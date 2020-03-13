@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import devices from 'core/devices';
 import { deserializeDate } from 'core/utils/date_serialization';
 import FileSystemItem from 'file_management/file_system_item';
 
@@ -219,6 +220,14 @@ export class FileManagerWrapper {
         return this.getDetailsItemsNames().eq(index).text();
     }
 
+    getDetailsItemDateModified(index) {
+        return this.getDetailsCell('Date Modified', index).text();
+    }
+
+    getDetailsItemSize(index) {
+        return this.getDetailsCell('File Size', index).text();
+    }
+
     getRowActionButtonInDetailsView(index) {
         const $row = this.getRowInDetailsView(index);
         return this._findActionButton($row);
@@ -257,6 +266,13 @@ export class FileManagerWrapper {
 
     getDetailsCellText(columnCaption, rowIndex) {
         return this.getDetailsCell(columnCaption, rowIndex).text();
+    }
+
+    getDetailsCellValue(rowIndex, columnIndex) {
+        return this.getRowInDetailsView(rowIndex)
+            .find(`td:nth-child(${columnIndex})`)
+            .text()
+            .replace(showMoreButtonText, '');
     }
 
     getSelectAllCheckBox() {
@@ -722,4 +738,8 @@ export const createUploadInfo = (file, chunkIndex, customData, chunkSize) => {
 
 export const stubFileReader = object => {
     sinon.stub(object, '_createFileReader', () => new FileReaderMock());
+};
+
+export const isDesktopDevice = () => {
+    devices.real().deviceType === 'desktop';
 };
