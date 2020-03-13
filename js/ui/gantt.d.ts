@@ -130,6 +130,14 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      */
     tasks?: { dataSource?: Array<any> | DataSource | DataSourceOptions, endExpr?: string | Function, keyExpr?: string | Function, parentIdExpr?: string | Function, progressExpr?: string | Function, startExpr?: string | Function, titleExpr?: string | Function };
     /**
+     * @docid dxGanttOptions.toolbar
+     * @type dxGanttToolbar
+     * @default null
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    toolbar?: dxGanttToolbar;
+    /**
      * @docid dxGanttOptions.stripLines
      * @type Array<dxGanttStripLine>
      * @default undefined
@@ -149,6 +157,33 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
 export default class dxGantt extends Widget {
     constructor(element: Element, options?: dxGanttOptions)
     constructor(element: JQuery, options?: dxGanttOptions)
+}
+
+export interface dxGanttToolbar {
+    /**
+     * @docid dxGanttToolbar.items
+     * @type Array<dxGanttToolbarItem,Enums.GanttToolbarItem>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'zoomIn' | 'zoomOut'>;
+}
+
+export interface dxGanttToolbarItem extends dxToolbarItem {
+    /**
+     * @docid dxGanttToolbarItem.formatName
+     * @type Enums.GanttToolbarItem|string
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    formatName?: 'separator' | 'undo' | 'redo' | 'zoomIn' | 'zoomOut' | string;
+    /**
+     * @docid dxGanttToolbarItem.location
+     * @default "before"
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    location?: 'after' | 'before' | 'center';
 }
 
 export interface dxGanttStripLine {
