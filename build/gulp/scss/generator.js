@@ -56,17 +56,53 @@ const replaceInterpolatedCalcContent = (content) => {
     return content.replace(/calc\(([\d]+%) - ((round|\$).*)\);/g, 'calc($1 - #{$2});');
 };
 
-gulp.task('fix-bundles', () => {
-    return gulp
-        .src(`${unfixedScssPath}/bundles/*.scss`)
-        // next replaces make @use "../widgets/generic" with ();
+gulp.task('fix-bundles', gulp.parallel(
+    () => gulp
+        .src([
+            `${unfixedScssPath}/bundles/*.scss`,
+            `!${unfixedScssPath}/bundles/dx.common.scss`,
+            `!${unfixedScssPath}/bundles/dx.ios7.default.scss`,
+        ])
         .pipe(replace(/@import \(once\).*/, ''))
         .pipe(replace(/\$base-theme:\s*"(generic|material|ios7)";/, '@use "../widgets/$1" with ('))
         .pipe(replace(/;/g, ','))
         .pipe(replace(/,[\W]*$/g, '\n);\n'))
         .pipe(replace(/\$light/, '$mode'))
-        .pipe(gulp.dest(`${outputPath}/bundles`));
-});
+        .pipe(gulp.dest(`${outputPath}/bundles`)),
+
+    () => gulp
+        .src(`${unfixedScssPath}/bundles/dx.common.scss`)
+        .pipe(replace(/@import \(reference\).*/g, ''))
+        .pipe(replace(/@import \(once\)(.*)/g, '@use $1'))
+        .pipe(replace(/\.scss/g, ''))
+        .pipe(replace(/widgets\/ui/, 'widgets/common/ui'))
+        // .pipe(replace('@use  "../widgets/common/htmlEditor";', '')) // TODO enable htmlEditor
+        .pipe(through.obj((chunk, enc, callback) => {
+            // add 'private' widgets to the bundle
+            const widgets = [
+                'scrollable',
+                'badge',
+                'textEditor',
+                'dropDownEditor',
+                'dateView',
+                'timeView',
+                'dropDownList',
+                'overlay',
+                'dropDownMenu',
+                'radioButton',
+                'colorView',
+                'pager',
+                'menuBase',
+                'recurrenceEditor',
+                'splitter'
+            ];
+            let content = chunk.contents.toString();
+            widgets.forEach(widget => content += `@use "../widgets/common/${widget}";\n`);
+            chunk.contents = new Buffer(content);
+            callback(null, chunk);
+        }))
+        .pipe(gulp.dest(`${outputPath}/bundles`))
+));
 
 gulp.task('fix-base', () => {
     return gulp
@@ -126,13 +162,22 @@ gulp.task('fix-base', () => {
         .pipe(gulp.dest(`${outputPath}/widgets/base`));
 });
 
-gulp.task('fix-common', () => {
-    // for dx.common.css
-    // TODO
+gulp.task(function fixCommon() {
     return gulp
-        .src(`${unfixedScssPath}/widgets/common/*.scss`)
+        .src([`${unfixedScssPath}/widgets/common/*.scss`, `${unfixedScssPath}/widgets/ui.scss`])
         .pipe(rename((path) => {
             path.basename = '_' + path.basename;
+        }))
+        .pipe(replace(/@import \(once\)(.*)/g, ''))
+        .pipe(replace(parentSelectorRegex, parentSelectorReplacement))
+        .pipe(replace(/(\W)e\(/g, '$1string.unquote('))
+        .pipe(through.obj((chunk, enc, callback) => {
+            let content = chunk.contents.toString();
+            content = `@use "../base/mixins" as *;\n// adduse\n${content}`;
+            content = commonSpecificReplacement(content, chunk.path);
+            content = replaceInterpolatedCalcContent(content);
+            chunk.contents = new Buffer(content);
+            callback(null, chunk);
         }))
         .pipe(gulp.dest(`${outputPath}/widgets/common`));
 });
@@ -185,7 +230,7 @@ const addImportedVariables = (r, folder) => {
 
 const specificReplacement = (content, folder, file) => {
     const widget = path.basename(folder);
-    const replacementTable = require('./replacements');
+    const replacementTable = require('./theme-replacements');
 
     if(replacementTable[widget]) {
         replacementTable[widget].forEach(r => {
@@ -194,9 +239,28 @@ const specificReplacement = (content, folder, file) => {
             } else if(r.import && r.type === file) {
                 const withPart = addImportedVariables(r, folder);
                 const alias = r.alias || '*';
-                content = content.replace(/\/\/\sadduse/, `@use "${r.import}" as ${alias}${withPart};\n// adduse`); // TODO // adduse at the end
+                content = content.replace(/\/\/\sadduse/, `@use "${r.import}" as ${alias}${withPart};\n// adduse`);
             }
 
+        });
+    }
+
+    return content;
+};
+
+const commonSpecificReplacement = (content, fileName) => {
+    const widget = path.basename(fileName).replace(/(.scss|_)/g, '');
+    const replacementTable = require('./common-replacements');
+
+    if(replacementTable[widget]) {
+        replacementTable[widget].forEach(r => {
+            if(r.regex) {
+                content = content.replace(r.regex, r.replacement);
+            } else if(r.import) {
+                // const withPart = addImportedVariables(r, folder); // it seems we do not need it in common
+                const alias = r.alias || '*';
+                content = content.replace(/\/\/\sadduse/, `@use "${r.import}" as ${alias};\n// adduse`); // TODO // adduse at the end
+            }
         });
     }
 

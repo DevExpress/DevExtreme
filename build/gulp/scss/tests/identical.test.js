@@ -6,7 +6,9 @@ const SUCCESS = 0;
 const ERROR = 1;
 
 const blackList = [
-    '.dx-show-clear-button .dx-icon-clear'
+    '.dx-show-clear-button .dx-icon-clear',
+    // dx.common.css
+    '.dx-radiobutton'
 ];
 
 const artifactsPath = path.join(__dirname, '..', '..', '..', '..', 'artifacts');
@@ -41,6 +43,11 @@ const normalizeRule = rule => rule
 
     // replace color in inlined svg
     .replace(/(%3A|%22)%23000000/g, '$1black')
+
+    // dx.common.css
+    .replace(/transparent/, 'rgba(0, 0, 0, 0)')
+    .replace(/14\.14227125px/, '14.1422712488px')
+    .replace(/9\.89958987px/, '9.8995898741px')
 
     .replace(/'(.)'/, (_, letter) => {
         // utf char to escaped notation
