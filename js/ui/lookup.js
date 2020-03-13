@@ -233,12 +233,6 @@ const Lookup = DropDownList.inherit({
             * @hidden
             */
 
-            /**
-             * @name dxLookupOptions.itemCenteringEnabled
-             * @type boolean
-             * @default true @for Material
-             * @public
-             */
             itemCenteringEnabled: false,
 
             _scrollToSelectedItemEnabled: false,
