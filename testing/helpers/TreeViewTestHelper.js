@@ -116,7 +116,7 @@ class TreeViewTestWrapper {
     checkScrollPosition(expected) {
         const scrollContainer = this.getElement().find(`.${SCROLLABLE_CONTAINER_CLASS}`).get(0);
 
-        const epsilon = 0.3;
+        const epsilon = 0.5;
         assert.roughEqual(scrollContainer.scrollTop, expected.top, epsilon, ' scrollTop');
         assert.roughEqual(scrollContainer.scrollLeft, expected.left, epsilon, ' scrollLeft');
     }

@@ -384,14 +384,13 @@ const Scrollable = DOMComponent.inherit({
     },
 
     _isDirection: function(direction) {
-        const current = this.option('direction');
         if(direction === VERTICAL) {
-            return current === VERTICAL || current === BOTH;
+            return this._isDirectionVerticalOrBoth();
         }
         if(direction === HORIZONTAL) {
-            return current === HORIZONTAL || current === BOTH;
+            return this._isDirectionHorizontalOrBoth();
         }
-        return current === direction;
+        return this.option('direction') === direction;
     },
 
     _isDirectionVerticalOrBoth() {

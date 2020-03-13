@@ -803,7 +803,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         return this._dataAdapter.getNodeByKey(key);
     },
 
-    _toggleExpandedState: function(itemElement, state, e, completedCallback) {
+    _toggleExpandedState: function(itemElement, state, e, completionCallback) {
         const node = this._getNode(itemElement);
         const currentState = node.internalFields.expanded;
 
@@ -827,7 +827,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         this._dataAdapter.toggleExpansion(node.internalFields.key, state);
 
-        this._updateExpandedItemsUI(node, state, e, completedCallback);
+        this._updateExpandedItemsUI(node, state, e, completionCallback);
     },
 
     _createLoadIndicator: function($node) {
@@ -868,7 +868,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         });
     },
 
-    _updateExpandedItemsUI: function(node, state, e, completedCallback) {
+    _updateExpandedItemsUI: function(node, state, e, completionCallback) {
         const $node = this._getNodeElement(node);
         const isHiddenNode = !$node.length || state && $node.is(':hidden');
 
@@ -888,21 +888,21 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const nodeContainerExists = $nodeContainer.length > 0;
 
         if(!state || nodeContainerExists && !$nodeContainer.is(':empty')) {
-            this._animateNodeContainer(node, state, e, completedCallback);
+            this._animateNodeContainer(node, state, e, completionCallback);
             return;
         }
 
         if(this._isVirtualMode() || this._useCustomChildrenLoader()) {
-            this._loadNestedItemsWithUpdate(node, state, e, completedCallback);
+            this._loadNestedItemsWithUpdate(node, state, e, completionCallback);
             return;
         }
 
         this._renderSublevel($node, node, this._getChildNodes(node));
         this._fireContentReadyAction();
-        this._animateNodeContainer(node, state, e, completedCallback);
+        this._animateNodeContainer(node, state, e, completionCallback);
     },
 
-    _loadNestedItemsWithUpdate: function(node, state, e, completedCallback) {
+    _loadNestedItemsWithUpdate: function(node, state, e, completionCallback) {
         const $node = this._getNodeElement(node);
         this._loadNestedItems(node).done(items => {
             const actualNodeData = this._getActualNode(node);
@@ -913,7 +913,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             }
 
             this._fireContentReadyAction();
-            this._animateNodeContainer(actualNodeData, state, e, completedCallback);
+            this._animateNodeContainer(actualNodeData, state, e, completionCallback);
         });
     },
 
@@ -953,7 +953,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._initDataAdapter();
     },
 
-    _animateNodeContainer: function(node, state, e, completedCallback) {
+    _animateNodeContainer: function(node, state, e, completionCallback) {
         const $node = this._getNodeElement(node);
         const $nodeContainer = $node.children(`.${NODE_CONTAINER_CLASS}`);
 
@@ -977,8 +977,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 this.setAria('expanded', state, $node);
                 this._scrollableContainer.update();
                 this._fireExpandedStateUpdatedEvent(state, node, e);
-                if(completedCallback) {
-                    completedCallback.resolve();
+                if(completionCallback) {
+                    completionCallback.resolve();
                 }
             }).bind(this)
         });

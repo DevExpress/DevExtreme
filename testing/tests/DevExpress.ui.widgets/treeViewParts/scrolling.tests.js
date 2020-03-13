@@ -6,9 +6,7 @@ QUnit.module('scrollToItem', () => {
         return;
     }
 
-    const ROOT_ID = '0';
-    const BRANCHES_TOTAL_COUNT = 10;
-    const MAX_DEEP_LEVEL = 10;
+    const MAX_DEEP_LEVEL = 6;
     const LEVEL_SEPARATOR = '_';
 
     const WIDGET_HEIGHT = 200;
@@ -19,12 +17,11 @@ QUnit.module('scrollToItem', () => {
 
     function createWrapper(config, dataSource) {
         const wrapper = new TreeViewTestWrapper({
+            keyExpr: 'text',
             scrollDirection: config.scrollDirection,
             height: WIDGET_HEIGHT,
             width: WIDGET_WIDTH,
             animationEnabled: false, // +400ms per test
-            dataStructure: 'plain',
-            rootValue: ROOT_ID,
             dataSource: dataSource
         });
 
@@ -36,20 +33,18 @@ QUnit.module('scrollToItem', () => {
     }
 
     function createDataSource(expanded, disabled) {
-        const items = [];
-        for(let i = 1; i <= BRANCHES_TOTAL_COUNT; i++) {
-            for(let j = 1; j <= MAX_DEEP_LEVEL; j++) {
-                if(j === 1) {
-                    const text = `item${i}`;
-                    items.push({ id: text, text, parentId: ROOT_ID, expanded, disabled });
-                } else {
-                    const parentId = items[items.length - 1].id;
-                    const text = `item${i}` + [...Array(j - 1)].map(() => `${LEVEL_SEPARATOR}1`).join('');
-                    items.push({ id: text, text, parentId, expanded, disabled });
-                }
-            }
-        }
-        return items;
+        return [
+            { text: 'item1', expanded, disabled, items: [ { text: 'item1_1', expanded, disabled, items: [ { text: 'item1_1_1', expanded, disabled, items: [ { text: 'item1_1_1_1', expanded, disabled, items: [ { text: 'item1_1_1_1_1', expanded, disabled, items: [ { text: 'item1_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
+            { text: 'item2', expanded, disabled, items: [ { text: 'item2_1', expanded, disabled, items: [ { text: 'item2_1_1', expanded, disabled, items: [ { text: 'item2_1_1_1', expanded, disabled, items: [ { text: 'item2_1_1_1_1', expanded, disabled, items: [ { text: 'item2_1_1_1_1_1', expanded, disabled, items: [ ] }] } ] } ] } ] }] },
+            { text: 'item3', expanded, disabled, items: [ { text: 'item3_1', expanded, disabled, items: [ { text: 'item3_1_1', expanded, disabled, items: [ { text: 'item3_1_1_1', expanded, disabled, items: [ { text: 'item3_1_1_1_1', expanded, disabled, items: [ { text: 'item3_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
+            { text: 'item4', expanded, disabled, items: [ { text: 'item4_1', expanded, disabled, items: [ { text: 'item4_1_1', expanded, disabled, items: [ { text: 'item4_1_1_1', expanded, disabled, items: [ { text: 'item4_1_1_1_1', expanded, disabled, items: [ { text: 'item4_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
+            { text: 'item5', expanded, disabled, items: [ { text: 'item5_1', expanded, disabled, items: [ { text: 'item5_1_1', expanded, disabled, items: [ { text: 'item5_1_1_1', expanded, disabled, items: [ { text: 'item5_1_1_1_1', expanded, disabled, items: [ { text: 'item5_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
+            { text: 'item6', expanded, disabled, items: [ { text: 'item6_1', expanded, disabled, items: [ { text: 'item6_1_1', expanded, disabled, items: [ { text: 'item6_1_1_1', expanded, disabled, items: [ { text: 'item6_1_1_1_1', expanded, disabled, items: [ { text: 'item6_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
+            { text: 'item7', expanded, disabled, items: [ { text: 'item7_1', expanded, disabled, items: [ { text: 'item7_1_1', expanded, disabled, items: [ { text: 'item7_1_1_1', expanded, disabled, items: [ { text: 'item7_1_1_1_1', expanded, disabled, items: [ { text: 'item7_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
+            { text: 'item8', expanded, disabled, items: [ { text: 'item8_1', expanded, disabled, items: [ { text: 'item8_1_1', expanded, disabled, items: [ { text: 'item8_1_1_1', expanded, disabled, items: [ { text: 'item8_1_1_1_1', expanded, disabled, items: [ { text: 'item8_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
+            { text: 'item9', expanded, disabled, items: [ { text: 'item9_1', expanded, disabled, items: [ { text: 'item9_1_1', expanded, disabled, items: [ { text: 'item9_1_1_1', expanded, disabled, items: [ { text: 'item9_1_1_1_1', expanded, disabled, items: [ { text: 'item9_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
+            { text: 'item10', expanded, disabled, items: [ { text: 'item10_1', expanded, disabled, items: [ { text: 'item10_1_1', expanded, disabled, items: [ { text: 'item10_1_1_1', expanded, disabled, items: [ { text: 'item10_1_1_1_1', expanded, disabled, items: [ { text: 'item10_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] }
+        ];
     }
 
     function getScrollPosition(wrapper, key, config) {
@@ -94,7 +89,7 @@ QUnit.module('scrollToItem', () => {
     });
 
     configs.forEach(config => {
-        ['item1', 'item1_1_1', 'item1_1_1_1_1', 'item1_1_1_1_1_1_1_1_1_1', 'item9', 'item9_1_1_1_1', 'item10', 'item10_1_1_1_1'].forEach(key => {
+        ['item1', 'item1_1_1', 'item1_1_1_1_1', 'item1_1_1_1_1_1', 'item9', 'item9_1_1_1_1', 'item10', 'item10_1_1_1_1', 'item10_1_1_1_1_1'].forEach(key => {
             QUnit.test(`TreeView scrolling. expanded: ${config.expanded} disabled: ${config.disabled}, scrollDirection: ${config.scrollDirection}, initialPosition: ${JSON.stringify(config.initialPosition)} -> scrollToItem(${key})`, function(assert) {
                 const wrapper = createWrapper(config, createDataSource(config.expanded, config.disabled));
                 const completionCallback = wrapper.instance.scrollToItem(key);
@@ -117,7 +112,7 @@ QUnit.module('scrollToItem', () => {
     const key = 'item1_1_1';
     [{ argType: 'key', scrollFunc: (wrapper) => wrapper.scrollToItem(key) },
         { argType: 'itemElement', scrollFunc: (wrapper) => wrapper.scrollToItem(wrapper.$element().find(`[data-item-id="${key}"]`)) },
-        { argType: 'itemData', scrollFunc: (wrapper) => wrapper.scrollToItem(wrapper.option('dataSource').find(i => i.id === key)) }
+        { argType: 'itemData', scrollFunc: (wrapper) => wrapper.scrollToItem(wrapper.option('dataSource')[0].items[0].items[0]) }
     ].forEach(testCase => {
         QUnit.test(`scrollToItem(item1_1_1: ${testCase.argType})`, function(assert) {
             const config = { scrollDirection: 'both', initialPosition: { top: 1000, left: 1000 }, expanded: true };
