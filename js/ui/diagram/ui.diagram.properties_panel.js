@@ -131,6 +131,7 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
             },
             onSelectionChanged: (e) => {
                 this._onSelectedGroupChangedAction();
+                this._onPointerUpAction();
             },
             onContentReady: (e) => {
                 this._popup.option('height', e.component.$element().height() + this._getVerticalPaddingsAndBorders());

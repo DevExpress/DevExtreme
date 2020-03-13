@@ -42,6 +42,9 @@ class DiagramFloatingPanel extends DiagramPanel {
     toggle() {
         this.option('isVisible', !this.isVisible());
     }
+    repaint() {
+        this._popup.repaint();
+    }
 
     _getPopupContent() {
         return this._popup.content();
@@ -81,6 +84,9 @@ class DiagramFloatingPanel extends DiagramPanel {
     _getPopupPosition() {
         return {};
     }
+    _getPopupContainer() {
+        return this.option('container');
+    }
     _getPopupSlideAnimationObject(properties) {
         return extend({
             type: 'slide',
@@ -101,6 +107,7 @@ class DiagramFloatingPanel extends DiagramPanel {
             shading: false,
             showTitle: false,
             focusStateEnabled: false,
+            container: this._getPopupContainer(),
             width: this._getPopupWidth(),
             height: this._getPopupHeight(),
             maxWidth: this._getPopupMaxWidth(),
@@ -145,6 +152,9 @@ class DiagramFloatingPanel extends DiagramPanel {
                 break;
             case 'onVisibilityChanged':
                 this._createOnVisibilityChangedAction();
+                break;
+            case 'container':
+                this._popup.option('container', this._getPopupContainer());
                 break;
             case 'width':
                 this._popup.option('width', this._getPopupWidth());
