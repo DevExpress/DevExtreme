@@ -183,16 +183,18 @@ QUnit.module('widget rendering', moduleSetup, () => {
                             multiple
                         });
                         const instance = $element.dxAccordion('instance');
-                        let item1 = $element.find(`.${ACCORDION_ITEM_CLASS}`).eq(1);
+                        const item1GetterFunc = () => $element.find(`.${ACCORDION_ITEM_CLASS}`).eq(1);
+
+                        let item1 = item1GetterFunc();
                         assert.strictEqual(item1.hasClass(HIDDEN_CLASS), true, 'item1 is hidden');
 
                         instance.option('items[1].visible', true);
-                        item1 = $element.find(`.${ACCORDION_ITEM_CLASS}`).eq(1);
+                        item1 = item1GetterFunc();
                         assert.strictEqual(item1.hasClass(HIDDEN_CLASS), false, 'item1 is visible');
                         assert.roughEqual(item1.height(), 21, 0.5, 'item1 has valid height');
 
                         instance.option('items[1].visible', false);
-                        item1 = $element.find(`.${ACCORDION_ITEM_CLASS}`).eq(1);
+                        item1 = item1GetterFunc();
                         assert.strictEqual(item1.hasClass(HIDDEN_CLASS), true, 'item1 is hidden');
                         assert.strictEqual(item1.height(), 0, 'item1 has zero height');
                     });
