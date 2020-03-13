@@ -303,6 +303,10 @@ QUnit.module('Raise context menu', moduleConfig, () => {
 QUnit.module('Cutomize context menu', moduleConfig, () => {
 
     test('default items rearrangement and modification', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
         const testClick = sinon.spy();
 
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
@@ -332,7 +336,7 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         });
         this.clock.tick(800);
 
-        this.wrapper.getFolderNode(1).trigger('dxcontextmenu');
+        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxcontextmenu');
         this.clock.tick(400);
 
         const $items = this.wrapper.getContextMenuItems();

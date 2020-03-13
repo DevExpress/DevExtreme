@@ -380,4 +380,51 @@ QUnit.module('Details View', moduleConfig, () => {
             assert.deepEqual(selectionSpy.args[3][0].currentDeselectedItemKeys, [ itemPath ], 'one item became deselected');
         }
     });
+
+    test('Support selection by long tap', function(assert) {
+        const selectionSpy = sinon.spy();
+        const item1Path = 'Folder 1/Folder 1.1';
+        const item2Path = 'Folder 1/Folder 1.2';
+
+        const fileManager = prepareParentDirectoryTesting(this);
+        fileManager.option('onSelectionChanged', selectionSpy);
+
+        this.wrapper.getRowNameCellInDetailsView(2).trigger('dxhold');
+        this.clock.tick(400);
+
+        assert.strictEqual(selectionSpy.callCount, 1, 'event raised');
+        assert.strictEqual(selectionSpy.args[0][0].selectedItems.length, 1);
+        assert.strictEqual(fileManager.getSelectedItems().length, 1, 'one item in selection');
+        assert.strictEqual(selectionSpy.args[0][0].selectedItems[0].path, item1Path);
+        assert.strictEqual(fileManager.getSelectedItems()[0].key, item1Path, 'correct item in selection');
+        assert.deepEqual(selectionSpy.args[0][0].selectedItemKeys, [ item1Path ], 'selected key provided');
+        assert.deepEqual(selectionSpy.args[0][0].currentSelectedItemKeys, [ item1Path ], 'one item became selected');
+        assert.deepEqual(selectionSpy.args[0][0].currentDeselectedItemKeys, [], 'no deselected items');
+
+
+        this.wrapper.getRowNameCellInDetailsView(3).trigger('dxhold');
+        this.clock.tick(400);
+
+        const oldSelectedItems = fileManager.getSelectedItems();
+
+        assert.strictEqual(selectionSpy.callCount, 2, 'event raised');
+        assert.strictEqual(selectionSpy.args[1][0].selectedItems.length, 2);
+        assert.strictEqual(oldSelectedItems.length, 2, 'two items in selection');
+        assert.strictEqual(selectionSpy.args[1][0].selectedItems[0].path, item1Path);
+        assert.strictEqual(oldSelectedItems[0].key, item1Path, 'correct item1 in selection');
+        assert.strictEqual(selectionSpy.args[1][0].selectedItems[1].path, item2Path);
+        assert.strictEqual(oldSelectedItems[1].key, item2Path, 'correct item2 in selection');
+        assert.deepEqual(selectionSpy.args[1][0].selectedItemKeys, [ item1Path, item2Path ], 'selected keys provided');
+        assert.deepEqual(selectionSpy.args[1][0].currentSelectedItemKeys, [ item2Path ], 'one item became selected');
+        assert.deepEqual(selectionSpy.args[1][0].currentDeselectedItemKeys, [], 'no deselected items');
+
+        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxhold');
+        this.clock.tick(400);
+
+        const newSelectedItems = fileManager.getSelectedItems();
+
+        assert.strictEqual(selectionSpy.callCount, 2, 'event not raised');
+        assert.strictEqual(newSelectedItems.length, 2);
+        assert.deepEqual(newSelectedItems, oldSelectedItems, 'selection has not changed');
+    });
 });

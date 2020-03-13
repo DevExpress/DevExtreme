@@ -23,6 +23,7 @@ export const Consts = {
     DIALOG_CLASS: 'dx-filemanager-dialog',
     THUMBNAILS_ITEM_CLASS: 'dx-filemanager-thumbnails-item',
     THUMBNAILS_ITEM_NAME_CLASS: 'dx-filemanager-thumbnails-item-name',
+    THUMBNAILS_ITEM_CONTENT_CLASS: 'dx-filemanager-thumbnails-item-content',
     GRID_DATA_ROW_CLASS: 'dx-data-row',
     FILE_ACTION_BUTTON_CLASS: 'dx-filemanager-file-actions-button',
     FOLDERS_TREE_VIEW_ITEM_CLASS: 'dx-treeview-item',
@@ -197,6 +198,10 @@ export class FileManagerWrapper {
 
     findThumbnailsItem(itemName) {
         return this.getThumbnailsItems().filter(`:contains('${itemName}')`);
+    }
+
+    getThumbnailsItemContent(itemName) {
+        return this.findThumbnailsItem(itemName).find(`.${Consts.THUMBNAILS_ITEM_CONTENT_CLASS}`);
     }
 
     findDetailsItem(itemName) {
