@@ -31,6 +31,8 @@ const TIME_INTERVAL_SELECTOR = '.dx-gantt-ti';
 const OVERLAY_WRAPPER_SELECTOR = '.dx-overlay-wrapper';
 const CONTEXT_MENU_SELECTOR = '.dx-context-menu';
 const INPUT_TEXT_EDITOR_SELECTOR = '.dx-texteditor-input';
+const TOOLBAR_ITEM_SELECTOR = '.dx-toolbar-item';
+const TOOLBAR_SEPARATOR_SELECTOR = '.dx-gantt-toolbar-separator';
 
 
 const tasks = [
@@ -543,6 +545,38 @@ QUnit.module('Dialogs', moduleConfig, () => {
         assert.equal(resources[0].text, secondResourceText, 'first resource removed from ds');
         assert.equal(resources[1].text, thirdResourceText, 'second resource ds');
         assert.equal(resources[2].text, newResourceText, 'new resource ds');
+    });
+});
+
+QUnit.module('Toolbar', moduleConfig, () => {
+    test('common', function(assert) {
+        const items = [
+            'undo',
+            'redo',
+            'separator',
+            'zoomIn',
+            'zoomOut',
+            'separator',
+            {
+                widget: 'dxButton',
+                options: {
+                    text: 'Custom item',
+                    stylingMode: 'text'
+                }
+            }
+        ];
+        const options = {
+            tasks: { dataSource: tasks },
+            toolbar: { items: items }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const $items = this.$element.find(TOOLBAR_ITEM_SELECTOR);
+        assert.equal($items.length, items.length, 'All items were rendered');
+        assert.equal($items.find(TOOLBAR_SEPARATOR_SELECTOR).length, 2, 'Both selectors were rendered');
+        assert.equal($items.last().text(), 'Custom item', 'Custom item has custom text');
+        assert.equal($items.first().children().children().attr('aria-label'), 'undo', 'First button is undo button');
     });
 });
 

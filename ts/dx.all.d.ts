@@ -4100,6 +4100,8 @@ declare module DevExpress.ui {
         taskTitlePosition?: 'inside' | 'outside' | 'none';
         /** @name dxGantt.Options.tasks */
         tasks?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, endExpr?: string | Function, keyExpr?: string | Function, parentIdExpr?: string | Function, progressExpr?: string | Function, startExpr?: string | Function, titleExpr?: string | Function };
+        /** @name dxGantt.Options.toolbar */
+        toolbar?: dxGanttToolbar;
     }
     /** @name dxGantt */
     export class dxGantt extends Widget {
@@ -4116,6 +4118,18 @@ declare module DevExpress.ui {
         start?: Date | number | string | (() => Date | number | string);
         /** @name dxGanttStripLine.title */
         title?: string;
+    }
+    /** @name dxGanttToolbar */
+    export interface dxGanttToolbar {
+        /** @name dxGanttToolbar.items */
+        items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'zoomIn' | 'zoomOut'>;
+    }
+    /** @name dxGanttToolbarItem */
+    export interface dxGanttToolbarItem extends dxToolbarItem {
+        /** @name dxGanttToolbarItem.formatName */
+        formatName?: 'separator' | 'undo' | 'redo' | 'zoomIn' | 'zoomOut' | string;
+        /** @name dxGanttToolbarItem.location */
+        location?: 'after' | 'before' | 'center';
     }
     /** @name dxHtmlEditor.Options */
     export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {

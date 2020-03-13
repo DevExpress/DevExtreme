@@ -1,3 +1,4 @@
+import $ from '../../core/renderer';
 import ToolbarMenu from '../toolbar';
 import ContextMenu from '../context_menu';
 import messageLocalization from '../../localization/message';
@@ -117,7 +118,9 @@ export class GanttToolbar extends Bar {
     _createSeparator() {
         return {
             location: 'before',
-            template: (_data, _index, element) => element.addClass(TOOLBAR_SEPARATOR_CLASS)
+            template: (_data, _index, element) => {
+                $(element).addClass(TOOLBAR_SEPARATOR_CLASS);
+            }
         };
     }
     _createDefaultItem(commandId, icon) {
