@@ -387,7 +387,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemCenteringEnabled
+    itemCenteringEnabled?: boolean;
 }
 /**
  * @docid dxLookup
