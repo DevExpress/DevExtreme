@@ -14,6 +14,10 @@ import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
+import {
+    dxToolbarItem
+} from './toolbar';
+
 export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid dxGanttOptions.allowSelection
