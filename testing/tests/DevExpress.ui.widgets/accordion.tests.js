@@ -40,6 +40,7 @@ const ACCORDION_ITEM_TITLE_CLASS = 'dx-accordion-item-title';
 const ACCORDION_ITEM_BODY_CLASS = 'dx-accordion-item-body';
 const ACCORDION_ITEM_OPENED_CLASS = 'dx-accordion-item-opened';
 const ACCORDION_ITEM_CLOSED_CLASS = 'dx-accordion-item-closed';
+const HIDDEN_CLASS = 'dx-state-invisible';
 
 const moduleSetup = {
     beforeEach: function() {
@@ -181,14 +182,14 @@ QUnit.module('widget rendering', moduleSetup, () => {
                     });
                     const instance = $element.dxAccordion('instance');
                     const item1 = $element.find(`.${ACCORDION_ITEM_CLASS}`).eq(1);
-                    assert.ok(item1.is(':hidden'), 'item1 is hidden');
+                    assert.strictEqual(item1.hasClass(HIDDEN_CLASS), true, 'item1 is hidden');
 
                     instance.option('items[1].visible', true);
-                    assert.ok(item1.is(':visible'), 'item1 is visible');
-                    assert.ok(item1.height() > 0, 'item1 has valid height');
+                    assert.strictEqual(item1.hasClass(HIDDEN_CLASS), false, 'item1 is visible');
+                    assert.roughEqual(item1.height(), 21, 0.5, 'item1 has valid height');
 
                     instance.option('items[1].visible', false);
-                    assert.ok(item1.is(':hidden'), 'item1 is hodden');
+                    assert.strictEqual(item1.hasClass(HIDDEN_CLASS), true, 'item1 is hidden');
                     assert.strictEqual(item1.height(), 0, 'item1 has zero height');
                 });
             });
