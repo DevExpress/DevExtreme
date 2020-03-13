@@ -3331,7 +3331,7 @@ QUnit.module('default options', {
 
             $(lookup.field()).trigger('dxclick');
 
-            const $popover = $('.dx-popover-wrapper');
+            const $popover = $('.dx-popup-wrapper');
 
             assert.equal($popover.find('.dx-overlay-content').outerWidth(), $(lookup.field()).outerWidth() + 2, 'popup width match with lookup field width');
             assert.roughEqual($popover.find('.dx-overlay-content').outerHeight(), $('.dx-list-item').height() * 5 + 2, 3, 'popup height auto if usePopover true');
