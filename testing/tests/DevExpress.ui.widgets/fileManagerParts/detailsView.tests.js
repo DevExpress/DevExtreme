@@ -388,6 +388,7 @@ QUnit.module('Details View', moduleConfig, () => {
 
         const fileManager = prepareParentDirectoryTesting(this);
         fileManager.option('onSelectionChanged', selectionSpy);
+        this.clock.tick(400);
 
         this.wrapper.getRowNameCellInDetailsView(2).trigger('dxhold');
         this.clock.tick(400);
