@@ -1116,13 +1116,10 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         executeOperation: function(deferred, func) {
-            if(this._lastOperation) {
-                this._lastOperation.reject();
-            }
-
+            this._lastOperation && this._lastOperation.reject();
             this._lastOperation = deferred;
 
-            when(...this._deferreds).always(() => {
+            this.waitForDeferredOperations().always(() => {
                 this._lastOperation = null;
             }).done(() => {
                 if(deferred.state() === 'rejected') {
@@ -1130,6 +1127,10 @@ const EditingController = modules.ViewController.inherit((function() {
                 }
                 func();
             }).fail(deferred.reject);
+        },
+
+        waitForDeferredOperations: function() {
+            return when(...this._deferreds);
         },
 
         editCell: function(rowIndex, columnIndex) {
@@ -1535,7 +1536,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     deferred.resolve();
                 });
             };
-            when(...this._deferreds).done(() => {
+            this.waitForDeferredOperations().done(() => {
                 if(this._saving) {
                     afterSaveEditData();
                     return;
@@ -1848,7 +1849,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 if(options.values) {
                     options.values[options.columnIndex] = value;
                 }
-                that.addDeferred(setCellValueResult);
+                that.addDeferred(deferred);
             }
 
             return deferred;

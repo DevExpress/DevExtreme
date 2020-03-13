@@ -612,3 +612,55 @@ test("Async Validation(Batch) - Data is not saved when a dependant cell value be
         validationRules: [{ type: 'required' }]
     }, 'lastName']
 })));
+
+test("Async Validation(Batch) - Data is not saved when a cell with async setCellValue is invalid", async t => {
+    const dataGrid = new DataGrid("#container");
+
+    const rowIndex = 0;
+    const columnIndex = 0;
+    const headerPanel = dataGrid.getHeaderPanel();
+    const saveButton = headerPanel.getSaveButton();
+    const dataRow = dataGrid.getDataRow(rowIndex);
+    const cell0 = dataRow.getDataCell(columnIndex);
+    const editor0 = cell0.getEditor();
+
+    await t
+        .click(headerPanel.getAddRowButton())
+        .expect(dataRow.isInserted).ok("row is inserted")
+        .expect(cell0.isValidationPending).notOk()
+        .expect(cell0.isInvalid).notOk()
+        .click(cell0.element)
+        .typeText(editor0.element, "123")
+        .pressKey('enter')
+        .click(saveButton)
+        .expect(cell0.isValidationPending).ok()
+        .expect(cell0.isModified).ok()
+        .expect(dataRow.isInserted).ok("row is in editing mode");
+
+}).before(() => createWidget("dxDataGrid", getGridConfig({
+    editing: {
+        mode: 'batch',
+        allowAdding: true
+    },
+    columns: [{
+        dataField: 'age',
+        validationRules: [{
+            type: 'async',
+            validationCallback: function(params) {
+                const d = $.Deferred();
+                setTimeout(function() {
+                    params.value === 1 ? d.resolve(true) : d.reject();
+                }, 1000);
+                return d.promise();
+            }
+        }],
+        setCellValue: function(rowData, value) {
+            const d = $.Deferred();
+            setTimeout(function() {
+                rowData.age = value;
+                d.resolve();
+            }, 1200);
+            return d.promise();
+        }
+    }, 'name', 'lastName']
+})));
