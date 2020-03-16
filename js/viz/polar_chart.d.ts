@@ -144,6 +144,17 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      */
     containerBackgroundColor?: string;
     /**
+     * @docid dxPolarChartOptions.customizeAnnotation
+     * @type function(annotation)
+     * @type_function_param1 annotation:dxPolarChartAnnotationConfig|any
+     * @type_function_return dxPolarChartAnnotationConfig
+     * @default undefined
+     * @notUsedInTheme
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    customizeAnnotation?: ((annotation: dxPolarChartAnnotationConfig | any) => dxPolarChartAnnotationConfig);
+    /**
      * @docid dxPolarChartOptions.dataPrepareSettings
      * @type object
      * @prevFileNamespace DevExpress.viz
