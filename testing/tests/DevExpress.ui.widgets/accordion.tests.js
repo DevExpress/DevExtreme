@@ -170,36 +170,46 @@ QUnit.module('widget rendering', moduleSetup, () => {
         assert.equal($element.find('.' + ACCORDION_ITEM_BODY_CLASS).length, 1, 'body is rendered');
     });
 
+    const configs = [];
     [true, false].forEach(collapsible => {
         [true, false].forEach(multiple => {
             [true, false].forEach(deferRendering => {
                 [true, false].forEach(repaintChangesOnly => {
-                    QUnit.test(`collapsible: ${collapsible}, multiple: ${multiple}, deferRendering: ${deferRendering}, repaintChangesOnly: ${repaintChangesOnly}, item1.display: false -> accordion.option(items[1].visible, true) -> accordion.option(items[1].visible, false) (T869114)`, function(assert) {
-                        const $element = this.$element.dxAccordion({
-                            items: [ { id: 0, title: 'item0' }, { id: 1, title: 'item1', visible: false } ],
-                            repaintChangesOnly,
-                            deferRendering,
-                            collapsible,
-                            multiple
-                        });
-                        const instance = $element.dxAccordion('instance');
-                        const item1GetterFunc = () => $element.find(`.${ACCORDION_ITEM_CLASS}`).eq(1);
-
-                        let item1 = item1GetterFunc();
-                        assert.strictEqual(item1.hasClass(HIDDEN_CLASS), true, 'item1 is hidden');
-
-                        instance.option('items[1].visible', true);
-                        item1 = item1GetterFunc();
-                        assert.strictEqual(item1.hasClass(HIDDEN_CLASS), false, 'item1 is visible');
-                        assert.roughEqual(item1.height(), 21, 0.5, 'item1 has valid height');
-
-                        instance.option('items[1].visible', false);
-                        item1 = item1GetterFunc();
-                        assert.strictEqual(item1.hasClass(HIDDEN_CLASS), true, 'item1 is hidden');
-                        assert.strictEqual(item1.height(), 0, 'item1 has zero height');
+                    [
+                        (accordion, value) => { accordion.option('items[1].visible', value); },
+                        (accordion, value) => { accordion.option('items')[1].visible = value; accordion.repaint(); }
+                    ].forEach(changeVisibleFunc => {
+                        configs.push({ collapsible, multiple, deferRendering, repaintChangesOnly, changeVisibleFunc });
                     });
                 });
             });
+        });
+    });
+
+    configs.forEach(config => {
+        QUnit.test(`collapsible: ${config.collapsible}, multiple: ${config.multiple}, deferRendering: ${config.deferRendering}, repaintChangesOnly: ${config.repaintChangesOnly}, item1.display: false -> accordion.option(items[1].visible, true) -> accordion.option(items[1].visible, false) (T869114)`, function(assert) {
+            const $element = this.$element.dxAccordion({
+                items: [ { id: 0, title: 'item0' }, { id: 1, title: 'item1', visible: false } ],
+                repaintChangesOnly: config.repaintChangesOnly,
+                deferRendering: config.deferRendering,
+                collapsible: config.collapsible,
+                multiple: config.multiple
+            });
+            const instance = $element.dxAccordion('instance');
+            const item1GetterFunc = () => $element.find(`.${ACCORDION_ITEM_CLASS}`).eq(1);
+
+            let item1 = item1GetterFunc();
+            assert.strictEqual(item1.hasClass(HIDDEN_CLASS), true, 'item1 is hidden');
+
+            config.changeVisibleFunc(instance, true);
+            item1 = item1GetterFunc();
+            assert.strictEqual(item1.hasClass(HIDDEN_CLASS), false, 'item1 is visible');
+            assert.roughEqual(item1.height(), 21, 0.5, 'item1 has valid height');
+
+            config.changeVisibleFunc(instance, false);
+            item1 = item1GetterFunc();
+            assert.strictEqual(item1.hasClass(HIDDEN_CLASS), true, 'item1 is hidden');
+            assert.strictEqual(item1.height(), 0, 'item1 has zero height');
         });
     });
 
