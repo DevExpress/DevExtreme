@@ -400,10 +400,7 @@ testComponentDefaults(Lookup,
         searchEnabled: false,
         showCancelButton: false,
         showPopupTitle: false,
-        position: {
-            my: 'left top',
-            at: 'left top'
-        }
+        itemCenteringEnabled: true
     },
     function() {
         this.origIsMaterial = themes.isMaterial;
