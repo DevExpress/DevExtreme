@@ -1966,13 +1966,14 @@ QUnit.test('marginOptions.checkInterval on valueAxis - ignore interval', functio
             checkInterval: true
         },
         range: {
-            min: 100,
+            minVisible: 100,
+            min: 98,
             max: 220,
             interval: 10
         },
         ticks: [100, 220],
         expectedRange: {
-            minVisible: 98,
+            minVisible: 100,
             maxVisible: 220,
             interval: 10
         },
