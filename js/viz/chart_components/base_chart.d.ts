@@ -21,6 +21,10 @@ import {
 } from '../../ui/widget/ui.widget';
 
 import {
+    Font
+} from './core/base_widget';
+
+import {
     basePointObject,
     baseSeriesObject,
     chartSeriesObject,
