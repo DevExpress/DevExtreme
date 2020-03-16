@@ -3192,7 +3192,6 @@ QUnit.module('default options', {
             const lookup = $lookup.dxLookup({ dataSource: ['blue', 'orange', 'lime', 'purple'] }).dxLookup('instance');
 
             assert.equal(lookup.option('popupWidth')(), $lookup.outerWidth(), 'popup width match with lookup field width');
-            assert.equal(lookup.option('position').of, lookup.element(), 'popup position of lookup field');
 
             $(lookup.field()).trigger('dxclick');
 
