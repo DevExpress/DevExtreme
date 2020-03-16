@@ -98,7 +98,7 @@ QUnit.module('Excel creator', commonEnvironment, () => {
                 return excelCreator.formatConverter.convertFormat(formatter, null, 'date');
             };
 
-            const pattern = '[$-2010009]d\\/M\\/yyyy';
+            const pattern = '[$-2010001]d\\/M\\/yyyy';
             const formatter = function(value) {
                 return dateLocalization.format(value, 'shortdate');
             };
