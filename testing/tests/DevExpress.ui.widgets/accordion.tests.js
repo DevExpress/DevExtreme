@@ -170,22 +170,6 @@ QUnit.module('widget rendering', moduleSetup, () => {
         assert.equal($element.find('.' + ACCORDION_ITEM_BODY_CLASS).length, 1, 'body is rendered');
     });
 
-    const configs = [];
-    [true, false].forEach(collapsible => {
-        [true, false].forEach(multiple => {
-            [true, false].forEach(deferRendering => {
-                [true, false].forEach(repaintChangesOnly => {
-                    [
-                        (accordion, value) => { accordion.option('items[1].visible', value); },
-                        (accordion, value) => { accordion.option('items')[1].visible = value; accordion.repaint(); }
-                    ].forEach(changeVisibleFunc => {
-                        configs.push({ collapsible, multiple, deferRendering, repaintChangesOnly, changeVisibleFunc });
-                    });
-                });
-            });
-        });
-    });
-
     [true, false].forEach(collapsible => {
         [true, false].forEach(multiple => {
             [true, false].forEach(deferRendering => {
