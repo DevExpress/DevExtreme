@@ -22,7 +22,7 @@ import {
 
 import {
     Font
-} from './core/base_widget';
+} from '../core/base_widget';
 
 import {
     basePointObject,
