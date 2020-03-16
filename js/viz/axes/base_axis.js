@@ -23,6 +23,7 @@ const patchFontOptions = vizUtils.patchFontOptions;
 const getVizRangeObject = vizUtils.getVizRangeObject;
 const getLog = vizUtils.getLogExt;
 const raiseTo = vizUtils.raiseToExt;
+const valueOf = vizUtils.valueOf;
 const _math = Math;
 const _abs = _math.abs;
 const _max = _math.max;
@@ -214,10 +215,6 @@ function updateLabels(ticks, step, func) {
             }
         }
     });
-}
-
-function valueOf(value) {
-    return value.valueOf();
 }
 
 function getZoomBoundValue(optionValue, dataValue) {

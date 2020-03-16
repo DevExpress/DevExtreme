@@ -2002,6 +2002,28 @@ QUnit.test('marginOptions.checkInterval on valueAxis. Add margin for showing min
     });
 });
 
+QUnit.test('marginOptions.checkInterval on valueAxis. Empty chart (T862823)', function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true
+        },
+        marginOptions: {
+            checkInterval: true
+        },
+        range: {
+            min: undefined,
+            max: undefined,
+            minVisible: undefined,
+            maxVisible: undefined
+        },
+        expectedVisibleArea: {
+            min: 200,
+            max: 500
+        },
+        isArgumentAxis: false
+    });
+});
+
 QUnit.test('marginOptions.checkInterval on valueAxis. All points are negative - add margin for showing max point (T862823)', function(assert) {
     this.testMargins(assert, {
         options: {
