@@ -1619,10 +1619,13 @@
 @filemanager-breadcrumbs-item-focus-bg: @base-border-color;
 @filemanager-breadcrumbs-item-focus-color: @base-text-color;
 @filemanager-custom-thumbnail-color: @base-border-color;
-@filemanager-file-item-select-color: @base-text-color;
-@filemanager-file-item-select-bg: @base-select-bg;
+@filemanager-file-item-select-color: @base-bg;
+@filemanager-file-item-select-bg: fade(@base-accent, 80%);
+@filemanager-file-item-select-focus-color: @base-bg;
+@filemanager-file-item-select-focus-bg: fade(@base-accent, 70%);
 @filemanager-file-item-hover-bg: @base-hover-bg;
 @filemanager-file-item-focused-bg: @base-focus-bg;
+@filemanager-file-item-focused-border: @base-accent;
 @filemanager-item-focused-color: @base-inverted-text-color;
 @filemanager-progressbox-shadow-color: fade(@base-shadow-color, 30%);
 
