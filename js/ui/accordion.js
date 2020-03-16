@@ -371,6 +371,13 @@ const Accordion = CollectionWidget.inherit({
         this.callBase();
     },
 
+    _itemOptionChanged: function(item, property, value, oldValue) {
+        this.callBase(item, property, value, oldValue);
+        if(property === 'visible') {
+            this._updateItemHeightsWrapper(true);
+        }
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case 'animationDuration':
