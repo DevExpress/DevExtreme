@@ -1119,14 +1119,16 @@ const EditingController = modules.ViewController.inherit((function() {
             this._lastOperation && this._lastOperation.reject();
             this._lastOperation = deferred;
 
-            this.waitForDeferredOperations().always(() => {
-                this._lastOperation = null;
-            }).done(() => {
+            this.waitForDeferredOperations().done(() => {
                 if(deferred.state() === 'rejected') {
                     return;
                 }
                 func();
-            }).fail(deferred.reject);
+                this._lastOperation = null;
+            }).fail(() => {
+                deferred.reject();
+                this._lastOperation = null;
+            });
         },
 
         waitForDeferredOperations: function() {
