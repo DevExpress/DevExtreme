@@ -882,55 +882,6 @@ QUnit.test('calculated ticks out of mix/max issue', function(assert) {
     assert.deepEqual(this.axis._majorTicks.map(value).map(function(tick) { return tick.toFixed(1); }), ['-0.9', '-0.8', '-0.7']);
 });
 
-QUnit.test('Add extra tick (continuous, numeric) for the bar point is equal to the minimum tick value', function(assert) {
-    this.createAxis();
-    this.updateOptions({
-        argumentType: 'numeric',
-        type: 'continuous'
-    });
-
-    this.axis.setBusinessRange({ min: 200, max: 605, checkMinDataVisibility: true });
-
-    // act
-    this.axis.createTicks(canvas(300));
-
-    assert.deepEqual(this.axis._majorTicks.map(value), [100, 200, 300, 400, 500, 600]);
-    assert.deepEqual(this.axis._tickInterval, 100);
-});
-
-QUnit.test('Add extra tick (continuous, numeric) for the bar point is equal to the maximum tick value', function(assert) {
-    this.createAxis();
-    this.updateOptions({
-        argumentType: 'numeric',
-        type: 'continuous'
-    });
-
-    this.axis.setBusinessRange({ min: -605, max: -200, checkMaxDataVisibility: true });
-
-    // act
-    this.axis.createTicks(canvas(300));
-
-    assert.deepEqual(this.axis._majorTicks.map(value), [-600, -500, -400, -300, -200, -100]);
-    assert.deepEqual(this.axis._tickInterval, 100);
-});
-
-QUnit.test('Add extra tick (logarithmic, numeric) for the bar point is equal to the minimum tick value', function(assert) {
-    this.createAxis();
-    this.updateOptions({
-        argumentType: 'numeric',
-        type: 'logarithmic',
-        logarithmBase: 10
-    });
-
-    this.axis.setBusinessRange({ min: 0.01, max: 10011, checkMinDataVisibility: true });
-
-    // act
-    this.axis.createTicks(canvas(1000));
-
-    compareFloatNumbers(this.axis._majorTicks, [0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000], assert);
-    assert.deepEqual(this.axis._tickInterval, 1);
-});
-
 QUnit.test('Do not hang browser if small numbers', function(assert) {
     this.createAxis();
     this.updateOptions({
