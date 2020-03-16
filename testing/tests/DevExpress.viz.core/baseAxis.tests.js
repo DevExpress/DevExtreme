@@ -1972,9 +1972,51 @@ QUnit.test('marginOptions.checkInterval on valueAxis - ignore interval', functio
         },
         ticks: [100, 220],
         expectedRange: {
-            minVisible: 100,
+            minVisible: 98,
             maxVisible: 220,
             interval: 10
+        },
+        isArgumentAxis: false
+    });
+});
+
+QUnit.test('marginOptions.checkInterval on valueAxis. Add margin for showing min point (T862823)', function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true
+        },
+        marginOptions: {
+            checkInterval: true
+        },
+        range: {
+            min: 100,
+            max: 200
+        },
+        ticks: [100, 200],
+        expectedVisibleArea: {
+            min: 205,
+            max: 500
+        },
+        isArgumentAxis: false
+    });
+});
+
+QUnit.test('marginOptions.checkInterval on valueAxis. All points are negative - add margin for showing max point (T862823)', function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true
+        },
+        marginOptions: {
+            checkInterval: true
+        },
+        range: {
+            min: -200,
+            max: -100
+        },
+        ticks: [-200, -100],
+        expectedVisibleArea: {
+            min: 200,
+            max: 495
         },
         isArgumentAxis: false
     });
@@ -2309,8 +2351,6 @@ QUnit.test('Calculate ticks on range with margins', function(assert) {
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0], {
         categories: undefined,
         isSpacedMargin: false,
-        checkMaxDataVisibility: false,
-        checkMinDataVisibility: false,
         max: 220,
         min: 90
     });
@@ -2335,8 +2375,6 @@ QUnit.test('Axis pass margin options for calculate ticks', function(assert) {
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0], {
         categories: undefined,
         isSpacedMargin: true,
-        checkMaxDataVisibility: false,
-        checkMinDataVisibility: false,
         max: 225,
         min: 75
     });
