@@ -74,77 +74,7 @@ const configs = [];
 });
 
 configs.forEach(config => {
-    function getScrollPosition($node, key, direction, expanded) {
-        let newFocusedItemKey = getNextFocusedItemKey($node, key, direction, expanded);
-        switch(newFocusedItemKey) {
-            case 1:
-                return { top: 0, left: NODE_MARGIN };
-            case 2:
-                return { top: ITEM_HEIGHT, left: NODE_MARGIN * 2 };
-            case 3:
-                return expanded
-                    ? { top: ITEM_HEIGHT * 2, left: NODE_MARGIN }
-                    : { top: ITEM_HEIGHT, left: NODE_MARGIN };
-            case 4:
-                return { top: ITEM_HEIGHT * 3, left: NODE_MARGIN * 2 };
-            case 5:
-                return expanded
-                    ? { top: ITEM_HEIGHT * 4, left: NODE_MARGIN }
-                    : { top: ITEM_HEIGHT * 2, left: NODE_MARGIN };
-            case 6:
-                return { top: ITEM_HEIGHT * 5, left: NODE_MARGIN * 2 };
-        }
-    }
-
-    function getNextFocusedItemKey($node, key, direction, expanded) {
-        const isFirstLevelNode = $node.attr('aria-level') === '1';
-        const firstKey = 1;
-        const lastKey = expanded ? 6 : 5;
-
-        let nextFocusedItemKey = 1;
-        switch(direction) {
-            case 'up':
-                if(isFirstLevelNode) {
-                    nextFocusedItemKey = expanded ? key - 1 : key - 2;
-                } else {
-                    nextFocusedItemKey = key - 1;
-                }
-                break;
-            case 'down':
-                if(isFirstLevelNode) {
-                    nextFocusedItemKey = expanded ? key + 1 : key + 2;
-                } else {
-                    nextFocusedItemKey = key + 1;
-                }
-                break;
-            case 'left':
-                nextFocusedItemKey = isFirstLevelNode
-                    ? key
-                    : key - 1;
-                break;
-            case 'right':
-                nextFocusedItemKey = !config.expanded || !isFirstLevelNode
-                    ? key
-                    : key + 1;
-                break;
-            case 'first':
-                nextFocusedItemKey = firstKey;
-                break;
-            case 'last':
-                nextFocusedItemKey = lastKey;
-                break;
-        }
-
-        if(nextFocusedItemKey < firstKey) {
-            nextFocusedItemKey = lastKey;
-        } else if(nextFocusedItemKey > lastKey) {
-            nextFocusedItemKey = firstKey;
-        }
-
-        return nextFocusedItemKey;
-    }
-
-    QUnit.test(`all.Expanded: ${config.expanded} -> click(key:${config.initialFocusedItemKey}) -> moveFocus('${config.direction}'); (T226868)`, function(assert) {
+    QUnit.test(`all.Expanded: ${config.expanded} -> emulateFocus(key:${config.initialFocusedItemKey}) -> moveFocus('${config.direction}'); (T226868)`, function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'unnecessary test on mobile devices');
             return;
@@ -174,6 +104,73 @@ configs.forEach(config => {
         wrapper.instance._moveFocus(config.direction, {});
         wrapper.checkScrollPosition(getScrollPosition($node, config.initialFocusedItemKey, config.direction, config.expanded));
     });
+
+    function getScrollPosition($node, key, direction, expanded) {
+        let newFocusedItemKey = getNextFocusedItemKey($node, key, direction, expanded);
+        switch(newFocusedItemKey) {
+            case 1:
+                return { top: 0, left: NODE_MARGIN };
+            case 2:
+                return { top: ITEM_HEIGHT, left: NODE_MARGIN * 2 };
+            case 3:
+                return expanded
+                    ? { top: ITEM_HEIGHT * 2, left: NODE_MARGIN }
+                    : { top: ITEM_HEIGHT, left: NODE_MARGIN };
+            case 4:
+                return { top: ITEM_HEIGHT * 3, left: NODE_MARGIN * 2 };
+            case 5:
+                return expanded
+                    ? { top: ITEM_HEIGHT * 4, left: NODE_MARGIN }
+                    : { top: ITEM_HEIGHT * 2, left: NODE_MARGIN };
+            case 6:
+                return { top: ITEM_HEIGHT * 5, left: NODE_MARGIN * 2 };
+        }
+    }
+
+    function getNextFocusedItemKey($node, key, direction, expanded) {
+        const isFirstLevelNode = $node.attr('aria-level') === '1';
+        const isLastLevelNode = !isFirstLevelNode;
+        const firstKey = 1;
+        const lastKey = expanded ? 6 : 5;
+
+        let nextFocusedItemKey = 1;
+        switch(direction) {
+            case 'up':
+                nextFocusedItemKey = !isFirstLevelNode || expanded
+                    ? key - 1
+                    : key - 2;
+                break;
+            case 'down':
+                nextFocusedItemKey = !isFirstLevelNode || expanded
+                    ? key + 1
+                    : key + 2;
+                break;
+            case 'left':
+                nextFocusedItemKey = isFirstLevelNode
+                    ? key
+                    : key - 1;
+                break;
+            case 'right':
+                nextFocusedItemKey = isLastLevelNode || !expanded
+                    ? key
+                    : key + 1;
+                break;
+            case 'first':
+                nextFocusedItemKey = firstKey;
+                break;
+            case 'last':
+                nextFocusedItemKey = lastKey;
+                break;
+        }
+
+        if(nextFocusedItemKey < firstKey) {
+            nextFocusedItemKey = lastKey;
+        } else if(nextFocusedItemKey > lastKey) {
+            nextFocusedItemKey = firstKey;
+        }
+
+        return nextFocusedItemKey;
+    }
 });
 
 QUnit.test('PointerDown event at checkbox should not be ignored', function(assert) {

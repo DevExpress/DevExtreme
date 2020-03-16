@@ -43,8 +43,10 @@ class TreeViewTestWrapper {
     getAllSelectedCheckboxes() { return this.getElement().find(`.${CHECK_BOX_CHECKED_CLASS}`); }
     getToggleItemVisibility($node) { return isDefined($node) ? $node.find(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`) : this.getElement().find(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`); }
     getNodeLoadIndicator($node) { return isDefined($node) ? $node.find(`.${NODE_LOAD_INDICATOR_CLASS}`) : this.getElement().find(`.${NODE_LOAD_INDICATOR_CLASS}`); }
-    getScrollHeight() { return this.getElement().find(`.${SCROLLABLE_CONTENT_CLASS}`).height(); }
-    getScrollWidth() { return this.getElement().find(`.${SCROLLABLE_CONTENT_CLASS}`).width(); }
+
+    getScrollElementContent = () => this.getElement().find(`.${SCROLLABLE_CONTENT_CLASS}`);
+    getScrollHeight = () => this.getScrollElementContent().height();
+    getScrollWidth = () => this.getScrollElementContent().width();
 
     hasWidgetClass($item) { return $item.hasClass(WIDGET_CLASS); }
     hasItemClass($item) { return $item.hasClass(ITEM_CLASS); }
