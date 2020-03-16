@@ -34,7 +34,11 @@ function coreAnnotation(options, contentTemplate) {
         draw: function(widget, group) {
             const annotationGroup = widget._renderer.g().append(group)
                 .css(patchFontOptions(options.font));
-            this.plaque = new Plaque(options, widget, annotationGroup, contentTemplate, isDefined(options.value) || isDefined(options.argument));
+            this.plaque = new Plaque(
+                extend(true, {}, options, { cornerRadius: (options.border || {}).cornerRadius }),
+                widget, annotationGroup, contentTemplate,
+                isDefined(options.value) || isDefined(options.argument)
+            );
             this.plaque.draw(widget._getAnnotationCoords(this));
 
             if(options.allowDragging) {
