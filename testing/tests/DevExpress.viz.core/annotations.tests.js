@@ -103,6 +103,29 @@ QUnit.test('Merge customizeAnnotation result and common+item options', function(
     assert.equal(customizeAnnotation.getCall(0).args[0], itemOptions);
 });
 
+QUnit.test('Image option is string', function(assert) {
+    const itemOptions = {
+        x: 10, y: 20,
+        type: 'image',
+        image: 'some_url'
+    };
+    const annotation = this.createAnnotations([itemOptions])[0];
+    annotation.draw(this.widget, this.group);
+
+    assert.deepEqual(this.renderer.image.firstCall.args[4], 'some_url');
+});
+
+QUnit.test('Image option is string in common annotation options', function(assert) {
+    const itemOptions = {
+        x: 10, y: 20,
+        type: 'image',
+    };
+    const annotation = this.createAnnotations([itemOptions], { image: 'some_url' })[0];
+    annotation.draw(this.widget, this.group);
+
+    assert.deepEqual(this.renderer.image.firstCall.args[4], 'some_url');
+});
+
 QUnit.test('Draw image inside a plaque with borders and arrow', function(assert) {
     const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url', width: 20, height: 13 }, font: { color: 'red' } }], {
         border: {
