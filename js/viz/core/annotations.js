@@ -101,9 +101,23 @@ function getTemplateFunction(options, widget) {
     return template;
 }
 
+function getImageObject(image) {
+    return typeof image === 'string' ? { url: image } : image;
+}
+
 export let createAnnotations = function(widget, items, commonAnnotationSettings = {}, customizeAnnotation) {
+    const commonImageOptions = getImageObject(commonAnnotationSettings.image);
     return items.reduce((arr, item) => {
-        const options = extend(true, {}, commonAnnotationSettings, item, customizeAnnotation && customizeAnnotation.call ? customizeAnnotation(item) : {});
+        const currentImageOptions = getImageObject(item.image);
+        const options = extend(
+            true,
+            {},
+            commonAnnotationSettings,
+            item,
+            { image: commonImageOptions },
+            { image: currentImageOptions },
+            customizeAnnotation && customizeAnnotation.call ? customizeAnnotation(item) : {}
+        );
         const templateFunction = getTemplateFunction(options, widget);
         const annotation = templateFunction && coreAnnotation(options, widget._getTemplate(templateFunction));
         annotation && arr.push(annotation);
