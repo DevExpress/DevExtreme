@@ -432,6 +432,50 @@ QUnit.testStart(function() {
         assert.deepEqual(secondCellData.startDate, new Date(2018, 2, 16, 12), 'cell has right startDate');
         assert.deepEqual(secondCellData.endDate, new Date(2018, 2, 16, 12, 30), 'cell has right endDate');
     });
+
+    QUnit.test('Cell count should be correct if cellDuration (hoursInterval) is set', function(assert) {
+        this.instance.option({
+            currentDate: new Date(2020, 2, 16),
+            hoursInterval: 1.75
+        });
+
+        assert.equal(this.instance.$element().find('.dx-scheduler-date-table-cell').length, 13, 'Cell count is OK');
+    });
+
+    QUnit.test('Cell count should be correct if cellDuration (hoursInterval),endDayHour and startDayHour is set', function(assert) {
+        this.instance.option({
+            currentDate: new Date(2020, 2, 16),
+            hoursInterval: 1.75,
+            endDayHour: 16,
+            startDayHour: 10
+        });
+
+        assert.equal(this.instance.$element().find('.dx-scheduler-date-table-cell').length, 3, 'Cell count is OK');
+    });
+
+    QUnit.test('Last cell should fit completely in the time interval if cellDuration (hoursInterval) is set', function(assert) {
+        this.instance.option({
+            currentDate: new Date(2020, 2, 16),
+            hoursInterval: 1.75
+        });
+        const lastCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').last().data('dxCellData');
+
+        assert.deepEqual(lastCellData.startDate, new Date(2020, 2, 16, 21), 'cell has right startDate');
+        assert.deepEqual(lastCellData.endDate, new Date(2020, 2, 16, 22, 45), 'cell has right endDate');
+    });
+
+    QUnit.test('Last cell should fit completely in the time interval if cellDuration (hoursInterval), endDayHour and startDayHour is set', function(assert) {
+        this.instance.option({
+            currentDate: new Date(2020, 2, 16),
+            hoursInterval: 1.75,
+            endDayHour: 16,
+            startDayHour: 10
+        });
+        const lastCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').last().data('dxCellData');
+
+        assert.deepEqual(lastCellData.startDate, new Date(2020, 2, 13, 30), 'cell has right startDate');
+        assert.deepEqual(lastCellData.endDate, new Date(2020, 2, 16, 15, 15), 'cell has right endDate');
+    });
 })('Work Space Day');
 
 (function() {

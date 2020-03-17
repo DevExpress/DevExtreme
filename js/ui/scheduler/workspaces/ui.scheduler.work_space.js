@@ -1472,7 +1472,7 @@ const SchedulerWorkSpace = Widget.inherit({
 
     _getCellCountInDay: function(skipRound) {
         const result = this._calculateDayDuration() / this.option('hoursInterval');
-        return skipRound ? result : Math.ceil(result);
+        return skipRound ? result : Math.floor(result);
     },
 
     _calculateDayDuration: function() {
