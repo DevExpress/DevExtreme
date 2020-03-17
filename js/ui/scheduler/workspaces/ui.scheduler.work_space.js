@@ -730,6 +730,7 @@ const SchedulerWorkSpace = Widget.inherit({
     _createCrossScrollingConfig: function() {
         const config = {};
         config.direction = 'both';
+
         config.onScroll = e => {
             this._mainSemaphore.take();
 
@@ -741,6 +742,10 @@ const SchedulerWorkSpace = Widget.inherit({
             });
 
             this._mainSemaphore.release();
+        };
+
+        config.onEnd = () => {
+            this.notifyObserver('updateResizableArea', {});
         };
 
         return config;
