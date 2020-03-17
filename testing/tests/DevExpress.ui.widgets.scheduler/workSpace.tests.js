@@ -473,7 +473,7 @@ QUnit.testStart(function() {
         });
         const lastCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').last().data('dxCellData');
 
-        assert.deepEqual(lastCellData.startDate, new Date(2020, 2, 13, 30), 'cell has right startDate');
+        assert.deepEqual(lastCellData.startDate, new Date(2020, 2, 16, 13, 30), 'cell has right startDate');
         assert.deepEqual(lastCellData.endDate, new Date(2020, 2, 16, 15, 15), 'cell has right endDate');
     });
 })('Work Space Day');
