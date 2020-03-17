@@ -759,7 +759,9 @@ const DiagramCommandsManager = {
                 const command = {
                     command: c.name,
                     text: c.text,
-                    icon: c.icon
+                    hint: c.text,
+                    icon: c.icon,
+                    menuIcon: c.icon
                 };
                 if(Array.isArray(c.items)) {
                     command.items = this._getPreparedCommands(allCommands, c.items);
@@ -768,7 +770,7 @@ const DiagramCommandsManager = {
             }
         }).filter(c => c);
     },
-    _prepareContextMenuCommands(commands, excludeCommands) {
+    _prepareContextMenuCommands(commands, excludeCommands, rootCommand) {
         let beginGroup = false;
         return commands.map(c => {
             if(!this._isValidCommand(c, excludeCommands)) return;
@@ -779,6 +781,7 @@ const DiagramCommandsManager = {
                 const command = this._cloneCommand(c, excludeCommands);
                 command.icon = command.menuIcon;
                 command.beginGroup = beginGroup;
+                command.rootCommand = !command.command ? rootCommand && rootCommand.command : undefined;
                 beginGroup = false;
                 return command;
             }
@@ -802,7 +805,7 @@ const DiagramCommandsManager = {
     _cloneCommand(c, excludeCommands) {
         const command = extend({}, c);
         if(Array.isArray(c.items)) {
-            command.items = this._prepareContextMenuCommands(c.items, excludeCommands);
+            command.items = this._prepareContextMenuCommands(c.items, excludeCommands, command);
         }
         return command;
     },
