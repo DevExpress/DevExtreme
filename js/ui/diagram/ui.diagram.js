@@ -678,12 +678,15 @@ class Diagram extends Widget {
         this._updateCustomShapes(this._getCustomShapes());
         this._refreshDataSources();
     }
-    _dispose() {
+    _clean() {
         if(this._diagramInstance) {
-            this._diagramInstance.dispose();
-            this._diagramInstance = undefined;
+            this._diagramInstance.cleanMarkup();
         }
+        super._clean();
+    }
+    _dispose() {
         super._dispose();
+        this._diagramInstance = undefined;
     }
     _executeDiagramCommand(command, parameter) {
         this._diagramInstance.commandManager.getCommand(command).execute(parameter);
