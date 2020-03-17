@@ -433,26 +433,6 @@ QUnit.testStart(function() {
         assert.deepEqual(secondCellData.endDate, new Date(2018, 2, 16, 12, 30), 'cell has right endDate');
     });
 
-    QUnit.test('Cell count should be correct if cellDuration (hoursInterval) is set', function(assert) {
-        this.instance.option({
-            currentDate: new Date(2020, 2, 16),
-            hoursInterval: 1.75
-        });
-
-        assert.equal(this.instance.$element().find('.dx-scheduler-date-table-cell').length, 13, 'Cell count is OK');
-    });
-
-    QUnit.test('Cell count should be correct if cellDuration (hoursInterval),endDayHour and startDayHour is set', function(assert) {
-        this.instance.option({
-            currentDate: new Date(2020, 2, 16),
-            hoursInterval: 1.75,
-            endDayHour: 16,
-            startDayHour: 10
-        });
-
-        assert.equal(this.instance.$element().find('.dx-scheduler-date-table-cell').length, 3, 'Cell count is OK');
-    });
-
     QUnit.test('Last cell should fit completely in the time interval if cellDuration (hoursInterval) is set', function(assert) {
         this.instance.option({
             currentDate: new Date(2020, 2, 16),

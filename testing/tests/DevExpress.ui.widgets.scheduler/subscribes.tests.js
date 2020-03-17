@@ -854,7 +854,7 @@ QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment dur
         endDate: new Date(2015, 2, 4, 21),
         allDay: true,
     });
-    assert.equal(result / dateUtils.dateToMilliseconds('hour'), 48.8, '\'getAppointmentDurationInMs\' works fine');
+    assert.equal(result / dateUtils.dateToMilliseconds('hour'), 45.75, '\'getAppointmentDurationInMs\' works fine');
 });
 
 QUnit.test('\'getAppointmentColor\' by certain group', function(assert) {

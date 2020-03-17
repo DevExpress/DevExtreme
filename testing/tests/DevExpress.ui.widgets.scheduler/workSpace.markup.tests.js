@@ -78,8 +78,8 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
     const cellDuration = 3600000 * interval;
 
     const cellCountInGroup = cellCount;
-    assert.equal($element.find('.dx-scheduler-time-panel-row').length, Math.ceil(cellCount * groupCount), 'Time panel has a right count of rows');
-    assert.equal($element.find('.dx-scheduler-time-panel-cell').length, Math.ceil(cellCount * groupCount), 'Time panel has a right count of cells');
+    assert.equal($element.find('.dx-scheduler-time-panel-row').length, Math.floor(cellCount * groupCount), 'Time panel has a right count of rows');
+    assert.equal($element.find('.dx-scheduler-time-panel-cell').length, Math.floor(cellCount * groupCount), 'Time panel has a right count of cells');
 
     $element.find('.dx-scheduler-time-panel-cell').each(function(index) {
         let time;
@@ -490,7 +490,7 @@ QUnit.module('Workspace Day markup', dayModuleConfig, () => {
             hoursInterval: 2.5
         });
 
-        assert.equal($element.find('.dx-scheduler-date-table-cell').length, 5, 'Cell count is OK');
+        assert.equal($element.find('.dx-scheduler-date-table-cell').length, 4, 'Cell count is OK');
     });
 
     QUnit.test('WorkSpace Day view has right count of cells with view option intervalCount=2', function(assert) {

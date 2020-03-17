@@ -303,7 +303,7 @@ QUnit.module('TimelineDay markup', timelineDayModuleConfig, () => {
             hoursInterval: 2.5
         });
 
-        assert.equal($element.find('.dx-scheduler-date-table-cell').length, 5, 'Cell count is OK');
+        assert.equal($element.find('.dx-scheduler-date-table-cell').length, 4, 'Cell count is OK');
     });
 });
 
@@ -604,7 +604,7 @@ QUnit.module('TimelineWeek markup', timelineWeekModuleConfig, () => {
             hoursInterval: 0.75
         });
 
-        assert.equal($element.find('.dx-scheduler-date-table-cell').length, 49, 'Cell count is OK');
+        assert.equal($element.find('.dx-scheduler-date-table-cell').length, 42, 'Cell count is OK');
     });
 });
 
