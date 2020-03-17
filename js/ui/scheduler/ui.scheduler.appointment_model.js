@@ -295,6 +295,11 @@ class AppointmentModel {
                 result = false;
             }
 
+            // NOTE: max may not be equal to endDayHour
+            if(result && comparableStartDate >= max) {
+                result = false;
+            }
+
             if(result && startDayHour !== undefined) {
                 result = compareDateWithStartDayHour(comparableStartDate, comparableEndDate, startDayHour, appointmentTakesAllDay, appointmentTakesSeveralDays);
             }
