@@ -1,4 +1,3 @@
-
 import numberLocalization from '../number';
 
 const ARABIC_COMMA = '\u060C';
