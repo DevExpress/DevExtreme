@@ -1140,7 +1140,7 @@ const LayoutManager = Widget.inherit({
                                     } else {
                                         itemRunTimeInfo.widgetInstance.option('value', dataValue);
                                     }
-                                } else if(itemRunTimeInfo.item.dataField && itemRunTimeInfo.item.template) {
+                                } else if(dataField && itemRunTimeInfo.item.template) {
                                     itemRunTimeInfo.$itemContainer.empty();
                                     this._renderFieldItem(itemRunTimeInfo.item, itemRunTimeInfo.$itemContainer);
                                 }
