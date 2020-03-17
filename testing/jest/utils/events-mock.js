@@ -6,7 +6,8 @@ let keyboardHandlers = {};
 
 export const KEY = {
     enter: 'enter',
-    space: 'space'
+    space: 'space',
+    a: 'a',
 };
 
 export const clear = () => {
@@ -37,13 +38,14 @@ export const defaultEvent = {
 export const fakeClickEvent = Object.assign(defaultEvent, {
     screenX: 0,
     offsetX: 0,
-    pageX: 0
+    pageX: 0,
+    pageY: 0,
 });
 
-export const emitKeyboard = (key, e = defaultEvent) => {
+export const emitKeyboard = (key, which = key, e = defaultEvent) => {
     for(const id in keyboardHandlers) {
         keyboardHandlers[id].forEach(
-            handler => handler({ originalEvent: e, keyName: key })
+            handler => handler({ originalEvent: e, keyName: key, which })
         );
     }
 };
