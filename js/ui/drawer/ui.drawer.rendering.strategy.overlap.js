@@ -32,9 +32,11 @@ class OverlapStrategy extends DrawerStrategy {
                 this._fixOverlayPosition(e.component.$content());
             }).bind(this),
             contentTemplate: drawer.option('template'),
-            onContentReady: (args) => {
+            onContentReady: () => {
                 whenPanelContentRendered.resolve();
-                this._processOverlayZIndex(args.component.content());
+                if(drawer.option('shading')) {
+                    drawer.toggleZIndex(opened);
+                }
             },
             visible: true,
             propagateOutsideClick: true
@@ -177,13 +179,6 @@ class OverlapStrategy extends DrawerStrategy {
 
     getPanelContent() {
         return $(this.getDrawerInstance().getOverlay().content());
-    }
-
-    _processOverlayZIndex($element) {
-        const styles = $($element).get(0).style;
-        const zIndex = styles.zIndex || 1;
-
-        this.getDrawerInstance().setZIndex(zIndex);
     }
 
     isViewContentFirst(position) {

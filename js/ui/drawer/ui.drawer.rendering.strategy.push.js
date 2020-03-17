@@ -3,6 +3,7 @@ import DrawerStrategy from './ui.drawer.rendering.strategy';
 import $ from '../../core/renderer';
 import translator from '../../animation/translator';
 import { extend } from '../../core/utils/extend';
+import * as zIndexPool from '../overlay/z_index';
 
 class PushStrategy extends DrawerStrategy {
     _useDefaultAnimation() {
@@ -40,6 +41,20 @@ class PushStrategy extends DrawerStrategy {
             contentPosition: this._getPanelSize(isDrawerOpened) * this.getDrawerInstance()._getPositionCorrection(),
             maxSize: this._getPanelSize(true)
         });
+    }
+
+    setZIndex(zIndex) {
+        const drawer = this.getDrawerInstance();
+
+        drawer._$shader.css('zIndex', zIndex);
+    }
+
+    clearZIndex() {
+        const drawer = this.getDrawerInstance();
+
+        zIndexPool.remove(drawer._zIndex);
+        drawer._$shader.css('zIndex', '');
+        delete drawer._zIndex;
     }
 }
 

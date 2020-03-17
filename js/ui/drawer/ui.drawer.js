@@ -15,6 +15,7 @@ import { name as CLICK_EVENT_NAME } from '../../events/click';
 import fx from '../../animation/fx';
 import { Deferred } from '../../core/utils/deferred';
 import { triggerResizeEvent } from '../../core/utils/dom';
+import * as zIndexPool from '../overlay/z_index';
 
 const DRAWER_CLASS = 'dx-drawer';
 const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
@@ -335,11 +336,6 @@ const Drawer = Widget.inherit({
         }
     },
 
-    setZIndex(zIndex) {
-        this._$shader.css('zIndex', zIndex - 1);
-        this._$panelContentWrapper.css('zIndex', zIndex);
-    },
-
     resizeContent() { // TODO: keep for ui.file_manager.adaptivity.js
         this.resizeViewContent;
     },
@@ -407,8 +403,22 @@ const Drawer = Widget.inherit({
         if(this.option('shading')) {
             this._$shader.toggleClass(INVISIBLE_STATE_CLASS, !visible);
             this._$shader.css('visibility', visible ? 'visible' : 'hidden');
+
+            this.toggleZIndex(visible);
         } else {
             this._$shader.toggleClass(INVISIBLE_STATE_CLASS, true);
+            this._$shader.css('visibility', 'hidden');
+        }
+    },
+
+    toggleZIndex(visible) {
+        if(visible && !typeUtils.isDefined(this._zIndex)) {
+            this._zIndex = zIndexPool.create();
+            this._strategy.setZIndex(this._zIndex);
+        }
+
+        if(!visible && typeUtils.isDefined(this._zIndex)) {
+            this._strategy.clearZIndex(zIndexPool);
         }
     },
 
@@ -441,6 +451,7 @@ const Drawer = Widget.inherit({
     _clean() {
         this._cleanFocusState();
 
+        this._strategy.clearZIndex(zIndexPool);
         this._removePanelContentWrapper();
         this._removeOverlay();
     },

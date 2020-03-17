@@ -2,6 +2,7 @@ import $ from '../../core/renderer';
 import fx from '../../animation/fx';
 import { Deferred, when } from '../../core/utils/deferred';
 import { camelize } from '../../core/utils/inflector';
+import * as zIndexPool from '../overlay/z_index';
 
 const animation = {
     moveTo(config) {
@@ -203,6 +204,23 @@ class DrawerStrategy {
             drawer._toggleShaderVisibility(isShaderVisible);
             drawer._$shader.css('opacity', fadeConfig.to);
         }
+    }
+
+    setZIndex(zIndex) {
+        const drawer = this.getDrawerInstance();
+
+        drawer._$shader.css('zIndex', zIndex);
+        drawer._$panelContentWrapper.css('zIndex', zIndex + 1);
+    }
+
+    clearZIndex() {
+        const drawer = this.getDrawerInstance();
+
+        zIndexPool.remove(drawer._zIndex);
+        zIndexPool.remove(drawer._zIndex + 1);
+        drawer._$shader.css('zIndex', '');
+        drawer._$panelContentWrapper.css('zIndex', '');
+        delete drawer._zIndex;
     }
 
     getPanelContent() {
