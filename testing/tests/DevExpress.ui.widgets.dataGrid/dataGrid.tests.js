@@ -4405,6 +4405,51 @@ QUnit.test('Test \'autoNavigateToFocusedRow\' option if focused row key is not v
     assert.equal(dataGrid.option('focusedRowIndex'), -1, 'focusedRowIndex');
 });
 
+// T867777
+[true, false].forEach(repaintChangesOnly => {
+    QUnit.test(`FocusedRowIndex should be cleared after page changing if autoNavigateToFocusedRow is false and repaintChangesOnly ${repaintChangesOnly}`, function(assert) {
+        const data = [
+            { name: 'Alex', phone: '111111', room: 6 },
+            { name: 'Dan', phone: '2222222', room: 5 },
+            { name: 'Ben', phone: '454333', room: 4 },
+            { name: 'Sean', phone: '454555', room: 3 },
+            { name: 'Smith', phone: '454666', room: 2 },
+            { name: 'Zeb', phone: '454777', room: 1 }
+        ];
+        let onContentReadyCallCount = 0;
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            height: 80,
+            dataSource: data,
+            keyExpr: 'name',
+            autoNavigateToFocusedRow: false,
+            focusedRowEnabled: true,
+            repaintChangesOnly: repaintChangesOnly,
+            paging: {
+                pageSize: 2
+            },
+            onContentReady: function(e) {
+                onContentReadyCallCount++;
+
+                const focusedRowIndex = e.component.option('focusedRowIndex');
+                if(focusedRowIndex < 0) {
+                    e.component.option('focusedRowIndex', 0);
+                }
+
+                assert.equal(focusedRowIndex, -1, 'Page index was cleared after page changing');
+            }
+        }).dxDataGrid('instance');
+        this.clock.tick();
+
+        dataGrid.pageIndex(1);
+        this.clock.tick();
+
+        dataGrid.pageIndex(2);
+        this.clock.tick();
+
+        assert.equal(onContentReadyCallCount, 3, 'onContentReady called 3 times');
+    });
+});
+
 QUnit.test('Test \'autoNavigateToFocusedRow\' option if focused row key is visible', function(assert) {
     // arrange
     const data = [
