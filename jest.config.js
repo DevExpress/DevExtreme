@@ -10,6 +10,22 @@ module.exports = {
             diagnostics: false, // set to true to enable type checking
         }
     },
+    collectCoverage: true,
+    collectCoverageFrom: ['./js/renovation/**/*.p.js'],
+    coverageDirectory: './testing/jest/code_coverage',
+    coverageThreshold: {
+        './js/renovation/**/button.p.js': {
+            functions: 100,
+            statements: 100,
+            lines: 100,
+            branches: 100
+        },
+        './js/renovation/**/*.p.js': {
+            functions: 70,
+            statements: 80,
+            lines: 80
+        }
+    },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     preset: 'ts-jest',
     setupFiles: [
