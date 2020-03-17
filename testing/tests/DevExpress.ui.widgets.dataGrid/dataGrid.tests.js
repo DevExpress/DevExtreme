@@ -10197,6 +10197,67 @@ QUnit.test('Freespace row should not have huge height if rowRenderingMode is vir
     assert.roughEqual($('.dx-freespace-row').height(), 0.5, 0.51, 'freespace height');
 });
 
+QUnit.test('DataGrid - DataController should return correct lastIndex for the focusedRow logic (T864478)', function(assert) {
+    // arrange
+    const that = this;
+    const generateData = function(rowAmount, columnAmount) {
+        const columns = [ 'ID' ];
+        const data = [];
+
+        for(let i = 0; i < columnAmount; ++i) {
+            columns.push(`C_${i}`);
+        }
+
+        for(let i = 0; i < rowAmount; ++i) {
+            const item = { };
+            for(let j = 0; j < columnAmount; ++j) {
+                const columnName = columns[j];
+                const value = columnName === 'ID' ? i : `${columnName}_${i}`;
+                item[columnName] = value;
+            }
+            data.push(item);
+        }
+        that.columns = columns;
+        return data;
+    };
+    const dataGrid = createDataGrid({
+        height: 200,
+        dataSource: generateData(100, 2),
+        keyExpr: 'ID',
+        focusedRowEnabled: true,
+        scrolling: {
+            mode: 'virtual',
+            rowRenderingMode: 'virtual'
+        },
+        paging: {
+            pageSize: 110,
+            enabled: false
+        },
+        columns: [
+            'ID',
+            'C_0',
+            {
+                dataField: 'C_1',
+                calculateSortValue: e => e.field3
+            }
+        ]
+    });
+
+    this.clock.tick();
+
+    // arrange
+    const dataController = dataGrid.getController('data');
+    sinon.spy(dataController, '_getLastItemIndex');
+
+    // act
+    dataGrid.option('focusedRowKey', 5);
+    this.clock.tick();
+
+    // assert
+    assert.ok(dataController._getLastItemIndex.callCount > 0, '_getLastItemIndex has called after set focusedRowKey');
+    assert.equal(dataController._getLastItemIndex(), 99, 'Last item index');
+});
+
 QUnit.module('Rendered on server', baseModuleConfig);
 
 QUnit.test('Loading should be synchronously', function(assert) {
