@@ -33,7 +33,7 @@ const setAttribute = (name, value) => {
     if (value) {
         const attrName = (name === 'role' || name === 'id') ? name : `aria-${name}`;
 
-        result[attrName] = value.toString() || null;
+        result[attrName] = String(value);
     }
 
     return result;
@@ -101,19 +101,19 @@ export class WidgetInput {
     @OneWay() className?: string | undefined = '';
     @OneWay() clickArgs?: any = {};
     @OneWay() disabled?: boolean = false;
-    @OneWay() elementAttr?: { [name: string]: any } = {};
+    @OneWay() elementAttr?: { [name: string]: any };
     @OneWay() focusStateEnabled?: boolean = false;
     @OneWay() height?: string | number | null = null;
     @OneWay() hint?: string;
     @OneWay() hoverStateEnabled?: boolean = false;
     @OneWay() name?: string = '';
-    @OneWay() onActive?: (e: any) => any = (() => undefined);
-    @Event() onClick?: (e: any) => void = (() => {});
+    @OneWay() onActive?: (e: any) => any;
+    @Event() onClick?: (e: any) => void;
     @Event() onContentReady?: (e: any) => any = (() => {});
-    @OneWay() onDimensionChanged?: () => any = (() => undefined);
-    @OneWay() onInactive?: (e: any) => any = (() => undefined);
+    @OneWay() onDimensionChanged?: () => any;
+    @OneWay() onInactive?: (e: any) => any;
     @OneWay() onKeyboardHandled?: (args: any) => any | undefined;
-    @OneWay() onKeyPress?: (e: any, options: any) => any = (() => undefined);
+    @OneWay() onKeyPress?: (e: any, options: any) => any;
     @OneWay() onVisibilityChange?: (args: boolean) => undefined;
     @OneWay() rtlEnabled?: boolean = config().rtlEnabled;
     @OneWay() tabIndex?: number = 0;
@@ -191,15 +191,19 @@ export default class Widget extends JSXComponent<WidgetInput> {
 
     @Effect()
     clickEffect() {
-        const { name, clickArgs } = this.props;
+        const { name, clickArgs, onClick } = this.props;
         const namespace = name;
 
-        dxClick.on(this.widgetRef,
-            e => this.props.onClick!({ ...clickArgs, ...e }),
-            { namespace },
-        );
+        if (onClick) {
+            dxClick.on(this.widgetRef,
+                e => onClick({ ...clickArgs, ...e }),
+                { namespace },
+            );
 
-        return () => dxClick.off(this.widgetRef, { namespace });
+            return () => dxClick.off(this.widgetRef, { namespace });
+        }
+
+        return null;
     }
 
     @Effect()
@@ -213,7 +217,7 @@ export default class Widget extends JSXComponent<WidgetInput> {
                 e => !e.isDefaultPrevented() && (this._focused = true),
                 e => !e.isDefaultPrevented() && (this._focused = false),
                 {
-                    isFocusable: el => focusable(null, el),
+                    isFocusable: focusable,
                     namespace,
                 },
             );
@@ -250,7 +254,7 @@ export default class Widget extends JSXComponent<WidgetInput> {
 
         if (focusStateEnabled || onKeyPress) {
             const id = keyboard.on(this.widgetRef, this.widgetRef,
-                options => onKeyPress?.(options.originalEvent, options));
+                options => onKeyPress!(options.originalEvent, options));
 
             return () => keyboard.off(id);
         }
@@ -275,8 +279,8 @@ export default class Widget extends JSXComponent<WidgetInput> {
     @Effect()
     visibilityEffect() {
         const { name, onVisibilityChange } = this.props;
-
         const namespace = `${name}VisibilityChange`;
+
         if (onVisibilityChange) {
             visibility.on(this.widgetRef,
                 () => onVisibilityChange!(true),
@@ -292,25 +296,26 @@ export default class Widget extends JSXComponent<WidgetInput> {
 
     get attributes() {
         const {
-            aria,
-            visible,
-            focusStateEnabled,
-            disabled,
             accessKey,
+            aria,
+            disabled,
             elementAttr,
+            focusStateEnabled,
+            visible,
         } = this.props;
 
+        const arias = getAria({ ...aria, disabled, hidden: !visible });
         const attrsWithoutClass = getAttributes({
             accessKey: focusStateEnabled && !disabled && accessKey,
             elementAttr,
         });
-        const arias = getAria({ ...aria, disabled, hidden: !visible });
 
         return { ...attrsWithoutClass, ...arias };
     }
 
     get styles() {
         const { width, height } = this.props;
+
         return getStyles({ width, height });
     }
 
@@ -334,8 +339,8 @@ export default class Widget extends JSXComponent<WidgetInput> {
     }
 
     get tabIndex() {
-        return this.props.focusStateEnabled &&
-            !this.props.disabled &&
-            this.props.tabIndex;
+        const { focusStateEnabled, disabled } = this.props;
+
+        return focusStateEnabled && !disabled && this.props.tabIndex;
     }
 }

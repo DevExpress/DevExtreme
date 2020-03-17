@@ -70,7 +70,7 @@ export const focus = {
 
         if(domAdapter.hasDocumentProperty('onbeforeactivate')) {
             eventsEngine.on($el, addNamespace('beforeactivate', namespace),
-                e => isFocusable(e.target) || e.preventDefault()
+                e => isFocusable(null, e.target) || e.preventDefault()
             );
         }
     },
