@@ -1131,18 +1131,20 @@ const LayoutManager = Widget.inherit({
                             if(isDefined(itemRunTimeInfo.item)) {
                                 const dataField = itemRunTimeInfo.item.dataField;
 
-                                if(dataField && isDefined(itemRunTimeInfo.widgetInstance)) {
-                                    const valueGetter = dataUtils.compileGetter(dataField);
-                                    const dataValue = valueGetter(args.value);
+                                if(dataField) {
+                                    if(isDefined(itemRunTimeInfo.widgetInstance)) {
+                                        const valueGetter = dataUtils.compileGetter(dataField);
+                                        const dataValue = valueGetter(args.value);
 
-                                    if(dataValue === undefined) {
-                                        this._resetWidget(itemRunTimeInfo.widgetInstance);
-                                    } else {
-                                        itemRunTimeInfo.widgetInstance.option('value', dataValue);
+                                        if(dataValue === undefined) {
+                                            this._resetWidget(itemRunTimeInfo.widgetInstance);
+                                        } else {
+                                            itemRunTimeInfo.widgetInstance.option('value', dataValue);
+                                        }
+                                    } else if(itemRunTimeInfo.item.template) {
+                                        itemRunTimeInfo.$itemContainer.empty();
+                                        this._renderFieldItem(itemRunTimeInfo.item, itemRunTimeInfo.$itemContainer);
                                     }
-                                } else if(dataField && itemRunTimeInfo.item.template) {
-                                    itemRunTimeInfo.$itemContainer.empty();
-                                    this._renderFieldItem(itemRunTimeInfo.item, itemRunTimeInfo.$itemContainer);
                                 }
                             }
                         });
