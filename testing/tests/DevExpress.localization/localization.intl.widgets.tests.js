@@ -7,6 +7,7 @@ import $ from 'jquery';
 import 'ui/date_box';
 import { excel as excelCreator } from 'exporter';
 import dateLocalization from 'localization/date';
+import keyboardMock from '../../helpers/keyboardMock.js';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
@@ -33,11 +34,19 @@ QUnit.module('Intl localization', () => {
                     value: new Date(2015, 10, 10),
                     type: 'date',
                     pickerType: 'calendar',
-                    useMaskBehavior: true
+                    useMaskBehavior: true,
+                    opened: true
                 });
 
-                const date = $dateBox.find(TEXTEDITOR_INPUT_SELECTOR).val();
-                assert.equal(date, '١٠/١١/٢٠١٥', 'date is localized');
+                const $input = $dateBox.find(TEXTEDITOR_INPUT_SELECTOR);
+                const keyboard = keyboardMock($input);
+
+                keyboard
+                    .press('right')
+                    .press('enter');
+                const date = $input.val();
+
+                assert.equal(date, '١١/١١/٢٠١٥', 'date is localized');
             } catch(e) {
                 assert.ok(false, 'Error occured: ' + e.message);
             } finally {
@@ -48,16 +57,23 @@ QUnit.module('Intl localization', () => {
         QUnit.test('DateBox should not raise error when digits are Farsi digits', function(assert) {
             const currentLocale = locale();
             try {
-                locale('fa');
+                locale('fa-u-ca-gregory');
                 const $dateBox = $('#dateBox').dxDateBox({
                     value: new Date(2015, 10, 10),
                     type: 'date',
                     pickerType: 'calendar',
-                    useMaskBehavior: true
+                    useMaskBehavior: true,
                 });
 
-                const date = $dateBox.find(TEXTEDITOR_INPUT_SELECTOR).val();
-                assert.equal(date, '۲۰۱۵/۱۱/۱۰', 'date is localized');
+                const $input = $dateBox.find(TEXTEDITOR_INPUT_SELECTOR);
+                const keyboard = keyboardMock($input);
+
+                keyboard
+                    .press('up')
+                    .press('enter');
+                const date = $input.val();
+
+                assert.strictEqual(date, '۲۰۱۶/۱۱/۱۰', 'date is localized');
             } catch(e) {
                 assert.ok(false, 'Error occured: ' + e.message);
             } finally {
@@ -73,11 +89,19 @@ QUnit.module('Intl localization', () => {
                     value: new Date(2015, 10, 10),
                     type: 'date',
                     pickerType: 'calendar',
-                    useMaskBehavior: true
+                    useMaskBehavior: true,
+                    opened: true
                 });
 
-                const date = $dateBox.find(TEXTEDITOR_INPUT_SELECTOR).val();
-                assert.equal(date, '१०/११/२०१५', 'date is localized');
+                const $input = $dateBox.find(TEXTEDITOR_INPUT_SELECTOR);
+                const keyboard = keyboardMock($input);
+
+                keyboard
+                    .press('right')
+                    .press('enter');
+                const date = $input.val();
+
+                assert.equal(date, '११/११/२०१५', 'date is localized');
             } catch(e) {
                 assert.ok(false, 'Error occured: ' + e.message);
             } finally {
@@ -92,13 +116,13 @@ QUnit.module('Excel creator', commonEnvironment, () => {
         const originalCulture = locale();
 
         try {
-            locale('ar');
+            locale('ar-u-nu-arab');
 
             const convertDate = function(formatter) {
                 return excelCreator.formatConverter.convertFormat(formatter, null, 'date');
             };
 
-            const pattern = '[$-2010001]d\\/M\\/yyyy';
+            const pattern = '[$-2010000]d\\/M\\/yyyy';
             const formatter = function(value) {
                 return dateLocalization.format(value, 'shortdate');
             };

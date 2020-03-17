@@ -2,17 +2,19 @@ const likelySubtags = require('../../../node_modules/cldr-core/supplemental/like
 const numberingSystems = require('../../../node_modules/cldr-core/supplemental/numberingSystems.json!');
 const Globalize = require('globalize');
 
+const cldrData = [
+    require('../../../node_modules/devextreme-cldr-data/fa.json!json'),
+    require('../../../node_modules/devextreme-cldr-data/mr.json!json'),
+    require('../../../node_modules/devextreme-cldr-data/ar.json!json'),
+    require('../../../node_modules/devextreme-cldr-data/de.json!json')
+];
+
 Globalize.load(likelySubtags);
 Globalize.load(numberingSystems);
 
-require('../../helpers/l10n/cldrNumberDataDe.js');
-require('../../helpers/l10n/cldrCalendarDataDe.js');
-require('../../helpers/l10n/cldrNumberDataAr.js');
-require('../../helpers/l10n/cldrCalendarDataAr.js');
-require('../../helpers/l10n/cldrNumberDataFa.js');
-require('../../helpers/l10n/cldrCalendarDataFa.js');
-require('../../helpers/l10n/cldrNumberDataMr.js');
-require('../../helpers/l10n/cldrCalendarDataMr.js');
+cldrData.forEach(localeCldrData => {
+    Globalize.load(localeCldrData);
+});
 
 require('localization/globalize/core');
 require('localization/globalize/number');
@@ -324,8 +326,9 @@ QUnit.module('Excel creator', commonEnvironment, () => {
             const formatter = function(value) {
                 return dateLocalization.format(value, 'shortdate');
             };
+            const date = convertDate(formatter).trim();
 
-            assert.strictEqual(convertDate(formatter), pattern, `Pattern: "${pattern}" Example:"${formatter(new Date())}"`);
+            assert.strictEqual(date, pattern, `Pattern: "${pattern}" Example:"${formatter(new Date())}"`);
         } finally {
             Globalize.locale(originalCulture);
         }
