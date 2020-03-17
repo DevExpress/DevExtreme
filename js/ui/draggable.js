@@ -702,18 +702,6 @@ const Draggable = DOMComponentWithTemplate.inherit({
 
     _updateScrollable: function(e) {
         const that = this;
-        const $sourceElement = that._getSourceElement();
-
-        that._$scrollable = null;
-        $sourceElement.parents().toArray().some(function(element) {
-            const $element = $(element);
-
-            if(that._horizontalScrollHelper.isScrollable($element) || that._verticalScrollHelper.isScrollable($element)) {
-                that._$scrollable = $element;
-
-                return true;
-            }
-        });
 
         if(that.option('autoScroll')) {
             const $window = $(window);
