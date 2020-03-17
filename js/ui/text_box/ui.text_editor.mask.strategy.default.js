@@ -35,6 +35,10 @@ class DefaultMaskStrategy extends BaseMaskStrategy {
             this._handleBackspaceInput(event);
         }
 
+        if(this._isAutoFill(event)) {
+            this._autoFillHandler(event);
+        }
+
         if(this._keyPressHandled) {
             return;
         }
@@ -111,6 +115,10 @@ class DefaultMaskStrategy extends BaseMaskStrategy {
         const { start, end } = this.editorCaret();
         this.editorCaret({ start: start + 1, end: end + 1 });
         this._backspaceHandler(event);
+    }
+
+    _isAutoFill(event) {
+        return event && event.originalEvent && !event.originalEvent.inputType;
     }
 
     clean() {

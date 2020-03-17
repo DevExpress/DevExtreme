@@ -418,6 +418,21 @@ QUnit.module('typing', moduleConfig, () => {
         assert.equal(handler.callCount, 2, '\'change\' event is not fired after focus out without value change');
         clock.restore();
     });
+
+    QUnit.test('TextEditor with mask option should work correctly with ios autofill (T869537)', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '+1 (X00) 000',
+            maskRules: { X: /[02-9]/ },
+            name: 'phonenumber',
+            pattern: '[0-9]*',
+            mode: 'tel'
+        });
+        const $input = $textEditor.find('.dx-texteditor-input');
+
+        $input.val(555555);
+        $input.trigger($.Event('input', { originalEvent: $.Event('input', { data: '5' }) }));
+        assert.strictEqual($input.val(), '+1 (555) 555', 'the mask is applied for all value');
+    });
 });
 
 QUnit.module('backspace key', moduleConfig, () => {

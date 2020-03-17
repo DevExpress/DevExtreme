@@ -139,6 +139,16 @@ export default class BaseMaskStrategy {
         });
     }
 
+    _autoFillHandler(event) {
+        const { editor } = this;
+        this._keyPressHandled = true;
+
+        editor._maskKeyHandler(event, () => {
+            const pastingText = this.editorInput().val();
+            editor._handleChain({ text: pastingText, start: 0, length: pastingText.length });
+        });
+    }
+
     runWithoutEventProcessing(action) {
         const keyPressHandled = this._keyPressHandled;
 
