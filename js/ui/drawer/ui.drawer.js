@@ -441,8 +441,15 @@ const Drawer = Widget.inherit({
     _clean() {
         this._cleanFocusState();
 
+        this._removeViewContent();
         this._removePanelContentWrapper();
         this._removeOverlay();
+    },
+
+    _removeViewContent() {
+        if(this._$viewContentWrapper) {
+            this._$viewContentWrapper.empty();
+        }
     },
 
     _removePanelContentWrapper() {
