@@ -633,6 +633,7 @@ class Diagram extends Widget {
             notifyItemDblClick: this._raiseItemDblClickAction.bind(this),
             notifySelectionChanged: this._raiseSelectionChanged.bind(this)
         });
+        this._updateEventSubscriptionMethods();
 
         this._updateShapeTexts();
         this._updateUnitItems();
@@ -1294,6 +1295,15 @@ class Diagram extends Widget {
         texts[ShapeTypes.CardWithImageOnTop] = messageLocalization.format('dxDiagram-shapeCardWithImageOnTop');
         texts[ShapeTypes.CardWithImageOnRight] = messageLocalization.format('dxDiagram-shapeCardWithImageOnRight');
         return texts;
+    }
+    _updateEventSubscriptionMethods() {
+        const { RenderHelper } = getDiagram();
+        RenderHelper.addEventListener = (element, eventName, handler) => {
+            eventsEngine.on(element, eventName, handler);
+        };
+        RenderHelper.removeEventListener = (element, eventName, handler) => {
+            eventsEngine.off(element, eventName, handler);
+        };
     }
 
     export() {
