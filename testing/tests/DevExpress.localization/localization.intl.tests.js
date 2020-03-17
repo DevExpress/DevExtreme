@@ -297,6 +297,22 @@ QUnit.module('Intl localization', {
             assert.equal(dateLocalization.getMonthNames('wide', 'format')[10], expected[localeId], 'Array of non-standalone month names');
         });
 
+        QUnit.test('getPeriodNames', function(assert) {
+            const expected = {
+                de: ['vorm.', 'nachm.'],
+                en: ['AM', 'PM'],
+                ja: ['午前', '午後'],
+                ru: ['ДП', 'ПП'],
+                zh: ['上午', '下午'],
+                hr: ['AM', 'PM'],
+                ar: ['ص', 'م'],
+                el: ['π.μ.', 'μ.μ.'],
+                ca: ['a. m.', 'p. m.']
+            };
+
+            assert.deepEqual(dateLocalization.getPeriodNames(), expected[localeId]);
+        });
+
         QUnit.test('getDayNames', function(assert) {
             const dayNames = {
                 en: { long: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] }

@@ -22,11 +22,11 @@ SystemJS.config({
 });
 
 define(function(require, exports, module) {
-    require('../../helpers/l10n/cldrNumberDataRu.js');
-    require('../../helpers/l10n/cldrNumberDataDe.js');
-    require('../../helpers/l10n/cldrCalendarDataRu.js');
-    require('../../helpers/l10n/cldrCurrencyDataRu.js');
-    require('../../helpers/l10n/cldrCurrencyDataEn.js');
+    const cldrData = [
+        require('../../../node_modules/devextreme-cldr-data/ru.json!json'),
+        require('../../../node_modules/devextreme-cldr-data/en.json!json'),
+        require('../../../node_modules/devextreme-cldr-data/de.json!json')
+    ];
 
     require('localization/globalize/core');
     require('localization/globalize/number');
@@ -45,6 +45,10 @@ define(function(require, exports, module) {
 
     const likelySubtags = require('../../../node_modules/cldr-core/supplemental/likelySubtags.json!');
     Globalize.load(likelySubtags);
+
+    cldrData.forEach(localeCldrData => {
+        Globalize.load(localeCldrData);
+    });
 
     const NBSP = String.fromCharCode(160);
 
@@ -118,7 +122,7 @@ define(function(require, exports, module) {
     });
 
     QUnit.test('getPeriodNames', function(assert) {
-        assert.deepEqual(dateLocalization.getPeriodNames(), ['ДП', 'ПП'], 'Array of period names');
+        assert.deepEqual(dateLocalization.getPeriodNames(), ['AM', 'PM'], 'Array of period names');
     });
 
     QUnit.test('getDayNames', function(assert) {
@@ -137,8 +141,8 @@ define(function(require, exports, module) {
             'dayofweek': 'понедельник',
             'hour': '03',
             'longdate': 'понедельник, 2 марта 2015 г.',
-            'longdatelongtime': 'понедельник, 2 марта 2015 г., 3:04:05',
-            'longtime': '3:04:05',
+            'longdatelongtime': 'понедельник, 2 марта 2015 г., 03:04:05',
+            'longtime': '03:04:05',
             'millisecond': '006',
             'minute': '04',
             'month': 'март',
@@ -148,8 +152,8 @@ define(function(require, exports, module) {
             'quarterandyear': '1-й кв. 2015 г.',
             'second': '05',
             'shortdate': '02.03.2015',
-            'shortdateshorttime': '02.03.2015, 3:04',
-            'shorttime': '3:04',
+            'shortdateshorttime': '02.03.2015, 03:04',
+            'shorttime': '03:04',
             'shortyear': '15',
             'year': '2015',
 
