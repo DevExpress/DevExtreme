@@ -173,25 +173,21 @@ QUnit.test('Reset editor value after formData changing only if dataField is defi
     assert.equal(form.getEditor('gender').option('value'), '', '\'gender\' editor was reseted');
 });
 
-[undefined, e => $('<div>').text(e.editorOptions.value)].forEach(template => {
-    QUnit.test(`item.template: ${template} -> option('formData', data[1]) (T870257)`, function(assert) {
-        const formData = [ { Field: 'item1' }, { Field: 'item2' } ];
-        const form = $('#form').dxForm({
-            formData: formData[0],
-            items: [{
-                dataField: 'Field',
-                template
-            }],
-        }).dxForm('instance');
 
-        form.option('formData', formData[1]);
+QUnit.test('item.template -> option("formData", data[1]) (T870257)', function(assert) {
+    const formData = [ { Field: 'item1' }, { Field: 'item2' } ];
+    const form = $('#form').dxForm({
+        formData: formData[0],
+        items: [{
+            dataField: 'Field',
+            template: e => $('<div>').text(e.editorOptions.value)
+        }],
+    }).dxForm('instance');
 
-        const fieldText = form.$element().find('.dx-field-item-content input').length
-            ? form.$element().find('.dx-field-item-content input').val()
-            : form.$element().find('.dx-field-item-content').text();
+    form.option('formData', formData[1]);
 
-        assert.equal(fieldText, formData[1].Field, 'Field text is valid');
-    });
+    const fieldText = form.$element().find('.dx-field-item-content').text();
+    assert.equal(fieldText, formData[1].Field, 'Field text is valid');
 });
 
 QUnit.test('Invalid field name when item is defined not as string and not as object', function(assert) {
