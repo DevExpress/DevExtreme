@@ -586,8 +586,8 @@ QUnit.test('Timeline should find cell coordinates by date depend on start/end da
 
     const coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 2, 8, 0));
 
-    assert.equal(coords.top, $element.find('.dx-scheduler-date-table-cell').eq(11).position().top, 'Cell coordinates are right');
-    assert.equal(coords.left, $element.find('.dx-scheduler-date-table-cell').eq(11).position().left, 'Cell coordinates are right');
+    assert.equal(coords.top, $element.find('.dx-scheduler-date-table-cell').eq(10).position().top, 'Cell coordinates are right');
+    assert.equal(coords.left, $element.find('.dx-scheduler-date-table-cell').eq(10).position().left, 'Cell coordinates are right');
 });
 
 QUnit.test('Get visible bounds for timelineWeek on init', function(assert) {
