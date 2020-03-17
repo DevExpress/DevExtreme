@@ -4,7 +4,8 @@ QUnit.testStart(function() {
             <div id="container" class="dx-datagrid"></div>
         </div>`;
 
-    $('#qunit-fixture').html(markup);
+    // $('#qunit-fixture').html(markup);
+    $(markup).appendTo('body');
 });
 
 import 'common.css!';
@@ -36,7 +37,6 @@ QUnit.module('Rows view', {
 
         this.createRowsView = function(rows, dataController, columns, initDefaultOptions) {
             let i;
-            let columnsController;
 
             dataController = dataController || new MockDataController({ items: rows });
 
@@ -46,7 +46,7 @@ QUnit.module('Rows view', {
                     columns.push({});
                 }
             }
-            columnsController = new MockColumnsController(columns);
+            const columnsController = new MockColumnsController(columns);
 
             this.options = {
                 disabled: false,
@@ -90,14 +90,13 @@ QUnit.module('Rows view', {
     QUnit.testInActiveWindow('Focused cell from free space row when view is rendered', function(assert) {
         // arrange
         const $container = $('#container');
-        let origUpdateFocus;
 
         setupModules(this);
         this.gridView.render($container);
         this.keyboardNavigationController._focusedView = this.rowsView;
         this.keyboardNavigationController._isNeedFocus = true;
 
-        origUpdateFocus = this.keyboardNavigationController._updateFocus;
+        const origUpdateFocus = this.keyboardNavigationController._updateFocus;
         this.keyboardNavigationController._updateFocus = function() {
             origUpdateFocus.apply(this, arguments);
 
