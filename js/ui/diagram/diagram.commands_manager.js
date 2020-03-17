@@ -781,7 +781,7 @@ const DiagramCommandsManager = {
                 const command = this._cloneCommand(c, excludeCommands);
                 command.icon = command.menuIcon;
                 command.beginGroup = beginGroup;
-                command.rootCommand = !command.command ? rootCommand.command : undefined;
+                command.rootCommand = !command.command ? rootCommand && rootCommand.command : undefined;
                 beginGroup = false;
                 return command;
             }
