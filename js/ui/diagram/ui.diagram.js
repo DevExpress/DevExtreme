@@ -633,6 +633,7 @@ class Diagram extends Widget {
             notifyItemDblClick: this._raiseItemDblClickAction.bind(this),
             notifySelectionChanged: this._raiseSelectionChanged.bind(this)
         });
+        this._updateEventSubscriptionMethods();
 
         this._updateShapeTexts();
         this._updateUnitItems();
@@ -677,12 +678,15 @@ class Diagram extends Widget {
         this._updateCustomShapes(this._getCustomShapes());
         this._refreshDataSources();
     }
-    _dispose() {
+    _clean() {
         if(this._diagramInstance) {
-            this._diagramInstance.dispose();
-            this._diagramInstance = undefined;
+            this._diagramInstance.cleanMarkup();
         }
+        super._clean();
+    }
+    _dispose() {
         super._dispose();
+        this._diagramInstance = undefined;
     }
     _executeDiagramCommand(command, parameter) {
         this._diagramInstance.commandManager.getCommand(command).execute(parameter);
@@ -1294,6 +1298,15 @@ class Diagram extends Widget {
         texts[ShapeTypes.CardWithImageOnTop] = messageLocalization.format('dxDiagram-shapeCardWithImageOnTop');
         texts[ShapeTypes.CardWithImageOnRight] = messageLocalization.format('dxDiagram-shapeCardWithImageOnRight');
         return texts;
+    }
+    _updateEventSubscriptionMethods() {
+        const { RenderHelper } = getDiagram();
+        RenderHelper.addEventListener = (element, eventName, handler) => {
+            eventsEngine.on(element, eventName, handler);
+        };
+        RenderHelper.removeEventListener = (element, eventName, handler) => {
+            eventsEngine.off(element, eventName, handler);
+        };
     }
 
     export() {
