@@ -1172,7 +1172,7 @@ QUnit.test('Draw plaque w/o arrow', function(assert) {
         y: 100,
         paddingLeftRight: 10,
         paddingTopBottom: 10,
-        cornerRadius: 5,
+        border: { cornerRadius: 5 },
         arrowWidth: 10
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1191,7 +1191,7 @@ QUnit.test('Corner radius can\'t be greater than half of height', function(asser
         height: 20,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 50,
+        border: { cornerRadius: 50 },
         arrowWidth: 10
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1210,7 +1210,7 @@ QUnit.test('Corner radius can\'t be greater than half of width', function(assert
         height: 100,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 50,
+        border: { cornerRadius: 50 },
         arrowWidth: 10
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1233,7 +1233,7 @@ QUnit.test('Arrow bettween arcs', function(assert) {
         height: 50,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 5,
+        border: { cornerRadius: 5 },
         arrowWidth: 10
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1252,7 +1252,7 @@ QUnit.test('Arrow start on top arc, arrow end beetween arcs', function(assert) {
         height: 100,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 30,
+        border: { cornerRadius: 30 },
         arrowWidth: 90
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1271,7 +1271,7 @@ QUnit.test('Both arrrow coordinates on top arc', function(assert) {
         height: 100,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 30,
+        border: { cornerRadius: 30 },
         arrowWidth: 20
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1290,7 +1290,7 @@ QUnit.test('Arrow starts on top arc and ends on bottom arc', function(assert) {
         height: 100,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 50,
+        border: { cornerRadius: 50 },
         arrowWidth: 20
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1309,7 +1309,7 @@ QUnit.test('Arrow starts on bottom arc and ends on bottom arc', function(assert)
         height: 100,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 20,
+        border: { cornerRadius: 20 },
         arrowWidth: 20
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1328,7 +1328,7 @@ QUnit.test('Arrow starts from bottom arc', function(assert) {
         height: 100,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 20,
+        border: { cornerRadius: 20 },
         arrowWidth: 20
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1347,7 +1347,7 @@ QUnit.test('Arrow on bottom arc', function(assert) {
         height: 100,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 50,
+        border: { cornerRadius: 50 },
         arrowWidth: 10
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1366,7 +1366,7 @@ QUnit.test('Arrow in the corner', function(assert) {
         height: 100,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 20,
+        border: { cornerRadius: 20 },
         arrowWidth: 10
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1385,7 +1385,7 @@ QUnit.test('Arrow in the corner. Arrow width greater than arc length', function(
         height: 100,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 20,
+        border: { cornerRadius: 20 },
         arrowWidth: 40
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1404,7 +1404,7 @@ QUnit.test('Arrow in the corner. Arrow width is 0', function(assert) {
         height: 100,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 20,
+        border: { cornerRadius: 20 },
         arrowWidth: 0
     })[0];
     annotation.draw(this.widget, this.group);
