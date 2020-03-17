@@ -913,6 +913,48 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.ok(this.getController('keyboardNavigation').isRowFocusType(), 'Row focus type');
     });
 
+    QUnit.test('Row should being focused after click if editing.mode: cell', function(assert) {
+        // arrange
+        this.options = {
+            focusedRowEnabled: true,
+            keyExpr: 'name',
+            editing: {
+                mode: 'cell',
+                allowEditing: true,
+                allowUpdating: true
+            }
+        };
+
+        this.data = [
+            { name: 'Alex', phone: '123' },
+            { name: 'Ben', phone: '456' }
+        ];
+
+        this.setupModule();
+        addOptionChangedHandlers(this);
+
+        this.gridView.render($('#container'));
+        this.clock.tick();
+
+        // act
+        const $cell = $(this.getCellElement(1, 1));
+
+        if(isMobile) {
+            $cell.click();
+        } else {
+            $cell
+                .trigger(pointerEvents.down)
+                .trigger(clickEvent.name);
+        }
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.option('focusedRowIndex'), 1, 'FocusedRowIndex');
+        assert.equal(this.option('focusedRowKey'), 'Ben', 'FocusedRowKey');
+        assert.ok(rowsViewWrapper.getDataRow(1).isFocusedRow(), 'Focused row');
+        assert.ok(rowsViewWrapper.getCell(1, 1).isEditorCell(), 'Editor cell');
+    });
+
     QUnit.testInActiveWindow('Escape should change focus type from cell to row if focusedRowEnabled', function(assert) {
         // arrange
         this.$element = function() {
@@ -966,7 +1008,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex is undefined');
         this.clock.tick();
         // act
-        $(rowsView.getRow(1).find('td').eq(0)).trigger(pointerEvents.up).click();
+        $(rowsView.getRow(1).find('td').eq(0)).trigger(CLICK_EVENT).click();
         this.triggerKeyDown('rightArrow', false, false, rowsView.element().find(':focus').get(0));
         // assert
         assert.ok(this.getController('keyboardNavigation').isCellFocusType(), 'Cell focus type');
@@ -3971,48 +4013,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         // assert
         assert.equal(this.option('focusedRowIndex'), 1, 'focusedRowIndex');
         assert.equal(this.option('focusedRowKey'), 'Ben', 'focusedRowKey');
-    });
-
-    QUnit.test('Row should being focused after click if editing.mode: cell', function(assert) {
-        // arrange
-        this.options = {
-            focusedRowEnabled: true,
-            keyExpr: 'name',
-            editing: {
-                mode: 'cell',
-                allowEditing: true,
-                allowUpdating: true
-            }
-        };
-
-        this.data = [
-            { name: 'Alex', phone: '123' },
-            { name: 'Ben', phone: '456' }
-        ];
-
-        this.setupModule();
-        addOptionChangedHandlers(this);
-
-        this.gridView.render($('#container'));
-        this.clock.tick();
-
-        // act
-        const $cell = $(this.getCellElement(1, 1));
-
-        if(isMobile) {
-            $cell.click();
-        } else {
-            $cell
-                .trigger(pointerEvents.down)
-                .trigger(clickEvent.name);
-        }
-        this.clock.tick();
-
-        // assert
-        assert.equal(this.option('focusedRowIndex'), 1, 'FocusedRowIndex');
-        assert.equal(this.option('focusedRowKey'), 'Ben', 'FocusedRowKey');
-        assert.ok(rowsViewWrapper.getDataRow(1).isFocusedRow(), 'Focused row');
-        assert.ok(rowsViewWrapper.getCell(1, 1).isEditorCell(), 'Editor cell');
     });
 
     QUnit.test('Focused row events should handle only once after click disabled editing cell if editing.mode: cell', function(assert) {
