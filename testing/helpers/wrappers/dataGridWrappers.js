@@ -27,6 +27,7 @@ const COMMAND_EDIT_CLASS = 'dx-command-edit';
 const COMMAND_BUTTON_CLASS = 'dx-link';
 const SELECT_CHECKBOX_CLASS = 'dx-select-checkbox';
 const FOCUSED_CLASS = 'dx-focused';
+const EDITOR_CELL_CLASS = 'dx-editor-cell';
 const HIDDEN_CLASS = 'dx-hidden';
 const INSERTED_ROW_CLASS = 'dx-row-inserted';
 
@@ -109,6 +110,10 @@ export class Cell extends WrapperBase {
 
     hasFocusedClass() {
         return this.getElement().hasClass(FOCUSED_CLASS);
+    }
+
+    isEditorCell() {
+        return this.getElement().hasClass(EDITOR_CELL_CLASS);
     }
 }
 

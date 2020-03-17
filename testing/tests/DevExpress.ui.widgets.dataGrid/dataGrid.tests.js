@@ -3802,6 +3802,43 @@ QUnit.test('Resize grid after column resizing to right when columnResizingMode i
     }
 });
 
+QUnit.test('DataGrid - A fixed rows should be synchronized after change column width if wordWrapEnabled and height are set (T830739)', function(assert) {
+    // arrange
+    const rowsViewWrapper = dataGridWrapper.rowsView;
+    const dataGrid = $('#dataGrid').dxDataGrid({
+        loadingTimeout: undefined,
+        width: 400,
+        height: 150,
+        dataSource: [
+            { id: 0, c0: 'Test00 resize', c1: 'Test10' },
+            { id: 1, c0: 'Test01 resize', c1: 'Test11' }
+        ],
+        allowColumnResizing: true,
+        rowAlternationEnabled: true,
+        wordWrapEnabled: true,
+        columns: [
+            { dataField: 'id', width: 100, fixed: true },
+            'c0',
+            'c1'
+        ]
+    }).dxDataGrid('instance');
+
+    // act
+    dataGrid.columnOption('c0', 'width', 60);
+
+    // arrange, assert
+    let $fixedRow = rowsViewWrapper.getFixedDataRow(0).getElement();
+    let $dataRow = rowsViewWrapper.getDataRow(0).getElement();
+    assert.deepEqual($fixedRow.position(), $dataRow.position(), '1st row position');
+    assert.equal($fixedRow.height(), $dataRow.height(), '1st row height');
+
+    // arrange, assert
+    $fixedRow = rowsViewWrapper.getFixedDataRow(1).getElement();
+    $dataRow = rowsViewWrapper.getDataRow(1).getElement();
+    assert.deepEqual($fixedRow.position(), $dataRow.position(), '2nd row position');
+    assert.equal($fixedRow.height(), $dataRow.height(), '2nd row height');
+});
+
 QUnit.test('Column widths should be correct after resize column to show scroll if fixed column is exists', function(assert) {
     // arrange
     const $dataGrid = $('#dataGrid').dxDataGrid({
@@ -18816,8 +18853,7 @@ QUnit.testInActiveWindow('Not highlight cell if isHighlighted set false in the o
     this.clock.tick();
 
     $(this.dataGrid.getCellElement(0, 0))
-        .trigger(CLICK_EVENT)
-        .click();
+        .trigger(CLICK_EVENT);
     this.clock.tick();
 
     // assert
@@ -19216,7 +19252,7 @@ QUnit.test('The cell should not be focused on pointerEvents.down event (T850219)
         this.clock.tick();
 
         // act
-        $(dataGrid.getCellElement(0, 0)).trigger(pointerEvents.down);
+        $(dataGrid.getCellElement(0, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         // assert
