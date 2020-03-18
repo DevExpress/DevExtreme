@@ -14,8 +14,7 @@ import {
 
 import {
     baseSeriesObject,
-    chartAxisObject,
-    dxChartCommonAnnotationConfig
+    chartAxisObject
 } from './chart';
 
 import {
@@ -23,7 +22,8 @@ import {
     BaseChartAdaptiveLayout,
     BaseChartLegend,
     BaseChartOptions,
-    BaseChartTooltip
+    BaseChartTooltip,
+    BaseChartAnnotationConfig
 } from './chart_components/base_chart';
 
 import {
@@ -143,6 +143,17 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @public
      */
     containerBackgroundColor?: string;
+    /**
+     * @docid dxPolarChartOptions.customizeAnnotation
+     * @type function(annotation)
+     * @type_function_param1 annotation:dxPolarChartAnnotationConfig|any
+     * @type_function_return dxPolarChartAnnotationConfig
+     * @default undefined
+     * @notUsedInTheme
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    customizeAnnotation?: ((annotation: dxPolarChartAnnotationConfig | any) => dxPolarChartAnnotationConfig);
     /**
      * @docid dxPolarChartOptions.dataPrepareSettings
      * @type object
@@ -1378,7 +1389,7 @@ export interface dxPolarChartAnnotationConfig extends dxPolarChartCommonAnnotati
     name?: string;
 }
 
-export interface dxPolarChartCommonAnnotationConfig extends dxChartCommonAnnotationConfig {
+export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationConfig {
     /**
      * @docid dxPolarChartCommonAnnotationConfig.angle
      * @type number

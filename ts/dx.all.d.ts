@@ -6630,6 +6630,69 @@ declare module DevExpress.viz {
         /** @name BaseChart.render(renderOptions) */
         render(renderOptions: any): void;
     }
+    /** @name BaseChartAnnotationConfig */
+    export interface BaseChartAnnotationConfig {
+        /** @name BaseChartAnnotationConfig.allowDragging */
+        allowDragging?: boolean;
+        /** @name BaseChartAnnotationConfig.argument */
+        argument?: number | Date | string;
+        /** @name BaseChartAnnotationConfig.arrowLength */
+        arrowLength?: number;
+        /** @name BaseChartAnnotationConfig.arrowWidth */
+        arrowWidth?: number;
+        /** @name BaseChartAnnotationConfig.border */
+        border?: { color?: string, cornerRadius?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
+        /** @name BaseChartAnnotationConfig.color */
+        color?: string;
+        /** @name BaseChartAnnotationConfig.customizeTooltip */
+        customizeTooltip?: ((annotation: BaseChartAnnotationConfig | any) => any);
+        /** @name BaseChartAnnotationConfig.data */
+        data?: any;
+        /** @name BaseChartAnnotationConfig.description */
+        description?: string;
+        /** @name BaseChartAnnotationConfig.font */
+        font?: Font;
+        /** @name BaseChartAnnotationConfig.height */
+        height?: number;
+        /** @name BaseChartAnnotationConfig.image */
+        image?: string | { height?: number, url?: string, width?: number };
+        /** @name BaseChartAnnotationConfig.offsetX */
+        offsetX?: number;
+        /** @name BaseChartAnnotationConfig.offsetY */
+        offsetY?: number;
+        /** @name BaseChartAnnotationConfig.opacity */
+        opacity?: number;
+        /** @name BaseChartAnnotationConfig.paddingLeftRight */
+        paddingLeftRight?: number;
+        /** @name BaseChartAnnotationConfig.paddingTopBottom */
+        paddingTopBottom?: number;
+        /** @name BaseChartAnnotationConfig.series */
+        series?: string;
+        /** @name BaseChartAnnotationConfig.shadow */
+        shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
+        /** @name BaseChartAnnotationConfig.template */
+        template?: DevExpress.core.template | ((annotation: BaseChartAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+        /** @name BaseChartAnnotationConfig.text */
+        text?: string;
+        /** @name BaseChartAnnotationConfig.textOverflow */
+        textOverflow?: 'ellipsis' | 'hide' | 'none';
+        /** @name BaseChartAnnotationConfig.tooltipEnabled */
+        tooltipEnabled?: boolean;
+        /** @name BaseChartAnnotationConfig.tooltipTemplate */
+        tooltipTemplate?: DevExpress.core.template | ((annotation: BaseChartAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
+        /** @name BaseChartAnnotationConfig.type */
+        type?: 'text' | 'image' | 'custom';
+        /** @name BaseChartAnnotationConfig.value */
+        value?: number | Date | string;
+        /** @name BaseChartAnnotationConfig.width */
+        width?: number;
+        /** @name BaseChartAnnotationConfig.wordWrap */
+        wordWrap?: 'normal' | 'breakWord' | 'none';
+        /** @name BaseChartAnnotationConfig.x */
+        x?: number;
+        /** @name BaseChartAnnotationConfig.y */
+        y?: number;
+    }
     /** @name BaseChartLegendItem */
     export interface BaseChartLegendItem extends BaseLegendItem {
         /** @name BaseChartLegendItem.series */
@@ -7980,69 +8043,9 @@ declare module DevExpress.viz {
         name?: string;
     }
     /** @name dxChartCommonAnnotationConfig */
-    export interface dxChartCommonAnnotationConfig {
-        /** @name dxChartCommonAnnotationConfig.allowDragging */
-        allowDragging?: boolean;
-        /** @name dxChartCommonAnnotationConfig.argument */
-        argument?: number | Date | string;
-        /** @name dxChartCommonAnnotationConfig.arrowLength */
-        arrowLength?: number;
-        /** @name dxChartCommonAnnotationConfig.arrowWidth */
-        arrowWidth?: number;
+    export interface dxChartCommonAnnotationConfig extends BaseChartAnnotationConfig {
         /** @name dxChartCommonAnnotationConfig.axis */
         axis?: string;
-        /** @name dxChartCommonAnnotationConfig.border */
-        border?: { color?: string, cornerRadius?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
-        /** @name dxChartCommonAnnotationConfig.color */
-        color?: string;
-        /** @name dxChartCommonAnnotationConfig.customizeTooltip */
-        customizeTooltip?: ((annotation: dxChartAnnotationConfig | any) => any);
-        /** @name dxChartCommonAnnotationConfig.data */
-        data?: any;
-        /** @name dxChartCommonAnnotationConfig.description */
-        description?: string;
-        /** @name dxChartCommonAnnotationConfig.font */
-        font?: Font;
-        /** @name dxChartCommonAnnotationConfig.height */
-        height?: number;
-        /** @name dxChartCommonAnnotationConfig.image */
-        image?: string | { height?: number, url?: string, width?: number };
-        /** @name dxChartCommonAnnotationConfig.offsetX */
-        offsetX?: number;
-        /** @name dxChartCommonAnnotationConfig.offsetY */
-        offsetY?: number;
-        /** @name dxChartCommonAnnotationConfig.opacity */
-        opacity?: number;
-        /** @name dxChartCommonAnnotationConfig.paddingLeftRight */
-        paddingLeftRight?: number;
-        /** @name dxChartCommonAnnotationConfig.paddingTopBottom */
-        paddingTopBottom?: number;
-        /** @name dxChartCommonAnnotationConfig.series */
-        series?: string;
-        /** @name dxChartCommonAnnotationConfig.shadow */
-        shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
-        /** @name dxChartCommonAnnotationConfig.template */
-        template?: DevExpress.core.template | ((annotation: dxChartAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
-        /** @name dxChartCommonAnnotationConfig.text */
-        text?: string;
-        /** @name dxChartCommonAnnotationConfig.textOverflow */
-        textOverflow?: 'ellipsis' | 'hide' | 'none';
-        /** @name dxChartCommonAnnotationConfig.tooltipEnabled */
-        tooltipEnabled?: boolean;
-        /** @name dxChartCommonAnnotationConfig.tooltipTemplate */
-        tooltipTemplate?: DevExpress.core.template | ((annotation: dxChartAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
-        /** @name dxChartCommonAnnotationConfig.type */
-        type?: 'text' | 'image' | 'custom';
-        /** @name dxChartCommonAnnotationConfig.value */
-        value?: number | Date | string;
-        /** @name dxChartCommonAnnotationConfig.width */
-        width?: number;
-        /** @name dxChartCommonAnnotationConfig.wordWrap */
-        wordWrap?: 'normal' | 'breakWord' | 'none';
-        /** @name dxChartCommonAnnotationConfig.x */
-        x?: number;
-        /** @name dxChartCommonAnnotationConfig.y */
-        y?: number;
     }
     /** @name dxChartSeriesTypes */
     interface dxChartSeriesTypes {
@@ -9224,6 +9227,8 @@ declare module DevExpress.viz {
         commonSeriesSettings?: dxPolarChartCommonSeriesSettings;
         /** @name dxPolarChart.Options.containerBackgroundColor */
         containerBackgroundColor?: string;
+        /** @name dxPolarChart.Options.customizeAnnotation */
+        customizeAnnotation?: ((annotation: dxPolarChartAnnotationConfig | any) => dxPolarChartAnnotationConfig);
         /** @name dxPolarChart.Options.dataPrepareSettings */
         dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) };
         /** @deprecated */
@@ -9596,7 +9601,7 @@ declare module DevExpress.viz {
         name?: string;
     }
     /** @name dxPolarChartCommonAnnotationConfig */
-    export interface dxPolarChartCommonAnnotationConfig extends dxChartCommonAnnotationConfig {
+    export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationConfig {
         /** @name dxPolarChartCommonAnnotationConfig.angle */
         angle?: number;
         /** @name dxPolarChartCommonAnnotationConfig.radius */
