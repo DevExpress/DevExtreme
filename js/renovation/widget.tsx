@@ -11,6 +11,10 @@ import {
     Ref,
     Slot,
 } from 'devextreme-generator/component_declaration/common';
+
+import '../events/click';
+import '../events/hover';
+
 import { active, dxClick, focus, hover, keyboard, resize, visibility } from '../events/short';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
@@ -170,7 +174,7 @@ export default class Widget extends JSXComponent<WidgetInput> {
             active.on(this.widgetRef,
                 ({ event }) => {
                     this._active = true;
-                    onActive?.(event);
+                    onActive!(event);
                 },
                 ({ event }) => {
                     this._active = false;
