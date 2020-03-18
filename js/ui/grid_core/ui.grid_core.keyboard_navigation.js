@@ -1481,15 +1481,18 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const visibleColumnIndex = this.getVisibleColumnIndex();
         const row = this._dataController.items()[visibleRowIndex];
         const column = this._columnsController.getVisibleColumns()[visibleColumnIndex];
-        const isAllowEditing = this._editingController.allowUpdating({ row: row }) && column && column.allowEditing;
 
-        if(isAllowEditing) {
+        if(this._isAllowEditing(row, column)) {
             if(this._isRowEditMode()) {
                 this._editingController.editRow(visibleRowIndex);
             } else if(focusedCellPosition) {
                 this._startEditCell(eventArgs, fastEditingKey);
             }
         }
+    },
+
+    _isAllowEditing: function(row, column) {
+        return this.getController('editing').allowUpdating({ row: row }) && column && column.allowEditing;
     },
 
     _editFocusedCell: function() {
