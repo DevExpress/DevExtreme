@@ -9,6 +9,7 @@ import themes from 'ui/themes';
 import device from 'core/devices';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import domAdapter from 'core/dom_adapter';
+import { setTemplateEngine } from 'core/templates/template_engine_registry';
 
 import 'ui/text_area';
 import 'ui/autocomplete';
@@ -28,10 +29,14 @@ const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
 const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
 const FORM_LAYOUT_MANAGER_CLASS = 'dx-layout-manager';
 
+import '../../../node_modules/underscore/underscore-min.js';
+
 QUnit.testStart(function() {
     const markup =
-        '<div id="form"></div>\
-        <div id="form2"></div>';
+        `<div id="form"></div>
+        <div id="form2"></div>
+
+        <script type="text/html" id="scriptTemplate"><%= obj.editorOptions.value %></script>`;
 
     $('#qunit-fixture').html(markup);
 });
@@ -174,20 +179,24 @@ QUnit.test('Reset editor value after formData changing only if dataField is defi
 });
 
 
-QUnit.test('item.template -> option("formData", data[1]) (T870257)', function(assert) {
-    const formData = [ { Field: 'item1' }, { Field: 'item2' } ];
-    const form = $('#form').dxForm({
-        formData: formData[0],
-        items: [{
-            dataField: 'Field',
-            template: e => $('<div>').text(e.editorOptions.value)
-        }],
-    }).dxForm('instance');
+[() => (e => $('<div>').text(e.editorOptions.value)), () => $('#scriptTemplate')].forEach(templateGetterFunc => {
+    QUnit.test(`item.template: ${templateGetterFunc} -> option("formData", data[1]) (T870257)`, function(assert) {
+        setTemplateEngine('underscore');
+        const formData = [ { Field: 'item1' }, { Field: 'item2' } ];
+        const form = $('#form').dxForm({
+            formData: formData[0],
+            items: [{
+                dataField: 'Field',
+                template: templateGetterFunc(),
+            }],
+        }).dxForm('instance');
 
-    form.option('formData', formData[1]);
+        form.option('formData', formData[1]);
 
-    const fieldText = form.$element().find('.dx-field-item-content').text();
-    assert.equal(fieldText, formData[1].Field, 'Field text is valid');
+        const fieldText = form.$element().find('.dx-field-item-content').text();
+        assert.equal(fieldText, formData[1].Field, 'Field text is valid');
+    });
+
 });
 
 QUnit.test('Invalid field name when item is defined not as string and not as object', function(assert) {
