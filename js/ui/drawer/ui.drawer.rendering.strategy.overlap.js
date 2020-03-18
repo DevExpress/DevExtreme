@@ -35,7 +35,7 @@ class OverlapStrategy extends DrawerStrategy {
             onContentReady: () => {
                 whenPanelContentRendered.resolve();
                 if(drawer.option('shading')) {
-                    drawer.toggleZIndex(opened);
+                    drawer.updateZIndex(opened);
                 }
             },
             visible: true,
