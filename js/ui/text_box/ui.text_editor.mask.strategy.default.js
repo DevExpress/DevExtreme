@@ -1,9 +1,12 @@
 import BaseMaskStrategy from './ui.text_editor.mask.strategy.base';
 import { getChar } from '../../events/utils';
+import browser from '../../core/utils/browser';
 import Promise from '../../core/polyfills/promise';
 
 const BACKSPACE_INPUT_TYPE = 'deleteContentBackward';
 const EMPTY_CHAR = ' ';
+
+const IS_SAFARI = browser.safari;
 
 class DefaultMaskStrategy extends BaseMaskStrategy {
     _getStrategyName() {
@@ -35,10 +38,19 @@ class DefaultMaskStrategy extends BaseMaskStrategy {
             this._handleBackspaceInput(event);
         }
 
-        if(this._isAutoFill(event)) {
-            this._autoFillHandler(event);
+        if(IS_SAFARI) {
+            this._inputHandlerTimer = setTimeout(() => {
+                if(this._isAutoFill(event)) {
+                    this._autoFillHandler(event);
+                }
+                this._maskInputHandler(event);
+            });
+        } else {
+            this._maskInputHandler(event);
         }
+    }
 
+    _maskInputHandler(event) {
         if(this._keyPressHandled) {
             return;
         }
@@ -53,15 +65,12 @@ class DefaultMaskStrategy extends BaseMaskStrategy {
         caret.start = caret.end - 1;
         const oldValue = inputValue.substring(0, caret.start) + inputValue.substring(caret.end);
         const char = inputValue[caret.start];
+        const { editor } = this;
 
         this.editorInput().val(oldValue);
 
-        // NOTE: WP8 can not to handle setCaret immediately after setting value
-        this._inputHandlerTimer = setTimeout((function() {
-            this._caret({ start: caret.start, end: caret.start });
-
-            this._maskKeyHandler(event, () => this._handleKey(char));
-        }).bind(this.editor));
+        editor._caret({ start: caret.start, end: caret.start });
+        editor._maskKeyHandler(event, () => editor._handleKey(char));
     }
 
     _backspaceHandler(event) {
@@ -117,8 +126,11 @@ class DefaultMaskStrategy extends BaseMaskStrategy {
         this._backspaceHandler(event);
     }
 
+    // _isSafari
+
     _isAutoFill(event) {
-        return event && event.originalEvent && !event.originalEvent.inputType;
+        const input = this.editor._input().get(0);
+        return IS_SAFARI && input && input.matches(':-webkit-autofill');
     }
 
     clean() {

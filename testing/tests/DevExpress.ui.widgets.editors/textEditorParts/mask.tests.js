@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import devices from 'core/devices';
+import browser from 'core/utils/browser';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import caretWorkaround from './caretWorkaround.js';
 
@@ -420,11 +421,12 @@ QUnit.module('typing', moduleConfig, () => {
     });
 
     QUnit.test('TextEditor with mask option should work correctly with ios autofill (T869537)', function(assert) {
-        if(devices.real().platform === 'android') {
+        if(!browser.safari) {
             assert.expect(0);
             return;
         }
 
+        const clock = sinon.useFakeTimers();
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: '+1 (X00) 000',
             maskRules: { X: /[02-9]/ },
@@ -435,8 +437,14 @@ QUnit.module('typing', moduleConfig, () => {
         const $input = $textEditor.find('.dx-texteditor-input');
 
         $input.val(555555);
-        $input.trigger($.Event('input', { originalEvent: $.Event('input', { data: '5' }) }));
+        const inputMatchesStub = sinon.stub($input.get(0), 'matches', () => true);
+        $input.trigger($.Event('input'));
+
+        clock.tick();
         assert.strictEqual($input.val(), '+1 (555) 555', 'the mask is applied for all value');
+
+        clock.restore();
+        inputMatchesStub.restore();
     });
 });
 
@@ -571,7 +579,7 @@ QUnit.module('backspace key', moduleConfig, () => {
     });
 });
 
-QUnit.module('delete key', {}, () => {
+QUnit.module('delete key', moduleConfig, () => {
     QUnit.test('char should be deleted after pressing on delete key', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: 'X',
@@ -607,6 +615,8 @@ QUnit.module('delete key', {}, () => {
         keyboard.type('xx')
             .caret({ start: 0, end: 3 })
             .press('del');
+
+        this.clock.tick();
 
         assert.equal($input.val(), '_- x', 'letter deleted');
     });

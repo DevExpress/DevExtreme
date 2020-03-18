@@ -129,9 +129,9 @@ export default class BaseMaskStrategy {
         const caret = this.editorCaret();
 
         editor._maskKeyHandler(event, () => {
-            const pastingText = getClipboardText(event);
+            const pastedText = getClipboardText(event);
             const restText = editor._maskRulesChain.text().substring(caret.end);
-            const accepted = editor._handleChain({ text: pastingText, start: caret.start, length: pastingText.length });
+            const accepted = editor._handleChain({ text: pastedText, start: caret.start, length: pastedText.length });
             const newCaret = caret.start + accepted;
 
             editor._handleChain({ text: restText, start: newCaret, length: restText.length });
@@ -144,8 +144,8 @@ export default class BaseMaskStrategy {
         this._keyPressHandled = true;
 
         editor._maskKeyHandler(event, () => {
-            const pastingText = this.editorInput().val();
-            editor._handleChain({ text: pastingText, start: 0, length: pastingText.length });
+            const pastedText = this.editorInput().val();
+            editor._handleChain({ text: pastedText, start: 0, length: pastedText.length });
         });
     }
 
