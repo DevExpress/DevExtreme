@@ -718,7 +718,7 @@ if(Globalize && Globalize.formatDate) {
             }
 
             if(format.formatter) {
-                return this.removeRtlMarks(format.formatter(date));
+                return format.formatter(date);
             }
 
             format = format.type || format;
