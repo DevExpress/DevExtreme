@@ -6,6 +6,7 @@ import {
     MockDataController,
     MockColumnsController,
     MockSelectionController } from '../dataGridMocks.js';
+import clickEvent from 'events/click';
 import pointerEvents from 'events/pointer';
 import DataGridWrapper from '../wrappers/dataGridWrappers.js';
 
@@ -83,8 +84,11 @@ export function setupModules(that, modulesOptions, gridModules) {
     });
 }
 
-export const CLICK_EVENT = eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation');
-const device = devices.real();
+export const device = devices.real();
+export const isMobile = device.deviceType !== 'desktop';
+const pointerEventName = !isMobile ? pointerEvents.down : clickEvent.name;
+export const CLICK_EVENT = eventUtils.addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation');
+
 const KEYS = {
     'tab': 'Tab',
     'enter': 'Enter',
@@ -105,7 +109,7 @@ const KEYS = {
 };
 
 export function testInDesktop(name, testFunc) {
-    if(device.deviceType === 'desktop') {
+    if(!isMobile) {
         QUnit.testInActiveWindow(name, testFunc);
     }
 }
