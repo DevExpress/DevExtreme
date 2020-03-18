@@ -960,18 +960,12 @@
                 return this;
             },
 
-            wheel: function(d, shiftKey) {
-                if(document['onwheel'] !== undefined) {
-                    triggerEvent('wheel', {
-                        deltaY: -d / 30,
-                        shiftKey: shiftKey
-                    });
-                } else {
-                    triggerEvent('mousewheel', {
-                        wheelDelta: d,
-                        shiftKey: shiftKey
-                    });
-                }
+            wheel: function(d, shiftKey, deltaMode) {
+                triggerEvent('wheel', {
+                    deltaY: -d,
+                    deltaMode: deltaMode || 0,
+                    shiftKey: shiftKey
+                });
 
                 triggerEvent('scroll');
                 return this;

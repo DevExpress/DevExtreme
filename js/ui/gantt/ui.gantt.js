@@ -474,6 +474,16 @@ class Gantt extends Widget {
             * @hidden
             */
 
+            /**
+            * @name dxGanttToolbar
+            * @type object
+            */
+
+            /**
+            * @name dxGanttToolbarItem
+            * @inherits dxToolbarItem
+            */
+
             tasks: {
                 /**
                 * @name dxGanttOptions.tasks.dataSource

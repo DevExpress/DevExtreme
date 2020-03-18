@@ -1042,7 +1042,8 @@ QUnit.module('Lifecycle', {
         };
         const items = [
             { x: 100, y: 200, },
-            { value: 1, argument: 2 }
+            { value: 1, argument: 2 },
+            { angle: 45, radius: 120 }
         ];
         const polarChart = this.polarChart(annotationOptions, items, customizeAnnotation);
 

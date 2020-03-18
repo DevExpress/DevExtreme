@@ -51,7 +51,7 @@ class DiagramScrollView extends Widget {
     getScrollBarWidth() {
         return 0;
     }
-    dispose() {
+    detachEvents() {
     }
 
     _raiseOnScroll(left, top) {

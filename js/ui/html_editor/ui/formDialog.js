@@ -13,7 +13,6 @@ const DIALOG_CLASS = 'dx-formdialog';
 const FORM_CLASS = 'dx-formdialog-form';
 
 class FormDialog {
-
     constructor(editorInstance, popupConfig) {
         this._editorInstance = editorInstance;
         this._popupUserConfig = popupConfig;

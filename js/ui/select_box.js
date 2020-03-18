@@ -558,7 +558,9 @@ const SelectBox = DropDownList.inherit({
     },
 
     _clearTextValue: function() {
-        this.option('value', null);
+        if(this.option('selectedItem')) {
+            this.option('value', null);
+        }
     },
 
     _shouldOpenPopup: function() {

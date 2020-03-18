@@ -40,25 +40,32 @@ const FIELD_LABEL_CLASS = 'dx-field-label';
 const FIELD_VALUE_CLASS = 'dx-field-value';
 const RECURRENCE_BUTTON_GROUP = 'dx-recurrence-button-group';
 
-const frequenciesMessages = [{
-    recurrence: 'dxScheduler-recurrenceMinutely',
-    value: 'minutely'
-}, {
-    recurrence: 'dxScheduler-recurrenceHourly',
-    value: 'hourly'
-}, {
-    recurrence: 'dxScheduler-recurrenceDaily',
-    value: 'daily'
-}, {
-    recurrence: 'dxScheduler-recurrenceWeekly',
-    value: 'weekly'
-}, {
-    recurrence: 'dxScheduler-recurrenceMonthly',
-    value: 'monthly'
-}, {
-    recurrence: 'dxScheduler-recurrenceYearly',
-    value: 'yearly'
-}];
+const defaultRecurrenceTypeIndex = 1; // TODO default daily recurrence
+
+const frequenciesMessages = [
+    /* {
+        // functionality is not removed, but hide the ability to set minute recurrence in the editor.
+        // in the future, if we publish the dxRecurrenceEditor, then we publish the minute recurrence
+        recurrence: 'dxScheduler-recurrenceMinutely',
+        value: 'minutely'
+    }*/
+    {
+        recurrence: 'dxScheduler-recurrenceHourly',
+        value: 'hourly'
+    }, {
+        recurrence: 'dxScheduler-recurrenceDaily',
+        value: 'daily'
+    }, {
+        recurrence: 'dxScheduler-recurrenceWeekly',
+        value: 'weekly'
+    }, {
+        recurrence: 'dxScheduler-recurrenceMonthly',
+        value: 'monthly'
+    }, {
+        recurrence: 'dxScheduler-recurrenceYearly',
+        value: 'yearly'
+    }
+];
 
 const frequencies = frequenciesMessages.map((item) => {
     return { text() { return messageLocalization.format(item.recurrence); }, value: item.value };
@@ -205,7 +212,7 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _handleDefaults() {
-        this._recurrenceRule.makeRule('freq', frequenciesMessages[2].value);
+        this._recurrenceRule.makeRule('freq', frequenciesMessages[defaultRecurrenceTypeIndex].value);
         this._changeEditorValue();
     },
 
@@ -221,7 +228,7 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _renderFreqEditor() {
-        const freq = (this._recurrenceRule.rules().freq || frequenciesMessages[2].value).toLowerCase();
+        const freq = (this._recurrenceRule.rules().freq || frequenciesMessages[defaultRecurrenceTypeIndex].value).toLowerCase();
         const $freqEditor = $('<div>')
             .addClass(FREQUENCY_EDITOR)
             .addClass(FIELD_VALUE_CLASS);
@@ -771,7 +778,7 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _changeEditorsValues(rules) {
-        this._freqEditor.option('value', (rules.freq || frequenciesMessages[2].value).toLowerCase());
+        this._freqEditor.option('value', (rules.freq || frequenciesMessages[defaultRecurrenceTypeIndex].value).toLowerCase());
         this._changeRepeatTypeLabel();
         this._intervalEditor.option('value', rules.interval || 1);
 

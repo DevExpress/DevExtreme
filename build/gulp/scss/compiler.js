@@ -23,16 +23,15 @@ function processDataUri() {
         .pipe(gulp.dest(tmpPath));
 }
 
-function compileMaterial() {
-    return compileBundle(`${tmpPath}/bundles/dx.material.blue.light.scss`);
-}
-
-function compileGeneric() {
-    return compileBundle(`${tmpPath}/bundles/dx.light.scss`);
+function compile() {
+    return compileBundle([
+        `${tmpPath}/bundles/*`,
+        `!${tmpPath}/bundles/dx.common.scss`,
+        `!${tmpPath}/bundles/dx.ios7.default.scss`
+    ]);
 }
 
 gulp.task('compile', gulp.series(
     processDataUri,
-    compileMaterial,
-    compileGeneric
+    compile
 ));

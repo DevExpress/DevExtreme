@@ -1141,6 +1141,11 @@
  */
 
 /**
+ * @typedef {string} Enums.GanttToolbarItem
+ * @enum {'separator'|'undo'|'redo'|'zoomIn'|'zoomOut'}
+ */
+
+/**
  * @typedef {string} Enums.GanttScaleType
  * @enum {'auto'|'minutes'|'hours'|'days'|'weeks'|'months'|'quarters'|'years'}
  */

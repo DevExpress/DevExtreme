@@ -708,6 +708,7 @@ const environmentWithSinonStubPoint = {
             'class': 'dxc-elements',
             'clip-path': undefined,
             'fill': 'n color',
+            'hatching': undefined,
             'opacity': 'n opacity',
             'stroke': 'none'
         });

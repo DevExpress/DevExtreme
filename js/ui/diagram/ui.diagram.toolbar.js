@@ -107,7 +107,9 @@ class DiagramToolbar extends DiagramPanel {
                 type: this.option('buttonType'),
                 text: item.text,
                 hint: item.hint,
-                icon: item.icon,
+                icon: item.icon || item.iconUnchecked || item.iconChecked,
+                iconChecked: item.iconChecked,
+                iconUnchecked: item.iconUnchecked,
                 onInitialized: (e) => this._onItemInitialized(e.component, item),
                 onContentReady: (e) => this._onItemContentReady(e.component, item, actionHandler),
             }
@@ -161,11 +163,15 @@ class DiagramToolbar extends DiagramPanel {
         let options = this._createTextEditorItemOptions(hint);
         options = extend(true, options, {
             options: {
+                readOnly: true,
+                focusStateEnabled: false,
+                hoverStateEnabled: false,
                 buttons: [{
                     name: 'dropDown',
                     location: 'after',
                     options: {
                         icon: 'spindown',
+                        disabled: false,
                         stylingMode: 'text',
                         onClick: () => {
                             const contextMenu = this._contextMenus[command];
@@ -250,9 +256,6 @@ class DiagramToolbar extends DiagramPanel {
         this._addItemHelper(item.command, new DiagramToolbarItemHelper(widget));
     }
     _onItemContentReady(widget, item, actionHandler) {
-        if(widget.NAME === 'dxTextBox') {
-            widget.$element().find('.dx-texteditor-input').attr('readonly', 'readonly');
-        }
         if((widget.NAME === 'dxButton' || widget.NAME === 'dxTextBox') && item.items) {
             const $menuContainer = $('<div>')
                 .appendTo(this.$element());
@@ -487,7 +490,11 @@ class DiagramToolbarItemHelper {
         }
     }
     _updateButtonValue(value) {
-        this._widget.$element().toggleClass(ACTIVE_FORMAT_CLASS, value);
+        if(this._widget.option('iconChecked') && this._widget.option('iconUnchecked')) {
+            this._widget.option('icon', value ? this._widget.option('iconChecked') : this._widget.option('iconUnchecked'));
+        } else {
+            this._widget.$element().toggleClass(ACTIVE_FORMAT_CLASS, value);
+        }
     }
     _updateContextMenuItemValue(contextMenu, itemOptionText, rootCommandKey, value) {
         DiagramMenuHelper.updateContextMenuItemValue(contextMenu, itemOptionText, rootCommandKey, value);

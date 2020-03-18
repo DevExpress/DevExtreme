@@ -7,6 +7,12 @@
 @base-font-family: 'Helvetica Neue', 'Segoe UI', Helvetica, Verdana, sans-serif;
 
 /**
+* @name 10. Accent color
+* @type color
+*/
+@base-accent: #f05b41;
+
+/**
 * @name 20. Label color
 * @type color
 */
@@ -23,12 +29,6 @@
 * @type color
 */
 @base-icon-color: @base-label-color;
-
-/**
-* @name 10. Accent color
-* @type color
-*/
-@base-accent: #f05b41;
 
 /**
 * @name 20. Text color
@@ -1614,9 +1614,12 @@
 @filemanager-breadcrumbs-item-focus-color: @base-text-color;
 @filemanager-custom-thumbnail-color: @base-border-color;
 @filemanager-file-item-select-color: @base-bg;
-@filemanager-file-item-select-bg: @base-accent;
+@filemanager-file-item-select-bg: fade(@base-accent, 80%);
+@filemanager-file-item-select-focus-color: @base-bg;
+@filemanager-file-item-select-focus-bg: fade(@base-accent, 70%);
 @filemanager-file-item-hover-bg: @base-hover-bg;
 @filemanager-file-item-focused-bg: @base-accent;
+@filemanager-file-item-focused-border: @base-accent;
 @filemanager-item-focused-color: @base-inverted-text-color;
 @filemanager-progressbox-shadow-color: fade(@base-shadow-color, 17.5%);
 

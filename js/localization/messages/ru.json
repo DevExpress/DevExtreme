@@ -496,6 +496,10 @@
         "dxGantt-dialogTaskDetailsTitle": "!TODO!",
         "dxGantt-dialogEditResourceListHint": "!TODO!",
         "dxGantt-dialogEditNoResources": "!TODO!",
-        "dxGantt-dialogButtonAdd": "!TODO!"
+        "dxGantt-dialogButtonAdd": "!TODO!",
+        "dxGantt-contextMenuNewTask": "!TODO!",
+        "dxGantt-contextMenuNewSubtask": "!TODO!",
+        "dxGantt-contextMenuRemoveTask": "!TODO!",
+        "dxGantt-contextMenuRemoveDependency": "!TODO!"
     }
 }

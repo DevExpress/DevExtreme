@@ -60,3 +60,22 @@ QUnit.test('provide delta and pointerType in event args', function(assert) {
     assert.equal(args.delta, 10, 'wheel delta provided');
     assert.equal(args.pointerType, 'mouse', 'wheel pointerType provided');
 });
+
+QUnit.test('normalize delta for deltaMode LINE and PAGE', function(assert) {
+    const LINE_MODE = 1;
+    const PAGE_MODE = 2;
+    const DELTA_MULTIPLIER = 30;
+    const DELTA = 3;
+    const wheelHandler = sinon.stub();
+    const $element = $('#test');
+    const mouse = nativePointerMock($element).start();
+
+    $element.on(wheelEvent.name, wheelHandler);
+
+    mouse.wheel(DELTA, false, LINE_MODE);
+    mouse.wheel(DELTA, false, PAGE_MODE);
+
+    assert.strictEqual(wheelHandler.callCount, 2);
+    assert.strictEqual(wheelHandler.firstCall.args[0].delta, DELTA * DELTA_MULTIPLIER);
+    assert.strictEqual(wheelHandler.lastCall.args[0].delta, DELTA * DELTA_MULTIPLIER);
+});

@@ -560,6 +560,8 @@ Series.prototype = {
             that._changeStyle(that.lastSelectionMode, undefined, true);
         } else if(that.isHovered()) {
             that._changeStyle(that.lastHoverMode, undefined, true);
+        } else {
+            that._applyStyle(that._styles.normal);
         }
     },
 

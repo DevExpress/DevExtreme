@@ -163,7 +163,8 @@ const Autocomplete = DropDownList.inherit({
 
     _dataSourceOptions: function() {
         return {
-            paginate: true
+            paginate: true,
+            pageSize: this.option('maxItemCount')
         };
     },
 

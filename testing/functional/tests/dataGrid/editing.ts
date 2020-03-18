@@ -127,7 +127,7 @@ test("Async Validation(Row) - Only valid data is saved in a new row", async t =>
                 const d = $.Deferred();
                 setTimeout(function() {
                     params.value === 1 ? d.resolve(true) : d.reject();
-                }, 600);
+                }, 1000);
                 return d.promise();
             }
         }]
@@ -173,7 +173,7 @@ test("Async Validation(Row) - Only valid data is saved in a modified row", async
                 const d = $.Deferred();
                 setTimeout(function() {
                     params.value === 1 ? d.resolve(true) : d.reject();
-                }, 600);
+                }, 1000);
                 return d.promise();
             }
         }]
@@ -224,7 +224,7 @@ test("Async Validation(Row) - Data is not saved when a dependant cell value beco
                 const d = $.Deferred();
                 setTimeout(function() {
                     params.value === 1 ? d.resolve(true) : d.reject();
-                }, 600);
+                }, 1000);
                 return d.promise();
             }
         }],
@@ -316,7 +316,7 @@ test("Async Validation(Cell) - Only valid data is saved in a new row", async t =
                 const d = $.Deferred();
                 setTimeout(function() {
                     params.value === 1 ? d.resolve(true) : d.reject();
-                }, 600);
+                }, 1000);
                 return d.promise();
             }
         }]
@@ -364,7 +364,7 @@ test("Async Validation(Cell) - Only valid data is saved in a modified cell", asy
                 const d = $.Deferred();
                 setTimeout(function() {
                     params.value === 1 ? d.resolve(true) : d.reject();
-                }, 600);
+                }, 1000);
                 return d.promise();
             }
         }]
@@ -374,9 +374,8 @@ test("Async Validation(Cell) - Only valid data is saved in a modified cell", asy
 test("Async Validation(Cell) - Data is not saved when a dependant cell value becomes invalid", async t => {
     const dataGrid = new DataGrid("#container");
 
-    const rowIndex = 0;
-    const cell0 = dataGrid.getDataRow(rowIndex).getDataCell(0);
-    const cell1 = dataGrid.getDataRow(rowIndex).getDataCell(1);
+    const cell0 = dataGrid.getDataCell(0, 0);
+    const cell1 = dataGrid.getDataCell(0, 1);
     const editor0 = cell0.getEditor();
 
     await t
@@ -390,10 +389,10 @@ test("Async Validation(Cell) - Data is not saved when a dependant cell value bec
         .expect(cell0.isValidationPending).ok()
         .expect(cell0.isEditCell).ok()
         .expect(cell0.isInvalid).ok('the first cell is invalid')
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, 0)).eql("invalid")
+        .expect(dataGrid.api_getCellValidationStatus(0, 0)).eql("invalid")
         .expect(cell1.isEditCell).notOk()
         .expect(cell1.isInvalid).notOk('the second cell is valid')
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, 1)).eql("valid")
+        .expect(dataGrid.api_getCellValidationStatus(0, 1)).eql("valid")
         .click(cell0.element)
         .selectText(editor0.element, 0, 1)
         .typeText(editor0.element, "1")
@@ -401,10 +400,10 @@ test("Async Validation(Cell) - Data is not saved when a dependant cell value bec
         .expect(cell0.isValidationPending).ok()
         .expect(cell0.isEditCell).ok()
         .expect(cell0.isInvalid).notOk('the first cell is valid')
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, 0)).eql("valid")
+        .expect(dataGrid.api_getCellValidationStatus(0, 0)).eql("valid")
         .expect(cell1.isEditCell).notOk()
         .expect(cell1.isInvalid).ok('the first cell is invalid')
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, 1)).eql("invalid");
+        .expect(dataGrid.api_getCellValidationStatus(0, 1)).eql("invalid");
 
 }).before(() => createWidget("dxDataGrid", getGridConfig({
     editing: {
@@ -419,7 +418,7 @@ test("Async Validation(Cell) - Data is not saved when a dependant cell value bec
                 const d = $.Deferred();
                 setTimeout(function() {
                     params.value === 1 ? d.resolve(true) : d.reject();
-                }, 600);
+                }, 1000);
                 return d.promise();
             }
         }],
@@ -480,7 +479,7 @@ test("Async Validation(Batch) - Only valid data is saved in a new row", async t 
                 const d = $.Deferred();
                 setTimeout(function() {
                     params.value === 1 ? d.resolve(true) : d.reject();
-                }, 600);
+                }, 1000);
                 return d.promise();
             }
         }]
@@ -534,7 +533,7 @@ test("Async Validation(Batch) - Only valid data is saved in a modified cell", as
                 const d = $.Deferred();
                 setTimeout(function() {
                     params.value === 1 ? d.resolve(true) : d.reject();
-                }, 600);
+                }, 1000);
                 return d.promise();
             }
         }]
@@ -598,7 +597,7 @@ test("Async Validation(Batch) - Data is not saved when a dependant cell value be
                 const d = $.Deferred();
                 setTimeout(function() {
                     params.value === 1 ? d.resolve(true) : d.reject();
-                }, 600);
+                }, 1000);
                 return d.promise();
             }
         }],
