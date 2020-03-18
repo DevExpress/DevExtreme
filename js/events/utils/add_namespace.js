@@ -1,8 +1,12 @@
 import errors from '../../core/errors';
 
-const addNamespace = (eventNames, namespace) => {
+const addNamespace = (eventNames, namespace, skipEmptyNamespace) => {
     if(!namespace) {
-        throw errors.Error('E0017');
+        if(skipEmptyNamespace) {
+            return eventNames;
+        } else {
+            throw errors.Error('E0017');
+        }
     }
 
     if(Array.isArray(eventNames)) {

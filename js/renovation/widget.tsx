@@ -1,4 +1,5 @@
 import config from '../core/config';
+import hover from '../events/hover';
 import {
     Component,
     ComponentBindings,
@@ -11,7 +12,7 @@ import {
     Ref,
     Slot,
 } from 'devextreme-generator/component_declaration/common';
-import { active, dxClick, focus, hover, keyboard, resize, visibility } from '../events/short';
+import { active, dxClick, focus, keyboard, resize, visibility } from '../events/short';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import { focusable } from '../ui/widget/selectors';

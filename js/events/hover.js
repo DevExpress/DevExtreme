@@ -5,6 +5,7 @@ const devices = require('../core/devices');
 const registerEvent = require('./core/event_registrator');
 const eventUtils = require('./utils');
 const pointerEvents = require('./pointer');
+const executeHandler = require('./utils/execute-handler').default;
 
 const HOVERSTART_NAMESPACE = 'dxHoverStart';
 const HOVERSTART = 'dxhoverstart';
@@ -109,3 +110,14 @@ registerEvent(HOVEREND, new HoverEnd());
 
 exports.start = HOVERSTART;
 exports.end = HOVEREND;
+
+exports.on = ($el, start, end, { selector, namespace }) => {
+    eventsEngine.on($el, eventUtils.addNamespace(HOVEREND, namespace, true), selector, event => end(event));
+    eventsEngine.on($el, eventUtils.addNamespace(HOVERSTART, namespace, true), selector,
+        event => executeHandler(start, { element: event.target, event }));
+},
+
+exports.off = ($el, { selector, namespace }) => {
+    eventsEngine.off($el, eventUtils.addNamespace(HOVERSTART, namespace, true), selector);
+    eventsEngine.off($el, eventUtils.addNamespace(HOVEREND, namespace, true), selector);
+};

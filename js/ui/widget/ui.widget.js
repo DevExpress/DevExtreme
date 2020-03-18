@@ -1,7 +1,8 @@
 import $ from '../../core/renderer';
+import hover from '../../events/hover';
 import Action from '../../core/action';
 import DOMComponent from '../../core/dom_component';
-import { active, dxClick, focus, hover, keyboard } from '../../events/short';
+import { active, dxClick, focus, keyboard } from '../../events/short';
 import { deferRender, deferRenderer, noop } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
@@ -12,7 +13,6 @@ import { isPlainObject, isDefined } from '../../core/utils/type';
 
 import '../../events/click';
 import '../../events/core/emitter.feedback';
-import '../../events/hover';
 
 function setAttribute(name, value, target) {
     name = (name === 'role' || name === 'id') ? name : `aria-${name}`;

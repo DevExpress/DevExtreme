@@ -38,19 +38,6 @@ export const resize = {
     }
 };
 
-export const hover = {
-    on: ($el, start, end, { selector, namespace }) => {
-        eventsEngine.on($el, addNamespace('dxhoverend', namespace), selector, event => end(event));
-        eventsEngine.on($el, addNamespace('dxhoverstart', namespace), selector,
-            event => executeAction(start, { element: event.target, event }));
-    },
-
-    off: ($el, { selector, namespace }) => {
-        eventsEngine.off($el, addNamespace('dxhoverstart', namespace), selector);
-        eventsEngine.off($el, addNamespace('dxhoverend', namespace), selector);
-    }
-};
-
 export const visibility = {
     on: ($el, shown, hiding, { namespace }) => {
         eventsEngine.on($el, addNamespace('dxhiding', namespace), hiding);
