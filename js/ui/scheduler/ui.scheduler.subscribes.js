@@ -551,6 +551,7 @@ const subscribes = {
         return this._appointmentModel.filterLoadedAppointments({
             startDayHour: this._getCurrentViewOption('startDayHour'),
             endDayHour: this._getCurrentViewOption('endDayHour'),
+            realEndDayTime: this.getWorkSpace().getEndViewDate(),
             min: dateRange[0],
             max: dateRange[1],
             resources: resources,

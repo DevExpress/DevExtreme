@@ -536,6 +536,13 @@ const dateTimeFromDecimal = function(number) {
     };
 };
 
+const dateTimeToDecimal = function(date) {
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    return hours + minutes / 60;
+};
+
 const roundDateByStartDayHour = function(date, startDayHour) {
     const startTime = this.dateTimeFromDecimal(startDayHour);
     const result = new Date(date);
@@ -634,6 +641,7 @@ const dateUtils = {
     setToDayEnd: setToDayEnd,
     roundDateByStartDayHour: roundDateByStartDayHour,
     dateTimeFromDecimal: dateTimeFromDecimal,
+    dateTimeToDecimal: dateTimeToDecimal,
 
     addDateInterval: addDateInterval,
     addInterval: addInterval,
