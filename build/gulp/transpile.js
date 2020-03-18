@@ -8,10 +8,10 @@ const notify = require('gulp-notify');
 
 const context = require('./context.js');
 
-require('./generator');
+require('./generator/gulpfile');
 
 const GLOB_TS = require('./ts').GLOB_TS;
-const SRC = ['js/**/*.*', '!' + GLOB_TS, '!js/**/*.tsx', '!js/component_declaration/*.ts'];
+const SRC = ['js/**/*.*', '!' + GLOB_TS, '!js/**/*.tsx'];
 const TESTS_PATH = 'testing';
 const TESTS_SRC = TESTS_PATH + '/**/*.js';
 
