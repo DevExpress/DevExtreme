@@ -413,12 +413,15 @@ const Drawer = Widget.inherit({
 
     updateZIndex(visible) {
         if(visible && !typeUtils.isDefined(this._zIndex)) {
-            this._zIndex = zIndexPool.create();
+            if(!typeUtils.isDefined(this._zIndex)) {
+                this._zIndex = zIndexPool.create();
+            }
+
             this._strategy.setZIndex(this._zIndex);
         }
 
         if(!visible && typeUtils.isDefined(this._zIndex)) {
-            this._strategy.clearZIndex(zIndexPool);
+            this._strategy.clearZIndex();
         }
     },
 
@@ -451,7 +454,7 @@ const Drawer = Widget.inherit({
     _clean() {
         this._cleanFocusState();
 
-        this._strategy.clearZIndex(zIndexPool);
+        this._strategy.clearZIndex();
         this._removePanelContentWrapper();
         this._removeOverlay();
     },

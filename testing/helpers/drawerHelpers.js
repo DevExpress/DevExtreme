@@ -18,7 +18,7 @@ function checkMargin(assert, element, top, right, bottom, left, message) {
     assert.strictEqual(window.getComputedStyle(element).marginBottom, bottom + 'px', 'marginBottom, ' + message);
 }
 
-function checkShader(assert, env) {
+function checkShader(assert, env, expectedZIndex = { panel: '1502', shader: '1501' }) {
     const shaderElement = env.drawerElement.querySelector(`.${DRAWER_SHADER_CLASS}`);
 
     const { visibility } = window.getComputedStyle(shaderElement);
@@ -27,8 +27,8 @@ function checkShader(assert, env) {
     if(opened && shading) {
         assert.strictEqual(visibility, 'visible', 'shader is visible');
         assert.strictEqual(shaderElement.classList.contains('dx-state-invisible'), false, 'shader has not .dx-invisible-class');
-        assert.strictEqual(window.getComputedStyle(shaderElement).zIndex, '1501', 'shader.zIndex');
-        assert.strictEqual(window.getComputedStyle(env.templateElement.parentElement).zIndex, openedStateMode === 'push' ? 'auto' : '1502', 'panel.zIndex');
+        assert.strictEqual(window.getComputedStyle(shaderElement).zIndex, expectedZIndex.shader, 'shader.zIndex');
+        assert.strictEqual(window.getComputedStyle(env.templateElement.parentElement).zIndex, openedStateMode === 'push' ? 'auto' : expectedZIndex.panel, 'panel.zIndex');
 
         checkBoundingClientRect(assert, env.viewElement, shaderElement.getBoundingClientRect(), 'shader');
     } else {
@@ -399,5 +399,6 @@ export const drawerTesters = {
 
     left: LeftDrawerTester,
     top: TopDrawerTester,
-    right: RightDrawerTester
+    right: RightDrawerTester,
+    checkShader: checkShader
 };

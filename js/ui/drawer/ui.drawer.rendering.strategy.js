@@ -207,20 +207,13 @@ class DrawerStrategy {
     }
 
     setZIndex(zIndex) {
-        const drawer = this.getDrawerInstance();
-
-        drawer._$shader.css('zIndex', zIndex);
-        drawer._$panelContentWrapper.css('zIndex', zIndex + 1);
+        this._drawer._$shader.css('zIndex', zIndex);
     }
 
     clearZIndex() {
-        const drawer = this.getDrawerInstance();
-
-        zIndexPool.remove(drawer._zIndex);
-        zIndexPool.remove(drawer._zIndex + 1);
-        drawer._$shader.css('zIndex', '');
-        drawer._$panelContentWrapper.css('zIndex', '');
-        delete drawer._zIndex;
+        zIndexPool.remove(this._drawer._zIndex);
+        this._drawer._$shader.css('zIndex', '');
+        delete this._drawer._zIndex;
     }
 
     getPanelContent() {
