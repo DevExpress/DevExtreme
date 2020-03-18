@@ -174,7 +174,7 @@ export default class Widget extends JSXComponent<WidgetInput> {
             active.on(this.widgetRef,
                 ({ event }) => {
                     this._active = true;
-                    onActive!(event);
+                    onActive?.(event);
                 },
                 ({ event }) => {
                     this._active = false;
