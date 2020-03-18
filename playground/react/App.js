@@ -3,11 +3,11 @@ import Button from 'devextreme/renovation/button';
 
 const App = () => {
     return <Button
-        text={'Click Me!'}
+        text="Click Me!"
         onClick={() => alert('Clicked')}
-        icon={'download'}
-        iconPosition={'right'}
-    ></Button>;
+        icon="download"
+        iconPosition="right"
+    />;
 };
 
 export default App;
