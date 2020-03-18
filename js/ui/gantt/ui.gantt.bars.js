@@ -101,19 +101,38 @@ export class GanttToolbar extends Bar {
         this._cache = null;
         this._items = items.map(item => {
             if(typeof item === 'string') {
-                switch(item.toLowerCase()) {
-                    case 'separator': return this._createSeparator();
-                    case 'undo': return this._createDefaultItem(COMMANDS.undo, 'undo');
-                    case 'redo': return this._createDefaultItem(COMMANDS.redo, 'redo');
-                    case 'zoomin': return this._createDefaultItem(COMMANDS.zoomIn, 'plus');
-                    case 'zoomout': return this._createDefaultItem(COMMANDS.zoomOut, 'minus');
-                    default: return extend(this._getDefaultItemOptions(), { options: { text: item } });
-                }
+                return this._createItemByText(item);
             } else {
-                return extend(this._getDefaultItemOptions(), item);
+                if(item.formatName) {
+                    return extend(this._createItemByText(item.formatName), item);
+                } else {
+                    return extend(this._getDefaultItemOptions(), item);
+                }
             }
         });
         this._menu.option('items', this._items);
+    }
+    _createItemByText(text) {
+        switch(text.toLowerCase()) {
+            case 'separator': return this._createSeparator();
+            case 'undo': return this._createDefaultItem(COMMANDS.undo, 'undo');
+            case 'redo': return this._createDefaultItem(COMMANDS.redo, 'redo');
+            case 'zoomin': return this._createDefaultItem(COMMANDS.zoomIn, 'plus');
+            case 'zoomout': return this._createDefaultItem(COMMANDS.zoomOut, 'minus');
+            default: return extend(this._getDefaultItemOptions(), { options: { text: text } });
+        }
+    }
+    _createDefaultItem(commandId, icon) {
+        return {
+            commandId: commandId,
+            disabled: true,
+            widget: 'dxButton',
+            location: 'before',
+            options: {
+                icon: icon,
+                stylingMode: 'text'
+            }
+        };
     }
     _createSeparator() {
         return {
@@ -122,16 +141,6 @@ export class GanttToolbar extends Bar {
                 $(element).addClass(TOOLBAR_SEPARATOR_CLASS);
             }
         };
-    }
-    _createDefaultItem(commandId, icon) {
-        return extend(this._getDefaultItemOptions(), {
-            commandId: commandId,
-            disabled: true,
-            options: {
-                icon: icon,
-                stylingMode: 'text'
-            }
-        });
     }
     _getDefaultItemOptions() {
         return {
