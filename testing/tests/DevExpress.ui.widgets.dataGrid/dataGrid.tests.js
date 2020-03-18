@@ -4435,7 +4435,7 @@ QUnit.test('Test \'autoNavigateToFocusedRow\' option if focused row key is not v
                     e.component.option('focusedRowIndex', 0);
                 }
 
-                assert.equal(focusedRowIndex, -1, 'Page index was cleared after page changing');
+                assert.equal(focusedRowIndex, -1, 'Focused row index was cleared after page changing');
             }
         }).dxDataGrid('instance');
         this.clock.tick();

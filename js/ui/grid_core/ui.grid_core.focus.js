@@ -510,6 +510,8 @@ module.exports = {
                 },
 
                 _fireChanged: function(e) {
+                    this.callBase(e);
+
                     if(this.option('focusedRowEnabled') && this._dataSource) {
                         const isPartialUpdate = e.changeType === 'update' && e.repaintChangesOnly;
                         const isPartialUpdateWithDeleting = isPartialUpdate && e.changeTypes && e.changeTypes.indexOf('remove') >= 0;
@@ -520,8 +522,6 @@ module.exports = {
                             this._updatePageIndexes();
                         }
                     }
-
-                    this.callBase(e);
                 },
 
                 _updatePageIndexes: function() {
