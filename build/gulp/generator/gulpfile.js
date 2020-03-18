@@ -45,10 +45,10 @@ gulp.task('generate-components', function() {
         .pipe(gulp.dest(DEST));
 });
 
-function addGenerationTask(approach, knownErrors = []) {
-    const generator = require(`devextreme-generator/${approach}-generator`).default;
-    gulp.task(`generate-${approach}`, function() {
-        const tsProject = ts.createProject(`build/gulp/generator/ts-configs/${approach}.tsconfig.json`);
+function addGenerationTask(frameworkName, knownErrors = []) {
+    const generator = require(`devextreme-generator/${frameworkName}-generator`).default;
+    gulp.task(`generate-${frameworkName}`, function() {
+        const tsProject = ts.createProject(`build/gulp/generator/ts-configs/${frameworkName}.tsconfig.json`);
         generator.defaultOptionsModule = 'js/core/options/utils';
 
         return merge(
@@ -65,7 +65,7 @@ function addGenerationTask(approach, knownErrors = []) {
                     finish() { }
                 }))
         ).pipe(babel())
-            .pipe(gulp.dest(`artifacts/${approach}`));
+            .pipe(gulp.dest(`artifacts/${frameworkName}`));
     });
 }
 
