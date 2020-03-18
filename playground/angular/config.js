@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 System.config({
     transpiler: 'ts',
     typescriptOptions: {
