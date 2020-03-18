@@ -14,8 +14,6 @@ const INVISIBLE_ITEM_CLASS = 'dx-state-invisible';
 
 const CHECK_BOX_CLASS = 'dx-checkbox';
 const CHECK_BOX_CHECKED_CLASS = 'dx-checkbox-checked';
-const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
-const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 
 const { assert } = QUnit;
 
@@ -43,10 +41,6 @@ class TreeViewTestWrapper {
     getAllSelectedCheckboxes() { return this.getElement().find(`.${CHECK_BOX_CHECKED_CLASS}`); }
     getToggleItemVisibility($node) { return isDefined($node) ? $node.find(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`) : this.getElement().find(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`); }
     getNodeLoadIndicator($node) { return isDefined($node) ? $node.find(`.${NODE_LOAD_INDICATOR_CLASS}`) : this.getElement().find(`.${NODE_LOAD_INDICATOR_CLASS}`); }
-
-    getScrollElementContent = () => this.getElement().find(`.${SCROLLABLE_CONTENT_CLASS}`);
-    getScrollHeight = () => this.getScrollElementContent().height();
-    getScrollWidth = () => this.getScrollElementContent().width();
 
     hasWidgetClass($item) { return $item.hasClass(WIDGET_CLASS); }
     hasItemClass($item) { return $item.hasClass(ITEM_CLASS); }
@@ -115,12 +109,18 @@ class TreeViewTestWrapper {
         assert.deepEqual(this.eventLog, expectedEventLog, 'eventLog ' + additionalErrorMessage);
     }
 
-    checkScrollPosition(expected) {
-        const scrollContainer = this.getElement().find(`.${SCROLLABLE_CONTAINER_CLASS}`).get(0);
+    checkNodeIsVisibleArea(nodeKey) {
+        const treeViewRect = this.getElement().get(0).getBoundingClientRect();
+        const itemRect = this.getElement().find(`[data-item-id="${nodeKey}"] .${ITEM_CLASS}`).get(0).getBoundingClientRect();
 
-        const epsilon = 0.5;
-        assert.roughEqual(scrollContainer.scrollTop, expected.top, epsilon, ' scrollTop');
-        assert.roughEqual(scrollContainer.scrollLeft, expected.left, epsilon, ' scrollLeft');
+        const scrollDirection = this.instance.option('scrollDirection');
+        if(scrollDirection === 'vertical' || scrollDirection === 'both') {
+            assert.equal(itemRect.top >= treeViewRect.top && itemRect.top <= treeViewRect.bottom, true, ` vertical item location ${itemRect.top} must be between ${treeViewRect.top} and ${treeViewRect.bottom}`);
+        }
+
+        if(scrollDirection === 'horizontal' || scrollDirection === 'both') {
+            assert.equal(itemRect.left >= treeViewRect.left && itemRect.left <= treeViewRect.right, true, ` horizontal item location ${itemRect.left} must be between ${treeViewRect.left} and ${treeViewRect.right}`);
+        }
     }
 
     clearEventLog() {

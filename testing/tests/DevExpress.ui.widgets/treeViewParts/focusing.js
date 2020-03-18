@@ -60,14 +60,10 @@ QUnit.testInActiveWindow('widget should not have focus-state class after click o
     assert.ok(!$node.hasClass('dx-state-focused'), 'focus state was toggle after click');
 });
 
-
-const ITEM_HEIGHT = 32;
-const NODE_MARGIN = 15;
-
 const configs = [];
 ['up', 'down', 'left', 'right', 'first', 'last'].forEach(direction => {
     [false, true].forEach(expanded => {
-        [1, 2, 3, 4, 5, 6].forEach(initialFocusedItemKey => {
+        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].forEach(initialFocusedItemKey => {
             configs.push({ expanded, direction, initialFocusedItemKey });
         });
     });
@@ -81,14 +77,15 @@ configs.forEach(config => {
         }
         const wrapper = new TreeViewTestWrapper({
             items: [
-                { id: 1, text: 'item1', expanded: config.expanded, items: [{ id: 2, text: 'item1_1' }] },
-                { id: 3, text: 'item2', expanded: config.expanded, items: [{ id: 4, text: 'item2_1' }] },
-                { id: 5, text: 'item3', expanded: config.expanded, items: [{ id: 6, text: 'item3_1' }] }
+                { id: 1, text: 'item1', expanded: config.expanded, items: [{ id: 2, text: 'item1_1', expanded: config.expanded, items: [{ id: 3, text: 'item1_1_1' }] }] },
+                { id: 4, text: 'item2', expanded: config.expanded, items: [{ id: 5, text: 'item2_1', expanded: config.expanded, items: [{ id: 6, text: 'item1_1_1' }] }] },
+                { id: 7, text: 'item3', expanded: config.expanded, items: [{ id: 8, text: 'item3_1', expanded: config.expanded, items: [{ id: 9, text: 'item1_1_1' }] }] },
+                { id: 10, text: 'item4', expanded: config.expanded, items: [{ id: 11, text: 'item4_1', expanded: config.expanded, items: [{ id: 12, text: 'item4_1_1' }] }] }
             ],
             focusStateEnabled: true,
             scrollDirection: 'both',
-            height: ITEM_HEIGHT,
-            width: 30
+            height: 40,
+            width: 40
         });
 
         const $node = wrapper.getElement().find(`[data-item-id="${config.initialFocusedItemKey}"]`);
@@ -102,51 +99,29 @@ configs.forEach(config => {
         $item.trigger('dxpointerdown');
 
         wrapper.instance._moveFocus(config.direction, {});
-        wrapper.checkScrollPosition(getScrollPosition($node, config.initialFocusedItemKey, config.direction, config.expanded));
+        wrapper.checkNodeIsVisibleArea(getNextFocusedItemKey($node, config.initialFocusedItemKey, config.direction, config.expanded));
     });
-
-    function getScrollPosition($node, key, direction, expanded) {
-        let newFocusedItemKey = getNextFocusedItemKey($node, key, direction, expanded);
-        switch(newFocusedItemKey) {
-            case 1:
-                return { top: 0, left: NODE_MARGIN };
-            case 2:
-                return { top: ITEM_HEIGHT, left: NODE_MARGIN * 2 };
-            case 3:
-                return expanded
-                    ? { top: ITEM_HEIGHT * 2, left: NODE_MARGIN }
-                    : { top: ITEM_HEIGHT, left: NODE_MARGIN };
-            case 4:
-                return { top: ITEM_HEIGHT * 3, left: NODE_MARGIN * 2 };
-            case 5:
-                return expanded
-                    ? { top: ITEM_HEIGHT * 4, left: NODE_MARGIN }
-                    : { top: ITEM_HEIGHT * 2, left: NODE_MARGIN };
-            case 6:
-                return { top: ITEM_HEIGHT * 5, left: NODE_MARGIN * 2 };
-        }
-    }
 
     function getNextFocusedItemKey($node, key, direction, expanded) {
         const isFirstLevelNode = $node.attr('aria-level') === '1';
-        const isLastLevelNode = !isFirstLevelNode;
+        const isLastLevelNode = $node.attr('aria-level') === '3';
         const firstKey = 1;
-        const lastKey = expanded ? 6 : 5;
+        const lastKey = expanded ? 12 : 10;
 
         let nextFocusedItemKey = 1;
         switch(direction) {
             case 'up':
                 nextFocusedItemKey = !isFirstLevelNode || expanded
                     ? key - 1
-                    : key - 2;
+                    : key - 3;
                 break;
             case 'down':
                 nextFocusedItemKey = !isFirstLevelNode || expanded
                     ? key + 1
-                    : key + 2;
+                    : key + 3;
                 break;
             case 'left':
-                nextFocusedItemKey = isFirstLevelNode
+                nextFocusedItemKey = isFirstLevelNode || expanded
                     ? key
                     : key - 1;
                 break;

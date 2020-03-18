@@ -583,6 +583,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const dataSource = this.getDataSource();
         const skipContentReadyAction = dataSource && !dataSource.isLoaded();
 
+        if(this._scrollableContainer && windowUtils.hasWindow()) {
+            this._scrollableContainer.update();
+        }
+
         if(!skipContentReadyAction) {
             this.callBase();
         }
