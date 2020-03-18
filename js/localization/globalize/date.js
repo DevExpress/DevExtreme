@@ -714,7 +714,7 @@ if(Globalize && Globalize.formatDate) {
             let formatCacheKey;
 
             if(typeof (format) === 'function') {
-                return this.removeRtlMarks(format(date));
+                return format(date);
             }
 
             if(format.formatter) {
