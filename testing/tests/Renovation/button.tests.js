@@ -589,78 +589,6 @@ QUnit.module('submit behavior', {
             ValidationEngine.initGroups();
         }
     });
-
-    // NOTE: unstable (problem with preact timers)
-    QUnit.skip('Submit button should change the \'disabled\' option to \'false\' when validation is passed negatively', function(assert) {
-        this.clock.restore();
-        const validator = new Validator($('<div>').appendTo(this.$form), {
-            adapter: sinon.createStubInstance(DefaultAdapter),
-            validationRules: [{
-                type: 'async',
-                validationCallback: function() {
-                    const d = new Deferred();
-                    setTimeout(() => {
-                        d.reject();
-                    }, 10);
-                    return d.promise();
-                }
-            }]
-        });
-        const done = assert.async();
-
-        this.$element.Button({ validationGroup: 'testGroup' });
-        this.$element.Button('instance').option('onOptionChanged', (args) => {
-            if(args.name === 'disabled') {
-                if(args.value === true) {
-                    assert.equal(validator._validationInfo.result.status, 'pending', 'validator in pending');
-                } else {
-                    assert.equal(validator._validationInfo.result.status, 'invalid', 'validator is invalid');
-
-                    ValidationEngine.initGroups();
-                    done();
-                }
-            }
-        });
-
-        ValidationEngine.registerValidatorInGroup('testGroup', validator);
-        this.$element.trigger('dxclick');
-    });
-
-    // NOTE: unstable (problem with preact timers)
-    QUnit.skip('Submit button should change the \'disabled\' option to \'false\' when validation is passed positively', function(assert) {
-        this.clock.restore();
-        const validator = new Validator($('<div>').appendTo(this.$form), {
-            adapter: sinon.createStubInstance(DefaultAdapter),
-            validationRules: [{
-                type: 'async',
-                validationCallback: function() {
-                    const d = new Deferred();
-                    setTimeout(() => {
-                        d.resolve();
-                    }, 10);
-                    return d.promise();
-                }
-            }]
-        });
-        const done = assert.async();
-
-        this.$element.Button({ validationGroup: 'testGroup' });
-        this.$element.Button('instance').option('onOptionChanged', (args) => {
-            if(args.name === 'disabled') {
-                if(args.value === true) {
-                    assert.equal(validator._validationInfo.result.status, 'pending', 'validator in pending');
-                } else {
-                    assert.equal(validator._validationInfo.result.status, 'valid', 'validator is valid');
-
-                    ValidationEngine.initGroups();
-                    done();
-                }
-            }
-        });
-
-        ValidationEngine.registerValidatorInGroup('testGroup', validator);
-        this.$element.trigger('dxclick');
-    });
 });
 
 QUnit.module('templates', () => {
@@ -676,54 +604,6 @@ QUnit.module('templates', () => {
         assert.equal(checkStyleHelper.getOverflowX($template[0].parentNode), 'visible', 'overflowX');
         assert.equal(checkStyleHelper.getTextOverflow($template[0].parentNode), 'clip', 'textOverflow');
         assert.equal(checkStyleHelper.getWhiteSpace($template[0].parentNode), 'normal', 'whiteSpace');
-    });
-
-    checkStyleHelper.testInChromeOnDesktopActiveWindow('parent styles when button is focused, text is not empty', function(assert) {
-        const done = assert.async();
-
-        const $template = $('<div>').text('test1');
-        const $button = $('#button').Button({
-            text: 'not empty',
-            template: function() { return $template; }
-        });
-
-        setTimeout(() => {
-            $button.Button('instance').focus();
-
-            setTimeout(() => {
-                assert.strictEqual(checkStyleHelper.getColor($template[0]), 'rgb(51, 51, 51)', 'color');
-                assert.strictEqual(checkStyleHelper.getBackgroundColor($template[0]), 'rgb(235, 235, 235)', 'backgroundColor');
-                assert.strictEqual(checkStyleHelper.getOverflowX($template[0].parentNode), 'hidden', 'overflowX');
-                assert.strictEqual(checkStyleHelper.getTextOverflow($template[0].parentNode), 'ellipsis', 'textOverflow');
-                assert.strictEqual(checkStyleHelper.getWhiteSpace($template[0].parentNode), 'nowrap', 'whiteSpace');
-
-                done();
-            }, 100);
-        }, 100);
-    });
-
-    checkStyleHelper.testInChromeOnDesktopActiveWindow('parent styles when button is focused, text is empty', function(assert) {
-        const done = assert.async();
-
-        const $template = $('<div>').text('test1');
-        const $button = $('#button').Button({
-            text: null,
-            template: function() { return $template; }
-        });
-
-        setTimeout(() => {
-            $button.Button('instance').focus();
-
-            setTimeout(() => {
-                assert.strictEqual(checkStyleHelper.getColor($template[0]), 'rgb(51, 51, 51)', 'color');
-                assert.strictEqual(checkStyleHelper.getBackgroundColor($template[0]), 'rgb(235, 235, 235)', 'backgroundColor');
-                assert.strictEqual(checkStyleHelper.getOverflowX($template[0].parentNode), 'visible', 'overflowX');
-                assert.strictEqual(checkStyleHelper.getTextOverflow($template[0].parentNode), 'clip', 'textOverflow');
-                assert.strictEqual(checkStyleHelper.getWhiteSpace($template[0].parentNode), 'normal', 'whiteSpace');
-
-                done();
-            }, 100);
-        }, 100);
     });
 });
 
