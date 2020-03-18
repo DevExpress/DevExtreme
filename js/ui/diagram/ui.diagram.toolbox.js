@@ -14,6 +14,7 @@ import DiagramFloatingPanel from './ui.diagram.floating_panel';
 const DIAGRAM_TOOLBOX_MIN_HEIGHT = 130;
 const DIAGRAM_TOOLBOX_POPUP_CLASS = 'dx-diagram-toolbox-popup';
 const DIAGRAM_TOOLBOX_PANEL_CLASS = 'dx-diagram-toolbox-panel';
+const DIAGRAM_TOOLBOX_INPUT_CONTAINER_CLASS = 'dx-diagram-toolbox-input-container';
 const DIAGRAM_TOOLBOX_INPUT_CLASS = 'dx-diagram-toolbox-input';
 const DIAGRAM_TOOLTIP_DATATOGGLE = 'shape-toolbox-tooltip';
 const DIAGRAM_SKIP_GESTURE_CLASS = 'dx-skip-gesture-event';
@@ -120,33 +121,11 @@ class DiagramToolbox extends DiagramFloatingPanel {
         return options;
     }
     _renderPopupContent($parent) {
-        const that = this;
-        const $input = $('<div>')
-            .addClass(DIAGRAM_TOOLBOX_INPUT_CLASS)
+        const $inputContainer = $('<div>')
+            .addClass(DIAGRAM_TOOLBOX_INPUT_CONTAINER_CLASS)
             .appendTo($parent);
-        this._searchInput = this._createComponent($input, TextBox, {
-            stylingMode: 'outlined',
-            placeholder: messageLocalization.format('dxDiagram-uiSearch'),
-            onValueChanged: function(data) {
-                that._onInputChanged(data.value);
-            },
-            valueChangeEvent: 'keyup',
-            buttons: [{
-                name: 'search',
-                location: 'after',
-                options: {
-                    activeStateEnabled: false,
-                    focusStateEnabled: false,
-                    hoverStateEnabled: false,
-                    icon: 'search',
-                    stylingMode: 'outlined',
-                    type: 'normal',
-                    onClick: function() {
-                        that._searchInput.focus();
-                    }
-                }
-            }]
-        });
+        this._renderSearchInput($inputContainer);
+
         const panelHeight = !hasWindow() ? '100%' : 'calc(100% - ' + this._searchInput.$element().height() + 'px)';
         const $panel = $('<div>')
             .addClass(DIAGRAM_TOOLBOX_PANEL_CLASS)
@@ -170,6 +149,34 @@ class DiagramToolbox extends DiagramFloatingPanel {
             maxHeight += this._searchInput.$element().outerHeight();
         }
         this.option('maxHeight', maxHeight);
+    }
+    _renderSearchInput($parent) {
+        const $input = $('<div>')
+            .addClass(DIAGRAM_TOOLBOX_INPUT_CLASS)
+            .appendTo($parent);
+        this._searchInput = this._createComponent($input, TextBox, {
+            stylingMode: 'outlined',
+            placeholder: messageLocalization.format('dxDiagram-uiSearch'),
+            onValueChanged: data => {
+                this._onInputChanged(data.value);
+            },
+            valueChangeEvent: 'keyup',
+            buttons: [{
+                name: 'search',
+                location: 'after',
+                options: {
+                    activeStateEnabled: false,
+                    focusStateEnabled: false,
+                    hoverStateEnabled: false,
+                    icon: 'search',
+                    stylingMode: 'outlined',
+                    type: 'normal',
+                    onClick: () => {
+                        this._searchInput.focus();
+                    }
+                }
+            }]
+        });
     }
     _renderScrollView($parent) {
         const $scrollViewWrapper = $('<div>')
