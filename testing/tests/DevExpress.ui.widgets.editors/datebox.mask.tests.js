@@ -1240,4 +1240,25 @@ module('Using beforeInput event', {
         assert.strictEqual(input.value, '02/01/2020 03:45');
     });
 
+    test('typing invalid symbols does not changes value on Android devices (T838638)', function(assert) {
+        const $input = this.$input;
+
+        $input.val('A');
+
+        this.keyboard
+            .keyDown('Unidentified')
+            .beforeInput('A', 'insertCompositionText')
+            .input('A', 'insertCompositionText');
+
+        assert.strictEqual($input.get(0).value, '02/01/2020 03:45');
+    });
+
+    test('unable to delete mask chars on Android devices (T838638)', function(assert) {
+        this.keyboard
+            .caret(3)
+            .beforeInput(null, 'deleteContentBackward')
+            .input(null, 'deleteContentBackward');
+
+        assert.strictEqual(this.$input.get(0).value, '01/01/2020 03:45');
+    });
 });
