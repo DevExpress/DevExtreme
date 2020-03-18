@@ -426,7 +426,7 @@ const subscribes = {
 
     updateAppointmentEndDate: function(options) {
         const endDate = options.endDate;
-        const endDayHour = this._getCurrentViewOption('endDayHour');
+        const endDayHour = this._workSpace.getEndDayHour();
         const startDayHour = this._getCurrentViewOption('startDayHour');
 
         let updatedEndDate = endDate;
@@ -786,7 +786,7 @@ const subscribes = {
             let tailDuration;
 
             if(isDifferentDates) {
-                const startDateEndHour = new Date(new Date(startDate).setHours(this.option('endDayHour'), 0, 0));
+                const startDateEndHour = new Date(new Date(startDate).setHours(this.option('endDayHour'), 0, 0)); // !
                 const hiddenDayDuration = dayDuration - visibleDayDuration - (startDate.getTime() > startDateEndHour.getTime() ? startDate.getTime() - startDateEndHour.getTime() : 0);
 
                 tailDuration = appointmentDuration - (floorQuantityOfDays ? floorQuantityOfDays * dayDuration : hiddenDayDuration);
@@ -819,7 +819,7 @@ const subscribes = {
     },
 
     getEndDayHour: function() {
-        return this._workSpace.option('endDayHour') || this.option('endDayHour');
+        return this._workSpace.getEndDayHour() || this.option('endDayHour');
     },
 
     getStartDayHour: function() {

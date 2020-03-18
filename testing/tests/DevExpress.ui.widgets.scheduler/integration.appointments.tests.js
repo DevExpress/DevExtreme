@@ -1971,13 +1971,58 @@ QUnit.test('Appointments should be filtered correctly by end day hour when curre
         ]
     });
 
-    let $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
-    assert.equal($appointments.length, 0, 'There are not appointments');
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, 'There are not appointments');
 
     this.instance.option('currentDate', new Date(2015, 4, 7));
 
-    $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
-    assert.equal($appointments.length, 0, 'There is one appointment');
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, 'There are not appointments');
+});
+
+QUnit.test('Appointments should be filtered correctly by real end day hour, if cellDuration is set', function(assert) {
+    this.createInstance({
+        dataSource: [
+            {
+                text: 'Test',
+                startDate: new Date(2020, 4, 25, 23, 50),
+                endDate: new Date(2020, 4, 25, 23, 55)
+            }
+        ],
+        cellDuration: 105,
+        views: ['day', 'week', 'timelineWeek', 'month'],
+        currentView: 'day',
+        currentDate: new Date(2020, 4, 25),
+        startDayHour: 1
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, 'There are not appointments');
+
+    this.instance.option('currentView', 'week');
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, 'There are not appointments');
+
+    this.instance.option('currentView', 'timelineWeek');
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, 'There are not appointments');
+
+    this.instance.option('currentView', 'month');
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 1, 'There is one appointment');
+});
+
+QUnit.test('Rendered appointment should be cropped correctly by real end day hour, if cellDuration is set', function(assert) {
+    this.createInstance({
+        dataSource: [
+            {
+                text: 'Test',
+                startDate: new Date(2020, 4, 25, 23, 10),
+                endDate: new Date(2020, 4, 25, 23, 50)
+            }
+        ],
+        cellDuration: 105,
+        views: ['day', 'week'],
+        currentView: 'week',
+        currentDate: new Date(2020, 4, 25),
+        startDayHour: 1
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 1, 'There is one appointment');
 });
 
 QUnit.test('Multi-day appointments should be filtered correctly if it\'s time less than startDayHour', function(assert) {
@@ -1997,8 +2042,7 @@ QUnit.test('Multi-day appointments should be filtered correctly if it\'s time le
         ]
     });
 
-    const $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
-    assert.equal($appointments.length, 1, 'Appointment was rendered');
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 1, 'There is one appointment');
 });
 
 QUnit.test('Appointments should be cleared when currentDate option is changed', function(assert) {

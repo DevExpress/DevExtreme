@@ -529,7 +529,8 @@ class BaseRenderingStrategy {
             }
         }
 
-        const currentViewEndTime = new Date(new Date(endDate).setHours(this.instance.option('endDayHour'), 0, 0));
+        const endTime = dateUtils.dateTimeFromDecimal(this.instance.fire('getEndDayHour'));
+        const currentViewEndTime = new Date(new Date(endDate).setHours(endTime.hours, endTime.minutes, 0));
 
         if(endDate.getTime() > currentViewEndTime.getTime()) {
             endDate = currentViewEndTime;
