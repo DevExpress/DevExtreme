@@ -404,14 +404,14 @@ const Drawer = Widget.inherit({
             this._$shader.toggleClass(INVISIBLE_STATE_CLASS, !visible);
             this._$shader.css('visibility', visible ? 'visible' : 'hidden');
 
-            this.toggleZIndex(visible);
+            this.updateZIndex(visible);
         } else {
             this._$shader.toggleClass(INVISIBLE_STATE_CLASS, true);
             this._$shader.css('visibility', 'hidden');
         }
     },
 
-    toggleZIndex(visible) {
+    updateZIndex(visible) {
         if(visible && !typeUtils.isDefined(this._zIndex)) {
             this._zIndex = zIndexPool.create();
             this._strategy.setZIndex(this._zIndex);
