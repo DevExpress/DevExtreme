@@ -61,7 +61,7 @@ matrix:
     - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: ui.grid }
     - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: ui.scheduler }
     - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: viz }
-    - { TARGET: test_functional, COMPONENT: dataGrid }
+    - { TARGET: test_functional, COMPONENT: dataGrid, QUARANTINE_MODE: true }
     - { TARGET: test_functional, COMPONENT: scheduler, QUARANTINE_MODE: true }
     - { TARGET: test_functional, COMPONENT: editors }
     - { TARGET: test_functional, COMPONENT: navigation }
