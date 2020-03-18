@@ -212,4 +212,31 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
         assert.deepEqual(newSelectedItems, oldSelectedItems, 'selection has not changed');
     });
 
+    test('Raise the ContextMenuItemClick event', function(assert) {
+        const spy = sinon.spy();
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            onContextMenuItemClick: spy,
+            permissions: {
+                rename: true
+            }
+        });
+        this.clock.tick(800);
+
+        this.wrapper.findThumbnailsItem('File 1.txt').trigger('dxcontextmenu');
+        this.clock.tick(800);
+
+        const $items = this.wrapper.getContextMenuItems();
+        $items.eq(0).trigger('dxclick');
+        this.clock.tick(800);
+
+        assert.strictEqual(spy.callCount, 1, 'event raised');
+        assert.strictEqual(spy.args[0][0].event.type, 'dxclick', 'event has correct type');
+        assert.deepEqual(spy.args[0][0].itemElement, $items.eq(0).get(0), 'itemElement is correct');
+        assert.strictEqual(spy.args[0][0].itemIndex, 0, 'itemIndex is correct');
+        assert.strictEqual(spy.args[0][0].itemData.name, 'rename', 'itemData has correct name');
+        assert.deepEqual(spy.args[0][0].component, fileManager, 'component is correct');
+        assert.deepEqual(spy.args[0][0].element, this.$element.get(0), 'element is correct');
+    });
+
 });
