@@ -143,6 +143,32 @@ const EditorFactoryMixin = (function() {
         }
     };
 
+    function watchLookupDataSource(options) {
+        if(options.row && options.row.watch && options.parentType === 'dataRow') {
+            const editorOptions = options.editorOptions || {};
+
+            options.editorOptions = editorOptions;
+
+            let selectBox;
+            const onInitialized = editorOptions.onInitialized;
+            editorOptions.onInitialized = function(e) {
+                onInitialized && onInitialized.apply(this, arguments);
+                selectBox = e.component;
+                selectBox.on('disposing', stopWatch);
+            };
+
+            let dataSource;
+            const stopWatch = options.row.watch(() => {
+                dataSource = options.lookup.dataSource(options.row);
+                return dataSource && dataSource.filter;
+            }, () => {
+                selectBox.option('dataSource', dataSource);
+            }, (row) => {
+                options.row = row;
+            });
+        }
+    }
+
     var prepareSelectBox = function(options) {
         const lookup = options.lookup;
         let displayGetter;
@@ -156,6 +182,8 @@ const EditorFactoryMixin = (function() {
 
             if(typeUtils.isFunction(dataSource) && !isWrapped(dataSource)) {
                 dataSource = dataSource(options.row || {});
+
+                watchLookupDataSource(options);
             }
 
             if(typeUtils.isObject(dataSource) || Array.isArray(dataSource)) {
