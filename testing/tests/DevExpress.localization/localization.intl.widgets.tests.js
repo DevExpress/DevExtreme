@@ -26,7 +26,7 @@ const commonEnvironment = {
 
 QUnit.module('Intl localization', () => {
     QUnit.module('DateBox', commonEnvironment, () => {
-        QUnit.test('DateBox should not raise error when digits are true arabic digits', function(assert) {
+        QUnit.test('DateBox should not raise error when digits are true arabic digits (T851630)', function(assert) {
             const currentLocale = locale();
             try {
                 locale('ar-u-nu-arab');
@@ -54,7 +54,7 @@ QUnit.module('Intl localization', () => {
             }
         });
 
-        QUnit.test('DateBox should not raise error when digits are Farsi digits', function(assert) {
+        QUnit.test('DateBox should not raise error when digits are Farsi digits (T867867)', function(assert) {
             const currentLocale = locale();
             try {
                 locale('fa-u-ca-gregory');
@@ -62,7 +62,7 @@ QUnit.module('Intl localization', () => {
                     value: new Date(2015, 10, 10),
                     type: 'date',
                     pickerType: 'calendar',
-                    useMaskBehavior: true,
+                    useMaskBehavior: true
                 });
 
                 const $input = $dateBox.find(TEXTEDITOR_INPUT_SELECTOR);
@@ -81,7 +81,7 @@ QUnit.module('Intl localization', () => {
             }
         });
 
-        QUnit.test('DateBox should not raise error when digits are Marathi digits', function(assert) {
+        QUnit.test('DateBox should not raise error when digits are Marathi digits (T867867)', function(assert) {
             const currentLocale = locale();
             try {
                 locale('mr');
