@@ -420,6 +420,11 @@ QUnit.module('typing', moduleConfig, () => {
     });
 
     QUnit.test('TextEditor with mask option should work correctly with ios autofill (T869537)', function(assert) {
+        if(devices.real().platform === 'android') {
+            assert.expect(0);
+            return;
+        }
+
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: '+1 (X00) 000',
             maskRules: { X: /[02-9]/ },
