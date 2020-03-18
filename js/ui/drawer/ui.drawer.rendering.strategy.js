@@ -2,6 +2,7 @@ import $ from '../../core/renderer';
 import fx from '../../animation/fx';
 import { Deferred, when } from '../../core/utils/deferred';
 import { camelize } from '../../core/utils/inflector';
+import { isDefined } from '../../core/utils/type';
 import * as zIndexPool from '../overlay/z_index';
 
 const animation = {
@@ -206,14 +207,19 @@ class DrawerStrategy {
         }
     }
 
-    setZIndex(zIndex) {
-        this._drawer._$shader.css('zIndex', zIndex);
+    updateZIndex() {
+        if(!isDefined(this._shaderZIndex)) {
+            this._shaderZIndex = zIndexPool.create();
+            this._drawer._$shader.css('zIndex', this._shaderZIndex);
+        }
     }
 
     clearZIndex() {
-        zIndexPool.remove(this._drawer._zIndex);
-        this._drawer._$shader.css('zIndex', '');
-        delete this._drawer._zIndex;
+        if(isDefined(this._shaderZIndex)) {
+            zIndexPool.remove(this._shaderZIndex);
+            this._drawer._$shader.css('zIndex', '');
+            delete this._shaderZIndex;
+        }
     }
 
     getPanelContent() {

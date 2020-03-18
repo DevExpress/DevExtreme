@@ -5,7 +5,9 @@ import translator from '../../animation/translator';
 import Overlay from '../overlay';
 import { ensureDefined } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
+import { isDefined } from '../../core/utils/type';
 import { camelize } from '../../core/utils/inflector';
+import * as zIndexPool from '../overlay/z_index';
 
 class OverlapStrategy extends DrawerStrategy {
 
@@ -13,7 +15,6 @@ class OverlapStrategy extends DrawerStrategy {
         delete this._initialPosition;
 
         const drawer = this.getDrawerInstance();
-
         const { opened, minSize } = drawer.option();
 
         drawer._overlay = drawer._createComponent(drawer.content(), Overlay, {
@@ -183,6 +184,26 @@ class OverlapStrategy extends DrawerStrategy {
 
     isViewContentFirst(position) {
         return position === 'right' || position === 'bottom';
+    }
+
+    updateZIndex() {
+        super.updateZIndex();
+
+        if(!isDefined(this._panelZIndex)) {
+            this._panelZIndex = zIndexPool.create();
+            this._drawer._$panelContentWrapper.css('zIndex', this._panelZIndex);
+        }
+
+    }
+
+    clearZIndex() {
+        if(isDefined(this._panelZIndex)) {
+            zIndexPool.remove(this._panelZIndex);
+            this._drawer._$panelContentWrapper.css('zIndex', '');
+            delete this._panelZIndex;
+        }
+
+        super.clearZIndex();
     }
 }
 

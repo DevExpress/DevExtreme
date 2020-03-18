@@ -2,6 +2,7 @@ import { animation } from './ui.drawer.rendering.strategy';
 import DrawerStrategy from './ui.drawer.rendering.strategy';
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
+import { isDefined } from '../../core/utils/type';
 import { camelize } from '../../core/utils/inflector';
 import * as zIndexPool from '../overlay/z_index';
 
@@ -51,16 +52,21 @@ class ShrinkStrategy extends DrawerStrategy {
         return (isRtl ? position === 'left' : position === 'right') || position === 'bottom';
     }
 
-    setZIndex(zIndex) {
-        zIndexPool.create(zIndex + 1);
-        this._drawer._$panelContentWrapper.css('zIndex', zIndex + 1);
+    updateZIndex() {
+        super.updateZIndex();
+        if(!isDefined(this._panelZIndex)) {
+            this._panelZIndex = zIndexPool.create();
+            this._drawer._$panelContentWrapper.css('zIndex', this._panelZIndex);
+        }
 
-        super.setZIndex(zIndex);
     }
 
     clearZIndex() {
-        zIndexPool.remove(this._drawer._zIndex + 1);
-        this._drawer._$panelContentWrapper.css('zIndex', '');
+        if(isDefined(this._panelZIndex)) {
+            zIndexPool.remove(this._panelZIndex);
+            this._drawer._$panelContentWrapper.css('zIndex', '');
+            delete this._panelZIndex;
+        }
 
         super.clearZIndex();
     }

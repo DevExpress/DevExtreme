@@ -1,4 +1,6 @@
 import { isDefined } from 'core/utils/type';
+
+const DRAWER_PANEL_CONTENT_CLASS = 'dx-drawer-panel-content';
 const DRAWER_SHADER_CLASS = 'dx-drawer-shader';
 
 function checkBoundingClientRect(assert, element, expectedRect, elementName) {
@@ -28,7 +30,11 @@ function checkShader(assert, env, expectedZIndex = { panel: '1502', shader: '150
         assert.strictEqual(visibility, 'visible', 'shader is visible');
         assert.strictEqual(shaderElement.classList.contains('dx-state-invisible'), false, 'shader has not .dx-invisible-class');
         assert.strictEqual(window.getComputedStyle(shaderElement).zIndex, expectedZIndex.shader, 'shader.zIndex');
-        assert.strictEqual(window.getComputedStyle(env.templateElement.parentElement).zIndex, openedStateMode === 'push' ? 'auto' : expectedZIndex.panel, 'panel.zIndex');
+        if(openedStateMode === 'overlap') {
+            assert.strictEqual(window.getComputedStyle(env.templateElement.closest(`.dx-overlay.${DRAWER_PANEL_CONTENT_CLASS}`)).zIndex, openedStateMode === 'push' ? 'auto' : expectedZIndex.panel, 'panel.zIndex');
+        } else {
+            assert.strictEqual(window.getComputedStyle(env.templateElement.parentElement).zIndex, openedStateMode === 'push' ? 'auto' : expectedZIndex.panel, 'panel.zIndex');
+        }
 
         checkBoundingClientRect(assert, env.viewElement, shaderElement.getBoundingClientRect(), 'shader');
     } else {
@@ -43,7 +49,7 @@ function checkShader(assert, env, expectedZIndex = { panel: '1502', shader: '150
 }
 
 const leftTemplateSize = 150;
-const LeftDrawerTester = { // TODO: convert to class with abstract methods
+const LeftDrawerTester = {
     templateSize: leftTemplateSize,
     template: () => `<div id="template" style="width: ${leftTemplateSize}px; height: 100%; background-color: green">template</div>`,
 
@@ -156,7 +162,7 @@ const LeftDrawerTester = { // TODO: convert to class with abstract methods
 };
 
 const rightTemplateSize = 150;
-const RightDrawerTester = { // TODO: convert to class with abstract methods
+const RightDrawerTester = {
     templateSize: rightTemplateSize,
     template: () => `<div id="template" style="width: ${rightTemplateSize}px; height: 100%; background-color: green">template</div>`,
 
@@ -276,7 +282,7 @@ const RightDrawerTester = { // TODO: convert to class with abstract methods
 };
 
 const topTemplateSize = 75;
-const TopDrawerTester = { // TODO: convert to class with abstract methods
+const TopDrawerTester = {
     templateSize: topTemplateSize,
     template: () => `<div id="template" style="width: 100%; height: ${topTemplateSize}px; background-color: green">template</div>`,
 
@@ -394,9 +400,11 @@ export const drawerTesters = {
     drawerElementId: drawerElementId,
     markup: `
         <div id="${drawerElementId}" style="background-color: blue; width: 200px; height: 100px">
-            <div id="view" style="width: 100%; height: 100%; background-color: yellow">view</div>
+            <div id="view" style="width: 100%; height: 100%; background-color: yellow">
+                view
+                <div id="loadPanel"></div>
+            </div>
         </div>`,
-
     left: LeftDrawerTester,
     top: TopDrawerTester,
     right: RightDrawerTester,

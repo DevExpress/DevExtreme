@@ -15,7 +15,6 @@ import { name as CLICK_EVENT_NAME } from '../../events/click';
 import fx from '../../animation/fx';
 import { Deferred } from '../../core/utils/deferred';
 import { triggerResizeEvent } from '../../core/utils/dom';
-import * as zIndexPool from '../overlay/z_index';
 
 const DRAWER_CLASS = 'dx-drawer';
 const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
@@ -412,15 +411,9 @@ const Drawer = Widget.inherit({
     },
 
     updateZIndex(visible) {
-        if(visible && !typeUtils.isDefined(this._zIndex)) {
-            if(!typeUtils.isDefined(this._zIndex)) {
-                this._zIndex = zIndexPool.create();
-            }
-
-            this._strategy.setZIndex(this._zIndex);
-        }
-
-        if(!visible && typeUtils.isDefined(this._zIndex)) {
+        if(visible) {
+            this._strategy.updateZIndex();
+        } else {
             this._strategy.clearZIndex();
         }
     },

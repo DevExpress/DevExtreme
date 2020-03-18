@@ -4,9 +4,9 @@ import { drawerTesters } from '../../helpers/drawerHelpers.js';
 import { clearStack } from 'ui/overlay/z_index';
 
 import 'common.css!';
-import 'ui/load_panel';
 
 import dxDrawer from 'ui/drawer';
+import dxLoadPanel from 'ui/load_panel';
 
 QUnit.testStart(() => {
     $('#qunit-fixture').html(drawerTesters.markup);
@@ -35,6 +35,7 @@ configs.forEach(config => {
         afterEach() {
             this.clock.restore();
             this.clock = undefined;
+            clearStack();
         }
     }, () => {
 
@@ -250,22 +251,27 @@ configs.forEach(config => {
             drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
         });
 
+        testOrSkip('opened: true, visible: false -> repaint', () => config.openedStateMode === 'shrink' || config.openedStateMode === 'overlap' || config.openedStateMode === 'push', function(assert) {
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
+            const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
+                opened: true,
+                visible: false,
+                template: drawerTesters[config.position].template
+            }));
+
+            this.clock.tick(100);
+            drawer.repaint();
+            this.clock.tick(100);
+
+            drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
+        });
+
         QUnit.test('opened: false -> opened: true, shader has more priority z-index than overlay inside view content', function(assert) {
             const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
-                template: drawerTesters[config.position].template,
-                contentTemplate: function($content) {
-                    const $viewContent = $(drawerTesters.markup).find('#view');
-                    return $viewContent.append($('<div/>').dxLoadPanel({
-                        visible: true,
-                        container: $content,
-                        position: { my: 'center', at: 'center', of: $content }
-                    }));
-                }
+                template: drawerTesters[config.position].template
             }));
-
-            this.clock.tick(100);
 
             const env = {
                 drawer,
@@ -273,20 +279,28 @@ configs.forEach(config => {
                 templateElement: drawerElement.querySelector('#template'),
                 viewElement: drawerElement.querySelector('#view')
             };
-            const $loadPanelWrapper = $('.dx-loadpanel-wrapper');
-            const $loadPanelContent = $('.dx-loadpanel-content');
-            const loadPanelZIndex = config.openedStateMode === 'overlap' ? '1502' : '1501';
 
-            assert.strictEqual($loadPanelWrapper.css('zIndex'), loadPanelZIndex, 'loadPanelWrapper.zIndex');
-            assert.strictEqual($loadPanelContent.css('zIndex'), loadPanelZIndex, 'loadPanelContent.zIndex');
-            drawerTesters.checkShader(assert, env, { panel: '1502', shader: '1501' });
+            new dxLoadPanel(document.getElementById('loadPanel'), {
+                visible: true,
+                container: env.viewElement,
+                position: { my: 'center', at: 'center', of: env.viewElement }
+            });
 
             this.clock.tick(100);
             drawer.option('opened', true);
             this.clock.tick(100);
-            assert.strictEqual($loadPanelWrapper.css('zIndex'), loadPanelZIndex, 'loadPanelWrapper.zIndex');
-            assert.strictEqual($loadPanelContent.css('zIndex'), loadPanelZIndex, 'loadPanelContent.zIndex');
-            drawerTesters.checkShader(assert, env, config.openedStateMode === 'overlap' ? { panel: '1501', shader: '1503' } : { panel: '1503', shader: '1502' });
+
+            if(config.openedStateMode === 'overlap') {
+                assert.strictEqual($('.dx-loadpanel-wrapper').css('zIndex'), '1502', 'loadPanelWrapper.zIndex');
+                assert.strictEqual($('.dx-loadpanel-content').css('zIndex'), '1502', 'loadPanelContent.zIndex');
+
+                drawerTesters.checkShader(assert, env, { shader: '1503', panel: '1504' });
+            } else {
+                assert.strictEqual($('.dx-loadpanel-wrapper').css('zIndex'), '1501', 'loadPanelWrapper.zIndex');
+                assert.strictEqual($('.dx-loadpanel-content').css('zIndex'), '1501', 'loadPanelContent.zIndex');
+
+                drawerTesters.checkShader(assert, env, { shader: '1502', panel: '1503' });
+            }
         });
     });
 });
