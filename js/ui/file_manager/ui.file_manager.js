@@ -88,7 +88,8 @@ class FileManager extends Widget {
             commandManager: this._commandManager,
             generalItems: this.option('toolbar.items'),
             fileItems: this.option('toolbar.fileSelectionItems'),
-            itemViewMode: this.option('itemView').mode
+            itemViewMode: this.option('itemView').mode,
+            onItemClick: (args) => this._actions.onToolbarItemClick(args)
         });
 
         this._createAdaptivityControl();
@@ -184,6 +185,7 @@ class FileManager extends Widget {
         return this._createComponent($contextMenu, FileManagerContextMenu, {
             commandManager: this._commandManager,
             items: this.option('contextMenu.items'),
+            onItemClick: (args) => this._actions.onContextMenuItemClick(args),
             isolateCreationItemCommands
         });
     }
@@ -425,11 +427,15 @@ class FileManager extends Widget {
 
             customizeDetailColumns: null,
 
+            onContextMenuItemClick: null,
+
             onCurrentDirectoryChanged: null,
 
             onSelectedFileOpened: null,
 
             onSelectionChanged: null,
+
+            onToolbarItemClick: null,
 
             allowedFileExtensions: ['.txt', '.rtf', '.doc', '.docx', '.odt', '.xls', '.xlsx', '.ods', '.ppt', '.pptx', '.odp', '.pdf', '.xml', '.png', '.svg', '.gif', '.jpg', '.jpeg', '.ico', '.bmp', '.avi', '.mpeg', '.mkv', ''],
 
@@ -534,9 +540,11 @@ class FileManager extends Widget {
                 this._itemView.option('contextMenu', this._createContextMenu(true));
                 this._filesTreeView.option('contextMenu', this._createContextMenu());
                 break;
+            case 'onContextMenuItemClick':
             case 'onCurrentDirectoryChanged':
             case 'onSelectedFileOpened':
             case 'onSelectionChanged':
+            case 'onToolbarItemClick':
                 this._actions[name] = this._createActionByOption(name);
                 break;
             default:
@@ -546,9 +554,11 @@ class FileManager extends Widget {
 
     _initActions() {
         this._actions = {
+            onContextMenuItemClick: this._createActionByOption('onContextMenuItemClick'),
             onCurrentDirectoryChanged: this._createActionByOption('onCurrentDirectoryChanged'),
             onSelectedFileOpened: this._createActionByOption('onSelectedFileOpened'),
-            onSelectionChanged: this._createActionByOption('onSelectionChanged')
+            onSelectionChanged: this._createActionByOption('onSelectionChanged'),
+            onToolbarItemClick: this._createActionByOption('onToolbarItemClick')
         };
     }
 

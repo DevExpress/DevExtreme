@@ -107,6 +107,7 @@ class FileManagerToolbar extends Widget {
 
     _initMarkup() {
         this._commandManager = this.option('commandManager');
+        this._createItemClickedAction();
 
         this._generalToolbarVisible = true;
 
@@ -140,7 +141,8 @@ class FileManagerToolbar extends Widget {
         const $toolbar = $('<div>').appendTo(this.$element());
         const result = this._createComponent($toolbar, Toolbar, {
             items: toolbarItems,
-            visible: !hidden
+            visible: !hidden,
+            onItemClick: (args) => this._onItemClick(args)
         });
         result.compactMode = false;
         return result;
@@ -410,12 +412,17 @@ class FileManagerToolbar extends Widget {
         toolbar.endUpdate();
     }
 
+    _createItemClickedAction() {
+        this._onItemClick = this._createActionByOption('onItemClick');
+    }
+
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             commandManager: null,
             generalItems: [],
             fileItems: [],
-            itemViewMode: 'details'
+            itemViewMode: 'details',
+            onItemClick: null
         });
     }
 
@@ -428,6 +435,9 @@ class FileManagerToolbar extends Widget {
             case 'generalItems':
             case 'fileItems':
                 this.repaint();
+                break;
+            case 'onItemClick':
+                this._onItemClick = this._createActionByOption(name);
                 break;
             default:
                 super._optionChanged(args);

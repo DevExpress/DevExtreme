@@ -24,7 +24,7 @@ const DEFAULT_CONTEXT_MENU_ITEMS = {
 class FileManagerContextMenu extends Widget {
 
     _initMarkup() {
-        this._createContextMenuHiddenAction();
+        this._initActions();
 
         this._isVisible = false;
 
@@ -32,7 +32,7 @@ class FileManagerContextMenu extends Widget {
         this._contextMenu = this._createComponent($menu, ContextMenu, {
             cssClass: FILEMANAGER_CONTEXT_MEMU_CLASS,
             showEvent: '',
-            onItemClick: ({ itemData: { name } }) => this._onContextMenuItemClick(name),
+            onItemClick: (args) => this._onContextMenuItemClick(args.itemData.name, args),
             onHidden: () => this._onContextMenuHidden()
         });
 
@@ -149,17 +149,21 @@ class FileManagerContextMenu extends Widget {
             name: commandName,
             text,
             icon,
-            onItemClick: () => this._onContextMenuItemClick(commandName)
+            onItemClick: (args) => this._onContextMenuItemClick(commandName, args)
         };
     }
 
-    _onContextMenuItemClick(commandName) {
+    _onContextMenuItemClick(commandName, args) {
+        this._actions.onItemClick(args);
         const targetFileItems = this._isIsolatedCreationItemCommand(commandName) ? null : this._targetFileItems;
         this._commandManager.executeCommand(commandName, targetFileItems);
     }
 
-    _createContextMenuHiddenAction() {
-        this._contextMenuHiddenAction = this._createActionByOption('onContextMenuHidden');
+    _initActions() {
+        this._actions = {
+            contextMenuHiddenAction: this._createActionByOption('onContextMenuHidden'),
+            onItemClick: this._createActionByOption('onItemClick')
+        };
     }
 
     _onContextMenuHidden() {
@@ -168,13 +172,14 @@ class FileManagerContextMenu extends Widget {
     }
 
     _raiseContextMenuHidden() {
-        this._contextMenuHiddenAction();
+        this._actions.contextMenuHiddenAction();
     }
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             commandManager: null,
-            onContextMenuHidden: null
+            onContextMenuHidden: null,
+            onItemClick: null
         });
     }
 
@@ -185,8 +190,9 @@ class FileManagerContextMenu extends Widget {
             case 'commandManager':
                 this.repaint();
                 break;
+            case 'onItemClick':
             case 'onContextMenuHidden':
-                this._createContextMenuHiddenAction();
+                this._actions[name] = this._createActionByOption(name);
                 break;
             default:
                 super._optionChanged(args);
