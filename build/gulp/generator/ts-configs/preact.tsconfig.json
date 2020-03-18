@@ -1,16 +1,6 @@
 {
+    "extends": "./tsconfig.json",
     "compilerOptions": {
-        "target": "ES2016",
-        "module": "ESNext",
-        "strict": false,
-        "esModuleInterop": false,
-        "typeRoots": ["node_modules/@types"],
-        "forceConsistentCasingInFileNames": true,
-        "jsx": "react",
-        "jsxFactory": "Preact.h",
-        "declaration": true
-    },
-    "exclude": [
-        "node_modules"
-    ]
+        "jsxFactory": "Preact.h"
+    }
 }

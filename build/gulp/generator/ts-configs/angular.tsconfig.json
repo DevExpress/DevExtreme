@@ -1,15 +1,6 @@
 {
+    "extends": "./tsconfig.json",
     "compilerOptions": {
-        "target": "ES2016",
-        "module": "ESNext",
-        "strict": false,
-        "jsx": "react",
-        "esModuleInterop": false,
-        "typeRoots": ["node_modules/@types"],
-        "forceConsistentCasingInFileNames": true,
         "experimentalDecorators": true
-    },
-    "exclude": [
-        "node_modules"
-    ]
+    }
 }
