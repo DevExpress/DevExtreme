@@ -1877,8 +1877,13 @@ const EditingController = modules.ViewController.inherit((function() {
                 }
             }
 
-            if(options.row && (forceUpdateRow || isCustomSetCellValue)) {
-                that._updateEditRow(options.row, forceUpdateRow, isCustomSetCellValue);
+            const row = options.row;
+            if(row) {
+                if(forceUpdateRow || isCustomSetCellValue) {
+                    that._updateEditRow(row, forceUpdateRow, isCustomSetCellValue);
+                } else if(row.update) {
+                    row.update();
+                }
             }
         },
         _updateEditRowCore: function(row, skipCurrentRow, isCustomSetCellValue) {
@@ -1998,6 +2003,7 @@ const EditingController = modules.ViewController.inherit((function() {
             if(that._rowsView.renderTemplate($container, template, cellOptions, !!$container.closest(getWindow().document).length)) {
                 that._rowsView._updateCell($container, cellOptions);
             }
+            return cellOptions;
         },
 
         getFormEditorTemplate: function(cellOptions, item) {
@@ -2005,21 +2011,17 @@ const EditingController = modules.ViewController.inherit((function() {
             const column = this.component.columnOption(item.dataField);
 
             return function(options, container) {
-                const templateOptions = extend({}, cellOptions);
                 const $container = $(container);
 
-                templateOptions.column = column;
-
-                templateOptions.row.watch && templateOptions.row.watch(function() {
-                    return templateOptions.column.selector(templateOptions.row.data);
-                }, function(newValue) {
+                cellOptions.row.watch && cellOptions.row.watch(function() {
+                    return column.selector(cellOptions.row.data);
+                }, function() {
                     let $editorElement = $container.find('.dx-widget').first();
                     let validator = $editorElement.data('dxValidator');
                     const validatorOptions = validator && validator.option();
 
-                    templateOptions.value = newValue;
                     $container.contents().remove();
-                    that.renderFormEditTemplate.bind(that)(cellOptions, item, options.component, $container);
+                    cellOptions = that.renderFormEditTemplate.bind(that)(cellOptions, item, options.component, $container);
 
                     $editorElement = $container.find('.dx-widget').first();
                     validator = $editorElement.data('dxValidator');
@@ -2032,7 +2034,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     }
                 });
 
-                that.renderFormEditTemplate.bind(that)(cellOptions, item, options.component, $container);
+                cellOptions = that.renderFormEditTemplate.bind(that)(cellOptions, item, options.component, $container);
             };
         },
 
