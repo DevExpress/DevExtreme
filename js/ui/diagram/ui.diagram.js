@@ -1309,6 +1309,9 @@ class Diagram extends Widget {
         };
     }
 
+    focus() {
+        this._diagramInstance.captureFocus();
+    }
     export() {
         return this._getDiagramData();
     }
