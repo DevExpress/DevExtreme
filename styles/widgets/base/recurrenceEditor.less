@@ -7,6 +7,7 @@
 
 @SCHEDULER_RECURRENCE_REPEAT_ON_WEEK_PADDING: 7px;
 @SCHEDULER_RECURRENCE_BORDER_COLOR: @base-border-color;
+@RECURRENCE_NUMBER_BOX_MARGIN_RIGHT: 11px;
 
 .dx-recurrence-numberbox-interval,
 .dx-recurrence-numberbox-day-of-month,
@@ -44,13 +45,13 @@
 .dx-recurrence-repeat-end-label {
     display: inline-block;
     vertical-align: top;
+    line-height: 36px;
 }
 
 .dx-recurrence-repeat-end-label {
     float: left;
     width: auto;
     white-space: nowrap;
-    line-height: 36px;
 }
 
 .dx-recurrence-selectbox-month-of-year {
@@ -172,6 +173,19 @@
     &.dx-label-h-align {
         .dx-recurrence-repeat-end-container.dx-field {
             padding-top: @GENERIC_SCHEDULER_RECURRENCE_REPEAT_END_CONTAINER_PADDING_TOP;
+        }
+    }
+}
+
+.dx-recurrence-repeat-end-wrapper {
+    .dx-field-value {
+        &.dx-recurrence-datebox-until-date {
+            margin-left: 23px;
+        }
+
+        &.dx-recurrence-numberbox-repeat-count {
+            margin-left: 11px;
+            margin-right: @RECURRENCE_NUMBER_BOX_MARGIN_RIGHT;
         }
     }
 }

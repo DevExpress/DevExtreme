@@ -15,7 +15,7 @@ const SCROLL_EVENT = addNamespace('scroll', MODULE_NAMESPACE);
 
 const FRAME_PADDING = 1;
 
-class ResizingModule {
+export default class ResizingModule {
     constructor(quill, options) {
         this.quill = quill;
         this.editorInstance = options.editorInstance;
@@ -147,5 +147,3 @@ class ResizingModule {
         this._$resizeFrame = undefined;
     }
 }
-
-export default ResizingModule;

@@ -18,7 +18,6 @@ import keyboardNavigationModule from 'ui/grid_core/ui.grid_core.keyboard_navigat
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import publicComponentUtils from 'core/utils/public_component';
-import * as eventUtils from 'events/utils';
 import eventsEngine from 'events/core/events_engine';
 import pointerEvents from 'events/pointer';
 import { MockDataController, MockColumnsController, MockEditingController } from '../../helpers/dataGridMocks.js';
@@ -168,6 +167,7 @@ QUnit.module('Keyboard controller', {
             getController: function(name) {
                 return this._controllers[name];
             },
+            getScrollable: commonUtils.noop,
             _createComponent: function(element, name, config) {
                 name = typeof name === 'string' ? name : publicComponentUtils.name(name);
                 const $element = $(element)[name](config || {});
@@ -244,7 +244,7 @@ QUnit.module('Keyboard controller', {
         callViewsRenderCompleted(this.component._views);
 
         // assert
-        assert.equal(element.eventsInfo[eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation')].subscribeToEventCounter, 1, 'Subscribed');
+        assert.equal(element.eventsInfo[CLICK_EVENT].subscribeToEventCounter, 1, 'PointerDown subscribed');
     });
 
     QUnit.testInActiveWindow('Element of view is unsubscribed from events', function(assert) {
@@ -260,7 +260,7 @@ QUnit.module('Keyboard controller', {
         callViewsRenderCompleted(this.component._views);
 
         // assert
-        assert.equal(element.eventsInfo[eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation')].unsubscribeFromEventCounter, 1, 'Unsubscribed');
+        assert.equal(element.eventsInfo[CLICK_EVENT].unsubscribeFromEventCounter, 1, 'Unsubscribed');
     });
 
     // T579521

@@ -1,5 +1,7 @@
+import $ from '../../core/renderer';
 import ToolbarMenu from '../toolbar';
 import ContextMenu from '../context_menu';
+import messageLocalization from '../../localization/message';
 import { extend } from '../../core/utils/extend';
 
 const TOOLBAR_SEPARATOR_CLASS = 'dx-gantt-toolbar-separator';
@@ -116,7 +118,9 @@ export class GanttToolbar extends Bar {
     _createSeparator() {
         return {
             location: 'before',
-            template: (_data, _index, element) => element.addClass(TOOLBAR_SEPARATOR_CLASS)
+            template: (_data, _index, element) => {
+                $(element).addClass(TOOLBAR_SEPARATOR_CLASS);
+            }
         };
     }
     _createDefaultItem(commandId, icon) {
@@ -159,16 +163,16 @@ export class GanttContextMenuBar extends Bar {
     }
     _createItems() {
         this._items = [
-            { text: 'Add',
+            { text: messageLocalization.format('dxGantt-dialogButtonAdd'),
                 commandId: COMMANDS.taskAddContextItem,
                 items: [
-                    { text: 'New Task', commandId: COMMANDS.createTask },
-                    { text: 'New Subtask', commandId: COMMANDS.createSubTask }
+                    { text: messageLocalization.format('dxGantt-contextMenuNewTask'), commandId: COMMANDS.createTask },
+                    { text: messageLocalization.format('dxGantt-contextMenuNewSubtask'), commandId: COMMANDS.createSubTask }
                 ]
             },
-            { text: 'Task Details...', commandId: COMMANDS.taskInformation },
-            { text: 'Remove Task', commandId: COMMANDS.removeTask },
-            { text: 'Remove Dependency', commandId: COMMANDS.removeDependency },
+            { text: messageLocalization.format('dxGantt-dialogTaskDetailsTitle') + '...', commandId: COMMANDS.taskInformation },
+            { text: messageLocalization.format('dxGantt-contextMenuRemoveTask'), commandId: COMMANDS.removeTask },
+            { text: messageLocalization.format('dxGantt-contextMenuRemoveDependency'), commandId: COMMANDS.removeDependency },
         ];
     }
     show(point) {

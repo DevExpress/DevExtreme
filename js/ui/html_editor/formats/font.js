@@ -1,8 +1,10 @@
-import { getQuill } from '../quill_importer';
+import Quill from 'quill';
 
-const quill = getQuill();
-const FontStyle = quill.import('attributors/style/font');
+let FontStyle = {};
 
-FontStyle.whitelist = null;
+if(Quill) {
+    FontStyle = Quill.import('attributors/style/font');
+    FontStyle.whitelist = null;
+}
 
 export default FontStyle;

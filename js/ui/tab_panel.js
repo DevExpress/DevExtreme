@@ -2,6 +2,7 @@ import $ from '../core/renderer';
 import support from '../core/utils/support';
 import { extend } from '../core/utils/extend';
 import devices from '../core/devices';
+import domAdapter from '../core/dom_adapter';
 import registerComponent from '../core/component_registrator';
 import MultiView from './multi_view';
 import Tabs from './tabs';
@@ -102,12 +103,14 @@ const TabPanel = MultiView.inherit({
         this._templateManager.addDefaultTemplates({
             title: new BindableTemplate(function($container, data) {
                 if(isPlainObject(data)) {
-                    if(isDefined(data.title) && !isPlainObject(data.title)) {
-                        $container.text(data.title);
+                    const $iconElement = getImageContainer(data.icon);
+                    if($iconElement) {
+                        $container.append($iconElement);
                     }
 
-                    const $iconElement = getImageContainer(data.icon);
-                    $iconElement && $iconElement.prependTo($container);
+                    if(isDefined(data.title) && !isPlainObject(data.title)) {
+                        $container.append(domAdapter.createTextNode(data.title));
+                    }
                 } else {
                     if(isDefined(data)) {
                         $container.text(String(data));
@@ -150,6 +153,7 @@ const TabPanel = MultiView.inherit({
 
     _renderLayout: function() {
         if(this._tabs) {
+            this._updateLayout();
             return;
         }
 

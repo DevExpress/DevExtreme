@@ -297,7 +297,7 @@
 
         "dxFileManager-newDirectoryName": "Untitled directory",
         "dxFileManager-rootDirectoryName": "Files",
-        "dxFileManager-errorNoAccess": "Access denied. The operation cannot be completed.",
+        "dxFileManager-errorNoAccess": "Access Denied. This operation could not be completed.",
         "dxFileManager-errorDirectoryExistsFormat": "Directory '{0}' already exists.",
         "dxFileManager-errorFileExistsFormat": "File '{0}' already exists.",
         "dxFileManager-errorFileNotFoundFormat": "File '{0}' not found.",
@@ -529,6 +529,10 @@
         "dxGantt-dialogTaskDetailsTitle": "Task Details",
         "dxGantt-dialogEditResourceListHint": "Edit Resource List",
         "dxGantt-dialogEditNoResources": "No resources",
-        "dxGantt-dialogButtonAdd": "Add"
+        "dxGantt-dialogButtonAdd": "Add",
+        "dxGantt-contextMenuNewTask": "New Task",
+        "dxGantt-contextMenuNewSubtask": "New Subtask",
+        "dxGantt-contextMenuRemoveTask": "Remove Task",
+        "dxGantt-contextMenuRemoveDependency": "Remove Dependency"
       }
 }
