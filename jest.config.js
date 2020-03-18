@@ -21,9 +21,10 @@ module.exports = {
             branches: 100
         },
         './js/renovation/**/*.p.js': {
-            functions: 70,
+            functions: 80,
             statements: 80,
-            lines: 80
+            lines: 80,
+            branches: 100
         }
     },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],

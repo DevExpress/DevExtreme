@@ -1,15 +1,16 @@
+import createDefaultOptionRules from '../core/options/utils';
+import devices from '../core/devices';
+import noop from './utils/noop';
+import themes from '../ui/themes';
 import { click } from '../events/short';
+import { getImageSourceType } from '../core/utils/icon';
 import { initConfig, showWave, hideWave } from '../ui/widget/utils.ink_ripple';
 import { Component, ComponentBindings, Effect, JSXComponent, OneWay, Ref, Template } from 'devextreme-generator/component_declaration/common';
-import { getImageSourceType } from '../core/utils/icon';
-import Widget, { WidgetInput } from './widget';
 import Icon from './icon';
-import devices from '../core/devices';
-import themes from '../ui/themes';
-import createDefaultOptionRules from '../core/options/utils';
+import Widget, { WidgetInput } from './widget';
 
-const stylingModes = ['outlined', 'text', 'contained'];
 const defaultClassNames = ['dx-button'];
+const stylingModes = ['outlined', 'text', 'contained'];
 
 const getInkRippleConfig = ({ text, icon, type }: ButtonInput) => {
     const isOnlyIconButton = !text && icon || type === 'back';
@@ -39,6 +40,7 @@ const getCssClasses = (model: ButtonInput) => {
 
 const getAriaLabel = (text, icon) => {
     let label = text && text.trim() || icon;
+
     if (!text && getImageSourceType(icon) === 'image') {
         label = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
     }
@@ -103,7 +105,8 @@ export class ButtonInput extends WidgetInput {
     @OneWay() hoverStateEnabled?: boolean = true;
     @OneWay() icon?: string = '';
     @OneWay() iconPosition?: string = 'left';
-    @OneWay() onSubmit?: (e: any) => any = (() => undefined);
+    @OneWay() onClick?: (e: any) => any = noop;
+    @OneWay() onSubmit?: (e: any) => any = noop;
     @OneWay() pressed?: boolean;
     @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
     @Template() template?: any = '';
@@ -114,18 +117,13 @@ export class ButtonInput extends WidgetInput {
     @OneWay() validationGroup?: string = undefined;
 }
 
-const defaultOptionRules = createDefaultOptionRules<ButtonInput>([
-    {
-        device: () => devices.real().deviceType === 'desktop' && !(devices as any).isSimulator(),
-        options: {
-            focusStateEnabled: true,
-        },
-    },
-    {
-        device: () => (themes as any).isMaterial(themes.current()),
-        options: { useInkRipple: true },
-    },
-]);
+const defaultOptionRules = createDefaultOptionRules<ButtonInput>([{
+    device: () => devices.real().deviceType === 'desktop' && !(devices as any).isSimulator(),
+    options: { focusStateEnabled: true },
+}, {
+    device: () => (themes as any).isMaterial(themes.current()),
+    options: { useInkRipple: true },
+}]);
 // tslint:disable-next-line: max-classes-per-file
 @Component({
     defaultOptionsRules: defaultOptionRules,
@@ -143,7 +141,7 @@ export default class Button extends JSXComponent<ButtonInput> {
         //       (for example, text, icon, etc)
         const { onContentReady } = this.props;
 
-        onContentReady?.({ element: this.contentRef.parentNode });
+        onContentReady!({ element: this.contentRef.parentNode });
     }
 
     onActive(event: Event) {
@@ -160,18 +158,17 @@ export default class Button extends JSXComponent<ButtonInput> {
         useInkRipple && hideWave(config, { element: this.contentRef, event });
     }
 
-    onWidgetClick(e: Event) {
+    onWidgetClick(event: Event) {
         const { onClick, useSubmitBehavior, validationGroup } = this.props;
 
-        onClick?.({ event: e, validationGroup });
-
+        onClick!({ event, validationGroup });
         useSubmitBehavior && this.submitInputRef.click();
     }
 
-    onWidgetKeyPress(e: Event, { keyName, which }) {
+    onWidgetKeyPress(event: Event, { keyName, which }) {
         if (keyName === 'space' || which === 'space' || keyName === 'enter' || which === 'enter') {
-            e.preventDefault();
-            this.onWidgetClick(e);
+            event.preventDefault();
+            this.onWidgetClick(event);
         }
     }
 
@@ -182,7 +179,7 @@ export default class Button extends JSXComponent<ButtonInput> {
 
         if (useSubmitBehavior) {
             click.on(this.submitInputRef,
-                event => onSubmit?.({ event, submitInput: this.submitInputRef }),
+                event => onSubmit!({ event, submitInput: this.submitInputRef }),
                 { namespace },
             );
 
@@ -206,6 +203,7 @@ export default class Button extends JSXComponent<ButtonInput> {
 
     get iconSource(): string {
         const { icon, type } = this.props;
+
         return (icon || type === 'back') ? (icon || 'back') : '';
     }
 }

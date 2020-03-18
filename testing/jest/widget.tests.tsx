@@ -1,7 +1,7 @@
 import Widget from '../../js/renovation/widget.p.js';
 import { h } from 'preact';
-import { clear as clearEventHandlers, emit, fakeClickEvent, EVENT } from './utils/events-mock';
-import { shallow } from 'enzyme';
+import { clear as clearEventHandlers, defaultEvent, emit, eventHandlers, fakeClickEvent, EVENT } from './utils/events-mock';
+import { mount, shallow } from 'enzyme';
 
 describe('Widget', () => {
     const render = (props = {}) => shallow(<Widget {...props} />);
@@ -10,7 +10,7 @@ describe('Widget', () => {
 
     describe('Props', () => {
         describe('accessKey', () => {
-            it('should render "accesskey" attribute', () => {
+            it('should render `accesskey` attribute', () => {
                 const widget = render({ accessKey: 'y', focusStateEnabled: true });
 
                 expect(widget.props().accessKey).toBe('y');
@@ -22,25 +22,42 @@ describe('Widget', () => {
                 expect(widget.props().accessKey).toBe(void 0);
             });
 
-            it('should not render if focusStateEnabled is false', () => {
+            it('should not render if `focusStateEnabled` is false', () => {
                 const widget = render({ accessKey: 'y', focusStateEnabled: false });
 
                 expect(widget.props().accessKey).toBe(void 0);
             });
 
-            it('should take a focus if the accessKey is pressed', () => {
+            it('should take a focus if the `accessKey` is pressed', () => {
                 const widget = render({ accessKey: 'y', focusStateEnabled: true });
 
                 emit(EVENT.dxClick, fakeClickEvent);
                 expect(widget.hasClass('dx-state-focused')).toBe(true);
             });
 
-            it('should not fire click event if the accessKey is pressed', () => {
+            it('should detach `dxclick` event before rerendering', () => {
+                const widget = mount(<Widget accessKey="y" focusStateEnabled={true} />);
+
+                expect(eventHandlers[EVENT.dxClick].length).toBe(1);
+                widget.unmount();
+                expect(eventHandlers[EVENT.dxClick].length).toBe(0);
+            });
+
+            it('should not fire `dxclick` event if the `accessKey` is pressed', () => {
                 const e = { ...fakeClickEvent, stopImmediatePropagation: jest.fn() };
 
                 render({ accessKey: 'y', focusStateEnabled: true });
                 emit(EVENT.dxClick, e);
                 expect(e.stopImmediatePropagation).toHaveBeenCalledTimes(1);
+            });
+
+            it('should ignore real mouse click', () => {
+                const e = { ...defaultEvent, stopImmediatePropagation: jest.fn() };
+                const widget = render({ accessKey: 'y', focusStateEnabled: true });
+
+                emit(EVENT.dxClick, e);
+                expect(e.stopImmediatePropagation).toHaveBeenCalledTimes(0);
+                expect(widget.hasClass('dx-state-focused')).toBe(false);
             });
         });
 
@@ -51,7 +68,7 @@ describe('Widget', () => {
                 expect(widget.hasClass('dx-rtl')).toBe(false);
             });
 
-            it('should add rtl marker class if "rtlEnabled" is true', () => {
+            it('should add rtl marker class if `rtlEnabled` is true', () => {
                 const widget = render({ rtlEnabled: true });
 
                 expect(widget.hasClass('dx-rtl')).toBe(true);
@@ -125,19 +142,19 @@ describe('Widget', () => {
                 expect(widget.prop('tabIndex')).toBe(0);
             });
 
-            it('should add custom tabIndex attribute', () => {
+            it('should add custom `tabIndex` attribute', () => {
                 const widget = render({ focusStateEnabled: true, tabIndex: 10 });
 
                 expect(widget.prop('tabIndex')).toBe(10);
             });
 
-            it('should not add tabIndex attribute if the "disabled" is true', () => {
+            it('should not add tabIndex attribute if the `disabled` is true', () => {
                 const widget = render({ focusStateEnabled: true, tabIndex: 10, disabled: true });
 
                 expect(widget.prop('tabIndex')).toBe(false);
             });
 
-            it('should not add tabIndex attribute if the "focusStateEnabled" is false', () => {
+            it('should not add `tabIndex` attribute if the `focusStateEnabled` is false', () => {
                 const widget = render({ focusStateEnabled: false, tabIndex: 10 });
 
                 expect(widget.prop('tabIndex')).toBe(false);
@@ -145,7 +162,7 @@ describe('Widget', () => {
         });
 
         describe('elementAttr', () => {
-            it('should pass custom css class name via elementAttr', () => {
+            it('should pass custom css class name via `elementAttr`', () => {
                 const widget = render({ elementAttr: { class: 'custom-class' } });
 
                 expect(widget.hasClass('custom-class')).toBe(true);
@@ -194,13 +211,13 @@ describe('Widget', () => {
         });
 
         describe('hint', () => {
-            it('should not add "title" attribute by default', () => {
+            it('should not add `title` attribute by default', () => {
                 const widget = render();
 
                 expect(widget.prop('title')).toBe(void 0);
             });
 
-            it('should add "title" attribute with the hint value', () => {
+            it('should add `title` attribute with the hint value', () => {
                 const widget = render({ hint: 'hint-text' });
 
                 expect(widget.prop('title')).toBe('hint-text');
@@ -209,7 +226,7 @@ describe('Widget', () => {
     });
 
     describe('aria', () => {
-        it('should pass custom "aria" attributes', () => {
+       it('should pass custom `aria` attributes', () => {
             const widget = render({ aria: {
                 label: 'custom-aria-label',
                 role: 'button',
@@ -256,7 +273,7 @@ describe('Widget', () => {
                 expect(widget.hasClass('dx-state-active')).toBe(false);
             });
 
-            it('should not change state if activeStateEnabled is false', () => {
+            it('should not change state if `activeStateEnabled` is false', () => {
                 const widget = render({ activeStateEnabled: false });
 
                 expect(widget.hasClass('dx-state-active')).toBe(false);
@@ -281,6 +298,16 @@ describe('Widget', () => {
                 emit(EVENT.inactive);
                 expect(widget.hasClass('dx-state-disabled')).toBe(true);
                 expect(widget.hasClass('dx-state-active')).toBe(false);
+            });
+
+            it('should detach `dxactive` and `dxinactive` events before rerendering', () => {
+                const widget = mount(<Widget activeStateEnabled={true} />);
+
+                expect(eventHandlers[EVENT.active].length).toBe(1);
+                expect(eventHandlers[EVENT.inactive].length).toBe(1);
+                widget.unmount();
+                expect(eventHandlers[EVENT.active].length).toBe(0);
+                expect(eventHandlers[EVENT.inactive].length).toBe(0);
             });
         });
 
@@ -310,6 +337,16 @@ describe('Widget', () => {
                 emit(EVENT.blur);
                 expect(widget.hasClass('dx-state-disabled')).toBe(true);
                 expect(widget.hasClass('dx-state-focused')).toBe(false);
+            });
+
+            it('should detach `focusin` and `focusout` events before rerendering', () => {
+                const widget = mount(<Widget focusStateEnabled={true} />);
+
+                expect(eventHandlers[EVENT.focus].length).toBe(1);
+                expect(eventHandlers[EVENT.blur].length).toBe(1);
+                widget.unmount();
+                expect(eventHandlers[EVENT.focus].length).toBe(0);
+                expect(eventHandlers[EVENT.blur].length).toBe(0);
             });
         });
 
@@ -341,6 +378,16 @@ describe('Widget', () => {
                 expect(widget.hasClass('dx-state-hover')).toBe(false);
             });
 
+            it('should detach `dxhoverend` and `dxhoverstart` events before rerendering', () => {
+                const widget = mount(<Widget hoverStateEnabled={true} />);
+
+                expect(eventHandlers[EVENT.hoverStart].length).toBe(1);
+                expect(eventHandlers[EVENT.hoverEnd].length).toBe(1);
+                widget.unmount();
+                expect(eventHandlers[EVENT.hoverStart].length).toBe(0);
+                expect(eventHandlers[EVENT.hoverEnd].length).toBe(0);
+            });
+
             it('should clear hover state if active', () => {
                 const widget = render({ hoverStateEnabled: true, activeStateEnabled: true });
 
@@ -362,17 +409,68 @@ describe('Widget', () => {
         });
     });
 
-    describe('Callbacks', () => {
+    describe('Events', () => {
+        describe('onClick', () => {
+            it('should detach `dxclick` event before rerendering', () => {
+                const widget = mount(<Widget onClick={() => void 0} />);
+
+                expect(eventHandlers[EVENT.dxClick].length).toBe(1);
+                widget.unmount();
+                expect(eventHandlers[EVENT.dxClick].length).toBe(0);
+            });
+
+            it('should be called on `dxclick` event', () => {
+                const onClick = jest.fn();
+
+                render({ onClick });
+                expect(onClick).toHaveBeenCalledTimes(0);
+                emit(EVENT.dxClick);
+                expect(onClick).toHaveBeenCalledTimes(1);
+            });
+        });
+
+        describe('onDimensionChanged', () => {
+            it('should detach `dxresize` event before rerendering', () => {
+                const widget = mount(<Widget onDimensionChanged={() => void 0} />);
+
+                expect(eventHandlers[EVENT.resize].length).toBe(1);
+                widget.unmount();
+                expect(eventHandlers[EVENT.resize].length).toBe(0);
+            });
+
+            it('should be called on the `dxresize` event', () => {
+                const onDimensionChanged = jest.fn();
+
+                render({ onDimensionChanged });
+                expect(onDimensionChanged).toHaveBeenCalledTimes(0);
+
+                emit(EVENT.resize);
+                expect(onDimensionChanged).toHaveBeenCalledTimes(1);
+            });
+        });
+
         describe('onVisibilityChanged', () => {
-            const onVisibilityChange = jest.fn();
             it('should add special css class when `onVisibilityChange` handler is defined', () => {
-                const widget = render({ onVisibilityChange });
+                const widget = render({ onVisibilityChange: () => void 0 });
 
                 expect(widget.exists('.dx-visibility-change-handler')).toBe(true);
             });
 
-            it('should be called on `dxhiding` and `dxshown` events and special css class is attached', () => {
+            it('should detach `dxshown` and `dxhiding` events before rerendering', () => {
+                const widget = mount(<Widget onVisibilityChange={() => void 0} />);
+
+                expect(eventHandlers[EVENT.shown].length).toBe(1);
+                expect(eventHandlers[EVENT.hiding].length).toBe(1);
+                widget.unmount();
+                expect(eventHandlers[EVENT.shown].length).toBe(0);
+                expect(eventHandlers[EVENT.hiding].length).toBe(0);
+            });
+
+            it('should be called on `dxhiding` and `dxshown` events', () => {
+                const onVisibilityChange = jest.fn();
+
                 render({ onVisibilityChange });
+                expect(onVisibilityChange).toHaveBeenCalledTimes(0);
 
                 emit(EVENT.hiding);
                 expect(onVisibilityChange).toHaveBeenCalledTimes(1);

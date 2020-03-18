@@ -1,8 +1,8 @@
 import eventsEngine from '../../../js/events/core/events_engine';
 import { keyboard } from '../../../js/events/short';
 
-let eventHandlers = {};
-let keyboardHandlers = {};
+export let eventHandlers = {};
+export let keyboardHandlers = {};
 
 export const KEY = {
     enter: 'enter',
@@ -26,6 +26,7 @@ export const EVENT = {
     hoverStart: 'dxhoverstart',
     inactive: 'dxinactive',
     shown: 'dxshown',
+    resize: 'dxresize',
 };
 
 export const defaultEvent = {
@@ -33,14 +34,19 @@ export const defaultEvent = {
     preventDefault: () => void 0,
     stopImmediatePropagation: () => void 0,
     stopPropagation: () => void 0,
+    screenX: 5,
+    offsetX: 5,
+    pageX: 10,
+    pageY: 10,
 };
 
-export const fakeClickEvent = Object.assign(defaultEvent, {
+export const fakeClickEvent = {
+    ...defaultEvent,
     screenX: 0,
     offsetX: 0,
     pageX: 0,
     pageY: 0,
-});
+};
 
 export const emitKeyboard = (key, which = key, e = defaultEvent) => {
     for(const id in keyboardHandlers) {

@@ -1,14 +1,16 @@
-import Button, { defaultOptions } from '../../js/renovation/button.p.js';
-import Widget from '../../js/renovation/widget.p.js';
-import Icon from '../../js/renovation/icon.p.js';
-import { h } from 'preact';
-import { clear as clearEventHandlers, defaultEvent, emit, emitKeyboard, EVENT, KEY } from './utils/events-mock';
-import { mount } from 'enzyme';
+
 import devices from '../../js/core/devices';
 import themes from '../../js/ui/themes';
+import { h } from 'preact';
+import { clear as clearEventHandlers, defaultEvent, emit, emitKeyboard, eventHandlers, fakeClickEvent, EVENT, KEY } from './utils/events-mock';
+import { mount } from 'enzyme';
+import Button, { defaultOptions } from '../../js/renovation/button.p.js';
+import Icon from '../../js/renovation/icon.p.js';
+import Widget from '../../js/renovation/widget.p.js';
 
 jest.mock('../../js/core/devices', () => {
     const actualDevices = require.requireActual('../../js/core/devices');
+
     return {
         ...actualDevices,
         ...actualDevices.__proto__,
@@ -46,7 +48,7 @@ describe('Button', () => {
 
                     content.style.width = '10px';
                     content.style.height = '10px';
-                    onActive(defaultEvent);
+                    onActive(fakeClickEvent);
 
                     const wave = content.querySelectorAll('.dx-inkripple-wave')[0];
 
@@ -60,7 +62,7 @@ describe('Button', () => {
 
                     content.style.width = '10px';
                     content.style.height = '10px';
-                    onActive(defaultEvent);
+                    onActive(fakeClickEvent);
 
                     const wave = content.querySelectorAll('.dx-inkripple-wave')[0];
 
@@ -74,7 +76,7 @@ describe('Button', () => {
 
                     content.style.width = '10px';
                     content.style.height = '10px';
-                    onActive(defaultEvent);
+                    onActive(fakeClickEvent);
 
                     const wave = content.querySelectorAll('.dx-inkripple-wave')[0];
 
@@ -82,7 +84,7 @@ describe('Button', () => {
                 });
             });
 
-            it('should be "false" by default', () => {
+            it('should be `false` by default', () => {
                 const button = render();
                 const content = button.find('.dx-button-content').getDOMNode();
                 const { onActive } = button.find(Widget).props();
@@ -106,23 +108,8 @@ describe('Button', () => {
             });
         });
 
-        describe('onContentReady', () => {
-            it('should fire after rendering', () => {
-                const onContentReady = jest.fn(({ element }) =>
-                    expect(element.classList.contains('dx-button')).toBe(true));
-
-                render({ onContentReady });
-                expect(onContentReady).toHaveBeenCalledTimes(1);
-            });
-
-            it('should ignore incorrect value', () => {
-                render({ onContentReady: null });
-                render({ onContentReady: void 0 });
-            });
-        });
-
         describe('useSubmitBehavior', () => {
-            it('should be "false" by default', () => {
+            it('should be `false` by default', () => {
                 const button = render();
 
                 expect(button.exists('.dx-button-submit-input')).toBe(false);
@@ -183,94 +170,8 @@ describe('Button', () => {
             });
         });
 
-        describe('onSubmit', () => {
-            it('should fire by submit input click', () => {
-                const onSubmit = jest.fn();
-                const button = render({ useSubmitBehavior: true, onSubmit });
-                const submitInput = button.find('input.dx-button-submit-input');
-
-                expect(onSubmit).toHaveBeenCalledTimes(0);
-                emit(EVENT.click, defaultEvent, submitInput.getDOMNode());
-                expect(onSubmit).toHaveBeenCalledTimes(1);
-            });
-
-            it('should ignore incorrect value', () => {
-                const button = mount(<Button useSubmitBehavior={true} />);
-
-                button.setProps({ onSubmit: null });
-                emit(EVENT.click, defaultEvent, button.find('input.dx-button-submit-input').getDOMNode());
-                button.setProps({ onSubmit: void 0 });
-                emit(EVENT.click, defaultEvent, button.find('input.dx-button-submit-input').getDOMNode());
-            });
-        });
-
-        describe('onClick', () => {
-            it('should be called by mouse click', () => {
-                const onClick = jest.fn();
-                const button = render({ onClick });
-
-                expect(onClick).toHaveBeenCalledTimes(0);
-                emit(EVENT.dxClick, defaultEvent, button.getDOMNode());
-                expect(onClick).toHaveBeenCalledTimes(1);
-            });
-
-            it('should be called with passed event', () => {
-                const onClick = jest.fn();
-                const button = render({ onClick });
-
-                emit(EVENT.dxClick, defaultEvent, button.getDOMNode());
-                expect(onClick).toHaveBeenCalledWith({ event: defaultEvent });
-            });
-
-            it('should be called by Enter', () => {
-                const onClick = jest.fn();
-
-                render({ onClick });
-                expect(onClick).toHaveBeenCalledTimes(0);
-                emitKeyboard(KEY.enter);
-                expect(onClick).toHaveBeenCalledTimes(1);
-                emitKeyboard(KEY.a, KEY.enter);
-                expect(onClick).toHaveBeenCalledTimes(2);
-            });
-
-            it('should be called by Space', () => {
-                const onClick = jest.fn();
-
-                render({ onClick });
-                expect(onClick).toHaveBeenCalledTimes(0);
-                emitKeyboard(KEY.space);
-                expect(onClick).toHaveBeenCalledTimes(1);
-                emitKeyboard(KEY.a, KEY.space);
-                expect(onClick).toHaveBeenCalledTimes(2);
-            });
-
-            it('should be called by key press with passed event', () => {
-                const onClick = jest.fn();
-
-                render({ onClick });
-                emitKeyboard(KEY.enter);
-                expect(onClick).toHaveBeenCalledWith({ event: defaultEvent });
-            });
-
-            it('should ignore incorrect value', () => {
-                render({ onClick: null });
-                emitKeyboard(KEY.enter);
-
-                render({ onClick: void 0 });
-                emitKeyboard(KEY.space);
-            });
-
-            it('should respond to enter or space keys only', () => {
-                const onClick = jest.fn();
-
-                render({ onClick });
-                emitKeyboard(KEY.a);
-                expect(onClick).toHaveBeenCalledTimes(0);
-            });
-        });
-
         describe('stylingMode', () => {
-            it('should use "contained" as a default value', () => {
+            it('should use `contained` as a default value', () => {
                 const button = render();
 
                 expect(button.hasClass('dx-button-mode-contained')).toBe(true);
@@ -278,7 +179,7 @@ describe('Button', () => {
                 expect(button.hasClass('dx-button-mode-outlined')).toBe(false);
             });
 
-            it('should add "dx-button-mode-text" class if the stylingMode is "text"', () => {
+            it('should add `dx-button-mode-text` class if the stylingMode is `text`', () => {
                 const button = render({ stylingMode: 'text' });
 
                 expect(button.hasClass('dx-button-mode-text')).toBe(true);
@@ -286,7 +187,7 @@ describe('Button', () => {
                 expect(button.hasClass('dx-button-mode-outlined')).toBe(false);
             });
 
-            it('should add "dx-button-mode-contained" class if the stylingMode is "contained"', () => {
+            it('should add `dx-button-mode-contained` class if the stylingMode is `contained`', () => {
                 const button = render({ stylingMode: 'contained' });
 
                 expect(button.hasClass('dx-button-mode-contained')).toBe(true);
@@ -294,7 +195,7 @@ describe('Button', () => {
                 expect(button.hasClass('dx-button-mode-outlined')).toBe(false);
             });
 
-            it('should add "dx-button-mode-outlined" class if the stylingMode is "outlined"', () => {
+            it('should add `dx-button-mode-outlined` class if the stylingMode is `outlined`', () => {
                 const button = render({ stylingMode: 'outlined' });
 
                 expect(button.hasClass('dx-button-mode-outlined')).toBe(true);
@@ -304,13 +205,13 @@ describe('Button', () => {
         });
 
         describe('text', () => {
-            it('should render "text"', () => {
+            it('should render `text`', () => {
                 const button = render({ text: 'My button' });
 
                 expect(button.find('.dx-button-text').text()).toBe('My button');
             });
 
-            it('should not render "text" by default', () => {
+            it('should not render `text` by default', () => {
                 const button = render();
 
                 expect(button.hasClass('dx-button')).toBe(true);
@@ -320,13 +221,13 @@ describe('Button', () => {
         });
 
         describe('type', () => {
-            it('should use "normal" as a default value', () => {
+            it('should use `normal` as a default value', () => {
                 const button = render();
 
                 expect(button.hasClass('dx-button-normal')).toBe(true);
             });
 
-            it('should add "dx-button-*" if the type is defined', () => {
+            it('should add `dx-button-*` if the type is defined', () => {
                 const button = render({ type: 'custom' });
 
                 expect(button.hasClass('dx-button-custom')).toBe(true);
@@ -421,7 +322,6 @@ describe('Button', () => {
                     icon: 'test',
                     text: 'myButton',
                 });
-
                 const elements = button.find('.dx-button-content').children();
 
                 expect(elements.at(0).is(Icon)).toBe(true);
@@ -435,7 +335,6 @@ describe('Button', () => {
                     iconPosition: 'right',
                     text: 'myButton',
                 });
-
                 const elements = button.find('.dx-button-content').children();
 
                 expect(button.hasClass('dx-button-icon-right')).toBe(true);
@@ -502,6 +401,95 @@ describe('Button', () => {
         });
     });
 
+    describe('Events', () => {
+        describe('onSubmit', () => {
+            it('should be called on submit input `click` event', () => {
+                const onSubmit = jest.fn();
+                const button = render({ useSubmitBehavior: true, onSubmit });
+                const submitInput = button.find('input.dx-button-submit-input');
+
+                expect(onSubmit).toHaveBeenCalledTimes(0);
+                emit(EVENT.click, defaultEvent, submitInput.getDOMNode());
+                expect(onSubmit).toHaveBeenCalledTimes(1);
+            });
+
+            it('should detach `click` event before rerendering', () => {
+                const button = mount(<Button useSubmitBehavior={true} />);
+
+                expect(eventHandlers[EVENT.click].length).toBe(1);
+                button.setProps({ useSubmitBehavior: false });
+                expect(eventHandlers[EVENT.click].length).toBe(0);
+            });
+        });
+
+        describe('onClick', () => {
+            it('should be called on `click` event', () => {
+                const onClick = jest.fn();
+                const button = render({ onClick });
+
+                expect(onClick).toHaveBeenCalledTimes(0);
+                emit(EVENT.dxClick, defaultEvent, button.getDOMNode());
+                expect(onClick).toHaveBeenCalledTimes(1);
+            });
+
+            it('should be called with passed event', () => {
+                const onClick = jest.fn();
+                const button = render({ onClick });
+
+                emit(EVENT.dxClick, defaultEvent, button.getDOMNode());
+                expect(onClick).toHaveBeenCalledWith({ event: defaultEvent });
+            });
+
+            it('should be called by Enter', () => {
+                const onClick = jest.fn();
+
+                render({ onClick });
+                expect(onClick).toHaveBeenCalledTimes(0);
+                emitKeyboard(KEY.enter);
+                expect(onClick).toHaveBeenCalledTimes(1);
+                emitKeyboard(KEY.a, KEY.enter);
+                expect(onClick).toHaveBeenCalledTimes(2);
+            });
+
+            it('should be called by Space', () => {
+                const onClick = jest.fn();
+
+                render({ onClick });
+                expect(onClick).toHaveBeenCalledTimes(0);
+                emitKeyboard(KEY.space);
+                expect(onClick).toHaveBeenCalledTimes(1);
+                emitKeyboard(KEY.a, KEY.space);
+                expect(onClick).toHaveBeenCalledTimes(2);
+            });
+
+            it('should be called by key press with passed event', () => {
+                const onClick = jest.fn();
+
+                render({ onClick });
+                emitKeyboard(KEY.enter);
+                expect(onClick).toHaveBeenCalledWith({ event: defaultEvent });
+            });
+
+            it('should respond to Enter or Space keys only', () => {
+                const onClick = jest.fn();
+
+                render({ onClick });
+                emitKeyboard(KEY.a);
+                expect(onClick).toHaveBeenCalledTimes(0);
+            });
+        });
+
+        describe('onContentReady', () => {
+            it('should be called after rendering', () => {
+                const onContentReady = jest.fn(({ element }) =>
+                    expect(element.classList.contains('dx-button')).toBe(true));
+
+                render({ onContentReady });
+                expect(onContentReady).toHaveBeenCalledTimes(1);
+            });
+        });
+    });
+
     describe('ARIA accessibility', () => {
         it('should use `text` value as aria-label', () => {
             const tree = render({ text: 'button-text' });
@@ -555,7 +543,6 @@ describe('Button', () => {
 
             it('should be false on simulator', () => {
                 (devices as any).isSimulator.mockImplementation(() => true);
-
                 expect(getDefaultProps().focusStateEnabled).toBe(false);
             });
         });
