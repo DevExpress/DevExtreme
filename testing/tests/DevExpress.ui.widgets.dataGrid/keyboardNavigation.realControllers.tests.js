@@ -616,7 +616,7 @@ QUnit.module('Real DataController and ColumnsController', {
     });
 
     // T804439
-    QUnit.testInActiveWindow('onFocusedRowChanging should fire after clicking on boolean column', function(assert) {
+    QUnit.testInActiveWindow('onFocusedRowChanging should fire after click boolean column', function(assert) {
         // arrange
         let focusedRowChangingFiresCount = 0;
 
@@ -634,9 +634,7 @@ QUnit.module('Real DataController and ColumnsController', {
 
         // act
         $(this.getCellElement(0, 0))
-            .trigger(CLICK_EVENT)
-            .trigger(pointerEvents.up)
-            .trigger('dxclick');
+            .trigger(CLICK_EVENT);
 
         // assert
         assert.equal(focusedRowChangingFiresCount, 1, 'onFocusedRowChanging fires count');
