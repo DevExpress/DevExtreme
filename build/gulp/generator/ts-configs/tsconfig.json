@@ -7,7 +7,6 @@
         "typeRoots": ["node_modules/@types"],
         "forceConsistentCasingInFileNames": true,
         "jsx": "react",
-        "jsxFactory": "Preact.h",
         "declaration": true
     },
     "exclude": [
