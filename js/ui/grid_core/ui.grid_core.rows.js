@@ -790,24 +790,21 @@ module.exports = {
                 },
 
                 updateFreeSpaceRowHeight: function($table) {
-                    const that = this;
-                    const dataController = that._dataController;
+                    const dataController = this._dataController;
                     const itemCount = dataController.items(true).length;
-                    const contentElement = that._findContentElement();
-                    const freeSpaceRowElements = that._getFreeSpaceRowElements($table);
-                    let freeSpaceRowCount;
-                    let scrollingMode;
+                    const contentElement = this._findContentElement();
+                    const freeSpaceRowElements = this._getFreeSpaceRowElements($table);
 
                     if(freeSpaceRowElements && contentElement && dataController.totalCount() >= 0) {
                         let isFreeSpaceRowVisible = false;
 
                         if(itemCount > 0) {
-                            if(!that._hasHeight) {
-                                freeSpaceRowCount = dataController.pageSize() - itemCount;
-                                scrollingMode = that.option('scrolling.mode');
+                            if(!this._hasHeight) {
+                                const freeSpaceRowCount = dataController.pageSize() - itemCount;
+                                const scrollingMode = this.option('scrolling.mode');
 
                                 if(freeSpaceRowCount > 0 && dataController.pageCount() > 1 && scrollingMode !== 'virtual' && scrollingMode !== 'infinite') {
-                                    styleUtils.setHeight(freeSpaceRowElements, freeSpaceRowCount * that._rowHeight);
+                                    styleUtils.setHeight(freeSpaceRowElements, freeSpaceRowCount * this._rowHeight);
                                     isFreeSpaceRowVisible = true;
                                 }
                                 if(!isFreeSpaceRowVisible && $table) {
@@ -815,37 +812,34 @@ module.exports = {
                                 } else {
                                     freeSpaceRowElements.toggle(isFreeSpaceRowVisible);
                                 }
-                                that._updateLastRowBorder(isFreeSpaceRowVisible);
+                                this._updateLastRowBorder(isFreeSpaceRowVisible);
                             } else {
                                 freeSpaceRowElements.hide();
-                                deferUpdate(function() {
-                                    const scrollablePadding = getScrollableBottomPadding(that); // T697699
-                                    const scrollbarWidth = that.getScrollbarWidth(true);
-                                    const elementHeightWithoutScrollbar = that.element().height() - scrollbarWidth - scrollablePadding;
+                                deferUpdate(() => {
+                                    const scrollbarWidth = this.getScrollbarWidth(true);
+                                    const elementHeightWithoutScrollbar = this.element().height() - scrollbarWidth;
                                     const contentHeight = contentElement.outerHeight();
                                     const showFreeSpaceRow = (elementHeightWithoutScrollbar - contentHeight) > 0;
-                                    const rowsHeight = that._getRowsHeight(contentElement.children().first());
-                                    const $tableElement = $table || that.getTableElements();
+                                    const rowsHeight = this._getRowsHeight(contentElement.children().first());
+                                    const $tableElement = $table || this.getTableElements();
                                     const borderTopWidth = Math.ceil(parseFloat($tableElement.css('borderTopWidth')));
-                                    const heightCorrection = that._getHeightCorrection();
+                                    const heightCorrection = this._getHeightCorrection();
                                     const resultHeight = elementHeightWithoutScrollbar - rowsHeight - borderTopWidth - heightCorrection;
 
                                     if(showFreeSpaceRow) {
-                                        deferRender(function() {
+                                        deferRender(() => {
                                             freeSpaceRowElements.css('height', resultHeight);
                                             isFreeSpaceRowVisible = true;
                                             freeSpaceRowElements.show();
                                         });
                                     }
-                                    deferRender(function() {
-                                        that._updateLastRowBorder(isFreeSpaceRowVisible);
-                                    });
+                                    deferRender(() => this._updateLastRowBorder(isFreeSpaceRowVisible));
                                 });
                             }
                         } else {
                             freeSpaceRowElements.css('height', 0);
                             freeSpaceRowElements.show();
-                            that._updateLastRowBorder(true);
+                            this._updateLastRowBorder(true);
                         }
                     }
                 },
@@ -925,7 +919,7 @@ module.exports = {
                             scrollbarWidth = scrollableContainer.clientWidth ? scrollableContainer.offsetWidth - scrollableContainer.clientWidth : 0;
                         } else {
                             scrollbarWidth = scrollableContainer.clientHeight ? scrollableContainer.offsetHeight - scrollableContainer.clientHeight : 0;
-                            scrollbarWidth += getScrollableBottomPadding(this); // T703649
+                            scrollbarWidth += getScrollableBottomPadding(this); // T703649, T697699
                         }
                     }
                     return scrollbarWidth > 0 ? scrollbarWidth : 0;
