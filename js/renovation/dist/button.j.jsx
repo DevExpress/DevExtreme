@@ -30,6 +30,8 @@ class Button extends Widget {
             props.render = ({ parentRef, ...restProps }) => {
                 useLayoutEffect(() => {
                     const $parent = $(parentRef.current);
+                    $parent?.empty();
+
                     let $template = $(template.render({
                         container: getPublicElement($parent),
                         model: restProps,
