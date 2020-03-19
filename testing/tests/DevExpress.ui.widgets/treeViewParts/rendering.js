@@ -30,7 +30,7 @@ QUnit.test('Scrollable container should be updated after collapse/expand treeVie
         .find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS + ':first')
         .trigger('dxclick');
 
-    assert.equal(treeView._scrollableContainer.update.callCount, 2);
+    assert.equal(treeView._scrollableContainer.update.callCount, 3); // 1 before content ready, 1 after content ready and 1 after node expanding animation (_animateNodeContainer)
 });
 
 QUnit.test('updateDimensions method should update scrollable container', function(assert) {

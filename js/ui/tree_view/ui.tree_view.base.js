@@ -590,6 +590,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         if(!skipContentReadyAction) {
             this.callBase();
         }
+
+        if(this._scrollableContainer && windowUtils.hasWindow()) {
+            this._scrollableContainer.update();
+        }
     },
 
     _renderScrollableContainer: function() {
