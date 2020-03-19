@@ -2,9 +2,9 @@ import DeltaConverter from 'ui/html_editor/converters/delta';
 import MarkdownConverter from 'ui/html_editor/converters/markdown';
 import { getQuill } from 'ui/html_editor/quill_importer';
 
-const { test } = QUnit;
+const { test, module: testModule } = QUnit;
 
-QUnit.module('Delta converter', {
+testModule('Delta converter', {
     beforeEach: function() {
         const Quill = getQuill();
         this.deltaConverter = new DeltaConverter();
@@ -84,7 +84,7 @@ QUnit.module('Delta converter', {
     });
 });
 
-QUnit.module('Markdown converter', () => {
+testModule('Markdown converter', () => {
     test('it convert a HTML to the Markdown', function(assert) {
         const markdownConverter = new MarkdownConverter();
         const html = '<p>Te<strong>st</strong></p>';
@@ -97,5 +97,84 @@ QUnit.module('Markdown converter', () => {
         const markdown = 'Te**st**';
 
         assert.equal(markdownConverter.toHtml(markdown), '<p>Te<strong>st</strong></p>', 'It converts a Markdown to HTML');
+    });
+});
+
+
+testModule('Custom list', {
+    before: function() {
+        const Quill = getQuill();
+        this.originalList = Quill.import('formats/list');
+        class LatinList extends this.originalList {
+            static create(value) {
+                const node = super.create(value);
+
+                node.setAttribute('type', 'a');
+                return node;
+            }
+        }
+
+        Quill.register('formats/list', LatinList, true);
+    },
+    beforeEach: function() {
+        const Quill = getQuill();
+        this.deltaConverter = new DeltaConverter();
+        this.quillInstance = new Quill(document.getElementById('htmlEditor'), {});
+        this.deltaConverter.setQuillInstance(this.quillInstance);
+    },
+    after: function() {
+        getQuill().register('formats/list', this.originalList, true);
+    } }, () => {
+
+    [
+        { type: 'bullet', tag: 'ul' },
+        { type: 'ordered', tag: 'ol' }
+    ].forEach(({ type, tag }) => {
+        test(`it should respect ${type} list attributes`, function(assert) {
+            const deltaOps = [
+                { insert: 'item1' },
+                {
+                    attributes: {
+                        list: type
+                    },
+                    insert: '\n'
+                },
+                { insert: 'item2' },
+                {
+                    attributes: {
+                        list: type
+                    },
+                    insert: '\n'
+                }
+            ];
+            const expected = `<${tag} type="a"><li>item1</li><li>item2</li></${tag}>`;
+
+            this.quillInstance.setContents(deltaOps);
+            assert.strictEqual(this.deltaConverter.toHtml(), expected, `attributes of the ${type} list are correct`);
+        });
+
+        test(`indent ${type} list attributes are correct`, function(assert) {
+            const deltaOps = [
+                { insert: 'item1' },
+                {
+                    attributes: {
+                        list: type
+                    },
+                    insert: '\n'
+                },
+                { insert: 'item2' },
+                {
+                    attributes: {
+                        indent: 1,
+                        list: type
+                    },
+                    insert: '\n'
+                }
+            ];
+            const expected = `<${tag} type="a"><li>item1<${tag} type="a"><li>item2</li></${tag}></li></${tag}>`;
+
+            this.quillInstance.setContents(deltaOps);
+            assert.strictEqual(this.deltaConverter.toHtml(), expected, `attributes of the ${type} list are correct`);
+        });
     });
 });
