@@ -152,6 +152,10 @@ class FormTestWrapper {
         const $texts = this._form.$element().find(`${itemSelector}.dx-col-${columnIndex} .${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
         this._checkLabelTextsWidthByEtalon($texts, etalonLabelText);
     }
+
+    checkItemOption(optionName, expected) {
+        QUnit.assert.deepEqual(this._form.option(optionName), expected, `the ${optionName} value`);
+    }
 }
 
 testStart(function() {
@@ -574,6 +578,60 @@ module('Group item. Use the option method', function() {
         testWrapper.checkLabelText('.test-item3', 'Test Label 3');
         testWrapper.checkHelpText('.test-item3', 'Test help text 3');
     });
+
+    test('Set { items: [\'dataField1\', {itemType: \'group\', items:[{dataField: \'dataField2\', label: \'Custom Label\'}]}] }, change label text of dataField2)', function() {
+        const testWrapper = new FormTestWrapper({
+            items: ['dataField1',
+                {
+                    itemType: 'group',
+                    items: [{
+                        dataField: 'dataField2',
+                        label: {
+                            text: 'Custom Label',
+                            visible: true
+                        },
+                        cssClass: 'test-item2'
+                    }]
+                }
+            ]
+        });
+
+        testWrapper.setOption('items[1].items[0]', 'label.text', 'Test Label 2');
+
+        testWrapper.checkFormsReRender('label.text');
+        testWrapper.checkLayoutManagerRendering([false, true], 'label.text');
+        testWrapper.checkLabelText('.test-item2', 'Test Label 2');
+        testWrapper.checkItemOption('items[1].items[0]', {
+            dataField: 'dataField2',
+            label: {
+                text: 'Test Label 2',
+                visible: true
+            },
+            cssClass: 'test-item2'
+        });
+    });
+
+    test('Set { items: [\'dataField1\', {itemType: \'group\', colCountByScreen: {lg: 2}, items:[\'dataField2\']}] }, change colCountByScreen of group)', function() {
+        const testWrapper = new FormTestWrapper({
+            items: ['dataField1',
+                {
+                    itemType: 'group',
+                    colCountByScreen: { lg: 2 },
+                    items: ['dataField2']
+                }
+            ]
+        });
+
+        testWrapper.setOption('items[1]', 'colCountByScreen.lg', 3);
+
+        testWrapper.checkFormsReRender('colCountByScreen');
+        testWrapper.checkLayoutManagerRendering([false, false], 'colCountByScreen');
+        testWrapper.checkItemOption('items[1]', {
+            itemType: 'group',
+            colCountByScreen: { lg: 3 },
+            items: ['dataField2']
+        });
+    });
 });
 
 module('Tabbed item. Use the option method', function() {
@@ -816,6 +874,64 @@ module('Tabbed item. Use the option method', function() {
         testWrapper.checkSimpleItem('dataField2', 'DataField2', 'Data Field 2');
         testWrapper.checkItemElement('.test-tab', true, 'tabbed item element');
         testWrapper.checkTabTitle('.test-tab', 'Test Title');
+    });
+
+    test('Set { items: [\'dataField1\', {itemType: \'tabbed\', tabs:[{items:[{dataField: \'dataField2\', label: \'Custom Label\'}]}}] }, change label text of dataField2)', function() {
+        const testWrapper = new FormTestWrapper({
+            items: ['dataField1',
+                {
+                    itemType: 'tabbed',
+                    tabs: [{
+                        title: 'title1',
+                        items: [{
+                            dataField: 'dataField2',
+                            label: {
+                                text: 'Custom Label',
+                                visible: true
+                            },
+                            cssClass: 'test-item2'
+                        }]
+                    }]
+                }
+            ]
+        });
+
+        testWrapper.setOption('items[1].tabs[0].items[0]', 'label.text', 'Test Label 2');
+
+        testWrapper.checkFormsReRender('label.text');
+        testWrapper.checkLayoutManagerRendering([false, true], 'label.text');
+        testWrapper.checkLabelText('.test-item2', 'Test Label 2');
+        testWrapper.checkItemOption('items[1].tabs[0].items[0]', {
+            dataField: 'dataField2',
+            label: {
+                text: 'Test Label 2',
+                visible: true
+            },
+            cssClass: 'test-item2'
+        });
+    });
+
+    test('Set { items: [\'dataField1\', {itemType: \'tabbed\', tabs: [{colCountByScreen: {lg: 2}, items:[\'dataField2\']}]}] }, change colCountByScreen of tab)', function() {
+        const testWrapper = new FormTestWrapper({
+            items: ['dataField1',
+                {
+                    itemType: 'tabbed',
+                    tabs: [{
+                        colCountByScreen: { lg: 2 },
+                        items: ['dataField2']
+                    }]
+                }
+            ]
+        });
+
+        testWrapper.setOption('items[1].tabs[0]', 'colCountByScreen.lg', 3);
+
+        testWrapper.checkFormsReRender('colCountByScreen');
+        testWrapper.checkLayoutManagerRendering([false, false], 'colCountByScreen');
+        testWrapper.checkItemOption('items[1].tabs[0]', {
+            colCountByScreen: { lg: 3 },
+            items: ['dataField2']
+        });
     });
 });
 
@@ -1337,6 +1453,60 @@ module('Group item. Use the itemOption method', function() {
         testWrapper.checkLabelText('.test-item3', 'Test Label 3');
         testWrapper.checkHelpText('.test-item3', 'Test help text 3');
     });
+
+    test('Set { items: [\'dataField1\', {itemType: \'group\', items:[{dataField: \'dataField2\', label: \'Custom Label\'}]}] }, change label text of dataField2)', function() {
+        const testWrapper = new FormTestWrapper({
+            items: ['dataField1',
+                {
+                    itemType: 'group',
+                    items: [{
+                        dataField: 'dataField2',
+                        label: {
+                            text: 'Custom Label'
+                        },
+                        cssClass: 'test-item2'
+                    }]
+                }
+            ]
+        });
+
+        testWrapper.setItemOption('dataField2', 'label', { text: 'Test Label 2' });
+
+        testWrapper.checkFormsReRender('label.text');
+        testWrapper.checkLayoutManagerRendering([false, true], 'label.text');
+        testWrapper.checkLabelText('.test-item2', 'Test Label 2');
+        testWrapper.checkItemOption('items[1].items[0]', {
+            dataField: 'dataField2',
+            label: {
+                text: 'Test Label 2'
+            },
+            cssClass: 'test-item2'
+        });
+    });
+
+    test('Set { items: [\'dataField1\', {itemType: \'group\', colCountByScreen: {lg: 2}, items:[\'dataField2\']}] }, change colCountByScreen of group)', function() {
+        const testWrapper = new FormTestWrapper({
+            items: ['dataField1',
+                {
+                    itemType: 'group',
+                    name: 'group1',
+                    colCountByScreen: { lg: 2 },
+                    items: ['dataField2']
+                }
+            ]
+        });
+
+        testWrapper.setItemOption('group1', 'colCountByScreen', { lg: 3 });
+
+        testWrapper.checkFormsReRender('colCountByScreen');
+        testWrapper.checkLayoutManagerRendering([false, false], 'colCountByScreen');
+        testWrapper.checkItemOption('items[1]', {
+            itemType: 'group',
+            name: 'group1',
+            colCountByScreen: { lg: 3 },
+            items: ['dataField2']
+        });
+    });
 });
 
 module('Tabbed item. Use the itemOption method', function() {
@@ -1586,6 +1756,39 @@ module('Tabbed item. Use the itemOption method', function() {
         testWrapper.checkSimpleItem('dataField2', 'DataField2', 'Data Field 2');
         testWrapper.checkItemElement('.test-tab', true, 'tabbed item element');
         testWrapper.checkTabTitle('.test-tab', 'Test Title');
+    });
+
+    test('Set { items: [\'dataField1\', {itemType: \'tabbed\', tabs:[{items:[{dataField: \'dataField2\', label: \'Custom Label\'}]}}] }, change label text of dataField2)', function() {
+        const testWrapper = new FormTestWrapper({
+            items: ['dataField1',
+                {
+                    itemType: 'tabbed',
+                    tabs: [{
+                        title: 'title1',
+                        items: [{
+                            dataField: 'dataField2',
+                            label: {
+                                text: 'Custom Label'
+                            },
+                            cssClass: 'test-item2'
+                        }]
+                    }]
+                }
+            ]
+        });
+
+        testWrapper.setItemOption('title1.dataField2', 'label', { text: 'Test Label 2' });
+
+        testWrapper.checkFormsReRender('label.text');
+        testWrapper.checkLayoutManagerRendering([false, true], 'label.text');
+        testWrapper.checkLabelText('.test-item2', 'Test Label 2');
+        testWrapper.checkItemOption('items[1].tabs[0].items[0]', {
+            dataField: 'dataField2',
+            label: {
+                text: 'Test Label 2'
+            },
+            cssClass: 'test-item2'
+        });
     });
 });
 

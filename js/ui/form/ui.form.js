@@ -30,7 +30,8 @@ import {
     tryGetTabPath,
     getTextWithoutSpaces,
     isExpectedItem,
-    isFullPathContainsTabs
+    isFullPathContainsTabs,
+    getItemPathParts
 } from './ui.form.utils';
 
 import '../validation_summary';
@@ -942,30 +943,43 @@ const Form = Widget.inherit({
         this._updateValidationGroupAndSummaryIfNeeded(optionName);
     },
 
+    _isGroupOrTabItemPathValid(itemPathParts, optionName) {
+        const item = this.option(itemPathParts.join('.'));
+        return optionName !== 'visible' && optionName !== 'caption' && Array.isArray(item.items);
+    },
+
+    _tryGetLayoutManagerPath(fullName, optionName) {
+        const fullNameParts = fullName.split('.');
+
+        if(optionName === 'items' && fullNameParts.length > 1) {
+            return getItemPathParts(fullNameParts).join('.');
+        } else if(fullNameParts.length > 1) {
+            const itemPathParts = getItemPathParts(fullNameParts);
+            const endIndex = itemPathParts.length - (!this._isGroupOrTabItemPathValid(itemPathParts, optionName) ? 1 : 0);
+            return itemPathParts.slice(0, endIndex).join('.');
+        }
+        return null;
+    },
+
     _tryChangeLayoutManagerItemOption(fullName, value) {
-        const nameParts = fullName.split('.');
         const optionName = getOptionNameFromFullName(fullName);
+        const layoutManagerPath = this._tryGetLayoutManagerPath(fullName, optionName);
+        const layoutManager = layoutManagerPath && this._itemsRunTimeInfo.getGroupOrTabLayoutManagerByPath(layoutManagerPath);
 
-        if(optionName === 'items' && nameParts.length > 1) {
-            const itemPath = this._getItemPath(nameParts);
-            const layoutManager = this._itemsRunTimeInfo.getGroupOrTabLayoutManagerByPath(itemPath);
-
-            if(layoutManager) {
+        if(layoutManager) {
+            if(optionName === 'items') {
                 this._itemsRunTimeInfo.removeItemsByItems(layoutManager.getItemsRunTimeInfo());
-                const items = this._prepareItems(value, false, itemPath);
-                this._setLayoutManagerItemOption(layoutManager, optionName, items, itemPath);
-                return true;
+                const items = this._prepareItems(value, false, layoutManagerPath);
+                this._setLayoutManagerItemOption(layoutManager, optionName, items, layoutManagerPath);
+            } else {
+                const itemPathParts = getItemPathParts(fullName.split('.'));
+                const localItemPath = this._isGroupOrTabItemPathValid(itemPathParts, optionName) ? '' : itemPathParts.pop();
+                const optionNameParts = optionName.split('.');
+                const fullOptionName = getFullOptionName(localItemPath, optionNameParts.length > 1 ? optionNameParts[0] : optionName);
+                const optionValue = optionNameParts.length > 1 ? { [optionNameParts.slice(1, optionNameParts.length).join('.')]: value } : value;
+                this._setLayoutManagerItemOption(layoutManager, fullOptionName, optionValue, layoutManagerPath);
             }
-        } else if(nameParts.length > 2) {
-            const endPartIndex = nameParts.length - 2;
-            const itemPath = this._getItemPath(nameParts.slice(0, endPartIndex));
-            const layoutManager = this._itemsRunTimeInfo.getGroupOrTabLayoutManagerByPath(itemPath);
-
-            if(layoutManager) {
-                const fullOptionName = getFullOptionName(nameParts[endPartIndex], optionName);
-                this._setLayoutManagerItemOption(layoutManager, fullOptionName, value, itemPath);
-                return true;
-            }
+            return true;
         }
         return false;
     },
@@ -988,9 +1002,9 @@ const Form = Widget.inherit({
         const value = args.value;
 
         if(rootOptionName === 'items') {
-            const itemPath = this._getItemPath(nameParts);
+            const itemPath = getItemPathParts(nameParts).join('.');
             const item = this.option(itemPath);
-            const optionNameWithoutPath = args.fullName.replace(itemPath + '.', '');
+            const optionNameWithoutPath = args.fullName.replace(`${itemPath}.`, '');
             const simpleOptionName = optionNameWithoutPath.split('.')[0].replace(/\[\d+]/, '');
             const itemAction = this._tryCreateItemOptionAction(simpleOptionName, item, item[simpleOptionName], args.previousValue, itemPath);
 
@@ -1012,21 +1026,6 @@ const Form = Widget.inherit({
                 this._triggerOnFieldDataChanged({ dataField, value });
             }
         }
-    },
-
-    _getItemPath: function(nameParts) {
-        let itemPath = nameParts[0];
-        let i;
-
-        for(i = 1; i < nameParts.length; i++) {
-            if(nameParts[i].search(/items\[\d+]|tabs\[\d+]/) !== -1) {
-                itemPath += '.' + nameParts[i];
-            } else {
-                break;
-            }
-        }
-
-        return itemPath;
     },
 
     _triggerOnFieldDataChanged: function(args) {
@@ -1343,16 +1342,16 @@ const Form = Widget.inherit({
             }
             default: {
                 if(isObject(option)) {
-                    if(!this._tryChangeLayoutManagerItemOptions(path, option)) {
-                        let allowUpdateItems;
-                        each(option, (optionName, optionValue) => {
-                            const itemAction = this._tryCreateItemOptionAction(optionName, item, optionValue, item[optionName], path);
-                            this._changeItemOption(item, optionName, optionValue);
-                            if(!allowUpdateItems && !this._tryExecuteItemOptionAction(itemAction)) {
-                                allowUpdateItems = true;
-                            }
-                        });
-                        allowUpdateItems && this.option('items', items);
+                    let allowUpdateItems;
+                    each(option, (optionName, optionValue) => {
+                        const itemAction = this._tryCreateItemOptionAction(optionName, item, optionValue, item[optionName], path);
+                        this._changeItemOption(item, optionName, optionValue);
+                        if(!allowUpdateItems && !this._tryExecuteItemOptionAction(itemAction)) {
+                            allowUpdateItems = true;
+                        }
+                    });
+                    if(!this._tryChangeLayoutManagerItemOptions(path, option) && allowUpdateItems) {
+                        this.option('items', items);
                     }
                 }
                 break;

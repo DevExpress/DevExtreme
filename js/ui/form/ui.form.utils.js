@@ -1,5 +1,7 @@
 import { isDefined } from '../../core/utils/type';
 
+const isItemsOrTabsNamePart = part => part.search(/items\[\d+]|tabs\[\d+]/) > -1;
+
 const createItemPathByIndex = (index, isTabs) => `${isTabs ? 'tabs' : 'items'}[${index}]`;
 
 const concatPaths = (path1, path2) => {
@@ -14,11 +16,11 @@ const getTextWithoutSpaces = text => text ? text.replace(/\s/g, '') : undefined;
 const isExpectedItem = (item, fieldName) => item && (item.dataField === fieldName || item.name === fieldName ||
     getTextWithoutSpaces(item.title) === fieldName || (item.itemType === 'group' && getTextWithoutSpaces(item.caption) === fieldName));
 
-const getFullOptionName = (path, optionName) => `${path}.${optionName}`;
+const getFullOptionName = (path, optionName) => path ? `${path}.${optionName}` : optionName;
 
 const getOptionNameFromFullName = fullName => {
-    const parts = fullName.split('.');
-    return parts[parts.length - 1].replace(/\[\d+]/, '');
+    const nameParts = fullName.split('.');
+    return nameParts.filter(part => !isItemsOrTabsNamePart(part)).join('.').replace(/\[\d+]/, '');
 };
 
 const tryGetTabPath = fullPath => {
@@ -36,6 +38,8 @@ const tryGetTabPath = fullPath => {
 
 const isFullPathContainsTabs = fullPath => fullPath.indexOf('tabs') > -1;
 
+const getItemPathParts = fullNameParts => fullNameParts.filter(part => isItemsOrTabsNamePart(part));
+
 exports.getOptionNameFromFullName = getOptionNameFromFullName;
 exports.getFullOptionName = getFullOptionName;
 exports.getTextWithoutSpaces = getTextWithoutSpaces;
@@ -44,3 +48,4 @@ exports.createItemPathByIndex = createItemPathByIndex;
 exports.concatPaths = concatPaths;
 exports.tryGetTabPath = tryGetTabPath;
 exports.isFullPathContainsTabs = isFullPathContainsTabs;
+exports.getItemPathParts = getItemPathParts;
