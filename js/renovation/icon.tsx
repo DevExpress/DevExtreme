@@ -18,7 +18,7 @@ export class IconInput {
 
 // tslint:disable-next-line: max-classes-per-file
 @Component({
-    components: [],
+    defaultOptionRules: null,
     view: viewFunction,
 })
 export default class Icon extends JSXComponent<IconInput> {

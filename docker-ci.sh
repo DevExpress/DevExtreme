@@ -192,8 +192,7 @@ function run_test_jest {
     export DEVEXTREME_TEST_CI=true
 
     npm i
-    npm run build
-
+    npx gulp generate-components
     npm run test-jest
 }
 
