@@ -390,7 +390,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid dxLookupOptions.dropDownOptions
      * @type dxPopupOptions | dxPopoverOptions
      */
-    dropDownOptions?: {};
+    dropDownOptions?: dxPopupOptions | dxPopoverOptions;
 }
 /**
  * @docid dxLookup
