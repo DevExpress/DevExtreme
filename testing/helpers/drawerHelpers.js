@@ -1,5 +1,3 @@
-import { isDefined } from 'core/utils/type';
-
 const DRAWER_PANEL_CONTENT_CLASS = 'dx-drawer-panel-content';
 const DRAWER_SHADER_CLASS = 'dx-drawer-shader';
 
@@ -20,7 +18,7 @@ function checkMargin(assert, element, top, right, bottom, left, message) {
     assert.strictEqual(window.getComputedStyle(element).marginBottom, bottom + 'px', 'marginBottom, ' + message);
 }
 
-function checkShader(assert, env, expectedZIndex = { panel: '1502', shader: '1501' }) {
+function checkShader(assert, env, expectedZIndex = { panel: '2001', shader: '2000' }) {
     const shaderElement = env.drawerElement.querySelector(`.${DRAWER_SHADER_CLASS}`);
 
     const { visibility } = window.getComputedStyle(shaderElement);
@@ -30,20 +28,15 @@ function checkShader(assert, env, expectedZIndex = { panel: '1502', shader: '150
         assert.strictEqual(visibility, 'visible', 'shader is visible');
         assert.strictEqual(shaderElement.classList.contains('dx-state-invisible'), false, 'shader has not .dx-invisible-class');
         assert.strictEqual(window.getComputedStyle(shaderElement).zIndex, expectedZIndex.shader, 'shader.zIndex');
-        if(openedStateMode === 'overlap') {
-            assert.strictEqual(window.getComputedStyle(env.templateElement.closest(`.dx-overlay.${DRAWER_PANEL_CONTENT_CLASS}`)).zIndex, openedStateMode === 'push' ? 'auto' : expectedZIndex.panel, 'panel.zIndex');
-        } else {
-            assert.strictEqual(window.getComputedStyle(env.templateElement.parentElement).zIndex, openedStateMode === 'push' ? 'auto' : expectedZIndex.panel, 'panel.zIndex');
-        }
+        assert.strictEqual(window.getComputedStyle(env.drawerElement.querySelector(`.${DRAWER_PANEL_CONTENT_CLASS}`)).zIndex, openedStateMode === 'push' ? 'auto' : expectedZIndex.panel, 'panel.zIndex');
 
         checkBoundingClientRect(assert, env.viewElement, shaderElement.getBoundingClientRect(), 'shader');
     } else {
         assert.strictEqual(visibility, 'hidden', 'shader is hidden');
         assert.strictEqual(shaderElement.classList.contains('dx-state-invisible'), true, 'shader has .dx-invisible-class');
         assert.strictEqual(window.getComputedStyle(shaderElement).zIndex, 'auto', 'shader.zIndex');
-        if(isDefined(env.templateElement)) { // Scenarios (overlap) opened: false, visible: false -> visible: true'
-            assert.strictEqual(window.getComputedStyle(env.templateElement.parentElement).zIndex, openedStateMode === 'overlap' ? '1501' : 'auto', 'panel.zIndex');
-        }
+        assert.strictEqual(window.getComputedStyle(env.drawerElement.querySelector(`.${DRAWER_PANEL_CONTENT_CLASS}`)).zIndex, 'auto', 'panel.zIndex');
+
         checkBoundingClientRect(assert, shaderElement, { width: 0, height: 0, top: 0, left: 0 }, 'shader');
     }
 }

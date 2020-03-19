@@ -746,8 +746,8 @@ QUnit.module('Drawer behavior', () => {
         const $panel = $('#drawer').find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
         const $shader = $('#drawer').find(`.${DRAWER_SHADER_CLASS}`);
 
-        assert.strictEqual($panel.css('zIndex'), '1502', 'panel.zIndex');
-        assert.strictEqual($shader.css('zIndex'), '1501', 'shader.zIndex');
+        assert.strictEqual($panel.css('zIndex'), '2001', 'panel.zIndex');
+        assert.strictEqual($shader.css('zIndex'), '2000', 'shader.zIndex');
         clock.restore();
     });
 

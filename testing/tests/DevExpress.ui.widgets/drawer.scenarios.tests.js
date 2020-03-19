@@ -7,6 +7,7 @@ import 'common.css!';
 
 import dxDrawer from 'ui/drawer';
 import dxLoadPanel from 'ui/load_panel';
+import dxOverlay from 'ui/overlay.js';
 
 QUnit.testStart(() => {
     $('#qunit-fixture').html(drawerTesters.markup);
@@ -267,40 +268,47 @@ configs.forEach(config => {
         });
 
         QUnit.test('opened: false -> opened: true, shader has more priority z-index than overlay inside view content', function(assert) {
-            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
-            const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
-                opened: false,
-                template: drawerTesters[config.position].template
-            }));
+            const prevBaseZIndex = dxOverlay.baseZIndex();
 
-            const env = {
-                drawer,
-                drawerElement,
-                templateElement: drawerElement.querySelector('#template'),
-                viewElement: drawerElement.querySelector('#view')
-            };
+            try {
+                dxOverlay.baseZIndex(3000);
 
-            new dxLoadPanel(document.getElementById('loadPanel'), {
-                visible: true,
-                container: env.viewElement,
-                position: { my: 'center', at: 'center', of: env.viewElement }
-            });
+                const drawerElement = document.getElementById(drawerTesters.drawerElementId);
+                const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
+                    opened: false,
+                    template: drawerTesters[config.position].template
+                }));
 
-            this.clock.tick(100);
-            drawer.option('opened', true);
-            this.clock.tick(100);
+                const env = {
+                    drawer,
+                    drawerElement,
+                    templateElement: drawerElement.querySelector('#template'),
+                    viewElement: drawerElement.querySelector('#view')
+                };
 
-            if(config.openedStateMode === 'overlap') {
-                assert.strictEqual($('.dx-loadpanel-wrapper').css('zIndex'), '1502', 'loadPanelWrapper.zIndex');
-                assert.strictEqual($('.dx-loadpanel-content').css('zIndex'), '1502', 'loadPanelContent.zIndex');
+                new dxLoadPanel(document.getElementById('loadPanel'), {
+                    visible: true,
+                    container: env.viewElement,
+                    position: { my: 'center', at: 'center', of: env.viewElement }
+                });
 
-                drawerTesters.checkShader(assert, env, { shader: '1503', panel: '1504' });
-            } else {
-                assert.strictEqual($('.dx-loadpanel-wrapper').css('zIndex'), '1501', 'loadPanelWrapper.zIndex');
-                assert.strictEqual($('.dx-loadpanel-content').css('zIndex'), '1501', 'loadPanelContent.zIndex');
+                this.clock.tick(100);
+                drawer.option('opened', true);
+                this.clock.tick(100);
 
-                drawerTesters.checkShader(assert, env, { shader: '1502', panel: '1503' });
+                if(config.openedStateMode === 'overlap') {
+                    assert.strictEqual($('.dx-loadpanel-wrapper').css('zIndex'), '3002', 'loadPanelWrapper.zIndex');
+                    assert.strictEqual($('.dx-loadpanel-content').css('zIndex'), '3002', 'loadPanelContent.zIndex');
+                } else {
+                    assert.strictEqual($('.dx-loadpanel-wrapper').css('zIndex'), '3001', 'loadPanelWrapper.zIndex');
+                    assert.strictEqual($('.dx-loadpanel-content').css('zIndex'), '3001', 'loadPanelContent.zIndex');
+                }
+
+                drawerTesters.checkShader(assert, env, { shader: '3500', panel: '3501' });
+            } finally {
+                dxOverlay.baseZIndex(prevBaseZIndex);
             }
+
         });
     });
 });

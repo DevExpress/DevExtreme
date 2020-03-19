@@ -209,14 +209,13 @@ class DrawerStrategy {
 
     updateZIndex() {
         if(!isDefined(this._shaderZIndex)) {
-            this._shaderZIndex = zIndexPool.create();
+            this._shaderZIndex = zIndexPool.base() + 500;
             this._drawer._$shader.css('zIndex', this._shaderZIndex);
         }
     }
 
     clearZIndex() {
         if(isDefined(this._shaderZIndex)) {
-            zIndexPool.remove(this._shaderZIndex);
             this._drawer._$shader.css('zIndex', '');
             delete this._shaderZIndex;
         }

@@ -55,7 +55,7 @@ class ShrinkStrategy extends DrawerStrategy {
     updateZIndex() {
         super.updateZIndex();
         if(!isDefined(this._panelZIndex)) {
-            this._panelZIndex = zIndexPool.create();
+            this._panelZIndex = zIndexPool.base() + 501;
             this._drawer._$panelContentWrapper.css('zIndex', this._panelZIndex);
         }
 
@@ -63,7 +63,6 @@ class ShrinkStrategy extends DrawerStrategy {
 
     clearZIndex() {
         if(isDefined(this._panelZIndex)) {
-            zIndexPool.remove(this._panelZIndex);
             this._drawer._$panelContentWrapper.css('zIndex', '');
             delete this._panelZIndex;
         }
