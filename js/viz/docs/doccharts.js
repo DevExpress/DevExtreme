@@ -763,6 +763,7 @@ const dxChart = {
         }],
         position: 'bottom',
         customPosition: undefined,
+        customPositionAxis: undefined,
         offset: undefined,
         min: undefined,
         max: undefined,

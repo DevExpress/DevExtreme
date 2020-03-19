@@ -3702,3 +3702,57 @@ QUnit.test('Zoom and pan', function(assert) {
     assert.roughEqual(valAxis1._axisPosition, 125, 5);
     assert.roughEqual(valAxis1._axisShift, 37, 5);
 });
+
+QUnit.test('Argument axis. Set customPositionAxis option', function(assert) {
+    const chart = this.createChart({
+        dataSource: [{
+            arg: 0,
+            val: 250,
+            val1: 500
+        }, {
+            arg: 100,
+            val: 300,
+            val1: 420
+        }, {
+            arg: 900,
+            val: 620,
+            val1: 120
+        }, {
+            arg: 1000,
+            val: 800,
+            val1: 0
+        }],
+        series: [{
+            axis: 'axis0'
+        }, {
+            axis: 'axis1',
+            valueField: 'val1'
+        }],
+        valueAxis: [{
+            name: 'axis0',
+            pane: 'pane2'
+        }, {
+            name: 'axis1',
+            pane: 'pane2',
+            position: 'right'
+        }],
+        argumentAxis: {
+            customPosition: 300
+        }
+    });
+    const axis = chart.getArgumentAxis();
+    const initAxisPosition = axis._axisPosition;
+
+    chart.option('argumentAxis.customPositionAxis', '');
+    const emptyAxisPosition = axis._axisPosition;
+
+    chart.option('argumentAxis.customPositionAxis', 'axis1');
+    const otherAxisPosition = axis._axisPosition;
+
+    chart.option('argumentAxis.customPositionAxis', 'axis3');
+    const defaultAxisPosition = axis._axisPosition;
+
+    assert.strictEqual(initAxisPosition, emptyAxisPosition);
+    assert.roughEqual(initAxisPosition - otherAxisPosition, 95, 8);
+    assert.roughEqual(defaultAxisPosition - initAxisPosition, 135, 8);
+});

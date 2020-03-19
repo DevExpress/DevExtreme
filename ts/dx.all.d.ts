@@ -7576,6 +7576,8 @@ declare module DevExpress.viz {
         constantLines?: Array<dxChartArgumentAxisConstantLines>;
         /** @name dxChart.Options.argumentAxis.customPosition */
         customPosition?: number | Date | string;
+        /** @name dxChart.Options.argumentAxis.customPositionAxis */
+        customPositionAxis?: string;
         /** @name dxChart.Options.argumentAxis.endOnTick */
         endOnTick?: boolean;
         /** @name dxChart.Options.argumentAxis.holidays */
