@@ -1,3 +1,6 @@
+const DRAWER_PANEL_CONTENT_CLASS = 'dx-drawer-panel-content';
+const DRAWER_SHADER_CLASS = 'dx-drawer-shader';
+
 function checkBoundingClientRect(assert, element, expectedRect, elementName) {
     assert.ok(!!element, elementName + ' is defined');
     if(element) {
@@ -15,8 +18,31 @@ function checkMargin(assert, element, top, right, bottom, left, message) {
     assert.strictEqual(window.getComputedStyle(element).marginBottom, bottom + 'px', 'marginBottom, ' + message);
 }
 
+function checkShader(assert, env, expectedZIndex = { panel: '2001', shader: '2000' }) {
+    const shaderElement = env.drawerElement.querySelector(`.${DRAWER_SHADER_CLASS}`);
+
+    const { visibility } = window.getComputedStyle(shaderElement);
+    const { opened, shading, openedStateMode } = env.drawer.option();
+
+    if(opened && shading) {
+        assert.strictEqual(visibility, 'visible', 'shader is visible');
+        assert.strictEqual(shaderElement.classList.contains('dx-state-invisible'), false, 'shader has not .dx-invisible-class');
+        assert.strictEqual(window.getComputedStyle(shaderElement).zIndex, expectedZIndex.shader, 'shader.zIndex');
+        assert.strictEqual(window.getComputedStyle(env.drawerElement.querySelector(`.${DRAWER_PANEL_CONTENT_CLASS}`)).zIndex, openedStateMode === 'push' ? 'auto' : expectedZIndex.panel, 'panel.zIndex');
+
+        checkBoundingClientRect(assert, env.viewElement, shaderElement.getBoundingClientRect(), 'shader');
+    } else {
+        assert.strictEqual(visibility, 'hidden', 'shader is hidden');
+        assert.strictEqual(shaderElement.classList.contains('dx-state-invisible'), true, 'shader has .dx-invisible-class');
+        assert.strictEqual(window.getComputedStyle(shaderElement).zIndex, 'auto', 'shader.zIndex');
+        assert.strictEqual(window.getComputedStyle(env.drawerElement.querySelector(`.${DRAWER_PANEL_CONTENT_CLASS}`)).zIndex, 'auto', 'panel.zIndex');
+
+        checkBoundingClientRect(assert, shaderElement, { width: 0, height: 0, top: 0, left: 0 }, 'shader');
+    }
+}
+
 const leftTemplateSize = 150;
-const LeftDrawerTester = { // TODO: convert to class with abstract methods
+const LeftDrawerTester = {
     templateSize: leftTemplateSize,
     template: () => `<div id="template" style="width: ${leftTemplateSize}px; height: 100%; background-color: green">template</div>`,
 
@@ -34,7 +60,6 @@ const LeftDrawerTester = { // TODO: convert to class with abstract methods
             checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 150, height: 100 }, 'template');
             checkBoundingClientRect(assert, env.templateElement.parentElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 150, height: 100 }, 'template.parentElement size should not cut template'); // or screenshot?
             checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 200, height: 100 }, 'view');
-            assert.equal(window.getComputedStyle(env.templateElement.parentElement).zIndex, '1501', 'template should be shown over view');
         }
 
         checkBoundingClientRect(assert, drawerElement, { width: 200, height: 100 }, 'drawerElement');
@@ -43,6 +68,7 @@ const LeftDrawerTester = { // TODO: convert to class with abstract methods
         assert.strictEqual(window.getComputedStyle(drawerElement).display, 'block', 'drawerElement.display');
 
         const env = {
+            drawer,
             drawerElement,
             drawerRect: drawerElement.getBoundingClientRect(),
             templateElement: drawerElement.querySelector('#template'),
@@ -58,6 +84,8 @@ const LeftDrawerTester = { // TODO: convert to class with abstract methods
         } else {
             assert.notOk('configuration is not tested');
         }
+
+        checkShader(assert, env);
     },
 
     checkHidden: function(assert, drawer, drawerElement) {
@@ -104,6 +132,7 @@ const LeftDrawerTester = { // TODO: convert to class with abstract methods
         assert.strictEqual(window.getComputedStyle(drawerElement).display, 'block', 'drawerElement.display');
 
         const env = {
+            drawer,
             drawerElement,
             drawerRect: drawerElement.getBoundingClientRect(),
             templateElement: drawerElement.querySelector('#template'),
@@ -120,11 +149,13 @@ const LeftDrawerTester = { // TODO: convert to class with abstract methods
         } else {
             assert.notOk('configuration is not tested');
         }
+
+        checkShader(assert, env);
     }
 };
 
 const rightTemplateSize = 150;
-const RightDrawerTester = { // TODO: convert to class with abstract methods
+const RightDrawerTester = {
     templateSize: rightTemplateSize,
     template: () => `<div id="template" style="width: ${rightTemplateSize}px; height: 100%; background-color: green">template</div>`,
 
@@ -142,7 +173,6 @@ const RightDrawerTester = { // TODO: convert to class with abstract methods
             checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left + 50, top: env.drawerRect.top, width: rightTemplateSize, height: 100 }, 'template');
             checkBoundingClientRect(assert, env.templateElement.parentElement, { left: env.drawerRect.left + 50, top: env.drawerRect.top, width: rightTemplateSize, height: 100 }, 'template.parentElement size should not cut template'); // or screenshot?
             checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 200, height: 100 }, 'view');
-            assert.equal(window.getComputedStyle(env.templateElement.parentElement).zIndex, '1501', 'template should be shown over view');
         }
 
         checkBoundingClientRect(assert, drawerElement, { width: 200, height: 100 }, 'drawerElement');
@@ -151,6 +181,7 @@ const RightDrawerTester = { // TODO: convert to class with abstract methods
         assert.strictEqual(window.getComputedStyle(drawerElement).display, 'block', 'drawerElement.display');
 
         const env = {
+            drawer,
             drawerElement,
             drawerRect: drawerElement.getBoundingClientRect(),
             templateElement: drawerElement.querySelector('#template'),
@@ -166,6 +197,8 @@ const RightDrawerTester = { // TODO: convert to class with abstract methods
         } else {
             assert.notOk('configuration is not tested');
         }
+
+        checkShader(assert, env);
     },
 
     checkHidden: function(assert, drawer, drawerElement) {
@@ -219,6 +252,7 @@ const RightDrawerTester = { // TODO: convert to class with abstract methods
         assert.strictEqual(window.getComputedStyle(drawerElement).display, 'block', 'drawerElement.display');
 
         const env = {
+            drawer,
             drawerElement,
             drawerRect: drawerElement.getBoundingClientRect(),
             templateElement: drawerElement.querySelector('#template'),
@@ -235,11 +269,13 @@ const RightDrawerTester = { // TODO: convert to class with abstract methods
         } else {
             assert.notOk('configuration is not tested');
         }
+
+        checkShader(assert, env);
     }
 };
 
 const topTemplateSize = 75;
-const TopDrawerTester = { // TODO: convert to class with abstract methods
+const TopDrawerTester = {
     templateSize: topTemplateSize,
     template: () => `<div id="template" style="width: 100%; height: ${topTemplateSize}px; background-color: green">template</div>`,
 
@@ -257,7 +293,6 @@ const TopDrawerTester = { // TODO: convert to class with abstract methods
             checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 200, height: 75 }, 'template');
             checkBoundingClientRect(assert, env.templateElement.parentElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 200, height: 75 }, 'template.parentElement size should not cut template'); // or screenshot?
             checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 200, height: 100 }, 'view');
-            assert.equal(window.getComputedStyle(env.templateElement.parentElement).zIndex, '1501', 'template should be shown over view'); // or screenshot?
         }
 
         checkBoundingClientRect(assert, drawerElement, { width: 200, height: 100 }, 'drawerElement');
@@ -266,6 +301,8 @@ const TopDrawerTester = { // TODO: convert to class with abstract methods
         assert.strictEqual(window.getComputedStyle(drawerElement).display, 'block', 'drawerElement.display');
 
         const env = {
+            drawer,
+            drawerElement,
             drawerRect: drawerElement.getBoundingClientRect(),
             templateElement: drawerElement.querySelector('#template'),
             viewElement: drawerElement.querySelector('#view')
@@ -280,6 +317,8 @@ const TopDrawerTester = { // TODO: convert to class with abstract methods
         } else {
             assert.notOk('configuration is not tested');
         }
+
+        checkShader(assert, env);
     },
 
     checkHidden: function(assert, drawer, drawerElement) {
@@ -327,6 +366,7 @@ const TopDrawerTester = { // TODO: convert to class with abstract methods
         assert.strictEqual(window.getComputedStyle(drawerElement).display, 'block', 'drawerElement.display');
 
         const env = {
+            drawer,
             drawerElement,
             drawerRect: drawerElement.getBoundingClientRect(),
             templateElement: drawerElement.querySelector('#template'),
@@ -343,6 +383,8 @@ const TopDrawerTester = { // TODO: convert to class with abstract methods
         } else {
             assert.notOk('configuration is not tested');
         }
+
+        checkShader(assert, env);
     }
 };
 
@@ -351,10 +393,13 @@ export const drawerTesters = {
     drawerElementId: drawerElementId,
     markup: `
         <div id="${drawerElementId}" style="background-color: blue; width: 200px; height: 100px">
-            <div id="view" style="width: 100%; height: 100%; background-color: yellow">view</div>
+            <div id="view" style="width: 100%; height: 100%; background-color: yellow">
+                view
+                <div id="loadPanel"></div>
+            </div>
         </div>`,
-
     left: LeftDrawerTester,
     top: TopDrawerTester,
-    right: RightDrawerTester
+    right: RightDrawerTester,
+    checkShader: checkShader
 };
