@@ -1,5 +1,6 @@
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 import devices from 'core/devices';
+import $ from 'jquery';
 
 QUnit.module('scrollToItem', () => {
     if(devices.real().ios) {
@@ -55,10 +56,38 @@ QUnit.module('scrollToItem', () => {
     });
 
     configs.forEach(config => {
+        QUnit.test(`expanded: ${config.expanded} disabled: ${config.disabled}, scrollDirection: ${config.scrollDirection} -> onContentReady.scrollToItem(${config.key})`, function(assert) {
+            let completionCallback = null;
+            let isFirstContentReadyEvent = true;
+            const options = $.extend({}, config, {
+                onContentReady: function(e) {
+                    if(isFirstContentReadyEvent) {
+                        isFirstContentReadyEvent = false;
+                        completionCallback = e.component.scrollToItem(config.key);
+                    }
+                }
+            });
+
+            const wrapper = createWrapper(options, createDataSource(config.expanded, config.disabled));
+
+            const done = assert.async();
+            completionCallback.done((result) => {
+                const isFirstLevelNodeKey = config.key.indexOf(LEVEL_SEPARATOR) === -1;
+                if(config.disabled && !config.expanded && !isFirstLevelNodeKey) {
+                    assert.strictEqual(result, false, 'scroll must fail');
+                } else {
+                    assert.strictEqual(result, true, 'scroll must success');
+                    wrapper.checkNodeIsVisibleArea(config.key);
+                }
+                wrapper.instance.dispose();
+                done();
+            });
+        });
+
         [{ top: 0, left: 0 }, { top: 1000, left: 0 }, { top: 0, left: 1000 }, { top: 1000, left: 1000 }].forEach(initialPosition => {
             QUnit.test(`expanded: ${config.expanded} disabled: ${config.disabled}, scrollDirection: ${config.scrollDirection}, initialPosition: ${initialPosition} -> scrollToItem(${config.key})`, function(assert) {
-                config.initialPosition = initialPosition;
-                const wrapper = createWrapper(config, createDataSource(config.expanded, config.disabled));
+                const options = $.extend({}, config, { initialPosition });
+                const wrapper = createWrapper(options, createDataSource(config.expanded, config.disabled));
                 const completionCallback = wrapper.instance.scrollToItem(config.key);
 
                 const done = assert.async();
@@ -73,34 +102,6 @@ QUnit.module('scrollToItem', () => {
                     wrapper.instance.dispose();
                     done();
                 });
-            });
-        });
-    });
-
-    configs.forEach(config => {
-        QUnit.test(`expanded: ${config.expanded} disabled: ${config.disabled}, scrollDirection: ${config.scrollDirection} -> onContentReady.scrollToItem(${config.key})`, function(assert) {
-            let completionCallback = null;
-            let isFirstContentReadyEvent = true;
-            config.onContentReady = function(e) {
-                if(isFirstContentReadyEvent) {
-                    isFirstContentReadyEvent = false;
-                    completionCallback = e.component.scrollToItem(config.key);
-                }
-            };
-
-            const wrapper = createWrapper(config, createDataSource(config.expanded, config.disabled));
-
-            const done = assert.async();
-            completionCallback.done((result) => {
-                const isFirstLevelNodeKey = config.key.indexOf(LEVEL_SEPARATOR) === -1;
-                if(config.disabled && !config.expanded && !isFirstLevelNodeKey) {
-                    assert.strictEqual(result, false, 'scroll must fail');
-                } else {
-                    assert.strictEqual(result, true, 'scroll must success');
-                    wrapper.checkNodeIsVisibleArea(config.key);
-                }
-                wrapper.instance.dispose();
-                done();
             });
         });
     });
