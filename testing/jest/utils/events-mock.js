@@ -91,4 +91,9 @@ eventsEngine.off = (...args) => {
     const event = args[1].split('.')[0];
     eventHandlers[event] = [];
 };
+
+eventsEngine.trigger = (element, event) => {
+    emit(EVENT[event], undefined, element);
+};
+
 keyboard.off = id => delete keyboardHandlers[id];

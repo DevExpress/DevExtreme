@@ -6,8 +6,8 @@ import {
     Event,
     InternalState,
     JSXComponent,
+    Method,
     OneWay,
-    React,
     Ref,
     Slot,
 } from 'devextreme-generator/component_declaration/common';
@@ -207,6 +207,11 @@ export default class Widget extends JSXComponent<WidgetInput> {
         }
 
         return null;
+    }
+
+    @Method()
+    focus() {
+        focus.trigger(this.widgetRef);
     }
 
     @Effect()
