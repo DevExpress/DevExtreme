@@ -243,8 +243,7 @@ class AppointmentModel {
     _createCombinedFilter(filterOptions, timeZoneProcessor) {
         const dataAccessors = this._dataAccessors;
         const startDayHour = filterOptions.startDayHour;
-        const realEndDayHour = typeUtils.isDefined(filterOptions.realEndDayTime) ? dateUtils.dateTimeToDecimal(filterOptions.realEndDayTime) : filterOptions.endDayHour;
-        const endDayHour = Math.min(filterOptions.endDayHour, realEndDayHour);
+        const endDayHour = filterOptions.endDayHour;
         const min = new Date(filterOptions.min);
         const max = new Date(filterOptions.max);
         const resources = filterOptions.resources;

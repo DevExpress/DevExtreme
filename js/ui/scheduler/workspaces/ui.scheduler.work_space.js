@@ -2397,6 +2397,10 @@ const SchedulerWorkSpace = Widget.inherit({
         return this._getDateByCellIndexes(rowIndex, cellIndex, true);
     },
 
+    getEndDayHourByLastCell: function() {
+        return dateUtils.dateTimeToDecimal(this.getEndViewDate());
+    },
+
     getCellDuration: function() {
         return 3600000 * this.option('hoursInterval');
     },

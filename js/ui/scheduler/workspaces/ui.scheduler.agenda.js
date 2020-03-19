@@ -475,6 +475,10 @@ const SchedulerAgenda = SchedulerWorkSpace.inherit({
             startDate: null,
             endDate: null
         };
+    },
+
+    getEndDayHourByLastCell: function() {
+        return this.option('endDayHour');
     }
 
 });
