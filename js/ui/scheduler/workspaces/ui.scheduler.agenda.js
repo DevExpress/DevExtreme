@@ -461,6 +461,10 @@ const SchedulerAgenda = SchedulerWorkSpace.inherit({
         return new Date(result);
     },
 
+    getEndDayHour: function() {
+        return this.option('endDayHour');
+    },
+
     getCoordinatesByDate: function() {
         return {
             top: 0,
