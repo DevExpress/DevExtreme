@@ -6,6 +6,7 @@ import { noop } from 'core/utils/common';
 import pointerMock from '../../helpers/pointerMock.js';
 import 'ui/date_box';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import devices from 'core/devices';
 
 const { test, module } = QUnit;
 
@@ -1178,5 +1179,67 @@ module('Advanced caret', setupModule, () => {
 
         this.keyboard.type('01');
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'caret was moved to month');
+    });
+});
+
+module('Using beforeInput event', {
+    beforeEach: function() {
+        try {
+            this.originalDevice = $.extend({ }, devices.real());
+            devices.real({
+                android: true,
+                version: [ '5', '0' ]
+            });
+
+            return setupModule.beforeEach.apply(this, arguments);
+        } finally {
+            this.instance.option({
+                value: new Date(2020, 0, 2, 3, 45),
+                displayFormat: 'dd/MM/yyyy HH:mm',
+            });
+        }
+    },
+    afterEach: function() {
+        try {
+            return setupModule.afterEach.apply(this, arguments);
+        } finally {
+            devices.real(this.originalDevice);
+        }
+    }
+
+}, () => {
+
+    test('typing valid symbols changes value correctly', function(assert) {
+        const input = this.$input.get(0);
+        this.keyboard.type('030420210455');
+        assert.strictEqual(input.value, '03/04/2021 04:55');
+    });
+
+    test('typing invalid symbols does not changes value', function(assert) {
+        const input = this.$input.get(0);
+        this.keyboard.type('abcde');
+        assert.strictEqual(input.value, '02/01/2020 03:45');
+    });
+
+    test('typing invalid symbols does not changes value on Android devices (T838638)', function(assert) {
+        const $input = this.$input;
+
+        $input.val('A');
+
+        this.keyboard
+            .keyDown('Unidentified')
+            .beforeInput('A', 'insertCompositionText')
+            .input('A', 'insertCompositionText');
+
+        assert.strictEqual($input.get(0).value, '02/01/2020 03:45');
+    });
+
+    test('unable to delete mask chars on Android devices (T838638)', function(assert) {
+        this.keyboard
+            .caret(3)
+            .beforeInput(null, 'deleteContentBackward')
+            .input(null, 'deleteContentBackward');
+
+        assert.strictEqual(this.$input.get(0).value, '01/01/2020 03:45');
     });
 });
