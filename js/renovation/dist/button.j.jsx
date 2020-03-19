@@ -40,7 +40,7 @@ class Button extends Widget {
                     }
 
                     return () => {
-                        $parent.empty();
+                        $template.remove();
                     };
                 }, Object.keys(props).map(key => props[key]));
 
