@@ -608,3 +608,16 @@ QUnit.test('the getDatesBetween method should return firstDate if firstDate=last
     assert.equal(dates.length, 1);
     assert.deepEqual(dates[0], new Date(2018, 7, 31, 12, 13, 0), 'Date in interval is correct');
 });
+
+QUnit.test('the dateTimeFromDecimal method should return hours and minutes correctly', function(assert) {
+    const number = 7.5;
+
+    assert.equal(dateUtils.dateTimeFromDecimal(number).hours, 7, 'Hours is ok');
+    assert.equal(dateUtils.dateTimeFromDecimal(number).minutes, 30, 'Minutes is ok');
+});
+
+QUnit.test('the dateTimeToDecimal method should return correct number for time of the date', function(assert) {
+    const date = new Date(2020, 7, 31, 12, 45, 0);
+
+    assert.equal(dateUtils.dateTimeToDecimal(date), 12.75, 'Decimal value is ok');
+});
