@@ -205,7 +205,8 @@ QUnit.test('Scroll should not jump down when focusing on item (T492496)', functi
     try {
         $items.last().trigger('dxpointerdown');
         $treeView.dxTreeView('instance').scrollToItem($items.last());
-        assert.equal(scrollable.scrollTop(), 56, 'scroll top position');
+        const expectedScrollTop = devices.real().ios ? 57 : 56;
+        assert.equal(scrollable.scrollTop(), expectedScrollTop, 'scroll top position');
 
         scrollable.scrollTo({ y: 0 });
         assert.equal(scrollable.scrollTop(), 0, 'scroll top position');
@@ -235,7 +236,8 @@ QUnit.test('Scroll should not jump down when focusing on Select All (T517945)', 
     try {
         $treeView.dxTreeView('instance').scrollToItem($lastItem);
         $lastItem.trigger('dxpointerdown');
-        assert.equal(scrollable.scrollTop(), 106, 'scroll top position');
+        const expectedScrollTop = devices.real().ios ? 107 : 106;
+        assert.equal(scrollable.scrollTop(), expectedScrollTop, 'scroll top position');
 
         scrollable.scrollTo({ y: 0 });
         assert.equal(scrollable.scrollTop(), 0, 'scroll top position');
