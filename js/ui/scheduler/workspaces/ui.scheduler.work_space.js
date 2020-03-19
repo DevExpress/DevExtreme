@@ -2368,27 +2368,9 @@ const SchedulerWorkSpace = Widget.inherit({
 
     getEndViewDate: function() {
         const dateOfLastViewCell = this.getDateOfLastViewCell();
-        let endDateOfLastViewCell = this.calculateEndViewDate(dateOfLastViewCell);
+        const endDateOfLastViewCell = this.calculateEndViewDate(dateOfLastViewCell);
 
-        endDateOfLastViewCell = this._adjustEndViewDateByDaylightDiff(dateOfLastViewCell, endDateOfLastViewCell);
-
-        return new Date(endDateOfLastViewCell.getTime() - toMs('minute')); // minute?
-    },
-
-    getEndDayHour: function() {
-        const dateOfLastViewCell = this.getDateOfLastViewCell();
-        let endDateOfLastViewCell = this.calculateEndViewDate(dateOfLastViewCell);
-
-        endDateOfLastViewCell = this._adjustEndViewDateByDaylightDiff(dateOfLastViewCell, endDateOfLastViewCell);
-        // endDateOfLastViewCell = new Date(endDateOfLastViewCell.getTime() - 1);
-        const toDecimal = dateUtils.dateTimeToDecimal(endDateOfLastViewCell);
-
-        if(toDecimal !== 0) {
-            return toDecimal; // ?
-        } else {
-            return this.option('endDayHour');
-        }
-        // return Math.min(dateUtils.dateTimeToDecimal(endDateOfLastViewCell), this.option('endDayHour'));
+        return this._adjustEndViewDateByDaylightDiff(dateOfLastViewCell, endDateOfLastViewCell);
     },
 
     calculateEndViewDate: function(dateOfLastViewCell) {
@@ -2397,11 +2379,9 @@ const SchedulerWorkSpace = Widget.inherit({
 
     _adjustEndViewDateByDaylightDiff: function(startDate, endDate) {
         const daylightDiff = utils.getDaylightOffsetInMs(startDate, endDate);
-        return new Date(endDate.getTime() - daylightDiff);
+        const endDateOfLastViewCell = new Date(endDate.getTime() - daylightDiff);
 
-        // const endDateOfLastViewCell = new Date(endDate.getTime() - daylightDiff);
-
-        // return new Date(endDateOfLastViewCell.getTime() - toMs('minute'));
+        return new Date(endDateOfLastViewCell.getTime() - toMs('minute'));
     },
 
     getDateOfLastViewCell: function() {

@@ -2006,25 +2006,6 @@ QUnit.test('Appointments should be filtered correctly by real end day hour, if c
     assert.equal(this.scheduler.appointments.getAppointmentCount(), 1, 'There is one appointment');
 });
 
-QUnit.test('Rendered appointment should be cropped correctly by real end day hour, if cellDuration is set', function(assert) {
-    this.createInstance({
-        dataSource: [
-            {
-                text: 'Test',
-                startDate: new Date(2020, 4, 25, 23, 10),
-                endDate: new Date(2020, 4, 25, 23, 50)
-            }
-        ],
-        cellDuration: 105,
-        views: ['day', 'week'],
-        currentView: 'week',
-        currentDate: new Date(2020, 4, 25),
-        startDayHour: 1
-    });
-
-    assert.equal(this.scheduler.appointments.getAppointmentCount(), 1, 'There is one appointment');
-});
-
 QUnit.test('Multi-day appointments should be filtered correctly if it\'s time less than startDayHour', function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 11, 14),
