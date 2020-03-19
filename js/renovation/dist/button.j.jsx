@@ -28,10 +28,13 @@ class Button extends Widget {
             const template = this._getTemplate(props.template);
 
             props.render = ({ parentRef, ...restProps }) => {
-                useLayoutEffect(() => {
-                    const $parent = $(parentRef.current);
-                    $parent?.empty();
+                const $parent = $(parentRef.current);
+                $parent?.empty();
 
+                useLayoutEffect(() => {
+                    // NOTE: We don't see $parent here, possibly generator error.
+                    //       We see it if we define it again, or use 'console.log($parent)'
+                    const $parent = $(parentRef.current);
                     let $template = $(template.render({
                         container: getPublicElement($parent),
                         model: restProps,
