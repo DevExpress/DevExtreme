@@ -503,6 +503,7 @@ const Drawer = Widget.inherit({
                 this._refreshPanel();
                 break;
             case 'shading':
+                this._strategy.clearZIndex();
                 this._toggleShaderVisibility(this.option('opened'));
                 break;
             case 'animationEnabled':
