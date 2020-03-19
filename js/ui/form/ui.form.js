@@ -951,14 +951,13 @@ const Form = Widget.inherit({
     _tryGetLayoutManagerPath(fullName, optionName) {
         const fullNameParts = fullName.split('.');
 
-        if(optionName === 'items' && fullNameParts.length > 1) {
+        if(optionName === 'items') {
             return getItemPathParts(fullNameParts).join('.');
-        } else if(fullNameParts.length > 1) {
-            const itemPathParts = getItemPathParts(fullNameParts);
-            const endIndex = itemPathParts.length - (!this._isGroupOrTabItemPathValid(itemPathParts, optionName) ? 1 : 0);
-            return itemPathParts.slice(0, endIndex).join('.');
         }
-        return null;
+
+        const itemPathParts = getItemPathParts(fullNameParts);
+        const endIndex = itemPathParts.length - (!this._isGroupOrTabItemPathValid(itemPathParts, optionName) ? 1 : 0);
+        return itemPathParts.slice(0, endIndex).join('.');
     },
 
     _tryChangeLayoutManagerItemOption(fullName, value) {
