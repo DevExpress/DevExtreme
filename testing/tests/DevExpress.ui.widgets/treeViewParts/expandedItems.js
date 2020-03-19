@@ -437,34 +437,21 @@ module('Expanded items', {
         assert.ok(nodes[0].children[0].expanded, 'child node is expanded');
     });
 
-    [{ argType: 'key', expandFunc: (instance) => instance.expandItem('dsfgfdgsfd') },
-        { argType: 'itemElement', expandFunc: (instance) => instance.expandItem($('<div/>').get(0)) },
-        { argType: 'itemData', expandFunc: (instance) => instance.expandItem({}) }
-    ].forEach(testCase => {
-        test(`expandItem(not exists ${testCase.argType}) ;`, function(assert) {
-            const items = [{ text: '1', id: 1, items: [{ text: '11', id: 11, items: [{ text: '111', id: 111 }] }] }];
-            const $treeView = initTree({
-                items: items
-            });
-
-            const expandRes = testCase.expandFunc($treeView.dxTreeView('instance'));
-            assert.equal(expandRes, false, 'expand must fail');
+    test('expandItem(arg for not found node), collapseItem(arg for not found node)', function(assert) {
+        const $treeView = initTree({
+            items: [{ text: '1', id: 1, items: [{ text: '11', id: 11, items: [{ text: '111', id: 111 }] }] }]
         });
+
+        const treeView = $treeView.dxTreeView('instance');
+        assert.equal(treeView.expandItem('key not exist'), false, 'expand fail, node not found by key');
+        assert.equal(treeView.expandItem($('<div/>').get(0)), false, 'expand fail, node not found by element');
+        assert.equal(treeView.expandItem({}), false, 'expand fail, node not found by item data');
+
+        assert.equal(treeView.collapseItem('key not exist'), false, 'expand fail, node not found by key');
+        assert.equal(treeView.collapseItem($('<div/>').get(0)), false, 'expand fail, node not found by element');
+        assert.equal(treeView.collapseItem({}), false, 'expand fail, node not found by item data');
     });
 
-    [{ argType: 'key', collapseFunc: (instance) => instance.collapseItem('dsfgfdgsfd') },
-        { argType: 'itemElement', collapseFunc: (instance) => instance.collapseItem($('<div/>').get(0)) },
-        { argType: 'itemData', collapseFunc: (instance) => instance.collapseItem({}) }
-    ].forEach(testCase => {
-        test(`collapseItem(not exists ${testCase.argType}) ;`, function(assert) {
-            const items = [{ text: '1', id: 1, items: [{ text: '11', id: 11, items: [{ text: '111', id: 111 }] }] }];
-            const $treeView = initTree({
-                items: items
-            });
-            const collapseRes = testCase.collapseFunc($treeView.dxTreeView('instance'));
-            assert.equal(collapseRes, false, 'collapse must fail');
-        });
-    });
 
     test('Expand all method', function(assert) {
         const items = [{

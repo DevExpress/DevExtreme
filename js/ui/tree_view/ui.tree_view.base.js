@@ -808,10 +808,12 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         if(!node) {
             return false;
         }
+        if(node.internalFields.disabled) {
+            return false;
+        }
 
         const currentState = node.internalFields.expanded;
-
-        if(node.internalFields.disabled || currentState === state) {
+        if(currentState === state) {
             return true;
         }
 
@@ -819,7 +821,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             const $node = this._getNodeElement(node);
 
             if($node.find(`.${NODE_LOAD_INDICATOR_CLASS}:not(.${INVISIBLE_STATE_CLASS})`).length) {
-                return true;
+                return false;
             }
 
             this._createLoadIndicator($node);
