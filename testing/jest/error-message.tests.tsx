@@ -7,9 +7,9 @@ describe('ErrorMessage', () => {
 
     describe('Props', () => {
         it('should render `messages` inside the component', () => {
-            const errorMessage = render({ message: 'error-code' });
+            const errorMessage = render({ message: 'error-message' });
 
-            expect(errorMessage.children()).toHaveLength(1);
+            expect(errorMessage.text()).toBe('error-message');
         });
         it('should combine `className` with ', () => {
             const errorMessage = render({ className: 'custom-class' });
