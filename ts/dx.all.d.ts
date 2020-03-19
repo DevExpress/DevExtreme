@@ -4477,6 +4477,8 @@ declare module DevExpress.ui {
         clearButtonText?: string;
         /** @name dxLookup.Options.closeOnOutsideClick */
         closeOnOutsideClick?: boolean | (() => boolean);
+        /** @name dxLookup.Options.dropDownOptions */
+        dropDownOptions?: dxPopupOptions | dxPopoverOptions;
         /** @name dxLookup.Options.fieldTemplate */
         fieldTemplate?: DevExpress.core.template | ((selectedItem: any, fieldElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxLookup.Options.focusStateEnabled */
