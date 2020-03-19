@@ -119,6 +119,8 @@ class FileManagerContextMenu extends Widget {
     _configureItemByCommandName(commandName, item, fileItems) {
         if(!this._isDefaultItem(commandName)) {
             const res = extend(true, {}, item);
+            res.originalItemData = item;
+            this._addItemClickHandler(commandName, res);
             if(Array.isArray(item.items)) {
                 res.items = this.createContextMenuItems(fileItems, item.items);
             }
@@ -128,6 +130,7 @@ class FileManagerContextMenu extends Widget {
         const result = this._createMenuItemByCommandName(commandName);
         const defaultConfig = DEFAULT_CONTEXT_MENU_ITEMS[commandName];
         extend(result, defaultConfig);
+        result.originalItemData = item;
         this._extendAttributes(result, item, ['visible', 'beginGroup', 'text', 'icon']);
 
         if(!isDefined(result.visible)) {
@@ -145,23 +148,32 @@ class FileManagerContextMenu extends Widget {
 
     _createMenuItemByCommandName(commandName) {
         const { text, icon } = this._commandManager.getCommandByName(commandName);
-        return {
+        const menuItem = {
             name: commandName,
             text,
-            icon,
-            onItemClick: (args) => this._onContextMenuItemClick(commandName, args)
+            icon
         };
+        this._addItemClickHandler(commandName, menuItem);
+        return menuItem;
+    }
+
+    _addItemClickHandler(commandName, contextMenuItem) {
+        contextMenuItem.onItemClick = (args) => this._onContextMenuItemClick(commandName, args);
     }
 
     _onContextMenuItemClick(commandName, args) {
-        this._actions.onItemClick(args);
-        const targetFileItems = this._isIsolatedCreationItemCommand(commandName) ? null : this._targetFileItems;
-        this._commandManager.executeCommand(commandName, targetFileItems);
+        const changedArgs = extend(true, {}, args);
+        changedArgs.itemData = args.itemData.originalItemData;
+        this._actions.onItemClick(changedArgs);
+        if(this._isDefaultItem(commandName)) {
+            const targetFileItems = this._isIsolatedCreationItemCommand(commandName) ? null : this._targetFileItems;
+            this._commandManager.executeCommand(commandName, targetFileItems);
+        }
     }
 
     _initActions() {
         this._actions = {
-            contextMenuHiddenAction: this._createActionByOption('onContextMenuHidden'),
+            onContextMenuHidden: this._createActionByOption('onContextMenuHidden'),
             onItemClick: this._createActionByOption('onItemClick')
         };
     }
@@ -172,7 +184,7 @@ class FileManagerContextMenu extends Widget {
     }
 
     _raiseContextMenuHidden() {
-        this._actions.contextMenuHiddenAction();
+        this._actions.onContextMenuHidden();
     }
 
     _getDefaultOptions() {

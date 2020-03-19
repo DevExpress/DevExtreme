@@ -2,8 +2,6 @@ import $ from 'jquery';
 import 'ui/file_manager';
 import fx from 'animation/fx';
 import { Consts, FileManagerWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
-import 'common.css!';
-import 'generic_light.css!';
 
 const { test } = QUnit;
 
@@ -447,22 +445,51 @@ QUnit.module('Toolbar', moduleConfig, () => {
 
         const spy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
-        fileManager.option('onToolbarItemClick', spy);
+        fileManager.option({
+            onToolbarItemClick: spy,
+            toolbar: {
+                items: [
+                    {
+                        name: 'someItem',
+                        options: {
+                            text: 'someItem'
+                        },
+                        visible: true,
+                        location: 'before'
+                    }, 'create'
+                ]
+            }
+        });
         this.clock.tick(800);
 
         const $items = this.wrapper.getGeneralToolbarElements();
-        $items.eq(1).trigger('dxclick');
-        this.clock.tick(800);
+        $items.eq(0).trigger('dxclick');
+        this.clock.tick(400);
 
-        const itemElement = $(spy.args[0][0].itemElement).children().first().children().first().get(0);
+        let itemElement = $($items.eq(0)).parent().parent().get(0);
+        let itemData = fileManager.option('toolbar.items')[0];
 
         assert.strictEqual(spy.callCount, 1, 'event raised');
         assert.strictEqual(spy.args[0][0].event.type, 'dxclick', 'event has correct type');
-        assert.deepEqual(itemElement, $items.eq(1).get(0), 'itemElement is correct');
-        assert.strictEqual(spy.args[0][0].itemIndex, 1, 'itemIndex is correct');
-        assert.strictEqual(spy.args[0][0].itemData.name, 'create', 'itemData has correct name');
-        assert.deepEqual(spy.args[0][0].component, fileManager, 'component is correct');
+        assert.deepEqual(spy.args[0][0].itemElement, itemElement, 'itemElement is correct');
+        assert.strictEqual(spy.args[0][0].itemIndex, 0, 'itemIndex is correct');
+        assert.strictEqual(spy.args[0][0].itemData, itemData, 'itemData is correct');
+        assert.strictEqual(spy.args[0][0].component, fileManager, 'component is correct');
         assert.deepEqual(spy.args[0][0].element, this.$element.get(0), 'element is correct');
+
+        $items.eq(1).trigger('dxclick');
+        this.clock.tick(400);
+
+        itemElement = $($items.eq(1)).parent().parent().get(0);
+        itemData = fileManager.option('toolbar.items')[1];
+
+        assert.strictEqual(spy.callCount, 2, 'event raised');
+        assert.strictEqual(spy.args[1][0].event.type, 'dxclick', 'event has correct type');
+        assert.deepEqual(spy.args[1][0].itemElement, itemElement, 'itemElement is correct');
+        assert.strictEqual(spy.args[1][0].itemIndex, 1, 'itemIndex is correct');
+        assert.strictEqual(spy.args[1][0].itemData, itemData, 'itemData is correct');
+        assert.strictEqual(spy.args[1][0].component, fileManager, 'component is correct');
+        assert.deepEqual(spy.args[1][0].element, this.$element.get(0), 'element is correct');
     });
 
     test('Raise the ToolbarItemClick event on fileSelection toolbar', function(assert) {
@@ -471,25 +498,54 @@ QUnit.module('Toolbar', moduleConfig, () => {
 
         const spy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
-        fileManager.option('onToolbarItemClick', spy);
+        fileManager.option({
+            onToolbarItemClick: spy,
+            toolbar: {
+                fileSelectionItems: [
+                    {
+                        name: 'someItem',
+                        options: {
+                            text: 'someItem'
+                        },
+                        visible: true,
+                        location: 'before'
+                    }, 'create'
+                ]
+            }
+        });
         this.clock.tick(800);
 
         this.wrapper.getRowNameCellInDetailsView(2).trigger('dxclick');
         this.clock.tick(800);
 
         const $items = this.wrapper.getFileSelectionToolbarElements();
-        $items.eq(1).trigger('dxclick');
-        this.clock.tick(800);
+        $items.eq(0).trigger('dxclick');
+        this.clock.tick(400);
 
-        const itemElement = $(spy.args[0][0].itemElement).children().first().children().first().get(0);
+        let itemElement = $($items.eq(0)).parent().parent().get(0);
+        let itemData = fileManager.option('toolbar.fileSelectionItems')[0];
 
         assert.strictEqual(spy.callCount, 1, 'event raised');
         assert.strictEqual(spy.args[0][0].event.type, 'dxclick', 'event has correct type');
-        assert.deepEqual(itemElement, $items.eq(1).get(0), 'itemElement is correct');
-        assert.strictEqual(spy.args[0][0].itemIndex, 2, 'itemIndex is correct');
-        assert.strictEqual(spy.args[0][0].itemData.name, 'move', 'itemData has correct name');
-        assert.deepEqual(spy.args[0][0].component, fileManager, 'component is correct');
+        assert.deepEqual(spy.args[0][0].itemElement, itemElement, 'itemElement is correct');
+        assert.strictEqual(spy.args[0][0].itemIndex, 0, 'itemIndex is correct');
+        assert.strictEqual(spy.args[0][0].itemData, itemData, 'itemData is correct');
+        assert.strictEqual(spy.args[0][0].component, fileManager, 'component is correct');
         assert.deepEqual(spy.args[0][0].element, this.$element.get(0), 'element is correct');
+
+        $items.eq(1).trigger('dxclick');
+        this.clock.tick(400);
+
+        itemElement = $($items.eq(1)).parent().parent().get(0);
+        itemData = fileManager.option('toolbar.fileSelectionItems')[1];
+
+        assert.strictEqual(spy.callCount, 2, 'event raised');
+        assert.strictEqual(spy.args[1][0].event.type, 'dxclick', 'event has correct type');
+        assert.deepEqual(spy.args[1][0].itemElement, itemElement, 'itemElement is correct');
+        assert.strictEqual(spy.args[1][0].itemIndex, 1, 'itemIndex is correct');
+        assert.strictEqual(spy.args[1][0].itemData, itemData, 'itemData is correct');
+        assert.strictEqual(spy.args[1][0].component, fileManager, 'component is correct');
+        assert.deepEqual(spy.args[1][0].element, this.$element.get(0), 'element is correct');
     });
 
 });

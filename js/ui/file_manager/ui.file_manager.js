@@ -530,11 +530,16 @@ class FileManager extends Widget {
                 }
                 break;
             case 'toolbar':
-                this._toolbar.option(extend(
-                    true,
-                    args.value.items ? { generalItems: args.value.items } : {},
-                    args.value.fileSelectionItems ? { fileItems: args.value.fileSelectionItems } : {}
-                ));
+                {
+                    const toolbarOptions = {};
+                    if(args.value.items) {
+                        toolbarOptions.generalItems = args.value.items;
+                    }
+                    if(args.value.fileSelectionItems) {
+                        toolbarOptions.fileItems = args.value.fileSelectionItems;
+                    }
+                    this._toolbar.option(toolbarOptions);
+                }
                 break;
             case 'contextMenu':
                 this._itemView.option('contextMenu', this._createContextMenu(true));

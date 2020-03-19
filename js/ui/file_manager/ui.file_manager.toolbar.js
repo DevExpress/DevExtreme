@@ -142,7 +142,7 @@ class FileManagerToolbar extends Widget {
         const result = this._createComponent($toolbar, Toolbar, {
             items: toolbarItems,
             visible: !hidden,
-            onItemClick: (args) => this._onItemClick(args)
+            onItemClick: (args) => this._raiseItemClicked(args)
         });
         result.compactMode = false;
         return result;
@@ -150,8 +150,13 @@ class FileManagerToolbar extends Widget {
 
     _getPreparedItems(items) {
         items = items.map(item => {
-            const commandName = isString(item) ? item : item.name;
-            const preparedItem = this._configureItemByCommandName(commandName, item);
+            let extendedItem = item;
+            if(isString(item)) {
+                extendedItem = { name: item };
+            }
+            const commandName = extendedItem.name;
+            const preparedItem = this._configureItemByCommandName(commandName, extendedItem);
+            preparedItem.originalItemData = item;
 
             if(commandName !== 'separator') {
                 preparedItem.available = this._isToolbarItemAvailable(preparedItem);
@@ -210,7 +215,7 @@ class FileManagerToolbar extends Widget {
 
         if(this._isDefaultItem(commandName)) {
             const defaultConfig = DEFAULT_ITEM_CONFIGS[commandName];
-            extend(result, defaultConfig);
+            extend(true, result, defaultConfig);
             this._extendAttributes(result, item, ['visible', 'location', 'locateInMenu']);
 
             if(!isDefined(item.visible)) {
@@ -221,7 +226,7 @@ class FileManagerToolbar extends Widget {
 
             this._extendAttributes(result.options, item, ['text', 'icon']);
         } else {
-            extend(result, item);
+            extend(true, result, item);
             if(!result.widget) {
                 result.widget = 'dxButton';
             }
@@ -244,7 +249,7 @@ class FileManagerToolbar extends Widget {
 
     _extendAttributes(targetObject, sourceObject, objectKeysArray) {
         objectKeysArray.forEach(objectKey => {
-            extend(targetObject, sourceObject[objectKey]
+            extend(true, targetObject, sourceObject[objectKey]
                 ? { [objectKey]: sourceObject[objectKey] }
                 : {});
         });
@@ -412,8 +417,14 @@ class FileManagerToolbar extends Widget {
         toolbar.endUpdate();
     }
 
+    _raiseItemClicked(args) {
+        const changedArgs = extend(true, {}, args);
+        changedArgs.itemData = args.itemData.originalItemData;
+        this._itemClickedAction(changedArgs);
+    }
+
     _createItemClickedAction() {
-        this._onItemClick = this._createActionByOption('onItemClick');
+        this._itemClickedAction = this._createActionByOption('onItemClick');
     }
 
     _getDefaultOptions() {
@@ -437,7 +448,7 @@ class FileManagerToolbar extends Widget {
                 this.repaint();
                 break;
             case 'onItemClick':
-                this._onItemClick = this._createActionByOption(name);
+                this._itemClickedAction = this._createActionByOption(name);
                 break;
             default:
                 super._optionChanged(args);
