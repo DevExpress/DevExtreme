@@ -1,4 +1,4 @@
-import support from '../core/utils/support';
+import * as support from '../core/utils/support';
 import { each } from '../core/utils/iterator';
 import browser from '../core/utils/browser';
 import devices from '../core/devices';

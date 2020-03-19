@@ -11,6 +11,10 @@ import {
     Ref,
     Slot,
 } from 'devextreme-generator/component_declaration/common';
+
+import '../events/click';
+import '../events/hover';
+
 import { active, dxClick, focus, hover, keyboard, resize, visibility } from '../events/short';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
