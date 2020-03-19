@@ -100,13 +100,12 @@ testModule('Markdown converter', () => {
     });
 });
 
-let originalList;
 
 testModule('Custom list', {
     before: function() {
         const Quill = getQuill();
-        originalList = Quill.import('formats/list');
-        class LatinList extends originalList {
+        this.originalList = Quill.import('formats/list');
+        class LatinList extends this.originalList {
             static create(value) {
                 const node = super.create(value);
 
@@ -124,7 +123,7 @@ testModule('Custom list', {
         this.deltaConverter.setQuillInstance(this.quillInstance);
     },
     after: function() {
-        getQuill().register('formats/list', originalList, true);
+        getQuill().register('formats/list', this.originalList, true);
     } }, () => {
 
     [
