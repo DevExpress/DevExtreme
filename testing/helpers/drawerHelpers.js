@@ -24,18 +24,21 @@ function checkShader(assert, env, expectedZIndex = { panel: '2001', shader: '200
     const { visibility } = window.getComputedStyle(shaderElement);
     const { opened, shading, openedStateMode } = env.drawer.option();
 
+    const shaderZIndex = window.getComputedStyle(shaderElement).zIndex.toString();
+    const panelZIndex = window.getComputedStyle(env.drawerElement.querySelector(`.${DRAWER_PANEL_CONTENT_CLASS}`)).zIndex.toString();
+
     if(opened && shading) {
         assert.strictEqual(visibility, 'visible', 'shader is visible');
         assert.strictEqual(shaderElement.classList.contains('dx-state-invisible'), false, 'shader has not .dx-invisible-class');
-        assert.strictEqual(window.getComputedStyle(shaderElement).zIndex, expectedZIndex.shader, 'shader.zIndex');
-        assert.strictEqual(window.getComputedStyle(env.drawerElement.querySelector(`.${DRAWER_PANEL_CONTENT_CLASS}`)).zIndex, openedStateMode === 'push' ? 'auto' : expectedZIndex.panel, 'panel.zIndex');
+        assert.strictEqual(shaderZIndex, expectedZIndex.shader, 'shader.zIndex');
+        assert.strictEqual(panelZIndex, openedStateMode === 'push' ? 'auto' : expectedZIndex.panel, 'panel.zIndex');
 
         checkBoundingClientRect(assert, env.viewElement, shaderElement.getBoundingClientRect(), 'shader');
     } else {
         assert.strictEqual(visibility, 'hidden', 'shader is hidden');
         assert.strictEqual(shaderElement.classList.contains('dx-state-invisible'), true, 'shader has .dx-invisible-class');
-        assert.strictEqual(window.getComputedStyle(shaderElement).zIndex, 'auto', 'shader.zIndex');
-        assert.strictEqual(window.getComputedStyle(env.drawerElement.querySelector(`.${DRAWER_PANEL_CONTENT_CLASS}`)).zIndex, 'auto', 'panel.zIndex');
+        assert.strictEqual(shaderZIndex, 'auto', 'shader.zIndex');
+        assert.strictEqual(panelZIndex, 'auto', 'panel.zIndex');
 
         checkBoundingClientRect(assert, shaderElement, { width: 0, height: 0, top: 0, left: 0 }, 'shader');
     }
