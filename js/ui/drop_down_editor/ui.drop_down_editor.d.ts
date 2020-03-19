@@ -14,6 +14,10 @@ import {
     dxTextEditorButton
 } from '../text_box/ui.text_editor.base';
 
+import {
+    dxPopupOptions
+} from '../popup';
+
 export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBoxOptions<T> {
     /**
      * @docid dxDropDownEditorOptions.acceptCustomValue
@@ -39,6 +43,14 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @public
      */
     applyValueMode?: 'instantly' | 'useButtons';
+    /**
+     * @docid dxDropDownEditorOptions.dropDownOptions
+     * @type dxPopupOptions
+     * @default {}
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    dropDownOptions?: dxPopupOptions;
     /**
      * @docid dxDropDownEditorOptions.buttons
      * @type Array<Enums.DropDownEditorButtonName,dxTextEditorButton>

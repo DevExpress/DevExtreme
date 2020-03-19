@@ -3388,8 +3388,6 @@ declare module DevExpress.ui {
         contentTemplate?: DevExpress.core.template | ((templateData: { component?: dxDropDownBox, value?: any }, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxDropDownBox.Options.displayValueFormatter */
         displayValueFormatter?: ((value: string | Array<any>) => string);
-        /** @name dxDropDownBox.Options.dropDownOptions */
-        dropDownOptions?: dxPopupOptions;
         /** @name dxDropDownBox.Options.fieldTemplate */
         fieldTemplate?: DevExpress.core.template | ((value: any, fieldElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxDropDownBox.Options.openOnFieldClick */
@@ -3487,6 +3485,8 @@ declare module DevExpress.ui {
         deferRendering?: boolean;
         /** @name dxDropDownEditor.Options.dropDownButtonTemplate */
         dropDownButtonTemplate?: DevExpress.core.template | ((buttonData: { text?: string, icon?: string }, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
+        /** @name dxDropDownEditor.Options.dropDownOptions */
+        dropDownOptions?: dxPopupOptions;
         /** @name dxDropDownEditor.Options.onClosed */
         onClosed?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** @name dxDropDownEditor.Options.onOpened */
