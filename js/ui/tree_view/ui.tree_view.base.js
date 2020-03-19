@@ -805,17 +805,21 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _toggleExpandedState: function(itemElement, state, e) {
         const node = this._getNode(itemElement);
+        if(!node) {
+            return false;
+        }
+
         const currentState = node.internalFields.expanded;
 
         if(node.internalFields.disabled || currentState === state) {
-            return;
+            return true;
         }
 
         if(this._hasChildren(node)) {
             const $node = this._getNodeElement(node);
 
             if($node.find(`.${NODE_LOAD_INDICATOR_CLASS}:not(.${INVISIBLE_STATE_CLASS})`).length) {
-                return;
+                return true;
             }
 
             this._createLoadIndicator($node);
@@ -826,8 +830,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         this._dataAdapter.toggleExpansion(node.internalFields.key, state);
-
         this._updateExpandedItemsUI(node, state, e);
+
+        return true;
     },
 
     _createLoadIndicator: function($node) {
@@ -1523,11 +1528,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     expandItem: function(itemElement) {
-        this._toggleExpandedState(itemElement, true);
+        return this._toggleExpandedState(itemElement, true);
     },
 
     collapseItem: function(itemElement) {
-        this._toggleExpandedState(itemElement, false);
+        return this._toggleExpandedState(itemElement, false);
     },
 
     /**

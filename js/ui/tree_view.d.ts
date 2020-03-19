@@ -326,26 +326,29 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @docid dxTreeViewMethods.collapseItem
      * @publicName collapseItem(itemData)
      * @param1 itemData:Object
+     * @return boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(itemData: any): void;
+    collapseItem(itemData: any): boolean;
     /**
      * @docid dxTreeViewMethods.collapseItem
      * @publicName collapseItem(itemElement)
      * @param1 itemElement:Node
+     * @return boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(itemElement: Element): void;
+    collapseItem(itemElement: Element): boolean;
     /**
      * @docid dxTreeViewMethods.collapseItem
      * @publicName collapseItem(key)
      * @param1 key:any
+     * @return boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(key: any): void;
+    collapseItem(key: any): boolean;
     /**
      * @docid dxTreeViewMethods.expandAll
      * @publicName expandAll()
@@ -357,26 +360,29 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @docid dxTreeViewMethods.expandItem
      * @publicName expandItem(itemData)
      * @param1 itemData:Object
+     * @return boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(itemData: any): void;
+    expandItem(itemData: any): boolean;
     /**
      * @docid dxTreeViewMethods.expandItem
      * @publicName expandItem(itemElement)
      * @param1 itemElement:Node
+     * @return boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(itemElement: Element): void;
+    expandItem(itemElement: Element): boolean;
     /**
      * @docid dxTreeViewMethods.expandItem
      * @publicName expandItem(key)
      * @param1 key:any
+     * @return boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(key: any): void;
+    expandItem(key: any): boolean;
     /**
      * @docid dxTreeViewMethods.getNodes
      * @publicName getNodes()
