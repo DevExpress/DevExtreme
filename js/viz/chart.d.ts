@@ -1103,6 +1103,14 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
      */
     customPosition?: number | Date | string;
     /**
+     * @docid dxChartOptions.argumentAxis.customPositionAxis
+     * @type string
+     * @default undefined
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    customPositionAxis?: string;
+    /**
      * @docid dxChartOptions.argumentAxis.offset
      * @type number
      * @default undefined
