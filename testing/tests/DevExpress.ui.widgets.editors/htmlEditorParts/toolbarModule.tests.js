@@ -140,9 +140,9 @@ const dialogModuleConfig = {
     }
 };
 
-const { test } = QUnit;
+const { test, module: testModule } = QUnit;
 
-QUnit.module('Toolbar module', simpleModuleConfig, () => {
+testModule('Toolbar module', simpleModuleConfig, () => {
     test('Render toolbar without any options', function(assert) {
         new Toolbar(this.quillMock, this.options);
 
@@ -511,22 +511,6 @@ QUnit.module('Toolbar module', simpleModuleConfig, () => {
             }]);
     });
 
-    test('separator item', function(assert) {
-        this.options.items = ['separator', { formatName: 'separator', locateInMenu: 'always' }];
-
-        new Toolbar(this.quillMock, this.options);
-
-        $(`.${TOOLBAR_CLASS} .${DROPDOWNMENU_BUTTON_CLASS}`)
-            .trigger('dxclick')
-            .trigger('dxclick');
-
-        const $separator = $(`.${TOOLBAR_CLASS} .${SEPARATOR_CLASS}`);
-        const $menuSeparator = $(`.${TOOLBAR_CLASS} .${MENU_SEPARATOR_CLASS}`);
-
-        assert.equal($separator.length, 1, 'Toolbar has a separator item');
-        assert.equal($menuSeparator.length, 1, 'Toolbar has a menu separator item');
-    });
-
     test('toolbar should prevent default mousedown event', function(assert) {
         this.options.items = ['bold'];
 
@@ -557,24 +541,9 @@ QUnit.module('Toolbar module', simpleModuleConfig, () => {
                 value: false
             }]);
     });
-
-    test('adaptive menu container', function(assert) {
-        this.options.items = [{ formatName: 'strike', locateInMenu: 'always' }];
-
-        new Toolbar(this.quillMock, this.options);
-
-        $(`.${TOOLBAR_CLASS} .${DROPDOWNMENU_BUTTON_CLASS}`).trigger('dxclick');
-
-        const $formatButton = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
-        const isMenuLocatedInToolbar = !!$formatButton.closest(`.${TOOLBAR_CLASS}`).length;
-        const isMenuLocatedInToolbarContainer = !!$formatButton.closest(`.${TOOLBAR_WRAPPER_CLASS}`).length;
-
-        assert.notOk(isMenuLocatedInToolbar, 'Adaptive menu isn\'t located into Toolbar');
-        assert.ok(isMenuLocatedInToolbarContainer, 'Adaptive menu is located into Toolbar container');
-    });
 });
 
-QUnit.module('Active formats', simpleModuleConfig, () => {
+testModule('Active formats', simpleModuleConfig, () => {
     test('without active formats', function(assert) {
         this.options.items = ['bold', 'italic', 'clear'];
 
@@ -757,7 +726,7 @@ QUnit.module('Active formats', simpleModuleConfig, () => {
     });
 });
 
-QUnit.module('Toolbar dialogs', dialogModuleConfig, () => {
+testModule('Toolbar dialogs', dialogModuleConfig, () => {
     test('show color dialog', function(assert) {
         this.options.items = ['color'];
         new Toolbar(this.quillMock, this.options);
@@ -1113,5 +1082,40 @@ QUnit.module('Toolbar dialogs', dialogModuleConfig, () => {
 
         assert.equal($fields.length, 2, 'Form with 2 fields shown');
         assert.equal(fieldsText, 'URL:Open link in new window', 'Check labels');
+    });
+});
+
+testModule('Toolbar with adaptive menu', simpleModuleConfig, function() {
+    test('adaptive menu container', function(assert) {
+        this.options.multiline = false;
+        this.options.items = [{ formatName: 'strike', locateInMenu: 'always' }];
+
+        new Toolbar(this.quillMock, this.options);
+
+        $(`.${TOOLBAR_CLASS} .${DROPDOWNMENU_BUTTON_CLASS}`).trigger('dxclick');
+
+        const $formatButton = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+        const isMenuLocatedInToolbar = !!$formatButton.closest(`.${TOOLBAR_CLASS}`).length;
+        const isMenuLocatedInToolbarContainer = !!$formatButton.closest(`.${TOOLBAR_WRAPPER_CLASS}`).length;
+
+        assert.notOk(isMenuLocatedInToolbar, 'Adaptive menu is not located into Toolbar');
+        assert.ok(isMenuLocatedInToolbarContainer, 'Adaptive menu is located into Toolbar container');
+    });
+
+    test('separator item', function(assert) {
+        this.options.multiline = false;
+        this.options.items = ['separator', { formatName: 'separator', locateInMenu: 'always' }];
+
+        new Toolbar(this.quillMock, this.options);
+
+        $(`.${TOOLBAR_CLASS} .${DROPDOWNMENU_BUTTON_CLASS}`)
+            .trigger('dxclick')
+            .trigger('dxclick');
+
+        const $separator = $(`.${TOOLBAR_CLASS} .${SEPARATOR_CLASS}`);
+        const $menuSeparator = $(`.${TOOLBAR_CLASS} .${MENU_SEPARATOR_CLASS}`);
+
+        assert.equal($separator.length, 1, 'Toolbar has a separator item');
+        assert.equal($menuSeparator.length, 1, 'Toolbar has a menu separator item');
     });
 });
