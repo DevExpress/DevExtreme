@@ -3752,7 +3752,7 @@ QUnit.test('Argument axis. Set customPositionAxis option', function(assert) {
     chart.option('argumentAxis.customPositionAxis', 'axis3');
     const defaultAxisPosition = axis._axisPosition;
 
-    assert.strictEqual(initAxisPosition, emptyAxisPosition);
+    assert.roughEqual(initAxisPosition - emptyAxisPosition, 0, 8);
     assert.roughEqual(initAxisPosition - otherAxisPosition, 95, 8);
     assert.roughEqual(defaultAxisPosition - initAxisPosition, 135, 8);
 });
