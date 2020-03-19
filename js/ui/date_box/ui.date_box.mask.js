@@ -13,6 +13,7 @@ import { isString } from '../../core/utils/type';
 import { sign } from '../../core/utils/math';
 import DateBoxBase from './ui.date_box.base';
 import numberLocalization from '../../localization/number';
+import devices from '../../core/devices';
 
 const MASK_EVENT_NAMESPACE = 'dateBoxMask';
 const FORWARD = 1;
@@ -124,8 +125,13 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _isSingleCharKey(e) {
-        const key = e.originalEvent.key;
+        const key = e.originalEvent.data || e.originalEvent.key;
         return typeof key === 'string' && key.length === 1 && !e.ctrl && !e.alt;
+    },
+
+    _useBeforeInputEvent: function() {
+        const device = devices.real();
+        return device.android && device.version[0] > 4;
     },
 
     _keyboardHandler(e) {
@@ -133,21 +139,68 @@ const DateBoxMask = DateBoxBase.inherit({
 
         const result = this.callBase(e);
 
-        if(!this._useMaskBehavior() || !this._isSingleCharKey(e)) {
+        if(!this._useMaskBehavior() || this._useBeforeInputEvent() || !this._isSingleCharKey(e)) {
             return result;
         }
 
-        if(this._isAllSelected()) {
-            this._activePartIndex = 0;
-        }
-
-        this._setNewDateIfEmpty();
-
-        isNaN(parseInt(key)) ? this._searchString(key) : this._searchNumber(key);
+        this._processInputKey(key);
 
         e.originalEvent.preventDefault();
 
         return result;
+    },
+
+    _maskBeforeInputHandler(e) {
+        this._maskInputHandler = null;
+
+        const { inputType } = e.originalEvent;
+
+        if(inputType === 'insertCompositionText') {
+            this._maskInputHandler = () => {
+                this._renderDisplayText(this._getDisplayedText(this._maskValue));
+                this._selectNextPart();
+            };
+        }
+
+        const isBackwardDeletion = inputType === 'deleteContentBackward';
+        const isForwardDeletion = inputType === 'deleteContentForward';
+        if(isBackwardDeletion || isForwardDeletion) {
+            const direction = isBackwardDeletion ? BACKWARD : FORWARD;
+            this._maskInputHandler = () => {
+                this._revertPart();
+                this._selectNextPart(direction);
+            };
+        }
+
+        if(!this._useMaskBehavior() || !this._isSingleCharKey(e)) {
+            return;
+        }
+
+        const key = e.originalEvent.data;
+        this._processInputKey(key);
+        e.preventDefault();
+        return true;
+    },
+
+    _keyPressHandler(e) {
+        this.callBase(e);
+
+        if(this._maskInputHandler) {
+            this._maskInputHandler();
+            this._maskInputHandler = null;
+        }
+    },
+
+    _processInputKey(key) {
+        if(this._isAllSelected()) {
+            this._activePartIndex = 0;
+        }
+        this._setNewDateIfEmpty();
+        if(isNaN(parseInt(key))) {
+            this._searchString(key);
+        } else {
+            this._searchNumber(key);
+        }
     },
 
     _isAllSelected() {
@@ -306,6 +359,10 @@ const DateBoxMask = DateBoxBase.inherit({
             this._renderDisplayText(this._getDisplayedText(this._maskValue));
             this._selectNextPart();
         });
+
+        if(this._useBeforeInputEvent()) {
+            eventsEngine.on(this._input(), addNamespace('beforeinput', MASK_EVENT_NAMESPACE), this._maskBeforeInputHandler.bind(this));
+        }
     },
 
     _selectLastPart() {
