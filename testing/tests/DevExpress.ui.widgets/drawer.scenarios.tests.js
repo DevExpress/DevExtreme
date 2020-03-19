@@ -171,6 +171,21 @@ configs.forEach(config => {
             drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
         });
 
+        testOrSkip(`opened: true, shading: ${config.shading} -> shading: ${!config.shading}`, () => config.openedStateMode === 'push' && config.position === 'top', function(assert) {
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
+            const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
+                opened: true,
+                shading: config.shading,
+                template: drawerTesters[config.position].template
+            }));
+
+            this.clock.tick(100);
+            drawer.option('shading', !config.shading);
+            this.clock.tick(100);
+
+            drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
+        });
+
         testOrSkip('opened: true -> repaint', () => config.openedStateMode === 'push' && config.position === 'top', function(assert) {
             const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
@@ -308,28 +323,6 @@ configs.forEach(config => {
             } finally {
                 dxOverlay.baseZIndex(prevBaseZIndex);
             }
-        });
-
-        QUnit.test(`opened: true, shading: ${config.shading} -> shading: ${!config.shading}`, function(assert) {
-            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
-            const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
-                opened: true,
-                shading: config.shading,
-                template: drawerTesters[config.position].template
-            }));
-
-            this.clock.tick(100);
-            drawer.option('shading', !config.shading);
-            this.clock.tick(100);
-
-            const env = {
-                drawer,
-                drawerElement,
-                templateElement: drawerElement.querySelector('#template'),
-                viewElement: drawerElement.querySelector('#view')
-            };
-
-            drawerTesters.checkShader(assert, env, { shader: '2000', panel: '2001' });
         });
     });
 });
