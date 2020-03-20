@@ -5,7 +5,7 @@ import ValidationEngine from '../../ui/validation_engine';
 import Widget from '../preact-wrapper/component';
 import { extend } from '../../core/utils/extend';
 import ButtonView from '../button.p';
-import { wrapElement, getInnerActionName } from '../preact-wrapper/utils';
+import { wrapElement, getInnerActionName, removeDifferentElements } from '../preact-wrapper/utils';
 import { useLayoutEffect } from 'preact/hooks';
 import { getPublicElement } from '../../core/utils/dom';
 
@@ -30,6 +30,8 @@ class Button extends Widget {
             props.render = ({ parentRef, ...restProps }) => {
                 useLayoutEffect(() => {
                     const $parent = $(parentRef.current);
+                    const $children = $parent.contents();
+
                     let $template = $(template.render({
                         container: getPublicElement($parent),
                         model: restProps,
@@ -38,9 +40,11 @@ class Button extends Widget {
                     if($template.hasClass(TEMPLATE_WRAPPER_CLASS)) {
                         $template = wrapElement($parent, $template);
                     }
+                    const $newChildren = $parent.contents();
 
                     return () => {
-                        $parent.empty();
+                        // NOTE: order is important
+                        removeDifferentElements($children, $newChildren);
                     };
                 }, Object.keys(props).map(key => props[key]));
 

@@ -21,6 +21,20 @@ export const wrapElement = ($element, $wrapper) => {
     return children;
 };
 
+export const removeDifferentElements = ($children, $newChildren) => {
+    each($newChildren, (_, element) => {
+        let hasComponent = false;
+        each($children, (_, oldElement) => {
+            if(element === oldElement) {
+                hasComponent = true;
+            }
+        });
+        if(!hasComponent) {
+            element.remove();
+        }
+    });
+};
+
 export const getInnerActionName = (actionName) => {
     return actionName.charAt(2).toLowerCase() + actionName.substr(3) + 'Action';
 };
