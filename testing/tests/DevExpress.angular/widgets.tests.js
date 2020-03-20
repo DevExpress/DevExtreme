@@ -1179,7 +1179,7 @@ QUnit.module('Drawer', () => {
                     }">\
                 </div>\
                 <div class="content">\
-                        Content of Item_1... \
+                    Content of Item_1... \
                 </div>\
             </div>'
         );

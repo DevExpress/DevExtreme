@@ -13,7 +13,7 @@ import Drawer from 'ui/drawer';
 
 import 'common.css!';
 
-
+const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
 const DRAWER_PANEL_CONTENT_CLASS = 'dx-drawer-panel-content';
 const DRAWER_VIEW_CONTENT_CLASS = 'dx-drawer-content';
 const DRAWER_SHADER_CLASS = 'dx-drawer-shader';
@@ -72,6 +72,7 @@ QUnit.testStart(() => {
     </div>\
     <div id="drawerWithContent">\
         <div id="content"><div id="button"></div></div>\
+        <div id="additionalContent"></div>\
     </div>\
     <div id="outerDrawer">\
         <div id="innerDrawer"></div>\
@@ -141,6 +142,18 @@ QUnit.module('Drawer behavior', () => {
 
         eventsEngine.trigger(buttonElement, 'dxclick');
 
+        const wrapperElement = drawerElement.querySelector(`.${DRAWER_WRAPPER_CLASS}`);
+        const viewContentElement = wrapperElement.querySelector(`.${DRAWER_VIEW_CONTENT_CLASS}`);
+        const shaderElement = viewContentElement.querySelector(`.${DRAWER_SHADER_CLASS}`);
+        const firstViewContentInnerElement = viewContentElement.querySelector('#content');
+        const secondViewContentInnerElement = viewContentElement.querySelector('#additionalContent');
+
+        assert.notStrictEqual(wrapperElement, null, 'wrapperElement attached');
+        assert.notStrictEqual(viewContentElement, null, 'viewContentElement attached');
+        assert.notStrictEqual(shaderElement, null, 'wrappershaderElementElement attached');
+        assert.notStrictEqual(firstViewContentInnerElement, null, 'firstViewContentInnerElement attached');
+        assert.notStrictEqual(secondViewContentInnerElement, null, 'secondViewContentInnerElement attached');
+
         assert.strictEqual(innerButtonClickHandler.callCount, 1, 'buttonClickHandler.callCount');
         assert.strictEqual(buttonElement, drawerElement.querySelector('#button'), 'the same button element');
         assert.strictEqual($(buttonElement).dxButton('instance') instanceof Button, true, 'button.instance');
@@ -149,12 +162,30 @@ QUnit.module('Drawer behavior', () => {
         innerButtonClickHandler.reset();
         eventsEngine.trigger(buttonElement, 'dxclick');
 
+        const newWrapperElement = drawerElement.querySelector(`.${DRAWER_WRAPPER_CLASS}`);
+        const newViewContentElement = wrapperElement.querySelector(`.${DRAWER_VIEW_CONTENT_CLASS}`);
+        const newShaderElement = viewContentElement.querySelector(`.${DRAWER_SHADER_CLASS}`);
+        const newFirstViewContentInnerElement = viewContentElement.querySelector('#content');
+        const newSecondViewContentInnerElement = viewContentElement.querySelector('#additionalContent');
+
+        assert.notStrictEqual(wrapperElement, null, 'wrapperElement attached');
+        assert.notStrictEqual(viewContentElement, null, 'viewContentElement attached');
+        assert.notStrictEqual(shaderElement, null, 'shaderElement attached');
+        assert.notStrictEqual(firstViewContentInnerElement, null, 'firstViewContentInnerElement attached');
+        assert.notStrictEqual(secondViewContentInnerElement, null, 'secondViewContentInnerElement attached');
+
+        assert.strictEqual(newWrapperElement, wrapperElement, 'wrapperElement ');
+        assert.strictEqual(newViewContentElement, viewContentElement, 'viewContentElement attached');
+        assert.strictEqual(newShaderElement, shaderElement, 'shaderElement attached');
+        assert.strictEqual(newFirstViewContentInnerElement, firstViewContentInnerElement, 'firstViewContentInnerElement attached');
+        assert.strictEqual(newSecondViewContentInnerElement, secondViewContentInnerElement, 'secondViewContentInnerElement attached');
+
         assert.strictEqual(innerButtonClickHandler.callCount, 1, 'buttonClickHandler.callCount');
         assert.strictEqual(buttonElement, drawerElement.querySelector('#button'), 'the same button element');
         assert.strictEqual($(buttonElement).dxButton('instance') instanceof Button, true, 'button.instance');
     });
 
-    QUnit.test('Drawer + contentTemplate() with button - repaint() method does not duplicate the content(T864419)', function(assert) {
+    QUnit.test('Drawer + contentTemplate() with button -> repaint() method does not duplicate the content(T864419)', function(assert) {
         const innerButtonClickHandler = sinon.stub();
         const drawerElement = document.querySelector('#drawerWithContent');
 
@@ -168,7 +199,9 @@ QUnit.module('Drawer behavior', () => {
                 buttonElement.id = 'button';
 
                 viewContentElement.append(buttonElement);
-
+                const additionalElement = document.createElement('div');
+                additionalElement.id = 'additionalContent';
+                viewContentElement.append(additionalElement);
                 new Button(buttonElement, {
                     text: 'innerButton',
                     onClick: innerButtonClickHandler
@@ -178,6 +211,17 @@ QUnit.module('Drawer behavior', () => {
             }
         });
 
+        const wrapperElement = drawerElement.querySelector(`.${DRAWER_WRAPPER_CLASS}`);
+        const viewContentElement = wrapperElement.querySelector(`.${DRAWER_VIEW_CONTENT_CLASS}`);
+        const shaderElement = viewContentElement.querySelector(`.${DRAWER_SHADER_CLASS}`);
+        const viewTemplateElement = viewContentElement.querySelector('.ng-scope');
+
+        assert.notStrictEqual(wrapperElement, null, 'wrapperElement attached');
+        assert.notStrictEqual(viewContentElement, null, 'viewContentElement attached');
+        assert.notStrictEqual(shaderElement, null, 'wrappershaderElementElement attached');
+        assert.notStrictEqual(viewTemplateElement, null, 'viewTemplateElement attached');
+
+
         eventsEngine.trigger(buttonElement, 'dxclick');
 
         assert.strictEqual(innerButtonClickHandler.callCount, 1, 'buttonClickHandler.callCount');
@@ -185,6 +229,22 @@ QUnit.module('Drawer behavior', () => {
 
         drawer.repaint();
         innerButtonClickHandler.reset();
+
+        const newWrapperElement = drawerElement.querySelector(`.${DRAWER_WRAPPER_CLASS}`);
+        const newViewContentElement = wrapperElement.querySelector(`.${DRAWER_VIEW_CONTENT_CLASS}`);
+        const newShaderElement = viewContentElement.querySelector(`.${DRAWER_SHADER_CLASS}`);
+        const newViewTemplateElement = viewContentElement.querySelector('.ng-scope');
+
+        assert.notStrictEqual(wrapperElement, null, 'wrapperElement attached');
+        assert.notStrictEqual(viewContentElement, null, 'viewContentElement attached');
+        assert.notStrictEqual(shaderElement, null, 'shaderElement attached');
+        assert.notStrictEqual(viewTemplateElement, null, 'viewTemplateElement attached');
+
+        assert.strictEqual(newWrapperElement, wrapperElement, 'wrapperElement ');
+        assert.strictEqual(newViewContentElement, viewContentElement, 'viewContentElement attached');
+        assert.strictEqual(newShaderElement, shaderElement, 'shaderElement attached');
+        assert.strictEqual(viewTemplateElement, newViewTemplateElement, 'viewTemplateElement attached');
+        assert.strictEqual(newViewTemplateElement.children.length, 1, 'viewTemplateElement.length');
 
         buttonElement = drawerElement.querySelector('#button');
 

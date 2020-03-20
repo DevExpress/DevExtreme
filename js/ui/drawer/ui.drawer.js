@@ -166,21 +166,7 @@ const Drawer = Widget.inherit({
         this._whenPanelContentRendered = new Deferred();
         this._strategy.renderPanelContent(this._whenPanelContentRendered);
 
-
-        const contentTemplateOption = this.option('contentTemplate');
-        const contentTemplate = this._getTemplate(contentTemplateOption);
-
-        if(contentTemplate) {
-            const $viewTemplate = contentTemplate.render({
-                container: this.viewContent(),
-                noModel: true,
-                transclude: (this._templateManager.anonymousTemplateName === contentTemplateOption)
-            });
-
-            if($viewTemplate.hasClass('ng-scope')) { // T864419
-                $(this.viewContent()).replaceWith($viewTemplate);
-            }
-        }
+        this._renderViewContent();
 
         eventsEngine.off(this._$viewContentWrapper, CLICK_EVENT_NAME);
         eventsEngine.on(this._$viewContentWrapper, CLICK_EVENT_NAME, this._viewContentWrapperClickHandler.bind(this));
@@ -238,6 +224,24 @@ const Drawer = Widget.inherit({
         }
 
         this.$element().addClass(DRAWER_CLASS + '-' + this.option('revealMode'));
+    },
+
+    _renderViewContent() {
+        const contentTemplateOption = this.option('contentTemplate');
+        const contentTemplate = this._getTemplate(contentTemplateOption);
+
+        if(contentTemplate) {
+            const $viewTemplate = contentTemplate.render({
+                container: this.viewContent(),
+                noModel: true,
+                transclude: (this._templateManager.anonymousTemplateName === contentTemplateOption)
+            });
+
+            if($viewTemplate.hasClass('ng-scope')) { // T864419
+                $(this._$viewContentWrapper).children().replaceWith($viewTemplate);
+                this._renderShader();
+            }
+        }
     },
 
     _renderShader() {
