@@ -1,4 +1,6 @@
 import $ from '../../core/renderer';
+import { extend } from '../../core/utils/extend';
+import { isString, isFunction } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 
 import DataGrid from '../data_grid/ui.data_grid';
@@ -16,42 +18,34 @@ const FILE_MANAGER_PARENT_DIRECTORY_ITEM = 'dx-filemanager-parent-directory-item
 const DATA_GRID_DATA_ROW_CLASS = 'dx-data-row';
 const PREDEFINED_COLUMN_NAMES = [ 'name', 'isDirectory', 'size', 'thumbnail', 'dateModified', 'isParentFolder' ];
 
-const DEFAULT_COLUMN_CONFIGS = [
-    {
-        dataField: 'isDirectory',
+const DEFAULT_COLUMN_CONFIGS = {
+    isDirectory: {
         caption: '',
         width: 36,
         alignment: 'center',
-        cellTemplate: this._createThumbnailColumnCell.bind(this),
         cssClass: FILE_MANAGER_DETAILS_ITEM_IS_DIRECTORY_CLASS
     },
-    {
-        dataField: 'name',
+    name: {
         caption: messageLocalization.format('dxFileManager-listDetailsColumnCaptionName'),
-        cellTemplate: this._createNameColumnCell.bind(this)
     },
-    {
-        dataField: 'dateModified',
+    dateModified: {
         caption: messageLocalization.format('dxFileManager-listDetailsColumnCaptionDateModified'),
         width: 110,
         hidingPriority: 1,
     },
-    {
-        dataField: 'size',
+    size: {
         caption: messageLocalization.format('dxFileManager-listDetailsColumnCaptionFileSize'),
         width: 90,
         alignment: 'right',
         hidingPriority: 0,
-        calculateCellValue: this._calculateSizeColumnCellValue.bind(this)
     },
-    {
-        dataField: 'isParentFolder',
+    isParentFolder: {
         caption: 'isParentFolder',
         visible: false,
         sortIndex: 0,
         sortOrder: 'asc'
     }
-];
+};
 
 class FileManagerDetailsItemList extends FileManagerItemListBase {
 
@@ -96,7 +90,6 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             showRowLines: false,
             columnHidingEnabled: true,
             columns: this._createColumns(),
-            customizeColumns: this.option('customizeDetailColumns'),
             onEditorPreparing: this._onEditorPreparing.bind(this),
             onRowPrepared: this._onRowPrepared.bind(this),
             onContextMenuPreparing: this._onContextMenuPreparing.bind(this),
@@ -109,18 +102,40 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _createColumns() {
-        const columns = this.option('detailColumns');
-
+        let columns = this.option('detailColumns');
         const preparedColumns = [];
 
-        for(let i = 0; i < columns.length; i++) {
-            preparedColumns.push(this._configureColumn(columns[i]));
+        const customizeDetailColumns = this.option('customizeDetailColumns');
+        if(isFunction(customizeDetailColumns)) {
+            columns = customizeDetailColumns(columns);
         }
+
+        for(let i = 0; i < columns.length; i++) {
+            let extendedItem = columns[i];
+            if(isString(columns[i])) {
+                extendedItem = { dataField: columns[i] };
+            }
+            preparedColumns.push(this._configureColumn(extendedItem));
+        }
+
         return preparedColumns;
     }
 
     _configureColumn(columnOptions) {
         const result = {};
+
+        if(this._isDefaultColumn(columnOptions.dataField)) {
+            const defaultConfig = DEFAULT_COLUMN_CONFIGS[columnOptions.dataField];
+            if(columnOptions.dataField === 'isDirectory' || columnOptions.dataField === 'name') {
+                defaultConfig.cellTemplate = this[`_${columnOptions.dataField}ColumnCellTemplate`].bind(this);
+            }
+            if(columnOptions.dataField === 'size') {
+                defaultConfig.calculateCellValue = this._calculateSizeColumnCellValue.bind(this);
+            }
+            extend(true, result, defaultConfig);
+        }
+
+        extend(true, result, columnOptions);
 
         const dataItemSuffix = PREDEFINED_COLUMN_NAMES.indexOf(result.dataField) < 0 ? 'dataItem.' : '';
         result.dataField = 'fileItem.' + dataItemSuffix + result.dataField;
@@ -269,11 +284,11 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
     }
 
-    _createThumbnailColumnCell(container, cellInfo) {
+    _isDirectoryColumnCellTemplate(container, cellInfo) {
         this._getItemThumbnailContainer(cellInfo.data).appendTo(container);
     }
 
-    _createNameColumnCell(container, cellInfo) {
+    _nameColumnCellTemplate(container, cellInfo) {
         const $button = $('<div>');
 
         const $name = $('<span>')

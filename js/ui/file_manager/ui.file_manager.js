@@ -405,7 +405,7 @@ class FileManager extends Widget {
 
             itemView: {
                 details: {
-                    columns: [ 'thumbnails', 'name', 'dateModified', 'size' ]
+                    columns: [ 'isDirectory', 'name', 'dateModified', 'size', 'isParentFolder' ]
                 },
                 /**
                 * @name dxFileManagerOptions.itemView.mode

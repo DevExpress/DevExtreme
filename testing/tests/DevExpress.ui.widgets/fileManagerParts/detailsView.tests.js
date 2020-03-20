@@ -550,4 +550,20 @@ QUnit.module('Details View', moduleConfig, () => {
         assert.strictEqual(spy.args[1][0].component, fileManager, 'component is correct');
         assert.strictEqual($(spy.args[1][0].element).get(0), this.$element.get(0), 'element is correct');
     });
+
+    test('Default columns rearrangement and modification', function(assert) {
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            itemView: {
+                details: {
+                    columns: [ 'size', 'dateModified', 'name' ]
+                }
+            }
+        });
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(0).text(), 'File Size', 'first column is File Size');
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(1).text(), 'Date Modified', 'second column is Date Modified');
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(2).text(), 'Name', 'third column is Name');
+    });
 });
