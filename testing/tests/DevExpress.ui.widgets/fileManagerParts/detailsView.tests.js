@@ -562,7 +562,7 @@ QUnit.module('Details View', moduleConfig, () => {
                 details: {
                     columns: [ 'size', 'dateModified', 'name',
                         {
-                            dataField: 'isDirectory',
+                            dataField: 'thumbnail',
                             caption: customCaption,
                             cssClass: customCssClass
                         }
@@ -576,7 +576,7 @@ QUnit.module('Details View', moduleConfig, () => {
         assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(1).text(), 'Date Modified', 'second column is Date Modified');
         assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(2).text(), 'Name', 'third column is Name');
 
-        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(3).text(), customCaption, 'fourth column is isDirectory with custom capture');
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(3).text(), customCaption, 'fourth column is thumbnais with custom capture');
         assert.ok(this.wrapper.getColumnHeaderInDetailsView(3).hasClass(customCssClass), 'fourth column has custom css class');
         assert.ok(this.wrapper.getColumnHeaderInDetailsView(3).hasClass(defaultCssClass), 'fourth column also has default css class');
 

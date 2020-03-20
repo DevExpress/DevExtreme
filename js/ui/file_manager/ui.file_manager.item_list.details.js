@@ -16,11 +16,12 @@ const FILE_MANAGER_DETAILS_ITEM_NAME_WRAPPER_CLASS = 'dx-filemanager-details-ite
 const FILE_MANAGER_DETAILS_ITEM_IS_DIRECTORY_CLASS = 'dx-filemanager-details-item-is-directory';
 const FILE_MANAGER_PARENT_DIRECTORY_ITEM = 'dx-filemanager-parent-directory-item';
 const DATA_GRID_DATA_ROW_CLASS = 'dx-data-row';
-const PREDEFINED_COLUMN_NAMES = [ 'name', 'isDirectory', 'size', 'thumbnail', 'dateModified', 'isParentFolder' ];
+const PREDEFINED_COLUMN_NAMES = [ 'name', 'size', 'thumbnail', 'dateModified', 'isParentFolder' ];
 
 const DEFAULT_COLUMN_CONFIGS = {
-    isDirectory: {
+    thumbnail: {
         caption: '',
+        calculateSortValue: 'isDirectory',
         width: 36,
         alignment: 'center',
         cssClass: FILE_MANAGER_DETAILS_ITEM_IS_DIRECTORY_CLASS
@@ -125,6 +126,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _configureColumn(columnOptions) {
+        const dataItemSuffix = PREDEFINED_COLUMN_NAMES.indexOf(columnOptions.dataField) < 0 ? 'dataItem.' : '';
         const result = {};
         let resultCssClass = '';
 
@@ -134,8 +136,11 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             if(columnOptions.cssClass) {
                 resultCssClass += ` ${columnOptions.cssClass}`;
             }
-            if(columnOptions.dataField === 'isDirectory' || columnOptions.dataField === 'name') {
+            if(columnOptions.dataField === 'thumbnail' || columnOptions.dataField === 'name') {
                 defaultConfig.cellTemplate = this[`_${columnOptions.dataField}ColumnCellTemplate`].bind(this);
+            }
+            if(columnOptions.dataField === 'thumbnail') {
+                defaultConfig.calculateSortValue = 'fileItem.' + dataItemSuffix + defaultConfig.calculateSortValue;
             }
             if(columnOptions.dataField === 'size') {
                 defaultConfig.calculateCellValue = this._calculateSizeColumnCellValue.bind(this);
@@ -145,7 +150,6 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
         extend(true, result, columnOptions);
 
-        const dataItemSuffix = PREDEFINED_COLUMN_NAMES.indexOf(result.dataField) < 0 ? 'dataItem.' : '';
         result.dataField = 'fileItem.' + dataItemSuffix + result.dataField;
         result.cssClass = resultCssClass;
         return result;
@@ -293,7 +297,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
     }
 
-    _isDirectoryColumnCellTemplate(container, cellInfo) {
+    _thumbnailColumnCellTemplate(container, cellInfo) {
         this._getItemThumbnailContainer(cellInfo.data).appendTo(container);
     }
 
