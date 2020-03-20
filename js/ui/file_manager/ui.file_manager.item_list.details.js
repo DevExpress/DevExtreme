@@ -1,5 +1,6 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
+import { extendAttributes } from './ui.file_manager.common';
 import { isString, isFunction } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 
@@ -148,7 +149,18 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             extend(true, result, defaultConfig);
         }
 
-        extend(true, result, columnOptions);
+        extendAttributes(result, columnOptions, [
+            'alignment',
+            'calculateSortValue',
+            'caption',
+            'cellTemplate',
+            'dataField',
+            'hidingPriority',
+            'sortIndex',
+            'sortOrder',
+            'visible',
+            'width'
+        ]);
 
         result.dataField = 'fileItem.' + dataItemSuffix + result.dataField;
         result.cssClass = resultCssClass;
