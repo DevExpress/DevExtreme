@@ -14,16 +14,10 @@ module.exports = {
     collectCoverageFrom: ['./js/renovation/**/*.p.js'],
     coverageDirectory: './testing/jest/code_coverage',
     coverageThreshold: {
-        './js/renovation/**/button.p.js': {
+        './js/renovation/**/*.p.js': {
             functions: 100,
             statements: 100,
             lines: 100,
-            branches: 100
-        },
-        './js/renovation/**/*.p.js': {
-            functions: 80,
-            statements: 80,
-            lines: 80,
             branches: 100
         }
     },

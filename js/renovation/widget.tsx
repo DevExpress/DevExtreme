@@ -127,8 +127,7 @@ export class WidgetInput {
 
 // tslint:disable-next-line: max-classes-per-file
 @Component({
-    components: [],
-    name: 'Widget',
+    defaultOptionRules: null,
     view: viewFunction,
 })
 
