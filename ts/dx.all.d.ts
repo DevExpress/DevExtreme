@@ -3612,7 +3612,7 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.fileSystemProvider */
         fileSystemProvider?: any;
         /** @name dxFileManager.Options.itemView */
-        itemView?: { mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
+        itemView?: { details?: { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
         /** @name dxFileManager.Options.onContextMenuItemClick */
         onContextMenuItemClick?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: DevExpress.events.event }) => any);
         /** @name dxFileManager.Options.onCurrentDirectoryChanged */
@@ -3658,6 +3658,25 @@ declare module DevExpress.ui {
         name?: 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | string;
         /** @name dxFileManagerContextMenuItem.visible */
         visible?: boolean;
+    }
+    /** @name dxFileManagerDetailsColumn */
+    export interface dxFileManagerDetailsColumn {
+        /** @name dxFileManagerDetailsColumn.alignment */
+        alignment?: 'center' | 'left' | 'right' | undefined;
+        /** @name dxFileManagerDetailsColumn.caption */
+        caption?: string;
+        /** @name dxFileManagerDetailsColumn.dataField */
+        dataField?: string;
+        /** @name dxFileManagerDetailsColumn.hidingPriority */
+        hidingPriority?: number;
+        /** @name dxFileManagerDetailsColumn.sortIndex */
+        sortIndex?: number;
+        /** @name dxFileManagerDetailsColumn.sortOrder */
+        sortOrder?: 'asc' | 'desc' | undefined;
+        /** @name dxFileManagerDetailsColumn.visible */
+        visible?: boolean;
+        /** @name dxFileManagerDetailsColumn.width */
+        width?: number | string;
     }
     /** @name dxFileManagerToolbar */
     export interface dxFileManagerToolbar {

@@ -91,7 +91,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemView?: { mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
+    itemView?: {details?: { columns?: Array<dxFileManagerDetailsColumn | string>}, mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
     /**
      * @docid dxFileManagerOptions.onContextMenuItemClick
      * @extends Action
@@ -310,6 +310,75 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
      * @public
      */
     visible?: boolean;
+}
+
+export interface dxFileManagerDetailsColumn {
+    /**
+     * @docid dxFileManagerDetailsColumn.alignment
+     * @type Enums.HorizontalAlignment
+     * @default undefined
+     * @acceptValues undefined
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    alignment?: 'center' | 'left' | 'right' | undefined;
+    /**
+     * @docid dxFileManagerDetailsColumn.caption
+     * @type string
+     * @default undefined
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    caption?: string;
+    /**
+     * @docid dxFileManagerDetailsColumn.dataField
+     * @type string
+     * @default undefined
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    dataField?: string;
+    /**
+     * @docid dxFileManagerDetailsColumn.hidingPriority
+     * @type number
+     * @default undefined
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    hidingPriority?: number;
+    /**
+     * @docid dxFileManagerDetailsColumn.sortIndex
+     * @type number
+     * @default undefined
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    sortIndex?: number;
+    /**
+     * @docid dxFileManagerDetailsColumn.sortOrder
+     * @type Enums.SortOrder
+     * @default undefined
+     * @acceptValues undefined
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    sortOrder?: 'asc' | 'desc' | undefined;
+    /**
+     * @docid dxFileManagerDetailsColumn.visible
+     * @type boolean
+     * @default true
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    visible?: boolean;
+    /**
+     * @docid dxFileManagerDetailsColumn.width
+     * @type number|string
+     * @default undefined
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    width?: number | string;
 }
 
 declare global {

@@ -1,4 +1,5 @@
 import { when, Deferred } from '../../core/utils/deferred';
+import { extend } from '../../core/utils/extend';
 import { noop } from '../../core/utils/common';
 import typeUtils from '../../core/utils/type';
 
@@ -42,5 +43,14 @@ const getDisplayFileSize = function(byteSize) {
     return `${displaySize} ${sizesTitles[index]}`;
 };
 
+const extendAttributes = function(targetObject, sourceObject, objectKeysArray) {
+    objectKeysArray.forEach(objectKey => {
+        extend(true, targetObject, sourceObject[objectKey]
+            ? { [objectKey]: sourceObject[objectKey] }
+            : {});
+    });
+};
+
 module.exports = whenSome;
 module.exports.getDisplayFileSize = getDisplayFileSize;
+module.exports.extendAttributes = extendAttributes;

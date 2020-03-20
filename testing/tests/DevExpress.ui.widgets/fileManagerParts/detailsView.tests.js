@@ -550,4 +550,82 @@ QUnit.module('Details View', moduleConfig, () => {
         assert.strictEqual(spy.args[1][0].component, fileManager, 'component is correct');
         assert.strictEqual($(spy.args[1][0].element).get(0), this.$element.get(0), 'element is correct');
     });
+
+    test('Default columns rearrangement and modification', function(assert) {
+        const fileManager = this.wrapper.getInstance();
+        const defaultCssClass = 'dx-filemanager-details-item-is-directory';
+        const customCaption = 'This is directory';
+        const customCssClass = 'some-test-css-class';
+        const nameCellIndex = isDesktopDevice() ? 4 : 3;
+        fileManager.option({
+            itemView: {
+                details: {
+                    columns: [ 'size', 'dateModified', 'name',
+                        {
+                            dataField: 'thumbnail',
+                            caption: customCaption,
+                            cssClass: customCssClass
+                        }
+                    ]
+                }
+            }
+        });
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(0).text(), 'File Size', 'first column is File Size');
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(1).text(), 'Date Modified', 'second column is Date Modified');
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(2).text(), 'Name', 'third column is Name');
+
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(3).text(), customCaption, 'fourth column is thumbnais with custom capture');
+        assert.ok(this.wrapper.getColumnHeaderInDetailsView(3).hasClass(customCssClass), 'fourth column has custom css class');
+        assert.ok(this.wrapper.getColumnHeaderInDetailsView(3).hasClass(defaultCssClass), 'fourth column also has default css class');
+
+        assert.strictEqual(this.wrapper.getDetailsCellValue(1, nameCellIndex), 'Folder 1', 'folder has correct name in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(2, nameCellIndex), '1.txt', 'file 1 has correct name in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(3, nameCellIndex), '2.txt', 'file 2 has correct name in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(4, nameCellIndex), '3.txt', 'file 3 has correct name in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(5, nameCellIndex), '4.txt', 'file 4 has correct name in correct column');
+    });
+
+    test('Cusom columns rearrangement and modification', function(assert) {
+        const fileManager = this.wrapper.getInstance();
+        const ownerCellIndex = isDesktopDevice() ? 2 : 1;
+        const indexCellIndex = isDesktopDevice() ? 3 : 2;
+        let fileProvider = fileManager.option('fileSystemProvider');
+        let index = 0;
+        fileProvider = fileProvider.map(info => info.index = index++);
+        fileManager.option({
+            fileProvider,
+            itemView: {
+                details: {
+                    columns: [
+                        {
+                            dataField: 'owner',
+                            caption: 'Info owner'
+                        },
+                        {
+                            dataField: 'index',
+                            caption: 'Info index'
+                        }
+                    ]
+                }
+            }
+        });
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(0).text(), 'Info owner', 'first column has correct custom capture');
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(1).text(), 'Info index', 'second column has correct custom capture');
+
+        assert.strictEqual(this.wrapper.getDetailsCellValue(1, ownerCellIndex), '\u00A0', 'folder has correct owner in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(2, ownerCellIndex), 'Admin', 'file 1 has correct owner in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(3, ownerCellIndex), 'Admin', 'file 2 has correct owner in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(4, ownerCellIndex), 'Guest', 'file 3 has correct owner in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(5, ownerCellIndex), 'Max', 'file 4 has correct owner in correct column');
+
+        assert.strictEqual(this.wrapper.getDetailsCellValue(1, indexCellIndex), '0', 'folder has correct index in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(2, indexCellIndex), '1', 'file 1 has correct index in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(3, indexCellIndex), '2', 'file 2 has correct index in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(4, indexCellIndex), '3', 'file 3 has correct index in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(5, indexCellIndex), '4', 'file 4 has correct index in correct column');
+    });
 });
