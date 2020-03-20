@@ -8,9 +8,11 @@ import { animation } from 'ui/drawer/ui.drawer.rendering.strategy';
 import Overlay from 'ui/overlay';
 import Button from 'ui/button';
 import domUtils from 'core/utils/dom';
+import eventsEngine from 'events/core/events_engine';
+import Drawer from 'ui/drawer';
 
 import 'common.css!';
-import 'ui/drawer';
+
 
 const DRAWER_PANEL_CONTENT_CLASS = 'dx-drawer-panel-content';
 const DRAWER_VIEW_CONTENT_CLASS = 'dx-drawer-content';
@@ -122,8 +124,75 @@ QUnit.module('Drawer behavior', () => {
         $button = $element.find('.dx-button');
 
         const buttonInstance = $button.dxButton('instance');
-
         assert.ok(buttonInstance instanceof Button, 'button into drawer content wasn\'t clean after repaint');
+    });
+
+    QUnit.test('Drawer + template in markup with button -> repaint() method does not duplicate the content(T864419)', function(assert) {
+        const innerButtonClickHandler = sinon.stub();
+        const drawerElement = document.querySelector('#drawerWithContent');
+        const buttonElement = drawerElement.querySelector('#button');
+
+        new Button(buttonElement, {
+            text: 'innerButton',
+            onClick: innerButtonClickHandler
+        });
+
+        const drawer = new Drawer(drawerElement, {});
+
+        eventsEngine.trigger(buttonElement, 'dxclick');
+
+        assert.strictEqual(innerButtonClickHandler.callCount, 1, 'buttonClickHandler.callCount');
+        assert.strictEqual(buttonElement, drawerElement.querySelector('#button'), 'the same button element');
+        assert.strictEqual($(buttonElement).dxButton('instance') instanceof Button, true, 'button.instance');
+
+        drawer.repaint();
+        innerButtonClickHandler.reset();
+        eventsEngine.trigger(buttonElement, 'dxclick');
+
+        assert.strictEqual(innerButtonClickHandler.callCount, 1, 'buttonClickHandler.callCount');
+        assert.strictEqual(buttonElement, drawerElement.querySelector('#button'), 'the same button element');
+        assert.strictEqual($(buttonElement).dxButton('instance') instanceof Button, true, 'button.instance');
+    });
+
+    QUnit.test('Drawer + contentTemplate() with button - repaint() method does not duplicate the content(T864419)', function(assert) {
+        const innerButtonClickHandler = sinon.stub();
+        const drawerElement = document.querySelector('#drawerWithContent');
+
+        let buttonElement;
+        const drawer = new Drawer(drawerElement, {
+            contentTemplate: () => {
+                const viewContentElement = document.createElement('div');
+                buttonElement = document.createElement('div');
+
+                viewContentElement.classList.add('ng-scope');
+                buttonElement.id = 'button';
+
+                viewContentElement.append(buttonElement);
+
+                new Button(buttonElement, {
+                    text: 'innerButton',
+                    onClick: innerButtonClickHandler
+                });
+
+                return $(viewContentElement);
+            }
+        });
+
+        eventsEngine.trigger(buttonElement, 'dxclick');
+
+        assert.strictEqual(innerButtonClickHandler.callCount, 1, 'buttonClickHandler.callCount');
+        assert.strictEqual($(buttonElement).dxButton('instance') instanceof Button, true, 'button.instance');
+
+        drawer.repaint();
+        innerButtonClickHandler.reset();
+
+        buttonElement = drawerElement.querySelector('#button');
+
+        eventsEngine.trigger(buttonElement, 'dxclick');
+
+        assert.strictEqual(innerButtonClickHandler.callCount, 1, 'buttonClickHandler.callCount');
+        assert.strictEqual(buttonElement, drawerElement.querySelector('#button'), 'the same button element');
+        assert.strictEqual($(buttonElement).dxButton('instance') instanceof Button, true, 'button.instance');
     });
 
     QUnit.test('drawer tabIndex should be removed after _clean', function(assert) {

@@ -166,15 +166,20 @@ const Drawer = Widget.inherit({
         this._whenPanelContentRendered = new Deferred();
         this._strategy.renderPanelContent(this._whenPanelContentRendered);
 
+
         const contentTemplateOption = this.option('contentTemplate');
         const contentTemplate = this._getTemplate(contentTemplateOption);
 
         if(contentTemplate) {
-            contentTemplate.render({
+            const $viewTemplate = contentTemplate.render({
                 container: this.viewContent(),
                 noModel: true,
                 transclude: (this._templateManager.anonymousTemplateName === contentTemplateOption)
             });
+
+            if($viewTemplate.hasClass('ng-scope')) { // T864419
+                $(this.viewContent()).replaceWith($viewTemplate);
+            }
         }
 
         eventsEngine.off(this._$viewContentWrapper, CLICK_EVENT_NAME);

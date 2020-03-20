@@ -26,6 +26,7 @@ require('ui/slide_out_view');
 require('ui/tabs');
 require('ui/text_box');
 require('ui/toolbar');
+require('ui/drawer');
 
 require('../../helpers/ignoreAngularTimers.js');
 
@@ -1166,4 +1167,40 @@ QUnit.test('T228219 dxValidationSummary should be disposed properly', function(a
     $markup.remove();
 
     assert.ok(true, 'We should not fall on previous statement');
+});
+
+QUnit.module('Drawer', () => {
+    QUnit.test('Repaint() method does not duplicate the content(T864419)', function(assert) {
+        const $markup = $(
+            '<div dx-drawer="drawerOptions">\
+                <div data-options=\'dxTemplate: {name: "listTemplate"}\'\
+                    dx-list="{\
+                        dataSource: listItems\
+                    }">\
+                </div>\
+                <div class="content">\
+                        Content of Item_1... \
+                </div>\
+            </div>'
+        );
+
+        let drawerInstance;
+        const controller = function($scope) {
+            $scope.listItems = [ { text: 'Item_1' } ];
+
+            $scope.drawerOptions = {
+                opened: true,
+                template: 'listTemplate',
+                onInitialized: function(e) {
+                    drawerInstance = e.component;
+                }
+            };
+        };
+
+        initMarkup($markup, controller, this);
+
+        drawerInstance.repaint();
+
+        assert.strictEqual(drawerInstance.viewContent().find('.content').length, 1, 'content does not dublicate');
+    });
 });
