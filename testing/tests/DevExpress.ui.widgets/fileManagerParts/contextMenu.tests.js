@@ -377,7 +377,8 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         this.wrapper.getFolderNode(2).trigger('dxcontextmenu');
         this.clock.tick(800);
 
-        this.wrapper.getContextMenuItems().eq(0).trigger('mouseenter');
+        this.wrapper.getContextMenuItems().eq(0).trigger('dxclick');
+        spy.reset();
         this.clock.tick(800);
 
         const $subItems = this.wrapper.getContextMenuSubMenuItems();
