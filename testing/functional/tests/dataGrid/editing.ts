@@ -634,6 +634,8 @@ test("Async Validation(Batch) - Data is not saved when a cell with async setCell
         .pressKey('enter')
         .click(saveButton)
         .expect(cell0.isValidationPending).ok()
+        .expect(cell0.isValidationPending).notOk()
+        .expect(cell0.isInvalid).ok()
         .expect(cell0.isModified).ok()
         .expect(dataRow.isInserted).ok("row is in editing mode");
 
