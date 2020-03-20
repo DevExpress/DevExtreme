@@ -44,11 +44,16 @@ QUnit.module('scrollToItem', () => {
         ];
     }
 
+    function isScrollMustFail(config) {
+        const isFirstLevelNodeKey = config.key.indexOf(LEVEL_SEPARATOR) === -1;
+        return config.disabled && !config.expanded && !isFirstLevelNodeKey;
+    }
+
     const configs = [];
     ['vertical', 'horizontal', 'both'].forEach(scrollDirection => {
         [false, true].forEach(expanded => {
             [false, true].forEach(disabled => {
-                ['item1', 'item1_1_1', 'item1_1_1_1_1', 'item1_1_1_1_1_1', 'item9', 'item9_1_1_1_1', 'item10', 'item10_1_1_1_1', 'item10_1_1_1_1_1'].forEach(key => {
+                ['item1', 'item1_1_1', 'item1_1_1_1_1_1', 'item9', 'item9_1_1_1_1', 'item10', 'item10_1_1_1_1', 'item10_1_1_1_1_1'].forEach(key => {
                     configs.push({ expanded, scrollDirection, disabled, key });
                 });
             });
@@ -71,20 +76,14 @@ QUnit.module('scrollToItem', () => {
             const wrapper = createWrapper(options, createDataSource(config.expanded, config.disabled));
 
             const done = assert.async();
-            completionCallback.done((result) => {
-                wrapper.getElement().focusout();
-                wrapper.getElement().focusin();
-
-                const isFirstLevelNodeKey = config.key.indexOf(LEVEL_SEPARATOR) === -1;
-                if(config.disabled && !config.expanded && !isFirstLevelNodeKey) {
-                    assert.strictEqual(result, false, 'scroll must fail');
-                } else {
-                    assert.strictEqual(result, true, 'scroll must success');
+            if(isScrollMustFail(config)) {
+                completionCallback.fail(() => { assert.ok('scroll must fail'); done(); });
+            } else {
+                completionCallback.done(() => {
                     wrapper.checkNodeIsVisibleArea(config.key);
-                }
-                wrapper.instance.dispose();
-                done();
-            });
+                    done();
+                });
+            }
         });
 
         [{ top: 0, left: 0 }, { top: 1000, left: 0 }, { top: 0, left: 1000 }, { top: 1000, left: 1000 }].forEach(initialPosition => {
@@ -94,19 +93,14 @@ QUnit.module('scrollToItem', () => {
                 const completionCallback = wrapper.instance.scrollToItem(config.key);
 
                 const done = assert.async();
-                completionCallback.done((result) => {
-                    wrapper.getElement().focusout();
-                    wrapper.getElement().focusin();
-                    const isFirstLevelNodeKey = config.key.indexOf(LEVEL_SEPARATOR) === -1;
-                    if(config.disabled && !config.expanded && !isFirstLevelNodeKey) {
-                        assert.strictEqual(result, false, 'scroll must fail');
-                    } else {
-                        assert.strictEqual(result, true, 'scroll must success');
+                if(isScrollMustFail(config)) {
+                    completionCallback.fail(() => { assert.ok('scroll must fail'); done(); });
+                } else {
+                    completionCallback.done(() => {
                         wrapper.checkNodeIsVisibleArea(config.key);
-                    }
-                    wrapper.instance.dispose();
-                    done();
-                });
+                        done();
+                    });
+                }
             });
         });
     });
@@ -122,8 +116,7 @@ QUnit.module('scrollToItem', () => {
             const completionCallback = testCase.scrollFunc(wrapper.instance);
 
             const done = assert.async();
-            completionCallback.done((result) => {
-                assert.strictEqual(result, true, 'scroll must success');
+            completionCallback.done(() => {
                 wrapper.checkNodeIsVisibleArea(key);
                 done();
             });
@@ -134,12 +127,10 @@ QUnit.module('scrollToItem', () => {
     QUnit.test('scrollToItem(not exists key)', function(assert) {
         const config = { scrollDirection: 'both' };
         const wrapper = createWrapper(config, createDataSource(true, false));
-        const completionCallback = wrapper.instance.scrollToItem('12345');
 
-        const done = assert.async();
-        completionCallback.done((result) => {
-            assert.strictEqual(result, false, 'scroll must fail');
-            done();
-        });
+        const done = assert.async(3);
+        wrapper.instance.scrollToItem('12345').fail(() => { assert.ok('scroll must fail, node not found for this key'); done(); });
+        wrapper.instance.scrollToItem($('<div/>').get(0)).fail(() => { assert.ok('scroll must fail, node not found for this itemElement'); done(); });
+        wrapper.instance.scrollToItem({}).fail(() => { assert.ok('scroll must fail, node not found for this itemData'); done(); });
     });
 });
