@@ -417,6 +417,8 @@ class AppointmentModel {
         const combinedFilter = this._createCombinedFilter(filterOptions, timeZoneProcessor);
 
         if(this._filterMaker.isRegistered()) {
+            this._filterMaker.make('user', undefined);
+
             const trimmedDates = this._trimDates(filterOptions.min, filterOptions.max);
 
             this._filterMaker.make('date', [trimmedDates.min, trimmedDates.max, true]);
