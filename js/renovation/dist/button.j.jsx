@@ -5,8 +5,8 @@ import ValidationEngine from '../../ui/validation_engine';
 import Widget from '../preact-wrapper/component';
 import { extend } from '../../core/utils/extend';
 import ButtonView from '../button.p';
-import { wrapElement, getInnerActionName } from '../preact-wrapper/utils';
-import { useLayoutEffect, useState } from 'preact/hooks';
+import { wrapElement, getInnerActionName, removeDifferentElements } from '../preact-wrapper/utils';
+import { useLayoutEffect } from 'preact/hooks';
 import { getPublicElement } from '../../core/utils/dom';
 
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
@@ -28,13 +28,10 @@ class Button extends Widget {
             const template = this._getTemplate(props.template);
 
             props.render = ({ parentRef, ...restProps }) => {
-                // NOTE: Here we see on an old DOM tree, which was before template render
-                const [$parent] = useState($(parentRef.current));
-                $parent?.empty();
-
                 useLayoutEffect(() => {
-                    // NOTE: Here we see on an actual DOM tree
                     const $parent = $(parentRef.current);
+                    const $children = $parent.contents();
+
                     let $template = $(template.render({
                         container: getPublicElement($parent),
                         model: restProps,
@@ -43,9 +40,11 @@ class Button extends Widget {
                     if($template.hasClass(TEMPLATE_WRAPPER_CLASS)) {
                         $template = wrapElement($parent, $template);
                     }
+                    const $newChildren = $parent.contents();
 
                     return () => {
-                        $template.remove();
+                        // NOTE: order is important
+                        removeDifferentElements($children, $newChildren);
                     };
                 }, Object.keys(props).map(key => props[key]));
 
