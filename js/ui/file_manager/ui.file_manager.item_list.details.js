@@ -134,7 +134,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             if(columnOptions.cssClass) {
                 resultCssClass += ` ${columnOptions.cssClass}`;
             }
-            if(columnOptions.dataField === 'thumbnail' || columnOptions.dataField === 'name') {
+            if(columnOptions.dataField === 'thumbnail') {
                 defaultConfig.cellTemplate = this._createThumbnailColumnCell.bind(this);
                 defaultConfig.calculateSortValue = `fileItem.${defaultConfig.calculateSortValue}`;
             }
