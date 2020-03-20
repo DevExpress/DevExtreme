@@ -285,7 +285,7 @@ const Popup = Overlay.inherit({
         const toolbarTemplate = template instanceof EmptyTemplate;
 
         if(toolbarTemplate) {
-            const integrationOptions = extend({}, this.option('integrationOptions'), { skipTemplates: ['content'] });
+            const integrationOptions = extend({}, this.option('integrationOptions'), { skipTemplates: ['content', 'title'] });
             const toolbarOptions = extend(additionalToolbarOptions, {
                 items: data,
                 rtlEnabled: this.option('rtlEnabled'),
