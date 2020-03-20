@@ -1594,7 +1594,7 @@ QUnit.module('templates', () => {
         assert.strictEqual(toolbarItemText, text, 'Custom template rendered');
     });
 
-    QUnit.test('Popup should not pass the "content" template via integrationOptions', function(assert) {
+    QUnit.test('Popup should not pass the "content" and "title" templates via integrationOptions (T872394)', function(assert) {
         const buttonText = 'ToolbarButton';
         const titleText = 'TabTitle';
         const popup = $('#popup').dxPopup({
