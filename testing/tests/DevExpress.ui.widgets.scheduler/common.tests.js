@@ -2859,6 +2859,7 @@ QUnit.testStart(function() {
             }),
             views: ['month'],
             currentView: 'month',
+            height: 600,
             onAppointmentRendered: function(args) {
                 assert.ok(true, 'Appointment was rendered');
             },
@@ -3044,6 +3045,7 @@ QUnit.testStart(function() {
             views: ['month'],
             currentView: 'month',
             currentDate: new Date(2015, 2, 9),
+            height: 600,
             onAppointmentClick: function(e) {
                 assert.deepEqual(isRenderer(e.appointmentElement), !!config().useJQuery, 'appointmentElement is correct');
                 assert.deepEqual($(e.appointmentElement)[0], $item[0], 'appointmentElement is correct');
@@ -3219,6 +3221,7 @@ QUnit.testStart(function() {
             }),
             views: ['month'],
             currentView: 'month',
+            height: 600,
             currentDate: new Date(2015, 2, 9),
             onAppointmentContextMenu: function(e) {
                 assert.deepEqual(isRenderer(e.appointmentElement), !!config().useJQuery, 'appointmentElement is correct');
