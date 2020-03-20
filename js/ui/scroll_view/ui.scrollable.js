@@ -384,23 +384,14 @@ const Scrollable = DOMComponent.inherit({
     },
 
     _isDirection: function(direction) {
+        const current = this.option('direction');
         if(direction === VERTICAL) {
-            return this._isDirectionVerticalOrBoth();
+            return current !== HORIZONTAL;
         }
         if(direction === HORIZONTAL) {
-            return this._isDirectionHorizontalOrBoth();
+            return current !== VERTICAL;
         }
-        return this.option('direction') === direction;
-    },
-
-    _isDirectionVerticalOrBoth() {
-        const direction = this.option('direction');
-        return direction === VERTICAL || direction === BOTH;
-    },
-
-    _isDirectionHorizontalOrBoth() {
-        const direction = this.option('direction');
-        return direction === HORIZONTAL || direction === BOTH;
+        return current === direction;
     },
 
     _updateAllowedDirection: function() {
@@ -511,43 +502,23 @@ const Scrollable = DOMComponent.inherit({
 
     scrollToElement: function(element, offset) {
         const $element = $(element);
-        if(!this._checkElementIsInsideContent($element)) {
+        const elementInsideContent = this.$content().find(element).length;
+        const elementIsInsideContent = ($element.parents('.' + SCROLLABLE_CLASS).length - $element.parents('.' + SCROLLABLE_CONTENT_CLASS).length) === 0;
+        if(!elementInsideContent || !elementIsInsideContent) {
             return;
         }
 
         const scrollPosition = { top: 0, left: 0 };
-        if(this._isDirectionHorizontalOrBoth()) {
+        const direction = this.option('direction');
+
+        if(direction !== VERTICAL) {
             scrollPosition.left = this.getScrollElementPosition($element, HORIZONTAL, offset);
         }
-        if(this._isDirectionVerticalOrBoth()) {
+        if(direction !== HORIZONTAL) {
             scrollPosition.top = this.getScrollElementPosition($element, VERTICAL, offset);
         }
 
         this.scrollTo(scrollPosition);
-    },
-
-    scrollToElementBeginPosition(element) {
-        const $element = $(element);
-        if(!this._checkElementIsInsideContent($element)) {
-            return;
-        }
-
-        const scrollPosition = { top: 0, left: 0 };
-        if(this._isDirectionHorizontalOrBoth()) {
-            scrollPosition.left = this._elementPositionRelativeToContent($element, 'left');
-        }
-        if(this._isDirectionVerticalOrBoth()) {
-            scrollPosition.top = this._elementPositionRelativeToContent($element, 'top');
-        }
-
-        this.scrollTo(scrollPosition);
-    },
-
-    _checkElementIsInsideContent($element) {
-        const elementInsideContent = this.$content().find($element).length;
-        const elementIsInsideContent = ($element.parents('.' + SCROLLABLE_CLASS).length - $element.parents('.' + SCROLLABLE_CONTENT_CLASS).length) === 0;
-
-        return elementInsideContent && elementIsInsideContent;
     },
 
     getScrollElementPosition: function($element, direction, offset) {
