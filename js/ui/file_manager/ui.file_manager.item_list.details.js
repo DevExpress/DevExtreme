@@ -110,6 +110,9 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             columns = customizeDetailColumns(columns);
         }
 
+        columns = columns.filter(item => item.dataField !== 'isParentFolder');
+        columns.push({ dataField: 'isParentFolder' });
+
         for(let i = 0; i < columns.length; i++) {
             let extendedItem = columns[i];
             if(isString(columns[i])) {
