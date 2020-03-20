@@ -156,6 +156,11 @@ export class FileManagerWrapper {
         return _$generalToolbar.find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
     }
 
+    getFileSelectionToolbarElements() {
+        const _$fileSelectionToolbar = this.getToolbar().children().first().next();
+        return _$fileSelectionToolbar.find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
+    }
+
     getToolbarButton(text) {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}:contains('${text}')`);
     }
