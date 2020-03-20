@@ -343,6 +343,10 @@ QUnit.module('Raise context menu', moduleConfig, () => {
     });
 
     test('Raise the ContextMenuItemClick event on subitems', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
         const spy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({

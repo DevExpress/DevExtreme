@@ -430,6 +430,10 @@ QUnit.module('Details View', moduleConfig, () => {
     });
 
     test('Raise the ContextMenuItemClick event', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
         const spy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({

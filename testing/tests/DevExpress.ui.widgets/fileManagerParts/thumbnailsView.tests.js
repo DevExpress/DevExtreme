@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import 'ui/file_manager';
 import fx from 'animation/fx';
-import { FileManagerWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
+import { FileManagerWrapper, createTestFileSystem, isDesktopDevice } from '../../../helpers/fileManagerHelpers.js';
 
 const { test } = QUnit;
 
@@ -213,6 +213,10 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
     });
 
     test('Raise the ContextMenuItemClick event', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
         const spy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
