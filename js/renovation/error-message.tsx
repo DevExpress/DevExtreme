@@ -14,7 +14,7 @@ export class ErrorMessageInput {
 
 // tslint:disable-next-line: max-classes-per-file
 @Component({
-    components: [],
+    defaultOptionRules: null,
     view: viewFunction,
 })
 export default class ErrorMessage extends JSXComponent<ErrorMessageInput> {}
