@@ -81,6 +81,71 @@
                     padding: 0 2px;
                 }
             }
+
+            &.dx-gantt-parent {
+                height: @GANTT_TASK_HEIGHT - 2px;
+                background-color: @gantt_parent_task_background_color;
+                border-bottom-right-radius: 0;
+                border-bottom-left-radius: 0;
+
+                &:not(.dx-gantt-noPrg) .dx-gantt-tPrg {
+                    background-color: rgba(255, 255, 255, 0.2);
+                }
+
+                &:not(.dx-gantt-smallTask)::before,
+                &:not(.dx-gantt-smallTask)::after,
+                &:not(.dx-gantt-smallTask):not(.dx-gantt-noPrg) .dx-gantt-tPrg::before,
+                &:not(.dx-gantt-smallTask).dx-gantt-cmpl .dx-gantt-tPrg::after {
+                    content: '';
+                    position: absolute;
+                    bottom: -8px;
+                    border-width: 4px;
+                    border-style: solid;
+                }
+
+                &::before,
+                &:not(.dx-gantt-noPrg) .dx-gantt-tPrg::before {
+                    left: 0;
+                    border-right-color: transparent;
+                    border-bottom-color: transparent;
+                }
+
+                &::before {
+                    border-left-color: @gantt_parent_task_background_color;
+                    border-top-color: @gantt_parent_task_background_color;
+                }
+
+                &:not(.dx-gantt-noPrg) .dx-gantt-tPrg::before {
+                    border-left-color: rgba(255, 255, 255, 0.2);
+                    border-top-color: rgba(255, 255, 255, 0.2);
+                }
+
+                &::after,
+                &.dx-gantt-cmpl .dx-gantt-tPrg::after {
+                    right: 0;
+                    border-left-color: transparent;
+                    border-bottom-color: transparent;
+                }
+
+                &::after {
+                    border-right-color: @gantt_parent_task_background_color;
+                    border-top-color: @gantt_parent_task_background_color;
+                }
+
+                &.dx-gantt-cmpl::after {
+                    border-right-color: rgba(255, 255, 255, 0.2);
+                    border-top-color: rgba(255, 255, 255, 0.2);
+                }
+
+                &.dx-gantt-cmpl .dx-gantt-tPrg::after {
+                    border-right-color: @gantt_parent_task_background_color;
+                    border-top-color: @gantt_parent_task_background_color;
+                }
+
+                .dx-gantt-task-edit-frame {
+                    height: @GANTT_TASK_HEIGHT - 2px;
+                }
+            }
         }
 
         .dx-gantt-taskRes {
@@ -94,7 +159,7 @@
 
         .dx-gantt-titleIn {
             color: #fff;
-            padding: 0 @GANTT_TASK_WRAPPER_PADDING_TOP;
+            padding: 0 @GANTT_TASK_TITLE_PADDING_LEFT;
         }
 
         .dx-gantt-titleOut {
