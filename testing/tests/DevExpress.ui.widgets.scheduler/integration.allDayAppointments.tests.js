@@ -1226,43 +1226,43 @@ QUnit.test('AllDay appointment has right startDate and endDate', function(assert
 });
 
 QUnit.test('All-day & common appointments should have a right sorting', function(assert) {
-    this.createInstance({
+    const scheduler = createInstance({
         currentDate: new Date(2016, 1, 10),
         currentView: 'day',
         width: 800,
-        maxAppointmentsPerCell: 'unlimited',
+        maxAppointmentsPerCell: '3',
         dataSource: [
             {
-                text: 'Full 1',
+                text: 'A',
                 startDate: new Date(2016, 1, 10, 9, 0),
                 endDate: new Date(2016, 1, 10, 11, 30),
                 allDay: true
             }, {
-                text: 'Full 2',
+                text: 'B',
                 startDate: new Date(2016, 1, 10, 12, 0),
                 endDate: new Date(2016, 1, 10, 13, 0),
                 allDay: true
             },
             {
-                text: 'Short 1',
+                text: 'C',
                 startDate: new Date(2016, 1, 10, 12, 0),
                 endDate: new Date(2016, 1, 10, 13, 0),
                 allDay: true
             },
 
             {
-                text: 'Short 2',
+                text: 'D',
                 startDate: new Date(2016, 1, 10, 12, 0),
                 endDate: new Date(2016, 1, 10, 13, 0),
                 allDay: true
             }, {
-                text: 'Short 3',
+                text: 'E',
                 startDate: new Date(2016, 1, 10, 12, 0),
                 endDate: new Date(2016, 1, 10, 13, 0),
                 allDay: true
             },
             {
-                text: 'Short 4',
+                text: 'F',
                 startDate: new Date(2016, 1, 10, 12, 0),
                 endDate: new Date(2016, 1, 10, 13, 0),
                 allDay: true
@@ -1275,72 +1275,17 @@ QUnit.test('All-day & common appointments should have a right sorting', function
         ]
     });
 
-    const $element = $(this.instance.$element());
-    const $appointments = $element.find('.dx-scheduler-appointment-compact');
-    const $simpleAppointment = $element.find('.dx-scheduler-appointment').last();
-    const cellWidth = $element.find('.dx-scheduler-date-table-cell').outerWidth();
+    const cellWidth = scheduler.workSpace.getCellWidth();
     const offset = getOffset();
 
-    assert.equal(dataUtils.data($appointments.get(0), 'dxItemData').text, 'Short 1', 'Data is right');
-    assert.equal(dataUtils.data($appointments.get(1), 'dxItemData').text, 'Short 2', 'Data is right');
-    assert.equal(dataUtils.data($appointments.get(2), 'dxItemData').text, 'Short 3', 'Data is right');
-    assert.equal(dataUtils.data($appointments.get(3), 'dxItemData').text, 'Short 4', 'Data is right');
+    assert.equal(scheduler.appointments.getTitleText(0), 'A', 'Text is right');
+    assert.equal(scheduler.appointments.getTitleText(1), 'B', 'Text is right');
+    assert.equal(scheduler.appointments.getTitleText(2), 'C', 'Text is right');
+    assert.equal(scheduler.appointments.getTitleText(3), 'Simple appointment', 'Text is right');
 
-    assert.roughEqual(translator.locate($simpleAppointment).left, 100, 1.001, 'Appointment position is OK');
-    assert.roughEqual($simpleAppointment.outerWidth(), cellWidth - offset, 1.001, 'Appointment size is OK');
-});
-
-QUnit.test('All-day appointments should have a right sorting', function(assert) {
-    this.createInstance({
-        currentDate: new Date(2016, 1, 10),
-        currentView: 'day',
-        width: 800,
-        dataSource: [
-            {
-                text: 'Full 1',
-                startDate: new Date(2016, 1, 10, 9, 0),
-                endDate: new Date(2016, 1, 10, 11, 30),
-                allDay: true
-            }, {
-                text: 'Full 2',
-                startDate: new Date(2016, 1, 10, 12, 0),
-                endDate: new Date(2016, 1, 10, 13, 0),
-                allDay: true
-            },
-            {
-                text: 'Short 1',
-                startDate: new Date(2016, 1, 10, 12, 0),
-                endDate: new Date(2016, 1, 10, 13, 0),
-                allDay: true
-            },
-
-            {
-                text: 'Short 2',
-                startDate: new Date(2016, 1, 10, 12, 0),
-                endDate: new Date(2016, 1, 10, 13, 0),
-                allDay: true
-            }, {
-                text: 'Short 3',
-                startDate: new Date(2016, 1, 10, 12, 0),
-                endDate: new Date(2016, 1, 10, 13, 0),
-                allDay: true
-            },
-            {
-                text: 'Short 4',
-                startDate: new Date(2016, 1, 10, 12, 0),
-                endDate: new Date(2016, 1, 10, 13, 0),
-                allDay: true
-            }
-        ]
-    });
-
-    const $element = $(this.instance.$element());
-    const $appointments = $element.find('.dx-scheduler-appointment-compact');
-
-    assert.equal(dataUtils.data($appointments.get(0), 'dxItemData').text, 'Short 1', 'Data is right');
-    assert.equal(dataUtils.data($appointments.get(1), 'dxItemData').text, 'Short 2', 'Data is right');
-    assert.equal(dataUtils.data($appointments.get(2), 'dxItemData').text, 'Short 3', 'Data is right');
-    assert.equal(dataUtils.data($appointments.get(3), 'dxItemData').text, 'Short 4', 'Data is right');
+    assert.roughEqual(scheduler.appointments.getAppointmentPosition(3).left, 100, 1.001, 'Appointment position is OK');
+    assert.roughEqual(scheduler.appointments.getAppointmentPosition(3).top, 100, 1.001, 'Appointment position is OK');
+    assert.roughEqual(scheduler.appointments.getAppointmentWidth(3), cellWidth - offset, 1.001, 'Appointment size is OK');
 });
 
 QUnit.test('dropDown appointment should have correct container & position', function(assert) {
