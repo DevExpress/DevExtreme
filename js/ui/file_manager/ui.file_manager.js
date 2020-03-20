@@ -544,8 +544,6 @@ class FileManager extends Widget {
             case 'itemView':
                 if(args.fullName === 'itemView.mode') {
                     this._switchView(args.value);
-                } else if(args.fullName === 'itemView.details.columns') {
-                    // console.log('it works');
                 } else {
                     this.repaint();
                 }
