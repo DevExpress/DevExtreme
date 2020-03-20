@@ -400,6 +400,17 @@ const Sortable = Draggable.inherit({
 
     _makeWidthCorrection: function($item, width) {
         const that = this;
+        that._$scrollable = null;
+
+        $item.parents().toArray().some(function(element) {
+            const $element = $(element);
+
+            if(that._horizontalScrollHelper.isScrollable($element)) {
+                that._$scrollable = $element;
+
+                return true;
+            }
+        });
 
         if(that._$scrollable && that._$scrollable.width() < width) {
             const scrollableWidth = that._$scrollable.width();

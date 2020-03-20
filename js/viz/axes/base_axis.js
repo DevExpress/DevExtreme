@@ -343,6 +343,8 @@ Axis.prototype = {
         return false;
     },
 
+    getCustomPositionAxis: _noop,
+
     getCustomPosition: _noop,
 
     getCustomBoundaryPosition: _noop,

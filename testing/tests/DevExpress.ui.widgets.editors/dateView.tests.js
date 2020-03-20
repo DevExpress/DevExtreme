@@ -7,8 +7,6 @@ import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import fx from 'animation/fx';
 import translator from 'animation/translator';
 import dateLocalization from 'localization/date';
-import '../../helpers/l10n/cldrNumberDataRu.js';
-import '../../helpers/l10n/cldrCalendarDataRu.js';
 
 import 'common.css!';
 import 'generic_light.css!';

@@ -4,6 +4,10 @@ import {
     dxElement
 } from '../core/element';
 
+import {
+    event
+} from '../events/index';
+
 import FileSystemItem from '../file_management/file_system_item';
 
 import {
@@ -89,6 +93,20 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      */
     itemView?: { mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
     /**
+     * @docid dxFileManagerOptions.onContextMenuItemClick
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 itemData:object
+     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field6 itemIndex:number
+     * @type_function_param1_field7 event:event
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onContextMenuItemClick?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event }) => any);
+    /**
      * @docid dxFileManagerOptions.onCurrentDirectoryChanged
      * @extends Action
      * @type function(e)
@@ -127,6 +145,20 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @public
      */
     onSelectionChanged?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, currentSelectedItemKeys?: Array<string>, currentDeselectedItemKeys?: Array<string>, selectedItems?: Array<FileSystemItem>, selectedItemKeys?: Array<string>}) => any);
+    /**
+     * @docid dxFileManagerOptions.onToolbarItemClick
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 itemData:object
+     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field6 itemIndex:number
+     * @type_function_param1_field7 event:event
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onToolbarItemClick?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event }) => any);
     /**
      * @docid dxFileManagerOptions.permissions
      * @type object

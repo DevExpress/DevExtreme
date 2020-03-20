@@ -558,6 +558,33 @@ QUnit.test('Placeholder should not be wider than grid if horizontal scroll exist
     assert.ok($('.dx-sortable-placeholder').width() < 501, 'placeholder width');
 });
 
+// T868007
+QUnit.test('Placeholder should not be wider than grid if horizontal scroll exists (with fixed column)', function(assert) {
+    // arrange
+    const $testElement = $('#container');
+
+    $testElement.css('width', '500px');
+    this.options.columnWidth = 300;
+    this.options.rowDragging = {
+        group: 'myGroup'
+    };
+    this.options.columns = ['field1', 'field2', 'field3', {
+        fixed: true, dataField: 'fixed'
+    }];
+
+    const rowsView = this.createRowsView();
+    rowsView.render($testElement);
+
+    // act
+    pointerMock(rowsView.getCellElement(0, 0)).start().down().move(0, 10).move(0, 5);
+
+    // assert
+    const $placeholder = $('.dx-sortable-placeholder');
+
+    assert.ok($placeholder.length, 'placeholder exists');
+    assert.ok($placeholder.width() < 501, 'placeholder width');
+});
+
 // T830034
 QUnit.test('Placeholder should be placed correctly if scrollLeft > 0', function(assert) {
     // arrange

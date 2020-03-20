@@ -32,6 +32,7 @@ const OVERLAY_WRAPPER_SELECTOR = '.dx-overlay-wrapper';
 const CONTEXT_MENU_SELECTOR = '.dx-context-menu';
 const INPUT_TEXT_EDITOR_SELECTOR = '.dx-texteditor-input';
 const TOOLBAR_ITEM_SELECTOR = '.dx-toolbar-item';
+const PARENT_TASK_SELECTOR = '.dx-gantt-parent';
 const TOOLBAR_SEPARATOR_SELECTOR = '.dx-gantt-toolbar-separator';
 
 
@@ -755,5 +756,18 @@ QUnit.module('Strip Lines', moduleConfig, () => {
         this.instance.option('stripLines', []);
         $stripLines = this.$element.find(TIME_MARKER_SELECTOR);
         assert.equal($stripLines.length, 0, 'gantt has no strip lines');
+    });
+});
+QUnit.module('Parent auto calculation', moduleConfig, () => {
+    test('render', function(assert) {
+        const options = {
+            tasks: { dataSource: tasks },
+            validation: { autoUpdateParentTasks: true }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const $stripLines = this.$element.find(PARENT_TASK_SELECTOR);
+        assert.ok($stripLines.length > 0, 'parent tasks has className');
     });
 });

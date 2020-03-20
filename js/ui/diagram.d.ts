@@ -267,6 +267,35 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @public
      */
     zoomLevel?: number | { items?: Array<number>, value?: number };
+
+    /**
+     * @name dxDiagramOptions.accessKey
+     * @hidden
+     */
+    /**
+     * @name dxDiagramOptions.activeStateEnabled
+     * @hidden
+     */
+    /**
+     * @name dxDiagramOptions.focusStateEnabled
+     * @hidden
+     */
+    /**
+     * @name dxDiagramOptions.hint
+     * @hidden
+     */
+    /**
+     * @name dxDiagramOptions.hoverStateEnabled
+     * @hidden
+     */
+    /**
+     * @name dxDiagramOptions.tabIndex
+     * @hidden
+     */
+    /**
+     * @name dxDiagramMethods.registerKeyHandler(key, handler)
+     * @hidden
+     */
 }
 /**
  * @docid dxDiagram

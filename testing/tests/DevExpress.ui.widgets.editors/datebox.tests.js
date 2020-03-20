@@ -18,8 +18,6 @@ import typeUtils from 'core/utils/type';
 import uiDateUtils from 'ui/date_box/ui.date_utils';
 import { noop } from 'core/utils/common';
 
-import '../../helpers/l10n/cldrNumberDataDe.js';
-import '../../helpers/l10n/cldrCalendarDataDe.js';
 import '../../helpers/calendarFixtures.js';
 
 import 'ui/validator';

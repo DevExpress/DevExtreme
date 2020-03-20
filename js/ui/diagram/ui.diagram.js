@@ -1309,6 +1309,9 @@ class Diagram extends Widget {
         };
     }
 
+    focus() {
+        this._diagramInstance.captureFocus();
+    }
     export() {
         return this._getDiagramData();
     }
@@ -1784,7 +1787,7 @@ class Diagram extends Widget {
                 /**
                 * @name dxDiagramOptions.toolbox.visibility
                 * @type Enums.DiagramPanelVisibility
-                * @default true
+                * @default 'auto'
                 */
                 visibility: 'auto',
                 /**
@@ -1889,7 +1892,7 @@ class Diagram extends Widget {
                 /**
                 * @name dxDiagramOptions.propertiesPanel.visibility
                 * @type Enums.DiagramPanelVisibility
-                * @default true
+                * @default 'auto'
                 */
                 visibility: 'auto',
                 /**

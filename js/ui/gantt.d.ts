@@ -51,6 +51,13 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      */
     editing?: { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowDependencyUpdating?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskUpdating?: boolean, enabled?: boolean };
     /**
+     * @docid dxGanttOptions.validation
+     * @type Object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    validation?: { enableDependencyValidation?: boolean, autoUpdateParentTasks?: boolean };
+    /**
      * @docid dxGanttOptions.onSelectionChanged
      * @extends Action
      * @type function(e)

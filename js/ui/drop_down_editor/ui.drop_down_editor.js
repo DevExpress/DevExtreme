@@ -481,10 +481,10 @@ const DropDownEditor = TextBox.inherit({
             'showing': this._popupShowingHandler.bind(this),
             'shown': this._popupShownHandler.bind(this),
             'hiding': this._popupHidingHandler.bind(this),
-            'hidden': this._popupHiddenHandler.bind(this)
+            'hidden': this._popupHiddenHandler.bind(this),
+            'contentReady': this._contentReadyHandler.bind(this)
         });
 
-        this._popup.option('onContentReady', this._contentReadyHandler.bind(this));
         this._contentReadyHandler();
 
         this._setPopupContentId(this._popup.$content());

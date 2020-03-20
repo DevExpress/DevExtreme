@@ -75,14 +75,6 @@ QUnit.test('Date time format as function converting', function(assert) {
     const day_names_short = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const day_names_short2 = ['Вс', 'Пн', 'Вт', 'Cр', 'Чт', 'Пт', 'Сб'];
     const day_names_es = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
-    const arabicZeroCode = 1632;
-
-    const formatArabicNumber = function(text) {
-        return text.split('').map(function(char) {
-            const digit = parseInt(char);
-            return String.fromCharCode(digit + arabicZeroCode);
-        }).join('');
-    };
 
     const convertDate = function(formatter) {
         return excelCreator.formatConverter.convertFormat(formatter, null, 'date');
@@ -118,7 +110,6 @@ QUnit.test('Date time format as function converting', function(assert) {
         '[$-9]yyyy\\/MM\\/dd': function(value) { return expected['[$-9]yyyy'](value) + '/' + expected['[$-9]MM'](value) + '/' + expected['[$-9]dd'](value); },
         '[$-9]dddd, MMMM d, yyyy': function(value) { return expected['[$-9]dddd'][0](value) + ', ' + expected['[$-9]MMMM'](value) + ' ' + expected['[$-9]d'](value) + ', ' + expected['[$-9]yyyy'](value); },
         '[$-9]dd-MMM-yyyy': function(value) { return expected['[$-9]dd'](value) + '-' + expected['[$-9]MMM'](value) + '-' + expected['[$-9]yyyy'](value); }, // T489981
-        '[$-2010009]d\\/M\\/yyyy': function(value) { return formatArabicNumber(expected['[$-9]d'](value)) + '/' + formatArabicNumber(expected['[$-9]M'](value)) + '/' + formatArabicNumber(expected['[$-9]yyyy'](value)); }
     };
 
     for(const pattern in expected) {
