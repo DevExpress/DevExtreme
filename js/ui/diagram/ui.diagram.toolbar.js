@@ -163,11 +163,15 @@ class DiagramToolbar extends DiagramPanel {
         let options = this._createTextEditorItemOptions(hint);
         options = extend(true, options, {
             options: {
+                readOnly: true,
+                focusStateEnabled: false,
+                hoverStateEnabled: false,
                 buttons: [{
                     name: 'dropDown',
                     location: 'after',
                     options: {
                         icon: 'spindown',
+                        disabled: false,
                         stylingMode: 'text',
                         onClick: () => {
                             const contextMenu = this._contextMenus[command];
@@ -252,9 +256,6 @@ class DiagramToolbar extends DiagramPanel {
         this._addItemHelper(item.command, new DiagramToolbarItemHelper(widget));
     }
     _onItemContentReady(widget, item, actionHandler) {
-        if(widget.NAME === 'dxTextBox') {
-            widget.$element().find('.dx-texteditor-input').attr('readonly', 'readonly');
-        }
         if((widget.NAME === 'dxButton' || widget.NAME === 'dxTextBox') && item.items) {
             const $menuContainer = $('<div>')
                 .appendTo(this.$element());

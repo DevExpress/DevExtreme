@@ -763,6 +763,7 @@ const dxChart = {
         }],
         position: 'bottom',
         customPosition: undefined,
+        customPositionAxis: undefined,
         offset: undefined,
         min: undefined,
         max: undefined,
@@ -1174,6 +1175,7 @@ const dxPolarChart = {
     },
     commonAnnotationSettings: undefined,
     annotations: [{}],
+    customizeAnnotation: undefined,
     onSeriesHoverChanged: function() { },
     onSeriesSelectionChanged: function() { },
     series: undefined,
@@ -1249,14 +1251,13 @@ const BaseChart = {
 };
 
 /**
-* @name dxChartCommonAnnotationConfig
+* @name BaseChartAnnotationConfig
 * @type object
 */
-const dxChartCommonAnnotationConfig = {
+const BaseChartAnnotationConfig = {
     type: undefined,
     argument: undefined,
     value: undefined,
-    axis: undefined,
     series: undefined,
     x: undefined,
     y: undefined,
@@ -1267,37 +1268,37 @@ const dxChartCommonAnnotationConfig = {
     opacity: 0.9,
     border: {
         /**
-        * @name dxChartCommonAnnotationConfig.border.width
+        * @name BaseChartAnnotationConfig.border.width
         * @default 1
         * @type number
         */
         width: 1,
         /**
-        * @name dxChartCommonAnnotationConfig.border.color
+        * @name BaseChartAnnotationConfig.border.color
         * @type string
         * @default '#dddddd'
         */
         color: '#dddddd',
         /**
-        * @name dxChartCommonAnnotationConfig.border.dashStyle
+        * @name BaseChartAnnotationConfig.border.dashStyle
         * @type Enums.DashStyle
         * @default 'solid'
         */
         dashStyle: 'solid',
         /**
-        * @name dxChartCommonAnnotationConfig.border.opacity
+        * @name BaseChartAnnotationConfig.border.opacity
         * @type number
         * @default undefined
         */
         opacity: undefined,
         /**
-        * @name dxChartCommonAnnotationConfig.border.visible
+        * @name BaseChartAnnotationConfig.border.visible
         * @type boolean
         * @default true
         */
         visible: true,
         /**
-        * @name dxChartCommonAnnotationConfig.border.cornerRadius
+        * @name BaseChartAnnotationConfig.border.cornerRadius
         * @type number
         * @default 0
         * @default 4 @for Material
@@ -1313,31 +1314,31 @@ const dxChartCommonAnnotationConfig = {
     paddingTopBottom: 10,
     shadow: {
         /**
-        * @name dxChartCommonAnnotationConfig.shadow.opacity
+        * @name BaseChartAnnotationConfig.shadow.opacity
         * @type number
         * @default 0.15
         */
         opacity: 0.15,
         /**
-        * @name dxChartCommonAnnotationConfig.shadow.color
+        * @name BaseChartAnnotationConfig.shadow.color
         * @type string
         * @default '#000000'
         */
         color: '#000000',
         /**
-        * @name dxChartCommonAnnotationConfig.shadow.offsetX
+        * @name BaseChartAnnotationConfig.shadow.offsetX
         * @type number
         * @default 0
         */
         offsetX: 0,
         /**
-        * @name dxChartCommonAnnotationConfig.shadow.offsetY
+        * @name BaseChartAnnotationConfig.shadow.offsetY
         * @type number
         * @default 1
         */
         offsetY: 1,
         /**
-        * @name dxChartCommonAnnotationConfig.shadow.blur
+        * @name BaseChartAnnotationConfig.shadow.blur
         * @type number
         * @default 4
         */
@@ -1345,19 +1346,19 @@ const dxChartCommonAnnotationConfig = {
     },
     image: {
         /**
-        * @name dxChartCommonAnnotationConfig.image.url
+        * @name BaseChartAnnotationConfig.image.url
         * @type string
         * @default undefined
         */
         url: undefined,
         /**
-        * @name dxChartCommonAnnotationConfig.image.width
+        * @name BaseChartAnnotationConfig.image.width
         * @type number
         * @default 30
         */
         width: 30,
         /**
-        * @name dxChartCommonAnnotationConfig.image.height
+        * @name BaseChartAnnotationConfig.image.height
         * @type number
         * @default 30
         */
@@ -1376,6 +1377,14 @@ const dxChartCommonAnnotationConfig = {
     data: undefined
 };
 /**
+* @name dxChartCommonAnnotationConfig
+* @type object
+* @inherits BaseChartAnnotationConfig
+*/
+const dxChartCommonAnnotationConfig = {
+    axis: undefined
+}
+/**
 * @name dxChartAnnotationConfig
 * @type object
 * @inherits dxChartCommonAnnotationConfig
@@ -1387,7 +1396,7 @@ const dxChartAnnotationConfig = {
 /**
 * @name dxPolarChartCommonAnnotationConfig
 * @type object
-* @inherits dxChartCommonAnnotationConfig
+* @inherits BaseChartAnnotationConfig
 */
 const dxPolarChartCommonAnnotationConfig = {
     radius: undefined,

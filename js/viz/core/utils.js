@@ -645,6 +645,7 @@ exports.getDistance = getDistance;
 
 exports.roundValue = roundValue;
 exports.getPower = getPower;
+exports.valueOf = valueOf;
 
 exports.rotateBBox = rotateBBox;
 exports.normalizeBBox = normalizeBBox;

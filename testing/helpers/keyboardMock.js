@@ -407,8 +407,10 @@ let focused;
 
                     if(!this.event.isDefaultPrevented()) {
                         this.beforeInput(char);
-                        typeChar(char);
-                        this.input(char);
+                        if(!this.event.isDefaultPrevented()) {
+                            typeChar(char);
+                            this.input(char);
+                        }
                     }
 
                     this.keyUp(char);

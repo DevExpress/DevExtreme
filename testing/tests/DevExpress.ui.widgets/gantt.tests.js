@@ -574,9 +574,65 @@ QUnit.module('Toolbar', moduleConfig, () => {
 
         const $items = this.$element.find(TOOLBAR_ITEM_SELECTOR);
         assert.equal($items.length, items.length, 'All items were rendered');
-        assert.equal($items.find(TOOLBAR_SEPARATOR_SELECTOR).length, 2, 'Both selectors were rendered');
+        assert.equal($items.find(TOOLBAR_SEPARATOR_SELECTOR).length, 2, 'Both separators were rendered');
         assert.equal($items.last().text(), 'Custom item', 'Custom item has custom text');
         assert.equal($items.first().children().children().attr('aria-label'), 'undo', 'First button is undo button');
+    });
+    test('changing', function(assert) {
+        const items = [
+            'undo',
+            'redo'
+        ];
+        const options = {
+            tasks: { dataSource: tasks },
+            toolbar: { items: items }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        let $items = this.$element.find(TOOLBAR_ITEM_SELECTOR);
+        assert.equal($items.length, items.length, 'All items were rendered');
+
+        this.instance.option('toolbar.items', []);
+        $items = this.$element.find(TOOLBAR_ITEM_SELECTOR);
+        assert.equal($items.length, 0, 'Toolbar is empty');
+
+        this.instance.option('toolbar.items', ['zoomIn', 'zoomOut']);
+        $items = this.$element.find(TOOLBAR_ITEM_SELECTOR);
+        assert.equal($items.length, 2, 'All items were rendered again');
+    });
+    test('different item types', function(assert) {
+        const items = [
+            'undo',
+            'redo',
+            'separator',
+            {
+                formatName: 'zoomIn',
+                options: {
+                    text: 'test'
+                }
+            },
+            'separator',
+            {
+                widget: 'dxButton',
+                options: {
+                    text: 'Custom item',
+                    stylingMode: 'text'
+                }
+            }
+        ];
+        const options = {
+            tasks: { dataSource: tasks },
+            toolbar: { items: items }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const $items = this.$element.find(TOOLBAR_ITEM_SELECTOR);
+        assert.equal($items.length, items.length, 'All items were rendered');
+        assert.equal($items.find(TOOLBAR_SEPARATOR_SELECTOR).length, 2, 'Both separators were rendered');
+        assert.equal($items.last().text(), 'Custom item', 'Custom item has custom text');
+        assert.equal($items.eq(3).text(), 'test', 'Custom zoomIn button was rendered with custom text');
     });
 });
 

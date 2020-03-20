@@ -3802,6 +3802,43 @@ QUnit.test('Resize grid after column resizing to right when columnResizingMode i
     }
 });
 
+QUnit.test('DataGrid - A fixed rows should be synchronized after change column width if wordWrapEnabled and height are set (T830739)', function(assert) {
+    // arrange
+    const rowsViewWrapper = dataGridWrapper.rowsView;
+    const dataGrid = $('#dataGrid').dxDataGrid({
+        loadingTimeout: undefined,
+        width: 400,
+        height: 150,
+        dataSource: [
+            { id: 0, c0: 'Test00 resize', c1: 'Test10' },
+            { id: 1, c0: 'Test01 resize', c1: 'Test11' }
+        ],
+        allowColumnResizing: true,
+        rowAlternationEnabled: true,
+        wordWrapEnabled: true,
+        columns: [
+            { dataField: 'id', width: 100, fixed: true },
+            'c0',
+            'c1'
+        ]
+    }).dxDataGrid('instance');
+
+    // act
+    dataGrid.columnOption('c0', 'width', 60);
+
+    // arrange, assert
+    let $fixedRow = rowsViewWrapper.getFixedDataRow(0).getElement();
+    let $dataRow = rowsViewWrapper.getDataRow(0).getElement();
+    assert.deepEqual($fixedRow.position(), $dataRow.position(), '1st row position');
+    assert.equal($fixedRow.height(), $dataRow.height(), '1st row height');
+
+    // arrange, assert
+    $fixedRow = rowsViewWrapper.getFixedDataRow(1).getElement();
+    $dataRow = rowsViewWrapper.getDataRow(1).getElement();
+    assert.deepEqual($fixedRow.position(), $dataRow.position(), '2nd row position');
+    assert.equal($fixedRow.height(), $dataRow.height(), '2nd row height');
+});
+
 QUnit.test('Column widths should be correct after resize column to show scroll if fixed column is exists', function(assert) {
     // arrange
     const $dataGrid = $('#dataGrid').dxDataGrid({
@@ -9435,6 +9472,31 @@ QUnit.test('Scrollable should have the correct padding when the grid inside the 
     assert.strictEqual($scrollableContent.css('paddingLeft'), '0px', 'paddingLeft');
 });
 
+QUnit.test('Content height differs from the scrollable container height by the height of horizontal scroll (T865137)', function(assert) {
+    if(devices.real().deviceType !== 'desktop') {
+        assert.ok(true, 'not actual for not desktop devices');
+        return;
+    }
+
+    const dataGrid = createDataGrid({
+        height: 200,
+        width: 200,
+        dataSource: [{ id: 1, name: 'Sam', age: 26 }],
+        columnWidth: 100,
+        keyExpr: 'id',
+        scrolling: {
+            showScrollbar: 'always'
+        }
+    });
+    this.clock.tick();
+
+    const scrollable = dataGrid.getScrollable();
+    const content = dataGrid.$element().find('.dx-datagrid-rowsview .dx-datagrid-content')[0];
+    const scrollbarWidth = dataGrid.getView('rowsView').getScrollbarWidth(true);
+
+    assert.equal(scrollable.$element().height() - content.clientHeight, scrollbarWidth, 'Content height is correct');
+});
+
 QUnit.module('Virtual row rendering', baseModuleConfig);
 
 QUnit.test('editing should starts correctly if scrolling mode is virtual', function(assert) {
@@ -10170,6 +10232,67 @@ QUnit.test('Freespace row should not have huge height if rowRenderingMode is vir
 
     // assert
     assert.roughEqual($('.dx-freespace-row').height(), 0.5, 0.51, 'freespace height');
+});
+
+QUnit.test('DataGrid - DataController should return correct lastIndex for the focusedRow logic (T864478)', function(assert) {
+    // arrange
+    const that = this;
+    const generateData = function(rowAmount, columnAmount) {
+        const columns = [ 'ID' ];
+        const data = [];
+
+        for(let i = 0; i < columnAmount; ++i) {
+            columns.push(`C_${i}`);
+        }
+
+        for(let i = 0; i < rowAmount; ++i) {
+            const item = { };
+            for(let j = 0; j < columnAmount; ++j) {
+                const columnName = columns[j];
+                const value = columnName === 'ID' ? i : `${columnName}_${i}`;
+                item[columnName] = value;
+            }
+            data.push(item);
+        }
+        that.columns = columns;
+        return data;
+    };
+    const dataGrid = createDataGrid({
+        height: 200,
+        dataSource: generateData(100, 2),
+        keyExpr: 'ID',
+        focusedRowEnabled: true,
+        scrolling: {
+            mode: 'virtual',
+            rowRenderingMode: 'virtual'
+        },
+        paging: {
+            pageSize: 110,
+            enabled: false
+        },
+        columns: [
+            'ID',
+            'C_0',
+            {
+                dataField: 'C_1',
+                calculateSortValue: e => e.field3
+            }
+        ]
+    });
+
+    this.clock.tick();
+
+    // arrange
+    const dataController = dataGrid.getController('data');
+    sinon.spy(dataController, '_getLastItemIndex');
+
+    // act
+    dataGrid.option('focusedRowKey', 5);
+    this.clock.tick();
+
+    // assert
+    assert.ok(dataController._getLastItemIndex.callCount > 0, '_getLastItemIndex has called after set focusedRowKey');
+    assert.equal(dataController._getLastItemIndex(), 99, 'Last item index');
 });
 
 QUnit.module('Rendered on server', baseModuleConfig);
@@ -18816,8 +18939,7 @@ QUnit.testInActiveWindow('Not highlight cell if isHighlighted set false in the o
     this.clock.tick();
 
     $(this.dataGrid.getCellElement(0, 0))
-        .trigger(CLICK_EVENT)
-        .click();
+        .trigger(CLICK_EVENT);
     this.clock.tick();
 
     // assert
@@ -19216,7 +19338,7 @@ QUnit.test('The cell should not be focused on pointerEvents.down event (T850219)
         this.clock.tick();
 
         // act
-        $(dataGrid.getCellElement(0, 0)).trigger(pointerEvents.down);
+        $(dataGrid.getCellElement(0, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         // assert

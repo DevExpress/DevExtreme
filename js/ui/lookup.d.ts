@@ -24,6 +24,14 @@ import dxDropDownList, {
     dxDropDownListOptions
 } from './drop_down_editor/ui.drop_down_list';
 
+import {
+    dxPopupOptions
+} from './popup';
+
+import {
+    dxPopoverOptions
+} from './popover';
+
 export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid dxLookupOptions.animation
@@ -387,6 +395,12 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @public
      */
     itemCenteringEnabled?: boolean;
+    /**
+     * @docid dxLookupOptions.dropDownOptions
+     * @type dxPopupOptions | dxPopoverOptions
+     */
+    dropDownOptions?: dxPopupOptions | dxPopoverOptions;
+
 }
 /**
  * @docid dxLookup

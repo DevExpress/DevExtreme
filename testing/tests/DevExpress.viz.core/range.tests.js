@@ -129,48 +129,6 @@ QUnit.test('Merge isSpacedMargin', function(assert) {
     checkRules(false, false, false);
 });
 
-QUnit.test('Merge checkMinDataVisibility', function(assert) {
-    const that = this;
-
-    const checkRules = function(checkMinDataVisibility, otherCheckMinDataVisibility, expected) {
-        // arrange
-        that.createRange({ checkMinDataVisibility: checkMinDataVisibility });
-
-        // act
-        const returnValue = that.range.addRange({ checkMinDataVisibility: otherCheckMinDataVisibility });
-
-        // assert
-        assert.strictEqual(that.range, returnValue);
-        assert.strictEqual(that.range.checkMinDataVisibility, expected);
-    };
-
-    checkRules(true, true, true);
-    checkRules(false, true, true);
-    checkRules(true, false, true);
-    checkRules(false, false, false);
-});
-
-QUnit.test('Merge checkMaxDataVisibility', function(assert) {
-    const that = this;
-
-    const checkRules = function(checkMaxDataVisibility, otherCheckMaxDataVisibility, expected) {
-        // arrange
-        that.createRange({ checkMaxDataVisibility: checkMaxDataVisibility });
-
-        // act
-        const returnValue = that.range.addRange({ checkMaxDataVisibility: otherCheckMaxDataVisibility });
-
-        // assert
-        assert.strictEqual(that.range, returnValue);
-        assert.strictEqual(that.range.checkMaxDataVisibility, expected);
-    };
-
-    checkRules(true, true, true);
-    checkRules(false, true, true);
-    checkRules(true, false, true);
-    checkRules(false, false, false);
-});
-
 QUnit.test('Merge base', function(assert) {
     const that = this;
 

@@ -106,23 +106,6 @@ function resolveEndOnTickDate(curValue, tickValue, interval, businessViewInfo) {
     return resolveEndOnTick(curValue.valueOf(), tickValue.valueOf(), dateToMilliseconds(interval), businessViewInfo);
 }
 
-function resolveExtraTickForHiddenDataPoint(checkDataVisibility, extremum, tick, businessViewInfo, isMin) {
-    const screenRatio = businessViewInfo.screenDelta / businessViewInfo.businessDelta;
-    const extDir = isMin ? 1 : -1;
-    const tickDir = isMin ? -1 : 1;
-    return checkDataVisibility && screenRatio * (extremum * extDir + tick * tickDir) < VISIBILITY_DELIMITER;
-}
-
-function resolveExtraTickForHiddenDataPointLog(base) {
-    return function(checkDataVisibility, extremum, tick, businessViewInfo, isMin) {
-        return resolveExtraTickForHiddenDataPoint(checkDataVisibility, getLog(extremum, base), getLog(tick, base), businessViewInfo, isMin);
-    };
-}
-
-function resolveExtraTickForHiddenDataPointDate(checkDataVisibility, extremum, tick, businessViewInfo, isMin) {
-    return resolveExtraTickForHiddenDataPoint(checkDataVisibility, extremum.valueOf(), tick.valueOf(), businessViewInfo, isMin);
-}
-
 function getBusinessDelta(data, breaks) {
     let spacing = 0;
     if(breaks) {
@@ -387,7 +370,7 @@ function addIntervalWithBreaks(addInterval, breaks, correctValue) {
     };
 }
 
-function calculateTicks(addInterval, correctMinValue, adjustInterval, resolveEndOnTick, resolveExtraTickForHiddenDataPoint) {
+function calculateTicks(addInterval, correctMinValue, adjustInterval, resolveEndOnTick) {
     return function(data, tickInterval, endOnTick, gaps, breaks, businessDelta, screenDelta, axisDivisionFactor, generateExtraTick) {
         const correctTickValue = correctTickValueOnGapSize(addInterval, gaps);
         const min = data.min;
@@ -423,15 +406,6 @@ function calculateTicks(addInterval, correctMinValue, adjustInterval, resolveEnd
         }
         if(endOnTick || (cur - max === 0) || (!isDefined(endOnTick) && resolveEndOnTick(max, cur, tickInterval, businessViewInfo))) {
             ticks.push(cur);
-        }
-        if(ticks.length > 0) {
-            if(ticks[0].valueOf() > 0 && resolveExtraTickForHiddenDataPoint(data.checkMinDataVisibility, min, ticks[0], businessViewInfo, true)) {
-                cur = addInterval(ticks[0], tickInterval, true);
-                ticks.unshift(cur);
-            } else if(ticks[ticks.length - 1].valueOf() < 0 && resolveExtraTickForHiddenDataPoint(data.checkMaxDataVisibility, max, ticks[ticks.length - 1], businessViewInfo, false)) {
-                cur = addInterval(ticks[ticks.length - 1], tickInterval);
-                ticks.push(cur);
-            }
         }
         return ticks;
     };
@@ -701,7 +675,7 @@ function numericGenerator(options) {
         calculateTickIntervalByCustomTicks,
         calculateTickIntervalByCustomTicks,
         getValue,
-        calculateTicks(addInterval, correctMinValueByEndOnTick(floor, ceil, resolveEndOnTick, options.endOnTick), adjustInterval, resolveEndOnTick, resolveExtraTickForHiddenDataPoint),
+        calculateTicks(addInterval, correctMinValueByEndOnTick(floor, ceil, resolveEndOnTick, options.endOnTick), adjustInterval, resolveEndOnTick),
         calculateMinorTicks(getValue, addInterval, floor, addInterval, getValue),
         getScaleBreaksProcessor(getValue, getValue, (value, correction) => value + correction)
     );
@@ -734,7 +708,7 @@ function logarithmicGenerator(options) {
         getTickIntervalByCustomTicks(log, getValue),
         getTickIntervalByCustomTicks(getValue, getValue),
         getValue,
-        calculateTicks(addIntervalLog(log, raise), correctMinValueByEndOnTick(floor, ceil, resolveEndOnTickLog(base), options.endOnTick), getAdjustIntervalLog(options.skipCalculationLimits), resolveEndOnTickLog(base), resolveExtraTickForHiddenDataPointLog(base)),
+        calculateTicks(addIntervalLog(log, raise), correctMinValueByEndOnTick(floor, ceil, resolveEndOnTickLog(base), options.endOnTick), getAdjustIntervalLog(options.skipCalculationLimits), resolveEndOnTickLog(base)),
         calculateMinorTicks((_, tick, prevTick, factor) => {
             return Math.max(Math.abs(tick), Math.abs(prevTick)) / factor;
         }, addInterval, floor, ceilNumber, ceil),
@@ -797,7 +771,7 @@ function dateGenerator(options) {
         calculateTickIntervalByCustomTicks,
         calculateTickIntervalByCustomTicks,
         dateToMilliseconds,
-        calculateTicks(addIntervalDate, correctMinValueByEndOnTick(floor, ceil, resolveEndOnTickDate, options.endOnTick), adjustIntervalDateTime, resolveEndOnTickDate, resolveExtraTickForHiddenDataPointDate),
+        calculateTicks(addIntervalDate, correctMinValueByEndOnTick(floor, ceil, resolveEndOnTickDate, options.endOnTick), adjustIntervalDateTime, resolveEndOnTickDate),
         calculateMinorTicks(getValue, addIntervalDate, floor, addIntervalDate, getValue),
         getScaleBreaksProcessor(dateToMilliseconds, getValue, (value, correction) => new Date(value.getTime() + correction))
     );
