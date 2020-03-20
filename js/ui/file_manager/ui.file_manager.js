@@ -158,7 +158,8 @@ class FileManager extends Widget {
             onSelectionChanged: this._onItemViewSelectionChanged.bind(this),
             onSelectedItemOpened: this._onSelectedItemOpened.bind(this),
             getItemThumbnail: this._getItemThumbnailInfo.bind(this),
-            customizeDetailColumns: this.option('customizeDetailColumns')
+            customizeDetailColumns: this.option('customizeDetailColumns'),
+            detailColumns: this.option('itemView.details.columns')
         };
 
         const $itemView = $('<div>').appendTo($container);
@@ -403,6 +404,9 @@ class FileManager extends Widget {
             },
 
             itemView: {
+                details: {
+                    columns: [ 'thumbnails', 'name', 'dateModified', 'size' ]
+                },
                 /**
                 * @name dxFileManagerOptions.itemView.mode
                 * @type Enums.FileManagerItemViewMode
@@ -525,6 +529,8 @@ class FileManager extends Widget {
             case 'itemView':
                 if(args.fullName === 'itemView.mode') {
                     this._switchView(args.value);
+                } else if(args.fullName === 'itemView.details.columns') {
+                    // console.log('it works');
                 } else {
                     this.repaint();
                 }
