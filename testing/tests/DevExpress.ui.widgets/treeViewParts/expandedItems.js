@@ -372,8 +372,7 @@ module('Expanded items', {
     test('expand parent items in recursive case', function(assert) {
         const items = [{ text: '1', id: 1, items: [{ text: '11', id: 11, items: [{ text: '111', id: 111 }] }] }];
         const $treeView = initTree({
-            items: items,
-            expandNodesRecursive: true
+            items: items
         });
         const treeView = $treeView.dxTreeView('instance');
 
