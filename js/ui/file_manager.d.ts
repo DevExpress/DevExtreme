@@ -160,6 +160,19 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      */
     onToolbarItemClick?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event }) => any);
     /**
+     * @docid dxFileManagerOptions.onFocusedItemChanged
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 item:FileSystemItem
+     * @type_function_param1_field5 itemElement:dxElement
+     * @default null
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onFocusedItemChanged?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, item?: FileSystemItem, itemElement?: dxElement }) => any);
+    /**
      * @docid dxFileManagerOptions.permissions
      * @type object
      * @prevFileNamespace DevExpress.ui
@@ -182,6 +195,22 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @public
      */
     selectionMode?: 'multiple' | 'single';
+    /**
+     * @docid dxFileManagerOptions.selectedItemKeys
+     * @type Array<string>
+     * @default []
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    selectedItemKeys?: Array<string>;
+    /**
+     * @docid dxFileManagerOptions.focusedItemKey
+     * @type string
+     * @default null
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    focusedItemKey?: string;
     /**
      * @docid dxFileManagerOptions.toolbar
      * @type dxFileManagerToolbar

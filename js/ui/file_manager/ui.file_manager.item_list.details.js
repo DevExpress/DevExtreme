@@ -74,11 +74,14 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         const selectionMode = this._isMultipleSelectionMode() ? 'multiple' : 'none';
 
         this._filesView = this._createComponent($filesView, DataGrid, {
+            dataSource: this._createDataSource(),
             hoverStateEnabled: true,
             selection: {
                 mode: selectionMode,
                 showCheckBoxesMode: this._isDesktop() ? 'onClick' : 'none'
             },
+            selectedRowKeys: this.option('selectedItemKeys'),
+            focusedRowKey: this.option('focusedItemKey'),
             focusedRowEnabled: true,
             allowColumnResizing: true,
             scrolling: {
@@ -99,8 +102,6 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             onFocusedRowChanged: this._onFocusedRowChanged.bind(this),
             onOptionChanged: this._onFilesViewOptionChanged.bind(this)
         });
-
-        this.refresh();
     }
 
     _createColumns() {
@@ -274,7 +275,9 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         e.items = this._contextMenu.createContextMenuItems(fileItems);
     }
 
-    _onFilesViewSelectionChanged({ selectedRowsData, selectedRowKeys, currentSelectedRowKeys, currentDeselectedRowKeys }) {
+    _onFilesViewSelectionChanged({ component, selectedRowsData, selectedRowKeys, currentSelectedRowKeys, currentDeselectedRowKeys }) {
+        this._filesView = this._filesView || component;
+
         if(this._selectAllCheckBox) {
             this._selectAllCheckBoxUpdating = true;
             this._selectAllCheckBox.option('value', this._isAllItemsSelected());
@@ -283,6 +286,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
         const selectedItems = selectedRowsData.map(itemInfo => itemInfo.fileItem);
         this._tryRaiseSelectionChanged({
+            selectedItemInfos: selectedRowsData,
             selectedItems,
             selectedItemKeys: selectedRowKeys,
             currentSelectedItemKeys: currentSelectedRowKeys,
@@ -290,10 +294,11 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         });
     }
 
-    _onFocusedRowChanged({ row }) {
+    _onFocusedRowChanged(e) {
         if(!this._isMultipleSelectionMode()) {
-            this._selectItemSingleSelection(row.data);
+            this._selectItemSingleSelection(e.row.data);
         }
+        this._raiseFocusedItemChanged(e);
     }
 
     _onFilesViewOptionChanged({ fullName }) {
@@ -367,12 +372,19 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
     }
 
+    _setSelectedItemKeys(itemKeys) {
+        this._filesView.option('selectedRowKeys', itemKeys);
+    }
+
+    _setFocusedItemKey(itemKey) {
+        this._filesView.option('focusedRowKey', itemKey);
+    }
+
     clearSelection() {
         this._filesView.clearSelection();
     }
 
     refresh() {
-        this.clearSelection();
         this._filesView.option('dataSource', this._createDataSource());
     }
 

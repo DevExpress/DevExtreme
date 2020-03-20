@@ -51,6 +51,31 @@ const extendAttributes = function(targetObject, sourceObject, objectKeysArray) {
     });
 };
 
+const findItemsByKeys = (itemInfos, keys) => {
+    const itemMap = {};
+    keys.forEach(key => {
+        itemMap[key] = null;
+    });
+
+    itemInfos.forEach(itemInfo => {
+        const key = itemInfo.fileItem.key;
+        if(Object.prototype.hasOwnProperty.call(itemMap, key)) {
+            itemMap[key] = itemInfo;
+        }
+    });
+
+    const result = [];
+    keys.forEach(key => {
+        const itemInfo = itemMap[key];
+        if(itemInfo) {
+            result.push(itemInfo);
+        }
+    });
+
+    return result;
+};
+
 module.exports = whenSome;
 module.exports.getDisplayFileSize = getDisplayFileSize;
 module.exports.extendAttributes = extendAttributes;
+module.exports.findItemsByKeys = findItemsByKeys;

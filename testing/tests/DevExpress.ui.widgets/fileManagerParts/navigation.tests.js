@@ -209,7 +209,10 @@ QUnit.module('Navigation operations', moduleConfig, () => {
 
         testCases.forEach(({ mode, wrapperMethod, eventName }) => {
             const inst = this.wrapper.getInstance();
-            inst.option('itemView.mode', mode);
+            inst.option({
+                itemView: { mode },
+                selectedItemKeys: []
+            });
             this.clock.tick(400);
 
             let items = inst.getSelectedItems();
