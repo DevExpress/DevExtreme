@@ -455,7 +455,6 @@ QUnit.module('dimensions', {
             }
         });
 
-
         assert.equal($content.text(), 'text', 'container is correct');
     });
 
@@ -1591,6 +1590,31 @@ QUnit.module('templates', () => {
         }).dxPopup('instance');
 
         const toolbarItemText = popup.$element().find('.dx-toolbar-item').text();
+        assert.strictEqual(toolbarItemText, text, 'Custom template rendered');
+    });
+
+    QUnit.test('Popup should not pass the "content" template via integrationOptions', function(assert) {
+        const text = 'ToolbarButton';
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            toolbarItems: [{
+                location: 'before',
+                toolbar: 'bottom',
+                widget: 'dxButton',
+                options: { text }
+            }],
+            integrationOptions: {
+                templates: {
+                    'content': {
+                        render: function(args) {
+                            $('<div>').text('ContentTemplate').appendTo(args.container);
+                        }
+                    }
+                }
+            }
+        }).dxPopup('instance');
+
+        const toolbarItemText = popup.$element().find('.dx-popup-bottom .dx-button').text();
         assert.strictEqual(toolbarItemText, text, 'Custom template rendered');
     });
 });
