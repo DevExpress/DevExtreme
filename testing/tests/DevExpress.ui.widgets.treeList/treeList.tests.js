@@ -26,14 +26,16 @@ import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 
 fx.off = true;
 
-QUnit.module('Initialization', {
+const defaultModuleConfig = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         this.clock.restore();
     }
-});
+};
+
+QUnit.module('Initialization', defaultModuleConfig);
 
 const treeListWrapper = new TreeListWrapper('#container');
 
@@ -773,14 +775,7 @@ QUnit.test('TreeList with paging', function(assert) {
     assert.strictEqual($treeListElement.find('.dx-page-size').length, 3, 'number of containers for page sizes');
 });
 
-QUnit.module('Option Changed', {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.restore();
-    }
-});
+QUnit.module('Option Changed', defaultModuleConfig);
 
 QUnit.test('Change dataSource, selectedRowKeys and scrolling options together', function(assert) {
     // arrange
@@ -1288,14 +1283,7 @@ QUnit.test('Expand node after filtering when it has many children and they are s
     }
 });
 
-QUnit.module('Focused Row', {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.restore();
-    }
-});
+QUnit.module('Focused Row', defaultModuleConfig);
 
 QUnit.test('TreeList with focusedRowEnabled and focusedRowIndex 0', function(assert) {
     // arrange, act
@@ -1548,14 +1536,7 @@ QUnit.test('Should not generate exception when selection mode is multiple and fo
     assert.ok(true, 'No exceptions');
 });
 
-QUnit.module('Scroll', {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.restore();
-    }
-});
+QUnit.module('Scroll', defaultModuleConfig);
 
 // T757537
 QUnit.test('TreeList should not hang when scrolling', function(assert) {
@@ -1807,14 +1788,7 @@ QUnit.test('TreeList should filter data with unreachable items (T816921)', funct
 });
 
 
-QUnit.module('Row dragging', {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.restore();
-    }
-});
+QUnit.module('Row dragging', defaultModuleConfig);
 
 // T831020
 QUnit.test('The draggable row should have correct markup when defaultOptions is specified', function(assert) {
@@ -1873,4 +1847,55 @@ QUnit.test('The draggable row should have correct markup when defaultOptions is 
             }
         });
     }
+});
+
+QUnit.module('Selection', defaultModuleConfig);
+
+// T861403
+[true, false].forEach(recursive => {
+    QUnit.test(`Select and deselect all rows if filter is applied, filterMode is matchOnly and recursive=${recursive}`, function(assert) {
+        // arrange
+        const selectedRowKeys = recursive ? [1, 2] : [2];
+        const treeList = createTreeList({
+            dataSource: [{
+                id: 1,
+                parent_id: 0,
+                data: 'some'
+            }, {
+                id: 2,
+                parent_id: 1,
+                data: 'some2'
+            }],
+            columns: ['id', 'data'],
+            filterValue: ['data', '=', 'some2'],
+            keyExpr: 'id',
+            parentIdExpr: 'parent_id',
+            filterMode: 'matchOnly',
+            selection: {
+                recursive,
+                mode: 'multiple'
+            }
+        });
+
+        this.clock.tick();
+
+        // act
+        const $selectCheckBoxes = $('.dx-select-checkbox');
+        $selectCheckBoxes.eq(0).trigger('dxclick');
+
+        // assert
+        assert.equal($selectCheckBoxes.eq(0).attr('aria-checked'), 'true', 'selectAll checkbox is checked');
+        assert.equal($selectCheckBoxes.eq(1).attr('aria-checked'), 'true', 'first row\'s checkbox is checked');
+        assert.deepEqual(treeList.getSelectedRowKeys(), selectedRowKeys, 'selected row keys');
+        assert.deepEqual(treeList.option('selectedRowKeys'), selectedRowKeys, 'selected row keys');
+
+        // act
+        $selectCheckBoxes.eq(0).trigger('dxclick');
+
+        // assert
+        assert.equal($selectCheckBoxes.eq(0).attr('aria-checked'), 'false', 'selectAll checkbox is not checked');
+        assert.equal($selectCheckBoxes.eq(1).attr('aria-checked'), 'false', 'first row\'s checkbox is not checked');
+        assert.deepEqual(treeList.getSelectedRowKeys(), [], 'selected row keys');
+        assert.deepEqual(treeList.option('selectedRowKeys'), [], 'selected row keys');
+    });
 });

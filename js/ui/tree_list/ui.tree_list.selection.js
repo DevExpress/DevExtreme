@@ -107,15 +107,21 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
 
                 _updateSelectColumn: noop,
 
-                _getVisibleNodeKeys: function(isRecursiveSelection) {
+                _getVisibleNodeKeys: function(isRecursiveSelection, root) {
                     const component = this.component;
-                    const root = component.getRootNode();
+                    root = root || component.getRootNode();
                     const cache = {};
                     const keys = [];
+                    const isMatchOnly = this.option('filterMode') === 'matchOnly';
+                    const that = this;
 
                     root && treeListCore.foreachNodes(root.children, function(node) {
                         if(node.key !== undefined && (node.visible || isRecursiveSelection)) {
                             keys.push(node.key);
+                        }
+
+                        if(isMatchOnly) {
+                            Array.prototype.push.apply(keys, that._getVisibleNodeKeys(isRecursiveSelection, node));
                         }
 
                         return isRecursiveSelection ? false : component.isRowExpanded(node.key, cache);
