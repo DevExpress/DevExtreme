@@ -556,6 +556,7 @@ QUnit.module('Details View', moduleConfig, () => {
         const defaultCssClass = 'dx-filemanager-details-item-is-directory';
         const customCaption = 'This is directory';
         const customCssClass = 'some-test-css-class';
+        const nameCellIndex = isDesktopDevice() ? 4 : 3;
         fileManager.option({
             itemView: {
                 details: {
@@ -578,5 +579,11 @@ QUnit.module('Details View', moduleConfig, () => {
         assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(3).text(), customCaption, 'fourth column is isDirectory with custom capture');
         assert.ok(this.wrapper.getColumnHeaderInDetailsView(3).hasClass(customCssClass), 'fourth column has custom css class');
         assert.ok(this.wrapper.getColumnHeaderInDetailsView(3).hasClass(defaultCssClass), 'fourth column also has default css class');
+
+        assert.strictEqual(this.wrapper.getDetailsCellValue(1, nameCellIndex), 'Folder 1', 'folder has correct name in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(2, nameCellIndex), '1.txt', 'file 1 has correct name in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(3, nameCellIndex), '2.txt', 'file 2 has correct name in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(4, nameCellIndex), '3.txt', 'file 3 has correct name in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(5, nameCellIndex), '4.txt', 'file 4 has correct name in correct column');
     });
 });
