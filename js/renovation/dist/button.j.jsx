@@ -58,7 +58,6 @@ class Button extends Widget {
         });
 
         props.validationGroup = ValidationEngine.getGroupConfig(this._findGroup());
-        console.log(this._initializing, this._initialized);
 
         return props;
     }
