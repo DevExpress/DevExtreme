@@ -45,14 +45,6 @@ class ToolbarTestWrapper {
         this._toolbar = this._$toolbar.dxToolbar('instance');
     }
 
-    get _assert() {
-        return QUnit.assert;
-    }
-
-    get _$items() {
-        return this._$toolbar.find('.dx-toolbar-item');
-    }
-
     set width(value) {
         this._toolbar.option('width', value);
     }
@@ -62,37 +54,30 @@ class ToolbarTestWrapper {
     }
 
     checkToolBarHeight(expected) {
-        this._assert.roughEqual(this._$toolbar.height(), expected, 2.1, 'toolbar height');
+        QUnit.assert.roughEqual(this._$toolbar.height(), expected, 2.1, 'toolbar height');
     }
 
     checkItemsInLine(itemsIndexes, lineIndex) {
-        const toolBarTopOffset = this._$toolbar.offset().top;
-        const itemsElements = this._$items.toArray();
-        const itemsInLine = itemsElements.filter((item, index, $items) => {
-            const itemIndex = $items.indexOf(item);
-            return itemsIndexes.indexOf(itemIndex) > -1;
-        });
+        const toolBarOffset = this._$toolbar.offset();
+        const itemsElements = this._$toolbar.find('.dx-toolbar-item').toArray();
+        const widths = itemsIndexes.map(itemIndex => $(itemsElements[itemIndex]).outerWidth());
+        const getAssertMessage = (index, offsetName) => `${lineIndex} line, ${index} item, ${offsetName} offset`;
 
-        this._assert.equal(itemsInLine.length, itemsIndexes.length, `items length of the ${lineIndex} line`);
+        itemsIndexes.forEach((itemIndex, i) => {
+            const item = itemsElements[itemIndex];
+            const expectedLeftOffset = widths.slice(0, i).reduce((result, value) => result + value, 0);
 
-        const widths = itemsInLine.map(item => $(item).outerWidth());
-        const toolbarLeftOffset = this._$toolbar.offset().left;
-        const getMessage = (index, offsetName) => `${lineIndex} line, ${index} item, ${offsetName} offset`;
-        itemsInLine.forEach((item, index) => {
-            const itemIndex = itemsElements.indexOf(item);
-            this._assert.roughEqual($(item).offset().top - toolBarTopOffset, TOOLBAR_ITEM_HEIGHT * lineIndex, 2, getMessage(itemIndex, 'top'));
-
-            const calculatedLeftOffset = widths.slice(0, index).reduce((result, value) => result + value, 0);
-            this._assert.roughEqual(calculatedLeftOffset, $(item).offset().left - toolbarLeftOffset, 2.1, getMessage(itemIndex, 'left'));
+            QUnit.assert.roughEqual($(item).offset().top - toolBarOffset.top, TOOLBAR_ITEM_HEIGHT * lineIndex, 2, getAssertMessage(itemIndex, 'top'));
+            QUnit.assert.roughEqual($(item).offset().left - toolBarOffset.left, expectedLeftOffset, 2.1, getAssertMessage(itemIndex, 'left'));
         });
     }
 
     checkMultilineOption(expected) {
-        this._assert.equal(this._toolbar.option('multiline'), expected, 'multiline option');
+        QUnit.assert.equal(this._toolbar.option('multiline'), expected, 'multiline option');
     }
 
     checkMultilineCssClass(expected) {
-        this._assert.equal(this._$toolbar.hasClass('dx-toolbar-multiline'), expected, 'multiline CSS class');
+        QUnit.assert.equal(this._$toolbar.hasClass('dx-toolbar-multiline'), expected, 'multiline CSS class');
     }
 }
 
