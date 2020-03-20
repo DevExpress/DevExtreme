@@ -56,7 +56,7 @@ QUnit.module('scrollToItem', () => {
     });
 
     configs.forEach(config => {
-        QUnit.test(`expanded: ${config.expanded} disabled: ${config.disabled}, scrollDirection: ${config.scrollDirection} -> onContentReady.scrollToItem(${config.key})`, function(assert) {
+        QUnit.test(`expanded: ${config.expanded} disabled: ${config.disabled}, scrollDirection: ${config.scrollDirection} -> onContentReady.scrollToItem(${config.key}) -> focusOut() -> focusIn()`, function(assert) {
             let completionCallback = null;
             let isFirstContentReadyEvent = true;
             const options = $.extend({}, config, {
@@ -72,6 +72,9 @@ QUnit.module('scrollToItem', () => {
 
             const done = assert.async();
             completionCallback.done((result) => {
+                wrapper.getElement().focusout();
+                wrapper.getElement().focusin();
+
                 const isFirstLevelNodeKey = config.key.indexOf(LEVEL_SEPARATOR) === -1;
                 if(config.disabled && !config.expanded && !isFirstLevelNodeKey) {
                     assert.strictEqual(result, false, 'scroll must fail');
@@ -85,13 +88,15 @@ QUnit.module('scrollToItem', () => {
         });
 
         [{ top: 0, left: 0 }, { top: 1000, left: 0 }, { top: 0, left: 1000 }, { top: 1000, left: 1000 }].forEach(initialPosition => {
-            QUnit.test(`expanded: ${config.expanded} disabled: ${config.disabled}, scrollDirection: ${config.scrollDirection}, initialPosition: ${initialPosition} -> scrollToItem(${config.key})`, function(assert) {
+            QUnit.test(`expanded: ${config.expanded} disabled: ${config.disabled}, scrollDirection: ${config.scrollDirection}, initialPosition: ${initialPosition} -> scrollToItem(${config.key}) -> focusOut() -> focusIn()`, function(assert) {
                 const options = $.extend({}, config, { initialPosition });
                 const wrapper = createWrapper(options, createDataSource(config.expanded, config.disabled));
                 const completionCallback = wrapper.instance.scrollToItem(config.key);
 
                 const done = assert.async();
                 completionCallback.done((result) => {
+                    wrapper.getElement().focusout();
+                    wrapper.getElement().focusin();
                     const isFirstLevelNodeKey = config.key.indexOf(LEVEL_SEPARATOR) === -1;
                     if(config.disabled && !config.expanded && !isFirstLevelNodeKey) {
                         assert.strictEqual(result, false, 'scroll must fail');
