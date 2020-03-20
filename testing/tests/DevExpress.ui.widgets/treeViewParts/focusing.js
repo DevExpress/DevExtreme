@@ -62,89 +62,80 @@ QUnit.testInActiveWindow('widget should not have focus-state class after click o
 
 const configs = [];
 ['up', 'down', 'left', 'right', 'first', 'last'].forEach(direction => {
-    [false, true].forEach(expanded => {
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].forEach(initialFocusedItemKey => {
-            configs.push({ expanded, direction, initialFocusedItemKey });
+    ['item1', 'item1_1', 'item1_1_1', 'item1_1_1_1', 'item2', 'item2_1', 'item2_1_1', 'item2_1_1_1', 'item3', 'item3_1', 'item3_1_1', 'item3_1_1_1', 'item4', 'item4_1', 'item4_1_1', 'item4_1_1_1'].forEach(initialFocusedKey => {
+        [false, true].forEach(expanded => {
+            configs.push({ expanded, direction, initialFocusedKey });
         });
     });
 });
 
 configs.forEach(config => {
-    QUnit.test(`all.Expanded: ${config.expanded} -> emulateFocus(key:${config.initialFocusedItemKey}) -> moveFocus('${config.direction}'); (T226868)`, function(assert) {
+    QUnit.test(`all.Expanded: ${config.expanded} -> emulateFocus(key:${config.initialFocusedKey}) -> moveFocus('${config.direction}'); (T226868)`, function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'unnecessary test on mobile devices');
             return;
         }
         const wrapper = new TreeViewTestWrapper({
             items: [
-                { id: 1, text: 'item1', expanded: config.expanded, items: [{ id: 2, text: 'item1_1', expanded: config.expanded, items: [{ id: 3, text: 'item1_1_1' }] }] },
-                { id: 4, text: 'item2', expanded: config.expanded, items: [{ id: 5, text: 'item2_1', expanded: config.expanded, items: [{ id: 6, text: 'item1_1_1' }] }] },
-                { id: 7, text: 'item3', expanded: config.expanded, items: [{ id: 8, text: 'item3_1', expanded: config.expanded, items: [{ id: 9, text: 'item1_1_1' }] }] },
-                { id: 10, text: 'item4', expanded: config.expanded, items: [{ id: 11, text: 'item4_1', expanded: config.expanded, items: [{ id: 12, text: 'item4_1_1' }] }] }
+                { id: 'item1', expanded: config.expanded, items: [{ id: 'item1_1', expanded: config.expanded, items: [{ id: 'item1_1_1', expanded: config.expanded, items: [{ id: 'item1_1_1_1_1', expanded: config.expanded }] }] }] },
+                { id: 'item2', expanded: config.expanded, items: [{ id: 'item2_1', expanded: config.expanded, items: [{ id: 'item2_1_1', expanded: config.expanded, items: [{ id: 'item2_1_1_1_1', expanded: config.expanded }] }] }] },
+                { id: 'item3', expanded: config.expanded, items: [{ id: 'item3_1', expanded: config.expanded, items: [{ id: 'item3_1_1', expanded: config.expanded, items: [{ id: 'item3_1_1_1_1', expanded: config.expanded }] }] }] },
+                { id: 'item4', expanded: config.expanded, items: [{ id: 'item4_1', expanded: config.expanded, items: [{ id: 'item4_1_1', expanded: config.expanded, items: [{ id: 'item4_1_1_1_1', expanded: config.expanded }] }] }] }
             ],
+            displayExpr: 'id',
             focusStateEnabled: true,
             scrollDirection: 'both',
             height: 40,
             width: 40
         });
 
-        const $node = wrapper.getElement().find(`[data-item-id="${config.initialFocusedItemKey}"]`);
+        const $nodes = wrapper.getElement().find(`.${NODE_CLASS}`);
+        const $node = wrapper.getElement().find(`[data-item-id="${config.initialFocusedKey}"]`);
         if(!$node.length) {
             assert.ok(true, 'not real scenario');
             return;
         }
 
         const $item = $node.find('.dx-treeview-item').eq(0);
-        wrapper.instance._scrollableContainer.scrollToElement($item);
+        wrapper.instance.scrollToItem($item);
         $item.trigger('dxpointerdown');
 
         wrapper.instance._moveFocus(config.direction, {});
-        wrapper.checkNodeIsVisibleArea(getNextFocusedItemKey($node, config.initialFocusedItemKey, config.direction, config.expanded));
+        const nextFocusedKey = getNextFocusedKey($nodes, $node, config.direction);
+        wrapper.checkNodeIsVisibleArea(nextFocusedKey);
     });
 
-    function getNextFocusedItemKey($node, key, direction, expanded) {
-        const isFirstLevelNode = $node.attr('aria-level') === '1';
-        const isLastLevelNode = $node.attr('aria-level') === '3';
-        const firstKey = 1;
-        const lastKey = expanded ? 12 : 10;
+    function getNextFocusedKey($nodes, $node, direction) {
+        const firstNodeIndex = 0;
+        const lastNodeIndex = $nodes.length - 1;
+        const currentNodeIndex = $nodes.index($node);
 
-        let nextFocusedItemKey = 1;
-        switch(direction) {
-            case 'up':
-                nextFocusedItemKey = !isFirstLevelNode || expanded
-                    ? key - 1
-                    : key - 3;
-                break;
-            case 'down':
-                nextFocusedItemKey = !isFirstLevelNode || expanded
-                    ? key + 1
-                    : key + 3;
-                break;
-            case 'left':
-                nextFocusedItemKey = isFirstLevelNode || expanded
-                    ? key
-                    : key - 1;
-                break;
-            case 'right':
-                nextFocusedItemKey = isLastLevelNode || !expanded
-                    ? key
-                    : key + 1;
-                break;
-            case 'first':
-                nextFocusedItemKey = firstKey;
-                break;
-            case 'last':
-                nextFocusedItemKey = lastKey;
-                break;
+        let nextNodeIndex;
+        if(direction === 'up') {
+            nextNodeIndex = currentNodeIndex - 1;
+        } else if(direction === 'down') {
+            nextNodeIndex = currentNodeIndex + 1;
+        } else if(direction === 'first') {
+            nextNodeIndex = 0;
+        } else if(direction === 'last') {
+            nextNodeIndex = lastNodeIndex;
+        } else if(direction === 'left') {
+            nextNodeIndex = $node.attr('aria-expanded') === 'true' || $node.attr('aria-level') === '1'
+                ? currentNodeIndex
+                : currentNodeIndex - 1;
+        } else {
+            nextNodeIndex = $node.attr('aria-expanded') !== 'true' || $node.attr('aria-level') === '4'
+                ? currentNodeIndex
+                : currentNodeIndex + 1;
         }
 
-        if(nextFocusedItemKey < firstKey) {
-            nextFocusedItemKey = lastKey;
-        } else if(nextFocusedItemKey > lastKey) {
-            nextFocusedItemKey = firstKey;
+        if(nextNodeIndex < firstNodeIndex) {
+            nextNodeIndex = lastNodeIndex;
+        } else if(nextNodeIndex > lastNodeIndex) {
+            nextNodeIndex = firstNodeIndex;
         }
 
-        return nextFocusedItemKey;
+        return $nodes.eq(nextNodeIndex).attr('data-item-id');
     }
 });
 
