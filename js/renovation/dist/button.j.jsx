@@ -6,7 +6,7 @@ import Widget from '../preact-wrapper/component';
 import { extend } from '../../core/utils/extend';
 import ButtonView from '../button.p';
 import { wrapElement, getInnerActionName } from '../preact-wrapper/utils';
-import { useLayoutEffect } from 'preact/hooks';
+import { useLayoutEffect, useState } from 'preact/hooks';
 import { getPublicElement } from '../../core/utils/dom';
 
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
@@ -28,12 +28,12 @@ class Button extends Widget {
             const template = this._getTemplate(props.template);
 
             props.render = ({ parentRef, ...restProps }) => {
-                const $parent = $(parentRef.current);
+                // NOTE: Here we see on an old DOM tree, which was before template render
+                const [$parent] = useState($(parentRef.current));
                 $parent?.empty();
 
                 useLayoutEffect(() => {
-                    // NOTE: We don't see $parent here, possibly generator error.
-                    //       We see it if we define it again, or use 'console.log($parent)'
+                    // NOTE: Here we see on an actual DOM tree
                     const $parent = $(parentRef.current);
                     let $template = $(template.render({
                         container: getPublicElement($parent),
@@ -58,6 +58,7 @@ class Button extends Widget {
         });
 
         props.validationGroup = ValidationEngine.getGroupConfig(this._findGroup());
+        console.log(this._initializing, this._initialized);
 
         return props;
     }
