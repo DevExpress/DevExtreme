@@ -48,7 +48,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler($.extend(options)).dxScheduler('instance');
+            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
         };
         this.getAppointmentColor = function($task, checkedProperty) {
             checkedProperty = checkedProperty || 'backgroundColor';
@@ -430,7 +430,8 @@ QUnit.test('Appointment size should depend on neighbor appointments', function(a
     this.createInstance({
         currentView: 'week',
         currentDate: new Date(2015, 2, 4),
-        dataSource: items
+        dataSource: items,
+        maxAppointmentsPerCell: 'unlimited'
     });
 
     const $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
@@ -992,14 +993,13 @@ QUnit.test('Rival appointments from one group should be rendered correctly in ve
                 ]
             }
         ],
+        width: 800,
         currentDate: new Date(2018, 4, 21),
         startDayHour: 9,
         endDayHour: 15,
         cellDuration: 60,
         showAllDayPanel: true
     });
-
-    const defaultWidthStub = sinon.stub(this.instance.getRenderingStrategyInstance(), '_getAppointmentMaxWidth').returns(50);
 
     this.instance.option('dataSource', [
         {
@@ -1022,14 +1022,12 @@ QUnit.test('Rival appointments from one group should be rendered correctly in ve
     const cellHeight = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first().outerHeight();
 
     assert.roughEqual($appointments.eq(0).position().top, 8.5 * cellHeight, 1.5, 'correct top position of appointment');
-    assert.roughEqual($appointments.eq(0).outerWidth(), 50, 2, 'correct size of appointment');
-    assert.equal($appointments.eq(0).position().left, 314, 'correct left position of appointment');
+    assert.roughEqual($appointments.eq(0).outerWidth(), 59, 2, 'correct size of appointment');
+    assert.equal($appointments.eq(0).position().left, 285, 'correct left position of appointment');
 
     assert.roughEqual($appointments.eq(1).position().top, 8.5 * cellHeight, 1.5, 'correct top position of appointment');
-    assert.roughEqual($appointments.eq(1).outerWidth(), 50, 2, 'correct size of appointment');
-    assert.equal($appointments.eq(1).position().left, 428, 'correct left position of appointment');
-
-    defaultWidthStub.restore();
+    assert.roughEqual($appointments.eq(1).outerWidth(), 59, 2, 'correct size of appointment');
+    assert.equal($appointments.eq(1).position().left, 370, 'correct left position of appointment');
 });
 
 QUnit.test('Appointment in bottom cell should be rendered cirrectly in vertical grouped workspace Week', function(assert) {
