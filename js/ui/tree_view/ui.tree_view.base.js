@@ -806,22 +806,22 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _toggleExpandedState: function(itemElement, state, e) {
         const node = this._getNode(itemElement);
         if(!node) {
-            return false;
+            return new Deferred().reject();
         }
         if(node.internalFields.disabled) {
-            return false;
+            return new Deferred().reject();
         }
 
         const currentState = node.internalFields.expanded;
         if(currentState === state) {
-            return true;
+            return new Deferred().resolve();
         }
 
         if(this._hasChildren(node)) {
             const $node = this._getNodeElement(node);
 
             if($node.find(`.${NODE_LOAD_INDICATOR_CLASS}:not(.${INVISIBLE_STATE_CLASS})`).length) {
-                return false;
+                return new Deferred().reject();
             }
 
             this._createLoadIndicator($node);
@@ -832,9 +832,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         this._dataAdapter.toggleExpansion(node.internalFields.key, state);
-        this._updateExpandedItemsUI(node, state, e);
 
-        return true;
+        return this._updateExpandedItemsUI(node, state, e);
     },
 
     _createLoadIndicator: function($node) {
@@ -894,22 +893,24 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         const nodeContainerExists = $nodeContainer.length > 0;
 
+        const completionCallback = new Deferred();
         if(!state || nodeContainerExists && !$nodeContainer.is(':empty')) {
-            this._updateExpandedItem(node, state, e);
-            return;
+            this._animateNodeContainer(node, state, e, completionCallback);
+            return completionCallback;
         }
 
         if(this._isVirtualMode() || this._useCustomChildrenLoader()) {
-            this._loadNestedItemsWithUpdate(node, state, e);
-            return;
+            this._loadNestedItemsWithUpdate(node, state, e, completionCallback);
+            return completionCallback;
         }
 
         this._renderSublevel($node, node, this._getChildNodes(node));
         this._fireContentReadyAction();
-        this._updateExpandedItem(node, state, e);
+        this._animateNodeContainer(node, state, e, completionCallback);
+        return completionCallback;
     },
 
-    _loadNestedItemsWithUpdate: function(node, state, e) {
+    _loadNestedItemsWithUpdate: function(node, state, e, completionCallback) {
         const $node = this._getNodeElement(node);
         this._loadNestedItems(node).done(items => {
             const actualNodeData = this._getActualNode(node);
@@ -920,7 +921,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             }
 
             this._fireContentReadyAction();
-            this._updateExpandedItem(actualNodeData, state, e);
+            this._animateNodeContainer(actualNodeData, state, e, completionCallback);
         });
     },
 
@@ -960,13 +961,13 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._initDataAdapter();
     },
 
-    _updateExpandedItem: function(node, state, e) {
-        this._animateNodeContainer(node, state, e);
-    },
-
-    _animateNodeContainer: function(node, state, e) {
+    _animateNodeContainer: function(node, state, e, completionCallback) {
         const $node = this._getNodeElement(node);
         const $nodeContainer = $node.children(`.${NODE_CONTAINER_CLASS}`);
+
+        if(node && completionCallback && $nodeContainer.length === 0) {
+            completionCallback.resolve();
+        }
 
         // NOTE: The height of node container is should be used when the container is shown (T606878)
         $nodeContainer.addClass(OPENED_NODE_CONTAINER_CLASS);
@@ -988,6 +989,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 this.setAria('expanded', state, $node);
                 this._scrollableContainer.update();
                 this._fireExpandedStateUpdatedEvent(state, node, e);
+
+                if(completionCallback) {
+                    completionCallback.resolve();
+                }
             }).bind(this)
         });
     },

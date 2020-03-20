@@ -6343,19 +6343,19 @@ declare module DevExpress.ui {
         /** @name dxTreeView.collapseAll() */
         collapseAll(): void;
         /** @name dxTreeView.collapseItem(itemData) */
-        collapseItem(itemData: any): boolean;
+        collapseItem(itemData: any): Promise<void> & JQueryPromise<void>;
         /** @name dxTreeView.collapseItem(itemElement) */
-        collapseItem(itemElement: Element): boolean;
+        collapseItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
         /** @name dxTreeView.collapseItem(key) */
-        collapseItem(key: any): boolean;
+        collapseItem(key: any): Promise<void> & JQueryPromise<void>;
         /** @name dxTreeView.expandAll() */
         expandAll(): void;
         /** @name dxTreeView.expandItem(itemData) */
-        expandItem(itemData: any): boolean;
+        expandItem(itemData: any): Promise<void> & JQueryPromise<void>;
         /** @name dxTreeView.expandItem(itemElement) */
-        expandItem(itemElement: Element): boolean;
+        expandItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
         /** @name dxTreeView.expandItem(key) */
-        expandItem(key: any): boolean;
+        expandItem(key: any): Promise<void> & JQueryPromise<void>;
         /** @name dxTreeView.getNodes() */
         getNodes(): Array<dxTreeViewNode>;
         /** @name dxTreeView.getSelectedNodeKeys() */

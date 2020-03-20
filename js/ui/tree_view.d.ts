@@ -326,29 +326,29 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @docid dxTreeViewMethods.collapseItem
      * @publicName collapseItem(itemData)
      * @param1 itemData:Object
-     * @return boolean
+     * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(itemData: any): boolean;
+    collapseItem(itemData: any): Promise<void> & JQueryPromise<void>;
     /**
      * @docid dxTreeViewMethods.collapseItem
      * @publicName collapseItem(itemElement)
      * @param1 itemElement:Node
-     * @return boolean
+     * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(itemElement: Element): boolean;
+    collapseItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
     /**
      * @docid dxTreeViewMethods.collapseItem
      * @publicName collapseItem(key)
      * @param1 key:any
-     * @return boolean
+     * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(key: any): boolean;
+    collapseItem(key: any): Promise<void> & JQueryPromise<void>;
     /**
      * @docid dxTreeViewMethods.expandAll
      * @publicName expandAll()
@@ -360,29 +360,29 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @docid dxTreeViewMethods.expandItem
      * @publicName expandItem(itemData)
      * @param1 itemData:Object
-     * @return boolean
+     * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(itemData: any): boolean;
+    expandItem(itemData: any): Promise<void> & JQueryPromise<void>;
     /**
      * @docid dxTreeViewMethods.expandItem
      * @publicName expandItem(itemElement)
      * @param1 itemElement:Node
-     * @return boolean
+     * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(itemElement: Element): boolean;
+    expandItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
     /**
      * @docid dxTreeViewMethods.expandItem
      * @publicName expandItem(key)
      * @param1 key:any
-     * @return boolean
+     * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(key: any): boolean;
+    expandItem(key: any): Promise<void> & JQueryPromise<void>;
     /**
      * @docid dxTreeViewMethods.getNodes
      * @publicName getNodes()

@@ -48,12 +48,11 @@ module('Expanded items', {
         ];
         const treeView = initTree({ items: data }).dxTreeView('instance');
 
-        const expandRes = treeView.expandItem(data[0]);
-        assert.equal(expandRes, true, 'expand is success');
+        const done = assert.async(2);
+        treeView.expandItem(data[0]).done(() => { assert.ok('expand success'); done(); });
         assert.ok(data[0].expanded, 'item is expanded');
 
-        const collapseRes = treeView.collapseItem(data[0]);
-        assert.equal(collapseRes, true, 'collapse is success');
+        treeView.collapseItem(data[0]).done(() => { assert.ok('expand success'); done(); });
         assert.notOk(data[0].expanded, 'item is not expanded');
     });
 
@@ -68,8 +67,8 @@ module('Expanded items', {
 
         const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
 
-        const expandRes = treeView.expandItem($firstItem.get(0));
-        assert.equal(expandRes, true, 'expand is success');
+        const done = assert.async();
+        treeView.expandItem($firstItem.get(0)).done(() => { assert.ok('expand is success'); done(); });
 
         assert.equal($treeView.find('.' + internals.OPENED_NODE_CONTAINER_CLASS).length, 1);
         assert.ok(itemExpandedHandler.calledOnce);
@@ -104,13 +103,12 @@ module('Expanded items', {
 
         const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
 
-        const expandRes = treeView.expandItem($firstItem.get(0));
-        assert.equal(expandRes, true, 'expand is success');
-
+        const done = assert.async(3);
+        treeView.expandItem($firstItem.get(0)).done(() => { assert.ok('expand is success'); done(); });
         assert.equal(onContentReadyHandler.callCount, 2);
 
-        treeView.collapseItem($firstItem.get(0));
-        treeView.expandItem($firstItem.get(0));
+        treeView.collapseItem($firstItem.get(0)).done(() => { assert.ok('expand is success'); done(); });
+        treeView.expandItem($firstItem.get(0)).done(() => { assert.ok('collapse is success'); done(); });
         assert.equal(onContentReadyHandler.callCount, 2);
     });
 
@@ -149,8 +147,8 @@ module('Expanded items', {
 
         const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
 
-        const collapseRes = treeView.collapseItem($firstItem);
-        assert.equal(collapseRes, true, 'collapse is success');
+        const done = assert.async();
+        treeView.collapseItem($firstItem).done(() => { assert.ok('expand is success'); done(); });
 
         assert.equal($treeView.find('.' + internals.OPENED_NODE_CONTAINER_CLASS).length, 1);
         assert.ok(itemCollapsedHandler.calledOnce);
@@ -356,8 +354,8 @@ module('Expanded items', {
         });
         const treeView = $treeView.dxTreeView('instance');
 
-        let expandRes = treeView.expandItem(11);
-        assert.equal(expandRes, true, 'expand is success');
+        const done = assert.async(2);
+        treeView.expandItem(11).done(() => { assert.ok('expand is success'); done(); });
 
         let $items = $treeView.find('.dx-treeview-node');
         assert.equal($items.length, 1, 'root item was expanded');
@@ -366,9 +364,7 @@ module('Expanded items', {
         assert.notOk(nodes[0].expanded, 'root node is collapsed');
         assert.ok(nodes[0].children[0].expanded, 'child node is expanded');
 
-        expandRes = treeView.expandItem(1);
-        assert.equal(expandRes, true, 'expand is success');
-
+        treeView.expandItem(1).done(() => { assert.ok('expand is success'); done(); });
         $items = $treeView.find('.dx-treeview-node');
         assert.equal($items.length, 3, 'root item was expanded');
     });
@@ -376,12 +372,13 @@ module('Expanded items', {
     test('expand parent items in recursive case', function(assert) {
         const items = [{ text: '1', id: 1, items: [{ text: '11', id: 11, items: [{ text: '111', id: 111 }] }] }];
         const $treeView = initTree({
-            items: items
+            items: items,
+            expandNodesRecursive: true
         });
         const treeView = $treeView.dxTreeView('instance');
 
-        const expandRes = treeView.expandItem(11);
-        assert.equal(expandRes, true, 'expand is success');
+        const done = assert.async();
+        treeView.expandItem(11).done(() => { assert.ok('expand is success'); done(); });
 
         const $items = $treeView.find('.dx-treeview-node');
         assert.equal($items.length, 3, 'root item was expanded');
@@ -411,8 +408,9 @@ module('Expanded items', {
 
         treeView.expandAll();
         treeView.collapseAll();
-        const expandRes = treeView.expandItem(111);
-        assert.equal(expandRes, true, 'expand is success');
+
+        const done = assert.async();
+        treeView.expandItem(111).done(() => { assert.ok('expand is success'); done(); });
 
         const nodeElements = $treeView.find('.' + TREEVIEW_NODE_CONTAINER_CLASS);
         assert.ok(nodeElements.eq(1).hasClass(TREEVIEW_NODE_CONTAINER_OPENED_CLASS), 'item 11');
@@ -426,8 +424,8 @@ module('Expanded items', {
         });
         const treeView = $treeView.dxTreeView('instance');
 
-        const expandRes = treeView.expandItem(11);
-        assert.equal(expandRes, true, 'expand is success');
+        const done = assert.async();
+        treeView.expandItem(11).done(() => { assert.ok('expand is success'); done(); });
 
         const $items = $treeView.find('.dx-treeview-node');
         assert.equal($items.length, 2, 'root item was expanded');
@@ -443,13 +441,15 @@ module('Expanded items', {
         });
 
         const treeView = $treeView.dxTreeView('instance');
-        assert.equal(treeView.expandItem('key not exist'), false, 'expand fail, node not found by key');
-        assert.equal(treeView.expandItem($('<div/>').get(0)), false, 'expand fail, node not found by element');
-        assert.equal(treeView.expandItem({}), false, 'expand fail, node not found by item data');
 
-        assert.equal(treeView.collapseItem('key not exist'), false, 'expand fail, node not found by key');
-        assert.equal(treeView.collapseItem($('<div/>').get(0)), false, 'expand fail, node not found by element');
-        assert.equal(treeView.collapseItem({}), false, 'expand fail, node not found by item data');
+        const done = assert.async(6);
+        treeView.expandItem('key not exist').fail(() => { assert.ok('expand fail, node not found by key'); done(); });
+        treeView.expandItem($('<div/>').get(0)).fail(() => { assert.ok('expand fail, node not found by itemElement'); done(); });
+        treeView.expandItem({}).fail(() => { assert.ok('expand fail, node not found by itemData'); done(); });
+
+        treeView.collapseItem('key not exist').fail(() => { assert.ok('collapse fail, node not found by key'); done(); });
+        treeView.collapseItem($('<div/>').get(0)).fail(() => { assert.ok('collapse fail, node not found by itemElement'); done(); });
+        treeView.collapseItem({}).fail(() => { assert.ok('collapse fail, node not found by itemData'); done(); });
     });
 
 
@@ -749,8 +749,8 @@ module('Expanded items', {
                     const wrapper = new TreeViewTestWrapper(options);
                     const $item1 = wrapper.getElement().find('[aria-level="1"]');
 
-                    const expandRes = wrapper.instance.expandItem(argumentGetter($item1));
-                    assert.equal(expandRes, true, 'expand is success');
+                    const done = assert.async();
+                    wrapper.instance.expandItem(argumentGetter($item1)).done(() => { assert.ok('expand is success'); done(); });
 
                     const $item1_1 = wrapper.getElement().find('[aria-level="2"]');
                     assert.equal($item1_1.is(':visible'), true);
@@ -790,8 +790,8 @@ module('Expanded items', {
                     const wrapper = new TreeViewTestWrapper(options);
                     const $item1 = wrapper.getElement().find('[aria-level="1"]');
 
-                    const collapseRes = wrapper.instance.collapseItem(argumentGetter($item1));
-                    assert.equal(collapseRes, true, 'collapse is success');
+                    const done = assert.async();
+                    wrapper.instance.collapseItem(argumentGetter($item1)).done(() => { assert.ok('collapse is success'); done(); });
 
                     const $item1_1 = wrapper.getElement().find('[aria-level="2"]');
                     if(expanded) {
