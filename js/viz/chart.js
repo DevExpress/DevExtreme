@@ -467,15 +467,13 @@ const dxChart = AdvancedChart.inherit({
     _initCustomPositioningAxes() {
         const that = this;
         const argumentAxis = that.getArgumentAxis();
-        const valueAxis = that._valueAxes.filter(v => v.pane === argumentAxis.pane)[0];
+        const valueAxisName = argumentAxis.getOptions().customPositionAxis;
+        const valueAxis = that._valueAxes.filter(v => v.pane === argumentAxis.pane && (!valueAxisName || valueAxisName === v.name))[0];
 
         that._valueAxes.forEach(v => {
-            if(v.getCustomPosition === noop) {
-                v.getCustomPosition = (position) => {
-                    return v.getTranslatedPosition(argumentAxis, position ?? v.getResolvedPositionOption());
-                };
-                v.getCustomBoundaryPosition = (position) => {
-                    return v.getBoundaryPosition(argumentAxis, position ?? v.getResolvedPositionOption());
+            if(argumentAxis !== v.getCustomPositionAxis()) {
+                v.getCustomPositionAxis = () => {
+                    return argumentAxis;
                 };
                 v.customPositionIsBoundaryOppositeAxis = () => {
                     return argumentAxis.customPositionIsBoundary();
@@ -483,16 +481,15 @@ const dxChart = AdvancedChart.inherit({
             }
         });
 
-        if(argumentAxis.getCustomPosition === noop) {
-            argumentAxis.getCustomPosition = (position) => {
-                return argumentAxis.getTranslatedPosition(valueAxis, position ?? argumentAxis.getResolvedPositionOption());
-            };
-            argumentAxis.getCustomBoundaryPosition = (position) => {
-                return argumentAxis.getBoundaryPosition(valueAxis, position ?? argumentAxis.getResolvedPositionOption());
+        if(_isDefined(valueAxis) && valueAxis !== argumentAxis.getCustomPositionAxis()) {
+            argumentAxis.getCustomPositionAxis = () => {
+                return valueAxis;
             };
             argumentAxis.customPositionIsBoundaryOppositeAxis = () => {
                 return that._valueAxes.some(v => v.customPositionIsBoundary());
             };
+        } else if(_isDefined(argumentAxis.getCustomPositionAxis()) && !_isDefined(valueAxis)) {
+            argumentAxis.getCustomPositionAxis = noop;
         }
     },
 

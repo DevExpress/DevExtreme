@@ -1080,6 +1080,7 @@ export const MockAxis = function(renderOptions) {
         getAxisShift: function() {
             return 0;
         },
+        getCustomPositionAxis: commonUtils.noop,
         customPositionIsAvailable() {
             return false;
         },

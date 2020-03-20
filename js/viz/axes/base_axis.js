@@ -23,6 +23,7 @@ const patchFontOptions = vizUtils.patchFontOptions;
 const getVizRangeObject = vizUtils.getVizRangeObject;
 const getLog = vizUtils.getLogExt;
 const raiseTo = vizUtils.raiseToExt;
+const valueOf = vizUtils.valueOf;
 const _math = Math;
 const _abs = _math.abs;
 const _max = _math.max;
@@ -48,6 +49,7 @@ const DEFAULT_AXIS_DIVISION_FACTOR = 50;
 const DEFAULT_MINOR_AXIS_DIVISION_FACTOR = 15;
 
 const SCROLL_THRESHOLD = 5;
+const MIN_BAR_MARGIN = 5;
 const MAX_MARGIN_VALUE = 0.8;
 
 const dateIntervals = {
@@ -215,10 +217,6 @@ function updateLabels(ticks, step, func) {
     });
 }
 
-function valueOf(value) {
-    return value.valueOf();
-}
-
 function getZoomBoundValue(optionValue, dataValue) {
     if(optionValue === undefined) {
         return dataValue;
@@ -244,9 +242,7 @@ function configureGenerator(options, axisDivisionFactor, viewPort, screenDelta, 
                 min: min,
                 max: max,
                 categories: viewPort.categories,
-                isSpacedMargin: viewPort.isSpacedMargin,
-                checkMinDataVisibility: viewPort.checkMinDataVisibility,
-                checkMaxDataVisibility: viewPort.checkMaxDataVisibility
+                isSpacedMargin: viewPort.isSpacedMargin
             },
             screenDelta,
             tickInterval,
@@ -346,6 +342,8 @@ Axis.prototype = {
     customPositionIsAvailable() {
         return false;
     },
+
+    getCustomPositionAxis: _noop,
 
     getCustomPosition: _noop,
 
@@ -1401,9 +1399,7 @@ Axis.prototype = {
                 min: viewPort.minVisible,
                 max: viewPort.maxVisible,
                 categories: viewPort.categories,
-                isSpacedMargin: viewPort.isSpacedMargin,
-                checkMinDataVisibility: viewPort.checkMinDataVisibility,
-                checkMaxDataVisibility: viewPort.checkMaxDataVisibility
+                isSpacedMargin: viewPort.isSpacedMargin
             },
             that._getScreenDelta(),
             options.tickInterval,
@@ -1501,9 +1497,6 @@ Axis.prototype = {
         const that = this;
         const renderer = that._renderer;
         const options = that._options;
-        let ticks;
-        let boundaryTicks;
-        let range;
 
         if(!canvas) {
             return;
@@ -1513,21 +1506,19 @@ Axis.prototype = {
         that.updateCanvas(canvas);
 
         that._estimatedTickInterval = that._getTicks(that.adjustViewport(this._seriesData), _noop, true).tickInterval; // tickInterval calculation
-        range = that._getViewportRange();
 
+        const range = that._getViewportRange();
         const margins = this._calculateValueMargins();
 
         range.addRange({
             minVisible: margins.minValue,
             maxVisible: margins.maxValue,
-            isSpacedMargin: margins.isSpacedMargin,
-            checkMinDataVisibility: !this.isArgumentAxis && margins.checkInterval && !isDefined(options.min) && margins.minValue.valueOf() > 0,
-            checkMaxDataVisibility: !this.isArgumentAxis && margins.checkInterval && !isDefined(options.max) && margins.maxValue.valueOf() < 0
+            isSpacedMargin: margins.isSpacedMargin
         });
 
-        ticks = that._createTicksAndLabelFormat(range);
+        const ticks = that._createTicksAndLabelFormat(range);
 
-        boundaryTicks = that._getBoundaryTicks(ticks.ticks, that._getViewportRange());
+        const boundaryTicks = that._getBoundaryTicks(ticks.ticks, that._getViewportRange());
         if(options.showCustomBoundaryTicks && boundaryTicks.length) {
             that._boundaryTicks = [boundaryTicks[0]].map(createBoundaryTick(that, renderer, true));
             if(boundaryTicks.length > 1) {
@@ -1655,8 +1646,8 @@ Axis.prototype = {
         const margins = that.getMarginOptions();
         const marginSize = (margins.size || 0) / 2;
         const options = that._options;
-        const dataRange = this._getViewportRange();
-        const viewPort = this.getViewport();
+        const dataRange = that._getViewportRange();
+        const viewPort = that.getViewport();
         const screenDelta = that._getScreenDelta();
         const isDiscrete = (options.type || '').indexOf(constants.discrete) !== -1;
         const valueMarginsEnabled = options.valueMarginsEnabled && !isDiscrete && !that.customPositionIsBoundaryOppositeAxis();
@@ -1701,6 +1692,8 @@ Axis.prototype = {
         if(valueMarginsEnabled) {
             if(isDefined(minValueMargin)) {
                 minPercentPadding = isFinite(minValueMargin) ? minValueMargin : 0;
+            } else if(!that.isArgumentAxis && margins.checkInterval && valueOf(dataRange.minVisible) > 0 && valueOf(dataRange.minVisible) === valueOf(dataRange.min)) {
+                minPadding = MIN_BAR_MARGIN;
             } else {
                 minPadding = Math.max(marginSize, interval);
                 minPadding = Math.min(maxPaddingValue, minPadding);
@@ -1708,6 +1701,8 @@ Axis.prototype = {
 
             if(isDefined(maxValueMargin)) {
                 maxPercentPadding = isFinite(maxValueMargin) ? maxValueMargin : 0;
+            } else if(!that.isArgumentAxis && margins.checkInterval && valueOf(dataRange.maxVisible) < 0 && valueOf(dataRange.maxVisible) === valueOf(dataRange.max)) {
+                maxPadding = MIN_BAR_MARGIN;
             } else {
                 maxPadding = Math.max(marginSize, interval);
                 maxPadding = Math.min(maxPaddingValue, maxPadding);

@@ -1,5 +1,9 @@
-.dx-button-disabled {
+.dx-button-disabled() {
     cursor: default;
+}
+
+.dx-button-disabled {
+    .dx-button-disabled();
 }
 
 .dx-button {
@@ -63,6 +67,6 @@
 .dx-state-disabled {
     &.dx-button,
     .dx-button {
-        .dx-button-disabled;
+        .dx-button-disabled();
     }
 }

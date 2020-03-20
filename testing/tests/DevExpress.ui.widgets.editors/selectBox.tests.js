@@ -984,6 +984,25 @@ QUnit.module('widget options', moduleSetup, () => {
         assert.equal(selectionChangedSecondHandler.callCount, 1, 'selectionChanged handler is correct');
     });
 
+    QUnit.test('valueChange after focusout should not be raised', function(assert) {
+        const valueChangeHandler = sinon.spy();
+
+        const $selectBox = $('#selectBox').dxSelectBox({
+            items: [1, 2, 3],
+            value: 'a',
+            searchEnabled: true,
+            onValueChanged: valueChangeHandler
+        });
+
+        const selectBox = $selectBox.dxSelectBox('instance');
+
+        selectBox.open();
+        $selectBox.focusout();
+
+        assert.ok(valueChangeHandler.notCalled, 'option change has not been raised');
+        assert.strictEqual(selectBox.option('value'), 'a', 'value is correct');
+    });
+
     QUnit.test('options displayExpr, valueExpr', function(assert) {
         assert.expect(5);
 

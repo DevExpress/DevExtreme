@@ -40,6 +40,7 @@ const ACCORDION_ITEM_TITLE_CLASS = 'dx-accordion-item-title';
 const ACCORDION_ITEM_BODY_CLASS = 'dx-accordion-item-body';
 const ACCORDION_ITEM_OPENED_CLASS = 'dx-accordion-item-opened';
 const ACCORDION_ITEM_CLOSED_CLASS = 'dx-accordion-item-closed';
+const HIDDEN_CLASS = 'dx-state-invisible';
 
 const moduleSetup = {
     beforeEach: function() {
@@ -167,6 +168,39 @@ QUnit.module('widget rendering', moduleSetup, () => {
 
         instance.option('items[0].title', 'Changed Title');
         assert.equal($element.find('.' + ACCORDION_ITEM_BODY_CLASS).length, 1, 'body is rendered');
+    });
+
+    [true, false].forEach(collapsible => {
+        [true, false].forEach(multiple => {
+            [true, false].forEach(deferRendering => {
+                [true, false].forEach(repaintChangesOnly => {
+                    QUnit.test(`collapsible: ${collapsible}, multiple: ${multiple}, deferRendering: ${deferRendering}, repaintChangesOnly: ${repaintChangesOnly}, item1.display: false -> accordion.option(items[1].visible, true) -> accordion.option(items[1].visible, false) (T869114)`, function(assert) {
+                        const $element = this.$element.dxAccordion({
+                            items: [ { id: 0, title: 'item0' }, { id: 1, title: 'item1', visible: false } ],
+                            repaintChangesOnly: repaintChangesOnly,
+                            deferRendering: deferRendering,
+                            collapsible: collapsible,
+                            multiple: multiple
+                        });
+                        const instance = $element.dxAccordion('instance');
+                        const item1GetterFunc = () => $element.find(`.${ACCORDION_ITEM_CLASS}`).eq(1);
+
+                        let item1 = item1GetterFunc();
+                        assert.strictEqual(item1.hasClass(HIDDEN_CLASS), true, 'item1 is hidden');
+
+                        instance.option('items[1].visible', true);
+                        item1 = item1GetterFunc();
+                        assert.strictEqual(item1.hasClass(HIDDEN_CLASS), false, 'item1 is visible');
+                        assert.roughEqual(item1.height(), 21, 0.5, 'item1 has valid height');
+
+                        instance.option('items[1].visible', false);
+                        item1 = item1GetterFunc();
+                        assert.strictEqual(item1.hasClass(HIDDEN_CLASS), true, 'item1 is hidden');
+                        assert.strictEqual(item1.height(), 0, 'item1 has zero height');
+                    });
+                });
+            });
+        });
     });
 
     QUnit.test('Item body should be rendered on item changing and selectionChanging when the \'deferRendering\' option is true (T586536)', function(assert) {

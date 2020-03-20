@@ -3,12 +3,18 @@ require('localization/globalize/number');
 require('localization/globalize/currency');
 require('localization/globalize/date');
 require('localization/globalize/message');
-require('../../helpers/l10n/cldrNumberDataRu.js');
+const cldrData = [
+    require('../../../node_modules/devextreme-cldr-data/ru.json!json')
+];
 
 const ValidationEngine = require('ui/validation_engine');
 const Globalize = require('globalize');
 const localization = require('localization');
 const ru = require('localization/messages/ru.json!');
+
+cldrData.forEach(localeCldrData => {
+    Globalize.load(localeCldrData);
+});
 
 localization.loadMessages(ru);
 

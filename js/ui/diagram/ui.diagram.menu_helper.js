@@ -90,12 +90,12 @@ const DiagramMenuHelper = {
         contextMenu.option(itemOptionText + 'visible', visible);
     },
     updateContextMenuItemValue(contextMenu, itemOptionText, rootCommandKey, value) {
-        if(typeof value === 'boolean') {
+        const items = contextMenu.option(itemOptionText + 'items');
+        if(typeof value === 'boolean' && (!items || !items.length)) {
             this._setContextMenuHasCheckedItems(contextMenu, -1);
             contextMenu.option(itemOptionText + 'checked', value);
         } else if(value !== undefined) {
             this._setContextMenuHasCheckedItems(contextMenu, rootCommandKey);
-            const items = contextMenu.option(itemOptionText + 'items');
             if(Array.isArray(items)) {
                 items.forEach((item, index) => {
                     item.checked = item.value === value;

@@ -30,7 +30,7 @@
     height: 100%;
 }
 
-.dx-toolbar-item {
+.dx-toolbar-item() {
     display: table-cell;
     padding: 0 5px;
     vertical-align: middle;
@@ -45,8 +45,12 @@
     }
 }
 
+.dx-toolbar-item {
+    .dx-toolbar-item();
+}
+
 .dx-toolbar-menu-container {
-    .dx-toolbar-item;
+    .dx-toolbar-item();
 }
 
 .dx-toolbar-group {

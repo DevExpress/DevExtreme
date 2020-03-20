@@ -42,6 +42,9 @@ class DiagramFloatingPanel extends DiagramPanel {
     toggle() {
         this.option('isVisible', !this.isVisible());
     }
+    repaint() {
+        this._popup.repaint();
+    }
 
     _getPopupContent() {
         return this._popup.content();
@@ -61,25 +64,28 @@ class DiagramFloatingPanel extends DiagramPanel {
         return '';
     }
     _getPopupWidth() {
-        return Math.max(this.option('width'), this._getPopupMinWidth()) || 'auto';
+        return this.option('width') || 'auto';
     }
-    _getPopupWidthOption() {
-        return this._getPopupWidth() || 'auto';
+    _getPopupMaxWidth() {
+        return this.option('maxWidth');
     }
     _getPopupMinWidth() {
-        return 0;
-    }
-    _getPopupHeightOption() {
-        return this._getPopupHeight() || 'auto';
+        return this.option('minWidth');
     }
     _getPopupHeight() {
-        return Math.max(this.option('height'), this._getPopupMinHeight()) || 'auto';
+        return this.option('height') || 'auto';
+    }
+    _getPopupMaxHeight() {
+        return this.option('maxHeight');
     }
     _getPopupMinHeight() {
-        return 0;
+        return this.option('minHeight');
     }
     _getPopupPosition() {
         return {};
+    }
+    _getPopupContainer() {
+        return this.option('container');
     }
     _getPopupSlideAnimationObject(properties) {
         return extend({
@@ -101,8 +107,13 @@ class DiagramFloatingPanel extends DiagramPanel {
             shading: false,
             showTitle: false,
             focusStateEnabled: false,
-            width: this._getPopupWidthOption(),
-            height: this._getPopupHeightOption(),
+            container: this._getPopupContainer(),
+            width: this._getPopupWidth(),
+            height: this._getPopupHeight(),
+            maxWidth: this._getPopupMaxWidth(),
+            maxHeight: this._getPopupMaxHeight(),
+            minWidth: this._getPopupMinWidth(),
+            minHeight: this._getPopupMinHeight(),
             position: this._getPopupPosition(),
             onContentReady: function() {
                 that._renderPopupContent(that._popup.content());
@@ -142,11 +153,26 @@ class DiagramFloatingPanel extends DiagramPanel {
             case 'onVisibilityChanged':
                 this._createOnVisibilityChangedAction();
                 break;
+            case 'container':
+                this._popup.option('container', this._getPopupContainer());
+                break;
             case 'width':
-                this._popup.option('width', this._getPopupWidthOption());
+                this._popup.option('width', this._getPopupWidth());
                 break;
             case 'height':
-                this._popup.option('height', this._getPopupHeightOption());
+                this._popup.option('height', this._getPopupHeight());
+                break;
+            case 'maxWidth':
+                this._popup.option('maxWidth', this._getPopupMaxWidth());
+                break;
+            case 'maxHeight':
+                this._popup.option('maxHeight', this._getPopupMaxHeight());
+                break;
+            case 'minWidth':
+                this._popup.option('minWidth', this._getPopupMinWidth());
+                break;
+            case 'minHeight':
+                this._popup.option('minHeight', this._getPopupMinHeight());
                 break;
             case 'isMobileView':
                 this._invalidate();

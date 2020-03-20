@@ -18,8 +18,6 @@ import typeUtils from 'core/utils/type';
 import uiDateUtils from 'ui/date_box/ui.date_utils';
 import { noop } from 'core/utils/common';
 
-import '../../helpers/l10n/cldrNumberDataDe.js';
-import '../../helpers/l10n/cldrCalendarDataDe.js';
 import '../../helpers/calendarFixtures.js';
 
 import 'ui/validator';
@@ -3314,7 +3312,7 @@ QUnit.module('datebox w/ time list', {
         assert.equal($listItems.last().text(), '11:30 PM', 'max value is right');
     });
 
-    QUnit.test('list should contain all correct values when min/max options are define (T869203)', function(assert) {
+    QUnit.test('list should contain all correct values when min/max options are defined (T869203)', function(assert) {
         this.dateBox.option({
             min: new Date(2015, 11, 1, 5, 45),
             max: new Date(2015, 11, 1, 6, 15),

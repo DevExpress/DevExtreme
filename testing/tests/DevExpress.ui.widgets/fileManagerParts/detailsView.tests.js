@@ -2,7 +2,7 @@ import $ from 'jquery';
 import 'ui/file_manager';
 import fx from 'animation/fx';
 import pointerEvents from 'events/pointer';
-import { Consts, FileManagerWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
+import { FileManagerWrapper, createTestFileSystem, isDesktopDevice } from '../../../helpers/fileManagerHelpers.js';
 import { triggerCellClick } from '../../../helpers/fileManager/events.js';
 
 const { test } = QUnit;
@@ -62,21 +62,6 @@ const moduleConfig = {
     }
 };
 
-const ShowMoreButtonText = '\u22EE';
-
-const getFileSizeCellValueInDetailsView = ($element, rowIndex) => getCellValueInDetailsView($element, rowIndex, 4);
-
-const getCellValueInDetailsView = ($element, rowIndex, columnIndex) => {
-    return getCellInDetailsView($element, rowIndex, columnIndex)
-        .text()
-        .replace(ShowMoreButtonText, '');
-};
-
-const getCellInDetailsView = ($element, rowIndex, columnIndex) => {
-    return $element.find(`tr.${Consts.GRID_DATA_ROW_CLASS}[aria-rowindex=${rowIndex}] td`)
-        .eq(columnIndex);
-};
-
 const getSelectedItemNames = fileManager => fileManager.getSelectedItems().map(item => item.name);
 
 const prepareParentDirectoryTesting = (context, singleSelection) => {
@@ -96,11 +81,11 @@ const prepareParentDirectoryTesting = (context, singleSelection) => {
 QUnit.module('Details View', moduleConfig, () => {
 
     test('Format file sizes', function(assert) {
-        assert.equal(getFileSizeCellValueInDetailsView(this.$element, 1).trim(), '', 'Folder shouldn\'t display own size.');
-        assert.equal(getFileSizeCellValueInDetailsView(this.$element, 2), '0 B', 'Incorrect formating of size column.');
-        assert.equal(getFileSizeCellValueInDetailsView(this.$element, 3), '200 B', 'Incorrect formating of size column.');
-        assert.equal(getFileSizeCellValueInDetailsView(this.$element, 4), '1 KB', 'Incorrect formating of size column.');
-        assert.equal(getFileSizeCellValueInDetailsView(this.$element, 5), '1.3 KB', 'Incorrect formating of size column.');
+        assert.equal(this.wrapper.getDetailsItemSize(0).trim(), '', 'Folder shouldn\'t display own size.');
+        assert.equal(this.wrapper.getDetailsItemSize(1), '0 B', 'Incorrect formating of size column.');
+        assert.equal(this.wrapper.getDetailsItemSize(2), '200 B', 'Incorrect formating of size column.');
+        assert.equal(this.wrapper.getDetailsItemSize(3), '1 KB', 'Incorrect formating of size column.');
+        assert.equal(this.wrapper.getDetailsItemSize(4), '1.3 KB', 'Incorrect formating of size column.');
     });
 
     test('Using custom formats of JSON files', function(assert) {
@@ -127,28 +112,28 @@ QUnit.module('Details View', moduleConfig, () => {
             });
         this.clock.tick(400);
 
-        assert.strictEqual(getCellValueInDetailsView(this.$element, 1, 2).indexOf('Folder'), 0);
-        assert.equal(getCellValueInDetailsView(this.$element, 1, 3).trim(), '2/2/2000');
-        assert.equal(getCellValueInDetailsView(this.$element, 1, 4).trim(), '');
+        assert.strictEqual(this.wrapper.getDetailsItemName(0).indexOf('Folder'), 0);
+        assert.equal(this.wrapper.getDetailsItemDateModified(0).trim(), '2/2/2000');
+        assert.equal(this.wrapper.getDetailsItemSize(0).trim(), '');
 
-        assert.strictEqual(getCellValueInDetailsView(this.$element, 2, 2).indexOf('Title.txt'), 0);
-        assert.equal(getCellValueInDetailsView(this.$element, 2, 3).trim(), '1/1/2000');
-        assert.equal(getCellValueInDetailsView(this.$element, 2, 4).trim(), '55 B');
+        assert.strictEqual(this.wrapper.getDetailsItemName(1).indexOf('Title.txt'), 0);
+        assert.equal(this.wrapper.getDetailsItemDateModified(1).trim(), '1/1/2000');
+        assert.equal(this.wrapper.getDetailsItemSize(1).trim(), '55 B');
     });
 
     test('Add additional columns to details view', function(assert) {
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
         fileManagerInstance.option('customizeDetailColumns', columns => {
-            columns.push({ dataField: 'owner' });
+            columns.push({ dataField: 'owner', caption: 'owner' });
             return columns;
         });
         this.clock.tick(400);
 
-        assert.equal(getCellValueInDetailsView(this.$element, 1, 5).trim(), '');
-        assert.equal(getCellValueInDetailsView(this.$element, 2, 5), 'Admin');
-        assert.equal(getCellValueInDetailsView(this.$element, 3, 5), 'Admin');
-        assert.equal(getCellValueInDetailsView(this.$element, 4, 5), 'Guest');
-        assert.equal(getCellValueInDetailsView(this.$element, 5, 5), 'Max');
+        assert.equal(this.wrapper.getDetailsCellText('owner', 0).trim(), '');
+        assert.equal(this.wrapper.getDetailsCellText('owner', 1), 'Admin');
+        assert.equal(this.wrapper.getDetailsCellText('owner', 2), 'Admin');
+        assert.equal(this.wrapper.getDetailsCellText('owner', 3), 'Guest');
+        assert.equal(this.wrapper.getDetailsCellText('owner', 4), 'Max');
     });
 
     test('Raise the  SelectedFileOpened event', function(assert) {
@@ -156,12 +141,12 @@ QUnit.module('Details View', moduleConfig, () => {
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
         fileManagerInstance.option('onSelectedFileOpened', spy);
 
-        getCellInDetailsView(this.$element, 2, 2).trigger('dxdblclick');
+        this.wrapper.getRowNameCellInDetailsView(2).trigger('dxdblclick');
         this.clock.tick(800);
         assert.equal(spy.callCount, 1);
         assert.equal(spy.args[0][0].file.name, '1.txt', 'file passed as argument');
 
-        getCellInDetailsView(this.$element, 1, 2).trigger('dxdblclick');
+        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxdblclick');
         this.clock.tick(800);
         assert.equal(spy.callCount, 1);
     });
@@ -174,20 +159,20 @@ QUnit.module('Details View', moduleConfig, () => {
         columnHeader.trigger('dxclick');
         this.clock.tick(400);
 
-        assert.equal(getCellValueInDetailsView(this.$element, 1, 2), '1.txt');
-        assert.equal(getCellValueInDetailsView(this.$element, 2, 2), '2.txt');
-        assert.equal(getCellValueInDetailsView(this.$element, 3, 2), '3.txt');
-        assert.equal(getCellValueInDetailsView(this.$element, 4, 2), '4.txt');
-        assert.equal(getCellValueInDetailsView(this.$element, 5, 2), 'Folder 1', 'sorted ascending');
+        assert.equal(this.wrapper.getDetailsItemName(0), '1.txt');
+        assert.equal(this.wrapper.getDetailsItemName(1), '2.txt');
+        assert.equal(this.wrapper.getDetailsItemName(2), '3.txt');
+        assert.equal(this.wrapper.getDetailsItemName(3), '4.txt');
+        assert.equal(this.wrapper.getDetailsItemName(4), 'Folder 1', 'sorted ascending');
 
         columnHeader.trigger('dxclick');
         this.clock.tick(400);
 
-        assert.equal(getCellValueInDetailsView(this.$element, 1, 2), 'Folder 1');
-        assert.equal(getCellValueInDetailsView(this.$element, 2, 2), '1.txt');
-        assert.equal(getCellValueInDetailsView(this.$element, 3, 2), '2.txt');
-        assert.equal(getCellValueInDetailsView(this.$element, 4, 2), '3.txt');
-        assert.equal(getCellValueInDetailsView(this.$element, 5, 2), '4.txt', 'sorted descending');
+        assert.equal(this.wrapper.getDetailsItemName(0), 'Folder 1');
+        assert.equal(this.wrapper.getDetailsItemName(1), '1.txt');
+        assert.equal(this.wrapper.getDetailsItemName(2), '2.txt');
+        assert.equal(this.wrapper.getDetailsItemName(3), '3.txt');
+        assert.equal(this.wrapper.getDetailsItemName(4), '4.txt', 'sorted descending');
 
         const e = $.Event('dxclick');
         e.ctrlKey = true;
@@ -263,7 +248,9 @@ QUnit.module('Details View', moduleConfig, () => {
         const fileManager = prepareParentDirectoryTesting(this);
         const allNames = [ 'Folder 1.1', 'Folder 1.2', 'File 1-1.txt', 'File 1-2.jpg' ];
 
-        assert.strictEqual(this.wrapper.getSelectAllCheckBoxState(), 'clear', 'select all is not checked');
+        if(isDesktopDevice()) {
+            assert.strictEqual(this.wrapper.getSelectAllCheckBoxState(), 'clear', 'select all is not checked');
+        }
 
         for(let i = 2; i <= 5; i++) {
             const e = $.Event('dxclick');
@@ -272,14 +259,18 @@ QUnit.module('Details View', moduleConfig, () => {
             this.clock.tick(400);
         }
 
-        assert.strictEqual(this.wrapper.getSelectAllCheckBoxState(), 'checked', 'select all is checked');
+        if(isDesktopDevice()) {
+            assert.strictEqual(this.wrapper.getSelectAllCheckBoxState(), 'checked', 'select all is checked');
+        }
         assert.deepEqual(getSelectedItemNames(fileManager), allNames, 'all items in selection');
 
         const e = $.Event('dxclick');
         e.ctrlKey = true;
         this.wrapper.getRowNameCellInDetailsView(1).trigger(pointerEvents.down).trigger(e);
 
-        assert.strictEqual(this.wrapper.getSelectAllCheckBoxState(), 'checked', 'select all is checked');
+        if(isDesktopDevice()) {
+            assert.strictEqual(this.wrapper.getSelectAllCheckBoxState(), 'checked', 'select all is checked');
+        }
         assert.deepEqual(getSelectedItemNames(fileManager), allNames, 'all items in selection');
         assert.notOk(this.wrapper.isDetailsRowSelected(1), 'parent directory item is not selected');
         assert.ok(this.wrapper.isDetailsRowFocused(1), 'parent directory item is focused');
@@ -287,6 +278,10 @@ QUnit.module('Details View', moduleConfig, () => {
     });
 
     test('Select All check box ignore parent directory item when it is checked', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true);
+            return;
+        }
         const fileManager = prepareParentDirectoryTesting(this);
         const allNames = [ 'Folder 1.1', 'Folder 1.2', 'File 1-1.txt', 'File 1-2.jpg' ];
 
@@ -351,26 +346,208 @@ QUnit.module('Details View', moduleConfig, () => {
         assert.deepEqual(selectionSpy.args[1][0].selectedItems, [], 'no items in selection');
         assert.deepEqual(selectionSpy.args[1][0].selectedItemKeys, [], 'no item keys in selection');
         assert.deepEqual(selectionSpy.args[1][0].currentSelectedItemKeys, [], 'no selected items');
-        assert.deepEqual(selectionSpy.args[1][0].currentDeselectedItemKeys, [ itemPath ], 'no deselected items');
+        assert.deepEqual(selectionSpy.args[1][0].currentDeselectedItemKeys, [ itemPath ], 'one item became deselected');
 
         triggerCellClick(this.wrapper.getRowNameCellInDetailsView(1));
         this.clock.tick(400);
 
         assert.strictEqual(selectionSpy.callCount, 2, 'event not raised');
 
-        this.wrapper.getSelectCheckBoxInDetailsView(2).trigger('dxclick');
+        if(isDesktopDevice()) {
+            this.wrapper.getSelectCheckBoxInDetailsView(2).trigger('dxclick');
+        } else {
+            triggerCellClick(this.wrapper.getRowNameCellInDetailsView(2));
+        }
         this.clock.tick(400);
 
         assert.strictEqual(selectionSpy.callCount, 3, 'event raised');
-        assert.strictEqual(selectionSpy.args[0][0].selectedItems.length, 1, 'one item in selection');
-        assert.strictEqual(selectionSpy.args[0][0].selectedItems[0].path, itemPath, 'correct item in selection');
-        assert.deepEqual(selectionSpy.args[0][0].selectedItemKeys, [ itemPath ], 'selected key provided');
-        assert.deepEqual(selectionSpy.args[0][0].currentSelectedItemKeys, [ itemPath ], 'one item became selected');
-        assert.deepEqual(selectionSpy.args[0][0].currentDeselectedItemKeys, [], 'no deselected items');
+        assert.strictEqual(selectionSpy.args[2][0].selectedItems.length, 1, 'one item in selection');
+        assert.strictEqual(selectionSpy.args[2][0].selectedItems[0].path, itemPath, 'correct item in selection');
+        assert.deepEqual(selectionSpy.args[2][0].selectedItemKeys, [ itemPath ], 'selected key provided');
+        assert.deepEqual(selectionSpy.args[2][0].currentSelectedItemKeys, [ itemPath ], 'one item became selected');
+        assert.deepEqual(selectionSpy.args[2][0].currentDeselectedItemKeys, [], 'no deselected items');
 
         triggerCellClick(this.wrapper.getRowNameCellInDetailsView(1));
         this.clock.tick(400);
 
-        assert.strictEqual(selectionSpy.callCount, 3, 'event not raised');
+        if(isDesktopDevice()) {
+            assert.strictEqual(selectionSpy.callCount, 3, 'event not raised');
+        } else {
+            assert.strictEqual(selectionSpy.callCount, 4, 'event raised');
+            assert.deepEqual(selectionSpy.args[3][0].selectedItems, [], 'no items in selection');
+            assert.deepEqual(selectionSpy.args[3][0].selectedItemKeys, [], 'no item keys in selection');
+            assert.deepEqual(selectionSpy.args[3][0].currentSelectedItemKeys, [], 'no selected items');
+            assert.deepEqual(selectionSpy.args[3][0].currentDeselectedItemKeys, [ itemPath ], 'one item became deselected');
+        }
+    });
+
+    test('Support selection by long tap', function(assert) {
+        const selectionSpy = sinon.spy();
+        const item1Path = 'Folder 1/Folder 1.1';
+        const item2Path = 'Folder 1/Folder 1.2';
+
+        const fileManager = prepareParentDirectoryTesting(this);
+        fileManager.option('onSelectionChanged', selectionSpy);
+        this.clock.tick(400);
+
+        this.wrapper.getRowNameCellInDetailsView(2).trigger('dxhold');
+        this.clock.tick(400);
+
+        assert.strictEqual(selectionSpy.callCount, 1, 'event raised');
+        assert.strictEqual(selectionSpy.args[0][0].selectedItems.length, 1);
+        assert.strictEqual(fileManager.getSelectedItems().length, 1, 'one item in selection');
+        assert.strictEqual(selectionSpy.args[0][0].selectedItems[0].path, item1Path);
+        assert.strictEqual(fileManager.getSelectedItems()[0].key, item1Path, 'correct item in selection');
+        assert.deepEqual(selectionSpy.args[0][0].selectedItemKeys, [ item1Path ], 'selected key provided');
+        assert.deepEqual(selectionSpy.args[0][0].currentSelectedItemKeys, [ item1Path ], 'one item became selected');
+        assert.deepEqual(selectionSpy.args[0][0].currentDeselectedItemKeys, [], 'no deselected items');
+
+
+        this.wrapper.getRowNameCellInDetailsView(3).trigger('dxhold');
+        this.clock.tick(400);
+
+        const oldSelectedItems = fileManager.getSelectedItems();
+
+        assert.strictEqual(selectionSpy.callCount, 2, 'event raised');
+        assert.strictEqual(selectionSpy.args[1][0].selectedItems.length, 2);
+        assert.strictEqual(oldSelectedItems.length, 2, 'two items in selection');
+        assert.strictEqual(selectionSpy.args[1][0].selectedItems[0].path, item1Path);
+        assert.strictEqual(oldSelectedItems[0].key, item1Path, 'correct item1 in selection');
+        assert.strictEqual(selectionSpy.args[1][0].selectedItems[1].path, item2Path);
+        assert.strictEqual(oldSelectedItems[1].key, item2Path, 'correct item2 in selection');
+        assert.deepEqual(selectionSpy.args[1][0].selectedItemKeys, [ item1Path, item2Path ], 'selected keys provided');
+        assert.deepEqual(selectionSpy.args[1][0].currentSelectedItemKeys, [ item2Path ], 'one item became selected');
+        assert.deepEqual(selectionSpy.args[1][0].currentDeselectedItemKeys, [], 'no deselected items');
+
+        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxhold');
+        this.clock.tick(400);
+
+        const newSelectedItems = fileManager.getSelectedItems();
+
+        assert.strictEqual(selectionSpy.callCount, 2, 'event not raised');
+        assert.strictEqual(newSelectedItems.length, 2);
+        assert.deepEqual(newSelectedItems, oldSelectedItems, 'selection has not changed');
+    });
+
+    test('Raise the ContextMenuItemClick event', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
+        const spy = sinon.spy();
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            onContextMenuItemClick: spy,
+            permissions: {
+                rename: true
+            },
+            contextMenu: {
+                items: [
+                    {
+                        name: 'someItem',
+                        text: 'someItem',
+                        visibilityMode: 'manual',
+                        visible: true,
+                        items: [
+                            {
+                                name: 'otherItem',
+                                text: 'otherItem',
+                                specialField: 123
+                            }
+                        ]
+                    }, 'rename'
+                ]
+            }
+        });
+        this.clock.tick(800);
+
+        this.wrapper.getRowNameCellInDetailsView(2).trigger('dxcontextmenu');
+        this.clock.tick(800);
+
+        const $items = this.wrapper.getContextMenuItems();
+        $items.eq(0).trigger('dxclick');
+        this.clock.tick(800);
+
+        let itemData = fileManager.option('contextMenu.items')[0];
+
+        assert.strictEqual(spy.callCount, 1, 'event raised');
+        assert.strictEqual(spy.args[0][0].event.type, 'dxclick', 'event has correct type');
+        assert.strictEqual($(spy.args[0][0].itemElement).get(0), $items.eq(0).get(0), 'itemElement is correct');
+        assert.strictEqual(spy.args[0][0].itemIndex, 0, 'itemIndex is correct');
+        assert.strictEqual(spy.args[0][0].itemData, itemData, 'itemData is correct');
+        assert.strictEqual(spy.args[0][0].component, fileManager, 'component is correct');
+        assert.strictEqual($(spy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
+
+        $items.eq(1).trigger('dxclick');
+        this.clock.tick(800);
+
+        itemData = fileManager.option('contextMenu.items')[1];
+
+        assert.strictEqual(spy.callCount, 2, 'event raised');
+        assert.strictEqual(spy.args[1][0].event.type, 'dxclick', 'event has correct type');
+        assert.strictEqual($(spy.args[1][0].itemElement).get(0), $items.eq(1).get(0), 'itemElement is correct');
+        assert.strictEqual(spy.args[1][0].itemIndex, 2, 'itemIndex is correct');
+        assert.strictEqual(spy.args[1][0].itemData, itemData, 'itemData is correct');
+        assert.strictEqual(spy.args[1][0].component, fileManager, 'component is correct');
+        assert.strictEqual($(spy.args[1][0].element).get(0), this.$element.get(0), 'element is correct');
+    });
+
+    test('Raise the ContextMenuItemClick event on fileActionsButton\'s menu', function(assert) {
+        const spy = sinon.spy();
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            onContextMenuItemClick: spy,
+            permissions: {
+                rename: true
+            },
+            contextMenu: {
+                items: [
+                    {
+                        name: 'someItem',
+                        text: 'someItem',
+                        visibilityMode: 'manual',
+                        visible: true,
+                        items: [
+                            {
+                                name: 'otherItem',
+                                text: 'otherItem',
+                                specialField: 123
+                            }
+                        ]
+                    }, 'rename'
+                ]
+            }
+        });
+        this.clock.tick(800);
+
+        this.wrapper.getRowActionButtonInDetailsView(2).trigger('dxclick');
+        this.clock.tick(800);
+
+        const $items = this.wrapper.getContextMenuItems();
+        $items.eq(0).trigger('dxclick');
+        this.clock.tick(800);
+
+        let itemData = fileManager.option('contextMenu.items')[0];
+
+        assert.strictEqual(spy.callCount, 1, 'event raised');
+        assert.strictEqual(spy.args[0][0].event.type, 'dxclick', 'event has correct type');
+        assert.strictEqual($(spy.args[0][0].itemElement).get(0), $items.eq(0).get(0), 'itemElement is correct');
+        assert.strictEqual(spy.args[0][0].itemIndex, 0, 'itemIndex is correct');
+        assert.strictEqual(spy.args[0][0].itemData, itemData, 'itemData is correct');
+        assert.strictEqual(spy.args[0][0].component, fileManager, 'component is correct');
+        assert.strictEqual($(spy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
+
+        $items.eq(1).trigger('dxclick');
+        this.clock.tick(800);
+
+        itemData = fileManager.option('contextMenu.items')[1];
+
+        assert.strictEqual(spy.callCount, 2, 'event raised');
+        assert.strictEqual(spy.args[1][0].event.type, 'dxclick', 'event has correct type');
+        assert.strictEqual($(spy.args[1][0].itemElement).get(0), $items.eq(1).get(0), 'itemElement is correct');
+        assert.strictEqual(spy.args[1][0].itemIndex, 2, 'itemIndex is correct');
+        assert.strictEqual(spy.args[1][0].itemData, itemData, 'itemData is correct');
+        assert.strictEqual(spy.args[1][0].component, fileManager, 'component is correct');
+        assert.strictEqual($(spy.args[1][0].element).get(0), this.$element.get(0), 'element is correct');
     });
 });

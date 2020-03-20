@@ -32,7 +32,7 @@ module.exports = [
     { content: 'navBar', task: 'widget' },
     { content: 'validation', task: 'widget', private: true },
     { content: 'textEditor', task: 'widget', private: true },
-    { content: 'textBox', task: 'widget', private: true },
+    { content: 'textBox', task: 'widget' },
     { content: 'dropDownEditor', task: 'widget', private: true },
     { content: 'dropDownBox', task: 'widget' },
     { content: 'list', task: 'widget' },
