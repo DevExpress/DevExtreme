@@ -123,9 +123,14 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
     _configureColumn(columnOptions) {
         const result = {};
+        let resultCssClass = '';
 
         if(this._isDefaultColumn(columnOptions.dataField)) {
             const defaultConfig = DEFAULT_COLUMN_CONFIGS[columnOptions.dataField];
+            resultCssClass = defaultConfig.cssClass;
+            if(columnOptions.cssClass) {
+                resultCssClass += ` ${columnOptions.cssClass}`;
+            }
             if(columnOptions.dataField === 'isDirectory' || columnOptions.dataField === 'name') {
                 defaultConfig.cellTemplate = this[`_${columnOptions.dataField}ColumnCellTemplate`].bind(this);
             }
@@ -139,6 +144,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
         const dataItemSuffix = PREDEFINED_COLUMN_NAMES.indexOf(result.dataField) < 0 ? 'dataItem.' : '';
         result.dataField = 'fileItem.' + dataItemSuffix + result.dataField;
+        result.cssClass = resultCssClass;
         return result;
     }
 
