@@ -404,8 +404,23 @@ class FileManager extends Widget {
             },
 
             itemView: {
+                /**
+                 * @name dxFileManagerOptions.itemView.details
+                 * @type object
+                 */
+                /**
+                 * @name dxFileManagerDetailsColumn
+                 * @type object
+                 */
                 details: {
-                    columns: [ 'thumbnail', 'name', 'dateModified', 'size' ]
+                    /**
+                     * @name dxFileManagerOptions.itemView.details.columns
+                     * @type Array<dxFileManagerDetailsColumn, string>
+                     * @default ["thumbnail", "name", "dateModified", "size"]
+                     */
+                    columns: [
+                        'thumbnail', 'name', 'dateModified', 'size'
+                    ]
                 },
                 /**
                 * @name dxFileManagerOptions.itemView.mode
