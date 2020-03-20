@@ -13,6 +13,7 @@ import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
 import 'common.css!';
 import 'ui/popup';
+import 'ui/tab_panel';
 
 const IS_IE11 = (browser.msie && parseInt(browser.version) === 11);
 const IS_SAFARI = !!browser.safari;
@@ -460,7 +461,6 @@ QUnit.module('dimensions', {
                 }
             }
         });
-
 
         assert.equal($content.text(), 'text', 'container is correct');
     });
@@ -1595,6 +1595,45 @@ QUnit.module('templates', () => {
 
         const toolbarItemText = popup.$element().find('.dx-toolbar-item').text();
         assert.strictEqual(toolbarItemText, text, 'Custom template rendered');
+    });
+
+    QUnit.test('Popup should not pass the "content" and "title" templates via integrationOptions (T872394)', function(assert) {
+        const buttonText = 'ToolbarButton';
+        const titleText = 'TabTitle';
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            toolbarItems: [{
+                location: 'before',
+                toolbar: 'bottom',
+                widget: 'dxButton',
+                options: { text: buttonText }
+            }, {
+                location: 'before',
+                toolbar: 'bottom',
+                widget: 'dxTabPanel',
+                options: { items: [{ title: titleText, text: 'TabText' }] }
+            }],
+            integrationOptions: {
+                templates: {
+                    'content': {
+                        render: function(args) {
+                            $('<div>').text('PopupContent').appendTo(args.container);
+                        }
+                    },
+                    'title': {
+                        render: function(args) {
+                            $('<div>').text('PopupTitle').appendTo(args.container);
+                        }
+                    }
+                }
+            }
+        }).dxPopup('instance');
+
+        const toolbarButtonText = popup.$element().find('.dx-popup-bottom .dx-button').text();
+        const toolbarTabTitleText = popup.$element().find('.dx-popup-bottom .dx-tab').text();
+
+        assert.strictEqual(toolbarButtonText, buttonText, 'default content template rendered');
+        assert.strictEqual(toolbarTabTitleText, titleText, 'default title template rendered');
     });
 });
 
