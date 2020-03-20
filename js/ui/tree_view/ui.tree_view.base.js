@@ -1625,16 +1625,15 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             parentNode = parentNode.parent;
         }
 
-        const allNodesExpandedCallback = this._expandNodes(nodeKeysToExpand.reverse());
-        const $element = this._getNodeElement(node);
-        if(!$element || $element.length === 0) {
-            return new Deferred().reject();
-        }
-
         const scrollCallback = new Deferred();
-        allNodesExpandedCallback.done(() => {
-            this._scrollableContainer.scrollToElement(this._getNodeItemElement($element));
-            scrollCallback.resolve();
+        this._expandNodes(nodeKeysToExpand.reverse()).always(() => {
+            const $element = this._getNodeElement(node);
+            if($element && $element.length) {
+                this._scrollableContainer.scrollToElement(this._getNodeItemElement($element));
+                scrollCallback.resolve();
+                return;
+            }
+            scrollCallback.reject();
         });
 
         return scrollCallback;
