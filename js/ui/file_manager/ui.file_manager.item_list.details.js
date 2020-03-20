@@ -131,7 +131,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         let resultCssClass = '';
 
         if(this._isDefaultColumn(columnOptions.dataField)) {
-            const defaultConfig = DEFAULT_COLUMN_CONFIGS[columnOptions.dataField];
+            const defaultConfig = extend(true, {}, DEFAULT_COLUMN_CONFIGS[columnOptions.dataField]);
             resultCssClass = defaultConfig.cssClass;
             if(columnOptions.cssClass) {
                 resultCssClass += ` ${columnOptions.cssClass}`;
