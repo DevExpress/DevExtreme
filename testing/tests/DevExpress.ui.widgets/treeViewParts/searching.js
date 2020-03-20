@@ -30,14 +30,33 @@ QUnit.module('searching');
     });
 });
 
-['multiple', 'single', 'none'].forEach(selectionMode => {
-    QUnit.test(`selectionMode:${selectionMode}, itemsExpr:"subItems", dataStructure: tree, keyExpr:undefined -> search("2"); (T871605)`, function(assert) {
-        const wrapper = new TreeViewTestWrapper({
-            dataSource: [ { text: 'item1', subItems: [{ text: 'item1_1' }, { text: 'item1_2' }] } ],
-            itemsExpr: 'subItems',
-            selectionMode: selectionMode,
-            dataStructure: 'tree'
+const configs = [];
+['items', 'dataSource'].forEach((dataSourceOption) => { // 'createChildren' is partially supported
+    [false, true].forEach((virtualModeEnabled) => {
+        [false, true].forEach((expanded) => {
+            [false, true].forEach(selectNodesRecursive => {
+                ['multiple', 'single'].forEach(selectionMode => {
+                    ['none', 'normal', 'selectAll'].forEach(showCheckBoxesMode => {
+                        configs.push({ dataSourceOption, virtualModeEnabled, expanded, selectNodesRecursive, selectionMode, showCheckBoxesMode });
+                    });
+                });
+            });
         });
+    });
+});
+
+configs.forEach(config => {
+    QUnit.test(`selectionMode:${config.selectionMode}, showCheckBoxesMode: ${config.showCheckBoxesMode}, virtualModeEnabled: ${config.virtualModeEnabled}, itemsExpr:"subItems", dataStructure: tree, keyExpr:undefined -> search("2"); (T871605)`, function(assert) {
+        const options = {
+            itemsExpr: 'subItems',
+            virtualModeEnabled: config.virtualModeEnabled,
+            selectNodesRecursive: config.selectNodesRecursive,
+            showCheckBoxesMode: config.showCheckBoxesMode,
+            selectionMode: config.selectionMode,
+            dataStructure: 'tree'
+        };
+        options[config.dataSourceOption] = [ { text: 'item1', expanded: config.expanded, subItems: [{ text: 'item1_1' }, { text: 'item1_2' }] } ];
+        const wrapper = new TreeViewTestWrapper(options);
 
         wrapper.instance.option('searchValue', '2');
 
