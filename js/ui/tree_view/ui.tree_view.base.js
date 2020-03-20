@@ -1631,9 +1631,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             if($element && $element.length) {
                 this._scrollableContainer.scrollToElement(this._getNodeItemElement($element));
                 scrollCallback.resolve();
-                return;
+            } else {
+                scrollCallback.reject();
             }
-            scrollCallback.reject();
         });
 
         return scrollCallback;
