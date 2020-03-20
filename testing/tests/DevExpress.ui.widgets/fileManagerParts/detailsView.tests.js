@@ -472,11 +472,11 @@ QUnit.module('Details View', moduleConfig, () => {
 
         assert.strictEqual(spy.callCount, 1, 'event raised');
         assert.strictEqual(spy.args[0][0].event.type, 'dxclick', 'event has correct type');
-        assert.deepEqual(spy.args[0][0].itemElement, $items.eq(0).get(0), 'itemElement is correct');
+        assert.strictEqual($(spy.args[0][0].itemElement).get(0), $items.eq(0).get(0), 'itemElement is correct');
         assert.strictEqual(spy.args[0][0].itemIndex, 0, 'itemIndex is correct');
         assert.strictEqual(spy.args[0][0].itemData, itemData, 'itemData is correct');
         assert.strictEqual(spy.args[0][0].component, fileManager, 'component is correct');
-        assert.deepEqual(spy.args[0][0].element, this.$element.get(0), 'element is correct');
+        assert.strictEqual($(spy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
 
         $items.eq(1).trigger('dxclick');
         this.clock.tick(800);
@@ -485,11 +485,11 @@ QUnit.module('Details View', moduleConfig, () => {
 
         assert.strictEqual(spy.callCount, 2, 'event raised');
         assert.strictEqual(spy.args[1][0].event.type, 'dxclick', 'event has correct type');
-        assert.deepEqual(spy.args[1][0].itemElement, $items.eq(1).get(0), 'itemElement is correct');
+        assert.strictEqual($(spy.args[1][0].itemElement).get(0), $items.eq(1).get(0), 'itemElement is correct');
         assert.strictEqual(spy.args[1][0].itemIndex, 2, 'itemIndex is correct');
         assert.strictEqual(spy.args[1][0].itemData, itemData, 'itemData is correct');
         assert.strictEqual(spy.args[1][0].component, fileManager, 'component is correct');
-        assert.deepEqual(spy.args[1][0].element, this.$element.get(0), 'element is correct');
+        assert.strictEqual($(spy.args[1][0].element).get(0), this.$element.get(0), 'element is correct');
     });
 
     test('Raise the ContextMenuItemClick event on fileActionsButton\'s menu', function(assert) {
@@ -531,11 +531,11 @@ QUnit.module('Details View', moduleConfig, () => {
 
         assert.strictEqual(spy.callCount, 1, 'event raised');
         assert.strictEqual(spy.args[0][0].event.type, 'dxclick', 'event has correct type');
-        assert.deepEqual(spy.args[0][0].itemElement, $items.eq(0).get(0), 'itemElement is correct');
+        assert.strictEqual($(spy.args[0][0].itemElement).get(0), $items.eq(0).get(0), 'itemElement is correct');
         assert.strictEqual(spy.args[0][0].itemIndex, 0, 'itemIndex is correct');
         assert.strictEqual(spy.args[0][0].itemData, itemData, 'itemData is correct');
         assert.strictEqual(spy.args[0][0].component, fileManager, 'component is correct');
-        assert.deepEqual(spy.args[0][0].element, this.$element.get(0), 'element is correct');
+        assert.strictEqual($(spy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
 
         $items.eq(1).trigger('dxclick');
         this.clock.tick(800);
@@ -544,10 +544,10 @@ QUnit.module('Details View', moduleConfig, () => {
 
         assert.strictEqual(spy.callCount, 2, 'event raised');
         assert.strictEqual(spy.args[1][0].event.type, 'dxclick', 'event has correct type');
-        assert.deepEqual(spy.args[1][0].itemElement, $items.eq(1).get(0), 'itemElement is correct');
+        assert.strictEqual($(spy.args[1][0].itemElement).get(0), $items.eq(1).get(0), 'itemElement is correct');
         assert.strictEqual(spy.args[1][0].itemIndex, 2, 'itemIndex is correct');
         assert.strictEqual(spy.args[1][0].itemData, itemData, 'itemData is correct');
         assert.strictEqual(spy.args[1][0].component, fileManager, 'component is correct');
-        assert.deepEqual(spy.args[1][0].element, this.$element.get(0), 'element is correct');
+        assert.strictEqual($(spy.args[1][0].element).get(0), this.$element.get(0), 'element is correct');
     });
 });
