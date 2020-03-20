@@ -105,28 +105,25 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
     _createColumns() {
         let columns = this.option('detailColumns');
-        const preparedColumns = [];
 
         const customizeDetailColumns = this.option('customizeDetailColumns');
         if(isFunction(customizeDetailColumns)) {
             columns = customizeDetailColumns(columns);
         }
 
-        columns = columns.filter(item => item.dataField !== 'isParentFolder');
+        columns = columns.slice(0);
         columns.push({ dataField: 'isParentFolder' });
 
-        for(let i = 0; i < columns.length; i++) {
-            let extendedItem = columns[i];
-            if(isString(columns[i])) {
-                extendedItem = { dataField: columns[i] };
+        return columns.map(column => {
+            let extendedItem = column;
+            if(isString(column)) {
+                extendedItem = { dataField: column };
             }
-            preparedColumns.push(this._configureColumn(extendedItem));
-        }
-
-        return preparedColumns;
+            return this._getPreparedColumn(extendedItem);
+        });
     }
 
-    _configureColumn(columnOptions) {
+    _getPreparedColumn(columnOptions) {
         const dataItemSuffix = PREDEFINED_COLUMN_NAMES.indexOf(columnOptions.dataField) < 0 ? 'dataItem.' : '';
         const result = {};
         let resultCssClass = '';
@@ -138,10 +135,11 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                 resultCssClass += ` ${columnOptions.cssClass}`;
             }
             if(columnOptions.dataField === 'thumbnail' || columnOptions.dataField === 'name') {
-                defaultConfig.cellTemplate = this[`_${columnOptions.dataField}ColumnCellTemplate`].bind(this);
+                defaultConfig.cellTemplate = this._createThumbnailColumnCell.bind(this);
+                defaultConfig.calculateSortValue = `fileItem.${defaultConfig.calculateSortValue}`;
             }
-            if(columnOptions.dataField === 'thumbnail') {
-                defaultConfig.calculateSortValue = 'fileItem.' + dataItemSuffix + defaultConfig.calculateSortValue;
+            if(columnOptions.dataField === 'name') {
+                defaultConfig.cellTemplate = this._createNameColumnCell.bind(this);
             }
             if(columnOptions.dataField === 'size') {
                 defaultConfig.calculateCellValue = this._calculateSizeColumnCellValue.bind(this);
@@ -151,9 +149,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
         extendAttributes(result, columnOptions, [
             'alignment',
-            'calculateSortValue',
             'caption',
-            'cellTemplate',
             'dataField',
             'hidingPriority',
             'sortIndex',
@@ -309,11 +305,11 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
     }
 
-    _thumbnailColumnCellTemplate(container, cellInfo) {
+    _createThumbnailColumnCell(container, cellInfo) {
         this._getItemThumbnailContainer(cellInfo.data).appendTo(container);
     }
 
-    _nameColumnCellTemplate(container, cellInfo) {
+    _createNameColumnCell(container, cellInfo) {
         const $button = $('<div>');
 
         const $name = $('<span>')
