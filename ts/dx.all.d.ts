@@ -4106,6 +4106,8 @@ declare module DevExpress.ui {
         tasks?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, endExpr?: string | Function, keyExpr?: string | Function, parentIdExpr?: string | Function, progressExpr?: string | Function, startExpr?: string | Function, titleExpr?: string | Function };
         /** @name dxGantt.Options.toolbar */
         toolbar?: dxGanttToolbar;
+        /** @name dxGantt.Options.validation */
+        validation?: { autoUpdateParentTasks?: boolean, enableDependencyValidation?: boolean };
     }
     /** @name dxGantt */
     export class dxGantt extends Widget {
