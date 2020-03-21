@@ -78,6 +78,8 @@ QUnit.module('scrollToItem', () => {
                     });
                 } else {
                     completionCallback.done(() => {
+                        wrapper.getElement().focusout();
+                        wrapper.getElement().focusin();
                         wrapper.checkNodeIsVisibleArea(key);
                         done();
                     });
@@ -96,6 +98,8 @@ QUnit.module('scrollToItem', () => {
                         completionCallback.fail(() => { assert.ok('scroll must fail'); done(); });
                     } else {
                         completionCallback.done(() => {
+                            wrapper.getElement().focusout();
+                            wrapper.getElement().focusin();
                             wrapper.checkNodeIsVisibleArea(key);
                             done();
                         });
