@@ -41,8 +41,8 @@ QUnit.module('scrollToItem', () => {
         ];
     }
 
-    function isScrollMustFail(config) {
-        const isFirstLevelNodeKey = config.key.indexOf(LEVEL_SEPARATOR) === -1;
+    function isScrollMustFail(key, config) {
+        const isFirstLevelNodeKey = key.indexOf(LEVEL_SEPARATOR) === -1;
         return config.disabled && !config.expanded && !isFirstLevelNodeKey;
     }
 
@@ -50,53 +50,57 @@ QUnit.module('scrollToItem', () => {
     ['vertical', 'horizontal', 'both'].forEach(scrollDirection => {
         [false, true].forEach(expanded => {
             [false, true].forEach(disabled => {
-                ['item1', 'item1_1_1', 'item9', 'item9_1_1_1_1', 'item10', 'item10_1_1_1_1_1'].forEach(key => {
-                    configs.push({ expanded, scrollDirection, disabled, key });
-                });
+                configs.push({ expanded, scrollDirection, disabled, keysToScroll: ['item1', 'item1_1_1', 'item9', 'item9_1_1_1_1', 'item10', 'item10_1_1_1_1_1'] });
             });
         });
     });
 
     configs.forEach(config => {
-        QUnit.test(`expanded: ${config.expanded} disabled: ${config.disabled}, scrollDirection: ${config.scrollDirection} -> onContentReady.scrollToItem(${config.key}) -> focusOut() -> focusIn()`, function(assert) {
-            let completionCallback = null;
-            let isFirstContentReadyEvent = true;
-            const options = $.extend({}, config, {
-                onContentReady: function(e) {
-                    if(isFirstContentReadyEvent) {
-                        isFirstContentReadyEvent = false;
-                        completionCallback = e.component.scrollToItem(config.key);
+        config.keysToScroll.forEach(key => {
+            QUnit.test(`expanded: ${config.expanded} disabled: ${config.disabled}, scrollDirection: ${config.scrollDirection} -> onContentReady.scrollToItem(${key}) -> focusOut() -> focusIn()`, function(assert) {
+                let completionCallback = null;
+                let isFirstContentReadyEvent = true;
+                const options = $.extend({}, config, {
+                    onContentReady: function(e) {
+                        if(isFirstContentReadyEvent) {
+                            isFirstContentReadyEvent = false;
+                            completionCallback = e.component.scrollToItem(key);
+                        }
                     }
-                }
-            });
-
-            const wrapper = createWrapper(options, createDataSource(config.expanded, config.disabled));
-            const done = assert.async();
-            if(isScrollMustFail(config)) {
-                completionCallback.fail(() => { assert.ok('scroll must fail'); done(); });
-            } else {
-                completionCallback.done(() => {
-                    wrapper.checkNodeIsVisibleArea(config.key);
-                    done();
                 });
-            }
-        });
 
-        [{ top: 0, left: 0 }, { top: 1000, left: 0 }, { top: 0, left: 1000 }, { top: 1000, left: 1000 }].forEach(initialPosition => {
-            QUnit.test(`expanded: ${config.expanded} disabled: ${config.disabled}, scrollDirection: ${config.scrollDirection}, initialPosition: ${initialPosition} -> scrollToItem(${config.key}) -> focusOut() -> focusIn()`, function(assert) {
-                const options = $.extend({}, config, { initialPosition });
                 const wrapper = createWrapper(options, createDataSource(config.expanded, config.disabled));
-
-                const completionCallback = wrapper.instance.scrollToItem(config.key);
                 const done = assert.async();
-                if(isScrollMustFail(config)) {
-                    completionCallback.fail(() => { assert.ok('scroll must fail'); done(); });
+                if(isScrollMustFail(key, config)) {
+                    completionCallback.fail(() => {
+                        assert.ok('scroll must fail');
+                        done();
+                    });
                 } else {
                     completionCallback.done(() => {
-                        wrapper.checkNodeIsVisibleArea(config.key);
+                        wrapper.checkNodeIsVisibleArea(key);
                         done();
                     });
                 }
+            });
+        });
+
+        [{ top: 0, left: 0 }, { top: 1000, left: 0 }, { top: 0, left: 1000 }, { top: 1000, left: 1000 }].forEach(initialPosition => {
+            QUnit.test(`expanded: ${config.expanded} disabled: ${config.disabled}, scrollDirection: ${config.scrollDirection}, initialPosition: ${initialPosition} -> scrollToItem() -> focusOut() -> focusIn()`, function(assert) {
+                const options = $.extend({}, config, { initialPosition });
+                const wrapper = createWrapper(options, createDataSource(config.expanded, config.disabled));
+                config.keysToScroll.forEach(key => {
+                    const completionCallback = wrapper.instance.scrollToItem(key);
+                    const done = assert.async();
+                    if(isScrollMustFail(key, config)) {
+                        completionCallback.fail(() => { assert.ok('scroll must fail'); done(); });
+                    } else {
+                        completionCallback.done(() => {
+                            wrapper.checkNodeIsVisibleArea(key);
+                            done();
+                        });
+                    }
+                });
             });
         });
     });
