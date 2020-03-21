@@ -109,17 +109,17 @@ class TreeViewTestWrapper {
         assert.deepEqual(this.eventLog, expectedEventLog, 'eventLog ' + additionalErrorMessage);
     }
 
-    checkNodeIsVisibleArea(nodeKey) {
+    checkNodeIsVisibleArea(itemKey) {
         const treeViewRect = this.getElement().get(0).getBoundingClientRect();
-        const itemRect = this.getElement().find(`[data-item-id="${nodeKey}"] .${ITEM_CLASS}`).get(0).getBoundingClientRect();
+        const itemRect = this.getElement().find(`[data-item-id="${itemKey}"] .${ITEM_CLASS}`).get(0).getBoundingClientRect();
 
         const scrollDirection = this.instance.option('scrollDirection');
         if(scrollDirection === 'vertical' || scrollDirection === 'both') {
-            assert.equal(itemRect.top >= treeViewRect.top && itemRect.top <= treeViewRect.bottom, true, ` vertical item location ${itemRect.top} must be between ${treeViewRect.top} and ${treeViewRect.bottom}`);
+            assert.equal(itemRect.top >= treeViewRect.top && itemRect.top <= treeViewRect.bottom, true, ` vertical item ${itemKey} location ${itemRect.top} must be between ${treeViewRect.top} and ${treeViewRect.bottom}`);
         }
 
         if(scrollDirection === 'horizontal' || scrollDirection === 'both') {
-            assert.equal(itemRect.left >= treeViewRect.left && itemRect.left <= treeViewRect.right, true, ` horizontal item location ${itemRect.left} must be between ${treeViewRect.left} and ${treeViewRect.right}`);
+            assert.equal(itemRect.left >= treeViewRect.left && itemRect.left <= treeViewRect.right, true, ` horizontal item ${itemKey} location ${itemRect.left} must be between ${treeViewRect.left} and ${treeViewRect.right}`);
         }
     }
 

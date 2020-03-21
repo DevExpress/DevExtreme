@@ -88,7 +88,7 @@ QUnit.module('scrollToItem', () => {
         });
 
         [{ top: 0, left: 0 }, { top: 1000, left: 0 }, { top: 0, left: 1000 }, { top: 1000, left: 1000 }].forEach(initialPosition => {
-            QUnit.test(`expanded: ${config.expanded} disabled: ${config.disabled}, scrollDirection: ${config.scrollDirection}, initialPosition: ${initialPosition} -> scrollToItem() -> focusOut() -> focusIn()`, function(assert) {
+            QUnit.test(`expanded: ${config.expanded} disabled: ${config.disabled}, scrollDirection: ${config.scrollDirection}, initialPosition: ${JSON.stringify(initialPosition)} -> scrollToItem() -> focusOut() -> focusIn()`, function(assert) {
                 const options = $.extend({}, config, { initialPosition });
                 const wrapper = createWrapper(options, createDataSource(config.expanded, config.disabled));
                 config.keysToScroll.forEach(key => {
