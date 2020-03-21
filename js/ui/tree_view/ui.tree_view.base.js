@@ -806,22 +806,22 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _toggleExpandedState: function(itemElement, state, e) {
         const node = this._getNode(itemElement);
         if(!node) {
-            return new Deferred().reject();
+            return new Deferred().reject().promise();
         }
         if(node.internalFields.disabled) {
-            return new Deferred().reject();
+            return new Deferred().reject().promise();
         }
 
         const currentState = node.internalFields.expanded;
         if(currentState === state) {
-            return new Deferred().resolve();
+            return new Deferred().resolve().promise();
         }
 
         if(this._hasChildren(node)) {
             const $node = this._getNodeElement(node);
 
             if($node.find(`.${NODE_LOAD_INDICATOR_CLASS}:not(.${INVISIBLE_STATE_CLASS})`).length) {
-                return new Deferred().reject();
+                return new Deferred().reject().promise();
             }
 
             this._createLoadIndicator($node);
@@ -896,18 +896,18 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const completionCallback = new Deferred();
         if(!state || nodeContainerExists && !$nodeContainer.is(':empty')) {
             this._animateNodeContainer(node, state, e, completionCallback);
-            return completionCallback;
+            return completionCallback.promise();
         }
 
         if(this._isVirtualMode() || this._useCustomChildrenLoader()) {
             this._loadNestedItemsWithUpdate(node, state, e, completionCallback);
-            return completionCallback;
+            return completionCallback.promise();
         }
 
         this._renderSublevel($node, node, this._getChildNodes(node));
         this._fireContentReadyAction();
         this._animateNodeContainer(node, state, e, completionCallback);
-        return completionCallback;
+        return completionCallback.promise();
     },
 
     _loadNestedItemsWithUpdate: function(node, state, e, completionCallback) {
