@@ -8,15 +8,12 @@ QUnit.module('scrollToItem', () => {
     }
     const LEVEL_SEPARATOR = '_';
 
-    const WIDGET_HEIGHT = 200;
-    const WIDGET_WIDTH = 200;
-
     function createWrapper(config, dataSource) {
         const wrapper = new TreeViewTestWrapper({
             displayExpr: 'id',
             scrollDirection: config.scrollDirection,
-            height: WIDGET_HEIGHT,
-            width: WIDGET_WIDTH,
+            height: 200,
+            width: 200,
             animationEnabled: false, // +400ms per test
             dataSource: dataSource,
             onContentReady: config.onContentReady
@@ -53,7 +50,7 @@ QUnit.module('scrollToItem', () => {
     ['vertical', 'horizontal', 'both'].forEach(scrollDirection => {
         [false, true].forEach(expanded => {
             [false, true].forEach(disabled => {
-                ['item1', 'item1_1_1', 'item1_1_1_1_1_1', 'item9', 'item9_1_1_1_1', 'item10', 'item10_1_1_1_1', 'item10_1_1_1_1_1'].forEach(key => {
+                ['item1', 'item1_1_1', 'item9', 'item9_1_1_1_1', 'item10', 'item10_1_1_1_1_1'].forEach(key => {
                     configs.push({ expanded, scrollDirection, disabled, key });
                 });
             });
@@ -74,7 +71,6 @@ QUnit.module('scrollToItem', () => {
             });
 
             const wrapper = createWrapper(options, createDataSource(config.expanded, config.disabled));
-
             const done = assert.async();
             if(isScrollMustFail(config)) {
                 completionCallback.fail(() => { assert.ok('scroll must fail'); done(); });
@@ -90,8 +86,8 @@ QUnit.module('scrollToItem', () => {
             QUnit.test(`expanded: ${config.expanded} disabled: ${config.disabled}, scrollDirection: ${config.scrollDirection}, initialPosition: ${initialPosition} -> scrollToItem(${config.key}) -> focusOut() -> focusIn()`, function(assert) {
                 const options = $.extend({}, config, { initialPosition });
                 const wrapper = createWrapper(options, createDataSource(config.expanded, config.disabled));
-                const completionCallback = wrapper.instance.scrollToItem(config.key);
 
+                const completionCallback = wrapper.instance.scrollToItem(config.key);
                 const done = assert.async();
                 if(isScrollMustFail(config)) {
                     completionCallback.fail(() => { assert.ok('scroll must fail'); done(); });

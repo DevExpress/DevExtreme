@@ -102,6 +102,8 @@ configs.forEach(config => {
 
         wrapper.instance._moveFocus(config.direction, {});
         const nextFocusedKey = getNextFocusedKey($nodes, $node, config.direction);
+        const actualFocusedItemKey = $(wrapper.instance.option('focusedElement').get(0)).attr('data-item-id');
+        assert.equal(nextFocusedKey, actualFocusedItemKey);
         wrapper.checkNodeIsVisibleArea(nextFocusedKey);
     });
 
