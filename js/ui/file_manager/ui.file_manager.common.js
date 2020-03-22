@@ -45,10 +45,11 @@ const getDisplayFileSize = function(byteSize) {
 
 const extendAttributes = function(targetObject, sourceObject, objectKeysArray) {
     objectKeysArray.forEach(objectKey => {
-        extend(true, targetObject, sourceObject[objectKey]
+        extend(true, targetObject, typeUtils.isDefined(sourceObject[objectKey])
             ? { [objectKey]: sourceObject[objectKey] }
             : {});
     });
+    return targetObject;
 };
 
 const findItemsByKeys = (itemInfos, keys) => {

@@ -11,7 +11,7 @@ import registerComponent from '../../core/component_registrator';
 import Widget from '../widget/ui.widget';
 import notify from '../notify';
 
-import { findItemsByKeys } from './ui.file_manager.common';
+import { findItemsByKeys, extendAttributes } from './ui.file_manager.common';
 import FileItemsController from './file_items_controller';
 import { FileManagerCommandManager } from './ui.file_manager.command_manager';
 import FileManagerContextMenu from './ui.file_manager.context_menu';
@@ -126,7 +126,8 @@ class FileManager extends Widget {
             },
             getItemThumbnail: this._getItemThumbnailInfo.bind(this),
             onSuccess: ({ updatedOnlyFiles }) => this._redrawComponent(updatedOnlyFiles),
-            onCreating: () => this._setItemsViewAreaActive(false)
+            onCreating: () => this._setItemsViewAreaActive(false),
+            onError: e => this._onEditingError(e)
         });
     }
 
@@ -243,6 +244,12 @@ class FileManager extends Widget {
     _onActionProgress({ message, status }) {
         this._toolbar.updateRefreshItem(message, status);
         this._updateToolbar();
+    }
+
+    _onEditingError(e) {
+        const args = extendAttributes({ }, e, [ 'errorCode', 'errorText', 'fileSystemItem' ]);
+        this._actions.onErrorOccurred(args);
+        e.errorText = args.errorText;
     }
 
     _refreshAndShowProgress() {
@@ -501,6 +508,8 @@ class FileManager extends Widget {
 
             onToolbarItemClick: null,
 
+            onErrorOccurred: null,
+
             allowedFileExtensions: ['.txt', '.rtf', '.doc', '.docx', '.odt', '.xls', '.xlsx', '.ods', '.ppt', '.pptx', '.odp', '.pdf', '.xml', '.png', '.svg', '.gif', '.jpg', '.jpeg', '.ico', '.bmp', '.avi', '.mpeg', '.mkv', ''],
 
             upload: {
@@ -625,6 +634,7 @@ class FileManager extends Widget {
             case 'onSelectionChanged':
             case 'onFocusedItemChanged':
             case 'onToolbarItemClick':
+            case 'onErrorOccurred':
                 this._actions[name] = this._createActionByOption(name);
                 break;
             default:
@@ -639,7 +649,8 @@ class FileManager extends Widget {
             onSelectedFileOpened: this._createActionByOption('onSelectedFileOpened'),
             onSelectionChanged: this._createActionByOption('onSelectionChanged'),
             onFocusedItemChanged: this._createActionByOption('onFocusedItemChanged'),
-            onToolbarItemClick: this._createActionByOption('onToolbarItemClick')
+            onToolbarItemClick: this._createActionByOption('onToolbarItemClick'),
+            onErrorOccurred: this._createActionByOption('onErrorOccurred')
         };
     }
 

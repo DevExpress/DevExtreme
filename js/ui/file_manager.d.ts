@@ -173,6 +173,20 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      */
     onFocusedItemChanged?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, item?: FileSystemItem, itemElement?: dxElement }) => any);
     /**
+     * @docid dxFileManagerOptions.onErrorOccurred
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 errorCode:number
+     * @type_function_param1_field5 errorText:string
+     * @type_function_param1_field6 fileSystemItem:FileSystemItem
+     * @default null
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onErrorOccurred?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, errorCode?: number, errorText?: string, fileSystemItem?: FileSystemItem }) => any);
+    /**
      * @docid dxFileManagerOptions.permissions
      * @type object
      * @prevFileNamespace DevExpress.ui
