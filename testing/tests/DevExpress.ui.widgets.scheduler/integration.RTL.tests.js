@@ -121,7 +121,7 @@ module('RTL', moduleConfig, () => {
             const cell = scheduler.workSpace.getCell(8);
             const appointment = scheduler.appointments.getAppointment();
 
-            assert.equal(appointment.position().left + appointment.outerWidth(), cell.position().left + cell.outerWidth(), 'task position is correct');
+            assert.roughEqual(appointment.position().left + appointment.outerWidth(), cell.position().left + cell.outerWidth(), 1.1, 'task position is correct');
         });
 
         test('Week view', function(assert) {
@@ -130,7 +130,7 @@ module('RTL', moduleConfig, () => {
             const cell = scheduler.workSpace.getCell(1);
             const appointment = scheduler.appointments.getAppointment();
 
-            assert.equal(Math.round(appointment.position().left + appointment.outerWidth()), Math.round(cell.position().left + cell.outerWidth()), 'task position is correct');
+            assert.roughEqual(Math.round(appointment.position().left + appointment.outerWidth()), Math.round(cell.position().left + cell.outerWidth()), 1.1, 'task position is correct');
         });
 
         test('Month view', function(assert) {
@@ -139,7 +139,7 @@ module('RTL', moduleConfig, () => {
             const cell = scheduler.workSpace.getCell(1);
             const appointment = scheduler.appointments.getAppointment();
 
-            assert.roughEqual(appointment.position().left + appointment.outerWidth(), cell.position().left + cell.outerWidth(), 1, 'task position is correct');
+            assert.roughEqual(appointment.position().left + appointment.outerWidth(), cell.position().left + cell.outerWidth(), 1.1, 'task position is correct');
         });
     });
 });
