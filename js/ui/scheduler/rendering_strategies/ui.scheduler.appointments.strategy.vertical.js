@@ -168,12 +168,6 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         return itemLeft + (cellBorderSize + cellWidth) * index;
     }
 
-    _checkLongCompactAppointment(item, result) {
-        this._splitLongCompactAppointment(item, result);
-
-        return result;
-    }
-
     _getVerticalAppointmentGeometry(coordinates) {
         const config = this._calculateVerticalGeometryConfig(coordinates);
 

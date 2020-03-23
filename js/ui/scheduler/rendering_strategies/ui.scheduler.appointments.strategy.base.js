@@ -454,7 +454,10 @@ class BaseRenderingStrategy {
         return result;
     }
 
-    _checkLongCompactAppointment() {
+    _checkLongCompactAppointment(item, result) {
+        this._splitLongCompactAppointment(item, result);
+
+        return result;
     }
 
     _splitLongCompactAppointment(item, result) {

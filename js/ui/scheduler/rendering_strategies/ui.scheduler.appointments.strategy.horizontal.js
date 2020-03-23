@@ -52,19 +52,6 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
         };
     }
 
-    _checkLongCompactAppointment(item, result) {
-        this._splitLongCompactAppointment(item, result);
-
-        return result;
-        // const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
-
-        // if(overlappingMode) {
-        //     this._splitLongCompactAppointment(item, result);
-
-        //     return result;
-        // }
-    }
-
     _getCompactLeftCoordinate(itemLeft, index) {
         const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
 

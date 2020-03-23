@@ -82,12 +82,6 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
         return this._getAppointmentDefaultHeight();
     }
 
-    _checkLongCompactAppointment(item, result) {
-        this._splitLongCompactAppointment(item, result);
-
-        return result;
-    }
-
     _columnCondition(a, b) {
         const conditions = this._getConditions(a, b);
         return conditions.rowCondition || conditions.columnCondition || conditions.cellPositionCondition;
