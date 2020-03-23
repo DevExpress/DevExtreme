@@ -1645,13 +1645,13 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             return new Deferred().resolve().promise();
         }
 
-        for(let i = 0; i < keysToExpand.length; i++) {
-            if(i === keysToExpand.length - 1) {
-                return this.expandItem(keysToExpand[i], true);
-            } else {
-                this.expandItem(keysToExpand[i], true);
-            }
-        }
+        const resultCallback = new Deferred();
+        const callbacksByNodes = keysToExpand.map(key => this.expandItem(key));
+        when.apply($, callbacksByNodes)
+            .done(() => resultCallback.resolve())
+            .fail(() => resultCallback.reject());
+
+        return resultCallback.promise();
     },
 });
 

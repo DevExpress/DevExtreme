@@ -115,7 +115,8 @@ class TreeViewTestWrapper {
 
         const scrollDirection = this.instance.option('scrollDirection');
         if(scrollDirection === 'vertical' || scrollDirection === 'both') {
-            assert.equal(itemRect.top >= treeViewRect.top && itemRect.top <= treeViewRect.bottom, true, ` vertical item ${itemKey} location ${itemRect.top} must be between ${treeViewRect.top} and ${treeViewRect.bottom}`);
+            assert.equal(itemRect.top >= treeViewRect.top && itemRect.top <= treeViewRect.bottom, true, ` item ${itemKey} top location ${itemRect.top} must be between ${treeViewRect.top} and ${treeViewRect.bottom}`);
+            assert.equal(itemRect.bottom >= treeViewRect.top && itemRect.bottom <= treeViewRect.bottom, true, ` item ${itemKey} bottom location ${itemRect.bottom} must be between ${treeViewRect.top} and ${treeViewRect.bottom}`);
         }
 
         const propName = this.instance.option('rtlEnabled') ? 'right' : 'left';
