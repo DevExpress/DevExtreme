@@ -12,8 +12,8 @@ QUnit.module('scrollToItem', () => {
         const wrapper = new TreeViewTestWrapper({
             displayExpr: 'id',
             scrollDirection: config.scrollDirection,
-            height: 100,
-            width: 100,
+            height: 150,
+            width: 150,
             animationEnabled: false, // +400ms per test
             dataSource: dataSource,
             rtlEnabled: config.rtlEnabled,
@@ -124,7 +124,7 @@ QUnit.module('scrollToItem', () => {
         { argType: 'itemData', scrollFunc: (wrapper) => wrapper.scrollToItem(wrapper.option('dataSource')[0].items[0].items[0]) }
     ].forEach(testCase => {
         QUnit.test(`scrollToItem(item1_1_1: ${testCase.argType})`, function(assert) {
-            const config = { scrollDirection: 'both', initialPosition: { top: 1000, left: 1000 }, expanded: true };
+            const config = { scrollDirection: 'both', initialPosition: { top: 1000, left: 1000 }, expanded: true, rtlEnabled: false };
             const wrapper = createWrapper(config, createDataSource(true, false));
             const completionCallback = testCase.scrollFunc(wrapper.instance);
 
