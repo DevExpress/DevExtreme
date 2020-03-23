@@ -335,11 +335,6 @@ const Drawer = Widget.inherit({
         }
     },
 
-    setZIndex(zIndex) {
-        this._$shader.css('zIndex', zIndex - 1);
-        this._$panelContentWrapper.css('zIndex', zIndex);
-    },
-
     resizeContent() { // TODO: keep for ui.file_manager.adaptivity.js
         this.resizeViewContent;
     },
@@ -407,8 +402,19 @@ const Drawer = Widget.inherit({
         if(this.option('shading')) {
             this._$shader.toggleClass(INVISIBLE_STATE_CLASS, !visible);
             this._$shader.css('visibility', visible ? 'visible' : 'hidden');
+
+            this.updateZIndex(visible);
         } else {
             this._$shader.toggleClass(INVISIBLE_STATE_CLASS, true);
+            this._$shader.css('visibility', 'hidden');
+        }
+    },
+
+    updateZIndex(visible) {
+        if(visible) {
+            this._strategy.updateZIndex();
+        } else {
+            this._strategy.clearZIndex();
         }
     },
 
@@ -441,6 +447,7 @@ const Drawer = Widget.inherit({
     _clean() {
         this._cleanFocusState();
 
+        this._strategy.clearZIndex();
         this._removePanelContentWrapper();
         this._removeOverlay();
     },
@@ -496,6 +503,7 @@ const Drawer = Widget.inherit({
                 this._refreshPanel();
                 break;
             case 'shading':
+                this._strategy.clearZIndex();
                 this._toggleShaderVisibility(this.option('opened'));
                 break;
             case 'animationEnabled':

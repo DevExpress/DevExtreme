@@ -1,5 +1,7 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
+import { find } from '../../core/utils/array';
+import { isDefined } from '../../core/utils/type';
 
 import holdEvent from '../../events/hold';
 import { addNamespace } from '../../events/utils';
@@ -22,17 +24,24 @@ const FILE_MANAGER_THUMBNAILS_LIST_BOX_HOLD_EVENT_NAME = addNamespace(holdEvent.
 
 class FileManagerThumbnailListBox extends CollectionWidget {
     _initMarkup() {
-        super._initMarkup();
         this._initActions();
 
         this.$element().addClass(FILE_MANAGER_THUMBNAILS_VIEW_PORT_CLASS);
         this._renderItemsContainer();
 
+        super._initMarkup();
+
+        this.onFocusedItemChanged = this._onFocusedItemChanged.bind(this);
         this._layoutUtils = new ListBoxLayoutUtils(this.$element(), this._$itemContainer, this.itemElements().first());
+
+        this._syncFocusedItemKey();
     }
 
     _initActions() {
-        this._onItemEnterKeyPressed = this._createActionByOption('onItemEnterKeyPressed');
+        this._actions = {
+            onItemEnterKeyPressed: this._createActionByOption('onItemEnterKeyPressed'),
+            onFocusedItemChanged: this._createActionByOption('onFocusedItemChanged')
+        };
     }
 
     _initTemplates() {
@@ -274,6 +283,43 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         }
     }
 
+    _syncFocusedItemKey() {
+        if(this._dataSource && this._dataSource.isLoading()) {
+            return;
+        }
+
+        const focusedItemKey = this.option('focusedItemKey');
+        if(!isDefined(focusedItemKey)) {
+            return;
+        }
+
+        const items = this.option('items');
+        const focusedItem = find(items, item => this.keyOf(item) === focusedItemKey);
+        if(focusedItem) {
+            this._focusItem(focusedItem);
+        } else {
+            this.option('focusedItemKey', undefined);
+        }
+    }
+
+    _onFocusedItemChanged() {
+        const focusedItem = this._getFocusedItem();
+        const newFocusedItemKey = this.keyOf(focusedItem);
+        const oldFocusedItemKey = this.option('focusedItemKey');
+        if(newFocusedItemKey !== oldFocusedItemKey) {
+            this.option('focusedItemKey', newFocusedItemKey);
+            this._raiseFocusedItemChanged(focusedItem);
+        }
+    }
+
+    _raiseFocusedItemChanged(focusedItem) {
+        const args = {
+            item: focusedItem,
+            itemElement: this.option('focusedElement')
+        };
+        this._actions.onFocusedItemChanged(args);
+    }
+
     _changeItemSelection(item, select) {
         if(this.isItemSelected(item) === select) {
             return;
@@ -319,6 +365,19 @@ class FileManagerThumbnailListBox extends CollectionWidget {
                     this._layoutUtils.updateItems(this.itemElements().first());
                 }
                 super._optionChanged(args);
+                break;
+            case 'focusedItemKey':
+                if(isDefined(args.value)) {
+                    this._syncFocusedItemKey();
+                    this._onFocusedItemChanged();
+                } else {
+                    this.option('focusedElement', null);
+                    this._raiseFocusedItemChanged(null);
+                }
+                break;
+            case 'onItemEnterKeyPressed':
+            case 'onFocusedItemChanged':
+                this._actions[args.name] = this._createActionByOption(args.name);
                 break;
             default:
                 super._optionChanged(args);

@@ -133,6 +133,7 @@ class Gantt extends Widget {
             showRowLines: this.option('showRowLines'),
             scaleType: this.option('scaleType'),
             editing: this.option('editing'),
+            validation: this.option('validation'),
             stripLines: this.option('stripLines'),
             bars: this._bars,
             mainElement: this.$element(),
@@ -678,6 +679,20 @@ class Gantt extends Widget {
                 */
                 allowResourceUpdating: true
             },
+            validation: {
+                /**
+                * @name dxGanttOptions.validation.enableDependencyValidation
+                * @type boolean
+                * @default false
+                */
+                enableDependencyValidation: false,
+                /**
+                * @name dxGanttOptions.validation.autoUpdateParentTasks
+                * @type boolean
+                * @default false
+                */
+                autoUpdateParentTasks: false
+            },
             toolbar: null
         });
     }
@@ -730,6 +745,9 @@ class Gantt extends Widget {
                 break;
             case 'editing':
                 this._setGanttViewOption('editing', this.option(args.name));
+                break;
+            case 'validation':
+                this._setGanttViewOption('validation', this.option(args.name));
                 break;
             case 'toolbar':
                 this._updateToolbarContent();

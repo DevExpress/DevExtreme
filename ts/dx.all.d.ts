@@ -3388,8 +3388,6 @@ declare module DevExpress.ui {
         contentTemplate?: DevExpress.core.template | ((templateData: { component?: dxDropDownBox, value?: any }, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxDropDownBox.Options.displayValueFormatter */
         displayValueFormatter?: ((value: string | Array<any>) => string);
-        /** @name dxDropDownBox.Options.dropDownOptions */
-        dropDownOptions?: dxPopupOptions;
         /** @name dxDropDownBox.Options.fieldTemplate */
         fieldTemplate?: DevExpress.core.template | ((value: any, fieldElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxDropDownBox.Options.openOnFieldClick */
@@ -3487,6 +3485,8 @@ declare module DevExpress.ui {
         deferRendering?: boolean;
         /** @name dxDropDownEditor.Options.dropDownButtonTemplate */
         dropDownButtonTemplate?: DevExpress.core.template | ((buttonData: { text?: string, icon?: string }, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
+        /** @name dxDropDownEditor.Options.dropDownOptions */
+        dropDownOptions?: dxPopupOptions;
         /** @name dxDropDownEditor.Options.onClosed */
         onClosed?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** @name dxDropDownEditor.Options.onOpened */
@@ -3611,18 +3611,30 @@ declare module DevExpress.ui {
         customizeThumbnail?: ((fileSystemItem: DevExpress.fileManagement.FileSystemItem) => string);
         /** @name dxFileManager.Options.fileSystemProvider */
         fileSystemProvider?: any;
+        /** @name dxFileManager.Options.focusedItemKey */
+        focusedItemKey?: string;
         /** @name dxFileManager.Options.itemView */
-        itemView?: { mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
+        itemView?: { details?: { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
+        /** @name dxFileManager.Options.onContextMenuItemClick */
+        onContextMenuItemClick?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: DevExpress.events.event }) => any);
         /** @name dxFileManager.Options.onCurrentDirectoryChanged */
         onCurrentDirectoryChanged?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, directory?: DevExpress.fileManagement.FileSystemItem }) => any);
+        /** @name dxFileManager.Options.onErrorOccurred */
+        onErrorOccurred?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, errorCode?: number, errorText?: string, fileSystemItem?: DevExpress.fileManagement.FileSystemItem }) => any);
+        /** @name dxFileManager.Options.onFocusedItemChanged */
+        onFocusedItemChanged?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, item?: DevExpress.fileManagement.FileSystemItem, itemElement?: DevExpress.core.dxElement }) => any);
         /** @name dxFileManager.Options.onSelectedFileOpened */
         onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, file?: DevExpress.fileManagement.FileSystemItem }) => any);
         /** @name dxFileManager.Options.onSelectionChanged */
         onSelectionChanged?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, currentSelectedItemKeys?: Array<string>, currentDeselectedItemKeys?: Array<string>, selectedItems?: Array<DevExpress.fileManagement.FileSystemItem>, selectedItemKeys?: Array<string> }) => any);
+        /** @name dxFileManager.Options.onToolbarItemClick */
+        onToolbarItemClick?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: DevExpress.events.event }) => any);
         /** @name dxFileManager.Options.permissions */
         permissions?: { copy?: boolean, create?: boolean, delete?: boolean, download?: boolean, move?: boolean, rename?: boolean, upload?: boolean };
         /** @name dxFileManager.Options.rootFolderName */
         rootFolderName?: string;
+        /** @name dxFileManager.Options.selectedItemKeys */
+        selectedItemKeys?: Array<string>;
         /** @name dxFileManager.Options.selectionMode */
         selectionMode?: 'multiple' | 'single';
         /** @name dxFileManager.Options.toolbar */
@@ -3654,6 +3666,25 @@ declare module DevExpress.ui {
         name?: 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | string;
         /** @name dxFileManagerContextMenuItem.visible */
         visible?: boolean;
+    }
+    /** @name dxFileManagerDetailsColumn */
+    export interface dxFileManagerDetailsColumn {
+        /** @name dxFileManagerDetailsColumn.alignment */
+        alignment?: 'center' | 'left' | 'right' | undefined;
+        /** @name dxFileManagerDetailsColumn.caption */
+        caption?: string;
+        /** @name dxFileManagerDetailsColumn.dataField */
+        dataField?: string;
+        /** @name dxFileManagerDetailsColumn.hidingPriority */
+        hidingPriority?: number;
+        /** @name dxFileManagerDetailsColumn.sortIndex */
+        sortIndex?: number;
+        /** @name dxFileManagerDetailsColumn.sortOrder */
+        sortOrder?: 'asc' | 'desc' | undefined;
+        /** @name dxFileManagerDetailsColumn.visible */
+        visible?: boolean;
+        /** @name dxFileManagerDetailsColumn.width */
+        width?: number | string;
     }
     /** @name dxFileManagerToolbar */
     export interface dxFileManagerToolbar {
@@ -4102,6 +4133,8 @@ declare module DevExpress.ui {
         tasks?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, endExpr?: string | Function, keyExpr?: string | Function, parentIdExpr?: string | Function, progressExpr?: string | Function, startExpr?: string | Function, titleExpr?: string | Function };
         /** @name dxGantt.Options.toolbar */
         toolbar?: dxGanttToolbar;
+        /** @name dxGantt.Options.validation */
+        validation?: { autoUpdateParentTasks?: boolean, enableDependencyValidation?: boolean };
     }
     /** @name dxGantt */
     export class dxGantt extends Widget {
@@ -4479,6 +4512,8 @@ declare module DevExpress.ui {
         clearButtonText?: string;
         /** @name dxLookup.Options.closeOnOutsideClick */
         closeOnOutsideClick?: boolean | (() => boolean);
+        /** @name dxLookup.Options.dropDownOptions */
+        dropDownOptions?: dxPopupOptions | dxPopoverOptions;
         /** @name dxLookup.Options.fieldTemplate */
         fieldTemplate?: DevExpress.core.template | ((selectedItem: any, fieldElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxLookup.Options.focusStateEnabled */
@@ -7578,6 +7613,8 @@ declare module DevExpress.viz {
         constantLines?: Array<dxChartArgumentAxisConstantLines>;
         /** @name dxChart.Options.argumentAxis.customPosition */
         customPosition?: number | Date | string;
+        /** @name dxChart.Options.argumentAxis.customPositionAxis */
+        customPositionAxis?: string;
         /** @name dxChart.Options.argumentAxis.endOnTick */
         endOnTick?: boolean;
         /** @name dxChart.Options.argumentAxis.holidays */

@@ -100,6 +100,7 @@ class TaskEditDialogInfo extends DialogInfoBase {
     getTitle() { return messageLocalization.format('dxGantt-dialogTaskDetailsTitle'); }
     _getFormItems() {
         const readOnly = !this._editingOptions.enabled || !this._editingOptions.allowTaskUpdating;
+        const readOnlyRange = readOnly || !this._parameters.enableRangeEdit;
         return [{
             dataField: 'title',
             editorType: 'dxTextBox',
@@ -112,7 +113,7 @@ class TaskEditDialogInfo extends DialogInfoBase {
             editorOptions: {
                 type: 'datetime',
                 width: '100%',
-                readOnly: readOnly
+                readOnly: readOnlyRange
             }
         }, {
             dataField: 'end',
@@ -121,7 +122,7 @@ class TaskEditDialogInfo extends DialogInfoBase {
             editorOptions: {
                 type: 'datetime',
                 width: '100%',
-                readOnly: readOnly
+                readOnly: readOnlyRange
             }
         }, {
             dataField: 'progress',
@@ -134,7 +135,7 @@ class TaskEditDialogInfo extends DialogInfoBase {
                 max: 1,
                 format: '#0%',
                 step: 0.01,
-                readOnly: readOnly
+                readOnly: readOnlyRange
             }
         }, {
             dataField: 'assigned.items',

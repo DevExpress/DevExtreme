@@ -1245,20 +1245,22 @@ module.exports = {
             });
         },
 
-        getTranslatedPosition(oppositeAxis, position) {
+        getCustomPosition(position) {
             const that = this;
+            const oppositeAxis = that.getCustomPositionAxis();
+            const resolvedPosition = position ?? that.getResolvedPositionOption();
             const offset = that.getOptions().offset;
             const oppositeTranslator = oppositeAxis.getTranslator();
             const oppositeAxisType = oppositeAxis.getOptions().type;
-            let validPosition = oppositeAxis.validateUnit(position);
+            let validPosition = oppositeAxis.validateUnit(resolvedPosition);
             let currentPosition;
 
             if(oppositeAxisType === 'discrete' && (!oppositeTranslator._categories || oppositeTranslator._categories.indexOf(validPosition) < 0)) {
                 validPosition = undefined;
             }
 
-            if(that.positionIsBoundary(position)) {
-                currentPosition = that.getPredefinedPosition(position);
+            if(that.positionIsBoundary(resolvedPosition)) {
+                currentPosition = that.getPredefinedPosition(resolvedPosition);
             } else if(!isDefined(validPosition)) {
                 currentPosition = that.getPredefinedPosition(that.getOptions().position);
             } else {
@@ -1272,8 +1274,10 @@ module.exports = {
             return currentPosition;
         },
 
-        getBoundaryPosition(oppositeAxis, position) {
+        getCustomBoundaryPosition(position) {
             const that = this;
+            const oppositeAxis = that.getCustomPositionAxis();
+            const resolvedPosition = position ?? that.getResolvedPositionOption();
             const boundaryPositions = that._orthogonalPositions;
             const oppositeTranslator = oppositeAxis.getTranslator();
 
@@ -1281,7 +1285,7 @@ module.exports = {
                 return undefined;
             }
 
-            const currentPosition = that.getTranslatedPosition(oppositeAxis, position);
+            const currentPosition = that.getCustomPosition(resolvedPosition);
 
             if(!isDefined(currentPosition)) {
                 return that.getResolvedBoundaryPosition();
@@ -1301,7 +1305,7 @@ module.exports = {
 
         customPositionIsAvailable() {
             const options = this.getOptions();
-            return isDefined(this.getCustomPosition) && (isDefined(options.customPosition) || isFinite(options.offset));
+            return isDefined(this.getCustomPositionAxis()) && (isDefined(options.customPosition) || isFinite(options.offset));
         },
 
         hasCustomPosition() {

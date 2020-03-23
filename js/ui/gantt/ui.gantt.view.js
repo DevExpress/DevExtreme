@@ -19,6 +19,7 @@ export class GanttView extends Widget {
             taskTitlePosition: this._getTaskTitlePosition(this.option('taskTitlePosition')),
             allowSelectTask: this.option('allowSelection'),
             editing: this.option('editing'),
+            validation: this.option('validation'),
             stripLines: { stripLines: this.option('stripLines') },
             areHorizontalBordersEnabled: this.option('showRowLines'),
             areAlternateRowsEnabled: false,
@@ -130,6 +131,9 @@ export class GanttView extends Widget {
                 break;
             case 'editing':
                 this._ganttViewCore.setEditingSettings(args.value);
+                break;
+            case 'validation':
+                this._ganttViewCore.setValidationSettings(args.value);
                 break;
             case 'showRowLines':
                 this._ganttViewCore.setRowLinesVisible(args.value);
