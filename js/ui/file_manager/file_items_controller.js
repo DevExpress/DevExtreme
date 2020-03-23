@@ -20,6 +20,10 @@ export default class FileItemsController {
         options = options || {};
         this._options = extend({ }, options);
 
+        this._isInitialized = false;
+        this._dataLoading = false;
+        this._dataLoadingDeferred = null;
+
         this._rootDirectoryInfo = this._createRootDirectoryInfo(options.rootText);
         this._currentDirectoryInfo = this._rootDirectoryInfo;
 
@@ -30,19 +34,11 @@ export default class FileItemsController {
             maxFileSize: this._options.uploadMaxFileSize
         });
 
-        this.setProvider(options.fileProvider);
-        this._onSelectedDirectoryChanged = options && options.onSelectedDirectoryChanged;
-
-        this._loadedItems = {};
-
-        if(options.currentPathKeys && options.currentPathKeys.length) {
-            this.setCurrentPathByKeys(options.currentPathKeys);
-        } else {
-            this.setCurrentPath(options.currentPath);
-        }
+        this._setProvider(options.fileProvider);
+        this._initialize();
     }
 
-    setProvider(fileProvider) {
+    _setProvider(fileProvider) {
         this._fileProvider = this._createFileProvider(fileProvider);
         this._resetState();
     }
@@ -114,7 +110,24 @@ export default class FileItemsController {
 
         const requireRaiseSelectedDirectory = this._currentDirectoryInfo.fileItem.key !== directoryInfo.fileItem.key;
         this._currentDirectoryInfo = directoryInfo;
-        requireRaiseSelectedDirectory && this._raiseSelectedDirectoryChanged(directoryInfo);
+
+        if(requireRaiseSelectedDirectory && this._isInitialized) {
+            if(!this._dataLoading) {
+                this._raiseDataLoading();
+            }
+            this._raiseSelectedDirectoryChanged(directoryInfo);
+        }
+    }
+
+    getCurrentItems(onlyFiles) {
+        return this._dataLoadingDeferred
+            ? this._dataLoadingDeferred.then(() => this._getCurrentItemsInternal(onlyFiles))
+            : this._getCurrentItemsInternal(onlyFiles);
+    }
+
+    _getCurrentItemsInternal(onlyFiles) {
+        const currentDirectory = this.getCurrentDirectory();
+        return onlyFiles ? this.getFiles(currentDirectory) : this.getDirectoryContents(currentDirectory);
     }
 
     getDirectories(parentDirectoryInfo) {
@@ -322,6 +335,12 @@ export default class FileItemsController {
 
         this._lockRefresh = true;
 
+        return this._executeDataLoad(() => {
+            return this._refreshDeferred = this._refreshInternal();
+        });
+    }
+
+    _refreshInternal() {
         const cachedRootInfo = {
             items: this._rootDirectoryInfo.items
         };
@@ -329,8 +348,7 @@ export default class FileItemsController {
 
         this._resetDirectoryState(this._rootDirectoryInfo);
 
-        this.setCurrentDirectory(null);
-        return this._refreshDeferred = this._loadItemsRecursive(this._rootDirectoryInfo, cachedRootInfo)
+        return this._loadItemsRecursive(this._rootDirectoryInfo, cachedRootInfo)
             .then(() => {
                 const dirInfo = this._findSelectedDirectoryByPathKeyParts(selectedKeyParts);
                 this.setCurrentDirectory(dirInfo);
@@ -357,7 +375,28 @@ export default class FileItemsController {
             () => null);
     }
 
+    _initialize() {
+        const result = this._options.currentPathKeys && this._options.currentPathKeys.length
+            ? this.setCurrentPathByKeys(this._options.currentPathKeys)
+            : this.setCurrentPath(this._options.currentPath);
+
+        const completeInitialization = () => {
+            this._isInitialized = true;
+            this._raiseInitialized();
+        };
+
+        if(result) {
+            when(result).always(completeInitialization);
+        } else {
+            completeInitialization();
+        }
+    }
+
     _setCurrentDirectoryByPathParts(pathParts, useKeys) {
+        return this._executeDataLoad(() => this._setCurrentDirectoryByPathPartsInternal(pathParts, useKeys));
+    }
+
+    _setCurrentDirectoryByPathPartsInternal(pathParts, useKeys) {
         return this._getDirectoryByPathParts(this._rootDirectoryInfo, pathParts, useKeys)
             .then(directoryInfo => {
                 for(let info = directoryInfo.parentDirectory; info; info = info.parentDirectory) {
@@ -365,6 +404,21 @@ export default class FileItemsController {
                 }
                 this.setCurrentDirectory(directoryInfo);
             });
+    }
+
+    _executeDataLoad(action) {
+        this._dataLoading = true;
+        this._dataLoadingDeferred = new Deferred();
+
+        if(this._isInitialized) {
+            this._raiseDataLoading();
+        }
+
+        return action().always(() => {
+            this._dataLoadingDeferred.resolve();
+            this._dataLoadingDeferred = null;
+            this._dataLoading = false;
+        });
     }
 
     _getDirectoryByPathParts(parentDirectoryInfo, pathParts, useKeys) {
@@ -479,9 +533,24 @@ export default class FileItemsController {
         return result;
     }
 
+    _raiseInitialized() {
+        const e = { controller: this };
+        if(this._options.onInitialized) {
+            this._options.onInitialized(e);
+        }
+    }
+
+    _raiseDataLoading() {
+        if(this._options.onDataLoading) {
+            this._options.onDataLoading();
+        }
+    }
+
     _raiseSelectedDirectoryChanged(directoryInfo) {
         const e = { selectedDirectoryInfo: directoryInfo };
-        this._onSelectedDirectoryChanged && this._onSelectedDirectoryChanged(e);
+        if(this._options.onSelectedDirectoryChanged) {
+            this._options.onSelectedDirectoryChanged(e);
+        }
     }
 
     _raiseEditActionStarting(actionInfo) {

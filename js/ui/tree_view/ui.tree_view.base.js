@@ -836,6 +836,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         this._dataAdapter.toggleExpansion(node.internalFields.key, state);
+
         return this._updateExpandedItemsUI(node, state, e);
     },
 

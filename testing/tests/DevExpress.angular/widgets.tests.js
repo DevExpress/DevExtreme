@@ -1,33 +1,36 @@
-const $ = require('jquery');
-const angular = require('angular');
-const registerComponent = require('core/component_registrator');
-const DOMComponent = require('core/dom_component');
-const Widget = require('ui/widget/ui.widget');
-const config = require('core/config');
-const inflector = require('core/utils/inflector');
-const fx = require('animation/fx');
-const positionUtils = require('animation/position');
-const ValidationGroup = require('ui/validation_group');
+import $ from 'jquery';
+import angular from 'angular';
+import registerComponent from 'core/component_registrator';
+import DOMComponent from 'core/dom_component';
+import Widget from 'ui/widget/ui.widget';
+import config from 'core/config';
+import inflector from 'core/utils/inflector';
+import fx from 'animation/fx';
+import positionUtils from 'animation/position';
+import ValidationGroup from 'ui/validation_group';
+import eventsEngine from 'events/core/events_engine';
 
-require('common.css!');
-require('generic_light.css!');
-require('integration/angular');
+import 'common.css!';
+import 'generic_light.css!';
+import 'integration/angular';
 
-require('ui/accordion');
-require('ui/box');
-require('ui/data_grid');
-require('ui/defer_rendering');
-require('ui/menu');
-require('ui/popup');
-require('ui/popover');
-require('ui/date_box');
-require('ui/scheduler');
-require('ui/slide_out_view');
-require('ui/tabs');
-require('ui/text_box');
-require('ui/toolbar');
+import 'ui/accordion';
+import 'ui/box';
+import 'ui/data_grid';
+import 'ui/defer_rendering';
+import 'ui/menu';
+import 'ui/popup';
+import 'ui/popover';
+import 'ui/date_box';
+import 'ui/scheduler';
+import 'ui/slide_out_view';
+import 'ui/tabs';
+import 'ui/text_box';
+import 'ui/toolbar';
+import 'ui/drawer';
+import Button from 'ui/button';
 
-require('../../helpers/ignoreAngularTimers.js');
+import '../../helpers/ignoreAngularTimers.js';
 
 const FILTERING_TIMEOUT = 700;
 
@@ -1166,4 +1169,166 @@ QUnit.test('T228219 dxValidationSummary should be disposed properly', function(a
     $markup.remove();
 
     assert.ok(true, 'We should not fall on previous statement');
+});
+
+QUnit.module('Drawer', () => {
+    const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
+    const DRAWER_PANEL_CONTENT_CLASS = 'dx-drawer-panel-content';
+    const DRAWER_VIEW_CONTENT_CLASS = 'dx-drawer-content';
+    const DRAWER_SHADER_CLASS = 'dx-drawer-shader';
+
+    function getNestedElements() {
+        const wrapperElement = document.querySelectorAll(`.${DRAWER_WRAPPER_CLASS}`);
+        const panelElement = document.querySelectorAll(`.${DRAWER_PANEL_CONTENT_CLASS}`);
+        const viewContentElement = document.querySelectorAll(`.${DRAWER_VIEW_CONTENT_CLASS}`);
+        const shaderElement = document.querySelectorAll(`.${DRAWER_SHADER_CLASS}`);
+        const firstViewContentNestedElement = document.querySelectorAll('#button');
+        const secondViewContentNestedElement = document.querySelectorAll('#additionalContent');
+
+        return {
+            wrapperElement,
+            panelElement,
+            viewContentElement,
+            shaderElement,
+            firstViewContentNestedElement,
+            secondViewContentNestedElement
+        };
+    }
+
+    function checkNestedElements(assert, nestedElements) {
+        assert.strictEqual(nestedElements.wrapperElement.length, 1, 'wrapperElement.length');
+        assert.strictEqual(nestedElements.panelElement.length, 1, 'panelElement.length');
+        assert.strictEqual(nestedElements.viewContentElement.length, 1, 'viewContentElement.length');
+        assert.strictEqual(nestedElements.shaderElement.length, 1, 'wrappershaderElementElement.length');
+        assert.strictEqual(nestedElements.firstViewContentNestedElement.length, 1, 'firstViewContentNestedElement.length');
+        assert.strictEqual(nestedElements.secondViewContentNestedElement.length, 1, 'secondViewContentNestedElement.length');
+    }
+
+    function checkNodeEquals(assert, nestedElementsAfterRepaint, nestedElements) {
+        assert.strictEqual(nestedElementsAfterRepaint.wrapperElement[0].isSameNode(nestedElements.wrapperElement[0]), true, 'the same wrapperElement');
+        assert.strictEqual(nestedElementsAfterRepaint.viewContentElement[0].isSameNode(nestedElements.viewContentElement[0]), true, 'the same viewContentElement');
+        assert.strictEqual(nestedElementsAfterRepaint.shaderElement[0].isSameNode(nestedElements.shaderElement[0]), true, 'the same shaderElement');
+        assert.strictEqual(nestedElementsAfterRepaint.secondViewContentNestedElement[0].isEqualNode(nestedElements.secondViewContentNestedElement[0]), true, 'the same secondViewContentNestedElement');
+    }
+
+    QUnit.test('Drawer + template in markup with button -> repaint() method does not duplicate the content(T864419)', function(assert) {
+        const nestedButtonClickHandler = sinon.stub();
+        const $markup = $(
+            '<div dx-drawer="drawerOptions">\
+                <div data-options=\'dxTemplate: {name: "listTemplate"}\'\
+                    dx-list="{\
+                        dataSource: listItems\
+                    }">\
+                </div>\
+                <div id="button" dx-button="buttonOptions"></div>\
+                <div id="additionalContent"></div>\
+            </div>'
+        );
+
+        let drawerInstance;
+        let buttonElement;
+        const controller = function($scope) {
+            $scope.buttonOptions = {
+                text: 'nestedButton',
+                onClick: nestedButtonClickHandler
+            };
+            $scope.drawerOptions = {
+                opened: true,
+                template: 'listTemplate',
+                onInitialized: function(e) {
+                    drawerInstance = e.component;
+                }
+            };
+        };
+        initMarkup($markup, controller, this);
+
+        const nestedElements = getNestedElements();
+        checkNestedElements(assert, nestedElements);
+
+        buttonElement = nestedElements.firstViewContentNestedElement;
+        eventsEngine.trigger(buttonElement, 'dxclick');
+
+        assert.strictEqual(nestedButtonClickHandler.callCount, 1, 'buttonClickHandler.callCount');
+        assert.strictEqual($(buttonElement).dxButton('instance') instanceof Button, true, 'button.instance');
+
+        drawerInstance.repaint();
+        nestedButtonClickHandler.reset();
+
+        const nestedElementsAfterRepaint = getNestedElements();
+
+        buttonElement = nestedElementsAfterRepaint.firstViewContentNestedElement;
+        eventsEngine.trigger(buttonElement, 'dxclick');
+        checkNestedElements(assert, nestedElementsAfterRepaint);
+
+        assert.strictEqual(nestedButtonClickHandler.callCount, 1, 'buttonClickHandler.callCount');
+        assert.strictEqual($(buttonElement).dxButton('instance') instanceof Button, true, 'button.instance');
+
+        checkNodeEquals(assert, nestedElementsAfterRepaint, nestedElements);
+    });
+
+
+    QUnit.test('Drawer + contentTemplate() with button -> repaint() method does not duplicate the content(T864419)', function(assert) {
+        const nestedButtonClickHandler = sinon.stub();
+        const $markup = $(
+            '<div dx-drawer="drawerOptions">\
+                <div data-options=\'dxTemplate: {name: "listTemplate"}\'\
+                    dx-list="{\
+                        dataSource: listItems\
+                    }">\
+                </div>\
+            </div>'
+        );
+
+        let drawerInstance;
+        let buttonElement;
+        const controller = function($scope) {
+            $scope.drawerOptions = {
+                opened: true,
+                template: 'listTemplate',
+                onInitialized: function(e) {
+                    drawerInstance = e.component;
+                },
+                contentTemplate: () => {
+                    const viewContentElement = document.createElement('div');
+                    viewContentElement.classList.add('ng-scope');
+                    buttonElement = document.createElement('div');
+                    buttonElement.id = 'button';
+
+                    viewContentElement.append(buttonElement);
+                    const additionalElement = document.createElement('div');
+                    additionalElement.id = 'additionalContent';
+                    viewContentElement.append(additionalElement);
+                    new Button(buttonElement, {
+                        text: 'nestedButton',
+                        onClick: nestedButtonClickHandler
+                    });
+                    return $(viewContentElement);
+                }
+            };
+        };
+
+        initMarkup($markup, controller, this);
+
+        const nestedElements = getNestedElements();
+        checkNestedElements(assert, nestedElements);
+
+        eventsEngine.trigger(buttonElement, 'dxclick');
+
+        assert.strictEqual(nestedButtonClickHandler.callCount, 1, 'buttonClickHandler.callCount');
+        assert.strictEqual($(buttonElement).dxButton('instance') instanceof Button, true, 'button.instance');
+
+        drawerInstance.repaint();
+        nestedButtonClickHandler.reset();
+
+        const nestedElementsAfterRepaint = getNestedElements();
+
+        buttonElement = nestedElementsAfterRepaint.firstViewContentNestedElement;
+        eventsEngine.trigger(buttonElement, 'dxclick');
+        checkNestedElements(assert, nestedElementsAfterRepaint);
+
+        assert.strictEqual(nestedButtonClickHandler.callCount, 1, 'buttonClickHandler.callCount');
+        assert.strictEqual($(buttonElement).dxButton('instance') instanceof Button, true, 'button.instance');
+
+        checkNodeEquals(assert, nestedElementsAfterRepaint, nestedElements);
+    });
 });

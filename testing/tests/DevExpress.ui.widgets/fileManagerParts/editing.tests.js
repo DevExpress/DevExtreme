@@ -3,6 +3,7 @@ import 'ui/file_manager';
 import FileUploader from 'ui/file_uploader';
 import fx from 'animation/fx';
 import CustomFileSystemProvider from 'file_management/custom_provider';
+import ErrorCode from 'file_management/errors';
 import { Consts, FileManagerWrapper, FileManagerProgressPanelWrapper, createTestFileSystem, createUploaderFiles, stubFileReader } from '../../../helpers/fileManagerHelpers.js';
 import { CLICK_EVENT } from '../../../helpers/grid/keyboardNavigationHelper.js';
 
@@ -609,6 +610,30 @@ QUnit.module('Editing operations', moduleConfig, () => {
         cancelButton.trigger('dxclick');
         const fileNames = this.wrapper.getDetailsItemNamesTexts();
         assert.strictEqual(fileNames.filter(name => name === 'File 1.txt').length, 1, 'File wasn\'t copied');
+    });
+
+    test('errorOccurred event raised', function(assert) {
+        const errorSpy = sinon.spy();
+        this.fileManager.option('onErrorOccurred', errorSpy);
+
+        assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
+
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Rename').trigger('dxclick');
+        this.clock.tick(400);
+
+        this.wrapper.getDialogTextInput()
+            .val('Testpage 11.aspx')
+            .trigger('change');
+        this.wrapper.getDialogButton('Save').trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(errorSpy.callCount, 1, 'event raised');
+        assert.strictEqual(errorSpy.args[0][0].errorCode, ErrorCode.WrongFileExtension, 'errorCode correct');
+        assert.strictEqual(errorSpy.args[0][0].errorText, 'File extension is not allowed.', 'errorText correct');
+        assert.strictEqual(errorSpy.args[0][0].fileSystemItem.name, 'File 1.txt', 'fileSystemItem correct');
     });
 
 });
