@@ -387,10 +387,20 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      */
     usePopover?: boolean;
     /**
+     * @docid dxLookupOptions.itemCenteringEnabled
+     * @type boolean
+     * @default false
+     * @default true [for](Material)
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    itemCenteringEnabled?: boolean;
+    /**
      * @docid dxLookupOptions.dropDownOptions
      * @type dxPopupOptions | dxPopoverOptions
      */
     dropDownOptions?: dxPopupOptions | dxPopoverOptions;
+
 }
 /**
  * @docid dxLookup

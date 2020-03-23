@@ -4524,6 +4524,8 @@ declare module DevExpress.ui {
         groupTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxLookup.Options.grouped */
         grouped?: boolean;
+        /** @name dxLookup.Options.itemCenteringEnabled */
+        itemCenteringEnabled?: boolean;
         /** @name dxLookup.Options.nextButtonText */
         nextButtonText?: string;
         /** @name dxLookup.Options.onPageLoading */
