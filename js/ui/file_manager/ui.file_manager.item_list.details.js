@@ -17,7 +17,6 @@ const FILE_MANAGER_DETAILS_ITEM_NAME_WRAPPER_CLASS = 'dx-filemanager-details-ite
 const FILE_MANAGER_DETAILS_ITEM_IS_DIRECTORY_CLASS = 'dx-filemanager-details-item-is-directory';
 const FILE_MANAGER_PARENT_DIRECTORY_ITEM = 'dx-filemanager-parent-directory-item';
 const DATA_GRID_DATA_ROW_CLASS = 'dx-data-row';
-const PREDEFINED_COLUMN_NAMES = [ 'name', 'size', 'thumbnail', 'dateModified', 'isParentFolder' ];
 
 const DEFAULT_COLUMN_CONFIGS = {
     thumbnail: {
@@ -106,26 +105,27 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
     _createColumns() {
         let columns = this.option('detailColumns');
-
-        const customizeDetailColumns = this.option('customizeDetailColumns');
-        if(isFunction(customizeDetailColumns)) {
-            columns = customizeDetailColumns(columns);
-        }
-
         columns = columns.slice(0);
-        columns.push({ dataField: 'isParentFolder' });
 
-        return columns.map(column => {
+        columns = columns.map(column => {
             let extendedItem = column;
             if(isString(column)) {
                 extendedItem = { dataField: column };
             }
             return this._getPreparedColumn(extendedItem);
         });
+
+        const customizeDetailColumns = this.option('customizeDetailColumns');
+        if(isFunction(customizeDetailColumns)) {
+            columns = customizeDetailColumns(columns);
+        }
+
+        columns.push(this._getPreparedColumn({ dataField: 'isParentFolder' }));
+        columns.forEach(column => this._updateColumnDataField(column));
+        return columns;
     }
 
     _getPreparedColumn(columnOptions) {
-        const dataItemSuffix = PREDEFINED_COLUMN_NAMES.indexOf(columnOptions.dataField) < 0 ? 'dataItem.' : '';
         const result = {};
         let resultCssClass = '';
 
@@ -159,9 +159,16 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             'width'
         ]);
 
-        result.dataField = 'fileItem.' + dataItemSuffix + result.dataField;
-        result.cssClass = resultCssClass;
+        if(resultCssClass) {
+            result.cssClass = resultCssClass;
+        }
         return result;
+    }
+
+    _updateColumnDataField(column) {
+        const dataItemSuffix = this._isDefaultColumn(column.dataField) ? '' : 'dataItem.';
+        column.dataField = 'fileItem.' + dataItemSuffix + column.dataField;
+        return column;
     }
 
     _isDefaultColumn(columnDataField) {
