@@ -209,6 +209,10 @@ export class FileManagerWrapper {
         return this.findThumbnailsItem(itemName).find(`.${Consts.THUMBNAILS_ITEM_CONTENT_CLASS}`);
     }
 
+    isThumbnailsItemSelected(itemName) {
+        return this.findThumbnailsItem(itemName).is(`.${Consts.ITEM_SELECTED_CLASS}`);
+    }
+
     findDetailsItem(itemName) {
         return this._$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td:contains('${itemName}')`);
     }
@@ -280,6 +284,7 @@ export class FileManagerWrapper {
     }
 
     getDetailsCellValue(rowIndex, columnIndex) {
+        columnIndex += isDesktopDevice() ? 1 : 0;
         return this.getRowInDetailsView(rowIndex)
             .find(`td:nth-child(${columnIndex})`)
             .text()

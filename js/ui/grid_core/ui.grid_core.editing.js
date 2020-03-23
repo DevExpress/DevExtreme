@@ -1116,20 +1116,23 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         executeOperation: function(deferred, func) {
-            if(this._lastOperation) {
-                this._lastOperation.reject();
-            }
-
+            this._lastOperation && this._lastOperation.reject();
             this._lastOperation = deferred;
 
-            when(...this._deferreds).always(() => {
-                this._lastOperation = null;
-            }).done(() => {
+            this.waitForDeferredOperations().done(() => {
                 if(deferred.state() === 'rejected') {
                     return;
                 }
                 func();
-            }).fail(deferred.reject);
+                this._lastOperation = null;
+            }).fail(() => {
+                deferred.reject();
+                this._lastOperation = null;
+            });
+        },
+
+        waitForDeferredOperations: function() {
+            return when(...this._deferreds);
         },
 
         editCell: function(rowIndex, columnIndex) {
@@ -1535,7 +1538,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     deferred.resolve();
                 });
             };
-            when(...this._deferreds).done(() => {
+            this.waitForDeferredOperations().done(() => {
                 if(this._saving) {
                     afterSaveEditData();
                     return;
@@ -1546,7 +1549,7 @@ const EditingController = modules.ViewController.inherit((function() {
                         return;
                     }
                     this._saveEditDataInner().done(deferred.resolve).fail(deferred.reject);
-                });
+                }).fail(deferred.reject);
             }).fail(deferred.reject);
             return deferred.promise();
         },
@@ -1848,26 +1851,31 @@ const EditingController = modules.ViewController.inherit((function() {
                 if(options.values) {
                     options.values[options.columnIndex] = value;
                 }
-
-                that.addDeferred(setCellValueResult);
+                that.addDeferred(deferred);
             }
 
             return deferred;
         },
 
         updateFieldValue: function(options, value, text, forceUpdateRow) {
-            const that = this;
             const rowKey = options.key;
+            const deferred = new Deferred();
 
             if(rowKey === undefined) {
-                that._dataController.fireError('E1043');
+                this._dataController.fireError('E1043');
             }
 
             if(options.column.setCellValue) {
                 this._prepareEditDataParams(options, value, text).done(params => {
-                    this._applyEditDataParams(options, params, forceUpdateRow);
+                    when(this._applyEditDataParams(options, params, forceUpdateRow)).always(() => {
+                        deferred.resolve();
+                    });
                 });
+            } else {
+                deferred.resolve();
             }
+
+            return deferred.promise();
         },
         _focusPreviousEditingCellIfNeed: function(options) {
             const that = this;

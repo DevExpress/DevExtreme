@@ -3,6 +3,7 @@ import { extend } from '../../core/utils/extend';
 import { isDefined, isString } from '../../core/utils/type';
 import { ensureDefined } from '../../core/utils/common';
 import messageLocalization from '../../localization/message';
+import { extendAttributes } from './ui.file_manager.common';
 
 import Widget from '../widget/ui.widget';
 import Toolbar from '../toolbar';
@@ -216,15 +217,15 @@ class FileManagerToolbar extends Widget {
         if(this._isDefaultItem(commandName)) {
             const defaultConfig = DEFAULT_ITEM_CONFIGS[commandName];
             extend(true, result, defaultConfig);
-            this._extendAttributes(result, item, ['visible', 'location', 'locateInMenu']);
+            extendAttributes(result, item, ['visible', 'location', 'locateInMenu']);
 
             if(!isDefined(item.visible)) {
                 result._autoHide = true;
             } else {
-                this._extendAttributes(result, item, ['disabled']);
+                extendAttributes(result, item, ['disabled']);
             }
 
-            this._extendAttributes(result.options, item, ['text', 'icon']);
+            extendAttributes(result.options, item, ['text', 'icon']);
         } else {
             extend(true, result, item);
             if(!result.widget) {
@@ -245,14 +246,6 @@ class FileManagerToolbar extends Widget {
         }
 
         return result;
-    }
-
-    _extendAttributes(targetObject, sourceObject, objectKeysArray) {
-        objectKeysArray.forEach(objectKey => {
-            extend(true, targetObject, sourceObject[objectKey]
-                ? { [objectKey]: sourceObject[objectKey] }
-                : {});
-        });
     }
 
     _isDefaultItem(commandName) {

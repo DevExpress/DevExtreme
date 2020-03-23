@@ -13,6 +13,11 @@ const FILE_MANAGER_ITEM_LIST_ITEM_OPEN_EVENT_NAMESPACE = 'dxFileManager_open';
 
 class FileManagerItemListBase extends Widget {
 
+    _init() {
+        this._initActions();
+        super._init();
+    }
+
     _initMarkup() {
         this._initActions();
 
@@ -28,6 +33,7 @@ class FileManagerItemListBase extends Widget {
         this._actions = {
             onError: this._createActionByOption('onError'),
             onSelectionChanged: this._createActionByOption('onSelectionChanged'),
+            onFocusedItemChanged: this._createActionByOption('onFocusedItemChanged'),
             onSelectedItemOpened: this._createActionByOption('onSelectedItemOpened')
         };
     }
@@ -35,11 +41,14 @@ class FileManagerItemListBase extends Widget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             selectionMode: 'single',
+            selectedItemKeys: [],
+            focusedItemKey: undefined,
             contextMenu: null,
             getItems: null,
             getItemThumbnail: null,
             onError: null,
             onSelectionChanged: null,
+            onFocusedItemChanged: null,
             onSelectedItemOpened: null
         });
     }
@@ -54,9 +63,16 @@ class FileManagerItemListBase extends Widget {
             case 'getItemThumbnail':
                 this.repaint();
                 break;
+            case 'selectedItemKeys':
+                this._setSelectedItemKeys(args.value);
+                break;
+            case 'focusedItemKey':
+                this._setFocusedItemKey(args.value);
+                break;
             case 'onError':
             case 'onSelectedItemOpened':
             case 'onSelectionChanged':
+            case 'onFocusedItemChanged':
                 this._actions[name] = this._createActionByOption(name);
                 break;
             default:
@@ -83,6 +99,10 @@ class FileManagerItemListBase extends Widget {
 
     _raiseSelectionChanged(args) {
         this._actions.onSelectionChanged(args);
+    }
+
+    _raiseFocusedItemChanged(args) {
+        this._actions.onFocusedItemChanged(args);
     }
 
     _raiseSelectedItemOpened(fileItemInfo) {
@@ -211,6 +231,12 @@ class FileManagerItemListBase extends Widget {
     }
 
     _deselectItem(item) {}
+
+    _setSelectedItemKeys(itemKeys) {
+    }
+
+    _setFocusedItemKey(itemKey) {
+    }
 
     _createDataSource() {
         return {

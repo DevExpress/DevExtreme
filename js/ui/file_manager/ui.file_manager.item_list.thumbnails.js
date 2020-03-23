@@ -32,7 +32,10 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
         const $itemListContainer = $('<div>').appendTo(this.$element());
         this._itemList = this._createComponent($itemListContainer, FileManagerThumbnailListBox, {
+            dataSource: this._createDataSource(),
             selectionMode,
+            selectedItemKeys: this.option('selectedItemKeys'),
+            focusedItemKey: this.option('focusedItemKey'),
             activeStateEnabled: true,
             hoverStateEnabled: true,
             loopItemFocus: false,
@@ -40,10 +43,9 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             onItemEnterKeyPressed: this._tryOpen.bind(this),
             itemThumbnailTemplate: this._getItemThumbnailContainer.bind(this),
             getTooltipText: this._getTooltipText.bind(this),
-            onSelectionChanged: this._onFilesViewSelectionChanged.bind(this)
+            onSelectionChanged: this._onItemListSelectionChanged.bind(this),
+            onFocusedItemChanged: this._onItemListFocusedItemChanged.bind(this)
         });
-
-        this.refresh();
     }
 
     _onContextMenu(e) {
@@ -106,13 +108,26 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         });
     }
 
-    _onFilesViewSelectionChanged({ addedItems, removedItems }) {
-        const selectedItems = this.getSelectedItems().map(itemInfo => itemInfo.fileItem);
+    _onItemListSelectionChanged({ addedItems, removedItems }) {
+        const selectedItemInfos = this.getSelectedItems();
+        const selectedItems = selectedItemInfos.map(itemInfo => itemInfo.fileItem);
         const selectedItemKeys = selectedItems.map(item => item.key);
         const currentSelectedItemKeys = addedItems.map(itemInfo => itemInfo.fileItem.key);
         const currentDeselectedItemKeys = removedItems.map(itemInfo => itemInfo.fileItem.key);
 
-        this._tryRaiseSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
+        this._tryRaiseSelectionChanged({ selectedItemInfos, selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
+    }
+
+    _onItemListFocusedItemChanged(e) {
+        this._raiseFocusedItemChanged(e);
+    }
+
+    _setSelectedItemKeys(itemKeys) {
+        this._itemList.option('selectedItemKeys', itemKeys);
+    }
+
+    _setFocusedItemKey(itemKey) {
+        this._itemList.option('focusedItemKey', itemKey);
     }
 
     refresh() {

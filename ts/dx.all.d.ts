@@ -3223,7 +3223,7 @@ declare module DevExpress.ui {
         /** @name dxDiagram.Options.customShapeTemplate */
         customShapeTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, data: { item?: dxDiagramShape }) => any);
         /** @name dxDiagram.Options.customShapes */
-        customShapes?: Array<{ allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageWidth?: number, baseType?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string, category?: string, connectionPoints?: Array<{ x?: number, y?: number }>, defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: DevExpress.core.template | ((container: DevExpress.core.dxElement, data: { item?: dxDiagramShape }) => any), templateHeight?: number, templateLeft?: number, templateTop?: number, templateWidth?: number, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, type?: string }>;
+        customShapes?: Array<{ allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageToolboxUrl?: string, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageWidth?: number, baseType?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string, category?: string, connectionPoints?: Array<{ x?: number, y?: number }>, defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: DevExpress.core.template | ((container: DevExpress.core.dxElement, data: { item?: dxDiagramShape }) => any), templateHeight?: number, templateLeft?: number, templateTop?: number, templateWidth?: number, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, type?: string }>;
         /** @name dxDiagram.Options.edges */
         edges?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, fromExpr?: string | ((data: any) => any), fromLineEndExpr?: string | ((data: any) => any), fromPointIndexExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), lineTypeExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), pointsExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), toExpr?: string | ((data: any) => any), toLineEndExpr?: string | ((data: any) => any), toPointIndexExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.export */
@@ -3611,12 +3611,18 @@ declare module DevExpress.ui {
         customizeThumbnail?: ((fileSystemItem: DevExpress.fileManagement.FileSystemItem) => string);
         /** @name dxFileManager.Options.fileSystemProvider */
         fileSystemProvider?: any;
+        /** @name dxFileManager.Options.focusedItemKey */
+        focusedItemKey?: string;
         /** @name dxFileManager.Options.itemView */
-        itemView?: { mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
+        itemView?: { details?: { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
         /** @name dxFileManager.Options.onContextMenuItemClick */
         onContextMenuItemClick?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: DevExpress.events.event }) => any);
         /** @name dxFileManager.Options.onCurrentDirectoryChanged */
         onCurrentDirectoryChanged?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, directory?: DevExpress.fileManagement.FileSystemItem }) => any);
+        /** @name dxFileManager.Options.onErrorOccurred */
+        onErrorOccurred?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, errorCode?: number, errorText?: string, fileSystemItem?: DevExpress.fileManagement.FileSystemItem }) => any);
+        /** @name dxFileManager.Options.onFocusedItemChanged */
+        onFocusedItemChanged?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, item?: DevExpress.fileManagement.FileSystemItem, itemElement?: DevExpress.core.dxElement }) => any);
         /** @name dxFileManager.Options.onSelectedFileOpened */
         onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, file?: DevExpress.fileManagement.FileSystemItem }) => any);
         /** @name dxFileManager.Options.onSelectionChanged */
@@ -3627,6 +3633,8 @@ declare module DevExpress.ui {
         permissions?: { copy?: boolean, create?: boolean, delete?: boolean, download?: boolean, move?: boolean, rename?: boolean, upload?: boolean };
         /** @name dxFileManager.Options.rootFolderName */
         rootFolderName?: string;
+        /** @name dxFileManager.Options.selectedItemKeys */
+        selectedItemKeys?: Array<string>;
         /** @name dxFileManager.Options.selectionMode */
         selectionMode?: 'multiple' | 'single';
         /** @name dxFileManager.Options.toolbar */
@@ -3658,6 +3666,25 @@ declare module DevExpress.ui {
         name?: 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | string;
         /** @name dxFileManagerContextMenuItem.visible */
         visible?: boolean;
+    }
+    /** @name dxFileManagerDetailsColumn */
+    export interface dxFileManagerDetailsColumn {
+        /** @name dxFileManagerDetailsColumn.alignment */
+        alignment?: 'center' | 'left' | 'right' | undefined;
+        /** @name dxFileManagerDetailsColumn.caption */
+        caption?: string;
+        /** @name dxFileManagerDetailsColumn.dataField */
+        dataField?: string;
+        /** @name dxFileManagerDetailsColumn.hidingPriority */
+        hidingPriority?: number;
+        /** @name dxFileManagerDetailsColumn.sortIndex */
+        sortIndex?: number;
+        /** @name dxFileManagerDetailsColumn.sortOrder */
+        sortOrder?: 'asc' | 'desc' | undefined;
+        /** @name dxFileManagerDetailsColumn.visible */
+        visible?: boolean;
+        /** @name dxFileManagerDetailsColumn.width */
+        width?: number | string;
     }
     /** @name dxFileManagerToolbar */
     export interface dxFileManagerToolbar {
@@ -4239,6 +4266,8 @@ declare module DevExpress.ui {
         container?: string | Element | JQuery;
         /** @name dxHtmlEditorToolbar.items */
         items?: Array<dxHtmlEditorToolbarItem | 'background' | 'bold' | 'color' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear'>;
+        /** @name dxHtmlEditorToolbar.multiline */
+        multiline?: boolean;
     }
     /** @name dxHtmlEditorToolbarItem */
     export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
@@ -4495,6 +4524,8 @@ declare module DevExpress.ui {
         groupTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxLookup.Options.grouped */
         grouped?: boolean;
+        /** @name dxLookup.Options.itemCenteringEnabled */
+        itemCenteringEnabled?: boolean;
         /** @name dxLookup.Options.nextButtonText */
         nextButtonText?: string;
         /** @name dxLookup.Options.onPageLoading */
@@ -6351,19 +6382,19 @@ declare module DevExpress.ui {
         /** @name dxTreeView.collapseAll() */
         collapseAll(): void;
         /** @name dxTreeView.collapseItem(itemData) */
-        collapseItem(itemData: any): void;
+        collapseItem(itemData: any): Promise<void> & JQueryPromise<void>;
         /** @name dxTreeView.collapseItem(itemElement) */
-        collapseItem(itemElement: Element): void;
+        collapseItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
         /** @name dxTreeView.collapseItem(key) */
-        collapseItem(key: any): void;
+        collapseItem(key: any): Promise<void> & JQueryPromise<void>;
         /** @name dxTreeView.expandAll() */
         expandAll(): void;
         /** @name dxTreeView.expandItem(itemData) */
-        expandItem(itemData: any): void;
+        expandItem(itemData: any): Promise<void> & JQueryPromise<void>;
         /** @name dxTreeView.expandItem(itemElement) */
-        expandItem(itemElement: Element): void;
+        expandItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
         /** @name dxTreeView.expandItem(key) */
-        expandItem(key: any): void;
+        expandItem(key: any): Promise<void> & JQueryPromise<void>;
         /** @name dxTreeView.getNodes() */
         getNodes(): Array<dxTreeViewNode>;
         /** @name dxTreeView.getSelectedNodeKeys() */

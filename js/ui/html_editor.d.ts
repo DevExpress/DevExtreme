@@ -424,6 +424,14 @@ export interface dxHtmlEditorToolbar {
      * @public
      */
     items?: Array<dxHtmlEditorToolbarItem | 'background' | 'bold' | 'color' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear'>;
+    /**
+     * @docid dxHtmlEditorToolbar.multiline
+     * @type boolean
+     * @default true
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    multiline?: boolean;
 }
 
 export interface dxHtmlEditorToolbarItem extends dxToolbarItem {

@@ -94,7 +94,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         $toolbar = this.wrapper.getToolbar();
         assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), 'file toolbar displayed');
 
-        const $folderNode = this.wrapper.getFolderNode(0);
+        const $folderNode = this.wrapper.getFolderNode(1);
         $folderNode.trigger('dxclick');
         $folderNode.trigger('click');
         this.clock.tick(400);
@@ -149,7 +149,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         $toolbar = this.wrapper.getToolbar();
         assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), 'file toolbar displayed');
 
-        const $folderNode = this.wrapper.getFolderNode(0);
+        const $folderNode = this.wrapper.getFolderNode(1);
         $folderNode.trigger('dxclick');
         $folderNode.trigger('click');
         this.clock.tick(400);

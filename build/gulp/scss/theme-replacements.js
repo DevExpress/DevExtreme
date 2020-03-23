@@ -463,6 +463,7 @@ module.exports = {
         { import: '../button/sizes', type: 'index' },
         { import: '../color', type: 'colors', alias: 'extColor' },
         { import: '../textEditor/colors', type: 'index' },
+        { import: '../toolbar/sizes', type: 'index' },
         { import: '../common', type: 'index' },
     ],
     'speedDialAction': [

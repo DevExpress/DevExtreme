@@ -122,13 +122,21 @@ const PATTERN_SETTERS = {
     y: 'setFullYear',
     M: 'setMonth',
     L: 'setMonth',
-    a: function(date, value) {
-        const hours = date.getHours();
-        if(!value && hours === 12) {
-            date.setHours(0);
-        } else if(value && hours !== 12) {
-            date.setHours(hours + 12);
+    a: function(date, value, datePartValues) {
+        let hours = date.getHours();
+
+        const hourPartValue = datePartValues['h'];
+        if(hourPartValue !== undefined && hourPartValue !== hours) {
+            hours--;
         }
+
+        if(!value && hours === 12) {
+            hours = 0;
+        } else if(value && hours !== 12) {
+            hours += 12;
+        }
+
+        date.setHours(hours);
     },
     d: 'setDate',
     H: 'setHours',
@@ -213,17 +221,18 @@ const getPatternSetters = function() {
     return PATTERN_SETTERS;
 };
 
-const setPatternPart = function(date, pattern, text, dateParts) {
+const setPatternPart = function(date, pattern, text, dateParts, datePartValues) {
     const patternChar = pattern[0];
     const partSetter = PATTERN_SETTERS[patternChar];
     const partParser = PATTERN_PARSERS[patternChar];
 
     if(partSetter && partParser) {
         const value = partParser(text, pattern.length, dateParts);
+        datePartValues[pattern] = value;
         if(date[partSetter]) {
             date[partSetter](value);
         } else {
-            partSetter(date, value);
+            partSetter(date, value, datePartValues);
         }
     }
 };
@@ -231,8 +240,8 @@ const setPatternPart = function(date, pattern, text, dateParts) {
 const setPatternPartFromNow = function(date, pattern, now) {
     const setterName = PATTERN_SETTERS[pattern];
     const getterName = 'g' + setterName.substr(1);
-
-    date[setterName](now[getterName]());
+    const value = now[getterName]();
+    date[setterName](value);
 };
 
 const getShortPatterns = function(fullPatterns) {
@@ -273,6 +282,7 @@ const getParser = function(format, dateParts) {
             const formatPatterns = getShortPatterns(regExpInfo.patterns);
             const maxPatternIndex = getMaxOrderedPatternIndex(formatPatterns);
             const orderedFormatPatterns = getOrderedFormatPatterns(formatPatterns);
+            const datePartValues = { };
 
             orderedFormatPatterns.forEach(function(pattern, index) {
                 if(!pattern || (index < ORDERED_PATTERNS.length && index > maxPatternIndex)) {
@@ -281,7 +291,9 @@ const getParser = function(format, dateParts) {
 
                 const patternIndex = formatPatterns.indexOf(pattern);
                 if(patternIndex >= 0) {
-                    setPatternPart(date, regExpInfo.patterns[patternIndex], regExpResult[patternIndex + 1], dateParts);
+                    const regExpPattern = regExpInfo.patterns[patternIndex];
+                    const regExpText = regExpResult[patternIndex + 1];
+                    setPatternPart(date, regExpPattern, regExpText, dateParts, datePartValues);
                 } else {
                     setPatternPartFromNow(date, pattern, now);
                 }

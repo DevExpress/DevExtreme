@@ -3192,7 +3192,6 @@ QUnit.module('default options', {
             const lookup = $lookup.dxLookup({ dataSource: ['blue', 'orange', 'lime', 'purple'] }).dxLookup('instance');
 
             assert.equal(lookup.option('popupWidth')(), $lookup.outerWidth(), 'popup width match with lookup field width');
-            assert.equal(lookup.option('position').of, lookup.element(), 'popup position of lookup field');
 
             $(lookup.field()).trigger('dxclick');
 
@@ -3281,6 +3280,100 @@ QUnit.module('default options', {
             themes.isMaterial = origIsMaterial;
         }
     });
+
+    QUnit.test('Check itemCenteringEnabled option for Material theme', function(assert) {
+        const origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
+
+        const $lookup = $('<div>').prependTo('body');
+
+        try {
+
+            const lookup = $lookup.dxLookup({ dataSource: ['blue', 'orange', 'lime', 'purple', 'green'], value: 'blue' }).dxLookup('instance');
+
+            lookup.option('usePopover', false);
+            lookup.option('itemCenteringEnabled', false);
+
+            $(lookup.field()).trigger('dxclick');
+
+            let $popup = $('.dx-popup-wrapper');
+
+            assert.roughEqual($popup.find('.dx-overlay-content').outerWidth(), $(window).width() * 0.8, 3, 'default popup width like generic');
+            assert.roughEqual($popup.find('.dx-overlay-content').outerHeight(), $('.dx-list-item').height() * 5 + 2, 3, 'default popup height like generic');
+
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, ($(window).height() - $popup.find('.dx-overlay-content').outerHeight()) / 2, 1, 'default popup position of window');
+
+            lookup.option('position', 'top');
+
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, 0, 1, 'popup position of window after change position');
+
+            $(lookup.field()).trigger('dxclick');
+
+            lookup.close();
+
+            lookup.option('usePopover', true);
+
+            $(lookup.field()).trigger('dxclick');
+
+            const $popover = $('.dx-popup-wrapper');
+
+            assert.equal($popover.find('.dx-overlay-content').outerWidth(), $(lookup.field()).outerWidth() + 2, 'popup width match with lookup field width');
+
+            // android6 test fail
+            // assert.roughEqual($popover.find('.dx-overlay-content').outerHeight(), $('.dx-list-item').height() * 5 + 2, 3, 'popup height auto if usePopover true');
+
+            assert.roughEqual($popover.find('.dx-overlay-content').eq(0).position().top, $(lookup.field()).outerHeight() + 8, 2, 'popover position of lookup field with body padding 8px');
+
+            lookup.close();
+
+            lookup.option('itemCenteringEnabled', true);
+
+            $(lookup.field()).trigger('dxclick');
+
+            $popup = $('.dx-popup-wrapper');
+
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -3.5, 1, 'popup position if option is false');
+
+            lookup.close();
+        } finally {
+            $lookup.remove();
+            themes.isMaterial = origIsMaterial;
+        }
+    });
+
+
+    QUnit.test('Check itemCenteringEnabled option for Generic theme', function(assert) {
+        const $lookup = $('<div>').prependTo('body');
+
+        try {
+
+            const lookup = $lookup.dxLookup({ dataSource: ['blue', 'orange', 'lime', 'purple', 'green'], value: 'blue' }).dxLookup('instance');
+
+            lookup.option('usePopover', true);
+            lookup.option('itemCenteringEnabled', true);
+
+            $(lookup.field()).trigger('dxclick');
+
+            const $popover = $('.dx-popover-wrapper');
+
+            assert.roughEqual($popover.find('.dx-overlay-content').eq(0).position().top, $(lookup.field()).outerHeight() + 8 + 10, 2, 'popover position of lookup field with body padding 8px');
+
+            lookup.close();
+
+            lookup.option('usePopover', false);
+
+            $(lookup.field()).trigger('dxclick');
+
+            const $popup = $('.dx-popup-wrapper');
+
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, ($(window).height() - $popup.find('.dx-overlay-content').outerHeight()) / 2, 1, 'default popup position of window');
+
+            lookup.close();
+        } finally {
+            $lookup.remove();
+        }
+    });
+
 
     QUnit.test('changing popupWidth in default options should change popover width', function(assert) {
         const defaultWidth = 100;
