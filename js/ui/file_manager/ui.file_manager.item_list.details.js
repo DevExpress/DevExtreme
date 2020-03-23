@@ -120,8 +120,8 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
 
         columns.push(this._getPreparedColumn({ dataField: 'isParentFolder' }));
-
-        return columns.map(column => this._updateColumnDataField(column));
+        columns.forEach(column => this._updateColumnDataField(column));
+        return columns;
     }
 
     _getPreparedColumn(columnOptions) {
