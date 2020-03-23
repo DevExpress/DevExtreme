@@ -2283,8 +2283,8 @@ QUnit.test('Full-size appointment should have minWidth, narrow width', function(
 
     const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
 
-    assert.equal($appointments.eq(0).get(0).getBoundingClientRect().width, 5, 'Appointment has min width');
-    assert.equal($appointments.eq(1).get(0).getBoundingClientRect().width, 5, 'Appointment has min width');
+    assert.roughEqual($appointments.eq(0).get(0).getBoundingClientRect().width, 5, 1.1, 'Appointment has min width');
+    assert.roughEqual($appointments.eq(1).get(0).getBoundingClientRect().width, 5, 1.1, 'Appointment has min width');
 });
 
 QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, \'auto\' mode, narrow width', function(assert) {

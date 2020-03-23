@@ -1023,11 +1023,11 @@ QUnit.test('Rival appointments from one group should be rendered correctly in ve
 
     assert.roughEqual($appointments.eq(0).position().top, 8.5 * cellHeight, 1.5, 'correct top position of appointment');
     assert.roughEqual($appointments.eq(0).outerWidth(), 59, 2, 'correct size of appointment');
-    assert.equal($appointments.eq(0).position().left, 285, 'correct left position of appointment');
+    assert.roughEqual($appointments.eq(0).position().left, 285, 1.1, 'correct left position of appointment');
 
     assert.roughEqual($appointments.eq(1).position().top, 8.5 * cellHeight, 1.5, 'correct top position of appointment');
     assert.roughEqual($appointments.eq(1).outerWidth(), 59, 2, 'correct size of appointment');
-    assert.equal($appointments.eq(1).position().left, 370, 'correct left position of appointment');
+    assert.roughEqual($appointments.eq(1).position().left, 370, 1.1, 'correct left position of appointment');
 });
 
 QUnit.test('Appointment in bottom cell should be rendered cirrectly in vertical grouped workspace Week', function(assert) {
