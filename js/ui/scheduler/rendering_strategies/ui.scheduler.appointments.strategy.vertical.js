@@ -1,12 +1,12 @@
 import BaseAppointmentsStrategy from './ui.scheduler.appointments.strategy.base';
 import { extend } from '../../../core/utils/extend';
 import { isNumeric } from '../../../core/utils/type';
-import devices from '../../../core/devices';
+// import devices from '../../../core/devices';
 import dateUtils from '../../../core/utils/date';
 import utils from './../utils';
 
-const WEEK_APPOINTMENT_DEFAULT_OFFSET = 25;
-const WEEK_APPOINTMENT_MOBILE_OFFSET = 50;
+// const WEEK_APPOINTMENT_DEFAULT_OFFSET = 25;
+// const WEEK_APPOINTMENT_MOBILE_OFFSET = 50;
 
 // const APPOINTMENT_MIN_WIDTH = 5;
 
@@ -265,10 +265,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getAppointmentMaxWidth() {
-        const offset = devices.current().deviceType === 'desktop' && !this.instance.fire('isAdaptive') ? WEEK_APPOINTMENT_DEFAULT_OFFSET : WEEK_APPOINTMENT_MOBILE_OFFSET;
-        const width = this.getDefaultCellWidth() - offset;
-
-        return width > 0 ? width : this.getAppointmentMinSize();
+        this.getDefaultCellWidth();
     }
 
     calculateAppointmentWidth(appointment, position, isRecurring) {
