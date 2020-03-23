@@ -4,9 +4,6 @@ import { isNumeric } from '../../../core/utils/type';
 import dateUtils from '../../../core/utils/date';
 import utils from './../utils';
 
-const ADAPTIVE_VERTICAL_APPOINTMENT_DEFAULT_OFFSET = 50;
-
-
 const ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5;
 const ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
 
@@ -243,9 +240,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getAppointmentMaxWidth() {
-        const offset = this.instance.fire('isAdaptive') ? ADAPTIVE_VERTICAL_APPOINTMENT_DEFAULT_OFFSET : this._getAppointmentDefaultOffset();
-
-        return this.getDefaultCellWidth() - offset;
+        return this.getDefaultCellWidth() - this._getAppointmentDefaultOffset();
     }
 
     calculateAppointmentWidth(appointment, position, isRecurring) {
