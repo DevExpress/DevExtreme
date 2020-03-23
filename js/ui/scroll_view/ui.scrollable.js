@@ -533,7 +533,10 @@ const Scrollable = DOMComponent.inherit({
         const direction = this.option('direction');
 
         if(direction !== VERTICAL) {
-            scrollPosition.left = this._elementPositionRelativeToContent($element, 'left');
+            const leftPosition = this._elementPositionRelativeToContent($element, 'left');
+            scrollPosition.left = this.option('rtlEnabled') === true
+                ? leftPosition + $element.width() - this.clientWidth()
+                : leftPosition;
         }
         if(direction !== HORIZONTAL) {
             scrollPosition.top = this._elementPositionRelativeToContent($element, 'top');

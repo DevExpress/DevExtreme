@@ -118,8 +118,9 @@ class TreeViewTestWrapper {
             assert.equal(itemRect.top >= treeViewRect.top && itemRect.top <= treeViewRect.bottom, true, ` vertical item ${itemKey} location ${itemRect.top} must be between ${treeViewRect.top} and ${treeViewRect.bottom}`);
         }
 
+        const propName = this.instance.option('rtlEnabled') ? 'right' : 'left';
         if(scrollDirection === 'horizontal' || scrollDirection === 'both') {
-            assert.equal(itemRect.left >= treeViewRect.left && itemRect.left <= treeViewRect.right, true, ` horizontal item ${itemKey} location ${itemRect.left} must be between ${treeViewRect.left} and ${treeViewRect.right}`);
+            assert.equal(itemRect[propName] >= treeViewRect.left && itemRect[propName] <= treeViewRect.right, true, ` horizontal item ${itemKey} ${propName} location ${itemRect[propName]} must be between ${treeViewRect.left} and ${treeViewRect.right}`);
         }
     }
 
