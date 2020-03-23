@@ -376,15 +376,13 @@ const Accordion = CollectionWidget.inherit({
         if(property === 'visible') {
             this._updateItemHeightsWrapper(true);
         }
+        if(property === 'title') {
+            this._renderSelection(this._getSelectedItemIndices(), []);
+        }
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case 'items':
-                this.callBase(args);
-
-                this._updateItems(this._getSelectedItemIndices(), []);
-                break;
             case 'animationDuration':
             case 'onItemTitleClick':
             case '_animationEasing':

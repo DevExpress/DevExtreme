@@ -171,39 +171,6 @@ QUnit.module('widget rendering', moduleSetup, () => {
         assert.equal($element.find('.' + ACCORDION_ITEM_BODY_CLASS).length, 1, 'body is rendered');
     });
 
-    [true, false].forEach(collapsible => {
-        [true, false].forEach(multiple => {
-            [true, false].forEach(deferRendering => {
-                [true, false].forEach(repaintChangesOnly => {
-                    QUnit.test(`collapsible: ${collapsible}, multiple: ${multiple}, deferRendering: ${deferRendering}, repaintChangesOnly: ${repaintChangesOnly}, item1.display: false -> accordion.option(items[1].visible, true) -> accordion.option(items[1].visible, false) (T869114)`, function(assert) {
-                        const $element = this.$element.dxAccordion({
-                            items: [ { id: 0, title: 'item0' }, { id: 1, title: 'item1', visible: false } ],
-                            repaintChangesOnly: repaintChangesOnly,
-                            deferRendering: deferRendering,
-                            collapsible: collapsible,
-                            multiple: multiple
-                        });
-                        const instance = $element.dxAccordion('instance');
-                        const item1GetterFunc = () => $element.find(`.${ACCORDION_ITEM_CLASS}`).eq(1);
-
-                        let item1 = item1GetterFunc();
-                        assert.strictEqual(item1.hasClass(HIDDEN_CLASS), true, 'item1 is hidden');
-
-                        instance.option('items[1].visible', true);
-                        item1 = item1GetterFunc();
-                        assert.strictEqual(item1.hasClass(HIDDEN_CLASS), false, 'item1 is visible');
-                        assert.roughEqual(item1.height(), 21, 1.001, 'item1 has valid height');
-
-                        instance.option('items[1].visible', false);
-                        item1 = item1GetterFunc();
-                        assert.strictEqual(item1.hasClass(HIDDEN_CLASS), true, 'item1 is hidden');
-                        assert.strictEqual(item1.height(), 0, 'item1 has zero height');
-                    });
-                });
-            });
-        });
-    });
-
     QUnit.test('Item body should be rendered on item changing and selectionChanging when the \'deferRendering\' option is true (T586536)', function(assert) {
         const $element = this.$element.dxAccordion({
             items: this.items,
@@ -1259,7 +1226,7 @@ QUnit.module('Live Update', {
     });
 });
 
-QUnit.module('Item option changed', moduleSetup, () => {
+QUnit.module('optionChanged', moduleSetup, () => {
     class AccordionTestHelper {
         constructor($element, options) {
             this.element = $element.get(0);
@@ -1298,10 +1265,10 @@ QUnit.module('Item option changed', moduleSetup, () => {
                     assert.strictEqual(this._hasOpenedClass(item), false, `item ${index} hasn't opened class`);
                     assert.strictEqual(this._hasClosedClass(item), true, `item ${index} has closed class`);
 
-                    if(this.options.deferRendering) {
-                        assert.strictEqual(this._getItemContentElement(itemElements[index]), null, `contentElement[${index}] is not rendered`);
-                    } else {
+                    if(this._getItemContentElement(itemElements[index])) {
                         assert.strictEqual(window.getComputedStyle(this._getItemContentElement(itemElements[index])).visibility, 'hidden', `contentElement[${index}] is hidden`);
+                    } else {
+                        assert.strictEqual(this._getItemContentElement(itemElements[index]), null, `contentElement[${index}] is not rendered`); // deferRendering: true
                     }
                 }
             });
@@ -1312,7 +1279,7 @@ QUnit.module('Item option changed', moduleSetup, () => {
     [true, false].forEach(collapsible => {
         [true, false].forEach(multiple => {
             [true, false].forEach(deferRendering => {
-                [true, false].forEach(repaintChangesOnly => {
+                [true, false ].forEach(repaintChangesOnly => {
                     configs.push({ collapsible, multiple, deferRendering, repaintChangesOnly });
                 });
             });
@@ -1320,26 +1287,107 @@ QUnit.module('Item option changed', moduleSetup, () => {
     });
 
     configs.forEach(config => {
-        QUnit.test(`deferRendering: ${config.deferRendering} Accordion collapses an item if its title was changed (T871954)`, function(assert) {
-            const items = [ { id: 0, title: 'item_0' }, { id: 1, title: 'item_1' } ];
-            const helper = new AccordionTestHelper(this.$element, {
-                items: items,
-                selectedIndex: 0,
-                collapsible: config.collapsible,
-                multiple: config.multiple,
-                deferRendering: config.deferRendering,
-                repaintChangesOnly: config.repaintChangesOnly
+        const getConfigMessage = () => Object.entries(config).reduce((message, [key, value]) => message += `${key}: ${value}, `, '');
+        const { collapsible, multiple, deferRendering, repaintChangesOnly } = config;
+        // T871954
+        if(!repaintChangesOnly) {
+            QUnit.test(getConfigMessage() + '[item_0.selected, item_1] -> .option(items[0].title, "new_value") -> .expandItem(1)', function(assert) {
+                const items = [ { id: 0, title: 'item_0' }, { id: 1, title: 'item_1' } ];
+                const helper = new AccordionTestHelper(this.$element, {
+                    selectedIndex: 0,
+                    items,
+                    collapsible,
+                    multiple,
+                    deferRendering,
+                    repaintChangesOnly
+                });
+
+                helper.checkItems(assert, items, [0]);
+                helper.instance.option('items[0].title', 'new_item_0');
+                helper.checkItems(assert, items, [0]);
+                helper.instance.expandItem(1);
+                helper.checkItems(assert, items, multiple ? [0, 1] : [1]);
             });
 
-            helper.checkItems(assert, items, [0]);
+            QUnit.test(getConfigMessage() + '[item_0.selected, item_1] -> .option(items[1].title, "new_value") -> .expandItem(1)', function(assert) {
+                const items = [ { id: 0, title: 'item_0' }, { id: 1, title: 'item_1' } ];
+                const helper = new AccordionTestHelper(this.$element, {
+                    selectedIndex: 0,
+                    items,
+                    collapsible,
+                    multiple,
+                    deferRendering,
+                    repaintChangesOnly
+                });
 
-            helper.instance.option('items[0].title', 'new_item_0');
+                helper.checkItems(assert, items, [0]);
+                helper.instance.option('items[1].title', 'new_item_1');
+                helper.checkItems(assert, items, [0]);
+                helper.instance.expandItem(1);
+                helper.checkItems(assert, items, multiple ? [0, 1] : [1]);
+            });
 
-            helper.checkItems(assert, items, [0]);
+            QUnit.test(getConfigMessage() + '[item_0.selected, item_1] -> .option(items[0].title, "new_value") -> .collapseItem(0)', function(assert) {
+                const items = [ { id: 0, title: 'item_0' }, { id: 1, title: 'item_1' } ];
+                const helper = new AccordionTestHelper(this.$element, {
+                    selectedIndex: 0,
+                    items,
+                    collapsible,
+                    multiple,
+                    deferRendering,
+                    repaintChangesOnly
+                });
 
-            helper.instance.expandItem(1);
+                helper.checkItems(assert, items, [0]);
+                helper.instance.option('items[0].title', 'new_item_0');
+                helper.checkItems(assert, items, [0]);
+                helper.instance.collapseItem(0);
+                helper.checkItems(assert, items, collapsible ? [] : [0]);
+            });
 
-            helper.checkItems(assert, items, config.multiple ? [0, 1] : [1]);
+            QUnit.test(getConfigMessage() + '[item_0.selected, item_1] -> .option(items[1].title, "new_value") -> .collapseItem(0)', function(assert) {
+                const items = [ { id: 0, title: 'item_0' }, { id: 1, title: 'item_1' } ];
+                const helper = new AccordionTestHelper(this.$element, {
+                    selectedIndex: 0,
+                    items,
+                    collapsible,
+                    multiple,
+                    deferRendering,
+                    repaintChangesOnly
+                });
+
+                helper.checkItems(assert, items, [0]);
+                helper.instance.option('items[1].title', 'new_item_1');
+                helper.checkItems(assert, items, [0]);
+                helper.instance.collapseItem(0);
+                helper.checkItems(assert, items, collapsible ? [] : [0]);
+            });
+        }
+
+        QUnit.test(getConfigMessage() + 'item1.display: false -> accordion.option(items[1].visible, true) -> accordion.option(items[1].visible, false) (T869114)', function(assert) {
+            const $element = this.$element.dxAccordion({
+                items: [ { id: 0, title: 'item0' }, { id: 1, title: 'item1', visible: false } ],
+                collapsible,
+                multiple,
+                deferRendering,
+                repaintChangesOnly
+            });
+            const instance = $element.dxAccordion('instance');
+            const item1GetterFunc = () => $element.find(`.${ACCORDION_ITEM_CLASS}`).eq(1);
+
+            let item1 = item1GetterFunc();
+            assert.strictEqual(item1.hasClass(HIDDEN_CLASS), true, 'item1 is hidden');
+
+            instance.option('items[1].visible', true);
+            item1 = item1GetterFunc();
+            assert.strictEqual(item1.hasClass(HIDDEN_CLASS), false, 'item1 is visible');
+            assert.roughEqual(item1.height(), 21, 1.001, 'item1 has valid height');
+
+            instance.option('items[1].visible', false);
+            item1 = item1GetterFunc();
+            assert.strictEqual(item1.hasClass(HIDDEN_CLASS), true, 'item1 is hidden');
+            assert.strictEqual(item1.height(), 0, 'item1 has zero height');
         });
     });
 });
+
