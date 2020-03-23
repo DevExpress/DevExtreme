@@ -19594,7 +19594,6 @@ QUnit.test('Row height should not be changed after validation', function(assert)
     const data = [
         { a: 'a', b: 'b', c: 'c' }
     ];
-    this.clock.restore();
 
     const grid = createDataGrid({
         dataSource: {
@@ -19650,18 +19649,18 @@ QUnit.test('Row height should not be changed after validation', function(assert)
                     }
                 }]
             }
-        ],
-        onContentReady: function(e) {
-            if(!e.component.__firstTime) {
-                e.component.__firstTime = true;
-                const rowHeight = $(grid.getRowElement(0)).height();
-                grid.cellValue(0, 1, '');
-                grid.saveEditData().done(() => {
-                    assert.strictEqual($(grid.getRowElement(0)).height(), rowHeight, 'row height is not changed');
-                    done();
-                });
-            }
-        }
+        ]
+    });
+
+    this.clock.tick();
+    const rowHeight = $(grid.getRowElement(0)).height();
+    this.clock.restore();
+
+    grid.cellValue(0, 1, '');
+    grid.saveEditData().done(() => {
+        assert.strictEqual($(grid.getRowElement(0)).height(), rowHeight, 'row height is not changed');
+
+        done();
     });
 });
 
