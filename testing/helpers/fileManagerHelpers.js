@@ -280,6 +280,7 @@ export class FileManagerWrapper {
     }
 
     getDetailsCellValue(rowIndex, columnIndex) {
+        columnIndex += isDesktopDevice() ? 1 : 0;
         return this.getRowInDetailsView(rowIndex)
             .find(`td:nth-child(${columnIndex})`)
             .text()
