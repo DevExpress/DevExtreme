@@ -41,6 +41,7 @@ const ACCORDION_ITEM_BODY_CLASS = 'dx-accordion-item-body';
 const ACCORDION_ITEM_OPENED_CLASS = 'dx-accordion-item-opened';
 const ACCORDION_ITEM_CLOSED_CLASS = 'dx-accordion-item-closed';
 const HIDDEN_CLASS = 'dx-state-invisible';
+const SELECTED_ITEM_CLASS = 'dx-item-selected';
 
 const moduleSetup = {
     beforeEach: function() {
@@ -191,7 +192,7 @@ QUnit.module('widget rendering', moduleSetup, () => {
                         instance.option('items[1].visible', true);
                         item1 = item1GetterFunc();
                         assert.strictEqual(item1.hasClass(HIDDEN_CLASS), false, 'item1 is visible');
-                        assert.roughEqual(item1.height(), 21, 0.5, 'item1 has valid height');
+                        assert.roughEqual(item1.height(), 21, 1.001, 'item1 has valid height');
 
                         instance.option('items[1].visible', false);
                         item1 = item1GetterFunc();
@@ -1255,5 +1256,90 @@ QUnit.module('Live Update', {
 
         assert.equal(accordion.itemElements().find('.' + ACCORDION_ITEM_BODY_CLASS).length, 2);
         clock.restore();
+    });
+});
+
+QUnit.module('Item option changed', moduleSetup, () => {
+    class AccordionTestHelper {
+        constructor($element, options) {
+            this.element = $element.get(0);
+            this.options = options;
+            this.instance = this._getAccordionInstance(options);
+        }
+
+        _getAccordionInstance(options) {
+            return new Accordion(this.element, options);
+        }
+        _getItemElements() {
+            return this.element.querySelectorAll(`.${ACCORDION_ITEM_CLASS}`);
+        }
+        _getItemContentElement(itemElement) {
+            return itemElement.querySelector(`.${ACCORDION_ITEM_BODY_CLASS}`);
+        }
+        _hasSelectedClass(item) { return item.classList.contains(SELECTED_ITEM_CLASS); }
+        _hasOpenedClass(item) { return item.classList.contains(ACCORDION_ITEM_OPENED_CLASS); }
+        _hasClosedClass(item) { return item.classList.contains(ACCORDION_ITEM_CLOSED_CLASS); }
+
+        checkItems(assert, items, selectedIndexes) {
+            const itemElements = this._getItemElements();
+
+            selectedIndexes.forEach((index) => {
+                assert.notStrictEqual(this.instance.option('selectedItems').indexOf(items[index]), -1, `item ${index} is selected`);
+                assert.strictEqual(this._hasSelectedClass(itemElements[index]), true, `item ${index} has selected class`);
+                assert.strictEqual(this._hasOpenedClass(itemElements[index]), true, `item ${index} has opened class`);
+                assert.strictEqual(this._hasClosedClass(itemElements[index]), false, `item ${index} hasn't closed class`);
+                assert.strictEqual(window.getComputedStyle(this._getItemContentElement(itemElements[index])).visibility, 'visible', `contentElement[${index}] is visible`);
+            });
+
+            itemElements.forEach((item, index) => {
+                if(selectedIndexes.indexOf(index) === -1) {
+                    assert.strictEqual(this.instance.option('selectedItems').indexOf(items[index]), -1, `item ${index} is not selected`);
+                    assert.strictEqual(this._hasSelectedClass(item), false, `item ${index} hasn't selected class`);
+                    assert.strictEqual(this._hasOpenedClass(item), false, `item ${index} hasn't opened class`);
+                    assert.strictEqual(this._hasClosedClass(item), true, `item ${index} has closed class`);
+
+                    if(this.options.deferRendering) {
+                        assert.strictEqual(this._getItemContentElement(itemElements[index]), null, `contentElement[${index}] is not rendered`);
+                    } else {
+                        assert.strictEqual(window.getComputedStyle(this._getItemContentElement(itemElements[index])).visibility, 'hidden', `contentElement[${index}] is hidden`);
+                    }
+                }
+            });
+        }
+    }
+
+    const configs = [];
+    [true, false].forEach(collapsible => {
+        [true, false].forEach(multiple => {
+            [true, false].forEach(deferRendering => {
+                [true, false].forEach(repaintChangesOnly => {
+                    configs.push({ collapsible, multiple, deferRendering, repaintChangesOnly });
+                });
+            });
+        });
+    });
+
+    configs.forEach(config => {
+        QUnit.test(`deferRendering: ${config.deferRendering} Accordion collapses an item if its title was changed (T871954)`, function(assert) {
+            const items = [ { id: 0, title: 'item_0' }, { id: 1, title: 'item_1' } ];
+            const helper = new AccordionTestHelper(this.$element, {
+                items: items,
+                selectedIndex: 0,
+                collapsible: config.collapsible,
+                multiple: config.multiple,
+                deferRendering: config.deferRendering,
+                repaintChangesOnly: config.repaintChangesOnly
+            });
+
+            helper.checkItems(assert, items, [0]);
+
+            helper.instance.option('items[0].title', 'new_item_0');
+
+            helper.checkItems(assert, items, [0]);
+
+            helper.instance.expandItem(1);
+
+            helper.checkItems(assert, items, config.multiple ? [0, 1] : [1]);
+        });
     });
 });

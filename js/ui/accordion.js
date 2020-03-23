@@ -247,21 +247,20 @@ const Accordion = CollectionWidget.inherit({
 
     _updateItems: function(addedSelection, removedSelection) {
         const $items = this._itemElements();
-        const that = this;
 
-        iteratorUtils.each(addedSelection, function(_, index) {
-            that._deferredItems[index].resolve();
+        iteratorUtils.each(addedSelection, (_, index) => {
+            this._deferredItems[index].resolve();
 
             const $item = $items.eq(index)
                 .addClass(ACCORDION_ITEM_OPENED_CLASS)
                 .removeClass(ACCORDION_ITEM_CLOSED_CLASS);
-            that.setAria('hidden', false, $item.find('.' + ACCORDION_ITEM_BODY_CLASS));
+            this.setAria('hidden', false, $item.find('.' + ACCORDION_ITEM_BODY_CLASS));
         });
 
-        iteratorUtils.each(removedSelection, function(_, index) {
+        iteratorUtils.each(removedSelection, (_, index) => {
             const $item = $items.eq(index)
                 .removeClass(ACCORDION_ITEM_OPENED_CLASS);
-            that.setAria('hidden', true, $item.find('.' + ACCORDION_ITEM_BODY_CLASS));
+            this.setAria('hidden', true, $item.find('.' + ACCORDION_ITEM_BODY_CLASS));
         });
     },
 
@@ -373,6 +372,7 @@ const Accordion = CollectionWidget.inherit({
 
     _itemOptionChanged: function(item, property, value, oldValue) {
         this.callBase(item, property, value, oldValue);
+
         if(property === 'visible') {
             this._updateItemHeightsWrapper(true);
         }
@@ -380,6 +380,11 @@ const Accordion = CollectionWidget.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
+            case 'items':
+                this.callBase(args);
+
+                this._updateItems(this._getSelectedItemIndices(), []);
+                break;
             case 'animationDuration':
             case 'onItemTitleClick':
             case '_animationEasing':
