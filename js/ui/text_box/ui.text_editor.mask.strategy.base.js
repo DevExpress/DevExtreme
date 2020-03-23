@@ -141,12 +141,24 @@ export default class BaseMaskStrategy {
 
     _autoFillHandler(event) {
         const { editor } = this;
-        this._keyPressHandled = true;
+        const inputVal = this.editorInput().val();
+        this._inputHandlerTimer = setTimeout(() => {
+            this._keyPressHandled = true;
 
-        editor._maskKeyHandler(event, () => {
-            const pastedText = this.editorInput().val();
-            editor._handleChain({ text: pastedText, start: 0, length: pastedText.length });
+            if(this._isAutoFill(event)) {
+                this._keyPressHandled = true;
+
+                editor._maskKeyHandler(event, () => {
+                    editor._handleChain({ text: inputVal, start: 0, length: inputVal.length });
+                });
+                editor._validateMask();
+            }
         });
+    }
+
+    _isAutoFill() {
+        const input = this.editor._input().get(0);
+        return input && input.matches(':-webkit-autofill');
     }
 
     runWithoutEventProcessing(action) {
@@ -171,5 +183,6 @@ export default class BaseMaskStrategy {
         this._clearDragTimer();
         clearTimeout(this._backspaceHandlerTimeout);
         clearTimeout(this._caretTimeout);
+        clearTimeout(this._inputHandlerTimer);
     }
 }

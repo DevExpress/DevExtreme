@@ -1,12 +1,9 @@
 import BaseMaskStrategy from './ui.text_editor.mask.strategy.base';
 import { getChar } from '../../events/utils';
-import browser from '../../core/utils/browser';
 import Promise from '../../core/polyfills/promise';
 
 const BACKSPACE_INPUT_TYPE = 'deleteContentBackward';
 const EMPTY_CHAR = ' ';
-
-const IS_SAFARI = browser.safari;
 
 class DefaultMaskStrategy extends BaseMaskStrategy {
     _getStrategyName() {
@@ -38,19 +35,10 @@ class DefaultMaskStrategy extends BaseMaskStrategy {
             this._handleBackspaceInput(event);
         }
 
-        if(IS_SAFARI) {
-            this._inputHandlerTimer = setTimeout(() => {
-                if(this._isAutoFill(event)) {
-                    this._autoFillHandler(event);
-                }
-                this._maskInputHandler(event);
-            });
-        } else {
-            this._maskInputHandler(event);
+        if(event.originalEvent) {
+            this._autoFillHandler(event);
         }
-    }
 
-    _maskInputHandler(event) {
         if(this._keyPressHandled) {
             return;
         }
@@ -124,19 +112,6 @@ class DefaultMaskStrategy extends BaseMaskStrategy {
         const { start, end } = this.editorCaret();
         this.editorCaret({ start: start + 1, end: end + 1 });
         this._backspaceHandler(event);
-    }
-
-    // _isSafari
-
-    _isAutoFill(event) {
-        const input = this.editor._input().get(0);
-        return IS_SAFARI && input && input.matches(':-webkit-autofill');
-    }
-
-    clean() {
-        super.clean();
-
-        clearTimeout(this._inputHandlerTimer);
     }
 }
 

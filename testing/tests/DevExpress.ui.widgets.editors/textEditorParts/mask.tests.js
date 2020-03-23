@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import devices from 'core/devices';
-import browser from 'core/utils/browser';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import caretWorkaround from './caretWorkaround.js';
 
@@ -421,27 +420,32 @@ QUnit.module('typing', moduleConfig, () => {
     });
 
     QUnit.test('TextEditor with mask option should work correctly with ios autofill (T869537)', function(assert) {
-        if(!browser.safari) {
-            assert.expect(0);
-            return;
-        }
-
         const clock = sinon.useFakeTimers();
+        const testText = '555555';
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: '+1 (X00) 000',
             maskRules: { X: /[02-9]/ },
             name: 'phonenumber',
             pattern: '[0-9]*',
-            mode: 'tel'
+            mode: 'tel',
+            useMaskedValue: true
         });
         const $input = $textEditor.find('.dx-texteditor-input');
+        const textEditor = $textEditor.dxTextEditor('instance');
+        const keyboard = keyboardMock($input, true);
 
-        $input.val(555555);
+        $input.val(testText);
         const inputMatchesStub = sinon.stub($input.get(0), 'matches', () => true);
-        $input.trigger($.Event('input'));
+
+        if(devices.real().android) {
+            keyboard.beforeInput(testText, 'insertText');
+        }
+
+        $input.trigger($.Event('input', { originalEvent: $.Event('input') }));
 
         clock.tick();
-        assert.strictEqual($input.val(), '+1 (555) 555', 'the mask is applied for all value');
+        assert.strictEqual($input.val(), '+1 (555) 555', 'the mask is applied');
+        assert.equal(textEditor.option('isValid'), true, 'isValid is true');
 
         clock.restore();
         inputMatchesStub.restore();
