@@ -238,8 +238,10 @@ const Drawer = Widget.inherit({
             });
 
             if($viewTemplate.hasClass('ng-scope')) { // T864419
-                $(this._$viewContentWrapper).children().replaceWith($viewTemplate);
-                this._renderShader();
+                $(this._$viewContentWrapper)
+                    .children()
+                    .not(`.${DRAWER_SHADER_CLASS}`)
+                    .replaceWith($viewTemplate);
             }
         }
     },
