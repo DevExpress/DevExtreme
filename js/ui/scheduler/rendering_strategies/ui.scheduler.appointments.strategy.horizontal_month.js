@@ -101,12 +101,6 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
         return super._getSortedPositions(map, true);
     }
 
-    _customizeAppointmentGeometry(coordinates) {
-        const config = this._calculateGeometryConfig(coordinates);
-
-        return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset);
-    }
-
     _getDefaultRatio() {
         return MONTH_APPOINTMENT_HEIGHT_RATIO;
     }

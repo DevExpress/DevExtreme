@@ -558,14 +558,10 @@ class BaseRenderingStrategy {
             allDay: allDay,
         });
     }
-    // NOTE: remove
-    _getMaxNeighborAppointmentCount() {
-        return 0;
-    }
 
     _markAppointmentAsVirtual(coordinates, isAllDay) {
         const countFullWidthAppointmentInCell = this._getMaxAppointmentCountPerCellByType(isAllDay);
-        if((coordinates.count - countFullWidthAppointmentInCell) > this._getMaxNeighborAppointmentCount()) {
+        if((coordinates.count - countFullWidthAppointmentInCell) > 0) {
             coordinates.virtual = {
                 top: coordinates.top,
                 left: coordinates.left,

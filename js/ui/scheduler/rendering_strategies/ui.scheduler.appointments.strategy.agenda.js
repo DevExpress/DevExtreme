@@ -137,9 +137,6 @@ class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
     _findIndexByKey() {
     }
 
-    _getMaxNeighborAppointmentCount() {
-    }
-
     _markAppointmentAsVirtual() {
     }
 
