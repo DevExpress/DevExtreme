@@ -339,57 +339,57 @@ const DiagramCommandsManager = {
                 },
                 layoutTreeTopToBottom: {
                     command: DiagramCommand.AutoLayoutTreeVertical,
-                    text: messageLocalization.format('dxDiagram-uiLayoutTopToBottom'),
-                    hint: messageLocalization.format('dxDiagram-uiLayoutTopToBottom'),
+                    text: messageLocalization.format('dxDiagram-commandLayoutTopToBottom'),
+                    hint: messageLocalization.format('dxDiagram-commandLayoutTopToBottom'),
                     icon: 'dx-diagram-i-button-layout-tree-tb dx-diagram-i',
                     cssClass: CSS_CLASSES.LARGE_ICON_ITEM
                 },
                 layoutTreeBottomToTop: {
                     command: DiagramCommand.AutoLayoutTreeVerticalBottomToTop,
-                    text: messageLocalization.format('dxDiagram-uiLayoutBottomToTop'),
-                    hint: messageLocalization.format('dxDiagram-uiLayoutBottomToTop'),
+                    text: messageLocalization.format('dxDiagram-commandLayoutBottomToTop'),
+                    hint: messageLocalization.format('dxDiagram-commandLayoutBottomToTop'),
                     icon: 'dx-diagram-i-button-layout-tree-bt dx-diagram-i',
                     cssClass: CSS_CLASSES.LARGE_ICON_ITEM
                 },
                 layoutTreeLeftToRight: {
                     command: DiagramCommand.AutoLayoutTreeHorizontal,
-                    text: messageLocalization.format('dxDiagram-uiLayoutLeftToRight'),
-                    hint: messageLocalization.format('dxDiagram-uiLayoutLeftToRight'),
+                    text: messageLocalization.format('dxDiagram-commandLayoutLeftToRight'),
+                    hint: messageLocalization.format('dxDiagram-commandLayoutLeftToRight'),
                     icon: 'dx-diagram-i-button-layout-tree-lr dx-diagram-i',
                     cssClass: CSS_CLASSES.LARGE_ICON_ITEM
                 },
                 layoutTreeRightToLeft: {
                     command: DiagramCommand.AutoLayoutTreeHorizontalRightToLeft,
-                    text: messageLocalization.format('dxDiagram-uiLayoutRightToLeft'),
-                    hint: messageLocalization.format('dxDiagram-uiLayoutRightToLeft'),
+                    text: messageLocalization.format('dxDiagram-commandLayoutRightToLeft'),
+                    hint: messageLocalization.format('dxDiagram-commandLayoutRightToLeft'),
                     icon: 'dx-diagram-i-button-layout-tree-rl dx-diagram-i',
                     cssClass: CSS_CLASSES.LARGE_ICON_ITEM
                 },
                 layoutLayeredTopToBottom: {
                     command: DiagramCommand.AutoLayoutLayeredVertical,
-                    text: messageLocalization.format('dxDiagram-uiLayoutTopToBottom'),
-                    hint: messageLocalization.format('dxDiagram-uiLayoutTopToBottom'),
+                    text: messageLocalization.format('dxDiagram-commandLayoutTopToBottom'),
+                    hint: messageLocalization.format('dxDiagram-commandLayoutTopToBottom'),
                     icon: 'dx-diagram-i-button-layout-layered-tb dx-diagram-i',
                     cssClass: CSS_CLASSES.LARGE_ICON_ITEM
                 },
                 layoutLayeredBottomToTop: {
                     command: DiagramCommand.AutoLayoutLayeredVerticalBottomToTop,
-                    text: messageLocalization.format('dxDiagram-uiLayoutBottomToTop'),
-                    hint: messageLocalization.format('dxDiagram-uiLayoutBottomToTop'),
+                    text: messageLocalization.format('dxDiagram-commandLayoutBottomToTop'),
+                    hint: messageLocalization.format('dxDiagram-commandLayoutBottomToTop'),
                     icon: 'dx-diagram-i-button-layout-layered-bt dx-diagram-i',
                     cssClass: CSS_CLASSES.LARGE_ICON_ITEM
                 },
                 layoutLayeredLeftToRight: {
                     command: DiagramCommand.AutoLayoutLayeredHorizontal,
-                    text: messageLocalization.format('dxDiagram-uiLayoutLeftToRight'),
-                    hint: messageLocalization.format('dxDiagram-uiLayoutLeftToRight'),
+                    text: messageLocalization.format('dxDiagram-commandLayoutLeftToRight'),
+                    hint: messageLocalization.format('dxDiagram-commandLayoutLeftToRight'),
                     icon: 'dx-diagram-i-button-layout-layered-lr dx-diagram-i',
                     cssClass: CSS_CLASSES.LARGE_ICON_ITEM
                 },
                 layoutLayeredRightToLeft: {
                     command: DiagramCommand.AutoLayoutLayeredHorizontalRightToLeft,
-                    text: messageLocalization.format('dxDiagram-uiLayoutRightToLeft'),
-                    hint: messageLocalization.format('dxDiagram-uiLayoutRightToLeft'),
+                    text: messageLocalization.format('dxDiagram-commandLayoutRightToLeft'),
+                    hint: messageLocalization.format('dxDiagram-commandLayoutRightToLeft'),
                     icon: 'dx-diagram-i-button-layout-layered-rl dx-diagram-i',
                     cssClass: CSS_CLASSES.LARGE_ICON_ITEM
                 },
@@ -653,7 +653,7 @@ const DiagramCommandsManager = {
                         },
                         {
                             title: messageLocalization.format('dxDiagram-uiObject'),
-                            commands: ['lineWidth', 'lineStyle', 'lineColor', 'fillColor']
+                            commands: ['lineStyle', 'lineWidth', 'lineColor', 'fillColor']
                         },
                         {
                             title: messageLocalization.format('dxDiagram-uiConnector'),

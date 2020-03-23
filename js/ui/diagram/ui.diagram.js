@@ -973,6 +973,7 @@ class Diagram extends Widget {
                         baseType: s.baseType,
                         title: s.title,
                         svgUrl: s.backgroundImageUrl,
+                        svgToolboxUrl: s.backgroundImageToolboxUrl,
                         svgLeft: s.backgroundImageLeft,
                         svgTop: s.backgroundImageTop,
                         svgWidth: s.backgroundImageWidth,
@@ -1653,6 +1654,10 @@ class Diagram extends Widget {
                 */
                 /**
                 * @name dxDiagramOptions.customShapes.backgroundImageUrl
+                * @type String
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.backgroundImageToolboxUrl
                 * @type String
                 */
                 /**
