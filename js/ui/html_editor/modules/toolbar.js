@@ -324,12 +324,16 @@ if(Quill) {
                 dataSource: this._prepareToolbarItems(),
                 disabled: this.isInteractionDisabled,
                 menuContainer: this._$toolbarContainer,
-                multiline: this.options.multiline ?? true
+                multiline: this.isMultilineMode()
             };
         }
 
         get isInteractionDisabled() {
             return this._editorInstance.option('readOnly') || this._editorInstance.option('disabled');
+        }
+
+        isMultilineMode() {
+            return this.options.multiline ?? true;
         }
 
         clean() {
@@ -472,7 +476,9 @@ if(Quill) {
                 }
             };
 
-            return extend(true, { location: 'before', locateInMenu: 'auto' }, this._getDefaultConfig(item.formatName), item, baseItem);
+            const multilineItem = this.isMultilineMode() ? { location: 'before', locateInMenu: 'never' } : {};
+
+            return extend(true, { location: 'before', locateInMenu: 'auto' }, this._getDefaultConfig(item.formatName), item, baseItem, multilineItem);
         }
 
         _getDefaultItemsConfig() {
