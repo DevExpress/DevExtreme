@@ -521,7 +521,7 @@ const Scrollable = DOMComponent.inherit({
         this.scrollTo(scrollPosition);
     },
 
-    scrollToElementTopLeftPosition: function(element, offset) {
+    scrollToElementTopLeft: function(element) {
         const $element = $(element);
         const elementInsideContent = this.$content().find(element).length;
         const elementIsInsideContent = ($element.parents('.' + SCROLLABLE_CLASS).length - $element.parents('.' + SCROLLABLE_CONTENT_CLASS).length) === 0;

@@ -12,10 +12,11 @@ QUnit.module('scrollToItem', () => {
         const wrapper = new TreeViewTestWrapper({
             displayExpr: 'id',
             scrollDirection: config.scrollDirection,
-            height: 200,
-            width: 200,
+            height: 100,
+            width: 100,
             animationEnabled: false, // +400ms per test
             dataSource: dataSource,
+            rtlEnabled: config.rtlEnabled,
             onContentReady: config.onContentReady
         });
 
@@ -50,14 +51,22 @@ QUnit.module('scrollToItem', () => {
     ['vertical', 'horizontal', 'both'].forEach(scrollDirection => {
         [false, true].forEach(expanded => {
             [false, true].forEach(disabled => {
-                configs.push({ expanded, scrollDirection, disabled, keysToScroll: ['item1', 'item1_1_1', 'item9', 'item9_1_1_1_1', 'item10', 'item10_1_1_1_1_1'] });
+                [false, true].forEach(rtlEnabled => {
+                    configs.push({
+                        expanded,
+                        scrollDirection,
+                        disabled,
+                        rtlEnabled,
+                        keysToScroll: ['item1', 'item1_1_1', 'item9', 'item9_1_1_1_1', 'item10', 'item10_1_1_1_1_1']
+                    });
+                });
             });
         });
     });
 
     configs.forEach(config => {
         config.keysToScroll.forEach(key => {
-            QUnit.test(`expanded: ${config.expanded} disabled: ${config.disabled}, scrollDirection: ${config.scrollDirection} -> onContentReady.scrollToItem(${key}) -> focusOut() -> focusIn()`, function(assert) {
+            QUnit.test(`expanded: ${config.expanded}, rtlEnabled: ${config.rtlEnabled}, disabled: ${config.disabled}, scrollDirection: ${config.scrollDirection} -> onContentReady.scrollToItem(${key}) -> focusOut() -> focusIn()`, function(assert) {
                 let completionCallback = null;
                 let isFirstContentReadyEvent = true;
                 const options = $.extend({}, config, {
@@ -88,7 +97,7 @@ QUnit.module('scrollToItem', () => {
         });
 
         [{ top: 0, left: 0 }, { top: 1000, left: 0 }, { top: 0, left: 1000 }, { top: 1000, left: 1000 }].forEach(initialPosition => {
-            QUnit.test(`expanded: ${config.expanded} disabled: ${config.disabled}, scrollDirection: ${config.scrollDirection}, initialPosition: ${JSON.stringify(initialPosition)} -> scrollToItem() -> focusOut() -> focusIn()`, function(assert) {
+            QUnit.test(`expanded: ${config.expanded}, rtlEnabled: ${config.rtlEnabled}, disabled: ${config.disabled}, scrollDirection: ${config.scrollDirection}, initialPosition: ${JSON.stringify(initialPosition)} -> scrollToItem() -> focusOut() -> focusIn()`, function(assert) {
                 const options = $.extend({}, config, { initialPosition });
                 const wrapper = createWrapper(options, createDataSource(config.expanded, config.disabled));
                 config.keysToScroll.forEach(key => {

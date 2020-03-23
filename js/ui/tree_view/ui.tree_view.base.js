@@ -1629,7 +1629,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._expandNodes(nodeKeysToExpand.reverse()).always(() => {
             const $element = this._getNodeElement(node);
             if($element && $element.length) {
-                this._scrollableContainer.scrollToElementTopLeftPosition($element);
+                this._scrollableContainer.scrollToElementTopLeft($element);
                 scrollCallback.resolve();
             } else {
                 scrollCallback.reject();
