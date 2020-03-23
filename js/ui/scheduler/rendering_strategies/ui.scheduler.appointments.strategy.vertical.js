@@ -4,7 +4,7 @@ import { isNumeric } from '../../../core/utils/type';
 import dateUtils from '../../../core/utils/date';
 import utils from './../utils';
 
-const ADAPTIVE_WEEK_APPOINTMENT_DEFAULT_OFFSET = 50;
+const ADAPTIVE_VERTICAL_APPOINTMENT_DEFAULT_OFFSET = 50;
 
 
 const ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5;
@@ -169,25 +169,6 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         const config = this._calculateVerticalGeometryConfig(coordinates);
 
         return this._customizeVerticalCoordinates(coordinates, config.width, config.appointmentCountPerCell, config.offset);
-        // const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
-
-        // if(overlappingMode) {
-        //     const config = this._calculateVerticalGeometryConfig(coordinates);
-
-        //     return this._customizeVerticalCoordinates(coordinates, config.width, config.appointmentCountPerCell, config.offset);
-        // }
-        // else {
-        //     let width = this._getAppointmentMaxWidth() / coordinates.count;
-        //     const height = coordinates.height;
-        //     const top = coordinates.top;
-        //     const left = coordinates.left + (coordinates.index * width);
-
-        //     if(width < APPOINTMENT_MIN_WIDTH) {
-        //         width = APPOINTMENT_MIN_WIDTH;
-        //     }
-
-        //     return { height: height, width: width, top: top, left: left, empty: this._isAppointmentEmpty(height, width) };
-        // }
     }
 
     _customizeVerticalCoordinates(coordinates, width, appointmentCountPerCell, topOffset, isAllDay) {
@@ -262,7 +243,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getAppointmentMaxWidth() {
-        const offset = this.instance.fire('isAdaptive') ? ADAPTIVE_WEEK_APPOINTMENT_DEFAULT_OFFSET : this._getAppointmentDefaultOffset();
+        const offset = this.instance.fire('isAdaptive') ? ADAPTIVE_VERTICAL_APPOINTMENT_DEFAULT_OFFSET : this._getAppointmentDefaultOffset();
 
         return this.getDefaultCellWidth() - offset;
     }
