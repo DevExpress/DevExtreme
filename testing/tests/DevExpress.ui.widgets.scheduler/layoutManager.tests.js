@@ -14,19 +14,13 @@ import HorizontalAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui
 import HorizontalMonthLineAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month_line';
 import Color from 'color';
 import dataUtils from 'core/element_data';
-import devices from 'core/devices';
 import CustomStore from 'data/custom_store';
 import { SchedulerTestWrapper } from './helpers.js';
 
 const APPOINTMENT_DEFAULT_OFFSET = 26;
-const APPOINTMENT_MOBILE_OFFSET = 50;
 
 const getOffset = () => {
-    if(devices.current().deviceType !== 'desktop') {
-        return APPOINTMENT_MOBILE_OFFSET;
-    } else {
-        return APPOINTMENT_DEFAULT_OFFSET;
-    }
+    return APPOINTMENT_DEFAULT_OFFSET;
 };
 
 const checkAppointmentUpdatedCallbackArgs = (assert, actual, expected) => {

@@ -9,7 +9,6 @@ import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import Query from 'data/query';
 import dataUtils from 'core/element_data';
-import devices from 'core/devices';
 import { SchedulerTestWrapper } from './helpers.js';
 
 import 'common.css!';
@@ -23,15 +22,10 @@ QUnit.testStart(function() {
             </div>');
 });
 
-const APPOINTMENT_DEFAULT_OFFSET = 25;
-const APPOINTMENT_MOBILE_OFFSET = 50;
+const APPOINTMENT_DEFAULT_OFFSET = 26;
 
 function getOffset() {
-    if(devices.current().deviceType !== 'desktop') {
-        return APPOINTMENT_MOBILE_OFFSET;
-    } else {
-        return APPOINTMENT_DEFAULT_OFFSET;
-    }
+    return APPOINTMENT_DEFAULT_OFFSET;
 }
 
 const createInstance = function(options) {
