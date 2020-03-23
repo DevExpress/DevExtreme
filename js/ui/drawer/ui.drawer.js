@@ -232,7 +232,7 @@ const Drawer = Widget.inherit({
             const $viewTemplate = contentTemplate.render({
                 container: this.viewContent(),
                 noModel: true,
-                transclude: (this._templateManager.anonymousTemplateName === contentTemplateOption)
+                transclude: this._getAnonymousTemplateName() === contentTemplateOption
             });
 
             if($viewTemplate.hasClass('ng-scope')) { // T864419
