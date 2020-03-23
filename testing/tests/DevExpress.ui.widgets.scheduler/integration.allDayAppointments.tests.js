@@ -1220,7 +1220,7 @@ QUnit.test('All-day & common appointments should have a right sorting', function
         currentDate: new Date(2016, 1, 10),
         currentView: 'day',
         width: 800,
-        maxAppointmentsPerCell: '3',
+        maxAppointmentsPerCell: 3,
         dataSource: [
             {
                 text: 'A',
