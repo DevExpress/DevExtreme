@@ -8,7 +8,6 @@ import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import Color from 'color';
 import tooltip from 'ui/tooltip/ui.tooltip';
-import devices from 'core/devices';
 import config from 'core/config';
 import dragEvents from 'events/drag';
 import { DataSource } from 'data/data_source/data_source';
@@ -28,15 +27,10 @@ const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
 
 const APPOINTMENT_DEFAULT_OFFSET = 26;
-const APPOINTMENT_MOBILE_OFFSET = 50;
 
 
 function getOffset() {
-    if(devices.current().deviceType !== 'desktop') {
-        return APPOINTMENT_MOBILE_OFFSET;
-    } else {
-        return APPOINTMENT_DEFAULT_OFFSET;
-    }
+    return APPOINTMENT_DEFAULT_OFFSET;
 }
 
 QUnit.module('T712431', () => {

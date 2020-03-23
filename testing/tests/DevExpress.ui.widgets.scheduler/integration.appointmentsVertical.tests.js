@@ -24,7 +24,6 @@ import translator from 'animation/translator';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import Color from 'color';
-import devices from 'core/devices';
 import dragEvents from 'events/drag';
 import { DataSource } from 'data/data_source/data_source';
 import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
@@ -34,14 +33,9 @@ const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
 
 const APPOINTMENT_DEFAULT_OFFSET = 25;
-const APPOINTMENT_MOBILE_OFFSET = 50;
 
 const getOffset = () => {
-    if(devices.current().deviceType !== 'desktop') {
-        return APPOINTMENT_MOBILE_OFFSET;
-    } else {
-        return APPOINTMENT_DEFAULT_OFFSET;
-    }
+    return APPOINTMENT_DEFAULT_OFFSET;
 };
 
 QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)', {
