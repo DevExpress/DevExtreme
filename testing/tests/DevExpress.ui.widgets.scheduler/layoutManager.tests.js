@@ -19,10 +19,6 @@ import { SchedulerTestWrapper } from './helpers.js';
 
 const APPOINTMENT_DEFAULT_OFFSET = 26;
 
-const getOffset = () => {
-    return APPOINTMENT_DEFAULT_OFFSET;
-};
-
 const checkAppointmentUpdatedCallbackArgs = (assert, actual, expected) => {
     assert.deepEqual(actual.old, expected.old, 'Old data is OK');
     assert.deepEqual(actual.updated, expected.updated, 'New data is OK');
@@ -1337,7 +1333,7 @@ QUnit.test('Two rival appointments should have correct positions, vertical strat
     const $tableCell = $(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
     const cellHeight = $tableCell.get(0).getBoundingClientRect().height;
     const cellWidth = $tableCell.get(0).getBoundingClientRect().width;
-    const offset = getOffset();
+    const offset = APPOINTMENT_DEFAULT_OFFSET;
 
     assert.equal($appointment.length, 2, 'All appointments are rendered');
 
@@ -1372,7 +1368,7 @@ QUnit.test('Three rival appointments with two columns should have correct positi
     const $tableCell = $(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
     const cellHeight = $tableCell.get(0).getBoundingClientRect().height;
     const cellWidth = $tableCell.get(0).getBoundingClientRect().width;
-    const offset = getOffset();
+    const offset = APPOINTMENT_DEFAULT_OFFSET;
     const firstAppointmentPosition = translator.locate($appointment.eq(0));
     const secondAppointmentPosition = translator.locate($appointment.eq(1));
     const thirdAppointmentPosition = translator.locate($appointment.eq(2));
@@ -1445,7 +1441,7 @@ QUnit.test('Rival duplicated appointments should have correct positions', functi
     );
 
     const cellWidth = this.scheduler.workSpace.getCellWidth();
-    const offset = getOffset();
+    const offset = APPOINTMENT_DEFAULT_OFFSET;
 
     assert.equal(this.scheduler.appointments.getAppointmentCount(), 2, 'All appointments are rendered');
     assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(0), { top: 0, left: cellWidth + 100 }, 'appointment is rendered in right place');
@@ -2358,7 +2354,7 @@ QUnit.test('Full-size appointment should have correct size, \'auto\' mode', func
     const $appointment = $(this.instance.$element().find('.dx-scheduler-appointment')).eq(0);
     const tableCellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
     const appointmentWidth = $appointment.outerWidth();
-    const offset = getOffset();
+    const offset = APPOINTMENT_DEFAULT_OFFSET;
 
     assert.roughEqual(appointmentWidth, tableCellWidth - offset, 1.5, 'appointment is full-size');
 });

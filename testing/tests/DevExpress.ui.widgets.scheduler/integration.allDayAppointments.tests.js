@@ -24,10 +24,6 @@ QUnit.testStart(function() {
 
 const APPOINTMENT_DEFAULT_OFFSET = 26;
 
-function getOffset() {
-    return APPOINTMENT_DEFAULT_OFFSET;
-}
-
 const createInstance = function(options) {
     const instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
     return new SchedulerTestWrapper(instance);
@@ -1270,7 +1266,7 @@ QUnit.test('All-day & common appointments should have a right sorting', function
     });
 
     const cellWidth = scheduler.workSpace.getCellWidth();
-    const offset = getOffset();
+    const offset = APPOINTMENT_DEFAULT_OFFSET;
 
     assert.equal(scheduler.appointments.getTitleText(0), 'A', 'Text is right');
     assert.equal(scheduler.appointments.getTitleText(1), 'B', 'Text is right');

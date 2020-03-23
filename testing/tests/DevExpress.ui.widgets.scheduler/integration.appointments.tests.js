@@ -28,11 +28,6 @@ const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
 
 const APPOINTMENT_DEFAULT_OFFSET = 26;
 
-
-function getOffset() {
-    return APPOINTMENT_DEFAULT_OFFSET;
-}
-
 QUnit.module('T712431', () => {
     // TODO: there is a test for T712431 bug, when replace table layout on div layout, the test will also be useless
     const APPOINTMENT_WIDTH = 941;
@@ -1937,7 +1932,7 @@ QUnit.test('Appointment width should depend on cell width', function(assert) {
     const workSpace = this.instance.getWorkSpace();
     const defaultGetCellWidthMethod = workSpace.getCellWidth;
     const CELL_WIDTH = 777;
-    const offset = getOffset();
+    const offset = APPOINTMENT_DEFAULT_OFFSET;
 
     workSpace.getCellWidth = function() {
         return CELL_WIDTH;
@@ -2474,8 +2469,8 @@ QUnit.test('Rival long appointments should have right position on timeline month
         endDayHour: 20
     });
 
-    assert.equal(this.scheduler.appointments.getAppointmentPosition(0).top, getOffset(), 'Long appointment top is ok');
-    assert.roughEqual(this.scheduler.appointments.getAppointmentPosition(1).top, this.scheduler.appointments.getAppointmentHeight() + getOffset(), 1, 'Second appointment top is ok');
+    assert.equal(this.scheduler.appointments.getAppointmentPosition(0).top, APPOINTMENT_DEFAULT_OFFSET, 'Long appointment top is ok');
+    assert.roughEqual(this.scheduler.appointments.getAppointmentPosition(1).top, this.scheduler.appointments.getAppointmentHeight() + APPOINTMENT_DEFAULT_OFFSET, 1, 'Second appointment top is ok');
 });
 
 QUnit.test('Long appointment part should not be rendered on timeline month view (T678380)', function(assert) {
@@ -3122,7 +3117,7 @@ QUnit.test('Appointments should be rendered correctly in vertical grouped worksp
 
     const cellHeight = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
     const cellPosition = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(5).position().left;
-    const monthTopOffset = getOffset();
+    const monthTopOffset = APPOINTMENT_DEFAULT_OFFSET;
 
     assert.roughEqual($appointments.eq(0).position().top, cellHeight * 2 + monthTopOffset, 1, 'correct top position');
     assert.roughEqual($appointments.eq(0).position().left, cellPosition, 1.5, 'correct left position');
