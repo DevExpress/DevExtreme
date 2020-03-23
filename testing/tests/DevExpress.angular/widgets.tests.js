@@ -1294,10 +1294,10 @@ QUnit.module('Drawer', () => {
                     buttonElement = document.createElement('div');
                     buttonElement.id = 'button';
 
-                    viewContentElement.append(buttonElement);
+                    viewContentElement.appendChild(buttonElement);
                     const additionalElement = document.createElement('div');
                     additionalElement.id = 'additionalContent';
-                    viewContentElement.append(additionalElement);
+                    viewContentElement.appendChild(additionalElement);
                     new Button(buttonElement, {
                         text: 'nestedButton',
                         onClick: nestedButtonClickHandler
