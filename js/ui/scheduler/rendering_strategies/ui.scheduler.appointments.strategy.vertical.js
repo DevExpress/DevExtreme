@@ -265,7 +265,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getAppointmentMaxWidth() {
-        this.getDefaultCellWidth();
+        return this.getDefaultCellWidth() - this._getAppointmentDefaultOffset();
     }
 
     calculateAppointmentWidth(appointment, position, isRecurring) {
