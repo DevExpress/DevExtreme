@@ -99,6 +99,18 @@ QUnit.module('date parser', () => {
         checkFormat('yyyy \'m\'. MMMM d');
         checkFormat('MMM dd, yyyy [h:mm aaa]');
     });
+
+    QUnit.test('dates are parsed correctly on DST start time (T869511)', function(assert) {
+        const date = new Date(2020, 2, 8, 14, 15, 16);
+        const parser = getDateParser('yyyy/MM/dd h:mm:ss aaa', dateParts);
+        assert.deepEqual(parser('2020/03/08 2:15:16 PM'), date, 'parse correct date string');
+    });
+
+    QUnit.test('dates are parsed correctly on hours after DST start time (T869511)', function(assert) {
+        const date = new Date(2020, 2, 8, 15, 14, 13);
+        const parser = getDateParser('yyyy/MM/dd h:mm:ss aaa', dateParts);
+        assert.deepEqual(parser('2020/03/08 3:14:13 PM'), date, 'parse correct date string');
+    });
 });
 
 
