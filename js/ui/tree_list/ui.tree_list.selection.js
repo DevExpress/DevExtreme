@@ -107,21 +107,20 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
 
                 _updateSelectColumn: noop,
 
-                _getVisibleNodeKeys: function(isRecursiveSelection, root) {
+                _getSelectAllNodeKeys: function() {
                     const component = this.component;
-                    root = root || component.getRootNode();
+                    const root = component.getRootNode();
                     const cache = {};
                     const keys = [];
-                    const isMatchOnly = this.option('filterMode') === 'matchOnly';
-                    const that = this;
+                    const isRecursiveSelection = this.isRecursiveSelection();
 
                     root && treeListCore.foreachNodes(root.children, function(node) {
                         if(node.key !== undefined && (node.visible || isRecursiveSelection)) {
                             keys.push(node.key);
                         }
 
-                        if(isMatchOnly) {
-                            Array.prototype.push.apply(keys, that._getVisibleNodeKeys(isRecursiveSelection, node));
+                        if(!node.visible) {
+                            return true;
                         }
 
                         return isRecursiveSelection ? false : component.isRowExpanded(node.key, cache);
@@ -133,7 +132,7 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 isSelectAll: function() {
                     const component = this.component;
                     let hasIndeterminateState;
-                    const visibleKeys = this._getVisibleNodeKeys();
+                    const visibleKeys = this._getSelectAllNodeKeys();
 
                     const selectedVisibleKeys = visibleKeys.filter(function(key) {
                         return component.isRowSelected(key);
@@ -152,8 +151,7 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
 
                 selectAll: function() {
                     const that = this;
-                    const isRecursiveSelection = that.isRecursiveSelection();
-                    const visibleKeys = that._getVisibleNodeKeys(isRecursiveSelection).filter(function(key) {
+                    const visibleKeys = that._getSelectAllNodeKeys().filter(function(key) {
                         return !that.isRowSelected(key);
                     });
 
@@ -161,8 +159,7 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 deselectAll: function() {
-                    const isRecursiveSelection = this.isRecursiveSelection();
-                    const visibleKeys = this._getVisibleNodeKeys(isRecursiveSelection);
+                    const visibleKeys = this._getSelectAllNodeKeys();
 
                     return this.deselectRows(visibleKeys);
                 },
