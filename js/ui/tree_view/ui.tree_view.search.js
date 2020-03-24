@@ -2,6 +2,7 @@ import $ from '../../core/renderer';
 import registerComponent from '../../core/component_registrator';
 import searchBoxMixin from '../widget/ui.search_box_mixin';
 import { extend } from '../../core/utils/extend';
+import domAdapter from '../../core/dom_adapter';
 import TreeViewBase from './ui.tree_view.base';
 
 const WIDGET_CLASS = 'dx-treeview';
@@ -67,7 +68,11 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
             $container.empty();
             rootNodes = this._dataAdapter.getRootNodes();
             this._renderEmptyMessage(rootNodes);
-            this._renderItems($container, rootNodes);
+
+            const $fragment = $(domAdapter.getDocument().createDocumentFragment());
+            this._renderItems($fragment, rootNodes);
+            $container.append($fragment);
+
             this._fireContentReadyAction();
         }
     },

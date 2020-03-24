@@ -16,6 +16,7 @@ import { down as PointerDown } from '../../events/pointer';
 import dblclickEvent from '../../events/double_click';
 import fx from '../../animation/fx';
 import Scrollable from '../scroll_view/ui.scrollable';
+import domAdapter from '../../core/dom_adapter';
 import LoadIndicator from '../load_indicator';
 import { fromPromise, Deferred, when } from '../../core/utils/deferred';
 import errors from '../widget/ui.errors';
@@ -554,14 +555,17 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _renderContentImpl: function() {
+        const $fragment = $(domAdapter.getDocument().createDocumentFragment());
         const $nodeContainer = this._renderNodeContainer();
 
-        this._scrollableContainer.$content().append($nodeContainer);
+        $fragment.append($nodeContainer);
 
         if(!this.option('items') || !this.option('items').length) {
+            this._scrollableContainer.$content().append($fragment);
             return;
         }
         this._renderItems($nodeContainer, this._dataAdapter.getRootNodes());
+        this._scrollableContainer.$content().append($fragment);
 
         this._initExpandEvent();
 
@@ -634,7 +638,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _getLevel: function($nodeContainer) {
         const parent = $nodeContainer.parent();
-        return parent.hasClass('dx-scrollable-content') ? 1 : parseInt(parent.attr('aria-level')) + 1;
+        return (parent.length === 0 || parent.hasClass('dx-scrollable-content'))
+            ? 1
+            : parseInt(parent.attr('aria-level')) + 1;
     },
 
     _showCheckboxes: function() {
@@ -724,7 +730,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         if(childNodesByChildrenKeys.length && !node.internalFields.selected) {
             const firstChild = childNodesByChildrenKeys[0];
-            this._updateParentsState(firstChild, this._getNodeElement(firstChild));
+            if($node.length) {
+                const key = this._encodeString(node.internalFields.key);
+                const element = $node.get(0).querySelector(`[${DATA_ITEM_ID}="${key}"]`);
+                this._updateParentsState(firstChild, element);
+            }
         }
 
         this._normalizeIconState($node, childNodesByChildrenKeys.length);
