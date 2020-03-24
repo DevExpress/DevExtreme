@@ -46,13 +46,13 @@ QUnit.module('Properties Panel', {
         const $toolbar = getPropertiesToolbarElement(this.$element);
         assert.equal($toolbar.length, 1);
 
-        let $button = findPropertiesToolbarItem(this.$element, 'settings');
+        let $button = findPropertiesToolbarItem(this.$element, 'properties');
         $button.trigger('dxclick');
         $panel = $('body').find(Consts.PROPERTIES_PANEL_SELECTOR);
         assert.equal($panel.length, 1);
         assert.equal($panel.is(':visible'), true);
 
-        $button = findPropertiesToolbarItem(this.$element, 'settings');
+        $button = findPropertiesToolbarItem(this.$element, 'properties');
         $button.trigger('dxclick');
         this.clock.tick(2000);
         assert.equal($panel.length, 1);
