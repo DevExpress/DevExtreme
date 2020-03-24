@@ -57,44 +57,24 @@ class DialogInfoBase {
     _getFormItems() { return {}; }
     _updateParameters() {}
     _getOkToolbarItem() {
-        return {
-            widget: 'dxButton',
-            location: 'after',
-            toolbar: 'bottom',
-            options: {
-                text: messageLocalization.format('OK'),
-                onClick: this._applyAction
-            }
-        };
+        return this._getToolbarItem('OK', this._applyAction);
     }
     _getCancelToolbarItem() {
-        return {
-            widget: 'dxButton',
-            location: 'after',
-            toolbar: 'bottom',
-            options: {
-                text: messageLocalization.format('Cancel'),
-                onClick: this._hideAction
-            }
-        };
+        return this._getToolbarItem('Cancel', this._hideAction);
     }
     _getYesToolbarItem() {
-        return {
-            widget: 'dxButton',
-            toolbar: 'bottom',
-            options: {
-                text: messageLocalization.format('Yes'),
-                onClick: this._applyAction
-            }
-        };
+        return this._getToolbarItem('Yes', this._applyAction);
     }
     _getNoToolbarItem() {
+        return this._getToolbarItem('No', this._hideAction);
+    }
+    _getToolbarItem(localizationText, action) {
         return {
             widget: 'dxButton',
             toolbar: 'bottom',
             options: {
-                text: messageLocalization.format('No'),
-                onClick: this._hideAction
+                text: messageLocalization.format(localizationText),
+                onClick: action
             }
         };
     }
