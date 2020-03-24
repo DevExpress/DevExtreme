@@ -804,17 +804,23 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _toggleExpandedState: function(itemElement, state, e) {
         const node = this._getNode(itemElement);
-        const currentState = node.internalFields.expanded;
+        if(!node) {
+            return new Deferred().reject().promise();
+        }
+        if(node.internalFields.disabled) {
+            return new Deferred().reject().promise();
+        }
 
-        if(node.internalFields.disabled || currentState === state) {
-            return;
+        const currentState = node.internalFields.expanded;
+        if(currentState === state) {
+            return new Deferred().resolve().promise();
         }
 
         if(this._hasChildren(node)) {
             const $node = this._getNodeElement(node);
 
             if($node.find(`.${NODE_LOAD_INDICATOR_CLASS}:not(.${INVISIBLE_STATE_CLASS})`).length) {
-                return;
+                return new Deferred().reject().promise();
             }
 
             this._createLoadIndicator($node);
@@ -826,7 +832,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         this._dataAdapter.toggleExpansion(node.internalFields.key, state);
 
-        this._updateExpandedItemsUI(node, state, e);
+        return this._updateExpandedItemsUI(node, state, e);
     },
 
     _createLoadIndicator: function($node) {
@@ -886,22 +892,24 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         const nodeContainerExists = $nodeContainer.length > 0;
 
+        const completionCallback = new Deferred();
         if(!state || nodeContainerExists && !$nodeContainer.is(':empty')) {
-            this._updateExpandedItem(node, state, e);
-            return;
+            this._animateNodeContainer(node, state, e, completionCallback);
+            return completionCallback.promise();
         }
 
         if(this._isVirtualMode() || this._useCustomChildrenLoader()) {
-            this._loadNestedItemsWithUpdate(node, state, e);
-            return;
+            this._loadNestedItemsWithUpdate(node, state, e, completionCallback);
+            return completionCallback.promise();
         }
 
         this._renderSublevel($node, node, this._getChildNodes(node));
         this._fireContentReadyAction();
-        this._updateExpandedItem(node, state, e);
+        this._animateNodeContainer(node, state, e, completionCallback);
+        return completionCallback.promise();
     },
 
-    _loadNestedItemsWithUpdate: function(node, state, e) {
+    _loadNestedItemsWithUpdate: function(node, state, e, completionCallback) {
         const $node = this._getNodeElement(node);
         this._loadNestedItems(node).done(items => {
             const actualNodeData = this._getActualNode(node);
@@ -912,7 +920,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             }
 
             this._fireContentReadyAction();
-            this._updateExpandedItem(actualNodeData, state, e);
+            this._animateNodeContainer(actualNodeData, state, e, completionCallback);
         });
     },
 
@@ -952,14 +960,14 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._initDataAdapter();
     },
 
-    _updateExpandedItem: function(node, state, e) {
-        this._animateNodeContainer(node, state, e);
-    },
-
-    _animateNodeContainer: function(node, state, e) {
+    _animateNodeContainer: function(node, state, e, completionCallback) {
         const $node = this._getNodeElement(node);
         const $nodeContainer = $node.children(`.${NODE_CONTAINER_CLASS}`);
         let nodeHeight;
+
+        if(node && completionCallback && $nodeContainer.length === 0) {
+            completionCallback.resolve();
+        }
 
         // NOTE: The height of node container is should be used when the container is shown (T606878)
         $nodeContainer.addClass(OPENED_NODE_CONTAINER_CLASS);
@@ -981,6 +989,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 this.setAria('expanded', state, $node);
                 this._scrollableContainer.update();
                 this._fireExpandedStateUpdatedEvent(state, node, e);
+
+                if(completionCallback) {
+                    completionCallback.resolve();
+                }
             }).bind(this)
         });
     },
@@ -1513,11 +1525,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     expandItem: function(itemElement) {
-        this._toggleExpandedState(itemElement, true);
+        return this._toggleExpandedState(itemElement, true);
     },
 
     collapseItem: function(itemElement) {
-        this._toggleExpandedState(itemElement, false);
+        return this._toggleExpandedState(itemElement, false);
     },
 
     /**
