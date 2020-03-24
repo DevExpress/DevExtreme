@@ -79,664 +79,665 @@ function createHorizontalMarkUp(width, addItems, createTable) {
 }
 
 
-QUnit.module('sortable without containers');
+QUnit.module('sortable without containers', () => {
 
-QUnit.test('sortable render without parameters', function(assert) {
-    const $sortable = $('#sortable').dxSortable({});
+    QUnit.test('sortable render without parameters', function(assert) {
+        const $sortable = $('#sortable').dxSortable({});
 
-    assert.ok($sortable.hasClass('dx-sortable'), 'dx-sortable class attached');
-});
-
-QUnit.test('vertical dragging', function(assert) {
-    let changedArgs;
-    const draggingArgs = [];
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        itemContainerSelector: '.test-container',
-        onDragging: function(e) {
-            draggingArgs.push(e);
-        },
-        onChanged: function(e) {
-            changedArgs = e;
-        }
+        assert.ok($sortable.hasClass('dx-sortable'), 'dx-sortable class attached');
     });
 
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $item.offset();
+    QUnit.test('vertical dragging', function(assert) {
+        let changedArgs;
+        const draggingArgs = [];
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            itemContainerSelector: '.test-container',
+            onDragging: function(e) {
+                draggingArgs.push(e);
+            },
+            onChanged: function(e) {
+                changedArgs = e;
+            }
+        });
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 5, offset.top + 5)
-        .move(offset.left, offset.top + 22)
-        .up();
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $item.offset();
 
-    // assert
-    const $items = $sortable.find('.test-item');
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 5, offset.top + 5)
+            .move(offset.left, offset.top + 22)
+            .up();
 
-    assert.equal($items.length, 4, 'item count');
-    assert.equal($items.eq(0).text(), '2', 'item 0 text');
-    assert.equal($items.eq(1).text(), '1', 'item 1 text');
-    assert.equal($items.eq(2).text(), '3', 'item 2 text');
-    assert.equal($items.eq(3).text(), '4', 'item 3 text');
+        // assert
+        const $items = $sortable.find('.test-item');
 
-    assert.equal(draggingArgs.length, 2, 'fired two times');
+        assert.equal($items.length, 4, 'item count');
+        assert.equal($items.eq(0).text(), '2', 'item 0 text');
+        assert.equal($items.eq(1).text(), '1', 'item 1 text');
+        assert.equal($items.eq(2).text(), '3', 'item 2 text');
+        assert.equal($items.eq(3).text(), '4', 'item 3 text');
 
-    assert.strictEqual(draggingArgs[0].sourceIndex, 0, 'source index');
-    assert.strictEqual(draggingArgs[0].targetIndex, -1, 'target index'); // TODO: real index
+        assert.equal(draggingArgs.length, 2, 'fired two times');
 
-    assert.strictEqual(draggingArgs[1].sourceIndex, 0, 'source index');
-    assert.strictEqual(draggingArgs[1].targetIndex, -1, 'target index'); // TODO: real index
+        assert.strictEqual(draggingArgs[0].sourceIndex, 0, 'source index');
+        assert.strictEqual(draggingArgs[0].targetIndex, -1, 'target index'); // TODO: real index
 
-    assert.strictEqual(changedArgs.sourceIndex, 0, 'source index');
-    assert.strictEqual(changedArgs.targetIndex, 2, 'target index');
-});
+        assert.strictEqual(draggingArgs[1].sourceIndex, 0, 'source index');
+        assert.strictEqual(draggingArgs[1].targetIndex, -1, 'target index'); // TODO: real index
 
-QUnit.test('set onChanged arg\'s fields', function(assert) {
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        itemContainerSelector: '.test-container',
-        onChanged: function(e) {
-            e.removeSourceElement = false,
-            e.removeTargetElement = true,
-            e.removeSourceClass = false;
-        }
+        assert.strictEqual(changedArgs.sourceIndex, 0, 'source index');
+        assert.strictEqual(changedArgs.targetIndex, 2, 'target index');
     });
 
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $item.offset();
+    QUnit.test('set onChanged arg\'s fields', function(assert) {
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            itemContainerSelector: '.test-container',
+            onChanged: function(e) {
+                e.removeSourceElement = false,
+                e.removeTargetElement = true,
+                e.removeSourceClass = false;
+            }
+        });
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 5, offset.top + 5)
-        .move(offset.left, offset.top + 22)
-        .up();
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $item.offset();
 
-    assert.ok($('#sortable').find('.dx-drag-source').length);
-    assert.equal($('#sortable').find('.dx-drag-target').length, 0);
-});
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 5, offset.top + 5)
+            .move(offset.left, offset.top + 22)
+            .up();
 
-QUnit.test('horizontal dragging - right', function(assert) {
-    createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE);
-
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        direction: 'horizontal',
-        itemContainerSelector: '.test-container'
+        assert.ok($('#sortable').find('.dx-drag-source').length);
+        assert.equal($('#sortable').find('.dx-drag-target').length, 0);
     });
 
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $item.offset();
+    QUnit.test('horizontal dragging - right', function(assert) {
+        createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE);
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 3, offset.top + 3)
-        .move(offset.left + 400, offset.top)
-        .up();
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            direction: 'horizontal',
+            itemContainerSelector: '.test-container'
+        });
 
-    // assert
-    const $items = $sortable.find('.test-item');
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $item.offset();
 
-    assert.equal($items.length, 4, 'item count');
-    assert.equal($items.eq(0).text(), '2', 'item 0 text');
-    assert.equal($items.eq(1).text(), '1', 'item 1 text');
-    assert.equal($items.eq(2).text(), '3', 'item 2 text');
-    assert.equal($items.eq(3).text(), '4', 'item 3 text');
-});
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 3, offset.top + 3)
+            .move(offset.left + 400, offset.top)
+            .up();
 
-// QUnit.test("horizontal dragging between lines", function(assert) {
-//    createHorizontalMarkUp(HORIZONTAL_WIDTH, true);
+        // assert
+        const $items = $sortable.find('.test-item');
 
-//    var $sortable = $("#sortable").dxSortable({
-//        itemSelector: ".test-item",
-//        itemContainerSelector: ".test-container",
-//        direction: "auto"
-//    });
-
-//    var $item = $sortable.find(".test-item").eq(0);
-//    var offset = $item.offset();
-
-//    // act
-//    pointerMock($item)
-//        .start()
-//        .down()
-//        .move(offset.left + 3, offset.top + 3)
-//        .move(offset.left + 350, offset.top + 15)
-//        .up();
-
-//    // assert
-//    var $items = $sortable.find(".test-item");
-
-//    assert.equal($items.length, 6, "item count");
-//    assert.equal($items.eq(0).text(), "2", "item 0 text");
-//    assert.equal($items.eq(1).text(), "3", "item 1 text");
-//    assert.equal($items.eq(2).text(), "4", "item 2 text");
-//    assert.equal($items.eq(3).text(), "5", "item 3 text");
-//    assert.equal($items.eq(4).text(), "1", "item 4 text");
-//    assert.equal($items.eq(5).text(), "6", "item 5 text");
-// });
-
-// QUnit.test("horizontal dragging between lines to the end of the first line", function(assert) {
-//    createHorizontalMarkUp(HORIZONTAL_WIDTH, true);
-
-//    var $sortable = $("#sortable").dxSortable({
-//        itemSelector: ".test-item",
-//        itemContainerSelector: ".test-container",
-//        direction: "auto"
-//    });
-
-//    var $item = $sortable.find(".test-item").eq(0);
-//    var offset = $item.offset();
-
-//    // act
-//    pointerMock($item)
-//        .start()
-//        .down()
-//        .move(offset.left + 3, offset.top + 3)
-//        .move(offset.left + 551, offset.top)
-//        .up();
-
-//    // assert
-//    var $items = $sortable.find(".test-item");
-
-//    assert.equal($items.length, 6, "item count");
-//    assert.equal($items.eq(0).text(), "2", "item 0 text");
-//    assert.equal($items.eq(1).text(), "3", "item 1 text");
-//    assert.equal($items.eq(2).text(), "1", "item 2 text");
-//    assert.equal($items.eq(3).text(), "4", "item 3 text");
-//    assert.equal($items.eq(4).text(), "5", "item 4 text");
-//    assert.equal($items.eq(5).text(), "6", "item 5 text");
-// });
-
-QUnit.test('dragging inside table', function(assert) {
-    createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE, true, true);
-
-    let changedArgs;
-    const draggingArgs = [];
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        direction: 'auto',
-        itemContainerSelector: '.test-container',
-        onDragging: function(e) {
-            draggingArgs.push(e);
-        },
-        onChanged: function(e) {
-            changedArgs = e;
-        }
+        assert.equal($items.length, 4, 'item count');
+        assert.equal($items.eq(0).text(), '2', 'item 0 text');
+        assert.equal($items.eq(1).text(), '1', 'item 1 text');
+        assert.equal($items.eq(2).text(), '3', 'item 2 text');
+        assert.equal($items.eq(3).text(), '4', 'item 3 text');
     });
 
-    const $item = $sortable.find('.test-item').eq(1);
-    const offset = $item.offset();
+    // QUnit.test("horizontal dragging between lines", function(assert) {
+    //    createHorizontalMarkUp(HORIZONTAL_WIDTH, true);
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 3, offset.top + 3)
-        .move(offset.left + 500, offset.top)
-        .up();
+    //    var $sortable = $("#sortable").dxSortable({
+    //        itemSelector: ".test-item",
+    //        itemContainerSelector: ".test-container",
+    //        direction: "auto"
+    //    });
 
-    const $items = $sortable.find('.test-item');
+    //    var $item = $sortable.find(".test-item").eq(0);
+    //    var offset = $item.offset();
 
-    assert.equal(draggingArgs.length, 2, 'fired two times');
+    //    // act
+    //    pointerMock($item)
+    //        .start()
+    //        .down()
+    //        .move(offset.left + 3, offset.top + 3)
+    //        .move(offset.left + 350, offset.top + 15)
+    //        .up();
 
-    assert.strictEqual(draggingArgs[0].sourceIndex, 1, 'source index');
-    assert.strictEqual(draggingArgs[0].targetIndex, -1, 'target index'); // TODO: real index
+    //    // assert
+    //    var $items = $sortable.find(".test-item");
 
-    assert.strictEqual(draggingArgs[1].sourceIndex, 1, 'source index');
-    assert.strictEqual(draggingArgs[1].targetIndex, -1, 'target index'); // TODO: real index
+    //    assert.equal($items.length, 6, "item count");
+    //    assert.equal($items.eq(0).text(), "2", "item 0 text");
+    //    assert.equal($items.eq(1).text(), "3", "item 1 text");
+    //    assert.equal($items.eq(2).text(), "4", "item 2 text");
+    //    assert.equal($items.eq(3).text(), "5", "item 3 text");
+    //    assert.equal($items.eq(4).text(), "1", "item 4 text");
+    //    assert.equal($items.eq(5).text(), "6", "item 5 text");
+    // });
 
-    assert.strictEqual(changedArgs.sourceIndex, 1, 'source index');
-    assert.strictEqual(changedArgs.targetIndex, 4, 'target index');
+    // QUnit.test("horizontal dragging between lines to the end of the first line", function(assert) {
+    //    createHorizontalMarkUp(HORIZONTAL_WIDTH, true);
 
-    assert.equal($items.length, 6, 'item count');
-    assert.equal($items.eq(0).text(), '1', 'item 0 text');
-    assert.equal($items.eq(1).text(), '3', 'item 1 text');
-    assert.equal($items.eq(2).text(), '4', 'item 2 text');
-    assert.equal($items.eq(3).text(), '2', 'item 3 text');
-    assert.equal($items.eq(4).text(), '5', 'item 4 text');
-    assert.equal($items.eq(5).text(), '6', 'item 5 text');
-});
+    //    var $sortable = $("#sortable").dxSortable({
+    //        itemSelector: ".test-item",
+    //        itemContainerSelector: ".test-container",
+    //        direction: "auto"
+    //    });
 
-QUnit.test('dragging move over half of item height', function(assert) {
-    let changedArgs;
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        itemContainerSelector: '.test-container',
-        onChanged: function(e) {
-            changedArgs = e;
-        }
+    //    var $item = $sortable.find(".test-item").eq(0);
+    //    var offset = $item.offset();
+
+    //    // act
+    //    pointerMock($item)
+    //        .start()
+    //        .down()
+    //        .move(offset.left + 3, offset.top + 3)
+    //        .move(offset.left + 551, offset.top)
+    //        .up();
+
+    //    // assert
+    //    var $items = $sortable.find(".test-item");
+
+    //    assert.equal($items.length, 6, "item count");
+    //    assert.equal($items.eq(0).text(), "2", "item 0 text");
+    //    assert.equal($items.eq(1).text(), "3", "item 1 text");
+    //    assert.equal($items.eq(2).text(), "1", "item 2 text");
+    //    assert.equal($items.eq(3).text(), "4", "item 3 text");
+    //    assert.equal($items.eq(4).text(), "5", "item 4 text");
+    //    assert.equal($items.eq(5).text(), "6", "item 5 text");
+    // });
+
+    QUnit.test('dragging inside table', function(assert) {
+        createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE, true, true);
+
+        let changedArgs;
+        const draggingArgs = [];
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            direction: 'auto',
+            itemContainerSelector: '.test-container',
+            onDragging: function(e) {
+                draggingArgs.push(e);
+            },
+            onChanged: function(e) {
+                changedArgs = e;
+            }
+        });
+
+        const $item = $sortable.find('.test-item').eq(1);
+        const offset = $item.offset();
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 3, offset.top + 3)
+            .move(offset.left + 500, offset.top)
+            .up();
+
+        const $items = $sortable.find('.test-item');
+
+        assert.equal(draggingArgs.length, 2, 'fired two times');
+
+        assert.strictEqual(draggingArgs[0].sourceIndex, 1, 'source index');
+        assert.strictEqual(draggingArgs[0].targetIndex, -1, 'target index'); // TODO: real index
+
+        assert.strictEqual(draggingArgs[1].sourceIndex, 1, 'source index');
+        assert.strictEqual(draggingArgs[1].targetIndex, -1, 'target index'); // TODO: real index
+
+        assert.strictEqual(changedArgs.sourceIndex, 1, 'source index');
+        assert.strictEqual(changedArgs.targetIndex, 4, 'target index');
+
+        assert.equal($items.length, 6, 'item count');
+        assert.equal($items.eq(0).text(), '1', 'item 0 text');
+        assert.equal($items.eq(1).text(), '3', 'item 1 text');
+        assert.equal($items.eq(2).text(), '4', 'item 2 text');
+        assert.equal($items.eq(3).text(), '2', 'item 3 text');
+        assert.equal($items.eq(4).text(), '5', 'item 4 text');
+        assert.equal($items.eq(5).text(), '6', 'item 5 text');
     });
 
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $item.offset();
+    QUnit.test('dragging move over half of item height', function(assert) {
+        let changedArgs;
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            itemContainerSelector: '.test-container',
+            onChanged: function(e) {
+                changedArgs = e;
+            }
+        });
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 5, offset.top + 5)
-        .move(offset.left, offset.top + 25)
-        .up();
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $item.offset();
 
-    // assert
-    const $items = $sortable.find('.test-item');
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 5, offset.top + 5)
+            .move(offset.left, offset.top + 25)
+            .up();
 
-    assert.equal($items.length, 4, 'item count');
-    assert.equal($items.eq(0).text(), '2', 'item 0 text');
-    assert.equal($items.eq(1).text(), '3', 'item 1 text');
-    assert.equal($items.eq(2).text(), '1', 'item 2 text');
-    assert.equal($items.eq(3).text(), '4', 'item 3 text');
+        // assert
+        const $items = $sortable.find('.test-item');
 
-    assert.ok(changedArgs, 'changed called');
-    assert.strictEqual(changedArgs.sourceIndex, 0, 'source index');
-    assert.strictEqual(changedArgs.targetIndex, 3, 'target index');
-});
+        assert.equal($items.length, 4, 'item count');
+        assert.equal($items.eq(0).text(), '2', 'item 0 text');
+        assert.equal($items.eq(1).text(), '3', 'item 1 text');
+        assert.equal($items.eq(2).text(), '1', 'item 2 text');
+        assert.equal($items.eq(3).text(), '4', 'item 3 text');
 
-QUnit.test('dragging - to end of container', function(assert) {
-    let changedArgs;
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        itemContainerSelector: '.test-container',
-        onChanged: function(e) {
-            changedArgs = e;
-        }
+        assert.ok(changedArgs, 'changed called');
+        assert.strictEqual(changedArgs.sourceIndex, 0, 'source index');
+        assert.strictEqual(changedArgs.targetIndex, 3, 'target index');
     });
 
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $item.offset();
+    QUnit.test('dragging - to end of container', function(assert) {
+        let changedArgs;
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            itemContainerSelector: '.test-container',
+            onChanged: function(e) {
+                changedArgs = e;
+            }
+        });
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 5, offset.top + 5)
-        .move(offset.left, offset.top + 200)
-        .up();
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $item.offset();
 
-    // assert
-    const $items = $sortable.find('.test-item');
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 5, offset.top + 5)
+            .move(offset.left, offset.top + 200)
+            .up();
 
-    assert.equal($items.length, 4, 'item count');
-    assert.equal($items.eq(0).text(), '2', 'item 0 text');
-    assert.equal($items.eq(1).text(), '3', 'item 1 text');
-    assert.equal($items.eq(2).text(), '4', 'item 2 text');
-    assert.equal($items.eq(3).text(), '1', 'item 3 text');
+        // assert
+        const $items = $sortable.find('.test-item');
 
-    assert.strictEqual(changedArgs.sourceIndex, 0, 'source index');
-    assert.strictEqual(changedArgs.targetIndex, 4, 'target index');
-});
+        assert.equal($items.length, 4, 'item count');
+        assert.equal($items.eq(0).text(), '2', 'item 0 text');
+        assert.equal($items.eq(1).text(), '3', 'item 1 text');
+        assert.equal($items.eq(2).text(), '4', 'item 2 text');
+        assert.equal($items.eq(3).text(), '1', 'item 3 text');
 
-QUnit.test('dragging - to end of container without dragend', function(assert) {
-    let changedArgs;
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        itemContainerSelector: '.test-container',
-        onChanged: function(e) {
-            changedArgs = e;
-        }
+        assert.strictEqual(changedArgs.sourceIndex, 0, 'source index');
+        assert.strictEqual(changedArgs.targetIndex, 4, 'target index');
     });
 
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $item.offset();
+    QUnit.test('dragging - to end of container without dragend', function(assert) {
+        let changedArgs;
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            itemContainerSelector: '.test-container',
+            onChanged: function(e) {
+                changedArgs = e;
+            }
+        });
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 5, offset.top + 5)
-        .move(offset.left, offset.top + 200);
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $item.offset();
 
-    // assert
-    const $items = $sortable.find('.test-item');
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 5, offset.top + 5)
+            .move(offset.left, offset.top + 200);
 
-    assert.equal($items.length, 5, 'item count');
-    assert.equal($items.eq(0).text(), '1', 'item 0 text');
-    assert.equal($items.eq(1).text(), '2', 'item 1 text');
-    assert.equal($items.eq(2).text(), '3', 'item 2 text');
-    assert.equal($items.eq(3).text(), '4', 'item 3 text');
+        // assert
+        const $items = $sortable.find('.test-item');
 
-    const $draggable = $('.dx-drag');
-    assert.ok($draggable.hasClass('test-item'));
-    assert.ok($draggable.css('position'), 'absolute');
-    assert.ok($draggable.hasClass($sortable.dxSortable('instance').option('dragClass')));
-    assert.ok($items.eq(4).hasClass($sortable.dxSortable('instance').option('targetClass')));
-    assert.ok($items.eq(0).hasClass($sortable.dxSortable('instance').option('sourceClass')));
+        assert.equal($items.length, 5, 'item count');
+        assert.equal($items.eq(0).text(), '1', 'item 0 text');
+        assert.equal($items.eq(1).text(), '2', 'item 1 text');
+        assert.equal($items.eq(2).text(), '3', 'item 2 text');
+        assert.equal($items.eq(3).text(), '4', 'item 3 text');
 
-    assert.ok(!changedArgs, 'change callback not called');
-    assert.ok($sortable.hasClass($sortable.dxSortable('instance').option('targetClass')));
-});
+        const $draggable = $('.dx-drag');
+        assert.ok($draggable.hasClass('test-item'));
+        assert.ok($draggable.css('position'), 'absolute');
+        assert.ok($draggable.hasClass($sortable.dxSortable('instance').option('dragClass')));
+        assert.ok($items.eq(4).hasClass($sortable.dxSortable('instance').option('targetClass')));
+        assert.ok($items.eq(0).hasClass($sortable.dxSortable('instance').option('sourceClass')));
 
-QUnit.test('dragging - out from container', function(assert) {
-    let changedArgs;
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        itemContainerSelector: '.test-container',
-        onChanged: function(e) {
-            changedArgs = e;
-        }
+        assert.ok(!changedArgs, 'change callback not called');
+        assert.ok($sortable.hasClass($sortable.dxSortable('instance').option('targetClass')));
     });
 
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $item.offset();
+    QUnit.test('dragging - out from container', function(assert) {
+        let changedArgs;
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            itemContainerSelector: '.test-container',
+            onChanged: function(e) {
+                changedArgs = e;
+            }
+        });
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 5, offset.top + 5)
-        .move(offset.left, offset.top - 400)
-        .up();
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $item.offset();
 
-    // assert
-    const $items = $sortable.find('.test-item');
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 5, offset.top + 5)
+            .move(offset.left, offset.top - 400)
+            .up();
 
-    assert.equal($items.length, 4, 'item count');
-    assert.equal($items.eq(0).text(), '1', 'item 0 text');
-    assert.equal($items.eq(1).text(), '2', 'item 1 text');
-    assert.equal($items.eq(2).text(), '3', 'item 2 text');
-    assert.equal($items.eq(3).text(), '4', 'item 3 text');
+        // assert
+        const $items = $sortable.find('.test-item');
 
-    assert.ok(!changedArgs, 'changed called');
-});
+        assert.equal($items.length, 4, 'item count');
+        assert.equal($items.eq(0).text(), '1', 'item 0 text');
+        assert.equal($items.eq(1).text(), '2', 'item 1 text');
+        assert.equal($items.eq(2).text(), '3', 'item 2 text');
+        assert.equal($items.eq(3).text(), '4', 'item 3 text');
 
-QUnit.test('dragging - out from container without dragend', function(assert) {
-    let changedArgs;
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        itemContainerSelector: '.test-container',
-        onChanged: function(e) {
-            changedArgs = e;
-        }
+        assert.ok(!changedArgs, 'changed called');
     });
 
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $item.offset();
+    QUnit.test('dragging - out from container without dragend', function(assert) {
+        let changedArgs;
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            itemContainerSelector: '.test-container',
+            onChanged: function(e) {
+                changedArgs = e;
+            }
+        });
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 5, offset.top + 5)
-        .move(offset.left, offset.top - 400);
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $item.offset();
 
-    // assert
-    const $items = $sortable.find('.test-item');
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 5, offset.top + 5)
+            .move(offset.left, offset.top - 400);
 
-    assert.equal($items.length, 4, 'item count');
-    assert.equal($items.eq(0).text(), '1', 'item 0 text');
-    assert.equal($items.eq(1).text(), '2', 'item 1 text');
-    assert.equal($items.eq(2).text(), '3', 'item 2 text');
-    assert.equal($items.eq(3).text(), '4', 'item 3 text');
+        // assert
+        const $items = $sortable.find('.test-item');
 
-    assert.equal($('.dx-drag.test-item').length, 1, 'drag element exists');
-    assert.ok($items.eq(0).hasClass($sortable.dxSortable('instance').option('sourceClass')));
+        assert.equal($items.length, 4, 'item count');
+        assert.equal($items.eq(0).text(), '1', 'item 0 text');
+        assert.equal($items.eq(1).text(), '2', 'item 1 text');
+        assert.equal($items.eq(2).text(), '3', 'item 2 text');
+        assert.equal($items.eq(3).text(), '4', 'item 3 text');
 
-    assert.ok(!$sortable.hasClass($sortable.dxSortable('instance').option('targetClass')));
+        assert.equal($('.dx-drag.test-item').length, 1, 'drag element exists');
+        assert.ok($items.eq(0).hasClass($sortable.dxSortable('instance').option('sourceClass')));
 
-    assert.ok(!changedArgs, 'changed called');
-});
+        assert.ok(!$sortable.hasClass($sortable.dxSortable('instance').option('targetClass')));
 
-QUnit.skip('dragging not allowed item', function(assert) {
-    let changedArgs;
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        itemContainerSelector: '.test-container',
-        onChanged: function(e) {
-            changedArgs = e;
-        }
+        assert.ok(!changedArgs, 'changed called');
     });
 
-    const $item = $sortable.find('.not-test-item').eq(0);
-    const offset = $item.offset();
+    QUnit.skip('dragging not allowed item', function(assert) {
+        let changedArgs;
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            itemContainerSelector: '.test-container',
+            onChanged: function(e) {
+                changedArgs = e;
+            }
+        });
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 5, offset.top + 5)
-        .move(offset.left + 5, offset.top + 25)
-        .up();
+        const $item = $sortable.find('.not-test-item').eq(0);
+        const offset = $item.offset();
 
-    // assert
-    const $items = $sortable.find('.test-item');
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 5, offset.top + 5)
+            .move(offset.left + 5, offset.top + 25)
+            .up();
 
-    assert.equal($items.length, 4, 'item count');
-    assert.equal($items.eq(0).text(), '1', 'item 0 text');
-    assert.equal($items.eq(1).text(), '2', 'item 1 text');
-    assert.equal($items.eq(2).text(), '3', 'item 2 text');
-    assert.equal($items.eq(3).text(), '4', 'item 3 text');
+        // assert
+        const $items = $sortable.find('.test-item');
 
-    assert.ok(!$sortable.hasClass($sortable.dxSortable('instance').option('targetClass')));
-    assert.ok(!changedArgs, 'changed not called');
-});
+        assert.equal($items.length, 4, 'item count');
+        assert.equal($items.eq(0).text(), '1', 'item 0 text');
+        assert.equal($items.eq(1).text(), '2', 'item 1 text');
+        assert.equal($items.eq(2).text(), '3', 'item 2 text');
+        assert.equal($items.eq(3).text(), '4', 'item 3 text');
 
-QUnit.test('dragging when no itemContainer', function(assert) {
-    let changedArgs;
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        itemContainerSelector: '.no',
-        onChanged: function(e) {
-            changedArgs = e;
-        }
+        assert.ok(!$sortable.hasClass($sortable.dxSortable('instance').option('targetClass')));
+        assert.ok(!changedArgs, 'changed not called');
     });
 
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $item.offset();
+    QUnit.test('dragging when no itemContainer', function(assert) {
+        let changedArgs;
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            itemContainerSelector: '.no',
+            onChanged: function(e) {
+                changedArgs = e;
+            }
+        });
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 5, offset.top + 5)
-        .move(offset.left + 5, offset.top + 25)
-        .up();
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $item.offset();
 
-    // assert
-    const $items = $sortable.find('.test-item');
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 5, offset.top + 5)
+            .move(offset.left + 5, offset.top + 25)
+            .up();
 
-    assert.equal($items.length, 4, 'item count');
-    assert.equal($items.eq(0).text(), '1', 'item 0 text');
-    assert.equal($items.eq(1).text(), '2', 'item 1 text');
-    assert.equal($items.eq(2).text(), '3', 'item 2 text');
-    assert.equal($items.eq(3).text(), '4', 'item 3 text');
+        // assert
+        const $items = $sortable.find('.test-item');
 
-    assert.ok(!changedArgs, 'changed not called');
-});
+        assert.equal($items.length, 4, 'item count');
+        assert.equal($items.eq(0).text(), '1', 'item 0 text');
+        assert.equal($items.eq(1).text(), '2', 'item 1 text');
+        assert.equal($items.eq(2).text(), '3', 'item 2 text');
+        assert.equal($items.eq(3).text(), '4', 'item 3 text');
 
-QUnit.test('dragging with color swatch', function(assert) {
-    const $sortable = $('#swatchSortable').dxSortable({
-        itemSelector: '.test-item',
-        itemContainerSelector: '.test-container'
+        assert.ok(!changedArgs, 'changed not called');
     });
 
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $item.offset();
+    QUnit.test('dragging with color swatch', function(assert) {
+        const $sortable = $('#swatchSortable').dxSortable({
+            itemSelector: '.test-item',
+            itemContainerSelector: '.test-container'
+        });
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 5, offset.top + 5);
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $item.offset();
 
-    // assert
-    assert.equal($('body > .dx-swatch-1 > .test-item.dx-drag').length, 1, 'Dragging item rendered in container with swatch class');
-});
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 5, offset.top + 5);
 
-
-QUnit.module('\'useIndicator\' option');
-
-QUnit.test('indicator is shown on right dragging', function(assert) {
-    createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE, true, true);
-
-    let indicator;
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        direction: 'auto',
-        useIndicator: true,
-        itemContainerSelector: '.test-container'
+        // assert
+        assert.equal($('body > .dx-swatch-1 > .test-item.dx-drag').length, 1, 'Dragging item rendered in container with swatch class');
     });
 
-    const $item = $sortable.find('.test-item').eq(1);
-    const $targetItem = $sortable.find('.dx-drag-target');
-    const offset = $item.offset();
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 3, offset.top + 3)
-        .move(offset.left + 500, offset.top);
-
-    indicator = $('.dx-position-indicator');
-
-    assert.ok(indicator.length, 'indicator is rendered');
-    assert.notOk($targetItem.is(':visible'));
-
-    assert.ok(indicator.offset().left <= $sortable.find('.test-item').eq(5).offset().left, 'indicator was rendered before 5 item');
-    assert.ok(indicator.offset().left > $sortable.find('.test-item').eq(3).offset().left, 'indicator was rendered after 4 item');
-    assert.ok(indicator.hasClass('dx-position-indicator-horizontal'));
-    assert.ok(!indicator.hasClass('dx-position-indicator-vertical'));
-    assert.ok(!indicator.hasClass('dx-position-indicator-last'));
 });
+QUnit.module('\'useIndicator\' option', () => {
 
-QUnit.test('indicator should not be shown on small dragging', function(assert) {
-    createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE, true, true);
+    QUnit.test('indicator is shown on right dragging', function(assert) {
+        createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE, true, true);
 
-    let indicator;
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        direction: 'auto',
-        useIndicator: true,
-        itemContainerSelector: '.test-container'
+        let indicator;
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            direction: 'auto',
+            useIndicator: true,
+            itemContainerSelector: '.test-container'
+        });
+
+        const $item = $sortable.find('.test-item').eq(1);
+        const $targetItem = $sortable.find('.dx-drag-target');
+        const offset = $item.offset();
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 3, offset.top + 3)
+            .move(offset.left + 500, offset.top);
+
+        indicator = $('.dx-position-indicator');
+
+        assert.ok(indicator.length, 'indicator is rendered');
+        assert.notOk($targetItem.is(':visible'));
+
+        assert.ok(indicator.offset().left <= $sortable.find('.test-item').eq(5).offset().left, 'indicator was rendered before 5 item');
+        assert.ok(indicator.offset().left > $sortable.find('.test-item').eq(3).offset().left, 'indicator was rendered after 4 item');
+        assert.ok(indicator.hasClass('dx-position-indicator-horizontal'));
+        assert.ok(!indicator.hasClass('dx-position-indicator-vertical'));
+        assert.ok(!indicator.hasClass('dx-position-indicator-last'));
     });
 
-    const $item = $sortable.find('.test-item').eq(1);
-    const offset = $item.offset();
+    QUnit.test('indicator should not be shown on small dragging', function(assert) {
+        createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE, true, true);
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 153, offset.top + 3);
+        let indicator;
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            direction: 'auto',
+            useIndicator: true,
+            itemContainerSelector: '.test-container'
+        });
 
-    indicator = $('.dx-position-indicator');
+        const $item = $sortable.find('.test-item').eq(1);
+        const offset = $item.offset();
 
-    assert.ok(!indicator.length, 'indicator is rendered');
-});
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 153, offset.top + 3);
 
-QUnit.test('indicator is shown on left dragging', function(assert) {
-    createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE, true, true);
+        indicator = $('.dx-position-indicator');
 
-    let indicator;
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        direction: 'auto',
-        useIndicator: true,
-        itemContainerSelector: '.test-container'
+        assert.ok(!indicator.length, 'indicator is rendered');
     });
 
-    const $item = $sortable.find('.test-item').eq(1);
-    const offset = $item.offset();
+    QUnit.test('indicator is shown on left dragging', function(assert) {
+        createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE, true, true);
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left - 3, offset.top + 3)
-        .move(offset.left - 302, offset.top);
+        let indicator;
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            direction: 'auto',
+            useIndicator: true,
+            itemContainerSelector: '.test-container'
+        });
 
-    indicator = $('.dx-position-indicator');
+        const $item = $sortable.find('.test-item').eq(1);
+        const offset = $item.offset();
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left - 3, offset.top + 3)
+            .move(offset.left - 302, offset.top);
+
+        indicator = $('.dx-position-indicator');
 
 
-    assert.ok(indicator.length, 'indicator is rendered');
-    assert.ok(indicator.offset().left <= $sortable.find('.test-item').eq(1).offset().left, 'indicator is rendered before 1 item');
-});
-
-QUnit.test('indicator is shown after last item dragging', function(assert) {
-    createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE * 2, true, true);
-
-    let indicator;
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        direction: 'auto',
-        useIndicator: true,
-        itemContainerSelector: '.test-container'
+        assert.ok(indicator.length, 'indicator is rendered');
+        assert.ok(indicator.offset().left <= $sortable.find('.test-item').eq(1).offset().left, 'indicator is rendered before 1 item');
     });
 
-    const $item = $sortable.find('.test-item').eq(1);
-    const offset = $item.offset();
+    QUnit.test('indicator is shown after last item dragging', function(assert) {
+        createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE * 2, true, true);
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 3, offset.top + 3)
-        .move(offset.left + 1500, offset.top);
+        let indicator;
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            direction: 'auto',
+            useIndicator: true,
+            itemContainerSelector: '.test-container'
+        });
 
-    indicator = $('.dx-position-indicator');
+        const $item = $sortable.find('.test-item').eq(1);
+        const offset = $item.offset();
 
-    assert.ok(indicator.length, 'indicator is rendered');
-    assert.ok(indicator.offset().left > $sortable.find('.test-item').eq(5).offset().left, 'indicator was rendered after 4 item');
-    assert.ok(indicator.hasClass('dx-position-indicator-last'));
-});
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 3, offset.top + 3)
+            .move(offset.left + 1500, offset.top);
 
-QUnit.test('indicator was removed', function(assert) {
-    createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE * 2, true, true);
+        indicator = $('.dx-position-indicator');
 
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        direction: 'auto',
-        useIndicator: true,
-        itemContainerSelector: '.test-container'
+        assert.ok(indicator.length, 'indicator is rendered');
+        assert.ok(indicator.offset().left > $sortable.find('.test-item').eq(5).offset().left, 'indicator was rendered after 4 item');
+        assert.ok(indicator.hasClass('dx-position-indicator-last'));
     });
 
-    const $item = $sortable.find('.test-item').eq(1);
-    const offset = $item.offset();
+    QUnit.test('indicator was removed', function(assert) {
+        createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE * 2, true, true);
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 3, offset.top + 3)
-        .move(offset.left + 1500, offset.top)
-        .up();
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            direction: 'auto',
+            useIndicator: true,
+            itemContainerSelector: '.test-container'
+        });
 
-    assert.notOk($('.dx-position-indicator').length, 'indicator is removed');
-});
+        const $item = $sortable.find('.test-item').eq(1);
+        const offset = $item.offset();
 
-QUnit.test('remove indicator when item dragged out from container', function(assert) {
-    createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE * 2, true, true);
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 3, offset.top + 3)
+            .move(offset.left + 1500, offset.top)
+            .up();
 
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        direction: 'auto',
-        useIndicator: true,
-        itemContainerSelector: '.test-container'
+        assert.notOk($('.dx-position-indicator').length, 'indicator is removed');
     });
 
-    const $item = $sortable.find('.test-item').eq(1);
-    const offset = $item.offset();
+    QUnit.test('remove indicator when item dragged out from container', function(assert) {
+        createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE * 2, true, true);
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left - 3, offset.top + 3)
-        .move(offset.left - 302, offset.top)
-        .move(offset.left - 302, offset.top - 100);
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            direction: 'auto',
+            useIndicator: true,
+            itemContainerSelector: '.test-container'
+        });
+
+        const $item = $sortable.find('.test-item').eq(1);
+        const offset = $item.offset();
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left - 3, offset.top + 3)
+            .move(offset.left - 302, offset.top)
+            .move(offset.left - 302, offset.top - 100);
 
 
-    assert.strictEqual($('.dx-position-indicator').length, 0, 'indicator is removed');
-});
+        assert.strictEqual($('.dx-position-indicator').length, 0, 'indicator is removed');
+    });
 
-QUnit.test('indicator should be shown on dragging between groups', function(assert) {
-    $('#sortable').width(1700).html('').append('<div group="group1" class="group">\
+    QUnit.test('indicator should be shown on dragging between groups', function(assert) {
+        $('#sortable').width(1700).html('').append('<div group="group1" class="group">\
                                             <div class="test-container">\
                                                 <div class="test-item" style="display: inline-block;">1</div>\
                                                 <div class="test-item" style="display: inline-block;">2</div>\
@@ -745,7 +746,7 @@ QUnit.test('indicator should be shown on dragging between groups', function(asse
                                             </div>\
                                         </div>');
 
-    $('#sortable').append('<div group="group2" class="group">\
+        $('#sortable').append('<div group="group2" class="group">\
                                             <div class="test-container">\
                                                 <div class="test-item" style="display: inline-block;">2-1</div>\
                                                 <div class="test-item" style="display: inline-block;">2-2</div>\
@@ -754,30 +755,30 @@ QUnit.test('indicator should be shown on dragging between groups', function(asse
                                             </div>\
                                         </div>');
 
-    let indicator;
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        groupSelector: '.group',
-        direction: 'auto',
-        useIndicator: true,
-        itemContainerSelector: '.test-container'
+        let indicator;
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            groupSelector: '.group',
+            direction: 'auto',
+            useIndicator: true,
+            itemContainerSelector: '.test-container'
+        });
+
+        const $item = $sortable.find('.test-item').eq(1);
+        const offset = $item.offset();
+
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 3, offset.top + 3)
+            .move(offset.left, offset.top + 20);
+
+        indicator = $('.dx-position-indicator');
+        assert.ok(indicator.length);
     });
 
-    const $item = $sortable.find('.test-item').eq(1);
-    const offset = $item.offset();
-
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 3, offset.top + 3)
-        .move(offset.left, offset.top + 20);
-
-    indicator = $('.dx-position-indicator');
-    assert.ok(indicator.length);
-});
-
-QUnit.test('dragging to empty group', function(assert) {
-    $('#sortable').width(1700).html('').append('<div group="group1" class="group">\
+    QUnit.test('dragging to empty group', function(assert) {
+        $('#sortable').width(1700).html('').append('<div group="group1" class="group">\
                                             <div class="test-container">\
                                                 <div class="test-item" style="display: inline-block;">1</div>\
                                                 <div class="test-item" style="display: inline-block;">2</div>\
@@ -786,261 +787,262 @@ QUnit.test('dragging to empty group', function(assert) {
                                             </div>\
                                         </div>');
 
-    $('#sortable').append('<div group="group2" class="group">\
+        $('#sortable').append('<div group="group2" class="group">\
                                             <div class="test-container" style="height: 30px;"></div>\
                                         </div>');
 
-    let indicator;
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        groupSelector: '.group',
-        direction: 'auto',
-        useIndicator: true,
-        itemContainerSelector: '.test-container'
-    });
-
-    const $item = $sortable.find('.test-item').eq(1);
-    const offset = $item.offset();
-
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 3, offset.top + 3)
-        .move(offset.left, offset.top + 20);
-
-    indicator = $('.dx-position-indicator');
-    assert.ok(!indicator.length); // TODO: indicator should be shown
-});
-
-QUnit.test('indicator is shown on bottom dragging when items are set in two lines', function(assert) {
-    createHorizontalMarkUp(HORIZONTAL_WIDTH_SMALL, true, true);
-
-    let indicator;
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        direction: 'auto',
-        useIndicator: true,
-        itemContainerSelector: '.test-container'
-    });
-
-    const $item = $sortable.find('.test-item').eq(1);
-    const $targetItem = $sortable.find('.dx-drag-target');
-    const offset = $item.offset();
-
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left - 3, offset.top + 3)
-        .move(offset.left - 103, offset.top + 15);
-
-    indicator = $('.dx-position-indicator');
-
-    assert.ok(indicator.length, 'indicator is rendered');
-    assert.notOk($targetItem.is(':visible'));
-
-    assert.ok(indicator.offset().left <= $sortable.find('.test-item').eq(5).offset().left, 'indicator was rendered before 5 item');
-    assert.ok(indicator.offset().left > $sortable.find('.test-item').eq(4).offset().left, 'indicator was rendered after 4 item');
-    assert.ok(indicator.hasClass('dx-position-indicator-horizontal'));
-    assert.ok(!indicator.hasClass('dx-position-indicator-vertical'));
-    assert.ok(!indicator.hasClass('dx-position-indicator-last'));
-});
-
-QUnit.test('indicator is shown on bottom dragging', function(assert) {
-    let indicator;
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        itemContainerSelector: '.test-container',
-        useIndicator: true
-    });
-
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $item.offset();
-
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 5, offset.top + 5)
-        .move(offset.left, offset.top + 22);
-
-    // assert
-    indicator = $('.dx-position-indicator');
-
-    assert.ok(indicator.length, 'indicator is rendered');
-
-    const $items = $sortable.find('.test-item');
-    assert.ok(indicator.offset().top <= $items.eq(3).offset().top, 'indicator was rendered before 2 item');
-    assert.ok(indicator.offset().top > $items.eq(1).offset().top, 'indicator was rendered after 1 item');
-    assert.ok(!indicator.hasClass('dx-position-indicator-horizontal'));
-    assert.ok(indicator.hasClass('dx-position-indicator-vertical'));
-    assert.ok(!indicator.hasClass('dx-position-indicator-last'));
-});
-
-QUnit.test('indicator is shown on bottom dragging. RTL', function(assert) {
-    let indicator;
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        itemContainerSelector: '.test-container',
-        useIndicator: true,
-        rtlEnabled: true
-    });
-
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $item.offset();
-
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 5, offset.top + 5)
-        .move(offset.left, offset.top + 22);
-
-    // assert
-    indicator = $('.dx-position-indicator');
-
-    assert.ok(indicator.length, 'indicator is rendered');
-
-    const $items = $sortable.find('.test-item');
-    assert.ok(indicator.offset().top <= $items.eq(3).offset().top, 'indicator was rendered before 2 item');
-    assert.ok(indicator.offset().top > $items.eq(1).offset().top, 'indicator was rendered after 1 item');
-    assert.ok(!indicator.hasClass('dx-position-indicator-horizontal'));
-    assert.ok(indicator.hasClass('dx-position-indicator-vertical'));
-    assert.ok(!indicator.hasClass('dx-position-indicator-last'));
-});
-
-QUnit.test('indicator is shown after last item bottom dragging', function(assert) {
-    let indicator;
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        itemContainerSelector: '.test-container',
-        useIndicator: true
-    });
-
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $item.offset();
-
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 5, offset.top + 5)
-        .move(offset.left, offset.top + 45);
-
-    // assert
-    indicator = $('.dx-position-indicator');
-
-    assert.ok(indicator.length, 'indicator is rendered');
-
-    const $items = $sortable.find('.test-item');
-    assert.ok(indicator.offset().top >= $items.eq(3).offset().top, 'indicator was rendered after 4 item');
-
-    assert.ok(indicator.hasClass('dx-position-indicator-last'));
-});
-
-QUnit.test('indicator is shown after last item bottom dragging. RTL', function(assert) {
-    let indicator;
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        itemContainerSelector: '.test-container',
-        useIndicator: true,
-        rtlEnabled: true
-    });
-
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $item.offset();
-
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 5, offset.top + 5)
-        .move(offset.left, offset.top + 45);
-
-    // assert
-    indicator = $('.dx-position-indicator');
-
-    assert.ok(indicator.length, 'indicator is rendered');
-
-    const $items = $sortable.find('.test-item');
-    assert.ok(indicator.offset().top >= $items.eq(3).offset().top, 'indicator was rendered after 4 item');
-
-    assert.ok(indicator.hasClass('dx-position-indicator-last'));
-});
-
-QUnit.test('drag without source element', function(assert) {
-    const $sortable = $('#sortable').dxSortable({
-        itemSelector: '.test-item',
-        itemContainerSelector: '.test-container',
-        useIndicator: true,
-    });
-    const $item = $sortable.find('.test-container');
-    const offset = $sortable.find('.test-item').eq(0).offset();
-
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + $item.width() / 2 + 10, offset.top);
-
-    // assert
-    const indicator = $('.dx-position-indicator');
-
-    assert.ok(!indicator.length);
-});
-
-QUnit.test('Indicator should not be shown on dragging to the same item at another sortable', function(assert) {
-    $('#sortable').css('display', 'none');
-    $('<div id=\'sortable1\'><div id=\'second-group\' group=\'groupFilter\' class=\'group horizontal\' style=\'height: 150px\'><div class=\'test-container\'><div class=\'test-item\'>1</div><div class=\'test-item\'>2</div><div class=\'test-item\'>3</div></div></div>')
-        .insertAfter('#sortable')
-        .css({
-            width: '3000px',
-            height: '200px'
-        });
-    $('<div id=\'sortable2\'><div id=\'second-group\' group=\'groupFilter\' class=\'group horizontal\' style=\'height: 150px\'><div class=\'test-container\'><div class=\'test-item\'>1</div><div class=\'test-item\'>2</div><div class=\'test-item\'>3</div></div></div>')
-        .insertAfter('#sortable1')
-        .css({
-            width: '3000px',
-            height: '200px'
+        let indicator;
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            groupSelector: '.group',
+            direction: 'auto',
+            useIndicator: true,
+            itemContainerSelector: '.test-container'
         });
 
-    const sortableDown = $('#sortable1').dxSortable({
-        selector: '#sortable1',
-        itemSelector: '.test-item',
-        groupSelector: '.group',
-        direction: 'auto',
-        groupFilter: function() {
-            return $(this).attr('group') === 'groupFilter';
-        },
-        itemContainerSelector: '.test-container',
-        useIndicator: true,
+        const $item = $sortable.find('.test-item').eq(1);
+        const offset = $item.offset();
+
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 3, offset.top + 3)
+            .move(offset.left, offset.top + 20);
+
+        indicator = $('.dx-position-indicator');
+        assert.ok(!indicator.length); // TODO: indicator should be shown
     });
 
-    $('#sortable2').dxSortable({
-        selector: '#sortable2',
-        itemSelector: '.test-item',
-        groupSelector: '.group',
-        direction: 'auto',
-        groupFilter: function() {
-            return $(this).attr('group') === 'groupFilter';
-        },
-        itemContainerSelector: '.test-container',
-        useIndicator: true
+    QUnit.test('indicator is shown on bottom dragging when items are set in two lines', function(assert) {
+        createHorizontalMarkUp(HORIZONTAL_WIDTH_SMALL, true, true);
+
+        let indicator;
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            direction: 'auto',
+            useIndicator: true,
+            itemContainerSelector: '.test-container'
+        });
+
+        const $item = $sortable.find('.test-item').eq(1);
+        const $targetItem = $sortable.find('.dx-drag-target');
+        const offset = $item.offset();
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left - 3, offset.top + 3)
+            .move(offset.left - 103, offset.top + 15);
+
+        indicator = $('.dx-position-indicator');
+
+        assert.ok(indicator.length, 'indicator is rendered');
+        assert.notOk($targetItem.is(':visible'));
+
+        assert.ok(indicator.offset().left <= $sortable.find('.test-item').eq(5).offset().left, 'indicator was rendered before 5 item');
+        assert.ok(indicator.offset().left > $sortable.find('.test-item').eq(4).offset().left, 'indicator was rendered after 4 item');
+        assert.ok(indicator.hasClass('dx-position-indicator-horizontal'));
+        assert.ok(!indicator.hasClass('dx-position-indicator-vertical'));
+        assert.ok(!indicator.hasClass('dx-position-indicator-last'));
     });
 
-    const $item = sortableDown.find('.test-item').eq(1);
+    QUnit.test('indicator is shown on bottom dragging', function(assert) {
+        let indicator;
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            itemContainerSelector: '.test-container',
+            useIndicator: true
+        });
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(305, 200);
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $item.offset();
 
-    const indicator = $('.dx-position-indicator');
-    assert.ok(!indicator.length);
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 5, offset.top + 5)
+            .move(offset.left, offset.top + 22);
+
+        // assert
+        indicator = $('.dx-position-indicator');
+
+        assert.ok(indicator.length, 'indicator is rendered');
+
+        const $items = $sortable.find('.test-item');
+        assert.ok(indicator.offset().top <= $items.eq(3).offset().top, 'indicator was rendered before 2 item');
+        assert.ok(indicator.offset().top > $items.eq(1).offset().top, 'indicator was rendered after 1 item');
+        assert.ok(!indicator.hasClass('dx-position-indicator-horizontal'));
+        assert.ok(indicator.hasClass('dx-position-indicator-vertical'));
+        assert.ok(!indicator.hasClass('dx-position-indicator-last'));
+    });
+
+    QUnit.test('indicator is shown on bottom dragging. RTL', function(assert) {
+        let indicator;
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            itemContainerSelector: '.test-container',
+            useIndicator: true,
+            rtlEnabled: true
+        });
+
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $item.offset();
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 5, offset.top + 5)
+            .move(offset.left, offset.top + 22);
+
+        // assert
+        indicator = $('.dx-position-indicator');
+
+        assert.ok(indicator.length, 'indicator is rendered');
+
+        const $items = $sortable.find('.test-item');
+        assert.ok(indicator.offset().top <= $items.eq(3).offset().top, 'indicator was rendered before 2 item');
+        assert.ok(indicator.offset().top > $items.eq(1).offset().top, 'indicator was rendered after 1 item');
+        assert.ok(!indicator.hasClass('dx-position-indicator-horizontal'));
+        assert.ok(indicator.hasClass('dx-position-indicator-vertical'));
+        assert.ok(!indicator.hasClass('dx-position-indicator-last'));
+    });
+
+    QUnit.test('indicator is shown after last item bottom dragging', function(assert) {
+        let indicator;
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            itemContainerSelector: '.test-container',
+            useIndicator: true
+        });
+
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $item.offset();
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 5, offset.top + 5)
+            .move(offset.left, offset.top + 45);
+
+        // assert
+        indicator = $('.dx-position-indicator');
+
+        assert.ok(indicator.length, 'indicator is rendered');
+
+        const $items = $sortable.find('.test-item');
+        assert.ok(indicator.offset().top >= $items.eq(3).offset().top, 'indicator was rendered after 4 item');
+
+        assert.ok(indicator.hasClass('dx-position-indicator-last'));
+    });
+
+    QUnit.test('indicator is shown after last item bottom dragging. RTL', function(assert) {
+        let indicator;
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            itemContainerSelector: '.test-container',
+            useIndicator: true,
+            rtlEnabled: true
+        });
+
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $item.offset();
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 5, offset.top + 5)
+            .move(offset.left, offset.top + 45);
+
+        // assert
+        indicator = $('.dx-position-indicator');
+
+        assert.ok(indicator.length, 'indicator is rendered');
+
+        const $items = $sortable.find('.test-item');
+        assert.ok(indicator.offset().top >= $items.eq(3).offset().top, 'indicator was rendered after 4 item');
+
+        assert.ok(indicator.hasClass('dx-position-indicator-last'));
+    });
+
+    QUnit.test('drag without source element', function(assert) {
+        const $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            itemContainerSelector: '.test-container',
+            useIndicator: true,
+        });
+        const $item = $sortable.find('.test-container');
+        const offset = $sortable.find('.test-item').eq(0).offset();
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + $item.width() / 2 + 10, offset.top);
+
+        // assert
+        const indicator = $('.dx-position-indicator');
+
+        assert.ok(!indicator.length);
+    });
+
+    QUnit.test('Indicator should not be shown on dragging to the same item at another sortable', function(assert) {
+        $('#sortable').css('display', 'none');
+        $('<div id=\'sortable1\'><div id=\'second-group\' group=\'groupFilter\' class=\'group horizontal\' style=\'height: 150px\'><div class=\'test-container\'><div class=\'test-item\'>1</div><div class=\'test-item\'>2</div><div class=\'test-item\'>3</div></div></div>')
+            .insertAfter('#sortable')
+            .css({
+                width: '3000px',
+                height: '200px'
+            });
+        $('<div id=\'sortable2\'><div id=\'second-group\' group=\'groupFilter\' class=\'group horizontal\' style=\'height: 150px\'><div class=\'test-container\'><div class=\'test-item\'>1</div><div class=\'test-item\'>2</div><div class=\'test-item\'>3</div></div></div>')
+            .insertAfter('#sortable1')
+            .css({
+                width: '3000px',
+                height: '200px'
+            });
+
+        const sortableDown = $('#sortable1').dxSortable({
+            selector: '#sortable1',
+            itemSelector: '.test-item',
+            groupSelector: '.group',
+            direction: 'auto',
+            groupFilter: function() {
+                return $(this).attr('group') === 'groupFilter';
+            },
+            itemContainerSelector: '.test-container',
+            useIndicator: true,
+        });
+
+        $('#sortable2').dxSortable({
+            selector: '#sortable2',
+            itemSelector: '.test-item',
+            groupSelector: '.group',
+            direction: 'auto',
+            groupFilter: function() {
+                return $(this).attr('group') === 'groupFilter';
+            },
+            itemContainerSelector: '.test-container',
+            useIndicator: true
+        });
+
+        const $item = sortableDown.find('.test-item').eq(1);
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(305, 200);
+
+        const indicator = $('.dx-position-indicator');
+        assert.ok(!indicator.length);
+    });
+
+
 });
-
-
 QUnit.module('sortable when source item is hidden', {
     beforeEach: function() {
         this.createSortable = function(options) {
@@ -1065,432 +1067,433 @@ QUnit.module('sortable when source item is hidden', {
             }, options));
         };
     }
-});
+}, () => {
 
-QUnit.test('dragging', function(assert) {
-    const $sortable = this.createSortable();
+    QUnit.test('dragging', function(assert) {
+        const $sortable = this.createSortable();
 
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $item.offset();
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $item.offset();
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 5, offset.top + 5)
-        .move(offset.left, offset.top + 22)
-        .up();
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 5, offset.top + 5)
+            .move(offset.left, offset.top + 22)
+            .up();
 
-    // assert
-    const $items = $sortable.find('.test-item');
+        // assert
+        const $items = $sortable.find('.test-item');
 
-    assert.equal($items.length, 4, 'item count');
-    assert.equal($items.eq(0).text(), '2', 'item 0 text');
-    assert.equal($items.eq(1).text(), '1', 'item 1 text');
-    assert.equal($items.eq(2).text(), '3', 'item 2 text');
-    assert.equal($items.eq(3).text(), '4', 'item 3 text');
+        assert.equal($items.length, 4, 'item count');
+        assert.equal($items.eq(0).text(), '2', 'item 0 text');
+        assert.equal($items.eq(1).text(), '1', 'item 1 text');
+        assert.equal($items.eq(2).text(), '3', 'item 2 text');
+        assert.equal($items.eq(3).text(), '4', 'item 3 text');
 
-    assert.deepEqual($sortable.dxSortable('instance').option('onChanged').lastCall.args[0].sourceIndex, 0);
-    assert.deepEqual($sortable.dxSortable('instance').option('onChanged').lastCall.args[0].targetIndex, 2);
-});
-
-QUnit.test('dragging move over half of item height', function(assert) {
-    const $sortable = this.createSortable();
-
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $item.offset();
-
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 5, offset.top + 5)
-        .move(offset.left, offset.top + 25)
-        .up();
-
-    // assert
-    const $items = $sortable.find('.test-item');
-
-    assert.equal($items.length, 4, 'item count');
-    assert.equal($items.eq(0).text(), '2', 'item 0 text');
-    assert.equal($items.eq(1).text(), '3', 'item 1 text');
-    assert.equal($items.eq(2).text(), '1', 'item 2 text');
-    assert.equal($items.eq(3).text(), '4', 'item 3 text');
-
-    assert.deepEqual($sortable.dxSortable('instance').option('onChanged').lastCall.args[0].sourceIndex, 0);
-    assert.deepEqual($sortable.dxSortable('instance').option('onChanged').lastCall.args[0].targetIndex, 3);
-});
-
-QUnit.test('dragging - to end of container', function(assert) {
-    const $sortable = this.createSortable();
-
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $item.offset();
-
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 5, offset.top + 5)
-        .move(offset.left, offset.top + 200)
-        .up();
-
-    // assert
-    const $items = $sortable.find('.test-item');
-
-    assert.equal($items.length, 4, 'item count');
-    assert.equal($items.eq(0).text(), '2', 'item 0 text');
-    assert.equal($items.eq(1).text(), '3', 'item 1 text');
-    assert.equal($items.eq(2).text(), '4', 'item 2 text');
-    assert.equal($items.eq(3).text(), '1', 'item 3 text');
-
-    assert.deepEqual($sortable.dxSortable('instance').option('onChanged').lastCall.args[0].sourceIndex, 0);
-    assert.deepEqual($sortable.dxSortable('instance').option('onChanged').lastCall.args[0].targetIndex, 4);
-});
-
-QUnit.test('dragging - add element to empty container', function(assert) {
-    const $sortable = $('#sortable');
-    const $container = $sortable.find('.test-container').remove();
-
-    $('<div id=\'first-group\' group=\'first\' class=\'group\'>').css({
-        height: 150
-    }).append($container).appendTo($sortable);
-
-    $('<div id=\'second-group\' group=\'second\' class=\'group\'>').css({
-        height: 150
-    }).append($('<div class=\'test-container\'>')).appendTo($sortable);
-
-    this.createSortable({
-        groupSelector: '.group'
+        assert.deepEqual($sortable.dxSortable('instance').option('onChanged').lastCall.args[0].sourceIndex, 0);
+        assert.deepEqual($sortable.dxSortable('instance').option('onChanged').lastCall.args[0].targetIndex, 2);
     });
 
-    const firstGroup = $('#first-group');
-    const $item = firstGroup.find('.test-item').eq(2);
-    const secondGroup = $('#second-group');
+    QUnit.test('dragging move over half of item height', function(assert) {
+        const $sortable = this.createSortable();
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(5, 155)
-        .up();
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $item.offset();
 
-    // assert
-    const $firstGroupItems = firstGroup.find('.test-item');
-    const $secondGroupItems = secondGroup.find('.test-item');
-    const onChangedArgs = $sortable.dxSortable('instance').option('onChanged').lastCall.args[0];
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 5, offset.top + 5)
+            .move(offset.left, offset.top + 25)
+            .up();
 
-    assert.equal($secondGroupItems.length, 1, 'item count in second group');
-    assert.equal($secondGroupItems.eq(0).text(), '3', 'item 0 text');
+        // assert
+        const $items = $sortable.find('.test-item');
 
-    assert.equal($firstGroupItems.length, 3, 'item count in first group');
-    assert.equal($firstGroupItems.eq(0).text(), '1', 'item 0 text');
-    assert.equal($firstGroupItems.eq(1).text(), '2', 'item 1 text');
-    assert.equal($firstGroupItems.eq(2).text(), '4', 'item 3 text');
+        assert.equal($items.length, 4, 'item count');
+        assert.equal($items.eq(0).text(), '2', 'item 0 text');
+        assert.equal($items.eq(1).text(), '3', 'item 1 text');
+        assert.equal($items.eq(2).text(), '1', 'item 2 text');
+        assert.equal($items.eq(3).text(), '4', 'item 3 text');
 
-    assert.deepEqual(onChangedArgs.sourceIndex, 2);
-    assert.deepEqual(onChangedArgs.sourceGroup, 'first');
-    assert.deepEqual(onChangedArgs.targetIndex, 0);
-    assert.deepEqual(onChangedArgs.targetGroup, 'second');
-});
-
-QUnit.test('dragging between different sortables by groupFilter callback to empty container', function(assert) {
-    const $sortable = $('#sortable');
-    const $container = $sortable.find('.test-container').remove();
-
-    $('<div id=\'first-group\' group=\'first\' class=\'group\'>')
-        .append($container).appendTo($sortable);
-
-    $('<div id=\'sortable2\'><div id=\'second-group\' group=\'second\' class=\'group\' style=\'height: 150px\'><div class=\'test-container\'></div></div>')
-        .insertAfter($sortable);
-
-    this.createSortable({
-        groupSelector: '.group',
-        groupFilter: function() {
-            return $(this).attr('group') === 'second';
-        }
+        assert.deepEqual($sortable.dxSortable('instance').option('onChanged').lastCall.args[0].sourceIndex, 0);
+        assert.deepEqual($sortable.dxSortable('instance').option('onChanged').lastCall.args[0].targetIndex, 3);
     });
 
-    this.createSortable({
-        selector: '#sortable2',
-        groupSelector: '.group'
+    QUnit.test('dragging - to end of container', function(assert) {
+        const $sortable = this.createSortable();
+
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $item.offset();
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 5, offset.top + 5)
+            .move(offset.left, offset.top + 200)
+            .up();
+
+        // assert
+        const $items = $sortable.find('.test-item');
+
+        assert.equal($items.length, 4, 'item count');
+        assert.equal($items.eq(0).text(), '2', 'item 0 text');
+        assert.equal($items.eq(1).text(), '3', 'item 1 text');
+        assert.equal($items.eq(2).text(), '4', 'item 2 text');
+        assert.equal($items.eq(3).text(), '1', 'item 3 text');
+
+        assert.deepEqual($sortable.dxSortable('instance').option('onChanged').lastCall.args[0].sourceIndex, 0);
+        assert.deepEqual($sortable.dxSortable('instance').option('onChanged').lastCall.args[0].targetIndex, 4);
     });
 
-    const firstGroup = $('#first-group');
-    const $item = firstGroup.find('.test-item').eq(2);
-    const secondGroup = $('#second-group');
+    QUnit.test('dragging - add element to empty container', function(assert) {
+        const $sortable = $('#sortable');
+        const $container = $sortable.find('.test-container').remove();
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(5, 305)
-        .up();
+        $('<div id=\'first-group\' group=\'first\' class=\'group\'>').css({
+            height: 150
+        }).append($container).appendTo($sortable);
 
-    // assert
-    const $firstGroupItems = firstGroup.find('.test-item');
-    const $secondGroupItems = secondGroup.find('.test-item');
-    const onChangedArgs = $sortable.dxSortable('instance').option('onChanged').lastCall.args[0];
+        $('<div id=\'second-group\' group=\'second\' class=\'group\'>').css({
+            height: 150
+        }).append($('<div class=\'test-container\'>')).appendTo($sortable);
 
-    assert.equal($secondGroupItems.length, 1, 'item count in second group');
-    assert.equal($secondGroupItems.eq(0).text(), '3', 'item 0 text');
-
-    assert.equal($firstGroupItems.length, 3, 'item count in first group');
-    assert.equal($firstGroupItems.eq(0).text(), '1', 'item 0 text');
-    assert.equal($firstGroupItems.eq(1).text(), '2', 'item 1 text');
-    assert.equal($firstGroupItems.eq(2).text(), '4', 'item 3 text');
-
-    assert.deepEqual(onChangedArgs.sourceIndex, 2);
-    assert.deepEqual(onChangedArgs.sourceGroup, 'first');
-    assert.deepEqual(onChangedArgs.targetIndex, 0);
-    assert.deepEqual(onChangedArgs.targetGroup, 'second');
-});
-
-QUnit.test('disable dragging between different sortables by groupFilter callback', function(assert) {
-    const $sortable = $('#sortable');
-    const $container = $sortable.find('.test-container').remove();
-
-    $('<div id=\'first-group\' group=\'first\' class=\'group\'>')
-        .append($container).appendTo($sortable);
-
-    $('<div id=\'sortable2\'><div id=\'second-group\' group=\'second\' class=\'group\' style=\'height: 150px\'><div class=\'test-container\'></div></div>')
-        .insertAfter($sortable);
-
-    this.createSortable({
-        groupSelector: '.group',
-        groupFilter: function() {
-            return $(this).attr('group') !== 'second';
-        }
-    });
-
-    this.createSortable({
-        selector: '#sortable2',
-        groupSelector: '.group'
-    });
-
-    const firstGroup = $('#first-group');
-    const $item = firstGroup.find('.test-item').eq(2);
-
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(5, 305)
-        .up();
-
-    // assert
-    const onChangedCalled = $sortable.dxSortable('instance').option('onChanged').called;
-
-    assert.strictEqual(onChangedCalled, false, 'onChanged is not called');
-});
-
-QUnit.test('dragging between different sortables by groupFilter callback to non-empty container with another direction', function(assert) {
-    const $sortable = $('#sortable');
-    const $container = $sortable.find('.test-container').remove();
-
-    $('<div id=\'first-group\' group=\'first\' class=\'group\'>')
-        .append($container).appendTo($sortable);
-
-    $('<div id=\'sortable2\'><div id=\'second-group\' group=\'second\' class=\'group horizontal\' style=\'height: 150px\'><div class=\'test-container\'><div class=\'test-item\'>10</div><div class=\'test-item\'>11</div><div class=\'test-item\'>12</div></div></div>')
-        .insertAfter($sortable);
-
-    this.createSortable({
-        groupSelector: '.group',
-        groupFilter: function() {
-            return $(this).attr('group') === 'second';
-        }
-    });
-
-    this.createSortable({
-        selector: '#sortable2',
-        direction: 'horizontal',
-        groupSelector: '.group'
-    });
-
-    const firstGroup = $('#first-group');
-    const $item = firstGroup.find('.test-item').eq(2);
-    const secondGroup = $('#second-group');
-
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(400, 300)
-        .up();
-
-    // assert
-    const $firstGroupItems = firstGroup.find('.test-item');
-    const $secondGroupItems = secondGroup.find('.test-item');
-    const onChangedArgs = $sortable.dxSortable('instance').option('onChanged').lastCall.args[0];
-
-    assert.equal($secondGroupItems.length, 4, 'item count in second group');
-    assert.equal($secondGroupItems.eq(0).text(), '10', 'item 0 text');
-    assert.equal($secondGroupItems.eq(1).text(), '11', 'item 1 text');
-    assert.equal($secondGroupItems.eq(2).text(), '3', 'item 2 text');
-    assert.equal($secondGroupItems.eq(3).text(), '12', 'item 3 text');
-
-    assert.equal($firstGroupItems.length, 3, 'item count in first group');
-    assert.equal($firstGroupItems.eq(0).text(), '1', 'item 0 text');
-    assert.equal($firstGroupItems.eq(1).text(), '2', 'item 1 text');
-    assert.equal($firstGroupItems.eq(2).text(), '4', 'item 3 text');
-
-    assert.deepEqual(onChangedArgs.sourceIndex, 2);
-    assert.deepEqual(onChangedArgs.sourceGroup, 'first');
-    assert.deepEqual(onChangedArgs.targetIndex, 2);
-    assert.deepEqual(onChangedArgs.targetGroup, 'second');
-});
-
-QUnit.test('dragging between different sortables by groupFilter callback to non-empty container with another useIndicator option value', function(assert) {
-    const $sortable = $('#sortable');
-    const $container = $sortable.find('.test-container').remove();
-
-    $('<div id=\'first-group\' group=\'first\' class=\'group\'>')
-        .append($container).appendTo($sortable);
-
-    $('<div id=\'sortable2\'><div id=\'second-group\' group=\'second\' class=\'group horizontal\' style=\'height: 150px\'><div class=\'test-container\'><div class=\'test-item\'>10</div><div class=\'test-item\'>11</div><div class=\'test-item\'>12</div></div></div>')
-        .insertAfter($sortable);
-
-    this.createSortable({
-        groupSelector: '.group',
-        groupFilter: function() {
-            return $(this).attr('group') === 'second';
-        },
-        useIndicator: false
-    });
-
-    this.createSortable({
-        selector: '#sortable2',
-        direction: 'horizontal',
-        groupSelector: '.group',
-        useIndicator: true
-    });
-
-    const firstGroup = $('#first-group');
-    const $item = firstGroup.find('.test-item').eq(2);
-
-    // act
-    const pointer = pointerMock($item)
-        .start()
-        .down()
-        .move(400, 300);
-
-
-    // assert
-    assert.strictEqual($('.dx-position-indicator').length, 1);
-
-    // act
-    pointer.up();
-
-    // assert
-    assert.strictEqual($('.dx-position-indicator').length, 0);
-});
-
-QUnit.test('dragging between different sortables positioned one on another', function(assert) {
-    $('<div id=\'sortable1\'><div id=\'second-group\' group=\'groupFilter\' class=\'group horizontal\' style=\'height: 150px\'><div class=\'test-container\'><div class=\'test-item\'>1</div><div class=\'test-item\'>2</div></div></div>')
-        .insertAfter('#sortable')
-        .css({
-            position: 'absolute',
-            left: '20px',
-            top: '0px',
-            width: '300px',
-            height: '150px'
+        this.createSortable({
+            groupSelector: '.group'
         });
 
-    $('<div id=\'sortable2\'><div id=\'second-group\' group=\'groupFilter\' class=\'group horizontal\' style=\'height: 150px\'><div class=\'test-container\'></div></div>')
-        .insertAfter('#sortable1')
-        .css({
-            position: 'absolute',
-            left: '20px',
-            top: '0px',
-            width: '300px',
-            height: '150px'
+        const firstGroup = $('#first-group');
+        const $item = firstGroup.find('.test-item').eq(2);
+        const secondGroup = $('#second-group');
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(5, 155)
+            .up();
+
+        // assert
+        const $firstGroupItems = firstGroup.find('.test-item');
+        const $secondGroupItems = secondGroup.find('.test-item');
+        const onChangedArgs = $sortable.dxSortable('instance').option('onChanged').lastCall.args[0];
+
+        assert.equal($secondGroupItems.length, 1, 'item count in second group');
+        assert.equal($secondGroupItems.eq(0).text(), '3', 'item 0 text');
+
+        assert.equal($firstGroupItems.length, 3, 'item count in first group');
+        assert.equal($firstGroupItems.eq(0).text(), '1', 'item 0 text');
+        assert.equal($firstGroupItems.eq(1).text(), '2', 'item 1 text');
+        assert.equal($firstGroupItems.eq(2).text(), '4', 'item 3 text');
+
+        assert.deepEqual(onChangedArgs.sourceIndex, 2);
+        assert.deepEqual(onChangedArgs.sourceGroup, 'first');
+        assert.deepEqual(onChangedArgs.targetIndex, 0);
+        assert.deepEqual(onChangedArgs.targetGroup, 'second');
+    });
+
+    QUnit.test('dragging between different sortables by groupFilter callback to empty container', function(assert) {
+        const $sortable = $('#sortable');
+        const $container = $sortable.find('.test-container').remove();
+
+        $('<div id=\'first-group\' group=\'first\' class=\'group\'>')
+            .append($container).appendTo($sortable);
+
+        $('<div id=\'sortable2\'><div id=\'second-group\' group=\'second\' class=\'group\' style=\'height: 150px\'><div class=\'test-container\'></div></div>')
+            .insertAfter($sortable);
+
+        this.createSortable({
+            groupSelector: '.group',
+            groupFilter: function() {
+                return $(this).attr('group') === 'second';
+            }
         });
 
-    const sortableDown = this.createSortable({
-        selector: '#sortable1',
-        itemSelector: '.test-item',
-        groupSelector: '.group',
-        direction: 'auto',
-        groupFilter: function() {
-            return $(this).attr('group') === 'groupFilter';
-        },
-        itemContainerSelector: '.test-container'
+        this.createSortable({
+            selector: '#sortable2',
+            groupSelector: '.group'
+        });
+
+        const firstGroup = $('#first-group');
+        const $item = firstGroup.find('.test-item').eq(2);
+        const secondGroup = $('#second-group');
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(5, 305)
+            .up();
+
+        // assert
+        const $firstGroupItems = firstGroup.find('.test-item');
+        const $secondGroupItems = secondGroup.find('.test-item');
+        const onChangedArgs = $sortable.dxSortable('instance').option('onChanged').lastCall.args[0];
+
+        assert.equal($secondGroupItems.length, 1, 'item count in second group');
+        assert.equal($secondGroupItems.eq(0).text(), '3', 'item 0 text');
+
+        assert.equal($firstGroupItems.length, 3, 'item count in first group');
+        assert.equal($firstGroupItems.eq(0).text(), '1', 'item 0 text');
+        assert.equal($firstGroupItems.eq(1).text(), '2', 'item 1 text');
+        assert.equal($firstGroupItems.eq(2).text(), '4', 'item 3 text');
+
+        assert.deepEqual(onChangedArgs.sourceIndex, 2);
+        assert.deepEqual(onChangedArgs.sourceGroup, 'first');
+        assert.deepEqual(onChangedArgs.targetIndex, 0);
+        assert.deepEqual(onChangedArgs.targetGroup, 'second');
     });
 
-    const sortableUp = this.createSortable({
-        selector: '#sortable2',
-        itemSelector: '.test-item',
-        groupSelector: '.group',
-        direction: 'auto',
-        groupFilter: function() {
-            return $(this).attr('group') === 'groupFilter';
-        },
-        itemContainerSelector: '.test-container'
+    QUnit.test('disable dragging between different sortables by groupFilter callback', function(assert) {
+        const $sortable = $('#sortable');
+        const $container = $sortable.find('.test-container').remove();
+
+        $('<div id=\'first-group\' group=\'first\' class=\'group\'>')
+            .append($container).appendTo($sortable);
+
+        $('<div id=\'sortable2\'><div id=\'second-group\' group=\'second\' class=\'group\' style=\'height: 150px\'><div class=\'test-container\'></div></div>')
+            .insertAfter($sortable);
+
+        this.createSortable({
+            groupSelector: '.group',
+            groupFilter: function() {
+                return $(this).attr('group') !== 'second';
+            }
+        });
+
+        this.createSortable({
+            selector: '#sortable2',
+            groupSelector: '.group'
+        });
+
+        const firstGroup = $('#first-group');
+        const $item = firstGroup.find('.test-item').eq(2);
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(5, 305)
+            .up();
+
+        // assert
+        const onChangedCalled = $sortable.dxSortable('instance').option('onChanged').called;
+
+        assert.strictEqual(onChangedCalled, false, 'onChanged is not called');
     });
 
-    const $item = sortableDown.find('.test-item').eq(0);
-    const offset = $item.offset();
+    QUnit.test('dragging between different sortables by groupFilter callback to non-empty container with another direction', function(assert) {
+        const $sortable = $('#sortable');
+        const $container = $sortable.find('.test-container').remove();
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 5, offset.top + 5)
-        .move(offset.left + 20, offset.top + 22)
-        .up();
+        $('<div id=\'first-group\' group=\'first\' class=\'group\'>')
+            .append($container).appendTo($sortable);
 
-    // assert
-    const $items1 = sortableDown.find('.test-item');
-    const $items2 = sortableUp.find('.test-item');
+        $('<div id=\'sortable2\'><div id=\'second-group\' group=\'second\' class=\'group horizontal\' style=\'height: 150px\'><div class=\'test-container\'><div class=\'test-item\'>10</div><div class=\'test-item\'>11</div><div class=\'test-item\'>12</div></div></div>')
+            .insertAfter($sortable);
 
-    assert.equal($items1.length, 1, 'item count');
-    assert.equal($items1.eq(0).text(), '2', 'item 1 text');
-    assert.equal($items2.eq(0).text(), '1', 'item 0 text');
+        this.createSortable({
+            groupSelector: '.group',
+            groupFilter: function() {
+                return $(this).attr('group') === 'second';
+            }
+        });
+
+        this.createSortable({
+            selector: '#sortable2',
+            direction: 'horizontal',
+            groupSelector: '.group'
+        });
+
+        const firstGroup = $('#first-group');
+        const $item = firstGroup.find('.test-item').eq(2);
+        const secondGroup = $('#second-group');
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(400, 300)
+            .up();
+
+        // assert
+        const $firstGroupItems = firstGroup.find('.test-item');
+        const $secondGroupItems = secondGroup.find('.test-item');
+        const onChangedArgs = $sortable.dxSortable('instance').option('onChanged').lastCall.args[0];
+
+        assert.equal($secondGroupItems.length, 4, 'item count in second group');
+        assert.equal($secondGroupItems.eq(0).text(), '10', 'item 0 text');
+        assert.equal($secondGroupItems.eq(1).text(), '11', 'item 1 text');
+        assert.equal($secondGroupItems.eq(2).text(), '3', 'item 2 text');
+        assert.equal($secondGroupItems.eq(3).text(), '12', 'item 3 text');
+
+        assert.equal($firstGroupItems.length, 3, 'item count in first group');
+        assert.equal($firstGroupItems.eq(0).text(), '1', 'item 0 text');
+        assert.equal($firstGroupItems.eq(1).text(), '2', 'item 1 text');
+        assert.equal($firstGroupItems.eq(2).text(), '4', 'item 3 text');
+
+        assert.deepEqual(onChangedArgs.sourceIndex, 2);
+        assert.deepEqual(onChangedArgs.sourceGroup, 'first');
+        assert.deepEqual(onChangedArgs.targetIndex, 2);
+        assert.deepEqual(onChangedArgs.targetGroup, 'second');
+    });
+
+    QUnit.test('dragging between different sortables by groupFilter callback to non-empty container with another useIndicator option value', function(assert) {
+        const $sortable = $('#sortable');
+        const $container = $sortable.find('.test-container').remove();
+
+        $('<div id=\'first-group\' group=\'first\' class=\'group\'>')
+            .append($container).appendTo($sortable);
+
+        $('<div id=\'sortable2\'><div id=\'second-group\' group=\'second\' class=\'group horizontal\' style=\'height: 150px\'><div class=\'test-container\'><div class=\'test-item\'>10</div><div class=\'test-item\'>11</div><div class=\'test-item\'>12</div></div></div>')
+            .insertAfter($sortable);
+
+        this.createSortable({
+            groupSelector: '.group',
+            groupFilter: function() {
+                return $(this).attr('group') === 'second';
+            },
+            useIndicator: false
+        });
+
+        this.createSortable({
+            selector: '#sortable2',
+            direction: 'horizontal',
+            groupSelector: '.group',
+            useIndicator: true
+        });
+
+        const firstGroup = $('#first-group');
+        const $item = firstGroup.find('.test-item').eq(2);
+
+        // act
+        const pointer = pointerMock($item)
+            .start()
+            .down()
+            .move(400, 300);
+
+
+        // assert
+        assert.strictEqual($('.dx-position-indicator').length, 1);
+
+        // act
+        pointer.up();
+
+        // assert
+        assert.strictEqual($('.dx-position-indicator').length, 0);
+    });
+
+    QUnit.test('dragging between different sortables positioned one on another', function(assert) {
+        $('<div id=\'sortable1\'><div id=\'second-group\' group=\'groupFilter\' class=\'group horizontal\' style=\'height: 150px\'><div class=\'test-container\'><div class=\'test-item\'>1</div><div class=\'test-item\'>2</div></div></div>')
+            .insertAfter('#sortable')
+            .css({
+                position: 'absolute',
+                left: '20px',
+                top: '0px',
+                width: '300px',
+                height: '150px'
+            });
+
+        $('<div id=\'sortable2\'><div id=\'second-group\' group=\'groupFilter\' class=\'group horizontal\' style=\'height: 150px\'><div class=\'test-container\'></div></div>')
+            .insertAfter('#sortable1')
+            .css({
+                position: 'absolute',
+                left: '20px',
+                top: '0px',
+                width: '300px',
+                height: '150px'
+            });
+
+        const sortableDown = this.createSortable({
+            selector: '#sortable1',
+            itemSelector: '.test-item',
+            groupSelector: '.group',
+            direction: 'auto',
+            groupFilter: function() {
+                return $(this).attr('group') === 'groupFilter';
+            },
+            itemContainerSelector: '.test-container'
+        });
+
+        const sortableUp = this.createSortable({
+            selector: '#sortable2',
+            itemSelector: '.test-item',
+            groupSelector: '.group',
+            direction: 'auto',
+            groupFilter: function() {
+                return $(this).attr('group') === 'groupFilter';
+            },
+            itemContainerSelector: '.test-container'
+        });
+
+        const $item = sortableDown.find('.test-item').eq(0);
+        const offset = $item.offset();
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 5, offset.top + 5)
+            .move(offset.left + 20, offset.top + 22)
+            .up();
+
+        // assert
+        const $items1 = sortableDown.find('.test-item');
+        const $items2 = sortableUp.find('.test-item');
+
+        assert.equal($items1.length, 1, 'item count');
+        assert.equal($items1.eq(0).text(), '2', 'item 1 text');
+        assert.equal($items2.eq(0).text(), '1', 'item 0 text');
+    });
+
+    QUnit.test('Disable dragging', function(assert) {
+        const $sortable = this.createSortable({
+            allowDragging: false
+        });
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $item.offset();
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 5, offset.top + 5)
+            .move(offset.left, offset.top + 22)
+            .up();
+
+        // assert
+        assert.ok(!$sortable.dxSortable('instance').option('onChanged').called, 'dragging should be disabled');
+    });
+
+    QUnit.test('Enable dragging at runtime', function(assert) {
+        const $sortable = this.createSortable({
+            allowDragging: false
+        });
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $item.offset();
+
+        $sortable.dxSortable('option', 'allowDragging', true);
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 5, offset.top + 5)
+            .move(offset.left, offset.top + 22)
+            .up();
+
+        // assert
+        assert.ok($sortable.dxSortable('instance').option('onChanged').called, 'dragging should be disabled');
+
+        assert.deepEqual($sortable.dxSortable('instance').option('onChanged').lastCall.args[0].sourceIndex, 0);
+        assert.deepEqual($sortable.dxSortable('instance').option('onChanged').lastCall.args[0].targetIndex, 2);
+    });
+
+
 });
-
-QUnit.test('Disable dragging', function(assert) {
-    const $sortable = this.createSortable({
-        allowDragging: false
-    });
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $item.offset();
-
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 5, offset.top + 5)
-        .move(offset.left, offset.top + 22)
-        .up();
-
-    // assert
-    assert.ok(!$sortable.dxSortable('instance').option('onChanged').called, 'dragging should be disabled');
-});
-
-QUnit.test('Enable dragging at runtime', function(assert) {
-    const $sortable = this.createSortable({
-        allowDragging: false
-    });
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $item.offset();
-
-    $sortable.dxSortable('option', 'allowDragging', true);
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 5, offset.top + 5)
-        .move(offset.left, offset.top + 22)
-        .up();
-
-    // assert
-    assert.ok($sortable.dxSortable('instance').option('onChanged').called, 'dragging should be disabled');
-
-    assert.deepEqual($sortable.dxSortable('instance').option('onChanged').lastCall.args[0].sourceIndex, 0);
-    assert.deepEqual($sortable.dxSortable('instance').option('onChanged').lastCall.args[0].targetIndex, 2);
-});
-
-
 QUnit.module('Group items', {
     beforeEach: function() {
         this.createSortable = function(options) {
@@ -1502,159 +1505,160 @@ QUnit.module('Group items', {
             }, options));
         };
     }
-});
+}, () => {
 
-QUnit.test('Groups dragging', function(assert) {
-    $('.test-item').eq(0).attr('item-group', 'group1');
-    $('.test-item').eq(1).attr('item-group', 'group1');
+    QUnit.test('Groups dragging', function(assert) {
+        $('.test-item').eq(0).attr('item-group', 'group1');
+        $('.test-item').eq(1).attr('item-group', 'group1');
 
-    $('.test-container').css('border', 'none');
+        $('.test-container').css('border', 'none');
 
-    const $sortable = this.createSortable({
-        groupSelector: '.test-container'
-    });
+        const $sortable = this.createSortable({
+            groupSelector: '.test-container'
+        });
 
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset1 = $item.offset();
-    const offset2 = $sortable.find('.test-item').eq(1).offset();
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset1 = $item.offset();
+        const offset2 = $sortable.find('.test-item').eq(1).offset();
 
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset1.left + 5, offset1.top + 5);
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset1.left + 5, offset1.top + 5);
 
-    const dragElements = $('.dx-drag');
+        const dragElements = $('.dx-drag');
 
-    assert.strictEqual(dragElements.length, 2);
+        assert.strictEqual(dragElements.length, 2);
 
-    assert.strictEqual(dragElements.eq(0).text(), '1');
-    assert.strictEqual(dragElements.eq(1).text(), '2');
+        assert.strictEqual(dragElements.eq(0).text(), '1');
+        assert.strictEqual(dragElements.eq(1).text(), '2');
 
-    assert.strictEqual(parseInt(dragElements.eq(0).css('left')), parseInt(offset1.left + 5));
-    assert.strictEqual(parseInt(dragElements.eq(1).css('left')), parseInt(offset2.left + 5));
+        assert.strictEqual(parseInt(dragElements.eq(0).css('left')), parseInt(offset1.left + 5));
+        assert.strictEqual(parseInt(dragElements.eq(1).css('left')), parseInt(offset2.left + 5));
 
-    assert.strictEqual(parseInt(dragElements.eq(0).css('top')), parseInt(offset1.top + 5));
-    assert.strictEqual(parseInt(dragElements.eq(1).css('top')), parseInt(offset2.top + 5));
-
-});
-
-QUnit.test('Groups dragging. get correct source index for no group item', function(assert) {
-    $('.test-item').eq(1).attr('item-group', 'group1');
-    $('.test-item').eq(2).attr('item-group', 'group1');
-
-    $('.test-container').css('border', 'none');
-
-    const $sortable = this.createSortable({
+        assert.strictEqual(parseInt(dragElements.eq(0).css('top')), parseInt(offset1.top + 5));
+        assert.strictEqual(parseInt(dragElements.eq(1).css('top')), parseInt(offset2.top + 5));
 
     });
 
-    const $item = $sortable.find('.test-item').eq(3);
-    const offset = $item.offset();
+    QUnit.test('Groups dragging. get correct source index for no group item', function(assert) {
+        $('.test-item').eq(1).attr('item-group', 'group1');
+        $('.test-item').eq(2).attr('item-group', 'group1');
 
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 5, offset.top - 25)
-        .up();
+        $('.test-container').css('border', 'none');
 
-    const changedArgs = $sortable.dxSortable('option', 'onChanged').lastCall.args[0];
+        const $sortable = this.createSortable({
 
-    assert.strictEqual(changedArgs.sourceIndex, 2, 'sourceIndex');
-    assert.strictEqual(changedArgs.targetIndex, 1, 'targetIndex');
-});
+        });
 
-QUnit.test('Groups dragging. get correct source index for group item', function(assert) {
-    $('.test-item').eq(1).attr('item-group', 'group1');
-    $('.test-item').eq(2).attr('item-group', 'group1');
+        const $item = $sortable.find('.test-item').eq(3);
+        const offset = $item.offset();
 
-    $('.test-container').css('border', 'none');
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 5, offset.top - 25)
+            .up();
 
-    const $sortable = this.createSortable({
+        const changedArgs = $sortable.dxSortable('option', 'onChanged').lastCall.args[0];
 
+        assert.strictEqual(changedArgs.sourceIndex, 2, 'sourceIndex');
+        assert.strictEqual(changedArgs.targetIndex, 1, 'targetIndex');
     });
 
-    const $item = $sortable.find('.test-item').eq(2);
-    const offset = $sortable.find('.test-item').eq(1).offset();
+    QUnit.test('Groups dragging. get correct source index for group item', function(assert) {
+        $('.test-item').eq(1).attr('item-group', 'group1');
+        $('.test-item').eq(2).attr('item-group', 'group1');
 
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 5, offset.top + 25)
-        .up();
+        $('.test-container').css('border', 'none');
 
-    const changedArgs = $sortable.dxSortable('option', 'onChanged').lastCall.args[0];
+        const $sortable = this.createSortable({
 
-    assert.strictEqual(changedArgs.sourceIndex, 1, 'sourceIndex');
-    assert.strictEqual(changedArgs.targetIndex, 2, 'targetIndex');
-});
+        });
 
-QUnit.test('do not change index on small dragging inside group. horizontal', function(assert) {
-    createHorizontalMarkUp(1500, false, false);
+        const $item = $sortable.find('.test-item').eq(2);
+        const offset = $sortable.find('.test-item').eq(1).offset();
 
-    $('.test-item').eq(1).attr('item-group', 'group1');
-    $('.test-item').eq(2).attr('item-group', 'group1');
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 5, offset.top + 25)
+            .up();
 
-    $('.test-container').css('border', 'none');
+        const changedArgs = $sortable.dxSortable('option', 'onChanged').lastCall.args[0];
 
-    const $sortable = this.createSortable({
-        direction: 'auto',
-        useIndicator: true
+        assert.strictEqual(changedArgs.sourceIndex, 1, 'sourceIndex');
+        assert.strictEqual(changedArgs.targetIndex, 2, 'targetIndex');
     });
 
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $sortable.find('.test-item').eq(0).offset();
+    QUnit.test('do not change index on small dragging inside group. horizontal', function(assert) {
+        createHorizontalMarkUp(1500, false, false);
 
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 350, offset.top + 5)
-        .up();
+        $('.test-item').eq(1).attr('item-group', 'group1');
+        $('.test-item').eq(2).attr('item-group', 'group1');
 
-    assert.ok(!$sortable.dxSortable('option', 'onChanged').called);
-});
+        $('.test-container').css('border', 'none');
 
-QUnit.test('do not change index on small dragging inside group. horizontal', function(assert) {
-    $('.test-item').eq(1).attr('item-group', 'group1');
-    $('.test-item').eq(2).attr('item-group', 'group1');
+        const $sortable = this.createSortable({
+            direction: 'auto',
+            useIndicator: true
+        });
 
-    $('.test-container').css('border', 'none');
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $sortable.find('.test-item').eq(0).offset();
 
-    const $sortable = this.createSortable({
-        useIndicator: true
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 350, offset.top + 5)
+            .up();
+
+        assert.ok(!$sortable.dxSortable('option', 'onChanged').called);
     });
 
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $sortable.find('.test-item').eq(0).offset();
+    QUnit.test('do not change index on small dragging inside group. horizontal', function(assert) {
+        $('.test-item').eq(1).attr('item-group', 'group1');
+        $('.test-item').eq(2).attr('item-group', 'group1');
 
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 3, offset.top + 10)
-        .up();
+        $('.test-container').css('border', 'none');
 
-    assert.ok(!$sortable.dxSortable('option', 'onChanged').called);
-});
+        const $sortable = this.createSortable({
+            useIndicator: true
+        });
 
-QUnit.test('Get correct source index for last item', function(assert) {
-    const $sortable = this.createSortable({
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $sortable.find('.test-item').eq(0).offset();
 
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 3, offset.top + 10)
+            .up();
+
+        assert.ok(!$sortable.dxSortable('option', 'onChanged').called);
     });
-    const $item = $sortable.find('.test-item').eq(3);
-    const offset = $item.offset();
 
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + 5, offset.top - 25)
-        .up();
+    QUnit.test('Get correct source index for last item', function(assert) {
+        const $sortable = this.createSortable({
 
-    const changedArgs = $sortable.dxSortable('option', 'onChanged').lastCall.args[0];
+        });
+        const $item = $sortable.find('.test-item').eq(3);
+        const offset = $item.offset();
 
-    assert.strictEqual(changedArgs.sourceIndex, 3, 'sourceIndex');
-    assert.strictEqual(changedArgs.targetIndex, 1, 'targetIndex');
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 5, offset.top - 25)
+            .up();
+
+        const changedArgs = $sortable.dxSortable('option', 'onChanged').lastCall.args[0];
+
+        assert.strictEqual(changedArgs.sourceIndex, 3, 'sourceIndex');
+        assert.strictEqual(changedArgs.targetIndex, 1, 'targetIndex');
+    });
+
+
 });
-
-
 QUnit.module('Horizontal direction. RTL', {
     beforeEach: function() {
         const that = this;
@@ -1676,180 +1680,181 @@ QUnit.module('Horizontal direction. RTL', {
             return $sortable;
         };
     }
-});
+}, () => {
 
-QUnit.test('horizontal dragging - left', function(assert) {
+    QUnit.test('horizontal dragging - left', function(assert) {
 
-    const $sortable = this.createSortable({});
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $item.offset();
+        const $sortable = this.createSortable({});
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $item.offset();
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + $item.width() - 400, offset.top)
-        .up();
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + $item.width() - 400, offset.top)
+            .up();
 
-    // assert
-    const $items = $sortable.find('.test-item');
+        // assert
+        const $items = $sortable.find('.test-item');
 
-    assert.equal($items.length, 4, 'item count');
-    assert.equal($items.eq(0).text(), '2', 'item 0 text');
-    assert.equal($items.eq(1).text(), '1', 'item 1 text');
-    assert.equal($items.eq(2).text(), '3', 'item 2 text');
-    assert.equal($items.eq(3).text(), '4', 'item 3 text');
+        assert.equal($items.length, 4, 'item count');
+        assert.equal($items.eq(0).text(), '2', 'item 0 text');
+        assert.equal($items.eq(1).text(), '1', 'item 1 text');
+        assert.equal($items.eq(2).text(), '3', 'item 2 text');
+        assert.equal($items.eq(3).text(), '4', 'item 3 text');
 
-    assert.strictEqual(this.sortable.option('onChanged').lastCall.args[0].sourceIndex, 0);
-    assert.strictEqual(this.sortable.option('onChanged').lastCall.args[0].targetIndex, 2);
-});
-
-// QUnit.test("horizontal dragging between lines", function (assert) {
-//    createHorizontalMarkUp(HORIZONTAL_WIDTH, true);
-
-//    var $sortable = this.createSortable({}),
-//        $item = $sortable.find(".test-item").eq(0),
-//        offset = $item.offset();
-
-//    // act
-//    pointerMock($item)
-//        .start()
-//        .down()
-//        .move(offset.left + $item.width() - 350, offset.top + 15)
-//        .up();
-
-//    // assert
-//    var $items = $sortable.find(".test-item");
-
-//    assert.equal($items.length, 6, "item count");
-//    assert.equal($items.eq(0).text(), "2", "item 0 text");
-//    assert.equal($items.eq(1).text(), "3", "item 1 text");
-//    assert.equal($items.eq(2).text(), "4", "item 2 text");
-//    assert.equal($items.eq(3).text(), "5", "item 3 text");
-//    assert.equal($items.eq(4).text(), "1", "item 4 text");
-//    assert.equal($items.eq(5).text(), "6", "item 5 text");
-
-//    assert.strictEqual(this.sortable.option("onChanged").lastCall.args[0].sourceIndex, 0);
-//    assert.strictEqual(this.sortable.option("onChanged").lastCall.args[0].targetIndex, 5);
-// });
-
-QUnit.test('drag to the end of the container', function(assert) {
-    const $sortable = this.createSortable({});
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $sortable.find('.test-item').eq(3).offset();
-
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left - 10, offset.top)
-        .up();
-
-    // assert
-    const $items = $sortable.find('.test-item');
-
-    assert.equal($items.length, 4, 'item count');
-    assert.equal($items.eq(0).text(), '2', 'item 0 text');
-    assert.equal($items.eq(1).text(), '3', 'item 1 text');
-    assert.equal($items.eq(2).text(), '4', 'item 2 text');
-    assert.equal($items.eq(3).text(), '1', 'item 3 text');
-
-    assert.strictEqual(this.sortable.option('onChanged').lastCall.args[0].sourceIndex, 0);
-    assert.strictEqual(this.sortable.option('onChanged').lastCall.args[0].targetIndex, 4);
-});
-
-QUnit.test('drag to begin of the container', function(assert) {
-    const $sortable = this.createSortable({});
-    const $item = $sortable.find('.test-item').eq(3);
-    const offset = $sortable.find('.test-item').eq(0).offset();
-
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + $item.width() / 2 + 10, offset.top)
-        .up();
-
-    // assert
-    const $items = $sortable.find('.test-item');
-
-    assert.equal($items.length, 4, 'item count');
-    assert.equal($items.eq(0).text(), '4', 'item 0 text');
-    assert.equal($items.eq(1).text(), '1', 'item 1 text');
-    assert.equal($items.eq(2).text(), '2', 'item 2 text');
-    assert.equal($items.eq(3).text(), '3', 'item 3 text');
-
-    assert.strictEqual(this.sortable.option('onChanged').lastCall.args[0].sourceIndex, 3);
-    assert.strictEqual(this.sortable.option('onChanged').lastCall.args[0].targetIndex, 0);
-});
-
-QUnit.test('horizontal dragging - left. Render Indicator', function(assert) {
-    const $sortable = this.createSortable({
-        useIndicator: true
+        assert.strictEqual(this.sortable.option('onChanged').lastCall.args[0].sourceIndex, 0);
+        assert.strictEqual(this.sortable.option('onChanged').lastCall.args[0].targetIndex, 2);
     });
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $item.offset();
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + $item.width() - 400, offset.top);
+    // QUnit.test("horizontal dragging between lines", function (assert) {
+    //    createHorizontalMarkUp(HORIZONTAL_WIDTH, true);
 
-    // assert
-    const indicator = $('.dx-position-indicator');
+    //    var $sortable = this.createSortable({}),
+    //        $item = $sortable.find(".test-item").eq(0),
+    //        offset = $item.offset();
 
-    assert.ok(indicator.length);
+    //    // act
+    //    pointerMock($item)
+    //        .start()
+    //        .down()
+    //        .move(offset.left + $item.width() - 350, offset.top + 15)
+    //        .up();
 
-    assert.roughEqual(parseInt(indicator.css('left')), $sortable.find('.test-item').eq(2).offset().left + $sortable.find('.test-item').eq(2).outerWidth(true), 1);
-    assert.ok(indicator.hasClass('dx-position-indicator-last'));
-});
+    //    // assert
+    //    var $items = $sortable.find(".test-item");
 
-QUnit.test('drag to the end of the container. Render Indicator', function(assert) {
-    const $sortable = this.createSortable({
-        useIndicator: true
+    //    assert.equal($items.length, 6, "item count");
+    //    assert.equal($items.eq(0).text(), "2", "item 0 text");
+    //    assert.equal($items.eq(1).text(), "3", "item 1 text");
+    //    assert.equal($items.eq(2).text(), "4", "item 2 text");
+    //    assert.equal($items.eq(3).text(), "5", "item 3 text");
+    //    assert.equal($items.eq(4).text(), "1", "item 4 text");
+    //    assert.equal($items.eq(5).text(), "6", "item 5 text");
+
+    //    assert.strictEqual(this.sortable.option("onChanged").lastCall.args[0].sourceIndex, 0);
+    //    assert.strictEqual(this.sortable.option("onChanged").lastCall.args[0].targetIndex, 5);
+    // });
+
+    QUnit.test('drag to the end of the container', function(assert) {
+        const $sortable = this.createSortable({});
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $sortable.find('.test-item').eq(3).offset();
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left - 10, offset.top)
+            .up();
+
+        // assert
+        const $items = $sortable.find('.test-item');
+
+        assert.equal($items.length, 4, 'item count');
+        assert.equal($items.eq(0).text(), '2', 'item 0 text');
+        assert.equal($items.eq(1).text(), '3', 'item 1 text');
+        assert.equal($items.eq(2).text(), '4', 'item 2 text');
+        assert.equal($items.eq(3).text(), '1', 'item 3 text');
+
+        assert.strictEqual(this.sortable.option('onChanged').lastCall.args[0].sourceIndex, 0);
+        assert.strictEqual(this.sortable.option('onChanged').lastCall.args[0].targetIndex, 4);
     });
-    const $item = $sortable.find('.test-item').eq(0);
-    const offset = $sortable.find('.test-item').eq(3).offset();
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left - 10, offset.top);
+    QUnit.test('drag to begin of the container', function(assert) {
+        const $sortable = this.createSortable({});
+        const $item = $sortable.find('.test-item').eq(3);
+        const offset = $sortable.find('.test-item').eq(0).offset();
 
-    // assert
-    const indicator = $('.dx-position-indicator');
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + $item.width() / 2 + 10, offset.top)
+            .up();
 
-    assert.ok(indicator.length);
+        // assert
+        const $items = $sortable.find('.test-item');
 
-    assert.roughEqual(parseInt(indicator.css('left')), $sortable.find('.test-item').eq(3).offset().left, 1);
-    assert.ok(!indicator.hasClass('dx-position-indicator-last'));
-});
+        assert.equal($items.length, 4, 'item count');
+        assert.equal($items.eq(0).text(), '4', 'item 0 text');
+        assert.equal($items.eq(1).text(), '1', 'item 1 text');
+        assert.equal($items.eq(2).text(), '2', 'item 2 text');
+        assert.equal($items.eq(3).text(), '3', 'item 3 text');
 
-QUnit.test('drag to begin of the container. Render Indicator', function(assert) {
-    const $sortable = this.createSortable({
-        useIndicator: true
+        assert.strictEqual(this.sortable.option('onChanged').lastCall.args[0].sourceIndex, 3);
+        assert.strictEqual(this.sortable.option('onChanged').lastCall.args[0].targetIndex, 0);
     });
-    const $item = $sortable.find('.test-item').eq(3);
-    const offset = $sortable.find('.test-item').eq(0).offset();
 
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + $item.width() / 2 + 10, offset.top);
+    QUnit.test('horizontal dragging - left. Render Indicator', function(assert) {
+        const $sortable = this.createSortable({
+            useIndicator: true
+        });
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $item.offset();
 
-    // assert
-    const indicator = $('.dx-position-indicator');
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + $item.width() - 400, offset.top);
 
-    assert.ok(indicator.length);
+        // assert
+        const indicator = $('.dx-position-indicator');
 
-    assert.roughEqual(parseInt(indicator.css('left')), $sortable.find('.test-item').eq(0).offset().left + $sortable.find('.test-item').eq(0).outerWidth(true), 1);
-    assert.ok(indicator.hasClass('dx-position-indicator-last'));
+        assert.ok(indicator.length);
+
+        assert.roughEqual(parseInt(indicator.css('left')), $sortable.find('.test-item').eq(2).offset().left + $sortable.find('.test-item').eq(2).outerWidth(true), 1);
+        assert.ok(indicator.hasClass('dx-position-indicator-last'));
+    });
+
+    QUnit.test('drag to the end of the container. Render Indicator', function(assert) {
+        const $sortable = this.createSortable({
+            useIndicator: true
+        });
+        const $item = $sortable.find('.test-item').eq(0);
+        const offset = $sortable.find('.test-item').eq(3).offset();
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left - 10, offset.top);
+
+        // assert
+        const indicator = $('.dx-position-indicator');
+
+        assert.ok(indicator.length);
+
+        assert.roughEqual(parseInt(indicator.css('left')), $sortable.find('.test-item').eq(3).offset().left, 1);
+        assert.ok(!indicator.hasClass('dx-position-indicator-last'));
+    });
+
+    QUnit.test('drag to begin of the container. Render Indicator', function(assert) {
+        const $sortable = this.createSortable({
+            useIndicator: true
+        });
+        const $item = $sortable.find('.test-item').eq(3);
+        const offset = $sortable.find('.test-item').eq(0).offset();
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + $item.width() / 2 + 10, offset.top);
+
+        // assert
+        const indicator = $('.dx-position-indicator');
+
+        assert.ok(indicator.length);
+
+        assert.roughEqual(parseInt(indicator.css('left')), $sortable.find('.test-item').eq(0).offset().left + $sortable.find('.test-item').eq(0).outerWidth(true), 1);
+        assert.ok(indicator.hasClass('dx-position-indicator-last'));
+    });
+
+
 });
-
-
 QUnit.module('Scroll group content', {
     beforeEach: function() {
         this.createSortable = function(options) {
@@ -1892,230 +1897,231 @@ QUnit.module('Scroll group content', {
     afterEach: function() {
         this.clock.restore();
     }
+}, () => {
+
+    QUnit.test('No scroll group content', function(assert) {
+        const $sortable = this.createSortable();
+        const $item = $sortable.find('.test-item').eq(3);
+        const offset = $sortable.find('.test-item').eq(0).offset();
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + $item.width() / 2 + 10, offset.top);
+
+        this.clock.tick();
+
+        assert.ok(!this.onScroll.called);
+    });
+
+    QUnit.test('Scroll down group content', function(assert) {
+        const $sortable = this.createSortable();
+        const $item = $sortable.find('.test-item').eq(3);
+        const offset = $sortable.find('.test-container').eq(0).offset();
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left, offset.top + 30)
+            .move(offset.left, offset.top + $('.test-container').height());
+
+        assert.strictEqual(this.onScroll.callCount, 1);
+        assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, $sortable.dxSortable('instance').__SCROLL_STEP);
+    });
+
+    QUnit.test('Scroll down group content', function(assert) {
+        const $sortable = this.createSortable();
+        const $item = $sortable.find('.test-item').eq(3);
+        const offset = $sortable.find('.test-container').eq(0).offset();
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left, offset.top + 30)
+            .move(offset.left, offset.top + $('.test-container').height());
+
+        assert.strictEqual(this.onScroll.callCount, 1);
+        assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, $sortable.dxSortable('instance').__SCROLL_STEP);
+    });
+
+    QUnit.test('Scroll down group content second time after clock tick if pointer at the bottom', function(assert) {
+        const $sortable = this.createSortable();
+        const $item = $sortable.find('.test-item').eq(3);
+        const offset = $sortable.find('.test-container').eq(0).offset();
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left, offset.top + 30)
+            .move(offset.left, offset.top + $('.test-container').height());
+
+        this.onScroll.reset();
+
+        this.clock.tick(10);
+
+        assert.strictEqual(this.onScroll.callCount, 1);
+        assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, 2 * $sortable.dxSortable('instance').__SCROLL_STEP);
+    });
+
+    QUnit.test('Scroll down group content while pointer at the bottom', function(assert) {
+        const $sortable = this.createSortable();
+        const $item = $sortable.find('.test-item').eq(3);
+        const offset = $sortable.find('.test-container').eq(0).offset();
+
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left, offset.top + 30)
+            .move(offset.left, offset.top + $('.test-container').height());
+
+        this.clock.tick(100);
+
+        assert.strictEqual(this.onScroll.callCount, 11);
+        assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, 11 * $sortable.dxSortable('instance').__SCROLL_STEP);
+    });
+
+    QUnit.test('Scroll up group content', function(assert) {
+        const $sortable = this.createSortable();
+        const $item = $sortable.find('.test-item').eq(3);
+        const offset = $sortable.find('.test-container').eq(0).offset();
+
+        $sortable.find('.test-container').dxScrollable('scrollTo', 50);
+        this.onScroll.reset();
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left, offset.top + 1)
+            .move(offset.left, offset.top + 8);
+
+        assert.strictEqual(this.onScroll.callCount, 1);
+        assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, 50 - $sortable.dxSortable('instance').__SCROLL_STEP);
+    });
+
+    QUnit.test('Scroll up group content to begin when pointer above area', function(assert) {
+        const $sortable = this.createSortable();
+        const $item = $sortable.find('.test-item').eq(3);
+        const offset = $sortable.find('.test-container').eq(0).offset();
+
+        $sortable.find('.test-container').dxScrollable('scrollTo', 50);
+        this.onScroll.reset();
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left, offset.top + 1)
+            .move(offset.left, offset.top - 10);
+
+        this.clock.tick(1000);
+
+        assert.strictEqual(this.onScroll.callCount, 25);
+        assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, 0);
+    });
+
+    QUnit.test('Stop scrolling affer return pointer in the middle of group', function(assert) {
+        const $sortable = this.createSortable();
+        const $item = $sortable.find('.test-item').eq(3);
+        const offset = $sortable.find('.test-container').eq(0).offset();
+
+        $sortable.find('.test-container').dxScrollable('scrollTo', 50);
+        this.onScroll.reset();
+
+        const pointer = pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left, offset.top + 1)
+            .move(offset.left, offset.top - 10);
+        this.clock.tick(20);
+        this.onScroll.reset();
+
+        // act
+        pointer.move(offset.left, offset.top + 40);
+        this.clock.tick(100);
+
+        assert.strictEqual(this.onScroll.callCount, 0);
+    });
+
+    QUnit.test('Stop scrolling affer drag end', function(assert) {
+        const $sortable = this.createSortable();
+        const $item = $sortable.find('.test-item').eq(3);
+        const offset = $sortable.find('.test-container').eq(0).offset();
+
+        $sortable.find('.test-container').dxScrollable('scrollTo', 50);
+        this.onScroll.reset();
+        const pointer = pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left, offset.top + 1)
+            .move(offset.left, offset.top - 10);
+        this.clock.tick(20);
+
+        this.onScroll.reset();
+        // act
+        pointer.up();
+        this.clock.tick(100);
+
+        assert.strictEqual(this.onScroll.callCount, 0);
+        assert.strictEqual($sortable.find('.test-container').dxScrollable('instance').hasEvent('scroll'), false);
+    });
+
+    QUnit.test('Stop scrolling affer drag to another group', function(assert) {
+        $('#sortable').append('<div id="second-group" class="test-container"><div class="test-item">1</div><div class="test-item">2</div></div>');
+        const $sortable = this.createSortable();
+        const $item = $sortable.find('.test-item').eq(3);
+        const offset = $sortable.find('.test-container').eq(0).offset();
+
+        $sortable.find('.test-container').eq(0).dxScrollable('scrollTo', 50);
+        this.onScroll.reset();
+        // act
+        const pointer = pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left, offset.top + 1)
+            .move(offset.left, offset.top + 5);
+        this.clock.tick(20);
+
+        this.onScroll.reset();
+
+        // act
+        const secondGroupOffset = $('#second-group').offset();
+        pointer.move(secondGroupOffset.left + 10, secondGroupOffset.top + 15);
+        this.clock.tick(100);
+
+        assert.strictEqual(this.onScroll.callCount, 0);
+        assert.strictEqual($sortable.find('.test-container').eq(0).dxScrollable('instance').hasEvent('scroll'), false);
+    });
+
+    QUnit.test('Stop scrolling affer drag from emty space(no group) to another group', function(assert) {
+        $('#sortable').append('<div id="second-group" class="test-container"><div class="test-item">1</div><div class="test-item">2</div></div>');
+        const $sortable = this.createSortable();
+        const $item = $sortable.find('.test-item').eq(3);
+        const offset = $sortable.find('.test-container').eq(0).offset();
+
+        $sortable.find('.test-container').eq(0).dxScrollable('scrollTo', 50);
+        this.onScroll.reset();
+        // act
+        const pointer = pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left, offset.top + 1)
+            .move(offset.left, offset.top - 10);
+        this.clock.tick(20);
+
+        this.onScroll.reset();
+
+        // act
+        const secondGroupOffset = $('#second-group').offset();
+        pointer.move(secondGroupOffset.left + 10, secondGroupOffset.top + 15);
+        this.clock.tick(100);
+
+        assert.strictEqual(this.onScroll.callCount, 0);
+        assert.strictEqual($sortable.find('.test-container').eq(0).dxScrollable('instance').hasEvent('scroll'), false);
+    });
+
+
 });
-
-QUnit.test('No scroll group content', function(assert) {
-    const $sortable = this.createSortable();
-    const $item = $sortable.find('.test-item').eq(3);
-    const offset = $sortable.find('.test-item').eq(0).offset();
-
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left + $item.width() / 2 + 10, offset.top);
-
-    this.clock.tick();
-
-    assert.ok(!this.onScroll.called);
-});
-
-QUnit.test('Scroll down group content', function(assert) {
-    const $sortable = this.createSortable();
-    const $item = $sortable.find('.test-item').eq(3);
-    const offset = $sortable.find('.test-container').eq(0).offset();
-
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left, offset.top + 30)
-        .move(offset.left, offset.top + $('.test-container').height());
-
-    assert.strictEqual(this.onScroll.callCount, 1);
-    assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, $sortable.dxSortable('instance').__SCROLL_STEP);
-});
-
-QUnit.test('Scroll down group content', function(assert) {
-    const $sortable = this.createSortable();
-    const $item = $sortable.find('.test-item').eq(3);
-    const offset = $sortable.find('.test-container').eq(0).offset();
-
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left, offset.top + 30)
-        .move(offset.left, offset.top + $('.test-container').height());
-
-    assert.strictEqual(this.onScroll.callCount, 1);
-    assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, $sortable.dxSortable('instance').__SCROLL_STEP);
-});
-
-QUnit.test('Scroll down group content second time after clock tick if pointer at the bottom', function(assert) {
-    const $sortable = this.createSortable();
-    const $item = $sortable.find('.test-item').eq(3);
-    const offset = $sortable.find('.test-container').eq(0).offset();
-
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left, offset.top + 30)
-        .move(offset.left, offset.top + $('.test-container').height());
-
-    this.onScroll.reset();
-
-    this.clock.tick(10);
-
-    assert.strictEqual(this.onScroll.callCount, 1);
-    assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, 2 * $sortable.dxSortable('instance').__SCROLL_STEP);
-});
-
-QUnit.test('Scroll down group content while pointer at the bottom', function(assert) {
-    const $sortable = this.createSortable();
-    const $item = $sortable.find('.test-item').eq(3);
-    const offset = $sortable.find('.test-container').eq(0).offset();
-
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left, offset.top + 30)
-        .move(offset.left, offset.top + $('.test-container').height());
-
-    this.clock.tick(100);
-
-    assert.strictEqual(this.onScroll.callCount, 11);
-    assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, 11 * $sortable.dxSortable('instance').__SCROLL_STEP);
-});
-
-QUnit.test('Scroll up group content', function(assert) {
-    const $sortable = this.createSortable();
-    const $item = $sortable.find('.test-item').eq(3);
-    const offset = $sortable.find('.test-container').eq(0).offset();
-
-    $sortable.find('.test-container').dxScrollable('scrollTo', 50);
-    this.onScroll.reset();
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left, offset.top + 1)
-        .move(offset.left, offset.top + 8);
-
-    assert.strictEqual(this.onScroll.callCount, 1);
-    assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, 50 - $sortable.dxSortable('instance').__SCROLL_STEP);
-});
-
-QUnit.test('Scroll up group content to begin when pointer above area', function(assert) {
-    const $sortable = this.createSortable();
-    const $item = $sortable.find('.test-item').eq(3);
-    const offset = $sortable.find('.test-container').eq(0).offset();
-
-    $sortable.find('.test-container').dxScrollable('scrollTo', 50);
-    this.onScroll.reset();
-    // act
-    pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left, offset.top + 1)
-        .move(offset.left, offset.top - 10);
-
-    this.clock.tick(1000);
-
-    assert.strictEqual(this.onScroll.callCount, 25);
-    assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, 0);
-});
-
-QUnit.test('Stop scrolling affer return pointer in the middle of group', function(assert) {
-    const $sortable = this.createSortable();
-    const $item = $sortable.find('.test-item').eq(3);
-    const offset = $sortable.find('.test-container').eq(0).offset();
-
-    $sortable.find('.test-container').dxScrollable('scrollTo', 50);
-    this.onScroll.reset();
-
-    const pointer = pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left, offset.top + 1)
-        .move(offset.left, offset.top - 10);
-    this.clock.tick(20);
-    this.onScroll.reset();
-
-    // act
-    pointer.move(offset.left, offset.top + 40);
-    this.clock.tick(100);
-
-    assert.strictEqual(this.onScroll.callCount, 0);
-});
-
-QUnit.test('Stop scrolling affer drag end', function(assert) {
-    const $sortable = this.createSortable();
-    const $item = $sortable.find('.test-item').eq(3);
-    const offset = $sortable.find('.test-container').eq(0).offset();
-
-    $sortable.find('.test-container').dxScrollable('scrollTo', 50);
-    this.onScroll.reset();
-    const pointer = pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left, offset.top + 1)
-        .move(offset.left, offset.top - 10);
-    this.clock.tick(20);
-
-    this.onScroll.reset();
-    // act
-    pointer.up();
-    this.clock.tick(100);
-
-    assert.strictEqual(this.onScroll.callCount, 0);
-    assert.strictEqual($sortable.find('.test-container').dxScrollable('instance').hasEvent('scroll'), false);
-});
-
-QUnit.test('Stop scrolling affer drag to another group', function(assert) {
-    $('#sortable').append('<div id="second-group" class="test-container"><div class="test-item">1</div><div class="test-item">2</div></div>');
-    const $sortable = this.createSortable();
-    const $item = $sortable.find('.test-item').eq(3);
-    const offset = $sortable.find('.test-container').eq(0).offset();
-
-    $sortable.find('.test-container').eq(0).dxScrollable('scrollTo', 50);
-    this.onScroll.reset();
-    // act
-    const pointer = pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left, offset.top + 1)
-        .move(offset.left, offset.top + 5);
-    this.clock.tick(20);
-
-    this.onScroll.reset();
-
-    // act
-    const secondGroupOffset = $('#second-group').offset();
-    pointer.move(secondGroupOffset.left + 10, secondGroupOffset.top + 15);
-    this.clock.tick(100);
-
-    assert.strictEqual(this.onScroll.callCount, 0);
-    assert.strictEqual($sortable.find('.test-container').eq(0).dxScrollable('instance').hasEvent('scroll'), false);
-});
-
-QUnit.test('Stop scrolling affer drag from emty space(no group) to another group', function(assert) {
-    $('#sortable').append('<div id="second-group" class="test-container"><div class="test-item">1</div><div class="test-item">2</div></div>');
-    const $sortable = this.createSortable();
-    const $item = $sortable.find('.test-item').eq(3);
-    const offset = $sortable.find('.test-container').eq(0).offset();
-
-    $sortable.find('.test-container').eq(0).dxScrollable('scrollTo', 50);
-    this.onScroll.reset();
-    // act
-    const pointer = pointerMock($item)
-        .start()
-        .down()
-        .move(offset.left, offset.top + 1)
-        .move(offset.left, offset.top - 10);
-    this.clock.tick(20);
-
-    this.onScroll.reset();
-
-    // act
-    const secondGroupOffset = $('#second-group').offset();
-    pointer.move(secondGroupOffset.left + 10, secondGroupOffset.top + 15);
-    this.clock.tick(100);
-
-    assert.strictEqual(this.onScroll.callCount, 0);
-    assert.strictEqual($sortable.find('.test-container').eq(0).dxScrollable('instance').hasEvent('scroll'), false);
-});
-
-
