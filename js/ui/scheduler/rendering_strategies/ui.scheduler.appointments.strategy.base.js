@@ -12,7 +12,6 @@ import utils from '../utils';
 const toMs = dateUtils.dateToMilliseconds;
 
 const APPOINTMENT_MIN_SIZE = 2;
-// const COMPACT_APPOINTMENT_DEFAULT_WIDTH = 15;
 const APPOINTMENT_DEFAULT_HEIGHT = 20;
 
 const COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18;
