@@ -344,6 +344,8 @@ const Lookup = DropDownList.inherit({
 
                     showCancelButton: false,
 
+                    itemCenteringEnabled: true,
+
                     _scrollToSelectedItemEnabled: true
                 }
             }
@@ -553,8 +555,10 @@ const Lookup = DropDownList.inherit({
     },
 
     _renderPopup: function() {
-        if(this.option('usePopover') && !this.option('dropDownOptions.fullScreen')) {
-            this._renderPopover();
+        if(this.option('usePopover')) {
+            if(this.option('_scrollToSelectedItemEnabled') && !this.option('itemCenteringEnabled') || !this.option('dropDownOptions.fullScreen')) {
+                this._renderPopover();
+            }
         } else {
             this.callBase();
         }
