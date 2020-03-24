@@ -49,6 +49,9 @@ class DiagramFloatingPanel extends DiagramPanel {
     _getPopupContent() {
         return this._popup.content();
     }
+    _getPopupTitle() {
+        return this._getPopupContent().parent().find('.dx-popup-title');
+    }
     _getPointerUpElement() {
         return this._getPopupContent();
     }

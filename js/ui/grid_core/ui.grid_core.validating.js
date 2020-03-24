@@ -215,7 +215,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                 }
                 $indicator = $('<div>').appendTo($indicatorContainer)
                     .addClass(PENDING_INDICATOR_CLASS);
-                new LoadIndicator($indicator);
+                this._createComponent($indicator, LoadIndicator);
                 $container.addClass(VALIDATION_PENDING_CLASS);
             }
         },
@@ -226,7 +226,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                 const indicator = LoadIndicator.getInstance($indicator);
                 if(indicator) {
                     indicator.dispose();
-                    indicator.element().remove();
+                    indicator.$element().remove();
                 }
                 $container.removeClass(VALIDATION_PENDING_CLASS);
             }

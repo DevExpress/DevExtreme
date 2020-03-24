@@ -138,8 +138,7 @@ class DiagramToolbox extends DiagramFloatingPanel {
 
         let maxHeight = 4;
         if(this._popup) {
-            const $content = $(this._popup.content());
-            const $title = $content.parent().find('.dx-popup-title');
+            const $title = this._getPopupTitle();
             maxHeight += $title.outerHeight();
         }
         if(this._accordion) {
