@@ -151,15 +151,12 @@ const DataSource = require('data/data_source/data_source').DataSource;
 
             appointmentModel.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2));
 
-            const appts = appointmentModel.filterLoadedAppointments({
+            appointmentModel.filterLoadedAppointments({
                 startDayHour: 3,
-                endDayHour: 7,
-                min: new Date(2015, 0, 1, 0),
-                max: new Date(2015, 0, 3)
+                endDayHour: 4
             });
 
-            assert.deepEqual(appointmentModel._filterMaker._filterRegistry.user, undefined, 'Empty user filter');
-            assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6), priorityId: 1 }], 'Appointments are OK');
+            assert.equal(appointmentModel._filterMaker._filterRegistry.user, undefined, 'Empty user filter');
         });
     });
 
