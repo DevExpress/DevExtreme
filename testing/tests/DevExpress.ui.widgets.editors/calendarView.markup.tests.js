@@ -523,14 +523,16 @@ QUnit.module("DecadeView min/max", {
     beforeEach: function() {
         fx.off = true;
 
-        this.min = new Date(2013, 0, 18);
-        this.max = new Date(2018, 6, 18);
+        var min = new Date(2013, 0, 18);
+        var max = new Date(2018, 6, 18);
+        var currentDate = new Date(2015, 3, 15);
 
         this.$element = $("<div>").appendTo("body");
         this.view = new Views["decade"](this.$element, {
-            min: this.min,
-            value: new Date(2015, 3, 15),
-            max: this.max
+            min: min,
+            max: max,
+            value: currentDate,
+            date: currentDate
         });
     },
     afterEach: function() {
@@ -554,6 +556,7 @@ QUnit.module("DecadeView disabledDates", {
     beforeEach: function() {
         fx.off = true;
 
+        var currentDate = new Date(2015, 3, 15);
         this.disabledDates = function(args) {
             if(args.date.getFullYear() < 2013) {
                 return true;
@@ -563,7 +566,8 @@ QUnit.module("DecadeView disabledDates", {
         this.$element = $("<div>").appendTo("body");
         this.view = new Views["decade"](this.$element, {
             disabledDates: this.disabledDates,
-            value: new Date(2015, 3, 15),
+            value: currentDate,
+            date: currentDate
         });
     },
     afterEach: function() {
