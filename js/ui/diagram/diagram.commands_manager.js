@@ -613,8 +613,8 @@ const DiagramCommandsManager = {
                 },
                 {
                     icon: 'preferences',
-                    hint: messageLocalization.format('dxDiagram-uiProperties'),
-                    text: messageLocalization.format('dxDiagram-uiProperties'),
+                    hint: messageLocalization.format('dxDiagram-uiSettings'),
+                    text: messageLocalization.format('dxDiagram-uiSettings'),
                     items: [
                         allCommands['units'],
                         allCommands['separator'],
