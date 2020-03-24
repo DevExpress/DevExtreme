@@ -1280,18 +1280,19 @@ QUnit.module('optionChanged', moduleSetup, () => {
         [true, false].forEach(multiple => {
             [true, false].forEach(deferRendering => {
                 [true, false ].forEach(repaintChangesOnly => {
-                    configs.push({ collapsible, multiple, deferRendering, repaintChangesOnly });
+                    const config = { collapsible, multiple, deferRendering, repaintChangesOnly };
+                    config.message = Object.entries(config).reduce((message, [key, value]) => message += `${key}: ${value}, `, '');
+                    configs.push(config);
                 });
             });
         });
     });
 
     configs.forEach(config => {
-        const getConfigMessage = () => Object.entries(config).reduce((message, [key, value]) => message += `${key}: ${value}, `, '');
         const { collapsible, multiple, deferRendering, repaintChangesOnly } = config;
         // T871954
         if(!repaintChangesOnly) {
-            QUnit.test(getConfigMessage() + '[item_0.selected, item_1] -> .option(items[0].title, "new_value") -> .expandItem(1)', function(assert) {
+            QUnit.test(config.message + '[item_0.selected, item_1] -> .option(items[0].title, "new_value") -> .expandItem(1)', function(assert) {
                 const items = [ { id: 0, title: 'item_0' }, { id: 1, title: 'item_1' } ];
                 const helper = new AccordionTestHelper(this.$element, {
                     selectedIndex: 0,
@@ -1309,7 +1310,7 @@ QUnit.module('optionChanged', moduleSetup, () => {
                 helper.checkItems(assert, items, multiple ? [0, 1] : [1]);
             });
 
-            QUnit.test(getConfigMessage() + '[item_0.selected, item_1] -> .option(items[1].title, "new_value") -> .expandItem(1)', function(assert) {
+            QUnit.test(config.message + '[item_0.selected, item_1] -> .option(items[1].title, "new_value") -> .expandItem(1)', function(assert) {
                 const items = [ { id: 0, title: 'item_0' }, { id: 1, title: 'item_1' } ];
                 const helper = new AccordionTestHelper(this.$element, {
                     selectedIndex: 0,
@@ -1327,7 +1328,7 @@ QUnit.module('optionChanged', moduleSetup, () => {
                 helper.checkItems(assert, items, multiple ? [0, 1] : [1]);
             });
 
-            QUnit.test(getConfigMessage() + '[item_0.selected, item_1] -> .option(items[0].title, "new_value") -> .collapseItem(0)', function(assert) {
+            QUnit.test(config.message + '[item_0.selected, item_1] -> .option(items[0].title, "new_value") -> .collapseItem(0)', function(assert) {
                 const items = [ { id: 0, title: 'item_0' }, { id: 1, title: 'item_1' } ];
                 const helper = new AccordionTestHelper(this.$element, {
                     selectedIndex: 0,
@@ -1345,7 +1346,7 @@ QUnit.module('optionChanged', moduleSetup, () => {
                 helper.checkItems(assert, items, collapsible ? [] : [0]);
             });
 
-            QUnit.test(getConfigMessage() + '[item_0.selected, item_1] -> .option(items[1].title, "new_value") -> .collapseItem(0)', function(assert) {
+            QUnit.test(config.message + '[item_0.selected, item_1] -> .option(items[1].title, "new_value") -> .collapseItem(0)', function(assert) {
                 const items = [ { id: 0, title: 'item_0' }, { id: 1, title: 'item_1' } ];
                 const helper = new AccordionTestHelper(this.$element, {
                     selectedIndex: 0,
@@ -1364,7 +1365,7 @@ QUnit.module('optionChanged', moduleSetup, () => {
             });
         }
 
-        QUnit.test(getConfigMessage() + 'item1.display: false -> accordion.option(items[1].visible, true) -> accordion.option(items[1].visible, false) (T869114)', function(assert) {
+        QUnit.test(config.message + 'item1.display: false -> accordion.option(items[1].visible, true) -> accordion.option(items[1].visible, false) (T869114)', function(assert) {
             const $element = this.$element.dxAccordion({
                 items: [ { id: 0, title: 'item0' }, { id: 1, title: 'item1', visible: false } ],
                 collapsible,
