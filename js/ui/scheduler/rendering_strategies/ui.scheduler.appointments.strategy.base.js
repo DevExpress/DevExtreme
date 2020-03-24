@@ -632,21 +632,21 @@ class BaseRenderingStrategy {
         let top = appointmentTop + topOffset;
         let width = coordinates.width;
         let left = coordinates.left;
-        let compactAppointmentDefaultSize;
-        let compactAppointmentLeftOffset;
-        const compactAppointmentTopOffset = this.getCompactAppointmentTopOffset(isAllDay);
+        // let compactAppointmentDefaultSize;
+        // let compactAppointmentLeftOffset;
+        // const compactAppointmentTopOffset = this.getCompactAppointmentTopOffset(isAllDay);
 
         if(coordinates.isCompact) {
-            compactAppointmentDefaultSize = this.getCompactAppointmentDefaultWidth();
-            compactAppointmentLeftOffset = this.getCompactAppointmentLeftOffset();
+            // compactAppointmentDefaultSize = this.getCompactAppointmentDefaultWidth();
+            // compactAppointmentLeftOffset = this.getCompactAppointmentLeftOffset();
 
-            top = coordinates.top + compactAppointmentTopOffset;
-            left = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentLeftOffset) + compactAppointmentLeftOffset;
+            // top = coordinates.top + compactAppointmentTopOffset;
+            // left = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentLeftOffset) + compactAppointmentLeftOffset;
 
             this._isAdaptive() && this._correctCompactAppointmentCoordinatesInAdaptive(coordinates, isAllDay);
 
-            appointmentHeight = compactAppointmentDefaultSize;
-            width = compactAppointmentDefaultSize;
+            // appointmentHeight = compactAppointmentDefaultSize;
+            // width = compactAppointmentDefaultSize;
 
             this._markAppointmentAsVirtual(coordinates, isAllDay);
         }
