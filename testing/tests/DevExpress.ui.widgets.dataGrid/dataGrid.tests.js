@@ -4597,6 +4597,35 @@ QUnit.test('DataGrid - navigateToRow method should work if rowRenderingMode is \
     assert.equal(dataGrid.getVisibleRows().filter(row => row.key === navigateRowKey).length, 1, 'navigated row is visible');
 });
 
+QUnit.test('Focused row should be in viewport if focusedRowKey specified and autoNavigateToFocusedRow is true', function(assert) {
+    const data = [];
+
+    for(let i = 0; i < 30; i++) {
+        data.push({ id: i + 1 });
+    }
+
+    const dataGrid = $('#dataGrid').dxDataGrid({
+        height: 200,
+        keyExpr: 'id',
+        repaintChangesOnly: true,
+        focusedRowEnabled: true,
+        focusedRowKey: 30,
+        dataSource: data,
+        scrolling: {
+            mode: 'virtual'
+        }
+    }).dxDataGrid('instance');
+    this.clock.tick();
+
+    const scrollable = dataGrid.getScrollable();
+    assert.ok(scrollable.scrollOffset().top >= 854, 'navigated row in viewport');
+
+    dataGrid.option('columns[0].sortOrder', 'desc');
+    this.clock.tick();
+
+    assert.ok(scrollable.scrollOffset().top <= 1, 'navigated row in viewport');
+});
+
 ['standard', 'infinite', 'virtual'].forEach((scrollingMode) => {
     ['standard', 'virtual'].forEach((columnRenderingMode) => {
         QUnit.test(`Grid should not scroll top after navigate to row on the same page if scrolling.mode is ${scrollingMode} and scrolling.rowRenderingMode is ${columnRenderingMode} (T836612)`, function(assert) {
