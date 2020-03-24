@@ -638,7 +638,15 @@ exports.chart = _extend({}, baseScatterMethods, {
         return oppositeCoord;
     },
 
-    getNearestPointsByCoord(coord, isArgument) {
+    _getNearestPoints(point, nextPoint) {
+        return [point, nextPoint];
+    },
+
+    _getBezierPoints() {
+        return [];
+    },
+
+    _getNearestPointsByCoord(coord, isArgument) {
         const that = this;
         const rotated = that.getOptions().rotated;
         const isOpposite = !isArgument && !rotated || isArgument && rotated;
@@ -660,23 +668,6 @@ exports.chart = _extend({}, baseScatterMethods, {
         }
 
         return nearestPoints;
-    },
-
-    findNeighborPointsByCoord(coord, coordName, points, allPoints, pushNeighborPoints) {
-        let searchPoints = allPoints;
-
-        if(points.length > 0) {
-            points.splice(0, 0, allPoints[allPoints.indexOf(points[0]) - 1]);
-            points.splice(points.length, 0, allPoints[allPoints.indexOf(points[points.length - 1]) + 1]);
-            searchPoints = points;
-        }
-
-        searchPoints.forEach((p, i) => {
-            const np = searchPoints[i + 1];
-            if(p && np && (p[coordName] <= coord && np[coordName] >= coord || p[coordName] >= coord && np[coordName] <= coord)) {
-                pushNeighborPoints(p, np);
-            }
-        });
     },
 
     getNeighborPoint: function(x, y) {
