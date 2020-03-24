@@ -107,6 +107,7 @@ const SlideOut = CollectionWidget.inherit({
         this.callBase();
         this.$element().addClass(SLIDEOUT_CLASS);
         this._initSlideOutView();
+        this._logDeprecatedWarning('W0000', { since: '20.1', alias: 'dxDrawer' });
     },
 
     _initTemplates: function() {

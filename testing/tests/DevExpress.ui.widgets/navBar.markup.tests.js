@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import errors from 'core/errors';
 
 import 'ui/nav_bar';
 
@@ -46,6 +47,26 @@ QUnit.module('rendering', () => {
         const $item = $navBar.find(toSelector(NAVBAR_ITEM_CLASS)).eq(0);
 
         assert.ok($item.hasClass(TAB_SELECTED_CLASS), 'selection present');
+    });
+
+    QUnit.test('show deprecated warning by the initialization', function(assert) {
+        const originalLog = errors.log;
+        try {
+            const stub = sinon.stub();
+            errors.log = stub;
+
+            $('#navbar').dxNavBar();
+
+            assert.equal(stub.callCount, 1, 'the log method is called once');
+            assert.deepEqual(stub.getCall(0).args, [
+                'W0000',
+                'dxNavBar',
+                '20.1',
+                'Use the \'dxTabs\' widget instead'
+            ], 'args of the log method');
+        } finally {
+            errors.log = originalLog;
+        }
     });
 });
 

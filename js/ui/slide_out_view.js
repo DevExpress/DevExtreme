@@ -122,6 +122,7 @@ const SlideOutView = Widget.inherit({
         this._whenAnimationComplete = undefined;
         this._whenMenuRendered = undefined;
         this._initHideTopOverlayHandler();
+        this._logDeprecatedWarning('W0000', { since: '20.1', alias: 'dxDrawer' });
     },
 
     _initHideTopOverlayHandler: function() {
