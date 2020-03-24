@@ -135,7 +135,7 @@ QUnit.module('scrollToItem', () => {
         });
 
         wrapper.instance._scrollableContainer.scrollTo({ left: 0, top: 0 });
-        const node = wrapper.$element().find('[data-item-id="item1_1_1"]').get(0);
+        const node = wrapper.getElement().find('[data-item-id="item1_1_1"]').get(0);
         wrapper.instance.scrollToItem(node).done(() => {
             wrapper.checkNodeIsInVisibleArea(node);
             done();
