@@ -611,7 +611,7 @@ const Lookup = DropDownList.inherit({
     _preventFocusOnPopup: commonUtils.noop,
 
     _popupConfig: function() {
-        const result = extend(this.callBase(), {
+        return extend(this.callBase(), {
 
             toolbarItems: this._getPopupToolbarItems(),
 
@@ -623,9 +623,6 @@ const Lookup = DropDownList.inherit({
             animation: undefined,
             position: undefined
         }, this.option('dropDownOptions'));
-
-
-        return result;
     },
 
     _getPopupToolbarItems: function() {
