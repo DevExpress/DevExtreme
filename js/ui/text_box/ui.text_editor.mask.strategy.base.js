@@ -1,5 +1,6 @@
 import EventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils';
+import browser from '../../core/utils/browser';
 import { inArray } from '../../core/utils/array';
 import { clipboardText as getClipboardText } from '../../core/utils/dom';
 
@@ -158,7 +159,7 @@ export default class BaseMaskStrategy {
 
     _isAutoFill() {
         const input = this.editor._input().get(0);
-        return input && input.matches(':-webkit-autofill');
+        return input && browser.webkit && input.matches(':-webkit-autofill');
     }
 
     runWithoutEventProcessing(action) {

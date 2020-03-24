@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import devices from 'core/devices';
+import browser from 'core/utils/browser';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import caretWorkaround from './caretWorkaround.js';
 
@@ -420,6 +421,11 @@ QUnit.module('typing', moduleConfig, () => {
     });
 
     QUnit.test('TextEditor with mask option should work correctly with ios autofill (T869537)', function(assert) {
+        if(!browser.webkit) {
+            assert.expect(0);
+            return;
+        }
+
         const clock = sinon.useFakeTimers();
         const testText = '555555';
         const $textEditor = $('#texteditor').dxTextEditor({
