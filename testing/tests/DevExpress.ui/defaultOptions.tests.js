@@ -7,6 +7,7 @@ const devices = require('core/devices');
 const themes = require('ui/themes');
 const support = require('core/utils/support');
 const publicComponentUtils = require('core/utils/public_component');
+const getNestedOptionValue = require('core/utils/data').getNestedOptionValue;
 
 const ActionSheet = require('ui/action_sheet');
 const Accordion = require('ui/accordion');
@@ -84,7 +85,7 @@ const checkOptions = function(expectedOptions, resultOptions, deviceString, asse
     const that = this;
 
     $.each(expectedOptions, function(optionName, expectedValue) {
-        let resultValue = resultOptions[optionName];
+        let resultValue = getNestedOptionValue(resultOptions, optionName);
 
         resultValue = $.isFunction(resultValue) ? resultValue.call(that) : resultValue;
 
@@ -357,7 +358,10 @@ testComponentDefaults(Lookup,
     [
         { platform: 'ios', phone: true }
     ],
-    { fullScreen: true }
+    {
+        fullScreen: true,
+        'dropDownOptions.fullScreen': true
+    }
 );
 
 testComponentDefaults(Lookup,
@@ -397,9 +401,11 @@ testComponentDefaults(Lookup,
     {
         usePopover: false,
         closeOnOutsideClick: true,
+        'dropDownOptions.closeOnOutsideClick': true,
         searchEnabled: false,
         showCancelButton: false,
         showPopupTitle: false,
+        'dropDownOptions.showTitle': false,
         itemCenteringEnabled: true
     },
     function() {
