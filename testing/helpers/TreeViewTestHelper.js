@@ -112,11 +112,11 @@ class TreeViewTestWrapper {
 
     checkNodeIsInVisibleArea(itemKey) {
         const $treeView = this.getElement();
-        const $node = $treeView.find(`[data-item-id="${itemKey}"] .${ITEM_CLASS}`).eq(0);
-        $node.find(`.${ITEM_CONTENT_CLASS}`).wrapInner('<span/>');
+        const $item = $treeView.find(`[data-item-id="${itemKey}"] .${ITEM_CLASS}`).eq(0);
+        $item.find(`.${ITEM_CONTENT_CLASS}`).wrapInner('<span/>');
 
         const treeViewRect = $treeView.get(0).getBoundingClientRect();
-        const itemTextRect = $node.find('span').get(0).getBoundingClientRect();
+        const itemTextRect = $item.find('span').get(0).getBoundingClientRect();
 
         const scrollDirection = this.instance.option('scrollDirection');
         if(scrollDirection === 'vertical' || scrollDirection === 'both') {
