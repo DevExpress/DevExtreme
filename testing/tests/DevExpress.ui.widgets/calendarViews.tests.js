@@ -712,14 +712,16 @@ QUnit.module("DecadeView min/max", {
     beforeEach: function() {
         fx.off = true;
 
-        this.min = new Date(2013, 0, 18);
-        this.max = new Date(2018, 6, 18);
+        var min = new Date(2013, 0, 18);
+        var max = new Date(2018, 6, 18);
+        var currentDate = new Date(2015, 3, 15);
 
         this.$element = $("<div>").appendTo("body");
         this.view = new Views["decade"](this.$element, {
-            min: this.min,
-            value: new Date(2015, 3, 15),
-            max: this.max
+            min: min,
+            max: max,
+            value: currentDate,
+            date: currentDate
         });
     },
     afterEach: function() {
