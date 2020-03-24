@@ -515,7 +515,16 @@ class Diagram extends Widget {
         });
     }
     _onPanelPointerUp() {
-        this._diagramInstance.captureFocus();
+        this._captureFocusTimeout = setTimeout(() => {
+            this._diagramInstance.captureFocus();
+            delete this._captureFocusTimeout;
+        }, 100);
+    }
+    _killCaptureFocusTimeout() {
+        if(this._captureFocusTimeout) {
+            clearTimeout(this._captureFocusTimeout);
+            delete this._captureFocusTimeout;
+        }
     }
     _renderContextMenu($mainElement) {
         const $contextMenu = $('<div>')
@@ -685,6 +694,8 @@ class Diagram extends Widget {
         super._clean();
     }
     _dispose() {
+        this._killCaptureFocusTimeout();
+
         super._dispose();
         this._diagramInstance = undefined;
     }
@@ -1948,6 +1959,35 @@ class Diagram extends Widget {
             onItemDblClick: null,
 
             onSelectionChanged: null
+
+            /**
+             * @name dxDiagramOptions.accessKey
+             * @hidden true
+             */
+            /**
+             * @name dxDiagramOptions.activeStateEnabled
+             * @hidden true
+             */
+            /**
+             * @name dxDiagramOptions.focusStateEnabled
+             * @hidden true
+             */
+            /**
+             * @name dxDiagramOptions.hint
+             * @hidden true
+             */
+            /**
+             * @name dxDiagramOptions.hoverStateEnabled
+             * @hidden true
+             */
+            /**
+             * @name dxDiagramOptions.tabIndex
+             * @hidden true
+             */
+            /**
+             * @name dxDiagramMethods.registerKeyHandler(key, handler)
+             * @hidden true
+             */
         });
     }
 
