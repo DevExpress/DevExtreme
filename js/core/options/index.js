@@ -4,7 +4,7 @@ import { OptionManager } from './option_manager';
 import { clone } from '../utils/object';
 import { getFieldName, getParentName, convertRulesToOptions } from './utils';
 import { extend } from '../utils/extend';
-import { getNestedOptionValue } from 'core/utils/data';
+import { getNestedOptionValue } from '../utils/data';
 
 export class Options {
     constructor(options, defaultOptions, optionsByReference, deprecatedOptions) {
