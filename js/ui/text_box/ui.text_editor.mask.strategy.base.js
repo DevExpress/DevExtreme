@@ -158,13 +158,14 @@ export default class BaseMaskStrategy {
     }
 
     _isAutoFill() {
-        const input = this.editor._input();
+        const $input = this.editor._input();
         let result = false;
 
         if(browser.msie && browser.version > 11) {
-            result = input.hasClass('edge-autofilled');
+            result = $input.hasClass('edge-autofilled');
         } else if(browser.webkit) {
-            result = input.get(0).matches(':-webkit-autofill');
+            const input = $input.get(0);
+            result = input && input.matches(':-webkit-autofill');
         }
 
         return result;

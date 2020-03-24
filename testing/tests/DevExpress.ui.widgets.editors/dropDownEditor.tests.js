@@ -1085,6 +1085,7 @@ QUnit.module('Templates', () => {
     QUnit.testInActiveWindow('fieldTemplate can contain a masked TextBox', function(assert) {
         let keyboard;
         let $input;
+        this.clock = sinon.useFakeTimers();
 
         $('#dropDownEditorLazy').dxDropDownEditor({
             dataSource: [1, 2],
@@ -1103,7 +1104,9 @@ QUnit.module('Templates', () => {
         });
 
         keyboard.type('z5');
+        this.clock.tick();
         assert.strictEqual($input.val(), '5-_', 'Masked TextBox works fine');
+        this.clock.restore();
     });
 
     QUnit.test('contentTemplate should not redefine popup content (T860163)', function(assert) {
