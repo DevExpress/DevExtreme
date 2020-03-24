@@ -22,9 +22,9 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         return deltaTime;
     }
 
-    _correctCompactAppointmentCoordinatesInAdaptive(coordinates, isAllDay) {
+    _correctCollectorCoordinatesInAdaptive(coordinates, isAllDay) {
         if(isAllDay) {
-            super._correctCompactAppointmentCoordinatesInAdaptive(coordinates, isAllDay);
+            super._correctCollectorCoordinatesInAdaptive(coordinates, isAllDay);
         } else if(this._getMaxAppointmentCountPerCellByType() === 0) {
             const cellHeight = this.getDefaultCellHeight();
             const cellWidth = this.getDefaultCellWidth();
@@ -169,22 +169,12 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _customizeVerticalCoordinates(coordinates, width, appointmentCountPerCell, topOffset, isAllDay) {
-        // const index = coordinates.index;
         let appointmentWidth = Math.max(width / appointmentCountPerCell, width / coordinates.count);
         const height = coordinates.height;
         let appointmentLeft = coordinates.left + (coordinates.index * appointmentWidth);
         let top = coordinates.top;
-        // let compactAppointmentDefaultSize;
-        // let compactAppointmentDefaultOffset;
 
         if(coordinates.isCompact) {
-            // compactAppointmentDefaultSize = this.getCompactAppointmentDefaultWidth();
-            // compactAppointmentDefaultOffset = this.getCompactAppointmentLeftOffset();
-            // top = coordinates.top + compactAppointmentDefaultOffset;
-            // appointmentLeft = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentDefaultOffset) + compactAppointmentDefaultOffset;
-            // appointmentWidth = compactAppointmentDefaultSize;
-            // width = compactAppointmentDefaultSize;
-
             this._markAppointmentAsVirtual(coordinates, isAllDay);
         }
 

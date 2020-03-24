@@ -147,10 +147,7 @@ class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
         return this._defaultWidth;
     }
 
-    getCompactAppointmentDefaultWidth() {
-    }
-
-    getCompactAppointmentLeftOffset() {
+    getCollectorLeftOffset() {
     }
     getCompactAppointmentTopOffset() {
     }

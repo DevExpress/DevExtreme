@@ -26,7 +26,7 @@ class AdaptivePositioningStrategy extends BasePositioningStrategy {
         }
     }
 
-    getCompactAppointmentLeftOffset() {
+    getCollectorLeftOffset() {
         return (this.getRenderingStrategy().getDefaultCellWidth() - COLLECTOR_ADAPTIVE_SIZE) / 2;
     }
 

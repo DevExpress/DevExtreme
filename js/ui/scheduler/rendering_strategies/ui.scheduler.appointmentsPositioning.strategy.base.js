@@ -33,7 +33,7 @@ class AppointmentPositioningStrategy {
         return COMPACT_APPOINTMENT_DEFAULT_OFFSET;
     }
 
-    getCompactAppointmentLeftOffset() {
+    getCollectorLeftOffset() {
         return COMPACT_APPOINTMENT_DEFAULT_OFFSET;
     }
 

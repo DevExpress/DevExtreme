@@ -12,7 +12,7 @@ import utils from '../utils';
 const toMs = dateUtils.dateToMilliseconds;
 
 const APPOINTMENT_MIN_SIZE = 2;
-const COMPACT_APPOINTMENT_DEFAULT_WIDTH = 15;
+// const COMPACT_APPOINTMENT_DEFAULT_WIDTH = 15;
 const APPOINTMENT_DEFAULT_HEIGHT = 20;
 
 const COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18;
@@ -29,9 +29,9 @@ class BaseRenderingStrategy {
         return this.instance.fire('isAdaptive');
     }
 
-    _correctCompactAppointmentCoordinatesInAdaptive(coordinates, isAllDay) {
+    _correctCollectorCoordinatesInAdaptive(coordinates, isAllDay) {
         coordinates.top = coordinates.top + this.getCompactAppointmentTopOffset(isAllDay);
-        coordinates.left = coordinates.left + this.getCompactAppointmentLeftOffset();
+        coordinates.left = coordinates.left + this.getCollectorLeftOffset();
     }
 
     _initPositioningStrategy() {
@@ -610,16 +610,12 @@ class BaseRenderingStrategy {
         return this._allDayHeight;
     }
 
-    getCompactAppointmentDefaultWidth() {
-        return COMPACT_APPOINTMENT_DEFAULT_WIDTH;
-    }
-
     getCompactAppointmentTopOffset(allDay) {
         return this.getPositioningStrategy().getCompactAppointmentTopOffset(allDay);
     }
 
-    getCompactAppointmentLeftOffset() {
-        return this.getPositioningStrategy().getCompactAppointmentLeftOffset();
+    getCollectorLeftOffset() {
+        return this.getPositioningStrategy().getCollectorLeftOffset();
     }
 
     getAppointmentDataCalculator() {
@@ -632,21 +628,9 @@ class BaseRenderingStrategy {
         let top = appointmentTop + topOffset;
         let width = coordinates.width;
         let left = coordinates.left;
-        // let compactAppointmentDefaultSize;
-        // let compactAppointmentLeftOffset;
-        // const compactAppointmentTopOffset = this.getCompactAppointmentTopOffset(isAllDay);
 
         if(coordinates.isCompact) {
-            // compactAppointmentDefaultSize = this.getCompactAppointmentDefaultWidth();
-            // compactAppointmentLeftOffset = this.getCompactAppointmentLeftOffset();
-
-            // top = coordinates.top + compactAppointmentTopOffset;
-            // left = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentLeftOffset) + compactAppointmentLeftOffset;
-
-            this._isAdaptive() && this._correctCompactAppointmentCoordinatesInAdaptive(coordinates, isAllDay);
-
-            // appointmentHeight = compactAppointmentDefaultSize;
-            // width = compactAppointmentDefaultSize;
+            this._isAdaptive() && this._correctCollectorCoordinatesInAdaptive(coordinates, isAllDay);
 
             this._markAppointmentAsVirtual(coordinates, isAllDay);
         }
