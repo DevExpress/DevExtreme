@@ -4,7 +4,6 @@ const window = require('../core/utils/window').getWindow();
 const support = require('../core/utils/support');
 const commonUtils = require('../core/utils/common');
 const domUtils = require('../core/utils/dom');
-const each = require('../core/utils/iterator').each;
 const extend = require('../core/utils/extend').extend;
 const inkRipple = require('./widget/utils.ink_ripple');
 const messageLocalization = require('../localization/message');
@@ -32,12 +31,6 @@ const LOOKUP_POPOVER_MODE = 'dx-lookup-popover-mode';
 const LOOKUP_EMPTY_CLASS = 'dx-lookup-empty';
 const LOOKUP_POPOVER_FLIP_VERTICAL_CLASS = 'dx-popover-flipped-vertical';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
-
-const POPUP_OPTION_MAP = {
-    'popupWidth': 'width',
-    'popupHeight': 'height'
-};
-
 
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 
@@ -156,6 +149,40 @@ const Lookup = DropDownList.inherit({
 
             focusStateEnabled: false,
 
+            dropDownOptions: {
+                showTitle: true,
+
+                width: function() { return $(window).width() * 0.8; },
+
+                height: function() { return $(window).height() * 0.8; },
+
+                shading: true,
+
+                closeOnOutsideClick: false,
+
+                position: undefined,
+
+                animation: {
+                    /**
+                    * @name dxLookupOptions.animation.show
+                    * @type animationConfig
+                    * @default undefined
+                    */
+                    /**
+                    * @name dxLookupOptions.animation.hide
+                    * @type animationConfig
+                    * @default undefined
+                    */
+                },
+
+                title: '',
+
+                titleTemplate: 'title',
+
+                onTitleRendered: null,
+
+                fullScreen: false
+            },
 
             /**
             * @name dxLookupOptions.acceptCustomValue
@@ -258,21 +285,26 @@ const Lookup = DropDownList.inherit({
                 },
                 options: {
                     usePopover: true,
-                    popupHeight: 'auto'
+                    dropDownOptions: {
+                        height: 'auto'
+                    }
                 }
             },
             {
                 device: { platform: 'ios', phone: true },
                 options: {
-                    fullScreen: true
+                    dropDownOptions: {
+                        fullScreen: true
+                    }
                 }
             },
             {
                 device: { platform: 'ios', tablet: true },
                 options: {
-                    popupWidth: function() { return Math.min($(window).width(), $(window).height()) * 0.4; },
-
-                    popupHeight: 'auto',
+                    dropDownOptions: {
+                        width: function() { return Math.min($(window).width(), $(window).height()) * 0.4; },
+                        height: 'auto'
+                    },
 
                     usePopover: true,
                     useInkRipple: false
@@ -294,20 +326,23 @@ const Lookup = DropDownList.inherit({
 
                     usePopover: false,
 
-                    closeOnOutsideClick: true,
+                    dropDownOptions: {
+                        closeOnOutsideClick: true,
 
-                    popupWidth: (function() { return this._getPopupWidth(); }).bind(this),
-                    popupHeight: (function() { return this._getPopupHeight(MATERIAL_LOOKUP_LIST_ITEMS_COUNT); }).bind(this),
+                        width: (function() { return $(this.element()).outerWidth(); }).bind(this),
+                        height: (function() { return this._getPopupHeight(MATERIAL_LOOKUP_LIST_ITEMS_COUNT); }).bind(this),
+                        showTitle: false,
+
+                        position: {
+                            my: 'left top',
+                            at: 'left top',
+                            of: this.element()
+                        },
+                    },
 
                     searchEnabled: false,
 
                     showCancelButton: false,
-
-                    showPopupTitle: false,
-
-                    shading: false,
-
-                    itemCenteringEnabled: true,
 
                     _scrollToSelectedItemEnabled: true
                 }
@@ -377,7 +412,7 @@ const Lookup = DropDownList.inherit({
     _toggleOpenState: function() {
         this.callBase();
 
-        if(!this.option('fullScreen') && this.option('_scrollToSelectedItemEnabled')) {
+        if(!this.option('dropDownOptions.fullScreen') && this.option('_scrollToSelectedItemEnabled')) {
             this._setPopupPosition();
         }
     },
@@ -449,7 +484,7 @@ const Lookup = DropDownList.inherit({
             this._list && this._list.option('focusedElement', null);
         }
 
-        if(this.option('fullScreen') && this.option('_scrollToSelectedItemEnabled')) {
+        if(this.option('dropDownOptions.fullScreen') && this.option('_scrollToSelectedItemEnabled')) {
             this._popup.option('position').of = $(window);
         }
     },
@@ -518,20 +553,14 @@ const Lookup = DropDownList.inherit({
     },
 
     _renderPopup: function() {
-        if(this.option('usePopover')) {
-            if(this.option('_scrollToSelectedItemEnabled') && !this.option('itemCenteringEnabled') || !this.option('fullScreen')) {
-                this._renderPopover();
-            }
+        if(this.option('usePopover') && !this.option('dropDownOptions.fullScreen')) {
+            this._renderPopover();
         } else {
             this.callBase();
         }
 
         this._$popup.addClass(LOOKUP_POPUP_CLASS);
         this._popup._wrapper().addClass(LOOKUP_POPUP_WRAPPER_CLASS);
-    },
-
-    _popupOptionMap: function(optionName) {
-        return POPUP_OPTION_MAP[optionName] || optionName;
     },
 
     _renderPopover: function() {
@@ -542,7 +571,9 @@ const Lookup = DropDownList.inherit({
             fullScreen: false,
             shading: false,
             closeOnTargetScroll: true,
-            width: this._isInitialOptionValue('popupWidth') ? (function() { return this.$element().outerWidth(); }).bind(this) : this._popupConfig().width
+            width: this._isInitialOptionValue('dropDownOptions.width')
+                ? (function() { return this.$element().outerWidth(); }).bind(this)
+                : this._popupConfig().width
         }));
 
         this._popup.on({
@@ -577,38 +608,18 @@ const Lookup = DropDownList.inherit({
 
     _popupConfig: function() {
         const result = extend(this.callBase(), {
-            showTitle: this.option('showPopupTitle'),
-            title: this.option('title'),
-            titleTemplate: this._getTemplateByOption('titleTemplate'),
-            onTitleRendered: this.option('onTitleRendered'),
 
             toolbarItems: this._getPopupToolbarItems(),
 
-            fullScreen: this.option('fullScreen'),
-            shading: this.option('shading'),
             closeOnTargetScroll: false,
-            closeOnOutsideClick: this.option('closeOnOutsideClick'),
-            onPositioned: null
-        });
+            onPositioned: null,
 
-        delete result.animation;
-        delete result.position;
+            maxHeight: function() { return $(window).height(); },
 
-        result.maxHeight = function() { return $(window).height(); };
+            animation: undefined,
+            position: undefined
+        }, this.option('dropDownOptions'));
 
-        if(this.option('_scrollToSelectedItemEnabled') && this.option('itemCenteringEnabled')) {
-            result.position = {
-                my: 'left top',
-                at: 'left top',
-                of: this.element()
-            };
-        }
-
-        each(['position', 'animation', 'popupWidth', 'popupHeight'], (function(_, optionName) {
-            if(this.option(optionName) !== undefined) {
-                result[this._popupOptionMap(optionName)] = this.option(optionName);
-            }
-        }).bind(this));
 
         return result;
     },
@@ -681,8 +692,8 @@ const Lookup = DropDownList.inherit({
     },
 
     _dimensionChanged: function() {
-        if(this.option('usePopover') && !this.option('popupWidth')) {
-            this.option('popupWidth', this.$element().width());
+        if(this.option('usePopover') && !this.option('dropDownOptions.width')) {
+            this.option('dropDownOptions.width', this.$element().width());
         }
 
         this.callBase();
@@ -895,6 +906,23 @@ const Lookup = DropDownList.inherit({
         this.callBase();
     },
 
+    _setDeprecatedOptions: function() {
+        this.callBase();
+
+        extend(this._deprecatedOptions, {
+            'title': { since: '20.1', alias: 'dropDownOptions.title' },
+            'titleTemplate': { since: '20.1', alias: 'dropDownOptions.titleTemplate' },
+            'onTitleRendered': { since: '20.1', alias: 'dropDownOptions.onTitleRendered' },
+            'fullScreen': { since: '20.1', alias: 'dropDownOptions.fullScreen' },
+            'popupWidth': { since: '20.1', alias: 'dropDownOptions.width' },
+            'popupHeight': { since: '20.1', alias: 'dropDownOptions.height' },
+            'shading': { since: '20.1', alias: 'dropDownOptions.shading' },
+            'closeOnOutsideClick': { since: '20.1', alias: 'dropDownOptions.closeOnOutsideClick' },
+            'position': { since: '20.1', alias: 'dropDownOptions.position' },
+            'animation': { since: '20.1', alias: 'dropDownOptions.animation' }
+        });
+    },
+
     _optionChanged: function(args) {
         const name = args.name;
         const value = args.value;
@@ -924,9 +952,9 @@ const Lookup = DropDownList.inherit({
             case 'animation':
             case 'position':
             case 'closeOnOutsideClick':
-                this._setPopupOption(name);
-                break;
             case 'fullScreen':
+                this._setPopupOption(name, value);
+                break;
             case 'usePopover':
             case 'placeholder':
                 this._invalidate();
@@ -940,10 +968,10 @@ const Lookup = DropDownList.inherit({
                 this.callBase.apply(this, arguments);
                 break;
             case 'popupWidth':
-                this._setPopupOption('popupWidth', value === 'auto' ? this.initialOption('popupWidth') : value);
+                this._setPopupOption('width', value === 'auto' ? this.initialOption('dropDownOptions').width : value);
                 break;
             case 'popupHeight':
-                this._setPopupOption('popupHeight', value === 'auto' ? this.initialOption('popupHeight') : value);
+                this._setPopupOption('height', value === 'auto' ? this.initialOption('dropDownOptions').height : value);
                 break;
             case 'pullRefreshEnabled':
             case 'useNativeScrolling':

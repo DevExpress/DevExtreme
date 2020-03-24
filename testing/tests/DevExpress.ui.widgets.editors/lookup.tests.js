@@ -1542,7 +1542,7 @@ QUnit.module('options', {
             autoValue = autoValue();
         }
 
-        assert.equal(initialValue, autoValue, 'initial value equal auto value');
+        assert.equal(autoValue, initialValue, 'initial value equal auto value');
     });
 
     QUnit.test('popupHeight', function(assert) {
@@ -1576,7 +1576,7 @@ QUnit.module('options', {
             autoValue = autoValue();
         }
 
-        assert.equal(initialValue, autoValue, 'initial value equal auto value');
+        assert.equal(autoValue, initialValue, 'initial value equal auto value');
     });
 
     QUnit.test('searchPlaceholder', function(assert) {
@@ -3237,7 +3237,7 @@ QUnit.module('default options', {
 
             const $popup = $('.dx-popup-wrapper');
 
-            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -3.5, 1, 'offset of the lookup if first item is selected');
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -3.5, 1.001, 'offset of the lookup if first item is selected');
 
             lookup._list.scrollTo(100);
 
@@ -3245,7 +3245,7 @@ QUnit.module('default options', {
 
             $(lookup.field()).trigger('dxclick');
 
-            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -3.5, 1, 'offset of the lookup after scrolling and without item selecting');
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -3.5, 1.001, 'offset of the lookup after scrolling and without item selecting');
 
             lookup.close();
 
@@ -3257,7 +3257,7 @@ QUnit.module('default options', {
 
             $(lookup.field()).trigger('dxclick');
 
-            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -3.5, 1, 'offset of the lookup after scrolling and cut-off item selecting');
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -3.5, 1.001, 'offset of the lookup after scrolling and cut-off item selecting');
             assert.roughEqual($('.dx-list-item').eq(1).position().top, lookup._list.scrollTop(), 2, 'position of the selected item after scrolling and cut-off item selecting');
 
             lookup.close();
@@ -3266,7 +3266,7 @@ QUnit.module('default options', {
 
             $(lookup.field()).trigger('dxclick');
 
-            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -2.5, 1, 'offset of the lookup if last item is selected');
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -2.5, 1.001, 'offset of the lookup if last item is selected');
 
             lookup.close();
 
@@ -3274,7 +3274,7 @@ QUnit.module('default options', {
 
             $(lookup.field()).trigger('dxclick');
 
-            assert.roughEqual($popup.find('.dx-overlay-content').position().top, 0, 1, 'offset of the lookup if not selected item');
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, 0, 1.001, 'offset of the lookup if not selected item');
         } finally {
             $lookup.remove();
             themes.isMaterial = origIsMaterial;
@@ -3382,7 +3382,7 @@ QUnit.module('default options', {
             options: {
                 usePopover: true,
                 fullScreen: false,
-                popupWidth: defaultWidth
+                'dropDownOptions.width': defaultWidth
             }
         });
         const $lookup = $('<div>').prependTo('body');

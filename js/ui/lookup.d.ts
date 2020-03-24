@@ -39,6 +39,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @deprecated dxLookupOptions.dropDownOptions.animation
      */
     animation?: { hide?: animationConfig, show?: animationConfig };
     /**
@@ -90,6 +91,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default true [for](Material)
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @deprecated dxLookupOptions.dropDownOptions.closeOnOutsideClick
      */
     closeOnOutsideClick?: boolean | (() => boolean);
     /**
@@ -119,6 +121,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default true [for](iPhone)
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @deprecated dxLookupOptions.dropDownOptions.fullScreen
      */
     fullScreen?: boolean;
     /**
@@ -191,6 +194,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @deprecated dxLookupOptions.dropDownOptions.onTitleRendered
      */
     onTitleRendered?: ((e: { component?: dxLookup, element?: dxElement, model?: any, titleElement?: dxElement }) => any);
     /**
@@ -239,6 +243,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default 'auto' [for](desktop|iPad)
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @deprecated dxLookupOptions.dropDownOptions.height
      */
     popupHeight?: number | string | (() => number | string);
     /**
@@ -249,6 +254,8 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default function() { return Math.min($(window).width(), $(window).height()) * 0.4; } [for](iPad)
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @deprecated dxLookupOptions.dropDownOptions.width
+
      */
     popupWidth?: number | string | (() => number | string);
     /**
@@ -259,6 +266,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default { my: 'left top', at: 'left top', of: lookupContainer } [for](Material)
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @deprecated dxLookupOptions.dropDownOptions.position
      */
     position?: positionConfig;
     /**
@@ -317,6 +325,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @deprecated dxLookupOptions.dropDownOptions.shading
      */
     shading?: boolean;
     /**
@@ -345,6 +354,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default false [for](Material)
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @deprecated dxLookupOptions.dropDownOptions.showTitle
      */
     showPopupTitle?: boolean;
     /**
@@ -353,6 +363,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @deprecated dxLookupOptions.dropDownOptions.title
      */
     title?: string;
     /**
@@ -363,6 +374,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @type_function_return string|Node|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @deprecated dxLookupOptions.dropDownOptions.titleTemplate
      */
     titleTemplate?: template | ((titleElement: dxElement) => string | Element | JQuery);
     /**

@@ -166,7 +166,14 @@ export class Options {
     }
 
     initial(name) {
-        return this._initial[name];
+        const nameParts = name.split('.');
+        let current = this._initial;
+
+        nameParts.forEach(property => {
+            current = current[property];
+        });
+
+        return current;
     }
 
     option(options, value) {

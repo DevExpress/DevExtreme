@@ -365,16 +365,6 @@ QUnit.module('dropDownOptions', () => {
         assert.strictEqual(instance._popup.option('showTitle'), true, 'Option has been redefined');
     });
 
-    QUnit.test('dropDownOptions should be prior than built-in public options', function(assert) {
-        const instance = $('#dropDownEditorLazy').dxDropDownEditor({
-            opened: true,
-            showPopupTitle: false,
-            dropDownOptions: { showTitle: true }
-        }).dxDropDownEditor('instance');
-
-        assert.strictEqual(instance._popup.option('showTitle'), true, 'Option has been redefined');
-    });
-
     QUnit.test('dropDownOptions should be updated when popup option changed', function(assert) {
         const instance = $('#dropDownEditorLazy').dxDropDownEditor({
             opened: true

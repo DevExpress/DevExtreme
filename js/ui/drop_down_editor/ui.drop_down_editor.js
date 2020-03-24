@@ -506,7 +506,7 @@ const DropDownEditor = TextBox.inherit({
             position: extend(this.option('popupPosition'), {
                 of: this.$element()
             }),
-            showTitle: this.option('showPopupTitle'),
+            showTitle: this.option('dropDownOptions.showTitle'),
             width: 'auto',
             height: 'auto',
             shading: false,
@@ -727,6 +727,14 @@ const DropDownEditor = TextBox.inherit({
     _dispose: function() {
         this._detachFocusOutEvents();
         this.callBase();
+    },
+
+    _setDeprecatedOptions: function() {
+        this.callBase();
+
+        extend(this._deprecatedOptions, {
+            'showPopupTitle': { since: '20.1', alias: 'dropDownOptions.showTitle' },
+        });
     },
 
     _optionChanged: function(args) {
