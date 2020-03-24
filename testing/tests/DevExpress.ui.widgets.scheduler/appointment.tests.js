@@ -40,13 +40,6 @@ QUnit.test('Scheduler appointment should be initialized', function(assert) {
     assert.ok(this.instance instanceof SchedulerAppointment, 'dxSchedulerAppointment was initialized');
 });
 
-QUnit.test('Scheduler appointment has css-class \'dx-scheduler-appointment-compact\'', function(assert) {
-    assert.notOk(this.instance.$element().hasClass('dx-scheduler-appointment-compact'), 'appointment doesn\'t have css-class');
-
-    this.instance.option('isCompact', true);
-    assert.ok(this.instance.$element().hasClass('dx-scheduler-appointment-compact'), 'appointment has right class');
-});
-
 QUnit.test('Scheduler appointment has right direction css-class', function(assert) {
     assert.notOk(this.instance.$element().hasClass('dx-scheduler-appointment-horizontal'), 'appointment doesn\'t have css-class');
     assert.ok(this.instance.$element().hasClass('dx-scheduler-appointment-vertical'), 'appointment has right class');

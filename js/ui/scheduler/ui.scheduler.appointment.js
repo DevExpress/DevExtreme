@@ -28,7 +28,6 @@ const DIRECTION_APPOINTMENT_CLASSES = {
 };
 
 const RECURRENCE_APPOINTMENT_CLASS = 'dx-scheduler-appointment-recurrence';
-const COMPACT_APPOINTMENT_CLASS = 'dx-scheduler-appointment-compact';
 
 const REDUCED_APPOINTMENT_CLASS = 'dx-scheduler-appointment-reduced';
 const REDUCED_APPOINTMENT_ICON = 'dx-scheduler-appointment-reduced-icon';
@@ -106,7 +105,6 @@ const Appointment = DOMComponent.inherit({
 
         this._renderAppointmentGeometry();
         this._renderEmptyClass();
-        this._renderCompactClass();
         this._renderReducedAppointment();
         this._renderAllDayClass();
         this._renderDirection();
@@ -197,10 +195,6 @@ const Appointment = DOMComponent.inherit({
         }
     },
 
-    _renderCompactClass: function() {
-        this.$element().toggleClass(COMPACT_APPOINTMENT_CLASS, !!this.option('isCompact'));
-    },
-
     _renderDirection: function() {
         this.$element().addClass(DIRECTION_APPOINTMENT_CLASSES[this.option('direction')]);
     },
@@ -217,7 +211,7 @@ const Appointment = DOMComponent.inherit({
     },
 
     _renderResizable: function() {
-        if(this.option('allowResize') && !this.option('isCompact')) {
+        if(this.option('allowResize')) {
             this._createComponent(this.$element(), Resizable, extend(this._createResizingConfig(), this.option('resizableConfig')));
         }
     },
