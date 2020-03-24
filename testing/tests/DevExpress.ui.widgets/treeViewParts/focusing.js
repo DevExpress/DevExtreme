@@ -85,8 +85,8 @@ configs.forEach(config => {
             displayExpr: 'id',
             focusStateEnabled: true,
             scrollDirection: 'both',
-            height: 100,
-            width: 100
+            height: 150,
+            width: 150
         });
 
         const $nodes = wrapper.getElement().find(`.${NODE_CLASS}`);
