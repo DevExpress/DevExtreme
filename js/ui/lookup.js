@@ -329,15 +329,11 @@ const Lookup = DropDownList.inherit({
                     dropDownOptions: {
                         closeOnOutsideClick: true,
 
-                        width: (function() { return $(this.element()).outerWidth(); }).bind(this),
+                        width: (function() { return this._getPopupWidth(); }).bind(this),
                         height: (function() { return this._getPopupHeight(MATERIAL_LOOKUP_LIST_ITEMS_COUNT); }).bind(this),
                         showTitle: false,
 
-                        position: {
-                            my: 'left top',
-                            at: 'left top',
-                            of: this.element()
-                        },
+                        shading: false
                     },
 
                     searchEnabled: false,
