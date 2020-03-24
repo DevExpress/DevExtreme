@@ -110,7 +110,7 @@ class TreeViewTestWrapper {
         assert.deepEqual(this.eventLog, expectedEventLog, 'eventLog ' + additionalErrorMessage);
     }
 
-    checkNodeIsVisibleArea(itemKey) {
+    checkNodeIsInVisibleArea(itemKey) {
         const $treeView = this.getElement();
         const $node = $treeView.find(`[data-item-id="${itemKey}"] .${ITEM_CLASS}`).eq(0);
         $node.find(`.${ITEM_CONTENT_CLASS}`).wrapInner('<span/>');

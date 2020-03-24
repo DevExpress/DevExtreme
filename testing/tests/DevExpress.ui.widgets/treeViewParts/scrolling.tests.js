@@ -6,7 +6,6 @@ QUnit.module('scrollToItem', () => {
     if(devices.real().ios) {
         return;
     }
-    const LEVEL_SEPARATOR = '_';
 
     function createWrapper(config, dataSource) {
         const wrapper = new TreeViewTestWrapper({
@@ -42,8 +41,8 @@ QUnit.module('scrollToItem', () => {
         ];
     }
 
-    function isScrollMustFail(key, config) {
-        const isFirstLevelNodeKey = key.indexOf(LEVEL_SEPARATOR) === -1;
+    function isNotSupported(key, config) {
+        const isFirstLevelNodeKey = key.indexOf('_') === -1;
         return config.disabled && !config.expanded && !isFirstLevelNodeKey;
     }
 
@@ -80,7 +79,7 @@ QUnit.module('scrollToItem', () => {
 
                 const wrapper = createWrapper(options, createDataSource(config.expanded, config.disabled));
                 const done = assert.async();
-                if(isScrollMustFail(key, config)) {
+                if(isNotSupported(key, config)) {
                     completionCallback.fail(() => {
                         assert.ok('scroll must fail');
                         done();
@@ -89,7 +88,7 @@ QUnit.module('scrollToItem', () => {
                     completionCallback.done(() => {
                         wrapper.getElement().focusout();
                         wrapper.getElement().focusin();
-                        wrapper.checkNodeIsVisibleArea(key);
+                        wrapper.checkNodeIsInVisibleArea(key);
                         done();
                     });
                 }
@@ -103,13 +102,13 @@ QUnit.module('scrollToItem', () => {
                 config.keysToScroll.forEach(key => {
                     const completionCallback = wrapper.instance.scrollToItem(key);
                     const done = assert.async();
-                    if(isScrollMustFail(key, config)) {
+                    if(isNotSupported(key, config)) {
                         completionCallback.fail(() => { assert.ok('scroll must fail'); done(); });
                     } else {
                         completionCallback.done(() => {
                             wrapper.getElement().focusout();
                             wrapper.getElement().focusin();
-                            wrapper.checkNodeIsVisibleArea(key);
+                            wrapper.checkNodeIsInVisibleArea(key);
                             done();
                         });
                     }
@@ -118,28 +117,41 @@ QUnit.module('scrollToItem', () => {
         });
     });
 
-    const key = 'item1_1_1';
-    [{ argType: 'key', scrollFunc: (wrapper) => wrapper.scrollToItem(key) },
-        { argType: 'itemElement', scrollFunc: (wrapper) => wrapper.scrollToItem(wrapper.$element().find(`[data-item-id="${key}"]`)) },
-        { argType: 'itemData', scrollFunc: (wrapper) => wrapper.scrollToItem(wrapper.option('dataSource')[0].items[0].items[0]) }
-    ].forEach(testCase => {
-        QUnit.test(`scrollToItem(item1_1_1: ${testCase.argType})`, function(assert) {
-            const config = { scrollDirection: 'both', initialPosition: { top: 1000, left: 1000 }, expanded: true, rtlEnabled: false };
-            const wrapper = createWrapper(config, createDataSource(true, false));
-            const completionCallback = testCase.scrollFunc(wrapper.instance);
+    QUnit.test('scrollToItem(key} -> scrollToItem(itemElement) -> scrollToItem(itemData))', function(assert) {
+        const wrapper = createWrapper({ scrollDirection: 'both', rtlEnabled: false }, [
+            { id: 'item1', expanded: true, items: [ { id: 'item1_1', expanded: true, items: [ { id: 'item1_1_1' } ] } ] },
+            { id: 'item2', expanded: true, items: [ { id: 'item2_1', expanded: true, items: [ { id: 'item2_1_1' } ] } ] },
+            { id: 'item3', expanded: true, items: [ { id: 'item3_1', expanded: true, items: [ { id: 'item3_1_1' } ] } ] },
+            { id: 'item4', expanded: true, items: [ { id: 'item4_1', expanded: true, items: [ { id: 'item4_1_1' } ] } ] },
+            { id: 'item5', expanded: true, items: [ { id: 'item5_1', expanded: true, items: [ { id: 'item5_1_1' } ] } ] }
+        ]);
 
-            const done = assert.async();
-            completionCallback.done(() => {
-                wrapper.checkNodeIsVisibleArea(key);
-                done();
-            });
+        const done = assert.async(3);
+        const key = 'item1_1_1';
+        wrapper.instance._scrollableContainer.scrollTo({ left: 0, top: 0 });
+        wrapper.instance.scrollToItem('item1_1_1').done(() => {
+            wrapper.checkNodeIsInVisibleArea(key);
+            done();
+        });
+
+        wrapper.instance._scrollableContainer.scrollTo({ left: 0, top: 0 });
+        const node = wrapper.$element().find('[data-item-id="item1_1_1"]').get(0);
+        wrapper.instance.scrollToItem(node).done(() => {
+            wrapper.checkNodeIsInVisibleArea(node);
+            done();
+        });
+
+        wrapper.instance._scrollableContainer.scrollTo({ left: 0, top: 0 });
+        const itemData = wrapper.option('dataSource')[0].items[0].items[0];
+        wrapper.instance.scrollToItem(itemData).done(() => {
+            wrapper.checkNodeIsInVisibleArea(itemData.id);
+            done();
         });
     });
 
-
     QUnit.test('scrollToItem(not exists key)', function(assert) {
         const config = { scrollDirection: 'both' };
-        const wrapper = createWrapper(config, createDataSource(true, false));
+        const wrapper = createWrapper(config, [{ id: 'item1', items: [ { id: 'item1_1', items: [ { id: 'item1_1_1' } ] } ] } ]);
 
         const done = assert.async(3);
         wrapper.instance.scrollToItem('12345').fail(() => { assert.ok('scroll must fail, node not found for this key'); done(); });

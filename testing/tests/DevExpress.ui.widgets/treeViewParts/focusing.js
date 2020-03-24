@@ -104,7 +104,7 @@ configs.forEach(config => {
         const nextFocusedKey = getNextFocusedKey($nodes, $node, config.direction);
         const actualFocusedItemKey = $(wrapper.instance.option('focusedElement')).attr('data-item-id');
         assert.equal(nextFocusedKey, actualFocusedItemKey);
-        wrapper.checkNodeIsVisibleArea(nextFocusedKey);
+        wrapper.checkNodeIsInVisibleArea(nextFocusedKey);
     });
 
     function getNextFocusedKey($nodes, $node, direction) {
