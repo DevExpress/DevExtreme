@@ -137,12 +137,12 @@ QUnit.module('scrollToItem', () => {
         wrapper.instance._scrollableContainer.scrollTo({ left: 0, top: 0 });
         const node = wrapper.getElement().find('[data-item-id="item1_1_1"]').get(0);
         wrapper.instance.scrollToItem(node).done(() => {
-            wrapper.checkNodeIsInVisibleArea(node);
+            wrapper.checkNodeIsInVisibleArea(node.getAttribute('data-item-id'));
             done();
         });
 
         wrapper.instance._scrollableContainer.scrollTo({ left: 0, top: 0 });
-        const itemData = wrapper.option('dataSource')[0].items[0].items[0];
+        const itemData = wrapper.instance.option('dataSource')[0].items[0].items[0];
         wrapper.instance.scrollToItem(itemData).done(() => {
             wrapper.checkNodeIsInVisibleArea(itemData.id);
             done();
