@@ -1508,9 +1508,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             const node = this._getNodeByElement($focusedNode.children('.' + ITEM_CLASS));
             this._toggleExpandedState(node, false);
         } else {
-            const $collapsedItem = this._getClosestNonDisabledNode($focusedNode);
-            $collapsedItem.length && this.option('focusedElement', getPublicElement($collapsedItem));
-            this._scrollableContainer.scrollToElement(this._getNodeItemElement($collapsedItem));
+            const collapsedNode = this._getClosestNonDisabledNode($focusedNode);
+            collapsedNode.length && this.option('focusedElement', getPublicElement(collapsedNode));
+            this._scrollableContainer.scrollToElement(this._getNodeItemElement(collapsedNode));
         }
     },
 
