@@ -1477,9 +1477,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const $node = $focusedNode.find(`.${NODE_CONTAINER_CLASS}`).eq(0);
 
         if($node.hasClass(OPENED_NODE_CONTAINER_CLASS)) {
-            const $nextNode = this._nextItem(this._findNonDisabledNodes(this._nodeElements()));
-            this.option('focusedElement', getPublicElement($nextNode));
-            this._scrollableContainer.scrollToElement(this._getNodeItemElement($nextNode));
+            const $nextItem = this._nextItem(this._findNonDisabledNodes(this._nodeElements()));
+            this.option('focusedElement', getPublicElement($nextItem));
+            this._scrollableContainer.scrollToElement(this._getNodeItemElement($nextItem));
             return;
         }
 
@@ -1508,9 +1508,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             const node = this._getNodeByElement($focusedNode.children('.' + ITEM_CLASS));
             this._toggleExpandedState(node, false);
         } else {
-            const $collapsedNode = this._getClosestNonDisabledNode($focusedNode);
-            $collapsedNode.length && this.option('focusedElement', getPublicElement($collapsedNode));
-            this._scrollableContainer.scrollToElement(this._getNodeItemElement($collapsedNode));
+            const $collapsedItem = this._getClosestNonDisabledNode($focusedNode);
+            $collapsedItem.length && this.option('focusedElement', getPublicElement($collapsedItem));
+            this._scrollableContainer.scrollToElement(this._getNodeItemElement($collapsedItem));
         }
     },
 
