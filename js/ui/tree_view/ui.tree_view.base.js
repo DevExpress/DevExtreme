@@ -1401,10 +1401,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         switch(location) {
             case FOCUS_UP: {
-                const prevItem = this._prevItem($items);
-                this.option('focusedElement', getPublicElement(prevItem));
+                const $prevItem = this._prevItem($items);
+                this.option('focusedElement', getPublicElement($prevItem));
 
-                const itemElement = this._getNodeItemElement(prevItem);
+                const itemElement = this._getNodeItemElement($prevItem);
                 this._scrollableContainer.scrollToElement(itemElement);
                 if(e.shiftKey && this._showCheckboxes()) {
                     this._updateItemSelection(true, itemElement);
@@ -1412,10 +1412,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 break;
             }
             case FOCUS_DOWN: {
-                const nextItem = this._nextItem($items);
-                this.option('focusedElement', getPublicElement(nextItem));
+                const $nextItem = this._nextItem($items);
+                this.option('focusedElement', getPublicElement($nextItem));
 
-                const itemElement = this._getNodeItemElement(nextItem);
+                const itemElement = this._getNodeItemElement($nextItem);
                 this._scrollableContainer.scrollToElement(itemElement);
                 if(e.shiftKey && this._showCheckboxes()) {
                     this._updateItemSelection(true, itemElement);
@@ -1423,24 +1423,24 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 break;
             }
             case FOCUS_FIRST: {
-                const firstItem = $items.first();
+                const $firstItem = $items.first();
                 if(e.shiftKey && this._showCheckboxes()) {
                     this._updateSelectionToFirstItem($items, $items.index(this._prevItem($items)));
                 }
 
-                this.option('focusedElement', getPublicElement(firstItem));
-                this._scrollableContainer.scrollToElement(this._getNodeItemElement(firstItem));
+                this.option('focusedElement', getPublicElement($firstItem));
+                this._scrollableContainer.scrollToElement(this._getNodeItemElement($firstItem));
                 break;
             }
             case FOCUS_LAST: {
-                const lastItem = $items.last();
+                const $lastItem = $items.last();
 
                 if(e.shiftKey && this._showCheckboxes()) {
                     this._updateSelectionToLastItem($items, $items.index(this._nextItem($items)));
                 }
 
-                this.option('focusedElement', getPublicElement(lastItem));
-                this._scrollableContainer.scrollToElement(this._getNodeItemElement(lastItem));
+                this.option('focusedElement', getPublicElement($lastItem));
+                this._scrollableContainer.scrollToElement(this._getNodeItemElement($lastItem));
                 break;
             }
             case FOCUS_RIGHT: {
