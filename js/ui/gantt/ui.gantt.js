@@ -447,7 +447,7 @@ class Gantt extends Widget {
         if(!this._dialogInstance) {
             this._dialogInstance = new GanttDialog(this, this._$dialog);
         }
-        this._dialogInstance.show(e.name, e.parameters, e.callback, this.option('editing'));
+        this._dialogInstance.show(e.name, e.parameters, e.callback, e.afterClosing, this.option('editing'));
     }
     _showPopupMenu(e) {
         this._ganttView.getBarManager().updateContextMenu();
@@ -527,7 +527,13 @@ class Gantt extends Widget {
                 * @type string|function
                 * @default "title"
                 */
-                titleExpr: 'title'
+                titleExpr: 'title',
+                /**
+                * @name dxGanttOptions.tasks.colorExpr
+                * @type string|function
+                * @default "color"
+                */
+                colorExpr: 'color'
             },
             dependencies: {
                 /**
@@ -579,7 +585,13 @@ class Gantt extends Widget {
                 * @type string|function
                 * @default "text"
                 */
-                textExpr: 'text'
+                textExpr: 'text',
+                /**
+                * @name dxGanttOptions.resources.colorExpr
+                * @type string|function
+                * @default "color"
+                */
+                colorExpr: 'color'
             },
             resourceAssignments: {
                 /**
