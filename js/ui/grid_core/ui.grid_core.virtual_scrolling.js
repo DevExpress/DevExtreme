@@ -782,8 +782,9 @@ module.exports = {
                                 const rowIndex = Math.floor(itemIndex) - rowIndexOffset;
                                 const component = that.component;
                                 const scrollable = component.getScrollable && component.getScrollable();
+                                const isSortingOperation = that.dataSource().operationTypes().sorting;
 
-                                if(scrollable && !that.option('legacyRendering')) {
+                                if(scrollable && !that.option('legacyRendering') && !isSortingOperation) {
                                     const rowElement = component.getRowElement(rowIndex);
                                     const $rowElement = rowElement && rowElement[0] && $(rowElement[0]);
                                     let top = $rowElement && $rowElement.position().top;
