@@ -244,7 +244,7 @@ const lineSeries = exports.chart['line'] = _extend({}, chartScatterSeries, lineM
                 tmpCoord = needValueCoord ? k * coord + b : (coord - b) / k;
             }
 
-            if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
+            if(this._checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
                 oppositeCoord = tmpCoord;
                 break;
             }
@@ -299,7 +299,7 @@ exports.chart['stepline'] = _extend({}, lineSeries, {
                 tmpCoord = coord === p[0][coordName] ? p[0][oppositeCoordName] : p[1][oppositeCoordName];
             }
 
-            if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
+            if(this._checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
                 oppositeCoord = tmpCoord;
                 break;
             }

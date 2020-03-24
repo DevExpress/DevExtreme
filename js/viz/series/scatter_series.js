@@ -608,7 +608,7 @@ exports.chart = _extend({}, baseScatterMethods, {
         that._trackersTranslator = that.groupPointsByCoords(rotated);
     },
 
-    checkAxisVisibleAreaCoord(isArgument, coord) {
+    _checkAxisVisibleAreaCoord(isArgument, coord) {
         const axis = isArgument ? this.getArgumentAxis() : this.getValueAxis();
         const visibleArea = axis.getVisibleArea();
 
@@ -630,7 +630,7 @@ exports.chart = _extend({}, baseScatterMethods, {
             const p = points[i];
             const tmpCoord = p[coordName] === coord ? p[oppositeCoordName] : undefined;
 
-            if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
+            if(this._checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
                 oppositeCoord = tmpCoord;
                 break;
             }
@@ -656,20 +656,16 @@ exports.chart = _extend({}, baseScatterMethods, {
         const bezierPoints = that._getBezierPoints();
         const nearestPoints = [];
 
-        if(that.isVisible() && allPoints.length > 0) {
-            if(allPoints.length > 1) {
-                allPoints.forEach((point, i) => {
-                    const nextPoint = allPoints[i + 1];
-                    if(nextPoint && (point[coordName] <= coord && nextPoint[coordName] >= coord ||
+        if(allPoints.length > 1) {
+            allPoints.forEach((point, i) => {
+                const nextPoint = allPoints[i + 1];
+                if(nextPoint && (point[coordName] <= coord && nextPoint[coordName] >= coord ||
                         point[coordName] >= coord && nextPoint[coordName] <= coord)) {
-                        nearestPoints.push(that._getNearestPoints(point, nextPoint, bezierPoints));
-                    }
-                });
-            } else {
-                if(allPoints[0][coordName] === coord) {
-                    nearestPoints.push([allPoints[0]]);
+                    nearestPoints.push(that._getNearestPoints(point, nextPoint, bezierPoints));
                 }
-            }
+            });
+        } else {
+            nearestPoints.push([allPoints[0], allPoints[0]]);
         }
 
         return nearestPoints;
