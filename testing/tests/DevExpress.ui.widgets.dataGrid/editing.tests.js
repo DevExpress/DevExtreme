@@ -8595,8 +8595,13 @@ QUnit.module('Editing with validation', {
             return renderer('.dx-datagrid');
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'columnFixing', 'rows', 'editing', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity', 'summary'], {
-            initViews: true
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'columnFixing', 'rows', 'editing', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity', 'summary', 'keyboardNavigation'], {
+            initViews: true,
+            options: {
+                keyboardNavigation: {
+                    enabled: true
+                }
+            }
         });
 
         this.applyOptions = function(options) {
@@ -8605,11 +8610,17 @@ QUnit.module('Editing with validation', {
             this.columnsController.init();
             this.editingController.init();
             this.validatingController.init();
+            this.keyboardNavigationController.init();
         };
 
         this.columnHeadersView.getColumnCount = function() {
             return 3;
         };
+
+        this.focus = function($element) {
+            this.keyboardNavigationController.focus($element);
+        };
+
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
@@ -12572,6 +12583,10 @@ QUnit.test('validatingController - validation result should be removed from cach
     this.clock.tick();
     const rowKey = this.getKeyByRowIndex(0);
 
+    const $firstCell = $(this.getCellElement(0, 0));
+    this.focus($firstCell);
+    this.clock.tick();
+
     let result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
 
     // assert
@@ -12632,6 +12647,51 @@ QUnit.test('validatingController - all validation results of a certain row shoul
     assert.notOk(result1, 'result1 should not be defined');
     assert.notOk(result2, 'result2 should not be defined');
     assert.notOk(editData.validated, 'editData should not be validated');
+});
+
+QUnit.test('Row - An untouched cell should not be validated (T872003)', function(assert) {
+    // arrange
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    rowsView.render(testElement);
+
+    this.applyOptions({
+        editing: {
+            mode: 'row'
+        },
+        columns: [
+            {
+                dataField: 'name'
+            },
+            {
+                dataField: 'age',
+                validationRules: [
+                    {
+                        type: 'custom',
+                        validationCallback: function() {
+                            return false;
+                        }
+                    }
+                ]
+            }
+        ]
+    });
+
+    this.editRow(0);
+    this.clock.tick();
+    const rowKey = this.getKeyByRowIndex(0);
+
+    const $secondCell = $(this.getCellElement(0, 1));
+
+    // assert
+    assert.notOk($secondCell.hasClass('dx-focused'), 'cell is not focused');
+    assert.notOk($secondCell.hasClass('dx-datagrid-invalid'), 'cell is not marked as invalid');
+
+    const result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 1 });
+
+    // assert
+    assert.notOk(result, 'result should not be defined');
 });
 
 // T865329
@@ -16999,8 +17059,13 @@ QUnit.module('Async validation', {
             return renderer('.dx-datagrid');
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'columnFixing', 'rows', 'editing', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity', 'summary'], {
-            initViews: true
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'columnFixing', 'rows', 'editing', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity', 'summary', 'keyboardNavigation'], {
+            initViews: true,
+            options: {
+                keyboardNavigation: {
+                    enabled: true
+                }
+            }
         });
 
         this.applyOptions = function(options) {
@@ -17019,6 +17084,10 @@ QUnit.module('Async validation', {
             const inputElement = getInputElements(inputContainer).first();
             inputElement.val(value);
             inputElement.trigger('change');
+        };
+
+        this.focus = function($element) {
+            this.keyboardNavigationController.focus($element);
         };
 
     },
@@ -17201,8 +17270,12 @@ QUnit.module('Async validation', {
 
         // act
         this.editCell(0, 0);
-        const $editor = $(this.getCellElement(0, 0)).find('.dx-texteditor');
 
+        const $firstCell = $(this.getCellElement(0, 0));
+        this.focus($firstCell);
+        const $editor = $firstCell.find('.dx-texteditor');
+
+        // assert
         assert.ok($editor.hasClass('dx-validation-pending'));
     });
 });
