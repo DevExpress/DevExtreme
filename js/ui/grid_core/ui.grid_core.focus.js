@@ -509,14 +509,22 @@ module.exports = {
                     return this.callBase.apply(this, arguments);
                 },
 
-                _fireChanged: function(e) {
-                    this.callBase(e);
+                initFocusedRow: function() {
+                    if(this.isLoaded()) {
+                        this.focusedRowDataChangedHandler();
+                    }
+
+                    this.changed.add(this.focusedRowDataChangedHandler.bind(this));
+                },
+
+                focusedRowDataChangedHandler: function(e) {
+                    e = e || {};
 
                     if(this.option('focusedRowEnabled') && this._dataSource) {
                         const isPartialUpdate = e.changeType === 'update' && e.repaintChangesOnly;
                         const isPartialUpdateWithDeleting = isPartialUpdate && e.changeTypes && e.changeTypes.indexOf('remove') >= 0;
 
-                        if(e.changeType === 'refresh' && e.items.length || isPartialUpdateWithDeleting) {
+                        if(e.changeType === 'refresh' && e.items.length || isPartialUpdateWithDeleting || !e.changeType) {
                             this.processUpdateFocusedRow();
                         } else if(e.changeType === 'append' || e.changeType === 'prepend') {
                             this._updatePageIndexes();
@@ -701,6 +709,11 @@ module.exports = {
 
         views: {
             rowsView: {
+                init: function() {
+                    this.callBase.apply(this, arguments);
+                    this.getController('data').initFocusedRow();
+                },
+
                 _createRow: function(row) {
                     const $row = this.callBase(row);
 
