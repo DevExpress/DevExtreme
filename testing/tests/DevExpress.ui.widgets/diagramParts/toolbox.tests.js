@@ -41,7 +41,7 @@ QUnit.module('Toolbox', {
         this.instance.option('toolbox.visibility', 'collapsed');
         let $accordion = $('body').find(Consts.TOOLBOX_ACCORDION_SELECTOR);
         assert.equal($accordion.length, 0);
-        const optionsButton = findViewToolbarItem(this.$element, 'properties');
+        const optionsButton = findViewToolbarItem(this.$element, 'settings');
         optionsButton.trigger('dxclick');
         const showToolboxButton = findContextMenuItem(this.$element, 'show toolbox');
         showToolboxButton.trigger('dxclick');

@@ -429,7 +429,8 @@
         "dxDiagram-dialogEditShapeImageLabelText": "или перетащите файл сюда",
 
         "dxDiagram-uiExport": "Экспорт",
-        "dxDiagram-uiProperties": "Настройки",
+        "dxDiagram-uiProperties": "Свойства",
+        "dxDiagram-uiSettings": "Настройки",
         "dxDiagram-uiShowToolbox": "Панель инструментов",
         "dxDiagram-uiSearch": "Поиск",
         "dxDiagram-uiStyle": "Стиль",
