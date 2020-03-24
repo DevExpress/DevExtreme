@@ -1231,12 +1231,9 @@ QUnit.module('optionChanged', moduleSetup, () => {
         constructor($element, options) {
             this.element = $element.get(0);
             this.options = options;
-            this.instance = this._getAccordionInstance(options);
+            this.instance = new Accordion(this.element, options);
         }
 
-        _getAccordionInstance(options) {
-            return new Accordion(this.element, options);
-        }
         _getItemElements() {
             return this.element.querySelectorAll(`.${ACCORDION_ITEM_CLASS}`);
         }
