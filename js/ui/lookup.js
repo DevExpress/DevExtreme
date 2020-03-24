@@ -4,6 +4,7 @@ const window = require('../core/utils/window').getWindow();
 const support = require('../core/utils/support');
 const commonUtils = require('../core/utils/common');
 const domUtils = require('../core/utils/dom');
+const each = require('../core/utils/iterator').each;
 const extend = require('../core/utils/extend').extend;
 const inkRipple = require('./widget/utils.ink_ripple');
 const messageLocalization = require('../localization/message');
@@ -626,7 +627,7 @@ const Lookup = DropDownList.inherit({
     _preventFocusOnPopup: commonUtils.noop,
 
     _popupConfig: function() {
-        return extend(this.callBase(), {
+        const result = extend(this.callBase(), {
 
             toolbarItems: this._getPopupToolbarItems(),
 
@@ -635,9 +636,34 @@ const Lookup = DropDownList.inherit({
 
             maxHeight: function() { return $(window).height(); },
 
-            animation: undefined,
-            position: undefined
-        }, this.option('dropDownOptions'));
+            showTitle: this.option('dropDownOptions.showTitle'),
+            title: this.option('dropDownOptions.title'),
+            titleTemplate: this._getTemplateByOption('dropDownOptions.titleTemplate'),
+            onTitleRendered: this.option('dropDownOptions.onTitleRendered'),
+            fullScreen: this.option('dropDownOptions.fullScreen'),
+            shading: this.option('dropDownOptions.shading'),
+            closeOnOutsideClick: this.option('dropDownOptions.closeOnOutsideClick'),
+        });
+
+        delete result.animation;
+        delete result.position;
+
+        if(this.option('_scrollToSelectedItemEnabled') && this.option('itemCenteringEnabled')) {
+            result.position = {
+                my: 'left top',
+                at: 'left top',
+                of: this.element()
+            };
+        }
+
+        each(['position', 'animation', 'width', 'height'], (function(_, optionName) {
+            const popupOptionValue = this.option(`dropDownOptions.${ optionName }`);
+            if(popupOptionValue !== undefined) {
+                result[optionName] = popupOptionValue;
+            }
+        }).bind(this));
+
+        return result;
     },
 
     _getPopupToolbarItems: function() {
