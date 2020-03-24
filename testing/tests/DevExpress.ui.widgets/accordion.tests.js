@@ -1288,79 +1288,77 @@ QUnit.module('optionChanged', moduleSetup, () => {
     configs.forEach(config => {
         const { collapsible, multiple, deferRendering, repaintChangesOnly } = config;
         // T871954
-        if(!repaintChangesOnly) {
-            QUnit.test(config.message + '[item_0.selected, item_1] -> .option(items[0].title, "new_value") -> .expandItem(1)', function(assert) {
-                const items = [ { id: 0, title: 'item_0' }, { id: 1, title: 'item_1' } ];
-                const helper = new AccordionTestHelper(this.$element, {
-                    selectedIndex: 0,
-                    items,
-                    collapsible,
-                    multiple,
-                    deferRendering,
-                    repaintChangesOnly
-                });
-
-                helper.checkItems(assert, items, [0]);
-                helper.instance.option('items[0].title', 'new_item_0');
-                helper.checkItems(assert, items, [0]);
-                helper.instance.expandItem(1);
-                helper.checkItems(assert, items, multiple ? [0, 1] : [1]);
+        QUnit.test(config.message + '[item_0.selected, item_1] -> .option(items[0].title, "new_value") -> .expandItem(1)', function(assert) {
+            const items = [ { id: 0, title: 'item_0' }, { id: 1, title: 'item_1' } ];
+            const helper = new AccordionTestHelper(this.$element, {
+                selectedIndex: 0,
+                items,
+                collapsible,
+                multiple,
+                deferRendering,
+                repaintChangesOnly
             });
 
-            QUnit.test(config.message + '[item_0.selected, item_1] -> .option(items[1].title, "new_value") -> .expandItem(1)', function(assert) {
-                const items = [ { id: 0, title: 'item_0' }, { id: 1, title: 'item_1' } ];
-                const helper = new AccordionTestHelper(this.$element, {
-                    selectedIndex: 0,
-                    items,
-                    collapsible,
-                    multiple,
-                    deferRendering,
-                    repaintChangesOnly
-                });
+            helper.checkItems(assert, items, [0]);
+            helper.instance.option('items[0].title', 'new_item_0');
+            helper.checkItems(assert, items, [0]);
+            helper.instance.expandItem(1);
+            helper.checkItems(assert, items, multiple ? [0, 1] : [1]);
+        });
 
-                helper.checkItems(assert, items, [0]);
-                helper.instance.option('items[1].title', 'new_item_1');
-                helper.checkItems(assert, items, [0]);
-                helper.instance.expandItem(1);
-                helper.checkItems(assert, items, multiple ? [0, 1] : [1]);
+        QUnit.test(config.message + '[item_0.selected, item_1] -> .option(items[1].title, "new_value") -> .expandItem(1)', function(assert) {
+            const items = [ { id: 0, title: 'item_0' }, { id: 1, title: 'item_1' } ];
+            const helper = new AccordionTestHelper(this.$element, {
+                selectedIndex: 0,
+                items,
+                collapsible,
+                multiple,
+                deferRendering,
+                repaintChangesOnly
             });
 
-            QUnit.test(config.message + '[item_0.selected, item_1] -> .option(items[0].title, "new_value") -> .collapseItem(0)', function(assert) {
-                const items = [ { id: 0, title: 'item_0' }, { id: 1, title: 'item_1' } ];
-                const helper = new AccordionTestHelper(this.$element, {
-                    selectedIndex: 0,
-                    items,
-                    collapsible,
-                    multiple,
-                    deferRendering,
-                    repaintChangesOnly
-                });
+            helper.checkItems(assert, items, [0]);
+            helper.instance.option('items[1].title', 'new_item_1');
+            helper.checkItems(assert, items, [0]);
+            helper.instance.expandItem(1);
+            helper.checkItems(assert, items, multiple ? [0, 1] : [1]);
+        });
 
-                helper.checkItems(assert, items, [0]);
-                helper.instance.option('items[0].title', 'new_item_0');
-                helper.checkItems(assert, items, [0]);
-                helper.instance.collapseItem(0);
-                helper.checkItems(assert, items, collapsible ? [] : [0]);
+        QUnit.test(config.message + '[item_0.selected, item_1] -> .option(items[0].title, "new_value") -> .collapseItem(0)', function(assert) {
+            const items = [ { id: 0, title: 'item_0' }, { id: 1, title: 'item_1' } ];
+            const helper = new AccordionTestHelper(this.$element, {
+                selectedIndex: 0,
+                items,
+                collapsible,
+                multiple,
+                deferRendering,
+                repaintChangesOnly
             });
 
-            QUnit.test(config.message + '[item_0.selected, item_1] -> .option(items[1].title, "new_value") -> .collapseItem(0)', function(assert) {
-                const items = [ { id: 0, title: 'item_0' }, { id: 1, title: 'item_1' } ];
-                const helper = new AccordionTestHelper(this.$element, {
-                    selectedIndex: 0,
-                    items,
-                    collapsible,
-                    multiple,
-                    deferRendering,
-                    repaintChangesOnly
-                });
+            helper.checkItems(assert, items, [0]);
+            helper.instance.option('items[0].title', 'new_item_0');
+            helper.checkItems(assert, items, [0]);
+            helper.instance.collapseItem(0);
+            helper.checkItems(assert, items, collapsible ? [] : [0]);
+        });
 
-                helper.checkItems(assert, items, [0]);
-                helper.instance.option('items[1].title', 'new_item_1');
-                helper.checkItems(assert, items, [0]);
-                helper.instance.collapseItem(0);
-                helper.checkItems(assert, items, collapsible ? [] : [0]);
+        QUnit.test(config.message + '[item_0.selected, item_1] -> .option(items[1].title, "new_value") -> .collapseItem(0)', function(assert) {
+            const items = [ { id: 0, title: 'item_0' }, { id: 1, title: 'item_1' } ];
+            const helper = new AccordionTestHelper(this.$element, {
+                selectedIndex: 0,
+                items,
+                collapsible,
+                multiple,
+                deferRendering,
+                repaintChangesOnly
             });
-        }
+
+            helper.checkItems(assert, items, [0]);
+            helper.instance.option('items[1].title', 'new_item_1');
+            helper.checkItems(assert, items, [0]);
+            helper.instance.collapseItem(0);
+            helper.checkItems(assert, items, collapsible ? [] : [0]);
+        });
 
         QUnit.test(config.message + 'item1.display: false -> accordion.option(items[1].visible, true) -> accordion.option(items[1].visible, false) (T869114)', function(assert) {
             const $element = this.$element.dxAccordion({

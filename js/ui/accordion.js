@@ -376,13 +376,25 @@ const Accordion = CollectionWidget.inherit({
         if(property === 'visible') {
             this._updateItemHeightsWrapper(true);
         }
-        if(property === 'title') {
-            this._renderSelection(this._getSelectedItemIndices(), []);
+    },
+
+    _tryParseItemPropertyName: function(fullName) {
+        const matches = fullName.match(/.*\.(.*)/);
+
+        if(isDefined(matches) && matches.length) {
+            return matches[1];
         }
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
+            case 'items':
+                this.callBase(args);
+
+                if(this._tryParseItemPropertyName(args.fullName) === 'title') {
+                    this._renderSelection(this._getSelectedItemIndices(), []);
+                }
+                break;
             case 'animationDuration':
             case 'onItemTitleClick':
             case '_animationEasing':
