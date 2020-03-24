@@ -420,8 +420,8 @@ QUnit.module('typing', moduleConfig, () => {
         clock.restore();
     });
 
-    QUnit.test('TextEditor with mask option should work correctly with ios autofill (T869537)', function(assert) {
-        if(!browser.webkit) {
+    QUnit.test('TextEditor with mask option should work correctly with autofill (T869537)', function(assert) {
+        if(!browser.webkit && !(browser.msie && browser.version > 11)) {
             assert.expect(0);
             return;
         }
@@ -441,7 +441,12 @@ QUnit.module('typing', moduleConfig, () => {
         const keyboard = keyboardMock($input, true);
 
         $input.val(testText);
-        const inputMatchesStub = sinon.stub($input.get(0), 'matches', () => true);
+        let inputMatchesStub;
+        if(browser.webkit) {
+            inputMatchesStub = sinon.stub($input.get(0), 'matches', () => true);
+        } else {
+            $input.addClass('edge-autofilled');
+        }
 
         if(devices.real().android) {
             keyboard.beforeInput(testText, 'insertText');
@@ -454,7 +459,7 @@ QUnit.module('typing', moduleConfig, () => {
         assert.equal(textEditor.option('isValid'), true, 'isValid is true');
 
         clock.restore();
-        inputMatchesStub.restore();
+        inputMatchesStub && inputMatchesStub.restore();
     });
 });
 
