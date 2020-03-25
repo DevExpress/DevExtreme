@@ -163,18 +163,7 @@ const Lookup = DropDownList.inherit({
 
                 position: undefined,
 
-                animation: {
-                    /**
-                    * @name dxLookupOptions.animation.show
-                    * @type animationConfig
-                    * @default undefined
-                    */
-                    /**
-                    * @name dxLookupOptions.animation.hide
-                    * @type animationConfig
-                    * @default undefined
-                    */
-                },
+                animation: {},
 
                 title: '',
 
