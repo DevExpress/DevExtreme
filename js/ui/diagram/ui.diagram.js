@@ -632,6 +632,8 @@ class Diagram extends Widget {
         this._diagramInstance.onNodeRemoved = this._raiseNodeRemovedAction.bind(this);
         this._diagramInstance.onToolboxDragStart = this._raiseToolboxDragStart.bind(this);
         this._diagramInstance.onToolboxDragEnd = this._raiseToolboxDragEnd.bind(this);
+        this._diagramInstance.onTextInputStart = this._raiseTextInputStart.bind(this);
+        this._diagramInstance.onTextInputEnd = this._raiseTextInputEnd.bind(this);
         this._diagramInstance.onToggleFullscreen = this._onToggleFullScreen.bind(this);
         this._diagramInstance.onShowContextMenu = this._onShowContextMenu.bind(this);
         this._diagramInstance.onHideContextMenu = this._onHideContextMenu.bind(this);
@@ -2041,6 +2043,22 @@ class Diagram extends Widget {
             if(this._toolboxDragHidden) {
                 this._toolbox.show();
                 delete this._toolboxDragHidden;
+            }
+        }
+    }
+    _raiseTextInputStart() {
+        if(this._propertiesPanel) {
+            if(this.isMobileScreenSize() && this._propertiesPanel.isVisible()) {
+                this._propertiesPanel.hide();
+                this._propertiesPanelTextInputHidden = true;
+            }
+        }
+    }
+    _raiseTextInputEnd() {
+        if(this._propertiesPanel) {
+            if(this._propertiesPanelTextInputHidden) {
+                this._propertiesPanel.show();
+                delete this._propertiesPanelTextInputHidden;
             }
         }
     }

@@ -272,7 +272,9 @@ class DiagramToolbar extends DiagramPanel {
                 },
                 onItemClick: ({ component, itemData }) => {
                     DiagramMenuHelper.onContextMenuItemClick(this, itemData, actionHandler.bind(this));
-                    component.hide();
+                    if(!itemData.items || !itemData.items.length) {
+                        component.hide();
+                    }
                 },
                 onShowing: (e) => {
                     if(this._showingSubMenu) return;
