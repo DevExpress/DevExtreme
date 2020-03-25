@@ -42,6 +42,10 @@ const animation = {
 };
 
 const SlideOutView = Widget.inherit({
+    ctor: function(element, options) {
+        this.callBase(element, options);
+        this._logDeprecatedComponentWarning('20.1', 'dxDrawer');
+    },
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {

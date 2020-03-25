@@ -95,7 +95,7 @@ const Component = Class.inherit({
             this._options.onChanging(
                 (name, previousValue, value) => this._initialized && this._optionChanging(name, previousValue, value));
             this._options.onDeprecated(
-                (option, info) => this._logDeprecatedWarning(option, info));
+                (option, info) => this._logDeprecatedOptionWarning(option, info));
             this._options.onChanged(
                 (name, value, previousValue) => this._notifyOptionChanged(name, value, previousValue));
             this._options.onStartChange(() => this.beginUpdate());
@@ -125,9 +125,13 @@ const Component = Class.inherit({
         });
     },
 
-    _logDeprecatedWarning(option, info) {
+    _logDeprecatedOptionWarning(option, info) {
         const message = info.message || (`Use the '${info.alias}' option instead`);
         errors.log('W0001', this.NAME, option, info.since, message);
+    },
+
+    _logDeprecatedComponentWarning(since, alias) {
+        errors.log('W0000', this.NAME, since, `Use the '${alias}' widget instead`);
     },
 
     _createOptionChangedAction() {
