@@ -2330,15 +2330,19 @@ const Scheduler = Widget.inherit({
     },
 
     _convertRecurrenceException: function(exception, exceptionByStartDate, startDateTimeZone) {
-        const format = recurrenceUtils.getAsciiStringFormat(exception);
+        // const format = recurrenceUtils.getAsciiStringFormat(exception);
 
         exception = exception.replace(/\s/g, '');
         exception = dateSerialization.deserializeDate(exception);
         exception = this.fire('convertDateByTimezone', exception, startDateTimeZone);
 
-        if(format === 'date') {
-            exception.setHours(exceptionByStartDate.getHours());
-        }
+        exception = utils.getCorrectedDateByDaylightOffsets(exception, exceptionByStartDate, exception, this.option('timeZone'), startDateTimeZone);
+
+        // const appointmentTimezoneDiff =  utils.calculateTimezoneByValue(startDateTimeZone, exceptionByStartDate) - utils.calculateTimezoneByValue(startDateTimeZone, exception);
+        // exception = new Date(exception.getTime() - appointmentTimezoneDiff * toMs('hour'));
+        // if(format === 'date') {
+        // exception.setHours(exceptionByStartDate.getHours());
+        // }
         exception = dateSerialization.serializeDate(exception, FULL_DATE_FORMAT);
         return exception;
     },

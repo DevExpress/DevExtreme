@@ -39,8 +39,8 @@ const _getDaylightOffsetByTimezone = (startDate, endDate, timeZone) => {
 };
 
 const getCorrectedDateByDaylightOffsets = (convertedOriginalStartDate, convertedDate, date, timeZone, startDateTimezone) => {
-    const daylightOffsetByCommonTimezone = _getDaylightOffsetByTimezone(convertedOriginalStartDate, convertedDate, timeZone);
-    const daylightOffsetByAppointmentTimezone = _getDaylightOffsetByTimezone(convertedOriginalStartDate, convertedDate, startDateTimezone);
+    const daylightOffsetByCommonTimezone = timeZone ? _getDaylightOffsetByTimezone(convertedOriginalStartDate, convertedDate, timeZone) : 0;
+    const daylightOffsetByAppointmentTimezone = startDateTimezone ? _getDaylightOffsetByTimezone(convertedOriginalStartDate, convertedDate, startDateTimezone) : 0;
     const diff = daylightOffsetByCommonTimezone - daylightOffsetByAppointmentTimezone;
 
     return new Date(date.getTime() - diff * toMs('hour'));
