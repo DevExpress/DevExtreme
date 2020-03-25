@@ -1500,25 +1500,6 @@ QUnit.test('Tables should take css class after width calculation(T491453)', func
 });
 
 if(devices.real().deviceType === 'desktop') {
-    QUnit.test('ScrollTo of dateTable scrollable shouldn\'t be called when dateTable scrollable scroll in timeLine view', function(assert) {
-        this.createInstance({
-            currentDate: new Date(2017, 3, 16),
-            dataSource: [],
-            currentView: 'timelineWeek',
-            height: 500
-        });
-
-        const headerScrollable = this.instance.$element().find('.dx-scheduler-header-scrollable').dxScrollable('instance');
-        const dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
-        const headerScrollToSpy = sinon.spy(headerScrollable, 'scrollTo');
-        const dateTableScrollToSpy = sinon.spy(dateTableScrollable, 'scrollTo');
-
-        dateTableScrollable.scrollBy(1000);
-
-        assert.ok(headerScrollToSpy.calledOnce, 'header scrollTo was called');
-        assert.notOk(dateTableScrollToSpy.calledOnce, 'dateTable scrollTo was not called');
-    });
-
     QUnit.test('ScrollToTime works correctly with timelineDay and timelineWeek view (T749957)', function(assert) {
         const date = new Date(2019, 5, 1, 9, 40);
 
@@ -1569,25 +1550,6 @@ QUnit.test('OnScroll of header scrollable shouldn\'t be called when dateTable sc
     dateTableScrollable.scrollBy(1000);
 
     assert.equal(callCount, 0, 'header onScroll was not called');
-});
-
-QUnit.test('ScrollTo of dateTable & header scrollable should are called when headerScrollable scroll', function(assert) {
-    this.createInstance({
-        currentDate: new Date(2017, 3, 16),
-        dataSource: [],
-        currentView: 'timelineWeek',
-        height: 500
-    });
-
-    const headerScrollable = this.instance.$element().find('.dx-scheduler-header-scrollable').dxScrollable('instance');
-    const dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
-    const headerScrollToSpy = sinon.spy(headerScrollable, 'scrollTo');
-    const dateTableScrollToSpy = sinon.spy(dateTableScrollable, 'scrollTo');
-
-    headerScrollable.scrollBy(1000);
-
-    assert.ok(dateTableScrollToSpy.calledOnce, 'dateTable scrollTo should called');
-    assert.ok(headerScrollToSpy.calledOnce, 'header scrollTo should called');
 });
 
 QUnit.test('ScrollTo of sidebar scrollable shouldn\'t be called when sidebar scrollable scroll and crossScrollingEnabled is turn on', function(assert) {

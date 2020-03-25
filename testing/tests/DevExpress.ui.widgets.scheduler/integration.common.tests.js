@@ -1,4 +1,4 @@
-import { createWrapper, initTestMarkup } from './helpers.js';
+import { createWrapper, initTestMarkup, isDesktopEnvironment } from './helpers.js';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -8,96 +8,98 @@ const { testStart, module, test } = QUnit;
 
 testStart(() => initTestMarkup());
 
-module('Scrolling', () => {
-    const resourcesData = [{
-        text: 'A',
-        id: 1
-    }, {
-        text: 'B',
-        id: 2
-    }, {
-        text: 'C',
-        id: 3
-    }, {
-        text: 'D',
-        id: 4
-    }];
+if(isDesktopEnvironment()) {
+    module('Scrolling', () => {
+        const resourcesData = [{
+            text: 'A',
+            id: 1
+        }, {
+            text: 'B',
+            id: 2
+        }, {
+            text: 'C',
+            id: 3
+        }, {
+            text: 'D',
+            id: 4
+        }];
 
-    const priorityData = [{
-        text: 'A',
-        id: 1,
-    }, {
-        text: 'B',
-        id: 2,
-    }, {
-        text: 'C',
-        id: 3,
-    }];
+        const priorityData = [{
+            text: 'A',
+            id: 1,
+        }, {
+            text: 'B',
+            id: 2,
+        }, {
+            text: 'C',
+            id: 3,
+        }];
 
-    const createScheduler = () => {
-        return createWrapper({
-            dataSource: [],
-            views: ['timelineMonth'],
-            currentView: 'timelineMonth',
-            crossScrollingEnabled: true,
-            groups: ['priority', 'resource'],
-            resources: [{
-                fieldExpr: 'priority',
-                dataSource: priorityData,
-                label: 'Priority'
+        const createScheduler = () => {
+            return createWrapper({
+                dataSource: [],
+                views: ['timelineMonth'],
+                currentView: 'timelineMonth',
+                crossScrollingEnabled: true,
+                groups: ['priority', 'resource'],
+                resources: [{
+                    fieldExpr: 'priority',
+                    dataSource: priorityData,
+                    label: 'Priority'
+                }, {
+                    fieldExpr: 'resource',
+                    dataSource: resourcesData,
+                    label: 'Resource'
+                }],
+                height: 580
+            });
+        };
+
+        const testCases = [
+            {
+                name: 'header',
+                scrollPosition: { x: 10 },
+                text: 'header'
             }, {
-                fieldExpr: 'resource',
-                dataSource: resourcesData,
-                label: 'Resource'
-            }],
-            height: 580
-        });
-    };
+                name: 'dataTable',
+                scrollPosition: { x: 10 },
+                text: 'dataTable(horizontal scrolling)'
+            }, {
+                name: 'dataTable',
+                scrollPosition: { y: 10 },
+                text: 'dataTable(vertical scrolling)'
+            }, {
+                name: 'sideBar',
+                scrollPosition: { y: 10 },
+                text: 'sideBar'
+            }
+        ];
 
-    const testCases = [
-        {
-            name: 'header',
-            scrollPosition: { x: 10 },
-            text: 'header'
-        }, {
-            name: 'dataTable',
-            scrollPosition: { x: 10 },
-            text: 'dataTable(horizontal scrolling)'
-        }, {
-            name: 'dataTable',
-            scrollPosition: { y: 10 },
-            text: 'dataTable(vertical scrolling)'
-        }, {
-            name: 'sideBar',
-            scrollPosition: { y: 10 },
-            text: 'sideBar'
-        }
-    ];
+        testCases.forEach(testCase => {
+            test(`When ${testCase.text} was scrolling, semaphore should prevent scroll myself`, function(assert) {
+                const scheduler = createScheduler();
 
-    testCases.forEach(testCase => {
-        test(`When ${testCase.text} was scrolling, semaphore should prevent scroll myself`, function(assert) {
-            const scheduler = createScheduler();
+                const { getHeaderScrollable, getDateTableScrollable, getSideBarScrollable } = scheduler.workSpace;
 
-            const { getHeaderScrollable, getDateTableScrollable, getSideBarScrollable } = scheduler.workSpace;
+                const map = {
+                    'header': getHeaderScrollable().dxScrollable('instance'),
+                    'dataTable': getDateTableScrollable().dxScrollable('instance'),
+                    'sideBar': getSideBarScrollable().dxScrollable('instance')
+                };
 
-            const map = {
-                'header': getHeaderScrollable().dxScrollable('instance'),
-                'dataTable': getDateTableScrollable().dxScrollable('instance'),
-                'sideBar': getSideBarScrollable().dxScrollable('instance')
-            };
+                const headerScrollToSpy = sinon.spy(map.header, 'scrollTo');
+                const dateTableScrollToSpy = sinon.spy(map.dataTable, 'scrollTo');
+                const sideBarScrollToSpy = sinon.spy(map.sideBar, 'scrollTo');
 
-            const headerScrollToSpy = sinon.spy(map.header, 'scrollTo');
-            const dateTableScrollToSpy = sinon.spy(map.dataTable, 'scrollTo');
-            const sideBarScrollToSpy = sinon.spy(map.sideBar, 'scrollTo');
+                map[testCase.name].scrollTo(testCase.scrollPosition);
 
-            map[testCase.name].scrollTo(testCase.scrollPosition);
-
-            assert.equal(headerScrollToSpy.callCount, 1, 'header should scroll once');
-            assert.equal(dateTableScrollToSpy.callCount, 1, 'dataTable should scroll once');
-            assert.equal(sideBarScrollToSpy.callCount, 1, 'side bar should scroll once');
+                assert.equal(headerScrollToSpy.callCount, 1, 'header should scroll once');
+                assert.equal(dateTableScrollToSpy.callCount, 1, 'dataTable should scroll once');
+                assert.equal(sideBarScrollToSpy.callCount, 1, 'side bar should scroll once');
+            });
         });
     });
-});
+}
 
 
 module('Views:startDate property', () => {
