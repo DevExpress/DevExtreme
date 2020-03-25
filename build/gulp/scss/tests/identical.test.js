@@ -5,6 +5,8 @@ const cssom = require('cssom');
 const SUCCESS = 0;
 const ERROR = 1;
 
+console.error('I want to test script running');
+
 const blackList = [
     '.dx-show-clear-button .dx-icon-clear',
     // dx.common.css
