@@ -206,7 +206,7 @@ const ValidatingController = modules.Controller.inherit((function() {
             const that = this;
             const column = parameters.column;
 
-            if(isDefined(column.command) || !column.validationRules || !Array.isArray(column.validationRules) || !column.validationRules.length) return;
+            if(isDefined(column.command) || !column.allowEditing || !column.validationRules || !Array.isArray(column.validationRules) || !column.validationRules.length) return;
 
             const editingController = that._editingController;
             let editData;
@@ -246,7 +246,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                     showEditorAlways = visibleColumns.some(function(column) { return column.showEditorAlways; });
                 }
 
-                if(showEditorAlways) {
+                if(showEditorAlways && editingController.isCellOrBatchEditMode() && editingController.allowUpdating({ row: parameters.row })) {
                     editIndex = editingController._addEditData({ key: parameters.key, oldData: parameters.data });
                 }
             }
