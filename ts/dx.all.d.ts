@@ -4114,7 +4114,7 @@ declare module DevExpress.ui {
         /** @name dxGantt.Options.resourceAssignments */
         resourceAssignments?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | Function, resourceIdExpr?: string | Function, taskIdExpr?: string | Function };
         /** @name dxGantt.Options.resources */
-        resources?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | Function, textExpr?: string | Function };
+        resources?: { colorExpr?: string | Function, dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | Function, textExpr?: string | Function };
         /** @name dxGantt.Options.scaleType */
         scaleType?: 'auto' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
         /** @name dxGantt.Options.selectedRowKey */
@@ -4130,7 +4130,7 @@ declare module DevExpress.ui {
         /** @name dxGantt.Options.taskTitlePosition */
         taskTitlePosition?: 'inside' | 'outside' | 'none';
         /** @name dxGantt.Options.tasks */
-        tasks?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, endExpr?: string | Function, keyExpr?: string | Function, parentIdExpr?: string | Function, progressExpr?: string | Function, startExpr?: string | Function, titleExpr?: string | Function };
+        tasks?: { colorExpr?: string | Function, dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, endExpr?: string | Function, keyExpr?: string | Function, parentIdExpr?: string | Function, progressExpr?: string | Function, startExpr?: string | Function, titleExpr?: string | Function };
         /** @name dxGantt.Options.toolbar */
         toolbar?: dxGanttToolbar;
         /** @name dxGantt.Options.validation */

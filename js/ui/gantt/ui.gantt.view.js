@@ -186,11 +186,12 @@ export class GanttView extends Widget {
     onGanttScroll(scrollTop) {
         this._onScroll({ scrollTop: scrollTop });
     }
-    showDialog(name, parameters, callback) {
+    showDialog(name, parameters, callback, afterClosing) {
         this._onDialogShowing({
             name: name,
             parameters: parameters,
-            callback: callback
+            callback: callback,
+            afterClosing: afterClosing
         });
     }
     getModelChangesListener() {
