@@ -626,6 +626,16 @@ const getDatesOfInterval = function(startDate, endDate, step) {
     return result;
 };
 
+const markWrongDate = function(date) {
+    const wrongDateTime = new Date(0, 0, 0).getTime();
+    date.setTime(wrongDateTime);
+};
+
+const isWrongDate = function(date) {
+    const wrongDateTime = new Date(0, 0, 0).getTime();
+    return date.getTime() === wrongDateTime;
+};
+
 var dateUtils = {
     dateUnitIntervals: dateUnitIntervals,
 
@@ -682,7 +692,11 @@ var dateUtils = {
 
     getDatesInterval: getDatesInterval,
 
-    getDatesOfInterval: getDatesOfInterval
+    getDatesOfInterval: getDatesOfInterval,
+
+    markWrongDate: markWrongDate,
+
+    isWrongDate: isWrongDate
 };
 
 module.exports = dateUtils;

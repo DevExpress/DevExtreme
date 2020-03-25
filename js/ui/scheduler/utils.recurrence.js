@@ -47,8 +47,11 @@ const dateSetterMap = {
             }
 
         } else {
-            date.setDate(value);
-            correctDate(date, value);
+            if(value <= dateUtils.getLastMonthDay(date)) {
+                date.setDate(value);
+            } else {
+                dateUtils.markWrongDate(date);
+            }
         }
     },
     'byday': function(date, byDay, appointmentWeekStart, frequency, firstDayOfWeek) {
@@ -727,9 +730,13 @@ var getDatesByCount = function(dateRules, startDate, recurrenceStartDate, rule) 
         const dates = getDatesByRules(dateRules, date, rule);
 
         const checkedDates = [];
+        let checkedDate;
         for(var i = 0; i < dates.length; i++) {
-            if(dates[i].getTime() >= recurrenceStartDate.getTime()) {
-                checkedDates.push(dates[i]);
+            checkedDate = dates[i];
+            if(!dateUtils.isWrongDate(checkedDate)) {
+                if(checkedDate.getTime() >= recurrenceStartDate.getTime()) {
+                    checkedDates.push(checkedDate);
+                }
             }
         }
         const length = checkedDates.length;

@@ -508,10 +508,25 @@ QUnit.test('get date by month recurrence with BYMONTHDAY at 31', function(assert
     assert.deepEqual(dates, [new Date(2015, 2, 31), new Date(2015, 4, 31)], 'dates are right');
 });
 
-QUnit.test('get date by month recurrence with BYMONTHDAY at 31', function(assert) {
-    const dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=DAILY;BYMONTHDAY=31', start: new Date(2015, 1, 15), min: new Date(2015, 1, 15), max: new Date(2015, 5, 5) });
+// This test seems wrong
+// QUnit.test('get date by month recurrence with BYMONTHDAY at 31', function(assert) {
+//     const dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=DAILY;BYMONTHDAY=31', start: new Date(2015, 1, 15), min: new Date(2015, 1, 15), max: new Date(2015, 5, 5) });
 
-    assert.deepEqual(dates, [new Date(2015, 2, 31), new Date(2015, 4, 31)], 'dates are right');
+//     assert.deepEqual(dates, [new Date(2015, 2, 31), new Date(2015, 4, 31)], 'dates are right');
+// });
+
+QUnit.test('get date by month recurrence with BYMONTHDAY at 31 and skip months with the last day < 31', function(assert) {
+    const start = new Date(2020, 2, 31, 9, 30);
+
+    const dates = recurrenceUtils.getDatesByRecurrence({
+        rule: 'FREQ=MONTHLY;BYMONTHDAY=31;COUNT=3',
+        start: start,
+        end: new Date(2020, 2, 31, 11),
+        min: new Date(2020, 2, 1),
+        max: new Date(2020, 10, 1)
+    });
+
+    assert.deepEqual(dates, [start, new Date(2020, 4, 31, 9, 30), new Date(2020, 6, 31, 9, 30)], 'Recurrence dates has no months with the last day < 31');
 });
 
 QUnit.test('get days of the week by byDay rule', function(assert) {
