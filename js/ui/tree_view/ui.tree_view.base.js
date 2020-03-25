@@ -1404,10 +1404,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 const $prevItem = this._prevItem($items);
                 this.option('focusedElement', getPublicElement($prevItem));
 
-                const itemElement = this._getNodeItemElement($prevItem);
-                this._scrollableContainer.scrollToElement(itemElement);
+                const prevItemElement = this._getNodeItemElement($prevItem);
+                this._scrollableContainer.scrollToElement(prevItemElement);
                 if(e.shiftKey && this._showCheckboxes()) {
-                    this._updateItemSelection(true, itemElement);
+                    this._updateItemSelection(true, prevItemElement);
                 }
                 break;
             }
@@ -1415,10 +1415,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 const $nextItem = this._nextItem($items);
                 this.option('focusedElement', getPublicElement($nextItem));
 
-                const itemElement = this._getNodeItemElement($nextItem);
-                this._scrollableContainer.scrollToElement(itemElement);
+                const nextItemElement = this._getNodeItemElement($nextItem);
+                this._scrollableContainer.scrollToElement(nextItemElement);
                 if(e.shiftKey && this._showCheckboxes()) {
-                    this._updateItemSelection(true, itemElement);
+                    this._updateItemSelection(true, nextItemElement);
                 }
                 break;
             }
