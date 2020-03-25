@@ -1279,7 +1279,7 @@ QUnit.module('optionChanged', moduleSetup, () => {
             [true, false].forEach(deferRendering => {
                 [true, false ].forEach(repaintChangesOnly => {
                     const config = { collapsible, multiple, deferRendering, repaintChangesOnly };
-                    config.message = Object.entries(config).reduce((message, [key, value]) => message += `${key}: ${value}, `, '');
+                    config.message = Object.keys(config).reduce((message, key) => message += `${key}: ${config[key]}, `, '');
                     configs.push(config);
                 });
             });
