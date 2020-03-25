@@ -1549,28 +1549,6 @@ if(devices.real().deviceType === 'desktop') {
     });
 }
 
-QUnit.test('OnScroll of header scrollable shouldn\'t be called when dateTable scrollable scroll in timeLine view', function(assert) {
-    this.createInstance({
-        currentDate: new Date(2017, 3, 16),
-        dataSource: [],
-        currentView: 'timelineWeek',
-        height: 500
-    });
-
-    let callCount = 0;
-
-    const headerScrollable = this.instance.$element().find('.dx-scheduler-header-scrollable').dxScrollable('instance');
-    const dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
-
-    headerScrollable.option('onScroll', function() {
-        callCount++;
-    });
-
-    dateTableScrollable.scrollBy(1000);
-
-    assert.equal(callCount, 0, 'header onScroll was not called');
-});
-
 QUnit.test('ScrollTo of dateTable & header scrollable should are called when headerScrollable scroll', function(assert) {
     this.createInstance({
         currentDate: new Date(2017, 3, 16),
@@ -1586,8 +1564,8 @@ QUnit.test('ScrollTo of dateTable & header scrollable should are called when hea
 
     headerScrollable.scrollBy(1000);
 
-    assert.ok(dateTableScrollToSpy.calledOnce, 'dateTable scrollTo should called');
-    assert.ok(headerScrollToSpy.calledOnce, 'header scrollTo should called');
+    assert.ok(dateTableScrollToSpy.calledOnce, 'dateTable scrollTo was called');
+    assert.notOk(headerScrollToSpy.calledOnce, 'header scrollTo wasn\'t called');
 });
 
 QUnit.test('ScrollTo of sidebar scrollable shouldn\'t be called when sidebar scrollable scroll and crossScrollingEnabled is turn on', function(assert) {
