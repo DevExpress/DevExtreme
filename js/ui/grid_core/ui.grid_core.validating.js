@@ -798,6 +798,23 @@ module.exports = {
                     }
                 },
 
+                highlightDataCell: function($cell, parameters) {
+                    const isEditableCell = parameters.setValue;
+                    const cellModified = this.isCellModified(parameters);
+
+                    if(!cellModified && isEditableCell) {
+                        const validationResult = this.getController('validating').getCellValidationResult({
+                            rowKey: parameters.key,
+                            columnIndex: parameters.column.index
+                        });
+                        const isValidated = isDefined(validationResult);
+                        const skipValidation = parameters.row.isNewRow || !isValidated;
+                        this.showHighlighting($cell, skipValidation);
+                        return;
+                    }
+                    this.callBase.apply(this, arguments);
+                },
+
                 getEditDataByKey: function(key) {
                     return this._editData[getIndexByKey(key, this._editData)];
                 },

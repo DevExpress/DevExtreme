@@ -2314,6 +2314,18 @@ const EditingController = modules.ViewController.inherit((function() {
             }
         },
 
+        highlightDataCell: function($cell, parameters) {
+            const isEditableCell = parameters.setValue;
+            const cellModified = this.isCellModified(parameters);
+
+            if(cellModified && parameters.column.setCellValue) {
+                this.showHighlighting($cell);
+                $cell.addClass(CELL_MODIFIED);
+            } else if(isEditableCell) {
+                this.showHighlighting($cell);
+            }
+        },
+
         resetRowAndPageIndices: function() {
             const that = this;
 
@@ -2703,14 +2715,8 @@ module.exports = {
                         this._editCellPrepared($cell);
                     }
 
-                    const cellModified = editingController.isCellModified(parameters);
-                    if(cellModified && parameters.column && !isCommandCell && parameters.column.setCellValue) {
-                        editingController.showHighlighting($cell);
-                        $cell.addClass(CELL_MODIFIED);
-                    } else if(isEditableCell) {
-                        const skipValidation = parameters.row.isNewRow;
-
-                        editingController.showHighlighting($cell, skipValidation);
+                    if(parameters.column && !isCommandCell) {
+                        editingController.highlightDataCell($cell, parameters);
                     }
 
                     this.callBase.apply(this, arguments);
