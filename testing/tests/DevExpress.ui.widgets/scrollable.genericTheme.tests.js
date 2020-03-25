@@ -71,11 +71,12 @@ QUnit.module('ScrollProps: native strategy', () => {
     });
 
     function checkScrollProps(assert, $scrollable, expected, message) {
-        const $scrollableContainer = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
+        const scrollableContainer = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`).get(0);
+        const styles = window.getComputedStyle(scrollableContainer);
 
-        assert.strictEqual($scrollableContainer.css('touchAction'), expected.touchAction, 'touch action ' + message);
-        assert.strictEqual($scrollableContainer.css('overflowX'), expected.overflowX, 'overflow X ' + message);
-        assert.strictEqual($scrollableContainer.css('overflowY'), expected.overflowY, 'overflow Y ' + message);
+        assert.strictEqual(styles.touchAction, expected.touchAction, 'touch action ' + message);
+        assert.strictEqual(styles.overflowX, expected.overflowX, 'overflow X ' + message);
+        assert.strictEqual(styles.overflowY, expected.overflowY, 'overflow Y ' + message);
     }
 
     configs.forEach(config => {
