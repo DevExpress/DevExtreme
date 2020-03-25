@@ -2,6 +2,9 @@ import devices from '../devices';
 import { isEmptyObject, isFunction } from '../utils/type';
 import { findBestMatches } from '../utils/common';
 import { extend } from '../utils/extend';
+import { compileGetter } from '../utils/data';
+
+const cachedGetters = {};
 
 export const convertRulesToOptions = (rules) => {
     const currentDevice = devices.current();
@@ -29,11 +32,6 @@ export const getFieldName = fullName => fullName.substr(fullName.lastIndexOf('.'
 export const getParentName = fullName => fullName.substr(0, fullName.lastIndexOf('.'));
 
 export const getNestedOptionValue = function(optionsObject, name) {
-    const nameParts = name.split('.');
-
-    nameParts.forEach(property => {
-        optionsObject = optionsObject[property];
-    });
-
-    return optionsObject;
+    cachedGetters[name] = cachedGetters[name] || compileGetter(name);
+    return cachedGetters[name](optionsObject, { functionsAsIs: true });
 };
