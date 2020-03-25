@@ -2330,10 +2330,15 @@ const Scheduler = Widget.inherit({
     },
 
     _convertRecurrenceException: function(exception, exceptionByStartDate, startDateTimeZone) {
+        const format = recurrenceUtils.getAsciiStringFormat(exception);
+
         exception = exception.replace(/\s/g, '');
         exception = dateSerialization.deserializeDate(exception);
         exception = this.fire('convertDateByTimezone', exception, startDateTimeZone);
-        exception.setHours(exceptionByStartDate.getHours());
+
+        if(format === 'date') {
+            exception.setHours(exceptionByStartDate.getHours());
+        }
         exception = dateSerialization.serializeDate(exception, FULL_DATE_FORMAT);
         return exception;
     },

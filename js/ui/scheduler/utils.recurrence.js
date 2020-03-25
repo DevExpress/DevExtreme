@@ -581,6 +581,19 @@ function getDateByAsciiString(string, initialDate) {
     return date;
 }
 
+function getAsciiStringFormat(string) {
+    const arrayDateTime = string.match(/(\d{4})(\d{2})(\d{2})(T(\d{2})(\d{2})(\d{2}))?(Z)?/);
+
+    if(!arrayDateTime) {
+        return null;
+    }
+    if(!isDefined(arrayDateTime[4])) {
+        return 'date';
+    } else {
+        return 'datetime';
+    }
+}
+
 function prepareDateArrayToParse(arrayDate) {
     arrayDate.shift();
 
@@ -821,7 +834,8 @@ extend(resultUtils, {
     dateInRecurrenceRange: dateInRecurrenceRange,
     getDateByAsciiString: getDateByAsciiString,
     daysFromByDayRule: daysFromByDayRule,
-    getTimeZoneOffset: getTimeZoneOffset
+    getTimeZoneOffset: getTimeZoneOffset,
+    getAsciiStringFormat: getAsciiStringFormat
 });
 
 module.exports = resultUtils;
