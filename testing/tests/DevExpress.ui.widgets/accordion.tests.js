@@ -1289,20 +1289,18 @@ QUnit.module('optionChanged', moduleSetup, () => {
     configs.forEach(config => {
         const { collapsible, multiple } = config;
         // T871954
-        ['title', 'text', 'icon', 'disabled'].forEach((propertyName) => {
-            QUnit.test(propertyName + config.message + '[item_0.selected, item_1] -> .option(items[0].title, "new_value") -> .expandItem(1)', function(assert) {
-                const items = [ { id: 0, title: 'item_0' }, { id: 1, title: 'item_1' } ];
-                const helper = new AccordionTestHelper(this.$element, extend(config, {
-                    selectedIndex: 0,
-                    items
-                }));
+        QUnit.test(config.message + '[item_0.selected, item_1] -> .option(items[0].title, "new_value") -> .expandItem(1)', function(assert) {
+            const items = [ { id: 0, title: 'item_0' }, { id: 1, title: 'item_1' } ];
+            const helper = new AccordionTestHelper(this.$element, extend(config, {
+                selectedIndex: 0,
+                items
+            }));
 
-                helper.checkItems(assert, items, [0]);
-                helper.instance.option(`items[0].${propertyName}`, 'new_item_0');
-                helper.checkItems(assert, items, [0]);
-                helper.instance.expandItem(1);
-                helper.checkItems(assert, items, multiple ? [0, 1] : [1]);
-            });
+            helper.checkItems(assert, items, [0]);
+            helper.instance.option(items[0].title, 'new_item_0');
+            helper.checkItems(assert, items, [0]);
+            helper.instance.expandItem(1);
+            helper.checkItems(assert, items, multiple ? [0, 1] : [1]);
         });
 
 
