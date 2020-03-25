@@ -381,7 +381,7 @@ const Accordion = CollectionWidget.inherit({
     _tryParseItemPropertyName: function(fullName) {
         const matches = fullName.match(/.*\.(.*)/);
 
-        if(isDefined(matches) && matches.length) {
+        if(isDefined(matches) && (matches.length >= 1)) {
             return matches[1];
         }
     },
