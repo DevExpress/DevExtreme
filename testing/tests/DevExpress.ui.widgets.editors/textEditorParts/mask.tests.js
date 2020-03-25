@@ -420,8 +420,8 @@ QUnit.module('typing', moduleConfig, () => {
         clock.restore();
     });
 
-    QUnit.test('TextEditor with mask option should work correctly with autofill (T869537)', function(assert) {
-        if(!browser.webkit && !(browser.msie && browser.version > 11)) {
+    QUnit.test('TextEditor with mask option should work correctly with autofill in webkit browsers (T869537)', function(assert) {
+        if(!browser.webkit) {
             assert.expect(0);
             return;
         }
@@ -431,27 +431,52 @@ QUnit.module('typing', moduleConfig, () => {
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: '+1 (X00) 000',
             maskRules: { X: /[02-9]/ },
-            name: 'phonenumber',
-            pattern: '[0-9]*',
+            mode: 'tel',
+            useMaskedValue: true
+        });
+        const $input = $textEditor.find('.dx-texteditor-input');
+        const inputMatchesStub = sinon.stub($input.get(0), 'matches', () => true);
+
+        try {
+            const textEditor = $textEditor.dxTextEditor('instance');
+            const keyboard = keyboardMock($input, true);
+
+            $input.val(testText);
+
+            if(devices.real().android) {
+                keyboard.beforeInput(testText, 'insertText');
+            }
+
+            $input.trigger($.Event('input', { originalEvent: $.Event('input') }));
+
+            clock.tick();
+            assert.strictEqual($input.val(), '+1 (555) 555', 'the mask is applied');
+            assert.equal(textEditor.option('isValid'), true, 'isValid is true');
+        } finally {
+            clock.restore();
+            inputMatchesStub.restore();
+        }
+    });
+
+    QUnit.test('TextEditor with mask option should work correctly with autofill in Edge (T869537)', function(assert) {
+        if(!(browser.msie && browser.version > 11)) {
+            assert.expect(0);
+            return;
+        }
+
+        const clock = sinon.useFakeTimers();
+        const testText = '555555';
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '+1 (X00) 000',
+            maskRules: { X: /[02-9]/ },
             mode: 'tel',
             useMaskedValue: true
         });
         const $input = $textEditor.find('.dx-texteditor-input');
         const textEditor = $textEditor.dxTextEditor('instance');
-        const keyboard = keyboardMock($input, true);
 
         $input.val(testText);
-        let inputMatchesStub;
-        if(browser.webkit) {
-            inputMatchesStub = sinon.stub($input.get(0), 'matches', () => true);
-        } else {
-            $input.addClass('edge-autofilled');
-        }
-
-        if(devices.real().android) {
-            keyboard.beforeInput(testText, 'insertText');
-        }
-
+        $input.addClass('edge-autofilled');
         $input.trigger($.Event('input', { originalEvent: $.Event('input') }));
 
         clock.tick();
@@ -459,7 +484,6 @@ QUnit.module('typing', moduleConfig, () => {
         assert.equal(textEditor.option('isValid'), true, 'isValid is true');
 
         clock.restore();
-        inputMatchesStub && inputMatchesStub.restore();
     });
 });
 

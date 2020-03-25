@@ -146,7 +146,7 @@ export default class BaseMaskStrategy {
         this._inputHandlerTimer = setTimeout(() => {
             this._keyPressHandled = true;
 
-            if(this._isAutoFill(event)) {
+            if(this._isAutoFill()) {
                 this._keyPressHandled = true;
 
                 editor._maskKeyHandler(event, () => {
