@@ -803,11 +803,12 @@ module.exports = {
                     const cellModified = this.isCellModified(parameters);
 
                     if(!cellModified && isEditableCell) {
-                        const result = this.getController('validating').getCellValidationResult({
+                        const validationResult = this.getController('validating').getCellValidationResult({
                             rowKey: parameters.key,
                             columnIndex: parameters.column.index
                         });
-                        const skipValidation = parameters.row.isNewRow || !isDefined(result);
+                        const isValidated = isDefined(validationResult);
+                        const skipValidation = parameters.row.isNewRow || !isValidated;
                         this.showHighlighting($cell, skipValidation);
                         return;
                     }
