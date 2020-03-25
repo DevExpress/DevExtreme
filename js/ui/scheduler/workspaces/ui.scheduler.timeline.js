@@ -151,6 +151,10 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
         return this.option('crossScrollingEnabled') ? config : extend(config, timelineConfig);
     },
 
+    _needCreateCrossScrolling: function() {
+        return true;
+    },
+
     _headerScrollableConfig: function() {
         const config = this.callBase();
 
