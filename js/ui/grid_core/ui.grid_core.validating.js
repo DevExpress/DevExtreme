@@ -205,9 +205,6 @@ const ValidatingController = modules.Controller.inherit((function() {
         createValidator: function(parameters, $container) {
             const that = this;
             const column = parameters.column;
-
-            if(isDefined(column.command) || !column.allowEditing || !column.validationRules || !Array.isArray(column.validationRules) || !column.validationRules.length) return;
-
             const editingController = that._editingController;
             let editData;
             let editIndex;
@@ -236,6 +233,8 @@ const ValidatingController = modules.Controller.inherit((function() {
             let visibleColumns;
             let columnsController;
             let showEditorAlways = column.showEditorAlways;
+
+            if(isDefined(column.command) || !column.allowEditing || !column.validationRules || !Array.isArray(column.validationRules) || !column.validationRules.length) return;
 
             editIndex = editingController.getIndexByKey(parameters.key, editingController._editData);
 
