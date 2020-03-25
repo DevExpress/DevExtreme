@@ -26,7 +26,7 @@ function processDataUri() {
 function compile() {
     return compileBundle([
         `${tmpPath}/bundles/*`,
-        `!${tmpPath}/bundles/dx.common.scss`,
+        `${tmpPath}/bundles/dx.common.scss`,
         `!${tmpPath}/bundles/dx.ios7.default.scss`
     ]);
 }
