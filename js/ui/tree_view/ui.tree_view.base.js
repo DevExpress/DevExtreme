@@ -583,6 +583,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const dataSource = this.getDataSource();
         const skipContentReadyAction = dataSource && !dataSource.isLoaded();
 
+        if(this._scrollableContainer && windowUtils.hasWindow()) {
+            this._scrollableContainer.update();
+        }
+
         if(!skipContentReadyAction) {
             this.callBase();
         }
@@ -1354,8 +1358,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         if(!$target.children().hasClass(DISABLED_STATE_CLASS)) {
             this.callBase($target);
         }
-
-        this._scrollableContainer.scrollToElement($target.find('.' + ITEM_CLASS).first());
     },
 
     _itemPointerDownHandler: function(e) {
@@ -1400,30 +1402,34 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         switch(location) {
             case FOCUS_UP: {
                 const $prevItem = this._prevItem($items);
-
                 this.option('focusedElement', getPublicElement($prevItem));
+
+                const prevItemElement = this._getNodeItemElement($prevItem);
+                this._scrollableContainer.scrollToElement(prevItemElement);
                 if(e.shiftKey && this._showCheckboxes()) {
-                    this._updateItemSelection(true, $prevItem.find('.' + ITEM_CLASS).get(0));
+                    this._updateItemSelection(true, prevItemElement);
                 }
                 break;
             }
             case FOCUS_DOWN: {
                 const $nextItem = this._nextItem($items);
-
                 this.option('focusedElement', getPublicElement($nextItem));
+
+                const nextItemElement = this._getNodeItemElement($nextItem);
+                this._scrollableContainer.scrollToElement(nextItemElement);
                 if(e.shiftKey && this._showCheckboxes()) {
-                    this._updateItemSelection(true, $nextItem.find('.' + ITEM_CLASS).get(0));
+                    this._updateItemSelection(true, nextItemElement);
                 }
                 break;
             }
             case FOCUS_FIRST: {
                 const $firstItem = $items.first();
-
                 if(e.shiftKey && this._showCheckboxes()) {
                     this._updateSelectionToFirstItem($items, $items.index(this._prevItem($items)));
                 }
 
                 this.option('focusedElement', getPublicElement($firstItem));
+                this._scrollableContainer.scrollToElement(this._getNodeItemElement($firstItem));
                 break;
             }
             case FOCUS_LAST: {
@@ -1434,6 +1440,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 }
 
                 this.option('focusedElement', getPublicElement($lastItem));
+                this._scrollableContainer.scrollToElement(this._getNodeItemElement($lastItem));
                 break;
             }
             case FOCUS_RIGHT: {
@@ -1448,6 +1455,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 this.callBase.apply(this, arguments);
                 return;
         }
+    },
+
+
+    _getNodeItemElement: function($node) {
+        return $node.find('.' + ITEM_CLASS).get(0);
     },
 
     _nodeElements: function() {
@@ -1467,6 +1479,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         if($node.hasClass(OPENED_NODE_CONTAINER_CLASS)) {
             const $nextItem = this._nextItem(this._findNonDisabledNodes(this._nodeElements()));
             this.option('focusedElement', getPublicElement($nextItem));
+            this._scrollableContainer.scrollToElement(this._getNodeItemElement($nextItem));
             return;
         }
 
@@ -1497,6 +1510,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         } else {
             const collapsedNode = this._getClosestNonDisabledNode($focusedNode);
             collapsedNode.length && this.option('focusedElement', getPublicElement(collapsedNode));
+            this._scrollableContainer.scrollToElement(this._getNodeItemElement(collapsedNode));
         }
     },
 
@@ -1595,8 +1609,50 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         each(this._dataAdapter.getExpandedNodesKeys(), (function(_, key) {
             this._toggleExpandedState(key, false);
         }).bind(this));
-    }
+    },
 
+    scrollToItem: function(keyOrItemOrElement) {
+        const node = this._getNode(keyOrItemOrElement);
+        if(!node) {
+            return new Deferred().reject().promise();
+        }
+
+        const nodeKeysToExpand = [];
+        let parentNode = node.internalFields.publicNode.parent;
+        while(parentNode != null) {
+            if(!parentNode.expanded) {
+                nodeKeysToExpand.push(parentNode.key);
+            }
+            parentNode = parentNode.parent;
+        }
+
+        const scrollCallback = new Deferred();
+        this._expandNodes(nodeKeysToExpand.reverse()).always(() => {
+            const $element = this._getNodeElement(node);
+            if($element && $element.length) {
+                this._scrollableContainer.scrollToElementTopLeft($element);
+                scrollCallback.resolve();
+            } else {
+                scrollCallback.reject();
+            }
+        });
+
+        return scrollCallback.promise();
+    },
+
+    _expandNodes: function(keysToExpand) {
+        if(!keysToExpand || keysToExpand.length === 0) {
+            return new Deferred().resolve().promise();
+        }
+
+        const resultCallback = new Deferred();
+        const callbacksByNodes = keysToExpand.map(key => this.expandItem(key));
+        when.apply($, callbacksByNodes)
+            .done(() => resultCallback.resolve())
+            .fail(() => resultCallback.reject());
+
+        return resultCallback.promise();
+    },
 });
 
 module.exports = TreeViewBase;

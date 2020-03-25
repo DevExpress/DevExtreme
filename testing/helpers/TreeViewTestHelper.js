@@ -6,6 +6,7 @@ const WIDGET_CLASS = 'dx-treeview';
 
 const NODE_CLASS = `${WIDGET_CLASS}-node`;
 const ITEM_CLASS = `${WIDGET_CLASS}-item`;
+const ITEM_CONTENT_CLASS = `${WIDGET_CLASS}-item-content`;
 const TOGGLE_ITEM_VISIBILITY_CLASS = `${WIDGET_CLASS}-toggle-item-visibility`;
 const NODE_LOAD_INDICATOR_CLASS = `${NODE_CLASS}-loadindicator`;
 
@@ -107,6 +108,26 @@ class TreeViewTestWrapper {
 
     checkEventLog(expectedEventLog, additionalErrorMessage) {
         assert.deepEqual(this.eventLog, expectedEventLog, 'eventLog ' + additionalErrorMessage);
+    }
+
+    checkNodeIsInVisibleArea(itemKey) {
+        const $treeView = this.getElement();
+        const $item = $treeView.find(`[data-item-id="${itemKey}"] .${ITEM_CLASS}`).eq(0);
+        $item.find(`.${ITEM_CONTENT_CLASS}`).wrapInner('<span/>');
+
+        const treeViewRect = $treeView.get(0).getBoundingClientRect();
+        const itemTextRect = $item.find('span').get(0).getBoundingClientRect();
+
+        const scrollDirection = this.instance.option('scrollDirection');
+        if(scrollDirection === 'vertical' || scrollDirection === 'both') {
+            assert.equal(itemTextRect.top >= treeViewRect.top && itemTextRect.top <= treeViewRect.bottom, true, ` item ${itemKey} top location ${itemTextRect.top} must be between ${treeViewRect.top} and ${treeViewRect.bottom}`);
+            assert.equal(itemTextRect.bottom >= treeViewRect.top && itemTextRect.bottom <= treeViewRect.bottom, true, ` item ${itemKey} bottom location ${itemTextRect.bottom} must be between ${treeViewRect.top} and ${treeViewRect.bottom}`);
+        }
+
+        if(scrollDirection === 'horizontal' || scrollDirection === 'both') {
+            assert.equal(itemTextRect.left >= treeViewRect.left && itemTextRect.left <= treeViewRect.right, true, ` horizontal item ${itemKey} left location ${itemTextRect.left} must be between ${treeViewRect.left} and ${treeViewRect.right}`);
+            assert.equal(itemTextRect.right >= treeViewRect.left && itemTextRect.right <= treeViewRect.right, true, ` horizontal item ${itemKey} right location ${itemTextRect.right} must be between ${treeViewRect.left} and ${treeViewRect.right}`);
+        }
     }
 
     clearEventLog() {
