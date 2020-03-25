@@ -300,9 +300,7 @@ const Lookup = DropDownList.inherit({
 
                     dropDownOptions: {
                         fullScreen: true
-                    },
-
-                    'dropDownOptions.fullScreen': true
+                    }
                 }
             },
             {

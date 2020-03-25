@@ -7,7 +7,7 @@ const devices = require('core/devices');
 const themes = require('ui/themes');
 const support = require('core/utils/support');
 const publicComponentUtils = require('core/utils/public_component');
-const getNestedOptionValue = require('core/utils/data').getNestedOptionValue;
+const getNestedOptionValue = require('core/options/utils').getNestedOptionValue;
 
 const ActionSheet = require('ui/action_sheet');
 const Accordion = require('ui/accordion');

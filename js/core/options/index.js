@@ -2,9 +2,8 @@ import { isFunction, isObject, type } from '../utils/type';
 import { equalByValue, noop } from '../utils/common';
 import { OptionManager } from './option_manager';
 import { clone } from '../utils/object';
-import { getFieldName, getParentName, convertRulesToOptions } from './utils';
+import { getFieldName, getParentName, convertRulesToOptions, getNestedOptionValue } from './utils';
 import { extend } from '../utils/extend';
-import { getNestedOptionValue } from '../utils/data';
 
 export class Options {
     constructor(options, defaultOptions, optionsByReference, deprecatedOptions) {

@@ -35,16 +35,6 @@ const assignPropValue = function(obj, propName, value, options) {
     }
 };
 
-const getNestedOptionValue = function(optionsObject, name) {
-    const nameParts = name.split('.');
-
-    nameParts.forEach(property => {
-        optionsObject = optionsObject[property];
-    });
-
-    return optionsObject;
-};
-
 const prepareOptions = function(options) {
     options = options || {};
     options.unwrapObservables = options.unwrapObservables !== undefined ? options.unwrapObservables : true;
@@ -208,4 +198,3 @@ const toComparable = function(value, caseSensitive) {
 exports.compileGetter = compileGetter;
 exports.compileSetter = compileSetter;
 exports.toComparable = toComparable;
-exports.getNestedOptionValue = getNestedOptionValue;

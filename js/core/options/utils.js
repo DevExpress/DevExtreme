@@ -27,3 +27,13 @@ export const deviceMatch = (device, filter) => isEmptyObject(filter) || findBest
 export const getFieldName = fullName => fullName.substr(fullName.lastIndexOf('.') + 1);
 
 export const getParentName = fullName => fullName.substr(0, fullName.lastIndexOf('.'));
+
+export const getNestedOptionValue = function(optionsObject, name) {
+    const nameParts = name.split('.');
+
+    nameParts.forEach(property => {
+        optionsObject = optionsObject[property];
+    });
+
+    return optionsObject;
+};
