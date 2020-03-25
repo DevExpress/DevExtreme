@@ -56,7 +56,8 @@ QUnit.module('scrollToItem', () => {
                         scrollDirection,
                         disabled,
                         rtlEnabled,
-                        keysToScroll: ['item1', 'item1_1_1', 'item9', 'item9_1_1_1_1', 'item10', 'item10_1_1_1_1_1']
+                        keysToScroll: ['item1', 'item1_1_1', 'item9', 'item9_1_1_1_1', 'item10', 'item10_1_1_1_1_1'],
+                        description: `expanded: ${expanded}, rtlEnabled: ${rtlEnabled}, disabled: ${disabled}, scrollDirection: ${scrollDirection}`
                     });
                 });
             });
@@ -65,7 +66,7 @@ QUnit.module('scrollToItem', () => {
 
     configs.forEach(config => {
         config.keysToScroll.forEach(key => {
-            QUnit.test(`expanded: ${config.expanded}, rtlEnabled: ${config.rtlEnabled}, disabled: ${config.disabled}, scrollDirection: ${config.scrollDirection} -> onContentReady.scrollToItem(${key}) -> focusOut() -> focusIn()`, function(assert) {
+            QUnit.test(`config:${config.description} -> onContentReady.scrollToItem(${key}) -> focusOut() -> focusIn()`, function(assert) {
                 let completionCallback = null;
                 let isFirstContentReadyEvent = true;
                 const options = $.extend({}, config, {
@@ -96,7 +97,7 @@ QUnit.module('scrollToItem', () => {
         });
 
         [{ top: 0, left: 0 }, { top: 1000, left: 0 }, { top: 0, left: 1000 }, { top: 1000, left: 1000 }].forEach(initialPosition => {
-            QUnit.test(`expanded: ${config.expanded}, rtlEnabled: ${config.rtlEnabled}, disabled: ${config.disabled}, scrollDirection: ${config.scrollDirection}, initialPosition: ${JSON.stringify(initialPosition)} -> scrollToItem() -> focusOut() -> focusIn()`, function(assert) {
+            QUnit.test(`config:${config.description}, initialPosition: ${JSON.stringify(initialPosition)} -> scrollToItem() -> focusOut() -> focusIn()`, function(assert) {
                 const options = $.extend({}, config, { initialPosition });
                 const wrapper = createWrapper(options, createDataSource(config.expanded, config.disabled));
                 config.keysToScroll.forEach(key => {
