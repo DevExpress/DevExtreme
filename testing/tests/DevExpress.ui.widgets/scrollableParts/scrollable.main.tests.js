@@ -7,7 +7,6 @@ import animationFrame from 'animation/frame';
 import domUtils from 'core/utils/dom';
 import initMobileViewport from 'mobile/init_mobile_viewport';
 import devices from 'core/devices';
-import Scrollable from 'ui/scroll_view/ui.scrollable';
 import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
 
@@ -73,16 +72,6 @@ QUnit.test('scrollable render', function(assert) {
     assert.equal($content.children().length, 2, 'content was moved');
     assert.ok($content.children().eq(0).hasClass('content1'));
     assert.ok($content.children().eq(1).hasClass('content2'));
-});
-
-QUnit.test('scrollable - root element should has \'dx-scrollable-customizable-scrollbars\' class (only for non-Mac desktops)', function(assert) {
-    const scrollable = new Scrollable($('#scrollable'));
-
-    if(devices.real().deviceType !== 'desktop' || navigator.platform.indexOf('Mac') > -1 && browser.webkit) {
-        assert.notOk(scrollable.$element().hasClass('dx-scrollable-customizable-scrollbars'), 'root element hasn\'t \'dx-scrollable-customizable-scrollbars\' class');
-    } else {
-        assert.ok(scrollable.$element().hasClass('dx-scrollable-customizable-scrollbars'), 'root element has \'dx-scrollable-customizable-scrollbars\' class');
-    }
 });
 
 QUnit.module('horizontal direction', moduleConfig);
