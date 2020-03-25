@@ -387,6 +387,8 @@ const fillWidgetColors = (theme) => {
     });
 };
 
+const makeVariableDefinitionDefault = (content) => content.replace(/(\$.*);$/gm, '$1 !default;');
+
 const collectWidgetColorVariables = (content, schemeName) => {
     const widgetContentRegex = /\/\/\s?(?!TODO)(dx)?(\w.*)([\w\W]*?)(\n\/\/|$)/g;
     const aliases = {
@@ -418,7 +420,7 @@ const collectWidgetColorVariables = (content, schemeName) => {
 
         widgetsColorVariables[widget] = widgetsColorVariables[widget] || {};
         widgetsColorVariables[widget][schemeName] = widgetsColorVariables[widget][schemeName] || '';
-        widgetsColorVariables[widget][schemeName] += widgetContent;
+        widgetsColorVariables[widget][schemeName] += makeVariableDefinitionDefault(widgetContent);
     }
 };
 

@@ -118,20 +118,20 @@ const deepCompare = (etalonCssObject, targetCssObject) => {
 };
 
 const printArrayItems = (array) => {
-    array.forEach(item => console.log(item + '\n'));
+    array.forEach(item => console.error(item + '\n'));
 };
 
 const printSelectorsErrors = (etalonDiff, targetDiff, themeFile) => {
-    console.log(`${themeFile} bundle selectors diff:\n\nEtalon diff:\n`);
+    console.error(`${themeFile} bundle selectors diff:\n\nEtalon diff:\n`);
     printArrayItems(etalonDiff);
-    console.log('\nTarget diff:\n');
+    console.error('\nTarget diff:\n');
     printArrayItems(targetDiff);
 };
 
 const printRuleErrors = (ruleErrors, themeFile) => {
-    console.log(`${themeFile} bundle rule errors:\n\n`);
+    console.error(`${themeFile} bundle rule errors:\n\n`);
     ruleErrors.forEach(error => {
-        console.log(`Selector:\n${error.selector}\nRules:`);
+        console.error(`Selector:\n${error.selector}\nRules:`);
         printArrayItems(error.properties);
     });
 };
