@@ -805,7 +805,7 @@ const SchedulerWorkSpace = Widget.inherit({
             updateManually: true,
             bounceEnabled: false,
             pushBackValue: 0,
-            onScroll: e=> {
+            onScroll: e => {
                 this._headerSemaphore.take();
                 this._mainSemaphore.isFree() && this._dateTableScrollable.scrollTo({ left: e.scrollOffset.left });
                 this._headerSemaphore.release();
