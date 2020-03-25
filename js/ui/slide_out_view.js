@@ -42,6 +42,10 @@ const animation = {
 };
 
 const SlideOutView = Widget.inherit({
+    ctor: function(element, options) {
+        this.callBase(element, options);
+        this._logDeprecatedComponentWarning('20.1', 'dxDrawer');
+    },
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -122,7 +126,6 @@ const SlideOutView = Widget.inherit({
         this._whenAnimationComplete = undefined;
         this._whenMenuRendered = undefined;
         this._initHideTopOverlayHandler();
-        this._logDeprecatedWarning('W0000', { since: '20.1', alias: 'dxDrawer' });
     },
 
     _initHideTopOverlayHandler: function() {
