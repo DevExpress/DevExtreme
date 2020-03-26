@@ -325,7 +325,7 @@ const ValidatingController = modules.Controller.inherit((function() {
             };
             let showEditorAlways = column.showEditorAlways;
 
-            if(isDefined(column.command) || !column.allowEditing || !column.validationRules || !Array.isArray(column.validationRules) || !column.validationRules.length) return;
+            if(isDefined(column.command) || !column.validationRules || !Array.isArray(column.validationRules) || !column.validationRules.length) return;
 
             editIndex = editingController.getIndexByKey(parameters.key, editingController._editData);
 
