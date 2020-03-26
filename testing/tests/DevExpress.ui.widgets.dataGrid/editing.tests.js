@@ -8180,7 +8180,7 @@ QUnit.test('The current editable row should close when adding a new row in \'row
                 const rowsView = this.rowsView;
                 const $testElement = $('#container');
                 let dataSourceCallCount = 0;
-                let lookup2InitializedSpy = sinon.spy();
+                const lookup2InitializedSpy = sinon.spy();
 
                 this.options.repaintChangesOnly = repaintChangesOnly;
                 this.options.editing = {
@@ -12945,7 +12945,7 @@ QUnit.test('Row - An untouched cell should not be validated (T872003)', function
 
 [false, true].forEach((allowUpdating) => {
     [false, true].forEach((allowEditing) => {
-        QUnit.test(`row(allowUpdating: ${allowUpdating}, column.allowEditing: ${allowEditing}) - Cell with validation rules should not have a validator if a row is not in editing mode(T871515)`, function(assert) {
+        QUnit.test(`Row(allowUpdating: ${allowUpdating}, column.allowEditing: ${allowEditing}) - Cell with validation rules should not have a validator if a row is not in editing mode(T871515)`, function(assert) {
             // arrange
             const rowsView = this.rowsView;
             const testElement = $('#container');
@@ -13067,7 +13067,7 @@ QUnit.test('Row - An untouched cell should not be validated (T872003)', function
         assert.notOk($secondCell.hasClass('dx-validator'), 'cell should not have validator');
     });
 
-    QUnit.test(`${mode}(allowUpdating: true, column.allowEditing: true) - Cell with validation rules should not have a validator(T871515)`, function(assert) {
+    QUnit.test(`${mode}(allowUpdating: true, column.allowEditing: true) - Cell with validation rules should have a validator(T871515)`, function(assert) {
         // arrange
         const rowsView = this.rowsView;
         const testElement = $('#container');
@@ -13092,7 +13092,7 @@ QUnit.test('Row - An untouched cell should not be validated (T872003)', function
 
         rowsView.render(testElement);
         this.applyOptions(gridConfig);
-        let $secondCell = $(this.getCellElement(0, 1));
+        const $secondCell = $(this.getCellElement(0, 1));
 
         // assert
         assert.ok($secondCell.hasClass('dx-validator'), 'cell should have validator');
