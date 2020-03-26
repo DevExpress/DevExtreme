@@ -2,12 +2,12 @@ import $ from 'jquery';
 import { noop as noop } from 'core/utils/common';
 
 QUnit.testStart(function() {
-    var markup =
-'<div>\
-    <div class="dx-datagrid">\
-        <div id="container"></div>\
-    </div>\
-</div>';
+    const markup =
+    '<div>\
+        <div class="dx-datagrid">\
+            <div id="container"></div>\
+        </div>\
+    </div>';
 
     $('#qunit-fixture').html(markup);
 });
@@ -43,8 +43,8 @@ QUnit.module('ExportController', {
 });
 
 function columnCompare(targetColumn, columnWithOptions) {
-    var result = 0,
-        expectLength = 0;
+    let result = 0;
+    let expectLength = 0;
 
     $.each(columnWithOptions, function() {
         expectLength++;
@@ -59,7 +59,6 @@ function columnCompare(targetColumn, columnWithOptions) {
 }
 
 QUnit.test('Get columns from data provider', function(assert) {
-    // arrange
     this.setupModules({
         showColumnHeaders: true,
         columns: [{
@@ -73,14 +72,12 @@ QUnit.test('Get columns from data provider', function(assert) {
         }]
     });
 
-    // act
-    var dataProvider = this.exportController.getDataProvider(),
-        columns;
+    const dataProvider = this.exportController.getDataProvider();
+    let columns;
 
     dataProvider.ready();
     columns = dataProvider.getColumns();
 
-    // assert
     assert.equal(columns.length, 4, 'columns length');
     assert.ok(dataProvider.isHeadersVisible(), 'headers is visible');
     assert.ok(columnCompare(columns[0], { width: 100, dataType: 'string', alignment: 'left', caption: 'Test Field 1' }), 'column 1');
@@ -90,7 +87,6 @@ QUnit.test('Get columns from data provider', function(assert) {
 });
 
 QUnit.test('Get columns with width from rowsView', function(assert) {
-    // arrange
     this.setupModules({
         columns: [{
             dataField: 'TestField1', dataType: 'string'
@@ -103,16 +99,14 @@ QUnit.test('Get columns with width from rowsView', function(assert) {
         }]
     });
 
-    // act
     this.rowsView.render($('#container').width('400px'));
 
-    var dataProvider = this.exportController.getDataProvider(),
-        columns;
+    const dataProvider = this.exportController.getDataProvider();
+    let columns;
 
     dataProvider.ready();
     columns = dataProvider.getColumns();
 
-    // assert
     assert.equal(columns.length, 4, 'columns length');
     assert.equal(columns[0].width, 100, '1 column width');
     assert.equal(columns[1].width, 100, '2 column width');
@@ -121,7 +115,6 @@ QUnit.test('Get columns with width from rowsView', function(assert) {
 });
 
 QUnit.test('Get columns from data provider when visible columns has command columns', function(assert) {
-    // arrange
     this.setupModules({
         editing: {
             allowUpdating: true,
@@ -138,14 +131,12 @@ QUnit.test('Get columns from data provider when visible columns has command colu
         }]
     });
 
-    // act
-    var dataProvider = this.exportController.getDataProvider(),
-        columns;
+    const dataProvider = this.exportController.getDataProvider();
+    let columns;
 
     dataProvider.ready();
     columns = dataProvider.getColumns();
 
-    // assert
     assert.equal(columns.length, 3, 'columns length');
     assert.ok(columnCompare(columns[0], { width: 40, dataType: 'number', alignment: 'right', caption: 'Test Field 2' }), 'column 2');
     assert.ok(columnCompare(columns[1], { width: 50, dataType: 'date', alignment: 'left', caption: 'Test Field 3' }), 'column 3');
@@ -153,7 +144,6 @@ QUnit.test('Get columns from data provider when visible columns has command colu
 });
 
 QUnit.test('Get columns with percent value in width of column', function(assert) {
-    // arrange
     this.setupModules({
         columns: [{
             dataField: 'TestField1', dataType: 'string', width: '20%'
@@ -166,15 +156,13 @@ QUnit.test('Get columns with percent value in width of column', function(assert)
         }]
     });
 
-    // act
     this.rowsView.render($('#container').width('400px'));
-    var dataProvider = this.exportController.getDataProvider(),
-        columns;
+    const dataProvider = this.exportController.getDataProvider();
+    let columns;
 
     dataProvider.ready();
     columns = dataProvider.getColumns();
 
-    // assert
     assert.equal(columns.length, 4, 'columns length');
     assert.equal(columns[0].width, 80, '1 column width');
     assert.equal(columns[1].width, 120, '1 column width');
@@ -183,7 +171,6 @@ QUnit.test('Get columns with percent value in width of column', function(assert)
 });
 
 QUnit.test('Get columns from data provider when there is band columns', function(assert) {
-    // arrange
     this.setupModules({
         showColumnHeaders: true,
         columns: [{
@@ -208,14 +195,12 @@ QUnit.test('Get columns from data provider when there is band columns', function
         }]
     });
 
-    // act
-    var dataProvider = this.exportController.getDataProvider(),
-        columns;
+    const dataProvider = this.exportController.getDataProvider();
+    let columns;
 
     dataProvider.ready();
     columns = dataProvider.getColumns();
 
-    // assert
     assert.equal(columns.length, 4, 'columns length');
     assert.ok(dataProvider.isHeadersVisible(), 'headers is visible');
     assert.ok(columnCompare(columns[0], { width: 100, dataType: 'string', alignment: 'left', caption: 'Test Field 1' }), 'column 1');
@@ -225,7 +210,6 @@ QUnit.test('Get columns from data provider when there is band columns', function
 });
 
 QUnit.test('Get columns width when column has allowExporting is false', function(assert) {
-    // arrange
     this.setupModules({
         columns: [{
             dataField: 'TestField1', dataType: 'string', width: 100
@@ -238,16 +222,14 @@ QUnit.test('Get columns width when column has allowExporting is false', function
         }]
     });
 
-    // act
     this.rowsView.render($('#container').width('300px'));
 
-    var dataProvider = this.exportController.getDataProvider(),
-        columns;
+    const dataProvider = this.exportController.getDataProvider();
+    let columns;
 
     dataProvider.ready();
     columns = dataProvider.getColumns();
 
-    // assert
     assert.equal(columns.length, 3, 'columns length');
     assert.equal(columns[0].width, 100, '1 column width');
     assert.equal(columns[1].width, 120, '2 column width');
@@ -255,7 +237,6 @@ QUnit.test('Get columns width when column has allowExporting is false', function
 });
 
 QUnit.test('Get items without an unexported values', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { TestField1: 'Test string value', TestField2: 135, TestField3: new Date('2016/1/23'), TestField4: true }
@@ -271,21 +252,18 @@ QUnit.test('Get items without an unexported values', function(assert) {
         }]
     });
 
-    // act
     this.rowsView.render($('#container').width('300px'));
 
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
-    // assert
-    var items = dataProvider._options.items;
+    const items = dataProvider._options.items;
     assert.equal(items.length, 1, 'items length');
     assert.deepEqual(items[0].values, ['Test string value', new Date('2016/1/23')], 'values of item');
 });
 
 QUnit.test('Get actual columns when visible of column is changed before calling \'ready\' method', function(assert) {
-    // arrange
     $('#container').width(280);
     this.setupModules({
         showColumnHeaders: true,
@@ -302,9 +280,8 @@ QUnit.test('Get actual columns when visible of column is changed before calling 
 
     this.rowsView.render($('#container'));
 
-    // act
-    var dataProvider = this.exportController.getDataProvider(),
-        columns;
+    const dataProvider = this.exportController.getDataProvider();
+    let columns;
 
     this.exportController._columnsController.columnOption('TestField4', 'visible', true);
     this.clock.tick();
@@ -313,7 +290,6 @@ QUnit.test('Get actual columns when visible of column is changed before calling 
     this.clock.tick();
     columns = dataProvider.getColumns();
 
-    // assert
     assert.equal(columns.length, 4, 'columns length');
     assert.ok(dataProvider.isHeadersVisible(), 'headers is visible');
     assert.ok(columnCompare(columns[0], { width: 100, dataType: 'string', alignment: 'left', caption: 'Test Field 1' }), 'column 1');
@@ -323,7 +299,6 @@ QUnit.test('Get actual columns when visible of column is changed before calling 
 });
 
 QUnit.test('Get all columns from data provider when there is band columns', function(assert) {
-    // arrange
     this.setupModules({
         showColumnHeaders: true,
         columns: [{
@@ -348,15 +323,13 @@ QUnit.test('Get all columns from data provider when there is band columns', func
         }]
     });
 
-    // act
-    var dataProvider = this.exportController.getDataProvider(),
-        columnsByRow,
-        columns;
+    const dataProvider = this.exportController.getDataProvider();
+    let columnsByRow;
+    let columns;
 
     dataProvider.ready();
     columns = dataProvider.getColumns(true);
 
-    // assert
     assert.equal(columns.length, 4, 'columns length');
     assert.ok(dataProvider.isHeadersVisible(), 'headers is visible');
 
@@ -393,7 +366,6 @@ QUnit.test('Get all columns from data provider when there is band columns', func
 });
 
 QUnit.test('Get export format', function(assert) {
-    // arrange
     this.setupModules({});
 
     // act, assert
@@ -401,7 +373,6 @@ QUnit.test('Get export format', function(assert) {
 });
 
 QUnit.test('Get cell value', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { TestField1: 'test1', TestField2: 1, TestField3: '2/13/2014', TestField4: true },
@@ -426,13 +397,12 @@ QUnit.test('Get cell value', function(assert) {
             dataField: 'TestField4', dataType: 'boolean'
         }]
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
     this.clock.tick();
 
-    // assert
     assert.equal(dataProvider.getRowsCount(), 3, 'rows count');
 
     assert.equal(dataProvider.getCellData(0, 0).value, 'Test Field 1', 'header row 1 cell');
@@ -454,11 +424,11 @@ QUnit.test('Get cell value', function(assert) {
 });
 
 QUnit.test('Virtual columns', function(assert) {
-    var data = [{}],
-        columns = [];
+    const data = [{}];
+    const columns = [];
 
-    for(var i = 1; i <= 100; i++) {
-        var dataField = 'field' + i;
+    for(let i = 1; i <= 100; i++) {
+        const dataField = 'field' + i;
         data[0][dataField] = i;
         columns.push({
             dataField: dataField,
@@ -466,7 +436,6 @@ QUnit.test('Virtual columns', function(assert) {
         });
     }
 
-    // act
     this.setupModules({
         width: 500,
         columnWidth: 50,
@@ -478,13 +447,12 @@ QUnit.test('Virtual columns', function(assert) {
         columns: columns
     });
 
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
     this.clock.tick();
 
-    // assert
     assert.equal(this.getVisibleColumns().length, 11, 'visible column count');
     assert.equal(dataProvider.getColumns().length, 99, 'column count');
     assert.equal(dataProvider.getRowsCount(), 2, 'row count');
@@ -499,7 +467,6 @@ QUnit.test('Virtual columns', function(assert) {
 });
 
 QUnit.test('Get lookup cell value', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { LookupField: 1, NumberField: 1 },
@@ -524,13 +491,12 @@ QUnit.test('Get lookup cell value', function(assert) {
             dataField: 'NumberField', dataType: 'number'
         }]
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
     this.clock.tick();
 
-    // assert
     assert.equal(dataProvider.getRowsCount(), 2, 'rows count');
 
     assert.equal(dataProvider.getCellData(0, 0).value, 'Category 1', '1 row 1 cell');
@@ -541,7 +507,6 @@ QUnit.test('Get lookup cell value', function(assert) {
 });
 
 QUnit.test('Get cell value with customizeText', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { TestField1: 1, TestField2: true },
@@ -558,13 +523,12 @@ QUnit.test('Get cell value with customizeText', function(assert) {
         }]
     });
 
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
     this.clock.tick();
 
-    // assert
     assert.equal(dataProvider.getRowsCount(), 2, 'rows count');
 
     assert.equal(dataProvider.getCellData(0, 0).value, '$1 current price', '1 row 1 cell');
@@ -575,7 +539,6 @@ QUnit.test('Get cell value with customizeText', function(assert) {
 });
 
 QUnit.test('Get cell value when value is not finite', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { Price: 1 },
@@ -594,13 +557,12 @@ QUnit.test('Get cell value when value is not finite', function(assert) {
             dataField: 'Price', dataType: 'number'
         }]
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
     this.clock.tick();
 
-    // assert
     assert.equal(dataProvider.getRowsCount(), 4, 'rows count');
     assert.equal(dataProvider.getCellData(0, 0).value, 1, 'row 1');
     assert.equal(dataProvider.getCellData(1, 0).value, 'NaN', 'row 2');
@@ -609,7 +571,6 @@ QUnit.test('Get cell value when value is not finite', function(assert) {
 });
 
 QUnit.test('Get group cell value from lookup', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { Name: 1, Price: 1, Active: true },
@@ -644,13 +605,12 @@ QUnit.test('Get group cell value from lookup', function(assert) {
             dataField: 'Active', dataType: 'boolean', groupIndex: 0
         }]
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
     this.clock.tick();
 
-    // assert
     assert.equal(dataProvider.getColumns().length, 1, 'columns count');
     assert.equal(dataProvider.getRowsCount(), 10, 'rows count');
 
@@ -667,7 +627,6 @@ QUnit.test('Get group cell value from lookup', function(assert) {
 });
 
 QUnit.test('Get group level by group index', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { Name: 1, Price: 1, Active: true },
@@ -684,7 +643,7 @@ QUnit.test('Get group level by group index', function(assert) {
             dataField: 'Active', dataType: 'boolean', groupIndex: 0, sortOrder: 'desc'
         }]
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
@@ -704,7 +663,6 @@ QUnit.test('Get group level by group index', function(assert) {
 });
 
 QUnit.test('Get group level by group index. header is visible', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { Name: 1, Price: 1, Active: true },
@@ -722,7 +680,7 @@ QUnit.test('Get group level by group index. header is visible', function(assert)
             dataField: 'Active', dataType: 'boolean', groupIndex: 0, sortOrder: 'desc'
         }]
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
@@ -744,7 +702,6 @@ QUnit.test('Get group level by group index. header is visible', function(assert)
 });
 
 QUnit.test('Items when group item is defined and this column is grouped', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { Name: 1, Price: 1, Active: true },
@@ -768,7 +725,7 @@ QUnit.test('Items when group item is defined and this column is grouped', functi
             dataField: 'Active', dataType: 'boolean', groupIndex: 0, sortOrder: 'desc'
         }]
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
@@ -779,7 +736,6 @@ QUnit.test('Items when group item is defined and this column is grouped', functi
 });
 
 QUnit.test('Get group level for total summary row', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { Name: 1, Price: 1, Active: true },
@@ -818,7 +774,7 @@ QUnit.test('Get group level for total summary row', function(assert) {
             dataField: 'Active', dataType: 'boolean', groupIndex: 0, sortOrder: 'desc'
         }]
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
@@ -835,8 +791,7 @@ QUnit.test('Get group level for total summary row', function(assert) {
 });
 
 QUnit.test('Get total summary value', function(assert) {
-    // arrange
-    var summaryRowTypes = [];
+    const summaryRowTypes = [];
     this.setupModules({
         dataSource: [
             { Name: 1, Price: 1, Sale: 0.03 },
@@ -849,8 +804,8 @@ QUnit.test('Get total summary value', function(assert) {
             showCheckBoxesMode: 'onClick'
         },
         customizeExportData: function(columns, rows) {
-            for(var i = 0; i < rows.length; i++) {
-                var row = rows[i];
+            for(let i = 0; i < rows.length; i++) {
+                const row = rows[i];
                 if(row.rowType === 'totalFooter') {
                     summaryRowTypes.push(row.rowType);
                 }
@@ -886,7 +841,7 @@ QUnit.test('Get total summary value', function(assert) {
         },
         columns: ['Name', 'Price', 'Sale']
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
@@ -904,8 +859,7 @@ QUnit.test('Get total summary value', function(assert) {
 });
 
 QUnit.test('Get total summary value when selected items are defined', function(assert) {
-    // arrange
-    var dataSource = [
+    const dataSource = [
         { Name: 1, Price: 1, Sale: 0.03 },
         { Name: 2, Price: 12, Sale: 0.14 },
         { Name: 3, Price: 12, Sale: 0.63 },
@@ -952,7 +906,7 @@ QUnit.test('Get total summary value when selected items are defined', function(a
 
     this.exportController._selectionOnly = true;
 
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
     dataProvider.ready();
 
     this.clock.tick();
@@ -968,7 +922,6 @@ QUnit.test('Get total summary value when selected items are defined', function(a
 });
 
 QUnit.test('Get total summary value when selected items are defined. Deferred selection', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: {
             store: new ArrayStore({ data: [
@@ -1017,7 +970,7 @@ QUnit.test('Get total summary value when selected items are defined. Deferred se
     });
 
     this.exportController._selectionOnly = true;
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
     dataProvider.ready();
 
     this.clock.tick();
@@ -1033,7 +986,6 @@ QUnit.test('Get total summary value when selected items are defined. Deferred se
 });
 
 QUnit.test('Get total summary value when selected items are defined. Deferred selection. SelectedRowsData is failed', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: {
             store: new ArrayStore({ data: [
@@ -1087,7 +1039,7 @@ QUnit.test('Get total summary value when selected items are defined. Deferred se
         return $.Deferred().reject();
     };
 
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
     dataProvider.ready();
 
     this.clock.tick();
@@ -1097,7 +1049,6 @@ QUnit.test('Get total summary value when selected items are defined. Deferred se
 });
 
 QUnit.test('Get group summary value', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { Name: 'test 1', Price: 1, Sale: 0.03 },
@@ -1142,8 +1093,8 @@ QUnit.test('Get group summary value', function(assert) {
         },
         columns: [{ dataField: 'Name', groupIndex: 0 }, 'Price', 'Sale']
     }, false);
-    var isPrepareItemsForGroupFooters,
-        dataProvider;
+    let isPrepareItemsForGroupFooters;
+    let dataProvider;
 
     this.exportController._getItemsWithSummaryGroupFooters = function() {
         isPrepareItemsForGroupFooters = true;
@@ -1174,7 +1125,6 @@ QUnit.test('Get group summary value', function(assert) {
 });
 
 QUnit.test('Get group footer summary value', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { Name: 'test 1', Price: 1, Sale: 0.03 },
@@ -1222,7 +1172,7 @@ QUnit.test('Get group footer summary value', function(assert) {
         },
         columns: [{ dataField: 'Name', groupIndex: 0, showWhenGrouped: true }, 'Price', 'Sale']
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
@@ -1253,7 +1203,6 @@ QUnit.test('Get group footer summary value', function(assert) {
 });
 
 QUnit.test('Get summary value for a column', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { Name: 'test 1', room: 101, Price: 1, Sale: 0.03 },
@@ -1296,7 +1245,7 @@ QUnit.test('Get summary value for a column', function(assert) {
         columns: [{ dataField: 'Name', groupIndex: 0 }, 'room', 'Price', 'Sale']
     });
 
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
@@ -1308,7 +1257,6 @@ QUnit.test('Get summary value for a column', function(assert) {
 });
 
 QUnit.test('Get summary value for a column when summary items in one column', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { Name: 'test 1', room: 101, Price: 1, Sale: 0.03 },
@@ -1360,7 +1308,7 @@ QUnit.test('Get summary value for a column when summary items in one column', fu
         }]
     }, false);
 
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
@@ -1415,15 +1363,14 @@ QUnit.test('Check summary for a column in a group row', function(assert) {
         columns: [{ dataField: 'Name', groupIndex: 0 }, 'room', { dataField: 'Price', alignment: 'center' }, 'Sale']
     });
 
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
     this.clock.tick();
 
-    var styles = dataProvider.getStyles();
+    const styles = dataProvider.getStyles();
 
-    // assert
     assert.ok(dataProvider.isGroupRow(0), 'zero row is a group row');
 
     assert.deepEqual(styles[dataProvider.getStyleId(1, 0)], {
@@ -1467,14 +1414,13 @@ QUnit.test('Check summary for a column in a group row.RTL', function(assert) {
         },
         columns: [{ dataField: 'Name', groupIndex: 0 }, 'room', { dataField: 'Price', alignment: 'center' }, 'Sale']
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
     this.clock.tick();
 
-    var styles = dataProvider.getStyles();
-    // assert
+    const styles = dataProvider.getStyles();
     assert.deepEqual(styles[dataProvider.getStyleId(1, 0)], {
         bold: true,
         wrapText: false,
@@ -1483,8 +1429,7 @@ QUnit.test('Check summary for a column in a group row.RTL', function(assert) {
 });
 
 QUnit.test('Summary group footers are contained in the options', function(assert) {
-    // arrange
-    var summaryRowTypes = [];
+    const summaryRowTypes = [];
     this.setupModules({
         dataSource: [
             { Name: 'test 1', Price: 1, Sale: 0.03 },
@@ -1493,8 +1438,8 @@ QUnit.test('Summary group footers are contained in the options', function(assert
             { Name: 'test 1', Price: 1, Sale: 0.93 }
         ],
         customizeExportData: function(columns, rows) {
-            for(var i = 0; i < rows.length; i++) {
-                var row = rows[i];
+            for(let i = 0; i < rows.length; i++) {
+                const row = rows[i];
                 if(row.rowType === 'groupFooter') {
                     summaryRowTypes.push(row.rowType);
                 }
@@ -1526,16 +1471,13 @@ QUnit.test('Summary group footers are contained in the options', function(assert
         columns: [{ dataField: 'Name', groupIndex: 0, showWhenGrouped: true }, 'Price', 'Sale']
     });
 
-    // act
     this.exportController.getDataProvider().ready();
 
-    // assert
     assert.ok(this.exportController._hasSummaryGroupFooters());
     assert.equal(summaryRowTypes.length, 2, 'group footers count');
 });
 
 QUnit.test('Summary group footers are not contained in the options', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { Name: 'test 1', Price: 1, Sale: 0.03 },
@@ -1570,7 +1512,6 @@ QUnit.test('Summary group footers are not contained in the options', function(as
 });
 
 QUnit.test('Get cell type', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { TestField1: 'test1', TestField2: 1, TestField3: '2/13/2014', TestField4: true },
@@ -1587,7 +1528,7 @@ QUnit.test('Get cell type', function(assert) {
             dataField: 'TestField4', dataType: 'boolean'
         }]
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
@@ -1613,7 +1554,6 @@ QUnit.test('Get cell type', function(assert) {
 });
 
 QUnit.test('Get cell type with lookup', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { TestField1: 12, TestID: 1 },
@@ -1634,7 +1574,7 @@ QUnit.test('Get cell type with lookup', function(assert) {
             }
         }]
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
@@ -1646,7 +1586,6 @@ QUnit.test('Get cell type with lookup', function(assert) {
 });
 
 QUnit.test('Get cell type with customize text', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { TestField1: 'test1', TestField2: 1 },
@@ -1660,7 +1599,7 @@ QUnit.test('Get cell type with customize text', function(assert) {
             }
         }]
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
@@ -1675,7 +1614,6 @@ QUnit.test('Get cell type with customize text', function(assert) {
 });
 
 QUnit.test('Get cell type with grouping and summary footer', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { TestField1: 'test1', TestField2: 1 },
@@ -1698,7 +1636,7 @@ QUnit.test('Get cell type with grouping and summary footer', function(assert) {
             dataField: 'TestField2', dataType: 'number', groupIndex: 0
         }]
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
@@ -1715,7 +1653,6 @@ QUnit.test('Get cell type with grouping and summary footer', function(assert) {
 });
 
 QUnit.test('Get cell type when value is not finite', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { TestField1: NaN },
@@ -1726,7 +1663,7 @@ QUnit.test('Get cell type when value is not finite', function(assert) {
             dataField: 'TestField1', dataType: 'number'
         }]
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
@@ -1739,8 +1676,7 @@ QUnit.test('Get cell type when value is not finite', function(assert) {
 });
 
 QUnit.test('Summary align by column', function(assert) {
-    // arrange
-    var that = this;
+    const that = this;
 
     that.setupModules({
         dataSource: [
@@ -1770,22 +1706,20 @@ QUnit.test('Summary align by column', function(assert) {
         columns: [{ dataField: 'Name', groupIndex: 0 }, { dataField: 'room', groupIndex: 1, showWhenGrouped: true }, 'Price', 'Sale']
     });
 
-    var updateGroupValuesWithSummaryByColumn = that.exportController._updateGroupValuesWithSummaryByColumn,
-        dataProvider,
-        _sourceItems;
+    const updateGroupValuesWithSummaryByColumn = that.exportController._updateGroupValuesWithSummaryByColumn;
+    let dataProvider;
+    let _sourceItems;
 
     that.exportController._updateGroupValuesWithSummaryByColumn = function(sourceItems) {
         $.proxy(updateGroupValuesWithSummaryByColumn, that)(sourceItems);
         _sourceItems = sourceItems;
     };
 
-    // act
     dataProvider = this.exportController.getDataProvider();
     dataProvider.ready();
 
     that.clock.tick();
 
-    // assert
     assert.deepEqual(_sourceItems[1].values, [101, [{
         alignByColumn: true,
         column: 'Price',
@@ -1800,8 +1734,7 @@ QUnit.test('Summary align by column', function(assert) {
 });
 
 QUnit.test('Summary align by column when summary items are contains in one cell', function(assert) {
-    // arrange
-    var that = this;
+    const that = this;
 
     that.setupModules({
         dataSource: [
@@ -1832,22 +1765,20 @@ QUnit.test('Summary align by column when summary items are contains in one cell'
         columns: [{ dataField: 'Name', groupIndex: 0 }, 'room', 'Price', 'Sale']
     });
 
-    var updateGroupValuesWithSummaryByColumn = that.exportController._updateGroupValuesWithSummaryByColumn,
-        dataProvider,
-        _sourceItems;
+    const updateGroupValuesWithSummaryByColumn = that.exportController._updateGroupValuesWithSummaryByColumn;
+    let dataProvider;
+    let _sourceItems;
 
     that.exportController._updateGroupValuesWithSummaryByColumn = function(sourceItems) {
         $.proxy(updateGroupValuesWithSummaryByColumn, that)(sourceItems);
         _sourceItems = sourceItems;
     };
 
-    // act
     dataProvider = this.exportController.getDataProvider();
     dataProvider.ready();
 
     that.clock.tick();
 
-    // assert
     assert.deepEqual(_sourceItems[0].values, ['test 1', [
         {
             alignByColumn: true,
@@ -1867,7 +1798,6 @@ QUnit.test('Summary align by column when summary items are contains in one cell'
 });
 
 QUnit.test('Headers is not visible', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { TestField1: 'test1', TestField2: 1, TestField3: '2/13/2014', TestField4: true },
@@ -1884,7 +1814,7 @@ QUnit.test('Headers is not visible', function(assert) {
             dataField: 'TestField4', dataType: 'boolean'
         }]
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
@@ -1894,12 +1824,11 @@ QUnit.test('Headers is not visible', function(assert) {
 });
 
 QUnit.test('Get cell value with master detail', function(assert) {
-    // arrange
-    var dataProvider,
-        dataSource = [
-            { TestField1: 'test1', TestField2: 1 },
-            { TestField1: 'test2', TestField2: 12 }
-        ];
+    let dataProvider;
+    const dataSource = [
+        { TestField1: 'test1', TestField2: 1 },
+        { TestField1: 'test2', TestField2: 12 }
+    ];
 
     this.setupModules({
         dataSource: dataSource,
@@ -1921,7 +1850,6 @@ QUnit.test('Get cell value with master detail', function(assert) {
 
     this.clock.tick();
 
-    // assert
     assert.equal(dataProvider.getRowsCount(), 2, 'rows count');
     assert.equal(dataProvider.getCellData(0, 0).value, 'test1', 'row 1 cell 1');
     assert.equal(dataProvider.getCellData(0, 1).value, 1, 'row 1 cell 2');
@@ -1930,10 +1858,9 @@ QUnit.test('Get cell value with master detail', function(assert) {
 });
 
 QUnit.test('The export to Excel api method', function(assert) {
-    // arrange
-    var onExportedStub = sinon.stub(),
-        onExportingStub = sinon.stub(),
-        onFileSavingStub = sinon.stub();
+    const onExportedStub = sinon.stub();
+    const onExportingStub = sinon.stub();
+    const onFileSavingStub = sinon.stub();
 
     sinon.stub(clientExporter, 'export');
     this.setupModules({
@@ -1955,10 +1882,8 @@ QUnit.test('The export to Excel api method', function(assert) {
     });
     sinon.stub(this.exportController.component, 'getDataProvider');
 
-    // act
     this.exportController.exportToExcel();
 
-    // assert
     assert.equal(clientExporter.export.callCount, 1, 'exporting is called');
     assert.deepEqual(clientExporter.export.getCall(0).args[0], this.exportController.component.getDataProvider.getCall(0).returnValue, 'First arg is data');
 
@@ -1982,14 +1907,11 @@ QUnit.test('The export to Excel api method', function(assert) {
 });
 
 QUnit.test('Default options', function(assert) {
-    // arrange
     sinon.stub(clientExporter, 'export');
     this.setupModules({}, true);
 
-    // act
     this.exportController.exportToExcel();
 
-    // assert
     assert.deepEqual(clientExporter.export.getCall(0).args[1], {
         autoFilterEnabled: false,
         exportedAction: undefined,
@@ -2006,7 +1928,6 @@ QUnit.test('Default options', function(assert) {
 });
 
 QUnit.test('get header row count when headers is visible', function(assert) {
-    // arrange
     this.setupModules({
         showColumnHeaders: true,
         columns: [{
@@ -2030,7 +1951,7 @@ QUnit.test('get header row count when headers is visible', function(assert) {
             ]
         }]
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
     dataProvider.ready();
 
     // act, assert
@@ -2039,7 +1960,6 @@ QUnit.test('get header row count when headers is visible', function(assert) {
 });
 
 QUnit.test('get header row count when headers is hidden', function(assert) {
-    // arrange
     this.setupModules({
         showColumnHeaders: false,
         columns: [{
@@ -2063,7 +1983,7 @@ QUnit.test('get header row count when headers is hidden', function(assert) {
             ]
         }]
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
     dataProvider.ready();
 
     // act, assert
@@ -2072,7 +1992,6 @@ QUnit.test('get header row count when headers is hidden', function(assert) {
 });
 
 QUnit.test('get cell merging', function(assert) {
-    // arrange
     this.setupModules({
         showColumnHeaders: true,
         columns: [{
@@ -2096,7 +2015,7 @@ QUnit.test('get cell merging', function(assert) {
             ]
         }]
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
     dataProvider.ready();
 
     // act, assert
@@ -2106,7 +2025,6 @@ QUnit.test('get cell merging', function(assert) {
 });
 
 QUnit.test('get frozen area', function(assert) {
-    // arrange
     this.setupModules({
         showColumnHeaders: true,
         columns: [{
@@ -2130,7 +2048,7 @@ QUnit.test('get frozen area', function(assert) {
             ]
         }]
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
     dataProvider.ready();
 
     // act, assert
@@ -2138,7 +2056,6 @@ QUnit.test('get frozen area', function(assert) {
 });
 
 QUnit.test('Header styles', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { TestField1: 'test1', TestField2: 1 }
@@ -2150,13 +2067,13 @@ QUnit.test('Header styles', function(assert) {
             dataField: 'TestField2', dataType: 'number', format: 'currency'
         }]
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
     this.clock.tick();
 
-    var styles = dataProvider.getStyles();
+    const styles = dataProvider.getStyles();
 
     // assert, act
     assert.strictEqual(dataProvider.getStyleId(0, 0), dataProvider.getStyleId(0, 1), 'used same styles for header');
@@ -2168,7 +2085,6 @@ QUnit.test('Header styles', function(assert) {
 });
 
 QUnit.test('data styles. column headers are hidden', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { TestField1: 'test1', TestField2: 1 }
@@ -2178,13 +2094,13 @@ QUnit.test('data styles. column headers are hidden', function(assert) {
             dataField: 'TestField1', dataType: 'string', alignment: 'right'
         }]
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
     this.clock.tick();
 
-    var styles = dataProvider.getStyles();
+    const styles = dataProvider.getStyles();
 
     // assert, act
     assert.deepEqual(styles[dataProvider.getStyleId(0, 0)], {
@@ -2196,7 +2112,6 @@ QUnit.test('data styles. column headers are hidden', function(assert) {
 });
 
 QUnit.test('data styles', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { TestField1: 'test1', TestField2: 1 }
@@ -2208,13 +2123,13 @@ QUnit.test('data styles', function(assert) {
             dataField: 'TestField2', dataType: 'number', format: { type: 'currency', precision: 0 }
         }]
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
     this.clock.tick();
 
-    var styles = dataProvider.getStyles();
+    const styles = dataProvider.getStyles();
 
     // assert, act
     assert.deepEqual(styles[dataProvider.getStyleId(1, 0)], {
@@ -2236,7 +2151,6 @@ QUnit.test('data styles', function(assert) {
 });
 
 QUnit.test('data wrapText enabled. wrapTextEnabled option is set to true', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { TestField1: 'test1', TestField2: 1 }
@@ -2245,13 +2159,13 @@ QUnit.test('data wrapText enabled. wrapTextEnabled option is set to true', funct
         wordWrapEnabled: true,
         columns: [{ dataField: 'TestField1', dataType: 'string', alignment: 'right' }]
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
     this.clock.tick();
 
-    var styles = dataProvider.getStyles();
+    const styles = dataProvider.getStyles();
 
     // assert, act
     assert.strictEqual(styles[dataProvider.getStyleId(0, 0)].wrapText, true, 'header');
@@ -2259,7 +2173,6 @@ QUnit.test('data wrapText enabled. wrapTextEnabled option is set to true', funct
 });
 
 QUnit.test('data wrapText enabled. wrapTextEnabled option is set to true', function(assert) {
-    // arrange
     this.setupModules({
         dataSource: [
             { TestField1: 'test1', TestField2: 1 }
@@ -2271,13 +2184,13 @@ QUnit.test('data wrapText enabled. wrapTextEnabled option is set to true', funct
         },
         columns: [{ dataField: 'TestField1', dataType: 'string', alignment: 'right' }]
     });
-    var dataProvider = this.exportController.getDataProvider();
+    const dataProvider = this.exportController.getDataProvider();
 
     dataProvider.ready();
 
     this.clock.tick();
 
-    var styles = dataProvider.getStyles();
+    const styles = dataProvider.getStyles();
 
     // assert, act
     assert.strictEqual(styles[dataProvider.getStyleId(0, 0)].wrapText, true, 'header');
@@ -2286,7 +2199,6 @@ QUnit.test('data wrapText enabled. wrapTextEnabled option is set to true', funct
 
 // T592026
 QUnit.test('Get columns from data provider when there is datetime column', function(assert) {
-    // arrange
     this.setupModules({
         showColumnHeaders: true,
         columns: [{
@@ -2300,14 +2212,12 @@ QUnit.test('Get columns from data provider when there is datetime column', funct
         }]
     });
 
-    // act
-    var dataProvider = this.exportController.getDataProvider(),
-        columns;
+    const dataProvider = this.exportController.getDataProvider();
+    let columns;
 
     dataProvider.ready();
     columns = dataProvider.getColumns();
 
-    // assert
     assert.equal(columns.length, 4, 'columns length');
     assert.ok(columnCompare(columns[0], { width: 100, dataType: 'string', alignment: 'left', caption: 'Test Field 1' }), 'column 1');
     assert.ok(columnCompare(columns[1], { width: 40, dataType: 'number', alignment: 'right', caption: 'Test Field 2' }), 'column 2');
@@ -2337,7 +2247,6 @@ QUnit.module('Export menu', {
 });
 
 QUnit.test('The export to button is shown', function(assert) {
-    // arrange
     this.setupModules({
         'export': {
             enabled: true,
@@ -2345,13 +2254,11 @@ QUnit.test('The export to button is shown', function(assert) {
         }
     }, true);
 
-    // act
-    var $container = $('#container'),
-        $button;
+    const $container = $('#container');
+    let $button;
 
     this.headerPanel.render($container);
 
-    // assert
     assert.ok(this.headerPanel.isVisible(), 'is visible');
     assert.ok(this.headerPanel._exportController, 'export controller');
 
@@ -2361,7 +2268,6 @@ QUnit.test('The export to button is shown', function(assert) {
 });
 
 QUnit.test('Search panel should be replaced after export button', function(assert) {
-    // arrange
     this.setupModules({
         'export': {
             enabled: true
@@ -2377,13 +2283,11 @@ QUnit.test('Search panel should be replaced after export button', function(asser
         }
     }, true);
 
-    // act
-    var $container = $('#container'),
-        $toolbarItems;
+    const $container = $('#container');
+    let $toolbarItems;
 
     this.headerPanel.render($container);
 
-    // assert
     $toolbarItems = $container.find('.dx-toolbar-item');
     assert.equal($toolbarItems.length, 4, 'groupPanel + 2 buttons + 1 editor');
 
@@ -2394,7 +2298,6 @@ QUnit.test('Search panel should be replaced after export button', function(asser
 });
 
 QUnit.test('Export\'s menu buttons has a correct markup', function(assert) {
-    // arrange
     this.setupModules({
         'export': {
             enabled: true
@@ -2410,10 +2313,9 @@ QUnit.test('Export\'s menu buttons has a correct markup', function(assert) {
         }
     }, true);
 
-    // act
-    var $container = $('#container').width(100),
-        renderButtonSpy = sinon.spy(this.headerPanel, '_renderButton'),
-        checkingSelector = '.dx-toolbar-item-auto-hide > .dx-button';
+    const $container = $('#container').width(100);
+    const renderButtonSpy = sinon.spy(this.headerPanel, '_renderButton');
+    const checkingSelector = '.dx-toolbar-item-auto-hide > .dx-button';
 
     this.headerPanel.render($container);
     $container.find('.dx-toolbar-menu-container .dx-dropdownmenu-button').trigger('dxclick');
@@ -2423,7 +2325,6 @@ QUnit.test('Export\'s menu buttons has a correct markup', function(assert) {
 });
 
 QUnit.test('Export\'s fake menu buttons has a correct markup', function(assert) {
-    // arrange
     this.setupModules({
         'export': {
             enabled: true,
@@ -2440,46 +2341,40 @@ QUnit.test('Export\'s fake menu buttons has a correct markup', function(assert) 
         }
     }, true);
 
-    var checkingSelector = '.dx-toolbar-item-auto-hide > .dx-button.dx-button-has-text.dx-button-has-icon.' +
+    const checkingSelector = '.dx-toolbar-item-auto-hide > .dx-button.dx-button-has-text.dx-button-has-icon.' +
         'dx-datagrid-toolbar-button > .dx-button-content > .dx-icon + .dx-button-text';
 
-    // act
-    var $container = $('#container').width(100),
-        renderFakeButtonSpy = sinon.spy(this.headerPanel, '_renderFakeButton');
+    const $container = $('#container').width(100);
+    const renderFakeButtonSpy = sinon.spy(this.headerPanel, '_renderFakeButton');
 
     this.headerPanel.render($container);
 
     $container.find('.dx-toolbar-menu-container .dx-dropdownmenu-button').trigger('dxclick');
 
-    // assert
     assert.equal(renderFakeButtonSpy.callCount, 2);
 
-    var $firstItem = renderFakeButtonSpy.getCall(0).args[1],
-        $secondItem = renderFakeButtonSpy.getCall(1).args[1];
+    const $firstItem = renderFakeButtonSpy.getCall(0).args[1];
+    const $secondItem = renderFakeButtonSpy.getCall(1).args[1];
 
     assert.equal($firstItem.find(checkingSelector.replace('dx-icon', 'dx-icon.dx-icon-xlsxfile')).length, 1);
     assert.equal($secondItem.find(checkingSelector.replace('dx-icon', 'dx-icon.dx-icon-exportselected')).length, 1);
 });
 
 QUnit.test('The export button is not shown', function(assert) {
-    // arrange
     this.setupModules({
         'export': {
             enabled: false
         }
     });
 
-    // act
-    var $container = $('#container');
+    const $container = $('#container');
     this.headerPanel.render($container);
 
-    // assert
     assert.ok(!this.headerPanel.isVisible(), 'is visible');
     assert.equal($container.find('.dx-datagrid-export-button').length, 0, 'export button is contained in a DOM');
 });
 
 QUnit.test('The export button is not shown when header panel is visible', function(assert) {
-    // arrange
     this.setupModules({
         editing: {
             mode: 'batch',
@@ -2487,24 +2382,20 @@ QUnit.test('The export button is not shown when header panel is visible', functi
         }
     }, true);
 
-    // act
-    var $container = $('#container');
+    const $container = $('#container');
     this.headerPanel.render($container);
 
-    // assert
     assert.equal($container.find('.dx-datagrid-export-button').length, 0, 'export button is contained in a DOM');
 });
 
 QUnit.test('Show export button via option when export is disabled', function(assert) {
-    // arrange
     this.setupModules({
         'export': {
             enabled: false
         }
     }, true);
 
-    // act
-    var $container = $('#container');
+    const $container = $('#container');
     this.headerPanel._$element = $container;
     this.headerPanel.option('export.enabled', true);
     this.headerPanel.component.isReady = function() {
@@ -2514,27 +2405,23 @@ QUnit.test('Show export button via option when export is disabled', function(ass
     this.headerPanel.optionChanged({ name: 'export', fullName: 'export.enabled', value: true });
     this.headerPanel.endUpdate();
 
-    // assert
     assert.ok(this.headerPanel.isVisible(), 'is visible');
     assert.ok(this.headerPanel._exportController, 'export controller');
     assert.equal($container.find('.dx-datagrid-export-button').length, 1, 'export button is contained in a DOM');
 });
 
 QUnit.test('Show export to excel button when allowExportSelectedData is disabled', function(assert) {
-    // arrange
     this.setupModules({
         'export': {
             enabled: true
         }
     }, true);
 
-    // act
-    var $container = $('#container'),
-        $exportButton;
+    const $container = $('#container');
+    let $exportButton;
 
     this.headerPanel.render($container);
 
-    // assert
     assert.ok(this.headerPanel.isVisible(), 'is visible');
     assert.ok(this.headerPanel._exportController, 'export controller');
 
@@ -2544,7 +2431,6 @@ QUnit.test('Show export to excel button when allowExportSelectedData is disabled
 });
 
 QUnit.test('Export menu elements doesn\'t leak', function(assert) {
-    // arrange
     this.setupModules({
         'export': {
             enabled: true,
@@ -2552,64 +2438,53 @@ QUnit.test('Export menu elements doesn\'t leak', function(assert) {
         }
     }, true);
 
-    // act
-    var $container = $('#container');
+    const $container = $('#container');
 
     this.headerPanel.render($container);
     this.refresh();
 
-    // assert
-    var $exportMenu = $container.find('.dx-datagrid-export-menu');
+    const $exportMenu = $container.find('.dx-datagrid-export-menu');
 
     assert.equal($exportMenu.length, 1, 'only one export menu element is contained in a DOM');
 });
 
 QUnit.test('Export button disable on editing', function(assert) {
-    // arrange
     this.setupModules({
         'export': {
             enabled: true
         }
     }, true);
 
-    // act
-    var $container = $('#container'),
-        $exportButton;
+    const $container = $('#container');
+    let $exportButton;
 
     this.headerPanel.render($container);
     $exportButton = $container.find('.dx-datagrid-export-button');
 
-    // assert
     assert.ok(!$exportButton.closest('.dx-toolbar-item').hasClass('dx-state-disabled'), 'Export button is enabled before editing start');
 
-    // act
     this.editingController.hasChanges = function() { return true; };
     this.editingController._updateEditButtons();
 
-    // assert
     assert.ok($exportButton.closest('.dx-toolbar-item').hasClass('dx-state-disabled'), 'Export button is disabled after editing');
 
-    // act
     this.editingController.hasChanges = function() { return false; };
     this.editingController._updateEditButtons();
     $exportButton = $container.closest('.dx-toolbar-item').find('.dx-datagrid-export-button');
 
-    // assert
     assert.ok(!$exportButton.hasClass('dx-state-disabled'), 'Export button is enabled after saving');
 });
 
 QUnit.test('Show the export to excel button and a context menu via an option', function(assert) {
-    // arrange
     this.setupModules({
         'export': {
             enabled: true
         }
     }, true);
 
-    // act
-    var $container = $('#container'),
-        $exportMenu,
-        $exportButton;
+    const $container = $('#container');
+    let $exportMenu;
+    let $exportButton;
 
     this.$element = function() {
         return $container;
@@ -2629,13 +2504,11 @@ QUnit.test('Show the export to excel button and a context menu via an option', f
     $($exportButton).trigger('dxclick');
     $exportMenu = $('.dx-context-menu.dx-datagrid-export-menu').first();
 
-    // assert
     assert.equal($exportButton.attr('title'), 'Export', 'hint of button');
     assert.ok($exportMenu.length > 0);
 });
 
 QUnit.test('Context menu is removed when the allowExportSelectedData option is changed', function(assert) {
-    // arrange
     this.setupModules({
         'export': {
             enabled: true,
@@ -2643,9 +2516,8 @@ QUnit.test('Context menu is removed when the allowExportSelectedData option is c
         }
     }, true);
 
-    // act
-    var $container = $('#container'),
-        $exportMenu;
+    const $container = $('#container');
+    let $exportMenu;
 
     this.$element = function() {
         return $container;
@@ -2663,13 +2535,11 @@ QUnit.test('Context menu is removed when the allowExportSelectedData option is c
 
     $exportMenu = $('.dx-context-menu.dx-datagrid-export-menu').first();
 
-    // assert
-    assert.ok($exportMenu.length === 0);
+    assert.strictEqual($exportMenu.length, 0);
 });
 
 QUnit.test('Hide export button via option', function(assert) {
-    // arrange
-    var $container = $('#container');
+    const $container = $('#container');
 
     this.setupModules({
         'export': {
@@ -2677,17 +2547,14 @@ QUnit.test('Hide export button via option', function(assert) {
         }
     }, true);
 
-    // act
     this.headerPanel.render($container);
     this.headerPanel.option('export.enabled', false);
     this.headerPanel.render($container);
 
-    // assert
     assert.ok(!this.headerPanel.isVisible(), 'is visible');
 });
 
 QUnit.test('Hide export button via option when editing is defined', function(assert) {
-    // arrange
     this.setupModules({
         'export': {
             enabled: true
@@ -2698,9 +2565,8 @@ QUnit.test('Hide export button via option when editing is defined', function(ass
         }
     }, true);
 
-    // act
-    var $container = $('#container'),
-        $exportButton;
+    const $container = $('#container');
+    let $exportButton;
 
     this.headerPanel.render($container);
     this.headerPanel._$element = $container;
@@ -2712,7 +2578,6 @@ QUnit.test('Hide export button via option when editing is defined', function(ass
     this.headerPanel.optionChanged({ name: 'export', fullName: 'export.enabled', value: false });
     this.headerPanel.endUpdate();
 
-    // assert
     assert.ok(this.headerPanel.isVisible(), 'is visible');
 
     $exportButton = $container.find('.dx-datagrid-export-button');
@@ -2720,16 +2585,14 @@ QUnit.test('Hide export button via option when editing is defined', function(ass
 });
 
 QUnit.test('Show export button via option when the enabled option is disabled', function(assert) {
-    // arrange
     this.setupModules({
         'export': {
             enabled: true
         }
     }, true);
 
-    // act
-    var $container = $('#container'),
-        $exportButton;
+    const $container = $('#container');
+    let $exportButton;
 
     this.headerPanel.render($container);
     this.headerPanel._$element = $container;
@@ -2741,15 +2604,13 @@ QUnit.test('Show export button via option when the enabled option is disabled', 
     this.headerPanel.optionChanged({ name: 'export', fullName: 'export.enabled', value: true });
 
 
-    // assert
     assert.ok(this.headerPanel.isVisible(), 'is visible');
     $exportButton = $container.find('.dx-datagrid-export-button');
     assert.equal($exportButton.length, 1, 'export button is contained in a DOM');
-    assert.ok($exportButton.css('display') !== 'none', 'export button is shown');
+    assert.notStrictEqual($exportButton.css('display'), 'none', 'export button is shown');
 });
 
 QUnit.test('The export context menu is shown', function(assert) {
-    // arrange
     this.setupModules({
         'export': {
             enabled: true,
@@ -2757,27 +2618,24 @@ QUnit.test('The export context menu is shown', function(assert) {
         }
     }, true);
 
-    var $container = $('#container'),
-        $exportMenu,
-        $exportButton;
+    const $container = $('#container');
+    let $exportMenu;
+    let $exportButton;
 
     this.$element = function() {
         return $container;
     };
 
-    // act
     this.headerPanel.render($container);
     $exportButton = $container.find('.dx-datagrid-export-button').first();
     $($exportButton).trigger('dxclick');
 
-    // assert
     $exportMenu = $('.dx-context-menu.dx-datagrid-export-menu').first();
     assert.ok($exportMenu.length > 0);
     assert.equal($exportMenu.css('display'), 'block', 'menu visibility');
 });
 
 QUnit.test('Export context menu items', function(assert) {
-    // arrange
     this.setupModules({
         'export': {
             enabled: true,
@@ -2785,30 +2643,27 @@ QUnit.test('Export context menu items', function(assert) {
         }
     }, true);
 
-    var $container = $('#container'),
-        menuItems;
+    const $container = $('#container');
+    let menuItems;
 
     this.$element = function() {
         return $container;
     };
 
-    // act
     this.headerPanel.render($container);
 
-    var $menu = $container.find('.dx-datagrid-export-menu'),
-        menuInstance = $menu.dxContextMenu('instance');
+    const $menu = $container.find('.dx-datagrid-export-menu');
+    const menuInstance = $menu.dxContextMenu('instance');
 
     menuInstance.option('animation', false);
     menuItems = menuInstance.option('items');
     menuInstance.show();
 
-    // assert
     assert.equal(menuItems[0].text, 'Export all data', '1 item');
     assert.equal(menuItems[1].text, 'Export selected rows', '2 item text');
 });
 
 QUnit.test('Context menu is hidden when item with export format is clicked', function(assert) {
-    // arrange
     this.setupModules({
         'export': {
             enabled: true,
@@ -2816,18 +2671,17 @@ QUnit.test('Context menu is hidden when item with export format is clicked', fun
         }
     }, true);
 
-    var $container = $('#container'),
-        $menuItems;
+    const $container = $('#container');
+    let $menuItems;
 
     this.$element = function() {
         return $container;
     };
 
-    // act
     this.headerPanel.render($container);
 
-    var $menu = $container.find('.dx-datagrid-export-menu'),
-        menuInstance = $menu.dxContextMenu('instance');
+    const $menu = $container.find('.dx-datagrid-export-menu');
+    const menuInstance = $menu.dxContextMenu('instance');
 
     this.exportController.exportToExcel = noop;
     menuInstance.option('animation', false);
@@ -2839,7 +2693,6 @@ QUnit.test('Context menu is hidden when item with export format is clicked', fun
 });
 
 QUnit.test('Context menu is hidden when item with export selected is clicked', function(assert) {
-    // arrange
     this.setupModules({
         'export': {
             enabled: true,
@@ -2847,18 +2700,17 @@ QUnit.test('Context menu is hidden when item with export selected is clicked', f
         }
     }, true);
 
-    var $container = $('#container'),
-        $menuItems;
+    const $container = $('#container');
+    let $menuItems;
 
     this.$element = function() {
         return $container;
     };
 
-    // act
     this.headerPanel.render($container);
 
-    var $menu = $container.find('.dx-datagrid-export-menu'),
-        menuInstance = $menu.dxContextMenu('instance');
+    const $menu = $container.find('.dx-datagrid-export-menu');
+    const menuInstance = $menu.dxContextMenu('instance');
 
     this.exportController.exportToExcel = noop;
     menuInstance.option('animation', false);
@@ -2891,21 +2743,20 @@ QUnit.test('Export to Excel button call`s exportTo when the button text is local
         }
     }, true);
 
-    var $container = $('#container'),
-        $menuItems,
-        _exportToExcel,
-        exportToCalled = false;
+    const $container = $('#container');
+    let $menuItems;
+    let _exportToExcel;
+    let exportToCalled = false;
 
     this.$element = function() {
         return $container;
     };
 
-    // act
     this.stateStoringController.state({ exportSelectionOnly: true });
     this.headerPanel.render($container);
 
-    var $menu = $container.find('.dx-datagrid-export-menu'),
-        menuInstance = $menu.dxContextMenu('instance');
+    const $menu = $container.find('.dx-datagrid-export-menu');
+    const menuInstance = $menu.dxContextMenu('instance');
 
     menuInstance.show();
     $menuItems = menuInstance.itemsContainer().find('.dx-menu-item');
@@ -2916,7 +2767,6 @@ QUnit.test('Export to Excel button call`s exportTo when the button text is local
 
     $($menuItems.first()).trigger('dxclick');
 
-    // assert
     assert.ok(exportToCalled, 'exportTo Called');
     this.headerPanel._exportController.exportToExcel = _exportToExcel;
 });
@@ -2931,9 +2781,9 @@ QUnit.module('Real dataGrid ExportController tests', {
     }
 });
 
-var createDataGrid = function(options) {
-    var dataGrid,
-        dataGridElement = $('#container').dxDataGrid(options);
+const createDataGrid = function(options) {
+    let dataGrid;
+    const dataGridElement = $('#container').dxDataGrid(options);
 
     QUnit.assert.ok(dataGridElement);
     dataGrid = dataGridElement.dxDataGrid('instance');
@@ -2942,39 +2792,36 @@ var createDataGrid = function(options) {
 
 // T310793
 QUnit.test('Get columns with width from rowsView after grouping', function(assert) {
-    // arrange
-    var options = {
-            width: 300,
-            loadingTimeout: 0,
-            groupPanel: { visible: true },
-            grouping: { autoExpandAll: false },
-            dataSource: [
-                { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },
-                { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },
-                { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },
-                { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 }
-            ],
-            columns: [{
-                dataField: 'TestField1', dataType: 'string', groupIndex: 1
-            }, {
-                dataField: 'TestField2', dataType: 'number'
-            }, {
-                dataField: 'TestField3', dataType: 'date'
-            }, {
-                dataField: 'TestField4', dataType: 'boolean'
-            }]
-        },
-        dataGrid = createDataGrid(options);
+    const options = {
+        width: 300,
+        loadingTimeout: 0,
+        groupPanel: { visible: true },
+        grouping: { autoExpandAll: false },
+        dataSource: [
+            { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },
+            { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },
+            { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },
+            { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 }
+        ],
+        columns: [{
+            dataField: 'TestField1', dataType: 'string', groupIndex: 1
+        }, {
+            dataField: 'TestField2', dataType: 'number'
+        }, {
+            dataField: 'TestField3', dataType: 'date'
+        }, {
+            dataField: 'TestField4', dataType: 'boolean'
+        }]
+    };
+    const dataGrid = createDataGrid(options);
 
-    // act
     this.clock.tick();
-    var dataProvider = dataGrid.getController('export').getDataProvider(),
-        columns;
+    const dataProvider = dataGrid.getController('export').getDataProvider();
+    let columns;
 
     dataProvider.ready();
     columns = dataProvider.getColumns();
 
-    // assert
     assert.equal(columns.length, 3, 'columns length');
     assert.equal(columns[0].width, 90, '1 column width');
     assert.equal(columns[1].width, 90, '2 column width');
@@ -2982,37 +2829,34 @@ QUnit.test('Get columns with width from rowsView after grouping', function(asser
 });
 
 QUnit.test('Get columns with width when headers is hidden', function(assert) {
-    // arrange
-    var options = {
-            width: 300,
-            loadingTimeout: 0,
-            dataSource: [
-                { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },
-                { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },
-                { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },
-                { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 }
-            ],
-            showColumnHeaders: false,
-            columns: [{
-                dataField: 'TestField1', dataType: 'string'
-            }, {
-                dataField: 'TestField2', dataType: 'number'
-            }, {
-                dataField: 'TestField3', dataType: 'date'
-            }, {
-                dataField: 'TestField4', dataType: 'boolean'
-            }]
-        },
-        dataGrid = createDataGrid(options);
-    // act
+    const options = {
+        width: 300,
+        loadingTimeout: 0,
+        dataSource: [
+            { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },
+            { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },
+            { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },
+            { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 }
+        ],
+        showColumnHeaders: false,
+        columns: [{
+            dataField: 'TestField1', dataType: 'string'
+        }, {
+            dataField: 'TestField2', dataType: 'number'
+        }, {
+            dataField: 'TestField3', dataType: 'date'
+        }, {
+            dataField: 'TestField4', dataType: 'boolean'
+        }]
+    };
+    const dataGrid = createDataGrid(options);
     this.clock.tick();
-    var dataProvider = dataGrid.getController('export').getDataProvider(),
-        columns;
+    const dataProvider = dataGrid.getController('export').getDataProvider();
+    let columns;
 
     dataProvider.ready();
     columns = dataProvider.getColumns();
 
-    // assert
     assert.equal(columns.length, 4, 'columns length');
     assert.equal(columns[0].width, 75, '1 column width');
     assert.equal(columns[1].width, 75, '2 column width');
@@ -3021,42 +2865,39 @@ QUnit.test('Get columns with width when headers is hidden', function(assert) {
 });
 
 QUnit.test('Customize a data and a columns before exporting', function(assert) {
-    // arrange
-    var options = {
-            width: 300,
-            customizeExportData: function(columns, data) {
-                columns[2].width = 333;
-                for(var i = 0; i < data.length; i++) {
-                    var item = data[i];
-                    if(item.rowType === 'data') {
-                        item.values[1] = 'TEST ' + item.values[1] * 10;
-                    }
+    const options = {
+        width: 300,
+        customizeExportData: function(columns, data) {
+            columns[2].width = 333;
+            for(let i = 0; i < data.length; i++) {
+                const item = data[i];
+                if(item.rowType === 'data') {
+                    item.values[1] = 'TEST ' + item.values[1] * 10;
                 }
-            },
-            loadingTimeout: undefined,
-            dataSource: [
-                { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },
-                { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },
-                { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },
-                { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 }
-            ],
-            columns: [{ dataField: 'TestField1', groupIndex: 0 }, 'TestField2', 'TestField3', 'TestField4']
+            }
         },
-        dataGrid = createDataGrid(options),
-        columnsController = dataGrid.getController('columns'),
-        dataController = dataGrid.getController('data'),
-        dataProvider = dataGrid.getController('export').getDataProvider();
+        loadingTimeout: undefined,
+        dataSource: [
+            { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },
+            { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },
+            { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },
+            { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 }
+        ],
+        columns: [{ dataField: 'TestField1', groupIndex: 0 }, 'TestField2', 'TestField3', 'TestField4']
+    };
+    const dataGrid = createDataGrid(options);
+    const columnsController = dataGrid.getController('columns');
+    const dataController = dataGrid.getController('data');
+    const dataProvider = dataGrid.getController('export').getDataProvider();
 
-    // act
     this.clock.tick();
     dataProvider.ready();
     this.clock.tick();
 
-    // assert
-    var columns = columnsController.getVisibleColumns(),
-        items = dataController.items(),
-        exportedColumns = dataProvider.getColumns(),
-        exportedItems = dataProvider._options.items;
+    const columns = columnsController.getVisibleColumns();
+    const items = dataController.items();
+    const exportedColumns = dataProvider.getColumns();
+    const exportedItems = dataProvider._options.items;
 
     assert.equal(exportedColumns[2].width, 333, 'third exported column\'s width');
     assert.equal(exportedItems[1].values[1], 'TEST 30', '2 exported item of data');
@@ -3064,7 +2905,7 @@ QUnit.test('Customize a data and a columns before exporting', function(assert) {
     assert.equal(exportedItems[3].values[1], 'TEST 30', '4 exported item of data');
     assert.equal(exportedItems[4].values[1], 'TEST 30', '5 exported item of data');
 
-    assert.ok(columns[2].width !== 333, 'third column\'s width');
+    assert.notStrictEqual(columns[2].width, 333, 'third column\'s width');
     assert.equal(items[1].values[2], '3', '2 item of data');
     assert.equal(items[2].values[2], '3', '3 item of data');
     assert.equal(items[3].values[2], '3', '4 item of data');
@@ -3075,9 +2916,8 @@ import exportMixin from 'ui/grid_core/ui.grid_core.export_mixin';
 
 // T399787
 QUnit.test('PrepareItems with extended Array prototypes', function(assert) {
-    // arrange
-    var resultItems,
-        items = [[{ test: 'test' }], [{ test: 'test' }]];
+    let resultItems;
+    const items = [[{ test: 'test' }], [{ test: 'test' }]];
 
     items.test = function() { }; // As appending prototype method to array
 

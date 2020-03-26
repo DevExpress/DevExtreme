@@ -1,30 +1,31 @@
-var $ = require('../../core/renderer'),
-    domAdapter = require('../../core/dom_adapter'),
-    eventsEngine = require('../../events/core/events_engine'),
-    dataUtils = require('../../core/element_data'),
-    domUtils = require('../../core/utils/dom'),
-    Widget = require('../widget/ui.widget'),
-    dateUtils = require('../../core/utils/date'),
-    extend = require('../../core/utils/extend').extend,
-    noop = require('../../core/utils/common').noop,
-    dateSerialization = require('../../core/utils/date_serialization'),
-    eventUtils = require('../../events/utils'),
-    clickEvent = require('../../events/click');
+import $ from '../../core/renderer';
+import domAdapter from '../../core/dom_adapter';
+import eventsEngine from '../../events/core/events_engine';
+import dataUtils from '../../core/element_data';
+import domUtils from '../../core/utils/dom';
+import Widget from '../widget/ui.widget';
+import { fixTimezoneGap, getShortDateFormat, getFirstDateView } from '../../core/utils/date';
+import { extend } from '../../core/utils/extend';
+import { noop } from '../../core/utils/common';
+import { serializeDate } from '../../core/utils/date_serialization';
+import { format as formatMessage } from '../../localization/message';
+import { addNamespace } from '../../events/utils';
+import { name as clickEventName } from '../../events/click';
 
-var abstract = Widget.abstract,
+const { abstract } = Widget;
 
-    CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view',
-    CALENDAR_CELL_CLASS = 'dx-calendar-cell',
-    CALENDAR_EMPTY_CELL_CLASS = 'dx-calendar-empty-cell',
-    CALENDAR_TODAY_CLASS = 'dx-calendar-today',
-    CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date',
-    CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date',
+const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
+const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
+const CALENDAR_EMPTY_CELL_CLASS = 'dx-calendar-empty-cell';
+const CALENDAR_TODAY_CLASS = 'dx-calendar-today';
+const CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date';
+const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
 
-    CALENDAR_DXCLICK_EVENT_NAME = eventUtils.addNamespace(clickEvent.name, 'dxCalendar'),
+const CALENDAR_DXCLICK_EVENT_NAME = addNamespace(clickEventName, 'dxCalendar');
 
-    CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey';
+const CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey';
 
-var BaseView = Widget.inherit({
+const BaseView = Widget.inherit({
 
     _getViewName: function() {
         return 'base';
@@ -46,7 +47,7 @@ var BaseView = Widget.inherit({
     _init: function() {
         this.callBase();
 
-        var value = this.option('value');
+        const value = this.option('value');
 
         // TODO: what is this for?
         this.option('value', new Date(value));
@@ -63,8 +64,7 @@ var BaseView = Widget.inherit({
     },
 
     _renderImpl: function() {
-        this._$table = $('<table>');
-        this.$element().append(this._$table);
+        this.$element().append(this._createTable());
 
         this._createDisabledDatesHandler();
         this._renderBody();
@@ -73,104 +73,139 @@ var BaseView = Widget.inherit({
         this._renderEvents();
     },
 
+    _createTable: function() {
+        this._$table = $('<table>');
+
+        this.setAria({
+            label: formatMessage('dxCalendar-ariaWidgetName'),
+            role: 'grid'
+        }, this._$table);
+
+        return this._$table;
+    },
+
     _renderBody: function() {
         this.$body = $('<tbody>').appendTo(this._$table);
 
-        var that = this,
-            cellTemplate = this.option('cellTemplate');
+        const rowData = {
+            cellDate: this._getFirstCellData(),
+            prevCellDate: null
+        };
 
-        var appendChild = this.option('rtl')
-            ? function(row, cell) {
-                row.insertBefore(cell, row.firstChild);
-            } : function(row, cell) {
-                row.appendChild(cell);
-            };
-
-        function renderCell(cellIndex) {
-            // T425127
-            if(prevCellDate) {
-                dateUtils.fixTimezoneGap(prevCellDate, cellDate);
+        for(let rowIndex = 0, rowCount = this.option('rowCount'); rowIndex < rowCount; rowIndex++) {
+            rowData.row = this._createRow();
+            for(let colIndex = 0, colCount = this.option('colCount'); colIndex < colCount; colIndex++) {
+                this._renderCell(rowData, colIndex);
             }
-
-            prevCellDate = cellDate;
-
-            var cell = domAdapter.createElement('td'),
-                $cell = $(cell),
-                className = CALENDAR_CELL_CLASS;
-
-            if(that._isTodayCell(cellDate)) {
-                className = className + ' ' + CALENDAR_TODAY_CLASS;
-            }
-
-            if(that._isDateOutOfRange(cellDate) || that.isDateDisabled(cellDate)) {
-                className = className + ' ' + CALENDAR_EMPTY_CELL_CLASS;
-            }
-
-            if(that._isOtherView(cellDate)) {
-                className = className + ' ' + CALENDAR_OTHER_VIEW_CLASS;
-            }
-
-            cell.className = className;
-
-            cell.setAttribute('data-value', dateSerialization.serializeDate(cellDate, dateUtils.getShortDateFormat()));
-            dataUtils.data(cell, CALENDAR_DATE_VALUE_KEY, cellDate);
-
-            that.setAria({
-                'role': 'option',
-                'label': that.getCellAriaLabel(cellDate)
-            }, $cell);
-
-            appendChild(row, cell);
-
-            if(cellTemplate) {
-                cellTemplate.render({
-                    model: {
-                        text: that._getCellText(cellDate),
-                        date: cellDate,
-                        view: that._getViewName()
-                    },
-                    container: domUtils.getPublicElement($cell),
-                    index: cellIndex
-                });
-            } else {
-                cell.innerHTML = that._getCellText(cellDate);
-            }
-
-            cellDate = that._getNextCellData(cellDate);
-        }
-
-        var cellDate = this._getFirstCellData(),
-            colCount = this.option('colCount'),
-            prevCellDate;
-
-        for(var indexRow = 0, len = this.option('rowCount'); indexRow < len; indexRow++) {
-            var row = domAdapter.createElement('tr');
-            this.$body.get(0).appendChild(row);
-            this._iterateCells(colCount, renderCell);
         }
     },
 
-    _iterateCells: function(colCount, delegate) {
-        var i = 0;
+    _createRow: function() {
+        const row = domAdapter.createElement('tr');
 
-        while(i < colCount) {
-            delegate(i);
-            ++i;
+        this.setAria('role', 'row', $(row));
+        this.$body.get(0).appendChild(row);
+
+        return row;
+    },
+
+    _appendCell: function(row, cell) {
+        if(!this._appendMethodName) {
+            this._cacheAppendMethodName();
         }
+
+        $(row)[this._appendMethodName](cell);
+    },
+
+    _cacheAppendMethodName: function(rtlEnabled) {
+        this._appendMethodName = rtlEnabled ?? this.option('rtlEnabled') ?
+            'prepend' :
+            'append';
+    },
+
+    _createCell: function(cellDate) {
+        const cell = domAdapter.createElement('td');
+        const $cell = $(cell);
+
+        cell.className = this._getClassNameByDate(cellDate);
+
+        cell.setAttribute('data-value', serializeDate(cellDate, getShortDateFormat()));
+        dataUtils.data(cell, CALENDAR_DATE_VALUE_KEY, cellDate);
+
+        this.setAria({
+            'role': 'gridcell',
+            'label': this.getCellAriaLabel(cellDate)
+        }, $cell);
+
+        return { cell, $cell };
+    },
+
+    _renderCell: function(params, cellIndex) {
+        const { cellDate, prevCellDate, row } = params;
+
+        // T425127
+        if(prevCellDate) {
+            fixTimezoneGap(prevCellDate, cellDate);
+        }
+
+        params.prevCellDate = cellDate;
+
+        const { cell, $cell } = this._createCell(cellDate);
+        const cellTemplate = this.option('cellTemplate');
+
+        this._appendCell(row, cell);
+
+        if(cellTemplate) {
+            cellTemplate.render(this._prepareCellTemplateData(cellDate, cellIndex, $cell));
+        } else {
+            cell.innerHTML = this._getCellText(cellDate);
+        }
+
+        params.cellDate = this._getNextCellData(cellDate);
+    },
+
+    _getClassNameByDate: function(cellDate) {
+        let className = CALENDAR_CELL_CLASS;
+
+        if(this._isTodayCell(cellDate)) {
+            className += ` ${CALENDAR_TODAY_CLASS}`;
+        }
+
+        if(this._isDateOutOfRange(cellDate) || this.isDateDisabled(cellDate)) {
+            className += ` ${CALENDAR_EMPTY_CELL_CLASS}`;
+        }
+
+        if(this._isOtherView(cellDate)) {
+            className += ` ${CALENDAR_OTHER_VIEW_CLASS}`;
+        }
+
+        return className;
+    },
+
+    _prepareCellTemplateData: function(cellDate, cellIndex, $cell) {
+        return {
+            model: {
+                text: this._getCellText(cellDate),
+                date: cellDate,
+                view: this._getViewName()
+            },
+            container: domUtils.getPublicElement($cell),
+            index: cellIndex
+        };
     },
 
     _renderEvents: function() {
         this._createCellClickAction();
 
         eventsEngine.off(this._$table, CALENDAR_DXCLICK_EVENT_NAME);
-        eventsEngine.on(this._$table, CALENDAR_DXCLICK_EVENT_NAME, 'td', (function(e) {
+        eventsEngine.on(this._$table, CALENDAR_DXCLICK_EVENT_NAME, 'td', ((e) => {
             if(!$(e.currentTarget).hasClass(CALENDAR_EMPTY_CELL_CLASS)) {
                 this._cellClickAction({
                     event: e,
                     value: $(e.currentTarget).data(CALENDAR_DATE_VALUE_KEY)
                 });
             }
-        }).bind(this));
+        }));
     },
 
     _createCellClickAction: function() {
@@ -178,7 +213,7 @@ var BaseView = Widget.inherit({
     },
 
     _createDisabledDatesHandler: function() {
-        var disabledDates = this.option('disabledDates');
+        const disabledDates = this.option('disabledDates');
 
         this._disabledDatesHandler = Array.isArray(disabledDates) ? this._getDefaultDisabledDatesHandler(disabledDates) : disabledDates || noop;
     },
@@ -192,7 +227,7 @@ var BaseView = Widget.inherit({
     _isDateOutOfRange: abstract,
 
     isDateDisabled: function(cellDate) {
-        var dateParts = {
+        const dateParts = {
             date: cellDate,
             view: this._getViewName()
         };
@@ -215,8 +250,8 @@ var BaseView = Widget.inherit({
 
         contouredDate = contouredDate || this.option('contouredDate');
 
-        var $oldContouredCell = this._$table.find('.' + CALENDAR_CONTOURED_DATE_CLASS);
-        var $newContouredCell = this._getCellByDate(contouredDate);
+        const $oldContouredCell = this._$table.find(`.${CALENDAR_CONTOURED_DATE_CLASS}`);
+        const $newContouredCell = this._getCellByDate(contouredDate);
 
         $oldContouredCell.removeClass(CALENDAR_CONTOURED_DATE_CLASS);
         $newContouredCell.addClass(CALENDAR_CONTOURED_DATE_CLASS);
@@ -224,8 +259,8 @@ var BaseView = Widget.inherit({
 
     _changeValue: function(cellDate) {
         if(cellDate) {
-            var value = this.option('value'),
-                newValue = value ? new Date(value) : new Date();
+            const value = this.option('value');
+            const newValue = value ? new Date(value) : new Date();
 
             newValue.setDate(cellDate.getDate());
             newValue.setMonth(cellDate.getMonth());
@@ -243,8 +278,8 @@ var BaseView = Widget.inherit({
             return;
         }
 
-        var value = this.option('value'),
-            selectedCell = this._getCellByDate(value);
+        const value = this.option('value');
+        const selectedCell = this._getCellByDate(value);
 
         if(this._selectedCell) {
             this._selectedCell.removeClass(CALENDAR_SELECTED_DATE_CLASS);
@@ -259,10 +294,10 @@ var BaseView = Widget.inherit({
     },
 
     _getFirstAvailableDate: function() {
-        var date = this.option('date'),
-            min = this.option('min');
+        let date = this.option('date');
+        const min = this.option('min');
 
-        date = dateUtils.getFirstDateView(this._getViewName(), date);
+        date = getFirstDateView(this._getViewName(), date);
         return new Date(min && date < min ? min : date);
     },
 
@@ -271,13 +306,13 @@ var BaseView = Widget.inherit({
     isBoundary: abstract,
 
     _optionChanged: function(args) {
-        var name = args.name;
+        const { name, value } = args;
         switch(name) {
             case 'value':
                 this._renderValue();
                 break;
             case 'contouredDate':
-                this._renderContouredDate(args.value);
+                this._renderContouredDate(value);
                 break;
             case 'onCellClick':
                 this._createCellClickAction();
@@ -285,6 +320,10 @@ var BaseView = Widget.inherit({
             case 'disabledDates':
             case 'cellTemplate':
                 this._invalidate();
+                break;
+            case 'rtlEnabled':
+                this._cacheAppendMethodName(value);
+                this.callBase(args);
                 break;
             default:
                 this.callBase(args);

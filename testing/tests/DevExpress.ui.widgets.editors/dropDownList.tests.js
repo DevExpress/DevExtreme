@@ -1063,16 +1063,43 @@ QUnit.module('popup', moduleConfig, () => {
             opened: true
         }).dxDropDownList('instance');
 
-        assert.ok($(instance.content('.dx-overlay-content')).parent().height() > 80, 'popup sizes are not limited if container has no overflow: hidden styles');
+        assert.ok($(instance.content()).parent().height() > 80, 'popup sizes are not limited if container has no overflow: hidden styles');
 
         parentContainer.css('overflow', 'hidden');
         instance.close();
         instance.open();
-        assert.roughEqual($(instance.content('.dx-overlay-content')).parent().height(), 80 / 2, 2, 'popup sizes are limited by container parent bounds');
+        assert.roughEqual($(instance.content()).parent().height(), 80 / 2, 2, 'popup sizes are limited by container parent bounds');
 
         childContainer.css('overflow', 'hidden');
         instance.repaint();
-        assert.roughEqual($(instance.content('.dx-overlay-content')).parent().height(), 60 / 2, 2, 'popup sizes are limited by container bounds');
+        assert.roughEqual($(instance.content()).parent().height(), 60 / 2, 2, 'popup sizes are limited by container bounds');
+
+        parentContainer.remove();
+    });
+
+    QUnit.test('popup max height are limited by container bounds and window', function(assert) {
+        const items = [];
+        for(let i = 0; i < 100; i++) {
+            items.push(`item ${i}`);
+        }
+
+        const windowHeight = $(window).outerHeight();
+        const parentContainer = $('<div>')
+            .attr('id', 'specific-container')
+            .css('overflow', 'hidden')
+            .height(windowHeight * 2)
+            .appendTo('#qunit-fixture');
+
+        const instance = $('#dropDownList').dxDropDownList({
+            items,
+            dropDownOptions: {
+                container: parentContainer
+            },
+            opened: true
+        }).dxDropDownList('instance');
+        const $overlay = $(instance.content()).parent();
+
+        assert.roughEqual($overlay.height(), windowHeight / 2, 2, 'popup sizes are limited by window if overflow:hidden container is larger than window');
 
         parentContainer.remove();
     });
@@ -1128,14 +1155,19 @@ QUnit.module('popup', moduleConfig, () => {
         const scrollTop = listInstance.scrollTop();
 
         setTimeout(() => {
-            assert.ok(listInstance.scrollTop() === scrollTop, 'scrollTop is correctly after new page load');
+            assert.strictEqual(listInstance.scrollTop(), scrollTop, 'scrollTop is correctly after new page load');
             done();
         });
     });
 
     QUnit.testInActiveWindow('After search and load new page scrollTop should not be changed', function(assert) {
         if(browser.msie) {
-            assert.ok(true, 'test does not actual for IE');
+            assert.ok(true, 'not applicable in IE');
+            return;
+        }
+
+        if(browser.chrome && !window.INTRANET) {
+            assert.ok(true, 'TODO https://trello.com/c/l50V8hPU/');
             return;
         }
 

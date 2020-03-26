@@ -1,4 +1,4 @@
-var $ = require('jquery');
+const $ = require('jquery');
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(
@@ -11,10 +11,10 @@ require('common.css!');
 require('generic_light.css!');
 
 
-var noop = require('core/utils/common').noop,
-    errors = require('ui/widget/ui.errors'),
-    DataSource = require('data/data_source/data_source').DataSource,
-    config = require('core/config');
+const noop = require('core/utils/common').noop;
+const errors = require('ui/widget/ui.errors');
+const DataSource = require('data/data_source/data_source').DataSource;
+const config = require('core/config');
 
 require('ui/scheduler/ui.scheduler');
 
@@ -42,13 +42,13 @@ QUnit.test('Header should be initialized with correct views and currentView opti
         views: ['day', 'week'],
         currentView: 'week'
     });
-    var $element = this.instance.$element();
-    assert.deepEqual($element.find('.dx-scheduler-header').dxSchedulerHeader('instance').option('views'), ['day', 'week'], 'Scheduler header has a correct views option');
-    assert.equal($element.find('.dx-scheduler-header').dxSchedulerHeader('instance').option('currentView'), 'week', 'Scheduler header has a correct current view');
+    const header = this.instance.$element().find('.dx-scheduler-header').dxSchedulerHeader('instance');
+    assert.deepEqual(header.option('views'), ['day', 'week'], 'Scheduler header has a correct views option');
+    assert.equal(header.option('currentView'), 'week', 'Scheduler header has a correct current view');
 });
 
 QUnit.test('Height of \'dx-scheduler-group-row\' should be equal with height of \'dx-scheduler-date-table-row\'', function(assert) {
-    var priorities = [
+    const priorities = [
         {
             text: 'High priority',
             id: 1,
@@ -58,7 +58,7 @@ QUnit.test('Height of \'dx-scheduler-group-row\' should be equal with height of 
             id: 2,
             color: '#ff9747'
         }];
-    var owners = [
+    const owners = [
         {
             text: 'Samantha Bright',
             id: 1,
@@ -67,20 +67,12 @@ QUnit.test('Height of \'dx-scheduler-group-row\' should be equal with height of 
             text: 'John Heart',
             id: 2,
             color: '#32c9ed'
-        }, {
-            text: 'Todd Hoffman',
-            id: 3,
-            color: '#2a7ee4'
-        }, {
-            text: 'Sandra Johnson',
-            id: 4,
-            color: '#7b49d3'
         }];
 
-    var data = [
+    const data = [
         {
             text: 'Website Re-Design Plan',
-            ownerId: 4, roomId: 1, priorityId: 2,
+            ownerId: 1, roomId: 1, priorityId: 2,
             startDate: new Date(2017, 4, 22, 9, 30),
             endDate: new Date(2017, 4, 22, 11, 30)
         }, {
@@ -89,21 +81,6 @@ QUnit.test('Height of \'dx-scheduler-group-row\' should be equal with height of 
             startDate: new Date(2017, 4, 22, 12, 0),
             endDate: new Date(2017, 4, 22, 13, 0),
             allDay: true
-        }, {
-            text: 'Install New Router in Dev Room',
-            ownerId: 1, roomId: 1, priorityId: 2,
-            startDate: new Date(2017, 4, 22, 14, 30),
-            endDate: new Date(2017, 4, 22, 15, 30)
-        }, {
-            text: 'Approve Personal Computer Upgrade Plan',
-            ownerId: 3, roomId: 2, priorityId: 2,
-            startDate: new Date(2017, 4, 23, 10, 0),
-            endDate: new Date(2017, 4, 23, 11, 0)
-        }, {
-            text: 'Final Budget Review',
-            ownerId: 1, roomId: 1, priorityId: 1,
-            startDate: new Date(2017, 4, 23, 12, 0),
-            endDate: new Date(2017, 4, 23, 13, 35)
         }];
 
     this.createInstance({
@@ -124,9 +101,9 @@ QUnit.test('Height of \'dx-scheduler-group-row\' should be equal with height of 
         height: 600
     });
 
-    var $element = this.instance.$element();
-    var groupRow = $element.find('.dx-scheduler-group-flex-container .dx-scheduler-group-row:last-child .dx-scheduler-group-header').eq(0),
-        dataTableRow = $element.find('.dx-scheduler-date-table-row').eq(0);
+    const $element = this.instance.$element();
+    const groupRow = $element.find('.dx-scheduler-group-flex-container .dx-scheduler-group-row:last-child .dx-scheduler-group-header').eq(0);
+    const dataTableRow = $element.find('.dx-scheduler-date-table-row').eq(0);
 
     assert.roughEqual(groupRow.outerHeight(), dataTableRow.outerHeight(), 0.02, 'Row heights is equal');
 });
@@ -137,26 +114,37 @@ QUnit.test('Header should be initialized with correct \'width\' option', functio
         currentView: 'week',
         width: 700
     });
-    var $element = this.instance.$element(),
-        header = $element.find('.dx-scheduler-header').dxSchedulerHeader('instance');
+    const header = this.instance.$element().find('.dx-scheduler-header').dxSchedulerHeader('instance');
 
     assert.equal(header.option('width'), 700, 'Header has a right width');
+});
 
+QUnit.test('Header should be updated with correct \'width\' option', function(assert) {
+    this.createInstance({
+        views: ['day', 'week'],
+        currentView: 'week',
+        width: 700
+    });
     this.instance.option('width', 800);
+    const header = this.instance.$element().find('.dx-scheduler-header').dxSchedulerHeader('instance');
 
     assert.equal(header.option('width'), 800, 'Header has a right width');
-
 });
 
 QUnit.test('Header should be initialized with correct useDropDownViewSwitcher option', function(assert) {
     this.createInstance({
         useDropDownViewSwitcher: true
     });
-    var $element = this.instance.$element();
+    const $element = this.instance.$element();
     assert.strictEqual($element.find('.dx-scheduler-header').dxSchedulerHeader('instance').option('useDropDownViewSwitcher'), true, 'Scheduler header has a correct useDropDownViewSwitcher option');
+});
 
+QUnit.test('Header should be updated with correct useDropDownViewSwitcher option', function(assert) {
+    this.createInstance({
+        useDropDownViewSwitcher: true
+    });
     this.instance.option('useDropDownViewSwitcher', false);
-
+    const $element = this.instance.$element();
     assert.strictEqual($element.find('.dx-scheduler-header').dxSchedulerHeader('instance').option('useDropDownViewSwitcher'), false, 'Scheduler header has a correct useDropDownViewSwitcher option');
 });
 
@@ -172,14 +160,14 @@ QUnit.test('Scheduler should have a tasks', function(assert) {
 
 QUnit.test('Scheduler should handle events from units', function(assert) {
     this.createInstance();
-    var checkSchedulerUnit = function(selector, unitName) {
-        var unit = this.instance.$element().find(selector)[unitName]('instance');
+    const checkSchedulerUnit = function(selector, unitName) {
+        const unit = this.instance.$element().find(selector)[unitName]('instance');
 
-        var spy = sinon.spy(noop);
+        const spy = sinon.spy(noop);
 
         this.instance.subscribe('testFunction', spy);
 
-        var observer = unit.option('observer');
+        const observer = unit.option('observer');
 
         assert.equal(observer, this.instance, 'observer is instance of scheduler');
 
@@ -197,7 +185,7 @@ QUnit.test('Scheduler should handle events from units', function(assert) {
 
 QUnit.test('Scheduler should throw an error if event is not added to subscribes', function(assert) {
     this.createInstance();
-    var unit = this.instance.$element().find('.dx-scheduler-header').dxSchedulerHeader('instance');
+    const unit = this.instance.$element().find('.dx-scheduler-header').dxSchedulerHeader('instance');
 
     assert.throws(
         function() {
@@ -221,13 +209,13 @@ QUnit.test('Scheduler should be able to invoke unit methods', function(assert) {
         return a + b;
     });
 
-    var result = this.instance.getWorkSpace().invoke('testFn', 1, 2);
+    const result = this.instance.getWorkSpace().invoke('testFn', 1, 2);
 
     assert.equal(result, 3, 'result is OK');
 });
 
 QUnit.test('Filter options should be passed to the load method', function(assert) {
-    var resources = [
+    const resources = [
         { field: 'r1', dataSource: [{ id: 1, text: 'a' }] },
         { field: 'r2', dataSource: [{ id: 1, text: 'b' }] }
     ];
@@ -238,7 +226,7 @@ QUnit.test('Filter options should be passed to the load method', function(assert
         resources: resources,
         dataSource: new DataSource({
             load: function(options) {
-                var schedulerOptions = options.dxScheduler;
+                const schedulerOptions = options.dxScheduler;
                 assert.deepEqual(schedulerOptions.startDate, new Date(2015, 5, 29), 'Start date is OK');
                 assert.deepEqual(schedulerOptions.endDate, new Date(2015, 6, 5, 23, 59), 'End date is OK');
                 assert.deepEqual(schedulerOptions.resources, resources, 'Resources are OK');
@@ -256,13 +244,13 @@ QUnit.test('scheduler should work with disabled: true', function(assert) {
 });
 
 QUnit.test('The \'min\' option should be converted to Date obj before send to work space and header', function(assert) {
-    var date = new Date(1422738000000);
+    let date = new Date(1422738000000);
     this.createInstance({
         min: date.getTime()
     });
 
-    var workSpace = this.instance.getWorkSpace(),
-        header = this.instance.getHeader();
+    const workSpace = this.instance.getWorkSpace();
+    const header = this.instance.getHeader();
 
     this.compareDates(workSpace.option('min'), { year: date.getFullYear(), month: date.getMonth(), date: date.getDate() }, assert);
     this.compareDates(header.option('min'), { year: date.getFullYear(), month: date.getMonth(), date: date.getDate() }, assert);
@@ -274,13 +262,13 @@ QUnit.test('The \'min\' option should be converted to Date obj before send to wo
 });
 
 QUnit.test('The \'max\' option should be converted to Date obj before send to work space and header', function(assert) {
-    var date = new Date(1422738000000);
+    let date = new Date(1422738000000);
     this.createInstance({
         max: date.getTime()
     });
 
-    var workSpace = this.instance.getWorkSpace(),
-        header = this.instance.getHeader();
+    const workSpace = this.instance.getWorkSpace();
+    const header = this.instance.getHeader();
 
     this.compareDates(workSpace.option('max'), { year: date.getFullYear(), month: date.getMonth(), date: date.getDate() }, assert);
     this.compareDates(header.option('max'), { year: date.getFullYear(), month: date.getMonth(), date: date.getDate() }, assert);
@@ -292,7 +280,7 @@ QUnit.test('The \'max\' option should be converted to Date obj before send to wo
 });
 
 QUnit.test('Scheduler should not throw an error when the details form is opened for the first time', function(assert) {
-    var errorLogStub = sinon.stub(errors, 'log');
+    const errorLogStub = sinon.stub(errors, 'log');
 
     try {
         errorLogStub.withArgs('W1002').returns(true)
@@ -334,8 +322,8 @@ QUnit.test('currentDate option should be parsed with ISO8601 dates before sendin
         currentDate: '20170208'
     });
 
-    var workSpace = this.instance.getWorkSpace(),
-        header = this.instance.getHeader();
+    const workSpace = this.instance.getWorkSpace();
+    const header = this.instance.getHeader();
 
     assert.deepEqual(workSpace.option('currentDate'), new Date(2017, 1, 8), 'currentDate is OK');
     assert.deepEqual(header.option('currentDate'), new Date(2017, 1, 8), 'currentDate is OK');
@@ -354,8 +342,8 @@ QUnit.test('max option should be parsed with ISO8601 dates before sending to wor
         max: '20170209'
     });
 
-    var workSpace = this.instance.getWorkSpace(),
-        header = this.instance.getHeader();
+    const workSpace = this.instance.getWorkSpace();
+    const header = this.instance.getHeader();
 
     assert.deepEqual(workSpace.option('max'), new Date(2017, 1, 9), 'max is OK');
     assert.deepEqual(header.option('max'), new Date(2017, 1, 9), 'max is OK');
@@ -374,8 +362,8 @@ QUnit.test('min option should be parsed with ISO8601 dates before sending to wor
         min: '20170207'
     });
 
-    var workSpace = this.instance.getWorkSpace(),
-        header = this.instance.getHeader();
+    const workSpace = this.instance.getWorkSpace();
+    const header = this.instance.getHeader();
 
     assert.deepEqual(workSpace.option('min'), new Date(2017, 1, 7), 'min is OK');
     assert.deepEqual(header.option('min'), new Date(2017, 1, 7), 'min is OK');

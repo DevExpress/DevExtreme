@@ -1,20 +1,21 @@
-var animationFrame = require('../../../animation/frame'),
-    noop = function() { },
-    easingFunctions = {
-        easeOutCubic: function(pos, start, end) { return (pos === 1) ? end : ((1 - Math.pow((1 - pos), 3)) * (end - start) + (+start)); },
-        linear: function(pos, start, end) { return (pos === 1) ? end : (pos * (end - start) + (+start)); }
-    };
+const animationFrame = require('../../../animation/frame');
+const noop = function() { };
+const easingFunctions = {
+    easeOutCubic: function(pos, start, end) { return (pos === 1) ? end : ((1 - Math.pow((1 - pos), 3)) * (end - start) + (+start)); },
+    linear: function(pos, start, end) { return (pos === 1) ? end : (pos * (end - start) + (+start)); }
+};
 
 exports.easingFunctions = easingFunctions;
 
-var animationSvgStep = {
+const animationSvgStep = {
     segments: function(elem, params, progress, easing, currentParams) {
-        var from = params.from,
-            to = params.to,
-            curSeg,
-            seg,
-            i, j,
-            segments = [];
+        const from = params.from;
+        const to = params.to;
+        let curSeg;
+        let seg;
+        let i;
+        let j;
+        const segments = [];
 
         for(i = 0; i < from.length; i++) {
             curSeg = from[i];
@@ -31,27 +32,27 @@ var animationSvgStep = {
     },
 
     arc: function(elem, params, progress, easing) {
-        var from = params.from,
-            to = params.to,
-            current = {};
-        for(var i in from) {
+        const from = params.from;
+        const to = params.to;
+        const current = {};
+        for(const i in from) {
             current[i] = easing(progress, from[i], to[i]);
         }
         elem.attr(current);
     },
 
     transform: function(elem, params, progress, easing, currentParams) {
-        var from = params.from,
-            to = params.to,
-            current = {};
-        for(var i in from) {
+        const from = params.from;
+        const to = params.to;
+        const current = {};
+        for(const i in from) {
             current[i] = currentParams[i] = easing(progress, from[i], to[i]);
         }
         elem.attr(current);
     },
 
     base: function(elem, params, progress, easing, currentParams, attributeName) {
-        var obj = {};
+        const obj = {};
         obj[attributeName] = currentParams[attributeName] = easing(progress, params.from, params.to);
         elem.attr(obj);
     },
@@ -64,13 +65,13 @@ var animationSvgStep = {
 };
 
 function step(now) {
-    var that = this,
-        animateStep = that._animateStep,
-        attrName;
+    const that = this;
+    const animateStep = that._animateStep;
+    let attrName;
     that._progress = that._calcProgress(now);
 
     for(attrName in that.params) {
-        var anim = animateStep[attrName] || animateStep.base;
+        const anim = animateStep[attrName] || animateStep.base;
         anim(that.element, that.params[attrName], that._progress, that._easing, that._currentParams, attrName);
     }
 
@@ -95,7 +96,7 @@ function start(now) {
 }
 
 function Animation(element, params, options) {
-    var that = this;
+    const that = this;
     that._progress = 0;
     that.element = element;
     that.params = params;
@@ -114,9 +115,9 @@ Animation.prototype = {
     },
 
     stop: function(disableComplete) {
-        var that = this,
-            options = that.options,
-            animateStep = that._animateStep;
+        const that = this;
+        const options = that.options;
+        const animateStep = that._animateStep;
 
         that.stop = that.tick = noop;
 
@@ -126,7 +127,7 @@ Animation.prototype = {
 };
 
 function AnimationController(element) {
-    var that = this;
+    const that = this;
     that._animationCount = 0;
     that._timerId = null;
     that._animations = {};
@@ -136,12 +137,12 @@ exports.AnimationController = AnimationController;
 
 AnimationController.prototype = {
     _loop: function() {
-        var that = this,
-            animations = that._animations,
-            activeAnimation = 0,
-            now = new Date().getTime(),
-            an,
-            endAnimation = that._endAnimation;
+        const that = this;
+        const animations = that._animations;
+        let activeAnimation = 0;
+        const now = new Date().getTime();
+        let an;
+        const endAnimation = that._endAnimation;
 
         for(an in animations) {
             if(!animations[an].tick(now)) {
@@ -165,7 +166,7 @@ AnimationController.prototype = {
     },
 
     addAnimation: function(animation) {
-        var that = this;
+        const that = this;
         that._animations[that._animationCount++] = animation;
         clearTimeout(that._endAnimationTimer);
         if(!that._timerId) {
@@ -194,7 +195,7 @@ AnimationController.prototype = {
     },
 
     stop: function() {
-        var that = this;
+        const that = this;
 
         that._animations = {};
         that._animationCount = 0;
@@ -205,10 +206,10 @@ AnimationController.prototype = {
     },
 
     lock: function() {
-        var an,
-            animations = this._animations,
-            unstoppable, // T261694
-            hasUnstoppableInAnimations;
+        let an;
+        const animations = this._animations;
+        let unstoppable; // T261694
+        let hasUnstoppableInAnimations;
 
         for(an in animations) {
             unstoppable = animations[an].options.unstoppable;

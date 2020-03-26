@@ -2,6 +2,7 @@
     "env": {
         "es6": true
     },
+    "parser": "babel-eslint",
     "parserOptions": {
         "ecmaVersion": 6,
         "sourceType": "module",
@@ -55,8 +56,11 @@
         "no-alert": "error",
         "no-console": "error",
         "no-restricted-syntax": [ "error", "ForOfStatement" ],
+        "no-var": "error",
         "no-whitespace-before-property": "error",
         "object-curly-spacing": [ "error", "always" ],
+        "one-var": ["error", "never"],
+        "prefer-const": "warn",
         "semi-spacing": "error",
         "semi": "error",
         "space-before-blocks": "error",
@@ -122,6 +126,7 @@
                     "bing",
                     "browserslist", // auto-prefixer browsers list
                     "cldr",         // Unicode CLDR Project
+                    "cssom",        // cssom parser
                     "cwd",          // current working directory
                     "edm",          // Entity Data Model
                     "eol",          // end of line
@@ -150,6 +155,7 @@
                     "msie",
                     "odata",      // OData
                     "readonly",
+                    "rebase",     // clean-css option
                     "rtl",        // Right-to-Left
                     "scss",
                     "semver",     // The semantic versioner for npm

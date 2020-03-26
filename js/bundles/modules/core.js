@@ -1,9 +1,9 @@
-var windowUtils = require('../../core/utils/window');
-var window = windowUtils.getWindow();
+const windowUtils = require('../../core/utils/window');
+const window = windowUtils.getWindow();
 
-var DevExpress = window.DevExpress = window.DevExpress || {};
+const DevExpress = window.DevExpress = window.DevExpress || {};
 
-var errors = DevExpress.errors = require('../../core/errors');
+const errors = DevExpress.errors = require('../../core/errors');
 
 if(DevExpress._DEVEXTREME_BUNDLE_INITIALIZED) {
     throw errors.Error('E0024');
@@ -11,7 +11,7 @@ if(DevExpress._DEVEXTREME_BUNDLE_INITIALIZED) {
 DevExpress._DEVEXTREME_BUNDLE_INITIALIZED = true;
 
 DevExpress.clientExporter = require('../../exporter');
-DevExpress.excelExporter = require('../../exporter/exceljs/excelExporter');
+DevExpress.excelExporter = require('../../excel_exporter');
 
 DevExpress.VERSION = require('../../core/version');
 
@@ -25,7 +25,7 @@ DevExpress.devices = require('../../core/devices');
 
 DevExpress.Color = require('../../color');
 
-var animationFrame = require('../../animation/frame');
+const animationFrame = require('../../animation/frame');
 
 /**
  * @name utils

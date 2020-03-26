@@ -26,20 +26,20 @@ const moduleConfig = {
 QUnit.module('Value as HTML markup', moduleConfig, () => {
     test('show placeholder is value undefined', function(assert) {
         const instance = $('#htmlEditor').dxHtmlEditor({
-                placeholder: 'test placeholder'
-            }).dxHtmlEditor('instance'),
-            $element = instance.$element(),
-            $content = $element.find(getSelector(CONTENT_CLASS));
+            placeholder: 'test placeholder'
+        }).dxHtmlEditor('instance');
+        const $element = instance.$element();
+        const $content = $element.find(getSelector(CONTENT_CLASS));
 
         assert.equal($content.get(0).dataset.placeholder, 'test placeholder');
     });
 
     test('render default value', function(assert) {
         const instance = $('#htmlEditor').dxHtmlEditor({
-                value: '<h1>Hi!</h1><p>Test</p>'
-            }).dxHtmlEditor('instance'),
-            $element = instance.$element(),
-            markup = $element.find(getSelector(CONTENT_CLASS)).html();
+            value: '<h1>Hi!</h1><p>Test</p>'
+        }).dxHtmlEditor('instance');
+        const $element = instance.$element();
+        const markup = $element.find(getSelector(CONTENT_CLASS)).html();
 
         assert.equal(instance.option('value'), '<h1>Hi!</h1><p>Test</p>');
         assert.equal(markup, '<h1>Hi!</h1><p>Test</p>');
@@ -73,13 +73,13 @@ QUnit.module('Value as HTML markup', moduleConfig, () => {
 
     test('render transclude content and predefined value', function(assert) {
         const instance = $('#htmlEditor')
-                .html('<h1>Hi!</h1><p>Test</p>')
-                .dxHtmlEditor({
-                    value: '<p>Test1</p><p>Test2</p>'
-                })
-                .dxHtmlEditor('instance'),
-            $element = instance.$element(),
-            markup = $element.find(getSelector(CONTENT_CLASS)).html();
+            .html('<h1>Hi!</h1><p>Test</p>')
+            .dxHtmlEditor({
+                value: '<p>Test1</p><p>Test2</p>'
+            })
+            .dxHtmlEditor('instance');
+        const $element = instance.$element();
+        const markup = $element.find(getSelector(CONTENT_CLASS)).html();
 
         this.clock.tick();
 
@@ -259,11 +259,11 @@ QUnit.module('Value as Markdown markup', {
 }, () => {
     test('render default value', function(assert) {
         const instance = $('#htmlEditor').dxHtmlEditor({
-                value: 'Hi!\nIt\'s a **test**!',
-                valueType: 'markdown'
-            }).dxHtmlEditor('instance'),
-            $element = instance.$element(),
-            markup = $element.find(getSelector(CONTENT_CLASS)).html();
+            value: 'Hi!\nIt\'s a **test**!',
+            valueType: 'markdown'
+        }).dxHtmlEditor('instance');
+        const $element = instance.$element();
+        const markup = $element.find(getSelector(CONTENT_CLASS)).html();
 
         assert.equal(instance.option('value'), 'Hi!\nIt\'s a **test**!');
         assert.equal(markup, '<p>Hi!</p><p>It\'s a <strong>test</strong>!</p>');

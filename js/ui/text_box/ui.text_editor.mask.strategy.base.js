@@ -85,7 +85,7 @@ export default class BaseMaskStrategy {
         if(!this.editor._isValueEmpty() && this.editorOption('isValid')) {
             this.editor._adjustCaret();
         } else {
-            var caret = this.editor._maskRulesChain.first();
+            const caret = this.editor._maskRulesChain.first();
             this._caretTimeout = setTimeout(function() {
                 this._caret({ start: caret, end: caret });
             }.bind(this.editor), 0);
@@ -102,8 +102,8 @@ export default class BaseMaskStrategy {
     }
 
     _cutHandler(event) {
-        var caret = this.editorCaret();
-        var selectedText = this.editorInput().val().substring(caret.start, caret.end);
+        const caret = this.editorCaret();
+        const selectedText = this.editorInput().val().substring(caret.start, caret.end);
 
         this.editor._maskKeyHandler(event, () => getClipboardText(event, selectedText));
     }
@@ -126,13 +126,13 @@ export default class BaseMaskStrategy {
     _pasteHandler(event) {
         const { editor } = this;
         this._keyPressHandled = true;
-        var caret = this.editorCaret();
+        const caret = this.editorCaret();
 
         editor._maskKeyHandler(event, () => {
-            var pastingText = getClipboardText(event);
-            var restText = editor._maskRulesChain.text().substring(caret.end);
-            var accepted = editor._handleChain({ text: pastingText, start: caret.start, length: pastingText.length });
-            var newCaret = caret.start + accepted;
+            const pastingText = getClipboardText(event);
+            const restText = editor._maskRulesChain.text().substring(caret.end);
+            const accepted = editor._handleChain({ text: pastingText, start: caret.start, length: pastingText.length });
+            const newCaret = caret.start + accepted;
 
             editor._handleChain({ text: restText, start: newCaret, length: restText.length });
             editor._caret({ start: newCaret, end: newCaret });

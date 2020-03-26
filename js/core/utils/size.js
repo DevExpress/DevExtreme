@@ -1,10 +1,10 @@
-var window = require('../../core/utils/window').getWindow();
-var typeUtils = require('../utils/type');
+const window = require('../../core/utils/window').getWindow();
+const typeUtils = require('../utils/type');
 
-var SPECIAL_HEIGHT_VALUES = ['auto', 'none', 'inherit', 'initial'];
+const SPECIAL_HEIGHT_VALUES = ['auto', 'none', 'inherit', 'initial'];
 
-var getSizeByStyles = function(elementStyles, styles) {
-    var result = 0;
+const getSizeByStyles = function(elementStyles, styles) {
+    let result = 0;
 
     styles.forEach(function(style) {
         result += (parseFloat(elementStyles[style]) || 0);
@@ -13,9 +13,9 @@ var getSizeByStyles = function(elementStyles, styles) {
     return result;
 };
 
-var getElementBoxParams = function(name, elementStyles) {
-    var beforeName = name === 'width' ? 'Left' : 'Top';
-    var afterName = name === 'width' ? 'Right' : 'Bottom';
+const getElementBoxParams = function(name, elementStyles) {
+    const beforeName = name === 'width' ? 'Left' : 'Top';
+    const afterName = name === 'width' ? 'Right' : 'Bottom';
 
     return {
         padding: getSizeByStyles(elementStyles, ['padding' + beforeName, 'padding' + afterName]),
@@ -24,8 +24,8 @@ var getElementBoxParams = function(name, elementStyles) {
     };
 };
 
-var getBoxSizingOffset = function(name, elementStyles, boxParams) {
-    var size = elementStyles[name];
+const getBoxSizingOffset = function(name, elementStyles, boxParams) {
+    const size = elementStyles[name];
 
     if(elementStyles.boxSizing === 'border-box' && size.length && size[size.length - 1] !== '%') {
         return boxParams.border + boxParams.padding;
@@ -34,15 +34,15 @@ var getBoxSizingOffset = function(name, elementStyles, boxParams) {
     return 0;
 };
 
-var getSize = function(element, name, include) {
-    var elementStyles = window.getComputedStyle(element);
+const getSize = function(element, name, include) {
+    const elementStyles = window.getComputedStyle(element);
 
-    var boxParams = getElementBoxParams(name, elementStyles);
+    const boxParams = getElementBoxParams(name, elementStyles);
 
-    var clientRect = element.getClientRects().length;
-    var boundingClientRect = element.getBoundingClientRect()[name];
+    const clientRect = element.getClientRects().length;
+    const boundingClientRect = element.getBoundingClientRect()[name];
 
-    var result = clientRect ? boundingClientRect : 0;
+    let result = clientRect ? boundingClientRect : 0;
 
     if(result <= 0) {
         result = parseFloat(elementStyles[name] || element.style[name]) || 0;
@@ -65,11 +65,11 @@ var getSize = function(element, name, include) {
     return result;
 };
 
-var getContainerHeight = function(container) {
+const getContainerHeight = function(container) {
     return typeUtils.isWindow(container) ? container.innerHeight : container.offsetHeight;
 };
 
-var parseHeight = function(value, container) {
+const parseHeight = function(value, container) {
     if(value.indexOf('px') > 0) {
         value = parseInt(value.replace('px', ''));
     } else if(value.indexOf('%') > 0) {
@@ -81,7 +81,7 @@ var parseHeight = function(value, container) {
     return value;
 };
 
-var getHeightWithOffset = function(value, offset, container) {
+const getHeightWithOffset = function(value, offset, container) {
     if(!value) {
         return null;
     }
@@ -98,36 +98,36 @@ var getHeightWithOffset = function(value, offset, container) {
         return Math.max(0, value + offset);
     }
 
-    var operationString = offset < 0 ? ' - ' : ' ';
+    const operationString = offset < 0 ? ' - ' : ' ';
 
     return 'calc(' + value + operationString + Math.abs(offset) + 'px)';
 };
 
-var addOffsetToMaxHeight = function(value, offset, container) {
-    var maxHeight = getHeightWithOffset(value, offset, container);
+const addOffsetToMaxHeight = function(value, offset, container) {
+    const maxHeight = getHeightWithOffset(value, offset, container);
     return maxHeight !== null ? maxHeight : 'none';
 };
 
-var addOffsetToMinHeight = function(value, offset, container) {
-    var minHeight = getHeightWithOffset(value, offset, container);
+const addOffsetToMinHeight = function(value, offset, container) {
+    const minHeight = getHeightWithOffset(value, offset, container);
     return minHeight !== null ? minHeight : 0;
 };
 
-var getVerticalOffsets = function(element, withMargins) {
+const getVerticalOffsets = function(element, withMargins) {
     if(!element) {
         return 0;
     }
 
-    var boxParams = getElementBoxParams('height', window.getComputedStyle(element));
+    const boxParams = getElementBoxParams('height', window.getComputedStyle(element));
 
     return boxParams.padding
         + boxParams.border
         + (withMargins ? boxParams.margin : 0);
 };
 
-var getVisibleHeight = function(element) {
+const getVisibleHeight = function(element) {
     if(element) {
-        var boundingClientRect = element.getBoundingClientRect();
+        const boundingClientRect = element.getBoundingClientRect();
 
         if(boundingClientRect.height) {
             return boundingClientRect.height;

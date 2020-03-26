@@ -1,17 +1,17 @@
-var $ = require('jquery'),
-    version = require('core/version'),
-    getData = require('exporter').pdf.getData,
-    pdfCreator = require('exporter/pdf_creator').__tests,
-    isFunction = require('core/utils/type').isFunction,
-    imageCreator = require('exporter/image_creator').imageCreator;
+const $ = require('jquery');
+const version = require('core/version');
+const getData = require('exporter').pdf.getData;
+const pdfCreator = require('exporter/pdf_creator').__tests;
+const isFunction = require('core/utils/type').isFunction;
+const imageCreator = require('exporter/image_creator').imageCreator;
 
 QUnit.module('PDF content test', {
     beforeEach: function() {
         pdfCreator.set_getBlob(function(data) { return data; });
         pdfCreator.set_getBase64(function(data) { return data; });
         pdfCreator.set_getCurDate(function() { return '_test_date_'; });
-        var that = this;
-        sinon.stub(imageCreator, 'getImageData', function(markup) { var def = $.Deferred(); def.resolve(that.imageDataSample || '_test_' + markup + '_string_'); return def; });
+        const that = this;
+        sinon.stub(imageCreator, 'getImageData', function(markup) { const def = $.Deferred(); def.resolve(that.imageDataSample || '_test_' + markup + '_string_'); return def; });
     },
     afterEach: function() {
         pdfCreator.restore_getBlob();
@@ -22,71 +22,53 @@ QUnit.module('PDF content test', {
 });
 
 QUnit.test('PDF \'main page\' populated with correct size in pt', function(assert) {
-    // arrange
-    var done = assert.async();
+    const done = assert.async();
 
-    // act
     getData('image_markup', { width: 600.1, height: 400.2, margin: 10 }).then(function(data) {
-        // assert
-        assert.ok(data.indexOf('/MediaBox[0 0 465.08 315.15]/') !== -1);
+        assert.notStrictEqual(data.indexOf('/MediaBox[0 0 465.08 315.15]/'), -1);
     }).done(done);
 });
 
 QUnit.test('PDF \'content stream\' populated with correct size in pt', function(assert) {
-    // arrange
-    var done = assert.async();
+    const done = assert.async();
 
-    // act
     getData('image_markup', { width: 600.1, height: 400.2, margin: 10 }).then(function(data) {
-        // assert
-        assert.ok(data.indexOf('q 465.08 0 0 315.15 0.00 0.00 cm /I0 Do Q') !== -1);
+        assert.notStrictEqual(data.indexOf('q 465.08 0 0 315.15 0.00 0.00 cm /I0 Do Q'), -1);
         done();
     });
 });
 
 QUnit.test('PDF \'info\' has correct date and dx version', function(assert) {
-    // arrange
-    var done = assert.async();
+    const done = assert.async();
 
-    // act
     getData('image_markup', { width: 600.1, height: 400.2 }).then(function(data) {
-        // assert
-        assert.ok(data.indexOf('/CreationDate _test_date_/Producer(DevExtreme ' + version + ')') !== -1);
+        assert.notStrictEqual(data.indexOf('/CreationDate _test_date_/Producer(DevExtreme ' + version + ')'), -1);
         done();
     });
 });
 
 QUnit.test('PDF \'image\' populated with correct size in px, length and image string', function(assert) {
-    // arrange
-    var done = assert.async();
-    // act
+    const done = assert.async();
     getData('image_markup', { width: 600.1, height: 400.2, margin: 10 }).then(function(data) {
-        // assert
-        assert.ok(data.indexOf('/Image/Width 620.1/Height 420.2/') !== -1);
-        assert.ok(data.indexOf('/Length 26>>stream\r\n_test_image_markup_string_\r\n') !== -1);
+        assert.notStrictEqual(data.indexOf('/Image/Width 620.1/Height 420.2/'), -1);
+        assert.notStrictEqual(data.indexOf('/Length 26>>stream\r\n_test_image_markup_string_\r\n'), -1);
         done();
     });
 });
 
 QUnit.test('PDF \'image\' does not contain artifacts. T443241', function(assert) {
-    // arrange
-    var done = assert.async();
+    const done = assert.async();
     this.imageDataSample = '$`';
-    // act
     getData('image_markup', { width: 600.1, height: 400.2 }).then(function(data) {
-        // assert
-        assert.ok(data.indexOf('<</Type/XObject/Subtype/Image/Width') === data.lastIndexOf('<</Type/XObject/Subtype/Image/Width'));
+        assert.strictEqual(data.indexOf('<</Type/XObject/Subtype/Image/Width'), data.lastIndexOf('<</Type/XObject/Subtype/Image/Width'));
         done();
     });
 });
 
 QUnit.test('PDF \'startxref\' populated with correct offset', function(assert) {
-    // arrange
-    var done = assert.async();
-    // act
+    const done = assert.async();
     getData('image_markup', { width: 600.1, height: 400.2 }).then(function(data) {
-        // assert
-        var match = data.match(/startxref\r\n(\d+)\r\n/);
+        const match = data.match(/startxref\r\n(\d+)\r\n/);
         assert.ok(match);
         assert.strictEqual(match.length, 2);
         assert.strictEqual(parseInt(match[1]), 707 + version.length);
@@ -95,12 +77,9 @@ QUnit.test('PDF \'startxref\' populated with correct offset', function(assert) {
 });
 
 QUnit.test('PDF \'xref\' populated with correct blocks offset', function(assert) {
-    // arrange
-    var done = assert.async();
-    // act
+    const done = assert.async();
     getData('image_markup', { width: 600.1, height: 400.2 }).then(function(data) {
-        // assert
-        var match = data.match(/xref\r\n0 8\r\n0000000000 65535 f\r\n0000000(\d\d\d) 00000 n\r\n0000000(\d\d\d) 00000 n\r\n0000000(\d\d\d) 00000 n\r\n0000000(\d\d\d) 00000 n\r\n0000000(\d\d\d) 00000 n\r\n0000000(\d\d\d) 00000 n\r\n0000000(\d\d\d) 00000 n\r\ntrailer/);
+        const match = data.match(/xref\r\n0 8\r\n0000000000 65535 f\r\n0000000(\d\d\d) 00000 n\r\n0000000(\d\d\d) 00000 n\r\n0000000(\d\d\d) 00000 n\r\n0000000(\d\d\d) 00000 n\r\n0000000(\d\d\d) 00000 n\r\n0000000(\d\d\d) 00000 n\r\n0000000(\d\d\d) 00000 n\r\ntrailer/);
 
         assert.ok(match);
 
@@ -121,7 +100,7 @@ QUnit.module('Export', {
     beforeEach: function() {
         pdfCreator.set_composePdfString(function() { return '_composed_string_'; });
 
-        sinon.stub(imageCreator, 'getImageData', function(markup) { var def = $.Deferred(); def.resolve(''); return def; });
+        sinon.stub(imageCreator, 'getImageData', function(markup) { const def = $.Deferred(); def.resolve(''); return def; });
 
         if(isFunction(window.Blob)) {
             this.Blob = window.Blob;
@@ -143,11 +122,8 @@ QUnit.module('Export', {
 });
 
 QUnit.test('pass correct options to imageCreator', function(assert) {
-    // arrange
-    var done = assert.async();
-    // act
+    const done = assert.async();
     getData('image_markup', { width: 600.1, height: 400.2, margin: 10 }).then(function(data) {
-        // assert
         assert.deepEqual(imageCreator.getImageData.lastCall.args, ['image_markup', { width: 600.1, height: 400.2, margin: 10, format: 'JPEG' }]);
         done();
     });
@@ -159,11 +135,8 @@ QUnit.test('getData returns Blob when it is supported by Browser', function(asse
         return;
     }
 
-    // arrange
-    var done = assert.async();
-    // act
+    const done = assert.async();
     getData('image_markup', { width: 600.1, height: 400.2 }).then(function(data) {
-        // assert
         assert.equal(window.Blob.callCount, 1);
         assert.equal(window.Blob.calledWithNew(), true);
         assert.ok(window.Blob.lastCall.args[0][0] instanceof ArrayBuffer);
@@ -180,11 +153,8 @@ QUnit.test('getData returns Base64 when Blob is not supported by Browser', funct
         return;
     }
 
-    // arrange
-    var done = assert.async();
-    // act
+    const done = assert.async();
     getData('image_markup', { width: 600.1, height: 400.2 }).then(function(data) {
-        // assert
         assert.equal(window.btoa.callCount, 1);
         assert.deepEqual(window.btoa.lastCall.args, ['_composed_string_']);
         assert.equal(data, 'base64Data');

@@ -9,21 +9,13 @@ import Callbacks from './utils/callbacks';
 import { EventsStrategy } from './events_strategy';
 import publicComponentUtils from './utils/public_component';
 import { PostponedOperations } from './postponed_operations';
-import { isFunction, isPlainObject, type, isDefined } from './utils/type';
+import { isFunction, isPlainObject, isDefined } from './utils/type';
 import { noop } from './utils/common';
 
 const getEventName = (actionName) => {
     return actionName.charAt(2).toLowerCase() + actionName.substr(3);
 };
 
-/**
-* @name Component
-* @type object
-* @module core/component
-* @export default
-* @namespace DevExpress
-* @hidden
-*/
 const Component = Class.inherit({
     _setDeprecatedOptions() {
         this._deprecatedOptions = {};
@@ -35,36 +27,8 @@ const Component = Class.inherit({
 
     _getDefaultOptions() {
         return {
-            /**
-            * @name ComponentOptions.onInitialized
-            * @type function
-            * @type_function_param1 e:object
-            * @type_function_param1_field1 component:this
-            * @type_function_param1_field2 element:dxElement
-            * @default null
-            * @action
-            */
             onInitialized: null,
-            /**
-            * @name ComponentOptions.onOptionChanged
-            * @type function
-            * @type_function_param1 e:object
-            * @type_function_param1_field1 component:this
-            * @type_function_param1_field4 name:string
-            * @type_function_param1_field5 fullName:string
-            * @type_function_param1_field6 value:any
-            * @default null
-            * @action
-            */
             onOptionChanged: null,
-            /**
-            * @name ComponentOptions.onDisposing
-            * @type function
-            * @type_function_param1 e:object
-            * @type_function_param1_field1 component:this
-            * @default null
-            * @action
-            */
             onDisposing: null,
 
             defaultOptionsRules: null
@@ -131,9 +95,11 @@ const Component = Class.inherit({
             this._options.onChanging(
                 (name, previousValue, value) => this._initialized && this._optionChanging(name, previousValue, value));
             this._options.onDeprecated(
-                (option, info) => this._logDeprecatedWarning(option, info));
+                (option, info) => this._logDeprecatedOptionWarning(option, info));
             this._options.onChanged(
                 (name, value, previousValue) => this._notifyOptionChanged(name, value, previousValue));
+            this._options.onStartChange(() => this.beginUpdate());
+            this._options.onEndChange(() => this.endUpdate());
             this._options.addRules(this._defaultOptionsRules());
 
             if(options && options.onInitializing) {
@@ -159,9 +125,13 @@ const Component = Class.inherit({
         });
     },
 
-    _logDeprecatedWarning(option, info) {
+    _logDeprecatedOptionWarning(option, info) {
         const message = info.message || (`Use the '${info.alias}' option instead`);
         errors.log('W0001', this.NAME, option, info.since, message);
+    },
+
+    _logDeprecatedComponentWarning(since, alias) {
+        errors.log('W0000', this.NAME, since, `Use the '${alias}' widget instead`);
     },
 
     _createOptionChangedAction() {
@@ -231,27 +201,14 @@ const Component = Class.inherit({
         }
     },
 
-    /**
-     * @name componentmethods.instance
-     * @publicName instance()
-     * @return this
-     */
     instance() {
         return this;
     },
 
-    /**
-     * @name componentmethods.beginupdate
-     * @publicName beginUpdate()
-     */
     beginUpdate: function() {
         this._lockUpdate();
     },
 
-    /**
-     * @name componentmethods.endupdate
-     * @publicName endUpdate()
-     */
     endUpdate: function() {
         this._unlockUpdate();
         this._isUpdateAllowed() && this._commitUpdate();
@@ -372,37 +329,11 @@ const Component = Class.inherit({
         return onActionCreated(this, result, config) || result;
     },
 
-    /**
-     * @name ComponentMethods.on
-     * @publicName on(eventName, eventHandler)
-     * @param1 eventName:string
-     * @param2 eventHandler:function
-     * @return this
-     */
-    /**
-     * @name ComponentMethods.on
-     * @publicName on(events)
-     * @param1 events:object
-     * @return this
-     */
     on(eventName, eventHandler) {
         this._eventsStrategy.on(eventName, eventHandler);
         return this;
     },
 
-    /**
-     * @name ComponentMethods.off
-     * @publicName off(eventName)
-     * @param1 eventName:string
-     * @return this
-     */
-    /**
-     * @name ComponentMethods.off
-     * @publicName off(eventName, eventHandler)
-     * @param1 eventName:string
-     * @param2 eventHandler:function
-     * @return this
-     */
     off(eventName, eventHandler) {
         this._eventsStrategy.off(eventName, eventHandler);
         return this;
@@ -433,47 +364,10 @@ const Component = Class.inherit({
         return value;
     },
 
-    /**
-     * @name componentmethods.option
-     * @publicName option()
-     * @return object
-     */
-    /**
-     * @name componentmethods.option
-     * @publicName option(optionName)
-     * @param1 optionName:string
-     * @return any
-     */
-    /**
-     * @name componentmethods.option
-     * @publicName option(optionName, optionValue)
-     * @param1 optionName:string
-     * @param2 optionValue:any
-     */
-    /**
-     * @name componentmethods.option
-     * @publicName option(options)
-     * @param1 options:object
-     */
-    option(options, value) {
-        if(arguments.length < 2 && type(options) !== 'object') {
-            return this._options.option(options);
-        } else {
-            this.beginUpdate();
-
-            try {
-                this._options.option(options, value);
-            } finally {
-                this.endUpdate();
-            }
-        }
+    option(...args) {
+        return this._options.option(...args);
     },
 
-    /**
-     * @name componentmethods.resetOption
-     * @publicName resetOption(optionName)
-     * @param1 optionName:string
-     */
     resetOption(name) {
         this.beginUpdate();
         this._options.reset(name);

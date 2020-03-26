@@ -1,11 +1,11 @@
-var themeModule = require('../../themes'),
-    registerTheme = themeModule.registerTheme,
-    registerThemeAlias = themeModule.registerThemeAlias,
-    WHITE = '#ffffff',
-    BLACK = '#000000',
-    CONTRAST_ACTIVE = '#cf00da',
-    MARKER_COLOR = '#f8ca00',
-    AREA_LAYER_COLOR = '#686868';
+const themeModule = require('../../themes');
+const registerTheme = themeModule.registerTheme;
+const registerThemeAlias = themeModule.registerThemeAlias;
+const WHITE = '#ffffff';
+const BLACK = '#000000';
+const CONTRAST_ACTIVE = '#cf00da';
+const MARKER_COLOR = '#f8ca00';
+const AREA_LAYER_COLOR = '#686868';
 
 registerTheme({
     name: 'generic.contrast',
@@ -93,6 +93,15 @@ registerTheme({
             color: WHITE
         }
     },
+    'chart:common:annotation': {
+        font: {
+            color: WHITE
+        },
+        border: {
+            color: WHITE
+        },
+        color: BLACK
+    },
     chart: {
         commonSeriesSettings: {
         },
@@ -118,15 +127,6 @@ registerTheme({
                 color: WHITE,
                 opacity: 0.7
             }
-        },
-        commonAnnotationSettings: {
-            font: {
-                color: WHITE
-            },
-            border: {
-                color: WHITE
-            },
-            color: BLACK
         }
     },
     pie: {

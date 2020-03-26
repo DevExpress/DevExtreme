@@ -10,8 +10,8 @@ import Widget from '../widget/ui.widget';
 import gridCore, { callModuleItemsMethod } from './ui.data_grid.core';
 import themes from '../themes';
 
-var DATAGRID_ROW_SELECTOR = '.dx-row',
-    DATAGRID_DEPRECATED_TEMPLATE_WARNING = 'Specifying grid templates with the jQuery selector name is now deprecated. Use the DOM Node or the jQuery object that references this selector instead.';
+const DATAGRID_ROW_SELECTOR = '.dx-row';
+const DATAGRID_DEPRECATED_TEMPLATE_WARNING = 'Specifying grid templates with the jQuery selector name is now deprecated. Use the DOM Node or the jQuery object that references this selector instead.';
 
 import './ui.data_grid.column_headers';
 import './ui.data_grid.columns_controller';
@@ -53,12 +53,12 @@ gridCore.registerModulesOrder([
     'export',
     'gridView']);
 
-var DataGrid = Widget.inherit({
+const DataGrid = Widget.inherit({
     _activeStateUnit: DATAGRID_ROW_SELECTOR,
 
     _getDefaultOptions: function() {
-        var that = this,
-            result = that.callBase();
+        const that = this;
+        const result = that.callBase();
 
         each(gridCore.modules, function() {
             if(typeUtils.isFunction(this.defaultOptions)) {
@@ -81,11 +81,6 @@ var DataGrid = Widget.inherit({
             {
                 device: { platform: 'ios' },
                 options: {
-                    /**
-                    * @name GridBaseOptions.showRowLines
-                    * @type boolean
-                    * @default true @for iOS
-                    */
                     showRowLines: true
                 }
             },
@@ -94,31 +89,17 @@ var DataGrid = Widget.inherit({
                     return themes.isMaterial();
                 },
                 options: {
-                    /**
-                    * @name GridBaseOptions.showRowLines
-                    * @type boolean
-                    * @default true @for Material
-                    */
                     showRowLines: true,
-                    /**
-                    * @name GridBaseOptions.showColumnLines
-                    * @type boolean
-                    * @default false @for Material
-                    */
                     showColumnLines: false,
                     /**
                      * @name GridBaseOptions.headerFilter.height
                      * @type number
                      * @default 315 @for Material
+                     * @default 325
                      */
                     headerFilter: {
                         height: 315
                     },
-                    /**
-                     * @name GridBaseOptions.editing.useIcons
-                     * @type boolean
-                     * @default true @for Material
-                     */
                     editing: {
                         useIcons: true
                     }
@@ -151,6 +132,8 @@ var DataGrid = Widget.inherit({
                         /**
                          * @name dxDataGridOptions.grouping.expandMode
                          * @default 'rowClick' @for mobile_devices
+                         * @type Enums.GridGroupingExpandMode
+                         * @default "buttonClick"
                          */
                         expandMode: 'rowClick'
                     }
@@ -160,7 +143,7 @@ var DataGrid = Widget.inherit({
     },
 
     _init: function() {
-        var that = this;
+        const that = this;
 
         that.callBase();
 
@@ -172,7 +155,7 @@ var DataGrid = Widget.inherit({
     _clean: commonUtils.noop,
 
     _optionChanged: function(args) {
-        var that = this;
+        const that = this;
 
         callModuleItemsMethod(that, 'optionChanged', [args]);
         if(!args.handled) {
@@ -200,7 +183,7 @@ var DataGrid = Widget.inherit({
     },
 
     _renderContent: function() {
-        var that = this;
+        const that = this;
 
         commonUtils.deferRender(function() {
             that._renderContentImpl();
@@ -208,7 +191,7 @@ var DataGrid = Widget.inherit({
     },
 
     _getTemplate: function(templateName) {
-        var template = templateName;
+        let template = templateName;
 
         if(typeUtils.isString(template) && template[0] === '#') {
             template = $(templateName);
@@ -219,7 +202,7 @@ var DataGrid = Widget.inherit({
     },
 
     _dispose: function() {
-        var that = this;
+        const that = this;
         that.callBase();
 
         callModuleItemsMethod(that, 'dispose');
@@ -230,14 +213,14 @@ var DataGrid = Widget.inherit({
     },
 
     beginUpdate: function() {
-        var that = this;
+        const that = this;
 
         that.callBase();
         callModuleItemsMethod(that, 'beginUpdate');
     },
 
     endUpdate: function() {
-        var that = this;
+        const that = this;
 
         callModuleItemsMethod(that, 'endUpdate');
         that.callBase();

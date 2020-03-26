@@ -2,7 +2,8 @@ import $ from 'jquery';
 const { test } = QUnit;
 import 'ui/file_manager';
 import fx from 'animation/fx';
-import { Consts, FileManagerWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
+import pointerEvents from 'events/pointer';
+import { Consts, FileManagerWrapper, createTestFileSystem, isDesktopDevice } from '../../../helpers/fileManagerHelpers.js';
 
 const moduleConfig = {
 
@@ -13,7 +14,7 @@ const moduleConfig = {
         fx.off = true;
 
         this.$element = $('#fileManager').dxFileManager({
-            fileProvider: fileSystem,
+            fileSystemProvider: fileSystem,
             itemView: {
                 showFolders: false
             },
@@ -21,7 +22,7 @@ const moduleConfig = {
                 create: true,
                 copy: true,
                 move: true,
-                remove: true,
+                delete: true,
                 rename: true,
                 upload: true
             }
@@ -43,7 +44,11 @@ const moduleConfig = {
 
 QUnit.module('Raise context menu', moduleConfig, () => {
 
-    test('right click by row', function(assert) {
+    test('right click by row on desktops', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desctops');
+            return;
+        }
         const $row1 = this.wrapper.getRowInDetailsView(1);
         assert.notOk($row1.hasClass(Consts.SELECTION_CLASS));
         assert.equal(this.wrapper.getContextMenuItems().length, 0);
@@ -61,7 +66,82 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.ok(this.wrapper.getContextMenuItems().length > 0);
     });
 
+    test('right click by row on mobiles', function(assert) {
+        if(isDesktopDevice()) {
+            assert.ok(true, 'only on mobiles');
+            return;
+        }
+
+        assert.equal(this.wrapper.getContextMenuItems().length, 0);
+
+        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxcontextmenu');
+        assert.strictEqual(this.wrapper.getContextMenuItems().length, 0);
+
+        this.wrapper.getRowNameCellInDetailsView(2).trigger('dxcontextmenu');
+        assert.strictEqual(this.wrapper.getContextMenuItems().length, 0);
+    });
+
+    test('right click by thumbnails item on desktops', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desctops');
+            return;
+        }
+
+        this.wrapper.getInstance().option({
+            itemView: {
+                mode: 'thumbnails',
+                showFolders: true
+            },
+            permissions: {
+                download: true
+            }
+        });
+        this.clock.tick(400);
+
+        const item1 = this.wrapper.findThumbnailsItem('File 1.txt');
+        const item2 = this.wrapper.findThumbnailsItem('Folder 1');
+
+        assert.equal(this.wrapper.getContextMenuItems().length, 0);
+
+        item1.trigger('dxcontextmenu');
+        assert.strictEqual(this.wrapper.getContextMenuItems().length, 6, 'context menu items for files');
+        assert.ok(item1.hasClass(Consts.ITEM_SELECTED_CLASS));
+        assert.notOk(item2.hasClass(Consts.ITEM_SELECTED_CLASS));
+
+        item2.trigger('dxcontextmenu');
+        assert.strictEqual(this.wrapper.getContextMenuItems().length, 5, 'context menu items for folders');
+        assert.notOk(item1.hasClass(Consts.ITEM_SELECTED_CLASS));
+        assert.ok(item2.hasClass(Consts.ITEM_SELECTED_CLASS));
+    });
+
+    test('right click by thumbnails item on mobiles', function(assert) {
+        if(isDesktopDevice()) {
+            assert.ok(true, 'only on mobiles');
+            return;
+        }
+
+        this.wrapper.getInstance().option({
+            itemView: {
+                mode: 'thumbnails',
+                showFolders: true
+            }
+        });
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getContextMenuItems().length, 0);
+
+        this.wrapper.findThumbnailsItem('File 1.txt').trigger('dxcontextmenu');
+        assert.strictEqual(this.wrapper.getContextMenuItems().length, 0);
+
+        this.wrapper.findThumbnailsItem('Folder 1').trigger('dxcontextmenu');
+        assert.strictEqual(this.wrapper.getContextMenuItems().length, 0);
+    });
+
     test('right click by row and click by select check box', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true);
+            return;
+        }
         this.wrapper.getSelectCheckBoxInDetailsView(1).trigger('dxclick');
 
         const $row1 = this.wrapper.getRowInDetailsView(1);
@@ -101,7 +181,9 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         const $row2 = this.wrapper.getRowInDetailsView(2);
         $row2.trigger('dxhoverstart');
         this.wrapper.getRowActionButtonInDetailsView(2).trigger('dxclick');
-        assert.ok($row1.hasClass(Consts.SELECTION_CLASS));
+        if(isDesktopDevice()) {
+            assert.ok($row1.hasClass(Consts.SELECTION_CLASS));
+        }
         assert.ok($row2.hasClass(Consts.SELECTION_CLASS));
         assert.ok(this.wrapper.getContextMenuItems().length > 0);
     });
@@ -216,11 +298,113 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.ok($items.eq(2).text().indexOf('Refresh') > -1, 'refresh item shown');
     });
 
+    test('Raise the ContextMenuItemClick event on treeView', function(assert) {
+        const spy = sinon.spy();
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            onContextMenuItemClick: spy,
+            permissions: {
+                rename: true
+            },
+            contextMenu: {
+                items: [
+                    {
+                        name: 'someItem',
+                        text: 'someItem',
+                        visibilityMode: 'manual',
+                        visible: true,
+                        items: [
+                            {
+                                name: 'otherItem',
+                                text: 'otherItem',
+                                specialField: 123
+                            }
+                        ]
+                    }, 'rename'
+                ]
+            }
+        });
+        this.clock.tick(800);
+
+        this.wrapper.getFolderNode(2).trigger('dxcontextmenu');
+        this.clock.tick(800);
+
+        const $items = this.wrapper.getContextMenuItems();
+        $items.eq(1).trigger('dxclick');
+        this.clock.tick(800);
+
+        assert.strictEqual(spy.callCount, 1, 'event raised');
+        assert.strictEqual(spy.args[0][0].event.type, 'dxclick', 'event has correct type');
+        assert.strictEqual($(spy.args[0][0].itemElement).get(0), $items.eq(1).get(0), 'itemElement is correct');
+        assert.strictEqual(spy.args[0][0].itemIndex, 1, 'itemIndex is correct');
+        assert.strictEqual(spy.args[0][0].itemData, 'rename', 'itemData is correct');
+        assert.strictEqual(spy.args[0][0].component, fileManager, 'component is correct');
+        assert.strictEqual($(spy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
+    });
+
+    test('Raise the ContextMenuItemClick event on subitems', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
+        const spy = sinon.spy();
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            onContextMenuItemClick: spy,
+            permissions: {
+                rename: true
+            },
+            contextMenu: {
+                items: [
+                    {
+                        name: 'someItem',
+                        text: 'someItem',
+                        visibilityMode: 'manual',
+                        visible: true,
+                        items: [
+                            {
+                                name: 'otherItem',
+                                text: 'otherItem',
+                                specialField: 123
+                            }
+                        ]
+                    }, 'rename'
+                ]
+            }
+        });
+        this.clock.tick(800);
+
+        this.wrapper.getFolderNode(2).trigger('dxcontextmenu');
+        this.clock.tick(800);
+
+        this.wrapper.getContextMenuItems().eq(0).trigger('dxclick');
+        spy.reset();
+        this.clock.tick(800);
+
+        const $subItems = this.wrapper.getContextMenuSubMenuItems();
+        $subItems.eq(0).trigger('dxclick');
+        this.clock.tick(800);
+
+        const itemData = fileManager.option('contextMenu.items[0].items[0]');
+
+        assert.strictEqual(spy.callCount, 1, 'event raised');
+        assert.strictEqual(spy.args[0][0].event.type, 'dxclick', 'event has correct type');
+        assert.strictEqual($(spy.args[0][0].itemElement).get(0), $subItems.eq(0).get(0), 'itemElement is correct');
+        assert.strictEqual(spy.args[0][0].itemIndex, 1, 'itemIndex is correct');
+        assert.strictEqual(spy.args[0][0].itemData, itemData, 'itemData is correct');
+        assert.strictEqual(spy.args[0][0].component, fileManager, 'component is correct');
+        assert.strictEqual($(spy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
+    });
+
 });
 
 QUnit.module('Cutomize context menu', moduleConfig, () => {
 
     test('default items rearrangement and modification', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
         const testClick = sinon.spy();
 
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
@@ -270,6 +454,10 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('custom items render and modification', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
         const testClick = sinon.spy();
 
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
@@ -350,6 +538,10 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('nested items set and use', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
         fileManagerInstance.option('contextMenu', {
             items: [
@@ -399,6 +591,30 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         this.clock.tick(400);
 
         assert.equal(this.wrapper.getDetailsItemName(0), 'New name.txt', 'file is renamed');
+    });
+
+    test('context menu for parent directory item contains no edit actions', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
+        const fileManager = this.$element.dxFileManager('instance');
+        fileManager.option('currentPath', 'Folder 1');
+        this.clock.tick(400);
+
+        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxcontextmenu');
+        let menuItems = this.wrapper.getContextMenuItems();
+        assert.strictEqual(menuItems.length, 1, 'one menu item shown');
+        assert.strictEqual(menuItems.eq(0).text(), 'Refresh', '\'refresh\' menu item shown');
+
+        this.wrapper.getRowNameCellInDetailsView(2).trigger('dxclick');
+        this.wrapper.getRowNameCellInDetailsView(2).trigger(pointerEvents.up);
+        this.clock.tick(400);
+
+        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxcontextmenu');
+        menuItems = this.wrapper.getContextMenuItems();
+        assert.strictEqual(menuItems.length, 1, 'one menu item shown');
+        assert.strictEqual(menuItems.eq(0).text(), 'Refresh', '\'refresh\' menu item shown');
     });
 
 });

@@ -1,6 +1,8 @@
-var _extend = require('../../core/utils/extend').extend;
+const _extend = require('../../core/utils/extend').extend;
 
 function Node() { }
+
+const updateTile = [updateLeaf, updateGroup];
 
 _extend(Node.prototype, {
     value: 0,
@@ -10,26 +12,26 @@ _extend(Node.prototype, {
     },
 
     isActive: function() {
-        var ctx = this.ctx;
+        const ctx = this.ctx;
 
         return this.level >= ctx.minLevel && this.level <= ctx.maxLevel;
     },
 
     updateStyles: function() {
-        var that = this,
-            isNode = Number(that.isNode());
+        const that = this;
+        const isNode = Number(that.isNode());
 
         that.state = that._buildState(that.ctx.settings[isNode].state, !isNode && that.color && { fill: that.color });
     },
 
     _buildState: function(state, extra) {
-        var base = _extend({}, state);
+        const base = _extend({}, state);
 
         return extra ? _extend(base, extra) : base;
     },
 
     updateLabelStyle: function() {
-        var settings = this.ctx.settings[Number(this.isNode())];
+        const settings = this.ctx.settings[Number(this.isNode())];
 
         this.labelState = settings.labelState;
         this.labelParams = settings.labelParams;
@@ -43,8 +45,6 @@ _extend(Node.prototype, {
         updateTile[Number(this.isNode())](this.tile, this._getState());
     }
 });
-
-var updateTile = [updateLeaf, updateGroup];
 
 function updateLeaf(content, attrs) {
     content.smartAttr(attrs);

@@ -32,7 +32,7 @@ const INFO_BOX_CLASS = 'gm-style-iw';
 
 QUnit.module('google provider', {
     beforeEach: function() {
-        var fakeURL = '/fakeGoogleUrl';
+        const fakeURL = '/fakeGoogleUrl';
 
         GoogleProvider.remapConstant(fakeURL);
         GoogleProvider.prototype._geocodedLocations = {};
@@ -60,7 +60,7 @@ QUnit.module('google provider', {
 });
 
 QUnit.test('map initialize with loaded map', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     $.getScript('../../testing/helpers/forMap/googleMock.js').done(function() {
         window.google.maps.customFlag = true;
@@ -79,14 +79,14 @@ QUnit.test('map initialize with loaded map', function(assert) {
 });
 
 QUnit.test('map initialize without loaded map', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     if(window.google) {
         delete window.google.maps;
     }
 
-    var d1 = $.Deferred(),
-        d2 = $.Deferred();
+    const d1 = $.Deferred();
+    const d2 = $.Deferred();
 
     $('<div>').appendTo($('#map')).dxMap({
         provider: 'google',
@@ -112,7 +112,7 @@ QUnit.test('map initialize without loaded map', function(assert) {
 });
 
 QUnit.test('map ready action', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     $('#map').dxMap({
         provider: 'google',
@@ -129,13 +129,13 @@ QUnit.test('map ready action', function(assert) {
 });
 
 QUnit.test('initialize map with a default center', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     $('#map').dxMap({
         provider: 'google',
         onReady: function(e) {
-            var map = e.component._provider._map,
-                centerLatLng = map.get('options').center;
+            const map = e.component._provider._map;
+            const centerLatLng = map.get('options').center;
             assert.deepEqual({ lat: centerLatLng.lat(), lng: centerLatLng.lng() }, { lat: 0, lng: 0 }, 'center option of google map');
 
             done();
@@ -144,14 +144,14 @@ QUnit.test('initialize map with a default center', function(assert) {
 });
 
 QUnit.test('initialize map with a custom center', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     $('#map').dxMap({
         provider: 'google',
         center: 'Antarctica',
         onReady: function(e) {
-            var map = e.component._provider._map,
-                centerLatLng = map.get('options').center;
+            const map = e.component._provider._map;
+            const centerLatLng = map.get('options').center;
             assert.deepEqual({ lat: centerLatLng.lat(), lng: centerLatLng.lng() }, { lat: -1.12345, lng: -1.12345 }, 'center option of google map');
 
             done();
@@ -160,20 +160,20 @@ QUnit.test('initialize map with a custom center', function(assert) {
 });
 
 QUnit.test('dimensions: width', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
-    var assignedCenterCount;
+    const done = assert.async();
+    const d = $.Deferred();
+    let assignedCenterCount;
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            width: 300,
-            onReady: function() {
-                assignedCenterCount = window.google.assignedCenterCount;
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        width: 300,
+        onReady: function() {
+            assignedCenterCount = window.google.assignedCenterCount;
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -188,20 +188,20 @@ QUnit.test('dimensions: width', function(assert) {
 });
 
 QUnit.test('dimensions: height', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
-    var assignedCenterCount;
+    const done = assert.async();
+    const d = $.Deferred();
+    let assignedCenterCount;
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            height: 300,
-            onReady: function() {
-                assignedCenterCount = window.google.assignedCenterCount;
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        height: 300,
+        onReady: function() {
+            assignedCenterCount = window.google.assignedCenterCount;
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -216,19 +216,19 @@ QUnit.test('dimensions: height', function(assert) {
 });
 
 QUnit.test('type', function(assert) {
-    var done = assert.async();
-    var d1 = $.Deferred(),
-        d2 = $.Deferred();
+    const done = assert.async();
+    const d1 = $.Deferred();
+    const d2 = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            type: 'hybrid',
-            onReady: function() {
-                assert.equal(window.google.assignedMapTypeId, google.maps.MapTypeId.HYBRID, 'type specified correctly');
-                d1.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        type: 'hybrid',
+        onReady: function() {
+            assert.equal(window.google.assignedMapTypeId, google.maps.MapTypeId.HYBRID, 'type specified correctly');
+            d1.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d1.done(function() {
         map.option('onUpdated', function() {
@@ -252,22 +252,22 @@ QUnit.test('type', function(assert) {
 });
 
 QUnit.test('center', function(assert) {
-    var done = assert.async();
-    var d1 = $.Deferred(),
-        d2 = $.Deferred(),
-        d3 = $.Deferred();
+    const done = assert.async();
+    const d1 = $.Deferred();
+    const d2 = $.Deferred();
+    const d3 = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            center: LOCATIONS[0],
-            onReady: function() {
-                assert.equal(window.google.geocodeCalled, 1, 'geocode used');
-                assert.deepEqual(window.google.assignedCenter, window.geocodedLocation, 'center specified correctly');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        center: LOCATIONS[0],
+        onReady: function() {
+            assert.equal(window.google.geocodeCalled, 1, 'geocode used');
+            assert.deepEqual(window.google.assignedCenter, window.geocodedLocation, 'center specified correctly');
 
-                d1.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d1.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d1.done(function() {
         map.option('onUpdated', function() {
@@ -293,7 +293,7 @@ QUnit.test('center', function(assert) {
 
     d3.done(function() {
         map.option('onUpdated', function() {
-            var coords = LOCATIONS[3].split(',');
+            const coords = LOCATIONS[3].split(',');
             assert.equal(window.google.geocodeCalled, 1, 'geocode not used');
             assert.deepEqual(window.google.assignedCenter, new google.maps.LatLng(parseFloat(coords[0]), parseFloat(coords[1])), 'center changed');
 
@@ -305,21 +305,21 @@ QUnit.test('center', function(assert) {
 });
 
 QUnit.test('center with geocode error', function(assert) {
-    var done = assert.async();
-    var d1 = $.Deferred();
-    var errorStub = sinon.stub(errors, 'log');
+    const done = assert.async();
+    const d1 = $.Deferred();
+    const errorStub = sinon.stub(errors, 'log');
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            center: '',
-            onReady: function() {
-                assert.equal(window.google.geocodeCalled, 1, 'geocode used');
-                assert.deepEqual(window.google.assignedCenter, window.geocodedWithErrorLocation, 'center specified correctly');
-                assert.deepEqual(errorStub.firstCall.args, ['W1006', 1]);
-                d1.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        center: '',
+        onReady: function() {
+            assert.equal(window.google.geocodeCalled, 1, 'geocode used');
+            assert.deepEqual(window.google.assignedCenter, window.geocodedWithErrorLocation, 'center specified correctly');
+            assert.deepEqual(errorStub.firstCall.args, ['W1006', 1]);
+            d1.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d1.done(function() {
         map.option('onUpdated', function() {
@@ -335,18 +335,18 @@ QUnit.test('center with geocode error', function(assert) {
 });
 
 QUnit.test('\'center\' option is null', function(assert) {
-    var done = assert.async(),
-        d1 = $.Deferred(),
-        map = $('#map').dxMap({
-            provider: 'google',
-            center: null,
-            onReady: function() {
-                assert.equal(window.google.geocodeCalled, 0, 'geocode not used');
-                assert.deepEqual(window.google.assignedCenter, window.geocodedWithErrorLocation, 'center changed');
+    const done = assert.async();
+    const d1 = $.Deferred();
+    const map = $('#map').dxMap({
+        provider: 'google',
+        center: null,
+        onReady: function() {
+            assert.equal(window.google.geocodeCalled, 0, 'geocode not used');
+            assert.deepEqual(window.google.assignedCenter, window.geocodedWithErrorLocation, 'center changed');
 
-                d1.resolve();
-            }
-        }).dxMap('instance');
+            d1.resolve();
+        }
+    }).dxMap('instance');
 
     d1.done(function() {
         map.option('onUpdated', function() {
@@ -359,20 +359,20 @@ QUnit.test('\'center\' option is null', function(assert) {
 });
 
 QUnit.test('geocode should be called once for equal locations', function(assert) {
-    var done = assert.async();
-    var d1 = $.Deferred(),
-        d2 = $.Deferred();
+    const done = assert.async();
+    const d1 = $.Deferred();
+    const d2 = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            center: LOCATIONS[0],
-            onReady: function() {
-                assert.equal(window.google.geocodeCalled, 1, 'geocode used');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        center: LOCATIONS[0],
+        onReady: function() {
+            assert.equal(window.google.geocodeCalled, 1, 'geocode used');
 
-                d1.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d1.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d1.done(function() {
         map.option('onUpdated', function() {
@@ -394,21 +394,21 @@ QUnit.test('geocode should be called once for equal locations', function(assert)
 });
 
 QUnit.test('center changing from map', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            center: LOCATIONS[0],
-            onReady: function() {
-                window.google.centerValue = [5, 10];
-                window.google.boundsChangedCallback();
-                assert.deepEqual(map.option('center'), { lat: 5, lng: 10 }, 'center changed correctly');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        center: LOCATIONS[0],
+        onReady: function() {
+            window.google.centerValue = [5, 10];
+            window.google.boundsChangedCallback();
+            assert.deepEqual(map.option('center'), { lat: 5, lng: 10 }, 'center changed correctly');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onReady', function() {
@@ -422,18 +422,18 @@ QUnit.test('center changing from map', function(assert) {
 });
 
 QUnit.test('zoom', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            zoom: 4,
-            onReady: function() {
-                assert.equal(window.google.options.zoom, 4, 'zoom specified correctly');
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        zoom: 4,
+        onReady: function() {
+            assert.equal(window.google.options.zoom, 4, 'zoom specified correctly');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -447,21 +447,21 @@ QUnit.test('zoom', function(assert) {
 });
 
 QUnit.test('zoom changing from map', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            zoom: 4,
-            onReady: function() {
-                window.google.zoomValue = 5;
-                window.google.boundsChangedCallback();
-                assert.equal(map.option('zoom'), 5, 'zoom changed correctly');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        zoom: 4,
+        onReady: function() {
+            window.google.zoomValue = 5;
+            window.google.boundsChangedCallback();
+            assert.equal(map.option('zoom'), 5, 'zoom changed correctly');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onReady', function() {
@@ -475,23 +475,23 @@ QUnit.test('zoom changing from map', function(assert) {
 });
 
 QUnit.test('bounds', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            bounds: {
-                northEast: LOCATIONS[0],
-                southWest: LOCATIONS[1]
-            },
-            onReady: function() {
-                assert.equal(window.google.geocodeCalled, 1, 'geocode used');
-                assert.deepEqual(window.google.fittedBounds._points, [window.geocodedLocation, new google.maps.LatLng(LOCATIONS[1].lat, LOCATIONS[1].lng)], 'bounds specified correctly');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        bounds: {
+            northEast: LOCATIONS[0],
+            southWest: LOCATIONS[1]
+        },
+        onReady: function() {
+            assert.equal(window.google.geocodeCalled, 1, 'geocode used');
+            assert.deepEqual(window.google.fittedBounds._points, [window.geocodedLocation, new google.maps.LatLng(LOCATIONS[1].lat, LOCATIONS[1].lng)], 'bounds specified correctly');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -509,7 +509,7 @@ QUnit.test('bounds', function(assert) {
 });
 
 QUnit.test('bounds option should take precedence over center if bounds set', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     $('#map').dxMap({
         provider: 'google',
@@ -527,7 +527,7 @@ QUnit.test('bounds option should take precedence over center if bounds set', fun
 });
 
 QUnit.test('bounds option should not take precedence over center if bounds not set', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     $('#map').dxMap({
         provider: 'google',
@@ -541,31 +541,31 @@ QUnit.test('bounds option should not take precedence over center if bounds not s
 });
 
 QUnit.test('bounds changing from map', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            zoom: 4,
-            onReady: function() {
-                window.google.boundsValue = {
-                    getNorthEast: function() {
-                        return new google.maps.LatLng(10, 20);
-                    },
-                    getSouthWest: function() {
-                        return new google.maps.LatLng(40, 50);
-                    }
-                };
-                window.google.boundsChangedCallback();
-                assert.deepEqual(map.option('bounds'), {
-                    northEast: { lat: 10, lng: 20 },
-                    southWest: { lat: 40, lng: 50 }
-                }, 'bounds changed correctly');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        zoom: 4,
+        onReady: function() {
+            window.google.boundsValue = {
+                getNorthEast: function() {
+                    return new google.maps.LatLng(10, 20);
+                },
+                getSouthWest: function() {
+                    return new google.maps.LatLng(40, 50);
+                }
+            };
+            window.google.boundsChangedCallback();
+            assert.deepEqual(map.option('bounds'), {
+                northEast: { lat: 10, lng: 20 },
+                southWest: { lat: 40, lng: 50 }
+            }, 'bounds changed correctly');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onReady', function() {
@@ -579,18 +579,18 @@ QUnit.test('bounds changing from map', function(assert) {
 });
 
 QUnit.test('controls', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            controls: true,
-            onReady: function() {
-                assert.equal(window.google.options.disableDefaultUI, false, 'controls specified correctly');
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        controls: true,
+        onReady: function() {
+            assert.equal(window.google.options.disableDefaultUI, false, 'controls specified correctly');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -604,22 +604,22 @@ QUnit.test('controls', function(assert) {
 });
 
 QUnit.test('markers', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            markers: [MARKERS[0]],
-            onReady: function() {
-                assert.equal(window.google.markerOptionsSpecified, true, 'marker options specified');
-                assert.equal(window.google.markerOptions.mapSpecified, true, 'map specified correctly');
-                assert.deepEqual(window.google.markerOptions.position, new google.maps.LatLng(MARKERS[0].location.lat, MARKERS[0].location.lng), 'location specified correctly');
-                assert.equal(window.google.infoWindowOpened, 1, 'tooltip is opened');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        markers: [MARKERS[0]],
+        onReady: function() {
+            assert.equal(window.google.markerOptionsSpecified, true, 'marker options specified');
+            assert.equal(window.google.markerOptions.mapSpecified, true, 'map specified correctly');
+            assert.deepEqual(window.google.markerOptions.position, new google.maps.LatLng(MARKERS[0].location.lat, MARKERS[0].location.lng), 'location specified correctly');
+            assert.equal(window.google.infoWindowOpened, 1, 'tooltip is opened');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -635,23 +635,23 @@ QUnit.test('markers', function(assert) {
 });
 
 QUnit.test('marker`s tooltip options', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            markers: [MARKERS[0]],
-            onReady: function() {
-                assert.equal(window.google.infoWindowOptionsSpecified, true, 'tooltip options specified');
-                assert.equal(window.google.infoWindowOptions.content, 'A', 'tooltip content specified');
-                assert.equal(window.google.openInfoWindowOptions.mapSpecified, true, 'tooltip opened with specified map');
-                assert.equal(window.google.openInfoWindowOptions.markerSpecified, true, 'tooltip opened with specified marker');
-                assert.equal(window.google.infoWindowOpened, 1, 'tooltip opened');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        markers: [MARKERS[0]],
+        onReady: function() {
+            assert.equal(window.google.infoWindowOptionsSpecified, true, 'tooltip options specified');
+            assert.equal(window.google.infoWindowOptions.content, 'A', 'tooltip content specified');
+            assert.equal(window.google.openInfoWindowOptions.mapSpecified, true, 'tooltip opened with specified map');
+            assert.equal(window.google.openInfoWindowOptions.markerSpecified, true, 'tooltip opened with specified marker');
+            assert.equal(window.google.infoWindowOpened, 1, 'tooltip opened');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -666,17 +666,17 @@ QUnit.test('marker`s tooltip options', function(assert) {
 });
 
 QUnit.test('marker integration', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var clickFired = 0,
-        marker = {
-            tooltip: 'A',
-            location: [40.537102, -73.990318],
-            onClick: function(e) {
-                assert.deepEqual(e.location, { lat: 40.537102, lng: -73.990318 }, 'markers location set');
-                clickFired++;
-            }
-        };
+    let clickFired = 0;
+    const marker = {
+        tooltip: 'A',
+        location: [40.537102, -73.990318],
+        onClick: function(e) {
+            assert.deepEqual(e.location, { lat: 40.537102, lng: -73.990318 }, 'markers location set');
+            clickFired++;
+        }
+    };
 
     $('#map').dxMap({
         provider: 'google',
@@ -696,23 +696,23 @@ QUnit.test('marker integration', function(assert) {
 });
 
 QUnit.test('marker icon', function(assert) {
-    var done = assert.async();
-    var d1 = $.Deferred(),
-        d2 = $.Deferred();
+    const done = assert.async();
+    const d1 = $.Deferred();
+    const d2 = $.Deferred();
 
-    var markerUrl1 = 'http://example.com/1.png',
-        markerUrl2 = 'http://example.com/2.png';
+    const markerUrl1 = 'http://example.com/1.png';
+    const markerUrl2 = 'http://example.com/2.png';
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            markers: [MARKERS[0]],
-            markerIconSrc: markerUrl1,
-            onReady: function() {
-                assert.equal(window.google.markerOptions.icon, markerUrl1, 'marker options contains custom icon url');
-                d1.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        markers: [MARKERS[0]],
+        markerIconSrc: markerUrl1,
+        onReady: function() {
+            assert.equal(window.google.markerOptions.icon, markerUrl1, 'marker options contains custom icon url');
+            d1.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d1.done(function() {
         map.addMarker([$.extend({ iconSrc: markerUrl2 }, MARKERS[1]), MARKERS[2]]).done(function(instances) {
@@ -735,26 +735,26 @@ QUnit.test('marker icon', function(assert) {
 });
 
 QUnit.test('marker html', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            markers: [MARKERS[5]],
-            onReady: function() {
-                assert.equal(window.google.markerInstance, 0, 'markers not present');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        markers: [MARKERS[5]],
+        onReady: function() {
+            assert.equal(window.google.markerInstance, 0, 'markers not present');
 
-                assert.equal(window.google.overlayInstance, 1, 'overlay created');
-                var overlay = $(window.google.overlayMouseTarget).children();
-                assert.equal(overlay.length, 1, 'overlay created');
-                assert.deepEqual(window.google.overlayProjectedLocation, new google.maps.LatLng(MARKERS[5].location.lat, MARKERS[5].location.lng), 'correct location projected');
-                assert.equal(overlay.css('top'), '200px', 'overlay created');
-                assert.equal(overlay.css('left'), '100px', 'overlay created');
+            assert.equal(window.google.overlayInstance, 1, 'overlay created');
+            const overlay = $(window.google.overlayMouseTarget).children();
+            assert.equal(overlay.length, 1, 'overlay created');
+            assert.deepEqual(window.google.overlayProjectedLocation, new google.maps.LatLng(MARKERS[5].location.lat, MARKERS[5].location.lng), 'correct location projected');
+            assert.equal(overlay.css('top'), '200px', 'overlay created');
+            assert.equal(overlay.css('left'), '100px', 'overlay created');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.removeMarker(MARKERS[5]).done(function() {
@@ -766,12 +766,12 @@ QUnit.test('marker html', function(assert) {
 });
 
 QUnit.test('marker html offset', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
     $('#map').dxMap({
         provider: 'google',
         markers: [MARKERS[6]],
         onReady: function() {
-            var overlay = $(window.google.overlayMouseTarget).children();
+            const overlay = $(window.google.overlayMouseTarget).children();
             assert.equal(overlay.css('top'), '215px', 'offset applied');
             assert.equal(overlay.css('left'), '125px', 'offset applied');
             done();
@@ -784,29 +784,29 @@ QUnit.test('marker html offset', function(assert) {
 QUnit.test('marker html interaction', function(assert) {
     assert.expect(3);
 
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var marker = $.extend({
+    const marker = $.extend({
         onClick: function() {
             assert.ok(true, 'click handled');
         }
     }, MARKERS[5]);
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            markers: [marker],
-            onReady: function() {
-                window.google.domClickActionCallback({
-                    preventDefault: function() {
-                        assert.ok(true, 'default prevented');
-                    }
-                });
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        markers: [marker],
+        onReady: function() {
+            window.google.domClickActionCallback({
+                preventDefault: function() {
+                    assert.ok(true, 'default prevented');
+                }
+            });
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.removeMarker(marker).done(function() {
@@ -818,17 +818,17 @@ QUnit.test('marker html interaction', function(assert) {
 });
 
 QUnit.test('add marker', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            markers: [MARKERS[0]],
-            onReady: function() {
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        markers: [MARKERS[0]],
+        onReady: function() {
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.addMarker(MARKERS[1]).done(function(instance) {
@@ -843,21 +843,21 @@ QUnit.test('add marker', function(assert) {
 });
 
 QUnit.test('add marker should extend bounds', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            markers: [MARKERS[0]],
-            onReady: function() {
-                assert.equal(window.google.LatLngBoundsPoints.length, 1, 'extended by 1 location');
-                assert.deepEqual(window.google.LatLngBoundsPoints[0], new google.maps.LatLng(MARKERS[0].location.lat, MARKERS[0].location.lng), 'bound extended correctly');
-                assert.deepEqual(window.google.LatLngBoundsPoints, google.fittedBounds._points, 'map fitted correctly');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        markers: [MARKERS[0]],
+        onReady: function() {
+            assert.equal(window.google.LatLngBoundsPoints.length, 1, 'extended by 1 location');
+            assert.deepEqual(window.google.LatLngBoundsPoints[0], new google.maps.LatLng(MARKERS[0].location.lat, MARKERS[0].location.lng), 'bound extended correctly');
+            assert.deepEqual(window.google.LatLngBoundsPoints, google.fittedBounds._points, 'map fitted correctly');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -871,20 +871,20 @@ QUnit.test('add marker should extend bounds', function(assert) {
 });
 
 QUnit.test('add marker should extend visible bounds if autoAdjust = true', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            markers: [MARKERS[0]],
-            autoAdjust: true,
-            onReady: function() {
-                assert.equal(window.google.boundsFittedCount, 1, 'bounds fitted');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        markers: [MARKERS[0]],
+        autoAdjust: true,
+        onReady: function() {
+            assert.equal(window.google.boundsFittedCount, 1, 'bounds fitted');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -898,20 +898,20 @@ QUnit.test('add marker should extend visible bounds if autoAdjust = true', funct
 });
 
 QUnit.test('add marker should not extend visible bounds if autoAdjust = false', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            markers: [MARKERS[0]],
-            autoAdjust: false,
-            onReady: function() {
-                assert.equal(window.google.boundsFittedCount, 0, 'bounds not fitted');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        markers: [MARKERS[0]],
+        autoAdjust: false,
+        onReady: function() {
+            assert.equal(window.google.boundsFittedCount, 0, 'bounds not fitted');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -925,16 +925,16 @@ QUnit.test('add marker should not extend visible bounds if autoAdjust = false', 
 });
 
 QUnit.test('add markers', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            onReady: function() {
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        onReady: function() {
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.addMarker([MARKERS[0], MARKERS[1]]).done(function(instances) {
@@ -947,17 +947,17 @@ QUnit.test('add markers', function(assert) {
 });
 
 QUnit.test('remove marker', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            markers: [MARKERS[0]],
-            onReady: function() {
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        markers: [MARKERS[0]],
+        onReady: function() {
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.removeMarker(0).done(function() {
@@ -970,8 +970,8 @@ QUnit.test('remove marker', function(assert) {
 });
 
 QUnit.test('markerAdded', function(assert) {
-    var done = assert.async();
-    var markerAddedFired = 0;
+    const done = assert.async();
+    let markerAddedFired = 0;
 
     $('#map').dxMap({
         provider: 'google',
@@ -990,23 +990,23 @@ QUnit.test('markerAdded', function(assert) {
 });
 
 QUnit.test('markerRemoved', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var markerRemovedFired = 0;
+    let markerRemovedFired = 0;
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            markers: [MARKERS[0]],
-            onMarkerRemoved: function(args) {
-                assert.equal(args.options, MARKERS[0], 'correct options passed as parameter');
-                markerRemovedFired++;
-            },
-            onReady: function() {
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        markers: [MARKERS[0]],
+        onMarkerRemoved: function(args) {
+            assert.equal(args.options, MARKERS[0], 'correct options passed as parameter');
+            markerRemovedFired++;
+        },
+        onReady: function() {
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -1020,20 +1020,20 @@ QUnit.test('markerRemoved', function(assert) {
 });
 
 QUnit.test('autoAdjust', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            markers: [MARKERS[0]],
-            autoAdjust: false,
-            onReady: function() {
-                assert.equal(window.google.boundsFittedCount, 0, 'bounds not fitted');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        markers: [MARKERS[0]],
+        autoAdjust: false,
+        onReady: function() {
+            assert.equal(window.google.boundsFittedCount, 0, 'bounds not fitted');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -1047,25 +1047,25 @@ QUnit.test('autoAdjust', function(assert) {
 });
 
 QUnit.test('autoAdjust should not change zoom if marker is fitted', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            markers: [MARKERS[0]],
-            autoAdjust: false,
-            zoom: 5,
-            onReady: function() {
-                window.google.zoomValue = 5;
-                window.google.fitBoundsCallback = function() {
-                    window.google.zoomValue = 10;
-                    window.google.maps.event.trigger(null, 'bounds_changed');
-                };
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        markers: [MARKERS[0]],
+        autoAdjust: false,
+        zoom: 5,
+        onReady: function() {
+            window.google.zoomValue = 5;
+            window.google.fitBoundsCallback = function() {
+                window.google.zoomValue = 10;
+                window.google.maps.event.trigger(null, 'bounds_changed');
+            };
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -1082,25 +1082,25 @@ QUnit.test('autoAdjust should not change zoom if marker is fitted', function(ass
 });
 
 QUnit.test('autoAdjust should change zoom if marker is not fitted', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            markers: [MARKERS[0]],
-            autoAdjust: false,
-            zoom: 10,
-            onReady: function() {
-                window.google.zoomValue = 10;
-                window.google.fitBoundsCallback = function() {
-                    window.google.zoomValue = 5;
-                    window.google.maps.event.trigger(null, 'bounds_changed');
-                };
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        markers: [MARKERS[0]],
+        autoAdjust: false,
+        zoom: 10,
+        onReady: function() {
+            window.google.zoomValue = 10;
+            window.google.fitBoundsCallback = function() {
+                window.google.zoomValue = 5;
+                window.google.maps.event.trigger(null, 'bounds_changed');
+            };
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -1116,19 +1116,19 @@ QUnit.test('autoAdjust should change zoom if marker is not fitted', function(ass
 });
 
 QUnit.test('autoAdjust should not prevent zoom changing', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            markers: [MARKERS[0]],
-            autoAdjust: false,
-            zoom: 5,
-            onReady: function() {
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        markers: [MARKERS[0]],
+        autoAdjust: false,
+        zoom: 5,
+        onReady: function() {
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -1144,30 +1144,30 @@ QUnit.test('autoAdjust should not prevent zoom changing', function(assert) {
 });
 
 QUnit.test('routes', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var polOpts = {
+    const polOpts = {
         strokeWeight: ROUTES[0].weight,
         strokeOpacity: ROUTES[0].opacity,
         strokeColor: '#0000ff'
     };
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            routes: [ROUTES[0]],
-            onReady: function() {
-                assert.equal(window.google.directionDrawnByDirectionService, true, 'direction drawn');
-                assert.equal(window.google.directionTravelMode, google.maps.TravelMode.WALKING, 'direction mode specified correctly');
-                assert.equal(window.google.directionsRendererOptionsSpecified, true, 'direction renderer options specified');
-                assert.equal(window.google.directionsRendererOptions.mapSpecified, true, 'map specified correctly');
-                assert.equal(window.google.directionsRendererOptions.directionsSpecified, true, 'directions specified correctly');
-                assert.deepEqual(window.google.directionsRendererOptions.polylineOptions, polOpts, 'line options specified correctly');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        routes: [ROUTES[0]],
+        onReady: function() {
+            assert.equal(window.google.directionDrawnByDirectionService, true, 'direction drawn');
+            assert.equal(window.google.directionTravelMode, google.maps.TravelMode.WALKING, 'direction mode specified correctly');
+            assert.equal(window.google.directionsRendererOptionsSpecified, true, 'direction renderer options specified');
+            assert.equal(window.google.directionsRendererOptions.mapSpecified, true, 'map specified correctly');
+            assert.equal(window.google.directionsRendererOptions.directionsSpecified, true, 'directions specified correctly');
+            assert.deepEqual(window.google.directionsRendererOptions.polylineOptions, polOpts, 'line options specified correctly');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -1181,17 +1181,17 @@ QUnit.test('routes', function(assert) {
 });
 
 QUnit.test('add route', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            routes: [ROUTES[0]],
-            onReady: function() {
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        routes: [ROUTES[0]],
+        onReady: function() {
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.addRoute(ROUTES[1]).done(function(instance) {
@@ -1209,19 +1209,19 @@ QUnit.test('add route', function(assert) {
 });
 
 QUnit.test('add route with incorrect response', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            routes: [ROUTES[0]],
-            onReady: function() {
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        routes: [ROUTES[0]],
+        onReady: function() {
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
-    var errorStub = sinon.stub(errors, 'log');
+    const errorStub = sinon.stub(errors, 'log');
     d.done(function() {
         google.statusCallback = function() {
             return google.maps.DirectionsStatus.OVER_QUERY_LIMIT;
@@ -1239,16 +1239,16 @@ QUnit.test('add route with incorrect response', function(assert) {
 });
 
 QUnit.test('add routes', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            onReady: function() {
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        onReady: function() {
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.addRoute([ROUTES[0], ROUTES[1]]).done(function(instances) {
@@ -1261,22 +1261,22 @@ QUnit.test('add routes', function(assert) {
 });
 
 QUnit.test('add route should extend bounds', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            routes: [ROUTES[0]],
-            onReady: function() {
-                assert.equal(window.google.LatLngBoundsPoints.length, 2, 'extended by 2 location');
-                assert.deepEqual(window.google.LatLngBoundsPoints[0], new google.maps.LatLng(ROUTES[0].locations[0][0], ROUTES[0].locations[0][1]), 'bound extended correctly');
-                assert.deepEqual(window.google.LatLngBoundsPoints[1], new google.maps.LatLng(ROUTES[0].locations[2][0], ROUTES[0].locations[2][1]), 'bound extended correctly');
-                assert.deepEqual(window.google.LatLngBoundsPoints, google.fittedBounds._points, 'map fitted correctly');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        routes: [ROUTES[0]],
+        onReady: function() {
+            assert.equal(window.google.LatLngBoundsPoints.length, 2, 'extended by 2 location');
+            assert.deepEqual(window.google.LatLngBoundsPoints[0], new google.maps.LatLng(ROUTES[0].locations[0][0], ROUTES[0].locations[0][1]), 'bound extended correctly');
+            assert.deepEqual(window.google.LatLngBoundsPoints[1], new google.maps.LatLng(ROUTES[0].locations[2][0], ROUTES[0].locations[2][1]), 'bound extended correctly');
+            assert.deepEqual(window.google.LatLngBoundsPoints, google.fittedBounds._points, 'map fitted correctly');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -1290,8 +1290,8 @@ QUnit.test('add route should extend bounds', function(assert) {
 });
 
 QUnit.test('routeAdded', function(assert) {
-    var done = assert.async();
-    var routeAddedFired = 0;
+    const done = assert.async();
+    let routeAddedFired = 0;
 
     $('#map').dxMap({
         provider: 'google',
@@ -1310,23 +1310,23 @@ QUnit.test('routeAdded', function(assert) {
 });
 
 QUnit.test('routeRemoved', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var routeRemovedFired = 0;
+    let routeRemovedFired = 0;
 
-    var $map = $('#map').dxMap({
-            provider: 'google',
-            routes: [ROUTES[0]],
-            onRouteRemoved: function(args) {
-                assert.equal(args.options, ROUTES[0], 'correct options passed as parameter');
-                routeRemovedFired++;
-            },
-            onReady: function() {
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        routes: [ROUTES[0]],
+        onRouteRemoved: function(args) {
+            assert.equal(args.options, ROUTES[0], 'correct options passed as parameter');
+            routeRemovedFired++;
+        },
+        onReady: function() {
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -1340,12 +1340,12 @@ QUnit.test('routeRemoved', function(assert) {
 });
 
 QUnit.test('click', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred(),
-        clicked = 0,
-        eventFired = 0;
+    const done = assert.async();
+    const d = $.Deferred();
+    let clicked = 0;
+    let eventFired = 0;
 
-    var $map = $('#map').dxMap({
+    const $map = $('#map').dxMap({
         provider: 'google',
         width: 400,
         height: 500,
@@ -1374,20 +1374,20 @@ QUnit.test('click', function(assert) {
 });
 
 QUnit.test('changing provider should reset bounds', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'googleStatic',
-            bounds: {
-                northEast: '1, 1',
-                southWest: '-1, -1'
-            },
-            onReady: function() {
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'googleStatic',
+        bounds: {
+            northEast: '1, 1',
+            southWest: '-1, -1'
+        },
+        onReady: function() {
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onReady', function() {
@@ -1401,11 +1401,11 @@ QUnit.test('changing provider should reset bounds', function(assert) {
 });
 
 QUnit.test('StopPropagation is called on the pointer down event', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred(),
-        isPropagationStopped;
+    const done = assert.async();
+    const d = $.Deferred();
+    let isPropagationStopped;
 
-    var $map = $('#map').dxMap({
+    const $map = $('#map').dxMap({
         provider: 'google',
         width: 400,
         height: 500,
@@ -1426,10 +1426,10 @@ QUnit.test('StopPropagation is called on the pointer down event', function(asser
 });
 
 QUnit.test('StopPropagation is not called when gestureHandling of map is cooperative', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred(),
-        real = devices.real,
-        isPropagationStopped;
+    const done = assert.async();
+    const d = $.Deferred();
+    const real = devices.real;
+    let isPropagationStopped;
 
     devices.real = function() {
         return {
@@ -1437,7 +1437,7 @@ QUnit.test('StopPropagation is not called when gestureHandling of map is coopera
         };
     };
 
-    var $map = $('#map').dxMap({
+    const $map = $('#map').dxMap({
         provider: 'google',
         width: 400,
         height: 500,

@@ -1,12 +1,13 @@
-var $ = require('../../core/renderer'),
-    Guid = require('../../core/guid'),
-    registerComponent = require('../../core/component_registrator'),
-    extend = require('../../core/utils/extend').extend,
-    Popover = require('../popover'),
-    TOOLTIP_CLASS = 'dx-tooltip',
-    TOOLTIP_WRAPPER_CLASS = 'dx-tooltip-wrapper';
+const $ = require('../../core/renderer');
+const Guid = require('../../core/guid');
+const registerComponent = require('../../core/component_registrator');
+const extend = require('../../core/utils/extend').extend;
+const Popover = require('../popover');
+const TOOLTIP_CLASS = 'dx-tooltip';
+const TOOLTIP_WRAPPER_CLASS = 'dx-tooltip-wrapper';
+const isWindow = require('../../core/utils/type').isWindow;
 
-var Tooltip = Popover.inherit({
+const Tooltip = Popover.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
@@ -70,10 +71,12 @@ var Tooltip = Popover.inherit({
     },
 
     _toggleAriaDescription: function(showing) {
-        var $target = $(this.option('target')),
-            label = showing ? this._contentId : undefined;
+        const $target = $(this.option('target'));
+        const label = showing ? this._contentId : undefined;
 
-        this.setAria('describedby', label, $target);
+        if(!isWindow($target.get(0))) {
+            this.setAria('describedby', label, $target);
+        }
     }
 });
 

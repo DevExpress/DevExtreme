@@ -1,64 +1,64 @@
-var $ = require('../core/renderer'),
-    window = require('../core/utils/window').getWindow(),
-    translator = require('../animation/translator'),
-    camelize = require('../core/utils/inflector').camelize,
-    noop = require('../core/utils/common').noop,
-    getPublicElement = require('../core/utils/dom').getPublicElement,
-    each = require('../core/utils/iterator').each,
-    isDefined = require('../core/utils/type').isDefined,
-    inArray = require('../core/utils/array').inArray,
-    extend = require('../core/utils/extend').extend,
-    browser = require('../core/utils/browser'),
-    compareVersions = require('../core/utils/version').compare,
-    messageLocalization = require('../localization/message'),
-    devices = require('../core/devices'),
-    registerComponent = require('../core/component_registrator'),
-    Button = require('./button'),
-    themes = require('./themes'),
-    Overlay = require('./overlay'),
-    EmptyTemplate = require('../core/templates/empty_template').EmptyTemplate,
-    domUtils = require('../core/utils/dom'),
-    sizeUtils = require('../core/utils/size'),
-    windowUtils = require('../core/utils/window');
+const $ = require('../core/renderer');
+const window = require('../core/utils/window').getWindow();
+const translator = require('../animation/translator');
+const camelize = require('../core/utils/inflector').camelize;
+const noop = require('../core/utils/common').noop;
+const getPublicElement = require('../core/utils/dom').getPublicElement;
+const each = require('../core/utils/iterator').each;
+const isDefined = require('../core/utils/type').isDefined;
+const inArray = require('../core/utils/array').inArray;
+const extend = require('../core/utils/extend').extend;
+const browser = require('../core/utils/browser');
+const compareVersions = require('../core/utils/version').compare;
+const messageLocalization = require('../localization/message');
+const devices = require('../core/devices');
+const registerComponent = require('../core/component_registrator');
+const Button = require('./button');
+const themes = require('./themes');
+const Overlay = require('./overlay');
+const EmptyTemplate = require('../core/templates/empty_template').EmptyTemplate;
+const domUtils = require('../core/utils/dom');
+const sizeUtils = require('../core/utils/size');
+const windowUtils = require('../core/utils/window');
 
 require('./toolbar/ui.toolbar.base');
 
-var POPUP_CLASS = 'dx-popup',
-    POPUP_WRAPPER_CLASS = 'dx-popup-wrapper',
-    POPUP_FULL_SCREEN_CLASS = 'dx-popup-fullscreen',
-    POPUP_FULL_SCREEN_WIDTH_CLASS = 'dx-popup-fullscreen-width',
-    POPUP_NORMAL_CLASS = 'dx-popup-normal',
-    POPUP_CONTENT_CLASS = 'dx-popup-content',
+const POPUP_CLASS = 'dx-popup';
+const POPUP_WRAPPER_CLASS = 'dx-popup-wrapper';
+const POPUP_FULL_SCREEN_CLASS = 'dx-popup-fullscreen';
+const POPUP_FULL_SCREEN_WIDTH_CLASS = 'dx-popup-fullscreen-width';
+const POPUP_NORMAL_CLASS = 'dx-popup-normal';
+const POPUP_CONTENT_CLASS = 'dx-popup-content';
 
-    POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable',
+const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
 
-    POPUP_TITLE_CLASS = 'dx-popup-title',
-    POPUP_TITLE_CLOSEBUTTON_CLASS = 'dx-closebutton',
+const POPUP_TITLE_CLASS = 'dx-popup-title';
+const POPUP_TITLE_CLOSEBUTTON_CLASS = 'dx-closebutton';
 
-    POPUP_BOTTOM_CLASS = 'dx-popup-bottom',
+const POPUP_BOTTOM_CLASS = 'dx-popup-bottom';
 
-    TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper',
+const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
-    POPUP_CONTENT_FLEX_HEIGHT_CLASS = 'dx-popup-flex-height',
-    POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height',
+const POPUP_CONTENT_FLEX_HEIGHT_CLASS = 'dx-popup-flex-height';
+const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
 
-    ALLOWED_TOOLBAR_ITEM_ALIASES = ['cancel', 'clear', 'done'],
+const ALLOWED_TOOLBAR_ITEM_ALIASES = ['cancel', 'clear', 'done'];
 
-    BUTTON_DEFAULT_TYPE = 'default',
-    BUTTON_NORMAL_TYPE = 'normal',
-    BUTTON_TEXT_MODE = 'text',
-    BUTTON_CONTAINED_MODE = 'contained';
+const BUTTON_DEFAULT_TYPE = 'default';
+const BUTTON_NORMAL_TYPE = 'normal';
+const BUTTON_TEXT_MODE = 'text';
+const BUTTON_CONTAINED_MODE = 'contained';
 
-var IS_IE11 = (browser.msie && parseInt(browser.version) === 11);
-var IS_OLD_SAFARI = browser.safari && compareVersions(browser.version, [11]) < 0;
-var HEIGHT_STRATEGIES = { static: '', inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS, flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS };
+const IS_IE11 = (browser.msie && parseInt(browser.version) === 11);
+const IS_OLD_SAFARI = browser.safari && compareVersions(browser.version, [11]) < 0;
+const HEIGHT_STRATEGIES = { static: '', inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS, flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS };
 
-var getButtonPlace = function(name) {
+const getButtonPlace = function(name) {
 
-    var device = devices.current(),
-        platform = device.platform,
-        toolbar = 'bottom',
-        location = 'before';
+    const device = devices.current();
+    const platform = device.platform;
+    let toolbar = 'bottom';
+    let location = 'before';
 
     if(platform === 'ios') {
         switch(name) {
@@ -92,160 +92,26 @@ var getButtonPlace = function(name) {
     };
 };
 
-/**
- * @name dxPopup
- * @inherits dxOverlay
- * @hasTranscludedContent
- * @module ui/popup
- * @export default
- */
-var Popup = Overlay.inherit({
+const Popup = Overlay.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxPopupOptions.fullScreen
-            * @type boolean
-            * @default false
-            */
             fullScreen: false,
 
-            /**
-            * @name dxPopupOptions.title
-            * @type string
-            * @default ""
-            */
             title: '',
 
-            /**
-            * @name dxPopupOptions.showTitle
-            * @type boolean
-            * @default true
-            */
             showTitle: true,
 
-            /**
-             * @name dxPopupOptions.container
-             * @type string|Node|jQuery
-             * @default undefined
-             */
 
-            /**
-            * @name dxPopupOptions.titleTemplate
-            * @type template|function
-            * @default "title"
-            * @type_function_param1 titleElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
             titleTemplate: 'title',
 
-            /**
-            * @name dxPopupOptions.onTitleRendered
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 titleElement:dxElement
-            * @action
-            */
             onTitleRendered: null,
 
-            /**
-            * @name dxPopupOptions.dragEnabled
-            * @type boolean
-            * @default false
-            */
             dragEnabled: false,
 
-            /**
-            * @name dxPopupOptions.position
-            * @type Enums.PositionAlignment|positionConfig|function
-            */
 
-            /**
-             * @name dxPopupOptions.resizeEnabled
-             * @type boolean
-             * @default false
-             */
-
-            /**
-            * @name dxPopupOptions.onResizeStart
-            * @extends Action
-            * @action
-            */
-
-            /**
-            * @name dxPopupOptions.onResize
-            * @extends Action
-            * @action
-            */
-
-            /**
-            * @name dxPopupOptions.onResizeEnd
-            * @extends Action
-            * @action
-            */
-
-            /**
-             * @name dxPopupOptions.width
-             * @fires dxPopupOptions.onResize
-             */
-
-            /**
-             * @name dxPopupOptions.height
-             * @fires dxPopupOptions.onResize
-             */
-
-            /**
-            * @name dxPopupOptions.toolbarItems
-            * @type Array<Object>
-            */
-            /**
-            * @name dxPopupOptions.toolbarItems.toolbar
-            * @type Enums.Toolbar
-            * @default 'top'
-            */
-            /**
-            * @name dxPopupOptions.toolbarItems.html
-            * @type String
-            */
-            /**
-            * @name dxPopupOptions.toolbarItems.text
-            * @type String
-            */
-            /**
-            * @name dxPopupOptions.toolbarItems.visible
-            * @type boolean
-            * @default true
-            */
-            /**
-            * @name dxPopupOptions.toolbarItems.disabled
-            * @type boolean
-            * @default false
-            */
-            /**
-            * @name dxPopupOptions.toolbarItems.template
-            * @type template
-            */
-            /**
-            * @name dxPopupOptions.toolbarItems.widget
-            * @type Enums.ToolbarItemWidget
-            */
-            /**
-            * @name dxPopupOptions.toolbarItems.options
-            * @type object
-            */
-            /**
-            * @name dxPopupOptions.toolbarItems.location
-            * @type Enums.ToolbarItemLocation
-            * @default 'center'
-            */
             toolbarItems: [],
 
-            /**
-            * @name dxPopupOptions.showCloseButton
-            * @type boolean
-            * @default false
-            */
             showCloseButton: false,
 
             bottomTemplate: 'bottom',
@@ -256,24 +122,12 @@ var Popup = Overlay.inherit({
     },
 
     _defaultOptionsRules: function() {
-        var themeName = themes.current();
+        const themeName = themes.current();
 
         return this.callBase().concat([
             {
                 device: { platform: 'ios' },
                 options: {
-                    /**
-                    * @name dxPopupOptions.animation
-                    * @default { show: { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } } }, hide: { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } } }} @for iOS
-                    */
-                    /**
-                    * @name dxPopupOptions.animation.show
-                    * @default { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } }} @for iOS
-                    */
-                    /**
-                    * @name dxPopupOptions.animation.hide
-                    * @default { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } }} @for iOS
-                    */
                     animation: this._iosAnimation
                 }
             },
@@ -286,10 +140,6 @@ var Popup = Overlay.inherit({
             {
                 device: { platform: 'generic' },
                 options: {
-                    /**
-                    * @name dxPopupOptions.showCloseButton
-                    * @default true @for desktop
-                    */
                     showCloseButton: true
                 }
             },
@@ -298,10 +148,6 @@ var Popup = Overlay.inherit({
                     return devices.real().deviceType === 'desktop' && device.platform === 'generic';
                 },
                 options: {
-                    /**
-                    * @name dxPopupOptions.dragEnabled
-                    * @default true @for desktop
-                    */
                     dragEnabled: true
                 }
             },
@@ -310,11 +156,6 @@ var Popup = Overlay.inherit({
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
-                    /**
-                    * @name dxPopupOptions.focusStateEnabled
-                    * @type boolean
-                    * @default true @for desktop
-                    */
                     focusStateEnabled: true
                 }
             },
@@ -368,14 +209,14 @@ var Popup = Overlay.inherit({
     },
 
     _androidAnimation: function() {
-        var fullScreenConfig = {
-                show: { type: 'slide', duration: 300, from: { top: '30%', opacity: 0 }, to: { top: 0, opacity: 1 } },
-                hide: { type: 'slide', duration: 300, from: { top: 0, opacity: 1 }, to: { top: '30%', opacity: 0 } }
-            },
-            defaultConfig = {
-                show: { type: 'fade', duration: 400, from: 0, to: 1 },
-                hide: { type: 'fade', duration: 400, from: 1, to: 0 }
-            };
+        const fullScreenConfig = {
+            show: { type: 'slide', duration: 300, from: { top: '30%', opacity: 0 }, to: { top: 0, opacity: 1 } },
+            hide: { type: 'slide', duration: 300, from: { top: 0, opacity: 1 }, to: { top: '30%', opacity: 0 } }
+        };
+        const defaultConfig = {
+            show: { type: 'fade', duration: 400, from: 0, to: 1 },
+            hide: { type: 'fade', duration: 400, from: 1, to: 0 }
+        };
 
         return this.option('fullScreen') ? fullScreenConfig : defaultConfig;
     },
@@ -391,7 +232,7 @@ var Popup = Overlay.inherit({
     },
 
     _render: function() {
-        var isFullscreen = this.option('fullScreen');
+        const isFullscreen = this.option('fullScreen');
 
         this._toggleFullScreenClass(isFullscreen);
         this.callBase();
@@ -418,9 +259,9 @@ var Popup = Overlay.inherit({
     },
 
     _renderTitle: function() {
-        var items = this._getToolbarItems('top'),
-            titleText = this.option('title'),
-            showTitle = this.option('showTitle');
+        const items = this._getToolbarItems('top');
+        const titleText = this.option('title');
+        const showTitle = this.option('showTitle');
 
         if(showTitle && !!titleText) {
             items.unshift({
@@ -431,7 +272,7 @@ var Popup = Overlay.inherit({
 
         if(showTitle || items.length > 0) {
             this._$title && this._$title.remove();
-            var $title = $('<div>').addClass(POPUP_TITLE_CLASS).insertBefore(this.$content());
+            const $title = $('<div>').addClass(POPUP_TITLE_CLASS).insertBefore(this.$content());
             this._$title = this._renderTemplateByType('titleTemplate', items, $title).addClass(POPUP_TITLE_CLASS);
             this._renderDrag();
             this._executeTitleRenderAction(this._$title);
@@ -441,15 +282,17 @@ var Popup = Overlay.inherit({
     },
 
     _renderTemplateByType: function(optionName, data, $container, additionalToolbarOptions) {
-        var template = this._getTemplateByOption(optionName),
-            toolbarTemplate = template instanceof EmptyTemplate;
+        const template = this._getTemplateByOption(optionName);
+        const toolbarTemplate = template instanceof EmptyTemplate;
 
         if(toolbarTemplate) {
-            var toolbarOptions = extend(additionalToolbarOptions, {
+            const integrationOptions = extend({}, this.option('integrationOptions'), { skipTemplates: ['content', 'title'] });
+            const toolbarOptions = extend(additionalToolbarOptions, {
                 items: data,
                 rtlEnabled: this.option('rtlEnabled'),
                 useDefaultButtons: this.option('useDefaultToolbarButtons'),
-                useFlatButtons: this.option('useFlatToolbarButtons')
+                useFlatButtons: this.option('useFlatToolbarButtons'),
+                integrationOptions
             });
 
             this._getTemplate('dx-polymorph-widget').render({
@@ -459,11 +302,11 @@ var Popup = Overlay.inherit({
                     options: toolbarOptions
                 }
             });
-            var $toolbar = $container.children('div');
+            const $toolbar = $container.children('div');
             $container.replaceWith($toolbar);
             return $toolbar;
         } else {
-            var $result = $(template.render({ container: getPublicElement($container) }));
+            const $result = $(template.render({ container: getPublicElement($container) }));
             if($result.hasClass(TEMPLATE_WRAPPER_CLASS)) {
                 $container.replaceWith($result);
                 $container = $result;
@@ -499,7 +342,7 @@ var Popup = Overlay.inherit({
 
     _getCloseButtonRenderer: function() {
         return (function(_, __, container) {
-            var $button = $('<div>').addClass(POPUP_TITLE_CLOSEBUTTON_CLASS);
+            const $button = $('<div>').addClass(POPUP_TITLE_CLOSEBUTTON_CLASS);
             this._createComponent($button, Button, {
                 icon: 'close',
                 onClick: this._createToolbarItemAction(undefined),
@@ -511,18 +354,18 @@ var Popup = Overlay.inherit({
 
     _getToolbarItems: function(toolbar) {
 
-        var toolbarItems = this.option('toolbarItems');
+        const toolbarItems = this.option('toolbarItems');
 
-        var toolbarsItems = [];
+        const toolbarsItems = [];
 
         this._toolbarItemClasses = [];
 
-        var currentPlatform = devices.current().platform,
-            index = 0;
+        const currentPlatform = devices.current().platform;
+        let index = 0;
 
         each(toolbarItems, (function(_, data) {
-            var isShortcut = isDefined(data.shortcut),
-                item = isShortcut ? getButtonPlace(data.shortcut) : data;
+            const isShortcut = isDefined(data.shortcut);
+            const item = isShortcut ? getButtonPlace(data.shortcut) : data;
 
             if(isShortcut && currentPlatform === 'ios' && index < 2) {
                 item.toolbar = 'top';
@@ -536,7 +379,7 @@ var Popup = Overlay.inherit({
                     extend(item, { location: data.location }, this._getToolbarItemByAlias(data));
                 }
 
-                var isLTROrder = currentPlatform === 'generic';
+                const isLTROrder = currentPlatform === 'generic';
 
                 if((data.shortcut === 'done' && isLTROrder) || (data.shortcut === 'cancel' && !isLTROrder)) {
                     toolbarsItems.unshift(item);
@@ -558,14 +401,14 @@ var Popup = Overlay.inherit({
     },
 
     _getToolbarItemByAlias: function(data) {
-        var that = this,
-            itemType = data.shortcut;
+        const that = this;
+        const itemType = data.shortcut;
 
         if(inArray(itemType, ALLOWED_TOOLBAR_ITEM_ALIASES) < 0) {
             return false;
         }
 
-        var itemConfig = extend({
+        const itemConfig = extend({
             text: messageLocalization.format(this._getLocalizationKey(itemType)),
             onClick: this._createToolbarItemAction(data.onClick),
             integrationOptions: {},
@@ -573,13 +416,13 @@ var Popup = Overlay.inherit({
             stylingMode: that.option('useFlatToolbarButtons') ? BUTTON_TEXT_MODE : BUTTON_CONTAINED_MODE
         }, data.options || {});
 
-        var itemClass = POPUP_CLASS + '-' + itemType;
+        const itemClass = POPUP_CLASS + '-' + itemType;
 
         this._toolbarItemClasses.push(itemClass);
 
         return {
             template: function(_, __, container) {
-                var $toolbarItem = $('<div>').addClass(itemClass).appendTo(container);
+                const $toolbarItem = $('<div>').addClass(itemClass).appendTo(container);
                 that._createComponent($toolbarItem, Button, itemConfig);
             }
         };
@@ -594,11 +437,11 @@ var Popup = Overlay.inherit({
     },
 
     _renderBottom: function() {
-        var items = this._getToolbarItems('bottom');
+        const items = this._getToolbarItems('bottom');
 
         if(items.length) {
             this._$bottom && this._$bottom.remove();
-            var $bottom = $('<div>').addClass(POPUP_BOTTOM_CLASS).insertAfter(this.$content());
+            const $bottom = $('<div>').addClass(POPUP_BOTTOM_CLASS).insertAfter(this.$content());
             this._$bottom = this._renderTemplateByType('bottomTemplate', items, $bottom, { compactMode: true }).addClass(POPUP_BOTTOM_CLASS);
             this._toggleClasses();
         } else {
@@ -607,10 +450,10 @@ var Popup = Overlay.inherit({
     },
 
     _toggleClasses: function() {
-        var aliases = ALLOWED_TOOLBAR_ITEM_ALIASES;
+        const aliases = ALLOWED_TOOLBAR_ITEM_ALIASES;
 
         each(aliases, (function(_, alias) {
-            var className = POPUP_CLASS + '-' + alias;
+            const className = POPUP_CLASS + '-' + alias;
 
             if(inArray(className, this._toolbarItemClasses) >= 0) {
                 this._wrapper().addClass(className + '-visible');
@@ -667,8 +510,8 @@ var Popup = Overlay.inherit({
     _setContentHeight: function() {
         (this.option('forceApplyBindings') || noop)();
 
-        var overlayContent = this.overlayContent().get(0),
-            currentHeightStrategyClass = this._chooseHeightStrategy(overlayContent);
+        const overlayContent = this.overlayContent().get(0);
+        const currentHeightStrategyClass = this._chooseHeightStrategy(overlayContent);
 
         this.$content().css(this._getHeightCssStyles(currentHeightStrategyClass, overlayContent));
         this._setHeightClasses(this.overlayContent(), currentHeightStrategyClass);
@@ -679,8 +522,8 @@ var Popup = Overlay.inherit({
     },
 
     _chooseHeightStrategy: function(overlayContent) {
-        var isAutoWidth = overlayContent.style.width === 'auto' || overlayContent.style.width === '',
-            currentHeightStrategyClass = HEIGHT_STRATEGIES.static;
+        const isAutoWidth = overlayContent.style.width === 'auto' || overlayContent.style.width === '';
+        let currentHeightStrategyClass = HEIGHT_STRATEGIES.static;
 
         if(this._isAutoHeight() && this.option('autoResizeEnabled')) {
             if(isAutoWidth || IS_OLD_SAFARI) {
@@ -696,11 +539,11 @@ var Popup = Overlay.inherit({
     },
 
     _getHeightCssStyles: function(currentHeightStrategyClass, overlayContent) {
-        var cssStyles = {},
-            contentMaxHeight = this._getOptionValue('maxHeight', overlayContent),
-            contentMinHeight = this._getOptionValue('minHeight', overlayContent),
-            popupHeightParts = this._splitPopupHeight(),
-            toolbarsAndVerticalOffsetsHeight = popupHeightParts.header
+        let cssStyles = {};
+        const contentMaxHeight = this._getOptionValue('maxHeight', overlayContent);
+        const contentMinHeight = this._getOptionValue('minHeight', overlayContent);
+        const popupHeightParts = this._splitPopupHeight();
+        const toolbarsAndVerticalOffsetsHeight = popupHeightParts.header
                 + popupHeightParts.footer
                 + popupHeightParts.contentVerticalOffsets
                 + popupHeightParts.popupVerticalOffsets
@@ -708,10 +551,10 @@ var Popup = Overlay.inherit({
 
         if(currentHeightStrategyClass === HEIGHT_STRATEGIES.static) {
             if(!this._isAutoHeight() || contentMaxHeight || contentMinHeight) {
-                var overlayHeight = this.option('fullScreen')
+                const overlayHeight = this.option('fullScreen')
                     ? Math.min(overlayContent.getBoundingClientRect().height, windowUtils.getWindow().innerHeight)
                     : overlayContent.getBoundingClientRect().height;
-                var contentHeight = overlayHeight - toolbarsAndVerticalOffsetsHeight;
+                const contentHeight = overlayHeight - toolbarsAndVerticalOffsetsHeight;
                 cssStyles = {
                     height: Math.max(0, contentHeight),
                     minHeight: 'auto',
@@ -719,9 +562,9 @@ var Popup = Overlay.inherit({
                 };
             }
         } else {
-            var container = $(this._getContainer()).get(0),
-                maxHeightValue = sizeUtils.addOffsetToMaxHeight(contentMaxHeight, -toolbarsAndVerticalOffsetsHeight, container),
-                minHeightValue = sizeUtils.addOffsetToMinHeight(contentMinHeight, -toolbarsAndVerticalOffsetsHeight, container);
+            const container = $(this._getContainer()).get(0);
+            const maxHeightValue = sizeUtils.addOffsetToMaxHeight(contentMaxHeight, -toolbarsAndVerticalOffsetsHeight, container);
+            const minHeightValue = sizeUtils.addOffsetToMinHeight(contentMinHeight, -toolbarsAndVerticalOffsetsHeight, container);
 
             cssStyles = {
                 height: 'auto',
@@ -734,9 +577,9 @@ var Popup = Overlay.inherit({
     },
 
     _setHeightClasses: function($container, currentClass) {
-        var excessClasses = '';
+        let excessClasses = '';
 
-        for(var name in HEIGHT_STRATEGIES) {
+        for(const name in HEIGHT_STRATEGIES) {
             if(HEIGHT_STRATEGIES[name] !== currentClass) {
                 excessClasses += ' ' + HEIGHT_STRATEGIES[name];
             }
@@ -750,8 +593,8 @@ var Popup = Overlay.inherit({
     },
 
     _splitPopupHeight: function() {
-        var topToolbar = this.topToolbar(),
-            bottomToolbar = this.bottomToolbar();
+        const topToolbar = this.topToolbar();
+        const bottomToolbar = this.bottomToolbar();
 
         return {
             header: sizeUtils.getVisibleHeight(topToolbar && topToolbar.get(0)),
@@ -767,7 +610,7 @@ var Popup = Overlay.inherit({
     },
 
     _toggleSafariFullScreen: function(value) {
-        var toggleFullScreenBeforeShown = this._useFixedPosition() && value && !this._isShown;
+        const toggleFullScreenBeforeShown = this._useFixedPosition() && value && !this._isShown;
         if(toggleFullScreenBeforeShown) {
             this._bodyScrollTop = value ? window.pageYOffset : undefined;
         } else {
@@ -827,10 +670,10 @@ var Popup = Overlay.inherit({
                 break;
             case 'toolbarItems':
             case 'useDefaultToolbarButtons':
-            case 'useFlatToolbarButtons':
+            case 'useFlatToolbarButtons': {
                 // NOTE: Geometry rendering after "toolbarItems" runtime change breaks the popup animation first appereance.
                 // But geometry rendering for options connected to the popup position still should be called.
-                var shouldRenderGeometry = !args.fullName.match(/^toolbarItems((\[\d+\])(\.(options|visible).*)?)?$/);
+                const shouldRenderGeometry = !args.fullName.match(/^toolbarItems((\[\d+\])(\.(options|visible).*)?)?$/);
 
                 this._renderTitle();
                 this._renderBottom();
@@ -839,6 +682,7 @@ var Popup = Overlay.inherit({
                     this._renderGeometry();
                 }
                 break;
+            }
             case 'dragEnabled':
                 this._renderDrag();
                 break;

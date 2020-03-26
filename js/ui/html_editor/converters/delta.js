@@ -100,10 +100,10 @@ class DeltaConverter {
             });
         });
 
-        return this._getListMarkup(items, -1, []);
+        return this._getListMarkup(items, -1, [], blot);
     }
 
-    _getListMarkup(items, lastIndent, listTypes) {
+    _getListMarkup(items, lastIndent, listTypes, listBlot) {
         if(items.length === 0) {
             const endTag = this._getListType(listTypes.pop());
 
@@ -122,7 +122,7 @@ class DeltaConverter {
             listTypes.push(type);
             const multiLevelTags = this._correctListMultiIndent(listTypes, type, tag, indent - lastIndent - 1);
 
-            return multiLevelTags + this._processIndentListMarkup(childItemArgs, restItemsArgs, tag);
+            return multiLevelTags + this._processIndentListMarkup(childItemArgs, restItemsArgs, tag, listBlot);
         }
 
         if(indent === lastIndent) {
@@ -149,12 +149,13 @@ class DeltaConverter {
         return `</li></${tag}>${this._getListMarkup(...childItemArgs)}`;
     }
 
-    _processIndentListMarkup(childItemArgs, restItemsArgs, tag = '/li') {
-        const itemAttrs = this._getListItemAttributes(childItemArgs[0]);
-        return `<${tag}><li${itemAttrs}>${this._convertHTML(...childItemArgs)}${this._getListMarkup(...restItemsArgs)}`;
+    _processIndentListMarkup(childItemArgs, restItemsArgs, tag = '/li', listBlot) {
+        const listAttrs = listBlot && this._getBlotNodeAttributes(listBlot) || '';
+        const itemAttrs = this._getBlotNodeAttributes(childItemArgs[0]);
+        return `<${tag}${listAttrs}><li${itemAttrs}>${this._convertHTML(...childItemArgs)}${this._getListMarkup(...restItemsArgs, listBlot)}`;
     }
 
-    _getListItemAttributes({ domNode }) {
+    _getBlotNodeAttributes({ domNode }) {
         if(!domNode.hasAttributes()) {
             return '';
         }

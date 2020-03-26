@@ -10,6 +10,7 @@ import Widget from '../widget/ui.widget';
 import Overlay from '../overlay';
 import ValidationEngine from '../validation_engine';
 import EventsEngine from '../../events/core/events_engine';
+import { encodeHtml } from '../../core/utils/string';
 
 const READONLY_STATE_CLASS = 'dx-state-readonly';
 const INVALID_CLASS = 'dx-invalid';
@@ -29,31 +30,27 @@ const getValidationErrorMessage = function(validationErrors) {
     if(validationErrors) {
         validationErrors.forEach(function(err) {
             if(err.message) {
-                validationErrorMessage += ((validationErrorMessage ? '<br />' : '') + err.message);
+                validationErrorMessage += ((validationErrorMessage ? '<br />' : '') + encodeHtml(err.message));
             }
         });
     }
     return validationErrorMessage;
 };
 
-/**
-* @name Editor
-* @type object
-* @inherits Widget
-* @module ui/editor/editor
-* @export default
-* @hidden
-*/
 const Editor = Widget.inherit({
     ctor: function() {
         this.showValidationMessageTimeout = null;
         this.validationRequest = Callbacks();
+
         this.callBase.apply(this, arguments);
+    },
+
+    _createElement: function(element) {
+        this.callBase(element);
         const $element = this.$element();
         if($element) {
             dataUtils.data($element[0], VALIDATION_TARGET, this);
         }
-
     },
 
     _initOptions: function(options) {
@@ -70,12 +67,6 @@ const Editor = Widget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name EditorOptions.value
-            * @type any
-            * @default null
-            * @fires EditorOptions.onValueChanged
-            */
             value: null,
 
             /**
@@ -86,60 +77,18 @@ const Editor = Widget.inherit({
             */
             name: '',
 
-            /**
-            * @name EditorOptions.onValueChanged
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 value:object
-            * @type_function_param1_field5 previousValue:object
-            * @type_function_param1_field6 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field7 event:event
-            * @action
-            */
             onValueChanged: null,
 
-            /**
-             * @name EditorOptions.readOnly
-             * @type boolean
-             * @default false
-             */
             readOnly: false,
 
-            /**
-            * @name EditorOptions.isValid
-            * @type boolean
-            * @default true
-            */
             isValid: true,
 
-            /**
-            * @name EditorOptions.validationError
-            * @type object
-            * @ref
-            * @default null
-            */
             validationError: null,
 
-            /**
-            * @name EditorOptions.validationErrors
-            * @type Array<object>
-            * @default null
-            */
             validationErrors: null,
 
-            /**
-            * @name EditorOptions.validationStatus
-            * @type Enums.ValidationStatus
-            * @default "valid"
-            */
             validationStatus: VALIDATION_STATUS_VALID,
 
-            /**
-             * @name EditorOptions.validationMessageMode
-             * @type Enums.ValidationMessageMode
-             * @default "auto"
-             */
             validationMessageMode: 'auto',
 
             validationBoundary: undefined,
@@ -250,7 +199,7 @@ const Editor = Widget.inherit({
             this._$validationMessage = null;
         }
 
-        let validationErrorMessage = getValidationErrorMessage(validationErrors);
+        const validationErrorMessage = getValidationErrorMessage(validationErrors);
 
         if(!isValid && validationErrorMessage) {
             this._$validationMessage = $('<div>').addClass(INVALID_MESSAGE)
@@ -428,10 +377,6 @@ const Editor = Widget.inherit({
         }
     },
 
-    /**
-    * @name EditorMethods.reset
-    * @publicName reset()
-    */
     reset: function() {
         const defaultOptions = this._getDefaultOptions();
         this.option('value', defaultOptions.value);

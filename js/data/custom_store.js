@@ -1,23 +1,23 @@
-var $ = require('../core/renderer'),
-    dataUtils = require('./utils'),
-    arrayUtils = require('./array_utils'),
-    isFunction = require('../core/utils/type').isFunction,
-    config = require('../core/config'),
-    errors = require('./errors').errors,
-    Store = require('./abstract_store'),
-    arrayQuery = require('./array_query'),
-    queryByOptions = require('./store_helper').queryByOptions,
-    deferredUtils = require('../core/utils/deferred'),
-    Deferred = deferredUtils.Deferred,
-    when = deferredUtils.when,
-    fromPromise = deferredUtils.fromPromise;
+const $ = require('../core/renderer');
+const dataUtils = require('./utils');
+const arrayUtils = require('./array_utils');
+const isFunction = require('../core/utils/type').isFunction;
+const config = require('../core/config');
+const errors = require('./errors').errors;
+const Store = require('./abstract_store');
+const arrayQuery = require('./array_query');
+const queryByOptions = require('./store_helper').queryByOptions;
+const deferredUtils = require('../core/utils/deferred');
+const Deferred = deferredUtils.Deferred;
+const when = deferredUtils.when;
+const fromPromise = deferredUtils.fromPromise;
 
-var TOTAL_COUNT = 'totalCount',
-    LOAD = 'load',
-    BY_KEY = 'byKey',
-    INSERT = 'insert',
-    UPDATE = 'update',
-    REMOVE = 'remove';
+const TOTAL_COUNT = 'totalCount';
+const LOAD = 'load';
+const BY_KEY = 'byKey';
+const INSERT = 'insert';
+const UPDATE = 'update';
+const REMOVE = 'remove';
 
 function isPromise(obj) {
     return obj && isFunction(obj.then);
@@ -39,8 +39,8 @@ function throwInvalidUserFuncResult(name) {
 
 function createUserFuncFailureHandler(pendingDeferred) {
     function errorMessageFromXhr(promiseArguments) {
-        var xhr = promiseArguments[0],
-            textStatus = promiseArguments[1];
+        const xhr = promiseArguments[0];
+        const textStatus = promiseArguments[1];
 
         if(!xhr || !xhr.getResponseHeader) {
             return null;
@@ -50,7 +50,7 @@ function createUserFuncFailureHandler(pendingDeferred) {
     }
 
     return function(arg) {
-        var error;
+        let error;
 
         if(arg instanceof Error) {
             error = arg;
@@ -65,8 +65,8 @@ function createUserFuncFailureHandler(pendingDeferred) {
 }
 
 function invokeUserLoad(store, options) {
-    var userFunc = store._loadFunc,
-        userResult;
+    const userFunc = store._loadFunc;
+    let userResult;
 
     ensureRequiredFuncOption(LOAD, userFunc);
     userResult = userFunc.apply(store, [options]);
@@ -85,8 +85,8 @@ function invokeUserLoad(store, options) {
 }
 
 function invokeUserTotalCountFunc(store, options) {
-    var userFunc = store._totalCountFunc,
-        userResult;
+    const userFunc = store._totalCountFunc;
+    let userResult;
 
     if(!isFunction(userFunc)) {
         throw errors.Error('E4021');
@@ -106,8 +106,8 @@ function invokeUserTotalCountFunc(store, options) {
 }
 
 function invokeUserByKeyFunc(store, key, extraOptions) {
-    var userFunc = store._byKeyFunc,
-        userResult;
+    const userFunc = store._byKeyFunc;
+    let userResult;
 
     ensureRequiredFuncOption(BY_KEY, userFunc);
     userResult = userFunc.apply(store, [key, extraOptions]);
@@ -123,7 +123,7 @@ function runRawLoad(pendingDeferred, store, userFuncOptions, continuation) {
     if(store.__rawData) {
         continuation(store.__rawData);
     } else {
-        var loadPromise = store.__rawDataPromise || invokeUserLoad(store, userFuncOptions);
+        const loadPromise = store.__rawDataPromise || invokeUserLoad(store, userFuncOptions);
 
         if(store._cacheRawData) {
             store.__rawDataPromise = loadPromise;
@@ -146,19 +146,19 @@ function runRawLoad(pendingDeferred, store, userFuncOptions, continuation) {
 function runRawLoadWithQuery(pendingDeferred, store, options, countOnly) {
     options = options || { };
 
-    var userFuncOptions = { };
+    const userFuncOptions = { };
     if('userData' in options) {
         userFuncOptions.userData = options.userData;
     }
 
     runRawLoad(pendingDeferred, store, userFuncOptions, function(rawData) {
-        var rawDataQuery = arrayQuery(rawData, { errorHandler: store._errorHandler }),
-            itemsQuery,
-            totalCountQuery,
-            waitList = [];
+        const rawDataQuery = arrayQuery(rawData, { errorHandler: store._errorHandler });
+        let itemsQuery;
+        let totalCountQuery;
+        const waitList = [];
 
-        var items,
-            totalCount;
+        let items;
+        let totalCount;
 
         if(!countOnly) {
             itemsQuery = queryByOptions(rawDataQuery, options);
@@ -200,10 +200,10 @@ function runRawLoadWithQuery(pendingDeferred, store, options, countOnly) {
 
 function runRawLoadWithKey(pendingDeferred, store, key) {
     runRawLoad(pendingDeferred, store, {}, function(rawData) {
-        var keyExpr = store.key(),
-            item;
+        const keyExpr = store.key();
+        let item;
 
-        for(var i = 0, len = rawData.length; i < len; i++) {
+        for(let i = 0, len = rawData.length; i < len; i++) {
             item = rawData[i];
             if(dataUtils.keysEqual(keyExpr, store.keyOf(rawData[i]), key)) {
                 pendingDeferred.resolve(item);
@@ -220,163 +220,29 @@ function runRawLoadWithKey(pendingDeferred, store, key) {
  * @namespace DevExpress.data
  * @type object
  */
-/**
- * @name LoadOptions.filter
- * @type object
- */
-/**
- * @name LoadOptions.sort
- * @type object
- */
-/**
- * @name LoadOptions.select
- * @type object
- */
-/**
- * @name LoadOptions.group
- * @type object
- */
-/**
- * @name LoadOptions.skip
- * @type number
- */
-/**
- * @name LoadOptions.skip
- * @type number
- */
-/**
- * @name LoadOptions.take
- * @type number
- */
-/**
- * @name LoadOptions.userData
- * @type object
- */
-/**
- * @name LoadOptions.expand
- * @type object
- */
-/**
- * @name LoadOptions.requireTotalCount
- * @type boolean
- */
-/**
- * @name LoadOptions.searchValue
- * @type any
- */
-/**
- * @name LoadOptions.searchOperation
- * @type string
- */
-/**
- * @name LoadOptions.searchExpr
- * @type getter|Array<getter>
- */
-/**
- * @name LoadOptions.customQueryParams
- * @type Object
- */
-/**
- * @name LoadOptions.totalSummary
- * @type Object
- */
-/**
- * @name LoadOptions.groupSummary
- * @type Object
- */
-/**
- * @name LoadOptions.requireGroupCount
- * @type boolean
- */
-/**
- * @name LoadOptions.parentIds
- * @type Array<any>
- */
 
-/**
-* @name CustomStore
-* @inherits Store
-* @type object
-* @module data/custom_store
-* @export default
-*/
-var CustomStore = Store.inherit({
+const CustomStore = Store.inherit({
     ctor: function(options) {
         options = options || {};
 
         this.callBase(options);
 
-        /**
-         * @name CustomStoreOptions.useDefaultSearch
-         * @type boolean
-         * @default undefined
-         */
         this._useDefaultSearch = !!options.useDefaultSearch || options.loadMode === 'raw';
 
-        /**
-         * @name CustomStoreOptions.loadMode
-         * @type string
-         * @default 'processed'
-         * @acceptValues 'processed'|'raw'
-         */
         this._loadMode = options.loadMode;
 
-        /**
-         * @name CustomStoreOptions.cacheRawData
-         * @type boolean
-         * @default true
-         */
         this._cacheRawData = options.cacheRawData !== false;
 
-        /**
-         * @name CustomStoreOptions.load
-         * @type function
-         * @type_function_param1 options:LoadOptions
-         * @type_function_return Promise<any>|Array<any>
-         */
         this._loadFunc = options[LOAD];
 
-        /**
-         * @name CustomStoreOptions.totalCount
-         * @type function
-         * @type_function_param1 loadOptions:object
-         * @type_function_param1_field1 filter:object
-         * @type_function_param1_field2 group:object
-         * @type_function_return Promise<number>
-         */
         this._totalCountFunc = options[TOTAL_COUNT];
 
-        /**
-         * @name CustomStoreOptions.byKey
-         * @type function
-         * @type_function_param1 key:object|string|number
-         * @type_function_return Promise<any>
-         */
         this._byKeyFunc = options[BY_KEY];
 
-        /**
-         * @name CustomStoreOptions.insert
-         * @type function
-         * @type_function_param1 values:object
-         * @type_function_return Promise<any>
-         */
         this._insertFunc = options[INSERT];
 
-        /**
-         * @name CustomStoreOptions.update
-         * @type function
-         * @type_function_param1 key:object|string|number
-         * @type_function_param2 values:object
-         * @type_function_return Promise<any>
-         */
         this._updateFunc = options[UPDATE];
 
-        /**
-         * @name CustomStoreOptions.remove
-         * @type function
-         * @type_function_param1 key:object|string|number
-         * @type_function_return Promise<void>
-         */
         this._removeFunc = options[REMOVE];
     },
 
@@ -384,16 +250,12 @@ var CustomStore = Store.inherit({
         throw errors.Error('E4010');
     },
 
-    /**
-    * @name CustomStoreMethods.clearRawDataCache
-    * @publicName clearRawDataCache()
-    */
     clearRawDataCache: function() {
         delete this.__rawData;
     },
 
     _totalCountImpl: function(options) {
-        var d = new Deferred();
+        let d = new Deferred();
 
         if(this._loadMode === 'raw' && !this._totalCountFunc) {
             runRawLoadWithQuery(d, this, options, true);
@@ -414,7 +276,7 @@ var CustomStore = Store.inherit({
     },
 
     _loadImpl: function(options) {
-        var d = new Deferred();
+        let d = new Deferred();
 
         if(this._loadMode === 'raw') {
             runRawLoadWithQuery(d, this, options, false);
@@ -429,7 +291,7 @@ var CustomStore = Store.inherit({
     },
 
     _byKeyImpl: function(key, extraOptions) {
-        var d = new Deferred();
+        const d = new Deferred();
 
         if(this._byKeyViaLoad()) {
             this._requireKey();
@@ -448,10 +310,10 @@ var CustomStore = Store.inherit({
     },
 
     _insertImpl: function(values) {
-        var that = this,
-            userFunc = that._insertFunc,
-            userResult,
-            d = new Deferred();
+        const that = this;
+        const userFunc = that._insertFunc;
+        let userResult;
+        const d = new Deferred();
 
         ensureRequiredFuncOption(INSERT, userFunc);
         userResult = userFunc.apply(that, [values]); // should return key or data
@@ -474,9 +336,9 @@ var CustomStore = Store.inherit({
     },
 
     _updateImpl: function(key, values) {
-        var userFunc = this._updateFunc,
-            userResult,
-            d = new Deferred();
+        const userFunc = this._updateFunc;
+        let userResult;
+        const d = new Deferred();
 
         ensureRequiredFuncOption(UPDATE, userFunc);
         userResult = userFunc.apply(this, [key, values]);
@@ -499,9 +361,9 @@ var CustomStore = Store.inherit({
     },
 
     _removeImpl: function(key) {
-        var userFunc = this._removeFunc,
-            userResult,
-            d = new Deferred();
+        const userFunc = this._removeFunc;
+        let userResult;
+        const d = new Deferred();
 
         ensureRequiredFuncOption(REMOVE, userFunc);
         userResult = userFunc.apply(this, [key]);

@@ -14,16 +14,13 @@ QUnit.testStart(function() {
                                 <div id="fixedContainer"></div>');
 });
 
-var CELL_OFFSET = 15;
+const CELL_OFFSET = 15;
 
-var moduleOptions = {
+const moduleOptions = {
     beforeEach: function() {
         fx.off = true;
 
         this.coordinates = [{ top: 0, left: 0 }];
-        this.getCoordinates = function() {
-            return this.coordinates;
-        };
         this.clock = sinon.useFakeTimers();
         this.cellWidth = 25;
         this.cellHeight = 20;
@@ -41,38 +38,16 @@ var moduleOptions = {
             startTopCoord = startTopCoord || 0;
             startLeftCoord = startLeftCoord || 0;
 
-            var topCoord = startTopCoord,
-                leftCoord = startLeftCoord + ((this.cellWidth - CELL_OFFSET) / appInCellCount) * appInCellIndex;
+            const topCoord = startTopCoord;
+            const leftCoord = startLeftCoord + ((this.cellWidth - CELL_OFFSET) / appInCellCount) * appInCellIndex;
 
             return { top: topCoord, left: leftCoord };
         };
 
         this.instance = $('#scheduler-appointments').dxSchedulerAppointments().dxSchedulerAppointments('instance');
 
-        this.instance.notifyObserver = $.proxy(function(command, options) {
-            if(command === 'needCoordinates') {
-                options.callback(this.getCoordinates.apply(this));
-            }
-
-            if(command === 'getCellDimensions') {
-                options.callback(this.cellWidth, this.cellHeight, this.allDayHeight);
-            }
-
-            if(command === 'getAppointmentColor') {
-                options.callback($.Deferred().resolve('red').promise());
-            }
-
-            if(command === 'getResourceForPainting') {
-                options.callback({ field: 'roomId' });
-            }
-
-            if(command === 'getAppointmentDurationInMs') {
-                options.callback(options.endDate.getTime() - options.startDate.getTime());
-            }
-        }, this);
-
         this.instance.invoke = $.proxy(function(command, field, obj, value) {
-            var dataAccessors = {
+            const dataAccessors = {
                 getter: {
                     startDate: compileGetter('startDate'),
                     endDate: compileGetter('endDate'),
@@ -104,6 +79,9 @@ var moduleOptions = {
             if(command === 'convertDateByTimezone') {
                 return field;
             }
+            if(command === 'getAppointmentColor') {
+                return $.Deferred().resolve('red').promise();
+            }
             if(command === 'getAppointmentGeometry') {
                 return {
                     width: field.width || 0,
@@ -124,7 +102,7 @@ var moduleOptions = {
 QUnit.module('Vertical Strategy', moduleOptions);
 
 QUnit.test('Wide rival appointments should not have specific class', function(assert) {
-    var items = [{
+    const items = [{
         itemData: {
             text: 'Appointment 1',
             startDate: new Date(2015, 1, 9, 8),
@@ -145,14 +123,14 @@ QUnit.test('Wide rival appointments should not have specific class', function(as
     this.items = items;
     this.instance.option('items', items);
 
-    var $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+    const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
     assert.ok(!$appointment.eq(0).hasClass('dx-scheduler-appointment-empty'), 'appointment has not the class');
     assert.ok(!$appointment.eq(1).hasClass('dx-scheduler-appointment-empty'), 'appointment has not the class');
 });
 
 // NOTE: integration test
 QUnit.test('Narrow rival appointments should have specific class', function(assert) {
-    var items = [{
+    const items = [{
         itemData: {
             text: 'Appointment 1',
             startDate: new Date(2015, 1, 9, 8),
@@ -173,7 +151,7 @@ QUnit.test('Narrow rival appointments should have specific class', function(asse
     this.items = items;
     this.instance.option('items', items);
 
-    var $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+    const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
     assert.ok($appointment.eq(0).hasClass('dx-scheduler-appointment-empty'), 'appointment has the class');
     assert.ok($appointment.eq(1).hasClass('dx-scheduler-appointment-empty'), 'appointment has the class');
 });
@@ -192,7 +170,7 @@ QUnit.test('Scheduler appointments should be rendered in right containers', func
     this.instance.option('fixedContainer', $('#fixedContainer'));
     this.instance.option('allDayContainer', $('#allDayContainer'));
 
-    var items = [{
+    const items = [{
         itemData: {
             text: 'Appointment 1',
             startDate: new Date(),
@@ -215,7 +193,7 @@ QUnit.test('Scheduler appointments should be rendered in right containers', func
 });
 
 QUnit.test('Scheduler appointments should have specific allDay class if needed', function(assert) {
-    var items = [{
+    const items = [{
         itemData: {
             text: 'Appointment 1',
             startDate: new Date()
@@ -226,7 +204,7 @@ QUnit.test('Scheduler appointments should have specific allDay class if needed',
     this.items = items;
     this.instance.option('items', items);
 
-    var $appointment = $('.dx-scheduler-appointment').eq(0);
+    let $appointment = $('.dx-scheduler-appointment').eq(0);
     assert.ok(!$appointment.hasClass('dx-scheduler-all-day-appointment'), 'Appointment hasn\'t allDay class');
 
     this.instance.option('fixedContainer', $('#fixedContainer'));

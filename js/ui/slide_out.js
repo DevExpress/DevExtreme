@@ -1,31 +1,29 @@
-var $ = require('../core/renderer'),
-    getPublicElement = require('../core/utils/dom').getPublicElement,
-    noop = require('../core/utils/common').noop,
-    isDefined = require('../core/utils/type').isDefined,
-    registerComponent = require('../core/component_registrator'),
-    extend = require('../core/utils/extend').extend,
-    PlainEditStrategy = require('./collection/ui.collection_widget.edit.strategy.plain'),
-    SlideOutView = require('./slide_out_view'),
-    CollectionWidget = require('./collection/ui.collection_widget.edit'),
-    List = require('./list'),
-    ChildDefaultTemplate = require('../core/templates/child_default_template').ChildDefaultTemplate,
-    EmptyTemplate = require('../core/templates/empty_template').EmptyTemplate,
-    DataConverterMixin = require('./shared/grouped_data_converter_mixin').default;
+const $ = require('../core/renderer');
+const getPublicElement = require('../core/utils/dom').getPublicElement;
+const noop = require('../core/utils/common').noop;
+const isDefined = require('../core/utils/type').isDefined;
+const registerComponent = require('../core/component_registrator');
+const extend = require('../core/utils/extend').extend;
+const PlainEditStrategy = require('./collection/ui.collection_widget.edit.strategy.plain');
+const SlideOutView = require('./slide_out_view');
+const CollectionWidget = require('./collection/ui.collection_widget.edit');
+const List = require('./list');
+const ChildDefaultTemplate = require('../core/templates/child_default_template').ChildDefaultTemplate;
+const EmptyTemplate = require('../core/templates/empty_template').EmptyTemplate;
+const DataConverterMixin = require('./shared/grouped_data_converter_mixin').default;
 
-var SLIDEOUT_CLASS = 'dx-slideout',
-    SLIDEOUT_ITEM_CONTAINER_CLASS = 'dx-slideout-item-container',
-    SLIDEOUT_MENU = 'dx-slideout-menu',
+const SLIDEOUT_CLASS = 'dx-slideout';
+const SLIDEOUT_ITEM_CONTAINER_CLASS = 'dx-slideout-item-container';
+const SLIDEOUT_MENU = 'dx-slideout-menu';
 
-    SLIDEOUT_ITEM_CLASS = 'dx-slideout-item',
-    SLIDEOUT_ITEM_DATA_KEY = 'dxSlideoutItemData';
+const SLIDEOUT_ITEM_CLASS = 'dx-slideout-item';
+const SLIDEOUT_ITEM_DATA_KEY = 'dxSlideoutItemData';
 
-/**
-* @name dxSlideOut
-* @inherits CollectionWidget
-* @module ui/slide_out
-* @export default
-*/
-var SlideOut = CollectionWidget.inherit({
+const SlideOut = CollectionWidget.inherit({
+    ctor: function(element, options) {
+        this.callBase(element, options);
+        this._logDeprecatedComponentWarning('20.1', 'dxDrawer');
+    },
 
     _getDefaultOptions: function() {
         /**
@@ -33,114 +31,33 @@ var SlideOut = CollectionWidget.inherit({
         * @inherits CollectionWidgetItem
         * @type object
         */
-        /**
-        * @name dxSlideOutItem.menuTemplate
-        * @type template|function
-        * @type_function_return string|Node|jQuery
-        */
 
         return extend(this.callBase(), {
 
-            /**
-             * @name dxSlideOutOptions.dataSource
-             * @type string|Array<string,dxSlideOutItem,object>|DataSource|DataSourceOptions
-             * @default null
-             */
 
-            /**
-             * @name dxSlideOutOptions.items
-             * @type Array<string, dxSlideOutItem, object>
-             * @fires dxSlideOutOptions.onOptionChanged
-             */
-
-            /**
-            * @name dxSlideOutOptions.activeStateEnabled
-            * @type boolean
-            * @default false
-            */
             activeStateEnabled: false,
 
-            /**
-            * @name dxSlideOutOptions.menuItemTemplate
-            * @type template|function
-            * @default "menuItem"
-            * @type_function_param1 itemData:object
-            * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
             menuItemTemplate: 'menuItem',
 
-            /**
-            * @name dxSlideOutOptions.swipeEnabled
-            * @type boolean
-            * @default true
-            */
             swipeEnabled: true,
 
-            /**
-            * @name dxSlideOutOptions.menuVisible
-            * @type boolean
-            * @default false
-            */
             menuVisible: false,
 
-            /**
-            * @name dxSlideOutOptions.menuPosition
-            * @type Enums.SlideOutMenuPosition
-            * @default "normal"
-            */
             menuPosition: 'normal',
 
 
-            /**
-            * @name dxSlideOutOptions.menuGrouped
-            * @type boolean
-            * @default false
-            */
             menuGrouped: false,
 
-            /**
-            * @name dxSlideOutOptions.menuGroupTemplate
-            * @type template|function
-            * @default "menuGroup"
-            * @type_function_param1 groupData:object
-            * @type_function_param2 groupIndex:number
-            * @type_function_param3 groupElement:object
-            * @type_function_return string|Node|jQuery
-            */
             menuGroupTemplate: 'menuGroup',
 
-            /**
-            * @name dxSlideOutOptions.onMenuItemRendered
-            * @extends Action
-            * @action
-            */
             onMenuItemRendered: null,
 
-            /**
-            * @name dxSlideOutOptions.onMenuGroupRendered
-            * @extends Action
-            * @action
-            */
             onMenuGroupRendered: null,
 
-            /**
-            * @name dxSlideOutOptions.contentTemplate
-            * @type template|function
-            * @default "content"
-            * @type_function_param1 container:dxElement
-            * @type_function_return string|Node|jQuery
-            */
             contentTemplate: 'content',
 
             selectionMode: 'single',
 
-            /**
-             * @name dxSlideOutOptions.selectedIndex
-             * @type number
-             * @default 0
-             */
             selectedIndex: 0,
 
             selectionRequired: true
@@ -207,7 +124,7 @@ var SlideOut = CollectionWidget.inherit({
 
     _initEditStrategy: function() {
         if(this.option('menuGrouped')) {
-            var strategy = PlainEditStrategy.inherit({
+            const strategy = PlainEditStrategy.inherit({
 
                 _getPlainItems: function() {
                     return this.callBase().reduce((result, group) => {
@@ -258,7 +175,7 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     _renderList: function() {
-        var $list = this._list && this._list.$element() || $('<div>').addClass(SLIDEOUT_MENU).appendTo($(this._slideOutView.menuContent()));
+        const $list = this._list && this._list.$element() || $('<div>').addClass(SLIDEOUT_MENU).appendTo($(this._slideOutView.menuContent()));
 
         this._renderItemClickAction();
 
@@ -294,7 +211,7 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     _listItemClickHandler: function(e) {
-        var selectedIndex = this._list.$element().find('.dx-list-item').index(e.itemElement);
+        const selectedIndex = this._list.$element().find('.dx-list-item').index(e.itemElement);
         this.option('selectedIndex', selectedIndex);
         this._itemClickAction(e);
     },
@@ -304,7 +221,7 @@ var SlideOut = CollectionWidget.inherit({
             return;
         }
 
-        var itemsLength = this._itemContainer().html().length;
+        const itemsLength = this._itemContainer().html().length;
         this._getTemplateByOption('contentTemplate').render({
             container: getPublicElement(this._itemContainer())
         });
@@ -318,12 +235,12 @@ var SlideOut = CollectionWidget.inherit({
             return;
         }
 
-        var items = this.option('items'),
-            selectedIndex = this.option('selectedIndex');
+        const items = this.option('items');
+        const selectedIndex = this.option('selectedIndex');
 
         if(items.length && selectedIndex > -1) {
             this._selectedItemContentRendered = true;
-            var selectedItem = this._list.getItemByIndex(selectedIndex);
+            const selectedItem = this._list.getItemByIndex(selectedIndex);
             this._renderItems([selectedItem]);
         }
     },
@@ -370,8 +287,8 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     _optionChanged: function(args) {
-        var name = args.name;
-        var value = args.value;
+        const name = args.name;
+        const value = args.value;
 
         switch(name) {
             case 'menuVisible':
@@ -424,30 +341,14 @@ var SlideOut = CollectionWidget.inherit({
         }
     },
 
-    /**
-    * @name dxSlideOutMethods.show
-    * @publicName showMenu()
-    * @return Promise<void>
-    */
     showMenu: function() {
         return this._slideOutView.toggleMenuVisibility(true);
     },
 
-    /**
-    * @name dxSlideOutMethods.hide
-    * @publicName hideMenu()
-    * @return Promise<void>
-    */
     hideMenu: function() {
         return this._slideOutView.toggleMenuVisibility(false);
     },
 
-    /**
-    * @name dxSlideOutMethods.toggleMenuVisibility
-    * @publicName toggleMenuVisibility(showing)
-    * @param1 showing:boolean
-    * @return Promise<void>
-    */
     toggleMenuVisibility: function(showing) {
         return this._slideOutView.toggleMenuVisibility(showing);
     }

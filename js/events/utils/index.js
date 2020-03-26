@@ -184,7 +184,7 @@ export const needSkipEvent = e => {
 export const setEventFixMethod = func => fixMethod = func;
 
 export const createEvent = (originalEvent, args) => {
-    let event = copyEvent(originalEvent);
+    const event = copyEvent(originalEvent);
 
     args && extend(event, args);
 

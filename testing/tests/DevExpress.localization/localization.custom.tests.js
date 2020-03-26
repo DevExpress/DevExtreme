@@ -1,5 +1,5 @@
-var numberLocalization = require('localization/number'),
-    dateLocalization = require('localization/date');
+const numberLocalization = require('localization/number');
+const dateLocalization = require('localization/date');
 
 QUnit.module('Custom date names', {
     beforeEach: function() {
@@ -67,14 +67,14 @@ QUnit.module('Custom digits', {
 });
 
 QUnit.test('format date by LDML pattern', function(assert) {
-    var date = new Date(2015, 2, 3, 4, 5, 6, 789);
+    const date = new Date(2015, 2, 3, 4, 5, 6, 789);
     assert.equal(dateLocalization.format(date, 'dd/MM/yyyy'), '٠٣/٠٣/٢٠١٥');
     assert.equal(dateLocalization.format(date, 'HH:mm:ss'), '٠٤:٠٥:٠٦');
     assert.equal(dateLocalization.format(date, 'SSS'), '٧٨٩');
 });
 
 QUnit.test('format date by predefined format', function(assert) {
-    var date = new Date(2015, 2, 3, 4, 5, 6, 789);
+    const date = new Date(2015, 2, 3, 4, 5, 6, 789);
     assert.equal(dateLocalization.format(date, 'shortDate'), '٣/٣/٢٠١٥');
     assert.equal(dateLocalization.format(date, 'millisecond'), '٧٨٩');
 });
@@ -128,4 +128,9 @@ QUnit.test('getThousandsSeparator', function(assert) {
 
 QUnit.test('format number', function(assert) {
     assert.equal(numberLocalization.format(1234.5, '#,##0.00'), '1 234.50');
+});
+
+QUnit.test('format number with unlimitedIntegerDigits flag (for dashbords)', function(assert) {
+    assert.equal(numberLocalization.format(0, { type: '0', unlimitedIntegerDigits: true }), '0');
+    assert.equal(numberLocalization.format(12345.6, { type: '0', unlimitedIntegerDigits: true }), '12346');
 });

@@ -20,21 +20,14 @@ const DRAG_END_EVENT_NAME = dragEvents.end + DOT_EVENT_NS;
 
 function coreAnnotation(options, contentTemplate) {
     return {
-        type: options.type,
-        name: options.name,
-        x: options.x,
-        y: options.y,
-        value: options.value,
-        argument: options.argument,
-        axis: options.axis,
-        series: options.series,
-        options: options,
-        offsetX: options.offsetX,
-        offsetY: options.offsetY,
         draw: function(widget, group) {
             const annotationGroup = widget._renderer.g().append(group)
                 .css(patchFontOptions(options.font));
-            this.plaque = new Plaque(options, widget, annotationGroup, contentTemplate, isDefined(options.value) || isDefined(options.argument));
+            this.plaque = new Plaque(
+                extend(true, {}, options, { cornerRadius: (options.border || {}).cornerRadius }),
+                widget, annotationGroup, contentTemplate,
+                isDefined(options.value) || isDefined(options.argument)
+            );
             this.plaque.draw(widget._getAnnotationCoords(this));
 
             if(options.allowDragging) {
@@ -101,11 +94,25 @@ function getTemplateFunction(options, widget) {
     return template;
 }
 
-export let createAnnotations = function(widget, items, commonAnnotationSettings = {}, customizeAnnotation) {
+function getImageObject(image) {
+    return typeof image === 'string' ? { url: image } : image;
+}
+
+export let createAnnotations = function(widget, items, commonAnnotationSettings = {}, customizeAnnotation, pullOptions) {
+    const commonImageOptions = getImageObject(commonAnnotationSettings.image);
     return items.reduce((arr, item) => {
-        const options = extend(true, {}, commonAnnotationSettings, item, customizeAnnotation && customizeAnnotation.call ? customizeAnnotation(item) : {});
+        const currentImageOptions = getImageObject(item.image);
+        const options = extend(
+            true,
+            {},
+            commonAnnotationSettings,
+            item,
+            { image: commonImageOptions },
+            { image: currentImageOptions },
+            customizeAnnotation && customizeAnnotation.call ? customizeAnnotation(item) : {}
+        );
         const templateFunction = getTemplateFunction(options, widget);
-        const annotation = templateFunction && coreAnnotation(options, widget._getTemplate(templateFunction));
+        const annotation = templateFunction && extend(true, pullOptions(options), coreAnnotation(options, widget._getTemplate(templateFunction)));
         annotation && arr.push(annotation);
         return arr;
     }, []);
@@ -213,6 +220,79 @@ const chartPlugin = {
                 annotation.showTooltip(this._annotations.tooltip, coords);
                 event.stopPropagation();
             }
+        },
+        _pullOptions(options) {
+            return {
+                type: options.type,
+                name: options.name,
+                x: options.x,
+                y: options.y,
+                value: options.value,
+                argument: options.argument,
+                axis: options.axis,
+                series: options.series,
+                options: options,
+                offsetX: options.offsetX,
+                offsetY: options.offsetY
+            };
+        }
+    }
+};
+const polarChartPlugin = {
+    name: 'annotations_polar_chart',
+    init() {},
+    dispose() {},
+    members: {
+        _getAnnotationCoords(annotation) {
+            const coords = {
+                offsetX: annotation.offsetX,
+                offsetY: annotation.offsetY,
+                canvas: this._calcCanvas()
+            };
+            const argAxis = this.getArgumentAxis();
+            let argument = argAxis.validateUnit(annotation.argument);
+            const value = this.getValueAxis().validateUnit(annotation.value);
+            const radius = annotation.radius;
+            const angle = annotation.angle;
+            let pointCoords;
+            let series;
+
+            if(annotation.series) {
+                series = this.series.filter(s => s.name === annotation.series)[0];
+            }
+
+            extend(true, coords, this.getXYFromPolar(angle, radius, argument, value));
+
+            if(isDefined(series)) {
+                if(isDefined(coords.angle) && !isDefined(value) && !isDefined(radius)) {
+                    if(!isDefined(argument)) {
+                        argument = argAxis.getTranslator().from(isFinite(angle) ? this.getActualAngle(angle) : coords.angle);
+                    }
+                    pointCoords = series.getSeriesPairCoord({ argument, angle: -coords.angle }, true);
+                } else if(isDefined(coords.radius) && !isDefined(argument) && !isDefined(angle)) {
+                    pointCoords = series.getSeriesPairCoord({ radius: coords.radius }, false);
+                }
+                if(isDefined(pointCoords)) {
+                    coords.x = pointCoords.x;
+                    coords.y = pointCoords.y;
+                }
+            }
+            if(annotation.series && !isDefined(pointCoords)) {
+                coords.x = coords.y = undefined;
+            }
+
+            return coords;
+        },
+        _annotationsPointerEventHandler: chartPlugin.members._annotationsPointerEventHandler,
+        _pullOptions(options) {
+            const polarOptions = extend({}, {
+                radius: options.radius,
+                angle: options.angle,
+            }, chartPlugin.members._pullOptions(options));
+
+            delete polarOptions.axis;
+
+            return polarOptions;
         }
     }
 };
@@ -273,9 +353,10 @@ const corePlugin = {
             if(!items || !items.length) {
                 return;
             }
-            this._annotations.items = createAnnotations(this, items, this._getOption('commonAnnotationSettings'), this._getOption('customizeAnnotation'));
+            this._annotations.items = createAnnotations(this, items, this._getOption('commonAnnotationSettings'), this._getOption('customizeAnnotation'), this._pullOptions);
         },
-        _getAnnotationCoords() { return {}; }
+        _getAnnotationCoords() { return {}; },
+        _pullOptions() { return {}; }
     },
     customize(constructor) {
         constructor.addChange({
@@ -311,5 +392,6 @@ const corePlugin = {
 
 export const plugins = {
     core: corePlugin,
-    chart: chartPlugin
+    chart: chartPlugin,
+    polarChart: polarChartPlugin
 };

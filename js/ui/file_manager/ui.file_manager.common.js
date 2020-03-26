@@ -1,18 +1,7 @@
 import { when, Deferred } from '../../core/utils/deferred';
+import { extend } from '../../core/utils/extend';
 import { noop } from '../../core/utils/common';
 import typeUtils from '../../core/utils/type';
-
-const ErrorCode = {
-    NoAccess: 0,
-    FileExists: 1,
-    FileNotFound: 2,
-    DirectoryExists: 3,
-    DirectoryNotFound: 4,
-    WrongFileExtension: 5,
-    MaxFileSizeExceeded: 6,
-    InvalidSymbols: 7,
-    Other: 32767
-};
 
 const whenSome = function(arg, onSuccess, onError) {
     onSuccess = onSuccess || noop;
@@ -42,5 +31,52 @@ const whenSome = function(arg, onSuccess, onError) {
     return when.apply(null, deferreds);
 };
 
+const getDisplayFileSize = function(byteSize) {
+    const sizesTitles = [ 'B', 'KB', 'MB', 'GB', 'TB' ];
+    let index = 0;
+    let displaySize = byteSize;
+    while(displaySize >= 1024 && index <= sizesTitles.length - 1) {
+        displaySize /= 1024;
+        index++;
+    }
+    displaySize = Math.round(displaySize * 10) / 10;
+    return `${displaySize} ${sizesTitles[index]}`;
+};
+
+const extendAttributes = function(targetObject, sourceObject, objectKeysArray) {
+    objectKeysArray.forEach(objectKey => {
+        extend(true, targetObject, typeUtils.isDefined(sourceObject[objectKey])
+            ? { [objectKey]: sourceObject[objectKey] }
+            : {});
+    });
+    return targetObject;
+};
+
+const findItemsByKeys = (itemInfos, keys) => {
+    const itemMap = {};
+    keys.forEach(key => {
+        itemMap[key] = null;
+    });
+
+    itemInfos.forEach(itemInfo => {
+        const key = itemInfo.fileItem.key;
+        if(Object.prototype.hasOwnProperty.call(itemMap, key)) {
+            itemMap[key] = itemInfo;
+        }
+    });
+
+    const result = [];
+    keys.forEach(key => {
+        const itemInfo = itemMap[key];
+        if(itemInfo) {
+            result.push(itemInfo);
+        }
+    });
+
+    return result;
+};
+
 module.exports = whenSome;
-module.exports.ErrorCode = ErrorCode;
+module.exports.getDisplayFileSize = getDisplayFileSize;
+module.exports.extendAttributes = extendAttributes;
+module.exports.findItemsByKeys = findItemsByKeys;

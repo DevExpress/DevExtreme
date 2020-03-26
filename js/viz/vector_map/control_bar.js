@@ -1,51 +1,51 @@
-var _math = Math,
-    _min = _math.min,
-    _max = _math.max,
-    _round = _math.round,
-    _floor = _math.floor,
-    _sqrt = _math.sqrt,
+const _math = Math;
+const _min = _math.min;
+const _max = _math.max;
+const _round = _math.round;
+const _floor = _math.floor;
+const _sqrt = _math.sqrt;
 
-    vizUtils = require('../core/utils'),
-    _parseScalar = vizUtils.parseScalar,
-    parseHorizontalAlignment = vizUtils.enumParser(['left', 'center', 'right']),
-    parseVerticalAlignment = vizUtils.enumParser(['top', 'bottom']),
+const vizUtils = require('../core/utils');
+const _parseScalar = vizUtils.parseScalar;
+const parseHorizontalAlignment = vizUtils.enumParser(['left', 'center', 'right']);
+const parseVerticalAlignment = vizUtils.enumParser(['top', 'bottom']);
 
-    COMMAND_RESET = 'command-reset',
-    COMMAND_MOVE_UP = 'command-move-up',
-    COMMAND_MOVE_RIGHT = 'command-move-right',
-    COMMAND_MOVE_DOWN = 'command-move-down',
-    COMMAND_MOVE_LEFT = 'command-move-left',
-    COMMAND_ZOOM_IN = 'command-zoom-in',
-    COMMAND_ZOOM_OUT = 'command-zoom-out',
-    COMMAND_ZOOM_DRAG_LINE = 'command-zoom-drag-line',
-    COMMAND_ZOOM_DRAG = 'command-zoom-drag',
+const COMMAND_RESET = 'command-reset';
+const COMMAND_MOVE_UP = 'command-move-up';
+const COMMAND_MOVE_RIGHT = 'command-move-right';
+const COMMAND_MOVE_DOWN = 'command-move-down';
+const COMMAND_MOVE_LEFT = 'command-move-left';
+const COMMAND_ZOOM_IN = 'command-zoom-in';
+const COMMAND_ZOOM_OUT = 'command-zoom-out';
+const COMMAND_ZOOM_DRAG_LINE = 'command-zoom-drag-line';
+const COMMAND_ZOOM_DRAG = 'command-zoom-drag';
 
-    EVENT_TARGET_TYPE = 'control-bar',
+const EVENT_TARGET_TYPE = 'control-bar';
 
-    FLAG_CENTERING = 1,
-    FLAG_ZOOMING = 2,
+const FLAG_CENTERING = 1;
+const FLAG_ZOOMING = 2;
 
-    // TODO: This should be specified in options - seems like everything can be calculated from "buttonSize" and "zoomSliderLength"
-    SIZE_OPTIONS = {
-        bigCircleSize: 58,
-        smallCircleSize: 28,
-        buttonSize: 10,
-        arrowButtonOffset: 20,
-        incDecButtonSize: 11,
-        incButtonOffset: 66,
-        decButtonOffset: 227,
-        sliderLineStartOffset: 88.5,
-        sliderLineEndOffset: 205.5,
-        sliderLength: 20,
-        sliderWidth: 8,
-        trackerGap: 4
-    },
-    OFFSET_X = 30.5,
-    OFFSET_Y = 30.5,
-    TOTAL_WIDTH = 61,
-    TOTAL_HEIGHT = 274,
+// TODO: This should be specified in options - seems like everything can be calculated from "buttonSize" and "zoomSliderLength"
+const SIZE_OPTIONS = {
+    bigCircleSize: 58,
+    smallCircleSize: 28,
+    buttonSize: 10,
+    arrowButtonOffset: 20,
+    incDecButtonSize: 11,
+    incButtonOffset: 66,
+    decButtonOffset: 227,
+    sliderLineStartOffset: 88.5,
+    sliderLineEndOffset: 205.5,
+    sliderLength: 20,
+    sliderWidth: 8,
+    trackerGap: 4
+};
+const OFFSET_X = 30.5;
+const OFFSET_Y = 30.5;
+const TOTAL_WIDTH = 61;
+const TOTAL_HEIGHT = 274;
 
-    COMMAND_TO_TYPE_MAP = {};
+let COMMAND_TO_TYPE_MAP = {};
 
 COMMAND_TO_TYPE_MAP[COMMAND_RESET] = ResetCommand;
 COMMAND_TO_TYPE_MAP[COMMAND_MOVE_UP] = COMMAND_TO_TYPE_MAP[COMMAND_MOVE_RIGHT] = COMMAND_TO_TYPE_MAP[COMMAND_MOVE_DOWN] = COMMAND_TO_TYPE_MAP[COMMAND_MOVE_LEFT] = MoveCommand;
@@ -53,7 +53,7 @@ COMMAND_TO_TYPE_MAP[COMMAND_ZOOM_IN] = COMMAND_TO_TYPE_MAP[COMMAND_ZOOM_OUT] = Z
 COMMAND_TO_TYPE_MAP[COMMAND_ZOOM_DRAG] = ZoomDragCommand;
 
 function ControlBar(parameters) {
-    var that = this;
+    const that = this;
     that._params = parameters;
     that._createElements(parameters.renderer, parameters.container, parameters.dataKey);
     parameters.layoutControl.addItem(that);
@@ -68,7 +68,7 @@ ControlBar.prototype = {
     _flags: 0,
 
     dispose: function() {
-        var that = this;
+        const that = this;
         that._params.layoutControl.removeItem(that);
         that._root.linkRemove().linkOff();
         that._offProjection();
@@ -77,7 +77,7 @@ ControlBar.prototype = {
     },
 
     _subscribeToProjection: function(projection) {
-        var that = this;
+        const that = this;
         that._offProjection = projection.on({
             'engine': function() {
                 that._update();
@@ -95,8 +95,8 @@ ControlBar.prototype = {
     },
 
     _subscribeToTracker: function(tracker) {
-        var that = this,
-            isActive = false;
+        const that = this;
+        let isActive = false;
         that._offTracker = tracker.on({
             'start': function(arg) {
                 isActive = arg.data.name === EVENT_TARGET_TYPE;
@@ -119,7 +119,7 @@ ControlBar.prototype = {
     },
 
     _createCallbacks: function(projection) {
-        var that = this;
+        const that = this;
         that._callbacks = {
             reset: function(isCenter, isZoom) {
                 if(isCenter) {
@@ -145,9 +145,9 @@ ControlBar.prototype = {
     },
 
     _createElements: function(renderer, container, dataKey) {
-        var that = this,
-            buttonsGroups,
-            trackersGroup;
+        const that = this;
+        let buttonsGroups;
+        let trackersGroup;
 
         that._root = renderer.g().attr({ 'class': 'dxm-control-bar' }).linkOn(container, 'control-bar');
         buttonsGroups = that._buttonsGroup = renderer.g().attr({ 'class': 'dxm-control-buttons' }).append(that._root);
@@ -157,14 +157,14 @@ ControlBar.prototype = {
     },
 
     _createButtons: function(renderer, dataKey, group) {
-        var that = this,
-            options = SIZE_OPTIONS,
-            size = options.buttonSize / 2,
-            offset1 = options.arrowButtonOffset - size,
-            offset2 = options.arrowButtonOffset,
-            incDecButtonSize = options.incDecButtonSize / 2,
-            directionOptions = { 'stroke-linecap': 'square', fill: 'none' },
-            line = 'line';
+        const that = this;
+        const options = SIZE_OPTIONS;
+        const size = options.buttonSize / 2;
+        const offset1 = options.arrowButtonOffset - size;
+        const offset2 = options.arrowButtonOffset;
+        const incDecButtonSize = options.incDecButtonSize / 2;
+        const directionOptions = { 'stroke-linecap': 'square', fill: 'none' };
+        const line = 'line';
 
         renderer.circle(0, 0, options.bigCircleSize / 2).append(group);
         renderer.circle(0, 0, size).attr({ fill: 'none' }).append(group);
@@ -188,11 +188,11 @@ ControlBar.prototype = {
     },
 
     _createTrackers: function(renderer, dataKey, group) {
-        var options = SIZE_OPTIONS,
-            size = _round((options.arrowButtonOffset - options.trackerGap) / 2),
-            offset1 = options.arrowButtonOffset - size,
-            offset2 = _round(_sqrt(options.bigCircleSize * options.bigCircleSize / 4 - size * size)),
-            size2 = offset2 - offset1;
+        const options = SIZE_OPTIONS;
+        const size = _round((options.arrowButtonOffset - options.trackerGap) / 2);
+        const offset1 = options.arrowButtonOffset - size;
+        const offset2 = _round(_sqrt(options.bigCircleSize * options.bigCircleSize / 4 - size * size));
+        const size2 = offset2 - offset1;
 
         renderer.rect(-size, -size, size * 2, size * 2).data(dataKey, { index: COMMAND_RESET, name: EVENT_TARGET_TYPE }).append(group);
         renderer.rect(-size, -offset2, size * 2, size2).data(dataKey, { index: COMMAND_MOVE_UP, name: EVENT_TARGET_TYPE }).append(group);
@@ -224,7 +224,7 @@ ControlBar.prototype = {
     // END: Implementation of LayoutTarget interface
 
     _update: function() {
-        var that = this;
+        const that = this;
         that._isActive = that._isEnabled && that._flags && that._params.projection.isInvertible();
         if(that._isActive) {
             that._root.linkAppend();
@@ -236,7 +236,7 @@ ControlBar.prototype = {
     },
 
     setInteraction: function(interaction) {
-        var that = this;
+        const that = this;
         if(_parseScalar(interaction.centeringEnabled, true)) {
             that._flags |= FLAG_CENTERING;
         } else {
@@ -251,7 +251,7 @@ ControlBar.prototype = {
     },
 
     setOptions: function(options) {
-        var that = this;
+        const that = this;
         that._isEnabled = !!_parseScalar(options.enabled, true);
         that._margin = options.margin || 0;
         that._layoutOptions = {
@@ -265,12 +265,12 @@ ControlBar.prototype = {
     },
 
     _adjustZoom: function(zoom) {
-        var that = this,
-            transform,
-            y,
-            start = SIZE_OPTIONS.sliderLineStartOffset,
-            end = SIZE_OPTIONS.sliderLineEndOffset,
-            h = SIZE_OPTIONS.sliderWidth;
+        const that = this;
+        let transform;
+        let y;
+        const start = SIZE_OPTIONS.sliderLineStartOffset;
+        const end = SIZE_OPTIONS.sliderLineEndOffset;
+        const h = SIZE_OPTIONS.sliderWidth;
 
         that._zoomFactor = _max(_min(_round(zoom), that._zoomPartition), 0);
         transform = { translateY: -_round(that._zoomFactor * that._sliderUnitLength) };
@@ -285,7 +285,7 @@ ControlBar.prototype = {
     },
 
     _processStart: function(command, arg) {
-        var commandType;
+        let commandType;
         if(this._isActive) {
             commandType = COMMAND_TO_TYPE_MAP[command];
             this._command = commandType && commandType.flags & this._flags ? new commandType(this, command, arg) : null;
@@ -320,17 +320,17 @@ ResetCommand.prototype.update = function(command) {
 };
 
 ResetCommand.prototype.finish = function() {
-    var flags = this._owner._flags;
+    const flags = this._owner._flags;
     this._owner._callbacks.reset(!!(flags & FLAG_CENTERING), !!(flags & FLAG_ZOOMING));
     disposeCommand(this);
 };
 
 function MoveCommand(owner, command, arg) {
     this._command = command;
-    var timeout = null,
-        interval = 100,
-        dx = 0,
-        dy = 0;
+    let timeout = null;
+    const interval = 100;
+    let dx = 0;
+    let dy = 0;
     switch(this._command) {
         case COMMAND_MOVE_UP: dy = -10; break;
         case COMMAND_MOVE_RIGHT: dx = 10; break;
@@ -365,9 +365,9 @@ MoveCommand.prototype.finish = function() {
 function ZoomCommand(owner, command) {
     this._owner = owner;
     this._command = command;
-    var timeout = null,
-        interval = 150,
-        dZoom = this._command === COMMAND_ZOOM_IN ? 1 : -1;
+    let timeout = null;
+    const interval = 150;
+    const dZoom = this._command === COMMAND_ZOOM_IN ? 1 : -1;
     function callback() {
         owner._adjustZoom(owner._zoomFactor + dZoom);
         timeout = setTimeout(callback, interval);
@@ -400,7 +400,7 @@ function ZoomDragCommand(owner, command, arg) {
 ZoomDragCommand.flags = FLAG_ZOOMING;
 
 ZoomDragCommand.prototype.update = function(command, arg) {
-    var owner = this._owner;
+    const owner = this._owner;
     owner._adjustZoom(this._zoomFactor + owner._zoomPartition * (this._pos - arg.y) / owner._sliderLineLength);
 };
 
@@ -412,7 +412,7 @@ ZoomDragCommand.prototype.finish = function() {
 exports.ControlBar = ControlBar;
 
 ///#DEBUG
-var COMMAND_TO_TYPE_MAP__ORIGINAL = COMMAND_TO_TYPE_MAP;
+const COMMAND_TO_TYPE_MAP__ORIGINAL = COMMAND_TO_TYPE_MAP;
 exports._TESTS_stubCommandToTypeMap = function(map) {
     COMMAND_TO_TYPE_MAP = map;
 };

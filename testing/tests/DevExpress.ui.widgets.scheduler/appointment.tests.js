@@ -1,12 +1,12 @@
-var $ = require('jquery'),
-    SchedulerAppointment = require('ui/scheduler/ui.scheduler.appointment'),
-    fx = require('animation/fx');
+const $ = require('jquery');
+const SchedulerAppointment = require('ui/scheduler/ui.scheduler.appointment');
+const fx = require('animation/fx');
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler-appointment"></div>');
 });
 
-var moduleOptions = {
+const moduleOptions = {
     beforeEach: function() {
         fx.off = true;
         this.instance = $('#scheduler-appointment').dxSchedulerAppointment().dxSchedulerAppointment('instance');
@@ -63,7 +63,7 @@ QUnit.test('Scheduler appointment has right resizable config for vertical direct
 
     assert.ok(this.instance.$element().dxResizable, 'appointment has right class');
 
-    var resizableInstance = this.instance.$element().dxResizable('instance');
+    const resizableInstance = this.instance.$element().dxResizable('instance');
 
     assert.equal(resizableInstance.option('handles'), 'top bottom', 'Appointment can resize only horizontal');
     assert.equal(resizableInstance.option('step'), this.cellHeight, 'Resizable has a right step');
@@ -79,7 +79,7 @@ QUnit.test('Scheduler appointment has right resizable config for horizontal dire
 
     assert.ok(this.instance.$element().dxResizable, 'appointment has right class');
 
-    var resizableInstance = this.instance.$element().dxResizable('instance');
+    const resizableInstance = this.instance.$element().dxResizable('instance');
 
     assert.equal(resizableInstance.option('handles'), 'left right', 'Appointment can resize only horizontal');
     assert.equal(resizableInstance.option('step'), this.cellWidth, 'Resizable has a right step');
@@ -95,7 +95,7 @@ QUnit.test('Scheduler appointment has right resizing handles, horizontal directi
         reduced: 'head'
     });
 
-    var resizableInstance = this.instance.$element().dxResizable('instance');
+    const resizableInstance = this.instance.$element().dxResizable('instance');
 
     assert.equal(resizableInstance.option('handles'), 'left', 'Appointment has right resizing handle');
 
@@ -115,7 +115,7 @@ QUnit.test('Scheduler appointment has right resizing handles, horizontal directi
         reduced: 'head'
     });
 
-    var resizableInstance = this.instance.$element().dxResizable('instance');
+    const resizableInstance = this.instance.$element().dxResizable('instance');
 
     assert.equal(resizableInstance.option('handles'), 'right', 'Appointment has right resizing handle');
 

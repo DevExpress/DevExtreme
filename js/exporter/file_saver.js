@@ -45,7 +45,7 @@ exports.fileSaver = {
     },
 
     _linkDownloader: function(fileName, href) {
-        var exportLinkElement = domAdapter.createElement('a');
+        const exportLinkElement = domAdapter.createElement('a');
         exportLinkElement.download = fileName;
         exportLinkElement.href = href;
         exportLinkElement.target = '_blank'; // cors policy
@@ -54,8 +54,8 @@ exports.fileSaver = {
     },
 
     _formDownloader: function(proxyUrl, fileName, contentType, data) {
-        var formAttributes = { method: 'post', action: proxyUrl, enctype: 'multipart/form-data' },
-            exportForm = $('<form>').css({ 'display': 'none' }).attr(formAttributes);
+        const formAttributes = { method: 'post', action: proxyUrl, enctype: 'multipart/form-data' };
+        const exportForm = $('<form>').css({ 'display': 'none' }).attr(formAttributes);
 
         exportForm.append('<input type="hidden" name="fileName" value="' + fileName + '" />');
         exportForm.append('<input type="hidden" name="contentType" value="' + contentType + '" />');
@@ -75,7 +75,7 @@ exports.fileSaver = {
     },
 
     _winJSBlobSave: function(blob, fileName, format) {
-        var savePicker = new Windows.Storage.Pickers.FileSavePicker();
+        const savePicker = new Windows.Storage.Pickers.FileSavePicker();
         savePicker.suggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.documentsLibrary;
 
         const fileExtension = FILE_EXTESIONS[format];
@@ -89,7 +89,7 @@ exports.fileSaver = {
         savePicker.pickSaveFileAsync().then(function(file) {
             if(file) {
                 file.openAsync(Windows.Storage.FileAccessMode.readWrite).then(function(outputStream) {
-                    var inputStream = blob.msDetachStream();
+                    const inputStream = blob.msDetachStream();
                     Windows.Storage.Streams.RandomAccessStream.copyAsync(inputStream, outputStream).then(function() {
                         outputStream.flushAsync().done(function() {
                             inputStream.close();
@@ -106,7 +106,7 @@ exports.fileSaver = {
             // eslint-disable-next-line no-undef
             link.dispatchEvent(new MouseEvent('click', { cancelable: true }));
         } catch(e) {
-            var event = domAdapter.getDocument().createEvent('MouseEvents');
+            const event = domAdapter.getDocument().createEvent('MouseEvents');
             event.initMouseEvent('click', true, true, window, 0, 0, 0, 80, 20, false, false, false, false, 0, null);
             link.dispatchEvent(event);
         }
@@ -122,11 +122,11 @@ exports.fileSaver = {
             this._winJSBlobSave(data, fileName, format);
             this._blobSaved = true;
         } else {
-            var URL = window.URL || window.webkitURL || window.mozURL || window.msURL || window.oURL;
+            const URL = window.URL || window.webkitURL || window.mozURL || window.msURL || window.oURL;
 
             if(typeUtils.isDefined(URL)) {
-                var objectURL = URL.createObjectURL(data);
-                var downloadLink = this._linkDownloader(fileName, objectURL);
+                const objectURL = URL.createObjectURL(data);
+                const downloadLink = this._linkDownloader(fileName, objectURL);
 
                 setTimeout(() => {
                     URL.revokeObjectURL(objectURL);
@@ -160,7 +160,7 @@ exports.fileSaver = {
             } else {
                 if(!typeUtils.isDefined(navigator.userAgent.match(/iPad/i))) errors.log('E1034');
 
-                var downloadLink = this._linkDownloader(fileName, this._getDataUri(format, data));
+                const downloadLink = this._linkDownloader(fileName, this._getDataUri(format, data));
                 this._click(downloadLink);
             }
         }

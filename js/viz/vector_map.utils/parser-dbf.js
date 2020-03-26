@@ -1,10 +1,10 @@
-/* eslint-disable no-unused-vars*/
+/* eslint-disable no-unused-vars, no-var, one-var*/
 function parseDBF(stream, errors) {
-    var timeStart,
-        timeEnd,
-        header,
-        parseData,
-        records;
+    var timeStart;
+    var timeEnd;
+    var header;
+    var parseData;
+    var records;
     try {
         timeStart = new Date();
         header = parseDataBaseFileHeader(stream, errors);
@@ -18,16 +18,16 @@ function parseDBF(stream, errors) {
 }
 
 function parseDataBaseFileHeader(stream, errors) {
-    var i,
-        header = {
-            versionNumber: stream.ui8(),
-            lastUpdate: new Date(1900 + stream.ui8(), stream.ui8() - 1, stream.ui8()),
-            numberOfRecords: stream.ui32LE(),
-            headerLength: stream.ui16LE(),
-            recordLength: stream.ui16LE(),
-            fields: []
-        },
-        term;
+    var i;
+    var header = {
+        versionNumber: stream.ui8(),
+        lastUpdate: new Date(1900 + stream.ui8(), stream.ui8() - 1, stream.ui8()),
+        numberOfRecords: stream.ui32LE(),
+        headerLength: stream.ui16LE(),
+        recordLength: stream.ui16LE(),
+        fields: []
+    };
+    var term;
     stream.skip(20);
     for(i = (header.headerLength - stream.pos() - 1) / 32; i > 0; --i) {
         header.fields.push(parseFieldDescriptor(stream));
@@ -82,11 +82,12 @@ function DBF_FIELD_PARSER_DEFAULT(stream, length) {
 }
 
 function prepareDataBaseFileRecordParseData(header, errors) {
-    var list = [],
-        i = 0,
-        ii = header.fields.length,
-        item, field,
-        totalLength = 0;
+    var list = [];
+    var i = 0;
+    var ii = header.fields.length;
+    var item;
+    var field;
+    var totalLength = 0;
     for(i = 0; i < ii; ++i) {
         field = header.fields[i];
         item = {
@@ -108,13 +109,13 @@ function prepareDataBaseFileRecordParseData(header, errors) {
 }
 
 function parseDataBaseFileRecords(stream, recordCount, recordLength, parseData, errors) {
-    var i,
-        j,
-        jj = parseData.length,
-        pos,
-        records = [],
-        record,
-        pd;
+    var i;
+    var j;
+    var jj = parseData.length;
+    var pos;
+    var records = [];
+    var record;
+    var pd;
     for(i = 0; i < recordCount; ++i) {
         record = {};
         pos = stream.pos();

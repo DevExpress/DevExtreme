@@ -8,7 +8,7 @@
     @MATERIAL_LOOKUP_FONT_SIZE: 16px;
     @MATERIAL_LOOKUP_POPUP_CONTENT_TOP: 49px;
     @MATERIAL_LOOKUP_POPUP_CONTENT_PADDING: 20px;
-    @MATERIAL_LOOKUP_LIST_TOP: 70px;
+    @MATERIAL_LOOKUP_LIST_TOP: 66px;
 
     @MATERIAL_LOOKUP_ARROW_MARGIN: -6px;
     @MATERIAL_LOOKUP_ARROW_RIGHT: 10px;
@@ -26,7 +26,7 @@
     @MATERIAL_LOOKUP_FONT_SIZE: 13px;
     @MATERIAL_LOOKUP_POPUP_CONTENT_TOP: 49px;
     @MATERIAL_LOOKUP_POPUP_CONTENT_PADDING: 8px;
-    @MATERIAL_LOOKUP_LIST_TOP: 70px;
+    @MATERIAL_LOOKUP_LIST_TOP: 36px;
 
     @MATERIAL_LOOKUP_ARROW_MARGIN: -6px;
     @MATERIAL_LOOKUP_ARROW_RIGHT: 10px;
@@ -46,10 +46,24 @@
 
         .dx-lookup-field {
             padding: @MATERIAL_FILLED_TEXTEDITOR_INPUT_PADDING;
+            padding-right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING + @MATERIAL_BASE_ICON_SIZE;
         }
 
         .dx-lookup-arrow {
             right: @MATERIAL_BASE_ICON_SIZE / 2;
+        }
+
+        &.dx-invalid {
+            .dx-lookup-field {
+                padding-right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING + @MATERIAL_BASE_ICON_SIZE * 2;
+            }
+
+            &.dx-rtl {
+                .dx-lookup-field {
+                    padding-left: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING + @MATERIAL_BASE_ICON_SIZE * 2;
+                    padding-right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                }
+            }
         }
 
         &.dx-rtl,
@@ -57,6 +71,11 @@
             .dx-lookup-arrow {
                 left: @MATERIAL_BASE_ICON_SIZE / 2;
                 right: auto;
+            }
+
+            .dx-lookup-field {
+                padding-left: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING + @MATERIAL_BASE_ICON_SIZE;
+                padding-right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
             }
         }
     }
@@ -66,6 +85,28 @@
 
         .dx-lookup-field {
             padding: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_PADDING;
+            padding-right: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING + @MATERIAL_BASE_ICON_SIZE;
+        }
+
+        &.dx-invalid {
+            .dx-lookup-field {
+                padding-right: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING + @MATERIAL_BASE_ICON_SIZE * 2;
+            }
+
+            &.dx-rtl {
+                .dx-lookup-field {
+                    padding-left: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING + @MATERIAL_BASE_ICON_SIZE * 2;
+                    padding-right: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                }
+            }
+        }
+
+        &.dx-rtl,
+        .dx-rtl & {
+            .dx-lookup-field {
+                padding-left: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING + @MATERIAL_BASE_ICON_SIZE;
+                padding-right: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+            }
         }
     }
 
@@ -148,7 +189,7 @@
 }
 
 .dx-lookup-arrow {
-    .dx-icon-spindown;
+    .dx-icon(spindown);
 
     width: @MATERIAL_BASE_ICON_SIZE;
     color: @lookup-icon-color;

@@ -1,8 +1,9 @@
-var jQuery = require('jquery');
-var eventsEngine = require('../../events/core/events_engine');
-var useJQuery = require('./use_jquery')();
-var registerEventCallbacks = require('../../events/core/event_registrator_callbacks');
-var domAdapter = require('../../core/dom_adapter');
+import jQuery from 'jquery';
+import eventsEngine from '../../events/core/events_engine';
+import useJQueryFn from './use_jquery';
+import registerEventCallbacks from '../../events/core/event_registrator_callbacks';
+import domAdapter from '../../core/dom_adapter';
+const useJQuery = useJQueryFn();
 
 if(useJQuery) {
     registerEventCallbacks.add(function(name, eventObject) {

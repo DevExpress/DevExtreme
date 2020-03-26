@@ -1,6 +1,6 @@
 /* globals Intl */
 import dxConfig from '../../core/config';
-import { locale } from '../core';
+import { locale, getValueByClosestLocale } from '../core';
 import dxVersion from '../../core/version';
 import { compare as compareVersions } from '../../core/utils/version';
 import openXmlCurrencyFormat from '../open_xml_currency_format';
@@ -133,7 +133,9 @@ module.exports = {
         return this._extractCurrencySymbolInfo(formatter.format(0));
     },
     _extractCurrencySymbolInfo: function(currencyValueString) {
-        const match = detectCurrencySymbolRegex.exec(currencyValueString) || []; const position = match[1] ? 'before' : 'after'; const symbol = match[1] || match[4] || '';
+        const match = detectCurrencySymbolRegex.exec(currencyValueString) || [];
+        const position = match[1] ? 'before' : 'after';
+        const symbol = match[1] || match[4] || '';
         const delimiter = match[2] || match[3] || '';
 
         return {
@@ -148,15 +150,16 @@ module.exports = {
             currency = dxConfig().defaultCurrency;
         }
 
-        let symbolInfo = this._getCurrencySymbolInfo(currency);
+        const symbolInfo = this._getCurrencySymbolInfo(currency);
         return {
             'symbol': symbolInfo.symbol
         };
     },
     getOpenXmlCurrencyFormat: function(currency) {
-        const currencyValue = currency || dxConfig().defaultCurrency;
-        const currencySymbol = this._getCurrencySymbolInfo(currencyValue).symbol;
+        const targetCurrency = currency || dxConfig().defaultCurrency;
+        const currencySymbol = this._getCurrencySymbolInfo(targetCurrency).symbol;
+        const closestAccountingFormat = getValueByClosestLocale(locale => accountingFormats[locale]);
 
-        return openXmlCurrencyFormat(currencySymbol, accountingFormats[locale()]);
+        return openXmlCurrencyFormat(currencySymbol, closestAccountingFormat);
     }
 };

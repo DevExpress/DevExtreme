@@ -63,6 +63,7 @@ class FileManagerAdaptivityControl extends Widget {
         }
         $(this._drawer.content()).removeClass(DRAWER_PANEL_CONTENT_INITIAL);
         $(this._drawer.content()).css('width', e.leftPanelWidth);
+        this._drawer._initSize();
         this._drawer.resizeContent();
     }
 
@@ -84,7 +85,6 @@ class FileManagerAdaptivityControl extends Widget {
         if(oldState !== this._isInAdaptiveState) {
             this.toggleDrawer(!this._isInAdaptiveState, true);
             this._raiseAdaptiveStateChanged(this._isInAdaptiveState);
-            this._splitter.toggleState(!this._isInAdaptiveState);
         }
     }
 
@@ -133,6 +133,8 @@ class FileManagerAdaptivityControl extends Widget {
     toggleDrawer(showing, skipAnimation) {
         this._drawer.option('animationEnabled', !skipAnimation);
         this._drawer.toggle(showing);
+        const isSplitterActive = this._drawer.option('opened') && !this.isInAdaptiveState();
+        this._splitter.toggleState(isSplitterActive);
     }
 }
 

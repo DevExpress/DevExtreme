@@ -1,14 +1,14 @@
-var proto = require('./tree_map.base').prototype,
-    nodeProto = require('./node').prototype,
+const proto = require('./tree_map.base').prototype;
+const nodeProto = require('./node').prototype;
 
-    _extend = require('../../core/utils/extend').extend;
+const _extend = require('../../core/utils/extend').extend;
 
 proto._eventsMap.onNodesInitialized = { name: 'nodesInitialized' };
 proto._eventsMap.onNodesRendering = { name: 'nodesRendering' };
 
 proto._createProxyType = function() {
-    var that = this,
-        nodes;
+    const that = this;
+    let nodes;
 
     Proxy.prototype = {
         constructor: Proxy,
@@ -18,20 +18,20 @@ proto._createProxyType = function() {
         },
 
         getChild: function(index) {
-            var _nodes = nodes[this._id].nodes;
+            const _nodes = nodes[this._id].nodes;
             return _nodes ? _nodes[index].proxy : null;
         },
 
         getChildrenCount: function() {
-            var _nodes = nodes[this._id].nodes;
+            const _nodes = nodes[this._id].nodes;
             return _nodes ? _nodes.length : 0;
         },
 
         getAllChildren: function() {
-            var _nodes = nodes[this._id].nodes,
-                i,
-                ii = _nodes && _nodes.length,
-                list = [];
+            const _nodes = nodes[this._id].nodes;
+            let i;
+            const ii = _nodes && _nodes.length;
+            const list = [];
 
             for(i = 0; i < ii; ++i) {
                 list.push(_nodes[i].proxy);
@@ -40,7 +40,7 @@ proto._createProxyType = function() {
         },
 
         getAllNodes: function() {
-            var list = [];
+            const list = [];
 
             collectNodes(nodes[this._id], list);
             return list;
@@ -55,8 +55,8 @@ proto._createProxyType = function() {
         },
 
         value: function(arg) {
-            var node = nodes[this._id],
-                result;
+            const node = nodes[this._id];
+            let result;
 
             if(arg !== undefined) {
                 updateValue(node, arg > 0 ? Number(arg) : 0);
@@ -69,8 +69,8 @@ proto._createProxyType = function() {
         },
 
         label: function(arg) {
-            var node = nodes[this._id],
-                result;
+            const node = nodes[this._id];
+            let result;
 
             if(arg !== undefined) {
                 node.customLabel = arg ? String(arg) : null;
@@ -83,7 +83,7 @@ proto._createProxyType = function() {
         },
 
         customize: function(settings) {
-            var node = nodes[this._id];
+            const node = nodes[this._id];
 
             if(settings) {
                 node._custom = node._custom || {};
@@ -95,7 +95,7 @@ proto._createProxyType = function() {
         },
 
         resetCustomization: function() {
-            var node = nodes[this._id];
+            const node = nodes[this._id];
 
             node._custom = node._partialState = node._partialLabelState = null;
             change(node, ['TILES', 'LABELS']);
@@ -105,7 +105,7 @@ proto._createProxyType = function() {
     that._extendProxyType(Proxy.prototype);
 
     function Proxy(node) {
-        var that = this;
+        const that = this;
 
         node.proxy = that;
         that._id = node._id;
@@ -128,7 +128,7 @@ proto._createProxyType = function() {
 };
 
 function change(node, codes) {
-    var ctx = node.ctx;
+    const ctx = node.ctx;
 
     ctx.suspend();
     ctx.change(codes);
@@ -136,9 +136,9 @@ function change(node, codes) {
 }
 
 function collectNodes(node, list) {
-    var nodes = node.nodes,
-        i,
-        ii = nodes && nodes.length;
+    const nodes = node.nodes;
+    let i;
+    const ii = nodes && nodes.length;
 
     for(i = 0; i < ii; ++i) {
         list.push(nodes[i].proxy);
@@ -147,7 +147,7 @@ function collectNodes(node, list) {
 }
 
 function updateValue(node, value) {
-    var delta = value - node.value;
+    const delta = value - node.value;
 
     while(node) {
         node.value += delta;
@@ -157,15 +157,15 @@ function updateValue(node, value) {
 
 proto._extendProxyType = require('../../core/utils/common').noop;
 
-var _resetNodes = proto._resetNodes;
+const _resetNodes = proto._resetNodes;
 proto._resetNodes = function() {
     _resetNodes.call(this);
     this._eventTrigger('nodesRendering', { node: this._topNode.proxy });
 };
 
-var _updateStyles = nodeProto.updateStyles;
+const _updateStyles = nodeProto.updateStyles;
 nodeProto.updateStyles = function() {
-    var that = this;
+    const that = this;
 
     _updateStyles.call(that);
     if(that._custom) {
@@ -174,10 +174,10 @@ nodeProto.updateStyles = function() {
     }
 };
 
-var _updateLabelStyle = nodeProto.updateLabelStyle;
+const _updateLabelStyle = nodeProto.updateLabelStyle;
 nodeProto.updateLabelStyle = function() {
-    var that = this,
-        custom = that._custom;
+    const that = this;
+    const custom = that._custom;
 
     _updateLabelStyle.call(that);
     if(custom && custom.label) {
@@ -187,7 +187,7 @@ nodeProto.updateLabelStyle = function() {
 };
 
 function calculatePartialLabelState(node, settings) {
-    var state = node.ctx.calculateLabelState(settings);
+    const state = node.ctx.calculateLabelState(settings);
     if('visible' in settings) {
         state.visible = !!settings.visible;
     }
@@ -199,7 +199,7 @@ proto.getRootNode = function() {
 };
 
 proto.resetNodes = function() {
-    var context = this._context;
+    const context = this._context;
 
     context.suspend();
     context.change(['NODES_CREATE']);

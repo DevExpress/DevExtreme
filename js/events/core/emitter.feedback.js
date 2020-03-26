@@ -1,20 +1,20 @@
-var Class = require('../../core/class'),
-    commonUtils = require('../../core/utils/common'),
-    contains = require('../../core/utils/dom').contains,
-    devices = require('../../core/devices'),
-    eventUtils = require('../utils'),
-    pointerEvents = require('../pointer'),
-    Emitter = require('./emitter'),
-    registerEmitter = require('./emitter_registrator');
+const Class = require('../../core/class');
+const commonUtils = require('../../core/utils/common');
+const contains = require('../../core/utils/dom').contains;
+const devices = require('../../core/devices');
+const eventUtils = require('../utils');
+const pointerEvents = require('../pointer');
+const Emitter = require('./emitter');
+const registerEmitter = require('./emitter_registrator');
 
-var ACTIVE_EVENT_NAME = 'dxactive',
-    INACTIVE_EVENT_NAME = 'dxinactive',
+const ACTIVE_EVENT_NAME = 'dxactive';
+const INACTIVE_EVENT_NAME = 'dxinactive';
 
-    ACTIVE_TIMEOUT = 30,
-    INACTIVE_TIMEOUT = 400;
+const ACTIVE_TIMEOUT = 30;
+const INACTIVE_TIMEOUT = 400;
 
 
-var FeedbackEvent = Class.inherit({
+const FeedbackEvent = Class.inherit({
 
     ctor: function(timeout, fire) {
         this._timeout = timeout;
@@ -22,7 +22,7 @@ var FeedbackEvent = Class.inherit({
     },
 
     start: function() {
-        var that = this;
+        const that = this;
 
         this._schedule(function() {
             that.force();
@@ -55,9 +55,9 @@ var FeedbackEvent = Class.inherit({
 });
 
 
-var activeFeedback;
+let activeFeedback;
 
-var FeedbackEmitter = Emitter.inherit({
+const FeedbackEmitter = Emitter.inherit({
 
     ctor: function() {
         this.callBase.apply(this, arguments);
@@ -81,8 +81,8 @@ var FeedbackEmitter = Emitter.inherit({
 
     start: function(e) {
         if(activeFeedback) {
-            var activeChildExists = contains(this.getElement().get(0), activeFeedback.getElement().get(0));
-            var childJustActivated = !activeFeedback._active.fired();
+            const activeChildExists = contains(this.getElement().get(0), activeFeedback.getElement().get(0));
+            const childJustActivated = !activeFeedback._active.fired();
 
             if(activeChildExists && childJustActivated) {
                 this._cancel();
@@ -98,16 +98,16 @@ var FeedbackEmitter = Emitter.inherit({
     },
 
     _initEvents: function(e) {
-        var that = this,
+        const that = this;
 
-            eventTarget = this._getEmitterTarget(e),
+        const eventTarget = this._getEmitterTarget(e);
 
-            mouseEvent = eventUtils.isMouseEvent(e),
-            isSimulator = devices.isSimulator(),
-            deferFeedback = isSimulator || !mouseEvent,
+        const mouseEvent = eventUtils.isMouseEvent(e);
+        const isSimulator = devices.isSimulator();
+        const deferFeedback = isSimulator || !mouseEvent;
 
-            activeTimeout = commonUtils.ensureDefined(this.activeTimeout, ACTIVE_TIMEOUT),
-            inactiveTimeout = commonUtils.ensureDefined(this.inactiveTimeout, INACTIVE_TIMEOUT);
+        const activeTimeout = commonUtils.ensureDefined(this.activeTimeout, ACTIVE_TIMEOUT);
+        const inactiveTimeout = commonUtils.ensureDefined(this.inactiveTimeout, INACTIVE_TIMEOUT);
 
         this._active = new FeedbackEvent(deferFeedback ? activeTimeout : 0, function() {
             that._fireEvent(ACTIVE_EVENT_NAME, e, { target: eventTarget });
@@ -123,7 +123,7 @@ var FeedbackEmitter = Emitter.inherit({
     },
 
     end: function(e) {
-        var skipTimers = e.type !== pointerEvents.up;
+        const skipTimers = e.type !== pointerEvents.up;
 
         if(skipTimers) {
             this._active.stop();
@@ -156,7 +156,7 @@ var FeedbackEmitter = Emitter.inherit({
 
 });
 FeedbackEmitter.lock = function(deferred) {
-    var lockInactive = activeFeedback ? activeFeedback.lockInactive() : commonUtils.noop;
+    const lockInactive = activeFeedback ? activeFeedback.lockInactive() : commonUtils.noop;
 
     deferred.done(lockInactive);
 };

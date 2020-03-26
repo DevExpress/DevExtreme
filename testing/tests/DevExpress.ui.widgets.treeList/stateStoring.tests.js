@@ -1,5 +1,5 @@
 QUnit.testStart(function() {
-    var markup =
+    const markup =
     '<!--qunit-fixture-->\
         <div id="container">\
             <div id="treeList">\
@@ -51,7 +51,7 @@ QUnit.module('State Storing', {
 
 QUnit.test('Apply state storing', function(assert) {
     // arrange
-    var rows;
+    let rows;
 
     // act
     this.setupDataGridModules({
@@ -86,7 +86,7 @@ QUnit.test('Apply state storing', function(assert) {
 
 QUnit.test('Save user state', function(assert) {
     // arrange
-    var state = {};
+    let state = {};
 
     // act
     this.setupDataGridModules({
@@ -121,7 +121,7 @@ QUnit.test('Save user state', function(assert) {
 
 QUnit.test('The expandRowKeys state should not persist when autoExpandAll is enabled', function(assert) {
     // arrange
-    var state = {};
+    let state = {};
 
     // act
     this.setupDataGridModules({
@@ -146,19 +146,19 @@ QUnit.test('The expandRowKeys state should not persist when autoExpandAll is ena
 // T811724, T824333
 QUnit.test('customSave should be fired after expand', function(assert) {
     // arrange
-    var state = {
-            columns: [
-                { visibleIndex: 0, dataField: 'name', dataType: 'string', visible: true },
-                { visibleIndex: 1, dataField: 'age', dataType: 'number', visible: true }
-            ],
-            filterPanel: {},
-            filterValue: null,
-            expandedRowKeys: [1],
-            pageIndex: 0,
-            pageSize: 20,
-            searchText: ''
-        },
-        customSaveCallCount = 0;
+    let state = {
+        columns: [
+            { visibleIndex: 0, dataField: 'name', dataType: 'string', visible: true },
+            { visibleIndex: 1, dataField: 'age', dataType: 'number', visible: true }
+        ],
+        filterPanel: {},
+        filterValue: null,
+        expandedRowKeys: [1],
+        pageIndex: 0,
+        pageSize: 20,
+        searchText: ''
+    };
+    let customSaveCallCount = 0;
 
     // act
     this.setupDataGridModules({
@@ -187,4 +187,44 @@ QUnit.test('customSave should be fired after expand', function(assert) {
     // assert
     assert.strictEqual(customSaveCallCount, 1, 'customSave is called once after expandRow');
     assert.deepEqual(state.expandedRowKeys, [1, 2], 'expandedRowKeys in state is correct');
+});
+
+// T851561
+QUnit.test('The expandedRowKeys should be updated in the state storing when expanding/collapsing nodes', function(assert) {
+    // arrange
+    let state = {};
+
+    this.setupDataGridModules({
+        stateStoring: {
+            enabled: true,
+            type: 'custom',
+            customLoad: function() {
+                return state;
+            },
+            customSave: function(arg) {
+                state = arg;
+            },
+            savingTimeout: 0
+        }
+    });
+
+    // act
+    this.expandRow(1);
+    this.clock.tick();
+
+    // assert
+    let expandedRowKeys = this.option('expandedRowKeys');
+    assert.deepEqual(expandedRowKeys, [1], 'expandedRowKeys');
+    assert.deepEqual(state.expandedRowKeys, [1], 'expandedRowKeys has been updated in the state storage');
+    assert.notStrictEqual(state.expandedRowKeys, this.option('expandedRowKeys'), 'expandedRowKeys has a different instance in the state storage');
+
+    // act
+    this.collapseRow(1);
+    this.clock.tick();
+
+    // assert
+    expandedRowKeys = this.option('expandedRowKeys');
+    assert.deepEqual(expandedRowKeys, [], 'expandedRowKeys');
+    assert.deepEqual(state.expandedRowKeys, [], 'expandedRowKeys has been updated in the state storage');
+    assert.notStrictEqual(state.expandedRowKeys, this.option('expandedRowKeys'), 'expandedRowKeys has a different instance in the state storage');
 });

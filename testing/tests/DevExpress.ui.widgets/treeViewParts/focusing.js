@@ -1,28 +1,28 @@
 /* global DATA, internals, initTree */
 
 import $ from 'jquery';
-import { noop } from 'core/utils/common';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import devices from 'core/devices';
+import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 
-var NODE_CLASS = 'dx-treeview-node',
-    ITEM_CLASS = 'dx-treeview-item',
-    SELECT_ALL_ITEM_CLASS = 'dx-treeview-select-all-item',
-    TOGGLE_ITEM_VISIBILITY_CLASS = 'dx-treeview-toggle-item-visibility';
+const NODE_CLASS = 'dx-treeview-node';
+const ITEM_CLASS = 'dx-treeview-item';
+const SELECT_ALL_ITEM_CLASS = 'dx-treeview-select-all-item';
+const TOGGLE_ITEM_VISIBILITY_CLASS = 'dx-treeview-toggle-item-visibility';
 
 QUnit.module('Focusing');
 
 QUnit.testInActiveWindow('item should have focus-state class after click on it', function(assert) {
-    var treeViewData = DATA[0];
-    var $treeView = initTree({
-            items: treeViewData,
-            focusStateEnabled: true
-        }),
-        $item = $treeView.find('.' + internals.ITEM_CLASS).eq(0),
-        $node = $treeView.find('.' + internals.NODE_CLASS).eq(0);
+    const treeViewData = DATA[0];
+    const $treeView = initTree({
+        items: treeViewData,
+        focusStateEnabled: true
+    });
+    const $item = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+    const $node = $treeView.find('.' + internals.NODE_CLASS).eq(0);
 
-    var treeView = $treeView.dxTreeView('instance');
+    const treeView = $treeView.dxTreeView('instance');
 
     $item.trigger('dxpointerdown');
 
@@ -31,15 +31,15 @@ QUnit.testInActiveWindow('item should have focus-state class after click on it',
 });
 
 QUnit.testInActiveWindow('disabled item should not have focus-state class after click on it', function(assert) {
-    var treeViewData = $.extend(true, [], DATA[0]);
+    const treeViewData = $.extend(true, [], DATA[0]);
     treeViewData[0].disabled = true;
 
-    var $treeView = initTree({
-            items: treeViewData,
-            focusStateEnabled: true
-        }),
-        $item = $treeView.find('.' + internals.ITEM_CLASS).eq(0),
-        $node = $treeView.find('.' + internals.NODE_CLASS).eq(0);
+    const $treeView = initTree({
+        items: treeViewData,
+        focusStateEnabled: true
+    });
+    const $item = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+    const $node = $treeView.find('.' + internals.NODE_CLASS).eq(0);
 
     $item.trigger('dxpointerdown');
 
@@ -47,60 +47,116 @@ QUnit.testInActiveWindow('disabled item should not have focus-state class after 
 });
 
 QUnit.testInActiveWindow('widget should not have focus-state class after click on arrow', function(assert) {
-    var treeViewData = DATA[0];
-    var $treeView = initTree({
-            items: treeViewData,
-            focusStateEnabled: true
-        }),
-        $arrow = $treeView.find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(0),
-        $node = $treeView.find('.' + internals.NODE_CLASS).eq(0);
+    const treeViewData = DATA[0];
+    const $treeView = initTree({
+        items: treeViewData,
+        focusStateEnabled: true
+    });
+    const $arrow = $treeView.find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(0);
+    const $node = $treeView.find('.' + internals.NODE_CLASS).eq(0);
 
     $arrow.trigger('dxclick');
 
     assert.ok(!$node.hasClass('dx-state-focused'), 'focus state was toggle after click');
 });
 
-QUnit.test('focus on the item should move scroll position to this item (T226868)', function(assert) {
-    assert.expect(1);
+const configs = [];
+['up', 'down', 'left', 'right', 'first', 'last'].forEach(direction => {
+    ['item1', 'item1_1', 'item1_1_1', 'item1_1_1_1', 'item2', 'item2_1', 'item2_1_1', 'item2_1_1_1', 'item3', 'item3_1', 'item3_1_1', 'item3_1_1_1', 'item4', 'item4_1', 'item4_1_1', 'item4_1_1_1'].forEach(initialFocusedKey => {
+        [false, true].forEach(expanded => {
+            configs.push({ expanded, direction, initialFocusedKey });
+        });
+    });
+});
 
-    if(devices.real().deviceType !== 'desktop') {
-        assert.ok(true, 'unnecessary test on mobile devices');
-        return;
-    }
-
-    var $treeView = initTree({
-            items: [{ id: 1, text: 'item 1' }, { id: 2, text: 'item 2', expanded: true, items: [{ id: 3, text: 'item 3' }] }],
+configs.forEach(config => {
+    QUnit.test(`all.Expanded: ${config.expanded} -> emulateFocus(key:${config.initialFocusedKey}) -> moveFocus('${config.direction}'); (T226868)`, function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'unnecessary test on mobile devices');
+            return;
+        }
+        const wrapper = new TreeViewTestWrapper({
+            items: [
+                { id: 'item1', expanded: config.expanded, items: [{ id: 'item1_1', expanded: config.expanded, items: [{ id: 'item1_1_1', expanded: config.expanded, items: [{ id: 'item1_1_1_1_1', expanded: config.expanded }] }] }] },
+                { id: 'item2', expanded: config.expanded, items: [{ id: 'item2_1', expanded: config.expanded, items: [{ id: 'item2_1_1', expanded: config.expanded, items: [{ id: 'item2_1_1_1_1', expanded: config.expanded }] }] }] },
+                { id: 'item3', expanded: config.expanded, items: [{ id: 'item3_1', expanded: config.expanded, items: [{ id: 'item3_1_1', expanded: config.expanded, items: [{ id: 'item3_1_1_1_1', expanded: config.expanded }] }] }] },
+                { id: 'item4', expanded: config.expanded, items: [{ id: 'item4_1', expanded: config.expanded, items: [{ id: 'item4_1_1', expanded: config.expanded, items: [{ id: 'item4_1_1_1_1', expanded: config.expanded }] }] }] }
+            ],
+            displayExpr: 'id',
             focusStateEnabled: true,
-            height: 40
-        }),
-        $item = $treeView.find('.' + internals.ITEM_CLASS).eq(1),
-        scrollable = $treeView.find('.dx-scrollable').dxScrollable('instance');
+            scrollDirection: 'both',
+            height: 150,
+            width: 150
+        });
 
-    scrollable.option('onScroll', function(args) {
-        assert.equal(args.scrollOffset.top, 24, 'scrolled to the item');
-        scrollable.option('onScroll', noop);
+        const $nodes = wrapper.getElement().find(`.${NODE_CLASS}`);
+        const $node = wrapper.getElement().find(`[data-item-id="${config.initialFocusedKey}"]`);
+        if(!$node.length) {
+            assert.ok(true, 'not real scenario');
+            return;
+        }
+
+        const $item = $node.find('.dx-treeview-item').eq(0);
+        wrapper.instance.scrollToItem($item);
+        $item.trigger('dxpointerdown');
+
+        wrapper.instance._moveFocus(config.direction, {});
+        const nextFocusedKey = getNextFocusedKey($nodes, $node, config.direction);
+        const actualFocusedItemKey = $(wrapper.instance.option('focusedElement')).attr('data-item-id');
+        assert.equal(nextFocusedKey, actualFocusedItemKey);
+        wrapper.checkNodeIsInVisibleArea(nextFocusedKey);
     });
 
-    $item.trigger('dxpointerdown');
+    function getNextFocusedKey($nodes, $node, direction) {
+        const firstNodeIndex = 0;
+        const lastNodeIndex = $nodes.length - 1;
+        const currentNodeIndex = $nodes.index($node);
 
+        let nextNodeIndex;
+        if(direction === 'up') {
+            nextNodeIndex = currentNodeIndex - 1;
+        } else if(direction === 'down') {
+            nextNodeIndex = currentNodeIndex + 1;
+        } else if(direction === 'first') {
+            nextNodeIndex = 0;
+        } else if(direction === 'last') {
+            nextNodeIndex = lastNodeIndex;
+        } else if(direction === 'left') {
+            nextNodeIndex = $node.attr('aria-expanded') === 'true' || $node.attr('aria-level') === '1'
+                ? currentNodeIndex
+                : currentNodeIndex - 1;
+        } else {
+            nextNodeIndex = $node.attr('aria-expanded') !== 'true' || $node.attr('aria-level') === '4'
+                ? currentNodeIndex
+                : currentNodeIndex + 1;
+        }
+
+        if(nextNodeIndex < firstNodeIndex) {
+            nextNodeIndex = lastNodeIndex;
+        } else if(nextNodeIndex > lastNodeIndex) {
+            nextNodeIndex = firstNodeIndex;
+        }
+
+        return $nodes.eq(nextNodeIndex).attr('data-item-id');
+    }
 });
 
 QUnit.test('PointerDown event at checkbox should not be ignored', function(assert) {
-    var data = [
+    const data = [
         { id: 1, parentId: 0, text: 'Cats' }
     ];
 
-    var $treeView = initTree({
+    const $treeView = initTree({
         dataSource: data,
         dataStructure: 'plain',
         showCheckBoxesMode: 'normal'
     });
 
-    var treeView = $treeView.dxTreeView('instance');
-    var pointerDownStub = sinon.stub(treeView, '_itemPointerDownHandler');
+    const treeView = $treeView.dxTreeView('instance');
+    const pointerDownStub = sinon.stub(treeView, '_itemPointerDownHandler');
 
-    var $node = $treeView.find('.' + NODE_CLASS).eq(0),
-        $checkBox = $node.find('.dx-checkbox');
+    const $node = $treeView.find('.' + NODE_CLASS).eq(0);
+    const $checkBox = $node.find('.dx-checkbox');
 
     $checkBox.trigger('dxpointerdown');
 
@@ -108,21 +164,21 @@ QUnit.test('PointerDown event at checkbox should not be ignored', function(asser
 });
 
 QUnit.test('PointerDown event at expansion arrow should not be ignored', function(assert) {
-    var data = [
+    const data = [
         { id: 1, parentId: 0, text: 'Cats' },
         { id: 2, parentId: 1, text: 'Maine Coon' }
     ];
 
-    var $treeView = initTree({
+    const $treeView = initTree({
         dataSource: data,
         dataStructure: 'plain'
     });
 
-    var treeView = $treeView.dxTreeView('instance');
-    var pointerDownStub = sinon.stub(treeView, '_itemPointerDownHandler');
+    const treeView = $treeView.dxTreeView('instance');
+    const pointerDownStub = sinon.stub(treeView, '_itemPointerDownHandler');
 
-    var $node = $treeView.find('.' + NODE_CLASS).eq(0),
-        $arrow = $node.find('.' + TOGGLE_ITEM_VISIBILITY_CLASS);
+    const $node = $treeView.find('.' + NODE_CLASS).eq(0);
+    const $arrow = $node.find('.' + TOGGLE_ITEM_VISIBILITY_CLASS);
 
     $arrow.trigger('dxpointerdown');
 
@@ -130,37 +186,26 @@ QUnit.test('PointerDown event at expansion arrow should not be ignored', functio
 });
 
 QUnit.test('Scroll should not jump down when focusing on item (T492496)', function(assert) {
-    // arrange
-    var $treeView = initTree({
-            items: [{ id: 1, text: 'item 1' }, { id: 2, text: 'item 2', expanded: true, items: [{ id: 3, text: 'item 3' }] }],
-            focusStateEnabled: true,
-            height: 40
-        }),
-        $items = $treeView.find('.' + ITEM_CLASS),
-        scrollable = $treeView.find('.dx-scrollable').dxScrollable('instance'),
-        clock = sinon.useFakeTimers();
+    const $treeView = initTree({
+        items: [{ id: 1, text: 'item 1' }, { id: 2, text: 'item 2', expanded: true, items: [{ id: 3, text: 'item 3' }] }],
+        focusStateEnabled: true,
+        height: 40
+    });
+    const $items = $treeView.find('.' + ITEM_CLASS);
+    const scrollable = $treeView.find('.dx-scrollable').dxScrollable('instance');
+    const clock = sinon.useFakeTimers();
 
     try {
+        scrollable.scrollTo({ y: 56 });
         $items.last().trigger('dxpointerdown');
-
-        // assert
         assert.equal(scrollable.scrollTop(), 56, 'scroll top position');
 
         scrollable.scrollTo({ y: 0 });
-
-        // assert
-        assert.equal(scrollable.scrollTop(), 0, 'scroll top position');
-
-        // act
         $treeView.trigger('focusin');
-
-        // assert
         assert.equal(scrollable.scrollTop(), 0, 'scroll top position');
 
         $items.first().trigger('dxpointerdown');
         clock.tick();
-
-        // assert
         assert.equal(scrollable.scrollTop(), 0, 'scroll top position');
     } finally {
         clock.restore();
@@ -168,38 +213,29 @@ QUnit.test('Scroll should not jump down when focusing on item (T492496)', functi
 });
 
 QUnit.test('Scroll should not jump down when focusing on Select All (T517945)', function(assert) {
-    // arrange
-    var $treeView = initTree({
-            items: [{ id: 1, text: 'item 1' }, { id: 2, text: 'item 2', expanded: true, items: [{ id: 3, text: 'item 3' }] }],
-            showCheckBoxesMode: 'selectAll',
-            focusStateEnabled: true,
-            height: 40
-        }),
-        $items = $treeView.find('.' + ITEM_CLASS),
-        scrollable = $treeView.find('.dx-scrollable').dxScrollable('instance'),
-        clock = sinon.useFakeTimers();
+    const $treeView = initTree({
+        items: [{ id: 1, text: 'item 1' }, { id: 2, text: 'item 2', expanded: true, items: [{ id: 3, text: 'item 3' }] }],
+        showCheckBoxesMode: 'selectAll',
+        focusStateEnabled: true,
+        height: 40
+    });
+    const $lastItem = $treeView.find('.' + ITEM_CLASS).last();
+    const scrollable = $treeView.find('.dx-scrollable').dxScrollable('instance');
+    const clock = sinon.useFakeTimers();
 
     try {
-        $items.last().trigger('dxpointerdown');
-
-        // assert
+        scrollable.scrollTo({ y: 106 });
+        $lastItem.trigger('dxpointerdown');
         assert.equal(scrollable.scrollTop(), 106, 'scroll top position');
 
         scrollable.scrollTo({ y: 0 });
-
-        // assert
         assert.equal(scrollable.scrollTop(), 0, 'scroll top position');
 
-        // act
         $treeView.trigger('focusin');
-
-        // assert
         assert.equal(scrollable.scrollTop(), 0, 'scroll top position');
 
         $treeView.find('.' + SELECT_ALL_ITEM_CLASS).first().trigger('dxpointerdown');
         clock.tick();
-
-        // assert
         assert.equal(scrollable.scrollTop(), 0, 'scroll top position');
     } finally {
         clock.restore();
@@ -207,11 +243,11 @@ QUnit.test('Scroll should not jump down when focusing on Select All (T517945)', 
 });
 
 QUnit.testInActiveWindow('Focusing widget when there is search editor', function(assert) {
-    var $treeView = initTree({
-            items: $.extend(true, [], DATA[0]),
-            searchEnabled: true
-        }),
-        instance = $treeView.dxTreeView('instance');
+    const $treeView = initTree({
+        items: $.extend(true, [], DATA[0]),
+        searchEnabled: true
+    });
+    const instance = $treeView.dxTreeView('instance');
 
     instance.focus();
 

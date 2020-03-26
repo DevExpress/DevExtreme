@@ -6,7 +6,7 @@ const excelColumnWidthFrom_100 = '13.57';
 const excelColumnWidthFrom_200 = '27.86';
 
 QUnit.testStart(function() {
-    var markup = '<div id="dataGrid"></div>';
+    const markup = '<div id="dataGrid"></div>';
     $('#qunit-fixture').html(markup);
 });
 
@@ -44,9 +44,9 @@ QUnit.test('Columns - number', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
-        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /><col width="13.57" min="6" max="6" />' +
-        '<col width="13.57" min="7" max="7" /><col width="13.57" min="8" max="8" /><col width="13.57" min="9" max="9" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" />' +
+        '<col width="13.57" min="4" max="4" customWidth="1" /><col width="13.57" min="5" max="5" customWidth="1" /><col width="13.57" min="6" max="6" customWidth="1" />' +
+        '<col width="13.57" min="7" max="7" customWidth="1" /><col width="13.57" min="8" max="8" customWidth="1" /><col width="13.57" min="9" max="9" customWidth="1" /></cols>' +
         '<sheetData><row r="1" spans="1:9" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s" />' +
         '<c r="B1" s="3" t="n" />' +
@@ -93,9 +93,9 @@ QUnit.test('Columns - number, unbound', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
-        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /><col width="13.57" min="6" max="6" />' +
-        '<col width="13.57" min="7" max="7" /><col width="13.57" min="8" max="8" /><col width="13.57" min="9" max="9" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" />' +
+        '<col width="13.57" min="4" max="4" customWidth="1" /><col width="13.57" min="5" max="5" customWidth="1" /><col width="13.57" min="6" max="6" customWidth="1" />' +
+        '<col width="13.57" min="7" max="7" customWidth="1" /><col width="13.57" min="8" max="8" customWidth="1" /><col width="13.57" min="9" max="9" customWidth="1" /></cols>' +
         '<sheetData><row r="1" spans="1:9" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s" />' +
         '<c r="B1" s="3" t="n" />' +
@@ -145,7 +145,7 @@ QUnit.test('Columns - number, unbound, selectedRowIndexes: [0]', function(assert
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols>' +
-        '<col width="13.57" min="1" max="1" /></cols>' +
+        '<col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="n"><v>0</v></c></row>' +
         '</sheetData></worksheet>';
@@ -184,7 +184,7 @@ QUnit.test('Columns - number with format as percent', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /><col width="13.57" min="4" max="4" customWidth="1" /><col width="13.57" min="5" max="5" customWidth="1" /></cols>' +
         '<sheetData><row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>1</v></c>' +
         '<c r="B1" s="4" t="n"><v>1</v></c>' +
@@ -229,7 +229,7 @@ QUnit.test('Columns - number with format as fixedPoint', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /><col width="13.57" min="4" max="4" customWidth="1" /><col width="13.57" min="5" max="5" customWidth="1" /></cols>' +
         '<sheetData><row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>1</v></c>' +
         '<c r="B1" s="4" t="n"><v>1</v></c>' +
@@ -274,7 +274,7 @@ QUnit.test('Columns - number with format as exponential', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /><col width="13.57" min="4" max="4" customWidth="1" /><col width="13.57" min="5" max="5" customWidth="1" /></cols>' +
         '<sheetData><row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>1</v></c>' +
         '<c r="B1" s="4" t="n"><v>1</v></c>' +
@@ -311,8 +311,8 @@ QUnit.test('Columns - number with format as currency', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
-        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /><col width="13.57" min="6" max="6" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" />' +
+        '<col width="13.57" min="4" max="4" customWidth="1" /><col width="13.57" min="5" max="5" customWidth="1" /><col width="13.57" min="6" max="6" customWidth="1" /></cols>' +
         '<sheetData><row r="1" spans="1:6" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s" />' +
         '<c r="B1" s="3" t="n" />' +
@@ -354,8 +354,8 @@ QUnit.test('Columns - number with format as currency format_en local', function(
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
-        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /><col width="13.57" min="6" max="6" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" />' +
+        '<col width="13.57" min="4" max="4" customWidth="1" /><col width="13.57" min="5" max="5" customWidth="1" /><col width="13.57" min="6" max="6" customWidth="1" /></cols>' +
         '<sheetData><row r="1" spans="1:6" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>1</v></c>' +
         '<c r="B1" s="4" t="n"><v>1</v></c>' +
@@ -392,7 +392,7 @@ QUnit.test('Columns - number with format as largeNumber', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData><row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>1</v></c>' +
         '<c r="B1" s="3" t="n"><v>1</v></c>' +
@@ -431,7 +431,7 @@ QUnit.test('Columns - number with format as thousands', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /><col width="13.57" min="4" max="4" customWidth="1" /><col width="13.57" min="5" max="5" customWidth="1" /></cols>' +
         '<sheetData><row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>1</v></c>' +
         '<c r="B1" s="4" t="n"><v>1</v></c>' +
@@ -476,7 +476,7 @@ QUnit.test('Columns - number with format as millions', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /><col width="13.57" min="4" max="4" customWidth="1" /><col width="13.57" min="5" max="5" customWidth="1" /></cols>' +
         '<sheetData><row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>1</v></c>' +
         '<c r="B1" s="4" t="n"><v>1</v></c>' +
@@ -521,7 +521,7 @@ QUnit.test('Columns - number with format as billions', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /><col width="13.57" min="4" max="4" customWidth="1" /><col width="13.57" min="5" max="5" customWidth="1" /></cols>' +
         '<sheetData><row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>1</v></c>' +
         '<c r="B1" s="4" t="n"><v>1</v></c>' +
@@ -566,7 +566,7 @@ QUnit.test('Columns - number with format as trillions', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /><col width="13.57" min="4" max="4" customWidth="1" /><col width="13.57" min="5" max="5" customWidth="1" /></cols>' +
         '<sheetData><row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>1</v></c>' +
         '<c r="B1" s="4" t="n"><v>1</v></c>' +
@@ -602,8 +602,8 @@ QUnit.test('Columns - string', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
-        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /><col width="13.57" min="6" max="6" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" />' +
+        '<col width="13.57" min="4" max="4" customWidth="1" /><col width="13.57" min="5" max="5" customWidth="1" /><col width="13.57" min="6" max="6" customWidth="1" /></cols>' +
         '<sheetData><row r="1" spans="1:6" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s" />' +
         '<c r="B1" s="3" t="s" />' +
@@ -638,7 +638,7 @@ QUnit.test('Columns - string, selectedRowIndexes: [1]', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="s"><v>0</v></c></row>' +
         '</sheetData></worksheet>';
@@ -667,8 +667,8 @@ QUnit.test('Columns - string, unbound', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
-        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /><col width="13.57" min="6" max="6" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" />' +
+        '<col width="13.57" min="4" max="4" customWidth="1" /><col width="13.57" min="5" max="5" customWidth="1" /><col width="13.57" min="6" max="6" customWidth="1" /></cols>' +
         '<sheetData><row r="1" spans="1:6" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s" />' +
         '<c r="B1" s="3" t="s" />' +
@@ -711,8 +711,8 @@ QUnit.test('Columns - string, unbound, selectedRowIndexes: [1]', function(assert
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols>' +
-        '<col width="13.57" min="1" max="1" />' +
-        '<col width="13.57" min="2" max="2" />' +
+        '<col width="13.57" min="1" max="1" customWidth="1" />' +
+        '<col width="13.57" min="2" max="2" customWidth="1" />' +
         '</cols>' +
         '<sheetData><row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s"><v>0</v></c><c r="B1" s="3" t="s"><v>0</v></c>' +
@@ -749,9 +749,9 @@ QUnit.test('Columns - string, unbound, selectedRowIndexes: [0], dataField proper
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" />' +
-        '<col width="13.57" min="2" max="2" />' +
-        '<col width="13.57" min="3" max="3" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" />' +
+        '<col width="13.57" min="2" max="2" customWidth="1" />' +
+        '<col width="13.57" min="3" max="3" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="s"><v>0</v></c><c r="B1" s="3" t="s"><v>1</v></c><c r="C1" s="3" t="s"><v>2</v></c></row>' +
         '</sheetData>' +
@@ -792,8 +792,8 @@ QUnit.test('Columns - date', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
-        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" />' +
+        '<col width="13.57" min="4" max="4" customWidth="1" /><col width="13.57" min="5" max="5" customWidth="1" /></cols>' +
         '<sheetData><row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s" />' +
         '<c r="B1" s="3" t="s" />' +
@@ -829,7 +829,7 @@ QUnit.test('Columns - date with format as function', function(assert) { // T5736
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData><row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>43435</v></c>' +
         '<c r="B1" s="4" t="n"><v>43435</v></c>' +
@@ -868,8 +868,8 @@ QUnit.test('Columns - datetime', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
-        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" />' +
+        '<col width="13.57" min="4" max="4" customWidth="1" /><col width="13.57" min="5" max="5" customWidth="1" /></cols>' +
         '<sheetData><row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s" />' +
         '<c r="B1" s="3" t="s" />' +
@@ -900,8 +900,8 @@ QUnit.test('Columns - boolean', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
-        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" />' +
+        '<col width="13.57" min="4" max="4" customWidth="1" /><col width="13.57" min="5" max="5" customWidth="1" /></cols>' +
         '<sheetData><row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s" />' +
         '<c r="B1" s="3" t="s" />' +
@@ -938,7 +938,7 @@ QUnit.test('Columns - lookup', function(assert) {
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="s" /></row>' +
         '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s" /></row>' +
@@ -994,12 +994,12 @@ QUnit.test('Columns - [string, number, date, boolean, lookup, datetime]', functi
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width="13.57" min="1" max="1" />' +
-        '<col width="13.57" min="2" max="2" />' +
-        '<col width="13.57" min="3" max="3" />' +
-        '<col width="13.57" min="4" max="4" />' +
-        '<col width="13.57" min="5" max="5" />' +
-        '<col width="13.57" min="6" max="6" />' +
+        '<col width="13.57" min="1" max="1" customWidth="1" />' +
+        '<col width="13.57" min="2" max="2" customWidth="1" />' +
+        '<col width="13.57" min="3" max="3" customWidth="1" />' +
+        '<col width="13.57" min="4" max="4" customWidth="1" />' +
+        '<col width="13.57" min="5" max="5" customWidth="1" />' +
+        '<col width="13.57" min="6" max="6" customWidth="1" />' +
         '</cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:6" outlineLevel="0" x14ac:dyDescent="0.25">' +
@@ -1068,7 +1068,7 @@ QUnit.test('Columns - command columns are not exported', function(assert) {
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="s"><v>0</v></c></row>' +
         '</sheetData></worksheet>';
@@ -1091,7 +1091,7 @@ QUnit.test('Columns - command columns are not exported', function(assert) {
 
 QUnit.test('Columns - set width in %', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="6.43" min="1" max="1" /><col width="27.86" min="2" max="2" /></cols>' +
+        '<cols><col width="6.43" min="1" max="1" customWidth="1" /><col width="27.86" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData><row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>42</v></c><c r="B1" s="3" t="n"><v>43</v></c>' +
         '</row></sheetData></worksheet>';
@@ -1116,7 +1116,7 @@ QUnit.test('Columns - show column headers', function(assert) {
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c></row>' +
         '</sheetData></worksheet>';
@@ -1140,9 +1140,9 @@ QUnit.test('Columns - show column headers & mixed visibleIndex', function(assert
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" />' +
-        '<col width="' + excelColumnWidthFrom_50 + '" min="2" max="2" />' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="3" max="3" /></cols>' +
+        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_50 + '" min="2" max="2" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="3" max="3" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s"><v>2</v></c></row>' +
         '</sheetData></worksheet>';
@@ -1172,7 +1172,7 @@ QUnit.test('Columns - show column headers & \'column.visible: false\'', function
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" /></cols>' +
+        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
         '</sheetData></worksheet>';
@@ -1196,7 +1196,7 @@ QUnit.test('Columns - show column headers & \'column.visible: false\' in onExpor
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" /></cols>' +
+        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
         '</sheetData></worksheet>';
@@ -1228,7 +1228,7 @@ QUnit.test('Columns - show column headers & \'column.visible: false\' in onExpor
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" /></cols>' +
+        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
         '</sheetData></worksheet>';
@@ -1258,8 +1258,8 @@ QUnit.test('Columns - show column headers & \'column.visible: true\' in onExport
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="' + excelColumnWidthFrom_50 + '" min="1" max="1" />' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="2" max="2" /></cols>' +
+        '<cols><col width="' + excelColumnWidthFrom_50 + '" min="1" max="1" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c></row>' +
         '</sheetData></worksheet>';
@@ -1296,7 +1296,7 @@ QUnit.test('Columns - show column headers & \'column.allowExporting: false\'', f
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" /></cols>' +
+        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
         '</sheetData></worksheet>';
@@ -1320,7 +1320,7 @@ QUnit.test('Columns - hide column headers', function(assert) {
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="n"><v>42</v></c><c r="B1" s="3" t="n"><v>43</v></c></row>' +
         '</sheetData></worksheet>';
@@ -1345,7 +1345,7 @@ QUnit.test('Columns - show column headers & single column', function(assert) {
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" customWidth="1" />' +
         '</cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
@@ -1401,9 +1401,9 @@ QUnit.test('Columns - hide column headers & mixed visibleIndex', function(assert
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" />' +
-        '<col width="' + excelColumnWidthFrom_50 + '" min="2" max="2" />' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="3" max="3" /></cols>' +
+        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_50 + '" min="2" max="2" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="3" max="3" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="n"><v>43</v></c><c r="B1" s="3" t="n"><v>44</v></c><c r="C1" s="3" t="n"><v>42</v></c></row>' +
         '</sheetData></worksheet>';
@@ -1428,7 +1428,7 @@ QUnit.test('Columns - hide column headers & \'column.visible: false\' in onExpor
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" /></cols>' +
+        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="n"><v>2</v></c></row>' +
         '</sheetData></worksheet>';
@@ -1460,7 +1460,7 @@ QUnit.test('Columns - hide column headers & \'column.allowExporting: false\'', f
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" /></cols>' +
+        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="n"><v>2</v></c></row>' +
         '</sheetData></worksheet>';
@@ -1492,7 +1492,7 @@ QUnit.test('Bands', function(assert) {
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s" /></row>' +
         '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="0" t="s" /><c r="B2" s="0" t="s"><v>2</v></c><c r="C2" s="0" t="s"><v>3</v></c></row>' +
@@ -1532,10 +1532,10 @@ QUnit.test('Bands - show column headers', function(assert) {
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
-        '<col width="' + excelColumnWidthFrom_50 + '" min="2" max="2" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="4" max="4" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_50 + '" min="2" max="2" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="4" max="4" customWidth="1" />' +
         '</cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s" /><c r="D1" s="0" t="s" /></row>' +
@@ -1571,7 +1571,7 @@ QUnit.test('Bands - show column headers, single child column', function(assert) 
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" customWidth="1" />' +
         '</cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
@@ -1604,8 +1604,8 @@ QUnit.test('Bands - show column headers & band without children', function(asser
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
-        '<col width="127.86" min="2" max="2" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" customWidth="1" />' +
+        '<col width="127.86" min="2" max="2" customWidth="1" />' +
         '</cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c></row>' +
@@ -1635,8 +1635,8 @@ QUnit.test('Bands - show column headers & hide band, hide by visible', function(
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" customWidth="1" />' +
         '</cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c></row>' +
@@ -1676,8 +1676,8 @@ QUnit.test('Bands - show column headers & hide all columns in band, hide by visi
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
-        '<col width="127.86" min="2" max="2" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" customWidth="1" />' +
+        '<col width="127.86" min="2" max="2" customWidth="1" />' +
         '</cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c></row>' +
@@ -1715,9 +1715,9 @@ function _runBandsShowColumnHeadersHideColumnTest(assert, hideByVisible, helper)
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" customWidth="1" />' +
         '</cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s" /></row>' +
@@ -1762,8 +1762,8 @@ function _runBandsShowColumnHeadersHideColumnLevel3Config1Test(assert, hideByVis
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="3" topLeftCell="A4" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width="' + excelColumnWidthFrom_50 + '" min="1" max="1" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" />' +
+        '<col width="' + excelColumnWidthFrom_50 + '" min="1" max="1" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" customWidth="1" />' +
         '</cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s" /></row>' +
@@ -1813,7 +1813,7 @@ function _runBandsShowColumnHeadersHideColumnLevel3Config2Test(assert, hideByVis
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="3" topLeftCell="A4" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" customWidth="1" />' +
         '</cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
@@ -1861,8 +1861,8 @@ function _runBandsShowColumnHeadersHideColumnLevel3ComplexConfig1Test(assert, hi
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="3" topLeftCell="A4" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width="' + excelColumnWidthFrom_50 + '" min="1" max="1" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" />' +
+        '<col width="' + excelColumnWidthFrom_50 + '" min="1" max="1" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" customWidth="1" />' +
         '</cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s" /></row>' +
@@ -1912,8 +1912,8 @@ function _runBandsShowColumnHeadersHideColumnLevel3ComplexConfig2Test(assert, hi
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="3" topLeftCell="A4" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width="' + excelColumnWidthFrom_50 + '" min="1" max="1" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" />' +
+        '<col width="' + excelColumnWidthFrom_50 + '" min="1" max="1" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" customWidth="1" />' +
         '</cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s" /></row>' +
@@ -1963,9 +1963,9 @@ QUnit.test('Bands - show column headers & \'column.visible: false\' in onExporti
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" customWidth="1" />' +
         '</cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s" /></row>' +
@@ -2009,10 +2009,10 @@ QUnit.test('Bands - show column headers & \'column.visible: true\' in onExportin
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
-        '<col width="' + excelColumnWidthFrom_50 + '" min="2" max="2" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="4" max="4" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_50 + '" min="2" max="2" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="4" max="4" customWidth="1" />' +
         '</cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25">' +
@@ -2058,11 +2058,11 @@ QUnit.test('Bands - show column headers & two bands', function(assert) {
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
-        '<col width="' + excelColumnWidthFrom_50 + '" min="2" max="2" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" />' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="4" max="4" />' +
-        '<col width="' + excelColumnWidthFrom_50 + '" min="5" max="5" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_50 + '" min="2" max="2" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="4" max="4" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_50 + '" min="5" max="5" customWidth="1" />' +
         '</cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
@@ -2108,11 +2108,11 @@ QUnit.test('Bands - show column headers & two bands & \'column.visible: false\''
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
-        '<col width="' + excelColumnWidthFrom_50 + '" min="2" max="2" />' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="3" max="3" />' +
-        '<col width="' + excelColumnWidthFrom_50 + '" min="4" max="4" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="5" max="5" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_50 + '" min="2" max="2" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="3" max="3" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_50 + '" min="4" max="4" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="5" max="5" customWidth="1" />' +
         '</cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
@@ -2160,10 +2160,10 @@ QUnit.test('Bands - hide column headers', function(assert) {
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
-        '<col width="' + excelColumnWidthFrom_50 + '" min="2" max="2" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="4" max="4" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_50 + '" min="2" max="2" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="4" max="4" customWidth="1" />' +
         '</cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25">' +
@@ -2198,9 +2198,9 @@ QUnit.test('Bands - hide column headers & \'column.visible: false\' in onExporti
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" customWidth="1" />' +
         '</cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25">' +
@@ -2243,9 +2243,9 @@ QUnit.test('Bands - hide column headers & \'column.allowExporting: false\'', fun
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" customWidth="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" customWidth="1" />' +
         '</cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25">' +
@@ -2287,7 +2287,7 @@ QUnit.test('Groupping - 1 level', function(assert) {
         '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
         '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>1</v></c></row>' +
@@ -2315,6 +2315,48 @@ QUnit.test('Groupping - 1 level', function(assert) {
     );
 });
 
+[true, false].forEach((remoteOperations) => {
+    QUnit.test(`Groupping - 1 level, column.dataType: date, format: 'yyyy-MM-dd', remoteOperations: ${remoteOperations}`, function(assert) {
+        const styles = helper.STYLESHEET_HEADER_XML +
+            helper.BASE_STYLE_XML +
+            '<cellXfs count="5">' +
+            helper.STYLESHEET_STANDARDSTYLES +
+            '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+            '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+            '</cellXfs>' +
+            helper.STYLESHEET_FOOTER_XML;
+        const worksheet = helper.WORKSHEET_HEADER_XML +
+            '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
+            '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+            '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
+            '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
+            '<sheetData>' +
+            '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
+            '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>1</v></c></row>' +
+            '<row r="3" spans="1:1" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s"><v>2</v></c></row>' +
+            '</sheetData>' +
+            '</worksheet>';
+        const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="3" uniqueCount="3">' +
+            '<si><t>f2</t></si>' +
+            '<si><t>f1: 1996-07-04</t></si>' +
+            '<si><t>f1_1</t></si>' +
+            '</sst>';
+
+        helper.runGeneralTest(
+            assert,
+            {
+                columns: [
+                    { caption: 'f1', dataField: 'f1', dataType: 'date', format: 'yyyy-MM-dd', groupIndex: 0 },
+                    { caption: 'f2', dataField: 'f2', dataType: 'string' }
+                ],
+                remoteOperations: remoteOperations,
+                dataSource: [{ f1: '1996-07-04T00:00:00', f2: 'f1_1' }]
+            },
+            { styles, worksheet, sharedStrings }
+        );
+    });
+});
+
 QUnit.test('Groupping - 1 level, selectedRowIndexes: []', function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
@@ -2328,7 +2370,7 @@ QUnit.test('Groupping - 1 level, selectedRowIndexes: []', function(assert) {
         '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
         '</sheetData>' +
@@ -2363,7 +2405,7 @@ QUnit.test('Groupping - 1 level, selectedRowIndexes: [1]', function(assert) {
         '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
         '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>1</v></c></row>' +
@@ -2403,7 +2445,7 @@ QUnit.test('Groupping - 1 level, selectedRowIndexes: [2]', function(assert) {
         '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
         '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>1</v></c></row>' +
@@ -2443,7 +2485,7 @@ QUnit.test('Groupping - 1 level, selectedRowIndexes: [1,2]', function(assert) {
         '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
         '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>1</v></c></row>' +
@@ -2485,8 +2527,8 @@ QUnit.test('Groupping - 1 level, unbound', function(assert) {
         '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/><sheetViews>' +
         '<sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView>' +
         '</sheetViews><sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" />' +
-        '<col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" />' +
+        '<col width="13.57" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c></row>' +
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>2</v></c><c r="B2" s="4" t="s" /></row>' +
@@ -2532,8 +2574,8 @@ QUnit.test('Groupping - 1 level, unbound, selectedRowIndexes: [1]', function(ass
         '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/><sheetViews>' +
         '<sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView>' +
         '</sheetViews><sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" />' +
-        '<col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" />' +
+        '<col width="13.57" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c></row>' +
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>2</v></c><c r="B2" s="4" t="s" /></row>' +
@@ -2579,7 +2621,7 @@ QUnit.test('Groupping - 2 levels', function(assert) {
         '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="2" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
         '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>1</v></c></row>' +
@@ -2625,7 +2667,7 @@ QUnit.test('Group summary', function(assert) {
         '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
         '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>1</v></c></row>' +
@@ -2666,7 +2708,7 @@ QUnit.test('Group summary - alignByColumn: true', function(assert) {
         '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="2" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c></row>' +
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>2</v></c><c r="B2" s="1" t="s"><v>3</v></c></row>' +
@@ -2716,7 +2758,7 @@ QUnit.test('Group summary - showInGroupFooter: true', function(assert) {
         '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s"><v>2</v></c></row>' +
         '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>3</v></c><c r="B2" s="4" t="s" /><c r="C2" s="4" t="s" /></row>' +
@@ -2776,7 +2818,7 @@ QUnit.test('Group summary - 5 columns, 2 summary - allowExporting: false, showIn
         '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s"><v>2</v></c></row>' +
         '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>3</v></c><c r="B2" s="1" t="s"><v>4</v></c><c r="C2" s="1" t="s"><v>5</v></c></row>' +
@@ -2838,7 +2880,7 @@ QUnit.test('Group summary - 4 columns, 1 summary - allowExporting: false, showIn
         '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols><sheetData>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /></cols><sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c></row>' +
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>2</v></c><c r="B2" s="1" t="s"><v>3</v></c></row>' +
         '<row r="3" spans="1:2" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s"><v>4</v></c><c r="B3" s="3" t="s"><v>5</v></c></row>' +
@@ -2892,7 +2934,7 @@ QUnit.test('Total summary', function(assert) {
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
         '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>1</v></c></row>' +
@@ -2931,7 +2973,7 @@ QUnit.test('Total summary, selectedRowIndexes: [1]', function(assert) {
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols><sheetData>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /></cols><sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c></row>' +
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>2</v></c><c r="B2" s="4" t="s"><v>2</v></c></row>' +
         '<row r="3" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="2" t="s"><v>3</v></c><c r="B3" s="1" t="s"><v>4</v></c></row>' +
@@ -2969,7 +3011,7 @@ QUnit.test('showColumnHeaders: false', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="s"><v>0</v></c></row>' +
         '</sheetData>' +
@@ -2994,7 +3036,7 @@ QUnit.test('excelFilterEnabled - 1 header columns x 0 data rows', function(asser
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
         '</sheetData><autoFilter ref="A1:A2" /></worksheet>';
@@ -3018,7 +3060,7 @@ QUnit.test('excelFilterEnabled - 1 header columns x 1 data row', function(assert
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
         '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>1</v></c></row>' +
@@ -3043,7 +3085,7 @@ QUnit.test('excelFilterEnabled - 2 header columns x 1 data row', function(assert
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c></row>' +
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>1</v></c><c r="B2" s="3" t="n"><v>2</v></c></row>' +
@@ -3068,7 +3110,7 @@ QUnit.test('excelFilterEnabled - 4 header columns x 2 data rows', function(asser
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /><col width="13.57" min="4" max="4" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s"><v>2</v></c><c r="D1" s="0" t="s"><v>3</v></c>' +
@@ -3100,7 +3142,7 @@ QUnit.test('excelFilterEnabled - 2 header columns x 3 data rows', function(asser
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c></row>' +
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>1</v></c><c r="B2" s="3" t="n"><v>2</v></c></row>' +
@@ -3128,7 +3170,7 @@ QUnit.test('excelFilterEnabled - 1 Band x 1 data rows', function(assert) {
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width="13.57" min="1" max="1" />' +
+        '<col width="13.57" min="1" max="1" customWidth="1" />' +
         '</cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
@@ -3165,8 +3207,8 @@ QUnit.test('excelFilterEnabled - 2 Bands x 1 data rows', function(assert) {
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width="13.57" min="1" max="1" />' +
-        '<col width="13.57" min="2" max="2" />' +
+        '<col width="13.57" min="1" max="1" customWidth="1" />' +
+        '<col width="13.57" min="2" max="2" customWidth="1" />' +
         '</cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c></row>' +
@@ -3228,7 +3270,7 @@ QUnit.test('ignoreExcelErrors - 3x1 grid', function(assert) {
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s"><v>2</v></c></row>' +
         '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>1</v></c><c r="B2" s="3" t="n"><v>2</v></c><c r="C2" s="3" t="n"><v>3</v></c></row>' +
@@ -3262,7 +3304,7 @@ QUnit.test('Update cell values in \'customizeExportData\'', function(assert) {
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
         '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s"><v>1</v></c></row>' +

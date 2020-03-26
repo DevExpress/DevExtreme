@@ -455,8 +455,6 @@ QUnit.module('Showing and hiding context menu', moduleConfig, () => {
 
     // T459373
     QUnit.test('Show context menu when position and target is defined', function(assert) {
-        let overlay;
-
         const instance = new ContextMenu(this.$element, {
             target: $('#menuTarget'),
             items: [{ text: 'item 1' }],
@@ -470,14 +468,12 @@ QUnit.module('Showing and hiding context menu', moduleConfig, () => {
 
         $('#menuTarget').trigger('dxcontextmenu');
 
-        overlay = this.$element.find('.dx-overlay').dxOverlay('instance');
+        const overlay = this.$element.find('.dx-overlay').dxOverlay('instance');
         assert.ok(instance.option('visible'), 'context menu is visible');
         assert.deepEqual(overlay.option('position.of').get(0), $('#menuTarget').get(0), 'position is correct');
     });
 
     QUnit.test('Show context menu when position.of is defined', function(assert) {
-        let overlay;
-
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 'item 1' }],
             visible: false,
@@ -490,14 +486,12 @@ QUnit.module('Showing and hiding context menu', moduleConfig, () => {
 
         $('#menuShower').trigger('dxcontextmenu');
 
-        overlay = this.$element.find('.dx-overlay').dxOverlay('instance');
+        const overlay = this.$element.find('.dx-overlay').dxOverlay('instance');
         assert.ok(instance.option('visible'), 'context menu is visible');
         assert.deepEqual(overlay.option('position.of').get(0), $('#menuShower').get(0), 'position is correct');
     });
 
     QUnit.test('Show context menu when position is undefined', function(assert) {
-        let overlay;
-
         const instance = new ContextMenu(this.$element, {
             target: $('#menuTarget'),
             items: [{ text: 'item 1' }],
@@ -506,14 +500,12 @@ QUnit.module('Showing and hiding context menu', moduleConfig, () => {
 
         $('#menuTarget').trigger('dxcontextmenu');
 
-        overlay = this.$element.find('.dx-overlay').dxOverlay('instance');
+        const overlay = this.$element.find('.dx-overlay').dxOverlay('instance');
         assert.ok(instance.option('visible'), 'context menu is visible');
         assert.ok(overlay.option('position.of') instanceof $.Event, 'position is correct');
     });
 
     QUnit.test('Show context menu via api when position is defined', function(assert) {
-        let overlay;
-
         const instance = new ContextMenu(this.$element, {
             target: $('#menuTarget'),
             items: [{ text: 'item 1' }],
@@ -527,14 +519,12 @@ QUnit.module('Showing and hiding context menu', moduleConfig, () => {
 
         instance.show();
 
-        overlay = this.$element.find('.dx-overlay').dxOverlay('instance');
+        const overlay = this.$element.find('.dx-overlay').dxOverlay('instance');
         assert.ok(instance.option('visible'), 'context menu is visible');
         assert.deepEqual(overlay.option('position.of').get(0), $('#menuTarget').get(0), 'position is correct');
     });
 
     QUnit.test('Show context menu via api when position is undefined', function(assert) {
-        let overlay;
-
         const instance = new ContextMenu(this.$element, {
             target: $('#menuTarget'),
             items: [{ text: 'item 1' }],
@@ -543,7 +533,7 @@ QUnit.module('Showing and hiding context menu', moduleConfig, () => {
 
         instance.show();
 
-        overlay = this.$element.find('.dx-overlay').dxOverlay('instance');
+        const overlay = this.$element.find('.dx-overlay').dxOverlay('instance');
         assert.ok(instance.option('visible'), 'context menu is visible');
         assert.deepEqual(overlay.option('position.of').get(0), $('#menuTarget').get(0), 'position is correct');
     });
@@ -609,11 +599,10 @@ QUnit.module('Showing and hiding submenus', moduleConfig, () => {
         });
 
         const $itemsContainer = instance.itemsContainer();
-        let $items;
 
         $($itemsContainer.find('.' + DX_MENU_ITEM_CLASS).eq(0)).trigger('dxclick');
         $($itemsContainer.find('.' + DX_MENU_ITEM_CLASS).eq(1)).trigger('dxclick');
-        $items = $itemsContainer.find('.' + DX_MENU_ITEM_CLASS);
+        const $items = $itemsContainer.find('.' + DX_MENU_ITEM_CLASS);
 
         assert.ok($items.eq(2).is(':visible'), 'last submenu item was shown');
 
@@ -943,12 +932,11 @@ QUnit.module('Options', moduleConfig, () => {
 
         const $itemsContainer = instance.itemsContainer();
         const $rootItem = $itemsContainer.find('.' + DX_MENU_ITEM_CLASS).eq(0);
-        let $items;
 
         $($itemsContainer).trigger($.Event('dxhoverstart', { target: $rootItem.get(0) }));
         this.clock.tick(0);
 
-        $items = $itemsContainer.find('.' + DX_MENU_ITEM_CLASS);
+        const $items = $itemsContainer.find('.' + DX_MENU_ITEM_CLASS);
 
         assert.equal($items.length, 2, 'second item was rendered');
     });
@@ -966,12 +954,11 @@ QUnit.module('Options', moduleConfig, () => {
 
         const $itemsContainer = instance.itemsContainer();
         const $rootItem = $itemsContainer.find('.' + DX_MENU_ITEM_CLASS).eq(0);
-        let $items;
 
         $($itemsContainer).trigger($.Event('dxhoverstart', { target: $rootItem.get(0) }));
         this.clock.tick(1);
 
-        $items = $itemsContainer.find('.' + DX_MENU_ITEM_CLASS);
+        const $items = $itemsContainer.find('.' + DX_MENU_ITEM_CLASS);
 
         assert.equal($items.length, 2, 'second item was rendered');
     });
@@ -989,14 +976,13 @@ QUnit.module('Options', moduleConfig, () => {
 
         const $itemsContainer = instance.itemsContainer();
         const $rootItem = $itemsContainer.find('.' + DX_MENU_ITEM_CLASS).eq(0);
-        let $items;
 
         $($itemsContainer).trigger($.Event('dxhoverstart', { target: $rootItem.get(0) }));
         this.clock.tick(400);
         $($itemsContainer).trigger($.Event('dxhoverend', { target: $rootItem.get(0) }));
         this.clock.tick(100);
 
-        $items = $itemsContainer.find('.' + DX_MENU_ITEM_CLASS);
+        const $items = $itemsContainer.find('.' + DX_MENU_ITEM_CLASS);
 
         assert.equal($items.length, 1, 'second item was not rendered');
     });
@@ -1010,11 +996,10 @@ QUnit.module('Options', moduleConfig, () => {
 
         const $itemsContainer = instance.itemsContainer();
         const $rootItem = $itemsContainer.find('.' + DX_MENU_ITEM_CLASS).eq(0);
-        let $items;
 
         $($rootItem).trigger('dxclick');
 
-        $items = $itemsContainer.find('.' + DX_MENU_ITEM_CLASS);
+        const $items = $itemsContainer.find('.' + DX_MENU_ITEM_CLASS);
 
         assert.equal($items.length, 2, 'delay should be ignored');
     });
@@ -1028,13 +1013,12 @@ QUnit.module('Options', moduleConfig, () => {
 
         const $itemsContainer = instance.itemsContainer();
         const $rootItem = $itemsContainer.find('.' + DX_MENU_ITEM_CLASS).eq(0);
-        let $items;
 
         $($itemsContainer).trigger($.Event('dxhoverstart', { target: $rootItem.get(0) }));
         this.clock.tick(1);
         $($rootItem).trigger('dxclick');
 
-        $items = $itemsContainer.find('.' + DX_MENU_ITEM_CLASS);
+        const $items = $itemsContainer.find('.' + DX_MENU_ITEM_CLASS);
 
         assert.equal($items.length, 2, 'delay should be ignored');
     });
@@ -1466,10 +1450,8 @@ QUnit.module('Behavior', moduleConfig, () => {
             items
         });
 
-        let $itemsContainer;
-
         instance.show();
-        $itemsContainer = instance.itemsContainer();
+        const $itemsContainer = instance.itemsContainer();
 
         $($itemsContainer.find('.' + DX_MENU_ITEM_CLASS).eq(0)).trigger('dxclick');
         $($itemsContainer.find('.' + DX_MENU_ITEM_CLASS).eq(1)).trigger('dxclick');
@@ -1587,7 +1569,7 @@ QUnit.module('Selection', moduleConfig, () => {
     });
 });
 
-var helper;
+let helper;
 QUnit.module('Aria accessibility', {
     beforeEach: function() {
         helper = new ariaAccessibilityTestHelper({
@@ -1834,11 +1816,9 @@ QUnit.module('Keyboard navigation', moduleConfig, () => {
             focusStateEnabled: true
         });
 
-        let keyboard;
-
         instance.show();
 
-        keyboard = keyboardMock(instance.itemsContainer());
+        const keyboard = keyboardMock(instance.itemsContainer());
 
         keyboard
             .keyDown('down')

@@ -94,10 +94,17 @@
 
     .dx-icon {
         .dx-icon-sizing(@GENERIC_BASE_ICON_SIZE);
-        .dx-icon-margin(@GENERIC_BASE_ICON_SIZE/2);
 
         display: inline-block;
         color: @accordion-icon-color;
+    }
+
+    .dx-accordion-item-title-caption .dx-icon {
+        .dx-icon-margin(@ACCORDION_TITLE_ICON_MARGIN);
+
+        vertical-align: top;
+        position: relative;
+        top: @ACCORDION_TITLE_ICON_TOP_OFFSET;
     }
 }
 

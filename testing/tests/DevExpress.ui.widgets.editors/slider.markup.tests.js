@@ -137,10 +137,10 @@ module('slider markup', () => {
 module('widget sizing render', () => {
     test('constructor', function(assert) {
         const $element = $('#widget').dxSlider({
-                width: 400,
-                useInkRipple: false
-            }),
-            instance = $element.dxSlider('instance');
+            width: 400,
+            useInkRipple: false
+        });
+        const instance = $element.dxSlider('instance');
 
         assert.strictEqual(instance.option('width'), 400);
         assert.strictEqual($element[0].style.width, '400px', 'outer width of the element must be equal to custom width');
@@ -148,9 +148,9 @@ module('widget sizing render', () => {
 
     test('root with custom width', function(assert) {
         const $element = $('#widthRootStyle').dxSlider({
-                useInkRipple: false
-            }),
-            instance = $element.dxSlider('instance');
+            useInkRipple: false
+        });
+        const instance = $element.dxSlider('instance');
 
         assert.strictEqual(instance.option('width'), undefined);
         assert.strictEqual($element[0].style.width, '300px', 'outer width of the element must be equal to custom width');
@@ -158,10 +158,10 @@ module('widget sizing render', () => {
 
     test('change width', function(assert) {
         const $element = $('#widget').dxSlider({
-                useInkRipple: false
-            }),
-            instance = $element.dxSlider('instance'),
-            customWidth = 400;
+            useInkRipple: false
+        });
+        const instance = $element.dxSlider('instance');
+        const customWidth = 400;
 
         instance.option('width', customWidth);
 
@@ -171,28 +171,28 @@ module('widget sizing render', () => {
 
 module('hidden input', () => {
     test('a hidden input should be rendered', function(assert) {
-        const $slider = $('#slider').dxSlider(),
-            $input = $slider.find('input');
+        const $slider = $('#slider').dxSlider();
+        const $input = $slider.find('input');
 
         assert.equal($input.length, 1, 'input is rendered');
         assert.equal($input.attr('type'), 'hidden', 'the input type is \'hidden\'');
     });
 
     test('the hidden input should have correct value on widget init', function(assert) {
-        const expectedValue = 30,
-            $slider = $('#slider').dxSlider({
-                value: expectedValue
-            }),
-            $input = $slider.find('input');
+        const expectedValue = 30;
+        const $slider = $('#slider').dxSlider({
+            value: expectedValue
+        });
+        const $input = $slider.find('input');
 
         assert.equal(parseInt($input.val()), expectedValue, 'the hidden input value is correct');
     });
 
     test('the hidden input should get correct value on widget value change', function(assert) {
-        const expectedValue = 77,
-            $slider = $('#slider').dxSlider(),
-            instance = $slider.dxSlider('instance'),
-            $input = $slider.find('input');
+        const expectedValue = 77;
+        const $slider = $('#slider').dxSlider();
+        const instance = $slider.dxSlider('instance');
+        const $input = $slider.find('input');
 
         instance.option('value', 11);
         instance.option('value', expectedValue);
@@ -203,21 +203,21 @@ module('hidden input', () => {
 module('aria accessibility', () => {
     test('aria role', function(assert) {
         const $element = $('#widget').dxSlider({
-                useInkRipple: false
-            }),
-            $handle = $element.find('.dx-slider-handle');
+            useInkRipple: false
+        });
+        const $handle = $element.find('.dx-slider-handle');
 
         assert.equal($handle.attr('role'), 'slider', 'aria role is correct');
     });
 
     test('aria properties', function(assert) {
         const $element = $('#widget').dxSlider({
-                min: 20,
-                max: 50,
-                value: 35,
-                useInkRipple: false
-            }),
-            $handle = $element.find('.dx-slider-handle');
+            min: 20,
+            max: 50,
+            value: 35,
+            useInkRipple: false
+        });
+        const $handle = $element.find('.dx-slider-handle');
 
         assert.equal($handle.attr('aria-valuemin'), 20, 'aria min is correct');
         assert.equal($handle.attr('aria-valuemax'), 50, 'aria max is correct');
@@ -226,13 +226,13 @@ module('aria accessibility', () => {
 
     test('change aria properties on option changing', function(assert) {
         const $element = $('#widget').dxSlider({
-                min: 20,
-                max: 50,
-                value: 35,
-                useInkRipple: false
-            }),
-            instance = $element.dxSlider('instance'),
-            $handle = $element.find('.dx-slider-handle');
+            min: 20,
+            max: 50,
+            value: 35,
+            useInkRipple: false
+        });
+        const instance = $element.dxSlider('instance');
+        const $handle = $element.find('.dx-slider-handle');
 
         instance.option({
             min: 25,

@@ -1053,7 +1053,7 @@
 
 /**
  * @typedef {string} Enums.FileManagerToolbarItem
- * @enum {'showNavPane'|'create'|'upload'|'refresh'|'viewSwitcher'|'download'|'move'|'copy'|'rename'|'delete'|'clear'|'separator'}
+ * @enum {'showNavPane'|'create'|'upload'|'refresh'|'switchView'|'download'|'move'|'copy'|'rename'|'delete'|'clear'|'separator'}
  */
 
 /**
@@ -1068,7 +1068,7 @@
 
 /**
  * @typedef {string} Enums.DiagramDataLayoutType
- * @enum {'off'|'tree'|'layered'}
+ * @enum {'auto'|'off'|'tree'|'layered'}
  */
 /**
  * @typedef {string} Enums.DiagramDataLayoutOrientation
@@ -1111,23 +1111,23 @@
  */
 
 /**
- * @typedef {string} Enums.DiagramToolbarCommand
- * @enum {'separator'|'export'|'undo'|'redo'|'cut'|'copy'|'paste'|'selectAll'|'delete'|'fontName'|'fontSize'|'bold'|'italic'|'underline'|'fontColor'|'lineColor'|'fillColor'|'textAlignLeft'|'textAlignCenter'|'textAlignRight'|'lock'|'unlock'|'sendToBack'|'bringToFront'|'insertShapeImage'|'editShapeImage'|'deleteShapeImage'|'connectorLineType'|'connectorLineStart'|'connectorLineEnd'|'autoLayout'|'fullScreen'}
+ * @typedef {string} Enums.DiagramCommand
+ * @enum {'separator'|'exportSvg'|'exportPng'|'exportJpg'|'undo'|'redo'|'cut'|'copy'|'paste'|'selectAll'|'delete'|'fontName'|'fontSize'|'bold'|'italic'|'underline'|'fontColor'|'lineColor'|'fillColor'|'textAlignLeft'|'textAlignCenter'|'textAlignRight'|'lock'|'unlock'|'sendToBack'|'bringToFront'|'insertShapeImage'|'editShapeImage'|'deleteShapeImage'|'connectorLineType'|'connectorLineStart'|'connectorLineEnd'|'layoutTreeTopToBottom'|'layoutTreeBottomToTop'|'layoutTreeLeftToRight'|'layoutTreeRightToLeft'|'layoutLayeredTopToBottom'|'layoutLayeredBottomToTop'|'layoutLayeredLeftToRight'|'layoutLayeredRightToLeft'|'fullScreen'|'zoomLevel'|'showGrid'|'snapToGrid'|'gridSize'|'units'|'pageSize'|'pageOrientation'|'pageColor'}
  */
 
 /**
- * @typedef {string} Enums.DiagramContextMenuCommand
- * @enum {'cut'|'copy'|'paste'|'selectAll'|'delete'|'bringToFront'|'sendToBack'|'lock'|'unlock'|'insertShapeImage'|'editShapeImage'|'deleteShapeImage'}
- */
-
-/**
- * @typedef {string} Enums.DiagramPropertiesPanelCommand
- * @enum {'zoomLevel'|'autoZoom'|'showGrid'|'snapToGrid'|'gridSize'|'units'|'pageSize'|'pageOrientation'|'pageColor'}
+ * @typedef {string} Enums.DiagramPanelVisibility
+ * @enum {'auto'|'visible'|'collapsed'|'disabled'}
  */
 
 /**
  * @typedef {string} Enums.DiagramAutoZoom
  * @enum {'fitContent'|'fitWidth'|'disabled'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramItemType
+ * @enum {'shape'|'connector'}
  */
 
 /**
@@ -1138,6 +1138,11 @@
 /**
  * @typedef {string} Enums.GanttTaskTitlePosition
  * @enum {'inside'|'outside'|'none'}
+ */
+
+/**
+ * @typedef {string} Enums.GanttToolbarItem
+ * @enum {'separator'|'undo'|'redo'|'zoomIn'|'zoomOut'}
  */
 
 /**

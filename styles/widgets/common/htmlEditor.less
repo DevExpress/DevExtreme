@@ -12,6 +12,8 @@
 @MAX_INDENT: 9;
 @RESIZE_HANDLE_SIZE: 11px;
 @TOUCH_RESIZE_HANDLE_SIZE: 15px;
+@HALF_RESIZE_HANDLE_SIZE: @RESIZE_HANDLE_SIZE / 2;
+@HALF_TOUCH_RESIZE_HANDLE_SIZE: @TOUCH_RESIZE_HANDLE_SIZE / 2;
 
 @TRANSPARENT_BORDER: 1px solid transparent;
 
@@ -56,7 +58,7 @@
         counter-increment: ~"list-@{counter}";
 
         &::before {
-            content: counter(~"list-@{counter}", extract(@LIST_STYLE, mod(@counter, 3) + 1)) +  '. ';
+            content: counter(~"list-@{counter}", extract(@LIST_STYLE, mod(@counter, 3) + 1)) ". ";
         }
     }
 
@@ -196,7 +198,7 @@
         counter-increment: list-0;
 
         &::before {  // stylelint-disable-line no-duplicate-selectors
-            content: counter(list-0, extract(@LIST_STYLE, 1)) + '. ';
+            content: counter(list-0, extract(@LIST_STYLE, 1)) ". ";
         }
     }
 
@@ -330,7 +332,6 @@
 }
 
 .dx-htmleditor-toolbar-separator {
-    height: 100%;
     border-left: @TRANSPARENT_BORDER;
 }
 
@@ -365,37 +366,37 @@
 
     .dx-resizable-handle-corner-top-right,
     .dx-resizable-handle-corner-bottom-right {
-        right: -@RESIZE_HANDLE_SIZE / 2;
+        right: -@HALF_RESIZE_HANDLE_SIZE;
 
         .dx-touch-device& {
-            right: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+            right: -@HALF_TOUCH_RESIZE_HANDLE_SIZE;
         }
     }
 
     .dx-resizable-handle-corner-top-left,
     .dx-resizable-handle-corner-bottom-left {
-        left: -@RESIZE_HANDLE_SIZE / 2;
+        left: -@HALF_RESIZE_HANDLE_SIZE;
 
         .dx-touch-device& {
-            left: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+            left: -@HALF_TOUCH_RESIZE_HANDLE_SIZE;
         }
     }
 
     .dx-resizable-handle-corner-top-right,
     .dx-resizable-handle-corner-top-left {
-        top: -@RESIZE_HANDLE_SIZE / 2;
+        top: -@HALF_RESIZE_HANDLE_SIZE;
 
         .dx-touch-device& {
-            top: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+            top: -@HALF_TOUCH_RESIZE_HANDLE_SIZE;
         }
     }
 
     .dx-resizable-handle-corner-bottom-right,
     .dx-resizable-handle-corner-bottom-left {
-        bottom: -@RESIZE_HANDLE_SIZE / 2;
+        bottom: -@HALF_RESIZE_HANDLE_SIZE;
 
         .dx-touch-device& {
-            bottom: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+            bottom: -@HALF_TOUCH_RESIZE_HANDLE_SIZE;
         }
     }
 
@@ -420,10 +421,10 @@
     .dx-resizable-handle-right,
     .dx-resizable-handle-left {
         &::after {
-            top: calc(~"50% - "@RESIZE_HANDLE_SIZE / 2);
+            top: calc(50% - @HALF_RESIZE_HANDLE_SIZE);
 
             .dx-touch-device& {
-                top: calc(~"50% - "@TOUCH_RESIZE_HANDLE_SIZE / 2);
+                top: calc(50% - @HALF_TOUCH_RESIZE_HANDLE_SIZE);
             }
         }
     }
@@ -431,43 +432,43 @@
     .dx-resizable-handle-top,
     .dx-resizable-handle-bottom {
         &::after {
-            left: calc(~"50% - "@RESIZE_HANDLE_SIZE / 2);
+            left: calc(50% - @HALF_RESIZE_HANDLE_SIZE);
 
             .dx-touch-device& {
-                left: calc(~"50% - "@TOUCH_RESIZE_HANDLE_SIZE / 2);
+                left: calc(50% - @HALF_TOUCH_RESIZE_HANDLE_SIZE);
             }
         }
     }
 
     .dx-resizable-handle-right::after {
-        right: -@RESIZE_HANDLE_SIZE / 2;
+        right: -@HALF_RESIZE_HANDLE_SIZE;
 
         .dx-touch-device& {
-            right: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+            right: -@HALF_TOUCH_RESIZE_HANDLE_SIZE;
         }
     }
 
     .dx-resizable-handle-left::after {
-        left: -@RESIZE_HANDLE_SIZE / 2;
+        left: -@HALF_RESIZE_HANDLE_SIZE;
 
         .dx-touch-device& {
-            left: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+            left: -@HALF_TOUCH_RESIZE_HANDLE_SIZE;
         }
     }
 
     .dx-resizable-handle-top::after {
-        top: -@RESIZE_HANDLE_SIZE / 2;
+        top: -@HALF_RESIZE_HANDLE_SIZE;
 
         .dx-touch-device& {
-            top: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+            top: -@HALF_TOUCH_RESIZE_HANDLE_SIZE;
         }
     }
 
     .dx-resizable-handle-bottom::after {
-        bottom: -@RESIZE_HANDLE_SIZE / 2;
+        bottom: -@HALF_RESIZE_HANDLE_SIZE;
 
         .dx-touch-device& {
-            bottom: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+            bottom: -@HALF_TOUCH_RESIZE_HANDLE_SIZE;
         }
     }
 }

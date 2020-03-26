@@ -1,5 +1,5 @@
 QUnit.testStart(function() {
-    let markup = `
+    const markup = `
         <div>
             <div id="container" class="dx-datagrid"></div>
         </div>`;
@@ -13,8 +13,10 @@ import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/data_grid/ui.data_grid';
 import commonUtils from 'core/utils/common';
+import * as eventUtils from 'events/utils';
 import typeUtils from 'core/utils/type';
 import pointerEvents from 'events/pointer';
+import eventsEngine from 'events/core/events_engine';
 import {
     setupDataGridModules,
     MockDataController,
@@ -33,8 +35,8 @@ QUnit.module('Rows view', {
             { data: { name: 'test3', id: 3, date: new Date(2003, 2, 3) }, values: ['test3', 3, '3/03/2003'], rowType: 'data', dataIndex: 2 }];
 
         this.createRowsView = function(rows, dataController, columns, initDefaultOptions) {
-            var i,
-                columnsController;
+            let i;
+            let columnsController;
 
             dataController = dataController || new MockDataController({ items: rows });
 
@@ -55,7 +57,7 @@ QUnit.module('Rows view', {
             };
             this.selectionOptions = {};
 
-            var mockDataGrid = {
+            const mockDataGrid = {
                 options: this.options,
                 $element: function() {
                     return $('.dx-datagrid').parent();
@@ -87,8 +89,8 @@ QUnit.module('Rows view', {
     // T222258
     QUnit.testInActiveWindow('Focused cell from free space row when view is rendered', function(assert) {
         // arrange
-        var $container = $('#container'),
-            origUpdateFocus;
+        const $container = $('#container');
+        let origUpdateFocus;
 
         setupModules(this);
         this.gridView.render($container);
@@ -110,8 +112,8 @@ QUnit.module('Rows view', {
 
     QUnit.testInActiveWindow('Cell is not focused when view is rendered if key is not pressed', function(assert) {
         // arrange, act
-        var isCellFocused = false,
-            $container = $('#container');
+        let isCellFocused = false;
+        const $container = $('#container');
 
         setupModules(this);
 
@@ -139,8 +141,8 @@ QUnit.module('Rows view', {
 
     QUnit.testInActiveWindow('Render rows view with keyboard navigation', function(assert) {
         // arrange
-        var rowsView = this.createRowsView(this.items),
-            testElement = $('#container');
+        const rowsView = this.createRowsView(this.items);
+        const testElement = $('#container');
 
         // act
         rowsView.render(testElement);
@@ -153,14 +155,14 @@ QUnit.module('Rows view', {
     // T391194, T380140
     QUnit.testInActiveWindow('Tab from focused element before rowsview must focus first cell', function(assert) {
         // arrange
-        var rowsView = this.createRowsView(this.items),
-            testElement = $('#container');
+        const rowsView = this.createRowsView(this.items);
+        const testElement = $('#container');
 
         rowsView.render(testElement);
         this.clock.tick();
 
         // act
-        var $focusable = testElement.find('[tabIndex]').first();
+        const $focusable = testElement.find('[tabIndex]').first();
         $focusable.focus();
         this.clock.tick();
 
@@ -175,12 +177,11 @@ QUnit.module('Rows view', {
 
     QUnit.testInActiveWindow('Skip invalid cell for moving to right', function(assert) {
         // arrange
-        var rowsView = this.createRowsView(this.items, null, [{}, {}, {}, {}]),
-            navigationController = this.dataGrid.keyboardNavigationController,
-            $cell;
+        const rowsView = this.createRowsView(this.items, null, [{}, {}, {}, {}]);
+        const navigationController = this.dataGrid.keyboardNavigationController;
 
         navigationController._isCellValid = function($cell) {
-            var cell = $cell[0];
+            const cell = $cell[0];
             return cell.cellIndex > 0 && cell.cellIndex < 2;
         };
         navigationController._focusedView = rowsView;
@@ -188,18 +189,17 @@ QUnit.module('Rows view', {
         rowsView.render($('#container'));
 
         // assert, act
-        $cell = navigationController._getNextCell.call(navigationController, 'nextInRow');
+        const $cell = navigationController._getNextCell.call(navigationController, 'nextInRow');
         assert.equal($cell[0].cellIndex, 3);
     });
 
     QUnit.testInActiveWindow('Skip invalid cell for moving to left', function(assert) {
         // arrange
-        var rowsView = this.createRowsView(this.items, null, [{}, {}, {}, {}]),
-            navigationController = this.dataGrid.keyboardNavigationController,
-            $cell;
+        const rowsView = this.createRowsView(this.items, null, [{}, {}, {}, {}]);
+        const navigationController = this.dataGrid.keyboardNavigationController;
 
         navigationController._isCellValid = function($cell) {
-            var cell = $cell[0];
+            const cell = $cell[0];
             return cell.cellIndex < 3 && cell.cellIndex !== 2 && cell.cellIndex !== 1 && cell.cellIndex >= 0;
         };
         navigationController._focusedView = rowsView;
@@ -207,14 +207,14 @@ QUnit.module('Rows view', {
         rowsView.render($('#container'));
 
         // assert, act
-        $cell = navigationController._getNextCell.call(navigationController, 'previousInRow');
+        const $cell = navigationController._getNextCell.call(navigationController, 'previousInRow');
         assert.equal($cell[0].cellIndex, 0);
     });
 
     QUnit.test('Focused state is not applied when element is not cell', function(assert) {
         // arrange
-        var rowsView = this.createRowsView(this.items, null, [{}, {}, {}, {}]),
-            $element = $('<div>');
+        const rowsView = this.createRowsView(this.items, null, [{}, {}, {}, {}]);
+        const $element = $('<div>');
 
         this.dataGrid.getController('keyboardNavigation')._isCellValid = function($cell) {
             return true;
@@ -239,18 +239,66 @@ QUnit.module('Rows view', {
 
     QUnit.test('Apply custom tabIndex to rows view on click', function(assert) {
         // arrange
-        var rowsView = this.createRowsView(this.items),
-            testElement = $('#container');
+        const rowsView = this.createRowsView(this.items);
+        const testElement = $('#container');
 
         this.options.tabIndex = 5;
 
         // act
         rowsView.render(testElement);
 
-        var $cell = $(rowsView.element().find('td').first());
+        const $cell = $(rowsView.element().find('td').first());
         $cell.trigger(CLICK_EVENT);
         assert.equal(rowsView.element().attr('tabIndex'), undefined, 'tabIndex of rowsView');
         assert.equal($cell.attr('tabIndex'), 5, 'tabIndex of clicked cell');
     });
 
+    QUnit.testInActiveWindow('Cell focus should not be disabled after "blur" in the current document (T858241)', function(assert) {
+        // arrange
+        const rowsView = this.createRowsView(this.items);
+        const testElement = $('#container');
+
+        rowsView.render(testElement);
+
+        const $cell0 = $(rowsView.getCellElement(0, 1));
+        const $cell1 = $(rowsView.getCellElement(1, 1));
+
+        // act
+        $cell0
+            .focus()
+            .trigger(pointerEvents.down)
+            .trigger(pointerEvents.up)
+            .trigger('dxclick');
+
+        // assert
+        assert.ok($cell0.hasClass('dx-cell-focus-disabled'), 'Cell has disabled focus class');
+        assert.notOk($cell0.hasClass('dx-focused'), 'Cell has no .dx-focused');
+
+        $cell1
+            .focus()
+            .trigger(pointerEvents.down)
+            .trigger(pointerEvents.up)
+            .trigger('dxclick');
+
+        // assert
+        assert.notOk($cell0.hasClass('dx-cell-focus-disabled'), 'Cell has no disabled focus class');
+        assert.notOk($cell0.hasClass('dx-focused'), 'Cell has no .dx-focused');
+
+        $cell0
+            .focus()
+            .trigger(pointerEvents.down)
+            .trigger(pointerEvents.up)
+            .trigger('dxclick');
+
+        // assert
+        assert.ok($cell0.hasClass('dx-cell-focus-disabled'), 'Cell has disabled focus class');
+        assert.notOk($cell0.hasClass('dx-focused'), 'Cell has no .dx-focused');
+
+        // act
+        eventsEngine.trigger($cell0, eventUtils.createEvent('blur'));
+
+        // assert
+        assert.ok($cell0.hasClass('dx-cell-focus-disabled'), 'Cell has no disabled focus class');
+        assert.notOk($cell0.hasClass('dx-focused'), 'Cell has no .dx-focused');
+    });
 });

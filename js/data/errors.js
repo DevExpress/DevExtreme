@@ -1,12 +1,12 @@
-var errorUtils = require('../core/utils/error'),
-    coreErrors = require('../core/errors'),
-    handlers = {};
+const errorUtils = require('../core/utils/error');
+const coreErrors = require('../core/errors');
+let handlers = {};
 
 /**
 * @docid
 * @name ErrorsData
 */
-var errors = errorUtils(coreErrors.ERROR_MESSAGES, {
+const errors = errorUtils(coreErrors.ERROR_MESSAGES, {
 
     /**
     * @name ErrorsData.E4000
@@ -129,6 +129,11 @@ var errors = errorUtils(coreErrors.ERROR_MESSAGES, {
     E4023: 'Could not parse the following XML: {0}',
 
     /**
+    * @name ErrorsData.E4024
+    */
+    E4024: 'String function {0} cannot be used with the data field {1} of type {2}.',
+
+    /**
     * @name ErrorsData.W4000
     */
     W4000: 'Data returned from the server has an incorrect structure',
@@ -146,7 +151,7 @@ var errors = errorUtils(coreErrors.ERROR_MESSAGES, {
 
 // todo: add some logic
 function handleError(error) {
-    var id = 'E4000';
+    let id = 'E4000';
     if(error && '__id' in error) {
         id = error.__id;
     }
@@ -154,16 +159,8 @@ function handleError(error) {
     errors.log(id, error);
 }
 
-/**
-* @name Utils.errorHandler
-* @type function
-* @type_function_param1 e:Error
-* @module data/errors
-* @export errorHandler
-* @namespace DevExpress.data
-*/
-var errorHandler = null;
-var _errorHandler = function(error) {
+const errorHandler = null;
+const _errorHandler = function(error) {
     ///#DEBUG
     handleError(error);
     ///#ENDDEBUG

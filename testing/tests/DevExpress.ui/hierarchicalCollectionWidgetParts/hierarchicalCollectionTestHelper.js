@@ -35,7 +35,7 @@ class HierarchicalCollectionTestHelper {
     }
 
     getTreeDataWithObjects() {
-        let User = function(text, items) {
+        const User = function(text, items) {
             this.text = text;
             this.items = items;
         };

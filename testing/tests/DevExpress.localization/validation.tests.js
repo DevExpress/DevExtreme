@@ -3,12 +3,18 @@ require('localization/globalize/number');
 require('localization/globalize/currency');
 require('localization/globalize/date');
 require('localization/globalize/message');
-require('../../helpers/l10n/cldrNumberDataRu.js');
+const cldrData = [
+    require('../../../node_modules/devextreme-cldr-data/ru.json!json')
+];
 
-var ValidationEngine = require('ui/validation_engine'),
-    Globalize = require('globalize'),
-    localization = require('localization'),
-    ru = require('localization/messages/ru.json!');
+const ValidationEngine = require('ui/validation_engine');
+const Globalize = require('globalize');
+const localization = require('localization');
+const ru = require('localization/messages/ru.json!');
+
+cldrData.forEach(localeCldrData => {
+    Globalize.load(localeCldrData);
+});
 
 localization.loadMessages(ru);
 
@@ -23,7 +29,7 @@ QUnit.module('culture-specific validation', {
 });
 
 QUnit.test('Invalid message localization', function(assert) {
-    var result = ValidationEngine.validate('не число', [{
+    const result = ValidationEngine.validate('не число', [{
         type: 'numeric'
     }]);
 
@@ -31,7 +37,7 @@ QUnit.test('Invalid message localization', function(assert) {
 });
 
 QUnit.test('Invalid message localization, formatted', function(assert) {
-    var result = ValidationEngine.validate('не число', [{
+    const result = ValidationEngine.validate('не число', [{
         type: 'numeric'
     }], 'Зарплата');
 
@@ -39,7 +45,7 @@ QUnit.test('Invalid message localization, formatted', function(assert) {
 });
 
 QUnit.test('T212840: Numeric - invalid, with default culture-agnostic behaviour', function(assert) {
-    var result = ValidationEngine.validate('2,100,001.15', [{
+    const result = ValidationEngine.validate('2,100,001.15', [{
         type: 'numeric'
     }]);
 
@@ -48,7 +54,7 @@ QUnit.test('T212840: Numeric - invalid, with default culture-agnostic behaviour'
 });
 
 QUnit.test('T212840: Numeric - valid, with globalize-culture-specific option', function(assert) {
-    var result = ValidationEngine.validate('2 100 001,15', [{
+    const result = ValidationEngine.validate('2 100 001,15', [{
         type: 'numeric',
         useCultureSettings: true
     }]);

@@ -45,10 +45,10 @@ QUnit.module('Base markup', () => {
 
     test('render markdown markup', function(assert) {
         const instance = $('#htmlEditor').dxHtmlEditor({
-                value: '*Test* **text**',
-                valueType: 'markdown'
-            }).dxHtmlEditor('instance'),
-            $element = instance.$element();
+            value: '*Test* **text**',
+            valueType: 'markdown'
+        }).dxHtmlEditor('instance');
+        const $element = instance.$element();
 
         const $htmlEditorContent = $element.find(`.${HTML_EDITOR_CONTENT_CLASS}`);
         const isQuillRendered = !!$htmlEditorContent.length;

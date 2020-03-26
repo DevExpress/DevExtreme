@@ -1,5 +1,5 @@
-var $ = require('jquery'),
-    layoutModule = require('viz/vector_map/layout');
+const $ = require('jquery');
+const layoutModule = require('viz/vector_map/layout');
 
 QUnit.module('LayoutControl', {
     beforeEach: function() {
@@ -22,7 +22,7 @@ QUnit.test('instance type', function(assert) {
 });
 
 QUnit.test('add item', function(assert) {
-    var item = this.createItem();
+    const item = this.createItem();
 
     this.layoutControl.addItem(item);
 
@@ -30,7 +30,7 @@ QUnit.test('add item', function(assert) {
 });
 
 QUnit.test('remove item', function(assert) {
-    var item = this.createItem();
+    const item = this.createItem();
     this.layoutControl.addItem(item);
 
     this.layoutControl.removeItem(item);
@@ -39,9 +39,9 @@ QUnit.test('remove item', function(assert) {
 });
 
 QUnit.test('setSize', function(assert) {
-    var item1 = this.createItem(),
-        item2 = this.createItem(),
-        item3 = this.createItem();
+    const item1 = this.createItem();
+    const item2 = this.createItem();
+    const item3 = this.createItem();
     this.layoutControl.addItem(item1);
     this.layoutControl.addItem(item2);
     this.layoutControl.addItem(item3);
@@ -75,9 +75,9 @@ QUnit.test('setSize', function(assert) {
 });
 
 QUnit.test('setSize / not rendered', function(assert) {
-    var item1 = this.createItem(),
-        item2 = this.createItem(),
-        item3 = this.createItem();
+    const item1 = this.createItem();
+    const item2 = this.createItem();
+    const item3 = this.createItem();
     this.layoutControl.addItem(item1);
     this.layoutControl.addItem(item2);
     this.layoutControl.addItem(item3);
@@ -95,9 +95,9 @@ QUnit.test('setSize / not rendered', function(assert) {
 });
 
 QUnit.test('calling updateLayout from item', function(assert) {
-    var item1 = this.createItem(),
-        item2 = this.createItem(),
-        item3 = this.createItem();
+    const item1 = this.createItem();
+    const item2 = this.createItem();
+    const item3 = this.createItem();
     this.layoutControl.addItem(item1);
     this.layoutControl.addItem(item2);
     this.layoutControl.addItem(item3);
@@ -129,9 +129,9 @@ QUnit.test('calling updateLayout from item', function(assert) {
 });
 
 QUnit.test('setSize / suspended', function(assert) {
-    var item1 = this.createItem(),
-        item2 = this.createItem(),
-        item3 = this.createItem();
+    const item1 = this.createItem();
+    const item2 = this.createItem();
+    const item3 = this.createItem();
     this.layoutControl.addItem(item1);
     this.layoutControl.addItem(item2);
     this.layoutControl.addItem(item3);
@@ -147,9 +147,9 @@ QUnit.test('setSize / suspended', function(assert) {
 });
 
 QUnit.test('updateLayout / suspended', function(assert) {
-    var item1 = this.createItem(),
-        item2 = this.createItem(),
-        item3 = this.createItem();
+    const item1 = this.createItem();
+    const item2 = this.createItem();
+    const item3 = this.createItem();
     this.layoutControl.addItem(item1);
     this.layoutControl.addItem(item2);
     this.layoutControl.addItem(item3);
@@ -170,10 +170,10 @@ QUnit.test('updateLayout / suspended', function(assert) {
 
 QUnit.module('Layout', {
     doTest: function(assert, itemDefs, size, expected, message) {
-        var layoutControl = new layoutModule.LayoutControl();
-        var items = $.map(itemDefs, function(def) {
-            var parts = def.split('-');
-            var item = {
+        const layoutControl = new layoutModule.LayoutControl();
+        const items = $.map(itemDefs, function(def) {
+            const parts = def.split('-');
+            const item = {
                 getLayoutOptions: function() {
                     return { horizontalAlignment: parts[0], verticalAlignment: parts[1], width: Number(parts[2]), height: Number(parts[3]) };
                 },
@@ -190,7 +190,7 @@ QUnit.module('Layout', {
             return item;
         });
         layoutControl.setSize({ left: 0, right: 0, top: 0, bottom: 0, width: size[0], height: size[1] });
-        var result = [];
+        const result = [];
         $.each(items, function(_, item) {
             layoutControl.removeItem(item);
             result.push(item.location);

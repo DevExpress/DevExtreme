@@ -3,7 +3,7 @@ import helper from '../../helpers/dataGridExportTestsHelper.js';
 import { isDefined } from '../../../js/core/utils/type.js';
 
 QUnit.testStart(function() {
-    var markup = '<div id="dataGrid"></div>';
+    const markup = '<div id="dataGrid"></div>';
     $('#qunit-fixture').html(markup);
 });
 
@@ -24,7 +24,7 @@ QUnit.test('Check e.component', function(assert) {
             export: {
                 customizeExcelCell: e => {
                     assert.ok(isDefined(onCellPreparedComponent));
-                    assert.ok(e.component === onCellPreparedComponent);
+                    assert.strictEqual(e.component, onCellPreparedComponent);
                 }
             },
         }
@@ -45,7 +45,7 @@ QUnit.test('Change alignment', function(assert) {
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="n"><v>42</v></c></row>' +
         '</sheetData></worksheet>';
@@ -86,7 +86,7 @@ QUnit.test('Set alignment to null', function(assert) {
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="n"><v>42</v></c></row>' +
         '</sheetData></worksheet>';
@@ -181,7 +181,7 @@ QUnit.test('Change fill', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="n"><v>42</v></c></row>' +
         '</sheetData></worksheet>';
@@ -218,7 +218,7 @@ QUnit.test('Set fill to null', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="n"><v>42</v></c></row>' +
         '</sheetData></worksheet>';
@@ -282,7 +282,7 @@ QUnit.test('Change font', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="n"><v>42</v></c></row>' +
         '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="6" t="n"><v>43</v></c></row>' +
@@ -332,7 +332,7 @@ QUnit.test('Change font: create new font', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="n"><v>42</v></c></row>' +
         '</sheetData></worksheet>';
@@ -384,7 +384,7 @@ QUnit.test('Set font to null', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="n"><v>42</v></c></row>' +
         '</sheetData></worksheet>';
@@ -472,8 +472,8 @@ QUnit.test('Change number format', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
-        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /><col width="13.57" min="6" max="6" /><col width="13.57" min="7" max="7" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" />' +
+        '<col width="13.57" min="4" max="4" customWidth="1" /><col width="13.57" min="5" max="5" customWidth="1" /><col width="13.57" min="6" max="6" customWidth="1" /><col width="13.57" min="7" max="7" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:7" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" t="n"><v>43483.6875</v></c>' +
@@ -534,7 +534,7 @@ QUnit.test('Set number format to null', function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="5" t="n"><v>1</v></c>' +
@@ -578,7 +578,7 @@ QUnit.test('Set number format for Number column to \'0000\', \'0.00\', \'0.00E+0
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="5" t="n"><v>42</v></c><c r="B1" s="6" t="n"><v>43</v></c><c r="C1" s="7" t="n"><v>44</v></c>' +
@@ -625,7 +625,7 @@ QUnit.test('Set number format for Number column when column.format is function',
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="5" t="n"><v>42</v></c>' +
@@ -668,7 +668,7 @@ QUnit.test('Set number format for Number column when column.format is \'decimal\
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="5" t="n"><v>42</v></c>' +
@@ -708,7 +708,7 @@ QUnit.test('Set number format for Date column cell when column.format is functio
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="5" t="n"><v>43483</v></c>' +
@@ -849,8 +849,8 @@ QUnit.test('Check default number format for [Number|Number|Date] columns', funct
     }
 ].forEach(config => {
     QUnit.test(`Check arguments for data cells - ${config.dataType}`, function(assert) {
-        const column = { dataField: 'f1', dataType: config.dataType, lookup: config.lookup },
-            ds = config.gridCellValues.map(item => { return { f1: item }; });
+        const column = { dataField: 'f1', dataType: config.dataType, lookup: config.lookup };
+        const ds = config.gridCellValues.map(item => { return { f1: item }; });
 
         helper.runGeneralTest(assert,
             {
@@ -1292,7 +1292,7 @@ QUnit.test('Check customizeExcelCell(args): change horizontalAlignment depending
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="n"><v>1</v></c><c r="B1" s="3" t="n"><v>1</v></c></row>' +
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>2</v></c><c r="B2" s="3" t="n"><v>2</v></c></row>' +
@@ -1326,7 +1326,7 @@ QUnit.test('Check customizeExcelCell(args): change horizontalAlignment depending
 
 QUnit.test('Change string undefined to string', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s"><v>0</v></c>' +
@@ -1356,7 +1356,7 @@ QUnit.test('Change string undefined to string', function(assert) {
 
 QUnit.test('Change string undefined to number', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>42</v></c>' +
@@ -1384,7 +1384,7 @@ QUnit.test('Change string undefined to number', function(assert) {
 
 QUnit.test('Change string null to string', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s"><v>0</v></c>' +
@@ -1414,7 +1414,7 @@ QUnit.test('Change string null to string', function(assert) {
 
 QUnit.test('Change string null to number', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>42</v></c>' +
@@ -1442,7 +1442,7 @@ QUnit.test('Change string null to number', function(assert) {
 
 QUnit.test('Change string value to undefined', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s" />' +
@@ -1472,7 +1472,7 @@ QUnit.test('Change string value to undefined', function(assert) {
 
 QUnit.test('Change string value to null', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s" />' +
@@ -1502,7 +1502,7 @@ QUnit.test('Change string value to null', function(assert) {
 
 QUnit.test('Change string value to string', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s"><v>1</v></c>' +
@@ -1533,7 +1533,7 @@ QUnit.test('Change string value to string', function(assert) {
 
 QUnit.test('Change string value to number', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>42</v></c>' +
@@ -1563,7 +1563,7 @@ QUnit.test('Change string value to number', function(assert) {
 
 QUnit.test('Change string value to Number.NaN', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s"><v>1</v></c>' +
@@ -1594,7 +1594,7 @@ QUnit.test('Change string value to Number.NaN', function(assert) {
 
 QUnit.test('Change string value to Number.POSITIVE_INFINITY', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s"><v>1</v></c>' +
@@ -1625,7 +1625,7 @@ QUnit.test('Change string value to Number.POSITIVE_INFINITY', function(assert) {
 
 QUnit.test('Change string value to Number.NEGATIVE_INFINITY', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s"><v>1</v></c>' +
@@ -1656,7 +1656,7 @@ QUnit.test('Change string value to Number.NEGATIVE_INFINITY', function(assert) {
 
 QUnit.test('Change string value to date', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>43122.70486111111</v></c>' +
@@ -1686,7 +1686,7 @@ QUnit.test('Change string value to date', function(assert) {
 
 QUnit.test('Change string value to boolean', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="b"><v>true</v></c>' +
@@ -1716,7 +1716,7 @@ QUnit.test('Change string value to boolean', function(assert) {
 
 QUnit.test('Change number undefined to number', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>42</v></c>' +
@@ -1744,7 +1744,7 @@ QUnit.test('Change number undefined to number', function(assert) {
 
 QUnit.test('Change number null to number', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>42</v></c>' +
@@ -1772,7 +1772,7 @@ QUnit.test('Change number null to number', function(assert) {
 
 QUnit.test('Change number value to undefined', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n" />' +
@@ -1800,7 +1800,7 @@ QUnit.test('Change number value to undefined', function(assert) {
 
 QUnit.test('Change number value to null', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n" />' +
@@ -1828,7 +1828,7 @@ QUnit.test('Change number value to null', function(assert) {
 
 QUnit.test('Change number value to string', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s"><v>0</v></c>' +
@@ -1858,7 +1858,7 @@ QUnit.test('Change number value to string', function(assert) {
 
 QUnit.test('Change number value to number', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>43</v></c>' +
@@ -1886,7 +1886,7 @@ QUnit.test('Change number value to number', function(assert) {
 
 QUnit.test('Change number value to number.NaN', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s"><v>0</v></c>' +
@@ -1916,7 +1916,7 @@ QUnit.test('Change number value to number.NaN', function(assert) {
 
 QUnit.test('Change number value to number.POSITIVE_INFINITY', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s"><v>0</v></c>' +
@@ -1946,7 +1946,7 @@ QUnit.test('Change number value to number.POSITIVE_INFINITY', function(assert) {
 
 QUnit.test('Change number value to number.NEGATIVE_INFINITY', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s"><v>0</v></c>' +
@@ -1976,7 +1976,7 @@ QUnit.test('Change number value to number.NEGATIVE_INFINITY', function(assert) {
 
 QUnit.test('Change number value to date', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>43122.70486111111</v></c>' +
@@ -2004,7 +2004,7 @@ QUnit.test('Change number value to date', function(assert) {
 
 QUnit.test('Change number value to boolean', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="b"><v>true</v></c>' +
@@ -2032,7 +2032,7 @@ QUnit.test('Change number value to boolean', function(assert) {
 
 QUnit.test('Change date undefined to date', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>43487.70486111111</v></c>' +
@@ -2062,7 +2062,7 @@ QUnit.test('Change date undefined to date', function(assert) {
 
 QUnit.test('Change date null to date', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>43487.70486111111</v></c>' +
@@ -2092,7 +2092,7 @@ QUnit.test('Change date null to date', function(assert) {
 
 QUnit.test('Change date value to string', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s"><v>0</v></c>' +
@@ -2124,7 +2124,7 @@ QUnit.test('Change date value to string', function(assert) {
 
 QUnit.test('Change date value to undefined', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n" />' +
@@ -2154,7 +2154,7 @@ QUnit.test('Change date value to undefined', function(assert) {
 
 QUnit.test('Change date value to null', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n" />' +
@@ -2184,7 +2184,7 @@ QUnit.test('Change date value to null', function(assert) {
 
 QUnit.test('Change date value to number', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>42</v></c>' +
@@ -2214,7 +2214,7 @@ QUnit.test('Change date value to number', function(assert) {
 
 QUnit.test('Change date value to date', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>43122.70486111111</v></c>' +
@@ -2252,7 +2252,7 @@ QUnit.test('Change date value to date', function(assert) {
 
 QUnit.test('Change date value to boolean', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="b"><v>true</v></c>' +
@@ -2282,7 +2282,7 @@ QUnit.test('Change date value to boolean', function(assert) {
 
 QUnit.test('Change boolean value to string', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s"><v>1</v></c></row>' +
@@ -2314,7 +2314,7 @@ QUnit.test('Change boolean value to string', function(assert) {
 
 QUnit.test('Change boolean value to number', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>42</v></c></row>' +
@@ -2345,7 +2345,7 @@ QUnit.test('Change boolean value to number', function(assert) {
 
 QUnit.test('Change boolean value to date', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>43122.70486111111</v></c></row>' +
@@ -2376,7 +2376,7 @@ QUnit.test('Change boolean value to date', function(assert) {
 
 QUnit.test('Change boolean value to boolean', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="s"><v>1</v></c></row>' +
         '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="b"><v>true</v></c></row>' +
@@ -2424,7 +2424,7 @@ QUnit.test('Change group cell value', function(assert) {
         '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="4" t="n"><v>1011</v></c></row>' +
         '<row r="2" spans="1:1" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>1002</v></c></row>' +
@@ -2468,7 +2468,7 @@ QUnit.test('Change group summary cell value with alignByColumn', function(assert
         '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="4" t="s"><v>0</v></c><c r="B1" s="2" t="s"><v>2</v></c></row>' +
         '<row r="2" spans="1:2" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>1002</v></c><c r="B2" s="3" t="n"><v>1003</v></c></row>' +
@@ -2522,7 +2522,7 @@ QUnit.test('Change group cell with group summary items value', function(assert) 
         '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="4" t="s"><v>1</v></c></row>' +
         '<row r="2" spans="1:1" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>1002</v></c></row>' +
@@ -2574,7 +2574,7 @@ QUnit.test('Change total summary cell value', function(assert) {
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="n"><v>1001</v></c><c r="B1" s="3" t="n"><v>1002</v></c></row>' +
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="2" t="s" /><c r="B2" s="2" t="s"><v>1</v></c></row>' +

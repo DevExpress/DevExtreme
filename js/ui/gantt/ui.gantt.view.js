@@ -1,6 +1,7 @@
 import Widget from '../widget/ui.widget';
 import { getGanttViewCore } from './gantt_importer';
 import { TaskAreaContainer } from './ui.gantt.task.area.container';
+import dateLocalization from '../../localization/date';
 
 export class GanttView extends Widget {
     _init() {
@@ -18,12 +19,15 @@ export class GanttView extends Widget {
             taskTitlePosition: this._getTaskTitlePosition(this.option('taskTitlePosition')),
             allowSelectTask: this.option('allowSelection'),
             editing: this.option('editing'),
-            timeMarkers: this.option('timeMarkers'),
+            validation: this.option('validation'),
+            stripLines: { stripLines: this.option('stripLines') },
             areHorizontalBordersEnabled: this.option('showRowLines'),
             areAlternateRowsEnabled: false,
-            viewType: this._getViewTypeByScaleType(this.option('scaleType'))
+            viewType: this._getViewTypeByScaleType(this.option('scaleType')),
+            cultureInfo: this._getCultureInfo()
         });
         this._selectTask(this.option('selectedRowKey'));
+        this.updateBarItemsState();
     }
 
     getTaskAreaContainer() {
@@ -44,6 +48,9 @@ export class GanttView extends Widget {
     updateView() {
         this._ganttViewCore.updateView();
     }
+    updateBarItemsState() {
+        this._ganttViewCore.barManager.updateItemsState([]);
+    }
     setWidth(value) {
         this._ganttViewCore.setWidth(value);
     }
@@ -56,6 +63,17 @@ export class GanttView extends Widget {
         this._ganttViewCore.resetAndUpdate();
     }
 
+    _getCultureInfo() {
+        return {
+            monthNames: dateLocalization.getMonthNames('wide'),
+            dayNames: dateLocalization.getDayNames('wide'),
+            abbrMonthNames: dateLocalization.getMonthNames('abbreviated'),
+            abbrDayNames: dateLocalization.getDayNames('abbreviated'),
+            quarterNames: dateLocalization.getQuarterNames(),
+            amText: dateLocalization.getPeriodNames()[0],
+            pmText: dateLocalization.getPeriodNames()[1]
+        };
+    }
     _getTaskTitlePosition(value) {
         switch(value) {
             case 'outside':
@@ -114,14 +132,18 @@ export class GanttView extends Widget {
             case 'editing':
                 this._ganttViewCore.setEditingSettings(args.value);
                 break;
+            case 'validation':
+                this._ganttViewCore.setValidationSettings(args.value);
+                this._update();
+                break;
             case 'showRowLines':
                 this._ganttViewCore.setRowLinesVisible(args.value);
                 break;
             case 'scaleType':
                 this._ganttViewCore.setViewType(this._getViewTypeByScaleType(args.value));
                 break;
-            case 'timeMarkers':
-                this._ganttViewCore.setTimeMarkers(args.value);
+            case 'stripLines':
+                this._ganttViewCore.setStripLines({ stripLines: args.value });
                 break;
             default:
                 super._optionChanged(args);
@@ -165,11 +187,12 @@ export class GanttView extends Widget {
     onGanttScroll(scrollTop) {
         this._onScroll({ scrollTop: scrollTop });
     }
-    showDialog(name, parameters, callback) {
+    showDialog(name, parameters, callback, afterClosing) {
         this._onDialogShowing({
             name: name,
             parameters: parameters,
-            callback: callback
+            callback: callback,
+            afterClosing: afterClosing
         });
     }
     getModelChangesListener() {
@@ -180,4 +203,9 @@ export class GanttView extends Widget {
             position: position
         });
     }
+    getMainElement() {
+        return this.option('mainElement').get(0);
+    }
+    adjustControl() {}
+    getRequireFirstLoadParentAutoCalc() { return this.option('validation.autoUpdateParentTasks'); }
 }

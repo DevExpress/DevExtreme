@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { createAnnotations } from 'viz/core/annotations';
+import { createAnnotations, plugins } from 'viz/core/annotations';
 import vizMocks from '../../helpers/vizMocks.js';
 
 const environment = {
@@ -20,8 +20,9 @@ const environment = {
             _getAnnotationCoords: sinon.stub().returns({ x: 100, y: 200, canvas: { left: 0, top: 0, right: 0, bottom: 0, width: 500, height: 500 } })
         };
     },
-    createAnnotations(items, options = {}, customizeAnnotation) {
-        return createAnnotations(this.widget, items, $.extend(true, { argument: 0 }, options), customizeAnnotation);
+    createAnnotations(items, options = {}, customizeAnnotation, widget = 'chart') {
+        const pullOptions = plugins[widget].members._pullOptions;
+        return createAnnotations(this.widget, items, $.extend(true, { argument: 0 }, options), customizeAnnotation, pullOptions);
     }
 };
 
@@ -101,6 +102,29 @@ QUnit.test('Merge customizeAnnotation result and common+item options', function(
     assert.deepEqual(this.renderer.image.firstCall.args, [0, 0, 10, 10, 'customized_url', 'center']);
     assert.equal(customizeAnnotation.callCount, 1);
     assert.equal(customizeAnnotation.getCall(0).args[0], itemOptions);
+});
+
+QUnit.test('Image option is string', function(assert) {
+    const itemOptions = {
+        x: 10, y: 20,
+        type: 'image',
+        image: 'some_url'
+    };
+    const annotation = this.createAnnotations([itemOptions])[0];
+    annotation.draw(this.widget, this.group);
+
+    assert.deepEqual(this.renderer.image.firstCall.args[4], 'some_url');
+});
+
+QUnit.test('Image option is string in common annotation options', function(assert) {
+    const itemOptions = {
+        x: 10, y: 20,
+        type: 'image',
+    };
+    const annotation = this.createAnnotations([itemOptions], { image: 'some_url' })[0];
+    annotation.draw(this.widget, this.group);
+
+    assert.deepEqual(this.renderer.image.firstCall.args[4], 'some_url');
 });
 
 QUnit.test('Draw image inside a plaque with borders and arrow', function(assert) {
@@ -612,7 +636,7 @@ QUnit.test('Arrow on the right, top side', function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [140 - 10, 220 - 10]);
 });
 
-QUnit.test('Arrow on the left, center', function(assert) {
+QUnit.test('Arrow on the right, center', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
     const annotation = this.createAnnotations([{ x: 140, y: 200, type: 'image', image: { url: 'some_url' } }], {
         border: {
@@ -636,7 +660,7 @@ QUnit.test('Arrow on the left, center', function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [140 - 10, 200 - 10]);
 });
 
-QUnit.test('Arrow on the left, bottom side', function(assert) {
+QUnit.test('Arrow on the right, bottom side', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
     const annotation = this.createAnnotations([{ x: 140, y: 180, type: 'image', image: { url: 'some_url' } }], {
         border: {
@@ -846,7 +870,9 @@ QUnit.module('Check plaque path on pane bounds', {
                 offsetY: 4,
                 blur: 5
             }
-        }, options));
+        }, options),
+        undefined,
+        plugins.chart.members._pullOptions);
     }
 });
 
@@ -1146,7 +1172,7 @@ QUnit.test('Draw plaque w/o arrow', function(assert) {
         y: 100,
         paddingLeftRight: 10,
         paddingTopBottom: 10,
-        cornerRadius: 5,
+        border: { cornerRadius: 5 },
         arrowWidth: 10
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1165,7 +1191,7 @@ QUnit.test('Corner radius can\'t be greater than half of height', function(asser
         height: 20,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 50,
+        border: { cornerRadius: 50 },
         arrowWidth: 10
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1184,7 +1210,7 @@ QUnit.test('Corner radius can\'t be greater than half of width', function(assert
         height: 100,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 50,
+        border: { cornerRadius: 50 },
         arrowWidth: 10
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1207,7 +1233,7 @@ QUnit.test('Arrow bettween arcs', function(assert) {
         height: 50,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 5,
+        border: { cornerRadius: 5 },
         arrowWidth: 10
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1226,7 +1252,7 @@ QUnit.test('Arrow start on top arc, arrow end beetween arcs', function(assert) {
         height: 100,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 30,
+        border: { cornerRadius: 30 },
         arrowWidth: 90
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1245,7 +1271,7 @@ QUnit.test('Both arrrow coordinates on top arc', function(assert) {
         height: 100,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 30,
+        border: { cornerRadius: 30 },
         arrowWidth: 20
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1264,7 +1290,7 @@ QUnit.test('Arrow starts on top arc and ends on bottom arc', function(assert) {
         height: 100,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 50,
+        border: { cornerRadius: 50 },
         arrowWidth: 20
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1283,7 +1309,7 @@ QUnit.test('Arrow starts on bottom arc and ends on bottom arc', function(assert)
         height: 100,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 20,
+        border: { cornerRadius: 20 },
         arrowWidth: 20
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1302,7 +1328,7 @@ QUnit.test('Arrow starts from bottom arc', function(assert) {
         height: 100,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 20,
+        border: { cornerRadius: 20 },
         arrowWidth: 20
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1321,7 +1347,7 @@ QUnit.test('Arrow on bottom arc', function(assert) {
         height: 100,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 50,
+        border: { cornerRadius: 50 },
         arrowWidth: 10
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1340,7 +1366,7 @@ QUnit.test('Arrow in the corner', function(assert) {
         height: 100,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 20,
+        border: { cornerRadius: 20 },
         arrowWidth: 10
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1359,7 +1385,7 @@ QUnit.test('Arrow in the corner. Arrow width greater than arc length', function(
         height: 100,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 20,
+        border: { cornerRadius: 20 },
         arrowWidth: 40
     })[0];
     annotation.draw(this.widget, this.group);
@@ -1378,7 +1404,7 @@ QUnit.test('Arrow in the corner. Arrow width is 0', function(assert) {
         height: 100,
         paddingLeftRight: 0,
         paddingTopBottom: 0,
-        cornerRadius: 20,
+        border: { cornerRadius: 20 },
         arrowWidth: 0
     })[0];
     annotation.draw(this.widget, this.group);

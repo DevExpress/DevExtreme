@@ -152,7 +152,7 @@ QUnit.module('common', {}, () => {
             browser.msie = true;
             const $element = $('#textbox').dxTextBox({ maxLength: 1, mask: '0' });
             const $input = $element.find('.' + INPUT_CLASS);
-            let event = $.Event('keydown', { key: '1' });
+            const event = $.Event('keydown', { key: '1' });
 
             $input.trigger(event);
             $input.val('1');

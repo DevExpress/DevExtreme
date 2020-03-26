@@ -18,7 +18,7 @@ const HORIZONTAL = 'horizontal';
 const HIDE_SCROLLBAR_TIMEOUT = 500;
 
 
-var NativeStrategy = Class.inherit({
+const NativeStrategy = Class.inherit({
 
     ctor: function(scrollable) {
         this._init(scrollable);
@@ -43,8 +43,8 @@ var NativeStrategy = Class.inherit({
 
     render: function() {
         this._renderPushBackOffset();
-        var device = devices.real(),
-            deviceType = device.platform;
+        const device = devices.real();
+        const deviceType = device.platform;
 
         this._$element
             .addClass(SCROLLABLE_NATIVE_CLASS)
@@ -59,7 +59,7 @@ var NativeStrategy = Class.inherit({
     updateBounds: noop,
 
     _renderPushBackOffset: function() {
-        var pushBackValue = this.option('pushBackValue');
+        const pushBackValue = this.option('pushBackValue');
         if(!pushBackValue && !this._component._lastPushBackValue) {
             return;
         }
@@ -158,14 +158,14 @@ var NativeStrategy = Class.inherit({
     },
 
     _pushBackFromBoundary: function() {
-        var pushBackValue = this.option('pushBackValue');
+        const pushBackValue = this.option('pushBackValue');
         if(!pushBackValue || this._disablePushBack) {
             return;
         }
 
-        var scrollOffset = this._containerSize.height - this._contentSize.height,
-            scrollTopPos = this._$container.scrollTop(),
-            scrollBottomPos = scrollOffset + scrollTopPos - pushBackValue * 2;
+        const scrollOffset = this._containerSize.height - this._contentSize.height;
+        const scrollTopPos = this._$container.scrollTop();
+        const scrollBottomPos = scrollOffset + scrollTopPos - pushBackValue * 2;
 
         if(!scrollTopPos) {
             this._$container.scrollTop(pushBackValue);
@@ -175,10 +175,10 @@ var NativeStrategy = Class.inherit({
     },
 
     _isScrollLocationChanged: function() {
-        var currentLocation = this.location(),
-            lastLocation = this._lastLocation || {},
-            isTopChanged = lastLocation.top !== currentLocation.top,
-            isLeftChanged = lastLocation.left !== currentLocation.left;
+        const currentLocation = this.location();
+        const lastLocation = this._lastLocation || {};
+        const isTopChanged = lastLocation.top !== currentLocation.top;
+        const isLeftChanged = lastLocation.left !== currentLocation.left;
 
         return isTopChanged || isLeftChanged;
     },
@@ -240,7 +240,7 @@ var NativeStrategy = Class.inherit({
 
     _updateScrollbars: function() {
         this._eachScrollbar(function(scrollbar, direction) {
-            var dimension = direction === VERTICAL ? 'height' : 'width';
+            const dimension = direction === VERTICAL ? 'height' : 'width';
             scrollbar.option({
                 containerSize: this._containerSize[dimension],
                 contentSize: this._componentContentSize[dimension]
@@ -257,8 +257,8 @@ var NativeStrategy = Class.inherit({
     },
 
     dispose: function() {
-        var className = this._$element.get(0).className;
-        var scrollableNativeRegexp = new RegExp(SCROLLABLE_NATIVE_CLASS + '\\S*', 'g');
+        const className = this._$element.get(0).className;
+        const scrollableNativeRegexp = new RegExp(SCROLLABLE_NATIVE_CLASS + '\\S*', 'g');
 
         if(scrollableNativeRegexp.test(className)) {
             this._$element.removeClass(className.match(scrollableNativeRegexp).join(' '));
@@ -277,7 +277,7 @@ var NativeStrategy = Class.inherit({
     },
 
     scrollBy: function(distance) {
-        var location = this.location();
+        const location = this.location();
         this._$container.scrollTop(Math.round(-location.top - distance.top + this.option('pushBackValue')));
         this._$container.scrollLeft(Math.round(-location.left - distance.left));
     },
@@ -297,7 +297,7 @@ var NativeStrategy = Class.inherit({
     // TODO: rtl
     // TODO: horizontal scroll when shift is pressed
     _isScrolledInMaxDirection(e) {
-        let container = this._$container.get(0);
+        const container = this._$container.get(0);
         let result;
 
         if(e.delta > 0) {

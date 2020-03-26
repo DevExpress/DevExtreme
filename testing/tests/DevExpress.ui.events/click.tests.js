@@ -8,7 +8,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="inputWrapper">\
             <input id="input" />\
         </div>\
@@ -24,7 +24,7 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
         this.element = $('#element');
         this.container = $('#container');
@@ -48,7 +48,7 @@ QUnit.module('click handler', moduleConfig);
 QUnit.test('event triggers', function(assert) {
     assert.expect(1);
 
-    var $element = this.element.on('dxclick', function(e) {
+    const $element = this.element.on('dxclick', function(e) {
         assert.ok(e);
     });
 
@@ -56,13 +56,13 @@ QUnit.test('event triggers', function(assert) {
 });
 
 QUnit.test('event args', function(assert) {
-    var fields = ['altKey', 'cancelable', 'clientX', 'clientY',
+    const fields = ['altKey', 'cancelable', 'clientX', 'clientY',
         'ctrlKey', 'currentTarget', 'data', 'delegateTarget',
         'isDefaultPrevented', 'metaKey', 'originalEvent',
         'pageX', 'pageY', 'screenX', 'screenY', 'shiftKey',
         'target', 'timeStamp', 'type', 'view', 'which'];
 
-    var element = this.element.on('dxclick', function(e) {
+    const element = this.element.on('dxclick', function(e) {
         $.each(fields, function() {
             assert.ok(this in e, this);
         });
@@ -74,7 +74,7 @@ QUnit.test('event args', function(assert) {
 QUnit.test('unsubscribing', function(assert) {
     assert.expect(0);
 
-    var $element = this.element
+    const $element = this.element
         .on('dxclick', function(e) {
             assert.ok(e);
         })
@@ -115,8 +115,8 @@ QUnit.test('regression: dxclick should triggers only on left mouse button click'
         return;
     }
 
-    var triggered = 0,
-        element = this.element.on('dxclick', function(e) { triggered++; });
+    let triggered = 0;
+    const element = this.element.on('dxclick', function(e) { triggered++; });
 
     element
         .trigger($.Event('dxpointerdown', { which: 1, pointerType: 'mouse', pointers: [null] }))
@@ -162,10 +162,10 @@ QUnit.test('dxpointer events on iOS7 with alert', function(assert) {
         return;
     }
 
-    var originalPlatform;
+    let originalPlatform;
 
     try {
-        var requestAnimationFrameCallback = noop;
+        let requestAnimationFrameCallback = noop;
         if(clickEvent.misc) {
             clickEvent.misc.requestAnimationFrame = function(callback) { requestAnimationFrameCallback = callback; };
         }
@@ -173,9 +173,9 @@ QUnit.test('dxpointer events on iOS7 with alert', function(assert) {
         originalPlatform = devices.real().platform;
         devices.real({ platform: 'ios' });
 
-        var clickCount = 0,
-            pointerDownCount = 0,
-            pointerUpCount = 0;
+        let clickCount = 0;
+        let pointerDownCount = 0;
+        let pointerUpCount = 0;
 
         this.element.on('dxclick', function() {
             clickCount++;
@@ -189,7 +189,7 @@ QUnit.test('dxpointer events on iOS7 with alert', function(assert) {
             pointerUpCount++;
         });
 
-        var touchId = 13;
+        const touchId = 13;
 
         this.element
             .trigger($.Event('touchstart', { touches: [1], targetTouches: [1], changedTouches: [{ identifier: touchId }] }));
@@ -220,16 +220,16 @@ QUnit.test('fast click should be fired on next frame after pointerup', function(
         return;
     }
 
-    var origRequestAnimationFrame = clickEvent.misc.requestAnimationFrame;
+    const origRequestAnimationFrame = clickEvent.misc.requestAnimationFrame;
 
     try {
-        var animCallback = noop;
+        let animCallback = noop;
         clickEvent.misc.requestAnimationFrame = function(callback) {
             animCallback = callback;
         };
 
-        var $element = $('#element'),
-            clickFired = 0;
+        const $element = $('#element');
+        let clickFired = 0;
         $element.on('dxclick', function() {
             clickFired++;
         });
@@ -251,7 +251,7 @@ QUnit.test('click should not be fired on pointercancel (Win8 parasitic click)', 
         return;
     }
 
-    var $element = this.element;
+    const $element = this.element;
 
     $element.on('dxclick', function(e) {
         assert.ok(false, 'click is fired');
@@ -264,8 +264,8 @@ QUnit.test('click should not be fired on pointercancel (Win8 parasitic click)', 
 QUnit.module('prevent default', moduleConfig);
 
 QUnit.test('pointer events should not be prevented', function(assert) {
-    var $element = this.element,
-        pointer = nativePointerMock($element);
+    const $element = this.element;
+    const pointer = nativePointerMock($element);
 
     $element.on('dxclick', noop);
 
@@ -284,7 +284,7 @@ QUnit.test('pointer events should not be prevented', function(assert) {
 });
 
 QUnit.test('click should not be prevented (T131440, T131837)', function(assert) {
-    var $element = this.element;
+    const $element = this.element;
 
     $element.on('dxclick', function(e) {
         assert.ok(!e.originalEvent.isDefaultPrevented(), 'dxpointerup is not prevented');
@@ -304,10 +304,10 @@ QUnit.test('click should reset active element (B253127)', function(assert) {
 
     $('#input').focus();
 
-    var $element = this.element,
-        resetActiveElementCalled = 0;
+    const $element = this.element;
+    let resetActiveElementCalled = 0;
 
-    var originalResetActiveElement = domUtils.resetActiveElement;
+    const originalResetActiveElement = domUtils.resetActiveElement;
     domUtils.resetActiveElement = function() {
         resetActiveElementCalled++;
     };
@@ -317,7 +317,7 @@ QUnit.test('click should reset active element (B253127)', function(assert) {
             assert.equal(resetActiveElementCalled, 1, 'active reset before click happened');
         });
 
-        var pointer = pointerMock($element).start();
+        const pointer = pointerMock($element).start();
         pointer.down();
         assert.equal(resetActiveElementCalled, 0, 'not reset after pointerdown');
 
@@ -336,10 +336,10 @@ QUnit.test('click should not reset active element if down default action prevent
 
     $('#input').focus();
 
-    var $element = this.element,
-        resetActiveElementCalled = 0;
+    const $element = this.element;
+    let resetActiveElementCalled = 0;
 
-    var originalResetActiveElement = domUtils.resetActiveElement;
+    const originalResetActiveElement = domUtils.resetActiveElement;
     domUtils.resetActiveElement = function() {
         resetActiveElementCalled++;
     };
@@ -352,7 +352,7 @@ QUnit.test('click should not reset active element if down default action prevent
             }
         });
 
-        var pointer = pointerMock($element).start();
+        const pointer = pointerMock($element).start();
         pointer.down();
         assert.equal(resetActiveElementCalled, 0, 'not reset after pointerdown');
 
@@ -370,12 +370,12 @@ $.each(['<input>', '<textarea>', '<select>', '<button>', '<div tabindex=\'0\'>',
             return;
         }
 
-        var originalResetActiveElement = domUtils.resetActiveElement;
+        const originalResetActiveElement = domUtils.resetActiveElement;
 
         try {
-            var $focusableWrapper = $('#inputWrapper'),
-                $focusable = $(focusable),
-                resetCount = 0;
+            const $focusableWrapper = $('#inputWrapper');
+            const $focusable = $(focusable);
+            let resetCount = 0;
 
             $focusable.appendTo($focusableWrapper);
             $focusable.trigger('focus');
@@ -406,14 +406,14 @@ QUnit.test('native click should not focus on input after animation or scroll', f
         return;
     }
 
-    var originalResetActiveElement = domUtils.resetActiveElement;
+    const originalResetActiveElement = domUtils.resetActiveElement;
 
     try {
-        var $element = this.element,
-            $input = $('#input'),
-            pointer = nativePointerMock($element),
-            isMouseDownPrevented = false,
-            resetCount = 0;
+        const $element = this.element;
+        const $input = $('#input');
+        const pointer = nativePointerMock($element);
+        let isMouseDownPrevented = false;
+        let resetCount = 0;
 
         $element.on('dxclick', noop)
             .on('mousedown', function(e) {
@@ -451,14 +451,14 @@ QUnit.test('native click should focus on input after animation or scroll if defa
         return;
     }
 
-    var originalResetActiveElement = domUtils.resetActiveElement;
+    const originalResetActiveElement = domUtils.resetActiveElement;
 
     try {
-        var $element = this.element,
-            $input = $('#input'),
-            pointer = nativePointerMock($element),
-            isMouseDownPrevented = false,
-            resetCount = 0;
+        const $element = this.element;
+        const $input = $('#input');
+        const pointer = nativePointerMock($element);
+        let isMouseDownPrevented = false;
+        let resetCount = 0;
 
         $element.on({
             'dxclick': noop,
@@ -496,11 +496,11 @@ QUnit.test('native click should focus on input after animation or scroll if defa
 });
 
 QUnit.test('native click should focus on input', function(assert) {
-    var originalResetActiveElement = domUtils.resetActiveElement;
+    const originalResetActiveElement = domUtils.resetActiveElement;
 
     try {
-        var $input = $('#input'),
-            resetCount = 0;
+        const $input = $('#input');
+        let resetCount = 0;
 
         domUtils.resetActiveElement = $.proxy(function() {
             resetCount++;
@@ -529,9 +529,9 @@ QUnit.test('click on element should not prevent focus on mousedown if used nativ
         height: 200
     });
 
-    var $element = this.element,
-        pointer = nativePointerMock($element),
-        isDefaultPrevented = false;
+    const $element = this.element;
+    const pointer = nativePointerMock($element);
+    let isDefaultPrevented = false;
 
     $element
         .on('dxclick', noop)
@@ -561,8 +561,8 @@ QUnit.test('dxclick should be prevented if 10px bound is exceeded', function(ass
         return;
     }
 
-    var $element = $('#element'),
-        pointer = nativePointerMock($element);
+    const $element = $('#element');
+    const pointer = nativePointerMock($element);
 
     $element.on('dxclick', function(e) {
         assert.ok(false, 'click not present');
@@ -577,10 +577,10 @@ QUnit.test('dxclick should have correct target', function(assert) {
         return;
     }
 
-    var $container = $('#container'),
-        $element = $('#element'),
-        pointer = pointerMock($element),
-        clickTarget;
+    const $container = $('#container');
+    const $element = $('#element');
+    const pointer = pointerMock($element);
+    let clickTarget;
 
     $container.on('dxclick', function(e) {
         clickTarget = e.target;
@@ -600,9 +600,9 @@ QUnit.test('dxclick should have correct currentTarget', function(assert) {
         return;
     }
 
-    var $container = $('#container'),
-        $element = $('#element'),
-        pointer = pointerMock($element);
+    const $container = $('#container');
+    const $element = $('#element');
+    const pointer = pointerMock($element);
 
     $container.on('dxclick', function(e) {
         assert.ok($container.is(e.currentTarget));
@@ -623,7 +623,7 @@ QUnit.test('dxclick should have correct target with delegated handlers', functio
         return;
     }
 
-    var $container = $('#container');
+    const $container = $('#container');
 
     $container.on('dxclick', '#element', function(e) {
         assert.ok($(e.target).is('#wrapper'));
@@ -641,8 +641,8 @@ QUnit.test('dxclick should not be fired if target is child of element', function
         return;
     }
 
-    var $container = $('#container'),
-        $element = $('#element');
+    const $container = $('#container');
+    const $element = $('#element');
 
     $element.on('dxclick', function(e) {
         assert.ok(false, 'click was not fired');
@@ -661,7 +661,7 @@ QUnit.test('dxclick should not be fired if target is child of element', function
         return;
     }
 
-    var $element = $('#element');
+    const $element = $('#element');
 
     $element
         .on('dxclick', '#first', function() {
@@ -686,7 +686,7 @@ QUnit.test('dxclick should be based on native click', function(assert) {
         return;
     }
 
-    var $element = $('#element');
+    const $element = $('#element');
 
     $element.on('dxclick', function() {
         assert.ok(true, 'dxclick present');
@@ -697,15 +697,15 @@ QUnit.test('dxclick should be based on native click', function(assert) {
 
 // T322738
 QUnit.test('dxclick should be based on native click for all devices when useNative parameter is true', function(assert) {
-    var $element = $('#element'),
-        dxClickCallCount = 0,
-        dxClickChildCallCount = 0;
+    const $element = $('#element');
+    let dxClickCallCount = 0;
+    let dxClickChildCallCount = 0;
 
     $element.on('dxclick', { useNative: true }, function() {
         dxClickCallCount++;
     });
 
-    var $childElement = $('<div>').on('dxclick', function() {
+    const $childElement = $('<div>').on('dxclick', function() {
         dxClickChildCallCount++;
     }).appendTo($element);
 
@@ -723,8 +723,8 @@ QUnit.test('dxclick should triggers only on left mouse button click', function(a
         return;
     }
 
-    var $element = $('#element').on('dxclick', function(e) { triggered++; }),
-        triggered = 0;
+    let triggered = 0;
+    const $element = $('#element').on('dxclick', function(e) { triggered++; });
 
 
     $element.trigger($.Event('click', { which: 1 }));
@@ -745,8 +745,8 @@ QUnit.test('dxclick should not be fired twice after pointerdown, pointerup and c
         return;
     }
 
-    var $element = $('#element'),
-        pointer = pointerMock($element);
+    const $element = $('#element');
+    const pointer = pointerMock($element);
 
     $element.on('dxclick', function() {
         assert.ok(true, 'dxclick fired');
@@ -763,8 +763,8 @@ QUnit.test('dxclick should be fired even if propagation was stopped', function(a
         return;
     }
 
-    var $element = $('#element'),
-        pointer = nativePointerMock($element);
+    const $element = $('#element');
+    const pointer = nativePointerMock($element);
 
     $element
         .on('dxclick', function() {

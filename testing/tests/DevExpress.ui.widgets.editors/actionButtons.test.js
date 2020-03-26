@@ -232,7 +232,7 @@ module('rendering', () => {
 
         test('should render predefined button (\'clear\') configurated as object', function(assert) {
             const $textBox = $('<div>').dxTextBox({ showClearButton: true, buttons: [{ name: 'clear' }] });
-            let $after = getTextEditorButtons($textBox).$after;
+            const $after = getTextEditorButtons($textBox).$after;
             assert.ok(isClearButton($after.eq(0)));
         });
 
@@ -929,7 +929,7 @@ module('collection updating', () => {
 
             textBox.option('stylingMode', 'filled');
             customButton = textBox.getButton('custom');
-            assert.notOk(customButton.option('stylingMode') === 'text');
+            assert.notStrictEqual(customButton.option('stylingMode'), 'text');
         });
     });
 

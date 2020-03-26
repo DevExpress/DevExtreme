@@ -376,7 +376,15 @@ describe('Cli arguments normalizer', () => {
     });
 
     it('build-theme \'data\', \'items\', \'reader\', \'lessCompiler\' stay unchanged', () => {
-        const config = { command: 'build-theme', baseTheme: 'material.blue.light', inputFile: 'file.json', data: 'somedata', items: 'items', reader: 'r', lessCompiler: 'l' };
+        const config = {
+            command: 'build-theme',
+            baseTheme: 'material.blue.light',
+            inputFile: 'file.json',
+            data: 'somedata',
+            items: [{ key: '1', value: '2' }],
+            reader: 'r',
+            lessCompiler: 'l'
+        };
         normalizeConfig(config);
 
         assert.deepEqual(config, {
@@ -387,7 +395,7 @@ describe('Cli arguments normalizer', () => {
             'data': 'somedata',
             'fileFormat': 'css',
             'isBootstrap': false,
-            'items': 'items',
+            'items': [{ key: '1', value: '2' }],
             'lessCompiler': 'l',
             'makeSwatch': false,
             'out': 'dx.material.custom-scheme.css',
@@ -398,7 +406,7 @@ describe('Cli arguments normalizer', () => {
     });
 
     it('build-theme: if \'data\' is empty string it will be unchanged', () => {
-        const config = { command: 'build-theme', baseTheme: 'material.blue.light', data: '', items: 'items', reader: 'r', lessCompiler: 'l' };
+        const config = { command: 'build-theme', baseTheme: 'material.blue.light', data: '', items: [{ key: '', value: '' }], reader: 'r', lessCompiler: 'l' };
         normalizeConfig(config);
 
         assert.deepEqual(config, {
@@ -409,7 +417,7 @@ describe('Cli arguments normalizer', () => {
             'data': '',
             'fileFormat': 'css',
             'isBootstrap': false,
-            'items': 'items',
+            'items': [{ key: '', value: '' }],
             'lessCompiler': 'l',
             'makeSwatch': false,
             'out': 'dx.material.custom-scheme.css',
@@ -543,6 +551,36 @@ describe('Cli arguments normalizer', () => {
             'outColorScheme': 'custom-scheme',
             'themeName': 'generic',
             'widgets': ['datagrid']
+        });
+    });
+
+    it('build-theme @treelist constants change to the @datagrid constants', () => {
+        const config = {
+            command: 'build-theme',
+            baseTheme: 'material.blue.light',
+            inputFile: 'file.json',
+            data: 'somedata',
+            items: [{ key: '1', value: '2' }, { key: '@treelist-bg-color', value: '2' }, { key: '@treelist-border-color', value: '3' }],
+            reader: 'r',
+            lessCompiler: 'l'
+        };
+        normalizeConfig(config);
+
+        assert.deepEqual(config, {
+            'base': false,
+            'bootstrapVersion': 0,
+            'colorScheme': 'blue-light',
+            'command': 'build-theme',
+            'data': 'somedata',
+            'fileFormat': 'css',
+            'isBootstrap': false,
+            'items': [{ key: '1', value: '2' }, { key: '@datagrid-bg-color', value: '2' }, { key: '@datagrid-border-color', value: '3' }],
+            'lessCompiler': 'l',
+            'makeSwatch': false,
+            'out': 'dx.material.custom-scheme.css',
+            'outColorScheme': 'custom-scheme',
+            'reader': 'r',
+            'themeName': 'material'
         });
     });
 });

@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import ExcelJS from 'exceljs';
 import ExcelJSTestHelper from './ExcelJSTestHelper.js';
-import { exportDataGrid } from 'exporter/exceljs/excelExporter';
+import { exportDataGrid } from 'excel_exporter';
 import { initializeDxObjectAssign, clearDxObjectAssign } from './objectAssignHelper.js';
 import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 
@@ -29,7 +29,7 @@ const ExcelJSLocalizationFormatTests = {
 
                 QUnit.test(`Data - columns.dataType: number, columns.format: { type: 'currency', currency: ${currency.value} } `, function(assert) {
                     const done = assert.async();
-                    const ds = [{ f1: undefined, f2: null, f3: 0, f4: 1, f5: 2, f6: 2 }];
+                    const ds = [{ f1: undefined, f2: null, f3: 0, f4: 1, f5: 2, f6: -2 }];
                     const topLeft = { row: 1, column: 1 };
 
                     $('#qunit-fixture').append('<div id=\'dataGrid\'></div>');
@@ -61,10 +61,10 @@ const ExcelJSLocalizationFormatTests = {
                     exportDataGrid({
                         component: dataGrid,
                         worksheet: this.worksheet
-                    }).then((cellsRange) => {
+                    }).then((cellRange) => {
                         helper.checkValues(expectedCells);
                         helper.checkCellFormat(expectedCells);
-                        helper.checkCellsRange(cellsRange, { row: 1, column: 6 }, topLeft);
+                        helper.checkCellRange(cellRange, { row: 1, column: 6 }, topLeft);
                         done();
                     });
                 });

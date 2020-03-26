@@ -1,12 +1,13 @@
-var registerComponent = require('../../../core/component_registrator'),
-    SchedulerTimelineWeek = require('./ui.scheduler.timeline_week'),
-    dateUtils = require('../../../core/utils/date'),
-    toMs = dateUtils.dateToMilliseconds;
+const registerComponent = require('../../../core/component_registrator');
+const SchedulerTimelineWeek = require('./ui.scheduler.timeline_week');
+const dateUtils = require('../../../core/utils/date');
+const workWeekUtils = require('./utils.work_week');
+const toMs = dateUtils.dateToMilliseconds;
 
-var TIMELINE_CLASS = 'dx-scheduler-timeline-work-week',
-    MONDAY_INDEX = 1;
+const TIMELINE_CLASS = 'dx-scheduler-timeline-work-week';
+const LAST_DAY_WEEK_INDEX = 5;
 
-var SchedulerTimelineWorkWeek = SchedulerTimelineWeek.inherit({
+const SchedulerTimelineWorkWeek = SchedulerTimelineWeek.inherit({
     _getElementClass: function() {
         return TIMELINE_CLASS;
     },
@@ -16,35 +17,28 @@ var SchedulerTimelineWorkWeek = SchedulerTimelineWeek.inherit({
     },
 
     _firstDayOfWeek: function() {
-        return this.option('firstDayOfWeek') || MONDAY_INDEX;
+        return workWeekUtils.getFirstDayOfWeek(this.option('firstDayOfWeek'));
     },
 
+    _isSkippedData: workWeekUtils.isDataOnWeekend,
+
     _incrementDate: function(date) {
-        var day = date.getDay();
-        if(day === 5) {
+        const day = date.getDay();
+        if(day === LAST_DAY_WEEK_INDEX) {
             date.setDate(date.getDate() + 2);
         }
         this.callBase(date);
     },
 
-    _getOffsetByCount: function(cellIndex, rowIndex) {
-        var weekendCount = Math.floor(cellIndex / (5 * this._getCellCountInDay()));
-        if(weekendCount > 0) {
-            return toMs('day') * weekendCount * 2;
-        } else {
-            return 0;
-        }
+    _getOffsetByCount: function(cellIndex) {
+        const weekendCount = Math.floor(cellIndex / (5 * this._getCellCountInDay()));
+        return toMs('day') * weekendCount * 2;
     },
 
-    _getWeekendsCount: function(days) {
-        return 2 * Math.floor(days / 7);
-    },
+    _getWeekendsCount: workWeekUtils.getWeekendsCount,
 
     _setFirstViewDate: function() {
-        this._firstViewDate = dateUtils.getFirstWeekDate(this.option('currentDate'), this._firstDayOfWeek());
-
-        this._firstViewDate = dateUtils.normalizeDateByWeek(this._firstViewDate, this.option('currentDate'));
-
+        this._firstViewDate = workWeekUtils.getFirstViewDate(this.option('currentDate'), this._firstDayOfWeek());
         this._setStartDayHour(this._firstViewDate);
     }
 });

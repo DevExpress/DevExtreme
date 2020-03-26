@@ -1,4 +1,4 @@
-var Action = require('../../core/action');
+import Action from '../../core/action';
 
 Action.registerExecutor({
     'ngExpression': {

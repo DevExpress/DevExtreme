@@ -21,25 +21,25 @@ require('./build/gulp/vendor');
 require('./build/gulp/ts');
 require('./build/gulp/localization');
 require('./build/gulp/style-compiler');
+require('./build/gulp/scss/tasks');
 
-const QUNIT_CI = Boolean(process.env['DEVEXTREME_QUNIT_CI']);
+const TEST_CI = Boolean(process.env['DEVEXTREME_TEST_CI']);
 const DOCKER_CI = Boolean(process.env['DEVEXTREME_DOCKER_CI']);
 
-if(QUNIT_CI) {
-    console.warn('Using QUnit CI mode!');
+if(TEST_CI) {
+    console.warn('Using test CI mode!');
 }
 
 function createStyleCompilerBatch() {
-    const tasks = ['style-compiler-themes'];
-    if(!QUNIT_CI) {
-        tasks.push('style-compiler-tb-assets');
-    }
-    return gulp.series(tasks);
+    return gulp.series(TEST_CI
+        ? ['style-compiler-themes-ci']
+        : ['style-compiler-themes', 'style-compiler-tb-assets']
+    );
 }
 
 function createMiscBatch() {
     const tasks = ['vectormap', 'vendor'];
-    if(!QUNIT_CI) {
+    if(!TEST_CI) {
         tasks.push('aspnet', 'ts');
     }
     return gulp.parallel(tasks);
@@ -47,18 +47,18 @@ function createMiscBatch() {
 
 function createMainBatch() {
     const tasks = ['js-bundles-debug'];
-    if(!QUNIT_CI) {
+    if(!TEST_CI) {
         tasks.push('js-bundles-prod');
     }
     tasks.push('style-compiler-batch', 'misc-batch');
     return DOCKER_CI
-        ? gulp.parallel(tasks)
+        ? gulp.series(tasks)
         : (callback) => multiProcess(tasks, callback, true);
 }
 
 function createDefaultBatch() {
     const tasks = [ 'clean', 'localization', createMainBatch() ];
-    if(!QUNIT_CI) {
+    if(!TEST_CI) {
         tasks.push('npm', 'themebuilder-npm');
     }
     return gulp.series(tasks);

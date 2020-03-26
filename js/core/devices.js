@@ -1,20 +1,20 @@
-var $ = require('../core/renderer'),
-    windowUtils = require('./utils/window'),
-    navigator = windowUtils.getNavigator(),
-    window = windowUtils.getWindow(),
-    extend = require('./utils/extend').extend,
-    isPlainObject = require('./utils/type').isPlainObject,
-    each = require('./utils/iterator').each,
-    Class = require('./class'),
-    errors = require('./errors'),
-    Callbacks = require('./utils/callbacks'),
-    resizeCallbacks = require('./utils/resize_callbacks'),
-    EventsStrategy = require('./events_strategy').EventsStrategy,
-    SessionStorage = require('./utils/storage').sessionStorage,
-    viewPort = require('./utils/view_port'),
-    Config = require('./config');
+import $ from '../core/renderer';
+import windowUtils from './utils/window';
+import { extend } from './utils/extend';
+import { isPlainObject } from './utils/type';
+import { each } from './utils/iterator';
+import errors from './errors';
+import Callbacks from './utils/callbacks';
+import resizeCallbacks from './utils/resize_callbacks';
+import { EventsStrategy } from './events_strategy';
+import { sessionStorage as SessionStorage } from './utils/storage';
+import viewPort from './utils/view_port';
+import Config from './config';
 
-var KNOWN_UA_TABLE = {
+const navigator = windowUtils.getNavigator();
+const window = windowUtils.getWindow();
+
+const KNOWN_UA_TABLE = {
     'iPhone': 'iPhone',
     'iPhone5': 'iPhone',
     'iPhone6': 'iPhone',
@@ -35,66 +35,27 @@ var KNOWN_UA_TABLE = {
 * @module core/devices
 * @export default
 */
-var DEFAULT_DEVICE = {
-    /**
-    * @name Device.deviceType
-    * @type string
-    * @acceptValues 'phone'|'tablet'|'desktop'
-    */
+const DEFAULT_DEVICE = {
     deviceType: 'desktop',
-    /**
-    * @name Device.platform
-    * @type string
-    * @acceptValues 'android'|'ios'|'generic'
-    */
     platform: 'generic',
-    /**
-    * @name Device.version
-    * @type Array<number>
-    */
     version: [],
-    /**
-    * @name Device.phone
-    * @type boolean
-    */
     phone: false,
-    /**
-    * @name Device.tablet
-    * @type boolean
-    */
     tablet: false,
-    /**
-    * @name Device.android
-    * @type boolean
-    */
     android: false,
-    /**
-    * @name Device.ios
-    * @type boolean
-    */
     ios: false,
-    /**
-    * @name Device.generic
-    * @type boolean
-    */
     generic: true,
-    /**
-    * @name Device.grade
-    * @type string
-    * @acceptValues 'A'|'B'|'C'
-    */
     grade: 'A',
 
     // TODO: For internal use (draft, do not document these options!)
     mac: false
 };
 
-var uaParsers = {
-    generic: function(userAgent) {
-        var isPhone = /windows phone/i.test(userAgent) || userAgent.match(/WPDesktop/),
-            isTablet = !isPhone && /Windows(.*)arm(.*)Tablet PC/i.test(userAgent),
-            isDesktop = !isPhone && !isTablet && /msapphost/i.test(userAgent),
-            isMac = /((intel|ppc) mac os x)/.test(userAgent.toLowerCase());
+const uaParsers = {
+    generic(userAgent) {
+        const isPhone = /windows phone/i.test(userAgent) || userAgent.match(/WPDesktop/);
+        const isTablet = !isPhone && /Windows(.*)arm(.*)Tablet PC/i.test(userAgent);
+        const isDesktop = !isPhone && !isTablet && /msapphost/i.test(userAgent);
+        const isMac = /((intel|ppc) mac os x)/.test(userAgent.toLowerCase());
 
         if(!(isPhone || isTablet || isDesktop || isMac)) {
             return;
@@ -109,54 +70,46 @@ var uaParsers = {
         };
     },
 
-    ios: function(userAgent) {
+    ios(userAgent) {
         if(!/ip(hone|od|ad)/i.test(userAgent)) {
             return;
         }
 
-        var isPhone = /ip(hone|od)/i.test(userAgent),
-            matches = userAgent.match(/os (\d+)_(\d+)_?(\d+)?/i),
-            version = matches ? [parseInt(matches[1], 10), parseInt(matches[2], 10), parseInt(matches[3] || 0, 10)] : [],
-            isIPhone4 = (window.screen.height === (960 / 2)),
-            grade = isIPhone4 ? 'B' : 'A';
+        const isPhone = /ip(hone|od)/i.test(userAgent);
+        const matches = userAgent.match(/os (\d+)_(\d+)_?(\d+)?/i);
+        const version = matches ? [parseInt(matches[1], 10), parseInt(matches[2], 10), parseInt(matches[3] || 0, 10)] : [];
+        const isIPhone4 = (window.screen.height === (960 / 2));
+        const grade = isIPhone4 ? 'B' : 'A';
 
         return {
             deviceType: isPhone ? 'phone' : 'tablet',
             platform: 'ios',
-            version: version,
-            grade: grade
+            version,
+            grade
         };
     },
 
-    android: function(userAgent) {
+    android(userAgent) {
         if(!/android|htc_|silk/i.test(userAgent)) {
             return;
         }
 
-        var isPhone = /mobile/i.test(userAgent),
-            matches = userAgent.match(/android (\d+)\.?(\d+)?\.?(\d+)?/i),
-            version = matches ? [parseInt(matches[1], 10), parseInt(matches[2] || 0, 10), parseInt(matches[3] || 0, 10)] : [],
-            worseThan4_4 = version.length > 1 && (version[0] < 4 || version[0] === 4 && version[1] < 4),
-            grade = worseThan4_4 ? 'B' : 'A';
+        const isPhone = /mobile/i.test(userAgent);
+        const matches = userAgent.match(/android (\d+)\.?(\d+)?\.?(\d+)?/i);
+        const version = matches ? [parseInt(matches[1], 10), parseInt(matches[2] || 0, 10), parseInt(matches[3] || 0, 10)] : [];
+        const worseThan4_4 = version.length > 1 && (version[0] < 4 || version[0] === 4 && version[1] < 4);
+        const grade = worseThan4_4 ? 'B' : 'A';
 
         return {
             deviceType: isPhone ? 'phone' : 'tablet',
             platform: 'android',
-            version: version,
-            grade: grade
+            version,
+            grade
         };
     }
 };
 
-/**
- * @name DevicesObject
- * @publicName devices
- * @section Utils
- * @namespace DevExpress
- * @module core/devices
- * @export default
- */
-var Devices = Class.inherit({
+class Devices {
     /**
     * @name DevicesObjectevents.orientationChanged
     * @type classEventType
@@ -170,8 +123,8 @@ var Devices = Class.inherit({
     * @param1_field1 window:Window
     * @hidden
     */
-    ctor: function(options) {
-        this._window = options && options.window || window;
+    constructor(options) {
+        this._window = options?.window || window;
 
         this._realDevice = this._getDevice();
         this._currentDevice = undefined;
@@ -183,18 +136,9 @@ var Devices = Class.inherit({
             this._recalculateOrientation();
             resizeCallbacks.add(this._recalculateOrientation.bind(this));
         }
-    },
-    /**
-    * @name DevicesObjectmethods.current
-    * @publicName current()
-    * @return Device
-    */
-    /**
-    * @name DevicesObjectmethods.current
-    * @publicName current(deviceName)
-    * @param1 deviceName:string|Device
-    */
-    current: function(deviceOrName) {
+    }
+
+    current(deviceOrName) {
         if(deviceOrName) {
             this._currentDevice = this._getDevice(deviceOrName);
             this._forced = true;
@@ -221,62 +165,51 @@ var Devices = Class.inherit({
         }
 
         return this._currentDevice;
-    },
+    }
 
-    /**
-    * @name DevicesObjectMethods.real
-    * @publicName real()
-    * @return Device
-    */
-    real: function() {
+    real(forceDevice) {
         ///#DEBUG
-        var forceDevice = arguments[0];
         if(isPlainObject(forceDevice)) {
             extend(this._realDevice, forceDevice);
             return;
         }
         ///#ENDDEBUG
         return extend({}, this._realDevice);
-    },
+    }
 
-    /**
-     * @name DevicesObjectMethods.orientation
-     * @publicName orientation()
-     * @return String
-     */
-    orientation: function() {
+    orientation() {
         return this._currentOrientation;
-    },
+    }
 
-    isForced: function() {
+    isForced() {
         return this._forced;
-    },
+    }
 
-    isRippleEmulator: function() {
+    isRippleEmulator() {
         return !!this._window.tinyHippos;
-    },
+    }
 
-    _getCssClasses: function(device) {
-        var result = [];
-        var realDevice = this._realDevice;
+    _getCssClasses(device) {
+        const result = [];
+        const realDevice = this._realDevice;
 
         device = device || this.current();
 
         // TODO: use real device here?
         if(device.deviceType) {
-            result.push('dx-device-' + device.deviceType);
+            result.push(`dx-device-${device.deviceType}`);
             if(device.deviceType !== 'desktop') {
                 result.push('dx-device-mobile');
             }
         }
 
-        result.push('dx-device-' + realDevice.platform);
+        result.push(`dx-device-${realDevice.platform}`);
 
         if(realDevice.version && realDevice.version.length) {
-            result.push('dx-device-' + realDevice.platform + '-' + realDevice.version[0]);
+            result.push(`dx-device-${realDevice.platform}-${realDevice.version[0]}`);
         }
 
-        if(devices.isSimulator()) {
+        if(this.isSimulator()) {
             result.push('dx-simulator');
         }
 
@@ -285,31 +218,31 @@ var Devices = Class.inherit({
         }
 
         return result;
-    },
+    }
 
-    attachCssClasses: function(element, device) {
+    attachCssClasses(element, device) {
         this._deviceClasses = this._getCssClasses(device).join(' ');
         $(element).addClass(this._deviceClasses);
-    },
+    }
 
-    detachCssClasses: function(element) {
+    detachCssClasses(element) {
         $(element).removeClass(this._deviceClasses);
-    },
+    }
 
-    isSimulator: function() {
+    isSimulator() {
         // NOTE: error may happen due to same-origin policy
         try {
             return this._isSimulator || windowUtils.hasWindow() && this._window.top !== this._window.self && this._window.top['dx-force-device'] || this.isRippleEmulator();
         } catch(e) {
             return false;
         }
-    },
+    }
 
-    forceSimulator: function() {
+    forceSimulator() {
         this._isSimulator = true;
-    },
+    }
 
-    _getDevice: function(deviceName) {
+    _getDevice(deviceName) {
         if(deviceName === 'genericPhone') {
             deviceName = {
                 deviceType: 'phone',
@@ -321,7 +254,7 @@ var Devices = Class.inherit({
         if(isPlainObject(deviceName)) {
             return this._fromConfig(deviceName);
         } else {
-            var ua;
+            let ua;
             if(deviceName) {
                 ua = KNOWN_UA_TABLE[deviceName];
                 if(!ua) {
@@ -332,51 +265,51 @@ var Devices = Class.inherit({
             }
             return this._fromUA(ua);
         }
-    },
+    }
 
-    _getDeviceOrNameFromWindowScope: function() {
-        var result;
+    _getDeviceOrNameFromWindowScope() {
+        let result;
 
         if(windowUtils.hasWindow() && (this._window.top['dx-force-device-object'] || this._window.top['dx-force-device'])) {
             result = this._window.top['dx-force-device-object'] || this._window.top['dx-force-device'];
         }
 
         return result;
-    },
+    }
 
-    _getDeviceNameFromSessionStorage: function() {
-        var sessionStorage = SessionStorage();
+    _getDeviceNameFromSessionStorage() {
+        const sessionStorage = SessionStorage();
 
         if(!sessionStorage) {
             return;
         }
 
-        var deviceOrName = sessionStorage.getItem('dx-force-device');
+        const deviceOrName = sessionStorage.getItem('dx-force-device');
 
         try {
             return JSON.parse(deviceOrName);
         } catch(ex) {
             return deviceOrName;
         }
-    },
+    }
 
-    _fromConfig: function(config) {
-        var result = extend({}, DEFAULT_DEVICE, this._currentDevice, config),
-            shortcuts = {
-                phone: result.deviceType === 'phone',
-                tablet: result.deviceType === 'tablet',
-                android: result.platform === 'android',
-                ios: result.platform === 'ios',
-                generic: result.platform === 'generic'
-            };
+    _fromConfig(config) {
+        const result = extend({}, DEFAULT_DEVICE, this._currentDevice, config);
+        const shortcuts = {
+            phone: result.deviceType === 'phone',
+            tablet: result.deviceType === 'tablet',
+            android: result.platform === 'android',
+            ios: result.platform === 'ios',
+            generic: result.platform === 'generic'
+        };
 
         return extend(result, shortcuts);
-    },
+    }
 
-    _fromUA: function(ua) {
-        var config;
+    _fromUA(ua) {
+        let config;
 
-        each(uaParsers, function(platform, parser) {
+        each(uaParsers, (platform, parser) => {
             config = parser(ua);
             return !config;
         });
@@ -386,11 +319,11 @@ var Devices = Class.inherit({
         }
 
         return DEFAULT_DEVICE;
-    },
+    }
 
-    _changeOrientation: function() {
-        var $window = $(this._window),
-            orientation = $window.height() > $window.width() ? 'portrait' : 'landscape';
+    _changeOrientation() {
+        const $window = $(this._window);
+        const orientation = $window.height() > $window.width() ? 'portrait' : 'landscape';
 
         if(this._currentOrientation === orientation) {
             return;
@@ -401,10 +334,10 @@ var Devices = Class.inherit({
         this._eventsStrategy.fireEvent('orientationChanged', [{
             orientation: orientation
         }]);
-    },
+    }
 
-    _recalculateOrientation: function() {
-        var windowWidth = $(this._window).width();
+    _recalculateOrientation() {
+        const windowWidth = $(this._window).width();
 
         if(this._currentWidth === windowWidth) {
             return;
@@ -413,56 +346,24 @@ var Devices = Class.inherit({
 
         this._changeOrientation();
 
-    },
+    }
 
-    /**
-     * @name DevicesObjectMethods.on
-     * @publicName on(eventName, eventHandler)
-     * @param1 eventName:string
-     * @param2 eventHandler:function
-     * @return this
-     */
-    /**
-     * @name DevicesObjectMethods.on
-     * @publicName on(events)
-     * @param1 events:object
-     * @return this
-     */
     on(eventName, eventHandler) {
         this._eventsStrategy.on(eventName, eventHandler);
         return this;
-    },
+    }
 
-    /**
-     * @name DevicesObjectMethods.off
-     * @publicName off(eventName)
-     * @param1 eventName:string
-     * @return this
-     */
-    /**
-     * @name DevicesObjectMethods.off
-     * @publicName off(eventName, eventHandler)
-     * @param1 eventName:string
-     * @param2 eventHandler:function
-     * @return this
-     */
     off(eventName, eventHandler) {
         this._eventsStrategy.off(eventName, eventHandler);
         return this;
     }
-});
+}
 
-var devices = new Devices();
+const devices = new Devices();
 
-viewPort.changeCallback.add(function(viewPort, prevViewport) {
+viewPort.changeCallback.add((viewPort, prevViewport) => {
     devices.detachCssClasses(prevViewport);
     devices.attachCssClasses(viewPort);
 });
 
-/**
- * @const devices
- * @type DevicesObject
- * @namespace DevExpress
- * @hidden
- */
 module.exports = devices;

@@ -6,26 +6,26 @@ import { Selector } from 'testcafe';
 fixture `Keyboard Navigation`
     .page(url(__dirname, '../container.html'));
 
-test("Cell should not highlighted after editing another cell when startEditAction is 'dblClick' and 'batch' edit mode", async t => {
+test("Cell should not highlighted after editing another cell when startEditAction: dblClick and editing.mode: batch", async t => {
 const dataGrid = new DataGrid("#container");
 
     await t
         .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
         .expect(dataGrid.getDataCell(1, 1).isFocused).notOk()
 
-        .doubleClick(dataGrid.getDataCell(1, 1).element)
+        .doubleClick(dataGrid.getDataCell(1, 1).element, { speed: 0.5 })
         .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
         .expect(dataGrid.getDataCell(1, 1).isFocused).ok()
 
-        .click(dataGrid.getDataCell(0, 1).element)
+        .click(dataGrid.getDataCell(0, 1).element, { speed: 0.5 })
         .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
         .expect(dataGrid.getDataCell(1, 1).isFocused).notOk()
         .expect(dataGrid.getDataCell(1, 1).isEditCell).notOk()
 
-        .doubleClick(dataGrid.getDataCell(1, 1).element)
+        .doubleClick(dataGrid.getDataCell(1, 1).element, { speed: 0.5 })
         .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
 
-        .click(dataGrid.getDataCell(0, 1).element)
+        .click(dataGrid.getDataCell(0, 1).element, { speed: 0.5 })
         .expect(dataGrid.getDataCell(0, 1).element.focused).ok()
         .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
         .expect(dataGrid.getDataCell(1, 1).isFocused).notOk();
@@ -569,18 +569,49 @@ test("Row should not be focused by 'focusedRowIndex' after change 'pageIndex' by
         .click(pager.getNavPage(1).element)
         .expect(pager.getNavPage(1).isSelected).ok()
         .expect(dataGrid.getFocusedRow().exists).notOk();
-    }).before(() => createWidget("dxDataGrid", {
-        dataSource: [
-            { id: 0, c0: "c0_0" },
-            { id: 1, c0: "c0_1" },
-            { id: 2, c0: "c0_2" },
-            { id: 3, c0: "c0_3" }
-        ],
-        keyExpr: "id",
-        focusedRowEnabled: true,
-        autoNavigateToFocusedRow: false,
-        focusedRowIndex: 1,
-        paging: {
-            pageSize: 2
-        }
-    }));
+}).before(() => createWidget("dxDataGrid", {
+    dataSource: [
+        { id: 0, c0: "c0_0" },
+        { id: 1, c0: "c0_1" },
+        { id: 2, c0: "c0_2" },
+        { id: 3, c0: "c0_3" }
+    ],
+    keyExpr: "id",
+    focusedRowEnabled: true,
+    autoNavigateToFocusedRow: false,
+    focusedRowIndex: 1,
+    paging: {
+        pageSize: 2
+    }
+}));
+
+test("Cell should be highlighted after editing another cell when startEditAction is 'dblClick' and 'batch' edit mode if isHighlighted is set to true in onFocusedCellChanging (T836391)", async t => {
+    const dataGrid = new DataGrid("#container");
+    const cell0 = dataGrid.getDataCell(0, 0);
+    const cell1 = dataGrid.getDataCell(0, 1);
+
+    await t
+        .expect(cell0.isFocused).notOk()
+        .expect(cell1.isFocused).notOk()
+
+        .doubleClick(cell0.element, { speed: 0.8 })
+        .expect(cell0.isFocused).ok()
+        .expect(cell0.isEditCell).ok()
+
+        .click(cell1.element, { speed: 0.8 })
+        .expect(cell1.isFocused).ok()
+        .expect(cell0.isFocused).notOk()
+        .expect(cell0.isEditCell).notOk();
+}).before(() => createWidget("dxDataGrid", {
+    dataSource: [
+        { name: "Alex", phone: "555555", room: 1 },
+        { name: "Dan", phone: "553355", room: 2 }
+    ],
+    columns:["name","phone","room"],
+    editing: {
+        mode: "batch",
+        allowUpdating: true,
+        startEditAction: "dblClick"
+    },
+    onFocusedCellChanging: (e) => e.isHighlighted = true
+}));

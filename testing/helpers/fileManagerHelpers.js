@@ -1,6 +1,7 @@
 import $ from 'jquery';
+import devices from 'core/devices';
 import { deserializeDate } from 'core/utils/date_serialization';
-import { FileManagerItem } from 'ui/file_manager/file_provider/file_provider';
+import FileSystemItem from 'file_management/file_system_item';
 
 import FileReaderMock from './fileManager/file_reader.mock.js';
 
@@ -13,12 +14,16 @@ export const Consts = {
     CONTAINER_CLASS: 'dx-filemanager-container',
     DRAWER_PANEL_CONTENT_CLASS: 'dx-drawer-panel-content',
     DRAWER_CONTENT_CLASS: 'dx-drawer-content',
+    DRAWER_MODE_SHRINK: 'dx-drawer-shrink',
+    DRAWER_MODE_OVERLAP: 'dx-drawer-overlap',
+    NOTIFICATION_DRAWER_CLASS: 'dx-filemanager-notification-drawer',
     DIRS_PANEL_CLASS: 'dx-filemanager-dirs-panel',
     DIRS_TREE_CLASS: 'dx-filemanager-dirs-tree',
     ITEMS_VIEW_CLASS: 'dx-filemanager-files-view',
     DIALOG_CLASS: 'dx-filemanager-dialog',
     THUMBNAILS_ITEM_CLASS: 'dx-filemanager-thumbnails-item',
     THUMBNAILS_ITEM_NAME_CLASS: 'dx-filemanager-thumbnails-item-name',
+    THUMBNAILS_ITEM_CONTENT_CLASS: 'dx-filemanager-thumbnails-item-content',
     GRID_DATA_ROW_CLASS: 'dx-data-row',
     FILE_ACTION_BUTTON_CLASS: 'dx-filemanager-file-actions-button',
     FOLDERS_TREE_VIEW_ITEM_CLASS: 'dx-treeview-item',
@@ -45,6 +50,8 @@ export const Consts = {
     MENU_ITEM_WITH_SUBMENU_CLASS: 'dx-menu-item-has-submenu',
     SUBMENU_CLASS: 'dx-submenu',
     SELECTION_CLASS: 'dx-selection',
+    ITEM_SELECTED_CLASS: 'dx-item-selected',
+    FOCUSED_ROW_CLASS: 'dx-row-focused',
     SPLITTER_CLASS: 'dx-splitter',
     DISABLED_STATE_CLASS: 'dx-state-disabled',
     UPLOAD_ICON_CLASS: 'dx-icon-upload',
@@ -149,12 +156,21 @@ export class FileManagerWrapper {
         return _$generalToolbar.find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
     }
 
+    getFileSelectionToolbarElements() {
+        const _$fileSelectionToolbar = this.getToolbar().children().first().next();
+        return _$fileSelectionToolbar.find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
+    }
+
     getToolbarButton(text) {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}:contains('${text}')`);
     }
 
     getToolbarSeparators() {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.TOOLBAR_SEPARATOR_ITEM}:visible`);
+    }
+
+    getToolbarDropDownButton() {
+        return this._$element.find(`.${Consts.DROP_DOWN_BUTTON_CLASS}`);
     }
 
     getToolbarDropDownMenuButton() {
@@ -189,6 +205,14 @@ export class FileManagerWrapper {
         return this.getThumbnailsItems().filter(`:contains('${itemName}')`);
     }
 
+    getThumbnailsItemContent(itemName) {
+        return this.findThumbnailsItem(itemName).find(`.${Consts.THUMBNAILS_ITEM_CONTENT_CLASS}`);
+    }
+
+    isThumbnailsItemSelected(itemName) {
+        return this.findThumbnailsItem(itemName).is(`.${Consts.ITEM_SELECTED_CLASS}`);
+    }
+
     findDetailsItem(itemName) {
         return this._$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td:contains('${itemName}')`);
     }
@@ -211,6 +235,14 @@ export class FileManagerWrapper {
         return this.getDetailsItemsNames().eq(index).text();
     }
 
+    getDetailsItemDateModified(index) {
+        return this.getDetailsCell('Date Modified', index).text();
+    }
+
+    getDetailsItemSize(index) {
+        return this.getDetailsCell('File Size', index).text();
+    }
+
     getRowActionButtonInDetailsView(index) {
         const $row = this.getRowInDetailsView(index);
         return this._findActionButton($row);
@@ -221,7 +253,7 @@ export class FileManagerWrapper {
     }
 
     getRowNameCellInDetailsView(index) {
-        return this.getRowInDetailsView(index).find('td').eq(1);
+        return this.getDetailsCell('Name', index - 1);
     }
 
     getRowsInDetailsView() {
@@ -240,11 +272,51 @@ export class FileManagerWrapper {
         return this._$element.find('[id*=dx-col]').eq(index);
     }
 
-    getDetailsCellText(columnCaption, rowIndex) {
+    getDetailsCell(columnCaption, rowIndex) {
         const $itemList = this.getDetailsItemList();
         const columnIndex = $itemList.find(`.dx-header-row > td:contains('${columnCaption}')`).index();
         const $row = this.getRowInDetailsView(rowIndex + 1);
-        return $row.children('td').eq(columnIndex).text();
+        return $row.children('td').eq(columnIndex);
+    }
+
+    getDetailsCellText(columnCaption, rowIndex) {
+        return this.getDetailsCell(columnCaption, rowIndex).text();
+    }
+
+    getDetailsCellValue(rowIndex, columnIndex) {
+        columnIndex += isDesktopDevice() ? 1 : 0;
+        return this.getRowInDetailsView(rowIndex)
+            .find(`td:nth-child(${columnIndex})`)
+            .text()
+            .replace(showMoreButtonText, '');
+    }
+
+    getSelectAllCheckBox() {
+        const $itemList = this.getDetailsItemList();
+        return $itemList.find('.dx-header-row > td.dx-command-select .dx-select-checkbox');
+    }
+
+    getSelectAllCheckBoxState() {
+        const $checkBox = this.getSelectAllCheckBox();
+        if($checkBox.is('.dx-checkbox-indeterminate')) {
+            return 'indeterminate';
+        } else if($checkBox.is('.dx-checkbox-checked')) {
+            return 'checked';
+        } else {
+            return 'clear';
+        }
+    }
+
+    getRowSelectCheckBox(index) {
+        return this.getRowInDetailsView(index).find('td.dx-command-select .dx-select-checkbox:visible');
+    }
+
+    isDetailsRowSelected(index) {
+        return this.getRowInDetailsView(index).is(`.${Consts.SELECTION_CLASS}`);
+    }
+
+    isDetailsRowFocused(index) {
+        return this.getRowInDetailsView(index).is(`.${Consts.FOCUSED_ROW_CLASS}`);
     }
 
     getContextMenuItems(visible) {
@@ -269,6 +341,10 @@ export class FileManagerWrapper {
 
     getDrawerPanelContent() {
         return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.DRAWER_PANEL_CONTENT_CLASS}`);
+    }
+
+    getProgressDrawer() {
+        return this._$element.find(`.${Consts.NOTIFICATION_DRAWER_CLASS}`);
     }
 
     getItemsPanel() {
@@ -484,7 +560,7 @@ export const stringify = obj => {
         return JSON.stringify(obj);
     }
 
-    let props = Object
+    const props = Object
         .keys(obj)
         .map(key => `${key}: ${stringify(obj[key])}`)
         .join(', ');
@@ -611,19 +687,19 @@ export const createSampleFileItems = () => {
         { id: 'Root\\Files\\Article.txt', name: 'Article.txt', dateModified: '2017-02-09T09:38:46.3772529Z', isDirectory: false, size: 1, pathInfo: filesPathInfo }
     ];
 
-    const fileManagerItems = [
-        createFileManagerItem(filesPathInfo, itemData[0]),
-        createFileManagerItem(filesPathInfo, itemData[1]),
-        createFileManagerItem(filesPathInfo, itemData[2]),
-        createFileManagerItem(filesPathInfo, itemData[3]),
-        createFileManagerItem(filesPathInfo, itemData[4])
+    const fileSystemItems = [
+        createFileSystemItem(filesPathInfo, itemData[0]),
+        createFileSystemItem(filesPathInfo, itemData[1]),
+        createFileSystemItem(filesPathInfo, itemData[2]),
+        createFileSystemItem(filesPathInfo, itemData[3]),
+        createFileSystemItem(filesPathInfo, itemData[4])
     ];
 
-    return { filesPathInfo, itemData, fileManagerItems };
+    return { filesPathInfo, itemData, fileSystemItems };
 };
 
-const createFileManagerItem = (parentPath, dataObj) => {
-    let item = new FileManagerItem(parentPath, dataObj.name, dataObj.isDirectory);
+const createFileSystemItem = (parentPath, dataObj) => {
+    const item = new FileSystemItem(parentPath, dataObj.name, dataObj.isDirectory);
     item.dateModified = deserializeDate(dataObj.dateModified);
     item.size = dataObj.size;
     item.dataItem = dataObj;
@@ -678,4 +754,8 @@ export const createUploadInfo = (file, chunkIndex, customData, chunkSize) => {
 
 export const stubFileReader = object => {
     sinon.stub(object, '_createFileReader', () => new FileReaderMock());
+};
+
+export const isDesktopDevice = () => {
+    return devices.real().deviceType === 'desktop';
 };

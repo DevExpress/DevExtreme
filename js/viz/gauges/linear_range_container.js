@@ -1,12 +1,12 @@
-var BaseRangeContainer = require('./base_range_container'),
+const BaseRangeContainer = require('./base_range_container');
 
-    _Number = Number,
-    _max = Math.max,
-    _normalizeEnum = require('../core/utils').normalizeEnum;
+const _Number = Number;
+const _max = Math.max;
+const _normalizeEnum = require('../core/utils').normalizeEnum;
 
-var LinearRangeContainer = BaseRangeContainer.inherit({
+const LinearRangeContainer = BaseRangeContainer.inherit({
     _processOptions: function() {
-        var that = this;
+        const that = this;
         that.vertical = that._options.vertical;
         that._inner = that._outer = 0;
         if(that.vertical) {
@@ -41,16 +41,16 @@ var LinearRangeContainer = BaseRangeContainer.inherit({
     },
 
     _createRange: function(range, layout) {
-        var that = this,
-            inner = that._inner,
-            outer = that._outer,
-            startPosition = that._translator.translate(range.start),
-            endPosition = that._translator.translate(range.end),
-            points,
-            x = layout.x,
-            y = layout.y,
-            startWidth = range.startWidth,
-            endWidth = range.endWidth;
+        const that = this;
+        const inner = that._inner;
+        const outer = that._outer;
+        const startPosition = that._translator.translate(range.start);
+        const endPosition = that._translator.translate(range.end);
+        let points;
+        const x = layout.x;
+        const y = layout.y;
+        const startWidth = range.startWidth;
+        const endWidth = range.endWidth;
 
         if(that.vertical) {
             points = [
@@ -71,8 +71,8 @@ var LinearRangeContainer = BaseRangeContainer.inherit({
     },
 
     measure: function(layout) {
-        var result = {},
-            width;
+        const result = {};
+        let width;
 
         result.min = result.max = layout[this.vertical ? 'x' : 'y'];
         width = this._options.width;

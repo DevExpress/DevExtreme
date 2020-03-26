@@ -3,6 +3,7 @@ import ValidationEngine from 'ui/validation_engine';
 import Validator from 'ui/validator';
 import DefaultAdapter from 'ui/validation/default_adapter';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import pointerMock from '../../helpers/pointerMock.js';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 import { Deferred } from 'core/utils/deferred';
 
@@ -32,6 +33,10 @@ const BUTTON_HAS_TEXT_CLASS = 'dx-button-has-text';
 const BUTTON_HAS_ICON_CLASS = 'dx-button-has-icon';
 const BUTTON_BACK_CLASS = 'dx-button-back';
 const BUTTON_SUBMIT_INPUT_CLASS = 'dx-button-submit-input';
+const BUTTON_TEXT_STYLE_CLASS = 'dx-button-mode-text';
+const BUTTON_CONTAINED_STYLE_CLASS = 'dx-button-mode-contained';
+const BUTTON_OUTLINED_STYLE_CLASS = 'dx-button-mode-outlined';
+const INK_RIPPLE_CLASS = 'dx-inkripple';
 
 QUnit.module('options changed callbacks', {
     beforeEach: function() {
@@ -111,6 +116,22 @@ QUnit.module('options changed callbacks', {
         this.instance.repaint();
 
         assert.strictEqual(template.firstCall.args[0].custom, 1, 'custom field is correct');
+    });
+
+    QUnit.test('stylingMode', function(assert) {
+        assert.ok(this.element.hasClass(BUTTON_CONTAINED_STYLE_CLASS));
+
+        this.instance.option('stylingMode', 'text');
+        assert.ok(this.element.hasClass(BUTTON_TEXT_STYLE_CLASS));
+        assert.notOk(this.element.hasClass(BUTTON_CONTAINED_STYLE_CLASS));
+
+        this.instance.option('stylingMode', 'outlined');
+        assert.ok(this.element.hasClass(BUTTON_OUTLINED_STYLE_CLASS));
+        assert.notOk(this.element.hasClass(BUTTON_TEXT_STYLE_CLASS));
+
+        this.instance.option('stylingMode', 'contained');
+        assert.ok(this.element.hasClass(BUTTON_CONTAINED_STYLE_CLASS));
+        assert.notOk(this.element.hasClass(BUTTON_OUTLINED_STYLE_CLASS));
     });
 
     QUnit.test('readOnly validator should be excluded for the click action', function(assert) {
@@ -220,6 +241,37 @@ QUnit.module('inkRipple', {}, () => {
         });
         $('#inkButton').trigger('dxclick');
     });
+
+    QUnit.test('widget should works correctly when the useInkRipple option is changed at runtime', function(assert) {
+        const clock = sinon.useFakeTimers();
+        const $inkButton = $('#inkButton').dxButton({
+            text: 'test',
+            useInkRipple: true
+        });
+        const inkButton = $inkButton.dxButton('instance');
+        const pointer = pointerMock($inkButton);
+
+        pointer.start('touch').down();
+        clock.tick();
+        pointer.start('touch').up();
+        assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 1, 'inkRipple element was rendered');
+
+        inkButton.option('useInkRipple', false);
+        assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 0, 'inkRipple element was removed');
+
+        pointer.start('touch').down();
+        clock.tick();
+        pointer.start('touch').up();
+        assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 0, 'inkRipple element was removed is still removed after click');
+
+        inkButton.option('useInkRipple', true);
+        pointer.start('touch').down();
+        clock.tick();
+        pointer.start('touch').up();
+        assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 1, 'inkRipple element was rendered');
+
+        clock.restore();
+    });
 });
 
 QUnit.module('widget sizing render', {}, () => {
@@ -316,11 +368,11 @@ QUnit.module('submit behavior', {
     }
 }, () => {
     QUnit.test('render input with submit type', function(assert) {
-        assert.ok(this.$element.find('input[type=submit]').length, 1);
+        assert.strictEqual(this.$element.find('input[type=submit]').length, 1);
     });
 
     QUnit.test('submit input has .dx-button-submit-input CSS class', function(assert) {
-        assert.ok(this.$element.find('.' + BUTTON_SUBMIT_INPUT_CLASS).length, 1);
+        assert.strictEqual(this.$element.find(`.${BUTTON_SUBMIT_INPUT_CLASS}`).length, 1);
     });
 
     QUnit.test('button click call click() on submit input', function(assert) {
@@ -333,6 +385,18 @@ QUnit.module('submit behavior', {
         this.clickButton();
 
         assert.ok(clickHandlerSpy.calledOnce);
+    });
+
+    QUnit.test('widget should work correctly if useSubmitBehavior was changed runtime', function(assert) {
+        const instance = this.$element.dxButton('instance');
+
+        instance.option('useSubmitBehavior', false);
+        assert.strictEqual(this.$element.find('input[type=submit]').length, 0, 'no submit input if useSubmitBehavior is false');
+        assert.strictEqual(this.$element.find(`.${BUTTON_SUBMIT_INPUT_CLASS}`).length, 0, 'no submit class if useSubmitBehavior is false');
+
+        instance.option('useSubmitBehavior', true);
+        assert.strictEqual(this.$element.find('input[type=submit]').length, 1, 'has submit input if useSubmitBehavior is false');
+        assert.strictEqual(this.$element.find(`.${BUTTON_SUBMIT_INPUT_CLASS}`).length, 1, 'has submit class if useSubmitBehavior is false');
     });
 
     QUnit.test('preventDefault is called to dismiss submit of form if validation failed', function(assert) {
@@ -374,20 +438,20 @@ QUnit.module('submit behavior', {
     QUnit.test('Submit button should not be enabled on pending', function(assert) {
         try {
             const validator = new Validator(document.createElement('div'), {
-                    adapter: sinon.createStubInstance(DefaultAdapter),
-                    validationRules: [{
-                        type: 'async',
-                        validationCallback: function() {
-                            const d = new Deferred();
-                            return d.promise();
-                        }
-                    }]
-                }),
-                clickHandlerSpy = sinon.spy(e => {
-                    assert.ok(e.isDefaultPrevented(), 'default is prevented');
-                }),
-                $element = this.$element.dxButton({ validationGroup: 'testGroup' }),
-                buttonInstance = this.$element.dxButton('instance');
+                adapter: sinon.createStubInstance(DefaultAdapter),
+                validationRules: [{
+                    type: 'async',
+                    validationCallback: function() {
+                        const d = new Deferred();
+                        return d.promise();
+                    }
+                }]
+            });
+            const clickHandlerSpy = sinon.spy(e => {
+                assert.ok(e.isDefaultPrevented(), 'default is prevented');
+            });
+            const $element = this.$element.dxButton({ validationGroup: 'testGroup' });
+            const buttonInstance = this.$element.dxButton('instance');
 
 
             ValidationEngine.registerValidatorInGroup('testGroup', validator);
@@ -408,19 +472,19 @@ QUnit.module('submit behavior', {
     QUnit.test('Submit button should change the \'disabled\' option to \'false\' when validation is passed negatively', function(assert) {
         this.clock.restore();
         const validator = new Validator($('<div>').appendTo(this.$form), {
-                adapter: sinon.createStubInstance(DefaultAdapter),
-                validationRules: [{
-                    type: 'async',
-                    validationCallback: function() {
-                        const d = new Deferred();
-                        setTimeout(() => {
-                            d.reject();
-                        }, 10);
-                        return d.promise();
-                    }
-                }]
-            }),
-            done = assert.async();
+            adapter: sinon.createStubInstance(DefaultAdapter),
+            validationRules: [{
+                type: 'async',
+                validationCallback: function() {
+                    const d = new Deferred();
+                    setTimeout(() => {
+                        d.reject();
+                    }, 10);
+                    return d.promise();
+                }
+            }]
+        });
+        const done = assert.async();
 
         this.$element.dxButton({
             validationGroup: 'testGroup',
@@ -445,19 +509,19 @@ QUnit.module('submit behavior', {
     QUnit.test('Submit button should change the \'disabled\' option to \'false\' when validation is passed positively', function(assert) {
         this.clock.restore();
         const validator = new Validator($('<div>').appendTo(this.$form), {
-                adapter: sinon.createStubInstance(DefaultAdapter),
-                validationRules: [{
-                    type: 'async',
-                    validationCallback: function() {
-                        const d = new Deferred();
-                        setTimeout(() => {
-                            d.resolve();
-                        }, 10);
-                        return d.promise();
-                    }
-                }]
-            }),
-            done = assert.async();
+            adapter: sinon.createStubInstance(DefaultAdapter),
+            validationRules: [{
+                type: 'async',
+                validationCallback: function() {
+                    const d = new Deferred();
+                    setTimeout(() => {
+                        d.resolve();
+                    }, 10);
+                    return d.promise();
+                }
+            }]
+        });
+        const done = assert.async();
 
         this.$element.dxButton({
             validationGroup: 'testGroup',
@@ -523,5 +587,40 @@ QUnit.module('templates', () => {
         assert.strictEqual(checkStyleHelper.getOverflowX($template[0].parentNode), 'visible', 'overflowX');
         assert.strictEqual(checkStyleHelper.getTextOverflow($template[0].parentNode), 'clip', 'textOverflow');
         assert.strictEqual(checkStyleHelper.getWhiteSpace($template[0].parentNode), 'normal', 'whiteSpace');
+    });
+});
+
+QUnit.module('events subscriptions', () => {
+    QUnit.test('click', function(assert) {
+        const clickHandler = sinon.spy();
+        const $button = $('#button').dxButton({
+            text: 'test'
+        });
+        const button = $button.dxButton('instance');
+
+        button.on('click', clickHandler);
+
+        $button.trigger('dxclick');
+
+        assert.ok(clickHandler.calledOnce, 'Handler should be called');
+        const params = clickHandler.getCall(0).args[0];
+        assert.ok(params, 'Event params should be passed');
+        assert.ok(params.event, 'Event should be passed');
+        assert.ok(params.validationGroup, 'validationGroup should be passed');
+    });
+
+    QUnit.test('contentReady', function(assert) {
+        assert.expect(3);
+
+        const button = $('#button').dxButton({
+            text: 'test'
+        }).dxButton('instance');
+
+        button.on('contentReady', (e) => {
+            assert.ok(e.component, 'Component info should be passed');
+            assert.ok(e.element, 'Element info should be passed');
+            assert.strictEqual($(e.element).text(), 'test', 'Text is rendered to the element');
+        });
+        button.repaint();
     });
 });

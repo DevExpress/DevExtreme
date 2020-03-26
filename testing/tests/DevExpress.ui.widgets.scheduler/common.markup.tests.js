@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
 import dxScheduler from 'ui/scheduler/ui.scheduler';
-import DataSource from 'data/data_source/data_source';
+import { DataSource } from 'data/data_source/data_source';
 import dateUtils from 'core/utils/date';
 import dxSchedulerAppointmentModel from 'ui/scheduler/ui.scheduler.appointment_model';
 
@@ -54,7 +54,7 @@ QUnit.module('Scheduler markup', moduleConfig, () => {
     });
 
     QUnit.test('Scheduler should not fail when dataSource is set', function(assert) {
-        const data = new DataSource.DataSource({
+        const data = new DataSource({
             store: this.tasks
         });
 
@@ -66,11 +66,11 @@ QUnit.module('Scheduler markup', moduleConfig, () => {
         }).dxScheduler('instance');
 
         assert.ok(instance._appointmentModel instanceof dxSchedulerAppointmentModel, 'Task model is initialized on scheduler init');
-        assert.ok(instance._appointmentModel._dataSource instanceof DataSource.DataSource, 'Task model has data source instance');
+        assert.ok(instance._appointmentModel._dataSource instanceof DataSource, 'Task model has data source instance');
     });
 
     QUnit.test('Scheduler should not fail when dataSource is set, timelineView', function(assert) {
-        const data = new DataSource.DataSource({
+        const data = new DataSource({
             store: this.tasks
         });
 
@@ -82,11 +82,11 @@ QUnit.module('Scheduler markup', moduleConfig, () => {
         }).dxScheduler('instance');
 
         assert.ok(instance._appointmentModel instanceof dxSchedulerAppointmentModel, 'Task model is initialized on scheduler init');
-        assert.ok(instance._appointmentModel._dataSource instanceof DataSource.DataSource, 'Task model has data source instance');
+        assert.ok(instance._appointmentModel._dataSource instanceof DataSource, 'Task model has data source instance');
     });
 
     QUnit.test('Scheduler should not fail when dataSource is set, timelineWeek', function(assert) {
-        const data = new DataSource.DataSource({
+        const data = new DataSource({
             store: this.tasks
         });
 
@@ -98,11 +98,11 @@ QUnit.module('Scheduler markup', moduleConfig, () => {
         }).dxScheduler('instance');
 
         assert.ok(instance._appointmentModel instanceof dxSchedulerAppointmentModel, 'Task model is initialized on scheduler init');
-        assert.ok(instance._appointmentModel._dataSource instanceof DataSource.DataSource, 'Task model has data source instance');
+        assert.ok(instance._appointmentModel._dataSource instanceof DataSource, 'Task model has data source instance');
     });
 
     QUnit.test('Scheduler should not fail when dataSource is set, agenda', function(assert) {
-        const data = new DataSource.DataSource({
+        const data = new DataSource({
             store: this.tasks
         });
 
@@ -114,15 +114,15 @@ QUnit.module('Scheduler markup', moduleConfig, () => {
         }).dxScheduler('instance');
 
         assert.ok(instance._appointmentModel instanceof dxSchedulerAppointmentModel, 'Task model is initialized on scheduler init');
-        assert.ok(instance._appointmentModel._dataSource instanceof DataSource.DataSource, 'Task model has data source instance');
+        assert.ok(instance._appointmentModel._dataSource instanceof DataSource, 'Task model has data source instance');
     });
 
     QUnit.test('Header & work space currentDate should not contain information about hours, minutes, seconds', function(assert) {
-        var currentDate = this.instance.option('currentDate'),
-            header = this.instance.getHeader(),
-            workSpace = this.instance.getWorkSpace(),
-            headerCurrentDate = header.option('currentDate'),
-            workSpaceCurrentDate = workSpace.option('currentDate');
+        let currentDate = this.instance.option('currentDate');
+        const header = this.instance.getHeader();
+        const workSpace = this.instance.getWorkSpace();
+        let headerCurrentDate = header.option('currentDate');
+        let workSpaceCurrentDate = workSpace.option('currentDate');
 
         this.checkDateTime(assert, headerCurrentDate, dateUtils.trimTime(currentDate), 'header date');
         this.checkDateTime(assert, workSpaceCurrentDate, dateUtils.trimTime(currentDate), 'work space date');
@@ -178,7 +178,7 @@ QUnit.module('Scheduler with config', {
             }]
         });
 
-        var $workSpace = this.instance.getWorkSpace().$element();
+        const $workSpace = this.instance.getWorkSpace().$element();
         assert.notOk($workSpace.hasClass('dx-scheduler-work-space-overlapping'), 'workspace hasn\'t class');
     });
 

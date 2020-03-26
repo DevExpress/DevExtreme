@@ -3,6 +3,7 @@ import { extend } from '../../core/utils/extend';
 import { isDefined, isString } from '../../core/utils/type';
 import { ensureDefined } from '../../core/utils/common';
 import messageLocalization from '../../localization/message';
+import { extendAttributes } from './ui.file_manager.common';
 
 import Widget from '../widget/ui.widget';
 import Toolbar from '../toolbar';
@@ -43,7 +44,7 @@ const DEFAULT_ITEM_CONFIGS = {
             locateInMenu: 'auto'
         }
     },
-    viewSwitcher: {
+    switchView: {
         location: 'after'
     },
     download: {
@@ -92,7 +93,7 @@ const DEFAULT_ITEM_CONFIGS = {
     }
 };
 
-const ALWAYS_VISIBLE_TOOLBAR_ITEMS = [ 'separator', 'viewSwitcher' ];
+const ALWAYS_VISIBLE_TOOLBAR_ITEMS = [ 'separator', 'switchView' ];
 
 const REFRESH_ICON_MAP = {
     default: 'dx-filemanager-i dx-filemanager-i-refresh',
@@ -101,10 +102,13 @@ const REFRESH_ICON_MAP = {
     error: 'dx-filemanager-i dx-filemanager-i-danger'
 };
 
+const REFRESH_ITEM_PROGRESS_MESSAGE_DELAY = 500;
+
 class FileManagerToolbar extends Widget {
 
     _initMarkup() {
         this._commandManager = this.option('commandManager');
+        this._createItemClickedAction();
 
         this._generalToolbarVisible = true;
 
@@ -138,31 +142,59 @@ class FileManagerToolbar extends Widget {
         const $toolbar = $('<div>').appendTo(this.$element());
         const result = this._createComponent($toolbar, Toolbar, {
             items: toolbarItems,
-            visible: !hidden
+            visible: !hidden,
+            onItemClick: (args) => this._raiseItemClicked(args)
         });
         result.compactMode = false;
         return result;
     }
 
     _getPreparedItems(items) {
-        let groupHasItems = false;
+        items = items.map(item => {
+            let extendedItem = item;
+            if(isString(item)) {
+                extendedItem = { name: item };
+            }
+            const commandName = extendedItem.name;
+            const preparedItem = this._configureItemByCommandName(commandName, extendedItem);
+            preparedItem.originalItemData = item;
 
-        return items.map(item => {
-            const commandName = isString(item) ? item : item.name;
-            const preparedItem = this._configureItemByCommandName(commandName, item);
-
-            if(commandName === 'separator') {
-                preparedItem.visible = groupHasItems;
-                groupHasItems = false;
-            } else {
+            if(commandName !== 'separator') {
                 preparedItem.available = this._isToolbarItemAvailable(preparedItem);
                 const itemVisible = preparedItem.available;
                 preparedItem.visible = itemVisible;
-                groupHasItems = groupHasItems || itemVisible;
             }
 
             return preparedItem;
         });
+        return this._updateSeparatorsVisibility(items);
+    }
+
+    _updateSeparatorsVisibility(items, toolbar) {
+        for(let i = 0; i < items.length; i++) {
+            if(items[i].name === 'separator') {
+                const isSeparatorVisible = this._groupHasItems(items, i, true) && this._groupHasItems(items, i, false);
+                if(toolbar) {
+                    const optionName = `items[${i}].visible`;
+                    toolbar.option(optionName, isSeparatorVisible);
+                } else {
+                    items[i].visible = isSeparatorVisible;
+                }
+            }
+        }
+        return items;
+    }
+
+    _groupHasItems(items, separatorIndex, isBeforeGroup) {
+        const delta = isBeforeGroup ? -1 : 1;
+        let i = separatorIndex + delta;
+        while(items[i] && items[i].name !== 'separator') {
+            if(items[i].visible) {
+                return true;
+            }
+            i += delta;
+        }
+        return false;
     }
 
     _configureItemByCommandName(commandName, item) {
@@ -177,25 +209,25 @@ class FileManagerToolbar extends Widget {
             case 'separator':
                 result = this._createSeparatorItem();
                 break;
-            case 'viewSwitcher':
+            case 'switchView':
                 result = this._createViewModeItem();
                 break;
         }
 
         if(this._isDefaultItem(commandName)) {
             const defaultConfig = DEFAULT_ITEM_CONFIGS[commandName];
-            extend(result, defaultConfig);
-            this._extendAttributes(result, item, ['visible', 'location', 'locateInMenu']);
+            extend(true, result, defaultConfig);
+            extendAttributes(result, item, ['visible', 'location', 'locateInMenu']);
 
             if(!isDefined(item.visible)) {
                 result._autoHide = true;
             } else {
-                this._extendAttributes(result, item, ['disabled']);
+                extendAttributes(result, item, ['disabled']);
             }
 
-            this._extendAttributes(result.options, item, ['text', 'icon']);
+            extendAttributes(result.options, item, ['text', 'icon']);
         } else {
-            extend(result, item);
+            extend(true, result, item);
             if(!result.widget) {
                 result.widget = 'dxButton';
             }
@@ -214,14 +246,6 @@ class FileManagerToolbar extends Widget {
         }
 
         return result;
-    }
-
-    _extendAttributes(targetObject, sourceObject, objectKeysArray) {
-        objectKeysArray.forEach(objectKey => {
-            extend(targetObject, sourceObject[objectKey]
-                ? { [objectKey]: sourceObject[objectKey] }
-                : {});
-        });
     }
 
     _isDefaultItem(commandName) {
@@ -330,28 +354,20 @@ class FileManagerToolbar extends Widget {
     _ensureAvailableCommandsVisible(toolbar, fileItems) {
         toolbar.beginUpdate();
 
-        let groupHasItems = false;
         const items = toolbar.option('items');
 
         items.forEach((item, index) => {
-            const itemVisible = item.available;
-
-            let showItem = false;
-            if(item.name === 'separator') {
-                showItem = groupHasItems;
-                groupHasItems = false;
-            } else {
+            if(item.name !== 'separator') {
+                const itemVisible = item.available;
                 item.available = this._isToolbarItemAvailable(item, fileItems);
-                showItem = item.available;
-                groupHasItems = groupHasItems || showItem;
-            }
-
-            if(showItem !== itemVisible) {
-                const optionName = `items[${index}].visible`;
-                toolbar.option(optionName, showItem);
+                if(item.available !== itemVisible) {
+                    const optionName = `items[${index}].visible`;
+                    toolbar.option(optionName, item.available);
+                }
             }
         });
 
+        this._updateSeparatorsVisibility(toolbar.option('items'), toolbar);
         toolbar.endUpdate();
     }
 
@@ -394,12 +410,23 @@ class FileManagerToolbar extends Widget {
         toolbar.endUpdate();
     }
 
+    _raiseItemClicked(args) {
+        const changedArgs = extend(true, {}, args);
+        changedArgs.itemData = args.itemData.originalItemData;
+        this._itemClickedAction(changedArgs);
+    }
+
+    _createItemClickedAction() {
+        this._itemClickedAction = this._createActionByOption('onItemClick');
+    }
+
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             commandManager: null,
             generalItems: [],
             fileItems: [],
-            itemViewMode: 'details'
+            itemViewMode: 'details',
+            onItemClick: null
         });
     }
 
@@ -413,6 +440,9 @@ class FileManagerToolbar extends Widget {
             case 'fileItems':
                 this.repaint();
                 break;
+            case 'onItemClick':
+                this._itemClickedAction = this._createActionByOption(name);
+                break;
             default:
                 super._optionChanged(args);
         }
@@ -420,29 +450,58 @@ class FileManagerToolbar extends Widget {
 
     updateRefreshItem(message, status) {
         let generalToolbarOptions = null;
+        let text = messageLocalization.format('dxFileManager-commandRefresh');
+        let showText = 'inMenu';
+
         this._isRefreshVisibleInFileToolbar = false;
 
         if(status === 'default') {
             generalToolbarOptions = {
-                showText: 'inMenu',
                 options: {
-                    text: messageLocalization.format('dxFileManager-commandRefresh'),
                     icon: REFRESH_ICON_MAP.default
                 }
             };
         } else {
             generalToolbarOptions = {
-                showText: 'always',
                 options: {
-                    text: message,
                     icon: REFRESH_ICON_MAP[status]
                 }
             };
             this._isRefreshVisibleInFileToolbar = true;
+            text = message;
+            showText = 'always';
         }
 
         const fileToolbarOptions = extend({ }, generalToolbarOptions, { visible: this._isRefreshVisibleInFileToolbar });
+        this._applyRefreshItemOptions(generalToolbarOptions, fileToolbarOptions);
+        this._refreshItemTextTimeout = this._updateRefreshItemText(status === 'progress', text, showText);
+    }
 
+    _updateRefreshItemText(isDeferredUpdate, text, showText) {
+        const options = {
+            showText,
+            options: {
+                text
+            }
+        };
+        if(isDeferredUpdate) {
+            return setTimeout(() => {
+                this._applyRefreshItemOptions(options);
+                this._refreshItemTextTimeout = undefined;
+            }, REFRESH_ITEM_PROGRESS_MESSAGE_DELAY);
+        } else {
+            if(this._refreshItemTextTimeout) {
+                clearTimeout(this._refreshItemTextTimeout);
+            }
+            this._applyRefreshItemOptions(options);
+            return undefined;
+        }
+    }
+
+    _applyRefreshItemOptions(generalToolbarOptions, fileToolbarOptions) {
+        if(!fileToolbarOptions) {
+            fileToolbarOptions = extend({}, generalToolbarOptions);
+        }
         this._updateItemInToolbar(this._generalToolbar, 'refresh', generalToolbarOptions);
         this._updateItemInToolbar(this._fileToolbar, 'refresh', fileToolbarOptions);
     }

@@ -331,7 +331,7 @@ QUnit.module('tags', moduleSetup, () => {
         });
 
         this.clock.tick(TIME_TO_WAIT);
-        assert.ok($element.find('.' + LIST_ITEM_CLASS).length === 3, 'found 3 items');
+        assert.strictEqual($element.find('.' + LIST_ITEM_CLASS).length, 3, 'found 3 items');
 
         $($element.find('.' + LIST_ITEM_CLASS).first()).trigger('dxclick');
         assert.equal($element.find('.' + TAGBOX_TAG_CLASS).length, 1, 'tag is added');
@@ -708,7 +708,7 @@ QUnit.module('multi tag support', {
         assert.equal($tagBox.find('.' + TAGBOX_TAG_CLASS).length, 4, '4 tags when option was disabled');
     });
 
-    QUnit.test('onMultitagPreparing option change', function(assert) {
+    QUnit.test('onMultiTagPreparing option change', function(assert) {
         assert.expect(4);
 
         const onMultiTagPreparing = e => {
@@ -727,6 +727,28 @@ QUnit.module('multi tag support', {
         const tagBox = $tagBox.dxTagBox('instance');
 
         tagBox.option('onMultiTagPreparing', onMultiTagPreparing);
+
+        const $tag = $tagBox.find('.' + TAGBOX_TAG_CLASS);
+        assert.deepEqual($tag.text(), 'custom text', 'custom text is displayed');
+    });
+
+    QUnit.test('multitagPreparing event test', function(assert) {
+        assert.expect(4);
+
+        const onMultiTagPreparing = e => {
+            assert.equal(e.component.NAME, 'dxTagBox', 'component is correct');
+            assert.ok($(e.multiTagElement).hasClass(TAGBOX_MULTI_TAG_CLASS), 'element is correct');
+            assert.deepEqual(e.selectedItems, [1, 2, 4], 'selectedItems are correct');
+            e.text = 'custom text';
+        };
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: [1, 2, 3, 4],
+            maxDisplayedTags: 2
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        tagBox.on('multiTagPreparing', onMultiTagPreparing);
+        tagBox.option('value', [1, 2, 4]);
 
         const $tag = $tagBox.find('.' + TAGBOX_TAG_CLASS);
         assert.deepEqual($tag.text(), 'custom text', 'custom text is displayed');
@@ -1260,6 +1282,28 @@ QUnit.module('the \'onCustomItemCreating\' option', moduleSetup, () => {
         assert.equal($tags.length, 0, 'tags should not be rendered before button click');
         assert.equal($listItems.length, 1, 'list item should be selected after enter press');
         assert.equal(checkbox.option('value'), true, 'checkbox is checked');
+    });
+
+    QUnit.test('onValueChanged event should have correct "event" field after adding a custom item', function(assert) {
+        const valueChangedStub = sinon.stub();
+        const $tagBox = $('#tagBox').dxTagBox({
+            acceptCustomValue: true,
+            items: [1, 2, 3],
+            onValueChanged: valueChangedStub,
+            onCustomItemCreating: (e) => {
+                e.customItem = e.text;
+            }
+        });
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+
+        keyboardMock($input)
+            .type('test')
+            .press('enter');
+
+        const event = valueChangedStub.getCall(0).args[0].event;
+        assert.ok(valueChangedStub.calledOnce);
+        assert.ok(!!event);
+        assert.strictEqual(event.type, 'keydown');
     });
 });
 
@@ -2688,7 +2732,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             keyboardMock($input).type(text);
             const inputWidth = $input.width();
 
-            var inputCopy = createTextElementHiddenCopy($input, text);
+            const inputCopy = createTextElementHiddenCopy($input, text);
             inputCopy.appendTo('#qunit-fixture');
 
             assert.ok(inputWidth >= inputCopy.width());
@@ -3560,6 +3604,21 @@ QUnit.module('the \'selectedItems\' option', moduleSetup, () => {
         assert.deepEqual(tagBox.option('selectedItems'), [items[1]], 'the \'selectedItems\' option value is correct');
     });
 
+    QUnit.test('onSelectionChanged handler should be called if selected items was changed at runtime', function(assert) {
+        const items = [1, 2, 3];
+        const selectionChangedHandler = sinon.spy();
+
+        const tagBox = $('#tagBox').dxTagBox({
+            items,
+            opened: true,
+            onSelectionChanged: selectionChangedHandler
+        }).dxTagBox('instance');
+
+        const callCountOnInit = selectionChangedHandler.callCount;
+        tagBox.option('selectedItems', [items[0], items[1]]);
+        assert.strictEqual(selectionChangedHandler.callCount, callCountOnInit + 1, 'onSelectionChanged handler was called');
+    });
+
     QUnit.test('The \'selectedItems\' option changes after the \'value\' option', function(assert) {
         const items = [1, 2, 3];
 
@@ -3773,6 +3832,20 @@ QUnit.module('the \'onSelectionChanged\' option', moduleSetup, () => {
 
         assert.deepEqual(spy.args[1][0].removedItems, [data[2]], 'the \'removedItems\' argument');
         assert.equal(spy.args[1][0].addedItems.length, 0, 'the \'addedItems\' argument');
+    });
+
+    QUnit.test('selectionChanged event should be raised if selected items were changed', function(assert) {
+        const items = [1, 2, 3];
+        const selectionChangedHandler = sinon.spy();
+        const tagBox = $('#tagBox').dxTagBox({
+            items,
+            opened: true
+        }).dxTagBox('instance');
+
+        tagBox.on('selectionChanged', selectionChangedHandler);
+        tagBox.option('value', [1]);
+
+        assert.strictEqual(selectionChangedHandler.callCount, 1, 'selectionChanged event was raised');
     });
 });
 
@@ -4341,7 +4414,7 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
         assert.ok(this.spy.args[this.spy.args.length - 1][0].value, 'all items are selected');
 
         $($selectAllCheckbox).trigger('dxclick');
-        assert.ok(this.spy.args[this.spy.args.length - 1][0].value === false, 'all items are unselected');
+        assert.strictEqual(this.spy.args[this.spy.args.length - 1][0].value, false, 'all items are unselected');
     });
 
     QUnit.test('the \'onSelectAllValueChanged\' action is fired only one time if all items are selected', function(assert) {
@@ -4377,6 +4450,26 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
         $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
         assert.equal(this.spy.callCount, 1, 'count is correct');
     });
+
+    QUnit.test('the "selectAllValueChanged" event is fired one time after all items selection changing', function(assert) {
+        const spy = sinon.spy();
+
+        this.reinit({
+            items: this.items,
+            value: this.items.splice(),
+            onSelectAllValueChanged: null
+        });
+
+        const $list = this.instance._list.$element();
+        const $selectAllElement = $($list.find('.dx-list-select-all-checkbox'));
+        $selectAllElement.trigger('dxclick');
+        assert.equal(this.spy.callCount, 0, 'count is correct');
+
+        this.instance.on('selectAllValueChanged', spy);
+        $selectAllElement.trigger('dxclick');
+
+        assert.equal(spy.callCount, 1, 'count is correct');
+    });
 });
 
 QUnit.module('single line mode', {
@@ -4411,14 +4504,22 @@ QUnit.module('single line mode', {
         assert.ok(this.$element.hasClass(TAGBOX_SINGLE_LINE_CLASS), 'the single line class is added');
     });
 
-    QUnit.test('tags container should be scrolled to the end on value change', function(assert) {
+    QUnit.test('tags container should be scrolled to the end on value change if the widget is focused', function(assert) {
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
+        this.instance.focus();
         this.instance.option('value', [this.items[0]]);
         assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 'tags container is scrolled to the end');
 
         this.instance.option('value', this.items);
         assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 'tags container is scrolled to the end');
+    });
+
+    QUnit.test('tags container should not be scrolled to the end on value change without focus (T865611)', function(assert) {
+        const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
+
+        this.instance.option('value', this.items);
+        assert.equal($container.scrollLeft(), 0, 'tags container is not scrolled if the widget has no focus');
     });
 
     QUnit.test('tags should be scrolled by mouse wheel (T386939)', function(assert) {
@@ -4717,6 +4818,7 @@ QUnit.module('keyboard navigation through tags in single line mode', {
         const isScrollReverted = (browser.msie || browser.mozilla);
         const sign = browser.webkit || browser.msie ? 1 : -1;
 
+        this.instance.focus();
         this.instance.option('value', [this.items[0]]);
 
         let expectedScrollPosition = isScrollReverted ? sign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
@@ -5183,6 +5285,25 @@ QUnit.module('performance', () => {
         assert.strictEqual(load.getCall(0).args[0].filter, undefined);
     });
 
+    QUnit.test('load filter should be undefined when tagBox has some initial values and "maxFilterLength" was changed at runtime', function(assert) {
+        const load = sinon.stub();
+
+        const instance = $('#tagBox').dxTagBox({
+            dataSource: {
+                load
+            },
+            value: Array.apply(null, { length: 1 }).map(Number.call, Number),
+            valueExpr: 'id',
+            displayExpr: 'text'
+        }).dxTagBox('instance');
+
+        instance.option('maxFilterLength', 0);
+        instance.option('value', Array.apply(null, { length: 2 }).map(Number.call, Number));
+
+        assert.ok(load.getCall(0).args[0].filter);
+        assert.strictEqual(load.getCall(load.callCount - 1).args[0].filter, undefined);
+    });
+
     QUnit.test('load filter should be array when tagBox has not a lot of initial values', function(assert) {
         const load = sinon.stub();
 
@@ -5645,7 +5766,7 @@ QUnit.module('regression', {
         assert.notOk($tagBox.hasClass(FOCUSED_CLASS), 'focused class was removed');
     });
 
-    QUnit.test('search filter should be cleared on close', function(assert) {
+    QUnit.test('search filter should not be cleared on close without focusout (T851874)', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
             items: ['111', '222', '333'],
             searchTimeout: 0,
@@ -5664,6 +5785,29 @@ QUnit.module('regression', {
 
         $tagContainer.trigger('dxclick');
         $tagContainer.trigger('dxclick');
+
+        assert.equal($input.val(), '111', 'input is not cleared');
+        assert.equal($(instance.content()).find('.' + LIST_ITEM_CLASS).length, 1, 'filter is not cleared');
+    });
+
+    QUnit.test('search filter should be cleared on focusout', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: ['111', '222', '333'],
+            searchTimeout: 0,
+            opened: true,
+            searchEnabled: true
+        });
+
+        const instance = $tagBox.dxTagBox('instance');
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const kb = keyboardMock($input);
+
+        kb.type('111');
+        instance.close();
+        $($input).trigger('focusout');
+
+        $($input).trigger('dxclick');
+        this.clock.tick();
 
         assert.equal($input.val(), '', 'input was cleared');
         assert.equal($(instance.content()).find('.' + LIST_ITEM_CLASS).length, 3, 'filter was cleared');

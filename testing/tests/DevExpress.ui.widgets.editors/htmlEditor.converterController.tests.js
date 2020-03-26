@@ -1,9 +1,10 @@
 import $ from 'jquery';
 
 import 'common.css!';
+import '../../helpers/ignoreQuillTimers.js';
 
 QUnit.testStart(() => {
-    var markup = '<div id="htmlEditor"></div>';
+    const markup = '<div id="htmlEditor"></div>';
 
     $('#qunit-fixture').html(markup);
 });

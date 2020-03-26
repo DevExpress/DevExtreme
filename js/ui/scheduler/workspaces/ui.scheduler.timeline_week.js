@@ -1,10 +1,10 @@
-var registerComponent = require('../../../core/component_registrator'),
-    SchedulerTimeline = require('./ui.scheduler.timeline');
+const registerComponent = require('../../../core/component_registrator');
+const SchedulerTimeline = require('./ui.scheduler.timeline');
 
-var TIMELINE_CLASS = 'dx-scheduler-timeline-week',
-    HEADER_ROW_CLASS = 'dx-scheduler-header-row';
+const TIMELINE_CLASS = 'dx-scheduler-timeline-week';
+const HEADER_ROW_CLASS = 'dx-scheduler-header-row';
 
-var SchedulerTimelineWeek = SchedulerTimeline.inherit({
+const SchedulerTimelineWeek = SchedulerTimeline.inherit({
     _getElementClass: function() {
         return TIMELINE_CLASS;
     },
@@ -15,11 +15,11 @@ var SchedulerTimelineWeek = SchedulerTimeline.inherit({
 
     _setTableSizes: function() {
         this.callBase();
-        var cellWidth = this.getCellWidth(),
-            minWidth = this.getWorkSpaceMinWidth(),
-            $headerCells = this.$element().find('.' + HEADER_ROW_CLASS).last().find('th');
+        const cellWidth = this.getCellWidth();
+        const minWidth = this.getWorkSpaceMinWidth();
+        const $headerCells = this.$element().find('.' + HEADER_ROW_CLASS).last().find('th');
 
-        var width = cellWidth * $headerCells.length;
+        let width = cellWidth * $headerCells.length;
 
         if(width < minWidth) {
             width = minWidth;

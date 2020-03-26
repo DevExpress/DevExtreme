@@ -1,26 +1,26 @@
-var extend = require('./extend').extend,
-    windowUtils = require('./window'),
-    navigator = windowUtils.getNavigator();
+const extend = require('./extend').extend;
+const windowUtils = require('./window');
+const navigator = windowUtils.getNavigator();
 
-var webkitRegExp = /(webkit)[ /]([\w.]+)/,
-    ieRegExp = /(msie) (\d{1,2}\.\d)/,
-    ie11RegExp = /(trident).*rv:(\d{1,2}\.\d)/,
-    msEdge = /(edge)\/((\d+)?[\w.]+)/,
-    mozillaRegExp = /(mozilla)(?:.*? rv:([\w.]+))/;
+const webkitRegExp = /(webkit)[ /]([\w.]+)/;
+const ieRegExp = /(msie) (\d{1,2}\.\d)/;
+const ie11RegExp = /(trident).*rv:(\d{1,2}\.\d)/;
+const msEdge = /(edge)\/((\d+)?[\w.]+)/;
+const mozillaRegExp = /(mozilla)(?:.*? rv:([\w.]+))/;
 
-var browserFromUA = function(ua) {
+const browserFromUA = function(ua) {
     ua = ua.toLowerCase();
 
-    var result = {},
-        matches =
+    const result = {};
+    const matches =
             ieRegExp.exec(ua) ||
             ie11RegExp.exec(ua) ||
             msEdge.exec(ua) ||
             ua.indexOf('compatible') < 0 && mozillaRegExp.exec(ua) ||
             webkitRegExp.exec(ua) ||
-            [],
-        browserName = matches[1],
-        browserVersion = matches[2];
+            [];
+    let browserName = matches[1];
+    let browserVersion = matches[2];
 
     if(browserName === 'webkit') {
         result['webkit'] = true;

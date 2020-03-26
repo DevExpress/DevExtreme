@@ -1,12 +1,12 @@
-var themeModule = require('../../themes'),
-    registerTheme = themeModule.registerTheme,
-    registerThemeAlias = themeModule.registerThemeAlias,
-    ACCENT_COLOR = '#9c63ff',
-    BACKGROUND_COLOR = '#17171f',
-    TITLE_COLOR = '#f5f6f7',
-    SUBTITLE_COLOR = '#fff',
-    TEXT_COLOR = '#b2b2b6',
-    BORDER_COLOR = '#343840';
+const themeModule = require('../../themes');
+const registerTheme = themeModule.registerTheme;
+const registerThemeAlias = themeModule.registerThemeAlias;
+const ACCENT_COLOR = '#9c63ff';
+const BACKGROUND_COLOR = '#17171f';
+const TITLE_COLOR = '#f5f6f7';
+const SUBTITLE_COLOR = '#fff';
+const TEXT_COLOR = '#b2b2b6';
+const BORDER_COLOR = '#343840';
 
 registerTheme({
     name: 'generic.darkviolet',
@@ -68,6 +68,15 @@ registerTheme({
             }
         }
     },
+    'chart:common:annotation': {
+        font: {
+            color: TITLE_COLOR
+        },
+        border: {
+            color: '#414152'
+        },
+        color: BACKGROUND_COLOR
+    },
     chart: {
         commonPaneSettings: {
             border: {
@@ -76,15 +85,6 @@ registerTheme({
         },
         commonAxisSettings: {
             breakStyle: { color: '#575e6b' }
-        },
-        commonAnnotationSettings: {
-            font: {
-                color: TITLE_COLOR
-            },
-            border: {
-                color: '#414152'
-            },
-            color: BACKGROUND_COLOR
         }
     },
     funnel: {

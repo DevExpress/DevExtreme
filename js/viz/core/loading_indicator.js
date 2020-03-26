@@ -1,16 +1,16 @@
-var _patchFontOptions = require('./utils').patchFontOptions,
+const _patchFontOptions = require('./utils').patchFontOptions;
 
-    STATE_HIDDEN = 0,
-    STATE_SHOWN = 1,
+const STATE_HIDDEN = 0;
+const STATE_SHOWN = 1;
 
-    ANIMATION_EASING = 'linear',
-    ANIMATION_DURATION = 400,
+const ANIMATION_EASING = 'linear';
+const ANIMATION_DURATION = 400;
 
-    LOADING_INDICATOR_READY = 'loadingIndicatorReady';
+const LOADING_INDICATOR_READY = 'loadingIndicatorReady';
 
 function LoadingIndicator(parameters) {
-    var that = this,
-        renderer = parameters.renderer;
+    const that = this;
+    const renderer = parameters.renderer;
     that._group = renderer.g().attr({ 'class': 'dx-loading-indicator' }).linkOn(renderer.root, { name: 'loading-indicator', after: 'peripheral' });
     that._rect = renderer.rect().attr({ opacity: 0 }).append(that._group);
     that._text = renderer.text().attr({ align: 'center' }).append(that._group);
@@ -21,7 +21,7 @@ LoadingIndicator.prototype = {
     constructor: LoadingIndicator,
 
     _createStates: function(eventTrigger, group, root, notify) {
-        var that = this;
+        const that = this;
         that._states = [{
             opacity: 0,
             start: function() {
@@ -47,8 +47,8 @@ LoadingIndicator.prototype = {
     },
 
     setSize: function(size) {
-        var width = size.width,
-            height = size.height;
+        const width = size.width;
+        const height = size.height;
         this._rect.attr({ width: width, height: height });
         this._text.attr({ x: width / 2, y: height / 2 });
     },
@@ -60,14 +60,14 @@ LoadingIndicator.prototype = {
     },
 
     dispose: function() {
-        var that = this;
+        const that = this;
         that._group.linkRemove().linkOff();
         that._group = that._rect = that._text = that._states = null;
     },
 
     _transit: function(stateId) {
-        var that = this,
-            state;
+        const that = this;
+        let state;
         if(that._state !== stateId) {
             that._state = stateId;
             that._isHiding = false;
@@ -108,7 +108,7 @@ exports.LoadingIndicator = LoadingIndicator;
 exports.plugin = {
     name: 'loading_indicator',
     init: function() {
-        var that = this;
+        const that = this;
         // "exports" is used for testing purposes.
         that._loadingIndicator = new exports.LoadingIndicator({ eventTrigger: that._eventTrigger, renderer: that._renderer, notify: notify });
         that._scheduleLoadingIndicatorHiding();
@@ -162,11 +162,11 @@ exports.plugin = {
         }
     },
     customize: function(constructor) {
-        var proto = constructor.prototype;
+        const proto = constructor.prototype;
 
         // Of course this looks dirty - but cleaning it is another task. For now it has been just extracted from BaseWidget with minimal changes.
         if(proto._dataSourceChangedHandler) {
-            var _dataSourceChangedHandler = proto._dataSourceChangedHandler;
+            const _dataSourceChangedHandler = proto._dataSourceChangedHandler;
             proto._dataSourceChangedHandler = function() {
                 this._scheduleLoadingIndicatorHiding();
                 _dataSourceChangedHandler.apply(this, arguments);
@@ -185,7 +185,7 @@ exports.plugin = {
             isOptionChange: true
         });
         proto._eventsMap.onLoadingIndicatorReady = { name: 'loadingIndicatorReady' };
-        var _drawn = proto._drawn;
+        const _drawn = proto._drawn;
         proto._drawn = function() {
             _drawn.apply(this, arguments);
             if(this._dataIsReady()) {

@@ -9,8 +9,10 @@ QUnit.testStart(() => {
 import './fileManagerParts/markup.tests.js';
 import './fileManagerParts/contextMenu.tests.js';
 import './fileManagerParts/detailsView.tests.js';
+import './fileManagerParts/thumbnailsView.tests.js';
 import './fileManagerParts/toolbar.tests.js';
 import './fileManagerParts/navigation.tests.js';
+import './fileManagerParts/selection.tests.js';
 import './fileManagerParts/editing.tests.js';
 import './fileManagerParts/adaptivity.tests.js';
 import './fileManagerParts/editingProgress.tests.js';
@@ -19,7 +21,6 @@ import './fileManagerParts/fileItemsController.tests.js';
 
 import './fileManagerParts/common.tests.js';
 
-import './fileManagerParts/ajaxProvider.tests.js';
 import './fileManagerParts/arrayProvider.tests.js';
 import './fileManagerParts/remoteProvider.tests.js';
 import './fileManagerParts/customProvider.tests.js';

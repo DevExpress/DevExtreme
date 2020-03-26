@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import { extend } from 'core/utils/extend';
 import translator from 'animation/translator';
 import devices from 'core/devices';
 import 'ui/scheduler/ui.scheduler';
@@ -20,7 +19,17 @@ export class SchedulerTestWrapper {
     constructor(instance) {
         this.instance = instance;
 
-        this.getTimePanel = () => $('.dx-scheduler-time-panel'),
+        this.timePanel = {
+            getElement: () => {
+                return $('.dx-scheduler-time-panel');
+            },
+            getTimeValues: () => {
+                const cellClassName = this.instance.option('currentView').indexOf('timeline') > -1 ? '.dx-scheduler-header-panel-cell' : '.dx-scheduler-time-panel-cell > div';
+                return $(cellClassName).filter((i, el) => {
+                    return $(el).text() !== '';
+                }).map((i, el) => { return $(el).text(); });
+            }
+        },
 
         this.tooltip = {
             getOverlayContentElement: () => {
@@ -147,15 +156,7 @@ export class SchedulerTestWrapper {
             },
             getPopupInstance: () => $('.dx-scheduler-appointment-popup.dx-widget').dxPopup('instance'),
             isVisible: () => this.appointmentPopup.getPopup().length !== 0,
-            hide: () => this.appointmentPopup.getPopup().find('.dx-closebutton.dx-button').trigger('dxclick'),
-            setInitialPopupSize: size => {
-                const _createPopupConfig = this.instance._appointmentPopup._createPopupConfig;
-                this.instance._appointmentPopup._createPopupConfig = () => {
-                    const config = _createPopupConfig.call(this.instance._appointmentPopup);
-                    return extend(config, size);
-                };
-            },
-            setPopupWidth: width => this.appointmentPopup.getPopupInstance().option('width', width),
+            setPopupHeight: height => this.appointmentPopup.getPopupInstance().option('height', height),
             getToolbarElementByLocation: location => {
                 const toolbarName = location === TOOLBAR_TOP_LOCATION ? 'title' : TOOLBAR_BOTTOM_LOCATION;
                 return this.appointmentPopup.getPopup().find(`.dx-toolbar.dx-widget.dx-popup-${toolbarName}`);
@@ -211,12 +212,14 @@ export class SchedulerTestWrapper {
             getAllDayCellWidth: () => this.workSpace.getAllDayCells().eq(0).outerWidth(),
             getAllDayCellHeight: () => this.workSpace.getAllDayCells().eq(0).outerHeight(),
             getCurrentTimeIndicator: () => $('.dx-scheduler-date-time-indicator'),
+            getAllDayPanel: () => $('.dx-scheduler-all-day-panel'),
 
             getDataTableScrollableContainer: () => this.workSpace.getDateTableScrollable().find('.dx-scrollable-container'),
             getScrollPosition: () => {
                 const element = this.workSpace.getDataTableScrollableContainer();
                 return { left: element.scrollLeft(), top: element.scrollTop() };
             },
+            getScrollable: () => $('.dx-scheduler-date-table-scrollable').dxScrollable('instance'),
             groups: {
                 getGroupsContainer: () => $('.dx-scheduler-group-flex-container'),
                 getGroup: (index = 0) => $('.dx-scheduler-group-row').eq(index),
@@ -234,6 +237,22 @@ export class SchedulerTestWrapper {
             clickOnNextButton: () => {
                 this.navigator.getNavigator().find('.dx-scheduler-navigator-next').trigger('dxclick');
             }
+        },
+
+        this.viewSwitcher = {
+            getElement: () => $('.dx-dropdownmenu-popup-wrapper.dx-position-bottom'),
+            show: () => {
+                $('.dx-scheduler-view-switcher').trigger('dxclick');
+            },
+            click: (name) => {
+                this.viewSwitcher.getElement().find('.dx-list-item').filter((index, element) => {
+                    return $(element).find('.dx-dropdownmenu-item-text').text() === name;
+                }).trigger('dxclick');
+            },
+            getSelectedViewName: () => {
+                return this.viewSwitcher.getElement().find('.dx-list-item-selected .dx-dropdownmenu-item-text').text();
+            },
+            getLabel: () => $('.dx-scheduler-view-switcher-label')
         },
 
         this.header = {

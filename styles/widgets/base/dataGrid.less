@@ -40,11 +40,11 @@
     background-color: @datagrid-base-background-color;
 
     .dx-sort-up {
-        .dx-icon-sortup;
+        .dx-icon(sortup);
     }
 
     .dx-sort-down {
-        .dx-icon-sortdown;
+        .dx-icon(sortdown);
     }
 
     .dx-sort-down,
@@ -97,7 +97,7 @@
     .dx-header-filter {
         position: relative;
         color: @HEADER_FILTER_COLOR;
-        .dx-icon-filter;
+        .dx-icon(filter);
     }
 
     .dx-header-filter-empty {
@@ -171,11 +171,6 @@
         }
     }
 
-    .dx-table-with-scroller-border {
-        border-right: 1px solid @datagrid-border-color;
-        box-sizing: content-box;
-    }
-
     .dx-datagrid-filter-row .dx-filter-range-content {
         color: @datagrid-base-color;
     }
@@ -202,7 +197,7 @@
     }
 
     .dx-command-drag .dx-datagrid-drag-icon {
-        .dx-icon-dragvertical;
+        .dx-icon(dragvertical);
     }
 }
 
@@ -235,13 +230,9 @@
     }
 }
 
-.dx-datagrid-column-chooser {
-    .dx-base-typography();
-}
-
 .dx-datagrid-adaptive-more {
     cursor: pointer;
-    .dx-icon-more;
+    .dx-icon(more);
     .dx-icon-sizing(21px);
 }
 
@@ -296,11 +287,6 @@
                 border-right: @datagrid-border;
             }
         }
-    }
-
-    .dx-table-with-scroller-border {
-        border-left: 1px solid @datagrid-border-color;
-        border-right: none;
     }
 
     .dx-datagrid-form-buttons-container {

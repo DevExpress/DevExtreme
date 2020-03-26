@@ -1,120 +1,46 @@
-var Class = require('../core/class'),
-    abstract = Class.abstract,
-    EventsStrategy = require('../core/events_strategy').EventsStrategy,
-    each = require('../core/utils/iterator').each,
-    errorsModule = require('./errors'),
-    dataUtils = require('./utils'),
-    compileGetter = require('../core/utils/data').compileGetter,
-    storeHelper = require('./store_helper'),
-    queryByOptions = storeHelper.queryByOptions,
-    Deferred = require('../core/utils/deferred').Deferred,
-    noop = require('../core/utils/common').noop,
+const Class = require('../core/class');
+const abstract = Class.abstract;
+const EventsStrategy = require('../core/events_strategy').EventsStrategy;
+const each = require('../core/utils/iterator').each;
+const errorsModule = require('./errors');
+const dataUtils = require('./utils');
+const compileGetter = require('../core/utils/data').compileGetter;
+const storeHelper = require('./store_helper');
+const queryByOptions = storeHelper.queryByOptions;
+const Deferred = require('../core/utils/deferred').Deferred;
+const noop = require('../core/utils/common').noop;
 
-    storeImpl = {};
+const storeImpl = {};
 
-/**
-* @name Store
-* @type object
-* @hidden
-* @module data/abstract_store
-* @export default
-*/
-var Store = Class.inherit({
+const Store = Class.inherit({
 
     ctor: function(options) {
-        var that = this;
+        const that = this;
         options = options || {};
         this._eventsStrategy = new EventsStrategy(this);
 
         each(
             [
-                /**
-                 * @name StoreOptions.onLoaded
-                 * @type function
-                 * @type_function_param1 result:Array<any>
-                 * @action
-                 */
                 'onLoaded',
 
-                /**
-                 * @name StoreOptions.onLoading
-                 * @type function
-                 * @type_function_param1 loadOptions:LoadOptions
-                 * @action
-                 */
                 'onLoading',
 
-                /**
-                 * @name StoreOptions.onInserted
-                 * @type function
-                 * @type_function_param1 values:object
-                 * @type_function_param2 key:object|string|number
-                 * @action
-                 */
                 'onInserted',
 
-                /**
-                 * @name StoreOptions.onInserting
-                 * @type function
-                 * @type_function_param1 values:object
-                 * @action
-                 */
                 'onInserting',
 
-                /**
-                 * @name StoreOptions.onUpdated
-                 * @type function
-                 * @type_function_param1 key:object|string|number
-                 * @type_function_param2 values:object
-                 * @action
-                 */
                 'onUpdated',
 
-                /**
-                 * @name StoreOptions.onUpdating
-                 * @type function
-                 * @type_function_param1 key:object|string|number
-                 * @type_function_param2 values:object
-                 * @action
-                 */
                 'onUpdating',
 
-                /**
-                 * @name StoreOptions.onPush
-                 * @type function
-                 * @type_function_param1 changes:Array<any>
-                 * @action
-                 */
                 'onPush',
 
-                /**
-                 * @name StoreOptions.onRemoved
-                 * @type function
-                 * @type_function_param1 key:object|string|number
-                 * @action
-                 */
                 'onRemoved',
 
-                /**
-                 * @name StoreOptions.onRemoving
-                 * @type function
-                 * @type_function_param1 key:object|string|number
-                 * @action
-                 */
                 'onRemoving',
 
-                /**
-                 * @name StoreOptions.onModified
-                 * @type function
-                 * @action
-                 */
                 'onModified',
 
-                /**
-                 * @name StoreOptions.onModifying
-                 * @type function
-                 * @action
-                 */
                 'onModifying'
             ],
             function(_, optionName) {
@@ -123,16 +49,8 @@ var Store = Class.inherit({
                 }
             });
 
-        /**
-         * @name StoreOptions.key
-         * @type string|Array<string>
-         */
         this._key = options.key;
 
-        /**
-         * @name StoreOptions.errorHandler
-         * @type function
-         */
         this._errorHandler = options.errorHandler;
 
         this._useDefaultSearch = true;
@@ -142,21 +60,10 @@ var Store = Class.inherit({
         return null;
     },
 
-    /**
-    * @name StoreMethods.key
-    * @publicName key()
-    * @return any
-    */
     key: function() {
         return this._key;
     },
 
-    /**
-    * @name StoreMethods.keyOf
-    * @publicName keyOf(obj)
-    * @param1 obj:object
-    * @return any
-    */
     keyOf: function(obj) {
         if(!this._keyGetter) {
             this._keyGetter = compileGetter(this.key());
@@ -170,19 +77,8 @@ var Store = Class.inherit({
             throw errorsModule.errors.Error('E4005');
         }
     },
-    /**
-    * @name StoreMethods.load
-    * @publicName load()
-    * @return Promise<any>
-    */
-    /**
-    * @name StoreMethods.load
-    * @publicName load(options)
-    * @param1 options:LoadOptions
-    * @return Promise<any>
-    */
     load: function(options) {
-        var that = this;
+        const that = this;
 
         options = options || {};
 
@@ -198,11 +94,11 @@ var Store = Class.inherit({
     },
 
     _withLock: function(task) {
-        var result = new Deferred();
+        const result = new Deferred();
 
         task.done(function() {
-            var that = this,
-                args = arguments;
+            const that = this;
+            const args = arguments;
 
             dataUtils.processRequestResultLock
                 .promise()
@@ -219,14 +115,6 @@ var Store = Class.inherit({
 
     createQuery: abstract,
 
-    /**
-    * @name StoreMethods.totalCount
-    * @publicName totalCount(options)
-    * @param1 obj:object
-    * @param1_field1 filter:object
-    * @param1_field2 group:object
-    * @return Promise<number>
-    */
     totalCount: function(options) {
         return this._totalCountImpl(options);
     },
@@ -235,26 +123,14 @@ var Store = Class.inherit({
         return queryByOptions(this.createQuery(options), options, true).count();
     },
 
-    /**
-    * @name StoreMethods.byKey
-    * @publicName byKey(key)
-    * @param1 key:object|string|number
-    * @return Promise<any>
-    */
     byKey: function(key, extraOptions) {
         return this._addFailHandlers(this._withLock(this._byKeyImpl(key, extraOptions)));
     },
 
     _byKeyImpl: abstract,
 
-    /**
-    * @name StoreMethods.insert
-    * @publicName insert(values)
-    * @param1 values:object
-    * @return Promise<any>
-    */
     insert: function(values) {
-        var that = this;
+        const that = this;
 
         that._eventsStrategy.fireEvent('modifying');
         that._eventsStrategy.fireEvent('inserting', [values]);
@@ -267,15 +143,8 @@ var Store = Class.inherit({
 
     _insertImpl: abstract,
 
-    /**
-    * @name StoreMethods.update
-    * @publicName update(key, values)
-    * @param1 key:object|string|number
-    * @param2 values:object
-    * @return Promise<any>
-    */
     update: function(key, values) {
-        var that = this;
+        const that = this;
 
         that._eventsStrategy.fireEvent('modifying');
         that._eventsStrategy.fireEvent('updating', [key, values]);
@@ -288,11 +157,6 @@ var Store = Class.inherit({
 
     _updateImpl: abstract,
 
-    /**
-    * @name StoreMethods.push
-    * @publicName push(changes)
-    * @param1 changes:Array<any>
-    */
     push: function(changes) {
         this._pushImpl(changes);
         this._eventsStrategy.fireEvent('push', [changes]);
@@ -300,14 +164,8 @@ var Store = Class.inherit({
 
     _pushImpl: noop,
 
-    /**
-    * @name StoreMethods.remove
-    * @publicName remove(key)
-    * @param1 key:object|string|number
-    * @return Promise<void>
-    */
     remove: function(key) {
-        var that = this;
+        const that = this;
 
         that._eventsStrategy.fireEvent('modifying');
         that._eventsStrategy.fireEvent('removing', [key]);
@@ -324,37 +182,11 @@ var Store = Class.inherit({
         return deferred.fail(this._errorHandler).fail(errorsModule._errorHandler);
     },
 
-    /**
-     * @name StoreMethods.on
-     * @publicName on(eventName, eventHandler)
-     * @param1 eventName:string
-     * @param2 eventHandler:function
-     * @return this
-     */
-    /**
-     * @name StoreMethods.on
-     * @publicName on(events)
-     * @param1 events:object
-     * @return this
-     */
     on(eventName, eventHandler) {
         this._eventsStrategy.on(eventName, eventHandler);
         return this;
     },
 
-    /**
-     * @name StoreMethods.off
-     * @publicName off(eventName)
-     * @param1 eventName:string
-     * @return this
-     */
-    /**
-     * @name StoreMethods.off
-     * @publicName off(eventName, eventHandler)
-     * @param1 eventName:string
-     * @param2 eventHandler:function
-     * @return this
-     */
     off(eventName, eventHandler) {
         this._eventsStrategy.off(eventName, eventHandler);
         return this;
@@ -378,7 +210,7 @@ Store.registerClass = function(type, alias) {
 
 Store.inherit = function(inheritor) {
     return function(members, alias) {
-        var type = inheritor.apply(this, [members]);
+        const type = inheritor.apply(this, [members]);
         Store.registerClass(type, alias);
         return type;
     };

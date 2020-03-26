@@ -57,14 +57,14 @@
 }
 
 .dx-datagrid-group-opened {
-    .dx-icon-spindown;
+    .dx-icon(spindown);
     .dx-icon-sizing(@GENERIC_BASE_ICON_SIZE);
 
     color: @datagrid-spin-icon-color;
 }
 
 .dx-datagrid-group-closed {
-    .dx-icon-spinright;
+    .dx-icon(spinright);
     .dx-icon-sizing(@GENERIC_BASE_ICON_SIZE);
 
     color: @datagrid-spin-icon-color;
@@ -93,14 +93,6 @@
         .dx-group-panel-item,
         .dx-block-separator {
             margin-left: @GENERIC_GRID_BASE_GROUPPANEL_ITEM_MARGIN;
-        }
-    }
-
-    .dx-datagrid-table-fixed {
-        .dx-row.dx-group-row {
-            td {
-                background-color: @datagrid-group-row-bg;
-            }
         }
     }
 }

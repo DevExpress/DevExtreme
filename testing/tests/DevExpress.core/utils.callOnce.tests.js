@@ -1,11 +1,11 @@
-var callOnce = require('core/utils/call_once');
+const callOnce = require('core/utils/call_once');
 
 QUnit.module('callOnce');
 
 QUnit.test('base usage', function(assert) {
-    var i = 0;
+    let i = 0;
 
-    var callOnceHandler = callOnce(function() {
+    const callOnceHandler = callOnce(function() {
         return ++i;
     });
 

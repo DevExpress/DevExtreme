@@ -1,10 +1,10 @@
-var typeUtils = require('../utils/type');
-var isPromise = typeUtils.isPromise;
-var isDeferred = typeUtils.isDeferred;
-var extend = require('../utils/extend').extend;
-var Callbacks = require('../utils/callbacks');
+const typeUtils = require('../utils/type');
+const isPromise = typeUtils.isPromise;
+const isDeferred = typeUtils.isDeferred;
+const extend = require('../utils/extend').extend;
+const Callbacks = require('../utils/callbacks');
 
-var deferredConfig = [{
+const deferredConfig = [{
     method: 'resolve',
     handler: 'done',
     state: 'resolved'
@@ -17,13 +17,13 @@ var deferredConfig = [{
     handler: 'progress'
 }];
 
-var Deferred = function() {
-    var that = this;
+let Deferred = function() {
+    const that = this;
     this._state = 'pending';
     this._promise = {};
 
     deferredConfig.forEach(function(config) {
-        var methodName = config.method;
+        const methodName = config.method;
         this[methodName + 'Callbacks'] = new Callbacks();
 
         this[methodName] = function() {
@@ -33,7 +33,7 @@ var Deferred = function() {
         this._promise[config.handler] = function(handler) {
             if(!handler) return this;
 
-            var callbacks = that[methodName + 'Callbacks'];
+            const callbacks = that[methodName + 'Callbacks'];
             if(callbacks.fired()) {
                 handler.apply(that[methodName + 'Context'], that[methodName + 'Args']);
             } else {
@@ -54,10 +54,10 @@ var Deferred = function() {
     };
 
     this._promise.then = function(resolve, reject) {
-        var result = new Deferred();
+        const result = new Deferred();
 
         ['done', 'fail'].forEach(function(method) {
-            var callback = method === 'done' ? resolve : reject;
+            const callback = method === 'done' ? resolve : reject;
 
             this[method](function() {
                 if(!callback) {
@@ -65,7 +65,7 @@ var Deferred = function() {
                     return;
                 }
 
-                var callbackResult = callback && callback.apply(this, arguments);
+                const callbackResult = callback && callback.apply(this, arguments);
                 if(isDeferred(callbackResult)) {
                     callbackResult.done(result.resolve).fail(result.reject);
                 } else if(isPromise(callbackResult)) {
@@ -91,11 +91,11 @@ var Deferred = function() {
 };
 
 deferredConfig.forEach(function(config) {
-    var methodName = config.method;
-    var state = config.state;
+    const methodName = config.method;
+    const state = config.state;
 
     Deferred.prototype[methodName + 'With'] = function(context, args) {
-        var callbacks = this[methodName + 'Callbacks'];
+        const callbacks = this[methodName + 'Callbacks'];
 
         if(this.state() === 'pending') {
             this[methodName + 'Args'] = args;
@@ -112,7 +112,7 @@ exports.fromPromise = function(promise, context) {
     if(isDeferred(promise)) {
         return promise;
     } else if(isPromise(promise)) {
-        var d = new Deferred();
+        const d = new Deferred();
         promise.then(function() {
             d.resolveWith.apply(d, [context].concat([[].slice.call(arguments)]));
         }, function() {
@@ -124,17 +124,17 @@ exports.fromPromise = function(promise, context) {
     return new Deferred().resolveWith(context, [promise]);
 };
 
-var when = function() {
+let when = function() {
     if(arguments.length === 1) {
         return exports.fromPromise(arguments[0]);
     }
 
-    var values = [].slice.call(arguments),
-        contexts = [],
-        resolvedCount = 0,
-        deferred = new Deferred();
+    const values = [].slice.call(arguments);
+    const contexts = [];
+    let resolvedCount = 0;
+    const deferred = new Deferred();
 
-    var updateState = function(i) {
+    const updateState = function(i) {
         return function(value) {
             contexts[i] = this;
             values[i] = arguments.length > 1 ? [].slice.call(arguments) : value;
@@ -145,7 +145,7 @@ var when = function() {
         };
     };
 
-    for(var i = 0; i < values.length; i++) {
+    for(let i = 0; i < values.length; i++) {
         if(isDeferred(values[i])) {
             values[i].promise()
                 .done(updateState(i))

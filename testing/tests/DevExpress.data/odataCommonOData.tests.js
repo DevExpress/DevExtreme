@@ -1,7 +1,7 @@
-var $ = require('jquery'),
-    converters = require('data/odata/utils').keyConverters,
-    interpretJsonFormat = require('data/odata/utils').OData__internals.interpretJsonFormat,
-    Guid = require('core/guid');
+const $ = require('jquery');
+const converters = require('data/odata/utils').keyConverters;
+const interpretJsonFormat = require('data/odata/utils').OData__internals.interpretJsonFormat;
+const Guid = require('core/guid');
 
 QUnit.module('OData 2');
 QUnit.test('key converters', function(assert) {
@@ -26,60 +26,60 @@ QUnit.test('key converters', function(assert) {
 });
 
 QUnit.test('error', function(assert) {
-    var e = {
+    const e = {
         error: {
             message: 'Something goes wrong'
         }
     };
 
-    var r = interpretJsonFormat(e, 'success');
+    const r = interpretJsonFormat(e, 'success');
 
     assert.ok(r.error);
     assert.equal(r.error.message, 'Something goes wrong');
 });
 
 QUnit.test('list', function(assert) {
-    var a = {
+    const a = {
         d: {
             results: [1, 2, 3]
         }
     };
 
-    var r = interpretJsonFormat(a, 'success');
+    const r = interpretJsonFormat(a, 'success');
 
     assert.ok(r.data);
     assert.deepEqual(r.data, [1, 2, 3]);
 });
 
 QUnit.test('single', function(assert) {
-    var a = {
+    const a = {
         d: { foo: 'bar' }
     };
 
-    var r = interpretJsonFormat(a, 'success');
+    const r = interpretJsonFormat(a, 'success');
 
     assert.ok(r.data);
     assert.deepEqual(r.data, { foo: 'bar' });
 });
 
 QUnit.test('count', function(assert) {
-    var a1 = {
+    const a1 = {
         d: { results: [1, 2, 4], __count: '3' }
     };
-    var a2 = {
+    const a2 = {
         d: { results: [1, 2, 4], __count: 3 }
     };
-    var a3 = {
+    const a3 = {
         d: { results: [1, 2, 4], __count: 'StringValue' }
     };
-    var a4 = {
+    const a4 = {
         d: { results: [1, 2, 4] }
     };
 
-    var t1 = interpretJsonFormat(a1, 'success'),
-        t2 = interpretJsonFormat(a2, 'success'),
-        t3 = interpretJsonFormat(a3, 'success'),
-        t4 = interpretJsonFormat(a4, 'success');
+    const t1 = interpretJsonFormat(a1, 'success');
+    const t2 = interpretJsonFormat(a2, 'success');
+    const t3 = interpretJsonFormat(a3, 'success');
+    const t4 = interpretJsonFormat(a4, 'success');
 
     assert.equal(t1.count, 3);
     assert.equal($.type(t1.count), 'number');
@@ -93,13 +93,13 @@ QUnit.test('count', function(assert) {
 
 QUnit.module('OData 3');
 QUnit.test('error', function(assert) {
-    var e = {
+    const e = {
         'odata.error': {
             message: 'Something goes wrong'
         }
     };
 
-    var r = interpretJsonFormat(e, 'success');
+    const r = interpretJsonFormat(e, 'success');
 
     assert.ok(r.error);
     assert.equal(r.error.message, 'Something goes wrong');
@@ -128,48 +128,48 @@ QUnit.test('key converters', function(assert) {
 });
 
 QUnit.test('error', function(assert) {
-    var e = {
+    const e = {
         '@odata.error': {
             message: 'Something goes wrong'
         }
     };
 
-    var r = interpretJsonFormat(e, 'success');
+    const r = interpretJsonFormat(e, 'success');
 
     assert.ok(r.error);
     assert.equal(r.error.message, 'Something goes wrong');
 });
 
 QUnit.test('list', function(assert) {
-    var a = {
+    const a = {
         value: [1, 2, 3]
     };
 
-    var r = interpretJsonFormat(a, 'success');
+    const r = interpretJsonFormat(a, 'success');
 
     assert.ok(r.data);
     assert.deepEqual(r.data, [1, 2, 3]);
 });
 
 QUnit.test('single', function(assert) {
-    var a = { foo: 'bar' };
+    const a = { foo: 'bar' };
 
-    var r = interpretJsonFormat(a, 'success');
+    const r = interpretJsonFormat(a, 'success');
 
     assert.ok(r.data);
     assert.deepEqual(r.data, { foo: 'bar' });
 });
 
 QUnit.test('count', function(assert) {
-    var a1 = { value: [1, 2, 4], '@odata.count': '3' };
-    var a2 = { value: [1, 2, 4], '@odata.count': 3 };
-    var a3 = { value: [1, 2, 4], '@odata.count': 'StringValue' };
-    var a4 = { value: [1, 2, 4] };
+    const a1 = { value: [1, 2, 4], '@odata.count': '3' };
+    const a2 = { value: [1, 2, 4], '@odata.count': 3 };
+    const a3 = { value: [1, 2, 4], '@odata.count': 'StringValue' };
+    const a4 = { value: [1, 2, 4] };
 
-    var t1 = interpretJsonFormat(a1, 'success'),
-        t2 = interpretJsonFormat(a2, 'success'),
-        t3 = interpretJsonFormat(a3, 'success'),
-        t4 = interpretJsonFormat(a4, 'success');
+    const t1 = interpretJsonFormat(a1, 'success');
+    const t2 = interpretJsonFormat(a2, 'success');
+    const t3 = interpretJsonFormat(a3, 'success');
+    const t4 = interpretJsonFormat(a4, 'success');
 
     assert.equal(t1.count, 3);
     assert.equal($.type(t1.count), 'number');
@@ -183,10 +183,10 @@ QUnit.test('count', function(assert) {
 
 QUnit.module('Guids');
 QUnit.test('Should parse guids', function(assert) {
-    var guid1 = '6fd3d2c5-904d-4e6f-a302-3e277ef36630',
-        guid2 = '27309478-e811-4205-a23f-cfc0e63b4daf';
+    const guid1 = '6fd3d2c5-904d-4e6f-a302-3e277ef36630';
+    const guid2 = '27309478-e811-4205-a23f-cfc0e63b4daf';
 
-    var r = interpretJsonFormat({
+    const r = interpretJsonFormat({
         'value': {
             key: guid1,
             property: new Guid(guid2).valueOf()
@@ -205,7 +205,7 @@ QUnit.test('OData 2 & 3', function(assert) {
     // NOTE: http://www.odata.org/documentation/odata-version-2-0/json-format/#RepresentingPrimitiveProperties
 
     function interpret(value) {
-        var result = interpretJsonFormat({ d: { results: value } }, 'success');
+        const result = interpretJsonFormat({ d: { results: value } }, 'success');
         return result.data;
     }
 
@@ -226,7 +226,7 @@ QUnit.test('OData 2 & 3', function(assert) {
 
 QUnit.test('OData 4', function(assert) {
     function interpret(value) {
-        var result = interpretJsonFormat({ value: value }, 'success');
+        const result = interpretJsonFormat({ value: value }, 'success');
         return result.data;
     }
 
@@ -284,9 +284,9 @@ QUnit.test('All formats', function(assert) {
 
 QUnit.test('OData 2', function(assert) {
     // arrange
-    var scalarResponse = { d: { results: '/Date(-777807300000)/' } };
-    var singleResponse = { d: { date: '/Date(-777807300000)/' } };
-    var collectionResponse = {
+    const scalarResponse = { d: { results: '/Date(-777807300000)/' } };
+    const singleResponse = { d: { date: '/Date(-777807300000)/' } };
+    const collectionResponse = {
         d: [
             { date: '/Date(-777807300000)/' },
             { date: '/Date(-777807300000+10)/' },
@@ -295,9 +295,9 @@ QUnit.test('OData 2', function(assert) {
     };
 
     // act
-    var scalarResult = interpretJsonFormat(scalarResponse, 'success'),
-        singleResult = interpretJsonFormat(singleResponse, 'success'),
-        collectionResult = interpretJsonFormat(collectionResponse, 'success');
+    const scalarResult = interpretJsonFormat(scalarResponse, 'success');
+    const singleResult = interpretJsonFormat(singleResponse, 'success');
+    const collectionResult = interpretJsonFormat(collectionResponse, 'success');
 
     // assert
     assert.equal(scalarResult.data.getTime(), new Date(1945, 4, 9, 14, 25, 0, 0).getTime());
@@ -311,9 +311,9 @@ QUnit.test('OData 2', function(assert) {
 
 QUnit.test('OData 3', function(assert) {
     // arrange
-    var scalarResponse = { value: '1945-05-09T14:25:00' };
-    var singleResponse = { value: { date: '1945-05-09T14:25:00' } };
-    var collectionResponse = {
+    const scalarResponse = { value: '1945-05-09T14:25:00' };
+    const singleResponse = { value: { date: '1945-05-09T14:25:00' } };
+    const collectionResponse = {
         value: [
             { date: '1945-05-09T14:25:00' },
             { date: '1945-05-09T14:25:00.73' }
@@ -321,9 +321,9 @@ QUnit.test('OData 3', function(assert) {
     };
 
     // act
-    var scalarResult = interpretJsonFormat(scalarResponse, 'success'),
-        singleResult = interpretJsonFormat(singleResponse, 'success'),
-        collectionResult = interpretJsonFormat(collectionResponse, 'success');
+    const scalarResult = interpretJsonFormat(scalarResponse, 'success');
+    const singleResult = interpretJsonFormat(singleResponse, 'success');
+    const collectionResult = interpretJsonFormat(collectionResponse, 'success');
 
     // assert
     assert.equal(scalarResult.data.getTime(), new Date(1945, 4, 9, 14, 25, 0, 0).getTime());
@@ -336,9 +336,9 @@ QUnit.test('OData 3', function(assert) {
 
 QUnit.test('OData 4', function(assert) {
     // arrange
-    var scalarResponse = { value: '1945-05-09T14:25:00Z' };
-    var singleResponse = { value: { date: '1945-05-09T14:25:00Z' } };
-    var collectionResponse = {
+    const scalarResponse = { value: '1945-05-09T14:25:00Z' };
+    const singleResponse = { value: { date: '1945-05-09T14:25:00Z' } };
+    const collectionResponse = {
         value: [
             { date: '1945-05-09T14:25:00Z' },
             { date: '1945-05-09T14:25:00.73Z' }
@@ -346,9 +346,9 @@ QUnit.test('OData 4', function(assert) {
     };
 
     // act
-    var scalarResult = interpretJsonFormat(scalarResponse, 'success'),
-        singleResult = interpretJsonFormat(singleResponse, 'success'),
-        collectionResult = interpretJsonFormat(collectionResponse, 'success');
+    const scalarResult = interpretJsonFormat(scalarResponse, 'success');
+    const singleResult = interpretJsonFormat(singleResponse, 'success');
+    const collectionResult = interpretJsonFormat(collectionResponse, 'success');
 
     // assert
     assert.equal(scalarResult.data.getTime(), new Date(1945, 4, 9, 14, 25, 0, 0).getTime());
@@ -360,26 +360,26 @@ QUnit.test('OData 4', function(assert) {
 });
 
 QUnit.test('T211239: ODataStore doesn\'t parse second fraction properly', function(assert) {
-    var interpret = function(dateStr) { return interpretJsonFormat({ value: [{ date: dateStr }] }, 'success'); };
+    const interpret = function(dateStr) { return interpretJsonFormat({ value: [{ date: dateStr }] }, 'success'); };
 
-    var r1 = interpret('2015-01-30T08:35:46.1686789Z');
+    const r1 = interpret('2015-01-30T08:35:46.1686789Z');
     assert.equal(r1.data[0].date.getTime(), new Date(2015, 0, 30, 8, 35, 46, 168).getTime());
 
-    var r2 = interpret('2015-01-30T08:35:46.1Z');
+    const r2 = interpret('2015-01-30T08:35:46.1Z');
     assert.equal(r2.data[0].date.getTime(), new Date(2015, 0, 30, 8, 35, 46, 100).getTime());
 
-    var r3 = interpret('2015-01-30T08:35:46.01Z');
+    const r3 = interpret('2015-01-30T08:35:46.01Z');
     assert.equal(r3.data[0].date.getTime(), new Date(2015, 0, 30, 8, 35, 46, 10).getTime());
 
-    var r4 = interpret('2015-01-30T08:35:46.011Z');
+    const r4 = interpret('2015-01-30T08:35:46.011Z');
     assert.equal(r4.data[0].date.getTime(), new Date(2015, 0, 30, 8, 35, 46, 11).getTime());
 
-    var r5 = interpret('2015-01-30T08:35:46.001Z');
+    const r5 = interpret('2015-01-30T08:35:46.001Z');
     assert.equal(r5.data[0].date.getTime(), new Date(2015, 0, 30, 8, 35, 46, 1).getTime());
 });
 
 QUnit.test('T345624: The parseISO8601 function returns incorrect data for February 29 in a leap year', function(assert) {
-    var r = interpretJsonFormat({
+    const r = interpretJsonFormat({
         value: [{ date: '2016-02-29T23:59:59.999Z' }]
     }, 'success');
 

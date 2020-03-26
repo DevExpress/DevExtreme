@@ -789,9 +789,9 @@ const INKRIPPLE_WAVE_SHOWING_CLASS = 'dx-inkripple-showing';
 const INKRIPPLE_MATERIAL_SHOW_TIMEOUT = 100;
 
 QUnit.test('button should have no inkRipple after fast swipe for Material theme', function(assert) {
-    const origIsMaterial = themes.isMaterial,
-        origCurrent = themes.current,
-        clock = sinon.useFakeTimers();
+    const origIsMaterial = themes.isMaterial;
+    const origCurrent = themes.current;
+    const clock = sinon.useFakeTimers();
 
     themes.isMaterial = () => { return true; };
     themes.current = () => { return 'material'; };
@@ -855,7 +855,7 @@ QUnit.test('inkRipple feedback should not be broken if swipe in opposite directi
     clock.tick(100);
     const inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
 
-    assert.ok(inkRippleShowingWave.length === 1, 'inkripple feedback works right after swipe in opposite direction');
+    assert.strictEqual(inkRippleShowingWave.length, 1, 'inkripple feedback works right after swipe in opposite direction');
 
     pointer.start('touch').up();
     clock.restore();
@@ -945,7 +945,7 @@ QUnit.test('multiple swipes should not break deletion', function(assert) {
 });
 
 QUnit.test('optimizations', function(assert) {
-    let origOuterWidth = renderer.fn.outerWidth;
+    const origOuterWidth = renderer.fn.outerWidth;
     const outerWidthStub = sinon.stub();
 
     try {
@@ -2493,8 +2493,8 @@ QUnit.module('reordering decorator', {
 });
 
 const REORDER_HANDLE_CLASS = 'dx-list-reorder-handle';
-const REOREDERING_ITEM_CLASS = 'dx-sortable-source-hidden';
-const REOREDERING_ITEM_GHOST_CLASS = 'dx-list-item-ghost-reordering';
+const REORDERING_ITEM_CLASS = 'dx-sortable-source-hidden';
+const REORDERING_ITEM_GHOST_CLASS = 'dx-list-item-ghost-reordering';
 
 const reorderingPointerMock = ($item, clock, usePixel) => {
     const itemOffset = $item.offset().top;
@@ -2540,12 +2540,61 @@ QUnit.test('sortable options', function(assert) {
         itemDragging: { allowReordering: true }
     });
 
-    var sortable = $list.find('.dx-sortable').dxSortable('instance');
+    const sortable = $list.find('.dx-sortable').dxSortable('instance');
 
     assert.equal(sortable.option('dragDirection'), 'vertical', 'dragDirection');
-    assert.equal(sortable.option('filter'), '.dx-list-item', 'filter');
+    assert.equal(sortable.option('filter'), '> .dx-list-item', 'filter');
     assert.equal(sortable.option('handle'), '.dx-list-reorder-handle', 'handle');
     assert.equal(sortable.option('component'), $list.dxList('instance'), 'component');
+});
+
+QUnit.test('sortable options for grouped List', function(assert) {
+    const $list = $('#templated-list').dxList({
+        items: [{
+            key: 'Group 1',
+            items: [{ a: 0 }, { a: 1 }, { a: 2 }]
+        }],
+        grouped: true,
+        itemDragging: { allowReordering: true }
+    });
+
+    const sortable = $list.find('.dx-sortable').dxSortable('instance');
+
+
+    assert.equal(sortable.option('dragDirection'), 'vertical', 'dragDirection');
+    assert.equal(sortable.option('filter'), '> .dx-list-group > .dx-list-group-body > .dx-list-item', 'filter');
+    assert.equal(sortable.option('handle'), '.dx-list-reorder-handle', 'handle');
+    assert.equal(sortable.option('component'), $list.dxList('instance'), 'component');
+});
+
+QUnit.test('sortable filter is correct after "grouped" option changed', function(assert) {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
+        itemDragging: { allowReordering: true }
+    });
+    const instance = $list.dxList('instance');
+
+    instance.option({
+        items: [{
+            key: 'Group 1',
+            items: [{ a: 0 }, { a: 1 }, { a: 2 }]
+        }],
+        grouped: true
+    });
+
+    let sortable = $list.find('.dx-sortable').dxSortable('instance');
+    const groupedFilter = '> .dx-list-group > .dx-list-group-body > .dx-list-item';
+    const simpleFilter = '> .dx-list-item';
+
+    assert.strictEqual(sortable.option('filter'), groupedFilter, 'correct grouped filter');
+
+    instance.option({
+        items: ['0'],
+        grouped: false
+    });
+    sortable = $list.find('.dx-sortable').dxSortable('instance');
+
+    assert.strictEqual(sortable.option('filter'), simpleFilter, 'correct simple filter');
 });
 
 QUnit.test('no sortable without allowReordering', function(assert) {
@@ -2562,7 +2611,7 @@ QUnit.test('sortable should be created with deprecated option allowItemReorderin
         allowItemReordering: true
     });
 
-    var sortable = $list.find('.dx-sortable').dxSortable('instance');
+    const sortable = $list.find('.dx-sortable').dxSortable('instance');
 
     assert.ok(sortable, 'sortable is created');
     assert.strictEqual(sortable.option('allowReordering'), true, 'allowReordering is true');
@@ -2574,7 +2623,7 @@ QUnit.test('sortable should be created with option itemDragging.allowDropInsideI
         itemDragging: { allowDropInsideItem: true }
     });
 
-    var sortable = $list.find('.dx-sortable').dxSortable('instance');
+    const sortable = $list.find('.dx-sortable').dxSortable('instance');
 
     assert.ok(sortable, 'sortable is created');
     assert.strictEqual(sortable.option('allowDropInsideItem'), true, 'allowDropInsideItem is true');
@@ -2589,7 +2638,7 @@ QUnit.test('passing itemDragging options to sortable if group is defined', funct
         }
     });
 
-    var sortable = $list.find('.dx-sortable').dxSortable('instance');
+    const sortable = $list.find('.dx-sortable').dxSortable('instance');
 
     assert.equal(sortable.option('group'), 'myGroup', 'group parameter is passed');
     assert.strictEqual(sortable.option('allowReordering'), false, 'allowReordering is false by default');
@@ -2607,9 +2656,9 @@ QUnit.test('reordering class should be present on item during drag', function(as
 
     pointer.dragStart().drag(10);
     this.clock.tick();
-    assert.ok($item.hasClass(REOREDERING_ITEM_CLASS), 'class was added');
+    assert.ok($item.hasClass(REORDERING_ITEM_CLASS), 'class was added');
     pointer.dragEnd();
-    assert.ok(!$item.hasClass(REOREDERING_ITEM_CLASS), 'class was removed');
+    assert.ok(!$item.hasClass(REORDERING_ITEM_CLASS), 'class was removed');
 });
 
 QUnit.test('reordering should not be possible if item disabled', function(assert) {
@@ -2622,7 +2671,7 @@ QUnit.test('reordering should not be possible if item disabled', function(assert
     const pointer = reorderingPointerMock($item, this.clock, true);
 
     pointer.dragStart().drag(10);
-    assert.ok(!$item.hasClass(REOREDERING_ITEM_CLASS), 'class was not added');
+    assert.ok(!$item.hasClass(REORDERING_ITEM_CLASS), 'class was not added');
 });
 
 QUnit.test('list item should be duplicated on drag start', function(assert) {
@@ -2637,13 +2686,41 @@ QUnit.test('list item should be duplicated on drag start', function(assert) {
     pointer.dragStart().drag(10);
 
     this.clock.tick();
-    let $ghostItem = $list.find(toSelector(REOREDERING_ITEM_GHOST_CLASS));
+    let $ghostItem = $list.find(toSelector(REORDERING_ITEM_GHOST_CLASS));
     assert.strictEqual($ghostItem.text(), $item.text(), 'correct item was duplicated');
     assert.strictEqual($ghostItem.offset().top, $item.offset().top + 10, 'correct ghost position');
-    assert.ok(!$ghostItem.hasClass(REOREDERING_ITEM_CLASS), 'reordering class is not present');
+    assert.ok(!$ghostItem.hasClass(REORDERING_ITEM_CLASS), 'reordering class is not present');
 
     pointer.dragEnd();
-    $ghostItem = $list.find(toSelector(REOREDERING_ITEM_GHOST_CLASS));
+    $ghostItem = $list.find(toSelector(REORDERING_ITEM_GHOST_CLASS));
+    assert.strictEqual($items.length, 1, 'duplicate item was removed');
+});
+
+// T859557
+QUnit.test('list item duplicate should inherit direction (rtl)', function(assert) {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
+        itemDragging: { allowReordering: true },
+        rtlEnabled: true
+    });
+
+    const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+    const $item = $items.eq(0);
+    const pointer = reorderingPointerMock($item, this.clock, true);
+
+    pointer.dragStart().drag(10);
+
+    this.clock.tick();
+    let $ghostItem = $list.find(toSelector(REORDERING_ITEM_GHOST_CLASS));
+    assert.strictEqual($ghostItem.text(), $item.text(), 'correct item was duplicated');
+    assert.strictEqual($ghostItem.offset().top, $item.offset().top + 10, 'correct ghost position');
+    assert.ok(!$ghostItem.hasClass(REORDERING_ITEM_CLASS), 'reordering class is not present');
+
+    assert.equal($ghostItem.css('direction'), 'rtl', 'direction is rtl');
+    assert.ok($ghostItem.parent().hasClass('dx-rtl'), 'ghost\'s parent has dx-rtl class');
+
+    pointer.dragEnd();
+    $ghostItem = $list.find(toSelector(REORDERING_ITEM_GHOST_CLASS));
     assert.strictEqual($items.length, 1, 'duplicate item was removed');
 });
 
@@ -2663,7 +2740,7 @@ QUnit.test('cached items doesn\'t contains a ghost item after reordering', funct
     const cachedItems = list._itemElements();
 
     assert.strictEqual(cachedItems.length, 3, 'Cached items contains 3 items');
-    assert.notOk(cachedItems.hasClass(REOREDERING_ITEM_GHOST_CLASS), 'Cached items isn\'t contain a ghost item');
+    assert.notOk(cachedItems.hasClass(REORDERING_ITEM_GHOST_CLASS), 'Cached items isn\'t contain a ghost item');
 });
 
 QUnit.test('ghost item should be moved by drag', function(assert) {
@@ -2678,7 +2755,7 @@ QUnit.test('ghost item should be moved by drag', function(assert) {
     pointer.dragStart().drag(10);
 
     this.clock.tick();
-    const $ghostItem = $list.find(toSelector(REOREDERING_ITEM_GHOST_CLASS));
+    const $ghostItem = $list.find(toSelector(REORDERING_ITEM_GHOST_CLASS));
     const startPosition = topTranslation($ghostItem.parent());
 
     pointer.drag(20);
@@ -2828,6 +2905,37 @@ QUnit.test('drop item should reorder list items with correct indexes', function(
     pointer.dragEnd();
 });
 
+QUnit.test('reordering should correctly handle items contains List widget', function(assert) {
+    const $list = $('#list').dxList({
+        items: [
+            '0',
+            '1',
+            {
+                template: (data, index, container) => $('<div>').appendTo(container).dxList({ items: ['2-1', '2-2'] })
+            },
+            '3',
+            '4',
+            '5'
+        ],
+        itemDragging: { allowReordering: true }
+    });
+    const list = $list.dxList('instance');
+
+    list.reorderItem = (itemElement, toItemElement) => {
+        assert.strictEqual(itemElement.text(), $item1.text());
+        assert.strictEqual(toItemElement.text(), $item2.text());
+    };
+
+    const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+    const $item1 = $items.eq(1);
+    const $item2 = $items.eq(2);
+    const pointer = reorderingPointerMock($item1, this.clock);
+
+    pointer.dragStart(0.5).drag(2);
+    this.clock.tick();
+    pointer.dragEnd();
+});
+
 QUnit.test('items should reset positions after dragend', function(assert) {
     const $list = $('#list').dxList({
         items: ['0', '1', '2'],
@@ -2846,3 +2954,26 @@ QUnit.test('items should reset positions after dragend', function(assert) {
     });
 });
 
+// T856292
+QUnit.test('Drag and drop item to the top of the list should not work when allowReordering is false', function(assert) {
+    const $list = $('#list').dxList({
+        items: ['0', '1', '2'],
+        itemDragging: {
+            allowReordering: false,
+            group: 'shared'
+        }
+    });
+
+    let $items = $list.find(toSelector(LIST_ITEM_CLASS));
+    const $item3 = $items.eq(2);
+    const pointer = reorderingPointerMock($item3, this.clock);
+
+    pointer.dragStart(0.5).drag(-1).drag(-1.5).dragEnd();
+
+    $items = $list.find(toSelector(LIST_ITEM_CLASS));
+    $.each($items, (index, item) => {
+        const $item = $(item);
+
+        assert.equal($item.text(), index, 'item text');
+    });
+});

@@ -7,13 +7,13 @@ import { extend } from '../core/utils/extend';
 import { isDefined } from '../core/utils/type';
 import { BindableTemplate } from '../core/templates/bindable_template';
 
-const BUTTON_GROUP_CLASS = 'dx-buttongroup',
-    BUTTON_GROUP_WRAPPER_CLASS = BUTTON_GROUP_CLASS + '-wrapper',
-    BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + '-item',
-    BUTTON_GROUP_FIRST_ITEM_CLASS = BUTTON_GROUP_CLASS + '-first-item',
-    BUTTON_GROUP_LAST_ITEM_CLASS = BUTTON_GROUP_CLASS + '-last-item',
-    BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_ITEM_CLASS + '-has-width',
-    SHAPE_STANDARD_CLASS = 'dx-shape-standard';
+const BUTTON_GROUP_CLASS = 'dx-buttongroup';
+const BUTTON_GROUP_WRAPPER_CLASS = BUTTON_GROUP_CLASS + '-wrapper';
+const BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + '-item';
+const BUTTON_GROUP_FIRST_ITEM_CLASS = BUTTON_GROUP_CLASS + '-first-item';
+const BUTTON_GROUP_LAST_ITEM_CLASS = BUTTON_GROUP_CLASS + '-last-item';
+const BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_ITEM_CLASS + '-has-width';
+const SHAPE_STANDARD_CLASS = 'dx-shape-standard';
 
 const ButtonCollection = CollectionWidget.inherit({
     _initTemplates() {
@@ -22,19 +22,6 @@ const ButtonCollection = CollectionWidget.inherit({
          * @name dxButtonGroupItem
          * @inherits CollectionWidgetItem
          * @type object
-         */
-        /**
-         * @name dxButtonGroupItem.hint
-         * @type String
-         */
-        /**
-         * @name dxButtonGroupItem.type
-         * @type Enums.ButtonType
-         * @default 'normal'
-         */
-        /**
-         * @name dxButtonGroupItem.icon
-         * @type String
          */
         /**
          * @name dxButtonGroupItem.html
@@ -113,108 +100,30 @@ const ButtonCollection = CollectionWidget.inherit({
     }
 });
 
-/**
- * @name dxButtonGroup
- * @inherits Widget
- * @module ui/button_group
- * @export default
- */
 const ButtonGroup = Widget.inherit({
     _getDefaultOptions() {
         return extend(this.callBase(), {
-            /**
-             * @name dxButtonGroupOptions.hoverStateEnabled
-             * @type boolean
-             * @default true
-             */
             hoverStateEnabled: true,
 
-            /**
-             * @name dxButtonGroupOptions.focusStateEnabled
-             * @type boolean
-             * @default true
-             */
             focusStateEnabled: true,
 
-            /**
-            * @name dxButtonGroupOptions.selectionMode
-            * @type Enums.ButtonGroupSelectionMode
-            * @default 'single'
-            */
             selectionMode: 'single',
 
-            /**
-             * @name dxButtonGroupOptions.selectedItems
-             * @type Array<any>
-             * @fires dxButtonGroupOptions.onSelectionChanged
-             */
             selectedItems: [],
 
-            /**
-             * @name dxButtonGroupOptions.selectedItemKeys
-             * @type Array<any>
-             * @fires dxButtonGroupOptions.onSelectionChanged
-             */
             selectedItemKeys: [],
 
-            /**
-             * @name dxButtonGroupOptions.stylingMode
-             * @type Enums.ButtonStylingMode
-             * @default 'contained'
-             */
             stylingMode: 'contained',
 
-            /**
-             * @name dxButtonGroupOptions.keyExpr
-             * @type string|function
-             * @default 'text'
-             */
             keyExpr: 'text',
 
-            /**
-             * @name dxButtonGroupOptions.items
-             * @type Array<dxButtonGroupItem>
-             */
             items: [],
 
-            /**
-             * @name dxButtonGroupOptions.itemTemplate
-             * @type template|function
-             * @deprecated dxButtonGroupOptions.buttonTemplate
-             */
 
-            /**
-             * @name dxButtonGroupOptions.buttonTemplate
-             * @type template|function
-             * @default "content"
-             * @type_function_param1 buttonData:object
-             * @type_function_param2 buttonContent:dxElement
-             * @type_function_return string|Node|jQuery
-             */
             buttonTemplate: 'content',
 
-            /**
-             * @name dxButtonGroupOptions.onSelectionChanged
-             * @extends Action
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 addedItems:array<any>
-             * @type_function_param1_field5 removedItems:array<any>
-             * @action
-             */
             onSelectionChanged: null,
 
-            /**
-            * @name dxButtonGroupOptions.onItemClick
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number
-            * @type_function_param1_field7 event:event
-            * @action
-            */
             onItemClick: null
         });
     },

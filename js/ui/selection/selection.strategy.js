@@ -1,9 +1,9 @@
-var dataQuery = require('../../data/query'),
-    commonUtils = require('../../core/utils/common'),
-    typeUtils = require('../../core/utils/type'),
-    getKeyHash = commonUtils.getKeyHash,
-    Class = require('../../core/class'),
-    Deferred = require('../../core/utils/deferred').Deferred;
+const dataQuery = require('../../data/query');
+const commonUtils = require('../../core/utils/common');
+const typeUtils = require('../../core/utils/type');
+const getKeyHash = commonUtils.getKeyHash;
+const Class = require('../../core/class');
+const Deferred = require('../../core/utils/deferred').Deferred;
 
 module.exports = Class.inherit({
     ctor: function(options) {
@@ -27,13 +27,13 @@ module.exports = Class.inherit({
     },
 
     onSelectionChanged: function() {
-        var addedItemKeys = this.options.addedItemKeys,
-            removedItemKeys = this.options.removedItemKeys,
-            addedItems = this.options.addedItems,
-            removedItems = this.options.removedItems,
-            selectedItems = this.options.selectedItems,
-            selectedItemKeys = this.options.selectedItemKeys,
-            onSelectionChanged = this.options.onSelectionChanged || commonUtils.noop;
+        const addedItemKeys = this.options.addedItemKeys;
+        const removedItemKeys = this.options.removedItemKeys;
+        const addedItems = this.options.addedItems;
+        const removedItems = this.options.removedItems;
+        const selectedItems = this.options.selectedItems;
+        const selectedItemKeys = this.options.selectedItemKeys;
+        const onSelectionChanged = this.options.onSelectionChanged || commonUtils.noop;
 
         this._clearItemKeys();
         onSelectionChanged({
@@ -71,20 +71,20 @@ module.exports = Class.inherit({
     },
 
     _loadFilteredData: function(remoteFilter, localFilter, select, isSelectAll) {
-        var filterLength = encodeURI(JSON.stringify(remoteFilter)).length,
-            needLoadAllData = this.options.maxFilterLengthInRequest && (filterLength > this.options.maxFilterLengthInRequest),
-            deferred = new Deferred(),
-            loadOptions = {
-                filter: needLoadAllData ? undefined : remoteFilter,
-                select: needLoadAllData ? this.options.dataFields() : select || this.options.dataFields()
-            };
+        const filterLength = encodeURI(JSON.stringify(remoteFilter)).length;
+        const needLoadAllData = this.options.maxFilterLengthInRequest && (filterLength > this.options.maxFilterLengthInRequest);
+        const deferred = new Deferred();
+        const loadOptions = {
+            filter: needLoadAllData ? undefined : remoteFilter,
+            select: needLoadAllData ? this.options.dataFields() : select || this.options.dataFields()
+        };
 
         if(remoteFilter && remoteFilter.length === 0) {
             deferred.resolve([]);
         } else {
             this.options.load(loadOptions)
                 .done(function(items) {
-                    var filteredItems = typeUtils.isPlainObject(items) ? items.data : items;
+                    let filteredItems = typeUtils.isPlainObject(items) ? items.data : items;
 
                     if(localFilter && !isSelectAll) {
                         filteredItems = filteredItems.filter(localFilter);
@@ -101,20 +101,20 @@ module.exports = Class.inherit({
     },
 
     updateSelectedItemKeyHash: function(keys) {
-        for(var i = 0; i < keys.length; i++) {
-            var keyHash = getKeyHash(keys[i]);
+        for(let i = 0; i < keys.length; i++) {
+            const keyHash = getKeyHash(keys[i]);
 
             if(!typeUtils.isObject(keyHash)) {
                 this.options.keyHashIndices[keyHash] = this.options.keyHashIndices[keyHash] || [];
 
-                var keyIndices = this.options.keyHashIndices[keyHash];
+                const keyIndices = this.options.keyHashIndices[keyHash];
                 keyIndices.push(i);
             }
         }
     },
 
     _isAnyItemSelected: function(items) {
-        for(var i = 0; i < items.length; i++) {
+        for(let i = 0; i < items.length; i++) {
             if(this.options.isItemSelected(items[i])) {
                 return undefined;
             }
@@ -124,15 +124,15 @@ module.exports = Class.inherit({
     },
 
     _getFullSelectAllState: function() {
-        var items = this.options.plainItems(),
-            dataFilter = this.options.filter(),
-            selectedItems = this.options.selectedItems;
+        const items = this.options.plainItems();
+        const dataFilter = this.options.filter();
+        let selectedItems = this.options.selectedItems;
 
         if(dataFilter) {
             selectedItems = dataQuery(selectedItems).filter(dataFilter).toArray();
         }
 
-        var selectedItemsLength = selectedItems.length;
+        const selectedItemsLength = selectedItems.length;
 
         if(!selectedItemsLength) {
             return this._isAnyItemSelected(items);
@@ -145,14 +145,14 @@ module.exports = Class.inherit({
     },
 
     _getVisibleSelectAllState: function() {
-        var items = this.getSelectableItems(this.options.plainItems()),
-            hasSelectedItems = false,
-            hasUnselectedItems = false;
+        const items = this.getSelectableItems(this.options.plainItems());
+        let hasSelectedItems = false;
+        let hasUnselectedItems = false;
 
-        for(var i = 0; i < items.length; i++) {
-            var item = items[i],
-                itemData = this.options.getItemData(item),
-                key = this.options.keyOf(itemData);
+        for(let i = 0; i < items.length; i++) {
+            const item = items[i];
+            const itemData = this.options.getItemData(item);
+            const key = this.options.keyOf(itemData);
 
             if(this.options.isSelectableItem(item)) {
                 if(this.isItemKeySelected(key)) {

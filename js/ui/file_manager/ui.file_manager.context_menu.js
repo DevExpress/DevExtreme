@@ -24,7 +24,7 @@ const DEFAULT_CONTEXT_MENU_ITEMS = {
 class FileManagerContextMenu extends Widget {
 
     _initMarkup() {
-        this._createContextMenuHiddenAction();
+        this._initActions();
 
         this._isVisible = false;
 
@@ -32,7 +32,7 @@ class FileManagerContextMenu extends Widget {
         this._contextMenu = this._createComponent($menu, ContextMenu, {
             cssClass: FILEMANAGER_CONTEXT_MEMU_CLASS,
             showEvent: '',
-            onItemClick: ({ itemData: { name } }) => this._onContextMenuItemClick(name),
+            onItemClick: (args) => this._onContextMenuItemClick(args.itemData.name, args),
             onHidden: () => this._onContextMenuHidden()
         });
 
@@ -119,15 +119,18 @@ class FileManagerContextMenu extends Widget {
     _configureItemByCommandName(commandName, item, fileItems) {
         if(!this._isDefaultItem(commandName)) {
             const res = extend(true, {}, item);
+            res.originalItemData = item;
+            this._addItemClickHandler(commandName, res);
             if(Array.isArray(item.items)) {
                 res.items = this.createContextMenuItems(fileItems, item.items);
             }
             return res;
         }
 
-        let result = this._createMenuItemByCommandName(commandName);
+        const result = this._createMenuItemByCommandName(commandName);
         const defaultConfig = DEFAULT_CONTEXT_MENU_ITEMS[commandName];
         extend(result, defaultConfig);
+        result.originalItemData = item;
         this._extendAttributes(result, item, ['visible', 'beginGroup', 'text', 'icon']);
 
         if(!isDefined(result.visible)) {
@@ -145,21 +148,34 @@ class FileManagerContextMenu extends Widget {
 
     _createMenuItemByCommandName(commandName) {
         const { text, icon } = this._commandManager.getCommandByName(commandName);
-        return {
+        const menuItem = {
             name: commandName,
             text,
-            icon,
-            onItemClick: () => this._onContextMenuItemClick(commandName)
+            icon
         };
+        this._addItemClickHandler(commandName, menuItem);
+        return menuItem;
     }
 
-    _onContextMenuItemClick(commandName) {
-        let targetFileItems = this._isIsolatedCreationItemCommand(commandName) ? null : this._targetFileItems;
-        this._commandManager.executeCommand(commandName, targetFileItems);
+    _addItemClickHandler(commandName, contextMenuItem) {
+        contextMenuItem.onItemClick = (args) => this._onContextMenuItemClick(commandName, args);
     }
 
-    _createContextMenuHiddenAction() {
-        this._contextMenuHiddenAction = this._createActionByOption('onContextMenuHidden');
+    _onContextMenuItemClick(commandName, args) {
+        const changedArgs = extend(true, {}, args);
+        changedArgs.itemData = args.itemData.originalItemData;
+        this._actions.onItemClick(changedArgs);
+        if(this._isDefaultItem(commandName)) {
+            const targetFileItems = this._isIsolatedCreationItemCommand(commandName) ? null : this._targetFileItems;
+            this._commandManager.executeCommand(commandName, targetFileItems);
+        }
+    }
+
+    _initActions() {
+        this._actions = {
+            onContextMenuHidden: this._createActionByOption('onContextMenuHidden'),
+            onItemClick: this._createActionByOption('onItemClick')
+        };
     }
 
     _onContextMenuHidden() {
@@ -168,13 +184,14 @@ class FileManagerContextMenu extends Widget {
     }
 
     _raiseContextMenuHidden() {
-        this._contextMenuHiddenAction();
+        this._actions.onContextMenuHidden();
     }
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             commandManager: null,
-            onContextMenuHidden: null
+            onContextMenuHidden: null,
+            onItemClick: null
         });
     }
 
@@ -185,8 +202,9 @@ class FileManagerContextMenu extends Widget {
             case 'commandManager':
                 this.repaint();
                 break;
+            case 'onItemClick':
             case 'onContextMenuHidden':
-                this._createContextMenuHiddenAction();
+                this._actions[name] = this._createActionByOption(name);
                 break;
             default:
                 super._optionChanged(args);

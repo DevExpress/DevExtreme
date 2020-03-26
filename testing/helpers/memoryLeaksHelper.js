@@ -13,10 +13,10 @@
     }
 }(window, function($) {
 
-    var exports = {};
+    const exports = {};
 
     exports.createTestNode = function() {
-        var testNode = $('<div />');
+        const testNode = $('<div />');
         testNode.appendTo('body');
         return testNode;
     };
@@ -30,8 +30,8 @@
     };
 
     exports.getAllEventSubscriptions = function() {
-        var eventSubscriptions = {},
-            anEvent;
+        const eventSubscriptions = {};
+        let anEvent;
         exports.getAllPossibleEventTargets().each(function() {
             for(anEvent in $._data(this, 'events')) {
                 eventSubscriptions[anEvent] = $._data(this, 'events')[anEvent].length;
@@ -41,13 +41,13 @@
     };
 
     exports.compareDomElements = function(originalDomElements, newDomElements, ignorePatterns) {
-        var errorMessage = '',
-            addedElements = {},
-            isIgnored;
+        let errorMessage = '';
+        const addedElements = {};
+        let isIgnored;
 
         if(ignorePatterns) {
             isIgnored = function(element) {
-                var result = false;
+                let result = false;
                 $.each(ignorePatterns, function(tagName, pattern) {
                     result = result || ((element.tagName || '').toLowerCase() === tagName.toLowerCase() && pattern.test(element.innerHTML));
                 });
@@ -55,11 +55,11 @@
             };
         }
 
-        var diffElement = function(element, diff) {
+        const diffElement = function(element, diff) {
             if(isIgnored && isIgnored(element)) {
                 return;
             }
-            var id = element.tagName + ' ' + element.className;
+            const id = element.tagName + ' ' + element.className;
             addedElements[id] = (addedElements[id] || 0) + diff;
         };
         $.each(newDomElements, function() { diffElement(this, +1); });

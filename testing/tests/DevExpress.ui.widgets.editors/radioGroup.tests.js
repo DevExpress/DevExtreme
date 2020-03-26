@@ -16,8 +16,6 @@ testStart(() => {
 });
 
 const RADIO_GROUP_CLASS = 'dx-radiogroup';
-const RADIO_GROUP_VERTICAL_CLASS = 'dx-radiogroup-vertical';
-const RADIO_GROUP_HORIZONTAL_CLASS = 'dx-radiogroup-horizontal';
 const RADIO_BUTTON_CLASS = 'dx-radiobutton';
 const RADIO_BUTTON_CHECKED_CLASS = 'dx-radiobutton-checked';
 const FOCUSED_CLASS = 'dx-state-focused';
@@ -66,8 +64,8 @@ module('nested radio group', moduleConfig, () => {
     });
 
     test('T680199 - click on one nested radio group doesn\'t change another nested group', function(assert) {
-        let $nestedRadioGroup1,
-            $nestedRadioGroup2;
+        let $nestedRadioGroup1;
+        let $nestedRadioGroup2;
 
         createRadioGroup({
             items: [{
@@ -123,54 +121,103 @@ module('buttons group rendering', () => {
     });
 
     test('onContentReady should rise after changing dataSource (T697809)', function(assert) {
-        const onContentReadyHandler = sinon.stub(),
-            instance = getInstance(
-                createRadioGroup({
-                    dataSource: ['str1', 'str2', 'str3'],
-                    onContentReady: onContentReadyHandler
-                })
-            );
+        const onContentReadyHandler = sinon.stub();
+        const instance = getInstance(
+            createRadioGroup({
+                dataSource: ['str1', 'str2', 'str3'],
+                onContentReady: onContentReadyHandler
+            })
+        );
 
         assert.ok(onContentReadyHandler.calledOnce);
         instance.option('dataSource', [1, 2, 3]);
         assert.strictEqual(onContentReadyHandler.callCount, 2);
     });
+
+    test('should render new items if them were setted in onContentReady handler (T861468)', function(assert) {
+        const onContentReadyHandler = sinon.spy((e) => {
+            if(!isReady) {
+                isReady = true;
+                e.component.option('items', [1, 2, 3]);
+            }
+        });
+        let isReady;
+        const instance = getInstance(
+            createRadioGroup({
+                items: ['str1', 'str2'],
+                onContentReady: onContentReadyHandler
+            })
+        );
+
+        assert.strictEqual(onContentReadyHandler.callCount, 2);
+        assert.strictEqual($(instance.element()).find(`.${RADIO_BUTTON_CLASS}`).length, 3);
+    });
+
+    test('should render new items if async dataSource was setted in onContentReady handler (T861468)', function(assert) {
+        const clock = sinon.useFakeTimers();
+        const asyncDataSource = new DataSource({
+            load: () => {
+                const d = $.Deferred();
+
+                setTimeout(function() {
+                    d.resolve([1, 2, 3]);
+                }, 200);
+
+                return d.promise();
+            }
+        });
+
+        const onContentReadyHandler = sinon.spy((e) => {
+            if(!isReady) {
+                isReady = true;
+                e.component.option('dataSource', asyncDataSource);
+            }
+        });
+        let isReady;
+        const instance = getInstance(
+            createRadioGroup({
+                dataSource: ['str1', 'str2'],
+                onContentReady: onContentReadyHandler
+            })
+        );
+
+        clock.tick(300);
+
+        assert.strictEqual(onContentReadyHandler.callCount, 2);
+        assert.strictEqual($(instance.element()).find(`.${RADIO_BUTTON_CLASS}`).length, 3);
+        clock.restore();
+    });
+
+    test('onContentReady - subscription using "on" method', function(assert) {
+        const done = assert.async();
+
+        const onContentReadyHandler = () => {
+            assert.strictEqual(instance.itemElements().eq(0).text(), '1', 'contentReady is fired');
+            done();
+        };
+
+        const instance = getInstance(
+            createRadioGroup({
+                dataSource: ['str1', 'str2', 'str3']
+            })
+        );
+
+        instance.on('contentReady', onContentReadyHandler);
+
+        instance.option('dataSource', [1, 2, 3]);
+    });
 });
 
 module('layout', moduleConfig, () => {
-    test('should be generated proper class with vertical layout', function(assert) {
-        const $radioGroup = createRadioGroup({
-            layout: 'vertical'
-        });
-
-        assert.ok($radioGroup.hasClass(RADIO_GROUP_VERTICAL_CLASS), 'class set correctly');
-    });
-
-    test('should be generated proper class with horizontal layout', function(assert) {
-        const $radioGroup = createRadioGroup({
-            layout: 'horizontal'
-        });
-
-        assert.ok($radioGroup.hasClass(RADIO_GROUP_HORIZONTAL_CLASS), 'class set correctly');
-    });
-
-    test('should be generated proper class when layout is changed', function(assert) {
-        const $radioGroup = createRadioGroup({
-            layout: 'horizontal'
-        });
-
-        getInstance($radioGroup).option('layout', 'vertical');
-
-        assert.ok($radioGroup.hasClass(RADIO_GROUP_VERTICAL_CLASS), 'class set correctly');
-    });
-
     test('On the tablet radio group must use a horizontal layout', function(assert) {
+        const currentDevice = devices.current();
         devices.current('iPad');
 
-        const $radioGroup = createRadioGroup(),
-            isHorizontalLayout = getInstance($radioGroup).option('layout') === 'horizontal';
+        const $radioGroup = createRadioGroup();
+        const isHorizontalLayout = getInstance($radioGroup).option('layout') === 'horizontal';
 
         assert.ok(isHorizontalLayout, 'radio group on tablet have horizontal layout');
+        devices.current(currentDevice);
     });
 
     test('RadioGroup items should have the \'dx-radio-button\' class after render on deferUpdate (T820582)', function(assert) {
@@ -192,11 +239,11 @@ module('layout', moduleConfig, () => {
 module('hidden input', () => {
     test('the hidden input should get correct value on widget value change', function(assert) {
         const $element = createRadioGroup({
-                items: [1, 2, 3],
-                value: 2
-            }),
-            instance = getInstance($element),
-            $input = $element.find('input');
+            items: [1, 2, 3],
+            value: 2
+        });
+        const instance = getInstance($element);
+        const $input = $element.find('input');
 
         instance.option('value', 1);
         assert.equal($input.val(), '1', 'input value is correct');
@@ -315,10 +362,10 @@ module('value', moduleConfig, () => {
     test('repaint of widget shouldn\'t reset value option', function(assert) {
         const items = [{ text: '0' }, { text: '1' }];
         const $radioGroup = createRadioGroup({
-                items: items,
-                value: items[1]
-            }),
-            radioGroup = getInstance($radioGroup);
+            items: items,
+            value: items[1]
+        });
+        const radioGroup = getInstance($radioGroup);
 
         radioGroup.repaint();
         assert.strictEqual(radioGroup.option('value'), items[1]);
@@ -341,15 +388,34 @@ module('value', moduleConfig, () => {
         assert.equal(value, 1, 'value changed');
     });
 
+    test('value is changed on item click - subscription using "on" method', function(assert) {
+        const handler = sinon.spy();
+        const $radioGroup = createRadioGroup({
+            items: [1, 2, 3]
+        });
+        const radioGroup = getInstance($radioGroup);
+
+        radioGroup.on('valueChanged', handler);
+        $(radioGroup.itemElements()).first().trigger('dxclick');
+
+        const e = handler.lastCall.args[0];
+
+        assert.ok(handler.calledOnce, 'handler was called');
+        assert.strictEqual(e.component, radioGroup, 'component is correct');
+        assert.strictEqual(e.element, radioGroup.element(), 'element is correct');
+        assert.strictEqual(e.event.type, 'dxclick', 'event is correct');
+        assert.strictEqual(e.value, 1, 'itemData is correct');
+    });
+
     test('onValueChanged option should get jQuery event as a parameter', function(assert) {
-        let jQueryEvent,
-            $radioGroup = createRadioGroup({
-                items: [1, 2, 3],
-                onValueChanged: function(e) {
-                    jQueryEvent = e.event;
-                }
-            }),
-            radioGroup = getInstance($radioGroup);
+        let jQueryEvent;
+        const $radioGroup = createRadioGroup({
+            items: [1, 2, 3],
+            onValueChanged: function(e) {
+                jQueryEvent = e.event;
+            }
+        });
+        const radioGroup = getInstance($radioGroup);
 
         $(radioGroup.itemElements()).first().trigger('dxclick');
         assert.ok(jQueryEvent, 'jQuery event is defined when click used');
@@ -434,15 +500,15 @@ module('valueExpr', moduleConfig, () => {
 module('widget sizing render', moduleConfig, () => {
     test('change width', function(assert) {
         const $element = createRadioGroup({
-                items: [
-                    { text: '0' },
-                    { text: '1' },
-                    { text: '2' },
-                    { text: '3' }
-                ]
-            }),
-            instance = getInstance($element),
-            customWidth = 400;
+            items: [
+                { text: '0' },
+                { text: '1' },
+                { text: '2' },
+                { text: '3' }
+            ]
+        });
+        const instance = getInstance($element);
+        const customWidth = 400;
 
         instance.option('width', customWidth);
 
@@ -454,13 +520,13 @@ module('keyboard navigation', moduleConfig, () => {
     test('keys tests', function(assert) {
         assert.expect(3);
 
-        const items = [{ text: '0' }, { text: '1' }, { text: '2' }, { text: '3' }],
-            $element = createRadioGroup({
-                focusStateEnabled: true,
-                items: items
-            }),
-            instance = getInstance($element),
-            keyboard = keyboardMock($element);
+        const items = [{ text: '0' }, { text: '1' }, { text: '2' }, { text: '3' }];
+        const $element = createRadioGroup({
+            focusStateEnabled: true,
+            items: items
+        });
+        const instance = getInstance($element);
+        const keyboard = keyboardMock($element);
 
         $element.focusin();
 
@@ -502,26 +568,26 @@ module('keyboard navigation', moduleConfig, () => {
     });
 
     test('keyboard navigation does not work in disabled widget', function(assert) {
-        const items = [{ text: '0' }, { text: '1' }, { text: '2' }, { text: '3' }],
-            $element = createRadioGroup({
-                focusStateEnabled: true,
-                items: items,
-                disabled: true
-            });
+        const items = [{ text: '0' }, { text: '1' }, { text: '2' }, { text: '3' }];
+        const $element = createRadioGroup({
+            focusStateEnabled: true,
+            items: items,
+            disabled: true
+        });
 
-        assert.ok($element.attr('tabindex') === undefined, 'collection of radio group has not tabindex');
+        assert.strictEqual($element.attr('tabindex'), undefined, 'collection of radio group has not tabindex');
     });
 
     test('radio group items should not have tabIndex(T674238)', function(assert) {
-        const items = [{ text: '0' }, { text: '1' }],
-            $element = createRadioGroup({
-                focusStateEnabled: true,
-                items: items
-            });
+        const items = [{ text: '0' }, { text: '1' }];
+        const $element = createRadioGroup({
+            focusStateEnabled: true,
+            items: items
+        });
 
         const $items = $element.find('.' + RADIO_BUTTON_CLASS);
-        assert.ok($items.eq(0).attr('tabindex') === undefined, 'items of radio group hasn\'t tabindex');
-        assert.ok($items.eq(1).attr('tabindex') === undefined, 'items of radio group hasn\'t tabindex');
+        assert.strictEqual($items.eq(0).attr('tabindex'), undefined, 'items of radio group hasn\'t tabindex');
+        assert.strictEqual($items.eq(1).attr('tabindex'), undefined, 'items of radio group hasn\'t tabindex');
     });
 });
 
@@ -539,11 +605,11 @@ module('focus policy', moduleConfig, () => {
         assert.expect(2);
 
         const $radioGroup = createRadioGroup({
-                items: [1, 2, 3],
-                focusStateEnabled: true
-            }),
-            radioGroup = getInstance($radioGroup),
-            $firstRButton = $(radioGroup.itemElements()).first();
+            items: [1, 2, 3],
+            focusStateEnabled: true
+        });
+        const radioGroup = getInstance($radioGroup);
+        const $firstRButton = $(radioGroup.itemElements()).first();
 
         assert.ok(!$radioGroup.hasClass(FOCUSED_CLASS), 'radio group is not focused');
 
@@ -557,11 +623,11 @@ module('focus policy', moduleConfig, () => {
         assert.expect(2);
 
         const $radioGroup = createRadioGroup({
-                items: [1, 2, 3],
-                focusStateEnabled: true
-            }),
-            radioGroup = getInstance($radioGroup),
-            $firstRButton = $(radioGroup.itemElements()).first();
+            items: [1, 2, 3],
+            focusStateEnabled: true
+        });
+        const radioGroup = getInstance($radioGroup);
+        const $firstRButton = $(radioGroup.itemElements()).first();
 
         $radioGroup.focusin();
         $($firstRButton).trigger('dxpointerdown');
@@ -573,21 +639,21 @@ module('focus policy', moduleConfig, () => {
         assert.ok(!$firstRButton.hasClass(FOCUSED_CLASS), 'radio group item lost focus after focusout on radio group');
     });
 
-    test('radioGroup item has not dx-state-focused class after radioGroup lose focus', function(assert) {
+    test('RadioGroup item has dx-state-focused class when RadioGroup focused', function(assert) {
         assert.expect(2);
 
         const $radioGroup = createRadioGroup({
-                items: [1, 2, 3],
-                focusStateEnabled: true
-            }),
-            radioGroup = getInstance($radioGroup),
-            $firstRButton = $(radioGroup.itemElements()).first();
+            items: [1, 2, 3],
+            focusStateEnabled: true
+        });
+        const radioGroup = getInstance($radioGroup);
+        const $firstRButton = $(radioGroup.itemElements()).first();
 
         assert.ok(!$firstRButton.hasClass(FOCUSED_CLASS));
 
         $radioGroup.focusin();
 
-        assert.ok($firstRButton.hasClass(FOCUSED_CLASS), 'radioGroup item is not focused');
+        assert.ok($firstRButton.hasClass(FOCUSED_CLASS), 'radioGroup item is focused');
     });
 
     test('radioGroup element should get \'dx-state-focused\' class', function(assert) {
@@ -603,11 +669,11 @@ module('focus policy', moduleConfig, () => {
 
     test('option \'accessKey\' has effect', function(assert) {
         const $radioGroup = createRadioGroup({
-                items: [1, 2, 3],
-                focusStateEnabled: true,
-                accessKey: 'k'
-            }),
-            instance = getInstance($radioGroup);
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+            accessKey: 'k'
+        });
+        const instance = getInstance($radioGroup);
 
         assert.equal($radioGroup.attr('accessKey'), 'k', 'access key is correct');
 
@@ -617,11 +683,11 @@ module('focus policy', moduleConfig, () => {
 
     test('option \'tabIndex\' has effect', function(assert) {
         const $radioGroup = createRadioGroup({
-                items: [1, 2, 3],
-                focusStateEnabled: true,
-                tabIndex: 4
-            }),
-            instance = getInstance($radioGroup);
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+            tabIndex: 4
+        });
+        const instance = getInstance($radioGroup);
 
         assert.equal($radioGroup.attr('tabIndex'), 4, 'tab index is correct');
         instance.option('tabIndex', 7);
@@ -640,6 +706,46 @@ module('focus policy', moduleConfig, () => {
 });
 
 module('option changed', () => {
+    test('focusStateEnabled option change', function(assert) {
+        const $radioGroup = createRadioGroup({
+            focusStateEnabled: true
+        });
+        const instance = getInstance($radioGroup);
+
+        instance.option('focusStateEnabled', false);
+        assert.strictEqual(instance.$element().attr('tabindex'), undefined, 'element is not focusable');
+
+        instance.option('focusStateEnabled', true);
+        assert.strictEqual(instance.$element().attr('tabindex'), '0', 'element is focusable');
+    });
+
+    test('items option change', function(assert) {
+        const $radioGroup = createRadioGroup({
+            items: [1, 2, 3]
+        });
+        const instance = getInstance($radioGroup);
+
+        assert.equal($(instance.itemElements()).eq(0).text(), '1', 'item is correct');
+        instance.option('items', [4, 5, 6]);
+        assert.equal($(instance.itemElements()).eq(0).text(), '4', 'item is correct');
+    });
+
+    test('displayExpr option change', function(assert) {
+        const radioGroup = getInstance(
+            createRadioGroup({
+                dataSource: [{ id: 1, name: 'Item 1' }],
+                valueExpr: 'id',
+                displayExpr: 'id',
+                value: 1
+            })
+        );
+
+        radioGroup.option('displayExpr', 'name');
+
+        const $item = $(radioGroup.itemElements()).eq(0);
+        assert.strictEqual($item.text(), 'Item 1', 'displayExpr works');
+    });
+
     test('items from the getDataSource method are wrong when the dataSource option is changed', function(assert) {
         const instance = getInstance(
             createRadioGroup({

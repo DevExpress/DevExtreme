@@ -1,25 +1,18 @@
-var $ = require('../core/renderer'),
-    noop = require('../core/utils/common').noop,
-    registerComponent = require('../core/component_registrator'),
-    extend = require('../core/utils/extend').extend,
-    DropDownList = require('./drop_down_editor/ui.drop_down_list'),
-    Deferred = require('../core/utils/deferred').Deferred;
+const $ = require('../core/renderer');
+const noop = require('../core/utils/common').noop;
+const registerComponent = require('../core/component_registrator');
+const extend = require('../core/utils/extend').extend;
+const DropDownList = require('./drop_down_editor/ui.drop_down_list');
+const Deferred = require('../core/utils/deferred').Deferred;
 
-var AUTOCOMPLETE_CLASS = 'dx-autocomplete',
-    AUTOCOMPLETE_POPUP_WRAPPER_CLASS = 'dx-autocomplete-popup-wrapper';
+const AUTOCOMPLETE_CLASS = 'dx-autocomplete';
+const AUTOCOMPLETE_POPUP_WRAPPER_CLASS = 'dx-autocomplete-popup-wrapper';
 
-/**
-* @name dxAutocomplete
-* @isEditor
-* @inherits dxDropDownList
-* @module ui/autocomplete
-* @export default
-*/
-var Autocomplete = DropDownList.inherit({
+const Autocomplete = DropDownList.inherit({
 
     _supportedKeys: function() {
-        var item = this._list ? this._list.option('focusedElement') : null,
-            parent = this.callBase();
+        let item = this._list ? this._list.option('focusedElement') : null;
+        const parent = this.callBase();
 
         item = item && $(item);
 
@@ -54,24 +47,9 @@ var Autocomplete = DropDownList.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxAutocompleteOptions.value
-            * @type string
-            * @default null
-            */
 
-            /**
-            * @name dxAutocompleteOptions.minSearchLength
-            * @type number
-            * @default 1
-            */
             minSearchLength: 1,
 
-            /**
-            * @name dxAutocompleteOptions.maxItemCount
-            * @type number
-            * @default 10
-            */
             maxItemCount: 10,
 
             /**
@@ -82,10 +60,6 @@ var Autocomplete = DropDownList.inherit({
             */
             noDataText: '',
 
-            /**
-             * @name dxAutocompleteOptions.showDropDownButton
-             * @default false
-             */
             showDropDownButton: false,
 
             searchEnabled: true
@@ -166,7 +140,7 @@ var Autocomplete = DropDownList.inherit({
     },
 
     _listItemClickHandler: function(e) {
-        var value = this._displayGetter(e.itemData);
+        const value = this._displayGetter(e.itemData);
         this.option('value', value);
         this.close();
     },
@@ -189,7 +163,8 @@ var Autocomplete = DropDownList.inherit({
 
     _dataSourceOptions: function() {
         return {
-            paginate: true
+            paginate: true,
+            pageSize: this.option('maxItemCount')
         };
     },
 
@@ -211,7 +186,7 @@ var Autocomplete = DropDownList.inherit({
     },
 
     _valueChangeEventHandler: function(e) {
-        var value = this._input().val() || null;
+        const value = this._input().val() || null;
         return this.callBase(e, value);
     },
 

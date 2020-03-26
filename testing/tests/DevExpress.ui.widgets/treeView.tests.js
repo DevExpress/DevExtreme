@@ -159,7 +159,7 @@ window.initTree = function(options) {
 };
 
 window.stripFunctions = function(obj) {
-    var result = $.extend(true, {}, obj);
+    const result = $.extend(true, {}, obj);
     $.each(result, function(field, value) {
         if($.isFunction(value)) {
             delete result[field];
@@ -205,6 +205,7 @@ import './treeViewParts/lazyRendering.js';
 import './treeViewParts/optionChanged.js';
 import './treeViewParts/regression.js';
 import './treeViewParts/rendering.js';
+import './treeViewParts/scrolling.tests.js';
 import './treeViewParts/selection.js';
 import './treeViewParts/searching.js';
 import './treeViewParts/selectAllMode.js';

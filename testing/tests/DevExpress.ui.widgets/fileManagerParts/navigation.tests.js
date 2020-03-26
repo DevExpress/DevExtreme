@@ -16,7 +16,7 @@ const moduleConfig = {
         fx.off = true;
 
         this.$element = $('#fileManager').dxFileManager({
-            fileProvider: fileSystem,
+            fileSystemProvider: fileSystem,
             itemView: {
                 mode: 'thumbnails'
             },
@@ -24,11 +24,13 @@ const moduleConfig = {
                 create: true,
                 copy: true,
                 move: true,
-                remove: true,
+                delete: true,
                 rename: true,
                 upload: true
             }
         });
+
+        this.fileManager = this.$element.dxFileManager('instance');
 
         this.wrapper = new FileManagerWrapper(this.$element);
 
@@ -118,7 +120,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.equal(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
         assert.equal(this.wrapper.getBreadcrumbsPath(), 'Files', 'breadcrumbs refrers to the root');
 
-        let $folderNode = this.wrapper.getFolderNode(2);
+        const $folderNode = this.wrapper.getFolderNode(2);
         $folderNode.trigger('dxclick');
 
         assert.equal(this.wrapper.getFocusedItemText(), 'Folder 1.1', 'descendant folder selected');
@@ -201,13 +203,16 @@ QUnit.module('Navigation operations', moduleConfig, () => {
 
     test('getSelectedItems method', function(assert) {
         const testCases = [
-            { mode: 'thumbnails', wrapperMethod: 'findThumbnailsItem', eventName: 'click' },
+            { mode: 'thumbnails', wrapperMethod: 'findThumbnailsItem', eventName: 'dxclick' },
             { mode: 'details', wrapperMethod: 'findDetailsItem', eventName: 'dxclick' }
         ];
 
         testCases.forEach(({ mode, wrapperMethod, eventName }) => {
             const inst = this.wrapper.getInstance();
-            inst.option('itemView.mode', mode);
+            inst.option({
+                itemView: { mode },
+                selectedItemKeys: []
+            });
             this.clock.tick(400);
 
             let items = inst.getSelectedItems();
@@ -240,7 +245,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         let dir = inst.getCurrentDirectory();
         assert.strictEqual(dir.relativeName, '', 'directory has empty relative name');
         assert.ok(dir.isDirectory, 'directory has directory flag');
-        assert.ok(dir.isRoot, 'directory has root flag');
+        assert.ok(dir.isRoot(), 'directory has root flag');
 
         inst.option('currentPath', 'Folder 1/Folder 1.1');
         this.clock.tick(800);
@@ -248,34 +253,34 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         dir = inst.getCurrentDirectory();
         assert.strictEqual(dir.relativeName, 'Folder 1/Folder 1.1', 'directory has correct relative name');
         assert.ok(dir.isDirectory, 'directory has directory flag');
-        assert.notOk(dir.isRoot, 'directory has not root flag');
+        assert.notOk(dir.isRoot(), 'directory has not root flag');
     });
 
     test('change current directory by public API', function(assert) {
         const inst = this.wrapper.getInstance();
+        const spy = sinon.spy();
+
         assert.equal(inst.option('currentPath'), '');
 
-        const that = this;
-        let onCurrentDirectoryChangedCounter = 0;
-        inst.option('onCurrentDirectoryChanged', function() {
-            onCurrentDirectoryChangedCounter++;
-        });
-
+        inst.option('onCurrentDirectoryChanged', spy);
         inst.option('currentPath', 'Folder 1/Folder 1.1');
         this.clock.tick(800);
 
-        assert.equal(onCurrentDirectoryChangedCounter, 1);
+        assert.equal(spy.callCount, 1);
+        assert.equal(spy.args[0][0].directory.path, 'Folder 1/Folder 1.1', 'directory passed as argument');
         assert.equal(inst.option('currentPath'), 'Folder 1/Folder 1.1', 'The option \'currentPath\' was changed');
 
-        const $folder1Node = that.wrapper.getFolderNode(1);
+        const $folder1Node = this.wrapper.getFolderNode(1);
         assert.equal($folder1Node.find('span').text(), 'Folder 1');
 
-        const $folder11Node = that.wrapper.getFolderNode(2);
+        const $folder11Node = this.wrapper.getFolderNode(2);
         assert.equal($folder11Node.find('span').text(), 'Folder 1.1');
 
         inst.option('currentPath', '');
         this.clock.tick(800);
 
+        assert.equal(spy.callCount, 2);
+        assert.equal(spy.args[1][0].directory.path, '', 'directory argument updated');
         assert.equal(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
         assert.equal(this.wrapper.getBreadcrumbsPath(), 'Files', 'breadcrumbs refrers to the root folder');
     });
@@ -364,7 +369,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
     test('slashes in directory name must be processed correctly', function(assert) {
         const incorrectName = 'Docu\\/me\\/nts';
         const fileProvider = createFileProviderWithIncorrectName(incorrectName);
-        let controller = new FileItemsController({
+        const controller = new FileItemsController({
             fileProvider,
             rootText: 'Files',
             currentPath: '',
@@ -402,7 +407,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
     test('whitespace as directory name must be processed correctly', function(assert) {
         const incorrectName = 'Docu\\/me\\/nts';
         const fileProvider = createFileProviderWithIncorrectName(incorrectName);
-        let controller = new FileItemsController({
+        const controller = new FileItemsController({
             fileProvider,
             rootText: 'Files',
             currentPath: '',
@@ -446,7 +451,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         const incorrectOptionValue = 'Docu//me//nts';
         const incorrectName = 'Docu/me/nts';
         const fileProvider = createFileProviderWithIncorrectName(incorrectName);
-        inst.option('fileProvider', fileProvider);
+        inst.option('fileSystemProvider', fileProvider);
 
         let counter = 0;
         inst.option('onOptionChanged', (e) => { e.name === 'currentPath' && counter++; });
@@ -501,7 +506,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         const incorrectPartialName = 'Docu/';
         let fileProvider = createFileProviderWithIncorrectName(incorrectName);
         fileProvider = fileProvider.concat(createFileProviderWithIncorrectName(incorrectPartialName, true));
-        inst.option('fileProvider', fileProvider);
+        inst.option('fileSystemProvider', fileProvider);
 
         inst.option('currentPath', incorrectOptionValue);
         this.clock.tick(400);
@@ -524,7 +529,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
     test('\'Back\' directory must have attributes of the represented directory', function(assert) {
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
-            fileProvider: [
+            fileSystemProvider: [
                 {
                     name: 'Folder 1',
                     isDirectory: true,
@@ -554,4 +559,61 @@ QUnit.module('Navigation operations', moduleConfig, () => {
             });
     });
 
+    test('navigate via \'currentPathKeys\' option updating', function(assert) {
+        const optionChangedSpy = sinon.spy();
+        const dirChangedSpy = sinon.spy();
+        const pathKeys = [ 'Folder 1', 'Folder 1/Folder 1.1' ];
+
+        assert.deepEqual(this.fileManager.option('currentPathKeys'), [], 'initial value correct');
+
+        this.fileManager.option({
+            onCurrentDirectoryChanged: dirChangedSpy,
+            onOptionChanged: optionChangedSpy,
+            currentPathKeys: pathKeys
+        });
+        this.clock.tick(800);
+
+        assert.strictEqual(dirChangedSpy.callCount, 1, 'directory changed event raised');
+        assert.strictEqual(dirChangedSpy.args[0][0].directory.path, 'Folder 1/Folder 1.1', 'directory passed as argument');
+        assert.deepEqual(this.fileManager.option('currentPathKeys'), pathKeys, 'The option \'currentPathKeys\' was changed');
+        assert.strictEqual(optionChangedSpy.callCount, 2, 'option changed event raised');
+        assert.strictEqual(optionChangedSpy.args[1][0].name, 'currentPath', 'current path option changed');
+        assert.strictEqual(optionChangedSpy.args[1][0].value, 'Folder 1/Folder 1.1', 'current path option value updated');
+
+        const $folder1Node = this.wrapper.getFolderNode(1);
+        assert.strictEqual($folder1Node.find('span').text(), 'Folder 1');
+
+        const $folder11Node = this.wrapper.getFolderNode(2);
+        assert.strictEqual($folder11Node.find('span').text(), 'Folder 1.1');
+
+        this.fileManager.option('currentPathKeys', []);
+        this.clock.tick(800);
+
+        assert.strictEqual(dirChangedSpy.callCount, 2, 'directory changed event raised');
+        assert.strictEqual(dirChangedSpy.args[1][0].directory.path, '', 'directory argument updated');
+        assert.strictEqual(this.fileManager.option('currentPath'), '', 'The option \'currentPath\' was changed');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files', 'breadcrumbs refrers to the root folder');
+        assert.strictEqual(optionChangedSpy.callCount, 4, 'option changed event raised');
+        assert.strictEqual(optionChangedSpy.args[3][0].name, 'currentPath', 'current path option changed');
+        assert.strictEqual(optionChangedSpy.args[3][0].value, '', 'current path option value updated');
+    });
+
+    test('navigate via \'currentPathKeys\' option on init', function(assert) {
+        const optionChangedSpy = sinon.spy();
+
+        this.$element.dxFileManager({
+            onOptionChanged: optionChangedSpy,
+            currentPathKeys: [ 'Folder 1', 'Folder 1/Folder 1.1' ],
+        });
+        this.clock.tick(800);
+
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Folder 1.1', 'Target folder is selected');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files/Folder 1/Folder 1.1', 'breadcrumbs refrers to the target folder');
+        assert.strictEqual(optionChangedSpy.callCount, 3, 'option changed event raised');
+        assert.strictEqual(optionChangedSpy.args[0][0].name, 'onOptionChanged', 'onOptionChanged option changed');
+        assert.strictEqual(optionChangedSpy.args[1][0].name, 'currentPathKeys', 'currentPathKeys option changed');
+        assert.strictEqual(optionChangedSpy.args[2][0].name, 'currentPath', 'currentPath option changed');
+        assert.strictEqual(optionChangedSpy.args[2][0].value, 'Folder 1/Folder 1.1', 'currentPath option updated');
+    });
 });

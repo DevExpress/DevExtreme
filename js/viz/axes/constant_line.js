@@ -52,7 +52,7 @@ export default function createConstantLine(axis, options) {
                 return this;
             }
 
-            var path = axis._createConstantLine(this.coord, {
+            const path = axis._createConstantLine(this.coord, {
                 stroke: options.color,
                 'stroke-width': options.width,
                 dashStyle: options.dashStyle

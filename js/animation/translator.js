@@ -1,55 +1,51 @@
-var dataUtils = require('../core/element_data'),
-    type = require('../core/utils/type').type;
+const dataUtils = require('../core/element_data');
+const type = require('../core/utils/type').type;
 
-var TRANSLATOR_DATA_KEY = 'dxTranslator',
-    TRANSFORM_MATRIX_REGEX = /matrix(3d)?\((.+?)\)/,
-    TRANSLATE_REGEX = /translate(?:3d)?\((.+?)\)/;
+const TRANSLATOR_DATA_KEY = 'dxTranslator';
+const TRANSFORM_MATRIX_REGEX = /matrix(3d)?\((.+?)\)/;
+const TRANSLATE_REGEX = /translate(?:3d)?\((.+?)\)/;
 
-var locate = function($element) {
-    var translate = getTranslate($element);
+const locate = function($element) {
+    const translate = getTranslate($element);
 
     return {
         left: translate.x,
         top: translate.y
     };
 };
-
-var move = function($element, position) {
-    var left = position.left,
-        top = position.top,
-        translate;
-
-    if(left === undefined) {
-        translate = getTranslate($element);
-        translate.y = top || 0;
-    } else if(top === undefined) {
-        translate = getTranslate($element);
-        translate.x = left || 0;
-    } else {
-        translate = { x: left || 0, y: top || 0, z: 0 };
-        cacheTranslate($element, translate);
-    }
-
-    $element.css({
-        transform: getTranslateCss(translate)
-    });
-
-    if(isPercentValue(left) || isPercentValue(top)) {
-        clearCache($element);
-    }
-};
-
-var isPercentValue = function(value) {
+function isPercentValue(value) {
     return type(value) === 'string' && value[value.length - 1] === '%';
+}
+
+function cacheTranslate($element, translate) {
+    if($element.length) {
+        dataUtils.data($element.get(0), TRANSLATOR_DATA_KEY, translate);
+    }
+}
+
+const clearCache = function($element) {
+    if($element.length) {
+        dataUtils.removeData($element.get(0), TRANSLATOR_DATA_KEY);
+    }
 };
 
-var getTranslate = function($element) {
-    var result = $element.length ? dataUtils.data($element.get(0), TRANSLATOR_DATA_KEY) : null;
+const getTranslateCss = function(translate) {
+    translate.x = translate.x || 0;
+    translate.y = translate.y || 0;
+
+    const xValueString = isPercentValue(translate.x) ? translate.x : translate.x + 'px';
+    const yValueString = isPercentValue(translate.y) ? translate.y : translate.y + 'px';
+
+    return 'translate(' + xValueString + ', ' + yValueString + ')';
+};
+
+const getTranslate = function($element) {
+    let result = $element.length ? dataUtils.data($element.get(0), TRANSLATOR_DATA_KEY) : null;
 
     if(!result) {
-        var transformValue = $element.css('transform') || getTranslateCss({ x: 0, y: 0 }),
-            matrix = transformValue.match(TRANSFORM_MATRIX_REGEX),
-            is3D = matrix && matrix[1];
+        const transformValue = $element.css('transform') || getTranslateCss({ x: 0, y: 0 });
+        let matrix = transformValue.match(TRANSFORM_MATRIX_REGEX);
+        const is3D = matrix && matrix[1];
 
         if(matrix) {
             matrix = matrix[2].split(',');
@@ -75,25 +71,38 @@ var getTranslate = function($element) {
     return result;
 };
 
-var cacheTranslate = function($element, translate) {
-    if($element.length) {
-        dataUtils.data($element.get(0), TRANSLATOR_DATA_KEY, translate);
+const move = function($element, position) {
+    const left = position.left;
+    const top = position.top;
+    let translate;
+
+    if(left === undefined) {
+        translate = getTranslate($element);
+        translate.y = top || 0;
+    } else if(top === undefined) {
+        translate = getTranslate($element);
+        translate.x = left || 0;
+    } else {
+        translate = { x: left || 0, y: top || 0, z: 0 };
+        cacheTranslate($element, translate);
+    }
+
+    $element.css({
+        transform: getTranslateCss(translate)
+    });
+
+    if(isPercentValue(left) || isPercentValue(top)) {
+        clearCache($element);
     }
 };
 
-var clearCache = function($element) {
-    if($element.length) {
-        dataUtils.removeData($element.get(0), TRANSLATOR_DATA_KEY);
-    }
-};
-
-var resetPosition = function($element, finishTransition) {
-    var originalTransition,
-        stylesConfig = {
-            left: 0,
-            top: 0,
-            transform: 'none',
-        };
+const resetPosition = function($element, finishTransition) {
+    let originalTransition;
+    const stylesConfig = {
+        left: 0,
+        top: 0,
+        transform: 'none',
+    };
 
     if(finishTransition) {
         originalTransition = $element.css('transition');
@@ -110,8 +119,8 @@ var resetPosition = function($element, finishTransition) {
     }
 };
 
-var parseTranslate = function(translateString) {
-    var result = translateString.match(TRANSLATE_REGEX);
+const parseTranslate = function(translateString) {
+    let result = translateString.match(TRANSLATE_REGEX);
 
     if(!result || !result[1]) {
         return;
@@ -126,16 +135,6 @@ var parseTranslate = function(translateString) {
     };
 
     return result;
-};
-
-var getTranslateCss = function(translate) {
-    translate.x = translate.x || 0;
-    translate.y = translate.y || 0;
-
-    var xValueString = isPercentValue(translate.x) ? translate.x : translate.x + 'px';
-    var yValueString = isPercentValue(translate.y) ? translate.y : translate.y + 'px';
-
-    return 'translate(' + xValueString + ', ' + yValueString + ')';
 };
 
 exports.move = move;

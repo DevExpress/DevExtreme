@@ -47,13 +47,6 @@ const FEEDBACK_SCROLL_TIMEOUT = 300;
 const TAB_OFFSET = 30;
 
 
-/**
-* @name dxTabs
-* @inherits CollectionWidget
-* @module ui/tabs
-* @export default
-*/
-
 const Tabs = CollectionWidget.inherit({
 
     _activeStateUnit: '.' + TABS_ITEM_CLASS,
@@ -61,73 +54,23 @@ const Tabs = CollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
 
-            /**
-            * @name dxTabsOptions.repaintChangesOnly
-            * @type boolean
-            * @default false
-            */
 
-            /**
-             * @name dxTabsOptions.hoverStateEnabled
-             * @type boolean
-             * @default true
-             */
             hoverStateEnabled: true,
 
-            /**
-            * @name dxTabsOptions.showNavButtons
-            * @type boolean
-            * @default true
-            */
             showNavButtons: true,
 
-            /**
-            * @name dxTabsOptions.scrollByContent
-            * @type boolean
-            * @default true
-            */
             scrollByContent: true,
 
-            /**
-            * @name dxTabsOptions.scrollingEnabled
-            * @type boolean
-            * @default true
-            */
             scrollingEnabled: true,
 
-            /**
-            * @name dxTabsOptions.selectionMode
-            * @type Enums.NavSelectionMode
-            * @default 'single'
-            */
             selectionMode: 'single',
 
             /**
-            * @name dxTabsOptions.activeStateEnabled
-            * @hidden
-            */
-
-            /**
-            * @name dxTabsOptions.selectedItems
-            * @type Array<string,number,Object>
-            */
-
-            /**
              * @name dxTabsOptions.activeStateEnabled
+             * @hidden
              * @default true
-             */
+            */
 
-            /**
-             * @name dxTabsOptions.dataSource
-             * @type string|Array<string,dxTabsItem,object>|DataSource|DataSourceOptions
-             * @default null
-             */
-
-            /**
-             * @name dxTabsOptions.items
-             * @type Array<string, dxTabsItem, object>
-             * @fires dxTabsOptions.onOptionChanged
-             */
 
             activeStateEnabled: true,
             selectionRequired: false,
@@ -140,19 +83,11 @@ const Tabs = CollectionWidget.inherit({
             * @inherits CollectionWidgetItem
             * @type object
             */
-            /**
-            * @name dxTabsItem.icon
-            * @type String
-            */
-            /**
-            * @name dxTabsItem.badge
-            * @type String
-            */
         });
     },
 
     _defaultOptionsRules: function() {
-        var themeName = themes.current();
+        const themeName = themes.current();
 
         return this.callBase().concat([
             {
@@ -160,20 +95,12 @@ const Tabs = CollectionWidget.inherit({
                     return devices.real().deviceType !== 'desktop';
                 },
                 options: {
-                    /**
-                    * @name dxTabsOptions.showNavButtons
-                    * @default false @for mobile_devices
-                    */
                     showNavButtons: false
                 }
             },
             {
                 device: { deviceType: 'desktop' },
                 options: {
-                    /**
-                    * @name dxTabsOptions.scrollByContent
-                    * @default false @for desktop
-                    */
                     scrollByContent: false
                 }
             },
@@ -182,11 +109,6 @@ const Tabs = CollectionWidget.inherit({
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
-                    /**
-                    * @name dxTabsOptions.focusStateEnabled
-                    * @type boolean
-                    * @default true @for desktop
-                    */
                     focusStateEnabled: true
                 }
             },
@@ -225,7 +147,7 @@ const Tabs = CollectionWidget.inherit({
                     $container.text(String(data));
                 }
 
-                var $iconElement = getImageContainer(data.icon);
+                const $iconElement = getImageContainer(data.icon);
 
                 $container.wrapInner($('<span>').addClass(TABS_ITEM_TEXT_CLASS));
                 $iconElement && $iconElement.prependTo($container);
@@ -261,7 +183,7 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _renderScrolling: function() {
-        var removeClasses = [TABS_STRETCHED_CLASS, TABS_EXPANDED_CLASS, OVERFLOW_HIDDEN_CLASS];
+        const removeClasses = [TABS_STRETCHED_CLASS, TABS_EXPANDED_CLASS, OVERFLOW_HIDDEN_CLASS];
         this.$element().removeClass(removeClasses.join(' '));
 
         if(this.option('scrollingEnabled') && this._isItemsWidthExceeded()) {
@@ -293,22 +215,22 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _isItemsWidthExceeded: function() {
-        var tabItemsWidth = this._getSummaryItemsWidth(this._getVisibleItems(), true);
+        const tabItemsWidth = this._getSummaryItemsWidth(this._getVisibleItems(), true);
 
         // NOTE: "-1" is a hack fix for IE (T190044)
         return tabItemsWidth - 1 > this.$element().width();
     },
 
     _needStretchItems: function() {
-        var $visibleItems = this._getVisibleItems(),
-            elementWidth = this.$element().width(),
-            itemsWidth = [];
+        const $visibleItems = this._getVisibleItems();
+        const elementWidth = this.$element().width();
+        const itemsWidth = [];
 
         each($visibleItems, (_, item) => {
             itemsWidth.push($(item).outerWidth(true));
         });
 
-        var maxTabWidth = Math.max.apply(null, itemsWidth);
+        const maxTabWidth = Math.max.apply(null, itemsWidth);
 
         return maxTabWidth > elementWidth / $visibleItems.length;
     },
@@ -344,7 +266,7 @@ const Tabs = CollectionWidget.inherit({
             return;
         }
 
-        var config = {
+        const config = {
             element: $element,
             event: e
         };
@@ -372,7 +294,7 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _renderScrollable: function() {
-        var $itemContainer = this.$element().wrapInner($('<div>').addClass(TABS_SCROLLABLE_CLASS)).children();
+        const $itemContainer = this.$element().wrapInner($('<div>').addClass(TABS_SCROLLABLE_CLASS)).children();
 
         this._scrollable = this._createComponent($itemContainer, Scrollable, {
             direction: 'horizontal',
@@ -389,7 +311,7 @@ const Tabs = CollectionWidget.inherit({
     _scrollToItem: function(itemData) {
         if(!this._scrollable) return;
 
-        var $item = this._editStrategy.getItemElement(itemData);
+        const $item = this._editStrategy.getItemElement(itemData);
         this._scrollable.scrollToElement($item);
     },
 
@@ -398,16 +320,16 @@ const Tabs = CollectionWidget.inherit({
 
         if(!this.option('showNavButtons')) return;
 
-        var rtlEnabled = this.option('rtlEnabled');
+        const rtlEnabled = this.option('rtlEnabled');
         this._leftButton = this._createNavButton(-TAB_OFFSET, rtlEnabled ? BUTTON_NEXT_ICON : BUTTON_PREV_ICON);
 
-        var $leftButton = this._leftButton.$element();
+        const $leftButton = this._leftButton.$element();
         $leftButton.addClass(TABS_LEFT_NAV_BUTTON_CLASS);
         this.$element().prepend($leftButton);
 
         this._rightButton = this._createNavButton(TAB_OFFSET, rtlEnabled ? BUTTON_PREV_ICON : BUTTON_NEXT_ICON);
 
-        var $rightButton = this._rightButton.$element();
+        const $rightButton = this._rightButton.$element();
         $rightButton.addClass(TABS_RIGHT_NAV_BUTTON_CLASS);
         this.$element().append($rightButton);
     },
@@ -423,19 +345,19 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _createNavButton: function(offset, icon) {
-        var that = this;
+        const that = this;
 
-        var holdAction = that._createAction(function() {
-                that._holdInterval = setInterval(function() {
-                    that._updateScrollPosition(offset, FEEDBACK_DURATION_INTERVAL);
-                }, FEEDBACK_DURATION_INTERVAL);
-            }),
+        const holdAction = that._createAction(function() {
+            that._holdInterval = setInterval(function() {
+                that._updateScrollPosition(offset, FEEDBACK_DURATION_INTERVAL);
+            }, FEEDBACK_DURATION_INTERVAL);
+        });
 
-            holdEventName = addNamespace(holdEvent.name, 'dxNavButton'),
-            pointerUpEventName = addNamespace(pointerEvents.up, 'dxNavButton'),
-            pointerOutEventName = addNamespace(pointerEvents.out, 'dxNavButton');
+        const holdEventName = addNamespace(holdEvent.name, 'dxNavButton');
+        const pointerUpEventName = addNamespace(pointerEvents.up, 'dxNavButton');
+        const pointerOutEventName = addNamespace(pointerEvents.out, 'dxNavButton');
 
-        var navButton = this._createComponent($('<div>').addClass(TABS_NAV_BUTTON_CLASS), Button, {
+        const navButton = this._createComponent($('<div>').addClass(TABS_NAV_BUTTON_CLASS), Button, {
             focusStateEnabled: false,
             icon: icon,
             onClick: function() {
@@ -444,7 +366,7 @@ const Tabs = CollectionWidget.inherit({
             integrationOptions: {}
         });
 
-        var $navButton = navButton.$element();
+        const $navButton = navButton.$element();
 
         eventsEngine.on($navButton, holdEventName, { timeout: FEEDBACK_SCROLL_TIMEOUT }, (function(e) { holdAction({ event: e }); }).bind(this));
         eventsEngine.on($navButton, pointerUpEventName, function() {

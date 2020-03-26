@@ -61,90 +61,92 @@
     @GENERIC_COMMAND_EDIT_ICON_MARGIN: 1px;
 }
 
-.grid-base(@widgetName) {
-    @GENERIC_GRID_BASE_BORDER_HIDDEN: 1px solid transparent;
-    @GENERIC_GRID_BASE_ROW_BORDER: 1px solid transparent;
-    @GENERIC_GRID_BASE_BORDER_COLOR: ~"@{@{widgetName}-border-color}";
-    @GENERIC_GRID_BASE_DRAG_HEADER_BORDER: 1px solid ~"@{@{widgetName}-drag-header-border-color}";
-    @GENERIC_GRID_BASE_DRAG_HEADER_FIRST_SHADOW: 0 0 1px ~"@{@{widgetName}-drag-header-shadow-color}";
-    @GENERIC_GRID_BASE_DRAG_HEADER_SECOND_SHADOW: 0 1px 3px ~"@{@{widgetName}-drag-header-second-shadow-color}";
-    @GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
+@GENERIC_GRID_BASE_BORDER_HIDDEN: 1px solid transparent;
+@GENERIC_GRID_BASE_ROW_BORDER: 1px solid transparent;
+@GENERIC_GRID_BASE_BORDER_COLOR: @datagrid-border-color;
+@GENERIC_GRID_BASE_DRAG_HEADER_BORDER: 1px solid @datagrid-drag-header-border-color;
+@GENERIC_GRID_BASE_DRAG_HEADER_FIRST_SHADOW: 0 0 1px @datagrid-drag-header-shadow-color;
+@GENERIC_GRID_BASE_DRAG_HEADER_SECOND_SHADOW: 0 1px 3px @datagrid-drag-header-second-shadow-color;
+@GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
 
-    .dx-set-checkbox-border-color-as-background() when (@GENERIC_COLOR_POSTFIX = ".contrast") {
-        .dx-selection .dx-checkbox-icon {
-            border-color: ~"@{@{widgetName}-base-background-color}";
-        }
+.dx-set-checkbox-border-color-as-background() when (@GENERIC_COLOR_POSTFIX = ".contrast") {
+    .dx-selection .dx-checkbox-icon {
+        border-color: @datagrid-base-background-color;
     }
+}
 
+.grid-base(@widgetName) {
     .dx-@{widgetName},
     .dx-@{widgetName}-container {
-        .dx-menu-item-has-icon {
-            .dx-icon {
-                color: ~"@{@{widgetName}-menu-icon-color}";
+        &.dx-filter-menu {
+            .dx-menu-item-has-icon {
+                .dx-icon {
+                    color: @datagrid-menu-icon-color;
+                }
             }
         }
 
         &.dx-context-menu {
             .dx-menu-items-container {
                 .dx-icon-context-menu-sort-asc {
-                    .dx-icon-sortuptext;
+                    .dx-icon(sortuptext);
                     .dx-icon-sizing(16px);
                 }
 
                 .dx-icon-context-menu-sort-desc {
-                    .dx-icon-sortdowntext;
+                    .dx-icon(sortdowntext);
                     .dx-icon-sizing(16px);
                 }
             }
         }
 
         .dx-icon-filter-operation-equals {
-            .dx-icon-equal;
+            .dx-icon(equal);
         }
 
         .dx-icon-filter-operation-default {
-            .dx-icon-find;
+            .dx-icon(find);
             .dx-icon-sizing(12px);
         }
 
         .dx-icon-filter-operation-not-equals {
-            .dx-icon-notequal;
+            .dx-icon(notequal);
         }
 
         .dx-icon-filter-operation-less {
-            .dx-icon-less;
+            .dx-icon(less);
         }
 
         .dx-icon-filter-operation-less-equal {
-            .dx-icon-lessorequal;
+            .dx-icon(lessorequal);
         }
 
         .dx-icon-filter-operation-greater {
-            .dx-icon-greater;
+            .dx-icon(greater);
         }
 
         .dx-icon-filter-operation-greater-equal {
-            .dx-icon-greaterorequal;
+            .dx-icon(greaterorequal);
         }
 
         .dx-icon-filter-operation-contains {
-            .dx-icon-contains;
+            .dx-icon(contains);
         }
 
         .dx-icon-filter-operation-not-contains {
-            .dx-icon-doesnotcontain;
+            .dx-icon(doesnotcontain);
         }
 
         .dx-icon-filter-operation-starts-with {
-            .dx-icon-startswith;
+            .dx-icon(startswith);
         }
 
         .dx-icon-filter-operation-ends-with {
-            .dx-icon-endswith;
+            .dx-icon(endswith);
         }
 
         .dx-icon-filter-operation-between {
-            .dx-icon-range;
+            .dx-icon(range);
         }
     }
 
@@ -154,7 +156,10 @@
         .dx-row-alt {
             & > td,
             & > tr > td {
-                background-color: ~"@{@{widgetName}-row-alternation-bg}";
+                background-color: @datagrid-row-alternation-bg;
+                // T838734
+                border-top: 1px solid @datagrid-row-alternation-bg;
+                border-bottom: 1px solid @datagrid-row-alternation-bg;
             }
 
             &.dx-row:not(.dx-row-removed) {
@@ -163,23 +168,23 @@
         }
 
         .dx-link {
-            color: ~"@{@{widgetName}-link-color}";
+            color: @datagrid-link-color;
         }
 
         .dx-row-lines > td {
-            border-bottom: ~"@{@{widgetName}-border}";
+            border-bottom: @datagrid-border;
         }
 
         .dx-column-lines > td {
-            border-left: ~"@{@{widgetName}-border}";
-            border-right: ~"@{@{widgetName}-border}";
+            border-left: @datagrid-border;
+            border-right: @datagrid-border;
         }
 
         .dx-error-row {
             .dx-closebutton {
                 float: right;
                 margin: @GENERIC_GRID_BASE_CELL_PADDING + 2px;
-                .dx-icon-close;
+                .dx-icon(close);
                 .dx-icon-sizing(14px);
             }
 
@@ -255,8 +260,8 @@
             .dx-placeholder:before {
                 padding-left: @GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
 
-                .dx-rtl &,
-                .dx-rtl& {
+                .dx-rtl&,
+                .dx-rtl & {
                     padding-right: @GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
                 }
             }
@@ -273,23 +278,15 @@
         }
 
         .dx-texteditor {
-            background: ~"@{@{widgetName}-editor-bg}";
+            background: @datagrid-editor-bg;
 
             .dx-texteditor-input {
-                background: ~"@{@{widgetName}-editor-bg}";
-            }
-
-            &.dx-numberbox-spin .dx-texteditor-input {
-                padding-right: @GENERIC_NUMBERBOX_SPIN_CONTAINER_WIDTH;
-            }
-
-            &.dx-numberbox-spin-touch-friendly .dx-texteditor-input {
-                padding-right: @GENERIC_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH;
+                background: @datagrid-editor-bg;
             }
         }
 
         .dx-dropdowneditor {
-            background-color: ~"@{@{widgetName}-editor-bg}";
+            background-color: @datagrid-editor-bg;
         }
 
         &.dx-focused .dx-dropdowneditor-icon {
@@ -324,12 +321,14 @@
     .dx-device-mobile .dx-@{widgetName}-column-chooser-list,
     .dx-@{widgetName}-column-chooser-list {
         .dx-empty-message {
-            color: ~"@{@{widgetName}-columnchooser-message-color}";
+            color: @datagrid-columnchooser-message-color;
             padding: 0 @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING;
         }
     }
 
     .dx-@{widgetName}-column-chooser {
+        .dx-base-typography();
+
         &.dx-@{widgetName}-column-chooser-mode-drag {
             .dx-popup-content {
                 padding: @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDINGS;
@@ -351,9 +350,9 @@
         }
 
         .dx-overlay-content {
-            background-color: ~"@{@{widgetName}-columnchooser-bg}";
-            border-radius: ~"@{@{widgetName}-columnchooser-overlay-border-radius}";
-            box-shadow: 0 1px 3px ~"@{@{widgetName}-columnchooser-shadow-color}";
+            background-color: @datagrid-columnchooser-bg;
+            border-radius: @datagrid-columnchooser-overlay-border-radius;
+            box-shadow: 0 1px 3px @datagrid-columnchooser-shadow-color;
 
             .dx-popup-title {
                 padding-top: 7px;
@@ -364,12 +363,12 @@
             .dx-popup-content {
                 .dx-column-chooser-item {
                     margin-bottom: @GENERIC_GRID_BASE_COLUMN_CHOOSER_ITEM_MARGIN;
-                    background-color: ~"@{@{widgetName}-columnchooser-item-bg}";
-                    color: ~"@{@{widgetName}-columnchooser-item-color}";
-                    font-weight: ~"@{@{widgetName}-columnchooser-font-weight}";
-                    border: ~"@{@{widgetName}-border}";
+                    background-color: @datagrid-columnchooser-item-bg;
+                    color: @datagrid-columnchooser-item-color;
+                    font-weight: @datagrid-columnchooser-font-weight;
+                    border: @datagrid-border;
                     padding: @GENERIC_GRID_BASE_CELL_PADDING;
-                    box-shadow: 0 1px 3px -1px ~"@{@{widgetName}-columnchooser-shadow-color}";
+                    box-shadow: 0 1px 3px -1px @datagrid-columnchooser-shadow-color;
                 }
             }
         }
@@ -377,15 +376,15 @@
 
     .dx-@{widgetName}-drag-header {
         box-shadow: @GENERIC_GRID_BASE_DRAG_HEADER_FIRST_SHADOW, @GENERIC_GRID_BASE_DRAG_HEADER_SECOND_SHADOW;
-        color: ~"@{@{widgetName}-columnchooser-item-color}";
-        font-weight: ~"@{@{widgetName}-columnchooser-font-weight}";
+        color: @datagrid-columnchooser-item-color;
+        font-weight: @datagrid-columnchooser-font-weight;
         padding: @GENERIC_GRID_BASE_CELL_PADDING;
         border: @GENERIC_GRID_BASE_DRAG_HEADER_BORDER;
-        background-color: ~"@{@{widgetName}-header-drag-bg}";
+        background-color: @datagrid-header-drag-bg;
     }
 
     .dx-@{widgetName}-columns-separator {
-        background-color: ~"@{@{widgetName}-column-separator-bg}";
+        background-color: @datagrid-column-separator-bg;
     }
 
     .dx-@{widgetName}-columns-separator-transparent {
@@ -394,13 +393,13 @@
 
     .dx-@{widgetName}-drop-highlight {
         & > td {
-            background-color: ~"@{@{widgetName}-drop-highlight-bg}";
-            color: ~"@{@{widgetName}-drop-highlight-color}";
+            background-color: @datagrid-drop-highlight-bg;
+            color: @datagrid-drop-highlight-color;
         }
     }
 
     .dx-@{widgetName}-focus-overlay {
-        border: 2px solid ~"@{@{widgetName}-focused-border-color}";
+        border: 2px solid @datagrid-focused-border-color;
     }
 
     .dx-@{widgetName}-table {
@@ -428,11 +427,11 @@
         .dx-data-row.dx-state-hover {
             &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) {
                 & > td:not(.dx-focused) {
-                    background-color: ~"@{@{widgetName}-hover-bg}";
-                    color: ~"@{@{widgetName}-row-hovered-color}";
+                    background-color: @datagrid-hover-bg;
+                    color: @datagrid-row-hovered-color;
 
                     &.dx-@{widgetName}-group-space {
-                        border-right-color: ~"@{@{widgetName}-hover-bg}";
+                        border-right-color: @datagrid-hover-bg;
                     }
 
                     &.dx-command-select {
@@ -442,8 +441,8 @@
 
                 & > .dx-@{widgetName}-readonly .dx-texteditor {
                     .dx-texteditor-input {
-                        background-color: ~"@{@{widgetName}-hover-bg}";
-                        color: ~"@{@{widgetName}-row-hovered-color}";
+                        background-color: @datagrid-hover-bg;
+                        color: @datagrid-row-hovered-color;
                     }
                 }
 
@@ -455,10 +454,10 @@
     }
 
     .dx-@{widgetName}-headers {
-        color: ~"@{@{widgetName}-columnchooser-item-color}";
-        font-weight: ~"@{@{widgetName}-columnchooser-font-weight}";
+        color: @datagrid-columnchooser-item-color;
+        font-weight: @datagrid-columnchooser-font-weight;
         touch-action: pinch-zoom;
-        border-bottom: ~"@{@{widgetName}-border}";
+        border-bottom: @datagrid-border;
 
         .dx-@{widgetName}-content {
             margin-bottom: -1px;
@@ -470,7 +469,7 @@
             }
 
             .dx-row > td {
-                border-bottom: ~"@{@{widgetName}-border}";
+                border-bottom: @datagrid-border;
             }
         }
     }
@@ -487,11 +486,11 @@
                 background-color: transparent;
 
                 &:after {
-                    border: 2px solid ~"@{@{widgetName}-focused-border-color}";
+                    border: 2px solid @datagrid-focused-border-color;
                 }
 
                 &.dx-menu-item-expanded {
-                    background-color: ~"@{@{widgetName}-base-background-color}";
+                    background-color: @datagrid-base-background-color;
 
                     &:after {
                         border-color: transparent;
@@ -506,19 +505,19 @@
             }
 
             &.dx-menu-item-expanded.dx-state-hover {
-                background-color: ~"@{@{widgetName}-editor-bg}";
+                background-color: @datagrid-editor-bg;
             }
         }
 
         .dx-highlight-outline {
             &::after {
-                border-color: ~"@{@{widgetName}-cell-modified-border-color}";
+                border-color: @datagrid-cell-modified-border-color;
             }
         }
 
         .dx-menu-item-content {
             .dx-icon {
-                color: ~"@{@{widgetName}-menu-icon-color}";
+                color: @datagrid-menu-icon-color;
             }
         }
 
@@ -529,23 +528,23 @@
 
     .dx-@{widgetName}-filter-range-overlay {
         .dx-overlay-content {
-            border: ~"@{@{widgetName}-border}";
+            border: @datagrid-border;
             overflow: inherit;
-            box-shadow: 2px 2px 3px ~"@{@{widgetName}-overlay-content-shadow-color}";
+            box-shadow: 2px 2px 3px @datagrid-overlay-content-shadow-color;
 
             .dx-editor-container.dx-highlight-outline::after {
-                border-color: ~"@{@{widgetName}-cell-modified-border-color}";
+                border-color: @datagrid-cell-modified-border-color;
                 left: 0;
             }
 
             .dx-texteditor {
                 .dx-texteditor-input {
-                    background-color: ~"@{@{widgetName}-base-background-color}";
+                    background-color: @datagrid-base-background-color;
                     padding: @GENERIC_GRID_BASE_CELL_PADDING;
                 }
 
                 &.dx-state-focused:after {
-                    border: 2px solid ~"@{@{widgetName}-focused-border-color}";
+                    border: 2px solid @datagrid-focused-border-color;
                 }
             }
         }
@@ -587,7 +586,7 @@
     }
 
     .dx-@{widgetName}-header-panel {
-        border-bottom: ~"@{@{widgetName}-border}";
+        border-bottom: @datagrid-border;
 
         .dx-toolbar {
             margin-bottom: @GENERIC_GRID_BASE_HEADER_PANEL_MARGIN_BOTTOM;
@@ -605,46 +604,46 @@
     }
 
     .dx-icon-column-chooser {
-        .dx-icon-columnchooser;
+        .dx-icon(columnchooser);
         .dx-icon-sizing(@GENERIC_BASE_ICON_SIZE);
     }
 
     .dx-@{widgetName}-addrow-button {
         .dx-icon-edit-button-addrow {
-            .dx-icon-add;
+            .dx-icon(add);
             .dx-icon-sizing(@GENERIC_BASE_ICON_SIZE);
         }
     }
 
     .dx-@{widgetName}-cancel-button {
         .dx-icon-edit-button-cancel {
-            .dx-icon-revert;
+            .dx-icon(revert);
             .dx-icon-sizing(@GENERIC_BASE_ICON_SIZE);
         }
     }
 
     .dx-@{widgetName}-save-button {
         .dx-icon-edit-button-save {
-            .dx-icon-save;
+            .dx-icon(save);
             .dx-icon-sizing(@GENERIC_BASE_ICON_SIZE);
         }
     }
 
     .dx-apply-button {
         .dx-icon-apply-filter {
-            .dx-icon-filter;
+            .dx-icon(filter);
             .dx-icon-sizing(@GENERIC_BASE_ICON_SIZE);
         }
     }
 
     .dx-@{widgetName}-export-button {
         .dx-icon-export-to {
-            .dx-icon-export;
+            .dx-icon(export);
             .dx-icon-sizing(@GENERIC_BASE_ICON_SIZE);
         }
 
         .dx-icon-export-excel-button {
-            .dx-icon-xlsxfile;
+            .dx-icon(xlsxfile);
             .dx-icon-sizing(@GENERIC_BASE_ICON_SIZE);
         }
     }
@@ -656,7 +655,7 @@
     .dx-@{widgetName}-rowsview {
         .dx-@{widgetName}-borders &,
         .dx-@{widgetName}-headers + & {
-            border-top: ~"@{@{widgetName}-border}";
+            border-top: @datagrid-border;
         }
 
         .dx-row {
@@ -665,12 +664,12 @@
 
             &.dx-edit-row:first-child > td {
                 border-top-width: 0;
-                border-bottom: ~"@{@{widgetName}-border}";
+                border-bottom: @datagrid-border;
             }
 
             &.dx-edit-row > td {
-                border-top: ~"@{@{widgetName}-border}";
-                border-bottom: ~"@{@{widgetName}-border}";
+                border-top: @datagrid-border;
+                border-bottom: @datagrid-border;
             }
 
             &.dx-@{widgetName}-edit-form {
@@ -681,26 +680,26 @@
         .dx-master-detail-row {
             > .dx-@{widgetName}-group-space,
             .dx-master-detail-cell {
-                border-top: ~"@{@{widgetName}-border}";
-                border-bottom: ~"@{@{widgetName}-border}";
+                border-top: @datagrid-border;
+                border-bottom: @datagrid-border;
             }
         }
 
         .dx-master-detail-row:not(.dx-@{widgetName}-edit-form) {
             > .dx-@{widgetName}-group-space,
             .dx-master-detail-cell {
-                background-color: ~"@{@{widgetName}-master-detail-cell-bg}";
+                background-color: @datagrid-master-detail-cell-bg;
             }
         }
 
         .dx-data-row {
             .dx-validator.dx-@{widgetName}-invalid {
                 .dx-highlight-outline::after {
-                    border: 1px solid ~"@{@{widgetName}-row-invalid-faded-border-color}";
+                    border: 1px solid @datagrid-row-invalid-faded-border-color;
                 }
 
                 &.dx-focused > .dx-highlight-outline::after {
-                    border: 1px solid ~"@{@{widgetName}-row-invalid-border-color}";
+                    border: 1px solid @datagrid-row-invalid-border-color;
                 }
             }
 
@@ -713,16 +712,22 @@
             .dx-cell-modified {
                 .dx-highlight-outline {
                     &::after {
-                        border-color: ~"@{@{widgetName}-cell-modified-border-color}";
+                        border-color: @datagrid-cell-modified-border-color;
                     }
+                }
+            }
+
+            td:not(.dx-cell-modified):not(.dx-validation-pending):not(.dx-@{widgetName}-invalid) {
+                .dx-highlight-outline {
+                    padding: 0;
                 }
             }
         }
 
         .dx-row-removed > td {
-            background-color: ~"@{@{widgetName}-row-removed-bg}";
-            border-top: 1px solid ~"@{@{widgetName}-cell-modified-border-color}";
-            border-bottom: 1px solid ~"@{@{widgetName}-cell-modified-border-color}";
+            background-color: @datagrid-row-removed-bg;
+            border-top: 1px solid @datagrid-cell-modified-border-color;
+            border-bottom: 1px solid @datagrid-cell-modified-border-color;
         }
 
         .dx-set-checkbox-border-color-as-background();
@@ -735,7 +740,7 @@
             }
 
             .dx-@{widgetName}-invalid {
-                border: 1px solid ~"@{@{widgetName}-row-invalid-faded-border-color}";
+                border: 1px solid @datagrid-row-invalid-faded-border-color;
 
                 &.dx-adaptive-item-text {
                     padding-top: @GENERIC_GRID_BASE_ADAPTIVE_TEXT_PADDING - 1px;
@@ -747,7 +752,7 @@
 
         .dx-item-modified {
             border-radius: @base-border-radius;
-            border: 2px solid ~"@{@{widgetName}-cell-modified-border-color}";
+            border: 2px solid @datagrid-cell-modified-border-color;
 
             &.dx-adaptive-item-text {
                 padding-top: @GENERIC_GRID_BASE_ADAPTIVE_TEXT_PADDING - 2px;
@@ -765,8 +770,8 @@
                 & > td:not(.dx-focused),
                 & > tr > td:not(.dx-focused),
                 & .dx-command-edit:not(.dx-focused) .dx-link {
-                    background-color: ~"@{@{widgetName}-row-focused-bg}";
-                    color: ~"@{@{widgetName}-row-focused-color}";
+                    background-color: @datagrid-row-focused-bg;
+                    color: @datagrid-row-focused-color;
 
                     .dx-texteditor-input {
                         border-radius: 0;
@@ -774,40 +779,40 @@
 
                     & .dx-@{widgetName}-group-opened,
                     & .dx-@{widgetName}-group-closed {
-                        color: ~"@{@{widgetName}-row-focused-color}";
+                        color: @datagrid-row-focused-color;
                     }
                 }
 
                 & .dx-command-edit .dx-link:focus {
-                    background-color: ~"@{@{widgetName}-base-background-color}";
-                    color: ~"@{@{widgetName}-base-color}";
+                    background-color: @datagrid-base-background-color;
+                    color: @datagrid-base-color;
                 }
 
                 & > td,
                 & > tr:last-child > td {
-                    border-bottom: 1px solid ~"@{@{widgetName}-focused-border-color}";
+                    border-bottom: 1px solid @datagrid-focused-border-color;
                 }
 
                 &:not(.dx-row-lines) {
                     & > td,
                     & > tr:first-child > td {
-                        border-top: 1px solid ~"@{@{widgetName}-focused-border-color}";
-                        border-bottom: 1px solid ~"@{@{widgetName}-focused-border-color}";
+                        border-top: 1px solid @datagrid-focused-border-color;
+                        border-bottom: 1px solid @datagrid-focused-border-color;
                     }
                 }
             }
 
             &.dx-group-row {
-                background-color: ~"@{@{widgetName}-row-focused-bg}";
-                color: ~"@{@{widgetName}-row-focused-color}";
+                background-color: @datagrid-row-focused-bg;
+                color: @datagrid-row-focused-color;
 
                 & .dx-@{widgetName}-group-opened,
                 & .dx-@{widgetName}-group-closed {
-                    color: ~"@{@{widgetName}-row-focused-color}";
+                    color: @datagrid-row-focused-color;
                 }
 
                 & .dx-datagrid-summary-item {
-                    color: ~"@{@{widgetName}-row-focused-color}";
+                    color: @datagrid-row-focused-color;
                 }
             }
         }
@@ -816,79 +821,103 @@
         .dx-selection.dx-row:not(.dx-row-focused):hover {
             & > td,
             & > tr > td {
-                background-color: ~"@{@{widgetName}-selection-bg}";
-                color: ~"@{@{widgetName}-row-selected-color}";
+                background-color: @datagrid-selection-bg;
+                color: @datagrid-row-selected-color;
 
                 &.dx-@{widgetName}-group-space {
-                    border-right-color: ~"@{@{widgetName}-selection-bg}";
+                    border-right-color: @datagrid-selection-bg;
                 }
 
                 &.dx-pointer-events-none {
-                    border-left-color: ~"@{@{widgetName}-row-selected-border-color}";
-                    border-right-color: ~"@{@{widgetName}-row-selected-border-color}";
+                    border-left-color: @datagrid-row-selected-border-color;
+                    border-right-color: @datagrid-row-selected-border-color;
                 }
 
                 &.dx-focused {
-                    background-color: ~"@{@{widgetName}-base-background-color}";
-                    color: ~"@{@{widgetName}-base-color}";
+                    background-color: @datagrid-base-background-color;
+                    color: @datagrid-base-color;
                 }
             }
 
             &:not(.dx-row-lines) {
                 & > td {
-                    border-bottom: 1px solid ~"@{@{widgetName}-selection-bg}";
-                    border-top: 1px solid ~"@{@{widgetName}-selection-bg}";
+                    border-bottom: 1px solid @datagrid-selection-bg;
+                    border-top: 1px solid @datagrid-selection-bg;
                 }
 
                 & > tr:first-child > td {
-                    border-top: 1px solid ~"@{@{widgetName}-selection-bg}";
+                    border-top: 1px solid @datagrid-selection-bg;
                 }
 
                 & > tr:last-child > td {
-                    border-bottom: 1px solid ~"@{@{widgetName}-selection-bg}";
+                    border-bottom: 1px solid @datagrid-selection-bg;
                 }
             }
 
             &.dx-column-lines {
                 & > td,
                 & > tr > td {
-                    border-left-color: ~"@{@{widgetName}-row-selected-border-color}";
-                    border-right-color: ~"@{@{widgetName}-row-selected-border-color}";
+                    border-left-color: @datagrid-row-selected-border-color;
+                    border-right-color: @datagrid-row-selected-border-color;
                 }
             }
 
             &.dx-row-lines {
                 & > td,
                 & > tr > td {
-                    border-bottom-color: ~"@{@{widgetName}-row-selected-border-color}";
+                    border-bottom-color: @datagrid-row-selected-border-color;
                 }
             }
         }
 
-        &.dx-scrollable-scrollbars-alwaysvisible.dx-scrollable-both .dx-scrollable-content {
+        &.dx-scrollable-scrollbars-alwaysvisible.dx-scrollable-both .dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content {
             padding-right: 0;
+        }
+
+        td {
+            &.dx-validation-pending {
+                position: relative;
+                padding: 0;
+
+                .dx-highlight-outline {
+                    padding-right: @GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE;
+
+                    .dx-rtl&,
+                    .dx-rtl & {
+                        padding-left: @GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE;
+                        padding-right: 0;
+                    }
+                }
+
+                .dx-pending-indicator {
+                    .dx-pending-indicator-generic();
+                    .texteditor-validation-icon-offset();
+
+                    background-color: @datagrid-base-background-color;
+                }
+            }
         }
     }
 
     .dx-@{widgetName}-search-text {
-        color: ~"@{@{widgetName}-search-color}";
-        background-color: ~"@{@{widgetName}-search-bg}";
+        color: @datagrid-search-color;
+        background-color: @datagrid-search-bg;
     }
 
     .dx-@{widgetName}-nodata {
-        color: ~"@{@{widgetName}-nodata-color}";
+        color: @datagrid-nodata-color;
         font-size: @GENERIC_GRID_BASE_NODATA_FONT_SIZE;
     }
 
     .dx-@{widgetName}-bottom-load-panel {
-        border-top: ~"@{@{widgetName}-border}";
+        border-top: @datagrid-border;
     }
 
     .dx-@{widgetName}-pager {
-        border-top: 3px double ~"@{@{widgetName}-border-color}";
+        border-top: 3px double @datagrid-border-color;
 
         &.dx-widget {
-            color: ~"@{@{widgetName}-base-color}";
+            color: @datagrid-base-color;
         }
 
         .dx-page,
@@ -908,16 +937,16 @@
     }
 
     .dx-@{widgetName}-summary-item {
-        color: ~"@{@{widgetName}-summary-color}";
+        color: @datagrid-summary-color;
     }
 
     .dx-@{widgetName}-total-footer {
-        border-top: ~"@{@{widgetName}-border}";
+        border-top: @datagrid-border;
     }
 
     .dx-@{widgetName}-revert-tooltip {
         .dx-overlay-content {
-            background-color: ~"@{@{widgetName}-base-background-color}";
+            background-color: @datagrid-base-background-color;
             min-width: inherit;
         }
 
@@ -965,7 +994,7 @@
             &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) {
                 & > td:not(.dx-focused) {
                     &.dx-@{widgetName}-group-space {
-                        border-left-color: ~"@{@{widgetName}-hover-bg}";
+                        border-left-color: @datagrid-hover-bg;
                         border-right-color: transparent;
                     }
                 }
@@ -993,19 +1022,19 @@
                 & > tr > td {
                     &:not(.dx-focused) {
                         &.dx-@{widgetName}-group-space {
-                            border-left-color: ~"@{@{widgetName}-selection-bg}";
+                            border-left-color: @datagrid-selection-bg;
                         }
                     }
 
-                    border-right-color: ~"@{@{widgetName}-row-selected-border-color}";
+                    border-right-color: @datagrid-row-selected-border-color;
 
                     &.dx-pointer-events-none {
-                        border-left-color: ~"@{@{widgetName}-row-selected-border-color}";
+                        border-left-color: @datagrid-row-selected-border-color;
                     }
                 }
             }
 
-            &.dx-scrollable-scrollbars-alwaysvisible.dx-scrollable-both .dx-scrollable-content {
+            &.dx-scrollable-scrollbars-alwaysvisible.dx-scrollable-both .dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content {
                 padding-left: 0;
             }
         }

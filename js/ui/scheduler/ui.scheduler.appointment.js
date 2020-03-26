@@ -16,29 +16,29 @@ import dateLocalization from '../../localization/date';
 const DEFAULT_HORIZONTAL_HANDLES = 'left right';
 const DEFAULT_VERTICAL_HANDLES = 'top bottom';
 
-var REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME = eventUtils.addNamespace(pointerEvents.enter, 'dxSchedulerAppointment'),
-    REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME = eventUtils.addNamespace(pointerEvents.leave, 'dxSchedulerAppointment');
+const REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME = eventUtils.addNamespace(pointerEvents.enter, 'dxSchedulerAppointment');
+const REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME = eventUtils.addNamespace(pointerEvents.leave, 'dxSchedulerAppointment');
 
-var EMPTY_APPOINTMENT_CLASS = 'dx-scheduler-appointment-empty',
+const EMPTY_APPOINTMENT_CLASS = 'dx-scheduler-appointment-empty';
 
-    APPOINTMENT_ALL_DAY_ITEM_CLASS = 'dx-scheduler-all-day-appointment',
-    DIRECTION_APPOINTMENT_CLASSES = {
-        horizontal: 'dx-scheduler-appointment-horizontal',
-        vertical: 'dx-scheduler-appointment-vertical'
-    },
+const APPOINTMENT_ALL_DAY_ITEM_CLASS = 'dx-scheduler-all-day-appointment';
+const DIRECTION_APPOINTMENT_CLASSES = {
+    horizontal: 'dx-scheduler-appointment-horizontal',
+    vertical: 'dx-scheduler-appointment-vertical'
+};
 
-    RECURRENCE_APPOINTMENT_CLASS = 'dx-scheduler-appointment-recurrence',
-    COMPACT_APPOINTMENT_CLASS = 'dx-scheduler-appointment-compact',
+const RECURRENCE_APPOINTMENT_CLASS = 'dx-scheduler-appointment-recurrence';
+const COMPACT_APPOINTMENT_CLASS = 'dx-scheduler-appointment-compact';
 
-    REDUCED_APPOINTMENT_CLASS = 'dx-scheduler-appointment-reduced',
-    REDUCED_APPOINTMENT_ICON = 'dx-scheduler-appointment-reduced-icon',
-    REDUCED_APPOINTMENT_PARTS_CLASSES = {
-        head: 'dx-scheduler-appointment-head',
-        body: 'dx-scheduler-appointment-body',
-        tail: 'dx-scheduler-appointment-tail'
-    };
+const REDUCED_APPOINTMENT_CLASS = 'dx-scheduler-appointment-reduced';
+const REDUCED_APPOINTMENT_ICON = 'dx-scheduler-appointment-reduced-icon';
+const REDUCED_APPOINTMENT_PARTS_CLASSES = {
+    head: 'dx-scheduler-appointment-head',
+    body: 'dx-scheduler-appointment-body',
+    tail: 'dx-scheduler-appointment-tail'
+};
 
-var Appointment = DOMComponent.inherit({
+const Appointment = DOMComponent.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -120,8 +120,8 @@ var Appointment = DOMComponent.inherit({
     },
 
     _renderAppointmentGeometry: function() {
-        var geometry = this.option('geometry'),
-            $element = this.$element();
+        const geometry = this.option('geometry');
+        const $element = this.$element();
         translator.move($element, {
             top: geometry.top,
             left: geometry.left
@@ -134,7 +134,7 @@ var Appointment = DOMComponent.inherit({
     },
 
     _renderEmptyClass: function() {
-        var geometry = this.option('geometry');
+        const geometry = this.option('geometry');
 
         if(geometry.empty || this.option('isCompact')) {
             this.$element().addClass(EMPTY_APPOINTMENT_CLASS);
@@ -142,7 +142,7 @@ var Appointment = DOMComponent.inherit({
     },
 
     _renderReducedAppointment: function() {
-        var reducedPart = this.option('reduced');
+        const reducedPart = this.option('reduced');
 
         if(!reducedPart) {
             return;
@@ -156,13 +156,13 @@ var Appointment = DOMComponent.inherit({
     },
 
     _renderAppointmentReducedIcon: function() {
-        var $icon = $('<div>')
-                .addClass(REDUCED_APPOINTMENT_ICON)
-                .appendTo(this.$element()),
+        const $icon = $('<div>')
+            .addClass(REDUCED_APPOINTMENT_ICON)
+            .appendTo(this.$element());
 
-            endDate = this._getEndDate();
-        var tooltipLabel = messageLocalization.format('dxScheduler-editorLabelEndDate'),
-            tooltipText = [tooltipLabel, ': ', dateLocalization.format(endDate, 'monthAndDay'), ', ', dateLocalization.format(endDate, 'year')].join('');
+        const endDate = this._getEndDate();
+        const tooltipLabel = messageLocalization.format('dxScheduler-editorLabelEndDate');
+        const tooltipText = [tooltipLabel, ': ', dateLocalization.format(endDate, 'monthAndDay'), ', ', dateLocalization.format(endDate, 'year')].join('');
 
         eventsEngine.off($icon, REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME);
         eventsEngine.on($icon, REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME, function() {
@@ -178,7 +178,7 @@ var Appointment = DOMComponent.inherit({
     },
 
     _getEndDate: function() {
-        var result = this.invoke('getField', 'endDate', this.option('data'));
+        const result = this.invoke('getField', 'endDate', this.option('data'));
         if(result) {
             return new Date(result);
         }
@@ -190,7 +190,7 @@ var Appointment = DOMComponent.inherit({
     },
 
     _renderRecurrenceClass: function() {
-        var rule = this.invoke('getField', 'recurrenceRule', this.option('data'));
+        const rule = this.invoke('getField', 'recurrenceRule', this.option('data'));
 
         if(recurrenceUtils.getRecurrenceRule(rule).isValid) {
             this.$element().addClass(RECURRENCE_APPOINTMENT_CLASS);

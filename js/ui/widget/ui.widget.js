@@ -21,25 +21,7 @@ function setAttribute(name, value, target) {
     target.attr(name, value);
 }
 
-/**
- * @name ui
- * @section utils
- */
 
-/**
-* @const dxItem
-* @type object
-* @section uiWidgetMarkupComponents
-*/
-
-/**
-* @name Widget
-* @type object
-* @inherits DOMComponent
-* @module ui/widget/ui.widget
-* @export default
-* @hidden
-*/
 const Widget = DOMComponent.inherit({
     _feedbackHideTimeout: 400,
     _feedbackShowTimeout: 30,
@@ -50,68 +32,25 @@ const Widget = DOMComponent.inherit({
 
     _getDefaultOptions() {
         return extend(this.callBase(), {
+            hoveredElement: null,
+            isActive: false,
 
-            /**
-             * @name WidgetOptions.disabled
-             * @type boolean
-             * @default false
-             */
             disabled: false,
 
-            /**
-             * @name WidgetOptions.visible
-             * @type boolean
-             * @default true
-             */
             visible: true,
 
-            /**
-             * @name WidgetOptions.hint
-             * @type string
-             * @default undefined
-             */
             hint: undefined,
 
-            /**
-             * @name WidgetOptions.activeStateEnabled
-             * @type boolean
-             * @default false
-             */
             activeStateEnabled: false,
 
-            /**
-            * @name WidgetOptions.onContentReady
-            * @extends Action
-            * @action
-            */
             onContentReady: null,
 
-            /**
-             * @name WidgetOptions.hoverStateEnabled
-             * @type boolean
-             * @default false
-             */
             hoverStateEnabled: false,
 
-            /**
-             * @name WidgetOptions.focusStateEnabled
-             * @type boolean
-             * @default false
-             */
             focusStateEnabled: false,
 
-            /**
-             * @name WidgetOptions.tabIndex
-             * @type number
-             * @default 0
-             */
             tabIndex: 0,
 
-            /**
-             * @name WidgetOptions.accessKey
-             * @type string
-             * @default null
-             */
             accessKey: null,
 
             /**
@@ -130,21 +69,7 @@ const Widget = DOMComponent.inherit({
             */
             onFocusOut: null,
 
-            /**
-            * @name ui.template
-            * @type template
-            * @namespace DevExpress.ui
-            * @deprecated
-            */
 
-            /**
-            * @name format
-            * @type Enums.Format|string|function|Object
-            * @type_function_param1 value:number|date
-            * @type_function_return string
-            * @default undefined
-            * @section Common
-            */
             /**
             * @name format.type
             * @type Enums.Format
@@ -450,13 +375,11 @@ const Widget = DOMComponent.inherit({
         if(hoverStateEnabled) {
             hover.on($el, new Action(({ event, element }) => {
                 this._hoverStartHandler(event);
-                this._refreshHoveredElement($(element));
+                this.option('hoveredElement', $(element));
             }, { excludeValidators: ['readOnly'] }), event => {
+                this.option('hoveredElement', null);
                 this._hoverEndHandler(event);
-                this._forgetHoveredElement();
             }, { selector, namespace });
-        } else {
-            this._toggleHoverClass(false);
         }
     },
 
@@ -505,34 +428,35 @@ const Widget = DOMComponent.inherit({
     _hoverEndHandler: noop,
 
     _toggleActiveState($element, value) {
-        this._toggleHoverClass(!value);
+        this.option('isActive', value);
         $element.toggleClass('dx-state-active', value);
     },
 
-    _refreshHoveredElement(hoveredElement) {
-        const selector = this._activeStateUnit || this._eventBindingTarget();
+    _updatedHover() {
+        const hoveredElement = this._options.silent('hoveredElement');
 
-        this._forgetHoveredElement();
-        this._hoveredElement = hoveredElement.closest(selector);
-        this._toggleHoverClass(true);
+        this._hover(hoveredElement, hoveredElement);
     },
 
-    _forgetHoveredElement() {
-        this._toggleHoverClass(false);
-        delete this._hoveredElement;
+    _findHoverTarget($el) {
+        return $el && $el.closest(this._activeStateUnit || this._eventBindingTarget());
     },
 
-    _toggleHoverClass(value) {
-        if(this._hoveredElement) {
-            const { hoverStateEnabled } = this.option();
+    _hover($el, $previous) {
+        const { hoverStateEnabled, disabled, isActive } = this.option();
 
-            this._hoveredElement.toggleClass('dx-state-hover', value && hoverStateEnabled);
+        $previous = this._findHoverTarget($previous);
+        $previous && $previous.toggleClass('dx-state-hover', false);
+
+        if($el && hoverStateEnabled && !disabled && !isActive) {
+            const newHoveredElement = this._findHoverTarget($el);
+
+            newHoveredElement && newHoveredElement.toggleClass('dx-state-hover', true);
         }
     },
 
     _toggleDisabledState(value) {
         this.$element().toggleClass('dx-state-disabled', Boolean(value));
-        this._toggleHoverClass(!value);
         this.setAria('disabled', value || undefined);
     },
 
@@ -560,11 +484,12 @@ const Widget = DOMComponent.inherit({
     },
 
     _optionChanged(args) {
-        const { name, value } = args;
+        const { name, value, previousValue } = args;
 
         switch(name) {
             case 'disabled':
                 this._toggleDisabledState(value);
+                this._updatedHover();
                 this._refreshFocusState();
                 break;
             case 'hint':
@@ -575,6 +500,7 @@ const Widget = DOMComponent.inherit({
                 break;
             case 'hoverStateEnabled':
                 this._attachHoverEvents();
+                this._updatedHover();
                 break;
             case 'tabIndex':
             case 'focusStateEnabled':
@@ -585,6 +511,12 @@ const Widget = DOMComponent.inherit({
                 break;
             case 'accessKey':
                 this._renderAccessKey();
+                break;
+            case 'hoveredElement':
+                this._hover(value, previousValue);
+                break;
+            case 'isActive':
+                this._updatedHover();
                 break;
             case 'visible':
                 this._toggleVisibility(value);
@@ -645,28 +577,14 @@ const Widget = DOMComponent.inherit({
         return this._ready();
     },
 
-    /**
-    * @name WidgetMethods.repaint
-    * @publicName repaint()
-    */
     repaint() {
         this._refresh();
     },
 
-    /**
-    * @name WidgetMethods.focus
-    * @publicName focus()
-    */
     focus() {
         focus.trigger(this._focusTarget());
     },
 
-    /**
-    * @name WidgetMethods.registerKeyHandler
-    * @publicName registerKeyHandler(key, handler)
-    * @param1 key:string
-    * @param2 handler:function
-    */
     registerKeyHandler(key, handler) {
         const currentKeys = this._supportedKeys();
 

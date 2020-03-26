@@ -1,4 +1,4 @@
-var DATE_PARTS = [
+const DATE_PARTS = [
     {
         name: 'year',
         getter: 'getFullYear'
@@ -27,10 +27,10 @@ var DATE_PARTS = [
 ];
 
 exports.generateDate = function(config) {
-    var hasFixedValue;
-    var now = new Date();
-    var parts = DATE_PARTS.map(function(part) {
-        var result = config[part.name];
+    let hasFixedValue;
+    const now = new Date();
+    const parts = DATE_PARTS.map(function(part) {
+        let result = config[part.name];
 
         if(result === undefined) {
             result = hasFixedValue ? part.defaultValue || 0 : now[part.getter]();

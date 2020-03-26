@@ -1,22 +1,23 @@
-var $ = require('../../core/renderer'),
-    window = require('../../core/utils/window').getWindow(),
-    List = require('../list'),
-    DateBoxStrategy = require('./ui.date_box.strategy'),
-    noop = require('../../core/utils/common').noop,
-    ensureDefined = require('../../core/utils/common').ensureDefined,
-    isDate = require('../../core/utils/type').isDate,
-    extend = require('../../core/utils/extend').extend,
-    dateUtils = require('./ui.date_utils'),
-    dateLocalization = require('../../localization/date');
+const $ = require('../../core/renderer');
+const window = require('../../core/utils/window').getWindow();
+const List = require('../list');
+const DateBoxStrategy = require('./ui.date_box.strategy');
+const noop = require('../../core/utils/common').noop;
+const ensureDefined = require('../../core/utils/common').ensureDefined;
+const isDate = require('../../core/utils/type').isDate;
+const extend = require('../../core/utils/extend').extend;
+const dateUtils = require('./ui.date_utils');
+const dateLocalization = require('../../localization/date');
+const dateSerialization = require('../../core/utils/date_serialization');
 
-var DATE_FORMAT = 'date';
+const DATE_FORMAT = 'date';
 
-var BOUNDARY_VALUES = {
+const BOUNDARY_VALUES = {
     'min': new Date(0, 0, 0, 0, 0),
     'max': new Date(0, 0, 0, 23, 59)
 };
 
-var ListStrategy = DateBoxStrategy.inherit({
+const ListStrategy = DateBoxStrategy.inherit({
 
     NAME: 'List',
 
@@ -126,8 +127,8 @@ var ListStrategy = DateBoxStrategy.inherit({
     },
 
     _setSelectedItemsByValue: function() {
-        var value = this.dateBoxValue();
-        var dateIndex = this._getDateIndex(value);
+        const value = this.dateBoxValue();
+        const dateIndex = this._getDateIndex(value);
 
         if(dateIndex === -1) {
             this._widget.option('selectedItems', []);
@@ -141,9 +142,9 @@ var ListStrategy = DateBoxStrategy.inherit({
     },
 
     _getDateIndex: function(date) {
-        var result = -1;
+        let result = -1;
 
-        for(var i = 0, n = this._widgetItems.length; i < n; i++) {
+        for(let i = 0, n = this._widgetItems.length; i < n; i++) {
             if(this._areDatesEqual(date, this._widgetItems[i])) {
                 result = i;
                 break;
@@ -160,11 +161,11 @@ var ListStrategy = DateBoxStrategy.inherit({
     },
 
     _getTimeListItems: function() {
-        var min = this.dateBox.dateOption('min') || this._getBoundaryDate('min'),
-            max = this.dateBox.dateOption('max') || this._getBoundaryDate('max'),
-            value = this.dateBox.dateOption('value') || null,
-            delta = max - min,
-            minutes = min.getMinutes() % this.dateBox.option('interval');
+        let min = this.dateBox.dateOption('min') || this._getBoundaryDate('min');
+        const max = this.dateBox.dateOption('max') || this._getBoundaryDate('max');
+        const value = this.dateBox.dateOption('value') || null;
+        let delta = max - min;
+        const minutes = min.getMinutes() % this.dateBox.option('interval');
 
         if(delta < 0) {
             return [];
@@ -189,10 +190,10 @@ var ListStrategy = DateBoxStrategy.inherit({
     },
 
     _getRangeItems: function(startValue, currentValue, rangeDuration) {
-        var rangeItems = [];
-        var interval = this.dateBox.option('interval');
+        const rangeItems = [];
+        const interval = this.dateBox.option('interval');
 
-        while(currentValue - startValue < rangeDuration) {
+        while(currentValue - startValue <= rangeDuration) {
             rangeItems.push(new Date(currentValue));
             currentValue.setMinutes(currentValue.getMinutes() + interval);
         }
@@ -201,8 +202,8 @@ var ListStrategy = DateBoxStrategy.inherit({
     },
 
     _getBoundaryDate: function(boundary) {
-        var boundaryValue = BOUNDARY_VALUES[boundary],
-            currentValue = new Date(ensureDefined(this.dateBox.dateOption('value'), 0));
+        const boundaryValue = BOUNDARY_VALUES[boundary];
+        const currentValue = new Date(ensureDefined(this.dateBox.dateOption('value'), 0));
 
         return new Date(
             currentValue.getFullYear(),
@@ -214,7 +215,7 @@ var ListStrategy = DateBoxStrategy.inherit({
     },
 
     _timeListItemTemplate: function(itemData) {
-        var displayFormat = this.dateBox.option('displayFormat');
+        const displayFormat = this.dateBox.option('displayFormat');
         return dateLocalization.format(itemData, this.getDisplayFormat(displayFormat));
     },
 
@@ -231,7 +232,11 @@ var ListStrategy = DateBoxStrategy.inherit({
         const day = itemData.getDate();
 
         if(date) {
-            date = new Date(date);
+            if(this.dateBox.option('dateSerializationFormat')) {
+                date = dateSerialization.deserializeDate(date);
+            } else {
+                date = new Date(date);
+            }
 
             date.setHours(hours);
             date.setMinutes(minutes);
@@ -243,7 +248,7 @@ var ListStrategy = DateBoxStrategy.inherit({
             date = new Date(year, month, day, hours, minutes, 0, 0);
         }
 
-        this.dateBoxValue(date);
+        this.dateBoxValue(date, e.event);
     },
 
     getKeyboardListener() {
@@ -266,14 +271,14 @@ var ListStrategy = DateBoxStrategy.inherit({
     _updatePopupHeight: function() {
         this.dateBox._setPopupOption('height', 'auto');
 
-        var popupHeight = this._widget.$element().outerHeight();
-        var maxHeight = $(window).height() * 0.45;
+        const popupHeight = this._widget.$element().outerHeight();
+        const maxHeight = $(window).height() * 0.45;
         this.dateBox._setPopupOption('height', Math.min(popupHeight, maxHeight));
         this.dateBox._timeList && this.dateBox._timeList.updateDimensions();
     },
 
     getParsedText: function(text, format) {
-        var value = this.callBase(text, format);
+        let value = this.callBase(text, format);
 
         if(value) {
             value = dateUtils.mergeDates(value, new Date(null), DATE_FORMAT);

@@ -27,7 +27,6 @@ const FORMATS_TO_PATTERN_MAP = {
     'day': 'd',
     'year': 'y',
     'shortdateshorttime': 'M/d/y, h:mm a',
-    'mediumdatemediumtime': 'MMMM d, h:mm a',
     'longdatelongtime': 'EEEE, MMMM d, y, h:mm:ss a',
     'month': 'LLLL',
     'shortyear': 'yy',
@@ -143,7 +142,6 @@ const dateLocalization = dependencyInjector({
 
     parse: function(text, format) {
         const that = this;
-        let result;
         let ldmlFormat;
         let formatter;
 
@@ -177,7 +175,7 @@ const dateLocalization = dependencyInjector({
         }
 
         errors.log('W0012');
-        result = new Date(text);
+        const result = new Date(text);
 
         if(!result || isNaN(result.getTime())) {
             return;

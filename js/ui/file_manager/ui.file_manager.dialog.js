@@ -1,5 +1,6 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
+import messageLocalization from '../../localization/message';
 
 import Widget from '../widget/ui.widget';
 import Popup from '../popup';
@@ -38,6 +39,15 @@ class FileManagerDialogBase extends Widget {
                     options: {
                         text: options.buttonText,
                         onClick: this._applyDialogChanges.bind(this)
+                    }
+                },
+                {
+                    widget: 'dxButton',
+                    toolbar: 'bottom',
+                    location: 'after',
+                    options: {
+                        text: messageLocalization.format('dxFileManager-dialogButtonCancel'),
+                        onClick: this._closeDialog.bind(this)
                     }
                 }
             ],
@@ -83,6 +93,10 @@ class FileManagerDialogBase extends Widget {
         }
     }
 
+    _closeDialog() {
+        this._popup.hide();
+    }
+
     _onPopupHidden() {
         this._onClosedAction({ dialogResult: this._dialogResult });
     }
@@ -92,6 +106,14 @@ class FileManagerDialogBase extends Widget {
 
     _createOnClosedAction() {
         this._onClosedAction = this._createActionByOption('onClosed');
+    }
+
+    _setTitle(newTitle) {
+        this._popup.option('title', newTitle);
+    }
+
+    _setButtonText(newText) {
+        this._popup.option('toolbarItems[0].options.text', newText);
     }
 
     _getDefaultOptions() {

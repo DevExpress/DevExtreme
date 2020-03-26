@@ -976,9 +976,7 @@ QUnit.module('templates support', {}, () => {
             }
         };
 
-        let testContainer;
-
-        testContainer = new TestContainer('#container', { myTemplate: template });
+        let testContainer = new TestContainer('#container', { myTemplate: template });
         testContainer._getTemplateByOption('myTemplate').render();
         assert.deepEqual(renderHandler.callCount, 1, 'object with render function acquired as template');
 

@@ -58,9 +58,17 @@ class ExcelJSTestHelper {
         });
     }
 
-    checkColumnWidths(expectedWidths, startColumnIndex) {
+    checkColumnWidths(expectedWidths, startColumnIndex, tolerance) {
         for(let i = 0; i < expectedWidths.length; i++) {
-            assert.equal(this.worksheet.getColumn(startColumnIndex + i).width, expectedWidths[i], `worksheet.getColumns(${i}).width`);
+            const actual = this.worksheet.getColumn(startColumnIndex + i).width;
+            const expected = expectedWidths[i];
+            const message = `worksheet.getColumns(${i}).width`;
+
+            if(tolerance && isFinite(expected)) {
+                assert.roughEqual(actual, expected, tolerance, message);
+            } else {
+                assert.equal(actual, expected, message);
+            }
         }
     }
 
@@ -95,12 +103,12 @@ class ExcelJSTestHelper {
         assert.equal(this.worksheet.columnCount, total.column === 0 ? total.column : topLeft.column + total.column - 1, 'worksheet.columnCount');
     }
 
-    checkCellsRange(cellsRange, actual, topLeft) {
-        assert.deepEqual(cellsRange.from, topLeft, 'cellsRange.from');
+    checkCellRange(cellRange, actual, topLeft) {
+        assert.deepEqual(cellRange.from, topLeft, 'cellRange.from');
         if(actual.row > 0 && actual.column > 0) {
-            assert.deepEqual(cellsRange.to, { row: topLeft.row + actual.row - 1, column: topLeft.column + actual.column - 1 }, 'cellsRange.to');
+            assert.deepEqual(cellRange.to, { row: topLeft.row + actual.row - 1, column: topLeft.column + actual.column - 1 }, 'cellRange.to');
         } else {
-            assert.deepEqual(cellsRange.to, { row: topLeft.row + actual.row, column: topLeft.column + actual.column }, 'cellsRange.to');
+            assert.deepEqual(cellRange.to, { row: topLeft.row + actual.row, column: topLeft.column + actual.column }, 'cellRange.to');
         }
     }
 
@@ -120,7 +128,7 @@ class ExcelJSTestHelper {
     _iterateCells(cellsArray, callback) {
         for(let rowIndex = 0; rowIndex < cellsArray.length; rowIndex++) {
             for(let columnIndex = 0; columnIndex < cellsArray[rowIndex].length; columnIndex++) {
-                let currentCell = cellsArray[rowIndex][columnIndex];
+                const currentCell = cellsArray[rowIndex][columnIndex];
 
                 callback(currentCell, rowIndex, columnIndex);
             }

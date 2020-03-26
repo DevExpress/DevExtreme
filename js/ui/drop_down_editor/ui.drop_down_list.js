@@ -1,51 +1,44 @@
-var $ = require('../../core/renderer'),
-    window = require('../../core/utils/window').getWindow(),
-    eventsEngine = require('../../events/core/events_engine'),
-    Guid = require('../../core/guid'),
-    registerComponent = require('../../core/component_registrator'),
-    commonUtils = require('../../core/utils/common'),
-    typeUtils = require('../../core/utils/type'),
-    extend = require('../../core/utils/extend').extend,
-    inArray = require('../../core/utils/array').inArray,
-    DropDownEditor = require('./ui.drop_down_editor'),
-    List = require('../list'),
-    errors = require('../widget/ui.errors'),
-    eventUtils = require('../../events/utils'),
-    devices = require('../../core/devices'),
-    dataQuery = require('../../data/query'),
-    each = require('../../core/utils/iterator').each,
-    DataExpressionMixin = require('../editor/ui.data_expression'),
-    messageLocalization = require('../../localization/message'),
-    ChildDefaultTemplate = require('../../core/templates/child_default_template').ChildDefaultTemplate,
-    Deferred = require('../../core/utils/deferred').Deferred,
-    DataConverterMixin = require('../shared/grouped_data_converter_mixin').default;
+const $ = require('../../core/renderer');
+const window = require('../../core/utils/window').getWindow();
+const eventsEngine = require('../../events/core/events_engine');
+const Guid = require('../../core/guid');
+const registerComponent = require('../../core/component_registrator');
+const commonUtils = require('../../core/utils/common');
+const typeUtils = require('../../core/utils/type');
+const extend = require('../../core/utils/extend').extend;
+const inArray = require('../../core/utils/array').inArray;
+const DropDownEditor = require('./ui.drop_down_editor');
+const List = require('../list');
+const errors = require('../widget/ui.errors');
+const eventUtils = require('../../events/utils');
+const devices = require('../../core/devices');
+const dataQuery = require('../../data/query');
+const each = require('../../core/utils/iterator').each;
+const DataExpressionMixin = require('../editor/ui.data_expression');
+const messageLocalization = require('../../localization/message');
+const ChildDefaultTemplate = require('../../core/templates/child_default_template').ChildDefaultTemplate;
+const Deferred = require('../../core/utils/deferred').Deferred;
+const DataConverterMixin = require('../shared/grouped_data_converter_mixin').default;
 
-var LIST_ITEM_SELECTOR = '.dx-list-item',
-    LIST_ITEM_DATA_KEY = 'dxListItemData',
-    DROPDOWNLIST_POPUP_WRAPPER_CLASS = 'dx-dropdownlist-popup-wrapper',
+const LIST_ITEM_SELECTOR = '.dx-list-item';
+const LIST_ITEM_DATA_KEY = 'dxListItemData';
+const DROPDOWNLIST_POPUP_WRAPPER_CLASS = 'dx-dropdownlist-popup-wrapper';
 
-    SKIP_GESTURE_EVENT_CLASS = 'dx-skip-gesture-event',
-    SEARCH_EVENT = 'input',
+const SKIP_GESTURE_EVENT_CLASS = 'dx-skip-gesture-event';
+const SEARCH_EVENT = 'input';
 
-    SEARCH_MODES = ['startswith', 'contains', 'endwith', 'notcontains'];
+const SEARCH_MODES = ['startswith', 'contains', 'endwith', 'notcontains'];
 
-/**
-* @name dxDropDownList
-* @inherits DataExpressionMixin, dxDropDownEditor
-* @module ui/drop_down_editor/ui.drop_down_list
-* @export default
-* @hidden
-*/
-var DropDownList = DropDownEditor.inherit({
+const DropDownList = DropDownEditor.inherit({
 
     _supportedKeys: function() {
-        var parent = this.callBase();
+        const parent = this.callBase();
 
         return extend({}, parent, {
             tab: function(e) {
                 if(this._allowSelectItemByTab()) {
                     this._saveValueChangeEvent(e);
-                    var $focusedItem = $(this._list.option('focusedElement'));
+                    const $focusedItem = $(this._list.option('focusedElement'));
                     $focusedItem.length && this._setSelectedElement($focusedItem);
                 }
 
@@ -62,7 +55,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _setSelectedElement: function($element) {
-        var value = this._valueGetter(this._list._getItemData($element));
+        const value = this._valueGetter(this._list._getItemData($element));
         this._setValue(value);
     },
 
@@ -72,119 +65,32 @@ var DropDownList = DropDownEditor.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), extend(DataExpressionMixin._dataExpressionDefaultOptions(), {
-            /**
-            * @name dxDropDownListOptions.displayValue
-            * @type string
-            * @readonly
-            * @default undefined
-            * @ref
-            */
             displayValue: undefined,
 
-            /**
-            * @name dxDropDownListOptions.searchEnabled
-            * @type boolean
-            * @default false
-            */
             searchEnabled: false,
 
-            /**
-            * @name dxDropDownListOptions.searchMode
-            * @type Enums.DropDownSearchMode
-            * @default "contains"
-            */
             searchMode: 'contains',
 
-            /**
-            * @name dxDropDownListOptions.searchTimeout
-            * @type number
-            * @default 500
-            */
             searchTimeout: 500,
 
-            /**
-            * @name dxDropDownListOptions.minSearchLength
-            * @type number
-            * @default 0
-            */
             minSearchLength: 0,
 
-            /**
-            * @name dxDropDownListOptions.searchExpr
-            * @type getter|Array<getter>
-            * @default null
-            */
             searchExpr: null,
 
-            /**
-            * @name dxDropDownListOptions.valueChangeEvent
-            * @type string
-            * @default "input change keyup"
-            */
             valueChangeEvent: 'input change keyup',
 
-            /**
-            * @name dxDropDownListOptions.selectedItem
-            * @type any
-            * @readonly
-            * @default null
-            * @ref
-            */
             selectedItem: null,
 
-            /**
-            * @name dxDropDownListOptions.noDataText
-            * @type string
-            * @default "No data to display"
-            */
             noDataText: messageLocalization.format('dxCollectionWidget-noDataText'),
 
-            /**
-            * @name dxDropDownListOptions.onSelectionChanged
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 selectedItem:object
-            * @action
-            */
             onSelectionChanged: null,
 
-            /**
-            * @name dxDropDownListOptions.onItemClick
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:object
-            * @type_function_param1_field6 itemIndex:number | object
-            * @type_function_param1_field7 event:event
-            * @action
-            */
             onItemClick: commonUtils.noop,
 
-            /**
-            * @name dxDropDownListOptions.showDataBeforeSearch
-            * @type boolean
-            * @default false
-            */
             showDataBeforeSearch: false,
 
-            /**
-            * @name dxDropDownListOptions.grouped
-            * @type boolean
-            * @default false
-            */
             grouped: false,
 
-            /**
-            * @name dxDropDownListOptions.groupTemplate
-            * @type template|function
-            * @default "group"
-            * @type_function_param1 itemData:object
-            * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
             groupTemplate: 'group',
 
             popupPosition: {
@@ -194,24 +100,8 @@ var DropDownList = DropDownEditor.inherit({
                 collision: 'flip'
             },
 
-            /**
-             * @name dxDropDownListOptions.wrapItemText
-             * @type boolean
-             * @default false
-             */
             wrapItemText: false,
 
-            /**
-            * @name dxDropDownListOptions.onValueChanged
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 value:object
-            * @type_function_param1_field5 previousValue:object
-            * @type_function_param1_field6 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field7 event:event
-            * @action
-            */
 
             /**
             * @name dxDropDownListOptions.fieldTemplate
@@ -219,10 +109,6 @@ var DropDownList = DropDownEditor.inherit({
             */
             /**
             * @name dxDropDownListOptions.fieldRender
-            * @hidden
-            */
-            /**
-            * @name dxDropDownListOptions.contentTemplate
             * @hidden
             */
             /**
@@ -259,10 +145,6 @@ var DropDownList = DropDownEditor.inherit({
         this.callBase();
 
         extend(this._optionsByReference, {
-            /**
-            * @name dxDropDownListOptions.value
-            * @ref
-            */
             value: true,
             selectedItem: true,
             displayValue: true
@@ -281,7 +163,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _initItems: function() {
-        var items = this.option().items;
+        const items = this.option().items;
         if(items && !items.length && this._dataSource) {
             this.option().items = this._dataSource.items();
         }
@@ -333,23 +215,23 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _items: function() {
-        var items = this._getPlainItems(!this._list && this._dataSource.items());
+        const items = this._getPlainItems(!this._list && this._dataSource.items());
 
-        var availableItems = new dataQuery(items).filter('disabled', '<>', true).toArray();
+        const availableItems = new dataQuery(items).filter('disabled', '<>', true).toArray();
 
         return availableItems;
     },
 
     _calcNextItem: function(step) {
-        var items = this._items();
-        var nextIndex = this._fitIntoRange(this._getSelectedIndex() + step, 0, items.length - 1);
+        const items = this._items();
+        const nextIndex = this._fitIntoRange(this._getSelectedIndex() + step, 0, items.length - 1);
         return items[nextIndex];
     },
 
     _getSelectedIndex: function() {
-        var items = this._items();
-        var selectedItem = this.option('selectedItem');
-        var result = -1;
+        const items = this._items();
+        const selectedItem = this.option('selectedItem');
+        let result = -1;
         each(items, (function(index, item) {
             if(this._isValueEquals(item, selectedItem)) {
                 result = index;
@@ -365,17 +247,27 @@ var DropDownList = DropDownEditor.inherit({
         this._updateCustomBoundaryContainer();
         this._popup._wrapper().addClass(this._popupWrapperClass());
 
-        var $popupContent = this._popup.$content();
+        const $popupContent = this._popup.$content();
         eventsEngine.off($popupContent, 'mouseup');
         eventsEngine.on($popupContent, 'mouseup', this._saveFocusOnWidget.bind(this));
+
+        const that = this;
+        this._popup.on({
+            'shown': function() {
+                that.$element().addClass(SKIP_GESTURE_EVENT_CLASS);
+            },
+            'hidden': function() {
+                that.$element().removeClass(SKIP_GESTURE_EVENT_CLASS);
+            }
+        });
     },
 
     _updateCustomBoundaryContainer: function() {
-        var customContainer = this.option('dropDownOptions.container');
-        var $container = customContainer && $(customContainer);
+        const customContainer = this.option('dropDownOptions.container');
+        const $container = customContainer && $(customContainer);
 
         if($container && $container.length && !typeUtils.isWindow($container.get(0))) {
-            var $containerWithParents = [].slice.call($container.parents());
+            const $containerWithParents = [].slice.call($container.parents());
             $containerWithParents.unshift($container.get(0));
 
             each($containerWithParents, function(i, parent) {
@@ -394,7 +286,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _renderInputValue: function() {
-        var value = this._getCurrentValue();
+        const value = this._getCurrentValue();
 
         return this._loadInputValue(value, this._setSelectedItem.bind(this))
             .always(this.callBase.bind(this, value));
@@ -405,8 +297,8 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _getItemFromPlain: function(value, cache) {
-        var plainItems,
-            selectedItem;
+        let plainItems;
+        let selectedItem;
 
         if(cache && typeof value !== 'object') {
             if(!cache.itemByValue) {
@@ -430,7 +322,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _loadItem: function(value, cache) {
-        var selectedItem = this._getItemFromPlain(value, cache);
+        const selectedItem = this._getItemFromPlain(value, cache);
 
         return selectedItem !== undefined
             ? new Deferred().resolve(selectedItem).promise()
@@ -438,11 +330,11 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _getPlainItems: function(items) {
-        var plainItems = [];
+        let plainItems = [];
 
         items = items || this.option('items') || this._dataSource.items() || [];
 
-        for(var i = 0; i < items.length; i++) {
+        for(let i = 0; i < items.length; i++) {
             if(items[i] && items[i].items) {
                 plainItems = plainItems.concat(items[i].items);
             } else {
@@ -454,7 +346,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _setSelectedItem: function(item) {
-        var displayValue = this._displayValue(item);
+        const displayValue = this._displayValue(item);
         this.option('selectedItem', commonUtils.ensureDefined(item, null));
         this.option('displayValue', displayValue);
     },
@@ -464,12 +356,12 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _refreshSelected: function() {
-        var cache = {};
+        const cache = {};
         this._listItemElements().each((function(_, itemElement) {
-            var $itemElement = $(itemElement);
-            var itemValue = this._valueGetter($itemElement.data(LIST_ITEM_DATA_KEY));
+            const $itemElement = $(itemElement);
+            const itemValue = this._valueGetter($itemElement.data(LIST_ITEM_DATA_KEY));
 
-            var isItemSelected = this._isSelectedValue(itemValue, cache);
+            const isItemSelected = this._isSelectedValue(itemValue, cache);
 
             if(isItemSelected) {
                 this._list.selectItem($itemElement);
@@ -497,8 +389,8 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _validateSearchMode: function() {
-        var searchMode = this.option('searchMode'),
-            normalizedSearchMode = searchMode.toLowerCase();
+        const searchMode = this.option('searchMode');
+        const normalizedSearchMode = searchMode.toLowerCase();
 
         if(inArray(normalizedSearchMode, SEARCH_MODES) < 0) {
             throw errors.Error('E1019', searchMode);
@@ -536,16 +428,9 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _popupConfig: function() {
-        var that = this;
         return extend(this.callBase(), {
             templatesRenderAsynchronously: false,
             width: this.option('width'),
-            onShowing: function() {
-                that.$element().addClass(SKIP_GESTURE_EVENT_CLASS);
-            },
-            onHidden: function() {
-                that.$element().removeClass(SKIP_GESTURE_EVENT_CLASS);
-            },
             height: 'auto',
             autoResizeEnabled: false,
             maxHeight: this._getMaxHeight.bind(this)
@@ -553,6 +438,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _renderPopupContent: function() {
+        this.callBase();
         this._renderList();
     },
 
@@ -571,7 +457,7 @@ var DropDownList = DropDownEditor.inherit({
     _renderList: function() {
         this._listId = 'dx-' + new Guid()._value;
 
-        var $list = this._$list = $('<div>').attr('id', this._listId)
+        const $list = this._$list = $('<div>').attr('id', this._listId)
             .appendTo(this._popup.$content());
 
         this._list = this._createComponent($list, List, this._listConfig());
@@ -584,7 +470,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _renderPreventBlur: function($target) {
-        var eventName = eventUtils.addNamespace('mousedown', 'dxDropDownList');
+        const eventName = eventUtils.addNamespace('mousedown', 'dxDropDownList');
 
         eventsEngine.off($target, eventName);
         eventsEngine.on($target, eventName, function(e) {
@@ -595,7 +481,7 @@ var DropDownList = DropDownEditor.inherit({
     _renderOpenedState: function() {
         this.callBase();
 
-        var opened = this.option('opened') || undefined;
+        const opened = this.option('opened') || undefined;
 
         this.setAria({
             'activedescendant': opened && this._list.getFocusedItemId(),
@@ -618,7 +504,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _shouldRefreshDataSource: function() {
-        var dataSourceProvided = !!this._list.option('dataSource');
+        const dataSourceProvided = !!this._list.option('dataSource');
         return dataSourceProvided !== this._needPassDataSourceToList();
     },
 
@@ -627,7 +513,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _listConfig: function() {
-        var options = {
+        const options = {
             selectionMode: 'single',
             _templates: this.option('_templates'),
             templateProvider: this.option('templateProvider'),
@@ -753,7 +639,7 @@ var DropDownList = DropDownEditor.inherit({
             return;
         }
 
-        var searchTimeout = this.option('searchTimeout');
+        const searchTimeout = this.option('searchTimeout');
 
         if(searchTimeout) {
             this._clearSearchTimer();
@@ -778,7 +664,7 @@ var DropDownList = DropDownEditor.inherit({
     _filterDataSource: function(searchValue) {
         this._clearSearchTimer();
 
-        var dataSource = this._dataSource;
+        const dataSource = this._dataSource;
 
         dataSource.searchExpr(this.option('searchExpr') || this._displayGetterExpr());
         dataSource.searchOperation(this.option('searchMode'));
@@ -788,7 +674,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _clearFilter: function() {
-        var dataSource = this._dataSource;
+        const dataSource = this._dataSource;
         dataSource && dataSource.searchValue() && dataSource.searchValue(null);
     },
 
@@ -828,9 +714,9 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _hasItemsToShow: function() {
-        var resultItems = this._dataSource && this._dataSource.items() || [];
-        var resultAmount = resultItems.length;
-        var isMinSearchLengthExceeded = this._needPassDataSourceToList();
+        const resultItems = this._dataSource && this._dataSource.items() || [];
+        const resultAmount = resultItems.length;
+        const isMinSearchLengthExceeded = this._needPassDataSourceToList();
 
         return !!(isMinSearchLengthExceeded && resultAmount);
     },
@@ -862,8 +748,8 @@ var DropDownList = DropDownEditor.inherit({
             return false;
         }
 
-        var currentPageIndex = this._dataSource.pageIndex(),
-            needRepaint = typeUtils.isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex;
+        const currentPageIndex = this._dataSource.pageIndex();
+        const needRepaint = typeUtils.isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex;
 
         this._pageIndex = currentPageIndex;
 
@@ -879,11 +765,12 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _getMaxHeight: function() {
-        var $element = this.$element(),
-            $customBoundaryContainer = this._$customBoundaryContainer,
-            offsetTop = $element.offset().top - ($customBoundaryContainer ? $customBoundaryContainer.offset().top : 0),
-            containerHeight = ($customBoundaryContainer || $(window)).outerHeight(),
-            maxHeight = Math.max(offsetTop, containerHeight - offsetTop - $element.outerHeight());
+        const $element = this.$element();
+        const $customBoundaryContainer = this._$customBoundaryContainer;
+        const offsetTop = $element.offset().top - ($customBoundaryContainer ? $customBoundaryContainer.offset().top : 0);
+        const windowHeight = $(window).outerHeight();
+        const containerHeight = $customBoundaryContainer ? Math.min($customBoundaryContainer.outerHeight(), windowHeight) : windowHeight;
+        const maxHeight = Math.max(offsetTop, containerHeight - offsetTop - $element.outerHeight());
 
         return Math.min(containerHeight * 0.5, maxHeight);
     },
@@ -905,8 +792,8 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _setSubmitValue: function() {
-        var value = this.option('value'),
-            submitValue = this._shouldUseDisplayValue(value) ? this._displayGetter(value) : value;
+        const value = this.option('value');
+        const submitValue = this._shouldUseDisplayValue(value) ? this._displayGetter(value) : value;
 
         this._getSubmitElement().val(submitValue);
     },

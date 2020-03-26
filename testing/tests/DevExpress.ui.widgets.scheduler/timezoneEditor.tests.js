@@ -1,8 +1,8 @@
-var $ = require('jquery');
+const $ = require('jquery');
 
 require('ui/select_box');
 
-var TIMEZONES = [
+const TIMEZONES = [
     { 'id': 'Africa/Addis_Ababa', 'title': 'Addis Ababa', 'winIndex': 0, 'link': 7 }, // link to Africa/Abidjan
     { 'id': 'Africa/Asmara', 'title': 'Asmara', 'winIndex': 0, 'link': 7 }, // link to Africa/Abidjan
     { 'id': 'Africa/Dar_es_Salaam', 'title': 'Dar es Salaam', 'winIndex': 0, 'link': 7 }, // link to Africa/Abidjan
@@ -14,19 +14,19 @@ var TIMEZONES = [
     { 'id': 'Africa/Nairobi', 'title': 'Nairobi', 'winIndex': 0, 'offsets': [2.454444444444445, 3, 2.5, 2.75], 'offsetIndices': '01231', 'untils': '-lnsetg|s8mhg|57v020|afrrb0|Infinity' }
 ];
 
-var DISPLAY_NAMES = ['(UTC+03:00) Nairobi', '(UTC) Monrovia, Reykjavik'];
+const DISPLAY_NAMES = ['(UTC+03:00) Nairobi', '(UTC) Monrovia, Reykjavik'];
 
-var NO_TZ = require('localization/message').format('dxScheduler-noTimezoneTitle');
+const NO_TZ = require('localization/message').format('dxScheduler-noTimezoneTitle');
 
-var TimezoneEditor = require('ui/scheduler/timezones/ui.scheduler.timezone_editor'),
-    SchedulerTimezones = require('ui/scheduler/timezones/ui.scheduler.timezones');
+const TimezoneEditor = require('ui/scheduler/timezones/ui.scheduler.timezone_editor');
+const SchedulerTimezones = require('ui/scheduler/timezones/ui.scheduler.timezones');
 
 sinon.stub(SchedulerTimezones, 'getTimezones').returns(TIMEZONES);
 sinon.stub(SchedulerTimezones, 'getDisplayNames').returns(DISPLAY_NAMES);
 
-var Subscribes = require('ui/scheduler/ui.scheduler.subscribes');
+const Subscribes = require('ui/scheduler/ui.scheduler.subscribes');
 
-var createEditor = function(options) {
+const createEditor = function(options) {
     options = options || {};
     options.observer = {
         fire: function(type, args) {
@@ -56,7 +56,7 @@ QUnit.test('Timezone editor should be initialized', function(assert) {
 
 QUnit.test('Timezone editor should contain tz display name selectbox', function(assert) {
     this.createInstance();
-    var $tzDisplayNameSelectBox = this.instance.$element().find('.dx-timezone-display-name');
+    const $tzDisplayNameSelectBox = this.instance.$element().find('.dx-timezone-display-name');
 
     assert.equal($tzDisplayNameSelectBox.length, 1, 'Display name editor is rendered');
     assert.ok($tzDisplayNameSelectBox.dxSelectBox('instance'), 'Display name editor is selectbox');
@@ -65,8 +65,8 @@ QUnit.test('Timezone editor should contain tz display name selectbox', function(
 QUnit.test('Timezone editor should contain iana id selectbox', function(assert) {
     this.createInstance();
 
-    var $tzIdSelectBox = this.instance.$element().find('.dx-timezone-iana-id'),
-        tzIdSelectBox = $tzIdSelectBox.dxSelectBox('instance');
+    const $tzIdSelectBox = this.instance.$element().find('.dx-timezone-iana-id');
+    const tzIdSelectBox = $tzIdSelectBox.dxSelectBox('instance');
 
     assert.equal($tzIdSelectBox.length, 1, 'Tz id editor is rendered');
     assert.ok($tzIdSelectBox.dxSelectBox('instance'), 'Tz id editor is selectbox');
@@ -97,8 +97,8 @@ QUnit.module('Data processing', {
 QUnit.test('Init without value', function(assert) {
     this.createInstance();
 
-    var displayNameSelectBox = this.getDisplayNameEditor(),
-        idSelectBox = this.getIdEditor();
+    const displayNameSelectBox = this.getDisplayNameEditor();
+    const idSelectBox = this.getIdEditor();
 
     assert.deepEqual(displayNameSelectBox.option('items'), [
         NO_TZ,
@@ -112,9 +112,9 @@ QUnit.test('Init without value', function(assert) {
 QUnit.test('Init with value', function(assert) {
     this.createInstance({ value: 'Africa/Addis_Ababa' });
 
-    var displayNameSelectBox = this.getDisplayNameEditor(),
-        idSelectBox = this.getIdEditor(),
-        displayNames = displayNameSelectBox.option('items');
+    const displayNameSelectBox = this.getDisplayNameEditor();
+    const idSelectBox = this.getIdEditor();
+    const displayNames = displayNameSelectBox.option('items');
 
     assert.equal(displayNameSelectBox.option('value'), '(UTC+03:00) Nairobi', 'Display name is OK');
 
@@ -138,8 +138,8 @@ QUnit.test('Process value changing', function(assert) {
 
     this.instance.option('value', 'Africa/Addis_Ababa');
 
-    var displayNameSelectBox = this.getDisplayNameEditor(),
-        idSelectBox = this.getIdEditor();
+    const displayNameSelectBox = this.getDisplayNameEditor();
+    const idSelectBox = this.getIdEditor();
 
     assert.equal(displayNameSelectBox.option('value'), '(UTC+03:00) Nairobi', 'Display name is OK');
     assert.deepEqual(displayNameSelectBox.option('items'), [
@@ -160,8 +160,8 @@ QUnit.test('Process value changing', function(assert) {
 QUnit.test('Process display name changing', function(assert) {
     this.createInstance();
 
-    var displayNameSelectBox = this.getDisplayNameEditor(),
-        idSelectBox = this.getIdEditor();
+    const displayNameSelectBox = this.getDisplayNameEditor();
+    const idSelectBox = this.getIdEditor();
 
 
     displayNameSelectBox.option('value', '(UTC+03:00) Nairobi');
@@ -179,8 +179,8 @@ QUnit.test('Process display name changing', function(assert) {
 QUnit.test('Process display name changing if it changes to \'No tz\'', function(assert) {
     this.createInstance({ value: 'Africa/Addis_Ababa' });
 
-    var displayNameSelectBox = this.getDisplayNameEditor(),
-        idSelectBox = this.getIdEditor();
+    const displayNameSelectBox = this.getDisplayNameEditor();
+    const idSelectBox = this.getIdEditor();
 
     displayNameSelectBox.option('value', NO_TZ);
 
@@ -197,7 +197,7 @@ QUnit.test('Process display name changing if it changes to \'No tz\'', function(
 QUnit.test('Display name should be equal to NO_TZ if tz editor value changes to null', function(assert) {
     this.createInstance({ value: 'Africa/Addis_Ababa' });
 
-    var displayNameSelectBox = this.getDisplayNameEditor();
+    const displayNameSelectBox = this.getDisplayNameEditor();
 
     this.instance.option('value', null);
     assert.equal(displayNameSelectBox.option('value'), NO_TZ, 'Display name is OK');
@@ -206,7 +206,7 @@ QUnit.test('Display name should be equal to NO_TZ if tz editor value changes to 
 QUnit.test('Process tz id changing', function(assert) {
     this.createInstance({ value: 'Africa/Bamako' });
 
-    var idSelectBox = this.getIdEditor();
+    const idSelectBox = this.getIdEditor();
 
     idSelectBox.option('value', 'Africa/Banjul');
 
@@ -222,8 +222,8 @@ QUnit.test('Process tz id changing', function(assert) {
 QUnit.test('Process readOnly state changing', function(assert) {
     this.createInstance({ readOnly: true });
 
-    var displayNameSelectBox = this.getDisplayNameEditor(),
-        idSelectBox = this.getIdEditor();
+    const displayNameSelectBox = this.getDisplayNameEditor();
+    const idSelectBox = this.getIdEditor();
 
     assert.strictEqual(displayNameSelectBox.option('readOnly'), true, 'ReadOnly is OK');
     assert.strictEqual(idSelectBox.option('readOnly'), true, 'ReadOnly is OK');

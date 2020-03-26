@@ -29,7 +29,7 @@ const createFileManager = useThumbnailViewMode => {
     const viewMode = useThumbnailViewMode ? 'thumbnails' : 'details';
 
     $('#fileManager').dxFileManager({
-        fileProvider: fileSystem,
+        fileSystemProvider: fileSystem,
         itemView: {
             mode: viewMode,
             showFolders: false,
@@ -39,7 +39,7 @@ const createFileManager = useThumbnailViewMode => {
             create: true,
             copy: true,
             move: true,
-            remove: true,
+            delete: true,
             rename: true,
             upload: true
         }
@@ -63,7 +63,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.notStrictEqual($elements.eq(2).attr('title').indexOf('Thumbnails'), -1, 'view switcher displayed');
 
         const $item = this.wrapper.findThumbnailsItem('File 1.txt');
-        $item.trigger('click');
+        $item.trigger('dxclick');
         this.clock.tick(400);
 
         $toolbar = this.wrapper.getToolbar();
@@ -87,13 +87,14 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.ok($toolbar.hasClass(Consts.GENERAL_TOOLBAR_CLASS), 'general toolbar displayed');
 
         const $item = this.wrapper.findThumbnailsItem('File 1.txt');
+        $item.trigger('dxclick');
         $item.trigger('click');
         this.clock.tick(400);
 
         $toolbar = this.wrapper.getToolbar();
         assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), 'file toolbar displayed');
 
-        let $folderNode = this.wrapper.getFolderNode(0);
+        const $folderNode = this.wrapper.getFolderNode(1);
         $folderNode.trigger('dxclick');
         $folderNode.trigger('click');
         this.clock.tick(400);
@@ -148,7 +149,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         $toolbar = this.wrapper.getToolbar();
         assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), 'file toolbar displayed');
 
-        let $folderNode = this.wrapper.getFolderNode(0);
+        const $folderNode = this.wrapper.getFolderNode(1);
         $folderNode.trigger('dxclick');
         $folderNode.trigger('click');
         this.clock.tick(400);
@@ -165,7 +166,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
             create: false,
             copy: false,
             move: false,
-            remove: false,
+            delete: false,
             rename: false,
             upload: false
         });
@@ -192,7 +193,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.equal(this.wrapper.getToolbarSeparators().length, 1, 'specified separator visible');
 
         const $item = this.wrapper.findThumbnailsItem('File 1.txt');
-        $item.trigger('click');
+        $item.trigger('dxclick');
         this.clock.tick(400);
 
         $toolbar = this.wrapper.getToolbar();
@@ -225,13 +226,13 @@ QUnit.module('Toolbar', moduleConfig, () => {
                     location: 'after'
                 },
                 {
-                    name: 'viewSwitcher',
+                    name: 'switchView',
                     location: 'before'
                 }]
         });
         this.clock.tick(400);
 
-        let $elements = this.wrapper.getGeneralToolbarElements();
+        const $elements = this.wrapper.getGeneralToolbarElements();
         assert.equal($elements.length, 5, 'general toolbar has elements');
 
         assert.ok($elements.eq(0).find('.dx-icon').hasClass(Consts.UPLOAD_ICON_CLASS), 'show tree view button is rendered with new icon');
@@ -252,7 +253,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         $item.trigger('click');
         this.clock.tick(400);
 
-        let $toolbar = this.wrapper.getToolbar();
+        const $toolbar = this.wrapper.getToolbar();
         assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), 'file toolbar displayed');
     });
 
@@ -270,7 +271,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
                     name: 'separator',
                     location: 'after'
                 },
-                'viewSwitcher',
+                'switchView',
                 {
                     ID: 42,
                     name: 'commandName',
@@ -305,7 +306,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
                     name: 'separator',
                     location: 'after'
                 },
-                'viewSwitcher',
+                'switchView',
                 {
                     name: 'commandName',
                     locateInMenu: 'always',
@@ -374,12 +375,12 @@ QUnit.module('Toolbar', moduleConfig, () => {
                     name: 'separator',
                     location: 'after'
                 },
-                'viewSwitcher'
+                'switchView'
             ]
         });
         this.clock.tick(400);
 
-        let $elements = this.wrapper.getToolbarElements();
+        const $elements = this.wrapper.getToolbarElements();
         assert.equal($elements.length, 4, 'general toolbar has elements');
 
         assert.notStrictEqual($elements.eq(2).text().indexOf('Move'), -1, 'move is rendered in new position');
@@ -389,7 +390,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         $item.trigger('click');
         this.clock.tick(400);
 
-        let $toolbar = this.wrapper.getToolbar();
+        const $toolbar = this.wrapper.getToolbar();
         assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), 'file toolbar displayed');
     });
 
@@ -401,7 +402,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         fileManagerInstance.option('itemView.mode', 'thumbnails');
         this.clock.tick(400);
 
-        let $dropDownButton = this.wrapper.getGeneralToolbarElements().last();
+        let $dropDownButton = this.wrapper.getToolbarDropDownButton();
         assert.equal($dropDownButton.attr('title'), 'Thumbnails View', 'Thumbnails View');
 
         $dropDownButton.find(`.${Consts.BUTTON_CLASS}`).trigger('dxclick');
@@ -410,7 +411,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         $(detailsViewSelector).trigger('dxclick');
         this.clock.tick(400);
 
-        $dropDownButton = this.wrapper.getGeneralToolbarElements().last();
+        $dropDownButton = this.wrapper.getToolbarDropDownButton();
         assert.equal($dropDownButton.attr('title'), 'Details View', 'Details View');
 
         this.wrapper.findDetailsItem('File 1.txt').trigger('dxclick');
@@ -425,7 +426,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         this.clock.tick(400);
         assert.equal(this.wrapper.getDetailsItemName(0), 'New filename.txt', 'File renamed');
 
-        $dropDownButton = this.wrapper.getGeneralToolbarElements().last();
+        $dropDownButton = this.wrapper.getToolbarDropDownButton();
         assert.equal($dropDownButton.attr('title'), 'Details View', 'Details View');
 
         $dropDownButton.find(`.${Consts.BUTTON_CLASS}`).trigger('dxclick');
@@ -434,8 +435,117 @@ QUnit.module('Toolbar', moduleConfig, () => {
         $(detailsViewSelector).trigger('dxclick');
         this.clock.tick(400);
 
-        $dropDownButton = this.wrapper.getGeneralToolbarElements().last();
+        $dropDownButton = this.wrapper.getToolbarDropDownButton();
         assert.equal($dropDownButton.attr('title'), 'Thumbnails View', 'Thumbnails View');
+    });
+
+    test('Raise the ToolbarItemClick event on default toolbar', function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const spy = sinon.spy();
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            onToolbarItemClick: spy,
+            toolbar: {
+                items: [
+                    {
+                        name: 'someItem',
+                        options: {
+                            text: 'someItem'
+                        },
+                        visible: true,
+                        location: 'before'
+                    }, 'create'
+                ]
+            }
+        });
+        this.clock.tick(800);
+
+        const $items = this.wrapper.getGeneralToolbarElements();
+        $items.eq(0).trigger('dxclick');
+        this.clock.tick(400);
+
+        let itemElement = $($items.eq(0)).parent().parent().get(0);
+        let itemData = fileManager.option('toolbar.items')[0];
+
+        assert.strictEqual(spy.callCount, 1, 'event raised');
+        assert.strictEqual(spy.args[0][0].event.type, 'dxclick', 'event has correct type');
+        assert.strictEqual($(spy.args[0][0].itemElement).get(0), itemElement, 'itemElement is correct');
+        assert.strictEqual(spy.args[0][0].itemIndex, 0, 'itemIndex is correct');
+        assert.strictEqual(spy.args[0][0].itemData, itemData, 'itemData is correct');
+        assert.strictEqual(spy.args[0][0].component, fileManager, 'component is correct');
+        assert.strictEqual($(spy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
+
+        $items.eq(1).trigger('dxclick');
+        this.clock.tick(400);
+
+        itemElement = $($items.eq(1)).parent().parent().get(0);
+        itemData = fileManager.option('toolbar.items')[1];
+
+        assert.strictEqual(spy.callCount, 2, 'event raised');
+        assert.strictEqual(spy.args[1][0].event.type, 'dxclick', 'event has correct type');
+        assert.strictEqual($(spy.args[1][0].itemElement).get(0), itemElement, 'itemElement is correct');
+        assert.strictEqual(spy.args[1][0].itemIndex, 1, 'itemIndex is correct');
+        assert.strictEqual(spy.args[1][0].itemData, itemData, 'itemData is correct');
+        assert.strictEqual(spy.args[1][0].component, fileManager, 'component is correct');
+        assert.strictEqual($(spy.args[1][0].element).get(0), this.$element.get(0), 'element is correct');
+    });
+
+    test('Raise the ToolbarItemClick event on fileSelection toolbar', function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const spy = sinon.spy();
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            onToolbarItemClick: spy,
+            toolbar: {
+                fileSelectionItems: [
+                    {
+                        name: 'someItem',
+                        options: {
+                            text: 'someItem'
+                        },
+                        visible: true,
+                        location: 'before'
+                    }, 'create'
+                ]
+            }
+        });
+        this.clock.tick(800);
+
+        this.wrapper.getRowNameCellInDetailsView(2).trigger('dxclick');
+        this.clock.tick(800);
+
+        const $items = this.wrapper.getFileSelectionToolbarElements();
+        $items.eq(0).trigger('dxclick');
+        this.clock.tick(400);
+
+        let itemElement = $($items.eq(0)).parent().parent().get(0);
+        let itemData = fileManager.option('toolbar.fileSelectionItems')[0];
+
+        assert.strictEqual(spy.callCount, 1, 'event raised');
+        assert.strictEqual(spy.args[0][0].event.type, 'dxclick', 'event has correct type');
+        assert.strictEqual($(spy.args[0][0].itemElement).get(0), itemElement, 'itemElement is correct');
+        assert.strictEqual(spy.args[0][0].itemIndex, 0, 'itemIndex is correct');
+        assert.strictEqual(spy.args[0][0].itemData, itemData, 'itemData is correct');
+        assert.strictEqual(spy.args[0][0].component, fileManager, 'component is correct');
+        assert.strictEqual($(spy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
+
+        $items.eq(1).trigger('dxclick');
+        this.clock.tick(400);
+
+        itemElement = $($items.eq(1)).parent().parent().get(0);
+        itemData = fileManager.option('toolbar.fileSelectionItems')[1];
+
+        assert.strictEqual(spy.callCount, 2, 'event raised');
+        assert.strictEqual(spy.args[1][0].event.type, 'dxclick', 'event has correct type');
+        assert.strictEqual($(spy.args[1][0].itemElement).get(0), itemElement, 'itemElement is correct');
+        assert.strictEqual(spy.args[1][0].itemIndex, 1, 'itemIndex is correct');
+        assert.strictEqual(spy.args[1][0].itemData, itemData, 'itemData is correct');
+        assert.strictEqual(spy.args[1][0].component, fileManager, 'component is correct');
+        assert.strictEqual($(spy.args[1][0].element).get(0), this.$element.get(0), 'element is correct');
     });
 
 });

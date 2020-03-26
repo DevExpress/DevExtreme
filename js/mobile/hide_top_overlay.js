@@ -1,22 +1,23 @@
-var inArray = require('../core/utils/array').inArray;
+const inArray = require('../core/utils/array').inArray;
 
-var hideCallback = (function() {
-    var callbacks = [];
+const hideCallback = (function() {
+    let callbacks = [];
     return {
         add: function(callback) {
-            var indexOfCallback = inArray(callback, callbacks);
+            const indexOfCallback = inArray(callback, callbacks);
             if(indexOfCallback === -1) {
                 callbacks.push(callback);
             }
         },
         remove: function(callback) {
-            var indexOfCallback = inArray(callback, callbacks);
+            const indexOfCallback = inArray(callback, callbacks);
             if(indexOfCallback !== -1) {
                 callbacks.splice(indexOfCallback, 1);
             }
         },
         fire: function() {
-            var callback = callbacks.pop(), result = !!callback;
+            const callback = callbacks.pop();
+            const result = !!callback;
             if(result) {
                 callback();
             }
@@ -34,14 +35,6 @@ var hideCallback = (function() {
     };
 })();
 
-/**
- * @name hideTopOverlay
- * @publicName hideTopOverlay()
- * @return Boolean
- * @module mobile/hide_top_overlay
- * @namespace DevExpress
- * @export default
- */
 module.exports = function() {
     return hideCallback.fire();
 };

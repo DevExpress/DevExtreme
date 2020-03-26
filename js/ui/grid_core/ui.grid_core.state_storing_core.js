@@ -9,12 +9,12 @@ import { each } from '../../core/utils/iterator';
 import { isDefined, isPlainObject } from '../../core/utils/type';
 import { fromPromise } from '../../core/utils/deferred';
 
-var DATE_REGEX = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/;
+const DATE_REGEX = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/;
 
-var parseDates = function(state) {
+const parseDates = function(state) {
     if(!state) return;
     each(state, function(key, value) {
-        var date;
+        let date;
         if(isPlainObject(value) || Array.isArray(value)) {
             parseDates(value);
         } else if(typeof value === 'string') {
@@ -27,8 +27,8 @@ var parseDates = function(state) {
 };
 
 exports.StateStoringController = modules.ViewController.inherit((function() {
-    var getStorage = function(options) {
-        var storage = options.type === 'sessionStorage' ? sessionStorage() : getWindow().localStorage;
+    const getStorage = function(options) {
+        const storage = options.type === 'sessionStorage' ? sessionStorage() : getWindow().localStorage;
 
         if(!storage) {
             if(getWindow().location.protocol === 'file:' && browser.msie) {
@@ -41,13 +41,13 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
         return storage;
     };
 
-    var getUniqueStorageKey = function(options) {
+    const getUniqueStorageKey = function(options) {
         return isDefined(options.storageKey) ? options.storageKey : 'storage';
     };
 
     return {
         _loadState: function() {
-            var options = this.option('stateStoring');
+            const options = this.option('stateStoring');
 
             if(options.type === 'custom') {
                 return options.customLoad && options.customLoad();
@@ -60,7 +60,7 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
         },
 
         _saveState: function(state) {
-            var options = this.option('stateStoring');
+            const options = this.option('stateStoring');
 
             if(options.type === 'custom') {
                 options.customSave && options.customSave(state);
@@ -81,7 +81,7 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
         },
 
         init: function() {
-            var that = this;
+            const that = this;
 
             that._state = {};
             that._isLoaded = false;
@@ -107,8 +107,8 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
         },
 
         load: function() {
-            var that = this,
-                loadResult;
+            const that = this;
+            let loadResult;
 
             that._isLoading = true;
             loadResult = fromPromise(that._loadState());
@@ -121,7 +121,7 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
         },
 
         state: function(state) {
-            var that = this;
+            const that = this;
 
             if(!arguments.length) {
                 return extend(true, {}, that._state);
@@ -132,7 +132,7 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
         },
 
         save: function() {
-            var that = this;
+            const that = this;
 
             clearTimeout(that._savingTimeoutID);
             that._savingTimeoutID = setTimeout(function() {
@@ -142,7 +142,7 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
         },
 
         optionChanged: function(args) {
-            var that = this;
+            const that = this;
 
             switch(args.name) {
                 case 'stateStoring':
