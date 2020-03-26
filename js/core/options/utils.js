@@ -15,7 +15,7 @@ export const convertRulesToOptions = (rules) => {
             deviceMatch(currentDevice, deviceFilter);
 
         if(match) {
-            extend(options, ruleOptions);
+            extend(true, options, ruleOptions);
         }
         return options;
     }, {});
