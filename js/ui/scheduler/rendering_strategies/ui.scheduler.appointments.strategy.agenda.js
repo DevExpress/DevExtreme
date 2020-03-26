@@ -149,7 +149,7 @@ class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
 
     getCollectorLeftOffset() {
     }
-    getCompactAppointmentTopOffset() {
+    getCollectorTopOffset() {
     }
 
     calculateRows(appointments, agendaDuration, currentDate, needClearSettings) {

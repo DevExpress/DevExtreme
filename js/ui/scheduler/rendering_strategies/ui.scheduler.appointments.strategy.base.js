@@ -29,7 +29,7 @@ class BaseRenderingStrategy {
     }
 
     _correctCollectorCoordinatesInAdaptive(coordinates, isAllDay) {
-        coordinates.top = coordinates.top + this.getCompactAppointmentTopOffset(isAllDay);
+        coordinates.top = coordinates.top + this.getCollectorTopOffset(isAllDay);
         coordinates.left = coordinates.left + this.getCollectorLeftOffset();
     }
 
@@ -609,8 +609,8 @@ class BaseRenderingStrategy {
         return this._allDayHeight;
     }
 
-    getCompactAppointmentTopOffset(allDay) {
-        return this.getPositioningStrategy().getCompactAppointmentTopOffset(allDay);
+    getCollectorTopOffset(allDay) {
+        return this.getPositioningStrategy().getCollectorTopOffset(allDay);
     }
 
     getCollectorLeftOffset() {
