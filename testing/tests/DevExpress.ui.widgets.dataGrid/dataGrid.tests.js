@@ -9510,7 +9510,7 @@ QUnit.testInActiveWindow('onFocusedRowChanging and onFocusedRowChanged should be
     assert.equal(dataGrid.option('focusedRowIndex'), -1, 'there is no focused row');
 
     const $firstCell = $(dataGrid.getCellElement(0, 1));
-    $firstCell.trigger('dxpointerdown');
+    $firstCell.trigger(CLICK_EVENT);
     this.clock.tick();
 
     const $firstRow = $(dataGrid.getRowElement(0));
