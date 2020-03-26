@@ -54,12 +54,6 @@ const Lookup = DropDownList.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            title: '',
-
-            titleTemplate: 'title',
-
-            onTitleRendered: null,
-
             placeholder: messageLocalization.format('Select'),
 
             searchPlaceholder: messageLocalization.format('Search'),
@@ -67,8 +61,6 @@ const Lookup = DropDownList.inherit({
             searchEnabled: true,
 
             cleanSearchOnOpening: true,
-
-            fullScreen: false,
 
             showCancelButton: true,
 
@@ -78,29 +70,6 @@ const Lookup = DropDownList.inherit({
             clearButtonText: messageLocalization.format('Clear'),
 
             applyButtonText: messageLocalization.format('OK'),
-
-            popupWidth: function() { return $(window).width() * 0.8; },
-
-            popupHeight: function() { return $(window).height() * 0.8; },
-
-            shading: true,
-
-            closeOnOutsideClick: false,
-
-            position: undefined,
-
-            animation: {
-                /**
-                * @name dxLookupOptions.animation.show
-                * @type animationConfig
-                * @default undefined
-                */
-                /**
-                * @name dxLookupOptions.animation.hide
-                * @type animationConfig
-                * @default undefined
-                */
-            },
 
             pullRefreshEnabled: false,
 
@@ -146,7 +115,6 @@ const Lookup = DropDownList.inherit({
              */
             showDropDownButton: false,
 
-            showPopupTitle: true,
 
             focusStateEnabled: false,
 

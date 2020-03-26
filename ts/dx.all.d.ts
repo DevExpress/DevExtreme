@@ -4500,7 +4500,7 @@ declare module DevExpress.ui {
     export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
         /** @deprecated */
         /** @name dxLookup.Options.animation */
-        animation?: { hide?: animationConfig, show?: animationConfig };
+        animation?: any;
         /** @name dxLookup.Options.applyButtonText */
         applyButtonText?: string;
         /** @name dxLookup.Options.applyValueMode */
