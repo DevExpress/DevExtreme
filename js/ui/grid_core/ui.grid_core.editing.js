@@ -235,27 +235,24 @@ const EditingController = modules.ViewController.inherit((function() {
                 that._pointerDownEditorHandler = e => $pointerDownTarget = $(e.target);
                 that._saveEditorHandler = that.createAction(function(e) {
                     const event = e.event;
-                    let isEditorPopup;
-                    let isDomElement;
-                    let isFocusOverlay;
-                    let isAddRowButton;
-                    let isCellEditMode;
                     const $target = $(event.target);
-                    let isAnotherComponent;
                     const targetComponent = event[TARGET_COMPONENT_NAME];
 
                     if($pointerDownTarget && $pointerDownTarget.is('input') && !$pointerDownTarget.is($target)) {
                         return;
                     }
 
-                    if(!isRowEditMode(that) && !that._editCellInProgress) {
-                        isEditorPopup = !!$target.closest(`.${DROPDOWN_EDITOR_OVERLAY_CLASS}`).length;
-                        isDomElement = !!$target.closest(getWindow().document).length;
-                        isAnotherComponent = targetComponent && targetComponent !== that.component;
-                        isAddRowButton = !!$target.closest(`.${that.addWidgetPrefix(ADD_ROW_BUTTON_CLASS)}`).length;
-                        isFocusOverlay = $target.hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
-                        isCellEditMode = getEditMode(that) === EDIT_MODE_CELL;
+                    function checkEditorPopup($element) {
+                        return $element && !!$element.closest(`.${DROPDOWN_EDITOR_OVERLAY_CLASS}`).length;
+                    }
 
+                    if(!isRowEditMode(that) && !that._editCellInProgress) {
+                        const isEditorPopup = checkEditorPopup($target) || checkEditorPopup($pointerDownTarget);
+                        const isDomElement = !!$target.closest(getWindow().document).length;
+                        const isAnotherComponent = targetComponent && targetComponent !== that.component;
+                        const isAddRowButton = !!$target.closest(`.${that.addWidgetPrefix(ADD_ROW_BUTTON_CLASS)}`).length;
+                        const isFocusOverlay = $target.hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
+                        const isCellEditMode = getEditMode(that) === EDIT_MODE_CELL;
                         if(!isEditorPopup && !isFocusOverlay && !(isAddRowButton && isCellEditMode && that.isEditing()) && (isDomElement || isAnotherComponent)) {
                             that._closeEditItem.bind(that)($target);
                         }
