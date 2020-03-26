@@ -308,6 +308,16 @@ class Gantt extends Widget {
                 return previous;
             }, {});
     }
+    _prepareSetterMapHandler(setters) {
+        return (data) => {
+            return Object.keys(setters)
+                .reduce((previous, key) => {
+                    const resultKey = key === 'key' ? 'id' : key;
+                    setters[key](previous, data[resultKey]);
+                    return previous;
+                }, {});
+        };
+    }
     _prepareMapHandler(getters) {
         return (data) => {
             return Object.keys(getters)
@@ -347,7 +357,8 @@ class Gantt extends Widget {
             NotifyResourceRemoved: (resource) => { this._onRecordRemoved(GANTT_RESOURCES, resource); },
 
             NotifyResourceAssigned: (assignment, callback) => { this._onRecordInserted(GANTT_RESOURCE_ASSIGNMENTS, assignment, callback); },
-            NotifyResourceUnassigned: (assignmentId) => { this._onRecordRemoved(GANTT_RESOURCE_ASSIGNMENTS, assignmentId); }
+            NotifyResourceUnassigned: (assignmentId) => { this._onRecordRemoved(GANTT_RESOURCE_ASSIGNMENTS, assignmentId); },
+            NotifyParentDataRecalculated: (data) => { this._onParentTasksRecalculated(data); }
         };
     }
     _onRecordInserted(optionName, record, callback) {
@@ -393,9 +404,19 @@ class Gantt extends Widget {
             });
         }
     }
+    _onParentTasksRecalculated(data) {
+        const setters = this._compileSettersByOption(GANTT_TASKS);
+        const treeDataSource = data.map(this._prepareSetterMapHandler(setters));
+        this._setTreeListOption('dataSource', treeDataSource);
+    }
     _updateTreeListDataSource() {
-        const storeArray = this._tasksOption._getStore()._array;
-        this._setTreeListOption('dataSource', storeArray ? storeArray : this.option('tasks.dataSource'));
+        if(!this._skipUpdateTreeListDataSource()) {
+            const storeArray = this._tasksOption._getStore()._array;
+            this._setTreeListOption('dataSource', storeArray ? storeArray : this.option('tasks.dataSource'));
+        }
+    }
+    _skipUpdateTreeListDataSource() {
+        return this.option('validation.autoUpdateParentTasks');
     }
 
     _getLoadPanel() {
