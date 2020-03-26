@@ -398,7 +398,7 @@
         "dxDiagram-commandBold": "Bold",
         "dxDiagram-commandItalic": "Italic",
         "dxDiagram-commandUnderline": "Underline",
-        "dxDiagram-commandTextColor": "Text Color",
+        "dxDiagram-commandTextColor": "Font Color",
         "dxDiagram-commandLineColor": "Line Color",
         "dxDiagram-commandLineWidth": "Line Width",
         "dxDiagram-commandLineStyle": "Line Style",
