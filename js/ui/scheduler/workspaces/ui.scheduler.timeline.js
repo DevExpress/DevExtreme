@@ -143,28 +143,16 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
     },
 
     _dateTableScrollableConfig: function() {
-        let headerScrollableOnScroll;
-
         const config = this.callBase();
         const timelineConfig = {
-            direction: HORIZONTAL,
-            onStart: (function() {
-                if(this._headerScrollable) {
-                    headerScrollableOnScroll = this._headerScrollable.option('onScroll');
-                    this._headerScrollable.option('onScroll', undefined);
-                }
-            }).bind(this),
-            onScroll: (function(e) {
-                this._headerScrollable && this._headerScrollable.scrollTo({
-                    left: e.scrollOffset.left
-                });
-            }).bind(this),
-            onEnd: (function(e) {
-                this._headerScrollable && this._headerScrollable.option('onScroll', headerScrollableOnScroll);
-            }).bind(this)
+            direction: HORIZONTAL
         };
 
         return this.option('crossScrollingEnabled') ? config : extend(config, timelineConfig);
+    },
+
+    _needCreateCrossScrolling: function() {
+        return true;
     },
 
     _headerScrollableConfig: function() {
