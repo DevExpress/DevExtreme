@@ -4617,12 +4617,12 @@ QUnit.test('Focused row should be in viewport if focusedRowKey specified and aut
     }).dxDataGrid('instance');
     this.clock.tick();
 
-    assert.ok(dataGridWrapper.rowsView.isRowVisible(29), 'navigated row in viewport');
+    assert.ok(dataGridWrapper.rowsView.isRowVisible(29, 1), 'navigated row in viewport');
 
     dataGrid.option('columns[0].sortOrder', 'desc');
     this.clock.tick();
 
-    assert.ok(dataGridWrapper.rowsView.isRowVisible(0), 'navigated row in viewport');
+    assert.ok(dataGridWrapper.rowsView.isRowVisible(0, 1), 'navigated row in viewport');
 });
 
 ['standard', 'infinite', 'virtual'].forEach((scrollingMode) => {
