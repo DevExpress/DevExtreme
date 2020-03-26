@@ -387,6 +387,8 @@ const fillWidgetColors = (theme) => {
     });
 };
 
+const makeVariableDefinitionDefault = (content) => content.replace(/(\$.*?)( !default)*;$/gm, '$1 !default;');
+
 const collectWidgetColorVariables = (content, schemeName) => {
     const widgetContentRegex = /\/\/\s?(?!TODO)(dx)?(\w.*)([\w\W]*?)(\n\/\/|$)/g;
     const aliases = {
@@ -418,7 +420,7 @@ const collectWidgetColorVariables = (content, schemeName) => {
 
         widgetsColorVariables[widget] = widgetsColorVariables[widget] || {};
         widgetsColorVariables[widget][schemeName] = widgetsColorVariables[widget][schemeName] || '';
-        widgetsColorVariables[widget][schemeName] += widgetContent;
+        widgetsColorVariables[widget][schemeName] += makeVariableDefinitionDefault(widgetContent);
     }
 };
 
@@ -469,6 +471,7 @@ gulp.task('create-base-widget-generic-colors', (callback) => {
             const themeIconsContent = fs.readFileSync(path.join(themeDir, `generic.${file}.icons.scss`)).toString();
             const baseThemeContent = getBaseContent(themeContent);
             colorsContent += `@if $color == "${file}" {\n${makeIndent(baseThemeContent + themeIconsContent)}\n}\n\n`;
+            colorsContent = makeVariableDefinitionDefault(colorsContent);
             colorsContent = replaceColorFunctions(colorsContent);
 
             collectWidgetColorVariables(themeContent, file);
@@ -508,6 +511,7 @@ gulp.task('create-base-widget-material-colors', (callback) => {
             const themeDir = path.join(sourcePath, file.name);
             const themeContent = fs.readFileSync(path.join(themeDir, `material.${file.name}.scss`)).toString();
             colorsContent += `@if $color == "${file.name}" {\n${makeIndent(themeContent)}\n}\n\n`;
+            colorsContent = makeVariableDefinitionDefault(colorsContent);
         });
 
         ['light', 'dark'].forEach(mode => {
@@ -516,6 +520,7 @@ gulp.task('create-base-widget-material-colors', (callback) => {
             themeContent = themeContent.replace(/#F44336;/, '#F44336 !default; /* TODO move outside @if */');
             colorsContent += `@if $mode == "${mode}" {\n${makeIndent([getBaseContent(themeContent), themeIconsContent].join('\n'))}\n}\n\n`;
             colorsContent = replaceColorFunctions(colorsContent);
+            colorsContent = makeVariableDefinitionDefault(colorsContent);
 
             collectWidgetColorVariables(themeContent, mode);
         });
