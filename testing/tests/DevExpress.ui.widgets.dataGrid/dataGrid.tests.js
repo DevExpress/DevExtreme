@@ -72,6 +72,8 @@ import pointerMock from '../../helpers/pointerMock.js';
 import ajaxMock from '../../helpers/ajaxMock.js';
 import themes from 'ui/themes';
 import pointerEvents from 'events/pointer';
+import clickEvent from 'events/click';
+import eventUtils from 'events/utils';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import 'ui/scroll_view';
 
@@ -80,6 +82,11 @@ const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 const CELL_UPDATED_CLASS = 'dx-datagrid-cell-updated-animation';
 const ROW_INSERTED_CLASS = 'dx-datagrid-row-inserted-animation';
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
+
+const device = devices.real();
+const isMobile = device.deviceType !== 'desktop';
+const pointerEventName = !isMobile ? pointerEvents.down : clickEvent.name;
+const CLICK_EVENT = eventUtils.addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation');
 
 const baseModuleConfig = {
     beforeEach: function() {
@@ -8927,6 +8934,45 @@ QUnit.test('Scrollable should have the correct padding when the grid inside the 
     assert.strictEqual($scrollableContent.css('paddingRight'), '0px', 'paddingRight');
     assert.strictEqual($scrollableContent.css('paddingLeft'), '0px', 'paddingLeft');
 });
+
+QUnit.testInActiveWindow('onFocusedRowChanging and onFocusedRowChanged should be raised when the first row is focused (T874198)', function(assert) {
+    const handlerCalls = [];
+
+    // arrange
+    const dataGrid = createDataGrid({
+        keyExpr: 'name',
+        dataSource: [
+            { name: 'Alex', phone: '555555', room: 1 },
+            { name: 'Ben', phone: '6666666', room: 2 }
+        ],
+        focusedRowEnabled: true,
+        onFocusedRowChanging: function() {
+            handlerCalls.push('changing');
+        },
+        onFocusedRowChanged: function() {
+            handlerCalls.push('changed');
+        }
+    });
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGrid.option('focusedRowIndex'), -1, 'there is no focused row');
+
+    const $firstCell = $(dataGrid.getCellElement(0, 1));
+    $firstCell.trigger(CLICK_EVENT);
+    this.clock.tick();
+
+    const $firstRow = $(dataGrid.getRowElement(0));
+
+    // assert
+    assert.equal(dataGrid.option('focusedRowIndex'), 0, 'the first row is focused');
+    assert.ok($firstRow.hasClass('dx-row-focused'), 'the first row is highlighted');
+    assert.equal(handlerCalls.length, 2, 'both events were riased');
+    assert.strictEqual(handlerCalls[0], 'changing');
+    assert.strictEqual(handlerCalls[1], 'changed');
+});
+
 
 QUnit.module('Virtual row rendering', baseModuleConfig);
 
