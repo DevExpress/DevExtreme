@@ -8706,8 +8706,13 @@ QUnit.module('Editing with validation', {
             return renderer('.dx-datagrid');
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'columnFixing', 'rows', 'editing', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity', 'summary'], {
-            initViews: true
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'columnFixing', 'rows', 'editing', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity', 'summary', 'keyboardNavigation'], {
+            initViews: true,
+            options: {
+                keyboardNavigation: {
+                    enabled: true
+                }
+            }
         });
 
         this.applyOptions = function(options) {
@@ -8716,10 +8721,15 @@ QUnit.module('Editing with validation', {
             this.columnsController.init();
             this.editingController.init();
             this.validatingController.init();
+            this.keyboardNavigationController.init();
         };
 
         this.columnHeadersView.getColumnCount = function() {
             return 3;
+        };
+
+        this.focus = function($element) {
+            this.keyboardNavigationController.focus($element);
         };
 
         this.clock = sinon.useFakeTimers();
@@ -12818,6 +12828,125 @@ QUnit.test('Row - An untouched cell should not be validated (T872003)', function
         assert.equal(visibleRows.length, 4, 'rows count');
     });
 });
+
+[false, true].forEach((allowUpdating) => {
+    [false, true].forEach((allowEditing) => {
+        QUnit.test(`Row(allowUpdating: ${allowUpdating}, column.allowEditing: ${allowEditing}) - Cell with validation rules should not have a validator if a row is not in editing mode(T871515)`, function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const testElement = $('#container');
+
+            const gridConfig = {
+                dataSource: [
+                    { a: true, b: null }
+                ],
+                editing: {
+                    mode: 'row',
+                    allowUpdating: allowUpdating
+                },
+                columns: [
+                    'a',
+                    {
+                        dataField: 'b',
+                        allowEditing: allowEditing,
+                        validationRules: [{ type: 'required' }]
+                    }
+                ]
+            };
+
+            rowsView.render(testElement);
+            this.applyOptions(gridConfig);
+            let $secondCell = $(this.getCellElement(0, 1));
+
+            // assert
+            assert.notOk($secondCell.hasClass('dx-validator'), 'cell should not have validator');
+
+            this.focus($secondCell);
+            this.clock.tick();
+            $secondCell = $(this.getCellElement(0, 1));
+
+            // assert
+            assert.ok($secondCell.hasClass('dx-focused'), 'cell is focused');
+            assert.notOk($secondCell.hasClass('dx-validator'), 'cell should not have validator');
+        });
+    });
+});
+
+['Cell', 'Batch'].forEach((mode) => {
+    [true, false].forEach((allowEditing) => {
+        QUnit.test(`${mode}(allowUpdating: false, column.allowEditing: ${allowEditing}) - Cell with validation rules should not have a validator(T871515)`, function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const testElement = $('#container');
+
+            const gridConfig = {
+                dataSource: [
+                    { a: true, b: null }
+                ],
+                editing: {
+                    mode: mode.toLowerCase(),
+                    allowUpdating: false
+                },
+                columns: [
+                    'a',
+                    {
+                        dataField: 'b',
+                        allowEditing: allowEditing,
+                        validationRules: [{ type: 'required' }]
+                    }
+                ]
+            };
+
+            rowsView.render(testElement);
+            this.applyOptions(gridConfig);
+            let $secondCell = $(this.getCellElement(0, 1));
+
+            // assert
+            assert.notOk($secondCell.hasClass('dx-validator'), 'cell should not have validator');
+
+            this.focus($secondCell);
+            this.clock.tick();
+            $secondCell = $(this.getCellElement(0, 1));
+
+            // assert
+            assert.ok($secondCell.hasClass('dx-focused'), 'cell is focused');
+            assert.notOk($secondCell.hasClass('dx-validator'), 'cell should not have validator');
+        });
+
+        QUnit.test(`${mode}(allowUpdating: true, column.allowEditing: ${allowEditing}) - Cell with validation rules should have a validator(T871515)`, function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const testElement = $('#container');
+
+            const gridConfig = {
+                dataSource: [
+                    { a: true, b: null }
+                ],
+                editing: {
+                    mode: mode.toLowerCase(),
+                    allowUpdating: true
+                },
+                columns: [
+                    'a',
+                    {
+                        dataField: 'b',
+                        allowEditing: allowEditing,
+                        validationRules: [{ type: 'required' }]
+                    }
+                ]
+            };
+
+            rowsView.render(testElement);
+            this.applyOptions(gridConfig);
+            const $secondCell = $(this.getCellElement(0, 1));
+
+            // assert
+            assert.ok($secondCell.hasClass('dx-validator'), 'cell should have validator');
+            assert.notOk($secondCell.hasClass('dx-datagrid-invalid'));
+        });
+    });
+});
+
 
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
     beforeEach: function() {
