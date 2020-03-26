@@ -1264,6 +1264,34 @@ QUnit.module('Array Local Store', moduleConfig, () => {
         });
     });
 
+    // T872720
+    QUnit.test('getFields if length field exists', function(assert) {
+        const dataSource = [
+            { id: 1, length: '1.65' }
+        ];
+
+        new LocalStore(dataSource).getFields().done(function(data) {
+            assert.ok(data);
+
+            assert.deepEqual(data, [
+                {
+                    'dataField': 'id',
+                    'dataType': 'number',
+                    'groupInterval': undefined,
+                    'groupName': undefined,
+                    'displayFolder': ''
+                },
+                {
+                    'dataField': 'length',
+                    'dataType': 'string',
+                    'groupInterval': undefined,
+                    'groupName': undefined,
+                    'displayFolder': ''
+                }
+            ]);
+        });
+    });
+
     // T666145
     QUnit.test('getFields should skip fields with \'__\' prefix', function(assert) {
         const dataSource = [{
