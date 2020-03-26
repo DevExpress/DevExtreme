@@ -513,7 +513,7 @@ QUnit.test('get date by month recurrence with BYMONTHDAY=31, FREQ=MONTHLY', func
     assert.deepEqual(dates, [new Date(2015, 2, 31), new Date(2015, 4, 31)], 'dates are right');
 });
 
-QUnit.test('get date by month recurrence with BYMONTHDAY at 31 and skip months with the last day < 31', function(assert) {
+QUnit.test('get date by month recurrence with BYMONTHDAY=31, FREQ=MONTHLY and skiping dates with last day of month < 31', function(assert) {
     const start = new Date(2020, 2, 31, 9, 30);
 
     const dates = recurrenceUtils.getDatesByRecurrence({
