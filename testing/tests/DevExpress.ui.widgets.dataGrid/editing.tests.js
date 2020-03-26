@@ -8350,7 +8350,8 @@ QUnit.module('Editing with validation', {
             options: {
                 keyboardNavigation: {
                     enabled: true
-                }
+                },
+                useKeyboard: true
             }
         });
 
