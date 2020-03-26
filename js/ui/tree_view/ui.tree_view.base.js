@@ -1654,7 +1654,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         return resultCallback.promise();
     },
 
-    dispose: function() {
+    _dispose: function() {
         this.callBase();
         clearTimeout(this._setFocusedItemTimeout);
     }
