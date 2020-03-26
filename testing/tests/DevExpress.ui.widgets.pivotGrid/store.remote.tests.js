@@ -328,23 +328,27 @@ QUnit.module('Loading root data', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Parse string data if data type is set. Number type', function(assert) {
-        this.load({
-            columns: [{ dataField: 'Freight', dataType: 'number' }],
-            rows: [],
-            values: []
-        }).done(function(data) {
-            assert.strictEqual(data.columns[0].value, 0.02);
+    ['columns', 'rows'].forEach(headerName => {
+        QUnit.test(`Parse string data if data type is set. Number type for ${headerName}`, function(assert) {
+            this.load({
+                columns: [],
+                rows: [],
+                values: [],
+                [headerName]: [{ dataField: 'Freight', dataType: 'number' }]
+            }).done(function(data) {
+                assert.strictEqual(data[headerName][0].value, 0.02);
+            });
         });
-    });
 
-    QUnit.test('Parse string data if data type is set', function(assert) {
-        this.load({
-            columns: [{ dataField: 'OrderDate', dataType: 'date' }],
-            rows: [],
-            values: []
-        }).done(function(data) {
-            assert.deepEqual(data.columns[0].value, new Date('1996/07/04'));
+        QUnit.test(`Parse string data if data type is set. Date type for ${headerName}`, function(assert) {
+            this.load({
+                columns: [],
+                rows: [],
+                values: [],
+                [headerName]: [{ dataField: 'OrderDate', dataType: 'date' }]
+            }).done(function(data) {
+                assert.deepEqual(data[headerName][0].value, new Date('1996/07/04'));
+            });
         });
     });
 
