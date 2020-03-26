@@ -15631,6 +15631,58 @@ QUnit.test('The onRowClick event should not be fired when clicking on a save but
     assert.strictEqual(onRowClick.callCount, 0, 'onRowClick event is not fired');
 });
 
+// T869892
+QUnit.test('setCellValue\'s currentRowData argument should be correct if repaintChangesOnly', function(assert) {
+    // arrange
+    const changeValue = function(newValue) {
+        const editor = $('.dx-texteditor-input').eq(0);
+
+        editor.val(newValue);
+        editor.trigger('change');
+    };
+
+    const setCellValueSpy = sinon.spy(function() {
+        this.defaultSetCellValue.apply(this, arguments);
+    });
+
+    this.options.repaintChangesOnly = true;
+    this.columns[0] = {
+        dataField: 'name',
+        setCellValue: setCellValueSpy
+    };
+    this.setupModules(this);
+
+    const rowsView = this.rowsView;
+    const $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    // act
+    this.editRow(0);
+
+    const editFormInstance = this.editingController._editForm;
+    const $editForm = $(editFormInstance.element());
+
+    // assert
+    assert.strictEqual($editForm.length, 1, 'there is edit form');
+
+    let newValue;
+    let oldValue = 'Alex';
+
+    for(let i = 1; i < 5; i++) {
+        // act
+        newValue = `Test${i}`;
+
+        changeValue(newValue);
+
+        // assert
+        assert.equal(setCellValueSpy.callCount, i, 'setCellValue call count');
+        assert.equal(setCellValueSpy.args[i - 1][2].name, oldValue, 'argument is correct');
+
+        oldValue = newValue;
+    }
+});
+
 
 QUnit.module('Editing - "popup" mode', {
     beforeEach: function() {

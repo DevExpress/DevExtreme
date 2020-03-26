@@ -2018,7 +2018,8 @@ const EditingController = modules.ViewController.inherit((function() {
             const $container = $(container);
             const column = item.column;
             const editorType = getEditorType(item);
-            const rowData = detailCellOptions.row && detailCellOptions.row.data;
+            const rowData = detailCellOptions?.row.data;
+            const repaintChangesOnly = that.option('repaintChangesOnly');
             const cellOptions = extend({}, detailCellOptions, {
                 data: rowData,
                 cellElement: null,
@@ -2028,6 +2029,10 @@ const EditingController = modules.ViewController.inherit((function() {
                 id: form.getItemID(item.name || item.dataField),
                 columnIndex: column.index,
                 setValue: !isReadOnly && column.allowEditing && function(value) {
+                    if(repaintChangesOnly) {
+                        cellOptions.data = Object.assign({}, cellOptions.row.data);
+                    }
+
                     that.updateFieldValue(cellOptions, value);
                 }
             });
@@ -2054,7 +2059,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 }, function() {
                     let $editorElement = $container.find('.dx-widget').first();
                     let validator = $editorElement.data('dxValidator');
-                    const validatorOptions = validator && validator.option();
+                    const validatorOptions = validator?.option();
 
                     $container.contents().remove();
                     cellOptions = that.renderFormEditTemplate.bind(that)(cellOptions, item, options.component, $container);
@@ -2099,7 +2104,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     });
                 } else {
                     forEachFormItems(items, (item) => {
-                        const itemId = item && (item.name || item.dataField);
+                        const itemId = item?.name || item?.dataField;
 
                         if(itemId) {
                             isCustomEditorType[itemId] = !!item.editorType;
