@@ -170,6 +170,81 @@ QUnit.test('Select all rows if filter is applied', function(assert) {
     assert.deepEqual(this.option('selectedRowKeys'), [1, 2], 'all visible rows are selected');
 });
 
+// T861403
+[true, false].forEach(recursive => {
+    QUnit.test(`Select all rows if filter is applied, filterMode is matchOnly and recursive=${recursive}`, function(assert) {
+        // arrange
+        const $testElement = $('#treeList');
+        const selectedRowKeys = recursive ? [1, 2] : [2];
+
+        this.options.filterMode = 'matchOnly';
+        this.options.columns[0].filterValue = 'test2';
+        this.options.selection = {
+            recursive,
+            mode: 'multiple'
+        };
+
+        this.setupTreeList();
+        this.rowsView.render($testElement);
+
+        // act
+        this.selectAll();
+
+        // assert
+        assert.deepEqual(this.getController('selection').isSelectAll(), true, 'select all state');
+        assert.deepEqual(this.getSelectedRowKeys(), selectedRowKeys, 'all visible rows are selected');
+        assert.deepEqual(this.option('selectedRowKeys'), selectedRowKeys, 'all visible rows are selected');
+
+        // act
+        this.option('filterValue', undefined);
+
+        // assert
+        assert.deepEqual(this.getController('selection').isSelectAll(), true, 'select all state');
+        assert.deepEqual(this.getSelectedRowKeys(), selectedRowKeys, 'all visible rows are selected');
+        assert.deepEqual(this.option('selectedRowKeys'), selectedRowKeys, 'all visible rows are selected');
+    });
+
+    QUnit.test(`Select and deselect all rows if filter is applied, filterMode is matchOnly and recursive=${recursive}`, function(assert) {
+        // arrange
+        const $testElement = $('#treeList');
+        const selectedRowKeys = recursive ? [1, 2] : [2];
+
+        this.options.filterMode = 'matchOnly';
+        this.options.columns[0].filterValue = 'test2';
+        this.options.selection = {
+            recursive,
+            mode: 'multiple'
+        };
+
+        this.setupTreeList();
+        this.rowsView.render($testElement);
+
+        // act
+        this.selectAll();
+
+        // assert
+        assert.deepEqual(this.getController('selection').isSelectAll(), true, 'select all state');
+        assert.deepEqual(this.getSelectedRowKeys(), selectedRowKeys, 'all visible rows are selected');
+        assert.deepEqual(this.option('selectedRowKeys'), selectedRowKeys, 'all visible rows are selected');
+
+        // act
+        this.deselectAll();
+
+        // assert
+        assert.deepEqual(this.getController('selection').isSelectAll(), false, 'select all state');
+        assert.deepEqual(this.getSelectedRowKeys(), [], 'all visible rows are selected');
+        assert.deepEqual(this.option('selectedRowKeys'), [], 'all visible rows are selected');
+
+        // act
+        this.option('filterValue', undefined);
+
+        // assert
+        assert.deepEqual(this.getController('selection').isSelectAll(), false, 'select all state');
+        assert.deepEqual(this.getSelectedRowKeys(), [], 'all visible rows are selected');
+        assert.deepEqual(this.option('selectedRowKeys'), [], 'all visible rows are selected');
+    });
+});
+
 QUnit.test('getSelectedRowKeys with non-recursive selection', function(assert) {
     // arrange
     const $testElement = $('#treeList');
