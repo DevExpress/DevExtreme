@@ -627,8 +627,7 @@ module.exports = {
                             if(oldItem.visible !== newItem.visible) {
                                 change.items.splice(-1, 1, { visible: newItem.visible });
                             } else if(repaintChangesOnly && !change.isFullUpdate) {
-                                newItem.cells = oldItem.cells;
-                                columnIndices = that._getChangedColumnIndices(oldItem, newItem, rowIndex - rowIndexDelta);
+                                columnIndices = that._partialUpdateRow(oldItem, newItem, rowIndex - rowIndexDelta);
                             }
                         } else if(newItem && !oldItem || (newNextItem && equalItems(oldItem, newNextItem, strict))) {
                             changeType = 'insert';
@@ -674,19 +673,36 @@ module.exports = {
                             for(let columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
                                 if(this._isCellChanged(oldItem, newItem, visibleRowIndex, columnIndex, isLiveUpdate)) {
                                     columnIndices.push(columnIndex);
-                                } else {
-                                    const cell = oldItem.cells && oldItem.cells[columnIndex];
-                                    if(cell && cell.update) {
-                                        cell.update(newItem);
-                                    }
                                 }
                             }
                         }
 
-                        oldItem.update && oldItem.update(newItem);
-
                         return columnIndices;
                     }
+                },
+                _partialUpdateRow: function(oldItem, newItem, visibleRowIndex, isLiveUpdate) {
+                    const changedColumnIndices = this._getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate);
+
+                    if(changedColumnIndices) {
+                        oldItem.cells && oldItem.cells.forEach(function(cell, columnIndex) {
+                            const isCellChanged = changedColumnIndices.indexOf(columnIndex) >= 0;
+                            if(!isCellChanged && cell && cell.update) {
+                                cell.update(newItem);
+                            }
+                        });
+
+                        newItem.update = oldItem.update;
+                        newItem.watch = oldItem.watch;
+                        newItem.cells = oldItem.cells;
+
+                        if(isLiveUpdate) {
+                            newItem.oldValues = oldItem.values;
+                        }
+
+                        oldItem.update && oldItem.update(newItem);
+                    }
+
+                    return changedColumnIndices;
                 },
                 _isItemEquals: function(item1, item2) {
                     if(JSON.stringify(item1.values) !== JSON.stringify(item2.values)) {
@@ -756,15 +772,13 @@ module.exports = {
                                 const index = change.index;
                                 const newItem = change.data;
                                 const oldItem = change.oldItem;
-                                const currentColumnIndices = this._getChangedColumnIndices(oldItem, newItem, index, true);
+                                const changedColumnIndices = this._partialUpdateRow(oldItem, newItem, index, true);
 
                                 rowIndices.push(index);
                                 changeTypes.push('update');
                                 items.push(newItem);
                                 this._items[index] = newItem;
-                                newItem.cells = oldItem.cells;
-                                newItem.oldValues = oldItem.values;
-                                columnIndices.push(currentColumnIndices);
+                                columnIndices.push(changedColumnIndices);
                                 break;
                             }
                             case 'insert':

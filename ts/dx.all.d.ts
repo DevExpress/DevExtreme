@@ -6202,19 +6202,19 @@ declare module DevExpress.ui {
         /** @name dxTreeView.collapseAll() */
         collapseAll(): void;
         /** @name dxTreeView.collapseItem(itemData) */
-        collapseItem(itemData: any): void;
+        collapseItem(itemData: any): Promise<void> & JQueryPromise<void>;
         /** @name dxTreeView.collapseItem(itemElement) */
-        collapseItem(itemElement: Element): void;
+        collapseItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
         /** @name dxTreeView.collapseItem(key) */
-        collapseItem(key: any): void;
+        collapseItem(key: any): Promise<void> & JQueryPromise<void>;
         /** @name dxTreeView.expandAll() */
         expandAll(): void;
         /** @name dxTreeView.expandItem(itemData) */
-        expandItem(itemData: any): void;
+        expandItem(itemData: any): Promise<void> & JQueryPromise<void>;
         /** @name dxTreeView.expandItem(itemElement) */
-        expandItem(itemElement: Element): void;
+        expandItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
         /** @name dxTreeView.expandItem(key) */
-        expandItem(key: any): void;
+        expandItem(key: any): Promise<void> & JQueryPromise<void>;
         /** @name dxTreeView.getNodes() */
         getNodes(): Array<dxTreeViewNode>;
         /** @name dxTreeView.selectAll() */
@@ -6898,13 +6898,13 @@ declare module DevExpress.viz {
     /** @name MapLayer */
     export class MapLayer {
         /** @name MapLayer.elementType */
-        elementType: string;
+        elementType?: string;
         /** @name MapLayer.index */
-        index: number;
+        index?: number;
         /** @name MapLayer.name */
-        name: string;
+        name?: string;
         /** @name MapLayer.type */
-        type: string;
+        type?: string;
         /** @name MapLayer.clearSelection() */
         clearSelection(): void;
         /** @name MapLayer.getDataSource() */
@@ -6915,7 +6915,7 @@ declare module DevExpress.viz {
     /** @name MapLayerElement */
     export class MapLayerElement {
         /** @name MapLayerElement.layer */
-        layer: any;
+        layer?: any;
         /** @name MapLayerElement.applySettings(settings) */
         applySettings(settings: any): void;
         /** @name MapLayerElement.attribute(name) */
@@ -7012,17 +7012,17 @@ declare module DevExpress.viz {
     /** @name basePointObject */
     export class basePointObject {
         /** @name basePointObject.data */
-        data: any;
+        data?: any;
         /** @name basePointObject.fullState */
-        fullState: number;
+        fullState?: number;
         /** @name basePointObject.originalArgument */
-        originalArgument: string | number | Date;
+        originalArgument?: string | number | Date;
         /** @name basePointObject.originalValue */
-        originalValue: string | number | Date;
+        originalValue?: string | number | Date;
         /** @name basePointObject.series */
-        series: any;
+        series?: any;
         /** @name basePointObject.tag */
-        tag: any;
+        tag?: any;
         /** @name basePointObject.clearHover() */
         clearHover(): void;
         /** @name basePointObject.clearSelection() */
@@ -7047,13 +7047,13 @@ declare module DevExpress.viz {
     /** @name baseSeriesObject */
     export class baseSeriesObject {
         /** @name baseSeriesObject.fullState */
-        fullState: number;
+        fullState?: number;
         /** @name baseSeriesObject.name */
-        name: any;
+        name?: any;
         /** @name baseSeriesObject.tag */
-        tag: any;
+        tag?: any;
         /** @name baseSeriesObject.type */
-        type: string;
+        type?: string;
         /** @name baseSeriesObject.clearHover() */
         clearHover(): void;
         /** @name baseSeriesObject.clearSelection() */
@@ -7108,32 +7108,32 @@ declare module DevExpress.viz {
     /** @name chartPointObject */
     export class chartPointObject extends basePointObject {
         /** @name chartPointObject.aggregationInfo */
-        aggregationInfo: chartPointAggregationInfoObject;
+        aggregationInfo?: chartPointAggregationInfoObject;
         /** @name chartPointObject.originalCloseValue */
-        originalCloseValue: number | string;
+        originalCloseValue?: number | string;
         /** @name chartPointObject.originalHighValue */
-        originalHighValue: number | string;
+        originalHighValue?: number | string;
         /** @name chartPointObject.originalLowValue */
-        originalLowValue: number | string;
+        originalLowValue?: number | string;
         /** @name chartPointObject.originalMinValue */
-        originalMinValue: string | number | Date;
+        originalMinValue?: string | number | Date;
         /** @name chartPointObject.originalOpenValue */
-        originalOpenValue: number | string;
+        originalOpenValue?: number | string;
         /** @name chartPointObject.size */
-        size: number | string;
+        size?: number | string;
         /** @name chartPointObject.getBoundingRect() */
         getBoundingRect(): any;
     }
     /** @name chartSeriesObject */
     export class chartSeriesObject extends baseSeriesObject {
         /** @name chartSeriesObject.axis */
-        axis: string;
+        axis?: string;
         /** @name chartSeriesObject.barOverlapGroup */
-        barOverlapGroup: string;
+        barOverlapGroup?: string;
         /** @name chartSeriesObject.pane */
-        pane: string;
+        pane?: string;
         /** @name chartSeriesObject.stack */
-        stack: string;
+        stack?: string;
         /** @name chartSeriesObject.getArgumentAxis() */
         getArgumentAxis(): chartAxisObject;
         /** @name chartSeriesObject.getValueAxis() */
@@ -8885,13 +8885,13 @@ declare module DevExpress.viz {
     /** @name dxFunnelItem */
     export class dxFunnelItem {
         /** @name dxFunnelItem.argument */
-        argument: string | Date | number;
+        argument?: string | Date | number;
         /** @name dxFunnelItem.data */
-        data: any;
+        data?: any;
         /** @name dxFunnelItem.percent */
-        percent: number;
+        percent?: number;
         /** @name dxFunnelItem.value */
-        value: number;
+        value?: number;
         /** @name dxFunnelItem.getColor() */
         getColor(): string;
         /** @name dxFunnelItem.hover(state) */
@@ -9714,7 +9714,7 @@ declare module DevExpress.viz {
     /** @name dxSankeyLink */
     export class dxSankeyLink {
         /** @name dxSankeyLink.connection */
-        connection: dxSankeyConnectionInfoObject;
+        connection?: dxSankeyConnectionInfoObject;
         /** @name dxSankeyLink.hideTooltip() */
         hideTooltip(): void;
         /** @name dxSankeyLink.hover(state) */
@@ -9727,14 +9727,14 @@ declare module DevExpress.viz {
     /** @name dxSankeyNode */
     export class dxSankeyNode {
         /** @name dxSankeyNode.label */
-        label: string;
+        label?: string;
         /** @name dxSankeyNode.linksIn */
-        linksIn: Array<any>;
+        linksIn?: Array<any>;
         /** @name dxSankeyNode.linksOut */
-        linksOut: Array<any>;
+        linksOut?: Array<any>;
         /** @deprecated */
         /** @name dxSankeyNode.title */
-        title: string;
+        title?: string;
         /** @name dxSankeyNode.hideTooltip() */
         hideTooltip(): void;
         /** @name dxSankeyNode.hover(state) */
@@ -9879,11 +9879,11 @@ declare module DevExpress.viz {
     /** @name dxTreeMapNode */
     export class dxTreeMapNode {
         /** @name dxTreeMapNode.data */
-        data: any;
+        data?: any;
         /** @name dxTreeMapNode.index */
-        index: number;
+        index?: number;
         /** @name dxTreeMapNode.level */
-        level: number;
+        level?: number;
         /** @name dxTreeMapNode.customize(options) */
         customize(options: any): void;
         /** @name dxTreeMapNode.drillDown() */
@@ -10040,7 +10040,7 @@ declare module DevExpress.viz {
     /** @name piePointObject */
     export class piePointObject extends basePointObject {
         /** @name piePointObject.percent */
-        percent: string | number | Date;
+        percent?: string | number | Date;
         /** @name piePointObject.hide() */
         hide(): void;
         /** @name piePointObject.isVisible() */

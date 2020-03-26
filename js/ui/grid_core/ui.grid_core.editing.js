@@ -235,27 +235,24 @@ const EditingController = modules.ViewController.inherit((function() {
                 that._pointerDownEditorHandler = e => $pointerDownTarget = $(e.target);
                 that._saveEditorHandler = that.createAction(function(e) {
                     const event = e.event;
-                    let isEditorPopup;
-                    let isDomElement;
-                    let isFocusOverlay;
-                    let isAddRowButton;
-                    let isCellEditMode;
                     const $target = $(event.target);
-                    let isAnotherComponent;
                     const targetComponent = event[TARGET_COMPONENT_NAME];
 
                     if($pointerDownTarget && $pointerDownTarget.is('input') && !$pointerDownTarget.is($target)) {
                         return;
                     }
 
-                    if(!isRowEditMode(that) && !that._editCellInProgress) {
-                        isEditorPopup = !!$target.closest(`.${DROPDOWN_EDITOR_OVERLAY_CLASS}`).length;
-                        isDomElement = !!$target.closest(getWindow().document).length;
-                        isAnotherComponent = targetComponent && targetComponent !== that.component;
-                        isAddRowButton = !!$target.closest(`.${that.addWidgetPrefix(ADD_ROW_BUTTON_CLASS)}`).length;
-                        isFocusOverlay = $target.hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
-                        isCellEditMode = getEditMode(that) === EDIT_MODE_CELL;
+                    function checkEditorPopup($element) {
+                        return $element && !!$element.closest(`.${DROPDOWN_EDITOR_OVERLAY_CLASS}`).length;
+                    }
 
+                    if(!isRowEditMode(that) && !that._editCellInProgress) {
+                        const isEditorPopup = checkEditorPopup($target) || checkEditorPopup($pointerDownTarget);
+                        const isDomElement = !!$target.closest(getWindow().document).length;
+                        const isAnotherComponent = targetComponent && targetComponent !== that.component;
+                        const isAddRowButton = !!$target.closest(`.${that.addWidgetPrefix(ADD_ROW_BUTTON_CLASS)}`).length;
+                        const isFocusOverlay = $target.hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
+                        const isCellEditMode = getEditMode(that) === EDIT_MODE_CELL;
                         if(!isEditorPopup && !isFocusOverlay && !(isAddRowButton && isCellEditMode && that.isEditing()) && (isDomElement || isAnotherComponent)) {
                             that._closeEditItem.bind(that)($target);
                         }
@@ -1883,8 +1880,13 @@ const EditingController = modules.ViewController.inherit((function() {
                 }
             }
 
-            if(options.row && (forceUpdateRow || isCustomSetCellValue)) {
-                that._updateEditRow(options.row, forceUpdateRow, isCustomSetCellValue);
+            const row = options.row;
+            if(row) {
+                if(forceUpdateRow || isCustomSetCellValue) {
+                    that._updateEditRow(row, forceUpdateRow, isCustomSetCellValue);
+                } else if(row.update) {
+                    row.update();
+                }
             }
         },
         _updateEditRowCore: function(row, skipCurrentRow, isCustomSetCellValue) {
@@ -2009,6 +2011,7 @@ const EditingController = modules.ViewController.inherit((function() {
             if(that._rowsView.renderTemplate($container, template, cellOptions, !!$container.closest(getWindow().document).length)) {
                 that._rowsView._updateCell($container, cellOptions);
             }
+            return cellOptions;
         },
 
         getFormEditorTemplate: function(cellOptions, item) {
@@ -2016,21 +2019,17 @@ const EditingController = modules.ViewController.inherit((function() {
             const column = this.component.columnOption(item.dataField);
 
             return function(options, container) {
-                const templateOptions = extend({}, cellOptions);
                 const $container = $(container);
 
-                templateOptions.column = column;
-
-                templateOptions.row.watch?.(function() {
-                    return templateOptions.column.selector(templateOptions.row.data);
-                }, function(newValue) {
+                cellOptions.row.watch && cellOptions.row.watch(function() {
+                    return column.selector(cellOptions.row.data);
+                }, function() {
                     let $editorElement = $container.find('.dx-widget').first();
                     let validator = $editorElement.data('dxValidator');
                     const validatorOptions = validator?.option();
 
-                    templateOptions.value = newValue;
                     $container.contents().remove();
-                    that.renderFormEditTemplate.bind(that)(cellOptions, item, options.component, $container);
+                    cellOptions = that.renderFormEditTemplate.bind(that)(cellOptions, item, options.component, $container);
 
                     $editorElement = $container.find('.dx-widget').first();
                     validator = $editorElement.data('dxValidator');
@@ -2043,7 +2042,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     }
                 });
 
-                that.renderFormEditTemplate.bind(that)(cellOptions, item, options.component, $container);
+                cellOptions = that.renderFormEditTemplate.bind(that)(cellOptions, item, options.component, $container);
             };
         },
 
@@ -2675,9 +2674,7 @@ module.exports = {
                         editingController.showHighlighting($cell);
                         $cell.addClass(CELL_MODIFIED);
                     } else if(isEditableCell) {
-                        const skipValidation = parameters.row.isNewRow;
-
-                        editingController.showHighlighting($cell, skipValidation);
+                        editingController.showHighlighting($cell, true);
                     }
 
                     this.callBase.apply(this, arguments);

@@ -201,6 +201,7 @@ export class SchedulerTestWrapper {
 
             getDateTableScrollable: () => $('.dx-scheduler-date-table-scrollable'),
             getHeaderScrollable: () => $('.dx-scheduler-header-scrollable'),
+            getSideBarScrollable: () => $('.dx-scheduler-sidebar-scrollable'),
 
             getDateTable: () => $('.dx-scheduler-date-table'),
             getDateTableHeight: () => this.workSpace.getDateTable().height(),

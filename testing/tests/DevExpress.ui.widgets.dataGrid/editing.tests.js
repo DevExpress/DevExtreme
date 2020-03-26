@@ -33,6 +33,7 @@ import 'generic_light.css!';
 import 'ui/data_grid/ui.data_grid';
 import 'ui/autocomplete';
 import 'ui/color_box';
+import 'ui/drop_down_box';
 
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -1728,6 +1729,54 @@ QUnit.test('Not close Editing Cell in batch mode on down in editing cell and up 
     // assert
     editor = rowsViewWrapper.getDataRow(0).getCell(2).getEditor();
     assert.ok(editor.isExists(), 'editor is not closed');
+});
+
+// T869676
+QUnit.test('Not close Editing Cell in batch mode on click add button inside editor popup', function(assert) {
+    // arrange
+    const that = this;
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: 'batch'
+    };
+
+    that.columns[0].editCellTemplate = function(e) {
+        return $('<div>').dxDropDownBox({
+            contentTemplate: function(e) {
+                return $('<div>').dxDataGrid({
+                    dataSource: [],
+                    columns: ['name'],
+                    editing: {
+                        mode: 'batch',
+                        allowAdding: true
+                    }
+                });
+            }
+        });
+    };
+
+    rowsView.render(testElement);
+    testElement.find('tbody > tr').first().find('td').eq(0).trigger('dxclick'); // Edit
+
+    const $dropDownIcon = testElement.find('.dx-dropdowneditor-icon');
+    assert.equal($dropDownIcon.length, 1, 'drop down icon count');
+    $dropDownIcon.trigger('dxclick');
+
+    const $addButton = $('.dx-popup-wrapper .dx-datagrid-addrow-button');
+    assert.equal($addButton.length, 1, 'add button is rendered');
+
+    // act
+    this.clock.tick();
+    $addButton.trigger('dxpointerdown');
+    $addButton.trigger('dxclick');
+    this.clock.tick();
+
+    // assert
+    assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1, 'editor count');
+    assert.equal($('.dx-popup-wrapper').length, 1, 'editor popup count');
 });
 
 // T318313
@@ -8110,6 +8159,130 @@ QUnit.test('The current editable row should close when adding a new row in \'row
     assert.notOk($(rowsView.getRowElement(3)).hasClass('dx-edit-row'), 'row isn\'t edited');
 });
 
+['row', 'form', 'popup'].forEach(editingMode => {
+    [false, true].forEach(repaintChangesOnly => {
+        [false, true].forEach(doubleChange => {
+            QUnit.test(`Editor value and lookup items should be updated after cascading update (editingMode=${editingMode}, repaintChangesOnly=${repaintChangesOnly}, doubleChange=${doubleChange})`, function(assert) {
+                // arrange
+                const rowsView = this.rowsView;
+                const $testElement = $('#container');
+                let dataSourceCallCount = 0;
+                let lookup2InitializedSpy = sinon.spy();
+
+                this.options.repaintChangesOnly = repaintChangesOnly;
+                this.options.editing = {
+                    mode: 'form',
+                    allowUpdating: true
+                };
+                this.options.dataSource = [{
+                    id: 1, lookup1: 1, lookup2: 11
+                }];
+                this.options.columns = ['id', {
+                    dataField: 'lookup1',
+                    lookup: {
+                        valueExpr: 'id',
+                        displayExpr: 'name',
+                        dataSource: [{
+                            id: 1, name: 'value1'
+                        }, {
+                            id: 2, name: 'value2'
+                        }, {
+                            id: 3, name: 'value3'
+                        }]
+                    },
+                    setCellValue: function(data, value) {
+                        data.lookup1 = value;
+                        data.lookup2 = null;
+                    }
+                }, {
+                    dataField: 'lookup2',
+                    editorOptions: {
+                        onInitialized: lookup2InitializedSpy
+                    },
+                    lookup: {
+                        valueExpr: 'id',
+                        displayExpr: 'name',
+                        dataSource: function(options) {
+                            dataSourceCallCount++;
+                            const store = [];
+                            for(let group = 1; group <= 3; group++) {
+                                for(let i = 1; i <= 2; i++) {
+                                    const id = group * 10 + i;
+                                    store.push({
+                                        id: id,
+                                        group: group,
+                                        name: `value${id}`
+                                    });
+                                }
+                            }
+                            return {
+                                store: store,
+                                filter: options.data ? ['group', '=', options.data.lookup1] : undefined
+                            };
+                        }
+                    }
+                }];
+                this.dataController.init();
+                this.columnsController.init();
+                rowsView.render($testElement);
+
+                this.editRow(0);
+
+                const getEditor = (dataField) => {
+                    const $editor = $(this.getCellElement(0, dataField)).find('.dx-texteditor');
+                    return dataField === 'id' ? $editor.dxNumberBox('instance') : $editor.dxSelectBox('instance');
+                };
+
+                const checkEditorRecreating = (dataField, isRecreated) => {
+                    const editorName = `${dataField}Editor`;
+                    const editor = getEditor(dataField);
+                    assert.strictEqual(editor !== this[editorName], isRecreated, `${dataField} is ${isRecreated ? '' : 'not' } recreated`);
+                    this[editorName] = editor;
+                };
+
+                checkEditorRecreating('id', true);
+                checkEditorRecreating('lookup1', true);
+                checkEditorRecreating('lookup2', true);
+
+                // act
+                if(doubleChange) {
+                    getEditor('lookup1').option('value', 3);
+                    this.clock.tick();
+                }
+                getEditor('lookup1').option('value', 2);
+                this.clock.tick();
+
+                // assert
+                checkEditorRecreating('id', !repaintChangesOnly);
+                checkEditorRecreating('lookup1', true);
+                checkEditorRecreating('lookup2', true);
+                assert.equal(getEditor('lookup2').option('value'), null, 'lookup2 value is reseted');
+                assert.ok(lookup2InitializedSpy.called, 'lookup2 onInitialized is called');
+
+                // act
+                dataSourceCallCount = 0;
+                getEditor('lookup2').option('opened', true);
+                getEditor('lookup2').option('value', 21);
+                this.clock.tick();
+
+                // assert
+                assert.equal(getEditor('lookup2').option('text'), 'value21', 'lookup2 text is updated');
+                assert.deepEqual(getEditor('lookup2').option('items').map(item => item.name), ['value21', 'value22'], 'lookup2 items are updated');
+                assert.equal(dataSourceCallCount, repaintChangesOnly ? 1 : 0, 'dataSource is called once if repaintChangesOnly');
+
+                // act
+                getEditor('lookup1').option('value', 3);
+                this.clock.tick();
+
+                // assert
+                checkEditorRecreating('id', !repaintChangesOnly);
+                checkEditorRecreating('lookup1', true);
+                checkEditorRecreating('lookup2', true);
+                assert.equal(getEditor('lookup2').option('value'), null, 'lookup2 value is reseted');
+            });
+        });
+    });
+});
 
 QUnit.module('Refresh modes', {
     beforeEach: function() {
@@ -8533,8 +8706,13 @@ QUnit.module('Editing with validation', {
             return renderer('.dx-datagrid');
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'columnFixing', 'rows', 'editing', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity', 'summary'], {
-            initViews: true
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'columnFixing', 'rows', 'editing', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity', 'summary', 'keyboardNavigation'], {
+            initViews: true,
+            options: {
+                keyboardNavigation: {
+                    enabled: true
+                }
+            }
         });
 
         this.applyOptions = function(options) {
@@ -8543,11 +8721,17 @@ QUnit.module('Editing with validation', {
             this.columnsController.init();
             this.editingController.init();
             this.validatingController.init();
+            this.keyboardNavigationController.init();
         };
 
         this.columnHeadersView.getColumnCount = function() {
             return 3;
         };
+
+        this.focus = function($element) {
+            this.keyboardNavigationController.focus($element);
+        };
+
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
@@ -12481,6 +12665,45 @@ QUnit.test('No exceptions on editing a column with given setCellValue when repai
     }
 });
 
+QUnit.test('Row - An untouched cell should not be validated (T872003)', function(assert) {
+    // arrange
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    rowsView.render(testElement);
+
+    this.applyOptions({
+        editing: {
+            mode: 'row'
+        },
+        columns: [
+            {
+                dataField: 'name'
+            },
+            {
+                dataField: 'age',
+                validationRules: [
+                    {
+                        type: 'custom',
+                        validationCallback: function() {
+                            return false;
+                        }
+                    }
+                ]
+            }
+        ]
+    });
+
+    this.editRow(0);
+    this.clock.tick();
+
+    const $secondCell = $(this.getCellElement(0, 1));
+
+    // assert
+    assert.notOk($secondCell.hasClass('dx-focused'), 'cell is not focused');
+    assert.notOk($secondCell.hasClass('dx-datagrid-invalid'), 'cell is not marked as invalid');
+});
+
 // T865329
 [true, false].forEach(withConfirm => {
     QUnit.test('Validation should not block deleting newly added row in cell edit mode ' + withConfirm ? '(with confirm)' : '(no confirm)', function(assert) {
@@ -12605,6 +12828,125 @@ QUnit.test('No exceptions on editing a column with given setCellValue when repai
         assert.equal(visibleRows.length, 4, 'rows count');
     });
 });
+
+[false, true].forEach((allowUpdating) => {
+    [false, true].forEach((allowEditing) => {
+        QUnit.test(`Row(allowUpdating: ${allowUpdating}, column.allowEditing: ${allowEditing}) - Cell with validation rules should not have a validator if a row is not in editing mode(T871515)`, function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const testElement = $('#container');
+
+            const gridConfig = {
+                dataSource: [
+                    { a: true, b: null }
+                ],
+                editing: {
+                    mode: 'row',
+                    allowUpdating: allowUpdating
+                },
+                columns: [
+                    'a',
+                    {
+                        dataField: 'b',
+                        allowEditing: allowEditing,
+                        validationRules: [{ type: 'required' }]
+                    }
+                ]
+            };
+
+            rowsView.render(testElement);
+            this.applyOptions(gridConfig);
+            let $secondCell = $(this.getCellElement(0, 1));
+
+            // assert
+            assert.notOk($secondCell.hasClass('dx-validator'), 'cell should not have validator');
+
+            this.focus($secondCell);
+            this.clock.tick();
+            $secondCell = $(this.getCellElement(0, 1));
+
+            // assert
+            assert.ok($secondCell.hasClass('dx-focused'), 'cell is focused');
+            assert.notOk($secondCell.hasClass('dx-validator'), 'cell should not have validator');
+        });
+    });
+});
+
+['Cell', 'Batch'].forEach((mode) => {
+    [true, false].forEach((allowEditing) => {
+        QUnit.test(`${mode}(allowUpdating: false, column.allowEditing: ${allowEditing}) - Cell with validation rules should not have a validator(T871515)`, function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const testElement = $('#container');
+
+            const gridConfig = {
+                dataSource: [
+                    { a: true, b: null }
+                ],
+                editing: {
+                    mode: mode.toLowerCase(),
+                    allowUpdating: false
+                },
+                columns: [
+                    'a',
+                    {
+                        dataField: 'b',
+                        allowEditing: allowEditing,
+                        validationRules: [{ type: 'required' }]
+                    }
+                ]
+            };
+
+            rowsView.render(testElement);
+            this.applyOptions(gridConfig);
+            let $secondCell = $(this.getCellElement(0, 1));
+
+            // assert
+            assert.notOk($secondCell.hasClass('dx-validator'), 'cell should not have validator');
+
+            this.focus($secondCell);
+            this.clock.tick();
+            $secondCell = $(this.getCellElement(0, 1));
+
+            // assert
+            assert.ok($secondCell.hasClass('dx-focused'), 'cell is focused');
+            assert.notOk($secondCell.hasClass('dx-validator'), 'cell should not have validator');
+        });
+
+        QUnit.test(`${mode}(allowUpdating: true, column.allowEditing: ${allowEditing}) - Cell with validation rules should have a validator(T871515)`, function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const testElement = $('#container');
+
+            const gridConfig = {
+                dataSource: [
+                    { a: true, b: null }
+                ],
+                editing: {
+                    mode: mode.toLowerCase(),
+                    allowUpdating: true
+                },
+                columns: [
+                    'a',
+                    {
+                        dataField: 'b',
+                        allowEditing: allowEditing,
+                        validationRules: [{ type: 'required' }]
+                    }
+                ]
+            };
+
+            rowsView.render(testElement);
+            this.applyOptions(gridConfig);
+            const $secondCell = $(this.getCellElement(0, 1));
+
+            // assert
+            assert.ok($secondCell.hasClass('dx-validator'), 'cell should have validator');
+            assert.notOk($secondCell.hasClass('dx-datagrid-invalid'));
+        });
+    });
+});
+
 
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
     beforeEach: function() {
@@ -15959,8 +16301,6 @@ QUnit.test('The data passed to the editCellTemplate callback should be updated a
 QUnit.test('In popup editing mode need to repaint only changed fields with repaintChangesOnly (T753269)', function(assert) {
     // arrange
     const that = this;
-    let $popupContent;
-    let selectBox;
     const orders = [
         { Id: 1, Name: 'Paul Henriot', City: 'Reims', Country: 'France' },
         { Id: 2, Name: 'Karin Josephs', City: 'Münster', Country: 'Germany' }
@@ -16022,8 +16362,8 @@ QUnit.test('In popup editing mode need to repaint only changed fields with repai
     that.preparePopupHelpers();
 
     // act
-    $popupContent = $(that.editPopupInstance.content());
-    selectBox = $popupContent.find('.dx-selectbox').dxSelectBox('instance');
+    const $popupContent = $(that.editPopupInstance.content());
+    const selectBox = $popupContent.find('.dx-selectbox').dxSelectBox('instance');
     selectBox.option('value', 'Münster');
 
     // assert
