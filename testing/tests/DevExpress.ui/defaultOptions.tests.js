@@ -359,7 +359,6 @@ testComponentDefaults(Lookup,
         { platform: 'ios', phone: true }
     ],
     {
-        fullScreen: true,
         'dropDownOptions.fullScreen': true
     }
 );
@@ -400,11 +399,9 @@ testComponentDefaults(Lookup,
     {},
     {
         usePopover: false,
-        closeOnOutsideClick: true,
         'dropDownOptions.closeOnOutsideClick': true,
         searchEnabled: false,
         showCancelButton: false,
-        showPopupTitle: false,
         'dropDownOptions.showTitle': false,
         itemCenteringEnabled: true
     },
