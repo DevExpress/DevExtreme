@@ -2336,10 +2336,12 @@ const Scheduler = Widget.inherit({
         exception = dateSerialization.deserializeDate(exception);
         exception = this.fire('convertDateByTimezone', exception, startDateTimeZone);
 
-        exception = utils.getCorrectedDateByDaylightOffsets(exception, exceptionByStartDate, exception, this.option('timeZone'), startDateTimeZone);
+        // exception = utils.getCorrectedDateByDaylightOffsets(exceptionByStartDate, exception, exception, this.option('timeZone'), startDateTimeZone);
 
-        // const appointmentTimezoneDiff =  utils.calculateTimezoneByValue(startDateTimeZone, exceptionByStartDate) - utils.calculateTimezoneByValue(startDateTimeZone, exception);
-        // exception = new Date(exception.getTime() - appointmentTimezoneDiff * toMs('hour'));
+        const appointmentTimezoneDiff = startDateTimeZone ? utils.calculateTimezoneByValue(startDateTimeZone, exceptionByStartDate) - utils.calculateTimezoneByValue(startDateTimeZone, exception) : 0;
+        const commonTimezoneDiff = this.option('timeZone') ? utils.calculateTimezoneByValue(this.option('timeZone'), exceptionByStartDate) - utils.calculateTimezoneByValue(this.option('timeZone'), exception) : 0;
+
+        exception = new Date(exception.getTime() + (commonTimezoneDiff + appointmentTimezoneDiff) * toMs('hour'));
         // if(format === 'date') {
         // exception.setHours(exceptionByStartDate.getHours());
         // }

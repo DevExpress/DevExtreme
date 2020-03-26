@@ -569,4 +569,49 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
 
         assert.roughEqual(scheduler.appointments.getAppointment(0).outerWidth(), scheduler.workSpace.getCellWidth(), 2.001, 'Appointment width is correct after translation oт STD');
     });
+
+    QUnit.test('Recurrence exception should be adjusted by scheduler timezone after deleting of the single appt', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: [{
+                text: 'Recruiting students',
+                startDate: new Date(2018, 2, 26, 10, 0),
+                endDate: new Date(2018, 2, 26, 11, 0),
+                recurrenceRule: 'FREQ=DAILY'
+            }],
+            views: ['day'],
+            currentView: 'day',
+            currentDate: new Date(2018, 3, 1),
+            timeZone: 'Australia/Sydney',
+            recurrenceEditMode: 'occurrence'
+        });
+
+        scheduler.appointments.click();
+        this.clock.tick(300);
+        scheduler.tooltip.clickOnDeleteButton();
+
+        assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'Appointment was deleted');
+    });
+
+    QUnit.test('Recurrence exception should be adjusted by appointment timezone after deleting of the single appt', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: [{
+                text: 'Recruiting students',
+                startDate: new Date(2018, 2, 26, 10, 0),
+                endDate: new Date(2018, 2, 26, 11, 0),
+                recurrenceRule: 'FREQ=DAILY',
+                startDateTimeZone: 'Australia/Canberra',
+                endDateTimeZone: 'Australia/Canberra'
+            }],
+            views: ['day'],
+            currentView: 'day',
+            currentDate: new Date(2018, 3, 1),
+            recurrenceEditMode: 'occurrence'
+        });
+
+        scheduler.appointments.click();
+        this.clock.tick(300);
+        scheduler.tooltip.clickOnDeleteButton();
+
+        assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'Appointment was deleted');
+    });
 });
