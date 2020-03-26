@@ -134,6 +134,7 @@ export class GanttView extends Widget {
                 break;
             case 'validation':
                 this._ganttViewCore.setValidationSettings(args.value);
+                this._update();
                 break;
             case 'showRowLines':
                 this._ganttViewCore.setRowLinesVisible(args.value);
@@ -206,4 +207,5 @@ export class GanttView extends Widget {
         return this.option('mainElement').get(0);
     }
     adjustControl() {}
+    getRequireFirstLoadParentAutoCalc() { return this.option('validation.autoUpdateParentTasks'); }
 }

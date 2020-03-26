@@ -781,4 +781,82 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
         const $stripLines = this.$element.find(PARENT_TASK_SELECTOR);
         assert.ok($stripLines.length > 0, 'parent tasks has className');
     });
+
+    test('first load data', function(assert) {
+        const start = new Date('2019-02-19');
+        const end = new Date('2019-02-26');
+        const tasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-22'), 'progress': 0 },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-20'), 'end': new Date('2019-02-20'), 'progress': 0 },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': start, 'end': end, 'progress': 50 }
+        ];
+        const options = {
+            tasks: { dataSource: tasks },
+            validation: { autoUpdateParentTasks: true }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        let dataToCheck = [];
+        this.instance._onParentTasksRecalculated = (data) => {
+            dataToCheck = data;
+        };
+        getGanttViewCore(this.instance).viewModel.updateModel();
+        this.clock.tick();
+
+        assert.equal(dataToCheck.length, 3, 'length');
+        assert.equal(dataToCheck[0].start, start, 'parent 0 start date');
+        assert.equal(dataToCheck[0].end, end, 'parent 0 end date');
+        assert.ok(dataToCheck[0].progress > 0, 'parent 0 progress eq 0');
+        assert.equal(dataToCheck[1].start, start, 'parent 1 start date');
+        assert.equal(dataToCheck[1].end, end, 'parent 1 end date');
+        assert.ok(dataToCheck[1].progress > 0, 'parent 1 progress eq 0');
+        assert.equal(dataToCheck[2].start, start, 'child start date');
+        assert.equal(dataToCheck[2].end, end, 'child 1 end date');
+        assert.equal(dataToCheck[2].progress, 50, 'child progress');
+    });
+
+    test('mode changing', function(assert) {
+        const start = new Date('2019-02-19');
+        const end = new Date('2019-02-26');
+        const tasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-22'), 'progress': 0 },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-20'), 'end': new Date('2019-02-20'), 'progress': 0 },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': start, 'end': end, 'progress': 50 }
+        ];
+        const options = {
+            tasks: { dataSource: tasks }
+        };
+        this.createInstance(options);
+        let dataToCheck = [];
+        this.instance._onParentTasksRecalculated = (data) => {
+            dataToCheck = data;
+        };
+        this.clock.tick();
+        let $parentTasks = this.$element.find(PARENT_TASK_SELECTOR);
+        assert.equal(dataToCheck.length, 0, 'length');
+        assert.equal($parentTasks.length, 0, 'parent tasks exists');
+
+        this.instance.option('validation.autoUpdateParentTasks', true);
+        this.clock.tick();
+        $parentTasks = this.$element.find(PARENT_TASK_SELECTOR);
+        assert.equal($parentTasks.length, 2, 'parent tasks not exists');
+        assert.equal(dataToCheck.length, 3, 'length');
+        assert.equal(dataToCheck[0].start, start, 'parent 0 start date');
+        assert.equal(dataToCheck[0].end, end, 'parent 0 end date');
+        assert.ok(dataToCheck[0].progress > 0, 'parent 0 progress eq 0');
+        assert.equal(dataToCheck[1].start, start, 'parent 1 start date');
+        assert.equal(dataToCheck[1].end, end, 'parent 1 end date');
+        assert.ok(dataToCheck[1].progress > 0, 'parent 1 progress eq 0');
+        assert.equal(dataToCheck[2].start, start, 'child start date');
+        assert.equal(dataToCheck[2].end, end, 'child 1 end date');
+        assert.equal(dataToCheck[2].progress, 50, 'child progress');
+
+        dataToCheck = [];
+        this.instance.option('validation.autoUpdateParentTasks', false);
+        this.clock.tick();
+        $parentTasks = this.$element.find(PARENT_TASK_SELECTOR);
+        assert.equal(dataToCheck.length, 0, 'length');
+        assert.equal($parentTasks.length, 0, 'parent tasks exists');
+    });
 });
