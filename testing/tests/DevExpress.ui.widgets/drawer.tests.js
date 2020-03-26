@@ -8,10 +8,12 @@ import { animation } from 'ui/drawer/ui.drawer.rendering.strategy';
 import Overlay from 'ui/overlay';
 import Button from 'ui/button';
 import domUtils from 'core/utils/dom';
+import eventsEngine from 'events/core/events_engine';
+import Drawer from 'ui/drawer';
 
 import 'common.css!';
-import 'ui/drawer';
 
+const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
 const DRAWER_PANEL_CONTENT_CLASS = 'dx-drawer-panel-content';
 const DRAWER_VIEW_CONTENT_CLASS = 'dx-drawer-content';
 const DRAWER_SHADER_CLASS = 'dx-drawer-shader';
@@ -70,6 +72,7 @@ QUnit.testStart(() => {
     </div>\
     <div id="drawerWithContent">\
         <div id="content"><div id="button"></div></div>\
+        <div id="additionalContent"></div>\
     </div>\
     <div id="outerDrawer">\
         <div id="innerDrawer"></div>\
@@ -122,7 +125,6 @@ QUnit.module('Drawer behavior', () => {
         $button = $element.find('.dx-button');
 
         const buttonInstance = $button.dxButton('instance');
-
         assert.ok(buttonInstance instanceof Button, 'button into drawer content wasn\'t clean after repaint');
     });
 
@@ -724,10 +726,12 @@ QUnit.module('Drawer behavior', () => {
         $('#drawer').dxDrawer({
             openedStateMode: 'overlap',
             templatesRenderAsynchronously: true,
+            opened: true,
+            shading: true,
             integrationOptions: {
                 templates: {
                     'panel': {
-                        render: function(args) {
+                        render: args => {
                             const $div = $('<div/>').appendTo(args.container);
                             setTimeout(() => {
                                 $div.css('height', 600);
@@ -741,9 +745,11 @@ QUnit.module('Drawer behavior', () => {
         });
 
         clock.tick(100);
-        const $panel = $('#drawer').find('.dx-drawer-panel-content');
+        const $panel = $('#drawer').find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
+        const $shader = $('#drawer').find(`.${DRAWER_SHADER_CLASS}`);
 
-        assert.equal($panel.css('zIndex'), 1501, 'panel has correct zIndex');
+        assert.strictEqual($panel.css('zIndex'), '2001', 'panel.zIndex');
+        assert.strictEqual($shader.css('zIndex'), '2000', 'shader.zIndex');
         clock.restore();
     });
 
@@ -796,6 +802,78 @@ QUnit.module('Drawer behavior', () => {
         instance.option('position', 'after');
 
         assert.equal(instance.calcTargetPosition(), 'left');
+    });
+});
+
+QUnit.module('Drawer view template', () => {
+
+    function getNestedElements() {
+        const wrapperElement = document.querySelectorAll(`.${DRAWER_WRAPPER_CLASS}`);
+        const panelElement = document.querySelectorAll(`.${DRAWER_PANEL_CONTENT_CLASS}`);
+        const viewContentElement = document.querySelectorAll(`.${DRAWER_VIEW_CONTENT_CLASS}`);
+        const shaderElement = document.querySelectorAll(`.${DRAWER_SHADER_CLASS}`);
+        const firstViewContentNestedElement = document.querySelectorAll('#button');
+        const secondViewContentNestedElement = document.querySelectorAll('#additionalContent');
+
+        return {
+            wrapperElement,
+            panelElement,
+            viewContentElement,
+            shaderElement,
+            firstViewContentNestedElement,
+            secondViewContentNestedElement
+        };
+    }
+
+    function checkNestedElements(assert, nestedElements) {
+        assert.strictEqual(nestedElements.wrapperElement.length, 1, 'wrapperElement.length');
+        assert.strictEqual(nestedElements.panelElement.length, 1, 'panelElement.length');
+        assert.strictEqual(nestedElements.viewContentElement.length, 1, 'viewContentElement.length');
+        assert.strictEqual(nestedElements.shaderElement.length, 1, 'wrappershaderElementElement.length');
+        assert.strictEqual(nestedElements.firstViewContentNestedElement.length, 1, 'firstViewContentNestedElement.length');
+        assert.strictEqual(nestedElements.secondViewContentNestedElement.length, 1, 'secondViewContentNestedElement.length');
+    }
+
+    function checkNodeEquals(assert, nestedElementsAfterRepaint, nestedElements) {
+        assert.strictEqual(nestedElementsAfterRepaint.wrapperElement[0].isSameNode(nestedElements.wrapperElement[0]), true, 'the same wrapperElement');
+        assert.strictEqual(nestedElementsAfterRepaint.viewContentElement[0].isSameNode(nestedElements.viewContentElement[0]), true, 'the same viewContentElement');
+        assert.strictEqual(nestedElementsAfterRepaint.shaderElement[0].isSameNode(nestedElements.shaderElement[0]), true, 'the same shaderElement');
+        assert.strictEqual(nestedElementsAfterRepaint.secondViewContentNestedElement[0].isEqualNode(nestedElements.secondViewContentNestedElement[0]), true, 'the same secondViewContentNestedElement');
+    }
+
+    QUnit.test('Drawer + template in markup with button -> repaint() method does not duplicate the content(T864419)', function(assert) {
+        const nestedButtonClickHandler = sinon.stub();
+        const drawerElement = document.querySelector('#drawerWithContent');
+        let buttonElement = drawerElement.querySelector('#button');
+
+        new Button(buttonElement, {
+            text: 'innerButton',
+            onClick: nestedButtonClickHandler
+        });
+
+        const drawer = new Drawer(drawerElement, {});
+
+        const nestedElements = getNestedElements();
+        checkNestedElements(assert, nestedElements);
+
+        eventsEngine.trigger(buttonElement, 'dxclick');
+
+        assert.strictEqual(nestedButtonClickHandler.callCount, 1, 'buttonClickHandler.callCount');
+        assert.strictEqual($(buttonElement).dxButton('instance') instanceof Button, true, 'button.instance');
+
+        drawer.repaint();
+        nestedButtonClickHandler.reset();
+
+        const nestedElementsAfterRepaint = getNestedElements();
+
+        buttonElement = nestedElementsAfterRepaint.firstViewContentNestedElement;
+        eventsEngine.trigger(buttonElement, 'dxclick');
+        checkNestedElements(assert, nestedElementsAfterRepaint);
+
+        assert.strictEqual(nestedButtonClickHandler.callCount, 1, 'buttonClickHandler.callCount');
+        assert.strictEqual($(buttonElement).dxButton('instance') instanceof Button, true, 'button.instance');
+
+        checkNodeEquals(assert, nestedElementsAfterRepaint, nestedElements);
     });
 });
 
@@ -981,18 +1059,6 @@ QUnit.module('Shader', () => {
         resizeCallbacks.fire();
 
         assert.equal($shader.offset().left, $content.offset().left, 'shader has correct position');
-    });
-
-    QUnit.test('shader should have correct zIndex in overlap mode', function(assert) {
-        const $element = $('#drawer').dxDrawer({
-            opened: true,
-            openedStateMode: 'overlap',
-            shading: true
-        });
-
-        const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
-
-        assert.equal($shader.css('zIndex'), 1500, 'shader has correct zIndex');
     });
 });
 

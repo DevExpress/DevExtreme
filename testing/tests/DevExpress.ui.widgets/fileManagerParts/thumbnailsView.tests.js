@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import 'ui/file_manager';
 import fx from 'animation/fx';
-import { FileManagerWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
+import { FileManagerWrapper, createTestFileSystem, isDesktopDevice } from '../../../helpers/fileManagerHelpers.js';
 
 const { test } = QUnit;
 
@@ -210,6 +210,69 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
         assert.strictEqual(selectionSpy.callCount, 2, 'event not raised');
         assert.strictEqual(newSelectedItems.length, 2);
         assert.deepEqual(newSelectedItems, oldSelectedItems, 'selection has not changed');
+    });
+
+    test('Raise the ContextMenuItemClick event', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
+        const spy = sinon.spy();
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            onContextMenuItemClick: spy,
+            permissions: {
+                rename: true
+            },
+            contextMenu: {
+                items: [
+                    {
+                        name: 'someItem',
+                        text: 'someItem',
+                        visibilityMode: 'manual',
+                        visible: true,
+                        items: [
+                            {
+                                name: 'otherItem',
+                                text: 'otherItem',
+                                specialField: 123
+                            }
+                        ]
+                    }, 'rename'
+                ]
+            }
+        });
+        this.clock.tick(800);
+
+        this.wrapper.findThumbnailsItem('File 1.txt').trigger('dxcontextmenu');
+        this.clock.tick(800);
+
+        const $items = this.wrapper.getContextMenuItems();
+        $items.eq(0).trigger('dxclick');
+        this.clock.tick(800);
+
+        let itemData = fileManager.option('contextMenu.items')[0];
+
+        assert.strictEqual(spy.callCount, 1, 'event raised');
+        assert.strictEqual(spy.args[0][0].event.type, 'dxclick', 'event has correct type');
+        assert.strictEqual($(spy.args[0][0].itemElement).get(0), $items.eq(0).get(0), 'itemElement is correct');
+        assert.strictEqual(spy.args[0][0].itemIndex, 0, 'itemIndex is correct');
+        assert.strictEqual(spy.args[0][0].itemData, itemData, 'itemData is correct');
+        assert.strictEqual(spy.args[0][0].component, fileManager, 'component is correct');
+        assert.strictEqual($(spy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
+
+        $items.eq(1).trigger('dxclick');
+        this.clock.tick(800);
+
+        itemData = fileManager.option('contextMenu.items')[1];
+
+        assert.strictEqual(spy.callCount, 2, 'event raised');
+        assert.strictEqual(spy.args[1][0].event.type, 'dxclick', 'event has correct type');
+        assert.strictEqual($(spy.args[1][0].itemElement).get(0), $items.eq(1).get(0), 'itemElement is correct');
+        assert.strictEqual(spy.args[1][0].itemIndex, 2, 'itemIndex is correct');
+        assert.strictEqual(spy.args[1][0].itemData, itemData, 'itemData is correct');
+        assert.strictEqual(spy.args[1][0].component, fileManager, 'component is correct');
+        assert.strictEqual($(spy.args[1][0].element).get(0), this.$element.get(0), 'element is correct');
     });
 
 });

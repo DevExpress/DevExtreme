@@ -9472,6 +9472,31 @@ QUnit.test('Scrollable should have the correct padding when the grid inside the 
     assert.strictEqual($scrollableContent.css('paddingLeft'), '0px', 'paddingLeft');
 });
 
+QUnit.test('Content height differs from the scrollable container height by the height of horizontal scroll (T865137)', function(assert) {
+    if(devices.real().deviceType !== 'desktop') {
+        assert.ok(true, 'not actual for not desktop devices');
+        return;
+    }
+
+    const dataGrid = createDataGrid({
+        height: 200,
+        width: 200,
+        dataSource: [{ id: 1, name: 'Sam', age: 26 }],
+        columnWidth: 100,
+        keyExpr: 'id',
+        scrolling: {
+            showScrollbar: 'always'
+        }
+    });
+    this.clock.tick();
+
+    const scrollable = dataGrid.getScrollable();
+    const content = dataGrid.$element().find('.dx-datagrid-rowsview .dx-datagrid-content')[0];
+    const scrollbarWidth = dataGrid.getView('rowsView').getScrollbarWidth(true);
+
+    assert.equal(scrollable.$element().height() - content.clientHeight, scrollbarWidth, 'Content height is correct');
+});
+
 QUnit.module('Virtual row rendering', baseModuleConfig);
 
 QUnit.test('editing should starts correctly if scrolling mode is virtual', function(assert) {
@@ -19561,6 +19586,82 @@ QUnit.test('Filter builder custom operations should update filterValue immediate
 
     // assert
     assert.equal(filterBuilder.getItemValueTextParts().length, 2, 'IsAnyOf operation applyed');
+});
+
+QUnit.test('Row height should not be changed after validation', function(assert) {
+    // arrange
+    const done = assert.async();
+    const data = [
+        { a: 'a', b: 'b', c: 'c' }
+    ];
+
+    const grid = createDataGrid({
+        dataSource: {
+            asyncLoadEnabled: false,
+            store: data
+        },
+        editing: {
+            mode: 'cell',
+            allowUpdating: true
+        },
+        columns: [
+            {
+                dataField: 'a',
+                setCellValue: function(newData, value, currentData) {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve('');
+                    }, 20);
+                    return d.promise();
+                },
+                validationRules: [{
+                    type: 'async',
+                    validationCallback: function(params) {
+                        const d = $.Deferred();
+                        setTimeout(function() {
+                            d.reject();
+                        }, 10);
+                        return d.promise();
+                    }
+                }]
+            }, {
+                dataField: 'b',
+                validationRules: [{
+                    type: 'async',
+                    validationCallback: function(params) {
+                        const d = $.Deferred();
+                        setTimeout(function() {
+                            params.value ? d.resolve(true) : d.reject();
+                        }, 20);
+                        return d.promise();
+                    }
+                }]
+            }, {
+                dataField: 'c',
+                validationRules: [{
+                    type: 'async',
+                    validationCallback: function(params) {
+                        const d = $.Deferred();
+                        setTimeout(function() {
+                            params.value ? d.resolve(true) : d.reject();
+                        }, 20);
+                        return d.promise();
+                    }
+                }]
+            }
+        ]
+    });
+
+    this.clock.tick();
+    const rowHeight = $(grid.getRowElement(0)).height();
+    this.clock.restore();
+
+    grid.cellValue(0, 1, '');
+    grid.saveEditData().done(() => {
+        assert.strictEqual($(grid.getRowElement(0)).height(), rowHeight, 'row height is not changed');
+
+        done();
+    });
 });
 
 

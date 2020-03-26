@@ -24,6 +24,7 @@ const TOOLBAR_ITEMS_CONTAINER_CLASS = 'dx-toolbar-items-container';
 const TOOLBAR_GROUP_CLASS = 'dx-toolbar-group';
 const TOOLBAR_COMPACT_CLASS = 'dx-toolbar-compact';
 const TOOLBAR_LABEL_SELECTOR = '.' + TOOLBAR_LABEL_CLASS;
+const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
 const TEXT_BUTTON_MODE = 'text';
 const DEFAULT_BUTTON_TYPE = 'default';
 
@@ -96,7 +97,8 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
             grouped: false,
 
             useFlatButtons: false,
-            useDefaultButtons: false
+            useDefaultButtons: false,
+            multiline: false
         });
     },
 
@@ -191,7 +193,8 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
     _renderToolbar: function() {
         this.$element()
             .addClass(TOOLBAR_CLASS)
-            .toggleClass(TOOLBAR_BOTTOM_CLASS, this.option('renderAs') === 'bottomToolbar');
+            .toggleClass(TOOLBAR_BOTTOM_CLASS, this.option('renderAs') === 'bottomToolbar')
+            .toggleClass(TOOLBAR_MULTILINE_CLASS, this.option('multiline'));
 
         this._$toolbarItemsContainer = $('<div>')
             .addClass(TOOLBAR_ITEMS_CONTAINER_CLASS)
@@ -444,6 +447,9 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
             case 'width':
                 this.callBase.apply(this, arguments);
                 this._dimensionChanged();
+                break;
+            case 'multiline':
+                this.$element().toggleClass(TOOLBAR_MULTILINE_CLASS, args.value);
                 break;
             case 'renderAs':
             case 'useFlatButtons':

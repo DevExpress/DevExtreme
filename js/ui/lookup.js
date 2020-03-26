@@ -233,6 +233,8 @@ const Lookup = DropDownList.inherit({
             * @hidden
             */
 
+            itemCenteringEnabled: false,
+
             _scrollToSelectedItemEnabled: false,
             useHiddenSubmitElement: true
         });
@@ -294,7 +296,7 @@ const Lookup = DropDownList.inherit({
 
                     closeOnOutsideClick: true,
 
-                    popupWidth: (function() { return $(this.element()).outerWidth(); }).bind(this),
+                    popupWidth: (function() { return this._getPopupWidth(); }).bind(this),
                     popupHeight: (function() { return this._getPopupHeight(MATERIAL_LOOKUP_LIST_ITEMS_COUNT); }).bind(this),
 
                     searchEnabled: false,
@@ -303,11 +305,9 @@ const Lookup = DropDownList.inherit({
 
                     showPopupTitle: false,
 
-                    position: {
-                        my: 'left top',
-                        at: 'left top',
-                        of: this.element()
-                    },
+                    shading: false,
+
+                    itemCenteringEnabled: true,
 
                     _scrollToSelectedItemEnabled: true
                 }
@@ -471,6 +471,9 @@ const Lookup = DropDownList.inherit({
     },
 
     _setPopupPosition: function() {
+        if(!this.option('itemCenteringEnabled')) return;
+
+
         const selectedIndex = this._list.option('selectedIndex');
         const flipped = this._popup._$wrapper.hasClass(LOOKUP_POPOVER_FLIP_VERTICAL_CLASS);
         if(selectedIndex === -1 || flipped) return;
@@ -501,7 +504,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _getPopupHeight: function(listItemsCount) {
-        return (this._list && this._list.itemElements()) ?
+        return (this._list && this._list.itemElements() && this.option('itemCenteringEnabled')) ?
             (this._list.itemElements().height() * listItemsCount) +
             MATERIAL_LOOKUP_LIST_PADDING * 2 +
             (this._$searchWrapper ? this._$searchWrapper.outerHeight() : 0) +
@@ -510,9 +513,15 @@ const Lookup = DropDownList.inherit({
             'auto';
     },
 
+    _getPopupWidth: function() {
+        return this.option('itemCenteringEnabled') ? $(this.element()).outerWidth() : $(window).width() * 0.8;
+    },
+
     _renderPopup: function() {
-        if(this.option('usePopover') && !this.option('fullScreen')) {
-            this._renderPopover();
+        if(this.option('usePopover')) {
+            if(this.option('_scrollToSelectedItemEnabled') && !this.option('itemCenteringEnabled') || !this.option('fullScreen')) {
+                this._renderPopover();
+            }
         } else {
             this.callBase();
         }
@@ -540,12 +549,14 @@ const Lookup = DropDownList.inherit({
             'showing': this._popupShowingHandler.bind(this),
             'shown': this._popupShownHandler.bind(this),
             'hiding': this._popupHidingHandler.bind(this),
-            'hidden': this._popupHiddenHandler.bind(this)
+            'hidden': this._popupHiddenHandler.bind(this),
+            'contentReady': this._contentReadyHandler.bind(this)
         });
+
+        if(this.option('_scrollToSelectedItemEnabled')) this._popup._$arrow.remove();
 
         this._setPopupContentId(this._popup.$content());
 
-        this._popup.option('onContentReady', this._contentReadyHandler.bind(this));
         this._contentReadyHandler();
     },
 
@@ -584,6 +595,14 @@ const Lookup = DropDownList.inherit({
         delete result.position;
 
         result.maxHeight = function() { return $(window).height(); };
+
+        if(this.option('_scrollToSelectedItemEnabled') && this.option('itemCenteringEnabled')) {
+            result.position = {
+                my: 'left top',
+                at: 'left top',
+                of: this.element()
+            };
+        }
 
         each(['position', 'animation', 'popupWidth', 'popupHeight'], (function(_, optionName) {
             if(this.option(optionName) !== undefined) {
@@ -945,6 +964,11 @@ const Lookup = DropDownList.inherit({
                 break;
             case 'cleanSearchOnOpening':
             case '_scrollToSelectedItemEnabled':
+                break;
+            case 'itemCenteringEnabled':
+                if(this.option('_scrollToSelectedItemEnabled') && value) {
+                    this.option('usePopover', false);
+                }
                 break;
             default:
                 this.callBase.apply(this, arguments);

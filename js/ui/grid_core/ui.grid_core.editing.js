@@ -238,27 +238,24 @@ const EditingController = modules.ViewController.inherit((function() {
                 that._pointerDownEditorHandler = e => $pointerDownTarget = $(e.target);
                 that._saveEditorHandler = that.createAction(function(e) {
                     const event = e.event;
-                    let isEditorPopup;
-                    let isDomElement;
-                    let isFocusOverlay;
-                    let isAddRowButton;
-                    let isCellEditMode;
                     const $target = $(event.target);
-                    let isAnotherComponent;
                     const targetComponent = event[TARGET_COMPONENT_NAME];
 
                     if($pointerDownTarget && $pointerDownTarget.is('input') && !$pointerDownTarget.is($target)) {
                         return;
                     }
 
-                    if(!isRowEditMode(that) && !that._editCellInProgress) {
-                        isEditorPopup = !!$target.closest(`.${DROPDOWN_EDITOR_OVERLAY_CLASS}`).length;
-                        isDomElement = !!$target.closest(getWindow().document).length;
-                        isAnotherComponent = targetComponent && targetComponent !== that.component;
-                        isAddRowButton = !!$target.closest(`.${that.addWidgetPrefix(ADD_ROW_BUTTON_CLASS)}`).length;
-                        isFocusOverlay = $target.hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
-                        isCellEditMode = getEditMode(that) === EDIT_MODE_CELL;
+                    function checkEditorPopup($element) {
+                        return $element && !!$element.closest(`.${DROPDOWN_EDITOR_OVERLAY_CLASS}`).length;
+                    }
 
+                    if(!isRowEditMode(that) && !that._editCellInProgress) {
+                        const isEditorPopup = checkEditorPopup($target) || checkEditorPopup($pointerDownTarget);
+                        const isDomElement = !!$target.closest(getWindow().document).length;
+                        const isAnotherComponent = targetComponent && targetComponent !== that.component;
+                        const isAddRowButton = !!$target.closest(`.${that.addWidgetPrefix(ADD_ROW_BUTTON_CLASS)}`).length;
+                        const isFocusOverlay = $target.hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
+                        const isCellEditMode = getEditMode(that) === EDIT_MODE_CELL;
                         if(!isEditorPopup && !isFocusOverlay && !(isAddRowButton && isCellEditMode && that.isEditing()) && (isDomElement || isAnotherComponent)) {
                             that._closeEditItem.bind(that)($target);
                         }
@@ -1116,20 +1113,23 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         executeOperation: function(deferred, func) {
-            if(this._lastOperation) {
-                this._lastOperation.reject();
-            }
-
+            this._lastOperation && this._lastOperation.reject();
             this._lastOperation = deferred;
 
-            when(...this._deferreds).always(() => {
-                this._lastOperation = null;
-            }).done(() => {
+            this.waitForDeferredOperations().done(() => {
                 if(deferred.state() === 'rejected') {
                     return;
                 }
                 func();
-            }).fail(deferred.reject);
+                this._lastOperation = null;
+            }).fail(() => {
+                deferred.reject();
+                this._lastOperation = null;
+            });
+        },
+
+        waitForDeferredOperations: function() {
+            return when(...this._deferreds);
         },
 
         editCell: function(rowIndex, columnIndex) {
@@ -1535,7 +1535,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     deferred.resolve();
                 });
             };
-            when(...this._deferreds).done(() => {
+            this.waitForDeferredOperations().done(() => {
                 if(this._saving) {
                     afterSaveEditData();
                     return;
@@ -1546,7 +1546,7 @@ const EditingController = modules.ViewController.inherit((function() {
                         return;
                     }
                     this._saveEditDataInner().done(deferred.resolve).fail(deferred.reject);
-                });
+                }).fail(deferred.reject);
             }).fail(deferred.reject);
             return deferred.promise();
         },
@@ -1848,26 +1848,31 @@ const EditingController = modules.ViewController.inherit((function() {
                 if(options.values) {
                     options.values[options.columnIndex] = value;
                 }
-
-                that.addDeferred(setCellValueResult);
+                that.addDeferred(deferred);
             }
 
             return deferred;
         },
 
         updateFieldValue: function(options, value, text, forceUpdateRow) {
-            const that = this;
             const rowKey = options.key;
+            const deferred = new Deferred();
 
             if(rowKey === undefined) {
-                that._dataController.fireError('E1043');
+                this._dataController.fireError('E1043');
             }
 
             if(options.column.setCellValue) {
                 this._prepareEditDataParams(options, value, text).done(params => {
-                    this._applyEditDataParams(options, params, forceUpdateRow);
+                    when(this._applyEditDataParams(options, params, forceUpdateRow)).always(() => {
+                        deferred.resolve();
+                    });
                 });
+            } else {
+                deferred.resolve();
             }
+
+            return deferred.promise();
         },
         _focusPreviousEditingCellIfNeed: function(options) {
             const that = this;
@@ -1906,8 +1911,13 @@ const EditingController = modules.ViewController.inherit((function() {
                 }
             }
 
-            if(options.row && (forceUpdateRow || isCustomSetCellValue)) {
-                that._updateEditRow(options.row, forceUpdateRow, isCustomSetCellValue);
+            const row = options.row;
+            if(row) {
+                if(forceUpdateRow || isCustomSetCellValue) {
+                    that._updateEditRow(row, forceUpdateRow, isCustomSetCellValue);
+                } else if(row.update) {
+                    row.update();
+                }
             }
         },
         _updateEditRowCore: function(row, skipCurrentRow, isCustomSetCellValue) {
@@ -2029,6 +2039,7 @@ const EditingController = modules.ViewController.inherit((function() {
             if(that._rowsView.renderTemplate($container, template, cellOptions, !!$container.closest(getWindow().document).length)) {
                 that._rowsView._updateCell($container, cellOptions);
             }
+            return cellOptions;
         },
 
         getFormEditorTemplate: function(cellOptions, item) {
@@ -2036,21 +2047,17 @@ const EditingController = modules.ViewController.inherit((function() {
             const column = this.component.columnOption(item.dataField);
 
             return function(options, container) {
-                const templateOptions = extend({}, cellOptions);
                 const $container = $(container);
 
-                templateOptions.column = column;
-
-                templateOptions.row.watch && templateOptions.row.watch(function() {
-                    return templateOptions.column.selector(templateOptions.row.data);
-                }, function(newValue) {
+                cellOptions.row.watch && cellOptions.row.watch(function() {
+                    return column.selector(cellOptions.row.data);
+                }, function() {
                     let $editorElement = $container.find('.dx-widget').first();
                     let validator = $editorElement.data('dxValidator');
                     const validatorOptions = validator && validator.option();
 
-                    templateOptions.value = newValue;
                     $container.contents().remove();
-                    that.renderFormEditTemplate.bind(that)(cellOptions, item, options.component, $container);
+                    cellOptions = that.renderFormEditTemplate.bind(that)(cellOptions, item, options.component, $container);
 
                     $editorElement = $container.find('.dx-widget').first();
                     validator = $editorElement.data('dxValidator');
@@ -2063,7 +2070,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     }
                 });
 
-                that.renderFormEditTemplate.bind(that)(cellOptions, item, options.component, $container);
+                cellOptions = that.renderFormEditTemplate.bind(that)(cellOptions, item, options.component, $container);
             };
         },
 
@@ -2303,6 +2310,18 @@ const EditingController = modules.ViewController.inherit((function() {
             const $highlight = $cell.find('.' + CELL_HIGHLIGHT_OUTLINE);
             if($cell.get(0).tagName === 'TD' && !$highlight.length) {
                 $cell.wrapInner($('<div>').addClass(CELL_HIGHLIGHT_OUTLINE + ' ' + POINTER_EVENTS_TARGET_CLASS));
+            }
+        },
+
+        highlightDataCell: function($cell, parameters) {
+            const isEditableCell = parameters.setValue;
+            const cellModified = this.isCellModified(parameters);
+
+            if(cellModified && parameters.column.setCellValue) {
+                this.showHighlighting($cell);
+                $cell.addClass(CELL_MODIFIED);
+            } else if(isEditableCell) {
+                this.showHighlighting($cell);
             }
         },
 
@@ -2695,14 +2714,8 @@ module.exports = {
                         this._editCellPrepared($cell);
                     }
 
-                    const cellModified = editingController.isCellModified(parameters);
-                    if(cellModified && parameters.column && !isCommandCell && parameters.column.setCellValue) {
-                        editingController.showHighlighting($cell);
-                        $cell.addClass(CELL_MODIFIED);
-                    } else if(isEditableCell) {
-                        const skipValidation = parameters.row.isNewRow;
-
-                        editingController.showHighlighting($cell, skipValidation);
+                    if(parameters.column && !isCommandCell) {
+                        editingController.highlightDataCell($cell, parameters);
                     }
 
                     this.callBase.apply(this, arguments);

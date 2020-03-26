@@ -521,6 +521,30 @@ const Scrollable = DOMComponent.inherit({
         this.scrollTo(scrollPosition);
     },
 
+    scrollToElementTopLeft: function(element) {
+        const $element = $(element);
+        const elementInsideContent = this.$content().find(element).length;
+        const elementIsInsideContent = ($element.parents('.' + SCROLLABLE_CLASS).length - $element.parents('.' + SCROLLABLE_CONTENT_CLASS).length) === 0;
+        if(!elementInsideContent || !elementIsInsideContent) {
+            return;
+        }
+
+        const scrollPosition = { top: 0, left: 0 };
+        const direction = this.option('direction');
+
+        if(direction !== VERTICAL) {
+            const leftPosition = this._elementPositionRelativeToContent($element, 'left');
+            scrollPosition.left = this.option('rtlEnabled') === true
+                ? leftPosition + $element.width() - this.clientWidth()
+                : leftPosition;
+        }
+        if(direction !== HORIZONTAL) {
+            scrollPosition.top = this._elementPositionRelativeToContent($element, 'top');
+        }
+
+        this.scrollTo(scrollPosition);
+    },
+
     getScrollElementPosition: function($element, direction, offset) {
         offset = offset || {};
         const isVertical = direction === VERTICAL;

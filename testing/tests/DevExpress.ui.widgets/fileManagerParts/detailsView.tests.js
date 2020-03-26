@@ -428,4 +428,238 @@ QUnit.module('Details View', moduleConfig, () => {
         assert.strictEqual(newSelectedItems.length, 2);
         assert.deepEqual(newSelectedItems, oldSelectedItems, 'selection has not changed');
     });
+
+    test('Raise the ContextMenuItemClick event', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
+        const spy = sinon.spy();
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            onContextMenuItemClick: spy,
+            permissions: {
+                rename: true
+            },
+            contextMenu: {
+                items: [
+                    {
+                        name: 'someItem',
+                        text: 'someItem',
+                        visibilityMode: 'manual',
+                        visible: true,
+                        items: [
+                            {
+                                name: 'otherItem',
+                                text: 'otherItem',
+                                specialField: 123
+                            }
+                        ]
+                    }, 'rename'
+                ]
+            }
+        });
+        this.clock.tick(800);
+
+        this.wrapper.getRowNameCellInDetailsView(2).trigger('dxcontextmenu');
+        this.clock.tick(800);
+
+        const $items = this.wrapper.getContextMenuItems();
+        $items.eq(0).trigger('dxclick');
+        this.clock.tick(800);
+
+        let itemData = fileManager.option('contextMenu.items')[0];
+
+        assert.strictEqual(spy.callCount, 1, 'event raised');
+        assert.strictEqual(spy.args[0][0].event.type, 'dxclick', 'event has correct type');
+        assert.strictEqual($(spy.args[0][0].itemElement).get(0), $items.eq(0).get(0), 'itemElement is correct');
+        assert.strictEqual(spy.args[0][0].itemIndex, 0, 'itemIndex is correct');
+        assert.strictEqual(spy.args[0][0].itemData, itemData, 'itemData is correct');
+        assert.strictEqual(spy.args[0][0].component, fileManager, 'component is correct');
+        assert.strictEqual($(spy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
+
+        $items.eq(1).trigger('dxclick');
+        this.clock.tick(800);
+
+        itemData = fileManager.option('contextMenu.items')[1];
+
+        assert.strictEqual(spy.callCount, 2, 'event raised');
+        assert.strictEqual(spy.args[1][0].event.type, 'dxclick', 'event has correct type');
+        assert.strictEqual($(spy.args[1][0].itemElement).get(0), $items.eq(1).get(0), 'itemElement is correct');
+        assert.strictEqual(spy.args[1][0].itemIndex, 2, 'itemIndex is correct');
+        assert.strictEqual(spy.args[1][0].itemData, itemData, 'itemData is correct');
+        assert.strictEqual(spy.args[1][0].component, fileManager, 'component is correct');
+        assert.strictEqual($(spy.args[1][0].element).get(0), this.$element.get(0), 'element is correct');
+    });
+
+    test('Raise the ContextMenuItemClick event on fileActionsButton\'s menu', function(assert) {
+        const spy = sinon.spy();
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            onContextMenuItemClick: spy,
+            permissions: {
+                rename: true
+            },
+            contextMenu: {
+                items: [
+                    {
+                        name: 'someItem',
+                        text: 'someItem',
+                        visibilityMode: 'manual',
+                        visible: true,
+                        items: [
+                            {
+                                name: 'otherItem',
+                                text: 'otherItem',
+                                specialField: 123
+                            }
+                        ]
+                    }, 'rename'
+                ]
+            }
+        });
+        this.clock.tick(800);
+
+        this.wrapper.getRowActionButtonInDetailsView(2).trigger('dxclick');
+        this.clock.tick(800);
+
+        const $items = this.wrapper.getContextMenuItems();
+        $items.eq(0).trigger('dxclick');
+        this.clock.tick(800);
+
+        let itemData = fileManager.option('contextMenu.items')[0];
+
+        assert.strictEqual(spy.callCount, 1, 'event raised');
+        assert.strictEqual(spy.args[0][0].event.type, 'dxclick', 'event has correct type');
+        assert.strictEqual($(spy.args[0][0].itemElement).get(0), $items.eq(0).get(0), 'itemElement is correct');
+        assert.strictEqual(spy.args[0][0].itemIndex, 0, 'itemIndex is correct');
+        assert.strictEqual(spy.args[0][0].itemData, itemData, 'itemData is correct');
+        assert.strictEqual(spy.args[0][0].component, fileManager, 'component is correct');
+        assert.strictEqual($(spy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
+
+        $items.eq(1).trigger('dxclick');
+        this.clock.tick(800);
+
+        itemData = fileManager.option('contextMenu.items')[1];
+
+        assert.strictEqual(spy.callCount, 2, 'event raised');
+        assert.strictEqual(spy.args[1][0].event.type, 'dxclick', 'event has correct type');
+        assert.strictEqual($(spy.args[1][0].itemElement).get(0), $items.eq(1).get(0), 'itemElement is correct');
+        assert.strictEqual(spy.args[1][0].itemIndex, 2, 'itemIndex is correct');
+        assert.strictEqual(spy.args[1][0].itemData, itemData, 'itemData is correct');
+        assert.strictEqual(spy.args[1][0].component, fileManager, 'component is correct');
+        assert.strictEqual($(spy.args[1][0].element).get(0), this.$element.get(0), 'element is correct');
+    });
+
+    test('Default columns rearrangement and modification', function(assert) {
+        const fileManager = this.wrapper.getInstance();
+        const defaultCssClass = 'dx-filemanager-details-item-is-directory';
+        const customCaption = 'This is directory';
+        const customCssClass = 'some-test-css-class';
+        fileManager.option({
+            itemView: {
+                details: {
+                    columns: [ 'size', 'dateModified', 'name',
+                        {
+                            dataField: 'thumbnail',
+                            caption: customCaption,
+                            cssClass: customCssClass
+                        }
+                    ]
+                }
+            }
+        });
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(0).text(), 'File Size', 'first column is File Size');
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(1).text(), 'Date Modified', 'second column is Date Modified');
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(2).text(), 'Name', 'third column is Name');
+
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(3).text(), customCaption, 'fourth column is thumbnais with custom capture');
+        assert.ok(this.wrapper.getColumnHeaderInDetailsView(3).hasClass(customCssClass), 'fourth column has custom css class');
+        assert.ok(this.wrapper.getColumnHeaderInDetailsView(3).hasClass(defaultCssClass), 'fourth column also has default css class');
+
+        assert.strictEqual(this.wrapper.getDetailsCellValue(1, 3), 'Folder 1', 'folder has correct name in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(2, 3), '1.txt', 'file 1 has correct name in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(3, 3), '2.txt', 'file 2 has correct name in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(4, 3), '3.txt', 'file 3 has correct name in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(5, 3), '4.txt', 'file 4 has correct name in correct column');
+    });
+
+    test('Cusom columns rearrangement and modification', function(assert) {
+        const fileManager = this.wrapper.getInstance();
+        let fileProvider = fileManager.option('fileSystemProvider');
+        let index = 0;
+        fileProvider = fileProvider.map(info => info.index = index++);
+        fileManager.option({
+            fileProvider,
+            itemView: {
+                details: {
+                    columns: [
+                        {
+                            dataField: 'owner',
+                            caption: 'Info owner'
+                        },
+                        {
+                            dataField: 'index',
+                            caption: 'Info index'
+                        }
+                    ]
+                }
+            }
+        });
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(0).text(), 'Info owner', 'first column has correct custom capture');
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(1).text(), 'Info index', 'second column has correct custom capture');
+
+        assert.strictEqual(this.wrapper.getDetailsCellValue(1, 1), '\u00A0', 'folder has correct owner in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(2, 1), 'Admin', 'file 1 has correct owner in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(3, 1), 'Admin', 'file 2 has correct owner in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(4, 1), 'Guest', 'file 3 has correct owner in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(5, 1), 'Max', 'file 4 has correct owner in correct column');
+
+        assert.strictEqual(this.wrapper.getDetailsCellValue(1, 2), '0', 'folder has correct index in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(2, 2), '1', 'file 1 has correct index in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(3, 2), '2', 'file 2 has correct index in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(4, 2), '3', 'file 3 has correct index in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(5, 2), '4', 'file 4 has correct index in correct column');
+    });
+
+    test('Customize columns with customizeDetailColumns callback', function(assert) {
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            itemView: {
+                details: {
+                    columns: [ 'size', 'dateModified', 'name']
+                }
+            },
+            customizeDetailColumns: function(columns) {
+                const fileSizeColumn = columns.filter(function(c) { return c.dataField === 'size'; })[0];
+                columns.splice(columns.indexOf(fileSizeColumn), 1);
+
+                const modifiedColumn = columns.filter(function(c) { return c.dataField === 'dateModified'; })[0];
+                modifiedColumn.caption = 'Modified';
+
+                columns.push({
+                    caption: 'Created',
+                    dataField: 'created',
+                    dataType: 'date'
+                });
+
+                return columns;
+            },
+        });
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(0).text(), 'Modified', 'first column is Date Modified');
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(1).text(), 'Name', 'second column is Name');
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(2).text(), 'Created', 'third column is Date Created');
+
+        assert.strictEqual(this.wrapper.getDetailsCellValue(1, 2), 'Folder 1', 'folder has correct name in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(2, 2), '1.txt', 'file 1 has correct name in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(3, 2), '2.txt', 'file 2 has correct name in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(4, 2), '3.txt', 'file 3 has correct name in correct column');
+        assert.strictEqual(this.wrapper.getDetailsCellValue(5, 2), '4.txt', 'file 4 has correct name in correct column');
+    });
 });

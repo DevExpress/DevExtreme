@@ -674,11 +674,13 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         source.watch = source.watch || function(getter, updateFunc) {
             let oldValue = getter(source.data);
 
-            const watcher = function() {
+            const watcher = function(row) {
                 const newValue = getter(source.data);
 
                 if(JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
-                    updateFunc(newValue, oldValue);
+                    if(row) {
+                        updateFunc(newValue, oldValue);
+                    }
                     oldValue = newValue;
                 }
             };
@@ -696,17 +698,19 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         };
 
         source.update = source.update || function(row) {
-            this.data = options.data = row.data;
-            this.rowIndex = options.rowIndex = row.rowIndex;
-            this.dataIndex = options.dataIndex = row.dataIndex;
-            this.isExpanded = options.isExpanded = row.isExpanded;
+            if(row) {
+                this.data = options.data = row.data;
+                this.rowIndex = options.rowIndex = row.rowIndex;
+                this.dataIndex = options.dataIndex = row.dataIndex;
+                this.isExpanded = options.isExpanded = row.isExpanded;
 
-            if(options.row) {
-                options.row = row;
+                if(options.row) {
+                    options.row = row;
+                }
             }
 
             watchers.forEach(function(watcher) {
-                watcher();
+                watcher(row);
             });
         };
 

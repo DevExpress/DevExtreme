@@ -151,8 +151,9 @@ class DiagramToolbar extends DiagramPanel {
                             stylingMode: 'outlined'
                         }).appendTo(container);
                     },
-                    itemTemplate: (data) => {
-                        return `<i class="${data.icon}"${data.hint && ` title="${data.hint}`}"}></i>`;
+                    itemTemplate: (data, index, container) => {
+                        $(container).attr('title', data.hint);
+                        return `<i class="${data.icon}"></i>`;
                     }
                 }
             });
@@ -271,7 +272,9 @@ class DiagramToolbar extends DiagramPanel {
                 },
                 onItemClick: ({ component, itemData }) => {
                     DiagramMenuHelper.onContextMenuItemClick(this, itemData, actionHandler.bind(this));
-                    component.hide();
+                    if(!itemData.items || !itemData.items.length) {
+                        component.hide();
+                    }
                 },
                 onShowing: (e) => {
                     if(this._showingSubMenu) return;

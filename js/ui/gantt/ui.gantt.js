@@ -133,6 +133,7 @@ class Gantt extends Widget {
             showRowLines: this.option('showRowLines'),
             scaleType: this.option('scaleType'),
             editing: this.option('editing'),
+            validation: this.option('validation'),
             stripLines: this.option('stripLines'),
             bars: this._bars,
             mainElement: this.$element(),
@@ -446,7 +447,7 @@ class Gantt extends Widget {
         if(!this._dialogInstance) {
             this._dialogInstance = new GanttDialog(this, this._$dialog);
         }
-        this._dialogInstance.show(e.name, e.parameters, e.callback, this.option('editing'));
+        this._dialogInstance.show(e.name, e.parameters, e.callback, e.afterClosing, this.option('editing'));
     }
     _showPopupMenu(e) {
         this._ganttView.getBarManager().updateContextMenu();
@@ -526,7 +527,13 @@ class Gantt extends Widget {
                 * @type string|function
                 * @default "title"
                 */
-                titleExpr: 'title'
+                titleExpr: 'title',
+                /**
+                * @name dxGanttOptions.tasks.colorExpr
+                * @type string|function
+                * @default "color"
+                */
+                colorExpr: 'color'
             },
             dependencies: {
                 /**
@@ -578,7 +585,13 @@ class Gantt extends Widget {
                 * @type string|function
                 * @default "text"
                 */
-                textExpr: 'text'
+                textExpr: 'text',
+                /**
+                * @name dxGanttOptions.resources.colorExpr
+                * @type string|function
+                * @default "color"
+                */
+                colorExpr: 'color'
             },
             resourceAssignments: {
                 /**
@@ -678,6 +691,20 @@ class Gantt extends Widget {
                 */
                 allowResourceUpdating: true
             },
+            validation: {
+                /**
+                * @name dxGanttOptions.validation.enableDependencyValidation
+                * @type boolean
+                * @default false
+                */
+                enableDependencyValidation: false,
+                /**
+                * @name dxGanttOptions.validation.autoUpdateParentTasks
+                * @type boolean
+                * @default false
+                */
+                autoUpdateParentTasks: false
+            },
             toolbar: null
         });
     }
@@ -730,6 +757,9 @@ class Gantt extends Widget {
                 break;
             case 'editing':
                 this._setGanttViewOption('editing', this.option(args.name));
+                break;
+            case 'validation':
+                this._setGanttViewOption('validation', this.option(args.name));
                 break;
             case 'toolbar':
                 this._updateToolbarContent();

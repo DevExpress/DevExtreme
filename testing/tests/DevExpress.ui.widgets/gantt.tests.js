@@ -32,11 +32,12 @@ const OVERLAY_WRAPPER_SELECTOR = '.dx-overlay-wrapper';
 const CONTEXT_MENU_SELECTOR = '.dx-context-menu';
 const INPUT_TEXT_EDITOR_SELECTOR = '.dx-texteditor-input';
 const TOOLBAR_ITEM_SELECTOR = '.dx-toolbar-item';
+const PARENT_TASK_SELECTOR = '.dx-gantt-parent';
 const TOOLBAR_SEPARATOR_SELECTOR = '.dx-gantt-toolbar-separator';
 
 
 const tasks = [
-    { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31 },
+    { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red' },
     { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 60 },
     { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-21T09:00:00.000Z'), 'progress': 100 },
     { 'id': 4, 'parentId': 2, 'title': 'Secure project sponsorship', 'start': new Date('2019-02-21T10:00:00.000Z'), 'end': new Date('2019-02-22T09:00:00.000Z'), 'progress': 100 },
@@ -164,12 +165,12 @@ QUnit.module('Options', moduleConfig, () => {
     });
     test('expr', function(assert) {
         const tasksDS = [
-            { 'i': 1, 'pid': 0, 't': 'Software Development', 's': new Date('2019-02-21T05:00:00.000Z'), 'e': new Date('2019-07-04T12:00:00.000Z'), 'p': 31 },
+            { 'i': 1, 'pid': 0, 't': 'Software Development', 's': new Date('2019-02-21T05:00:00.000Z'), 'e': new Date('2019-07-04T12:00:00.000Z'), 'p': 31, 'c': 'rgb(255, 0, 0)' },
             { 'i': 2, 'pid': 1, 't': 'Scope', 's': new Date('2019-02-21T05:00:00.000Z'), 'e': new Date('2019-02-26T09:00:00.000Z'), 'p': 60 },
             { 'i': 3, 'pid': 2, 't': 'Determine project scope', 's': new Date('2019-02-21T05:00:00.000Z'), 'e': new Date('2019-02-21T09:00:00.000Z'), 'p': 100 }
         ];
         const dependenciesDS = [{ 'i': 0, 'pid': 1, 'sid': 2, 't': 0 }];
-        const resourcesDS = [{ 'i': 1, 't': 'Management' }];
+        const resourcesDS = [{ 'i': 1, 't': 'Management', 'c': 'rgb(0, 255, 0)' }];
         const resourceAssignmentsDS = [{ 'i': 0, 'tid': 3, 'rid': 1 }];
         const options = {
             tasks: {
@@ -180,6 +181,7 @@ QUnit.module('Options', moduleConfig, () => {
                 endExpr: 'e',
                 progressExpr: 'p',
                 titleExpr: 't',
+                colorExpr: 'c'
             },
             dependencies: {
                 dataSource: dependenciesDS,
@@ -191,7 +193,8 @@ QUnit.module('Options', moduleConfig, () => {
             resources: {
                 dataSource: resourcesDS,
                 keyExpr: 'i',
-                textExpr: 't'
+                textExpr: 't',
+                colorExpr: 'c'
             },
             resourceAssignments: {
                 dataSource: resourceAssignmentsDS,
@@ -207,6 +210,8 @@ QUnit.module('Options', moduleConfig, () => {
         assert.equal(taskWrapperElements.length, tasksDS.length);
         const firstTitle = taskWrapperElements.first().children().children().first().text();
         assert.equal(firstTitle, tasksDS[0].t);
+        const firstElementBackgroundColor = taskWrapperElements.first().children().css('background-color');
+        assert.equal(firstElementBackgroundColor, tasksDS[0].c);
         const firstProgressElement = taskWrapperElements.first().children().children().last();
         assert.ok(firstProgressElement.width() > 0);
         const $firstTreeListRowText = this.$element.find(TREELIST_DATA_ROW_SELECTOR).first().find('.dx-treelist-text-content').first().text();
@@ -218,6 +223,7 @@ QUnit.module('Options', moduleConfig, () => {
         const resourceElements = this.$element.find(TASK_RESOURCES_SELECTOR);
         assert.equal(resourceElements.length, resourceAssignmentsDS.length);
         assert.equal(resourceElements.first().text(), resourcesDS[0].t);
+        assert.equal(resourceElements.first().css('background-color'), resourcesDS[0].c);
     });
     test('columns', function(assert) {
         const options = {
@@ -542,6 +548,12 @@ QUnit.module('Dialogs', moduleConfig, () => {
         const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
         $okButton.trigger('dxclick');
         this.clock.tick();
+
+        const $confirmDialog = $('body').find(POPUP_SELECTOR);
+        const $yesButton = $confirmDialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
+        $yesButton.trigger('dxclick');
+        this.clock.tick();
+
         assert.equal(resources[0].text, secondResourceText, 'first resource removed from ds');
         assert.equal(resources[1].text, thirdResourceText, 'second resource ds');
         assert.equal(resources[2].text, newResourceText, 'new resource ds');
@@ -574,9 +586,65 @@ QUnit.module('Toolbar', moduleConfig, () => {
 
         const $items = this.$element.find(TOOLBAR_ITEM_SELECTOR);
         assert.equal($items.length, items.length, 'All items were rendered');
-        assert.equal($items.find(TOOLBAR_SEPARATOR_SELECTOR).length, 2, 'Both selectors were rendered');
+        assert.equal($items.find(TOOLBAR_SEPARATOR_SELECTOR).length, 2, 'Both separators were rendered');
         assert.equal($items.last().text(), 'Custom item', 'Custom item has custom text');
         assert.equal($items.first().children().children().attr('aria-label'), 'undo', 'First button is undo button');
+    });
+    test('changing', function(assert) {
+        const items = [
+            'undo',
+            'redo'
+        ];
+        const options = {
+            tasks: { dataSource: tasks },
+            toolbar: { items: items }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        let $items = this.$element.find(TOOLBAR_ITEM_SELECTOR);
+        assert.equal($items.length, items.length, 'All items were rendered');
+
+        this.instance.option('toolbar.items', []);
+        $items = this.$element.find(TOOLBAR_ITEM_SELECTOR);
+        assert.equal($items.length, 0, 'Toolbar is empty');
+
+        this.instance.option('toolbar.items', ['zoomIn', 'zoomOut']);
+        $items = this.$element.find(TOOLBAR_ITEM_SELECTOR);
+        assert.equal($items.length, 2, 'All items were rendered again');
+    });
+    test('different item types', function(assert) {
+        const items = [
+            'undo',
+            'redo',
+            'separator',
+            {
+                formatName: 'zoomIn',
+                options: {
+                    text: 'test'
+                }
+            },
+            'separator',
+            {
+                widget: 'dxButton',
+                options: {
+                    text: 'Custom item',
+                    stylingMode: 'text'
+                }
+            }
+        ];
+        const options = {
+            tasks: { dataSource: tasks },
+            toolbar: { items: items }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const $items = this.$element.find(TOOLBAR_ITEM_SELECTOR);
+        assert.equal($items.length, items.length, 'All items were rendered');
+        assert.equal($items.find(TOOLBAR_SEPARATOR_SELECTOR).length, 2, 'Both separators were rendered');
+        assert.equal($items.last().text(), 'Custom item', 'Custom item has custom text');
+        assert.equal($items.eq(3).text(), 'test', 'Custom zoomIn button was rendered with custom text');
     });
 });
 
@@ -623,7 +691,7 @@ QUnit.module('DataSources', moduleConfig, () => {
 
         const removedTaskId = 3;
         const tasksCount = tasks.length;
-        getGanttViewCore(this.instance).commandManager.removeTaskCommand.execute(removedTaskId.toString());
+        getGanttViewCore(this.instance).commandManager.removeTaskCommand.execute(removedTaskId.toString(), false);
         this.clock.tick();
         assert.equal(tasks.length, tasksCount - 1, 'tasks less');
         const removedTask = tasks.filter((t) => t.id === removedTaskId)[0];
@@ -699,5 +767,18 @@ QUnit.module('Strip Lines', moduleConfig, () => {
         this.instance.option('stripLines', []);
         $stripLines = this.$element.find(TIME_MARKER_SELECTOR);
         assert.equal($stripLines.length, 0, 'gantt has no strip lines');
+    });
+});
+QUnit.module('Parent auto calculation', moduleConfig, () => {
+    test('render', function(assert) {
+        const options = {
+            tasks: { dataSource: tasks },
+            validation: { autoUpdateParentTasks: true }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const $stripLines = this.$element.find(PARENT_TASK_SELECTOR);
+        assert.ok($stripLines.length > 0, 'parent tasks has className');
     });
 });

@@ -323,12 +323,17 @@ if(Quill) {
             return {
                 dataSource: this._prepareToolbarItems(),
                 disabled: this.isInteractionDisabled,
-                menuContainer: this._$toolbarContainer
+                menuContainer: this._$toolbarContainer,
+                multiline: this.isMultilineMode()
             };
         }
 
         get isInteractionDisabled() {
             return this._editorInstance.option('readOnly') || this._editorInstance.option('disabled');
+        }
+
+        isMultilineMode() {
+            return this.options.multiline ?? true;
         }
 
         clean() {
@@ -373,11 +378,11 @@ if(Quill) {
         }
 
         _handleObjectItem(item) {
-            if(item.formatName && item.formatValues && this._isAcceptableItem('dxSelectBox')) {
+            if(item.formatName && item.formatValues && this._isAcceptableItem(item.widget, 'dxSelectBox')) {
                 const selectItemConfig = this._prepareSelectItemConfig(item);
 
                 return this._getToolbarItem(selectItemConfig);
-            } else if(item.formatName && this._isAcceptableItem('dxButton')) {
+            } else if(item.formatName && this._isAcceptableItem(item.widget, 'dxButton')) {
                 const defaultButtonItemConfig = this._prepareButtonItemConfig(item.formatName);
                 const buttonItemConfig = extend(true, defaultButtonItemConfig, item);
 
@@ -387,8 +392,8 @@ if(Quill) {
             }
         }
 
-        _isAcceptableItem(item, acceptableWidgetName) {
-            return !item.widget || item.widget === acceptableWidgetName;
+        _isAcceptableItem(widget, acceptableWidgetName) {
+            return !widget || widget === acceptableWidgetName;
         }
 
         _prepareButtonItemConfig(formatName) {
@@ -471,7 +476,9 @@ if(Quill) {
                 }
             };
 
-            return extend(true, { location: 'before', locateInMenu: 'auto' }, this._getDefaultConfig(item.formatName), item, baseItem);
+            const multilineItem = this.isMultilineMode() ? { location: 'before', locateInMenu: 'never' } : {};
+
+            return extend(true, { location: 'before', locateInMenu: 'auto' }, this._getDefaultConfig(item.formatName), item, baseItem, multilineItem);
         }
 
         _getDefaultItemsConfig() {

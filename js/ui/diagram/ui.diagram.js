@@ -515,7 +515,16 @@ class Diagram extends Widget {
         });
     }
     _onPanelPointerUp() {
-        this._diagramInstance.captureFocus();
+        this._captureFocusTimeout = setTimeout(() => {
+            this._diagramInstance.captureFocus();
+            delete this._captureFocusTimeout;
+        }, 100);
+    }
+    _killCaptureFocusTimeout() {
+        if(this._captureFocusTimeout) {
+            clearTimeout(this._captureFocusTimeout);
+            delete this._captureFocusTimeout;
+        }
     }
     _renderContextMenu($mainElement) {
         const $contextMenu = $('<div>')
@@ -623,6 +632,8 @@ class Diagram extends Widget {
         this._diagramInstance.onNodeRemoved = this._raiseNodeRemovedAction.bind(this);
         this._diagramInstance.onToolboxDragStart = this._raiseToolboxDragStart.bind(this);
         this._diagramInstance.onToolboxDragEnd = this._raiseToolboxDragEnd.bind(this);
+        this._diagramInstance.onTextInputStart = this._raiseTextInputStart.bind(this);
+        this._diagramInstance.onTextInputEnd = this._raiseTextInputEnd.bind(this);
         this._diagramInstance.onToggleFullscreen = this._onToggleFullScreen.bind(this);
         this._diagramInstance.onShowContextMenu = this._onShowContextMenu.bind(this);
         this._diagramInstance.onHideContextMenu = this._onHideContextMenu.bind(this);
@@ -685,6 +696,8 @@ class Diagram extends Widget {
         super._clean();
     }
     _dispose() {
+        this._killCaptureFocusTimeout();
+
         super._dispose();
         this._diagramInstance = undefined;
     }
@@ -973,6 +986,7 @@ class Diagram extends Widget {
                         baseType: s.baseType,
                         title: s.title,
                         svgUrl: s.backgroundImageUrl,
+                        svgToolboxUrl: s.backgroundImageToolboxUrl,
                         svgLeft: s.backgroundImageLeft,
                         svgTop: s.backgroundImageTop,
                         svgWidth: s.backgroundImageWidth,
@@ -1309,6 +1323,9 @@ class Diagram extends Widget {
         };
     }
 
+    focus() {
+        this._diagramInstance.captureFocus();
+    }
     export() {
         return this._getDiagramData();
     }
@@ -1653,6 +1670,10 @@ class Diagram extends Widget {
                 * @type String
                 */
                 /**
+                * @name dxDiagramOptions.customShapes.backgroundImageToolboxUrl
+                * @type String
+                */
+                /**
                 * @name dxDiagramOptions.customShapes.backgroundImageLeft
                 * @type Number
                 */
@@ -1784,7 +1805,7 @@ class Diagram extends Widget {
                 /**
                 * @name dxDiagramOptions.toolbox.visibility
                 * @type Enums.DiagramPanelVisibility
-                * @default true
+                * @default 'auto'
                 */
                 visibility: 'auto',
                 /**
@@ -1889,7 +1910,7 @@ class Diagram extends Widget {
                 /**
                 * @name dxDiagramOptions.propertiesPanel.visibility
                 * @type Enums.DiagramPanelVisibility
-                * @default true
+                * @default 'auto'
                 */
                 visibility: 'auto',
                 /**
@@ -1940,6 +1961,35 @@ class Diagram extends Widget {
             onItemDblClick: null,
 
             onSelectionChanged: null
+
+            /**
+             * @name dxDiagramOptions.accessKey
+             * @hidden true
+             */
+            /**
+             * @name dxDiagramOptions.activeStateEnabled
+             * @hidden true
+             */
+            /**
+             * @name dxDiagramOptions.focusStateEnabled
+             * @hidden true
+             */
+            /**
+             * @name dxDiagramOptions.hint
+             * @hidden true
+             */
+            /**
+             * @name dxDiagramOptions.hoverStateEnabled
+             * @hidden true
+             */
+            /**
+             * @name dxDiagramOptions.tabIndex
+             * @hidden true
+             */
+            /**
+             * @name dxDiagramMethods.registerKeyHandler(key, handler)
+             * @hidden true
+             */
         });
     }
 
@@ -1993,6 +2043,22 @@ class Diagram extends Widget {
             if(this._toolboxDragHidden) {
                 this._toolbox.show();
                 delete this._toolboxDragHidden;
+            }
+        }
+    }
+    _raiseTextInputStart() {
+        if(this._propertiesPanel) {
+            if(this.isMobileScreenSize() && this._propertiesPanel.isVisible()) {
+                this._propertiesPanel.hide();
+                this._propertiesPanelTextInputHidden = true;
+            }
+        }
+    }
+    _raiseTextInputEnd() {
+        if(this._propertiesPanel) {
+            if(this._propertiesPanelTextInputHidden) {
+                this._propertiesPanel.show();
+                delete this._propertiesPanelTextInputHidden;
             }
         }
     }

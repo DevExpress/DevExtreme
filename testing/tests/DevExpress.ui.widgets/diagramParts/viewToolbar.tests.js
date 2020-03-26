@@ -56,7 +56,7 @@ QUnit.module('View Toolbar', {
     test('should toggle check state on show grid button click', function(assert) {
         assert.equal(this.instance.option('showGrid'), true);
 
-        const $optionsButton = findViewToolbarItem(this.$element, 'properties');
+        const $optionsButton = findViewToolbarItem(this.$element, 'settings');
         $optionsButton.trigger('dxclick');
         let $showGridButton = findContextMenuItem(this.$element, 'show grid');
         let $showGridButtonCheck = getContextMenuItemCheck($showGridButton);

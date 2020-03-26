@@ -336,7 +336,16 @@ class FileManagerEditingControl extends Widget {
 
     _getErrorText(errorInfo, itemInfo) {
         const itemName = itemInfo ? itemInfo.fileItem.name : null;
-        return FileManagerMessages.get(errorInfo.errorId, itemName);
+        const errorText = FileManagerMessages.get(errorInfo.errorId, itemName);
+
+        const errorArgs = {
+            fileSystemItem: itemInfo ? itemInfo.fileItem : null,
+            errorCode: errorInfo.errorId,
+            errorText
+        };
+        this._raiseOnError(errorArgs);
+
+        return errorArgs.errorText;
     }
 
     _getItemProgressDisplayInfo(itemInfo) {
@@ -417,10 +426,8 @@ class FileManagerEditingControl extends Widget {
         this._actions.onSuccess({ updatedOnlyFiles });
     }
 
-    _raiseOnError(errorId, fileItem) {
-        const fileItemName = fileItem ? fileItem.name : null;
-        const message = FileManagerMessages.get(errorId, fileItemName);
-        this._actions.onError({ message });
+    _raiseOnError(args) {
+        this._actions.onError(args);
     }
 
     _getCurrentDirectory() {

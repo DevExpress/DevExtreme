@@ -1,12 +1,14 @@
+import numberLocalization from '../number';
+
 const ARABIC_COMMA = '\u060C';
 const FORMAT_SEPARATORS = ' .,:;/\\<>()-[]' + ARABIC_COMMA;
-const ARABIC_ZERO_CODE = 1632;
 const AM_PM_PATTERN = '. m.';
 
 const checkDigit = function(char) {
-    const code = char && char.charCodeAt(0);
+    const code = char && numberLocalization.convertDigits(char, false).charCodeAt(0);
+    const zeroCode = numberLocalization.convertDigits('0', false).charCodeAt(0);
 
-    return (char >= '0' && char <= '9') || (code >= ARABIC_ZERO_CODE && code < ARABIC_ZERO_CODE + 10);
+    return zeroCode <= code && code < zeroCode + 10;
 };
 
 const checkPatternContinue = function(text, index, isDigit) {

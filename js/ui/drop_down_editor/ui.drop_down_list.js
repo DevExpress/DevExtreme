@@ -250,6 +250,16 @@ const DropDownList = DropDownEditor.inherit({
         const $popupContent = this._popup.$content();
         eventsEngine.off($popupContent, 'mouseup');
         eventsEngine.on($popupContent, 'mouseup', this._saveFocusOnWidget.bind(this));
+
+        const that = this;
+        this._popup.on({
+            'shown': function() {
+                that.$element().addClass(SKIP_GESTURE_EVENT_CLASS);
+            },
+            'hidden': function() {
+                that.$element().removeClass(SKIP_GESTURE_EVENT_CLASS);
+            }
+        });
     },
 
     _updateCustomBoundaryContainer: function() {
@@ -418,16 +428,9 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _popupConfig: function() {
-        const that = this;
         return extend(this.callBase(), {
             templatesRenderAsynchronously: false,
             width: this.option('width'),
-            onShowing: function() {
-                that.$element().addClass(SKIP_GESTURE_EVENT_CLASS);
-            },
-            onHidden: function() {
-                that.$element().removeClass(SKIP_GESTURE_EVENT_CLASS);
-            },
             height: 'auto',
             autoResizeEnabled: false,
             maxHeight: this._getMaxHeight.bind(this)

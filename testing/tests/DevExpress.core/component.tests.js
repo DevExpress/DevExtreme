@@ -126,6 +126,14 @@ const TestComponent = Component.inherit({
     }
 });
 
+class TestDeprecatedComponent extends Component {
+    constructor(options) {
+        super(options);
+        this.NAME = 'TestDeprecatedComponent';
+        this._logDeprecatedComponentWarning('20.1', 'TestComponent');
+    }
+}
+
 QUnit.module('default', {}, () => {
     QUnit.test('options api - \'option\' method', function(assert) {
         const instance = new TestComponent({ opt2: 'custom' });
@@ -477,11 +485,11 @@ QUnit.module('default', {}, () => {
     QUnit.test('set and get option silently', function(assert) {
         const instance = new TestComponent();
         let warningCount = 0;
-        const _logDeprecatedWarningMock = option => {
+        const _logDeprecatedWarningMock = () => {
             ++warningCount;
         };
 
-        instance._logDeprecatedWarning = _logDeprecatedWarningMock;
+        instance._logDeprecatedOptionWarning = _logDeprecatedWarningMock;
 
         instance._options.silent({
             deprecatedOption: true,
@@ -491,14 +499,14 @@ QUnit.module('default', {}, () => {
         assert.equal(warningCount, 0);
     });
 
-    QUnit.test('reading & writing a deprecated option must invoke the _logDeprecatedWarning method and pass the option name as a parameter', function(assert) {
+    QUnit.test('reading & writing a deprecated option must invoke the _logDeprecatedOptionWarning method and pass the option name as a parameter', function(assert) {
         const instance = new TestComponent();
         const deprecatedOption = 'deprecatedOption';
         const _logDeprecatedWarningMock = option => {
             assert.strictEqual(option, deprecatedOption);
         };
 
-        instance._logDeprecatedWarning = _logDeprecatedWarningMock;
+        instance._logDeprecatedOptionWarning = _logDeprecatedWarningMock;
         assert.expect(3);
         instance.option(deprecatedOption);
         instance.option(deprecatedOption, true);
@@ -540,14 +548,14 @@ QUnit.module('default', {}, () => {
         assert.deepEqual(instance.option('deprecatedOptionAliasWithSugarSyntax'), 'new test');
     });
 
-    QUnit.test('reading all options should not invoke the _logDeprecatedWarning method', function(assert) {
+    QUnit.test('reading all options should not invoke the _logDeprecatedOptionWarning method', function(assert) {
         const instance = new TestComponent();
         let warningCount = 0;
         const _logDeprecatedWarningMock = option => {
             ++warningCount;
         };
 
-        instance._logDeprecatedWarning = _logDeprecatedWarningMock;
+        instance._logDeprecatedOptionWarning = _logDeprecatedWarningMock;
         instance.option();
         assert.strictEqual(warningCount, 0);
     });
@@ -560,7 +568,7 @@ QUnit.module('default', {}, () => {
             ++warningCount;
         };
 
-        instance._logDeprecatedWarning = _logDeprecatedWarningMock;
+        instance._logDeprecatedOptionWarning = _logDeprecatedWarningMock;
 
         assert.strictEqual(warningCount, 0);
         instance.option(deprecatedOption);
@@ -685,15 +693,13 @@ QUnit.module('default', {}, () => {
         );
     });
 
-    const createDeprecatedMessageArray = (version, instanceName, deprecatedOption, aliasName) => {
-        return [
-            'W0001',
-            instanceName,
-            deprecatedOption,
-            version,
-            'Use the \'' + aliasName + '\' option instead'
-        ];
-    };
+    const createDeprecatedMessageArray = (version, instanceName, deprecatedOption, aliasName) => [
+        'W0001',
+        instanceName,
+        deprecatedOption,
+        version,
+        `Use the '${aliasName}' option instead`
+    ];
 
     QUnit.test('T320061 - the third level of nesting option deprecated message on initialize', function(assert) {
         const originalLog = errors.log;
@@ -930,7 +936,7 @@ QUnit.module('default', {}, () => {
 
     QUnit.test('\'hasActionSubscription\' should not raise deprecation warning for event option', function(assert) {
         const instance = new TestComponent();
-        const logDeprecatedWarningSpy = sinon.spy(instance, '_logDeprecatedWarning');
+        const logDeprecatedWarningSpy = sinon.spy(instance, '_logDeprecatedOptionWarning');
 
         try {
             instance.hasActionSubscription('onDeprecatedEvent');
@@ -1049,6 +1055,26 @@ QUnit.module('default', {}, () => {
 
         const value = instance._getOptionValue('funcOption', context);
         assert.deepEqual(value, context, 'context is correct');
+    });
+
+    QUnit.test('log the deprecate warning for a component', function(assert) {
+        const originalLog = errors.log;
+        try {
+            const logStub = sinon.stub();
+            errors.log = logStub;
+
+            new TestDeprecatedComponent();
+
+            assert.equal(logStub.callCount, 1, 'the log method is called once');
+            assert.deepEqual(logStub.getCall(0).args, [
+                'W0000',
+                'TestDeprecatedComponent',
+                '20.1',
+                'Use the \'TestComponent\' widget instead'
+            ], 'arguments of log method');
+        } finally {
+            errors.log = originalLog;
+        }
     });
 });
 
@@ -1496,7 +1522,7 @@ QUnit.module('action API', {}, () => {
             ++warningCount;
         };
 
-        instance._logDeprecatedWarning = _logDeprecatedWarningMock;
+        instance._logDeprecatedOptionWarning = _logDeprecatedWarningMock;
         instance._createActionByOption(deprecatedOption, {});
         assert.strictEqual(warningCount, 0);
         instance.option(deprecatedOption);

@@ -2,6 +2,7 @@ import $ from 'jquery';
 import config from 'core/config';
 import typeUtils from 'core/utils/type';
 import windowUtils from 'core/utils/window';
+import errors from 'core/errors';
 
 import 'common.css!';
 import 'ui/slide_out_view';
@@ -120,6 +121,26 @@ QUnit.module('rendering', () => {
         });
 
         assert.equal($element.find('.' + SLIDEOUTVIEW_SHIELD_CLASS).length, 1, 'slideoutview has shield');
+    });
+
+    QUnit.test('show deprecated warning by the initialization', function(assert) {
+        const originalLog = errors.log;
+        try {
+            const stub = sinon.stub();
+            errors.log = stub;
+
+            $('#slideOutView').dxSlideOutView();
+
+            assert.equal(stub.callCount, 1, 'the log method is called once');
+            assert.deepEqual(stub.getCall(0).args, [
+                'W0000',
+                'dxSlideOutView',
+                '20.1',
+                'Use the \'dxDrawer\' widget instead'
+            ], 'args of the log method');
+        } finally {
+            errors.log = originalLog;
+        }
     });
 });
 
