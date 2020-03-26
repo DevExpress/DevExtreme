@@ -1997,7 +1997,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 columnIndex: column.index,
                 setValue: !isReadOnly && column.allowEditing && function(value) {
                     if(repaintChangesOnly) {
-                        cellOptions.data = Object.assign({}, cellOptions.row.data);
+                        cellOptions.data = extend({}, cellOptions.row.data);
                     }
 
                     that.updateFieldValue(cellOptions, value);
