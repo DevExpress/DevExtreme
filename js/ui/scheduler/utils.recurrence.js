@@ -730,14 +730,14 @@ var getDatesByCount = function(dateRules, startDate, recurrenceStartDate, rule) 
         const dates = getDatesByRules(dateRules, date, rule);
 
         const checkedDates = [];
-        for(var i = 0; i < dates.length; i++) {
-            const checkedDate = dates[i];
+        dates.forEach(checkedDate => {
             if(!dateUtils.isWrongDate(checkedDate)) {
                 if(checkedDate.getTime() >= recurrenceStartDate.getTime()) {
                     checkedDates.push(checkedDate);
                 }
             }
-        }
+        });
+
         const length = checkedDates.length;
 
         counter = counter + length;
@@ -747,9 +747,7 @@ var getDatesByCount = function(dateRules, startDate, recurrenceStartDate, rule) 
             checkedDates.splice(length - delCount, delCount);
         }
 
-        for(i = 0; i < checkedDates.length; i++) {
-            result.push(checkedDates[i]);
-        }
+        checkedDates.forEach(checkedDate => result.push(checkedDate));
 
         let interval = rule.interval;
 
