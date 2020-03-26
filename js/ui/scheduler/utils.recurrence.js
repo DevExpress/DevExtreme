@@ -730,9 +730,8 @@ var getDatesByCount = function(dateRules, startDate, recurrenceStartDate, rule) 
         const dates = getDatesByRules(dateRules, date, rule);
 
         const checkedDates = [];
-        let checkedDate;
         for(var i = 0; i < dates.length; i++) {
-            checkedDate = dates[i];
+            const checkedDate = dates[i];
             if(!dateUtils.isWrongDate(checkedDate)) {
                 if(checkedDate.getTime() >= recurrenceStartDate.getTime()) {
                     checkedDates.push(checkedDate);
