@@ -175,7 +175,7 @@ class TaskEditDialogInfo extends DialogInfoBase {
 }
 
 class ResourcesEditDialogInfo extends DialogInfoBase {
-    getTitle() { return messageLocalization.format('dxGantt-dialogResourcesTitle'); }
+    getTitle() { return messageLocalization.format('dxGantt-dialogResourceManagerTitle'); }
     _getFormItems() {
         return [{
             label: { visible: false },
