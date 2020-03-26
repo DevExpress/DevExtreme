@@ -226,7 +226,7 @@ describe('Widget', () => {
     });
 
     describe('aria', () => {
-       it('should pass custom `aria` attributes', () => {
+        it('should pass custom `aria` attributes', () => {
             const widget = render({ aria: {
                 label: 'custom-aria-label',
                 role: 'button',

@@ -21,11 +21,12 @@ import { extend } from '../core/utils/extend';
 import { focusable } from '../ui/widget/selectors';
 import { isFakeClickEvent } from '../events/utils';
 
-const getStyles = ({ width, height }) => {
+const getStyles = ({ width, height, style }) => {
     const computedWidth = typeof width === 'function' ? width() : width;
     const computedHeight = typeof height === 'function' ? height() : height;
 
     return {
+        ...style,
         height: computedHeight ?? void 0,
         width: computedWidth ?? void 0,
     };
@@ -87,6 +88,7 @@ export const viewFunction = (viewModel: Widget) => {
             title={viewModel.props.hint}
             style={viewModel.styles}
             hidden={!viewModel.props.visible}
+            {...viewModel.props.customAttributes}
         >
             {viewModel.props.children}
         </div>
@@ -104,6 +106,7 @@ export class WidgetInput {
     @Slot() children?: any;
     @OneWay() className?: string | undefined = '';
     @OneWay() clickArgs?: any = {};
+    @OneWay() customAttributes?: { [name: string]: any } = {};
     @OneWay() disabled?: boolean = false;
     @OneWay() elementAttr?: { [name: string]: any };
     @OneWay() focusStateEnabled?: boolean = false;
@@ -120,6 +123,7 @@ export class WidgetInput {
     @OneWay() onKeyPress?: (e: any, options: any) => any;
     @OneWay() onVisibilityChange?: (args: boolean) => undefined;
     @OneWay() rtlEnabled?: boolean = config().rtlEnabled;
+    @OneWay() style?: { [name: string]: any } = {};
     @OneWay() tabIndex?: number = 0;
     @OneWay() visible?: boolean = true;
     @OneWay() width?: string | number | null = null;
@@ -317,9 +321,9 @@ export default class Widget extends JSXComponent<WidgetInput> {
     }
 
     get styles() {
-        const { width, height } = this.props;
+        const { width, height, style } = this.props;
 
-        return getStyles({ width, height });
+        return getStyles({ width, height, style });
     }
 
     get cssClasses() {

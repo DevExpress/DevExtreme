@@ -25,7 +25,7 @@ const getInkRippleConfig = ({ text, icon, type }: ButtonInput) => {
 
 const getCssClasses = (model: ButtonInput) => {
     const { text, icon, stylingMode, type, iconPosition } = model;
-    const classNames = defaultClassNames.concat(model.classNames || []);
+    const classNames = defaultClassNames.concat(model.className || '');
     const isValidStylingMode = stylingMode && stylingModes.indexOf(stylingMode) !== -1;
 
     classNames.push(`dx-button-mode-${isValidStylingMode ? stylingMode : 'contained'}`);
@@ -72,11 +72,13 @@ export const viewFunction = (viewModel: Button) => {
         onContentReady={viewModel.props.onContentReady}
         onClick={viewModel.onWidgetClick}
         onInactive={viewModel.onInactive}
+        style={viewModel.props.style}
         onKeyPress={viewModel.onWidgetKeyPress}
         rtlEnabled={viewModel.props.rtlEnabled}
         tabIndex={viewModel.props.tabIndex}
         visible={viewModel.props.visible}
         width={viewModel.props.width}
+        customAttributes={viewModel.customAttributes}
     >
         <div className="dx-button-content" ref={viewModel.contentRef as any}>
             {template &&
@@ -101,7 +103,7 @@ export const viewFunction = (viewModel: Button) => {
 @ComponentBindings()
 export class ButtonInput extends WidgetInput {
     @OneWay() activeStateEnabled?: boolean = true;
-    @OneWay() classNames?: string[];
+    @OneWay() className?: string;
     @OneWay() hoverStateEnabled?: boolean = true;
     @OneWay() icon?: string = '';
     @OneWay() iconPosition?: string = 'left';
@@ -195,6 +197,54 @@ export default class Button extends JSXComponent<ButtonInput> {
 
     get cssClasses():string {
         return getCssClasses(this.props);
+    }
+
+    get customAttributes() {
+        const {
+            _feedbackHideTimeout,
+            _feedbackShowTimeout,
+            accessKey,
+            activeStateEnabled,
+            activeStateUnit,
+            aria,
+            className,
+            clickArgs,
+            customAttributes,
+            disabled,
+            elementAttr,
+            focusStateEnabled,
+            height,
+            hint,
+            hoverStateEnabled,
+            name,
+            onActive,
+            onClick,
+            onContentReady,
+            onDimensionChanged,
+            onInactive,
+            onKeyboardHandled,
+            onKeyPress,
+            onVisibilityChange,
+            rtlEnabled,
+            tabIndex,
+            visible,
+            width,
+            style,
+            icon,
+            iconPosition,
+            onSubmit,
+            pressed,
+            stylingMode,
+            text,
+            type,
+            useInkRipple,
+            useSubmitBehavior,
+            validationGroup,
+            template,
+            ...restProps
+        } = this.props;
+
+        return restProps;
     }
 
     get elementAttr() {

@@ -289,8 +289,8 @@ describe('Button', () => {
 
             it('should get original icon prop', () => {
                 const button = render({
-                    render: ({ icon }) => <div>{icon}</div>,
                     icon: 'testicon',
+                    render: ({ icon }) => <div>{icon}</div>,
                     text: 'My button',
                 });
                 const buttonContentChildren = button.find('.dx-button-content').children();
@@ -556,6 +556,77 @@ describe('Button', () => {
             it('should be false if theme is not material', () => {
                 (themes.current as any).mockImplementation(() => 'generic');
                 expect(getDefaultProps().useInkRipple).toBe(false);
+            });
+        });
+    });
+
+    describe('Custom attributes', () => {
+        it('should add custom `className` property', () => {
+            const tree = render({ className: 'custom-class' });
+
+            expect(tree.find(Widget).is('.custom-class.dx-button')).toBe(true);
+        });
+
+        it('should add custom `style` property', () => {
+            const tree = render({ style: { fontSize: '20px' }, width: 20, height: 10 });
+            const nestedDiv = tree.find('.dx-button').at(1);
+
+            expect(nestedDiv.prop('style')).toMatchObject({
+                fontSize: '20px',
+                height: 10,
+                width: 20,
+            });
+        });
+
+        it('should add custom property', () => {
+            const tree = render({ data: 'custom-data' });
+            const nestedDiv = tree.find('.dx-button').at(1);
+
+            expect(nestedDiv.prop('data')).toBe('custom-data');
+        });
+
+        it('should not spread excess properties', () => {
+            const tree = render({
+                _feedbackHideTimeout: 400,
+                _feedbackShowTimeout: 30,
+                accessKey: null,
+                activeStateEnabled: false,
+                activeStateUnit: '123',
+                aria: {},
+                className: '',
+                clickArgs: {},
+                customAttributes: {},
+                disabled: false,
+                elementAttr: {},
+                focusStateEnabled: true,
+                height: null,
+                hint: '123',
+                hoverStateEnabled: false,
+                name: '',
+                onActive: () => void 0,
+                onClick: () => void 0,
+                onContentReady: () => void 0,
+                onDimensionChanged: () => void 0,
+                onInactive: () => void 0,
+                onKeyPress: () => void 0,
+                onKeyboardHandled: () => void 0,
+                onVisibilityChange: () => void 0,
+                render: undefined,
+                rtlEnabled: false,
+                style: {},
+                tabIndex: 0,
+                visible: true,
+                width: null,
+            });
+            const nestedDiv = tree.find('.dx-button').at(1);
+
+            expect(nestedDiv.props()).toEqual({
+                className: expect.any(String),
+                hidden: expect.any(Boolean),
+                role: expect.any(String),
+                style: expect.any(Object),
+                tabIndex: expect.any(Number),
+                title: expect.any(String),
             });
         });
     });
