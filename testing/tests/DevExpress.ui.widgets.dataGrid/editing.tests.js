@@ -11987,7 +11987,7 @@ QUnit.test('Row - An untouched cell should not be validated (T872003)', function
         assert.notOk($secondCell.hasClass('dx-validator'), 'cell should not have validator');
     });
 
-    QUnit.test(`${mode}(allowUpdating: true, column.allowEditing: true) - Cell with validation rules should not have a validator(T871515)`, function(assert) {
+    QUnit.test(`${mode}(allowUpdating: true, column.allowEditing: true) - Cell with validation rules should have a validator(T871515)`, function(assert) {
         // arrange
         const rowsView = this.rowsView;
         const testElement = $('#container');
