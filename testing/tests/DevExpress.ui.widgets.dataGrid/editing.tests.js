@@ -8110,6 +8110,130 @@ QUnit.test('The current editable row should close when adding a new row in \'row
     assert.notOk($(rowsView.getRowElement(3)).hasClass('dx-edit-row'), 'row isn\'t edited');
 });
 
+['row', 'form', 'popup'].forEach(editingMode => {
+    [false, true].forEach(repaintChangesOnly => {
+        [false, true].forEach(doubleChange => {
+            QUnit.test(`Editor value and lookup items should be updated after cascading update (editingMode=${editingMode}, repaintChangesOnly=${repaintChangesOnly}, doubleChange=${doubleChange})`, function(assert) {
+                // arrange
+                const rowsView = this.rowsView;
+                const $testElement = $('#container');
+                let dataSourceCallCount = 0;
+                let lookup2InitializedSpy = sinon.spy();
+
+                this.options.repaintChangesOnly = repaintChangesOnly;
+                this.options.editing = {
+                    mode: 'form',
+                    allowUpdating: true
+                };
+                this.options.dataSource = [{
+                    id: 1, lookup1: 1, lookup2: 11
+                }];
+                this.options.columns = ['id', {
+                    dataField: 'lookup1',
+                    lookup: {
+                        valueExpr: 'id',
+                        displayExpr: 'name',
+                        dataSource: [{
+                            id: 1, name: 'value1'
+                        }, {
+                            id: 2, name: 'value2'
+                        }, {
+                            id: 3, name: 'value3'
+                        }]
+                    },
+                    setCellValue: function(data, value) {
+                        data.lookup1 = value;
+                        data.lookup2 = null;
+                    }
+                }, {
+                    dataField: 'lookup2',
+                    editorOptions: {
+                        onInitialized: lookup2InitializedSpy
+                    },
+                    lookup: {
+                        valueExpr: 'id',
+                        displayExpr: 'name',
+                        dataSource: function(options) {
+                            dataSourceCallCount++;
+                            const store = [];
+                            for(let group = 1; group <= 3; group++) {
+                                for(let i = 1; i <= 2; i++) {
+                                    const id = group * 10 + i;
+                                    store.push({
+                                        id: id,
+                                        group: group,
+                                        name: `value${id}`
+                                    });
+                                }
+                            }
+                            return {
+                                store: store,
+                                filter: options.data ? ['group', '=', options.data.lookup1] : undefined
+                            };
+                        }
+                    }
+                }];
+                this.dataController.init();
+                this.columnsController.init();
+                rowsView.render($testElement);
+
+                this.editRow(0);
+
+                const getEditor = (dataField) => {
+                    const $editor = $(this.getCellElement(0, dataField)).find('.dx-texteditor');
+                    return dataField === 'id' ? $editor.dxNumberBox('instance') : $editor.dxSelectBox('instance');
+                };
+
+                const checkEditorRecreating = (dataField, isRecreated) => {
+                    const editorName = `${dataField}Editor`;
+                    const editor = getEditor(dataField);
+                    assert.strictEqual(editor !== this[editorName], isRecreated, `${dataField} is ${isRecreated ? '' : 'not' } recreated`);
+                    this[editorName] = editor;
+                };
+
+                checkEditorRecreating('id', true);
+                checkEditorRecreating('lookup1', true);
+                checkEditorRecreating('lookup2', true);
+
+                // act
+                if(doubleChange) {
+                    getEditor('lookup1').option('value', 3);
+                    this.clock.tick();
+                }
+                getEditor('lookup1').option('value', 2);
+                this.clock.tick();
+
+                // assert
+                checkEditorRecreating('id', !repaintChangesOnly);
+                checkEditorRecreating('lookup1', true);
+                checkEditorRecreating('lookup2', true);
+                assert.equal(getEditor('lookup2').option('value'), null, 'lookup2 value is reseted');
+                assert.ok(lookup2InitializedSpy.called, 'lookup2 onInitialized is called');
+
+                // act
+                dataSourceCallCount = 0;
+                getEditor('lookup2').option('opened', true);
+                getEditor('lookup2').option('value', 21);
+                this.clock.tick();
+
+                // assert
+                assert.equal(getEditor('lookup2').option('text'), 'value21', 'lookup2 text is updated');
+                assert.deepEqual(getEditor('lookup2').option('items').map(item => item.name), ['value21', 'value22'], 'lookup2 items are updated');
+                assert.equal(dataSourceCallCount, repaintChangesOnly ? 1 : 0, 'dataSource is called once if repaintChangesOnly');
+
+                // act
+                getEditor('lookup1').option('value', 3);
+                this.clock.tick();
+
+                // assert
+                checkEditorRecreating('id', !repaintChangesOnly);
+                checkEditorRecreating('lookup1', true);
+                checkEditorRecreating('lookup2', true);
+                assert.equal(getEditor('lookup2').option('value'), null, 'lookup2 value is reseted');
+            });
+        });
+    });
+});
 
 QUnit.module('Refresh modes', {
     beforeEach: function() {
@@ -15947,8 +16071,6 @@ QUnit.test('The data passed to the editCellTemplate callback should be updated a
 QUnit.test('In popup editing mode need to repaint only changed fields with repaintChangesOnly (T753269)', function(assert) {
     // arrange
     const that = this;
-    let $popupContent;
-    let selectBox;
     const orders = [
         { Id: 1, Name: 'Paul Henriot', City: 'Reims', Country: 'France' },
         { Id: 2, Name: 'Karin Josephs', City: 'Münster', Country: 'Germany' }
@@ -16010,8 +16132,8 @@ QUnit.test('In popup editing mode need to repaint only changed fields with repai
     that.preparePopupHelpers();
 
     // act
-    $popupContent = $(that.editPopupInstance.content());
-    selectBox = $popupContent.find('.dx-selectbox').dxSelectBox('instance');
+    const $popupContent = $(that.editPopupInstance.content());
+    const selectBox = $popupContent.find('.dx-selectbox').dxSelectBox('instance');
     selectBox.option('value', 'Münster');
 
     // assert
