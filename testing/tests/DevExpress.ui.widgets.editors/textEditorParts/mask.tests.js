@@ -427,17 +427,19 @@ QUnit.module('typing', moduleConfig, () => {
         }
 
         const clock = sinon.useFakeTimers();
-        const testText = '555555';
-        const $textEditor = $('#texteditor').dxTextEditor({
-            mask: '+1 (X00) 000',
-            maskRules: { X: /[02-9]/ },
-            mode: 'tel',
-            useMaskedValue: true
-        });
-        const $input = $textEditor.find('.dx-texteditor-input');
-        const inputMatchesStub = sinon.stub($input.get(0), 'matches', () => true);
+        let inputMatchesStub;
 
         try {
+            const testText = '555555';
+            const $textEditor = $('#texteditor').dxTextEditor({
+                mask: '+1 (X00) 000',
+                maskRules: { X: /[02-9]/ },
+                mode: 'tel',
+                useMaskedValue: true
+            });
+            const $input = $textEditor.find('.dx-texteditor-input');
+            inputMatchesStub = sinon.stub($input.get(0), 'matches', () => true);
+
             const textEditor = $textEditor.dxTextEditor('instance');
             const keyboard = keyboardMock($input, true);
 
@@ -454,7 +456,7 @@ QUnit.module('typing', moduleConfig, () => {
             assert.equal(textEditor.option('isValid'), true, 'isValid is true');
         } finally {
             clock.restore();
-            inputMatchesStub.restore();
+            inputMatchesStub && inputMatchesStub.restore();
         }
     });
 
@@ -465,25 +467,28 @@ QUnit.module('typing', moduleConfig, () => {
         }
 
         const clock = sinon.useFakeTimers();
-        const testText = '555555';
-        const $textEditor = $('#texteditor').dxTextEditor({
-            mask: '+1 (X00) 000',
-            maskRules: { X: /[02-9]/ },
-            mode: 'tel',
-            useMaskedValue: true
-        });
-        const $input = $textEditor.find('.dx-texteditor-input');
-        const textEditor = $textEditor.dxTextEditor('instance');
 
-        $input.val(testText);
-        $input.addClass('edge-autofilled');
-        $input.trigger($.Event('input', { originalEvent: $.Event('input') }));
+        try {
+            const testText = '555555';
+            const $textEditor = $('#texteditor').dxTextEditor({
+                mask: '+1 (X00) 000',
+                maskRules: { X: /[02-9]/ },
+                mode: 'tel',
+                useMaskedValue: true
+            });
+            const $input = $textEditor.find('.dx-texteditor-input');
+            const textEditor = $textEditor.dxTextEditor('instance');
 
-        clock.tick();
-        assert.strictEqual($input.val(), '+1 (555) 555', 'the mask is applied');
-        assert.equal(textEditor.option('isValid'), true, 'isValid is true');
+            $input.val(testText);
+            $input.addClass('edge-autofilled');
+            $input.trigger($.Event('input', { originalEvent: $.Event('input') }));
 
-        clock.restore();
+            clock.tick();
+            assert.strictEqual($input.val(), '+1 (555) 555', 'the mask is applied');
+            assert.equal(textEditor.option('isValid'), true, 'isValid is true');
+        } finally {
+            clock.restore();
+        }
     });
 });
 
