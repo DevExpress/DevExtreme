@@ -12929,7 +12929,7 @@ QUnit.test('Row - An untouched cell should not be validated (T872003)', function
 
         rowsView.render(testElement);
         this.applyOptions(gridConfig);
-        let $secondCell = $(this.getCellElement(0, 1));
+        const $secondCell = $(this.getCellElement(0, 1));
 
         // assert
         assert.ok($secondCell.hasClass('dx-validator'), 'cell should have validator');
