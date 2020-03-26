@@ -529,7 +529,7 @@ const SchedulerWorkSpace = Widget.inherit({
     _init: function() {
         this._headerSemaphore = new ScrollSemaphore();
         this._sideBarSemaphore = new ScrollSemaphore();
-        this._mainSemaphore = new ScrollSemaphore();
+        this._dataTableSemaphore = new ScrollSemaphore();
 
         this.callBase();
 
@@ -732,7 +732,7 @@ const SchedulerWorkSpace = Widget.inherit({
         config.direction = 'both';
 
         config.onScroll = e => {
-            this._mainSemaphore.take();
+            this._dataTableSemaphore.take();
 
             this._sideBarSemaphore.isFree() && this._sidebarScrollable && this._sidebarScrollable.scrollTo({
                 top: e.scrollOffset.top
@@ -742,7 +742,7 @@ const SchedulerWorkSpace = Widget.inherit({
                 left: e.scrollOffset.left
             });
 
-            this._mainSemaphore.release();
+            this._dataTableSemaphore.release();
         };
 
         config.onEnd = () => {
@@ -808,7 +808,7 @@ const SchedulerWorkSpace = Widget.inherit({
             pushBackValue: 0,
             onScroll: e => {
                 this._headerSemaphore.take();
-                this._mainSemaphore.isFree() && this._dateTableScrollable.scrollTo({ left: e.scrollOffset.left });
+                this._dataTableSemaphore.isFree() && this._dateTableScrollable.scrollTo({ left: e.scrollOffset.left });
                 this._headerSemaphore.release();
             }
         };
@@ -831,7 +831,7 @@ const SchedulerWorkSpace = Widget.inherit({
             pushBackValue: 0,
             onScroll: e => {
                 this._sideBarSemaphore.take();
-                this._mainSemaphore.isFree() && this._dateTableScrollable.scrollTo({ top: e.scrollOffset.top });
+                this._dataTableSemaphore.isFree() && this._dateTableScrollable.scrollTo({ top: e.scrollOffset.top });
                 this._sideBarSemaphore.release();
             }
         });
