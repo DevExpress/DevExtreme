@@ -502,18 +502,16 @@ QUnit.test('get date by month recurrence with start date at 31', function(assert
     assert.deepEqual(dates, [new Date(2015, 2, 31), new Date(2015, 4, 31)], 'dates are right');
 });
 
-QUnit.test('get date by month recurrence with BYMONTHDAY at 31', function(assert) {
-    const dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=MONTHLY;BYMONTHDAY=31', start: new Date(2015, 1, 15), min: new Date(2015, 1, 15), max: new Date(2015, 5, 5) });
+QUnit.test('get date by month recurrence with BYMONTHDAY=31, FREQ=MONTHLY', function(assert) {
+    const dates = recurrenceUtils.getDatesByRecurrence({
+        rule: 'FREQ=MONTHLY;BYMONTHDAY=31',
+        start: new Date(2015, 1, 15),
+        min: new Date(2015, 1, 15),
+        max: new Date(2015, 5, 5)
+    });
 
     assert.deepEqual(dates, [new Date(2015, 2, 31), new Date(2015, 4, 31)], 'dates are right');
 });
-
-// This test seems wrong
-// QUnit.test('get date by month recurrence with BYMONTHDAY at 31', function(assert) {
-//     const dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=DAILY;BYMONTHDAY=31', start: new Date(2015, 1, 15), min: new Date(2015, 1, 15), max: new Date(2015, 5, 5) });
-
-//     assert.deepEqual(dates, [new Date(2015, 2, 31), new Date(2015, 4, 31)], 'dates are right');
-// });
 
 QUnit.test('get date by month recurrence with BYMONTHDAY at 31 and skip months with the last day < 31', function(assert) {
     const start = new Date(2020, 2, 31, 9, 30);
