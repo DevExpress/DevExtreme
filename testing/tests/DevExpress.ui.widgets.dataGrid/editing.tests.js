@@ -31,6 +31,7 @@ import 'generic_light.css!';
 import 'ui/data_grid/ui.data_grid';
 import 'ui/autocomplete';
 import 'ui/color_box';
+import 'ui/drop_down_box';
 
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -1720,6 +1721,54 @@ QUnit.test('Not close Editing Cell in batch mode on down in editing cell and up 
 
     // assert
     assert.equal(rowsViewWrapper.getEditorInput(0, 2).length, 1, 'editor is not closed');
+});
+
+// T869676
+QUnit.test('Not close Editing Cell in batch mode on click add button inside editor popup', function(assert) {
+    // arrange
+    const that = this;
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: 'batch'
+    };
+
+    that.columns[0].editCellTemplate = function(e) {
+        return $('<div>').dxDropDownBox({
+            contentTemplate: function(e) {
+                return $('<div>').dxDataGrid({
+                    dataSource: [],
+                    columns: ['name'],
+                    editing: {
+                        mode: 'batch',
+                        allowAdding: true
+                    }
+                });
+            }
+        });
+    };
+
+    rowsView.render(testElement);
+    testElement.find('tbody > tr').first().find('td').eq(0).trigger('dxclick'); // Edit
+
+    const $dropDownIcon = testElement.find('.dx-dropdowneditor-icon');
+    assert.equal($dropDownIcon.length, 1, 'drop down icon count');
+    $dropDownIcon.trigger('dxclick');
+
+    const $addButton = $('.dx-popup-wrapper .dx-datagrid-addrow-button');
+    assert.equal($addButton.length, 1, 'add button is rendered');
+
+    // act
+    this.clock.tick();
+    $addButton.trigger('dxpointerdown');
+    $addButton.trigger('dxclick');
+    this.clock.tick();
+
+    // assert
+    assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1, 'editor count');
+    assert.equal($('.dx-popup-wrapper').length, 1, 'editor popup count');
 });
 
 // T318313
