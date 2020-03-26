@@ -3375,14 +3375,14 @@ QUnit.module('default options', {
     });
 
 
-    QUnit.test('changing dropDownOptions.width in default options should change popover width', function(assert) {
+    QUnit.test('changing popupWidth in default options should change popover width', function(assert) {
         const defaultWidth = 100;
 
         Lookup.defaultOptions({
             options: {
                 usePopover: true,
                 fullScreen: false,
-                'dropDownOptions.width': defaultWidth
+                popupWidth: defaultWidth
             }
         });
         const $lookup = $('<div>').prependTo('body');

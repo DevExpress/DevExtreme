@@ -275,7 +275,6 @@ const Lookup = DropDownList.inherit({
                 },
                 options: {
                     usePopover: true,
-                    popupHeight: 'auto',
 
                     dropDownOptions: {
                         height: 'auto'
@@ -285,8 +284,6 @@ const Lookup = DropDownList.inherit({
             {
                 device: { platform: 'ios', phone: true },
                 options: {
-                    fullScreen: true,
-
                     dropDownOptions: {
                         fullScreen: true
                     }
@@ -295,10 +292,6 @@ const Lookup = DropDownList.inherit({
             {
                 device: { platform: 'ios', tablet: true },
                 options: {
-                    popupWidth: function() { return Math.min($(window).width(), $(window).height()) * 0.4; },
-
-                    popupHeight: 'auto',
-
                     dropDownOptions: {
                         width: function() { return Math.min($(window).width(), $(window).height()) * 0.4; },
                         height: 'auto'
@@ -324,18 +317,9 @@ const Lookup = DropDownList.inherit({
 
                     usePopover: false,
 
-                    closeOnOutsideClick: true,
-
-                    popupWidth: (function() { return this._getPopupWidth(); }).bind(this),
-                    popupHeight: (function() { return this._getPopupHeight(MATERIAL_LOOKUP_LIST_ITEMS_COUNT); }).bind(this),
-
                     searchEnabled: false,
 
                     showCancelButton: false,
-
-                    showPopupTitle: false,
-
-                    shading: false,
 
                     itemCenteringEnabled: true,
 

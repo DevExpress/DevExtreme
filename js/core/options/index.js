@@ -101,13 +101,13 @@ export class Options {
     }
 
     _normalizeName(name, silent) {
-        if(this._deprecatedNames.length && name && !silent) {
+        if(this._deprecatedNames.length && name) {
             for(let i = 0; i < this._deprecatedNames.length; i++) {
                 if(this._deprecatedNames[i] === name) {
                     const deprecate = this._deprecated[name];
 
                     if(deprecate) {
-                        this._notifyDeprecated(name);
+                        !silent && this._notifyDeprecated(name);
 
                         return deprecate.alias || name;
                     }
