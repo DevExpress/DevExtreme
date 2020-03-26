@@ -445,11 +445,9 @@ QUnit.module('typing', moduleConfig, () => {
 
             $input.val(testText);
 
-            if(devices.real().android) {
-                keyboard.beforeInput(testText, 'insertText');
-            }
-
-            $input.trigger($.Event('input', { originalEvent: $.Event('input') }));
+            keyboard
+                .beforeInput(testText)
+                .input();
 
             clock.tick();
             assert.strictEqual($input.val(), '+1 (555) 555', 'the mask is applied');
@@ -478,10 +476,11 @@ QUnit.module('typing', moduleConfig, () => {
             });
             const $input = $textEditor.find('.dx-texteditor-input');
             const textEditor = $textEditor.dxTextEditor('instance');
+            const keyboard = keyboardMock($input, true);
 
             $input.val(testText);
             $input.addClass('edge-autofilled');
-            $input.trigger($.Event('input', { originalEvent: $.Event('input') }));
+            keyboard.input();
 
             clock.tick();
             assert.strictEqual($input.val(), '+1 (555) 555', 'the mask is applied');
