@@ -1256,12 +1256,12 @@ QUnit.module('optionChanged', moduleSetup, () => {
                 assert.strictEqual(window.getComputedStyle(this._getItemContentElement(itemElements[index])).visibility, 'visible', `contentElement[${index}] is visible`);
             });
 
-            itemElements.forEach((item, index) => {
+            for(let index = 0, length = itemElements.length; index < length; index++) {
                 if(selectedIndexes.indexOf(index) === -1) {
                     assert.strictEqual(this.instance.option('selectedItems').indexOf(items[index]), -1, `item ${index} is not selected`);
-                    assert.strictEqual(this._hasSelectedClass(item), false, `item ${index} hasn't selected class`);
-                    assert.strictEqual(this._hasOpenedClass(item), false, `item ${index} hasn't opened class`);
-                    assert.strictEqual(this._hasClosedClass(item), true, `item ${index} has closed class`);
+                    assert.strictEqual(this._hasSelectedClass(itemElements[index]), false, `item ${index} hasn't selected class`);
+                    assert.strictEqual(this._hasOpenedClass(itemElements[index]), false, `item ${index} hasn't opened class`);
+                    assert.strictEqual(this._hasClosedClass(itemElements[index]), true, `item ${index} has closed class`);
 
                     if(this._getItemContentElement(itemElements[index])) {
                         assert.strictEqual(window.getComputedStyle(this._getItemContentElement(itemElements[index])).visibility, 'hidden', `contentElement[${index}] is hidden`);
@@ -1269,7 +1269,7 @@ QUnit.module('optionChanged', moduleSetup, () => {
                         assert.strictEqual(this._getItemContentElement(itemElements[index]), null, `contentElement[${index}] is not rendered`); // deferRendering: true
                     }
                 }
-            });
+            }
         }
     }
 
@@ -1279,7 +1279,7 @@ QUnit.module('optionChanged', moduleSetup, () => {
             [true, false].forEach(deferRendering => {
                 [true, false ].forEach(repaintChangesOnly => {
                     const config = { collapsible, multiple, deferRendering, repaintChangesOnly };
-                    config.message = Object.entries(config).reduce((message, [key, value]) => message += `${key}: ${value}, `, '');
+                    config.message = Object.keys(config).reduce((message, key) => message += `${key}: ${config[key]}, `, '');
                     configs.push(config);
                 });
             });
