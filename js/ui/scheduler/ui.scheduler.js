@@ -2333,9 +2333,9 @@ const Scheduler = Widget.inherit({
         let timezoneOffset = 0;
 
         if(startDateTimeZone) {
-            timezoneOffset = utils.calculateTimezoneByValue(startDateTimeZone, exceptionByStartDate) - utils.calculateTimezoneByValue(startDateTimeZone, exception);
+            timezoneOffset = utils.getDaylightOffsetByTimezone(exceptionByStartDate, exception, startDateTimeZone);
         } else if(this.option('timeZone')) {
-            timezoneOffset = utils.calculateTimezoneByValue(this.option('timeZone'), exceptionByStartDate) - utils.calculateTimezoneByValue(this.option('timeZone'), exception);
+            timezoneOffset = utils.getDaylightOffsetByTimezone(exceptionByStartDate, exception, this.option('timeZone'));
         } else {
             timezoneOffset = (exception.getTimezoneOffset() - exceptionByStartDate.getTimezoneOffset()) / 60;
         }
