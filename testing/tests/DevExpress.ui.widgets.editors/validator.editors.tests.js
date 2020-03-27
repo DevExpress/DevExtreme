@@ -221,5 +221,24 @@ QUnit.module('Editors Standard Adapter', {
         // assert
         assert.equal(spy.callCount, 2, 'The validationCallback is called after reset');
     });
+
+    QUnit.test('Editor(read-only) - Validator.validated event should be raised (T873862)', function(assert) {
+        // arrange
+        this.fixture.createEditor({
+            value: 'test',
+            readOnly: true
+        });
+        const validatedHandler = sinon.stub();
+        const validator = this.fixture.createValidator({
+            adapter: null,
+            validationRules: [{ type: 'required' }]
+        });
+        validator.on('validated', validatedHandler);
+
+        validator.validate();
+
+        // assert
+        assert.ok(validatedHandler.calledOnce, 'validated was called');
+    });
 });
 
