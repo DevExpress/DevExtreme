@@ -17,6 +17,7 @@ import { getDefaultAlignment } from '../../core/utils/position';
 import modules from './ui.grid_core.modules';
 import { checkChanges } from './ui.grid_core.utils';
 import columnStateMixin from './ui.grid_core.column_state_mixin';
+import { when, Deferred } from '../../core/utils/deferred';
 
 const SCROLL_CONTAINER_CLASS = 'scroll-container';
 const GROUP_SPACE_CLASS = 'group-space';
@@ -390,15 +391,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             templateParameters = templates.shift();
 
             const options = templateParameters.options;
-            const model = options.model;
             const doc = domAdapter.getDocument();
 
             if(!isAsync || $(options.container).closest(doc).length) {
                 templateParameters.template.render(options);
-
-                if(model && model.column) {
-                    this._updateCell(options.container, model);
-                }
             }
             if(isAsync && (new Date() - date) > 30) {
                 this._renderDelayedTemplatesCoreAsync(templates);
@@ -417,6 +413,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 allowRenderToDetachedContainer: template.allowRenderToDetachedContainer,
                 render: function(options) {
                     template.render(options.container, options.model);
+                    options.deferred && options.deferred.resolve();
                 }
             };
         } else if(typeUtils.isFunction(template)) {
@@ -426,6 +423,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                     if(renderedTemplate && (renderedTemplate.nodeType || typeUtils.isRenderer(renderedTemplate))) {
                         options.container.append(renderedTemplate);
                     }
+                    options.deferred && options.deferred.resolve();
                 }
             };
         } else {
@@ -450,6 +448,15 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         const renderingTemplate = that._processTemplate(template, options);
         const column = options.column;
         const isDataRow = options.rowType === 'data';
+        const templateDeferred = new Deferred();
+        const templateOptions = {
+            container: container,
+            model: options,
+            deferred: templateDeferred,
+            onRendered: () => {
+                templateDeferred.resolve();
+            }
+        };
         let async;
 
         if(renderingTemplate) {
@@ -462,14 +469,15 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             );
 
             if((renderingTemplate.allowRenderToDetachedContainer || allowRenderToDetachedContainer) && !async) {
-                renderingTemplate.render({ container: container, model: options });
-                return true;
+                renderingTemplate.render(templateOptions);
             } else {
-                that._delayedTemplates.push({ template: renderingTemplate, options: { container: container, model: options }, async: async });
+                that._delayedTemplates.push({ template: renderingTemplate, options: templateOptions, async: async });
             }
+        } else {
+            templateDeferred.reject();
         }
 
-        return false;
+        return templateDeferred.promise();
     },
 
     _getBodies: function(tableElement) {
@@ -639,9 +647,9 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _renderCellContent: function($cell, options) {
         const template = this._getCellTemplate(options);
 
-        if((!template || this.renderTemplate($cell, template, options))) {
+        when(!template || this.renderTemplate($cell, template, options)).done(() => {
             this._updateCell($cell, options);
-        }
+        });
     },
 
     _getCellTemplate: function() { },

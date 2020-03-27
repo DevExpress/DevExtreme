@@ -104,7 +104,9 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
 
         if(column.cellTemplate) {
             const templateOptions = extend({}, cellOptions, { value: value, displayValue: displayValue, text: text, column: column });
-            that._rowsView.renderTemplate($container, column.cellTemplate, templateOptions, !!$container.closest(getWindow().document).length);
+            that._rowsView.renderTemplate($container, column.cellTemplate, templateOptions, !!$container.closest(getWindow().document).length).done(() => {
+                that.getView('rowsView')._cellPrepared($container, cellOptions);
+            });
         } else {
             container = $container.get(0);
             if(column.encodeHtml) {
@@ -123,9 +125,9 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
                     $container.addClass(FORM_ITEM_MODIFIED);
                 }
             }
-        }
 
-        that.getView('rowsView')._cellPrepared($container, cellOptions);
+            that.getView('rowsView')._cellPrepared($container, cellOptions);
+        }
     },
 
     _getTemplate: function(item, cellOptions) {
