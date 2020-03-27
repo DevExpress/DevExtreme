@@ -2,7 +2,7 @@ import BaseAppointmentsStrategy from './ui.scheduler.appointments.strategy.base'
 import { extend } from '../../../core/utils/extend';
 import { isNumeric } from '../../../core/utils/type';
 import dateUtils from '../../../core/utils/date';
-import utils from './../utils';
+import timeZoneUtils from './../utils.timeZone';
 
 const ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5;
 const ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
@@ -56,7 +56,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         const appointmentStartDate = this.startDate(item, true);
         const appointmentEndDate = this.endDate(item);
 
-        const isAppointmentTakesSeveralDays = !utils.isSameAppointmentDates(appointmentStartDate, appointmentEndDate);
+        const isAppointmentTakesSeveralDays = !timeZoneUtils.isSameAppointmentDates(appointmentStartDate, appointmentEndDate);
 
         if(allDay) {
             return super._getItemPosition(item);
