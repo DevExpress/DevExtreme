@@ -736,7 +736,7 @@ const TagBox = SelectBox.inherit({
         const selectedItemsAlreadyLoaded = filteredItems.length === values.length;
         const d = new Deferred();
 
-        if(!this._loading && selectedItemsAlreadyLoaded) {
+        if(!this._isCacheDisabled && selectedItemsAlreadyLoaded) {
             return d.resolve(filteredItems).promise();
         } else {
             const dataSource = this._dataSource;
@@ -750,7 +750,7 @@ const TagBox = SelectBox.inherit({
                 .store()
                 .load({ filter, customQueryParams, expand })
                 .done((data, extra) => {
-                    this._loading = false;
+                    this._isCacheDisabled = false;
                     if(this._disposed) {
                         d.reject();
                         return;
@@ -1275,7 +1275,9 @@ const TagBox = SelectBox.inherit({
     },
 
     _dataSourceChangedHandler: function() {
-        this._loading = true;
+        if(this._list) {
+            this._isCacheDisabled = true;
+        }
         this.callBase.apply(this, arguments);
     },
 
@@ -1332,6 +1334,7 @@ const TagBox = SelectBox.inherit({
         this.callBase();
         delete this._defaultTagTemplate;
         delete this._tagTemplate;
+        delete this._isCacheDisabled;
     },
 
     _removeDuplicates: function(from, what) {
