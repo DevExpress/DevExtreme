@@ -267,7 +267,7 @@ exports.stock = _extend({}, scatterSeries, {
                 tmpCoord = coord >= coords[0] && coord <= coords[1] ? p.vx : undefined;
             }
 
-            if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
+            if(this._checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
                 oppositeCoord = tmpCoord;
                 break;
             }

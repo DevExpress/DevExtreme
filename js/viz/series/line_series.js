@@ -220,7 +220,7 @@ const lineMethods = {
     getSeriesPairCoord(coord, isArgument) {
         const that = this;
         let oppositeCoord = null;
-        const nearestPoints = this.getNearestPointsByCoord(coord, isArgument);
+        const nearestPoints = this._getNearestPointsByCoord(coord, isArgument);
         const needValueCoord = isArgument && !that._options.rotated || !isArgument && that._options.rotated;
 
         for(let i = 0; i < nearestPoints.length; i++) {
@@ -235,7 +235,7 @@ const lineMethods = {
                 tmpCoord = needValueCoord ? k * coord + b : (coord - b) / k;
             }
 
-            if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
+            if(this._checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
                 oppositeCoord = tmpCoord;
                 break;
             }
@@ -285,7 +285,7 @@ exports.chart['stepline'] = _extend({}, lineSeries, {
         const isOpposite = !isArgument && !rotated || isArgument && rotated;
         const coordName = !isOpposite ? 'vx' : 'vy';
         const oppositeCoordName = !isOpposite ? 'vy' : 'vx';
-        const nearestPoints = this.getNearestPointsByCoord(coord, isArgument);
+        const nearestPoints = this._getNearestPointsByCoord(coord, isArgument);
 
         for(let i = 0; i < nearestPoints.length; i++) {
             const p = nearestPoints[i];
@@ -297,7 +297,7 @@ exports.chart['stepline'] = _extend({}, lineSeries, {
                 tmpCoord = coord === p[0][coordName] ? p[0][oppositeCoordName] : p[1][oppositeCoordName];
             }
 
-            if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
+            if(this._checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
                 oppositeCoord = tmpCoord;
                 break;
             }
@@ -432,7 +432,7 @@ exports.chart['spline'] = _extend({}, lineSeries, {
         const bezierOppositeCoordName = !isOpposite ? 'y' : 'x';
         const axis = !isArgument ? that.getArgumentAxis() : that.getValueAxis();
         const visibleArea = axis.getVisibleArea();
-        const nearestPoints = this.getNearestPointsByCoord(coord, isArgument);
+        const nearestPoints = this._getNearestPointsByCoord(coord, isArgument);
 
         for(let i = 0; i < nearestPoints.length; i++) {
             const p = nearestPoints[i];
@@ -460,31 +460,14 @@ exports.chart['spline'] = _extend({}, lineSeries, {
         return oppositeCoord;
     },
 
-    getNearestPointsByCoord(coord, isArgument) {
-        const that = this;
-        const rotated = that.getOptions().rotated;
-        const isOpposite = !isArgument && !rotated || isArgument && rotated;
-        const coordName = isOpposite ? 'vy' : 'vx';
-        const points = that.getVisiblePoints();
-        const allPoints = that.getPoints();
-        const bezierPoints = that._segments.length > 0 ? that._segments.reduce((a, seg) => a.concat(seg.line), []) : [];
-        const nearestPoints = [];
+    _getNearestPoints(point, nextPoint, bezierPoints) {
+        const index = bezierPoints.indexOf(point);
+        return [point, bezierPoints[index + 1], bezierPoints[index + 2], nextPoint];
+    },
 
-        if(that.isVisible() && allPoints.length > 0) {
-            if(allPoints.length > 1) {
-                that.findNeighborPointsByCoord(coord, coordName, points.slice(0), allPoints, (point, nextPoint) => {
-                    const index = bezierPoints.indexOf(point);
-                    nearestPoints.push([point, bezierPoints[index + 1], bezierPoints[index + 2], nextPoint]);
-                });
-            } else {
-                if(allPoints[0][coordName] === coord) {
-                    nearestPoints.push([allPoints[0]]);
-                }
-            }
-        }
-
-        return nearestPoints;
-    }
+    _getBezierPoints() {
+        return this._segments.length > 0 ? this._segments.reduce((a, seg) => a.concat(seg.line), []) : [];
+    },
 });
 
 exports.polar.line = _extend({}, polarScatterSeries, lineMethods, {
