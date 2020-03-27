@@ -58,24 +58,25 @@ QUnit.module('API', {
     afterEach: function() {
         this.clock.restore();
     }
-});
+}, () => {
 
-QUnit.test('The detail adaptive row should have the node property', function(assert) {
+    QUnit.test('The detail adaptive row should have the node property', function(assert) {
     // arrange
-    $('.dx-treelist').width(200);
+        $('.dx-treelist').width(200);
 
-    setupTreeList(this);
-    this.rowsView.render($('#container'));
-    this.resizingController.updateDimensions();
-    this.clock.tick();
+        setupTreeList(this);
+        this.rowsView.render($('#container'));
+        this.resizingController.updateDimensions();
+        this.clock.tick();
 
-    // act
-    this.adaptiveColumnsController.expandAdaptiveDetailRow(1);
-    this.clock.tick();
+        // act
+        this.adaptiveColumnsController.expandAdaptiveDetailRow(1);
+        this.clock.tick();
 
-    // assert
-    const rows = this.getVisibleRows();
-    assert.ok($('.dx-adaptive-detail-row').length, 'render field items');
-    assert.strictEqual(rows[1].rowType, 'detailAdaptive', 'detail adaptive row');
-    assert.deepEqual(rows[1].node, rows[0].node, 'detail adaptive row has the node property');
+        // assert
+        const rows = this.getVisibleRows();
+        assert.ok($('.dx-adaptive-detail-row').length, 'render field items');
+        assert.strictEqual(rows[1].rowType, 'detailAdaptive', 'detail adaptive row');
+        assert.deepEqual(rows[1].node, rows[0].node, 'detail adaptive row has the node property');
+    });
 });

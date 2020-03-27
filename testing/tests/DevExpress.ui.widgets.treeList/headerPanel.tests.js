@@ -44,40 +44,42 @@ const teardownModule = function() {
     this.dispose();
 };
 
-QUnit.module('Header panel', { beforeEach: setupModule, afterEach: teardownModule });
+QUnit.module('Header panel', { beforeEach: setupModule, afterEach: teardownModule }, () => {
 
-QUnit.test('Draw edit buttons', function(assert) {
+    QUnit.test('Draw edit buttons', function(assert) {
     // arrange
-    const $testElement = $('#treeList');
+        const $testElement = $('#treeList');
 
-    this.options.editing = {
-        mode: 'batch',
-        allowUpdating: true,
-        allowAdding: true
-    };
-    this.setupTreeList();
+        this.options.editing = {
+            mode: 'batch',
+            allowUpdating: true,
+            allowAdding: true
+        };
+        this.setupTreeList();
 
-    // act
-    this.headerPanel.render($testElement);
+        // act
+        this.headerPanel.render($testElement);
 
-    // assert
-    assert.equal($testElement.find('.dx-treelist-addrow-button').length, 1, 'cancel button');
-    assert.equal($testElement.find('.dx-treelist-save-button').length, 1, 'cancel button');
-    assert.equal($testElement.find('.dx-treelist-cancel-button').length, 1, 'cancel button');
+        // assert
+        assert.equal($testElement.find('.dx-treelist-addrow-button').length, 1, 'cancel button');
+        assert.equal($testElement.find('.dx-treelist-save-button').length, 1, 'cancel button');
+        assert.equal($testElement.find('.dx-treelist-cancel-button').length, 1, 'cancel button');
+    });
+
+    QUnit.test('Draw column chooser button', function(assert) {
+    // arrange
+        const $testElement = $('#treeList');
+
+        this.options.columnChooser = {
+            enabled: true
+        };
+        this.setupTreeList();
+
+        // act
+        this.headerPanel.render($testElement);
+
+        // assert
+        assert.equal($testElement.find('.dx-treelist-column-chooser-button').length, 1, 'cancel button');
+    });
 });
 
-QUnit.test('Draw column chooser button', function(assert) {
-    // arrange
-    const $testElement = $('#treeList');
-
-    this.options.columnChooser = {
-        enabled: true
-    };
-    this.setupTreeList();
-
-    // act
-    this.headerPanel.render($testElement);
-
-    // assert
-    assert.equal($testElement.find('.dx-treelist-column-chooser-button').length, 1, 'cancel button');
-});
