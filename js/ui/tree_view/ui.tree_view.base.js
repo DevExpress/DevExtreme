@@ -1653,6 +1653,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         return resultCallback.promise();
     },
+
+    _dispose: function() {
+        this.callBase();
+        clearTimeout(this._setFocusedItemTimeout);
+    }
 });
 
 module.exports = TreeViewBase;
