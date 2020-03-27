@@ -191,6 +191,9 @@ QUnit.module('Keyboard controller', {
         that.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
+        if(this.dispose) {
+            this.dispose();
+        }
         eventsEngine.on = this.originalEventsEngineOn;
         eventsEngine.off = this.originalEventsEngineOff;
         this.clock.restore();
@@ -360,9 +363,9 @@ QUnit.module('Keyboard controller', {
                 <tr class='dx-row'>"
                     <td class='cell-0'><input></td>
                     <td><input></td>
-                    <td><textarea /></td>
+                    <td><textarea></textarea></td>
                     <td><a>Link<a/></td>
-                    <td><select /></td>
+                    <td><select></select></td>
                 </tr>`));
 
         const view = this.getView('rowsView');

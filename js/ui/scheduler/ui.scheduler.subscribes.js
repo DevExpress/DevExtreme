@@ -4,6 +4,7 @@ import recurrenceUtils from './utils.recurrence';
 import typeUtils from '../../core/utils/type';
 import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';
+import errors from '../widget/ui.errors';
 import translator from '../../animation/translator';
 import { grep } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
@@ -11,7 +12,7 @@ import { inArray } from '../../core/utils/array';
 import SchedulerTimezones from './timezones/ui.scheduler.timezones';
 import { Deferred } from '../../core/utils/deferred';
 import dateLocalization from '../../localization/date';
-import utils from './utils';
+import timeZoneUtils from './utils.timeZone';
 
 const MINUTES_IN_HOUR = 60;
 const toMs = dateUtils.dateToMilliseconds;
@@ -718,7 +719,7 @@ const subscribes = {
     getComplexOffsets: function(scheduler, date, appointmentTimezone) {
         const clientTimezoneOffset = -this.getClientTimezoneOffset(date) / toMs('hour');
         const commonTimezoneOffset = scheduler._getTimezoneOffsetByOption(date);
-        let appointmentTimezoneOffset = utils.calculateTimezoneByValue(appointmentTimezone, date);
+        let appointmentTimezoneOffset = timeZoneUtils.calculateTimezoneByValue(appointmentTimezone, date);
 
         if(typeof appointmentTimezoneOffset !== 'number') {
             appointmentTimezoneOffset = clientTimezoneOffset;
@@ -780,7 +781,7 @@ const subscribes = {
 
             result = ceilQuantityOfDays * visibleDayDuration;
         } else {
-            const isDifferentDates = !utils.isSameAppointmentDates(startDate, endDate);
+            const isDifferentDates = !timeZoneUtils.isSameAppointmentDates(startDate, endDate);
             const floorQuantityOfDays = Math.floor(appointmentDuration / dayDuration);
             let tailDuration;
 
@@ -833,6 +834,15 @@ const subscribes = {
         const dragBehavior = this.getWorkSpace().dragBehavior;
 
         dragBehavior && dragBehavior.moveBack();
-    }
+    },
+
+    validateDayHours: function() {
+        const endDayHour = this._getCurrentViewOption('endDayHour');
+        const startDayHour = this._getCurrentViewOption('startDayHour');
+
+        if(startDayHour >= endDayHour) {
+            throw errors.Error('E1058');
+        }
+    },
 };
 module.exports = subscribes;

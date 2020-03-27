@@ -78,6 +78,7 @@ module.exports = gridCore.Controller.inherit((function() {
             that._cachedPagesData = createEmptyPagesData();
             that._lastOperationTypes = {};
             that._eventsStrategy = dataSource._eventsStrategy;
+            that._skipCorrection = 0;
 
 
             that.changed = Callbacks();
@@ -136,6 +137,7 @@ module.exports = gridCore.Controller.inherit((function() {
 
             if(isReload || operationTypes.reload) {
                 that._currentTotalCount = 0;
+                that._skipCorrection = 0;
                 that._isLastPage = !dataSource.paginate();
                 that._hasLastPage = that._isLastPage;
             }
@@ -206,8 +208,15 @@ module.exports = gridCore.Controller.inherit((function() {
                 return !dataSource.paginate() || change.type !== 'insert' || change.index !== undefined;
             });
 
+            const oldItemCount = this.itemsCount();
+
             arrayUtils.applyBatch(keyInfo, this._items, changes, groupCount, true);
             arrayUtils.applyBatch(keyInfo, dataSource.items(), changes, groupCount, true);
+
+            if(this._currentTotalCount > 0) {
+                this._skipCorrection += this.itemsCount() - oldItemCount;
+            }
+
             changes.splice(0, changes.length);
         },
         _handlePush: function(changes) {
@@ -516,7 +525,7 @@ module.exports = gridCore.Controller.inherit((function() {
             return this._isLastPage;
         },
         totalCount: function() {
-            return parseInt(this._currentTotalCount || this._dataSource.totalCount());
+            return parseInt(this._currentTotalCount + this._skipCorrection || this._dataSource.totalCount());
         },
         itemsCount: function() {
             return this._dataSource.items().length;

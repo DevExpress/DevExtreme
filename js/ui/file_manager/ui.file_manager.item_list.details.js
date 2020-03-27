@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { extendAttributes } from './ui.file_manager.common';
-import { isString, isFunction } from '../../core/utils/type';
+import { isString, isFunction, isDefined } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 
 import DataGrid from '../data_grid/ui.data_grid';
@@ -303,9 +303,15 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
     _onFocusedRowChanged(e) {
         if(!this._isMultipleSelectionMode()) {
-            this._selectItemSingleSelection(e.row.data);
+            this._selectItemSingleSelection(e.row?.data);
         }
-        this._raiseFocusedItemChanged(e);
+
+        const fileSystemItem = e.row?.data.fileItem || null;
+        this._raiseFocusedItemChanged({
+            item: fileSystemItem,
+            itemKey: fileSystemItem?.key,
+            itemElement: e.rowElement
+        });
     }
 
     _onFilesViewOptionChanged({ fullName }) {
@@ -353,7 +359,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _selectItemSingleSelection(fileItemInfo) {
-        if(!this._focusedItem || this._focusedItem.fileItem.key !== fileItemInfo.fileItem.key) {
+        if(!this._focusedItem || !fileItemInfo || this._focusedItem.fileItem.key !== fileItemInfo.fileItem.key) {
             const oldFocusedItem = this._focusedItem;
             this._focusedItem = fileItemInfo;
 
@@ -362,10 +368,17 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                 deselectedKeys.push(oldFocusedItem.fileItem.key);
             }
 
+            const selectedItems = [];
+            const selectedKeys = [];
+            if(fileItemInfo) {
+                selectedItems.push(fileItemInfo.fileItem);
+                selectedKeys.push(fileItemInfo.fileItem.key);
+            }
+
             this._raiseSelectionChanged({
-                selectedItems: [ fileItemInfo.fileItem ],
-                selectedItemKeys: [ fileItemInfo.fileItem.key ],
-                currentSelectedItemKeys: [ fileItemInfo.fileItem.key ],
+                selectedItems,
+                selectedItemKeys: selectedKeys,
+                currentSelectedItemKeys: [...selectedKeys],
                 currentDeselectedItemKeys: deselectedKeys
             });
         }
@@ -388,11 +401,27 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     clearSelection() {
-        this._filesView.clearSelection();
+        if(this._isMultipleSelectionMode()) {
+            this._filesView.clearSelection();
+        } else {
+            this._filesView.option('focusedRowIndex', -1);
+        }
     }
 
-    refresh() {
-        this._filesView.option('dataSource', this._createDataSource());
+    refresh(options) {
+        const actualOptions = {
+            dataSource: this._createDataSource()
+        };
+
+        if(options && Object.prototype.hasOwnProperty.call(options, 'focusedItemKey')) {
+            if(isDefined(options.focusedItemKey)) {
+                actualOptions.focusedRowKey = options.focusedItemKey;
+            } else {
+                actualOptions.focusedRowIndex = -1;
+            }
+        }
+
+        this._filesView.option(actualOptions);
     }
 
     getSelectedItems() {

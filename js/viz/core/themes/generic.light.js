@@ -1348,18 +1348,15 @@ registerTheme({
                 visible: true,
                 paddingLeftRight: 5,
                 paddingTopBottom: 4,
-                stroke: '#000000',
-                'stroke-width': 1,
-                'stroke-opacity': 0.3,
                 font: {
                     color: '#ffffff',
-                    weight: 300
+                    weight: 600
                 },
                 shadow: {
-                    opacity: 0.8,
+                    opacity: 0.6,
                     offsetX: 0,
                     offsetY: 1,
-                    blur: 1,
+                    blur: 2,
                     color: '#000000'
                 },
                 wordWrap: 'normal',

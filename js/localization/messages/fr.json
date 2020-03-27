@@ -325,6 +325,10 @@
         "dxFileManager-dialogRenameItemButtonText": "Sauvegarder",
         "dxFileManager-dialogCreateDirectoryTitle": "Nouveau répertoire",
         "dxFileManager-dialogCreateDirectoryButtonText": "Créer",
+        "dxFileManager-dialogDeleteItemTitle": "TODO",
+        "dxFileManager-dialogDeleteItemButtonText": "TODO",
+        "dxFileManager-dialogDeleteItemSingleItemConfirmation": "TODO",
+        "dxFileManager-dialogDeleteItemMultipleItemsConfirmation": "TODO",
 
         "dxFileManager-editingCreateSingleItemProcessingMessage": "Créer un répertoire dans {0}",
         "dxFileManager-editingCreateSingleItemSuccessMessage": "Répertoire créé dans {0}",

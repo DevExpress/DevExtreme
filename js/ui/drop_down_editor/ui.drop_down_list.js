@@ -601,6 +601,19 @@ const DropDownList = DropDownEditor.inherit({
         return this._searchValue().toString().length >= this.option('minSearchLength');
     },
 
+    _needClearFilter: function() {
+        return this._canKeepDataSource() ? false : this._needPassDataSourceToList();
+    },
+
+    _canKeepDataSource: function() {
+        const isMinSearchLengthExceeded = this._isMinSearchLengthExceeded();
+        return this._dataSource?.isLoaded() &&
+            this.option('showDataBeforeSearch') &&
+            this.option('minSearchLength') &&
+            !isMinSearchLengthExceeded &&
+            !this._isLastMinSearchLengthExceeded;
+    },
+
     _searchValue: function() {
         return this._input().val() || '';
     },
@@ -651,7 +664,7 @@ const DropDownList = DropDownEditor.inherit({
 
     _searchCanceled: function() {
         this._clearSearchTimer();
-        if(this._needPassDataSourceToList()) {
+        if(this._needClearFilter()) {
             this._filterDataSource(null);
         }
         this._refreshList();
@@ -665,12 +678,12 @@ const DropDownList = DropDownEditor.inherit({
         this._clearSearchTimer();
 
         const dataSource = this._dataSource;
-
-        dataSource.searchExpr(this.option('searchExpr') || this._displayGetterExpr());
-        dataSource.searchOperation(this.option('searchMode'));
-        dataSource.searchValue(searchValue);
-
-        return dataSource.load().done(this._dataSourceFiltered.bind(this, searchValue));
+        if(dataSource) {
+            dataSource.searchExpr(this.option('searchExpr') || this._displayGetterExpr());
+            dataSource.searchOperation(this.option('searchMode'));
+            dataSource.searchValue(searchValue);
+            dataSource.load().done(this._dataSourceFiltered.bind(this, searchValue));
+        }
     },
 
     _clearFilter: function() {
@@ -679,6 +692,7 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _dataSourceFiltered: function() {
+        this._isLastMinSearchLengthExceeded = this._isMinSearchLengthExceeded();
         this._refreshList();
         this._refreshPopupVisibility();
     },
@@ -779,6 +793,7 @@ const DropDownList = DropDownEditor.inherit({
         if(this._list) {
             delete this._list;
         }
+        delete this._isLastMinSearchLengthExceeded;
         this.callBase();
     },
 
@@ -860,7 +875,9 @@ const DropDownList = DropDownEditor.inherit({
             case 'popupWidthExtension':
                 break;
             case 'selectedItem':
-                this._selectionChangedAction({ selectedItem: args.value });
+                if(args.previousValue !== args.value) {
+                    this._selectionChangedAction({ selectedItem: args.value });
+                }
                 break;
             default:
                 this.callBase(args);

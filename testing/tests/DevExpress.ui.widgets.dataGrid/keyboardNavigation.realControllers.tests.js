@@ -1,5 +1,6 @@
 QUnit.testStart(function() {
     const markup = `
+    <style>[tabindex]{background-color:yellow!important;}</style>
         <div>
             <div id="container" class="dx-datagrid"></div>
         </div>`;
@@ -56,7 +57,8 @@ QUnit.module('Real DataController and ColumnsController', {
         setupDataGridModules(this, [
             'data', 'columns', 'columnHeaders', 'rows',
             'editorFactory', 'gridView', 'editing', 'focus',
-            'keyboardNavigation', 'validating', 'masterDetail', 'selection'
+            'keyboardNavigation', 'validating', 'masterDetail', 'selection',
+            'grouping'
         ], {
             initViews: true
         });
@@ -70,6 +72,7 @@ QUnit.module('Real DataController and ColumnsController', {
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
+        this.dispose();
         this.clock.restore();
     }
 }, function() {
@@ -344,7 +347,7 @@ QUnit.module('Real DataController and ColumnsController', {
     });
 
     // T692137
-    QUnit.testInActiveWindow('Focus should not be lost after several clicks on the same cell', function(assert) {
+    QUnit.testInActiveWindow('Cell should not lost focus after several clicks on the same cell', function(assert) {
         // arrange
         this.$element = function() {
             return $('#container');
@@ -806,7 +809,7 @@ QUnit.module('Real DataController and ColumnsController', {
         assert.ok(!this.gridView.component.editorFactoryController.focus(), 'no focus overlay');
     });
 
-    QUnit.testInActiveWindow('Focus must be saved after paging', function(assert) {
+    QUnit.testInActiveWindow('Focus should be preserved after paging', function(assert) {
         // arrange
         const that = this;
         that.$element = function() {
@@ -845,7 +848,7 @@ QUnit.module('Real DataController and ColumnsController', {
         assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, 'rowIndex');
     });
 
-    QUnit.testInActiveWindow('freespace cells should not have a focus', function(assert) {
+    QUnit.testInActiveWindow('freespace cells should not have focus', function(assert) {
         // arrange
         const that = this;
         that.$element = function() {
@@ -975,7 +978,7 @@ QUnit.module('Real DataController and ColumnsController', {
         assert.ok(this.keyboardNavigationController._focusedCellPosition, 'focusedCellPosition');
     });
 
-    QUnit.testInActiveWindow('Focus must be saved after paging if last row cell selected and rowCount of the last page < then of the previus page', function(assert) {
+    QUnit.testInActiveWindow('Focus should be preserved after paging if the last row cell selected and rowCount of the last page < then of the previus page', function(assert) {
         // arrange
         let $cell;
 
@@ -1247,6 +1250,143 @@ QUnit.module('Real DataController and ColumnsController', {
         assert.ok(countCallCalculateCellValue, 'calculateCellValue is called');
         assert.strictEqual($testElement.find('.dx-datagrid-rowsview td').eq(2).text(), 'Bob John', 'text of the third column of the first row');
         assert.ok(that.editingController.isEditCell(1, 0), 'the first cell of the second row is editable');
+    });
+
+    QUnit.test('Previous navigation elements should not have "tabindex" if grouping and navigation action is click (T870120)', function(assert) {
+        // arrange
+        const $container = $('#container');
+        this.data = [
+            { name: 'Alex', phone: 'John' },
+            { name: 'Dan', phone: 'Skip' }
+        ];
+        this.options = {
+            grouping: {
+                autoExpandAll: true
+            },
+            columns: [
+                'name',
+                {
+                    dataField: 'phone',
+                    groupIndex: 0
+                }
+            ],
+            tabIndex: 111
+        };
+
+        this.setupModule();
+        this.gridView.render($container);
+
+        this.clock.tick();
+
+        const $rowsView = this.rowsView.element();
+
+        // act
+        $(this.getCellElement(0, 1)).trigger(CLICK_EVENT);
+
+        // act
+        $(this.getCellElement(1, 1)).trigger(CLICK_EVENT);
+        // assert
+        assert.equal($rowsView.find('[tabindex]').length, 1, 'Only one element with tabindex');
+        assert.equal($(this.getCellElement(1, 1)).attr('tabindex'), 111, 'Cell[1, 1] has tabindex');
+
+        // act
+        $(this.getCellElement(2, 1)).trigger(CLICK_EVENT);
+
+        // act
+        $(this.getCellElement(3, 1)).trigger(CLICK_EVENT);
+        // assert
+        assert.equal($rowsView.find('[tabindex]').length, 1, 'Only one element with tabindex');
+        assert.equal($(this.getCellElement(3, 1)).attr('tabindex'), 111, 'Cell[3, 1] has tabindex');
+    });
+
+    QUnit.test('Previous navigation elements should not have "tabindex" if grouping and navigation action is tab (T870120)', function(assert) {
+        // arrange
+        const $container = $('#container');
+        this.data = [
+            { name: 'Alex', phone: 'John' },
+            { name: 'Dan', phone: 'Skip' }
+        ];
+        this.options = {
+            grouping: {
+                autoExpandAll: false
+            },
+            editing: {},
+            columns: [
+                'name',
+                {
+                    dataField: 'phone',
+                    groupIndex: 0
+                }
+            ],
+            tabIndex: 111
+        };
+
+        this.setupModule();
+        this.gridView.render($container);
+
+        this.clock.tick();
+
+        const $rowsView = this.rowsView.element();
+        $(this.getCellElement(0, 1)).trigger(CLICK_EVENT);
+
+        // act
+        this.triggerKeyDown('tab', false, false, $(this.getRowElement(0)));
+
+        // assert
+        assert.equal($rowsView.find('[tabindex]').length, 1, 'Only one element with tabindex');
+        assert.equal($(this.getRowElement(1)).attr('tabindex'), 111, 'Row 1 has tabindex');
+    });
+
+    QUnit.test('Previous navigation elements should not have "tabindex" if grouping, focusedRowEnabled and navigation action is click (T870120)', function(assert) {
+        // arrange
+        const $container = $('#container');
+        this.data = [
+            { name: 'Alex', phone: 'John' },
+            { name: 'Dan', phone: 'Skip' }
+        ];
+        this.options = {
+            focusedRowEnabled: true,
+            grouping: {
+                autoExpandAll: true
+            },
+            columns: [
+                'name',
+                {
+                    dataField: 'phone',
+                    groupIndex: 0
+                }
+            ],
+            tabIndex: 111
+        };
+
+        this.setupModule();
+        this.gridView.render($container);
+
+        this.clock.tick();
+
+        const $rowsView = this.rowsView.element();
+
+        // act
+        $(this.getCellElement(0, 1)).trigger(CLICK_EVENT);
+        // assert
+        assert.equal($rowsView.find('[tabindex]').length, 1, 'Only one element with tabindex');
+        assert.equal($(this.getRowElement(0)).attr('tabindex'), 111, 'Row[0] has tabindex');
+
+        // act
+        $(this.getCellElement(1, 1)).trigger(CLICK_EVENT);
+        // assert
+        assert.equal($rowsView.find('[tabindex]').length, 1, 'Only one element with tabindex');
+        assert.equal($(this.getRowElement(1)).attr('tabindex'), 111, 'Row[1] has tabindex');
+
+        // act
+        $(this.getCellElement(2, 1)).trigger(CLICK_EVENT);
+        // assert
+
+        // act
+        $(this.getCellElement(3, 1)).trigger(CLICK_EVENT);
+        // assert
+        assert.equal($rowsView.find('[tabindex]').length, 1, 'Only one element with tabindex');
+        assert.equal($(this.getRowElement(3)).attr('tabindex'), 111, 'Row[3] has tabindex');
     });
 
     ['click', 'dblClick'].forEach(startEditAction => {

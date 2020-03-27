@@ -3,3 +3,8 @@ js/viz/docs/*
 node_modules/*
 testing/helpers/sinon/*
 /themebuilder/data/metadata/*
+*.p.js
+*.j.js
+*.p.d.ts
+*.j.d.ts
+playground/react/*

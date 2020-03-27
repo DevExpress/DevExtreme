@@ -7,12 +7,11 @@ import { isNumeric } from '../../../core/utils/type';
 import typeUtils from '../../../core/utils/type';
 import themes from '../../themes';
 
-import utils from '../utils';
+import timeZoneUtils from '../utils.timeZone';
 
 const toMs = dateUtils.dateToMilliseconds;
 
 const APPOINTMENT_MIN_SIZE = 2;
-const COMPACT_APPOINTMENT_DEFAULT_WIDTH = 15;
 const APPOINTMENT_DEFAULT_HEIGHT = 20;
 
 const COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18;
@@ -29,9 +28,9 @@ class BaseRenderingStrategy {
         return this.instance.fire('isAdaptive');
     }
 
-    _correctCompactAppointmentCoordinatesInAdaptive(coordinates, isAllDay) {
-        coordinates.top = coordinates.top + this.getCompactAppointmentTopOffset(isAllDay);
-        coordinates.left = coordinates.left + this.getCompactAppointmentLeftOffset();
+    _correctCollectorCoordinatesInAdaptive(coordinates, isAllDay) {
+        coordinates.top = coordinates.top + this.getCollectorTopOffset(isAllDay);
+        coordinates.left = coordinates.left + this.getCollectorLeftOffset();
     }
 
     _initPositioningStrategy() {
@@ -423,7 +422,7 @@ class BaseRenderingStrategy {
     }
 
     _skipSortedIndex(index) {
-        return this.instance.fire('getMaxAppointmentsPerCell') && index > this._getMaxAppointmentCountPerCell() - 1;
+        return index > this._getMaxAppointmentCountPerCell() - 1;
     }
 
     _findIndexByKey(arr, iKey, jKey, iValue, jValue) {
@@ -454,7 +453,10 @@ class BaseRenderingStrategy {
         return result;
     }
 
-    _checkLongCompactAppointment() {
+    _checkLongCompactAppointment(item, result) {
+        this._splitLongCompactAppointment(item, result);
+
+        return result;
     }
 
     _splitLongCompactAppointment(item, result) {
@@ -539,7 +541,7 @@ class BaseRenderingStrategy {
     }
 
     _adjustDurationByDaylightDiff(duration, startDate, endDate) {
-        const daylightDiff = utils.getDaylightOffset(startDate, endDate);
+        const daylightDiff = timeZoneUtils.getDaylightOffset(startDate, endDate);
         return this._needAdjustDuration(daylightDiff) ? this._calculateDurationByDaylightDiff(duration, daylightDiff) : duration;
     }
 
@@ -559,19 +561,9 @@ class BaseRenderingStrategy {
         });
     }
 
-    _getMaxNeighborAppointmentCount() {
-        const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
-        if(!overlappingMode) {
-            const outerAppointmentWidth = this.getCompactAppointmentDefaultWidth() + this.getCompactAppointmentLeftOffset();
-            return Math.floor(this.getDropDownAppointmentWidth() / outerAppointmentWidth);
-        } else {
-            return 0;
-        }
-    }
-
     _markAppointmentAsVirtual(coordinates, isAllDay) {
         const countFullWidthAppointmentInCell = this._getMaxAppointmentCountPerCellByType(isAllDay);
-        if((coordinates.count - countFullWidthAppointmentInCell) > this._getMaxNeighborAppointmentCount()) {
+        if((coordinates.count - countFullWidthAppointmentInCell) > 0) {
             coordinates.virtual = {
                 top: coordinates.top,
                 left: coordinates.left,
@@ -617,16 +609,12 @@ class BaseRenderingStrategy {
         return this._allDayHeight;
     }
 
-    getCompactAppointmentDefaultWidth() {
-        return COMPACT_APPOINTMENT_DEFAULT_WIDTH;
+    getCollectorTopOffset(allDay) {
+        return this.getPositioningStrategy().getCollectorTopOffset(allDay);
     }
 
-    getCompactAppointmentTopOffset(allDay) {
-        return this.getPositioningStrategy().getCompactAppointmentTopOffset(allDay);
-    }
-
-    getCompactAppointmentLeftOffset() {
-        return this.getPositioningStrategy().getCompactAppointmentLeftOffset();
+    getCollectorLeftOffset() {
+        return this.getPositioningStrategy().getCollectorLeftOffset();
     }
 
     getAppointmentDataCalculator() {
@@ -639,21 +627,9 @@ class BaseRenderingStrategy {
         let top = appointmentTop + topOffset;
         let width = coordinates.width;
         let left = coordinates.left;
-        let compactAppointmentDefaultSize;
-        let compactAppointmentLeftOffset;
-        const compactAppointmentTopOffset = this.getCompactAppointmentTopOffset(isAllDay);
 
         if(coordinates.isCompact) {
-            compactAppointmentDefaultSize = this.getCompactAppointmentDefaultWidth();
-            compactAppointmentLeftOffset = this.getCompactAppointmentLeftOffset();
-
-            top = coordinates.top + compactAppointmentTopOffset;
-            left = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentLeftOffset) + compactAppointmentLeftOffset;
-
-            this._isAdaptive() && this._correctCompactAppointmentCoordinatesInAdaptive(coordinates, isAllDay);
-
-            appointmentHeight = compactAppointmentDefaultSize;
-            width = compactAppointmentDefaultSize;
+            this._isAdaptive() && this._correctCollectorCoordinatesInAdaptive(coordinates, isAllDay);
 
             this._markAppointmentAsVirtual(coordinates, isAllDay);
         }
@@ -723,9 +699,6 @@ class BaseRenderingStrategy {
             const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
             let appointmentCountPerCell;
 
-            if(!overlappingMode) {
-                appointmentCountPerCell = 2;
-            }
             if(isNumeric(overlappingMode)) {
                 appointmentCountPerCell = overlappingMode;
             }

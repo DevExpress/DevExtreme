@@ -1,4 +1,4 @@
-import { isDefined, isString, isObject } from '../../core/utils/type';
+import { isDefined, isString, isObject, isDate } from '../../core/utils/type';
 import excelFormatConverter from '../excel_format_converter';
 import messageLocalization from '../../localization/message';
 import { extend } from '../../core/utils/extend';
@@ -84,7 +84,7 @@ function exportDataGrid(options) {
                 if(Object.keys(worksheetViewSettings).indexOf('state') === -1) {
                     extend(worksheetViewSettings, { state: 'frozen', ySplit: cellRange.from.row + dataProvider.getFrozenArea().y - 1 });
                 }
-                _setAutoFilter(dataProvider, worksheet, component, cellRange, autoFilterEnabled);
+                _setAutoFilter(dataProvider, worksheet, cellRange, autoFilterEnabled);
             }
 
             if(Object.keys(worksheetViewSettings).length > 0) {
@@ -136,7 +136,12 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
         const gridCell = cellData.cellSourceData;
 
         const excelCell = row.getCell(startColumnIndex + cellIndex);
-        excelCell.value = cellData.value;
+
+        if(isDate(cellData.value)) {
+            excelCell.value = _convertDateForExcelJS(cellData.value);
+        } else {
+            excelCell.value = cellData.value;
+        }
 
         if(isDefined(excelCell.value)) {
             const { bold, alignment: horizontalAlignment, format, dataType } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
@@ -170,7 +175,11 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
     }
 }
 
-function _setAutoFilter(dataProvider, worksheet, component, cellRange, autoFilterEnabled) {
+function _convertDateForExcelJS(date) {
+    return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()));
+}
+
+function _setAutoFilter(dataProvider, worksheet, cellRange, autoFilterEnabled) {
     if(autoFilterEnabled) {
         if(!isDefined(worksheet.autoFilter) && dataProvider.getRowsCount() > 0) {
             worksheet.autoFilter = cellRange;

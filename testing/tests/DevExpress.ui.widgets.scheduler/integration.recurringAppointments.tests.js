@@ -78,6 +78,7 @@ QUnit.test('Tasks should be duplicated according to recurrence rule, if firstDay
 });
 
 QUnit.test('Tasks should be duplicated according to recurrence rule and recurrence exception', function(assert) {
+    // NOTE: recurrenceException in date format will be converted in dateTime with 00.00 time when processing
     const tasks = [
         { text: 'One', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 2), recurrenceRule: 'FREQ=DAILY', recurrenceException: '20150317' }
     ];
@@ -884,6 +885,48 @@ QUnit.test('Recurring appt should be rendered correctly after setting recurrence
     assert.equal(appointments.length, 2, 'appt was rendered correctly');
 });
 
+QUnit.test('Recurrence exception time should be considered when recurrent appointment rendering (T862204)', function(assert) {
+    const task = {
+        text: 'No Recruiting students',
+        roomId: [5],
+        startDate: new Date(2017, 4, 15, 11, 0),
+        endDate: new Date(2017, 4, 15, 12, 0),
+        recurrenceRule: 'FREQ=DAILY;COUNT=3',
+        recurrenceException: '20170516T070000Z'
+    };
+
+    this.createInstance({
+        dataSource: [task],
+        views: ['month'],
+        currentView: 'month',
+        currentDate: new Date(2017, 4, 25)
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 3, 'Correct appointment count is rendered');
+});
+
+QUnit.test('Recurrence exception time should be considered when recurrent appointment rendering and timezones are set', function(assert) {
+    const task = {
+        text: 'No Recruiting students',
+        roomId: [5],
+        startDate: new Date(2017, 4, 15, 11, 0),
+        endDate: new Date(2017, 4, 15, 12, 0),
+        recurrenceRule: 'FREQ=DAILY;COUNT=3',
+        recurrenceException: '20170516T070000Z',
+        startDateTimeZone: 'Etc/UTC'
+    };
+
+    this.createInstance({
+        dataSource: [task],
+        timeZone: 'Europe/Paris',
+        views: ['month'],
+        currentView: 'month',
+        currentDate: new Date(2017, 4, 25)
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 3, 'Correct appointment count is rendered');
+});
+
 QUnit.test('The second appointment in recurring series in Month view should have correct width', function(assert) {
     this.createInstance({
         dataSource: [{
@@ -987,12 +1030,9 @@ QUnit.test('Reduced reccuring appt should have right left position in first colu
         currentView: 'month'
     });
 
-    const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
     const $reducedAppointment = this.instance.$element().find('.dx-scheduler-appointment-reduced');
-    const compactClass = 'dx-scheduler-appointment-compact';
 
     assert.equal($reducedAppointment.eq(1).position().left, 0, 'first appt has right left position');
-    assert.notOk($appointment.eq(7).hasClass(compactClass), 'next appt isn\'t compact');
 });
 
 QUnit.test('Reduced reccuring appt should have right left position in first column in grouped Month view', function(assert) {
@@ -1019,13 +1059,10 @@ QUnit.test('Reduced reccuring appt should have right left position in first colu
         ]
     });
 
-    const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
     const $reducedAppointment = this.instance.$element().find('.dx-scheduler-appointment-reduced');
-    const compactClass = 'dx-scheduler-appointment-compact';
     const cellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').outerWidth();
 
     assert.roughEqual($reducedAppointment.eq(1).position().left, cellWidth * 7, 2.5, 'first appt in 2d group has right left position');
-    assert.notOk($appointment.eq(7).hasClass(compactClass), 'appt isn\'t compact');
 });
 
 QUnit.test('Recurrence exception should be adjusted by scheduler timezone', function(assert) {
@@ -1079,56 +1116,6 @@ QUnit.test('T697037. Recurrence exception date should equal date of appointment,
     pointer.down().move(0, -30).up();
 
     $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
-});
-
-QUnit.test('Recurrence exception should be adjusted by scheduler timezone after deleting of the single appt', function(assert) {
-    this.createInstance({
-        dataSource: [{
-            text: 'Recruiting students',
-            startDate: new Date(2018, 2, 26, 10, 0),
-            endDate: new Date(2018, 2, 26, 11, 0),
-            recurrenceRule: 'FREQ=DAILY'
-        }],
-        views: ['day'],
-        currentView: 'day',
-        currentDate: new Date(2018, 2, 27),
-        timeZone: 'Australia/Sydney'
-    });
-
-    this.scheduler.appointments.click();
-    this.clock.tick(300);
-
-    this.scheduler.tooltip.clickOnDeleteButton();
-    $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
-
-    const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
-    assert.notOk($appointment.length, 'appt is deleted');
-});
-
-QUnit.test('Recurrence exception should be adjusted by appointment timezone after deleting of the single appt', function(assert) {
-    this.createInstance({
-        dataSource: [{
-            text: 'Recruiting students',
-            startDate: new Date(2018, 2, 26, 10, 0),
-            endDate: new Date(2018, 2, 26, 11, 0),
-            recurrenceRule: 'FREQ=DAILY',
-            startDateTimeZone: 'Australia/Canberra',
-            endDateTimeZone: 'Australia/Canberra'
-        }],
-        views: ['day'],
-        currentView: 'day',
-        currentDate: new Date(2018, 3, 1)
-    });
-
-    this.scheduler.appointments.click();
-    this.clock.tick(300);
-
-    this.scheduler.tooltip.clickOnDeleteButton();
-    $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
-
-    const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
-
-    assert.notOk($appointment.length, 'appt is deleted');
 });
 
 QUnit.test('Single changed appointment should be rendered correctly in specified timeZone', function(assert) {

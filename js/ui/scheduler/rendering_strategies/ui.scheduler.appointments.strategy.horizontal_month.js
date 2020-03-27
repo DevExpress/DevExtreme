@@ -82,12 +82,6 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
         return this._getAppointmentDefaultHeight();
     }
 
-    _checkLongCompactAppointment(item, result) {
-        this._splitLongCompactAppointment(item, result);
-
-        return result;
-    }
-
     _columnCondition(a, b) {
         const conditions = this._getConditions(a, b);
         return conditions.rowCondition || conditions.columnCondition || conditions.cellPositionCondition;
@@ -99,12 +93,6 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
 
     _getSortedPositions(map) {
         return super._getSortedPositions(map, true);
-    }
-
-    _customizeAppointmentGeometry(coordinates) {
-        const config = this._calculateGeometryConfig(coordinates);
-
-        return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset);
     }
 
     _getDefaultRatio() {

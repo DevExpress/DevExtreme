@@ -35,7 +35,7 @@ class FileManagerFilesTreeView extends Widget {
             keyExpr: 'getInternalKey',
             parentIdExpr: 'parentDirectory.getInternalKey',
             displayExpr: itemInfo => itemInfo.getDisplayName(),
-            hasItemsExpr: 'fileItem.hasSubDirs',
+            hasItemsExpr: 'fileItem.hasSubDirectories',
             onItemClick: this._createActionByOption('onDirectoryClick'),
             onItemExpanded: e => this._onFilesTreeViewItemExpanded(e),
             onItemCollapsed: e => this._onFilesTreeViewItemCollapsed(e),

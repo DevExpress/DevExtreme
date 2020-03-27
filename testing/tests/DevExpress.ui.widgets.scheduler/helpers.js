@@ -9,6 +9,13 @@ export const TOOLBAR_BOTTOM_LOCATION = 'bottom';
 const SCHEDULER_ID = 'scheduler';
 const TEST_ROOT_ELEMENT_ID = 'qunit-fixture';
 
+export const CLASSES = {
+    resizableHandle: {
+        left: '.dx-resizable-handle-left',
+        right: '.dx-resizable-handle-right'
+    }
+};
+
 export const initTestMarkup = () => $(`#${TEST_ROOT_ELEMENT_ID}`).html(`<div id="${SCHEDULER_ID}"><div data-options="dxTemplate: { name: 'template' }">Task Template</div></div>`);
 
 export const createWrapper = (option) => new SchedulerTestWrapper($(`#${SCHEDULER_ID}`).dxScheduler(option).dxScheduler('instance'));
@@ -205,7 +212,7 @@ export class SchedulerTestWrapper {
                 }
                 return this.workSpace.getCells().eq(rowIndex);
             },
-
+            getCellPosition: (rowIndex, cellIndex) => this.workSpace.getCell(rowIndex, cellIndex).position(),
             getAllDayCells: () => $('.dx-scheduler-all-day-table-cell'),
             getAllDayCell: (index) => this.workSpace.getAllDayCells().eq(index),
             getCellWidth: () => this.workSpace.getCells().eq(0).outerWidth(),
@@ -231,12 +238,21 @@ export class SchedulerTestWrapper {
 
         this.navigator = {
             getNavigator: () => $('.dx-scheduler-navigator'),
-            getCaption: () => $('.dx-scheduler-navigator').find('.dx-scheduler-navigator-caption').text(),
+            getCaptionElement: () => {
+                return this.navigator.getNavigator().find('.dx-scheduler-navigator-caption');
+            },
+            getCaption: () => this.navigator.getCaptionElement().text(),
             clickOnPrevButton: () => {
                 this.navigator.getNavigator().find('.dx-scheduler-navigator-previous').trigger('dxclick');
             },
             clickOnNextButton: () => {
                 this.navigator.getNavigator().find('.dx-scheduler-navigator-next').trigger('dxclick');
+            },
+            click: () => {
+                this.navigator.getCaptionElement().trigger('dxclick');
+            },
+            isPopupVisible: () => {
+                return $('.dx-scheduler-navigator-calendar-popover > .dx-overlay-content').is(':visible');
             }
         },
 

@@ -2,7 +2,7 @@ import $ from 'jquery';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 
-import 'renovation/dist/button.j';
+import 'renovation/button.j';
 import 'common.css!';
 
 QUnit.testStart(function() {
@@ -102,8 +102,7 @@ QUnit.module('Button markup', () => {
         assert.ok(element.hasClass(BUTTON_BACK_CLASS), 'button has correct type class after change type');
     });
 
-    // TODO
-    QUnit.skip('class is not removed after change type', function(assert) {
+    QUnit.test('class is not removed after change type', function(assert) {
         const $element = $('#button').Button({});
 
         $element.addClass('test');
@@ -165,15 +164,13 @@ QUnit.module('Button markup', () => {
         assert.ok($button.find('.' + BUTTON_CONTENT_CLASS).hasClass(TEMPLATE_WRAPPER_CLASS), 'template has content class');
     });
 
-    // TODO
-    QUnit.skip('Button with anonymous template', function(assert) {
+    QUnit.test('Button with anonymous template', function(assert) {
         const $button = $('#buttonWithAnonymousTemplate').Button();
 
         assert.equal($.trim($button.text()), 'test', 'anonymous template rendered');
     });
 
-    // TODO
-    QUnit.skip('anonymous content template rendering', function(assert) {
+    QUnit.test('anonymous content template rendering', function(assert) {
         const $contentElement = $('#buttonWithAnonymousTemplate #content');
 
         const $button = $('#buttonWithAnonymousTemplate').Button();

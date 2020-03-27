@@ -1702,6 +1702,8 @@ declare module DevExpress.fileManagement {
         dataItem: any;
         /** @name FileSystemItem.dateModified */
         dateModified: Date;
+        /** @name FileSystemItem.hasSubDirectories */
+        hasSubDirectories: boolean;
         /** @name FileSystemItem.isDirectory */
         isDirectory: boolean;
         /** @name FileSystemItem.key */
@@ -3239,7 +3241,7 @@ declare module DevExpress.ui {
         /** @name dxDiagram.Options.mainToolbar */
         mainToolbar?: { commands?: Array<dxDiagramCustomCommand> | Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor'>, visible?: boolean };
         /** @name dxDiagram.Options.nodes */
-        nodes?: { autoLayout?: 'auto' | 'off' | 'tree' | 'layered' | { orientation?: 'auto' | 'vertical' | 'horizontal', type?: 'auto' | 'off' | 'tree' | 'layered' }, childrenExpr?: string | ((data: any) => any), containerKeyExpr?: string | ((data: any) => any), dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, heightExpr?: string | ((data: any) => any), imageUrlExpr?: string | ((data: any) => any), itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), leftExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), topExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any), widthExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
+        nodes?: { autoLayout?: 'auto' | 'off' | 'tree' | 'layered' | { orientation?: 'auto' | 'vertical' | 'horizontal', type?: 'auto' | 'off' | 'tree' | 'layered' }, containerChildrenExpr?: string | ((data: any) => any), containerKeyExpr?: string | ((data: any) => any), dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, heightExpr?: string | ((data: any) => any), imageUrlExpr?: string | ((data: any) => any), itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), leftExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), topExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any), widthExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.onCustomCommand */
         onCustomCommand?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, name?: string }) => any);
         /** @name dxDiagram.Options.onItemClick */
@@ -3606,7 +3608,7 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.currentPathKeys */
         currentPathKeys?: Array<string>;
         /** @name dxFileManager.Options.customizeDetailColumns */
-        customizeDetailColumns?: ((columns: Array<dxDataGridColumn>) => Array<dxDataGridColumn>);
+        customizeDetailColumns?: ((columns: Array<dxFileManagerDetailsColumn>) => Array<dxFileManagerDetailsColumn>);
         /** @name dxFileManager.Options.customizeThumbnail */
         customizeThumbnail?: ((fileSystemItem: DevExpress.fileManagement.FileSystemItem) => string);
         /** @name dxFileManager.Options.fileSystemProvider */
@@ -4108,7 +4110,7 @@ declare module DevExpress.ui {
         /** @name dxGantt.Options.dependencies */
         dependencies?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | Function, predecessorIdExpr?: string | Function, successorIdExpr?: string | Function, typeExpr?: string | Function };
         /** @name dxGantt.Options.editing */
-        editing?: { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowDependencyUpdating?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskUpdating?: boolean, enabled?: boolean };
+        editing?: { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskUpdating?: boolean, enabled?: boolean };
         /** @name dxGantt.Options.onSelectionChanged */
         onSelectionChanged?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, selectedRowKey?: any }) => any);
         /** @name dxGantt.Options.resourceAssignments */
@@ -4134,7 +4136,7 @@ declare module DevExpress.ui {
         /** @name dxGantt.Options.toolbar */
         toolbar?: dxGanttToolbar;
         /** @name dxGantt.Options.validation */
-        validation?: { autoUpdateParentTasks?: boolean, enableDependencyValidation?: boolean };
+        validation?: { autoUpdateParentTasks?: boolean, validateDependencies?: boolean };
     }
     /** @name dxGantt */
     export class dxGantt extends Widget {
@@ -4159,10 +4161,10 @@ declare module DevExpress.ui {
     }
     /** @name dxGanttToolbarItem */
     export interface dxGanttToolbarItem extends dxToolbarItem {
-        /** @name dxGanttToolbarItem.formatName */
-        formatName?: 'separator' | 'undo' | 'redo' | 'zoomIn' | 'zoomOut' | string;
         /** @name dxGanttToolbarItem.location */
         location?: 'after' | 'before' | 'center';
+        /** @name dxGanttToolbarItem.name */
+        name?: 'separator' | 'undo' | 'redo' | 'zoomIn' | 'zoomOut' | string;
     }
     /** @name dxHtmlEditor.Options */
     export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
@@ -4265,14 +4267,14 @@ declare module DevExpress.ui {
         /** @name dxHtmlEditorToolbar.container */
         container?: string | Element | JQuery;
         /** @name dxHtmlEditorToolbar.items */
-        items?: Array<dxHtmlEditorToolbarItem | 'background' | 'bold' | 'color' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear'>;
+        items?: Array<dxHtmlEditorToolbarItem | 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear'>;
         /** @name dxHtmlEditorToolbar.multiline */
         multiline?: boolean;
     }
     /** @name dxHtmlEditorToolbarItem */
     export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
         /** @name dxHtmlEditorToolbarItem.formatName */
-        formatName?: 'background' | 'bold' | 'color' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | string;
+        formatName?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | string;
         /** @name dxHtmlEditorToolbarItem.formatValues */
         formatValues?: Array<string | number | boolean>;
         /** @name dxHtmlEditorToolbarItem.location */

@@ -11,7 +11,11 @@ module.exports = {
         }
     },
     collectCoverage: true,
-    collectCoverageFrom: ['./js/renovation/**/*.p.js'],
+    collectCoverageFrom: [
+        './js/renovation/**/*.p.js',
+        '!./js/renovation/number-box.p.js',
+        '!./js/renovation/select-box.p.js',
+    ],
     coverageDirectory: './testing/jest/code_coverage',
     coverageThreshold: {
         './js/renovation/**/*.p.js': {
@@ -24,7 +28,7 @@ module.exports = {
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     preset: 'ts-jest',
     setupFiles: [
-        path.join(path.resolve('.'), './testing/jest/setup-enzyme.js'),
+        path.join(path.resolve('.'), './testing/jest/setup-enzyme.ts'),
     ],
     testMatch: [
         path.join(path.resolve('.'), './testing/jest/**/*.tests.[jt]s?(x)')

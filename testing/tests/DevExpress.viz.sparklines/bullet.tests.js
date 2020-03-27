@@ -121,6 +121,28 @@ QUnit.test('Create canvas when container size is defined', function(assert) {
 
 QUnit.module('Range', environment);
 
+QUnit.test('startScaleValue > endScaleValue. Arg translator must be inverted', function(assert) {
+    this.createBullet({
+        startScaleValue: 10,
+        endScaleValue: 1
+    });
+
+    const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+
+    assert.strictEqual(argTranslator.update.lastCall.args[0].invert, true, 'Arg translator inverted');
+});
+
+QUnit.test('startScaleValue > endScaleValue. Arg translator must not be inverted', function(assert) {
+    this.createBullet({
+        startScaleValue: 1,
+        endScaleValue: 10
+    });
+
+    const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+
+    assert.strictEqual(argTranslator.update.lastCall.args[0].invert, undefined, 'Arg translator inverted');
+});
+
 QUnit.test('Create range when all value options are defined', function(assert) {
     this.createBullet({ value: 10, target: 20, startScaleValue: 0, endScaleValue: 30 });
 
@@ -490,7 +512,7 @@ QUnit.test('Groups structure when target < 0 and startScaleValue is not defined,
     assert.equal(renderer.stub('path').getCall(2).returnValue.stub('append').lastCall.args[0], renderer.root);
 });
 
-QUnit.test('Groups structure when target < 0 and startScaleValue is not defined, value < 0. target < value', function(assert) {
+QUnit.test('Groups structure when target < 0 and startScaleValue is not defined, value < 0. target > value', function(assert) {
     this.createBullet({ target: -10, endScaleValue: 20, value: -15 });
 
     const renderer = this.renderer;
@@ -1067,73 +1089,6 @@ QUnit.test('Change size if size = 0,10 - B239871', function(assert) {
     assert.ok(redrawFunctionCalled, 'Redraw function was not called');
 });
 
-// QUnit.test('Rendering in container with container size 0, 0', function (assert) {
-//    var container = $('#containerForResize'),
-//        sparkCont = $('<div style="width: 10px; height: 0px">').appendTo(container),
-//        options = {
-//            value: 10,
-//            startScaleValue: 0,
-//            endScaleValue: 10,
-//            target: 8
-//        },
-//        renderCalled = 0;
-//
-//    dxBullet.prototype._drawWidgetElements = function () {
-//        renderCalled++;
-//    };
-//
-//    sparkCont.dxBullet(options);
-//    sparkCont.width(200);
-//    sparkCont.height(400);
-//    sparkCont.dxBullet('instance').render();
-//
-//    assert.equal(renderCalled, 2, 'Render called 2 time');
-// });
-//
-// QUnit.test('Rendering in container with size 0, 0', function (assert) {
-//    var container = $('#containerForResize'),
-//        sparkCont = $('<div style="width: 10px; height: 10px">').appendTo(container),
-//        options = {
-//            value: 10,
-//            startScaleValue: 0,
-//            endScaleValue: 10,
-//            target: 8,
-//            size: {
-//                width: 0,
-//                height: 0
-//            }
-//        },
-//        renderCalled = 0;
-//
-//    dxBullet.prototype._drawWidgetElements = function () {
-//        renderCalled++;
-//    };
-//
-//    sparkCont.dxBullet(options);
-//    sparkCont.dxBullet('instance').option('size', { width: 200, height: 30 });
-//
-//    assert.equal(renderCalled, 1, 'Render called 1 time');
-// });
-//
-// QUnit.test('Rendering in container with big margin', function (assert) {
-//    var container = $('#containerForResize'),
-//        sparkCont = $('<div style="width: 2px; height: 2px">').appendTo(container),
-//        options = {
-//        },
-//        renderCalled = 0;
-//
-//    dxBullet.prototype._drawWidgetElements = function () {
-//        renderCalled++;
-//    };
-//
-//    sparkCont.dxBullet(options);
-//    sparkCont.width(200);
-//    sparkCont.height(400);
-//    sparkCont.dxBullet('instance').render();
-//
-//    assert.equal(renderCalled, 1, 'Render called 2 time');
-// });
-
 QUnit.module('drawn', {
     beforeEach: function() {
         environment.beforeEach.call(this);
@@ -1160,4 +1115,30 @@ QUnit.test('drawn is called after resize', function(assert) {
     bullet.option('size', { width: 300 });
 
     assert.strictEqual(BaseWidget.prototype._drawn.calledTwice, true);
+});
+
+QUnit.module('RTL support', environment);
+
+QUnit.test('rtlEnabled = true. EndScaleValue > startScaleValue', function(assert) {
+    this.createBullet({
+        startScaleValue: 1,
+        endScaleValue: 10,
+        rtlEnabled: true
+    });
+
+    const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+
+    assert.strictEqual(argTranslator.update.lastCall.args[0].invert, true, 'Arg translator is inverted');
+});
+
+QUnit.test('rtlEnabled = true. EndScaleValue < startScaleValue', function(assert) {
+    this.createBullet({
+        startScaleValue: 10,
+        endScaleValue: 1,
+        rtlEnabled: true
+    });
+
+    const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+
+    assert.strictEqual(argTranslator.update.lastCall.args[0].invert, false, 'Arg translator is inverted');
 });

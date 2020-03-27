@@ -3,7 +3,7 @@ import { ensureDefined } from '../core/utils/common';
 import { deserializeDate } from '../core/utils/date_serialization';
 import { each } from '../core/utils/iterator';
 import { isPromise } from '../core/utils/type';
-import { Deferred } from '../core/utils/deferred';
+import { Deferred, fromPromise } from '../core/utils/deferred';
 import FileSystemItem from './file_system_item';
 
 const DEFAULT_FILE_UPLOAD_CHUNK_SIZE = 200000;
@@ -82,7 +82,7 @@ class FileSystemProviderBase {
         }
 
         if(fileItem.isDirectory) {
-            fileItem.hasSubDirs = this._hasSubDirs(dataObj);
+            fileItem.hasSubDirectories = this._hasSubDirs(dataObj);
         }
 
         fileItem.key = this._keyGetter(dataObj);
@@ -134,7 +134,7 @@ class FileSystemProviderBase {
             const result = action();
 
             if(isPromise(result)) {
-                result
+                fromPromise(result)
                     .done(userResult => deferred.resolve(keepResult && userResult || undefined))
                     .fail(error => deferred.reject(error));
             } else {

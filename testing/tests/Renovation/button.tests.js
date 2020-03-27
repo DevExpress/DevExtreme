@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import 'renovation/dist/button.j';
+import 'renovation/button.j';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import ValidationEngine from 'ui/validation_engine';
@@ -60,7 +60,7 @@ QUnit.test('should render button with default template', function(assert) {
     $element.Button({ text: 'test', icon: 'check' });
     const $contentElements = $element.find('.dx-button-content').children();
 
-    assert.strictEqual($element.Button('instance').option('template'), '', 'default template value');
+    assert.strictEqual($element.Button('instance').option('template'), undefined, 'default template value');
     assert.ok($contentElements.eq(0).hasClass('dx-icon'), 'render icon');
     assert.ok($contentElements.eq(1).hasClass('dx-button-text'), 'render test');
 });
@@ -347,22 +347,23 @@ QUnit.module('contentReady', {}, () => {
 });
 
 QUnit.module('inkRipple', {}, () => {
-    // NOTE: deprecated behavior
-    QUnit.skip('inkRipple should be removed when widget is removed', function(assert) {
-        $('#inkButton').Button({
+    QUnit.test('inkRipple should be removed when widget is removed', function(assert) {
+        const $element = $('#inkButton');
+
+        $element.Button({
             useInkRipple: true,
-            onClick(e) {
-                const $element = $(e.component.$element());
-                $element.triggerHandler({ type: 'dxremove' });
-                $element.trigger('dxinactive');
-                assert.ok(true, 'no exceptions');
-            }
         });
-        $('#inkButton').trigger('dxclick');
+        $element.Button('instance').option('onClick', (e) => {
+            const $element = $(e.component.$element());
+            $element.triggerHandler({ type: 'dxremove' });
+            $element.trigger('dxinactive');
+            assert.ok(true, 'no exceptions');
+        });
+
+        $element.trigger('dxclick');
     });
 
-    // NOTE: deprecated behavior
-    QUnit.skip('widget should works correctly when the useInkRipple option is changed at runtime', function(assert) {
+    QUnit.test('widget should works correctly when the useInkRipple option is changed at runtime', function(assert) {
         const clock = sinon.useFakeTimers();
         const $inkButton = $('#inkButton').Button({
             text: 'test',
@@ -414,8 +415,7 @@ QUnit.module('widget sizing render', {}, () => {
         const instance = $element.Button('instance');
 
         assert.strictEqual(instance.option('width'), undefined);
-        // TODO
-        // assert.strictEqual($element.outerWidth(), 300, 'outer width of the element must be equal to custom width');
+        assert.strictEqual($element.outerWidth(), 300, 'outer width of the element must be equal to custom width');
     });
 
     QUnit.test('change width', function(assert) {

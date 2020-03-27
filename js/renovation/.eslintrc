@@ -1,0 +1,8 @@
+{
+    "extends": [
+        "devextreme/renovation-declarations"
+    ],
+    "rules": {
+         "@typescript-eslint/no-unused-expressions": ["error", { "allowShortCircuit": true, "allowTernary": true }]
+    }
+}

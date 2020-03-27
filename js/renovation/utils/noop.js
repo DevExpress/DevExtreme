@@ -1,1 +1,1 @@
-export default () => void 0;
+export default () => undefined;

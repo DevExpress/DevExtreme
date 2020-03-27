@@ -1,8 +1,8 @@
 import typeUtils from '../../../core/utils/type';
 
 const COLLECTOR_DEFAULT_WIDTH = 24;
+const COLLECTOR_DEFAULT_OFFSET = 3;
 
-const COMPACT_APPOINTMENT_DEFAULT_OFFSET = 3;
 const COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET = 22;
 
 const APPOINTMENT_MIN_COUNT = 1;
@@ -29,12 +29,12 @@ class AppointmentPositioningStrategy {
         }
     }
 
-    getCompactAppointmentTopOffset() {
-        return COMPACT_APPOINTMENT_DEFAULT_OFFSET;
+    getCollectorTopOffset() {
+        return COLLECTOR_DEFAULT_OFFSET;
     }
 
-    getCompactAppointmentLeftOffset() {
-        return COMPACT_APPOINTMENT_DEFAULT_OFFSET;
+    getCollectorLeftOffset() {
+        return COLLECTOR_DEFAULT_OFFSET;
     }
 
     getAppointmentDefaultOffset() {

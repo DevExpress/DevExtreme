@@ -1,14 +1,8 @@
 {
-    "env": {
-        "jest": true
-    },
-    "plugins": [
-        "jest",
-        "react"
+    "extends": [
+        "devextreme/jest"
     ],
-    "extends": ["plugin:jest/recommended"],
-    "rules": {
-        "no-unused-vars": ["error", { "varsIgnorePattern": "h" }],
-        "react/jsx-uses-vars": 2
+    "settings": {
+        "react": { "pragma": "h" }
     }
 }

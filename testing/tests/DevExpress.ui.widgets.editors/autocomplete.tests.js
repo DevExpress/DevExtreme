@@ -353,6 +353,9 @@ QUnit.module('dxAutocomplete', {
                     }
 
                     return deferred;
+                },
+                byKey(key) {
+                    return key;
                 }
             }
         });
@@ -833,6 +836,9 @@ QUnit.module('dxAutocomplete', {
                 load(loadOptions) {
                     searchedString = loadOptions.searchValue;
                     return ['item 1', 'item 2', 'item 3'];
+                },
+                byKey(key) {
+                    return key;
                 }
             },
             filterOperator: 'startswith'
@@ -1310,6 +1316,37 @@ QUnit.module('regressions', {
         this.keyboard
             .type('123');
         assert.equal(called, 6);
+    });
+
+    QUnit.test('onSelectionChanged event should trigger on item selection', function(assert) {
+        const valueChangedStub = sinon.stub();
+        const selectionChangedStub = sinon.stub();
+
+        this.instance.option({
+            onValueChanged: valueChangedStub,
+            onSelectionChanged: selectionChangedStub
+        });
+
+        this.keyboard
+            .type('2')
+            .press('arrowDown')
+            .press('enter');
+
+        assert.strictEqual(valueChangedStub.callCount, 2);
+        assert.strictEqual(valueChangedStub.firstCall.args[0].value, '2');
+        assert.strictEqual(valueChangedStub.secondCall.args[0].value, 'item 2');
+        assert.strictEqual(selectionChangedStub.callCount, 1);
+        assert.strictEqual(selectionChangedStub.lastCall.args[0].selectedItem, 'item 2');
+
+
+        this.keyboard
+            .caret(6)
+            .press('backspace');
+
+        assert.strictEqual(valueChangedStub.callCount, 3);
+        assert.strictEqual(valueChangedStub.lastCall.args[0].value, 'item ');
+        assert.strictEqual(selectionChangedStub.callCount, 2);
+        assert.strictEqual(selectionChangedStub.lastCall.args[0].selectedItem, null);
     });
 
     QUnit.test('clear button should save valueChangeEvent', function(assert) {

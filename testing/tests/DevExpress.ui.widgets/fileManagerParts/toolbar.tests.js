@@ -548,4 +548,93 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.strictEqual($(spy.args[1][0].element).get(0), this.$element.get(0), 'element is correct');
     });
 
+    test('file toolbar should support case when only custom elements are specified', function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const buttonClick = sinon.spy();
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            onToolbarItemClick: buttonClick,
+            toolbar: {
+                fileSelectionItems: [
+                    {
+                        widget: 'dxButton',
+                        options: {
+                            text: 'Properties',
+                            icon: 'preferences'
+                        }
+                    },
+                    {
+                        widget: 'dxButton',
+                        options: {
+                            text: 'Options',
+                            secretKey: 42
+                        }
+                    }
+                ]
+            }
+        });
+        this.clock.tick(400);
+
+        const $item = this.wrapper.findDetailsItem('File 1.txt');
+        $item.trigger('dxclick');
+        this.clock.tick(400);
+
+        const $toolbar = this.wrapper.getToolbar();
+        assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), 'file toolbar displayed');
+
+        const $elements = this.wrapper.getToolbarElements();
+        assert.equal($elements.length, 2, 'file toolbar has two elements');
+
+        assert.strictEqual($elements.eq(0).text(), 'Properties', 'properties button is rendered');
+        assert.strictEqual($elements.eq(1).text(), 'Options', 'options button is rendered');
+
+        $elements.eq(0).trigger('dxclick');
+
+        assert.strictEqual(buttonClick.callCount, 1, 'event raised');
+        assert.strictEqual(buttonClick.args[0][0].itemData.widget, 'dxButton', 'is correct widget');
+        assert.strictEqual(buttonClick.args[0][0].itemData.options.text, 'Properties', 'has correct text');
+        assert.strictEqual(buttonClick.args[0][0].itemData.options.icon, 'preferences', 'has correct icon');
+
+        $elements.eq(1).trigger('dxclick');
+
+        assert.strictEqual(buttonClick.callCount, 2, 'event raised');
+        assert.strictEqual(buttonClick.args[1][0].itemData.widget, 'dxButton', 'is correct widget');
+        assert.strictEqual(buttonClick.args[1][0].itemData.options.text, 'Options', 'has correct text');
+        assert.strictEqual(buttonClick.args[1][0].itemData.options.secretKey, 42, 'has custom option');
+    });
+
+    test('display only general toolbar if file toolbar have only custom items and none visible', function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            toolbar: {
+                fileSelectionItems: [
+                    {
+                        widget: 'dxButton',
+                        options: {
+                            text: 'Properties'
+                        },
+                        visible: false
+                    }
+                ]
+            }
+        });
+        this.clock.tick(400);
+
+        const $toolbar = this.wrapper.getToolbar();
+        assert.ok($toolbar.hasClass(Consts.GENERAL_TOOLBAR_CLASS), 'general toolbar displayed');
+        assert.ok(!$toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), 'file toolbar hidden');
+
+        const $item = this.wrapper.findDetailsItem('File 1.txt');
+        $item.trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.ok($toolbar.hasClass(Consts.GENERAL_TOOLBAR_CLASS), 'general toolbar displayed');
+        assert.ok(!$toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), 'file toolbar hidden');
+    });
+
 });

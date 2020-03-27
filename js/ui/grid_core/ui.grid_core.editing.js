@@ -22,7 +22,7 @@ import Form from '../form';
 import holdEvent from '../../events/hold';
 import { when, Deferred, fromPromise } from '../../core/utils/deferred';
 import commonUtils from '../../core/utils/common';
-import iconUtils from '../../core/utils/icon';
+import * as iconUtils from '../../core/utils/icon';
 import Scrollable from '../scroll_view/ui.scrollable';
 import deferredUtils from '../../core/utils/deferred';
 
@@ -1819,7 +1819,7 @@ const EditingController = modules.ViewController.inherit((function() {
         _prepareEditDataParams: function(options, value, text) {
             const that = this;
             const newData = {};
-            const oldData = options.data;
+            const oldData = options.row?.data;
             const rowKey = options.key;
             const $cellElement = $(options.cellElement);
             const editMode = getEditMode(that);
@@ -1890,6 +1890,9 @@ const EditingController = modules.ViewController.inherit((function() {
             const showEditorAlways = options.column.showEditorAlways;
             const isUpdateInCellMode = editMode === EDIT_MODE_CELL && options.row && !options.row.isNewRow;
             const focusPreviousEditingCell = showEditorAlways && !forceUpdateRow && isUpdateInCellMode && that.hasEditData() && !that.isEditCell(options.rowIndex, options.columnIndex);
+            const columns = that._columnsController.getVisibleColumns();
+            const isCustomCalculateCellValue = columns.some((column) => column.calculateCellValue !== column.defaultCalculateCellValue);
+            let focusCellAfterRowUpdate = false;
 
             if(focusPreviousEditingCell) {
                 that._focusEditingCell();
@@ -1900,14 +1903,18 @@ const EditingController = modules.ViewController.inherit((function() {
             that._addEditData(params, options.row);
             that._updateEditButtons();
 
+            if(editMode === EDIT_MODE_CELL && (isCustomSetCellValue || isCustomCalculateCellValue)) {
+                forceUpdateRow = focusCellAfterRowUpdate = true;
+            }
+
             if(showEditorAlways && !forceUpdateRow) {
                 if(isUpdateInCellMode) {
-                    that._editRowIndex = options.rowIndex + that._dataController.getRowIndexOffset();
+                    that._editRowIndex = options.row.rowIndex + that._dataController.getRowIndexOffset();
+
                     that._editColumnIndex = options.columnIndex;
                     return that.saveEditData();
                 } else if(editMode === EDIT_MODE_BATCH) {
-                    const columns = that._columnsController.getVisibleColumns();
-                    forceUpdateRow = isCustomSetCellValue || columns.some((column) => column.calculateCellValue !== column.defaultCalculateCellValue);
+                    forceUpdateRow = isCustomSetCellValue || isCustomCalculateCellValue;
                 }
             }
 
@@ -1915,6 +1922,7 @@ const EditingController = modules.ViewController.inherit((function() {
             if(row) {
                 if(forceUpdateRow || isCustomSetCellValue) {
                     that._updateEditRow(row, forceUpdateRow, isCustomSetCellValue);
+                    focusCellAfterRowUpdate && that._focusEditingCell();
                 } else if(row.update) {
                     row.update();
                 }
@@ -2018,7 +2026,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const $container = $(container);
             const column = item.column;
             const editorType = getEditorType(item);
-            const rowData = detailCellOptions.row && detailCellOptions.row.data;
+            const rowData = detailCellOptions?.row.data;
             const cellOptions = extend({}, detailCellOptions, {
                 data: rowData,
                 cellElement: null,
@@ -2035,10 +2043,9 @@ const EditingController = modules.ViewController.inherit((function() {
             cellOptions.value = column.calculateCellValue(rowData);
 
             const template = that._getFormEditItemTemplate.bind(that)(cellOptions, column);
-
-            if(that._rowsView.renderTemplate($container, template, cellOptions, !!$container.closest(getWindow().document).length)) {
+            that._rowsView.renderTemplate($container, template, cellOptions, !!$container.closest(getWindow().document).length).done(() => {
                 that._rowsView._updateCell($container, cellOptions);
-            }
+            });
             return cellOptions;
         },
 
@@ -2054,7 +2061,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 }, function() {
                     let $editorElement = $container.find('.dx-widget').first();
                     let validator = $editorElement.data('dxValidator');
-                    const validatorOptions = validator && validator.option();
+                    const validatorOptions = validator?.option();
 
                     $container.contents().remove();
                     cellOptions = that.renderFormEditTemplate.bind(that)(cellOptions, item, options.component, $container);
@@ -2099,7 +2106,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     });
                 } else {
                     forEachFormItems(items, (item) => {
-                        const itemId = item && (item.name || item.dataField);
+                        const itemId = item?.name || item?.dataField;
 
                         if(itemId) {
                             isCustomEditorType[itemId] = !!item.editorType;
@@ -2233,6 +2240,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 eventsEngine.on($button, addNamespace('click', EDITING_NAMESPACE), that.createAction(function(e) {
                     button.onClick.call(button, extend({}, e, { row: options.row, column: options.column }));
                     e.event.preventDefault();
+                    e.event.stopPropagation();
                 }));
                 options.rtlEnabled ? $container.prepend($button, '&nbsp;') : $container.append($button, '&nbsp;');
             }
