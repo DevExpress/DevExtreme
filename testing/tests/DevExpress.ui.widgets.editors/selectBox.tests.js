@@ -2822,6 +2822,26 @@ QUnit.module('search', moduleSetup, () => {
         assert.equal($(instance.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'filter was cleared');
     });
 
+    QUnit.testInActiveWindow('Unfiltered editor should not be load data on blur (T873258)', function(assert) {
+        const loadStub = sinon.stub().returns([1, 2, 3]);
+        const $selectBox = $('#selectBox').dxSelectBox({
+            searchTimeout: 0,
+            deferRendering: true,
+            dataSource: {
+                load: loadStub
+            },
+            searchEnabled: true,
+            showDataBeforeSearch: true
+        });
+
+        $selectBox
+            .find(toSelector(TEXTEDITOR_INPUT_CLASS))
+            .trigger('focusin')
+            .trigger('focusout');
+
+        assert.ok(loadStub.notCalled, 'data not loaded');
+    });
+
     QUnit.testInActiveWindow('widget with fieldTemplate and remote data source should display right value after search and selection (T668290)', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             dataSource: {
