@@ -347,18 +347,20 @@ QUnit.module('contentReady', {}, () => {
 });
 
 QUnit.module('inkRipple', {}, () => {
-    // NOTE: deprecated behavior
-    QUnit.skip('inkRipple should be removed when widget is removed', function(assert) {
-        $('#inkButton').Button({
+    QUnit.test('inkRipple should be removed when widget is removed', function(assert) {
+        const $element = $('#inkButton');
+
+        $element.Button({
             useInkRipple: true,
-            onClick(e) {
-                const $element = $(e.component.$element());
-                $element.triggerHandler({ type: 'dxremove' });
-                $element.trigger('dxinactive');
-                assert.ok(true, 'no exceptions');
-            }
         });
-        $('#inkButton').trigger('dxclick');
+        $element.Button('instance').option('onClick', (e) => {
+            const $element = $(e.component.$element());
+            $element.triggerHandler({ type: 'dxremove' });
+            $element.trigger('dxinactive');
+            assert.ok(true, 'no exceptions');
+        });
+
+        $element.trigger('dxclick');
     });
 
     // NOTE: deprecated behavior
