@@ -4498,6 +4498,7 @@ declare module DevExpress.ui {
     }
     /** @name dxLookup.Options */
     export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
+        /** @deprecated */
         /** @name dxLookup.Options.animation */
         animation?: { hide?: animationConfig, show?: animationConfig };
         /** @name dxLookup.Options.applyButtonText */
@@ -4510,6 +4511,7 @@ declare module DevExpress.ui {
         cleanSearchOnOpening?: boolean;
         /** @name dxLookup.Options.clearButtonText */
         clearButtonText?: string;
+        /** @deprecated */
         /** @name dxLookup.Options.closeOnOutsideClick */
         closeOnOutsideClick?: boolean | (() => boolean);
         /** @name dxLookup.Options.dropDownOptions */
@@ -4518,6 +4520,7 @@ declare module DevExpress.ui {
         fieldTemplate?: DevExpress.core.template | ((selectedItem: any, fieldElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxLookup.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
+        /** @deprecated */
         /** @name dxLookup.Options.fullScreen */
         fullScreen?: boolean;
         /** @name dxLookup.Options.groupTemplate */
@@ -4534,6 +4537,7 @@ declare module DevExpress.ui {
         onPullRefresh?: ((e: { component?: dxLookup, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** @name dxLookup.Options.onScroll */
         onScroll?: ((e: { component?: dxLookup, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: DevExpress.events.event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
+        /** @deprecated */
         /** @name dxLookup.Options.onTitleRendered */
         onTitleRendered?: ((e: { component?: dxLookup, element?: DevExpress.core.dxElement, model?: any, titleElement?: DevExpress.core.dxElement }) => any);
         /** @name dxLookup.Options.onValueChanged */
@@ -4544,10 +4548,13 @@ declare module DevExpress.ui {
         pageLoadingText?: string;
         /** @name dxLookup.Options.placeholder */
         placeholder?: string;
+        /** @deprecated */
         /** @name dxLookup.Options.popupHeight */
         popupHeight?: number | string | (() => number | string);
+        /** @deprecated */
         /** @name dxLookup.Options.popupWidth */
         popupWidth?: number | string | (() => number | string);
+        /** @deprecated */
         /** @name dxLookup.Options.position */
         position?: positionConfig;
         /** @name dxLookup.Options.pullRefreshEnabled */
@@ -4562,16 +4569,20 @@ declare module DevExpress.ui {
         searchEnabled?: boolean;
         /** @name dxLookup.Options.searchPlaceholder */
         searchPlaceholder?: string;
+        /** @deprecated */
         /** @name dxLookup.Options.shading */
         shading?: boolean;
         /** @name dxLookup.Options.showCancelButton */
         showCancelButton?: boolean;
         /** @name dxLookup.Options.showClearButton */
         showClearButton?: boolean;
+        /** @deprecated */
         /** @name dxLookup.Options.showPopupTitle */
         showPopupTitle?: boolean;
+        /** @deprecated */
         /** @name dxLookup.Options.title */
         title?: string;
+        /** @deprecated */
         /** @name dxLookup.Options.titleTemplate */
         titleTemplate?: DevExpress.core.template | ((titleElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxLookup.Options.useNativeScrolling */

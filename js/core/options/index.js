@@ -2,7 +2,7 @@ import { isFunction, isObject, type } from '../utils/type';
 import { equalByValue, noop } from '../utils/common';
 import { OptionManager } from './option_manager';
 import { clone } from '../utils/object';
-import { getFieldName, getParentName, convertRulesToOptions } from './utils';
+import { getFieldName, getParentName, convertRulesToOptions, getNestedOptionValue } from './utils';
 import { extend } from '../utils/extend';
 
 export class Options {
@@ -101,13 +101,13 @@ export class Options {
     }
 
     _normalizeName(name, silent) {
-        if(this._deprecatedNames.length && name && !silent) {
+        if(this._deprecatedNames.length && name) {
             for(let i = 0; i < this._deprecatedNames.length; i++) {
                 if(this._deprecatedNames[i] === name) {
                     const deprecate = this._deprecated[name];
 
                     if(deprecate) {
-                        this._notifyDeprecated(name);
+                        !silent && this._notifyDeprecated(name);
 
                         return deprecate.alias || name;
                     }
@@ -166,7 +166,7 @@ export class Options {
     }
 
     initial(name) {
-        return this._initial[name];
+        return getNestedOptionValue(this._initial, name);
     }
 
     option(options, value) {

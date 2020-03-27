@@ -1542,7 +1542,7 @@ QUnit.module('options', {
             autoValue = autoValue();
         }
 
-        assert.equal(initialValue, autoValue, 'initial value equal auto value');
+        assert.equal(autoValue, initialValue, 'initial value equal auto value');
     });
 
     QUnit.test('popupHeight', function(assert) {
@@ -1576,7 +1576,7 @@ QUnit.module('options', {
             autoValue = autoValue();
         }
 
-        assert.equal(initialValue, autoValue, 'initial value equal auto value');
+        assert.equal(autoValue, initialValue, 'initial value equal auto value');
     });
 
     QUnit.test('searchPlaceholder', function(assert) {

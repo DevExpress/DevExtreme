@@ -1287,6 +1287,29 @@ QUnit.module('defaultOptions', {
         })._isInitialOptionValue('test'), 'current value not equal initial value');
     });
 
+    QUnit.test('Checking current option value with initial option value (option value as function) when option is object', function(assert) {
+        const TestComponent = Component.inherit({
+            _getDefaultOptions() {
+                return {
+                    optionsObject: {
+                        test() {
+                            return 'test1';
+                        }
+                    }
+                };
+            }
+        });
+
+        assert.ok(new TestComponent()._isInitialOptionValue('optionsObject.test'), 'current value equal initial value');
+        assert.notOk(new TestComponent({
+            optionsObject: {
+                test() {
+                    return 'test2';
+                }
+            }
+        })._isInitialOptionValue('optionsObject.test'), 'current value not equal initial value');
+    });
+
     QUnit.test('Checking current option value with initial option value (option value as object)', function(assert) {
         const TestComponent = Component.inherit({
             _getDefaultOptions() {
