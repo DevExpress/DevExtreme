@@ -907,6 +907,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         }
 
         const focusedView = this._focusedView;
+        const $focusViewElement = focusedView && focusedView.element();
         let $focusElement;
 
         this._isHiddenFocus = disableFocus;
@@ -920,10 +921,15 @@ const KeyboardNavigationController = core.ViewController.inherit({
             $focusElement = $cell;
             this._updateFocusedCellPosition($cell);
         }
-
-        this._processPrevFocusedCells();
-
         if($focusElement) {
+            if($focusViewElement) {
+                $focusViewElement
+                    .find('.dx-row[tabIndex], .dx-row > td[tabindex]')
+                    .not($focusElement)
+                    .removeClass(CELL_FOCUS_DISABLED_CLASS)
+                    .removeAttr('tabIndex');
+            }
+
             eventsEngine.one($focusElement, 'blur', e => {
                 if(e.relatedTarget) {
                     $focusElement.removeClass(CELL_FOCUS_DISABLED_CLASS);
@@ -998,62 +1004,11 @@ const KeyboardNavigationController = core.ViewController.inherit({
     _getPrevFocusedCell: function() {
         return $(this._getCell(this._focusedCellPosition));
     },
-
-    _updatePrevFocusedCellPositions: function(position) {
-        const prevPosition = position || this._focusedCellPosition;
-
-        if(prevPosition) {
-            const rowIndex = prevPosition.rowIndex;
-            const columnIndex = prevPosition.columnIndex;
-
-            if(rowIndex >= 0 && columnIndex >= 0) {
-                const hasSameItem = this._prevFocusedCellPositions.filter(item => {
-                    return item.rowIndex === rowIndex && item.columnIndex === columnIndex;
-                }).length > 0;
-
-                if(!hasSameItem) {
-                    this._prevFocusedCellPositions.push({
-                        rowIndex: rowIndex,
-                        columnIndex: columnIndex
-                    });
-                }
-            }
-        }
-    },
-    _processPrevFocusedCells: function() {
-        const currentRowIndex = this._focusedCellPosition.rowIndex;
-        const currentColumnIndex = this._focusedCellPosition.columnIndex;
-        const positions = this._prevFocusedCellPositions || [];
-
-        this._prevFocusedCellPositions = positions.filter(position => {
-            const isCurrentPosition = position.rowIndex === currentRowIndex && position.columnIndex === currentColumnIndex;
-
-            if(!isCurrentPosition) {
-                $(this._getCell(position))
-                    .removeAttr('tabindex')
-                    .removeClass(CELL_FOCUS_DISABLED_CLASS)
-                    .closest(`.${ROW_CLASS}`)
-                    .removeAttr('tabindex')
-                    .removeClass(CELL_FOCUS_DISABLED_CLASS);
-            }
-
-            return isCurrentPosition;
-        });
-    },
-
-    _updateFocusedCellPosition: function($element, direction) {
-        const position = this._getCellPosition($element, direction);
-
-        this._updatePrevFocusedCellPositions();
-
+    _updateFocusedCellPosition: function($cell, direction) {
+        const position = this._getCellPosition($cell, direction);
         if(position) {
-            if(!$element.length || position.rowIndex >= 0 && position.columnIndex >= 0) {
-                const prevRowIndex = this.option('focusedRowIndex');
-                const prevColumnIndex = this.option('focusedColumnIndex');
-
+            if(!$cell.length || position.rowIndex >= 0 && position.columnIndex >= 0) {
                 this.setFocusedCellPosition(position.rowIndex, position.columnIndex);
-
-                this._fireFocusedCellChanged($element, prevColumnIndex, prevRowIndex);
             }
         }
         return position;
@@ -1635,11 +1590,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
     _applyTabIndexToElement: function($element) {
         const tabIndex = this.option('tabIndex') || 0;
         $element.attr('tabindex', isDefined(tabIndex) ? tabIndex : 0);
-
-        const elementType = this._getElementType($element);
-        const $prevCell = elementType === 'row' ? $element.find('td').eq(0) : $element;
-        const prevCellPosition = this._getCellPosition($prevCell);
-        this._updatePrevFocusedCellPositions(prevCellPosition);
     },
 
     _getCell: function(cellPosition) {
