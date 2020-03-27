@@ -5,13 +5,7 @@ export const wrapElement = ($element, $wrapper) => {
     const attributes = $wrapper.get(0).attributes;
     const children = $wrapper.contents();
 
-    each(attributes, (_, { name, value }) => {
-        if(name === 'class') {
-            $element.addClass(value);
-        } else {
-            $element.attr(name, value);
-        }
-    });
+    addAttributes($element, attributes);
 
     $wrapper.remove();
     each(children, (_, child) => {
@@ -19,6 +13,16 @@ export const wrapElement = ($element, $wrapper) => {
     });
 
     return children;
+};
+
+const addAttributes = ($element, attributes) => {
+    each(attributes, (_, { name, value }) => {
+        if(name === 'class') {
+            $element.addClass(value);
+        } else {
+            $element.attr(name, value);
+        }
+    });
 };
 
 export const removeDifferentElements = ($children, $newChildren) => {
