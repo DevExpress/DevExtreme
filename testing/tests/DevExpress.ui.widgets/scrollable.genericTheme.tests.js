@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
-import 'ui/scroll_view/ui.scrollable';
-import { SCROLLABLE_CONTENT_CLASS } from './scrollableParts/scrollable.constants.js';
+import Scrollable from 'ui/scroll_view/ui.scrollable';
+import { SCROLLABLE_CONTENT_CLASS, SCROLLABLE_CONTAINER_CLASS } from './scrollableParts/scrollable.constants.js';
 import { extend } from 'core/utils/extend';
 
 import 'common.css!';
@@ -50,6 +50,52 @@ QUnit.module('Paddings: simulated strategy', () => {
                     }
                 });
             });
+        });
+    });
+});
+
+
+// T872060
+QUnit.module('ScrollProps: native strategy', () => {
+    const configs = [];
+    [false, true].forEach((rtlEnabled) => {
+        ['vertical', 'horizontal', 'both'].forEach((outerDirection) => {
+            ['vertical', 'horizontal', 'both'].forEach((innerDirection) => {
+                ['always', 'never', 'onHover', 'onScroll'].forEach((showScrollbar) => {
+                    let config = { rtlEnabled, outerDirection, innerDirection, showScrollbar };
+                    config.message = Object.keys(config).reduce((message, key) => message += `${key}: ${config[key]}, `, '');
+                    configs.push(config);
+                });
+            });
+        });
+    });
+
+    function checkScrollProps(assert, scrollable, expected, message) {
+        const scrollableContainer = scrollable.querySelector(`.${SCROLLABLE_CONTAINER_CLASS}`);
+        const styles = window.getComputedStyle(scrollableContainer);
+
+        assert.strictEqual(styles.touchAction, expected.touchAction, 'touch action ' + message);
+        assert.strictEqual(styles.overflowX, expected.overflowX, 'overflow X ' + message);
+        assert.strictEqual(styles.overflowY, expected.overflowY, 'overflow Y ' + message);
+    }
+
+    configs.forEach(config => {
+        QUnit.test(`config: ${config.message}, innerScrollable inside outerScrollable`, function(assert) {
+            const options = { showScrollbar: config.showScrollbar, useNative: true, rtlEnabled: config.rtlEnabled };
+            const outerScrollableElement = document.querySelector('#outerScrollable');
+            const innerScrollableElement = document.querySelector('#innerScrollable');
+
+            new Scrollable(outerScrollableElement, extend(options, { direction: config.outerDirection }));
+            new Scrollable(innerScrollableElement, extend(options, { direction: config.innerDirection }));
+
+            const expected = {
+                both: { touchAction: 'pan-x pan-y', overflowX: 'auto', overflowY: 'auto' },
+                vertical: { touchAction: 'pan-y', overflowX: 'hidden', overflowY: 'auto' },
+                horizontal: { touchAction: 'pan-x', overflowX: 'auto', overflowY: 'hidden' }
+            };
+
+            checkScrollProps(assert, outerScrollableElement, expected[config.outerDirection], 'outerScrollable');
+            checkScrollProps(assert, innerScrollableElement, expected[config.innerDirection], 'innerScrollable');
         });
     });
 });
