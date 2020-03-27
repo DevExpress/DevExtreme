@@ -216,13 +216,14 @@ function createGroupFields(item) {
 function parseFields(dataSource, fieldsList, path, fieldsDataType) {
     const result = [];
 
-    each(fieldsList || [], function(field, value) {
+    Object.keys(fieldsList || []).forEach(function(field) {
         if(field && field.indexOf('__') === 0) return;
 
         let dataIndex = 1;
         const currentPath = path.length ? path + '.' + field : field;
         let dataType = fieldsDataType[currentPath];
         const getter = compileGetter(currentPath);
+        let value = fieldsList[field];
         let items;
 
         while(!isDefined(value) && dataSource[dataIndex]) {
