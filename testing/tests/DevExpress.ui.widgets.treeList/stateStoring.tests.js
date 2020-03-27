@@ -47,184 +47,186 @@ QUnit.module('State Storing', {
     afterEach: function() {
         this.clock.restore();
     }
-});
+}, () => {
 
-QUnit.test('Apply state storing', function(assert) {
+    QUnit.test('Apply state storing', function(assert) {
     // arrange
-    let rows;
+        let rows;
 
-    // act
-    this.setupDataGridModules({
-        filterRow: { visible: true },
-        stateStoring: {
-            enabled: true,
-            type: 'custom',
-            customLoad: function() {
-                return {
-                    columns: [
-                        { dataField: 'name' },
-                        { dataField: 'age', filterValue: 14, selectedFilterOperation: '>' }
-                    ],
-                    expandedRowKeys: [1, 2],
-                    selectedRowKeys: [3],
-                    searchPanel: {
-                        text: 'Name'
-                    }
-                };
+        // act
+        this.setupDataGridModules({
+            filterRow: { visible: true },
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return {
+                        columns: [
+                            { dataField: 'name' },
+                            { dataField: 'age', filterValue: 14, selectedFilterOperation: '>' }
+                        ],
+                        expandedRowKeys: [1, 2],
+                        selectedRowKeys: [3],
+                        searchPanel: {
+                            text: 'Name'
+                        }
+                    };
+                }
             }
-        }
+        });
+
+        rows = this.getVisibleRows();
+        assert.strictEqual(rows.length, 4, 'row count');
+        assert.strictEqual(rows[0].key, 1, 'key of the first row');
+        assert.strictEqual(rows[1].key, 2, 'key of the second row');
+        assert.strictEqual(rows[2].key, 3, 'key of the third row');
+        assert.ok(rows[2].isSelected, 'third row is selected');
+        assert.strictEqual(rows[3].key, 4, 'key of the fourth row');
     });
 
-    rows = this.getVisibleRows();
-    assert.strictEqual(rows.length, 4, 'row count');
-    assert.strictEqual(rows[0].key, 1, 'key of the first row');
-    assert.strictEqual(rows[1].key, 2, 'key of the second row');
-    assert.strictEqual(rows[2].key, 3, 'key of the third row');
-    assert.ok(rows[2].isSelected, 'third row is selected');
-    assert.strictEqual(rows[3].key, 4, 'key of the fourth row');
-});
-
-QUnit.test('Save user state', function(assert) {
+    QUnit.test('Save user state', function(assert) {
     // arrange
-    let state = {};
+        let state = {};
 
-    // act
-    this.setupDataGridModules({
-        expandedRowKeys: [1],
-        stateStoring: {
-            enabled: true,
-            type: 'custom',
-            customLoad: function() {
-                return state;
-            },
-            customSave: function(arg) {
-                state = arg;
-            },
-            savingTimeout: 0
-        }
+        // act
+        this.setupDataGridModules({
+            expandedRowKeys: [1],
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return state;
+                },
+                customSave: function(arg) {
+                    state = arg;
+                },
+                savingTimeout: 0
+            }
+        });
+
+        // assert
+        assert.deepEqual(state, {
+            columns: [
+                { dataField: 'name', dataType: 'string', visible: true, visibleIndex: 0 },
+                { dataField: 'age', dataType: 'number', visible: true, visibleIndex: 1 }
+            ],
+            filterPanel: {},
+            filterValue: null,
+            expandedRowKeys: [1],
+            pageIndex: 0,
+            pageSize: 20,
+            searchText: ''
+        }, 'state');
     });
 
-    // assert
-    assert.deepEqual(state, {
-        columns: [
-            { dataField: 'name', dataType: 'string', visible: true, visibleIndex: 0 },
-            { dataField: 'age', dataType: 'number', visible: true, visibleIndex: 1 }
-        ],
-        filterPanel: {},
-        filterValue: null,
-        expandedRowKeys: [1],
-        pageIndex: 0,
-        pageSize: 20,
-        searchText: ''
-    }, 'state');
-});
-
-QUnit.test('The expandRowKeys state should not persist when autoExpandAll is enabled', function(assert) {
+    QUnit.test('The expandRowKeys state should not persist when autoExpandAll is enabled', function(assert) {
     // arrange
-    let state = {};
+        let state = {};
 
-    // act
-    this.setupDataGridModules({
-        autoExpandAll: true,
-        stateStoring: {
-            enabled: true,
-            type: 'custom',
-            customLoad: function() {
-                return state;
-            },
-            customSave: function(arg) {
-                state = arg;
-            },
-            savingTimeout: 0
-        }
+        // act
+        this.setupDataGridModules({
+            autoExpandAll: true,
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return state;
+                },
+                customSave: function(arg) {
+                    state = arg;
+                },
+                savingTimeout: 0
+            }
+        });
+
+        // assert
+        assert.notOk(Object.prototype.hasOwnProperty.call(state, 'expandedRowKeys'), 'state doesn\'t have expandedRowKeys');
     });
 
-    // assert
-    assert.notOk(Object.prototype.hasOwnProperty.call(state, 'expandedRowKeys'), 'state doesn\'t have expandedRowKeys');
-});
-
-// T811724, T824333
-QUnit.test('customSave should be fired after expand', function(assert) {
+    // T811724, T824333
+    QUnit.test('customSave should be fired after expand', function(assert) {
     // arrange
-    let state = {
-        columns: [
-            { visibleIndex: 0, dataField: 'name', dataType: 'string', visible: true },
-            { visibleIndex: 1, dataField: 'age', dataType: 'number', visible: true }
-        ],
-        filterPanel: {},
-        filterValue: null,
-        expandedRowKeys: [1],
-        pageIndex: 0,
-        pageSize: 20,
-        searchText: ''
-    };
-    let customSaveCallCount = 0;
+        let state = {
+            columns: [
+                { visibleIndex: 0, dataField: 'name', dataType: 'string', visible: true },
+                { visibleIndex: 1, dataField: 'age', dataType: 'number', visible: true }
+            ],
+            filterPanel: {},
+            filterValue: null,
+            expandedRowKeys: [1],
+            pageIndex: 0,
+            pageSize: 20,
+            searchText: ''
+        };
+        let customSaveCallCount = 0;
 
-    // act
-    this.setupDataGridModules({
-        expandedRowKeys: [],
-        stateStoring: {
-            enabled: true,
-            type: 'custom',
-            customLoad: function() {
-                return state;
-            },
-            customSave: function(arg) {
-                customSaveCallCount++;
-                state = arg;
-            },
-            savingTimeout: 0
-        }
+        // act
+        this.setupDataGridModules({
+            expandedRowKeys: [],
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return state;
+                },
+                customSave: function(arg) {
+                    customSaveCallCount++;
+                    state = arg;
+                },
+                savingTimeout: 0
+            }
+        });
+
+        this.clock.tick();
+        assert.strictEqual(customSaveCallCount, 0, 'customSave is not called');
+
+        // act
+        this.expandRow(2);
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(customSaveCallCount, 1, 'customSave is called once after expandRow');
+        assert.deepEqual(state.expandedRowKeys, [1, 2], 'expandedRowKeys in state is correct');
     });
 
-    this.clock.tick();
-    assert.strictEqual(customSaveCallCount, 0, 'customSave is not called');
-
-    // act
-    this.expandRow(2);
-    this.clock.tick();
-
-    // assert
-    assert.strictEqual(customSaveCallCount, 1, 'customSave is called once after expandRow');
-    assert.deepEqual(state.expandedRowKeys, [1, 2], 'expandedRowKeys in state is correct');
-});
-
-// T851561
-QUnit.test('The expandedRowKeys should be updated in the state storing when expanding/collapsing nodes', function(assert) {
+    // T851561
+    QUnit.test('The expandedRowKeys should be updated in the state storing when expanding/collapsing nodes', function(assert) {
     // arrange
-    let state = {};
+        let state = {};
 
-    this.setupDataGridModules({
-        stateStoring: {
-            enabled: true,
-            type: 'custom',
-            customLoad: function() {
-                return state;
-            },
-            customSave: function(arg) {
-                state = arg;
-            },
-            savingTimeout: 0
-        }
+        this.setupDataGridModules({
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return state;
+                },
+                customSave: function(arg) {
+                    state = arg;
+                },
+                savingTimeout: 0
+            }
+        });
+
+        // act
+        this.expandRow(1);
+        this.clock.tick();
+
+        // assert
+        let expandedRowKeys = this.option('expandedRowKeys');
+        assert.deepEqual(expandedRowKeys, [1], 'expandedRowKeys');
+        assert.deepEqual(state.expandedRowKeys, [1], 'expandedRowKeys has been updated in the state storage');
+        assert.notStrictEqual(state.expandedRowKeys, this.option('expandedRowKeys'), 'expandedRowKeys has a different instance in the state storage');
+
+        // act
+        this.collapseRow(1);
+        this.clock.tick();
+
+        // assert
+        expandedRowKeys = this.option('expandedRowKeys');
+        assert.deepEqual(expandedRowKeys, [], 'expandedRowKeys');
+        assert.deepEqual(state.expandedRowKeys, [], 'expandedRowKeys has been updated in the state storage');
+        assert.notStrictEqual(state.expandedRowKeys, this.option('expandedRowKeys'), 'expandedRowKeys has a different instance in the state storage');
     });
-
-    // act
-    this.expandRow(1);
-    this.clock.tick();
-
-    // assert
-    let expandedRowKeys = this.option('expandedRowKeys');
-    assert.deepEqual(expandedRowKeys, [1], 'expandedRowKeys');
-    assert.deepEqual(state.expandedRowKeys, [1], 'expandedRowKeys has been updated in the state storage');
-    assert.notStrictEqual(state.expandedRowKeys, this.option('expandedRowKeys'), 'expandedRowKeys has a different instance in the state storage');
-
-    // act
-    this.collapseRow(1);
-    this.clock.tick();
-
-    // assert
-    expandedRowKeys = this.option('expandedRowKeys');
-    assert.deepEqual(expandedRowKeys, [], 'expandedRowKeys');
-    assert.deepEqual(state.expandedRowKeys, [], 'expandedRowKeys has been updated in the state storage');
-    assert.notStrictEqual(state.expandedRowKeys, this.option('expandedRowKeys'), 'expandedRowKeys has a different instance in the state storage');
 });
+
