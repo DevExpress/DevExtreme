@@ -95,7 +95,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
             that._editingController = that.getController('editing');
             that._headerPanel = that.getView('headerPanel');
             that._columnsController = that.getController('columns');
-            that._prevFocusedCellPositions = [];
             that.getController('editorFactory').focused.add(function($element) {
                 that.setupFocusedView();
 
@@ -1001,9 +1000,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
         return $(this._getCell(this._focusedCellPosition));
     },
 
-    _getPrevFocusedCell: function() {
-        return $(this._getCell(this._focusedCellPosition));
-    },
     _updateFocusedCellPosition: function($cell, direction) {
         const position = this._getCellPosition($cell, direction);
         if(position) {
