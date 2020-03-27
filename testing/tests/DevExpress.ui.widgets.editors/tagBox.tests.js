@@ -587,6 +587,35 @@ QUnit.module('tags', moduleSetup, () => {
         assert.equal($tag.text(), '', 'tag has correct text');
     });
 
+    QUnit.test('Tag should repaint tags on \'repaint\' if dataSource is reloaded (T873372)', function(assert) {
+        let items = [{ name: 'one', value: 1 }, { name: 'two', value: 2 }];
+        const dataSource = new DataSource({
+            store: new CustomStore({
+                key: 'id',
+                load: function(loadOptions) {
+                    const deferred = $.Deferred();
+                    deferred.resolve(items);
+                    return deferred.promise();
+                }
+            }),
+            paginate: true
+        });
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource,
+            displayExpr: 'name',
+            valueExpr: 'value',
+            value: [1]
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+        this.clock.tick();
+        items = [{ name: 'updated', value: 1 }];
+        dataSource.reload();
+        tagBox.repaint();
+
+        const $tag = $tagBox.find('.' + TAGBOX_TAG_CLASS);
+        assert.equal($tag.text(), 'updated', 'tag has updated text');
+    });
+
     QUnit.test('onValueChanged has dxclick event on remove button click', function(assert) {
         const $element = $('#tagBox').dxTagBox({
             value: ['123'],
@@ -1505,7 +1534,7 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
         assert.deepEqual($tagBox.dxTagBox('option', 'value'), [2], 'value is reset');
     });
 
-    QUnit.test('click on selected item causes item uncheck', function(assert) {
+    QUnit.test('list items are selected on render', function(assert) {
         $('#tagBox').dxTagBox({
             items: [1, 2, 3],
             value: [1, 2],
