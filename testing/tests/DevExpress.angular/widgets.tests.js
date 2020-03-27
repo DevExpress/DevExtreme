@@ -32,8 +32,6 @@ import Button from 'ui/button';
 
 import '../../helpers/ignoreAngularTimers.js';
 
-require('../../helpers/ignoreAngularTimers.js');
-
 const FILTERING_TIMEOUT = 700;
 
 fx.off = true;
