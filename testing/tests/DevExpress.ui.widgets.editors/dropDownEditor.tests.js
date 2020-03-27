@@ -1085,25 +1085,32 @@ QUnit.module('Templates', () => {
     QUnit.testInActiveWindow('fieldTemplate can contain a masked TextBox', function(assert) {
         let keyboard;
         let $input;
+        this.clock = sinon.useFakeTimers();
 
-        $('#dropDownEditorLazy').dxDropDownEditor({
-            dataSource: [1, 2],
-            fieldTemplate: (value, $element) => {
-                const $textBox = $('<div>')
-                    .appendTo($element)
-                    .dxTextBox({
-                        mask: '0-0',
-                        value
-                    });
+        try {
 
-                $input = $textBox.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-                keyboard = new keyboardMock($input, true);
-                caretWorkaround($input);
-            }
-        });
+            $('#dropDownEditorLazy').dxDropDownEditor({
+                dataSource: [1, 2],
+                fieldTemplate: (value, $element) => {
+                    const $textBox = $('<div>')
+                        .appendTo($element)
+                        .dxTextBox({
+                            mask: '0-0',
+                            value
+                        });
 
-        keyboard.type('z5');
-        assert.strictEqual($input.val(), '5-_', 'Masked TextBox works fine');
+                    $input = $textBox.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+                    keyboard = new keyboardMock($input, true);
+                    caretWorkaround($input);
+                }
+            });
+
+            keyboard.type('z5');
+            this.clock.tick();
+            assert.strictEqual($input.val(), '5-_', 'Masked TextBox works fine');
+        } finally {
+            this.clock.restore();
+        }
     });
 
     QUnit.test('contentTemplate should not redefine popup content (T860163)', function(assert) {
