@@ -35,6 +35,10 @@ class DefaultMaskStrategy extends BaseMaskStrategy {
             this._handleBackspaceInput(event);
         }
 
+        if(event.originalEvent) {
+            this._autoFillHandler(event);
+        }
+
         if(this._keyPressHandled) {
             return;
         }
@@ -49,15 +53,12 @@ class DefaultMaskStrategy extends BaseMaskStrategy {
         caret.start = caret.end - 1;
         const oldValue = inputValue.substring(0, caret.start) + inputValue.substring(caret.end);
         const char = inputValue[caret.start];
+        const { editor } = this;
 
         this.editorInput().val(oldValue);
 
-        // NOTE: WP8 can not to handle setCaret immediately after setting value
-        this._inputHandlerTimer = setTimeout((function() {
-            this._caret({ start: caret.start, end: caret.start });
-
-            this._maskKeyHandler(event, () => this._handleKey(char));
-        }).bind(this.editor));
+        editor._caret({ start: caret.start, end: caret.start });
+        editor._maskKeyHandler(event, () => editor._handleKey(char));
     }
 
     _backspaceHandler(event) {
@@ -111,12 +112,6 @@ class DefaultMaskStrategy extends BaseMaskStrategy {
         const { start, end } = this.editorCaret();
         this.editorCaret({ start: start + 1, end: end + 1 });
         this._backspaceHandler(event);
-    }
-
-    clean() {
-        super.clean();
-
-        clearTimeout(this._inputHandlerTimer);
     }
 }
 
