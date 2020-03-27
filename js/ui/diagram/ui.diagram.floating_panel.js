@@ -50,7 +50,8 @@ class DiagramFloatingPanel extends DiagramPanel {
         return this._popup.content();
     }
     _getPopupTitle() {
-        return this._getPopupContent().parent().find('.dx-popup-title');
+        const $content = $(this._getPopupContent());
+        return $content.parent().find('.dx-popup-title');
     }
     _getPointerUpElement() {
         return this._getPopupContent();
