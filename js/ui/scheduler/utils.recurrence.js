@@ -19,6 +19,9 @@ const intervalMap = {
     yearly: 'years'
 };
 
+// Wrong date needs to mark specific date as incorrect.
+const wrongDateTime = new Date(0, 0, 0).getTime();
+
 const dateSetterMap = {
     'bysecond': function(date, value) {
         date.setSeconds(value);
@@ -50,7 +53,7 @@ const dateSetterMap = {
             if(value <= dateUtils.getLastMonthDay(date)) {
                 date.setDate(value);
             } else {
-                dateUtils.markWrongDate(date);
+                markWrongDate(date);
             }
         }
     },
@@ -731,7 +734,7 @@ var getDatesByCount = function(dateRules, startDate, recurrenceStartDate, rule) 
 
         const checkedDates = [];
         dates.forEach(checkedDate => {
-            if(!dateUtils.isWrongDate(checkedDate)) {
+            if(!isWrongDate(checkedDate)) {
                 if(checkedDate.getTime() >= recurrenceStartDate.getTime()) {
                     checkedDates.push(checkedDate);
                 }
@@ -816,6 +819,14 @@ const getRecurrenceString = function(object) {
     result = result.substring(0, result.length - 1);
 
     return result.toUpperCase();
+};
+
+const markWrongDate = function(date) {
+    date.setTime(wrongDateTime);
+};
+
+const isWrongDate = function(date) {
+    return date.getTime() === wrongDateTime;
 };
 
 var resultUtils = {
