@@ -414,7 +414,9 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                 if(column.command) {
                     $cell.html('&nbsp;');
                 } else if(column.allowFiltering) {
-                    that.renderTemplate($cell, that._renderFilterCell.bind(that), options);
+                    that.renderTemplate($cell, that._renderFilterCell.bind(that), options).done(() => {
+                        that._updateCell($cell, options);
+                    });
                     return;
                 }
             }
