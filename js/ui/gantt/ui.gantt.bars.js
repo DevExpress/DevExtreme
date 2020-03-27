@@ -180,8 +180,8 @@ export class GanttContextMenuBar extends Bar {
                 ]
             },
             { text: messageLocalization.format('dxGantt-dialogTaskDetailsTitle') + '...', commandId: COMMANDS.taskInformation },
-            { text: messageLocalization.format('dxGantt-contextMenuRemoveTask'), commandId: COMMANDS.removeTask },
-            { text: messageLocalization.format('dxGantt-contextMenuRemoveDependency'), commandId: COMMANDS.removeDependency },
+            { text: messageLocalization.format('dxGantt-contextMenuDeleteTask'), commandId: COMMANDS.removeTask },
+            { text: messageLocalization.format('dxGantt-contextMenuDeleteDependency'), commandId: COMMANDS.removeDependency },
         ];
     }
     show(point) {
