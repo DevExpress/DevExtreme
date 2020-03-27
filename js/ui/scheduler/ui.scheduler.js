@@ -49,7 +49,7 @@ import { BindableTemplate } from '../../core/templates/bindable_template';
 import themes from '../themes';
 import browser from '../../core/utils/browser';
 import { touch } from '../../core/utils/support';
-import utils from './utils';
+import timeZoneUtils from './utils.timeZone';
 
 const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
@@ -1060,7 +1060,7 @@ const Scheduler = Widget.inherit({
     },
 
     _getTimezoneOffsetByOption: function(date) {
-        return utils.calculateTimezoneByValue(this.option('timeZone'), date);
+        return timeZoneUtils.calculateTimezoneByValue(this.option('timeZone'), date);
     },
 
     getCorrectedDatesByDaylightOffsets: function(originalStartDate, dates, appointmentData) {
@@ -1072,7 +1072,7 @@ const Scheduler = Widget.inherit({
             dates = dates.map((date) => {
                 const convertedDate = this.fire('convertDateByTimezoneBack', new Date(date.getTime()), startDateTimeZone);
 
-                return utils.getCorrectedDateByDaylightOffsets(convertedOriginalStartDate, convertedDate, date, this.option('timeZone'), startDateTimeZone);
+                return timeZoneUtils.getCorrectedDateByDaylightOffsets(convertedOriginalStartDate, convertedDate, date, this.option('timeZone'), startDateTimeZone);
             });
         }
 
@@ -2053,7 +2053,7 @@ const Scheduler = Widget.inherit({
             }
         }
 
-        endDate = new Date(endDate.getTime() - utils.getTimezoneOffsetChangeInMs(targetStartDate, targetEndDate, date, endDate));
+        endDate = new Date(endDate.getTime() - timeZoneUtils.getTimezoneOffsetChangeInMs(targetStartDate, targetEndDate, date, endDate));
 
         this.fire('setField', 'endDate', updatedData, endDate);
         this._resourcesManager.setResourcesToItem(updatedData, cellData.groups);
@@ -2333,9 +2333,9 @@ const Scheduler = Widget.inherit({
         let timezoneOffset = 0;
 
         if(startDateTimeZone) {
-            timezoneOffset = utils.getDaylightOffsetByTimezone(exceptionByStartDate, exception, startDateTimeZone);
+            timezoneOffset = timeZoneUtils.getDaylightOffsetByTimezone(exceptionByStartDate, exception, startDateTimeZone);
         } else if(this.option('timeZone')) {
-            timezoneOffset = utils.getDaylightOffsetByTimezone(exceptionByStartDate, exception, this.option('timeZone'));
+            timezoneOffset = timeZoneUtils.getDaylightOffsetByTimezone(exceptionByStartDate, exception, this.option('timeZone'));
         } else {
             timezoneOffset = (exception.getTimezoneOffset() - exceptionByStartDate.getTimezoneOffset()) / 60;
         }
