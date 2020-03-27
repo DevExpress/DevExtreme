@@ -222,7 +222,7 @@ QUnit.module('Editors Standard Adapter', {
         assert.equal(spy.callCount, 2, 'The validationCallback is called after reset');
     });
 
-    QUnit.test('Editor(read-only) - Validator.validated event should be raised', function(assert) {
+    QUnit.test('Editor(read-only) - Validator.validated event should be raised (T873862)', function(assert) {
         // arrange
         this.fixture.createEditor({
             value: 'test',
