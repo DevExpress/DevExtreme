@@ -183,7 +183,7 @@ export interface ExportDataGridProps {
      * @type_function_param1_field2 excelCell:Object
      * @public
      */
-    customizeCell?: ((options: { gridCell?: ExcelDataGridCell, excelCell?: object}) => any);
+    customizeCell?: ((options: { gridCell?: ExcelDataGridCell, excelCell?: any}) => any);
     /**
      * @docid ExportDataGridProps.loadPanel
      * @type ExportLoadPanel
