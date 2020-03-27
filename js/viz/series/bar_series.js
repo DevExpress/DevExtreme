@@ -166,7 +166,7 @@ exports.chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
                 tmpCoord = p[coordName] === coord ? p[oppositeCoordName] : undefined;
             }
 
-            if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
+            if(this._checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
                 oppositeCoord = tmpCoord;
                 break;
             }
