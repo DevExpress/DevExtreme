@@ -9,6 +9,7 @@ import initMobileViewport from 'mobile/init_mobile_viewport';
 import devices from 'core/devices';
 import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
+import 'ui/scroll_view/ui.scrollable';
 
 import 'common.css!';
 
