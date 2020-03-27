@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import devices from 'core/devices';
+import browser from 'core/utils/browser';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import caretWorkaround from './caretWorkaround.js';
 
@@ -418,6 +419,76 @@ QUnit.module('typing', moduleConfig, () => {
         assert.equal(handler.callCount, 2, '\'change\' event is not fired after focus out without value change');
         clock.restore();
     });
+
+    QUnit.test('TextEditor with mask option should work correctly with autofill in webkit browsers (T869537)', function(assert) {
+        if(!browser.webkit) {
+            assert.expect(0);
+            return;
+        }
+
+        const clock = sinon.useFakeTimers();
+        let inputMatchesStub;
+
+        try {
+            const testText = '555555';
+            const $textEditor = $('#texteditor').dxTextEditor({
+                mask: '+1 (X00) 000',
+                maskRules: { X: /[02-9]/ },
+                mode: 'tel',
+                useMaskedValue: true
+            });
+            const $input = $textEditor.find('.dx-texteditor-input');
+            inputMatchesStub = sinon.stub($input.get(0), 'matches', () => true);
+
+            const textEditor = $textEditor.dxTextEditor('instance');
+            const keyboard = keyboardMock($input, true);
+
+            $input.val(testText);
+
+            keyboard
+                .beforeInput(testText)
+                .input();
+
+            clock.tick();
+            assert.strictEqual($input.val(), '+1 (555) 555', 'the mask is applied');
+            assert.equal(textEditor.option('isValid'), true, 'isValid is true');
+        } finally {
+            clock.restore();
+            inputMatchesStub && inputMatchesStub.restore();
+        }
+    });
+
+    QUnit.test('TextEditor with mask option should work correctly with autofill in Edge (T869537)', function(assert) {
+        if(!(browser.msie && browser.version > 11)) {
+            assert.expect(0);
+            return;
+        }
+
+        const clock = sinon.useFakeTimers();
+
+        try {
+            const testText = '555555';
+            const $textEditor = $('#texteditor').dxTextEditor({
+                mask: '+1 (X00) 000',
+                maskRules: { X: /[02-9]/ },
+                mode: 'tel',
+                useMaskedValue: true
+            });
+            const $input = $textEditor.find('.dx-texteditor-input');
+            const textEditor = $textEditor.dxTextEditor('instance');
+            const keyboard = keyboardMock($input, true);
+
+            $input.val(testText);
+            $input.addClass('edge-autofilled');
+            keyboard.input();
+
+            clock.tick();
+            assert.strictEqual($input.val(), '+1 (555) 555', 'the mask is applied');
+            assert.equal(textEditor.option('isValid'), true, 'isValid is true');
+        } finally {
+            clock.restore();
+        }
+    });
 });
 
 QUnit.module('backspace key', moduleConfig, () => {
@@ -551,7 +622,7 @@ QUnit.module('backspace key', moduleConfig, () => {
     });
 });
 
-QUnit.module('delete key', {}, () => {
+QUnit.module('delete key', moduleConfig, () => {
     QUnit.test('char should be deleted after pressing on delete key', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: 'X',
@@ -587,6 +658,8 @@ QUnit.module('delete key', {}, () => {
         keyboard.type('xx')
             .caret({ start: 0, end: 3 })
             .press('del');
+
+        this.clock.tick();
 
         assert.equal($input.val(), '_- x', 'letter deleted');
     });

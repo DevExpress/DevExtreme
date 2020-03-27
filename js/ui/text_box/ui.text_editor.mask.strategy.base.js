@@ -1,5 +1,6 @@
 import EventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils';
+import browser from '../../core/utils/browser';
 import { inArray } from '../../core/utils/array';
 import { clipboardText as getClipboardText } from '../../core/utils/dom';
 
@@ -129,14 +130,45 @@ export default class BaseMaskStrategy {
         const caret = this.editorCaret();
 
         editor._maskKeyHandler(event, () => {
-            const pastingText = getClipboardText(event);
+            const pastedText = getClipboardText(event);
             const restText = editor._maskRulesChain.text().substring(caret.end);
-            const accepted = editor._handleChain({ text: pastingText, start: caret.start, length: pastingText.length });
+            const accepted = editor._handleChain({ text: pastedText, start: caret.start, length: pastedText.length });
             const newCaret = caret.start + accepted;
 
             editor._handleChain({ text: restText, start: newCaret, length: restText.length });
             editor._caret({ start: newCaret, end: newCaret });
         });
+    }
+
+    _autoFillHandler(event) {
+        const { editor } = this;
+        const inputVal = this.editorInput().val();
+        this._inputHandlerTimer = setTimeout(() => {
+            this._keyPressHandled = true;
+
+            if(this._isAutoFill()) {
+                this._keyPressHandled = true;
+
+                editor._maskKeyHandler(event, () => {
+                    editor._handleChain({ text: inputVal, start: 0, length: inputVal.length });
+                });
+                editor._validateMask();
+            }
+        });
+    }
+
+    _isAutoFill() {
+        const $input = this.editor._input();
+        let result = false;
+
+        if(browser.msie && browser.version > 11) {
+            result = $input.hasClass('edge-autofilled');
+        } else if(browser.webkit) {
+            const input = $input.get(0);
+            result = input && input.matches(':-webkit-autofill');
+        }
+
+        return result;
     }
 
     runWithoutEventProcessing(action) {
@@ -161,5 +193,6 @@ export default class BaseMaskStrategy {
         this._clearDragTimer();
         clearTimeout(this._backspaceHandlerTimeout);
         clearTimeout(this._caretTimeout);
+        clearTimeout(this._inputHandlerTimer);
     }
 }
