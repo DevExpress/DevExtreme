@@ -5,7 +5,7 @@
 @nav_button_width: 25px;
 @icon_size: 16px;
 
-.dx-tabs-ie-hack {
+.dx-tabs-ie-hack() {
     a { /* END TODO */ /* TODO: IE hack */
         position: absolute;
         top: 0;
@@ -17,6 +17,10 @@
         text-decoration: none;
         opacity: 0.001;
     }
+}
+
+.dx-tabs-ie-hack {
+    .dx-tabs-ie-hack();
 }
 
 .dx-tabs {

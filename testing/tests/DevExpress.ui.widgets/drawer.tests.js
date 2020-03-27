@@ -8,12 +8,14 @@ import { animation } from 'ui/drawer/ui.drawer.rendering.strategy';
 import Overlay from 'ui/overlay';
 import Button from 'ui/button';
 import domUtils from 'core/utils/dom';
+import eventsEngine from 'events/core/events_engine';
+import Drawer from 'ui/drawer';
 
 import 'common.css!';
-import 'ui/drawer';
 
+const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
 const DRAWER_PANEL_CONTENT_CLASS = 'dx-drawer-panel-content';
-const DRAWER_CONTENT_CLASS = 'dx-drawer-content';
+const DRAWER_VIEW_CONTENT_CLASS = 'dx-drawer-content';
 const DRAWER_SHADER_CLASS = 'dx-drawer-shader';
 
 const position = $element => $element.position().left;
@@ -70,6 +72,7 @@ QUnit.testStart(() => {
     </div>\
     <div id="drawerWithContent">\
         <div id="content"><div id="button"></div></div>\
+        <div id="additionalContent"></div>\
     </div>\
     <div id="outerDrawer">\
         <div id="innerDrawer"></div>\
@@ -122,7 +125,6 @@ QUnit.module('Drawer behavior', () => {
         $button = $element.find('.dx-button');
 
         const buttonInstance = $button.dxButton('instance');
-
         assert.ok(buttonInstance instanceof Button, 'button into drawer content wasn\'t clean after repaint');
     });
 
@@ -223,7 +225,7 @@ QUnit.module('Drawer behavior', () => {
             if($element.hasClass(DRAWER_PANEL_CONTENT_CLASS)) {
                 panelStopCalls++;
             }
-            if($element.hasClass(DRAWER_CONTENT_CLASS)) {
+            if($element.hasClass(DRAWER_VIEW_CONTENT_CLASS)) {
                 contentStopCalls++;
             }
             if($element.hasClass('dx-overlay-content')) {
@@ -275,7 +277,7 @@ QUnit.module('Drawer behavior', () => {
             if($element.hasClass(DRAWER_PANEL_CONTENT_CLASS)) {
                 panelStopCalls++;
             }
-            if($element.hasClass(DRAWER_CONTENT_CLASS)) {
+            if($element.hasClass(DRAWER_VIEW_CONTENT_CLASS)) {
                 contentStopCalls++;
             }
             if($element.hasClass('dx-overlay-content')) {
@@ -325,7 +327,7 @@ QUnit.module('Drawer behavior', () => {
             if($element.hasClass(DRAWER_PANEL_CONTENT_CLASS)) {
                 panelStopCalls++;
             }
-            if($element.hasClass(DRAWER_CONTENT_CLASS)) {
+            if($element.hasClass(DRAWER_VIEW_CONTENT_CLASS)) {
                 contentStopCalls++;
             }
             if($element.hasClass(DRAWER_SHADER_CLASS)) {
@@ -384,7 +386,7 @@ QUnit.module('Drawer behavior', () => {
     QUnit.test('viewContent() function', function(assert) {
         const $element = $('#drawer').dxDrawer({});
         const instance = $element.dxDrawer('instance');
-        const $content = $element.find('.' + DRAWER_CONTENT_CLASS).eq(0);
+        const $content = $element.find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
 
         assert.equal($content.get(0), $(instance.viewContent()).get(0), 'content function return correct DOMNode');
     });
@@ -724,10 +726,12 @@ QUnit.module('Drawer behavior', () => {
         $('#drawer').dxDrawer({
             openedStateMode: 'overlap',
             templatesRenderAsynchronously: true,
+            opened: true,
+            shading: true,
             integrationOptions: {
                 templates: {
                     'panel': {
-                        render: function(args) {
+                        render: args => {
                             const $div = $('<div/>').appendTo(args.container);
                             setTimeout(() => {
                                 $div.css('height', 600);
@@ -741,9 +745,11 @@ QUnit.module('Drawer behavior', () => {
         });
 
         clock.tick(100);
-        const $panel = $('#drawer').find('.dx-drawer-panel-content');
+        const $panel = $('#drawer').find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
+        const $shader = $('#drawer').find(`.${DRAWER_SHADER_CLASS}`);
 
-        assert.equal($panel.css('zIndex'), 1501, 'panel has correct zIndex');
+        assert.strictEqual($panel.css('zIndex'), '2001', 'panel.zIndex');
+        assert.strictEqual($shader.css('zIndex'), '2000', 'shader.zIndex');
         clock.restore();
     });
 
@@ -783,19 +789,91 @@ QUnit.module('Drawer behavior', () => {
         });
         const instance = $element.dxDrawer('instance');
 
-        assert.equal(instance.getDrawerPosition(), 'right');
+        assert.equal(instance.calcTargetPosition(), 'right');
 
         instance.option('position', 'before');
 
-        assert.equal(instance.getDrawerPosition(), 'left');
+        assert.equal(instance.calcTargetPosition(), 'left');
 
         instance.option('rtlEnabled', true);
 
-        assert.equal(instance.getDrawerPosition(), 'right');
+        assert.equal(instance.calcTargetPosition(), 'right');
 
         instance.option('position', 'after');
 
-        assert.equal(instance.getDrawerPosition(), 'left');
+        assert.equal(instance.calcTargetPosition(), 'left');
+    });
+});
+
+QUnit.module('Drawer view template', () => {
+
+    function getNestedElements() {
+        const wrapperElement = document.querySelectorAll(`.${DRAWER_WRAPPER_CLASS}`);
+        const panelElement = document.querySelectorAll(`.${DRAWER_PANEL_CONTENT_CLASS}`);
+        const viewContentElement = document.querySelectorAll(`.${DRAWER_VIEW_CONTENT_CLASS}`);
+        const shaderElement = document.querySelectorAll(`.${DRAWER_SHADER_CLASS}`);
+        const firstViewContentNestedElement = document.querySelectorAll('#button');
+        const secondViewContentNestedElement = document.querySelectorAll('#additionalContent');
+
+        return {
+            wrapperElement,
+            panelElement,
+            viewContentElement,
+            shaderElement,
+            firstViewContentNestedElement,
+            secondViewContentNestedElement
+        };
+    }
+
+    function checkNestedElements(assert, nestedElements) {
+        assert.strictEqual(nestedElements.wrapperElement.length, 1, 'wrapperElement.length');
+        assert.strictEqual(nestedElements.panelElement.length, 1, 'panelElement.length');
+        assert.strictEqual(nestedElements.viewContentElement.length, 1, 'viewContentElement.length');
+        assert.strictEqual(nestedElements.shaderElement.length, 1, 'wrappershaderElementElement.length');
+        assert.strictEqual(nestedElements.firstViewContentNestedElement.length, 1, 'firstViewContentNestedElement.length');
+        assert.strictEqual(nestedElements.secondViewContentNestedElement.length, 1, 'secondViewContentNestedElement.length');
+    }
+
+    function checkNodeEquals(assert, nestedElementsAfterRepaint, nestedElements) {
+        assert.strictEqual(nestedElementsAfterRepaint.wrapperElement[0].isSameNode(nestedElements.wrapperElement[0]), true, 'the same wrapperElement');
+        assert.strictEqual(nestedElementsAfterRepaint.viewContentElement[0].isSameNode(nestedElements.viewContentElement[0]), true, 'the same viewContentElement');
+        assert.strictEqual(nestedElementsAfterRepaint.shaderElement[0].isSameNode(nestedElements.shaderElement[0]), true, 'the same shaderElement');
+        assert.strictEqual(nestedElementsAfterRepaint.secondViewContentNestedElement[0].isEqualNode(nestedElements.secondViewContentNestedElement[0]), true, 'the same secondViewContentNestedElement');
+    }
+
+    QUnit.test('Drawer + template in markup with button -> repaint() method does not duplicate the content(T864419)', function(assert) {
+        const nestedButtonClickHandler = sinon.stub();
+        const drawerElement = document.querySelector('#drawerWithContent');
+        let buttonElement = drawerElement.querySelector('#button');
+
+        new Button(buttonElement, {
+            text: 'innerButton',
+            onClick: nestedButtonClickHandler
+        });
+
+        const drawer = new Drawer(drawerElement, {});
+
+        const nestedElements = getNestedElements();
+        checkNestedElements(assert, nestedElements);
+
+        eventsEngine.trigger(buttonElement, 'dxclick');
+
+        assert.strictEqual(nestedButtonClickHandler.callCount, 1, 'buttonClickHandler.callCount');
+        assert.strictEqual($(buttonElement).dxButton('instance') instanceof Button, true, 'button.instance');
+
+        drawer.repaint();
+        nestedButtonClickHandler.reset();
+
+        const nestedElementsAfterRepaint = getNestedElements();
+
+        buttonElement = nestedElementsAfterRepaint.firstViewContentNestedElement;
+        eventsEngine.trigger(buttonElement, 'dxclick');
+        checkNestedElements(assert, nestedElementsAfterRepaint);
+
+        assert.strictEqual(nestedButtonClickHandler.callCount, 1, 'buttonClickHandler.callCount');
+        assert.strictEqual($(buttonElement).dxButton('instance') instanceof Button, true, 'button.instance');
+
+        checkNodeEquals(assert, nestedElementsAfterRepaint, nestedElements);
     });
 });
 
@@ -982,18 +1060,6 @@ QUnit.module('Shader', () => {
 
         assert.equal($shader.offset().left, $content.offset().left, 'shader has correct position');
     });
-
-    QUnit.test('shader should have correct zIndex in overlap mode', function(assert) {
-        const $element = $('#drawer').dxDrawer({
-            opened: true,
-            openedStateMode: 'overlap',
-            shading: true
-        });
-
-        const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
-
-        assert.equal($shader.css('zIndex'), 1500, 'shader has correct zIndex');
-    });
 });
 
 QUnit.module('Rtl', () => {
@@ -1153,7 +1219,7 @@ QUnit.module('Push mode', {
             opened: true,
         });
 
-        const $content = this.instance.$element().find('.' + DRAWER_CONTENT_CLASS).eq(0);
+        const $content = this.instance.$element().find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
 
         assert.equal($content.position().left, 400, 'content has correct left when minSize and maxSize are set');
 
@@ -1168,7 +1234,7 @@ QUnit.module('Push mode', {
             opened: true
         });
 
-        const $content = this.instance.$element().find('.' + DRAWER_CONTENT_CLASS).eq(0);
+        const $content = this.instance.$element().find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
 
         assert.equal($content.position().left, -300, 'content has correct left');
 
@@ -1187,7 +1253,7 @@ QUnit.module('Push mode', {
             opened: true
         });
 
-        const $content = this.instance.$element().find('.' + DRAWER_CONTENT_CLASS).eq(0);
+        const $content = this.instance.$element().find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
 
         assert.equal($content.position().left, -400, 'content has correct left when minSize and maxSize are set');
 
@@ -1206,7 +1272,7 @@ QUnit.module('Push mode', {
             opened: true
         });
 
-        const $content = this.instance.$element().find('.' + DRAWER_CONTENT_CLASS).eq(0);
+        const $content = this.instance.$element().find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
 
         assert.equal($content.position().top, 400, 'content has correct top when minSize and maxSize are set');
 
@@ -1225,7 +1291,7 @@ QUnit.module('Push mode', {
             opened: true
         });
 
-        const $content = this.instance.$element().find('.' + DRAWER_CONTENT_CLASS).eq(0);
+        const $content = this.instance.$element().find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
 
         assert.equal($content.position().top, -400, 'content has correct top when minSize and maxSize are set');
 
@@ -1269,7 +1335,7 @@ QUnit.module('Shrink mode', {
         });
 
         const $element = this.instance.$element();
-        const $content = $element.find('.' + DRAWER_CONTENT_CLASS).eq(0);
+        const $content = $element.find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
         const $panel = $element.find('.' + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
         assert.equal($content.position().left, 50, 'content has correct left when minSize is set');
@@ -1292,7 +1358,7 @@ QUnit.module('Shrink mode', {
         });
 
         const $element = this.instance.$element();
-        const $content = $element.find('.' + DRAWER_CONTENT_CLASS).eq(0);
+        const $content = $element.find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
         const $panel = $element.find('.' + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
         assert.equal($panel.css('marginLeft'), '-250px', 'panel has correct margin when minSize is set');
@@ -1318,7 +1384,7 @@ QUnit.module('Shrink mode', {
         });
 
         const $element = this.instance.$element();
-        const $content = $element.find('.' + DRAWER_CONTENT_CLASS).eq(0);
+        const $content = $element.find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
         const $panel = $element.find('.' + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
         assert.equal($content.position().left, 0, 'content has correct left when minSize is set');
@@ -1342,7 +1408,7 @@ QUnit.module('Shrink mode', {
         });
 
         const $element = this.instance.$element();
-        const $content = $element.find('.' + DRAWER_CONTENT_CLASS).eq(0);
+        const $content = $element.find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
         const $panel = $element.find('.' + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
         assert.equal($panel.css('marginRight'), '-250px', 'panel has correct margin when minSize is set');
@@ -1368,7 +1434,7 @@ QUnit.module('Shrink mode', {
         });
 
         const $element = this.instance.$element();
-        const $content = $element.find('.' + DRAWER_CONTENT_CLASS).eq(0);
+        const $content = $element.find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
         const $panel = $element.find('.' + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
         assert.equal($content.position().top, 50, 'content has correct top');
@@ -1392,7 +1458,7 @@ QUnit.module('Shrink mode', {
         });
 
         const $element = this.instance.$element();
-        const $content = $element.find('.' + DRAWER_CONTENT_CLASS).eq(0);
+        const $content = $element.find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
         const $panel = $element.find('.' + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
         assert.equal($content.position().top, 50, 'content has correct top');
@@ -1418,7 +1484,7 @@ QUnit.module('Shrink mode', {
         });
 
         const $element = this.instance.$element();
-        const $content = $element.find('.' + DRAWER_CONTENT_CLASS).eq(0);
+        const $content = $element.find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
         const $panel = $element.find('.' + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
         assert.equal($content.position().top, 0, 'content has correct top');
@@ -1442,7 +1508,7 @@ QUnit.module('Shrink mode', {
         });
 
         const $element = this.instance.$element();
-        const $content = $element.find('.' + DRAWER_CONTENT_CLASS).eq(0);
+        const $content = $element.find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
         const $panel = $element.find('.' + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
         assert.equal($content.position().top, 0, 'content has correct top');
@@ -1569,7 +1635,7 @@ QUnit.module('Overlap mode', {
         });
 
         const $element = this.instance.$element();
-        const $content = $element.find('.' + DRAWER_CONTENT_CLASS).eq(0);
+        const $content = $element.find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
         const $panel = $element.find('.' + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
         const $overlayContent = $('.dx-drawer-panel-content.dx-overlay-wrapper .dx-overlay-content').eq(0);
@@ -1596,7 +1662,7 @@ QUnit.module('Overlap mode', {
         });
 
         const $element = this.instance.$element();
-        const $content = $element.find('.' + DRAWER_CONTENT_CLASS).eq(0);
+        const $content = $element.find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
         const $panel = $('.dx-drawer-panel-content.dx-overlay').eq(0);
         const $overlayContent = $('.dx-drawer-panel-content.dx-overlay-wrapper .dx-overlay-content').eq(0);
 
@@ -1621,7 +1687,7 @@ QUnit.module('Overlap mode', {
         });
 
         const $element = this.instance.$element();
-        const $content = $element.find('.' + DRAWER_CONTENT_CLASS).eq(0);
+        const $content = $element.find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
         const $panel = $element.find('.' + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
         const $overlayContent = $('.dx-drawer-panel-content.dx-overlay-wrapper .dx-overlay-content').eq(0);
@@ -1649,7 +1715,7 @@ QUnit.module('Overlap mode', {
         });
 
         const $element = this.instance.$element();
-        const $content = $element.find('.' + DRAWER_CONTENT_CLASS).eq(0);
+        const $content = $element.find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
         const $panel = $('.dx-drawer-panel-content.dx-overlay').eq(0);
         const $overlayContent = $('.dx-drawer-panel-content.dx-overlay-wrapper .dx-overlay-content').eq(0);
 
@@ -1675,7 +1741,7 @@ QUnit.module('Overlap mode', {
 
         const $element = this.instance.$element();
         const $panel = $('.dx-drawer-panel-content.dx-overlay').eq(0);
-        const $content = $element.find('.' + DRAWER_CONTENT_CLASS).eq(0);
+        const $content = $element.find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
         const $panelContent = $panel.find('.dx-overlay-content');
 
         assert.equal($panelContent.height(), 50, 'panel content has correct height when minSize is set');
@@ -1696,7 +1762,7 @@ QUnit.module('Overlap mode', {
             position: 'top'
         });
 
-        const $content = this.instance.$element().find('.' + DRAWER_CONTENT_CLASS).eq(0);
+        const $content = this.instance.$element().find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
         const $panel = $('.dx-drawer-panel-content.dx-overlay').eq(0);
 
         assert.equal($content.position().top, 0, 'content has correct top when minSize is set');
@@ -1719,7 +1785,7 @@ QUnit.module('Overlap mode', {
 
         const $element = this.instance.$element();
         const $panel = $('.dx-drawer-panel-content.dx-overlay').eq(0);
-        const $content = $element.find('.' + DRAWER_CONTENT_CLASS).eq(0);
+        const $content = $element.find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
         const $panelContent = $panel.find('.dx-overlay-content');
 
         assert.equal($panelContent.height(), 50, 'panel content has correct height when minSize is set');
@@ -1742,7 +1808,7 @@ QUnit.module('Overlap mode', {
             position: 'bottom'
         });
 
-        const $content = this.instance.$element().find('.' + DRAWER_CONTENT_CLASS).eq(0);
+        const $content = this.instance.$element().find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
         const $panel = $('.dx-drawer-panel-content.dx-overlay').eq(0);
 
         assert.equal($content.position().top, 0, 'content has correct top when minSize is set');
@@ -1946,7 +2012,7 @@ QUnit.module('Modes changing', {
         this.instance.option('openedStateMode', 'overlap');
 
         const $panelContent = this.instance.$element().find('.dx-overlay-content').eq(0);
-        const $content = this.instance.$element().find('.' + DRAWER_CONTENT_CLASS).eq(0);
+        const $content = this.instance.$element().find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
 
         assert.equal($panelContent.width(), 300, 'panel should have correct width after option changing');
         assert.equal($content.css('transform'), 'none', 'content has right css transform');

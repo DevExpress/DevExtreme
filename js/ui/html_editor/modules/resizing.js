@@ -15,7 +15,7 @@ const SCROLL_EVENT = addNamespace('scroll', MODULE_NAMESPACE);
 
 const FRAME_PADDING = 1;
 
-class ResizingModule {
+export default class ResizingModule {
     constructor(quill, options) {
         this.quill = quill;
         this.editorInstance = options.editorInstance;
@@ -78,8 +78,8 @@ class ResizingModule {
     }
 
     updateFramePosition() {
-        const { height, width, offsetTop, offsetLeft } = this._$target;
-        const { scrollTop, scrollLeft } = this.quill.root;
+        const { height, width, top: targetTop, left: targetLeft } = this._$target.getBoundingClientRect();
+        const { top: containerTop, left: containerLeft } = this.quill.root.getBoundingClientRect();
         const borderWidth = this._getBorderWidth();
 
         this._$resizeFrame
@@ -87,8 +87,8 @@ class ResizingModule {
                 height: height,
                 width: width,
                 padding: FRAME_PADDING,
-                top: offsetTop - borderWidth - scrollTop - FRAME_PADDING,
-                left: offsetLeft - borderWidth - scrollLeft - FRAME_PADDING
+                top: targetTop - containerTop - borderWidth - FRAME_PADDING,
+                left: targetLeft - containerLeft - borderWidth - FRAME_PADDING
             });
         move(this._$resizeFrame, { left: 0, top: 0 });
     }
@@ -147,5 +147,3 @@ class ResizingModule {
         this._$resizeFrame = undefined;
     }
 }
-
-export default ResizingModule;

@@ -5,13 +5,36 @@
 @import (once) "./selectBox.material.less";
 @import (once) "./dateBox.material.less";
 
+@MATERIAL_RECURRENCE_NUMBER_BOX_MARGIN_RIGHT: 11px;
+
 .dx-recurrence-editor-container {
     position: relative;
-    margin-bottom: 21px;
-    padding-top: 17px;
 
     .dx-recurrence-interval-field {
-        margin-bottom: 20px;
+        padding-top: 10px;
+    }
+
+    .dx-recurrence-numberbox-interval {
+        margin-right: @MATERIAL_RECURRENCE_NUMBER_BOX_MARGIN_RIGHT;
+    }
+
+    .dx-field {
+        display: 'block';
+        margin-bottom: 10px;
+    }
+
+    .dx-field-label {
+        padding: 16px 0 3px;
+    }
+}
+
+.dx-recurrence-button-group {
+    .dx-button-content {
+        padding: 6px;
+    }
+
+    .dx-buttongroup-wrapper > div {
+        min-width: 0;
     }
 }
 
@@ -28,13 +51,6 @@
         margin-bottom: 10px;
     }
 
-    .dx-recurrence-radiogroup-repeat-type-label,
-    .dx-recurrence-numberbox-interval-label,
-    .dx-recurrence-repeat-on-label,
-    .dx-recurrence-repeat-end-container-label {
-        line-height: @MATERIAL_BASE_INLINE_WIDGET_HEIGHT;
-    }
-
     .dx-recurrence-repeat-end-container-label,
     .dx-recurrence-repeat-end-container {
         padding-top: 0;
@@ -47,5 +63,6 @@
 
     .dx-recurrence-numberbox-repeat-count {
         margin-left: 11px;
+        margin-right: @MATERIAL_RECURRENCE_NUMBER_BOX_MARGIN_RIGHT;
     }
 }

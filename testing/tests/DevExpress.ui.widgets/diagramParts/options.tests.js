@@ -49,17 +49,17 @@ QUnit.module('Options', moduleConfig, () => {
     });
     test('should change autoZoom property', function(assert) {
         assert.equal(this.instance._diagramInstance.settings.autoZoom, 0);
-        this.instance.option('autoZoom', 'fitContent');
+        this.instance.option('autoZoomMode', 'fitContent');
         assert.equal(this.instance._diagramInstance.settings.autoZoom, 1);
-        this.instance.option('autoZoom', 'fitWidth');
+        this.instance.option('autoZoomMode', 'fitWidth');
         assert.equal(this.instance._diagramInstance.settings.autoZoom, 2);
-        this.instance.option('autoZoom', 'disabled');
+        this.instance.option('autoZoomMode', 'disabled');
         assert.equal(this.instance._diagramInstance.settings.autoZoom, 0);
     });
     test('should sync autoZoom property', function(assert) {
-        assert.equal(this.instance.option('autoZoom'), 'disabled');
+        assert.equal(this.instance.option('autoZoomMode'), 'disabled');
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.SwitchAutoZoom).execute(1);
-        assert.equal(this.instance.option('autoZoom'), 'fitContent');
+        assert.equal(this.instance.option('autoZoomMode'), 'fitContent');
     });
     test('should change fullScreen property', function(assert) {
         assert.notOk(this.instance._diagramInstance.settings.fullscreen);

@@ -560,6 +560,7 @@ const weekData = {
 };
 
 const ACCEPTABLE_JSON_FORMAT_PROPERTIES = ['skeleton', 'date', 'time', 'datetime', 'raw'];
+const RTL_MARKS_REGEX = /[\u200E\u200F]/g;
 
 import Globalize from 'globalize';
 import dateLocalization from '../date';
@@ -612,10 +613,6 @@ if(Globalize && Globalize.formatDate) {
         'shortdateshorttime': {
             path: 'dateTimeFormats/short',
             parts: ['shorttime', 'shortdate']
-        },
-        'mediumdatemediumtime': {
-            path: 'dateTimeFormats/medium',
-            parts: ['shorttime', 'monthandday']
         },
         'longdatelongtime': {
             path: 'dateTimeFormats/medium',
@@ -700,6 +697,10 @@ if(Globalize && Globalize.formatDate) {
             return Globalize.locale().main('numbers/symbols-numberSystem-latn/timeSeparator');
         },
 
+        removeRtlMarks(text) {
+            return text.replace(RTL_MARKS_REGEX, '');
+        },
+
         format: function(date, format) {
             if(!date) {
                 return;
@@ -740,7 +741,7 @@ if(Globalize && Globalize.formatDate) {
                 formatter = Globalize.dateFormatter(format);
             }
 
-            return formatter(date);
+            return this.removeRtlMarks(formatter(date));
         },
 
         parse: function(text, format) {

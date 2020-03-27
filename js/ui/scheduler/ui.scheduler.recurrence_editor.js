@@ -5,11 +5,10 @@ import recurrenceUtils from './utils.recurrence';
 import domUtils from '../../core/utils/dom';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-import { inArray } from '../../core/utils/array';
 import { each } from '../../core/utils/iterator';
 import Editor from '../editor/editor';
-import CheckBox from '../check_box';
 import RadioGroup from '../radio_group';
+import ButtonGroup from '../button_group';
 import NumberBox from '../number_box';
 import SelectBox from '../select_box';
 import DateBox from '../date_box';
@@ -31,8 +30,6 @@ const REPEAT_TYPE_EDITOR = 'dx-recurrence-radiogroup-repeat-type';
 const REPEAT_COUNT_EDITOR = 'dx-recurrence-numberbox-repeat-count';
 const REPEAT_UNTIL_DATE_EDITOR = 'dx-recurrence-datebox-until-date';
 const REPEAT_ON_EDITOR = 'dx-recurrence-repeat-on';
-const REPEAT_ON_WEEK_EDITOR = 'dx-recurrence-repeat-on-week';
-const DAY_OF_WEEK = 'dx-recurrence-checkbox-day-of-week';
 const REPEAT_ON_MONTH_EDITOR = 'dx-recurrence-repeat-on-month';
 const DAY_OF_MONTH = 'dx-recurrence-numberbox-day-of-month';
 const REPEAT_ON_YEAR_EDITOR = 'dx-recurrence-repeat-on-year';
@@ -41,14 +38,38 @@ const FIELD_CLASS = 'dx-field';
 const RECURRENCE_FREQ_FIELD = 'dx-recurrence-freq-field';
 const FIELD_LABEL_CLASS = 'dx-field-label';
 const FIELD_VALUE_CLASS = 'dx-field-value';
+const RECURRENCE_BUTTON_GROUP = 'dx-recurrence-button-group';
 
-const frequencies = [
-    { text() { return messageLocalization.format('dxScheduler-recurrenceNever'); }, value: 'never' },
-    { text() { return messageLocalization.format('dxScheduler-recurrenceDaily'); }, value: 'daily' },
-    { text() { return messageLocalization.format('dxScheduler-recurrenceWeekly'); }, value: 'weekly' },
-    { text() { return messageLocalization.format('dxScheduler-recurrenceMonthly'); }, value: 'monthly' },
-    { text() { return messageLocalization.format('dxScheduler-recurrenceYearly'); }, value: 'yearly' }
+const defaultRecurrenceTypeIndex = 1; // TODO default daily recurrence
+
+const frequenciesMessages = [
+    /* {
+        // functionality is not removed, but hide the ability to set minute recurrence in the editor.
+        // in the future, if we publish the dxRecurrenceEditor, then we publish the minute recurrence
+        recurrence: 'dxScheduler-recurrenceMinutely',
+        value: 'minutely'
+    }*/
+    {
+        recurrence: 'dxScheduler-recurrenceHourly',
+        value: 'hourly'
+    }, {
+        recurrence: 'dxScheduler-recurrenceDaily',
+        value: 'daily'
+    }, {
+        recurrence: 'dxScheduler-recurrenceWeekly',
+        value: 'weekly'
+    }, {
+        recurrence: 'dxScheduler-recurrenceMonthly',
+        value: 'monthly'
+    }, {
+        recurrence: 'dxScheduler-recurrenceYearly',
+        value: 'yearly'
+    }
 ];
+
+const frequencies = frequenciesMessages.map((item) => {
+    return { text() { return messageLocalization.format(item.recurrence); }, value: item.value };
+});
 
 const repeatEndTypes = [
     { text() { return messageLocalization.format('dxScheduler-recurrenceNever'); }, value: 'never' },
@@ -57,7 +78,6 @@ const repeatEndTypes = [
 ];
 
 const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
-
 const DAYS_IN_WEEK = 7;
 
 class RecurrenceRule {
@@ -124,10 +144,10 @@ const RecurrenceEditor = Editor.inherit({
             /**
             * @name dxRecurrenceEditorOptions.startDate
             * @type Date
-            * @default new Date()
+            * @default undefined
             * @hidden
             */
-            startDate: new Date(),
+            startDate: undefined,
 
             /**
             * @name dxRecurrenceEditorOptions.firstDayOfWeek
@@ -140,7 +160,8 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _getFirstDayOfWeek() {
-        return isDefined(this.option('firstDayOfWeek')) ? this.option('firstDayOfWeek') : dateLocalization.firstDayOfWeekIndex();
+        const firstDayOfWeek = this.option('firstDayOfWeek');
+        return isDefined(firstDayOfWeek) ? firstDayOfWeek : dateLocalization.firstDayOfWeekIndex();
     },
 
     _createComponent(element, name, config = {}) {
@@ -165,7 +186,6 @@ const RecurrenceEditor = Editor.inherit({
             .appendTo(this.$element());
 
         this._renderEditors();
-
         this._renderContainerVisibility(this.option('value'));
     },
 
@@ -192,7 +212,7 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _handleDefaults() {
-        this._recurrenceRule.makeRule('freq', 'daily');
+        this._recurrenceRule.makeRule('freq', frequenciesMessages[defaultRecurrenceTypeIndex].value);
         this._changeEditorValue();
     },
 
@@ -203,18 +223,19 @@ const RecurrenceEditor = Editor.inherit({
     _renderEditors() {
         this._renderFreqEditor();
         this._renderIntervalEditor();
-
         this._renderRepeatOnEditor();
-
         this._renderRepeatEndEditor();
     },
 
     _renderFreqEditor() {
-        const freq = (this._recurrenceRule.rules().freq || 'never').toLowerCase();
-
+        const freq = (this._recurrenceRule.rules().freq || frequenciesMessages[defaultRecurrenceTypeIndex].value).toLowerCase();
         const $freqEditor = $('<div>')
             .addClass(FREQUENCY_EDITOR)
             .addClass(FIELD_VALUE_CLASS);
+
+        const $freqEditorLabel = $('<div>')
+            .text(messageLocalization.format('dxScheduler-editorLabelRecurrence'))
+            .addClass(FIELD_LABEL_CLASS);
 
         this._freqEditor = this._createComponent($freqEditor, SelectBox, {
             field: 'freq',
@@ -225,16 +246,15 @@ const RecurrenceEditor = Editor.inherit({
             layout: 'horizontal',
             onValueChanged: (args)=> {
                 this._valueChangedHandler(args);
-                this.invoke('resizePopup');
             }
         });
 
         const $field = $('<div>')
             .addClass(FIELD_CLASS)
             .addClass(RECURRENCE_FREQ_FIELD)
-            .append($freqEditor);
+            .append($freqEditorLabel, $freqEditor);
 
-        this.$element().prepend($field);
+        this._$container.append($field);
     },
 
     _renderIntervalEditor() {
@@ -275,6 +295,7 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _renderRepeatOnEditor() {
+        this._clearRepeatOnEditor();
         const freq = (this._recurrenceRule.rules().freq || '').toLowerCase();
 
         if(!isDefined(this._$repeatOnEditor)) {
@@ -284,7 +305,7 @@ const RecurrenceEditor = Editor.inherit({
                 .appendTo(this._$container);
         }
 
-        if(!freq || freq === 'daily') {
+        if(!freq || freq === 'daily' || freq === 'minutely' || freq === 'hourly') {
             this._clearRepeatOnEditor();
             this._clearRepeatOnLabel();
             return;
@@ -359,39 +380,28 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _renderRepeatOnWeekEditor() {
-        this._clearRepeatOnEditor();
+        const firstDayOfWeek = this._getFirstDayOfWeek();
+        const byDay = this._recurrenceRule.rules()['byday'] ?
+            this._recurrenceRule.rules()['byday'].split(',') : days[firstDayOfWeek];
+        const that = this;
+        const itemsButtonGroup = days.slice(firstDayOfWeek).concat(days.slice(0, firstDayOfWeek)).map(item => { return { text: item }; });
 
-        this._$repeatOnWeek = $('<div>')
-            .addClass(REPEAT_ON_WEEK_EDITOR)
-            .addClass(FIELD_VALUE_CLASS)
-            .appendTo(this._$repeatOnEditor);
+        this._$repeatOnWeek = $('<div>').addClass(RECURRENCE_BUTTON_GROUP).appendTo(this._$repeatOnEditor);
 
-        const localDaysNames = dateLocalization.getDayNames('short');
-        const daysFromRules = this._daysOfWeekByRules();
-
-        this._daysOfWeek = [];
-        const getDayIndex = this._getDayIndex();
-
-        for(let i = 0; i < DAYS_IN_WEEK; i++) {
-            const dayIndex = getDayIndex(i);
-            const checkBoxText = localDaysNames[dayIndex].toUpperCase();
-            const dayName = days[dayIndex];
-            const $day = $('<div>').addClass(DAY_OF_WEEK);
-
-            const day = this._createComponent($day, CheckBox, {
-                text: checkBoxText,
-                value: inArray(dayName, daysFromRules) > -1 ? true : false,
-                onValueChanged: this._repeatByDayValueChangeHandler.bind(this)
-            });
-
-            this._daysOfWeek[i] = day;
-            this._$repeatOnWeek.append($day);
-        }
+        this._weekEditor = this._createComponent(this._$repeatOnWeek, ButtonGroup, {
+            items: itemsButtonGroup,
+            selectionMode: 'multiple',
+            selectedItemKeys: byDay,
+            onSelectionChanged: (e) => {
+                const selectedKeys = e.component.option('selectedItemKeys');
+                that._recurrenceRule.makeRule('byday', selectedKeys);
+                this._changeEditorValue();
+            }
+        });
     },
 
     _daysOfWeekByRules() {
         let daysByRule = this._recurrenceRule.daysFromByDayRule();
-
         if(!daysByRule.length) {
             daysByRule = [days[this.option('startDate').getDay()]];
         }
@@ -399,29 +409,7 @@ const RecurrenceEditor = Editor.inherit({
         return daysByRule;
     },
 
-    _repeatByDayValueChangeHandler() {
-        let byDayRule = '';
-        const getDayIndex = this._getDayIndex();
-
-        each(this._daysOfWeek, (index, day) => {
-            if(day.option('value')) {
-                const dayName = days[getDayIndex(index)];
-
-                if(!byDayRule) {
-                    byDayRule = dayName;
-                } else {
-                    byDayRule = `${byDayRule},${dayName}`;
-                }
-            }
-        });
-
-        this._recurrenceRule.makeRule('byday', byDayRule);
-        this._changeEditorValue();
-    },
-
     _renderRepeatOnMonthEditor() {
-        this._clearRepeatOnEditor();
-
         this._$repeatOnMonth = $('<div>')
             .addClass(REPEAT_ON_MONTH_EDITOR)
             .addClass(FIELD_VALUE_CLASS)
@@ -431,8 +419,6 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _renderRepeatOnYearEditor() {
-        this._clearRepeatOnEditor();
-
         this._$repeatOnYear = $('<div>')
             .addClass(REPEAT_ON_YEAR_EDITOR)
             .addClass(FIELD_VALUE_CLASS).appendTo(this._$repeatOnEditor);
@@ -517,28 +503,6 @@ const RecurrenceEditor = Editor.inherit({
 
         editor.setAria('describedby', labelId);
         editor.setAria('id', labelId, $label);
-    },
-
-    _repeatEndSwitchValueChangeHandler(args) {
-        const value = args.value;
-
-        this._renderRepeatEndVisibility(value);
-
-        if(!this._recurrenceRule.rules().count && !this._recurrenceRule.rules().until && value) {
-            this._handleRepeatEndDefaults();
-        } else if(!value) {
-            this._recurrenceRule.makeRule('count', '');
-            this._recurrenceRule.makeRule('until', '');
-            this._changeEditorValue();
-        }
-    },
-
-    _renderRepeatEndVisibility(value) {
-        if(!value) {
-            this._$repeatEndEditor.hide();
-        } else {
-            this._$repeatEndEditor.show();
-        }
     },
 
     _handleRepeatEndDefaults() {
@@ -736,20 +700,14 @@ const RecurrenceEditor = Editor.inherit({
     _valueChangedHandler(args) {
         const value = args.component.option('value');
         const field = args.component.option('field');
-        const freqEditorValue = this._freqEditor && this._freqEditor.option('value');
-        let visible = true;
 
-        if(field === 'freq' && value === 'never' || field !== 'freq' && freqEditorValue === 'never') {
-            visible = false;
+        if(!this.option('visible')) {
             this.option('value', '');
         } else {
             this._recurrenceRule.makeRule(field, value);
-
             this._makeRepeatOnRule(field, value);
             this._changeEditorValue();
         }
-
-        this._renderContainerVisibility(visible);
     },
 
     _makeRepeatOnRule(field, value) {
@@ -787,7 +745,6 @@ const RecurrenceEditor = Editor.inherit({
                 this._recurrenceRule.makeRules(args.value);
                 this._changeRepeatCountValue();
                 this._repeatTypeEditor.option('value', this._recurrenceRule.repeatableRule() || 'never');
-
                 this._renderRepeatEndEditor();
                 this._renderRepeatOnEditor();
 
@@ -796,7 +753,6 @@ const RecurrenceEditor = Editor.inherit({
                 this.callBase(args);
                 break;
             case 'startDate':
-                this._clearRepeatOnEditor();
                 this._renderRepeatOnEditor();
                 this._makeRepeatOnRule('freq', this._recurrenceRule.rules().freq);
 
@@ -806,7 +762,6 @@ const RecurrenceEditor = Editor.inherit({
 
                 break;
             case 'firstDayOfWeek':
-                this._clearRepeatOnEditor();
                 this._renderRepeatOnEditor();
 
                 if(this._$repeatDateEditor) {
@@ -823,11 +778,9 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _changeEditorsValues(rules) {
-        this._changeCheckBoxesValue(!!rules['byday']);
-
-        this._freqEditor.option('value', (rules.freq || 'never').toLowerCase());
+        this._freqEditor.option('value', (rules.freq || frequenciesMessages[defaultRecurrenceTypeIndex].value).toLowerCase());
         this._changeRepeatTypeLabel();
-        this._intervalEditor.option('value', rules.interval);
+        this._intervalEditor.option('value', rules.interval || 1);
 
         this._changeRepeatCountValue();
         this._changeRepeatUntilValue();
@@ -869,21 +822,6 @@ const RecurrenceEditor = Editor.inherit({
 
     _getUntilValue() {
         return this._recurrenceRule.rules().until || this._formatUntilDate(new Date());
-    },
-
-    _changeCheckBoxesValue(byDayChanged) {
-        if(!this._$repeatOnWeek || !byDayChanged) {
-            return;
-        }
-
-        const daysByRule = this._daysOfWeekByRules();
-        const getDayIndex = this._getDayIndex();
-
-        each(this._daysOfWeek, (index, day) => {
-            const dayName = days[getDayIndex(index)];
-
-            day.option('value', inArray(dayName, daysByRule) > -1);
-        });
     },
 
     _changeDayOfMonthValue() {

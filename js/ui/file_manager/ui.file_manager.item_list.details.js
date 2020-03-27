@@ -1,9 +1,10 @@
 import $ from '../../core/renderer';
-import typeUtils from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import { extendAttributes } from './ui.file_manager.common';
+import { isString, isFunction } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 
 import DataGrid from '../data_grid/ui.data_grid';
-import CustomStore from '../../data/custom_store';
 
 import FileManagerItemListBase from './ui.file_manager.item_list';
 import FileManagerFileActionsButton from './ui.file_manager.file_actions_button';
@@ -16,7 +17,36 @@ const FILE_MANAGER_DETAILS_ITEM_NAME_WRAPPER_CLASS = 'dx-filemanager-details-ite
 const FILE_MANAGER_DETAILS_ITEM_IS_DIRECTORY_CLASS = 'dx-filemanager-details-item-is-directory';
 const FILE_MANAGER_PARENT_DIRECTORY_ITEM = 'dx-filemanager-parent-directory-item';
 const DATA_GRID_DATA_ROW_CLASS = 'dx-data-row';
-const PREDEFINED_COLUMN_NAMES = [ 'name', 'isDirectory', 'size', 'thumbnail', 'dateModified', 'isParentFolder' ];
+
+const DEFAULT_COLUMN_CONFIGS = {
+    thumbnail: {
+        caption: '',
+        calculateSortValue: 'isDirectory',
+        width: 36,
+        alignment: 'center',
+        cssClass: FILE_MANAGER_DETAILS_ITEM_IS_DIRECTORY_CLASS
+    },
+    name: {
+        caption: messageLocalization.format('dxFileManager-listDetailsColumnCaptionName'),
+    },
+    dateModified: {
+        caption: messageLocalization.format('dxFileManager-listDetailsColumnCaptionDateModified'),
+        width: 110,
+        hidingPriority: 1,
+    },
+    size: {
+        caption: messageLocalization.format('dxFileManager-listDetailsColumnCaptionFileSize'),
+        width: 90,
+        alignment: 'right',
+        hidingPriority: 0,
+    },
+    isParentFolder: {
+        caption: 'isParentFolder',
+        visible: false,
+        sortIndex: 0,
+        sortOrder: 'asc'
+    }
+};
 
 class FileManagerDetailsItemList extends FileManagerItemListBase {
 
@@ -24,6 +54,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         this._itemCount = 0;
         this._focusedItem = null;
         this._hasParentDirectoryItem = false;
+        this._parentDirectoryItemKey = null;
         this._selectAllCheckBox = null;
         this._selectAllCheckBoxUpdating = false;
 
@@ -42,10 +73,14 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         const selectionMode = this._isMultipleSelectionMode() ? 'multiple' : 'none';
 
         this._filesView = this._createComponent($filesView, DataGrid, {
+            dataSource: this._createDataSource(),
             hoverStateEnabled: true,
             selection: {
-                mode: selectionMode
+                mode: selectionMode,
+                showCheckBoxesMode: this._isDesktop() ? 'onClick' : 'none'
             },
+            selectedRowKeys: this.option('selectedItemKeys'),
+            focusedRowKey: this.option('focusedItemKey'),
             focusedRowEnabled: true,
             allowColumnResizing: true,
             scrolling: {
@@ -66,58 +101,78 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             onFocusedRowChanged: this._onFocusedRowChanged.bind(this),
             onOptionChanged: this._onFilesViewOptionChanged.bind(this)
         });
-
-        this.refresh();
     }
 
     _createColumns() {
-        let columns = [
-            {
-                dataField: 'isDirectory',
-                caption: '',
-                width: 36,
-                alignment: 'center',
-                cellTemplate: this._createThumbnailColumnCell.bind(this),
-                cssClass: FILE_MANAGER_DETAILS_ITEM_IS_DIRECTORY_CLASS
-            },
-            {
-                dataField: 'name',
-                caption: messageLocalization.format('dxFileManager-listDetailsColumnCaptionName'),
-                cellTemplate: this._createNameColumnCell.bind(this)
-            },
-            {
-                dataField: 'dateModified',
-                caption: messageLocalization.format('dxFileManager-listDetailsColumnCaptionDateModified'),
-                width: 110,
-                hidingPriority: 1,
-            },
-            {
-                dataField: 'size',
-                caption: messageLocalization.format('dxFileManager-listDetailsColumnCaptionFileSize'),
-                width: 90,
-                alignment: 'right',
-                hidingPriority: 0,
-                calculateCellValue: this._calculateSizeColumnCellValue.bind(this)
-            },
-            {
-                dataField: 'isParentFolder',
-                caption: 'isParentFolder',
-                visible: false,
-                sortIndex: 0,
-                sortOrder: 'asc'
+        let columns = this.option('detailColumns');
+        columns = columns.slice(0);
+
+        columns = columns.map(column => {
+            let extendedItem = column;
+            if(isString(column)) {
+                extendedItem = { dataField: column };
             }
-        ];
+            return this._getPreparedColumn(extendedItem);
+        });
 
         const customizeDetailColumns = this.option('customizeDetailColumns');
-        if(typeUtils.isFunction(customizeDetailColumns)) {
+        if(isFunction(customizeDetailColumns)) {
             columns = customizeDetailColumns(columns);
         }
 
-        for(let i = 0; i < columns.length; i++) {
-            const dataItemSuffix = PREDEFINED_COLUMN_NAMES.indexOf(columns[i].dataField) < 0 ? 'dataItem.' : '';
-            columns[i].dataField = 'fileItem.' + dataItemSuffix + columns[i].dataField;
-        }
+        columns.push(this._getPreparedColumn({ dataField: 'isParentFolder' }));
+        columns.forEach(column => this._updateColumnDataField(column));
         return columns;
+    }
+
+    _getPreparedColumn(columnOptions) {
+        const result = {};
+        let resultCssClass = '';
+
+        if(this._isDefaultColumn(columnOptions.dataField)) {
+            const defaultConfig = extend(true, {}, DEFAULT_COLUMN_CONFIGS[columnOptions.dataField]);
+            resultCssClass = defaultConfig.cssClass;
+            if(columnOptions.cssClass) {
+                resultCssClass += ` ${columnOptions.cssClass}`;
+            }
+            if(columnOptions.dataField === 'thumbnail') {
+                defaultConfig.cellTemplate = this._createThumbnailColumnCell.bind(this);
+                defaultConfig.calculateSortValue = `fileItem.${defaultConfig.calculateSortValue}`;
+            }
+            if(columnOptions.dataField === 'name') {
+                defaultConfig.cellTemplate = this._createNameColumnCell.bind(this);
+            }
+            if(columnOptions.dataField === 'size') {
+                defaultConfig.calculateCellValue = this._calculateSizeColumnCellValue.bind(this);
+            }
+            extend(true, result, defaultConfig);
+        }
+
+        extendAttributes(result, columnOptions, [
+            'alignment',
+            'caption',
+            'dataField',
+            'hidingPriority',
+            'sortIndex',
+            'sortOrder',
+            'visible',
+            'width'
+        ]);
+
+        if(resultCssClass) {
+            result.cssClass = resultCssClass;
+        }
+        return result;
+    }
+
+    _updateColumnDataField(column) {
+        const dataItemSuffix = this._isDefaultColumn(column.dataField) ? '' : 'dataItem.';
+        column.dataField = 'fileItem.' + dataItemSuffix + column.dataField;
+        return column;
+    }
+
+    _isDefaultColumn(columnDataField) {
+        return !!DEFAULT_COLUMN_CONFIGS[columnDataField];
     }
 
     _onFileItemActionButtonClick({ component, element, event }) {
@@ -182,7 +237,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
     _onSelectAllCheckBoxValueChanged({ event, previousValue, value }) {
         if(!event) {
-            if(previousValue && !this._selectAllCheckBoxUpdating) {
+            if(previousValue && !this._selectAllCheckBoxUpdating && this._selectAllCheckBox) {
                 this._selectAllCheckBox.option('value', previousValue);
             }
             return;
@@ -213,6 +268,9 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _onContextMenuPreparing(e) {
+        if(!this._isDesktop()) {
+            return;
+        }
         let fileItems = null;
 
         if(e.row && e.row.rowType === 'data') {
@@ -224,21 +282,30 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         e.items = this._contextMenu.createContextMenuItems(fileItems);
     }
 
-    _onFilesViewSelectionChanged({ selectedRowsData }) {
-        const parentDirectoryItem = this._findParentDirectoryItem(selectedRowsData);
-        if(parentDirectoryItem) {
-            this._filesView.deselectRows([ parentDirectoryItem.fileItem.key ]);
+    _onFilesViewSelectionChanged({ component, selectedRowsData, selectedRowKeys, currentSelectedRowKeys, currentDeselectedRowKeys }) {
+        this._filesView = this._filesView || component;
+
+        if(this._selectAllCheckBox) {
+            this._selectAllCheckBoxUpdating = true;
+            this._selectAllCheckBox.option('value', this._isAllItemsSelected());
+            this._selectAllCheckBoxUpdating = false;
         }
 
-        this._selectAllCheckBoxUpdating = true;
-        this._selectAllCheckBox.option('value', this._isAllItemsSelected());
-        this._selectAllCheckBoxUpdating = false;
-
-        this._raiseSelectionChanged();
+        const selectedItems = selectedRowsData.map(itemInfo => itemInfo.fileItem);
+        this._tryRaiseSelectionChanged({
+            selectedItemInfos: selectedRowsData,
+            selectedItems,
+            selectedItemKeys: selectedRowKeys,
+            currentSelectedItemKeys: currentSelectedRowKeys,
+            currentDeselectedItemKeys: currentDeselectedRowKeys
+        });
     }
 
-    _onFocusedRowChanged({ row }) {
-        this._selectItemSingleSelection(row.data);
+    _onFocusedRowChanged(e) {
+        if(!this._isMultipleSelectionMode()) {
+            this._selectItemSingleSelection(e.row.data);
+        }
+        this._raiseFocusedItemChanged(e);
     }
 
     _onFilesViewOptionChanged({ fullName }) {
@@ -281,10 +348,26 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         selectItemFunc.call(this, fileItemInfo);
     }
 
+    _deselectItem(item) {
+        this._filesView.deselectRows([ item.fileItem.key ]);
+    }
+
     _selectItemSingleSelection(fileItemInfo) {
         if(!this._focusedItem || this._focusedItem.fileItem.key !== fileItemInfo.fileItem.key) {
+            const oldFocusedItem = this._focusedItem;
             this._focusedItem = fileItemInfo;
-            this._raiseSelectionChanged();
+
+            const deselectedKeys = [];
+            if(oldFocusedItem) {
+                deselectedKeys.push(oldFocusedItem.fileItem.key);
+            }
+
+            this._raiseSelectionChanged({
+                selectedItems: [ fileItemInfo.fileItem ],
+                selectedItemKeys: [ fileItemInfo.fileItem.key ],
+                currentSelectedItemKeys: [ fileItemInfo.fileItem.key ],
+                currentDeselectedItemKeys: deselectedKeys
+            });
         }
     }
 
@@ -296,39 +379,12 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
     }
 
-    _getItemsInternal() {
-        return this._getItems().done(itemInfos => {
-            this._itemCount = itemInfos.length;
-            this._hasParentDirectoryItem = !!this._findParentDirectoryItem(itemInfos);
-        });
+    _setSelectedItemKeys(itemKeys) {
+        this._filesView.option('selectedRowKeys', itemKeys);
     }
 
-    _findParentDirectoryItem(itemInfos) {
-        for(let i = 0; i < itemInfos.length; i++) {
-            const itemInfo = itemInfos[i];
-            if(this._isParentDirectoryItem(itemInfo)) {
-                return itemInfo;
-            }
-        }
-        return null;
-    }
-
-    _getFileItemsForContextMenu(fileItem) {
-        const result = this.getSelectedItems();
-
-        if(this._isParentDirectoryItem(fileItem)) {
-            result.push(fileItem);
-        }
-
-        return result;
-    }
-
-    _isParentDirectoryItem(itemInfo) {
-        return itemInfo.fileItem.isParentFolder;
-    }
-
-    _isMultipleSelectionMode() {
-        return this.option('selectionMode') === 'multiple';
+    _setFocusedItemKey(itemKey) {
+        this._filesView.option('focusedRowKey', itemKey);
     }
 
     clearSelection() {
@@ -336,13 +392,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     refresh() {
-        this.clearSelection();
-        this._filesView.option('dataSource', {
-            'store': new CustomStore({
-                key: 'fileItem.key',
-                load: this._getItemsInternal.bind(this)
-            })
-        });
+        this._filesView.option('dataSource', this._createDataSource());
     }
 
     getSelectedItems() {

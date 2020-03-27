@@ -2,6 +2,9 @@ import devices from '../devices';
 import { isEmptyObject, isFunction } from '../utils/type';
 import { findBestMatches } from '../utils/common';
 import { extend } from '../utils/extend';
+import { compileGetter } from '../utils/data';
+
+const cachedGetters = {};
 
 export const convertRulesToOptions = (rules) => {
     const currentDevice = devices.current();
@@ -12,7 +15,7 @@ export const convertRulesToOptions = (rules) => {
             deviceMatch(currentDevice, deviceFilter);
 
         if(match) {
-            extend(options, ruleOptions);
+            extend(true, options, ruleOptions);
         }
         return options;
     }, {});
@@ -28,6 +31,7 @@ export const getFieldName = fullName => fullName.substr(fullName.lastIndexOf('.'
 
 export const getParentName = fullName => fullName.substr(0, fullName.lastIndexOf('.'));
 
-export default function createDefaultOptionRules(options = []) {
-    return options;
-}
+export const getNestedOptionValue = function(optionsObject, name) {
+    cachedGetters[name] = cachedGetters[name] || compileGetter(name);
+    return cachedGetters[name](optionsObject, { functionsAsIs: true });
+};

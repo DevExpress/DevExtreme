@@ -984,6 +984,25 @@ QUnit.module('widget options', moduleSetup, () => {
         assert.equal(selectionChangedSecondHandler.callCount, 1, 'selectionChanged handler is correct');
     });
 
+    QUnit.test('valueChange after focusout should not be raised', function(assert) {
+        const valueChangeHandler = sinon.spy();
+
+        const $selectBox = $('#selectBox').dxSelectBox({
+            items: [1, 2, 3],
+            value: 'a',
+            searchEnabled: true,
+            onValueChanged: valueChangeHandler
+        });
+
+        const selectBox = $selectBox.dxSelectBox('instance');
+
+        selectBox.open();
+        $selectBox.focusout();
+
+        assert.ok(valueChangeHandler.notCalled, 'option change has not been raised');
+        assert.strictEqual(selectBox.option('value'), 'a', 'value is correct');
+    });
+
     QUnit.test('options displayExpr, valueExpr', function(assert) {
         assert.expect(5);
 
@@ -2803,6 +2822,26 @@ QUnit.module('search', moduleSetup, () => {
         assert.equal($(instance.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'filter was cleared');
     });
 
+    QUnit.testInActiveWindow('Unfiltered editor should not be load data on blur (T873258)', function(assert) {
+        const loadStub = sinon.stub().returns([1, 2, 3]);
+        const $selectBox = $('#selectBox').dxSelectBox({
+            searchTimeout: 0,
+            deferRendering: true,
+            dataSource: {
+                load: loadStub
+            },
+            searchEnabled: true,
+            showDataBeforeSearch: true
+        });
+
+        $selectBox
+            .find(toSelector(TEXTEDITOR_INPUT_CLASS))
+            .trigger('focusin')
+            .trigger('focusout');
+
+        assert.ok(loadStub.notCalled, 'data not loaded');
+    });
+
     QUnit.testInActiveWindow('widget with fieldTemplate and remote data source should display right value after search and selection (T668290)', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             dataSource: {
@@ -4393,6 +4432,57 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
         keyboard.keyDown('down');
         this.clock.tick(0);
         assert.deepEqual(instance.option('selectedItem'), items[1], 'downArrow');
+    });
+
+    QUnit.test('selectBox should load only one next page after some quick navigations by arrow keys (T862714)', function(assert) {
+        const items = [];
+        for(let i = 0; i < 10; i++) {
+            items.push({ id: i, text: 'item ' + i });
+        }
+
+        const loadHandler = sinon.spy((e) => {
+            const d = $.Deferred();
+            setTimeout(() => {
+                d.resolve(items.slice(e.skip, e.skip + e.take));
+            }, 200);
+            return d.promise();
+        });
+
+        const $element = $('#selectBox').dxSelectBox({
+            dataSource: new DataSource({
+                byKey: (key) => {
+                    return $.extend({}, $.grep(items, (i) => {
+                        return i.id === key;
+                    })[0]);
+                },
+                load: loadHandler,
+                key: 'id',
+                pageSize: 3,
+                paginate: true
+            }),
+            focusStateEnabled: true,
+            deferRendering: true,
+            displayExpr: 'text',
+            valueExpr: 'id'
+        });
+        const instance = $element.dxSelectBox('instance');
+        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+
+        keyboard.keyDown('down');
+
+        this.clock.tick(300);
+
+        keyboard
+            .keyDown('down')
+            .keyDown('down')
+            .keyDown('down')
+            .keyDown('down')
+            .keyDown('down');
+
+        this.clock.tick(300);
+        assert.strictEqual(loadHandler.callCount, 2, 'only one next page can be loaded after quick keydowns');
+        assert.deepEqual(instance.option('selectedItem'), items[3], 'correct item is selected');
     });
 
     QUnit.test('T323427 - item should be chosen after focus on it if input is empty', function(assert) {

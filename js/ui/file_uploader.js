@@ -378,9 +378,11 @@ class FileUploader extends Editor {
     _setStatusMessage(file, key) {
         setTimeout(() => {
             if(this.option('showFileList')) {
-                file.$statusMessage.text(this.option(key));
-                file.$statusMessage.css('display', '');
-                file.progressBar.$element().remove();
+                if(file.$statusMessage) {
+                    file.$statusMessage.text(this.option(key));
+                    file.$statusMessage.css('display', '');
+                    file.progressBar.$element().remove();
+                }
             }
         }, FILEUPLOADER_AFTER_LOAD_DELAY);
     }
@@ -815,6 +817,7 @@ class FileUploader extends Editor {
         if(!this._useInputForDrop()) {
             e.preventDefault();
         }
+        e.originalEvent.dataTransfer.dropEffect = 'copy';
     }
 
     _dragLeaveHandler(e) {

@@ -329,11 +329,18 @@ module.exports = {
             return this._translator.translate(value, offset);
         },
 
-        _initAxisPositions: function() {
+        _initAxisPositions() {
             const that = this;
-            const position = that._options.position;
 
-            that._axisPosition = that._orthogonalPositions[position === 'top' || position === 'left' ? 'start' : 'end'];
+            if(that.customPositionIsAvailable() && !isDefined(that._customBoundaryPosition)) {
+                that._customBoundaryPosition = that.getCustomBoundaryPosition();
+            }
+
+            if(!that.customPositionIsAvailable() || that.customPositionIsBoundary()) {
+                that._axisPosition = that.getPredefinedPosition(that.getResolvedBoundaryPosition());
+            } else {
+                that._axisPosition = that.getCustomPosition();
+            }
         },
 
         _getTickMarkPoints(coords, length, tickOptions) {
@@ -345,7 +352,7 @@ module.exports = {
                 tickStartCoord = TICKS_CORRECTIONS[options.tickOrientation] * length;
             } else {
                 let shift = tickOptions.shift || 0;
-                if(options.position === 'left' || options.position === 'top') {
+                if(options.position === LEFT || options.position === TOP) {
                     shift = -shift;
                 }
                 tickStartCoord = shift + this.getTickStartPositionShift(length);
@@ -359,11 +366,12 @@ module.exports = {
         },
 
         getTickStartPositionShift(length) {
-            const options = this._options;
+            const width = this._options.width;
+            const position = this.getResolvedBoundaryPosition();
             return (length % 2 === 1 ?
-                (options.width % 2 === 0 && (options.position === 'left' || options.position === 'top') ||
-                options.width % 2 === 1 && (options.position === 'right' || options.position === 'bottom') ? Math.floor(-length / 2) : -Math.floor(length / 2)) :
-                (-length / 2 + (options.width % 2 === 0 ? 0 : (options.position === 'bottom' || options.position === 'right' ? -1 : 1))));
+                (width % 2 === 0 && (position === LEFT || position === TOP) ||
+                width % 2 === 1 && ((position === RIGHT || position === BOTTOM) && !this.hasCustomPosition()) ? Math.floor(-length / 2) : -Math.floor(length / 2)) :
+                (-length / 2 + (width % 2 === 0 ? 0 : (position === BOTTOM || position === RIGHT ? -1 : 1))));
         },
 
         _getTitleCoords: function() {
@@ -1184,8 +1192,8 @@ module.exports = {
                 positionFrom = customCanvas.start;
                 positionTo = customCanvas.end;
             } else {
-                positionFrom = that._orthogonalPositions.start - (options.visible && !that._axisShift && (position === 'left' || position === 'top') ? SCALE_BREAK_OFFSET : 0);
-                positionTo = that._orthogonalPositions.end + (options.visible && (position === 'right' || position === 'bottom') ? SCALE_BREAK_OFFSET : 0);
+                positionFrom = that._orthogonalPositions.start - (options.visible && !that._axisShift && (position === LEFT || position === TOP) ? SCALE_BREAK_OFFSET : 0);
+                positionTo = that._orthogonalPositions.end + (options.visible && (position === RIGHT || position === BOTTOM) ? SCALE_BREAK_OFFSET : 0);
             }
 
             mainGroup = that._createBreaksGroup(positionFrom, positionTo);
@@ -1223,7 +1231,7 @@ module.exports = {
                 };
                 const shift = margins[side] ? margins[side] + axesSpacing : 0;
 
-                attr[isHorizontal ? 'translateY' : 'translateX'] = (side === 'left' || side === 'top' ? -1 : 1) * shift;
+                attr[isHorizontal ? 'translateY' : 'translateX'] = (side === LEFT || side === TOP ? -1 : 1) * shift;
 
                 (group[side] || group).attr(attr);
                 return shift;
@@ -1231,10 +1239,97 @@ module.exports = {
 
             that._axisShift = shiftGroup(options.position, that._axisGroup);
 
-            (isHorizontal ? ['top', 'bottom'] : ['left', 'right']).forEach(side => {
+            (isHorizontal ? [TOP, BOTTOM] : [LEFT, RIGHT]).forEach(side => {
                 shiftGroup(side, constantLinesGroups.above);
                 shiftGroup(side, constantLinesGroups.under);
             });
+        },
+
+        getCustomPosition(position) {
+            const that = this;
+            const oppositeAxis = that.getCustomPositionAxis();
+            const resolvedPosition = position ?? that.getResolvedPositionOption();
+            const offset = that.getOptions().offset;
+            const oppositeTranslator = oppositeAxis.getTranslator();
+            const oppositeAxisType = oppositeAxis.getOptions().type;
+            let validPosition = oppositeAxis.validateUnit(resolvedPosition);
+            let currentPosition;
+
+            if(oppositeAxisType === 'discrete' && (!oppositeTranslator._categories || oppositeTranslator._categories.indexOf(validPosition) < 0)) {
+                validPosition = undefined;
+            }
+
+            if(that.positionIsBoundary(resolvedPosition)) {
+                currentPosition = that.getPredefinedPosition(resolvedPosition);
+            } else if(!isDefined(validPosition)) {
+                currentPosition = that.getPredefinedPosition(that.getOptions().position);
+            } else {
+                currentPosition = oppositeTranslator.to(validPosition, -1);
+            }
+
+            if(isFinite(currentPosition) && isFinite(offset)) {
+                currentPosition += offset;
+            }
+
+            return currentPosition;
+        },
+
+        getCustomBoundaryPosition(position) {
+            const that = this;
+            const oppositeAxis = that.getCustomPositionAxis();
+            const resolvedPosition = position ?? that.getResolvedPositionOption();
+            const boundaryPositions = that._orthogonalPositions;
+            const oppositeTranslator = oppositeAxis.getTranslator();
+
+            if(!isDefined(boundaryPositions) || !isDefined(oppositeAxis._orthogonalPositions) || oppositeTranslator.canvasLength === 0) {
+                return undefined;
+            }
+
+            const currentPosition = that.getCustomPosition(resolvedPosition);
+
+            if(!isDefined(currentPosition)) {
+                return that.getResolvedBoundaryPosition();
+            } else if(currentPosition <= boundaryPositions.start || currentPosition >= boundaryPositions.end) {
+                const isStartPosition = currentPosition <= boundaryPositions.start;
+                return isStartPosition ? (that._isHorizontal ? TOP : LEFT) :
+                    (that._isHorizontal ? BOTTOM : RIGHT);
+            }
+
+            return currentPosition;
+        },
+
+        getResolvedPositionOption() {
+            const options = this.getOptions();
+            return options.customPosition ?? options.position;
+        },
+
+        customPositionIsAvailable() {
+            const options = this.getOptions();
+            return isDefined(this.getCustomPositionAxis()) && (isDefined(options.customPosition) || isFinite(options.offset));
+        },
+
+        hasCustomPosition() {
+            return this.customPositionIsAvailable() && !this.customPositionIsBoundary();
+        },
+
+        getResolvedBoundaryPosition() {
+            return this.customPositionIsBoundary() ? this._customBoundaryPosition : this.getOptions().position;
+        },
+
+        customPositionEqualsToPredefined() {
+            return this.customPositionIsBoundary() && this._customBoundaryPosition === this.getOptions().position;
+        },
+
+        customPositionIsBoundary() {
+            return this.positionIsBoundary(this._customBoundaryPosition);
+        },
+
+        positionIsBoundary(position) {
+            return [TOP, LEFT, BOTTOM, RIGHT].indexOf(position) >= 0;
+        },
+
+        getPredefinedPosition(position) {
+            return this._orthogonalPositions ? this._orthogonalPositions[position === TOP || position === LEFT ? 'start' : 'end'] : undefined;
         }
     }
 };

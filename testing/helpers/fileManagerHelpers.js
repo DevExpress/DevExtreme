@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import devices from 'core/devices';
 import { deserializeDate } from 'core/utils/date_serialization';
 import FileSystemItem from 'file_management/file_system_item';
 
@@ -13,12 +14,16 @@ export const Consts = {
     CONTAINER_CLASS: 'dx-filemanager-container',
     DRAWER_PANEL_CONTENT_CLASS: 'dx-drawer-panel-content',
     DRAWER_CONTENT_CLASS: 'dx-drawer-content',
+    DRAWER_MODE_SHRINK: 'dx-drawer-shrink',
+    DRAWER_MODE_OVERLAP: 'dx-drawer-overlap',
+    NOTIFICATION_DRAWER_CLASS: 'dx-filemanager-notification-drawer',
     DIRS_PANEL_CLASS: 'dx-filemanager-dirs-panel',
     DIRS_TREE_CLASS: 'dx-filemanager-dirs-tree',
     ITEMS_VIEW_CLASS: 'dx-filemanager-files-view',
     DIALOG_CLASS: 'dx-filemanager-dialog',
     THUMBNAILS_ITEM_CLASS: 'dx-filemanager-thumbnails-item',
     THUMBNAILS_ITEM_NAME_CLASS: 'dx-filemanager-thumbnails-item-name',
+    THUMBNAILS_ITEM_CONTENT_CLASS: 'dx-filemanager-thumbnails-item-content',
     GRID_DATA_ROW_CLASS: 'dx-data-row',
     FILE_ACTION_BUTTON_CLASS: 'dx-filemanager-file-actions-button',
     FOLDERS_TREE_VIEW_ITEM_CLASS: 'dx-treeview-item',
@@ -45,6 +50,7 @@ export const Consts = {
     MENU_ITEM_WITH_SUBMENU_CLASS: 'dx-menu-item-has-submenu',
     SUBMENU_CLASS: 'dx-submenu',
     SELECTION_CLASS: 'dx-selection',
+    ITEM_SELECTED_CLASS: 'dx-item-selected',
     FOCUSED_ROW_CLASS: 'dx-row-focused',
     SPLITTER_CLASS: 'dx-splitter',
     DISABLED_STATE_CLASS: 'dx-state-disabled',
@@ -150,6 +156,11 @@ export class FileManagerWrapper {
         return _$generalToolbar.find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
     }
 
+    getFileSelectionToolbarElements() {
+        const _$fileSelectionToolbar = this.getToolbar().children().first().next();
+        return _$fileSelectionToolbar.find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
+    }
+
     getToolbarButton(text) {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}:contains('${text}')`);
     }
@@ -194,6 +205,14 @@ export class FileManagerWrapper {
         return this.getThumbnailsItems().filter(`:contains('${itemName}')`);
     }
 
+    getThumbnailsItemContent(itemName) {
+        return this.findThumbnailsItem(itemName).find(`.${Consts.THUMBNAILS_ITEM_CONTENT_CLASS}`);
+    }
+
+    isThumbnailsItemSelected(itemName) {
+        return this.findThumbnailsItem(itemName).is(`.${Consts.ITEM_SELECTED_CLASS}`);
+    }
+
     findDetailsItem(itemName) {
         return this._$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td:contains('${itemName}')`);
     }
@@ -214,6 +233,14 @@ export class FileManagerWrapper {
 
     getDetailsItemName(index) {
         return this.getDetailsItemsNames().eq(index).text();
+    }
+
+    getDetailsItemDateModified(index) {
+        return this.getDetailsCell('Date Modified', index).text();
+    }
+
+    getDetailsItemSize(index) {
+        return this.getDetailsCell('File Size', index).text();
     }
 
     getRowActionButtonInDetailsView(index) {
@@ -254,6 +281,14 @@ export class FileManagerWrapper {
 
     getDetailsCellText(columnCaption, rowIndex) {
         return this.getDetailsCell(columnCaption, rowIndex).text();
+    }
+
+    getDetailsCellValue(rowIndex, columnIndex) {
+        columnIndex += isDesktopDevice() ? 1 : 0;
+        return this.getRowInDetailsView(rowIndex)
+            .find(`td:nth-child(${columnIndex})`)
+            .text()
+            .replace(showMoreButtonText, '');
     }
 
     getSelectAllCheckBox() {
@@ -306,6 +341,10 @@ export class FileManagerWrapper {
 
     getDrawerPanelContent() {
         return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.DRAWER_PANEL_CONTENT_CLASS}`);
+    }
+
+    getProgressDrawer() {
+        return this._$element.find(`.${Consts.NOTIFICATION_DRAWER_CLASS}`);
     }
 
     getItemsPanel() {
@@ -715,4 +754,8 @@ export const createUploadInfo = (file, chunkIndex, customData, chunkSize) => {
 
 export const stubFileReader = object => {
     sinon.stub(object, '_createFileReader', () => new FileReaderMock());
+};
+
+export const isDesktopDevice = () => {
+    return devices.real().deviceType === 'desktop';
 };

@@ -3,7 +3,7 @@ const { test } = QUnit;
 import 'common.css!';
 import 'ui/diagram';
 
-const FLOATING_TOOLBAR_SELECTOR = '.dx-diagram-floating-toolbar-container > .dx-diagram-toolbar';
+import { Consts, getHistoryToolbarInstance } from '../../../helpers/diagramHelpers.js';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -23,19 +23,19 @@ QUnit.module('History Toolbar', {
     }
 }, () => {
     test('should not render if toolbar.visible is false', function(assert) {
-        let $toolbar = this.$element.find(FLOATING_TOOLBAR_SELECTOR);
-        assert.equal($toolbar.length, 2);
+        let $toolbar = this.$element.find(Consts.FLOATING_TOOLBAR_SELECTOR);
+        assert.equal($toolbar.length, 3);
         this.instance.option('historyToolbar.visible', false);
-        $toolbar = this.$element.find(FLOATING_TOOLBAR_SELECTOR);
-        assert.equal($toolbar.length, 1);
+        $toolbar = this.$element.find(Consts.FLOATING_TOOLBAR_SELECTOR);
+        assert.equal($toolbar.length, 2);
     });
     test('should fill toolbar with default items', function(assert) {
-        const toolbar = $(this.$element.find(FLOATING_TOOLBAR_SELECTOR).get(0)).dxToolbar('instance');
-        assert.equal(toolbar.option('dataSource').length, 3);
+        const toolbar = getHistoryToolbarInstance(this.$element);
+        assert.equal(toolbar.option('dataSource').length, this.instance.isMobileScreenSize() ? 4 : 2);
     });
     test('should fill toolbar with custom items', function(assert) {
         this.instance.option('historyToolbar.commands', ['copy']);
-        const toolbar = $(this.$element.find(FLOATING_TOOLBAR_SELECTOR).get(0)).dxToolbar('instance');
-        assert.equal(toolbar.option('dataSource').length, 1); // + show properties panel
+        const toolbar = getHistoryToolbarInstance(this.$element);
+        assert.equal(toolbar.option('dataSource').length, 1);
     });
 });

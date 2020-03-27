@@ -417,6 +417,8 @@ class AppointmentModel {
         const combinedFilter = this._createCombinedFilter(filterOptions, timeZoneProcessor);
 
         if(this._filterMaker.isRegistered()) {
+            this._filterMaker.make('user', undefined);
+
             const trimmedDates = this._trimDates(filterOptions.min, filterOptions.max);
 
             this._filterMaker.make('date', [trimmedDates.min, trimmedDates.max, true]);
@@ -491,13 +493,10 @@ class AppointmentModel {
 
     appointmentTakesSeveralDays(appointment) {
         const dataAccessors = this._dataAccessors;
-        const startDate = dataAccessors.getter.startDate(appointment);
-        const endDate = dataAccessors.getter.endDate(appointment);
+        const startDate = new Date(dataAccessors.getter.startDate(appointment));
+        const endDate = new Date(dataAccessors.getter.endDate(appointment));
 
-        const startDateCopy = dateUtils.trimTime(new Date(startDate));
-        const endDateCopy = dateUtils.trimTime(new Date(endDate));
-
-        return startDateCopy.getTime() !== endDateCopy.getTime();
+        return !dateUtils.sameDate(startDate, endDate);
     }
 
     customizeDateFilter(dateFilter, timeZoneProcessor) {

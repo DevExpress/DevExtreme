@@ -42,10 +42,14 @@ const DOMComponent = Component.inherit({
     * @hidden
     */
     ctor(element, options) {
-        this._$element = $(element);
+        this._createElement(element);
         attachInstanceToElement(this._$element, this, this._dispose);
 
         this.callBase(options);
+    },
+
+    _createElement(element) {
+        this._$element = $(element);
     },
 
     _getSynchronizableOptionsForCreateComponent() {

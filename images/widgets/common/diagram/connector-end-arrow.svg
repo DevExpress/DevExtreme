@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 32 22" style="enable-background:new 0 0 32 22;" xml:space="preserve">
-<path d="M0,12l0-2h20V6l12,5l-12,5v-4H0z" fill-rule="evenodd" clip-rule="evenodd" fill="currentColor"/>
+<svg version="1.1" id="Слой_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 28 18" style="enable-background:new 0 0 28 18;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill-rule:evenodd;clip-rule:evenodd;}
+</style>
+<path class="st0" d="M0,10V8h16V4l12,5l-12,5v-4H0z" fill="currentColor" />
 </svg>

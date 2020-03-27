@@ -25,7 +25,6 @@ const SCROLLABLE_DISABLED_CLASS = 'dx-scrollable-disabled';
 const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
 const SCROLLABLE_WRAPPER_CLASS = 'dx-scrollable-wrapper';
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
-const SCROLLABLE_CUSTOMIZABLE_SCROLLBARS_CLASS = 'dx-scrollable-customizable-scrollbars';
 const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
 const BOTH = 'both';
@@ -166,14 +165,6 @@ const Scrollable = DOMComponent.inherit({
         this.update();
     },
 
-    _attachNativeScrollbarsCustomizationCss: function() {
-        // NOTE: Customize native scrollbars for dashboard team
-
-        if(devices.real().deviceType === 'desktop' && !(windowUtils.getNavigator().platform.indexOf('Mac') > -1 && browser['webkit'])) {
-            this.$element().addClass(SCROLLABLE_CUSTOMIZABLE_SCROLLBARS_CLASS);
-        }
-    },
-
     _initMarkup: function() {
         this.callBase();
         this._renderDirection();
@@ -181,7 +172,6 @@ const Scrollable = DOMComponent.inherit({
 
     _render: function() {
         this._renderStrategy();
-        this._attachNativeScrollbarsCustomizationCss();
 
         this._attachEventHandlers();
         this._renderDisabledState();
@@ -516,6 +506,30 @@ const Scrollable = DOMComponent.inherit({
         }
         if(direction !== HORIZONTAL) {
             scrollPosition.top = this.getScrollElementPosition($element, VERTICAL, offset);
+        }
+
+        this.scrollTo(scrollPosition);
+    },
+
+    scrollToElementTopLeft: function(element) {
+        const $element = $(element);
+        const elementInsideContent = this.$content().find(element).length;
+        const elementIsInsideContent = ($element.parents('.' + SCROLLABLE_CLASS).length - $element.parents('.' + SCROLLABLE_CONTENT_CLASS).length) === 0;
+        if(!elementInsideContent || !elementIsInsideContent) {
+            return;
+        }
+
+        const scrollPosition = { top: 0, left: 0 };
+        const direction = this.option('direction');
+
+        if(direction !== VERTICAL) {
+            const leftPosition = this._elementPositionRelativeToContent($element, 'left');
+            scrollPosition.left = this.option('rtlEnabled') === true
+                ? leftPosition + $element.width() - this.clientWidth()
+                : leftPosition;
+        }
+        if(direction !== HORIZONTAL) {
+            scrollPosition.top = this._elementPositionRelativeToContent($element, 'top');
         }
 
         this.scrollTo(scrollPosition);

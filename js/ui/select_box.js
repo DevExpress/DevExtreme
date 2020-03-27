@@ -360,7 +360,10 @@ const SelectBox = DropDownList.inherit({
                 if(!this._popup) {
                     this._createPopup();
                 }
-                this._list._loadNextPage().done(this._setNextItem.bind(this, step));
+
+                if(!this._dataSource.isLoading()) {
+                    this._list._loadNextPage().done(this._setNextItem.bind(this, step));
+                }
             } else {
                 this._setNextItem(step);
             }
@@ -542,7 +545,11 @@ const SelectBox = DropDownList.inherit({
             this._clearSearchTimer();
             this._restoreInputText();
 
-            if(!this.option('acceptCustomValue') && this.option('searchEnabled') && !this._isOverlayNestedTarget(e.relatedTarget)) {
+            const shouldCancelSearch = this._wasSearch() &&
+                !this.option('acceptCustomValue') &&
+                this.option('searchEnabled') &&
+                !this._isOverlayNestedTarget(e.relatedTarget);
+            if(shouldCancelSearch) {
                 this._searchCanceled();
             }
         }
@@ -555,7 +562,9 @@ const SelectBox = DropDownList.inherit({
     },
 
     _clearTextValue: function() {
-        this.option('value', null);
+        if(this.option('selectedItem')) {
+            this.option('value', null);
+        }
     },
 
     _shouldOpenPopup: function() {

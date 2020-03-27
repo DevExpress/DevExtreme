@@ -93,7 +93,8 @@ QUnit.test('Hover style', function(assert) {
         }
     });
 
-    const overlay = this.link(1)[0]; const base = this.link(1)[1];
+    const overlay = this.link(1)[0];
+    const base = this.link(1)[1];
     assert.equal(overlay.smartAttr.lastCall.args[0].opacity, 0, 'overlay element is invisible');
     assert.equal(base.smartAttr.lastCall.args[0].opacity, 0.1, 'base element is visible');
     assert.equal(base.smartAttr.lastCall.args[0].fill, '#432432');

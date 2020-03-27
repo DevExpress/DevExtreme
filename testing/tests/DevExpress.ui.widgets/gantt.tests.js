@@ -31,10 +31,13 @@ const TIME_INTERVAL_SELECTOR = '.dx-gantt-ti';
 const OVERLAY_WRAPPER_SELECTOR = '.dx-overlay-wrapper';
 const CONTEXT_MENU_SELECTOR = '.dx-context-menu';
 const INPUT_TEXT_EDITOR_SELECTOR = '.dx-texteditor-input';
+const TOOLBAR_ITEM_SELECTOR = '.dx-toolbar-item';
+const PARENT_TASK_SELECTOR = '.dx-gantt-parent';
+const TOOLBAR_SEPARATOR_SELECTOR = '.dx-gantt-toolbar-separator';
 
 
 const tasks = [
-    { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31 },
+    { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red' },
     { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 60 },
     { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-21T09:00:00.000Z'), 'progress': 100 },
     { 'id': 4, 'parentId': 2, 'title': 'Secure project sponsorship', 'start': new Date('2019-02-21T10:00:00.000Z'), 'end': new Date('2019-02-22T09:00:00.000Z'), 'progress': 100 },
@@ -162,12 +165,12 @@ QUnit.module('Options', moduleConfig, () => {
     });
     test('expr', function(assert) {
         const tasksDS = [
-            { 'i': 1, 'pid': 0, 't': 'Software Development', 's': new Date('2019-02-21T05:00:00.000Z'), 'e': new Date('2019-07-04T12:00:00.000Z'), 'p': 31 },
+            { 'i': 1, 'pid': 0, 't': 'Software Development', 's': new Date('2019-02-21T05:00:00.000Z'), 'e': new Date('2019-07-04T12:00:00.000Z'), 'p': 31, 'c': 'rgb(255, 0, 0)' },
             { 'i': 2, 'pid': 1, 't': 'Scope', 's': new Date('2019-02-21T05:00:00.000Z'), 'e': new Date('2019-02-26T09:00:00.000Z'), 'p': 60 },
             { 'i': 3, 'pid': 2, 't': 'Determine project scope', 's': new Date('2019-02-21T05:00:00.000Z'), 'e': new Date('2019-02-21T09:00:00.000Z'), 'p': 100 }
         ];
         const dependenciesDS = [{ 'i': 0, 'pid': 1, 'sid': 2, 't': 0 }];
-        const resourcesDS = [{ 'i': 1, 't': 'Management' }];
+        const resourcesDS = [{ 'i': 1, 't': 'Management', 'c': 'rgb(0, 255, 0)' }];
         const resourceAssignmentsDS = [{ 'i': 0, 'tid': 3, 'rid': 1 }];
         const options = {
             tasks: {
@@ -178,6 +181,7 @@ QUnit.module('Options', moduleConfig, () => {
                 endExpr: 'e',
                 progressExpr: 'p',
                 titleExpr: 't',
+                colorExpr: 'c'
             },
             dependencies: {
                 dataSource: dependenciesDS,
@@ -189,7 +193,8 @@ QUnit.module('Options', moduleConfig, () => {
             resources: {
                 dataSource: resourcesDS,
                 keyExpr: 'i',
-                textExpr: 't'
+                textExpr: 't',
+                colorExpr: 'c'
             },
             resourceAssignments: {
                 dataSource: resourceAssignmentsDS,
@@ -205,6 +210,8 @@ QUnit.module('Options', moduleConfig, () => {
         assert.equal(taskWrapperElements.length, tasksDS.length);
         const firstTitle = taskWrapperElements.first().children().children().first().text();
         assert.equal(firstTitle, tasksDS[0].t);
+        const firstElementBackgroundColor = taskWrapperElements.first().children().css('background-color');
+        assert.equal(firstElementBackgroundColor, tasksDS[0].c);
         const firstProgressElement = taskWrapperElements.first().children().children().last();
         assert.ok(firstProgressElement.width() > 0);
         const $firstTreeListRowText = this.$element.find(TREELIST_DATA_ROW_SELECTOR).first().find('.dx-treelist-text-content').first().text();
@@ -216,6 +223,7 @@ QUnit.module('Options', moduleConfig, () => {
         const resourceElements = this.$element.find(TASK_RESOURCES_SELECTOR);
         assert.equal(resourceElements.length, resourceAssignmentsDS.length);
         assert.equal(resourceElements.first().text(), resourcesDS[0].t);
+        assert.equal(resourceElements.first().css('background-color'), resourcesDS[0].c);
     });
     test('columns', function(assert) {
         const options = {
@@ -540,9 +548,103 @@ QUnit.module('Dialogs', moduleConfig, () => {
         const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
         $okButton.trigger('dxclick');
         this.clock.tick();
+
+        const $confirmDialog = $('body').find(POPUP_SELECTOR);
+        const $yesButton = $confirmDialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
+        $yesButton.trigger('dxclick');
+        this.clock.tick();
+
         assert.equal(resources[0].text, secondResourceText, 'first resource removed from ds');
         assert.equal(resources[1].text, thirdResourceText, 'second resource ds');
         assert.equal(resources[2].text, newResourceText, 'new resource ds');
+    });
+});
+
+QUnit.module('Toolbar', moduleConfig, () => {
+    test('common', function(assert) {
+        const items = [
+            'undo',
+            'redo',
+            'separator',
+            'zoomIn',
+            'zoomOut',
+            'separator',
+            {
+                widget: 'dxButton',
+                options: {
+                    text: 'Custom item',
+                    stylingMode: 'text'
+                }
+            }
+        ];
+        const options = {
+            tasks: { dataSource: tasks },
+            toolbar: { items: items }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const $items = this.$element.find(TOOLBAR_ITEM_SELECTOR);
+        assert.equal($items.length, items.length, 'All items were rendered');
+        assert.equal($items.find(TOOLBAR_SEPARATOR_SELECTOR).length, 2, 'Both separators were rendered');
+        assert.equal($items.last().text(), 'Custom item', 'Custom item has custom text');
+        assert.equal($items.first().children().children().attr('aria-label'), 'undo', 'First button is undo button');
+    });
+    test('changing', function(assert) {
+        const items = [
+            'undo',
+            'redo'
+        ];
+        const options = {
+            tasks: { dataSource: tasks },
+            toolbar: { items: items }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        let $items = this.$element.find(TOOLBAR_ITEM_SELECTOR);
+        assert.equal($items.length, items.length, 'All items were rendered');
+
+        this.instance.option('toolbar.items', []);
+        $items = this.$element.find(TOOLBAR_ITEM_SELECTOR);
+        assert.equal($items.length, 0, 'Toolbar is empty');
+
+        this.instance.option('toolbar.items', ['zoomIn', 'zoomOut']);
+        $items = this.$element.find(TOOLBAR_ITEM_SELECTOR);
+        assert.equal($items.length, 2, 'All items were rendered again');
+    });
+    test('different item types', function(assert) {
+        const items = [
+            'undo',
+            'redo',
+            'separator',
+            {
+                formatName: 'zoomIn',
+                options: {
+                    text: 'test'
+                }
+            },
+            'separator',
+            {
+                widget: 'dxButton',
+                options: {
+                    text: 'Custom item',
+                    stylingMode: 'text'
+                }
+            }
+        ];
+        const options = {
+            tasks: { dataSource: tasks },
+            toolbar: { items: items }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const $items = this.$element.find(TOOLBAR_ITEM_SELECTOR);
+        assert.equal($items.length, items.length, 'All items were rendered');
+        assert.equal($items.find(TOOLBAR_SEPARATOR_SELECTOR).length, 2, 'Both separators were rendered');
+        assert.equal($items.last().text(), 'Custom item', 'Custom item has custom text');
+        assert.equal($items.eq(3).text(), 'test', 'Custom zoomIn button was rendered with custom text');
     });
 });
 
@@ -589,7 +691,7 @@ QUnit.module('DataSources', moduleConfig, () => {
 
         const removedTaskId = 3;
         const tasksCount = tasks.length;
-        getGanttViewCore(this.instance).commandManager.removeTaskCommand.execute(removedTaskId.toString());
+        getGanttViewCore(this.instance).commandManager.removeTaskCommand.execute(removedTaskId.toString(), false);
         this.clock.tick();
         assert.equal(tasks.length, tasksCount - 1, 'tasks less');
         const removedTask = tasks.filter((t) => t.id === removedTaskId)[0];
@@ -623,47 +725,138 @@ QUnit.module('Context Menu', moduleConfig, () => {
     });
 });
 
-QUnit.module('Time Markers', moduleConfig, () => {
+QUnit.module('Strip Lines', moduleConfig, () => {
     test('render', function(assert) {
-        const timeMarkers = [
+        const stripLines = [
             { start: tasks[0].start, title: 'First' },
             { start: new Date(2019, 2, 1) },
             { start: new Date(2019, 5, 5), end: () => tasks[tasks.length - 1].end, title: 'Interval', cssClass: 'end' }
         ];
         const options = {
             tasks: { dataSource: tasks },
-            timeMarkers: timeMarkers
+            stripLines: stripLines
         };
         this.createInstance(options);
         this.clock.tick();
 
-        const $timeMarkers = this.$element.find(TIME_MARKER_SELECTOR);
-        assert.equal($timeMarkers.length, timeMarkers.length, 'all time markers are rendered');
+        const $stripLines = this.$element.find(TIME_MARKER_SELECTOR);
+        assert.equal($stripLines.length, 2, 'all strip lines are rendered');
         const $timeIntervals = this.$element.find(TIME_INTERVAL_SELECTOR);
         assert.equal($timeIntervals.length, 1, 'all time intervals are rendered');
-        assert.ok($timeMarkers.eq(2).hasClass(timeMarkers[2].cssClass), 'custom cssClass rendered');
-        assert.equal($timeMarkers.eq(0).attr('title'), timeMarkers[0].title, 'title rendered');
+        assert.ok($timeIntervals.eq(0).hasClass(stripLines[2].cssClass), 'custom cssClass rendered');
+        assert.equal($stripLines.eq(0).attr('title'), stripLines[0].title, 'title rendered');
     });
     test('changing', function(assert) {
         this.createInstance(tasksOnlyOptions);
         this.clock.tick();
 
-        let $timeMarkers = this.$element.find(TIME_MARKER_SELECTOR);
-        assert.equal($timeMarkers.length, 0, 'gantt has no time markers');
+        let $stripLines = this.$element.find(TIME_MARKER_SELECTOR);
+        assert.equal($stripLines.length, 0, 'gantt has no strip lines');
         let $timeIntervals = this.$element.find(TIME_INTERVAL_SELECTOR);
         assert.equal($timeIntervals.length, 0, 'gantt has no time intervals');
 
-        this.instance.option('timeMarkers', [
+        this.instance.option('stripLines', [
             { start: tasks[0].start },
             { start: tasks[tasks.length - 1].start, end: tasks[tasks.length - 1].end }
         ]);
-        $timeMarkers = this.$element.find(TIME_MARKER_SELECTOR);
-        assert.equal($timeMarkers.length, 2, 'gantt has time markers');
+        $stripLines = this.$element.find(TIME_MARKER_SELECTOR);
+        assert.equal($stripLines.length, 1, 'gantt has strip line');
         $timeIntervals = this.$element.find(TIME_INTERVAL_SELECTOR);
         assert.equal($timeIntervals.length, 1, 'gantt has time interval');
 
-        this.instance.option('timeMarkers', []);
-        $timeMarkers = this.$element.find(TIME_MARKER_SELECTOR);
-        assert.equal($timeMarkers.length, 0, 'gantt has no time markers');
+        this.instance.option('stripLines', []);
+        $stripLines = this.$element.find(TIME_MARKER_SELECTOR);
+        assert.equal($stripLines.length, 0, 'gantt has no strip lines');
+    });
+});
+QUnit.module('Parent auto calculation', moduleConfig, () => {
+    test('render', function(assert) {
+        const options = {
+            tasks: { dataSource: tasks },
+            validation: { autoUpdateParentTasks: true }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const $stripLines = this.$element.find(PARENT_TASK_SELECTOR);
+        assert.ok($stripLines.length > 0, 'parent tasks has className');
+    });
+
+    test('first load data', function(assert) {
+        const start = new Date('2019-02-19');
+        const end = new Date('2019-02-26');
+        const tasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-22'), 'progress': 0 },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-20'), 'end': new Date('2019-02-20'), 'progress': 0 },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': start, 'end': end, 'progress': 50 }
+        ];
+        const options = {
+            tasks: { dataSource: tasks },
+            validation: { autoUpdateParentTasks: true }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        let dataToCheck = [];
+        this.instance._onParentTasksRecalculated = (data) => {
+            dataToCheck = data;
+        };
+        getGanttViewCore(this.instance).viewModel.updateModel();
+        this.clock.tick();
+
+        assert.equal(dataToCheck.length, 3, 'length');
+        assert.equal(dataToCheck[0].start, start, 'parent 0 start date');
+        assert.equal(dataToCheck[0].end, end, 'parent 0 end date');
+        assert.ok(dataToCheck[0].progress > 0, 'parent 0 progress eq 0');
+        assert.equal(dataToCheck[1].start, start, 'parent 1 start date');
+        assert.equal(dataToCheck[1].end, end, 'parent 1 end date');
+        assert.ok(dataToCheck[1].progress > 0, 'parent 1 progress eq 0');
+        assert.equal(dataToCheck[2].start, start, 'child start date');
+        assert.equal(dataToCheck[2].end, end, 'child 1 end date');
+        assert.equal(dataToCheck[2].progress, 50, 'child progress');
+    });
+
+    test('mode changing', function(assert) {
+        const start = new Date('2019-02-19');
+        const end = new Date('2019-02-26');
+        const tasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-22'), 'progress': 0 },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-20'), 'end': new Date('2019-02-20'), 'progress': 0 },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': start, 'end': end, 'progress': 50 }
+        ];
+        const options = {
+            tasks: { dataSource: tasks }
+        };
+        this.createInstance(options);
+        let dataToCheck = [];
+        this.instance._onParentTasksRecalculated = (data) => {
+            dataToCheck = data;
+        };
+        this.clock.tick();
+        let $parentTasks = this.$element.find(PARENT_TASK_SELECTOR);
+        assert.equal(dataToCheck.length, 0, 'length');
+        assert.equal($parentTasks.length, 0, 'parent tasks exists');
+
+        this.instance.option('validation.autoUpdateParentTasks', true);
+        this.clock.tick();
+        $parentTasks = this.$element.find(PARENT_TASK_SELECTOR);
+        assert.equal($parentTasks.length, 2, 'parent tasks not exists');
+        assert.equal(dataToCheck.length, 3, 'length');
+        assert.equal(dataToCheck[0].start, start, 'parent 0 start date');
+        assert.equal(dataToCheck[0].end, end, 'parent 0 end date');
+        assert.ok(dataToCheck[0].progress > 0, 'parent 0 progress eq 0');
+        assert.equal(dataToCheck[1].start, start, 'parent 1 start date');
+        assert.equal(dataToCheck[1].end, end, 'parent 1 end date');
+        assert.ok(dataToCheck[1].progress > 0, 'parent 1 progress eq 0');
+        assert.equal(dataToCheck[2].start, start, 'child start date');
+        assert.equal(dataToCheck[2].end, end, 'child 1 end date');
+        assert.equal(dataToCheck[2].progress, 50, 'child progress');
+
+        dataToCheck = [];
+        this.instance.option('validation.autoUpdateParentTasks', false);
+        this.clock.tick();
+        $parentTasks = this.$element.find(PARENT_TASK_SELECTOR);
+        assert.equal(dataToCheck.length, 0, 'length');
+        assert.equal($parentTasks.length, 0, 'parent tasks exists');
     });
 });

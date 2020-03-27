@@ -1347,6 +1347,29 @@ QUnit.test('Components should not affect on eachother lock engines', function(as
     assert.equal(scope.prop, 'value 3');
 });
 
+QUnit.test('Outdated disposing callbacks for rendering timer should be removed (T861258)', function(assert) {
+    this.clock = sinon.useFakeTimers();
+    const $markup = $('<div></div>')
+        .attr('dx-test', '{ text: \'my text\' }')
+        .appendTo(this.$controller);
+
+    this.testApp.controller('my-controller', () => { });
+
+    angular.bootstrap(this.$container, ['testApp']);
+
+    const instance = $markup.dxTest('instance');
+    const watchMethod = instance.option('integrationOptions.watchMethod');
+    const addSpy = sinon.spy(instance._disposingCallbacks, 'add');
+    const removeSpy = sinon.spy(instance._disposingCallbacks, 'remove');
+
+    watchMethod(() => {}, () => {});
+    this.clock.tick();
+
+    assert.strictEqual(addSpy.callCount, removeSpy.callCount);
+
+    this.clock.restore();
+});
+
 QUnit.module('nested Widget with templates enabled', {
     beforeEach() {
         const TestContainer = Widget.inherit({

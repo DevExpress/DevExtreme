@@ -133,7 +133,9 @@ module.exports = {
         return this._extractCurrencySymbolInfo(formatter.format(0));
     },
     _extractCurrencySymbolInfo: function(currencyValueString) {
-        const match = detectCurrencySymbolRegex.exec(currencyValueString) || []; const position = match[1] ? 'before' : 'after'; const symbol = match[1] || match[4] || '';
+        const match = detectCurrencySymbolRegex.exec(currencyValueString) || [];
+        const position = match[1] ? 'before' : 'after';
+        const symbol = match[1] || match[4] || '';
         const delimiter = match[2] || match[3] || '';
 
         return {

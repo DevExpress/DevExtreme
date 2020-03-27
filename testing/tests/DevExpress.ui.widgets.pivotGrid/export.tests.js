@@ -148,420 +148,426 @@ QUnit.module('dxPivotGrid', {
         this.clock.restore();
         executeAsyncMock.teardown();
     }
+}, () => {
+
+    QUnit.test('getFrozenArea', function(assert) {
+        assert.strictEqual(this.dataProvider.getFrozenArea().x, 2, 'Frozen area width is correct');
+        assert.strictEqual(this.dataProvider.getFrozenArea().y, 3, 'Frozen area height is correct');
+    });
+
+    QUnit.test('Data provider base stub testing', function(assert) {
+        assert.strictEqual(this.dataProvider.getGroupLevel(3), 0, 'getGroupLevel returns 0');
+    });
+
+    QUnit.test('getRowsCount', function(assert) {
+        assert.strictEqual(this.dataProvider.getRowsCount(), 10, 'Rows count is correct');
+    });
+
+    QUnit.test('getCellType', function(assert) {
+        assert.strictEqual(this.dataProvider.getCellType(5, 5), 'number', 'Cells dataType is correct');
+        assert.strictEqual(this.dataProvider.getCellType(1, 2), 'string', 'RowPart dataType is correct');
+        assert.strictEqual(this.dataProvider.getCellType(5, 0), 'string', 'ColsPart dataType is correct');
+    });
+
+    QUnit.test('getCellData', function(assert) {
+        assert.strictEqual(this.dataProvider.getCellData(5, 5).value, 0.1, 'CellsInfo cellValue is correct');
+        assert.strictEqual(this.dataProvider.getCellData(1, 2).value, 'Q1', 'Header part cellText is correct');
+
+        assert.strictEqual(this.dataProvider.getCellData(5, 0).value, 'C1 Total', 'RowInfo part cellText is correct');
+        assert.strictEqual(this.dataProvider.getCellData(555, 555).value, undefined, 'CellValue out of index is undefined');
+    });
+
+    QUnit.test('exportToExcel', function(assert) {
+        const pivotGrid = this.pivotGrid;
+
+        sinon.stub(pivotGrid, 'getDataProvider');
+        sinon.stub(clientExporter, 'export');
+
+        pivotGrid.exportToExcel();
+
+        assert.equal(clientExporter.export.callCount, 1, 'exporting is called');
+        assert.deepEqual(clientExporter.export.getCall(0).args[0], pivotGrid.getDataProvider.getCall(0).returnValue, 'First arg is data');
+
+        assert.equal(clientExporter.export.getCall(0).args[1].format, 'EXCEL', 'format');
+        assert.strictEqual(clientExporter.export.getCall(0).args[1].proxyUrl, undefined, 'proxyUrl');
+        assert.strictEqual(clientExporter.export.getCall(0).args[1].rtlEnabled, false, 'rtlEnabled');
+        assert.strictEqual(clientExporter.export.getCall(0).args[1].fileName, 'PivotGrid', 'fileName');
+        assert.strictEqual(clientExporter.export.getCall(0).args[1].ignoreErrors, true, 'ignoreErrors');
+
+        assert.ok(clientExporter.export.getCall(0).args[1].exportedAction, 'exportedAction');
+        assert.ok(clientExporter.export.getCall(0).args[1].exportingAction, 'exportingAction');
+        assert.ok(clientExporter.export.getCall(0).args[1].fileSavingAction, 'fileSavingAction');
+
+        assert.deepEqual(clientExporter.export.getCall(0).args[2], clientExporter.excel.getData, 'Export to excel function is correct');
+
+        clientExporter.export.restore();
+    });
+
+    QUnit.test('getAllItems', function(assert) {
+        assert.strictEqual(this.items.length, 10, 'All rows are collected');
+        assert.strictEqual(this.items[1].length, 16, 'All columns are collected');
+        assert.deepEqual(this.items[3][3], {
+            columnPath: ['2010', '1'],
+            columnType: 'D',
+            dataIndex: 1,
+            dataType: 'number',
+            format: 'percent',
+            rowPath: ['C1', 'P1'],
+            rowType: 'D',
+            text: '10%',
+            value: 0.1,
+            colspan: 1,
+            rowspan: 1
+        }, 'Data Item object has correct content');
+        assert.deepEqual(this.items[0][0], {
+            colspan: 2,
+            rowspan: 3,
+            alignment: 'left',
+            text: ''
+        }, 'First Item object has correct content');
+        assert.deepEqual(this.items[5][1], {
+            colspan: 1,
+            dataSourceIndex: 2,
+            isLast: true,
+            path: ['C1'],
+            rowspan: 1,
+            text: '',
+            type: 'T'
+        }, 'Row info clone empty cell object has correct content');
+        assert.deepEqual(this.items[0][6], {
+            dataSourceIndex: 2,
+            colspan: 2,
+            rowspan: 2,
+            type: 'T',
+            path: ['2010'],
+            text: '2010 Total'
+        }, 'Column info cell width text object has correct content');
+        assert.deepEqual(this.items[0][7], {
+            colspan: 1,
+            rowspan: 1,
+            text: '',
+            dataSourceIndex: 2,
+            path: ['2010'],
+            type: 'T'
+        }, 'Column info clone empty cell object has correct content');
+    });
+
+
+    QUnit.test('Loading indicator showing', function(assert) {
+        const pivotGrid = createPivotGrid(this.testOptions);
+        const spyBegin = sinon.spy(pivotGrid._dataController, 'beginLoading');
+        const spyEnd = sinon.spy(pivotGrid._dataController, 'endLoading');
+        const dataProvider = this.pivotGrid.getDataProvider();
+        const showingBeforeReady = spyEnd.callCount === 0 && spyBegin.callCount === 1;
+
+        dataProvider.ready();
+        this.clock.tick();
+
+        assert.strictEqual(spyBegin.callCount, 1, 'beginLoadingChanged was called once');
+        assert.strictEqual(spyEnd.callCount, 1, 'endLoadingChanged was called once');
+        assert.ok(showingBeforeReady, 'endLoadingChanged wasn\'t called before ready');
+    });
+
+    QUnit.test('Export with empty cellsInfo', function(assert) {
+        const _getCellsInfo = this.pivotGrid._dataController.getCellsInfo;
+        const dataProvider = this.pivotGrid.getDataProvider();
+
+        this.pivotGrid._dataController.getCellsInfo = function() {
+            return [];
+        };
+
+        const columnsInfo = this.pivotGrid._dataController.getColumnsInfo(true);
+        const rowsInfo = this.pivotGrid._dataController.getRowsInfo(true);
+        const cellsInfo = this.pivotGrid._dataController.getCellsInfo(true);
+
+        this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
+
+        dataProvider.ready();
+        assert.strictEqual(this.dataProvider.getColumns().length, 16, 'Columns length is correct');
+        assert.strictEqual(this.dataProvider.getRowsCount(), 10, 'Rows count is length is correct');
+        assert.strictEqual(this.dataProvider.getCellMerging(0, 0).colspan, 1, 'colspan count is correct');
+        assert.strictEqual(this.dataProvider.getCellMerging(0, 0).rowspan, 2, 'rowspan count is correct');
+        assert.strictEqual(this.items[3].length, 16, 'Data cells is appended');
+        assert.strictEqual(this.items[0][12].text, '2012 Total', 'Cols info cell text is correct');
+        assert.strictEqual(this.items[5][0].text, 'C1 Total', 'Rows info cell text is correct');
+        assert.ok(this.items[3][3], 'Data info cell is not defined');
+
+        this.pivotGrid._dataController.getCellsInfo = _getCellsInfo;
+    });
+
+    QUnit.test('Context menu with export', function(assert) {
+        const $dataArea = this.pivotGrid.$element().find('.dx-pivotgrid-area-data');
+
+        $($dataArea.find('tr').eq(1).find('td').eq(3)).trigger('dxcontextmenu');
+
+        this.clock.tick();
+
+        assert.equal($('.dx-menu-item-text').eq(1).text(), 'Export to Excel file');
+
+        checkDxFontIcon(assert, '.dx-context-menu .dx-menu-item .dx-icon-xlsxfile', DX_ICON_XLSX_FILE_CONTENT_CODE);
+        checkDxFontIcon(assert, '.dx-pivotgrid-export-button .dx-icon-xlsxfile', DX_ICON_XLSX_FILE_CONTENT_CODE);
+    });
+
+    QUnit.test('Hide export from the context menu when the export.enabled option is disabled', function(assert) {
+        this.pivotGrid.option('export.enabled', false);
+
+        const $dataArea = this.pivotGrid.$element().find('.dx-pivotgrid-area-data');
+
+        $($dataArea.find('tr').eq(1).find('td').eq(3)).trigger('dxcontextmenu');
+
+        this.clock.tick();
+
+        assert.equal($('.dx-menu-item-text').eq(1).text(), '');
+    });
+
+    // T311313:
+    QUnit.test('Row column alignment', function(assert) {
+        const columnsInfo = $.extend(true, [], this.pivotGrid._dataController.getColumnsInfo(true));
+        const rowsInfo = $.extend(true, [], this.pivotGrid._dataController.getRowsInfo(true));
+        const cellsInfo = this.pivotGrid._dataController.getCellsInfo(true);
+        const dataProvider = this.pivotGrid.getDataProvider();
+
+        let items = this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
+        dataProvider.ready();
+        assert.equal(items[0][0].alignment, 'left', 'Not RTL export data');
+
+        this.pivotGrid._options.rtlEnabled = true;
+        items = this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
+        dataProvider.ready();
+        this.pivotGrid._options.rtlEnabled = false;
+        assert.equal(items[0][0].alignment, 'right', 'RTL export data');
+    });
+
+
 });
 
-QUnit.test('getFrozenArea', function(assert) {
-    assert.strictEqual(this.dataProvider.getFrozenArea().x, 2, 'Frozen area width is correct');
-    assert.strictEqual(this.dataProvider.getFrozenArea().y, 3, 'Frozen area height is correct');
-});
+QUnit.module('Data Provider', () => {
 
-QUnit.test('Data provider base stub testing', function(assert) {
-    assert.strictEqual(this.dataProvider.getGroupLevel(3), 0, 'getGroupLevel returns 0');
-});
+    QUnit.test('Initialization. Get styles', function(assert) {
+        const dataProvider = new DataProvider();
 
-QUnit.test('getRowsCount', function(assert) {
-    assert.strictEqual(this.dataProvider.getRowsCount(), 10, 'Rows count is correct');
-});
+        assert.ok(dataProvider.getStyles() instanceof Array);
+        assert.deepEqual(dataProvider.getStyles(), []);
+    });
 
-QUnit.test('getCellType', function(assert) {
-    assert.strictEqual(this.dataProvider.getCellType(5, 5), 'number', 'Cells dataType is correct');
-    assert.strictEqual(this.dataProvider.getCellType(1, 2), 'string', 'RowPart dataType is correct');
-    assert.strictEqual(this.dataProvider.getCellType(5, 0), 'string', 'ColsPart dataType is correct');
-});
-
-QUnit.test('getCellData', function(assert) {
-    assert.strictEqual(this.dataProvider.getCellData(5, 5).value, 0.1, 'CellsInfo cellValue is correct');
-    assert.strictEqual(this.dataProvider.getCellData(1, 2).value, 'Q1', 'Header part cellText is correct');
-
-    assert.strictEqual(this.dataProvider.getCellData(5, 0).value, 'C1 Total', 'RowInfo part cellText is correct');
-    assert.strictEqual(this.dataProvider.getCellData(555, 555).value, undefined, 'CellValue out of index is undefined');
-});
-
-QUnit.test('exportToExcel', function(assert) {
-    const pivotGrid = this.pivotGrid;
-
-    sinon.stub(pivotGrid, 'getDataProvider');
-    sinon.stub(clientExporter, 'export');
-
-    pivotGrid.exportToExcel();
-
-    assert.equal(clientExporter.export.callCount, 1, 'exporting is called');
-    assert.deepEqual(clientExporter.export.getCall(0).args[0], pivotGrid.getDataProvider.getCall(0).returnValue, 'First arg is data');
-
-    assert.equal(clientExporter.export.getCall(0).args[1].format, 'EXCEL', 'format');
-    assert.strictEqual(clientExporter.export.getCall(0).args[1].proxyUrl, undefined, 'proxyUrl');
-    assert.strictEqual(clientExporter.export.getCall(0).args[1].rtlEnabled, false, 'rtlEnabled');
-    assert.strictEqual(clientExporter.export.getCall(0).args[1].fileName, 'PivotGrid', 'fileName');
-    assert.strictEqual(clientExporter.export.getCall(0).args[1].ignoreErrors, true, 'ignoreErrors');
-
-    assert.ok(clientExporter.export.getCall(0).args[1].exportedAction, 'exportedAction');
-    assert.ok(clientExporter.export.getCall(0).args[1].exportingAction, 'exportingAction');
-    assert.ok(clientExporter.export.getCall(0).args[1].fileSavingAction, 'fileSavingAction');
-
-    assert.deepEqual(clientExporter.export.getCall(0).args[2], clientExporter.excel.getData, 'Export to excel function is correct');
-
-    clientExporter.export.restore();
-});
-
-QUnit.test('getAllItems', function(assert) {
-    assert.strictEqual(this.items.length, 10, 'All rows are collected');
-    assert.strictEqual(this.items[1].length, 16, 'All columns are collected');
-    assert.deepEqual(this.items[3][3], {
-        columnPath: ['2010', '1'],
-        columnType: 'D',
-        dataIndex: 1,
-        dataType: 'number',
-        format: 'percent',
-        rowPath: ['C1', 'P1'],
-        rowType: 'D',
-        text: '10%',
-        value: 0.1,
-        colspan: 1,
-        rowspan: 1
-    }, 'Data Item object has correct content');
-    assert.deepEqual(this.items[0][0], {
-        colspan: 2,
-        rowspan: 3,
-        alignment: 'left',
-        text: ''
-    }, 'First Item object has correct content');
-    assert.deepEqual(this.items[5][1], {
-        colspan: 1,
-        dataSourceIndex: 2,
-        isLast: true,
-        path: ['C1'],
-        rowspan: 1,
-        text: '',
-        type: 'T'
-    }, 'Row info clone empty cell object has correct content');
-    assert.deepEqual(this.items[0][6], {
-        dataSourceIndex: 2,
-        colspan: 2,
-        rowspan: 2,
-        type: 'T',
-        path: ['2010'],
-        text: '2010 Total'
-    }, 'Column info cell width text object has correct content');
-    assert.deepEqual(this.items[0][7], {
-        colspan: 1,
-        rowspan: 1,
-        text: '',
-        dataSourceIndex: 2,
-        path: ['2010'],
-        type: 'T'
-    }, 'Column info clone empty cell object has correct content');
-});
-
-
-QUnit.test('Loading indicator showing', function(assert) {
-    const pivotGrid = createPivotGrid(this.testOptions);
-    const spyBegin = sinon.spy(pivotGrid._dataController, 'beginLoading');
-    const spyEnd = sinon.spy(pivotGrid._dataController, 'endLoading');
-    const dataProvider = this.pivotGrid.getDataProvider();
-    const showingBeforeReady = spyEnd.callCount === 0 && spyBegin.callCount === 1;
-
-    dataProvider.ready();
-    this.clock.tick();
-
-    assert.strictEqual(spyBegin.callCount, 1, 'beginLoadingChanged was called once');
-    assert.strictEqual(spyEnd.callCount, 1, 'endLoadingChanged was called once');
-    assert.ok(showingBeforeReady, 'endLoadingChanged wasn\'t called before ready');
-});
-
-QUnit.test('Export with empty cellsInfo', function(assert) {
-    const _getCellsInfo = this.pivotGrid._dataController.getCellsInfo;
-    const dataProvider = this.pivotGrid.getDataProvider();
-
-    this.pivotGrid._dataController.getCellsInfo = function() {
-        return [];
-    };
-
-    const columnsInfo = this.pivotGrid._dataController.getColumnsInfo(true);
-    const rowsInfo = this.pivotGrid._dataController.getRowsInfo(true);
-    const cellsInfo = this.pivotGrid._dataController.getCellsInfo(true);
-
-    this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
-
-    dataProvider.ready();
-    assert.strictEqual(this.dataProvider.getColumns().length, 16, 'Columns length is correct');
-    assert.strictEqual(this.dataProvider.getRowsCount(), 10, 'Rows count is length is correct');
-    assert.strictEqual(this.dataProvider.getCellMerging(0, 0).colspan, 1, 'colspan count is correct');
-    assert.strictEqual(this.dataProvider.getCellMerging(0, 0).rowspan, 2, 'rowspan count is correct');
-    assert.strictEqual(this.items[3].length, 16, 'Data cells is appended');
-    assert.strictEqual(this.items[0][12].text, '2012 Total', 'Cols info cell text is correct');
-    assert.strictEqual(this.items[5][0].text, 'C1 Total', 'Rows info cell text is correct');
-    assert.ok(this.items[3][3], 'Data info cell is not defined');
-
-    this.pivotGrid._dataController.getCellsInfo = _getCellsInfo;
-});
-
-QUnit.test('Context menu with export', function(assert) {
-    const $dataArea = this.pivotGrid.$element().find('.dx-pivotgrid-area-data');
-
-    $($dataArea.find('tr').eq(1).find('td').eq(3)).trigger('dxcontextmenu');
-
-    this.clock.tick();
-
-    assert.equal($('.dx-menu-item-text').eq(1).text(), 'Export to Excel file');
-
-    checkDxFontIcon(assert, '.dx-context-menu .dx-menu-item .dx-icon-xlsxfile', DX_ICON_XLSX_FILE_CONTENT_CODE);
-    checkDxFontIcon(assert, '.dx-pivotgrid-export-button .dx-icon-xlsxfile', DX_ICON_XLSX_FILE_CONTENT_CODE);
-});
-
-QUnit.test('Hide export from the context menu when the export.enabled option is disabled', function(assert) {
-    this.pivotGrid.option('export.enabled', false);
-
-    const $dataArea = this.pivotGrid.$element().find('.dx-pivotgrid-area-data');
-
-    $($dataArea.find('tr').eq(1).find('td').eq(3)).trigger('dxcontextmenu');
-
-    this.clock.tick();
-
-    assert.equal($('.dx-menu-item-text').eq(1).text(), '');
-});
-
-// T311313:
-QUnit.test('Row column alignment', function(assert) {
-    const columnsInfo = $.extend(true, [], this.pivotGrid._dataController.getColumnsInfo(true));
-    const rowsInfo = $.extend(true, [], this.pivotGrid._dataController.getRowsInfo(true));
-    const cellsInfo = this.pivotGrid._dataController.getCellsInfo(true);
-    const dataProvider = this.pivotGrid.getDataProvider();
-
-    let items = this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
-    dataProvider.ready();
-    assert.equal(items[0][0].alignment, 'left', 'Not RTL export data');
-
-    this.pivotGrid._options.rtlEnabled = true;
-    items = this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
-    dataProvider.ready();
-    this.pivotGrid._options.rtlEnabled = false;
-    assert.equal(items[0][0].alignment, 'right', 'RTL export data');
-});
-
-QUnit.module('Data Provider');
-
-QUnit.test('Initialization. Get styles', function(assert) {
-    const dataProvider = new DataProvider();
-
-    assert.ok(dataProvider.getStyles() instanceof Array);
-    assert.deepEqual(dataProvider.getStyles(), []);
-});
-
-QUnit.test('getCellType. fields dataType is not defined', function(assert) {
-    const dataProvider = new DataProvider({
-        items: [
-            [{ rowspan: 1 }, {}, {}, {}, {}, {}],
-            [{ text: 'row1' },
-                { caption: 'Val1', value: 10, dataIndex: 0 },
-                { caption: 'Val2', value: 10, dataIndex: 1 },
-                { caption: 'Val3', value: 10, dataIndex: 2 },
-                { caption: 'Val4', value: 10, dataIndex: 3 },
-                { caption: 'Val5', value: 10, dataIndex: 4 }
+    QUnit.test('getCellType. fields dataType is not defined', function(assert) {
+        const dataProvider = new DataProvider({
+            items: [
+                [{ rowspan: 1 }, {}, {}, {}, {}, {}],
+                [{ text: 'row1' },
+                    { caption: 'Val1', value: 10, dataIndex: 0 },
+                    { caption: 'Val2', value: 10, dataIndex: 1 },
+                    { caption: 'Val3', value: 10, dataIndex: 2 },
+                    { caption: 'Val4', value: 10, dataIndex: 3 },
+                    { caption: 'Val5', value: 10, dataIndex: 4 }
+                ]
+            ],
+            dataFields: [
+                { dataType: 'string', format: 'fixedPoint' },
+                {},
+                { dataType: 'number', format: 'fixedPoint' },
+                { format: 'fixedPoint' },
+                { format: 'shortDate' }
             ]
-        ],
-        dataFields: [
-            { dataType: 'string', format: 'fixedPoint' },
-            {},
-            { dataType: 'number', format: 'fixedPoint' },
-            { format: 'fixedPoint' },
-            { format: 'shortDate' }
-        ]
+        });
+
+        dataProvider.ready();
+
+        assert.strictEqual(dataProvider.getCellType(0, 0), 'string');
+
+        assert.strictEqual(dataProvider.getCellType(1, 1), 'string', 'Val1 format');
+        assert.strictEqual(dataProvider.getCellType(1, 2), 'string', 'Val2 format');
+        assert.strictEqual(dataProvider.getCellType(1, 3), 'number', 'Val3 format');
+        assert.strictEqual(dataProvider.getCellType(1, 4), 'number', 'Val4 format');
+        assert.strictEqual(dataProvider.getCellType(1, 5), 'date', 'Val5 format');
     });
 
-    dataProvider.ready();
-
-    assert.strictEqual(dataProvider.getCellType(0, 0), 'string');
-
-    assert.strictEqual(dataProvider.getCellType(1, 1), 'string', 'Val1 format');
-    assert.strictEqual(dataProvider.getCellType(1, 2), 'string', 'Val2 format');
-    assert.strictEqual(dataProvider.getCellType(1, 3), 'number', 'Val3 format');
-    assert.strictEqual(dataProvider.getCellType(1, 4), 'number', 'Val4 format');
-    assert.strictEqual(dataProvider.getCellType(1, 5), 'date', 'Val5 format');
-});
-
-QUnit.test('getCellType. Data fields have customizeText', function(assert) {
-    const dataProvider = new DataProvider({
-        items: [
-            [{ rowspan: 1 }, {}, {}, {}, {}, {}, {}],
-            [{ text: 'row1' },
-                { caption: 'Val1', dataIndex: 0, value: 10 },
-                { caption: 'Val2', dataIndex: 1, value: 10 },
-                { caption: 'Val3', dataIndex: 2, value: 10, text: 'text' },
-                { caption: 'Val4', dataIndex: 3, value: 10 },
-                { caption: 'Val5', dataIndex: 4, value: 10 },
-                { caption: 'Val6', dataIndex: 5, value: new Date() }
+    QUnit.test('getCellType. Data fields have customizeText', function(assert) {
+        const dataProvider = new DataProvider({
+            items: [
+                [{ rowspan: 1 }, {}, {}, {}, {}, {}, {}],
+                [{ text: 'row1' },
+                    { caption: 'Val1', dataIndex: 0, value: 10 },
+                    { caption: 'Val2', dataIndex: 1, value: 10 },
+                    { caption: 'Val3', dataIndex: 2, value: 10, text: 'text' },
+                    { caption: 'Val4', dataIndex: 3, value: 10 },
+                    { caption: 'Val5', dataIndex: 4, value: 10 },
+                    { caption: 'Val6', dataIndex: 5, value: new Date() }
+                ]
+            ],
+            dataFields: [
+                { customizeText: function() { }, dataType: 'string', format: 'fixedPoint' },
+                { customizeText: function() { } },
+                { customizeText: function() { }, dataType: 'number', format: 'fixedPoint' },
+                { customizeText: function() { }, format: 'fixedPoint' },
+                { customizeText: function() { }, format: 'shortDate' }
             ]
-        ],
-        dataFields: [
-            { customizeText: function() { }, dataType: 'string', format: 'fixedPoint' },
-            { customizeText: function() { } },
-            { customizeText: function() { }, dataType: 'number', format: 'fixedPoint' },
-            { customizeText: function() { }, format: 'fixedPoint' },
-            { customizeText: function() { }, format: 'shortDate' }
-        ]
+        });
+
+        dataProvider.ready();
+
+        assert.strictEqual(dataProvider.getCellType(0, 0), 'string');
+
+        assert.strictEqual(dataProvider.getCellType(1, 1), 'string', 'Val1 format');
+        assert.strictEqual(dataProvider.getCellType(1, 2), 'string', 'Val2 format');
+        assert.strictEqual(dataProvider.getCellType(1, 3), 'string', 'Val3 format');
+        assert.strictEqual(dataProvider.getCellData(1, 3).value, 'text', 'Val3 value');
+        assert.strictEqual(dataProvider.getCellType(1, 4), 'string', 'Val4 format');
+        assert.strictEqual(dataProvider.getCellType(1, 5), 'string', 'Val5 format');
     });
 
-    dataProvider.ready();
-
-    assert.strictEqual(dataProvider.getCellType(0, 0), 'string');
-
-    assert.strictEqual(dataProvider.getCellType(1, 1), 'string', 'Val1 format');
-    assert.strictEqual(dataProvider.getCellType(1, 2), 'string', 'Val2 format');
-    assert.strictEqual(dataProvider.getCellType(1, 3), 'string', 'Val3 format');
-    assert.strictEqual(dataProvider.getCellData(1, 3).value, 'text', 'Val3 value');
-    assert.strictEqual(dataProvider.getCellType(1, 4), 'string', 'Val4 format');
-    assert.strictEqual(dataProvider.getCellType(1, 5), 'string', 'Val5 format');
-});
-
-QUnit.test('getCellType for headers', function(assert) {
-    const dataProvider = new DataProvider({
-        items: [
-            [{ rowspan: 2, colspan: 2 }, { text: 'a1', value: 1, format: 'fixedPoint' }, { text: 'a2', value: 2 }],
-            [{ text: 'b1', value: 1, format: 'fixedPoint' }, { text: 'b2', value: 2 }],
-            [{ text: 'row1' }, { text: 'row 2' },
-                { caption: 'Val1', dataIndex: 0, value: 10 },
-                { caption: 'Val2', dataIndex: 1, value: 10 }
+    QUnit.test('getCellType for headers', function(assert) {
+        const dataProvider = new DataProvider({
+            items: [
+                [{ rowspan: 2, colspan: 2 }, { text: 'a1', value: 1, format: 'fixedPoint' }, { text: 'a2', value: 2 }],
+                [{ text: 'b1', value: 1, format: 'fixedPoint' }, { text: 'b2', value: 2 }],
+                [{ text: 'row1' }, { text: 'row 2' },
+                    { caption: 'Val1', dataIndex: 0, value: 10 },
+                    { caption: 'Val2', dataIndex: 1, value: 10 }
+                ]
+            ],
+            dataFields: [
+                { dataType: 'string', format: 'fixedPoint' },
+                {}
             ]
-        ],
-        dataFields: [
-            { dataType: 'string', format: 'fixedPoint' },
-            {}
-        ]
+        });
+
+        dataProvider.ready();
+
+        assert.strictEqual(dataProvider.getCellType(0, 0), 'string');
+        assert.strictEqual(dataProvider.getCellType(0, 1), 'string');
+        assert.strictEqual(dataProvider.getCellType(0, 2), 'string');
+        assert.strictEqual(dataProvider.getCellType(1, 0), 'string');
+        assert.strictEqual(dataProvider.getCellType(1, 1), 'string');
+        assert.strictEqual(dataProvider.getCellType(1, 2), 'string');
+
+        assert.strictEqual(dataProvider.getCellType(2, 0), 'string');
+        assert.strictEqual(dataProvider.getCellType(2, 1), 'string');
     });
 
-    dataProvider.ready();
+    QUnit.test('getCellMerging', function(assert) {
+        const dataProvider = new DataProvider({
+            items: [
+                [{ rowspan: 3, colspan: 2 }, { rowspan: 1, colspan: 1 }, {}],
+                [{}, {}, {}],
+                [{}, {}, {}]
+            ],
+            dataFields: []
+        });
 
-    assert.strictEqual(dataProvider.getCellType(0, 0), 'string');
-    assert.strictEqual(dataProvider.getCellType(0, 1), 'string');
-    assert.strictEqual(dataProvider.getCellType(0, 2), 'string');
-    assert.strictEqual(dataProvider.getCellType(1, 0), 'string');
-    assert.strictEqual(dataProvider.getCellType(1, 1), 'string');
-    assert.strictEqual(dataProvider.getCellType(1, 2), 'string');
+        dataProvider.ready();
 
-    assert.strictEqual(dataProvider.getCellType(2, 0), 'string');
-    assert.strictEqual(dataProvider.getCellType(2, 1), 'string');
+        assert.strictEqual(dataProvider.getCellMerging(0, 0).colspan, 1, 'colspan count is correct');
+        assert.strictEqual(dataProvider.getCellMerging(0, 0).rowspan, 2, 'rowspan count is correct');
+
+        assert.strictEqual(dataProvider.getCellMerging(0, 1).colspan, 0, 'colspan count is correct');
+        assert.strictEqual(dataProvider.getCellMerging(0, 1).rowspan, 0, 'rowspan count is correct');
+    });
+
+    QUnit.test('Get columns', function(assert) {
+        const dataProvider = new DataProvider({
+            items: [
+                [{ rowspan: 1 }, {}],
+                [{ text: 'row1' }, {}]
+            ],
+            dataFields: []
+        });
+
+        dataProvider.ready();
+
+        const columns = dataProvider.getColumns();
+
+        assert.strictEqual(columns.length, 2);
+
+        assert.deepEqual(columns[0], {
+            rowspan: 1,
+            width: 100
+        });
+
+        assert.deepEqual(columns[1], {
+            width: 100
+        });
+
+    });
+
+    QUnit.test('Data alignment', function(assert) {
+        const dataProvider = new DataProvider({
+            items: [
+                [{ rowspan: 1, colspan: 1 }, {}, {}],
+                [{ text: 'row1' }, {}, {}]
+            ],
+            dataFields: [{}]
+        });
+
+        dataProvider.ready();
+
+        const styles = dataProvider.getStyles();
+
+        assert.strictEqual(styles[dataProvider.getStyleId(0, 0)].alignment, 'center', 'description cell alignment');
+        assert.strictEqual(styles[dataProvider.getStyleId(0, 1)].alignment, 'center', 'column header alignment');
+        assert.strictEqual(styles[dataProvider.getStyleId(1, 0)].alignment, 'left', 'row header alignment');
+        assert.strictEqual(styles[dataProvider.getStyleId(1, 1)].alignment, 'right', 'data alignment');
+    });
+
+    QUnit.test('Data alignment without data fields', function(assert) {
+        const dataProvider = new DataProvider({
+            items: [
+                [{ rowspan: 1, colspan: 1 }, {}, {}],
+                [{ text: 'row1' }, { }, { }]
+            ],
+            dataFields: []
+        });
+
+        dataProvider.ready();
+
+        const styles = dataProvider.getStyles();
+
+        assert.strictEqual(styles[dataProvider.getStyleId(0, 0)].alignment, 'center', 'description cell alignment');
+        assert.strictEqual(styles[dataProvider.getStyleId(0, 1)].alignment, 'center', 'column header alignment');
+        assert.strictEqual(styles[dataProvider.getStyleId(1, 0)].alignment, 'left', 'row header alignment');
+        assert.strictEqual(styles[dataProvider.getStyleId(1, 1)].alignment, 'right', 'empty cell alignment');
+    });
+
+    QUnit.test('Data alignment. RTL', function(assert) {
+        const dataProvider = new DataProvider({
+            items: [
+                [{ rowspan: 1, colspan: 1 }, {}, {}],
+                [{ text: 'row1' }, {}, {}]
+            ],
+            rtlEnabled: true,
+            dataFields: [{}]
+        });
+
+        dataProvider.ready();
+
+        const styles = dataProvider.getStyles();
+
+        assert.strictEqual(styles[dataProvider.getStyleId(0, 1)].alignment, 'center', 'column header alignment');
+        assert.strictEqual(styles[dataProvider.getStyleId(1, 0)].alignment, 'right', 'row header alignment');
+        assert.strictEqual(styles[dataProvider.getStyleId(1, 1)].alignment, 'left', 'data alignment');
+    });
+
+    QUnit.test('Data format', function(assert) {
+        const dataProvider = new DataProvider({
+            items: [
+                [{ rowspan: 1, colspan: 1 }, {}, {}],
+                [{ text: 'row1' }, { dataIndex: 0 }, { dataIndex: 1 }]
+            ],
+            dataFields: [
+                { format: { type: 'fixedPoint', precision: 0 } },
+                { format: 'currency' }
+            ]
+        });
+
+        dataProvider.ready();
+
+        const styles = dataProvider.getStyles();
+
+        assert.deepEqual(styles[dataProvider.getStyleId(1, 1)].format, { type: 'fixedPoint', precision: 0 });
+        assert.strictEqual(styles[dataProvider.getStyleId(1, 1)].dataType, 'number');
+        assert.strictEqual(styles[dataProvider.getStyleId(1, 2)].format, 'currency');
+        assert.strictEqual(styles[dataProvider.getStyleId(1, 2)].precision, undefined);
+    });
+
 });
 
-QUnit.test('getCellMerging', function(assert) {
-    const dataProvider = new DataProvider({
-        items: [
-            [{ rowspan: 3, colspan: 2 }, { rowspan: 1, colspan: 1 }, {}],
-            [{}, {}, {}],
-            [{}, {}, {}]
-        ],
-        dataFields: []
-    });
-
-    dataProvider.ready();
-
-    assert.strictEqual(dataProvider.getCellMerging(0, 0).colspan, 1, 'colspan count is correct');
-    assert.strictEqual(dataProvider.getCellMerging(0, 0).rowspan, 2, 'rowspan count is correct');
-
-    assert.strictEqual(dataProvider.getCellMerging(0, 1).colspan, 0, 'colspan count is correct');
-    assert.strictEqual(dataProvider.getCellMerging(0, 1).rowspan, 0, 'rowspan count is correct');
-});
-
-QUnit.test('Get columns', function(assert) {
-    const dataProvider = new DataProvider({
-        items: [
-            [{ rowspan: 1 }, {}],
-            [{ text: 'row1' }, {}]
-        ],
-        dataFields: []
-    });
-
-    dataProvider.ready();
-
-    const columns = dataProvider.getColumns();
-
-    assert.strictEqual(columns.length, 2);
-
-    assert.deepEqual(columns[0], {
-        rowspan: 1,
-        width: 100
-    });
-
-    assert.deepEqual(columns[1], {
-        width: 100
-    });
-
-});
-
-QUnit.test('Data alignment', function(assert) {
-    const dataProvider = new DataProvider({
-        items: [
-            [{ rowspan: 1, colspan: 1 }, {}, {}],
-            [{ text: 'row1' }, {}, {}]
-        ],
-        dataFields: [{}]
-    });
-
-    dataProvider.ready();
-
-    const styles = dataProvider.getStyles();
-
-    assert.strictEqual(styles[dataProvider.getStyleId(0, 0)].alignment, 'center', 'description cell alignment');
-    assert.strictEqual(styles[dataProvider.getStyleId(0, 1)].alignment, 'center', 'column header alignment');
-    assert.strictEqual(styles[dataProvider.getStyleId(1, 0)].alignment, 'left', 'row header alignment');
-    assert.strictEqual(styles[dataProvider.getStyleId(1, 1)].alignment, 'right', 'data alignment');
-});
-
-QUnit.test('Data alignment without data fields', function(assert) {
-    const dataProvider = new DataProvider({
-        items: [
-            [{ rowspan: 1, colspan: 1 }, {}, {}],
-            [{ text: 'row1' }, { }, { }]
-        ],
-        dataFields: []
-    });
-
-    dataProvider.ready();
-
-    const styles = dataProvider.getStyles();
-
-    assert.strictEqual(styles[dataProvider.getStyleId(0, 0)].alignment, 'center', 'description cell alignment');
-    assert.strictEqual(styles[dataProvider.getStyleId(0, 1)].alignment, 'center', 'column header alignment');
-    assert.strictEqual(styles[dataProvider.getStyleId(1, 0)].alignment, 'left', 'row header alignment');
-    assert.strictEqual(styles[dataProvider.getStyleId(1, 1)].alignment, 'right', 'empty cell alignment');
-});
-
-QUnit.test('Data alignment. RTL', function(assert) {
-    const dataProvider = new DataProvider({
-        items: [
-            [{ rowspan: 1, colspan: 1 }, {}, {}],
-            [{ text: 'row1' }, {}, {}]
-        ],
-        rtlEnabled: true,
-        dataFields: [{}]
-    });
-
-    dataProvider.ready();
-
-    const styles = dataProvider.getStyles();
-
-    assert.strictEqual(styles[dataProvider.getStyleId(0, 1)].alignment, 'center', 'column header alignment');
-    assert.strictEqual(styles[dataProvider.getStyleId(1, 0)].alignment, 'right', 'row header alignment');
-    assert.strictEqual(styles[dataProvider.getStyleId(1, 1)].alignment, 'left', 'data alignment');
-});
-
-QUnit.test('Data format', function(assert) {
-    const dataProvider = new DataProvider({
-        items: [
-            [{ rowspan: 1, colspan: 1 }, {}, {}],
-            [{ text: 'row1' }, { dataIndex: 0 }, { dataIndex: 1 }]
-        ],
-        dataFields: [
-            { format: { type: 'fixedPoint', precision: 0 } },
-            { format: 'currency' }
-        ]
-    });
-
-    dataProvider.ready();
-
-    const styles = dataProvider.getStyles();
-
-    assert.deepEqual(styles[dataProvider.getStyleId(1, 1)].format, { type: 'fixedPoint', precision: 0 });
-    assert.strictEqual(styles[dataProvider.getStyleId(1, 1)].dataType, 'number');
-    assert.strictEqual(styles[dataProvider.getStyleId(1, 2)].format, 'currency');
-    assert.strictEqual(styles[dataProvider.getStyleId(1, 2)].precision, undefined);
-});

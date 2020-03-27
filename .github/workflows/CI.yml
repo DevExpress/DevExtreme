@@ -1,33 +1,45 @@
 name: QUnit IE
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
-  build:
-
+  test:
     strategy:
       matrix:
         CONSTEL: [ export, misc, ui, ui.editors, ui.grid, ui.scheduler, viz, renovation ]
 
     runs-on: windows-latest
+    timeout-minutes: 60
 
     steps:
-    - uses: actions/checkout@v1
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Restore npm cache
+      uses: actions/cache@v1
+      with:
+        path: .\node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node
+
     - name: Run npm install
-      run: npm install
-    - name: Transpile tests
-      run: node .\node_modules\gulp\bin\gulp.js transpile-tests
-    - name: Run npm run build
+      run: npm install --no-package-lock --no-audit --no-fund
+
+    - name: Build
       env:
-        DEVEXTREME_TEST_CI: true
-      run: npm run build
+        DEVEXTREME_TEST_CI: "true"
+        DOTNET_CLI_TELEMETRY_OPTOUT: "true"
+        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
+      run: npx npm-run-all -p build transpile-tests
+
     - name: Run QUnit tests
       env:
         CONSTEL: ${{ matrix.CONSTEL }}
       run: |
         $runner = Start-Process -FilePath dotnet -ArgumentList './testing/runner/bin/runner.dll --single-run' -passthru -RedirectStandardOutput "output.txt"
         $url = "http://localhost:20050/run?notimers=true&nojquery=true&constellation=$env:CONSTEL"
-        Start-Sleep -s 3
+        Start-Sleep -s 5
         & "C:\Program Files\Internet Explorer\iexplore.exe" "$url"
         Wait-Process -InputObject $runner
         Get-Content -Path .\output.txt

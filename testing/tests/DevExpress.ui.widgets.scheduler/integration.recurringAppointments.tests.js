@@ -9,10 +9,13 @@ import { DataSource } from 'data/data_source/data_source';
 import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dateSerialization from 'core/utils/date_serialization';
 import { SchedulerTestWrapper, isDesktopEnvironment } from './helpers.js';
+import dateUtils from 'core/utils/date';
 
 import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
+
+const toMs = dateUtils.dateToMilliseconds;
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(
@@ -796,86 +799,6 @@ QUnit.test('Recurrent allDay task dragging on month view, single mode, 24h appoi
     assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
 });
 
-QUnit.test('Recurrence item in form should have a special css class', function(assert) {
-    this.createInstance({
-        currentDate: new Date(2015, 1, 9),
-        dataSource: [],
-        currentView: 'week',
-        firstDayOfWeek: 1
-    });
-
-    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 9, 2) }, true);
-
-    const form = this.instance.getAppointmentDetailsForm();
-    const recurrenceItemClass = 'dx-scheduler-recurrence-rule-item';
-    const openedRecurrenceItemClass = 'dx-scheduler-recurrence-rule-item-opened';
-    let $recurrenceItem = form.$element().find('.' + recurrenceItemClass);
-    const recurrenceEditor = form.getEditor('recurrenceRule');
-    const freqEditor = recurrenceEditor._freqEditor;
-
-    assert.notOk($recurrenceItem.hasClass(openedRecurrenceItemClass));
-
-    freqEditor.option('value', 'daily');
-    $recurrenceItem = form.$element().find('.' + recurrenceItemClass);
-
-    assert.ok($recurrenceItem.hasClass(openedRecurrenceItemClass));
-});
-
-QUnit.test('Recurrence editor should work correctly after toggling repeat and repeat-type editor', function(assert) {
-    this.createInstance({
-        currentDate: new Date(2015, 1, 9),
-        dataSource: new DataSource({
-            store: []
-        }),
-        currentView: 'week'
-    });
-
-    const appointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: 'caption 1' };
-
-    this.instance.showAppointmentPopup(appointment);
-
-    const form = this.instance.getAppointmentDetailsForm();
-    const recurrenceEditor = form.getEditor('recurrenceRule');
-    const freqEditor = recurrenceEditor._freqEditor;
-    const repeatTypeEditor = recurrenceEditor._repeatTypeEditor;
-
-    freqEditor.option('value', 'daily');
-    repeatTypeEditor.option('value', 'count');
-    freqEditor.option('value', 'never');
-
-    assert.ok(true, 'recurrence editor works correctly');
-});
-
-QUnit.test('Recurrence editor should work correctly after turn off the recurrence', function(assert) {
-    this.createInstance({
-        currentDate: new Date(2015, 4, 25),
-        dataSource: new DataSource({
-            store: []
-        }),
-        currentView: 'week'
-    });
-
-    this.instance.option('recurrenceEditMode', 'series');
-
-    const appointment = {
-        text: 'Appointment',
-        startDate: new Date(2015, 4, 25, 9, 0),
-        endDate: new Date(2015, 4, 25, 9, 15),
-        recurrenceRule: 'FREQ=DAILY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20150530'
-    };
-
-    this.instance.showAppointmentPopup(appointment);
-
-    const form = this.instance.getAppointmentDetailsForm();
-    const recurrenceEditor = form.getEditor('recurrenceRule');
-    const freqEditor = recurrenceEditor._freqEditor;
-
-    freqEditor.option('value', 'never');
-
-    assert.ok(true, 'recurrence editor works correctly');
-});
-
-
 QUnit.test('AllDay recurrence appointments should be rendered correctly after changing currentDate', function(assert) {
     const tasks = [
         { text: 'One', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 17), allDay: true, recurrenceRule: 'FREQ=DAILY' }
@@ -1518,7 +1441,7 @@ QUnit.test('Recurrence appointment occurrences should have correct start date wi
     assert.equal(this.scheduler.appointments.getAppointmentPosition(0).top, this.scheduler.appointments.getAppointmentPosition(2).top, 'Appointment first and third occurrences have same top coordinate');
 });
 
-QUnit.test('Recurrence appointment occurences should have correct text (T818393)', function(assert) {
+QUnit.test('Recurrence appointment occurrences should have correct text (T818393)', function(assert) {
     this.createInstance({
         views: ['week'],
         currentView: 'week',
@@ -1538,4 +1461,193 @@ QUnit.test('Recurrence appointment occurences should have correct text (T818393)
     const $thirdAppointment = this.scheduler.appointments.getAppointment(2);
 
     assert.equal($thirdAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), '4:00 AM - 5:00 AM', 'Appointment third occurrences has correct date text');
+});
+
+
+const apptStartDate = new Date(2019, 2, 30, 2, 0);
+const apptEndDate = new Date(2019, 2, 30, 3, 0);
+
+QUnit.test('Recurrence appointment is rendered correctly, freq=MINUTELY', function(assert) {
+    this.createInstance({
+        views: ['day'],
+        currentView: 'day',
+        height: 600,
+        dataSource: [{
+            text: 'Recurrence',
+            startDate: apptStartDate,
+            endDate: apptEndDate,
+            recurrenceRule: 'FREQ=MINUTELY;COUNT=3'
+        }],
+        currentDate: apptStartDate,
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 3, 'Appointment is rendered');
+    assert.equal(this.scheduler.appointments.getDateText(2), '2:02 AM - 3:02 AM', 'Appointment third occurrences has correct date text');
+
+    this.scheduler.appointments.dblclick(2);
+    this.scheduler.appointmentForm.clickFormDialogButton(1);
+
+    const formStartDate = this.scheduler.appointmentForm.getEditor('startDate');
+    const formEndDate = this.scheduler.appointmentForm.getEditor('endDate');
+
+    assert.deepEqual(formStartDate.option('value'), new Date(2019, 2, 30, 2, 2), 'Appointment third occurrence sets right startDate in appointmentForm');
+    assert.deepEqual(formEndDate.option('value'), new Date(2019, 2, 30, 3, 2), 'Appointment third occurrence sets right endDate in appointmentForm');
+});
+
+QUnit.test('Recurrence appointment is rendered correctly, freq=HOURLY', function(assert) {
+    this.createInstance({
+        views: ['day'],
+        currentView: 'day',
+        height: 600,
+        dataSource: [{
+            text: 'Recurrence',
+            startDate: apptStartDate,
+            endDate: apptEndDate,
+            recurrenceRule: 'FREQ=HOURLY;COUNT=3'
+        }],
+        currentDate: apptStartDate,
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 3, 'Appointment is rendered');
+    assert.equal(this.scheduler.appointments.getDateText(2), '4:00 AM - 5:00 AM', 'Appointment third occurrence has correct date text');
+
+    this.scheduler.appointments.dblclick(2);
+    this.scheduler.appointmentForm.clickFormDialogButton(1);
+
+    const formStartDate = this.scheduler.appointmentForm.getEditor('startDate');
+    const formEndDate = this.scheduler.appointmentForm.getEditor('endDate');
+
+    assert.deepEqual(formStartDate.option('value'), new Date(2019, 2, 30, 4, 0), 'Appointment third occurrence sets right startDate in appointmentForm');
+    assert.deepEqual(formEndDate.option('value'), new Date(2019, 2, 30, 5, 0), 'Appointment third occurrence sets right endDate in appointmentForm');
+});
+
+QUnit.test('Recurrence appointment sends correct data to appointmentTemplate, freq=MINUTELY', function(assert) {
+    let appTemplateIndex = 0;
+    this.createInstance({
+        views: ['day'],
+        currentView: 'day',
+        height: 600,
+        dataSource: [{
+            text: 'Recurrence',
+            startDate: apptStartDate,
+            endDate: apptEndDate,
+            recurrenceRule: 'FREQ=MINUTELY;COUNT=3'
+        }],
+        currentDate: apptStartDate,
+        appointmentTemplate: function(model) {
+            const { targetedAppointmentData, appointmentData } = model;
+
+            const timeShift = toMs('minute') * appTemplateIndex;
+
+            if(appTemplateIndex === 2) {
+                assert.deepEqual(appointmentData.startDate, apptStartDate, 'AppointmentTemplate Model appointmentData startDate is correct');
+                assert.deepEqual(appointmentData.endDate, apptEndDate, 'AppointmentTemplate Model appointmentData endDate is correct');
+            }
+
+            assert.deepEqual(targetedAppointmentData.startDate, new Date(apptStartDate.getTime() + timeShift), `AppointmentTemplate Model targetedAppointmentData startDate is correct, index=${appTemplateIndex}`);
+            assert.deepEqual(targetedAppointmentData.endDate, new Date(apptEndDate.getTime() + timeShift), `AppointmentTemplate Model targetedAppointmentData endDate is correct, index=${appTemplateIndex}`);
+            appTemplateIndex++;
+        },
+    });
+});
+
+QUnit.test('Recurrence appointment sends correct data to appointmentTooltipTemplate, freq=HOURLY', function(assert) {
+    const appTooltipTemplateIndex = 2;
+    this.createInstance({
+        views: ['day'],
+        currentView: 'day',
+        height: 600,
+        dataSource: [{
+            text: 'Recurrence',
+            startDate: apptStartDate,
+            endDate: apptEndDate,
+            recurrenceRule: 'FREQ=HOURLY;COUNT=3'
+        }],
+        currentDate: new Date(2019, 2, 30),
+
+        appointmentTooltipTemplate: function(model) {
+            const { targetedAppointmentData, appointmentData } = model;
+
+            assert.deepEqual(appointmentData.startDate, apptStartDate, 'AppointmentTooltipTemplate Model appointmentData startDate is correct');
+            assert.deepEqual(appointmentData.endDate, apptEndDate, 'AppointmentTooltipTemplate Model appointmentData endDate is correct');
+
+            const timeShift = toMs('hour') * appTooltipTemplateIndex;
+
+            assert.deepEqual(targetedAppointmentData.startDate, new Date(apptStartDate.getTime() + timeShift), `AppointmentTooltipTemplate Model targetedAppointmentData startDate is correct, index=${appTooltipTemplateIndex}`);
+            assert.deepEqual(targetedAppointmentData.endDate, new Date(apptEndDate.getTime() + timeShift), `AppointmentTooltipTemplate Model targetedAppointmentData endDate is correct, index=${appTooltipTemplateIndex}`);
+        },
+    });
+    this.scheduler.appointments.click(2);
+});
+
+$.each(['minutely', 'hourly'], (_, value) => {
+    const apptStartDate = new Date(2019, 2, 30, 2, 0);
+    const apptEndDate = new Date(2019, 2, 30, 3, 0);
+    QUnit.test(`Recurrence appointment renders correctly with INTERVAL rule, freq=${value}`, function(assert) {
+        this.createInstance({
+            views: ['day'],
+            currentView: 'day',
+            height: 600,
+            dataSource: [{
+                text: 'Recurrence',
+                startDate: apptStartDate,
+                endDate: new Date(2019, 2, 30, 2, 55),
+                recurrenceRule: `FREQ=${value.toUpperCase()};INTERVAL=110`
+            }],
+            currentDate: new Date(2019, 2, 30)
+        });
+
+        const appointments = this.scheduler.appointments.getAppointments();
+        const appointmentHeight = this.scheduler.appointments.getAppointmentHeight();
+
+        if(value === 'hourly') {
+            assert.equal(appointments.length, 1, 'Appointment is rendered');
+        } else if(value === 'minutely') {
+            assert.equal(appointments.length, 12, 'Appointment are rendered');
+            assert.roughEqual(this.scheduler.appointments.getAppointmentPosition(0).top + appointmentHeight * 2, this.scheduler.appointments.getAppointmentPosition(1).top, 1, 'Appointment interval rendered correctly');
+        }
+    });
+    QUnit.test(`Recurrence appointment renders correctly with COUNT rule, freq=${value}`, function(assert) {
+        this.createInstance({
+            views: ['week'],
+            currentView: 'week',
+            height: 600,
+            dataSource: [{
+                text: 'Recurrence',
+                startDate: apptStartDate,
+                endDate: apptEndDate,
+                recurrenceRule: `FREQ=${value.toUpperCase()};COUNT=3`
+            }],
+            currentDate: new Date(2019, 2, 30),
+            maxAppointmentsPerCell: 3,
+        });
+
+        assert.equal(this.scheduler.appointments.getAppointmentCount(), 3, 'Appointments are rendered with correct count');
+    });
+    QUnit.test(`Recurrence appointment renders correctly with UNTIL rule, freq=${value}`, function(assert) {
+        this.createInstance({
+            views: ['week'],
+            currentView: 'week',
+            height: 600,
+            dataSource: [{
+                text: 'Recurrence',
+                startDate: apptStartDate,
+                endDate: apptEndDate,
+                recurrenceRule: `FREQ=${value.toUpperCase()};INTERVAL=25;UNTIL=2019230T200000`
+            }, {
+                text: 'Appointment after UNTIL',
+                startDate: new Date(2019, 2, 30, 20, 0),
+                endDate: new Date(2019, 2, 30, 22, 15),
+            }],
+            currentDate: new Date(2019, 2, 30)
+        });
+
+        const appointments = this.scheduler.appointments.getAppointments();
+        const appointmentCount = this.scheduler.appointments.getAppointmentCount();
+
+        const lastAppointment = appointments[appointmentCount - 1];
+        const lastRecurrentAppointment = appointments[appointmentCount - 2];
+
+        assert.ok(translator.locate($(lastAppointment)).top > translator.locate($(lastRecurrentAppointment)).top, 'Last occurrence renders correctly');
+    });
 });

@@ -15,18 +15,14 @@ module.exports = {
         const isGroupPanelItem = parameters.rootElement.hasClass(GROUP_PANEL_ITEM_CLASS);
         const $indicatorsContainer = that._createIndicatorContainer(parameters, isGroupPanelItem);
         const $span = $('<span>').addClass(that._getIndicatorClassName(options.name));
-        const getIndicatorAlignment = function() {
-            if(rtlEnabled) {
-                return columnAlignment === 'left' ? 'right' : 'left';
-            }
-            return columnAlignment;
-        };
+        const columnsController = that.component?.getController('columns');
+        const indicatorAlignment = columnsController?.getHeaderContentAlignment(columnAlignment) || columnAlignment;
 
         parameters.container = $indicatorsContainer;
         parameters.indicator = $span;
         that._renderIndicator(parameters);
 
-        $indicatorsContainer[(isGroupPanelItem || !options.showColumnLines) && getIndicatorAlignment() === 'left' ? 'appendTo' : 'prependTo'](options.rootElement);
+        $indicatorsContainer[(isGroupPanelItem || !options.showColumnLines) && indicatorAlignment === 'left' ? 'appendTo' : 'prependTo'](options.rootElement);
 
         return $span;
     },

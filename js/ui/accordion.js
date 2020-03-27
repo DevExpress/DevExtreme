@@ -3,6 +3,7 @@ import eventsEngine from '../events/core/events_engine';
 import fx from '../animation/fx';
 import clickEvent from '../events/click';
 import devices from '../core/devices';
+import domAdapter from '../core/dom_adapter';
 import { extend } from '../core/utils/extend';
 import { deferRender } from '../core/utils/common';
 import { getPublicElement } from '../core/utils/dom';
@@ -110,12 +111,14 @@ const Accordion = CollectionWidget.inherit({
         this._templateManager.addDefaultTemplates({
             title: new BindableTemplate(function($container, data) {
                 if(isPlainObject(data)) {
-                    if(isDefined(data.title) && !isPlainObject(data.title)) {
-                        $container.text(data.title);
+                    const $iconElement = getImageContainer(data.icon);
+                    if($iconElement) {
+                        $container.append($iconElement);
                     }
 
-                    const $iconElement = getImageContainer(data.icon);
-                    $iconElement && $iconElement.appendTo($container);
+                    if(isDefined(data.title) && !isPlainObject(data.title)) {
+                        $container.append(domAdapter.createTextNode(data.title));
+                    }
                 } else {
                     if(isDefined(data)) {
                         $container.text(String(data));
@@ -244,21 +247,20 @@ const Accordion = CollectionWidget.inherit({
 
     _updateItems: function(addedSelection, removedSelection) {
         const $items = this._itemElements();
-        const that = this;
 
-        iteratorUtils.each(addedSelection, function(_, index) {
-            that._deferredItems[index].resolve();
+        iteratorUtils.each(addedSelection, (_, index) => {
+            this._deferredItems[index].resolve();
 
             const $item = $items.eq(index)
                 .addClass(ACCORDION_ITEM_OPENED_CLASS)
                 .removeClass(ACCORDION_ITEM_CLOSED_CLASS);
-            that.setAria('hidden', false, $item.find('.' + ACCORDION_ITEM_BODY_CLASS));
+            this.setAria('hidden', false, $item.find('.' + ACCORDION_ITEM_BODY_CLASS));
         });
 
-        iteratorUtils.each(removedSelection, function(_, index) {
+        iteratorUtils.each(removedSelection, (_, index) => {
             const $item = $items.eq(index)
                 .removeClass(ACCORDION_ITEM_OPENED_CLASS);
-            that.setAria('hidden', true, $item.find('.' + ACCORDION_ITEM_BODY_CLASS));
+            this.setAria('hidden', true, $item.find('.' + ACCORDION_ITEM_BODY_CLASS));
         });
     },
 
@@ -368,8 +370,31 @@ const Accordion = CollectionWidget.inherit({
         this.callBase();
     },
 
+    _itemOptionChanged: function(item, property, value, oldValue) {
+        this.callBase(item, property, value, oldValue);
+
+        if(property === 'visible') {
+            this._updateItemHeightsWrapper(true);
+        }
+    },
+
+    _tryParseItemPropertyName: function(fullName) {
+        const matches = fullName.match(/.*\.(.*)/);
+
+        if(isDefined(matches) && (matches.length >= 1)) {
+            return matches[1];
+        }
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
+            case 'items':
+                this.callBase(args);
+
+                if(this._tryParseItemPropertyName(args.fullName) === 'title') {
+                    this._renderSelection(this._getSelectedItemIndices(), []);
+                }
+                break;
             case 'animationDuration':
             case 'onItemTitleClick':
             case '_animationEasing':

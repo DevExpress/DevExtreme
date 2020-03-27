@@ -25,7 +25,7 @@
     @GENERIC_SCHEDULER_NAVIGATION_BUTTONS_PADDING: 6px;
 
     @GENERIC_SCHEDULER_APPOINTMENT_MONTH_TEXT_SIZE: 13px;
-    @GENERIC_SCHEDULER_WORKSPACE_INFO_TEXT_SIZE: 16px;
+    @GENERIC_SCHEDULER_WORKSPACE_INFO_TEXT_SIZE: 14px;
     @GENERIC_SCHEDULER_ALL_DAY_TITLE_FONT_SIZE: 14px;
 
     @GENERIC_SCHEDULER_APPOINTMENT_CONTENT_PADDING: 5px 7px;
@@ -39,7 +39,7 @@
     @GENERIC_SCHEDULER_APPOINTMENT_TRANSPARENT_RIGHT_BORDER: 2px solid transparent;
 
     @SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET: -88px;
-    @SCHEDULER_RECURRENCE_REPEAT_LABEL_OFFSET: 5px;
+    @SCHEDULER_RECURRENCE_REPEAT_LABEL_OFFSET: 7px;
 
     @GENERIC_SCHEDULER_APPOINTMENT_COLLECTOR_HEIGHT: 20px;
 }
@@ -56,7 +56,7 @@
     @GENERIC_SCHEDULER_NAVIGATION_BUTTONS_PADDING: 4px;
 
     @GENERIC_SCHEDULER_APPOINTMENT_MONTH_TEXT_SIZE: 11px;
-    @GENERIC_SCHEDULER_WORKSPACE_INFO_TEXT_SIZE: 14px;
+    @GENERIC_SCHEDULER_WORKSPACE_INFO_TEXT_SIZE: 12px;
     @GENERIC_SCHEDULER_ALL_DAY_TITLE_FONT_SIZE: 11px;
 
     @GENERIC_SCHEDULER_APPOINTMENT_CONTENT_PADDING: 2px 5px;
@@ -93,10 +93,7 @@
 
 @SCHEDULER_FIRST_OF_MONTH_BORDER: 1px solid @SCHEDULER_FIRST_MONTH_BORDER_COLOR;
 
-@SCHEDULER_RECURRENCE_REPEAT_ON_WEEK_PADDING: 7px;
-@SCHEDULER_RECURRENCE_BORDER_COLOR: @base-border-color;
-
-.scheduler-mixin(100px);
+.scheduler-mixin();
 
 .dx-scheduler-time-panel-cell {
     height: @GENERIC_SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
@@ -119,7 +116,7 @@
     }
 }
 
-&:not(.dx-scheduler-work-space-vertical-grouped) {
+:not(.dx-scheduler-work-space-vertical-grouped) {
     .dx-scheduler-all-day-title-mixin(@GENERIC_SCHEDULER_HEADER_HEIGHT + @GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP);
 }
 
@@ -322,14 +319,9 @@
             border-bottom: @SCHEDULER_BASE_BORDER;
 
             .dx-scheduler-group-header {
-                font-size: @GENERIC_BASE_FONT_SIZE;
                 color: @SCHEDULER_PANEL_TEXT_COLOR;
             }
         }
-    }
-
-    .dx-scheduler-group-header {
-        font-size: 18px;
     }
 }
 
@@ -432,7 +424,8 @@
 }
 
 .dx-scheduler-header-panel,
-.dx-scheduler-time-panel {
+.dx-scheduler-time-panel,
+.dx-scheduler-group-header {
     font-size: @GENERIC_SCHEDULER_WORKSPACE_INFO_TEXT_SIZE;
 }
 

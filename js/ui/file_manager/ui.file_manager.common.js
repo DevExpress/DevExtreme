@@ -1,4 +1,5 @@
 import { when, Deferred } from '../../core/utils/deferred';
+import { extend } from '../../core/utils/extend';
 import { noop } from '../../core/utils/common';
 import typeUtils from '../../core/utils/type';
 
@@ -42,5 +43,40 @@ const getDisplayFileSize = function(byteSize) {
     return `${displaySize} ${sizesTitles[index]}`;
 };
 
+const extendAttributes = function(targetObject, sourceObject, objectKeysArray) {
+    objectKeysArray.forEach(objectKey => {
+        extend(true, targetObject, typeUtils.isDefined(sourceObject[objectKey])
+            ? { [objectKey]: sourceObject[objectKey] }
+            : {});
+    });
+    return targetObject;
+};
+
+const findItemsByKeys = (itemInfos, keys) => {
+    const itemMap = {};
+    keys.forEach(key => {
+        itemMap[key] = null;
+    });
+
+    itemInfos.forEach(itemInfo => {
+        const key = itemInfo.fileItem.key;
+        if(Object.prototype.hasOwnProperty.call(itemMap, key)) {
+            itemMap[key] = itemInfo;
+        }
+    });
+
+    const result = [];
+    keys.forEach(key => {
+        const itemInfo = itemMap[key];
+        if(itemInfo) {
+            result.push(itemInfo);
+        }
+    });
+
+    return result;
+};
+
 module.exports = whenSome;
 module.exports.getDisplayFileSize = getDisplayFileSize;
+module.exports.extendAttributes = extendAttributes;
+module.exports.findItemsByKeys = findItemsByKeys;

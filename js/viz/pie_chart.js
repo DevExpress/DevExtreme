@@ -12,15 +12,28 @@ import { patchFontOptions } from './core/utils';
 
 const OPTIONS_FOR_REFRESH_SERIES = ['startAngle', 'innerRadius', 'segmentsDirection', 'type'];
 const NORMAL_STATE = states.normalMark;
+const HOVER_STATE = states.hoverMark;
+const SELECTED_STATE = states.selectedMark;
 const MAX_RESOLVE_ITERATION_COUNT = 5;
 const LEGEND_ACTIONS = [states.resetItem, states.applyHover, states.applySelected, states.applySelected];
 
 function getLegendItemAction(points) {
     let state = NORMAL_STATE;
 
-    points.forEach(function(point) {
-        state = state | point.fullState;
+    points.forEach(point => {
+        const seriesOptions = point.series?.getOptions();
+        let pointState = point.fullState;
+
+        if(seriesOptions?.hoverMode === 'none') {
+            pointState &= ~HOVER_STATE;
+        }
+        if(seriesOptions?.selectionMode === 'none') {
+            pointState &= ~SELECTED_STATE;
+        }
+
+        state = state | pointState;
     });
+
     return LEGEND_ACTIONS[state];
 }
 

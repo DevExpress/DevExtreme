@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import errors from 'core/errors';
 
 import 'ui/slide_out';
 import 'common.css!';
@@ -98,6 +99,32 @@ QUnit.module('render widget', {
         });
 
         assert.equal($.trim(slideOut.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS).text()), 'itemText', 'item was rendered only once');
+    });
+
+    QUnit.test('show deprecated warning by the initialization', function(assert) {
+        const originalLog = errors.log;
+        try {
+            const stub = sinon.stub();
+            errors.log = stub;
+
+            this.$element.dxSlideOut();
+
+            assert.equal(stub.callCount, 2, 'the log method is called twice');
+            assert.deepEqual(stub.getCall(0).args, [
+                'W0000',
+                'dxSlideOutView',
+                '20.1',
+                'Use the \'dxDrawer\' widget instead'
+            ], 'first call - args of the log method');
+            assert.deepEqual(stub.getCall(1).args, [
+                'W0000',
+                'dxSlideOut',
+                '20.1',
+                'Use the \'dxDrawer\' widget instead'
+            ], 'second call - args of the log method');
+        } finally {
+            errors.log = originalLog;
+        }
     });
 });
 

@@ -102,6 +102,9 @@ function _getFullOptions(options) {
     const fullOptions = extend({}, options);
     if(!isDefined(fullOptions.topLeftCell)) {
         fullOptions.topLeftCell = { row: 1, column: 1 };
+    } else if(isString(fullOptions.topLeftCell)) {
+        const { row, col } = fullOptions.worksheet.getCell(fullOptions.topLeftCell);
+        fullOptions.topLeftCell = { row, column: col };
     }
     if(!isDefined(fullOptions.keepColumnWidths)) {
         fullOptions.keepColumnWidths = true;

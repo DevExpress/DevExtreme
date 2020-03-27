@@ -29,7 +29,8 @@ const SimpleIndicator = BaseIndicator.inherit({
         const options = this._options;
         const radius = this._getRadius();
         const indentFromCenter = this._getIndentFromCenter();
-        const x = options.x; const y = options.y - (radius + indentFromCenter) / 2;
+        const x = options.x;
+        const y = options.y - (radius + indentFromCenter) / 2;
         let width = options.width / 2;
         let length = (radius - indentFromCenter) / 2;
         width > 10 || (width = 10);
@@ -234,7 +235,8 @@ const triangleMarker = SimpleIndicator.inherit({
 
     _getTrackerSettings: function() {
         const options = this._options;
-        const x = options.x; const y = options.y - options.radius - options.length / 2;
+        const x = options.x;
+        const y = options.y - options.radius - options.length / 2;
         let width = options.width / 2;
         let length = options.length / 2;
         width > 10 || (width = 10);

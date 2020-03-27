@@ -862,6 +862,21 @@ QUnit.test('containerBackgroundColor updating', function(assert) {
     assert.strictEqual(this.slidersController.update.lastCall.args[5].color, 'green');
 });
 
+// T856868
+QUnit.test('Set equal values', function(assert) {
+    const range = this.createWidget({
+        scale: {
+            startValue: 1,
+            endValue: 10
+        }
+    });
+
+    this.slidersController.getSelectedRange = sinon.stub().returns({ startValue: 2, endValue: 5 });
+    range.setValue({ startValue: 2, endValue: 5 });
+
+    assert.strictEqual(this.slidersController.setSelectedRange.callCount, 1);
+});
+
 QUnit.test('containerBackgroundColor updating. shutter color was set', function(assert) {
     const range = this.createWidget({
         containerBackgroundColor: 'red',

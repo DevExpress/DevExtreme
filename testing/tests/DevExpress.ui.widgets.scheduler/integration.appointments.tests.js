@@ -3,7 +3,6 @@ import { noop } from 'core/utils/common';
 import errors from 'ui/widget/ui.errors';
 import translator from 'animation/translator';
 import dateLocalization from 'localization/date';
-import messageLocalization from 'localization/message';
 import dblclickEvent from 'events/dblclick';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -590,42 +589,6 @@ QUnit.test('DblClick on appointment should not affect the related cell start dat
     }
 });
 
-QUnit.test('Recurrence repeat-type editor should have default \'never\' value after reopening appointment popup', function(assert) {
-    this.createInstance({
-        currentDate: new Date(2015, 1, 9),
-        dataSource: new DataSource({
-            store: []
-        }),
-        currentView: 'week'
-    });
-
-    const firstAppointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: 'caption 1' };
-    const secondAppointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: 'caption 2' };
-
-    this.instance.showAppointmentPopup(firstAppointment);
-
-    let form = this.instance.getAppointmentDetailsForm();
-    let recurrenceEditor = form.getEditor('recurrenceRule');
-    let freqEditor = recurrenceEditor._freqEditor;
-    let repeatTypeEditor = form.getEditor('recurrenceRule')._repeatTypeEditor;
-
-    freqEditor.option('value', 'daily');
-
-    repeatTypeEditor.option('value', 'count');
-    $('.dx-scheduler-appointment-popup').find('.dx-popup-done').trigger('dxclick');
-
-    this.instance.showAppointmentPopup(secondAppointment);
-
-    form = this.instance.getAppointmentDetailsForm();
-    recurrenceEditor = form.getEditor('recurrenceRule');
-    freqEditor = recurrenceEditor._freqEditor;
-    repeatTypeEditor = form.getEditor('recurrenceRule')._repeatTypeEditor;
-
-    freqEditor.option('value', 'daily');
-
-    assert.strictEqual(repeatTypeEditor.option('value'), 'never', 'Repeat-type editor value is ok');
-});
-
 QUnit.test('Appointment dates should not be normalized before sending to the details view', function(assert) {
     const startDate = 1429776000000;
     const endDate = 1429794000000;
@@ -660,40 +623,6 @@ QUnit.test('Appointment dates should not be normalized before sending to the det
     } finally {
         this.instance._appointmentPopup.show.restore();
     }
-});
-
-QUnit.test('Appointment labels should be localized before sending to the details view', function(assert) {
-    const startDate = 1429776000000;
-    const endDate = 1429794000000;
-    const task = {
-        text: 'Task 1',
-        startDate: startDate,
-        endDate: endDate
-    };
-
-    this.createInstance({
-        dataSource: new DataSource({
-            store: [task]
-        }),
-        currentDate: new Date(2015, 3, 23)
-    });
-
-    this.clock.tick();
-    this.instance.showAppointmentPopup(task);
-
-    const detailsForm = this.instance.getAppointmentDetailsForm();
-    const formItems = detailsForm.option('items');
-
-    assert.equal(formItems[0].label.text, messageLocalization.format('dxScheduler-editorLabelTitle'), 'Title is OK');
-    assert.equal(formItems[1].label.text, messageLocalization.format('dxScheduler-editorLabelStartDate'), 'Start date is OK');
-    assert.equal(formItems[2].label.text, ' ', 'Start date tz is OK');
-    assert.equal(formItems[3].label.text, messageLocalization.format('dxScheduler-editorLabelEndDate'), 'End date is OK');
-    assert.equal(formItems[4].label.text, ' ', 'End date tz is OK');
-    assert.equal(formItems[5].label.text, messageLocalization.format('dxScheduler-allDay'), 'All-day is OK');
-    assert.equal(formItems[6].itemType, 'empty', 'Item is empty');
-    assert.equal(formItems[7].label.text, messageLocalization.format('dxScheduler-editorLabelDescription'), 'Description is OK');
-    assert.equal(formItems[8].itemType, 'empty', 'Item is empty');
-    assert.equal(formItems[9].label.text, messageLocalization.format('dxScheduler-editorLabelRecurrence'), 'Recurrence is OK');
 });
 
 QUnit.test('Appointment should be copied before sending to the details view', function(assert) {
@@ -1269,40 +1198,6 @@ QUnit.test('Task dragging', function(assert) {
     });
 });
 
-// TODO remove
-// QUnit.test("Appointment should have correct position while vertical dragging", function(assert) {
-//     this.createInstance({
-//         height: 500,
-//         editing: true,
-//         currentDate: new Date(2015, 1, 9),
-//         currentView: "week",
-//         dataSource: [{
-//             text: "a",
-//             startDate: new Date(2015, 1, 9, 7),
-//             endDate: new Date(2015, 1, 9, 7, 30)
-//         }]
-//     });
-
-//     var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
-//         scrollable = this.instance.getWorkSpace().$element().find(".dx-scrollable").dxScrollable("instance"),
-//         allDayHeight = this.instance.$element().find(".dx-scheduler-all-day-table-cell").first().outerHeight(),
-//         scrollDistance = 400,
-//         dragDistance = -300,
-//         headerPanelHeight = this.instance.$element().find(".dx-scheduler-header-panel").outerHeight(true);
-
-//     scrollable.scrollBy(scrollDistance);
-
-//     var pointer = pointerMock($appointment).start(),
-//         startPosition = translator.locate($appointment);
-
-//     pointer.dragStart().drag(0, dragDistance);
-
-//     var currentPosition = translator.locate($appointment);
-
-//     assert.roughEqual(startPosition.top, currentPosition.top + scrollDistance - allDayHeight - dragDistance - headerPanelHeight, 1, "Appointment position is correct");
-//     pointer.dragEnd();
-// });
-
 QUnit.test('Appointment should be dragged correctly in grouped timeline (T739132)', function(assert) {
     const data = new DataSource({
         store: [{
@@ -1403,59 +1298,6 @@ QUnit.test('Appointment should have correct position while dragging from group',
     assert.deepEqual(appointmentData.endDate, new Date(2015, 6, 5, 0, 30), 'End date is correct');
     assert.deepEqual(appointmentData.ownerId, { id: [2] }, 'Resources is correct');
 });
-
-// TODO remove
-// QUnit.test("getWorkSpaceScrollableScrollTop should be called while dragging from allDay panel, vertical grouping", function(assert) {
-//     var spy = sinon.spy();
-//     this.createInstance({
-//         currentDate: new Date(2015, 6, 10),
-//         editing: true,
-//         views: [{
-//             type: "week",
-//             name: "Week",
-//             groupOrientation: "vertical"
-//         }],
-//         currentView: "week",
-//         dataSource: [{
-//             text: "a",
-//             startDate: new Date(2015, 6, 7, 10),
-//             endDate: new Date(2015, 6, 7, 10, 30),
-//             allDay: true,
-//             ownerId: { id: 2 }
-//         }],
-//         startDayHour: 9,
-//         endDayHour: 12,
-//         groups: ["ownerId.id"],
-//         resources: [
-//             {
-//                 field: "ownerId.id",
-//                 allowMultiple: false,
-//                 dataSource: [
-//                     { id: 1, text: "one" },
-//                     { id: 2, text: "two" }
-//                 ]
-//             }
-//         ],
-//         width: 800,
-//         height: 500
-//     });
-
-//     var getScrollableOffset = this.instance.getWorkSpaceScrollableScrollTop;
-//     this.instance.getWorkSpaceScrollableScrollTop = spy;
-
-//     try {
-//         var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0);
-//         var pointer = pointerMock($appointment).start();
-//         pointer.dragStart().drag(0, 100);
-
-//         assert.ok(spy.calledOnce, "getWorkSpaceScrollableScrollTop was called");
-//         assert.strictEqual(spy.getCall(0).args[0], true, "getWorkSpaceScrollableScrollTop was called with right args");
-
-//         pointer.dragEnd();
-//     } finally {
-//         this.instance.getWorkSpaceScrollableScrollTop = getScrollableOffset;
-//     }
-// });
 
 QUnit.test('Appointment should have correct position while dragging from group, vertical grouping', function(assert) {
     this.createInstance({
@@ -1674,114 +1516,6 @@ QUnit.test('Appointment should push correct data to the onAppointmentUpdating ev
 
     this.clock.tick();
 });
-
-// QUnit.test("Appointment should not twitch on drag start with horizontal dragging", function(assert) {
-//     if(skipTestOnMobile(assert)) return;
-//     let resourcesData = [
-//         {
-//             text: "Samantha Bright",
-//             id: 1,
-//             color: "#cb6bb2"
-//         }, {
-//             text: "John Heart",
-//             id: 2,
-//             color: "#56ca85"
-//         }
-//     ];
-
-//     let priorityData = [
-//         {
-//             text: "Low Priority",
-//             id: 1,
-//             color: "#1e90ff"
-//         }, {
-//             text: "High Priority",
-//             id: 2,
-//             color: "#ff9747"
-//         }
-//     ];
-
-//     let data = [{
-//         "text": "Google AdWords Strategy",
-//         "ownerId": [2],
-//         "startDate": new Date(2017, 4, 1, 9, 0),
-//         "endDate": new Date(2017, 4, 1, 10, 30),
-//         "priority": 1
-//     }, {
-//         "text": "New Brochures",
-//         "ownerId": [1],
-//         "startDate": new Date(2017, 4, 1, 11, 30),
-//         "endDate": new Date(2017, 4, 1, 14, 15),
-//         "priority": 2
-//     }];
-
-//     this.createInstance({
-//         dataSource: data,
-//         views: ["timelineDay"],
-//         currentView: "timelineDay",
-//         currentDate: new Date(2017, 4, 1),
-//         firstDayOfWeek: 0,
-//         startDayHour: 8,
-//         endDayHour: 20,
-//         cellDuration: 60,
-//         groups: ["priority"],
-//         resources: [{
-//             fieldExpr: "ownerId",
-//             allowMultiple: true,
-//             dataSource: resourcesData,
-//             label: "Owner",
-//             useColorAsDefault: true
-//         }, {
-//             fieldExpr: "priority",
-//             allowMultiple: false,
-//             dataSource: priorityData,
-//             label: "Priority"
-//         }],
-//         height: 400
-//     });
-
-//     let $appointment = this.scheduler.appointments.getAppointment(),
-//         dragDistance = 50;
-
-//     const defaultPosition = translator.locate($appointment);
-//     let pointer = pointerMock($appointment).start();
-
-//     //pointer.dragStart().drag(dragDistance, 0);
-//     pointer.dragStart().drag(0, 0);
-
-//     let startPosition = translator.locate($appointment);
-//     assert.roughEqual(defaultPosition.left, startPosition.left - dragDistance, 1, "Appointment start position does not twitch after drag start");
-// });
-
-// TODO remove
-// QUnit.test("Appointment should have correct position while horizontal dragging", function(assert) {
-//     if(skipTestOnMobile(assert)) return;
-//     this.createInstance({
-//         height: 500,
-//         editing: true,
-//         currentDate: new Date(2015, 1, 9),
-//         currentView: "week",
-//         dataSource: [{
-//             text: "a",
-//             startDate: new Date(2015, 1, 9, 1),
-//             endDate: new Date(2015, 1, 9, 1, 30)
-//         }]
-//     });
-
-//     let $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
-//         dragDistance = 150,
-//         timePanelWidth = this.instance.$element().find(".dx-scheduler-time-panel").outerWidth(true);
-
-//     let pointer = pointerMock($appointment).start(),
-//         startPosition = translator.locate($appointment);
-
-//     pointer.dragStart().drag(dragDistance, 0);
-
-//     let currentPosition = translator.locate($appointment);
-
-//     assert.roughEqual(startPosition.left, currentPosition.left - dragDistance, 2, "Appointment position is correct");
-//     pointer.dragEnd();
-// });
 
 QUnit.test('Appointment should not be updated if it is dropped to the initial cell (week view)', function(assert) {
     this.createInstance({
@@ -3142,10 +2876,9 @@ QUnit.test('Scheduler appointment popup should be opened correctly for recurrenc
     $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
 
     const popup = this.instance.getAppointmentPopup();
-    const $checkboxes = $(popup.$content()).find('.dx-checkbox');
+    const $buttonGroup = $(popup.$content()).find('.dx-buttongroup');
 
-    assert.equal($checkboxes.eq(1).dxCheckBox('instance').option('value'), true, 'Right checkBox was checked. Popup is correct');
-    assert.equal($checkboxes.eq(4).dxCheckBox('instance').option('value'), true, 'Right checkBox was checked. Popup is correct');
+    assert.deepEqual($buttonGroup.eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['MO', 'TH'], 'Right button group select item keys');
 });
 
 QUnit.test('Scheduler appointment popup should be opened correctly for recurrence appointments after opening for ordinary appointments(T710140)', function(assert) {
@@ -3181,10 +2914,9 @@ QUnit.test('Scheduler appointment popup should be opened correctly for recurrenc
     $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
 
     const popup = this.instance.getAppointmentPopup();
-    const $checkboxes = $(popup.$content()).find('.dx-checkbox');
+    const $buttonGroup = $(popup.$content()).find('.dx-buttongroup');
 
-    assert.equal($checkboxes.eq(1).dxCheckBox('instance').option('value'), true, 'Right checkBox was checked. Popup is correct');
-    assert.equal($checkboxes.eq(4).dxCheckBox('instance').option('value'), true, 'Right checkBox was checked. Popup is correct');
+    $buttonGroup.eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['MO', 'TH'], 'Right button group select item keys';
 
     this.instance.hideAppointmentPopup();
     this.instance.showAppointmentPopup(tasks[0]);
@@ -3890,11 +3622,13 @@ QUnit.module('Appointments', () => {
             const endDateExpr = scheduler.option('endDateExpr');
             const textExpr = scheduler.option('textExpr');
 
-            const expectedStartDateHours = appointmentData[startDateExpr].getHours() + eventCallCount;
-            const expectedStartDateMinutes = appointmentData[startDateExpr].getMinutes();
+            const expectedStartDate = scheduler.instance.fire('convertDateByTimezone', appointmentData[startDateExpr]);
+            const expectedStartDateHours = expectedStartDate.getHours() + eventCallCount;
+            const expectedStartDateMinutes = expectedStartDate.getMinutes();
 
-            const expectedEndDateHours = appointmentData[endDateExpr].getHours() + eventCallCount;
-            const expectedEndDateMinutes = appointmentData[endDateExpr].getMinutes();
+            const expectedEndDate = scheduler.instance.fire('convertDateByTimezone', appointmentData[endDateExpr]);
+            const expectedEndDateHours = expectedEndDate.getHours() + eventCallCount;
+            const expectedEndDateMinutes = expectedEndDate.getMinutes();
 
             assert.equal(targetedAppointmentData[startDateExpr].getHours(), expectedStartDateHours, `start date of targetedAppointmentData should be equal ${expectedStartDateHours}`);
             assert.equal(targetedAppointmentData[startDateExpr].getMinutes(), expectedStartDateMinutes, `start date of targetedAppointmentData should be equal ${expectedStartDateMinutes}`);
@@ -4019,7 +3753,8 @@ QUnit.module('Appointments', () => {
             {
                 data: recurrenceAndCompactData,
                 appointmentTooltip: createTestForRecurrenceData,
-                name: 'recurrence in collector'
+                name: 'recurrence in collector',
+                testCollector: true
             },
             {
                 data: hourlyRecurrenceData,
@@ -4030,7 +3765,8 @@ QUnit.module('Appointments', () => {
                     currentView: 'week'
                 },
                 appointmentTooltip: createTestForHourlyRecurrenceData,
-                name: 'hourly recurrence in collector'
+                name: 'hourly recurrence in collector',
+                testCollector: true
             },
             {
                 data: hourlyRecurrenceData,
@@ -4039,12 +3775,13 @@ QUnit.module('Appointments', () => {
                     startDateExpr: 'startDateCustom',
                     endDateExpr: 'endDateCustom',
                     currentView: 'week',
-                    timeZone: 'Asia/Yekaterinburg',
+                    timeZone: 'Africa/Bangui', // NOTE: +1
                     startDayHour: 0,
                     endDayHour: 24
                 },
                 appointmentTooltip: createTestForHourlyRecurrenceData,
-                name: 'hourly recurrence in collector, custom timezone is set'
+                name: 'hourly recurrence in collector, custom timezone is set',
+                testCollector: true
             }
         ];
 
@@ -4054,7 +3791,11 @@ QUnit.module('Appointments', () => {
                 scheduler.option('appointmentTooltipTemplate', testCase.appointmentTooltip(assert, scheduler, true));
 
                 for(let i = 0; i < 5; i++) {
-                    scheduler.appointments.click(i);
+                    if(testCase.testCollector) {
+                        scheduler.appointments.compact.click(i);
+                    } else {
+                        scheduler.appointments.click(i);
+                    }
                 }
 
                 assert.strictEqual(eventCallCount, 5, 'appointmentTemplate should be raised');

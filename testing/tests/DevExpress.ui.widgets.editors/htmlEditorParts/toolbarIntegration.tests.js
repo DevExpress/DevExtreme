@@ -9,6 +9,7 @@ import { checkLink } from './utils.js';
 const TOOLBAR_CLASS = 'dx-htmleditor-toolbar';
 const TOOLBAR_WRAPPER_CLASS = 'dx-htmleditor-toolbar-wrapper';
 const TOOLBAR_FORMAT_WIDGET_CLASS = 'dx-htmleditor-toolbar-format';
+const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
 const DROPDOWNMENU_CLASS = 'dx-dropdownmenu-button';
 const DROPDOWNEDITOR_ICON_CLASS = 'dx-dropdowneditor-icon';
 const BUTTON_CONTENT_CLASS = 'dx-button-content';
@@ -27,9 +28,13 @@ const WHITE_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
 const BLACK_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWNgYmL6DwABFgEGpP/tHAAAAABJRU5ErkJggg==';
 const ORANGE_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWP4z8j4HwAFBQIB6OfkUgAAAABJRU5ErkJggg==';
 
-const { test } = QUnit;
+const { test, module: testModule } = QUnit;
 
-QUnit.module('Toolbar integration', {
+function getToolbar($container) {
+    return $container.find(`.${TOOLBAR_CLASS}`);
+}
+
+testModule('Toolbar integration', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         fx.off = true;
@@ -112,7 +117,10 @@ QUnit.module('Toolbar integration', {
         const expected = '<p><span style="color: rgb(250, 250, 250);">te</span>st</p>';
         const instance = $('#htmlEditor').dxHtmlEditor({
             value: '<p>test</p>',
-            toolbar: { items: [{ formatName: 'color', locateInMenu: 'always' }] },
+            toolbar: {
+                items: [{ formatName: 'color', locateInMenu: 'always' }],
+                multiline: false
+            },
             onValueChanged: (e) => {
                 assert.equal(e.value, expected, 'color has been applied');
                 assert.equal(toolbarClickStub.callCount, 2, 'Clicks on toolbar buttons should bubbling to the toolbar container');
@@ -179,7 +187,10 @@ QUnit.module('Toolbar integration', {
 
     test('Overflow menu button should have a correct content', function(assert) {
         $('#htmlEditor').html('<p>test</p>').dxHtmlEditor({
-            toolbar: { items: ['bold', { text: 'test', showInMenu: 'always' }] }
+            toolbar: {
+                multiline: false,
+                items: ['bold', { text: 'test', showInMenu: 'always' }]
+            }
         });
 
         const buttonContent = $('#htmlEditor')
@@ -728,4 +739,31 @@ QUnit.module('Toolbar integration', {
         const beforeContainerWidth = $container.find('.dx-toolbar-before').width();
         assert.ok(beforeContainerWidth <= toolbarWidth, 'toolbar items fits the widget container');
     });
+
+    test('Multiline toolbar rendered by default', function(assert) {
+        const $container = $('#htmlEditor');
+        $container.dxHtmlEditor({
+            toolbar: { items: ['bold'] }
+        });
+
+        assert.ok(getToolbar($container).hasClass(TOOLBAR_MULTILINE_CLASS));
+    });
+
+    [true, false].forEach((multiline) => {
+        test(`Multiline mode change to ${multiline} is performed correctly at runtime`, function(assert) {
+            const $container = $('#htmlEditor');
+            const editor = $container.dxHtmlEditor({
+                toolbar: {
+                    items: ['bold'],
+                    multiline
+                }
+            }).dxHtmlEditor('instance');
+
+            assert.strictEqual(getToolbar($container).hasClass(TOOLBAR_MULTILINE_CLASS), multiline, `Toolbar in ${multiline ? 'multiline' : 'adaptive'} mode`);
+
+            editor.option('toolbar.multiline', !multiline);
+            assert.strictEqual(getToolbar($container).hasClass(TOOLBAR_MULTILINE_CLASS), !multiline, `Toolbar in ${!multiline ? 'multiline' : 'adaptive'} mode`);
+        });
+    });
+
 });

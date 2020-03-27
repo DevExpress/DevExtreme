@@ -7,8 +7,6 @@ import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import fx from 'animation/fx';
 import translator from 'animation/translator';
 import dateLocalization from 'localization/date';
-import '../../helpers/l10n/cldrNumberDataRu.js';
-import '../../helpers/l10n/cldrCalendarDataRu.js';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -96,7 +94,10 @@ QUnit.module('dateViewRoller', {
     });
 
     QUnit.test('change selected item by option', function(assert) {
-        const element = this.element.dxDateViewRoller({ items: ['1', '2', '3', '4', '5', '6', '7'] }); const instance = element.dxDateViewRoller('instance'); const content = element.find('.dx-scrollable-content'); const itemHeight = element.find('.' + DATEVIEW_ROLLER_ITEM_CLASS).eq(0).outerHeight(true);
+        const element = this.element.dxDateViewRoller({ items: ['1', '2', '3', '4', '5', '6', '7'] });
+        const instance = element.dxDateViewRoller('instance');
+        const content = element.find('.dx-scrollable-content');
+        const itemHeight = element.find('.' + DATEVIEW_ROLLER_ITEM_CLASS).eq(0).outerHeight(true);
 
         assert.equal(content.position().top, 0 * itemHeight);
 
@@ -129,7 +130,11 @@ QUnit.module('dateViewRoller', {
     });
 
     QUnit.test('change selected item by UI', function(assert) {
-        const element = this.element; const instance = this.instance; const content = element.find('.dx-scrollable-content'); const itemHeight = element.find('.' + DATEVIEW_ROLLER_ITEM_SELECTED_CLASS).eq(0).outerHeight(true); const pointer = pointerMock(content);
+        const element = this.element;
+        const instance = this.instance;
+        const content = element.find('.dx-scrollable-content');
+        const itemHeight = element.find('.' + DATEVIEW_ROLLER_ITEM_SELECTED_CLASS).eq(0).outerHeight(true);
+        const pointer = pointerMock(content);
 
         assert.equal(instance.option('selectedIndex'), 0);
 
@@ -144,7 +149,11 @@ QUnit.module('dateViewRoller', {
     });
 
     QUnit.test('scrolling by step (UI)', function(assert) {
-        const element = this.element.dxDateViewRoller({ items: ['1', '2', '3'], selectedIndex: 0 }); const instance = element.dxDateViewRoller('instance'); const content = element.find('.dx-scrollable-content'); const itemHeight = element.find('.' + DATEVIEW_ROLLER_ITEM_SELECTED_CLASS).eq(0).outerHeight(true); const pointer = pointerMock(instance._$container);
+        const element = this.element.dxDateViewRoller({ items: ['1', '2', '3'], selectedIndex: 0 });
+        const instance = element.dxDateViewRoller('instance');
+        const content = element.find('.dx-scrollable-content');
+        const itemHeight = element.find('.' + DATEVIEW_ROLLER_ITEM_SELECTED_CLASS).eq(0).outerHeight(true);
+        const pointer = pointerMock(instance._$container);
 
         pointer.start().down().move(0, -itemHeight * 0.7).wait(500).up();
         assert.equal(content.position().top, -itemHeight);
@@ -154,7 +163,8 @@ QUnit.module('dateViewRoller', {
     });
 
     QUnit.test('items changing leads to selected item recalculation', function(assert) {
-        const element = this.element.dxDateViewRoller({ items: ['1', '2', '3', '4', '5'], selectedIndex: 4 }); const instance = element.dxDateViewRoller('instance');
+        const element = this.element.dxDateViewRoller({ items: ['1', '2', '3', '4', '5'], selectedIndex: 4 });
+        const instance = element.dxDateViewRoller('instance');
 
         instance.option('items', ['5', '4', '3', '2', '1']);
         assert.equal(instance.option('selectedIndex'), 4);
@@ -196,7 +206,12 @@ QUnit.module('dateViewRoller', {
     });
 
     QUnit.test('Content should not be have a transform css property after complete', function(assert) {
-        const element = this.element.dxDateViewRoller({ items: ['1', '2', '3'], selectedIndex: 0 }); const instance = element.dxDateViewRoller('instance'); const $content = element.find('.dx-scrollable-content'); const $container = element.find('.dx-scrollable-container'); const itemHeight = element.find('.' + DATEVIEW_ROLLER_ITEM_SELECTED_CLASS).eq(0).outerHeight(true); const pointer = pointerMock(instance._$container);
+        const element = this.element.dxDateViewRoller({ items: ['1', '2', '3'], selectedIndex: 0 });
+        const instance = element.dxDateViewRoller('instance');
+        const $content = element.find('.dx-scrollable-content');
+        const $container = element.find('.dx-scrollable-container');
+        const itemHeight = element.find('.' + DATEVIEW_ROLLER_ITEM_SELECTED_CLASS).eq(0).outerHeight(true);
+        const pointer = pointerMock(instance._$container);
 
         pointer.start().down().move(0, -itemHeight * 0.7).wait(500).up();
         assert.deepEqual(translator.locate($content), { top: 0, left: 0 });
@@ -308,7 +323,8 @@ QUnit.module('dateView', {
     });
 
     QUnit.test('check state rollers', function(assert) {
-        const date = new Date(2012, 10, 23); const minDate = new Date(2010, 1);
+        const date = new Date(2012, 10, 23);
+        const minDate = new Date(2010, 1);
 
         this.instance.option({ value: date, minDate: minDate });
 
@@ -320,7 +336,9 @@ QUnit.module('dateView', {
     });
 
     QUnit.test('min and max date should take hours into account', function(assert) {
-        const value = new Date(2000, 5, 5, 10, 0, 0); const min = new Date(2000, 5, 4, 8, 0, 0); const max = new Date(2000, 5, 6, 12, 0, 0);
+        const value = new Date(2000, 5, 5, 10, 0, 0);
+        const min = new Date(2000, 5, 4, 8, 0, 0);
+        const max = new Date(2000, 5, 6, 12, 0, 0);
 
         this.instance.option({ type: 'datetime', value: value, minDate: min, maxDate: max });
 
@@ -359,7 +377,8 @@ QUnit.module('dateView', {
     });
 
     QUnit.test('\'value\' option should depend on rollers position', function(assert) {
-        const date = new Date(2012, 9, 10); const minDate = new Date(2000, 1);
+        const date = new Date(2012, 9, 10);
+        const minDate = new Date(2000, 1);
 
         this.instance.option({ value: date, minDate: minDate });
 
@@ -378,7 +397,9 @@ QUnit.module('dateView', {
     });
 
     QUnit.test('it should be impossible to select date out of range via rollers', function(assert) {
-        const date = new Date(2012, 9, 10); const minDate = new Date(2012, 7, 11); const maxDate = new Date(2012, 9, 11);
+        const date = new Date(2012, 9, 10);
+        const minDate = new Date(2012, 7, 11);
+        const maxDate = new Date(2012, 9, 11);
 
         this.instance.option({ value: date, maxDate: maxDate, minDate: minDate });
 
@@ -395,7 +416,8 @@ QUnit.module('dateView', {
     });
 
     QUnit.test('max day in month overflow is prevented', function(assert) {
-        const date = new Date(2012, 7, 31); const minDate = new Date(2000, 1);
+        const date = new Date(2012, 7, 31);
+        const minDate = new Date(2000, 1);
 
         this.instance.option({ value: date, minDate: minDate });
 
@@ -410,7 +432,8 @@ QUnit.module('dateView', {
     });
 
     QUnit.test('Dateview have all days in previous month with option maxDate', function(assert) {
-        const date = new Date(2012, 7, 31); const maxDate = new Date(2025, 1, 15);
+        const date = new Date(2012, 7, 31);
+        const maxDate = new Date(2025, 1, 15);
 
         this.instance.option({ value: date, maxDate: maxDate });
         const rollers = this.instance._rollers;
@@ -427,7 +450,8 @@ QUnit.module('dateView', {
     });
 
     QUnit.test('Dateview have all days in previous month with option minDate', function(assert) {
-        const date = new Date(2012, 7, 31); const minDate = new Date(2005, 10, 15);
+        const date = new Date(2012, 7, 31);
+        const minDate = new Date(2005, 10, 15);
 
         this.instance.option({ value: date, minDate: minDate });
 
@@ -520,7 +544,12 @@ QUnit.module('dateView', {
             culture: 'en'
         });
 
-        const components = this.wrapper.find('.dx-scrollable-content'); const months = components.eq(0).find('.dx-dateview-item'); const days = components.eq(1).find('.dx-dateview-item'); const years = components.eq(2).find('.dx-dateview-item'); const hours = components.eq(3).find('.dx-dateview-item'); const minutes = components.eq(4).find('.dx-dateview-item');
+        const components = this.wrapper.find('.dx-scrollable-content');
+        const months = components.eq(0).find('.dx-dateview-item');
+        const days = components.eq(1).find('.dx-dateview-item');
+        const years = components.eq(2).find('.dx-dateview-item');
+        const hours = components.eq(3).find('.dx-dateview-item');
+        const minutes = components.eq(4).find('.dx-dateview-item');
 
         assert.equal(months.length, 12, 'month count from January to December');
         assert.equal(days.length, 31, 'day count in December');
@@ -541,7 +570,8 @@ QUnit.module('dateView', {
     });
 
     QUnit.test('min date should be configured correctly', function(assert) {
-        const date = new Date(2013, 7, 20); const minDate = new Date(2013, 7, 20);
+        const date = new Date(2013, 7, 20);
+        const minDate = new Date(2013, 7, 20);
 
         this.instance.option({
             minDate: minDate,
@@ -558,7 +588,8 @@ QUnit.module('dateView', {
     });
 
     QUnit.test('max date should be configured correctly', function(assert) {
-        const date = new Date(2013, 7, 20); const maxDate = new Date(2013, 7, 20);
+        const date = new Date(2013, 7, 20);
+        const maxDate = new Date(2013, 7, 20);
 
         this.instance.option({
             maxDate: maxDate,
@@ -575,7 +606,8 @@ QUnit.module('dateView', {
     });
 
     QUnit.test('date should be the same if month changed with assigned min date option', function(assert) {
-        const date = new Date(2013, 7, 20); const minDate = new Date(2013, 7, 20);
+        const date = new Date(2013, 7, 20);
+        const minDate = new Date(2013, 7, 20);
 
         this.instance.option({ minDate: minDate, value: date });
 
@@ -599,7 +631,8 @@ QUnit.module('dateView', {
     });
 
     QUnit.test('dateView should have class corresponding its type', function(assert) {
-        const instance = this.instance; const $element = this.element;
+        const instance = this.instance;
+        const $element = this.element;
 
         let prevClass = DATEVIEW_CLASS + '-' + instance.option('type');
         assert.ok($element.hasClass(prevClass), 'type specific class is set on init');

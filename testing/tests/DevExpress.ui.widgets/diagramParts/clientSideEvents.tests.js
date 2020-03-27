@@ -2,8 +2,9 @@ import $ from 'jquery';
 const { test } = QUnit;
 import 'common.css!';
 import 'ui/diagram';
+
 import { DiagramCommand } from 'devexpress-diagram';
-import { SIMPLE_DIAGRAM } from '../diagram.tests.js';
+import { Consts } from '../../../helpers/diagramHelpers.js';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -23,7 +24,7 @@ QUnit.module('ClientSideEvents', {
     }
 }, () => {
     test('click on unbound diagram', function(assert) {
-        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(SIMPLE_DIAGRAM);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(Consts.SIMPLE_DIAGRAM);
         let clickedItem;
         this.instance.option('onItemClick', function(e) {
             clickedItem = e.item;
@@ -33,7 +34,7 @@ QUnit.module('ClientSideEvents', {
         assert.equal(clickedItem.text, 'A new ticket');
     });
     test('selectionchanged on unbound diagram', function(assert) {
-        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(SIMPLE_DIAGRAM);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(Consts.SIMPLE_DIAGRAM);
         let selectedItems;
         this.instance.option('onSelectionChanged', function(e) {
             selectedItems = e.items;
@@ -83,7 +84,7 @@ QUnit.module('ClientSideEvents', {
 
     test('hasChanges changes on import or editing of an unbound diagram', function(assert) {
         assert.equal(this.instance.option('hasChanges'), false, 'on init');
-        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(SIMPLE_DIAGRAM);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(Consts.SIMPLE_DIAGRAM);
         assert.equal(this.instance.option('hasChanges'), true, 'on import');
         this.instance.option('hasChanges', false);
         this.instance._diagramInstance.selection.set(['107']);

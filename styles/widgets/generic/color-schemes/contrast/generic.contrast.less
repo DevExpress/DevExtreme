@@ -11,7 +11,7 @@
 * @type color
 */
 @base-bg: #000;
-@base-inverted-bg: #fff - @base-bg;
+@base-inverted-bg: difference(#fff, @base-bg);
 
 @base-border-color: #fff;
 @base-border-radius: 4px;
@@ -34,8 +34,8 @@
 @base-text-color: #fff;
 @base-icon-color: #fff;
 
-@base-inverted-text-color: #fff - @base-text-color;
-@base-inverted-icon-color: #fff - @base-text-color;
+@base-inverted-text-color: difference(#fff, @base-text-color);
+@base-inverted-icon-color: difference(#fff, @base-text-color);
 
 /**
 * @name 30. Link color
@@ -60,6 +60,13 @@
 */
 @base-invalid-faded-border-color: @base-invalid-color;
 
+/**
+* @name 20. Label color
+* @type color
+*/
+@base-label-color: @base-text-color;
+@base-dropdown-shadow-color: @base-shadow-color;
+
 // Validation
 
 @VALIDATION_MESSAGE_COLOR: @base-text-color;
@@ -68,16 +75,6 @@
 @VALIDATION_SUMMARY_COLOR: @base-invalid-color;
 
 @validation-overlay-border-radius: @base-border-radius;
-
-@datagrid-row-hovered-color: @base-text-color;
-
-/**
-* @name 20. Label color
-* @type color
-*/
-@base-label-color: @base-text-color;
-
-@base-dropdown-shadow-color: @base-shadow-color;
 
 // Badges
 
@@ -107,6 +104,7 @@
 */
 @texteditor-bg: @base-bg;
 @texteditor-underlined-bg: transparent;
+@texteditor-color: @base-text-color;
 
 /**
 * @name 15. Filled editor background color
@@ -121,8 +119,6 @@
 @texteditor-focused-border-color: @base-focus-color;
 @texteditor-hover-bg: @base-bg;
 @texteditor-hover-border-color: @base-border-color;
-
-@texteditor-color: @base-text-color;
 
 @texteditor-placeholder-color: @base-text-color;
 
@@ -443,7 +439,7 @@
 @gallery-indicator-focused-bg: @base-inverted-bg;
 
 @gallery-indicator-item-border-color: @base-border-color;
-@gallery-indicator-selected-border-color: #fff - @base-border-color;
+@gallery-indicator-selected-border-color: difference(#fff, @base-border-color);
 
 
 @gallery-navbutton-degradation-bg: @base-inverted-bg;
@@ -476,7 +472,7 @@
 @htmleditor-variable-bg: fade(@base-accent, 15%);
 @htmleditor-resize-frame-border-color: @base-accent;
 @htmleditor-resize-handle-bg: @base-accent;
-@htmleditor-mention-bg: #fff - @base-bg;
+@htmleditor-mention-bg: difference(#fff, @base-bg);
 @htmleditor-mention-color: @base-inverted-text-color;
 
 // List
@@ -675,7 +671,7 @@
 * @name 30. Tag background color
 * @type color
 */
-@tagbox-tag-bg: #fff - @base-bg;
+@tagbox-tag-bg: difference(#fff, @base-bg);
 
 /**
 * @name 40. Tag text color
@@ -703,7 +699,7 @@
 * @name 10. Selected tab background color
 * @type color
 */
-@navbar-tab-selected-bg: #fff - @base-bg;
+@navbar-tab-selected-bg: difference(#fff, @base-bg);
 @navbar-tab-focused-border-color: @base-focus-color;
 
 @navbar-tab-bg: @base-bg;
@@ -822,7 +818,7 @@
 @slider-range-bg: @base-accent;
 @slider-range-border-color: @slider-range-bg;
 @slider-handle-bg: @base-inverted-bg;
-@slider-handle-border-color: #fff - @base-border-color;
+@slider-handle-border-color: difference(#fff, @base-border-color);
 @slider-handle-active-bg: @base-inverted-bg;
 @slider-handle-hover-bg: @slider-range-bg;
 @slider-handle-focused-bg: @slider-handle-hover-bg;
@@ -985,6 +981,7 @@
 * @type color
 */
 @datagrid-row-focused-bg: @base-accent;
+@datagrid-row-hovered-color: @base-text-color;
 
 /**
 * @name 90. Hovered row background color
@@ -1113,183 +1110,9 @@
 
 
 // TreeList
-
-/**
-* @name 10. Text color
-* @type color
-*/
-@treelist-base-color: @base-text-color;
-
-/**
-* @name 60. Background color
-* @type color
-*/
-@treelist-base-background-color: @base-bg;
-
-/**
-* @name 70. Border color
-* @type color
-*/
-@treelist-border-color: @base-border-color;
-@treelist-border: 1px solid @treelist-border-color;
-
-/**
-* @name 20. Header text color
-* @type color
-*/
-@treelist-columnchooser-item-color: @base-text-color;
-@treelist-columnchooser-font-weight: normal;
-
-/**
-* @name 71. Draggable header border color
-* @type color
-*/
-@treelist-drag-header-border-color: @base-border-color;
-@treelist-drag-header-shadow-color: @base-shadow-color;
-@treelist-drag-header-second-shadow-color: @base-shadow-color;
-@treelist-header-drag-bg: @base-bg;
-
-/**
-* @name 80. Selected row background color
-* @type color
-*/
-@treelist-selection-bg: @base-inverted-bg;
-
-/**
-* @name 81. Selected row border color
-* @type color
-*/
-@treelist-row-selected-border-color: @treelist-base-background-color;
-
-/**
-* @name 82. Selected row text color
-* @type color
-*/
-@treelist-row-selected-color: @base-inverted-text-color;
-
-/**
-* @name 83. Focused row text color
-* @type color
-*/
-@treelist-row-focused-color: @base-text-color;
-
-/**
-* @name 84. Focused row background color
-* @type color
-*/
-@treelist-row-focused-bg: @base-accent;
-
-/**
-* @name 90. Hovered row background color
-* @type color
-*/
-@treelist-hover-bg: @base-hover-color;
-
-/**
-* @name 70. Context menu icons color
-* @type color
-*/
-@treelist-menu-icon-color: @base-icon-color;
-
-/**
-* @name 71. Modified data color
-* @type color
-*/
-@treelist-cell-modified-border-color: @base-text-color;
-
-@treelist-row-removed-bg: fade(@base-success, 50%);
-
-/**
-* @name 73. Invalidate data faded color
-* @type color
-*/
-@treelist-row-invalid-faded-border-color: @base-invalid-faded-border-color;
-@treelist-row-invalid-border-color: @base-invalid-color;
-
-/**
-* @name 30. NoData message text color
-* @type color
-*/
-@treelist-nodata-color: @base-text-color;
-
-@treelist-master-detail-cell-bg: @base-bg;
-
-/**
-* @name 150. Highlighted text color
-* @type color
-*/
-@treelist-search-color: @base-inverted-text-color;
-
 @treelist-spin-icon-color: @base-icon-color;
 @treelist-selection-spin-icon-color: @base-inverted-text-color;
-
-/**
-* @name 160. Highlighted text background color
-* @type color
-*/
-@treelist-search-bg: @base-inverted-bg;
-
-/**
-* @name 170. Error row text color
-* @type color
-*/
-@treelist-row-error-color: @base-inverted-text-color;
-
-/**
-* @name 180. Error row background color
-* @type color
-*/
-@treelist-row-error-bg: @base-invalid-color;
-
-/**
-* @name 40. Link color
-* @type color
-*/
-@treelist-link-color: @base-link-color;
-
-/**
-* @name 130. Focused cell border color
-* @type color
-*/
-@treelist-focused-border-color: @base-accent;
-
-/**
-* @name 131. Editor background
-* @type color
-*/
-@treelist-editor-bg: @treelist-base-background-color;
-@treelist-drop-highlight-bg: @base-inverted-bg;
-@treelist-drop-highlight-color: @base-inverted-text-color;
-
-/**
-* @name 140. Column chooser background color
-* @type color
-*/
-@treelist-columnchooser-bg: @base-bg;
-
-/**
-* @name 100. Row alternation background color
-* @type color
-*/
-@treelist-row-alternation-bg: @base-bg;
-@treelist-columnchooser-item-bg: @base-bg;
-
-/**
-* @name 170. Summary item color
-* @type color
-*/
-@treelist-summary-color: @base-text-color;
-@treelist-columnchooser-message-color: @base-text-color;
-
-@treelist-overlay-content-shadow-color: fade(@base-shadow-color, 15%);
-@treelist-columnchooser-shadow-color: fade(@base-shadow-color, 20%);
-
-@treelist-columnchooser-overlay-border-radius: @base-border-radius + 2px;
-
-@treelist-column-separator-bg: darken(@treelist-base-background-color, 13.5%);
-
-@treelist-row-hovered-color: @base-text-color;
-@treelist-text-stub-background-image-path: data-uri('images/widgets/generic/color-schemes/contrast/grid/text-stub.png');
+@treelist-row-alternation-bg: @datagrid-row-alternation-bg;
 
 
 // dxPivotGrid
@@ -1342,7 +1165,7 @@
 @SCHEDULER_APPOINTMENT_BASE_COLOR: @base-accent;
 @SCHEDULER_APPOINTMENT_TEXT_COLOR: @base-text-color;
 @SCHEDULER_DD_APPOINTMENT_HOVER_TEXT_COLOR: @base-inverted-text-color;
-@scheduler-appointment-focus-color: #fff - @base-text-color;
+@scheduler-appointment-focus-color: difference(#fff, @base-text-color);
 @SCHEDULER_APPOINTMENT_START_COLOR: @base-inverted-bg;
 
 @SCHEDULER_WORKSPACE_FOCUSED_CELL_COLOR: lighten(@base-accent, 5%);
@@ -1358,7 +1181,7 @@
 @scheduler-popup-title-bg: @SCHEDULER_WORKSPACE_BACKGROUND_COLOR;
 
 @SCHEDULER_WORKSPACE_ACTIVE_CELL_COLOR: @SCHEDULER_ACCENT_BORDER_COLOR;
-@SCHEDULER_WORKSPACE_HOVERED_CELL_COLOR: #fff - @base-text-color;
+@SCHEDULER_WORKSPACE_HOVERED_CELL_COLOR: difference(#fff, @base-text-color);
 
 @scheduler-group-header-color: @base-text-color;
 
@@ -1522,12 +1345,14 @@
 @tooltip-shadow-color: @base-shadow-color;
 @tooltip-border-radius: @base-border-radius;
 
+// NumberBox
+
 /**
 * @name 10. Active spin buttons color
 * @type color
 */
 @numberbox-spin-active-bg: @base-inverted-bg;
-@numberbox-spin-active-color: #fff - @base-border-color;
+@numberbox-spin-active-color: difference(#fff, @base-border-color);
 
 /**
 * @name 20. Hovered spin buttons border color
@@ -1702,8 +1527,13 @@
 @filemanager-breadcrumbs-item-focus-bg: @base-border-color;
 @filemanager-breadcrumbs-item-focus-color: @base-text-color;
 @filemanager-custom-thumbnail-color: @base-border-color;
-@filemanager-file-item-select-color: @base-inverted-text-color;
-@filemanager-file-item-select-bg: @base-inverted-bg;
+@filemanager-file-item-select-color: @base-bg;
+@filemanager-file-item-select-bg: fade(@base-accent, 80%);
+@filemanager-file-item-select-focus-color: @base-bg;
+@filemanager-file-item-select-focus-bg: fade(@base-accent, 70%);
+@filemanager-file-item-hover-bg: @base-hover-color;
+@filemanager-file-item-focused-bg: @base-accent;
+@filemanager-file-item-focused-border: @base-accent;
 @filemanager-item-focused-color: @base-text-color;
 @filemanager-progressbox-shadow-color: @base-shadow-color;
 
@@ -1718,7 +1548,8 @@
 
 // Gantt
 @gantt-collapsable-row-bg: lighten(@base-bg, 5%);
-@gantt-selection-bg: fade(@treelist-selection-bg, 30%);
+@gantt-selection-bg: fade(@datagrid-selection-bg, 30%);
+@gantt-parent-task-bg: @base-success;
 
 // Splitter
 @splitter-inactive-color: @base-border-color;

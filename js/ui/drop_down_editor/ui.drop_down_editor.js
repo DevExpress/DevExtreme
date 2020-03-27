@@ -1,5 +1,4 @@
 import $ from '../../core/renderer';
-import AsyncTemplateMixin from '../shared/async_template_mixin';
 import eventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
 import registerComponent from '../../core/component_registrator';
@@ -36,14 +35,6 @@ const isIOs = devices.current().platform === 'ios';
 const DropDownEditor = TextBox.inherit({
 
     _supportedKeys: function() {
-        const homeEndHandler = function(e) {
-            if(this.option('opened')) {
-                e.preventDefault();
-                return true;
-            }
-            return false;
-        };
-
         return extend({}, this.callBase(), {
             tab: function(e) {
                 if(!this.option('opened')) {
@@ -94,9 +85,7 @@ const DropDownEditor = TextBox.inherit({
                     this._valueChangeEventHandler(e);
                 }
                 return true;
-            },
-            home: homeEndHandler,
-            end: homeEndHandler
+            }
         });
     },
 
@@ -125,7 +114,6 @@ const DropDownEditor = TextBox.inherit({
             dropDownButtonTemplate: 'dropDownButton',
 
             fieldTemplate: null,
-            contentTemplate: null,
 
             openOnFieldClick: false,
 
@@ -484,6 +472,8 @@ const DropDownEditor = TextBox.inherit({
         this._renderPopupContent();
     },
 
+    _renderPopupContent: noop,
+
     _renderPopup: function() {
         this._popup = this._createComponent(this._$popup, Popup, extend(this._popupConfig(), this._options.cache('dropDownOptions')));
 
@@ -491,10 +481,10 @@ const DropDownEditor = TextBox.inherit({
             'showing': this._popupShowingHandler.bind(this),
             'shown': this._popupShownHandler.bind(this),
             'hiding': this._popupHidingHandler.bind(this),
-            'hidden': this._popupHiddenHandler.bind(this)
+            'hidden': this._popupHiddenHandler.bind(this),
+            'contentReady': this._contentReadyHandler.bind(this)
         });
 
-        this._popup.option('onContentReady', this._contentReadyHandler.bind(this));
         this._contentReadyHandler();
 
         this._setPopupContentId(this._popup.$content());
@@ -516,7 +506,7 @@ const DropDownEditor = TextBox.inherit({
             position: extend(this.option('popupPosition'), {
                 of: this.$element()
             }),
-            showTitle: this.option('showPopupTitle'),
+            showTitle: this.option('dropDownOptions.showTitle'),
             width: 'auto',
             height: 'auto',
             shading: false,
@@ -531,7 +521,8 @@ const DropDownEditor = TextBox.inherit({
             showCloseButton: false,
             toolbarItems: this._getPopupToolbarItems(),
             onPositioned: this._popupPositionedHandler.bind(this),
-            fullScreen: false
+            fullScreen: false,
+            contentTemplate: null
         };
     },
 
@@ -581,27 +572,6 @@ const DropDownEditor = TextBox.inherit({
         }
 
         return this.callBase(positionRequest);
-    },
-
-    _renderPopupContent: function() {
-        const contentTemplate = this._getTemplateByOption('contentTemplate');
-
-        if(!(contentTemplate && this.option('contentTemplate'))) {
-            return;
-        }
-
-        const $popupContent = this._popup.$content();
-        const templateData = {
-            value: this._fieldRenderData(),
-            component: this
-        };
-
-        $popupContent.empty();
-
-        contentTemplate.render({
-            container: getPublicElement($popupContent),
-            model: templateData
-        });
     },
 
     _closeOutsideDropDownHandler: function({ target }) {
@@ -759,6 +729,14 @@ const DropDownEditor = TextBox.inherit({
         this.callBase();
     },
 
+    _setDeprecatedOptions: function() {
+        this.callBase();
+
+        extend(this._deprecatedOptions, {
+            'showPopupTitle': { since: '20.1', alias: 'dropDownOptions.showTitle' },
+        });
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case 'opened':
@@ -778,7 +756,6 @@ const DropDownEditor = TextBox.inherit({
                     this._invalidate();
                 }
                 break;
-            case 'contentTemplate':
             case 'acceptCustomValue':
             case 'openOnFieldClick':
                 this._invalidate();
@@ -789,7 +766,7 @@ const DropDownEditor = TextBox.inherit({
                 break;
             case 'dropDownOptions':
                 this._popupOptionChanged(args);
-                this._options.cache('dropDownOptions', args.value);
+                this._options.cache('dropDownOptions', this.option('dropDownOptions'));
                 break;
             case 'popupPosition':
             case 'deferRendering':
@@ -835,7 +812,7 @@ const DropDownEditor = TextBox.inherit({
     content: function() {
         return this._popup ? this._popup.content() : null;
     }
-}).include(AsyncTemplateMixin);
+});
 
 registerComponent('dxDropDownEditor', DropDownEditor);
 

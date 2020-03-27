@@ -9,6 +9,11 @@ const NAVBAR_ITEM_CLASS = 'dx-nav-item';
 const NAVBAR_ITEM_CONTENT_CLASS = 'dx-nav-item-content';
 
 const NavBar = Tabs.inherit({
+    ctor: function(element, options) {
+        this.callBase(element, options);
+        this._logDeprecatedComponentWarning('20.1', 'dxTabs');
+    },
+
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**

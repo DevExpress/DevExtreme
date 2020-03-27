@@ -19,7 +19,7 @@ const compactMixinUsageReplacement = /@include\s+dx-size-(compact|default);/g;
 
 // replacement for parent selector (https://github.com/sass/sass/issues/1425)
 const parentSelectorRegex = /^(\s*)([.\w\s-]*[\w])&/mg;
-const parentSelectorReplacement = '$1@at-root $2#{&}';
+const parentSelectorReplacement = '$1@at-root #{selector-append("$2", &)}';
 
 let widgetsColorVariables = {};
 
@@ -42,29 +42,71 @@ const replaceColorFunctions = (content) => {
     // change fade($color, 20%) to the color.change($color, $alpha: 0.20), $color can be other function
     // change fadein($color, 20%) to the color.adjust($color, $alpha: 0.20), $color can be other function
 
-    content = content.replace(/(fadein|fade)\(([$\d\w-#]*|[\w]*\(.*\)),\s*(\d+)%\)(;|,|\))/g, (match, func, color, percent, sign) => {
+    content = content.replace(/(fadein|fadeout|fade)\(([$\d\w-#]*|[\w]*\(.*\)),\s*([\d.]+)%?\)(;|,|\)|\s)/g, (match, func, color, percent, sign) => {
         const colorFunction = func === 'fade' ? 'change' : 'adjust';
+        percent = func === 'fadeout' ? -percent : percent;
         return `color.${colorFunction}(${color}, $alpha: ${percent / 100})${sign}`;
     });
+
+    content = content.replace(/(\s)(screen|difference)\(/g, '$1extColor.$2(');
     return content;
 };
 
-gulp.task('fix-bundles', () => {
-    return gulp
-        .src(`${unfixedScssPath}/bundles/*.scss`)
-        // next replaces make @use "../widgets/generic" with ();
+const replaceInterpolatedCalcContent = (content) => {
+    return content.replace(/calc\(([\d]+%) - ((round|\$).*)\);/g, 'calc($1 - #{$2});');
+};
+
+gulp.task('fix-bundles', gulp.parallel(
+    () => gulp
+        .src([
+            `${unfixedScssPath}/bundles/*.scss`,
+            `!${unfixedScssPath}/bundles/dx.common.scss`,
+            `!${unfixedScssPath}/bundles/dx.ios7.default.scss`,
+        ])
         .pipe(replace(/@import \(once\).*/, ''))
         .pipe(replace(/\$base-theme:\s*"(generic|material|ios7)";/, '@use "../widgets/$1" with ('))
         .pipe(replace(/;/g, ','))
         .pipe(replace(/,[\W]*$/g, '\n);\n'))
         .pipe(replace(/\$light/, '$mode'))
-        .pipe(gulp.dest(`${outputPath}/bundles`));
-});
+        .pipe(gulp.dest(`${outputPath}/bundles`)),
+
+    () => gulp
+        .src(`${unfixedScssPath}/bundles/dx.common.scss`)
+        .pipe(replace(/@import \(reference\).*/g, ''))
+        .pipe(replace(/@import \(once\)(.*)/g, '@use $1'))
+        .pipe(replace(/\.scss/g, ''))
+        .pipe(replace(/widgets\/ui/, 'widgets/common/ui'))
+        // .pipe(replace('@use  "../widgets/common/htmlEditor";', '')) // TODO enable htmlEditor
+        .pipe(through.obj((chunk, enc, callback) => {
+            // add 'private' widgets to the bundle
+            const widgets = [
+                'scrollable',
+                'badge',
+                'textEditor',
+                'dropDownEditor',
+                'dateView',
+                'timeView',
+                'dropDownList',
+                'overlay',
+                'dropDownMenu',
+                'radioButton',
+                'colorView',
+                'pager',
+                'menuBase',
+                'recurrenceEditor',
+                'splitter'
+            ];
+            let content = chunk.contents.toString();
+            widgets.forEach(widget => content += `@use "../widgets/common/${widget}";\n`);
+            chunk.contents = new Buffer(content);
+            callback(null, chunk);
+        }))
+        .pipe(gulp.dest(`${outputPath}/bundles`))
+));
 
 gulp.task('fix-base', () => {
-    // the same code for different themes
     return gulp
-        .src(`${unfixedScssPath}/widgets/base/*.scss`)
+        .src([`${unfixedScssPath}/widgets/base/*.scss`, 'build/gulp/scss/snippets/string.scss'])
         // .pipe(replace(/\.dx-font-icon\("/g, '@include dx-font-icon("'))
         // icons
         .pipe(replace('@mixin dx-icon-sizing', '@use "sass:map";\n\n@mixin dx-icon-sizing'))
@@ -75,20 +117,67 @@ gulp.task('fix-base', () => {
         .pipe(replace('f11d",', 'f11d"'))
         .pipe(replace(/each\(\$icons,\s{([\w\W]*)}\);/, '@each $key, $val in $icons {$1}'))
 
+        // dataGrid
+        .pipe(replace('.dx-datagrid-borders', '@use "sass:color";\n@use "./mixins" as *;\n@use "./icons" as *;\n\n.dx-datagrid-borders'))
+
+        // treeList
+        .pipe(replace(/\$treelist-border/, '@use "sass:color";\n@use "./mixins" as *;\n@use "./icons" as *;\n\n$treelist-border'))
+
+        // pivotGrid
+        .pipe(replace(/^\$PIVOTGRID_DRAG_HEADER_BORDER/, '@use "./mixins" as *;\n@use "./icons" as *;\n\n$PIVOTGRID_DRAG_HEADER_BORDER'))
+
+        // scheduler
+        .pipe(replace(/(@mixin |\.)dx-scheduler-group-mixin\((.*?)\),/g, '@include dx-scheduler-group-mixin($2);'))
+        .pipe(replace(/(@mixin |\.)set-size-timeline-horizontal-grouping-mixin\((.*?)\),/g, '@include set-size-timeline-horizontal-grouping-mixin($2);'))
+        .pipe(replace(/(@mixin |\.)set-size-timeline-group-table-mixin\((.*?)\),/g, '@include set-size-timeline-group-table-mixin($2);'))
+        .pipe(replace(/(@mixin |\.)set-size-vertical-group-table-mixin\((.*?)\),/g, '@include set-size-vertical-group-table-mixin($2);'))
+        .pipe(replace(/(@mixin |\.)dx-icon\((.*?)\),/g, '@include dx-icon($2);'))
+        .pipe(replace(/& when (not )?\((.*?)\)/g, '@if $1$2'))
+        .pipe(replace(/(_TOP|_LEFT|100%|absolute|inherit|""|0|_COLOR|none|_BORDER|relative|inline-block|hidden|left),$/gm, '$1;'))
+        .pipe(replace(/^\$SCHEDULER_NAVIGATOR_OFFSET/, '@use "./mixins" as *;\n@use "./icons" as *;\n\n$SCHEDULER_NAVIGATOR_OFFSET'))
+
+        // fileManager, diagram
+        .pipe(replace(/\.(filemanager|diagram)-icon-colored\(d/g, '@include $1-icon-colored(d'))
+        .pipe(replace(/@mixin (filemanager|diagram)-icon-colored/, '@use "sass:string";\n@use "./string" as *;\n\n@mixin $1-icon-colored'))
+        .pipe(replace(/, "gi"/g, ''))
+        .pipe(replace(/(\W)e\(/g, '$1string.unquote('))
+
+        // sortable
+        .pipe(replace('.dx-sortable-placeholder', '@use "sass:color";\n\n.dx-sortable-placeholder'))
+
+        // filterBuilder
+        .pipe(replace(/^.dx-filterbuilder/, '@use "./icons" as *;\n\n.dx-filterbuilder'))
+
         .pipe(replace(parentSelectorRegex, parentSelectorReplacement))
+        .pipe(through.obj((file, enc, callback) => {
+            let content = file.contents.toString();
+            content = replaceColorFunctions(content);
+            content = replaceInterpolatedCalcContent(content);
+            file.contents = new Buffer(content);
+            callback(null, file);
+        }))
         .pipe(rename((path) => {
             path.basename = '_' + path.basename;
         }))
         .pipe(gulp.dest(`${outputPath}/widgets/base`));
 });
 
-gulp.task('fix-common', () => {
-    // for dx.common.css
-    // TODO
+gulp.task(function fixCommon() {
     return gulp
-        .src(`${unfixedScssPath}/widgets/common/*.scss`)
+        .src([`${unfixedScssPath}/widgets/common/*.scss`, `${unfixedScssPath}/widgets/ui.scss`])
         .pipe(rename((path) => {
             path.basename = '_' + path.basename;
+        }))
+        .pipe(replace(/@import \(once\)(.*)/g, ''))
+        .pipe(replace(parentSelectorRegex, parentSelectorReplacement))
+        .pipe(replace(/(\W)e\(/g, '$1string.unquote('))
+        .pipe(through.obj((chunk, enc, callback) => {
+            let content = chunk.contents.toString();
+            content = `@use "../base/mixins" as *;\n// adduse\n${content}`;
+            content = commonSpecificReplacement(content, chunk.path);
+            content = replaceInterpolatedCalcContent(content);
+            chunk.contents = new Buffer(content);
+            callback(null, chunk);
         }))
         .pipe(gulp.dest(`${outputPath}/widgets/common`));
 });
@@ -104,18 +193,74 @@ gulp.task('fix-mixins', () => {
         .pipe(gulp.dest(`${outputPath}/widgets/base`));
 });
 
+const getRealFileName = (sassModuleName) => {
+    if(fs.existsSync(sassModuleName)) return sassModuleName;
+
+    const indexFileName = path.join(sassModuleName, '_index.scss');
+    if(fs.existsSync(indexFileName)) return indexFileName;
+
+    const moduleFileName = '_' + path.basename(sassModuleName) + '.scss';
+    const moduleDirName = path.dirname(sassModuleName);
+    const moduleRealFileName = path.join(moduleDirName, moduleFileName);
+    if(fs.existsSync(moduleRealFileName)) return moduleRealFileName;
+
+    throw new Error(`Module ${sassModuleName} not found`);
+};
+
+const addImportedVariables = (r, folder) => {
+    if(!r.withVars || r.withVars.length === 0) return '';
+
+    let variables = '';
+    let withPart = '';
+    let definitions = '';
+    r.withVars.forEach((variable) => {
+        variables += `    $${variable}: $${variable},\n`;
+        definitions += `$${variable}: null !default;\n`;
+    });
+    withPart = ` with (\n${variables})`;
+
+    const targetFileName = getRealFileName(path.join(folder, r.import));
+    let content = fs.readFileSync(targetFileName).toString();
+    if(content.indexOf(definitions) !== 0) {
+        content = definitions + content;
+    }
+    fs.writeFileSync(targetFileName, content);
+    return withPart;
+};
+
 const specificReplacement = (content, folder, file) => {
     const widget = path.basename(folder);
-    const replacementTable = require('./replacements');
+    const replacementTable = require('./theme-replacements');
 
     if(replacementTable[widget]) {
         replacementTable[widget].forEach(r => {
             if(r.regex && file === 'index') {
                 content = content.replace(r.regex, r.replacement);
             } else if(r.import && r.type === file) {
-                content = content.replace(/\/\/\sadduse/, `// adduse\n@use "${r.import}" as *;`);
+                const withPart = addImportedVariables(r, folder);
+                const alias = r.alias || '*';
+                content = content.replace(/\/\/\sadduse/, `@use "${r.import}" as ${alias}${withPart};\n// adduse`);
             }
 
+        });
+    }
+
+    return content;
+};
+
+const commonSpecificReplacement = (content, fileName) => {
+    const widget = path.basename(fileName).replace(/(.scss|_)/g, '');
+    const replacementTable = require('./common-replacements');
+
+    if(replacementTable[widget]) {
+        replacementTable[widget].forEach(r => {
+            if(r.regex) {
+                content = content.replace(r.regex, r.replacement);
+            } else if(r.import) {
+                // const withPart = addImportedVariables(r, folder); // it seems we do not need it in common
+                const alias = r.alias || '*';
+                content = content.replace(/\/\/\sadduse/, `@use "${r.import}" as ${alias};\n// adduse`); // TODO // adduse at the end
+            }
         });
     }
 
@@ -149,6 +294,7 @@ gulp.task('create-widgets', () => {
             indexContent += content.replace(compactMixinReplacementIndex, '');
             indexContent = specificReplacement(indexContent, folder, 'index');
             indexContent = replaceColorFunctions(indexContent);
+            indexContent = replaceInterpolatedCalcContent(indexContent);
             indexContent = indexContent.replace(parentSelectorRegex, parentSelectorReplacement);
             chunk.contents = new Buffer(indexContent);
 
@@ -200,10 +346,10 @@ const generateDefaultVariablesBlock = (variables) => {
     return content;
 };
 
-const createBaseWidgetFolder = (theme) => {
-    const baseWidgetPath = path.join(repositoryRoot, outputPath, 'widgets', theme);
-    if(!fs.existsSync(baseWidgetPath)) fs.mkdirSync(baseWidgetPath);
-    return baseWidgetPath;
+const createThemeFolder = (theme) => {
+    const themePath = path.join(repositoryRoot, outputPath, 'widgets', theme);
+    if(!fs.existsSync(themePath)) fs.mkdirSync(themePath);
+    return themePath;
 };
 
 const makeIndent = (content) => {
@@ -241,6 +387,8 @@ const fillWidgetColors = (theme) => {
     });
 };
 
+const makeVariableDefinitionDefault = (content) => content.replace(/(\$.*?)( !default)*;$/gm, '$1 !default;');
+
 const collectWidgetColorVariables = (content, schemeName) => {
     const widgetContentRegex = /\/\/\s?(?!TODO)(dx)?(\w.*)([\w\W]*?)(\n\/\/|$)/g;
     const aliases = {
@@ -257,7 +405,8 @@ const collectWidgetColorVariables = (content, schemeName) => {
         'success button (buttongroup)': 'buttonGroup',
         'checkbox': 'checkBox',
         'fileuploader': 'fileUploader',
-        'selectbox': 'selectBox'
+        'selectbox': 'selectBox',
+        'datagrid': 'gridBase'
     };
 
     let regResult;
@@ -271,7 +420,7 @@ const collectWidgetColorVariables = (content, schemeName) => {
 
         widgetsColorVariables[widget] = widgetsColorVariables[widget] || {};
         widgetsColorVariables[widget][schemeName] = widgetsColorVariables[widget][schemeName] || '';
-        widgetsColorVariables[widget][schemeName] += widgetContent;
+        widgetsColorVariables[widget][schemeName] += makeVariableDefinitionDefault(widgetContent);
     }
 };
 
@@ -280,20 +429,38 @@ const cleanWidgetColorVariables = () => {
 };
 
 gulp.task('create-base-widget-generic-colors', (callback) => {
-    const baseWidgetPath = createBaseWidgetFolder('generic');
+    const themePath = createThemeFolder('generic');
 
     // _colors
 
     // read all base variables (to the first widget-specific comment)
     const sourcePath = path.join(repositoryRoot, unfixedScssPath, 'widgets', 'generic', 'color-schemes');
-    const genericLightPath = path.join(sourcePath, 'light', 'generic.light.scss');
+    const genericCarminePath = path.join(sourcePath, 'carmine', 'generic.carmine.scss');
     const genericLightIconsPath = path.join(sourcePath, 'light', 'generic.light.icons.scss');
     const themeIconsContent = fs.readFileSync(genericLightIconsPath).toString();
-    const genericContent = fs.readFileSync(genericLightPath).toString();
+    const genericContent = fs.readFileSync(genericCarminePath).toString();
     const genericBaseContent = getBaseContent(genericContent) + '\n' + themeIconsContent;
     const genericBaseVariables = getVariableNames(genericBaseContent);
 
-    let colorsContent = '@use "sass:color";\n$color: null !default;\n\n';
+    // additional variables
+    Array.prototype.push.apply(genericBaseVariables, [
+        // contrast
+        '$base-default',
+        '$base-info',
+        // darkmoon
+        '$screen-text-color',
+        '$base-grid-selected-border-color',
+        // darkviolet
+        '$base-accent-highlight-color',
+        '$base-row-alternation-background',
+        '$base-selected-border',
+        // softblue
+        '$base-webwidget-hover-background',
+        '$base-grid-selection-background',
+        '$base-grid-selectedrow-border-color'
+    ]);
+
+    let colorsContent = '@use "sass:color";\n@use "./color" as extColor;\n$color: null !default;\n\n';
     colorsContent += generateDefaultVariablesBlock(genericBaseVariables);
     colorsContent += '\n';
 
@@ -304,12 +471,14 @@ gulp.task('create-base-widget-generic-colors', (callback) => {
             const themeIconsContent = fs.readFileSync(path.join(themeDir, `generic.${file}.icons.scss`)).toString();
             const baseThemeContent = getBaseContent(themeContent);
             colorsContent += `@if $color == "${file}" {\n${makeIndent(baseThemeContent + themeIconsContent)}\n}\n\n`;
+            colorsContent = makeVariableDefinitionDefault(colorsContent);
             colorsContent = replaceColorFunctions(colorsContent);
 
             collectWidgetColorVariables(themeContent, file);
         });
 
-        fs.writeFileSync(path.join(baseWidgetPath, '_colors.scss'), colorsContent);
+        fs.writeFileSync(path.join(themePath, '_colors.scss'), colorsContent);
+        fs.copyFileSync(path.join(__dirname, 'snippets', 'color.scss'), path.join(themePath, 'color.scss'));
         fillWidgetColors('generic');
         cleanWidgetColorVariables();
         callback();
@@ -317,7 +486,7 @@ gulp.task('create-base-widget-generic-colors', (callback) => {
 });
 
 gulp.task('create-base-widget-material-colors', (callback) => {
-    const baseWidgetPath = createBaseWidgetFolder('material');
+    const themePath = createThemeFolder('material');
 
     // _colors
 
@@ -342,18 +511,22 @@ gulp.task('create-base-widget-material-colors', (callback) => {
             const themeDir = path.join(sourcePath, file.name);
             const themeContent = fs.readFileSync(path.join(themeDir, `material.${file.name}.scss`)).toString();
             colorsContent += `@if $color == "${file.name}" {\n${makeIndent(themeContent)}\n}\n\n`;
+            colorsContent = makeVariableDefinitionDefault(colorsContent);
         });
 
         ['light', 'dark'].forEach(mode => {
-            const themeContent = fs.readFileSync(path.join(sourcePath, `material.${mode}.scss`)).toString();
+            let themeContent = fs.readFileSync(path.join(sourcePath, `material.${mode}.scss`)).toString();
             const themeIconsContent = fs.readFileSync(path.join(sourcePath, `material.${mode}.icons.scss`)).toString();
+            themeContent = themeContent.replace(/#F44336;/, '#F44336 !default; /* TODO move outside @if */');
             colorsContent += `@if $mode == "${mode}" {\n${makeIndent([getBaseContent(themeContent), themeIconsContent].join('\n'))}\n}\n\n`;
             colorsContent = replaceColorFunctions(colorsContent);
+            colorsContent = makeVariableDefinitionDefault(colorsContent);
 
             collectWidgetColorVariables(themeContent, mode);
         });
 
-        fs.writeFileSync(path.join(baseWidgetPath, '_colors.scss'), colorsContent);
+        fs.writeFileSync(path.join(themePath, '_colors.scss'), colorsContent);
+        fs.copyFileSync(path.join(__dirname, 'snippets', 'color.scss'), path.join(themePath, 'color.scss'));
         fillWidgetColors('material');
         cleanWidgetColorVariables();
         callback();
@@ -362,7 +535,7 @@ gulp.task('create-base-widget-material-colors', (callback) => {
 
 gulp.task('create-base-widget-sizes', (callback) => {
     ['generic', 'material'].forEach(theme => {
-        const baseWidgetPath = createBaseWidgetFolder(theme);
+        const baseWidgetPath = createThemeFolder(theme);
         const sourcePath = path.join(repositoryRoot, unfixedScssPath, 'widgets', theme, 'size-schemes');
         const sharedBasePath = path.join(sourcePath, 'shared/base.scss');
         const sharedMobilePath = path.join(sourcePath, 'shared/mobile.scss');

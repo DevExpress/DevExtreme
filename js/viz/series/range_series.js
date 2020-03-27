@@ -111,7 +111,7 @@ const baseRangeSeries = {
                 tmpCoord = coord >= coords[0] && coord <= coords[1] ? p[oppositeCoordName] : undefined;
             }
 
-            if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
+            if(this._checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
                 oppositeCoord = tmpCoord;
                 break;
             }

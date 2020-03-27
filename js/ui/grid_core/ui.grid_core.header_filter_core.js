@@ -257,16 +257,22 @@ exports.HeaderFilterView = modules.View.inherit({
             }
         };
 
+        function onOptionChanged(e) {
+            // T835492, T833015
+            if(e.fullName === 'searchValue' && !options.isFilterBuilder && that.option('headerFilter.hideSelectAllOnSearch') !== false) {
+                if(options.type === 'tree') {
+                    e.component.option('showCheckBoxesMode', e.value ? 'normal' : 'selectAll');
+                } else {
+                    e.component.option('selectionMode', e.value ? 'multiple' : 'all');
+                }
+            }
+        }
+
         if(options.type === 'tree') {
             that._listContainer = that._createComponent($('<div>').appendTo($content),
                 TreeView, extend(widgetOptions, {
                     showCheckBoxesMode: options.isFilterBuilder ? 'normal' : 'selectAll',
-                    onOptionChanged: function(e) {
-                        // T835492, T833015
-                        if(e.fullName === 'searchValue' && !options.isFilterBuilder) {
-                            e.component.option('showCheckBoxesMode', e.value ? 'normal' : 'selectAll');
-                        }
-                    },
+                    onOptionChanged: onOptionChanged,
                     keyExpr: 'id'
                 }));
         } else {
@@ -276,12 +282,7 @@ exports.HeaderFilterView = modules.View.inherit({
                     pageLoadMode: 'scrollBottom',
                     showSelectionControls: true,
                     selectionMode: options.isFilterBuilder ? 'multiple' : 'all',
-                    onOptionChanged: function(e) {
-                        // T835492, T833015
-                        if(e.fullName === 'searchValue' && !options.isFilterBuilder) {
-                            e.component.option('selectionMode', e.value ? 'multiple' : 'all');
-                        }
-                    },
+                    onOptionChanged: onOptionChanged,
                     onSelectionChanged: function(e) {
                         const items = e.component.option('items');
                         const selectedItems = e.component.option('selectedItems');

@@ -6,6 +6,7 @@ const WIDGET_CLASS = 'dx-treeview';
 
 const NODE_CLASS = `${WIDGET_CLASS}-node`;
 const ITEM_CLASS = `${WIDGET_CLASS}-item`;
+const ITEM_CONTENT_CLASS = `${WIDGET_CLASS}-item-content`;
 const TOGGLE_ITEM_VISIBILITY_CLASS = `${WIDGET_CLASS}-toggle-item-visibility`;
 const NODE_LOAD_INDICATOR_CLASS = `${NODE_CLASS}-loadindicator`;
 
@@ -64,9 +65,12 @@ class TreeViewTestWrapper {
         });
     }
 
-    checkSelectedItems(selectedIndexes, items) {
+    checkSelectedItemsWithTreeStructure(selectedIndexes, items) {
         const itemsArray = this.convertTreeToFlatList(items);
+        this.checkSelectedItemsWithPlainStructure(selectedIndexes, itemsArray);
+    }
 
+    checkSelectedItemsWithPlainStructure(selectedIndexes, itemsArray) {
         itemsArray.forEach((_, index) => {
             if(selectedIndexes.indexOf(index) === -1) {
                 assert.equal(!!itemsArray[index].selected, false, `item ${index} is not selected`);
@@ -76,18 +80,54 @@ class TreeViewTestWrapper {
         });
     }
 
+    checkSelection(expectedKeys, expectedNodes, additionalErrorMessage) {
+        const items = this.instance._dataAdapter.getData().map(node => node.internalFields.publicNode);
+        const keysArray = items.map(item => item.key);
+        const selectedIndexes = expectedKeys.map(key => keysArray.indexOf(key));
+        this.checkSelectedItemsWithPlainStructure(selectedIndexes, items);
+
+        this.checkSelectedKeys(expectedKeys, additionalErrorMessage);
+        this.checkSelectedNodes(expectedNodes, additionalErrorMessage);
+    }
+
     checkSelected(expectedSelectedIndexes, items) {
-        this.checkSelectedItems(expectedSelectedIndexes, items);
+        this.checkSelectedItemsWithTreeStructure(expectedSelectedIndexes, items);
         this.checkSelectedNodes(expectedSelectedIndexes);
     }
 
     checkSelectedKeys(expectedSelectedKeys, additionalErrorMessage) {
-        const actualSelectedKeys = this.instance.getSelectedNodesKeys();
-        assert.deepEqual(actualSelectedKeys.sort(), expectedSelectedKeys.sort(), 'getSelectedNodesKeys method ' + additionalErrorMessage);
+        const actualKeys = this.instance.getSelectedNodeKeys();
+        assert.deepEqual(actualKeys.sort(), expectedSelectedKeys.sort(), 'getSelectedNodeKeys method ' + additionalErrorMessage);
+
+        const keysByAdapter = this.instance._dataAdapter.getSelectedNodesKeys();
+        assert.deepEqual(keysByAdapter.sort(), expectedSelectedKeys.sort(), 'selectedKeys from dataAdapter' + additionalErrorMessage);
+
+        const selectedKeysByNodes = this.instance.getSelectedNodes().map(node => { return node.key; });
+        assert.deepEqual(selectedKeysByNodes.sort(), expectedSelectedKeys.sort(), 'getSelectedNodes method ' + additionalErrorMessage);
     }
 
     checkEventLog(expectedEventLog, additionalErrorMessage) {
         assert.deepEqual(this.eventLog, expectedEventLog, 'eventLog ' + additionalErrorMessage);
+    }
+
+    checkNodeIsInVisibleArea(itemKey) {
+        const $treeView = this.getElement();
+        const $item = $treeView.find(`[data-item-id="${itemKey}"] .${ITEM_CLASS}`).eq(0);
+        $item.find(`.${ITEM_CONTENT_CLASS}`).wrapInner('<span/>');
+
+        const treeViewRect = $treeView.get(0).getBoundingClientRect();
+        const itemTextRect = $item.find('span').get(0).getBoundingClientRect();
+
+        const scrollDirection = this.instance.option('scrollDirection');
+        if(scrollDirection === 'vertical' || scrollDirection === 'both') {
+            assert.equal(itemTextRect.top >= treeViewRect.top && itemTextRect.top <= treeViewRect.bottom, true, ` item ${itemKey} top location ${itemTextRect.top} must be between ${treeViewRect.top} and ${treeViewRect.bottom}`);
+            assert.equal(itemTextRect.bottom >= treeViewRect.top && itemTextRect.bottom <= treeViewRect.bottom, true, ` item ${itemKey} bottom location ${itemTextRect.bottom} must be between ${treeViewRect.top} and ${treeViewRect.bottom}`);
+        }
+
+        if(scrollDirection === 'horizontal' || scrollDirection === 'both') {
+            assert.equal(itemTextRect.left >= treeViewRect.left && itemTextRect.left <= treeViewRect.right, true, ` horizontal item ${itemKey} left location ${itemTextRect.left} must be between ${treeViewRect.left} and ${treeViewRect.right}`);
+            assert.equal(itemTextRect.right >= treeViewRect.left && itemTextRect.right <= treeViewRect.right, true, ` horizontal item ${itemKey} right location ${itemTextRect.right} must be between ${treeViewRect.left} and ${treeViewRect.right}`);
+        }
     }
 
     clearEventLog() {

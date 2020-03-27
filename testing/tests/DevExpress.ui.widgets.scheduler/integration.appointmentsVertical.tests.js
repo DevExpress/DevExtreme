@@ -150,6 +150,40 @@ QUnit.test('Appointment with resources should have a right height and position i
     assert.equal($appointment.outerHeight(), cellHeight * 4, 'Appointment has a right height');
 });
 
+QUnit.test('Breaking an appointment into parts depends on the timezone', function(assert) {
+    const scheduler = createInstance({
+        dataSource: [{
+            startDate: '2017-05-24T20:15:00+01:00',
+            endDate: '2017-05-25T01:30:00+01:00',
+            text: 'Test task'
+        }],
+        timeZone: 'America/Los_Angeles',
+        currentDate: new Date(2017, 4, 25),
+        views: ['week'],
+        currentView: 'week',
+        cellDuration: 60
+    });
+
+    assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appointment has 1 part');
+});
+
+QUnit.test('Breaking an appointment into parts should work correctly when endDate is a midnight', function(assert) {
+    const scheduler = createInstance({
+        dataSource: [{
+            startDate: '2017-05-24T20:15:00+01:00',
+            endDate: '2017-05-25T08:00:00+01:00',
+            text: 'Test task'
+        }],
+        timeZone: 'America/Los_Angeles',
+        currentDate: new Date(2017, 4, 25),
+        views: ['week'],
+        currentView: 'week',
+        cellDuration: 60
+    });
+
+    assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appointment has 1 part');
+});
+
 QUnit.test('The part of the appointment that ends after midnight should be shown on Week view', function(assert) {
     this.createInstance({
         dataSource: [{
@@ -192,8 +226,49 @@ QUnit.test('The part of the appointment that ends after midnight should have rig
     assert.equal($appointment.outerHeight(), cellHeight, 'appt part has right height');
 });
 
+QUnit.test('The parts of recurrence appointment before and after midnight should be shown on Week view', function(assert) {
+    const scheduler = createInstance({
+        dataSource: [{
+            startDate: new Date(2015, 4, 27, 23, 0),
+            endDate: new Date(2015, 4, 28, 1, 15),
+            text: 'Test task',
+            recurrenceRule: 'FREQ=DAILY;INTERVAL=2'
+        }],
+        currentDate: new Date(2015, 4, 27),
+        views: ['week'],
+        currentView: 'week',
+        cellDuration: 60
+    });
+
+    const cellHeight = scheduler.workSpace.getCellHeight();
+
+    assert.equal(scheduler.appointments.getAppointmentCount(), 4, 'Appt parts are shown');
+    assert.equal(scheduler.appointments.getAppointmentPosition(2).top, cellHeight * 23, 'Second appointment part before midnight has a correct top position');
+    assert.equal(scheduler.appointments.getAppointmentPosition(3).top, 0, 'Second appointment part after midnight has a right top position');
+});
+
+QUnit.test('The part of recurrence appointment before midnight should be shown on Day view', function(assert) {
+    const scheduler = createInstance({
+        dataSource: [{
+            startDate: new Date(2015, 4, 25, 23, 0),
+            endDate: new Date(2015, 4, 26, 1, 15),
+            text: 'Test task',
+            recurrenceRule: 'FREQ=DAILY;INTERVAL=2'
+        }],
+        currentDate: new Date(2015, 4, 27),
+        views: ['day'],
+        currentView: 'day',
+        cellDuration: 60
+    });
+
+    const cellHeight = scheduler.workSpace.getCellHeight();
+
+    assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appt part is shown');
+    assert.equal(scheduler.appointments.getAppointmentPosition().top, cellHeight * 23, 'Appointment has a correct top position');
+});
+
 QUnit.test('The part of recurrence appointment after midnight should be shown on Day view', function(assert) {
-    this.createInstance({
+    const scheduler = createInstance({
         dataSource: [{
             startDate: new Date(2015, 4, 25, 23, 0),
             endDate: new Date(2015, 4, 26, 1, 15),
@@ -206,10 +281,13 @@ QUnit.test('The part of recurrence appointment after midnight should be shown on
         cellDuration: 60
     });
 
-    const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS);
+    assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appt part is shown on 2d day');
+    assert.equal(scheduler.appointments.getAppointmentPosition().top, 0, 'Appointment has a correct top position');
 
-    assert.equal($appointment.length, 1, 'Appt part is shown on 2d day');
-    assert.equal($appointment.eq(0).position().top, 0, 'Appointment has a right top position');
+    scheduler.instance.option('currentDate', new Date(2015, 4, 28));
+
+    assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appt part is shown on 2d day');
+    assert.equal(scheduler.appointments.getAppointmentPosition().top, 0, 'Appointment has a correct top position');
 });
 
 QUnit.test('The part of recurrence appointment after midnight should have right height on the first day of week', function(assert) {

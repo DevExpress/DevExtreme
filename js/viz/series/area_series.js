@@ -216,7 +216,9 @@ exports.chart['splinearea'] = _extend({}, areaSeries, {
 
     getSeriesPairCoord: lineSeries.chart['spline'].getSeriesPairCoord,
 
-    getNearestPointsByCoord: lineSeries.chart['spline'].getNearestPointsByCoord,
+    _getNearestPoints: lineSeries.chart['spline']._getNearestPoints,
+
+    _getBezierPoints: lineSeries.chart['spline']._getBezierPoints,
 
     obtainCubicBezierTCoef: lineSeries.chart['spline'].obtainCubicBezierTCoef
 });

@@ -1,4 +1,5 @@
 module.exports = {
+    rebase: false,
     format: {
         breaks: {
             afterAtRule: true,
