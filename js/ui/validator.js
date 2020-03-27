@@ -273,7 +273,9 @@ const Validator = DOMComponent.inherit({
     },
 
     _applyValidationResult: function(result, adapter) {
-        const validatedAction = this._createActionByOption('onValidated');
+        const validatedAction = this._createActionByOption('onValidated', {
+            excludeValidators: ['readOnly'],
+        });
         result.validator = this;
 
         adapter.applyValidationResults && adapter.applyValidationResults(result);
