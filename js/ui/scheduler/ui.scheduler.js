@@ -1995,7 +1995,7 @@ const Scheduler = Widget.inherit({
             appointmentStartDate.getMilliseconds());
 
         const timezoneDiff = targetStartDate.getTimezoneOffset() - exceptionStartDate.getTimezoneOffset();
-        exceptionStartDate = new Date(exceptionStartDate.getTime() - timezoneDiff * toMs('minute'));
+        exceptionStartDate = new Date(exceptionStartDate.getTime() + timezoneDiff * toMs('minute'));
 
         return dateSerialization.serializeDate(exceptionStartDate, UTC_FULL_DATE_FORMAT);
     },
@@ -2329,22 +2329,26 @@ const Scheduler = Widget.inherit({
         return recurrenceException;
     },
 
-    _convertRecurrenceException: function(exception, exceptionByStartDate, startDateTimeZone) {
-        // const format = recurrenceUtils.getAsciiStringFormat(exception);
+    _convertRecurrenceExceptionByTimezone: function(exception, exceptionByStartDate, startDateTimeZone) {
+        let timezoneOffset = 0;
 
+        if(startDateTimeZone) {
+            timezoneOffset = utils.calculateTimezoneByValue(startDateTimeZone, exceptionByStartDate) - utils.calculateTimezoneByValue(startDateTimeZone, exception);
+        } else if(this.option('timeZone')) {
+            timezoneOffset = utils.calculateTimezoneByValue(this.option('timeZone'), exceptionByStartDate) - utils.calculateTimezoneByValue(this.option('timeZone'), exception);
+        } else {
+            timezoneOffset = (exception.getTimezoneOffset() - exceptionByStartDate.getTimezoneOffset()) / 60;
+        }
+
+        return new Date(exception.getTime() + (timezoneOffset) * toMs('hour'));
+    },
+
+    _convertRecurrenceException: function(exception, exceptionByStartDate, startDateTimeZone) {
         exception = exception.replace(/\s/g, '');
         exception = dateSerialization.deserializeDate(exception);
         exception = this.fire('convertDateByTimezone', exception, startDateTimeZone);
 
-        // exception = utils.getCorrectedDateByDaylightOffsets(exceptionByStartDate, exception, exception, this.option('timeZone'), startDateTimeZone);
-
-        const appointmentTimezoneDiff = startDateTimeZone ? utils.calculateTimezoneByValue(startDateTimeZone, exceptionByStartDate) - utils.calculateTimezoneByValue(startDateTimeZone, exception) : 0;
-        const commonTimezoneDiff = this.option('timeZone') ? utils.calculateTimezoneByValue(this.option('timeZone'), exceptionByStartDate) - utils.calculateTimezoneByValue(this.option('timeZone'), exception) : 0;
-
-        exception = new Date(exception.getTime() + (commonTimezoneDiff + appointmentTimezoneDiff) * toMs('hour'));
-        // if(format === 'date') {
-        // exception.setHours(exceptionByStartDate.getHours());
-        // }
+        exception = this._convertRecurrenceExceptionByTimezone(exception, exceptionByStartDate, startDateTimeZone);
         exception = dateSerialization.serializeDate(exception, FULL_DATE_FORMAT);
         return exception;
     },

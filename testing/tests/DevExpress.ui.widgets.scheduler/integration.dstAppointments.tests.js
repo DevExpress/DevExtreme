@@ -524,6 +524,24 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
         assert.roughEqual(scheduler.appointments.getAppointment(0).outerWidth(), scheduler.workSpace.getCellWidth() * duration, 2.001, 'Appt width is correct after the day of the time ajusting');
     });
 
+    QUnit.test('Appointment should rendered correctly if end date appointment coincided translation oт STD', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: [{
+                text: 'November 4',
+                startDate: new Date(2018, 10, 4, 18, 0),
+                endDate: new Date(2018, 10, 5, 0, 0),
+            }],
+            views: ['month'],
+            currentView: 'month',
+            currentDate: new Date(2018, 10, 1),
+            firstDayOfWeek: 0,
+            cellDuration: 60,
+            height: 800
+        });
+
+        assert.roughEqual(scheduler.appointments.getAppointment(0).outerWidth(), scheduler.workSpace.getCellWidth(), 2.001, 'Appointment width is correct after translation oт STD');
+    });
+
     QUnit.test('Recurrence exception should not be rendered if exception goes after adjusting AEST-> AEDT (T619455)', function(assert) {
         const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-39600000);
         try {
@@ -550,24 +568,6 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
         } finally {
             tzOffsetStub.restore();
         }
-    });
-
-    QUnit.test('Appointment should rendered correctly if end date appointment coincided translation oт STD', function(assert) {
-        const scheduler = createWrapper({
-            dataSource: [{
-                text: 'November 4',
-                startDate: new Date(2018, 10, 4, 18, 0),
-                endDate: new Date(2018, 10, 5, 0, 0),
-            }],
-            views: ['month'],
-            currentView: 'month',
-            currentDate: new Date(2018, 10, 1),
-            firstDayOfWeek: 0,
-            cellDuration: 60,
-            height: 800
-        });
-
-        assert.roughEqual(scheduler.appointments.getAppointment(0).outerWidth(), scheduler.workSpace.getCellWidth(), 2.001, 'Appointment width is correct after translation oт STD');
     });
 
     QUnit.test('Recurrence exception should be adjusted by scheduler timezone after deleting of the single appt', function(assert) {
