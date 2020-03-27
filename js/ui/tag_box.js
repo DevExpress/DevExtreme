@@ -1334,7 +1334,6 @@ const TagBox = SelectBox.inherit({
         this.callBase();
         delete this._defaultTagTemplate;
         delete this._tagTemplate;
-        delete this._isCacheDisabled;
     },
 
     _removeDuplicates: function(from, what) {
