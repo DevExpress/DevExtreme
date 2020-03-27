@@ -298,7 +298,7 @@ function parseResult(data, total, descriptions, result) {
         } else {
             if(item) {
                 rowPath[rowLevel] = item.key + '';
-                rowItem = getItem(item, 'row', rowPath, rowLevel);
+                rowItem = getItem(item, 'row', rowPath, rowLevel, descriptions.rows[rowPath.length - 1]);
                 columnItem = columnHash[columnPath.slice(0, columnLevel + 1).join('/')];
             } else {
                 result.rows.push({});
