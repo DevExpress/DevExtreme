@@ -3,7 +3,7 @@ name: QUnit IE
 on: [push, pull_request]
 
 jobs:
-  build:
+  test:
     strategy:
       matrix:
         CONSTEL: [ export, misc, ui, ui.editors, ui.grid, ui.scheduler, viz ]
@@ -12,15 +12,27 @@ jobs:
     timeout-minutes: 60
 
     steps:
-    - uses: actions/checkout@v1
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Restore npm cache
+      uses: actions/cache@v1
+      with:
+        path: .\node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node
+
     - name: Run npm install
-      run: npm install
-    - name: Transpile tests
-      run: node .\node_modules\gulp\bin\gulp.js transpile-tests
-    - name: Run npm run build
+      run: npm install --no-package-lock --no-audit --no-fund
+
+    - name: Build
       env:
-        DEVEXTREME_TEST_CI: true
-      run: npm run build
+        DEVEXTREME_TEST_CI: "true"
+        DOTNET_CLI_TELEMETRY_OPTOUT: "true"
+        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
+      run: npx npm-run-all -p build transpile-tests
+
     - name: Run QUnit tests
       env:
         CONSTEL: ${{ matrix.CONSTEL }}

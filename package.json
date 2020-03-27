@@ -141,6 +141,7 @@
     "build-themes": "gulp style-compiler-themes",
     "build-themebuilder-assets": "gulp style-compiler-tb-assets",
     "dev": "gulp dev",
+    "transpile-tests": "gulp transpile-tests",
     "test-env": "node testing/launch",
     "update-ts": "dx-tools update-ts-bundle --output=./ts/dx.all.d.ts",
     "internal-tool": "dx-tools",
