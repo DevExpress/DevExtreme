@@ -386,7 +386,7 @@ QUnit.module('Editors Standard Adapter', {
         assert.notOk(editor.option('validationError'), 'validationError === null');
     });
 
-    QUnit.test('Editor(read-only) - validating and validated events of a validator should be raised', function(assert) {
+    QUnit.test('Editor(read-only) - validating and validated events of a validator should be raised (T873862)', function(assert) {
         // arrange
         this.fixture.createTextEditor({
             value: 'test',
