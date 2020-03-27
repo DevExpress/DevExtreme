@@ -385,5 +385,38 @@ QUnit.module('Editors Standard Adapter', {
         editor.option('validationErrors', null);
         assert.notOk(editor.option('validationError'), 'validationError === null');
     });
+
+    QUnit.test('Editor(read-only) - validating and validated events of a validator should be raised (T873862)', function(assert) {
+        // arrange
+        this.fixture.createTextEditor({
+            value: 'test',
+            readOnly: true
+        });
+        const validatingHandler = sinon.stub();
+        const validatedHandler = sinon.stub();
+        const validator = this.fixture.createValidator({
+            adapter: null,
+            validationRules: [
+                {
+                    type: 'async',
+                    validationCallback: function() {
+                        return new Deferred().resolve().promise();
+                    }
+                }
+            ]
+        });
+        validator.on('validating', validatingHandler);
+        validator.on('validated', validatedHandler);
+        const done = assert.async();
+
+        const result = validator.validate();
+        result.complete.then(() => {
+            // assert
+            assert.ok(validatingHandler.calledOnce, 'validating was called');
+            assert.ok(validatedHandler.calledOnce, 'validated was called');
+
+            done();
+        });
+    });
 });
 
