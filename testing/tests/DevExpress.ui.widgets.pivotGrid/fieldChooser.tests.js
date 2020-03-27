@@ -2179,80 +2179,6 @@ QUnit.module('Base Field chooser', {
 
 });
 
-// T852897
-QUnit.test('Custom texts.emptyValue in header filter', function(assert) {
-    const that = this;
-    let listItems;
-    let fieldElements;
-    const fields = [
-        { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true }
-    ];
-    const dataSourceOptions = {
-        columnFields: fields,
-        fieldValues: [
-            [{ value: 1, text: '1' }, { value: 2, text: '' }]
-        ]
-    };
-
-    this.setup(dataSourceOptions, {
-        headerFilter: {
-            texts: {
-                emptyValue: 'Test'
-            }
-        }
-    });
-
-    $.each(fields, function(_, field) {
-        that.$container.append(that.fieldChooser.renderField(field));
-    });
-
-    fieldElements = that.$container.find('.dx-area-field');
-
-    // act
-    fieldElements.first().find('.dx-header-filter').trigger('dxclick');
-    this.clock.tick(500);
-
-    // assert
-    listItems = $('.dx-list').dxList('instance').option('items');
-
-    assert.equal(listItems.length, 2, 'header filter items');
-    assert.equal(listItems[1].text, 'Test');
-});
-
-// T852897
-QUnit.test('Default texts.emptyValue in header filter', function(assert) {
-    const that = this;
-    let listItems;
-    let fieldElements;
-    const fields = [
-        { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true }
-    ];
-    const dataSourceOptions = {
-        columnFields: fields,
-        fieldValues: [
-            [{ value: 1, text: '' }, { value: 2, text: '2' }]
-        ]
-    };
-
-    this.setup(dataSourceOptions);
-
-    $.each(fields, function(_, field) {
-        that.$container.append(that.fieldChooser.renderField(field));
-    });
-
-    fieldElements = that.$container.find('.dx-area-field');
-
-    // act
-    fieldElements.first().find('.dx-header-filter').trigger('dxclick');
-    this.clock.tick(500);
-
-    // assert
-    listItems = $('.dx-list').dxList('instance').option('items');
-
-    assert.equal(listItems.length, 2, 'header filter items');
-    assert.equal(listItems[0].text, '(Blanks)');
-});
-
 QUnit.module('applyChangesMode: onDemand', {
     beforeEach: function() {
         this.$container = $('#container');
@@ -2579,4 +2505,3 @@ QUnit.module('applyChangesMode: onDemand', {
     });
 
 });
-
