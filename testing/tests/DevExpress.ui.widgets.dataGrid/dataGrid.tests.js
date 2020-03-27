@@ -9485,6 +9485,44 @@ QUnit.test('Content height differs from the scrollable container height by the h
     assert.equal(scrollable.$element().height() - content.clientHeight, scrollbarWidth, 'Content height is correct');
 });
 
+QUnit.testInActiveWindow('onFocusedRowChanging and onFocusedRowChanged should be raised when the first row is focused (T874198)', function(assert) {
+    const handlerCalls = [];
+
+    // arrange
+    const dataGrid = createDataGrid({
+        keyExpr: 'name',
+        dataSource: [
+            { name: 'Alex', phone: '555555', room: 1 },
+            { name: 'Ben', phone: '6666666', room: 2 }
+        ],
+        focusedRowEnabled: true,
+        onFocusedRowChanging: function() {
+            handlerCalls.push('changing');
+        },
+        onFocusedRowChanged: function() {
+            handlerCalls.push('changed');
+        }
+    });
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGrid.option('focusedRowIndex'), -1, 'there is no focused row');
+
+    const $firstCell = $(dataGrid.getCellElement(0, 1));
+    $firstCell.trigger(CLICK_EVENT);
+    this.clock.tick();
+
+    const $firstRow = $(dataGrid.getRowElement(0));
+
+    // assert
+    assert.equal(dataGrid.option('focusedRowIndex'), 0, 'the first row is focused');
+    assert.ok($firstRow.hasClass('dx-row-focused'), 'the first row is highlighted');
+    assert.equal(handlerCalls.length, 2, 'both events were riased');
+    assert.strictEqual(handlerCalls[0], 'changing');
+    assert.strictEqual(handlerCalls[1], 'changed');
+});
+
 QUnit.module('Virtual row rendering', baseModuleConfig);
 
 QUnit.test('editing should starts correctly if scrolling mode is virtual', function(assert) {
