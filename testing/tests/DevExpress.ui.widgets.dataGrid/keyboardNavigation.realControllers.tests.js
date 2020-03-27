@@ -1277,34 +1277,63 @@ QUnit.module('Real DataController and ColumnsController', {
 
         this.clock.tick();
 
-        const keyboardController = this.getController('keyboardNavigation');
-        sinon.spy(keyboardController, '_processPrevFocusedCells');
-
         const $rowsView = this.rowsView.element();
 
         // act
         $(this.getCellElement(0, 1)).trigger(CLICK_EVENT);
-        // assert
-        assert.equal(keyboardController._processPrevFocusedCells.callCount, 1, '_processPrevFocusedCells called');
 
         // act
         $(this.getCellElement(1, 1)).trigger(CLICK_EVENT);
         // assert
-        assert.equal(keyboardController._processPrevFocusedCells.callCount, 2, '_processPrevFocusedCells called');
         assert.equal($rowsView.find('[tabindex]').length, 1, 'Only one element with tabindex');
         assert.equal($(this.getCellElement(1, 1)).attr('tabindex'), 111, 'Cell[1, 1] has tabindex');
 
         // act
         $(this.getCellElement(2, 1)).trigger(CLICK_EVENT);
-        // assert
-        assert.equal(keyboardController._processPrevFocusedCells.callCount, 3, '_processPrevFocusedCells called');
 
         // act
         $(this.getCellElement(3, 1)).trigger(CLICK_EVENT);
         // assert
-        assert.equal(keyboardController._processPrevFocusedCells.callCount, 4, '_processPrevFocusedCells called');
         assert.equal($rowsView.find('[tabindex]').length, 1, 'Only one element with tabindex');
         assert.equal($(this.getCellElement(3, 1)).attr('tabindex'), 111, 'Cell[3, 1] has tabindex');
+    });
+
+    QUnit.test('Previous navigation elements should not have "tabindex" if grouping and navigation action is tab (T870120)', function(assert) {
+        // arrange
+        const $container = $('#container');
+        this.data = [
+            { name: 'Alex', phone: 'John' },
+            { name: 'Dan', phone: 'Skip' }
+        ];
+        this.options = {
+            grouping: {
+                autoExpandAll: false
+            },
+            editing: {},
+            columns: [
+                'name',
+                {
+                    dataField: 'phone',
+                    groupIndex: 0
+                }
+            ],
+            tabIndex: 111
+        };
+
+        this.setupModule();
+        this.gridView.render($container);
+
+        this.clock.tick();
+
+        const $rowsView = this.rowsView.element();
+        $(this.getCellElement(0, 1)).trigger(CLICK_EVENT);
+
+        // act
+        this.triggerKeyDown('tab', false, false, $(this.getRowElement(0)));
+
+        // assert
+        assert.equal($rowsView.find('[tabindex]').length, 1, 'Only one element with tabindex');
+        assert.equal($(this.getRowElement(1)).attr('tabindex'), 111, 'Row 1 has tabindex');
     });
 
     QUnit.test('Previous navigation elements should not have "tabindex" if grouping, focusedRowEnabled and navigation action is click (T870120)', function(assert) {
@@ -1334,34 +1363,27 @@ QUnit.module('Real DataController and ColumnsController', {
 
         this.clock.tick();
 
-        const keyboardController = this.getController('keyboardNavigation');
-        sinon.spy(keyboardController, '_processPrevFocusedCells');
-
         const $rowsView = this.rowsView.element();
 
         // act
         $(this.getCellElement(0, 1)).trigger(CLICK_EVENT);
         // assert
-        assert.equal(keyboardController._processPrevFocusedCells.callCount, 1, '_processPrevFocusedCells called');
         assert.equal($rowsView.find('[tabindex]').length, 1, 'Only one element with tabindex');
         assert.equal($(this.getRowElement(0)).attr('tabindex'), 111, 'Row[0] has tabindex');
 
         // act
         $(this.getCellElement(1, 1)).trigger(CLICK_EVENT);
         // assert
-        assert.equal(keyboardController._processPrevFocusedCells.callCount, 2, '_processPrevFocusedCells called');
         assert.equal($rowsView.find('[tabindex]').length, 1, 'Only one element with tabindex');
         assert.equal($(this.getRowElement(1)).attr('tabindex'), 111, 'Row[1] has tabindex');
 
         // act
         $(this.getCellElement(2, 1)).trigger(CLICK_EVENT);
         // assert
-        assert.equal(keyboardController._processPrevFocusedCells.callCount, 3, '_processPrevFocusedCells called');
 
         // act
         $(this.getCellElement(3, 1)).trigger(CLICK_EVENT);
         // assert
-        assert.equal(keyboardController._processPrevFocusedCells.callCount, 4, '_processPrevFocusedCells called');
         assert.equal($rowsView.find('[tabindex]').length, 1, 'Only one element with tabindex');
         assert.equal($(this.getRowElement(3)).attr('tabindex'), 111, 'Row[3] has tabindex');
     });

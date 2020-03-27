@@ -445,6 +445,16 @@ module.exports = {
                         this.setRowFocusType();
                         this._focus(this._getCellElementFromTarget(eventArgs.originalEvent.target), true);
                     }
+                },
+
+                _updateFocusedCellPosition: function($cell, direction) {
+                    const prevRowIndex = this.option('focusedRowIndex');
+                    const prevColumnIndex = this.option('focusedColumnIndex');
+                    const position = this.callBase($cell, direction);
+
+                    if(position && position.columnIndex >= 0) {
+                        this._fireFocusedCellChanged($cell, prevColumnIndex, prevRowIndex);
+                    }
                 }
             },
 

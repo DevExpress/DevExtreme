@@ -706,31 +706,4 @@ QUnit.module('Keyboard controller', {
         // assert
         assert.ok(!_$focusElement, 'element has not focused');
     });
-
-    QUnit.test('Process previous focused cell positions', function(assert) {
-        // act
-        const keyboardController = new KeyboardNavigationController(this.component);
-        keyboardController.init();
-
-        // act
-        keyboardController.setFocusedCellPosition(10, 11);
-        keyboardController._updatePrevFocusedCellPositions();
-
-        keyboardController.setFocusedCellPosition(20, 21);
-        keyboardController._updatePrevFocusedCellPositions();
-
-        keyboardController.setFocusedCellPosition(30, 31);
-        keyboardController._updatePrevFocusedCellPositions();
-
-        // assert
-        assert.equal(keyboardController._prevFocusedCellPositions.length, 3, '_prevFocusedCellPositions items amount');
-        assert.deepEqual(keyboardController._prevFocusedCellPositions[0], { rowIndex: 10, columnIndex: 11 }, '_prevFocusedCellPositions[0]');
-        assert.deepEqual(keyboardController._prevFocusedCellPositions[1], { rowIndex: 20, columnIndex: 21 }, '_prevFocusedCellPositions[1]');
-        assert.deepEqual(keyboardController._prevFocusedCellPositions[2], { rowIndex: 30, columnIndex: 31 }, '_prevFocusedCellPositions[2] - current position!');
-
-        // act
-        keyboardController._processPrevFocusedCells();
-        assert.equal(keyboardController._prevFocusedCellPositions.length, 1, '_prevFocusedCellPositions items amount');
-        assert.deepEqual(keyboardController._prevFocusedCellPositions[0], { rowIndex: 30, columnIndex: 31 }, 'Current position should not be removed');
-    });
 });

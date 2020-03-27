@@ -490,8 +490,10 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick();
         // assert
         assert.equal(that.option('focusedRowIndex'), 0, 'focusedRowIndex');
-        assert.equal(rowsView.getRow(0).attr('tabindex'), 0, 'Row 0 tabindex');
+        assert.strictEqual(rowsView.getRow(0).attr('tabindex'), undefined, 'Row 0 tabindex');
         assert.ok(rowsView.getRow(0).hasClass('dx-row-focused'), 'Row 0 has row focused class');
+        assert.equal($(rowsView.getCellElement(0, 0)).attr('tabindex'), 0, 'Cell 0 - 0 tabindex');
+        assert.ok($(rowsView.getCellElement(0, 0)).hasClass('dx-focused'), 'Cell 0 - 0 has focused class');
     });
 
     QUnit.testInActiveWindow('Tab key press should work correctly on new row if focusedRowEnabled (T803763)', function(assert) {
@@ -555,8 +557,10 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick();
         // assert
         assert.equal(that.option('focusedRowIndex'), 0, 'focusedRowIndex');
-        assert.equal(rowsView.getRow(0).attr('tabindex'), 0, 'Row 0 tabindex');
+        assert.strictEqual(rowsView.getRow(0).attr('tabindex'), undefined, 'Row 0 tabindex');
         assert.ok(rowsView.getRow(0).hasClass('dx-row-focused'), 'Row 0 has row focused class');
+        assert.equal($(rowsView.getCellElement(0, 0)).attr('tabindex'), 0, 'Cell 0 - 0 tabindex');
+        assert.ok($(rowsView.getCellElement(0, 0)).hasClass('dx-focused'), 'Cell 0 - 0 has focused class');
     });
 
     QUnit.testInActiveWindow('LeftArrow key should focus the cell', function(assert) {
@@ -591,7 +595,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowIndex'), 1, 'FocusedRowIndex = 1');
         assert.equal(this.option('focusedColumnIndex'), 0, 'FocusedColumnIndex = 0');
         assert.equal(rowsView.getRow(0).attr('tabindex'), undefined);
-        assert.equal(rowsView.getRow(1).attr('tabindex'), 0);
+        assert.equal(rowsView.getRow(1).attr('tabindex'), undefined);
         assert.equal(rowsView.getRow(1).find('td').eq(0).attr('tabindex'), 0);
         assert.equal(rowsView.getRow(1).find('td').eq(1).attr('tabindex'), undefined);
     });
