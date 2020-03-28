@@ -671,7 +671,7 @@ const DateBox = DropDownEditor.inherit({
     _applyCustomValidation: function(value) {
         this.validationRequest.fire({
             editor: this,
-            value
+            value: this._serializeDate(value)
         });
 
         return this.option('isValid');
@@ -881,8 +881,12 @@ const DateBox = DropDownEditor.inherit({
             return dateSerialization.deserializeDate(this.option(optionName));
         }
 
+        this.option(optionName, this._serializeDate(value));
+    },
+
+    _serializeDate: function(date) {
         const serializationFormat = this._getSerializationFormat();
-        this.option(optionName, dateSerialization.serializeDate(value, serializationFormat));
+        return dateSerialization.serializeDate(date, serializationFormat);
     },
 
     reset: function() {
