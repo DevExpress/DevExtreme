@@ -92,7 +92,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         const displayValue = gridCoreUtils.getDisplayValue(column, value, cellOptions.data, cellOptions.rowType);
         const text = gridCoreUtils.formatValue(displayValue, column);
         const isCellOrBatchEditMode = this._editingController.isCellOrBatchEditMode();
-        const rowsView = that.getView('rowsView');
+        const rowsView = that._rowsView;
 
         if(column.allowEditing && that.getController('keyboardNavigation').isKeyboardEnabled()) {
             $container.attr('tabIndex', that.option('tabIndex'));
@@ -106,7 +106,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         if(column.cellTemplate) {
             const templateOptions = extend({}, cellOptions, { value: value, displayValue: displayValue, text: text, column: column });
             const isDomElement = !!$container.closest(getWindow().document).length;
-            that._rowsView.renderTemplate($container, column.cellTemplate, templateOptions, isDomElement).done(() => {
+            rowsView.renderTemplate($container, column.cellTemplate, templateOptions, isDomElement).done(() => {
                 rowsView._cellPrepared($container, cellOptions);
             });
         } else {
