@@ -1584,7 +1584,7 @@ QUnit.module('Keyboard keys', {
         assert.ok(isLeftArrow, 'default behaviour is worked');
     });
 
-    QUnit.testInActiveWindow('onKeyDown should fire event if grid is empty (T837977)', function(assert) {
+    QUnit.testInActiveWindow('onKeyDown should fire if grid is empty (T837977)', function(assert) {
         // arrange
         let keyDownFiresCount = 0,
             $rowsView;
@@ -1592,7 +1592,7 @@ QUnit.module('Keyboard keys', {
         this.options = {
             dataSource: [],
             onKeyDown: () => ++keyDownFiresCount,
-            tabindex: 111
+            tabIndex: 111
         };
 
         setupModules(this, { initViews: true });
@@ -3608,7 +3608,7 @@ QUnit.module('Keyboard keys', {
         // act
         this.gridView.render($('#container'));
 
-        this.focusFirstCell();
+        $(this.getCellElement(0, 0)).trigger(CLICK_EVENT);
 
         this.triggerKeyDown('rightArrow');
 
