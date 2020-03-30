@@ -3914,6 +3914,65 @@ QUnit.module('Validation', {
         assert.equal($('.dx-invalid-message.dx-widget').length, 1, 'Validation message is shown');
     });
 
+    QUnit.testInActiveWindow('Batch edit mode if cellTemplate is defined', function(assert) {
+        // arrange
+        $('.dx-datagrid').width(200);
+
+        const dataSource = [
+            { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum' },
+            { firstName: 'Super', lastName: 'Man' }
+        ];
+
+        this.options = {
+            columns: [
+                { dataField: 'firstName', index: 0, allowEditing: true },
+                { dataField: 'lastName', index: 1, allowEditing: true,
+                    cellTemplate: function($container, options) {
+                        return $('<span>').text(options.value);
+                    },
+                    validationRules: [{ type: 'required' }]
+                }
+            ],
+            editing: {
+                mode: 'batch',
+                allowUpdating: true
+            },
+            dataSource: dataSource,
+            columnHidingEnabled: true
+        };
+        setupDataGrid(this);
+        this.rowsView.render($('#container'));
+        this.resizingController.updateDimensions();
+        this.clock.tick();
+
+        // act
+        this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
+
+        let $itemsContent = $('.dx-field-item-content');
+
+        $itemsContent.first().trigger('dxclick');
+        this.clock.tick();
+
+        const editor = $('.dx-form .dx-texteditor').first().dxTextBox('instance');
+        editor.option('value', '');
+        $(document).trigger('dxpointerdown');
+        $(document).trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.ok($('.dx-field-item-content.dx-validator').length === 1, 'item element has a validation styles');
+        assert.ok($('.dx-field-item-content.dx-datagrid-invalid').length === 1, 'item element has a invalid css class');
+
+        // act
+        $itemsContent = $('.dx-field-item-content');
+        $itemsContent.first().trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.ok($('.dx-field-item-content > .dx-widget.dx-validator').length === 1, 'editor into a form item has a validation styles');
+        assert.equal($('.dx-invalid-message.dx-widget').length, 1, 'Validation message is shown');
+    });
+
     QUnit.testInActiveWindow('Batch edit mode. Editor is not marked as invalid when row is created', function(assert) {
         // arrange
         $('.dx-datagrid').width(200);
