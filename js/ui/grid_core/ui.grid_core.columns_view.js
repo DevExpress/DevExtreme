@@ -25,7 +25,6 @@ const TABLE_CLASS = 'table';
 const TABLE_FIXED_CLASS = 'table-fixed';
 const CONTENT_FIXED_CLASS = 'content-fixed';
 const ROW_CLASS = 'dx-row';
-const FIXED_COL_CLASS = 'dx-col-fixed';
 const GROUP_ROW_CLASS = 'dx-group-row';
 const DETAIL_ROW_CLASS = 'dx-master-detail-row';
 const FILTER_ROW_CLASS = 'filter-row';
@@ -186,11 +185,6 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             if(column.width) {
                 setCellWidth(cell, column, getWidthStyle(column.width));
             }
-        }
-
-        // T823783, T852898, T865179
-        if(browser.mozilla && options.column.fixed && options.rowType !== 'group' && !options.isAltRow) {
-            $cell.addClass(FIXED_COL_CLASS);
         }
 
         return $cell;
