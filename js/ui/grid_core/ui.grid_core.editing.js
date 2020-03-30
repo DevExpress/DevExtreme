@@ -1787,7 +1787,7 @@ const EditingController = modules.ViewController.inherit((function() {
         _prepareEditDataParams: function(options, value, text) {
             const that = this;
             const newData = {};
-            const oldData = options.data;
+            const oldData = options.row?.data;
             const rowKey = options.key;
             const $cellElement = $(options.cellElement);
             const editMode = getEditMode(that);
@@ -1985,8 +1985,8 @@ const EditingController = modules.ViewController.inherit((function() {
             const $container = $(container);
             const column = item.column;
             const editorType = getEditorType(item);
-            const rowData = detailCellOptions.row && detailCellOptions.row.data;
-            var cellOptions = extend({}, detailCellOptions, {
+            const rowData = detailCellOptions?.row.data;
+            const cellOptions = extend({}, detailCellOptions, {
                 data: rowData,
                 cellElement: null,
                 isOnForm: true,
@@ -2021,7 +2021,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 }, function() {
                     let $editorElement = $container.find('.dx-widget').first();
                     let validator = $editorElement.data('dxValidator');
-                    const validatorOptions = validator && validator.option();
+                    const validatorOptions = validator?.option();
 
                     $container.contents().remove();
                     cellOptions = that.renderFormEditTemplate.bind(that)(cellOptions, item, options.component, $container);
@@ -2066,7 +2066,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     });
                 } else {
                     forEachFormItems(items, (item) => {
-                        const itemId = item && (item.name || item.dataField);
+                        const itemId = item?.name || item?.dataField;
 
                         if(itemId) {
                             isCustomEditorType[itemId] = !!item.editorType;
