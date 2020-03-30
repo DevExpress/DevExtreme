@@ -10841,6 +10841,7 @@ QUnit.module('Summary with Editing', {
         this.setValue = function(rowIndex, value) {
             const row = this.getVisibleRows()[rowIndex];
             this.editingController.updateFieldValue({
+                row,
                 key: row.key,
                 data: row.data,
                 column: this.columnOption('value')
