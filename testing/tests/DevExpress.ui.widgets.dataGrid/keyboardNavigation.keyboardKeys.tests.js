@@ -2212,6 +2212,51 @@ QUnit.module('Keyboard keys', {
         });
     });
 
+    QUnit.testInActiveWindow('Focus should be moved outside grid after tabbing throw all group rows (T870114)', function(assert) {
+        // arrange
+        this.columns = [
+            { visible: true, command: 'expand', cssClass: 'dx-command-expand' },
+            { caption: 'Column 1', visible: true, dataField: 'Column1' },
+            { caption: 'Column 2', visible: true, dataField: 'Column2' }
+        ];
+
+        this.dataControllerOptions = {
+            pageCount: 10,
+            pageIndex: 0,
+            pageSize: 10,
+            items: [
+                { values: ['group 1'], rowType: 'group', key: ['group 1'], groupIndex: 0 },
+                { values: ['group 2'], rowType: 'group', key: ['group 2'], groupIndex: 0 }
+            ]
+        };
+
+        setupModules(this);
+
+        // act
+        this.gridView.render($('#container'));
+
+        const $groupRows = $('#container').find('.dx-group-row');
+
+        $groupRows.eq(0).focus();
+        this.clock.tick();
+
+        // act
+        this.triggerKeyDown('tab', false, false, $groupRows.eq(0));
+
+        // assert
+        assert.equal($(':focus').get(0), $groupRows.get(1), 'second group row is focused');
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, {
+            rowIndex: 1,
+            columnIndex: 1
+        });
+
+        // act
+        const isPreventDefaultCalled = this.triggerKeyDown('tab', false, false, $groupRows.eq(1)).preventDefault;
+
+        // assert
+        assert.ok(!isPreventDefaultCalled, 'preventDefault is not called');
+    });
+
     QUnit.testInActiveWindow('DataGrid should skip group rows after tab navigation from the editing cell (T714142, T715092)', function(assert) {
         // arrange
         this.columns = [
