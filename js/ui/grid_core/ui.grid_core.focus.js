@@ -450,8 +450,9 @@ module.exports = {
                 _updateFocusedCellPosition: function($cell, direction) {
                     const prevRowIndex = this.option('focusedRowIndex');
                     const prevColumnIndex = this.option('focusedColumnIndex');
+                    const position = this.callBase($cell, direction);
 
-                    if(this.callBase($cell, direction)) {
+                    if(position && position.columnIndex >= 0) {
                         this._fireFocusedCellChanged($cell, prevColumnIndex, prevRowIndex);
                     }
                 }
