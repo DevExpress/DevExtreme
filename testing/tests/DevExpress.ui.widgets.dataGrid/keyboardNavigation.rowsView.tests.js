@@ -4,8 +4,7 @@ QUnit.testStart(function() {
             <div id="container" class="dx-datagrid"></div>
         </div>`;
 
-    // $('#qunit-fixture').html(markup);
-    $(markup).appendTo('body');
+    $('#qunit-fixture').html(markup);
 });
 
 import 'common.css!';
