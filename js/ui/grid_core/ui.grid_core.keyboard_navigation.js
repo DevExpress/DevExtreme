@@ -520,7 +520,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             isOriginalHandlerRequired = true;
         } else {
             if(this._focusedCellPosition.rowIndex === undefined && $(eventTarget).hasClass(ROW_CLASS)) {
-                this._updateFocusedCellPosition($(eventTarget).children().first());
+                this._updateFocusedCellPosition($(eventTarget).children().not('.' + COMMAND_EXPAND_CLASS).first());
             }
 
             elementType = this._getElementType(eventTarget);
@@ -1222,7 +1222,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             columnIndex: nextColumnIndex,
             rowIndex: rowIndex
         };
-        const visibleRows = this.component.getVisibleRows();
+        const visibleRows = this.getController('data').getVisibleRows();
         const row = visibleRows && visibleRows[rowIndex];
         const isLastRow = this._isLastRow(rowIndex);
 
