@@ -815,7 +815,7 @@ QUnit.test('Fixed and main table should have same scroll top if showScrollbar is
     assert.strictEqual(scrollable.scrollTop(), $(scrollable.element()).children('.dx-datagrid-content-fixed').scrollTop(), 'scroll top are same for main and fixed table');
 });
 
-QUnit.test('Cells in fixed columns should have "dx-col-fixed" class if FF (T823783)', function(assert) {
+QUnit.test('Cells in fixed columns should have "dx-col-fixed" class if FF (T823783, T875201)', function(assert) {
     // arrange
     const rowsViewWrapper = dataGridWrapper.rowsView;
     const filterRowWrapper = dataGridWrapper.filterRow;
@@ -824,7 +824,8 @@ QUnit.test('Cells in fixed columns should have "dx-col-fixed" class if FF (T8237
         loadingTimeout: undefined,
         dataSource: {
             store: [
-                { id: 1, value: 'value 1' }
+                { id: 1, value: 'value 1' },
+                { id: 2, value: 'value 2' }
             ]
         },
         columnFixing: {
@@ -839,26 +840,28 @@ QUnit.test('Cells in fixed columns should have "dx-col-fixed" class if FF (T8237
         }]
     });
 
-    let fixedDataCell = rowsViewWrapper.getFixedDataRow(0).getCell(0);
-    let dataCell = rowsViewWrapper.getDataRow().getCell(0);
 
-    // assert
-    if(browser.mozilla) {
-        assert.ok(dataCell.getElement().hasClass('dx-col-fixed'), 'dx-col-fixed');
-        assert.ok(fixedDataCell.getElement().hasClass('dx-col-fixed'), 'dx-col-fixed');
-        assert.ok(filterRowWrapper.getEditorCell(0).hasClass('dx-col-fixed'), 'dx-col-fixed');
-    } else {
+    for(let rowIndex = 0; rowIndex < 2; rowIndex++) {
+        let dataCell = rowsViewWrapper.getDataRow(rowIndex).getCell(0);
+        let fixedDataCell = rowsViewWrapper.getFixedDataRow(rowIndex).getCell(0);
+
+        // assert
+        if(browser.mozilla) {
+            assert.ok(dataCell.getElement().hasClass('dx-col-fixed'), 'dx-col-fixed');
+            assert.ok(fixedDataCell.getElement().hasClass('dx-col-fixed'), 'dx-col-fixed');
+            assert.ok(filterRowWrapper.getEditorCell(0).hasClass('dx-col-fixed'), 'dx-col-fixed');
+        } else {
+            assert.notOk(dataCell.getElement().hasClass('dx-col-fixed'), 'not dx-col-fixed');
+            assert.notOk(fixedDataCell.getElement().hasClass('dx-col-fixed'), 'not dx-col-fixed');
+            assert.notOk(filterRowWrapper.getEditorCell(0).hasClass('dx-col-fixed'), 'not dx-col-fixed');
+        }
+        dataCell = rowsViewWrapper.getDataRow(rowIndex).getCell(1);
         assert.notOk(dataCell.getElement().hasClass('dx-col-fixed'), 'not dx-col-fixed');
+
+        fixedDataCell = rowsViewWrapper.getFixedDataRow(rowIndex).getCell(1);
         assert.notOk(fixedDataCell.getElement().hasClass('dx-col-fixed'), 'not dx-col-fixed');
-        assert.notOk(filterRowWrapper.getEditorCell(0).hasClass('dx-col-fixed'), 'not dx-col-fixed');
+        assert.notOk(filterRowWrapper.getEditorCell(1).hasClass('dx-col-fixed'), 'not dx-col-fixed');
     }
-
-    dataCell = rowsViewWrapper.getDataRow().getCell(1);
-    assert.notOk(dataCell.getElement().hasClass('dx-col-fixed'), 'not dx-col-fixed');
-
-    fixedDataCell = rowsViewWrapper.getFixedDataRow(0).getCell(1);
-    assert.notOk(fixedDataCell.getElement().hasClass('dx-col-fixed'), 'not dx-col-fixed');
-    assert.notOk(filterRowWrapper.getEditorCell(1).hasClass('dx-col-fixed'), 'not dx-col-fixed');
 });
 
 QUnit.test('Cells in group row should not have \'dx-col-fixed\' class (T852898)', function(assert) {
