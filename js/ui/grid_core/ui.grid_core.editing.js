@@ -1787,7 +1787,7 @@ const EditingController = modules.ViewController.inherit((function() {
         _prepareEditDataParams: function(options, value, text) {
             const that = this;
             const newData = {};
-            const oldData = options.data;
+            const oldData = options.row?.data;
             const rowKey = options.key;
             const $cellElement = $(options.cellElement);
             const editMode = getEditMode(that);
@@ -1986,7 +1986,6 @@ const EditingController = modules.ViewController.inherit((function() {
             const column = item.column;
             const editorType = getEditorType(item);
             const rowData = detailCellOptions?.row.data;
-            const repaintChangesOnly = that.option('repaintChangesOnly');
             const cellOptions = extend({}, detailCellOptions, {
                 data: rowData,
                 cellElement: null,
@@ -1996,10 +1995,6 @@ const EditingController = modules.ViewController.inherit((function() {
                 id: form.getItemID(item.name || item.dataField),
                 columnIndex: column.index,
                 setValue: !isReadOnly && column.allowEditing && function(value) {
-                    if(repaintChangesOnly) {
-                        cellOptions.data = extend({}, cellOptions.row.data);
-                    }
-
                     that.updateFieldValue(cellOptions, value);
                 }
             });
