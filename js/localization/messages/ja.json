@@ -295,6 +295,10 @@
         "dxFileManager-dialogRenameItemButtonText": "保存",
         "dxFileManager-dialogCreateDirectoryTitle": "新しいディレクトリ",
         "dxFileManager-dialogCreateDirectoryButtonText": "作成",
+        "dxFileManager-dialogDeleteItemTitle": "TODO",
+        "dxFileManager-dialogDeleteItemButtonText": "TODO",
+        "dxFileManager-dialogDeleteItemSingleItemConfirmation": "TODO",
+        "dxFileManager-dialogDeleteItemMultipleItemsConfirmation": "TODO",
         "dxFileManager-dialogButtonCancel": "キャンセル",
 
         "dxFileManager-editingCreateSingleItemProcessingMessage": "{0} 内にディレクトリを作成中",

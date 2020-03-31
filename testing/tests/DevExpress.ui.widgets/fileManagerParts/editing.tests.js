@@ -241,6 +241,9 @@ QUnit.module('Editing operations', moduleConfig, () => {
         this.wrapper.getToolbarButton('Delete').trigger('dxclick');
         this.clock.tick(400);
 
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
         $folderNodes = this.wrapper.getFolderNodes();
         assert.equal($folderNodes.length, initialCount - 1, 'folders count decreased');
         assert.strictEqual($folderNodes.eq(1).find('span').text().indexOf('Folder 1'), -1, 'first folder is not target folder');
@@ -259,6 +262,9 @@ QUnit.module('Editing operations', moduleConfig, () => {
         this.clock.tick(400);
 
         this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
         this.clock.tick(400);
 
         const $rows = this.wrapper.getRowsInDetailsView();
@@ -285,6 +291,9 @@ QUnit.module('Editing operations', moduleConfig, () => {
         this.clock.tick(400);
 
         this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
         this.clock.tick(400);
 
         $rows = this.wrapper.getRowsInDetailsView();

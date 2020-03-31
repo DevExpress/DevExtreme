@@ -295,6 +295,10 @@
         "dxFileManager-dialogRenameItemButtonText": "Сохранить",
         "dxFileManager-dialogCreateDirectoryTitle": "Новая папка",
         "dxFileManager-dialogCreateDirectoryButtonText": "Создать",
+        "dxFileManager-dialogDeleteItemTitle": "TODO",
+        "dxFileManager-dialogDeleteItemButtonText": "TODO",
+        "dxFileManager-dialogDeleteItemSingleItemConfirmation": "TODO",
+        "dxFileManager-dialogDeleteItemMultipleItemsConfirmation": "TODO",
 
         "dxFileManager-editingCreateSingleItemProcessingMessage": "Создаётся папка в {0}",
         "dxFileManager-editingCreateSingleItemSuccessMessage": "Создана папка в {0}",
