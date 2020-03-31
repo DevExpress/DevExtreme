@@ -1,5 +1,6 @@
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 import devices from 'core/devices';
+import browser from 'core/utils/browser';
 import $ from 'jquery';
 
 QUnit.module('scrollToItem', () => {
@@ -7,14 +8,14 @@ QUnit.module('scrollToItem', () => {
         return;
     }
 
-    function createWrapper(config, dataSource) {
+    function createWrapper(config, items) {
         const wrapper = new TreeViewTestWrapper({
             displayExpr: 'id',
             scrollDirection: config.scrollDirection,
             height: 150,
             width: 150,
             animationEnabled: false, // +400ms per test
-            dataSource: dataSource,
+            items: items,
             rtlEnabled: config.rtlEnabled,
             onContentReady: config.onContentReady
         });
@@ -46,6 +47,10 @@ QUnit.module('scrollToItem', () => {
         return config.disabled && !config.expanded && !isFirstLevelNodeKey;
     }
 
+    function needSkipForIE(config) {
+        return config.disabled && !config.expanded && browser.msie;
+    }
+
     const configs = [];
     ['vertical', 'horizontal', 'both'].forEach(scrollDirection => {
         [false, true].forEach(expanded => {
@@ -67,6 +72,10 @@ QUnit.module('scrollToItem', () => {
     configs.forEach(config => {
         config.keysToScroll.forEach(key => {
             QUnit.test(`config:${config.description} -> onContentReady.scrollToItem(${key}) -> focusOut() -> focusIn()`, function(assert) {
+                if(needSkipForIE(config)) {
+                    assert.ok('skip for IE');
+                }
+
                 let completionCallback = null;
                 let isFirstContentReadyEvent = true;
                 const options = $.extend({}, config, {
@@ -96,8 +105,12 @@ QUnit.module('scrollToItem', () => {
             });
         });
 
-        [{ top: 0, left: 0 }, { top: 1000, left: 0 }, { top: 0, left: 1000 }, { top: 1000, left: 1000 }].forEach(initialPosition => {
+        [{ top: 0, left: 0 }, { top: 1000, left: 1000 }].forEach(initialPosition => {
             QUnit.test(`config:${config.description}, initialPosition: ${JSON.stringify(initialPosition)} -> scrollToItem() -> focusOut() -> focusIn()`, function(assert) {
+                if(needSkipForIE(config)) {
+                    assert.ok('skip for IE');
+                }
+
                 const options = $.extend({}, config, { initialPosition });
                 const wrapper = createWrapper(options, createDataSource(config.expanded, config.disabled));
                 config.keysToScroll.forEach(key => {
@@ -143,7 +156,7 @@ QUnit.module('scrollToItem', () => {
         });
 
         wrapper.instance._scrollableContainer.scrollTo({ left: 0, top: 0 });
-        const itemData = wrapper.instance.option('dataSource')[0].items[0].items[0];
+        const itemData = wrapper.instance.option('items')[0].items[0].items[0];
         wrapper.instance.scrollToItem(itemData).done(() => {
             wrapper.checkNodeIsInVisibleArea(itemData.id);
             done();
