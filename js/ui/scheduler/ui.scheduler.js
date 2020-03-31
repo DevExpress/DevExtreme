@@ -2331,13 +2331,12 @@ const Scheduler = Widget.inherit({
     _convertRecurrenceException: function(exceptionString, startDate, startDateTimeZone) {
         exceptionString = exceptionString.replace(/\s/g, '');
 
-        let exceptionDate = dateSerialization.deserializeDate(exceptionString);
-
-        const convertedException = this.fire('convertDateByTimezone', exceptionDate, startDateTimeZone);
+        const exceptionDate = dateSerialization.deserializeDate(exceptionString);
         const convertedStartDate = this.fire('convertDateByTimezone', startDate, startDateTimeZone);
+        let convertedExceptionDate = this.fire('convertDateByTimezone', exceptionDate, startDateTimeZone);
 
-        exceptionDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(convertedException, convertedStartDate, this.option('timeZone'), startDateTimeZone);
-        exceptionString = dateSerialization.serializeDate(exceptionDate, FULL_DATE_FORMAT);
+        convertedExceptionDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(convertedExceptionDate, convertedStartDate, this.option('timeZone'), startDateTimeZone);
+        exceptionString = dateSerialization.serializeDate(convertedExceptionDate, FULL_DATE_FORMAT);
         return exceptionString;
     },
 
