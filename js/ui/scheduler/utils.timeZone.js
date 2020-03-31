@@ -2,6 +2,7 @@ import dateUtils from '../../core/utils/date';
 import SchedulerTimezones from './timezones/ui.scheduler.timezones';
 
 const toMs = dateUtils.dateToMilliseconds;
+const MINUTES_IN_HOUR = 60;
 
 const getTimezoneOffsetChangeInMinutes = (startDate, endDate, updatedStartDate, updatedEndDate) => {
     return getDaylightOffset(updatedStartDate, updatedEndDate) - getDaylightOffset(startDate, endDate);
@@ -54,10 +55,10 @@ const correctRecurrenceExceptionByTimezone = (exception, exceptionByStartDate, t
     } else if(timeZone) {
         timezoneOffset = getDaylightOffsetByTimezone(exceptionByStartDate, exception, timeZone);
     } else {
-        timezoneOffset = (exception.getTimezoneOffset() - exceptionByStartDate.getTimezoneOffset()) / 60;
+        timezoneOffset = (exception.getTimezoneOffset() - exceptionByStartDate.getTimezoneOffset()) / MINUTES_IN_HOUR;
     }
 
-    return new Date(exception.getTime() + (timezoneOffset) * toMs('hour'));
+    return new Date(exception.getTime() + timezoneOffset * toMs('hour'));
 };
 
 const isTimezoneChangeInDate = (date) => {
