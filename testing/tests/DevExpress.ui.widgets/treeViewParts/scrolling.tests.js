@@ -27,110 +27,6 @@ QUnit.module('scrollToItem', () => {
         return wrapper;
     }
 
-    function createDataSource(expanded, disabled) {
-        return [
-            { id: 'item1', expanded, disabled, items: [ { id: 'item1_1', expanded, disabled, items: [ { id: 'item1_1_1', expanded, disabled, items: [ { id: 'item1_1_1_1', expanded, disabled, items: [ { id: 'item1_1_1_1_1', expanded, disabled, items: [ { id: 'item1_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
-            { id: 'item2', expanded, disabled, items: [ { id: 'item2_1', expanded, disabled, items: [ { id: 'item2_1_1', expanded, disabled, items: [ { id: 'item2_1_1_1', expanded, disabled, items: [ { id: 'item2_1_1_1_1', expanded, disabled, items: [ { id: 'item2_1_1_1_1_1', expanded, disabled, items: [ ] }] } ] } ] } ] }] },
-            { id: 'item3', expanded, disabled, items: [ { id: 'item3_1', expanded, disabled, items: [ { id: 'item3_1_1', expanded, disabled, items: [ { id: 'item3_1_1_1', expanded, disabled, items: [ { id: 'item3_1_1_1_1', expanded, disabled, items: [ { id: 'item3_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
-            { id: 'item4', expanded, disabled, items: [ { id: 'item4_1', expanded, disabled, items: [ { id: 'item4_1_1', expanded, disabled, items: [ { id: 'item4_1_1_1', expanded, disabled, items: [ { id: 'item4_1_1_1_1', expanded, disabled, items: [ { id: 'item4_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
-            { id: 'item5', expanded, disabled, items: [ { id: 'item5_1', expanded, disabled, items: [ { id: 'item5_1_1', expanded, disabled, items: [ { id: 'item5_1_1_1', expanded, disabled, items: [ { id: 'item5_1_1_1_1', expanded, disabled, items: [ { id: 'item5_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
-            { id: 'item6', expanded, disabled, items: [ { id: 'item6_1', expanded, disabled, items: [ { id: 'item6_1_1', expanded, disabled, items: [ { id: 'item6_1_1_1', expanded, disabled, items: [ { id: 'item6_1_1_1_1', expanded, disabled, items: [ { id: 'item6_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
-            { id: 'item7', expanded, disabled, items: [ { id: 'item7_1', expanded, disabled, items: [ { id: 'item7_1_1', expanded, disabled, items: [ { id: 'item7_1_1_1', expanded, disabled, items: [ { id: 'item7_1_1_1_1', expanded, disabled, items: [ { id: 'item7_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
-            { id: 'item8', expanded, disabled, items: [ { id: 'item8_1', expanded, disabled, items: [ { id: 'item8_1_1', expanded, disabled, items: [ { id: 'item8_1_1_1', expanded, disabled, items: [ { id: 'item8_1_1_1_1', expanded, disabled, items: [ { id: 'item8_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
-            { id: 'item9', expanded, disabled, items: [ { id: 'item9_1', expanded, disabled, items: [ { id: 'item9_1_1', expanded, disabled, items: [ { id: 'item9_1_1_1', expanded, disabled, items: [ { id: 'item9_1_1_1_1', expanded, disabled, items: [ { id: 'item9_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
-            { id: 'item10', expanded, disabled, items: [ { id: 'item10_1', expanded, disabled, items: [ { id: 'item10_1_1', expanded, disabled, items: [ { id: 'item10_1_1_1', expanded, disabled, items: [ { id: 'item10_1_1_1_1', expanded, disabled, items: [ { id: 'item10_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] }
-        ];
-    }
-
-    function isNotSupported(key, config) {
-        const isFirstLevelNodeKey = key.indexOf('_') === -1;
-        return config.disabled && !config.expanded && !isFirstLevelNodeKey;
-    }
-
-    function needSkipForIE(config) {
-        return config.disabled && !config.expanded && browser.msie;
-    }
-
-    const configs = [];
-    ['vertical', 'horizontal', 'both'].forEach(scrollDirection => {
-        [false, true].forEach(expanded => {
-            [false, true].forEach(disabled => {
-                [false, true].forEach(rtlEnabled => {
-                    configs.push({
-                        expanded,
-                        scrollDirection,
-                        disabled,
-                        rtlEnabled,
-                        keysToScroll: ['item1', 'item1_1_1', 'item9', 'item9_1_1_1_1', 'item10', 'item10_1_1_1_1_1'],
-                        description: `expanded: ${expanded}, rtlEnabled: ${rtlEnabled}, disabled: ${disabled}, scrollDirection: ${scrollDirection}`
-                    });
-                });
-            });
-        });
-    });
-
-    configs.forEach(config => {
-        config.keysToScroll.forEach(key => {
-            QUnit.test(`config:${config.description} -> onContentReady.scrollToItem(${key}) -> focusOut() -> focusIn()`, function(assert) {
-                if(needSkipForIE(config)) {
-                    assert.ok('skip for IE');
-                }
-
-                let completionCallback = null;
-                let isFirstContentReadyEvent = true;
-                const options = $.extend({}, config, {
-                    onContentReady: function(e) {
-                        if(isFirstContentReadyEvent) {
-                            isFirstContentReadyEvent = false;
-                            completionCallback = e.component.scrollToItem(key);
-                        }
-                    }
-                });
-
-                const wrapper = createWrapper(options, createDataSource(config.expanded, config.disabled));
-                const done = assert.async();
-                if(isNotSupported(key, config)) {
-                    completionCallback.fail(() => {
-                        assert.ok('scroll must fail');
-                        done();
-                    });
-                } else {
-                    completionCallback.done(() => {
-                        wrapper.getElement().focusout();
-                        wrapper.getElement().focusin();
-                        wrapper.checkNodeIsInVisibleArea(key);
-                        done();
-                    });
-                }
-            });
-        });
-
-        [{ top: 0, left: 0 }, { top: 1000, left: 1000 }].forEach(initialPosition => {
-            QUnit.test(`config:${config.description}, initialPosition: ${JSON.stringify(initialPosition)} -> scrollToItem() -> focusOut() -> focusIn()`, function(assert) {
-                if(needSkipForIE(config)) {
-                    assert.ok('skip for IE');
-                }
-
-                const options = $.extend({}, config, { initialPosition });
-                const wrapper = createWrapper(options, createDataSource(config.expanded, config.disabled));
-                config.keysToScroll.forEach(key => {
-                    const completionCallback = wrapper.instance.scrollToItem(key);
-                    const done = assert.async();
-                    if(isNotSupported(key, config)) {
-                        completionCallback.fail(() => { assert.ok('scroll must fail'); done(); });
-                    } else {
-                        completionCallback.done(() => {
-                            wrapper.getElement().focusout();
-                            wrapper.getElement().focusin();
-                            wrapper.checkNodeIsInVisibleArea(key);
-                            done();
-                        });
-                    }
-                });
-            });
-        });
-    });
-
     QUnit.test('scrollToItem(key} -> scrollToItem(itemElement) -> scrollToItem(itemData))', function(assert) {
         const wrapper = createWrapper({ scrollDirection: 'both', rtlEnabled: false }, [
             { id: 'item1', expanded: true, items: [ { id: 'item1_1', expanded: true, items: [ { id: 'item1_1_1' } ] } ] },
@@ -171,5 +67,101 @@ QUnit.module('scrollToItem', () => {
         wrapper.instance.scrollToItem('12345').fail(() => { assert.ok('scroll must fail, node not found for this key'); done(); });
         wrapper.instance.scrollToItem($('<div/>').get(0)).fail(() => { assert.ok('scroll must fail, node not found for this itemElement'); done(); });
         wrapper.instance.scrollToItem({}).fail(() => { assert.ok('scroll must fail, node not found for this itemData'); done(); });
+    });
+
+    function createDataSource(expanded, disabled) {
+        return [
+            { id: 'item1', expanded, disabled, items: [ { id: 'item1_1', expanded, disabled, items: [ { id: 'item1_1_1', expanded, disabled, items: [ { id: 'item1_1_1_1', expanded, disabled, items: [ { id: 'item1_1_1_1_1', expanded, disabled, items: [ { id: 'item1_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
+            { id: 'item2', expanded, disabled, items: [ { id: 'item2_1', expanded, disabled, items: [ { id: 'item2_1_1', expanded, disabled, items: [ { id: 'item2_1_1_1', expanded, disabled, items: [ { id: 'item2_1_1_1_1', expanded, disabled, items: [ { id: 'item2_1_1_1_1_1', expanded, disabled, items: [ ] }] } ] } ] } ] }] },
+            { id: 'item3', expanded, disabled, items: [ { id: 'item3_1', expanded, disabled, items: [ { id: 'item3_1_1', expanded, disabled, items: [ { id: 'item3_1_1_1', expanded, disabled, items: [ { id: 'item3_1_1_1_1', expanded, disabled, items: [ { id: 'item3_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
+            { id: 'item4', expanded, disabled, items: [ { id: 'item4_1', expanded, disabled, items: [ { id: 'item4_1_1', expanded, disabled, items: [ { id: 'item4_1_1_1', expanded, disabled, items: [ { id: 'item4_1_1_1_1', expanded, disabled, items: [ { id: 'item4_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
+            { id: 'item5', expanded, disabled, items: [ { id: 'item5_1', expanded, disabled, items: [ { id: 'item5_1_1', expanded, disabled, items: [ { id: 'item5_1_1_1', expanded, disabled, items: [ { id: 'item5_1_1_1_1', expanded, disabled, items: [ { id: 'item5_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
+            { id: 'item6', expanded, disabled, items: [ { id: 'item6_1', expanded, disabled, items: [ { id: 'item6_1_1', expanded, disabled, items: [ { id: 'item6_1_1_1', expanded, disabled, items: [ { id: 'item6_1_1_1_1', expanded, disabled, items: [ { id: 'item6_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
+            { id: 'item7', expanded, disabled, items: [ { id: 'item7_1', expanded, disabled, items: [ { id: 'item7_1_1', expanded, disabled, items: [ { id: 'item7_1_1_1', expanded, disabled, items: [ { id: 'item7_1_1_1_1', expanded, disabled, items: [ { id: 'item7_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
+            { id: 'item8', expanded, disabled, items: [ { id: 'item8_1', expanded, disabled, items: [ { id: 'item8_1_1', expanded, disabled, items: [ { id: 'item8_1_1_1', expanded, disabled, items: [ { id: 'item8_1_1_1_1', expanded, disabled, items: [ { id: 'item8_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
+            { id: 'item9', expanded, disabled, items: [ { id: 'item9_1', expanded, disabled, items: [ { id: 'item9_1_1', expanded, disabled, items: [ { id: 'item9_1_1_1', expanded, disabled, items: [ { id: 'item9_1_1_1_1', expanded, disabled, items: [ { id: 'item9_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] },
+            { id: 'item10', expanded, disabled, items: [ { id: 'item10_1', expanded, disabled, items: [ { id: 'item10_1_1', expanded, disabled, items: [ { id: 'item10_1_1_1', expanded, disabled, items: [ { id: 'item10_1_1_1_1', expanded, disabled, items: [ { id: 'item10_1_1_1_1_1', expanded, disabled, items: [ ] } ] } ] } ] } ] }] }
+        ];
+    }
+
+    function isNotSupported(key, config) {
+        const isFirstLevelNodeKey = key.indexOf('_') === -1;
+        return config.disabled && !config.expanded && !isFirstLevelNodeKey;
+    }
+
+    if(browser.msie) {
+        return; // skip because of performance reason
+    }
+
+    const configs = [];
+    ['vertical', 'horizontal', 'both'].forEach(scrollDirection => {
+        [false, true].forEach(expanded => {
+            [false, true].forEach(disabled => {
+                [false, true].forEach(rtlEnabled => {
+                    configs.push({
+                        expanded,
+                        scrollDirection,
+                        disabled,
+                        rtlEnabled,
+                        keysToScroll: ['item1', 'item1_1_1', 'item9', 'item9_1_1_1_1', 'item10', 'item10_1_1_1_1_1'],
+                        description: `expanded: ${expanded}, rtlEnabled: ${rtlEnabled}, disabled: ${disabled}, scrollDirection: ${scrollDirection}`
+                    });
+                });
+            });
+        });
+    });
+
+    configs.forEach(config => {
+        config.keysToScroll.forEach(key => {
+            QUnit.test(`config:${config.description} -> onContentReady.scrollToItem(${key}) -> focusOut() -> focusIn()`, function(assert) {
+                let completionCallback = null;
+                let isFirstContentReadyEvent = true;
+                const options = $.extend({}, config, {
+                    onContentReady: function(e) {
+                        if(isFirstContentReadyEvent) {
+                            isFirstContentReadyEvent = false;
+                            completionCallback = e.component.scrollToItem(key);
+                        }
+                    }
+                });
+
+                const wrapper = createWrapper(options, createDataSource(config.expanded, config.disabled));
+                const done = assert.async();
+                if(isNotSupported(key, config)) {
+                    completionCallback.fail(() => {
+                        assert.ok('scroll must fail');
+                        done();
+                    });
+                } else {
+                    completionCallback.done(() => {
+                        wrapper.getElement().focusout();
+                        wrapper.getElement().focusin();
+                        wrapper.checkNodeIsInVisibleArea(key);
+                        done();
+                    });
+                }
+            });
+        });
+
+        [{ top: 0, left: 0 }, { top: 1000, left: 0 }, { top: 0, left: 1000 }, { top: 1000, left: 1000 }].forEach(initialPosition => {
+            QUnit.test(`config:${config.description}, initialPosition: ${JSON.stringify(initialPosition)} -> scrollToItem() -> focusOut() -> focusIn()`, function(assert) {
+                const options = $.extend({}, config, { initialPosition });
+                const wrapper = createWrapper(options, createDataSource(config.expanded, config.disabled));
+                config.keysToScroll.forEach(key => {
+                    const completionCallback = wrapper.instance.scrollToItem(key);
+                    const done = assert.async();
+                    if(isNotSupported(key, config)) {
+                        completionCallback.fail(() => { assert.ok('scroll must fail'); done(); });
+                    } else {
+                        completionCallback.done(() => {
+                            wrapper.getElement().focusout();
+                            wrapper.getElement().focusin();
+                            wrapper.checkNodeIsInVisibleArea(key);
+                            done();
+                        });
+                    }
+                });
+            });
+        });
     });
 });
