@@ -2329,26 +2329,12 @@ const Scheduler = Widget.inherit({
         return recurrenceException;
     },
 
-    _convertRecurrenceExceptionByTimezone: function(exception, exceptionByStartDate, startDateTimeZone) {
-        let timezoneOffset = 0;
-
-        if(startDateTimeZone) {
-            timezoneOffset = timeZoneUtils.getDaylightOffsetByTimezone(exceptionByStartDate, exception, startDateTimeZone);
-        } else if(this.option('timeZone')) {
-            timezoneOffset = timeZoneUtils.getDaylightOffsetByTimezone(exceptionByStartDate, exception, this.option('timeZone'));
-        } else {
-            timezoneOffset = (exception.getTimezoneOffset() - exceptionByStartDate.getTimezoneOffset()) / 60;
-        }
-
-        return new Date(exception.getTime() + (timezoneOffset) * toMs('hour'));
-    },
-
     _convertRecurrenceException: function(exception, exceptionByStartDate, startDateTimeZone) {
         exception = exception.replace(/\s/g, '');
         exception = dateSerialization.deserializeDate(exception);
         exception = this.fire('convertDateByTimezone', exception, startDateTimeZone);
 
-        exception = this._convertRecurrenceExceptionByTimezone(exception, exceptionByStartDate, startDateTimeZone);
+        exception = timeZoneUtils.correctRecurrenceExceptionByTimezone(exception, exceptionByStartDate, this.option('timeZone'), startDateTimeZone);
         exception = dateSerialization.serializeDate(exception, FULL_DATE_FORMAT);
         return exception;
     },
