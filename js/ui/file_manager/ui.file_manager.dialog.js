@@ -51,6 +51,9 @@ class FileManagerDialogBase extends Widget {
                     }
                 }
             ],
+            onInitialized: ({ component }) => {
+                component.registerKeyHandler('enter', this._applyDialogChanges.bind(this));
+            },
             onHidden: this._onPopupHidden.bind(this),
             onShown: this._onPopupShown.bind(this)
         });

@@ -253,7 +253,9 @@ class FileManagerEditingControl extends Widget {
 
     _tryDelete(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
-        return this._showDialog(this._dialogManager.getConfirmationDialog())
+        const itemName = itemInfos[0].fileItem.name;
+        const itemCount = itemInfos.length;
+        return this._showDialog(this._dialogManager.getDeleteItemDialog(), { itemName, itemCount })
             .then(() => this._controller.deleteItems(itemInfos));
     }
 
