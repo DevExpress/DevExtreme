@@ -1890,6 +1890,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const showEditorAlways = options.column.showEditorAlways;
             const isUpdateInCellMode = editMode === EDIT_MODE_CELL && options.row && !options.row.isNewRow;
             const focusPreviousEditingCell = showEditorAlways && !forceUpdateRow && isUpdateInCellMode && that.hasEditData() && !that.isEditCell(options.rowIndex, options.columnIndex);
+            let focusCellAfterRowUpdate = false;
 
             if(focusPreviousEditingCell) {
                 that._focusEditingCell();
@@ -1899,6 +1900,11 @@ const EditingController = modules.ViewController.inherit((function() {
 
             that._addEditData(params, options.row);
             that._updateEditButtons();
+
+            if(editMode === EDIT_MODE_CELL && isCustomSetCellValue) {
+                forceUpdateRow = true;
+                focusCellAfterRowUpdate = true;
+            }
 
             if(showEditorAlways && !forceUpdateRow) {
                 if(isUpdateInCellMode) {
@@ -1915,6 +1921,7 @@ const EditingController = modules.ViewController.inherit((function() {
             if(row) {
                 if(forceUpdateRow || isCustomSetCellValue) {
                     that._updateEditRow(row, forceUpdateRow, isCustomSetCellValue);
+                    focusCellAfterRowUpdate && that._focusEditingCell();
                 } else if(row.update) {
                     row.update();
                 }
