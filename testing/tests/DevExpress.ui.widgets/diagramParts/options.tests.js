@@ -212,6 +212,70 @@ QUnit.module('Options', moduleConfig, () => {
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.ToggleSimpleView).execute(true);
         assert.equal(this.instance.option('simpleView'), true);
     });
+
+    test('should change dataSource options', function(assert) {
+        assert.equal(this.instance._diagramInstance.documentDataSource, undefined);
+        this.instance.option('nodes.dataSource', [
+            {
+                id: '1',
+                text: 'text1'
+            },
+            {
+                id: '2',
+                text: 'text2'
+            }
+        ]);
+        assert.notEqual(this.instance._diagramInstance.documentDataSource, undefined);
+        assert.equal(this.instance._diagramInstance.documentDataSource.nodes.length, 2);
+        assert.equal(this.instance._diagramInstance.documentDataSource.edges.length, 0);
+
+        this.instance.option('edges.dataSource', [
+            {
+                id: '3',
+                from: '1',
+                to: '2'
+            }
+        ]);
+        assert.notEqual(this.instance._diagramInstance.documentDataSource, undefined);
+        assert.equal(this.instance._diagramInstance.documentDataSource.nodes.length, 2);
+        assert.equal(this.instance._diagramInstance.documentDataSource.edges.length, 1);
+    });
+
+    test('should change data expression options', function(assert) {
+        assert.equal(this.instance._diagramInstance.documentDataSource, undefined);
+        this.instance.option('nodes.dataSource', [
+            {
+                id: '1',
+                text: 'text1'
+            }
+        ]);
+        assert.notEqual(this.instance._diagramInstance.documentDataSource, undefined);
+
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.getKey, undefined);
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setKey, undefined);
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.getType, undefined);
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setType, undefined);
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.getText, undefined);
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setText, undefined);
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.getChildren, undefined);
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setChildren, undefined);
+        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataImporter.getContainerKey, undefined);
+        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setContainerKey, undefined);
+
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.edgeDataImporter.getKey, undefined);
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.edgeDataImporter.setKey, undefined);
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.edgeDataImporter.getFrom, undefined);
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.edgeDataImporter.setFrom, undefined);
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.edgeDataImporter.getTo, undefined);
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.edgeDataImporter.setTo, undefined);
+
+        this.instance.option('nodes.containerKeyExpr', 'containerKey');
+        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataImporter.getChildren, undefined);
+        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setChildren, undefined);
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.getContainerKey, undefined);
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setContainerKey, undefined);
+    });
+
     test('should return correct autoLayout parameters based on the nodes.autoLayout option', function(assert) {
         assert.equal(this.instance.option('nodes.autoLayout'), 'auto');
         assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Sugiyama });
@@ -236,5 +300,30 @@ QUnit.module('Options', moduleConfig, () => {
         assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Tree });
         this.instance.option('nodes.autoLayout', { type: 'tree' });
         assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Tree });
+    });
+
+    test('should change customShapes option', function(assert) {
+        const descriptions = this.instance._diagramInstance.shapeDescriptionManager.descriptions;
+        assert.equal(Object.keys(descriptions).length, 43);
+
+        this.instance.option('customShapes', [
+            {
+                type: 'type1',
+                title: 'type1'
+            },
+            {
+                type: 'type2',
+                title: 'type2'
+            }
+        ]);
+        assert.equal(Object.keys(descriptions).length, 45);
+
+        this.instance.option('customShapes', [
+            {
+                type: 'type3',
+                title: 'type3'
+            }
+        ]);
+        assert.equal(Object.keys(descriptions).length, 44);
     });
 });
