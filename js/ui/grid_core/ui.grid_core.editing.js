@@ -1871,8 +1871,7 @@ const EditingController = modules.ViewController.inherit((function() {
             that._updateEditButtons();
 
             if(editMode === EDIT_MODE_CELL && isCustomSetCellValue) {
-                forceUpdateRow = true;
-                focusCellAfterRowUpdate = true;
+                forceUpdateRow = focusCellAfterRowUpdate = true;
             }
 
             if(showEditorAlways && !forceUpdateRow) {
