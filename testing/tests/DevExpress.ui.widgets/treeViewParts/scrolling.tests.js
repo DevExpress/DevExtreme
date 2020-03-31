@@ -14,7 +14,7 @@ QUnit.module('scrollToItem', () => {
             scrollDirection: config.scrollDirection,
             height: 150,
             width: 150,
-            animationEnabled: false, // +400ms per test
+            animationEnabled: false,
             items: items,
             rtlEnabled: config.rtlEnabled,
             onContentReady: config.onContentReady
