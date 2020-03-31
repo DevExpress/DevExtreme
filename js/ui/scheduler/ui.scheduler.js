@@ -2317,10 +2317,9 @@ const Scheduler = Widget.inherit({
             const startDate = this.fire('getField', 'startDate', appointmentData);
             const exceptions = recurrenceException.split(',');
             const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
-            const exceptionByStartDate = this.fire('convertDateByTimezone', startDate, startDateTimeZone);
 
             for(let i = 0; i < exceptions.length; i++) {
-                exceptions[i] = this._convertRecurrenceException(exceptions[i], exceptionByStartDate, startDateTimeZone);
+                exceptions[i] = this._convertRecurrenceException(exceptions[i], startDate, startDateTimeZone);
             }
 
             recurrenceException = exceptions.join();
@@ -2329,14 +2328,17 @@ const Scheduler = Widget.inherit({
         return recurrenceException;
     },
 
-    _convertRecurrenceException: function(exception, exceptionByStartDate, startDateTimeZone) {
-        exception = exception.replace(/\s/g, '');
-        exception = dateSerialization.deserializeDate(exception);
-        exception = this.fire('convertDateByTimezone', exception, startDateTimeZone);
+    _convertRecurrenceException: function(exceptionString, startDate, startDateTimeZone) {
+        exceptionString = exceptionString.replace(/\s/g, '');
 
-        exception = timeZoneUtils.correctRecurrenceExceptionByTimezone(exception, exceptionByStartDate, this.option('timeZone'), startDateTimeZone);
-        exception = dateSerialization.serializeDate(exception, FULL_DATE_FORMAT);
-        return exception;
+        let exceptionDate = dateSerialization.deserializeDate(exceptionString);
+
+        const convertedException = this.fire('convertDateByTimezone', exceptionDate, startDateTimeZone);
+        const convertedStartDate = this.fire('convertDateByTimezone', startDate, startDateTimeZone);
+
+        exceptionDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(convertedException, convertedStartDate, this.option('timeZone'), startDateTimeZone);
+        exceptionString = dateSerialization.serializeDate(exceptionDate, FULL_DATE_FORMAT);
+        return exceptionString;
     },
 
     dayHasAppointment: function(day, appointment, trimTime) {
