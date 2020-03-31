@@ -78,6 +78,7 @@ QUnit.test('Tasks should be duplicated according to recurrence rule, if firstDay
 });
 
 QUnit.test('Tasks should be duplicated according to recurrence rule and recurrence exception', function(assert) {
+    // NOTE: recurrenceException in date format wil be converted in dateTime with 00.00 time when processing
     const tasks = [
         { text: 'One', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 2), recurrenceRule: 'FREQ=DAILY', recurrenceException: '20150317' }
     ];
