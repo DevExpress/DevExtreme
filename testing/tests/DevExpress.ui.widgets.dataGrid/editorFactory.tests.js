@@ -1123,6 +1123,7 @@ QUnit.module('Editor Factory - RTL', {
         executeAsyncMock.setup();
     },
     afterEach: function() {
+        this.dispose();
         executeAsyncMock.teardown();
     }
 });
@@ -1336,6 +1337,9 @@ QUnit.module('Focus', {
         };
     },
     afterEach: function() {
+        if(this.dispose) {
+            this.dispose();
+        }
         this.clock.restore();
     }
 });
