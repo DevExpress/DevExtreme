@@ -608,7 +608,7 @@ QUnit.module('templates', () => {
 });
 
 QUnit.module('events subscriptions', () => {
-    QUnit.test('click', function(assert) {
+    QUnit.skip.test('click', function(assert) {
         const done = assert.async();
         const clickHandler = sinon.spy();
         const $button = $('#button').Button({
