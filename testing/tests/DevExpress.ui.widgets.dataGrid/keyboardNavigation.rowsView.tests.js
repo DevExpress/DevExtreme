@@ -146,6 +146,9 @@ QUnit.module('Rows view', {
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
+        if(this.dispose) {
+            this.dispose();
+        }
         this.clock.restore();
     }
 }, function() {

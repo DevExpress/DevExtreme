@@ -1420,6 +1420,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         fx.off = true;
     },
     afterEach: function() {
+        this.dispose();
         this.clock.restore();
         fx.off = false;
     }

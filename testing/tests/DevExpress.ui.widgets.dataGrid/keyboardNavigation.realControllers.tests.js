@@ -116,6 +116,7 @@ QUnit.module('Keyboard navigation with real dataController and columnsController
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
+        this.dispose();
         this.clock.restore();
     }
 }, function() {

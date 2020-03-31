@@ -69,6 +69,7 @@ QUnit.module('AdaptiveColumns', {
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
+        this.dispose();
         this.clock.restore();
     }
 });
@@ -1828,6 +1829,7 @@ QUnit.module('API', {
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
+        this.dispose();
         this.clock.restore();
     }
 });
@@ -2072,6 +2074,7 @@ QUnit.module('Editing', {
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
+        this.dispose();
         this.clock.restore();
     }
 });
@@ -3721,6 +3724,7 @@ QUnit.module('Validation', {
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
+        this.dispose();
         this.clock.restore();
     }
 }, function() {
@@ -4175,6 +4179,9 @@ QUnit.module('Keyboard navigation', {
     },
 
     afterEach: function() {
+        if(this.dispose) {
+            this.dispose();
+        }
         this.clock.restore();
     }
 }, function() {

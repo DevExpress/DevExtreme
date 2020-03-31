@@ -194,7 +194,10 @@ QUnit.module('Keyboard keys', {
         that.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
-        this.dispose && this.dispose();
+        if(this.dispose) {
+            this.dispose();
+        }
+
         this.clock.restore();
     }
 }, function() {
