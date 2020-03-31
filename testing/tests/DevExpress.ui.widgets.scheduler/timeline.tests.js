@@ -43,7 +43,7 @@ QUnit.module('Timeline Base', {
                 delete this.instance;
             }
 
-            this.instance = $('#scheduler-timeline').dxSchedulerTimeline(options).dxSchedulerTimeline('instance');
+            this.instance = $('#scheduler-timeline').dxSchedulerTimeline().dxSchedulerTimeline('instance');
             stubInvokeMethod(this.instance, options);
         };
 
