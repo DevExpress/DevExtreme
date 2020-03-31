@@ -5,6 +5,9 @@
 @import (once) "./colorBox.generic.less";
 @import (once) "./form.generic.less";
 
+@GENERIC_HTML_EDITOR_TOOLBAR_HEIGHT: @GENERIC_BASE_INLINE_WIDGET_HEIGHT;
+@GENERIC_MOBILE_HTML_EDITOR_TOOLBAR_HEIGHT: @GENERIC_MOBILE_BASE_INLINE_WIDGET_SIZE;
+
 .dx-htmleditor {
     .dx-htmleditor-toolbar-wrapper:first-child {
         border-bottom: 1px solid @htmleditor-toolbar-border-color;
@@ -62,6 +65,14 @@
 
         &.dx-button-danger {
             background-color: @htmleditor-danger-format-active-bg;
+        }
+    }
+
+    .dx-htmleditor-toolbar-separator {
+        height: @GENERIC_HTML_EDITOR_TOOLBAR_HEIGHT;
+
+        .dx-device-mobile & {
+            height: @GENERIC_MOBILE_HTML_EDITOR_TOOLBAR_HEIGHT;
         }
     }
 }

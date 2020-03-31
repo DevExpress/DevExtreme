@@ -85,7 +85,8 @@ const getDistance = function(x1, y1, x2, y2) {
 };
 
 const getDecimalOrder = function(number) {
-    let n = abs(number); let cn;
+    let n = abs(number);
+    let cn;
     if(!_isNaN(n)) {
         if(n > 0) {
             n = log(n) / LN10;
@@ -242,7 +243,9 @@ extend(exports, {
     },
 
     enumParser: function(values) {
-        const stored = {}; let i; let ii;
+        const stored = {};
+        let i;
+        let ii;
         for(i = 0, ii = values.length; i < ii; ++i) {
             stored[normalizeEnum(values[i])] = 1;
         }
@@ -344,12 +347,10 @@ extend(exports, {
         const categoriesValue = map(categories, function(category) {
             return isDefined(category) ? category.valueOf() : null;
         });
-        let visibleCategories;
         let indexStartValue = categoriesValue.indexOf(startValue.valueOf());
         let indexEndValue = categoriesValue.indexOf(endValue.valueOf());
         let swapBuf;
         let inverted = false;
-        let lastIdx;
 
         indexStartValue < 0 && (indexStartValue = 0);
         indexEndValue < 0 && (indexEndValue = categories.length - 1);
@@ -360,8 +361,8 @@ extend(exports, {
             inverted = true;
         }
 
-        visibleCategories = categories.slice(indexStartValue, indexEndValue + 1);
-        lastIdx = visibleCategories.length - 1;
+        const visibleCategories = categories.slice(indexStartValue, indexEndValue + 1);
+        const lastIdx = visibleCategories.length - 1;
         return {
             categories: visibleCategories,
             start: visibleCategories[inverted ? lastIdx : 0],
@@ -609,11 +610,15 @@ function raiseToExt(value, base, allowNegatives = false, linearThreshold) {
 function rangesAreEqual(range, rangeFromOptions) {
     if(Array.isArray(rangeFromOptions)) {
         return range.length === rangeFromOptions.length
-            && range.every((item, i) => item === rangeFromOptions[i]);
+            && range.every((item, i) => valueOf(item) === valueOf(rangeFromOptions[i]));
     } else {
-        return range.startValue === rangeFromOptions.startValue
-            && range.endValue === rangeFromOptions.endValue;
+        return valueOf(range.startValue) === valueOf(rangeFromOptions.startValue)
+            && valueOf(range.endValue) === valueOf(rangeFromOptions.endValue);
     }
+}
+
+function valueOf(value) {
+    return value && value.valueOf();
 }
 
 function pointInCanvas(canvas, x, y) {
@@ -640,6 +645,7 @@ exports.getDistance = getDistance;
 
 exports.roundValue = roundValue;
 exports.getPower = getPower;
+exports.valueOf = valueOf;
 
 exports.rotateBBox = rotateBBox;
 exports.normalizeBBox = normalizeBBox;

@@ -505,4 +505,25 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
         assert.ok(rootItem.isRoot(), 'root has root flag');
     });
 
+    test('files can have extensions of any letter case', function(assert) {
+        const extendedData = this.data.concat({ name: 'File2.JPEG' }, { name: 'File3.Doc' });
+        this.controller = new FileItemsController({
+            fileProvider: extendedData,
+            allowedFileExtensions: [ '.jpeg', '.doC' ]
+        });
+        const selectedDir = this.controller.getCurrentDirectory();
+        const done1 = assert.async();
+        this.controller
+            .getDirectoryContents(selectedDir)
+            .done(items => {
+                assert.equal(items.length, 4);
+                assert.equal(items[0].fileItem.name, 'F1');
+                assert.equal(items[1].fileItem.name, 'F2');
+                assert.equal(items[2].fileItem.name, 'File2.JPEG');
+                assert.equal(items[3].fileItem.name, 'File3.Doc');
+                done1();
+            });
+        this.clock.tick(100);
+    });
+
 });

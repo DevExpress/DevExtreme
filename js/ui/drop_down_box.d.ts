@@ -52,14 +52,6 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      */
     displayValueFormatter?: ((value: string | Array<any>) => string);
     /**
-     * @docid dxDropDownBoxOptions.dropDownOptions
-     * @type dxPopupOptions
-     * @default {}
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    dropDownOptions?: dxPopupOptions;
-    /**
      * @docid dxDropDownBoxOptions.fieldTemplate
      * @type template|function
      * @default null

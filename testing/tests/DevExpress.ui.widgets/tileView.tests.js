@@ -20,6 +20,8 @@ const TILEVIEW_CONTAINER_CLASS = 'dx-tileview-wrapper';
 const TILEVIEW_ITEM_CLASS = 'dx-tile';
 const TILEVIEW_ITEM_SELECTOR = '.' + TILEVIEW_ITEM_CLASS;
 
+const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
+
 const DEFAULT_ITEMSIZE = 100;
 const DEFAULT_ITEMMARGIN = 20;
 const DEFAULT_ITEMOFFSET = DEFAULT_ITEMSIZE + DEFAULT_ITEMMARGIN;
@@ -188,7 +190,8 @@ QUnit.module('rendering', {
     });
 
     QUnit.test('rendering horizontal in RTL mode', function(assert) {
-        const config = configs.horizontal; const getPosition = getPositionCreator(config);
+        const config = configs.horizontal;
+        const getPosition = getPositionCreator(config);
 
         const element = this.element.dxTileView({
             height: 200,
@@ -222,7 +225,8 @@ QUnit.module('rendering', {
     });
 
     QUnit.test('rendering vertical in RTL mode', function(assert) {
-        const config = configs.vertical; const getPosition = getPositionCreator(config);
+        const config = configs.vertical;
+        const getPosition = getPositionCreator(config);
 
         const element = this.element.dxTileView({
             width: 200,
@@ -332,6 +336,29 @@ QUnit.module('widget sizing render', () => {
         instance.option('width', customWidth);
 
         assert.strictEqual($element.outerWidth(), customWidth, 'outer width of the element must be equal to custom width');
+    });
+
+    QUnit.test('scrollable content has the correct width if it is larger than the widget', function(assert) {
+        const customWidth = 500;
+        const $element = $('#widget').dxTileView({
+            items: prepareItems(items, configs.horizontal),
+            height: 300,
+            width: customWidth
+        });
+
+        assert.ok($element.find(`.${SCROLLVIEW_CONTENT_CLASS}`).width() > customWidth + 1);
+    });
+
+    QUnit.test('scrollable content has the correct width if it is less than the widget (T860587)', function(assert) {
+        const customWidth = 1500;
+        const $element = $('#widget').dxTileView({
+            items: prepareItems(items, configs.horizontal),
+            height: 600,
+            width: customWidth,
+            rtlEnabled: true
+        });
+
+        assert.roughEqual($element.find(`.${SCROLLVIEW_CONTENT_CLASS}`).width(), customWidth, 1);
     });
 });
 
@@ -446,7 +473,8 @@ QUnit.module('keyboard navigation', {
     }
 }, () => {
     QUnit.test('useKeyboard is must be false by default', function(assert) {
-        const instance = this.$element.dxTileView().dxTileView('instance'); const scrollView = this.$element.dxScrollView('instance');
+        const instance = this.$element.dxTileView().dxTileView('instance');
+        const scrollView = this.$element.dxScrollView('instance');
 
         instance.option('useKeyboard', false);
         assert.ok(!scrollView.option('useKeyboard'), 'useKeyboard is false in scrollview');

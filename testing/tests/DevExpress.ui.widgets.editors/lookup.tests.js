@@ -152,7 +152,8 @@ QUnit.module('Lookup', {
 
         this.togglePopup();
 
-        const popup = this.popup; const $field = this.$field;
+        const popup = this.popup;
+        const $field = this.$field;
 
         assert.ok(popup.option('visible'), 'popup shows on click');
 
@@ -181,7 +182,8 @@ QUnit.module('Lookup', {
 
         this.togglePopup();
 
-        const popup = this.popup; const $field = this.$field;
+        const popup = this.popup;
+        const $field = this.$field;
 
         $field.trigger('dxclick');
         assert.ok(!popup.option('visible'), 'popup hides on click');
@@ -802,7 +804,8 @@ QUnit.module('Lookup', {
 
         this.togglePopup();
 
-        const loadTriggeredAtStart = loadTriggered; const search = this.search;
+        const loadTriggeredAtStart = loadTriggered;
+        const search = this.search;
 
         search.option('value', 't');
         this.clock.tick(300);
@@ -1369,7 +1372,8 @@ QUnit.module('Lookup', {
     });
 
     QUnit.test('Check popup position for Material theme when fullScreen option is true ', function(assert) {
-        const isMaterialStub = sinon.stub(themes, 'isMaterial'); const $lookup = $('#lookup');
+        const isMaterialStub = sinon.stub(themes, 'isMaterial');
+        const $lookup = $('#lookup');
 
         isMaterialStub.returns(true);
 
@@ -1538,7 +1542,7 @@ QUnit.module('options', {
             autoValue = autoValue();
         }
 
-        assert.equal(initialValue, autoValue, 'initial value equal auto value');
+        assert.equal(autoValue, initialValue, 'initial value equal auto value');
     });
 
     QUnit.test('popupHeight', function(assert) {
@@ -1572,7 +1576,7 @@ QUnit.module('options', {
             autoValue = autoValue();
         }
 
-        assert.equal(initialValue, autoValue, 'initial value equal auto value');
+        assert.equal(autoValue, initialValue, 'initial value equal auto value');
     });
 
     QUnit.test('searchPlaceholder', function(assert) {
@@ -1735,7 +1739,9 @@ QUnit.module('options', {
     });
 
     QUnit.test('value', function(assert) {
-        const items = [1, 2, 3]; const instance = $('#lookup').dxLookup({ dataSource: items }).dxLookup('instance'); const $field = $(instance._$field);
+        const items = [1, 2, 3];
+        const instance = $('#lookup').dxLookup({ dataSource: items }).dxLookup('instance');
+        const $field = $(instance._$field);
 
         assert.equal($field.text(), instance.option('placeholder'), 'no field text if no selected value');
 
@@ -1855,7 +1861,8 @@ QUnit.module('options', {
     });
 
     QUnit.test('items after null data source', function(assert) {
-        const items2 = [4, 5]; const instance = $('#lookup').dxLookup({}).dxLookup('instance');
+        const items2 = [4, 5];
+        const instance = $('#lookup').dxLookup({}).dxLookup('instance');
 
         instance.option('items', items2);
 
@@ -1921,7 +1928,9 @@ QUnit.module('options', {
 
         $(instance._$field).trigger('dxclick');
 
-        const search = instance._searchBox; const $field = $(instance._$field); const $list = $(instance._list.$element());
+        const search = instance._searchBox;
+        const $field = $(instance._$field);
+        const $list = $(instance._list.$element());
 
         assert.equal($list.find('.dx-list-item').filter(':visible').length, 0, 'No items are expected to be shown');
         assert.equal($field.text(), placeholder);
@@ -2373,7 +2382,8 @@ QUnit.module('list options', {
 
 QUnit.module('Native scrolling', () => {
     QUnit.test('After load new page scrollTop should not be changed', function(assert) {
-        const data = []; const done = assert.async();
+        const data = [];
+        const done = assert.async();
 
         for(let i = 100; i >= 0; i--) {
             data.push(i);
@@ -3182,7 +3192,6 @@ QUnit.module('default options', {
             const lookup = $lookup.dxLookup({ dataSource: ['blue', 'orange', 'lime', 'purple'] }).dxLookup('instance');
 
             assert.equal(lookup.option('popupWidth')(), $lookup.outerWidth(), 'popup width match with lookup field width');
-            assert.equal(lookup.option('position').of, lookup.element(), 'popup position of lookup field');
 
             $(lookup.field()).trigger('dxclick');
 
@@ -3271,6 +3280,100 @@ QUnit.module('default options', {
             themes.isMaterial = origIsMaterial;
         }
     });
+
+    QUnit.test('Check itemCenteringEnabled option for Material theme', function(assert) {
+        const origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
+
+        const $lookup = $('<div>').prependTo('body');
+
+        try {
+
+            const lookup = $lookup.dxLookup({ dataSource: ['blue', 'orange', 'lime', 'purple', 'green'], value: 'blue' }).dxLookup('instance');
+
+            lookup.option('usePopover', false);
+            lookup.option('itemCenteringEnabled', false);
+
+            $(lookup.field()).trigger('dxclick');
+
+            let $popup = $('.dx-popup-wrapper');
+
+            assert.roughEqual($popup.find('.dx-overlay-content').outerWidth(), $(window).width() * 0.8, 3, 'default popup width like generic');
+            assert.roughEqual($popup.find('.dx-overlay-content').outerHeight(), $('.dx-list-item').height() * 5 + 2, 3, 'default popup height like generic');
+
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, ($(window).height() - $popup.find('.dx-overlay-content').outerHeight()) / 2, 1, 'default popup position of window');
+
+            lookup.option('position', 'top');
+
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, 0, 1, 'popup position of window after change position');
+
+            $(lookup.field()).trigger('dxclick');
+
+            lookup.close();
+
+            lookup.option('usePopover', true);
+
+            $(lookup.field()).trigger('dxclick');
+
+            const $popover = $('.dx-popup-wrapper');
+
+            assert.equal($popover.find('.dx-overlay-content').outerWidth(), $(lookup.field()).outerWidth() + 2, 'popup width match with lookup field width');
+
+            // android6 test fail
+            // assert.roughEqual($popover.find('.dx-overlay-content').outerHeight(), $('.dx-list-item').height() * 5 + 2, 3, 'popup height auto if usePopover true');
+
+            assert.roughEqual($popover.find('.dx-overlay-content').eq(0).position().top, $(lookup.field()).outerHeight() + 8, 2, 'popover position of lookup field with body padding 8px');
+
+            lookup.close();
+
+            lookup.option('itemCenteringEnabled', true);
+
+            $(lookup.field()).trigger('dxclick');
+
+            $popup = $('.dx-popup-wrapper');
+
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -3.5, 1, 'popup position if option is false');
+
+            lookup.close();
+        } finally {
+            $lookup.remove();
+            themes.isMaterial = origIsMaterial;
+        }
+    });
+
+
+    QUnit.test('Check itemCenteringEnabled option for Generic theme', function(assert) {
+        const $lookup = $('<div>').prependTo('body');
+
+        try {
+
+            const lookup = $lookup.dxLookup({ dataSource: ['blue', 'orange', 'lime', 'purple', 'green'], value: 'blue' }).dxLookup('instance');
+
+            lookup.option('usePopover', true);
+            lookup.option('itemCenteringEnabled', true);
+
+            $(lookup.field()).trigger('dxclick');
+
+            const $popover = $('.dx-popover-wrapper');
+
+            assert.roughEqual($popover.find('.dx-overlay-content').eq(0).position().top, $(lookup.field()).outerHeight() + 8 + 10, 2, 'popover position of lookup field with body padding 8px');
+
+            lookup.close();
+
+            lookup.option('usePopover', false);
+
+            $(lookup.field()).trigger('dxclick');
+
+            const $popup = $('.dx-popup-wrapper');
+
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, ($(window).height() - $popup.find('.dx-overlay-content').outerHeight()) / 2, 1, 'default popup position of window');
+
+            lookup.close();
+        } finally {
+            $lookup.remove();
+        }
+    });
+
 
     QUnit.test('changing popupWidth in default options should change popover width', function(assert) {
         const defaultWidth = 100;

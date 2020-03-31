@@ -3332,132 +3332,80 @@ QUnit.test('changeRowSelection onClick Multiple mode', function(assert) {
     assert.ok(!this.selectionController.isSelectionWithCheckboxes(), 'isSelectionWithCheckboxes');
 });
 
-QUnit.test('changeRowSelection for edited data if batch edit mode (T357814)', function(assert) {
-    // arrange
-    const $testElement = $('#container').width(800);
-    const rowsViewWrapper = dataGridWrapper.rowsView;
+['cell', 'batch'].forEach(editMode => {
+    QUnit.test(`changeRowSelection for edited data if editing.mode: ${editMode} (T357814)`, function(assert) {
+        // arrange
+        const $testElement = $('#container').width(800);
+        const rowsViewWrapper = dataGridWrapper.rowsView;
 
-    this.options.selection.showCheckBoxesMode = 'onClick';
-    this.options.editing = {
-        mode: 'batch',
-        allowUpdating: true
-    };
-    this.setup();
-    this.columnHeadersView.render($testElement);
-    this.rowsView.render($testElement);
-    this.cellValue(0, 1, 'Test');
+        this.options.selection.showCheckBoxesMode = 'onClick';
+        this.options.editing = {
+            mode: editMode,
+            allowUpdating: true
+        };
+        this.setup();
+        this.columnHeadersView.render($testElement);
+        this.rowsView.render($testElement);
+        this.cellValue(0, 1, 'Test');
 
-    // act
-    this.selectionController.changeItemSelection(0);
+        // act
+        this.selectionController.changeItemSelection(0);
 
-    // assert
-    assert.equal(rowsViewWrapper.getDataCellElement(0, 1).text(), 'Test', 'Text of the first cell');
-    assert.ok(rowsViewWrapper.isSelectedRow(0), 'First row is selected');
-    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Alex', age: 15 }], 'selected row key of the first row');
+        // assert
+        const dataCell = rowsViewWrapper.getDataRow(0).getCell(1);
+        assert.equal(dataCell.getElement().text(), 'Test', 'Text of the first cell');
+        assert.ok(rowsViewWrapper.getDataRow(0).isSelected(), 'First row is selected');
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Alex', age: 15 }], 'selected row key of the first row');
 
-    // act
-    this.saveEditData();
+        // act
+        this.saveEditData();
 
-    // assert
-    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Test', age: 15 }], 'selected row key of the first row after save');
-});
+        // assert
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Test', age: 15 }], 'selected row key of the first row after save');
+    });
 
-QUnit.test('changeRowSelection for edited data if cell edit mode (T357814)', function(assert) {
-    // arrange
-    const $testElement = $('#container').width(800);
-    const rowsViewWrapper = dataGridWrapper.rowsView;
+    QUnit.test(`changeRowSelection for editing data if editing.mode: ${editMode} (T654321)`, function(assert) {
+        // arrange
+        const that = this;
+        const $testElement = $('#container').width(800);
+        const clock = sinon.useFakeTimers();
+        const rowsViewWrapper = dataGridWrapper.rowsView;
 
-    this.options.selection.showCheckBoxesMode = 'onClick';
-    this.options.editing = {
-        mode: 'cell',
-        allowUpdating: true
-    };
-    this.setup();
-    this.columnHeadersView.render($testElement);
-    this.rowsView.render($testElement);
-    this.cellValue(0, 1, 'Test');
+        that.options.selection.showCheckBoxesMode = 'onClick';
+        that.options.editing = {
+            mode: editMode,
+            allowUpdating: true
+        };
+        that.options.onSelectionChanged = function(e) {
+            assert.deepEqual(e.selectedRowKeys, [{ 'name': 'Alex', 'age': 15 }], 'selectedRowKeys contains original data');
+        };
+        that.setup();
+        that.columnHeadersView.render($testElement);
+        that.rowsView.render($testElement);
 
-    // act
-    this.selectionController.changeItemSelection(0);
+        // act
+        that.editCell(0, 1);
+        const editor = rowsViewWrapper.getDataRow(0).getCell(1).getEditor();
+        editor.getInputElement().val('Test');
 
-    // assert
-    assert.equal(rowsViewWrapper.getDataCellElement(0, 1).text(), 'Test', 'Text of the first cell');
-    assert.ok(rowsViewWrapper.isSelectedRow(0), 'First row is selected');
-    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Alex', age: 15 }], 'selected row key of the first row');
+        const dataRow0 = rowsViewWrapper.getDataRow(0);
+        const $selectCheckBox = dataRow0.getSelectCheckBox(0).getElement();
+        $selectCheckBox.trigger(clickEvent.name);
 
-    // act
-    this.saveEditData();
+        clock.tick();
 
-    // assert
-    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Test', age: 15 }], 'selected row key of the first row after save');
-});
-
-QUnit.test('changeRowSelection for editing data (T654321)', function(assert) {
-    // arrange
-    const that = this;
-    const $testElement = $('#container').width(800);
-    const clock = sinon.useFakeTimers();
-    const rowsViewWrapper = dataGridWrapper.rowsView;
-
-    that.options.selection.showCheckBoxesMode = 'onClick';
-    that.options.editing = {
-        mode: 'batch',
-        allowUpdating: true
-    };
-    that.options.onSelectionChanged = function(e) {
-        assert.deepEqual(e.selectedRowKeys, [{ 'name': 'Alex', 'age': 15 }], 'selectedRowKeys contains original data');
-    };
-    that.setup();
-    that.columnHeadersView.render($testElement);
-    that.rowsView.render($testElement);
-
-    // act
-    that.editCell(0, 1);
-    rowsViewWrapper.getEditorInput(0, 1).val('Test');
-    rowsViewWrapper.getSelectCheckBox(0, 0).trigger(clickEvent.name);
-
-    clock.tick();
-
-    clock.restore();
-});
-
-QUnit.test('changeRowSelection for editing data if cell edit mode (T826197)', function(assert) {
-    // arrange
-    const that = this;
-    const $testElement = $('#container').width(800);
-    const clock = sinon.useFakeTimers();
-    const rowsViewWrapper = dataGridWrapper.rowsView;
-
-    that.options.selection.showCheckBoxesMode = 'onClick';
-    that.options.editing = {
-        mode: 'cell'
-    };
-    that.options.onSelectionChanged = function(e) {
-        assert.deepEqual(e.selectedRowKeys, [{ 'name': 'Alex', 'age': 15 }], 'selectedRowKeys contains original data');
-    };
-    that.setup();
-    that.columnHeadersView.render($testElement);
-    that.rowsView.render($testElement);
-
-    // act
-    that.editCell(0, 1);
-    rowsViewWrapper.getEditorInput(0, 1).val('Test');
-    rowsViewWrapper.getSelectCheckBox(0, 0).trigger(clickEvent.name);
-
-    clock.tick();
-
-    clock.restore();
+        clock.restore();
+    });
 });
 
 QUnit.test('Indeterminate state of selectAll', function(assert) {
-    let $checkbox;
     const testElement = $('#container');
 
     this.setup();
     this.columnHeadersView.render(testElement);
     this.rowsView.render(testElement);
 
-    $checkbox = $('.dx-header-row').find('.dx-checkbox');
+    const $checkbox = $('.dx-header-row').find('.dx-checkbox');
 
     // act
     this.selectionController.changeItemSelection(1);

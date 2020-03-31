@@ -14,6 +14,10 @@ import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
+import {
+    dxToolbarItem
+} from './toolbar';
+
 export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid dxGanttOptions.allowSelection
@@ -46,6 +50,13 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @public
      */
     editing?: { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowDependencyUpdating?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskUpdating?: boolean, enabled?: boolean };
+    /**
+     * @docid dxGanttOptions.validation
+     * @type Object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    validation?: { enableDependencyValidation?: boolean, autoUpdateParentTasks?: boolean };
     /**
      * @docid dxGanttOptions.onSelectionChanged
      * @extends Action
@@ -130,13 +141,21 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      */
     tasks?: { dataSource?: Array<any> | DataSource | DataSourceOptions, endExpr?: string | Function, keyExpr?: string | Function, parentIdExpr?: string | Function, progressExpr?: string | Function, startExpr?: string | Function, titleExpr?: string | Function };
     /**
-     * @docid dxGanttOptions.timeMarkers
-     * @type Array<dxGanttTimeMarker>
+     * @docid dxGanttOptions.toolbar
+     * @type dxGanttToolbar
+     * @default null
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    toolbar?: dxGanttToolbar;
+    /**
+     * @docid dxGanttOptions.stripLines
+     * @type Array<dxGanttStripLine>
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    timeMarkers?: Array<dxGanttTimeMarker>;
+    stripLines?: Array<dxGanttStripLine>;
 }
 /**
  * @docid dxGantt
@@ -151,9 +170,36 @@ export default class dxGantt extends Widget {
     constructor(element: JQuery, options?: dxGanttOptions)
 }
 
-export interface dxGanttTimeMarker {
+export interface dxGanttToolbar {
     /**
-     * @docid dxGanttTimeMarker.cssClass
+     * @docid dxGanttToolbar.items
+     * @type Array<dxGanttToolbarItem,Enums.GanttToolbarItem>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'zoomIn' | 'zoomOut'>;
+}
+
+export interface dxGanttToolbarItem extends dxToolbarItem {
+    /**
+     * @docid dxGanttToolbarItem.formatName
+     * @type Enums.GanttToolbarItem|string
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    formatName?: 'separator' | 'undo' | 'redo' | 'zoomIn' | 'zoomOut' | string;
+    /**
+     * @docid dxGanttToolbarItem.location
+     * @default "before"
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    location?: 'after' | 'before' | 'center';
+}
+
+export interface dxGanttStripLine {
+    /**
+     * @docid dxGanttStripLine.cssClass
      * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -161,7 +207,7 @@ export interface dxGanttTimeMarker {
      */
     cssClass?: string;
     /**
-     * @docid dxGanttTimeMarker.end
+     * @docid dxGanttStripLine.end
      * @type Date|number|string|function
      * @type_function_return Date|number|string
      * @default undefined
@@ -170,7 +216,7 @@ export interface dxGanttTimeMarker {
      */
     end?: Date | number | string | (() => Date | number | string);
     /**
-     * @docid dxGanttTimeMarker.start
+     * @docid dxGanttStripLine.start
      * @type Date|number|string|function
      * @type_function_return Date|number|string
      * @default undefined
@@ -180,7 +226,7 @@ export interface dxGanttTimeMarker {
     start?: Date | number | string | (() => Date | number | string);
     /**
      /**
-     * @docid dxGanttTimeMarker.title
+     * @docid dxGanttStripLine.title
      * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui

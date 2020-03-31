@@ -676,7 +676,7 @@ export const MockPoint = Class.inherit(
         },
 
         update: function(options) {
-            this._options = this.mockOptions = options || {};
+            this._options = options || {};
             this.argument = options.argument;
             this.value = options.value !== undefined ? options.value : 0;
             this.size = options.size;
@@ -698,7 +698,6 @@ export const MockPoint = Class.inherit(
             this.labelFormatObject = {};
             this.series = options.series || { type: '' };
 
-            this.options = this.mockOptions.options;
             this.pointClassName = options.pointClassName;
 
             this.x = options.x;
@@ -715,7 +714,6 @@ export const MockPoint = Class.inherit(
         dispose: function() {
             delete this.options;
             delete this.series;
-            delete this.mockOptions;
             this.disposed = true;
         },
         isInVisibleArea: function() {
@@ -738,7 +736,9 @@ export const MockPoint = Class.inherit(
                 this.correctionWasReset = false;
             }
         },
-
+        getMinValue() {
+            return this.minValue;
+        },
         resetCorrection: function() {
             this.correctionWasReset = true;
         },
@@ -882,7 +882,7 @@ export const MockPoint = Class.inherit(
             return this._visible !== undefined ? this._visible : true;
         },
         getOptions: function() {
-            return this.options;
+            return this._options;
         },
         getLegendStyles: function() {
             return {
@@ -939,6 +939,12 @@ export const MockAxis = function(renderOptions) {
         getMargins: function() {
             return { left: 0, top: 0, right: 0, bottom: 0 };
         },
+        visualRange: sinon.spy(function() {
+            if(arguments.length === 0) {
+                const opt = this._options || {};
+                return opt.visualRange;
+            }
+        }),
         updateSize: sinon.stub(),
 
         setBusinessRange: sinon.stub(),
@@ -1074,10 +1080,16 @@ export const MockAxis = function(renderOptions) {
         getAxisShift: function() {
             return 0;
         },
+        getCustomPositionAxis: commonUtils.noop,
+        customPositionIsAvailable() {
+            return false;
+        },
+        hasCustomPosition() {
+            return false;
+        },
         getMarginOptions: sinon.stub.returns({}),
         applyVisualRangeSetter: sinon.spy(),
         _setVisualRange: sinon.spy(),
-        visualRange: sinon.spy(),
         _getAdjustedBusinessRange: sinon.spy(),
         refreshVisualRangeOption: sinon.spy(),
         prepareAnimation: sinon.spy(),

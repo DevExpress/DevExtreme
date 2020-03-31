@@ -1,6 +1,7 @@
 import Popup from '../popup';
 import Form from '../form';
 import '../tag_box';
+import messageLocalization from '../../localization/message';
 
 export class GanttDialog {
     constructor(owner, $element) {
@@ -8,7 +9,9 @@ export class GanttDialog {
 
         this.infoMap = {
             TaskEdit: TaskEditDialogInfo,
-            Resources: ResourcesEditDialogInfo
+            Resources: ResourcesEditDialogInfo,
+            Confirmation: ConfirmDialogInfo,
+            ConstraintViolation: ConstraintViolationDialogInfo
         };
     }
     _apply() {
@@ -17,14 +20,16 @@ export class GanttDialog {
         this.hide();
     }
 
-    show(name, parameters, callback, editingOptions) {
+    show(name, parameters, callback, afterClosing, editingOptions) {
         this._callback = callback;
+        this._afterClosing = afterClosing;
 
         if(!this.infoMap[name]) {
             return;
         }
         this._dialogInfo = new this.infoMap[name](parameters, this._apply.bind(this), this.hide.bind(this), editingOptions);
         this._popupInstance.option({
+            showTitle: !!this._dialogInfo.getTitle(),
             title: this._dialogInfo.getTitle(),
             toolbarItems: this._dialogInfo.getToolbarItems(),
             maxWidth: this._dialogInfo.getMaxWidth(),
@@ -35,7 +40,9 @@ export class GanttDialog {
     }
     hide() {
         this._popupInstance.hide();
-        delete this._dialogInfo;
+        if(this._afterClosing) {
+            this._afterClosing();
+        }
     }
 }
 
@@ -50,24 +57,24 @@ class DialogInfoBase {
     _getFormItems() { return {}; }
     _updateParameters() {}
     _getOkToolbarItem() {
-        return {
-            widget: 'dxButton',
-            location: 'after',
-            toolbar: 'bottom',
-            options: {
-                text: 'Ok',
-                onClick: this._applyAction
-            }
-        };
+        return this._getToolbarItem('OK', this._applyAction);
     }
     _getCancelToolbarItem() {
+        return this._getToolbarItem('Cancel', this._hideAction);
+    }
+    _getYesToolbarItem() {
+        return this._getToolbarItem('Yes', this._applyAction);
+    }
+    _getNoToolbarItem() {
+        return this._getToolbarItem('No', this._hideAction);
+    }
+    _getToolbarItem(localizationText, action) {
         return {
             widget: 'dxButton',
-            location: 'after',
             toolbar: 'bottom',
             options: {
-                text: 'Cancel',
-                onClick: this._hideAction
+                text: messageLocalization.format(localizationText),
+                onClick: action
             }
         };
     }
@@ -89,43 +96,44 @@ class DialogInfoBase {
         };
     }
     getResult() {
-        const formData = this._form.option('formData');
+        const formData = this._form && this._form.option('formData');
         this._updateParameters(formData);
         return this._parameters;
     }
 }
 
 class TaskEditDialogInfo extends DialogInfoBase {
-    getTitle() { return 'Task Details'; }
+    getTitle() { return messageLocalization.format('dxGantt-dialogTaskDetailsTitle'); }
     _getFormItems() {
         const readOnly = !this._editingOptions.enabled || !this._editingOptions.allowTaskUpdating;
+        const readOnlyRange = readOnly || !this._parameters.enableRangeEdit;
         return [{
             dataField: 'title',
             editorType: 'dxTextBox',
-            label: { text: 'Title' },
+            label: { text: messageLocalization.format('dxGantt-dialogTitle') },
             editorOptions: { readOnly: readOnly }
         }, {
             dataField: 'start',
             editorType: 'dxDateBox',
-            label: { text: 'Start' },
+            label: { text: messageLocalization.format('dxGantt-dialogStartTitle') },
             editorOptions: {
                 type: 'datetime',
                 width: '100%',
-                readOnly: readOnly
+                readOnly: readOnlyRange
             }
         }, {
             dataField: 'end',
             editorType: 'dxDateBox',
-            label: { text: 'End' },
+            label: { text: messageLocalization.format('dxGantt-dialogEndTitle') },
             editorOptions: {
                 type: 'datetime',
                 width: '100%',
-                readOnly: readOnly
+                readOnly: readOnlyRange
             }
         }, {
             dataField: 'progress',
             editorType: 'dxNumberBox',
-            label: { text: 'Progress' },
+            label: { text: messageLocalization.format('dxGantt-dialogProgressTitle') },
             editorOptions: {
                 value: this._parameters.progress / 100,
                 showSpinButtons: true,
@@ -133,12 +141,12 @@ class TaskEditDialogInfo extends DialogInfoBase {
                 max: 1,
                 format: '#0%',
                 step: 0.01,
-                readOnly: readOnly
+                readOnly: readOnlyRange
             }
         }, {
             dataField: 'assigned.items',
             editorType: 'dxTagBox',
-            label: { text: 'Resources' },
+            label: { text: messageLocalization.format('dxGantt-dialogResourcesTitle') },
             editorOptions: {
                 readOnly: readOnly,
                 dataSource: this._parameters.resources.items,
@@ -148,7 +156,7 @@ class TaskEditDialogInfo extends DialogInfoBase {
                     location: 'after',
                     options: {
                         text: '...',
-                        hint: 'Edit Resource List',
+                        hint: messageLocalization.format('dxGantt-dialogEditResourceListHint'),
                         onClick: () => {
                             this._parameters.showResourcesDialogCommand.execute();
                         }
@@ -167,7 +175,7 @@ class TaskEditDialogInfo extends DialogInfoBase {
 }
 
 class ResourcesEditDialogInfo extends DialogInfoBase {
-    getTitle() { return 'Resources'; }
+    getTitle() { return messageLocalization.format('dxGantt-dialogResourceManagerTitle'); }
     _getFormItems() {
         return [{
             label: { visible: false },
@@ -179,7 +187,7 @@ class ResourcesEditDialogInfo extends DialogInfoBase {
                 selectionMode: 'none',
                 items: this._parameters.resources.items,
                 height: 250,
-                noDataText: 'No resources',
+                noDataText: messageLocalization.format('dxGantt-dialogEditNoResources'),
                 onInitialized: (e) => { this.list = e.component; },
                 onItemDeleted: (e) => { this._parameters.resources.remove(e.itemData); }
             }
@@ -198,7 +206,7 @@ class ResourcesEditDialogInfo extends DialogInfoBase {
                     name: 'addResource',
                     location: 'after',
                     options: {
-                        text: 'Add',
+                        text: messageLocalization.format('dxGantt-dialogButtonAdd'),
                         disabled: true,
                         onClick: (e) => {
                             const newItem = this._parameters.resources.createItem();
@@ -213,5 +221,57 @@ class ResourcesEditDialogInfo extends DialogInfoBase {
                 }]
             }
         }];
+    }
+}
+
+class ConfirmDialogInfo extends DialogInfoBase {
+    getContentTemplate() {
+        return (content) => {
+            return this._getConfirmMessage();
+        };
+    }
+    _getConfirmMessage() {
+        switch(this._parameters.type) {
+            case 0: return messageLocalization.format('dxGantt-dialogTaskDeleteConfirmation');
+            case 1: return messageLocalization.format('dxGantt-dialogDependencyDeleteConfirmation');
+            case 2: return messageLocalization.format('dxGantt-dialogResourcesDeleteConfirmation', this._parameters.message);
+            default: return '';
+        }
+    }
+    getToolbarItems() {
+        return [ this._getYesToolbarItem(), this._getNoToolbarItem()];
+    }
+}
+
+class ConstraintViolationDialogInfo extends DialogInfoBase {
+    _getFormItems() {
+        const items = [];
+        items.push({ text: messageLocalization.format('dxGantt-dialogCancelOperationMessage'), value: 0 });
+        items.push({ text: messageLocalization.format('dxGantt-dialogDeleteDependencyMessage'), value: 1 });
+        if(!this._parameters.validationError.critical) {
+            items.push({ text: messageLocalization.format('dxGantt-dialogMoveTaskAndKeepDependencyMessage'), value: 2 });
+        }
+
+        return [{
+            dataField: 'option',
+            label: {
+                text: this._parameters.validationError.critical ?
+                    messageLocalization.format('dxGantt-dialogConstraintCriticalViolationMessage') :
+                    messageLocalization.format('dxGantt-dialogConstraintViolationMessage'),
+                location: 'top'
+            },
+            editorType: 'dxRadioGroup',
+            editorOptions: {
+                items: items,
+                valueExpr: 'value',
+                value: 0
+            }
+        }];
+    }
+    getToolbarItems() {
+        return [ this._getOkToolbarItem()];
+    }
+    _updateParameters(formData) {
+        this._parameters.option = formData.option;
     }
 }

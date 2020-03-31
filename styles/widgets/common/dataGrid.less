@@ -14,6 +14,17 @@
     font-size: 0 !important; // stylelint-disable-line declaration-no-important
 }
 
+.dx-group-panel-item() {
+    display: inline-block;
+    min-width: 30px;
+    margin-right: 10px;
+    white-space: nowrap;
+
+    .dx-sort {
+        margin-left: 6px;
+    }
+}
+
 .dx-datagrid-group-panel {
     display: inline-block;
     white-space: nowrap;
@@ -25,18 +36,11 @@
     }
 
     .dx-group-panel-item {
-        display: inline-block;
-        min-width: 30px;
-        margin-right: 10px;
-        white-space: nowrap;
-
-        .dx-sort {
-            margin-left: 6px;
-        }
+        .dx-group-panel-item();
     }
 
     .dx-block-separator {
-        .dx-group-panel-item;
+        .dx-group-panel-item();
 
         color: transparent;
         position: relative;

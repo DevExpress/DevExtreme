@@ -107,6 +107,59 @@ const DataSource = require('data/data_source/data_source').DataSource;
         assert.deepEqual(actualFilter, expectedFilter, 'filter is right');
     });
 
+    QUnit.test('Appointment model should clear the internal user filter after dataSource has been filtered (T866593)', function(assert) {
+        const appointments = [
+            { text: 'a', StartDate: new Date(2015, 0, 1, 1), EndDate: new Date(2015, 0, 1, 2), priorityId: 2 },
+            { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6, 0), priorityId: 1 },
+            { text: 'c', StartDate: new Date(2015, 0, 1, 8), EndDate: new Date(2015, 0, 1, 9), priorityId: 1 }
+        ];
+
+        const dataSource = new DataSource({
+            store: appointments
+        });
+
+        const appointmentModel = new dxSchedulerAppointmentModel(dataSource, {
+            getter: {
+                startDate: compileGetter('StartDate'),
+                endDate: compileGetter('EndDate'),
+                recurrenceRule: compileGetter('RecurrenceRule'),
+                recurrenceException: compileGetter('Exception'),
+                allDay: compileGetter('AllDay'),
+                startDateTimeZone: compileGetter('StartDateTimeZone'),
+                endDateTimeZone: compileGetter('EndDateTimeZone')
+            },
+            setter: {
+                startDate: compileSetter('StartDate'),
+                endDate: compileSetter('EndDate'),
+                recurrenceRule: compileSetter('RecurrenceRule'),
+                recurrenceException: compileSetter('Exception'),
+                allDay: compileSetter('AllDay')
+            },
+            expr: {
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: 'RecurrenceRule',
+                recurrenceExceptionExpr: 'Exception'
+            }
+        });
+
+        appointmentModel.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2));
+
+        dataSource.load().done(() => {
+            dataSource.filter('priorityId', '=', 1);
+
+            appointmentModel.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2));
+
+            appointmentModel.filterLoadedAppointments({
+                startDayHour: 3,
+                endDayHour: 4
+            });
+
+            assert.equal(appointmentModel._filterMaker._filterRegistry.user, undefined, 'Empty user filter');
+        });
+    });
+
     QUnit.test('Appointment model filterByDate should filter dataSource correctly without copying dateFilter', function(assert) {
         const dateFilter = [
             [

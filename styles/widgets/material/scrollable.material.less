@@ -131,9 +131,15 @@
             > .dx-scrollable-container {
                 > .dx-scrollable-content {
                     padding-right: @SCROLLBAR_SIZE_THIN;
+                }
+            }
+        }
 
-                    .dx-rtl&,
-                    .dx-rtl & {
+        &.dx-rtl,
+        .dx-rtl & {
+            > .dx-scrollable-wrapper {
+                > .dx-scrollable-container {
+                    > .dx-scrollable-content {
                         padding-right: 0;
                         padding-left: @SCROLLBAR_SIZE_THIN;
                     }

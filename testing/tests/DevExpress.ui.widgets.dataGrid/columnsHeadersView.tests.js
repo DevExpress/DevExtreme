@@ -112,7 +112,6 @@ QUnit.test('Bounding rect is null when no columns', function(assert) {
 QUnit.test('Bounding rect with columns', function(assert) {
     // arrange
     const testElement = $('#container');
-    let boundingRect;
 
     $.extend(this.columns, [
         { caption: 'Column 1' },
@@ -122,7 +121,7 @@ QUnit.test('Bounding rect with columns', function(assert) {
 
     // act
     this.columnHeadersView.render(testElement);
-    boundingRect = this.columnHeadersView.getBoundingRect();
+    const boundingRect = this.columnHeadersView.getBoundingRect();
 
     // assert
     assert.ok(typeUtils.isObject(boundingRect) && typeUtils.isDefined(boundingRect.top), 'Bounding rect return object with "top" property when it has columns');
@@ -133,7 +132,6 @@ QUnit.test('Bounding rect with columns in iOS (T211627)', function(assert) {
     const realDevice = devices.real();
     const currentDevice = devices.current();
     const testElement = $('#container');
-    let boundingRect;
 
     devices.current('iPad');
     devices._realDevice = devices.current();
@@ -146,7 +144,7 @@ QUnit.test('Bounding rect with columns in iOS (T211627)', function(assert) {
 
     // act
     this.columnHeadersView.render(testElement);
-    boundingRect = this.columnHeadersView.getBoundingRect();
+    const boundingRect = this.columnHeadersView.getBoundingRect();
 
     // assert
     assert.ok(typeUtils.isObject(boundingRect) && typeUtils.isDefined(boundingRect.top), 'Bounding rect return object with "top" property when it has columns');
@@ -158,7 +156,6 @@ QUnit.test('Bounding rect with columns in iOS (T211627)', function(assert) {
 QUnit.test('Draw headers', function(assert) {
     // arrange
     const testElement = $('#container');
-    let cells;
     let i;
 
     $.extend(this.columns, [{ caption: 'Column 1' }, { caption: 'Column 2' }, { caption: 'Column 3' },
@@ -166,7 +163,7 @@ QUnit.test('Draw headers', function(assert) {
 
     // act
     this.columnHeadersView.render(testElement);
-    cells = dataGridMocks.getCells(testElement);
+    const cells = dataGridMocks.getCells(testElement);
 
     // assert
     assert.equal(cells.length, 5, 'headers count');
@@ -184,13 +181,12 @@ QUnit.test('Draw headers', function(assert) {
 QUnit.test('Headers with cssClass', function(assert) {
     // arrange
     const testElement = $('#container');
-    let cells;
 
     $.extend(this.columns, [{ caption: 'Column 1', cssClass: 'customCssClass' }, { caption: 'Column 2' }, { caption: 'Column 3' }]);
 
     // act
     this.columnHeadersView.render(testElement);
-    cells = dataGridMocks.getCells(testElement);
+    const cells = dataGridMocks.getCells(testElement);
 
     // assert
     assert.equal(cells.length, 3, 'headers count');
@@ -202,13 +198,12 @@ QUnit.test('Headers with cssClass', function(assert) {
 QUnit.test('Headers with option showColumnLines true', function(assert) {
     // arrange
     const testElement = $('#container');
-    let headerRow;
 
     this.options.showColumnLines = true;
 
     // act
     this.columnHeadersView.render(testElement);
-    headerRow = testElement.find('.dx-header-row');
+    const headerRow = testElement.find('.dx-header-row');
 
     // assert
     assert.ok(headerRow.hasClass('dx-column-lines'), 'has class dx-column-lines');
@@ -217,11 +212,10 @@ QUnit.test('Headers with option showColumnLines true', function(assert) {
 QUnit.test('Headers with option showColumnLines false', function(assert) {
     // arrange
     const testElement = $('#container');
-    let headerRow;
 
     // act
     this.columnHeadersView.render(testElement);
-    headerRow = testElement.find('.dx-header-row');
+    const headerRow = testElement.find('.dx-header-row');
 
     // assert
     assert.ok(!headerRow.hasClass('dx-column-lines'), 'not has class dx-column-lines');
@@ -273,7 +267,6 @@ QUnit.test('Column widths reset after change columns count and render', function
 QUnit.test('Scroll position after set column widths', function(assert) {
     // arrange
     const testElement = $('#containerIE').width(300);
-    let $scrollContainer;
 
     $.extend(this.columns, [{ caption: 'Column 1' }, { caption: 'Column 2' }]);
 
@@ -286,20 +279,19 @@ QUnit.test('Scroll position after set column widths', function(assert) {
     this.columnHeadersView.setColumnWidths({ widths: [200, 200] });
 
     // assert
-    $scrollContainer = this.columnHeadersView.element().find('.dx-datagrid-scroll-container');
+    const $scrollContainer = this.columnHeadersView.element().find('.dx-datagrid-scroll-container');
     assert.deepEqual($scrollContainer.scrollLeft(), 50);
 });
 
 QUnit.test('Draw grouped column header', function(assert) {
     // arrange
     const testElement = $('#container');
-    let cells;
 
     $.extend(this.columns, [{ caption: 'Column 1', groupIndex: 0, command: 'expand', cssClass: 'dx-command-expand' }, { caption: 'Column 2' }, { caption: 'Column 3' }]);
 
     // act
     this.columnHeadersView.render(testElement);
-    cells = testElement.find('td');
+    const cells = testElement.find('td');
 
     // assert
     assert.equal(cells.length, 3, 'headers count');
@@ -313,7 +305,6 @@ QUnit.test('Draw grouped column header', function(assert) {
 QUnit.test('Grouped column header after change sorting', function(assert) {
     // arrange
     const testElement = $('#container');
-    let cells;
 
     $.extend(this.columns, [{ caption: 'Column 1', groupIndex: 0, command: 'expand' }, { caption: 'Column 2' }, { caption: 'Column 3' }]);
 
@@ -324,7 +315,7 @@ QUnit.test('Grouped column header after change sorting', function(assert) {
     this.columns[1].sortOrder = 'asc';
 
     this.columnsController.columnsChanged.fire({ changeTypes: { sorting: true, length: 1 }, optionNames: {} });
-    cells = testElement.find('td');
+    const cells = testElement.find('td');
 
     // assert
     assert.equal(cells.length, 3, 'headers count');
@@ -390,13 +381,12 @@ QUnit.test('Not updating column header after filtering', function(assert) {
 QUnit.test('Height group space when all columns to grouping', function(assert) {
     // arrange
     const testElement = $('#container');
-    let cells;
 
     $.extend(this.columns, [{ headerCaption: 'Column 1', groupIndex: 0, command: 'expand' }, { headerCaption: 'Column 2', groupIndex: 1, command: 'expand' }, { headerCaption: 'Column 3', groupIndex: 2, command: 'expand' }, { command: 'empty' }]);
 
     // act
     this.columnHeadersView.render(testElement);
-    cells = testElement.find('td');
+    const cells = testElement.find('td');
 
     // assert
     assert.equal(cells.length, 4, 'headers count');
@@ -494,7 +484,6 @@ QUnit.test('Headers element is rendered when filter row is shown_B238622', funct
 QUnit.test('Draw filterRow', function(assert) {
     // arrange
     const testElement = $('#container');
-    let $filterCell;
 
     $.extend(this.columns, [
         { caption: 'Column 1', allowFiltering: true, calculateFilterExpression: function() { }, alignment: 'left' },
@@ -509,7 +498,7 @@ QUnit.test('Draw filterRow', function(assert) {
     // act
     this.columnHeadersView.render(testElement);
 
-    $filterCell = testElement.find('.dx-datagrid-filter-row .dx-editor-cell').first();
+    const $filterCell = testElement.find('.dx-datagrid-filter-row .dx-editor-cell').first();
 
     // assert
     const inputs = this.columnHeadersView.element().find('input');
@@ -636,13 +625,12 @@ QUnit.test('Draw filterRow with date column', function(assert) {
 QUnit.test('Apply text alignment', function(assert) {
     // arrange
     const testElement = $('#container');
-    let cells;
 
     $.extend(this.columns, [{ caption: 'Column 1', alignment: 'right' }, { caption: 'Column 2', alignment: 'left' }, { caption: 'Column 3', alignment: 'center' }]);
 
     // act
     this.columnHeadersView.render(testElement);
-    cells = testElement.find('td');
+    const cells = testElement.find('td');
 
     // assert
     assert.equal($(cells[0]).css('text-align'), 'right', 'cell 1');
@@ -911,7 +899,6 @@ QUnit.test('Sort while while cell is opened for editing in "row" mode. T450598',
 QUnit.test('Apply sorting ascending by click from context menu', function(assert) {
     // arrange
     const testElement = $('#container');
-    let popupMenu;
 
     $.extend(this.columns, [{ caption: 'Column 1', allowSorting: true, index: 0 }, { caption: 'Column 2' }, { caption: 'Column 3' }]);
 
@@ -925,7 +912,7 @@ QUnit.test('Apply sorting ascending by click from context menu', function(assert
 
     $(cells[0]).trigger('contextmenu');
 
-    popupMenu = $('.dx-viewport').children('.dx-overlay-wrapper').find('.dx-context-menu').first();
+    const popupMenu = $('.dx-viewport').children('.dx-overlay-wrapper').find('.dx-context-menu').first();
 
     // act
     popupMenu.find('.dx-menu-item').first().trigger('dxclick');
@@ -939,7 +926,6 @@ QUnit.test('Apply sorting ascending by click from context menu', function(assert
 QUnit.test('Apply sorting descending by click from context menu', function(assert) {
     // arrange
     const testElement = $('#container');
-    let popupMenu;
 
     $.extend(this.columns, [{ caption: 'Column 1', allowSorting: true, index: 0 }, { caption: 'Column 2' }, { caption: 'Column 3' }]);
 
@@ -953,7 +939,7 @@ QUnit.test('Apply sorting descending by click from context menu', function(asser
 
     $(cells[0]).trigger('contextmenu');
 
-    popupMenu = $('.dx-viewport').children('.dx-overlay-wrapper').find('.dx-context-menu').first();
+    const popupMenu = $('.dx-viewport').children('.dx-overlay-wrapper').find('.dx-context-menu').first();
 
     // act
     popupMenu.find('.dx-menu-item').eq(1).trigger('dxclick');
@@ -967,7 +953,6 @@ QUnit.test('Apply sorting descending by click from context menu', function(asser
 QUnit.test('Clear sorting by click from context menu', function(assert) {
     // arrange
     const testElement = $('#container');
-    let popupMenu;
 
     $.extend(this.columns, [{ caption: 'Column 1', allowSorting: true, index: 0, sortOrder: 'asc' }, { caption: 'Column 2' }, { caption: 'Column 3' }]);
 
@@ -985,7 +970,7 @@ QUnit.test('Clear sorting by click from context menu', function(assert) {
     // arrange
     $(cells[0]).trigger('contextmenu');
 
-    popupMenu = $('.dx-viewport').children('.dx-overlay-wrapper').find('.dx-context-menu').first();
+    const popupMenu = $('.dx-viewport').children('.dx-overlay-wrapper').find('.dx-context-menu').first();
 
     // act
     popupMenu.find('.dx-menu-item').last().trigger('dxclick');
@@ -1095,7 +1080,6 @@ QUnit.test('Get context menu items with sorting column after change sorting', fu
 QUnit.test('Get context menu items without sorting column', function(assert) {
     // arrange
     const testElement = $('#container');
-    let items;
 
     $.extend(this.columns, [{ caption: 'Column 1' }, { caption: 'Column 2' }, { caption: 'Column 3' }]);
 
@@ -1107,7 +1091,7 @@ QUnit.test('Get context menu items without sorting column', function(assert) {
     const cells = dataGridMocks.getCells(testElement);
 
     // act
-    items = this.columnHeadersView.getContextMenuItems($(cells[0]));
+    const items = this.columnHeadersView.getContextMenuItems($(cells[0]));
 
     // T386078
     // assert
@@ -1310,7 +1294,6 @@ QUnit.test('Select all is not work when allowSelectAll is false', function(asser
 // T546876
 QUnit.test('onCellClick event should be fired after clicking on \'Select All\' checkbox', function(assert) {
     // arrange
-    let checkBox;
     let cellClickEventFired;
     const testElement = $('#container');
 
@@ -1323,7 +1306,7 @@ QUnit.test('onCellClick event should be fired after clicking on \'Select All\' c
     this.columnHeadersView.render(testElement);
 
     // act
-    checkBox = testElement.find('.dx-checkbox');
+    const checkBox = testElement.find('.dx-checkbox');
     checkBox.trigger('dxclick');
 
     // assert
@@ -1379,8 +1362,6 @@ QUnit.test('Check correct work getColumnsWidth without columns', function(assert
 
 QUnit.test('render headers with correct text width when sorting', function(assert) {
     // arrange
-    let $cellElement;
-    let $cellContentElement;
     const $testElement = $('#container').width(50);
 
     $.extend(this.columns, [
@@ -1391,18 +1372,15 @@ QUnit.test('render headers with correct text width when sorting', function(asser
     this.columnHeadersView.render($testElement);
 
     // assert
-    $cellElement = $testElement.find('.dx-header-row td').eq(0);
-    $cellContentElement = $cellElement.children('.dx-datagrid-text-content');
+    const $cellElement = $testElement.find('.dx-header-row td').eq(0);
+    const $cellContentElement = $cellElement.children('.dx-datagrid-text-content');
 
     assert.ok($cellContentElement.width() < $cellElement.width(), 'width of the cell content');
 });
 
 QUnit.test('recalculate headers text width on windowResize', function(assert) {
     // arrange
-    let $cellElement;
-    let $cellContentElement;
     const $testElement = $('#container').width(100);
-    let width;
 
     $.extend(this.columns, [
         { alignment: 'left', sortOrder: 'asc', allowSorting: true, caption: 'testtesttesttesttesttest1' },
@@ -1411,11 +1389,11 @@ QUnit.test('recalculate headers text width on windowResize', function(assert) {
 
     this.columnHeadersView.render($testElement);
 
-    $cellElement = $testElement.find('.dx-header-row td').eq(0);
-    $cellContentElement = $cellElement.children('.dx-datagrid-text-content');
+    const $cellElement = $testElement.find('.dx-header-row td').eq(0);
+    const $cellContentElement = $cellElement.children('.dx-datagrid-text-content');
 
     // assert
-    width = $cellContentElement.width();
+    const width = $cellContentElement.width();
     assert.ok(width < $cellElement.width(), 'width of the cell content');
 
     // act
@@ -1479,7 +1457,6 @@ QUnit.test('Remove class nowrap when wordWrapEnabled true and columnAutoWidth tr
 QUnit.test('Not get header elements when showColumnHeaders false', function(assert) {
     // arrange
     const testElement = $('#container');
-    let headerElements;
 
     $.extend(this.columns, [{ caption: 'Column 1' }, { caption: 'Column 2' }, { caption: 'Column 3' },
         { caption: 'Column 4' }, { caption: 'Column 5' }]);
@@ -1494,7 +1471,7 @@ QUnit.test('Not get header elements when showColumnHeaders false', function(asse
     this.columnHeadersView.render(testElement);
 
     // act
-    headerElements = this.columnHeadersView.getColumnElements();
+    const headerElements = this.columnHeadersView.getColumnElements();
 
     // assert
     assert.ok(!testElement.find('.dx-header-row').length, 'not draw header columns');
@@ -1504,7 +1481,6 @@ QUnit.test('Not get header elements when showColumnHeaders false', function(asse
 QUnit.test('Custom function headerCellTemplate for column', function(assert) {
     // arrange
     const that = this;
-    let columnElements;
     let headerCellTemplateOptions;
     const testElement = $('#container');
 
@@ -1521,7 +1497,7 @@ QUnit.test('Custom function headerCellTemplate for column', function(assert) {
 
     // act
     that.columnHeadersView.render(testElement);
-    columnElements = that.columnHeadersView.getColumnElements();
+    const columnElements = that.columnHeadersView.getColumnElements();
 
     // assert
     assert.equal(columnElements.length, 3);
@@ -1535,7 +1511,6 @@ QUnit.test('Custom function headerCellTemplate for column', function(assert) {
 QUnit.test('Custom headerCellTemplate as string selector for column with hogan', function(assert) {
     // arrange
     const that = this;
-    let columnElements;
     const testElement = $('#container');
 
     $.extend(that.columns, [
@@ -1558,7 +1533,7 @@ QUnit.test('Custom headerCellTemplate as string selector for column with hogan',
 
     // act
     that.columnHeadersView.render(testElement);
-    columnElements = that.columnHeadersView.getColumnElements();
+    const columnElements = that.columnHeadersView.getColumnElements();
 
     // assert
     assert.equal(columnElements.length, 3);
@@ -1724,7 +1699,6 @@ QUnit.test('Invalidate instead of render for options', function(assert) {
 
 QUnit.test('getHeadersRowHeight with band columns', function(assert) {
     // arrange
-    let $headerRowElements;
     const $testElement = $('#container');
 
     $.extend(this.columns, [
@@ -1747,14 +1721,13 @@ QUnit.test('getHeadersRowHeight with band columns', function(assert) {
     this.columnHeadersView.render($testElement);
 
     // assert
-    $headerRowElements = this.columnHeadersView._getRowElements();
+    const $headerRowElements = this.columnHeadersView._getRowElements();
     assert.equal($headerRowElements.length, 2, 'count row');
     assert.roughEqual(this.columnHeadersView.getHeadersRowHeight(), $($headerRowElements).toArray().reduce((sum, row) => sum + $(row).height(), 0), 1, 'height of the headers');
 });
 
 QUnit.test('Header with headerFilter - alignment cell content', function(assert) {
     // arrange
-    let $headerCellContent;
     const $testElement = $('#container');
 
     this.options.headerFilter = { visible: true };
@@ -1768,7 +1741,7 @@ QUnit.test('Header with headerFilter - alignment cell content', function(assert)
     this.columnHeadersView.render($testElement);
 
     // assert
-    $headerCellContent = $testElement.find('.dx-header-row .dx-datagrid-text-content');
+    const $headerCellContent = $testElement.find('.dx-header-row .dx-datagrid-text-content');
     assert.ok($headerCellContent.eq(0).hasClass('dx-header-filter-indicator'), 'first cell content has dx-header-filter-indicator class');
     assert.notOk($headerCellContent.eq(0).hasClass('dx-sort-indicator'), 'first cell content hasn\'t dx-sort-indicator class');
     assert.ok($headerCellContent.eq(0).hasClass('dx-text-content-alignment-left'), 'first cell content has margin right');
@@ -1787,7 +1760,6 @@ QUnit.test('Header with headerFilter - alignment cell content', function(assert)
 
 QUnit.test('Header with sorting - alignment cell content', function(assert) {
     // arrange
-    let $headerCellContent;
     const $testElement = $('#container');
 
     this.options.sorting = { mode: 'single' };
@@ -1801,7 +1773,7 @@ QUnit.test('Header with sorting - alignment cell content', function(assert) {
     this.columnHeadersView.render($testElement);
 
     // assert
-    $headerCellContent = $testElement.find('.dx-header-row .dx-datagrid-text-content');
+    const $headerCellContent = $testElement.find('.dx-header-row .dx-datagrid-text-content');
     assert.notOk($headerCellContent.eq(0).hasClass('dx-header-filter-indicator'), 'first cell content has dx-header-filter-indicator class');
     assert.ok($headerCellContent.eq(0).hasClass('dx-sort-indicator'), 'first cell content hasn\'t dx-sort-indicator class');
     assert.ok($headerCellContent.eq(0).hasClass('dx-text-content-alignment-left'), 'first cell content has margin right');
@@ -1820,7 +1792,6 @@ QUnit.test('Header with sorting - alignment cell content', function(assert) {
 
 QUnit.test('Header with sorting and headerFilter - alignment cell content', function(assert) {
     // arrange
-    let $headerCellContent;
     const $testElement = $('#container');
 
     this.options.sorting = { mode: 'single' };
@@ -1835,7 +1806,7 @@ QUnit.test('Header with sorting and headerFilter - alignment cell content', func
     this.columnHeadersView.render($testElement);
 
     // assert
-    $headerCellContent = $testElement.find('.dx-header-row .dx-datagrid-text-content');
+    const $headerCellContent = $testElement.find('.dx-header-row .dx-datagrid-text-content');
     assert.ok($headerCellContent.eq(0).hasClass('dx-header-filter-indicator'), 'first cell content has dx-header-filter-indicator class');
     assert.ok($headerCellContent.eq(0).hasClass('dx-sort-indicator'), 'first cell content hasn\'t dx-sort-indicator class');
     assert.ok($headerCellContent.eq(0).hasClass('dx-text-content-alignment-left'), 'first cell content has margin right');
@@ -1854,7 +1825,6 @@ QUnit.test('Header with sorting and headerFilter - alignment cell content', func
 
 QUnit.test('Header without sorting and headerFilter - alignment cell content', function(assert) {
     // arrange
-    let $headerCellContent;
     const $testElement = $('#container');
 
     $.extend(this.columns, [
@@ -1867,7 +1837,7 @@ QUnit.test('Header without sorting and headerFilter - alignment cell content', f
     this.columnHeadersView.render($testElement);
 
     // assert
-    $headerCellContent = $testElement.find('.dx-header-row .dx-datagrid-text-content');
+    const $headerCellContent = $testElement.find('.dx-header-row .dx-datagrid-text-content');
     assert.notOk($headerCellContent.eq(0).hasClass('dx-header-filter-indicator'), 'first cell content has dx-header-filter-indicator class');
     assert.notOk($headerCellContent.eq(0).hasClass('dx-sort-indicator'), 'first cell content hasn\'t dx-sort-indicator class');
     assert.notOk($headerCellContent.eq(0).hasClass('dx-text-content-alignment-left'), 'first cell content has margin right');
@@ -1887,7 +1857,6 @@ QUnit.test('Header without sorting and headerFilter - alignment cell content', f
 // T497346
 QUnit.test('Header should have alignment if there\'s no dataSource and sorting is enabled', function(assert) {
     // arrange
-    let $headerCellContent;
     const $testElement = $('#container');
 
     this.options.sorting = { mode: 'single' };
@@ -1901,7 +1870,7 @@ QUnit.test('Header should have alignment if there\'s no dataSource and sorting i
     this.columnHeadersView.render($testElement);
 
     // assert
-    $headerCellContent = $testElement.find('.dx-header-row .dx-datagrid-text-content');
+    const $headerCellContent = $testElement.find('.dx-header-row .dx-datagrid-text-content');
     assert.ok($headerCellContent.eq(0).hasClass('dx-text-content-alignment-left'), 'alignment is left');
     assert.ok($headerCellContent.eq(1).hasClass('dx-text-content-alignment-left'), 'alignment is left');
     assert.ok($headerCellContent.eq(2).hasClass('dx-text-content-alignment-left'), 'alignment is left');
@@ -1911,25 +1880,22 @@ QUnit.test('Header should have alignment if there\'s no dataSource and sorting i
 QUnit.test('Not set title attribute when cell text isn\'t trimmed in dx-datagrid-text-content container', function(assert) {
     // arrange
     const $testElement = $('#container').addClass('dx-widget');
-    let $cellElements;
-    let $firstContentElement;
-    let $lastContentElement;
 
     this.options.cellHintEnabled = true;
     this.options.sorting = { mode: 'single' };
     $.extend(this.columns, [{ caption: 'First Name', allowSorting: true }, { caption: 'Last Name', allowSorting: true }]);
     this.columnHeadersView.render($testElement);
-    $cellElements = dataGridMocks.getCells($testElement);
+    const $cellElements = dataGridMocks.getCells($testElement);
 
     // act
-    $firstContentElement = $cellElements.first().find('.dx-datagrid-text-content');
+    const $firstContentElement = $cellElements.first().find('.dx-datagrid-text-content');
     $firstContentElement.trigger('mousemove');
 
     // assert
     assert.strictEqual($firstContentElement.attr('title'), undefined, 'not has attribute title in first cell');
 
     // act
-    $lastContentElement = $cellElements.last().find('.dx-datagrid-text-content');
+    const $lastContentElement = $cellElements.last().find('.dx-datagrid-text-content');
     $lastContentElement.trigger('mousemove');
 
     // assert
@@ -2065,7 +2031,6 @@ QUnit.test('Get context menu items with grouping operations (showWhenGrouped col
 QUnit.test('Grouped column caption should displayed when the showWhenGrouped option is enabled (T752775)', function(assert) {
     // arrange
     const that = this;
-    let $groupedColumnElement;
     const columnHeadersView = that.columnHeadersView;
     const $testElement = $('#container');
 
@@ -2075,7 +2040,7 @@ QUnit.test('Grouped column caption should displayed when the showWhenGrouped opt
     columnHeadersView.render($testElement);
 
     // assert
-    $groupedColumnElement = $(columnHeadersView.getCellElement(0, 0));
+    const $groupedColumnElement = $(columnHeadersView.getCellElement(0, 0));
     assert.strictEqual($groupedColumnElement.text(), 'Column 1', 'caption for grouped column displayed');
 });
 
@@ -2149,8 +2114,6 @@ QUnit.module('Headers with band columns', {
 
 QUnit.test('Draw band columns', function(assert) {
     // arrange
-    let $cells;
-    let $trElements;
     const $testElement = $('#container');
 
     this.columns = [{ caption: 'Band column 1', columns: ['Column1', 'Column2'] }, 'Column3', { caption: 'Band column 2', columns: ['Column4', 'Column5'] }];
@@ -2160,8 +2123,8 @@ QUnit.test('Draw band columns', function(assert) {
     this.columnHeadersView.render($testElement);
 
     // assert
-    $trElements = $testElement.find('tbody > tr');
-    $cells = $trElements.find('td');
+    const $trElements = $testElement.find('tbody > tr');
+    const $cells = $trElements.find('td');
     assert.equal($trElements.length, 2, 'count row');
     assert.equal($trElements.first().children().length, 3, 'count cell of the first row');
     assert.equal($trElements.last().children().length, 4, 'count cell of the second row');
@@ -2186,8 +2149,6 @@ QUnit.test('Draw band columns', function(assert) {
 
 QUnit.test('Draw band columns(complex hierarchy)', function(assert) {
     // arrange
-    let $cells;
-    let $trElements;
     const $testElement = $('#container');
 
     this.columns = ['Column1', {
@@ -2207,8 +2168,8 @@ QUnit.test('Draw band columns(complex hierarchy)', function(assert) {
     this.columnHeadersView.render($testElement);
 
     // assert
-    $trElements = $testElement.find('tbody > tr');
-    $cells = $trElements.find('td');
+    const $trElements = $testElement.find('tbody > tr');
+    const $cells = $trElements.find('td');
     assert.equal($trElements.length, 6, 'count row');
     assert.equal($trElements.eq(0).children().length, 2, 'count cell of the first row');
     assert.equal($trElements.eq(1).children().length, 2, 'count cell of the second row');
@@ -2260,7 +2221,6 @@ QUnit.test('Draw band columns(complex hierarchy)', function(assert) {
 
 QUnit.test('getColumnElements when there is band columns', function(assert) {
     // arrange
-    let $columnElements;
     const $testElement = $('#container');
 
     this.columns = [{ caption: 'Band column 1', columns: ['Column1', 'Column2'] }, 'Column3', { caption: 'Band column 2', columns: ['Column4', 'Column5'] }];
@@ -2268,7 +2228,7 @@ QUnit.test('getColumnElements when there is band columns', function(assert) {
     this.columnHeadersView.render($testElement);
 
     // act
-    $columnElements = this.columnHeadersView.getColumnElements();
+    const $columnElements = this.columnHeadersView.getColumnElements();
 
     // assert
     assert.equal($columnElements.length, 5, 'count data column');
@@ -2311,7 +2271,6 @@ QUnit.test('getColumnElements with rowIndex when there is band columns', functio
 
 QUnit.test('getColumnElements by band column', function(assert) {
     // arrange
-    let $columnElements;
     const $testElement = $('#container');
 
     this.columns = [{ caption: 'Band column 1', columns: ['Column1', 'Column2'] }, 'Column3', { caption: 'Band column 2', columns: ['Column4', 'Column5'] }];
@@ -2319,7 +2278,7 @@ QUnit.test('getColumnElements by band column', function(assert) {
     this.columnHeadersView.render($testElement);
 
     // act
-    $columnElements = this.columnHeadersView.getColumnElements(1, 4);
+    const $columnElements = this.columnHeadersView.getColumnElements(1, 4);
 
     // assert
     assert.equal($columnElements.length, 2, 'count column');
@@ -2361,8 +2320,6 @@ QUnit.test('Not allow dragging when allowReordering true and one column', functi
 QUnit.test('Apply sorting ascending by click from context menu', function(assert) {
     // arrange
     const $testElement = $('#container');
-    let $popupMenu;
-    let $cell;
 
     this.columns = ['Column1', { caption: 'Band column 1', columns: [{ caption: 'Column2', allowSorting: true }, 'Column3'] }];
     this.options.sorting = {
@@ -2372,10 +2329,10 @@ QUnit.test('Apply sorting ascending by click from context menu', function(assert
     this.columnHeadersView.render($testElement);
     this.contextMenuView.render($testElement);
 
-    $cell = $testElement.find('tbody > tr').eq(1).children().first();
+    const $cell = $testElement.find('tbody > tr').eq(1).children().first();
     $cell.trigger('contextmenu');
 
-    $popupMenu = $('.dx-viewport').children('.dx-overlay-wrapper').find('.dx-context-menu').first();
+    const $popupMenu = $('.dx-viewport').children('.dx-overlay-wrapper').find('.dx-context-menu').first();
 
     // act
     $popupMenu.find('.dx-menu-item').first().trigger('dxclick');
@@ -2389,7 +2346,6 @@ QUnit.test('Apply sorting ascending by click from context menu', function(assert
 
 QUnit.test('setRowsOpacity for band column', function(assert) {
     // arrange
-    let $cellElements;
     const $testElement = $('#container');
 
     this.columns = ['Column1', { caption: 'Band column 1', columns: ['Column2', { caption: 'Band column 2', columns: ['Column3'] }] }];
@@ -2399,7 +2355,7 @@ QUnit.test('setRowsOpacity for band column', function(assert) {
     // act
     this.columnHeadersView.setRowsOpacity(1, '0.5');
 
-    $cellElements = $testElement.find('td');
+    const $cellElements = $testElement.find('td');
 
     // assert
     assert.equal($cellElements.length, 5, 'count column');
@@ -2413,7 +2369,6 @@ QUnit.test('setRowsOpacity for band column', function(assert) {
 // T360139
 QUnit.test('getColumnWidths with band columns', function(assert) {
     // arrange
-    let widths;
     const $testElement = $('#container').width(450);
 
     this.columns = [
@@ -2435,7 +2390,7 @@ QUnit.test('getColumnWidths with band columns', function(assert) {
     this.columnHeadersView.render($testElement);
 
     // act
-    widths = this.columnHeadersView.getColumnWidths();
+    const widths = this.columnHeadersView.getColumnWidths();
 
     // assert
     assert.equal(widths.length, 3, 'widths of the columns');
@@ -2447,7 +2402,6 @@ QUnit.test('getColumnWidths with band columns', function(assert) {
 // T377673
 QUnit.test('getColumnElements by band column with hidden children where filter row is visible', function(assert) {
     // arrange
-    let $columnElements;
     const $testElement = $('#container');
 
     this.options.filterRow = { visible: true };
@@ -2456,7 +2410,7 @@ QUnit.test('getColumnElements by band column with hidden children where filter r
     this.columnHeadersView.render($testElement);
 
     // act
-    $columnElements = this.columnHeadersView.getColumnElements(1, 3);
+    const $columnElements = this.columnHeadersView.getColumnElements(1, 3);
 
     // assert
     assert.ok(!$columnElements, 'no cells');
@@ -2493,7 +2447,6 @@ QUnit.test('DataGrid headers has no dx-header-multi-row class for single-row hea
 // T652025
 QUnit.test('The grid should ignore the width of the band column', function(assert) {
     // arrange
-    let $bandColumnElements;
     const $testElement = $('#container');
 
     this.columns = [
@@ -2519,7 +2472,7 @@ QUnit.test('The grid should ignore the width of the band column', function(asser
     this.columnHeadersView.render($testElement);
 
     // assert
-    $bandColumnElements = $testElement.find('.dx-header-row').first().children();
+    const $bandColumnElements = $testElement.find('.dx-header-row').first().children();
     assert.strictEqual($bandColumnElements.length, 2, 'band column count');
 
     assert.strictEqual($bandColumnElements.get(0).style.width, '');
@@ -2603,13 +2556,12 @@ QUnit.test('Sort index icons should be rendered by default', function(assert) {
             mode: 'multiple'
         }
     };
-    let $headerCells;
 
     this.setupDataGrid(options);
 
     // act
     this.columnHeadersView.render($testElement);
-    $headerCells = $testElement.find('.dx-header-row').children();
+    const $headerCells = $testElement.find('.dx-header-row').children();
 
     // assert
     assert.equal($headerCells.eq(0).find(SORT_INDEX_ICON_SELECTOR).text(), '', 'first column\'s sort index');
@@ -2688,8 +2640,6 @@ function checkHeaderWidths(assert, that, options, widthDiffs) {
     // arrange
     const $testElement = that.$element().addClass('dx-widget');
     let $headerCell;
-    let etalonHeaderCellTextWidth;
-    let etalonHeaderCellWidth;
     let headerCellTextWidth;
     let headerCellWidth;
 
@@ -2701,8 +2651,8 @@ function checkHeaderWidths(assert, that, options, widthDiffs) {
     that.resizingController.updateDimensions();
 
     $headerCell = $testElement.find('.dx-header-row').children().eq(0);
-    etalonHeaderCellTextWidth = $headerCell.find('.dx-datagrid-text-content').eq(0).width();
-    etalonHeaderCellWidth = $headerCell.width();
+    const etalonHeaderCellTextWidth = $headerCell.find('.dx-datagrid-text-content').eq(0).width();
+    const etalonHeaderCellWidth = $headerCell.width();
 
     // assert
     assert.ok(etalonHeaderCellTextWidth, 'header text width');
@@ -2848,5 +2798,64 @@ QUnit.test('Check header widths with columnAutoWidth', function(assert) {
     checkHeaderWidths(assert, this, options, {
         textContentWidthDiff: 0,
         cellWidthDiff: -12
+    });
+});
+
+QUnit.module('Headers with RTL', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+
+        this.$element = function() {
+            return $('#container');
+        };
+
+        this.setupDataGrid = function(options) {
+            dataGridMocks.setupDataGridModules(this, ['data', 'columns', 'headerFilter', 'columnHeaders', 'sorting', 'gridView', 'rows'], {
+                initViews: true,
+                initDefaultOptions: true,
+                options: options
+            });
+        };
+    },
+    afterEach: function() {
+        this.dispose();
+        this.clock.restore();
+    }
+}, () => {
+
+    // T862537
+    QUnit.test('Header with sorting and headerFilter', function(assert) {
+        // arrange
+        const $testElement = this.$element().addClass('dx-widget');
+
+        $testElement.css('direction', 'rtl');
+        const options = {
+            rtlEnabled: true,
+            sorting: { mode: 'multiple' },
+            showColumnLines: false,
+            headerFilter: { visible: true },
+            columns: [
+                { caption: 'Column 1', allowFiltering: true, allowSorting: true, sortOrder: 'asc', alignment: 'left' },
+                { caption: 'Column 2', allowFiltering: true, allowSorting: true, alignment: 'center' },
+                { caption: 'Column 3', allowFiltering: true, allowSorting: true, sortOrder: 'desc', alignment: 'right' }
+            ]
+        };
+
+        // act
+        this.setupDataGrid(options);
+        this.columnHeadersView.render($testElement);
+
+        // assert
+        const $headerCellContent = $testElement.find('.dx-header-row .dx-datagrid-text-content');
+        const $headerCellIndicators = $testElement.find('.dx-header-row .dx-column-indicators');
+
+        assert.ok($headerCellContent.eq(0).offset().left < $headerCellIndicators.eq(0).offset().left, 'indicators are on the right');
+
+        assert.ok($headerCellIndicators.eq(1).hasClass('dx-visibility-hidden'), 'indicator is hidden');
+
+        assert.ok($headerCellContent.eq(1).offset().left > $headerCellIndicators.eq(2).offset().left, 'indicators are on the left');
+        assert.notOk($headerCellIndicators.eq(2).hasClass('dx-visibility-hidden'), 'indicator is not hidden');
+
+        assert.ok($headerCellContent.eq(2).offset().left > $headerCellIndicators.eq(3).offset().left, 'indicators are on the left');
     });
 });

@@ -1,10 +1,16 @@
-@MATERIAL_COLOR_POSTFIX: ".@{MATERIAL_COLOR_ACCENT_MODIFICATOR}.light";
+@MATERIAL_COLOR_THEME_MODIFICATOR: "light";
 
 /**
 * @name 10. Font family
 * @type text
 */
-@base-font-family: "Roboto", "RobotoFallback", "Helvetica", "Arial", sans-serif;
+@base-font-family: "Roboto", "RobotoFallback", "Noto Kufi Arabic", "Helvetica",  "Arial", sans-serif;
+
+/**
+* @name 20. Text color
+* @type color
+*/
+@base-text-color: rgba(0,0,0, 0.87);
 
 /**
 * @name 20. Text color
@@ -84,6 +90,8 @@
 */
 @base-hover-bg: fade(#000000, 4%);
 
+@base-inverted-text-color: #fff;
+
 /**
 * @name 100. Focused state text color
 * @type color
@@ -101,7 +109,6 @@
 @typography-color: @base-text-color;
 @typography-link-color: @base-link-color;
 
-@base-inverted-text-color: #fff;
 @base-inverted-icon-color: @base-inverted-text-color;
 @base-disabled-opacity: 0.38;
 @base-dropdown-shadow-color: fade(@base-shadow-color, 20%);
@@ -198,6 +205,8 @@
 
 // Accordion
 
+@accordion-color: @base-text-color;
+
 /**
 * @name 10. Item title text color
 * @type color
@@ -216,7 +225,6 @@
 */
 @accordion-icon-active-color: @accordion-color;
 
-@accordion-color: @base-text-color;
 @accordion-background-color: @base-bg;
 @accordion-title-active-color: @accordion-color;
 @accordion-title-active-bg: @base-hover-bg;
@@ -1053,7 +1061,7 @@
 * @name 70. Focused row background color
 * @type color
 */
-@datagrid-row-focused-bg: @base-accent;
+@datagrid-row-focused-bg: mix(@base-bg, @base-accent, 20%);
 @datagrid-hover-bg: @base-hover-bg;
 @datagrid-row-hovered-color: @datagrid-base-color;
 
@@ -1121,7 +1129,7 @@
 * @name 75. Focused cell border color
 * @type color
 */
-@datagrid-focused-border-color: @base-accent;
+@datagrid-focused-border-color: mix(@base-bg, @base-accent, 20%);
 
 /**
 * @name 80. Editor background
@@ -1155,71 +1163,10 @@
 @datagrid-filter-panel-color: @base-accent;
 
 //TreeList
-@treelist-base-color: @base-text-color;
-@treelist-base-background-color: @base-bg;
-@treelist-border-color: @base-border-color;
-@treelist-border: 1px solid @treelist-border-color;
-
-@treelist-columnchooser-item-color: @datagrid-columnchooser-item-color;
-@treelist-columnchooser-hover-icon-color: fade(@treelist-base-color, 38%);
-
-@treelist-columnchooser-font-weight: @datagrid-columnchooser-font-weight;
-@treelist-drag-header-border-color: @datagrid-drag-header-border-color;
-@treelist-drag-header-shadow-color: @datagrid-drag-header-shadow-color;
-@treelist-drag-header-second-shadow-color: fade(@base-shadow-color, 20%);
-@treelist-header-drag-bg: @treelist-base-background-color;
-
-@treelist-selection-bg: @datagrid-selection-bg;
-@treelist-row-selected-border-color: @datagrid-row-selected-border-color;
-@treelist-row-selected-color: @datagrid-row-selected-color;
-
-@treelist-row-focused-color: @datagrid-row-focused-color;
-@treelist-row-focused-bg: @datagrid-row-focused-bg;
-
-@treelist-hover-bg: @datagrid-hover-bg;
-@treelist-row-hovered-color: @datagrid-row-hovered-color;
-
-@treelist-menu-icon-color: @datagrid-menu-icon-color;
-
-@treelist-cell-modified-border-color: @datagrid-cell-modified-border-color;
-
-@treelist-row-removed-bg: fade(@base-success, 32%);
-@treelist-row-invalid-faded-border-color: @datagrid-row-invalid-faded-border-color;
-@treelist-nodata-color: lighten(@treelist-base-color, 40%);
-
-@treelist-master-detail-cell-bg: darken(@treelist-base-background-color, 2%);
-
-@treelist-search-color: @datagrid-search-color;
 @treelist-chevron-icon-color: lighten(@base-spin-icon-color, 38.5%);
 @treelist-selection-chevron-icon-color: @treelist-chevron-icon-color;
 
-@treelist-search-bg: @datagrid-search-bg;
-
-@treelist-row-error-color: @datagrid-row-error-color;
-@treelist-row-error-bg: @datagrid-row-error-bg;
-
-
-@treelist-filter-panel-color: @base-accent;
-@treelist-link-color: @base-link-color;
-
-@treelist-focused-border-color: @datagrid-focused-border-color;
-@treelist-editor-bg: @datagrid-editor-bg;
-
-@treelist-drop-highlight-bg: @base-accent;
-@treelist-drop-highlight-color: @base-inverted-text-color;
-
-@treelist-columnchooser-bg: @base-element-bg;
-@treelist-columnchooser-item-bg: @treelist-columnchooser-bg;
-
 @treelist-row-alternation-bg: @datagrid-row-alternation-bg;
-
-@treelist-summary-color: @datagrid-summary-color;
-@treelist-columnchooser-message-color: lighten(@treelist-base-color, 40%);
-
-@treelist-column-separator-bg: fade(@base-accent, 50%);
-@treelist-filter-row-background-color: darken(@treelist-base-background-color, 2%);
-@treelist-active-header-filter-icon-color: @base-accent;
-@treelist-text-stub-background-image-path: data-uri('images/widgets/material/color-schemes/light/grid/text-stub.png');
 
 // dxPivotGrid
 @PIVOTGRID_AREA_BACKGROUND: @base-bg;
@@ -1270,9 +1217,7 @@
 @PIVOTGRID_POSITION_INDICATOR_COLOR: gray;
 @pivotgrid-chevron-icon-color: @PIVOTGRID_AREA_COLOR;
 
-//
-//dxScheduler
-//
+// dxScheduler
 
 /**
 * @name 10. Border color
@@ -1572,8 +1517,13 @@
 @filemanager-breadcrumbs-item-focus-bg: @base-border-color;
 @filemanager-breadcrumbs-item-focus-color: @base-text-color;
 @filemanager-custom-thumbnail-color: @base-border-color;
-@filemanager-file-item-select-color: @base-text-color;
-@filemanager-file-item-select-bg: fade(@base-accent, 4%);
+@filemanager-file-item-select-color: @base-bg;
+@filemanager-file-item-select-bg: fade(@base-accent, 80%);
+@filemanager-file-item-select-focus-color: @base-bg;
+@filemanager-file-item-select-focus-bg: fade(@base-accent, 70%);
+@filemanager-file-item-hover-bg: @base-hover-bg;
+@filemanager-file-item-focused-bg: @base-accent;
+@filemanager-file-item-focused-border: @base-accent;
 @filemanager-item-focused-color: @base-inverted-text-color;
 @filemanager-progressbox-shadow-color: fade(@base-shadow-color, 17.5%);
 
@@ -1582,7 +1532,7 @@
 @speed-dial-action-hover-bg: darken(@speed-dial-action-bg, 8%);
 @speed-dial-action-active-bg: darken(@speed-dial-action-bg, 36%);
 @speed-dial-action-color: @base-text-color;
-@speed-dial-action-shadow: ~"0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12)";
+@speed-dial-action-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
 @speed-dial-action-label-shadow:  0 2px 6px rgba(0, 0, 0, 0.15);
 @speed-dial-action-shading-color: @overlay-shader-bg;
 

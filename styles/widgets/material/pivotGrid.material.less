@@ -4,11 +4,11 @@
 @import (once) "./treeView.material.less";
 @import (once) "./button.material.less";
 
-.dx-size-default {
+.dx-size-default() {
     @MATERIAL_PIVOTGRID_CELL_PADDING: 10px 14px;
 }
 
-.dx-size-compact {
+.dx-size-compact() {
     @MATERIAL_PIVOTGRID_CELL_PADDING: 7px 8px;
 }
 
@@ -129,6 +129,12 @@
         td.dx-white-space-column {
             width: @PIVOTGRID_EMPTY_COLUMN_WIDTH;
             min-width: @PIVOTGRID_EMPTY_COLUMN_WIDTH;
+        }
+    }
+
+    .dx-ie {
+        .dx-pivotgrid-fields-area {
+            .dx-base-typography();
         }
     }
 }

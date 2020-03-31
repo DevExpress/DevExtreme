@@ -110,7 +110,8 @@ QUnit.module('dxNumberBox markup', moduleConfig, () => {
     });
 
     QUnit.test('The widget should be valid if the value option is undefined', function(assert) {
-        const numberBox = new NumberBox(this.$element, { value: undefined }); const $input = this.$element.find('.' + INPUT_CLASS);
+        const numberBox = new NumberBox(this.$element, { value: undefined });
+        const $input = this.$element.find('.' + INPUT_CLASS);
 
         assert.ok(numberBox.option('isValid'), 'widget is valid');
         assert.equal($input.val(), '', 'input value is correct');

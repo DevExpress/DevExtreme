@@ -1677,7 +1677,7 @@ const moduleConfig = {
 
         QUnit.test('Data - columns.dataType: boolean', function(assert) {
             const done = assert.async();
-            const ds = [{ f1: true }];
+            const ds = [{ f1: true }, { f1: false }];
             const dataGrid = $('#dataGrid').dxDataGrid({
                 columns: [{
                     dataField: 'f1',
@@ -1689,23 +1689,25 @@ const moduleConfig = {
 
 
             const expectedCells = [[
-                { excelCell: { value: 'F1', alignment: alignCenterTopNoWrap, font: { bold: true } }, gridCell: { rowType: 'header', column: dataGrid.columnOption(0) } }
+                { excelCell: { value: 'F1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopNoWrap, font: { bold: true } }, gridCell: { rowType: 'header', column: dataGrid.columnOption(0) } }
             ], [
-                { excelCell: { value: 'true', alignment: alignCenterTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], value: true, column: dataGrid.columnOption(0) } }
+                { excelCell: { value: true, type: ExcelJS.ValueType.Boolean, dataType: 'boolean', alignment: alignCenterTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } }
+            ], [
+                { excelCell: { value: false, type: ExcelJS.ValueType.Boolean, dataType: 'boolean', alignment: alignCenterTopNoWrap }, gridCell: { rowType: 'data', data: ds[1], column: dataGrid.columnOption(0) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
-                helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
-                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
+                helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 1 }, topLeft);
+                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                assert.equal(typeof this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, 'string', `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
-                helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellRange(cellRange, { row: 2, column: 1 }, topLeft);
+                helper.checkCellFormat(expectedCells);
+                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkCellRange(cellRange, { row: 3, column: 1 }, topLeft);
                 done();
             });
         });
@@ -2406,7 +2408,7 @@ const moduleConfig = {
                 { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
                 { excelCell: { value: ds[0].f2, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
                 { excelCell: { value: ds[0].f3, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]M\\/d\\/yyyy', alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
-                { excelCell: { value: String(ds[0].f4), type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopNoWrap }, gridCell: { value: ds[0].f4, rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
+                { excelCell: { value: ds[0].f4, type: ExcelJS.ValueType.Boolean, dataType: 'boolean', alignment: alignCenterTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
                 { excelCell: { value: 'name1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f5, rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } },
                 { excelCell: { value: ds[0].f6, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]M\\/d\\/yyyy, H:mm AM/PM', alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(5) } }
             ]];
@@ -2421,7 +2423,6 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
-                helper.checkCellFormat(expectedCells);
                 helper.checkCellFormat(expectedCells);
                 helper.checkCellRange(cellRange, { row: 1, column: 6 }, topLeft);
                 done();
@@ -2540,11 +2541,11 @@ const moduleConfig = {
 
             const expectedCells = [[
                 { excelCell: { value: 'f1_1', alignment: alignCenterTopWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
-                { excelCell: { value: 'true', alignment: alignRightTopWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1), value: true } },
+                { excelCell: { value: true, alignment: alignRightTopWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
                 { excelCell: { value: 1, alignment: alignLeftTopWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } }
             ], [
                 { excelCell: { value: 'f1_2', alignment: alignCenterTopWrap }, gridCell: { rowType: 'data', data: ds[1], column: dataGrid.columnOption(0) } },
-                { excelCell: { value: 'false', alignment: alignRightTopWrap }, gridCell: { rowType: 'data', data: ds[1], column: dataGrid.columnOption(1), value: false } },
+                { excelCell: { value: false, alignment: alignRightTopWrap }, gridCell: { rowType: 'data', data: ds[1], column: dataGrid.columnOption(1) } },
                 { excelCell: { value: 2, alignment: alignLeftTopWrap }, gridCell: { rowType: 'data', data: ds[1], column: dataGrid.columnOption(2) } }
             ]];
 
@@ -6401,13 +6402,24 @@ const moduleConfig = {
     });
 });
 
-QUnit.module('_getFullOptions', () => {
+QUnit.module('_getFullOptions', moduleConfig, () => {
     QUnit.test('topLeftCell', function(assert) {
         assert.deepEqual(_getFullOptions({}).topLeftCell, { row: 1, column: 1 }, 'no member');
         assert.deepEqual(_getFullOptions({ topLeftCell: undefined }).topLeftCell, { row: 1, column: 1 }, 'undefined');
         assert.deepEqual(_getFullOptions({ topLeftCell: null }).topLeftCell, { row: 1, column: 1 }, 'null');
 
         assert.deepEqual(_getFullOptions({ topLeftCell: { row: 2, column: 3 } }).topLeftCell, { row: 2, column: 3 }, '{ row: 2, column: 3 }');
+        assert.deepEqual(_getFullOptions({ worksheet: this.worksheet, topLeftCell: 'A1' }).topLeftCell, { row: 1, column: 1 }, 'A1');
+        assert.deepEqual(_getFullOptions({ worksheet: this.worksheet, topLeftCell: 'D38' }).topLeftCell, { row: 38, column: 4 }, 'D38');
+        assert.deepEqual(_getFullOptions({ worksheet: this.worksheet, topLeftCell: 'AD8' }).topLeftCell, { row: 8, column: 30 }, 'AD8');
+
+        let errorMessage;
+        try {
+            _getFullOptions({ worksheet: this.worksheet, topLeftCell: 'AA' });
+        } catch(e) {
+            errorMessage = e.message;
+        }
+        assert.strictEqual(errorMessage, 'Invalid Address: AA', 'Exception was thrown');
     });
 
     QUnit.test('keepColumnWidths', function(assert) {

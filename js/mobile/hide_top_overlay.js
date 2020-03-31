@@ -16,7 +16,8 @@ const hideCallback = (function() {
             }
         },
         fire: function() {
-            const callback = callbacks.pop(); const result = !!callback;
+            const callback = callbacks.pop();
+            const result = !!callback;
             if(result) {
                 callback();
             }

@@ -1,4 +1,4 @@
-import { WrapperBase } from './wrapperBase.js';
+import { WrapperBase, ElementWrapper } from './wrapperBase.js';
 
 const FOCUS_OVERLAY_POSTFIX_CLASS = 'focus-overlay';
 const COMMAND_ADAPTIVE_CLASS = 'dx-command-adaptive';
@@ -13,18 +13,23 @@ const BUTTON_CLASS = 'dx-button';
 const FOCUSED_ROW_CLASS = 'dx-row-focused';
 const SELECTED_ROW_CLASS = 'dx-selection';
 const DATA_GRID_PREFIX = 'dx-datagrid';
+const ROW_CLASS = 'dx-row';
 const DATA_ROW_CLASS = 'dx-data-row';
 const TREELIST_PREFIX = 'dx-treelist';
 const TEXTEDITOR_CLASS = 'dx-texteditor';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
-const NEW_ROW_CLASS = 'dx-row-inserted';
 const FIXED_CONTENT_CLASS = 'dx-datagrid-content-fixed';
 const HEADER_COLUMN_INDICATORS_CLASS = 'dx-column-indicators';
 const GRID_TABLE_CLASS = 'dx-datagrid-table';
-const FREE_SPACE_ROW = 'dx-freespace-row';
-const ROW_CLASS = 'dx-row';
+const FREE_SPACE_ROW_CLASS = 'dx-freespace-row';
+const VIRTUAL_ROW_CLASS = 'dx-virtual-row';
 const COMMAND_EDIT_CLASS = 'dx-command-edit';
 const COMMAND_BUTTON_CLASS = 'dx-link';
+const SELECT_CHECKBOX_CLASS = 'dx-select-checkbox';
+const FOCUSED_CLASS = 'dx-focused';
+const EDITOR_CELL_CLASS = 'dx-editor-cell';
+const HIDDEN_CLASS = 'dx-hidden';
+const INSERTED_ROW_CLASS = 'dx-row-inserted';
 
 class GridWrapper extends WrapperBase {
     constructor(containerSelector, widgetPrefix) {
@@ -79,9 +84,148 @@ export class ColumnWrapper extends GridElement {
     }
 }
 
+export class Editor extends ElementWrapper {
+    constructor(containerWrapper) {
+        super(containerWrapper, `.${TEXTEDITOR_CLASS}`);
+    }
+
+    getInputElement() {
+        return this.getElement().find(`.${TEXTEDITOR_INPUT_CLASS}`);
+    }
+}
+
+export class Cell extends WrapperBase {
+    constructor(row, index) {
+        super(row.getElement());
+        this.index = index;
+    }
+
+    getElement() {
+        return this.getContainer().find(`td:nth-child(${this.index + 1})`);
+    }
+
+    getEditor() {
+        return new Editor(this);
+    }
+
+    hasFocusedClass() {
+        return this.getElement().hasClass(FOCUSED_CLASS);
+    }
+
+    isEditorCell() {
+        return this.getElement().hasClass(EDITOR_CELL_CLASS);
+    }
+}
+
+export class Row extends WrapperBase {
+    constructor(rowsView, index = -1) {
+        super(rowsView.getElement());
+        this.index = index;
+        this.elementClass = ROW_CLASS;
+    }
+
+    getElement() {
+        const rows = this.getContainer().find(`:not(.${FIXED_CONTENT_CLASS}) .${this.elementClass}`);
+        return this.index === -1 ? rows : rows.eq(this.index);
+    }
+
+    getCell(index) {
+        return new Cell(this, index);
+    }
+}
+
+export class CommandAdaptive extends ElementWrapper {
+    constructor(containerWrapper) {
+        super(containerWrapper, `.${COMMAND_ADAPTIVE_CLASS}`);
+    }
+
+    isVisible() {
+        return !this.getElement().hasClass(COMMAND_ADAPTIVE_HIDDEN_CLASS);
+    }
+}
+
+export class CommandCell extends ElementWrapper {
+    constructor(containerWrapper, columnIndex) {
+        super(containerWrapper, `.${COMMAND_EDIT_CLASS}:nth-child(${columnIndex + 1})`);
+    }
+
+    getButton(index) {
+        return new ElementWrapper(this, `.${COMMAND_BUTTON_CLASS}:nth-child(${index})`);
+    }
+}
+
+export class DataRow extends Row {
+    constructor(container, index) {
+        super(container, index);
+        this.elementClass = DATA_ROW_CLASS;
+    }
+
+    getSelectCheckBox(columnIndex = -1) {
+        let selector = `.${SELECT_CHECKBOX_CLASS}`;
+        if(columnIndex >= 0) {
+            selector += `:nth-child(${columnIndex + 1})`;
+        }
+        return new ElementWrapper(this, selector);
+    }
+
+    isSelected() {
+        return this.getElement().hasClass(SELECTED_ROW_CLASS);
+    }
+
+    isFocusedRow() {
+        return this.getElement().hasClass(FOCUSED_ROW_CLASS);
+    }
+
+    isNewRow() {
+        return this.getElement().hasClass(INSERTED_ROW_CLASS);
+    }
+
+    getCommandAdaptive() {
+        return new CommandAdaptive(this);
+    }
+
+    getCommandCell(columnIndex) {
+        return new CommandCell(this, columnIndex);
+    }
+}
+
+export class FixedDataRow extends DataRow {
+    getElement() {
+        return this.getContainer()
+            .find(`.${FIXED_CONTENT_CLASS} .${this.elementClass}`)
+            .eq(this.index);
+    }
+}
+
+export class FreeSpaceRow extends Row {
+    constructor(container) {
+        super(container, -1);
+        this.elementClass = FREE_SPACE_ROW_CLASS;
+    }
+}
+
+export class VirtualRow extends Row {
+    constructor(container) {
+        super(container, -1);
+        this.elementClass = VIRTUAL_ROW_CLASS;
+    }
+}
+
+export class FocusOverlay extends ElementWrapper {
+    constructor(containerWrapper) {
+        const focusOverlaySelector = `.${containerWrapper.widgetPrefix}-${FOCUS_OVERLAY_POSTFIX_CLASS}`;
+        super(containerWrapper, focusOverlaySelector);
+    }
+
+    isVisible() {
+        const $focusOverlay = this.getElement();
+        return $focusOverlay.length > 0 && !$focusOverlay.hasClass(HIDDEN_CLASS);
+    }
+}
+
 export class RowsViewWrapper extends GridTableElement {
-    constructor(containerSelector, widgetPrefix) {
-        super(containerSelector);
+    constructor(container, widgetPrefix) {
+        super(container);
         this.widgetPrefix = widgetPrefix;
     }
 
@@ -89,130 +233,55 @@ export class RowsViewWrapper extends GridTableElement {
         return this.getContainer().find(`.${this.widgetPrefix}-rowsview`);
     }
 
-    getVirtualRowElement() {
-        return this.getContainer().find(`:not(.${FIXED_CONTENT_CLASS}) .dx-virtual-row`);
+    getVirtualRow() {
+        return new VirtualRow(this);
     }
 
-    getVirtualCell(columnIndex) {
-        return this.getVirtualRowElement().find('td').eq(columnIndex);
+    // getRowElement
+    getRow(rowIndex) {
+        return new Row(this, rowIndex);
     }
 
-    getRowElement(rowIndex) {
-        return this.getElement().find(`:not(.${FIXED_CONTENT_CLASS}) .dx-row`).eq(rowIndex);
+    getDataRow(rowIndex) {
+        return new DataRow(this, rowIndex);
+    }
+
+    getDataRows() {
+        return new DataRow(this);
     }
 
     getFreeSpaceRow() {
-        return this.getElement().find(`.${ROW_CLASS}.${FREE_SPACE_ROW}`);
+        return new FreeSpaceRow(this);
     }
 
-    getFixedDataRowElement(rowIndex) {
-        return this.getElement().find(`.${FIXED_CONTENT_CLASS} .${DATA_ROW_CLASS}`).eq(rowIndex);
+    getFixedDataRow(rowIndex) {
+        return new FixedDataRow(this, rowIndex);
+    }
+
+    getFocusOverlay() {
+        return new FocusOverlay(this);
+    }
+
+    getCell(rowIndex, columnIndex) {
+        return this.getRow(rowIndex).getCell(columnIndex);
     }
 
     getCellElement(rowIndex, columnIndex) {
-        return this.getRowElement(rowIndex).find('td').eq(columnIndex);
-    }
-
-    getSelectCheckBox(rowIndex, columnIndex) {
-        return this.getCellElement(rowIndex, columnIndex).find('.dx-select-checkbox');
-    }
-
-    getDataRowElement(rowIndex) {
-        return this.getElement().find(`:not(.${FIXED_CONTENT_CLASS}) .${DATA_ROW_CLASS}`).eq(rowIndex);
-    }
-
-    getDataCellElement(rowIndex, columnIndex) {
-        return this.getDataRowElement(rowIndex).find('td').eq(columnIndex);
-    }
-
-    getCommandButton(rowIndex, commandColumnIndex, buttonIndex) {
-        const $dataRow = this.getDataRowElement(rowIndex);
-        const $commandCell = $dataRow
-            .find(`.${COMMAND_EDIT_CLASS}`)
-            .eq(commandColumnIndex);
-
-        return $commandCell
-            .find(`.${COMMAND_BUTTON_CLASS}`)
-            .eq(buttonIndex);
-    }
-
-    getFixedDataCellElement(rowIndex, columnIndex) {
-        return this.getFixedDataRowElement(rowIndex).find('td').eq(columnIndex);
-    }
-
-    getDataRowElementCount() {
-        return this.getElement().find(`:not(.${FIXED_CONTENT_CLASS}) .${DATA_ROW_CLASS}`).length;
-    }
-
-    getRowAdaptiveElement(rowIndex) {
-        return this.getDataRowElement(rowIndex).find(`.${COMMAND_ADAPTIVE_CLASS}`);
-    }
-
-    isRowAdaptiveVisible(rowIndex) {
-        return !this.getRowAdaptiveElement(rowIndex).hasClass(COMMAND_ADAPTIVE_HIDDEN_CLASS);
-    }
-
-    getEditor(rowIndex, columnIndex) {
-        return this.getDataRowElement(rowIndex).find('td').eq(columnIndex).find(`.${TEXTEDITOR_CLASS}`);
-    }
-
-    getEditorInput(rowIndex, columnIndex) {
-        return this.getEditor(rowIndex, columnIndex).find(`.${TEXTEDITOR_INPUT_CLASS}`);
-    }
-
-    hasEditorInputElement(rowIndex, columnIndex) {
-        return this.getEditorInput(rowIndex, columnIndex).length > 0;
-    }
-
-    getSelectionCheckBoxElement(rowIndex) {
-        return this.getDataRowElement(rowIndex).find('.dx-select-checkbox');
+        return this.getCell(rowIndex, columnIndex).getElement();
     }
 
     isRowVisible(rowIndex, precision) {
-        const $row = this.getRowElement(rowIndex);
+        const $row = this.getRow(rowIndex).getElement();
         return this._isInnerElementVisible($row, precision);
     }
 
-    isFocusedRow(rowIndex) {
-        return this.getDataRowElement(rowIndex).hasClass(FOCUSED_ROW_CLASS);
-    }
-
-    isSelectedRow(rowIndex) {
-        return this.getDataRowElement(rowIndex).hasClass(SELECTED_ROW_CLASS);
-    }
-
-    isNewRow(rowIndex) {
-        return this.getDataRowElement(rowIndex).hasClass(NEW_ROW_CLASS);
-    }
-
     _isInnerElementVisible($element, precision = 0) {
-        const rowsViewRect = this.getElement()[0].getBoundingClientRect();
+        const rowsViewRect = this.getContainer()[0].getBoundingClientRect();
         const elementRect = $element[0].getBoundingClientRect();
         const diffTop = Math.floor(elementRect.top - rowsViewRect.top) + precision;
         const diffBottom = Math.floor(rowsViewRect.bottom - elementRect.bottom) + precision;
 
         return diffTop >= 0 && diffBottom >= 0;
-    }
-
-    cellHasFocusedClass(rowIndex, columnIndex) {
-        return this.getCellElement(rowIndex, columnIndex).hasClass('dx-focused');
-    }
-
-    findFocusOverlay() {
-        return this.getElement().find(`.${this.widgetPrefix}-${FOCUS_OVERLAY_POSTFIX_CLASS}`);
-    }
-
-    isFocusOverlayVisible() {
-        const $focusOverlay = this.findFocusOverlay();
-        return $focusOverlay.length && !this.findFocusOverlay().hasClass('dx-hidden');
-    }
-
-    getFocusedRow() {
-        return this.getElement().find(`.${FOCUSED_ROW_CLASS}`);
-    }
-
-    hasFocusedRow() {
-        return this.getFocusedRow().length > 0;
     }
 }
 

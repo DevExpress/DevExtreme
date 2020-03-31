@@ -93,6 +93,7 @@
 
 @base-select-color: @base-text-color;
 @base-select-bg: fade(#000000, 10%);
+@base-inverted-text-color: #fff;
 
 /**
 * @name 100. Focused state text color
@@ -113,8 +114,8 @@
 @typography-color: @base-text-color;
 @typography-link-color: @base-link-color;
 
-@base-inverted-text-color: #fff;
 @base-inverted-icon-color: @base-inverted-text-color;
+@base-disabled-opacity: 0.5;
 
 @base-webwidget-hover-background: #edf0f2;
 @base-grid-selection-background: #d1e0ed;
@@ -203,8 +204,6 @@
 @texteditor-focused-border-color: @base-focus-bg;
 @texteditor-hover-bg: @base-bg;
 
-
-@base-disabled-opacity: 0.5;
 @texteditor-button-clear-icon-color: @base-icon-color;
 
 @texteditor-invalid-focused-border-color: @base-invalid-color;
@@ -237,7 +236,8 @@
 @radiogroup-readonly-bg: @radiogroup-bg;
 
 // Accordion
-// Accordion
+
+@accordion-color: @base-text-color;
 
 /**
 * @name 10. Item title text color
@@ -257,7 +257,6 @@
 */
 @accordion-item-border-color: @base-border-color;
 @accordion-item-focused-border-color: @base-accent;
-@accordion-color: @base-text-color;
 @accordion-background-color: @base-bg;
 @accordion-title-active-color: @accordion-color;
 @accordion-title-active-bg: fade(darken(@accordion-background-color, 62.5%), 20%);
@@ -678,6 +677,12 @@
 */
 @overlay-shader-bg: fade(@base-bg, 80%);
 
+/**
+* @name 20. Focus border color
+* @type color
+*/
+@overlay-focus-border-color: @base-border-color;
+
 // Popup
 
 /**
@@ -690,12 +695,6 @@
 @popup-bottom-bg: @popup-title-bg;
 @popup-bottom-color: @base-text-color;
 @popup-border-radius: @base-border-radius-large;
-
-/**
-* @name 20. Focus border color
-* @type color
-*/
-@overlay-focus-border-color: @base-border-color;
 
 // Popover
 @popover-arrow-bg: @overlay-content-bg;
@@ -1105,7 +1104,7 @@
 * @name 70. Focused row background color
 * @type color
 */
-@datagrid-row-focused-bg: @base-accent;
+@datagrid-row-focused-bg: mix(@base-bg, @base-accent, 20%);
 @datagrid-hover-bg: @base-webwidget-hover-background;
 @datagrid-row-hovered-color: @datagrid-base-color;
 
@@ -1180,7 +1179,7 @@
 * @name 80. Focused cell border color
 * @type color
 */
-@datagrid-focused-border-color: @base-focus-bg;
+@datagrid-focused-border-color: mix(@base-bg, @base-focus-bg, 20%);
 
 /**
 * @name 75. Editor background
@@ -1216,68 +1215,9 @@
 @datagrid-text-stub-background-image-path: data-uri('images/widgets/generic/color-schemes/softblue/grid/text-stub.png');
 
 // TreeList
-
-@treelist-base-color: @base-text-color;
-@treelist-base-background-color: @base-bg;
-@treelist-border-color: @base-border-color;
-@treelist-border: 1px solid @treelist-border-color;
-@treelist-columnchooser-item-color: @datagrid-columnchooser-item-color;
-@treelist-columnchooser-font-weight: @datagrid-columnchooser-font-weight;
-
-@treelist-drag-header-border-color: @datagrid-drag-header-border-color;
-@treelist-drag-header-shadow-color: fade(@base-shadow-color, 10%);
-@treelist-drag-header-second-shadow-color: fade(@base-shadow-color, 20%);
-@treelist-header-drag-bg: @treelist-base-background-color;
-@treelist-selection-bg: @datagrid-selection-bg;
-@treelist-row-selected-border-color: @datagrid-row-selected-border-color;
-
-@treelist-row-selected-color: @datagrid-row-selected-color;
-@treelist-row-focused-color: @datagrid-row-focused-color;
-@treelist-row-focused-bg: @datagrid-row-focused-bg;
-@treelist-hover-bg: @base-webwidget-hover-background;
-@treelist-row-hovered-color: @treelist-base-color;
-@treelist-menu-icon-color: @datagrid-menu-icon-color;
-@treelist-cell-modified-border-color: @datagrid-cell-modified-border-color;
-@treelist-row-removed-bg: fade(@base-success, 50%);
-@treelist-row-invalid-faded-border-color: @datagrid-row-invalid-faded-border-color;
-@treelist-row-invalid-border-color: @base-invalid-color;
-@treelist-nodata-color: lighten(@treelist-base-color, 40%);
-@treelist-master-detail-cell-bg: darken(@treelist-base-background-color, 2%);
-
-@treelist-search-color: @datagrid-search-color;
+@treelist-row-alternation-bg: @datagrid-row-alternation-bg;
 @treelist-spin-icon-color: @base-icon-color;
 @treelist-selection-spin-icon-color: @base-icon-color;
-@treelist-search-bg: @datagrid-search-bg;
-
-@treelist-row-error-color: @datagrid-row-error-color;
-@treelist-row-error-bg: @datagrid-row-error-bg;
-
-
-@treelist-link-color: @base-link-color;
-@treelist-focused-border-color: @datagrid-focused-border-color;
-
-@treelist-editor-bg: @datagrid-editor-bg;
-
-@treelist-drop-highlight-bg: @base-accent;
-@treelist-drop-highlight-color: @base-inverted-text-color;
-
-
-@treelist-columnchooser-bg: @base-element-bg;
-
-@treelist-row-alternation-bg: @datagrid-row-alternation-bg; // #fff => #fafafa
-@treelist-columnchooser-item-bg: @treelist-columnchooser-bg;
-
-@treelist-summary-color: @datagrid-summary-color;
-@treelist-columnchooser-message-color: lighten(@treelist-base-color, 40%);
-
-@treelist-overlay-content-shadow-color: fade(@base-shadow-color, 15%);
-@treelist-columnchooser-shadow-color: fade(@base-shadow-color, 20%);
-
-@treelist-columnchooser-overlay-border-radius: @base-border-radius-large; // TODO: may be not need
-
-@treelist-column-separator-bg: fade(@base-accent, 50%);
-@treelist-text-stub-background-image-path: data-uri('images/widgets/generic/color-schemes/softblue/grid/text-stub.png');
-
 
 // dxPivotGrid
 @PIVOTGRID_AREA_BACKGROUND: @base-bg;
@@ -1330,9 +1270,7 @@
 */
 @pivotgrid-spin-icon-color: @base-icon-color;
 
-//
 // dxScheduler
-//
 
 /**
 * @name 10. Border color
@@ -1725,8 +1663,13 @@
 @filemanager-breadcrumbs-item-focus-bg: @base-border-color;
 @filemanager-breadcrumbs-item-focus-color: @base-text-color;
 @filemanager-custom-thumbnail-color: @base-border-color;
-@filemanager-file-item-select-color: @base-text-color;
-@filemanager-file-item-select-bg: #d1e0ed;
+@filemanager-file-item-select-color: @base-bg;
+@filemanager-file-item-select-bg: fade(@base-accent, 80%);
+@filemanager-file-item-select-focus-color: @base-bg;
+@filemanager-file-item-select-focus-bg: fade(@base-accent, 70%);
+@filemanager-file-item-hover-bg: @base-hover-bg;
+@filemanager-file-item-focused-bg: @base-focus-bg;
+@filemanager-file-item-focused-border: @base-accent;
 @filemanager-item-focused-color: @base-inverted-text-color;
 @filemanager-progressbox-shadow-color: fade(@base-shadow-color, 17.5%);
 
@@ -1741,7 +1684,8 @@
 
 // Gantt
 @gantt-collapsable-row-bg: darken(@base-bg, 4%);
-@gantt-selection-bg: @treelist-selection-bg;
+@gantt-selection-bg: @datagrid-selection-bg;
+@gantt-parent-task-bg: @base-success;
 
 // Splitter
 @splitter-inactive-color: @base-border-color;

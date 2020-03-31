@@ -16,13 +16,15 @@ const DIAGRAM_TOUCHBAR_Y_OFFSET = 32;
 class DiagramContextMenu extends Widget {
     _init() {
         super._init();
-        this._createOnVisibleChangedAction();
+
+        this._createOnVisibilityChangingAction();
+        this._createOnCustomCommand();
         this._createOnItemClickAction();
         this._tempState = undefined;
 
         this._commands = [];
         this._commandToIndexMap = {};
-        this.bar = new ContextMenuBar(this);
+        this.bar = new DiagramContextMenuBar(this);
     }
     _initMarkup() {
         super._initMarkup();
@@ -43,7 +45,7 @@ class DiagramContextMenu extends Widget {
             closeOnOutsideClick: false,
             showEvent: '',
             cssClass: Browser.TouchUI ? DIAGRAM_TOUCHBAR_CLASS : DiagramMenuHelper.getContextMenuCssClass(),
-            items: this._getItems(this._commands),
+            items: this._commands,
             focusStateEnabled: false,
             position: (Browser.TouchUI ? {
                 my: { x: 'center', y: 'bottom' },
@@ -51,15 +53,15 @@ class DiagramContextMenu extends Widget {
                 of: this._$contextMenuTargetElement
             } : {}),
             itemTemplate: function(itemData, itemIndex, itemElement) {
-                DiagramMenuHelper.getContextMenuItemTemplate(itemData, itemIndex, itemElement, this._menuHasCheckedItems);
+                DiagramMenuHelper.getContextMenuItemTemplate(this, itemData, itemIndex, itemElement);
             },
             onItemClick: ({ itemData }) => this._onItemClick(itemData),
             onShowing: (e) => {
                 if(this._inOnShowing === true) return;
 
                 this._inOnShowing = true;
-                this._onVisibleChangedAction({ visible: true, component: this });
-                e.component.option('items', this._getItems(this._commands, true));
+                this._onVisibilityChangingAction({ visible: true, component: this });
+                e.component.option('items', e.component.option('items'));
                 delete this._inOnShowing;
             }
         });
@@ -98,18 +100,22 @@ class DiagramContextMenu extends Widget {
         }
 
         if(!processed) {
-            DiagramMenuHelper.onContextMenuItemClick(itemData, this._execDiagramCommand.bind(this));
+            DiagramMenuHelper.onContextMenuItemClick(this, itemData, this._executeCommand.bind(this));
             this._contextMenuInstance.hide();
         }
     }
-    _execDiagramCommand(command, value, onExecuted) {
-        if(command !== undefined) {
+    _executeCommand(command, value) {
+        if(command === undefined) return;
+
+        if(typeof command === 'number') {
             this.bar.raiseBarCommandExecuted(command, value);
         }
-
-        if(typeof onExecuted === 'function') {
-            onExecuted.call(this);
+        if(typeof command === 'string') {
+            this._onCustomCommandAction({ command });
         }
+    }
+    _createOnCustomCommand() {
+        this._onCustomCommandAction = this._createActionByOption('onCustomCommand');
     }
 
     _getCommands() {
@@ -126,65 +132,20 @@ class DiagramContextMenu extends Widget {
             }
         });
     }
-    _getCommandByKey(key) {
-        const indexPath = this._commandToIndexMap[key];
-        if(indexPath) {
-            let command;
-            let commands = this._commands;
-            indexPath.forEach(index => {
-                command = commands[index];
-                commands = command.items;
-            });
-            return command;
-        }
-    }
-    _getItems(commands, onlyVisible) {
-        const result = [];
-        commands.forEach(command => {
-            if(command.visible !== false || !onlyVisible) {
-                result.push(command);
-            }
-        });
-        return result;
-    }
     _setItemEnabled(key, enabled) {
         this._setItemVisible(key, enabled);
     }
     _setItemVisible(key, visible) {
-        const command = this._getCommandByKey(key);
-        if(command) command.visible = visible;
+        const itemOptionText = DiagramMenuHelper.getItemOptionText(this._contextMenuInstance, this._commandToIndexMap[key]);
+        DiagramMenuHelper.updateContextMenuItemVisible(this._contextMenuInstance, itemOptionText, visible);
     }
     _setItemValue(key, value) {
-        const command = this._getCommandByKey(key);
-        if(command) {
-            if(value === true || value === false) {
-                this._setHasCheckedItems(-1);
-                command.checked = value;
-            } else if(value !== undefined) {
-                this._setHasCheckedItems(key);
-                command.items = command.items.map(item => {
-                    return {
-                        'value': item.value,
-                        'text': item.text,
-                        'checked': item.value === value,
-                        'rootCommand': key
-                    };
-                });
-            }
-        }
+        const itemOptionText = DiagramMenuHelper.getItemOptionText(this._contextMenuInstance, this._commandToIndexMap[key]);
+        DiagramMenuHelper.updateContextMenuItemValue(this._contextMenuInstance, itemOptionText, key, value);
     }
     _setItemSubItems(key, items) {
-        const command = this._getCommandByKey(key);
-        if(command) {
-            command.items = items.map(item => {
-                return {
-                    'value': DiagramMenuHelper.getItemValue(item),
-                    'text': item.text,
-                    'checked': item.checked,
-                    'rootCommand': key
-                };
-            });
-        }
+        const itemOptionText = DiagramMenuHelper.getItemOptionText(this._contextMenuInstance, this._commandToIndexMap[key]);
+        DiagramMenuHelper.updateContextMenuItems(this._contextMenuInstance, itemOptionText, key, items);
     }
     _setEnabled(enabled) {
         this._contextMenuInstance.option('disabled', !enabled);
@@ -192,22 +153,20 @@ class DiagramContextMenu extends Widget {
     isVisible() {
         return this._inOnShowing;
     }
-    _setHasCheckedItems(key) {
-        if(!this._contextMenuInstance._menuHasCheckedItems) {
-            this._contextMenuInstance._menuHasCheckedItems = {};
-        }
-        this._contextMenuInstance._menuHasCheckedItems[key] = true;
-    }
-    _createOnVisibleChangedAction() {
-        this._onVisibleChangedAction = this._createActionByOption('onVisibleChanged');
+
+    _createOnVisibilityChangingAction() {
+        this._onVisibilityChangingAction = this._createActionByOption('onVisibilityChanging');
     }
     _createOnItemClickAction() {
         this._onItemClickAction = this._createActionByOption('onItemClick');
     }
     _optionChanged(args) {
         switch(args.name) {
-            case 'onVisibleChanged':
-                this._createOnVisibleChangedAction();
+            case 'onVisibilityChanging':
+                this._createOnVisibilityChangingAction();
+                break;
+            case 'onCustomCommand':
+                this._createOnCustomCommand();
                 break;
             case 'onItemClick':
                 this._createOnItemClickAction();
@@ -221,7 +180,7 @@ class DiagramContextMenu extends Widget {
     }
 }
 
-class ContextMenuBar extends DiagramBar {
+class DiagramContextMenuBar extends DiagramBar {
     constructor(owner) {
         super(owner);
     }

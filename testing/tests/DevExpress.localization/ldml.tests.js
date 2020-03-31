@@ -99,6 +99,18 @@ QUnit.module('date parser', () => {
         checkFormat('yyyy \'m\'. MMMM d');
         checkFormat('MMM dd, yyyy [h:mm aaa]');
     });
+
+    QUnit.test('dates are parsed correctly on DST start time (T869511)', function(assert) {
+        const date = new Date(2020, 2, 8, 14, 15, 16);
+        const parser = getDateParser('yyyy/MM/dd h:mm:ss aaa', dateParts);
+        assert.deepEqual(parser('2020/03/08 2:15:16 PM'), date, 'parse correct date string');
+    });
+
+    QUnit.test('dates are parsed correctly on hours after DST start time (T869511)', function(assert) {
+        const date = new Date(2020, 2, 8, 15, 14, 13);
+        const parser = getDateParser('yyyy/MM/dd h:mm:ss aaa', dateParts);
+        assert.deepEqual(parser('2020/03/08 3:14:13 PM'), date, 'parse correct date string');
+    });
 });
 
 
@@ -126,6 +138,18 @@ QUnit.module('number formatter', () => {
         assert.strictEqual(formatter(10), '010', 'format integer with zero at the end');
         assert.strictEqual(formatter(123), '123', 'format integer');
         assert.strictEqual(formatter(123456), '456', 'format large integer');
+    });
+
+    QUnit.test('integer with zero format with unlimitedIntegerDigits flag (for dashbords)', function(assert) {
+        const formatter = getNumberFormatter('0', { unlimitedIntegerDigits: true });
+
+        assert.strictEqual(formatter(null), '', 'format an empty value');
+        assert.strictEqual(formatter(NaN), '', 'NaN value should not be formatted');
+        assert.strictEqual(formatter(0), '0', 'format zero');
+        assert.strictEqual(formatter(1), '1', 'format integer with 1 digit');
+        assert.strictEqual(formatter(-1), '-1', 'format nagative integer with 1 digit');
+        assert.strictEqual(formatter(123456), '123456', 'format large integer');
+        assert.strictEqual(formatter(123456.7), '123457', 'format large integer with float part');
     });
 
     QUnit.test('float with precision formatting', function(assert) {
@@ -228,6 +252,12 @@ QUnit.module('number formatter', () => {
         assert.strictEqual(formatter(123), '123', 'format integer without groups');
         assert.strictEqual(formatter(1234), '1,234', 'format integer with 1 group');
         assert.strictEqual(formatter(123456789), '12,34,56,789', 'format integer with 3 groups');
+    });
+
+    QUnit.test('format with invalid group (T862287)', function(assert) {
+        const formatter = getNumberFormatter('#,,,B');
+
+        assert.strictEqual(formatter(123), 'B', 'format integer with invalid format');
     });
 
     QUnit.test('different positive and negative formatting with groups', function(assert) {

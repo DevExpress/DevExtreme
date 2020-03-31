@@ -30,7 +30,7 @@ export const removeDifferentElements = ($children, $newChildren) => {
             }
         });
         if(!hasComponent) {
-            element.remove();
+            element.parentNode.removeChild(element);
         }
     });
 };

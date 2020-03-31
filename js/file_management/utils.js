@@ -46,7 +46,7 @@ const getPathParts = (path, includeFullPath) => {
 
     if(includeFullPath) {
         for(let i = 0; i < result.length; i++) {
-            result[i] = pathCombine(i === 0 ? '' : result[i - 1], result[i]);
+            result[i] = pathCombine(i === 0 ? '' : result[i - 1], getEscapedFileName(result[i]));
         }
     }
 

@@ -608,7 +608,7 @@ exports.chart = _extend({}, baseScatterMethods, {
         that._trackersTranslator = that.groupPointsByCoords(rotated);
     },
 
-    checkAxisVisibleAreaCoord(isArgument, coord) {
+    _checkAxisVisibleAreaCoord(isArgument, coord) {
         const axis = isArgument ? this.getArgumentAxis() : this.getValueAxis();
         const visibleArea = axis.getVisibleArea();
 
@@ -630,7 +630,7 @@ exports.chart = _extend({}, baseScatterMethods, {
             const p = points[i];
             const tmpCoord = p[coordName] === coord ? p[oppositeCoordName] : undefined;
 
-            if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
+            if(this._checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
                 oppositeCoord = tmpCoord;
                 break;
             }
@@ -639,45 +639,36 @@ exports.chart = _extend({}, baseScatterMethods, {
         return oppositeCoord;
     },
 
-    getNearestPointsByCoord(coord, isArgument) {
+    _getNearestPoints(point, nextPoint) {
+        return [point, nextPoint];
+    },
+
+    _getBezierPoints() {
+        return [];
+    },
+
+    _getNearestPointsByCoord(coord, isArgument) {
         const that = this;
         const rotated = that.getOptions().rotated;
         const isOpposite = !isArgument && !rotated || isArgument && rotated;
         const coordName = isOpposite ? 'vy' : 'vx';
-        const points = that.getVisiblePoints();
         const allPoints = that.getPoints();
+        const bezierPoints = that._getBezierPoints();
         const nearestPoints = [];
 
-        if(that.isVisible() && allPoints.length > 0) {
-            if(allPoints.length > 1) {
-                that.findNeighborPointsByCoord(coord, coordName, points.slice(0), allPoints, (point, nextPoint) => {
-                    nearestPoints.push([point, nextPoint]);
-                });
-            } else {
-                if(allPoints[0][coordName] === coord) {
-                    nearestPoints.push([allPoints[0], allPoints[0]]);
+        if(allPoints.length > 1) {
+            allPoints.forEach((point, i) => {
+                const nextPoint = allPoints[i + 1];
+                if(nextPoint && (point[coordName] <= coord && nextPoint[coordName] >= coord ||
+                        point[coordName] >= coord && nextPoint[coordName] <= coord)) {
+                    nearestPoints.push(that._getNearestPoints(point, nextPoint, bezierPoints));
                 }
-            }
+            });
+        } else {
+            nearestPoints.push([allPoints[0], allPoints[0]]);
         }
 
         return nearestPoints;
-    },
-
-    findNeighborPointsByCoord(coord, coordName, points, allPoints, pushNeighborPoints) {
-        let searchPoints = allPoints;
-
-        if(points.length > 0) {
-            points.splice(0, 0, allPoints[allPoints.indexOf(points[0]) - 1]);
-            points.splice(points.length, 0, allPoints[allPoints.indexOf(points[points.length - 1]) + 1]);
-            searchPoints = points;
-        }
-
-        searchPoints.forEach((p, i) => {
-            const np = searchPoints[i + 1];
-            if(p && np && (p[coordName] <= coord && np[coordName] >= coord || p[coordName] >= coord && np[coordName] <= coord)) {
-                pushNeighborPoints(p, np);
-            }
-        });
     },
 
     getNeighborPoint: function(x, y) {

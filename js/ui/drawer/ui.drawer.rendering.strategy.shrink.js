@@ -2,11 +2,12 @@ import { animation } from './ui.drawer.rendering.strategy';
 import DrawerStrategy from './ui.drawer.rendering.strategy';
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
+import { isDefined } from '../../core/utils/type';
 import { camelize } from '../../core/utils/inflector';
+import * as zIndexPool from '../overlay/z_index';
 
 class ShrinkStrategy extends DrawerStrategy {
-
-    slidePositionRendering(config, offset, animate) {
+    _slidePositionRendering(config, _, animate) {
         if(animate) {
             const animationConfig = extend(config.defaultAnimationConfig, {
                 $element: config.$panel,
@@ -14,13 +15,14 @@ class ShrinkStrategy extends DrawerStrategy {
                 duration: this.getDrawerInstance().option('animationDuration'),
                 direction: config.direction
             });
+
             animation.margin(animationConfig);
         } else {
             config.$panel.css('margin' + camelize(config.direction, true), config.panelOffset);
         }
     }
 
-    expandPositionRendering(config, offset, animate) {
+    _expandPositionRendering(config, _, animate) {
         const drawer = this.getDrawerInstance();
 
         if(animate) {
@@ -40,14 +42,32 @@ class ShrinkStrategy extends DrawerStrategy {
         }
     }
 
-    getPositionRenderingConfig(offset) {
-        return extend(super.getPositionRenderingConfig(offset), {
-            panelOffset: this._getPanelOffset(offset)
+    _getPositionRenderingConfig(isDrawerOpened) {
+        return extend(super._getPositionRenderingConfig(isDrawerOpened), {
+            panelOffset: this._getPanelOffset(isDrawerOpened)
         });
     }
 
-    needOrderContent(position, isRtl) {
+    isViewContentFirst(position, isRtl) {
         return (isRtl ? position === 'left' : position === 'right') || position === 'bottom';
+    }
+
+    updateZIndex() {
+        super.updateZIndex();
+        if(!isDefined(this._panelZIndex)) {
+            this._panelZIndex = zIndexPool.base() + 501;
+            this._drawer._$panelContentWrapper.css('zIndex', this._panelZIndex);
+        }
+
+    }
+
+    clearZIndex() {
+        if(isDefined(this._panelZIndex)) {
+            this._drawer._$panelContentWrapper.css('zIndex', '');
+            delete this._panelZIndex;
+        }
+
+        super.clearZIndex();
     }
 }
 

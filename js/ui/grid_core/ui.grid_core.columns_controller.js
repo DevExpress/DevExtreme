@@ -440,17 +440,19 @@ module.exports = {
                 }
             };
 
+            const customizeTextForBooleanDataType = function(e) {
+                if(e.value === true) {
+                    return this.trueText || 'true';
+                } else if(e.value === false) {
+                    return this.falseText || 'false';
+                } else {
+                    return e.valueText || '';
+                }
+            };
+
             const getCustomizeTextByDataType = function(dataType) {
                 if(dataType === 'boolean') {
-                    return function(e) {
-                        if(e.value === true) {
-                            return this.trueText || 'true';
-                        } else if(e.value === false) {
-                            return this.falseText || 'false';
-                        } else {
-                            return e.valueText || '';
-                        }
-                    };
+                    return customizeTextForBooleanDataType;
                 }
             };
 
@@ -1964,17 +1966,6 @@ module.exports = {
                         assignColumns(that, createColumnsFromOptions(that, columns));
                     }
                 },
-                _checkAsyncValidationRules: function() {
-                    const currentEditMode = this.option('editing.mode');
-                    if(currentEditMode !== 'form' && currentEditMode !== 'popup') {
-                        const hasAsyncRules = this._columns.some(function(col) {
-                            return (col.validationRules || []).some(rule => rule.type === 'async');
-                        });
-                        if(hasAsyncRules) {
-                            errors.log('E1057', this.component.NAME, currentEditMode);
-                        }
-                    }
-                },
                 updateColumns: function(dataSource, forceApplying) {
                     const that = this;
                     let sortParameters;
@@ -1989,8 +1980,6 @@ module.exports = {
                         groupParameters = dataSource ? dataSource.group() || [] : that.getGroupDataSourceParameters();
 
                         that._customizeColumns(that._columns);
-
-                        that._checkAsyncValidationRules();
 
                         updateIndexes(that);
 
@@ -2547,6 +2536,16 @@ module.exports = {
                     }
 
                     return column.index;
+                },
+                getCustomizeTextByDataType: getCustomizeTextByDataType,
+                getHeaderContentAlignment: function(columnAlignment) {
+                    const rtlEnabled = this.option('rtlEnabled');
+
+                    if(rtlEnabled) {
+                        return columnAlignment === 'left' ? 'right' : 'left';
+                    }
+
+                    return columnAlignment;
                 }
             };
         })())

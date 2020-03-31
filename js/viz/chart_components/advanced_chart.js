@@ -7,6 +7,7 @@ const axisModule = require('../axes/base_axis');
 const seriesFamilyModule = require('../core/series_family');
 const BaseChart = require('./base_chart').BaseChart;
 const crosshairModule = require('./crosshair');
+const getViewPortFilter = require('../series/helpers/range_data_calculator').getViewPortFilter;
 
 const _isArray = Array.isArray;
 const _isDefined = require('../../core/utils/type').isDefined;
@@ -561,6 +562,10 @@ const AdvancedChart = BaseChart.inherit({
         return options;
     },
 
+    _getValFilter(series) {
+        return getViewPortFilter(series.getValueAxis().visualRange() || {});
+    },
+
     _createAxis(isArgumentAxes, options, virtual, index) {
         const that = this;
         const typeSelector = isArgumentAxes ? 'argumentAxis' : 'valueAxis';
@@ -797,12 +802,12 @@ const AdvancedChart = BaseChart.inherit({
 
         that._recreateSizeDependentObjects(false);
         if(!that._changes.has('FULL_RENDER')) {
-            const resizePanesOnZoom = this.option('resizePanesOnZoom');
+            const resizePanesOnZoom = that.option('resizePanesOnZoom');
             that._doRender({
                 force: true,
                 drawTitle: false,
                 drawLegend: false,
-                adjustAxes: _isDefined(resizePanesOnZoom) ? resizePanesOnZoom : (this.option('adjustAxesOnZoom') || false),
+                adjustAxes: resizePanesOnZoom ?? (that.option('adjustAxesOnZoom') || false),
                 animate: false
             });
             that._raiseZoomEndHandlers();

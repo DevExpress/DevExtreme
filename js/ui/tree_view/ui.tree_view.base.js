@@ -18,6 +18,7 @@ import fx from '../../animation/fx';
 import Scrollable from '../scroll_view/ui.scrollable';
 import LoadIndicator from '../load_indicator';
 import { fromPromise, Deferred, when } from '../../core/utils/deferred';
+import errors from '../widget/ui.errors';
 
 const WIDGET_CLASS = 'dx-treeview';
 
@@ -582,6 +583,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const dataSource = this.getDataSource();
         const skipContentReadyAction = dataSource && !dataSource.isLoaded();
 
+        if(this._scrollableContainer && windowUtils.hasWindow()) {
+            this._scrollableContainer.update();
+        }
+
         if(!skipContentReadyAction) {
             this.callBase();
         }
@@ -804,17 +809,23 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _toggleExpandedState: function(itemElement, state, e) {
         const node = this._getNode(itemElement);
-        const currentState = node.internalFields.expanded;
+        if(!node) {
+            return new Deferred().reject().promise();
+        }
+        if(node.internalFields.disabled) {
+            return new Deferred().reject().promise();
+        }
 
-        if(node.internalFields.disabled || currentState === state) {
-            return;
+        const currentState = node.internalFields.expanded;
+        if(currentState === state) {
+            return new Deferred().resolve().promise();
         }
 
         if(this._hasChildren(node)) {
             const $node = this._getNodeElement(node);
 
             if($node.find(`.${NODE_LOAD_INDICATOR_CLASS}:not(.${INVISIBLE_STATE_CLASS})`).length) {
-                return;
+                return new Deferred().reject().promise();
             }
 
             this._createLoadIndicator($node);
@@ -826,7 +837,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         this._dataAdapter.toggleExpansion(node.internalFields.key, state);
 
-        this._updateExpandedItemsUI(node, state, e);
+        return this._updateExpandedItemsUI(node, state, e);
     },
 
     _createLoadIndicator: function($node) {
@@ -886,22 +897,24 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         const nodeContainerExists = $nodeContainer.length > 0;
 
+        const completionCallback = new Deferred();
         if(!state || nodeContainerExists && !$nodeContainer.is(':empty')) {
-            this._updateExpandedItem(node, state, e);
-            return;
+            this._animateNodeContainer(node, state, e, completionCallback);
+            return completionCallback.promise();
         }
 
         if(this._isVirtualMode() || this._useCustomChildrenLoader()) {
-            this._loadNestedItemsWithUpdate(node, state, e);
-            return;
+            this._loadNestedItemsWithUpdate(node, state, e, completionCallback);
+            return completionCallback.promise();
         }
 
         this._renderSublevel($node, node, this._getChildNodes(node));
         this._fireContentReadyAction();
-        this._updateExpandedItem(node, state, e);
+        this._animateNodeContainer(node, state, e, completionCallback);
+        return completionCallback.promise();
     },
 
-    _loadNestedItemsWithUpdate: function(node, state, e) {
+    _loadNestedItemsWithUpdate: function(node, state, e, completionCallback) {
         const $node = this._getNodeElement(node);
         this._loadNestedItems(node).done(items => {
             const actualNodeData = this._getActualNode(node);
@@ -912,7 +925,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             }
 
             this._fireContentReadyAction();
-            this._updateExpandedItem(actualNodeData, state, e);
+            this._animateNodeContainer(actualNodeData, state, e, completionCallback);
         });
     },
 
@@ -952,13 +965,13 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._initDataAdapter();
     },
 
-    _updateExpandedItem: function(node, state, e) {
-        this._animateNodeContainer(node, state, e);
-    },
-
-    _animateNodeContainer: function(node, state, e) {
+    _animateNodeContainer: function(node, state, e, completionCallback) {
         const $node = this._getNodeElement(node);
         const $nodeContainer = $node.children(`.${NODE_CONTAINER_CLASS}`);
+
+        if(node && completionCallback && $nodeContainer.length === 0) {
+            completionCallback.resolve();
+        }
 
         // NOTE: The height of node container is should be used when the container is shown (T606878)
         $nodeContainer.addClass(OPENED_NODE_CONTAINER_CLASS);
@@ -980,6 +993,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 this.setAria('expanded', state, $node);
                 this._scrollableContainer.update();
                 this._fireExpandedStateUpdatedEvent(state, node, e);
+
+                if(completionCallback) {
+                    completionCallback.resolve();
+                }
             }).bind(this)
         });
     },
@@ -1133,7 +1150,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _isLastRequired: function(node) {
         const selectionRequired = this.option('selectionRequired');
         const isSingleMode = this._isSingleSelection();
-        const selectedNodesKeys = this.getSelectedNodesKeys();
+        const selectedNodesKeys = this.getSelectedNodeKeys();
 
         if(!selectionRequired) {
             return;
@@ -1149,9 +1166,12 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _updateItemSelection: function(value, itemElement, dxEvent) {
         const node = this._getNode(itemElement);
+        if(!node) {
+            return false;
+        }
 
-        if(!node || node.internalFields.selected === value) {
-            return;
+        if(node.internalFields.selected === value) {
+            return true;
         }
 
         if(!value && this._isLastRequired(node)) {
@@ -1161,10 +1181,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
                 checkbox && checkbox.option('value', true);
             }
-            return;
+            return false;
         }
 
-        const selectedNodesKeys = this.getSelectedNodesKeys();
+        const selectedNodesKeys = this.getSelectedNodeKeys();
         if(this._isSingleSelection() && value) {
             each(selectedNodesKeys, (index, nodeKey) => {
                 this.unselectItem(nodeKey);
@@ -1183,6 +1203,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         });
 
         this._fireSelectionChanged();
+        return true;
     },
 
     _getCheckBoxInstance: function($node) {
@@ -1337,8 +1358,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         if(!$target.children().hasClass(DISABLED_STATE_CLASS)) {
             this.callBase($target);
         }
-
-        this._scrollableContainer.scrollToElement($target.find('.' + ITEM_CLASS).first());
     },
 
     _itemPointerDownHandler: function(e) {
@@ -1383,30 +1402,34 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         switch(location) {
             case FOCUS_UP: {
                 const $prevItem = this._prevItem($items);
-
                 this.option('focusedElement', getPublicElement($prevItem));
+
+                const prevItemElement = this._getNodeItemElement($prevItem);
+                this._scrollableContainer.scrollToElement(prevItemElement);
                 if(e.shiftKey && this._showCheckboxes()) {
-                    this._updateItemSelection(true, $prevItem.find('.' + ITEM_CLASS).get(0));
+                    this._updateItemSelection(true, prevItemElement);
                 }
                 break;
             }
             case FOCUS_DOWN: {
                 const $nextItem = this._nextItem($items);
-
                 this.option('focusedElement', getPublicElement($nextItem));
+
+                const nextItemElement = this._getNodeItemElement($nextItem);
+                this._scrollableContainer.scrollToElement(nextItemElement);
                 if(e.shiftKey && this._showCheckboxes()) {
-                    this._updateItemSelection(true, $nextItem.find('.' + ITEM_CLASS).get(0));
+                    this._updateItemSelection(true, nextItemElement);
                 }
                 break;
             }
             case FOCUS_FIRST: {
                 const $firstItem = $items.first();
-
                 if(e.shiftKey && this._showCheckboxes()) {
                     this._updateSelectionToFirstItem($items, $items.index(this._prevItem($items)));
                 }
 
                 this.option('focusedElement', getPublicElement($firstItem));
+                this._scrollableContainer.scrollToElement(this._getNodeItemElement($firstItem));
                 break;
             }
             case FOCUS_LAST: {
@@ -1417,6 +1440,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 }
 
                 this.option('focusedElement', getPublicElement($lastItem));
+                this._scrollableContainer.scrollToElement(this._getNodeItemElement($lastItem));
                 break;
             }
             case FOCUS_RIGHT: {
@@ -1431,6 +1455,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 this.callBase.apply(this, arguments);
                 return;
         }
+    },
+
+
+    _getNodeItemElement: function($node) {
+        return $node.find('.' + ITEM_CLASS).get(0);
     },
 
     _nodeElements: function() {
@@ -1450,6 +1479,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         if($node.hasClass(OPENED_NODE_CONTAINER_CLASS)) {
             const $nextItem = this._nextItem(this._findNonDisabledNodes(this._nodeElements()));
             this.option('focusedElement', getPublicElement($nextItem));
+            this._scrollableContainer.scrollToElement(this._getNodeItemElement($nextItem));
             return;
         }
 
@@ -1480,6 +1510,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         } else {
             const collapsedNode = this._getClosestNonDisabledNode($focusedNode);
             collapsedNode.length && this.option('focusedElement', getPublicElement(collapsedNode));
+            this._scrollableContainer.scrollToElement(this._getNodeItemElement(collapsedNode));
         }
     },
 
@@ -1510,19 +1541,19 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     selectItem: function(itemElement) {
-        this._updateItemSelection(true, itemElement);
+        return this._updateItemSelection(true, itemElement);
     },
 
     unselectItem: function(itemElement) {
-        this._updateItemSelection(false, itemElement);
+        return this._updateItemSelection(false, itemElement);
     },
 
     expandItem: function(itemElement) {
-        this._toggleExpandedState(itemElement, true);
+        return this._toggleExpandedState(itemElement, true);
     },
 
     collapseItem: function(itemElement) {
-        this._toggleExpandedState(itemElement, false);
+        return this._toggleExpandedState(itemElement, false);
     },
 
     /**
@@ -1535,7 +1566,20 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         return this._dataAdapter.getTreeNodes();
     },
 
+    getSelectedNodes: function() {
+        return this.getSelectedNodeKeys().map(key => {
+            const node = this._dataAdapter.getNodeByKey(key);
+            return this._dataAdapter.getPublicNode(node);
+        });
+    },
+
+    // Deprecated. Will bew removed in near future - use getSelectedNodeKeys method instead
     getSelectedNodesKeys: function() {
+        errors.log('W0002', 'dxTreeView', 'getSelectedNodesKeys', '20.1', 'Use the \'getSelectedNodeKeys\' method instead');
+        return this.getSelectedNodeKeys();
+    },
+
+    getSelectedNodeKeys: function() {
         return this._dataAdapter.getSelectedNodesKeys();
     },
 
@@ -1565,8 +1609,55 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         each(this._dataAdapter.getExpandedNodesKeys(), (function(_, key) {
             this._toggleExpandedState(key, false);
         }).bind(this));
-    }
+    },
 
+    scrollToItem: function(keyOrItemOrElement) {
+        const node = this._getNode(keyOrItemOrElement);
+        if(!node) {
+            return new Deferred().reject().promise();
+        }
+
+        const nodeKeysToExpand = [];
+        let parentNode = node.internalFields.publicNode.parent;
+        while(parentNode != null) {
+            if(!parentNode.expanded) {
+                nodeKeysToExpand.push(parentNode.key);
+            }
+            parentNode = parentNode.parent;
+        }
+
+        const scrollCallback = new Deferred();
+        this._expandNodes(nodeKeysToExpand.reverse()).always(() => {
+            const $element = this._getNodeElement(node);
+            if($element && $element.length) {
+                this._scrollableContainer.scrollToElementTopLeft($element);
+                scrollCallback.resolve();
+            } else {
+                scrollCallback.reject();
+            }
+        });
+
+        return scrollCallback.promise();
+    },
+
+    _expandNodes: function(keysToExpand) {
+        if(!keysToExpand || keysToExpand.length === 0) {
+            return new Deferred().resolve().promise();
+        }
+
+        const resultCallback = new Deferred();
+        const callbacksByNodes = keysToExpand.map(key => this.expandItem(key));
+        when.apply($, callbacksByNodes)
+            .done(() => resultCallback.resolve())
+            .fail(() => resultCallback.reject());
+
+        return resultCallback.promise();
+    },
+
+    _dispose: function() {
+        this.callBase();
+        clearTimeout(this._setFocusedItemTimeout);
+    }
 });
 
 module.exports = TreeViewBase;

@@ -90,7 +90,9 @@ const tooltipEnvironment = {
 QUnit.module('Tracker - tooltip events', tooltipEnvironment);
 
 QUnit.test('"Show" is raised on mouseover after delay', function(assert) {
-    const element = this.renderer.path([], 'area'); const target = {}; const info = {};
+    const element = this.renderer.path([], 'area');
+    const target = {};
+    const info = {};
     this.tracker.attach(element, target, info);
     element.element['gauge-data-target'] = target; // emulate data attachment
     element.element['gauge-data-info'] = info; // emulate data attachment
@@ -104,7 +106,9 @@ QUnit.test('"Show" is raised on mouseover after delay', function(assert) {
 });
 
 QUnit.test('"Show" is not raised until mousemove occurs', function(assert) {
-    const element = this.renderer.path([], 'area'); const target = {}; const info = {};
+    const element = this.renderer.path([], 'area');
+    const target = {};
+    const info = {};
     this.tracker.attach(element, target, info);
     element.element['gauge-data-target'] = target; // emulate data attachment
     element.element['gauge-data-info'] = info; // emulate data attachment
@@ -120,7 +124,9 @@ QUnit.test('"Show" is not raised until mousemove occurs', function(assert) {
 });
 
 QUnit.test('"Show" is raised when small mousemove occurs', function(assert) {
-    const element = this.renderer.path([], 'area'); const target = {}; const info = {};
+    const element = this.renderer.path([], 'area');
+    const target = {};
+    const info = {};
     this.tracker.attach(element, target, info);
     element.element['gauge-data-target'] = target; // emulate data attachment
     element.element['gauge-data-info'] = info; // emulate data attachment
@@ -198,8 +204,10 @@ QUnit.test('"Hide" is not raised if mouseover occurs after mouseout', function(a
 
 QUnit.test('"Show" is raised after delay on mouseover on other element if tooltip is shown', function(assert) {
     assert.expect(2);
-    const element1 = this.renderer.path([], 'area'); const target1 = {};
-    const element2 = this.renderer.path([], 'area'); const target2 = {};
+    const element1 = this.renderer.path([], 'area');
+    const target1 = {};
+    const element2 = this.renderer.path([], 'area');
+    const target2 = {};
     this.tracker.attach(element1, target1).attach(element2, target2);
     element1.element['gauge-data-target'] = target1; // emulate data attachment
     element2.element['gauge-data-target'] = target2; // emulate data attachment
@@ -274,7 +282,9 @@ QUnit.module('Tracker - tooltip touch events', tooltipTouchEnvironment);
 
 QUnit.test('"Show" is raised on touchstart', function(assert) {
     assert.expect(2);
-    const element = this.renderer.path([], 'area'); const target = {}; const info = {};
+    const element = this.renderer.path([], 'area');
+    const target = {};
+    const info = {};
     this.tracker.attach(element, target, info);
     element.element['gauge-data-target'] = target; // emulate data attachment
     element.element['gauge-data-info'] = info; // emulate data attachment

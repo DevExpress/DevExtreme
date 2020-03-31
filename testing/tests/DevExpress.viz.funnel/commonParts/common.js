@@ -61,7 +61,8 @@ function checkNumbersWithError(actual, expected, error) {
 }
 
 QUnit.assert.checkItem = function(actual, expected, error, message) {
-    let check = true; let i;
+    let check = true;
+    let i;
     if(!error) {
         error = 0.1;
     }

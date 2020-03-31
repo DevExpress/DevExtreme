@@ -326,26 +326,29 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @docid dxTreeViewMethods.collapseItem
      * @publicName collapseItem(itemData)
      * @param1 itemData:Object
+     * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(itemData: any): void;
+    collapseItem(itemData: any): Promise<void> & JQueryPromise<void>;
     /**
      * @docid dxTreeViewMethods.collapseItem
      * @publicName collapseItem(itemElement)
      * @param1 itemElement:Node
+     * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(itemElement: Element): void;
+    collapseItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
     /**
      * @docid dxTreeViewMethods.collapseItem
      * @publicName collapseItem(key)
      * @param1 key:any
+     * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(key: any): void;
+    collapseItem(key: any): Promise<void> & JQueryPromise<void>;
     /**
      * @docid dxTreeViewMethods.expandAll
      * @publicName expandAll()
@@ -357,26 +360,29 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @docid dxTreeViewMethods.expandItem
      * @publicName expandItem(itemData)
      * @param1 itemData:Object
+     * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(itemData: any): void;
+    expandItem(itemData: any): Promise<void> & JQueryPromise<void>;
     /**
      * @docid dxTreeViewMethods.expandItem
      * @publicName expandItem(itemElement)
      * @param1 itemElement:Node
+     * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(itemElement: Element): void;
+    expandItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
     /**
      * @docid dxTreeViewMethods.expandItem
      * @publicName expandItem(key)
      * @param1 key:any
+     * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(key: any): void;
+    expandItem(key: any): Promise<void> & JQueryPromise<void>;
     /**
      * @docid dxTreeViewMethods.getNodes
      * @publicName getNodes()
@@ -385,6 +391,22 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @public
      */
     getNodes(): Array<dxTreeViewNode>;
+    /**
+     * @docid dxTreeViewMethods.getSelectedNodes
+     * @publicName getSelectedNodes()
+     * @return Array<dxTreeViewNode>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getSelectedNodes(): Array<dxTreeViewNode>;
+    /**
+     * @docid dxTreeViewMethods.getSelectedNodeKeys
+     * @publicName getSelectedNodeKeys()
+     * @return Array<any>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getSelectedNodeKeys(): Array<any>;
     /**
      * @docid dxTreeViewMethods.selectAll
      * @publicName selectAll()
@@ -396,26 +418,29 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @docid dxTreeViewMethods.selectItem
      * @publicName selectItem(itemData)
      * @param1 itemData:Object
+     * @return boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectItem(itemData: any): void;
+    selectItem(itemData: any): boolean;
     /**
      * @docid dxTreeViewMethods.selectItem
      * @publicName selectItem(itemElement)
      * @param1 itemElement:Node
+     * @return boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectItem(itemElement: Element): void;
+    selectItem(itemElement: Element): boolean;
     /**
      * @docid dxTreeViewMethods.selectItem
      * @publicName selectItem(key)
      * @param1 key:any
+     * @return boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectItem(key: any): void;
+    selectItem(key: any): boolean;
     /**
      * @docid dxTreeViewMethods.unselectAll
      * @publicName unselectAll()
@@ -427,26 +452,29 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @docid dxTreeViewMethods.unselectItem
      * @publicName unselectItem(itemData)
      * @param1 itemData:Object
+     * @return boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    unselectItem(itemData: any): void;
+    unselectItem(itemData: any): boolean;
     /**
      * @docid dxTreeViewMethods.unselectItem
      * @publicName unselectItem(itemElement)
      * @param1 itemElement:Node
+     * @return boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    unselectItem(itemElement: Element): void;
+    unselectItem(itemElement: Element): boolean;
     /**
      * @docid dxTreeViewMethods.unselectItem
      * @publicName unselectItem(key)
      * @param1 key:any
+     * @return boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    unselectItem(key: any): void;
+    unselectItem(key: any): boolean;
     /**
      * @docid dxTreeViewMethods.updateDimensions
      * @publicName updateDimensions()
@@ -455,6 +483,33 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @public
      */
     updateDimensions(): Promise<void> & JQueryPromise<void>;
+    /**
+     * @docid dxTreeViewMethods.scrollToItem
+     * @publicName scrollToItem(itemData)
+     * @param1 itemData:Object
+     * @return Promise<void>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    scrollToItem(itemData: any): Promise<void> & JQueryPromise<void>;
+    /**
+     * @docid dxTreeViewMethods.scrollToItem
+     * @publicName scrollToItem(itemElement)
+     * @param1 itemElement:Node
+     * @return Promise<void>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    scrollToItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
+    /**
+     * @docid dxTreeViewMethods.scrollToItem
+     * @publicName scrollToItem(key)
+     * @param1 key:any
+     * @return Promise<void>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    scrollToItem(key: any): Promise<void> & JQueryPromise<void>;
 }
 
 export interface dxTreeViewItem extends CollectionWidgetItem {

@@ -1,7 +1,10 @@
 import $ from 'jquery';
 
+import 'generic_light.css!';
+
 import 'ui/select_box';
 import 'ui/color_box/color_view';
+
 import Toolbar from 'ui/html_editor/modules/toolbar';
 import FormDialog from 'ui/html_editor/ui/formDialog';
 import { noop } from 'core/utils/common';
@@ -46,7 +49,7 @@ const ORDEREDLIST_FORMAT_CLASS = 'dx-orderedlist-format';
 const BULLETLIST_FORMAT_CLASS = 'dx-bulletlist-format';
 const CLEAR_FORMAT_CLASS = 'dx-clear-format';
 const IMAGE_FORMAT_CLASS = 'dx-image-format';
-
+const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
 
 const simpleModuleConfig = {
     beforeEach: function() {
@@ -140,15 +143,15 @@ const dialogModuleConfig = {
     }
 };
 
-const { test } = QUnit;
+const { test, module: testModule } = QUnit;
 
-QUnit.module('Toolbar module', simpleModuleConfig, () => {
+testModule('Toolbar module', simpleModuleConfig, () => {
     test('Render toolbar without any options', function(assert) {
         new Toolbar(this.quillMock, this.options);
 
         assert.notOk(this.$element.hasClass(TOOLBAR_WRAPPER_CLASS), 'Toolbar rendered not on the root element');
         assert.notOk(this.$element.children().hasClass(TOOLBAR_WRAPPER_CLASS), 'Toolbar isn\'t render inside the root element (no items)');
-        assert.equal(this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).length, 0, 'There are no format widgets');
+        assert.strictEqual(this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).length, 0, 'There are no format widgets');
     });
 
     test('Render toolbar with items', function(assert) {
@@ -162,6 +165,7 @@ QUnit.module('Toolbar module', simpleModuleConfig, () => {
         assert.notOk(this.$element.hasClass(TOOLBAR_WRAPPER_CLASS), 'Toolbar rendered not on the root element');
         assert.ok($toolbarWrapper.hasClass(TOOLBAR_WRAPPER_CLASS), 'Toolbar wrapper render inside the root element');
         assert.ok($toolbar.hasClass(TOOLBAR_CLASS), 'Toolbar render inside the wrapper element');
+        assert.ok($toolbar.hasClass(TOOLBAR_MULTILINE_CLASS), 'Toolbar is rendered with multiline mode by default');
         assert.equal($formatWidget.length, 1, 'There is one format widget');
         assert.ok($formatWidget.hasClass('dx-bold-format'), 'It\'s the bold format');
         assert.equal($formatWidget.find('.dx-icon-bold').length, 1, 'It has a bold icon');
@@ -511,22 +515,6 @@ QUnit.module('Toolbar module', simpleModuleConfig, () => {
             }]);
     });
 
-    test('separator item', function(assert) {
-        this.options.items = ['separator', { formatName: 'separator', locateInMenu: 'always' }];
-
-        new Toolbar(this.quillMock, this.options);
-
-        $(`.${TOOLBAR_CLASS} .${DROPDOWNMENU_BUTTON_CLASS}`)
-            .trigger('dxclick')
-            .trigger('dxclick');
-
-        const $separator = $(`.${TOOLBAR_CLASS} .${SEPARATOR_CLASS}`);
-        const $menuSeparator = $(`.${TOOLBAR_CLASS} .${MENU_SEPARATOR_CLASS}`);
-
-        assert.equal($separator.length, 1, 'Toolbar has a separator item');
-        assert.equal($menuSeparator.length, 1, 'Toolbar has a menu separator item');
-    });
-
     test('toolbar should prevent default mousedown event', function(assert) {
         this.options.items = ['bold'];
 
@@ -557,24 +545,9 @@ QUnit.module('Toolbar module', simpleModuleConfig, () => {
                 value: false
             }]);
     });
-
-    test('adaptive menu container', function(assert) {
-        this.options.items = [{ formatName: 'strike', locateInMenu: 'always' }];
-
-        new Toolbar(this.quillMock, this.options);
-
-        $(`.${TOOLBAR_CLASS} .${DROPDOWNMENU_BUTTON_CLASS}`).trigger('dxclick');
-
-        const $formatButton = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
-        const isMenuLocatedInToolbar = !!$formatButton.closest(`.${TOOLBAR_CLASS}`).length;
-        const isMenuLocatedInToolbarContainer = !!$formatButton.closest(`.${TOOLBAR_WRAPPER_CLASS}`).length;
-
-        assert.notOk(isMenuLocatedInToolbar, 'Adaptive menu isn\'t located into Toolbar');
-        assert.ok(isMenuLocatedInToolbarContainer, 'Adaptive menu is located into Toolbar container');
-    });
 });
 
-QUnit.module('Active formats', simpleModuleConfig, () => {
+testModule('Active formats', simpleModuleConfig, () => {
     test('without active formats', function(assert) {
         this.options.items = ['bold', 'italic', 'clear'];
 
@@ -757,7 +730,7 @@ QUnit.module('Active formats', simpleModuleConfig, () => {
     });
 });
 
-QUnit.module('Toolbar dialogs', dialogModuleConfig, () => {
+testModule('Toolbar dialogs', dialogModuleConfig, () => {
     test('show color dialog', function(assert) {
         this.options.items = ['color'];
         new Toolbar(this.quillMock, this.options);
@@ -1113,5 +1086,101 @@ QUnit.module('Toolbar dialogs', dialogModuleConfig, () => {
 
         assert.equal($fields.length, 2, 'Form with 2 fields shown');
         assert.equal(fieldsText, 'URL:Open link in new window', 'Check labels');
+    });
+});
+
+testModule('Toolbar with multiline mode', simpleModuleConfig, function() {
+    test('The toolbar must change its height according to the items', function(assert) {
+        this.options.items = ['bold'];
+        const toolbar = new Toolbar(this.quillMock, this.options);
+
+        const toolbarHeight = this.$element.height();
+        toolbar.clean();
+
+        for(let i = 0; i < 50; i++) {
+            this.options.items.push('bold');
+        }
+
+        new Toolbar(this.quillMock, this.options);
+
+        const isHeightIncreased = this.$element.height() > toolbarHeight;
+        assert.ok(isHeightIncreased, 'Toolbar height increased');
+    });
+
+    test('The toolbar with multiline mode overwrites item options affecting adaptive menu', function(assert) {
+        this.options.items = [
+            { widget: 'dxButton', locateInMenu: 'always', location: 'center' },
+            { widget: 'dxButton', locateInMenu: 'auto', location: 'before' },
+            { widget: 'dxButton' }
+        ];
+        const toolbar = new Toolbar(this.quillMock, this.options);
+
+        const toolbarItems = toolbar.toolbarInstance.option('items');
+
+        toolbarItems.forEach(({ locateInMenu, location }) => {
+            assert.strictEqual(locateInMenu, 'never', 'Multiline toolbar should not move items to the adaptive menu');
+            assert.strictEqual(location, 'before', 'Multiline toolbar operates with "before" location only');
+        });
+    });
+
+    test('separator item', function(assert) {
+        this.options.multiline = false;
+        this.options.items = ['separator'];
+
+        new Toolbar(this.quillMock, this.options);
+
+        $(`.${TOOLBAR_CLASS} .${DROPDOWNMENU_BUTTON_CLASS}`)
+            .trigger('dxclick')
+            .trigger('dxclick');
+
+        const $separator = $(`.${TOOLBAR_CLASS} .${SEPARATOR_CLASS}`);
+
+        const separatorHeight = $separator.outerHeight();
+        assert.equal($separator.length, 1, 'Toolbar has a separator item');
+        assert.ok(separatorHeight > 0, 'Separator has height greater than 0');
+    });
+});
+
+testModule('Toolbar with adaptive menu', simpleModuleConfig, function() {
+    test('Render toolbar with adaptive mode', function(assert) {
+        this.options.multiline = false;
+        this.options.items = ['bold'];
+        new Toolbar(this.quillMock, this.options);
+
+        const $toolbar = this.$element.children().children();
+        assert.notOk($toolbar.hasClass(TOOLBAR_MULTILINE_CLASS), 'Toolbar is rendered with adaptive mode');
+    });
+
+    test('adaptive menu container', function(assert) {
+        this.options.multiline = false;
+        this.options.items = [{ formatName: 'strike', locateInMenu: 'always' }];
+
+        new Toolbar(this.quillMock, this.options);
+
+        $(`.${TOOLBAR_CLASS} .${DROPDOWNMENU_BUTTON_CLASS}`).trigger('dxclick');
+
+        const $formatButton = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+        const isMenuLocatedInToolbar = !!$formatButton.closest(`.${TOOLBAR_CLASS}`).length;
+        const isMenuLocatedInToolbarContainer = !!$formatButton.closest(`.${TOOLBAR_WRAPPER_CLASS}`).length;
+
+        assert.notOk(isMenuLocatedInToolbar, 'Adaptive menu is not located into Toolbar');
+        assert.ok(isMenuLocatedInToolbarContainer, 'Adaptive menu is located into Toolbar container');
+    });
+
+    test('separator item', function(assert) {
+        this.options.multiline = false;
+        this.options.items = ['separator', { formatName: 'separator', locateInMenu: 'always' }];
+
+        new Toolbar(this.quillMock, this.options);
+
+        $(`.${TOOLBAR_CLASS} .${DROPDOWNMENU_BUTTON_CLASS}`)
+            .trigger('dxclick')
+            .trigger('dxclick');
+
+        const $separator = $(`.${TOOLBAR_CLASS} .${SEPARATOR_CLASS}`);
+        const $menuSeparator = $(`.${TOOLBAR_CLASS} .${MENU_SEPARATOR_CLASS}`);
+
+        assert.equal($separator.length, 1, 'Toolbar has a separator item');
+        assert.equal($menuSeparator.length, 1, 'Toolbar has a menu separator item');
     });
 });

@@ -15,11 +15,14 @@ import 'data/odata/store';
 import $ from 'jquery';
 import ArrayStore from 'data/array_store';
 import pointerEvents from 'events/pointer';
+import clickEvent from 'events/click';
 import { setupDataGridModules, generateItems } from '../../helpers/dataGridMocks.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
-import { CLICK_EVENT, fireKeyDown, triggerKeyDown } from '../../helpers/grid/keyboardNavigationHelper.js';
+import { CLICK_EVENT, isMobile, device, fireKeyDown, triggerKeyDown } from '../../helpers/grid/keyboardNavigationHelper.js';
+import commonUtils from 'core/utils/common';
 
 const dataGridWrapper = new DataGridWrapper('#container');
+const rowsViewWrapper = dataGridWrapper.rowsView;
 
 const addOptionChangedHandlers = function(that) {
     that.optionCalled.add(function(optionName, value) {
@@ -70,7 +73,9 @@ const getModuleConfig = function(keyboardNavigationEnabled) {
         },
         afterEach: function() {
             this.clock.restore();
-            this.dispose();
+            if(this.dispose) {
+                this.dispose();
+            }
         }
     };
 };
@@ -262,7 +267,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowIndex'), 1, 'FocusedRowIndex is 1');
         assert.ok(rowsView.getRow(1).hasClass('dx-row-focused'), 'FocusedRow');
         // act
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         keyboardController._upDownKeysHandler({ key: 'ArrowUp', keyName: 'upArrow' });
         this.clock.tick();
         // assert
@@ -355,7 +360,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.notOk(rowsView.getRow(0).hasClass('dx-cell-focus-disabled'), 'Row 0 has no .dx-cell-focus-disabled');
 
         // act
-        $(rowsView.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(rowsView.getCellElement(1, 0)).trigger(CLICK_EVENT);
         // assert
         assert.ok(keyboardController.isRowFocusType(), 'Row focus type');
         assert.equal(this.option('focusedRowIndex'), 1, 'FocusedRowIndex = 1');
@@ -366,7 +371,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal($(rowsView.getCellElement(1, 0)).attr('tabindex'), undefined);
 
         // act
-        $(rowsView.getCellElement(0, 0)).trigger(CLICK_EVENT).click();
+        $(rowsView.getCellElement(0, 0)).trigger(CLICK_EVENT);
         rowsView = this.gridView.getView('rowsView');
         // assert
         assert.ok(keyboardController.isRowFocusType(), 'Row focus type');
@@ -405,7 +410,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex is undefined');
         this.clock.tick();
         // act
-        $(rowsView.getRow(1).find('td').eq(0)).trigger(CLICK_EVENT).click();
+        $(rowsView.getRow(1).find('td').eq(0)).trigger(CLICK_EVENT);
         this.triggerKeyDown('tab', false, false, rowsView.element().find(':focus').get(0));
         // assert
         assert.equal(this.option('focusedRowIndex'), 1, 'focusedRowIndex');
@@ -543,7 +548,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex is undefined');
         this.clock.tick();
         // act
-        $(rowsView.getRow(1).find('td').eq(0)).trigger(CLICK_EVENT).click();
+        $(rowsView.getRow(1).find('td').eq(0)).trigger(CLICK_EVENT);
         this.triggerKeyDown('leftArrow', false, false, rowsView.element().find(':focus').get(0));
         // assert
         assert.equal(this.option('focusedRowIndex'), 1, 'FocusedRowIndex = 1');
@@ -580,7 +585,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex is undefined');
         this.clock.tick();
         // act
-        $(rowsView.getRow(1).find('td').eq(0)).trigger(CLICK_EVENT).click();
+        $(rowsView.getRow(1).find('td').eq(0)).trigger(CLICK_EVENT);
         this.triggerKeyDown('rightArrow', false, false, rowsView.element().find(':focus').get(0));
         // assert
         assert.equal(this.option('focusedRowIndex'), 1, 'FocusedRowIndex = 1');
@@ -614,7 +619,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex');
 
         // act
-        $(rowsView.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(rowsView.getCellElement(1, 0)).trigger(CLICK_EVENT);
         // assert
         assert.ok(this.keyboardNavigationController.isRowFocusType(), 'Row focus type');
 
@@ -669,7 +674,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         // assert
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex is undefined');
         // act
-        $(rowsView.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(rowsView.getCellElement(1, 0)).trigger(CLICK_EVENT);
         // assert
         assert.equal(this.option('focusedRowIndex'), 3, 'FocusedRowIndex = 3');
         assert.ok(this.keyboardNavigationController.isRowFocusType(), 'Row focus type');
@@ -842,10 +847,10 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         const rowsView = this.gridView.getView('rowsView');
 
         // act
-        $(rowsView.getRow(0).find('td').eq(0)).trigger(CLICK_EVENT).click();
+        $(rowsView.getRow(0).find('td').eq(0)).trigger(CLICK_EVENT);
         this.clock.tick();
         this.triggerKeyDown('rightArrow', false, false, rowsView.element().find(':focus').get(0));
-        $(rowsView.getRow(1).find('td').eq(0)).trigger(CLICK_EVENT).click();
+        $(rowsView.getRow(1).find('td').eq(0)).trigger(CLICK_EVENT);
         // assert
         assert.equal($(rowsView.getRow(0)).find('[tabindex="0"]').length, 1, 'Row 0 has tabindex');
         // act
@@ -908,6 +913,48 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.ok(this.getController('keyboardNavigation').isRowFocusType(), 'Row focus type');
     });
 
+    QUnit.test('Row should being focused after click if editing.mode: cell', function(assert) {
+        // arrange
+        this.options = {
+            focusedRowEnabled: true,
+            keyExpr: 'name',
+            editing: {
+                mode: 'cell',
+                allowEditing: true,
+                allowUpdating: true
+            }
+        };
+
+        this.data = [
+            { name: 'Alex', phone: '123' },
+            { name: 'Ben', phone: '456' }
+        ];
+
+        this.setupModule();
+        addOptionChangedHandlers(this);
+
+        this.gridView.render($('#container'));
+        this.clock.tick();
+
+        // act
+        const $cell = $(this.getCellElement(1, 1));
+
+        if(isMobile) {
+            $cell.click();
+        } else {
+            $cell
+                .trigger(pointerEvents.down)
+                .trigger(clickEvent.name);
+        }
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.option('focusedRowIndex'), 1, 'FocusedRowIndex');
+        assert.equal(this.option('focusedRowKey'), 'Ben', 'FocusedRowKey');
+        assert.ok(rowsViewWrapper.getDataRow(1).isFocusedRow(), 'Focused row');
+        assert.ok(rowsViewWrapper.getCell(1, 1).isEditorCell(), 'Editor cell');
+    });
+
     QUnit.testInActiveWindow('Escape should change focus type from cell to row if focusedRowEnabled', function(assert) {
         // arrange
         this.$element = function() {
@@ -930,7 +977,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex is undefined');
         this.clock.tick();
         // act
-        $(rowsView.getRow(1).find('td').eq(0)).trigger(CLICK_EVENT).click();
+        $(rowsView.getRow(1).find('td').eq(0)).trigger(CLICK_EVENT);
         this.triggerKeyDown('rightArrow', false, false, rowsView.element().find(':focus').get(0));
         // assert
         assert.ok(this.getController('keyboardNavigation').isCellFocusType(), 'Cell focus type');
@@ -961,7 +1008,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex is undefined');
         this.clock.tick();
         // act
-        $(rowsView.getRow(1).find('td').eq(0)).trigger(pointerEvents.up).click();
+        $(rowsView.getRow(1).find('td').eq(0)).trigger(CLICK_EVENT).click();
         this.triggerKeyDown('rightArrow', false, false, rowsView.element().find(':focus').get(0));
         // assert
         assert.ok(this.getController('keyboardNavigation').isCellFocusType(), 'Cell focus type');
@@ -1429,7 +1476,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
@@ -1489,7 +1536,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 2)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 2)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
@@ -1538,7 +1585,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
@@ -1610,7 +1657,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
@@ -1634,7 +1681,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'Focused row index');
     });
 
-    QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'startEdit\'', function(assert) {
+    QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if enterKeyDirection: "row", enterKeyAction: "startEdit"', function(assert) {
         let focusedCellChangingCounter = 0;
         let columnIndex;
 
@@ -1676,7 +1723,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
@@ -1704,7 +1751,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.notOk(this.editingController.isEditing(), 'Is editing');
     });
 
-    QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'moveFocus\'', function(assert) {
+    QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if enterKeyDirection: "row", enterKeyAction: "moveFocus", editing.allowEditing: true', function(assert) {
         let focusedCellChangingCounter = 0;
         let columnIndex;
 
@@ -1746,7 +1793,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
@@ -1808,7 +1855,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
@@ -1878,7 +1925,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
@@ -1934,7 +1981,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
@@ -1990,7 +2037,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
@@ -2051,7 +2098,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 2)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 2)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
@@ -2112,7 +2159,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 2)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 2)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
@@ -2297,7 +2344,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick();
 
         // act
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
         // assert
         assert.equal(this.getController('keyboardNavigation').getVisibleRowIndex(), 1, 'Focused row index is 1');
@@ -2528,7 +2575,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
@@ -2592,7 +2639,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 2)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 2)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
@@ -2657,7 +2704,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick();
 
         // act
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         assert.equal(focusedRowChangingCount, 1, 'focusedRowChanging count');
@@ -2723,7 +2770,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         keyboardController._focusedView = this.gridView.getView('rowsView');
 
         // act
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         keyboardController._upDownKeysHandler({ key: 'ArrowDown', keyName: 'downArrow' });
         keyboardController._upDownKeysHandler({ key: 'ArrowDown', keyName: 'downArrow' });
         keyboardController._upDownKeysHandler({ key: 'ArrowDown', keyName: 'downArrow' });
@@ -2759,7 +2806,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick();
 
         // act
-        $(this.getCellElement(0, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(0, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         assert.equal(onFocusedRowChangedSpy.callCount, 1, 'focusedRowChanged count');
@@ -3067,7 +3114,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         keyboardController._focusedView = rowsView;
 
         // act
-        $(this.getCellElement(4, 1)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(4, 1)).trigger(CLICK_EVENT);
         this.clock.tick();
         // assert
         assert.equal(this.getController('keyboardNavigation').getVisibleColumnIndex(), 1, 'Focused column index');
@@ -3105,7 +3152,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         keyboardController._focusedView = rowsView;
 
         // act
-        $(this.getCellElement(4, 1)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(4, 1)).trigger(CLICK_EVENT);
         this.clock.tick();
         // assert
         assert.equal(this.getController('keyboardNavigation').getVisibleColumnIndex(), 1, 'Focused column index');
@@ -3139,7 +3186,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         keyboardController._focusedView = rowsView;
 
         // act
-        $(this.getCellElement(1, 1)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 1)).trigger(CLICK_EVENT);
         this.clock.tick();
         // assert
         assert.equal(focusedColumnChangingCount, 1, 'onFocusedCellChanging fires count');
@@ -3179,7 +3226,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         // act
         this.option('focusedRowEnabled', true);
 
-        $(this.getCellElement(1, 1)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 1)).trigger(CLICK_EVENT);
 
         // assert
         assert.equal(focusedRowChangedCount, 1, 'onFocusedRowChanged fires count');
@@ -3223,7 +3270,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // act
         const rowsView = this.gridView.getView('rowsView');
-        $(this.getCellElement(1, 1)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 1)).trigger(CLICK_EVENT);
         assert.equal(focusedCellChangedCount, 1, 'onFocusedCellChanged fires count');
     });
 
@@ -3332,7 +3379,8 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             { name: 'Zeb', phone: '6666666', isRoom: false }
         ];
 
-        const store = new ArrayStore(this.data); const loadSpy = sinon.spy((loadOptions) => store.load(loadOptions));
+        const store = new ArrayStore(this.data);
+        const loadSpy = sinon.spy((loadOptions) => store.load(loadOptions));
 
         this.options = {
             focusedRowEnabled: true,
@@ -3639,7 +3687,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick();
 
         // act
-        $(this.getCellElement(0, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(0, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         // assert
@@ -3673,7 +3721,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         keyboardController._focusedView = rowsView;
 
         // act
-        $(this.getCellElement(0, 1)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(0, 1)).trigger(CLICK_EVENT);
         this.clock.tick();
         // assert
         assert.equal(focusedCellChangingCount, 1, 'onFocusedCellChanging fires count');
@@ -3924,6 +3972,104 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowKey'), 'Mark2', 'FocusedRowkey');
         assert.equal(this.pageIndex(), 2, 'PageIndex with the \'Mark2\' row');
     });
+
+    QUnit.testInActiveWindow('Row should not focus on scrolling with the pointer (T861577)', function(assert) {
+        if(device.deviceType === 'desktop') {
+            assert.ok(true, 'This test is not actual for the desktop');
+            return;
+        }
+
+        // arrange
+        this.options = {
+            focusedRowEnabled: true,
+            keyExpr: 'name',
+            keyboardNavigation: {
+                enabled: true
+            }
+        };
+
+        this.data = [
+            { name: 'Alex', phone: '555555', room: 1 },
+            { name: 'Ben', phone: '6666666', room: 2 },
+            { name: 'Dan', phone: '553355', room: 3 }
+        ];
+
+        this.setupModule();
+        addOptionChangedHandlers(this);
+
+        this.gridView.render($('#container'));
+        const rowsView = this.gridView.getView('rowsView');
+
+        // act
+        $(rowsView.getCellElement(1, 1)).trigger(pointerEvents.down);
+        this.clock.tick();
+        // assert
+        assert.equal(this.option('focusedRowIndex'), undefined, 'No focusedRowIndex');
+        assert.equal(this.option('focusedRowKey'), undefined, 'No focusedRowKey');
+
+        // act
+        $(rowsView.getCellElement(1, 1)).trigger('dxclick');
+        this.clock.tick();
+        // assert
+        assert.equal(this.option('focusedRowIndex'), 1, 'focusedRowIndex');
+        assert.equal(this.option('focusedRowKey'), 'Ben', 'focusedRowKey');
+    });
+
+    QUnit.test('Focused row events should handle only once after click disabled editing cell if editing.mode: cell', function(assert) {
+        let focusedRowChangingCounter = 0;
+        let focusedRowChangedCounter = 0;
+        // arrange
+        this.options = {
+            focusedRowEnabled: true,
+            keyExpr: 'name',
+            editing: {
+                mode: 'cell',
+                allowEditing: true,
+                allowUpdating: true
+            },
+            columns: [
+                'name',
+                {
+                    dataField: 'phone',
+                    allowEditing: false
+                }
+            ],
+            onFocusedRowChanging: e => ++focusedRowChangingCounter,
+            onFocusedRowChanged: e => ++focusedRowChangedCounter,
+        };
+
+        this.data = [
+            { name: 'Alex', phone: '123' },
+            { name: 'Ben', phone: '456' }
+        ];
+
+        this.setupModule();
+        addOptionChangedHandlers(this);
+
+        this.gridView.render($('#container'));
+        this.clock.tick();
+
+        // act
+        const $cell = $(this.getCellElement(1, 1));
+
+        if(isMobile) {
+            const event = $.Event('dxclick', {
+                originalEvent: { target: $cell.get(0) },
+                preventDefault: commonUtils.noop
+            });
+            $cell.trigger(event);
+        } else {
+            $cell
+                .trigger(pointerEvents.down)
+                .trigger(clickEvent.name);
+        }
+        this.clock.tick();
+
+        // assert
+        assert.equal(focusedRowChangingCounter, 1, 'focusedRowChangingCounter');
+        assert.equal(focusedRowChangedCounter, 1, 'focusedRowChangedCounter');
+    });
+
 });
 
 [true, false].forEach(keyboardNavigationEnabled => {
@@ -3967,7 +4113,8 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
                 assert.equal(this.option('focusedRowKey'), focusedRowKey, 'focusedRowKey');
                 assert.equal(this.option('focusedRowIndex'), focusedRowKey, 'focusedRowIndex');
                 if(focusedRowKey) {
-                    assert.ok(dataGridWrapper.rowsView.isFocusedRow(focusedRowKey), 'Row is focused');
+                    const dataRow = rowsViewWrapper.getDataRow(focusedRowKey);
+                    assert.ok(dataRow.isFocusedRow(), 'Row is focused');
                 }
 
                 // act
@@ -3977,13 +4124,14 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
                 // assert
                 assert.equal(this.option('focusedRowKey'), 3, 'focusedRowKey was changed');
                 assert.equal(this.option('focusedRowIndex'), 1, 'focusedRowIndex was changed');
-                assert.notOk(dataGridWrapper.rowsView.isFocusedRow(0), 'Row 0 is not focused row');
-                assert.ok(dataGridWrapper.rowsView.isFocusedRow(1), 'Row 1 is focused row');
+                assert.notOk(rowsViewWrapper.getDataRow(0).isFocusedRow(), 'Row 0 is not focused row');
+                assert.ok(rowsViewWrapper.getDataRow(1).isFocusedRow(), 'Row 1 is focused row');
             });
         });
 
         [undefined, 0, 1].forEach(focusedRowIndex => {
             QUnit.test(`Paging: set focusedRowKey on the next page: repaintChangesOnly=${repaintChangesOnly}, focusedRowIndex=${focusedRowIndex}`, function(assert) {
+                const rowsViewWrapper = dataGridWrapper.rowsView;
                 let focusedRowChangedFiresCount = 0;
 
                 this.columns = ['id', 'c0'];
@@ -4019,7 +4167,8 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
                 assert.equal(this.option('focusedRowKey'), focusedRowIndex, 'focusedRowKey');
                 assert.equal(this.option('focusedRowIndex'), focusedRowIndex, 'focusedRowIndex');
                 if(focusedRowIndex) {
-                    assert.ok(dataGridWrapper.rowsView.isFocusedRow(focusedRowIndex), 'Row is focused');
+                    const dataRow = rowsViewWrapper.getDataRow(focusedRowIndex);
+                    assert.ok(dataRow.isFocusedRow(), 'Row is focused');
                 }
 
                 // act
@@ -4029,8 +4178,8 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
                 // assert
                 assert.equal(this.option('focusedRowKey'), 3, 'focusedRowKey was changed');
                 assert.equal(this.option('focusedRowIndex'), 1, 'focusedRowIndex was changed');
-                assert.notOk(dataGridWrapper.rowsView.isFocusedRow(0), 'Row 0 is not focused row');
-                assert.ok(dataGridWrapper.rowsView.isFocusedRow(1), 'Row 1 is focused row');
+                assert.notOk(rowsViewWrapper.getDataRow(0).isFocusedRow(), 'Row 0 is not focused row');
+                assert.ok(rowsViewWrapper.getDataRow(1).isFocusedRow(), 'Row 1 is focused row');
             });
         });
     });
@@ -4163,6 +4312,95 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowKey'), 'Mark1', 'focusedRowKey');
         assert.ok(rowsView.getRow(0).hasClass('dx-row-focused'), 'Focused row');
         assert.equal($(rowsView.getRow(0)).find('td').eq(0).text(), 'Mark1', 'Focused row cell text');
+    });
+
+    QUnit.testInActiveWindow('Focused row should be updated by index after scrolling and deleting (T856932)', function(assert) {
+        // arrange
+        this.options = {
+            height: 40,
+            focusedRowEnabled: true,
+            keyExpr: 'name',
+            showColumnHeaders: false,
+            scrolling: {
+                mode: 'virtual',
+                removeInvisiblePages: true
+            },
+            paging: {
+                pageSize: 1
+            }
+        };
+
+        this.data = [
+            { name: 'Alex', phone: '555555', room: 1 },
+            { name: 'Ben', phone: '553355', room: 2 },
+            { name: 'Dan', phone: '6666666', room: 3 },
+            { name: 'Mark1', phone: '777777', room: 4 },
+            { name: 'Mark2', phone: '888888', room: 5 }
+        ];
+
+        this.setupModule();
+
+        addOptionChangedHandlers(this);
+
+        this.gridView.render($('#container'));
+
+        // act
+        this.pageIndex(1);
+        this.option('focusedRowKey', 'Dan');
+        this.deleteRow(this.getRowIndexByKey('Dan'));
+
+        // assert
+        assert.equal(this.getVisibleRows()[0].key, 'Ben', 'top visible row key');
+        assert.equal(this.option('focusedRowIndex'), 2, 'focusedRowIndex');
+        assert.equal(this.option('focusedRowKey'), 'Mark1', 'focusedRowKey');
+        assert.ok($(this.getRowElement(1)).hasClass('dx-row-focused'), 'Focused row style');
+        assert.equal($(this.getCellElement(1, 0)).text(), 'Mark1', 'Focused row cell text');
+    });
+
+    QUnit.testInActiveWindow('Focused row should be updated by index after scrolling back and deleting (T856932)', function(assert) {
+        // arrange
+        this.options = {
+            height: 40,
+            focusedRowEnabled: true,
+            keyExpr: 'name',
+            showColumnHeaders: false,
+            scrolling: {
+                mode: 'virtual',
+                removeInvisiblePages: true
+            },
+            paging: {
+                pageSize: 1
+            }
+        };
+
+        this.data = [
+            { name: 'Alex', phone: '555555', room: 1 },
+            { name: 'Ben', phone: '553355', room: 2 },
+            { name: 'Dan', phone: '6666666', room: 3 },
+            { name: 'Mark1', phone: '777777', room: 4 },
+            { name: 'Mark2', phone: '888888', room: 5 }
+        ];
+
+        this.setupModule();
+
+        addOptionChangedHandlers(this);
+
+        this.gridView.render($('#container'));
+
+        this.pageIndex(2);
+        assert.equal(this.getVisibleRows()[0].key, 'Ben', 'top visible row key');
+
+        // act
+        this.pageIndex(0);
+        this.option('focusedRowKey', 'Alex');
+        this.deleteRow(this.getRowIndexByKey('Alex'));
+
+        // assert
+        assert.equal(this.getVisibleRows()[0].key, 'Ben', 'top visible row key');
+        assert.equal(this.option('focusedRowIndex'), 0, 'focusedRowIndex');
+        assert.equal(this.option('focusedRowKey'), 'Ben', 'focusedRowKey');
+        assert.ok($(this.getRowElement(0)).hasClass('dx-row-focused'), 'Focused row style');
+        assert.equal($(this.getCellElement(0, 0)).text(), 'Ben', 'Focused row cell text');
     });
 
     QUnit.testInActiveWindow('DataGrid should show error E1042 if keyExpr is absent and focusedRowEnabled when focusedRowKey is set', function(assert) {
@@ -4409,7 +4647,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowKey'), 'Den', 'FocusedRowKey');
         assert.equal(this.pageIndex(), 2, 'PageIndex');
         assert.equal($(rowsView.getCellElement(11, 1)).text(), 'Alice');
-        assert.ok(dataGridWrapper.rowsView.isRowVisible(11));
+        assert.ok(rowsViewWrapper.isRowVisible(11));
     });
 
     QUnit.testInActiveWindow('DataGrid should focus row by focusedRowIndex if data was filtered', function(assert) {
@@ -4748,7 +4986,38 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal($rowsView.find('.dx-row-focused > td:nth-child(1)').text(), 'Dan', 'Focused row key column text');
     });
 
-    QUnit.testInActiveWindow('DataGrid - Should paginate to the defined focusedRowKey', function(assert) {
+    QUnit.testInActiveWindow('DataGrid should paginate to the defined focusedRowKey', function(assert) {
+        // arrange
+        this.data = [
+            { name: 'Alex', phone: '111111', room: 6 },
+            { name: 'Dan', phone: '2222222', room: 5 },
+            { name: 'Ben', phone: '333333', room: 4 },
+            { name: 'Sean', phone: '4545454', room: 3 },
+            { name: 'Smith', phone: '555555', room: 2 },
+            { name: 'Zeb', phone: '6666666', room: 1 }
+        ];
+
+        this.options = {
+            keyExpr: 'name',
+            focusedRowEnabled: true,
+            focusedRowKey: 'Smith',
+            paging: {
+                pageSize: 2
+            }
+        };
+
+        this.setupModule();
+
+        this.gridView.render($('#container'));
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.pageIndex(), 2, 'PageIndex is 2');
+        assert.strictEqual(this.dataController.getVisibleRows()[0].data, this.data[4], 'Row 0, Data 4');
+        assert.ok(this.gridView.getView('rowsView').getRow(0).hasClass('dx-row-focused'), 'Row 0 is the focused row');
+    });
+
+    QUnit.testInActiveWindow('DataGrid should not paginate to the defined focusedRowKey if scrolling mode is infinite (T856933)', function(assert) {
         // arrange
         this.data = [
             { name: 'Alex', phone: '111111', room: 6 },
@@ -4766,8 +5035,8 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             paging: {
                 pageSize: 2
             },
-            editing: {
-                allowEditing: false
+            scrolling: {
+                mode: 'infinite'
             }
         };
 
@@ -4777,9 +5046,8 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick();
 
         // assert
-        assert.equal(this.pageIndex(), 2, 'PageIndex is 0');
-        assert.strictEqual(this.dataController.getVisibleRows()[0].data, this.data[4], 'Row 0, Data 4');
-        assert.ok(this.gridView.getView('rowsView').getRow(0).hasClass('dx-row-focused'), 'Row 0 is the focused row');
+        assert.equal(this.pageIndex(), 0, 'PageIndex is 0');
+        assert.strictEqual(this.dataController.getVisibleRows()[0].data, this.data[0], 'Row 0, Data 0');
     });
 
     QUnit.testInActiveWindow('Highlight cell on focus() if focusedRowEnabled is true and focusedColumnIndex, focusedRowIndex are set', function(assert) {
@@ -5061,7 +5329,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick();
 
         // assert
-        assert.notOk(dataGridWrapper.rowsView.isFocusOverlayVisible(), 'has no focus overlay');
+        assert.notOk(rowsViewWrapper.getFocusOverlay().isVisible(), 'has no focus overlay');
     });
 
     QUnit.test('Test navigateToRow method if paging', function(assert) {
@@ -5600,8 +5868,13 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // act
         try {
-            dataGridWrapper.rowsView.getVirtualCell(0).trigger(pointerEvents.up).click();
-            dataGridWrapper.rowsView.getVirtualCell(1).trigger(pointerEvents.up).click();
+            const virtualRowWrapper = dataGridWrapper.rowsView.getVirtualRow();
+            const $virtualCell0 = virtualRowWrapper.getCell(0).getElement();
+            const $virtualCell1 = virtualRowWrapper.getCell(1).getElement();
+
+            $virtualCell0.trigger(CLICK_EVENT).click();
+            $virtualCell1.trigger(CLICK_EVENT).click();
+
             assert.ok(true, 'No Exception');
         } catch(e) {
             // assert

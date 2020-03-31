@@ -6,6 +6,7 @@ import ButtonGroup from './button_group';
 import Popup from './popup';
 import List from './list';
 import { compileGetter } from '../core/utils/data';
+import windowUtils from '../core/utils/window';
 import domUtils from '../core/utils/dom';
 import { getImageContainer } from '../core/utils/icon';
 import DataHelperMixin from '../data_helper';
@@ -306,6 +307,9 @@ const DropDownButton = Widget.inherit({
             focusStateEnabled: false,
             deferRendering: this.option('deferRendering'),
             minWidth: () => {
+                if(!windowUtils.hasWindow()) {
+                    return;
+                }
                 return this.$element().outerWidth();
             },
             closeOnOutsideClick: (e) => {
@@ -321,7 +325,6 @@ const DropDownButton = Widget.inherit({
             width: 'auto',
             height: 'auto',
             shading: false,
-            visible: this.option('opened'),
             position: {
                 of: this.$element(),
                 collision: 'flipfit',
@@ -331,7 +334,7 @@ const DropDownButton = Widget.inherit({
                     y: -1
                 }
             }
-        }, this._options.cache('dropDownOptions'));
+        }, this._options.cache('dropDownOptions'), { visible: this.option('opened') });
     },
 
     _listOptions() {
@@ -519,14 +522,23 @@ const DropDownButton = Widget.inherit({
                 break;
             case 'displayExpr':
                 this._compileDisplayGetter();
+                this._setListOption(name, value);
+                this._updateActionButton(this.option('selectedItem'));
                 break;
             case 'keyExpr':
                 this._compileKeyGetter();
+                this._setListOption(name, value);
                 break;
             case 'buttonGroupOptions':
                 this._innerWidgetOptionChanged(this._buttonGroup, args);
                 break;
             case 'dropDownOptions':
+                if(args.fullName === 'dropDownOptions.visible') {
+                    break;
+                }
+                if(args.value.visible !== undefined) {
+                    delete args.value.visible;
+                }
                 this._innerWidgetOptionChanged(this._popup, args);
                 break;
             case 'opened':
@@ -588,10 +600,7 @@ const DropDownButton = Widget.inherit({
                 this._createSelectionChangedAction();
                 break;
             case 'deferRendering':
-                if(!value && !this._popup) {
-                    this._renderPopup();
-                    this._renderContent();
-                }
+                this.toggle(this.option('opened'));
                 break;
             default:
                 this.callBase(args);

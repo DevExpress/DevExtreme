@@ -127,6 +127,7 @@
                     "bing",
                     "browserslist", // auto-prefixer browsers list
                     "cldr",         // Unicode CLDR Project
+                    "cssom",        // cssom parser
                     "cwd",          // current working directory
                     "edm",          // Entity Data Model
                     "eol",          // end of line
@@ -156,6 +157,7 @@
                     "msie",
                     "odata",      // OData
                     "readonly",
+                    "rebase",     // clean-css option
                     "rtl",        // Right-to-Left
                     "scss",
                     "semver",     // The semantic versioner for npm

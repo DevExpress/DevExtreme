@@ -111,9 +111,32 @@ QUnit.module('Editors Standard Adapter', {
         assert.strictEqual(editor.option('isValid'), true, 'Editor options should be set');
     });
 
+    QUnit.test('Adapter should be set on contentReady', function(assert) {
+        const fixture = this.fixture;
+        let error = '';
+        this.fixture.createEditor({
+            onContentReady: function() {
+                try {
+                    fixture.createValidator({
+                        adapter: null,
+                        validationRules: [{
+                            type: 'required'
+                        }]
+                    });
+
+                } catch(e) {
+                    error = e;
+                }
+            }
+        });
+
+        assert.equal(error, '');
+    });
+
 
     QUnit.test('Editor\'s validators request should not be mixed with another editors', function(assert) {
-        const value = '123'; const emptyValue = '';
+        const value = '123';
+        const emptyValue = '';
 
         const editor1 = this.fixture.createEditor({
             value: value
@@ -361,6 +384,30 @@ QUnit.module('Editors Standard Adapter', {
 
         editor.option('validationErrors', null);
         assert.notOk(editor.option('validationError'), 'validationError === null');
+    });
+
+
+    QUnit.test('Editor should not display a valid mark when showValidationMark is false', function(assert) {
+        const editor = this.fixture.createTextEditor({
+            showValidationMark: false
+        });
+
+        editor.option('validationStatus', 'pending');
+        editor.option('validationStatus', 'valid');
+
+        assert.notOk(this.fixture.$element.hasClass('dx-valid'), 'valid mark is not rendered');
+    });
+
+    QUnit.test('Editor should display a valid mark when showValidationMark is changed at runtime to true', function(assert) {
+        const editor = this.fixture.createTextEditor({
+            showValidationMark: false
+        });
+
+        editor.option('validationStatus', 'pending');
+        editor.option('showValidationMark', true);
+        editor.option('validationStatus', 'valid');
+
+        assert.ok(this.fixture.$element.hasClass('dx-valid'), 'valid mark is rendered');
     });
 });
 

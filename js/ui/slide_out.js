@@ -20,6 +20,10 @@ const SLIDEOUT_ITEM_CLASS = 'dx-slideout-item';
 const SLIDEOUT_ITEM_DATA_KEY = 'dxSlideoutItemData';
 
 const SlideOut = CollectionWidget.inherit({
+    ctor: function(element, options) {
+        this.callBase(element, options);
+        this._logDeprecatedComponentWarning('20.1', 'dxDrawer');
+    },
 
     _getDefaultOptions: function() {
         /**

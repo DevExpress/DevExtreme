@@ -149,11 +149,11 @@ export interface ExportDataGridProps {
     worksheet?: object;
     /**
      * @docid ExportDataGridProps.topLeftCell
-     * @type CellAddress
+     * @type CellAddress|string
      * @default { row: 1, column: 1 }
      * @public
      */
-    topLeftCell?: CellAddress;
+    topLeftCell?: CellAddress | string;
     /**
      * @docid ExportDataGridProps.selectedRowsOnly
      * @type boolean
@@ -183,7 +183,7 @@ export interface ExportDataGridProps {
      * @type_function_param1_field2 excelCell:Object
      * @public
      */
-    customizeCell?: ((options: { gridCell?: ExcelDataGridCell, excelCell?: object}) => any);
+    customizeCell?: ((options: { gridCell?: ExcelDataGridCell, excelCell?: any}) => any);
     /**
      * @docid ExportDataGridProps.loadPanel
      * @type ExportLoadPanel

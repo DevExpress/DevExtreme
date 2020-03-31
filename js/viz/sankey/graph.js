@@ -63,7 +63,8 @@ const struct = {
         // sorts the vertices (modifies the _sortedList variable)
         this._hasCycle = false;
         this._sortedList = [];
-        const vertices = {}; const allVertices = getVertices(links);
+        const vertices = {};
+        const allVertices = getVertices(links);
         allVertices.forEach((vertex) => {
             vertices[vertex] = {
                 color: WHITE

@@ -120,7 +120,8 @@ QUnit.module('behavior', () => {
 
         let $handle;
 
-        const elementWidth = $resizable.outerWidth(); const elementHeight = $resizable.outerHeight();
+        const elementWidth = $resizable.outerWidth();
+        const elementHeight = $resizable.outerHeight();
 
         $handle = $resizable.find('.' + RESIZABLE_HANDLE_BOTTOM_CLASS);
         pointerMock($handle).start().dragStart().drag(0, 10).drag(0, 1);
@@ -678,7 +679,8 @@ QUnit.module('area', () => {
         pointerMock($resizable.find('.' + RESIZABLE_HANDLE_TOP_CLASS)).start().down().move(0, -20).dragEnd();
         assert.equal($resizable.offset().top, resizableTop - 20);
 
-        const resizableRight = $resizable.offset().left + $resizable.outerWidth(); const resizableBottom = $resizable.offset().top + $resizable.outerHeight();
+        const resizableRight = $resizable.offset().left + $resizable.outerWidth();
+        const resizableBottom = $resizable.offset().top + $resizable.outerHeight();
 
         pointerMock($resizable.find('.' + RESIZABLE_HANDLE_RIGHT_CLASS)).start().down().move(20, 0).dragEnd();
         assert.equal($resizable.offset().left + $resizable.outerWidth(), resizableRight + 20);

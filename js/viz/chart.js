@@ -18,7 +18,7 @@ import multiAxesSynchronizer from './chart_components/multi_axes_synchronizer';
 import { AdvancedChart } from './chart_components/advanced_chart';
 import scrollBarModule from './chart_components/scroll_bar';
 import crosshairModule from './chart_components/crosshair';
-import rangeCalculator from './series/helpers/range_data_calculator';
+import { getViewPortFilter } from './series/helpers/range_data_calculator';
 import rangeModule from './translators/range';
 const DEFAULT_PANE_NAME = 'default';
 const VISUAL_RANGE = 'VISUAL_RANGE';
@@ -332,14 +332,18 @@ function drawAxesWithTicks(axes, condition, canvases, panesBorderOptions) {
 function shiftAxis(side1, side2) {
     const shifts = {};
     return function(axis) {
-        const shift = shifts[axis.pane] = shifts[axis.pane] || { top: 0, left: 0, bottom: 0, right: 0 };
-        const spacing = axis.getMultipleAxesSpacing();
-        const margins = axis.getMargins();
+        if(!axis.customPositionIsAvailable() || axis.customPositionEqualsToPredefined()) {
+            const shift = shifts[axis.pane] = shifts[axis.pane] || { top: 0, left: 0, bottom: 0, right: 0 };
+            const spacing = axis.getMultipleAxesSpacing();
+            const margins = axis.getMargins();
 
-        axis.shift(shift);
+            axis.shift(shift);
 
-        shift[side1] = accumulate(side1, shift, margins, spacing);
-        shift[side2] = accumulate(side2, shift, margins, spacing);
+            shift[side1] = accumulate(side1, shift, margins, spacing);
+            shift[side2] = accumulate(side2, shift, margins, spacing);
+        } else {
+            axis.shift({ top: 0, left: 0, bottom: 0, right: 0 });
+        }
     };
 }
 
@@ -370,8 +374,8 @@ function checkUsedSpace(sizeShortage, side, axes, getMarginFunc) {
     }
 }
 
-function axisAnimationEnabled(drawOptions, series) {
-    const pointsCount = series.reduce((sum, s) => sum += s.getPoints().length, 0) / series.length;
+function axisAnimationEnabled(drawOptions, pointsToAnimation) {
+    const pointsCount = pointsToAnimation.reduce((sum, count) => sum + count, 0) / pointsToAnimation.length;
 
     return drawOptions.animate && pointsCount <= drawOptions.animationPointsLimit;
 }
@@ -458,6 +462,52 @@ const dxChart = AdvancedChart.inherit({
         seriesTheme.pane = seriesTheme.pane || this.defaultPane;
 
         return inArray(seriesTheme.pane, paneList) !== -1;
+    },
+
+    _initCustomPositioningAxes() {
+        const that = this;
+        const argumentAxis = that.getArgumentAxis();
+        const valueAxisName = argumentAxis.getOptions().customPositionAxis;
+        const valueAxis = that._valueAxes.filter(v => v.pane === argumentAxis.pane && (!valueAxisName || valueAxisName === v.name))[0];
+
+        that._valueAxes.forEach(v => {
+            if(argumentAxis !== v.getCustomPositionAxis()) {
+                v.getCustomPositionAxis = () => {
+                    return argumentAxis;
+                };
+                v.customPositionIsBoundaryOppositeAxis = () => {
+                    return argumentAxis.customPositionIsBoundary();
+                };
+            }
+        });
+
+        if(_isDefined(valueAxis) && valueAxis !== argumentAxis.getCustomPositionAxis()) {
+            argumentAxis.getCustomPositionAxis = () => {
+                return valueAxis;
+            };
+            argumentAxis.customPositionIsBoundaryOppositeAxis = () => {
+                return that._valueAxes.some(v => v.customPositionIsBoundary());
+            };
+        } else if(_isDefined(argumentAxis.getCustomPositionAxis()) && !_isDefined(valueAxis)) {
+            argumentAxis.getCustomPositionAxis = noop;
+        }
+    },
+
+    _axesBoundaryPositioning() {
+        const that = this;
+        const allAxes = that._argumentAxes.concat(that._valueAxes);
+        let boundaryStateChanged = false;
+
+        allAxes.forEach(a => {
+            if(!a.customPositionIsAvailable()) {
+                return false;
+            }
+            const prevBoundaryState = a.customPositionIsBoundary();
+            a._customBoundaryPosition = a.getCustomBoundaryPosition();
+            boundaryStateChanged |= (prevBoundaryState !== a.customPositionIsBoundary());
+        });
+
+        return boundaryStateChanged;
     },
 
     _getValueAxis: function(paneName, axisName) {
@@ -621,7 +671,7 @@ const dxChart = AdvancedChart.inherit({
         }
 
         that._argumentAxes.forEach(function(axis) {
-            axis.updateCanvas(that._canvas);
+            axis.updateCanvas(that._canvas, true);
         });
         series.forEach(function(series) {
             if(series.useAggregation() && (isCanvasChanged || zoomChanged || !series._useAllAggregatedPoints)) {
@@ -666,7 +716,7 @@ const dxChart = AdvancedChart.inherit({
         });
 
         that._argumentAxes.forEach(function(axis) {
-            axis.updateCanvas(that._canvas);
+            axis.updateCanvas(that._canvas, true);
             axis.setBusinessRange(viewport, that._axesReinitialized);
         });
 
@@ -687,16 +737,10 @@ const dxChart = AdvancedChart.inherit({
 
     _applyClipRects: function(panesBorderOptions) {
         const that = this;
-        const canvasClipRectID = that._getCanvasClipRectID();
-        let i;
+
         that._drawPanesBorders(panesBorderOptions);
         that._createClipRectsForPanes();
-        for(i = 0; i < that._argumentAxes.length; i++) {
-            that._argumentAxes[i].applyClipRects(that._getElementsClipRectID(that._argumentAxes[i].pane), canvasClipRectID);
-        }
-        for(i = 0; i < that._valueAxes.length; i++) {
-            that._valueAxes[i].applyClipRects(that._getElementsClipRectID(that._valueAxes[i].pane), canvasClipRectID);
-        }
+        that._applyClipRectsForAxes();
         that._fillPanesBackground();
     },
 
@@ -750,6 +794,10 @@ const dxChart = AdvancedChart.inherit({
         });
     },
 
+    _getArgFilter() {
+        return getViewPortFilter(this.getArgumentAxis().visualRange() || {});
+    },
+
     _applyPointMarkersAutoHiding() {
         const that = this;
         if(!that._themeManager.getOptions('autoHidePointMarkers')) {
@@ -763,7 +811,7 @@ const dxChart = AdvancedChart.inherit({
             const argVisualRange = argAxis.visualRange();
             const argTranslator = argAxis.getTranslator();
             const argAxisType = argAxis.getOptions().type;
-            const argViewPortFilter = rangeCalculator.getViewPortFilter(argVisualRange || {});
+            const argViewPortFilter = getViewPortFilter(argVisualRange || {});
             let points = [];
             const overloadedSeries = {};
 
@@ -772,7 +820,7 @@ const dxChart = AdvancedChart.inherit({
                 const valVisualRange = valAxis.visualRange();
                 const valTranslator = valAxis.getTranslator();
                 const seriesIndex = that.series.indexOf(s);
-                const valViewPortFilter = rangeCalculator.getViewPortFilter(valVisualRange || {});
+                const valViewPortFilter = getViewPortFilter(valVisualRange || {});
 
                 overloadedSeries[seriesIndex] = {};
                 series.forEach(sr => overloadedSeries[seriesIndex][that.series.indexOf(sr)] = 0);
@@ -898,12 +946,18 @@ const dxChart = AdvancedChart.inherit({
         }, {});
         const cleanPanesCanvases = _extend(true, {}, panesCanvases);
 
-        if(!drawOptions.adjustAxes) {
+        that._initCustomPositioningAxes();
+        const needCustomAdjustAxes = that._axesBoundaryPositioning();
+
+        if(!drawOptions.adjustAxes && !needCustomAdjustAxes) {
             drawAxesWithTicks(verticalAxes, !rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
             drawAxesWithTicks(horizontalAxes, rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
             performActionOnAxes(allAxes, 'prepareAnimation');
             that._renderScaleBreaks();
             return false;
+        }
+        if(needCustomAdjustAxes) {
+            allAxes.forEach(a => a.customPositionIsAvailable() && a.shift({ top: 0, left: 0, bottom: 0, right: 0 }));
         }
 
         if(that._scrollBar) {
@@ -924,7 +978,10 @@ const dxChart = AdvancedChart.inherit({
 
         let oldTitlesWidth = calculateTitlesWidth(verticalAxes);
 
-        performActionOnAxes(allAxes, 'updateSize', panesCanvases, axisAnimationEnabled(drawOptions, that._getVisibleSeries()));
+        const visibleSeries = that._getVisibleSeries();
+        const pointsToAnimation = that._getPointsToAnimation(visibleSeries);
+
+        performActionOnAxes(allAxes, 'updateSize', panesCanvases, axisAnimationEnabled(drawOptions, pointsToAnimation));
 
         horizontalAxes.forEach(shiftAxis('top', 'bottom'));
         verticalAxes.forEach(shiftAxis('left', 'right'));
@@ -957,6 +1014,10 @@ const dxChart = AdvancedChart.inherit({
                 oldTitlesWidth = calculateTitlesWidth(verticalAxes);
             }
         });
+
+        if(verticalAxes.some(v => v.customPositionIsAvailable() && v.getCustomPosition() !== v._axisPosition)) {
+            performActionOnAxes(verticalAxes, 'updateSize', panesCanvases, axisAnimationEnabled(drawOptions, pointsToAnimation));
+        }
 
         return cleanPanesCanvases;
     },
@@ -1151,9 +1212,7 @@ const dxChart = AdvancedChart.inherit({
         that._panesBorderGroup.linkRemove().clear();
 
         _each(that.panes, function(i, pane) {
-            let bc;
             const borderOptions = panesBorderOptions[pane.name];
-            let segmentRectParams;
             const attr = {
                 fill: 'none',
                 stroke: borderOptions.color,
@@ -1168,9 +1227,9 @@ const dxChart = AdvancedChart.inherit({
             if(!borderOptions.visible) {
                 return;
             }
-            bc = pane.borderCoords;
+            const bc = pane.borderCoords;
 
-            segmentRectParams = prepareSegmentRectPoints(bc.left, bc.top, bc.width, bc.height, borderOptions);
+            const segmentRectParams = prepareSegmentRectPoints(bc.left, bc.top, bc.width, bc.height, borderOptions);
             that._renderer.path(segmentRectParams.points, segmentRectParams.pathType).attr(attr).append(that._panesBorderGroup);
         });
 
@@ -1224,6 +1283,19 @@ const dxChart = AdvancedChart.inherit({
                 panesClipRects.wide[i] = null;
             }
         });
+    },
+
+    _applyClipRectsForAxes() {
+        const that = this;
+        const axes = that._argumentAxes.concat(that._valueAxes);
+        const customPositionAxes = axes.filter(a => a.hasCustomPosition());
+        const chartCanvasClipRectID = that._getCanvasClipRectID();
+
+        for(let i = 0; i < axes.length; i++) {
+            const elementsClipRectID = that._getElementsClipRectID(axes[i].pane);
+            const canvasClipRectID = customPositionAxes.indexOf(axes[i]) >= 0 ? elementsClipRectID : chartCanvasClipRectID;
+            axes[i].applyClipRects(elementsClipRectID, canvasClipRectID);
+        }
     },
 
     _getPaneBorderVisibility: function(paneIndex) {
