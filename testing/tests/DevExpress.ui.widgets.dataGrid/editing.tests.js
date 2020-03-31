@@ -2294,33 +2294,6 @@ QUnit.test('Close editing cell when cell is contained table inside', function(as
     assert.ok(!isCellClosed);
 });
 
-/*
-TODO Unstable test
-asyncTest('Focus on first editor after Edit Click', function () {
-    // arrange
-    var that = this,
-        rowsView = this.rowsView,
-        testElement = $('#container');
-
-    rowsView.applyOptions({
-        editing: {
-            allowAdding: true
-        }
-    });
-    rowsView.render(testElement);
-
-    // act
-    testElement.find('tbody > tr').first().find('a').trigger('click'); // New
-
-    // assert
-    assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 3);
-    setTimeout(function () {
-        assert.equal(testElement.find("input:focus").val(), testElement.find('input')[0].value);
-
-    });
-});
-*/
-
 // T287356
 QUnit.test('Not apply column options to cell editor', function(assert) {
     // arrange
@@ -5323,6 +5296,7 @@ QUnit.test('Add highlight outline by batch edit mode when delayed template used 
             return {
                 render: function(options) {
                     options.container.text('test_' + options.model.text);
+                    options.onRendered();
                 }
             };
         }
@@ -8157,6 +8131,52 @@ QUnit.test('The current editable row should close when adding a new row in \'row
     // assert
     assert.ok($(rowsView.getRowElement(0)).hasClass('dx-edit-row dx-row-inserted'), 'new row');
     assert.notOk($(rowsView.getRowElement(3)).hasClass('dx-edit-row'), 'row isn\'t edited');
+});
+
+// T858174
+QUnit.test('The highlight outline should be correctly rendered after editing cell when cellTemplate is specified (React)', function(assert) {
+    // arrange
+    const that = this;
+    const $testElement = $('#container');
+    const template = sinon.spy(function(options) {
+        // deferUpdate is called in template in devextreme-react
+        commonUtils.deferUpdate(() => {
+            options.container.text('test_' + options.model.text);
+            options.onRendered();
+        });
+    });
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: 'batch'
+    };
+    that._getTemplate = function(name) {
+        if(name === '#test') {
+            return {
+                render: template
+            };
+        }
+    };
+    that.rowsView.render($testElement);
+
+    that.columnsController.columnOption(0, 'cellTemplate', '#test');
+
+    $testElement.find('td').eq(0).trigger('dxclick');
+
+    // act
+    $testElement.find('input').first().val('Test11');
+    $testElement.find('input').first().trigger('change');
+
+    template.reset();
+    that.editingController.closeEditCell();
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(template.callCount, 1, 'template is called');
+    assert.ok(template.getCall(0).args[0].onRendered, 'template args - there is onRendered');
+    const $elementWithOutline = $testElement.find('td').first().find('.dx-highlight-outline');
+    assert.strictEqual($elementWithOutline.length, 1, 'highlight outline');
+    assert.strictEqual($elementWithOutline.text(), 'test_Test11', 'text in outline element');
 });
 
 ['row', 'form', 'popup'].forEach(editingMode => {
