@@ -2035,10 +2035,9 @@ const EditingController = modules.ViewController.inherit((function() {
             cellOptions.value = column.calculateCellValue(rowData);
 
             const template = that._getFormEditItemTemplate.bind(that)(cellOptions, column);
-
-            if(that._rowsView.renderTemplate($container, template, cellOptions, !!$container.closest(getWindow().document).length)) {
+            that._rowsView.renderTemplate($container, template, cellOptions, !!$container.closest(getWindow().document).length).done(() => {
                 that._rowsView._updateCell($container, cellOptions);
-            }
+            });
             return cellOptions;
         },
 
