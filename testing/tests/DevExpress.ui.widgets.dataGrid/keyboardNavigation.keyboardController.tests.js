@@ -190,6 +190,9 @@ QUnit.module('Keyboard controller', {
         that.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
+        if(this.dispose) {
+            this.dispose();
+        }
         eventsEngine.on = this.originalEventsEngineOn;
         eventsEngine.off = this.originalEventsEngineOff;
         this.clock.restore();

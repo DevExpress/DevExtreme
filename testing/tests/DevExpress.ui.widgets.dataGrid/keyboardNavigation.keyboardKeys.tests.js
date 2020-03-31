@@ -52,10 +52,7 @@ QUnit.module('Keyboard keys', {
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
-        if(this.dispose) {
-            this.dispose();
-        }
-
+        this.dispose();
         this.clock.restore();
     }
 }, function() {
