@@ -13130,6 +13130,111 @@ QUnit.test('Row - An untouched cell should not be validated (T872003)', function
     });
 });
 
+QUnit.test('Cell mode - The value of an invalid dependent cell should be updated in a new row(T872751)', function(assert) {
+    // arrange
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    const gridConfig = {
+        dataSource: [],
+        editing: {
+            mode: 'cell',
+            allowAdding: true
+        },
+        columns: [
+            {
+                dataField: 'a',
+                setCellValue: function(rowData, value) {
+                    rowData.a = value;
+                    rowData.b = 'testb';
+                }
+            },
+            {
+                dataField: 'b',
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback: function() {
+                        return false;
+                    }
+                }]
+            }
+        ]
+    };
+
+    rowsView.render(testElement);
+    this.applyOptions(gridConfig);
+    this.addRow();
+    this.clock.tick();
+
+    const $inputElement = getInputElements(testElement).first();
+    $inputElement
+        .val('testa')
+        .trigger('change');
+
+    this.clock.tick();
+
+    const $secondCell = $(this.getCellElement(0, 1));
+
+    // assert
+    assert.ok($secondCell.hasClass('dx-cell-modified'), 'cell is marked as modified');
+    assert.ok($secondCell.hasClass('dx-datagrid-invalid'), 'cell is marked as invalid');
+    assert.strictEqual($secondCell.text(), 'testb', 'cell text is modified');
+});
+
+QUnit.test('Cell mode - The value of an invalid dependent cell should be updated in a modified row(T872751)', function(assert) {
+    // arrange
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    const gridConfig = {
+        dataSource: [{
+            a: 'a',
+            b: 'b'
+        }],
+        editing: {
+            mode: 'cell',
+            allowAdding: true
+        },
+        columns: [
+            {
+                dataField: 'a',
+                setCellValue: function(rowData, value) {
+                    rowData.a = value;
+                    rowData.b = 'testb';
+                }
+            },
+            {
+                dataField: 'b',
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback: function() {
+                        return false;
+                    }
+                }]
+            }
+        ]
+    };
+
+    rowsView.render(testElement);
+    this.applyOptions(gridConfig);
+    this.editCell(0, 0);
+    this.clock.tick();
+
+    const $inputElement = getInputElements(testElement).first();
+    $inputElement
+        .val('testa')
+        .trigger('change');
+
+    this.clock.tick();
+
+    const $secondCell = $(this.getCellElement(0, 1));
+
+    // assert
+    assert.ok($secondCell.hasClass('dx-cell-modified'), 'cell is marked as modified');
+    assert.ok($secondCell.hasClass('dx-datagrid-invalid'), 'cell is marked as invalid');
+    assert.strictEqual($secondCell.text(), 'testb', 'cell text is modified');
+});
+
 
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
     beforeEach: function() {
