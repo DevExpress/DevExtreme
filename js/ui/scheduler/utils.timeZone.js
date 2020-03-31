@@ -46,6 +46,20 @@ const getCorrectedDateByDaylightOffsets = (convertedOriginalStartDate, converted
     return new Date(date.getTime() - diff * toMs('hour'));
 };
 
+const correctRecurrenceExceptionByTimezone = (exception, exceptionByStartDate, timeZone, startDateTimeZone) => {
+    let timezoneOffset = 0;
+
+    if(startDateTimeZone) {
+        timezoneOffset = getDaylightOffsetByTimezone(exceptionByStartDate, exception, startDateTimeZone);
+    } else if(timeZone) {
+        timezoneOffset = getDaylightOffsetByTimezone(exceptionByStartDate, exception, timeZone);
+    } else {
+        timezoneOffset = (exception.getTimezoneOffset() - exceptionByStartDate.getTimezoneOffset()) / 60;
+    }
+
+    return new Date(exception.getTime() + (timezoneOffset) * toMs('hour'));
+};
+
 const isTimezoneChangeInDate = (date) => {
     const startDayDate = new Date((new Date(date)).setHours(0, 0, 0, 0));
     const endDayDate = new Date((new Date(date)).setHours(23, 59, 59, 0));
@@ -68,7 +82,8 @@ const utils = {
     getCorrectedDateByDaylightOffsets: getCorrectedDateByDaylightOffsets,
     isTimezoneChangeInDate: isTimezoneChangeInDate,
     isSameAppointmentDates: isSameAppointmentDates,
-    getDaylightOffsetByTimezone: getDaylightOffsetByTimezone
+    getDaylightOffsetByTimezone: getDaylightOffsetByTimezone,
+    correctRecurrenceExceptionByTimezone: correctRecurrenceExceptionByTimezone
 };
 
 module.exports = utils;
