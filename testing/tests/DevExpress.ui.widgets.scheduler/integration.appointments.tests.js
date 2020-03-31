@@ -26,7 +26,8 @@ QUnit.testStart(() => initTestMarkup());
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
 
-const APPOINTMENT_DEFAULT_OFFSET = 26;
+const APPOINTMENT_DEFAULT_LEFT_OFFSET = 26;
+const APPOINTMENT_DEFAULT_TOP_OFFSET = 26;
 
 QUnit.module('T712431', () => {
     // TODO: there is a test for T712431 bug, when replace table layout on div layout, the test will also be useless
@@ -1932,7 +1933,6 @@ QUnit.test('Appointment width should depend on cell width', function(assert) {
     const workSpace = this.instance.getWorkSpace();
     const defaultGetCellWidthMethod = workSpace.getCellWidth;
     const CELL_WIDTH = 777;
-    const offset = APPOINTMENT_DEFAULT_OFFSET;
 
     workSpace.getCellWidth = function() {
         return CELL_WIDTH;
@@ -1942,7 +1942,7 @@ QUnit.test('Appointment width should depend on cell width', function(assert) {
             { id: 1, text: 'Item 1', startDate: new Date(2015, 2, 18), endDate: new Date(2015, 2, 18, 0, 30) }
         ]);
 
-        assert.equal(this.scheduler.appointments.getAppointmentWidth(), CELL_WIDTH - offset, 'Appointment width is OK');
+        assert.equal(this.scheduler.appointments.getAppointmentWidth(), CELL_WIDTH - APPOINTMENT_DEFAULT_LEFT_OFFSET, 'Appointment width is OK');
 
     } finally {
         workSpace.getCellWidth = defaultGetCellWidthMethod;
@@ -2469,8 +2469,8 @@ QUnit.test('Rival long appointments should have right position on timeline month
         endDayHour: 20
     });
 
-    assert.equal(this.scheduler.appointments.getAppointmentPosition(0).top, APPOINTMENT_DEFAULT_OFFSET, 'Long appointment top is ok');
-    assert.roughEqual(this.scheduler.appointments.getAppointmentPosition(1).top, this.scheduler.appointments.getAppointmentHeight() + APPOINTMENT_DEFAULT_OFFSET, 1, 'Second appointment top is ok');
+    assert.equal(this.scheduler.appointments.getAppointmentPosition(0).top, APPOINTMENT_DEFAULT_TOP_OFFSET, 'Long appointment top is ok');
+    assert.roughEqual(this.scheduler.appointments.getAppointmentPosition(1).top, this.scheduler.appointments.getAppointmentHeight() + APPOINTMENT_DEFAULT_TOP_OFFSET, 1, 'Second appointment top is ok');
 });
 
 QUnit.test('Long appointment part should not be rendered on timeline month view (T678380)', function(assert) {
@@ -3117,11 +3117,10 @@ QUnit.test('Appointments should be rendered correctly in vertical grouped worksp
 
     const cellHeight = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
     const cellPosition = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(5).position().left;
-    const monthTopOffset = APPOINTMENT_DEFAULT_OFFSET;
 
-    assert.roughEqual($appointments.eq(0).position().top, cellHeight * 2 + monthTopOffset, 1, 'correct top position');
+    assert.roughEqual($appointments.eq(0).position().top, cellHeight * 2 + APPOINTMENT_DEFAULT_TOP_OFFSET, 1, 'correct top position');
     assert.roughEqual($appointments.eq(0).position().left, cellPosition, 1.5, 'correct left position');
-    assert.roughEqual($appointments.eq(1).position().top, cellHeight * 8 + monthTopOffset, 3.5, 'correct top position');
+    assert.roughEqual($appointments.eq(1).position().top, cellHeight * 8 + APPOINTMENT_DEFAULT_TOP_OFFSET, 3.5, 'correct top position');
     assert.roughEqual($appointments.eq(1).position().left, cellPosition, 1.5, 'correct left position');
 });
 

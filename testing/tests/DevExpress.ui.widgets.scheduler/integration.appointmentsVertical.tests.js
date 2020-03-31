@@ -32,7 +32,7 @@ import dataUtils from 'core/element_data';
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
 
-const APPOINTMENT_DEFAULT_OFFSET = 26;
+const APPOINTMENT_DEFAULT_LEFT_OFFSET = 26;
 
 QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)', {
     beforeEach: function() {
@@ -400,14 +400,13 @@ QUnit.test('Two vertical neighbor appointments should be placed correctly', func
     const $commonAppointments = this.instance.$element().find('.dx-scheduler-scrollable-appointments .dx-scheduler-appointment');
     const $allDayAppts = this.instance.$element().find('.dx-scheduler-all-day-appointment');
     const cellWidth = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerWidth();
-    const appointmentOffset = APPOINTMENT_DEFAULT_OFFSET;
 
     assert.roughEqual(translator.locate($commonAppointments.eq(0)).left, 100, 2.001, 'Left position is OK');
     assert.roughEqual(translator.locate($commonAppointments.eq(1)).left, 100, 2.001, 'Left position is OK');
     assert.roughEqual(translator.locate($allDayAppts.eq(0)).left, 100, 2.001, 'Left position is OK');
 
-    assert.roughEqual($commonAppointments.eq(0).outerWidth(), cellWidth - appointmentOffset, 1.001, 'Width is OK');
-    assert.roughEqual($commonAppointments.eq(1).outerWidth(), cellWidth - appointmentOffset, 1.001, 'Width is OK');
+    assert.roughEqual($commonAppointments.eq(0).outerWidth(), cellWidth - APPOINTMENT_DEFAULT_LEFT_OFFSET, 1.001, 'Width is OK');
+    assert.roughEqual($commonAppointments.eq(1).outerWidth(), cellWidth - APPOINTMENT_DEFAULT_LEFT_OFFSET, 1.001, 'Width is OK');
     assert.roughEqual($allDayAppts.eq(0).outerWidth(), cellWidth, 1.001, 'Width is OK');
 });
 
@@ -490,9 +489,8 @@ QUnit.test('Appointments should have correct position, rtl mode, editing=false',
     });
 
     const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-    const appointmentOffset = APPOINTMENT_DEFAULT_OFFSET;
 
-    assert.roughEqual($appointment.position().left, appointmentOffset, 2, 'Appointment left is correct on init');
+    assert.roughEqual($appointment.position().left, APPOINTMENT_DEFAULT_LEFT_OFFSET, 2, 'Appointment left is correct on init');
 });
 
 
@@ -713,11 +711,10 @@ QUnit.test('Appointment should have right width on mobile devices & desktop in w
         currentView: 'week'
     });
 
-    const expectedOffset = APPOINTMENT_DEFAULT_OFFSET;
     const $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
     const cellWidth = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerWidth();
 
-    assert.roughEqual($appointments.eq(0).outerWidth(), cellWidth - expectedOffset, 1.001, 'Width is OK');
+    assert.roughEqual($appointments.eq(0).outerWidth(), cellWidth - APPOINTMENT_DEFAULT_LEFT_OFFSET, 1.001, 'Width is OK');
 });
 
 QUnit.test('Appointments should be rendered correctly in vertical grouped workspace Day', function(assert) {

@@ -22,7 +22,7 @@ QUnit.testStart(function() {
             </div>');
 });
 
-const APPOINTMENT_DEFAULT_OFFSET = 26;
+const APPOINTMENT_DEFAULT_LEFT_OFFSET = 26;
 
 const createInstance = function(options) {
     const instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
@@ -1266,7 +1266,6 @@ QUnit.test('All-day & common appointments should have a right sorting', function
     });
 
     const cellWidth = scheduler.workSpace.getCellWidth();
-    const offset = APPOINTMENT_DEFAULT_OFFSET;
 
     assert.equal(scheduler.appointments.getTitleText(0), 'A', 'Text is right');
     assert.equal(scheduler.appointments.getTitleText(1), 'B', 'Text is right');
@@ -1275,7 +1274,7 @@ QUnit.test('All-day & common appointments should have a right sorting', function
 
     assert.roughEqual(scheduler.appointments.getAppointmentPosition(3).left, 100, 1.001, 'Appointment position is OK');
     assert.roughEqual(scheduler.appointments.getAppointmentPosition(3).top, 100, 1.001, 'Appointment position is OK');
-    assert.roughEqual(scheduler.appointments.getAppointmentWidth(3), cellWidth - offset, 1.001, 'Appointment size is OK');
+    assert.roughEqual(scheduler.appointments.getAppointmentWidth(3), cellWidth - APPOINTMENT_DEFAULT_LEFT_OFFSET, 1.001, 'Appointment size is OK');
 });
 
 QUnit.test('dropDown appointment should have correct container & position', function(assert) {
