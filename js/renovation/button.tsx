@@ -5,7 +5,7 @@ import themes from '../ui/themes';
 import { click } from '../events/short';
 import { getImageSourceType } from '../core/utils/icon';
 import { initConfig, showWave, hideWave } from '../ui/widget/utils.ink_ripple';
-import { Component, ComponentBindings, Effect, JSXComponent, OneWay, Ref, Template } from 'devextreme-generator/component_declaration/common';
+import { Component, ComponentBindings, Effect, JSXComponent, OneWay, Ref, Template, Event } from 'devextreme-generator/component_declaration/common';
 import Icon from './icon';
 import Widget, { WidgetInput } from './widget';
 
@@ -107,8 +107,8 @@ export class ButtonInput extends WidgetInput {
     @OneWay() hoverStateEnabled?: boolean = true;
     @OneWay() icon?: string = '';
     @OneWay() iconPosition?: string = 'left';
-    @OneWay() onClick?: (e: any) => any = noop;
-    @OneWay() onSubmit?: (e: any) => any = noop;
+    @Event() onClick?: (e: any) => any = noop;
+    @Event() onSubmit?: (e: any) => any = noop;
     @OneWay() pressed?: boolean;
     @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
     @Template() template?: any = '';
