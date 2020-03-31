@@ -767,6 +767,9 @@ class Diagram extends Widget {
         let startLineEndingSetter;
         let endLineEndingGetter;
         let endLineEndingSetter;
+        let containerKeyGetter;
+        let containerKeySetter;
+
         const data = {
             nodeDataSource: this._nodesOption && this._nodesOption.getItems(),
             edgeDataSource: this._edgesOption && this._edgesOption.getItems(),
@@ -805,10 +808,10 @@ class Diagram extends Widget {
                 getItems: this._createOptionGetter('nodes.itemsExpr'),
                 setItems: this._createOptionSetter('nodes.itemsExpr'),
 
-                getContainerKey: this._createOptionGetter('nodes.containerKeyExpr'),
-                setContainerKey: this._createOptionSetter('nodes.containerKeyExpr'),
-                getChildren: this._createOptionGetter('nodes.childrenExpr'),
-                setChildren: this._createOptionSetter('nodes.childrenExpr')
+                getContainerKey: (containerKeyGetter = this._createOptionGetter('nodes.containerKeyExpr')),
+                setContainerKey: (containerKeySetter = this._createOptionSetter('nodes.containerKeyExpr')),
+                getChildren: !containerKeyGetter && !containerKeySetter && this._createOptionGetter('nodes.childrenExpr'),
+                setChildren: !containerKeyGetter && !containerKeySetter && this._createOptionSetter('nodes.childrenExpr')
             },
             edgeDataImporter: {
                 getKey: this._createOptionGetter('edges.keyExpr'),
@@ -968,11 +971,7 @@ class Diagram extends Widget {
     }
     _updateCustomShapes(customShapes, prevCustomShapes) {
         if(Array.isArray(prevCustomShapes)) {
-            this._diagramInstance.removeCustomShapes(prevCustomShapes.map(
-                function(s) {
-                    return s.type;
-                }
-            ));
+            this._diagramInstance.removeCustomShapes(prevCustomShapes.map(s => s.type));
         }
 
         if(Array.isArray(customShapes)) {
