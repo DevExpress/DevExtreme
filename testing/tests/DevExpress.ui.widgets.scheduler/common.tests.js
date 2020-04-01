@@ -2107,9 +2107,7 @@ QUnit.testStart(function() {
         { startDayHour: 2, endDayHour: 0 }
     ].forEach(dayHours => {
         QUnit.test(`Generate error if option changed to startDayHour: ${dayHours.startDayHour} >= endDayHour: ${dayHours.endDayHour}`, function(assert) {
-            const that = this;
-
-            that.createInstance({
+            this.createInstance({
                 currentDate: new Date(2015, 4, 24),
                 views: ['day'],
                 currentView: 'day',
@@ -2118,13 +2116,11 @@ QUnit.testStart(function() {
             });
 
             assert.throws(
-                function() {
-                    that.instance.option('startDayHour', dayHours.startDayHour);
-                    that.instance.option('endDayHour', dayHours.endDayHour);
+                () => {
+                    this.instance.option('startDayHour', dayHours.startDayHour);
+                    this.instance.option('endDayHour', dayHours.endDayHour);
                 },
-                function(e) {
-                    return /E1058/.test(e.message);
-                },
+                e => /E1058/.test(e.message),
                 'E1058 Error message'
             );
         });
