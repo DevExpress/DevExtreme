@@ -48,14 +48,12 @@ const getCorrectedDateByDaylightOffsets = (convertedOriginalStartDate, converted
 };
 
 const correctRecurrenceExceptionByTimezone = (exception, exceptionByStartDate, timeZone, startDateTimeZone) => {
-    let timezoneOffset = 0;
+    let timezoneOffset = (exception.getTimezoneOffset() - exceptionByStartDate.getTimezoneOffset()) / MINUTES_IN_HOUR;
 
     if(startDateTimeZone) {
         timezoneOffset = getDaylightOffsetByTimezone(exceptionByStartDate, exception, startDateTimeZone);
     } else if(timeZone) {
         timezoneOffset = getDaylightOffsetByTimezone(exceptionByStartDate, exception, timeZone);
-    } else {
-        timezoneOffset = (exception.getTimezoneOffset() - exceptionByStartDate.getTimezoneOffset()) / MINUTES_IN_HOUR;
     }
 
     return new Date(exception.getTime() + timezoneOffset * toMs('hour'));
