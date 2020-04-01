@@ -137,9 +137,6 @@ class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
     _findIndexByKey() {
     }
 
-    _getMaxNeighborAppointmentCount() {
-    }
-
     _markAppointmentAsVirtual() {
     }
 
@@ -150,12 +147,9 @@ class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
         return this._defaultWidth;
     }
 
-    getCompactAppointmentDefaultWidth() {
+    getCollectorLeftOffset() {
     }
-
-    getCompactAppointmentLeftOffset() {
-    }
-    getCompactAppointmentTopOffset() {
+    getCollectorTopOffset() {
     }
 
     calculateRows(appointments, agendaDuration, currentDate, needClearSettings) {

@@ -33,7 +33,7 @@ QUnit.module('Integration: Work space', {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler($.extend(options, { maxAppointmentsPerCell: null })).dxScheduler('instance');
+            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
             this.scheduler = new SchedulerTestWrapper(this.instance);
         };
     },
@@ -701,7 +701,9 @@ QUnit.test('Appointments in month view should be sorted same as in all-day secti
     this.createInstance({
         dataSource: items,
         currentDate: new Date(2016, 1, 11),
-        currentView: 'week'
+        currentView: 'week',
+        height: 600,
+        maxAppointmentsPerCell: 'unlimited'
     });
 
     const allDayAppointments = this.instance.$element().find('.dx-scheduler-appointment');

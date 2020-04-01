@@ -33,7 +33,7 @@ QUnit.module('Integration: Multi-Week appointments', {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler($.extend(options, { maxAppointmentsPerCell: null })).dxScheduler('instance');
+            this.instance = $('#scheduler').dxScheduler($.extend(options, { height: 600 })).dxScheduler('instance');
         };
     },
     afterEach: function() {
@@ -173,58 +173,6 @@ QUnit.test('Max allowed position of appointment should be calculated correctly (
     const $appointment = $(this.instance.$element()).find('.dx-scheduler-appointment').eq(0);
 
     assert.roughEqual($appointment.outerWidth(), Math.floor($cell.outerWidth()), 1.001, 'Appointment width is OK');
-});
-
-QUnit.test('Compact parts of long appointments should be located properly (grouped mode)', function(assert) {
-    this.createInstance({
-        currentDate: new Date(2016, 6, 20),
-        views: ['month'],
-        currentView: 'month',
-        firstDayOfWeek: 1,
-        height: 500,
-        dataSource: [{
-            text: 'first',
-            ownerId: [1],
-            startDate: new Date(2016, 6, 16, 0, 0),
-            endDate: new Date(2016, 6, 19, 0, 0)
-        }, {
-            text: 'second',
-            ownerId: [1],
-            startDate: new Date(2016, 6, 16, 0, 0),
-            endDate: new Date(2016, 6, 19, 0, 0)
-        }, {
-            text: 'third',
-            ownerId: [1],
-            startDate: new Date(2016, 6, 16, 0, 0),
-            endDate: new Date(2016, 6, 19, 0, 0)
-        }],
-        groups: ['ownerId'],
-        resources: [
-            {
-                field: 'ownerId',
-                allowMultiple: true,
-                dataSource: [
-                    {
-                        text: 'first',
-                        id: 1
-                    },
-                    {
-                        text: 'second',
-                        id: 2
-                    }
-                ]
-            }
-        ]
-    });
-    const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
-    const $compactAppts = $appointments.filter('.dx-scheduler-appointment-compact');
-
-    assert.equal($appointments.length, 7, 'Appointment part quantity is right');
-    assert.equal($compactAppts.length, 3, 'Quantity of compact appointment parts is right');
-
-    assert.roughEqual($compactAppts.eq(0).position().top, 124, 2.001, 'Position of compact appointment part is right');
-    assert.roughEqual($compactAppts.eq(1).position().top, 124, 2.001, 'Position of compact appointment part is right');
-    assert.roughEqual($compactAppts.eq(2).position().top, 183, 2.501, 'Position of compact appointment part is right');
 });
 
 QUnit.test('Appointment should have a special icon and class if it greater than work space width', function(assert) {

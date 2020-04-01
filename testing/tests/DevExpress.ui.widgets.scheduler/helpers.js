@@ -205,7 +205,7 @@ export class SchedulerTestWrapper {
                 }
                 return this.workSpace.getCells().eq(rowIndex);
             },
-
+            getCellPosition: (rowIndex, cellIndex) => this.workSpace.getCell(rowIndex, cellIndex).position(),
             getAllDayCells: () => $('.dx-scheduler-all-day-table-cell'),
             getAllDayCell: (index) => this.workSpace.getAllDayCells().eq(index),
             getCellWidth: () => this.workSpace.getCells().eq(0).outerWidth(),

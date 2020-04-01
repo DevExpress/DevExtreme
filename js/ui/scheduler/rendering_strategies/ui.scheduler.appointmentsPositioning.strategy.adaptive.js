@@ -16,7 +16,7 @@ class AdaptivePositioningStrategy extends BasePositioningStrategy {
         return COLLECTOR_ADAPTIVE_SIZE;
     }
 
-    getCompactAppointmentTopOffset(allDay) {
+    getCollectorTopOffset(allDay) {
         const renderingStrategy = this.getRenderingStrategy();
 
         if(renderingStrategy.hasAllDayAppointments() && allDay) {
@@ -26,7 +26,7 @@ class AdaptivePositioningStrategy extends BasePositioningStrategy {
         }
     }
 
-    getCompactAppointmentLeftOffset() {
+    getCollectorLeftOffset() {
         return (this.getRenderingStrategy().getDefaultCellWidth() - COLLECTOR_ADAPTIVE_SIZE) / 2;
     }
 

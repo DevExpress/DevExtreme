@@ -484,7 +484,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
         this._applyResourceDataAttr($appointment);
         const data = this._getItemData($appointment);
         const geometry = this.invoke('getAppointmentGeometry', settings);
-        const allowResize = !settings.isCompact && this.option('allowResize') && (!typeUtils.isDefined(settings.skipResizing) || typeUtils.isString(settings.skipResizing));
+        const allowResize = this.option('allowResize') && (!typeUtils.isDefined(settings.skipResizing) || typeUtils.isString(settings.skipResizing));
         const allowDrag = this.option('allowDrag');
         const allDay = settings.allDay;
         this.invoke('setCellDataCacheAlias', this._currentAppointmentSettings, geometry);

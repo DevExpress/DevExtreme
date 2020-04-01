@@ -16,7 +16,7 @@ import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 
 const createInstance = function(options) {
-    const instance = $('#scheduler').dxScheduler($.extend(options, { maxAppointmentsPerCell: options && options.maxAppointmentsPerCell || null })).dxScheduler('instance');
+    const instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
     return new SchedulerTestWrapper(instance);
 };
 
@@ -39,7 +39,7 @@ QUnit.module('Integration: Appointments rendering when timezone is set', {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler($.extend(options, { maxAppointmentsPerCell: options && options.maxAppointmentsPerCell || null })).dxScheduler('instance');
+            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
         };
 
         this.clock = sinon.useFakeTimers();
@@ -1175,7 +1175,8 @@ QUnit.test('Appointment should have right width in workspace with timezone', fun
             firstDayOfWeek: 1,
             startDayHour: 3,
             endDayHour: 24,
-            timeZone: 'Asia/Ashkhabad'
+            timeZone: 'Asia/Ashkhabad',
+            height: 600
         });
 
         this.instance.addAppointment({

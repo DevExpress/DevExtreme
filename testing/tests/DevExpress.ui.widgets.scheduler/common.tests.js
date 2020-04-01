@@ -1592,7 +1592,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 1, 9),
             currentView: 'month',
             dataSource: data,
-            maxAppointmentsPerCell: null,
+            maxAppointmentsPerCell: 2,
             height: 500,
             width: 800
         });
@@ -1823,8 +1823,6 @@ QUnit.testStart(function() {
         });
 
         assert.equal(this.instance.option('maxAppointmentsPerCell'), 'auto', 'Default Option value is right');
-        const $workSpace = this.instance.getWorkSpace().$element();
-        assert.ok($workSpace.hasClass('dx-scheduler-work-space-overlapping'), 'workspace has right class');
     });
 
     QUnit.test('cellDuration is passed to workspace', function(assert) {
@@ -2816,8 +2814,8 @@ QUnit.testStart(function() {
                 }],
             }),
             views: ['month'],
-            maxAppointmentsPerCell: null,
             currentView: 'month',
+            maxAppointmentsPerCell: 1,
             onAppointmentRendered: function(args) {
                 assert.equal($(args.appointmentElement).find('.dx-scheduler-appointment-reduced-icon').length, 1, 'Appointment reduced icon is applied');
             },
@@ -2860,8 +2858,8 @@ QUnit.testStart(function() {
                 }],
             }),
             views: ['month'],
-            maxAppointmentsPerCell: null,
             currentView: 'month',
+            height: 600,
             onAppointmentRendered: function(args) {
                 assert.ok(true, 'Appointment was rendered');
             },
@@ -2894,7 +2892,6 @@ QUnit.testStart(function() {
             views: ['timelineWeek'],
             currentView: 'timelineWeek',
             cellDuration: 60,
-            maxAppointmentsPerCell: null,
             onAppointmentRendered: function(args) {
                 assert.ok(true, 'Appointment was rendered');
             },
@@ -3047,8 +3044,8 @@ QUnit.testStart(function() {
             }),
             views: ['month'],
             currentView: 'month',
-            maxAppointmentsPerCell: null,
             currentDate: new Date(2015, 2, 9),
+            height: 600,
             onAppointmentClick: function(e) {
                 assert.deepEqual(isRenderer(e.appointmentElement), !!config().useJQuery, 'appointmentElement is correct');
                 assert.deepEqual($(e.appointmentElement)[0], $item[0], 'appointmentElement is correct');
@@ -3124,7 +3121,6 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 2, 9),
             startDateExpr: 'start.date',
             endDateExpr: 'end.date',
-            maxAppointmentsPerCell: null,
             recurrenceRuleExpr: 'recurrence.rule',
             onAppointmentClick: function(e) {
                 const targetedAppointmentData = e.targetedAppointmentData;
@@ -3225,7 +3221,7 @@ QUnit.testStart(function() {
             }),
             views: ['month'],
             currentView: 'month',
-            maxAppointmentsPerCell: null,
+            height: 600,
             currentDate: new Date(2015, 2, 9),
             onAppointmentContextMenu: function(e) {
                 assert.deepEqual(isRenderer(e.appointmentElement), !!config().useJQuery, 'appointmentElement is correct');
@@ -3849,7 +3845,6 @@ QUnit.testStart(function() {
             this.createInstance({
                 width: 300,
                 currentView: 'week',
-                maxAppointmentsPerCell: null,
                 dataSource: [{
                     text: 'a',
                     startDate: new Date(2015, 6, 5, 0, 0),
@@ -4291,29 +4286,6 @@ QUnit.testStart(function() {
         });
 
         assert.ok(result, 'Appointment takes all day');
-    });
-
-    QUnit.test('Workspace should have an specific class if view.maxAppointmentsPerCell is set', function(assert) {
-        this.createInstance({
-            currentView: 'Week',
-            views: [{
-                type: 'week',
-                name: 'Week',
-                maxAppointmentsPerCell: 3
-            },
-            {
-                type: 'day',
-                name: 'day',
-                maxAppointmentsPerCell: null
-            }]
-        });
-
-        let $workSpace = this.instance.getWorkSpace().$element();
-        assert.ok($workSpace.hasClass('dx-scheduler-work-space-overlapping'), 'workspace has correct class');
-
-        this.instance.option('currentView', 'day');
-        $workSpace = this.instance.getWorkSpace().$element();
-        assert.notOk($workSpace.hasClass('dx-scheduler-work-space-overlapping'), 'workspace hasn\'t class');
     });
 
     QUnit.module('Options for Material theme in components', {

@@ -987,12 +987,9 @@ QUnit.test('Reduced reccuring appt should have right left position in first colu
         currentView: 'month'
     });
 
-    const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
     const $reducedAppointment = this.instance.$element().find('.dx-scheduler-appointment-reduced');
-    const compactClass = 'dx-scheduler-appointment-compact';
 
     assert.equal($reducedAppointment.eq(1).position().left, 0, 'first appt has right left position');
-    assert.notOk($appointment.eq(7).hasClass(compactClass), 'next appt isn\'t compact');
 });
 
 QUnit.test('Reduced reccuring appt should have right left position in first column in grouped Month view', function(assert) {
@@ -1019,13 +1016,10 @@ QUnit.test('Reduced reccuring appt should have right left position in first colu
         ]
     });
 
-    const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
     const $reducedAppointment = this.instance.$element().find('.dx-scheduler-appointment-reduced');
-    const compactClass = 'dx-scheduler-appointment-compact';
     const cellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').outerWidth();
 
     assert.roughEqual($reducedAppointment.eq(1).position().left, cellWidth * 7, 2.5, 'first appt in 2d group has right left position');
-    assert.notOk($appointment.eq(7).hasClass(compactClass), 'appt isn\'t compact');
 });
 
 QUnit.test('Recurrence exception should be adjusted by scheduler timezone', function(assert) {
