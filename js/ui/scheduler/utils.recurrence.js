@@ -19,6 +19,9 @@ const intervalMap = {
     yearly: 'years'
 };
 
+// Wrong date needs to mark specific date as incorrect.
+const wrongDateTime = new Date(0, 0, 0).getTime();
+
 const dateSetterMap = {
     'bysecond': function(date, value) {
         date.setSeconds(value);
@@ -47,8 +50,11 @@ const dateSetterMap = {
             }
 
         } else {
-            date.setDate(value);
-            correctDate(date, value);
+            if(value <= dateUtils.getLastMonthDay(date)) {
+                date.setDate(value);
+            } else {
+                markWrongDate(date);
+            }
         }
     },
     'byday': function(date, byDay, appointmentWeekStart, frequency, firstDayOfWeek) {
@@ -727,11 +733,14 @@ var getDatesByCount = function(dateRules, startDate, recurrenceStartDate, rule) 
         const dates = getDatesByRules(dateRules, date, rule);
 
         const checkedDates = [];
-        for(var i = 0; i < dates.length; i++) {
-            if(dates[i].getTime() >= recurrenceStartDate.getTime()) {
-                checkedDates.push(dates[i]);
+        dates.forEach(checkedDate => {
+            if(!isWrongDate(checkedDate)) {
+                if(checkedDate.getTime() >= recurrenceStartDate.getTime()) {
+                    checkedDates.push(checkedDate);
+                }
             }
-        }
+        });
+
         const length = checkedDates.length;
 
         counter = counter + length;
@@ -741,9 +750,7 @@ var getDatesByCount = function(dateRules, startDate, recurrenceStartDate, rule) 
             checkedDates.splice(length - delCount, delCount);
         }
 
-        for(i = 0; i < checkedDates.length; i++) {
-            result.push(checkedDates[i]);
-        }
+        checkedDates.forEach(checkedDate => result.push(checkedDate));
 
         let interval = rule.interval;
 
@@ -812,6 +819,14 @@ const getRecurrenceString = function(object) {
     result = result.substring(0, result.length - 1);
 
     return result.toUpperCase();
+};
+
+const markWrongDate = function(date) {
+    date.setTime(wrongDateTime);
+};
+
+const isWrongDate = function(date) {
+    return date.getTime() === wrongDateTime;
 };
 
 var resultUtils = {
