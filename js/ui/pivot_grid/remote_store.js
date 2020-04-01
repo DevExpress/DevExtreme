@@ -290,7 +290,7 @@ function parseResult(data, total, descriptions, result) {
         if(level >= descriptions.rows.length) {
             if(item) {
                 columnPath[columnLevel] = item.key + '';
-                columnItem = getItem(item, 'column', columnPath, columnLevel, descriptions.columns[columnPath.length - 1]);
+                columnItem = getItem(item, 'column', columnPath, columnLevel, descriptions.columns[columnLevel]);
                 rowItem = rowHash[rowPath.slice(0, rowLevel + 1).join('/')];
             } else {
                 result.columns.push({});
@@ -298,7 +298,7 @@ function parseResult(data, total, descriptions, result) {
         } else {
             if(item) {
                 rowPath[rowLevel] = item.key + '';
-                rowItem = getItem(item, 'row', rowPath, rowLevel, descriptions.rows[rowPath.length - 1]);
+                rowItem = getItem(item, 'row', rowPath, rowLevel, descriptions.rows[rowLevel]);
                 columnItem = columnHash[columnPath.slice(0, columnLevel + 1).join('/')];
             } else {
                 result.rows.push({});
