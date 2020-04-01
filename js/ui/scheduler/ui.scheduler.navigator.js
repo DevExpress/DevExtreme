@@ -379,12 +379,6 @@ const SchedulerNavigator = Widget.inherit({
         this._renderCaptionKeys();
     },
 
-    _createPopupContent: function() {
-        const result = $('<div>').addClass(CALENDAR_CLASS);
-        this._calendar = this._createComponent(result, Calendar, this._calendarOptions());
-        return result;
-    },
-
     _renderPopover: function() {
         const overlayType = !devices.current().generic ? Popup : Popover;
 
@@ -413,6 +407,12 @@ const SchedulerNavigator = Widget.inherit({
             ]
         });
         this._popover.$element().appendTo(this.$element());
+    },
+
+    _createPopupContent: function() {
+        const result = $('<div>').addClass(CALENDAR_CLASS);
+        this._calendar = this._createComponent(result, Calendar, this._calendarOptions());
+        return result;
     },
 
     _calendarOptions: function() {
