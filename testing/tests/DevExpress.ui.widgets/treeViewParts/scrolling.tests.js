@@ -1,10 +1,9 @@
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
-import devices from 'core/devices';
 import browser from 'core/utils/browser';
 import $ from 'jquery';
 
 QUnit.module('scrollToItem', () => {
-    if(devices.real().ios) {
+    if(browser.msie) {
         return;
     }
 
@@ -25,12 +24,6 @@ QUnit.module('scrollToItem', () => {
         }
 
         return wrapper;
-    }
-
-    function testSkipIE(name, callback) {
-        if(!browser.msie) {
-            QUnit.test(name, callback);
-        }
     }
 
     function createDataSource(expanded, disabled) {
@@ -73,7 +66,7 @@ QUnit.module('scrollToItem', () => {
 
     configs.forEach(config => {
         config.keysToScroll.forEach(key => {
-            testSkipIE(`config:${config.description} -> onContentReady.scrollToItem(${key}) -> focusOut() -> focusIn()`, function(assert) {
+            QUnit.test(`config:${config.description} -> onContentReady.scrollToItem(${key}) -> focusOut() -> focusIn()`, function(assert) {
                 let completionCallback = null;
                 let isFirstContentReadyEvent = true;
                 const options = $.extend({}, config, {
@@ -104,7 +97,7 @@ QUnit.module('scrollToItem', () => {
         });
 
         [{ top: 0, left: 0 }, { top: 1000, left: 0 }, { top: 0, left: 1000 }, { top: 1000, left: 1000 }].forEach(initialPosition => {
-            testSkipIE(`config:${config.description}, initialPosition: ${JSON.stringify(initialPosition)} -> scrollToItem() -> focusOut() -> focusIn()`, function(assert) {
+            QUnit.test(`config:${config.description}, initialPosition: ${JSON.stringify(initialPosition)} -> scrollToItem() -> focusOut() -> focusIn()`, function(assert) {
                 const options = $.extend({}, config, { initialPosition });
                 const wrapper = createWrapper(options, createDataSource(config.expanded, config.disabled));
                 config.keysToScroll.forEach(key => {
