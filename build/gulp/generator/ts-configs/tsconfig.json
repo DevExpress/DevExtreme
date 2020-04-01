@@ -6,7 +6,6 @@
         "esModuleInterop": false,
         "typeRoots": ["node_modules/@types"],
         "forceConsistentCasingInFileNames": true,
-        "experimentalDecorators": true,
         "jsx": "react",
         "declaration": true
     },
