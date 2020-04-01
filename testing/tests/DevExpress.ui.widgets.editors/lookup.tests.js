@@ -3399,3 +3399,80 @@ QUnit.module('default options', {
     });
 });
 
+QUnit.module('Events', {
+    before: function() {
+        this.items = Array.from(Array(100), (item, index) => index + 1);
+    },
+    beforeEach: function() {
+        fx.off = true;
+        executeAsyncMock.setup();
+        this.clock = sinon.useFakeTimers();
+
+        this.element = $('#lookup');
+        this.options = {
+            dropDownOptions: {
+                height: 200,
+                fullScreen: false
+            },
+            items: this.items
+        };
+
+        this.createLookup = function() {
+            this.instance = this.element.dxLookup(this.options).dxLookup('instance');
+            this.$field = $(this.instance._$field);
+        };
+        this.togglePopup = function() {
+            $(this.instance._$field).trigger('dxclick');
+
+            this.$popup = $('.dx-lookup-popup');
+            this.popup = dataUtils.data(this.$popup[0], 'dxPopup') || dataUtils.data(this.$popup[0], 'dxPopover');
+
+            this.$list = $('.dx-list');
+            this.list = this.$list.dxList('instance');
+
+            this.$search = $(this.instance._$searchBox);
+            this.search = this.instance._searchBox;
+        };
+    },
+    afterEach: function() {
+        executeAsyncMock.teardown();
+        this.clock.restore();
+        fx.off = false;
+    }
+}, function() {
+    QUnit.test('onScroll, handler attached via option', function(assert) {
+        const scrollStub = sinon.stub();
+        this.options.onScroll = scrollStub;
+        this.createLookup();
+        this.togglePopup();
+
+        this.list.scrollToItem(5);
+
+        assert.ok(scrollStub.calledOnce, 'onScroll event handled');
+    });
+
+    QUnit.test('onScroll, handler attached via "on" method', function(assert) {
+        const scrollStub = sinon.stub();
+        this.createLookup();
+        this.instance.on('scroll', scrollStub);
+        this.togglePopup();
+
+        this.list.scrollToItem(5);
+
+        assert.ok(scrollStub.calledOnce, 'onScroll event handled');
+    });
+
+    QUnit.test('change "onScroll" handler runtime', function(assert) {
+        const initialScrollStub = sinon.stub();
+        const newScrollStub = sinon.stub();
+        this.options.onScroll = initialScrollStub;
+        this.createLookup();
+        this.togglePopup();
+
+        this.instance.option('onScroll', newScrollStub);
+        this.list.scrollToItem(5);
+
+        assert.ok(initialScrollStub.notCalled, 'initial handled does not invoked');
+        assert.ok(newScrollStub.calledOnce, 'onScroll event handled');
+    });
+});
