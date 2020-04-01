@@ -413,12 +413,12 @@ const Drawer = Widget.inherit({
         if(this.option('shading')) {
             this._$shader.toggleClass(INVISIBLE_STATE_CLASS, !visible);
             this._$shader.css('visibility', visible ? 'visible' : 'hidden');
-
-            this.updateZIndex(visible);
         } else {
             this._$shader.toggleClass(INVISIBLE_STATE_CLASS, true);
             this._$shader.css('visibility', 'hidden');
         }
+
+        this.updateZIndex(visible);
     },
 
     updateZIndex(visible) {

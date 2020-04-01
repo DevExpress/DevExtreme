@@ -14,7 +14,7 @@ QUnit.testStart(() => {
     // $("#qunit-tests").prepend(drawerTesters.markup);
 });
 
-// TODO: templateSize, minSize, maxSize, shading, scrolling, rtlEnabled, animationEnabled, onRendered, _viewPortChangeHandler, target, template overflow and/or view overflow
+// TODO: templateSize, minSize, maxSize, scrolling, rtlEnabled, animationEnabled, onRendered, _viewPortChangeHandler, target, template overflow and/or view overflow
 const configs = [];
 
 ['shrink', 'push', 'overlap'].forEach(openedStateMode => {
@@ -298,7 +298,8 @@ configs.forEach(config => {
                     drawer,
                     drawerElement,
                     templateElement: drawerElement.querySelector('#template'),
-                    viewElement: drawerElement.querySelector('#view')
+                    viewElement: drawerElement.querySelector('#view'),
+                    shading: drawer.option('shading')
                 };
 
                 new dxLoadPanel(document.getElementById('loadPanel'), {
@@ -314,12 +315,12 @@ configs.forEach(config => {
                 if(config.openedStateMode === 'overlap') {
                     assert.strictEqual($('.dx-loadpanel-wrapper').css('zIndex'), '3002', 'loadPanelWrapper.zIndex');
                     assert.strictEqual($('.dx-loadpanel-content').css('zIndex'), '3002', 'loadPanelContent.zIndex');
+                    drawerTesters.checkShader(assert, env, { shader: env.shading ? '3500' : 'auto', panel: '3501' });
                 } else {
                     assert.strictEqual($('.dx-loadpanel-wrapper').css('zIndex'), '3001', 'loadPanelWrapper.zIndex');
                     assert.strictEqual($('.dx-loadpanel-content').css('zIndex'), '3001', 'loadPanelContent.zIndex');
+                    drawerTesters.checkShader(assert, env, { shader: env.shading ? '3500' : 'auto', panel: 'auto' });
                 }
-
-                drawerTesters.checkShader(assert, env, { shader: '3500', panel: '3501' });
             } finally {
                 dxOverlay.baseZIndex(prevBaseZIndex);
             }
