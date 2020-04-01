@@ -905,6 +905,28 @@ QUnit.test('Recurrence exception time should be considered when recurrent appoin
     assert.equal(this.scheduler.appointments.getAppointmentCount(), 3, 'Correct appointment count is rendered');
 });
 
+QUnit.test('Recurrence exception time should be considered when recurrent appointment rendering and timezones are set', function(assert) {
+    const task = {
+        text: 'No Recruiting students',
+        roomId: [5],
+        startDate: new Date(2017, 4, 15, 11, 0),
+        endDate: new Date(2017, 4, 15, 12, 0),
+        recurrenceRule: 'FREQ=DAILY;COUNT=3',
+        recurrenceException: '20170516T070000Z',
+        startDateTimeZone: 'Etc/UTC'
+    };
+
+    this.createInstance({
+        dataSource: [task],
+        timeZone: 'Europe/Paris',
+        views: ['month'],
+        currentView: 'month',
+        currentDate: new Date(2017, 4, 25)
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 3, 'Correct appointment count is rendered');
+});
+
 QUnit.test('The second appointment in recurring series in Month view should have correct width', function(assert) {
     this.createInstance({
         dataSource: [{
