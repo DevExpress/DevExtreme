@@ -1,20 +1,20 @@
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
-import devices from 'core/devices';
+import browser from 'core/utils/browser';
 import $ from 'jquery';
 
 QUnit.module('scrollToItem', () => {
-    if(devices.real().ios) {
+    if(browser.msie) {
         return;
     }
 
-    function createWrapper(config, dataSource) {
+    function createWrapper(config, items) {
         const wrapper = new TreeViewTestWrapper({
             displayExpr: 'id',
             scrollDirection: config.scrollDirection,
             height: 150,
             width: 150,
-            animationEnabled: false, // +400ms per test
-            dataSource: dataSource,
+            animationEnabled: false,
+            items: items,
             rtlEnabled: config.rtlEnabled,
             onContentReady: config.onContentReady
         });
@@ -143,7 +143,7 @@ QUnit.module('scrollToItem', () => {
         });
 
         wrapper.instance._scrollableContainer.scrollTo({ left: 0, top: 0 });
-        const itemData = wrapper.instance.option('dataSource')[0].items[0].items[0];
+        const itemData = wrapper.instance.option('items')[0].items[0].items[0];
         wrapper.instance.scrollToItem(itemData).done(() => {
             wrapper.checkNodeIsInVisibleArea(itemData.id);
             done();

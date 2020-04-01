@@ -237,6 +237,11 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     // E1057 is reserved. See https://js.devexpress.com/Documentation/19_2/ApiReference/UI_Widgets/Errors_and_Warnings/#E1057
 
     /**
+    * @name ErrorsUIWidgets.E1058
+    */
+    E1058: 'The "startDayHour" must be earlier than the "endDayHour"',
+
+    /**
     * @name ErrorsUIWidgets.W1001
     */
     W1001: 'The "key" option cannot be modified after initialization',
