@@ -528,7 +528,7 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
         assert.roughEqual(scheduler.appointments.getAppointment(0).outerWidth(), scheduler.workSpace.getCellWidth() * duration, 2.001, 'Appt width is correct after the day of the time ajusting');
     });
 
-    QUnit.test('Appointment should rendered correctly if end date appointment coincided translation on STD', function(assert) {
+    QUnit.test('Appointment should be rendered correctly if end date appointment coincided translation on STD', function(assert) {
         const scheduler = createWrapper({
             dataSource: [{
                 text: 'November 4',
