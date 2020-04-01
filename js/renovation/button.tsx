@@ -5,7 +5,17 @@ import themes from '../ui/themes';
 import { click } from '../events/short';
 import { getImageSourceType } from '../core/utils/icon';
 import { initConfig, showWave, hideWave } from '../ui/widget/utils.ink_ripple';
-import { Component, ComponentBindings, Effect, JSXComponent, OneWay, Ref, Template, Event } from 'devextreme-generator/component_declaration/common';
+import {
+    Component,
+    ComponentBindings,
+    Effect,
+    Event,
+    JSXComponent,
+    Method,
+    OneWay,
+    Ref,
+    Template,
+} from 'devextreme-generator/component_declaration/common';
 import Icon from './icon';
 import Widget, { WidgetInput } from './widget';
 
@@ -56,6 +66,7 @@ export const viewFunction = (viewModel: Button) => {
         && <Icon source={viewModel.iconSource} position={iconPosition}/>;
 
     return <Widget
+        ref={viewModel.widgetRef}
         accessKey={viewModel.props.accessKey}
         activeStateEnabled={viewModel.props.activeStateEnabled}
         aria={viewModel.aria}
@@ -131,6 +142,7 @@ const defaultOptionRules = createDefaultOptionRules<ButtonInput>([{
 export default class Button extends JSXComponent<ButtonInput> {
     @Ref() contentRef!: HTMLDivElement;
     @Ref() submitInputRef!: HTMLInputElement;
+    @Ref() widgetRef!: Widget;
 
     @Effect()
     contentReadyEffect() {
@@ -140,6 +152,11 @@ export default class Button extends JSXComponent<ButtonInput> {
         const { onContentReady } = this.props;
 
         onContentReady!({ element: this.contentRef.parentNode });
+    }
+
+    @Method()
+    focus() {
+        this.widgetRef.focus();
     }
 
     onActive(event: Event) {

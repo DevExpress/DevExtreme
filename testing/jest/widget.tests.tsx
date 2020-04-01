@@ -1,5 +1,5 @@
-import Widget from '../../js/renovation/widget.p.js';
-import { h } from 'preact';
+import Widget, { WidgetRef } from '../../js/renovation/widget.p.js';
+import { h, createRef } from 'preact';
 import { clear as clearEventHandlers, defaultEvent, emit, eventHandlers, fakeClickEvent, EVENT } from './utils/events-mock';
 import { mount, shallow } from 'enzyme';
 
@@ -479,6 +479,20 @@ describe('Widget', () => {
                 emit(EVENT.shown);
                 expect(onVisibilityChange).toHaveBeenCalledTimes(2);
                 expect(onVisibilityChange).toHaveBeenLastCalledWith(true);
+            });
+        });
+    });
+
+    describe('API', () => {
+        describe('Focus', () => {
+            it('should change state when called', () => {
+                const widgetAPIRef = createRef<WidgetRef>()
+                const widget = render({ ref: widgetAPIRef, focusStateEnabled: true });
+
+                expect(widget.hasClass('dx-state-focused')).toBe(false);
+
+                widgetAPIRef.current.focus();
+                expect(widget.hasClass('dx-state-focused')).toBe(true);
             });
         });
     });

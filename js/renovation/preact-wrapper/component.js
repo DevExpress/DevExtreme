@@ -1,9 +1,9 @@
-import Widget from '../../ui/widget/ui.widget';
+import DOMComponent from '../../core/dom_component';
 import * as Preact from 'preact';
 import { extend } from '../../core/utils/extend';
 import { getInnerActionName } from './utils';
 
-export default class PreactWrapper extends Widget {
+export default class PreactWrapper extends DOMComponent {
     getInstance() {
         return this;
     }
@@ -59,7 +59,8 @@ export default class PreactWrapper extends Widget {
         this.option(getInnerActionName(name), this._createActionByOption(name, config));
     }
 
-    _refresh() {
-        this._renderComponent();
+    // Public API
+    repaint() {
+        this._refresh();
     }
 }
