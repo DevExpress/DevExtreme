@@ -314,20 +314,17 @@ QUnit.testStart(function() {
         { startDayHour: 2, endDayHour: 0 }
     ].forEach(dayHours => {
         QUnit.test(`Generate error if startDayHour: ${dayHours.startDayHour} >= endDayHour: ${dayHours.endDayHour}`, function(assert) {
-            const that = this;
             assert.throws(
-                function() {
-                    that.instance.option({
+                () => {
+                    this.instance.option({
                         currentDate: new Date(2015, 4, 24),
                         views: ['day'],
                         currentView: 'day',
                         startDayHour: dayHours.startDayHour,
                         endDayHour: dayHours.endDayHour
-                    }).bind(that);
+                    });
                 },
-                function(e) {
-                    return /E1058/.test(e.message);
-                },
+                e => /E1058/.test(e.message),
                 'E1058 Error message'
             );
         });
