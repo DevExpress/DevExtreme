@@ -308,6 +308,27 @@ QUnit.testStart(function() {
             currentView: 'month'
         });
     });
+
+    [
+        { startDayHour: 0, endDayHour: 0 },
+        { startDayHour: 2, endDayHour: 0 }
+    ].forEach(dayHours => {
+        QUnit.test(`Generate error if startDayHour: ${dayHours.startDayHour} >= endDayHour: ${dayHours.endDayHour}`, function(assert) {
+            assert.throws(
+                () => {
+                    this.instance.option({
+                        currentDate: new Date(2015, 4, 24),
+                        views: ['day'],
+                        currentView: 'day',
+                        startDayHour: dayHours.startDayHour,
+                        endDayHour: dayHours.endDayHour
+                    });
+                },
+                e => /E1058/.test(e.message),
+                'E1058 Error message'
+            );
+        });
+    });
 })('Initialization');
 
 (function() {
@@ -2071,6 +2092,31 @@ QUnit.testStart(function() {
         this.instance.endUpdate();
         this.clock.tick(100);
         assert.equal(resourceCounter, 2, 'Resources was reloaded one more time after dataSource option changing');
+    });
+
+
+    [
+        { startDayHour: 0, endDayHour: 0 },
+        { startDayHour: 2, endDayHour: 0 }
+    ].forEach(dayHours => {
+        QUnit.test(`Generate error if option changed to startDayHour: ${dayHours.startDayHour} >= endDayHour: ${dayHours.endDayHour}`, function(assert) {
+            this.createInstance({
+                currentDate: new Date(2015, 4, 24),
+                views: ['day'],
+                currentView: 'day',
+                startDayHour: 8,
+                endDayHour: 12
+            });
+
+            assert.throws(
+                () => {
+                    this.instance.option('startDayHour', dayHours.startDayHour);
+                    this.instance.option('endDayHour', dayHours.endDayHour);
+                },
+                e => /E1058/.test(e.message),
+                'E1058 Error message'
+            );
+        });
     });
 
 })('Options');
