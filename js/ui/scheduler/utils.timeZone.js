@@ -35,13 +35,13 @@ const calculateTimezoneByValue = (timezone, date) => {
     return timezone;
 };
 
-const getDaylightOffsetByTimezone = (startDate, endDate, timeZone) => {
+const _getDaylightOffsetByTimezone = (startDate, endDate, timeZone) => {
     return calculateTimezoneByValue(timeZone, startDate) - calculateTimezoneByValue(timeZone, endDate);
 };
 
 const getCorrectedDateByDaylightOffsets = (convertedOriginalStartDate, convertedDate, date, timeZone, startDateTimezone) => {
-    const daylightOffsetByCommonTimezone = getDaylightOffsetByTimezone(convertedOriginalStartDate, convertedDate, timeZone);
-    const daylightOffsetByAppointmentTimezone = getDaylightOffsetByTimezone(convertedOriginalStartDate, convertedDate, startDateTimezone);
+    const daylightOffsetByCommonTimezone = _getDaylightOffsetByTimezone(convertedOriginalStartDate, convertedDate, timeZone);
+    const daylightOffsetByAppointmentTimezone = _getDaylightOffsetByTimezone(convertedOriginalStartDate, convertedDate, startDateTimezone);
     const diff = daylightOffsetByCommonTimezone - daylightOffsetByAppointmentTimezone;
 
     return new Date(date.getTime() - diff * toMs('hour'));
@@ -51,9 +51,9 @@ const correctRecurrenceExceptionByTimezone = (exception, exceptionByStartDate, t
     let timezoneOffset = (exception.getTimezoneOffset() - exceptionByStartDate.getTimezoneOffset()) / MINUTES_IN_HOUR;
 
     if(startDateTimeZone) {
-        timezoneOffset = getDaylightOffsetByTimezone(exceptionByStartDate, exception, startDateTimeZone);
+        timezoneOffset = _getDaylightOffsetByTimezone(exceptionByStartDate, exception, startDateTimeZone);
     } else if(timeZone) {
-        timezoneOffset = getDaylightOffsetByTimezone(exceptionByStartDate, exception, timeZone);
+        timezoneOffset = _getDaylightOffsetByTimezone(exceptionByStartDate, exception, timeZone);
     }
 
     return new Date(exception.getTime() + timezoneOffset * toMs('hour'));
@@ -81,7 +81,7 @@ const utils = {
     getCorrectedDateByDaylightOffsets: getCorrectedDateByDaylightOffsets,
     isTimezoneChangeInDate: isTimezoneChangeInDate,
     isSameAppointmentDates: isSameAppointmentDates,
-    getDaylightOffsetByTimezone: getDaylightOffsetByTimezone,
+    _getDaylightOffsetByTimezone: _getDaylightOffsetByTimezone,
     correctRecurrenceExceptionByTimezone: correctRecurrenceExceptionByTimezone
 };
 
