@@ -230,12 +230,21 @@ export class SchedulerTestWrapper {
 
         this.navigator = {
             getNavigator: () => $('.dx-scheduler-navigator'),
-            getCaption: () => $('.dx-scheduler-navigator').find('.dx-scheduler-navigator-caption').text(),
+            getCaptionElement: () => {
+                return this.navigator.getNavigator().find('.dx-scheduler-navigator-caption');
+            },
+            getCaption: () => this.navigator.getCaptionElement().text(),
             clickOnPrevButton: () => {
                 this.navigator.getNavigator().find('.dx-scheduler-navigator-previous').trigger('dxclick');
             },
             clickOnNextButton: () => {
                 this.navigator.getNavigator().find('.dx-scheduler-navigator-next').trigger('dxclick');
+            },
+            click: () => {
+                this.navigator.getCaptionElement().trigger('dxclick');
+            },
+            isPopupVisible: () => {
+                return $('.dx-scheduler-navigator-calendar-popover > .dx-overlay-content').is(':visible');
             }
         },
 

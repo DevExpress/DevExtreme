@@ -3,6 +3,8 @@ import fx from 'animation/fx';
 import 'ui/scheduler/ui.scheduler';
 import 'common.css!';
 import 'generic_light.css!';
+import dxPopup from 'ui/popup';
+import { createWrapper } from './helpers.js';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(
@@ -151,6 +153,21 @@ QUnit.module('Integration: Date navigator with min and max values', moduleConfig
 });
 
 QUnit.module('Integration: Date navigator', moduleConfig, function() {
+    [false, true].forEach(value => {
+        QUnit.test(`Date navigator should be correctly work, if deferRendering property set to ${value} (T874944)`, function(assert) {
+            dxPopup.defaultOptions({
+                options: {
+                    deferRendering: value
+                }
+            });
+
+            const scheduler = createWrapper();
+            scheduler.navigator.click();
+
+            assert.ok(scheduler.navigator.isPopupVisible(), 'Navigator popup should be visible without errors');
+        });
+    });
+
     QUnit.test('Click on the \'next\' button should update currentDate', function(assert) {
 
         this.createInstance({ currentDate: new Date(2015, 1, 9) });
