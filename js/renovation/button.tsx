@@ -222,10 +222,4 @@ export default class Button extends JSXComponent<ButtonInput> {
 
         return (icon || type === 'back') ? (icon || 'back') : '';
     }
-
-    get rootNode() {
-        const { rootNode } = this.props;
-
-        return rootNode;
-    }
 }
