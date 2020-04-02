@@ -41,7 +41,7 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
             name
         }).done(() => {
             if(parentDir && !parentDir.isRoot()) {
-                parentDir.hasSubDirs = true;
+                parentDir.hasSubDirectories = true;
             }
         });
     }

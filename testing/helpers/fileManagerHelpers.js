@@ -704,7 +704,7 @@ const createFileSystemItem = (parentPath, dataObj) => {
     item.size = dataObj.size;
     item.dataItem = dataObj;
     if(dataObj.isDirectory) {
-        item.hasSubDirs = true;
+        item.hasSubDirectories = true;
     }
     return item;
 };

@@ -1702,6 +1702,8 @@ declare module DevExpress.fileManagement {
         dataItem: any;
         /** @name FileSystemItem.dateModified */
         dateModified: Date;
+        /** @name FileSystemItem.hasSubDirectories */
+        hasSubDirectories: boolean;
         /** @name FileSystemItem.isDirectory */
         isDirectory: boolean;
         /** @name FileSystemItem.key */

@@ -67,6 +67,14 @@ export default class FileSystemItem {
     isDirectory: boolean;
 
     /**
+     * @docid FileSystemItemFields.hasSubDirectories
+     * @type boolean
+     * @prevFileNamespace DevExpress.fileManagement
+     * @public
+     */
+    hasSubDirectories: boolean;
+
+    /**
      * @docid FileSystemItemFields.thumbnail
      * @type string
      * @prevFileNamespace DevExpress.fileManagement
