@@ -473,6 +473,31 @@ QUnit.module('functionality', moduleSetup, () => {
         assert.deepEqual(selectBox._list.option('items'), []);
     });
 
+    QUnit.test('no exceptions after dataSource reset during typing', function(assert) {
+        try {
+            const $element = $('#selectBox');
+            const selectBox = $element.dxSelectBox({
+                dataSource: ['one', 'two'],
+                searchTimeout: 0,
+                searchEnabled: true
+            }).dxSelectBox('instance');
+
+            const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+            const keyboard = keyboardMock($input);
+
+            keyboard
+                .focus()
+                .type('o');
+
+            selectBox.option('dataSource', null);
+
+            keyboard.type('n');
+            assert.ok(true, 'no errors');
+        } catch(e) {
+            assert.ok(false, `The '${e.message}' is raised`);
+        }
+    });
+
     QUnit.test('list item obtained focus only after press on control key', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'test does not actual for mobile devices');
