@@ -33,9 +33,17 @@ export default class PreactWrapper extends DOMComponent {
                 }
                 return a;
             }, {}), options.elementAttr);
-        } else if(attributes.id) {
-            // NOTE: workaround to save container id
-            options.elementAttr = extend({ [attributes.id.name]: attributes.id.value }, options.elementAttr);
+        } else {
+            if(attributes.id) {
+                // NOTE: workaround to save container id
+                options.elementAttr = extend({ [attributes.id.name]: attributes.id.value }, options.elementAttr);
+            }
+            if(attributes.class) {
+                // NOTE: workaround to save custom classes on type changes
+                options.classNames = attributes.class.value
+                    .split(' ')
+                    .filter(name => name.indexOf('dx-') < 0);
+            }
         }
 
         return options;
