@@ -965,13 +965,7 @@ const Form = Widget.inherit({
 
                 if(optionName === 'visible') { // T874843
                     const formItems = this.option(getFullOptionName(itemPath, 'items'));
-                    if(formItems && formItems.length) {
-                        const layoutManagerItems = layoutManager.option('items');
-                        formItems.forEach((item, index) => {
-                            const layoutItem = layoutManagerItems[index];
-                            layoutItem.visibleIndex = item.visibleIndex;
-                        });
-                    }
+                    layoutManager.setItemsVisibleIndexesByFormItems(formItems);
                 }
                 this._setLayoutManagerItemOption(layoutManager, fullOptionName, value, itemPath);
                 return true;

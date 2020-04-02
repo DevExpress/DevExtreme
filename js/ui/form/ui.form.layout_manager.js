@@ -28,6 +28,7 @@ import '../number_box';
 import '../check_box';
 import '../date_box';
 import '../button';
+import { getOptionNameFromFullName } from './ui.form.utils';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 const FIELD_ITEM_CLASS = 'dx-field-item';
@@ -111,6 +112,7 @@ const LayoutManager = Widget.inherit({
         this._itemsRunTimeInfo = new FormItemsRunTimeInfo();
         this._updateReferencedOptions(layoutData);
         this._initDataAndItems(layoutData);
+        this._sortItems();
     },
 
     _dispose: function() {
@@ -194,8 +196,6 @@ const LayoutManager = Widget.inherit({
             }
 
             this._items = processedItems;
-
-            this._sortItems();
         }
     },
 
@@ -1146,14 +1146,20 @@ const LayoutManager = Widget.inherit({
                     }
                 } else {
                     this._initDataAndItems(args.value);
+                    this._sortItems();
                     this._invalidate();
                 }
                 break;
-            case 'items':
+            case 'items': {
                 this._cleanItemWatchers();
                 this._initDataAndItems(args.value);
+                const optionName = getOptionNameFromFullName(args.fullName);
+                if(optionName === 'visible' || optionName === 'visibleIndex') {
+                    this._sortItems();
+                }
                 this._invalidate();
                 break;
+            }
             case 'alignItemLabels':
             case 'labelLocation':
             case 'requiredMessage':
@@ -1238,6 +1244,16 @@ const LayoutManager = Widget.inherit({
         const responsiveBox = this._responsiveBox || component;
         if(responsiveBox) {
             return responsiveBox.option('currentScreenFactor') === responsiveBox.option('singleColumnScreen');
+        }
+    },
+
+    setItemsVisibleIndexesByFormItems(formItems) {
+        if(formItems && formItems.length) {
+            const layoutManagerItems = this.option('items');
+            formItems.forEach((item, index) => {
+                const layoutItem = layoutManagerItems[index];
+                layoutItem.visibleIndex = item.visibleIndex;
+            });
         }
     },
 

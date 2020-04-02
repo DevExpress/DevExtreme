@@ -2113,7 +2113,7 @@ QUnit.test('Changing the item\'s option via the itemOption when these options ar
 });
 
 QUnit.module('T874843', () => {
-    QUnit.test('itemsCount4 -> form.toggleVisible(field2, field3) 3 times', function(assert) {
+    QUnit.test('itemsCount4 -> form.toggleVisible(field1, field2, field3)', function(assert) {
         const form = $('#form').dxForm({
             items: [
                 { dataField: 'field1' },
@@ -2133,7 +2133,7 @@ QUnit.module('T874843', () => {
         assert.equal($inputs.eq(3).attr('name'), 'field4', 'item4 must be field4');
     });
 
-    QUnit.test('itemsCount4, item3.visibleIndex=0 -> form.toggleVisible(field2, field3) 3 times', function(assert) {
+    QUnit.test('itemsCount4, item3.visibleIndex=0 -> form.toggleVisible(field1, field2, field3)', function(assert) {
         const form = $('#form').dxForm({
             items: [
                 { dataField: 'field1' },
@@ -2152,7 +2152,7 @@ QUnit.module('T874843', () => {
         assert.equal($inputs.eq(3).attr('name'), 'field4', 'item4 must be field4');
     });
 
-    QUnit.test('group.itemsCount4 -> form.toggleVisible(field2, field3) 3 times', function(assert) {
+    QUnit.test('group.itemsCount4 -> form.toggleVisible(field1, field2, field3)', function(assert) {
         const form = $('#form').dxForm({
             items: [{
                 itemType: 'group',
@@ -2176,7 +2176,7 @@ QUnit.module('T874843', () => {
         assert.equal($inputs.eq(3).attr('name'), 'field4', 'item4 must be field4');
     });
 
-    QUnit.test('group.itemsCount4, item3.visibleIndex=0 -> form.toggleVisible(field2, field3) 3 times', function(assert) {
+    QUnit.test('group.itemsCount4, item3.visibleIndex=0 -> form.toggleVisible(field1, field2, field3)', function(assert) {
         const form = $('#form').dxForm({
             items: [{
                 itemType: 'group',
@@ -2200,7 +2200,7 @@ QUnit.module('T874843', () => {
         assert.equal($inputs.eq(3).attr('name'), 'field4', 'item4 must be field4');
     });
 
-    QUnit.test('group.group.itemsCount4 -> form.toggleVisible(field2, field3) 3 times', function(assert) {
+    QUnit.test('group.group.itemsCount4 -> form.toggleVisible(field1, field2, field3)', function(assert) {
         const form = $('#form').dxForm({
             items: [{
                 itemType: 'group',
@@ -2229,7 +2229,7 @@ QUnit.module('T874843', () => {
         assert.equal($inputs.eq(3).attr('name'), 'field4', 'item4 must be field4');
     });
 
-    QUnit.test('group.group.itemsCount4, item3.visibleIndex=0 -> form.toggleVisible(field2, field3) 3 times', function(assert) {
+    QUnit.test('group.group.itemsCount4, item3.visibleIndex=0 -> form.toggleVisible(field1, field2, field3)', function(assert) {
         const form = $('#form').dxForm({
             items: [{
                 itemType: 'group',
@@ -2256,6 +2256,28 @@ QUnit.module('T874843', () => {
         assert.equal($inputs.eq(1).attr('name'), 'field1', 'item2 must be field1');
         assert.equal($inputs.eq(2).attr('name'), 'field2', 'item3 must be field2');
         assert.equal($inputs.eq(3).attr('name'), 'field4', 'item4 must be field4');
+    });
+
+    QUnit.test('itemsCount4 -> form.changeVisibleIndex(field1, field2, field3, field4)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [
+                { dataField: 'field1' },
+                { dataField: 'field2' },
+                { dataField: 'field3' },
+                { dataField: 'field4' }
+            ]
+        }).dxForm('instance');
+
+        form.itemOption('field1', 'visibleIndex', 3);
+        form.itemOption('field2', 'visibleIndex', 4);
+        form.itemOption('field3', 'visibleIndex', 1);
+        form.itemOption('field4', 'visibleIndex', 2);
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field3', 'item1 must be field1');
+        assert.equal($inputs.eq(1).attr('name'), 'field4', 'item2 must be field2');
+        assert.equal($inputs.eq(2).attr('name'), 'field1', 'item3 must be field3');
+        assert.equal($inputs.eq(3).attr('name'), 'field2', 'item4 must be field4');
     });
 });
 
