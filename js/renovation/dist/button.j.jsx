@@ -104,6 +104,10 @@ class Button extends Component {
             case 'onOptionChanged':
                 super._optionChanged(option);
                 break;
+            case 'useInkRipple':
+                // NOTE: we should use "refresh", but cannot define "_empty" method
+                value !== true && this.$element().empty();
+                break;
         }
 
         super._optionChanged();
