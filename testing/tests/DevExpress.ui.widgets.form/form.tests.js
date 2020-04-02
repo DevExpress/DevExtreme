@@ -2123,15 +2123,14 @@ QUnit.module('T874843', () => {
             ]
         }).dxForm('instance');
 
-        [true, false, true].forEach(boolValue => {
-            form.itemOption('field2', 'visible', !boolValue);
-            form.itemOption('field3', 'visible', boolValue);
-        });
+        [1, 2, 3].forEach(index => form.itemOption('field' + index, 'visible', false));
+        [1, 2, 3].forEach(index => form.itemOption('field' + index, 'visible', true));
 
         const $inputs = form.$element().find('input');
         assert.equal($inputs.eq(0).attr('name'), 'field1', 'item1 must be field1');
-        assert.equal($inputs.eq(1).attr('name'), 'field3', 'item2 must be field3');
-        assert.equal($inputs.eq(2).attr('name'), 'field4', 'item3 must be field4');
+        assert.equal($inputs.eq(1).attr('name'), 'field2', 'item2 must be field2');
+        assert.equal($inputs.eq(2).attr('name'), 'field3', 'item3 must be field3');
+        assert.equal($inputs.eq(3).attr('name'), 'field4', 'item4 must be field4');
     });
 
     QUnit.test('itemsCount4, item3.visibleIndex=0 -> form.toggleVisible(field2, field3) 3 times', function(assert) {
@@ -2143,15 +2142,14 @@ QUnit.module('T874843', () => {
                 { dataField: 'field4' }]
         }).dxForm('instance');
 
-        [true, false, true].forEach(boolValue => {
-            form.itemOption('field2', 'visible', !boolValue);
-            form.itemOption('field3', 'visible', boolValue);
-        });
+        [1, 2, 3].forEach(index => form.itemOption('field' + index, 'visible', false));
+        [1, 2, 3].forEach(index => form.itemOption('field' + index, 'visible', true));
 
         const $inputs = form.$element().find('input');
         assert.equal($inputs.eq(0).attr('name'), 'field3', 'item1 must be field3');
         assert.equal($inputs.eq(1).attr('name'), 'field1', 'item2 must be field1');
-        assert.equal($inputs.eq(2).attr('name'), 'field4', 'item3 must be field4');
+        assert.equal($inputs.eq(2).attr('name'), 'field2', 'item3 must be field2');
+        assert.equal($inputs.eq(3).attr('name'), 'field4', 'item4 must be field4');
     });
 
     QUnit.test('group.itemsCount4 -> form.toggleVisible(field2, field3) 3 times', function(assert) {
@@ -2168,15 +2166,14 @@ QUnit.module('T874843', () => {
             }]
         }).dxForm('instance');
 
-        [true, false, true].forEach(boolValue => {
-            form.itemOption('group.field2', 'visible', !boolValue);
-            form.itemOption('group.field3', 'visible', boolValue);
-        });
+        [1, 2, 3].forEach(index => form.itemOption('group.field' + index, 'visible', false));
+        [1, 2, 3].forEach(index => form.itemOption('group.field' + index, 'visible', true));
 
         const $inputs = form.$element().find('input');
         assert.equal($inputs.eq(0).attr('name'), 'field1', 'item1 must be field1');
-        assert.equal($inputs.eq(1).attr('name'), 'field3', 'item2 must be field3');
-        assert.equal($inputs.eq(2).attr('name'), 'field4', 'item3 must be field4');
+        assert.equal($inputs.eq(1).attr('name'), 'field2', 'item2 must be field2');
+        assert.equal($inputs.eq(2).attr('name'), 'field3', 'item3 must be field3');
+        assert.equal($inputs.eq(3).attr('name'), 'field4', 'item4 must be field4');
     });
 
     QUnit.test('group.itemsCount4, item3.visibleIndex=0 -> form.toggleVisible(field2, field3) 3 times', function(assert) {
@@ -2193,15 +2190,14 @@ QUnit.module('T874843', () => {
             }]
         }).dxForm('instance');
 
-        [true, false, true].forEach(boolValue => {
-            form.itemOption('group.field2', 'visible', !boolValue);
-            form.itemOption('group.field3', 'visible', boolValue);
-        });
+        [1, 2, 3].forEach(index => form.itemOption('group.field' + index, 'visible', false));
+        [1, 2, 3].forEach(index => form.itemOption('group.field' + index, 'visible', true));
 
         const $inputs = form.$element().find('input');
         assert.equal($inputs.eq(0).attr('name'), 'field3', 'item1 must be field3');
         assert.equal($inputs.eq(1).attr('name'), 'field1', 'item2 must be field1');
-        assert.equal($inputs.eq(2).attr('name'), 'field4', 'item3 must be field4');
+        assert.equal($inputs.eq(2).attr('name'), 'field2', 'item3 must be field2');
+        assert.equal($inputs.eq(3).attr('name'), 'field4', 'item4 must be field4');
     });
 
     QUnit.test('group.group.itemsCount4 -> form.toggleVisible(field2, field3) 3 times', function(assert) {
@@ -2223,15 +2219,14 @@ QUnit.module('T874843', () => {
             }]
         }).dxForm('instance');
 
-        [true, false, true].forEach(boolValue => {
-            form.itemOption('group.innerGroup.field2', 'visible', !boolValue);
-            form.itemOption('group.innerGroup.field3', 'visible', boolValue);
-        });
+        [1, 2, 3].forEach(index => form.itemOption('group.innerGroup.field' + index, 'visible', false));
+        [1, 2, 3].forEach(index => form.itemOption('group.innerGroup.field' + index, 'visible', true));
 
         const $inputs = form.$element().find('input');
         assert.equal($inputs.eq(0).attr('name'), 'field1', 'item1 must be field1');
-        assert.equal($inputs.eq(1).attr('name'), 'field3', 'item2 must be field3');
-        assert.equal($inputs.eq(2).attr('name'), 'field4', 'item3 must be field4');
+        assert.equal($inputs.eq(1).attr('name'), 'field2', 'item2 must be field2');
+        assert.equal($inputs.eq(2).attr('name'), 'field3', 'item3 must be field3');
+        assert.equal($inputs.eq(3).attr('name'), 'field4', 'item4 must be field4');
     });
 
     QUnit.test('group.group.itemsCount4, item3.visibleIndex=0 -> form.toggleVisible(field2, field3) 3 times', function(assert) {
@@ -2253,15 +2248,14 @@ QUnit.module('T874843', () => {
             }]
         }).dxForm('instance');
 
-        [true, false, true].forEach(boolValue => {
-            form.itemOption('group.innerGroup.field2', 'visible', !boolValue);
-            form.itemOption('group.innerGroup.field3', 'visible', boolValue);
-        });
+        [1, 2, 3].forEach(index => form.itemOption('group.innerGroup.field' + index, 'visible', false));
+        [1, 2, 3].forEach(index => form.itemOption('group.innerGroup.field' + index, 'visible', true));
 
         const $inputs = form.$element().find('input');
         assert.equal($inputs.eq(0).attr('name'), 'field3', 'item1 must be field3');
         assert.equal($inputs.eq(1).attr('name'), 'field1', 'item2 must be field1');
-        assert.equal($inputs.eq(2).attr('name'), 'field4', 'item3 must be field4');
+        assert.equal($inputs.eq(2).attr('name'), 'field2', 'item3 must be field2');
+        assert.equal($inputs.eq(3).attr('name'), 'field4', 'item4 must be field4');
     });
 });
 
