@@ -1,5 +1,6 @@
 const sass = require('gulp-dart-sass');
 const gulp = require('gulp');
+const del = require('del');
 const config = require('./config');
 const dataUri = require('../gulp-data-uri');
 const cleanCss = require('gulp-clean-css');
@@ -30,7 +31,12 @@ function compile() {
     ]);
 }
 
-gulp.task('compile-scss', gulp.series(
+function clean() {
+    return del(`${tmpPath}`);
+}
+
+gulp.task('compile', gulp.series(
     processDataUri,
-    compile
+    compile,
+    clean
 ));
