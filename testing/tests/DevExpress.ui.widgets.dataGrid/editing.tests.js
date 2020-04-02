@@ -11811,6 +11811,45 @@ QUnit.test('The validation message should be decreased when there is not enough 
     assert.strictEqual(overlayPosition.at, 'bottom left', 'position.at');
 });
 
+QUnit.test('Row - An untouched cell should not be validated (T872003)', function(assert) {
+    // arrange
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    rowsView.render(testElement);
+
+    this.applyOptions({
+        editing: {
+            mode: 'row'
+        },
+        columns: [
+            {
+                dataField: 'name'
+            },
+            {
+                dataField: 'age',
+                validationRules: [
+                    {
+                        type: 'custom',
+                        validationCallback: function() {
+                            return false;
+                        }
+                    }
+                ]
+            }
+        ]
+    });
+
+    this.editRow(0);
+    this.clock.tick();
+
+    const $secondCell = $(this.getCellElement(0, 1));
+
+    // assert
+    assert.notOk($secondCell.hasClass('dx-focused'), 'cell is not focused');
+    assert.notOk($secondCell.hasClass('dx-datagrid-invalid'), 'cell is not marked as invalid');
+});
+
 
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
     beforeEach: function() {
