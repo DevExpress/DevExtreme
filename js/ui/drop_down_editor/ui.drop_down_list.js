@@ -664,12 +664,12 @@ const DropDownList = DropDownEditor.inherit({
         this._clearSearchTimer();
 
         const dataSource = this._dataSource;
-
-        dataSource.searchExpr(this.option('searchExpr') || this._displayGetterExpr());
-        dataSource.searchOperation(this.option('searchMode'));
-        dataSource.searchValue(searchValue);
-
-        return dataSource.load().done(this._dataSourceFiltered.bind(this, searchValue));
+        if(dataSource) {
+            dataSource.searchExpr(this.option('searchExpr') || this._displayGetterExpr());
+            dataSource.searchOperation(this.option('searchMode'));
+            dataSource.searchValue(searchValue);
+            dataSource.load().done(this._dataSourceFiltered.bind(this, searchValue));
+        }
     },
 
     _clearFilter: function() {
