@@ -3401,7 +3401,7 @@ QUnit.module('default options', {
 
 QUnit.module('Events', {
     before: function() {
-        this.items = Array.from(Array(50), (item, index) => index + 1);
+        this.items = [...new Array(50)].map((item, index) => index + 1);
     },
     beforeEach: function() {
         fx.off = true;
