@@ -72,7 +72,6 @@ import pointerMock from '../../helpers/pointerMock.js';
 import ajaxMock from '../../helpers/ajaxMock.js';
 import themes from 'ui/themes';
 import pointerEvents from 'events/pointer';
-import clickEvent from 'events/click';
 import eventUtils from 'events/utils';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import 'ui/scroll_view';
@@ -83,10 +82,7 @@ const CELL_UPDATED_CLASS = 'dx-datagrid-cell-updated-animation';
 const ROW_INSERTED_CLASS = 'dx-datagrid-row-inserted-animation';
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 
-const device = devices.real();
-const isMobile = device.deviceType !== 'desktop';
-const pointerEventName = !isMobile ? pointerEvents.down : clickEvent.name;
-const CLICK_EVENT = eventUtils.addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation');
+const CLICK_EVENT = eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation');
 
 const baseModuleConfig = {
     beforeEach: function() {
