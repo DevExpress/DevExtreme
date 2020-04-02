@@ -163,8 +163,8 @@ const Sortable = Draggable.inherit({
 
         if($scrollable) {
             const offset = $scrollable.offset();
-            const validY = offset.top + $scrollable.height() >= event.pageY && offset.top < event.pageY;
-            const validX = offset.left + $scrollable.width() >= event.pageX && offset.left < event.pageX;
+            const validY = offset.top + $scrollable.height() >= event.pageY && offset.top <= event.pageY;
+            const validX = offset.left + $scrollable.width() >= event.pageX && offset.left <= event.pageX;
 
             return validY && validX;
         }

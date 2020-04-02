@@ -2775,7 +2775,7 @@ QUnit.module('Dragging between sortables with scroll', {
         });
     }
 }, () => {
-    function dragBetweenSortableTest(that, assert, scrollPos, dragPos) {
+    function dragBetweenSortableTest(that, assert, scroll, dragPos) {
         // arrange
         const onAdd = sinon.spy();
         const onRemove = sinon.spy();
@@ -2789,7 +2789,8 @@ QUnit.module('Dragging between sortables with scroll', {
         });
 
         // act
-        that.$scrolls[1][0].scroll(scrollPos.x, scrollPos.y);
+        that.$elements[1].scrollLeft(scroll.left);
+        that.$elements[1].scrollTop(scroll.top);
 
         pointerMock(that.$elements[0].children().eq(0)).start().down().move(dragPos.x, dragPos.y).move(1, 1).up();
 
@@ -2833,8 +2834,8 @@ QUnit.module('Dragging between sortables with scroll', {
             }
 
             dragBetweenSortableTest(this, assert, {
-                x: 0,
-                y: 0
+                left: 0,
+                top: 0
             }, {
                 x: 650,
                 y: 800
@@ -2849,8 +2850,8 @@ QUnit.module('Dragging between sortables with scroll', {
             }
 
             dragBetweenSortableTest(this, assert, {
-                x: 0,
-                y: 0
+                left: 0,
+                top: 0
             }, {
                 x: 800,
                 y: 650
@@ -2861,8 +2862,8 @@ QUnit.module('Dragging between sortables with scroll', {
             !needBothScrolls && $('.draggable').height(25);
 
             dragBetweenSortableTest(this, assert, {
-                x: 500,
-                y: 500
+                left: 500,
+                top: 500
             }, {
                 x: 650,
                 y: 400
@@ -2873,8 +2874,8 @@ QUnit.module('Dragging between sortables with scroll', {
             !needBothScrolls && $('.draggable').height(25);
 
             dragBetweenSortableTest(this, assert, {
-                x: 500,
-                y: 500
+                left: 500,
+                top: 500
             }, {
                 x: 400,
                 y: 650
