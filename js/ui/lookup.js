@@ -320,6 +320,20 @@ const Lookup = DropDownList.inherit({
         ]);
     },
 
+    _init: function() {
+        this.callBase();
+
+        this._createScrollAction();
+    },
+
+    _createScrollAction: function() {
+        this._scrollAction = this._createActionByOption('onScroll');
+    },
+
+    _scrollHandler: function(e) {
+        this._scrollAction(e);
+    },
+
     _initTemplates: function() {
         this.callBase();
         this._templateManager.addDefaultTemplates({
@@ -811,7 +825,7 @@ const Lookup = DropDownList.inherit({
             pulledDownText: this.option('pulledDownText'),
             refreshingText: this.option('refreshingText'),
             pageLoadingText: this.option('pageLoadingText'),
-            onScroll: this.option('onScroll'),
+            onScroll: this._scrollHandler.bind(this),
             onPullRefresh: this.option('onPullRefresh'),
             onPageLoading: this.option('onPageLoading'),
             pageLoadMode: this.option('pageLoadMode'),
@@ -973,13 +987,15 @@ const Lookup = DropDownList.inherit({
             case 'pulledDownText':
             case 'refreshingText':
             case 'pageLoadingText':
-            case 'onScroll':
             case 'onPullRefresh':
             case 'onPageLoading':
             case 'nextButtonText':
             case 'grouped':
             case 'groupTemplate':
                 this._setListOption(name);
+                break;
+            case 'onScroll':
+                this._createScrollAction();
                 break;
             case 'pageLoadMode':
                 this._setListOption('pageLoadMode', this.option('pageLoadMode'));
