@@ -331,7 +331,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _scrollHandler: function(e) {
-        this._scrollAction?.(e);
+        this._scrollAction(e);
     },
 
     _initTemplates: function() {
