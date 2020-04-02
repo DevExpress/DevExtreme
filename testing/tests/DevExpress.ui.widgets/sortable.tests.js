@@ -2434,6 +2434,43 @@ QUnit.module('With scroll', getModuleConfigForTestsWithScroll('#itemsWithScroll'
         assert.notOk($(PLACEHOLDER_SELECTOR).is(':visible'), 'placeholder is not visible');
     });
 
+    QUnit.test('Placeholder should be visible after page scrolling (T871213)', function(assert) {
+        // arrange
+        this.createSortable({
+            filter: '.draggable',
+            dropFeedbackMode: 'indicate'
+        });
+
+        try {
+            const scrollPosition = 1000;
+            $('#qunit-fixture').removeClass('qunit-fixture-visible');
+            $('#qunit-fixture').css('top', 0);
+            $('body').css('height', 10000);
+            $('#scroll').css('top', scrollPosition);
+            window.scrollTo(0, scrollPosition);
+
+            const $items = this.$element.children();
+
+            // act
+            const pointer = pointerMock($items.eq(0)).start().down(0, scrollPosition).move(0, 250);
+
+            // assert
+            assert.strictEqual(window.pageYOffset, scrollPosition);
+            assert.ok($(PLACEHOLDER_SELECTOR).is(':visible'), 'placeholder is visisble');
+
+            // act
+            pointer.move(0, 50);
+
+            // assert
+            assert.notOk($(PLACEHOLDER_SELECTOR).is(':visible'), 'placeholder is not visible');
+        } finally {
+            $('#qunit-fixture').css('top', '');
+            $('body').css('height', '');
+            $('#scroll').css('top', 0);
+            window.scrollTo(0, 0);
+        }
+    });
+
     QUnit.test('Placeholder should not be visible outside bottom of scroll container if overflow on sortable', function(assert) {
     // arrange
         let pointer;
