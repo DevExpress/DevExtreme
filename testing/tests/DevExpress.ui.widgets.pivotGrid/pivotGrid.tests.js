@@ -2664,6 +2664,11 @@ QUnit.module('dxPivotGrid', {
     });
 
     QUnit.test('resize when height changed to no scroll', function(assert) {
+        this.testOptions.scrolling = {
+            useNative: false,
+            bounceEnabled: false
+        };
+
         const $pivotGridElement = $('#pivotGrid').height(200);
         const pivotGrid = createPivotGrid(this.testOptions, assert);
 
@@ -2673,10 +2678,6 @@ QUnit.module('dxPivotGrid', {
 
         const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
 
-        scrollable.option({
-            useNative: false,
-            bounceEnabled: false
-        });
         scrollable.scrollTo(10);
 
         // act
@@ -2690,11 +2691,7 @@ QUnit.module('dxPivotGrid', {
         assert.ok(parseFloat(pivotGrid.$element().find('.dx-area-data-cell').css('borderBottomWidth')) > 0, 'data area border bottom width');
         assert.ok(parseFloat(pivotGrid.$element().find('.dx-area-row-cell').css('borderBottomWidth')) > 0, 'row area border bottom width');
 
-        if(devices.real().ios) {
-            assert.roughEqual(pivotGrid._dataArea.groupElement().dxScrollable('scrollHeight'), pivotGrid._dataArea.groupElement().dxScrollable('clientHeight'), 1.2, 'client height equal scroll height');
-        } else {
-            assert.equal(pivotGrid._dataArea.groupElement().dxScrollable('scrollHeight'), pivotGrid._dataArea.groupElement().dxScrollable('clientHeight'), 'client height equal scroll height');
-        }
+        assert.equal(pivotGrid._dataArea.groupElement().dxScrollable('scrollHeight'), pivotGrid._dataArea.groupElement().dxScrollable('clientHeight'), 'client height equal scroll height');
 
         assert.strictEqual(pivotGrid._dataArea.groupElement().dxScrollable('scrollTop'), 0);
         assert.strictEqual(pivotGrid._rowsArea.groupElement().dxScrollable('scrollTop'), 0);
