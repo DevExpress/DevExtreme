@@ -4,5 +4,5 @@
 <style type="text/css">
 	.st0{fill-rule:evenodd;clip-rule:evenodd;}
 </style>
-<path id="_x32_" class="st0" d="M0,10l0-2h20l-4-3l-1-2l13,6l-13,6l1-2l4-3H0z" fill="currentColor" />
+<path id="_x32_" class="st0" d="M0,9l13,6v-5h15V8H13V3L0,9z M11,12L3.9,9L11,6V12z" fill="currentColor" />
 </svg>
