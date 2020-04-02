@@ -3,10 +3,16 @@ import { getWindow } from '../../core/utils/window';
 
 const WINDOW_HEIGHT_PERCENT = 0.9;
 
-export const getElementMaxHeightByWindow = $element => {
+export const getElementMaxHeightByWindow = ($element, startLocation) => {
     const window = getWindow();
     const offsetTop = $element.offset().top - $(window).scrollTop();
     const offsetBottom = $(window).innerHeight() - offsetTop - $element.outerHeight();
+    let actualOffset;
+    if(startLocation) {
+        actualOffset = $(window).innerHeight() - startLocation + $(window).scrollTop();
+    } else {
+        actualOffset = Math.max(offsetTop, offsetBottom);
+    }
 
-    return Math.max(offsetTop, offsetBottom) * WINDOW_HEIGHT_PERCENT;
+    return actualOffset * WINDOW_HEIGHT_PERCENT;
 };

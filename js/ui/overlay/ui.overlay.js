@@ -1142,6 +1142,7 @@ var Overlay = Widget.inherit({
         this._fixHeightAfterSafariAddressBarResizing();
         this._renderDimensions();
         const resultPosition = this._renderPosition();
+        this._resultPosition = resultPosition;
 
         this._actions.onPositioned({ position: resultPosition });
     },
