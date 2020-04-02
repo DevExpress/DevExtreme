@@ -186,4 +186,21 @@ QUnit.module('Custom file provider', moduleConfig, () => {
             });
     });
 
+    test('native promise can be used as the funciton result', function(assert) {
+        const done = assert.async();
+
+        this.options.getItems = sinon.spy(dir => new Promise(resolve => resolve(itemData)));
+        this.provider = new CustomFileSystemProvider(this.options);
+
+        const filesDir = new FileSystemItem('Root/Files', true);
+
+        this.provider.getItems(filesDir)
+            .done(items => {
+                assert.deepEqual(items, fileSystemItems, 'items acquired');
+                assert.strictEqual(this.options.getItems.callCount, 1, 'getItems called once');
+                assert.deepEqual(this.options.getItems.args[0][0], filesDir, 'getItems arguments are valid');
+                done();
+            });
+    });
+
 });
