@@ -1013,7 +1013,7 @@ const Form = Widget.inherit({
         }
     },
 
-    findFormItemsByLayoutManager: function(layoutManager) {
+    getItemsByLayoutManager: function(layoutManager) {
         const path = this._itemsRunTimeInfo.getLayoutManagerPath(layoutManager);
         if(!path) {
             return null;

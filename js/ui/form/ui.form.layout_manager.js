@@ -1248,7 +1248,7 @@ const LayoutManager = Widget.inherit({
     },
 
     _resetVisibleIndexes() {
-        const formItems = this.option('form').findFormItemsByLayoutManager(this);
+        const formItems = this.option('form').getItemsByLayoutManager(this);
         if(formItems && formItems.length) {
             const layoutManagerItems = this.option('items');
             formItems.forEach((item, index) => {
