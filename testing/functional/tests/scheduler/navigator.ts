@@ -1,6 +1,5 @@
 import { createWidget } from '../../helpers/testHelper';
 import Scheduler from '../../model/scheduler';
-import { ClientFunction } from 'testcafe';
 import { extend } from '../../../../js/core/utils/extend';
 import url from '../../helpers/getPageUrl';
 
