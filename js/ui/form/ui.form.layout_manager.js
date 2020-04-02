@@ -1153,8 +1153,7 @@ const LayoutManager = Widget.inherit({
                 this._cleanItemWatchers();
                 const changedOptionName = getOptionNameFromFullName(args.fullName);
                 if(changedOptionName === 'visible' || changedOptionName === 'visibleIndex') { // T874843
-                    const formItems = this.option('form').findFormItemsByLayoutManager(this);
-                    this._resetVisibleIndexesByFormItems(formItems);
+                    this._resetVisibleIndexes();
                 }
 
                 this._initDataAndItems(args.value);
@@ -1248,7 +1247,8 @@ const LayoutManager = Widget.inherit({
         }
     },
 
-    _resetVisibleIndexesByFormItems(formItems) {
+    _resetVisibleIndexes() {
+        const formItems = this.option('form').findFormItemsByLayoutManager(this);
         if(formItems && formItems.length) {
             const layoutManagerItems = this.option('items');
             formItems.forEach((item, index) => {
