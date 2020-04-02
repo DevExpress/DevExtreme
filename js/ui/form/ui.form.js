@@ -962,11 +962,6 @@ const Form = Widget.inherit({
 
             if(layoutManager) {
                 const fullOptionName = getFullOptionName(nameParts[endPartIndex], optionName);
-
-                if(optionName === 'visible') { // T874843
-                    const formItems = this.option(getFullOptionName(itemPath, 'items'));
-                    layoutManager.setItemsVisibleIndexesByFormItems(formItems);
-                }
                 this._setLayoutManagerItemOption(layoutManager, fullOptionName, value, itemPath);
                 return true;
             }
@@ -1016,6 +1011,15 @@ const Form = Widget.inherit({
                 this._triggerOnFieldDataChanged({ dataField, value });
             }
         }
+    },
+
+    findFormItemsByLayoutManager: function(layoutManager) {
+        const path = this._itemsRunTimeInfo.getPathFromLayoutManager(layoutManager);
+        if(!path) {
+            return null;
+        }
+
+        return this.option(getFullOptionName(path, 'items'));
     },
 
     _getItemPath: function(nameParts) {

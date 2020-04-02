@@ -112,7 +112,6 @@ const LayoutManager = Widget.inherit({
         this._itemsRunTimeInfo = new FormItemsRunTimeInfo();
         this._updateReferencedOptions(layoutData);
         this._initDataAndItems(layoutData);
-        this._sortItems();
     },
 
     _dispose: function() {
@@ -196,6 +195,7 @@ const LayoutManager = Widget.inherit({
             }
 
             this._items = processedItems;
+            this._sortItems();
         }
     },
 
@@ -1146,17 +1146,18 @@ const LayoutManager = Widget.inherit({
                     }
                 } else {
                     this._initDataAndItems(args.value);
-                    this._sortItems();
                     this._invalidate();
                 }
                 break;
             case 'items': {
                 this._cleanItemWatchers();
-                this._initDataAndItems(args.value);
-                const optionName = getOptionNameFromFullName(args.fullName);
-                if(optionName === 'visible' || optionName === 'visibleIndex') {
-                    this._sortItems();
+                const changedOptionName = getOptionNameFromFullName(args.fullName);
+                if(changedOptionName === 'visible' || changedOptionName === 'visibleIndex') { // T874843
+                    const formItems = this.option('form').findFormItemsByLayoutManager(this);
+                    this._resetVisibleIndexesByFormItems(formItems);
                 }
+
+                this._initDataAndItems(args.value);
                 this._invalidate();
                 break;
             }
@@ -1247,7 +1248,7 @@ const LayoutManager = Widget.inherit({
         }
     },
 
-    setItemsVisibleIndexesByFormItems(formItems) {
+    _resetVisibleIndexesByFormItems(formItems) {
         if(formItems && formItems.length) {
             const layoutManagerItems = this.option('items');
             formItems.forEach((item, index) => {
