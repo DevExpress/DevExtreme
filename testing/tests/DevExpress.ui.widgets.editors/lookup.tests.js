@@ -3401,41 +3401,31 @@ QUnit.module('default options', {
 
 QUnit.module('Events', {
     before: function() {
-        this.items = Array.from(Array(100), (item, index) => index + 1);
+        this.items = Array.from(Array(50), (item, index) => index + 1);
     },
     beforeEach: function() {
         fx.off = true;
-        executeAsyncMock.setup();
         this.clock = sinon.useFakeTimers();
 
         this.element = $('#lookup');
         this.options = {
-            dropDownOptions: {
-                height: 200,
-                fullScreen: false
-            },
             items: this.items
         };
 
         this.createLookup = function() {
             this.instance = this.element.dxLookup(this.options).dxLookup('instance');
-            this.$field = $(this.instance._$field);
         };
         this.togglePopup = function() {
-            $(this.instance._$field).trigger('dxclick');
-
-            this.$popup = $('.dx-lookup-popup');
-            this.popup = dataUtils.data(this.$popup[0], 'dxPopup') || dataUtils.data(this.$popup[0], 'dxPopover');
+            this.instance.open();
 
             this.$list = $('.dx-list');
             this.list = this.$list.dxList('instance');
-
-            this.$search = $(this.instance._$searchBox);
-            this.search = this.instance._searchBox;
+        };
+        this.triggerScrollEvent = function() {
+            this.$list.find('.dx-scrollable-container').trigger('scroll');
         };
     },
     afterEach: function() {
-        executeAsyncMock.teardown();
         this.clock.restore();
         fx.off = false;
     }
@@ -3446,7 +3436,7 @@ QUnit.module('Events', {
         this.createLookup();
         this.togglePopup();
 
-        this.list.scrollToItem(5);
+        this.triggerScrollEvent();
 
         assert.ok(scrollStub.calledOnce, 'onScroll event handled');
     });
@@ -3457,9 +3447,21 @@ QUnit.module('Events', {
         this.instance.on('scroll', scrollStub);
         this.togglePopup();
 
-        this.list.scrollToItem(5);
+        this.triggerScrollEvent();
 
         assert.ok(scrollStub.calledOnce, 'onScroll event handled');
+    });
+
+    QUnit.test('detach "onScroll" event handler', function(assert) {
+        const scrollStub = sinon.stub();
+        this.createLookup();
+        this.instance.on('scroll', scrollStub);
+        this.togglePopup();
+
+        this.instance.off('scroll', scrollStub);
+        this.triggerScrollEvent();
+
+        assert.ok(scrollStub.notCalled, 'onScroll event handler detached');
     });
 
     QUnit.test('change "onScroll" handler runtime', function(assert) {
@@ -3470,7 +3472,7 @@ QUnit.module('Events', {
         this.togglePopup();
 
         this.instance.option('onScroll', newScrollStub);
-        this.list.scrollToItem(5);
+        this.triggerScrollEvent();
 
         assert.ok(initialScrollStub.notCalled, 'initial handled does not invoked');
         assert.ok(newScrollStub.calledOnce, 'onScroll event handled');
