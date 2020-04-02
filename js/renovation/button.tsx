@@ -83,6 +83,7 @@ export const viewFunction = (viewModel: Button) => {
         onInactive={viewModel.onInactive}
         onKeyPress={viewModel.onWidgetKeyPress}
         rtlEnabled={viewModel.props.rtlEnabled}
+        rootNode={viewModel.props.rootNode}
         tabIndex={viewModel.props.tabIndex}
         visible={viewModel.props.visible}
         width={viewModel.props.width}
@@ -220,5 +221,11 @@ export default class Button extends JSXComponent<ButtonInput> {
         const { icon, type } = this.props;
 
         return (icon || type === 'back') ? (icon || 'back') : '';
+    }
+
+    get rootNode() {
+        const { rootNode } = this.props;
+
+        return rootNode;
     }
 }

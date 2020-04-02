@@ -25,6 +25,7 @@ export default class PreactWrapper extends DOMComponent {
     getProps(isFirstRender) {
         const options = extend({}, this.option());
         const attributes = this.$element()[0].attributes;
+        const nodeName = this.$element()[0].nodeName.toLowerCase();
 
         if(isFirstRender) {
             options.elementAttr = extend(Object.keys(attributes).reduce((a, key) => {
@@ -37,6 +38,7 @@ export default class PreactWrapper extends DOMComponent {
             // NOTE: workaround to save container id
             options.elementAttr = extend({ [attributes.id.name]: attributes.id.value }, options.elementAttr);
         }
+        options.rootNode = nodeName;
 
         return options;
     }

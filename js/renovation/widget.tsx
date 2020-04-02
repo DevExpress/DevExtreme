@@ -79,7 +79,7 @@ const getCssClasses = (model: Partial<Widget> & Partial<WidgetInput>) => {
 
 export const viewFunction = (viewModel: Widget) => {
     return (
-        <div
+        <viewModel.props.rootNode
             ref={viewModel.widgetRef as any}
             {...viewModel.attributes}
             className={viewModel.cssClasses}
@@ -89,7 +89,7 @@ export const viewFunction = (viewModel: Widget) => {
             hidden={!viewModel.props.visible}
         >
             {viewModel.props.children}
-        </div>
+        </viewModel.props.rootNode>
     );
 };
 
@@ -119,6 +119,7 @@ export class WidgetInput {
     @Event() onKeyboardHandled?: (args: any) => any | undefined;
     @Event() onKeyPress?: (e: any, options: any) => any;
     @Event() onVisibilityChange?: (args: boolean) => undefined;
+    @OneWay() rootNode?: any = 'div';
     @OneWay() rtlEnabled?: boolean = config().rtlEnabled;
     @OneWay() tabIndex?: number = 0;
     @OneWay() visible?: boolean = true;
