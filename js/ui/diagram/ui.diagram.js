@@ -865,6 +865,10 @@ class Diagram extends Widget {
                     switch(lineType) {
                         case 'arrow':
                             return ConnectorLineEnding.Arrow;
+                        case 'outlinedTriangle':
+                            return ConnectorLineEnding.OutlinedTriangle;
+                        case 'filledTriangle':
+                            return ConnectorLineEnding.FilledTriangle;
                         default:
                             return ConnectorLineEnding.None;
                     }
@@ -873,6 +877,12 @@ class Diagram extends Widget {
                     switch(value) {
                         case ConnectorLineEnding.Arrow:
                             value = 'arrow';
+                            break;
+                        case ConnectorLineEnding.OutlinedTriangle:
+                            value = 'outlinedTriangle';
+                            break;
+                        case ConnectorLineEnding.FilledTriangle:
+                            value = 'filledTriangle';
                             break;
                         case ConnectorLineEnding.None:
                             value = 'none';
@@ -885,6 +895,10 @@ class Diagram extends Widget {
                     switch(lineType) {
                         case 'none':
                             return ConnectorLineEnding.None;
+                        case 'outlinedTriangle':
+                            return ConnectorLineEnding.OutlinedTriangle;
+                        case 'filledTriangle':
+                            return ConnectorLineEnding.FilledTriangle;
                         default:
                             return ConnectorLineEnding.Arrow;
                     }
@@ -893,6 +907,12 @@ class Diagram extends Widget {
                     switch(value) {
                         case ConnectorLineEnding.Arrow:
                             value = 'arrow';
+                            break;
+                        case ConnectorLineEnding.OutlinedTriangle:
+                            value = 'outlinedTriangle';
+                            break;
+                        case ConnectorLineEnding.FilledTriangle:
+                            value = 'filledTriangle';
                             break;
                         case ConnectorLineEnding.None:
                             value = 'none';

@@ -314,6 +314,16 @@ const DiagramCommandsManager = {
                             value: 1,
                             menuIcon: 'dx-diagram-i-connector-begin-arrow dx-diagram-i',
                             hint: messageLocalization.format('dxDiagram-commandConnectorLineArrow')
+                        },
+                        {
+                            value: 2,
+                            menuIcon: 'dx-diagram-i-connector-begin-outlined-triangle dx-diagram-i',
+                            hint: messageLocalization.format('dxDiagram-commandConnectorLineArrow')
+                        },
+                        {
+                            value: 3,
+                            menuIcon: 'dx-diagram-i-connector-begin-filled-triangle dx-diagram-i',
+                            hint: messageLocalization.format('dxDiagram-commandConnectorLineArrow')
                         }
                     ],
                     hint: messageLocalization.format('dxDiagram-commandConnectorLineStart'),
@@ -325,12 +335,22 @@ const DiagramCommandsManager = {
                     items: [
                         {
                             value: 0,
-                            menuIcon: 'dx-diagram-i-connector-begin-none dx-diagram-i',
+                            menuIcon: 'dx-diagram-i-connector-end-none dx-diagram-i',
                             hint: messageLocalization.format('dxDiagram-commandConnectorLineNone')
                         },
                         {
                             value: 1,
-                            menuIcon: 'dx-diagram-i-connector-begin-arrow dx-diagram-i',
+                            menuIcon: 'dx-diagram-i-connector-end-arrow dx-diagram-i',
+                            hint: messageLocalization.format('dxDiagram-commandConnectorLineArrow')
+                        },
+                        {
+                            value: 2,
+                            menuIcon: 'dx-diagram-i-connector-end-outlined-triangle dx-diagram-i',
+                            hint: messageLocalization.format('dxDiagram-commandConnectorLineArrow')
+                        },
+                        {
+                            value: 3,
+                            menuIcon: 'dx-diagram-i-connector-end-filled-triangle dx-diagram-i',
                             hint: messageLocalization.format('dxDiagram-commandConnectorLineArrow')
                         }
                     ],

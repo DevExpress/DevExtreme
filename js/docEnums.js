@@ -1102,7 +1102,7 @@
 
 /**
  * @typedef {string} Enums.DiagramConnectorLineEnd
- * @enum {'none'|'arrow'}
+ * @enum {'none'|'arrow'|'outlinedTriangle'|'filledTriangle'}
  */
 
 /**
