@@ -329,6 +329,32 @@ QUnit.testStart(function() {
             );
         });
     });
+
+    [
+        { startDayHour: 0, endDayHour: 24, cellDuration: 95 },
+        { startDayHour: 8, endDayHour: 24, cellDuration: 90 }
+    ].forEach(config => {
+        QUnit.test(`Generate error if cellDuration: ${config.cellDuration} could not divide the range from startDayHour: ${config.startDayHour} to the endDayHour: ${config.endDayHour} into even intervals`, function(assert) {
+            const warningHandler = sinon.spy(errors, 'log');
+
+            try {
+                this.instance.option({
+                    currentDate: new Date(2015, 4, 24),
+                    views: ['day'],
+                    currentView: 'day',
+                    startDayHour: config.startDayHour,
+                    endDayHour: config.endDayHour,
+                    cellDuration: config.cellDuration
+                });
+
+
+                assert.equal(warningHandler.callCount, 1, 'warning has been called once');
+                assert.equal(warningHandler.getCall(0).args[0], 'W1015', 'warning has correct error id');
+            } finally {
+                warningHandler.restore();
+            }
+        });
+    });
 })('Initialization');
 
 (function() {

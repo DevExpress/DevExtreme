@@ -894,6 +894,7 @@ const Scheduler = Widget.inherit({
                 });
                 break;
             case 'cellDuration':
+                this._validateCellDuration();
                 this._appointments.option('items', []);
                 if(this._readyToRenderAppointments) {
                     this._updateOption('workSpace', 'hoursInterval', value / 60);
@@ -1448,6 +1449,7 @@ const Scheduler = Widget.inherit({
         this.callBase();
 
         this._validateDayHours();
+        this._validateCellDuration();
 
         this._processCurrentView();
         this._renderHeader();
@@ -1651,6 +1653,16 @@ const Scheduler = Widget.inherit({
 
         if(startDayHour >= endDayHour) {
             throw errors.Error('E1058');
+        }
+    },
+
+    _validateCellDuration: function() {
+        const endDayHour = this._getCurrentViewOption('endDayHour');
+        const startDayHour = this._getCurrentViewOption('startDayHour');
+        const cellDuration = this._getCurrentViewOption('cellDuration');
+
+        if((endDayHour - startDayHour) * 60 % cellDuration !== 0) {
+            errors.log('W1015');
         }
     },
 
