@@ -138,7 +138,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
         const excelCell = row.getCell(startColumnIndex + cellIndex);
 
         if(isDate(cellData.value)) {
-            excelCell.value = _localizeDateValue(cellData.value);
+            excelCell.value = _convertDateForExcelJS(cellData.value);
         } else {
             excelCell.value = cellData.value;
         }
@@ -175,7 +175,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
     }
 }
 
-function _localizeDateValue(date) {
+function _convertDateForExcelJS(date) {
     return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()));
 }
 
