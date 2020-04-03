@@ -256,18 +256,16 @@ exports.FocusController = core.ViewController.inherit((function() {
             const focusedRowIndex = this.getFocusedRowIndexByKey(key);
 
             if(this._isValidFocusedRowIndex(focusedRowIndex)) {
-                this.getController('keyboardNavigation').setFocusedRowIndex(focusedRowIndex);
-
-                if(focusedRowIndex === this.option('focusedRowIndex')) {
-                    if(this.option('focusedRowEnabled')) {
-                        dataController.updateItems({
-                            changeType: 'updateFocusedRow',
-                            focusedRowKey: key
-                        });
-                    } else {
-                        this.getView('rowsView').scrollToRowElement(key);
-                    }
+                if(this.option('focusedRowEnabled')) {
+                    dataController.updateItems({
+                        changeType: 'updateFocusedRow',
+                        focusedRowKey: key
+                    });
+                } else {
+                    this.getView('rowsView').scrollToRowElement(key);
                 }
+
+                this.getController('keyboardNavigation').setFocusedRowIndex(focusedRowIndex);
 
                 deferred && deferred.resolve(focusedRowIndex);
             } else {
