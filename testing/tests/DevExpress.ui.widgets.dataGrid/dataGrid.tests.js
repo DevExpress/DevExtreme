@@ -8965,10 +8965,52 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.strictEqual(handlerCalls[0], 'changing');
         assert.strictEqual(handlerCalls[1], 'changed');
     });
+
+    QUnit.testInActiveWindow('onSelectionChanged should not be raised when a command button with a custom image is clicked (T876269)', function(assert) {
+        // arrange
+        const selectionChanged = sinon.spy();
+        const buttonClick = sinon.spy();
+
+        const dataGrid = createDataGrid({
+            keyExpr: 'name',
+            dataSource: [
+                { name: 'Alex', phone: '555555', room: 1 },
+                { name: 'Ben', phone: '6666666', room: 2 }
+            ],
+            selection: {
+                mode: 'single'
+            },
+            columns: [
+                {
+                    type: 'buttons',
+                    width: 100,
+                    buttons: [{
+                        icon: '.svg',
+                        cssClass: 'my-class',
+                        onClick: buttonClick
+                    }]
+                },
+                'name', 'phone', 'room'
+            ],
+            onSelectionChanged: selectionChanged
+        });
+        this.clock.tick();
+
+        const $commandCell = $(dataGrid.getCellElement(0, 0));
+        $commandCell.find('.my-class').trigger('click');
+        this.clock.tick();
+
+        const $firstRow = $(dataGrid.getRowElement(0));
+
+        // assert
+        assert.ok(buttonClick.calledOnce, 'button is clicked');
+        assert.equal(selectionChanged.callCount, 0, 'selectionChanged is not called');
+        assert.notOk($firstRow.hasClass('dx-selection'), 'the first row is not selected');
+    });
 });
 
-QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
+QUnit.module('Virtual row rendering', baseModuleConfig, () => {
     QUnit.test('editing should starts correctly if scrolling mode is virtual', function(assert) {
     // arrange, act
         const array = [];
