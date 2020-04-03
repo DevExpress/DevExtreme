@@ -943,6 +943,14 @@ Axis.prototype = {
         return _abs(getLog(value, options.logarithmBase, allowNegatives, linearThreshold) - getLog(prevValue, options.logarithmBase, allowNegatives, linearThreshold));
     },
 
+    getCanvasRange() {
+        const translator = this._translator;
+        return {
+            startValue: translator.from(translator.translate('canvas_position_start')),
+            endValue: translator.from(translator.translate('canvas_position_end'))
+        };
+    },
+
     _processCanvas: function(canvas) {
         return canvas;
     },

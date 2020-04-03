@@ -385,7 +385,7 @@ function collectMarkersInfoBySeries(allSeries, filteredSeries, argAxis) {
     const argViewPortFilter = getViewPortFilter(argVisualRange || {});
     filteredSeries.forEach(s => {
         const valAxis = s.getValueAxis();
-        const valVisualRange = valAxis.visualRange();
+        const valVisualRange = valAxis.getCanvasRange();
         const valTranslator = valAxis.getTranslator();
         const seriesIndex = allSeries.indexOf(s);
         const valViewPortFilter = getViewPortFilter(valVisualRange || {});
