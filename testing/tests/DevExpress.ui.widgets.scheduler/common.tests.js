@@ -36,6 +36,7 @@ QUnit.testStart(function() {
     QUnit.module('Initialization', {
         beforeEach: function() {
             this.clock = sinon.useFakeTimers();
+            sinon.spy(errors, 'log');
 
             this.instance = $('#scheduler').dxScheduler().dxScheduler('instance');
             this.scheduler = new SchedulerTestWrapper(this.instance);
@@ -61,6 +62,7 @@ QUnit.testStart(function() {
             ];
         },
         afterEach: function() {
+            errors.log.restore();
             this.clock.restore();
             fx.off = false;
         }
@@ -335,24 +337,18 @@ QUnit.testStart(function() {
         { startDayHour: 8, endDayHour: 24, cellDuration: 90 }
     ].forEach(config => {
         QUnit.test(`Generate error if cellDuration: ${config.cellDuration} could not divide the range from startDayHour: ${config.startDayHour} to the endDayHour: ${config.endDayHour} into even intervals`, function(assert) {
-            const warningHandler = sinon.spy(errors, 'log');
-
-            try {
-                this.instance.option({
-                    currentDate: new Date(2015, 4, 24),
-                    views: ['day'],
-                    currentView: 'day',
-                    startDayHour: config.startDayHour,
-                    endDayHour: config.endDayHour,
-                    cellDuration: config.cellDuration
-                });
+            this.instance.option({
+                currentDate: new Date(2015, 4, 24),
+                views: ['day'],
+                currentView: 'day',
+                startDayHour: config.startDayHour,
+                endDayHour: config.endDayHour,
+                cellDuration: config.cellDuration
+            });
 
 
-                assert.equal(warningHandler.callCount, 1, 'warning has been called once');
-                assert.equal(warningHandler.getCall(0).args[0], 'W1015', 'warning has correct error id');
-            } finally {
-                warningHandler.restore();
-            }
+            assert.equal(errors.log.callCount, 1, 'warning has been called once');
+            assert.equal(errors.log.getCall(0).args[0], 'W1015', 'warning has correct error id');
         });
     });
 })('Initialization');
@@ -1208,11 +1204,12 @@ QUnit.testStart(function() {
             };
 
             this.clock = sinon.useFakeTimers();
-
+            sinon.spy(errors, 'log');
             fx.off = true;
         },
         afterEach: function() {
             this.clock.restore();
+            errors.log.restore();
             fx.off = false;
         }
     });
@@ -1276,12 +1273,10 @@ QUnit.testStart(function() {
             height: 500
         });
 
-        const warningHandler = sinon.spy(errors, 'log');
-
         this.instance.scrollToTime(12, 0, new Date(2015, 1, 16));
 
-        assert.equal(warningHandler.callCount, 1, 'warning has been called once');
-        assert.equal(warningHandler.getCall(0).args[0], 'W1008', 'warning has correct error id');
+        assert.equal(errors.log.callCount, 1, 'warning has been called once');
+        assert.equal(errors.log.getCall(0).args[0], 'W1008', 'warning has correct error id');
     });
 
     QUnit.test('Check scrolling to time for timeline view', function(assert) {
@@ -1384,9 +1379,13 @@ QUnit.testStart(function() {
                 this.scheduler = new SchedulerTestWrapper(this.instance);
             };
             this.clock = sinon.useFakeTimers();
+            sinon.spy(errors, 'log');
+            // this.warningHandler = sinon.spy(errors, 'log');
         },
         afterEach: function() {
             this.clock.restore();
+            errors.log.restore();
+            // this.warningHandler.restore();
         }
     });
 
@@ -2150,6 +2149,28 @@ QUnit.testStart(function() {
         });
     });
 
+    [
+        { startDayHour: 0, endDayHour: 24, cellDuration: 95 },
+        { startDayHour: 8, endDayHour: 24, cellDuration: 90 }
+    ].forEach(config => {
+        QUnit.test(`Generate error if cellDuration: ${config.cellDuration} could not divide the range from startDayHour: ${config.startDayHour} to the endDayHour: ${config.endDayHour} into even intervals`, function(assert) {
+            this.createInstance({
+                currentDate: new Date(2015, 4, 24),
+                views: ['day'],
+                currentView: 'day',
+                startDayHour: 8,
+                endDayHour: 12
+            });
+            this.instance.option({
+                startDayHour: config.startDayHour,
+                endDayHour: config.endDayHour,
+                cellDuration: config.cellDuration
+            });
+
+            assert.equal(errors.log.callCount, 1, 'warning has been called once');
+            assert.equal(errors.log.getCall(0).args[0], 'W1015', 'warning has correct error id');
+        });
+    });
 })('Options');
 
 (function() {
