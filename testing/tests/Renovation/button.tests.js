@@ -373,6 +373,7 @@ QUnit.module('inkRipple', {}, () => {
         const pointer = pointerMock($inkButton);
 
         // NOTE: workaround to raise the test
+        //       in QUnit click doesn't trigger 'activeEffect'
         inkButton.option('onClick', () => {
             $inkButton.trigger('dxinactive');
         });
