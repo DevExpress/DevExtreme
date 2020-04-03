@@ -105,8 +105,7 @@ class Button extends Component {
                 super._optionChanged(option);
                 break;
             case 'useInkRipple':
-                // NOTE: we should use "repaint", but cannot define "_empty" method yet
-                value !== true && this.$element().empty();
+                this.repaint();
                 break;
         }
 
