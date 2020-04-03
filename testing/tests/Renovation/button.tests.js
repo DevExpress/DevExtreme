@@ -416,8 +416,7 @@ QUnit.module('widget sizing render', {}, () => {
         const instance = $element.Button('instance');
 
         assert.strictEqual(instance.option('width'), undefined);
-        // TODO
-        // assert.strictEqual($element.outerWidth(), 300, 'outer width of the element must be equal to custom width');
+        assert.strictEqual($element.outerWidth(), 300, 'outer width of the element must be equal to custom width');
     });
 
     QUnit.test('change width', function(assert) {
