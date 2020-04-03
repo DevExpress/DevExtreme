@@ -194,6 +194,7 @@ const LayoutManager = Widget.inherit({
             }
 
             this._items = processedItems;
+
             this._sortItems();
         }
     },
@@ -1148,12 +1149,11 @@ const LayoutManager = Widget.inherit({
                     this._invalidate();
                 }
                 break;
-            case 'items': {
+            case 'items':
                 this._cleanItemWatchers();
                 this._initDataAndItems(args.value);
                 this._invalidate();
                 break;
-            }
             case 'alignItemLabels':
             case 'labelLocation':
             case 'requiredMessage':
