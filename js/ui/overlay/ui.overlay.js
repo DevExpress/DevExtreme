@@ -1446,6 +1446,9 @@ var Overlay = Widget.inherit({
 
         const animateDeferred = new Deferred();
         this._animateDeferred = animateDeferred;
+        if(!showing) {
+            this._resultPosition = undefined;
+        }
         this.option('visible', showing);
 
         animateDeferred.promise().done((function() {

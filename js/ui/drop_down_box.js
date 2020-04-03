@@ -272,7 +272,7 @@ const DropDownBox = DropDownEditor.inherit({
             },
             onKeyboardHandled: opts => this.option('focusStateEnabled') && this._popupElementTabHandler(opts),
             maxHeight: function() {
-                const popupLocation = this._popup?._resultPosition ?? this._popup._resultPosition.v.location;
+                const popupLocation = (this._popup && this._popup._resultPosition) ? this._popup._resultPosition.v.location : undefined;
 
                 return getElementMaxHeightByWindow(this.$element(), popupLocation);
             }.bind(this)
