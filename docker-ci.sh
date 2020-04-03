@@ -44,9 +44,10 @@ function run_test {
     local runner_result=0
 
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
+    [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
     [ -z "$JQUERY"  ] && url="$url&nojquery=true"
 
-    if [ "$HEADLESS" != "true" ]; then
+    if [ "$NO_HEADLESS" == "true" ]; then
         Xvfb :99 -ac -screen 0 1200x600x24 &
         x11vnc -display :99 2>/dev/null &
     fi
@@ -79,36 +80,67 @@ function run_test {
 
         "firefox")
             local firefox_args="-profile /firefox-profile $url"
-            [ "$HEADLESS" == "true" ] && firefox_args="-headless $firefox_args"
+            [ "$NO_HEADLESS" != "true" ] && firefox_args="-headless $firefox_args"
 
             firefox --version
             firefox $firefox_args &
         ;;
 
         *)
-            google-chrome-stable --version
+            local chrome_command=google-chrome-stable
+            local chrome_args=(
+                --no-sandbox
+                --disable-dev-shm-usage
+                --disable-gpu
+                --disable-extensions
+                --user-data-dir=/tmp/chrome
+            )
 
-            if [ "$HEADLESS" == "true" ]; then
-                google-chrome-stable \
-                    --no-sandbox \
-                    --disable-dev-shm-usage \
-                    --disable-gpu \
-                    --user-data-dir=/tmp/chrome \
-                    --headless \
-                    --remote-debugging-address=0.0.0.0 \
-                    --remote-debugging-port=9222 \
-                    $url &>headless-chrome.log &
+            if [ "$NO_HEADLESS" != "true" ]; then
+                echo "Headless mode"
+                chrome_args+=(
+                    --headless
+                    --remote-debugging-address=0.0.0.0
+                    --remote-debugging-port=9222
+                )
             else
-                dbus-launch --exit-with-session google-chrome-stable \
-                    --no-sandbox \
-                    --disable-dev-shm-usage \
-                    --disable-gpu \
-                    --user-data-dir=/tmp/chrome \
-                    --no-first-run \
-                    --no-default-browser-check \
-                    --disable-translate \
-                    $url &
+                chrome_command="dbus-launch --exit-with-session $chrome_command"
+                chrome_args+=(
+                    --no-first-run
+                    --no-default-browser-check
+                    --disable-translate
+                )
             fi
+
+            if [ -n "$MOBILE_UA" ]; then
+                local user_agent
+
+                if [ "$MOBILE_UA" == "ios9" ]; then
+                    user_agent="Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1"
+                elif [ "$MOBILE_UA" == "android6" ]; then
+                    user_agent="Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Mobile Safari/537.36"
+                else
+                    exit 1
+                fi
+
+                echo "Mobile user agent: $MOBILE_UA"
+
+                chrome_args+=(
+                    --user-agent="'$user_agent'"
+                    --enable-viewport
+                    --touch-events
+                    --enable-overlay-scrollbar
+                    --enable-features=OverlayScrollbar
+                )
+            fi
+
+            tput setaf 6
+            echo "$chrome_command"
+            printf '  %s\n' "${chrome_args[@]}"
+            tput setaf 9
+
+            google-chrome-stable --version
+            eval "$chrome_command ${chrome_args[@]} '$url'" &>chrome.log &
         ;;
 
     esac
@@ -156,15 +188,11 @@ function start_runner_watchdog {
 
 echo "node $(node -v), npm $(npm -v), dotnet $(dotnet --version)"
 
-case "$TARGET" in
-    "lint") run_lint ;;
-    "ts") run_ts ;;
-    "test") run_test ;;
-    "test_themebuilder") run_test_themebuilder ;;
-    "test_functional") run_test_functional ;;
+TARGET_FUNC="run_$TARGET"
 
-    *)
-        echo "Unknown target"
-        exit 1
-    ;;
-esac
+if [ $(type -t $TARGET_FUNC) != "function" ]; then
+    echo "Unknown target"
+    exit 1
+fi
+
+$TARGET_FUNC
