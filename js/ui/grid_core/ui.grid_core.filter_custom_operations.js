@@ -60,9 +60,15 @@ function baseOperation(grid) {
             const dataSource = new DataSource(dataSourceOptions);
             const result = new deferredUtils.Deferred();
 
-            dataSource.load().done(items => {
-                result.resolve(getSelectedItemsTexts(items)[0]);
-            });
+            if(dataSource._store && dataSource._store._byKeyFunc && typeof dataSource._store._byKeyFunc === 'function') {
+                dataSource._store._byKeyFunc(value).then(function(item) {
+                    result.resolve(item.text);
+                });
+            } else {
+                dataSource.load().done(function(items) {
+                    result.resolve(getSelectedItemsTexts(items)[0]);
+                });
+            }
             return result;
         } else {
             const text = headerFilterController.getHeaderItemText(value, column, 0, grid.option('headerFilter'));
