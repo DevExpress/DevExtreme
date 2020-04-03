@@ -458,12 +458,11 @@ Axis.prototype = {
         let text = lineLabelOptions.text;
         const options = that._options;
         const labelOptions = options.label;
-        let coords;
 
         that._checkAlignmentConstantLineLabels(lineLabelOptions);
 
         text = isDefined(text) ? text : that.formatLabel(parsedValue, labelOptions);
-        coords = that._getConstantLineLabelsCoords(value, lineLabelOptions);
+        const coords = that._getConstantLineLabelsCoords(value, lineLabelOptions);
 
         return that._drawConstantLineLabelText(text, coords.x, coords.y, lineLabelOptions, group);
     },
@@ -656,13 +655,10 @@ Axis.prototype = {
         const renderer = that._renderer;
         const classSelector = that._axisCssPrefix;
         const constantLinesClass = classSelector + 'constant-lines';
-        let insideGroup;
-        let outsideGroup1;
-        let outsideGroup2;
 
-        insideGroup = renderer.g().attr({ 'class': constantLinesClass });
-        outsideGroup1 = renderer.g().attr({ 'class': constantLinesClass });
-        outsideGroup2 = renderer.g().attr({ 'class': constantLinesClass });
+        const insideGroup = renderer.g().attr({ 'class': constantLinesClass });
+        const outsideGroup1 = renderer.g().attr({ 'class': constantLinesClass });
+        const outsideGroup2 = renderer.g().attr({ 'class': constantLinesClass });
 
         return {
             inside: insideGroup,
@@ -2413,9 +2409,6 @@ Axis.prototype = {
         const options = that._options;
         const widthAxis = options.visible ? options.width : 0;
         let ticks;
-        let maxText;
-        let text;
-        let box;
         const indent = withIndents ? options.label.indentFromAxis + (options.tick.length * 0.5) : 0;
         let tickInterval;
         const viewportRange = that._getViewportRange();
@@ -2433,7 +2426,7 @@ Axis.prototype = {
             ticks = ticks.ticks;
         }
 
-        maxText = ticks.reduce(function(prevLabel, tick, index) {
+        const maxText = ticks.reduce(function(prevLabel, tick, index) {
             const label = that.formatLabel(tick, options.label, viewportRange, undefined, tickInterval, ticks);
             if(prevLabel.length < label.length) {
                 return label;
@@ -2442,8 +2435,8 @@ Axis.prototype = {
             }
         }, that.formatLabel(ticks[0], options.label, viewportRange, undefined, tickInterval, ticks));
 
-        text = that._renderer.text(maxText, 0, 0).css(that._textFontStyles).attr(that._textOptions).append(that._renderer.root);
-        box = text.getBBox();
+        const text = that._renderer.text(maxText, 0, 0).css(that._textFontStyles).attr(that._textOptions).append(that._renderer.root);
+        const box = text.getBBox();
 
         text.remove();
         return { x: box.x, y: box.y, width: box.width + indent, height: box.height + indent };
