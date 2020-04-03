@@ -2122,6 +2122,29 @@ QUnit.testStart(function() {
                 'E1058 Error message'
             );
         });
+
+        QUnit.test(`Generate error if workSpace option changed to startDayHour: ${dayHours.startDayHour} >= endDayHour: ${dayHours.endDayHour}`, function(assert) {
+            this.createInstance({
+                currentDate: new Date(2015, 4, 24),
+                views: [{
+                    name: 'day',
+                    type: 'day'
+                }],
+                currentView: 'day',
+                startDayHour: 8,
+                endDayHour: 12
+            });
+
+            assert.throws(
+                () => {
+                    const instance = this.instance;
+                    instance.option('views[0].startDayHour', dayHours.startDayHour);
+                    instance.option('views[0].endDayHour', dayHours.endDayHour);
+                },
+                e => /E1058/.test(e.message),
+                'E1058 Error message'
+            );
+        });
     });
 
 })('Options');
