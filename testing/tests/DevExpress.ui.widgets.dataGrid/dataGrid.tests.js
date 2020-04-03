@@ -8239,7 +8239,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T558301
     QUnit.testInActiveWindow('Height virtual table should be updated to show validation message when there is a single row and virtual scrolling is enabled', function(assert) {
-    // arrange
+        // arrange
         let $tableElements;
 
         const dataGrid = createDataGrid({
@@ -8279,8 +8279,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Error row is not hidden when rowKey is undefined by mode is cell', function(assert) {
-    // arrange
-
+        // arrange
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: [{
@@ -8326,7 +8325,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T689367
     QUnit.test('Horizontal scroll should not exist if master-detail contains the simple nested grid', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             dataSource: [{ id: 1 }],
             loadingTimeout: undefined,
@@ -8349,7 +8348,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T728069
     QUnit.test('Horizontal scroll should not exist if fixed column with custom buttons exists', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             width: 600,
             dataSource: [{}],
@@ -8376,9 +8375,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     if(browser.msie && parseInt(browser.version) <= 11) {
         QUnit.test('Update the scrollable for IE browsers when the adaptive column is hidden', function(assert) {
-        // arrange
-
-
+            // arrange
             const dataGrid = createDataGrid({
                 dataSource: [{
                     'ID': 4,
