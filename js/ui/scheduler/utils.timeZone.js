@@ -81,7 +81,6 @@ const utils = {
     getCorrectedDateByDaylightOffsets: getCorrectedDateByDaylightOffsets,
     isTimezoneChangeInDate: isTimezoneChangeInDate,
     isSameAppointmentDates: isSameAppointmentDates,
-    _getDaylightOffsetByTimezone: _getDaylightOffsetByTimezone,
     correctRecurrenceExceptionByTimezone: correctRecurrenceExceptionByTimezone
 };
 
