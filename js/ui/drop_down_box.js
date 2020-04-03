@@ -272,14 +272,9 @@ const DropDownBox = DropDownEditor.inherit({
             },
             onKeyboardHandled: opts => this.option('focusStateEnabled') && this._popupElementTabHandler(opts),
             maxHeight: function() {
-                const collisionSide = this._popup && this._popup._resultPosition && this._popup._resultPosition.v.collisionSide;
-                let positionSide;
+                const popupLocation = this._popup?._resultPosition ? this._popup._resultPosition.v.location : undefined;
 
-                if(collisionSide) {
-                    positionSide = this._popup._resultPosition.v.location;
-                }
-
-                return getElementMaxHeightByWindow(this.$element(), positionSide);
+                return getElementMaxHeightByWindow(this.$element(), popupLocation);
             }.bind(this)
         });
     },
