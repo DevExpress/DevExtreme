@@ -83,10 +83,6 @@ export default class FormItemsRunTimeInfo {
         return this._findFieldByCondition(({ path }) => path === targetPath, 'layoutManager');
     }
 
-    getLayoutManagerPath(targetLayoutManager) {
-        return this._findFieldByCondition(({ layoutManager }) => layoutManager === targetLayoutManager, 'path');
-    }
-
     getKeyByPath(targetPath) {
         return this._findFieldByCondition(({ path }) => path === targetPath, 'guid');
     }

@@ -28,7 +28,6 @@ import '../number_box';
 import '../check_box';
 import '../date_box';
 import '../button';
-import { getOptionNameFromFullName } from './ui.form.utils';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 const FIELD_ITEM_CLASS = 'dx-field-item';
@@ -1151,11 +1150,6 @@ const LayoutManager = Widget.inherit({
                 break;
             case 'items': {
                 this._cleanItemWatchers();
-                const changedOptionName = getOptionNameFromFullName(args.fullName);
-                if(changedOptionName === 'visible' || changedOptionName === 'visibleIndex') { // T874843
-                    this._resetVisibleIndexesByForm();
-                }
-
                 this._initDataAndItems(args.value);
                 this._invalidate();
                 break;
@@ -1244,20 +1238,6 @@ const LayoutManager = Widget.inherit({
         const responsiveBox = this._responsiveBox || component;
         if(responsiveBox) {
             return responsiveBox.option('currentScreenFactor') === responsiveBox.option('singleColumnScreen');
-        }
-    },
-
-    _resetVisibleIndexesByForm() {
-        const form = this.option('form');
-        if(form) {
-            const formItems = form.getItemsByLayoutManager(this);
-            if(formItems && formItems.length) {
-                const layoutManagerItems = this.option('items');
-                formItems.forEach((item, index) => {
-                    const layoutItem = layoutManagerItems[index];
-                    layoutItem.visibleIndex = item.visibleIndex;
-                });
-            }
         }
     },
 
