@@ -1380,12 +1380,10 @@ QUnit.testStart(function() {
             };
             this.clock = sinon.useFakeTimers();
             sinon.spy(errors, 'log');
-            // this.warningHandler = sinon.spy(errors, 'log');
         },
         afterEach: function() {
             this.clock.restore();
             errors.log.restore();
-            // this.warningHandler.restore();
         }
     });
 
