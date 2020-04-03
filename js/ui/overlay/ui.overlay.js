@@ -664,6 +664,7 @@ var Overlay = Widget.inherit({
 
         if(!visible) {
             domUtils.triggerHidingEvent(this._$content);
+            this._resultPosition = undefined;
         }
 
         this._toggleVisibility(visible);
@@ -1446,9 +1447,6 @@ var Overlay = Widget.inherit({
 
         const animateDeferred = new Deferred();
         this._animateDeferred = animateDeferred;
-        if(!showing) {
-            this._resultPosition = undefined;
-        }
         this.option('visible', showing);
 
         animateDeferred.promise().done((function() {
