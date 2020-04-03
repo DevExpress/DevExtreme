@@ -2151,7 +2151,7 @@ QUnit.testStart(function() {
         { startDayHour: 0, endDayHour: 24, cellDuration: 95 },
         { startDayHour: 8, endDayHour: 24, cellDuration: 90 }
     ].forEach(config => {
-        QUnit.test(`Generate error if cellDuration: ${config.cellDuration} could not divide the range from startDayHour: ${config.startDayHour} to the endDayHour: ${config.endDayHour} into even intervals`, function(assert) {
+        QUnit.test(`Options changing,Generate error if cellDuration: ${config.cellDuration} could not divide the range from startDayHour: ${config.startDayHour} to the endDayHour: ${config.endDayHour} into even intervals`, function(assert) {
             this.createInstance({
                 currentDate: new Date(2015, 4, 24),
                 views: ['day'],
@@ -2164,6 +2164,35 @@ QUnit.testStart(function() {
                 endDayHour: config.endDayHour,
                 cellDuration: config.cellDuration
             });
+
+            assert.equal(errors.log.callCount, 1, 'warning has been called once');
+            assert.equal(errors.log.getCall(0).args[0], 'W1015', 'warning has correct error id');
+        });
+    });
+
+    [
+        { currentView: 'WEEK1' },
+        { currentView: 'WEEK2' }
+    ].forEach(view => {
+        QUnit.test(`View changing, Generate error if cellDuration: ${config.cellDuration} could not divide the range from startDayHour: ${config.startDayHour} to the endDayHour: ${config.endDayHour} into even intervals`, function(assert) {
+            this.createInstance({
+                currentDate: new Date(2015, 4, 24),
+                views: ['day',
+                    {
+                        type: 'week',
+                        name: 'WEEK1',
+                        cellDuration: 7
+                    },
+                    {
+                        type: 'week',
+                        name: 'WEEK2',
+                        cellDuration: 95
+                    }],
+                currentView: 'day',
+                startDayHour: 8,
+                endDayHour: 24
+            });
+            this.instance.option('currentView', view.currentView);
 
             assert.equal(errors.log.callCount, 1, 'warning has been called once');
             assert.equal(errors.log.getCall(0).args[0], 'W1015', 'warning has correct error id');

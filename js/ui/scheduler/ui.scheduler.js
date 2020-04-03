@@ -803,6 +803,8 @@ const Scheduler = Widget.inherit({
                 this._processCurrentView();
                 this.getLayoutManager().initRenderingStrategy(this._getAppointmentsRenderingStrategy());
 
+                this._validateCellDuration();
+
                 this._appointments.option({
                     items: [],
                     allowDrag: this._allowDragging(),
