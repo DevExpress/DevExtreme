@@ -9642,49 +9642,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(selectionChanged.callCount, 0, 'selectionChanged is not called');
         assert.notOk($firstRow.hasClass('dx-selection'), 'the first row is not selected');
     });
-
-    QUnit.testInActiveWindow('onFocusedRowChanging and onFocusedRowChanged should not be raised when a command button with a custom image is clicked (T876269)', function(assert) {
-        // arrange
-        const focusedRowChanging = sinon.spy();
-        const focusedRowChanged = sinon.spy();
-        const buttonClick = sinon.spy();
-
-        const dataGrid = createDataGrid({
-            keyExpr: 'name',
-            dataSource: [
-                { name: 'Alex', phone: '555555', room: 1 },
-                { name: 'Ben', phone: '6666666', room: 2 }
-            ],
-            columns: [
-                {
-                    type: 'buttons',
-                    width: 100,
-                    buttons: [{
-                        icon: '.svg',
-                        cssClass: 'my-class',
-                        onClick: buttonClick
-                    }]
-                },
-                'name', 'phone', 'room'
-            ],
-            focusedRowEnabled: true,
-            onFocusedRowChanging: focusedRowChanging,
-            onFocusedRowChanged: focusedRowChanged
-        });
-        this.clock.tick();
-
-        const $commandCell = $(dataGrid.getCellElement(0, 0));
-        $commandCell.find('.my-class').trigger(pointerEvents.down).trigger('click');
-        this.clock.tick();
-
-        const $firstRow = $(dataGrid.getRowElement(0));
-
-        // assert
-        assert.ok(buttonClick.calledOnce, 'button is clicked');
-        assert.equal(focusedRowChanging.callCount, 0, 'focusedRowChanging is not called');
-        assert.equal(focusedRowChanged.callCount, 0, 'focusedRowChanged is not called');
-        assert.notOk($firstRow.hasClass('dx-row-focused'), 'the first row is not focused');
-    });
 });
 
 
