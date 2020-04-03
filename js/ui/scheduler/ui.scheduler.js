@@ -55,6 +55,7 @@ const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
 
 const toMs = dateUtils.dateToMilliseconds;
+const MINUTES_IN_HOUR = 60;
 
 const WIDGET_CLASS = 'dx-scheduler';
 const WIDGET_SMALL_CLASS = `${WIDGET_CLASS}-small`;
@@ -1663,7 +1664,7 @@ const Scheduler = Widget.inherit({
         const startDayHour = this._getCurrentViewOption('startDayHour');
         const cellDuration = this._getCurrentViewOption('cellDuration');
 
-        if((endDayHour - startDayHour) * 60 % cellDuration !== 0) {
+        if((endDayHour - startDayHour) * MINUTES_IN_HOUR % cellDuration !== 0) {
             errors.log('W1015');
         }
     },
