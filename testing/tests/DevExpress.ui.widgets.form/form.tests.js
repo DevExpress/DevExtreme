@@ -2464,7 +2464,7 @@ QUnit.module('visible/visibleIndex', () => {
             items: [{
                 itemType: 'tabbed',
                 name: 'group',
-                tabs: [ { title: 'tab1', items: [
+                tabs: [ { title: 'tab', items: [
                     { dataField: 'field1', visible: true },
                     { dataField: 'field2', visible: true } ]
                 }]
@@ -2481,7 +2481,7 @@ QUnit.module('visible/visibleIndex', () => {
             items: [{
                 itemType: 'tabbed',
                 name: 'group',
-                tabs: [ { title: 'tab1', items: [
+                tabs: [ { title: 'tab', items: [
                     { dataField: 'field1', visible: true, visibleIndex: 0 },
                     { dataField: 'field2', visible: true, visibleIndex: 1 } ]
                 }]
@@ -2499,7 +2499,7 @@ QUnit.module('visible/visibleIndex', () => {
                 itemType: 'tabbed',
                 name: 'group',
                 tabs: [{
-                    title: 'tab1', items: [
+                    title: 'tab', items: [
                         { dataField: 'field1', visible: true, visibleIndex: 1 },
                         { dataField: 'field2', visible: true, visibleIndex: 0 }]
                 }]
@@ -2517,7 +2517,7 @@ QUnit.module('visible/visibleIndex', () => {
                 itemType: 'tabbed',
                 name: 'group',
                 tabs: [{
-                    title: 'tab1', items: [
+                    title: 'tab', items: [
                         { dataField: 'field1', visible: true, visibleIndex: 2 },
                         { dataField: 'field2', visible: true, visibleIndex: 3 }]
                 }]
@@ -2535,7 +2535,7 @@ QUnit.module('visible/visibleIndex', () => {
                 itemType: 'tabbed',
                 name: 'group',
                 tabs: [{
-                    title: 'tab1', items: [
+                    title: 'tab', items: [
                         { dataField: 'field1', visible: true, visibleIndex: 5 },
                         { dataField: 'field2', visible: true, visibleIndex: 2 }]
                 }]
@@ -2547,7 +2547,7 @@ QUnit.module('visible/visibleIndex', () => {
         assert.equal($inputs.eq(1).attr('name'), 'field1', 'inputs');
     });
 
-    QUnit.test('tabbedGroup.item1.visible:false -> group.item1.visible:true (no visibleIndex)', function(assert) {
+    QUnit.test('tabbedGroup.item1.visible:false -> tabbedGroup.item1.visible:true (no visibleIndex)', function(assert) {
         const form = $('#form').dxForm({
             items: [{
                 itemType: 'tabbed',
@@ -2570,7 +2570,7 @@ QUnit.module('visible/visibleIndex', () => {
         assert.equal($inputs_2.eq(1).attr('name'), 'field2', 'inputs_2');
     });
 
-    QUnit.test('tabbedGroup.item1.visible:false -> group.item1.visible:true (sequential visibleIndex starting from 0)', function(assert) {
+    QUnit.test('tabbedGroup.item1.visible:false -> tabbedGroup.item1.visible:true (sequential visibleIndex starting from 0)', function(assert) {
         const form = $('#form').dxForm({
             items: [{
                 itemType: 'tabbed',
@@ -2593,7 +2593,7 @@ QUnit.module('visible/visibleIndex', () => {
         assert.equal($inputs_2.eq(1).attr('name'), 'field2', 'inputs_2');
     });
 
-    QUnit.test('tabbedGroup.item1.visible:false -> group.item1.visible:true (sequantial visibleIndex starting from 0 does not fit with items order)', function(assert) {
+    QUnit.test('tabbedGroup.item1.visible:false -> tabbedGroup.item1.visible:true (sequantial visibleIndex starting from 0 does not fit with items order)', function(assert) {
         const form = $('#form').dxForm({
             items: [{
                 itemType: 'tabbed',
@@ -2616,7 +2616,7 @@ QUnit.module('visible/visibleIndex', () => {
         assert.equal($inputs_2.eq(1).attr('name'), 'field1', 'inputs_2');
     });
 
-    QUnit.test('tabbedGroup.item1.visible:false -> group.item1.visible:true (non sequensial visibleIndex starting from 2)', function(assert) {
+    QUnit.test('tabbedGroup.item1.visible:false -> tabbedGroup.item1.visible:true (non sequensial visibleIndex starting from 2)', function(assert) {
         const form = $('#form').dxForm({
             items: [{
                 itemType: 'tabbed',
@@ -2639,7 +2639,7 @@ QUnit.module('visible/visibleIndex', () => {
         assert.equal($inputs_2.eq(1).attr('name'), 'field2', 'inputs_2');
     });
 
-    QUnit.test('tabbedGroup.item1.visible:false -> group.item1.visible:true (non sequantial visibleIndex starting from 2 does not fit with items order)', function(assert) {
+    QUnit.test('tabbedGroup.item1.visible:false -> tabbedGroup.item1.visible:true (non sequantial visibleIndex starting from 2 does not fit with items order)', function(assert) {
         const form = $('#form').dxForm({
             items: [{
                 itemType: 'tabbed',
