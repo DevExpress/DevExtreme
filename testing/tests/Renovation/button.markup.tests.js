@@ -102,8 +102,7 @@ QUnit.module('Button markup', () => {
         assert.ok(element.hasClass(BUTTON_BACK_CLASS), 'button has correct type class after change type');
     });
 
-    // TODO
-    QUnit.skip('class is not removed after change type', function(assert) {
+    QUnit.test('class is not removed after change type', function(assert) {
         const $element = $('#button').Button({});
 
         $element.addClass('test');
