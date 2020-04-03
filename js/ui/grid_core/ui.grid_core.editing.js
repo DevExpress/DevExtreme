@@ -2208,10 +2208,6 @@ const EditingController = modules.ViewController.inherit((function() {
                     e.event.preventDefault();
                     e.event.stopPropagation();
                 }));
-                eventsEngine.on($button, addNamespace(pointerEvents.down, EDITING_NAMESPACE), that.createAction(function(e) {
-                    e.event.preventDefault();
-                    e.event.stopPropagation();
-                }));
                 options.rtlEnabled ? $container.prepend($button, '&nbsp;') : $container.append($button, '&nbsp;');
             }
         },
