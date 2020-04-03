@@ -83,11 +83,10 @@ QUnit.test('Create axis', function(assert) {
     const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
     const axesContainerGroup = renderer.g();
     const gridGroup = renderer.g();
-    let axis;
 
     renderer.g.reset();
 
-    axis = new Axis({
+    const axis = new Axis({
         renderer: renderer,
         stripsGroup: stripsGroup,
         labelAxesGroup: labelAxesGroup,
@@ -491,6 +490,28 @@ QUnit.test('categoriesSortingMethod returns \'categories\' option when \'categor
     assert.deepEqual(sort, ['1', '2']);
 });
 
+// T857880
+QUnit.test('getCanvasRange', function(assert) {
+    const translator = translator2DModule.Translator2D.lastCall.returnValue;
+
+    translator.stub('translate').onCall(0).returns('translateResult_1');
+    translator.stub('translate').onCall(1).returns('translateResult_2');
+    translator.stub('from').onCall(0).returns('startValue');
+    translator.stub('from').onCall(1).returns('endValue');
+
+    const canvasRange = this.axis.getCanvasRange();
+
+    assert.strictEqual(translator.translate.callCount, 2);
+    assert.strictEqual(translator.translate.getCall(0).args[0], 'canvas_position_start');
+    assert.strictEqual(translator.translate.getCall(1).args[0], 'canvas_position_end');
+
+    assert.strictEqual(translator.from.callCount, 2);
+    assert.strictEqual(translator.from.getCall(0).args[0], 'translateResult_1');
+    assert.strictEqual(translator.from.getCall(1).args[0], 'translateResult_2');
+
+    assert.deepEqual(canvasRange, { startValue: 'startValue', endValue: 'endValue' });
+});
+
 QUnit.module('Labels Settings', {
     beforeEach: function() {
         environment.beforeEach.call(this);
@@ -688,7 +709,7 @@ QUnit.test('Validate, argumentType - numeric, max and min is wrong specified', f
     assert.deepEqual(this.axis.getOptions().max, undefined);
 });
 
-QUnit.test('Validate, argumentType - numeric, max and min is wrong specified', function(assert) {
+QUnit.test('Validate, argumentType - wrong, max and min is wrong specified', function(assert) {
     this.updateOptions({ argumentType: 'wrongType', max: 'll', min: 'kk' });
 
     this.axis.validate();
@@ -813,7 +834,6 @@ QUnit.test('getViewport return object with field \'action\' if need', function(a
 });
 
 QUnit.test('hold min/max for single point series', function(assert) {
-    let businessRange;
     this.updateOptions({
         tick: {
             visible: true
@@ -822,7 +842,7 @@ QUnit.test('hold min/max for single point series', function(assert) {
     this.axis.setBusinessRange({ min: 4, max: 4 });
     this.generatedTicks = [3.2, 3.4, 3.6, 3.8, 4.0, 4.2, 4.4, 4.6, 4.8];
     this.axis.createTicks(this.canvas);
-    businessRange = this.axis.getTranslator().getBusinessRange();
+    const businessRange = this.axis.getTranslator().getBusinessRange();
 
     assert.equal(businessRange.min, 4, 'min');
     assert.equal(businessRange.max, 4, 'max');

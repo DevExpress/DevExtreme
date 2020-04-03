@@ -256,8 +256,6 @@ exports.FocusController = core.ViewController.inherit((function() {
             const focusedRowIndex = this.getFocusedRowIndexByKey(key);
 
             if(this._isValidFocusedRowIndex(focusedRowIndex)) {
-                this.getController('keyboardNavigation').setFocusedRowIndex(focusedRowIndex);
-
                 if(this.option('focusedRowEnabled')) {
                     dataController.updateItems({
                         changeType: 'updateFocusedRow',
@@ -266,6 +264,8 @@ exports.FocusController = core.ViewController.inherit((function() {
                 } else {
                     this.getView('rowsView').scrollToRowElement(key);
                 }
+
+                this.getController('keyboardNavigation').setFocusedRowIndex(focusedRowIndex);
 
                 deferred && deferred.resolve(focusedRowIndex);
             } else {
