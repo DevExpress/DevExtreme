@@ -2,6 +2,7 @@ import DOMComponent from '../../core/dom_component';
 import * as Preact from 'preact';
 import { extend } from '../../core/utils/extend';
 import { getInnerActionName } from './utils';
+import { isEmpty } from '../../core/utils/string';
 
 export default class PreactWrapper extends DOMComponent {
     getInstance() {
@@ -30,6 +31,7 @@ export default class PreactWrapper extends DOMComponent {
     getProps(isFirstRender) {
         const options = extend({}, this.option());
         const attributes = this.$element()[0].attributes;
+        const { width, height } = this.$element()[0].style;
 
         if(isFirstRender) {
             options.elementAttr = extend(Object.keys(attributes).reduce((a, key) => {
@@ -49,6 +51,12 @@ export default class PreactWrapper extends DOMComponent {
                     .split(' ')
                     .filter(name => name.indexOf('dx-') < 0);
             }
+        }
+        if(!isEmpty(width)) {
+            options.width = width;
+        }
+        if(!isEmpty(height)) {
+            options.height = height;
         }
 
         return options;
