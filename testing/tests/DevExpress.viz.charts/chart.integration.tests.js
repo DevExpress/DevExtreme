@@ -1916,13 +1916,7 @@ QUnit.test('Point is visible when placed in visualRande', function(assert) {
             oil: 13.7
         }],
         commonSeriesSettings: {
-            argumentField: 'country',
-            label1: {
-                visible: true,
-                connector: {
-                    visible: true
-                }
-            }
+            argumentField: 'country'
         },
         series: [
             { valueField: 'hydro', type: 'bar' },
