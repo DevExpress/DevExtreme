@@ -8268,7 +8268,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         $tableElements = dataGrid.$element().find('.dx-datagrid-rowsview').find('table');
-        assert.roughEqual($tableElements.eq(0).outerHeight(), 68, 3, 'height main table');
+        assert.roughEqual($tableElements.eq(0).outerHeight(), 68, 3.01, 'height main table');
 
         dataGrid.closeEditCell();
         this.clock.tick();
