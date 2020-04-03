@@ -4488,6 +4488,41 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(dataGrid.option('focusedRowIndex'), -1, 'focusedRowIndex');
     });
 
+    QUnit.test('Change focusedRowIndex in onOptionChanged on sorting if autoNavigateToFocusedRow is false (T867777)', function(assert) {
+        // arrange
+        const data = [
+            { id: 1 },
+            { id: 2 },
+            { id: 3 },
+            { id: 4 }
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: data,
+            keyExpr: 'id',
+            paging: {
+                pageSize: 2
+            },
+            autoNavigateToFocusedRow: false,
+            focusedRowEnabled: true,
+            focusedRowIndex: 0,
+            onOptionChanged: function(e) {
+                if(e.name === 'focusedRowIndex' && e.value < 0) {
+                    e.component.option('focusedRowIndex', 0);
+                }
+            }
+        }).dxDataGrid('instance');
+        this.clock.tick();
+
+        // act
+        dataGrid.columnOption('id', 'sortOrder', 'desc');
+        this.clock.tick();
+
+        // assert
+        assert.equal(dataGrid.option('focusedRowIndex'), 0, 'focusedRowIndex');
+        assert.equal(dataGrid.option('focusedRowKey'), 4, 'focusedRowKey');
+        assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-row-focused'), 'first row has focused class');
+    });
+
     QUnit.test('Focused row should be visible if it\'s on the first page and page height larger than container one (T756177)', function(assert) {
     // arrange
         const data = [
