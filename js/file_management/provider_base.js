@@ -82,7 +82,7 @@ class FileSystemProviderBase {
         }
 
         if(fileItem.isDirectory) {
-            fileItem.hasSubDirs = this._hasSubDirs(dataObj);
+            fileItem.hasSubDirectories = this._hasSubDirs(dataObj);
         }
 
         fileItem.key = this._keyGetter(dataObj);

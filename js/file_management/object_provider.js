@@ -66,9 +66,10 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
         if(!item) {
             return;
         }
-        this._nameSetter(item.dataItem, name);
+        const dataItem = this._findDataObject(item);
+        this._nameSetter(dataItem, name);
         item.name = name;
-        item.key = this._ensureDataObjectKey(item.dataItem);
+        item.key = this._ensureDataObjectKey(dataItem);
     }
 
     createDirectory(parentDir, name) {
@@ -83,12 +84,15 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
     }
 
     moveItems(items, destinationDir) {
-        const array = this._getDirectoryDataItems(destinationDir.dataItem);
+        const destinationDataItem = this._findDataObject(destinationDir);
+        const array = this._getDirectoryDataItems(destinationDataItem);
 
         const deferreds = items.map(item => this._executeActionAsDeferred(() => {
             this._checkAbilityToMoveOrCopyItem(item, destinationDir);
+
+            const dataItem = this._findDataObject(item);
             this._deleteItem(item);
-            array.push(item.dataItem);
+            array.push(dataItem);
         }));
 
         this._updateHasSubDirs(destinationDir);
@@ -97,12 +101,14 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
     }
 
     copyItems(items, destinationDir) {
-        const array = this._getDirectoryDataItems(destinationDir.dataItem);
+        const destinationDataItem = this._findDataObject(destinationDir);
+        const array = this._getDirectoryDataItems(destinationDataItem);
 
         const deferreds = items.map(item => this._executeActionAsDeferred(() => {
             this._checkAbilityToMoveOrCopyItem(item, destinationDir);
 
-            const copiedItem = this._createCopy(item.dataItem);
+            const dataItem = this._findDataObject(item);
+            const copiedItem = this._createCopy(dataItem);
             array.push(copiedItem);
         }));
 
@@ -184,7 +190,8 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
     }
 
     _getFileContent(file) {
-        return this._contentGetter(file.dataItem) || '';
+        const dataItem = this._findDataObject(file);
+        return this._contentGetter(dataItem) || '';
     }
 
     _validateDirectoryExists(directoryInfo) {
@@ -197,7 +204,8 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
     }
 
     _checkAbilityToMoveOrCopyItem(item, destinationDir) {
-        const itemKey = this._getKeyFromDataObject(item.dataItem, item.parentPath);
+        const dataItem = this._findDataObject(item);
+        const itemKey = this._getKeyFromDataObject(dataItem, item.parentPath);
         const pathInfo = destinationDir.getFullPathInfo();
         let currentPath = '';
 
@@ -220,7 +228,8 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
         this._getIsDirSetter(dataObj, isDirectory);
         this._keySetter(dataObj, String(new Guid()));
 
-        const array = this._getDirectoryDataItems(parentDir.dataItem);
+        const parentDataItem = this._findDataObject(parentDir);
+        const array = this._getDirectoryDataItems(parentDataItem);
         array.push(dataObj);
 
         if(isDirectory) {
@@ -248,17 +257,10 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
     }
 
     _deleteItem(fileItem) {
-        const fileItemObj = this._findFileItemObj(fileItem.getFullPathInfo());
-        if(!fileItemObj) {
-            throw {
-                errorId: fileItem.isDirectory ? ErrorCode.DirectoryNotFound : ErrorCode.FileNotFound,
-                fileItem: fileItem
-            };
-        }
-
+        const dataItem = this._findDataObject(fileItem);
         const parentDirDataObj = this._findFileItemObj(fileItem.pathInfo);
         const array = this._getDirectoryDataItems(parentDirDataObj);
-        const index = array.indexOf(fileItemObj);
+        const index = array.indexOf(dataItem);
         array.splice(index, 1);
     }
 
@@ -300,6 +302,21 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
                 names[name] = true;
             }
         });
+    }
+
+    _findDataObject(item) {
+        if(item.isRoot()) {
+            return null;
+        }
+
+        const result = this._findFileItemObj(item.getFullPathInfo());
+        if(!result) {
+            throw {
+                errorId: item.isDirectory ? ErrorCode.DirectoryNotFound : ErrorCode.FileNotFound,
+                fileItem: item
+            };
+        }
+        return result;
     }
 
     _findFileItemObj(pathInfo) {
@@ -345,7 +362,8 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
 
     _updateHasSubDirs(dir) {
         if(dir && !dir.isRoot()) {
-            dir.hasSubDirs = this._hasSubDirs(dir.dataItem);
+            const dataItem = this._findDataObject(dir);
+            dir.hasSubDirectories = this._hasSubDirs(dataItem);
         }
     }
 
