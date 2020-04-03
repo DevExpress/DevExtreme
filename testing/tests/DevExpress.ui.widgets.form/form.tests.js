@@ -2112,7 +2112,7 @@ QUnit.test('Changing the item\'s option via the itemOption when these options ar
     assert.strictEqual($('#form').find('.test-class').length, 1, 'cssClass of item');
 });
 
-QUnit.module('T874843', () => {
+QUnit.module('visible/visibleIndex', () => {
     QUnit.test('group.item1.visible:true (no visibleIndex)', function(assert) {
         const form = $('#form').dxForm({
             items: [{
