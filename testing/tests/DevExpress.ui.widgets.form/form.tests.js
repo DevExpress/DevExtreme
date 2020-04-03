@@ -2127,14 +2127,9 @@ QUnit.module('visible/visibleIndex', () => {
 
     QUnit.test('item1.visible:true (sequential visibleIndex starting from 0)', function(assert) {
         const form = $('#form').dxForm({
-            items: [{
-                itemType: 'group',
-                colCount: 1,
-                name: 'group',
-                items: [
-                    { dataField: 'field1', visible: true, visibleIndex: 0 },
-                    { dataField: 'field2', visible: true, visibleIndex: 1 } ]
-            }]
+            items: [
+                { dataField: 'field1', visible: true, visibleIndex: 0 },
+                { dataField: 'field2', visible: true, visibleIndex: 1 } ]
         }).dxForm('instance');
 
         const $inputs = form.$element().find('input');
@@ -2269,7 +2264,6 @@ QUnit.module('visible/visibleIndex', () => {
             items: [{
                 itemType: 'group',
                 colCount: 1,
-                name: 'group',
                 items: [
                     { dataField: 'field1', visible: true },
                     { dataField: 'field2', visible: true } ]
@@ -2286,7 +2280,6 @@ QUnit.module('visible/visibleIndex', () => {
             items: [{
                 itemType: 'group',
                 colCount: 1,
-                name: 'group',
                 items: [
                     { dataField: 'field1', visible: true, visibleIndex: 0 },
                     { dataField: 'field2', visible: true, visibleIndex: 1 } ]
@@ -2303,7 +2296,6 @@ QUnit.module('visible/visibleIndex', () => {
             items: [{
                 itemType: 'group',
                 colCount: 1,
-                name: 'group',
                 items: [
                     { dataField: 'field1', visible: true, visibleIndex: 1 },
                     { dataField: 'field2', visible: true, visibleIndex: 0 } ]
@@ -2320,7 +2312,6 @@ QUnit.module('visible/visibleIndex', () => {
             items: [{
                 itemType: 'group',
                 colCount: 1,
-                name: 'group',
                 items: [
                     { dataField: 'field1', visible: true, visibleIndex: 2 },
                     { dataField: 'field2', visible: true, visibleIndex: 3 } ]
@@ -2337,7 +2328,6 @@ QUnit.module('visible/visibleIndex', () => {
             items: [{
                 itemType: 'group',
                 colCount: 1,
-                name: 'group',
                 items: [
                     { dataField: 'field1', visible: true, visibleIndex: 5 },
                     { dataField: 'field2', visible: true, visibleIndex: 2 } ]
@@ -2463,7 +2453,6 @@ QUnit.module('visible/visibleIndex', () => {
         const form = $('#form').dxForm({
             items: [{
                 itemType: 'tabbed',
-                name: 'group',
                 tabs: [ { title: 'tab', items: [
                     { dataField: 'field1', visible: true },
                     { dataField: 'field2', visible: true } ]
@@ -2480,7 +2469,6 @@ QUnit.module('visible/visibleIndex', () => {
         const form = $('#form').dxForm({
             items: [{
                 itemType: 'tabbed',
-                name: 'group',
                 tabs: [ { title: 'tab', items: [
                     { dataField: 'field1', visible: true, visibleIndex: 0 },
                     { dataField: 'field2', visible: true, visibleIndex: 1 } ]
@@ -2497,7 +2485,6 @@ QUnit.module('visible/visibleIndex', () => {
         const form = $('#form').dxForm({
             items: [{
                 itemType: 'tabbed',
-                name: 'group',
                 tabs: [{
                     title: 'tab', items: [
                         { dataField: 'field1', visible: true, visibleIndex: 1 },
@@ -2515,7 +2502,6 @@ QUnit.module('visible/visibleIndex', () => {
         const form = $('#form').dxForm({
             items: [{
                 itemType: 'tabbed',
-                name: 'group',
                 tabs: [{
                     title: 'tab', items: [
                         { dataField: 'field1', visible: true, visibleIndex: 2 },
@@ -2533,7 +2519,6 @@ QUnit.module('visible/visibleIndex', () => {
         const form = $('#form').dxForm({
             items: [{
                 itemType: 'tabbed',
-                name: 'group',
                 tabs: [{
                     title: 'tab', items: [
                         { dataField: 'field1', visible: true, visibleIndex: 5 },
@@ -2551,7 +2536,7 @@ QUnit.module('visible/visibleIndex', () => {
         const form = $('#form').dxForm({
             items: [{
                 itemType: 'tabbed',
-                name: 'group',
+                name: 'tabbed',
                 tabs: [{
                     title: 'tab', items: [
                         { dataField: 'field1', visible: false },
@@ -2563,7 +2548,7 @@ QUnit.module('visible/visibleIndex', () => {
         const $inputs = form.$element().find('input');
         assert.equal($inputs.eq(0).attr('name'), 'field2');
 
-        form.itemOption('group.tab.field1', 'visible', true);
+        form.itemOption('tabbed.tab.field1', 'visible', true);
 
         const $inputs_2 = form.$element().find('input');
         assert.equal($inputs_2.eq(0).attr('name'), 'field1', 'inputs_1');
@@ -2574,7 +2559,7 @@ QUnit.module('visible/visibleIndex', () => {
         const form = $('#form').dxForm({
             items: [{
                 itemType: 'tabbed',
-                name: 'group',
+                name: 'tabbed',
                 tabs: [{
                     title: 'tab', items: [
                         { dataField: 'field1', visible: false, visibleIndex: 0 },
@@ -2586,7 +2571,7 @@ QUnit.module('visible/visibleIndex', () => {
         const $inputs = form.$element().find('input');
         assert.equal($inputs.eq(0).attr('name'), 'field2');
 
-        form.itemOption('group.tab.field1', 'visible', true);
+        form.itemOption('tabbed.tab.field1', 'visible', true);
 
         const $inputs_2 = form.$element().find('input');
         assert.equal($inputs_2.eq(0).attr('name'), 'field1', 'inputs_2');
@@ -2597,7 +2582,7 @@ QUnit.module('visible/visibleIndex', () => {
         const form = $('#form').dxForm({
             items: [{
                 itemType: 'tabbed',
-                name: 'group',
+                name: 'tabbed',
                 tabs: [{
                     title: 'tab', items: [
                         { dataField: 'field1', visible: false, visibleIndex: 1 },
@@ -2609,7 +2594,7 @@ QUnit.module('visible/visibleIndex', () => {
         const $inputs = form.$element().find('input');
         assert.equal($inputs.eq(0).attr('name'), 'field2');
 
-        form.itemOption('group.tab.field1', 'visible', true);
+        form.itemOption('tabbed.tab.field1', 'visible', true);
 
         const $inputs_2 = form.$element().find('input');
         assert.equal($inputs_2.eq(0).attr('name'), 'field2', 'inputs_2');
@@ -2620,7 +2605,7 @@ QUnit.module('visible/visibleIndex', () => {
         const form = $('#form').dxForm({
             items: [{
                 itemType: 'tabbed',
-                name: 'group',
+                name: 'tabbed',
                 tabs: [{
                     title: 'tab', items: [
                         { dataField: 'field1', visible: false, visibleIndex: 2 },
@@ -2632,7 +2617,7 @@ QUnit.module('visible/visibleIndex', () => {
         const $inputs = form.$element().find('input');
         assert.equal($inputs.eq(0).attr('name'), 'field2');
 
-        form.itemOption('group.tab.field1', 'visible', true);
+        form.itemOption('tabbed.tab.field1', 'visible', true);
 
         const $inputs_2 = form.$element().find('input');
         assert.equal($inputs_2.eq(0).attr('name'), 'field1', 'inputs_2');
@@ -2643,7 +2628,7 @@ QUnit.module('visible/visibleIndex', () => {
         const form = $('#form').dxForm({
             items: [{
                 itemType: 'tabbed',
-                name: 'group',
+                name: 'tabbed',
                 tabs: [{
                     title: 'tab', items: [
                         { dataField: 'field1', visible: false, visibleIndex: 5 },
@@ -2655,7 +2640,7 @@ QUnit.module('visible/visibleIndex', () => {
         const $inputs = form.$element().find('input');
         assert.equal($inputs.eq(0).attr('name'), 'field2');
 
-        form.itemOption('group.tab.field1', 'visible', true);
+        form.itemOption('tabbed.tab.field1', 'visible', true);
 
         const $inputs_2 = form.$element().find('input');
         assert.equal($inputs_2.eq(0).attr('name'), 'field2', 'inputs_2');
