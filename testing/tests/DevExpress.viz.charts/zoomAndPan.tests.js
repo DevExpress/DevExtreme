@@ -3326,11 +3326,11 @@ QUnit.test('Argument axis panning - value axis adjust to predefined position', f
     const axisPositionRight = valueAxis.getAxisPosition();
 
     this.pointer.start({ x: 50, y: 250 }).dragStart().drag(100, 10).dragEnd();
-    const newAxisPosition = valueAxis.getAxisPosition();
+    const staticPositionAfterDrag = valueAxis.getAxisPosition();
 
     assert.ok(initAxisPosition < axisPositionRight, 'value axis moved');
     assert.equal(axisPositionRight, 800, 'value axis has predefined position');
-    assert.equal(axisPositionRight, newAxisPosition, 'value axis not moved');
+    assert.equal(axisPositionRight, staticPositionAfterDrag, 'value axis not moved');
 });
 
 QUnit.test('Value axis panning (argument axis has custom position)', function(assert) {
@@ -3412,14 +3412,14 @@ QUnit.test('Value axis panning - argument axis adjust to predefined position', f
     const axisPositionBottom = argumentAxis.getAxisPosition();
 
     this.pointer.start({ x: 100, y: 100 }).dragStart().drag(10, 100).dragEnd();
-    const newAxisPosition = argumentAxis.getAxisPosition();
+    const staticPositionAfterDrag = argumentAxis.getAxisPosition();
 
     assert.ok(initAxisPosition < axisPositionBottom, 'argument axis moved');
     assert.equal(axisPositionBottom, 600, 'argument axis has predefined position');
-    assert.equal(axisPositionBottom, newAxisPosition, 'argument axis not moved');
+    assert.equal(axisPositionBottom, staticPositionAfterDrag, 'argument axis not moved');
 });
 
-QUnit.test('Axes zooming', function(assert) {
+QUnit.test('Axes zooming - wheel', function(assert) {
     const chart = this.createChart({
         argumentAxis: {
             customPosition: 2.5,
@@ -3446,7 +3446,6 @@ QUnit.test('Axes zooming', function(assert) {
     const valueAxis = chart.getValueAxis();
 
     // act
-    // wheel
     this.pointer.start({ x: 150, y: 100 }).wheel(10);
 
     assert.roughEqual(argumentAxis.getAxisPosition(), 320, 2.01, 'argument axis moved - zoom in');
@@ -3456,21 +3455,47 @@ QUnit.test('Axes zooming', function(assert) {
 
     assert.roughEqual(argumentAxis.getAxisPosition(), 287, 2.01, 'argument axis moved - zoom out');
     assert.roughEqual(valueAxis.getAxisPosition(), 364, 2.01, 'value axis moved - zoom out');
+});
 
-    // pinch
+QUnit.test('Axes zooming - pinch', function(assert) {
+    const chart = this.createChart({
+        argumentAxis: {
+            customPosition: 2.5,
+            visualRange: {
+                startValue: 3,
+                endValue: 7
+            }
+        },
+        valueAxis: {
+            customPosition: 5,
+            visualRange: {
+                startValue: 1,
+                endValue: 4
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'both',
+            valueAxis: 'both',
+            allowMouseWheel: true
+        }
+    });
+
+    const argumentAxis = chart.getArgumentAxis();
+    const valueAxis = chart.getValueAxis();
+
+    // act
     const $root = $(chart._renderer.root.element);
     $root.trigger($.Event('dxpointerdown', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 20, pageY: 20 }, { pointerId: 2, pageX: 50, pageY: 50 }] }));
     $root.trigger($.Event('dxpointermove', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 10, pageY: 10 }, { pointerId: 2, pageX: 60, pageY: 60 }] }));
     $root.trigger($.Event('dxpointerup', { pointerType: 'touch', pointers: [] }));
 
-    assert.roughEqual(argumentAxis.getAxisPosition(), 456, 2.01, 'argument axis moved - zoom in');
-    assert.roughEqual(valueAxis.getAxisPosition(), 583, 2.01, 'value axis moved - zoom in');
+    assert.roughEqual(argumentAxis.getAxisPosition(), 477, 2.01, 'argument axis moved - zoom in');
+    assert.roughEqual(valueAxis.getAxisPosition(), 643, 2.01, 'value axis moved - zoom in');
 
     $root.trigger($.Event('dxpointerdown', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 10, pageY: 10 }, { pointerId: 2, pageX: 60, pageY: 60 }] }));
     $root.trigger($.Event('dxpointermove', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 20, pageY: 20 }, { pointerId: 2, pageX: 50, pageY: 50 }] }));
     $root.trigger($.Event('dxpointerup', { pointerType: 'touch', pointers: [] }));
 
-    assert.roughEqual(argumentAxis.getAxisPosition(), 287, 2.01, 'argument axis moved - zoom out');
-    assert.roughEqual(valueAxis.getAxisPosition(), 364, 2.01, 'value axis moved - zoom out');
+    assert.roughEqual(argumentAxis.getAxisPosition(), 300, 2.01, 'argument axis moved - zoom out');
+    assert.roughEqual(valueAxis.getAxisPosition(), 400, 2.01, 'value axis moved - zoom out');
 });
-
