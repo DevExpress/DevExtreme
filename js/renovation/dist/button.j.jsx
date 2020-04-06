@@ -81,11 +81,10 @@ class Button extends Component {
     _init() {
         // NOTE: if we have no template and have some children,
         //       then it is anonymous template and we should render these children
-        const haveChildren = this.$element().contents().length > 0;
+        const haveAnonymousTemplate = this.$element().contents().length > 0;
         const template = this.option('template');
-        if(haveChildren && !template) {
-            this.option('template', this._getAnonymousTemplateName());
-        }
+        this.option('haveAnonymousTemplate', haveAnonymousTemplate);
+        this._setAnonymousTemplateIfNeed(template);
 
         super._init();
 
@@ -112,6 +111,9 @@ class Button extends Component {
                 break;
             case 'onOptionChanged':
                 super._optionChanged(option);
+                break;
+            case 'template':
+                this._setAnonymousTemplateIfNeed(value);
                 break;
         }
 
@@ -159,6 +161,12 @@ class Button extends Component {
     //       or we should use one name for all anonymous template (BC)
     _getAnonymousTemplateName() {
         return 'content';
+    }
+
+    _setAnonymousTemplateIfNeed(template) {
+        if(this.option('haveAnonymousTemplate') && !template) {
+            this.option('template', this._getAnonymousTemplateName());
+        }
     }
 }
 
