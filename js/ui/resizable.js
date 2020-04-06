@@ -412,6 +412,9 @@ const Resizable = DOMComponent.inherit({
     _optionChanged: function(args) {
         switch(args.name) {
             case 'disabled':
+                this._clean();
+                this._renderHandles();
+                break;
             case 'handles':
                 this._invalidate();
                 break;
