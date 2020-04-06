@@ -2242,7 +2242,7 @@ const SchedulerWorkSpace = Widget.inherit({
     getDateRange: function() {
         return [
             this.getStartViewDate(),
-            this.getEndViewDate()
+            this.getEndViewDateByEndDayHour()
         ];
     },
 
@@ -2371,6 +2371,16 @@ const SchedulerWorkSpace = Widget.inherit({
         const endDateOfLastViewCell = this.calculateEndViewDate(dateOfLastViewCell);
 
         return this._adjustEndViewDateByDaylightDiff(dateOfLastViewCell, endDateOfLastViewCell);
+    },
+
+    getEndViewDateByEndDayHour: function() {
+        const dateOfLastViewCell = this.getDateOfLastViewCell();
+        const endTime = dateUtils.dateTimeFromDecimal(this.option('endDayHour'));
+
+        const endDateOfLastViewCell = new Date(dateOfLastViewCell.setHours(endTime.hours, endTime.minutes));
+
+        return this._adjustEndViewDateByDaylightDiff(dateOfLastViewCell, endDateOfLastViewCell);
+
     },
 
     calculateEndViewDate: function(dateOfLastViewCell) {

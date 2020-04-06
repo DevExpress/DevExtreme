@@ -306,5 +306,10 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsUIWidgets.W1014
     */
-    W1014: 'The Floating Action Button exceeds the recommended speed dial action count. If you need to display more speed dial actions, increase the maxSpeedDialActionCount option value in the global config.'
+    W1014: 'The Floating Action Button exceeds the recommended speed dial action count. If you need to display more speed dial actions, increase the maxSpeedDialActionCount option value in the global config.',
+
+    /**
+    * @name ErrorsUIWidgets.W1015
+    */
+    W1015: 'The "cellDuration" should divide the range from the "startDayHour" to the "endDayHour" into even intervals'
 });

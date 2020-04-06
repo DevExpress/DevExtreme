@@ -56,6 +56,7 @@ const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
 
 const toMs = dateUtils.dateToMilliseconds;
+const MINUTES_IN_HOUR = 60;
 
 const WIDGET_CLASS = 'dx-scheduler';
 const WIDGET_SMALL_CLASS = `${WIDGET_CLASS}-small`;
@@ -800,6 +801,8 @@ const Scheduler = Widget.inherit({
                 this._processCurrentView();
                 this.getLayoutManager().initRenderingStrategy(this._getAppointmentsRenderingStrategy());
 
+                this._validateCellDuration();
+
                 this._appointments.option({
                     items: [],
                     allowDrag: this._allowDragging(),
@@ -891,6 +894,7 @@ const Scheduler = Widget.inherit({
                 });
                 break;
             case 'cellDuration':
+                this._validateCellDuration();
                 this._appointments.option('items', []);
                 if(this._readyToRenderAppointments) {
                     this._updateOption('workSpace', 'hoursInterval', value / 60);
@@ -1441,6 +1445,7 @@ const Scheduler = Widget.inherit({
         this.callBase();
 
         this._validateDayHours();
+        this._validateCellDuration();
 
         this._processCurrentView();
         this._renderHeader();
@@ -1647,6 +1652,16 @@ const Scheduler = Widget.inherit({
 
         if(startDayHour >= endDayHour) {
             throw errors.Error('E1058');
+        }
+    },
+
+    _validateCellDuration: function() {
+        const endDayHour = this._getCurrentViewOption('endDayHour');
+        const startDayHour = this._getCurrentViewOption('startDayHour');
+        const cellDuration = this._getCurrentViewOption('cellDuration');
+
+        if((endDayHour - startDayHour) * MINUTES_IN_HOUR % cellDuration !== 0) {
+            errors.log('W1015');
         }
     },
 
