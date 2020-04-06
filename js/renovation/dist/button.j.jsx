@@ -36,6 +36,7 @@ class Button extends Component {
                         container: getPublicElement($parent),
                         model: restProps,
                         transclude: this._templateManager.anonymousTemplateName === props.template,
+                        // TODO index
                     }));
 
                     if($template.hasClass(TEMPLATE_WRAPPER_CLASS)) {
