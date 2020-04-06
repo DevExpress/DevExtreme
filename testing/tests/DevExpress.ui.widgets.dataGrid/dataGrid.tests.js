@@ -18576,7 +18576,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
         // assert
         assert.ok($firstCell.hasClass('dx-focused'), 'cell is focused');
 
-        const $inputElement = rowsView.getCell(0, 0).getEditor().getInputElement();
+        const $inputElement = rowsView.getEditorInput(0, 0);
         $inputElement.val('');
         $inputElement.trigger('change');
         headerPanel.getElement().trigger(pointerEvents.down).trigger('dxclick');
@@ -18628,7 +18628,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
         assert.ok($firstCell.hasClass('dx-focused'), 'cell is focused');
 
-        const $inputElement = rowsView.getCell(0, 0).getEditor().getInputElement();
+        const $inputElement = rowsView.getEditorInput(0, 0);
         $inputElement.val('');
         $inputElement.trigger('change');
 
