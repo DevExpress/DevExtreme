@@ -551,10 +551,11 @@ QUnit.module('popup options', moduleConfig, () => {
             assert.roughEqual(Math.floor(maxHeight()), (1 + startPopupHeight + elementHeight) * 0.9, 3, 'maxHeight is correct');
         } finally {
             scrollTop.restore();
+            this.$element.css('margin-top', 0);
         }
     });
 
-    QUnit.test('maxHeight should be 90% to most farther bound if popup has been reopened after content change (T874949)', function(assert) {
+    QUnit.test('maxHeight should be recalculated if popup has been reopened after content change (T874949)', function(assert) {
         const contentHeight = 240;
 
         const windowHeight = $(window).height();
@@ -588,10 +589,12 @@ QUnit.module('popup options', moduleConfig, () => {
 
             instance.close();
             instance.open();
+            this.clock.tick();
             const overlayContentHeight = $(popup.content()).outerHeight();
             assert.roughEqual(Math.floor(maxHeight()), (windowHeight - (marginTop - overlayContentHeight)) * 0.9, 3, 'maxHeight is correct');
 
         } finally {
+            this.$element.css('margin-top', 0);
             scrollTop.restore();
         }
     });
