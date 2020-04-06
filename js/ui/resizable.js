@@ -114,21 +114,21 @@ const Resizable = DOMComponent.inherit({
         inArray('bottom', directions) + 1 && inArray('left', directions) + 1 && this._renderHandle('corner-bottom-left');
         inArray('top', directions) + 1 && inArray('right', directions) + 1 && this._renderHandle('corner-top-right');
         inArray('top', directions) + 1 && inArray('left', directions) + 1 && this._renderHandle('corner-top-left');
+        this._attachEventHandlers();
     },
 
     _renderHandle: function(handleName) {
-        const $element = this.$element();
-        const $handle = $('<div>');
-
-        $handle
+        $('<div>')
             .addClass(RESIZABLE_HANDLE_CLASS)
             .addClass(RESIZABLE_HANDLE_CLASS + '-' + handleName)
-            .appendTo($element);
-
-        this._attachEventHandlers($handle);
+            .appendTo(this.$element());
     },
 
-    _attachEventHandlers: function($handle) {
+    _getHandlers: function() {
+        return this.$element().children('.' + RESIZABLE_HANDLE_CLASS);
+    },
+
+    _attachEventHandlers: function() {
         if(this.option('disabled')) {
             return;
         }
@@ -138,10 +138,22 @@ const Resizable = DOMComponent.inherit({
         handlers[DRAGSTART_EVENT_NAME] = this._dragHandler.bind(this);
         handlers[DRAGSTART_END_EVENT_NAME] = this._dragEndHandler.bind(this);
 
-        eventsEngine.on($handle, handlers, {
-            direction: 'both',
-            immediate: true
+        this._getHandlers().each(function(index, handleElement) {
+            eventsEngine.on(handleElement, handlers, {
+                direction: 'both',
+                immediate: true
+            });
         });
+    },
+
+    _detachEventHandlers: function() {
+        this._getHandlers().each(function(index, handleElement) {
+            eventsEngine.off(handleElement);
+        });
+    },
+
+    toggleEventHandlers: function(shouldAttachEvents) {
+        shouldAttachEvents ? this._attachEventHandlers() : this._detachEventHandlers();
     },
 
     _dragStartHandler: function(e) {
@@ -412,8 +424,8 @@ const Resizable = DOMComponent.inherit({
     _optionChanged: function(args) {
         switch(args.name) {
             case 'disabled':
-                this._clean();
-                this._renderHandles();
+                this.toggleEventHandlers(!args.value);
+                this.callBase(args);
                 break;
             case 'handles':
                 this._invalidate();
