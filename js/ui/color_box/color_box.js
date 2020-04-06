@@ -380,15 +380,6 @@ const ColorBox = DropDownEditor.inherit({
                     this._colorView.option(name, value);
                 }
                 break;
-            case 'applyValueMode':
-                this.callBase(args);
-                break;
-            case 'rtlEnabled':
-                if(this._colorView) {
-                    this._colorView.option(name, value);
-                }
-                this.callBase(args);
-                break;
             default:
                 this.callBase(args);
         }
