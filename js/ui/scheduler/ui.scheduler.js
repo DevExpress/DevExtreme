@@ -798,6 +798,9 @@ const Scheduler = Widget.inherit({
                 break;
             case 'currentView':
                 this._processCurrentView();
+
+                this.fire('validateDayHours');
+
                 this.getLayoutManager().initRenderingStrategy(this._getAppointmentsRenderingStrategy());
 
                 this._appointments.option({
