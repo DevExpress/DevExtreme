@@ -35,7 +35,7 @@ class Button extends Component {
                     let $template = $(template.render({
                         container: getPublicElement($parent),
                         model: restProps,
-                        // TODO index
+                        transclude: this._templateManager.anonymousTemplateName === props.template,
                     }));
 
                     if($template.hasClass(TEMPLATE_WRAPPER_CLASS)) {
@@ -78,6 +78,14 @@ class Button extends Component {
     }
 
     _init() {
+        // NOTE: if we have no template and have some children,
+        //       then it is anonymous template and we should render these children
+        const haveChildren = this.$element().contents().length > 0;
+        const template = this.option('template');
+        if(haveChildren && !template) {
+            this.option('template', this._getAnonymousTemplateName());
+        }
+
         super._init();
 
         this.view_ref = Preact.createRef();
@@ -144,6 +152,12 @@ class Button extends Component {
 
     get _validationGroupConfig() {
         return ValidationEngine.getGroupConfig(this._findGroup());
+    }
+
+    // NOTE: should find a way, how we can pass anonymousTemplateName,
+    //       or we should use one name for all anonymous template (BC)
+    _getAnonymousTemplateName() {
+        return 'content';
     }
 }
 
