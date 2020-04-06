@@ -250,7 +250,7 @@ const DropDownBox = DropDownEditor.inherit({
 
     _popupHiddenHandler: function() {
         this.callBase();
-        this._resultPosition = undefined;
+        this._popupPosition = undefined;
     },
 
     _popupPositionedHandler: function(e) {

@@ -554,6 +554,48 @@ QUnit.module('popup options', moduleConfig, () => {
         }
     });
 
+    QUnit.test('maxHeight should be 90% to most farther bound if popup has been reopened after content change (T874949)', function(assert) {
+        const contentHeight = 240;
+
+        const windowHeight = $(window).height();
+        const marginTop = Math.max(windowHeight - 200, 300);
+        this.$element.dxDropDownBox({
+            contentTemplate: (e) => {
+                const content = $('<div id=\'dd-content\'></div>');
+
+                setTimeout(() => {
+                    $('#dd-content').height(contentHeight);
+                });
+
+                return content;
+            }
+        });
+
+        const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(0);
+
+        this.$element.css({
+            'margin-top': marginTop,
+            'margin-bottom:': 100
+        });
+        const instance = this.$element.dxDropDownBox('instance');
+
+        try {
+            instance.open();
+
+            this.clock.tick();
+            const popup = $('.dx-popup').dxPopup('instance');
+            const maxHeight = popup.option('maxHeight');
+
+            instance.close();
+            instance.open();
+            const overlayContentHeight = $(popup.content()).outerHeight();
+            assert.roughEqual(Math.floor(maxHeight()), (windowHeight - (marginTop - overlayContentHeight)) * 0.9, 3, 'maxHeight is correct');
+
+        } finally {
+            scrollTop.restore();
+        }
+    });
+
     QUnit.test('Dropdownbox popup should change height according to the content', function(assert) {
         if(isIE11) {
             assert.expect(0);
