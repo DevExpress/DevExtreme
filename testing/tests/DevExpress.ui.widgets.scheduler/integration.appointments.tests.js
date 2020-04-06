@@ -3606,6 +3606,9 @@ QUnit.test('Appointment should be resized correctly to left side in horizontal g
 }].forEach(testCase => {
     QUnit.test(`Appointment should have correct dates after resizing ${testCase.text} (T835544)`, function(assert) {
         this.createInstance({
+            editing: {
+                allowResizing: true
+            },
             dataSource: [{
                 text: 'Staff Productivity Report',
                 startDate: testCase.appointment.startDate,
