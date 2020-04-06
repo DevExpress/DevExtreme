@@ -19732,6 +19732,108 @@ QUnit.module('Editing', baseModuleConfig, () => {
         // assert
         assert.equal(filterBuilder.getItemValueTextParts().length, 2, 'IsAnyOf operation applyed');
     });
+
+    QUnit.testInActiveWindow('Cell mode - Cell validation message should be shown when a user clicks outside the cell (T869854)', function(assert) {
+        // arrange
+        const rowsView = dataGridWrapper.rowsView;
+        const headerPanel = dataGridWrapper.headerPanel;
+
+        const gridConfig = {
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: [{
+                    a: 'a',
+                    b: 'b'
+                }]
+            },
+            editing: {
+                mode: 'cell',
+                allowAdding: true,
+                allowUpdating: true
+            },
+            columns: [
+                {
+                    dataField: 'a',
+                    validationRules: [{
+                        type: 'required'
+                    }]
+                }, 'b'
+            ]
+        };
+
+        const grid = createDataGrid(gridConfig);
+        this.clock.tick();
+        let $firstCell = $(grid.getCellElement(0, 0));
+        $firstCell.trigger(pointerEvents.down).trigger('dxclick');
+        this.clock.tick();
+        $firstCell = $(grid.getCellElement(0, 0));
+
+        // assert
+        assert.ok($firstCell.hasClass('dx-focused'), 'cell is focused');
+
+        const $inputElement = rowsView.getCell(0, 0).getEditor().getInputElement();
+        $inputElement.val('');
+        $inputElement.trigger('change');
+        headerPanel.getElement().trigger(pointerEvents.down).trigger('dxclick');
+        this.clock.tick();
+        $firstCell = $(grid.getCellElement(0, 0));
+
+        // assert
+        assert.ok($firstCell.hasClass('dx-focused'), 'cell is focused');
+        assert.ok($firstCell.hasClass('dx-datagrid-invalid'), 'cell is invalid');
+        assert.ok($firstCell.find('.dx-datagrid-revert-tooltip .dx-overlay-content').is(':visible'), 'revert button is visible');
+        assert.ok($firstCell.find('.dx-invalid-message .dx-overlay-content').is(':visible'), 'error message is visible');
+    });
+
+    QUnit.testInActiveWindow('Batch mode - Cell should be invalid when a user clicks outside the cell (T869854)', function(assert) {
+        // arrange
+        const rowsView = dataGridWrapper.rowsView;
+        const headerPanel = dataGridWrapper.headerPanel;
+
+        const gridConfig = {
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: [{
+                    a: 'a',
+                    b: 'b'
+                }]
+            },
+            editing: {
+                mode: 'batch',
+                allowAdding: true,
+                allowUpdating: true
+            },
+            columns: [
+                {
+                    dataField: 'a',
+                    validationRules: [{
+                        type: 'required'
+                    }]
+                }, 'b'
+            ]
+        };
+
+        const grid = createDataGrid(gridConfig);
+        this.clock.tick();
+
+        let $firstCell = $(grid.getCellElement(0, 0));
+        $firstCell.trigger(pointerEvents.down).trigger('dxclick');
+        this.clock.tick();
+        $firstCell = $(grid.getCellElement(0, 0));
+
+        assert.ok($firstCell.hasClass('dx-focused'), 'cell is focused');
+
+        const $inputElement = rowsView.getCell(0, 0).getEditor().getInputElement();
+        $inputElement.val('');
+        $inputElement.trigger('change');
+
+        headerPanel.getElement().trigger(pointerEvents.down).trigger('dxclick');
+        this.clock.tick();
+        $firstCell = $(grid.getCellElement(0, 0));
+
+        // assert
+        assert.ok($firstCell.hasClass('dx-datagrid-invalid'), 'cell is invalid');
+    });
 });
 
 QUnit.module('Row dragging', baseModuleConfig, () => {
