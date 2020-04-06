@@ -556,10 +556,14 @@ QUnit.module('popup options', moduleConfig, () => {
     });
 
     QUnit.test('maxHeight should be recalculated if popup has been reopened after content change (T874949)', function(assert) {
-        const contentHeight = 240;
+        const contentHeight = 90;
 
         const windowHeight = $(window).height();
-        const marginTop = Math.max(windowHeight - 200, 300);
+        let windowHeightStub;
+        if(windowHeight < 300) {
+            windowHeightStub = sinon.stub(renderer.fn, 'innerHeight').returns(300);
+        }
+        const marginTop = Math.max(windowHeight - 50, 200);
         this.$element.dxDropDownBox({
             contentTemplate: (e) => {
                 const content = $('<div id=\'dd-content\'></div>');
@@ -574,10 +578,7 @@ QUnit.module('popup options', moduleConfig, () => {
 
         const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(0);
 
-        this.$element.css({
-            'margin-top': marginTop,
-            'margin-bottom:': 100
-        });
+        this.$element.css('margin-top', marginTop);
         const instance = this.$element.dxDropDownBox('instance');
 
         try {
@@ -595,6 +596,8 @@ QUnit.module('popup options', moduleConfig, () => {
 
         } finally {
             this.$element.css('margin-top', 0);
+            $('#container').css('min-height', 0);
+            windowHeightStub && windowHeightStub.restore();
             scrollTop.restore();
         }
     });
