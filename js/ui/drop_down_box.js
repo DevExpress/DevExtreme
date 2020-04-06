@@ -248,6 +248,16 @@ const DropDownBox = DropDownEditor.inherit({
         return realDevice.deviceType === 'desktop' && this._canShowVirtualKeyboard() && this._isNestedElementActive();
     },
 
+    _popupHiddenHandler: function() {
+        this.callBase();
+        this._resultPosition = undefined;
+    },
+
+    _popupPositionedHandler: function(e) {
+        this.callBase(e);
+        this._popupPosition = e.position;
+    },
+
     _popupConfig: function() {
         const horizontalAlignment = this.option('rtlEnabled') ? 'right' : 'left';
 
@@ -272,7 +282,7 @@ const DropDownBox = DropDownEditor.inherit({
             },
             onKeyboardHandled: opts => this.option('focusStateEnabled') && this._popupElementTabHandler(opts),
             maxHeight: function() {
-                const popupLocation = this?._popup?._resultPosition ? this._popup._resultPosition.v.location : undefined;
+                const popupLocation = this?._popupPosition ? this._popupPosition.v.location : undefined;
 
                 return getElementMaxHeightByWindow(this.$element(), popupLocation);
             }.bind(this)

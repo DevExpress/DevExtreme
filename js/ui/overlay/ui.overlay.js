@@ -664,7 +664,6 @@ var Overlay = Widget.inherit({
 
         if(!visible) {
             domUtils.triggerHidingEvent(this._$content);
-            this._resultPosition = undefined;
         }
 
         this._toggleVisibility(visible);
@@ -1142,9 +1141,9 @@ var Overlay = Widget.inherit({
         this._renderWrapper();
         this._fixHeightAfterSafariAddressBarResizing();
         this._renderDimensions();
-        this._resultPosition = this._renderPosition();
+        const resultPosition = this._renderPosition();
 
-        this._actions.onPositioned({ position: this._resultPosition });
+        this._actions.onPositioned({ position: resultPosition });
     },
 
     _fixWrapperPosition: function() {
