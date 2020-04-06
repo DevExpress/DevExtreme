@@ -20,7 +20,7 @@ import dblclickEvent from '../../events/double_click';
 import messageLocalization from '../../localization/message';
 import CollectionWidget from '../collection/ui.collection_widget.edit';
 import { Deferred } from '../../core/utils/deferred';
-import utils from './utils.js';
+import timeZoneUtils from './utils.timeZone.js';
 
 const APPOINTMENT_SETTINGS_NAME = 'dxAppointmentSettings';
 
@@ -611,12 +611,12 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
         if(isStartDateChanged) {
             startTime = needCorrectDates ? this._correctStartDateByDelta(startDate, deltaTime) : startDate.getTime() - deltaTime;
-            startTime += utils.getTimezoneOffsetChangeInMs(startDate, endDate, startTime, endDate);
+            startTime += timeZoneUtils.getTimezoneOffsetChangeInMs(startDate, endDate, startTime, endDate);
             endTime = endDate.getTime();
         } else {
             startTime = startDate.getTime();
             endTime = needCorrectDates ? this._correctEndDateByDelta(endDate, deltaTime) : endDate.getTime() + deltaTime;
-            endTime += utils.getTimezoneOffsetChangeInMs(startDate, endDate, startDate, endTime);
+            endTime += timeZoneUtils.getTimezoneOffsetChangeInMs(startDate, endDate, startDate, endTime);
         }
 
         return [startTime, endTime];

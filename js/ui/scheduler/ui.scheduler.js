@@ -49,7 +49,7 @@ import { BindableTemplate } from '../../core/templates/bindable_template';
 import themes from '../themes';
 import browser from '../../core/utils/browser';
 import { touch } from '../../core/utils/support';
-import utils from './utils';
+import timeZoneUtils from './utils.timeZone';
 
 const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
@@ -1065,7 +1065,7 @@ const Scheduler = Widget.inherit({
     },
 
     _getTimezoneOffsetByOption: function(date) {
-        return utils.calculateTimezoneByValue(this.option('timeZone'), date);
+        return timeZoneUtils.calculateTimezoneByValue(this.option('timeZone'), date);
     },
 
     getCorrectedDatesByDaylightOffsets: function(originalStartDate, dates, appointmentData) {
@@ -1077,7 +1077,7 @@ const Scheduler = Widget.inherit({
             dates = dates.map((date) => {
                 const convertedDate = this.fire('convertDateByTimezoneBack', new Date(date.getTime()), startDateTimeZone);
 
-                return utils.getCorrectedDateByDaylightOffsets(convertedOriginalStartDate, convertedDate, date, this.option('timeZone'), startDateTimeZone);
+                return timeZoneUtils.getCorrectedDateByDaylightOffsets(convertedOriginalStartDate, convertedDate, date, this.option('timeZone'), startDateTimeZone);
             });
         }
 
@@ -2022,7 +2022,7 @@ const Scheduler = Widget.inherit({
             appointmentStartDate.getMilliseconds());
 
         const timezoneDiff = targetStartDate.getTimezoneOffset() - exceptionStartDate.getTimezoneOffset();
-        exceptionStartDate = new Date(exceptionStartDate.getTime() - timezoneDiff * toMs('minute'));
+        exceptionStartDate = new Date(exceptionStartDate.getTime() + timezoneDiff * toMs('minute'));
 
         return dateSerialization.serializeDate(exceptionStartDate, UTC_FULL_DATE_FORMAT);
     },
@@ -2080,7 +2080,7 @@ const Scheduler = Widget.inherit({
             }
         }
 
-        endDate = new Date(endDate.getTime() - utils.getTimezoneOffsetChangeInMs(targetStartDate, targetEndDate, date, endDate));
+        endDate = new Date(endDate.getTime() - timeZoneUtils.getTimezoneOffsetChangeInMs(targetStartDate, targetEndDate, date, endDate));
 
         this.fire('setField', 'endDate', updatedData, endDate);
         this._resourcesManager.setResourcesToItem(updatedData, cellData.groups);
@@ -2344,10 +2344,9 @@ const Scheduler = Widget.inherit({
             const startDate = this.fire('getField', 'startDate', appointmentData);
             const exceptions = recurrenceException.split(',');
             const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
-            const exceptionByStartDate = this.fire('convertDateByTimezone', startDate, startDateTimeZone);
 
             for(let i = 0; i < exceptions.length; i++) {
-                exceptions[i] = this._convertRecurrenceException(exceptions[i], exceptionByStartDate, startDateTimeZone);
+                exceptions[i] = this._convertRecurrenceException(exceptions[i], startDate, startDateTimeZone);
             }
 
             recurrenceException = exceptions.join();
@@ -2356,13 +2355,16 @@ const Scheduler = Widget.inherit({
         return recurrenceException;
     },
 
-    _convertRecurrenceException: function(exception, exceptionByStartDate, startDateTimeZone) {
-        exception = exception.replace(/\s/g, '');
-        exception = dateSerialization.deserializeDate(exception);
-        exception = this.fire('convertDateByTimezone', exception, startDateTimeZone);
-        exception.setHours(exceptionByStartDate.getHours());
-        exception = dateSerialization.serializeDate(exception, FULL_DATE_FORMAT);
-        return exception;
+    _convertRecurrenceException: function(exceptionString, startDate, startDateTimeZone) {
+        exceptionString = exceptionString.replace(/\s/g, '');
+
+        const exceptionDate = dateSerialization.deserializeDate(exceptionString);
+        const convertedStartDate = this.fire('convertDateByTimezone', startDate, startDateTimeZone);
+        let convertedExceptionDate = this.fire('convertDateByTimezone', exceptionDate, startDateTimeZone);
+
+        convertedExceptionDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(convertedExceptionDate, convertedStartDate, this.option('timeZone'), startDateTimeZone);
+        exceptionString = dateSerialization.serializeDate(convertedExceptionDate, FULL_DATE_FORMAT);
+        return exceptionString;
     },
 
     dayHasAppointment: function(day, appointment, trimTime) {

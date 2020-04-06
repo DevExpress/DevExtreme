@@ -7,7 +7,7 @@ import { isNumeric } from '../../../core/utils/type';
 import typeUtils from '../../../core/utils/type';
 import themes from '../../themes';
 
-import utils from '../utils';
+import timeZoneUtils from '../utils.timeZone';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -541,7 +541,7 @@ class BaseRenderingStrategy {
     }
 
     _adjustDurationByDaylightDiff(duration, startDate, endDate) {
-        const daylightDiff = utils.getDaylightOffset(startDate, endDate);
+        const daylightDiff = timeZoneUtils.getDaylightOffset(startDate, endDate);
         return this._needAdjustDuration(daylightDiff) ? this._calculateDurationByDaylightDiff(duration, daylightDiff) : duration;
     }
 
