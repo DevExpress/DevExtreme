@@ -3555,38 +3555,86 @@ QUnit.test('Appointment should be resized correctly to left side in horizontal g
 });
 
 // Timezone-sensitive test, use US/Pacific for proper testing
-QUnit.test('Appointment should have correct dates after resizing through timezone change (T835544)', function(assert) {
-    this.createInstance({
-        dataSource: [{
-            text: 'Staff Productivity Report',
-            startDate: '2019-11-04T00:00',
-            endDate: '2019-11-06T00:00',
-        }],
-        views: ['timelineMonth'],
-        currentView: 'timelineMonth',
-        currentDate: new Date(2019, 10, 1),
-        height: 300,
-        startDayHour: 0,
+[{
+    handle: '.dx-resizable-handle-left',
+    direction: -1,
+    currentDate: new Date(2019, 10, 1),
+    appointment: {
+        startDate: '2019-11-04T00:00',
+        endDate: '2019-11-06T00:00',
+    },
+    expectedValue: '12:00 AM - 12:00 AM',
+    scrollDate: new Date(2019, 10, 1),
+    text: 'in case drag left handle to winter DST'
+}, {
+    handle: '.dx-resizable-handle-left',
+    direction: -1,
+    currentDate: new Date(2019, 2, 10),
+    appointment: {
+        startDate: '2019-03-11T00:00',
+        endDate: '2019-03-13T00:00',
+    },
+    expectedValue: '12:00 AM - 12:00 AM',
+    scrollDate: new Date(2019, 2, 10),
+    text: 'in case drag left handle to summer DST'
+}, {
+    handle: '.dx-resizable-handle-right',
+    direction: 1,
+    currentDate: new Date(2019, 10, 1),
+    appointment: {
+        startDate: '2019-11-01T00:00',
+        endDate: '2019-11-03T00:00',
+    },
+    expectedValue: '12:00 AM - 12:00 AM',
+    scrollDate: new Date(2019, 10, 1),
+    text: 'in case drag right handle to winter DST'
+}, {
+    handle: '.dx-resizable-handle-right',
+    direction: 1,
+    currentDate: new Date(2019, 2, 10),
+    appointment: {
+        startDate: '2019-03-08T00:00',
+        endDate: '2019-03-10T00:00',
+    },
+    expectedValue: '12:00 AM - 12:00 AM',
+    scrollDate: new Date(2019, 2, 7),
+    text: 'in case drag right handle to summer DST'
+}].forEach(testCase => {
+    QUnit.test(`Appointment should have correct dates after resizing ${testCase.text} (T835544)`, function(assert) {
+        this.createInstance({
+            dataSource: [{
+                text: 'Staff Productivity Report',
+                startDate: testCase.appointment.startDate,
+                endDate: testCase.appointment.endDate,
+            }],
+            views: ['timelineMonth'],
+            currentView: 'timelineMonth',
+            currentDate: new Date(testCase.currentDate),
+            height: 300,
+            startDayHour: 0,
+        });
+
+        this.scheduler.instance.scrollToTime(0, 0, new Date(testCase.scrollDate));
+
+        const cellWidth = this.scheduler.workSpace.getCellWidth();
+        let pointer = pointerMock($(this.scheduler.appointments.getAppointment()).find(testCase.handle).eq(0)).start();
+
+        pointer.dragStart().drag(testCase.direction * cellWidth, 0);
+        pointer.dragEnd();
+
+        let appointmentContent = this.scheduler.appointments.getAppointment().find('.dx-scheduler-appointment-content-date').text();
+
+        assert.equal(appointmentContent, testCase.expectedValue, 'Dates are correct');
+
+        pointer = pointerMock($(this.scheduler.appointments.getAppointment()).find(testCase.handle).eq(0)).start();
+
+        pointer.dragStart().drag(-testCase.direction * cellWidth, 0);
+        pointer.dragEnd();
+
+        appointmentContent = this.scheduler.appointments.getAppointment().find('.dx-scheduler-appointment-content-date').text();
+
+        assert.equal(appointmentContent, testCase.expectedValue, 'Dates are correct');
     });
-
-    const cellWidth = this.scheduler.workSpace.getCellWidth();
-    let pointer = pointerMock($(this.scheduler.appointments.getAppointment()).find('.dx-resizable-handle-left').eq(0)).start();
-
-    pointer.dragStart().drag(-(cellWidth), 0);
-    pointer.dragEnd();
-
-    let appointmentContent = this.scheduler.appointments.getAppointment().find('.dx-scheduler-appointment-content-date').text();
-
-    assert.equal(appointmentContent, '12:00 AM - 12:00 AM', 'Dates are correct');
-
-    pointer = pointerMock($(this.scheduler.appointments.getAppointment()).find('.dx-resizable-handle-left').eq(0)).start();
-
-    pointer.dragStart().drag((cellWidth), 0);
-    pointer.dragEnd();
-
-    appointmentContent = this.scheduler.appointments.getAppointment().find('.dx-scheduler-appointment-content-date').text();
-
-    assert.equal(appointmentContent, '12:00 AM - 12:00 AM', 'Dates are correct');
 });
 
 QUnit.test('Tail of long appointment should have a right position, groupByDate = true', function(assert) {
