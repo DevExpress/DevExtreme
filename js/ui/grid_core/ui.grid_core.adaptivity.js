@@ -413,7 +413,9 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
             rowsCount = view.getRowsCount();
             const $rowElements = view._getRowElements();
             for(rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
-                if(rowIndex !== editFormRowIndex || viewName !== ROWS_VIEW) {
+                const cancelClassAdding = rowIndex === editFormRowIndex && viewName === ROWS_VIEW && this.option('editing.mode') !== 'popup';
+
+                if(!cancelClassAdding) {
                     currentVisibleIndex = viewName === COLUMN_HEADERS_VIEW ? this._columnsController.getVisibleIndex(column.index, rowIndex) : visibleIndex;
                     if(currentVisibleIndex >= 0) {
                         $cellElement = $rowElements.eq(rowIndex).children().eq(currentVisibleIndex);
