@@ -507,6 +507,27 @@ QUnit.test('Appointments should have correct position, rtl mode, editing=false',
     assert.roughEqual($appointment.position().left, appointmentOffset, 2, 'Appointment left is correct on init');
 });
 
+QUnit.test('Appointments should be filtered correctly, if cellDuration is set and timetable is divided with a remainder (T854826)', function(assert) {
+    const appointments = [{
+        AppointmentId: 8,
+        text: 'Appointment',
+        startDate: '2017-05-24T14:30:00',
+        endDate: '2017-05-24T15:45:00'
+    }];
+
+    const scheduler = createInstance({
+        currentDate: new Date(2017, 4, 23),
+        startDayHour: 8,
+        endDayHour: 24,
+        cellDuration: 150,
+        views: ['day'],
+        currentView: 'day',
+        firstDayOfWeek: 1,
+        dataSource: appointments
+    });
+
+    assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'Appointments was filtered correctly');
+});
 
 QUnit.test('Appointment should have correct height, when startDayHour is decimal', function(assert) {
     const appointments = [{
