@@ -16,7 +16,7 @@ import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import dataUtils from 'core/element_data';
 import dateSerialization from 'core/utils/date_serialization';
-import { SchedulerTestWrapper, initTestMarkup, createWrapper } from './helpers.js';
+import { SchedulerTestWrapper, initTestMarkup, createWrapper, CLASSES } from './helpers.js';
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
@@ -3556,7 +3556,7 @@ QUnit.test('Appointment should be resized correctly to left side in horizontal g
 
 // Timezone-sensitive test, use US/Pacific for proper testing
 [{
-    handle: '.dx-resizable-handle-left',
+    handle: CLASSES.resizableHandle.left,
     direction: -1,
     currentDate: new Date(2019, 10, 1),
     appointment: {
@@ -3564,10 +3564,11 @@ QUnit.test('Appointment should be resized correctly to left side in horizontal g
         endDate: '2019-11-06T00:00',
     },
     expectedValue: '12:00 AM - 12:00 AM',
+    expectedTooltipValue: 'November 3 12:00 AM - November 6 12:00 AM',
     scrollDate: new Date(2019, 10, 1),
     text: 'in case drag left handle to winter DST'
 }, {
-    handle: '.dx-resizable-handle-left',
+    handle: CLASSES.resizableHandle.left,
     direction: -1,
     currentDate: new Date(2019, 2, 10),
     appointment: {
@@ -3575,10 +3576,11 @@ QUnit.test('Appointment should be resized correctly to left side in horizontal g
         endDate: '2019-03-13T00:00',
     },
     expectedValue: '12:00 AM - 12:00 AM',
+    expectedTooltipValue: 'March 10 12:00 AM - March 13 12:00 AM',
     scrollDate: new Date(2019, 2, 10),
     text: 'in case drag left handle to summer DST'
 }, {
-    handle: '.dx-resizable-handle-right',
+    handle: CLASSES.resizableHandle.right,
     direction: 1,
     currentDate: new Date(2019, 10, 1),
     appointment: {
@@ -3586,10 +3588,11 @@ QUnit.test('Appointment should be resized correctly to left side in horizontal g
         endDate: '2019-11-03T00:00',
     },
     expectedValue: '12:00 AM - 12:00 AM',
+    expectedTooltipValue: 'November 1 12:00 AM - November 4 12:00 AM',
     scrollDate: new Date(2019, 10, 1),
     text: 'in case drag right handle to winter DST'
 }, {
-    handle: '.dx-resizable-handle-right',
+    handle: CLASSES.resizableHandle.right,
     direction: 1,
     currentDate: new Date(2019, 2, 10),
     appointment: {
@@ -3597,6 +3600,7 @@ QUnit.test('Appointment should be resized correctly to left side in horizontal g
         endDate: '2019-03-10T00:00',
     },
     expectedValue: '12:00 AM - 12:00 AM',
+    expectedTooltipValue: 'March 8 12:00 AM - March 11 12:00 AM',
     scrollDate: new Date(2019, 2, 7),
     text: 'in case drag right handle to summer DST'
 }].forEach(testCase => {
@@ -3616,24 +3620,25 @@ QUnit.test('Appointment should be resized correctly to left side in horizontal g
 
         this.scheduler.instance.scrollToTime(0, 0, new Date(testCase.scrollDate));
 
+        const { getAppointment, getDateText } = this.scheduler.appointments;
+
         const cellWidth = this.scheduler.workSpace.getCellWidth();
-        let pointer = pointerMock($(this.scheduler.appointments.getAppointment()).find(testCase.handle).eq(0)).start();
+        let pointer = pointerMock($(getAppointment()).find(testCase.handle).eq(0)).start();
 
         pointer.dragStart().drag(testCase.direction * cellWidth, 0);
         pointer.dragEnd();
 
-        let appointmentContent = this.scheduler.appointments.getAppointment().find('.dx-scheduler-appointment-content-date').text();
+        assert.equal(getDateText(), testCase.expectedValue, 'Dates should correct after resizing');
 
-        assert.equal(appointmentContent, testCase.expectedValue, 'Dates are correct');
+        this.scheduler.appointments.click();
+        assert.equal(this.scheduler.tooltip.getDateText(), testCase.expectedTooltipValue, 'Dates in tooltip should correct');
 
-        pointer = pointerMock($(this.scheduler.appointments.getAppointment()).find(testCase.handle).eq(0)).start();
+        pointer = pointerMock($(getAppointment()).find(testCase.handle).eq(0)).start();
 
         pointer.dragStart().drag(-testCase.direction * cellWidth, 0);
         pointer.dragEnd();
 
-        appointmentContent = this.scheduler.appointments.getAppointment().find('.dx-scheduler-appointment-content-date').text();
-
-        assert.equal(appointmentContent, testCase.expectedValue, 'Dates are correct');
+        assert.equal(getDateText(), testCase.expectedValue, 'Dates should correct');
     });
 });
 
