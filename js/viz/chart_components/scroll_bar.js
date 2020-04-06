@@ -176,17 +176,12 @@ ScrollBar.prototype = {
     },
 
     // Axis like functions
-    draw: noop,
-
     shift: noop,
 
     hideTitle: noop,
 
     hideOuterElements: noop,
-
-    prepareAnimation: noop,
     // Axis like functions
-
     setPosition: function(min, max) {
         const that = this;
         const translator = that._translator;

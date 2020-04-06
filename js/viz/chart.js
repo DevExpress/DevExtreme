@@ -896,10 +896,14 @@ const dxChart = AdvancedChart.inherit({
         const that = this;
         const rotated = that._isRotated();
         const synchronizeMultiAxes = that._themeManager.getOptions('synchronizeMultiAxes');
-        const extendedArgAxes = (that._scrollBar ? [that._scrollBar] : []).concat(that._argumentAxes);
-        const verticalAxes = rotated ? extendedArgAxes : that._valueAxes;
-        const horizontalAxes = rotated ? that._valueAxes : extendedArgAxes;
+        const scrollBar = that._scrollBar ? [that._scrollBar] : [];
+        const extendedArgAxes = scrollBar.concat(that._argumentAxes);
+        const verticalAxes = rotated ? that._argumentAxes : that._valueAxes;
+        const verticalElements = rotated ? extendedArgAxes : that._valueAxes;
+        const horizontalAxes = rotated ? that._valueAxes : that._argumentAxes;
+        const horizontalElements = rotated ? that._valueAxes : extendedArgAxes;
         const allAxes = verticalAxes.concat(horizontalAxes);
+        const allElements = allAxes.concat(scrollBar);
 
         that._normalizePanesHeight();
         that._updatePanesCanvases(drawOptions);
@@ -930,15 +934,15 @@ const dxChart = AdvancedChart.inherit({
         }
 
         let vAxesMargins = { panes: {} };
-        let hAxesMargins = getHorizontalAxesMargins(horizontalAxes, axis => axis.estimateMargins(panesCanvases[axis.pane]));
+        let hAxesMargins = getHorizontalAxesMargins(horizontalElements, axis => axis.estimateMargins(panesCanvases[axis.pane]));
         panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
 
         drawAxesWithTicks(verticalAxes, !rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
-        vAxesMargins = getVerticalAxesMargins(verticalAxes);
+        vAxesMargins = getVerticalAxesMargins(verticalElements);
         panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
 
         drawAxesWithTicks(horizontalAxes, rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
-        hAxesMargins = getHorizontalAxesMargins(horizontalAxes, getAxisMargins);
+        hAxesMargins = getHorizontalAxesMargins(horizontalElements, getAxisMargins);
         panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
 
         let oldTitlesWidth = calculateTitlesWidth(verticalAxes);
@@ -946,10 +950,10 @@ const dxChart = AdvancedChart.inherit({
         const visibleSeries = that._getVisibleSeries();
         const pointsToAnimation = that._getPointsToAnimation(visibleSeries);
 
-        performActionOnAxes(allAxes, 'updateSize', panesCanvases, axisAnimationEnabled(drawOptions, pointsToAnimation));
+        performActionOnAxes(allElements, 'updateSize', panesCanvases, axisAnimationEnabled(drawOptions, pointsToAnimation));
 
-        horizontalAxes.forEach(shiftAxis('top', 'bottom'));
-        verticalAxes.forEach(shiftAxis('left', 'right'));
+        horizontalElements.forEach(shiftAxis('top', 'bottom'));
+        verticalElements.forEach(shiftAxis('left', 'right'));
 
         that._renderScaleBreaks();
 
@@ -975,7 +979,7 @@ const dxChart = AdvancedChart.inherit({
 
                 panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
 
-                performActionOnAxes(allAxes, 'updateSize', panesCanvases, false, false);
+                performActionOnAxes(allElements, 'updateSize', panesCanvases, false, false);
                 oldTitlesWidth = calculateTitlesWidth(verticalAxes);
             }
         });
