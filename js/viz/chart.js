@@ -937,18 +937,21 @@ const dxChart = AdvancedChart.inherit({
         let hAxesMargins = getHorizontalAxesMargins(horizontalElements, axis => axis.estimateMargins(panesCanvases[axis.pane]));
         panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
 
-        drawAxesWithTicks(verticalAxes, !rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
-        vAxesMargins = getVerticalAxesMargins(verticalElements);
-        panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
-
-        drawAxesWithTicks(horizontalAxes, rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
-        hAxesMargins = getHorizontalAxesMargins(horizontalElements, getAxisMargins);
-        panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
-
-        if(that._tickIntervalsChanged(verticalAxes, panesCanvases)) {
-            drawAxesWithTicks(verticalAxes, !rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
-            vAxesMargins = getVerticalAxesMargins(verticalElements);
+        const drawAxesAndSetCanvases = (axes, isHorizontal) => {
+            const condition = (isHorizontal ? rotated : !rotated) && synchronizeMultiAxes;
+            drawAxesWithTicks(axes, condition, panesCanvases, panesBorderOptions);
+            if(isHorizontal) {
+                hAxesMargins = getHorizontalAxesMargins(horizontalElements, getAxisMargins);
+            } else {
+                vAxesMargins = getVerticalAxesMargins(verticalElements);
+            }
             panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
+        };
+
+        drawAxesAndSetCanvases(verticalAxes, false);
+        drawAxesAndSetCanvases(horizontalAxes, true);
+        if(that._tickIntervalsChanged(verticalAxes, panesCanvases)) {
+            drawAxesAndSetCanvases(verticalAxes, false);
         }
 
         let oldTitlesWidth = calculateTitlesWidth(verticalAxes);
