@@ -983,6 +983,7 @@ export const MockAxis = function(renderOptions) {
         createTicks: function() {
 
         },
+        isChangedTickInterval: sinon.stub().returns(false),
         getMultipleAxesSpacing: function() {
             return this._options.mockAxesSpacing || 5;
         },

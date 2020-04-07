@@ -182,6 +182,7 @@ ScrollBar.prototype = {
 
     hideOuterElements: noop,
     // Axis like functions
+
     setPosition: function(min, max) {
         const that = this;
         const translator = that._translator;

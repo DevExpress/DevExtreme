@@ -1351,6 +1351,12 @@ Axis.prototype = {
         };
     },
 
+    isChangedTickInterval: function(canvas) {
+        const that = this;
+        that.updateCanvas(canvas);
+        return that._tickInterval !== that._getTicks(that.adjustViewport(that._seriesData), _noop, true).tickInterval;
+    },
+
     setTicks: function(ticks) {
         const majors = ticks.majorTicks || [];
         this._majorTicks = majors.map(createMajorTick(this, this._renderer, this._getSkippedCategory(majors)));
