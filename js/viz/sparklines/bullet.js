@@ -106,7 +106,7 @@ const dxBullet = BaseSparkline.inherit({
 
         that._ranges = {
             arg: {
-                invert: options.inverted,
+                invert: options.rtlEnabled ? !options.inverted : options.inverted,
                 min: options.startScaleValue,
                 max: options.endScaleValue,
                 axisType: 'continuous',
