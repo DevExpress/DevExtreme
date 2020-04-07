@@ -26,8 +26,8 @@ export default class InkRipple extends JSXComponent<InkRippleInput> {
     }
 
     @Method()
-    showWave(conf) {
+    showWave(event) {
         const { config } = this.props;
-        showWave(config, conf);
+        showWave(config, event);
     }
 }
