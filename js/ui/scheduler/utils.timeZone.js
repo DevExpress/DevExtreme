@@ -2,6 +2,7 @@ import dateUtils from '../../core/utils/date';
 import SchedulerTimezones from './timezones/ui.scheduler.timezones';
 
 const toMs = dateUtils.dateToMilliseconds;
+const MINUTES_IN_HOUR = 60;
 
 const getTimezoneOffsetChangeInMinutes = (startDate, endDate, updatedStartDate, updatedEndDate) => {
     return getDaylightOffset(updatedStartDate, updatedEndDate) - getDaylightOffset(startDate, endDate);
@@ -46,6 +47,18 @@ const getCorrectedDateByDaylightOffsets = (convertedOriginalStartDate, converted
     return new Date(date.getTime() - diff * toMs('hour'));
 };
 
+const correctRecurrenceExceptionByTimezone = (exception, exceptionByStartDate, timeZone, startDateTimeZone) => {
+    let timezoneOffset = (exception.getTimezoneOffset() - exceptionByStartDate.getTimezoneOffset()) / MINUTES_IN_HOUR;
+
+    if(startDateTimeZone) {
+        timezoneOffset = _getDaylightOffsetByTimezone(exceptionByStartDate, exception, startDateTimeZone);
+    } else if(timeZone) {
+        timezoneOffset = _getDaylightOffsetByTimezone(exceptionByStartDate, exception, timeZone);
+    }
+
+    return new Date(exception.getTime() + timezoneOffset * toMs('hour'));
+};
+
 const isTimezoneChangeInDate = (date) => {
     const startDayDate = new Date((new Date(date)).setHours(0, 0, 0, 0));
     const endDayDate = new Date((new Date(date)).setHours(23, 59, 59, 0));
@@ -67,7 +80,8 @@ const utils = {
     calculateTimezoneByValue: calculateTimezoneByValue,
     getCorrectedDateByDaylightOffsets: getCorrectedDateByDaylightOffsets,
     isTimezoneChangeInDate: isTimezoneChangeInDate,
-    isSameAppointmentDates: isSameAppointmentDates
+    isSameAppointmentDates: isSameAppointmentDates,
+    correctRecurrenceExceptionByTimezone: correctRecurrenceExceptionByTimezone
 };
 
 module.exports = utils;
