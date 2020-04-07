@@ -32,44 +32,42 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler"></div>');
 });
 
-(function() {
-    QUnit.module('Initialization', {
-        beforeEach: function() {
-            this.clock = sinon.useFakeTimers();
-            sinon.spy(errors, 'log');
+QUnit.module('Initialization', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        sinon.spy(errors, 'log');
 
-            this.createInstance = function(options) {
-                this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
-                this.scheduler = new SchedulerTestWrapper(this.instance);
-            };
+        this.createInstance = function(options) {
+            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
+            this.scheduler = new SchedulerTestWrapper(this.instance);
+        };
 
-            this.checkDateTime = function(assert, actualDate, expectedDate, messagePrefix) {
-                assert.equal(actualDate.getHours(), expectedDate.getHours(), messagePrefix + 'Hours\'re OK');
-                assert.equal(actualDate.getMinutes(), expectedDate.getMinutes(), messagePrefix + 'Minutes\'re OK');
-                assert.equal(actualDate.getSeconds(), expectedDate.getSeconds(), messagePrefix + 'Seconds\'re OK');
-                assert.equal(actualDate.getMilliseconds(), expectedDate.getMilliseconds(), messagePrefix + 'Milliseconds\'re OK');
-            };
-            fx.off = true;
-            this.tasks = [
-                {
-                    text: 'Task 1',
-                    startDate: new Date(2015, 1, 9, 1, 0),
-                    endDate: new Date(2015, 1, 9, 2, 0)
-                },
-                {
-                    text: 'Task 2',
-                    startDate: new Date(2015, 1, 9, 11, 0),
-                    endDate: new Date(2015, 1, 9, 12, 0)
-                }
-            ];
-        },
-        afterEach: function() {
-            errors.log.restore();
-            this.clock.restore();
-            fx.off = false;
-        }
-    });
-
+        this.checkDateTime = function(assert, actualDate, expectedDate, messagePrefix) {
+            assert.equal(actualDate.getHours(), expectedDate.getHours(), messagePrefix + 'Hours\'re OK');
+            assert.equal(actualDate.getMinutes(), expectedDate.getMinutes(), messagePrefix + 'Minutes\'re OK');
+            assert.equal(actualDate.getSeconds(), expectedDate.getSeconds(), messagePrefix + 'Seconds\'re OK');
+            assert.equal(actualDate.getMilliseconds(), expectedDate.getMilliseconds(), messagePrefix + 'Milliseconds\'re OK');
+        };
+        fx.off = true;
+        this.tasks = [
+            {
+                text: 'Task 1',
+                startDate: new Date(2015, 1, 9, 1, 0),
+                endDate: new Date(2015, 1, 9, 2, 0)
+            },
+            {
+                text: 'Task 2',
+                startDate: new Date(2015, 1, 9, 11, 0),
+                endDate: new Date(2015, 1, 9, 12, 0)
+            }
+        ];
+    },
+    afterEach: function() {
+        errors.log.restore();
+        this.clock.restore();
+        fx.off = false;
+    }
+}, () => {
     QUnit.test('Scheduler should have task model instance', function(assert) {
         const data = new DataSource({
             store: this.tasks
@@ -232,7 +230,7 @@ QUnit.testStart(function() {
             assert.equal(errors.log.callCount, 0, 'there are not any warnings');
         });
     });
-})('Initialization');
+});
 
 (function() {
 
