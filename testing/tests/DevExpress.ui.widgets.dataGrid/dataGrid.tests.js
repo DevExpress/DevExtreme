@@ -9443,6 +9443,40 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.notOk($(dataGrid.getRowElement(1)).find('.dx-texteditor').length, 'row doesn\'t have editor');
     });
 
+    // T865715
+    QUnit.test('Row\'s height should be correct after updateDimensions while editing with popup edit mode', function(assert) {
+        // arrange
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            loadingTimeout: undefined,
+            width: 300,
+            columnHidingEnabled: true,
+            keyExpr: 'ID',
+            wordWrapEnabled: true,
+            editing: {
+                allowUpdating: true,
+                mode: 'popup'
+            },
+            dataSource: [{
+                ID: 1,
+                Comment: 'very long text very long text very long text very long text very long text very long text very long text very long text'
+            }, {
+                ID: 2,
+                Comment: 'very long text very long text very long text very long text very long text very long text very long text very long text'
+            }]
+        }).dxDataGrid('instance');
+
+        // act
+        const $firstRow = $(dataGrid.getRowElement(0));
+        const firstRowHeight = $firstRow.height();
+
+        dataGrid.editRow(0);
+        dataGrid.updateDimensions();
+
+        // assert
+        assert.equal($firstRow.height(), firstRowHeight, 'first row\'s height');
+        assert.ok($firstRow.find('td').eq(1).hasClass('dx-datagrid-hidden-column'), 'column hiding class');
+    });
+
     ['row', 'form'].forEach(editMode => {
         QUnit.test(`Should not throw exception after calling editRow() if KBN is disabled and edit mode is ${editMode}`, function(assert) {
             const dataGrid = $('#dataGrid').dxDataGrid({
