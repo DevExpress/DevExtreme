@@ -1100,7 +1100,7 @@ QUnit.test('simple labels creation', function(assert) {
         assert.strictEqual(text.css.lastCall.args[0].fill, 'someColor');
         assert.strictEqual(text.css.lastCall.args[0]['font-size'], 'someSize');
         assert.deepEqual(text.attr.firstCall.args[0], {
-            filter: 'shadowFilter.id', stroke: '#000000', 'stroke-width': 1, 'stroke-opacity': 0.3
+            filter: 'shadowFilter.id'
         });
     });
 });
