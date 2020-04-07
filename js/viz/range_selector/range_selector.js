@@ -293,6 +293,10 @@ function updateTickIntervals(scaleOptions, screenDelta, incidentOccurred, range)
     return result;
 }
 
+function getFirstDayOfWeek(options) {
+    return options.workWeek?.[0];
+}
+
 function calculateTranslatorRange(seriesDataSource, scaleOptions) {
     let minValue;
     let maxValue;
@@ -305,6 +309,7 @@ function calculateTranslatorRange(seriesDataSource, scaleOptions) {
     let translatorRange = seriesDataSource ? seriesDataSource.getBoundRange().arg : new rangeModule.Range();
     let rangeForCategories;
     const isDate = scaleOptions.valueType === 'datetime';
+    const firstDayOfWeek = getFirstDayOfWeek(scaleOptions);
     const minRange = scaleOptions.minRange;
 
     if(scaleOptions.type === DISCRETE) {
@@ -322,14 +327,14 @@ function calculateTranslatorRange(seriesDataSource, scaleOptions) {
     }
 
     if(scaleOptions.type === SEMIDISCRETE) {
-        startValue = scaleOptions.startValue = correctValueByInterval(scaleOptions.startValue, isDate, minRange);
-        endValue = scaleOptions.endValue = correctValueByInterval(scaleOptions.endValue, isDate, minRange);
+        startValue = scaleOptions.startValue = correctValueByInterval(scaleOptions.startValue, isDate, minRange, firstDayOfWeek);
+        endValue = scaleOptions.endValue = correctValueByInterval(scaleOptions.endValue, isDate, minRange, firstDayOfWeek);
 
-        translatorRange.minVisible = correctValueByInterval(translatorRange.minVisible, isDate, minRange);
-        translatorRange.maxVisible = correctValueByInterval(translatorRange.maxVisible, isDate, minRange);
+        translatorRange.minVisible = correctValueByInterval(translatorRange.minVisible, isDate, minRange, firstDayOfWeek);
+        translatorRange.maxVisible = correctValueByInterval(translatorRange.maxVisible, isDate, minRange, firstDayOfWeek);
 
-        translatorRange.min = correctValueByInterval(translatorRange.min, isDate, minRange);
-        translatorRange.max = correctValueByInterval(translatorRange.max, isDate, minRange);
+        translatorRange.min = correctValueByInterval(translatorRange.min, isDate, minRange, firstDayOfWeek);
+        translatorRange.max = correctValueByInterval(translatorRange.max, isDate, minRange, firstDayOfWeek);
     }
 
     if(_isDefined(startValue) && _isDefined(endValue)) {
@@ -495,10 +500,10 @@ function prepareScaleOptions(scaleOption, calculatedValueType, incidentOccurred,
     return scaleOption;
 }
 
-function correctValueByInterval(value, isDate, interval) {
+function correctValueByInterval(value, isDate, interval, firstDayOfWeek) {
     if(_isDefined(value)) {
         value = isDate
-            ? correctDateWithUnitBeginning(new Date(value), interval)
+            ? correctDateWithUnitBeginning(new Date(value), interval, null, firstDayOfWeek)
             : adjust(_floor(adjust(value / interval)) * interval);
     }
     return value;
@@ -508,6 +513,7 @@ function getIntervalCustomTicks(options) {
     let min = options.startValue;
     let max = options.endValue;
     const isDate = options.valueType === 'datetime';
+    const firstDayOfWeek = getFirstDayOfWeek(options);
     const tickInterval = options.tickInterval;
     const res = {
         intervals: []
@@ -522,8 +528,8 @@ function getIntervalCustomTicks(options) {
     if(tickInterval !== options.minorTickInterval) {
         res.altIntervals = res.intervals;
 
-        min = correctValueByInterval(min, isDate, tickInterval);
-        max = correctValueByInterval(max, isDate, tickInterval);
+        min = correctValueByInterval(min, isDate, tickInterval, firstDayOfWeek);
+        max = correctValueByInterval(max, isDate, tickInterval, firstDayOfWeek);
 
         res.intervals = getSequenceByInterval(min, max, tickInterval);
         res.intervals[0] = res.altIntervals[0];
