@@ -24,8 +24,9 @@ class Button extends Component {
     getProps(isFirstRender) {
         const props = super.getProps(isFirstRender);
 
-        if(props.template) {
-            const template = this._getTemplate(props.template);
+        if(props.template || props.haveAnonymousTemplate) {
+            // NOTE: 'template' - default name for anonymous template
+            const template = this._getTemplate(props.template || 'template');
 
             props.render = ({ parentRef, ...restProps }) => {
                 useLayoutEffect(() => {
@@ -35,6 +36,7 @@ class Button extends Component {
                     let $template = $(template.render({
                         container: getPublicElement($parent),
                         model: restProps,
+                        transclude: !props.template && props.haveAnonymousTemplate,
                         // TODO index
                     }));
 
@@ -78,6 +80,7 @@ class Button extends Component {
     }
 
     _init() {
+        this.option('haveAnonymousTemplate', this.$element().contents().length > 0);
         super._init();
 
         this.view_ref = Preact.createRef();
