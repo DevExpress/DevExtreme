@@ -995,6 +995,12 @@ const dxChart = AdvancedChart.inherit({
         hAxesMargins = getHorizontalAxesMargins(horizontalElements, getAxisMargins);
         panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
 
+        if(that._tickIntervalsChanged(verticalAxes, panesCanvases)) {
+            drawAxesWithTicks(verticalAxes, !rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
+            vAxesMargins = getVerticalAxesMargins(verticalElements);
+            panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
+        }
+
         let oldTitlesWidth = calculateTitlesWidth(verticalAxes);
 
         const visibleSeries = that._getVisibleSeries();
@@ -1039,6 +1045,10 @@ const dxChart = AdvancedChart.inherit({
         }
 
         return cleanPanesCanvases;
+    },
+
+    _tickIntervalsChanged(axes, canvases) {
+        return axes.some(axis => axis.isChangedTickInterval(canvases[axis.pane]));
     },
 
     checkForMoreSpaceForPanesCanvas() {
