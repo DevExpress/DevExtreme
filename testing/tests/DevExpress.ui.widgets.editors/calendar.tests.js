@@ -1507,18 +1507,22 @@ QUnit.module('Options', {
     });
 
     QUnit.test('onContouredChanged option - subscription by "on" method', function(assert) {
+        const goNextView = () => {
+            $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS))).trigger('dxclick');
+        };
+
         const handler = sinon.spy();
+        this.reinit({
+            value: null,
+            focusStateEnabled: true
+        });
 
         this.calendar.on('contouredChanged', handler);
-
-        this.$element.trigger('focusin');
-        triggerKeydown(this.$element, UP_ARROW_KEY_CODE, true);
+        goNextView();
         assert.ok(handler.calledOnce, 'handler is called');
 
         this.calendar.off('contouredChanged', handler);
-
-        this.$element.trigger('focusin');
-        triggerKeydown(this.$element, UP_ARROW_KEY_CODE, true);
+        goNextView();
         assert.ok(handler.calledOnce, 'handler is not called second time');
     });
 
