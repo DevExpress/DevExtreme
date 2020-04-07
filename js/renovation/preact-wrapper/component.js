@@ -69,7 +69,6 @@ export default class PreactWrapper extends DOMComponent {
 
     // Public API
     repaint() {
-        this.$element().empty();
         this._refresh();
     }
 }

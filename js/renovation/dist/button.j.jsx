@@ -104,9 +104,6 @@ class Button extends Component {
             case 'onOptionChanged':
                 super._optionChanged(option);
                 break;
-            case 'useInkRipple':
-                this.repaint();
-                break;
         }
 
         super._optionChanged();

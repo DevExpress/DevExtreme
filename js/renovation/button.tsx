@@ -4,7 +4,7 @@ import noop from './utils/noop';
 import themes from '../ui/themes';
 import { click } from '../events/short';
 import { getImageSourceType } from '../core/utils/icon';
-import { initConfig, showWave, hideWave } from '../ui/widget/utils.ink_ripple';
+import { initConfig } from '../ui/widget/utils.ink_ripple';
 import {
     Component,
     ComponentBindings,
@@ -17,6 +17,7 @@ import {
     Template,
 } from 'devextreme-generator/component_declaration/common';
 import Icon from './icon';
+import InkRipple from './ink-ripple';
 import Widget, { WidgetInput } from './widget';
 
 const defaultClassNames = ['dx-button'];
@@ -103,6 +104,9 @@ export const viewFunction = (viewModel: Button) => {
             {viewModel.props.useSubmitBehavior &&
                 <input ref={viewModel.submitInputRef as any} type="submit" tabIndex={-1} className="dx-button-submit-input"/>
             }
+            {viewModel.props.useInkRipple &&
+                <InkRipple config={viewModel.inkRippleConfig} ref={viewModel.inkRippleRef}/>
+            }
         </div>
     </Widget>;
 };
@@ -141,6 +145,7 @@ const defaultOptionRules = createDefaultOptionRules<ButtonInput>([{
 
 export default class Button extends JSXComponent<ButtonInput> {
     @Ref() contentRef!: HTMLDivElement;
+    @Ref() inkRippleRef!: InkRipple;
     @Ref() submitInputRef!: HTMLInputElement;
     @Ref() widgetRef!: Widget;
 
@@ -161,16 +166,14 @@ export default class Button extends JSXComponent<ButtonInput> {
 
     onActive(event: Event) {
         const { useInkRipple } = this.props;
-        const config = getInkRippleConfig(this.props);
 
-        useInkRipple && showWave(config, { element: this.contentRef, event });
+        useInkRipple && this.inkRippleRef.showWave({ element: this.contentRef, event });
     }
 
     onInactive(event: Event) {
         const { useInkRipple } = this.props;
-        const config = getInkRippleConfig(this.props);
 
-        useInkRipple && hideWave(config, { element: this.contentRef, event });
+        useInkRipple && this.inkRippleRef.hideWave({ element: this.contentRef, event });
     }
 
     onWidgetClick(event: Event) {
@@ -220,5 +223,9 @@ export default class Button extends JSXComponent<ButtonInput> {
         const { icon, type } = this.props;
 
         return (icon || type === 'back') ? (icon || 'back') : '';
+    }
+
+    get inkRippleConfig() {
+        return getInkRippleConfig(this.props);
     }
 }
