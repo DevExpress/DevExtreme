@@ -152,6 +152,18 @@ module('Appointment form', {
         resetWindowWidth();
     }
 }, () => {
+    test('onAppointmentFormOpening should call once(T877275)', function(assert) {
+        let callCount = 0;
+        const scheduler = createInstance({
+            onAppointmentFormOpening: () => callCount++
+        });
+
+        scheduler.appointments.compact.click();
+        scheduler.tooltip.clickOnItem();
+
+        assert.equal(callCount, 1, 'handler should call once');
+    });
+
     test('Label location is left when the form\'s width > 610px on first show', function(assert) {
         const scheduler = createInstance();
         scheduler.appointmentPopup.setInitialPopupSize({ width: 700 });
