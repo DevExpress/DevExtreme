@@ -17,8 +17,6 @@ export class InkRippleInput {
     view: viewFunction,
 })
 export default class InkRipple extends JSXComponent<InkRippleInput> {
-    @Ref() waveRef!: HTMLDivElement;
-
     @Method()
     hideWave(event) {
         const { config } = this.props;
