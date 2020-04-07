@@ -1432,7 +1432,7 @@ QUnit.module('Options', {
         });
 
         const $cell = this.$element.find(toSelector(CALENDAR_CELL_CLASS)).eq(4);
-        const cellContent = $cell.get(0).outerText;
+        const cellContent = $cell.text();
 
         assert.strictEqual(cellContent, 'Custom template', 'cell content is correct after cellTemplate runtime change');
     });
