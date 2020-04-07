@@ -491,6 +491,28 @@ QUnit.test('categoriesSortingMethod returns \'categories\' option when \'categor
     assert.deepEqual(sort, ['1', '2']);
 });
 
+// T857880
+QUnit.test('getCanvasRange', function(assert) {
+    const translator = translator2DModule.Translator2D.lastCall.returnValue;
+
+    translator.stub('translate').onCall(0).returns('translateResult_1');
+    translator.stub('translate').onCall(1).returns('translateResult_2');
+    translator.stub('from').onCall(0).returns('startValue');
+    translator.stub('from').onCall(1).returns('endValue');
+
+    const canvasRange = this.axis.getCanvasRange();
+
+    assert.strictEqual(translator.translate.callCount, 2);
+    assert.strictEqual(translator.translate.getCall(0).args[0], 'canvas_position_start');
+    assert.strictEqual(translator.translate.getCall(1).args[0], 'canvas_position_end');
+
+    assert.strictEqual(translator.from.callCount, 2);
+    assert.strictEqual(translator.from.getCall(0).args[0], 'translateResult_1');
+    assert.strictEqual(translator.from.getCall(1).args[0], 'translateResult_2');
+
+    assert.deepEqual(canvasRange, { startValue: 'startValue', endValue: 'endValue' });
+});
+
 QUnit.module('Labels Settings', {
     beforeEach: function() {
         environment.beforeEach.call(this);

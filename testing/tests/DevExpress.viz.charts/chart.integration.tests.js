@@ -1905,6 +1905,31 @@ QUnit.test('auto switching point markers visibility', function(assert) {
     assert.ok(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
 });
 
+// T857880
+QUnit.test('Point is visible when placed in visualRande', function(assert) {
+    const chart = moduleSetup.createChart.call(this, {
+        dataSource: [{
+            country: 'USA',
+            hydro: 13.7
+        }, {
+            country: 'China',
+            oil: 13.7
+        }],
+        commonSeriesSettings: {
+            argumentField: 'country'
+        },
+        series: [
+            { valueField: 'hydro', type: 'bar' },
+            { valueField: 'oil', type: 'line' }
+        ],
+        valueAxis: {
+            visualRange: [0, 12]
+        }
+    });
+
+    assert.ok(chart.getAllSeries()[1].getVisiblePoints()[0].graphic);
+});
+
 QUnit.test('auto switching point markers visibility is disabled for non-line/area series', function(assert) {
     const chart = this.createChart({
         series: [{ type: 'bar' }]

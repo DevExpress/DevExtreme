@@ -24,7 +24,7 @@ const emptyHeader = () => { return ''; };
 const scssCompiler = {
     render: (scss) => {
         return new Promise((resolve, reject) => {
-            require('node-sass').render({
+            require('dart-sass').render({
                 data: scss
             }, (error, result) => {
                 if(error) {
@@ -303,20 +303,24 @@ describe('LessTemplateLoader', () => {
         }).then(data => {
 
             assert.equal(data.css, `div {
-  color: #fff; }
+  color: #fff;
+}
 
 .dx-theme-accent-as-text-color {
-  color: #fff; }
+  color: #fff;
+}
 
 .dx-theme-generic-typography {
-  color: #0f0; }
-  .dx-theme-generic-typography .dx-theme-accent-as-text-color {
-    color: #fff; }
+  color: #0f0;
+}
+.dx-theme-generic-typography .dx-theme-accent-as-text-color {
+  color: #fff;
+}
 
 #devexpress-metadata-compiler {
   base-bg: #fff;
-  base-text-color: #0f0; }
-`);
+  base-text-color: #0f0;
+}`);
         });
     });
 

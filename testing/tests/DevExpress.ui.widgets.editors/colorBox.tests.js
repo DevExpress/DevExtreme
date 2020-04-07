@@ -174,11 +174,9 @@ QUnit.module('Color Box', {
 
     QUnit.test('Click on apply button', function(assert) {
         const onValueChangedHandler = sinon.spy(noop);
-        const onApplyButtonClickHandler = sinon.spy(noop);
 
         showColorBox.call(this, {
-            onValueChanged: onValueChangedHandler,
-            onApplyButtonClick: onApplyButtonClickHandler
+            onValueChanged: onValueChangedHandler
         });
 
         const $overlayContent = getColorBoxOverlayContent();
@@ -194,15 +192,11 @@ QUnit.module('Color Box', {
         assert.equal($('.' + COLOR_BOX_INPUT_CLASS).val(), newColor);
         assert.ok(onValueChangedHandler.calledOnce);
         assert.ok($('.' + COLOR_BOX_OVERLAY_CLASS).is(':hidden'));
-        assert.ok(onApplyButtonClickHandler.calledOnce);
     });
 
     QUnit.test('Click on cancel button', function(assert) {
-        const spy = sinon.spy(noop);
-
         showColorBox.call(this, {
-            value: '#ff0000',
-            onCancelButtonClick: spy
+            value: '#ff0000'
         });
 
         this.updateColorInput('hex', 'f0f0f0');
@@ -219,8 +213,6 @@ QUnit.module('Color Box', {
             b: 0,
             hex: '#ff0000'
         }, assert);
-
-        assert.ok(spy.calledOnce);
     });
 
     QUnit.test('Cancel event should work right when color was changed', function(assert) {
@@ -442,14 +434,10 @@ QUnit.module('Color Box', {
 
     QUnit.test('Option changes', function(assert) {
         const colorBox = showColorBox.call(this).dxColorBox('instance');
-        const onCancelButtonClick = noop;
-        const onApplyButtonClick = noop;
 
         $.each([
             { name: 'value', value: '#ff0000' },
             { name: 'editAlphaChannel', value: true },
-            { name: 'onCancelButtonClick', value: onCancelButtonClick },
-            { name: 'onApplyButtonClick', value: onApplyButtonClick },
             { name: 'rtlEnabled', value: true },
             { name: 'keyStep', value: 10 }
         ], function(_, option) {

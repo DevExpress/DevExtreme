@@ -29,7 +29,7 @@ const tableCreator = require('../ui.scheduler.table_creator');
 const VerticalShader = require('../shaders/ui.scheduler.current_time_shader.vertical');
 const AppointmentDragBehavior = require('../appointmentDragBehavior');
 const FIXED_CONTAINER_CLASS = require('../constants').FIXED_CONTAINER_CLASS;
-const utils = require('../utils');
+const timeZoneUtils = require('../utils.timeZone');
 
 const COMPONENT_CLASS = 'dx-scheduler-work-space';
 const GROUPED_WORKSPACE_CLASS = 'dx-scheduler-work-space-grouped';
@@ -1463,7 +1463,7 @@ const SchedulerWorkSpace = Widget.inherit({
 
     _getDateWithSkippedDST: function() {
         let result = new Date(this.getStartViewDate());
-        if(utils.isTimezoneChangeInDate(result)) {
+        if(timeZoneUtils.isTimezoneChangeInDate(result)) {
             result = new Date(result.setDate(result.getDate() + 1));
         }
         return result;
@@ -1490,7 +1490,7 @@ const SchedulerWorkSpace = Widget.inherit({
 
     _getTimeCellDateAdjustedDST: function(i) {
         let startViewDate = new Date(this.getStartViewDate());
-        if(utils.isTimezoneChangeInDate(startViewDate)) {
+        if(timeZoneUtils.isTimezoneChangeInDate(startViewDate)) {
             startViewDate = new Date(startViewDate.setDate(startViewDate.getDate() + 1));
         }
 
@@ -2245,7 +2245,7 @@ const SchedulerWorkSpace = Widget.inherit({
     getDateRange: function() {
         return [
             this.getStartViewDate(),
-            this.getEndViewDate()
+            this.getEndViewDateByEndDayHour()
         ];
     },
 
@@ -2376,12 +2376,22 @@ const SchedulerWorkSpace = Widget.inherit({
         return this._adjustEndViewDateByDaylightDiff(dateOfLastViewCell, endDateOfLastViewCell);
     },
 
+    getEndViewDateByEndDayHour: function() {
+        const dateOfLastViewCell = this.getDateOfLastViewCell();
+        const endTime = dateUtils.dateTimeFromDecimal(this.option('endDayHour'));
+
+        const endDateOfLastViewCell = new Date(dateOfLastViewCell.setHours(endTime.hours, endTime.minutes));
+
+        return this._adjustEndViewDateByDaylightDiff(dateOfLastViewCell, endDateOfLastViewCell);
+
+    },
+
     calculateEndViewDate: function(dateOfLastViewCell) {
         return new Date(dateOfLastViewCell.getTime() + this.getCellDuration());
     },
 
     _adjustEndViewDateByDaylightDiff: function(startDate, endDate) {
-        const daylightDiff = utils.getDaylightOffsetInMs(startDate, endDate);
+        const daylightDiff = timeZoneUtils.getDaylightOffsetInMs(startDate, endDate);
 
         const endDateOfLastViewCell = new Date(endDate.getTime() - daylightDiff);
 
