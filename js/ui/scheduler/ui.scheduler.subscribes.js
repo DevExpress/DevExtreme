@@ -12,7 +12,7 @@ import { inArray } from '../../core/utils/array';
 import SchedulerTimezones from './timezones/ui.scheduler.timezones';
 import { Deferred } from '../../core/utils/deferred';
 import dateLocalization from '../../localization/date';
-import utils from './utils';
+import timeZoneUtils from './utils.timeZone';
 
 const MINUTES_IN_HOUR = 60;
 const toMs = dateUtils.dateToMilliseconds;
@@ -719,7 +719,7 @@ const subscribes = {
     getComplexOffsets: function(scheduler, date, appointmentTimezone) {
         const clientTimezoneOffset = -this.getClientTimezoneOffset(date) / toMs('hour');
         const commonTimezoneOffset = scheduler._getTimezoneOffsetByOption(date);
-        let appointmentTimezoneOffset = utils.calculateTimezoneByValue(appointmentTimezone, date);
+        let appointmentTimezoneOffset = timeZoneUtils.calculateTimezoneByValue(appointmentTimezone, date);
 
         if(typeof appointmentTimezoneOffset !== 'number') {
             appointmentTimezoneOffset = clientTimezoneOffset;
@@ -781,7 +781,7 @@ const subscribes = {
 
             result = ceilQuantityOfDays * visibleDayDuration;
         } else {
-            const isDifferentDates = !utils.isSameAppointmentDates(startDate, endDate);
+            const isDifferentDates = !timeZoneUtils.isSameAppointmentDates(startDate, endDate);
             const floorQuantityOfDays = Math.floor(appointmentDuration / dayDuration);
             let tailDuration;
 

@@ -4500,6 +4500,41 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(dataGrid.option('focusedRowIndex'), -1, 'focusedRowIndex');
     });
 
+    QUnit.test('Change focusedRowIndex in onOptionChanged on sorting if autoNavigateToFocusedRow is false (T867777)', function(assert) {
+        // arrange
+        const data = [
+            { id: 1 },
+            { id: 2 },
+            { id: 3 },
+            { id: 4 }
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: data,
+            keyExpr: 'id',
+            paging: {
+                pageSize: 2
+            },
+            autoNavigateToFocusedRow: false,
+            focusedRowEnabled: true,
+            focusedRowIndex: 0,
+            onOptionChanged: function(e) {
+                if(e.name === 'focusedRowIndex' && e.value < 0) {
+                    e.component.option('focusedRowIndex', 0);
+                }
+            }
+        }).dxDataGrid('instance');
+        this.clock.tick();
+
+        // act
+        dataGrid.columnOption('id', 'sortOrder', 'desc');
+        this.clock.tick();
+
+        // assert
+        assert.equal(dataGrid.option('focusedRowIndex'), 0, 'focusedRowIndex');
+        assert.equal(dataGrid.option('focusedRowKey'), 4, 'focusedRowKey');
+        assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-row-focused'), 'first row has focused class');
+    });
+
     QUnit.test('Focused row should be visible if it\'s on the first page and page height larger than container one (T756177)', function(assert) {
     // arrange
         const data = [
@@ -9420,6 +9455,40 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.notOk($(dataGrid.getRowElement(1)).find('.dx-texteditor').length, 'row doesn\'t have editor');
     });
 
+    // T865715
+    QUnit.test('Row\'s height should be correct after updateDimensions while editing with popup edit mode', function(assert) {
+        // arrange
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            loadingTimeout: undefined,
+            width: 300,
+            columnHidingEnabled: true,
+            keyExpr: 'ID',
+            wordWrapEnabled: true,
+            editing: {
+                allowUpdating: true,
+                mode: 'popup'
+            },
+            dataSource: [{
+                ID: 1,
+                Comment: 'very long text very long text very long text very long text very long text very long text very long text very long text'
+            }, {
+                ID: 2,
+                Comment: 'very long text very long text very long text very long text very long text very long text very long text very long text'
+            }]
+        }).dxDataGrid('instance');
+
+        // act
+        const $firstRow = $(dataGrid.getRowElement(0));
+        const firstRowHeight = $firstRow.height();
+
+        dataGrid.editRow(0);
+        dataGrid.updateDimensions();
+
+        // assert
+        assert.equal($firstRow.height(), firstRowHeight, 'first row\'s height');
+        assert.ok($firstRow.find('td').eq(1).hasClass('dx-datagrid-hidden-column'), 'column hiding class');
+    });
+
     ['row', 'form'].forEach(editMode => {
         QUnit.test(`Should not throw exception after calling editRow() if KBN is disabled and edit mode is ${editMode}`, function(assert) {
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -9565,7 +9634,50 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.strictEqual(handlerCalls[0], 'changing');
         assert.strictEqual(handlerCalls[1], 'changed');
     });
+
+    QUnit.testInActiveWindow('onSelectionChanged should not be raised when a command button with a custom image is clicked (T876269)', function(assert) {
+        // arrange
+        const selectionChanged = sinon.spy();
+        const buttonClick = sinon.spy();
+
+        const dataGrid = createDataGrid({
+            keyExpr: 'name',
+            dataSource: [
+                { name: 'Alex', phone: '555555', room: 1 },
+                { name: 'Ben', phone: '6666666', room: 2 }
+            ],
+            selection: {
+                mode: 'single'
+            },
+            columns: [
+                {
+                    type: 'buttons',
+                    width: 100,
+                    buttons: [{
+                        icon: '.svg',
+                        cssClass: 'my-class',
+                        onClick: buttonClick
+                    }]
+                },
+                'name', 'phone', 'room'
+            ],
+            onSelectionChanged: selectionChanged
+        });
+        this.clock.tick();
+
+        const $commandCell = $(dataGrid.getCellElement(0, 0));
+        $commandCell.find('.my-class').trigger('click');
+        this.clock.tick();
+
+        const $firstRow = $(dataGrid.getRowElement(0));
+
+        // assert
+        assert.ok(buttonClick.calledOnce, 'button is clicked');
+        assert.equal(selectionChanged.callCount, 0, 'selectionChanged is not called');
+        assert.notOk($firstRow.hasClass('dx-selection'), 'the first row is not selected');
+    });
 });
+
 
 QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
@@ -19741,6 +19853,108 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
             done();
         });
+    });
+
+    QUnit.testInActiveWindow('Cell mode - Cell validation message should be shown when a user clicks outside the cell (T869854)', function(assert) {
+        // arrange
+        const rowsView = dataGridWrapper.rowsView;
+        const headerPanel = dataGridWrapper.headerPanel;
+
+        const gridConfig = {
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: [{
+                    a: 'a',
+                    b: 'b'
+                }]
+            },
+            editing: {
+                mode: 'cell',
+                allowAdding: true,
+                allowUpdating: true
+            },
+            columns: [
+                {
+                    dataField: 'a',
+                    validationRules: [{
+                        type: 'required'
+                    }]
+                }, 'b'
+            ]
+        };
+
+        const grid = createDataGrid(gridConfig);
+        this.clock.tick();
+        let $firstCell = $(grid.getCellElement(0, 0));
+        $firstCell.trigger(pointerEvents.down).trigger('dxclick');
+        this.clock.tick();
+        $firstCell = $(grid.getCellElement(0, 0));
+
+        // assert
+        assert.ok($firstCell.hasClass('dx-focused'), 'cell is focused');
+
+        const $inputElement = rowsView.getCell(0, 0).getEditor().getInputElement();
+        $inputElement.val('');
+        $inputElement.trigger('change');
+        headerPanel.getElement().trigger(pointerEvents.down).trigger('dxclick');
+        this.clock.tick();
+        $firstCell = $(grid.getCellElement(0, 0));
+
+        // assert
+        assert.ok($firstCell.hasClass('dx-focused'), 'cell is focused');
+        assert.ok($firstCell.hasClass('dx-datagrid-invalid'), 'cell is invalid');
+        assert.ok($firstCell.find('.dx-datagrid-revert-tooltip .dx-overlay-content').is(':visible'), 'revert button is visible');
+        assert.ok($firstCell.find('.dx-invalid-message .dx-overlay-content').is(':visible'), 'error message is visible');
+    });
+
+    QUnit.testInActiveWindow('Batch mode - Cell should be invalid when a user clicks outside the cell (T869854)', function(assert) {
+        // arrange
+        const rowsView = dataGridWrapper.rowsView;
+        const headerPanel = dataGridWrapper.headerPanel;
+
+        const gridConfig = {
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: [{
+                    a: 'a',
+                    b: 'b'
+                }]
+            },
+            editing: {
+                mode: 'batch',
+                allowAdding: true,
+                allowUpdating: true
+            },
+            columns: [
+                {
+                    dataField: 'a',
+                    validationRules: [{
+                        type: 'required'
+                    }]
+                }, 'b'
+            ]
+        };
+
+        const grid = createDataGrid(gridConfig);
+        this.clock.tick();
+
+        let $firstCell = $(grid.getCellElement(0, 0));
+        $firstCell.trigger(pointerEvents.down).trigger('dxclick');
+        this.clock.tick();
+        $firstCell = $(grid.getCellElement(0, 0));
+
+        assert.ok($firstCell.hasClass('dx-focused'), 'cell is focused');
+
+        const $inputElement = rowsView.getCell(0, 0).getEditor().getInputElement();
+        $inputElement.val('');
+        $inputElement.trigger('change');
+
+        headerPanel.getElement().trigger(pointerEvents.down).trigger('dxclick');
+        this.clock.tick();
+        $firstCell = $(grid.getCellElement(0, 0));
+
+        // assert
+        assert.ok($firstCell.hasClass('dx-datagrid-invalid'), 'cell is invalid');
     });
 });
 

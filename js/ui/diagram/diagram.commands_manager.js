@@ -80,10 +80,7 @@ const DiagramCommandsManager = {
                     hint: messageLocalization.format('dxDiagram-commandPaste'),
                     text: messageLocalization.format('dxDiagram-commandPaste'),
                     icon: 'paste',
-                    menuIcon: 'paste',
-                    getParameter: (diagramContextMenu) => {
-                        return diagramContextMenu.clickPosition;
-                    }
+                    menuIcon: 'paste'
                 },
                 selectAll: {
                     command: DiagramCommand.SelectAll,

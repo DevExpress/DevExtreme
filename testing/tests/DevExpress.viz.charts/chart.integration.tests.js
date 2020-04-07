@@ -1905,6 +1905,31 @@ QUnit.test('auto switching point markers visibility', function(assert) {
     assert.ok(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
 });
 
+// T857880
+QUnit.test('Point is visible when placed in visualRande', function(assert) {
+    const chart = moduleSetup.createChart.call(this, {
+        dataSource: [{
+            country: 'USA',
+            hydro: 13.7
+        }, {
+            country: 'China',
+            oil: 13.7
+        }],
+        commonSeriesSettings: {
+            argumentField: 'country'
+        },
+        series: [
+            { valueField: 'hydro', type: 'bar' },
+            { valueField: 'oil', type: 'line' }
+        ],
+        valueAxis: {
+            visualRange: [0, 12]
+        }
+    });
+
+    assert.ok(chart.getAllSeries()[1].getVisiblePoints()[0].graphic);
+});
+
 QUnit.test('auto switching point markers visibility is disabled for non-line/area series', function(assert) {
     const chart = this.createChart({
         series: [{ type: 'bar' }]
@@ -2724,10 +2749,9 @@ QUnit.test('Checking border hover when pie chart palette changed. B237181', func
             point.select();
         }
     });
-    let hoverState;
 
     chart.option({ palette: 'Soft Pastel' });
-    hoverState = chart.getAllSeries()[0].getPoints()[0].getOptions().styles.hover;
+    const hoverState = chart.getAllSeries()[0].getPoints()[0].getOptions().styles.hover;
     assert.equal(hoverState.stroke, '#60a69f', 'Hover color is color of series');
     assert.equal(hoverState['stroke-width'], 0, 'Hover width was 0');
 });

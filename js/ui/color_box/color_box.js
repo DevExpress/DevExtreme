@@ -3,7 +3,6 @@ const eventsEngine = require('../../events/core/events_engine');
 const Color = require('../../color');
 const ColorView = require('./color_view');
 const extend = require('../../core/utils/extend').extend;
-const isFunction = require('../../core/utils/type').isFunction;
 const registerComponent = require('../../core/component_registrator');
 const DropDownEditor = require('../drop_down_editor/ui.drop_down_editor');
 
@@ -92,10 +91,6 @@ const ColorBox = DropDownEditor.inherit({
             keyStep: 1,
 
             fieldTemplate: null,
-
-            // TODO: convert these options to actions and publish them
-            onApplyButtonClick: null,
-            onCancelButtonClick: null,
 
             buttonsLocation: 'bottom after'
 
@@ -253,19 +248,11 @@ const ColorBox = DropDownEditor.inherit({
     _applyButtonHandler: function() {
         this._applyNewColor(this._colorView.option('value'));
 
-        if(isFunction(this.option('onApplyButtonClick'))) {
-            this.option('onApplyButtonClick')();
-        }
-
         this.callBase();
     },
 
     _cancelButtonHandler: function() {
         this._resetInputValue();
-
-        if(isFunction(this.option('onCancelButtonClick'))) {
-            this.option('onCancelButtonClick')();
-        }
 
         this.callBase();
     },
@@ -373,21 +360,10 @@ const ColorBox = DropDownEditor.inherit({
                 this._popup && this._addPopupBottomClasses();
                 break;
             case 'editAlphaChannel':
-            case 'onCancelButtonClick':
-            case 'onApplyButtonClick':
             case 'keyStep':
                 if(this._colorView) {
                     this._colorView.option(name, value);
                 }
-                break;
-            case 'applyValueMode':
-                this.callBase(args);
-                break;
-            case 'rtlEnabled':
-                if(this._colorView) {
-                    this._colorView.option(name, value);
-                }
-                this.callBase(args);
                 break;
             default:
                 this.callBase(args);
