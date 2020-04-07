@@ -75,7 +75,7 @@ function getTickGenerator(options, incidentOccurred, skipTickGeneration, rangeIs
 
         incidentOccurred: incidentOccurred,
 
-        firstDayOfWeek: options.workWeek && options.workWeek[0],
+        firstDayOfWeek: options.workWeek?.[0],
         skipTickGeneration: skipTickGeneration,
         skipCalculationLimits: options.skipCalculationLimits,
 
@@ -2580,6 +2580,7 @@ Axis.prototype = {
             isHorizontal: this._isHorizontal,
             shiftZeroValue: !this.isArgumentAxis,
             interval: options.semiDiscreteInterval,
+            firstDayOfWeek: options.workWeek?.[0],
             stick: this._getStick(),
             breaksSize: options.breakStyle ? options.breakStyle.width : 0
         };
