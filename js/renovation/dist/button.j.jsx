@@ -24,8 +24,9 @@ class Button extends Component {
     getProps(isFirstRender) {
         const props = super.getProps(isFirstRender);
 
-        if(props.template) {
-            const template = this._getTemplate(props.template);
+        if(props.template || props.haveAnonymousTemplate) {
+            // NOTE: 'template' - default name for anonymous template
+            const template = this._getTemplate(props.template || 'template');
 
             props.render = ({ parentRef, ...restProps }) => {
                 useLayoutEffect(() => {
@@ -35,7 +36,7 @@ class Button extends Component {
                     let $template = $(template.render({
                         container: getPublicElement($parent),
                         model: restProps,
-                        transclude: this._templateManager.anonymousTemplateName === props.template,
+                        transclude: !props.template && props.haveAnonymousTemplate,
                         // TODO index
                     }));
 
@@ -79,13 +80,7 @@ class Button extends Component {
     }
 
     _init() {
-        // NOTE: if we have no template and have some children,
-        //       then it is anonymous template and we should render these children
-        const haveAnonymousTemplate = this.$element().contents().length > 0;
-        const template = this.option('template');
-        this.option('haveAnonymousTemplate', haveAnonymousTemplate);
-        this._setAnonymousTemplateIfNeed(template);
-
+        this.option('haveAnonymousTemplate', this.$element().contents().length > 0);
         super._init();
 
         this.view_ref = Preact.createRef();
@@ -111,9 +106,6 @@ class Button extends Component {
                 break;
             case 'onOptionChanged':
                 super._optionChanged(option);
-                break;
-            case 'template':
-                this._setAnonymousTemplateIfNeed(value);
                 break;
         }
 
@@ -155,18 +147,6 @@ class Button extends Component {
 
     get _validationGroupConfig() {
         return ValidationEngine.getGroupConfig(this._findGroup());
-    }
-
-    // NOTE: should find a way, how we can pass anonymousTemplateName,
-    //       or we should use one name for all anonymous template (BC)
-    _getAnonymousTemplateName() {
-        return 'content';
-    }
-
-    _setAnonymousTemplateIfNeed(template) {
-        if(this.option('haveAnonymousTemplate') && !template) {
-            this.option('template', this._getAnonymousTemplateName());
-        }
     }
 }
 
