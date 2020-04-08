@@ -607,7 +607,11 @@ const DropDownList = DropDownEditor.inherit({
 
     _canKeepDataSource: function() {
         const isMinSearchLengthExceeded = this._isMinSearchLengthExceeded();
-        return this._dataSource?._isLoaded && this.option('showDataBeforeSearch') && this.option('minSearchLength') && !isMinSearchLengthExceeded && !this._isLastMinSearchLengthExceeded;
+        return this._dataSource?._isLoaded &&
+            this.option('showDataBeforeSearch') &&
+            this.option('minSearchLength') &&
+            !isMinSearchLengthExceeded &&
+            !this._isLastMinSearchLengthExceeded;
     },
 
     _searchValue: function() {
