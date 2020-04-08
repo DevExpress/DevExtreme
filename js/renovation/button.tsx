@@ -4,7 +4,6 @@ import noop from './utils/noop';
 import themes from '../ui/themes';
 import { click } from '../events/short';
 import { getImageSourceType } from '../core/utils/icon';
-import { initConfig } from '../ui/widget/utils.ink_ripple';
 import {
     Component,
     ComponentBindings,
@@ -31,7 +30,7 @@ const getInkRippleConfig = ({ text, icon, type }: ButtonInput) => {
         waveSizeCoefficient: 1,
     } : {};
 
-    return initConfig(config);
+    return config;
 };
 
 const getCssClasses = (model: ButtonInput) => {
