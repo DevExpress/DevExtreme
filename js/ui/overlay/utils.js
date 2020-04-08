@@ -1,5 +1,6 @@
 import $ from '../../core/renderer';
 import { getWindow } from '../../core/utils/window';
+import { isNumeric } from '../../core/utils/type';
 
 const WINDOW_HEIGHT_PERCENT = 0.9;
 
@@ -7,7 +8,7 @@ export const getElementMaxHeightByWindow = ($element, startLocation) => {
     const window = getWindow();
 
     let actualOffset;
-    if(startLocation) {
+    if(isNumeric(startLocation)) {
         actualOffset = $(window).innerHeight() - startLocation + $(window).scrollTop();
     } else {
         const offsetTop = $element.offset().top - $(window).scrollTop();

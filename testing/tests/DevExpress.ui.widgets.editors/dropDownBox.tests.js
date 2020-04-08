@@ -559,10 +559,6 @@ QUnit.module('popup options', moduleConfig, () => {
         const contentHeight = 90;
 
         const windowHeight = $(window).height();
-        let windowHeightStub;
-        if(windowHeight < 300) {
-            windowHeightStub = sinon.stub(renderer.fn, 'innerHeight').returns(300);
-        }
         const marginTop = Math.max(windowHeight - 50, 200);
         this.$element.dxDropDownBox({
             contentTemplate: (e) => {
@@ -597,7 +593,6 @@ QUnit.module('popup options', moduleConfig, () => {
         } finally {
             this.$element.css('margin-top', 0);
             $('#container').css('min-height', 0);
-            windowHeightStub && windowHeightStub.restore();
             scrollTop.restore();
         }
     });
