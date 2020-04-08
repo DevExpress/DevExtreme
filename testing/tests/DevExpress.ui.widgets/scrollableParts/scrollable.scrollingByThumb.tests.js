@@ -226,6 +226,27 @@ QUnit.test('thumb is visible after update when content became more then containe
     assert.equal(scrollbar.option('visible'), true, 'thumb is visible after update');
 });
 
+QUnit.test('showScrollbar: onHover, useNative: false, direction: vertical -> scaleRatio should be recalculated on mouseenter before scrollbar has been shown', function(assert) {
+    const $scrollable = $('#scrollable').height(100);
+    $scrollable.wrapInner('<div>').children().height(200);
+
+    const scrollable = $scrollable.dxScrollable({
+        showScrollbar: 'onHover',
+        useNative: false,
+        direction: 'vertical'
+    }).dxScrollable('instance');
+
+    const scrollbar = Scrollbar.getInstance($scrollable.find('.' + SCROLLABLE_SCROLLBAR_CLASS));
+    scrollable._strategy._scrollers['vertical']._scaleRatio = 0.5;
+
+    const $container = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
+    assert.equal(scrollbar.option('visible'), false, 'thumb is hidden');
+    $container.trigger('mouseenter');
+
+    assert.equal(scrollable._strategy._scrollers['vertical']._scaleRatio, 1, 'scaleRatio recalculated');
+    assert.equal(scrollbar.option('visible'), true, 'thumb is visible after mouseenter');
+});
+
 QUnit.test('thumb hide after scroll when showScrollbar = onScroll', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
         showScrollbar: 'onScroll',
