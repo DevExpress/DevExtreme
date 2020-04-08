@@ -271,14 +271,21 @@ exports.HeaderFilterView = modules.View.inherit({
                         const items = e.component.option('items');
                         const selectedItems = e.component.option('selectedItems');
 
+                        const filterValuesOnAnotherPage = !!items.length && !!options.filterValues && options.filterValues.some(filterValue => {
+                            return gridCoreUtils.getIndexByKey(filterValue, items, 'value') < 0;
+                        });
+
                         if(!e.component._selectedItemsUpdating && !e.component.option('searchValue') && !options.isFilterBuilder) {
-                            if(selectedItems.length === 0 && items.length && (!options.filterValues || options.filterValues.length <= 1)) {
+                            if(selectedItems.length === 0 && items.length && (!options.filterValues || options.filterValues.length <= 1 || !filterValuesOnAnotherPage)) {
                                 options.filterType = 'include';
                                 options.filterValues = [];
                             } else if(selectedItems.length === items.length) {
                                 options.filterType = 'exclude';
                                 options.filterValues = [];
                             }
+                        } else if(options.filterValues && selectedItems.length === items.length && !filterValuesOnAnotherPage) {
+                            options.filterType = 'exclude';
+                            options.filterValues = [];
                         }
 
                         each(items, function(index, item) {
