@@ -602,7 +602,7 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _needClearFilter: function() {
-        return !this._canKeepDataSource() ? this._needPassDataSourceToList() : false;
+        return this._canKeepDataSource() ? false : this._needPassDataSourceToList();
     },
 
     _canKeepDataSource: function() {
