@@ -1325,6 +1325,7 @@ QUnit.module('dataSource integration', moduleConfig, function() {
             valueExpr: 'name',
             displayExpr: 'name',
             searchExpr: 'name',
+            searchTimeout: 0,
             minSearchLength: 3
         });
 
@@ -1335,12 +1336,10 @@ QUnit.module('dataSource integration', moduleConfig, function() {
         kb.type('2');
         kb.type('3');
 
-        this.clock.tick(500);
         assert.strictEqual(loadStub.callCount, 2);
 
         kb.press('backspace');
         kb.press('backspace');
-        this.clock.tick(500);
 
         assert.strictEqual(loadStub.callCount, 3);
     });
