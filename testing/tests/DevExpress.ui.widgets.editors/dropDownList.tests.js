@@ -1299,6 +1299,37 @@ QUnit.module('dataSource integration', {
         this.clock.tick(loadDelay / 2);
         assert.ok($loadPanel.is(':hidden'), 'load panel is not visible when loading has been finished');
     });
+
+    QUnit.test('dataSource should not be reloaded while minSearchLength is not exceeded (T876423)', function(assert) {
+        const loadStub = sinon.stub().returns([{ name: 'test 1' }, { name: 'test 2' }, { name: 'test 3' }]);
+
+        const $dropDownList = $('#dropDownList').dxDropDownList({
+            dataSource: {
+                load: loadStub,
+                byKey: (id) => { return { name: id }; }
+            },
+            searchEnabled: true,
+            deferRendering: false,
+            showDataBeforeSearch: true,
+            valueExpr: 'name',
+            displayExpr: 'name',
+            searchExpr: 'name',
+            searchTimeout: 0,
+            minSearchLength: 3
+        });
+
+        const $input = $dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS);
+        const kb = keyboardMock($input);
+
+        kb.type('123');
+
+        assert.strictEqual(loadStub.callCount, 2);
+
+        kb.press('backspace')
+            .press('backspace');
+
+        assert.strictEqual(loadStub.callCount, 3);
+    });
 });
 
 QUnit.module('action options', moduleConfig, () => {

@@ -714,6 +714,19 @@ const DropDownList = DropDownEditor.inherit({
         return this._searchValue().toString().length >= this.option('minSearchLength');
     },
 
+    _needClearFilter: function() {
+        return this._canKeepDataSource() ? false : this._needPassDataSourceToList();
+    },
+
+    _canKeepDataSource: function() {
+        const isMinSearchLengthExceeded = this._isMinSearchLengthExceeded();
+        return this._dataSource?.isLoaded() &&
+            this.option('showDataBeforeSearch') &&
+            this.option('minSearchLength') &&
+            !isMinSearchLengthExceeded &&
+            !this._isLastMinSearchLengthExceeded;
+    },
+
     _searchValue: function() {
         return this._input().val() || '';
     },
@@ -764,7 +777,7 @@ const DropDownList = DropDownEditor.inherit({
 
     _searchCanceled: function() {
         this._clearSearchTimer();
-        if(this._needPassDataSourceToList()) {
+        if(this._needClearFilter()) {
             this._filterDataSource(null);
         }
         this._refreshList();
@@ -792,6 +805,7 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _dataSourceFiltered: function() {
+        this._isLastMinSearchLengthExceeded = this._isMinSearchLengthExceeded();
         this._refreshList();
         this._refreshPopupVisibility();
     },
@@ -892,6 +906,7 @@ const DropDownList = DropDownEditor.inherit({
         if(this._list) {
             delete this._list;
         }
+        delete this._isLastMinSearchLengthExceeded;
         this.callBase();
     },
 
