@@ -10478,11 +10478,9 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         scrollable.scrollBy(400);
         this.clock.tick();
 
-        // assert
-        assert.equal(dataGrid.getVisibleRows()[0].key, 11, 'first visible row key');
-        assert.equal(scrollable.scrollTop(), 400, 'scrollTop');
+        const firstVisibleRowKey = dataGrid.getVisibleRows()[0].key;
+        const scrollTop = scrollable.scrollTop();
 
-        // act
         let $cell = $(dataGrid.getCellElement(2, 1));
         const $checkBox = $cell.find('.dx-checkbox').eq(0);
 
@@ -10492,8 +10490,8 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.equal(dataGrid.getVisibleRows()[0].key, 11, 'first visible row key');
-        assert.equal(scrollable.scrollTop(), 400, 'scrollTop');
+        assert.equal(dataGrid.getVisibleRows()[0].key, firstVisibleRowKey, 'first visible row key');
+        assert.equal(scrollable.scrollTop(), scrollTop, 'scrollTop');
 
         $cell = $(dataGrid.getCellElement(2, 1));
 
