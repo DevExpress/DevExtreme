@@ -487,6 +487,116 @@ QUnit.module('popup options', moduleConfig, () => {
         }
     });
 
+    QUnit.test('maxHeight should be 90% of bottom offset if popup has been rendered at the bottom already (T874949)', function(assert) {
+        this.$element.dxDropDownBox({
+            contentTemplate: () => {
+                const content = $('<div id=\'dd-content\'></div>');
+
+                setTimeout(() => {
+                    $('#dd-content').height(300);
+                });
+
+                return content;
+            }
+        });
+
+        const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(0);
+        const windowHeight = $(window).height();
+        const offset = sinon.stub(renderer.fn, 'offset').returns({ left: 0, top: windowHeight - 200 });
+        const instance = this.$element.dxDropDownBox('instance');
+
+        try {
+            instance.open();
+
+            this.clock.tick();
+            const popup = $('.dx-popup').dxPopup('instance');
+            const maxHeight = popup.option('maxHeight');
+
+            assert.roughEqual(Math.floor(maxHeight()), (200 - this.$element.height()) * 0.9, 3, 'maxHeight is correct');
+        } finally {
+            scrollTop.restore();
+            offset.restore();
+        }
+    });
+
+    QUnit.test('maxHeight should be 90% to bottom bound if popup has been rendered at the top already (T874949)', function(assert) {
+
+        let startPopupHeight;
+        this.$element.dxDropDownBox({
+            contentTemplate: (e) => {
+                const content = $('<div id=\'dd-content\'></div>');
+
+                setTimeout(() => {
+                    startPopupHeight = $(e.component.content()).parent('.dx-overlay-content').height();
+                    $('#dd-content').height(300);
+                });
+
+                return content;
+            }
+        });
+
+        const elementHeight = this.$element.height();
+        const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(0);
+        const windowHeight = $(window).height();
+        this.$element.css('margin-top', windowHeight - elementHeight - 1);
+        const instance = this.$element.dxDropDownBox('instance');
+
+        try {
+            instance.open();
+
+            this.clock.tick();
+            const popup = $('.dx-popup').dxPopup('instance');
+            const maxHeight = popup.option('maxHeight');
+
+            assert.roughEqual(Math.floor(maxHeight()), (1 + startPopupHeight + elementHeight) * 0.9, 3, 'maxHeight is correct');
+        } finally {
+            scrollTop.restore();
+            this.$element.css('margin-top', 0);
+        }
+    });
+
+    QUnit.test('maxHeight should be recalculated if popup has been reopened after content change (T874949)', function(assert) {
+        const contentHeight = 90;
+
+        const windowHeight = $(window).height();
+        const marginTop = Math.max(windowHeight - 50, 200);
+        this.$element.dxDropDownBox({
+            contentTemplate: (e) => {
+                const content = $('<div id=\'dd-content\'></div>');
+
+                setTimeout(() => {
+                    $('#dd-content').height(contentHeight);
+                });
+
+                return content;
+            }
+        });
+
+        const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(0);
+
+        this.$element.css('margin-top', marginTop);
+        const instance = this.$element.dxDropDownBox('instance');
+
+        try {
+            instance.open();
+
+            this.clock.tick();
+            const popup = $('.dx-popup').dxPopup('instance');
+            const maxHeight = popup.option('maxHeight');
+
+            instance.close();
+            instance.open();
+            this.clock.tick();
+            const overlayContentHeight = $(popup.content()).outerHeight();
+            assert.roughEqual(Math.floor(maxHeight()), (windowHeight - (marginTop - overlayContentHeight)) * 0.9, 3, 'maxHeight is correct');
+
+        } finally {
+            this.$element.css('margin-top', 0);
+            $('#container').css('min-height', 0);
+            scrollTop.restore();
+        }
+    });
+
     QUnit.test('Dropdownbox popup should change height according to the content', function(assert) {
         if(isIE11) {
             assert.expect(0);
