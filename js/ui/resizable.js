@@ -152,7 +152,7 @@ const Resizable = DOMComponent.inherit({
         });
     },
 
-    toggleEventHandlers: function(shouldAttachEvents) {
+    _toggleEventHandlers: function(shouldAttachEvents) {
         shouldAttachEvents ? this._attachEventHandlers() : this._detachEventHandlers();
     },
 
@@ -424,7 +424,7 @@ const Resizable = DOMComponent.inherit({
     _optionChanged: function(args) {
         switch(args.name) {
             case 'disabled':
-                this.toggleEventHandlers(!args.value);
+                this._toggleEventHandlers(!args.value);
                 this.callBase(args);
                 break;
             case 'handles':
