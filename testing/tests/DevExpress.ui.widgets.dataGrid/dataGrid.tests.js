@@ -6137,7 +6137,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                     refreshMode: 'repaint'
                 },
                 scrolling: {
-                    mode: 'infinite'
+                    mode: 'infinite',
+                    useNative: false
                 },
                 columns: ['id', {
                     dataField: 'group',
