@@ -530,6 +530,7 @@ const Scroller = Class.inherit({
     },
 
     _cursorEnterHandler: function() {
+        this._resetScaleRatio();
         this._updateScrollbar();
 
         this._scrollbar.cursorEnter();
