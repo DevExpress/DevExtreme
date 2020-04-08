@@ -10430,6 +10430,65 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         assert.ok(dataController._getLastItemIndex.callCount > 0, '_getLastItemIndex has called after set focusedRowKey');
         assert.equal(dataController._getLastItemIndex(), 99, 'Last item index');
     });
+
+    // T872126
+    QUnit.test('Incorrect cell should not be focused after editing boolean column in cell edit mode', function(assert) {
+        // arrange
+        const store = [];
+
+        for(let i = 0; i < 60; i++) {
+            store.push({
+                id: i + 1,
+                field: true
+            });
+        }
+
+        const dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: store,
+            height: 200,
+            keyExpr: 'id',
+            editing: {
+                mode: 'cell',
+                allowUpdating: true,
+                refreshMode: 'repaint'
+            },
+            scrolling: {
+                rowRenderingMode: 'virtual'
+            },
+            paging: {
+                enabled: false
+            }
+        });
+
+        // act
+        const scrollable = dataGrid.getScrollable();
+        scrollable.scrollBy(400);
+        this.clock.tick();
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows()[0].key, 11, 'first visible row key');
+        assert.equal(scrollable.scrollTop(), 400, 'scrollTop');
+
+        // act
+        let $cell = $(dataGrid.getCellElement(2, 1));
+        const $checkBox = $cell.find('.dx-checkbox').eq(0);
+
+        $checkBox.trigger('dxpointerdown');
+        this.clock.tick();
+        $checkBox.trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows()[0].key, 11, 'first visible row key');
+        assert.equal(scrollable.scrollTop(), 400, 'scrollTop');
+
+        $cell = $(dataGrid.getCellElement(2, 1));
+
+        assert.ok($cell.hasClass('dx-focused'), 'cell is focused');
+        assert.ok($cell.hasClass('dx-editor-cell'), 'cell is edited');
+        assert.equal($cell.siblings().text(), '13', 'sibling\'s text');
+    });
 });
 
 QUnit.module('Rendered on server', baseModuleConfig, () => {

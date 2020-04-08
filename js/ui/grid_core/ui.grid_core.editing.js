@@ -1878,7 +1878,12 @@ const EditingController = modules.ViewController.inherit((function() {
 
             if(showEditorAlways && !forceUpdateRow) {
                 if(isUpdateInCellMode) {
-                    that._editRowIndex = options.rowIndex + that._dataController.getRowIndexOffset();
+                    const needUpdateEditRowIndex = options.row.key === that._dataController.items()[options.rowIndex].key;
+
+                    if(needUpdateEditRowIndex) {
+                        that._editRowIndex = options.rowIndex + that._dataController.getRowIndexOffset();
+                    }
+
                     that._editColumnIndex = options.columnIndex;
                     return that.saveEditData();
                 } else if(editMode === EDIT_MODE_BATCH) {
