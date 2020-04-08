@@ -1,9 +1,9 @@
 import registerComponent from '../../core/component_registrator';
-import WidgetBase from '../preact-wrapper/component';
-import { extend } from '../../core/utils/extend';
+import Component from '../preact-wrapper/component';
+import * as Preact from 'preact';
 import WidgetView from '../widget.p';
 
-class Widget extends WidgetBase {
+class Widget extends Component {
     getView() {
         return WidgetView;
     }
@@ -11,13 +11,19 @@ class Widget extends WidgetBase {
     getProps(isFirstRender) {
         const props = super.getProps(isFirstRender);
 
-        return props;
+        return {
+            ref: this.view_ref,
+            ...props
+        };
     }
 
-    _getDefaultOptions() {
-        return extend(super._getDefaultOptions(), {
-            focusStateEnabled: true
-        });
+    focus() {
+        this.view_ref.current.focus();
+    }
+
+    _init() {
+        super._init();
+        this.view_ref = Preact.createRef();
     }
 }
 

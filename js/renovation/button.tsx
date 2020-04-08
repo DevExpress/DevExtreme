@@ -4,9 +4,19 @@ import noop from './utils/noop';
 import themes from '../ui/themes';
 import { click } from '../events/short';
 import { getImageSourceType } from '../core/utils/icon';
-import { initConfig, showWave, hideWave } from '../ui/widget/utils.ink_ripple';
-import { Component, ComponentBindings, Effect, JSXComponent, OneWay, Ref, Template, Event } from 'devextreme-generator/component_declaration/common';
+import {
+    Component,
+    ComponentBindings,
+    Effect,
+    Event,
+    JSXComponent,
+    Method,
+    OneWay,
+    Ref,
+    Template,
+} from 'devextreme-generator/component_declaration/common';
 import Icon from './icon';
+import InkRipple from './ink-ripple';
 import Widget, { WidgetInput } from './widget';
 
 const defaultClassNames = ['dx-button'];
@@ -20,7 +30,7 @@ const getInkRippleConfig = ({ text, icon, type }: ButtonInput) => {
         waveSizeCoefficient: 1,
     } : {};
 
-    return initConfig(config);
+    return config;
 };
 
 const getCssClasses = (model: ButtonInput) => {
@@ -52,12 +62,11 @@ export const viewFunction = (viewModel: Button) => {
     const { icon, iconPosition, template, text } = viewModel.props;
     const renderText = !template && text;
     const isIconLeft = iconPosition === 'left';
-    const leftIcon = !template && isIconLeft;
-    const rightIcon = !template && !isIconLeft;
     const iconComponent = !template && viewModel.iconSource
         && <Icon source={viewModel.iconSource} position={iconPosition}/>;
 
     return <Widget
+        ref={viewModel.widgetRef}
         accessKey={viewModel.props.accessKey}
         activeStateEnabled={viewModel.props.activeStateEnabled}
         aria={viewModel.aria}
@@ -88,13 +97,16 @@ export const viewFunction = (viewModel: Button) => {
                     parentRef={viewModel.contentRef}
                 />
             }
-            {leftIcon && iconComponent}
+            {isIconLeft && iconComponent}
             {renderText &&
                 <span className="dx-button-text">{text}</span>
             }
-            {rightIcon && iconComponent}
+            {!isIconLeft && iconComponent}
             {viewModel.props.useSubmitBehavior &&
                 <input ref={viewModel.submitInputRef as any} type="submit" tabIndex={-1} className="dx-button-submit-input"/>
+            }
+            {viewModel.props.useInkRipple &&
+                <InkRipple config={viewModel.inkRippleConfig} ref={viewModel.inkRippleRef}/>
             }
         </div>
     </Widget>;
@@ -134,7 +146,9 @@ const defaultOptionRules = createDefaultOptionRules<ButtonInput>([{
 
 export default class Button extends JSXComponent<ButtonInput> {
     @Ref() contentRef!: HTMLDivElement;
+    @Ref() inkRippleRef!: InkRipple;
     @Ref() submitInputRef!: HTMLInputElement;
+    @Ref() widgetRef!: Widget;
 
     @Effect()
     contentReadyEffect() {
@@ -146,18 +160,21 @@ export default class Button extends JSXComponent<ButtonInput> {
         onContentReady!({ element: this.contentRef.parentNode });
     }
 
+    @Method()
+    focus() {
+        this.widgetRef.focus();
+    }
+
     onActive(event: Event) {
         const { useInkRipple } = this.props;
-        const config = getInkRippleConfig(this.props);
 
-        useInkRipple && showWave(config, { element: this.contentRef, event });
+        useInkRipple && this.inkRippleRef.showWave({ element: this.contentRef, event });
     }
 
     onInactive(event: Event) {
         const { useInkRipple } = this.props;
-        const config = getInkRippleConfig(this.props);
 
-        useInkRipple && hideWave(config, { element: this.contentRef, event });
+        useInkRipple && this.inkRippleRef.hideWave({ element: this.contentRef, event });
     }
 
     onWidgetClick(event: Event) {
@@ -255,5 +272,9 @@ export default class Button extends JSXComponent<ButtonInput> {
         const { icon, type } = this.props;
 
         return (icon || type === 'back') ? (icon || 'back') : '';
+    }
+
+    get inkRippleConfig() {
+        return getInkRippleConfig(this.props);
     }
 }

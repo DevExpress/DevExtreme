@@ -1,9 +1,9 @@
 import $ from '../../core/renderer';
-import * as Preact from 'preact';
+
 import registerComponent from '../../core/component_registrator';
 import ValidationEngine from '../../ui/validation_engine';
-import Widget from '../preact-wrapper/component';
-import { extend } from '../../core/utils/extend';
+import Component from '../preact-wrapper/component';
+import * as Preact from 'preact';
 import ButtonView from '../button.p';
 import { wrapElement, getInnerActionName, removeDifferentElements } from '../preact-wrapper/utils';
 import { useLayoutEffect } from 'preact/hooks';
@@ -16,7 +16,7 @@ const actions = {
     onContentReady: { excludeValidators: ['disabled', 'readOnly'] },
 };
 
-class Button extends Widget {
+class Button extends Component {
     getView() {
         return ButtonView;
     }
@@ -24,8 +24,9 @@ class Button extends Widget {
     getProps(isFirstRender) {
         const props = super.getProps(isFirstRender);
 
-        if(props.template) {
-            const template = this._getTemplate(props.template);
+        if(props.template || props.haveAnonymousTemplate) {
+            // NOTE: 'template' - default name for anonymous template
+            const template = this._getTemplate(props.template || 'template');
 
             props.render = ({ parentRef, ...restProps }) => {
                 useLayoutEffect(() => {
@@ -35,6 +36,8 @@ class Button extends Widget {
                     let $template = $(template.render({
                         container: getPublicElement($parent),
                         model: restProps,
+                        transclude: !props.template && props.haveAnonymousTemplate,
+                        // TODO index
                     }));
 
                     if($template.hasClass(TEMPLATE_WRAPPER_CLASS)) {
@@ -58,7 +61,14 @@ class Button extends Widget {
 
         props.validationGroup = ValidationEngine.getGroupConfig(this._findGroup());
 
-        return props;
+        return {
+            ref: this.view_ref,
+            ...props
+        };
+    }
+
+    focus() {
+        this.view_ref.current.focus();
     }
 
     _findGroup() {
@@ -69,23 +79,11 @@ class Button extends Widget {
         return validationGroup || ValidationEngine.findGroup($element, model);
     }
 
-    _getDefaultOptions() {
-        return extend(super._getDefaultOptions(), {
-            activeStateEnabled: true,
-            focusStateEnabled: true,
-            hoverStateEnabled: true,
-            icon: '',
-            iconPosition: 'left',
-            template: '',
-            text: '',
-            useInkRipple: false,
-            useSubmitBehavior: false,
-            validationGroup: undefined,
-        });
-    }
-
     _init() {
+        this.option('haveAnonymousTemplate', this.$element().contents().length > 0);
         super._init();
+
+        this.view_ref = Preact.createRef();
 
         if(this.option('useSubmitBehavior')) {
             this.option('onSubmit', this._getSubmitAction());

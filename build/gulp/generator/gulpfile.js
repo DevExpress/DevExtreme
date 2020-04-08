@@ -16,7 +16,8 @@ const COMMON_SRC = ['js/**/*.*', '!' + GLOB_TS];
 
 const knownErrors = [
     'Cannot find module \'preact\'.',
-    'Cannot find module \'preact/hooks\'.'
+    'Cannot find module \'preact/hooks\'.',
+    'Cannot find module \'preact/compat\'.'
 ];
 
 gulp.task('generate-components', function() {

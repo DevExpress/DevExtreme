@@ -19,6 +19,10 @@ const JS_VENDORS = [
         noUglyFile: true
     },
     {
+        path: '/preact/compat/dist/compat.js',
+        noUglyFile: true
+    },
+    {
         path: '/jquery/dist/jquery.js'
     },
     {

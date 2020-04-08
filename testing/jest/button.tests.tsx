@@ -1,10 +1,10 @@
 
 import devices from '../../js/core/devices';
 import themes from '../../js/ui/themes';
-import { h } from 'preact';
+import { h, createRef } from 'preact';
 import { clear as clearEventHandlers, defaultEvent, emit, emitKeyboard, eventHandlers, fakeClickEvent, EVENT, KEY } from './utils/events-mock';
 import { mount } from 'enzyme';
-import Button, { defaultOptions } from '../../js/renovation/button.p.js';
+import Button, { defaultOptions, ButtonRef } from '../../js/renovation/button.p.js';
 import Icon from '../../js/renovation/icon.p.js';
 import Widget from '../../js/renovation/widget.p.js';
 
@@ -627,6 +627,22 @@ describe('Button', () => {
                 style: expect.any(Object),
                 tabIndex: expect.any(Number),
                 title: expect.any(String),
+            });
+        });
+    });
+
+    describe('API', () => {
+        describe('Focus', () => {
+            it('should call Widget.focus API', () => {
+                const apiRef = createRef<ButtonRef>()
+                const button = render({ ref: apiRef, focusStateEnabled: true });
+                const { ref: widgetRef } = button.find(Widget).props();
+                const widgetFocusApi = jest.fn();
+                widgetRef.current.focus = widgetFocusApi;
+
+                apiRef.current.focus();
+
+                expect(widgetFocusApi).toHaveBeenCalledTimes(1);
             });
         });
     });
