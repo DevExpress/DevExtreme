@@ -89,7 +89,7 @@ function createAxisStubs() {
         drawScaleBreaks: sinon.spy(),
         hideOuterElements: sinon.spy(),
         prepareAnimation: sinon.spy(),
-        isChangedTickInterval: sinon.stub().returns(false)
+        estimateTickInterval: sinon.stub().returns(false)
     };
 
     axisFakes
@@ -2051,7 +2051,7 @@ QUnit.test('Redraw vertical axes, if tickInterval is changed', function(assert) 
     argAxis.getMargins.returns({ left: 10, top: 7, right: 20, bottom: 13 });
     valAxis.getMargins.returns({ left: 18, top: 15, right: 10, bottom: 9 });
 
-    valAxis.isChangedTickInterval.returns(true);
+    valAxis.estimateTickInterval.returns(true);
 
     this.setupAxes([argAxis, valAxis]);
 
