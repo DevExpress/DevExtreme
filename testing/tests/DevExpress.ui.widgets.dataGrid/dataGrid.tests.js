@@ -10445,6 +10445,11 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
     // T872126
     QUnit.test('Incorrect cell should not be focused after editing boolean column in cell edit mode', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test is not actual for mobile devices');
+            return;
+        }
+
         // arrange
         const store = [];
 
