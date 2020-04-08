@@ -972,7 +972,9 @@ const DropDownList = DropDownEditor.inherit({
             case 'popupWidthExtension':
                 break;
             case 'selectedItem':
-                this._selectionChangedAction({ selectedItem: args.value });
+                if(args.previousValue !== args.value) {
+                    this._selectionChangedAction({ selectedItem: args.value });
+                }
                 break;
             default:
                 this.callBase(args);
