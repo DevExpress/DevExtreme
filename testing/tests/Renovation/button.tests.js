@@ -363,8 +363,7 @@ QUnit.module('inkRipple', {}, () => {
         $element.trigger('dxclick');
     });
 
-    // NOTE: deprecated behavior
-    QUnit.skip('widget should works correctly when the useInkRipple option is changed at runtime', function(assert) {
+    QUnit.test('widget should works correctly when the useInkRipple option is changed at runtime', function(assert) {
         const clock = sinon.useFakeTimers();
         const $inkButton = $('#inkButton').Button({
             text: 'test',
