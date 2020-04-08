@@ -1332,14 +1332,12 @@ QUnit.module('dataSource integration', moduleConfig, function() {
         const $input = $dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS);
         const kb = keyboardMock($input);
 
-        kb.type('1');
-        kb.type('2');
-        kb.type('3');
+        kb.type('123');
 
         assert.strictEqual(loadStub.callCount, 2);
 
-        kb.press('backspace');
-        kb.press('backspace');
+        kb.press('backspace')
+            .press('backspace');
 
         assert.strictEqual(loadStub.callCount, 3);
     });
