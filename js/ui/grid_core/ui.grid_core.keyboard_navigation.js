@@ -231,7 +231,15 @@ const KeyboardNavigationController = core.ViewController.inherit({
         this._isNeedFocus = true;
         this._isNeedScroll = true;
 
-        this._updateFocusedCellPosition(this._getCellElementFromTarget(originalEvent.target));
+        const eventTarget = originalEvent.target;
+        const elementType = this._getElementType(eventTarget);
+        if(elementType === 'cell') {
+            this._updateFocusedCellPosition(this._getCellElementFromTarget(eventTarget));
+        } else {
+            const $row = $(eventTarget);
+            isGroupRow($row) && this.setFocusedRowIndex(this._getRowIndex($row));
+        }
+
 
         if(!isHandled) {
             switch(e.keyName) {
