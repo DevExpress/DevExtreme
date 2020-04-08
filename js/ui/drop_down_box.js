@@ -294,6 +294,16 @@ const DropDownBox = DropDownEditor.inherit({
         return realDevice.deviceType === 'desktop' && this._canShowVirtualKeyboard() && this._isNestedElementActive();
     },
 
+    _popupHiddenHandler: function() {
+        this.callBase();
+        this._popupPosition = undefined;
+    },
+
+    _popupPositionedHandler: function(e) {
+        this.callBase(e);
+        this._popupPosition = e.position;
+    },
+
     _popupConfig: function() {
         return extend(this.callBase(), {
             width: function() {
@@ -306,7 +316,9 @@ const DropDownBox = DropDownEditor.inherit({
             contentTemplate: ANONYMOUS_TEMPLATE_NAME,
             closeOnTargetScroll: this._shouldCloseOnTargetScroll.bind(this),
             maxHeight: function() {
-                return getElementMaxHeightByWindow(this.$element());
+                const popupLocation = this._popupPosition?.v.location;
+
+                return getElementMaxHeightByWindow(this.$element(), popupLocation);
             }.bind(this)
         });
     },
