@@ -836,11 +836,6 @@ const SelectBox = DropDownList.inherit({
             case 'useInkRipple':
                 this._invalidate();
                 break;
-            case 'selectedItem':
-                if(args.previousValue !== args.value) {
-                    this.callBase(args);
-                }
-                break;
             case 'allowClearing':
                 break;
             default:
