@@ -334,7 +334,7 @@ QUnit.test('Check tickInterval with new canvas', function(assert) {
         height: 400
     };
 
-    assert.ok(!this.axis.isChangedTickInterval(canvas), 'tickInterval is not change');
+    assert.ok(!this.axis.estimateTickInterval(canvas), 'tickInterval is not change');
     assert.equal(translator.updateCanvas.lastCall.args[0], canvas, 'translator is updated');
 
     this.generatedTickInterval = 3;
@@ -346,7 +346,7 @@ QUnit.test('Check tickInterval with new canvas', function(assert) {
         width: 400,
         height: 400
     };
-    assert.ok(this.axis.isChangedTickInterval(newCanvas), 'tickInterval is change');
+    assert.ok(this.axis.estimateTickInterval(newCanvas), 'tickInterval is change');
     assert.equal(translator.updateCanvas.lastCall.args[0], newCanvas, 'translator is updated');
 });
 
