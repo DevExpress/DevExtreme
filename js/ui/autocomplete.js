@@ -3,7 +3,6 @@ const noop = require('../core/utils/common').noop;
 const registerComponent = require('../core/component_registrator');
 const extend = require('../core/utils/extend').extend;
 const DropDownList = require('./drop_down_editor/ui.drop_down_list');
-const Deferred = require('../core/utils/deferred').Deferred;
 
 const AUTOCOMPLETE_CLASS = 'dx-autocomplete';
 const AUTOCOMPLETE_POPUP_WRAPPER_CLASS = 'dx-autocomplete-popup-wrapper';
@@ -103,17 +102,8 @@ const Autocomplete = DropDownList.inherit({
         this.setAria('autocomplete', 'inline');
     },
 
-    _loadValue: function() {
-        return new Deferred().resolve(this.option('value'));
-    },
-
     _displayGetterExpr: function() {
         return this.option('valueExpr');
-    },
-
-    _setSelectedItem: function(item) {
-        this.callBase(item);
-        this.option('displayValue', this.option('value'));
     },
 
     _popupConfig: function() {

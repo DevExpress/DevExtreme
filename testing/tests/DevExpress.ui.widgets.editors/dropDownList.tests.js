@@ -1018,7 +1018,7 @@ QUnit.module('selectedItem', moduleConfig, () => {
         assert.strictEqual(dropDownList.option('selectedItem'), null, 'Value should be reset');
     });
 
-    QUnit.test('onSelectionChanged action should not be fired when selectedItem was not changed', function(assert) {
+    QUnit.test('onSelectionChanged action should not be fired after dataSource has been updated and selectedItem was not changed', function(assert) {
         const selectionChangedHandler = sinon.spy();
         const dropDownList = $('#dropDownList').dxDropDownList({
             dataSource: [],
@@ -1032,6 +1032,23 @@ QUnit.module('selectedItem', moduleConfig, () => {
         dropDownList.option('dataSource', [{ id: 0, name: 'zero' }, { id: 1, name: 'one' }]);
 
         assert.strictEqual(selectionChangedHandler.callCount, 0, 'selectionChanged action was not fired');
+    });
+
+    QUnit.test('selectionChanged should not fire if selectedItem was not changed', function(assert) {
+        const selectionChangedHandler = sinon.stub();
+        const items = [{ name: 'item1' }, { name: 'item2' }];
+        const instance = $('#dropDownList').dxDropDownList({
+            dataSource: items,
+            value: items[0],
+            onSelectionChanged: selectionChangedHandler,
+            displayExpr: 'name'
+        }).dxDropDownList('instance');
+
+        assert.strictEqual(instance.option('selectedItem'), items[0], 'selectedItem is correct on init');
+
+        instance.option('selectedItem', items[0]);
+        assert.strictEqual(instance.option('selectedItem'), items[0], 'selectedItem was not changed');
+        assert.equal(selectionChangedHandler.callCount, 1, 'selectionChanged should not fire twice');
     });
 });
 
