@@ -4,6 +4,7 @@ import recurrenceUtils from './utils.recurrence';
 import typeUtils from '../../core/utils/type';
 import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';
+import errors from '../widget/ui.errors';
 import translator from '../../animation/translator';
 import { grep } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
@@ -833,6 +834,15 @@ const subscribes = {
         const dragBehavior = this.getWorkSpace().dragBehavior;
 
         dragBehavior && dragBehavior.moveBack();
-    }
+    },
+
+    validateDayHours: function() {
+        const endDayHour = this._getCurrentViewOption('endDayHour');
+        const startDayHour = this._getCurrentViewOption('startDayHour');
+
+        if(startDayHour >= endDayHour) {
+            throw errors.Error('E1058');
+        }
+    },
 };
 module.exports = subscribes;

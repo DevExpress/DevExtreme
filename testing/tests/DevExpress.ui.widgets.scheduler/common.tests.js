@@ -2164,6 +2164,62 @@ QUnit.testStart(function() {
                 'E1058 Error message'
             );
         });
+
+        QUnit.test(`Generate error if workSpace option changed to startDayHour: ${dayHours.startDayHour} >= endDayHour: ${dayHours.endDayHour}`, function(assert) {
+            this.createInstance({
+                currentDate: new Date(2015, 4, 24),
+                views: [{
+                    name: 'day',
+                    type: 'day'
+                }],
+                currentView: 'day',
+                startDayHour: 8,
+                endDayHour: 12
+            });
+
+            assert.throws(
+                () => {
+                    const instance = this.instance;
+                    instance.option('views[0].startDayHour', dayHours.startDayHour);
+                    instance.option('views[0].endDayHour', dayHours.endDayHour);
+                },
+                e => /E1058/.test(e.message),
+                'E1058 Error message'
+            );
+        });
+
+        QUnit.test(`Generate error if currentView changed to view.startDayHour: ${dayHours.startDayHour} >= view.endDayHour: ${dayHours.endDayHour}`, function(assert) {
+            this.createInstance({
+                currentDate: new Date(2015, 4, 24),
+                dataSource: [
+                    {
+                        startDate: new Date(2015, 4, 24, 0),
+                        endDate: new Date(2015, 4, 24, 2),
+                        allDay: true
+                    }
+                ],
+                views: [{
+                    name: 'day',
+                    type: 'day'
+                }, {
+                    name: 'week',
+                    type: 'week',
+                    startDayHour: dayHours.startDayHour,
+                    endDayHour: dayHours.endDayHour
+                }],
+                currentView: 'day',
+                startDayHour: 8,
+                endDayHour: 12
+            });
+
+            assert.throws(
+                () => {
+                    this.instance.option('currentView', 'week');
+                },
+                e => /E1058/.test(e.message),
+                'E1058 Error message'
+            );
+        });
     });
 
     [

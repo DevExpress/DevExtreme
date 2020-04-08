@@ -442,12 +442,15 @@ const SchedulerWorkSpace = Widget.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
+            case 'startDayHour':
+            case 'endDayHour':
+                this.invoke('validateDayHours');
+                this._cleanWorkSpace();
+                break;
             case 'dateCellTemplate':
             case 'resourceCellTemplate':
             case 'dataCellTemplate':
             case 'timeCellTemplate':
-            case 'startDayHour':
-            case 'endDayHour':
             case 'hoursInterval':
             case 'firstDayOfWeek':
             case 'currentDate':
