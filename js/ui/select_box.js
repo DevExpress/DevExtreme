@@ -548,6 +548,7 @@ const SelectBox = DropDownList.inherit({
             const shouldCancelSearch = this._wasSearch() &&
                 !this.option('acceptCustomValue') &&
                 this.option('searchEnabled') &&
+                this.option('opened') &&
                 !this._isOverlayNestedTarget(e.relatedTarget);
             if(shouldCancelSearch) {
                 this._searchCanceled();
