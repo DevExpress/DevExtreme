@@ -487,7 +487,8 @@ const Popup = Overlay.inherit({
 
     _resetContentHeight: function() {
         this._$popupContent.css({
-            'height': 'auto'
+            'height': 'auto',
+            'maxHeight': 'none'
         });
     },
 
