@@ -987,7 +987,8 @@ const dxChart = AdvancedChart.inherit({
         let hAxesMargins = getHorizontalAxesMargins(horizontalElements, axis => axis.estimateMargins(panesCanvases[axis.pane]));
         panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
 
-        const drawAxesAndSetCanvases = (axes, isHorizontal) => {
+        const drawAxesAndSetCanvases = (isHorizontal) => {
+            const axes = isHorizontal ? horizontalAxes : verticalAxes;
             const condition = (isHorizontal ? rotated : !rotated) && synchronizeMultiAxes;
             drawAxesWithTicks(axes, condition, panesCanvases, panesBorderOptions);
             if(isHorizontal) {
@@ -998,10 +999,10 @@ const dxChart = AdvancedChart.inherit({
             panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
         };
 
-        drawAxesAndSetCanvases(verticalAxes, false);
-        drawAxesAndSetCanvases(horizontalAxes, true);
-        if(that._tickIntervalsChanged(verticalAxes, panesCanvases)) {
-            drawAxesAndSetCanvases(verticalAxes, false);
+        drawAxesAndSetCanvases(false);
+        drawAxesAndSetCanvases(true);
+        if(that._estimateTickIntervals(verticalAxes, panesCanvases)) {
+            drawAxesAndSetCanvases(false);
         }
 
         let oldTitlesWidth = calculateTitlesWidth(verticalAxes);
@@ -1050,8 +1051,8 @@ const dxChart = AdvancedChart.inherit({
         return cleanPanesCanvases;
     },
 
-    _tickIntervalsChanged(axes, canvases) {
-        return axes.some(axis => axis.isChangedTickInterval(canvases[axis.pane]));
+    _estimateTickIntervals(axes, canvases) {
+        return axes.some(axis => axis.estimateTickInterval(canvases[axis.pane]));
     },
 
     checkForMoreSpaceForPanesCanvas() {

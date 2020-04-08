@@ -1381,7 +1381,7 @@ Axis.prototype = {
         };
     },
 
-    isChangedTickInterval: function(canvas) {
+    estimateTickInterval: function(canvas) {
         const that = this;
         that.updateCanvas(canvas);
         return that._tickInterval !== that._getTicks(that.adjustViewport(that._seriesData), _noop, true).tickInterval;
