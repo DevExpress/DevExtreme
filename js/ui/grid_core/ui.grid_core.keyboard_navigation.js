@@ -238,7 +238,14 @@ const KeyboardNavigationController = core.ViewController.inherit({
         this._isNeedFocus = true;
         this._isNeedScroll = true;
 
-        this._updateFocusedCellPosition(this._getCellElementFromTarget(originalEvent.target));
+        const eventTarget = originalEvent.target;
+        const elementType = this._getElementType(eventTarget);
+        if(elementType === 'cell' || (elementType === 'row' && !isDefined(this._focusedCellPosition?.columnIndex))) {
+            this._updateFocusedCellPosition(this._getCellElementFromTarget(originalEvent.target));
+        } else {
+            const $row = $(eventTarget);
+            this._focusedView && isGroupRow($row) && this.setFocusedRowIndex(this._getRowIndex($row));
+        }
 
         if(!isHandled) {
             switch(e.keyName) {
@@ -519,7 +526,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             isOriginalHandlerRequired = true;
         } else {
             if(this._focusedCellPosition.rowIndex === undefined && $(eventTarget).hasClass(ROW_CLASS)) {
-                this._updateFocusedCellPosition($(eventTarget).children().not('.' + COMMAND_EXPAND_CLASS).first());
+                this._updateFocusedCellPosition($cell);
             }
 
             elementType = this._getElementType(eventTarget);
@@ -1702,7 +1709,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _getCellElementFromTarget: function(target) {
-        return $(target).closest(`.${ROW_CLASS} > td`);
+        const elementType = this._getElementType(target);
+        const $cell = elementType === 'cell' ? $(target).closest(`.${ROW_CLASS} > td`) : $(target).children().not('.' + COMMAND_EXPAND_CLASS).first();
+        return $cell;
     },
 
     _getRowsViewElement: function() {
