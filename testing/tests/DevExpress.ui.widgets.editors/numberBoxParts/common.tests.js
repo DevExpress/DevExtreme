@@ -785,6 +785,21 @@ QUnit.module('basics', {}, () => {
 
         assert.ok($numberBox.hasClass(INVALID_CLASS), 'widget is invalid');
     });
+
+    QUnit.test('It should be possible to set negative value via scroll when min is null', function(assert) {
+        const $numberBox = $('#numberbox').dxNumberBox({
+            min: null,
+            value: 0,
+            showSpinButtons: true
+        });
+
+        const instance = $numberBox.dxNumberBox('instance');
+        const $spinDown = $numberBox.find('.' + SPIN_DOWN_CLASS);
+
+        $spinDown.trigger('dxpointerdown');
+
+        assert.strictEqual(instance.option('value'), -1, 'value is not set to negative number');
+    });
 });
 
 QUnit.module('submit element', {}, () => {
