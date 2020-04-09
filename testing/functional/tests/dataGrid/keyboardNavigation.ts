@@ -557,3 +557,31 @@ test("Tab key on the focused group row should be handled by default behavior (T8
         }
     });
 });
+
+test('The first group row should be expanded when the Enter key is pressed (T869799)', async t => {
+    const dataGrid = new DataGrid('#container');
+    const firstGroupRow = dataGrid.getGroupRow(0);
+
+    await t
+        .pressKey('tab')
+        .pressKey('tab')
+
+        .expect(firstGroupRow.isFocused).ok()
+        .expect(firstGroupRow.isExpanded).notOk()
+
+        .pressKey('enter')
+
+        .expect(firstGroupRow.isExpanded).ok()
+
+}).before(() => createWidget('dxDataGrid', {
+    dataSource: [
+        { name: 'Alex', phone: '555555' }
+    ],
+    columns:[{
+        dataField: 'name',
+        groupIndex: 0
+    }, 'phone'],
+    grouping: {
+        autoExpandAll: false
+    }
+}));
