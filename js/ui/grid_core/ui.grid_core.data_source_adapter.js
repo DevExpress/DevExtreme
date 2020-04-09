@@ -630,10 +630,7 @@ module.exports = gridCore.Controller.inherit((function() {
             }
         },
         reload: function(full) {
-            // this._isReshape = !full;
-            const result = full ? this._dataSource.reload() : this._dataSource.load();
-            // this._isReshape = false;
-            return result;
+            return full ? this._dataSource.reload() : this._dataSource.load();
         },
         getCachedStoreData: function() {
             return this._cachedStoreData;
