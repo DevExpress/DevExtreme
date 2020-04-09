@@ -46,6 +46,7 @@ class FileManager extends Widget {
         this._firstItemViewLoad = true;
         this._lockSelectionProcessing = false;
         this._lockFocusedItemProcessing = false;
+        this._itemKeyToFocus = undefined;
 
         this._controller = new FileItemsController({
             currentPath: this.option('currentPath'),
@@ -230,10 +231,13 @@ class FileManager extends Widget {
 
     _onItemViewFocusedItemChanged(e) {
         this._lockFocusedItemProcessing = true;
-        this.option('focusedItemKey', e.focusedItemKey);
+        this.option('focusedItemKey', e.itemKey);
         this._lockFocusedItemProcessing = false;
 
-        this._actions.onFocusedItemChanged(e);
+        this._actions.onFocusedItemChanged({
+            item: e.item,
+            itemElement: e.itemElement
+        });
     }
 
     _onAdaptiveStateChanged({ enabled }) {
@@ -362,6 +366,7 @@ class FileManager extends Widget {
         parentDirItem.isParentFolder = true;
         parentDirItem.name = '..';
         parentDirItem.relativeName = '..';
+        parentDirItem.key = [];
 
         const itemsCopy = [...items];
         itemsCopy.unshift({
@@ -674,8 +679,15 @@ class FileManager extends Widget {
         }
     }
 
-    _onDataLoading() {
-        this._itemView.refresh();
+    _onDataLoading({ operation }) {
+        let options = null;
+
+        if(operation === 'navigation') {
+            options = { focusedItemKey: this._itemKeyToFocus };
+            this._itemKeyToFocus = undefined;
+        }
+
+        this._itemView.refresh(options);
     }
 
     _onSelectedDirectoryChanged() {
@@ -732,6 +744,10 @@ class FileManager extends Widget {
         if(!fileItem.isDirectory) {
             this._actions.onSelectedFileOpened({ file: fileItem });
             return;
+        }
+
+        if(fileItem.isParentFolder) {
+            this._itemKeyToFocus = this._getCurrentDirectory().fileItem.key;
         }
 
         const newCurrentDirectory = fileItem.isParentFolder ? this._getCurrentDirectory().parentDirectory : fileItemInfo;

@@ -100,6 +100,21 @@ const createFileProviderWithIncorrectName = (incorrectName, isOnlyNewItem) => {
     return fileProvider;
 };
 
+const createExtendedFileSystem = () => {
+    const result = createTestFileSystem();
+    result[1].items.push(
+        {
+            name: 'File 2-2.jpg',
+            isDirectory: false
+        },
+        {
+            name: 'File 2-3.jpg',
+            isDirectory: false
+        }
+    );
+    return result;
+};
+
 QUnit.module('Navigation operations', moduleConfig, () => {
 
     test('keep selection and expanded state during refresh', function(assert) {
@@ -615,5 +630,23 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.strictEqual(optionChangedSpy.args[1][0].name, 'currentPathKeys', 'currentPathKeys option changed');
         assert.strictEqual(optionChangedSpy.args[2][0].name, 'currentPath', 'currentPath option changed');
         assert.strictEqual(optionChangedSpy.args[2][0].value, 'Folder 1/Folder 1.1', 'currentPath option updated');
+    });
+
+    test('Details view - navigation by double click doesn\'t focus parent folder', function(assert) {
+        this.fileManager.option({
+            fileSystemProvider: createExtendedFileSystem(),
+            itemView: {
+                mode: 'details'
+            }
+        });
+        this.clock.tick(400);
+
+        const $cell = this.wrapper.getRowNameCellInDetailsView(2);
+        $cell.trigger('dxdblclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), '..', 'parent folder shown');
+        assert.notOk(this.wrapper.isDetailsRowSelected(0), 'item not selected');
+        assert.notOk(this.wrapper.isDetailsRowFocused(0), 'item not focused');
     });
 });
