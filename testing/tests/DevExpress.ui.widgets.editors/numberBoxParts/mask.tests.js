@@ -837,7 +837,7 @@ QUnit.module('format: text input', moduleConfig, () => {
         const keyboard = keyboardMock($input);
 
         keyboard
-            .caret({ start: 0, end: 1 })
+            .caret({ start: 1, end: 1 })
             .type('-');
 
         assert.strictEqual(instance.option('value'), -2, 'value is set to negative number');
