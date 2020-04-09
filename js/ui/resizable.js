@@ -98,6 +98,7 @@ const Resizable = DOMComponent.inherit({
     },
 
     _renderHandles: function() {
+        this._handles = [];
         const handles = this.option('handles');
 
         if(handles === 'none') {
@@ -118,14 +119,12 @@ const Resizable = DOMComponent.inherit({
     },
 
     _renderHandle: function(handleName) {
-        $('<div>')
+        const $handle = $('<div>')
             .addClass(RESIZABLE_HANDLE_CLASS)
             .addClass(RESIZABLE_HANDLE_CLASS + '-' + handleName)
             .appendTo(this.$element());
-    },
 
-    _getHandlers: function() {
-        return this.$element().children('.' + RESIZABLE_HANDLE_CLASS);
+        this._handles.push($handle);
     },
 
     _attachEventHandlers: function() {
@@ -138,7 +137,7 @@ const Resizable = DOMComponent.inherit({
         handlers[DRAGSTART_EVENT_NAME] = this._dragHandler.bind(this);
         handlers[DRAGSTART_END_EVENT_NAME] = this._dragEndHandler.bind(this);
 
-        this._getHandlers().each(function(index, handleElement) {
+        this._handles.forEach(function(handleElement) {
             eventsEngine.on(handleElement, handlers, {
                 direction: 'both',
                 immediate: true
@@ -147,7 +146,7 @@ const Resizable = DOMComponent.inherit({
     },
 
     _detachEventHandlers: function() {
-        this._getHandlers().each(function(index, handleElement) {
+        this._handles.forEach(function(handleElement) {
             eventsEngine.off(handleElement);
         });
     },
