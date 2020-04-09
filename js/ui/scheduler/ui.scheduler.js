@@ -1869,7 +1869,7 @@ const Scheduler = Widget.inherit({
     },
 
     _cleanPopup: function() {
-        this._appointmentPopup.dispose();
+        this._appointmentPopup && this._appointmentPopup.dispose();
     },
 
     _convertDatesByTimezoneBack: function(applyAppointmentTimezone, sourceAppointmentData, targetAppointmentData) {
@@ -2444,7 +2444,7 @@ const Scheduler = Widget.inherit({
     },
 
     hideAppointmentPopup: function(saveChanges) {
-        if(this._appointmentPopup.isVisible()) {
+        if(this._appointmentPopup && this._appointmentPopup.isVisible()) {
             saveChanges && this._appointmentPopup.saveChanges();
             this._appointmentPopup.hide();
         }
@@ -2471,7 +2471,7 @@ const Scheduler = Widget.inherit({
     },
 
     hideAppointmentTooltip: function() {
-        this._appointmentTooltip.hide();
+        this._appointmentTooltip && this._appointmentTooltip.hide();
     },
 
     scrollToTime: function(hours, minutes, date) {
