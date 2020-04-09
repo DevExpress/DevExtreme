@@ -24,7 +24,7 @@ const INPUT_EVENT = 'input';
 const CARET_TIMEOUT_DURATION = browser.msie ? 300 : 0; // If we move caret before the second click, IE can prevent browser text selection on double click
 
 const ensureDefined = function(value, defaultValue) {
-    return value === undefined ? defaultValue : value;
+    return value === undefined || value === null ? defaultValue : value;
 };
 
 const NumberBoxMask = NumberBoxBase.inherit({

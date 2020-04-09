@@ -785,6 +785,47 @@ QUnit.module('basics', {}, () => {
 
         assert.ok($numberBox.hasClass(INVALID_CLASS), 'widget is invalid');
     });
+
+    QUnit.test('It should be possible to set negative value when min is null and format is defined (T876378)', function(assert) {
+        const $numberBox = $('#numberbox').dxNumberBox({
+            min: null,
+            format: '#,##0.##',
+            valueChangeEvent: 'keyup',
+            value: 0
+        });
+
+        const instance = $numberBox.dxNumberBox('instance');
+        const $input = $numberBox.find('.' + INPUT_CLASS);
+        const keyboard = keyboardMock($input);
+
+        keyboard
+            .caret(1)
+            .type('-')
+            .triggerEvent('keyup');
+        keyboard
+            .type('1')
+            .triggerEvent('keyup');
+
+        assert.strictEqual(instance.option('value'), -1, 'value is not set to negative number');
+    });
+
+    QUnit.test('It should be possible to set negative value when min is null', function(assert) {
+        const $numberBox = $('#numberbox').dxNumberBox({
+            min: null,
+            valueChangeEvent: 'keyup',
+            value: 0
+        });
+
+        const instance = $numberBox.dxNumberBox('instance');
+        const $input = $numberBox.find('.' + INPUT_CLASS);
+        const keyboard = keyboardMock($input);
+
+        keyboard
+            .caret({ start: 0, end: 1 })
+            .type('-1');
+
+        assert.strictEqual(instance.option('value'), -1, 'value is set to negative number');
+    });
 });
 
 QUnit.module('submit element', {}, () => {
