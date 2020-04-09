@@ -2217,6 +2217,56 @@ QUnit.module('applyChangesMode: onDemand', {
         assert.deepEqual(state.fields.length, 3, 'start state');
     });
 
+    QUnit.test('Tree should not recursive expand parent nodes (T866559)', function(assert) {
+        this.setup({
+            fields: [
+                {
+                    'dimension': 'Measures',
+                    'dataField': '[Measures].[Customer Count]',
+                    'caption': 'Customer Count',
+                    'displayFolder': 'Internet Customers',
+                    'isMeasure': true
+                },
+                {
+                    'dimension': 'Date',
+                    'dataField': '[Date].[Date]',
+                    'caption': 'Date.Date',
+                    'displayFolder': '',
+                    'isMeasure': false
+                }
+            ]
+        });
+        const dataSource = this.fieldChooser.getDataSource();
+        dataSource.load();
+        this.clock.tick(500);
+
+        const treeView = this.fieldChooser.$element().find('.dx-treeview').dxTreeView('instance');
+        let treeViewItems = treeView.option('dataSource');
+
+        treeView.expandItem(treeViewItems[0]);
+        this.clock.tick(500);
+
+        treeView.expandItem(treeViewItems[0].items[0]);
+        this.clock.tick(500);
+
+        assert.ok(treeView.getNodes()[0].children[0].expanded, 'node is expanded');
+
+        treeView.selectItem(treeViewItems[0].items[0].items[0]);
+
+        treeViewItems = treeView.option('dataSource');
+        treeView.collapseItem(treeViewItems[0]);
+        this.clock.tick(500);
+
+        assert.notOk(treeView.getNodes()[0].expanded, 'first node is collapsed');
+
+        treeView.selectItem(treeViewItems[1]);
+
+        assert.notOk(treeView.getNodes()[0].expanded, 'first node is collapsed');
+
+        assert.ok(treeView.getNodes()[0].children[0].selected, 'first node is selected');
+        assert.ok(treeView.getNodes()[1].selected, 'second node is selected');
+    });
+
     QUnit.test('change position between areas', function(assert) {
         const dataSource = {};
         dataSource.fields = [
