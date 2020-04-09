@@ -66,7 +66,7 @@
     "gulp-babel": "^8.0.0",
     "gulp-clean-css": "^4.2.0",
     "gulp-concat": "^2.6.0",
-    "gulp-dart-sass": "^0.9.1",
+    "gulp-dart-sass": "^1.0.0",
     "gulp-eol": "^0.1.2",
     "gulp-eslint": "^6.0.0",
     "gulp-file": "^0.4.0",
