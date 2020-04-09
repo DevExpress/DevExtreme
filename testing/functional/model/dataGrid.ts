@@ -10,6 +10,7 @@ const CLASS = {
     dataRow: 'dx-data-row',
     groupRow: 'dx-group-row',
     commandEdit: 'dx-command-edit',
+    commandExpand: 'dx-command-expand',
     commandLink: 'dx-link',
     editCell: 'dx-editor-cell',
     focused: 'dx-focused',
@@ -41,7 +42,8 @@ const CLASS = {
     addRowButton: 'addrow-button',
     insertedRow: 'dx-row-inserted',
     editedRow: 'dx-edit-row',
-    saveButton: 'save-button'
+    saveButton: 'save-button',
+    groupExpanded: 'group-opened'
 };
 
 const addWidgetPrefix = function(widgetName: string, className: string) {
@@ -201,11 +203,17 @@ class DataRow extends DxElement {
 }
 
 class GroupRow extends DxElement {
+    widgetName: string;
     isFocusedRow: Promise<boolean>;
+    isFocused: Promise<boolean>;
+    isExpanded: Promise<boolean>;
 
-    constructor(element: Selector) {
+    constructor(element: Selector, widgetName: string) {
         super(element);
+        this.widgetName = widgetName;
         this.isFocusedRow = this.element.hasClass(CLASS.focusedRow);
+        this.isFocused = this.element.hasClass(CLASS.focused);
+        this.isExpanded = this.element.find(`.${CLASS.commandExpand} .${addWidgetPrefix(this.widgetName, CLASS.groupExpanded)}`).exists
     }
 
     getCell(index: number): DataCell {
@@ -318,7 +326,7 @@ export default class DataGrid extends Widget {
     }
 
     getGroupRow(index: number): GroupRow {
-        return new GroupRow(this.element.find(`.${CLASS.groupRow}`).nth(index));
+        return new GroupRow(this.element.find(`.${CLASS.groupRow}`).nth(index), this.name);
     }
 
     getFocusedRow(): Selector {
