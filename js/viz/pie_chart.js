@@ -370,8 +370,8 @@ const dxPieChart = BaseChart.inherit({
         let labelsWereOverlapped;
         let wordWrapApplied;
         do {
-            labelsWereOverlapped = this._resolveLabelOverlapping(resolveLabelOverlapping);
             wordWrapApplied = this._adjustSeriesLabels(resolveLabelOverlapping === 'shift');
+            labelsWereOverlapped = this._resolveLabelOverlapping(resolveLabelOverlapping);
         } while((labelsWereOverlapped || wordWrapApplied) && ++iterationCount < MAX_RESOLVE_ITERATION_COUNT);
     },
 
