@@ -825,22 +825,21 @@ QUnit.module('format: text input', moduleConfig, () => {
     });
 
     QUnit.test('It should be possible to set negative value when min is null and format is defined (T876378)', function(assert) {
-        const $numberBox = $('#numberbox').dxNumberBox({
+        this.instance.option({
             min: null,
             format: '#,##0.##',
             valueChangeEvent: 'keyup',
             value: 2
         });
 
-        const instance = $numberBox.dxNumberBox('instance');
-        const $input = $numberBox.find('.' + INPUT_CLASS);
-        const keyboard = keyboardMock($input);
+        this.input.focus();
+        this.clock.tick(CARET_TIMEOUT_DURATION);
 
-        keyboard
-            .caret({ start: 1, end: 1 })
-            .type('-');
+        this.keyboard.caret(1);
+        this.clock.tick(CARET_TIMEOUT_DURATION);
+        this.keyboard.type('-');
 
-        assert.strictEqual(instance.option('value'), -2, 'value is set to negative number');
+        assert.strictEqual(this.instance.option('value'), -2, 'value is set to negative number');
     });
 
     QUnit.test('don\'t replace selected text after enter pressed', function(assert) {
