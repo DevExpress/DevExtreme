@@ -13,6 +13,6 @@ gulp.task('generate-scss', gulp.series(
     'fix-mixins',
     'create-base-widget',
     'create-theme-index',
-    'compile',
+    'compile-scss',
     'scss-raw-scss-clean'
 ));

@@ -30,7 +30,7 @@ function compile() {
     ]);
 }
 
-gulp.task('compile', gulp.series(
+gulp.task('compile-scss', gulp.series(
     processDataUri,
     compile
 ));
