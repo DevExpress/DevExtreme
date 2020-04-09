@@ -395,9 +395,7 @@ class FileManagerToolbar extends Widget {
         return this._commandManager.isCommandAvailable(toolbarItem.name, fileItems);
     }
 
-    _isFileToolbarItemAvailable(fileToolbarItem, fileItems) {
-        const name = fileToolbarItem.name;
-        const visible = fileToolbarItem.visible;
+    _isFileToolbarItemAvailable({ name, visible }, fileItems) {
         return !this._isDefaultItem(name) && ensureDefined(visible, true) ||
             name !== 'clear' && name !== 'refresh' && this._commandManager.isCommandAvailable(name, fileItems);
     }
