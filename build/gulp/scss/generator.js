@@ -387,7 +387,7 @@ const fillWidgetColors = (theme) => {
     });
 };
 
-const makeVariableDefinitionDefault = (content) => content.replace(/(\$.*?)( !default)*;$/gm, '$1 !default;');
+const makeVariableDefinitionDefault = (content) => content.replace(/(\$.*?)( !default)*;(\s)/gm, '$1 !default;$3');
 
 const collectWidgetColorVariables = (content, schemeName) => {
     const widgetContentRegex = /\/\/\s?(?!TODO)(dx)?(\w.*)([\w\W]*?)(\n\/\/|$)/g;
