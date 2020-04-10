@@ -12,6 +12,7 @@ const getLDMLFormat = require('../../localization/ldml/number').getFormat;
 const NumberBoxBase = require('./number_box.base');
 const eventUtils = require('../../events/utils');
 const typeUtils = require('../../core/utils/type');
+const { ensureDefined } = require('../../core/utils/common');
 
 const NUMBER_FORMATTER_NAMESPACE = 'dxNumberFormatter';
 const MOVE_FORWARD = 1;
@@ -22,10 +23,6 @@ const NUMPUD_MINUS_KEY_IE = 'Subtract';
 const INPUT_EVENT = 'input';
 
 const CARET_TIMEOUT_DURATION = browser.msie ? 300 : 0; // If we move caret before the second click, IE can prevent browser text selection on double click
-
-const ensureDefined = function(value, defaultValue) {
-    return value === undefined || value === null ? defaultValue : value;
-};
 
 const NumberBoxMask = NumberBoxBase.inherit({
 
