@@ -858,13 +858,12 @@ QUnit.module('Live Update', {
 class TestAsyncTabsWrapper {
     constructor(options) {
         const { itemsCount } = options;
-        this._$tabs = $('#tabs').dxTabs(extend({
+        const tabsOptions = extend({
             items: this._generateItems(itemsCount),
-            itemTemplate: 'item',
             templatesRenderAsynchronously: true,
             integrationOptions: {
                 templates: {
-                    'item': {
+                    'testItem': {
                         render(args) {
                             setTimeout(() => {
                                 $(args.container).append($('<div>').text(args.model.text));
@@ -874,7 +873,15 @@ class TestAsyncTabsWrapper {
                     }
                 }
             }
-        }, options));
+        }, options);
+
+        if(options.itemTemplate !== null) {
+            tabsOptions.itemTemplate = 'testItem';
+        } else {
+            delete tabsOptions.itemTemplate;
+        }
+
+        this._$tabs = $('#tabs').dxTabs(tabsOptions);
         this._tabs = this._$tabs.dxTabs('instance');
     }
 
@@ -910,8 +917,9 @@ class TestAsyncTabsWrapper {
     }
 
     checkNavigationButtons(expected) {
-        QUnit.assert.equal(this._$tabs.find('> .dx-tabs-nav-button-left').length, Number(expected), 'the left nav button element');
-        QUnit.assert.equal(this._$tabs.find('> .dx-tabs-nav-button-right').length, Number(expected), 'the right nav button element');
+        const visibilityStateText = expected ? 'shown' : 'hidden';
+        QUnit.assert.equal(this._$tabs.find('> .dx-tabs-nav-button-left').length, Number(expected), `the left nav button element is ${visibilityStateText}`);
+        QUnit.assert.equal(this._$tabs.find('> .dx-tabs-nav-button-right').length, Number(expected), `the right nav button element is ${visibilityStateText}`);
     }
 }
 
@@ -928,6 +936,44 @@ QUnit.module('Async templates', {
         this.clock.tick();
         testWrapper.checkTabsWithoutScrollable();
         testWrapper.checkNavigationButtons(false);
+    });
+
+    QUnit.test('render tabs. use default and custom templates', function() {
+        const testWrapper = new TestAsyncTabsWrapper({
+            width: 150,
+            items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3', template: 'item' }],
+            itemTemplate: null
+        });
+
+        this.clock.tick();
+        testWrapper.checkTabsWithoutScrollable();
+        testWrapper.checkNavigationButtons(false);
+    });
+
+    QUnit.test('render tabs with scrollable. use default and custom templates', function() {
+        const testWrapper = new TestAsyncTabsWrapper({
+            width: 100,
+            items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3', template: 'item' }],
+            showNavButtons: false,
+            itemTemplate: null
+        });
+
+        this.clock.tick();
+        testWrapper.checkTabsWithScrollable();
+        testWrapper.checkNavigationButtons(false);
+    });
+
+    QUnit.test('render tabs with scrollable and navigation buttons. use default and custom templates', function() {
+        const testWrapper = new TestAsyncTabsWrapper({
+            width: 100,
+            items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3', template: 'item' }],
+            showNavButtons: true,
+            itemTemplate: null
+        });
+
+        this.clock.tick();
+        testWrapper.checkTabsWithScrollable();
+        testWrapper.checkNavigationButtons(true);
     });
 
     QUnit.test('render tabs with scrollable', function() {
