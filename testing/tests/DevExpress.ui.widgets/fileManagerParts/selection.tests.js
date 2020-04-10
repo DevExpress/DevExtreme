@@ -3,7 +3,7 @@ const { test } = QUnit;
 import 'ui/file_manager';
 import fx from 'animation/fx';
 import { FileManagerWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
-import { CLICK_EVENT } from '../../../helpers/grid/keyboardNavigationHelper.js';
+import { triggerCellClick } from '../../../helpers/fileManager/events.js';
 
 const moduleConfig = {
 
@@ -126,7 +126,7 @@ QUnit.module('Selection', moduleConfig, () => {
         });
 
         const $cell = this.wrapper.getRowNameCellInDetailsView(2);
-        $cell.trigger(CLICK_EVENT).click();
+        triggerCellClick($cell);
         this.clock.tick(400);
 
         assert.ok(this.wrapper.isDetailsRowFocused(2), 'item selected');
@@ -149,29 +149,36 @@ QUnit.module('Selection', moduleConfig, () => {
         const itemPath = 'Folder 2';
 
         const selectionSpy = sinon.spy();
+        const focusSpy = sinon.spy();
 
         createFileManager(this, {
             selectionMode: 'single',
             itemView: {
                 mode: 'thumbnails'
             },
+            onFocusedItemChanged: focusSpy,
             onSelectionChanged: selectionSpy
         });
 
         const $item = this.wrapper.findThumbnailsItem(itemPath);
-        $item.trigger('dxclick');
+        triggerCellClick($item);
         this.clock.tick(400);
 
         assert.ok(this.wrapper.isThumbnailsItemSelected(itemPath), 'item selected');
+        assert.ok(this.wrapper.isThumbnailsItemFocused(itemPath), 'item focused');
         assert.strictEqual(selectionSpy.callCount, 1, 'selection event raised');
         assert.strictEqual(selectionSpy.args[0][0].selectedItems[0].path, itemPath, 'correct item in selection');
+        assert.strictEqual(focusSpy.callCount, 1, 'focused event raised');
+        assert.strictEqual(focusSpy.args[0][0].item.path, itemPath, 'focused item is correct');
 
         this.wrapper.getToolbarButton('Clear').trigger('dxclick');
         this.clock.tick(400);
 
         assert.notOk(this.wrapper.isThumbnailsItemSelected(itemPath), 'item not selected');
+        assert.ok(this.wrapper.isThumbnailsItemFocused(itemPath), 'item focused');
         assert.strictEqual(selectionSpy.callCount, 2, 'selection event raised');
         assert.deepEqual(selectionSpy.args[1][0].currentDeselectedItemKeys, [ itemPath ], 'correct item in selection');
+        assert.strictEqual(focusSpy.callCount, 1, 'focused event not raised');
     });
 
 });
