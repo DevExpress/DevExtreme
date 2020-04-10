@@ -2151,7 +2151,8 @@ QUnit.test('Checks whether the SelectAll checkbox is deselected when all filter 
     const $testElement = $('#container');
 
     this.generateItems(3);
-    this.columns[0].filterValues = ['test01', 'test02', 'test03'];
+    this.columns[0].filterValues = [];
+    this.columns[0].filterType = 'exclude';
     this.setupDataGrid();
     this.columnHeadersView.render($testElement);
     this.headerFilterView.render($testElement);
