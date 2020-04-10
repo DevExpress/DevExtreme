@@ -1,59 +1,21 @@
-import $ from '../../core/renderer';
-
 import registerComponent from '../../core/component_registrator';
 import ValidationEngine from '../../ui/validation_engine';
 import Component from '../preact-wrapper/component';
-import * as Preact from 'preact';
-import ButtonView from '../button.p';
-import { wrapElement, getInnerActionName, removeDifferentElements } from '../preact-wrapper/utils';
-import { useLayoutEffect } from 'preact/hooks';
-import { getPublicElement } from '../../core/utils/dom';
-
-const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
+import ButtonComponent from '../button.p';
+import { getInnerActionName } from '../preact-wrapper/utils';
 
 const actions = {
     onClick: { excludeValidators: ['readOnly'] },
     onContentReady: { excludeValidators: ['disabled', 'readOnly'] },
 };
 
-class Button extends Component {
-    getView() {
-        return ButtonView;
+export default class Button extends Component {
+    get _viewComponent() {
+        return ButtonComponent;
     }
 
-    getProps(isFirstRender) {
-        const props = super.getProps(isFirstRender);
-
-        if(props.template || props.haveAnonymousTemplate) {
-            // NOTE: 'template' - default name for anonymous template
-            const template = this._getTemplate(props.template || 'template');
-
-            props.render = ({ parentRef, ...restProps }) => {
-                useLayoutEffect(() => {
-                    const $parent = $(parentRef.current);
-                    const $children = $parent.contents();
-
-                    let $template = $(template.render({
-                        container: getPublicElement($parent),
-                        model: restProps,
-                        transclude: !props.template && props.haveAnonymousTemplate,
-                        // TODO index
-                    }));
-
-                    if($template.hasClass(TEMPLATE_WRAPPER_CLASS)) {
-                        $template = wrapElement($parent, $template);
-                    }
-                    const $newChildren = $parent.contents();
-
-                    return () => {
-                        // NOTE: order is important
-                        removeDifferentElements($children, $newChildren);
-                    };
-                }, Object.keys(props).map(key => props[key]));
-
-                return (<Preact.Fragment/>);
-            };
-        }
+    getProps(props) {
+        props.render = this._createTemplateComponent(props, props.template, true);
 
         Object.keys(actions).forEach((name) => {
             props[name] = this.option(getInnerActionName(name));
@@ -61,14 +23,11 @@ class Button extends Component {
 
         props.validationGroup = ValidationEngine.getGroupConfig(this._findGroup());
 
-        return {
-            ref: this.view_ref,
-            ...props
-        };
+        return props;
     }
 
     focus() {
-        this.view_ref.current.focus();
+        this.viewRef.current.focus();
     }
 
     _findGroup() {
@@ -79,11 +38,8 @@ class Button extends Component {
         return validationGroup || ValidationEngine.findGroup($element, model);
     }
 
-    _init() {
-        this.option('haveAnonymousTemplate', this.$element().contents().length > 0);
-        super._init();
-
-        this.view_ref = Preact.createRef();
+    _initWidget() {
+        this._createViewRef();
 
         if(this.option('useSubmitBehavior')) {
             this.option('onSubmit', this._getSubmitAction());
@@ -151,5 +107,3 @@ class Button extends Component {
 }
 
 registerComponent('Button', Button);
-
-module.exports = Button;

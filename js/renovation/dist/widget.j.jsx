@@ -1,32 +1,19 @@
 import registerComponent from '../../core/component_registrator';
 import Component from '../preact-wrapper/component';
-import * as Preact from 'preact';
-import WidgetView from '../widget.p';
+import WidgetComponent from '../widget.p';
 
-class Widget extends Component {
-    getView() {
-        return WidgetView;
-    }
-
-    getProps(isFirstRender) {
-        const props = super.getProps(isFirstRender);
-
-        return {
-            ref: this.view_ref,
-            ...props
-        };
+export default class Widget extends Component {
+    get _viewComponent() {
+        return WidgetComponent;
     }
 
     focus() {
-        this.view_ref.current.focus();
+        this.viewRef.current.focus();
     }
 
-    _init() {
-        super._init();
-        this.view_ref = Preact.createRef();
+    _initWidget() {
+        this._createViewRef();
     }
 }
 
 registerComponent('Widget', Widget);
-
-module.exports = Widget;
