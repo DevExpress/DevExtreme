@@ -4237,7 +4237,7 @@ QUnit.module('Headers reordering', {
         const controller = this.createDraggingHeaderViewController();
         const draggingHeader = new TestDraggingHeader(this.component);
 
-        $('#itemsContainer').html('<div style="width:125px; display: inline-block;" /><div style="width:125px; display: inline-block;" />');
+        $('#itemsContainer').html('<div style="width:125px; display: inline-block;"></div><div style="width:125px; display: inline-block;"></div>');
 
         controller.drop = function(parameters) {
             if(this.allowDrop(parameters)) {
