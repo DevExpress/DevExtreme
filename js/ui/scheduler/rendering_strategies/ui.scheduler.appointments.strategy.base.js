@@ -359,6 +359,7 @@ class BaseRenderingStrategy {
                 right: currentItem.right,
                 top: currentItem.top,
                 bottom: currentItem.bottom,
+                allDay: currentItem.allDay,
                 sortedIndex: this._skipSortedIndex(currentIndex) ? null : sortedIndex++,
             };
         };
@@ -370,6 +371,7 @@ class BaseRenderingStrategy {
             stack.right = currentItem.right;
             stack.top = currentItem.top;
             stack.bottom = currentItem.bottom;
+            stack.allDay = currentItem.allDay;
         };
         const pushItemsInResult = (items) => {
             items.forEach((item) => {
@@ -403,6 +405,7 @@ class BaseRenderingStrategy {
                     stack.right = Math.max(stack.right, currentItem.right);
                     stack.top = Math.min(stack.top, currentItem.top);
                     stack.bottom = Math.max(stack.bottom, currentItem.bottom);
+                    stack.allDay = currentItem.allDay;
                 } else {
                     pushItemsInResult(stack.items);
                     stack = {};
