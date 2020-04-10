@@ -810,8 +810,8 @@ class Diagram extends Widget {
 
                 getContainerKey: (containerKeyGetter = this._createOptionGetter('nodes.containerKeyExpr')),
                 setContainerKey: (containerKeySetter = this._createOptionSetter('nodes.containerKeyExpr')),
-                getChildren: !containerKeyGetter && !containerKeySetter && this._createOptionGetter('nodes.childrenExpr'),
-                setChildren: !containerKeyGetter && !containerKeySetter && this._createOptionSetter('nodes.childrenExpr')
+                getChildren: !containerKeyGetter && !containerKeySetter && this._createOptionGetter('nodes.containerChildrenExpr'),
+                setChildren: !containerKeyGetter && !containerKeySetter && this._createOptionSetter('nodes.containerChildrenExpr')
             },
             edgeDataImporter: {
                 getKey: this._createOptionGetter('edges.keyExpr'),
@@ -1539,12 +1539,12 @@ class Diagram extends Widget {
                 */
                 containerKeyExpr: undefined,
                 /**
-                * @name dxDiagramOptions.nodes.childrenExpr
+                * @name dxDiagramOptions.nodes.containerChildrenExpr
                 * @type string|function(data)
                 * @type_function_param1 data:object
                 * @default "children"
                 */
-                childrenExpr: 'children',
+                containerChildrenExpr: 'children',
                 /**
                  * @name dxDiagramOptions.nodes.autoLayout
                  * @type Enums.DiagramDataLayoutType|Object
