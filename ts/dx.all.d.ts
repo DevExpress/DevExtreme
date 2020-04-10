@@ -4110,7 +4110,7 @@ declare module DevExpress.ui {
         /** @name dxGantt.Options.dependencies */
         dependencies?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | Function, predecessorIdExpr?: string | Function, successorIdExpr?: string | Function, typeExpr?: string | Function };
         /** @name dxGantt.Options.editing */
-        editing?: { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowDependencyUpdating?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskUpdating?: boolean, enabled?: boolean };
+        editing?: { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskUpdating?: boolean, enabled?: boolean };
         /** @name dxGantt.Options.onSelectionChanged */
         onSelectionChanged?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, selectedRowKey?: any }) => any);
         /** @name dxGantt.Options.resourceAssignments */
@@ -4136,7 +4136,7 @@ declare module DevExpress.ui {
         /** @name dxGantt.Options.toolbar */
         toolbar?: dxGanttToolbar;
         /** @name dxGantt.Options.validation */
-        validation?: { autoUpdateParentTasks?: boolean, enableDependencyValidation?: boolean };
+        validation?: { autoUpdateParentTasks?: boolean, validateDependencies?: boolean };
     }
     /** @name dxGantt */
     export class dxGantt extends Widget {
@@ -4161,10 +4161,10 @@ declare module DevExpress.ui {
     }
     /** @name dxGanttToolbarItem */
     export interface dxGanttToolbarItem extends dxToolbarItem {
-        /** @name dxGanttToolbarItem.formatName */
-        formatName?: 'separator' | 'undo' | 'redo' | 'zoomIn' | 'zoomOut' | string;
         /** @name dxGanttToolbarItem.location */
         location?: 'after' | 'before' | 'center';
+        /** @name dxGanttToolbarItem.name */
+        name?: 'separator' | 'undo' | 'redo' | 'zoomIn' | 'zoomOut' | string;
     }
     /** @name dxHtmlEditor.Options */
     export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
