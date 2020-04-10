@@ -171,30 +171,48 @@ class FileManagerToolbar extends Widget {
     }
 
     _updateSeparatorsVisibility(items, toolbar) {
+        const hasItems = {
+            before: false,
+            center: false,
+            after: false
+        };
+        const itemGroups = {
+            before: items.filter(item => this._getItemLocation(item) === 'before'),
+            center: items.filter(item => this._getItemLocation(item) === 'center'),
+            after: items.filter(item => this._getItemLocation(item) === 'after')
+        };
         for(let i = 0; i < items.length; i++) {
+            const itemLocation = this._getItemLocation(items[i]);
             if(items[i].name === 'separator') {
-                const isSeparatorVisible = this._groupHasItems(items, i, true) && this._groupHasItems(items, i, false);
+                const isSeparatorVisible = hasItems[itemLocation] && this._groupHasItems(itemGroups[itemLocation]);
                 if(toolbar) {
                     const optionName = `items[${i}].visible`;
                     toolbar.option(optionName, isSeparatorVisible);
                 } else {
                     items[i].visible = isSeparatorVisible;
                 }
+                hasItems[itemLocation] = false;
+            } else {
+                hasItems[itemLocation] = hasItems[itemLocation] || items[i].visible;
             }
+            itemGroups[itemLocation].shift();
         }
         return items;
     }
 
-    _groupHasItems(items, separatorIndex, isBeforeGroup) {
-        const delta = isBeforeGroup ? -1 : 1;
-        let i = separatorIndex + delta;
+    _groupHasItems(items) {
+        let i = 1;
         while(items[i] && items[i].name !== 'separator') {
             if(items[i].visible) {
                 return true;
             }
-            i += delta;
+            i++;
         }
         return false;
+    }
+
+    _getItemLocation(toolbarItem) {
+        return ensureDefined(toolbarItem.location, 'before');
     }
 
     _configureItemByCommandName(commandName, item) {

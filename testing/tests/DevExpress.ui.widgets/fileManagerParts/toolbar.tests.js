@@ -637,4 +637,27 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.ok(!$toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), 'file toolbar hidden');
     });
 
+    test('toolbar separators calculation must be correct: location issue', function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            permissions: {
+                download: true
+            },
+            toolbar: {
+                fileSelectionItems: ['download', 'separator', 'clear']
+            }
+        });
+        this.clock.tick(400);
+
+        const $item = this.wrapper.findDetailsItem('File 1.txt');
+        $item.trigger('dxclick');
+        this.clock.tick(400);
+
+        const $separators = this.wrapper.getToolbarSeparators();
+        assert.equal($separators.length, 0, 'file toolbar has no separators');
+    });
+
 });
