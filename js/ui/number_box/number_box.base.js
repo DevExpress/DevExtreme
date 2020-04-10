@@ -270,11 +270,11 @@ const NumberBoxBase = TextEditor.inherit({
         const min = this.option('min');
         const max = this.option('max');
 
-        if(min !== undefined) {
+        if(typeUtils.isDefined(min)) {
             value = Math.max(min, value);
         }
 
-        if(max !== undefined) {
+        if(typeUtils.isDefined(max)) {
             value = Math.min(max, value);
         }
 

@@ -824,6 +824,24 @@ QUnit.module('format: text input', moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, 'caret position is correct');
     });
 
+    QUnit.test('It should be possible to set negative value when min is null and format is defined (T876378)', function(assert) {
+        this.instance.option({
+            min: null,
+            format: '#,##0.##',
+            valueChangeEvent: 'keyup',
+            value: 2
+        });
+
+        this.input.focus();
+        this.clock.tick(CARET_TIMEOUT_DURATION);
+
+        this.keyboard.caret(1);
+        this.clock.tick(CARET_TIMEOUT_DURATION);
+        this.keyboard.type('-');
+
+        assert.strictEqual(this.instance.option('value'), -2, 'value is set to negative number');
+    });
+
     QUnit.test('don\'t replace selected text after enter pressed', function(assert) {
         this.instance.option({
             format: '#0.00',
