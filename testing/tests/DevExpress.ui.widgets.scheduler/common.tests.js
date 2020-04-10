@@ -245,6 +245,7 @@ QUnit.module('Initialization', {
                 this.instance = $('#scheduler').dxScheduler($.extend({
                     showCurrentTimeIndicator: false
                 }, options)).dxScheduler('instance');
+                this.scheduler = new SchedulerTestWrapper(this.instance);
             };
 
             this.clock = sinon.useFakeTimers();
@@ -899,7 +900,7 @@ QUnit.module('Initialization', {
 
     QUnit.test('Scheduler getWorkSpaceDateTableOffset should return right dateTable offset, crossScrollingEnabled=true, rtl mode', function(assert) {
         this.createInstance({
-            dataSource: 'day',
+            currentView: 'day',
             currentDate: new Date(2015, 10, 3),
             crossScrollingEnabled: true,
             rtlEnabled: true
@@ -909,6 +910,19 @@ QUnit.module('Initialization', {
         const offset = this.instance.getWorkSpaceDateTableOffset();
 
         assert.equal(offset, timePanelWidth, 'Date Table offset is correct');
+    });
+
+    QUnit.test('Scheduler dateTable should have right position, crossScrollingEnabled=true, rtl mode', function(assert) {
+        this.createInstance({
+            currentView: 'day',
+            currentDate: new Date(2015, 10, 3),
+            crossScrollingEnabled: true,
+            rtlEnabled: true
+        });
+
+        const dateTable = this.scheduler.workSpace.getDateTable();
+
+        assert.equal(dateTable.position().left, 0, 'Date Table left is correct');
     });
 
     QUnit.test('Timezone offset calculation(T388304)', function(assert) {
