@@ -17,7 +17,7 @@ import Widget, {
 export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
      * @docid dxDiagramOptions.autoZoomMode
-     * @type Enums.DiagramAutoZoom
+     * @type Enums.DiagramAutoZoomMode
      * @default "disabled"
      * @prevFileNamespace DevExpress.ui
      * @public

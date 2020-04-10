@@ -1121,7 +1121,7 @@
  */
 
 /**
- * @typedef {string} Enums.DiagramAutoZoom
+ * @typedef {string} Enums.DiagramAutoZoomMode
  * @enum {'fitContent'|'fitWidth'|'disabled'}
  */
 
