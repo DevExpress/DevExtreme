@@ -5,14 +5,13 @@ const browser = require('../../core/utils/browser');
 const devices = require('../../core/devices');
 const fitIntoRange = require('../../core/utils/math').fitIntoRange;
 const inRange = require('../../core/utils/math').inRange;
-const escapeRegExp = require('../../core/utils/common').escapeRegExp;
 const number = require('../../localization/number');
 const maskCaret = require('./number_box.caret');
 const getLDMLFormat = require('../../localization/ldml/number').getFormat;
 const NumberBoxBase = require('./number_box.base');
 const eventUtils = require('../../events/utils');
 const typeUtils = require('../../core/utils/type');
-const { ensureDefined } = require('../../core/utils/common');
+const { ensureDefined, escapeRegExp } = require('../../core/utils/common');
 
 const NUMBER_FORMATTER_NAMESPACE = 'dxNumberFormatter';
 const MOVE_FORWARD = 1;
