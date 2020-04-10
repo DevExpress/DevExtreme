@@ -18,7 +18,7 @@ export class GanttView extends Widget {
             showResources: this.option('showResources'),
             taskTitlePosition: this._getTaskTitlePosition(this.option('taskTitlePosition')),
             allowSelectTask: this.option('allowSelection'),
-            editing: this.option('editing'),
+            editing: this._parseEditingSettings(this.option('editing')),
             validation: this.option('validation'),
             stripLines: { stripLines: this.option('stripLines') },
             areHorizontalBordersEnabled: this.option('showRowLines'),
@@ -104,6 +104,19 @@ export class GanttView extends Widget {
                 return undefined;
         }
     }
+    _parseEditingSettings(value) {
+        return {
+            enabled: value.enabled,
+            allowDependencyDelete: value.allowDependencyDeleting,
+            allowDependencyInsert: value.allowDependencyAdding,
+            allowTaskDelete: value.allowTaskDeleting,
+            allowTaskInsert: value.allowTaskAdding,
+            allowTaskUpdate: value.allowTaskUpdating,
+            allowResourceDelete: value.allowResourceDeleting,
+            allowResourceInsert: value.allowResourceAdding,
+            allowResourceUpdate: value.allowResourceUpdating
+        };
+    }
 
     _optionChanged(args) {
         switch(args.name) {
@@ -130,7 +143,7 @@ export class GanttView extends Widget {
                 this._selectTask(args.value);
                 break;
             case 'editing':
-                this._ganttViewCore.setEditingSettings(args.value);
+                this._ganttViewCore.setEditingSettings(this._parseEditingSettings(args.value));
                 break;
             case 'validation':
                 this._ganttViewCore.setValidationSettings(args.value);
