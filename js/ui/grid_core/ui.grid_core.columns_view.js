@@ -437,7 +437,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return renderingTemplate;
     },
 
-    renderTemplate: function(container, template, options, allowRenderToDetachedContainer) {
+    renderTemplate: function(container, template, options, allowRenderToDetachedContainer, syncRender) {
         const that = this;
         const renderingTemplate = that._processTemplate(template, options);
         const column = options.column;
@@ -451,12 +451,11 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 templateDeferred.resolve();
             }
         };
-        let async;
 
         if(renderingTemplate) {
             options.component = that.component;
 
-            async = column && (
+            const async = column && !syncRender && (
                 (column.renderAsync && isDataRow) ||
                 that.option('renderAsync') &&
                     (column.renderAsync !== false && (column.command || column.showEditorAlways) && isDataRow || options.rowType === 'filter')
