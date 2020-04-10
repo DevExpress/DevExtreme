@@ -6104,6 +6104,62 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok(dataGrid.getScrollable().scrollTop() > 0, 'scrollTop is not reseted');
     });
 
+    [false, true].forEach(function(grouping) {
+        QUnit.test(`loading data on scroll after deleting several rows if scrolling mode is infinite and refreshMode is repaint ${grouping ? 'and if grouping ' : ''}(T862268)`, function(assert) {
+            // arrange
+            const array = [];
+
+            for(let i = 1; i <= 50; i++) {
+                array.push({ id: i, group: Math.floor(i / 10) });
+            }
+
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                height: 100,
+                dataSource: array,
+                keyExpr: 'id',
+                editing: {
+                    allowDeleting: true,
+                    texts: {
+                        confirmDeleteMessage: ''
+                    },
+                    refreshMode: 'repaint'
+                },
+                scrolling: {
+                    mode: 'infinite',
+                    useNative: false
+                },
+                columns: ['id', {
+                    dataField: 'group',
+                    groupIndex: grouping ? 0 : undefined }
+                ],
+                loadingTimeout: undefined
+            }).dxDataGrid('instance');
+
+            const firstDataRowIndex = grouping ? 1 : 0;
+            // act
+            dataGrid.deleteRow(firstDataRowIndex);
+            dataGrid.deleteRow(firstDataRowIndex);
+            dataGrid.getScrollable().scrollTo({ y: 10000 });
+
+            // assert
+            let rows = dataGrid.getVisibleRows();
+            assert.equal(dataGrid.totalCount(), 38, 'totalCount');
+            assert.equal(rows.length, 38, 'visible row count');
+            assert.equal(rows[firstDataRowIndex].key, 3, 'row 0');
+            assert.equal(rows[18].key, grouping ? 19 : 21, 'row 18');
+            assert.equal(rows[37].key, grouping ? 36 : 40, 'row 37');
+
+            // act
+            dataGrid.refresh();
+
+            // assert
+            rows = dataGrid.getVisibleRows();
+            assert.equal(dataGrid.totalCount(), 20, 'totalCount');
+            assert.equal(rows.length, 20, 'visible row count');
+            assert.equal(rows[firstDataRowIndex].key, 3, 'row 0');
+        });
+    });
+
     QUnit.test('height from extern styles', function(assert) {
     // arrange, act
         const $dataGrid = $('#dataGrid').addClass('fixed-height').dxDataGrid({
