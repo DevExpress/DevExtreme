@@ -202,8 +202,8 @@ class FileManagerToolbar extends Widget {
 
     _groupHasItems(items) {
         let i = 1;
-        while(items[i] && items[i].name !== 'separator') {
-            if(items[i].visible) {
+        while(items[i]) {
+            if(items[i].name !== 'separator' && items[i].visible) {
                 return true;
             }
             i++;

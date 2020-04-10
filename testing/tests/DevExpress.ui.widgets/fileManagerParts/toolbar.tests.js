@@ -660,4 +660,41 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.equal($separators.length, 0, 'file toolbar has no separators');
     });
 
+    test('toolbar separators calculation must be correct: empty group issue', function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            toolbar: {
+                items: [
+                    {
+                        options: {
+                            text: 'item0'
+                        },
+                        visible: true
+                    },
+                    'separator',
+                    {
+                        options: {
+                            text: 'item1'
+                        },
+                        visible: false
+                    },
+                    'separator',
+                    {
+                        options: {
+                            text: 'item2'
+                        },
+                        visible: true
+                    }
+                ]
+            }
+        });
+        this.clock.tick(400);
+
+        const $separators = this.wrapper.getToolbarSeparators();
+        assert.equal($separators.length, 1, 'toolbar has one separator');
+    });
+
 });
