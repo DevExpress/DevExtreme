@@ -2,6 +2,7 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { find } from '../../core/utils/array';
 import { isDefined } from '../../core/utils/type';
+import { Deferred } from '../../core/utils/deferred';
 
 import holdEvent from '../../events/hold';
 import { addNamespace } from '../../events/utils';
@@ -25,6 +26,8 @@ const FILE_MANAGER_THUMBNAILS_LIST_BOX_HOLD_EVENT_NAME = addNamespace(holdEvent.
 class FileManagerThumbnailListBox extends CollectionWidget {
     _initMarkup() {
         this._initActions();
+
+        this._lockFocusedItemProcessing = false;
 
         this.$element().addClass(FILE_MANAGER_THUMBNAILS_VIEW_PORT_CLASS);
         this._renderItemsContainer();
@@ -104,7 +107,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
             },
             enter(e) {
                 this._beforeKeyProcessing(e);
-                this._onItemEnterKeyPressed(this._getFocusedItem());
+                this._actions.onItemEnterKeyPressed(this._getFocusedItem());
             },
             A(e) {
                 this._beforeKeyProcessing(e);
@@ -284,22 +287,33 @@ class FileManagerThumbnailListBox extends CollectionWidget {
     }
 
     _syncFocusedItemKey() {
+        if(!this._syncFocusedItemKeyDeferred) {
+            this._syncFocusedItemKeyDeferred = new Deferred();
+        }
+
+        const deferred = this._syncFocusedItemKeyDeferred;
+
         if(this._dataSource && this._dataSource.isLoading()) {
-            return;
+            return deferred.promise();
         }
 
         const focusedItemKey = this.option('focusedItemKey');
-        if(!isDefined(focusedItemKey)) {
-            return;
+        if(isDefined(focusedItemKey)) {
+            const items = this.option('items');
+            const focusedItem = find(items, item => this.keyOf(item) === focusedItemKey);
+            if(focusedItem) {
+                this._focusItem(focusedItem);
+                deferred.resolve();
+            } else {
+                this.option('focusedItemKey', undefined);
+                deferred.reject();
+            }
+        } else {
+            deferred.resolve();
         }
 
-        const items = this.option('items');
-        const focusedItem = find(items, item => this.keyOf(item) === focusedItemKey);
-        if(focusedItem) {
-            this._focusItem(focusedItem);
-        } else {
-            this.option('focusedItemKey', undefined);
-        }
+        this._syncFocusedItemKeyDeferred = null;
+        return deferred.promise();
     }
 
     _onFocusedItemChanged() {
@@ -307,7 +321,9 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         const newFocusedItemKey = this.keyOf(focusedItem);
         const oldFocusedItemKey = this.option('focusedItemKey');
         if(newFocusedItemKey !== oldFocusedItemKey) {
+            this._lockFocusedItemProcessing = true;
             this.option('focusedItemKey', newFocusedItemKey);
+            this._lockFocusedItemProcessing = false;
             this._raiseFocusedItemChanged(focusedItem);
         }
     }
@@ -367,13 +383,20 @@ class FileManagerThumbnailListBox extends CollectionWidget {
                 super._optionChanged(args);
                 break;
             case 'focusedItemKey':
+                if(this._lockFocusedItemProcessing) {
+                    break;
+                }
+
                 if(isDefined(args.value)) {
-                    this._syncFocusedItemKey();
-                    this._onFocusedItemChanged();
+                    this._syncFocusedItemKey().done(() => {
+                        const focusedItem = this._getFocusedItem();
+                        this._raiseFocusedItemChanged(focusedItem);
+                    });
                 } else {
                     this.option('focusedElement', null);
                     this._raiseFocusedItemChanged(null);
                 }
+
                 break;
             case 'onItemEnterKeyPressed':
             case 'onFocusedItemChanged':

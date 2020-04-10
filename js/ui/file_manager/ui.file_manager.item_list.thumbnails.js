@@ -118,8 +118,13 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         this._tryRaiseSelectionChanged({ selectedItemInfos, selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
     }
 
-    _onItemListFocusedItemChanged(e) {
-        this._raiseFocusedItemChanged(e);
+    _onItemListFocusedItemChanged({ item, itemElement }) {
+        const fileSystemItem = item?.fileItem || null;
+        this._raiseFocusedItemChanged({
+            item: fileSystemItem,
+            itemKey: fileSystemItem?.key,
+            itemElement: itemElement || undefined
+        });
     }
 
     _setSelectedItemKeys(itemKeys) {
@@ -130,9 +135,18 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         this._itemList.option('focusedItemKey', itemKey);
     }
 
-    refresh() {
+    refresh(options) {
         this.clearSelection();
-        this._itemList.option('dataSource', this._createDataSource());
+
+        const actualOptions = {
+            dataSource: this._createDataSource()
+        };
+
+        if(options && Object.prototype.hasOwnProperty.call(options, 'focusedItemKey')) {
+            actualOptions.focusedItemKey = options.focusedItemKey;
+        }
+
+        this._itemList.option(actualOptions);
     }
 
     _deselectItem(item) {

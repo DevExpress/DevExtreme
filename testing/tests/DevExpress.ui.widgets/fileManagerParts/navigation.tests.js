@@ -616,4 +616,47 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.strictEqual(optionChangedSpy.args[2][0].name, 'currentPath', 'currentPath option changed');
         assert.strictEqual(optionChangedSpy.args[2][0].value, 'Folder 1/Folder 1.1', 'currentPath option updated');
     });
+
+    test('Details view - navigation by double click doesn\'t focus parent folder', function(assert) {
+        this.fileManager.option({
+            itemView: {
+                mode: 'details'
+            }
+        });
+        this.clock.tick(400);
+
+        let $cell = this.wrapper.getRowNameCellInDetailsView(3);
+        $cell.trigger('dxdblclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), '..', 'parent folder shown');
+        assert.notOk(this.wrapper.isDetailsRowSelected(0), 'item not selected');
+        assert.notOk(this.wrapper.isDetailsRowFocused(0), 'item not focused');
+
+        $cell = this.wrapper.getRowNameCellInDetailsView(1);
+        $cell.trigger('dxdblclick');
+        this.clock.tick(400);
+
+        assert.notOk(this.wrapper.isDetailsRowSelected(3), 'item not selected');
+        assert.ok(this.wrapper.isDetailsRowFocused(3), 'item focused');
+    });
+
+    test('Thumbnails view - navigation by double click doesn\'t focus parent folder', function(assert) {
+        const itemName = 'Folder 3';
+
+        let $item = this.wrapper.findThumbnailsItem(itemName);
+        $item.trigger('dxdblclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getThumbnailsItemName(0), '..', 'parent folder shown');
+        assert.notOk(this.wrapper.isThumbnailsItemSelected('..'), 'item not selected');
+        assert.notOk(this.wrapper.isThumbnailsItemFocused('..'), 'item not focused');
+
+        $item = this.wrapper.findThumbnailsItem('..');
+        $item.trigger('dxdblclick');
+        this.clock.tick(400);
+
+        assert.notOk(this.wrapper.isThumbnailsItemSelected(itemName), 'item not selected');
+        assert.ok(this.wrapper.isThumbnailsItemFocused(itemName), 'item focused');
+    });
 });
