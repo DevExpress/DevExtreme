@@ -2253,6 +2253,86 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
 
 QUnit.module('Appointment overlapping, vertical view', moduleOptions);
 
+QUnit.test('Multi day appointment should not overlap other appointments when specific width is set \'auto\' mode (T864456)', function(assert) {
+    const data = [
+        {
+            text: 'Appointment 1',
+            startDate: new Date(2017, 4, 24, 13, 0),
+            endDate: new Date(2017, 4, 25, 12, 30)
+        },
+        {
+            text: 'Appointment 2',
+            startDate: new Date(2017, 4, 24, 15, 0),
+            endDate: new Date(2017, 4, 24, 16, 30)
+        },
+        {
+            text: 'Appointment 3',
+            startDate: new Date(2017, 4, 25, 9, 0),
+            endDate: new Date(2017, 4, 25, 10, 30)
+        },
+        {
+            text: 'Appointment 4',
+            startDate: new Date(2017, 4, 25, 11, 0),
+            endDate: new Date(2017, 4, 25, 12, 30)
+        },
+        {
+            text: 'Appointment 5',
+            startDate: new Date(2017, 4, 25, 11, 0),
+            endDate: new Date(2017, 4, 25, 12, 0),
+            allDay: true
+        }
+    ];
+
+    this.createInstance(
+        {
+            dataSource: data,
+            views: ['week'],
+            width: 940,
+            currentView: 'week',
+            currentDate: new Date(2017, 4, 25),
+            startDayHour: 9,
+            height: 900
+        }
+    );
+
+    assert.equal(this.scheduler.appointments.compact.getButtonCount(), 3, 'Correct collectors are rendered');
+
+    assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(2), 93, 1, 'Second part of long appointment has correct width');
+    assert.roughEqual(this.scheduler.appointments.getAppointmentHeight(2), 350, 1, 'Second part of long appointment has correct height');
+});
+
+QUnit.test('Simple appointment should not overlap allDay appointment when specific width is set \'auto\' mode (T864456)', function(assert) {
+    const data = [
+        {
+            text: 'Appointment 3',
+            startDate: new Date(2017, 4, 25, 9, 0),
+            endDate: new Date(2017, 4, 25, 10, 30)
+        },
+        {
+            text: 'Appointment 5',
+            startDate: new Date(2017, 4, 25, 11, 0),
+            endDate: new Date(2017, 4, 25, 12, 0),
+            allDay: true
+        }
+    ];
+
+    this.createInstance(
+        {
+            dataSource: data,
+            views: ['week'],
+            width: 940,
+            currentView: 'week',
+            currentDate: new Date(2017, 4, 25),
+            startDayHour: 9,
+            height: 900
+        }
+    );
+    assert.equal(this.scheduler.appointments.compact.getButtonCount(), 0, 'There are no collectors');
+
+    const allDayAppointmentPosition = this.scheduler.appointments.getAppointmentPosition(0);
+    assert.roughEqual(allDayAppointmentPosition.top, 0, 1, 'AllDay appointment top is OK');
+});
+
 QUnit.test('Full-size appointment should have minWidth, narrow width', function(assert) {
     const items = [
         { text: 'Task 2', startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) },
