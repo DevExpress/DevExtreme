@@ -31,7 +31,7 @@ function checkShader(assert, env, expectedZIndex) {
         if(shading) {
             assert.strictEqual(visibility, 'visible', 'shader is visible');
             assert.strictEqual(shaderElement.classList.contains('dx-state-invisible'), false, 'shader has not .dx-invisible-class');
-            var rect = env.viewElement.getBoundingClientRect();
+            let rect = env.viewElement.getBoundingClientRect();
             if(env.drawer.option('openedStateMode') === 'overlap') {
                 if(env.drawer.option('position') === 'left') { // overlap, top, slide, shading: true, minSize: 25
                     rect.width += env.minSize; // overlap, left, slide, shading: true, minSize: 25
