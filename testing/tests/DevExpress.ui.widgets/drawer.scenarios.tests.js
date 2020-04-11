@@ -265,7 +265,7 @@ configs.forEach(config => {
             drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
         });
 
-        testOrSkip('opened: true, visible: false -> repaint', () => configIs('shrink') || configIs('overlap') || configIs('push'), function(assert) {
+        testOrSkip('opened: true, visible: false -> repaint -> visible: true', () => configIs('shrink') || configIs('overlap') || configIs('push'), function(assert) {
             const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
@@ -275,6 +275,9 @@ configs.forEach(config => {
 
             this.clock.tick(100);
             drawer.repaint();
+            this.clock.tick(100);
+
+            drawer.option('visible', true);
             this.clock.tick(100);
 
             drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
