@@ -31,15 +31,18 @@ function checkShader(assert, env, expectedZIndex) {
         if(shading) {
             assert.strictEqual(visibility, 'visible', 'shader is visible');
             assert.strictEqual(shaderElement.classList.contains('dx-state-invisible'), false, 'shader has not .dx-invisible-class');
-            let rect = env.viewElement.getBoundingClientRect();
+            const viewRect = env.viewElement.getBoundingClientRect();
+            let expectedRect = { left: viewRect.left, top: viewRect.top, width: viewRect.width, height: viewRect.height };
             if(env.drawer.option('openedStateMode') === 'overlap') {
-                if(env.drawer.option('position') === 'left') { // overlap, top, slide, shading: true, minSize: 25
-                    rect.width += env.minSize; // overlap, left, slide, shading: true, minSize: 25
-                } else if(['top', 'right'].indexOf(env.drawer.option('position')) > -1) {
-                    rect = env.drawerElement.getBoundingClientRect();
+                if(env.drawer.option('position') === 'left') {
+                    expectedRect.width += env.minSize;
+                } else {
+                    const drawerRect = env.drawerElement.getBoundingClientRect();
+                    expectedRect = { left: drawerRect.left, top: drawerRect.top, width: drawerRect.width, height: drawerRect.height };
                 }
+
             }
-            checkBoundingClientRect(assert, shaderElement, rect, 'shader');
+            checkBoundingClientRect(assert, shaderElement, expectedRect, 'shader');
         } else {
             assert.strictEqual(visibility, 'hidden', 'shader is hidden');
             assert.strictEqual(shaderElement.classList.contains('dx-state-invisible'), true, 'shader has .dx-invisible-class');
