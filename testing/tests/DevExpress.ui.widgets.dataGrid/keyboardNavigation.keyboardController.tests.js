@@ -466,9 +466,9 @@ QUnit.module('Keyboard controller', {
                 <tr class='dx-row'>"
                     <td class='cell-0'><input></td>
                     <td><input></td>
-                    <td><textarea /></td>
+                    <td><textarea></textarea></td>
                     <td><a>Link<a/></td>
-                    <td><select /></td>
+                    <td><select></select></td>
                 </tr>`));
 
         view = this.getView('rowsView');
