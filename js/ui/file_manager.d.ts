@@ -15,10 +15,6 @@ import {
 } from './context_menu';
 
 import {
-    dxDataGridColumn
-} from './data_grid';
-
-import {
     dxToolbarItem
 } from './toolbar';
 
@@ -61,12 +57,12 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.customizeDetailColumns
      * @type function
-     * @type_function_param1 columns:Array<dxDataGridColumn>
-     * @type_function_return Array<dxDataGridColumn>
+     * @type_function_param1 columns:Array<dxFileManagerDetailsColumn>
+     * @type_function_return Array<dxFileManagerDetailsColumn>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customizeDetailColumns?: ((columns: Array<dxDataGridColumn>) => Array<dxDataGridColumn>);
+    customizeDetailColumns?: ((columns: Array<dxFileManagerDetailsColumn>) => Array<dxFileManagerDetailsColumn>);
     /**
      * @docid dxFileManagerOptions.customizeThumbnail
      * @type function
