@@ -179,7 +179,7 @@ const HeaderFilterController = modules.ViewController.inherit((function() {
                 } else {
                     lookupDataSourceOptions = column.lookup.dataSource;
                     if(isFunction(lookupDataSourceOptions) && !isWrapped(lookupDataSourceOptions)) {
-                        lookupDataSourceOptions = dataSource({});
+                        lookupDataSourceOptions = lookupDataSourceOptions({});
                     }
                 }
                 options.dataSource = normalizeDataSourceOptions(lookupDataSourceOptions);
