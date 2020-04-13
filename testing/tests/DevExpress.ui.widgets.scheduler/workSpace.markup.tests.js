@@ -84,10 +84,9 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
     $element.find('.dx-scheduler-time-panel-cell').each(function(index) {
         let time;
         const cellIndex = index % cellCountInGroup;
-        const initDate = new Date((new Date()).setHours(0, 0, 0, 0));
 
         if(cellIndex % 2 === 0) {
-            time = dateLocalization.format(new Date(initDate.getTime() + Math.round(cellDuration) * cellIndex + start * 3600000), 'shorttime');
+            time = dateLocalization.format(new Date(new Date(1970, 0).getTime() + Math.round(cellDuration) * cellIndex + start * 3600000), 'shorttime');
         } else {
             time = '';
         }
