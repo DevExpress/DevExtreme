@@ -117,3 +117,11 @@ QUnit.test('should not recreate container element after rerender', function(asse
 
     assert.strictEqual(widget.$element().get(0), container);
 });
+
+QUnit.module('Preact Wrapper', config);
+
+QUnit.test('should create in separate element', function(assert) {
+    $('<div>').Widget({});
+
+    assert.ok(true, 'no exceptions');
+});
