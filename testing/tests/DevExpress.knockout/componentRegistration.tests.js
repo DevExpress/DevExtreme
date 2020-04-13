@@ -359,7 +359,10 @@ QUnit.module(
         });
 
         QUnit.test('quoted names in binding, regression case', function(assert) {
-            const markup = $('<div><div /><div /></div>').appendTo(FIXTURE_ELEMENT);
+            const markup = $(`<div>
+                <div></div>
+                <div></div>
+            </div>`).appendTo(FIXTURE_ELEMENT);
             const child1 = markup.children().eq(0).attr('data-bind', '"dxTest": { "text": 1}');
             const child2 = markup.children().eq(1).attr('data-bind', '\'dxTest\': { \'text\': 2}');
 
