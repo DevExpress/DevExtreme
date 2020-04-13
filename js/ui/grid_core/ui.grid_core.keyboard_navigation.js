@@ -238,7 +238,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         this._isNeedFocus = true;
         this._isNeedScroll = true;
 
-        this._updateFocusedCellPosition(this._getCellElementFromTarget(originalEvent.target));
+        this._updateFocusedCellPositionByTarget(originalEvent.target);
 
         if(!isHandled) {
             switch(e.keyName) {
@@ -519,7 +519,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             isOriginalHandlerRequired = true;
         } else {
             if(this._focusedCellPosition.rowIndex === undefined && $(eventTarget).hasClass(ROW_CLASS)) {
-                this._updateFocusedCellPosition($(eventTarget).children().not('.' + COMMAND_EXPAND_CLASS).first());
+                this._updateFocusedCellPosition($cell);
             }
 
             elementType = this._getElementType(eventTarget);
@@ -998,6 +998,16 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
     _getFocusedCell: function() {
         return $(this._getCell(this._focusedCellPosition));
+    },
+
+    _updateFocusedCellPositionByTarget: function(target) {
+        const elementType = this._getElementType(target);
+        if(elementType === 'row' && isDefined(this._focusedCellPosition?.columnIndex)) {
+            const $row = $(target);
+            this._focusedView && isGroupRow($row) && this.setFocusedRowIndex(this._getRowIndex($row));
+        } else {
+            this._updateFocusedCellPosition(this._getCellElementFromTarget(target));
+        }
     },
 
     _updateFocusedCellPosition: function($cell, direction) {
@@ -1702,7 +1712,15 @@ const KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _getCellElementFromTarget: function(target) {
-        return $(target).closest(`.${ROW_CLASS} > td`);
+        const elementType = this._getElementType(target);
+        const $targetElement = $(target);
+        let $cell;
+        if(elementType === 'cell') {
+            $cell = $targetElement.closest(`.${ROW_CLASS} > td`);
+        } else {
+            $cell = $targetElement.children().not('.' + COMMAND_EXPAND_CLASS).first();
+        }
+        return $cell;
     },
 
     _getRowsViewElement: function() {
