@@ -172,35 +172,35 @@ describe('Button', () => {
 
         describe('stylingMode', () => {
             it('should use `contained` as a default value', () => {
-                const button = render();
+                const classNames = render().prop('classes');
 
-                expect(button.hasClass('dx-button-mode-contained')).toBe(true);
-                expect(button.hasClass('dx-button-mode-text')).toBe(false);
-                expect(button.hasClass('dx-button-mode-outlined')).toBe(false);
+                expect(classNames.includes('dx-button-mode-contained')).toBe(true);
+                expect(classNames.includes('dx-button-mode-text')).toBe(false);
+                expect(classNames.includes('dx-button-mode-outlined')).toBe(false);
             });
 
             it('should add `dx-button-mode-text` class if the stylingMode is `text`', () => {
-                const button = render({ stylingMode: 'text' });
+                const classNames = render({ stylingMode: 'text' }).prop('classes');
 
-                expect(button.hasClass('dx-button-mode-text')).toBe(true);
-                expect(button.hasClass('dx-button-mode-contained')).toBe(false);
-                expect(button.hasClass('dx-button-mode-outlined')).toBe(false);
+                expect(classNames.includes('dx-button-mode-text')).toBe(true);
+                expect(classNames.includes('dx-button-mode-contained')).toBe(false);
+                expect(classNames.includes('dx-button-mode-outlined')).toBe(false);
             });
 
             it('should add `dx-button-mode-contained` class if the stylingMode is `contained`', () => {
-                const button = render({ stylingMode: 'contained' });
+                const classNames = render({ stylingMode: 'contained' }).prop('classes');
 
-                expect(button.hasClass('dx-button-mode-contained')).toBe(true);
-                expect(button.hasClass('dx-button-mode-text')).toBe(false);
-                expect(button.hasClass('dx-button-mode-outlined')).toBe(false);
+                expect(classNames.includes('dx-button-mode-contained')).toBe(true);
+                expect(classNames.includes('dx-button-mode-text')).toBe(false);
+                expect(classNames.includes('dx-button-mode-outlined')).toBe(false);
             });
 
             it('should add `dx-button-mode-outlined` class if the stylingMode is `outlined`', () => {
-                const button = render({ stylingMode: 'outlined' });
+                const classNames = render({ stylingMode: 'outlined' }).prop('classes');
 
-                expect(button.hasClass('dx-button-mode-outlined')).toBe(true);
-                expect(button.hasClass('dx-button-mode-text')).toBe(false);
-                expect(button.hasClass('dx-button-mode-contained')).toBe(false);
+                expect(classNames.includes('dx-button-mode-outlined')).toBe(true);
+                expect(classNames.includes('dx-button-mode-text')).toBe(false);
+                expect(classNames.includes('dx-button-mode-contained')).toBe(false);
             });
         });
 
@@ -212,26 +212,26 @@ describe('Button', () => {
             });
 
             it('should not render `text` by default', () => {
-                const button = render();
+                const classNames = render().prop('classes');
 
-                expect(button.hasClass('dx-button')).toBe(true);
-                expect(button.hasClass('dx-button-has-text')).toBe(false);
-                expect(button.exists('.dx-button-text')).toBe(false);
+                expect(classNames.includes('dx-button')).toBe(true);
+                expect(classNames.includes('dx-button-has-text')).toBe(false);
+                expect(classNames.includes('dx-button-text')).toBe(false);
             });
         });
 
         describe('type', () => {
             it('should use `normal` as a default value', () => {
-                const button = render();
+                const classNames = render().prop('classes');
 
-                expect(button.hasClass('dx-button-normal')).toBe(true);
+                expect(classNames.includes('dx-button-normal')).toBe(true);
             });
 
             it('should add `dx-button-*` if the type is defined', () => {
-                const button = render({ type: 'custom' });
+                const classNames = render({ type: 'custom' }).prop('classes');
 
-                expect(button.hasClass('dx-button-custom')).toBe(true);
-                expect(button.hasClass('dx-button-normal')).toBe(false);
+                expect(classNames.includes('dx-button-custom')).toBe(true);
+                expect(classNames.includes('dx-button-normal')).toBe(false);
             });
         });
 
@@ -240,7 +240,7 @@ describe('Button', () => {
                 const button = render();
 
                 expect(button.prop('activeStateEnabled')).toBe(true);
-                expect(button.hasClass('dx-state-active')).toBe(false);
+                expect(button.prop('classes').includes('dx-state-active')).toBe(false);
             });
         });
 
@@ -310,7 +310,7 @@ describe('Button', () => {
             it('should render icon', () => {
                 const button = render({ icon: 'test' });
 
-                expect(button.is('.dx-button-has-icon')).toBe(true);
+                expect(button.prop('classes').includes('dx-button-has-icon')).toBe(true);
                 const { source } = button.find(Icon).props();
                 expect(source).toEqual('test');
             });
@@ -337,7 +337,7 @@ describe('Button', () => {
                 });
                 const elements = button.find('.dx-button-content').children();
 
-                expect(button.hasClass('dx-button-icon-right')).toBe(true);
+                expect(button.prop('classes').includes('dx-button-icon-right')).toBe(true);
                 expect(elements.at(0).is('.dx-button-text')).toBe(true);
                 expect(elements.at(1).is(Icon)).toBe(true);
                 expect(elements.at(1).props().position).toEqual('right');
@@ -560,77 +560,6 @@ describe('Button', () => {
         });
     });
 
-    describe('Custom attributes', () => {
-        it('should add custom `className` property', () => {
-            const tree = render({ className: 'custom-class' });
-
-            expect(tree.find(Widget).is('.custom-class.dx-button')).toBe(true);
-        });
-
-        it('should add custom `style` property', () => {
-            const tree = render({ style: { fontSize: '20px' }, width: 20, height: 10 });
-            const nestedDiv = tree.find('.dx-button').at(1);
-
-            expect(nestedDiv.prop('style')).toMatchObject({
-                fontSize: '20px',
-                height: 10,
-                width: 20,
-            });
-        });
-
-        it('should add custom property', () => {
-            const tree = render({ data: 'custom-data' });
-            const nestedDiv = tree.find('.dx-button').at(1);
-
-            expect(nestedDiv.prop('data')).toBe('custom-data');
-        });
-
-        it('should not spread excess properties', () => {
-            const tree = render({
-                _feedbackHideTimeout: 400,
-                _feedbackShowTimeout: 30,
-                accessKey: null,
-                activeStateEnabled: false,
-                activeStateUnit: '123',
-                aria: {},
-                className: '',
-                clickArgs: {},
-                customAttributes: {},
-                disabled: false,
-                elementAttr: {},
-                focusStateEnabled: true,
-                height: null,
-                hint: '123',
-                hoverStateEnabled: false,
-                name: '',
-                onActive: () => void 0,
-                onClick: () => void 0,
-                onContentReady: () => void 0,
-                onDimensionChanged: () => void 0,
-                onInactive: () => void 0,
-                onKeyPress: () => void 0,
-                onKeyboardHandled: () => void 0,
-                onVisibilityChange: () => void 0,
-                render: undefined,
-                rtlEnabled: false,
-                style: {},
-                tabIndex: 0,
-                visible: true,
-                width: null,
-            });
-            const nestedDiv = tree.find('.dx-button').at(1);
-
-            expect(nestedDiv.props()).toEqual({
-                className: expect.any(String),
-                hidden: expect.any(Boolean),
-                role: expect.any(String),
-                style: expect.any(Object),
-                tabIndex: expect.any(Number),
-                title: expect.any(String),
-            });
-        });
-    });
-
     describe('API', () => {
         describe('Focus', () => {
             it('should call Widget.focus API', () => {
@@ -648,8 +577,8 @@ describe('Button', () => {
     });
 
     it('should have dx-button class', () => {
-        const tree = render();
+        const classNames = render().prop('classes');
 
-        expect(tree.is('.dx-button')).toBe(true);
+        expect(classNames.includes('dx-button')).toBe(true);
     });
 });

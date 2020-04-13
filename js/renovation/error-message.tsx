@@ -1,9 +1,9 @@
 import { Component, ComponentBindings, JSXComponent, OneWay } from 'devextreme-generator/component_declaration/common';
 
-export const viewFunction = ({ props: { message, className }, customAttributes }: ErrorMessage) => (
+export const viewFunction = ({ props: { message, className }, restAttributes }: ErrorMessage) => (
     <div
         className={`dx-validationsummary dx-validationsummary-item ${className}`}
-        {...customAttributes}
+        {...restAttributes}
     >
         {message}
     </div>
@@ -20,9 +20,4 @@ export class ErrorMessageInput {
     defaultOptionRules: null,
     view: viewFunction,
 })
-export default class ErrorMessage extends JSXComponent<ErrorMessageInput> {
-    get customAttributes() {
-        const { className, message, ...restProps } = this.props;
-        return restProps;
-    }
-}
+export default class ErrorMessage extends JSXComponent<ErrorMessageInput> {}
