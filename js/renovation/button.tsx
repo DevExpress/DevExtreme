@@ -19,7 +19,6 @@ import Icon from './icon';
 import InkRipple from './ink-ripple';
 import Widget, { WidgetInput } from './widget';
 
-const defaultClassNames = ['dx-button'];
 const stylingModes = ['outlined', 'text', 'contained'];
 
 const getInkRippleConfig = ({ text, icon, type }: ButtonInput) => {
@@ -35,7 +34,7 @@ const getInkRippleConfig = ({ text, icon, type }: ButtonInput) => {
 
 const getCssClasses = (model: ButtonInput) => {
     const { text, icon, stylingMode, type, iconPosition } = model;
-    const classNames = defaultClassNames.slice();
+    const classNames = ['dx-button'];
     const isValidStylingMode = stylingMode && stylingModes.indexOf(stylingMode) !== -1;
 
     classNames.push(`dx-button-mode-${isValidStylingMode ? stylingMode : 'contained'}`);
