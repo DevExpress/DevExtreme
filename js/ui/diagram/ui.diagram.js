@@ -2072,12 +2072,24 @@ class Diagram extends Widget {
                 this._propertiesPanelTextInputHidden = true;
             }
         }
+        if(this._toolbox) {
+            if(this.isMobileScreenSize() && this._toolbox.isVisible()) {
+                this._toolbox.hide();
+                this._toolboxTextInputHidden = true;
+            }
+        }
     }
     _raiseTextInputEnd() {
         if(this._propertiesPanel) {
             if(this._propertiesPanelTextInputHidden) {
                 this._propertiesPanel.show();
                 delete this._propertiesPanelTextInputHidden;
+            }
+        }
+        if(this._toolbox) {
+            if(this._toolboxTextInputHidden) {
+                this._toolbox.show();
+                delete this._toolboxTextInputHidden;
             }
         }
     }
