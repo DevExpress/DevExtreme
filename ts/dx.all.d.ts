@@ -3608,7 +3608,7 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.currentPathKeys */
         currentPathKeys?: Array<string>;
         /** @name dxFileManager.Options.customizeDetailColumns */
-        customizeDetailColumns?: ((columns: Array<dxDataGridColumn>) => Array<dxDataGridColumn>);
+        customizeDetailColumns?: ((columns: Array<dxFileManagerDetailsColumn>) => Array<dxFileManagerDetailsColumn>);
         /** @name dxFileManager.Options.customizeThumbnail */
         customizeThumbnail?: ((fileSystemItem: DevExpress.fileManagement.FileSystemItem) => string);
         /** @name dxFileManager.Options.fileSystemProvider */
