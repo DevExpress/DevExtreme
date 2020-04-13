@@ -15,7 +15,7 @@ QUnit.testStart(function() {
                 display: table-cell;
                 padding: 35px;
             }
-            
+
             .bigtab.dx-tabs-expanded .dx-tab {
                 width: 1000px;
             }
@@ -406,7 +406,6 @@ QUnit.module('horizontal scrolling', () => {
 
         this.clock.restore();
     });
-
 
     QUnit.test('left nav button should be rendered if showNavButtons=true and possible to scroll left', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
@@ -850,5 +849,219 @@ QUnit.module('Live Update', {
 
         const $element = tabs.$element();
         assert.equal($element.find(`.${TABS_SCROLLABLE_CLASS}`).length, 0, 'scrolling is disabled');
+    });
+});
+
+class TestAsyncTabsWrapper {
+    constructor(options) {
+        const { itemsCount } = options;
+        const tabsOptions = extend({
+            items: this._generateItems(itemsCount),
+            templatesRenderAsynchronously: true,
+            integrationOptions: {
+                templates: {
+                    'testItem': {
+                        render(args) {
+                            setTimeout(() => {
+                                $(args.container).append($('<div>').text(args.model.text));
+                                args.onRendered();
+                            });
+                        }
+                    }
+                }
+            }
+        }, options);
+
+        if(options.itemTemplate !== null) {
+            tabsOptions.itemTemplate = 'testItem';
+        } else {
+            delete tabsOptions.itemTemplate;
+        }
+
+        this._$tabs = $('#tabs').dxTabs(tabsOptions);
+        this._tabs = this._$tabs.dxTabs('instance');
+    }
+
+    _generateItems(count = 5) {
+        return [...new Array(count)].map((value, index) => ({ text: `item ${index}` }));
+    }
+
+    _checkTabsContent($tabs) {
+        const items = this._tabs.option('items');
+        $tabs.toArray().forEach((tabElement, index) =>
+            QUnit.assert.equal($(tabElement).text(), items[index].text, `text of the ${index} tab`)
+        );
+    }
+
+    set width(value) {
+        this._tabs.option('width', value);
+    }
+
+    setItemsByCount(count) {
+        this._tabs.option('items', this._generateItems(count));
+    }
+
+    checkTabsWithoutScrollable() {
+        const $tabs = this._$tabs.find('> .dx-tabs-wrapper > .dx-tab');
+        QUnit.assert.equal($tabs.length, this._tabs.option('items').length, 'tabs are rendered');
+        this._checkTabsContent($tabs);
+    }
+
+    checkTabsWithScrollable() {
+        const $tabs = this._$tabs.find('> .dx-tabs-scrollable .dx-scrollable-content > .dx-tabs-wrapper > .dx-tab');
+        QUnit.assert.equal($tabs.length, this._tabs.option('items').length, 'tabs are rendered in the Scrollable');
+        this._checkTabsContent($tabs);
+    }
+
+    checkNavigationButtons(expected) {
+        const visibilityStateText = expected ? 'shown' : 'hidden';
+        QUnit.assert.equal(this._$tabs.find('> .dx-tabs-nav-button-left').length, Number(expected), `the left nav button element is ${visibilityStateText}`);
+        QUnit.assert.equal(this._$tabs.find('> .dx-tabs-nav-button-right').length, Number(expected), `the right nav button element is ${visibilityStateText}`);
+    }
+}
+
+QUnit.module('Async templates', {
+    beforeEach() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach() {
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.test('render tabs', function() {
+        const testWrapper = new TestAsyncTabsWrapper({ width: 220 });
+        this.clock.tick();
+        testWrapper.checkTabsWithoutScrollable();
+        testWrapper.checkNavigationButtons(false);
+    });
+
+    QUnit.test('render tabs. use default and custom templates', function() {
+        const testWrapper = new TestAsyncTabsWrapper({
+            width: 150,
+            items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3', template: 'item' }],
+            itemTemplate: null
+        });
+
+        this.clock.tick();
+        testWrapper.checkTabsWithoutScrollable();
+        testWrapper.checkNavigationButtons(false);
+    });
+
+    QUnit.test('render tabs with scrollable. use default and custom templates', function() {
+        const testWrapper = new TestAsyncTabsWrapper({
+            width: 100,
+            items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3', template: 'item' }],
+            showNavButtons: false,
+            itemTemplate: null
+        });
+
+        this.clock.tick();
+        testWrapper.checkTabsWithScrollable();
+        testWrapper.checkNavigationButtons(false);
+    });
+
+    QUnit.test('render tabs with scrollable and navigation buttons. use default and custom templates', function() {
+        const testWrapper = new TestAsyncTabsWrapper({
+            width: 100,
+            items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3', template: 'item' }],
+            showNavButtons: true,
+            itemTemplate: null
+        });
+
+        this.clock.tick();
+        testWrapper.checkTabsWithScrollable();
+        testWrapper.checkNavigationButtons(true);
+    });
+
+    QUnit.test('render tabs with scrollable', function() {
+        const testWrapper = new TestAsyncTabsWrapper({ width: 150, showNavButtons: false });
+        this.clock.tick();
+        testWrapper.checkTabsWithScrollable();
+        testWrapper.checkNavigationButtons(false);
+    });
+
+    QUnit.test('render tabs with scrollable and navigation buttons', function() {
+        const testWrapper = new TestAsyncTabsWrapper({ width: 150, showNavButtons: true });
+        this.clock.tick();
+        testWrapper.checkTabsWithScrollable();
+        testWrapper.checkNavigationButtons(true);
+    });
+
+    QUnit.test('Add scrollable when width is changed from large to small', function() {
+        const testWrapper = new TestAsyncTabsWrapper({ width: 220, showNavButtons: false });
+        this.clock.tick();
+        testWrapper.width = 150;
+        testWrapper.checkTabsWithScrollable();
+        testWrapper.checkNavigationButtons(false);
+    });
+
+    QUnit.test('Add scrollable and navigation buttons when width is changed from large to small', function() {
+        const testWrapper = new TestAsyncTabsWrapper({ width: 220, showNavButtons: true });
+        this.clock.tick();
+        testWrapper.width = 150;
+        testWrapper.checkTabsWithScrollable();
+        testWrapper.checkNavigationButtons(true);
+    });
+
+    QUnit.test('Remove scrollable when width is changed from small to large', function() {
+        const testWrapper = new TestAsyncTabsWrapper({ width: 150, showNavButtons: false });
+        this.clock.tick();
+        testWrapper.width = 220;
+        testWrapper.checkTabsWithoutScrollable();
+        testWrapper.checkNavigationButtons(false);
+    });
+
+    QUnit.test('Remove scrollable and navigation buttons when width is changed from small to large', function() {
+        const testWrapper = new TestAsyncTabsWrapper({ width: 150, showNavButtons: true });
+        this.clock.tick();
+        testWrapper.width = 220;
+        testWrapper.checkTabsWithoutScrollable();
+        testWrapper.checkNavigationButtons(false);
+    });
+
+    [false, true].forEach(repaintChangesOnly => {
+        QUnit.test(`Add scrollable when items are changed from 5 to 10, repaintChangesOnly: ${repaintChangesOnly}`, function() {
+            const testWrapper = new TestAsyncTabsWrapper({ width: 220, showNavButtons: false, repaintChangesOnly });
+
+            this.clock.tick();
+            testWrapper.setItemsByCount(10);
+            this.clock.tick();
+
+            testWrapper.checkTabsWithScrollable();
+            testWrapper.checkNavigationButtons(false);
+        });
+
+        QUnit.test(`Add scrollable and navigation buttons when items are changed from 5 to 10, repaintChangesOnly: ${repaintChangesOnly}`, function() {
+            const testWrapper = new TestAsyncTabsWrapper({ width: 220, showNavButtons: true, repaintChangesOnly });
+
+            this.clock.tick();
+            testWrapper.setItemsByCount(10);
+            this.clock.tick();
+
+            testWrapper.checkTabsWithScrollable();
+            testWrapper.checkNavigationButtons(true);
+        });
+
+        QUnit.test(`Remove scrollable when items are changed from 10 to 5, repaintChangesOnly: ${repaintChangesOnly}`, function() {
+            const testWrapper = new TestAsyncTabsWrapper({ width: 220, showNavButtons: false, repaintChangesOnly, itemsCount: 10 });
+
+            this.clock.tick();
+            testWrapper.setItemsByCount(5);
+            this.clock.tick();
+
+            testWrapper.checkTabsWithoutScrollable();
+            testWrapper.checkNavigationButtons(false);
+        });
+
+        QUnit.test(`Remove scrollable and navigation buttons when items are changed from 10 to 5, repaintChangesOnly: ${repaintChangesOnly}`, function() {
+            const testWrapper = new TestAsyncTabsWrapper({ width: 220, showNavButtons: true, repaintChangesOnly, itemsCount: 10 });
+
+            this.clock.tick();
+            testWrapper.setItemsByCount(5);
+            this.clock.tick();
+
+            testWrapper.checkTabsWithoutScrollable();
+            testWrapper.checkNavigationButtons(false);
+        });
     });
 });
