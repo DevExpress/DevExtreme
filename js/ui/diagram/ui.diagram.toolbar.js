@@ -8,6 +8,7 @@ import { hasWindow } from '../../core/utils/window';
 
 import DiagramPanel from './ui.diagram.panel';
 import DiagramMenuHelper from './ui.diagram.menu_helper';
+import { getDiagram } from './diagram.importer';
 
 import '../select_box';
 import '../color_box';
@@ -241,22 +242,26 @@ class DiagramToolbar extends DiagramPanel {
             case 'dxTextBox':
                 return {};
             default:
-                if(!item.items) {
-                    return {
-                        options: {
-                            onClick: (e) => {
+                return {
+                    options: {
+                        onClick: (e) => {
+                            if(!item.items) {
                                 const parameter = DiagramMenuHelper.getItemCommandParameter(this, item);
                                 handler.call(this, item.command, parameter);
+                            } else {
+                                const contextMenu = this._contextMenus[item.command];
+                                if(contextMenu) contextMenu.toggle();
                             }
                         }
-                    };
-                }
+                    }
+                };
         }
     }
     _onItemInitialized(widget, item) {
         this._addItemHelper(item.command, new DiagramToolbarItemHelper(widget));
     }
     _onItemContentReady(widget, item, actionHandler) {
+        const { Browser } = getDiagram();
         if((widget.NAME === 'dxButton' || widget.NAME === 'dxTextBox') && item.items) {
             const $menuContainer = $('<div>')
                 .appendTo(this.$element());
@@ -264,7 +269,8 @@ class DiagramToolbar extends DiagramPanel {
                 items: item.items,
                 target: widget.$element(),
                 cssClass: DiagramMenuHelper.getContextMenuCssClass(),
-                showEvent: widget.NAME === 'dxTextBox' ? '' : 'dxclick',
+                showEvent: '',
+                closeOnOutsideClick: !Browser.TouchUI,
                 focusStateEnabled: false,
                 position: { at: 'left bottom' },
                 itemTemplate: function(itemData, itemIndex, itemElement) {
