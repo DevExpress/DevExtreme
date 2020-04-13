@@ -23,6 +23,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import themes from 'ui/themes';
 import { SchedulerTestWrapper } from './helpers.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
+import browser from 'core/utils/browser';
 
 import 'ui/scheduler/ui.scheduler';
 import 'common.css!';
@@ -68,6 +69,26 @@ QUnit.module('Initialization', {
         fx.off = false;
     }
 }, () => {
+    QUnit.test('Long appointment should have correct parts count if widget is zoomed (T854740)', function(assert) {
+        if(browser.webkit) {
+            $('#scheduler').css('zoom', 1.25);
+        }
+
+        const data = [{ text: 'Two Weeks App (Jan 6 - Jan 19)', startDate: new Date(2020, 0, 6), endDate: new Date(2020, 0, 19, 12), typeId: 1 }];
+
+        this.createInstance({
+            dataSource: data,
+            views: ['month'],
+            firstDayOfWeek: 1,
+            currentView: 'month',
+            currentDate: new Date(2020, 0, 1),
+            height: 500,
+            width: 250
+        });
+
+        assert.equal(this.scheduler.appointments.getAppointmentCount(), 2, 'Appointment parts are ok');
+    });
+
     QUnit.test('Scheduler should have task model instance', function(assert) {
         const data = new DataSource({
             store: this.tasks
