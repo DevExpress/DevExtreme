@@ -2211,7 +2211,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 .addClass(button.cssClass);
 
             if(button.template) {
-                that._rowsView.renderTemplate($container, button.template, options, true, true);
+                that._rowsView.renderTemplate($container, button.template, options, true);
             } else {
                 if(useIcons && icon || button.icon) {
                     icon = button.icon || icon;
