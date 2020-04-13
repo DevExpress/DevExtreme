@@ -87,6 +87,11 @@ QUnit.module('Initialization', {
         });
 
         assert.equal(this.scheduler.appointments.getAppointmentCount(), 2, 'Appointment parts are ok');
+
+        $('#scheduler').css('zoom', 1);
+        this.instance.repaint();
+
+        assert.equal(this.scheduler.appointments.getAppointmentCount(), 2, 'Appointment parts are ok');
     });
 
     QUnit.test('Scheduler should have task model instance', function(assert) {
