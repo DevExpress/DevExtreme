@@ -2326,6 +2326,42 @@ QUnit.test('Draw label, rotated (area of label > maxY area of series)', function
     assert.equal(label.shift.firstCall.args[1], 200);
 });
 
+QUnit.test('Draw inside label, not rotated (area of label < minY)', function(assert) {
+    this.options.label.position = 'inside';
+    const label = createLabel.call(this, { x: 60, y: 22, width: 20, height: 1 });
+
+    assert.equal(label.shift.firstCall.args[0], 60);
+    assert.equal(label.shift.firstCall.args[1], 20);
+});
+
+QUnit.test('Draw inside label, not rotated (area of label > maxY)', function(assert) {
+    this.options.label.position = 'inside';
+    this.data.value = -10;
+    const label = createLabel.call(this, { x: 50, y: 209, width: 20, height: 1 });
+
+    assert.equal(label.shift.firstCall.args[0], 50);
+    assert.equal(label.shift.firstCall.args[1], 200);
+});
+
+QUnit.test('Draw inside label, rotated (area of label < minX)', function(assert) {
+    this.data.value = -10;
+    this.options.rotated = true;
+    this.options.label.position = 'inside';
+    const label = createLabel.call(this, { x: 32, y: 40, width: 1, height: 10 });
+
+    assert.equal(label.shift.firstCall.args[0], 30);
+    assert.equal(label.shift.firstCall.args[1], 40);
+});
+
+QUnit.test('Draw inside label, rotated (area of label > maxX)', function(assert) {
+    this.options.rotated = true;
+    this.options.label.position = 'inside';
+    const label = createLabel.call(this, { x: 90, y: 40, width: 1, height: 10 });
+
+    assert.equal(label.shift.firstCall.args[0], 80);
+    assert.equal(label.shift.firstCall.args[1], 40);
+});
+
 QUnit.test('Draw label, point is abroad on the left', function(assert) {
     const label = createLabel.call(this, { x: 35, y: 32, width: -10, height: 46 });
 
