@@ -765,9 +765,11 @@ QUnit.test('xl\\worksheets\\sheet1.xml file content with AutoFilter', function(a
     assert.expect(2);
     this.excelCreator._zip.folder(internals.XL_FOLDER_NAME + '/' + internals.WORKSHEETS_FOLDER).file(internals.WORKSHEET_FILE_NAME).async('string').then(function(content) {
         try {
-            const $autoFilter = $(content).find('autoFilter');
-            assert.strictEqual($autoFilter.parent()[0].tagName.toLowerCase(), 'worksheet');
-            assert.strictEqual($autoFilter.attr('ref'), 'A2:A3');
+            const oParser = new DOMParser();
+            const oDOM = oParser.parseFromString(content, 'application/xml');
+
+            assert.strictEqual(oDOM.documentElement.nodeName, 'worksheet');
+            assert.strictEqual(oDOM.querySelector('autoFilter').getAttribute('ref'), 'A2:A3');
         } finally {
             done();
         }
