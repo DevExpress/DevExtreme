@@ -43,7 +43,10 @@ const CLASS = {
     insertedRow: 'dx-row-inserted',
     editedRow: 'dx-edit-row',
     saveButton: 'save-button',
-    groupExpanded: 'group-opened'
+    groupExpanded: 'group-opened',
+    overlayContent: 'edit-popup',
+    popupContent: 'dx-overlay-content',
+    toolbar: 'dx-toolbar,'
 };
 
 const addWidgetPrefix = function(widgetName: string, className: string) {
@@ -368,10 +371,17 @@ export default class DataGrid extends Widget {
         )();
     }
 
-    getEditForm() {
+    getEditForm(): EditForm {
         const editFormRowClass = this.addWidgetPrefix(CLASS.editFormRow);
         const element = this.element ? this.element.find(`.${editFormRowClass}`) :  Selector(`.${editFormRowClass}`);
         const buttons = element.find(`.${this.addWidgetPrefix(CLASS.formButtonsContainer)} .${CLASS.button}`);
+
+        return new EditForm(element, buttons);
+    }
+
+    getPopupEditForm(): EditForm {
+        const element = Selector(`.${this.addWidgetPrefix(CLASS.overlayContent)} .${CLASS.popupContent}`);
+        const buttons = element.find(`.${this.addWidgetPrefix(CLASS.toolbar)} .${CLASS.button}`);
 
         return new EditForm(element, buttons);
     }
@@ -406,6 +416,30 @@ export default class DataGrid extends Widget {
         return ClientFunction(
             () => getGridInstance().cancelEditData(),
             { dependencies: { getGridInstance } }
+        )();
+    }
+
+    api_saveEditData() : Promise<void> {
+        const getGridInstance: any = this.getGridInstance;
+        return ClientFunction(
+            () => getGridInstance().saveEditData(),
+            { dependencies: { getGridInstance } }
+        )();
+    }
+
+    api_editCell(rowIndex: number, columnIndex: number) : Promise<void> {
+        const getGridInstance: any = this.getGridInstance;
+        return ClientFunction(
+            () => getGridInstance().editCell(rowIndex, columnIndex),
+            { dependencies: { getGridInstance, rowIndex, columnIndex } }
+        )();
+    }
+
+    api_cellValue(rowIndex: number, columnIndex: number, value: string) : Promise<void> {
+        const getGridInstance: any = this.getGridInstance;
+        return ClientFunction(
+            () => getGridInstance().editCell(rowIndex, columnIndex, value),
+            { dependencies: { getGridInstance, rowIndex, columnIndex, value } }
         )();
     }
 
