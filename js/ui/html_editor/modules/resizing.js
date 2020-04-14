@@ -4,6 +4,7 @@ import { name as ClickEvent } from '../../../events/click';
 import { addNamespace } from '../../../events/utils';
 import { move } from '../../../animation/translator';
 import devices from '../../../core/devices';
+import { normalizeKeyName } from '../../../events/utils';
 import Resizable from '../../resizable';
 import Quill from 'quill';
 
@@ -73,7 +74,8 @@ export default class ResizingModule {
     }
 
     _handleFrameKeyDown(e) {
-        if(e.key === 'Delete' || e.key === 'Backspace') {
+        const keyName = normalizeKeyName(e);
+        if(keyName === 'del' || keyName === 'backspace') {
             this._deleteImage();
         }
         this.hideFrame();
