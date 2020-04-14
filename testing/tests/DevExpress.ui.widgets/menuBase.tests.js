@@ -242,14 +242,10 @@ QUnit.module('Menu rendering', () => {
         assert.equal(menuBase.element.find('.dx-menu-separator').length, 0, 'there is no separators');
     });
 
-    function getMenuItems() {
-        return $(`.${DX_MENU_ITEM_CLASS}`);
-    }
-
     QUnit.test('Render menu with hidden items (T310028)', function(assert) {
-        createMenu({ items: [{ text: 'item 0' }, { text: 'item 1', visible: false }, { text: 'item 2' }] });
+        const menu = createMenu({ items: [{ text: 'item 0' }, { text: 'item 1', visible: false }, { text: 'item 2' }] });
 
-        const menuItems = getMenuItems();
+        const menuItems = menu.element.find(`.${DX_MENU_ITEM_CLASS}`);
         assert.equal(menuItems.length, 3, 'menu items count');
         assert.equal(menuItems.eq(0).hasClass(DX_STATE_INVISIBLE_CLASS), false, 'item0 is visible');
         assert.equal(menuItems.eq(1).hasClass(DX_STATE_INVISIBLE_CLASS), true, 'item1 is not visible');
@@ -260,12 +256,12 @@ QUnit.module('Menu rendering', () => {
         const menu = createMenu({ items: [{ text: 'item 0', visible: false }] });
 
         menu.instance.option('items[0].visible', true);
-        let menuItems = getMenuItems();
+        let menuItems = menu.element.find(`.${DX_MENU_ITEM_CLASS}`);
         assert.equal(menuItems.length, 1, 'menu items count');
         assert.equal(menuItems.eq(0).hasClass(DX_STATE_INVISIBLE_CLASS), false, 'item1 is  visible');
 
         menu.instance.option('items[0].visible', false);
-        menuItems = getMenuItems();
+        menuItems = menu.element.find(`.${DX_MENU_ITEM_CLASS}`);
         assert.equal(menuItems.length, 1, 'menu items count');
         assert.equal(menuItems.eq(0).hasClass(DX_STATE_INVISIBLE_CLASS), true, 'item1 is not visible');
     });
@@ -274,12 +270,12 @@ QUnit.module('Menu rendering', () => {
         const menu = createMenu({ items: [{ text: 'item 0', visible: true }] });
 
         menu.instance.option('items[0].visible', false);
-        let menuItems = getMenuItems();
+        let menuItems = menu.element.find(`.${DX_MENU_ITEM_CLASS}`);
         assert.equal(menuItems.length, 1, 'menu items count');
         assert.equal(menuItems.eq(0).hasClass(DX_STATE_INVISIBLE_CLASS), true, 'item1 is not visible');
 
         menu.instance.option('items[0].visible', true);
-        menuItems = getMenuItems();
+        menuItems = menu.element.find(`.${DX_MENU_ITEM_CLASS}`);
         assert.equal(menuItems.length, 1, 'menu items count');
         assert.equal(menuItems.eq(0).hasClass(DX_STATE_INVISIBLE_CLASS), false, 'item1 is visible');
     });
