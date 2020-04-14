@@ -458,7 +458,6 @@ class MenuBase extends HierarchicalCollectionWidget {
     _renderItem(index, node, $nodeContainer, $nodeElement) {
         const items = this.option('items');
 
-        if(node.internalFields.item.visible === false) return;
         const $node = $nodeElement || this._createDOMElement($nodeContainer);
 
         if(items[index + 1] && items[index + 1].beginGroup) {
