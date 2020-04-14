@@ -10428,8 +10428,8 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         assert.equal(scrollable.scrollTop(), 896, 'scrollTop');
 
         const visibleRows = dataGrid.getVisibleRows();
-        assert.equal(visibleRows[0].id, 21, 'first visible row');
-        assert.equal(visibleRows[19].id, 40, 'last visible row');
+        assert.equal(visibleRows[0].data.id, 21, 'first visible row');
+        assert.equal(visibleRows[19].data.id, 40, 'last visible row');
     });
 
     // T830138
