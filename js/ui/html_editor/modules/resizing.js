@@ -1,10 +1,9 @@
 import $ from '../../../core/renderer';
 import eventsEngine from '../../../events/core/events_engine';
 import { name as ClickEvent } from '../../../events/click';
-import { addNamespace } from '../../../events/utils';
+import { addNamespace, normalizeKeyName } from '../../../events/utils';
 import { move } from '../../../animation/translator';
 import devices from '../../../core/devices';
-import { normalizeKeyName } from '../../../events/utils';
 import Resizable from '../../resizable';
 import Quill from 'quill';
 
