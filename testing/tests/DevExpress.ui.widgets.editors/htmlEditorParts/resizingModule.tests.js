@@ -212,6 +212,26 @@ module('Resizing module', moduleConfig, () => {
         assert.notOk($resizeFrame.is(':visible'), 'Frame element isn\'t visible');
     });
 
+    ['Backspace', 'Delete'].forEach((deleteKey) => {
+        test(`${deleteKey} keydown event should remove target image hide resize frame (T878203)`, function(assert) {
+            this.$element.prepend($(document.createTextNode('text')));
+            $(this.$element).dxHtmlEditor({
+                mediaResizing: {
+                    enabled: true
+                }
+            });
+
+            this.options.enabled = true;
+            const $image = $(this.$element).find('img');
+            $image.trigger(clickEvent);
+
+            $image.trigger($.Event('keydown', { key: deleteKey }));
+
+            assert.strictEqual($(this.$element).find('img').length, 0, 'Image is removed');
+        });
+    });
+
+
     test('scroll event should update resize frame position', function(assert) {
         this.options.enabled = true;
         const resizingInstance = new Resizing(this.quillMock, this.options);
