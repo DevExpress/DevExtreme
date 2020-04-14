@@ -243,7 +243,7 @@ QUnit.module('Menu rendering', () => {
     });
 
     function getMenuItems() {
-        return $('.' + DX_MENU_ITEM_CLASS);
+        return $(`.${DX_MENU_ITEM_CLASS}`);
     }
 
     QUnit.test('Render menu with hidden items (T310028)', function(assert) {
