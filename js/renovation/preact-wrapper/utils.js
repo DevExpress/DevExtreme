@@ -42,3 +42,10 @@ export const removeDifferentElements = ($children, $newChildren) => {
 export const getInnerActionName = (actionName) => {
     return actionName.charAt(2).toLowerCase() + actionName.substr(3) + 'Action';
 };
+
+export const setAttribute = (name, value, target) => {
+    name = (name === 'role' || name === 'id') ? name : `aria-${name}`;
+    value = value?.toString() ?? null;
+
+    target.attr(name, value);
+};

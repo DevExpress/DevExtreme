@@ -1,8 +1,10 @@
 import DOMComponent from '../../core/dom_component';
 import * as Preact from 'preact';
 import { extend } from '../../core/utils/extend';
-import { getInnerActionName } from './utils';
+import { getInnerActionName, setAttribute } from './utils';
 import { isEmpty } from '../../core/utils/string';
+import { isPlainObject } from '../../core/utils/type';
+import { each } from '../../core/utils/iterator';
 
 export default class PreactWrapper extends DOMComponent {
     getInstance() {
@@ -78,5 +80,15 @@ export default class PreactWrapper extends DOMComponent {
     // Public API
     repaint() {
         this._refresh();
+    }
+
+    setAria(...args) {
+        if(!isPlainObject(args[0])) {
+            setAttribute(args[0], args[1], args[2] || this.$element());
+        } else {
+            const target = args[1] || this.$element();
+
+            each(args[0], (name, value) => setAttribute(name, value, target));
+        }
     }
 }
