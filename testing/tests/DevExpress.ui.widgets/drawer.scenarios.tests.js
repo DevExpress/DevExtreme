@@ -14,21 +14,23 @@ QUnit.testStart(() => {
     // $("#qunit-tests").prepend(drawerTesters.markup);
 });
 
-// TODO: templateSize, minSize, maxSize, scrolling, rtlEnabled, animationEnabled, onRendered, _viewPortChangeHandler, target, template overflow and/or view overflow
+// TODO: templateSize, maxSize, scrolling, rtlEnabled, animationEnabled, onRendered, _viewPortChangeHandler, target, template overflow and/or view overflow
 const configs = [];
 
 ['shrink', 'push', 'overlap'].forEach(openedStateMode => {
     ['left', 'top', 'right'].forEach(position => {
         ['slide', 'expand'].forEach(revealMode => {
             [true, false].forEach(shading => {
-                configs.push({ openedStateMode, position, revealMode, shading });
+                [undefined, 25].forEach(minSize => {
+                    configs.push({ openedStateMode, position, revealMode, shading, minSize });
+                });
             });
         });
     });
 });
 
 configs.forEach(config => {
-    QUnit.module(`Scenarios (${config.openedStateMode}, ${config.position}, ${config.revealMode}, shading: ${config.shading})`, {
+    QUnit.module(`Scenarios (${config.openedStateMode}, ${config.position}, ${config.revealMode}, shading: ${config.shading}, minSize: ${config.minSize})`, {
         beforeEach() {
             this.clock = sinon.useFakeTimers();
             clearStack();
@@ -66,7 +68,7 @@ configs.forEach(config => {
             return extend({ rtlEnabled: false, animationEnabled: false }, config, targetOptions);
         }
 
-        testOrSkip('opened: false', () => configIs('push', 'top'), function(assert) {
+        testOrSkip('opened: false', () => configIs('push', 'top') || configIs('overlap', 'right', 'expand') && config.minSize, function(assert) {
             const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
@@ -92,7 +94,7 @@ configs.forEach(config => {
             drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
         });
 
-        testOrSkip('opened: false, visible: false -> visible: true', () => configIs('shrink') || configIs('push', 'top'), function(assert) {
+        testOrSkip('opened: false, visible: false -> visible: true', () => configIs('shrink') || configIs('push') || configIs('overlap') && config.minSize, function(assert) {
             const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
@@ -263,7 +265,7 @@ configs.forEach(config => {
             drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
         });
 
-        testOrSkip('opened: true, visible: false -> repaint', () => configIs('shrink') || configIs('overlap') || configIs('push'), function(assert) {
+        testOrSkip('opened: true, visible: false -> repaint -> visible: true', () => configIs('shrink') || configIs('overlap') || configIs('push'), function(assert) {
             const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
@@ -275,9 +277,27 @@ configs.forEach(config => {
             drawer.repaint();
             this.clock.tick(100);
 
+            drawer.option('visible', true);
+            this.clock.tick(100);
+
             drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
         });
 
+    });
+});
+
+QUnit.module('Specific scenarios', {
+    beforeEach() {
+        this.clock = sinon.useFakeTimers();
+        clearStack();
+    },
+    afterEach() {
+        this.clock.restore();
+        this.clock = undefined;
+        clearStack();
+    }
+}, () => {
+    ['shrink', 'push', 'overlap'].forEach(openedStateMode => {
         QUnit.test('opened: false -> opened: true, shader has more priority z-index than overlay inside view content', function(assert) {
             const prevBaseZIndex = dxOverlay.baseZIndex();
 
@@ -285,17 +305,24 @@ configs.forEach(config => {
                 dxOverlay.baseZIndex(3000);
 
                 const drawerElement = document.getElementById(drawerTesters.drawerElementId);
-                const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
+                const drawer = new dxDrawer(drawerElement, {
+                    rtlEnabled: false,
+                    animationEnabled: false,
                     opened: false,
-                    template: drawerTesters[config.position].template
-                }));
+                    position: 'left',
+                    revealMode: 'slide',
+                    shading: true,
+                    template: drawerTesters.left.template,
+                    openedStateMode
+                });
 
                 const env = {
                     drawer,
                     drawerElement,
                     templateElement: drawerElement.querySelector('#template'),
                     viewElement: drawerElement.querySelector('#view'),
-                    shading: drawer.option('shading')
+                    shading: drawer.option('shading'),
+                    minSize: drawer.option('minSize') || 0
                 };
 
                 new dxLoadPanel(document.getElementById('loadPanel'), {
@@ -308,7 +335,7 @@ configs.forEach(config => {
                 drawer.option('opened', true);
                 this.clock.tick(100);
 
-                if(config.openedStateMode === 'overlap') {
+                if(openedStateMode === 'overlap') {
                     assert.strictEqual($('.dx-loadpanel-wrapper').css('zIndex'), '3002', 'loadPanelWrapper.zIndex');
                     assert.strictEqual($('.dx-loadpanel-content').css('zIndex'), '3002', 'loadPanelContent.zIndex');
                     drawerTesters.checkShader(assert, env, { shader: env.shading ? '3500' : 'auto', panel: '3501' });

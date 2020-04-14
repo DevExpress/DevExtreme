@@ -10532,6 +10532,68 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         assert.ok(dataController._getLastItemIndex.callCount > 0, '_getLastItemIndex has called after set focusedRowKey');
         assert.equal(dataController._getLastItemIndex(), 99, 'Last item index');
     });
+
+    // T872126
+    QUnit.test('Incorrect cell should not be focused after editing boolean column in cell edit mode', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test is not actual for mobile devices');
+            return;
+        }
+
+        // arrange
+        const store = [];
+
+        for(let i = 0; i < 60; i++) {
+            store.push({
+                id: i + 1,
+                field: true
+            });
+        }
+
+        const dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: store,
+            height: 200,
+            keyExpr: 'id',
+            editing: {
+                mode: 'cell',
+                allowUpdating: true,
+                refreshMode: 'repaint'
+            },
+            scrolling: {
+                rowRenderingMode: 'virtual'
+            },
+            paging: {
+                enabled: false
+            }
+        });
+
+        // act
+        const scrollable = dataGrid.getScrollable();
+        scrollable.scrollBy(400);
+        this.clock.tick();
+
+        const firstVisibleRowKey = dataGrid.getVisibleRows()[0].key;
+        const scrollTop = scrollable.scrollTop();
+
+        let $cell = $(dataGrid.getCellElement(2, 1));
+        const $checkBox = $cell.find('.dx-checkbox').eq(0);
+
+        $checkBox.trigger('dxpointerdown');
+        this.clock.tick();
+        $checkBox.trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows()[0].key, firstVisibleRowKey, 'first visible row key');
+        assert.equal(scrollable.scrollTop(), scrollTop, 'scrollTop');
+
+        $cell = $(dataGrid.getCellElement(2, 1));
+
+        assert.ok($cell.hasClass('dx-focused'), 'cell is focused');
+        assert.ok($cell.hasClass('dx-editor-cell'), 'cell is edited');
+        assert.equal($cell.siblings().text(), '13', 'sibling\'s text');
+    });
 });
 
 QUnit.module('Rendered on server', baseModuleConfig, () => {
@@ -10712,6 +10774,32 @@ QUnit.module('Async render', baseModuleConfig, () => {
             'data-select', // command column is async
             'data-boolean' // showEditorAlways column is async
         ], 'asynchronous cellPrepared calls');
+    });
+
+    QUnit.test('Template in columns.buttons should render asynchronously if column renderAsync is true (T876950)', function(assert) {
+        let buttonTemplateCallCount = 0;
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 1 }],
+            loadingTimeout: undefined,
+            columns: [{
+                type: 'buttons',
+                width: 100,
+                renderAsync: true,
+                buttons: [{
+                    template: function() {
+                        buttonTemplateCallCount++;
+                        return $('<a>').text('Test');
+                    }
+                }]
+            }]
+        });
+
+        assert.equal(buttonTemplateCallCount, 0, 'template is not rendered');
+
+        this.clock.tick();
+
+        assert.equal(buttonTemplateCallCount, 1, 'template is rendered asynchronously');
+        assert.equal($(dataGrid.getCellElement(0, 0)).text(), 'Test', 'template is applied');
     });
 
     QUnit.test('showEditorAlways column should render synchronously if renderAsync is true and column renderAsync is false', function(assert) {
