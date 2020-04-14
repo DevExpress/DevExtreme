@@ -10357,6 +10357,81 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         assert.ok(visibleRows[visibleRows.length - 1].data.id - topVisibleRowData.id > 10, 'visible rows are in viewport');
     });
 
+    // T878343
+    QUnit.test('cellValue should work correctly with virtual scrolling and row rendering', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test is not actual for mobile devices');
+            return;
+        }
+
+        const dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: {
+                load: function(options) {
+                    const items = [];
+                    const deferred = $.Deferred();
+
+                    for(let i = options.skip; i < options.skip + options.take && i < 10000; i++) {
+                        items.push({ id: i + 1, field: `some${i}` });
+                    }
+
+                    setTimeout(() => {
+                        deferred.resolve({ data: items, totalCount: 10000 });
+                    }, 1000);
+
+                    return deferred;
+                }
+            },
+            height: 550,
+            remoteOperations: true,
+            showBorders: true,
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual'
+            },
+            columns: [{
+                cellTemplate: function(element, info) {
+                    $('<div>')
+                        .appendTo(element)
+                        .dxCheckBox({
+                            onValueChanged: function(e) {
+                                const actualRowIdx = dataGrid.getRowIndexByKey(info.key);
+                                dataGrid.cellValue(actualRowIdx, 'field', 'new value');
+                            }
+                        });
+                },
+                width: 75
+            }, 'field']
+        });
+
+        this.clock.tick(2000);
+
+        // act
+        const scrollable = dataGrid.getScrollable();
+        scrollable.scrollBy(448);
+
+        this.clock.tick(1000);
+
+        scrollable.scrollBy(448);
+
+        this.clock.tick(1000);
+
+        const $checkBox = $(dataGrid.getRowElement(4)).find('.dx-checkbox');
+        $checkBox.trigger('dxpointerdown');
+        this.clock.tick();
+        $checkBox.trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.equal(dataGrid.cellValue(4, 'field'), 'new value', 'cell\'s value was changed');
+        assert.equal($(dataGrid.getCellElement(4, 1)).text(), 'new value', 'cell\'s text was changed');
+        assert.equal(scrollable.scrollTop(), 896, 'scrollTop');
+
+        const visibleRows = dataGrid.getVisibleRows();
+        assert.equal(visibleRows[0].id, 21, 'first visible row');
+        assert.equal(visibleRows[19].id, 40, 'last visible row');
+    });
+
     // T830138
     QUnit.test('Freespace row should not have huge height if rowRenderingMode is virtual and pageSize is large', function(assert) {
     // arrange
