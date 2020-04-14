@@ -2389,9 +2389,14 @@ QUnit.module('Native scrolling', () => {
             data.push(i);
         }
 
-        $('#qunit-fixture').css('position', 'static');
+        const parentContainer = $('<div>')
+            .css('position', 'static')
+            .appendTo('#qunit-fixture');
+        const $lookup = $('<div>')
+            .attr('id', 'innerLookup')
+            .appendTo(parentContainer);
 
-        const $lookup = $('#lookupOptions').dxLookup({
+        $lookup.dxLookup({
             searchEnabled: true,
             dataSource: {
                 store: new ArrayStore(data),
@@ -2430,9 +2435,14 @@ QUnit.module('Native scrolling', () => {
         }
         data.push('a');
 
-        $('#qunit-fixture').css('position', 'static');
+        const parentContainer = $('<div>')
+            .css('position', 'static')
+            .appendTo('#qunit-fixture');
+        const $lookup = $('<div>')
+            .attr('id', 'innerLookup')
+            .appendTo(parentContainer);
 
-        const $lookup = $('#lookupOptions').dxLookup({
+        $lookup.dxLookup({
             searchEnabled: true,
             dataSource: {
                 store: new ArrayStore(data),

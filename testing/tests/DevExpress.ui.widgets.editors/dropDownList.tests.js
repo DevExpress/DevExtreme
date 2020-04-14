@@ -1146,15 +1146,17 @@ QUnit.module('popup', moduleConfig, () => {
             data.push(i);
         }
 
-        const $root = $('#qunit-fixture');
-        const cssLeftPosition = $root.css('left');
-        const cssTopPosition = $root.css('top');
+        const parentContainer = $('<div>')
+            .css({
+                left: 0,
+                top: 0
+            })
+            .appendTo('#qunit-fixture');
+        const $dropDownList = $('<div>')
+            .attr('id', 'innerDropDownList')
+            .appendTo(parentContainer);
 
-        $root
-            .css('left', 0)
-            .css('top', 0);
-
-        $('#dropDownList').dxDropDownList({
+        $dropDownList.dxDropDownList({
             searchEnabled: true,
             dataSource: {
                 store: new ArrayStore(data),
@@ -1178,10 +1180,6 @@ QUnit.module('popup', moduleConfig, () => {
         setTimeout(() => {
             assert.strictEqual(listInstance.scrollTop(), scrollTop, 'scrollTop is correctly after new page load');
             done();
-
-            $root
-                .css('left', cssLeftPosition)
-                .css('top', cssTopPosition);
         });
     });
 
