@@ -370,6 +370,14 @@ export interface dxFileManagerDetailsColumn {
      */
     caption?: string;
     /**
+     * @docid dxFileManagerDetailsColumn.cssClass
+     * @type string
+     * @default undefined
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    cssClass?: string;
+    /**
      * @docid dxFileManagerDetailsColumn.dataField
      * @type string
      * @default undefined
@@ -377,6 +385,14 @@ export interface dxFileManagerDetailsColumn {
      * @public
      */
     dataField?: string;
+    /**
+     * @docid dxFileManagerDetailsColumn.dataType
+     * @type Enums.GridColumnDataType
+     * @default undefined
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
     /**
      * @docid dxFileManagerDetailsColumn.hidingPriority
      * @type number
@@ -410,6 +426,14 @@ export interface dxFileManagerDetailsColumn {
      * @public
      */
     visible?: boolean;
+    /**
+     * @docid dxFileManagerDetailsColumn.visibleIndex
+     * @type number
+     * @default undefined
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    visibleIndex?: number;
     /**
      * @docid dxFileManagerDetailsColumn.width
      * @type number|string

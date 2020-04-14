@@ -3675,8 +3675,12 @@ declare module DevExpress.ui {
         alignment?: 'center' | 'left' | 'right' | undefined;
         /** @name dxFileManagerDetailsColumn.caption */
         caption?: string;
+        /** @name dxFileManagerDetailsColumn.cssClass */
+        cssClass?: string;
         /** @name dxFileManagerDetailsColumn.dataField */
         dataField?: string;
+        /** @name dxFileManagerDetailsColumn.dataType */
+        dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
         /** @name dxFileManagerDetailsColumn.hidingPriority */
         hidingPriority?: number;
         /** @name dxFileManagerDetailsColumn.sortIndex */
@@ -3685,6 +3689,8 @@ declare module DevExpress.ui {
         sortOrder?: 'asc' | 'desc' | undefined;
         /** @name dxFileManagerDetailsColumn.visible */
         visible?: boolean;
+        /** @name dxFileManagerDetailsColumn.visibleIndex */
+        visibleIndex?: number;
         /** @name dxFileManagerDetailsColumn.width */
         width?: number | string;
     }

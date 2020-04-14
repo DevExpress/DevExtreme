@@ -131,10 +131,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
         if(this._isDefaultColumn(columnOptions.dataField)) {
             const defaultConfig = extend(true, {}, DEFAULT_COLUMN_CONFIGS[columnOptions.dataField]);
-            resultCssClass = defaultConfig.cssClass;
-            if(columnOptions.cssClass) {
-                resultCssClass += ` ${columnOptions.cssClass}`;
-            }
+            resultCssClass = defaultConfig.cssClass || '';
             if(columnOptions.dataField === 'thumbnail') {
                 defaultConfig.cellTemplate = this._createThumbnailColumnCell.bind(this);
                 defaultConfig.calculateSortValue = `fileItem.${defaultConfig.calculateSortValue}`;
@@ -152,12 +149,18 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             'alignment',
             'caption',
             'dataField',
+            'dataType',
             'hidingPriority',
             'sortIndex',
             'sortOrder',
             'visible',
+            'visibleIndex',
             'width'
         ]);
+
+        if(columnOptions.cssClass) {
+            resultCssClass = resultCssClass ? `${resultCssClass} ${columnOptions.cssClass}` : columnOptions.cssClass;
+        }
 
         if(resultCssClass) {
             result.cssClass = resultCssClass;
