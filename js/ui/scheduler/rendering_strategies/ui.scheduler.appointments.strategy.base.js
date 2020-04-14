@@ -314,7 +314,7 @@ class BaseRenderingStrategy {
     _isItemsCross(item, currentItem, orientation) {
         const side_1 = Math.floor(item[orientation[0]]);
         const side_2 = Math.floor(item[orientation[1]]);
-        const isItemCross = Math.abs(item[orientation[2]] - currentItem[orientation[2]]) <= 1.01;
+        const isItemCross = Math.abs(item[orientation[2]] - currentItem[orientation[2]]) <= 1;
         return isItemCross && !!item.allDay === !!currentItem.allDay && (
             (side_1 <= currentItem[orientation[0]] && side_2 > currentItem[orientation[0]]) ||
                 (side_1 < currentItem[orientation[1]] && side_2 >= currentItem[orientation[1]] || (
