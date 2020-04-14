@@ -1967,6 +1967,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
     customizeColumns?: ((columns: Array<dxDataGridColumn>) => any);
     /**
      * @docid dxDataGridOptions.customizeExportData
+     * @deprecated
      * @type function(columns, rows)
      * @type_function_param1 columns:Array<dxDataGridColumn>
      * @type_function_param2 rows:Array<dxDataGridRowObject>
@@ -2555,6 +2556,7 @@ declare class dxDataGrid extends Widget implements GridBase {
     /**
      * @docid dxDataGridMethods.exportToExcel
      * @publicName exportToExcel(selectionOnly)
+     * @deprecated
      * @param1 selectionOnly:boolean
      * @prevFileNamespace DevExpress.ui
      * @public
