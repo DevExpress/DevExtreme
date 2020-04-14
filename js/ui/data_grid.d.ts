@@ -2193,6 +2193,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @deprecated
      */
     onExported?: ((e: { component?: dxDataGrid, element?: dxElement, model?: any }) => any);
     /**
@@ -2219,6 +2220,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @deprecated
      */
     onFileSaving?: ((e: { component?: dxDataGrid, element?: dxElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
     /**
