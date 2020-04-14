@@ -836,8 +836,9 @@ module.exports = {
 
                         that._applyChange(change);
 
+                        const rowIndexDelta = that.getRowIndexDelta();
                         each(that._items, function(index, item) {
-                            item.rowIndex = index;
+                            item.rowIndex = index - rowIndexDelta;
                             if(oldItems) {
                                 item.cells = oldItems[index].cells || [];
                             }
