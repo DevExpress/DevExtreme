@@ -10702,6 +10702,32 @@ QUnit.module('Async render', baseModuleConfig, () => {
         ], 'asynchronous cellPrepared calls');
     });
 
+    QUnit.test('Template in columns.buttons should render asynchronously if column renderAsync is true (T876950)', function(assert) {
+        let buttonTemplateCallCount = 0;
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 1 }],
+            loadingTimeout: undefined,
+            columns: [{
+                type: 'buttons',
+                width: 100,
+                renderAsync: true,
+                buttons: [{
+                    template: function() {
+                        buttonTemplateCallCount++;
+                        return $('<a>').text('Test');
+                    }
+                }]
+            }]
+        });
+
+        assert.equal(buttonTemplateCallCount, 0, 'template is not rendered');
+
+        this.clock.tick();
+
+        assert.equal(buttonTemplateCallCount, 1, 'template is rendered asynchronously');
+        assert.equal($(dataGrid.getCellElement(0, 0)).text(), 'Test', 'template is applied');
+    });
+
     QUnit.test('showEditorAlways column should render synchronously if renderAsync is true and column renderAsync is false', function(assert) {
         const cellPreparedCells = [];
 

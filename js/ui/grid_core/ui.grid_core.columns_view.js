@@ -395,6 +395,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 break;
             }
         }
+
+        if(!templates.length && this._delayedTemplates.length) {
+            this.renderDelayedTemplates();
+        }
     },
 
     _processTemplate: function(template) {
@@ -451,12 +455,11 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 templateDeferred.resolve();
             }
         };
-        let async;
 
         if(renderingTemplate) {
             options.component = that.component;
 
-            async = column && (
+            const async = column && (
                 (column.renderAsync && isDataRow) ||
                 that.option('renderAsync') &&
                     (column.renderAsync !== false && (column.command || column.showEditorAlways) && isDataRow || options.rowType === 'filter')
