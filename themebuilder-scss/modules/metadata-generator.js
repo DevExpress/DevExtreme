@@ -1,47 +1,90 @@
-/* global __dirname */
+
 const path = require('path');
-const fs = require('fs');
 
-const themes = require('./themes');
-const getBundleName = require('./bundle-resolver');
-
-const stylesDirectory = path.join(__dirname, '..', '..', 'scss');
-
-const capitalize = (key) => key.charAt(0).toUpperCase() + key.slice(1);
-
-const executor = (str, regex, handler) => {
-    let matches;
-    while((matches = regex.exec(str)) !== null) {
-        handler(matches);
+class MetadataGenerator {
+    constructor() {
+        this.metadata = {};
     }
-};
 
-const parseComments = (comments) => {
-    const metaItem = {};
+    capitalize(key) {
+        return key.charAt(0).toUpperCase() + key.slice(1);
+    }
 
-    executor(comments, /\$(type|name|typeValues)\s(.+)/g, (matches) => {
-        const key = capitalize(matches[1]);
-        metaItem[key] = matches[2].trim();
-    });
+    clean() {
+        this.metadata = {};
+    }
 
-    return metaItem;
-};
+    getMetadata() {
+        return this.metadata;
+    }
 
-const getMetaItems = (scss) => {
-    const metaItems = [];
+    executor(str, regex, handler) {
+        let matches;
+        while((matches = regex.exec(str)) !== null) {
+            handler(matches);
+        }
+    }
 
-    executor(scss, /\/\*\*[\n\r]([\s\S]*?)\*\/\s*[\n\r]*([-$a-z_0-9]+):/gim, (matches) => {
-        const metaItem = {
-            'Key': matches[2]
-        };
-        metaItems.push(Object.assign(metaItem, parseComments(matches[1])));
-    });
+    parseComments(comments) {
+        const metaItem = {};
 
-    // TODO remove dups
-    return metaItems;
-};
+        this.executor(comments, /\$(type|name|typeValues)\s(.+)/g, (matches) => {
+            const key = this.capitalize(matches[1]);
+            metaItem[key] = matches[2].trim();
+        });
 
-module.exports = {
-    getMetaItems,
-    parseComments
-};
+        return metaItem;
+    }
+
+    getMetaItems(scss) {
+        const metaItems = [];
+
+        this.executor(scss, /\/\*\*[\n\r]([\s\S]*?)\*\/\s*[\n\r]*([-$a-z_0-9]+):/gim, (matches) => {
+            const key = matches[2];
+
+            if(metaItems.some(item => item.Key === key)) return;
+
+            const metaItem = {
+                'Key': key
+            };
+
+            metaItems.push(Object.assign(metaItem, this.parseComments(matches[1])));
+        });
+
+        return metaItems;
+    }
+
+    normalizePath(cwd, filePath) {
+        return path.relative(path.join(cwd, 'scss'), filePath)
+            .replace(/\\/g, '/')
+            .replace(/\.scss/, '')
+            .replace('_', '')
+            .replace(/^/, 'tb/');
+    }
+
+    getMapFromMeta(metaItems) {
+        let result = '';
+        metaItems.forEach(item => {
+            result += `"${item.Key}": ${item.Key},\n`;
+        });
+        return `(\n${result})`;
+    }
+
+    collectMetadata(cwd, filePath, content) {
+        const path = this.normalizePath(cwd, filePath);
+        const metaItems = this.getMetaItems(content);
+
+        if(metaItems.length) {
+            this.metadata[path] = metaItems;
+
+            const imports = `@forward "${path}";\n@use "${path}" as *;\n`;
+            const collector = `@debug collector(${this.getMapFromMeta(metaItems)});\n`;
+
+            content = imports + content + collector;
+        }
+
+        return content;
+    }
+}
+
+module.exports = MetadataGenerator;

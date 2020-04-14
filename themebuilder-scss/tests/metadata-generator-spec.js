@@ -1,7 +1,6 @@
 const assert = require('chai').assert;
-const mock = require('mock-require');
-// const lessCompiler = require('less/lib/less-node');
-const generator = require('../modules/metadata-generator');
+const MetadataGenerator = require('../modules/metadata-generator');
+const generator = new MetadataGenerator();
 
 describe('Metadata generator - parseComments', () => {
     const commentSamples = [
@@ -82,14 +81,14 @@ describe('Metadata generator - getMetaItems (several item)', () => {
 * $name Slide out background
 * $type color
 */
-$slideout-background: #000;
+$slideout-background0: #000;
 
 /**
 * $name Slide out background
 * $type color
 */
 
-$slideout-background: #000;
+$slideout-background1: #000;
 
 $base-color: rgb(0,170,0);
 /**
@@ -97,26 +96,143 @@ $base-color: rgb(0,170,0);
 * $type color
 */
 
-$slideout-background:  $base-color;
+$slideout-background2:  $base-color;
 
 /**
 * $name Slide out background    
 * $type color    
 */
-$slideout-background: #000;`;
+$slideout-background3: #000;`;
 
     it('parse several items', () => {
         const result = generator.getMetaItems(sample);
 
         assert.equal(result.length, 4);
 
-        result.forEach((item) => {
+        result.forEach((item, index) => {
             assert.deepEqual(item, {
                 'Name': 'Slide out background',
                 'Type': 'color',
-                'Key': '$slideout-background'
+                'Key': `$slideout-background${index}`
             });
         });
+    });
+});
+
+describe('Metadata generator - getMetaItems (duplicates removed, only first description used)', () => {
+    const sample =
+`/**
+* $name Slide out background1
+* $type color
+*/
+$slideout-background: #000;
+
+/**
+* $name Slide out background2
+* $type color
+*/
+
+$slideout-background: #000;
+
+$base-color: rgb(0,170,0);
+`;
+
+    it('parse items with duplicates', () => {
+        const result = generator.getMetaItems(sample);
+
+        assert.equal(result.length, 1);
+
+        assert.deepEqual(result[0], {
+            'Name': 'Slide out background1',
+            'Type': 'color',
+            'Key': '$slideout-background'
+        });
+    });
+});
+
+describe('Metadata generator - normalizePath', () => {
+    const matrix = [
+        { cwd: '/', path: '/scss/widgets/generic/toolbar/_colors.scss', expected: 'tb/widgets/generic/toolbar/colors' },
+        { cwd: '/', path: '/scss/widgets/generic/navBar/_colors.scss', expected: 'tb/widgets/generic/navBar/colors' },
+        { cwd: '/repo', path: '/repo/scss/widgets/generic/toolbar/_sizes.scss', expected: 'tb/widgets/generic/toolbar/sizes' },
+        { cwd: '/repo/', path: '/repo/scss/widgets/generic/toolbar/_sizes.scss', expected: 'tb/widgets/generic/toolbar/sizes' },
+        { cwd: '/repo/../', path: '/scss/widgets/generic/toolbar/_sizes.scss', expected: 'tb/widgets/generic/toolbar/sizes' },
+        { cwd: '/repo/../', path: '/repo/../scss/widgets/generic/toolbar/_sizes.scss', expected: 'tb/widgets/generic/toolbar/sizes' },
+        { cwd: 'd:\\repo', path: 'd:\\repo\\scss\\widgets\\generic\\toolbar\\_colors.scss', expected: 'tb/widgets/generic/toolbar/colors' },
+        { cwd: 'd:\\repo\\', path: 'd:\\repo\\scss\\widgets\\generic\\toolbar\\_colors.scss', expected: 'tb/widgets/generic/toolbar/colors' },
+    ];
+    it('normalizePath works as expected', () => {
+        matrix.forEach((item) => {
+            assert.equal(generator.normalizePath(item.cwd, item.path), item.expected);
+        });
+    });
+});
+
+describe('Metadata generator - getMapFromMeta', () => {
+    const testMetadata = [
+        { 'Key': '$menu-color' },
+        { 'Key': '$menu-item-selected-bg' }
+    ];
+    it('getMapFromMeta works as expected', () => {
+        assert.equal(generator.getMapFromMeta(testMetadata),
+            '(\n"$menu-color": $menu-color,\n"$menu-item-selected-bg": $menu-item-selected-bg,\n)');
+    });
+});
+
+describe('Metadata generator - collectMetadata', () => {
+    it('collectMetadata for file without comments return the same content and add nothing to metadata', () => {
+        const cwd = '/';
+        const path = '/scss/widgets/generic/toolbar/_colors.scss';
+        const content = '@use "colors";';
+
+        const result = generator.collectMetadata(cwd, path, content);
+        assert.equal(content, result);
+        assert.deepEqual(generator.getMetadata(), {});
+    });
+
+    it('collectMetadata for file with comments modify file content and add data to metadata', () => {
+        const cwd = '/';
+        const path = '/scss/widgets/generic/toolbar/_colors.scss';
+        const content = `
+@use "colors";
+/**
+* $name Slide out background
+* $type color
+*/
+$slideout-background: #000;
+`;
+
+        const expected =
+`@forward "tb/widgets/generic/toolbar/colors";
+@use "tb/widgets/generic/toolbar/colors" as *;
+
+@use "colors";
+/**
+* $name Slide out background
+* $type color
+*/
+$slideout-background: #000;
+@debug collector((
+"$slideout-background": $slideout-background,
+));
+`;
+
+        const result = generator.collectMetadata(cwd, path, content);
+        assert.equal(expected, result);
+        assert.deepEqual(generator.getMetadata(), {
+            'tb/widgets/generic/toolbar/colors': [{
+                'Name': 'Slide out background',
+                'Type': 'color',
+                'Key': '$slideout-background'
+            }]
+        });
+    });
+
+    it('clean method clean metadata', () => {
+        // metadata is not empty because of the previous test
+        assert.notDeepEqual(generator.getMetadata(), {});
+        generator.clean();
+        assert.deepEqual(generator.getMetadata(), {});
     });
 });
 
