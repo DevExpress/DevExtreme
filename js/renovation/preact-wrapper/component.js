@@ -19,7 +19,8 @@ export default class PreactWrapper extends DOMComponent {
 
     _initMarkup() {
         const isFirstRender = this.$element().children().length === 0;
-        const container = isFirstRender ? this.$element().get(0) : undefined;
+        const hasParent = this.$element().parent().length > 0;
+        const container = isFirstRender && hasParent ? this.$element().get(0) : undefined;
 
         Preact.render(this.renderView(this.getProps(isFirstRender)), this.$element().get(0), container);
     }
