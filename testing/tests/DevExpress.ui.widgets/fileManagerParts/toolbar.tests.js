@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import 'ui/file_manager';
 import fx from 'animation/fx';
+import renderer from 'core/renderer';
 import { Consts, FileManagerWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
 
 const { test } = QUnit;
@@ -695,6 +696,48 @@ QUnit.module('Toolbar', moduleConfig, () => {
 
         const $separators = this.wrapper.getToolbarSeparators();
         assert.equal($separators.length, 1, 'toolbar has one separator');
+    });
+
+    test('toolbar separators calculation must be correct: compact mode issue', function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            toolbar: {
+                fileSelectionItems: [
+                    'download', 'move', 'copy', 'rename', 'separator', 'delete', 'refresh', 'clear',
+                    {
+                        widget: 'dxButton',
+                        options: {
+                            text: 'some button with very-very long text to make it easier to hide some items in toolbar menu'
+                        }
+                    },
+                    {
+                        widget: 'dxButton',
+                        options: {
+                            text: 'some item 2 with text'
+                        }
+                    }
+                ]
+            }
+        });
+        this.clock.tick(400);
+
+        const originalWidth = renderer.fn.width;
+        renderer.fn.width = () => 700;
+        $('#fileManager').css('width', '100%');
+        fileManager.repaint();
+        this.clock.tick(800);
+
+        const $item = this.wrapper.findDetailsItem('File 1.txt');
+        $item.trigger('dxclick');
+        this.clock.tick(400);
+
+        const $separators = this.wrapper.getToolbarSeparators();
+        assert.equal($separators.length, 0, 'file toolbar has no separators');
+
+        renderer.fn.width = originalWidth;
     });
 
 });

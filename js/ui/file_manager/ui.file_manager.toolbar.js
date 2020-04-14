@@ -171,42 +171,78 @@ class FileManagerToolbar extends Widget {
     }
 
     _updateSeparatorsVisibility(items, toolbar) {
-        const hasItems = {
+        if(toolbar) {
+            toolbar.beginUpdate();
+        }
+        let menuItemNames = this._getMenuItemNames(toolbar);
+        const hasItemsBefore = {
             before: false,
             center: false,
             after: false
         };
         const itemGroups = {
-            before: items.filter(item => this._getItemLocation(item) === 'before'),
-            center: items.filter(item => this._getItemLocation(item) === 'center'),
-            after: items.filter(item => this._getItemLocation(item) === 'after')
+            before: this._getItemsInGroup(items, menuItemNames, 'before'),
+            center: this._getItemsInGroup(items, menuItemNames, 'center'),
+            after: this._getItemsInGroup(items, menuItemNames, 'after')
         };
+        let lookupIndex = 0;
+        menuItemNames = this._getMenuItemNames(toolbar);
         for(let i = 0; i < items.length; i++) {
             const itemLocation = this._getItemLocation(items[i]);
             if(items[i].name === 'separator') {
-                const isSeparatorVisible = hasItems[itemLocation] && this._groupHasItems(itemGroups[itemLocation]);
+                const isSeparatorVisible = hasItemsBefore[itemLocation] && this._groupHasItemsAfter(itemGroups[itemLocation]);
                 if(toolbar) {
                     const optionName = `items[${i}].visible`;
                     toolbar.option(optionName, isSeparatorVisible);
-                } else {
-                    items[i].visible = isSeparatorVisible;
                 }
-                hasItems[itemLocation] = false;
+                items[i].visible = isSeparatorVisible;
+                hasItemsBefore[itemLocation] = false;
             } else {
-                hasItems[itemLocation] = hasItems[itemLocation] || items[i].visible;
+                if(!this._isItemInMenu(menuItemNames, lookupIndex, items[i].name)) {
+                    hasItemsBefore[itemLocation] = hasItemsBefore[itemLocation] || items[i].visible;
+                    itemGroups[itemLocation].shift();
+                } else {
+                    lookupIndex++;
+                }
             }
-            itemGroups[itemLocation].shift();
+        }
+
+        if(toolbar) {
+            toolbar.endUpdate();
         }
         return items;
     }
 
-    _groupHasItems(items) {
-        let i = 1;
-        while(items[i]) {
+    _getMenuItemNames(toolbar) {
+        const result = toolbar ? toolbar._getMenuItems().slice(0) : [];
+        return result.map(menuItem => menuItem.name);
+    }
+
+    _isItemInMenu(menuItemNames, lookupIndex, itemName) {
+        return menuItemNames.indexOf(itemName, lookupIndex) !== -1;
+    }
+
+    _getItemsInGroup(items, menuItemNames, groupName) {
+        return items.filter(item => {
+            if(this._getItemLocation(item) !== groupName) {
+                return false;
+            }
+            let result = true;
+            if(ensureDefined(item.locateInMenu, 'never') !== 'never' && menuItemNames.length) {
+                if(item.name === menuItemNames[0]) {
+                    result = false;
+                    menuItemNames.shift();
+                }
+            }
+            return result;
+        });
+    }
+
+    _groupHasItemsAfter(items) {
+        for(let i = 0; i < items.length; i++) {
             if(items[i].name !== 'separator' && items[i].visible) {
                 return true;
             }
-            i++;
         }
         return false;
     }
@@ -359,6 +395,8 @@ class FileManagerToolbar extends Widget {
         });
 
         toolbar.endUpdate();
+
+        this._updateSeparatorsVisibility(items, toolbar);
     }
 
     _getCompactModeOptions({ showText, locateInMenu }, available) {
@@ -384,9 +422,9 @@ class FileManagerToolbar extends Widget {
                 }
             }
         });
+        toolbar.endUpdate();
 
         this._updateSeparatorsVisibility(toolbar.option('items'), toolbar);
-        toolbar.endUpdate();
     }
 
     _fileToolbarHasEffectiveItems(fileItems) {
