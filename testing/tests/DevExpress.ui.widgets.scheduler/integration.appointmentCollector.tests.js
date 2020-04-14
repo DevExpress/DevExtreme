@@ -879,6 +879,8 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = true', {
     QUnit.test('Ordinary appointment count depends on scheduler width on week view', function(assert) {
         this.createInstance();
 
+        this.instance.option('width', 600);
+
         this.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) }]);
         this.instance.option('currentView', 'week');
 
@@ -899,12 +901,14 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = true', {
     QUnit.test('Ordinary appointments should have correct sizes on week view', function(assert) {
         this.createInstance();
 
+        this.instance.option('width', 700);
+
         this.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) }]);
         this.instance.option('currentView', 'week');
 
         const $appointment = this.scheduler.appointments.getAppointment(0);
 
-        assert.roughEqual($appointment.outerWidth(), 70, 1.001, 'Width is OK');
+        assert.roughEqual($appointment.outerWidth(), 50, 1.001, 'Width is OK');
         assert.roughEqual($appointment.outerHeight(), 50, 1.001, 'Height is OK');
 
         this.instance.option('width', 1000);
@@ -921,6 +925,8 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = true', {
 
     QUnit.test('Adaptive collector should have correct coordinates on week view', function(assert) {
         this.createInstance();
+
+        this.instance.option('width', 700);
 
         this.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) }]);
         this.instance.option('currentView', 'week');
@@ -954,6 +960,8 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = true', {
 
     QUnit.test('Adaptive collector should have correct sizes on week view', function(assert) {
         this.createInstance();
+
+        this.instance.option('width', 700);
 
         this.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) }]);
         this.instance.option('currentView', 'week');

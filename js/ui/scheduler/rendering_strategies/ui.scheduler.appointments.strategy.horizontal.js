@@ -1,11 +1,9 @@
 import BaseAppointmentsStrategy from './ui.scheduler.appointments.strategy.base';
 import dateUtils from '../../../core/utils/date';
 
-const MAX_APPOINTMENT_HEIGHT = 100;
 const DEFAULT_APPOINTMENT_HEIGHT = 60;
 const MIN_APPOINTMENT_HEIGHT = 35;
 const DROP_DOWN_BUTTON_OFFSET = 2;
-const BOTTOM_CELL_GAP = 20;
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -42,29 +40,9 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _customizeAppointmentGeometry(coordinates) {
-        const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
+        const config = this._calculateGeometryConfig(coordinates);
 
-        if(overlappingMode) {
-            const config = this._calculateGeometryConfig(coordinates);
-
-            return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset);
-        } else {
-            const cellHeight = (this.getDefaultCellHeight() || this.getAppointmentMinSize()) - BOTTOM_CELL_GAP;
-            let height = cellHeight / coordinates.count;
-
-            if(height > MAX_APPOINTMENT_HEIGHT) {
-                height = MAX_APPOINTMENT_HEIGHT;
-            }
-
-            const top = coordinates.top + coordinates.index * height;
-
-            return {
-                height: height,
-                width: coordinates.width,
-                top: top,
-                left: coordinates.left
-            };
-        }
+        return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset);
     }
 
     _getOffsets() {
@@ -72,16 +50,6 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
             unlimited: 0,
             auto: 0
         };
-    }
-
-    _checkLongCompactAppointment(item, result) {
-        const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
-
-        if(overlappingMode) {
-            this._splitLongCompactAppointment(item, result);
-
-            return result;
-        }
     }
 
     _getCompactLeftCoordinate(itemLeft, index) {

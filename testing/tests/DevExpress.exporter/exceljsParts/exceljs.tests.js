@@ -1744,6 +1744,8 @@ const moduleConfig = {
         QUnit.test('Data - columns.dataType: date', function(assert) {
             const done = assert.async();
             const date = new Date(2019, 3, 12);
+            const expectedExcelDateValue = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+
             const ds = [{ f1: undefined, f2: null, f3: date, f4: date }];
             const dataGrid = $('#dataGrid').dxDataGrid({
                 columns: [
@@ -1760,8 +1762,8 @@ const moduleConfig = {
             const expectedCells = [[
                 { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', numberFormat: '[$-9]M\\/d\\/yyyy', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f1, rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
                 { excelCell: { value: ds[0].f2, type: ExcelJS.ValueType.Null, dataType: 'object' }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
-                { excelCell: { value: ds[0].f3, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]M\\/d\\/yyyy', alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
-                { excelCell: { value: ds[0].f4, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]M\\/d\\/yyyy', alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } }
+                { excelCell: { value: expectedExcelDateValue, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]M\\/d\\/yyyy', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f3, rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
+                { excelCell: { value: expectedExcelDateValue, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]M\\/d\\/yyyy', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f4, rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
@@ -1783,6 +1785,8 @@ const moduleConfig = {
         QUnit.test('Data - columns.dataType: date, col_1.format: () => {}, col_2.format: { type: date, formatter: () => {}}', function(assert) {
             const done = assert.async();
             const date = new Date(2019, 3, 12);
+            const expectedExcelDateValue = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+
             const ds = [{ f1: date }];
             const dataGrid = $('#dataGrid').dxDataGrid({
                 columns: [
@@ -1802,8 +1806,8 @@ const moduleConfig = {
             }).dxDataGrid('instance');
 
             const expectedCells = [[
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]d-M-yyyy', alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]d+M+yyyy', alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } }
+                { excelCell: { value: expectedExcelDateValue, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]d-M-yyyy', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f1, rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
+                { excelCell: { value: expectedExcelDateValue, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]d+M+yyyy', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f1, rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
@@ -1843,13 +1847,13 @@ const moduleConfig = {
             { format: 'dayOfWeek', expectedFormat: '[$-9]dddd' },
             { format: 'yyyy-MM-dd', expectedFormat: '[$-9]yyyy-MM-dd' }
         ].forEach((format)=> {
-            const dateTimeValue = new Date(2019, 9, 9, 9, 9, 9, 9);
-            const dateValue = new Date(2019, 9, 9);
+            const dateValue = new Date(2019, 9, 9, 9, 9, 9, 9);
+
             [
-                { value: dateTimeValue },
-                { value: dateValue },
-                { value: '2019/10/9', expected: dateValue },
-                { value: dateTimeValue.getTime(), expected: dateTimeValue }
+                { value: dateValue, expectedGridCellValue: dateValue, expectedExcelCellValue: new Date(Date.UTC(2019, 9, 9, 9, 9, 9, 9)) },
+                { value: '2002-04-01T00:00:00', expectedGridCellValue: new Date(2002, 3, 1), expectedExcelCellValue: new Date(Date.UTC(2002, 3, 1)) },
+                { value: '2019/10/9', expectedGridCellValue: new Date(2019, 9, 9), expectedExcelCellValue: new Date(Date.UTC(2019, 9, 9)) },
+                { value: dateValue.getTime(), expectedGridCellValue: dateValue, expectedExcelCellValue: new Date(Date.UTC(2019, 9, 9, 9, 9, 9, 9)) }
             ].forEach((date) => {
                 QUnit.test(`Data - columns.dataType: date, columns.format: ${format.format}, cell.value: ${JSON.stringify(date.value)} ${testCaption}`, function(assert) {
                     const done = assert.async();
@@ -1863,7 +1867,7 @@ const moduleConfig = {
                     }).dxDataGrid('instance');
 
                     const expectedCells = [[
-                        { excelCell: { value: date.expected || date.value, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: format.expectedFormat, alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
+                        { excelCell: { value: date.expectedExcelCellValue, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: format.expectedFormat, alignment: alignLeftTopNoWrap }, gridCell: { value: date.expectedGridCellValue, rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
                     ]];
 
                     helper._extendExpectedCells(expectedCells, topLeft);
@@ -1887,6 +1891,8 @@ const moduleConfig = {
         QUnit.test('Data - columns.dataType: datetime', function(assert) {
             const done = assert.async();
             const dateTime = new Date(2019, 3, 12, 12, 15);
+            const expectedExcelDateValue = new Date(Date.UTC(2019, 3, 12, 12, 15));
+
             const ds = [{ f1: undefined, f2: null, f3: dateTime, f4: dateTime }];
             const dataGrid = $('#dataGrid').dxDataGrid({
                 columns: [
@@ -1903,8 +1909,8 @@ const moduleConfig = {
             const expectedCells = [[
                 { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', numberFormat: '[$-9]M\\/d\\/yyyy, H:mm AM/PM', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f1, rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
                 { excelCell: { value: ds[0].f2, type: ExcelJS.ValueType.Null, dataType: 'object' }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
-                { excelCell: { value: ds[0].f3, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]M\\/d\\/yyyy, H:mm AM/PM', alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
-                { excelCell: { value: ds[0].f4, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]M\\/d\\/yyyy, H:mm AM/PM', alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } }
+                { excelCell: { value: expectedExcelDateValue, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]M\\/d\\/yyyy, H:mm AM/PM', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f3, rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
+                { excelCell: { value: expectedExcelDateValue, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]M\\/d\\/yyyy, H:mm AM/PM', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f4, rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
@@ -2376,7 +2382,14 @@ const moduleConfig = {
 
         QUnit.test('Data - columns.dataType: [string, number, date, boolean, lookup, datetime]', function(assert) {
             const done = assert.async();
-            const ds = [{ f1: 'str1', f2: 1, f3: new Date(2019, 3, 12), f4: true, f5: 1, f6: new Date(2019, 3, 12, 16, 10) }];
+
+            const date = new Date(2019, 3, 12);
+            const dateTime = new Date(2019, 3, 12, 16, 10);
+            const expectedExcelDateValue = new Date(Date.UTC(2019, 3, 12));
+            const expectedExcelDateTimeValue = new Date(Date.UTC(2019, 3, 12, 16, 10));
+
+
+            const ds = [{ f1: 'str1', f2: 1, f3: date, f4: true, f5: 1, f6: dateTime }];
             const dataGrid = $('#dataGrid').dxDataGrid({
                 columns: [
                     { dataField: 'f1', dataType: 'string' },
@@ -2407,10 +2420,10 @@ const moduleConfig = {
             const expectedCells = [[
                 { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
                 { excelCell: { value: ds[0].f2, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
-                { excelCell: { value: ds[0].f3, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]M\\/d\\/yyyy', alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
+                { excelCell: { value: expectedExcelDateValue, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]M\\/d\\/yyyy', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f3, rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
                 { excelCell: { value: ds[0].f4, type: ExcelJS.ValueType.Boolean, dataType: 'boolean', alignment: alignCenterTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
                 { excelCell: { value: 'name1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f5, rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } },
-                { excelCell: { value: ds[0].f6, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]M\\/d\\/yyyy, H:mm AM/PM', alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(5) } }
+                { excelCell: { value: expectedExcelDateTimeValue, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]M\\/d\\/yyyy, H:mm AM/PM', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f6, rowType: 'data', data: ds[0], column: dataGrid.columnOption(5) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);

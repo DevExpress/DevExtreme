@@ -1,10 +1,11 @@
 import $ from '../../../core/renderer';
 import eventsEngine from '../../../events/core/events_engine';
 import { name as ClickEvent } from '../../../events/click';
-import { addNamespace } from '../../../events/utils';
+import { addNamespace, normalizeKeyName } from '../../../events/utils';
 import { move } from '../../../animation/translator';
 import devices from '../../../core/devices';
 import Resizable from '../../resizable';
+import Quill from 'quill';
 
 const DX_RESIZE_FRAME_CLASS = 'dx-resize-frame';
 const DX_TOUCH_DEVICE_CLASS = 'dx-touch-device';
@@ -68,7 +69,15 @@ export default class ResizingModule {
 
     showFrame() {
         this._$resizeFrame.show();
-        eventsEngine.on(this.quill.root, KEYDOWN_EVENT, this.hideFrame.bind(this));
+        eventsEngine.on(this.quill.root, KEYDOWN_EVENT, this._handleFrameKeyDown.bind(this));
+    }
+
+    _handleFrameKeyDown(e) {
+        const keyName = normalizeKeyName(e);
+        if(keyName === 'del' || keyName === 'backspace') {
+            this._deleteImage();
+        }
+        this.hideFrame();
     }
 
     hideFrame() {
@@ -125,6 +134,12 @@ export default class ResizingModule {
                 this.updateFramePosition();
             }
         });
+    }
+
+    _deleteImage() {
+        if(this._isAllowedTarget(this._$target)) {
+            Quill.find(this._$target).deleteAt(0);
+        }
     }
 
     option(option, value) {

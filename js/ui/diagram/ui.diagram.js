@@ -767,6 +767,9 @@ class Diagram extends Widget {
         let startLineEndingSetter;
         let endLineEndingGetter;
         let endLineEndingSetter;
+        let containerKeyGetter;
+        let containerKeySetter;
+
         const data = {
             nodeDataSource: this._nodesOption && this._nodesOption.getItems(),
             edgeDataSource: this._edgesOption && this._edgesOption.getItems(),
@@ -805,10 +808,10 @@ class Diagram extends Widget {
                 getItems: this._createOptionGetter('nodes.itemsExpr'),
                 setItems: this._createOptionSetter('nodes.itemsExpr'),
 
-                getContainerKey: this._createOptionGetter('nodes.containerKeyExpr'),
-                setContainerKey: this._createOptionSetter('nodes.containerKeyExpr'),
-                getChildren: this._createOptionGetter('nodes.childrenExpr'),
-                setChildren: this._createOptionSetter('nodes.childrenExpr')
+                getContainerKey: (containerKeyGetter = this._createOptionGetter('nodes.containerKeyExpr')),
+                setContainerKey: (containerKeySetter = this._createOptionSetter('nodes.containerKeyExpr')),
+                getChildren: !containerKeyGetter && !containerKeySetter && this._createOptionGetter('nodes.containerChildrenExpr'),
+                setChildren: !containerKeyGetter && !containerKeySetter && this._createOptionSetter('nodes.containerChildrenExpr')
             },
             edgeDataImporter: {
                 getKey: this._createOptionGetter('edges.keyExpr'),
@@ -862,6 +865,10 @@ class Diagram extends Widget {
                     switch(lineType) {
                         case 'arrow':
                             return ConnectorLineEnding.Arrow;
+                        case 'outlinedTriangle':
+                            return ConnectorLineEnding.OutlinedTriangle;
+                        case 'filledTriangle':
+                            return ConnectorLineEnding.FilledTriangle;
                         default:
                             return ConnectorLineEnding.None;
                     }
@@ -870,6 +877,12 @@ class Diagram extends Widget {
                     switch(value) {
                         case ConnectorLineEnding.Arrow:
                             value = 'arrow';
+                            break;
+                        case ConnectorLineEnding.OutlinedTriangle:
+                            value = 'outlinedTriangle';
+                            break;
+                        case ConnectorLineEnding.FilledTriangle:
+                            value = 'filledTriangle';
                             break;
                         case ConnectorLineEnding.None:
                             value = 'none';
@@ -882,6 +895,10 @@ class Diagram extends Widget {
                     switch(lineType) {
                         case 'none':
                             return ConnectorLineEnding.None;
+                        case 'outlinedTriangle':
+                            return ConnectorLineEnding.OutlinedTriangle;
+                        case 'filledTriangle':
+                            return ConnectorLineEnding.FilledTriangle;
                         default:
                             return ConnectorLineEnding.Arrow;
                     }
@@ -890,6 +907,12 @@ class Diagram extends Widget {
                     switch(value) {
                         case ConnectorLineEnding.Arrow:
                             value = 'arrow';
+                            break;
+                        case ConnectorLineEnding.OutlinedTriangle:
+                            value = 'outlinedTriangle';
+                            break;
+                        case ConnectorLineEnding.FilledTriangle:
+                            value = 'filledTriangle';
                             break;
                         case ConnectorLineEnding.None:
                             value = 'none';
@@ -968,11 +991,7 @@ class Diagram extends Widget {
     }
     _updateCustomShapes(customShapes, prevCustomShapes) {
         if(Array.isArray(prevCustomShapes)) {
-            this._diagramInstance.removeCustomShapes(prevCustomShapes.map(
-                function(s) {
-                    return s.type;
-                }
-            ));
+            this._diagramInstance.removeCustomShapes(prevCustomShapes.map(s => s.type));
         }
 
         if(Array.isArray(customShapes)) {
@@ -1520,12 +1539,12 @@ class Diagram extends Widget {
                 */
                 containerKeyExpr: undefined,
                 /**
-                * @name dxDiagramOptions.nodes.childrenExpr
+                * @name dxDiagramOptions.nodes.containerChildrenExpr
                 * @type string|function(data)
                 * @type_function_param1 data:object
                 * @default "children"
                 */
-                childrenExpr: 'children',
+                containerChildrenExpr: 'children',
                 /**
                  * @name dxDiagramOptions.nodes.autoLayout
                  * @type Enums.DiagramDataLayoutType|Object

@@ -350,13 +350,56 @@ QUnit.module('Loading root data', moduleConfig, () => {
                 assert.deepEqual(data[headerName][0].value, new Date('1996/07/04'));
             });
         });
+
+        QUnit.test(`Do not parse string data if next field dataType is number for ${headerName} (T853201)`, function(assert) {
+            this.store = new RemoteStore({
+                load: function() {
+                    return $.Deferred().resolve([{
+                        'key': 'Expenses',
+                        'items': [{
+                            'key': 'FY 2018 Actual',
+                            'items': [{ 'key': 1, 'items': null, 'count': 1 }],
+                            'count': null,
+                        }, {
+                            'key': 'FY 2018 Budget',
+                            'items': [{ 'key': 1, 'items': null, 'count': 1 }],
+                            'count': null,
+                        }],
+                        'count': null
+                    }]);
+                }
+            });
+
+            this.load({
+                columns: [],
+                rows: [],
+                values: [],
+                [headerName]: [{
+                    dataField: 'AccountType',
+                    dataType: 'string',
+                    expanded: true
+                }, {
+                    dataField: 'DataSet',
+                    dataType: 'string',
+                    expanded: true
+                }, {
+                    dataField: 'Period',
+                    dataType: 'number',
+                }]
+            }).done(function(data) {
+                const headerItems = data[headerName];
+                assert.strictEqual(headerItems[0].value, 'Expenses');
+                assert.strictEqual(headerItems[0].children[0].value, 'FY 2018 Actual');
+                assert.strictEqual(headerItems[0].children[0].children[0].value, 1);
+                assert.strictEqual(headerItems[0].children[1].value, 'FY 2018 Budget');
+                assert.strictEqual(headerItems[0].children[1].children[0].value, 1);
+            });
+        });
     });
 
     QUnit.test('Key method should return key field name', function(assert) {
         assert.strictEqual(this.store.key(), 'OrderID');
     });
-
-
 });
 
 QUnit.module('Summary calculation', moduleConfig, () => {

@@ -244,7 +244,6 @@ QUnit.test('Scheduler should update scroll position if appointment is not visibl
 QUnit.test('Appointments should have a right order on timeline month(lots of appts)', function(assert) {
     const scheduler = createInstance({
         currentDate: new Date(2016, 1, 2),
-        maxAppointmentsPerCell: null,
         dataSource: new DataSource([
             {
                 'text': 'Google AdWords Strategy',
@@ -294,7 +293,8 @@ QUnit.test('Appointments should have a right order on timeline month(lots of app
         ]),
         views: ['timelineMonth'],
         currentView: 'timelineMonth',
-        height: 800,
+        maxAppointmentsPerCell: 'unlimited',
+        height: 505,
         startDayHour: 8,
         endDayHour: 20,
         cellDuration: 60,

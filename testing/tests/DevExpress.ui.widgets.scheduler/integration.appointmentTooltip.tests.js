@@ -502,7 +502,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             store: getSampleData()
         });
 
-        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'month', maxAppointmentsPerCell: null });
+        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'month' });
 
         scheduler.appointments.click(1);
 

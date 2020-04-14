@@ -741,6 +741,32 @@ QUnit.module('actions', () => {
         pointer.dragStart();
     });
 
+    QUnit.test('onResizeStart - subscription by "on" method', function(assert) {
+        assert.expect(3);
+
+        const resizeStartHandler = function(e) {
+            assert.ok(true, 'onResizeStart action fired');
+
+            assert.equal(e.width, $resizable.outerWidth(), 'width passed as event argument');
+            assert.equal(e.height, $resizable.outerHeight(), 'height passed as event argument');
+        };
+
+        const resize = () => {
+            const $handle = $resizable.find('.' + RESIZABLE_HANDLE_CORNER_CLASS + '-bottom-right');
+            const pointer = pointerMock($handle).start();
+            pointer.dragStart();
+        };
+
+        const $resizable = $('#resizable').dxResizable();
+        const instance = $resizable.dxResizable('instance');
+
+        instance.on('resizeStart', resizeStartHandler);
+        resize();
+
+        instance.off('resizeStart', resizeStartHandler);
+        resize();
+    });
+
     QUnit.test('onResize action should be fired during resize', function(assert) {
         assert.expect(3);
 
@@ -756,6 +782,32 @@ QUnit.module('actions', () => {
         const pointer = pointerMock($handle).start();
 
         pointer.dragStart().drag(10, 0);
+    });
+
+    QUnit.test('onResize action - subscription by "on" method', function(assert) {
+        assert.expect(3);
+
+        const resizeHandler = function(e) {
+            assert.ok(true, 'onResize action fired');
+
+            assert.equal(e.width, $resizable.outerWidth(), 'width passed as event argument');
+            assert.equal(e.height, $resizable.outerHeight(), 'height passed as event argument');
+        };
+
+        const resize = () => {
+            const $handle = $resizable.find('.' + RESIZABLE_HANDLE_CORNER_CLASS + '-bottom-right');
+            const pointer = pointerMock($handle).start();
+            pointer.dragStart().drag(10, 0);
+        };
+
+        const $resizable = $('#resizable').dxResizable();
+        const instance = $resizable.dxResizable('instance');
+
+        instance.on('resize', resizeHandler);
+        resize();
+
+        instance.off('resize', resizeHandler);
+        resize();
     });
 
     QUnit.test('dxresize event should be fired during resize', function(assert) {
@@ -812,6 +864,30 @@ QUnit.module('actions', () => {
         const pointer = pointerMock($handle).start();
 
         pointer.dragStart().drag(10, 0).dragEnd();
+    });
+
+    QUnit.test('onResizeEnd action - subscription by "on" method', function(assert) {
+        const resizeEndHandler = function(e) {
+            assert.ok(true, 'onResizeEnd action fired');
+
+            assert.equal(e.width, $resizable.outerWidth(), 'width passed as event argument');
+            assert.equal(e.height, $resizable.outerHeight(), 'height passed as event argument');
+        };
+
+        const resize = () => {
+            const $handle = $resizable.find('.' + RESIZABLE_HANDLE_CORNER_CLASS + '-bottom-right');
+            const pointer = pointerMock($handle).start();
+            pointer.dragStart().drag(10, 0).dragEnd();
+        };
+
+        const $resizable = $('#resizable').dxResizable();
+        const instance = $resizable.dxResizable('instance');
+
+        instance.on('resizeEnd', resizeEndHandler);
+        resize();
+
+        instance.off('resizeEnd', resizeEndHandler);
+        resize();
     });
 });
 

@@ -176,15 +176,11 @@ ScrollBar.prototype = {
     },
 
     // Axis like functions
-    draw: noop,
-
     shift: noop,
 
     hideTitle: noop,
 
     hideOuterElements: noop,
-
-    prepareAnimation: noop,
     // Axis like functions
 
     setPosition: function(min, max) {

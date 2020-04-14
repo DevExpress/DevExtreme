@@ -208,9 +208,11 @@ class DrawerStrategy {
     }
 
     updateZIndex() {
-        if(!isDefined(this._shaderZIndex)) {
-            this._shaderZIndex = zIndexPool.base() + 500;
-            this._drawer._$shader.css('zIndex', this._shaderZIndex);
+        if(this._drawer.option('shading')) {
+            if(!isDefined(this._shaderZIndex)) {
+                this._shaderZIndex = zIndexPool.base() + 500;
+                this._drawer._$shader.css('zIndex', this._shaderZIndex);
+            }
         }
     }
 

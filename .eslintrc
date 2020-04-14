@@ -52,7 +52,7 @@
         "no-new-func": "error",
         "no-eval": "error",
         "no-undef-init": "error",
-        "no-unused-vars": ["error", { "args": "none" }],
+        "no-unused-vars": ["error", { "args": "none", "ignoreRestSiblings": true }],
         "no-extend-native": "error",
         "no-alert": "error",
         "no-console": "error",
