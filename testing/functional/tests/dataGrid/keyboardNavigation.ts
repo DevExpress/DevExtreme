@@ -6,8 +6,8 @@ import { Selector } from 'testcafe';
 fixture `Keyboard Navigation`
     .page(url(__dirname, '../container.html'));
 
-test("Cell should not highlighted after editing another cell when startEditAction: dblClick and editing.mode: batch", async t => {
-const dataGrid = new DataGrid("#container");
+test('Cell should not highlighted after editing another cell when startEditAction: dblClick and editing.mode: batch', async t => {
+const dataGrid = new DataGrid('#container');
 
     await t
         .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
@@ -29,21 +29,21 @@ const dataGrid = new DataGrid("#container");
         .expect(dataGrid.getDataCell(0, 1).element.focused).ok()
         .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
         .expect(dataGrid.getDataCell(1, 1).isFocused).notOk();
-}).before(() => createWidget("dxDataGrid", {
+}).before(() => createWidget('dxDataGrid', {
     dataSource: [
-        { name: "Alex", phone: "555555", room: 1 },
-        { name: "Dan", phone: "553355", room: 2 }
+        { name: 'Alex', phone: '555555', room: 1 },
+        { name: 'Dan', phone: '553355', room: 2 }
     ],
-    columns:["name","phone","room"],
+    columns:['name','phone','room'],
     editing: {
-        mode: "batch",
+        mode: 'batch',
         allowUpdating: true,
-        startEditAction: "dblClick"
+        startEditAction: 'dblClick'
     }
 }));
 
-test("Cell should highlighted after editing another cell when startEditAction is 'dblClick' and editing mode is 'cell'", async t => {
-    const dataGrid = new DataGrid("#container");
+test('Cell should highlighted after editing another cell when startEditAction is "dblClick" and editing mode is "cell"', async t => {
+    const dataGrid = new DataGrid('#container');
 
     await t
         .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
@@ -66,39 +66,39 @@ test("Cell should highlighted after editing another cell when startEditAction is
         .expect(dataGrid.getDataCell(0, 1).element.focused).ok()
         .expect(dataGrid.getDataCell(0, 1).isFocused).ok()
         .expect(dataGrid.getDataCell(1, 1).isFocused).notOk();
-}).before(() => createWidget("dxDataGrid", {
+}).before(() => createWidget('dxDataGrid', {
     dataSource: [
-        { name: "Alex", phone: "555555", room: 1 },
-        { name: "Dan", phone: "553355", room: 2 }
+        { name: 'Alex', phone: '555555', room: 1 },
+        { name: 'Dan', phone: '553355', room: 2 }
     ],
-    columns:["name","phone","room"],
+    columns:['name','phone','room'],
     editing: {
-        mode: "cell",
+        mode: 'cell',
         allowUpdating: true,
-        startEditAction: "dblClick"
+        startEditAction: 'dblClick'
     },
     onFocusedCellChanging: e => e.isHighlighted = true
 }));
 
-test("Cell should be focused after Enter key press if enterKeyDirection is 'none' and enterKeyAction is 'moveFocus'", async t => {
-    const dataGrid = new DataGrid("#container");
+test('Cell should be focused after Enter key press if enterKeyDirection is "none" and enterKeyAction is "moveFocus"', async t => {
+    const dataGrid = new DataGrid('#container');
     const dataCell = dataGrid.getDataCell(0, 0).element;
     const commandCell = dataGrid.getDataCell(0, 1).element;
 
     await t
         .click(dataCell)
-        .pressKey("esc")
+        .pressKey('esc')
         .expect(dataCell.focused).ok()
-        .pressKey("enter")
-        .expect(dataCell.focused).ok()
-
-        .pressKey("enter")
+        .pressKey('enter')
         .expect(dataCell.focused).ok()
 
-        .pressKey("tab enter")
+        .pressKey('enter')
+        .expect(dataCell.focused).ok()
+
+        .pressKey('tab enter')
         .expect(commandCell.focused).ok()
         .expect(dataGrid.getDataRow(0).isRemoved).ok();
-}).before(() => createWidget("dxDataGrid", {
+}).before(() => createWidget('dxDataGrid', {
     height: 200,
     width: 200,
     dataSource: [
@@ -106,55 +106,55 @@ test("Cell should be focused after Enter key press if enterKeyDirection is 'none
         { id: 1 }
     ],
     editing: {
-        mode: "batch",
+        mode: 'batch',
         allowUpdating: true,
         allowDeleting: true
     },
     keyboardNavigation: {
-        enterKeyAction: "moveFocus",
-        enterKeyDirection: "none"
+        enterKeyAction: 'moveFocus',
+        enterKeyDirection: 'none'
     }
 }));
 
-test("TextArea should be focused on editing start", async t => {
-    const dataGrid = new DataGrid("#container"),
+test('TextArea should be focused on editing start', async t => {
+    const dataGrid = new DataGrid('#container'),
         commandCell = dataGrid.getDataCell(1, 3).element,
         dataCell = dataGrid.getDataCell(1, 0),
-        getTextArea = () => dataCell.element.find(".text-area-1");
+        getTextArea = () => dataCell.element.find('.text-area-1');
 
     await t
         // act, assert
-        .click(commandCell.find(".dx-link-edit"))
+        .click(commandCell.find('.dx-link-edit'))
         .expect(dataCell.isEditCell).ok()
         .expect(getTextArea().exists).ok()
         .expect(getTextArea().focused).ok();
-}).before(() => createWidget("dxDataGrid", {
+}).before(() => createWidget('dxDataGrid', {
     dataSource: [
-        { id: 0, name: "Alex" },
-        { id: 1, name: "Bob" }
+        { id: 0, name: 'Alex' },
+        { id: 1, name: 'Bob' }
     ],
     editing: {
-        mode: "row",
+        mode: 'row',
         allowUpdating: true
     },
     columns: [
         {
-            dataField: "name",
-            editCellTemplate: cell => $(cell).append($("<textarea class='text-area-1' />"))
+            dataField: 'name',
+            editCellTemplate: cell => $(cell).append($('<textarea class="text-area-1" />'))
         },
         {
-            dataField: "phone",
-            editCellTemplate: cell => $(cell).append($("<textarea class='text-area-2' />"))
+            dataField: 'phone',
+            editCellTemplate: cell => $(cell).append($('<textarea class="text-area-2" />'))
         },
         {
-            dataField: "room",
-            editCellTemplate: cell => $(cell).append($("<textarea />"))
+            dataField: 'room',
+            editCellTemplate: cell => $(cell).append($('<textarea />'))
         }
     ]
 }));
 
-test("Navigation through views using Tab, Shift+Tab", async t => {
-    const dataGrid = new DataGrid("#container");
+test('Navigation through views using Tab, Shift+Tab', async t => {
+    const dataGrid = new DataGrid('#container');
     const headers = dataGrid.getHeaders();
     const headerRow = headers.getHeaderRow(0);
     const filterRow = headers.getFilterRow();
@@ -163,229 +163,227 @@ test("Navigation through views using Tab, Shift+Tab", async t => {
 
     // header row
     await t
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(headers.hasFocusedState).ok()
         .expect(headerRow.getHeaderCell(0).element.focused).ok()
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(headers.hasFocusedState).ok()
         .expect(headerRow.getHeaderCell(0).getFilterIcon().focused).ok()
 
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(headers.hasFocusedState).ok()
         .expect(headerRow.getHeaderCell(1).element.focused).ok()
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(headers.hasFocusedState).ok()
         .expect(headerRow.getHeaderCell(1).getFilterIcon().focused).ok();
 
     // filter row
     await t
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(headers.hasFocusedState).ok()
         .expect(filterRow.getFilterCell(0).getSearchIcon().element.focused).ok()
         .expect(filterRow.getFilterCell(0).getSearchIcon().hasFocusedState).ok()
 
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(headers.hasFocusedState).ok()
         .expect(filterRow.getFilterCell(0).getEditor().element.focused).ok()
 
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(headers.hasFocusedState).ok()
         .expect(filterRow.getFilterCell(1).getSearchIcon().element.focused).ok()
         .expect(filterRow.getFilterCell(1).getSearchIcon().hasFocusedState).ok()
 
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(headers.hasFocusedState).ok()
         .expect(filterRow.getFilterCell(1).getEditor().element.focused).ok();
 
     // rowsView
     await t
         // 1st row
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(dataGrid.getDataRow(0).getDataCell(0).element.focused).ok()
         .expect(dataGrid.getDataRow(0).getDataCell(0).isFocused).ok()
 
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(dataGrid.getDataRow(0).getDataCell(1).element.focused).ok()
         .expect(dataGrid.getDataRow(0).getDataCell(1).isFocused).ok()
 
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(dataGrid.getDataRow(0).getCommandCell(2).getButton(0).focused).ok()
 
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(dataGrid.getDataRow(0).getCommandCell(2).getButton(1).focused).ok()
 
         // 2nd row
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(dataGrid.getDataRow(1).getDataCell(0).isFocused).ok()
 
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(dataGrid.getDataRow(1).getDataCell(1).isFocused).ok()
 
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(dataGrid.getDataRow(1).getCommandCell(2).getButton(0).focused).ok()
 
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(dataGrid.getDataRow(1).getCommandCell(2).getButton(1).focused).ok();
 
     // filterPanel
     await t
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(filterPanel.hasFocusedState).ok()
         .expect(filterPanel.getIconFilter().element.focused).ok()
 
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(filterPanel.hasFocusedState).ok()
         .expect(filterPanel.getFilterText().element.focused).ok();
 
     // pager
     await t
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(pager.hasFocusedState).ok()
         .expect(pager.getPageSize(0).element.focused).ok()
 
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(pager.hasFocusedState).ok()
         .expect(pager.getPageSize(1).element.focused).ok()
 
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(pager.hasFocusedState).ok()
         .expect(pager.getPrevNavButton().element.focused).ok()
 
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(pager.hasFocusedState).ok()
         .expect(pager.getNavPage(0).element.focused).ok()
 
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(pager.hasFocusedState).ok()
         .expect(pager.getNavPage(1).element.focused).ok()
 
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(pager.hasFocusedState).ok()
         .expect(pager.getNextNavButton().element.focused).ok();
 
     // focus BODY
     await t
-        .pressKey("tab")
-        .expect(Selector("BODY").focused).ok();
+        .pressKey('tab')
+        .expect(Selector('BODY').focused).ok();
 
     // Reverse
     // pager
     await t
-        .pressKey("shift+tab")
+        .pressKey('shift+tab')
         .expect(pager.hasFocusedState).ok()
         .expect(pager.getNextNavButton().element.focused).ok()
 
-        .pressKey("shift+tab")
+        .pressKey('shift+tab')
         .expect(pager.hasFocusedState).ok()
         .expect(pager.getNavPage(1).element.focused).ok()
 
-        .pressKey("shift+tab")
+        .pressKey('shift+tab')
         .expect(pager.hasFocusedState).ok()
         .expect(pager.getNavPage(0).element.focused).ok()
 
-        .pressKey("shift+tab")
+        .pressKey('shift+tab')
         .expect(pager.hasFocusedState).ok()
         .expect(pager.getPrevNavButton().element.focused).ok()
 
-        .pressKey("shift+tab")
+        .pressKey('shift+tab')
         .expect(pager.hasFocusedState).ok()
         .expect(pager.getPageSize(1).element.focused).ok()
 
-        .pressKey("shift+tab")
+        .pressKey('shift+tab')
         .expect(pager.hasFocusedState).ok()
         .expect(pager.getPageSize(0).element.focused).ok();
 
     // filterPanel
     await t
-        .pressKey("shift+tab")
+        .pressKey('shift+tab')
         .expect(filterPanel.hasFocusedState).ok()
         .expect(filterPanel.getFilterText().element.focused).ok()
 
-        .pressKey("shift+tab")
+        .pressKey('shift+tab')
         .expect(filterPanel.hasFocusedState).ok()
         .expect(filterPanel.getIconFilter().element.focused).ok();
 
     // rowsView
     await t
         // 2nd row
-        .pressKey("shift+tab")
+        .pressKey('shift+tab')
         .expect(dataGrid.getDataRow(1).getCommandCell(2).getButton(1).focused).ok()
 
-        .pressKey("shift+tab")
+        .pressKey('shift+tab')
         .expect(dataGrid.getDataRow(1).getCommandCell(2).getButton(0).focused).ok()
 
-        .pressKey("shift+tab")
+        .pressKey('shift+tab')
         .expect(dataGrid.getDataRow(1).getDataCell(1).isFocused).ok()
 
-        .pressKey("shift+tab")
+        .pressKey('shift+tab')
         .expect(dataGrid.getDataRow(1).getDataCell(0).isFocused).ok()
 
         // 1st row
-        .pressKey("shift+tab")
+        .pressKey('shift+tab')
         .expect(dataGrid.getDataRow(0).getCommandCell(2).getButton(1).focused).ok()
 
-        .pressKey("shift+tab")
+        .pressKey('shift+tab')
         .expect(dataGrid.getDataRow(0).getCommandCell(2).getButton(0).focused).ok()
 
-        .pressKey("shift+tab")
-        .expect(dataGrid.getDataRow(0).getDataCell(1).isFocused).ok()
+        .pressKey('shift+tab')
+        .expect(dataGrid.getDataCell(0, 1).isFocused).ok()
 
-        .pressKey("shift+tab")
-        .expect(dataGrid.getDataRow(0).getDataCell(0).isFocused).ok()
-        .pressKey("shift+tab")
-        .expect(dataGrid.getDataRow(0).element.focused).ok();
+        .pressKey('shift+tab')
+        .expect(dataGrid.getDataCell(0, 0).isFocused).ok();
 
     // filter row
     await t
-        .pressKey("shift+tab")
+        .pressKey('shift+tab')
         .expect(headers.hasFocusedState).ok()
         .expect(filterRow.getFilterCell(1).getEditor().element.focused).ok()
 
-        .pressKey("shift+tab")
+        .pressKey('shift+tab')
         .expect(headers.hasFocusedState).ok()
         .expect(filterRow.getFilterCell(1).getSearchIcon().element.focused).ok()
         .expect(filterRow.getFilterCell(1).getSearchIcon().hasFocusedState).ok()
 
-        .pressKey("shift+tab")
+        .pressKey('shift+tab')
         .expect(headers.hasFocusedState).ok()
         .expect(filterRow.getFilterCell(0).getEditor().element.focused).ok()
 
-        .pressKey("shift+tab")
+        .pressKey('shift+tab')
         .expect(headers.hasFocusedState).ok()
         .expect(filterRow.getFilterCell(0).getSearchIcon().element.focused).ok()
         .expect(filterRow.getFilterCell(0).getSearchIcon().hasFocusedState).ok();
 
     // header row
     await t
-        .pressKey("shift+tab")
+        .pressKey('shift+tab')
         .expect(headers.hasFocusedState).ok()
         .expect(headerRow.getHeaderCell(1).getFilterIcon().focused).ok()
-        .pressKey("shift+tab")
+        .pressKey('shift+tab')
         .expect(headers.hasFocusedState).ok()
         .expect(headerRow.getHeaderCell(1).element.focused).ok()
 
-        .pressKey("shift+tab")
+        .pressKey('shift+tab')
         .expect(headers.hasFocusedState).ok()
         .expect(headerRow.getHeaderCell(0).getFilterIcon().focused).ok()
-        .pressKey("shift+tab")
+        .pressKey('shift+tab')
         .expect(headers.hasFocusedState).ok()
         .expect(headerRow.getHeaderCell(0).element.focused).ok();
 
     // focus BODY
     await t
-        .pressKey("shift+tab")
-        .expect(Selector("BODY").focused).ok();
+        .pressKey('shift+tab')
+        .expect(Selector('BODY').focused).ok();
 
 }).before(async () => {
-    await createWidget("dxDataGrid", {
+    await createWidget('dxDataGrid', {
         width: 300,
         dataSource: [
-            { name: "Alex", c0: "c0_0" },
-            { name: "Ben", c0: "c0_1" },
-            { name: "Dan", c0: "c0_2" },
-            { name: "John", c0: "c0_3" }
+            { name: 'Alex', c0: 'c0_0' },
+            { name: 'Ben', c0: 'c0_1' },
+            { name: 'Dan', c0: 'c0_2' },
+            { name: 'John', c0: 'c0_3' }
         ],
-        keyExpr: "name",
+        keyExpr: 'name',
         editing: {
             allowUpdating: true,
             allowDeleting: true,
@@ -407,8 +405,8 @@ test("Navigation through views using Tab, Shift+Tab", async t => {
     });
 });
 
-test("Select views by Ctrl+Up, Ctrl+Down keys", async t => {
-    const dataGrid = new DataGrid("#container");
+test('Select views by Ctrl+Up, Ctrl+Down keys', async t => {
+    const dataGrid = new DataGrid('#container');
     const headers = dataGrid.getHeaders();
     const headerRow = headers.getHeaderRow(0);
     const filterRow = headers.getFilterRow();
@@ -417,51 +415,51 @@ test("Select views by Ctrl+Up, Ctrl+Down keys", async t => {
 
     // Ctrl+Down
     await t
-        .pressKey("tab")
-        .expect(headers.hasFocusedState).ok("headers has focused state")
-        .expect(headerRow.getHeaderCell(0).element.focused).ok("focused header cell[0, 0]")
+        .pressKey('tab')
+        .expect(headers.hasFocusedState).ok('headers has focused state')
+        .expect(headerRow.getHeaderCell(0).element.focused).ok('focused header cell[0, 0]')
 
-        .pressKey("ctrl+down")
-        .expect(headers.hasFocusedState).ok("headers has focused state")
-        .expect(filterRow.getFilterCell(0).getEditor().element.focused).ok("focused filterRow cell[0, 0]")
+        .pressKey('ctrl+down')
+        .expect(headers.hasFocusedState).ok('headers has focused state')
+        .expect(filterRow.getFilterCell(0).getEditor().element.focused).ok('focused filterRow cell[0, 0]')
 
-        .pressKey("ctrl+down")
-        .expect(dataGrid.getDataRow(0).isFocusedRow).ok("Row 0 is a focused row")
+        .pressKey('ctrl+down')
+        .expect(dataGrid.getDataRow(0).isFocusedRow).ok('Row 0 is a focused row')
 
-        .pressKey("ctrl+down")
-        .expect(filterPanel.hasFocusedState).ok("Filter panel has focused state")
-        .expect(filterPanel.getIconFilter().element.focused).ok("Focused filter panel filter icon")
+        .pressKey('ctrl+down')
+        .expect(filterPanel.hasFocusedState).ok('Filter panel has focused state')
+        .expect(filterPanel.getIconFilter().element.focused).ok('Focused filter panel filter icon')
 
-        .pressKey("ctrl+down")
-        .expect(pager.hasFocusedState).ok("Pager has focused state")
-        .expect(pager.getPageSize(0)).ok("Focused filter panel filter icon");
+        .pressKey('ctrl+down')
+        .expect(pager.hasFocusedState).ok('Pager has focused state')
+        .expect(pager.getPageSize(0)).ok('Focused filter panel filter icon');
 
     // Ctrl+Up
     await t
-        .pressKey("ctrl+up")
-        .expect(filterPanel.hasFocusedState).ok("Filter panel has focused state")
-        .expect(filterPanel.getIconFilter().element.focused).ok("Focused filter panel filter icon")
+        .pressKey('ctrl+up')
+        .expect(filterPanel.hasFocusedState).ok('Filter panel has focused state')
+        .expect(filterPanel.getIconFilter().element.focused).ok('Focused filter panel filter icon')
 
-        .pressKey("ctrl+up")
-        .expect(dataGrid.getDataRow(0).isFocusedRow).ok("Row 0 is a focused row")
+        .pressKey('ctrl+up')
+        .expect(dataGrid.getDataRow(0).isFocusedRow).ok('Row 0 is a focused row')
 
-        .pressKey("ctrl+up")
-        .expect(headers.hasFocusedState).ok("headers has focused state")
-        .expect(filterRow.getFilterCell(0).getEditor().element.focused).ok("focused filterRow cell[0, 0]")
+        .pressKey('ctrl+up')
+        .expect(headers.hasFocusedState).ok('headers has focused state')
+        .expect(filterRow.getFilterCell(0).getEditor().element.focused).ok('focused filterRow cell[0, 0]')
 
-        .pressKey("ctrl+up")
-        .expect(headers.hasFocusedState).ok("headers has focused state")
-        .expect(headerRow.getHeaderCell(0).element.focused).ok("focused header cell[0, 0]");
+        .pressKey('ctrl+up')
+        .expect(headers.hasFocusedState).ok('headers has focused state')
+        .expect(headerRow.getHeaderCell(0).element.focused).ok('focused header cell[0, 0]');
 }).before(async () => {
-    await createWidget("dxDataGrid", {
+    await createWidget('dxDataGrid', {
         width: 300,
         dataSource: [
-            { name: "Alex", c0: "c0_0" },
-            { name: "Ben", c0: "c0_1" },
-            { name: "Dan", c0: "c0_2" },
-            { name: "John", c0: "c0_3" }
+            { name: 'Alex', c0: 'c0_0' },
+            { name: 'Ben', c0: 'c0_1' },
+            { name: 'Dan', c0: 'c0_2' },
+            { name: 'John', c0: 'c0_3' }
         ],
-        keyExpr: "name",
+        keyExpr: 'name',
         editing: {
             allowUpdating: true,
             allowDeleting: true,
@@ -483,70 +481,70 @@ test("Select views by Ctrl+Up, Ctrl+Down keys", async t => {
     });
 });
 
-test("DataGrid - Scroll bars should not appear when updating edge cell focus overlay position (T812494)", async t => {
-    const dataGrid = new DataGrid("#container");
+test('DataGrid - Scroll bars should not appear when updating edge cell focus overlay position (T812494)', async t => {
+    const dataGrid = new DataGrid('#container');
 
     await t
         .click(dataGrid.getDataCell(0, 0).element)
         .expect(dataGrid.getDataCell(0, 0).element.focused).ok()
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(dataGrid.getDataCell(0, 1).isFocused).ok()
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(dataGrid.getDataCell(1, 0).isFocused).ok()
         .expect(dataGrid.getScrollbarWidth(false)).eql(0);
 }).before(async () => {
-    await createWidget("dxDataGrid", {
+    await createWidget('dxDataGrid', {
         height: 150,
         width: 200,
         columnAutoWidth: true,
         dataSource: [
-            { c0: "c0_0", c1: "c1_0" },
-            { c0: "c0_1", c1: "c1_1" }
+            { c0: 'c0_0', c1: 'c1_0' },
+            { c0: 'c0_1', c1: 'c1_1' }
         ],
         scrolling: {
             useNative: true
         },
         columns: [
-            "c0",
-            { dataField: "c1", width: 50 }
+            'c0',
+            { dataField: 'c1', width: 50 }
         ]
     });
 });
 
-test("Tab key on the focused group row should be handled by default behavior (T833621)", async t => {
-    const dataGrid = new DataGrid("#container");
+test('Tab key on the focused group row should be handled by default behavior (T833621)', async t => {
+    const dataGrid = new DataGrid('#container');
     const groupRow = dataGrid.getGroupRow(1);
     const pagerPage0 = dataGrid.getPager().getNavPage(0);
 
     await t
         .click(groupRow.element)
         .expect(groupRow.hasHiddenFocusState).ok()
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(pagerPage0.element.focused).ok()
-        .pressKey("shift+tab")
+        .pressKey('shift+tab')
         .expect(groupRow.hasHiddenFocusState).notOk()
         .expect(groupRow.hasFocusedState).notOk()
         .expect(groupRow.element.focused).ok()
-        .pressKey("tab")
+        .pressKey('tab')
         .expect(groupRow.hasHiddenFocusState).notOk()
         .expect(pagerPage0.element.focused).ok();
 }).before(async () => {
-    await createWidget("dxDataGrid", {
+    await createWidget('dxDataGrid', {
         width: 400,
         dataSource: [
-            { id: 0, c0: "Test00 resize", c1: "Test10" },
-            { id: 1, c0: "Test01 resize", c1: "Test11" },
-            { id: 1, c0: "Test01 resize", c1: "Test12" },
-            { id: 1, c0: "Test01 resize", c1: "Test10" },
-            { id: 1, c0: "Test01 resize", c1: "Test11" },
-            { id: 1, c0: "Test01 resize", c1: "Test12" },
-            { id: 1, c0: "Test01 resize", c1: "Test10" },
+            { id: 0, c0: 'Test00 resize', c1: 'Test10' },
+            { id: 1, c0: 'Test01 resize', c1: 'Test11' },
+            { id: 1, c0: 'Test01 resize', c1: 'Test12' },
+            { id: 1, c0: 'Test01 resize', c1: 'Test10' },
+            { id: 1, c0: 'Test01 resize', c1: 'Test11' },
+            { id: 1, c0: 'Test01 resize', c1: 'Test12' },
+            { id: 1, c0: 'Test01 resize', c1: 'Test10' },
         ],
         columns: [
-            "id",
-            "c0",
+            'id',
+            'c0',
             {
-                dataField: "c1",
+                dataField: 'c1',
                 groupIndex: 0,
                 showWhenGrouped: true
             }
@@ -560,8 +558,8 @@ test("Tab key on the focused group row should be handled by default behavior (T8
     });
 });
 
-test("Row should not be focused by 'focusedRowIndex' after change 'pageIndex' by pager if 'autoNavigateToFocused' row is false", async t => {
-    const dataGrid = new DataGrid("#container");
+test('Row should not be focused by "focusedRowIndex" after change "pageIndex" by pager if "autoNavigateToFocused" row is false', async t => {
+    const dataGrid = new DataGrid('#container');
     const pager = dataGrid.getPager();
 
     await t
@@ -569,14 +567,14 @@ test("Row should not be focused by 'focusedRowIndex' after change 'pageIndex' by
         .click(pager.getNavPage(1).element)
         .expect(pager.getNavPage(1).isSelected).ok()
         .expect(dataGrid.getFocusedRow().exists).notOk();
-}).before(() => createWidget("dxDataGrid", {
+}).before(() => createWidget('dxDataGrid', {
     dataSource: [
-        { id: 0, c0: "c0_0" },
-        { id: 1, c0: "c0_1" },
-        { id: 2, c0: "c0_2" },
-        { id: 3, c0: "c0_3" }
+        { id: 0, c0: 'c0_0' },
+        { id: 1, c0: 'c0_1' },
+        { id: 2, c0: 'c0_2' },
+        { id: 3, c0: 'c0_3' }
     ],
-    keyExpr: "id",
+    keyExpr: 'id',
     focusedRowEnabled: true,
     autoNavigateToFocusedRow: false,
     focusedRowIndex: 1,
@@ -604,14 +602,89 @@ test("Cell should be highlighted after editing another cell when startEditAction
         .expect(cell0.isEditCell).notOk();
 }).before(() => createWidget("dxDataGrid", {
     dataSource: [
-        { name: "Alex", phone: "555555", room: 1 },
-        { name: "Dan", phone: "553355", room: 2 }
+        { name: 'Alex', phone: '555555', room: 1 },
+        { name: 'Dan', phone: '553355', room: 2 }
     ],
-    columns:["name","phone","room"],
+    columns:['name','phone','room'],
     editing: {
-        mode: "batch",
+        mode: 'batch',
         allowUpdating: true,
-        startEditAction: "dblClick"
+        startEditAction: 'dblClick'
     },
     onFocusedCellChanging: (e) => e.isHighlighted = true
+}));
+
+test('Previous navigation elements should not have "tabindex" if navigation action is "click" (T870120)', async t => {
+    const dataGrid = new DataGrid('#container');
+    for(let rowIndex = 0; rowIndex < 3; ++rowIndex) {
+        for(let colIndex = 0; colIndex < 3; ++colIndex) {
+            const cell = dataGrid.getDataCell(rowIndex, colIndex);
+
+            await t
+                .click(cell.element)
+                .expect(cell.element.focused).ok(`cell[${rowIndex}, ${colIndex}] is focused`)
+                .expect(cell.element.getAttribute('tabindex')).eql('111', `cell[${rowIndex}, ${colIndex}] has tabindex`)
+        }
+    }
+}).before(() => createWidget('dxDataGrid', {
+    dataSource: [
+        { id: 4, c0: 'c0_4', c1: 'c1_4' },
+        { id: 5, c0: 'c0_5', c1: 'c1_5' },
+        { id: 6, c0: 'c0_6', c1: 'c1_6' }
+    ],
+    tabIndex: '111'
+}));
+
+test('Previous navigation elements should not have "tabindex" if navigation action is "tab" (T870120)', async t => {
+    const dataGrid = new DataGrid('#container');
+    let cell = dataGrid.getDataCell(0, 0);
+
+    await t.click(cell.element);
+
+    for(let rowIndex = 0; rowIndex < 3; ++rowIndex) {
+        for(let colIndex = 0; colIndex < 3; ++colIndex) {
+            cell = dataGrid.getDataCell(rowIndex, colIndex);
+
+            await t
+                .expect(cell.element.focused).ok(`cell[${rowIndex}, ${colIndex}] is focused`)
+                .expect(cell.element.getAttribute('tabindex')).eql('111', `cell[${rowIndex}, ${colIndex}] has tabindex`)
+
+            await t.pressKey('tab');
+        }
+    }
+}).before(() => createWidget('dxDataGrid', {
+    dataSource: [
+        { id: 4, c0: 'c0_4', c1: 'c1_4' },
+        { id: 5, c0: 'c0_5', c1: 'c1_5' },
+        { id: 6, c0: 'c0_6', c1: 'c1_6' }
+    ],
+    tabIndex: '111'
+}));
+
+test('The first group row should be expanded when the Enter key is pressed (T869799)', async t => {
+    const dataGrid = new DataGrid('#container');
+    const firstGroupRow = dataGrid.getGroupRow(0);
+
+    await t
+        .pressKey('tab')
+        .pressKey('tab')
+
+        .expect(firstGroupRow.isFocused).ok()
+        .expect(firstGroupRow.isExpanded).notOk()
+
+        .pressKey('enter')
+
+        .expect(firstGroupRow.isExpanded).ok()
+
+}).before(() => createWidget('dxDataGrid', {
+    dataSource: [
+        { name: 'Alex', phone: '555555' }
+    ],
+    columns:[{
+        dataField: 'name',
+        groupIndex: 0
+    }, 'phone'],
+    grouping: {
+        autoExpandAll: false
+    }
 }));

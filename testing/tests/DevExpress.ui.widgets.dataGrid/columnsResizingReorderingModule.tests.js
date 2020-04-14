@@ -81,8 +81,7 @@ const TestDraggingHeader2 = columnResizingReordering.DraggingHeaderView.inherit(
 });
 
 // ColumnsSeparator module///
-(function() {
-    QUnit.module('ColumnsSeparator');
+QUnit.module('ColumnsSeparator', () => {
 
     function createColumnsSeparator2(userOptions, columnsCommonSettings) {
         return new columnResizingReordering.ColumnsSeparatorView({
@@ -787,7 +786,7 @@ const TestDraggingHeader2 = columnResizingReordering.DraggingHeaderView.inherit(
         // assert
         assert.notEqual(columnsSeparator.element().css('display'), 'none', 'element is shown');
     });
-}());
+});
 
 function getEvent(options) {
     return {
@@ -798,173 +797,172 @@ function getEvent(options) {
     };
 }
 
-// Columns resizing///
-(function() {
-    QUnit.module('Columns resizing', {
-        beforeEach: function() {
-            const that = this;
+// Columns resizing
+QUnit.module('Columns resizing', {
+    beforeEach: function() {
+        const that = this;
 
-            that.commonColumnSettings = { allowResizing: true };
+        that.commonColumnSettings = { allowResizing: true };
 
-            that.options = {
-                columns: [
-                    { caption: 'Column 1', visible: true, width: 150, index: 0 },
-                    { caption: 'Column 2', visible: true, width: 150, index: 1 }
-                ],
-                showColumnHeaders: true,
-                pager: {
-                    visible: true
-                },
-                commonColumnSettings: that.commonColumnSettings
-            };
+        that.options = {
+            columns: [
+                { caption: 'Column 1', visible: true, width: 150, index: 0 },
+                { caption: 'Column 2', visible: true, width: 150, index: 1 }
+            ],
+            showColumnHeaders: true,
+            pager: {
+                visible: true
+            },
+            commonColumnSettings: that.commonColumnSettings
+        };
 
-            that.component = {
-                on: noop,
+        that.component = {
+            on: noop,
 
-                off: noop,
+            off: noop,
 
-                NAME: 'dxDataGrid',
+            NAME: 'dxDataGrid',
 
-                updateDimensions: noop,
+            updateDimensions: noop,
 
-                setAria: function(name, value, $target) {
-                    const setAttribute = function(option) {
-                        const attrName = ($.inArray(option.name, ['role', 'id']) + 1) ? option.name : 'aria-' + option.name;
-                        let attrValue = option.value;
+            setAria: function(name, value, $target) {
+                const setAttribute = function(option) {
+                    const attrName = ($.inArray(option.name, ['role', 'id']) + 1) ? option.name : 'aria-' + option.name;
+                    let attrValue = option.value;
 
-                        if(attrValue === null || attrValue === undefined) {
-                            attrValue = undefined;
-                        } else {
-                            attrValue = attrValue.toString();
-                        }
-
-                        option.target.attr(attrName, attrValue);
-                    };
-
-                    if(!$.isPlainObject(arguments[0])) {
-                        setAttribute({
-                            name: arguments[0],
-                            value: arguments[1],
-                            target: arguments[2] || this._getAriaTarget()
-                        });
+                    if(attrValue === null || attrValue === undefined) {
+                        attrValue = undefined;
                     } else {
-                        $target = arguments[1] || this._getAriaTarget();
+                        attrValue = attrValue.toString();
+                    }
 
-                        $.each(arguments[0], function(key, value) {
-                            setAttribute({
-                                name: key,
-                                value: value,
-                                target: $target
-                            });
+                    option.target.attr(attrName, attrValue);
+                };
+
+                if(!$.isPlainObject(arguments[0])) {
+                    setAttribute({
+                        name: arguments[0],
+                        value: arguments[1],
+                        target: arguments[2] || this._getAriaTarget()
+                    });
+                } else {
+                    $target = arguments[1] || this._getAriaTarget();
+
+                    $.each(arguments[0], function(key, value) {
+                        setAttribute({
+                            name: key,
+                            value: value,
+                            target: $target
                         });
-                    }
-                },
-
-                option: function(name) {
-                    return that.options[name];
-                },
-
-                _createAction: function(actionSource, config) {
-                    const action = new Action(actionSource, config);
-                    return function(e) {
-                        return action.execute.call(action, $.extend(e, {
-                            component: that,
-                            element: that.component.$element()
-                        }));
-                    };
-                },
-
-                $element: function() {
-                    return $('#container');
-                },
-
-                _fireContentReadyAction: function() {
-
-                },
-
-                _controllers: {
-                    tablePosition: new MockTablePositionViewController(),
-                    columns: new MockColumnsController(that.options.columns, that.commonColumnSettings),
-                    data: new MockDataController({
-                        pageCount: 1,
-                        pageIndex: 0,
-                        items: [
-                            { values: [1] },
-                            { values: [2] }
-                        ]
-                    }),
-
-                    columnsResizer: {
-                        isResizing: () => true
-                    }
-                },
-
-                _createComponent: function(element, name, config) {
-                    name = typeof name === 'string' ? name : publicComponentUtils.name(name);
-                    const $element = $(element)[name](config || {});
-                    return $element[name]('instance');
-                },
-
-                _createActionByOption: function() {
-                    return function() { };
-                },
-
-                getController: function(name) {
-                    return this._controllers[name];
+                    });
                 }
-            };
+            },
 
-            that.component._views = {
-                columnsSeparatorView: new columnResizingReordering.ColumnsSeparatorView(this.component),
-                trackerView: new MockTrackerView(),
-                columnHeadersView: new ColumnHeadersView(this.component),
-                rowsView: new RowsView(this.component),
-                pagerView: {
-                    init: noop,
-                    isVisible: noop,
-                    render: noop,
-                    getHeight: function() {
-                        return 0;
-                    }
+            option: function(name) {
+                return that.options[name];
+            },
+
+            _createAction: function(actionSource, config) {
+                const action = new Action(actionSource, config);
+                return function(e) {
+                    return action.execute.call(action, $.extend(e, {
+                        component: that,
+                        element: that.component.$element()
+                    }));
+                };
+            },
+
+            $element: function() {
+                return $('#container');
+            },
+
+            _fireContentReadyAction: function() {
+
+            },
+
+            _controllers: {
+                tablePosition: new MockTablePositionViewController(),
+                columns: new MockColumnsController(that.options.columns, that.commonColumnSettings),
+                data: new MockDataController({
+                    pageCount: 1,
+                    pageIndex: 0,
+                    items: [
+                        { values: [1] },
+                        { values: [2] }
+                    ]
+                }),
+
+                columnsResizer: {
+                    isResizing: () => true
                 }
-            };
+            },
 
-            that.initViews = function() {
-                $.each(that.component._views, function(key, value) {
-                    value.init();
-                });
-            };
+            _createComponent: function(element, name, config) {
+                name = typeof name === 'string' ? name : publicComponentUtils.name(name);
+                const $element = $(element)[name](config || {});
+                return $element[name]('instance');
+            },
 
-            that.renderViews = function($container) {
-                $.each(that.component._views, function(key, view) {
-                    view.render($container);
-                });
-            };
+            _createActionByOption: function() {
+                return function() { };
+            },
 
-            that.createColumnsResizerViewController = function(columns) {
-                let controller;
+            getController: function(name) {
+                return this._controllers[name];
+            }
+        };
 
-                if(columns) {
-                    that.component._controllers.columns = new MockColumnsController(columns, that.commonColumnSettings);
+        that.component._views = {
+            columnsSeparatorView: new columnResizingReordering.ColumnsSeparatorView(this.component),
+            trackerView: new MockTrackerView(),
+            columnHeadersView: new ColumnHeadersView(this.component),
+            rowsView: new RowsView(this.component),
+            pagerView: {
+                init: noop,
+                isVisible: noop,
+                render: noop,
+                getHeight: function() {
+                    return 0;
                 }
+            }
+        };
 
-                that.component._controllers.editing = new MockEditingController();
+        that.initViews = function() {
+            $.each(that.component._views, function(key, value) {
+                value.init();
+            });
+        };
 
-                that.resizeController = controller = new columnResizingReordering.ColumnsResizerViewController(that.component);
+        that.renderViews = function($container) {
+            $.each(that.component._views, function(key, view) {
+                view.render($container);
+            });
+        };
 
-                controller.init();
+        that.createColumnsResizerViewController = function(columns) {
+            let controller;
 
-                that.initViews();
+            if(columns) {
+                that.component._controllers.columns = new MockColumnsController(columns, that.commonColumnSettings);
+            }
 
-                return controller;
-            };
+            that.component._controllers.editing = new MockEditingController();
 
-            $('#container').css({ width: '300px' });
-        },
-        afterEach: function() {
-            this.resizeController && this.resizeController.dispose();
-        }
-    });
+            that.resizeController = controller = new columnResizingReordering.ColumnsResizerViewController(that.component);
+
+            controller.init();
+
+            that.initViews();
+
+            return controller;
+        };
+
+        $('#container').css({ width: '300px' });
+    },
+    afterEach: function() {
+        this.resizeController && this.resizeController.dispose();
+    }
+}, () => {
 
     QUnit.test('Get points by columns', function(assert) {
         // arrange
@@ -3077,147 +3075,146 @@ function getEvent(options) {
             assert.strictEqual($(header).offset().left, $dataCell.offset().left, `cells with index ${index}: header position matches cell position`);
         });
     });
-}());
+});
 
-// Headers reordering///
-(function() {
-    QUnit.module('Headers reordering', {
-        beforeEach: function() {
-            const that = this;
+// Headers reordering
+QUnit.module('Headers reordering', {
+    beforeEach: function() {
+        const that = this;
 
-            that.commonColumnSettings = {
-                allowReordering: true,
-                allowGrouping: true
-            };
+        that.commonColumnSettings = {
+            allowReordering: true,
+            allowGrouping: true
+        };
 
-            that.options = {
-                showColumnHeaders: true,
-                commonColumnSettings: that.commonColumnSettings,
-                groupPanel: { visible: false }
-            };
+        that.options = {
+            showColumnHeaders: true,
+            commonColumnSettings: that.commonColumnSettings,
+            groupPanel: { visible: false }
+        };
 
-            $('#container').css({ height: '500px' });
+        $('#container').css({ height: '500px' });
 
-            that.draggingPanels = [new MockDraggingPanel({
-                $element: $('<div/>'),
-                columnElements: $('#itemsContainer').children(),
-                columns: [{ allowReordering: true }, { allowReordering: true }],
-                offset: {
-                    left: -10000,
-                    top: 40,
-                    bottom: 70
-                },
-                location: 'headers'
-            }), new MockDraggingPanel({
-                $element: $('<div/>'),
-                columnElements: $('#itemsContainer').children(),
-                columns: [{ allowReordering: true }, { allowReordering: true }],
-                offset: {
-                    left: -10000,
-                    top: 0,
-                    bottom: 30
-                },
-                location: 'group'
-            })];
+        that.draggingPanels = [new MockDraggingPanel({
+            $element: $('<div/>'),
+            columnElements: $('#itemsContainer').children(),
+            columns: [{ allowReordering: true }, { allowReordering: true }],
+            offset: {
+                left: -10000,
+                top: 40,
+                bottom: 70
+            },
+            location: 'headers'
+        }), new MockDraggingPanel({
+            $element: $('<div/>'),
+            columnElements: $('#itemsContainer').children(),
+            columns: [{ allowReordering: true }, { allowReordering: true }],
+            offset: {
+                left: -10000,
+                top: 0,
+                bottom: 30
+            },
+            location: 'group'
+        })];
 
-            that.component = {
-                NAME: 'dxDataGrid',
+        that.component = {
+            NAME: 'dxDataGrid',
 
-                $element: function() {
-                    return $('#container');
-                },
+            $element: function() {
+                return $('#container');
+            },
 
-                _controllers: {
-                    data: new MockDataController({
-                        rows: [{ values: ['', ''] }]
-                    }),
+            _controllers: {
+                data: new MockDataController({
+                    rows: [{ values: ['', ''] }]
+                }),
 
-                    tablePosition: new MockTablePositionViewController()
-                },
+                tablePosition: new MockTablePositionViewController()
+            },
 
-                setAria: function(name, value, $target) {
-                    const setAttribute = function(option) {
-                        const attrName = ($.inArray(option.name, ['role', 'id']) + 1) ? option.name : 'aria-' + option.name;
-                        let attrValue = option.value;
+            setAria: function(name, value, $target) {
+                const setAttribute = function(option) {
+                    const attrName = ($.inArray(option.name, ['role', 'id']) + 1) ? option.name : 'aria-' + option.name;
+                    let attrValue = option.value;
 
-                        if(attrValue === null || attrValue === undefined) {
-                            attrValue = undefined;
-                        } else {
-                            attrValue = attrValue.toString();
-                        }
-
-                        option.target.attr(attrName, attrValue);
-                    };
-
-                    if(!$.isPlainObject(arguments[0])) {
-                        setAttribute({
-                            name: arguments[0],
-                            value: arguments[1],
-                            target: arguments[2] || this._getAriaTarget()
-                        });
+                    if(attrValue === null || attrValue === undefined) {
+                        attrValue = undefined;
                     } else {
-                        $target = arguments[1] || this._getAriaTarget();
-
-                        $.each(arguments[0], function(key, value) {
-                            setAttribute({
-                                name: key,
-                                value: value,
-                                target: $target
-                            });
-                        });
+                        attrValue = attrValue.toString();
                     }
-                },
 
-                option: function(value) {
-                    return that.options[value];
-                },
+                    option.target.attr(attrName, attrValue);
+                };
 
-                _createAction: function(handler) {
-                    return handler;
-                },
+                if(!$.isPlainObject(arguments[0])) {
+                    setAttribute({
+                        name: arguments[0],
+                        value: arguments[1],
+                        target: arguments[2] || this._getAriaTarget()
+                    });
+                } else {
+                    $target = arguments[1] || this._getAriaTarget();
 
-                _createActionByOption: function() {
-                    return function() { };
+                    $.each(arguments[0], function(key, value) {
+                        setAttribute({
+                            name: key,
+                            value: value,
+                            target: $target
+                        });
+                    });
                 }
-            };
+            },
 
-            that.component._views = {
-                columnsSeparatorView: new columnResizingReordering.ColumnsSeparatorView(that.component),
-                draggingHeaderView: new columnResizingReordering.DraggingHeaderView(that.component),
-                columnHeadersView: new ColumnHeadersView(that.component),
-                headerPanel: new (HeaderPanel.inherit(GroupingHeaderPanelExtender))(that.component),
-                columnChooserView: new ColumnChooserView(that.component)
-            };
+            option: function(value) {
+                return that.options[value];
+            },
 
-            that.createDraggingHeaderViewController = function(columns) {
-                that.component._controllers.columns = new MockColumnsController(columns, that.commonColumnSettings);
-                const controller = new columnResizingReordering.DraggingHeaderViewController(that.component);
+            _createAction: function(handler) {
+                return handler;
+            },
 
-                controller.init();
+            _createActionByOption: function() {
+                return function() { };
+            }
+        };
 
-                that.component._controllers.draggingHeader = controller;
+        that.component._views = {
+            columnsSeparatorView: new columnResizingReordering.ColumnsSeparatorView(that.component),
+            draggingHeaderView: new columnResizingReordering.DraggingHeaderView(that.component),
+            columnHeadersView: new ColumnHeadersView(that.component),
+            headerPanel: new (HeaderPanel.inherit(GroupingHeaderPanelExtender))(that.component),
+            columnChooserView: new ColumnChooserView(that.component)
+        };
 
-                that.initViews();
+        that.createDraggingHeaderViewController = function(columns) {
+            that.component._controllers.columns = new MockColumnsController(columns, that.commonColumnSettings);
+            const controller = new columnResizingReordering.DraggingHeaderViewController(that.component);
 
-                return controller;
-            };
+            controller.init();
 
-            that.initViews = function() {
-                $.each(that.component._views, function(key, value) {
-                    value.init();
-                });
-            };
+            that.component._controllers.draggingHeader = controller;
 
-            that.renderViews = function($container) {
-                $.each(that.component._views, function(key, value) {
-                    value.render($container);
-                });
-            };
-        },
-        afterEach: function() {
-            $('.dx-datagrid-drag-header').remove();
-        }
-    });
+            that.initViews();
+
+            return controller;
+        };
+
+        that.initViews = function() {
+            $.each(that.component._views, function(key, value) {
+                value.init();
+            });
+        };
+
+        that.renderViews = function($container) {
+            $.each(that.component._views, function(key, value) {
+                value.render($container);
+            });
+        };
+    },
+    afterEach: function() {
+        $('.dx-datagrid-drag-header').remove();
+    }
+}, () => {
 
     QUnit.test('Get points by columns', function(assert) {
         // arrange
@@ -4240,7 +4237,7 @@ function getEvent(options) {
         const controller = this.createDraggingHeaderViewController();
         const draggingHeader = new TestDraggingHeader(this.component);
 
-        $('#itemsContainer').html('<div style="width:125px; display: inline-block;" /><div style="width:125px; display: inline-block;" />');
+        $('#itemsContainer').html('<div style="width:125px; display: inline-block;"></div><div style="width:125px; display: inline-block;"></div>');
 
         controller.drop = function(parameters) {
             if(this.allowDrop(parameters)) {
@@ -4599,63 +4596,62 @@ function getEvent(options) {
         assert.strictEqual($dragHeader.outerWidth(), 100, 'width');
         assert.strictEqual($dragHeader.text(), '', 'text');
     });
-}());
+});
 
-// Group panel reordering///
-(function() {
-    QUnit.module('Group panel reordering', {
-        beforeEach: function() {
-            const that = this;
-            that.commonColumnSettings = { allowReordering: true };
+// Group panel reordering
+QUnit.module('Group panel reordering', {
+    beforeEach: function() {
+        const that = this;
+        that.commonColumnSettings = { allowReordering: true };
 
-            that.options = {
-                showColumnHeaders: true,
-                commonColumnSettings: that.commonColumnSettings,
-                groupPanel: { visible: true }
-            };
+        that.options = {
+            showColumnHeaders: true,
+            commonColumnSettings: that.commonColumnSettings,
+            groupPanel: { visible: true }
+        };
 
-            $('#container').css({ height: '500px' });
+        $('#container').css({ height: '500px' });
 
-            that.draggingPanels = [new MockDraggingPanel({
-                $element: $('<div/>'),
-                columnElements: $('#itemsContainer').children(),
-                columns: [{ allowReordering: true }, { allowReordering: true }],
-                offset: {
-                    top: 40
-                },
-                location: 'headers'
-            }),
-            new MockDraggingPanel({
-                $element: $('<div/>'),
-                columnElements: $('#itemsContainer').children(),
-                columns: [{ allowReordering: true }, { allowReordering: true }],
-                offset: {
-                    top: 0,
-                    bottom: 30
-                },
-                location: 'group'
-            })];
+        that.draggingPanels = [new MockDraggingPanel({
+            $element: $('<div/>'),
+            columnElements: $('#itemsContainer').children(),
+            columns: [{ allowReordering: true }, { allowReordering: true }],
+            offset: {
+                top: 40
+            },
+            location: 'headers'
+        }),
+        new MockDraggingPanel({
+            $element: $('<div/>'),
+            columnElements: $('#itemsContainer').children(),
+            columns: [{ allowReordering: true }, { allowReordering: true }],
+            offset: {
+                top: 0,
+                bottom: 30
+            },
+            location: 'group'
+        })];
 
-            setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'headerPanel', 'grouping', 'gridView', 'columnsResizingReordering', 'columnChooser'], {
-                initViews: true,
-                controllers: {
-                    data: new MockDataController({
-                        rows: [{ values: ['', ''] }]
-                    }),
-                    columns: new MockColumnsController([], that.commonColumnSettings),
-                    tablePosition: new MockTablePositionViewController()
-                },
-                views: {
-                    draggingHeaderView: new TestDraggingHeader(that)
-                }
-            });
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'headerPanel', 'grouping', 'gridView', 'columnsResizingReordering', 'columnChooser'], {
+            initViews: true,
+            controllers: {
+                data: new MockDataController({
+                    rows: [{ values: ['', ''] }]
+                }),
+                columns: new MockColumnsController([], that.commonColumnSettings),
+                tablePosition: new MockTablePositionViewController()
+            },
+            views: {
+                draggingHeaderView: new TestDraggingHeader(that)
+            }
+        });
 
-            that.controller = that.draggingHeaderController;
-        },
-        afterEach: function() {
-            $('.dx-datagrid-drag-header').remove();
-        }
-    });
+        that.controller = that.draggingHeaderController;
+    },
+    afterEach: function() {
+        $('.dx-datagrid-drag-header').remove();
+    }
+}, () => {
 
     QUnit.test('Dock group panel to points', function(assert) {
         // arrange
@@ -5560,82 +5556,81 @@ function getEvent(options) {
         // assert
         assert.equal(this.draggingHeaderController._subscribeToEvents.callCount, 1, 'subscribed to dragging');
     });
-})();
+});
 
 // Column chooser reordering
-(function() {
-    QUnit.module('column chooser reordering', {
-        beforeEach: function() {
-            const that = this;
+QUnit.module('column chooser reordering', {
+    beforeEach: function() {
+        const that = this;
 
-            that.commonColumnSettings = {
-                allowHiding: true,
-                allowReordering: true
-            };
+        that.commonColumnSettings = {
+            allowHiding: true,
+            allowReordering: true
+        };
 
-            that.options = {
-                showColumnHeaders: true,
-                commonColumnSettings: that.commonColumnSettings,
-                columnChooser: {
-                    enabled: true
-                }
-            };
+        that.options = {
+            showColumnHeaders: true,
+            commonColumnSettings: that.commonColumnSettings,
+            columnChooser: {
+                enabled: true
+            }
+        };
 
-            $('#container').css({ height: '500px' });
+        $('#container').css({ height: '500px' });
 
-            that.draggingPanels = [new MockDraggingPanel({
-                $element: $('<div/>'),
-                columnElements: $('#itemsContainer').children(),
-                columns: [{ allowHiding: true, allowReordering: true }, { allowHiding: true, allowReordering: true }],
-                offset: {
-                    top: 40
-                },
-                location: 'headers'
-            }),
-            new MockDraggingPanel({
-                $element: $('<div/>'),
-                columnElements: $('#itemsContainer').children(),
-                columns: [{ allowHiding: true, allowReordering: true }, { allowHiding: true, allowReordering: true }],
-                offset: {
-                    top: 0,
-                    bottom: 30
-                },
-                location: 'group'
-            }),
-            new MockDraggingPanel({
-                $element: $('<div/>'),
-                columnElements: $('#itemsContainerVertical').children(),
-                columns: [{ dataField: 'Test1', allowHiding: true, allowReordering: true }, { dataField: 'Test2', allowHiding: true, allowReordering: true }],
-                offset: {
-                    left: -9900,
-                    right: -9700,
-                    top: -9500,
-                    bottom: -9300
-                },
-                location: 'columnChooser',
-                scrollTop: 0
-            })];
+        that.draggingPanels = [new MockDraggingPanel({
+            $element: $('<div/>'),
+            columnElements: $('#itemsContainer').children(),
+            columns: [{ allowHiding: true, allowReordering: true }, { allowHiding: true, allowReordering: true }],
+            offset: {
+                top: 40
+            },
+            location: 'headers'
+        }),
+        new MockDraggingPanel({
+            $element: $('<div/>'),
+            columnElements: $('#itemsContainer').children(),
+            columns: [{ allowHiding: true, allowReordering: true }, { allowHiding: true, allowReordering: true }],
+            offset: {
+                top: 0,
+                bottom: 30
+            },
+            location: 'group'
+        }),
+        new MockDraggingPanel({
+            $element: $('<div/>'),
+            columnElements: $('#itemsContainerVertical').children(),
+            columns: [{ dataField: 'Test1', allowHiding: true, allowReordering: true }, { dataField: 'Test2', allowHiding: true, allowReordering: true }],
+            offset: {
+                left: -9900,
+                right: -9700,
+                top: -9500,
+                bottom: -9300
+            },
+            location: 'columnChooser',
+            scrollTop: 0
+        })];
 
-            setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'headerPanel', 'grouping', 'gridView', 'columnsResizingReordering', 'columnChooser'], {
-                initViews: true,
-                controllers: {
-                    data: new MockDataController({
-                        rows: [{ values: ['', ''] }]
-                    }),
-                    columns: new MockColumnsController([], that.commonColumnSettings),
-                    tablePosition: new MockTablePositionViewController()
-                },
-                views: {
-                    draggingHeaderView: new TestDraggingHeader(that)
-                }
-            });
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'headerPanel', 'grouping', 'gridView', 'columnsResizingReordering', 'columnChooser'], {
+            initViews: true,
+            controllers: {
+                data: new MockDataController({
+                    rows: [{ values: ['', ''] }]
+                }),
+                columns: new MockColumnsController([], that.commonColumnSettings),
+                tablePosition: new MockTablePositionViewController()
+            },
+            views: {
+                draggingHeaderView: new TestDraggingHeader(that)
+            }
+        });
 
-            that.controller = that.draggingHeaderController;
-        },
-        afterEach: function() {
-            this.dispose();
-        }
-    });
+        that.controller = that.draggingHeaderController;
+    },
+    afterEach: function() {
+        this.dispose();
+    }
+}, () => {
 
     QUnit.test('Get points by columns', function(assert) {
         // arrange
@@ -6420,114 +6415,113 @@ function getEvent(options) {
             fx.off = false;
         }
     });
-})();
+});
 
-// Headers reordering inside color swatch///
-(function() {
-    QUnit.module('Headers reordering inside color swatch', {
-        beforeEach: function() {
-            const that = this;
+// Headers reordering inside color swatch
+QUnit.module('Headers reordering inside color swatch', {
+    beforeEach: function() {
+        const that = this;
 
-            that.commonColumnSettings = {
-                allowReordering: true,
-                allowGrouping: true
-            };
+        that.commonColumnSettings = {
+            allowReordering: true,
+            allowGrouping: true
+        };
 
-            that.options = {
-                showColumnHeaders: true,
-                commonColumnSettings: that.commonColumnSettings,
-                groupPanel: { visible: false }
-            };
+        that.options = {
+            showColumnHeaders: true,
+            commonColumnSettings: that.commonColumnSettings,
+            groupPanel: { visible: false }
+        };
 
-            $('#gridInSwatch').css({ height: '500px' });
+        $('#gridInSwatch').css({ height: '500px' });
 
-            that.draggingPanels = [new MockDraggingPanel({
-                $element: $('<div/>'),
-                columnElements: $('#swatchitemsContainer').children(),
-                columns: [{ allowReordering: true }, { allowReordering: true }],
-                offset: {
-                    left: -10000,
-                    top: 40,
-                    bottom: 70
-                },
-                location: 'headers'
-            }), new MockDraggingPanel({
-                $element: $('<div/>'),
-                columnElements: $('#swatchitemsContainer').children(),
-                columns: [{ allowReordering: true }, { allowReordering: true }],
-                offset: {
-                    left: -10000,
-                    top: 0,
-                    bottom: 30
-                },
-                location: 'group'
-            })];
+        that.draggingPanels = [new MockDraggingPanel({
+            $element: $('<div/>'),
+            columnElements: $('#swatchitemsContainer').children(),
+            columns: [{ allowReordering: true }, { allowReordering: true }],
+            offset: {
+                left: -10000,
+                top: 40,
+                bottom: 70
+            },
+            location: 'headers'
+        }), new MockDraggingPanel({
+            $element: $('<div/>'),
+            columnElements: $('#swatchitemsContainer').children(),
+            columns: [{ allowReordering: true }, { allowReordering: true }],
+            offset: {
+                left: -10000,
+                top: 0,
+                bottom: 30
+            },
+            location: 'group'
+        })];
 
-            that.component = {
-                NAME: 'dxDataGrid',
+        that.component = {
+            NAME: 'dxDataGrid',
 
-                $element: function() {
-                    return $('#gridInSwatch');
-                },
+            $element: function() {
+                return $('#gridInSwatch');
+            },
 
-                _controllers: {
-                    data: new MockDataController({
-                        rows: [{ values: ['', ''] }]
-                    }),
+            _controllers: {
+                data: new MockDataController({
+                    rows: [{ values: ['', ''] }]
+                }),
 
-                    tablePosition: new MockTablePositionViewController()
-                },
+                tablePosition: new MockTablePositionViewController()
+            },
 
-                option: function(value) {
-                    return that.options[value];
-                },
+            option: function(value) {
+                return that.options[value];
+            },
 
-                _createAction: function(handler) {
-                    return handler;
-                },
+            _createAction: function(handler) {
+                return handler;
+            },
 
-                _createActionByOption: function() {
-                    return function() { };
-                }
-            };
+            _createActionByOption: function() {
+                return function() { };
+            }
+        };
 
-            that.component._views = {
-                columnsSeparatorView: new columnResizingReordering.ColumnsSeparatorView(that.component),
-                draggingHeaderView: new columnResizingReordering.DraggingHeaderView(that.component),
-                columnHeadersView: new ColumnHeadersView(that.component),
-                headerPanel: new (HeaderPanel.inherit(GroupingHeaderPanelExtender))(that.component),
-                columnChooserView: new ColumnChooserView(that.component)
-            };
+        that.component._views = {
+            columnsSeparatorView: new columnResizingReordering.ColumnsSeparatorView(that.component),
+            draggingHeaderView: new columnResizingReordering.DraggingHeaderView(that.component),
+            columnHeadersView: new ColumnHeadersView(that.component),
+            headerPanel: new (HeaderPanel.inherit(GroupingHeaderPanelExtender))(that.component),
+            columnChooserView: new ColumnChooserView(that.component)
+        };
 
-            that.createDraggingHeaderViewController = function(columns) {
-                that.component._controllers.columns = new MockColumnsController(columns, that.commonColumnSettings);
-                const controller = new columnResizingReordering.DraggingHeaderViewController(that.component);
+        that.createDraggingHeaderViewController = function(columns) {
+            that.component._controllers.columns = new MockColumnsController(columns, that.commonColumnSettings);
+            const controller = new columnResizingReordering.DraggingHeaderViewController(that.component);
 
-                controller.init();
+            controller.init();
 
-                that.component._controllers.draggingHeader = controller;
+            that.component._controllers.draggingHeader = controller;
 
-                that.initViews();
+            that.initViews();
 
-                return controller;
-            };
+            return controller;
+        };
 
-            that.initViews = function() {
-                $.each(that.component._views, function(key, value) {
-                    value.init();
-                });
-            };
+        that.initViews = function() {
+            $.each(that.component._views, function(key, value) {
+                value.init();
+            });
+        };
 
-            that.renderViews = function($container) {
-                $.each(that.component._views, function(key, value) {
-                    value.render($container);
-                });
-            };
-        },
-        afterEach: function() {
-            $('.dx-datagrid-drag-header').remove();
-        }
-    });
+        that.renderViews = function($container) {
+            $.each(that.component._views, function(key, value) {
+                value.render($container);
+            });
+        };
+    },
+    afterEach: function() {
+        $('.dx-datagrid-drag-header').remove();
+    }
+}, () => {
 
     QUnit.test('Header renders inside swatch', function(assert) {
         const testElement = $('#gridInSwatch');
@@ -6579,4 +6573,4 @@ function getEvent(options) {
         assert.ok(draggingHeaderParent.hasClass('dx-swatch-1'), 'Dragging header rendered in element with swatch class');
         assert.equal(viewport.get(0).tagName.toLowerCase(), 'body', 'Div with swatch class rendered on body');
     });
-})();
+});

@@ -92,6 +92,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         const displayValue = gridCoreUtils.getDisplayValue(column, value, cellOptions.data, cellOptions.rowType);
         const text = gridCoreUtils.formatValue(displayValue, column);
         const isCellOrBatchEditMode = this._editingController.isCellOrBatchEditMode();
+        const rowsView = that._rowsView;
 
         if(column.allowEditing && that.getController('keyboardNavigation').isKeyboardEnabled()) {
             $container.attr('tabIndex', that.option('tabIndex'));
@@ -104,7 +105,10 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
 
         if(column.cellTemplate) {
             const templateOptions = extend({}, cellOptions, { value: value, displayValue: displayValue, text: text, column: column });
-            that._rowsView.renderTemplate($container, column.cellTemplate, templateOptions, !!$container.closest(getWindow().document).length);
+            const isDomElement = !!$container.closest(getWindow().document).length;
+            rowsView.renderTemplate($container, column.cellTemplate, templateOptions, isDomElement).done(() => {
+                rowsView._cellPrepared($container, cellOptions);
+            });
         } else {
             container = $container.get(0);
             if(column.encodeHtml) {
@@ -123,9 +127,9 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
                     $container.addClass(FORM_ITEM_MODIFIED);
                 }
             }
-        }
 
-        that.getView('rowsView')._cellPrepared($container, cellOptions);
+            rowsView._cellPrepared($container, cellOptions);
+        }
     },
 
     _getTemplate: function(item, cellOptions) {
@@ -409,7 +413,9 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
             rowsCount = view.getRowsCount();
             const $rowElements = view._getRowElements();
             for(rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
-                if(rowIndex !== editFormRowIndex || viewName !== ROWS_VIEW) {
+                const cancelClassAdding = rowIndex === editFormRowIndex && viewName === ROWS_VIEW && this.option('editing.mode') !== 'popup';
+
+                if(!cancelClassAdding) {
                     currentVisibleIndex = viewName === COLUMN_HEADERS_VIEW ? this._columnsController.getVisibleIndex(column.index, rowIndex) : visibleIndex;
                     if(currentVisibleIndex >= 0) {
                         $cellElement = $rowElements.eq(rowIndex).children().eq(currentVisibleIndex);

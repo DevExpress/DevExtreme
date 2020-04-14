@@ -103,8 +103,8 @@ export class GanttToolbar extends Bar {
             if(typeof item === 'string') {
                 return this._createItemByText(item);
             } else {
-                if(item.formatName) {
-                    return extend(this._createItemByText(item.formatName), item);
+                if(item.name) {
+                    return extend(this._createItemByText(item.name), item);
                 } else {
                     return extend(this._getDefaultItemOptions(), item);
                 }

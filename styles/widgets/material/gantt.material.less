@@ -59,8 +59,7 @@
         padding-top: @GANTT_TASK_WRAPPER_PADDING_TOP;
 
         .dx-gantt-task,
-        .dx-gantt-titleOut,
-        .dx-gantt-taskRes {
+        .dx-gantt-titleOut {
             height: @GANTT_TASK_HEIGHT;
             line-height: @GANTT_TASK_HEIGHT;
         }
@@ -84,6 +83,7 @@
 
             &.dx-gantt-parent {
                 height: @GANTT_TASK_HEIGHT - 2px;
+                line-height: @GANTT_TASK_HEIGHT - 2px;
                 background-color: @gantt_parent_task_background_color;
                 border-bottom-right-radius: 0;
                 border-bottom-left-radius: 0;
@@ -148,27 +148,29 @@
             }
         }
 
-        .dx-gantt-taskRes {
-            color: #fff;
-            background-color: #999;
-            border-radius: @base-border-radius;
-            margin-left: 21px;
-            padding-left: 4px;
-            padding-right: 4px;
-        }
-
         .dx-gantt-titleIn {
             color: #fff;
             padding: 0 @GANTT_TASK_TITLE_PADDING_LEFT;
         }
+    }
 
-        .dx-gantt-titleOut {
-            padding-right: 20px;
-        }
+    .dx-gantt-taskRes {
+        height: @GANTT_TASK_HEIGHT;
+        line-height: @GANTT_TASK_HEIGHT;
+        color: #fff;
+        background-color: #999;
+        border-radius: @base-border-radius;
+        margin-left: 21px;
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+
+    .dx-gantt-titleOut {
+        padding-right: 20px;
     }
 
     .dx-gantt-milestone {
-        background-image: linear-gradient(135deg, @base-border-color, @base-text-color);
+        background-color: @base-text-color;
         width: @GANTT_MILESTONE_SIZE;
         height: @GANTT_MILESTONE_SIZE;
     }

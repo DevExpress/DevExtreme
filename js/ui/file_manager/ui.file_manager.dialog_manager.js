@@ -5,6 +5,7 @@ import messageLocalization from '../../localization/message';
 
 import FileManagerNameEditorDialog from './ui.file_manager.dialog.name_editor';
 import FileManagerFolderChooserDialog from './ui.file_manager.dialog.folder_chooser';
+import FileManagerDeleteItemDialog from './ui.file_manager.dialog.delete_item';
 
 class FileManagerDialogManager {
     constructor($element, options) {
@@ -29,13 +30,10 @@ class FileManagerDialogManager {
             onClosed: this._options['onDialogClosed']
         });
 
-        this._confirmationDialog = { // TODO implement this dialog
-            show: () => {
-                setTimeout(() => {
-                    this._options['onDialogClosed']({ dialogResult: {} });
-                });
-            }
-        };
+        const $deleteItemDialog = $('<div>').appendTo(this._$element);
+        this._deleteItemDialog = new FileManagerDeleteItemDialog($deleteItemDialog, {
+            onClosed: this._options['onDialogClosed']
+        });
     }
 
     getCopyDialog() {
@@ -56,8 +54,8 @@ class FileManagerDialogManager {
         return this._createItemDialog;
     }
 
-    getConfirmationDialog() {
-        return this._confirmationDialog;
+    getDeleteItemDialog() {
+        return this._deleteItemDialog;
     }
 }
 

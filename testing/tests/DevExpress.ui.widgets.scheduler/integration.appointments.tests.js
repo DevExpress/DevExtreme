@@ -8,14 +8,13 @@ import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import Color from 'color';
 import tooltip from 'ui/tooltip/ui.tooltip';
-import devices from 'core/devices';
 import config from 'core/config';
 import dragEvents from 'events/drag';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import dataUtils from 'core/element_data';
 import dateSerialization from 'core/utils/date_serialization';
-import { SchedulerTestWrapper, initTestMarkup, createWrapper } from './helpers.js';
+import { SchedulerTestWrapper, initTestMarkup, createWrapper, CLASSES } from './helpers.js';
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
@@ -27,17 +26,8 @@ QUnit.testStart(() => initTestMarkup());
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
 
-const APPOINTMENT_DEFAULT_OFFSET = 25;
-const APPOINTMENT_MOBILE_OFFSET = 50;
-
-
-function getOffset() {
-    if(devices.current().deviceType !== 'desktop') {
-        return APPOINTMENT_MOBILE_OFFSET;
-    } else {
-        return APPOINTMENT_DEFAULT_OFFSET;
-    }
-}
+const APPOINTMENT_DEFAULT_LEFT_OFFSET = 26;
+const APPOINTMENT_DEFAULT_TOP_OFFSET = 26;
 
 QUnit.module('T712431', () => {
     // TODO: there is a test for T712431 bug, when replace table layout on div layout, the test will also be useless
@@ -71,7 +61,7 @@ QUnit.module('Integration: Appointments', {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler($.extend(options, { maxAppointmentsPerCell: options && options.maxAppointmentsPerCell || null })).dxScheduler('instance');
+            this.instance = $('#scheduler').dxScheduler($.extend(options, { height: options && options.height || 600 })).dxScheduler('instance');
             this.clock.tick(300);
             this.instance.focus();
 
@@ -454,11 +444,11 @@ QUnit.test('Scheduler tasks should have a right dimensions for month view', func
     });
     this.clock.tick();
 
-    const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-    const $cell = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0);
+    const cellHeight = this.scheduler.workSpace.getCellHeight();
+    const cellWidth = this.scheduler.workSpace.getCellWidth();
 
-    assert.roughEqual($appointment.height(), $cell.outerHeight() * 0.6 / 2, 2, 'Task has a right height');
-    assert.roughEqual($appointment.outerWidth(), $cell.outerWidth(), 1.001, 'Task has a right width');
+    assert.roughEqual(this.scheduler.appointments.getAppointmentHeight(0), (cellHeight - 30) / 4, 2, 'Task has a right height');
+    assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(0), cellWidth, 1.001, 'Task has a right width');
 });
 
 QUnit.test('Scheduler tasks should have a right height when currentView is changed', function(assert) {
@@ -474,11 +464,11 @@ QUnit.test('Scheduler tasks should have a right height when currentView is chang
 
     this.instance.option('currentView', 'month');
 
-    const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-    const $cell = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0);
+    const cellHeight = this.scheduler.workSpace.getCellHeight();
+    const cellWidth = this.scheduler.workSpace.getCellWidth();
 
-    assert.roughEqual($appointment.height(), $cell.outerHeight() * 0.6 / 2, 2, 'Task has a right height');
-    assert.roughEqual($appointment.outerWidth(), $cell.outerWidth(), 1.001, 'Task has a right width');
+    assert.roughEqual(this.scheduler.appointments.getAppointmentHeight(0), (cellHeight - 30) / 4, 2, 'Task has a right height');
+    assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(0), cellWidth, 1.001, 'Task has a right width');
 });
 
 QUnit.test('Short tasks should have a right height (T725948)', function(assert) {
@@ -513,6 +503,7 @@ QUnit.test('Two not rival appointments with fractional coordinates should have c
         currentDate: new Date(2015, 1, 9),
         views: ['month'],
         currentView: 'month',
+        height: 600,
         width: 720
     });
 
@@ -681,6 +672,7 @@ QUnit.test('Appointments should be rendered correctly when resourses store is as
         views: ['month'],
         dataSource: appointments,
         width: 840,
+        height: 600,
         currentView: 'month',
         firstDayOfWeek: 1,
         groups: ['roomId'],
@@ -1933,15 +1925,14 @@ QUnit.test('Task with resources should contain a right data attr if field contai
 });
 
 QUnit.test('Appointment width should depend on cell width', function(assert) {
-
     this.createInstance({
-        currentDate: new Date(2015, 2, 18)
+        currentDate: new Date(2015, 2, 18),
+        maxAppointmentsPerCell: 'auto'
     });
 
     const workSpace = this.instance.getWorkSpace();
     const defaultGetCellWidthMethod = workSpace.getCellWidth;
     const CELL_WIDTH = 777;
-    const offset = getOffset();
 
     workSpace.getCellWidth = function() {
         return CELL_WIDTH;
@@ -1951,7 +1942,7 @@ QUnit.test('Appointment width should depend on cell width', function(assert) {
             { id: 1, text: 'Item 1', startDate: new Date(2015, 2, 18), endDate: new Date(2015, 2, 18, 0, 30) }
         ]);
 
-        assert.equal(this.instance.$element().find('.' + APPOINTMENT_CLASS).first().outerWidth(), CELL_WIDTH - offset, 'Appointment width is OK');
+        assert.equal(this.scheduler.appointments.getAppointmentWidth(), CELL_WIDTH - APPOINTMENT_DEFAULT_LEFT_OFFSET, 'Appointment width is OK');
 
     } finally {
         workSpace.getCellWidth = defaultGetCellWidthMethod;
@@ -2412,14 +2403,14 @@ QUnit.test('Appointment should have right position on timeline month view', func
         currentDate: new Date(2016, 1, 1),
         currentView: 'timelineMonth',
         firstDayOfWeek: 0,
-        dataSource: [appointment]
+        dataSource: [appointment],
+        maxAppointmentsPerCell: 'unlimited'
     });
 
-    const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-    const $targetCell = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(2);
+    const targetCellPosition = this.scheduler.workSpace.getCellPosition(0, 2);
 
-    assert.roughEqual($appointment.position().top, $targetCell.position().top, 1.001, 'appointment top is correct');
-    assert.roughEqual($appointment.position().left, $targetCell.position().left, 1.001, 'appointment left is correct');
+    assert.roughEqual(this.scheduler.appointments.getAppointmentPosition().top, targetCellPosition.top, 1.001, 'appointment top is correct');
+    assert.roughEqual(this.scheduler.appointments.getAppointmentPosition().left, targetCellPosition.left, 1.001, 'appointment left is correct');
 });
 
 QUnit.test('Rival appointments should have right position on timeline month view', function(assert) {
@@ -2441,6 +2432,7 @@ QUnit.test('Rival appointments should have right position on timeline month view
         dataSource: data,
         views: ['timelineMonth'],
         currentView: 'timelineMonth',
+        maxAppointmentsPerCell: 'unlimited',
         currentDate: new Date(2018, 11, 3),
         firstDayOfWeek: 0,
         startDayHour: 8,
@@ -2470,15 +2462,15 @@ QUnit.test('Rival long appointments should have right position on timeline month
         dataSource: data,
         views: ['timelineMonth'],
         currentView: 'timelineMonth',
+        maxAppointmentsPerCell: 2,
         currentDate: new Date(2018, 11, 3),
         firstDayOfWeek: 0,
         startDayHour: 8,
         endDayHour: 20
     });
 
-    const $secondAppointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(1);
-
-    assert.equal($secondAppointment.position().top, 40, 'Second appointment top is ok');
+    assert.equal(this.scheduler.appointments.getAppointmentPosition(0).top, APPOINTMENT_DEFAULT_TOP_OFFSET, 'Long appointment top is ok');
+    assert.roughEqual(this.scheduler.appointments.getAppointmentPosition(1).top, this.scheduler.appointments.getAppointmentHeight() + APPOINTMENT_DEFAULT_TOP_OFFSET, 1, 'Second appointment top is ok');
 });
 
 QUnit.test('Long appointment part should not be rendered on timeline month view (T678380)', function(assert) {
@@ -3125,11 +3117,10 @@ QUnit.test('Appointments should be rendered correctly in vertical grouped worksp
 
     const cellHeight = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
     const cellPosition = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(5).position().left;
-    const monthTopOffset = cellHeight * 0.4;
 
-    assert.roughEqual($appointments.eq(0).position().top, cellHeight * 2 + monthTopOffset, 1, 'correct top position');
+    assert.roughEqual($appointments.eq(0).position().top, cellHeight * 2 + APPOINTMENT_DEFAULT_TOP_OFFSET, 1, 'correct top position');
     assert.roughEqual($appointments.eq(0).position().left, cellPosition, 1.5, 'correct left position');
-    assert.roughEqual($appointments.eq(1).position().top, cellHeight * 8 + monthTopOffset, 3.5, 'correct top position');
+    assert.roughEqual($appointments.eq(1).position().top, cellHeight * 8 + APPOINTMENT_DEFAULT_TOP_OFFSET, 3.5, 'correct top position');
     assert.roughEqual($appointments.eq(1).position().left, cellPosition, 1.5, 'correct left position');
 });
 
@@ -3287,38 +3278,94 @@ QUnit.test('Appointment should be resized correctly to left side in horizontal g
 });
 
 // Timezone-sensitive test, use US/Pacific for proper testing
-QUnit.test('Appointment should have correct dates after resizing through timezone change (T835544)', function(assert) {
-    this.createInstance({
-        dataSource: [{
-            text: 'Staff Productivity Report',
-            startDate: '2019-11-04T00:00',
-            endDate: '2019-11-06T00:00',
-        }],
-        views: ['timelineMonth'],
-        currentView: 'timelineMonth',
-        currentDate: new Date(2019, 10, 1),
-        height: 300,
-        startDayHour: 0,
+[{
+    handle: CLASSES.resizableHandle.left,
+    direction: -1,
+    currentDate: new Date(2019, 10, 1),
+    appointment: {
+        startDate: '2019-11-04T00:00',
+        endDate: '2019-11-06T00:00',
+    },
+    expectedValue: '12:00 AM - 12:00 AM',
+    expectedTooltipValue: 'November 3 12:00 AM - November 6 12:00 AM',
+    scrollDate: new Date(2019, 10, 1),
+    text: 'in case drag left handle to winter DST'
+}, {
+    handle: CLASSES.resizableHandle.left,
+    direction: -1,
+    currentDate: new Date(2019, 2, 10),
+    appointment: {
+        startDate: '2019-03-11T00:00',
+        endDate: '2019-03-13T00:00',
+    },
+    expectedValue: '12:00 AM - 12:00 AM',
+    expectedTooltipValue: 'March 10 12:00 AM - March 13 12:00 AM',
+    scrollDate: new Date(2019, 2, 10),
+    text: 'in case drag left handle to summer DST'
+}, {
+    handle: CLASSES.resizableHandle.right,
+    direction: 1,
+    currentDate: new Date(2019, 10, 1),
+    appointment: {
+        startDate: '2019-11-01T00:00',
+        endDate: '2019-11-03T00:00',
+    },
+    expectedValue: '12:00 AM - 12:00 AM',
+    expectedTooltipValue: 'November 1 12:00 AM - November 4 12:00 AM',
+    scrollDate: new Date(2019, 10, 1),
+    text: 'in case drag right handle to winter DST'
+}, {
+    handle: CLASSES.resizableHandle.right,
+    direction: 1,
+    currentDate: new Date(2019, 2, 10),
+    appointment: {
+        startDate: '2019-03-08T00:00',
+        endDate: '2019-03-10T00:00',
+    },
+    expectedValue: '12:00 AM - 12:00 AM',
+    expectedTooltipValue: 'March 8 12:00 AM - March 11 12:00 AM',
+    scrollDate: new Date(2019, 2, 7),
+    text: 'in case drag right handle to summer DST'
+}].forEach(testCase => {
+    QUnit.test(`Appointment should have correct dates after resizing ${testCase.text} (T835544)`, function(assert) {
+        this.createInstance({
+            editing: {
+                allowResizing: true
+            },
+            dataSource: [{
+                text: 'Staff Productivity Report',
+                startDate: testCase.appointment.startDate,
+                endDate: testCase.appointment.endDate,
+            }],
+            views: ['timelineMonth'],
+            currentView: 'timelineMonth',
+            currentDate: new Date(testCase.currentDate),
+            height: 300,
+            startDayHour: 0,
+        });
+
+        this.scheduler.instance.scrollToTime(0, 0, new Date(testCase.scrollDate));
+
+        const { getAppointment, getDateText } = this.scheduler.appointments;
+
+        const cellWidth = this.scheduler.workSpace.getCellWidth();
+        let pointer = pointerMock($(getAppointment()).find(testCase.handle).eq(0)).start();
+
+        pointer.dragStart().drag(testCase.direction * cellWidth, 0);
+        pointer.dragEnd();
+
+        assert.equal(getDateText(), testCase.expectedValue, 'Dates should correct after resizing');
+
+        this.scheduler.appointments.click();
+        assert.equal(this.scheduler.tooltip.getDateText(), testCase.expectedTooltipValue, 'Dates in tooltip should correct');
+
+        pointer = pointerMock($(getAppointment()).find(testCase.handle).eq(0)).start();
+
+        pointer.dragStart().drag(-testCase.direction * cellWidth, 0);
+        pointer.dragEnd();
+
+        assert.equal(getDateText(), testCase.expectedValue, 'Dates should correct');
     });
-
-    const cellWidth = this.scheduler.workSpace.getCellWidth();
-    let pointer = pointerMock($(this.scheduler.appointments.getAppointment()).find('.dx-resizable-handle-left').eq(0)).start();
-
-    pointer.dragStart().drag(-(cellWidth), 0);
-    pointer.dragEnd();
-
-    let appointmentContent = this.scheduler.appointments.getAppointment().find('.dx-scheduler-appointment-content-date').text();
-
-    assert.equal(appointmentContent, '12:00 AM - 12:00 AM', 'Dates are correct');
-
-    pointer = pointerMock($(this.scheduler.appointments.getAppointment()).find('.dx-resizable-handle-left').eq(0)).start();
-
-    pointer.dragStart().drag((cellWidth), 0);
-    pointer.dragEnd();
-
-    appointmentContent = this.scheduler.appointments.getAppointment().find('.dx-scheduler-appointment-content-date').text();
-
-    assert.equal(appointmentContent, '12:00 AM - 12:00 AM', 'Dates are correct');
 });
 
 QUnit.test('Tail of long appointment should have a right position, groupByDate = true', function(assert) {

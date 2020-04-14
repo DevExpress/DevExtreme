@@ -29,7 +29,7 @@ const tableCreator = require('../ui.scheduler.table_creator');
 const VerticalShader = require('../shaders/ui.scheduler.current_time_shader.vertical');
 const AppointmentDragBehavior = require('../appointmentDragBehavior');
 const FIXED_CONTAINER_CLASS = require('../constants').FIXED_CONTAINER_CLASS;
-const utils = require('../utils');
+const timeZoneUtils = require('../utils.timeZone');
 
 const COMPONENT_CLASS = 'dx-scheduler-work-space';
 const GROUPED_WORKSPACE_CLASS = 'dx-scheduler-work-space-grouped';
@@ -40,7 +40,6 @@ const WORKSPACE_WITH_BOTH_SCROLLS_CLASS = 'dx-scheduler-work-space-both-scrollba
 const WORKSPACE_WITH_COUNT_CLASS = 'dx-scheduler-work-space-count';
 const WORKSPACE_WITH_GROUP_BY_DATE_CLASS = 'dx-scheduler-work-space-group-by-date';
 const WORKSPACE_WITH_ODD_CELLS_CLASS = 'dx-scheduler-work-space-odd-cells';
-const WORKSPACE_WITH_OVERLAPPING_CLASS = 'dx-scheduler-work-space-overlapping';
 
 const TIME_PANEL_CLASS = 'dx-scheduler-time-panel';
 const TIME_PANEL_CELL_CLASS = 'dx-scheduler-time-panel-cell';
@@ -443,12 +442,15 @@ const SchedulerWorkSpace = Widget.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
+            case 'startDayHour':
+            case 'endDayHour':
+                this.invoke('validateDayHours');
+                this._cleanWorkSpace();
+                break;
             case 'dateCellTemplate':
             case 'resourceCellTemplate':
             case 'dataCellTemplate':
             case 'timeCellTemplate':
-            case 'startDayHour':
-            case 'endDayHour':
             case 'hoursInterval':
             case 'firstDayOfWeek':
             case 'currentDate':
@@ -539,7 +541,6 @@ const SchedulerWorkSpace = Widget.inherit({
         this._toggleWorkSpaceCountClass();
         this._toggleGroupByDateClass();
         this._toggleWorkSpaceWithOddCells();
-        this._toggleWorkSpaceOverlappingClass();
 
         this.$element()
             .addClass(COMPONENT_CLASS)
@@ -594,14 +595,6 @@ const SchedulerWorkSpace = Widget.inherit({
 
     _isWorkspaceWithOddCells: function() {
         return this.option('hoursInterval') === 0.5;
-    },
-
-    _toggleWorkSpaceOverlappingClass: function() {
-        this.$element().toggleClass(WORKSPACE_WITH_OVERLAPPING_CLASS, this._isWorkSpaceWithOverlapping());
-    },
-
-    _isWorkSpaceWithOverlapping: function() {
-        return this.invoke('getMaxAppointmentsPerCell') !== null;
     },
 
     _toggleGroupingDirectionClass: function() {
@@ -1461,7 +1454,7 @@ const SchedulerWorkSpace = Widget.inherit({
 
     _getDateWithSkippedDST: function() {
         let result = new Date(this.getStartViewDate());
-        if(utils.isTimezoneChangeInDate(result)) {
+        if(timeZoneUtils.isTimezoneChangeInDate(result)) {
             result = new Date(result.setDate(result.getDate() + 1));
         }
         return result;
@@ -1488,7 +1481,7 @@ const SchedulerWorkSpace = Widget.inherit({
 
     _getTimeCellDateAdjustedDST: function(i) {
         let startViewDate = new Date(this.getStartViewDate());
-        if(utils.isTimezoneChangeInDate(startViewDate)) {
+        if(timeZoneUtils.isTimezoneChangeInDate(startViewDate)) {
             startViewDate = new Date(startViewDate.setDate(startViewDate.getDate() + 1));
         }
 
@@ -2243,7 +2236,7 @@ const SchedulerWorkSpace = Widget.inherit({
     getDateRange: function() {
         return [
             this.getStartViewDate(),
-            this.getEndViewDate()
+            this.getEndViewDateByEndDayHour()
         ];
     },
 
@@ -2374,12 +2367,22 @@ const SchedulerWorkSpace = Widget.inherit({
         return this._adjustEndViewDateByDaylightDiff(dateOfLastViewCell, endDateOfLastViewCell);
     },
 
+    getEndViewDateByEndDayHour: function() {
+        const dateOfLastViewCell = this.getDateOfLastViewCell();
+        const endTime = dateUtils.dateTimeFromDecimal(this.option('endDayHour'));
+
+        const endDateOfLastViewCell = new Date(dateOfLastViewCell.setHours(endTime.hours, endTime.minutes));
+
+        return this._adjustEndViewDateByDaylightDiff(dateOfLastViewCell, endDateOfLastViewCell);
+
+    },
+
     calculateEndViewDate: function(dateOfLastViewCell) {
         return new Date(dateOfLastViewCell.getTime() + this.getCellDuration());
     },
 
     _adjustEndViewDateByDaylightDiff: function(startDate, endDate) {
-        const daylightDiff = utils.getDaylightOffsetInMs(startDate, endDate);
+        const daylightDiff = timeZoneUtils.getDaylightOffsetInMs(startDate, endDate);
 
         const endDateOfLastViewCell = new Date(endDate.getTime() - daylightDiff);
 

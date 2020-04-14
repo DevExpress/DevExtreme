@@ -181,6 +181,8 @@ module.exports = {
         { import: '../../base/icons', type: 'index' },
         { import: '../list/sizes', type: 'index' },
         { import: '../button', type: 'index' },
+        { import: '../button/colors', type: 'index' },
+        { import: '../menuBase', type: 'index' },
         { regex: /@mixin dx-toolbar-item-padding\(\$MATERIAL_TOOLBAR_ITEM_SPACING\),/, replacement: '@include dx-toolbar-item-padding($MATERIAL_TOOLBAR_ITEM_SPACING);' },
         { regex: /.dx-toolbar-item-padding\(\$MATERIAL_MOBILE_TOOLBAR_ITEM_SPACING\),/, replacement: '@include dx-toolbar-item-padding($MATERIAL_MOBILE_TOOLBAR_ITEM_SPACING);' },
         { regex: /(-bg|-color|: 0|MATERIAL_LIST_ITEM_HEIGHT|MATERIAL_LIST_ITEM_HORIZONTAL_PADDING|4px|2 0|50%),/g, replacement: '$1;' },

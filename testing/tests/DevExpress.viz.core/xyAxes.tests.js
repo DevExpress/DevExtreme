@@ -128,7 +128,7 @@ const environment = {
         return axis;
     },
     createSimpleAxis: function(options) {
-        options = $.extend(true, this.options, options);
+        options = $.extend(true, {}, this.options, options);
         let axis;
 
         this.range.categories = options.categories;
@@ -4917,4 +4917,149 @@ QUnit.test('Update discrete translator business range after adjust axis', functi
     assert.strictEqual(max, '200');
     assert.strictEqual(minVisible, '120');
     assert.strictEqual(maxVisible, '180');
+});
+
+QUnit.module('Custom positioning', {
+    beforeEach: function() {
+        environment.beforeEach.call(this);
+        this.generatedTicks = [10, 50, 90];
+        this.options.type = 'continuous';
+        this.options.visible = true;
+        this.options.label = {
+            visible: true,
+            indentFromAxis: 5
+        };
+
+        translator2DModule.Translator2D.restore();
+        sinon.spy(translator2DModule, 'Translator2D');
+    },
+    afterEach: function() {
+        environment.afterEach.call(this);
+    },
+    createAxis: environment.createAxis,
+    createSimpleAxis: environment.createSimpleAxis,
+    drawOrthogonalAxes(horizontalAxisOptions, verticalAxisOptions) {
+        const horizontalAxis = this.createSimpleAxis($.extend(true, { isArgumentAxis: false, argumentType: 'numeric' }, horizontalAxisOptions));
+        const verticalAxis = this.createSimpleAxis($.extend(true, { isArgumentAxis: false, isHorizontal: false, valueType: 'numeric' }, verticalAxisOptions));
+
+        horizontalAxis.getCustomPositionAxis = () => { return verticalAxis; };
+        verticalAxis.getCustomPositionAxis = () => { return horizontalAxis; };
+
+        horizontalAxis.draw(this.canvas);
+        verticalAxis.draw(this.canvas);
+        horizontalAxis.draw(this.canvas);
+
+        return { horizontalAxis, verticalAxis };
+    }
+});
+
+QUnit.test('Set predefined axis position by \'position\' option', function(assert) {
+    const { horizontalAxis, verticalAxis } = this.drawOrthogonalAxes({
+        position: 'top'
+    }, {
+        position: 'right'
+    });
+
+    assert.equal(horizontalAxis.getAxisPosition(), 10);
+    assert.equal(verticalAxis.getAxisPosition(), 910);
+    assert.notOk(horizontalAxis.customPositionIsAvailable());
+    assert.notOk(verticalAxis.customPositionIsAvailable());
+    assert.notOk(horizontalAxis.hasCustomPosition());
+    assert.notOk(verticalAxis.hasCustomPosition());
+    assert.equal(horizontalAxis.getResolvedPositionOption(), 'top');
+    assert.equal(verticalAxis.getResolvedPositionOption(), 'right');
+
+    assert.equal(horizontalAxis.getLabelsPosition(), 5);
+    assert.equal(verticalAxis.getLabelsPosition(), 915);
+});
+
+QUnit.test('Set custom position', function(assert) {
+    const { horizontalAxis, verticalAxis } = this.drawOrthogonalAxes({
+        customPosition: 50
+    }, {
+        customPosition: 75
+    });
+
+    assert.equal(horizontalAxis.getAxisPosition(), 305);
+    assert.equal(verticalAxis.getAxisPosition(), 688);
+    assert.ok(horizontalAxis.customPositionIsAvailable());
+    assert.ok(verticalAxis.customPositionIsAvailable());
+    assert.ok(horizontalAxis.hasCustomPosition());
+    assert.ok(verticalAxis.hasCustomPosition());
+    assert.equal(horizontalAxis.getResolvedPositionOption(), 50);
+    assert.equal(verticalAxis.getResolvedPositionOption(), 75);
+    assert.notOk(horizontalAxis.customPositionIsBoundary());
+    assert.notOk(verticalAxis.customPositionIsBoundary());
+
+    assert.equal(horizontalAxis.getLabelsPosition(), 310);
+    assert.equal(verticalAxis.getLabelsPosition(), 683);
+
+    assert.deepEqual(horizontalAxis._axisElement.attr.getCall(0).args[0], { points: [20, 305, 910, 305] });
+    assert.deepEqual(verticalAxis._axisElement.attr.getCall(0).args[0], { points: [688, 600, 688, 10] });
+
+    assert.deepEqual(horizontalAxis._majorTicks[0].label.attr.getCall(5).args[0], { x: 109, y: 305 });
+    assert.deepEqual(verticalAxis._majorTicks[0].label.attr.getCall(1).args[0], { x: 688, y: 541 });
+});
+
+QUnit.test('Shift axis by offset option', function(assert) {
+    const { horizontalAxis, verticalAxis } = this.drawOrthogonalAxes({
+        customPosition: 50,
+        offset: -150
+    }, {
+        offset: 200
+    });
+
+    assert.equal(horizontalAxis.getAxisPosition(), 155);
+    assert.equal(verticalAxis.getAxisPosition(), 220);
+    assert.ok(horizontalAxis.customPositionIsAvailable());
+    assert.ok(verticalAxis.customPositionIsAvailable());
+    assert.equal(horizontalAxis.getResolvedPositionOption(), 50);
+    assert.equal(verticalAxis.getResolvedPositionOption(), 'left');
+    assert.notOk(horizontalAxis.customPositionIsBoundary());
+    assert.notOk(verticalAxis.customPositionIsBoundary());
+
+    assert.equal(horizontalAxis.getLabelsPosition(), 160);
+    assert.equal(verticalAxis.getLabelsPosition(), 215);
+
+    assert.deepEqual(horizontalAxis._axisElement.attr.getCall(0).args[0], { points: [20, 155, 910, 155] });
+    assert.deepEqual(verticalAxis._axisElement.attr.getCall(0).args[0], { points: [220, 600, 220, 10] });
+
+    assert.deepEqual(horizontalAxis._majorTicks[0].label.attr.getCall(5).args[0], { x: 109, y: 155 });
+    assert.deepEqual(verticalAxis._majorTicks[0].label.attr.getCall(1).args[0], { x: 220, y: 541 });
+});
+
+QUnit.test('Set predefined axis position by \'customPosition\' option', function(assert) {
+    const { horizontalAxis, verticalAxis } = this.drawOrthogonalAxes({
+        customPosition: 0
+    }, {
+        customPosition: 200
+    });
+
+    assert.equal(horizontalAxis.getAxisPosition(), 600);
+    assert.equal(verticalAxis.getAxisPosition(), 910);
+    assert.ok(horizontalAxis.customPositionIsBoundary());
+    assert.ok(verticalAxis.customPositionIsBoundary());
+    assert.equal(horizontalAxis.getResolvedBoundaryPosition(), 'bottom');
+    assert.equal(verticalAxis.getResolvedBoundaryPosition(), 'right');
+    assert.ok(horizontalAxis.customPositionEqualsToPredefined());
+    assert.notOk(verticalAxis.customPositionEqualsToPredefined());
+
+    assert.deepEqual(horizontalAxis._axisElement.attr.getCall(0).args[0], { points: [20, 600, 910, 600] });
+    assert.deepEqual(verticalAxis._axisElement.attr.getCall(0).args[0], { points: [910, 600, 910, 10] });
+
+    assert.deepEqual(horizontalAxis._majorTicks[0].label.attr.getCall(5).args[0], { x: 109, y: 600 });
+    assert.deepEqual(verticalAxis._majorTicks[0].label.attr.getCall(1).args[0], { x: 910, y: 541 });
+});
+
+QUnit.test('Validate \'customPosition\' option', function(assert) {
+    const { horizontalAxis } = this.drawOrthogonalAxes({
+        customPosition: 'abcd'
+    }, {});
+
+    assert.equal(horizontalAxis.getAxisPosition(), 600);
+    assert.ok(horizontalAxis.customPositionIsAvailable());
+    assert.notOk(horizontalAxis.hasCustomPosition());
+    assert.ok(horizontalAxis.customPositionIsBoundary());
+    assert.equal(horizontalAxis.getResolvedBoundaryPosition(), 'bottom');
+    assert.ok(horizontalAxis.customPositionEqualsToPredefined());
 });

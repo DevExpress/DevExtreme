@@ -473,6 +473,31 @@ QUnit.module('functionality', moduleSetup, () => {
         assert.deepEqual(selectBox._list.option('items'), []);
     });
 
+    QUnit.test('no exceptions after dataSource reset during typing', function(assert) {
+        try {
+            const $element = $('#selectBox');
+            const selectBox = $element.dxSelectBox({
+                dataSource: ['one', 'two'],
+                searchTimeout: 0,
+                searchEnabled: true
+            }).dxSelectBox('instance');
+
+            const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+            const keyboard = keyboardMock($input);
+
+            keyboard
+                .focus()
+                .type('o');
+
+            selectBox.option('dataSource', null);
+
+            keyboard.type('n');
+            assert.ok(true, 'no errors');
+        } catch(e) {
+            assert.ok(false, `The '${e.message}' is raised`);
+        }
+    });
+
     QUnit.test('list item obtained focus only after press on control key', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'test does not actual for mobile devices');
@@ -2820,6 +2845,44 @@ QUnit.module('search', moduleSetup, () => {
         $input.trigger('focusout');
 
         assert.equal($(instance.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'filter was cleared');
+    });
+
+    QUnit.testInActiveWindow('Filter should not be canceled after focusout if event target is not in editor\'s overlay (T838753)', function(assert) {
+        const items = ['111', '222', '333'];
+
+        const $selectBox = $('#selectBox').dxSelectBox({
+            searchTimeout: 0,
+            items,
+            searchEnabled: true,
+            applyValueMode: 'useButtons'
+        });
+
+        const instance = $selectBox.dxSelectBox('instance');
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        keyboardMock($input).type('1');
+        $input.trigger($.Event('focusout', { relatedTarget: $(instance.content()).parent().find('.dx-toolbar-items-container') }));
+
+        assert.equal($(instance.content()).find(toSelector(LIST_ITEM_CLASS)).length, 1, 'filter is not cleared');
+    });
+
+    QUnit.testInActiveWindow('Filter should not be canceled after focusout if the widget is closed (T876423)', function(assert) {
+        const items = ['111', '222', '333'];
+
+        const $selectBox = $('#selectBox').dxSelectBox({
+            searchTimeout: 0,
+            items,
+            searchEnabled: true
+        });
+
+        const instance = $selectBox.dxSelectBox('instance');
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        keyboardMock($input).type('1');
+        instance.close();
+        $input.trigger('focusout');
+
+        assert.equal($(instance.content()).find(toSelector(LIST_ITEM_CLASS)).length, 1, 'filter is not clear');
     });
 
     QUnit.testInActiveWindow('Unfiltered editor should not be load data on blur (T873258)', function(assert) {

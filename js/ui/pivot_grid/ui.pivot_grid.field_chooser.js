@@ -509,6 +509,7 @@ const FieldChooser = BaseFieldChooser.inherit({
         const treeView = that._createComponent(container, TreeView, {
             dataSource: that._createFieldsDataSource(dataSource),
             showCheckBoxesMode: 'normal',
+            expandNodesRecursive: false,
             searchEnabled: that.option('allowSearch'),
             searchTimeout: that.option('searchTimeout'),
             itemTemplate: function(itemData, itemIndex, itemElement) {

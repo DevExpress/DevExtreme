@@ -158,7 +158,6 @@ QUnit.module('onContentReady event', moduleConfig, () => {
             currentView: 'week',
             width: 800,
             dataSource: dataSource,
-            maxAppointmentsPerCell: null,
             onContentReady: e => {
                 const element = e.component;
                 const $header = element.getHeader().$element();
@@ -180,7 +179,6 @@ QUnit.module('onContentReady event', moduleConfig, () => {
             currentDate: new Date(2016, 2, 15),
             views: ['week'],
             currentView: 'week',
-            maxAppointmentsPerCell: null,
             width: 800,
             dataSource: []
         });
@@ -209,7 +207,6 @@ QUnit.module('onContentReady event', moduleConfig, () => {
             currentDate: new Date(2016, 2, 15),
             views: ['week'],
             currentView: 'week',
-            maxAppointmentsPerCell: null,
             width: 800,
             dataSource: [appointment]
         });

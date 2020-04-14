@@ -88,7 +88,8 @@ function createAxisStubs() {
         hideTitle: sinon.spy(),
         drawScaleBreaks: sinon.spy(),
         hideOuterElements: sinon.spy(),
-        prepareAnimation: sinon.spy()
+        prepareAnimation: sinon.spy(),
+        estimateTickInterval: sinon.stub().returns(false)
     };
 
     axisFakes
@@ -2040,6 +2041,39 @@ QUnit.test('Draw scale breaks', function(assert) {
 
     assert.ok(valAxisStub.drawScaleBreaks.called, 'draw scaleBreaks for value axis');
     assert.ok(argAxisStub.drawScaleBreaks.called, 'draw scaleBreaks for argument axis');
+});
+
+QUnit.test('Redraw vertical axes, if tickInterval is changed', function(assert) {
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
+
+    argAxis.estimateMargins.returns({ left: 10, top: 8, right: 11, bottom: 20 });
+    argAxis.getMargins.returns({ left: 10, top: 7, right: 20, bottom: 13 });
+    valAxis.getMargins.returns({ left: 18, top: 15, right: 10, bottom: 9 });
+
+    valAxis.estimateTickInterval.returns(true);
+
+    this.setupAxes([argAxis, valAxis]);
+
+    new dxChart(this.container, {
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    assert.deepEqual(this.axisStub.getCall(1).returnValue.createTicks_test_arg, {
+        left: 18,
+        right: 20,
+        top: 15,
+        bottom: 13,
+        originalLeft: 0,
+        originalRight: 0,
+        originalTop: 0,
+        originalBottom: 0,
+        width: 800,
+        height: 600
+    }, 'createTicks valAxis canvas');
+    assert.equal(this.axisStub.getCall(1).returnValue.draw.callCount, 2);
+    assert.equal(this.axisStub.getCall(1).returnValue.draw.lastCall.args[0], false, 'draw valAxis');
 });
 
 QUnit.module('Axes synchronization', environment);
