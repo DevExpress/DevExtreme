@@ -735,12 +735,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const $parent = $target.parent();
         const isEditingRow = $parent.hasClass(EDIT_ROW_CLASS);
         const isInteractiveElement = $(event.target).is(INTERACTIVE_ELEMENTS_SELECTOR);
-        const isCommandButtonTarget = $(event.target).hasClass('dx-link');
-
-        if(isCommandButtonTarget) {
-            this.setCellFocusType();
-            return;
-        }
 
         if(this._isEventInCurrentGrid(event) && this._isCellValid($target, !isInteractiveElement)) {
             $target = this._isInsideEditForm($target) ? $(event.target) : $target;
@@ -1525,6 +1519,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             args.cancel = true;
             return args;
         }
+
         if(this.option('focusedRowEnabled')) {
             this.executeAction('onFocusedRowChanging', args);
             if(!args.cancel && args.newRowIndex !== newRowIndex) {
