@@ -2940,6 +2940,7 @@ declare module DevExpress.ui {
         columns?: Array<dxDataGridColumn | string>;
         /** @name dxDataGrid.Options.customizeColumns */
         customizeColumns?: ((columns: Array<dxDataGridColumn>) => any);
+        /** @deprecated */
         /** @name dxDataGrid.Options.customizeExportData */
         customizeExportData?: ((columns: Array<dxDataGridColumn>, rows: Array<dxDataGridRowObject>) => any);
         /** @name dxDataGrid.Options.editing */
@@ -3048,6 +3049,7 @@ declare module DevExpress.ui {
         expandAll(groupIndex?: number): void;
         /** @name dxDataGrid.expandRow(key) */
         expandRow(key: any): Promise<void> & JQueryPromise<void>;
+        /** @deprecated */
         /** @name dxDataGrid.exportToExcel(selectionOnly) */
         exportToExcel(selectionOnly: boolean): void;
         /** @name dxDataGrid.getSelectedRowKeys() */
