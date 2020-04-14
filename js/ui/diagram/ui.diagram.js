@@ -80,6 +80,7 @@ class Diagram extends Widget {
         super._initMarkup();
 
         this._toolbars = [];
+        delete this._isMobileScreenSize;
 
         const isServerSide = !hasWindow();
         this.$element().addClass(DIAGRAM_CLASS);
@@ -198,10 +199,10 @@ class Diagram extends Widget {
         this._browserResizeTimer = -1;
     }
     isMobileScreenSize() {
-        if(this._isMobileScreenSize !== undefined) {
-            return this._isMobileScreenSize;
+        if(this._isMobileScreenSize === undefined) {
+            this._isMobileScreenSize = hasWindow() && this.$element().outerWidth() < DIAGRAM_MAX_MOBILE_WINDOW_WIDTH;
         }
-        return (this._isMobileScreenSize = hasWindow() && getWindow().innerWidth < DIAGRAM_MAX_MOBILE_WINDOW_WIDTH);
+        return this._isMobileScreenSize;
     }
     notifyBarCommandExecuted() {
         this._diagramInstance.captureFocus();
@@ -345,6 +346,10 @@ class Diagram extends Widget {
                         this._historyToolbar.$element().css('zIndex', this._historyToolbarZIndex);
                         this._historyToolbar.$element().css('boxShadow', 'none');
                     }
+                }
+
+                if(this._viewToolbar) {
+                    this._viewToolbar.$element().css('opacity', e.visible && this.isMobileScreenSize() ? '0' : '1');
                 }
             },
             onVisibilityChanged: (e) => {
