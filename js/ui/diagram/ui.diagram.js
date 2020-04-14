@@ -311,6 +311,7 @@ class Diagram extends Widget {
             offsetX: bounds.offsetX,
             offsetY: bounds.offsetY,
             toolboxGroups: this._getToolboxGroups(),
+
             onShapeCategoryRendered: (e) => {
                 if(isServerSide) return;
 
