@@ -8,9 +8,9 @@ daysUntilStale: 30
 daysUntilClose: 5
 
 # Issues or Pull Requests with these labels will never be considered stale. Set to `[]` to disable
-exemptLabels:
 # type/discussion - our discussion pages. They can be inactive for a long time.
 # WIP - pull requests that have "work in progress" status
+exemptLabels:
   - type/discussion
   - WIP
 
