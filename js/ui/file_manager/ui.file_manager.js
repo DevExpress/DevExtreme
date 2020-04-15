@@ -208,7 +208,7 @@ class FileManager extends Widget {
             refresh: () => this._refreshAndShowProgress(),
             thumbnails: () => this.option('itemView.mode', 'thumbnails'),
             details: () => this.option('itemView.mode', 'details'),
-            clear: () => this._clearSelection(),
+            clearSelection: () => this._clearSelection(),
             showNavPane: () => this._adaptivityControl.toggleDrawer()
         });
         this._commandManager.registerActions(actions);
@@ -432,7 +432,7 @@ class FileManager extends Widget {
                 ],
 
                 fileSelectionItems: [
-                    'download', 'separator', 'move', 'copy', 'rename', 'separator', 'delete', 'clear',
+                    'download', 'separator', 'move', 'copy', 'rename', 'separator', 'delete', 'clearSelection',
                     {
                         name: 'separator',
                         location: 'after'

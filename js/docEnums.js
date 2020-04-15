@@ -1053,7 +1053,7 @@
 
 /**
  * @typedef {string} Enums.FileManagerToolbarItem
- * @enum {'showNavPane'|'create'|'upload'|'refresh'|'switchView'|'download'|'move'|'copy'|'rename'|'delete'|'clear'|'separator'}
+ * @enum {'showNavPane'|'create'|'upload'|'refresh'|'switchView'|'download'|'move'|'copy'|'rename'|'delete'|'clearSelection'|'separator'}
  */
 
 /**
