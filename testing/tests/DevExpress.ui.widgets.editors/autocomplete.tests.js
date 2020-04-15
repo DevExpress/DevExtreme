@@ -938,8 +938,7 @@ QUnit.module('ContentReady event', {
         this.clock.restore();
     }
 }, () => {
-    // eslint-disable-next-line
-    QUnit.todo('ContentReady should be raised when widget non-dropdown part is rendered (deferRendering is true)', function(assert) {
+    QUnit.skip('ContentReady should be raised when widget non-dropdown part is rendered (deferRendering is true)', function(assert) {
         assert.expect(4);
 
         $('#autocomplete').dxAutocomplete({
@@ -974,8 +973,7 @@ QUnit.module('ContentReady event', {
         autocomplete.open();
     });
 
-    // eslint-disable-next-line
-    QUnit.todo('ContentReady should be raised when list is rendered after its first opening (deferRendering is false)', function(assert) {
+    QUnit.skip('ContentReady should be raised when list is rendered after its first opening (deferRendering is false)', function(assert) {
         assert.expect(6);
 
         $('#autocomplete').dxAutocomplete({
