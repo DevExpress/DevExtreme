@@ -185,7 +185,6 @@ class FileManagerToolbar extends Widget {
             center: this._getItemsInGroup(items, menuItems, 'center'),
             after: this._getItemsInGroup(items, menuItems, 'after')
         };
-        let lookupIndex = 0;
         items.forEach((item, i) => {
             const itemLocation = this._getItemLocation(item);
             if(item.name === 'separator') {
@@ -197,11 +196,9 @@ class FileManagerToolbar extends Widget {
                 item.visible = isSeparatorVisible;
                 hasItemsBefore[itemLocation] = false;
             } else {
-                if(!this._isItemInMenu(menuItems, item, lookupIndex)) {
+                if(!this._isItemInMenu(menuItems, item)) {
                     hasItemsBefore[itemLocation] = hasItemsBefore[itemLocation] || item.visible;
                     itemGroups[itemLocation].shift();
-                } else {
-                    lookupIndex++;
                 }
             }
         });
@@ -217,25 +214,14 @@ class FileManagerToolbar extends Widget {
         return result.map(menuItem => menuItem.originalItemData);
     }
 
-    _isItemInMenu(menuItems, item, lookupIndex) {
+    _isItemInMenu(menuItems, item) {
         return menuItems.length
             && ensureDefined(item.locateInMenu, 'never') !== 'never'
-            && menuItems.indexOf(item.originalItemData, lookupIndex) !== -1;
+            && menuItems.indexOf(item.originalItemData) !== -1;
     }
 
     _getItemsInGroup(items, menuItems, groupName) {
-        let lookupIndex = 0;
-        return items.filter(item => {
-            if(this._getItemLocation(item) !== groupName) {
-                return false;
-            }
-            if(!this._isItemInMenu(menuItems, item, lookupIndex)) {
-                return true;
-            } else {
-                lookupIndex++;
-                return false;
-            }
-        });
+        return items.filter(item => this._getItemLocation(item) === groupName && !this._isItemInMenu(menuItems, item, 0));
     }
 
     _groupHasItemsAfter(items) {
