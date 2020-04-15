@@ -2245,6 +2245,47 @@ QUnit.testInActiveWindow('No scroll on opening the header filter when the popup 
     }
 });
 
+QUnit.test('Checks whether the SelectAll checkbox is deselected when all filter items are deselected (T875471)', function(assert) {
+    // arrange
+    const $testElement = $('#container');
+
+    this.generateItems(3);
+    this.columns[0].filterValues = [];
+    this.columns[0].filterType = 'exclude';
+    this.setupDataGrid();
+    this.columnHeadersView.render($testElement);
+    this.headerFilterView.render($testElement);
+
+    this.headerFilterController.showHeaderFilterMenu(0);
+
+    const $popupContent = this.headerFilterView.getPopupContainer().$content();
+    const $selectAll = $popupContent.find('.dx-list-select-all-checkbox');
+    const $items = $popupContent.find('.dx-list-item');
+
+    // assert
+    assert.ok($selectAll.hasClass('dx-checkbox-checked'), 'selectAll is checked');
+    assert.equal($items.length, 3);
+
+    $($items.eq(0)).trigger('dxclick');
+
+    // assert
+    assert.ok($selectAll.hasClass('dx-checkbox-indeterminate'), 'selectAll is in the indeterminate state');
+
+    $($items.eq(1)).trigger('dxclick');
+    $($items.eq(2)).trigger('dxclick');
+
+    // assert
+    assert.notOk($selectAll.hasClass('dx-checkbox-indeterminate'), 'selectAll is not in the indeterminate state');
+    assert.notOk($selectAll.hasClass('dx-checkbox-checked'), 'selectAll is not checked');
+
+    $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // apply filter
+    this.clock.tick(500);
+
+    // assert
+    assert.notOk(this.columns[0].filterValues, 'filterValues not defined');
+});
+
+
 QUnit.module('Header Filter with real columnsController', {
     beforeEach: function() {
         this.items = [{ Test1: 'value1', Test2: 'value2' }, { Test1: 'value3', Test2: 'value4' }];

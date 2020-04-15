@@ -93,7 +93,7 @@ class FileSystemItem {
         result.dateModified = this.dateModified;
         result.thumbnail = this.thumbnail;
         result.tooltipText = this.tooltipText;
-        result.hasSubDirs = this.hasSubDirs;
+        result.hasSubDirectories = this.hasSubDirectories;
         result.dataItem = this.dataItem;
         return result;
     }

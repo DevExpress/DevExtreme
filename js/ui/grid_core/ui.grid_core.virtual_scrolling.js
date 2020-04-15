@@ -248,6 +248,8 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
                         storeLoadOptions.skip = that.pageIndex() * that.pageSize();
                     }
                 }
+            } else if(isAppendMode(that) && storeLoadOptions.skip) {
+                storeLoadOptions.skip += that._skipCorrection;
             }
             return that.callBase.apply(that, arguments);
         },

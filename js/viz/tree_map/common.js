@@ -7,10 +7,7 @@ exports.buildRectAppearance = function(option) {
 
 exports.buildTextAppearance = function(options, filter) {
     return {
-        attr: options['stroke-width'] ? {
-            stroke: options.stroke, 'stroke-width': options['stroke-width'], 'stroke-opacity': options['stroke-opacity'],
-            filter: filter
-        } : {},
+        attr: { filter },
         css: _patchFontOptions(options.font)
     };
 };

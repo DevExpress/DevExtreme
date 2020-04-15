@@ -292,6 +292,10 @@
         "dxFileManager-dialogRenameItemButtonText": "TODO",
         "dxFileManager-dialogCreateDirectoryTitle": "TODO",
         "dxFileManager-dialogCreateDirectoryButtonText": "TODO",
+        "dxFileManager-dialogDeleteItemTitle": "TODO",
+        "dxFileManager-dialogDeleteItemButtonText": "TODO",
+        "dxFileManager-dialogDeleteItemSingleItemConfirmation": "TODO",
+        "dxFileManager-dialogDeleteItemMultipleItemsConfirmation": "TODO",
 
         "dxFileManager-editingCreateSingleItemProcessingMessage": "TODO",
         "dxFileManager-editingCreateSingleItemSuccessMessage": "TODO",

@@ -4,6 +4,7 @@ import $ from 'jquery';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
+import ArrayStore from 'data/array_store';
 
 const FILTER_PANEL_CLASS = 'dx-datagrid-filter-panel';
 const FILTER_PANEL_TEXT_CLASS = FILTER_PANEL_CLASS + '-text';
@@ -222,6 +223,46 @@ QUnit.module('Filter Panel', {
         assert.expect(1);
         this.filterPanelView.getFilterText(filter, [{ name: 'anyof', caption: 'Any of' }]).done(function(result) {
             assert.equal(result, '[Field] Any of(\'1\', \'2\')');
+        });
+    });
+
+    // T876959
+    QUnit.test('not load all items from headerFilte.dataSource for anyof operation', function(assert) {
+        // arrange
+        const filter = ['field', 'anyof', [1, 2]];
+        const lookupDataStore = new ArrayStore({
+            key: 'key',
+            data: [
+                { key: 1, text: 'Text 1', value: 1 },
+                { key: 2, text: 'Text 2', value: 2 },
+                { key: 3, text: 'Text 3', value: 3 }
+            ]
+        });
+        this.initFilterPanelView({
+            filterValue: filter,
+            headerFilter: {
+                texts: {}
+            },
+            columns: [{
+                dataField: 'field',
+                headerFilter: { dataSource: lookupDataStore },
+                lookup: {
+                    dataSource: lookupDataStore,
+                    valueExpr: 'key',
+                    displayExpr: 'text'
+                }
+            }]
+        });
+        const loadingSpy = sinon.spy();
+        lookupDataStore.on('loading', loadingSpy);
+
+        // act
+        assert.expect(3);
+        this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
+            assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
+            assert.equal(loadingSpy.callCount, 2, 'loadingSpy.callCount');
+            const loadingFilters = loadingSpy.getCalls().map(i => i.args[0].filter);
+            assert.deepEqual(loadingFilters, [['key', '=', 1], ['key', '=', 2]]);
         });
     });
 

@@ -1024,8 +1024,7 @@ QUnit.module('merging dates', moduleConfig, () => {
             .val('1:1:16 AM')
             .trigger('change');
 
-        const date = new Date(2000, 6, 31, 1, 1, 16);
-        assert.deepEqual(this.instance.option('value'), date);
+        assert.strictEqual(this.instance.option('value').getSeconds(), 16);
     });
 
     QUnit.test('mergeDates must merge milliseconds when type is \'time\'', function(assert) {
@@ -1040,9 +1039,7 @@ QUnit.module('merging dates', moduleConfig, () => {
             .val('16')
             .trigger('change');
 
-        const now = new Date();
-        const date = new Date(2000, 6, 31, now.getHours(), now.getMinutes(), now.getSeconds(), 16);
-        assert.deepEqual(this.instance.option('value'), date);
+        assert.strictEqual(this.instance.option('value').getMilliseconds(), 16);
     });
 });
 
@@ -4608,6 +4605,53 @@ QUnit.module('datebox validation', {}, () => {
             .press('enter');
 
         assert.ok(dateBox.option('isValid'));
+    });
+
+    QUnit.test('datebox should pass Date value to the validationCallback by default', function(assert) {
+        const validationCallback = sinon.stub().returns(true);
+        const $dateBox = $('#dateBox').dxDateBox({
+            type: 'date',
+            value: null,
+            pickerType: 'calendar'
+        }).dxValidator({
+            validationRules: [{
+                type: 'custom',
+                validationCallback
+            }]
+        });
+        const keyboard = keyboardMock($dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`));
+
+        keyboard
+            .type('10/10/2020')
+            .change();
+
+        const { value } = validationCallback.lastCall.args[0];
+        assert.ok(validationCallback.calledOnce, 'validationCallback called once');
+        assert.ok(typeUtils.isDate(value), 'value type is Date');
+    });
+
+    QUnit.test('datebox should pass string value to the validationCallback when "dateSerializationFormat" defined', function(assert) {
+        const validationCallback = sinon.stub().returns(true);
+        const $dateBox = $('#dateBox').dxDateBox({
+            type: 'date',
+            value: null,
+            pickerType: 'calendar',
+            dateSerializationFormat: 'yyyy-MM-dd'
+        }).dxValidator({
+            validationRules: [{
+                type: 'custom',
+                validationCallback
+            }]
+        });
+        const keyboard = keyboardMock($dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`));
+
+        keyboard
+            .type('10/10/2020')
+            .change();
+
+        const { value } = validationCallback.lastCall.args[0];
+        assert.ok(validationCallback.calledOnce, 'validationCallback called once');
+        assert.strictEqual(value, '2020-10-10', 'String value passed');
     });
 });
 

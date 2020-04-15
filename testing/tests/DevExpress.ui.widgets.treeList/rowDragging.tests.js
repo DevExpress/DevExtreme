@@ -88,63 +88,65 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('Drag and Drop nodes', moduleConfig);
+QUnit.module('Drag and Drop nodes', moduleConfig, () => {
 
-QUnit.test('Drag and drop node', function(assert) {
+    QUnit.test('Drag and drop node', function(assert) {
     // arrange
-    let $draggableElement;
-    let $placeholderElement;
-    const onDragEndSpy = sinon.spy();
-    const $testElement = $('#container');
+        let $draggableElement;
+        let $placeholderElement;
+        const onDragEndSpy = sinon.spy();
+        const $testElement = $('#container');
 
-    this.options.rowDragging.onDragEnd = onDragEndSpy;
+        this.options.rowDragging.onDragEnd = onDragEndSpy;
 
-    const rowsView = this.createRowsView();
-    rowsView.render($testElement);
+        const rowsView = this.createRowsView();
+        rowsView.render($testElement);
 
-    // act
-    const pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
+        // act
+        const pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
 
-    // assert
-    $draggableElement = $('body').children('.dx-sortable-dragging');
-    $placeholderElement = $('body').children('.dx-sortable-placeholder');
-    assert.strictEqual($draggableElement.length, 1, 'there is dragging element');
-    assert.strictEqual($placeholderElement.length, 1, 'placeholder');
-    assert.notOk($placeholderElement.hasClass('dx-sortable-placeholder-inside'), 'placeholder for dropping inward');
-    assert.ok($draggableElement.children().hasClass('dx-treelist'), 'dragging element is treelist');
-    assert.strictEqual($draggableElement.find('.dx-data-row').length, 1, 'row count in dragging element');
+        // assert
+        $draggableElement = $('body').children('.dx-sortable-dragging');
+        $placeholderElement = $('body').children('.dx-sortable-placeholder');
+        assert.strictEqual($draggableElement.length, 1, 'there is dragging element');
+        assert.strictEqual($placeholderElement.length, 1, 'placeholder');
+        assert.notOk($placeholderElement.hasClass('dx-sortable-placeholder-inside'), 'placeholder for dropping inward');
+        assert.ok($draggableElement.children().hasClass('dx-treelist'), 'dragging element is treelist');
+        assert.strictEqual($draggableElement.find('.dx-data-row').length, 1, 'row count in dragging element');
 
-    // act
-    pointer.up();
+        // act
+        pointer.up();
 
-    // assert
-    assert.strictEqual(onDragEndSpy.callCount, 1, 'onDragEnd event is called');
-    assert.notOk(onDragEndSpy.getCall(0).args[0].dropInsideItem, 'onDragEnd args - dropInsideItem');
+        // assert
+        assert.strictEqual(onDragEndSpy.callCount, 1, 'onDragEnd event is called');
+        assert.notOk(onDragEndSpy.getCall(0).args[0].dropInsideItem, 'onDragEnd args - dropInsideItem');
+    });
+
+    QUnit.test('Drag and drop a node into another node', function(assert) {
+    // arrange
+        let $placeholderElement;
+        const onDragEndSpy = sinon.spy();
+        const $testElement = $('#container');
+
+        this.options.rowDragging.onDragEnd = onDragEndSpy;
+
+        const rowsView = this.createRowsView();
+        rowsView.render($testElement);
+
+        // act
+        const pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 50);
+
+        // assert
+        $placeholderElement = $('body').children('.dx-sortable-placeholder');
+        assert.strictEqual($placeholderElement.length, 1, 'placeholder');
+        assert.ok($placeholderElement.hasClass('dx-sortable-placeholder-inside'), 'placeholder for dropping inward');
+
+        // act
+        pointer.up();
+
+        // assert
+        assert.strictEqual(onDragEndSpy.callCount, 1, 'onDragEnd event is called');
+        assert.ok(onDragEndSpy.getCall(0).args[0].dropInsideItem, 'onDragEnd args - dropInsideItem');
+    });
 });
 
-QUnit.test('Drag and drop a node into another node', function(assert) {
-    // arrange
-    let $placeholderElement;
-    const onDragEndSpy = sinon.spy();
-    const $testElement = $('#container');
-
-    this.options.rowDragging.onDragEnd = onDragEndSpy;
-
-    const rowsView = this.createRowsView();
-    rowsView.render($testElement);
-
-    // act
-    const pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 50);
-
-    // assert
-    $placeholderElement = $('body').children('.dx-sortable-placeholder');
-    assert.strictEqual($placeholderElement.length, 1, 'placeholder');
-    assert.ok($placeholderElement.hasClass('dx-sortable-placeholder-inside'), 'placeholder for dropping inward');
-
-    // act
-    pointer.up();
-
-    // assert
-    assert.strictEqual(onDragEndSpy.callCount, 1, 'onDragEnd event is called');
-    assert.ok(onDragEndSpy.getCall(0).args[0].dropInsideItem, 'onDragEnd args - dropInsideItem');
-});

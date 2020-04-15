@@ -434,7 +434,6 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
         const scheduler = createWrapper({
             currentDate: new Date(2018, 2, 11),
             views: ['timelineDay'],
-            maxAppointmentsPerCell: null,
             currentView: 'timelineDay',
             dataSource: [{
                 text: 'DST',
@@ -462,7 +461,6 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
             currentDate: new Date(2018, 2, 12),
             views: ['timelineDay'],
             currentView: 'timelineDay',
-            maxAppointmentsPerCell: null,
             dataSource: [{
                 text: 'DST',
                 startDate: startDate,
@@ -488,7 +486,6 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
             currentView: 'timelineWeek',
             cellDuration: 60,
             currentDate: currentDate,
-            maxAppointmentsPerCell: null,
             dataSource: [{
                 text: 'DST',
                 startDate: startDate,
@@ -511,7 +508,6 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
             currentDate: currentDate,
             views: ['timelineDay'],
             currentView: 'timelineDay',
-            maxAppointmentsPerCell: null,
             dataSource: [{
                 text: 'DST',
                 startDate: startDate,
@@ -526,6 +522,24 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
         const duration = (endDate - startDate) / toMs('hour');
 
         assert.roughEqual(scheduler.appointments.getAppointment(0).outerWidth(), scheduler.workSpace.getCellWidth() * duration, 2.001, 'Appt width is correct after the day of the time ajusting');
+    });
+
+    QUnit.test('Appointment should be rendered correctly if end date appointment coincided translation on STD', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: [{
+                text: 'November 4',
+                startDate: new Date(2018, 10, 4, 18, 0),
+                endDate: new Date(2018, 10, 5, 0, 0),
+            }],
+            views: ['month'],
+            currentView: 'month',
+            currentDate: new Date(2018, 10, 1),
+            firstDayOfWeek: 0,
+            cellDuration: 60,
+            height: 800
+        });
+
+        assert.roughEqual(scheduler.appointments.getAppointment(0).outerWidth(), scheduler.workSpace.getCellWidth(), 2.001, 'Appointment width is correct after translation oт STD');
     });
 
     QUnit.test('Recurrence exception should not be rendered if exception goes after adjusting AEST-> AEDT (T619455)', function(assert) {
@@ -556,21 +570,48 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
         }
     });
 
-    QUnit.test('Appointment should rendered correctly if end date appointment coincided translation oт STD', function(assert) {
+    QUnit.test('Recurrence exception should be adjusted by scheduler timezone after deleting of the single appt', function(assert) {
         const scheduler = createWrapper({
             dataSource: [{
-                text: 'November 4',
-                startDate: new Date(2018, 10, 4, 18, 0),
-                endDate: new Date(2018, 10, 5, 0, 0),
+                text: 'Recruiting students',
+                startDate: new Date(2018, 2, 26, 10, 0),
+                endDate: new Date(2018, 2, 26, 11, 0),
+                recurrenceRule: 'FREQ=DAILY'
             }],
-            views: ['month'],
-            currentView: 'month',
-            currentDate: new Date(2018, 10, 1),
-            firstDayOfWeek: 0,
-            cellDuration: 60,
-            height: 800
+            views: ['day'],
+            currentView: 'day',
+            currentDate: new Date(2018, 3, 1),
+            timeZone: 'Australia/Sydney',
+            recurrenceEditMode: 'occurrence'
         });
 
-        assert.roughEqual(scheduler.appointments.getAppointment(0).outerWidth(), scheduler.workSpace.getCellWidth(), 2.001, 'Appointment width is correct after translation oт STD');
+        scheduler.appointments.click();
+        this.clock.tick(300);
+        scheduler.tooltip.clickOnDeleteButton();
+
+        assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'Appointment was deleted');
+    });
+
+    QUnit.test('Recurrence exception should be adjusted by appointment timezone after deleting of the single appt', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: [{
+                text: 'Recruiting students',
+                startDate: new Date(2018, 2, 26, 10, 0),
+                endDate: new Date(2018, 2, 26, 11, 0),
+                recurrenceRule: 'FREQ=DAILY',
+                startDateTimeZone: 'Australia/Canberra',
+                endDateTimeZone: 'Australia/Canberra'
+            }],
+            views: ['day'],
+            currentView: 'day',
+            currentDate: new Date(2018, 3, 1),
+            recurrenceEditMode: 'occurrence'
+        });
+
+        scheduler.appointments.click();
+        this.clock.tick(300);
+        scheduler.tooltip.clickOnDeleteButton();
+
+        assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'Appointment was deleted');
     });
 });

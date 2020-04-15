@@ -67,7 +67,6 @@ class DiagramContextMenu extends Widget {
         });
     }
     _show(x, y, selection) {
-        this.clickPosition = { x, y };
         const { Browser } = getDiagram();
 
         this._contextMenuInstance.hide();

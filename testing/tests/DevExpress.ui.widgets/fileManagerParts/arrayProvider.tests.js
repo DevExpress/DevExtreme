@@ -83,9 +83,9 @@ QUnit.module('Array File Provider', moduleConfig, () => {
 
                 assert.equal(items.length, 2);
                 assert.equal(items[0].name, 'F1');
-                assert.ok(items[0].hasSubDirs);
+                assert.ok(items[0].hasSubDirectories);
                 assert.equal(items[1].name, 'F2');
-                assert.notOk(items[1].hasSubDirs);
+                assert.notOk(items[1].hasSubDirectories);
             })
             .then(() => this.provider.getItems(dir1))
             .done(items => {
@@ -93,11 +93,11 @@ QUnit.module('Array File Provider', moduleConfig, () => {
 
                 assert.equal(items.length, 3);
                 assert.equal(items[0].name, 'F1.1');
-                assert.notOk(items[0].hasSubDirs);
+                assert.notOk(items[0].hasSubDirectories);
                 assert.equal(items[1].name, 'F1.2');
-                assert.notOk(items[1].hasSubDirs);
+                assert.notOk(items[1].hasSubDirectories);
                 assert.equal(items[2].name, 'F1.3');
-                assert.ok(items[2].hasSubDirs);
+                assert.ok(items[2].hasSubDirectories);
             })
             .then(() => this.provider.getItems(dir2))
             .done(items => {
@@ -185,9 +185,29 @@ QUnit.module('Array File Provider', moduleConfig, () => {
                 done();
 
                 assert.equal(items.length, 1);
-                assert.ok(items[0].hasSubDirs);
+                assert.ok(items[0].hasSubDirectories);
                 assert.strictEqual(subItems.length, subItemsCount + 1, 'sub item count has increased');
             });
+    });
+
+    test('move directory via arguments without data items', function(assert) {
+        const destDir = new FileSystemItem('F2', true);
+        const destDirData = this.options.data[1];
+
+        const dir = new FileSystemItem('F1', true);
+
+        const srcItemCount = this.options.data.length;
+        const destItemCount = destDirData.items && destDirData.items.length || 0;
+
+        const done = assert.async(1);
+
+        const deferreds = this.provider.moveItems([ dir ], destDir);
+        deferreds[0].done(() => {
+            done();
+
+            assert.strictEqual(this.options.data.length, srcItemCount - 1, 'directory removed from source');
+            assert.strictEqual(destDirData.items.length, destItemCount + 1, 'destination directory sub items increased');
+        });
     });
 
     test('copy directory', function(assert) {
@@ -225,7 +245,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
 
                 items = result;
                 assert.equal(items.length, 2, 'source dir preserved');
-                assert.ok(items[0].hasSubDirs, 'source dir items preserved');
+                assert.ok(items[0].hasSubDirectories, 'source dir items preserved');
 
                 return this.provider.getItems(dir);
             })
@@ -240,7 +260,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
         const root = new FileSystemItem();
         const dir = new FileSystemItem('F1', true);
 
-        assert.strictEqual(root.hasSubDirs, undefined, 'root hasSubDirs property is undefined');
+        assert.strictEqual(root.hasSubDirectories, undefined, 'root hasSubDirectories property is undefined');
 
         let items = null;
         let itemCount = -1;
@@ -269,9 +289,29 @@ QUnit.module('Array File Provider', moduleConfig, () => {
             .then(result => {
                 done();
 
-                assert.strictEqual(root.hasSubDirs, undefined, 'root hasSubDirs property is undefined');
+                assert.strictEqual(root.hasSubDirectories, undefined, 'root hasSubDirectories property is undefined');
                 assert.strictEqual(result.length, itemCount + 1, 'sub item count has increased');
             });
+    });
+
+    test('copy directory via arguments without data items', function(assert) {
+        const destDir = new FileSystemItem('F2', true);
+        const destDirData = this.options.data[1];
+
+        const dir = new FileSystemItem('F1', true);
+
+        const srcItemCount = this.options.data.length;
+        const destItemCount = destDirData.items && destDirData.items.length || 0;
+
+        const done = assert.async(1);
+
+        const deferreds = this.provider.copyItems([ dir ], destDir);
+        deferreds[0].done(() => {
+            done();
+
+            assert.strictEqual(this.options.data.length, srcItemCount, 'source directory not changed');
+            assert.strictEqual(destDirData.items.length, destItemCount + 1, 'destination directory sub items increased');
+        });
     });
 
     test('throw error when try moving folder with incorrect parameters', function(assert) {
@@ -426,6 +466,22 @@ QUnit.module('Array File Provider', moduleConfig, () => {
             });
     });
 
+    test('create directory via arguments without data items', function(assert) {
+        const dir = new FileSystemItem('F2', true);
+        const dirData = this.options.data[1];
+
+        const itemCount = dirData.items && dirData.items.length || 0;
+
+        const done = assert.async(1);
+
+        this.provider.createDirectory(dir, 'new F.2.2 test dir')
+            .done(() => {
+                done();
+
+                assert.strictEqual(dirData.items.length, itemCount + 1, 'directory created');
+            });
+    });
+
     test('throw error on creating new directory in unexisting directory', function(assert) {
         const done = assert.async(2);
 
@@ -465,6 +521,22 @@ QUnit.module('Array File Provider', moduleConfig, () => {
 
                 assert.equal(fileItems[1].name, 'F2');
                 assert.equal(fileItems[1].key, 'F2');
+            });
+    });
+
+    test('rename directory via arguments without data items', function(assert) {
+        const dir = new FileSystemItem('F2', true);
+        const dirData = this.options.data[1];
+
+        assert.strictEqual(dirData.name, 'F2', 'directory name correct');
+
+        const done = assert.async(1);
+
+        this.provider.renameItem(dir, 'new F2 test name')
+            .done(() => {
+                done();
+
+                assert.strictEqual(dirData.name, 'new F2 test name', 'directory renamed');
             });
     });
 
@@ -519,6 +591,21 @@ QUnit.module('Array File Provider', moduleConfig, () => {
             });
     });
 
+    test('delete directory via arguments without data items', function(assert) {
+        const dir = new FileSystemItem('F1', true);
+
+        const srcItemCount = this.options.data.length;
+
+        const done = assert.async(1);
+
+        const deferreds = this.provider.deleteItems([ dir ]);
+        deferreds[0].done(() => {
+            done();
+
+            assert.strictEqual(this.options.data.length, srcItemCount - 1, 'directory removed from source');
+        });
+    });
+
     test('upload file', function(assert) {
         const done = assert.async(4);
 
@@ -555,6 +642,31 @@ QUnit.module('Array File Provider', moduleConfig, () => {
                 assert.strictEqual(items.length, initialCount + 1, 'item count increased');
                 assert.ok(uploadedFile, 'file uploaded');
                 assert.strictEqual(window.atob(uploadedFile.dataItem.content), file._dxContent, 'uploaded file has correct content');
+            });
+    });
+
+    test('upload file via arguments without data items', function(assert) {
+        const done = assert.async(2);
+
+        const dir = new FileSystemItem('F2', true);
+        const dirData = this.options.data[1];
+
+        const itemCount = dirData.items && dirData.items.length || 0;
+
+        const file = createUploaderFiles(1)[0];
+        let uploadInfo = createUploadInfo(file);
+
+        this.provider.uploadFileChunk(file, uploadInfo, dir)
+            .then(() => {
+                done();
+
+                uploadInfo = createUploadInfo(file, 1, uploadInfo.customData);
+                return this.provider.uploadFileChunk(file, uploadInfo, dir);
+            })
+            .then(() => {
+                done();
+
+                assert.strictEqual(dirData.items.length, itemCount + 1, 'file uploaded');
             });
     });
 
@@ -609,4 +721,16 @@ QUnit.module('Array File Provider', moduleConfig, () => {
             });
     });
 
+    test('download single file via arguments without data items', function(assert) {
+        const done = assert.async(1);
+
+        const file = new FileSystemItem('F1/F1.2/File1.2.txt');
+
+        fileSaver._onTestSaveAs = (fileName) => {
+            done();
+            assert.strictEqual(fileName, 'File1.2.txt', 'file downloaded');
+        };
+
+        this.provider.downloadItems([ file ]);
+    });
 });

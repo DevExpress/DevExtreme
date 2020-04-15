@@ -237,6 +237,11 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     // E1057 is reserved. See https://js.devexpress.com/Documentation/19_2/ApiReference/UI_Widgets/Errors_and_Warnings/#E1057
 
     /**
+    * @name ErrorsUIWidgets.E1058
+    */
+    E1058: 'The "startDayHour" must be earlier than the "endDayHour"',
+
+    /**
     * @name ErrorsUIWidgets.W1001
     */
     W1001: 'The "key" option cannot be modified after initialization',
@@ -299,5 +304,10 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsUIWidgets.W1014
     */
-    W1014: 'The Floating Action Button exceeds the recommended speed dial action count. If you need to display more speed dial actions, increase the maxSpeedDialActionCount option value in the global config.'
+    W1014: 'The Floating Action Button exceeds the recommended speed dial action count. If you need to display more speed dial actions, increase the maxSpeedDialActionCount option value in the global config.',
+
+    /**
+    * @name ErrorsUIWidgets.W1015
+    */
+    W1015: 'The "cellDuration" should divide the range from the "startDayHour" to the "endDayHour" into even intervals'
 });

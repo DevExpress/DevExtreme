@@ -1,14 +1,8 @@
 import BaseAppointmentsStrategy from './ui.scheduler.appointments.strategy.base';
 import { extend } from '../../../core/utils/extend';
 import { isNumeric } from '../../../core/utils/type';
-import devices from '../../../core/devices';
 import dateUtils from '../../../core/utils/date';
-import utils from './../utils';
-
-const WEEK_APPOINTMENT_DEFAULT_OFFSET = 25;
-const WEEK_APPOINTMENT_MOBILE_OFFSET = 50;
-
-const APPOINTMENT_MIN_WIDTH = 5;
+import timeZoneUtils from './../utils.timeZone';
 
 const ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5;
 const ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
@@ -28,9 +22,9 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         return deltaTime;
     }
 
-    _correctCompactAppointmentCoordinatesInAdaptive(coordinates, isAllDay) {
+    _correctCollectorCoordinatesInAdaptive(coordinates, isAllDay) {
         if(isAllDay) {
-            super._correctCompactAppointmentCoordinatesInAdaptive(coordinates, isAllDay);
+            super._correctCollectorCoordinatesInAdaptive(coordinates, isAllDay);
         } else if(this._getMaxAppointmentCountPerCellByType() === 0) {
             const cellHeight = this.getDefaultCellHeight();
             const cellWidth = this.getDefaultCellWidth();
@@ -62,7 +56,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         const appointmentStartDate = this.startDate(item, true);
         const appointmentEndDate = this.endDate(item);
 
-        const isAppointmentTakesSeveralDays = !utils.isSameAppointmentDates(appointmentStartDate, appointmentEndDate);
+        const isAppointmentTakesSeveralDays = !timeZoneUtils.isSameAppointmentDates(appointmentStartDate, appointmentEndDate);
 
         if(allDay) {
             return super._getItemPosition(item);
@@ -168,50 +162,19 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         return itemLeft + (cellBorderSize + cellWidth) * index;
     }
 
-    _checkLongCompactAppointment(item, result) {
-        this._splitLongCompactAppointment(item, result);
-
-        return result;
-    }
-
     _getVerticalAppointmentGeometry(coordinates) {
-        const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
+        const config = this._calculateVerticalGeometryConfig(coordinates);
 
-        if(overlappingMode) {
-            const config = this._calculateVerticalGeometryConfig(coordinates);
-
-            return this._customizeVerticalCoordinates(coordinates, config.width, config.appointmentCountPerCell, config.offset);
-        } else {
-            let width = this._getAppointmentMaxWidth() / coordinates.count;
-            const height = coordinates.height;
-            const top = coordinates.top;
-            const left = coordinates.left + (coordinates.index * width);
-
-            if(width < APPOINTMENT_MIN_WIDTH) {
-                width = APPOINTMENT_MIN_WIDTH;
-            }
-
-            return { height: height, width: width, top: top, left: left, empty: this._isAppointmentEmpty(height, width) };
-        }
+        return this._customizeVerticalCoordinates(coordinates, config.width, config.appointmentCountPerCell, config.offset);
     }
 
     _customizeVerticalCoordinates(coordinates, width, appointmentCountPerCell, topOffset, isAllDay) {
-        const index = coordinates.index;
         let appointmentWidth = Math.max(width / appointmentCountPerCell, width / coordinates.count);
         const height = coordinates.height;
         let appointmentLeft = coordinates.left + (coordinates.index * appointmentWidth);
         let top = coordinates.top;
-        let compactAppointmentDefaultSize;
-        let compactAppointmentDefaultOffset;
 
         if(coordinates.isCompact) {
-            compactAppointmentDefaultSize = this.getCompactAppointmentDefaultWidth();
-            compactAppointmentDefaultOffset = this.getCompactAppointmentLeftOffset();
-            top = coordinates.top + compactAppointmentDefaultOffset;
-            appointmentLeft = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentDefaultOffset) + compactAppointmentDefaultOffset;
-            appointmentWidth = compactAppointmentDefaultSize;
-            width = compactAppointmentDefaultSize;
-
             this._markAppointmentAsVirtual(coordinates, isAllDay);
         }
 
@@ -267,10 +230,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getAppointmentMaxWidth() {
-        const offset = devices.current().deviceType === 'desktop' && !this.instance.fire('isAdaptive') ? WEEK_APPOINTMENT_DEFAULT_OFFSET : WEEK_APPOINTMENT_MOBILE_OFFSET;
-        const width = this.getDefaultCellWidth() - offset;
-
-        return width > 0 ? width : this.getAppointmentMinSize();
+        return this.getDefaultCellWidth() - this._getAppointmentDefaultOffset();
     }
 
     calculateAppointmentWidth(appointment, position, isRecurring) {
