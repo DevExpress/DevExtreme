@@ -40,14 +40,13 @@ class DiagramContextMenu extends Widget {
         const $contextMenu = $('<div>')
             .appendTo(this.$element());
 
-        const { Browser } = getDiagram();
         this._contextMenuInstance = this._createComponent($contextMenu, ContextMenu, {
             closeOnOutsideClick: false,
             showEvent: '',
-            cssClass: Browser.TouchUI ? DIAGRAM_TOUCHBAR_CLASS : DiagramMenuHelper.getContextMenuCssClass(),
+            cssClass: this._isTouchBarMode() ? DIAGRAM_TOUCHBAR_CLASS : DiagramMenuHelper.getContextMenuCssClass(),
             items: this._commands,
             focusStateEnabled: false,
-            position: (Browser.TouchUI ? {
+            position: (this._isTouchBarMode() ? {
                 my: { x: 'center', y: 'bottom' },
                 at: { x: 'center', y: 'top' },
                 of: this._$contextMenuTargetElement
@@ -91,6 +90,10 @@ class DiagramContextMenu extends Widget {
     _hide() {
         this._$contextMenuTargetElement.hide();
         this._contextMenuInstance.hide();
+    }
+    _isTouchBarMode() {
+        const { Browser } = getDiagram();
+        return true || Browser.TouchUI;
     }
     _onItemClick(itemData) {
         let processed = false;

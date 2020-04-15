@@ -130,15 +130,15 @@ class Diagram extends Widget {
 
         delete this._contextMenu;
         if(this.option('contextMenu.enabled')) {
-            this._renderContextMenu(this._$content);
+            this._renderContextMenu($contentWrapper);
         }
 
         delete this._contextToolbox;
         if(this.option('contextToolbox.enabled')) {
-            this._renderContextToolbox(this._$content);
+            this._renderContextToolbox($contentWrapper);
         }
 
-        this._renderDialog(this._$content);
+        this._renderDialog($contentWrapper);
 
         if(!isServerSide) {
             const $scrollViewWrapper = $('<div>')
@@ -186,11 +186,21 @@ class Diagram extends Widget {
         this._killBrowserResizeTimer();
     }
     _processDiagramResize() {
-        this._historyToolbarResizeCallback.call(this);
-        this._propertiesToolbarResizeCallback.call(this);
-        this._propertiesPanelResizeCallback.call(this);
-        this._viewToolbarResizeCallback.call(this);
-        this._toolboxResizeCallback.call(this);
+        if(this._historyToolbarResizeCallback) {
+            this._historyToolbarResizeCallback.call(this);
+        }
+        if(this._propertiesToolbarResizeCallback) {
+            this._propertiesToolbarResizeCallback.call(this);
+        }
+        if(this._propertiesPanelResizeCallback) {
+            this._propertiesPanelResizeCallback.call(this);
+        }
+        if(this._viewToolbarResizeCallback) {
+            this._viewToolbarResizeCallback.call(this);
+        }
+        if(this._toolboxResizeCallback) {
+            this._toolboxResizeCallback.call(this);
+        }
     }
     _killBrowserResizeTimer() {
         if(this._browserResizeTimer > -1) {
@@ -532,12 +542,11 @@ class Diagram extends Widget {
             delete this._captureFocusTimeout;
         }
     }
-    _renderContextMenu($mainElement) {
+    _renderContextMenu($parent) {
         const $contextMenu = $('<div>')
-            .appendTo(this.$element());
+            .appendTo($parent);
         this._contextMenu = this._createComponent($contextMenu, DiagramContextMenu, {
             commands: this.option('contextMenu.commands'),
-            container: $mainElement,
             onContentReady: ({ component }) => this._registerBar(component),
             onVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
             onItemClick: (itemData) => { return this._onBeforeCommandExecuted(itemData.command); },
@@ -547,14 +556,14 @@ class Diagram extends Widget {
         });
     }
 
-    _renderContextToolbox($mainElement) {
+    _renderContextToolbox($parent) {
         const isServerSide = !hasWindow();
         const category = this.option('contextToolbox.category');
         const displayMode = this.option('contextToolbox.displayMode');
         const shapes = this.option('contextToolbox.shapes');
 
         const $contextToolbox = $('<div>')
-            .appendTo(this.$element());
+            .appendTo($parent);
         this._contextToolbox = this._createComponent($contextToolbox, DiagramContextToolbox, {
             onShown: (e) => {
                 if(isServerSide) return;
@@ -598,8 +607,8 @@ class Diagram extends Widget {
         return !!dialogParameters;
     }
 
-    _renderDialog($mainElement) {
-        const $dialogElement = $('<div>').appendTo($mainElement);
+    _renderDialog($parent) {
+        const $dialogElement = $('<div>').appendTo($parent);
         this._dialogInstance = this._createComponent($dialogElement, DiagramDialog, { });
     }
 
@@ -1056,7 +1065,7 @@ class Diagram extends Widget {
     _onToggleFullScreen(fullScreen) {
         this._changeNativeFullscreen(fullScreen);
         this.$element().toggleClass(DIAGRAM_FULLSCREEN_CLASS, fullScreen);
-        this._diagramInstance.updateLayout();
+        this._diagramInstance.updateLayout(true);
 
         this._processDiagramResize();
         if(this._toolbox) {
