@@ -182,6 +182,7 @@ module.exports = {
         { import: '../list/sizes', type: 'index' },
         { import: '../button', type: 'index' },
         { import: '../button/colors', type: 'index' },
+        { import: '../button/sizes', type: 'index' },
         { import: '../menuBase', type: 'index' },
         { import: '../menuBase/sizes', type: 'index' },
         { regex: /@mixin dx-toolbar-item-padding\(\$MATERIAL_TOOLBAR_ITEM_SPACING\),/, replacement: '@include dx-toolbar-item-padding($MATERIAL_TOOLBAR_ITEM_SPACING);' },
