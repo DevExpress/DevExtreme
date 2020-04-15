@@ -136,8 +136,6 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     }
 
     refresh(options) {
-        this.clearSelection();
-
         const actualOptions = {
             dataSource: this._createDataSource()
         };

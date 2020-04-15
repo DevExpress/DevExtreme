@@ -345,6 +345,10 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         this._selection.changeItemSelection(index, { control: this._isPreserveSelectionMode });
     }
 
+    _chooseSelectOption() {
+        return 'selectedItemKeys';
+    }
+
     getSelectedItems() {
         return this._selection.getSelectedItems();
     }
