@@ -78,7 +78,7 @@ class FileSystemItem {
         return this.path === '';
     }
 
-    getExtension() {
+    getFileExtension() {
         return this.isDirectory ? '' : getFileExtension(this.name);
     }
 
