@@ -1146,21 +1146,22 @@ QUnit.module('popup', moduleConfig, () => {
             data.push(i);
         }
 
-        $('#qunit-fixture')
-            .css('left', 0)
-            .css('top', 0);
-
-        $('#dropDownList').dxDropDownList({
-            searchEnabled: true,
-            dataSource: {
-                store: new ArrayStore(data),
-                paginate: true,
-                pageSize: 40
-            },
-            opened: true,
-            searchTimeout: 0,
-            width: 200
-        });
+        $('#dropDownList')
+            .wrap($('<div>').css({
+                left: 0,
+                top: 0
+            }))
+            .dxDropDownList({
+                searchEnabled: true,
+                dataSource: {
+                    store: new ArrayStore(data),
+                    paginate: true,
+                    pageSize: 40
+                },
+                opened: true,
+                searchTimeout: 0,
+                width: 200
+            });
 
         const listInstance = $(`.${LIST_CLASS}`).dxList('instance');
 
@@ -1179,7 +1180,7 @@ QUnit.module('popup', moduleConfig, () => {
 
     QUnit.testInActiveWindow('After search and load new page scrollTop should not be changed', function(assert) {
         if(browser.msie) {
-            assert.ok(true, 'test does not actual for IE');
+            assert.ok(true, 'not applicable in IE');
             return;
         }
 

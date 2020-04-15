@@ -2403,21 +2403,21 @@ QUnit.module('Native scrolling', () => {
             data.push(i);
         }
 
-        $('#qunit-fixture').css('position', 'static');
-
-        const $lookup = $('#lookupOptions').dxLookup({
-            searchEnabled: true,
-            dataSource: {
-                store: new ArrayStore(data),
-                paginate: true,
-                pageSize: 40
-            },
-            fullScreen: false,
-            searchTimeout: 0,
-            width: 200,
-            usePopover: false,
-            popupHeight: '50%'
-        });
+        const $lookup = $('#lookup')
+            .wrap($('<div>').css('position', 'static'))
+            .dxLookup({
+                searchEnabled: true,
+                dataSource: {
+                    store: new ArrayStore(data),
+                    paginate: true,
+                    pageSize: 40
+                },
+                fullScreen: false,
+                searchTimeout: 0,
+                width: 200,
+                usePopover: false,
+                popupHeight: '50%'
+            });
 
         $lookup.dxLookup('instance').open();
 
@@ -2444,21 +2444,21 @@ QUnit.module('Native scrolling', () => {
         }
         data.push('a');
 
-        $('#qunit-fixture').css('position', 'static');
-
-        const $lookup = $('#lookupOptions').dxLookup({
-            searchEnabled: true,
-            dataSource: {
-                store: new ArrayStore(data),
-                paginate: true,
-                pageSize: 20
-            },
-            searchTimeout: 0,
-            width: 200,
-            usePopover: false,
-            popupHeight: 'auto',
-            fullScreen: false
-        });
+        const $lookup = $('#lookup')
+            .wrap($('<div>').css('position', 'static'))
+            .dxLookup({
+                searchEnabled: true,
+                dataSource: {
+                    store: new ArrayStore(data),
+                    paginate: true,
+                    pageSize: 20
+                },
+                searchTimeout: 0,
+                width: 200,
+                usePopover: false,
+                popupHeight: 'auto',
+                fullScreen: false
+            });
 
         $lookup.dxLookup('instance').open();
 
