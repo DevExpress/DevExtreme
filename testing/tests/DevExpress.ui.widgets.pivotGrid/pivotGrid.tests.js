@@ -4035,7 +4035,49 @@ QUnit.module('dxPivotGrid', {
         assert.strictEqual(textRect.left, expandIconRect.right, 'text is after expand icon');
     });
 
+    // T878428
+    QUnit.test('Sort icon should be correctly positioned when header text was wrapped to the next line', function(assert) {
+        const getHeaderElement = () => {
+            return $('#pivotGrid').find('.dx-pivotgrid-horizontal-headers td').eq(0);
+        };
 
+        // arrange
+        createPivotGrid({
+            dataSource: {
+                fields: [
+                    { dataField: 'city', area: 'row' },
+                    { dataField: 'price', area: 'data' },
+                    { dataField: 'country', area: 'column' }
+                ],
+                store: [{
+                    country: 'United Kingdom',
+                    city: 'London'
+                }]
+            },
+            allowSortingBySummary: true,
+            width: 200
+        }, assert);
+        this.clock.tick();
+
+        // act
+        getHeaderElement().trigger('dxcontextmenu');
+        $('.dx-context-menu.dx-pivotgrid').find('.dx-menu-item').eq(0).trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        const $header = getHeaderElement();
+        assert.ok($header.hasClass('dx-pivotgrid-sorted'));
+        assert.notEqual($header.find('span').css('display'), 'inline-flex', 'no inline-flex');
+
+        const $sortIcon = $header.find('.dx-icon-sorted');
+        const sortIconRect = $sortIcon.get(0).getBoundingClientRect();
+        const headerIconRect = $header.get(0).getBoundingClientRect();
+
+        assert.ok(sortIconRect.top > headerIconRect.top, 'top');
+        assert.ok(sortIconRect.bottom < headerIconRect.bottom, 'bottom');
+        assert.ok(sortIconRect.left > headerIconRect.left, 'left');
+        assert.ok(sortIconRect.right < headerIconRect.right, 'right');
+    });
 });
 
 QUnit.module('Field Panel', {
