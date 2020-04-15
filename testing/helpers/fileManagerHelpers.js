@@ -202,6 +202,10 @@ export class FileManagerWrapper {
         return this.getThumbnailsItems().eq(index).find(`.${Consts.THUMBNAILS_ITEM_NAME_CLASS}`).text();
     }
 
+    getThumbnailsSelectedItems() {
+        return this.getThumbnailsItems().filter(`.${Consts.ITEM_SELECTED_CLASS}`);
+    }
+
     findThumbnailsItem(itemName) {
         return this.getThumbnailsItems().filter(`:contains('${itemName}')`);
     }
