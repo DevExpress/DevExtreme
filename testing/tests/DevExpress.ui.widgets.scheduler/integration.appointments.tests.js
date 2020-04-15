@@ -17,6 +17,7 @@ import CustomStore from 'data/custom_store';
 import dataUtils from 'core/element_data';
 import dateSerialization from 'core/utils/date_serialization';
 import { SchedulerTestWrapper, initTestMarkup, createWrapper, CLASSES } from './helpers.js';
+import browser from 'core/utils/browser';
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
@@ -4200,6 +4201,45 @@ QUnit.module('Appointments', () => {
 
         scheduler.instance.option('currentView', 'month');
         assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointments should be filtered and rendered after change view on "Month"');
+    });
+
+    QUnit.test('Long appointment should have correct parts count(T854740)', function(assert) {
+        const data = [{ text: 'Two Weeks App (Jan 6 - Jan 19)', startDate: new Date(2020, 0, 6), endDate: new Date(2020, 0, 19, 12), typeId: 1 }];
+
+        const scheduler = createWrapper({
+            dataSource: data,
+            views: ['month'],
+            firstDayOfWeek: 1,
+            currentView: 'month',
+            currentDate: new Date(2020, 0, 1),
+            height: 500,
+            width: 250
+        });
+
+        assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointment parts are ok');
+    });
+
+    QUnit.test('Long appointment should have correct parts count if widget is zoomed (T854740)', function(assert) {
+        if(!browser.webkit) {
+            assert.ok(true, 'Browser zooming is enabled in webkit');
+            return;
+        }
+
+        $('#scheduler').css('zoom', 1.25);
+
+        const data = [{ text: 'Two Weeks App (Jan 6 - Jan 19)', startDate: new Date(2020, 0, 6), endDate: new Date(2020, 0, 19, 12), typeId: 1 }];
+
+        const scheduler = createWrapper({
+            dataSource: data,
+            views: ['month'],
+            firstDayOfWeek: 1,
+            currentView: 'month',
+            currentDate: new Date(2020, 0, 1),
+            height: 500,
+            width: 250
+        });
+
+        assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointment parts are ok');
     });
 });
 
