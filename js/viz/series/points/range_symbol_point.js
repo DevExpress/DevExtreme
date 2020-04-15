@@ -166,11 +166,11 @@ module.exports = _extend({}, symbolPoint, {
         let coord2 = bottomCoords[coordSelector] + delta;
 
         if(coord1 < minBound) {
-            delta = minBound - topCoords[coordSelector];
+            delta = minBound - coord1;
             coord1 += delta;
             coord2 += delta;
         } else if(coord2 + bottomCoords[valueSelector] > maxBound) {
-            delta = -(bottomCoords[coordSelector] + bottomCoords[valueSelector] - maxBound);
+            delta = maxBound - coord2 - bottomCoords[valueSelector];
             coord1 += delta;
             coord2 += delta;
         }
