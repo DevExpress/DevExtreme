@@ -7,6 +7,20 @@ import { ClientFunction } from 'testcafe';
 fixture `Editing`
     .page(url(__dirname, '../container.html'));
 
+const getGridConfig = (config) => {
+    const defaultConfig = {
+        errorRowEnabled: true,
+        dataSource: {
+            asyncLoadEnabled: false,
+            store: [{ name: 'Alex', age: 15, lastName: 'John', }],
+            paginate: true
+        },
+        legacyRendering: false
+    }
+
+    return config ? Object.assign({}, defaultConfig, config) : defaultConfig;
+}
+
 test("Tab key on editor should focus next cell if editing mode is cell", async t => {
     const dataGrid = new DataGrid("#container");
 
@@ -73,3 +87,264 @@ test("Value change on dataGrid row should be fired after clicking on editor (T82
         createWidget("dxSelectBox", {}, false, "#otherContainer")
     ]);
 });
+
+test("Validation(Row) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=false) (T880238)", async t => {
+    const dataGrid = new DataGrid("#container");
+
+    const dataRow = dataGrid.getDataRow(0);
+    const cell0 = dataRow.getDataCell(0);
+    const editor0 = cell0.getEditor();
+    const cell1 = dataRow.getDataCell(1);
+    const commandCell = dataRow.getCommandCell(2);
+
+    await t
+        .click(commandCell.getButton(0))
+
+        .expect(cell1.isInvalid).notOk()
+        .expect(editor0.element.exists).ok()
+
+        .click(editor0.element)
+        .selectText(editor0.element, 0, 2)
+        .typeText(editor0.element, '3')
+        .pressKey('enter')
+
+        .expect(cell1.isInvalid).ok()
+
+        .click(commandCell.getButton(0))
+
+        .expect(cell1.isInvalid).ok()
+
+        .click(editor0.element)
+        .selectText(editor0.element, 0, 1)
+        .typeText(editor0.element, '10')
+        .pressKey('enter')
+
+        .expect(cell1.isInvalid).ok()
+
+        .click(commandCell.getButton(0))
+
+        .expect(cell1.isInvalid).ok('the second cell is marked as invalid')
+        .expect(dataRow.isEdited).ok('row is still in editing mode');
+
+}).before(() => createWidget("dxDataGrid", getGridConfig({
+    editing: {
+        mode: 'row',
+        allowUpdating: true
+    },
+    columns: ['age', {
+        dataField: 'name',
+        validationRules: [{
+            type: 'custom',
+            validationCallback: function(params) {
+                return params.data.age >= 10;
+            }
+        }]
+    }]
+})));
+
+test("Validation(Row) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=true) (T880238)", async t => {
+    const dataGrid = new DataGrid("#container");
+
+    const dataRow = dataGrid.getDataRow(0);
+    const cell0 = dataRow.getDataCell(0);
+    const editor0 = cell0.getEditor();
+    const cell1 = dataRow.getDataCell(1);
+    const commandCell = dataRow.getCommandCell(2);
+
+    await t
+        .click(commandCell.getButton(0))
+
+        .expect(cell1.isInvalid).notOk()
+        .expect(editor0.element.exists).ok()
+
+        .click(editor0.element)
+        .selectText(editor0.element, 0, 2)
+        .typeText(editor0.element, '3')
+        .pressKey('enter')
+
+        .expect(cell1.isInvalid).ok()
+
+        .click(commandCell.getButton(0))
+
+        .expect(cell1.isInvalid).ok()
+
+        .click(editor0.element)
+        .selectText(editor0.element, 0, 1)
+        .typeText(editor0.element, '10')
+        .pressKey('enter')
+
+        .expect(cell1.isInvalid).notOk('cell is not marked as invalid')
+        .expect(dataRow.isEdited).notOk('row is not in editing mode');
+
+}).before(() => createWidget("dxDataGrid", getGridConfig({
+    editing: {
+        mode: 'row',
+        allowUpdating: true
+    },
+    columns: ['age', {
+        dataField: 'name',
+        validationRules: [{
+            type: 'custom',
+            reevaluate: true,
+            validationCallback: function(params) {
+                return params.data.age >= 10;
+            }
+        }]
+    }]
+})));
+
+test("Validation(Cell) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=false) (T880238)", async t => {
+    const dataGrid = new DataGrid("#container");
+
+    const dataRow = dataGrid.getDataRow(0);
+    const cell0 = dataRow.getDataCell(0);
+    const editor0 = cell0.getEditor();
+    const cell1 = dataRow.getDataCell(1);
+
+    await t
+        .click(cell0.element)
+
+        .expect(cell1.isInvalid).notOk()
+        .expect(editor0.element.exists).ok()
+
+        .click(editor0.element)
+        .selectText(editor0.element, 0, 2)
+        .typeText(editor0.element, '3')
+        .pressKey('enter')
+
+        .expect(cell1.isInvalid).ok()
+        .expect(cell0.isEditCell).ok()
+
+        .selectText(editor0.element, 0, 1)
+        .typeText(editor0.element, '10')
+        .pressKey('enter')
+
+        .expect(cell1.isInvalid).ok('the second cell is still invalid')
+        .expect(cell0.isEditCell).ok('the first cell is still in editing mode');
+
+}).before(() => createWidget("dxDataGrid", getGridConfig({
+    editing: {
+        mode: 'cell',
+        allowUpdating: true
+    },
+    columns: ['age', {
+        dataField: 'name',
+        validationRules: [{
+            type: 'custom',
+            validationCallback: function(params) {
+                return params.data.age >= 10;
+            }
+        }]
+    }]
+})));
+
+test("Validation(Cell) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=true) (T880238)", async t => {
+    const dataGrid = new DataGrid("#container");
+
+    const dataRow = dataGrid.getDataRow(0);
+    const cell0 = dataRow.getDataCell(0);
+    const editor0 = cell0.getEditor();
+    const cell1 = dataRow.getDataCell(1);
+
+    await t
+        .click(cell0.element)
+
+        .expect(cell1.isInvalid).notOk()
+        .expect(editor0.element.exists).ok()
+
+        .click(editor0.element)
+        .selectText(editor0.element, 0, 2)
+        .typeText(editor0.element, '3')
+        .pressKey('enter')
+
+        .expect(cell1.isInvalid).ok()
+        .expect(cell0.isEditCell).ok()
+
+        .selectText(editor0.element, 0, 1)
+        .typeText(editor0.element, '10')
+        .pressKey('enter')
+
+        .expect(cell1.isInvalid).notOk('the second cell is notmarked as invalid')
+        .expect(cell0.isEditCell).notOk('the first cell is not in editing mode');
+
+}).before(() => createWidget("dxDataGrid", getGridConfig({
+    editing: {
+        mode: 'cell',
+        allowUpdating: true
+    },
+    columns: ['age', {
+        dataField: 'name',
+        validationRules: [{
+            type: 'custom',
+            reevaluate: true,
+            validationCallback: function(params) {
+                return params.data.age >= 10;
+            }
+        }]
+    }]
+})));
+
+[false, true].forEach(reevaluate => {
+    test(`Validation(Batch) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=${reevaluate}) (T880238)`, async t => {
+        const dataGrid = new DataGrid("#container");
+
+        const saveButton = dataGrid.getHeaderPanel().getSaveButton();
+        const dataRow = dataGrid.getDataRow(0);
+        const cell0 = dataRow.getDataCell(0);
+        const editor0 = cell0.getEditor();
+        const cell1 = dataRow.getDataCell(1);
+
+        await t
+            .click(cell0.element)
+
+            .expect(cell1.isInvalid).notOk()
+            .expect(editor0.element.exists).ok()
+
+            .click(editor0.element)
+            .selectText(editor0.element, 0, 2)
+            .typeText(editor0.element, '3')
+            .pressKey('enter')
+
+            .expect(cell1.isInvalid).notOk()
+            .expect(cell0.isModified).ok()
+
+            .click(saveButton)
+
+            .expect(cell1.isInvalid).ok()
+            .expect(cell0.isModified).ok()
+
+            .click(cell0.element)
+
+            .expect(editor0.element.exists).ok()
+
+            .selectText(editor0.element, 0, 1)
+            .typeText(editor0.element, '10')
+            .pressKey('enter')
+
+            .expect(cell1.isInvalid).notOk()
+            .expect(cell0.isModified).ok()
+
+            .click(saveButton)
+
+            .expect(cell1.isInvalid).notOk('the second cell is not marked as invalid')
+            .expect(cell0.isModified).notOk('the first cell is not marked as modified')
+            .expect(cell0.isEditCell).notOk('the first cell is not in editing mode');
+
+    }).before(() => createWidget("dxDataGrid", getGridConfig({
+        editing: {
+            mode: 'batch',
+            allowUpdating: true
+        },
+        columns: ['age', {
+            dataField: 'name',
+            validationRules: [{
+                type: 'custom',
+                reevaluate,
+                validationCallback: function(params) {
+                    return params.data.age >= 10;
+                }
+            }]
+        }]
+    })));
+});
+
