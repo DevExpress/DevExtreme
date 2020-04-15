@@ -4,6 +4,7 @@ import Widget from "./internal/widget";
 const CLASS = {
     headers: 'headers',
     headerRow: 'dx-header-row',
+    headerPanel: 'header-panel',
     filterRow: 'filter-row',
     filterMenu: 'dx-filter-menu',
     dataRow: 'dx-data-row',
@@ -36,7 +37,11 @@ const CLASS = {
     formButtonsContainer: 'form-buttons-container',
     selectCheckBox: 'dx-select-checkbox',
     saveButton: 'save-button',
-    groupExpanded: 'group-opened'
+    addRowButton: 'addrow-button',
+    groupExpanded: 'group-opened',
+    overlayContent: 'edit-popup',
+    popupContent: 'dx-overlay-content',
+    toolbar: 'dx-toolbar,'
 };
 
 const addWidgetPrefix = function(widgetName: string, className: string) {
@@ -52,6 +57,23 @@ class DxElement {
         this.element = element;
         this.hasFocusedState = this.element.hasClass(CLASS.focusedState);
         this.hasHiddenFocusState = this.element.hasClass(CLASS.hiddenFocusedState);
+    }
+}
+
+class HeaderPanel extends DxElement {
+    widgetName: string;
+
+    constructor(element: Selector, widgetName: string) {
+        super(element);
+        this.widgetName = widgetName;
+    }
+
+    getAddRowButton(): Selector {
+        return this.element.find(`.${addWidgetPrefix(this.widgetName, CLASS.addRowButton)}`);
+    }
+
+    getSaveButton(): Selector {
+        return this.element.find(`.${addWidgetPrefix(this.widgetName, CLASS.saveButton)}`);
     }
 }
 
@@ -125,6 +147,10 @@ class DataCell extends DxElement {
         super(dataRow.find(`td:nth-child(${++index})`));
         this.isEditCell = this.element.hasClass(CLASS.editCell);
         this.isFocused = this.element.hasClass(CLASS.focused);
+    }
+
+    getEditor(): DxElement {
+        return new DxElement(this.element.find(`.${CLASS.editorInput}`));
     }
 }
 
@@ -329,12 +355,23 @@ export default class DataGrid extends Widget {
         )();
     }
 
-    getEditForm() {
+    getEditForm(): EditForm {
         const editFormRowClass = this.addWidgetPrefix(CLASS.editFormRow);
         const element = this.element ? this.element.find(`.${editFormRowClass}`) :  Selector(`.${editFormRowClass}`);
         const buttons = element.find(`.${this.addWidgetPrefix(CLASS.formButtonsContainer)} .${CLASS.button}`);
 
         return new EditForm(element, buttons);
+    }
+
+    getPopupEditForm(): EditForm {
+        const element = Selector(`.${this.addWidgetPrefix(CLASS.overlayContent)} .${CLASS.popupContent}`);
+        const buttons = element.find(`.${this.addWidgetPrefix(CLASS.toolbar)} .${CLASS.button}`);
+
+        return new EditForm(element, buttons);
+    }
+
+    getHeaderPanel(): HeaderPanel {
+        return new HeaderPanel(this.element.find(`.${this.addWidgetPrefix(CLASS.headerPanel)}`), this.name);
     }
 
     api_option(name: any, value = 'undefined') : Promise<any> {
@@ -363,6 +400,30 @@ export default class DataGrid extends Widget {
         return ClientFunction(
             () => getGridInstance().cancelEditData(),
             { dependencies: { getGridInstance } }
+        )();
+    }
+
+    api_saveEditData() : Promise<void> {
+        const getGridInstance: any = this.getGridInstance;
+        return ClientFunction(
+            () => getGridInstance().saveEditData(),
+            { dependencies: { getGridInstance } }
+        )();
+    }
+
+    api_editCell(rowIndex: number, columnIndex: number) : Promise<void> {
+        const getGridInstance: any = this.getGridInstance;
+        return ClientFunction(
+            () => getGridInstance().editCell(rowIndex, columnIndex),
+            { dependencies: { getGridInstance, rowIndex, columnIndex } }
+        )();
+    }
+
+    api_cellValue(rowIndex: number, columnIndex: number, value: string) : Promise<void> {
+        const getGridInstance: any = this.getGridInstance;
+        return ClientFunction(
+            () => getGridInstance().editCell(rowIndex, columnIndex, value),
+            { dependencies: { getGridInstance, rowIndex, columnIndex, value } }
         )();
     }
 }
