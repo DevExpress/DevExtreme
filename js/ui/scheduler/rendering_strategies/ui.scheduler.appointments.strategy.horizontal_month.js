@@ -15,7 +15,8 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
         const fullWeekAppointmentWidth = this._getFullWeekAppointmentWidth(appointmentSettings.groupIndex);
         const maxAppointmentWidth = this._getMaxAppointmentWidth(startDate);
         const longPartCount = Math.ceil((deltaWidth) / fullWeekAppointmentWidth) - 1;
-        const tailWidth = Math.floor(deltaWidth % fullWeekAppointmentWidth) || fullWeekAppointmentWidth;
+        const realTailWidth = Math.floor(deltaWidth % fullWeekAppointmentWidth);
+        const tailWidth = longPartCount ? realTailWidth : (realTailWidth || fullWeekAppointmentWidth);
         const result = [];
         let totalWidth = appointmentGeometry.reducedWidth + tailWidth;
         let currentPartTop = appointmentSettings.top + this.getDefaultCellHeight();
