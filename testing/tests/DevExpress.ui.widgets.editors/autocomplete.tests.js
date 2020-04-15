@@ -928,6 +928,121 @@ QUnit.module('dxAutocomplete', {
     });
 });
 
+QUnit.module('ContentReady event', {
+    beforeEach: function() {
+        fx.off = true;
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        fx.off = false;
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.skip('ContentReady should be raised when widget non-dropdown part is rendered (deferRendering is true)', function(assert) {
+        assert.expect(4);
+
+        $('#autocomplete').dxAutocomplete({
+            value: 'text',
+            focusStateEnabled: true,
+            deferRendering: true,
+            onContentReady: (e) => {
+                assert.ok(true, 'ContentReady is raised');
+                assert.ok(e.component, 'Component info should be passed');
+                assert.ok(e.element, 'Element info should be passed');
+                assert.strictEqual($(e.element).text(), 'text', 'Text is correct');
+            }
+        });
+    });
+
+    QUnit.test('ContentReady should be raised when list is rendered after its first opening (deferRendering is true)', function(assert) {
+        assert.expect(3);
+
+        const autocomplete = $('#autocomplete').dxAutocomplete({
+            dataSource: ['item 1', 'item 2', 'item 3'],
+            searchTimeout: 0,
+            focusStateEnabled: true,
+            deferRendering: true
+        }).dxAutocomplete('instance');
+
+        autocomplete.on('contentReady', (e) => {
+            assert.ok(true, 'ContentReady is raised');
+            assert.ok(e.component, 'Component info should be passed');
+            assert.ok(e.element, 'Element info should be passed');
+        });
+
+        autocomplete.open();
+    });
+
+    QUnit.skip('ContentReady should be raised when list is rendered after its first opening (deferRendering is false)', function(assert) {
+        assert.expect(6);
+
+        $('#autocomplete').dxAutocomplete({
+            dataSource: ['item 1', 'item 2', 'item 3'],
+            searchTimeout: 0,
+            focusStateEnabled: true,
+            deferRendering: false,
+            onContentReady: (e) => {
+                assert.ok(true, 'ContentReady is raised');
+                assert.ok(e.component, 'Component info should be passed');
+                assert.ok(e.element, 'Element info should be passed');
+            }
+        }).dxAutocomplete('instance');
+    });
+
+    QUnit.test('ContentReady should be raised after items loading', function(assert) {
+        assert.expect(5);
+
+        const longArray = [];
+        let arrayLength = 100;
+
+        while(arrayLength--) {
+            longArray.push(arrayLength);
+        }
+
+        const instance = $('#autocomplete').dxAutocomplete({
+            dataSource: {
+                store: longArray
+            },
+            deferRendering: false,
+            searchTimeout: 0,
+            focusStateEnabled: true
+        }).dxAutocomplete('instance');
+
+        assert.equal(instance._list._dataSource, null, 'no dataSource before changing value');
+
+        instance.on('contentReady', (e) => {
+            assert.ok(true, 'ContentReady is raised');
+            assert.ok(e.component, 'Component info should be passed');
+            assert.ok(e.element, 'Element info should be passed');
+        });
+
+        keyboardMock(instance._input()).type('0');
+
+        assert.equal(instance._list.$element().find('.dx-list-item').length, 10);
+    });
+
+    QUnit.test('ContentReady should be raised after items filtering', function(assert) {
+        assert.expect(4);
+
+        const instance = $('#autocomplete').dxAutocomplete({
+            dataSource: ['1', '2', '3'],
+            deferRendering: false,
+            searchTimeout: 0,
+            focusStateEnabled: true
+        }).dxAutocomplete('instance');
+
+        instance.on('contentReady', (e) => {
+            assert.ok(true, 'ContentReady is raised');
+            assert.ok(e.component, 'Component info should be passed');
+            assert.ok(e.element, 'Element info should be passed');
+        });
+
+        keyboardMock(instance._input()).type('1');
+
+        assert.equal(instance._list.$element().find('.dx-list-item').length, 1);
+    });
+});
+
 QUnit.module('Overlay integration', {
     beforeEach: function() {
         executeAsyncMock.setup();
