@@ -2392,9 +2392,7 @@ QUnit.module('Native scrolling', () => {
         const parentContainer = $('<div>')
             .css('position', 'static')
             .appendTo('#qunit-fixture');
-        const $lookup = $('<div>')
-            .attr('id', 'innerLookup')
-            .appendTo(parentContainer);
+        const $lookup = $('<div>').appendTo(parentContainer);
 
         $lookup.dxLookup({
             searchEnabled: true,
@@ -2438,9 +2436,7 @@ QUnit.module('Native scrolling', () => {
         const parentContainer = $('<div>')
             .css('position', 'static')
             .appendTo('#qunit-fixture');
-        const $lookup = $('<div>')
-            .attr('id', 'innerLookup')
-            .appendTo(parentContainer);
+        const $lookup = $('<div>').appendTo(parentContainer);
 
         $lookup.dxLookup({
             searchEnabled: true,

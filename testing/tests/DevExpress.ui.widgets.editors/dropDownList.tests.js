@@ -1152,9 +1152,7 @@ QUnit.module('popup', moduleConfig, () => {
                 top: 0
             })
             .appendTo('#qunit-fixture');
-        const $dropDownList = $('<div>')
-            .attr('id', 'innerDropDownList')
-            .appendTo(parentContainer);
+        const $dropDownList = $('<div>').appendTo(parentContainer);
 
         $dropDownList.dxDropDownList({
             searchEnabled: true,
