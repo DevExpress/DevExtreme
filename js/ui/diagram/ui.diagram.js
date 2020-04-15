@@ -214,8 +214,13 @@ class Diagram extends Widget {
         }
         return this._isMobileScreenSize;
     }
+    _diagramCaptureFocus() {
+        if(this._diagramInstance) {
+            this._diagramInstance.captureFocus();
+        }
+    }
     notifyBarCommandExecuted() {
-        this._diagramInstance.captureFocus();
+        this._diagramCaptureFocus();
     }
     _registerToolbar(component) {
         this._registerBar(component);
@@ -364,14 +369,16 @@ class Diagram extends Widget {
                 }
             },
             onVisibilityChanged: (e) => {
-                if(isServerSide) return;
+                this._diagramCaptureFocus();
 
-                if(this._historyToolbar) {
-                    if(!e.visible && this.isMobileScreenSize() && this._historyToolbarZIndex) {
-                        zIndexPool.remove(this._historyToolbarZIndex);
-                        this._historyToolbar.$element().css('zIndex', '');
-                        this._historyToolbar.$element().css('boxShadow', '');
-                        this._historyToolbarZIndex = undefined;
+                if(!isServerSide) {
+                    if(this._historyToolbar) {
+                        if(!e.visible && this.isMobileScreenSize() && this._historyToolbarZIndex) {
+                            zIndexPool.remove(this._historyToolbarZIndex);
+                            this._historyToolbar.$element().css('zIndex', '');
+                            this._historyToolbar.$element().css('boxShadow', '');
+                            this._historyToolbarZIndex = undefined;
+                        }
                     }
                 }
             },
@@ -511,6 +518,9 @@ class Diagram extends Widget {
                     }
                 }
             },
+            onVisibilityChanged: (e) => {
+                this._diagramCaptureFocus();
+            },
             onSelectedGroupChanged: ({ component }) => this._updatePropertiesPanelGroupBars(component),
             onPointerUp: this._onPanelPointerUp.bind(this)
         });
@@ -532,7 +542,7 @@ class Diagram extends Widget {
     }
     _onPanelPointerUp() {
         this._captureFocusTimeout = setTimeout(() => {
-            this._diagramInstance.captureFocus();
+            this._diagramCaptureFocus();
             delete this._captureFocusTimeout;
         }, 100);
     }
@@ -586,7 +596,7 @@ class Diagram extends Widget {
                     },
                     (shapeType) => {
                         e.callback(shapeType);
-                        this._diagramInstance.captureFocus();
+                        this._diagramCaptureFocus();
                         e.hide();
                     }
                 );
@@ -615,7 +625,7 @@ class Diagram extends Widget {
     _showDialog(dialogParameters) {
         if(this._dialogInstance) {
             this._dialogInstance.option('onGetContent', dialogParameters.onGetContent);
-            this._dialogInstance.option('onHidden', function() { this._diagramInstance.captureFocus(); }.bind(this));
+            this._dialogInstance.option('onHidden', function() { this._diagramCaptureFocus(); }.bind(this));
             this._dialogInstance.option('command', this._diagramInstance.commandManager.getCommand(dialogParameters.command));
             this._dialogInstance.option('title', dialogParameters.title);
             this._dialogInstance._show();
@@ -1358,7 +1368,7 @@ class Diagram extends Widget {
     }
 
     focus() {
-        this._diagramInstance.captureFocus();
+        this._diagramCaptureFocus();
     }
     export() {
         return this._getDiagramData();

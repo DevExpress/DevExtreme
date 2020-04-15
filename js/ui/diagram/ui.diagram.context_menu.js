@@ -1,4 +1,5 @@
 import $ from '../../core/renderer';
+import { extend } from '../../core/utils/extend';
 
 import Widget from '../widget/ui.widget';
 import ContextMenu from '../context_menu';
@@ -9,6 +10,7 @@ import DiagramBar from './diagram.bar';
 import { getDiagram } from './diagram.importer';
 
 const DIAGRAM_TOUCHBAR_CLASS = 'dx-diagram-touchbar';
+const DIAGRAM_TOUCHBAR_OVERLAY_CLASS = 'dx-diagram-touchbar-overlay';
 const DIAGRAM_TOUCHBAR_TARGET_CLASS = 'dx-diagram-touchbar-target';
 const DIAGRAM_TOUCHBAR_MIN_UNWRAPPED_WIDTH = 800;
 const DIAGRAM_TOUCHBAR_Y_OFFSET = 32;
@@ -40,12 +42,10 @@ class DiagramContextMenu extends Widget {
         const $contextMenu = $('<div>')
             .appendTo(this.$element());
 
-        this._contextMenuInstance = this._createComponent($contextMenu, ContextMenu, {
-            closeOnOutsideClick: false,
-            showEvent: '',
+        this._contextMenuInstance = this._createComponent($contextMenu, InnerContextMenu, {
+            isTouchBarMode: this._isTouchBarMode(),
             cssClass: this._isTouchBarMode() ? DIAGRAM_TOUCHBAR_CLASS : DiagramMenuHelper.getContextMenuCssClass(),
             items: this._commands,
-            focusStateEnabled: false,
             position: (this._isTouchBarMode() ? {
                 my: { x: 'center', y: 'bottom' },
                 at: { x: 'center', y: 'top' },
@@ -66,10 +66,8 @@ class DiagramContextMenu extends Widget {
         });
     }
     _show(x, y, selection) {
-        const { Browser } = getDiagram();
-
         this._contextMenuInstance.hide();
-        if(Browser.TouchUI) {
+        if(this._isTouchBarMode()) {
             this._$contextMenuTargetElement.show();
             if(!selection) {
                 selection = { x, y, width: 0, height: 0 };
@@ -93,7 +91,7 @@ class DiagramContextMenu extends Widget {
     }
     _isTouchBarMode() {
         const { Browser } = getDiagram();
-        return true || Browser.TouchUI;
+        return Browser.TouchUI;
     }
     _onItemClick(itemData) {
         let processed = false;
@@ -179,6 +177,26 @@ class DiagramContextMenu extends Widget {
             default:
                 super._optionChanged(args);
         }
+    }
+}
+
+class InnerContextMenu extends ContextMenu {
+    _renderContextMenuOverlay() {
+        super._renderContextMenuOverlay();
+
+        if(this._overlay && this.option('isTouchBarMode')) {
+            this._overlay && this._overlay.option('onShown', () => {
+                const $content = $(this._overlay.$content());
+                $content.parent().addClass(DIAGRAM_TOUCHBAR_OVERLAY_CLASS);
+            });
+        }
+    }
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
+            closeOnOutsideClick: false,
+            showEvent: '',
+            focusStateEnabled: false,
+        });
     }
 }
 
