@@ -83,5 +83,7 @@ export default class PreactWrapper extends DOMComponent {
 
     // NOTE: this method will be depricated
     //       aria changes should be defined in declaration
-    setAria() { }
+    setAria() {
+        throw new Error('"setAria" method is deprecated, use "aria" property instead');
+    }
 }
