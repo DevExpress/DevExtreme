@@ -176,8 +176,7 @@ class DiagramToolbar extends DiagramPanel {
                         disabled: false,
                         stylingMode: 'text',
                         onClick: () => {
-                            const contextMenu = this._contextMenus[command];
-                            if(contextMenu) contextMenu.toggle();
+                            this._toggleContextMenu(command);
                         }
                     }
                 }]
@@ -249,12 +248,22 @@ class DiagramToolbar extends DiagramPanel {
                                 const parameter = DiagramMenuHelper.getItemCommandParameter(this, item);
                                 handler.call(this, item.command, parameter);
                             } else {
-                                const contextMenu = this._contextMenus[item.command];
-                                if(contextMenu) contextMenu.toggle();
+                                this._toggleContextMenu(item.command);
                             }
                         }
                     }
                 };
+        }
+    }
+    _toggleContextMenu(command) {
+        const contextMenu = this._contextMenus[command];
+        if(contextMenu) {
+            Object.keys(this._contextMenus).forEach(command => {
+                if(contextMenu !== this._contextMenus[command]) {
+                    this._contextMenus[command].hide();
+                }
+            });
+            contextMenu.toggle();
         }
     }
     _onItemInitialized(widget, item) {
