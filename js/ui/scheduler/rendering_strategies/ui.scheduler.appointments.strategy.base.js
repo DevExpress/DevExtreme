@@ -315,7 +315,8 @@ class BaseRenderingStrategy {
     _isItemsCross(item, currentItem, orientation) {
         const side_1 = Math.floor(item[orientation[0]]);
         const side_2 = Math.floor(item[orientation[1]]);
-        return item[orientation[2]] === currentItem[orientation[2]] && (
+        const isItemCross = Math.abs(item[orientation[2]] - currentItem[orientation[2]]) <= 1;
+        return isItemCross && !!item.allDay === !!currentItem.allDay && (
             (side_1 <= currentItem[orientation[0]] && side_2 > currentItem[orientation[0]]) ||
                 (side_1 < currentItem[orientation[1]] && side_2 >= currentItem[orientation[1]] || (
                     side_1 === currentItem[orientation[0]] && side_2 === currentItem[orientation[1]]
@@ -355,6 +356,7 @@ class BaseRenderingStrategy {
             stack.right = currentItem.right;
             stack.top = currentItem.top;
             stack.bottom = currentItem.bottom;
+            stack.allDay = currentItem.allDay;
         };
 
         var createItem = (currentItem, index) => {
@@ -367,6 +369,7 @@ class BaseRenderingStrategy {
                 right: currentItem.right,
                 top: currentItem.top,
                 bottom: currentItem.bottom,
+                allDay: currentItem.allDay,
                 sortedIndex: this._skipSortedIndex(currentIndex) ? null : sortedIndex++,
             };
         };
@@ -403,6 +406,7 @@ class BaseRenderingStrategy {
                     stack.right = Math.max(stack.right, currentItem.right);
                     stack.top = Math.min(stack.top, currentItem.top);
                     stack.bottom = Math.max(stack.bottom, currentItem.bottom);
+                    stack.allDay = currentItem.allDay;
                 } else {
                     pushItemsInResult(stack.items);
                     stack = {};
