@@ -77,6 +77,19 @@ export default class PreactWrapper extends DOMComponent {
         this.option(getInnerActionName(name), this._createActionByOption(name, config));
     }
 
+    _getActiveElement() {
+        const activeElement = this.$element();
+        const activeStateUnit = this.option('activeStateUnit');
+
+        if(activeStateUnit) {
+            return activeElement
+                .find(activeStateUnit)
+                .not('.dx-state-disabled');
+        }
+
+        return activeElement;
+    }
+
     // Public API
     repaint() {
         this._refresh();
@@ -84,9 +97,9 @@ export default class PreactWrapper extends DOMComponent {
 
     setAria(...args) {
         if(!isPlainObject(args[0])) {
-            setAttribute(args[0], args[1], args[2] || this.$element());
+            setAttribute(args[0], args[1], args[2] || this._getActiveElement());
         } else {
-            const target = args[1] || this.$element();
+            const target = args[1] || this._getActiveElement();
 
             each(args[0], (name, value) => setAttribute(name, value, target));
         }
