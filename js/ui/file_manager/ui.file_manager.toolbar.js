@@ -174,38 +174,37 @@ class FileManagerToolbar extends Widget {
         if(toolbar) {
             toolbar.beginUpdate();
         }
-        let menuItemNames = this._getMenuItemNames(toolbar);
+        const menuItems = this._getMenuItems(toolbar);
         const hasItemsBefore = {
             before: false,
             center: false,
             after: false
         };
         const itemGroups = {
-            before: this._getItemsInGroup(items, menuItemNames, 'before'),
-            center: this._getItemsInGroup(items, menuItemNames, 'center'),
-            after: this._getItemsInGroup(items, menuItemNames, 'after')
+            before: this._getItemsInGroup(items, menuItems, 'before'),
+            center: this._getItemsInGroup(items, menuItems, 'center'),
+            after: this._getItemsInGroup(items, menuItems, 'after')
         };
         let lookupIndex = 0;
-        menuItemNames = this._getMenuItemNames(toolbar);
-        for(let i = 0; i < items.length; i++) {
-            const itemLocation = this._getItemLocation(items[i]);
-            if(items[i].name === 'separator') {
+        items.forEach((item, i) => {
+            const itemLocation = this._getItemLocation(item);
+            if(item.name === 'separator') {
                 const isSeparatorVisible = hasItemsBefore[itemLocation] && this._groupHasItemsAfter(itemGroups[itemLocation]);
                 if(toolbar) {
                     const optionName = `items[${i}].visible`;
                     toolbar.option(optionName, isSeparatorVisible);
                 }
-                items[i].visible = isSeparatorVisible;
+                item.visible = isSeparatorVisible;
                 hasItemsBefore[itemLocation] = false;
             } else {
-                if(!this._isItemInMenu(menuItemNames, lookupIndex, items[i].name)) {
-                    hasItemsBefore[itemLocation] = hasItemsBefore[itemLocation] || items[i].visible;
+                if(!this._isItemInMenu(menuItems, item, lookupIndex)) {
+                    hasItemsBefore[itemLocation] = hasItemsBefore[itemLocation] || item.visible;
                     itemGroups[itemLocation].shift();
                 } else {
                     lookupIndex++;
                 }
             }
-        }
+        });
 
         if(toolbar) {
             toolbar.endUpdate();
@@ -213,28 +212,29 @@ class FileManagerToolbar extends Widget {
         return items;
     }
 
-    _getMenuItemNames(toolbar) {
-        const result = toolbar ? toolbar._getMenuItems().slice(0) : [];
-        return result.map(menuItem => menuItem.name);
+    _getMenuItems(toolbar) {
+        const result = toolbar ? toolbar._getMenuItems() : [];
+        return result.map(menuItem => menuItem.originalItemData);
     }
 
-    _isItemInMenu(menuItemNames, lookupIndex, itemName) {
-        return menuItemNames.indexOf(itemName, lookupIndex) !== -1;
+    _isItemInMenu(menuItems, item, lookupIndex) {
+        return menuItems.length
+            && ensureDefined(item.locateInMenu, 'never') !== 'never'
+            && menuItems.indexOf(item.originalItemData, lookupIndex) !== -1;
     }
 
-    _getItemsInGroup(items, menuItemNames, groupName) {
+    _getItemsInGroup(items, menuItems, groupName) {
+        let lookupIndex = 0;
         return items.filter(item => {
             if(this._getItemLocation(item) !== groupName) {
                 return false;
             }
-            let result = true;
-            if(ensureDefined(item.locateInMenu, 'never') !== 'never' && menuItemNames.length) {
-                if(item.name === menuItemNames[0]) {
-                    result = false;
-                    menuItemNames.shift();
-                }
+            if(!this._isItemInMenu(menuItems, item, lookupIndex)) {
+                return true;
+            } else {
+                lookupIndex++;
+                return false;
             }
-            return result;
         });
     }
 

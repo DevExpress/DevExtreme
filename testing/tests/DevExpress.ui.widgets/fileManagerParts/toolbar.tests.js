@@ -638,7 +638,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.ok(!$toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), 'file toolbar hidden');
     });
 
-    test('toolbar separators calculation must be correct: location issue', function(assert) {
+    test('toolbar separators must take location into account', function(assert) {
         createFileManager(false);
         this.clock.tick(400);
 
@@ -661,7 +661,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.equal($separators.length, 0, 'file toolbar has no separators');
     });
 
-    test('toolbar separators calculation must be correct: empty group issue', function(assert) {
+    test('toolbar separators must render one time for empty group', function(assert) {
         createFileManager(false);
         this.clock.tick(400);
 
@@ -698,7 +698,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.equal($separators.length, 1, 'toolbar has one separator');
     });
 
-    test('toolbar separators calculation must be correct: compact mode issue', function(assert) {
+    test('toolbar separators must support default items in menu', function(assert) {
         createFileManager(false);
         this.clock.tick(400);
 
@@ -734,6 +734,42 @@ QUnit.module('Toolbar', moduleConfig, () => {
         $item.trigger('dxclick');
         this.clock.tick(400);
 
+        const $separators = this.wrapper.getToolbarSeparators();
+        assert.equal($separators.length, 0, 'file toolbar has no separators');
+
+        renderer.fn.width = originalWidth;
+    });
+
+    test('toolbar separators must support custom items in menu', function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            toolbar: {
+                fileSelectionItems: [
+                    'download', 'move', 'copy', 'rename', 'separator', 'refresh', 'clear',
+                    {
+                        widget: 'dxButton',
+                        options: {
+                            text: 'some item 1 with text'
+                        },
+                        locateInMenu: 'auto'
+                    }
+                ]
+            }
+        });
+        this.clock.tick(400);
+
+        const originalWidth = renderer.fn.width;
+        renderer.fn.width = () => 400;
+        $('#fileManager').css('width', '100%');
+        fileManager.repaint();
+        this.clock.tick(800);
+
+        const $item = this.wrapper.findDetailsItem('File 1.txt');
+        $item.trigger('dxclick');
+        this.clock.tick(400);
         const $separators = this.wrapper.getToolbarSeparators();
         assert.equal($separators.length, 0, 'file toolbar has no separators');
 
