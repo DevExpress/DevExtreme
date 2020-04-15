@@ -221,7 +221,7 @@ class FileManagerToolbar extends Widget {
     }
 
     _getItemsInGroup(items, menuItems, groupName) {
-        return items.filter(item => this._getItemLocation(item) === groupName && !this._isItemInMenu(menuItems, item, 0));
+        return items.filter(item => this._getItemLocation(item) === groupName && !this._isItemInMenu(menuItems, item));
     }
 
     _groupHasItemsAfter(items) {
