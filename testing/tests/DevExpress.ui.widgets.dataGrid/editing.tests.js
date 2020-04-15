@@ -12624,7 +12624,7 @@ QUnit.module('Editing with validation', {
         const key = this.getKeyByRowIndex(0);
 
         // assert
-        assert.notOk(this.validatingController.isInvalidCell({ rowKey: key, columnIndex: 0 }), 'cell should be invalid');
+        assert.ok(this.validatingController.isInvalidCell({ rowKey: key, columnIndex: 0 }), 'cell should be invalid');
     });
 
     QUnit.test('validatingController.validateCell should not call the validate method of the current validator', function(assert) {
