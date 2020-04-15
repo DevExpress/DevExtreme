@@ -2389,24 +2389,21 @@ QUnit.module('Native scrolling', () => {
             data.push(i);
         }
 
-        const parentContainer = $('<div>')
-            .css('position', 'static')
-            .appendTo('#qunit-fixture');
-        const $lookup = $('<div>').appendTo(parentContainer);
-
-        $lookup.dxLookup({
-            searchEnabled: true,
-            dataSource: {
-                store: new ArrayStore(data),
-                paginate: true,
-                pageSize: 40
-            },
-            fullScreen: false,
-            searchTimeout: 0,
-            width: 200,
-            usePopover: false,
-            popupHeight: '50%'
-        });
+        const $lookup = $('#lookup')
+            .wrap($('<div>').css('position', 'static'))
+            .dxLookup({
+                searchEnabled: true,
+                dataSource: {
+                    store: new ArrayStore(data),
+                    paginate: true,
+                    pageSize: 40
+                },
+                fullScreen: false,
+                searchTimeout: 0,
+                width: 200,
+                usePopover: false,
+                popupHeight: '50%'
+            });
 
         $lookup.dxLookup('instance').open();
 
@@ -2433,24 +2430,21 @@ QUnit.module('Native scrolling', () => {
         }
         data.push('a');
 
-        const parentContainer = $('<div>')
-            .css('position', 'static')
-            .appendTo('#qunit-fixture');
-        const $lookup = $('<div>').appendTo(parentContainer);
-
-        $lookup.dxLookup({
-            searchEnabled: true,
-            dataSource: {
-                store: new ArrayStore(data),
-                paginate: true,
-                pageSize: 20
-            },
-            searchTimeout: 0,
-            width: 200,
-            usePopover: false,
-            popupHeight: 'auto',
-            fullScreen: false
-        });
+        const $lookup = $('#lookup')
+            .wrap($('<div>').css('position', 'static'))
+            .dxLookup({
+                searchEnabled: true,
+                dataSource: {
+                    store: new ArrayStore(data),
+                    paginate: true,
+                    pageSize: 20
+                },
+                searchTimeout: 0,
+                width: 200,
+                usePopover: false,
+                popupHeight: 'auto',
+                fullScreen: false
+            });
 
         $lookup.dxLookup('instance').open();
 

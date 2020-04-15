@@ -1146,25 +1146,22 @@ QUnit.module('popup', moduleConfig, () => {
             data.push(i);
         }
 
-        const parentContainer = $('<div>')
-            .css({
+        $('#dropDownList')
+            .wrap($('<div>').css({
                 left: 0,
                 top: 0
-            })
-            .appendTo('#qunit-fixture');
-        const $dropDownList = $('<div>').appendTo(parentContainer);
-
-        $dropDownList.dxDropDownList({
-            searchEnabled: true,
-            dataSource: {
-                store: new ArrayStore(data),
-                paginate: true,
-                pageSize: 40
-            },
-            opened: true,
-            searchTimeout: 0,
-            width: 200
-        });
+            }))
+            .dxDropDownList({
+                searchEnabled: true,
+                dataSource: {
+                    store: new ArrayStore(data),
+                    paginate: true,
+                    pageSize: 40
+                },
+                opened: true,
+                searchTimeout: 0,
+                width: 200
+            });
 
         const listInstance = $(`.${LIST_CLASS}`).dxList('instance');
 
