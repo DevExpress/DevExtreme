@@ -125,7 +125,7 @@ const Tracker = Class.inherit({
         } else {
             that._hideTooltipCallback();
         }
-    },
+    }
 });
 
 let active_touch_tooltip_tracker = null;
