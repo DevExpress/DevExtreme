@@ -187,7 +187,7 @@ describe('Metadata generator - collectMetadata', () => {
 
         const result = generator.collectMetadata(cwd, path, content);
         assert.equal(content, result);
-        assert.deepEqual(generator.getMetadata(), {});
+        assert.deepEqual(generator.getMetadata(), { 'metadata': [] });
     });
 
     it('collectMetadata for file with comments modify file content and add data to metadata', () => {
@@ -220,19 +220,51 @@ $slideout-background: #000;
         const result = generator.collectMetadata(cwd, path, content);
         assert.equal(expected, result);
         assert.deepEqual(generator.getMetadata(), {
-            'tb/widgets/generic/toolbar/colors': [{
+            'metadata': [{
                 'Name': 'Slide out background',
                 'Type': 'color',
-                'Key': '$slideout-background'
+                'Key': '$slideout-background',
+                'Path': 'tb/widgets/generic/toolbar/colors'
             }]
         });
     });
 
     it('clean method clean metadata', () => {
         // metadata is not empty because of the previous test
-        assert.notDeepEqual(generator.getMetadata(), {});
+        assert.notDeepEqual(generator.getMetadata(), { 'metadata': [] });
         generator.clean();
-        assert.deepEqual(generator.getMetadata(), {});
+        assert.deepEqual(generator.getMetadata(), { 'metadata': [] });
+    });
+
+    it('collectMetadata add several item for diffenrt files with the same variables names', () => {
+        const cwd = '/';
+        const path1 = '/scss/widgets/generic/toolbar/_colors.scss';
+        const path2 = '/scss/widgets/material/toolbar/_colors.scss';
+        const content = `
+@use "colors";
+/**
+* $name Slide out background
+* $type color
+*/
+$slideout-background: #000;
+`;
+
+        generator.collectMetadata(cwd, path1, content);
+        generator.collectMetadata(cwd, path2, content);
+
+        assert.deepEqual(generator.getMetadata(), {
+            'metadata': [{
+                'Name': 'Slide out background',
+                'Type': 'color',
+                'Key': '$slideout-background',
+                'Path': 'tb/widgets/generic/toolbar/colors'
+            }, {
+                'Name': 'Slide out background',
+                'Type': 'color',
+                'Key': '$slideout-background',
+                'Path': 'tb/widgets/material/toolbar/colors'
+            }]
+        });
     });
 });
 

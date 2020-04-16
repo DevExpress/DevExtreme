@@ -3,7 +3,7 @@ const path = require('path');
 
 class MetadataGenerator {
     constructor() {
-        this.metadata = {};
+        this.metadata = [];
     }
 
     capitalize(key) {
@@ -11,11 +11,11 @@ class MetadataGenerator {
     }
 
     clean() {
-        this.metadata = {};
+        this.metadata = [];
     }
 
     getMetadata() {
-        return this.metadata;
+        return { 'metadata': this.metadata };
     }
 
     executor(str, regex, handler) {
@@ -75,7 +75,8 @@ class MetadataGenerator {
         const metaItems = this.getMetaItems(content);
 
         if(metaItems.length) {
-            this.metadata[path] = metaItems;
+            metaItems.forEach(item => item.Path = path);
+            Array.prototype.push.apply(this.metadata, metaItems);
 
             const imports = `@forward "${path}";\n@use "${path}" as *;\n`;
             const collector = `@debug collector(${this.getMapFromMeta(metaItems)});\n`;

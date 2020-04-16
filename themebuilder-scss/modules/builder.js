@@ -1,12 +1,16 @@
 
 // const themes = require('./themes.js');
 const normalize = require('./config-normalizer');
+const Compiler = require('./compiler');
+const compiler = new Compiler();
 
-const buildTheme = config => {
-    normalize(config);
+class Builder {
+    constructor() {}
 
-};
+    buildTheme(config) {
+        normalize(config);
+        compiler.compile(config);
+    }
+}
 
-module.exports = {
-    buildTheme: buildTheme
-};
+module.exports = Builder;
