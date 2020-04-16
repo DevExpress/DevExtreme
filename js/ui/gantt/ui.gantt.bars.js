@@ -50,6 +50,9 @@ class Bar {
             }
         });
     }
+    _getIcon(name) {
+        return 'dx-gantt-i dx-gantt-i-' + name;
+    }
 
     // IBar
     getCommandKeys() {
@@ -115,14 +118,19 @@ export class GanttToolbar extends Bar {
     _createItemByText(text) {
         switch(text.toLowerCase()) {
             case 'separator': return this._createSeparator();
-            case 'undo': return this._createDefaultItem(COMMANDS.undo, 'undo');
-            case 'redo': return this._createDefaultItem(COMMANDS.redo, 'redo');
-            case 'zoomin': return this._createDefaultItem(COMMANDS.zoomIn, 'plus');
-            case 'zoomout': return this._createDefaultItem(COMMANDS.zoomOut, 'minus');
+            case 'undo': return this._createDefaultItem(COMMANDS.undo, messageLocalization.format('dxGantt-undo'), this._getIcon('undo'));
+            case 'redo': return this._createDefaultItem(COMMANDS.redo, messageLocalization.format('dxGantt-redo'), this._getIcon('redo'));
+            case 'expandall': return this._createDefaultItem(COMMANDS.expandAll, messageLocalization.format('dxGantt-expandAll'), this._getIcon('expand'));
+            case 'collapseall': return this._createDefaultItem(COMMANDS.collapseAll, messageLocalization.format('dxGantt-collapseAll'), this._getIcon('collapse'));
+            case 'addtask': return this._createDefaultItem(COMMANDS.createTask, messageLocalization.format('dxGantt-addNewTask'), this._getIcon('add'));
+            case 'deletetask': return this._createDefaultItem(COMMANDS.removeTask, messageLocalization.format('dxGantt-deleteSelectedTask'), this._getIcon('delete'));
+            case 'zoomin': return this._createDefaultItem(COMMANDS.zoomIn, messageLocalization.format('dxGantt-zoomIn'), this._getIcon('zoom-in'));
+            case 'zoomout': return this._createDefaultItem(COMMANDS.zoomOut, messageLocalization.format('dxGantt-zoomOut'), this._getIcon('zoom-out'));
+            case 'fullscreen': return this._createDefaultItem(COMMANDS.fullScreen, messageLocalization.format('dxGantt-fullScreen'), this._getIcon('full-screen'));
             default: return extend(this._getDefaultItemOptions(), { options: { text: text } });
         }
     }
-    _createDefaultItem(commandId, icon) {
+    _createDefaultItem(commandId, hint, icon) {
         return {
             commandId: commandId,
             disabled: true,
@@ -130,7 +138,8 @@ export class GanttToolbar extends Bar {
             location: 'before',
             options: {
                 icon: icon,
-                stylingMode: 'text'
+                stylingMode: 'text',
+                hint: hint
             }
         };
     }
@@ -174,16 +183,18 @@ export class GanttContextMenuBar extends Bar {
         this._items = [
             { text: messageLocalization.format('dxGantt-dialogButtonAdd'),
                 commandId: COMMANDS.taskAddContextItem,
+                icon: this._getIcon('add'),
                 items: [
-                    { text: messageLocalization.format('dxGantt-contextMenuNewTask'), commandId: COMMANDS.createTask },
-                    { text: messageLocalization.format('dxGantt-contextMenuNewSubtask'), commandId: COMMANDS.createSubTask }
+                    { text: messageLocalization.format('dxGantt-contextMenuNewTask'), commandId: COMMANDS.createTask, icon: this._getIcon('add-task') },
+                    { text: messageLocalization.format('dxGantt-contextMenuNewSubtask'), commandId: COMMANDS.createSubTask, icon: this._getIcon('add-sub-task') }
                 ]
             },
-            { text: messageLocalization.format('dxGantt-dialogTaskDetailsTitle') + '...', commandId: COMMANDS.taskInformation },
-            { text: messageLocalization.format('dxGantt-contextMenuDeleteTask'), commandId: COMMANDS.removeTask },
-            { text: messageLocalization.format('dxGantt-contextMenuDeleteDependency'), commandId: COMMANDS.removeDependency },
+            { text: messageLocalization.format('dxGantt-dialogTaskDetailsTitle') + '...', commandId: COMMANDS.taskInformation, icon: this._getIcon('task-details') },
+            { text: messageLocalization.format('dxGantt-contextMenuDeleteTask'), commandId: COMMANDS.removeTask, icon: this._getIcon('delete') },
+            { text: messageLocalization.format('dxGantt-contextMenuDeleteDependency'), commandId: COMMANDS.removeDependency, icon: this._getIcon('delete-dependency') },
         ];
     }
+
     show(point) {
         this._menu.option('items', this._items);
         this._menu.option('position.offset', { x: point.x, y: point.y });

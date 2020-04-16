@@ -467,6 +467,15 @@
     "dxGantt-dialogConstraintViolationMessage": "TODO",
     "dxGantt-dialogCancelOperationMessage": "TODO",
     "dxGantt-dialogDeleteDependencyMessage": "TODO",
-    "dxGantt-dialogMoveTaskAndKeepDependencyMessage": "TODO"
+    "dxGantt-dialogMoveTaskAndKeepDependencyMessage": "TODO",
+    "dxGantt-undo": "TODO",
+    "dxGantt-redo": "TODO",
+    "dxGantt-expandAll": "TODO",
+    "dxGantt-collapseAll": "TODO",
+    "dxGantt-addNewTask": "TODO",
+    "dxGantt-deleteSelectedTask": "TODO",
+    "dxGantt-zoomIn": "TODO",
+    "dxGantt-zoomOut": "TODO",
+    "dxGantt-fullScreen": "TODO"
 }
 }
