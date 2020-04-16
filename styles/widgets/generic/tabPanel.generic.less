@@ -2,6 +2,12 @@
 @import (once) "./tabs.generic.less";
 
 .dx-tabpanel {
+    .dx-tabs-scrollable {
+        .dx-tabs-wrapper {
+            border-bottom: none;
+        }
+    }
+
     .dx-tabs {
         display: block;
         border-bottom: none;
@@ -52,10 +58,6 @@
         }
 
         .dx-tabs-scrollable {
-            .dx-tabs-wrapper {
-                border-bottom: none;
-            }
-
             .dx-tab:not(.dx-tab-selected):before {
                 content: "";
                 pointer-events: none;
