@@ -369,7 +369,9 @@ class Diagram extends Widget {
                 }
             },
             onVisibilityChanged: (e) => {
-                this._diagramCaptureFocus();
+                if(!e.visible) {
+                    this._diagramCaptureFocus();
+                }
 
                 if(!isServerSide) {
                     if(this._historyToolbar) {
@@ -519,7 +521,9 @@ class Diagram extends Widget {
                 }
             },
             onVisibilityChanged: (e) => {
-                this._diagramCaptureFocus();
+                if(!e.visible) {
+                    this._diagramCaptureFocus();
+                }
             },
             onSelectedGroupChanged: ({ component }) => this._updatePropertiesPanelGroupBars(component),
             onPointerUp: this._onPanelPointerUp.bind(this)
