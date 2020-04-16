@@ -97,6 +97,27 @@ const DATE_TABLE_MIN_CELL_WIDTH = 75;
 const DAY_MS = toMs('day');
 const HOUR_MS = toMs('hour');
 
+class ScrollSemaphore {
+    constructor() {
+        this.counter = 0;
+    }
+
+    isFree() {
+        return this.counter === 0;
+    }
+
+    take() {
+        this.counter++;
+    }
+
+    release() {
+        this.counter--;
+        if(this.counter < 0) {
+            this.counter = 0;
+        }
+    }
+}
+
 const formatWeekday = function(date) {
     return dateLocalization.getDayNames('abbreviated')[date.getDay()];
 };
@@ -502,6 +523,10 @@ const SchedulerWorkSpace = Widget.inherit({
     },
 
     _init: function() {
+        this._headerSemaphore = new ScrollSemaphore();
+        this._sideBarSemaphore = new ScrollSemaphore();
+        this._dataTableSemaphore = new ScrollSemaphore();
+
         this.callBase();
 
         this._initGrouping();
@@ -701,35 +726,25 @@ const SchedulerWorkSpace = Widget.inherit({
 
     _createCrossScrollingConfig: function() {
         const config = {};
-        let headerScrollableOnScroll;
-        let sidebarScrollableOnScroll;
-
         config.direction = 'both';
-        config.onStart = (function(e) {
-            if(this._headerScrollable) {
-                headerScrollableOnScroll = this._headerScrollable.option('onScroll');
-                this._headerScrollable.option('onScroll', undefined);
-            }
 
-            if(this._sidebarScrollable) {
-                sidebarScrollableOnScroll = this._sidebarScrollable.option('onScroll');
-                this._sidebarScrollable.option('onScroll', undefined);
-            }
-        }).bind(this);
-        config.onScroll = (function(e) {
-            this._sidebarScrollable && this._sidebarScrollable.scrollTo({
+        config.onScroll = e => {
+            this._dataTableSemaphore.take();
+
+            this._sideBarSemaphore.isFree() && this._sidebarScrollable && this._sidebarScrollable.scrollTo({
                 top: e.scrollOffset.top
             });
-            this._headerScrollable && this._headerScrollable.scrollTo({
+
+            this._headerSemaphore.isFree() && this._headerScrollable && this._headerScrollable.scrollTo({
                 left: e.scrollOffset.left
             });
 
-        }).bind(this);
-        config.onEnd = (function() {
+            this._dataTableSemaphore.release();
+        };
+
+        config.onEnd = () => {
             this.notifyObserver('updateResizableArea', {});
-            this._headerScrollable && this._headerScrollable.option('onScroll', headerScrollableOnScroll);
-            this._sidebarScrollable && this._sidebarScrollable.option('onScroll', sidebarScrollableOnScroll);
-        }).bind(this);
+        };
 
         return config;
     },
@@ -780,8 +795,6 @@ const SchedulerWorkSpace = Widget.inherit({
     },
 
     _headerScrollableConfig: function() {
-        let dateTableScrollableOnScroll;
-
         const config = {
             useKeyboard: false,
             showScrollbar: false,
@@ -790,23 +803,17 @@ const SchedulerWorkSpace = Widget.inherit({
             updateManually: true,
             bounceEnabled: false,
             pushBackValue: 0,
-            onStart: (function(e) {
-                dateTableScrollableOnScroll = this._dateTableScrollable.option('onScroll');
-            }).bind(this),
-            onScroll: (function(e) {
-                this._dateTableScrollable.option('onScroll', undefined);
-                this._dateTableScrollable.scrollTo({
-                    left: e.scrollOffset.left
-                });
-                this._dateTableScrollable.option('onScroll', dateTableScrollableOnScroll);
-            }).bind(this)
+            onScroll: e => {
+                this._headerSemaphore.take();
+                this._dataTableSemaphore.isFree() && this._dateTableScrollable.scrollTo({ left: e.scrollOffset.left });
+                this._headerSemaphore.release();
+            }
         };
 
         return config;
     },
 
     _createSidebarScrollable: function() {
-        let dateTableScrollableOnScroll;
         const $timePanelScrollable = $('<div>')
             .addClass(SCHEDULER_SIDEBAR_SCROLLABLE_CLASS)
             .appendTo(this.$element());
@@ -819,18 +826,11 @@ const SchedulerWorkSpace = Widget.inherit({
             updateManually: true,
             bounceEnabled: false,
             pushBackValue: 0,
-            onStart: (function(e) {
-                dateTableScrollableOnScroll = this._dateTableScrollable.option('onScroll');
-                this._dateTableScrollable.option('onScroll', undefined);
-            }).bind(this),
-            onScroll: (function(e) {
-                this._dateTableScrollable.scrollTo({
-                    top: e.scrollOffset.top
-                });
-            }).bind(this),
-            onEnd: (function(e) {
-                this._dateTableScrollable.option('onScroll', dateTableScrollableOnScroll);
-            }).bind(this)
+            onScroll: e => {
+                this._sideBarSemaphore.take();
+                this._dataTableSemaphore.isFree() && this._dateTableScrollable.scrollTo({ top: e.scrollOffset.top });
+                this._sideBarSemaphore.release();
+            }
         });
     },
 
