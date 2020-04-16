@@ -673,21 +673,24 @@ QUnit.module('Toolbar', moduleConfig, () => {
                         options: {
                             text: 'item0'
                         },
-                        visible: true
+                        visible: true,
+                        location: 'before'
                     },
                     'separator',
                     {
                         options: {
                             text: 'item1'
                         },
-                        visible: false
+                        visible: false,
+                        location: 'before'
                     },
                     'separator',
                     {
                         options: {
                             text: 'item2'
                         },
-                        visible: true
+                        visible: true,
+                        location: 'before'
                     }
                 ]
             }
@@ -773,6 +776,46 @@ QUnit.module('Toolbar', moduleConfig, () => {
         const $separators = this.wrapper.getToolbarSeparators();
         assert.equal($separators.length, 0, 'file toolbar has no separators');
 
+        renderer.fn.width = originalWidth;
+    });
+
+    test('items can render in menu after first load', function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            toolbar: {
+                fileSelectionItems: [
+                    'download', 'move', 'copy', 'rename', 'separator', 'refresh', 'clear',
+                    {
+                        widget: 'dxButton',
+                        options: {
+                            text: 'some item 1 with text'
+                        },
+                        locateInMenu: 'auto'
+                    }
+                ]
+            }
+        });
+        this.clock.tick(400);
+
+        const originalWidth = renderer.fn.width;
+        renderer.fn.width = () => 400;
+        $('#fileManager').css('width', '100%');
+        fileManager.repaint();
+        this.clock.tick(800);
+
+        const $item = this.wrapper.findDetailsItem('File 1.txt');
+        $item.trigger('dxclick');
+        this.clock.tick(400);
+
+        const $toolbarDropDownMenuButton = this.wrapper.getToolbarDropDownMenuButton();
+        $toolbarDropDownMenuButton.trigger('dxclick');
+        this.clock.tick(400);
+
+        const toolbarDropDownMenuItem = this.wrapper.getToolbarDropDownMenuItem(0);
+        assert.notStrictEqual($(toolbarDropDownMenuItem).find('.dx-button-text').text().indexOf('some item 1 with text'), -1, 'custom button is rendered in the dropDown menu');
         renderer.fn.width = originalWidth;
     });
 

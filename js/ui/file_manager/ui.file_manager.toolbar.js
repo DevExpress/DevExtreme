@@ -171,9 +171,7 @@ class FileManagerToolbar extends Widget {
     }
 
     _updateSeparatorsVisibility(items, toolbar) {
-        if(toolbar) {
-            toolbar.beginUpdate();
-        }
+        let hasModifications = false;
         const menuItems = this._getMenuItems(toolbar);
         const hasItemsBefore = {
             before: false,
@@ -189,22 +187,21 @@ class FileManagerToolbar extends Widget {
             const itemLocation = this._getItemLocation(item);
             if(item.name === 'separator') {
                 const isSeparatorVisible = hasItemsBefore[itemLocation] && this._groupHasItemsAfter(itemGroups[itemLocation]);
-                if(toolbar) {
-                    const optionName = `items[${i}].visible`;
-                    toolbar.option(optionName, isSeparatorVisible);
+                if(item.visible !== isSeparatorVisible) {
+                    hasModifications = true;
+                    item.visible = isSeparatorVisible;
                 }
-                item.visible = isSeparatorVisible;
                 hasItemsBefore[itemLocation] = false;
             } else {
                 if(!this._isItemInMenu(menuItems, item)) {
                     hasItemsBefore[itemLocation] = hasItemsBefore[itemLocation] || item.visible;
-                    itemGroups[itemLocation].shift();
                 }
+                itemGroups[itemLocation].shift();
             }
         });
 
-        if(toolbar) {
-            toolbar.endUpdate();
+        if(toolbar && hasModifications) {
+            toolbar.repaint();
         }
         return items;
     }
@@ -215,7 +212,7 @@ class FileManagerToolbar extends Widget {
     }
 
     _isItemInMenu(menuItems, item) {
-        return menuItems.length
+        return !!menuItems.length
             && ensureDefined(item.locateInMenu, 'never') !== 'never'
             && menuItems.indexOf(item.originalItemData) !== -1;
     }
@@ -361,9 +358,9 @@ class FileManagerToolbar extends Widget {
     }
 
     _toggleCompactMode(toolbar, useCompactMode) {
-        toolbar.beginUpdate();
-
+        let hasModifications = false;
         const items = toolbar.option('items');
+
         items.forEach((item, index) => {
             if(item.compactMode) {
                 let optionsSource = null;
@@ -377,10 +374,13 @@ class FileManagerToolbar extends Widget {
 
                 const options = this._getCompactModeOptions(optionsSource, item.available);
                 toolbar.option(`items[${index}]`, options);
+                hasModifications = true;
             }
         });
 
-        toolbar.endUpdate();
+        if(hasModifications) {
+            toolbar.repaint();
+        }
 
         this._updateSeparatorsVisibility(items, toolbar);
     }
@@ -394,8 +394,7 @@ class FileManagerToolbar extends Widget {
     }
 
     _ensureAvailableCommandsVisible(toolbar, fileItems) {
-        toolbar.beginUpdate();
-
+        let hasModifications = false;
         const items = toolbar.option('items');
 
         items.forEach((item, index) => {
@@ -405,12 +404,16 @@ class FileManagerToolbar extends Widget {
                 if(item.available !== itemVisible) {
                     const optionName = `items[${index}].visible`;
                     toolbar.option(optionName, item.available);
+                    hasModifications = true;
                 }
             }
         });
-        toolbar.endUpdate();
 
-        this._updateSeparatorsVisibility(toolbar.option('items'), toolbar);
+        if(hasModifications) {
+            toolbar.repaint();
+        }
+
+        this._updateSeparatorsVisibility(items, toolbar);
     }
 
     _fileToolbarHasEffectiveItems(fileItems) {
