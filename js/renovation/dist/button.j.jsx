@@ -71,9 +71,9 @@ class Button extends Component {
             // NOTE: registered handler has more priority
             if(func !== undefined) {
                 const handler = func.bind(this);
-                const result = handler(originalEvent, options);
+                handler(originalEvent, options);
 
-                return { cancel: result?.cancel };
+                return { cancel: true };
             }
 
             // NOTE: make possible pass onKeyPress property
