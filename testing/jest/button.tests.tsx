@@ -399,6 +399,78 @@ describe('Button', () => {
                 expect(tree.find(Widget).prop('tabIndex')).toBe(10);
             });
         });
+
+        describe('onKeyPress', () => {
+            it('should call custom handler on key press', () => {
+                const onClick = jest.fn();
+                const onKeyPress = jest.fn();
+
+                render({ onClick, onKeyPress });
+
+                expect(onClick).toHaveBeenCalledTimes(0);
+                expect(onKeyPress).toHaveBeenCalledTimes(0);
+
+                emitKeyboard(KEY.space);
+                expect(onClick).toHaveBeenCalledTimes(1);
+                expect(onKeyPress).toHaveBeenCalledTimes(1);
+
+                emitKeyboard(KEY.a);
+                expect(onClick).toHaveBeenCalledTimes(1);
+                expect(onKeyPress).toHaveBeenCalledTimes(2);
+            });
+
+            it('should call custom handler on press specific key', () => {
+                const onClick = jest.fn();
+                const customHandler = jest.fn();
+
+                render({
+                    onClick,
+                    onKeyPress: (event, { keyName, which }) => {
+                        if(keyName === 'a' || which === 'a') {
+                            customHandler();
+                        }
+                    }
+                });
+
+                expect(onClick).toHaveBeenCalledTimes(0);
+                expect(customHandler).toHaveBeenCalledTimes(0);
+
+                emitKeyboard(KEY.space);
+                expect(onClick).toHaveBeenCalledTimes(1);
+                expect(customHandler).toHaveBeenCalledTimes(0);
+
+                emitKeyboard(KEY.a);
+                expect(onClick).toHaveBeenCalledTimes(1);
+                expect(customHandler).toHaveBeenCalledTimes(1);
+            });
+
+            it('should not call onClick on press Enter and Space if prevented', () => {
+                const onClick = jest.fn();
+                const customHandler = jest.fn();
+
+                render({
+                    onClick,
+                    onKeyPress: (event, { keyName, which }) => {
+                        if(keyName === 'space' || which === 'space' || keyName === 'enter' || which === 'enter') {
+                            customHandler();
+                            event.cancel = true;
+                            return event;
+                        }
+                    }
+                });
+
+                expect(onClick).toHaveBeenCalledTimes(0);
+                expect(customHandler).toHaveBeenCalledTimes(0);
+
+                emitKeyboard(KEY.space);
+                expect(onClick).toHaveBeenCalledTimes(0);
+                expect(customHandler).toHaveBeenCalledTimes(1);
+
+                emitKeyboard(KEY.enter);
+                expect(onClick).toHaveBeenCalledTimes(0);
+                expect(customHandler).toHaveBeenCalledTimes(2);
+            });
+        });
     });
 
     describe('Events', () => {
