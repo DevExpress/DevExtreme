@@ -26,7 +26,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.allowedFileExtensions
      * @type Array<string>
-     * @default [".txt", ".rtf", ".doc", ".docx", ".odt", ".xls", ".xlsx", ".ods", ".ppt", ".pptx", ".odp", ".pdf", ".xml", ".png", ".svg", ".gif", ".jpg", ".jpeg", ".ico", ".bmp", ".avi", ".mpeg", ".mkv", ""]
+     * @default []
      * @prevFileNamespace DevExpress.ui
      * @public
      */

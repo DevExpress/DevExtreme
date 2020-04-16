@@ -515,7 +515,7 @@ class FileManager extends Widget {
 
             onErrorOccurred: null,
 
-            allowedFileExtensions: ['.txt', '.rtf', '.doc', '.docx', '.odt', '.xls', '.xlsx', '.ods', '.ppt', '.pptx', '.odp', '.pdf', '.xml', '.png', '.svg', '.gif', '.jpg', '.jpeg', '.ico', '.bmp', '.avi', '.mpeg', '.mkv', ''],
+            allowedFileExtensions: [],
 
             upload: {
                 /**
