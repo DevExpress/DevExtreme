@@ -620,11 +620,19 @@ class FileManager extends Widget {
             case 'toolbar':
                 {
                     const toolbarOptions = {};
-                    if(args.value.items) {
-                        toolbarOptions.generalItems = args.value.items;
+                    if(args.fullName === 'toolbar') {
+                        if(args.value.items) {
+                            toolbarOptions.generalItems = args.value.items;
+                        }
+                        if(args.value.fileSelectionItems) {
+                            toolbarOptions.fileItems = args.value.fileSelectionItems;
+                        }
                     }
-                    if(args.value.fileSelectionItems) {
-                        toolbarOptions.fileItems = args.value.fileSelectionItems;
+                    if(args.fullName === 'toolbar.items') {
+                        toolbarOptions.generalItems = args.value;
+                    }
+                    if(args.fullName === 'toolbar.fileSelectionItems') {
+                        toolbarOptions.fileItems = args.value;
                     }
                     this._toolbar.option(toolbarOptions);
                 }
