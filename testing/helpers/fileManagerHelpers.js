@@ -152,6 +152,11 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_TEXT_CLASS}:visible, .${Consts.TOOLBAR_CLASS} .${Consts.NATIVE_TOOLBAR_CLASS}:visible .${Consts.DROP_DOWN_BUTTON_CLASS}`);
     }
 
+    getToolbarElementsInSection(sectionName) {
+        const visibleToolbarSection = this.getToolbar().find(`.${Consts.NATIVE_TOOLBAR_CLASS}:visible .${Consts.NATIVE_TOOLBAR_CLASS}-${sectionName}`);
+        return visibleToolbarSection.find(`.${Consts.BUTTON_TEXT_CLASS}:visible, .${Consts.DROP_DOWN_BUTTON_CLASS}`);
+    }
+
     getGeneralToolbarElements() {
         const _$generalToolbar = this.getToolbar().children().first();
         return _$generalToolbar.find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);

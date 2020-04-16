@@ -819,4 +819,34 @@ QUnit.module('Toolbar', moduleConfig, () => {
         renderer.fn.width = originalWidth;
     });
 
+    test('items must render in \'before\' section by default', function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            toolbar: {
+                items: [
+                    {
+                        widget: 'dxButton',
+                        options: {
+                            text: 'item 1'
+                        },
+                        locateInMenu: 'never'
+                    }
+                ]
+            }
+        });
+        this.clock.tick(400);
+
+        const $beforeItems = this.wrapper.getToolbarElementsInSection('before');
+        const $centerItems = this.wrapper.getToolbarElementsInSection('center');
+        const $afterItems = this.wrapper.getToolbarElementsInSection('after');
+
+        assert.strictEqual($beforeItems.length, 1, 'there is one item in before group');
+        assert.strictEqual($beforeItems.text(), 'item 1', 'the item is correct');
+        assert.strictEqual($centerItems.length, 0, 'there is no items in center group');
+        assert.strictEqual($afterItems.length, 0, 'there is no items in after group');
+    });
+
 });

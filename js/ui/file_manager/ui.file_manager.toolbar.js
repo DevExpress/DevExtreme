@@ -275,6 +275,8 @@ class FileManagerToolbar extends Widget {
             extend(result, { name: commandName });
         }
 
+        result.location = this._getItemLocation(result);
+
         if(result.widget === 'dxButton') {
             extend(true, result, { options: { stylingMode: 'text' } });
         }
