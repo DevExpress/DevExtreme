@@ -3,8 +3,11 @@ import $ from '../../core/renderer';
 import Widget from '../widget/ui.widget';
 import Popover from '../popover';
 
+import { getDiagram } from './diagram.importer';
+
 const DIAGRAM_CONTEXT_TOOLBOX_TARGET_CLASS = 'dx-diagram-context-toolbox-target';
 const DIAGRAM_CONTEXT_TOOLBOX_CLASS = 'dx-diagram-context-toolbox';
+const DIAGRAM_TOUCH_CONTEXT_TOOLBOX_CLASS = 'dx-diagram-touch-context-toolbox';
 const DIAGRAM_CONTEXT_TOOLBOX_CONTENT_CLASS = 'dx-diagram-context-toolbox-content';
 
 class DiagramContextToolbox extends Widget {
@@ -45,10 +48,15 @@ class DiagramContextToolbox extends Widget {
         const $popoverElement = $('<div>')
             .appendTo(this.$element());
 
+        const { Browser } = getDiagram();
+        let popoverClass = DIAGRAM_CONTEXT_TOOLBOX_CLASS;
+        if(Browser.TouchUI) {
+            popoverClass += ' ' + DIAGRAM_TOUCH_CONTEXT_TOOLBOX_CLASS;
+        }
         this._popoverInstance = this._createComponent($popoverElement, Popover, {
             closeOnOutsideClick: false,
             container: this.$element(),
-            elementAttr: { class: DIAGRAM_CONTEXT_TOOLBOX_CLASS }
+            elementAttr: { class: popoverClass }
         });
     }
     _show(x, y, side, category, callback) {

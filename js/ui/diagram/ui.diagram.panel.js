@@ -16,15 +16,18 @@ class DiagramPanel extends Widget {
         super._render();
         this._attachPointerUpEvent();
     }
-    _getPointerUpElement() {
-        return this.$element();
+    _getPointerUpElements() {
+        return [ this.$element() ];
     }
     _attachPointerUpEvent() {
-        eventsEngine.off(this._getPointerUpElement(), POINTERUP_EVENT_NAME);
-        eventsEngine.on(this._getPointerUpElement(), POINTERUP_EVENT_NAME, (e) => {
-            if(!$(e.target).closest(PREVENT_REFOCUS_SELECTOR).length) {
-                this._onPointerUpAction();
-            }
+        const elements = this._getPointerUpElements();
+        elements.forEach(element => {
+            eventsEngine.off(element, POINTERUP_EVENT_NAME);
+            eventsEngine.on(element, POINTERUP_EVENT_NAME, (e) => {
+                if(!$(e.target).closest(PREVENT_REFOCUS_SELECTOR).length) {
+                    this._onPointerUpAction();
+                }
+            });
         });
     }
     _createOnPointerUpAction() {
