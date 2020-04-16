@@ -3,6 +3,7 @@ import ValidationEngine from '../../ui/validation_engine';
 import Component from '../preact-wrapper/component';
 import ButtonComponent from '../button.p';
 import { getInnerActionName } from '../preact-wrapper/utils';
+import { extend } from '../../core/utils/extend';
 
 const actions = {
     onClick: { excludeValidators: ['readOnly'] },
@@ -15,6 +16,8 @@ export default class Button extends Component {
     }
 
     getProps(props) {
+        const { onKeyPress: defaultKeyPress } = props;
+
         props.render = this._createTemplateComponent(props, props.template, true);
 
         Object.keys(actions).forEach((name) => {
@@ -23,11 +26,39 @@ export default class Button extends Component {
 
         props.validationGroup = ValidationEngine.getGroupConfig(this._findGroup());
 
+        props.onKeyPress = (event, options) => {
+            const { originalEvent, keyName, which } = options;
+            const keys = this._supportedKeys();
+            const func = keys[keyName] || keys[which];
+
+            // NOTE: registered handler has more priority
+            if(func !== undefined) {
+                const handler = func.bind(this);
+                const result = handler(originalEvent, options);
+
+                if(result) {
+                    return result;
+                } else {
+                    event.cancel = true;
+                    return event;
+                }
+            }
+
+            // NOTE: make possible pass onKeyPress property
+            return defaultKeyPress?.(event, options);
+        };
+
         return props;
     }
 
     focus() {
         this.viewRef.current.focus();
+    }
+
+    registerKeyHandler(key, handler) {
+        const currentKeys = this._supportedKeys();
+
+        this._supportedKeys = () => extend(currentKeys, { [key]: handler });
     }
 
     _findGroup() {
@@ -48,6 +79,10 @@ export default class Button extends Component {
         Object.keys(actions).forEach((name) => {
             this._addAction(name, actions[name]);
         });
+
+        this._supportedKeys = () => {
+            return {};
+        };
     }
 
     _optionChanged(option) {
