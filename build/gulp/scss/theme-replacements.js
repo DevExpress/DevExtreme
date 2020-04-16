@@ -493,6 +493,7 @@ module.exports = {
         { regex: /\.diagram-icon-colored\(d/g, replacement: '@include diagram-icon-colored(d' }
     ],
     'gantt': [
+        { import: '../../base/gantt', type: 'index' },
         { import: '../splitter', type: 'index' },
         { import: '../gridBase/colors', type: 'colors' },
         { import: '../gridBase/colors', type: 'index' },
