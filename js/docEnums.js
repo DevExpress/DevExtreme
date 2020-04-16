@@ -1142,7 +1142,7 @@
 
 /**
  * @typedef {string} Enums.GanttToolbarItem
- * @enum {'separator'|'undo'|'redo'|'zoomIn'|'zoomOut'}
+ * @enum {'separator'|'undo'|'redo'|'expandAll'|'collapseAll'|'addTask'|'deleteTask'|'zoomIn'| 'zoomOut'}
  */
 
 /**
