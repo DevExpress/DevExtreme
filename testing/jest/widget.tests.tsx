@@ -210,6 +210,14 @@ describe('Widget', () => {
             });
         });
 
+        describe('classes', () => {
+            it('should add className', () => {
+                const widget = render({ classes: 'custom-class' });
+
+                expect(widget.is('.custom-class.dx-widget')).toBe(true);
+            });
+        });
+
         describe('restAttributes', () => {
             it('should add merge `className` property', () => {
                 const widget = render({ restAttributes: { className: 'custom-class' } });
