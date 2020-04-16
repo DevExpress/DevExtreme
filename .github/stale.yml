@@ -13,6 +13,7 @@ daysUntilClose: 5
 exemptLabels:
   - type/discussion
   - WIP
+  - roadmap
 
 # Label to use when marking as stale
 staleLabel: stale
