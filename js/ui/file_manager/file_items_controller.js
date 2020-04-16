@@ -500,7 +500,7 @@ export default class FileItemsController {
             return 'folder';
         }
 
-        const extension = fileItem.getExtension();
+        const extension = fileItem.getFileExtension();
         const icon = this._defaultIconMap[extension];
         return icon || 'doc';
     }

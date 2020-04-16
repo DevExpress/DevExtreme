@@ -1718,6 +1718,8 @@ declare module DevExpress.fileManagement {
         size: number;
         /** @name FileSystemItem.thumbnail */
         thumbnail: string;
+        /** @name FileSystemItem.getFileExtension() */
+        getFileExtension(): string;
     }
     /** @name FileSystemProviderBase.Options */
     export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
