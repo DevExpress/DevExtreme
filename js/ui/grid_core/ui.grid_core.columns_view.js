@@ -275,11 +275,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             let formItemOptions;
             const rowOptions = $cell.parent().data('options');
             const options = rowOptions && rowOptions.cells && rowOptions.cells[$cell.index()];
-            let resultOptions;
 
             if(!$cell.closest('table').is(event.delegateTarget)) return;
 
-            resultOptions = extend({}, options, {
+            const resultOptions = extend({}, options, {
                 cellElement: getPublicElement($cell),
                 event: event,
                 eventType: event.type
@@ -501,12 +500,11 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     _resizeCore: function() {
-        const that = this;
-        const scrollLeft = that._scrollLeft;
+        const scrollLeft = this._scrollLeft;
 
         if(scrollLeft >= 0) {
-            that._scrollLeft = 0;
-            that.scrollTo({ left: scrollLeft });
+            this._scrollLeft = 0;
+            this.scrollTo({ left: scrollLeft });
         }
     },
 
@@ -521,14 +519,11 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _renderTable: function(options) {
         options = options || {};
 
-        const that = this;
-        let $table;
-
-        options.columns = that._columnsController.getVisibleColumns();
+        options.columns = this._columnsController.getVisibleColumns();
         const changeType = options.change && options.change.changeType;
-        $table = that._createTable(options.columns, changeType === 'append' || changeType === 'prepend' || changeType === 'update');
+        const $table = this._createTable(options.columns, changeType === 'append' || changeType === 'prepend' || changeType === 'update');
 
-        that._renderRows($table, options);
+        this._renderRows($table, options);
 
         return $table;
     },
@@ -546,25 +541,21 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     _renderRow: function($table, options) {
-        const that = this;
-        let $row;
-        let $wrappedRow;
-
         if(!options.columnIndices) {
             options.row.cells = [];
         }
 
-        $row = that._createRow(options.row);
-        $wrappedRow = that._wrapRowIfNeed($table, $row);
+        const $row = this._createRow(options.row);
+        const $wrappedRow = this._wrapRowIfNeed($table, $row);
         if(options.changeType !== 'remove') {
-            that._renderCells($row, options);
+            this._renderCells($row, options);
         }
-        that._appendRow($table, $wrappedRow);
+        this._appendRow($table, $wrappedRow);
         const rowOptions = extend({ columns: options.columns }, options.row);
 
-        that._addWatchMethod(rowOptions, options.row);
+        this._addWatchMethod(rowOptions, options.row);
 
-        that._rowPrepared($wrappedRow, rowOptions, options.row);
+        this._rowPrepared($wrappedRow, rowOptions, options.row);
     },
 
     _needRenderCell: function(columnIndex, columnIndices) {
@@ -820,38 +811,32 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     scrollTo: function(pos) {
-        const that = this;
-        const $element = that.element();
-        const $scrollContainer = $element && $element.children('.' + that.addWidgetPrefix(SCROLL_CONTAINER_CLASS)).not('.' + that.addWidgetPrefix(CONTENT_FIXED_CLASS));
+        const $element = this.element();
+        const $scrollContainer = $element && $element.children('.' + this.addWidgetPrefix(SCROLL_CONTAINER_CLASS)).not('.' + this.addWidgetPrefix(CONTENT_FIXED_CLASS));
 
-        that._skipScrollChanged = false;
-
-        if(typeUtils.isDefined(pos) && typeUtils.isDefined(pos.left) && that._scrollLeft !== pos.left) {
-            that._scrollLeft = pos.left;
+        if(typeUtils.isDefined(pos) && typeUtils.isDefined(pos.left)) {
+            this._scrollLeft = pos.left;
             $scrollContainer && $scrollContainer.scrollLeft(pos.left);
-            that._skipScrollChanged = true;
         }
     },
 
     _wrapTableInScrollContainer: function($table) {
-        const that = this;
-        let $scrollContainer;
+        const $scrollContainer = $('<div>');
 
-        $scrollContainer = $('<div>');
+        eventsEngine.on($scrollContainer, 'scroll', () => {
+            const scrollLeft = $scrollContainer.scrollLeft();
 
-        eventsEngine.on($scrollContainer, 'scroll', function() {
-            !that._skipScrollChanged && that.scrollChanged.fire({
-                left: $scrollContainer.scrollLeft()
-            }, that.name);
-            that._skipScrollChanged = false;
+            if(scrollLeft !== this._scrollLeft) {
+                this.scrollChanged.fire({ left: scrollLeft }, this.name);
+            }
         });
 
-        $scrollContainer.addClass(that.addWidgetPrefix(CONTENT_CLASS))
-            .addClass(that.addWidgetPrefix(SCROLL_CONTAINER_CLASS))
+        $scrollContainer.addClass(this.addWidgetPrefix(CONTENT_CLASS))
+            .addClass(this.addWidgetPrefix(SCROLL_CONTAINER_CLASS))
             .append($table)
-            .appendTo(that.element());
+            .appendTo(this.element());
 
-        that.setAria('role', 'presentation', $scrollContainer);
+        this.setAria('role', 'presentation', $scrollContainer);
 
         return $scrollContainer;
     },
