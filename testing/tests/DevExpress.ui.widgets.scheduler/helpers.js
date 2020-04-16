@@ -159,9 +159,9 @@ export class SchedulerTestWrapper {
             isVisible: () => this.appointmentPopup.getPopup().length !== 0,
             hide: () => this.appointmentPopup.getPopup().find('.dx-closebutton.dx-button').trigger('dxclick'),
             setInitialPopupSize: size => {
-                const _createPopupConfig = this.instance._appointmentPopup._createPopupConfig;
-                this.instance._appointmentPopup._createPopupConfig = () => {
-                    const config = _createPopupConfig.call(this.instance._appointmentPopup);
+                const popupConfig = this.instance._popupConfig;
+                this.instance._popupConfig = appointmentData => {
+                    const config = popupConfig.call(this.instance, appointmentData);
                     return extend(config, size);
                 };
             },
