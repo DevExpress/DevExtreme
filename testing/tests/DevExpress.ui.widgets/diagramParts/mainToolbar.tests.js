@@ -143,10 +143,6 @@ QUnit.module('Main Toolbar', {
         boldButton.trigger('dxclick');
         assert.equal(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
     });
-    test('Auto Layout button should be disabled when there is no selection', function(assert) {
-        const button = findMainToolbarItem(this.$element, 'layout').dxButton('instance');
-        assert.ok(button.option('disabled'));
-    });
     test('Auto Layout button should be disabled in Read Only mode', function(assert) {
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(Consts.SIMPLE_DIAGRAM);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.SelectAll).execute(true);

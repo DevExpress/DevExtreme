@@ -22,7 +22,7 @@ import DiagramMainToolbar from './ui.diagram.main_toolbar';
 import DiagramHistoryToolbar from './ui.diagram.history_toolbar';
 import DiagramViewToolbar from './ui.diagram.view_toolbar';
 import DiagramPropertiesToolbar from './ui.diagram.properties_toolbar';
-import DiagramContextMenu from './ui.diagram.context_menu';
+import { DiagramContextMenuWrapper } from './ui.diagram.context_menu';
 import DiagramContextToolbox from './ui.diagram.context_toolbox';
 import DiagramDialog from './ui.diagram.dialogs';
 import DiagramScrollView from './ui.diagram.scroll_view';
@@ -130,15 +130,15 @@ class Diagram extends Widget {
 
         delete this._contextMenu;
         if(this.option('contextMenu.enabled')) {
-            this._renderContextMenu(this._$content);
+            this._renderContextMenu($contentWrapper);
         }
 
         delete this._contextToolbox;
         if(this.option('contextToolbox.enabled')) {
-            this._renderContextToolbox(this._$content);
+            this._renderContextToolbox($contentWrapper);
         }
 
-        this._renderDialog(this._$content);
+        this._renderDialog($contentWrapper);
 
         if(!isServerSide) {
             const $scrollViewWrapper = $('<div>')
@@ -186,11 +186,21 @@ class Diagram extends Widget {
         this._killBrowserResizeTimer();
     }
     _processDiagramResize() {
-        this._historyToolbarResizeCallback.call(this);
-        this._propertiesToolbarResizeCallback.call(this);
-        this._propertiesPanelResizeCallback.call(this);
-        this._viewToolbarResizeCallback.call(this);
-        this._toolboxResizeCallback.call(this);
+        if(this._historyToolbarResizeCallback) {
+            this._historyToolbarResizeCallback.call(this);
+        }
+        if(this._propertiesToolbarResizeCallback) {
+            this._propertiesToolbarResizeCallback.call(this);
+        }
+        if(this._propertiesPanelResizeCallback) {
+            this._propertiesPanelResizeCallback.call(this);
+        }
+        if(this._viewToolbarResizeCallback) {
+            this._viewToolbarResizeCallback.call(this);
+        }
+        if(this._toolboxResizeCallback) {
+            this._toolboxResizeCallback.call(this);
+        }
     }
     _killBrowserResizeTimer() {
         if(this._browserResizeTimer > -1) {
@@ -204,8 +214,13 @@ class Diagram extends Widget {
         }
         return this._isMobileScreenSize;
     }
+    _diagramCaptureFocus() {
+        if(this._diagramInstance) {
+            this._diagramInstance.captureFocus();
+        }
+    }
     notifyBarCommandExecuted() {
-        this._diagramInstance.captureFocus();
+        this._diagramCaptureFocus();
     }
     _registerToolbar(component) {
         this._registerBar(component);
@@ -354,14 +369,18 @@ class Diagram extends Widget {
                 }
             },
             onVisibilityChanged: (e) => {
-                if(isServerSide) return;
+                if(!e.visible) {
+                    this._diagramCaptureFocus();
+                }
 
-                if(this._historyToolbar) {
-                    if(!e.visible && this.isMobileScreenSize() && this._historyToolbarZIndex) {
-                        zIndexPool.remove(this._historyToolbarZIndex);
-                        this._historyToolbar.$element().css('zIndex', '');
-                        this._historyToolbar.$element().css('boxShadow', '');
-                        this._historyToolbarZIndex = undefined;
+                if(!isServerSide) {
+                    if(this._historyToolbar) {
+                        if(!e.visible && this.isMobileScreenSize() && this._historyToolbarZIndex) {
+                            zIndexPool.remove(this._historyToolbarZIndex);
+                            this._historyToolbar.$element().css('zIndex', '');
+                            this._historyToolbar.$element().css('boxShadow', '');
+                            this._historyToolbarZIndex = undefined;
+                        }
                     }
                 }
             },
@@ -501,6 +520,11 @@ class Diagram extends Widget {
                     }
                 }
             },
+            onVisibilityChanged: (e) => {
+                if(!e.visible) {
+                    this._diagramCaptureFocus();
+                }
+            },
             onSelectedGroupChanged: ({ component }) => this._updatePropertiesPanelGroupBars(component),
             onPointerUp: this._onPanelPointerUp.bind(this)
         });
@@ -522,7 +546,7 @@ class Diagram extends Widget {
     }
     _onPanelPointerUp() {
         this._captureFocusTimeout = setTimeout(() => {
-            this._diagramInstance.captureFocus();
+            this._diagramCaptureFocus();
             delete this._captureFocusTimeout;
         }, 100);
     }
@@ -532,12 +556,11 @@ class Diagram extends Widget {
             delete this._captureFocusTimeout;
         }
     }
-    _renderContextMenu($mainElement) {
+    _renderContextMenu($parent) {
         const $contextMenu = $('<div>')
-            .appendTo(this.$element());
-        this._contextMenu = this._createComponent($contextMenu, DiagramContextMenu, {
+            .appendTo($parent);
+        this._contextMenu = this._createComponent($contextMenu, DiagramContextMenuWrapper, {
             commands: this.option('contextMenu.commands'),
-            container: $mainElement,
             onContentReady: ({ component }) => this._registerBar(component),
             onVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
             onItemClick: (itemData) => { return this._onBeforeCommandExecuted(itemData.command); },
@@ -547,14 +570,14 @@ class Diagram extends Widget {
         });
     }
 
-    _renderContextToolbox($mainElement) {
+    _renderContextToolbox($parent) {
         const isServerSide = !hasWindow();
         const category = this.option('contextToolbox.category');
         const displayMode = this.option('contextToolbox.displayMode');
         const shapes = this.option('contextToolbox.shapes');
 
         const $contextToolbox = $('<div>')
-            .appendTo(this.$element());
+            .appendTo($parent);
         this._contextToolbox = this._createComponent($contextToolbox, DiagramContextToolbox, {
             onShown: (e) => {
                 if(isServerSide) return;
@@ -577,7 +600,7 @@ class Diagram extends Widget {
                     },
                     (shapeType) => {
                         e.callback(shapeType);
-                        this._diagramInstance.captureFocus();
+                        this._diagramCaptureFocus();
                         e.hide();
                     }
                 );
@@ -598,15 +621,15 @@ class Diagram extends Widget {
         return !!dialogParameters;
     }
 
-    _renderDialog($mainElement) {
-        const $dialogElement = $('<div>').appendTo($mainElement);
+    _renderDialog($parent) {
+        const $dialogElement = $('<div>').appendTo($parent);
         this._dialogInstance = this._createComponent($dialogElement, DiagramDialog, { });
     }
 
     _showDialog(dialogParameters) {
         if(this._dialogInstance) {
             this._dialogInstance.option('onGetContent', dialogParameters.onGetContent);
-            this._dialogInstance.option('onHidden', function() { this._diagramInstance.captureFocus(); }.bind(this));
+            this._dialogInstance.option('onHidden', function() { this._diagramCaptureFocus(); }.bind(this));
             this._dialogInstance.option('command', this._diagramInstance.commandManager.getCommand(dialogParameters.command));
             this._dialogInstance.option('title', dialogParameters.title);
             this._dialogInstance._show();
@@ -1056,7 +1079,7 @@ class Diagram extends Widget {
     _onToggleFullScreen(fullScreen) {
         this._changeNativeFullscreen(fullScreen);
         this.$element().toggleClass(DIAGRAM_FULLSCREEN_CLASS, fullScreen);
-        this._diagramInstance.updateLayout();
+        this._diagramInstance.updateLayout(true);
 
         this._processDiagramResize();
         if(this._toolbox) {
@@ -1349,7 +1372,7 @@ class Diagram extends Widget {
     }
 
     focus() {
-        this._diagramInstance.captureFocus();
+        this._diagramCaptureFocus();
     }
     export() {
         return this._getDiagramData();
