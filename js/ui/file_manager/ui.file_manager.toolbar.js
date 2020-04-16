@@ -361,7 +361,7 @@ class FileManagerToolbar extends Widget {
         let hasModifications = false;
         const items = toolbar.option('items');
 
-        items.forEach((item, index) => {
+        items.forEach(item => {
             if(item.compactMode) {
                 let optionsSource = null;
 
@@ -373,7 +373,7 @@ class FileManagerToolbar extends Widget {
                 }
 
                 const options = this._getCompactModeOptions(optionsSource, item.available);
-                toolbar.option(`items[${index}]`, options);
+                extend(true, item, options);
                 hasModifications = true;
             }
         });
@@ -397,13 +397,12 @@ class FileManagerToolbar extends Widget {
         let hasModifications = false;
         const items = toolbar.option('items');
 
-        items.forEach((item, index) => {
+        items.forEach(item => {
             if(item.name !== 'separator') {
                 const itemVisible = item.available;
                 item.available = this._isToolbarItemAvailable(item, fileItems);
                 if(item.available !== itemVisible) {
-                    const optionName = `items[${index}].visible`;
-                    toolbar.option(optionName, item.available);
+                    item.visible = item.available;
                     hasModifications = true;
                 }
             }
