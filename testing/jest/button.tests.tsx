@@ -453,7 +453,8 @@ describe('Button', () => {
                     onKeyPress: (event, { keyName, which }) => {
                         if(keyName === 'space' || which === 'space' || keyName === 'enter' || which === 'enter') {
                             customHandler();
-                            return { cancel: true };
+                            event.cancel = true;
+                            return event;
                         }
                     }
                 });
