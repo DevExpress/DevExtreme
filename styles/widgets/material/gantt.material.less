@@ -1,7 +1,7 @@
+@import (once) "../base/gantt.less";
 @import (once) "./scrollView.material.less";
 @import (once) "./treeList.material.less";
 @import (once) "./splitter.material.less";
-@import (once) "../base/gantt.less";
 
 @gantt_successor_background_color: white;
 
@@ -14,6 +14,10 @@
 
         .dx-gantt-toolbar-separator {
             border-left-color: @base-border-color;
+        }
+
+        .dx-toolbar .dx-toolbar-items-container {
+            height: 42px;
         }
     }
 
@@ -267,4 +271,4 @@
     }
 }
 
-.gantt-icons-mixin(@base-text-color);
+.gantt-icons-mixin(@datagrid-columnchooser-item-color);
