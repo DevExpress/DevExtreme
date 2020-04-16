@@ -193,7 +193,7 @@ module('crossScrollingEnabled = true', config, () => {
 
             const dragDistance = 150;
             const $appointment = scheduler.appointments.getAppointment();
-            const timePanelWidth = scheduler.getTimePanel().outerWidth(true);
+            const timePanelWidth = scheduler.timePanel.getElement().outerWidth(true);
 
             const pointer = pointerMock($appointment).start();
             const startPosition = translator.locate($appointment);
