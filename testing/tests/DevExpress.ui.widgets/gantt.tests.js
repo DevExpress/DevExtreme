@@ -585,7 +585,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.equal($items.length, items.length, 'All items were rendered');
         assert.equal($items.find(TOOLBAR_SEPARATOR_SELECTOR).length, 2, 'Both separators were rendered');
         assert.equal($items.last().text(), 'Custom item', 'Custom item has custom text');
-        assert.equal($items.first().children().children().attr('aria-label'), 'undo', 'First button is undo button');
+        assert.equal($items.first().children().children().attr('aria-label'), 'dx-gantt-i dx-gantt-i-undo', 'First button is undo button');
     });
     test('changing', function(assert) {
         const items = [

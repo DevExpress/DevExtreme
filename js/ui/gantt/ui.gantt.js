@@ -141,6 +141,8 @@ class Gantt extends Widget {
             onScroll: this._onGanttViewScroll.bind(this),
             onDialogShowing: this._showDialog.bind(this),
             onPopupMenuShowing: this._showPopupMenu.bind(this),
+            onExpandAll: this._expandAll.bind(this),
+            onCollapseAll: this._collapseAll.bind(this),
             modelChangesListener: this._createModelChangesListener()
         });
         this._fireContentReadyAction();
@@ -194,6 +196,22 @@ class Gantt extends Widget {
         if(ganttViewTaskAreaContainer.scrollTop !== treeListScrollView.component.scrollTop()) {
             ganttViewTaskAreaContainer.scrollTop = treeListScrollView.component.scrollTop();
         }
+    }
+    _expandAll() {
+        this._treeList.forEachNode(node => {
+            if(node.children && node.children.length) {
+                this._treeList.expandRow(node.key);
+                this._ganttView.changeTaskExpanded(node.key, true);
+            }
+        });
+    }
+    _collapseAll() {
+        this._treeList.forEachNode(node => {
+            if(node.children && node.children.length) {
+                this._treeList.collapseRow(node.key);
+                this._ganttView.changeTaskExpanded(node.key, false);
+            }
+        });
     }
 
     _initScrollSync(treeList) {

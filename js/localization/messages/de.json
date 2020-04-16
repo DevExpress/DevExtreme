@@ -515,6 +515,15 @@
         "dxGantt-dialogConstraintViolationMessage": "Die Aufgabe, die Sie verschieben möchten, ist mit einer zweiten Aufgabe durch eine Abhängigkeit verbunden. Wie möchten Sie fortfahren?",
         "dxGantt-dialogCancelOperationMessage": "Vorgang abbrechen",
         "dxGantt-dialogDeleteDependencyMessage": "Abhängigkeit löschen",
-        "dxGantt-dialogMoveTaskAndKeepDependencyMessage": "Aufgabe verschieben und Abhängigkeit beibehalten"
+        "dxGantt-dialogMoveTaskAndKeepDependencyMessage": "Aufgabe verschieben und Abhängigkeit beibehalten",
+        "dxGantt-undo": "TODO",
+        "dxGantt-redo": "TODO",
+        "dxGantt-expandAll": "TODO",
+        "dxGantt-collapseAll": "TODO",
+        "dxGantt-addNewTask": "TODO",
+        "dxGantt-deleteSelectedTask": "TODO",
+        "dxGantt-zoomIn": "TODO",
+        "dxGantt-zoomOut": "TODO",
+        "dxGantt-fullScreen": "TODO"
     }
 }

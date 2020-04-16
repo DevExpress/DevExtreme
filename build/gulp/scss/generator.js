@@ -136,9 +136,9 @@ gulp.task('fix-base', () => {
         .pipe(replace(/(_TOP|_LEFT|100%|absolute|inherit|""|0|_COLOR|none|_BORDER|relative|inline-block|hidden|left),$/gm, '$1;'))
         .pipe(replace(/^\$SCHEDULER_NAVIGATOR_OFFSET/, '@use "./mixins" as *;\n@use "./icons" as *;\n\n$SCHEDULER_NAVIGATOR_OFFSET'))
 
-        // fileManager, diagram
-        .pipe(replace(/\.(filemanager|diagram)-icon-colored\(d/g, '@include $1-icon-colored(d'))
-        .pipe(replace(/@mixin (filemanager|diagram)-icon-colored/, '@use "sass:string";\n@use "./string" as *;\n\n@mixin $1-icon-colored'))
+        // fileManager, diagram, gantt
+        .pipe(replace(/\.(filemanager|diagram|gantt)-icon-colored\(d/g, '@include $1-icon-colored(d'))
+        .pipe(replace(/@mixin (filemanager|diagram|gantt)-icon-colored/, '@use "sass:string";\n@use "./string" as *;\n\n@mixin $1-icon-colored'))
         .pipe(replace(/, "gi"/g, ''))
         .pipe(replace(/(\W)e\(/g, '$1string.unquote('))
 

@@ -514,6 +514,15 @@
         "dxGantt-dialogConstraintViolationMessage": "Задача, которую вы передвигаете, имеет зависимость от другой задачи. Как вы хотите поступить?",
         "dxGantt-dialogCancelOperationMessage": "Отменить операцию",
         "dxGantt-dialogDeleteDependencyMessage": "Удалить задачу",
-        "dxGantt-dialogMoveTaskAndKeepDependencyMessage": "Сохранить зависимость и передвинуть задачу"
+        "dxGantt-dialogMoveTaskAndKeepDependencyMessage": "Сохранить зависимость и передвинуть задачу",
+        "dxGantt-undo": "TODO",
+        "dxGantt-redo": "TODO",
+        "dxGantt-expandAll": "TODO",
+        "dxGantt-collapseAll": "TODO",
+        "dxGantt-addNewTask": "TODO",
+        "dxGantt-deleteSelectedTask": "TODO",
+        "dxGantt-zoomIn": "TODO",
+        "dxGantt-zoomOut": "TODO",
+        "dxGantt-fullScreen": "TODO"
     }
 }

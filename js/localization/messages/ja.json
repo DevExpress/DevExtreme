@@ -515,6 +515,15 @@
         "dxGantt-dialogConstraintViolationMessage": "移動しようとしているタスクは、依存関係により2つ目のタスクとリンクされています。どのように続行しますか？",
         "dxGantt-dialogCancelOperationMessage": "操作をキャンセルする",
         "dxGantt-dialogDeleteDependencyMessage": "依存関係を削除する",
-        "dxGantt-dialogMoveTaskAndKeepDependencyMessage": "タスクを移動して、依存関係を保持する"
+        "dxGantt-dialogMoveTaskAndKeepDependencyMessage": "タスクを移動して、依存関係を保持する",
+        "dxGantt-undo": "TODO",
+        "dxGantt-redo": "TODO",
+        "dxGantt-expandAll": "TODO",
+        "dxGantt-collapseAll": "TODO",
+        "dxGantt-addNewTask": "TODO",
+        "dxGantt-deleteSelectedTask": "TODO",
+        "dxGantt-zoomIn": "TODO",
+        "dxGantt-zoomOut": "TODO",
+        "dxGantt-fullScreen": "TODO"
     }
 }
