@@ -312,11 +312,11 @@ export interface dxFileManagerToolbar {
     /**
      * @docid dxFileManagerToolbar.fileSelectionItems
      * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
-     * @default [ "download", "separator", "move", "copy", "rename", "separator", "delete", "clear", { name: "separator", location: "after" }, "refresh" ]
+     * @default [ "download", "separator", "move", "copy", "rename", "separator", "delete", "clearSelection", { name: "separator", location: "after" }, "refresh" ]
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fileSelectionItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
+    fileSelectionItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator'>;
     /**
      * @docid dxFileManagerToolbar.items
      * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
@@ -324,7 +324,7 @@ export interface dxFileManagerToolbar {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
+    items?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator'>;
 }
 
 export interface dxFileManagerToolbarItem extends dxToolbarItem {
@@ -341,7 +341,7 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    name?: 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator' | string;
+    name?: 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator' | string;
     /**
      * @docid dxFileManagerToolbarItem.visible
      * @default undefined

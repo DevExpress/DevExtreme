@@ -317,7 +317,7 @@
         "dxFileManager-commandRefresh": "Refresh",
         "dxFileManager-commandThumbnails": "Thumbnails View",
         "dxFileManager-commandDetails": "Details View",
-        "dxFileManager-commandClear": "Clear selection",
+        "dxFileManager-commandClearSelection": "Clear selection",
 
         "dxFileManager-dialogDirectoryChooserMoveTitle": "Move to",
         "dxFileManager-dialogDirectoryChooserMoveButtonText": "Move",

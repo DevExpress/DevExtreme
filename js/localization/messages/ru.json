@@ -284,7 +284,7 @@
         "dxFileManager-commandRefresh": "Обновить",
         "dxFileManager-commandThumbnails": "Режим эксизов",
         "dxFileManager-commandDetails": "Режим списка",
-        "dxFileManager-commandClear": "Очистить выделение",
+        "dxFileManager-commandClearSelection": "Очистить выделение",
         "dxFileManager-dialogButtonCancel": "Отмена",
 
         "dxFileManager-dialogDirectoryChooserMoveTitle": "Переместить в",

@@ -285,7 +285,7 @@
         "dxFileManager-commandRefresh": "Aktualisieren",
         "dxFileManager-commandThumbnails": "Miniaturansicht",
         "dxFileManager-commandDetails": "Detailansicht",
-        "dxFileManager-commandClear": "Auswahl aufheben",
+        "dxFileManager-commandClearSelection": "Auswahl aufheben",
 
         "dxFileManager-dialogDirectoryChooserMoveTitle": "TODO",
         "dxFileManager-dialogDirectoryChooserMoveButtonText": "Verschieben",

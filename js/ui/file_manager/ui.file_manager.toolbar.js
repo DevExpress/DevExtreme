@@ -81,7 +81,7 @@ const DEFAULT_ITEM_CONFIGS = {
             showText: 'inMenu'
         }
     },
-    clear: {
+    clearSelection: {
         location: 'after',
         locateInMenu: 'never',
         compactMode: {
@@ -397,7 +397,7 @@ class FileManagerToolbar extends Widget {
 
     _isFileToolbarItemAvailable({ name, visible }, fileItems) {
         return !this._isDefaultItem(name) && ensureDefined(visible, true) ||
-            name !== 'clear' && name !== 'refresh' && this._commandManager.isCommandAvailable(name, fileItems);
+            name !== 'clearSelection' && name !== 'refresh' && this._commandManager.isCommandAvailable(name, fileItems);
     }
 
     _updateItemInToolbar(toolbar, commandName, options) {
