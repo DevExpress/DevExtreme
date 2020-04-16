@@ -22,7 +22,7 @@ import DiagramMainToolbar from './ui.diagram.main_toolbar';
 import DiagramHistoryToolbar from './ui.diagram.history_toolbar';
 import DiagramViewToolbar from './ui.diagram.view_toolbar';
 import DiagramPropertiesToolbar from './ui.diagram.properties_toolbar';
-import DiagramContextMenu from './ui.diagram.context_menu';
+import { DiagramContextMenuWrapper } from './ui.diagram.context_menu';
 import DiagramContextToolbox from './ui.diagram.context_toolbox';
 import DiagramDialog from './ui.diagram.dialogs';
 import DiagramScrollView from './ui.diagram.scroll_view';
@@ -555,7 +555,7 @@ class Diagram extends Widget {
     _renderContextMenu($parent) {
         const $contextMenu = $('<div>')
             .appendTo($parent);
-        this._contextMenu = this._createComponent($contextMenu, DiagramContextMenu, {
+        this._contextMenu = this._createComponent($contextMenu, DiagramContextMenuWrapper, {
             commands: this.option('contextMenu.commands'),
             onContentReady: ({ component }) => this._registerBar(component),
             onVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),

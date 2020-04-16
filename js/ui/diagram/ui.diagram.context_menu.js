@@ -1,5 +1,4 @@
 import $ from '../../core/renderer';
-import { extend } from '../../core/utils/extend';
 
 import Widget from '../widget/ui.widget';
 import ContextMenu from '../context_menu';
@@ -15,7 +14,7 @@ const DIAGRAM_TOUCHBAR_TARGET_CLASS = 'dx-diagram-touchbar-target';
 const DIAGRAM_TOUCHBAR_MIN_UNWRAPPED_WIDTH = 800;
 const DIAGRAM_TOUCHBAR_Y_OFFSET = 32;
 
-class DiagramContextMenu extends Widget {
+class DiagramContextMenuWrapper extends Widget {
     _init() {
         super._init();
 
@@ -42,9 +41,12 @@ class DiagramContextMenu extends Widget {
         const $contextMenu = $('<div>')
             .appendTo(this.$element());
 
-        this._contextMenuInstance = this._createComponent($contextMenu, InnerContextMenu, {
+        this._contextMenuInstance = this._createComponent($contextMenu, DiagramContextMenu, {
             isTouchBarMode: this._isTouchBarMode(),
             cssClass: this._isTouchBarMode() ? DIAGRAM_TOUCHBAR_CLASS : DiagramMenuHelper.getContextMenuCssClass(),
+            closeOnOutsideClick: false,
+            showEvent: '',
+            focusStateEnabled: false,
             items: this._commands,
             position: (this._isTouchBarMode() ? {
                 my: { x: 'center', y: 'bottom' },
@@ -180,7 +182,7 @@ class DiagramContextMenu extends Widget {
     }
 }
 
-class InnerContextMenu extends ContextMenu {
+class DiagramContextMenu extends ContextMenu {
     _renderContextMenuOverlay() {
         super._renderContextMenuOverlay();
 
@@ -190,13 +192,6 @@ class InnerContextMenu extends ContextMenu {
                 $content.parent().addClass(DIAGRAM_TOUCHBAR_OVERLAY_CLASS);
             });
         }
-    }
-    _getDefaultOptions() {
-        return extend(super._getDefaultOptions(), {
-            closeOnOutsideClick: false,
-            showEvent: '',
-            focusStateEnabled: false,
-        });
     }
 }
 
@@ -228,4 +223,4 @@ class DiagramContextMenuBar extends DiagramBar {
     }
 }
 
-module.exports = DiagramContextMenu;
+module.exports = { DiagramContextMenuWrapper, DiagramContextMenu };
