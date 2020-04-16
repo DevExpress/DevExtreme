@@ -185,7 +185,7 @@ class FileManagerToolbar extends Widget {
             after: this._getItemsInGroup(items, menuItems, 'after')
         };
         items.forEach((item, i) => {
-            const itemLocation = this._getItemLocation(item);
+            const itemLocation = item.location;
             if(item.name === 'separator') {
                 const isSeparatorVisible = hasItemsBefore[itemLocation] && this._groupHasItemsAfter(itemGroups[itemLocation]);
                 if(item.visible !== isSeparatorVisible) {
@@ -219,7 +219,7 @@ class FileManagerToolbar extends Widget {
     }
 
     _getItemsInGroup(items, menuItems, groupName) {
-        return items.filter(item => this._getItemLocation(item) === groupName && !this._isItemInMenu(menuItems, item));
+        return items.filter(item => item.location === groupName && !this._isItemInMenu(menuItems, item));
     }
 
     _groupHasItemsAfter(items) {
@@ -229,10 +229,6 @@ class FileManagerToolbar extends Widget {
             }
         }
         return false;
-    }
-
-    _getItemLocation(toolbarItem) {
-        return ensureDefined(toolbarItem.location, 'before');
     }
 
     _configureItemByCommandName(commandName, item) {
@@ -275,7 +271,7 @@ class FileManagerToolbar extends Widget {
             extend(result, { name: commandName });
         }
 
-        result.location = this._getItemLocation(result);
+        result.location = ensureDefined(result.location, 'before');
 
         if(result.widget === 'dxButton') {
             extend(true, result, { options: { stylingMode: 'text' } });
