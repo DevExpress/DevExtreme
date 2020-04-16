@@ -648,7 +648,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
                 download: true
             },
             toolbar: {
-                fileSelectionItems: ['download', 'separator', 'clear']
+                fileSelectionItems: ['download', 'separator', 'clearSelection']
             }
         });
         this.clock.tick(400);
@@ -709,7 +709,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         fileManager.option({
             toolbar: {
                 fileSelectionItems: [
-                    'download', 'move', 'copy', 'rename', 'separator', 'delete', 'refresh', 'clear',
+                    'download', 'move', 'copy', 'rename', 'separator', 'delete', 'refresh', 'clearSelection',
                     {
                         widget: 'dxButton',
                         options: {
@@ -751,7 +751,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         fileManager.option({
             toolbar: {
                 fileSelectionItems: [
-                    'download', 'move', 'copy', 'rename', 'separator', 'refresh', 'clear',
+                    'download', 'move', 'copy', 'rename', 'separator', 'refresh', 'clearSelection',
                     {
                         widget: 'dxButton',
                         options: {
@@ -787,7 +787,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         fileManager.option({
             toolbar: {
                 fileSelectionItems: [
-                    'download', 'move', 'copy', 'rename', 'separator', 'refresh', 'clear',
+                    'download', 'move', 'copy', 'rename', 'separator', 'refresh', 'clearSelection',
                     {
                         widget: 'dxButton',
                         options: {
