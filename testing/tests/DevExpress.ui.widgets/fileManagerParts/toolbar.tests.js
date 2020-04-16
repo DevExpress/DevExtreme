@@ -843,10 +843,37 @@ QUnit.module('Toolbar', moduleConfig, () => {
         const $centerItems = this.wrapper.getToolbarElementsInSection('center');
         const $afterItems = this.wrapper.getToolbarElementsInSection('after');
 
-        assert.strictEqual($beforeItems.length, 1, 'there is one item in before group');
         assert.strictEqual($beforeItems.text(), 'item 1', 'the item is correct');
         assert.strictEqual($centerItems.length, 0, 'there is no items in center group');
         assert.strictEqual($afterItems.length, 0, 'there is no items in after group');
+    });
+
+    test('file toolbar items can be specified by option full name', function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option('toolbar.fileSelectionitems', [
+            'move',
+            {
+                widget: 'dxButton',
+                options: {
+                    text: 'item 1'
+                },
+                locateInMenu: 'never'
+            },
+            'rename']);
+        this.clock.tick(400);
+
+        const $item = this.wrapper.findDetailsItem('File 1.txt');
+        $item.trigger('dxclick');
+        this.clock.tick(400);
+
+        const $fileToolbarElements = this.wrapper.getFileSelectionToolbarElements();
+        assert.strictEqual($fileToolbarElements.length, 3, 'there are three elements in toolbar');
+        assert.strictEqual($fileToolbarElements.eq(0).text(), 'Move to', 'fisrt element correct');
+        assert.strictEqual($fileToolbarElements.eq(1).text(), 'item 1', 'second element correct');
+        assert.strictEqual($fileToolbarElements.eq(2).text(), 'Rename', 'third element correct');
     });
 
 });
