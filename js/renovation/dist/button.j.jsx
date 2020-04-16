@@ -8,6 +8,7 @@ import ButtonView from '../button.p';
 import { wrapElement, getInnerActionName, removeDifferentElements } from '../preact-wrapper/utils';
 import { useLayoutEffect } from 'preact/hooks';
 import { getPublicElement } from '../../core/utils/dom';
+import { extend } from '../../core/utils/extend';
 
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
@@ -23,6 +24,7 @@ class Button extends Component {
 
     getProps(isFirstRender) {
         const props = super.getProps(isFirstRender);
+        const { onKeyPress: defaultKeyPress } = props;
 
         if(props.template || props.haveAnonymousTemplate) {
             // NOTE: 'template' - default name for anonymous template
@@ -61,6 +63,23 @@ class Button extends Component {
 
         props.validationGroup = ValidationEngine.getGroupConfig(this._findGroup());
 
+        props.onKeyPress = (event, options) => {
+            const { originalEvent, keyName, which } = options;
+            const keys = this._supportedKeys();
+            const func = keys[keyName] || keys[which];
+
+            // NOTE: registered handler has more priority
+            if(func !== undefined) {
+                const handler = func.bind(this);
+                const result = handler(originalEvent, options);
+
+                return { cancel: result?.cancel };
+            }
+
+            // NOTE: make possible pass onKeyPress property
+            return defaultKeyPress?.(event, options);
+        };
+
         return {
             ref: this.view_ref,
             ...props
@@ -69,6 +88,12 @@ class Button extends Component {
 
     focus() {
         this.view_ref.current.focus();
+    }
+
+    registerKeyHandler(key, handler) {
+        const currentKeys = this._supportedKeys();
+
+        this._supportedKeys = () => extend(currentKeys, { [key]: handler });
     }
 
     _findGroup() {
@@ -92,6 +117,10 @@ class Button extends Component {
         Object.keys(actions).forEach((name) => {
             this._addAction(name, actions[name]);
         });
+
+        this._supportedKeys = () => {
+            return {};
+        };
     }
 
     _optionChanged(option) {
