@@ -18,6 +18,20 @@
         }
     }
 
+    .dx-tabpanel-tabs .dx-tabs {
+        &:before {
+            content: "";
+            display: block;
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 0;
+            border-bottom: 1px solid @tabs-border-color;
+            z-index: 1;
+        }
+    }
+
     .dx-tab {
         width: 140px;
 
@@ -30,16 +44,16 @@
         content: "";
         pointer-events: none;
         position: absolute;
-        top: 100%;
-        bottom: -1px;
         left: 0;
         right: 0;
-        z-index: 2;
+        z-index: 3;
         height: 0;
-        border-bottom: 1.5px solid @tabs-tab-selected-bg;
-        // NOTE: fractional pixels for ie
-        // stylelint-disable-next-line declaration-block-no-duplicate-properties
-        bottom: -1.4px;
+        border-bottom: 1px solid @tabs-tab-selected-bg;
+        bottom: 0;
+    }
+
+    .dx-tab-selected:after {
+        bottom: 0;
     }
 
     .dx-tabs-wrapper {
@@ -47,8 +61,14 @@
     }
 
     &.dx-state-focused {
+        .dx-tabpanel-tabs .dx-tabs {
+            &:before {
+                border-bottom: @GENERIC_TAB_FOCUS_BORDER;
+            }
+        }
+
         .dx-multiview-wrapper {
-            border: @GENERIC_TAB_FOCUS_BORDER;
+            border-color: @tabs-focused-border-color;
         }
 
         .dx-tab-selected:after {
@@ -56,29 +76,11 @@
             border-right: @GENERIC_TAB_FOCUS_BORDER;
             border-left: @GENERIC_TAB_FOCUS_BORDER;
         }
-
-        .dx-tabs-scrollable {
-            .dx-tab:not(.dx-tab-selected):before {
-                content: "";
-                pointer-events: none;
-                position: absolute;
-                top: 100%;
-                bottom: -1px;
-                left: 0;
-                right: 0;
-                z-index: 2;
-                height: 0;
-                border-bottom: 1.5px solid @tabs-focused-border-color;
-                bottom: -1.4px; // stylelint-disable-line declaration-block-no-duplicate-properties
-            }
-
-            .dx-tab-selected:after {
-                border-bottom: 1.5px solid @tabs-tab-bg;
-            }
-        }
     }
 
     .dx-multiview-wrapper {
-        border: 1px solid @tabs-border-color;
+        border-left: 1px solid @tabs-border-color;
+        border-right: 1px solid @tabs-border-color;
+        border-bottom: 1px solid @tabs-border-color;
     }
 }
