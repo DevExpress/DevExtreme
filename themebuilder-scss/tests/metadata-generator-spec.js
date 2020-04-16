@@ -174,8 +174,8 @@ describe('Metadata generator - getMapFromMeta', () => {
         { 'Key': '$menu-item-selected-bg' }
     ];
     it('getMapFromMeta works as expected', () => {
-        assert.equal(generator.getMapFromMeta(testMetadata),
-            '(\n"$menu-color": $menu-color,\n"$menu-item-selected-bg": $menu-item-selected-bg,\n)');
+        assert.equal(generator.getMapFromMeta(testMetadata, '/'),
+            '(\n"path": "/",\n"$menu-color": $menu-color,\n"$menu-item-selected-bg": $menu-item-selected-bg,\n)');
     });
 });
 
@@ -213,6 +213,7 @@ $slideout-background: #000;
 */
 $slideout-background: #000;
 @debug collector((
+"path": "tb/widgets/generic/toolbar/colors",
 "$slideout-background": $slideout-background,
 ));
 `;
@@ -236,7 +237,7 @@ $slideout-background: #000;
         assert.deepEqual(generator.getMetadata(), { 'metadata': [] });
     });
 
-    it('collectMetadata add several item for diffenrt files with the same variables names', () => {
+    it('collectMetadata add several item for different files with the same variables names', () => {
         const cwd = '/';
         const path1 = '/scss/widgets/generic/toolbar/_colors.scss';
         const path2 = '/scss/widgets/material/toolbar/_colors.scss';

@@ -574,7 +574,37 @@ describe('Cli arguments normalizer', () => {
             'data': 'somedata',
             'fileFormat': 'css',
             'isBootstrap': false,
-            'items': [{ key: '1', value: '2' }, { key: '@datagrid-bg-color', value: '2' }, { key: '@datagrid-border-color', value: '3' }],
+            'items': [{ key: '1', value: '2' }, { key: '$datagrid-bg-color', value: '2' }, { key: '$datagrid-border-color', value: '3' }],
+            'lessCompiler': 'l',
+            'makeSwatch': false,
+            'out': 'dx.material.custom-scheme.css',
+            'outColorScheme': 'custom-scheme',
+            'reader': 'r',
+            'themeName': 'material'
+        });
+    });
+
+    it('"@" is replaced with "$" in the "key" field in items', () => {
+        const config = {
+            command: 'build-theme',
+            baseTheme: 'material.blue.light',
+            inputFile: 'file.json',
+            data: 'somedata',
+            items: [{ key: '@datagrid-bg-color', value: '2' }, { key: '@datagrid-border-color', value: '3' }],
+            reader: 'r',
+            lessCompiler: 'l'
+        };
+        normalizeConfig(config);
+
+        assert.deepEqual(config, {
+            'base': false,
+            'bootstrapVersion': 0,
+            'colorScheme': 'blue-light',
+            'command': 'build-theme',
+            'data': 'somedata',
+            'fileFormat': 'css',
+            'isBootstrap': false,
+            'items': [{ key: '$datagrid-bg-color', value: '2' }, { key: '$datagrid-border-color', value: '3' }],
             'lessCompiler': 'l',
             'makeSwatch': false,
             'out': 'dx.material.custom-scheme.css',

@@ -100,13 +100,17 @@ const getThemeAndColorScheme = config => {
     };
 };
 
-const convertTreeListConstants = config => {
+const replaceItemKeys = (config, searchValue, replaceValue) => {
     if(config.items && config.items.length) {
         config.items.forEach(item => {
-            item.key = item.key.replace(/@treelist/, '@datagrid');
+            item.key = item.key.replace(searchValue, replaceValue);
         });
     }
 };
+
+const convertTreeListConstants = config => replaceItemKeys(config, /@treelist/, '@datagrid');
+
+const convertItemKeysToSassFormat = config => replaceItemKeys(config, /@/, '$');
 
 const normalizePath = path => path + (path[path.length - 1] !== '/' ? '/' : '');
 
@@ -133,6 +137,7 @@ const parseConfig = config => {
     }
 
     convertTreeListConstants(config);
+    convertItemKeysToSassFormat(config);
 
     Object.assign(config, {
         data: config.data !== undefined ? config.data : {},

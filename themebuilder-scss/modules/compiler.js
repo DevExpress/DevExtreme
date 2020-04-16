@@ -1,15 +1,19 @@
 /* global __dirname, console */
 /* eslint no-console: off */
+// TODO it seems this compiler is node-only (it contains many things that can be run on node only)
 const path = require('path');
+const sass = require('sass');
 const Fiber = require('fibers');
 const resolveBundle = require('./bundle-resolver');
 const basePath = path.join(__dirname, '..', 'data', 'scss');
 
 class Compiler {
-    constructor() {}
+    constructor() {
+        this.changedVariables = [];
+    }
 
     compile(config) {
-        const sass = config.sassCompiler;
+        this.changedVariables = [];
         const bundle = resolveBundle(config.themeName, config.colorScheme);
 
         sass.render({
@@ -21,26 +25,7 @@ class Compiler {
                 done({ contents: '' });
             },
             functions: {
-                'collector($map)': (map) => {
-                    for(let i = 0; i < map.getLength(); i++) {
-                        const value = map.getValue(i);
-                        let variableValue;
-
-                        if(value instanceof sass.types.Color) {
-                            variableValue = `rgba(${value.getR()},${value.getG()},${value.getB()},${value.getA()})`;
-                        } else if(value instanceof sass.types.String) {
-                            variableValue = value.getValue();
-                        } else if(value instanceof sass.types.Number) {
-                            variableValue = `${value.getValue()}${value.getUnit()}`;
-                        }
-                        console.log(
-                            'var:',
-                            map.getKey(i).getValue(),
-                            'value:',
-                            variableValue);
-                    }
-                    return sass.types.Null.NULL;
-                }
+                'collector($map)': this.collector.bind(this)
             }
         }, (error, result) => {
             if(error) {
@@ -49,6 +34,30 @@ class Compiler {
                 console.log(result.stats.duration);
             }
         });
+    }
+
+    collector(map) {
+        const path = map.getValue(0).getValue();
+
+        for(let i = 1; i < map.getLength(); i++) {
+            const value = map.getValue(i);
+            let variableValue;
+
+            if(value instanceof sass.types.Color) {
+                variableValue = `rgba(${value.getR()},${value.getG()},${value.getB()},${value.getA()})`;
+            } else if(value instanceof sass.types.String) {
+                variableValue = value.getValue();
+            } else if(value instanceof sass.types.Number) {
+                variableValue = `${value.getValue()}${value.getUnit()}`;
+            }
+
+            this.changedVariables.push({
+                Key: map.getKey(i).getValue(),
+                Value: variableValue,
+                Path: path
+            });
+        }
+        return sass.types.Null.NULL;
     }
 }
 
