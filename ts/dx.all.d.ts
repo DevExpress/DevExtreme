@@ -4169,14 +4169,14 @@ declare module DevExpress.ui {
     /** @name dxGanttToolbar */
     export interface dxGanttToolbar {
         /** @name dxGanttToolbar.items */
-        items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'zoomIn' | 'zoomOut'>;
+        items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut'>;
     }
     /** @name dxGanttToolbarItem */
     export interface dxGanttToolbarItem extends dxToolbarItem {
         /** @name dxGanttToolbarItem.location */
         location?: 'after' | 'before' | 'center';
         /** @name dxGanttToolbarItem.name */
-        name?: 'separator' | 'undo' | 'redo' | 'zoomIn' | 'zoomOut' | string;
+        name?: 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | string;
     }
     /** @name dxHtmlEditor.Options */
     export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
