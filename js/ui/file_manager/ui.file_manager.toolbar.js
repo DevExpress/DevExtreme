@@ -167,7 +167,8 @@ class FileManagerToolbar extends Widget {
 
             return preparedItem;
         });
-        return this._updateSeparatorsVisibility(items);
+        this._updateSeparatorsVisibility(items);
+        return items;
     }
 
     _updateSeparatorsVisibility(items, toolbar) {
@@ -203,7 +204,7 @@ class FileManagerToolbar extends Widget {
         if(toolbar && hasModifications) {
             toolbar.repaint();
         }
-        return items;
+        return hasModifications;
     }
 
     _getMenuItems(toolbar) {
@@ -378,6 +379,7 @@ class FileManagerToolbar extends Widget {
             }
         });
 
+        hasModifications = this._updateSeparatorsVisibility(items) || hasModifications;
         if(hasModifications) {
             toolbar.repaint();
         }
@@ -408,6 +410,7 @@ class FileManagerToolbar extends Widget {
             }
         });
 
+        hasModifications = this._updateSeparatorsVisibility(items) || hasModifications;
         if(hasModifications) {
             toolbar.repaint();
         }
