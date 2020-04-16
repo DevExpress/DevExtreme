@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, minimum-scale=1.0">
+
+    <title>DevExtreme Diagram Example</title>
+
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.common.css"/>
+
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
+    <link rel="stylesheet" type="text/css" href="../node_modules/devexpress-diagram/dist/dx-diagram.css"/>
+
+    <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
+
+
+    <script type="text/javascript" src="https://unpkg.com/canvg@3.0.1/lib/umd.js"></script>
+
+    <script type="text/javascript" src="../artifacts/js/cldr.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/supplemental.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/unresolved.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/currency.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/date.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/message.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/number.js"></script>
+
+    <script type="text/javascript" src="../node_modules/devexpress-diagram/dist/dx-diagram.js"></script>
+    <script type="text/javascript" src="../artifacts/js/dx.all.debug.js"></script>
+
+    <script type="text/javascript" src="../artifacts/js/localization/dx.messages.ru.js"></script>
+
+    <script src="https://unpkg.com/devextreme-cldr-data/supplemental.js"></script>
+    <script src="https://unpkg.com/devextreme-cldr-data/ru.js"></script>
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #diagram {
+            width: 100%;
+            height: 100%;
+            /* width: 1400px;
+            height: 600px; */
+        }
+    </style>
+    <script>
+        var employees = [{
+            "ID": 1,
+            "Full_Name": "John Heart",
+            "Prefix": "Mr.",
+            "Title": "CEO",
+        }, {
+            "ID": 2,
+            "Head_ID": 1,
+            "Full_Name": "Samantha Bright",
+            "Prefix": "Dr.",
+            "Title": "COO",
+        }, {
+            "ID": 3,
+            "Head_ID": 1,
+            "Full_Name": "Arthur Miller",
+            "Prefix": "Mr.",
+            "Title": "CTO",
+        }, {
+            "ID": 4,
+            "Head_ID": 1,
+            "Full_Name": "Robert Reagan",
+            "Prefix": "Mr.",
+            "Title": "CMO",
+        }, {
+            "ID": 5,
+            "Head_ID": 1,
+            "Full_Name": "Greta Sims",
+            "Prefix": "Ms.",
+            "Title": "HR Manager",
+        }, {
+            "ID": 6,
+            "Head_ID": 5,
+            "Full_Name": "Greta Sims's Son",
+            "Prefix": "Ms.",
+            "Title": "HR Manager",
+        }, {
+            "ID": 7,
+            "Head_ID": 5,
+            "Full_Name": "Greta Sims's Daughter",
+            "Prefix": "Ms.",
+            "Title": "HR Manager",
+        }, {
+            "ID": 8,
+            "Head_ID": 5,
+            "Full_Name": "Greta Sims's Sister",
+            "Prefix": "Ms.",
+            "Title": "HR Manager",
+            "type": "verticalContainer",
+            "children": [{
+                "ID": 9,
+                "Full_Name": "Greta Sims's Nice",
+                "Prefix": "Ms.",
+                "Title": "HR Manager",
+                "type": "rectangle"
+            },{
+                "ID": 10,
+                "Head_ID": 9,
+                "Full_Name": "Greta Sims's Grand Nice",
+                "Prefix": "Ms.",
+                "Title": "HR Manager",
+                "type": "rectangle"
+            },{
+                "ID": 11,
+                "Head_ID": 9,
+                "Full_Name": "Greta Sims's Grand Nice",
+                "Prefix": "Ms.",
+                "Title": "HR Manager",
+                "type": "rectangle"
+            }]
+        },{
+            "ID": 12,
+            "Full_Name": "Greta Sims's Another Nice",
+            "Prefix": "Ms.",
+            "Title": "HR Manager",
+            "type": "rectangle",
+            "containerID": 8
+        },{
+            "ID": 13,
+            "Head_ID": 12,
+            "Full_Name": "Greta Sims's Another Grand Nice",
+            "Prefix": "Ms.",
+            "Title": "HR Manager",
+            "type": "rectangle",
+            "containerID": 8
+        },{
+            "ID": 14,
+            "Head_ID": 12,
+            "Full_Name": "Greta Sims's Another Grand Nice",
+            "Prefix": "Ms.",
+            "Title": "HR Manager",
+            "type": "rectangle",
+            "containerID": 8
+        }];
+    </script>
+</head>
+<body>
+    <div id="diagram"></div>
+    <script>
+        DevExpress.localization.locale("ru");
+        Globalize.locale("ru");
+
+        $(function() {
+            var diagram = $("#diagram").dxDiagram({
+                // readOnly: true,
+                // disabled: true,
+                // viewUnits: "cm",
+                // gridSize: 0.3175,
+                // showGrid: false,
+                // snapToGrid: false,
+                // fullscreen: true,
+                // pageSize: { width: 2, height: 2 },
+                // pageOrientation: "landscape",
+                // pageColor: "gray"
+
+                nodes: {
+                    dataSource: new DevExpress.data.ArrayStore({
+                        key: "ID",
+                        data: employees
+                    }),
+                    keyExpr: "ID",
+                    parentKeyExpr: "Head_ID",
+                    textExpr: "Full_Name",
+                    typeExpr: function(item) {return item.type || ("emp" + item.ID); },
+                    // containerKeyExpr: "containerID",
+
+                    autoLayout: {
+                        type: "tree"
+                    }
+                },
+                customShapes: employees.map(
+                    function(emp) {
+                        return {
+                            category: "employees",
+                            type: "emp" + emp.ID,
+                            baseType: "rectangle",
+                            defaultText: emp.Full_Name,
+                            allowEditText: true
+                        }
+                    }
+                ),
+                contextMenu: {
+                    // enabled: false,
+                    // commands: [
+                    //     "copy",
+                    //     "cut",
+                    //     "paste",
+                    //     "bold",
+                    //     "separator",
+                    //     "showGrid",
+                    //     "units",
+                    //     {
+                    //         icon: "key",
+                    //         text: "My Commands",
+                    //         items: [
+                    //             "snapToGrid",
+                    //             "gridSize",
+                    //             "separator",
+                    //             "italic"
+                    //         ]
+                    //     },
+                    //     "separator",
+                    //     {
+                    //         name: "Context Action",
+                    //         icon: "music",
+                    //         text: "My Action"
+                    //     },
+                    // ]
+                },
+                contextToolbox: {
+                    // enabled: false,
+                    // category: "general"
+                },
+                propertiesPanel: {
+                    // visibility: 'visible',
+                    // visibility: 'disabled',
+                    // tabs: [
+                    //     { title: "Page", commands: ["pageSize","pageOrientation","pageColor"] }
+                    // ]
+                    // tabs: [
+                    //   { commands: ["units"] },
+                    //   { commands: ["pageSize","pageOrientation","pageColor"] }
+                    // ]
+                    // tabs: [
+                    //     {
+                    //         title: "My Group",
+                    //         groups: [
+                    //             { title: "My Sub Group1", commands: ["units"] },
+                    //             { title: "My Sub Group2", commands: ["pageSize","pageLandscape","pageColor"] }
+                    //         ]
+                    //     }
+                    // ]
+                    // tabs: [
+                    //     { title: "Units", commands: ["units"] },
+                    //     { title: "Page", commands: ["pageSize","pageLandscape","pageColor"] }
+                    // ]
+                },
+                mainToolbar: {
+                    // visible: true,
+                    // commands: [ "connectorLineType" ]
+                    commands: [
+                        "fontName",
+                        {
+                            name: "level_0",
+                            text: "level_0",
+                            icon: "check",
+                            items: ["pageOrientation","exportSvg"]
+                        }
+                    ]
+                    // commands: [
+                    //     {
+                    //         name: "level_0",
+                    //         text: "level_0",
+                    //         icon: "check",
+                    //         items: [
+                    //             {
+                    //                 name: "level_1",
+                    //                 text: "level_1",
+                    //                 icon: "check",
+                    //                 items: [
+                    //                     { name: "level_2", text: "level_2", icon: "check"},
+                    //                     "selectAll"
+                    //                 ]
+                    //             }
+                    //         ]
+                    //     }
+                    // ]
+                    // commands: [
+                    //     "selectAll",
+                    //     "separator",
+                    //     {
+                    //         icon: "export",
+                    //         text: "Exporting",
+                    //         items: [
+                    //             "units",
+                    //             "separator",
+                    //             "exportSvg",
+                    //             "exportPng",
+                    //             "separator",
+                    //             {
+                    //                 icon: "key",
+                    //                 text: "My Commands",
+                    //                 items: [
+                    //                     "showGrid",
+                    //                     "gridSize",
+                    //                     "separator",
+                    //                     "italic"
+                    //                 ]
+                    //             },
+                    //             {
+                    //                 name: "Sub Action",
+                    //                 icon: "music",
+                    //                 text: "My Sub Action",
+                    //             },
+                    //         ]
+
+                    //     },
+                    //     {
+                    //         name: "Action",
+                    //         icon: "music",
+                    //         text: "My Action"
+                    //     },
+                    //     "bold",
+                    //     "fontSize",
+                    //     "fullScreen",
+                    //     "connectorLineType",
+                    //     "zoomLevel"
+                    // ]
+                },
+                historyToolbar: {
+                    // visible: false
+                },
+                viewToolbar: {
+                    // visible: false
+                    //commands: ["zoomLevel", "units"]
+                },
+                toolbox: {
+                    // visibility: "collapsed",
+                    groups: [
+                        "general", "containers",
+                        { category: "orgChart", title: "OrgChart", expanded: false },
+                        { category: "employees", title: "Employees", displayMode: "texts", expanded: true }
+                    ]
+                },
+                onCustomCommand: function(e) {
+                    alert(e.name);
+                }
+            }).dxDiagram("instance");
+
+            // setTimeout(() => {
+            //     diagram._diagramInstance.toolboxManager.toolboxes.forEach(function(t) {
+            //         alert(t.emulateDragEvents);
+            //         t.emulateDragEvents = true;
+            //     });
+            // }, 5000);
+        });
+    </script>
+</body>
+</html>
