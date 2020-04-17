@@ -32,10 +32,13 @@ const CLASS = {
     textEditor: 'dx-texteditor',
     textEditorInput: 'dx-texteditor-input',
     invalid: 'dx-invalid',
+    invalidCell: 'dx-datagrid-invalid',
+    cellModified: 'dx-cell-modified',
     editFormRow: 'edit-form',
     button: 'dx-button',
     formButtonsContainer: 'form-buttons-container',
     selectCheckBox: 'dx-select-checkbox',
+    editedRow: 'dx-edit-row',
     saveButton: 'save-button',
     addRowButton: 'addrow-button',
     groupExpanded: 'group-opened',
@@ -142,11 +145,15 @@ class DataCell extends DxElement {
     element: Selector;
     isEditCell: Promise<boolean>;
     isFocused: Promise<boolean>;
+    isInvalid: Promise<boolean>;
+    isModified: Promise<boolean>;
 
     constructor(dataRow: Selector, index: number) {
         super(dataRow.find(`td:nth-child(${++index})`));
         this.isEditCell = this.element.hasClass(CLASS.editCell);
         this.isFocused = this.element.hasClass(CLASS.focused);
+        this.isInvalid = this.element.hasClass(CLASS.invalidCell);
+        this.isModified = this.element.hasClass(CLASS.cellModified);
     }
 
     getEditor(): DxElement {
@@ -168,12 +175,14 @@ class DataRow extends DxElement {
     isRemoved: Promise<boolean>;
     isFocusedRow: Promise<boolean>;
     isSelected: Promise<boolean>;
+    isEdited: Promise<boolean>;
 
     constructor(element: Selector) {
         super(element);
         this.isRemoved = this.element.hasClass(CLASS.rowRemoved);
         this.isFocusedRow = this.element.hasClass(CLASS.focusedRow);
         this.isSelected = this.element.hasClass(CLASS.selection);
+        this.isEdited = this.element.hasClass(CLASS.editedRow);
     }
 
     getDataCell(index: number): DataCell {
