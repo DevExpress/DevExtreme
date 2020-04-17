@@ -325,7 +325,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
             const items = this.option('items');
             const focusedItem = find(items, item => this.keyOf(item) === focusedItemKey);
             if(focusedItem) {
-                this._focusItem(focusedItem);
+                this._focusItem(focusedItem, true);
                 deferred.resolve();
             } else {
                 this.option('focusedItemKey', undefined);

@@ -690,6 +690,17 @@ export const createTestFileSystem = () => {
     ];
 };
 
+export const createHugeFileSystem = () => {
+    const result = [];
+    for(let i = 0; i < 50; i++) {
+        result.push({
+            name: `Folder ${i}`,
+            isDirectory: true
+        });
+    }
+    return result;
+};
+
 export const createUploaderFiles = count => {
     const result = [];
 

@@ -5,7 +5,7 @@ import 'ui/file_manager';
 import FileItemsController from 'ui/file_manager/file_items_controller';
 import FileManagerBreadcrumbs from 'ui/file_manager/ui.file_manager.breadcrumbs';
 import fx from 'animation/fx';
-import { FileManagerWrapper, FileManagerBreadcrumbsWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
+import { FileManagerWrapper, FileManagerBreadcrumbsWrapper, createTestFileSystem, createHugeFileSystem, Consts } from '../../../helpers/fileManagerHelpers.js';
 
 const moduleConfig = {
 
@@ -667,15 +667,8 @@ QUnit.module('Navigation operations', moduleConfig, () => {
             }
         });
         this.clock.tick(400);
-        const hugeFileSystem = [];
-        for(let i = 0; i < 50; i++) {
-            hugeFileSystem.push({
-                name: `Folder ${i}`,
-                isDirectory: true
-            });
-        }
         this.fileManager.option({
-            fileSystemProvider: hugeFileSystem
+            fileSystemProvider: createHugeFileSystem()
         });
         this.clock.tick(400);
 
@@ -693,15 +686,8 @@ QUnit.module('Navigation operations', moduleConfig, () => {
     });
 
     test('Thumbnails view - must keep scroll position', function(assert) {
-        const hugeFileSystem = [];
-        for(let i = 0; i < 50; i++) {
-            hugeFileSystem.push({
-                name: `Folder ${i}`,
-                isDirectory: true
-            });
-        }
         this.fileManager.option({
-            fileSystemProvider: hugeFileSystem
+            fileSystemProvider: createHugeFileSystem()
         });
         this.clock.tick(400);
 
@@ -716,5 +702,47 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         this.clock.tick(800);
 
         assert.strictEqual(this.wrapper.getThumbnailsViewScrollableContainer().scrollTop(), scrollPosition, 'scroll position is the same');
+    });
+
+    test('All views - must keep scroll position for sync focused item', function(assert) {
+        // focus item in thumbnails and remember its scroll position
+        this.fileManager.option({
+            fileSystemProvider: createHugeFileSystem()
+        });
+        this.clock.tick(400);
+
+        this.wrapper.findThumbnailsItem('Folder 0').trigger('dxpointerdown');
+        this.clock.tick(400);
+        this.wrapper.getThumbnailsViewPort().trigger($.Event('keydown', { key: 'PageDown' }));
+        this.clock.tick(400);
+
+        const thumbnailsScrollPosition = this.wrapper.getThumbnailsViewScrollableContainer().scrollTop();
+
+        // switch to details and remember scroll position
+        this.wrapper.getToolbarDropDownButton().find(`.${Consts.BUTTON_CLASS}`).trigger('dxclick');
+        this.clock.tick(400);
+        let detailsViewSelector = this.wrapper.getToolbarViewSwitcherListItem(0);
+        $(detailsViewSelector).trigger('dxclick');
+        this.clock.tick(400);
+
+        const detailsScrollPosition = this.wrapper.getDetailsViewScrollableContainer().scrollTop();
+
+        // switch to thumbnails and check scroll position
+        this.wrapper.getToolbarDropDownButton().find(`.${Consts.BUTTON_CLASS}`).trigger('dxclick');
+        this.clock.tick(400);
+        const thumbnailsViewSelector = this.wrapper.getToolbarViewSwitcherListItem(1);
+        $(thumbnailsViewSelector).trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getThumbnailsViewScrollableContainer().scrollTop(), thumbnailsScrollPosition, 'thumbnails scroll position is the same');
+
+        // switch to details and check scroll position
+        this.wrapper.getToolbarDropDownButton().find(`.${Consts.BUTTON_CLASS}`).trigger('dxclick');
+        this.clock.tick(400);
+        detailsViewSelector = this.wrapper.getToolbarViewSwitcherListItem(0);
+        $(detailsViewSelector).trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), detailsScrollPosition, 'details scroll position is the same');
     });
 });
