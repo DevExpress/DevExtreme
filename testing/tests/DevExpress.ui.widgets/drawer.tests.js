@@ -9,6 +9,7 @@ import Overlay from 'ui/overlay';
 import Button from 'ui/button';
 import domUtils from 'core/utils/dom';
 import eventsEngine from 'events/core/events_engine';
+import errors from 'core/errors';
 import Drawer from 'ui/drawer';
 
 import 'common.css!';
@@ -373,6 +374,27 @@ QUnit.module('Drawer behavior', () => {
 
         instance.option('target', $element.find('.dx-drawer-content'));
         assert.ok($(instance._overlay.option('position').of).hasClass('dx-drawer-content'), 'target is ok');
+    });
+
+    QUnit.test('show warning if deprecated \'target\' option is used', function(assert) {
+        sinon.spy(errors, 'log');
+
+        try {
+            $('#drawer').dxDrawer({
+                openedStateMode: 'overlap',
+                target: '#someID'
+            });
+
+            assert.deepEqual(errors.log.lastCall.args, [
+                'W0001',
+                'dxDrawer',
+                'target',
+                '20.1',
+                'This option is supported partially and the functionality controlled by it was not supposed to the Drawer widget.'
+            ], 'args of the log method');
+        } finally {
+            errors.log.restore();
+        }
     });
 
     QUnit.test('content() function', function(assert) {
