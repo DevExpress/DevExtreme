@@ -400,23 +400,23 @@ describe('Button', () => {
             });
         });
 
-        describe('onKeyPress', () => {
+        describe('onKeyDown', () => {
             it('should call custom handler on key press', () => {
                 const onClick = jest.fn();
-                const onKeyPress = jest.fn();
+                const onKeyDown = jest.fn();
 
-                render({ onClick, onKeyPress });
+                render({ onClick, onKeyDown });
 
                 expect(onClick).toHaveBeenCalledTimes(0);
-                expect(onKeyPress).toHaveBeenCalledTimes(0);
+                expect(onKeyDown).toHaveBeenCalledTimes(0);
 
                 emitKeyboard(KEY.space);
                 expect(onClick).toHaveBeenCalledTimes(1);
-                expect(onKeyPress).toHaveBeenCalledTimes(1);
+                expect(onKeyDown).toHaveBeenCalledTimes(1);
 
                 emitKeyboard(KEY.a);
                 expect(onClick).toHaveBeenCalledTimes(1);
-                expect(onKeyPress).toHaveBeenCalledTimes(2);
+                expect(onKeyDown).toHaveBeenCalledTimes(2);
             });
 
             it('should call custom handler on press specific key', () => {
@@ -425,7 +425,7 @@ describe('Button', () => {
 
                 render({
                     onClick,
-                    onKeyPress: (event, { keyName, which }) => {
+                    onKeyDown: (event, { keyName, which }) => {
                         if(keyName === 'a' || which === 'a') {
                             customHandler();
                         }
@@ -450,7 +450,7 @@ describe('Button', () => {
 
                 render({
                     onClick,
-                    onKeyPress: (event, { keyName, which }) => {
+                    onKeyDown: (event, { keyName, which }) => {
                         if(keyName === 'space' || which === 'space' || keyName === 'enter' || which === 'enter') {
                             customHandler();
                             event.cancel = true;

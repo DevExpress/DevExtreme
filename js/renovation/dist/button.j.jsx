@@ -16,7 +16,7 @@ export default class Button extends Component {
     }
 
     getProps(props) {
-        const { onKeyPress: defaultKeyPress } = props;
+        const { onKeyDown: defaultKeyDown } = props;
 
         props.render = this._createTemplateComponent(props, props.template, true);
 
@@ -26,7 +26,7 @@ export default class Button extends Component {
 
         props.validationGroup = ValidationEngine.getGroupConfig(this._findGroup());
 
-        props.onKeyPress = (event, options) => {
+        props.onKeyDown = (event, options) => {
             const { originalEvent, keyName, which } = options;
             const keys = this._supportedKeys();
             const func = keys[keyName] || keys[which];
@@ -44,8 +44,8 @@ export default class Button extends Component {
                 }
             }
 
-            // NOTE: make possible pass onKeyPress property
-            return defaultKeyPress?.(event, options);
+            // NOTE: make possible pass onKeyDown property
+            return defaultKeyDown?.(event, options);
         };
 
         return props;
