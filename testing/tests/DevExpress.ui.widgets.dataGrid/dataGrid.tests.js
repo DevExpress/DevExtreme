@@ -18141,6 +18141,90 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual(columns[1].width, 200, 'width of the second column');
         assert.strictEqual(columns[2].width, 200, 'width of the third column');
     });
+
+    QUnit.test('Group Row - expandRow should resolve its promise only after re-rendering (T880769)', function(assert) {
+        // arrange
+        const getRowsInfo = function(element) {
+            const $rows = $(element).find('.dx-datagrid-rowsview .dx-row[role=\'row\']');
+            return {
+                count: $rows.length,
+                groupRow: $($rows.eq(0)).hasClass('dx-group-row'),
+                dataRow: $($rows.eq(1)).hasClass('dx-data-row')
+            };
+        };
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { column1: 'value1', column2: 'value2' }
+            ],
+            grouping: {
+                autoExpandAll: false,
+            },
+            columns: [
+                {
+                    dataField: 'column1',
+                    groupIndex: 0
+                },
+                'column2'
+            ],
+            onRowExpanded: function() {
+                const info = getRowsInfo(dataGrid.element());
+                assert.step(`rowExpanded count: ${info.count}, groupRow: ${info.groupRow}, dataRow: ${info.dataRow}`);
+            }
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.expandRow(['value1']).done(() => {
+            const info = getRowsInfo(dataGrid.element());
+
+            assert.step(`count: ${info.count}, groupRow: ${info.groupRow}, dataRow: ${info.dataRow}`);
+        });
+        this.clock.tick();
+
+        assert.verifySteps([
+            'rowExpanded count: 2, groupRow: true, dataRow: true',
+            'count: 2, groupRow: true, dataRow: true'
+        ]);
+    });
+
+    QUnit.test('Master Row - expandRow should resolve its promise only after re-rendering (T880769)', function(assert) {
+        // arrange
+        const getRowsInfo = function(element) {
+            const $rows = $(element).find('.dx-datagrid-rowsview .dx-row[role=\'row\']');
+            return {
+                count: $rows.length,
+                masterRow: $($rows.eq(0)).hasClass('dx-data-row'),
+                detailRow: $($rows.eq(1)).hasClass('dx-master-detail-row')
+            };
+        };
+        const dataGrid = createDataGrid({
+            keyExpr: 'id',
+            dataSource: [
+                { id: 1 }
+            ],
+            masterDetail: {
+                enabled: true
+            },
+            onRowExpanded: function() {
+                const info = getRowsInfo(dataGrid.element());
+                assert.step(`rowExpanded count: ${info.count}, masterRow: ${info.masterRow}, detailRow: ${info.detailRow}`);
+            }
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.expandRow(1).done(() => {
+            const info = getRowsInfo(dataGrid.element());
+
+            assert.step(`count: ${info.count}, masterRow: ${info.masterRow}, detailRow: ${info.detailRow}`);
+        });
+        this.clock.tick();
+
+        assert.verifySteps([
+            'rowExpanded count: 2, masterRow: true, detailRow: true',
+            'count: 2, masterRow: true, detailRow: true'
+        ]);
+    });
 });
 
 QUnit.module('templates', baseModuleConfig, () => {
