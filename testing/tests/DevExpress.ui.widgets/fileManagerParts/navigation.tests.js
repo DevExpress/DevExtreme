@@ -659,4 +659,62 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.notOk(this.wrapper.isThumbnailsItemSelected(itemName), 'item not selected');
         assert.ok(this.wrapper.isThumbnailsItemFocused(itemName), 'item focused');
     });
+
+    test('Details view - must keep scroll position', function(assert) {
+        this.fileManager.option({
+            itemView: {
+                mode: 'details'
+            }
+        });
+        this.clock.tick(400);
+        const hugeFileSystem = [];
+        for(let i = 0; i < 50; i++) {
+            hugeFileSystem.push({
+                name: `Folder ${i}`,
+                isDirectory: true
+            });
+        }
+        this.fileManager.option({
+            fileSystemProvider: hugeFileSystem
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxpointerdown');
+        this.clock.tick(400);
+        this.wrapper.getRowNameCellInDetailsView(1).trigger($.Event('keydown', { key: 'PageDown' }));
+        this.clock.tick(400);
+
+        const scrollPosition = this.wrapper.getDetailsViewScrollableContainer().scrollTop();
+
+        this.fileManager.refresh();
+        this.clock.tick(800);
+
+        assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), scrollPosition, 'scroll position is the same');
+    });
+
+    test('Thumbnails view - must keep scroll position', function(assert) {
+        const hugeFileSystem = [];
+        for(let i = 0; i < 50; i++) {
+            hugeFileSystem.push({
+                name: `Folder ${i}`,
+                isDirectory: true
+            });
+        }
+        this.fileManager.option({
+            fileSystemProvider: hugeFileSystem
+        });
+        this.clock.tick(400);
+
+        this.wrapper.findThumbnailsItem('Folder 0').trigger('dxpointerdown');
+        this.clock.tick(400);
+        this.wrapper.getThumbnailsViewPort().trigger($.Event('keydown', { key: 'PageDown' }));
+        this.clock.tick(400);
+
+        const scrollPosition = this.wrapper.getThumbnailsViewScrollableContainer().scrollTop();
+
+        this.fileManager.refresh();
+        this.clock.tick(800);
+
+        assert.strictEqual(this.wrapper.getThumbnailsViewScrollableContainer().scrollTop(), scrollPosition, 'scroll position is the same');
+    });
 });
