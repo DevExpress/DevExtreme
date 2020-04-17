@@ -85,7 +85,15 @@ QUnit.testStart(function() {
                 <div id="item59" class="draggable" style="height: 50px; background: yellow; width: 600px;">item9</div>
             </div>
         </div>
-    </div>
+        <div id="parentSortable" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: absolute; top: 0; left: 0; background: grey;">
+            <div id="item1" class="draggable" style="background: yellow;">item1</div>
+            <div id="item2" class="draggable" style="background: red;">item2</div>
+            
+            <div id="nestedSortable" class="subgroup" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
+                <div id="item3" class="draggable" style="background: blue;">item3</div>
+                <div id="item4" class="draggable" style="background: green;">item4</div>
+            </div>
+        </div>
         `;
 
     $('#qunit-fixture').html(markup);
@@ -2918,5 +2926,81 @@ QUnit.module('Dragging between sortables with scroll', {
                 y: 650
             });
         });
+    });
+});
+
+QUnit.module('Drag and drop with nested sortable', crossComponentModuleConfig, () => {
+    QUnit.test('The onReorder event should be raised for a nested sortable', function(assert) {
+        // arrange
+        const onReorder1 = sinon.spy();
+        const onReorder2 = sinon.spy();
+
+        this.createSortable({
+            dropFeedbackMode: 'push',
+            filter: '.draggable',
+            group: 'shared',
+            moveItemOnDrop: true,
+            onReorder: onReorder1
+        }, $('#parentSortable'));
+
+        const sortable2 = this.createSortable({
+            dropFeedbackMode: 'push',
+            filter: '.draggable',
+            group: 'shared',
+            moveItemOnDrop: true,
+            onReorder: onReorder2
+        }, $('#nestedSortable'));
+
+        // act
+        const $itemElement = sortable2.$element().children().eq(0);
+        pointerMock($itemElement).start({ x: 0, y: $itemElement.offset().top }).down().move(0, 25).move(0, 5).up();
+
+        // assert
+        assert.strictEqual(onReorder1.callCount, 0, 'parent sortable - onReorder event is not called');
+        assert.strictEqual(onReorder2.callCount, 1, 'nested sortable - onReorder event is called');
+        assert.deepEqual(onReorder2.getCall(0).args[0].fromComponent, sortable2, 'onReorder args - fromComponent');
+        assert.deepEqual(onReorder2.getCall(0).args[0].toComponent, sortable2, 'onReorder args - toComponent');
+    });
+
+    QUnit.test('Dragging item into a nested sortable', function(assert) {
+        // arrange
+        const onReorder1 = sinon.spy();
+        const onReorder2 = sinon.spy();
+        const onAdd = sinon.spy();
+        const onRemove = sinon.spy();
+
+        const sortable1 = this.createSortable({
+            dropFeedbackMode: 'push',
+            filter: '.draggable',
+            group: 'shared',
+            moveItemOnDrop: true,
+            onReorder: onReorder1,
+            onRemove: onRemove
+        }, $('#parentSortable'));
+
+        const sortable2 = this.createSortable({
+            dropFeedbackMode: 'push',
+            filter: '.draggable',
+            group: 'shared',
+            moveItemOnDrop: true,
+            onReorder: onReorder2,
+            onAdd: onAdd
+        }, $('#nestedSortable'));
+
+        // act
+        const $itemElement = sortable1.$element().children().eq(0);
+        const offsetTop = sortable2.$element().offset().top;
+
+        pointerMock($itemElement).start({ x: 0, y: $itemElement.offset().top }).down().move(0, offsetTop + 5).move(0, 5).up();
+
+        // assert
+        assert.strictEqual(onReorder1.callCount, 0, 'parent sortable - onReorder event is not called');
+        assert.strictEqual(onReorder2.callCount, 0, 'nested sortable - onReorder event is not called');
+
+        assert.strictEqual(onRemove.callCount, 1, 'parent sortable - onRemove event is called');
+        assert.strictEqual(onAdd.callCount, 1, 'nested sortable - onAdd event is called');
+        assert.deepEqual(onAdd.getCall(0).args[0].fromComponent, sortable1, 'onAdd args - fromComponent');
+        assert.deepEqual(onAdd.getCall(0).args[0].toComponent, sortable2, 'onAdd args - toComponent');
+        assert.strictEqual(onAdd.getCall(0).args[0].toIndex, 1, 'onAdd args - toIndex');
     });
 });
