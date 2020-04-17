@@ -52,6 +52,12 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
      * @public
      */
     renderAs?: 'bottomToolbar' | 'topToolbar';
+
+    /**
+     * @docid dxToolbarOptions.height
+     * @deprecated
+     */
+    height?: number | string | (() => number | string);
 }
 /**
  * @docid dxToolbar

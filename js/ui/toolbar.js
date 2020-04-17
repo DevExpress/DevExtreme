@@ -323,7 +323,14 @@ const Toolbar = ToolbarBase.inherit({
 
     _changeMenuOption: function(name, value) {
         this._menuStrategy.widgetOption(name, value);
-    }
+    },
+
+    _setDeprecatedOptions() {
+        this.callBase();
+        extend(this._deprecatedOptions, {
+            'height': { since: '20.1', message: 'This option is not supported.' }
+        });
+    },
 
     /**
      * @name dxToolbarMethods.registerKeyHandler
