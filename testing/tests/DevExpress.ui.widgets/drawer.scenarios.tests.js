@@ -1,6 +1,8 @@
 import $ from 'jquery';
+import fx from 'animation/fx';
 import { extend } from 'core/utils/extend';
 import { drawerTesters } from '../../helpers/drawerHelpers.js';
+import resizeCallbacks from 'core/utils/resize_callbacks';
 import { clearStack } from 'ui/overlay/z_index';
 
 import 'common.css!';
@@ -8,6 +10,8 @@ import 'common.css!';
 import dxDrawer from 'ui/drawer';
 import dxLoadPanel from 'ui/load_panel';
 import dxOverlay from 'ui/overlay.js';
+
+const DRAWER_PANEL_CONTENT_CLASS = 'dx-drawer-panel-content';
 
 QUnit.testStart(() => {
     $('#qunit-fixture').html(drawerTesters.markup);
@@ -193,6 +197,49 @@ configs.forEach(config => {
 
             this.clock.tick(100);
             drawer.repaint();
+            this.clock.tick(100);
+
+            drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
+        });
+
+        testOrSkip('opened: false -> resize -> opened: true, update position config after resize', () => configIs('push', 'top'), function(assert) {
+            const originalStopAnimationFunc = fx.stop;
+            let animationStopCallCount = 0;
+
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
+            const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
+                opened: false,
+                template: drawerTesters[config.position].template
+            }));
+
+            fx.stop = function($element) {
+                if($element.hasClass(DRAWER_PANEL_CONTENT_CLASS)) {
+                    animationStopCallCount++;
+                }
+            };
+
+            try {
+                fx.off = false;
+
+                resizeCallbacks.fire();
+                assert.strictEqual(animationStopCallCount, 1, 'animation stop');
+
+                const originalRenderPositionFunc = drawer._renderPosition;
+                const updatePositionHandler = sinon.stub(drawer, '_renderPosition');
+                try {
+                    resizeCallbacks.fire();
+                    assert.strictEqual(updatePositionHandler.callCount, 1, 'position config updated');
+                } finally {
+                    drawer._renderPosition = originalRenderPositionFunc;
+                }
+            } finally {
+                fx.off = true;
+                fx.stop = originalStopAnimationFunc;
+            }
+
+            resizeCallbacks.fire();
+            this.clock.tick(100);
+            drawer.option('opened', true);
             this.clock.tick(100);
 
             drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
