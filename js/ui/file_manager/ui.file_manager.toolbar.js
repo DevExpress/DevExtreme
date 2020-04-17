@@ -265,12 +265,12 @@ class FileManagerToolbar extends Widget {
             if(!result.widget) {
                 result.widget = 'dxButton';
             }
-            // if(!result.compactMode) {
-            //     result.compactMode = {
-            //         showText: isDefined(result.icon) ? 'inMenu' : 'always',
-            //         locateInMenu: ensureDefined(result.locateInMenu, 'never')
-            //     };
-            // }
+            if(!result.compactMode) {
+                result.compactMode = {
+                    showText: isDefined(result.options.icon) ? 'inMenu' : 'always',
+                    locateInMenu: ensureDefined(result.locateInMenu, 'never')
+                };
+            }
         }
 
         if(commandName && !result.name) {

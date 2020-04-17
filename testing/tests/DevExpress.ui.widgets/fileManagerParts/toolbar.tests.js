@@ -893,39 +893,53 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.strictEqual($fileToolbarElements.eq(1).text(), 'item 2', 'second file element correct');
         assert.strictEqual($fileToolbarElements.eq(2).text(), 'Rename', 'third file element correct');
     });
-    
-       test('custom toolbar items have compact mode', function(assert) {
+
+    test('custom toolbar items have compact mode', function(assert) {
         createFileManager(false);
         this.clock.tick(400);
 
         const fileManager = this.wrapper.getInstance();
         fileManager.option('toolbar.items', [
-            'create',
             {
                 widget: 'dxButton',
                 options: {
-                    text: 'item 1',
+                    text: 'item with long name 0',
                     icon: 'upload'
-                }
+                },
+                locateInMenu: 'never'
+            },
+            {
+                widget: 'dxButton',
+                options: {
+                    text: 'item with long name 1',
+                    icon: 'upload'
+                },
+                locateInMenu: 'never'
+            },
+            {
+                widget: 'dxButton',
+                options: {
+                    text: 'item with long name 2'
+                },
+                locateInMenu: 'never'
             }
         ]);
         this.clock.tick(400);
 
+        const originalWidth = renderer.fn.width;
+        renderer.fn.width = () => 400;
+        $('#fileManager').css('width', '100%');
+        fileManager.repaint();
+        this.clock.tick(800);
+
         const $generalToolbarElements = this.wrapper.getGeneralToolbarElements();
+
         assert.strictEqual($generalToolbarElements.length, 3, 'there are three elements in general toolbar');
-        assert.strictEqual($generalToolbarElements.eq(0).text(), 'New directory', 'fisrt general element correct');
-        assert.strictEqual($generalToolbarElements.eq(1).text(), 'item 1', 'second general element correct');
-        assert.strictEqual($generalToolbarElements.eq(2).text(), 'Upload files', 'third general element correct');
+        assert.strictEqual($generalToolbarElements.eq(0).find(`.${Consts.BUTTON_TEXT_CLASS}:visible`).text(), '', 'fisrt general element correct');
+        assert.strictEqual($generalToolbarElements.eq(1).find(`.${Consts.BUTTON_TEXT_CLASS}:visible`).text(), '', 'second general element correct');
+        assert.strictEqual($generalToolbarElements.eq(2).find(`.${Consts.BUTTON_TEXT_CLASS}:visible`).text(), 'item with long name 2', 'third general element correct');
 
-        const $item = this.wrapper.findDetailsItem('File 1.txt');
-        $item.trigger('dxclick');
-        this.clock.tick(400);
-
-        const $fileToolbarElements = this.wrapper.getFileSelectionToolbarElements();
-        assert.strictEqual($fileToolbarElements.length, 3, 'there are three elements in file toolbar');
-        assert.strictEqual($fileToolbarElements.eq(0).text(), 'Move to', 'fisrt file element correct');
-        assert.strictEqual($fileToolbarElements.eq(1).text(), 'item 2', 'second file element correct');
-        assert.strictEqual($fileToolbarElements.eq(2).text(), 'Rename', 'third file element correct');
+        renderer.fn.width = originalWidth;
     });
 
 });
