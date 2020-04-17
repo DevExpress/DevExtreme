@@ -2,7 +2,7 @@ import $ from 'jquery';
 const { test } = QUnit;
 import 'ui/file_manager';
 import fx from 'animation/fx';
-import { FileManagerWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
+import { FileManagerWrapper, createTestFileSystem, isDesktopDevice } from '../../../helpers/fileManagerHelpers.js';
 import { triggerCellClick } from '../../../helpers/fileManager/events.js';
 
 const moduleConfig = {
@@ -218,6 +218,30 @@ QUnit.module('Selection', moduleConfig, () => {
 
         assert.strictEqual(this.wrapper.getThumbnailsSelectedItems().length, 0, 'no selected items in markup');
         assert.strictEqual(selectionSpy.callCount, 1, 'no event fired');
+    });
+
+    test('Details view - select all raises selection changed event', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true);
+            return;
+        }
+
+        const selectionSpy = sinon.spy();
+
+        createFileManager(this, {
+            selectionMode: 'multiple',
+            currentPath: 'Folder 1',
+            onSelectionChanged: selectionSpy
+        });
+
+        this.wrapper.getSelectAllCheckBox().trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(selectionSpy.callCount, 1, 'event fired');
+        assert.strictEqual(selectionSpy.args[0][0].selectedItems.length, 4, 'all items in selection');
+        assert.strictEqual(selectionSpy.args[0][0].selectedItemKeys.length, 4, 'all selected keys provided');
+        assert.strictEqual(selectionSpy.args[0][0].currentSelectedItemKeys.length, 4, 'all items became selected');
+        assert.deepEqual(selectionSpy.args[0][0].currentDeselectedItemKeys, [], 'one item became deselected');
     });
 
 });
