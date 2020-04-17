@@ -3759,6 +3759,33 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         assert.strictEqual(this.dataController.items().length, 15, 'item count');
         assert.strictEqual(this.dataController.pageCount(), 5, 'page count');
     });
+
+    // T750279
+    QUnit.test('setViewportItemIndex should be called for rowsScrollController and dataSource with same args after loadIfNeed call', function(assert) {
+        // act
+        this.dataController.setViewportPosition(50);
+
+        // assert
+        assert.strictEqual(this.dataController.getContentOffset('begin'), 50);
+
+        // act
+        const rowsScrollControllerSpy = sinon.spy(this.dataController._rowsScrollController, 'setViewportItemIndex');
+        const dataSourceSpy = sinon.spy(this.dataController._dataSource, 'setViewportItemIndex');
+
+        this.dataController.loadIfNeed();
+
+        // assert
+        const rowsScrollControllerCall = rowsScrollControllerSpy.getCall(0);
+        const dataSourceCall = dataSourceSpy.getCall(0);
+
+        assert.ok(rowsScrollControllerCall, 'rowsScrollController\'s setViewportItemIndex is called');
+        assert.ok(dataSourceCall, 'dataSource\'s setViewportItemIndex is called');
+
+        assert.equal(rowsScrollControllerCall.args[0], dataSourceCall.args[0], 'setViewportItemIndex call args are same');
+    });
+
+// =================================
+// scrollingDataSource tests
 });
 
 var TEN_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
