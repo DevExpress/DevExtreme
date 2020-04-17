@@ -425,8 +425,8 @@
             }
         }
 
-        if(callback.indexOf('function(){clearTimeout(u),cancelAnimationFrame(t),setTimeout(n)}') > -1) return true; // NOTE: Preact
-        if(callback.indexOf('.__H.u.forEach(') > -1) return true; // NOTE: Preact hooks
+        if(callback.match(/function\(\)\{clearTimeout\(\w+\),cancelAnimationFrame\(\w+\),setTimeout\(\w+\)\}/)) return true; // NOTE: Preact hooks
+        if(callback.match(/\.__H\.\w+\.forEach\(/)) return true; // NOTE: Preact hooks
     });
 
     const logTestFailure = function(timerInfo) {

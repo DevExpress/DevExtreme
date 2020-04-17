@@ -121,7 +121,7 @@ export class ButtonInput extends WidgetInput {
     @Event() onSubmit?: (e: any) => any = noop;
     @OneWay() pressed?: boolean;
     @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
-    @Template() template?: any = '';
+    @Template({ canBeAnonymous: true }) template?: any = '';
     @OneWay() text?: string = '';
     @OneWay() type?: string;
     @OneWay() useInkRipple?: boolean = false;
