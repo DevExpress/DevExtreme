@@ -117,7 +117,7 @@ export class WidgetInput {
     @Event() onDimensionChanged?: () => any;
     @Event() onInactive?: (e: any) => any;
     @Event() onKeyboardHandled?: (args: any) => any | undefined;
-    @Event() onKeyPress?: (e: any, options: any) => any;
+    @Event() onKeyDown?: (e: any, options: any) => any;
     @Event() onVisibilityChange?: (args: boolean) => undefined;
     @OneWay() rtlEnabled?: boolean = config().rtlEnabled;
     @OneWay() tabIndex?: number = 0;
@@ -258,11 +258,11 @@ export default class Widget extends JSXComponent<WidgetInput> {
 
     @Effect()
     keyboardEffect() {
-        const { focusStateEnabled, onKeyPress } = this.props;
+        const { focusStateEnabled, onKeyDown } = this.props;
 
-        if (focusStateEnabled || onKeyPress) {
+        if (focusStateEnabled || onKeyDown) {
             const id = keyboard.on(this.widgetRef, this.widgetRef,
-                options => onKeyPress!(options.originalEvent, options));
+                options => onKeyDown!(options.originalEvent, options));
 
             return () => keyboard.off(id);
         }
