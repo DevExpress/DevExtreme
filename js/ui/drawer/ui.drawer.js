@@ -30,27 +30,16 @@ const Drawer = Widget.inherit({
 
     _getDefaultOptions() {
         return extend(this.callBase(), {
-
             position: 'left',
-
             opened: false,
-
             minSize: null,
-
             maxSize: null,
-
             shading: false,
-
             template: PANEL_TEMPLATE_NAME,
-
             openedStateMode: 'shrink',
-
             revealMode: 'slide',
-
             animationEnabled: true,
-
             animationDuration: 400,
-
             closeOnOutsideClick: false,
 
             /**
@@ -84,6 +73,14 @@ const Drawer = Widget.inherit({
             * @name dxDrawerOptions.tabIndex
             * @hidden
             */
+        });
+    },
+
+    _setDeprecatedOptions() {
+        this.callBase();
+
+        extend(this._deprecatedOptions, {
+            'target': { since: '20.1', message: 'This option is supported partially and the functionality controlled by it was not supposed to the Drawer widget.' }
         });
     },
 
