@@ -2,6 +2,7 @@
     "extends": "../../tsconfig.json",
     "compilerOptions": {
         "jsx": "react",
-        "jsxFactory": "h"
-    }
+        "jsxFactory": "h",
+        "target": "ES2016"
+    },
 }

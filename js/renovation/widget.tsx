@@ -157,7 +157,7 @@ export default class Widget extends JSXComponent<WidgetInput> {
             return () => dxClick.off(this.widgetRef, { namespace });
         }
 
-        return null;
+        return void 0;
     }
 
     @Effect()
@@ -189,7 +189,7 @@ export default class Widget extends JSXComponent<WidgetInput> {
             return () => active.off(this.widgetRef, { selector, namespace });
         }
 
-        return null;
+        return void 0;
     }
 
     @Effect()
@@ -206,7 +206,7 @@ export default class Widget extends JSXComponent<WidgetInput> {
             return () => dxClick.off(this.widgetRef, { namespace });
         }
 
-        return null;
+        return void 0;
     }
 
     @Method()
@@ -233,7 +233,7 @@ export default class Widget extends JSXComponent<WidgetInput> {
             return () => focus.off(this.widgetRef, { namespace });
         }
 
-        return null;
+        return void 0;
     }
 
     @Effect()
@@ -253,7 +253,7 @@ export default class Widget extends JSXComponent<WidgetInput> {
             return () => hover.off(this.widgetRef, { selector, namespace });
         }
 
-        return null;
+        return void 0;
     }
 
     @Effect()
@@ -267,7 +267,7 @@ export default class Widget extends JSXComponent<WidgetInput> {
             return () => keyboard.off(id);
         }
 
-        return null;
+        return void 0;
     }
 
     @Effect()
@@ -281,7 +281,7 @@ export default class Widget extends JSXComponent<WidgetInput> {
             return () => resize.off(this.widgetRef, { namespace });
         }
 
-        return null;
+        return void 0;
     }
 
     @Effect()
@@ -299,7 +299,7 @@ export default class Widget extends JSXComponent<WidgetInput> {
             return () => visibility.off(this.widgetRef, { namespace });
         }
 
-        return null;
+        return void 0;
     }
 
     get attributes() {

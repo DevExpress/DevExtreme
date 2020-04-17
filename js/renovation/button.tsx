@@ -211,7 +211,7 @@ export default class Button extends JSXComponent<ButtonInput> {
             return () => click.off(this.submitInputRef, { namespace });
         }
 
-        return null;
+        return void 0;
     }
 
     get aria() {
