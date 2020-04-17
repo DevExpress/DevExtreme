@@ -7,6 +7,7 @@ import positionUtils from '../../animation/position';
 import { each } from '../../core/utils/iterator';
 import Class from '../../core/class';
 import { Deferred, when } from '../../core/utils/deferred';
+import Callbacks from '../../core/utils/callbacks';
 
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
@@ -311,6 +312,7 @@ exports.VirtualScrollController = Class.inherit((function() {
             that._cache = [];
             that._isVirtual = isVirtual;
             that._loadingPageIndexes = {};
+            that.positionChanged = Callbacks();
         },
 
         getItemSizes: function() {
@@ -400,7 +402,9 @@ exports.VirtualScrollController = Class.inherit((function() {
             this._position = position;
 
             const itemIndex = this.getItemIndexByPosition();
-            return this.setViewportItemIndex(itemIndex);
+            const result = this.setViewportItemIndex(itemIndex);
+            this.positionChanged.fire();
+            return result;
         },
 
         setContentSize: function(size) {
