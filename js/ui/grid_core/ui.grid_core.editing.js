@@ -2380,7 +2380,7 @@ const EditingController = modules.ViewController.inherit((function() {
         isCellModified: function(parameters) {
             const columnIndex = parameters.columnIndex;
             const modifiedValues = parameters.row && (parameters.row.isNewRow ? parameters.row.values : parameters.row.modifiedValues);
-            return modifiedValues && modifiedValues[columnIndex] !== undefined;
+            return !!modifiedValues && modifiedValues[columnIndex] !== undefined;
         }
     };
 })());
