@@ -672,12 +672,9 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         });
         this.clock.tick(400);
 
-        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxpointerdown');
+        const scrollPosition = 150;
+        this.wrapper.getDetailsViewScrollableContainer().scrollTop(scrollPosition);
         this.clock.tick(400);
-        this.wrapper.getRowNameCellInDetailsView(1).trigger($.Event('keydown', { key: 'PageDown' }));
-        this.clock.tick(400);
-
-        const scrollPosition = this.wrapper.getDetailsViewScrollableContainer().scrollTop();
 
         this.fileManager.refresh();
         this.clock.tick(800);
@@ -691,12 +688,9 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         });
         this.clock.tick(400);
 
-        this.wrapper.findThumbnailsItem('Folder 0').trigger('dxpointerdown');
+        const scrollPosition = 150;
+        this.wrapper.getThumbnailsViewScrollableContainer().scrollTop(scrollPosition);
         this.clock.tick(400);
-        this.wrapper.getThumbnailsViewPort().trigger($.Event('keydown', { key: 'PageDown' }));
-        this.clock.tick(400);
-
-        const scrollPosition = this.wrapper.getThumbnailsViewScrollableContainer().scrollTop();
 
         this.fileManager.refresh();
         this.clock.tick(800);
