@@ -216,7 +216,7 @@ describe('Button', () => {
 
                 expect(classNames.includes('dx-button')).toBe(true);
                 expect(classNames.includes('dx-button-has-text')).toBe(false);
-                expect(classNames.includes('dx-button-text')).toBe(false);
+                expect(render().find('.dx-button-text').exists()).toBe(false);
             });
         });
 
