@@ -24,7 +24,7 @@ class Button extends Component {
 
     getProps(isFirstRender) {
         const props = super.getProps(isFirstRender);
-        const { onKeyPress: defaultKeyPress } = props;
+        const { onKeyDown: defaultKeyPress } = props;
 
         if(props.template || props.haveAnonymousTemplate) {
             // NOTE: 'template' - default name for anonymous template
@@ -63,7 +63,7 @@ class Button extends Component {
 
         props.validationGroup = ValidationEngine.getGroupConfig(this._findGroup());
 
-        props.onKeyPress = (event, options) => {
+        props.onKeyDown = (event, options) => {
             const { originalEvent, keyName, which } = options;
             const keys = this._supportedKeys();
             const func = keys[keyName] || keys[which];
@@ -81,7 +81,7 @@ class Button extends Component {
                 }
             }
 
-            // NOTE: make possible pass onKeyPress property
+            // NOTE: make possible pass onKeyDown property
             return defaultKeyPress?.(event, options);
         };
 
