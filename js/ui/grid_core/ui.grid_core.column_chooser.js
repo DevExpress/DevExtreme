@@ -119,12 +119,17 @@ const ColumnChooserView = columnsView.ColumnsView.inherit({
         if(isSelectMode && columnChooserList && change && change.changeType === 'selection') {
             items = processItems(this, chooserColumns);
             for(let i = 0; i < items.length; i++) {
-                if(items[i].id === change.columnIndex) {
-                    columnChooserList.option('items[' + i + '].selected', items[i].selected);
+                const selected = items[i].selected;
+                const id = items[i].id;
+
+                if(id === change.columnIndex) {
+                    if(selected) {
+                        columnChooserList.selectItem(id, selected);
+                    } else {
+                        columnChooserList.unselectItem(id, selected);
+                    }
                 }
             }
-
-            columnChooserList.repaint();
         } else if(!isSelectMode || !columnChooserList || change === 'full') {
             this._popupContainer._wrapper()
                 .toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_DRAG_CLASS), !isSelectMode)
