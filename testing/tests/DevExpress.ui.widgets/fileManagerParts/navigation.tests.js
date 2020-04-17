@@ -662,13 +662,10 @@ QUnit.module('Navigation operations', moduleConfig, () => {
 
     test('Details view - must keep scroll position', function(assert) {
         this.fileManager.option({
+            fileSystemProvider: createHugeFileSystem(),
             itemView: {
                 mode: 'details'
             }
-        });
-        this.clock.tick(400);
-        this.fileManager.option({
-            fileSystemProvider: createHugeFileSystem()
         });
         this.clock.tick(400);
 
@@ -683,9 +680,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
     });
 
     test('Thumbnails view - must keep scroll position', function(assert) {
-        this.fileManager.option({
-            fileSystemProvider: createHugeFileSystem()
-        });
+        this.fileManager.option('fileSystemProvider', createHugeFileSystem());
         this.clock.tick(400);
 
         const scrollPosition = 150;
@@ -700,9 +695,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
 
     test('All views - must keep scroll position for sync focused item', function(assert) {
         // focus item in thumbnails and remember its scroll position
-        this.fileManager.option({
-            fileSystemProvider: createHugeFileSystem()
-        });
+        this.fileManager.option('fileSystemProvider', createHugeFileSystem());
         this.clock.tick(400);
 
         this.wrapper.findThumbnailsItem('Folder 0').trigger('dxpointerdown');
