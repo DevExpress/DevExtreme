@@ -2039,7 +2039,7 @@ const Scheduler = Widget.inherit({
 
     _getUpdatedData: function(options) {
         const target = options.data || options;
-        const cellData = this.getTargetCellData();
+        const cellData = options.cellData || this.getTargetCellData();
         const targetAllDay = this.fire('getField', 'allDay', target);
         const targetStartDate = new Date(this.fire('getField', 'startDate', target));
         const targetEndDate = new Date(this.fire('getField', 'endDate', target));

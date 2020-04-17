@@ -2233,6 +2233,16 @@ const SchedulerWorkSpace = Widget.inherit({
         };
     },
 
+    getDataByCell: function($cell) {
+        const cellData = this.getCellData($cell);
+
+        return {
+            date: cellData.startDate,
+            allDay: cellData.allDay,
+            groups: cellData.groups
+        };
+    },
+
     getDateRange: function() {
         return [
             this.getStartViewDate(),

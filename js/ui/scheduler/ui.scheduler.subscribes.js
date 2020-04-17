@@ -160,17 +160,42 @@ const subscribes = {
 
     updateAppointmentAfterDrag: function(options) {
         const target = options.data;
-        const updatedData = this._getUpdatedData(options);
-        const newCellIndex = this._workSpace.getDroppableCellIndex();
+
+        let updatedData = this._getUpdatedData(options);
+        let newCellIndex;
+        let cellData;
+
         const oldCellIndex = this._workSpace.getCellIndexByCoordinates(options.coordinates);
         const becomeAllDay = this.fire('getField', 'allDay', updatedData);
         const wasAllDay = this.fire('getField', 'allDay', target);
         const dragEvent = options.event;
+        const workSpace = this._workSpace;
+
+        const fixedAppointmentCoordinates = translator.locate(options.$appointment);
+        const scrollablePosition = workSpace.getScrollable().$element().position();
+        const scrollTopOffset = workSpace.getScrollableScrollTop();
+        const newDroppableCellCoordinates = {
+            left: fixedAppointmentCoordinates.left,
+            top: fixedAppointmentCoordinates.top - scrollablePosition.top + scrollTopOffset
+        };
+
+        newCellIndex = workSpace.getCellIndexByCoordinates(newDroppableCellCoordinates);
+        if(newCellIndex > 0) {
+            const $cells = workSpace._getCells(false);
+            const cellIndex = workSpace.getCellIndexByCoordinates(newDroppableCellCoordinates);
+            const $cell = $cells.eq(cellIndex);
+            cellData = workSpace.getDataByCell($cell);
+            options.cellData = cellData;
+
+            updatedData = this._getUpdatedData(options);
+        } else {
+            newCellIndex = this._workSpace.getDroppableCellIndex();
+        }
 
         const appointment = extend({}, target, updatedData);
 
         const movedToAllDay = this._workSpace.supportAllDayRow() && becomeAllDay;
-        const cellData = this._workSpace.getCellDataByCoordinates(options.coordinates, movedToAllDay);
+        cellData = this._workSpace.getCellDataByCoordinates(options.coordinates, movedToAllDay);
         const movedBetweenAllDayAndSimple = this._workSpace.supportAllDayRow() && (wasAllDay && !becomeAllDay || !wasAllDay && becomeAllDay);
 
         if((newCellIndex !== oldCellIndex) || movedBetweenAllDayAndSimple) {
