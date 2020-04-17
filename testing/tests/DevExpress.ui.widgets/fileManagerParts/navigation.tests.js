@@ -732,4 +732,76 @@ QUnit.module('Navigation operations', moduleConfig, () => {
 
         assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), detailsScrollPosition, 'details scroll position is the same');
     });
+
+    test('Thumbnails view - Keyboard navigation', function(assert) {
+        const selectionSpy = sinon.spy();
+        this.fileManager.option({
+            fileSystemProvider: createHugeFileSystem(),
+            onSelectionChanged: selectionSpy,
+            width: 900,
+            height: 800
+        });
+        this.clock.tick(400);
+
+        this.wrapper.findThumbnailsItem('Folder 10').trigger('dxpointerdown');
+        this.clock.tick(400);
+
+        // left/right
+        this.wrapper.getThumbnailsViewPort().trigger($.Event('keydown', { key: 'Left' }));
+        this.clock.tick(400);
+
+        assert.ok(this.wrapper.isThumbnailsItemFocused('Folder 9'), 'the \'Left\' key is working');
+
+        this.wrapper.getThumbnailsViewPort().trigger($.Event('keydown', { key: 'Right' }));
+        this.clock.tick(400);
+
+        assert.ok(this.wrapper.isThumbnailsItemFocused('Folder 10'), 'the \'Right\' key is working');
+
+        // up/down
+        this.wrapper.getThumbnailsViewPort().trigger($.Event('keydown', { key: 'Up' }));
+        this.clock.tick(400);
+
+        assert.ok(this.wrapper.isThumbnailsItemFocused('Folder 5'), 'the \'Up\' key is working');
+
+        this.wrapper.getThumbnailsViewPort().trigger($.Event('keydown', { key: 'Down' }));
+        this.clock.tick(400);
+
+        assert.ok(this.wrapper.isThumbnailsItemFocused('Folder 10'), 'the \'Down\' key is working');
+
+        // pgUp/pgDown
+        this.wrapper.getThumbnailsViewPort().trigger($.Event('keydown', { key: 'PageDown' }));
+        this.clock.tick(400);
+
+        assert.ok(this.wrapper.isThumbnailsItemFocused('Folder 40'), 'the \'PageDown\' key is working');
+
+        this.wrapper.getThumbnailsViewPort().trigger($.Event('keydown', { key: 'PageDown' }));
+        this.clock.tick(400);
+
+        assert.ok(this.wrapper.isThumbnailsItemFocused('Folder 49'), 'the \'PageDown\' key has not cross lower border');
+
+        const scrollEnd = this.wrapper.getThumbnailsViewScrollableContainer().scrollTop();
+
+        this.wrapper.getThumbnailsViewPort().trigger($.Event('keydown', { key: 'PageUp' }));
+        this.clock.tick(400);
+
+        assert.ok(this.wrapper.isThumbnailsItemFocused('Folder 19'), 'the \'PageUp\' key is working');
+
+        this.wrapper.getThumbnailsViewPort().trigger($.Event('keydown', { key: 'PageUp' }));
+        this.clock.tick(400);
+
+        assert.ok(this.wrapper.isThumbnailsItemFocused('Folder 0'), 'the \'PageUp\' key has not cross upper border');
+
+        // home/end
+        this.wrapper.getThumbnailsViewPort().trigger($.Event('keydown', { key: 'End' }));
+        this.clock.tick(400);
+
+        assert.ok(this.wrapper.isThumbnailsItemFocused('Folder 49'), 'the \'End\' key is working');
+        assert.strictEqual(this.wrapper.getThumbnailsViewScrollableContainer().scrollTop(), scrollEnd, 'the \'End\' key scroll is correct');
+
+        this.wrapper.getThumbnailsViewPort().trigger($.Event('keydown', { key: 'Home' }));
+        this.clock.tick(400);
+
+        assert.ok(this.wrapper.isThumbnailsItemFocused('Folder 0'), 'the \'Home\' key is working');
+        assert.ok(this.wrapper.getThumbnailsViewScrollableContainer().scrollTop() < 2, 'the \'Home\' key scroll is correct');
+    });
 });

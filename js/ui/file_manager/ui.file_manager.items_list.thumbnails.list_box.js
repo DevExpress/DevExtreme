@@ -471,7 +471,7 @@ class ListBoxLayoutUtils {
 
         const itemHeight = this._$item.outerHeight(true);
 
-        const viewPortWidth = this._scrollView.scrollWidth();
+        const viewPortWidth = this._$itemContainer.innerWidth();
         const viewPortHeight = this._$viewPort.innerHeight();
         const viewPortScrollTop = this._scrollView.scrollTop();
         const viewPortScrollBottom = viewPortScrollTop + viewPortHeight;
