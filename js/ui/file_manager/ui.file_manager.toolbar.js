@@ -265,9 +265,9 @@ class FileManagerToolbar extends Widget {
             if(!result.widget) {
                 result.widget = 'dxButton';
             }
-            if(result.widget === 'dxButton' && !result.compactMode && isDefined(result.options.icon) && isDefined(result.options.text)) {
+            if(result.widget === 'dxButton' && !result.compactMode && !result.showText && result.options.icon && result.options.text) {
                 result.compactMode = {
-                    showText: ensureDefined(result.showText, 'inMenu')
+                    showText: 'inMenu'
                 };
             }
         }
