@@ -79,7 +79,7 @@ class MetadataGenerator {
             Array.prototype.push.apply(this.metadata, metaItems);
 
             const imports = `@forward "${path}";\n@use "${path}" as *;\n`;
-            const collector = `@debug collector(${this.getMapFromMeta(metaItems, path)});\n`;
+            const collector = `$never-used: collector(${this.getMapFromMeta(metaItems, path)});\n`;
 
             content = imports + content + collector;
         }

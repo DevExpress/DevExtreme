@@ -1,39 +1,64 @@
-/* global __dirname, console */
+/* global console */
 /* eslint no-console: off */
-// TODO it seems this compiler is node-only (it contains many things that can be run on node only)
-const path = require('path');
+
 const sass = require('sass');
 const Fiber = require('fibers');
-const resolveBundle = require('./bundle-resolver');
-const basePath = path.join(__dirname, '..', 'data', 'scss');
 
 class Compiler {
     constructor() {
         this.changedVariables = [];
+        this.importerCache = {};
+        this.meta = require('../data/metadata/dx-theme-builder-metadata')['metadata'];
     }
 
-    compile(config) {
+    compileBundle(bundlePath, items) {
+        console.log(bundlePath);
         this.changedVariables = [];
-        const bundle = resolveBundle(config.themeName, config.colorScheme);
+        this.userItems = items;
 
-        sass.render({
-            file: path.join(basePath, bundle),
-            fiber: Fiber,
-            importer: (url, prev, done) => {
-                // compare url and add constants if need (config.items)
-                // done({ contents: '$accordion-color: red;' });
-                done({ contents: '' });
-            },
-            functions: {
-                'collector($map)': this.collector.bind(this)
-            }
-        }, (error, result) => {
-            if(error) {
-                console.log(error.formatted);
-            } else {
-                console.log(result.stats.duration);
-            }
+        return new Promise((resolve, reject) => {
+            sass.render({
+                file: bundlePath,
+                fiber: Fiber,
+                importer: this.setter.bind(this),
+                functions: {
+                    'collector($map)': this.collector.bind(this)
+                }
+            }, (error, result) => {
+                this.importerCache = {};
+
+                if(error) {
+                    reject(error);
+                } else {
+                    resolve({
+                        result,
+                        changedVariables: this.changedVariables
+                    });
+                }
+            });
         });
+    }
+
+    getMatchingUserItemsAsString(url) {
+        const metaKeysForUrl = this.meta
+            .filter(item => item.Path === url)
+            .map(item => item.Key);
+
+        return this.userItems
+            .filter(item => metaKeysForUrl.indexOf(item.key) >= 0)
+            .map(item => `${item.key}: ${item.value};`)
+            .join('');
+    }
+
+    setter(url, _, done) {
+        let content = this.importerCache[url];
+
+        if(!content) {
+            content = this.getMatchingUserItemsAsString(url);
+            this.importerCache[url] = content;
+        }
+
+        done({ contents: content });
     }
 
     collector(map) {
@@ -49,6 +74,13 @@ class Compiler {
                 variableValue = value.getValue();
             } else if(value instanceof sass.types.Number) {
                 variableValue = `${value.getValue()}${value.getUnit()}`;
+            } else if(value instanceof sass.types.List) {
+                const listValues = [];
+                for(let i = 0; i < value.getLength(); i++) {
+                    listValues.push(value.getValue(i));
+                }
+
+                variableValue = listValues.join(value.getSeparator() ? ',' : ' ');
             }
 
             this.changedVariables.push({

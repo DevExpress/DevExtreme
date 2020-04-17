@@ -212,7 +212,7 @@ $slideout-background: #000;
 * $type color
 */
 $slideout-background: #000;
-@debug collector((
+$never-used: collector((
 "path": "tb/widgets/generic/toolbar/colors",
 "$slideout-background": $slideout-background,
 ));
