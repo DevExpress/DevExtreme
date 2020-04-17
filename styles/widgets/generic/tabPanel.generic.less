@@ -3,15 +3,26 @@
 
 .dx-tabpanel {
     .dx-tabpanel-tabs {
-        .dx-tabs {
-            border-bottom: @GENERIC_TABS_BORDER;
-        }
-
         .dx-tabs-scrollable {
             .dx-tabs-wrapper {
                 border-bottom: none;
             }
+        }
 
+        .dx-tabs {
+            &:before {
+                content: "";
+                display: block;
+                position: absolute;
+                left: -1 * @GENERIC_TABS_BORDER_WIDTH;
+                right: -1 * @GENERIC_TABS_BORDER_WIDTH;
+                bottom: 0;
+                height: 0;
+                border-bottom: @GENERIC_TABS_BORDER;
+                z-index: 0;
+            }
+
+            .dx-tabs-nav-button:before,
             .dx-tab.dx-state-hover:not(.dx-tab-selected):before {
                 content: "";
                 pointer-events: none;
@@ -22,6 +33,29 @@
                 height: 0;
                 border-bottom: @GENERIC_TABS_BORDER;
                 bottom: 0;
+            }
+
+            .dx-tabs-nav-button:before {
+                left: -1 * @GENERIC_TABS_BORDER_WIDTH;
+                right: -1 * @GENERIC_TABS_BORDER_WIDTH;
+            }
+
+            .dx-tab {
+                &.dx-tab-selected:before {
+                    content: "";
+                    pointer-events: none;
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    z-index: 2;
+                    height: 0;
+                    border-bottom: @GENERIC_TABS_BORDER_WIDTH solid @tabs-tab-selected-bg;
+                    bottom: 0;
+                }
+
+                &.dx-tab-selected:after {
+                    bottom: 0;
+                }
             }
         }
     }
@@ -44,43 +78,39 @@
         }
     }
 
-    .dx-tab-selected:before {
-        content: "";
-        pointer-events: none;
-        position: absolute;
-        left: 0;
-        right: 0;
-        z-index: 2;
-        height: 0;
-        border-bottom: 1px solid @tabs-tab-selected-bg;
-        bottom: -1px;
-    }
-
     .dx-tabs-wrapper {
         display: block;
     }
 
     &.dx-state-focused {
-        .dx-tabpanel-tabs .dx-tabs {
-            border-bottom: @GENERIC_TAB_FOCUS_BORDER;
+        .dx-tabpanel-tabs {
+            .dx-tabs {
+                &:before {
+                    border-bottom: @GENERIC_TAB_FOCUS_BORDER;
+                }
+
+                .dx-tabs-nav-button:before,
+                .dx-tab.dx-state-hover:not(.dx-tab-selected):before {
+                    border-bottom: @GENERIC_TAB_FOCUS_BORDER;
+                }
+
+                .dx-tab {
+                    &.dx-tab-selected:after {
+                        border-top: @GENERIC_TAB_FOCUS_BORDER;
+                        border-right: @GENERIC_TAB_FOCUS_BORDER;
+                        border-left: @GENERIC_TAB_FOCUS_BORDER;
+                    }
+
+                    &.dx-state-focused:after,
+                    &.dx-state-hove:after {
+                        border-bottom: none;
+                    }
+                }
+            }
         }
 
         .dx-multiview-wrapper {
             border-color: @tabs-focused-border-color;
-        }
-
-        .dx-tab-selected:after {
-            border-top: @GENERIC_TAB_FOCUS_BORDER;
-            border-right: @GENERIC_TAB_FOCUS_BORDER;
-            border-left: @GENERIC_TAB_FOCUS_BORDER;
-        }
-
-        .dx-tabpanel-tabs {
-            .dx-tabs-scrollable {
-                .dx-tab.dx-state-hover:not(.dx-tab-selected):before {
-                    border-bottom: @GENERIC_TAB_FOCUS_BORDER;
-                }
-            }
         }
     }
 
