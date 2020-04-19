@@ -232,6 +232,23 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
         });
     });
 
+    QUnit.test('Appointment popup shouldn\'t render recurrence editor, if previous was with recurrence', function(assert) {
+        const scheduler = createScheduler();
+
+        scheduler.appointments.dblclick();
+        scheduler.appointmentPopup.dialog.clickEditSeries();
+
+        assert.ok(scheduler.appointmentPopup.form.isRecurrenceEditorVisible(), 'Recurrence editor should visible');
+        assert.equal(scheduler.appointmentPopup.form.getSubject(), 'recurrent-app', 'Subject should equal selected recurrence appointment');
+
+        scheduler.appointmentPopup.clickCancelButton();
+
+        scheduler.appointments.dblclick(5);
+
+        assert.notOk(scheduler.appointmentPopup.form.isRecurrenceEditorVisible(), 'Recurrence editor shouldn\'t visible');
+        assert.equal(scheduler.appointmentPopup.form.getSubject(), 'common-app', 'Subject in form should equal selected common appointment');
+    });
+
     QUnit.test('Appointment popup should work properly', function(assert) {
         const NEW_EXPECTED_SUBJECT = 'NEW SUBJECT';
         const scheduler = createScheduler();
@@ -256,15 +273,6 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
 
         assert.ok(appointmentPopup.form.isRecurrenceEditorVisible(), 'Recurrence editor should be visible after click on recurrence appointment');
         assert.equal(appointmentPopup.form.getSubject(), defaultData[0].text, 'Subject in form should equal selected appointment');
-
-        // TODO: Fix unstable test asserts
-        // scheduler.appointmentPopup.clickDoneButton();
-
-        // scheduler.appointments.click(); // click on common appointment, due to redrawing its index has changed
-        // scheduler.tooltip.clickOnItem();
-
-        // assert.notOk(scheduler.appointmentPopup.form.isRecurrenceEditorVisible(), 'Recurrence editor shouldn\'t visible on click on common appointment');
-        // assert.equal(scheduler.appointmentPopup.form.getSubject(), NEW_EXPECTED_SUBJECT, 'Subject in form should equal selected common appointment');
     });
 
 
