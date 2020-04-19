@@ -71,175 +71,175 @@ QUnit.test('Selecting', function(assert) {
     assert.deepEqual(selectStrategy({ elementType: 'image' }, createData(1, [1])), pointImageStrategy, 'image strategy');
 });
 
-// QUnit.test("Project", function (assert) {
-//    var projection = {
-//        project: function (coordinates) {
-//            return coordinates + "-proj";
-//        }
-//    };
-//
-//    assert.deepEqual(areaStrategyPolygon.project(projection, [
-//        ["p1", "p2"],
-//        ["p3", "p4", "p5"],
-//        ["p6"]
-//    ]), [
-//        ["p1-proj", "p2-proj"],
-//        ["p3-proj", "p4-proj", "p5-proj"],
-//        ["p6-proj"]
-//    ], "area polygon");
-//    assert.deepEqual(areaStrategyMultiPolygon.project(projection, [
-//        [
-//            ["p1", "p2"],
-//            ["p3"]
-//        ],
-//        [
-//            ["p4", "p5", "p6"]
-//        ]
-//    ]), [
-//        ["p1-proj", "p2-proj"],
-//        ["p3-proj"],
-//        ["p4-proj", "p5-proj", "p6-proj"]
-//    ], "area multipolygon");
-//    assert.deepEqual(lineStrategyLineString.project(projection, [
-//        "p1", "p2", "p3"
-//    ]), [
-//        ["p1-proj", "p2-proj", "p3-proj"]
-//    ], "line linestring");
-//    assert.deepEqual(lineStrategyMultiLineString.project(projection, [
-//        ["p1", "p2"],
-//        ["p3", "p4", "p5"],
-//        ["p6"]
-//    ]), [
-//        ["p1-proj", "p2-proj"],
-//        ["p3-proj", "p4-proj", "p5-proj"],
-//        ["p6-proj"]
-//    ], "line multilinestring");
-//    assert.deepEqual(pointDotStrategy.project(projection, ["p"]), "p-proj", "point");
-// });
+QUnit.skip('Project', function(assert) {
+    const projection = {
+        project: function(coordinates) {
+            return coordinates + '-proj';
+        }
+    };
 
-// QUnit.test("Project area label", function (assert) {
-//    var data = areaStrategyPolygon.projectLabel([
-//        [[10, 20], [10, 40], [30, 40], [40, 20]],
-//        [[30, 50], [30, 60], [40, 70], [50, 20]]
-//    ]);
-//
-//    assert.roughEqual(data[0][0], 20.3333, 0.0001, "coordinate 0");
-//    assert.roughEqual(data[0][1], 28.6666, 0.0001, "coordinate 1");
-//    assert.roughEqual(data[1][0], 22.3607, 0.0001, "size 0");
-//    assert.roughEqual(data[1][1], 22.3607, 0.0001, "size 1");
-// });
+    assert.deepEqual(areaStrategyPolygon.project(projection, [
+        ['p1', 'p2'],
+        ['p3', 'p4', 'p5'],
+        ['p6']
+    ]), [
+        ['p1-proj', 'p2-proj'],
+        ['p3-proj', 'p4-proj', 'p5-proj'],
+        ['p6-proj']
+    ], 'area polygon');
+    assert.deepEqual(areaStrategyMultiPolygon.project(projection, [
+        [
+            ['p1', 'p2'],
+            ['p3']
+        ],
+        [
+            ['p4', 'p5', 'p6']
+        ]
+    ]), [
+        ['p1-proj', 'p2-proj'],
+        ['p3-proj'],
+        ['p4-proj', 'p5-proj', 'p6-proj']
+    ], 'area multipolygon');
+    assert.deepEqual(lineStrategyLineString.project(projection, [
+        'p1', 'p2', 'p3'
+    ]), [
+        ['p1-proj', 'p2-proj', 'p3-proj']
+    ], 'line linestring');
+    assert.deepEqual(lineStrategyMultiLineString.project(projection, [
+        ['p1', 'p2'],
+        ['p3', 'p4', 'p5'],
+        ['p6']
+    ]), [
+        ['p1-proj', 'p2-proj'],
+        ['p3-proj', 'p4-proj', 'p5-proj'],
+        ['p6-proj']
+    ], 'line multilinestring');
+    assert.deepEqual(pointDotStrategy.project(projection, ['p']), 'p-proj', 'point');
+});
 
-// QUnit.test("Project line label", function (assert) {
-//    var data = lineStrategyLineString.projectLabel([
-//        [[10, 20], [10, 40], [30, 40], [40, 20], [50, 20]],
-//        [[30, 50], [30, 60], [40, 70]]
-//    ]);
-//
-//    assert.roughEqual(data[0][0], 26.1803, 0.0001, "coordinate 0");
-//    assert.roughEqual(data[0][1], 40, 0.0001, "coordinate 1");
-//    assert.roughEqual(data[1][0], 40, 0.0001, "size 0");
-//    assert.roughEqual(data[1][1], 20, 0.0001, "size 1");
-//    assert.roughEqual(data[2], 72.3607, 0.0001, "length");
-// });
+QUnit.skip('Project area label', function(assert) {
+    const data = areaStrategyPolygon.projectLabel([
+        [[10, 20], [10, 40], [30, 40], [40, 20]],
+        [[30, 50], [30, 60], [40, 70], [50, 20]]
+    ]);
 
-// QUnit.test("Transform area", function (assert) {
-//    var figure = { root: new vizMocks.Element() },
-//        projection = {
-//            transform: function (coordinates) {
-//                return coordinates + "-tr"
-//            }
-//        };
-//
-//    areaStrategyPolygon.transform(figure, projection, [
-//        ["p1", "p2"],
-//        ["p3"]
-//    ]);
-//
-//    assert.deepEqual(figure.root.attr.lastCall.args, [{
-//        points: [
-//            ["p1-tr", "p2-tr"],
-//            ["p3-tr"]
-//        ]
-//    }]);
-// });
+    assert.roughEqual(data[0][0], 20.3333, 0.0001, 'coordinate 0');
+    assert.roughEqual(data[0][1], 28.6666, 0.0001, 'coordinate 1');
+    assert.roughEqual(data[1][0], 22.3607, 0.0001, 'size 0');
+    assert.roughEqual(data[1][1], 22.3607, 0.0001, 'size 1');
+});
 
-// QUnit.test("Transform area label", function (assert) {
-//    var figure = { text: new vizMocks.Element(), size: [10, 20] },
-//        projection = {
-//            transform: function (coordinates) {
-//                return [coordinates[0] + 10, coordinates[1] - 20];
-//            },
-//            getSquareSize: function (size) {
-//                return [size[0] * 2, size[1] * 3];
-//            }
-//        };
-//
-//    areaStrategyPolygon.transformLabel(figure, projection, [[100, 200], [30, 30]]);
-//
-//    assert.deepEqual(figure.text.attr.getCall(0).args, [{ translateX: 110, translateY: 180 }], "position 1");
-//    assert.deepEqual(figure.text.attr.getCall(1).args, [{ visibility: null }], "visibility 1");
-//    assert.deepEqual(figure.spaceSize, [60, 90], "space 1");
-//
-//    areaStrategyPolygon.transformLabel(figure, projection, [[100, 200], [0.05, 0.05]]);
-//
-//    assert.deepEqual(figure.text.attr.getCall(3).args, [{ visibility: "hidden" }], "visibility 2");
-// });
+QUnit.skip('Project line label', function(assert) {
+    const data = lineStrategyLineString.projectLabel([
+        [[10, 20], [10, 40], [30, 40], [40, 20], [50, 20]],
+        [[30, 50], [30, 60], [40, 70]]
+    ]);
 
-// QUnit.test("Transform line", function (assert) {
-//    var figure = { root: new vizMocks.Element() },
-//        projection = {
-//            transform: function (coordinates) {
-//                return coordinates + "-tr"
-//            }
-//        };
-//
-//    lineStrategyLineString.transform(figure, projection, [
-//        ["p1", "p2"],
-//        ["p3"]
-//    ]);
-//
-//    assert.deepEqual(figure.root.attr.lastCall.args, [{
-//        points: [
-//            ["p1-tr", "p2-tr"],
-//            ["p3-tr"]
-//        ]
-//    }]);
-// });
+    assert.roughEqual(data[0][0], 26.1803, 0.0001, 'coordinate 0');
+    assert.roughEqual(data[0][1], 40, 0.0001, 'coordinate 1');
+    assert.roughEqual(data[1][0], 40, 0.0001, 'size 0');
+    assert.roughEqual(data[1][1], 20, 0.0001, 'size 1');
+    assert.roughEqual(data[2], 72.3607, 0.0001, 'length');
+});
 
-// QUnit.test("Transform line label", function (assert) {
-//    var figure = { text: new vizMocks.Element(), size: [10, 20] },
-//        projection = {
-//            transform: function (coordinates) {
-//                return [coordinates[0] + 10, coordinates[1] - 20];
-//            },
-//            getSquareSize: function (size) {
-//                return [size[0] * 2, size[1] * 3];
-//            }
-//        };
-//
-//    lineStrategyLineString.transformLabel(figure, projection, [[100, 200], [10, 20]]);
-//
-//    assert.deepEqual(figure.text.attr.getCall(0).args, [{ translateX: 110, translateY: 180 }], "position 1");
-//    assert.deepEqual(figure.text.attr.getCall(1).args, [{ visibility: null }], "visibility 1");
-//    assert.deepEqual(figure.spaceSize, [20, 60], "space 1");
-//
-//    lineStrategyLineString.transformLabel(figure, projection, [[100, 200], [0.05, 0.05]]);
-//
-//    assert.deepEqual(figure.text.attr.getCall(3).args, [{ visibility: "hidden" }], "visibility 2");
-// });
+QUnit.skip('Transform area', function(assert) {
+    const figure = { root: new vizMocks.Element() };
+    const projection = {
+        transform: function(coordinates) {
+            return coordinates + '-tr';
+        }
+    };
 
-// QUnit.test("Transform point", function (assert) {
-//    var figure = { root: new vizMocks.Element() },
-//        projection = {
-//            transform: function (coordinates) {
-//                return [coordinates[0] + 10, coordinates[1] - 20];
-//            }
-//        };
-//
-//    pointDotStrategy.transform(figure, projection, [100, 200]);
-//
-//    assert.deepEqual(figure.root.attr.lastCall.args, [{ translateX: 110, translateY: 180 }]);
-// });
+    areaStrategyPolygon.transform(figure, projection, [
+        ['p1', 'p2'],
+        ['p3']
+    ]);
+
+    assert.deepEqual(figure.root.attr.lastCall.args, [{
+        points: [
+            ['p1-tr', 'p2-tr'],
+            ['p3-tr']
+        ]
+    }]);
+});
+
+QUnit.skip('Transform area label', function(assert) {
+    const figure = { text: new vizMocks.Element(), size: [10, 20] };
+    const projection = {
+        transform: function(coordinates) {
+            return [coordinates[0] + 10, coordinates[1] - 20];
+        },
+        getSquareSize: function(size) {
+            return [size[0] * 2, size[1] * 3];
+        }
+    };
+
+    areaStrategyPolygon.transformLabel(figure, projection, [[100, 200], [30, 30]]);
+
+    assert.deepEqual(figure.text.attr.getCall(0).args, [{ translateX: 110, translateY: 180 }], 'position 1');
+    assert.deepEqual(figure.text.attr.getCall(1).args, [{ visibility: null }], 'visibility 1');
+    assert.deepEqual(figure.spaceSize, [60, 90], 'space 1');
+
+    areaStrategyPolygon.transformLabel(figure, projection, [[100, 200], [0.05, 0.05]]);
+
+    assert.deepEqual(figure.text.attr.getCall(3).args, [{ visibility: 'hidden' }], 'visibility 2');
+});
+
+QUnit.skip('Transform line', function(assert) {
+    const figure = { root: new vizMocks.Element() };
+    const projection = {
+        transform: function(coordinates) {
+            return coordinates + '-tr';
+        }
+    };
+
+    lineStrategyLineString.transform(figure, projection, [
+        ['p1', 'p2'],
+        ['p3']
+    ]);
+
+    assert.deepEqual(figure.root.attr.lastCall.args, [{
+        points: [
+            ['p1-tr', 'p2-tr'],
+            ['p3-tr']
+        ]
+    }]);
+});
+
+QUnit.skip('Transform line label', function(assert) {
+    const figure = { text: new vizMocks.Element(), size: [10, 20] };
+    const projection = {
+        transform: function(coordinates) {
+            return [coordinates[0] + 10, coordinates[1] - 20];
+        },
+        getSquareSize: function(size) {
+            return [size[0] * 2, size[1] * 3];
+        }
+    };
+
+    lineStrategyLineString.transformLabel(figure, projection, [[100, 200], [10, 20]]);
+
+    assert.deepEqual(figure.text.attr.getCall(0).args, [{ translateX: 110, translateY: 180 }], 'position 1');
+    assert.deepEqual(figure.text.attr.getCall(1).args, [{ visibility: null }], 'visibility 1');
+    assert.deepEqual(figure.spaceSize, [20, 60], 'space 1');
+
+    lineStrategyLineString.transformLabel(figure, projection, [[100, 200], [0.05, 0.05]]);
+
+    assert.deepEqual(figure.text.attr.getCall(3).args, [{ visibility: 'hidden' }], 'visibility 2');
+});
+
+QUnit.skip('Transform point', function(assert) {
+    const figure = { root: new vizMocks.Element() };
+    const projection = {
+        transform: function(coordinates) {
+            return [coordinates[0] + 10, coordinates[1] - 20];
+        }
+    };
+
+    pointDotStrategy.transform(figure, projection, [100, 200]);
+
+    assert.deepEqual(figure.root.attr.lastCall.args, [{ translateX: 110, translateY: 180 }]);
+});
 
 QUnit.test('Perform grouping', function(assert) {
     const set = sinon.spy();
