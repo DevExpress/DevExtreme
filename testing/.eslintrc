@@ -13,6 +13,7 @@
     "plugins": [
         "qunit"
     ],
+    "extends": "plugin:qunit/recommended",
     "rules": {
         "qunit/assert-args": "error",
         "qunit/literal-compare-order": "error",
@@ -22,6 +23,8 @@
         "qunit/no-identical-names": "warn",
         "qunit/no-ok-equality": "error",
         "qunit/no-only": "error",
-        "qunit/no-setup-teardown": "error"
+        "qunit/no-setup-teardown": "error",
+        "qunit/require-expect": "off",
+        "qunit/resolve-async": "off"
     }
 }
