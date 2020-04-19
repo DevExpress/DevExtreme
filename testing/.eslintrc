@@ -18,7 +18,7 @@
         "qunit/literal-compare-order": "error",
         "qunit/no-arrow-tests": "error",
         "qunit/no-async-in-loops": "error",
-        "qunit/no-commented-tests": "warn",
+        "qunit/no-commented-tests": "error",
         "qunit/no-identical-names": "warn",
         "qunit/no-ok-equality": "error",
         "qunit/no-only": "error",
