@@ -41,7 +41,7 @@ function clean() {
     return del(`${tmpPath}`);
 }
 
-gulp.task('compile', gulp.series(
+gulp.task('compile-scss', gulp.series(
     processDataUri,
     compile,
     clean
