@@ -407,6 +407,7 @@ const Drawer = Widget.inherit({
     _dimensionChanged() {
         this._initMinMaxSize();
         this._strategy.refreshPanelElementSize(this.option('revealMode') === 'slide');
+        this._renderPosition(this.option('opened'), false);
     },
 
     _toggleShaderVisibility(visible) {
