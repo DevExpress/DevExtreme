@@ -8,7 +8,7 @@ import { isDefined, isFunction } from '../core/utils/type';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import { inArray } from '../core/utils/array';
-import { Deferred, when } from '../core/utils/deferred';
+import { Deferred, fromPromise } from '../core/utils/deferred';
 import ajax from '../core/utils/ajax';
 import Editor from './editor/editor';
 import Button from './button';
@@ -1236,7 +1236,7 @@ class FileUploadStrategyBase {
             let deferred = null;
             try {
                 const result = abortUpload(file.value, arg);
-                deferred = when(result);
+                deferred = fromPromise(result);
             } catch(error) {
                 deferred = new Deferred().reject(error).promise();
             }
@@ -1467,7 +1467,7 @@ class CustomChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
         const uploadChunk = this.fileUploader.option('uploadChunk');
         try {
             const result = uploadChunk(file.value, chunksInfo);
-            return when(result);
+            return fromPromise(result);
         } catch(error) {
             return new Deferred().reject(error).promise();
         }
@@ -1579,7 +1579,7 @@ class CustomWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
         const uploadFile = this.fileUploader.option('uploadFile');
         try {
             const result = uploadFile(file, progressCallback);
-            return when(result);
+            return fromPromise(result);
         } catch(error) {
             return new Deferred().reject(error).promise();
         }
