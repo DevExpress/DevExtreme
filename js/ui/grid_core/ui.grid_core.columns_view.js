@@ -373,6 +373,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         if(templates.length) {
             getWindow().setTimeout(function() {
                 that._renderDelayedTemplatesCore(templates, true);
+                that.synchronizeRows();
             });
         }
     },
