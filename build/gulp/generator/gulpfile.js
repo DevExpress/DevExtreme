@@ -82,14 +82,14 @@ gulp.task('generate-components-watch', gulp.series('generate-components', functi
     gulp.watch([SRC], gulp.series('generate-components'));
 }));
 
-gulp.task('generate-react-watch', gulp.series('generate-components', 'generate-react', function() {
-    gulp.watch([SRC], gulp.series('generate-components', 'generate-react'));
+gulp.task('generate-react-watch', gulp.series('generate-react', function() {
+    gulp.watch([SRC], gulp.series('generate-react'));
 }));
 
-gulp.task('generate-angular-watch', gulp.series('generate-components', 'generate-angular', function() {
-    gulp.watch([SRC], gulp.series('generate-components', 'generate-angular'));
+gulp.task('generate-angular-watch', gulp.series('generate-angular', function() {
+    gulp.watch([SRC], gulp.series('generate-angular'));
 }));
 
-gulp.task('generate-renovation-watch', gulp.series('generate-components', 'generate-react', 'generate-angular', function() {
-    gulp.watch([SRC], gulp.series('generate-components', 'generate-react', 'generate-angular'));
+gulp.task('generate-renovation-watch', gulp.series('generate-react', 'generate-angular', function() {
+    gulp.watch([SRC], gulp.series('generate-react', 'generate-angular'));
 }));
