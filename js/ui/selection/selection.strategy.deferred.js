@@ -165,7 +165,7 @@ module.exports = SelectionStrategy.inherit({
         if(selectionFilter && selectionFilter.length) {
             that._removeSameFilter(selectionFilter, filter, isDeselect, isSelectAll);
             const filterIndex = that._removeSameFilter(selectionFilter, filter, !isDeselect);
-            const isKeyOperatorsAfterRemoved = this._isKeyFilter(filter) && this._isKeyOperatorsFromIndex(selectionFilter, filterIndex);
+            const isKeyOperatorsAfterRemoved = this._isKeyFilter(filter) && this._hasKeyFiltersOnlyStartingFromIndex(selectionFilter, filterIndex);
 
             needAddFilter = filter.length && !isKeyOperatorsAfterRemoved;
 
@@ -229,7 +229,7 @@ module.exports = SelectionStrategy.inherit({
 
         return this._isSimpleKeyFilter(filter, keyField);
     },
-    _isKeyOperatorsFromIndex: function(selectionFilter, filterIndex) {
+    _hasKeyFiltersOnlyStartingFromIndex: function(selectionFilter, filterIndex) {
         if(filterIndex >= 0) {
             for(let i = filterIndex; i < selectionFilter.length; i++) {
                 if(typeof selectionFilter[i] !== 'string' && !this._isKeyFilter(selectionFilter[i])) {
