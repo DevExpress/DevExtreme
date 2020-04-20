@@ -964,6 +964,7 @@ test('Validation(Batch) - Unmodified data cell with enabled showEditorAlways sho
         .click(cell11.element)
 
         .expect(cell11.isInvalid).ok()
+        .expect(cell11.hasInvalidMessage).ok()
         .expect(cell10.isModified).ok()
 
         .click(cell10.element)
