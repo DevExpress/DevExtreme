@@ -1,6 +1,5 @@
 const gulp = require('gulp');
 const path = require('path');
-const through = require('through2');
 const replace = require('gulp-replace');
 const gulpLess = require('gulp-less');
 const plumber = require('gulp-plumber');
@@ -13,10 +12,6 @@ const fs = require('fs');
 const dataUri = require('./gulp-data-uri');
 const generator = require('../../themebuilder/modules/metadata-generator');
 const cleanCssOptions = require('../../themebuilder/modules/clean-css-options');
-
-const MetadataGenerator = require('../../themebuilder-scss/modules/metadata-generator');
-const generatorScss = new MetadataGenerator();
-
 const context = require('./context');
 const starLicense = require('./header-pipes').starLicense;
 
@@ -101,34 +96,3 @@ gulp.task('style-compiler-tb-assets', gulp.parallel('style-compiler-tb-metadata'
         .pipe(dataUri())
         .pipe(gulp.dest(assetsPath));
 }));
-
-// metadata/scss generator for themebuilder on scss
-
-gulp.task('style-compiler-tb-scss-assets', gulp.series(
-    function generateScss() {
-        const assetsPath = path.join(process.cwd(), 'themebuilder-scss', 'data', 'scss');
-        return gulp.src('scss/**/*.scss')
-            .pipe(through.obj((chunk, enc, callback) => {
-                const content = generatorScss.collectMetadata(
-                    process.cwd(),
-                    chunk.path,
-                    chunk.contents.toString()
-                );
-
-                chunk.contents = Buffer.from(content);
-                callback(null, chunk);
-            }))
-            .pipe(replace(commentsRegex, ''))
-            .pipe(dataUri())
-            .pipe(gulp.dest(assetsPath));
-    },
-    function saveMetadata(callback) {
-        const metadataPath = path.join(process.cwd(), 'themebuilder-scss', 'data', 'metadata', 'dx-theme-builder-metadata.js');
-        const metadata = generatorScss.getMetadata();
-        metadata['_metadata_version'] = context.version.package;
-        const meta = 'module.exports = ' + JSON.stringify(metadata) + ';';
-        fs.mkdirSync(path.dirname(metadataPath), { recursive: true });
-        fs.writeFileSync(metadataPath, meta);
-        callback();
-    }
-));

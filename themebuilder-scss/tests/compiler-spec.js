@@ -23,8 +23,6 @@ describe('compileBundle', () => {
 
     const bundle = path.join(path.resolve(), 'tests', 'test-scss', 'bundles', 'dx.light.scss');
 
-    // TODO - test that cache is working (function called once)
-
     it('Compile with empty modifications', () => {
         const compiler = new Compiler();
         return compiler.compileBundle(bundle, []).then(data => {
@@ -234,6 +232,20 @@ describe('Sass features', () => {
             assert.deepEqual(data, { contents: '$var2: rgba(0,0,0,0);$var0: 10px;' });
             assert.deepEqual(compiler.importerCache, { 'tb/path': '$var2: rgba(0,0,0,0);$var0: 10px;' });
             done();
+        });
+    });
+
+    it('setter call getMatchingUserItemsAsString once for every url', (done) => {
+        let counter = 0;
+        const url = 'path1';
+        const compiler = new Compiler();
+        compiler.getMatchingUserItemsAsString = () => ++counter;
+        compiler.setter(url, '', () => {
+            compiler.setter(url, '', () => {
+                assert.equal(counter, 1, 'getMatchingUserItemsAsString was called once');
+                assert.equal(compiler.importerCache[url], 1, 'Cache for url is filled');
+                done();
+            });
         });
     });
 });
