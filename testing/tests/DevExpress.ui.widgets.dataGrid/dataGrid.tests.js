@@ -18132,7 +18132,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         const getRowsInfo = function(element) {
             const $rows = $(element).find('.dx-datagrid-rowsview .dx-row[role=\'row\']');
             return {
-                count: $rows.length,
+                rowCount: $rows.length,
                 groupRow: $($rows.eq(0)).hasClass('dx-group-row'),
                 dataRow: $($rows.eq(1)).hasClass('dx-data-row')
             };
@@ -18153,7 +18153,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             ],
             onRowExpanded: function() {
                 const info = getRowsInfo(dataGrid.element());
-                assert.step(`rowExpanded rowCount: ${info.count}, groupRow: ${info.groupRow}, dataRow: ${info.dataRow}`);
+                assert.step(`rowExpanded rowCount: ${info.rowCount}, groupRow: ${info.groupRow}, dataRow: ${info.dataRow}`);
             }
         });
         this.clock.tick();
@@ -18162,7 +18162,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         dataGrid.expandRow(['value1']).done(() => {
             const info = getRowsInfo(dataGrid.element());
 
-            assert.step(`done rowCount: ${info.count}, groupRow: ${info.groupRow}, dataRow: ${info.dataRow}`);
+            assert.step(`done rowCount: ${info.rowCount}, groupRow: ${info.groupRow}, dataRow: ${info.dataRow}`);
         });
         this.clock.tick();
 
@@ -18177,7 +18177,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         const getRowsInfo = function(element) {
             const $rows = $(element).find('.dx-datagrid-rowsview .dx-row[role=\'row\']');
             return {
-                count: $rows.length,
+                rowCount: $rows.length,
                 masterRow: $($rows.eq(0)).hasClass('dx-data-row'),
                 detailRow: $($rows.eq(1)).hasClass('dx-master-detail-row')
             };
@@ -18192,7 +18192,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             },
             onRowExpanded: function() {
                 const info = getRowsInfo(dataGrid.element());
-                assert.step(`rowExpanded rowCount: ${info.count}, masterRow: ${info.masterRow}, detailRow: ${info.detailRow}`);
+                assert.step(`rowExpanded rowCount: ${info.rowCount}, masterRow: ${info.masterRow}, detailRow: ${info.detailRow}`);
             }
         });
         this.clock.tick();
@@ -18201,7 +18201,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         dataGrid.expandRow(1).done(() => {
             const info = getRowsInfo(dataGrid.element());
 
-            assert.step(`done rowCount: ${info.count}, masterRow: ${info.masterRow}, detailRow: ${info.detailRow}`);
+            assert.step(`done rowCount: ${info.rowCount}, masterRow: ${info.masterRow}, detailRow: ${info.detailRow}`);
         });
         this.clock.tick();
 
