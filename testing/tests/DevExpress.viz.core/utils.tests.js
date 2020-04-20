@@ -114,14 +114,14 @@ QUnit.test('convertXYToPolar', function(assert) {
 });
 
 QUnit.test('map', function(assert) {
-    function test(array, callback, expected, messages) {
+    function check(array, callback, expected, messages) {
         assert.deepEqual(utils.map(array, callback), expected, messages);
     }
 
-    test([], function(el, i) { return el * i + 2; }, [], 'empty array');
-    test([1, 2, 3], function(el, i) { return el * i + 2; }, [2, 4, 8], 'non-empty array');
-    test([1, 2, 3, 4, 5, 6], function(el) { return el % 2 ? el : null; }, [1, 3, 5], 'callback w/ null');
-    test([1, 2, 3, 4, 5, 6], function(el) { return el % 2 ? el : undefined; }, [1, undefined, 3, undefined, 5, undefined], 'callback w/ undefined');
+    check([], function(el, i) { return el * i + 2; }, [], 'empty array');
+    check([1, 2, 3], function(el, i) { return el * i + 2; }, [2, 4, 8], 'non-empty array');
+    check([1, 2, 3, 4, 5, 6], function(el) { return el % 2 ? el : null; }, [1, 3, 5], 'callback w/ null');
+    check([1, 2, 3, 4, 5, 6], function(el) { return el % 2 ? el : undefined; }, [1, undefined, 3, undefined, 5, undefined], 'callback w/ undefined');
 });
 
 QUnit.test('unique', function(assert) {
