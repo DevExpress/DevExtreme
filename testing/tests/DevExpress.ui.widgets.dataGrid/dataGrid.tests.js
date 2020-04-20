@@ -18168,7 +18168,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             ],
             onRowExpanded: function() {
                 const info = getRowsInfo(dataGrid.element());
-                assert.step(`rowExpanded count: ${info.count}, groupRow: ${info.groupRow}, dataRow: ${info.dataRow}`);
+                assert.step(`rowExpanded rowCount: ${info.count}, groupRow: ${info.groupRow}, dataRow: ${info.dataRow}`);
             }
         });
         this.clock.tick();
@@ -18177,13 +18177,13 @@ QUnit.module('API methods', baseModuleConfig, () => {
         dataGrid.expandRow(['value1']).done(() => {
             const info = getRowsInfo(dataGrid.element());
 
-            assert.step(`count: ${info.count}, groupRow: ${info.groupRow}, dataRow: ${info.dataRow}`);
+            assert.step(`done rowCount: ${info.count}, groupRow: ${info.groupRow}, dataRow: ${info.dataRow}`);
         });
         this.clock.tick();
 
         assert.verifySteps([
-            'rowExpanded count: 2, groupRow: true, dataRow: true',
-            'count: 2, groupRow: true, dataRow: true'
+            'rowExpanded rowCount: 2, groupRow: true, dataRow: true',
+            'done rowCount: 2, groupRow: true, dataRow: true'
         ]);
     });
 
@@ -18207,7 +18207,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             },
             onRowExpanded: function() {
                 const info = getRowsInfo(dataGrid.element());
-                assert.step(`rowExpanded count: ${info.count}, masterRow: ${info.masterRow}, detailRow: ${info.detailRow}`);
+                assert.step(`rowExpanded rowCount: ${info.count}, masterRow: ${info.masterRow}, detailRow: ${info.detailRow}`);
             }
         });
         this.clock.tick();
@@ -18216,13 +18216,13 @@ QUnit.module('API methods', baseModuleConfig, () => {
         dataGrid.expandRow(1).done(() => {
             const info = getRowsInfo(dataGrid.element());
 
-            assert.step(`count: ${info.count}, masterRow: ${info.masterRow}, detailRow: ${info.detailRow}`);
+            assert.step(`done rowCount: ${info.count}, masterRow: ${info.masterRow}, detailRow: ${info.detailRow}`);
         });
         this.clock.tick();
 
         assert.verifySteps([
-            'rowExpanded count: 2, masterRow: true, detailRow: true',
-            'count: 2, masterRow: true, detailRow: true'
+            'rowExpanded rowCount: 2, masterRow: true, detailRow: true',
+            'done rowCount: 2, masterRow: true, detailRow: true'
         ]);
     });
 });
