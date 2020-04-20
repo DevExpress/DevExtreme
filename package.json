@@ -159,8 +159,6 @@
     "build-dist": "dotnet build build/build-dotnet.sln && gulp default --uglify",
     "build-themes": "gulp style-compiler-themes",
     "build-themebuilder-assets": "gulp style-compiler-tb-assets",
-    "build:renovation": "gulp generate-react && gulp generate-angular",
-    "build:renovation:watch": "gulp generate-renovation-watch",
     "build:react": "gulp generate-react",
     "build:react:watch": "gulp generate-react-watch",
     "build:angular": "gulp generate-angular",
