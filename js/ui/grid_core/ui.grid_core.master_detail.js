@@ -3,7 +3,7 @@ import gridCoreUtils from './ui.grid_core.utils';
 import { grep } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import { isDefined } from '../../core/utils/type';
-import { when } from '../../core/utils/deferred';
+import { when, Deferred } from '../../core/utils/deferred';
 
 const MASTER_DETAIL_CELL_CLASS = 'dx-master-detail-cell';
 const MASTER_DETAIL_ROW_CLASS = 'dx-master-detail-row';
@@ -110,8 +110,9 @@ module.exports = {
                         let expandIndex;
                         let editingController;
 
+                        let result;
                         if(Array.isArray(key)) {
-                            return that.callBase.apply(that, arguments);
+                            result = that.callBase.apply(that, arguments);
                         } else {
                             expandIndex = gridCoreUtils.getIndexByKey(key, that._expandedItems);
                             if(expandIndex >= 0) {
@@ -131,7 +132,11 @@ module.exports = {
                                 changeType: 'update',
                                 rowIndices: that._getRowIndicesForExpand(key)
                             });
+
+                            result = new Deferred().resolve();
                         }
+
+                        return result;
                     },
                     _processDataItem: function(data, options) {
                         const that = this;
