@@ -3294,6 +3294,6 @@ QUnit.test('row heights of both tables should be synchronized if one column is r
     const rowHeight = $rowElements.eq(0).height();
 
     for(let i = 1; i < $rowElements.length; i++) {
-        assert.equal($rowElements.eq(i).height(), rowHeight, 'row element height');
+        assert.roughEqual($rowElements.eq(i).height(), rowHeight, 1.01, 'row element height');
     }
 });
