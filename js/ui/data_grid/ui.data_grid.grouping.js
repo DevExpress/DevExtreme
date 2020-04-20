@@ -302,15 +302,15 @@ const GroupingDataControllerExtender = (function() {
         _changeRowExpandCore: function(key) {
             const that = this;
             const dataSource = this._dataSource;
-            let d;
 
-            if(!dataSource) return;
-
-            d = new Deferred();
-            when(dataSource.changeRowExpand(key)).done(function() {
-                that.load().done(d.resolve).fail(d.reject);
-            }).fail(d.reject);
-
+            const d = new Deferred();
+            if(!dataSource) {
+                d.resolve();
+            } else {
+                when(dataSource.changeRowExpand(key)).done(function() {
+                    that.load().done(d.resolve).fail(d.reject);
+                }).fail(d.reject);
+            }
             return d;
         },
         /**
