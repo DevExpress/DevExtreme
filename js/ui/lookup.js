@@ -35,7 +35,7 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 
-const MATERIAL_LOOKUP_LIST_ITEMS_COUNT = 4;
+const MATERIAL_LOOKUP_LIST_ITEMS_COUNT = 5;
 const MATERIAL_LOOKUP_LIST_PADDING = 8;
 
 
@@ -489,36 +489,65 @@ const Lookup = DropDownList.inherit({
         }
     },
 
+    _getDifferenceOffsets: function(selectedListItem) {
+        return selectedListItem.offset().top - $(this.element()).offset().top;
+    },
+
+    _getPopupOffset: function(selectedIndex) {
+        const popupHeight = this.option('dropDownOptions.height')();
+        const selectedListItem = $(this._list.element()).find('.' + LIST_ITEM_SELECTED_CLASS);
+        const differenceOfHeights = (selectedListItem.height() - $(this.element()).height()) / 2;
+        const listItemsCount = this._list.option('items').length;
+        const lookupOffset = $(this._list.element()).offset().top;
+
+        let offset = 0;
+
+        if(1 < selectedIndex && selectedIndex < (listItemsCount - 2)) {
+            this._scrollToSelectedItem();
+
+            const scrollOffsetTop = (popupHeight - selectedListItem.height()) / 2 - this._getDifferenceOffsets(selectedListItem);
+
+            this._list.scrollTo(this._list.scrollTop() + MATERIAL_LOOKUP_LIST_PADDING / 2 - scrollOffsetTop);
+
+            offset = differenceOfHeights + this._getDifferenceOffsets(selectedListItem);
+
+            if(lookupOffset < offset && selectedIndex !== (listItemsCount - 3)) {
+                this._list.scrollTo(this._list.scrollTop() + this._getDifferenceOffsets(selectedListItem) / 2);
+
+                offset = differenceOfHeights + this._getDifferenceOffsets(selectedListItem);
+            }
+        } else if(selectedIndex <= 1) {
+            this._list.scrollTo(0);
+
+            offset = differenceOfHeights + this._getDifferenceOffsets(selectedListItem);
+        } else if(selectedIndex >= (listItemsCount - 2)) {
+            this._scrollToSelectedItem();
+
+            offset = differenceOfHeights + this._getDifferenceOffsets(selectedListItem);
+        }
+
+        if(lookupOffset < offset) {
+            this._scrollToSelectedItem();
+            offset = differenceOfHeights + MATERIAL_LOOKUP_LIST_PADDING;
+        }
+
+        return offset;
+    },
+
     _setPopupPosition: function() {
         if(!this.option('itemCenteringEnabled')) return;
-
 
         const selectedIndex = this._list.option('selectedIndex');
         const flipped = this._popup._$wrapper.hasClass(LOOKUP_POPOVER_FLIP_VERTICAL_CLASS);
         if(selectedIndex === -1 || flipped) return;
 
-        const selectedListItem = $(this._list.element()).find('.' + LIST_ITEM_SELECTED_CLASS);
-
-        if(selectedListItem.offset().top < 0 || this._list.scrollTop() !== selectedListItem.position().top) {
-            this._scrollToSelectedItem();
-        }
-
-        const differenceOfHeights = (selectedListItem.height() - $(this.element()).height()) / 2;
         const popupContentParent = $(this._popup.content()).parent();
-        const differenceOfOffsets = selectedListItem.offset().top - popupContentParent.offset().top;
-        const lookupTop = $(this.element()).offset().top;
-        let popupOffsetY = differenceOfHeights;
-
-        if(lookupTop > differenceOfOffsets) {
-            popupOffsetY += differenceOfOffsets;
-        } else {
-            this._scrollToSelectedItem();
-        }
+        const popupOffset = this._getPopupOffset(selectedIndex);
 
         const position = translator.locate(popupContentParent);
 
         translator.move(popupContentParent, {
-            top: position.top - popupOffsetY
+            top: position.top - popupOffset
         });
     },
 
