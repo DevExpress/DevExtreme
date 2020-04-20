@@ -15,7 +15,7 @@ gridCore.registerModule('editing', extend(true, {}, editingModule, {
                         editingController && editingController.refresh();
                     }
 
-                    this.callBase.apply(this, arguments);
+                    return this.callBase.apply(this, arguments);
                 }
             }
         }
