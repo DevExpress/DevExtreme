@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import { extend } from 'core/utils/extend';
 import { drawerTesters } from '../../helpers/drawerHelpers.js';
+import resizeCallbacks from 'core/utils/resize_callbacks';
 import { clearStack } from 'ui/overlay/z_index';
 
 import 'common.css!';
@@ -191,6 +192,30 @@ configs.forEach(config => {
 
             this.clock.tick(100);
             drawer.repaint();
+            this.clock.tick(100);
+
+            drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
+        });
+
+        testOrSkip('opened: false -> resize -> opened: true, update position config after resize', () => configIs('push', 'top'), function(assert) {
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
+            const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
+                opened: false,
+                template: drawerTesters[config.position].template
+            }));
+
+            const originalRenderPositionFunc = drawer._renderPosition;
+
+            try {
+                sinon.spy(drawer, '_renderPosition');
+                resizeCallbacks.fire();
+            } finally {
+                drawer._renderPosition = originalRenderPositionFunc;
+            }
+
+            resizeCallbacks.fire();
+            this.clock.tick(100);
+            drawer.option('opened', true);
             this.clock.tick(100);
 
             drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
