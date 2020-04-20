@@ -3775,13 +3775,14 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         this.dataController.loadIfNeed();
 
         // assert
+        assert.equal(rowsScrollControllerSpy.callCount, 1, 'setViewportItemIndex call count');
+        assert.equal(dataSourceSpy.callCount, 1, 'setViewportItemIndex call count');
+
         const rowsScrollControllerCall = rowsScrollControllerSpy.getCall(0);
         const dataSourceCall = dataSourceSpy.getCall(0);
 
-        assert.ok(rowsScrollControllerCall, 'rowsScrollController\'s setViewportItemIndex is called');
-        assert.ok(dataSourceCall, 'dataSource\'s setViewportItemIndex is called');
-
-        assert.equal(rowsScrollControllerCall.args[0], dataSourceCall.args[0], 'setViewportItemIndex call args are same');
+        assert.deepEqual(rowsScrollControllerCall.args, [5], 'setViewportItemIndex call args');
+        assert.deepEqual(dataSourceCall.args, [5], 'setViewportItemIndex call args');
     });
 
 // =================================
