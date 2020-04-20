@@ -390,7 +390,7 @@ QUnit.module('Drawer behavior', () => {
                 'dxDrawer',
                 'target',
                 '20.1',
-                'This option is supported partially and the functionality controlled by it was not supposed to the Drawer widget.'
+                'Functionality associated with this option is not intended for the Drawer widget.'
             ], 'args of the log method');
         } finally {
             errors.log.restore();
