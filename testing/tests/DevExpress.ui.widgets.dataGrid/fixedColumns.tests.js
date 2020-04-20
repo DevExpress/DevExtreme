@@ -3044,8 +3044,11 @@ QUnit.module('Fixed columns with real dataController and columnController', {
                 initViews: true
             });
         };
+
+        that.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
+        this.clock.restore();
         this.dispose();
     }
 });
@@ -3261,4 +3264,34 @@ QUnit.test('The load panel should not be displayed when fixing and unfixing the 
     const $fixedContent = $testElement.find('.dx-datagrid-content-fixed');
     assert.strictEqual($fixedContent.length, 0, 'no fixed content');
     assert.strictEqual($testElement.find('.dx-datagrid-bottom-load-panel').length, 1, 'load panel count');
+});
+
+// T868950
+QUnit.test('row heights of both tables should be synchronized if one column is rendered async', function(assert) {
+    // arrange
+    const $testElement = $('#container').width(400);
+
+    this.options.dataSource = [{ id: 1 }, { id: 2 }];
+    this.options.columns = [{
+        dataField: 'id',
+        fixed: true
+    }, {
+        renderAsync: true,
+        cellTemplate: function(container) {
+            $(container).height(100);
+        }
+    }];
+
+    this.setupDataGrid();
+    this.rowsView.render($testElement);
+    this.rowsView.height(100);
+    this.rowsView.resize();
+
+    this.clock.tick();
+
+    // assert
+    const $rowElements = $('tr.dx-row.dx-data-row');
+    for(let j = 0; j < $rowElements.length; j++) {
+        assert.equal($rowElements.eq(j).height(), 100, 'row element height');
+    }
 });
