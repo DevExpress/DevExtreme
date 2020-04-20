@@ -384,7 +384,7 @@ export default class DataGrid extends Widget {
 
     getPopupEditForm(): EditForm {
         const element = Selector(`.${this.addWidgetPrefix(CLASS.overlayContent)} .${CLASS.popupContent}`);
-        const buttons = element.find(`.${this.addWidgetPrefix(CLASS.toolbar)} .${CLASS.button}`);
+        const buttons = element.find(`.${CLASS.toolbar} .${CLASS.button}`);
 
         return new EditForm(element, buttons);
     }
