@@ -363,7 +363,6 @@ module.exports = {
                 let i;
                 let column;
                 let rowspan;
-                const rowCount = that.getRowCount();
 
                 for(i = 0; i < columns.length; i++) {
                     column = columns[i];
@@ -372,8 +371,14 @@ module.exports = {
                         if(column.isBand) {
                             column.colspan = column.colspan || calculateColspan(that, column.index);
                         }
+
                         if(!column.isBand || !column.colspan) {
-                            rowspan = rowCount - (!column.command && !isDefined(column.groupIndex) ? getParentBandColumns(column.index, bandColumnsCache.columnParentByIndex).length : 0);
+                            rowspan = that.getRowCount();
+
+                            if(!column.command && (!isDefined(column.groupIndex) || column.showWhenGrouped)) {
+                                rowspan -= getParentBandColumns(column.index, bandColumnsCache.columnParentByIndex).length;
+                            }
+
                             if(rowspan > 1) {
                                 column.rowspan = rowspan;
                             }
