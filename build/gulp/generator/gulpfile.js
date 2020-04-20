@@ -5,7 +5,6 @@ const ts = require('gulp-typescript');
 const lint = require('gulp-eslint');
 const plumber = require('gulp-plumber');
 const gulpIf = require('gulp-if');
-// const merge = require('merge-stream');
 const babel = require('gulp-babel');
 const notify = require('gulp-notify');
 const watch = require('gulp-watch');
