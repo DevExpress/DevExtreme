@@ -1,5 +1,6 @@
 import 'ui/action_sheet';
 import 'ui/drop_down_menu';
+import errors from 'core/errors';
 
 import $ from 'jquery';
 import Toolbar from 'ui/toolbar';
@@ -1570,6 +1571,23 @@ QUnit.module('Waiting fonts for material theme', {
         this.clock.tick(15);
 
         themes.isMaterial = origIsMaterial;
+    });
+
+    QUnit.test('show warning if deprecated "height" option is used', function(assert) {
+        sinon.spy(errors, 'log');
+
+        $('#toolbar').dxToolbar({
+            items: [ { location: 'before', text: 'text1' } ],
+            height: 50
+        });
+
+        assert.deepEqual(errors.log.lastCall.args, [
+            'W0001',
+            'dxToolbar',
+            'height',
+            '20.1',
+            'This option is deprecated, because the functionality controlled by it was not supposed to belong to the Toolbar widget'
+        ], 'args of the log method');
     });
 });
 
