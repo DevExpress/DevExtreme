@@ -4611,7 +4611,8 @@ QUnit.module('datebox validation', {}, () => {
         const validationCallbackSpy = sinon.spy();
 
         const dateBox = $('#dateBox').dxDateBox({
-            value: '2020-01-15'
+            value: '2020-01-15',
+            pickerType: 'calendar'
         }).dxValidator({
             validationRules: [{
                 type: 'custom',
