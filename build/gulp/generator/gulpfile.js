@@ -50,24 +50,35 @@ gulp.task('generate-components', function() {
 
 function addGenerationTask(frameworkName, knownErrors = []) {
     const generator = require(`devextreme-generator/${frameworkName}-generator`).default;
+    const buildDeclaration = (tsProject) => gulp.src('js/**/*.tsx')
+        .pipe(generateComponents(generator))
+        .pipe(plumber(() => null))
+        .pipe(tsProject({
+            error(e) {
+                if(!knownErrors.some(i => e.message.endsWith(i))) {
+                    console.log(e.message);
+                }
+            },
+            finish() { }
+        }));
+
     gulp.task(`generate-${frameworkName}`, function() {
         const tsProject = ts.createProject(`build/gulp/generator/ts-configs/${frameworkName}.tsconfig.json`);
         generator.defaultOptionsModule = 'js/core/options/utils';
 
         return merge(
             gulp.src(COMMON_SRC),
-            gulp.src('js/**/*.tsx')
-                .pipe(generateComponents(generator))
-                .pipe(plumber(() => null))
-                .pipe(tsProject({
-                    error(e) {
-                        if(!knownErrors.some(i => e.message.endsWith(i))) {
-                            console.log(e.message);
-                        }
-                    },
-                    finish() { }
-                }))
+            buildDeclaration(tsProject)
         ).pipe(babel())
+            .pipe(gulp.dest(`artifacts/${frameworkName}`));
+    });
+
+    gulp.task(`generate-${frameworkName}-declaration-only`, function() {
+        const tsProject = ts.createProject(`build/gulp/generator/ts-configs/${frameworkName}.tsconfig.json`);
+        generator.defaultOptionsModule = 'js/core/options/utils';
+
+        return buildDeclaration(tsProject)
+            .pipe(babel())
             .pipe(gulp.dest(`artifacts/${frameworkName}`));
     });
 }
@@ -83,13 +94,13 @@ gulp.task('generate-components-watch', gulp.series('generate-components', functi
 }));
 
 gulp.task('generate-react-watch', gulp.series('generate-react', function() {
-    gulp.watch([SRC], gulp.series('generate-react'));
+    gulp.watch([SRC], gulp.series('generate-react-declaration'));
 }));
 
 gulp.task('generate-angular-watch', gulp.series('generate-angular', function() {
-    gulp.watch([SRC], gulp.series('generate-angular'));
+    gulp.watch([SRC], gulp.series('generate-angular-declaration'));
 }));
 
 gulp.task('generate-renovation-watch', gulp.series('generate-react', 'generate-angular', function() {
-    gulp.watch([SRC], gulp.series('generate-react', 'generate-angular'));
+    gulp.watch([SRC], gulp.series('generate-react-declaration-only', 'generate-angular-declaration-only'));
 }));
