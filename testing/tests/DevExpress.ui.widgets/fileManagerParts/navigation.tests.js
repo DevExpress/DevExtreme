@@ -682,6 +682,9 @@ QUnit.module('Navigation operations', moduleConfig, () => {
     });
 
     test('Thumbnails view - must keep scroll position', function(assert) {
+        const originalFunc = renderer.fn.width;
+        renderer.fn.width = () => 1200;
+
         this.fileManager.option({
             width: 500,
             height: 250,
@@ -697,6 +700,8 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         this.clock.tick(800);
 
         assert.strictEqual(this.wrapper.getThumbnailsViewScrollableContainer().scrollTop(), scrollPosition, 'scroll position is the same');
+
+        renderer.fn.width = originalFunc;
     });
 
     test('All views - must keep scroll position for sync focused item', function(assert) {
