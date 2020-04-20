@@ -7,7 +7,7 @@ export const viewFunction = ({ props: { message, className } }: ErrorMessage) =>
 );
 
 @ComponentBindings()
-export class ErrorMessageInput {
+export class ErrorMessageProps {
     @OneWay() className?: string = '';
     @OneWay() message?: string = '';
 }
@@ -17,4 +17,4 @@ export class ErrorMessageInput {
     defaultOptionRules: null,
     view: viewFunction,
 })
-export default class ErrorMessage extends JSXComponent<ErrorMessageInput> {}
+export default class ErrorMessage extends JSXComponent<ErrorMessageProps> {}

@@ -59,7 +59,7 @@ const getAttributes = ({ elementAttr, accessKey }) => {
     return attrs;
 };
 
-const getCssClasses = (model: Partial<Widget> & Partial<WidgetInput>) => {
+const getCssClasses = (model: Partial<Widget> & Partial<WidgetProps>) => {
     const className = ['dx-widget'];
     const isFocusable = model.focusStateEnabled && !model.disabled;
     const isHoverable = model.hoverStateEnabled && !model.disabled;
@@ -94,7 +94,7 @@ export const viewFunction = (viewModel: Widget) => {
 };
 
 @ComponentBindings()
-export class WidgetInput {
+export class WidgetProps {
     @OneWay() _feedbackHideTimeout?: number = 400;
     @OneWay() _feedbackShowTimeout?: number = 30;
     @OneWay() accessKey?: string | null = null;
@@ -131,7 +131,7 @@ export class WidgetInput {
     view: viewFunction,
 })
 
-export default class Widget extends JSXComponent<WidgetInput> {
+export default class Widget extends JSXComponent<WidgetProps> {
     @InternalState() _active: boolean = false;
     @InternalState() _focused: boolean = false;
     @InternalState() _hovered: boolean = false;

@@ -10,13 +10,13 @@ import Widget from '../../js/renovation/widget.p.js';
 
 jest.mock('../../js/core/devices', () => {
     const actualDevices = require.requireActual('../../js/core/devices');
+    const isSimulator = actualDevices.isSimulator.bind(actualDevices);
+    const real = actualDevices.real.bind(actualDevices);
 
-    return {
-        ...actualDevices,
-        ...actualDevices.__proto__,
-        isSimulator: jest.fn(() => false),
-        real: jest.fn(() => ({ deviceType: 'desktop' })),
-    };
+    actualDevices.isSimulator = jest.fn(isSimulator);
+    actualDevices.real = jest.fn(real);
+
+    return actualDevices;
 });
 
 jest.mock('../../js/ui/themes', () => ({
