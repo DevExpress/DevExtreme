@@ -77,7 +77,7 @@ module.exports = SelectionStrategy.inherit({
         return !!dataQuery([itemData]).filter(selectionFilter).toArray().length;
     },
 
-    _processSelectedItem: function(key) {
+    _getFilterByKey: function(key) {
         const keyField = this.options.key();
         let filter = [keyField, '=', key];
 
@@ -96,13 +96,13 @@ module.exports = SelectionStrategy.inherit({
     },
 
     addSelectedItem: function(key) {
-        const filter = this._processSelectedItem(key);
+        const filter = this._getFilterByKey(key);
 
         this._addSelectionFilter(false, filter);
     },
 
     removeSelectedItem: function(key) {
-        const filter = this._processSelectedItem(key);
+        const filter = this._getFilterByKey(key);
 
         this._addSelectionFilter(true, filter);
     },
@@ -155,21 +155,19 @@ module.exports = SelectionStrategy.inherit({
 
     _addSelectionFilter: function(isDeselect, filter, isSelectAll) {
         const that = this;
-        let needAddFilter = true;
         const currentFilter = isDeselect ? ['!', filter] : filter;
         const currentOperation = isDeselect ? 'and' : 'or';
+        let needAddFilter = true;
         let selectionFilter = that.options.selectionFilter || [];
 
         selectionFilter = that._denormalizeFilter(selectionFilter);
 
         if(selectionFilter && selectionFilter.length) {
             that._removeSameFilter(selectionFilter, filter, isDeselect, isSelectAll);
-            const lastOperation = that._removeSameFilter(selectionFilter, filter, !isDeselect);
+            const filterIndex = that._removeSameFilter(selectionFilter, filter, !isDeselect);
+            const isKeyOperatorsAfterRemoved = this._isKeyFilter(filter) && this._hasKeyFiltersOnlyStartingFromIndex(selectionFilter, filterIndex);
 
-            if(lastOperation && (lastOperation !== 'or' && isDeselect || lastOperation !== 'and' && !isDeselect)) {
-                needAddFilter = false;
-                selectionFilter = [];
-            }
+            needAddFilter = filter.length && !isKeyOperatorsAfterRemoved;
 
             if(needAddFilter) {
                 selectionFilter = that._addFilterOperator(selectionFilter, currentOperation);
@@ -193,46 +191,85 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _removeFilterByIndex: function(filter, filterIndex, isSelectAll) {
-        let lastRemoveOperation;
+        const operation = filter[1];
 
         if(filterIndex > 0) {
-            lastRemoveOperation = filter.splice(filterIndex - 1, 2)[0];
+            filter.splice(filterIndex - 1, 2);
         } else {
-            lastRemoveOperation = filter.splice(filterIndex, 2)[1] || 'undefined';
+            filter.splice(filterIndex, 2);
         }
 
-        if(isSelectAll && lastRemoveOperation === 'and') {
+        if(isSelectAll && operation === 'and') {
             filter.splice(0, filter.length);
         }
-
-        return lastRemoveOperation;
     },
+    _isSimpleKeyFilter: function(filter, key) {
+        return filter.length === 3 && filter[0] === key && filter[1] === '=';
+    },
+    _isKeyFilter: function(filter) {
+        if(filter.length === 2 && filter[0] === '!') {
+            return this._isKeyFilter(filter[1]);
+        }
+        const keyField = this.options.key();
 
+        if(Array.isArray(keyField)) {
+            if(filter.length !== keyField.length * 2 - 1) {
+                return false;
+            }
+            for(let i = 0; i < keyField.length; i++) {
+                if(i > 0 && filter[i] !== 'and') {
+                    return false;
+                }
+                if(!this._isSimpleKeyFilter(filter[i * 2], keyField[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        return this._isSimpleKeyFilter(filter, keyField);
+    },
+    _hasKeyFiltersOnlyStartingFromIndex: function(selectionFilter, filterIndex) {
+        if(filterIndex >= 0) {
+            for(let i = filterIndex; i < selectionFilter.length; i++) {
+                if(typeof selectionFilter[i] !== 'string' && !this._isKeyFilter(selectionFilter[i])) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    },
     _removeSameFilter: function(selectionFilter, filter, inverted, isSelectAll) {
         filter = inverted ? ['!', filter] : filter;
 
-        const filterIndex = this._findSubFilter(selectionFilter, filter);
-
         if(JSON.stringify(filter) === JSON.stringify(selectionFilter)) {
             selectionFilter.splice(0, selectionFilter.length);
-            return 'undefined';
+            return 0;
         }
 
+        const filterIndex = this._findSubFilter(selectionFilter, filter);
+
         if(filterIndex >= 0) {
-            return this._removeFilterByIndex(selectionFilter, filterIndex, isSelectAll);
+            this._removeFilterByIndex(selectionFilter, filterIndex, isSelectAll);
+            return filterIndex;
         } else {
             for(let i = 0; i < selectionFilter.length; i++) {
-                const lastRemoveOperation = Array.isArray(selectionFilter[i]) && selectionFilter[i].length > 2 && this._removeSameFilter(selectionFilter[i], filter, false, isSelectAll);
-
-                if(lastRemoveOperation) {
-                    if(!selectionFilter[i].length) {
-                        this._removeFilterByIndex(selectionFilter, i, isSelectAll);
-                    } else if(selectionFilter[i].length === 1) {
-                        selectionFilter[i] = selectionFilter[i][0];
+                if(Array.isArray(selectionFilter[i]) && selectionFilter[i].length > 2) {
+                    const filterIndex = this._removeSameFilter(selectionFilter[i], filter, false, isSelectAll);
+                    if(filterIndex >= 0) {
+                        if(!selectionFilter[i].length) {
+                            this._removeFilterByIndex(selectionFilter, i, isSelectAll);
+                        } else if(selectionFilter[i].length === 1) {
+                            selectionFilter[i] = selectionFilter[i][0];
+                        }
+                        return filterIndex;
                     }
-                    return lastRemoveOperation;
                 }
             }
+            return -1;
         }
     },
 

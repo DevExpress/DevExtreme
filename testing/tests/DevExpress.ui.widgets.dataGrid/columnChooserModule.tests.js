@@ -1021,6 +1021,53 @@ QUnit.module('Column chooser', {
         this.columnChooserView.hideColumnChooser();
     });
 
+    // T880276
+    QUnit.test('Column chooser should not scroll up after item selection', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.columnChooser.mode = 'select';
+
+        const columns = [];
+        for(let i = 0; i < 20; i++) {
+            columns.push({ caption: `Column ${i + 1}`, index: i, visible: true, showInColumnChooser: true });
+        }
+
+        $.extend(this.columns, columns);
+        this.setTestElement($testElement);
+
+        sinon.spy(this.columnChooserView, '_renderTreeView');
+
+        // act
+        this.columnChooserView.showColumnChooser();
+        this.clock.tick(1000);
+
+        // assert
+        assert.strictEqual(this.columnChooserView._renderTreeView.callCount, 1, 'treeview is rendered');
+
+        // act
+        const $scrollable = $('.dx-datagrid-column-chooser-mode-select').find('.dx-scrollable-container');
+        $scrollable.scrollTop(360);
+
+        this.columnsController.columnOption(0, 'visible', false);
+        this.columnsController.columnsChanged.fire({
+            columnIndex: 0,
+            optionNames: {
+                visible: true,
+                length: 1
+            }
+        });
+
+        // assert
+        const $checkboxes = $('.dx-datagrid-column-chooser-list').find('.dx-treeview-item-with-checkbox');
+
+        assert.equal($checkboxes.eq(0).attr('aria-selected'), 'false', 'first checkbox is not selected'); // T868198
+
+        assert.equal($scrollable.scrollTop(), 360, 'scrollTop');
+
+        this.columnChooserView.hideColumnChooser();
+    });
+
     ['select', 'dragAndDrop'].forEach(mode => {
         const modeName = (mode === 'select' ? 'CheckBox' : 'T739323: DragAndDrop');
         QUnit.test(modeName + ' mode - scroll position after selecting an last item', function(assert) {

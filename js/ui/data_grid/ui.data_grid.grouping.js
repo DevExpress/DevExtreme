@@ -293,13 +293,14 @@ const GroupingDataControllerExtender = (function() {
             const that = this;
             const dataSource = this._dataSource;
 
-            if(!dataSource) return;
-
             const d = new Deferred();
-            when(dataSource.changeRowExpand(key)).done(function() {
-                that.load().done(d.resolve).fail(d.reject);
-            }).fail(d.reject);
-
+            if(!dataSource) {
+                d.resolve();
+            } else {
+                when(dataSource.changeRowExpand(key)).done(function() {
+                    that.load().done(d.resolve).fail(d.reject);
+                }).fail(d.reject);
+            }
             return d;
         },
         isRowExpanded: function(key) {
