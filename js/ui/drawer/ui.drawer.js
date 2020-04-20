@@ -80,7 +80,7 @@ const Drawer = Widget.inherit({
         this.callBase();
 
         extend(this._deprecatedOptions, {
-            'target': { since: '20.1', message: 'This option is supported partially and the functionality controlled by it was not supposed to the Drawer widget.' }
+            'target': { since: '20.1', message: 'Functionality associated with this option is not intended for the Drawer widget.' }
         });
     },
 
@@ -571,5 +571,4 @@ const Drawer = Widget.inherit({
 registerComponent('dxDrawer', Drawer);
 
 module.exports = Drawer;
-
 
