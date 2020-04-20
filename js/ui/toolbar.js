@@ -328,7 +328,7 @@ const Toolbar = ToolbarBase.inherit({
     _setDeprecatedOptions() {
         this.callBase();
         extend(this._deprecatedOptions, {
-            'height': { since: '20.1', message: 'This option is deprecated, because the functionality controlled by it was not supposed to belong to the Toolbar widget' }
+            'height': { since: '20.1', message: 'Functionality associated with this option is not intended for the Toolbar widget.' }
         });
     },
 
