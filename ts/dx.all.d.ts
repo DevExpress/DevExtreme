@@ -3370,6 +3370,7 @@ declare module DevExpress.ui {
         revealMode?: 'slide' | 'expand';
         /** @name dxDrawer.Options.shading */
         shading?: boolean;
+        /** @deprecated */
         /** @name dxDrawer.Options.target */
         target?: string | Element | JQuery;
         /** @name dxDrawer.Options.template */

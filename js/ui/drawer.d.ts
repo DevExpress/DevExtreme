@@ -104,6 +104,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @docid dxDrawerOptions.target
      * @type string|Node|jQuery
      * @prevFileNamespace DevExpress.ui
+     * @deprecated
      * @public
      */
     target?: string | Element | JQuery;
