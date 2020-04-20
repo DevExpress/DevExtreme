@@ -662,6 +662,8 @@ QUnit.module('Navigation operations', moduleConfig, () => {
 
     test('Details view - must keep scroll position', function(assert) {
         this.fileManager.option({
+            width: 500,
+            height: 250,
             fileSystemProvider: createHugeFileSystem(),
             itemView: {
                 mode: 'details'
@@ -669,7 +671,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         });
         this.clock.tick(400);
 
-        const scrollPosition = 150;
+        const scrollPosition = 100;
         this.wrapper.getDetailsViewScrollableContainer().scrollTop(scrollPosition);
         this.clock.tick(400);
 
@@ -680,7 +682,11 @@ QUnit.module('Navigation operations', moduleConfig, () => {
     });
 
     test('Thumbnails view - must keep scroll position', function(assert) {
-        this.fileManager.option('fileSystemProvider', createHugeFileSystem());
+        this.fileManager.option({
+            width: 500,
+            height: 250,
+            fileSystemProvider: createHugeFileSystem()
+        });
         this.clock.tick(400);
 
         const scrollPosition = 150;

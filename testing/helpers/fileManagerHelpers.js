@@ -692,10 +692,10 @@ export const createTestFileSystem = () => {
 
 export const createHugeFileSystem = () => {
     const result = [];
-    for(let i = 0; i < 50; i++) {
+    for(let i = 0; i < 10; i++) {
         result.push({
-            name: `Folder ${i}`,
-            isDirectory: true
+            name: `File ${i}.txt`,
+            isDirectory: false
         });
     }
     return result;
