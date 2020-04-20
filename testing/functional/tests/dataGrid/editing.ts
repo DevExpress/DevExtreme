@@ -927,3 +927,70 @@ test("Validation(Cell) - Unmodified data cell should be marked as invalid when a
     })));
 });
 
+test('Validation(Batch) - Unmodified data cell with enabled showEditorAlways should be marked as invalid when a neighboring cell is modified (T878218)', async t => {
+    const dataGrid = new DataGrid("#container");
+
+    const dataRow0 = dataGrid.getDataRow(0);
+    const dataRow1 = dataGrid.getDataRow(1);
+    const cell00 = dataRow0.getDataCell(0);
+    const cell01 = dataRow0.getDataCell(1);
+    const cell10 = dataRow1.getDataCell(0);
+    const cell11 = dataRow1.getDataCell(1);
+    const editor10 = cell10.getEditor();
+
+    await t
+        .click(cell10.element)
+
+        .expect(cell11.isInvalid).notOk()
+        .expect(editor10.element.exists).ok()
+
+        .click(editor10.element)
+        .typeText(editor10.element, 'test')
+        .pressKey('enter')
+
+        .expect(cell11.isInvalid).ok()
+        .expect(cell10.isModified).ok()
+
+        .click(cell00.element)
+
+        .expect(cell11.isInvalid).ok()
+        .expect(cell10.isModified).ok()
+
+        .click(cell01.element)
+
+        .expect(cell11.isInvalid).ok()
+        .expect(cell10.isModified).ok()
+
+        .click(cell11.element)
+
+        .expect(cell11.isInvalid).ok()
+        .expect(cell10.isModified).ok()
+
+        .click(cell10.element)
+
+        .expect(cell11.isInvalid).ok()
+        .expect(cell10.isModified).ok()
+
+}).before(() => createWidget("dxDataGrid", getGridConfig({
+    keyExpr: 'id',
+    dataSource: [
+        { id: 1, name: '', lastName: '' },
+        { id: 2, name: '', lastName: '' }
+    ],
+    editing: {
+        mode: 'batch',
+        allowUpdating: true
+    },
+    columns: ['name', {
+        dataField: 'lastName',
+        showEditorAlways: true,
+        validationRules: [{
+            type: 'custom',
+            reevaluate: true,
+            validationCallback: function(params) {
+                return params.data.name.length > 0 ? false : true;
+            }
+        }]
+    }]
+})));
+
