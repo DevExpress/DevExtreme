@@ -1586,7 +1586,7 @@ QUnit.module('Waiting fonts for material theme', {
             'dxToolbar',
             'height',
             '20.1',
-            'This option is deprecated, because the functionality controlled by it was not supposed to belong to the Toolbar widget'
+            'Functionality associated with this option is not intended for the Toolbar widget.'
         ], 'args of the log method');
     });
 });
