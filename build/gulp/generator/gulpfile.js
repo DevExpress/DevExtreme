@@ -81,3 +81,15 @@ addGenerationTask('angular', [
 gulp.task('generate-components-watch', gulp.series('generate-components', function() {
     gulp.watch([SRC], gulp.series('generate-components'));
 }));
+
+gulp.task('generate-react-watch', gulp.series('generate-components', 'generate-react', function() {
+    gulp.watch([SRC], gulp.series('generate-components', 'generate-react'));
+}));
+
+gulp.task('generate-angular-watch', gulp.series('generate-components', 'generate-angular', function() {
+    gulp.watch([SRC], gulp.series('generate-components', 'generate-angular'));
+}));
+
+gulp.task('generate-renovation-watch', gulp.series('generate-components', 'generate-react', 'generate-angular', function() {
+    gulp.watch([SRC], gulp.series('generate-components', 'generate-react', 'generate-angular'));
+}));
