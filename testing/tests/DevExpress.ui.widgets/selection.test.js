@@ -1152,9 +1152,7 @@ QUnit.test('changeItemSelection with shift key two times', function(assert) {
     selection.changeItemSelection(2, { shift: true });
 
     // assert
-    assert.deepEqual(selection.selectionFilter(), [
-        [['id', '=', 2], 'and', ['!', ['id', '=', 5]], 'and', ['!', ['id', '=', 4]]],
-        'or', ['id', '=', 3]], 'selection filter');
+    assert.deepEqual(selection.selectionFilter(), [['id', '=', 2], 'or', ['id', '=', 3]], 'selection filter');
 });
 
 QUnit.test('selectAll when filter is empty', function(assert) {
@@ -1454,7 +1452,30 @@ QUnit.test('selectAll -> deselect items -> select item -> deselect item -> selec
     selection.selectAll();
 
     // assert
-    assert.deepEqual(selection.selectionFilter(), [[['id', '=', 3], 'and', ['!', ['id', '=', 4]]], 'or', ['age', '>', 15]], 'selection filter');
+    assert.deepEqual(selection.selectionFilter(), ['age', '>', 15], 'selection filter');
+    assert.strictEqual(selection.getSelectAllState(), true, 'select all is true');
+    selection.getSelectedItemKeys().done(function(keys) {
+        selectedKeys = keys;
+    });
+    assert.deepEqual(selectedKeys, [2, 3, 4, 5, 6, 7], 'selected keys');
+});
+
+QUnit.test('select item -> selectAll -> deselect items -> select item -> deselect item -> select All', function(assert) {
+    let selectedKeys;
+    const selection = this.createDeferredSelection(this.data);
+
+    // act
+    this.dataSource.filter(['age', '>', 15]);
+    selection.changeItemSelection(4, { control: true }); // select item
+    selection.selectAll();
+    selection.changeItemSelection(1, { control: true }); // deselect item
+    selection.changeItemSelection(2, { control: true }); // deselect item
+    selection.changeItemSelection(2, { control: true }); // select item
+    selection.changeItemSelection(3, { control: true }); // deselect item
+    selection.selectAll();
+
+    // assert
+    assert.deepEqual(selection.selectionFilter(), [[['id', '=', 5], 'and', ['!', ['id', '=', 2]], 'and', ['!', ['id', '=', 4]]], 'or', ['age', '>', 15]], 'selection filter');
     assert.strictEqual(selection.getSelectAllState(), true, 'select all is true');
     selection.getSelectedItemKeys().done(function(keys) {
         selectedKeys = keys;
@@ -1484,6 +1505,32 @@ QUnit.test('selectAll -> deselect items -> select/deselect item -> select All', 
     });
     assert.deepEqual(selectedKeys, [2, 3, 4, 5, 6, 7], 'selected keys');
 });
+
+// T814753
+QUnit.test('selectAll -> deselect/select items -> deselect item -> select All -> deselect item', function(assert) {
+    let selectedKeys;
+    const selection = this.createDeferredSelection(this.data);
+
+    // act
+    this.dataSource.filter(['age', '>', 15]);
+    selection.selectAll();
+    selection.changeItemSelection(1, { control: true }); // deselect item
+    selection.changeItemSelection(2, { control: true }); // deselect item
+    selection.changeItemSelection(1, { control: true }); // select item
+    selection.changeItemSelection(2, { control: true }); // select item
+    selection.changeItemSelection(2, { control: true }); // deselect item
+    selection.selectAll();
+    selection.changeItemSelection(1, { control: true }); // deselect item
+
+    // assert
+    assert.deepEqual(selection.selectionFilter(), [['age', '>', 15], 'and', ['!', ['id', '=', 2]]], 'selection filter');
+    assert.strictEqual(selection.getSelectAllState(), undefined, 'select all is true');
+    selection.getSelectedItemKeys().done(function(keys) {
+        selectedKeys = keys;
+    });
+    assert.deepEqual(selectedKeys, [3, 4, 5, 6, 7], 'selected keys');
+});
+
 
 QUnit.test('Deselect one item after selectAll', function(assert) {
     const selection = this.createDeferredSelection(this.data);
@@ -1645,6 +1692,7 @@ QUnit.test('select 3 items, deselect 3 items', function(assert) {
     assert.deepEqual(selection.selectionFilter(), [], 'selectionFilter is []');
 });
 
+// T874992
 QUnit.test('select 2 items, deselect item', function(assert) {
     let selectedKeys;
     const selection = this.createDeferredSelection(this.data);
@@ -1660,7 +1708,52 @@ QUnit.test('select 2 items, deselect item', function(assert) {
 
     // assert
     assert.deepEqual(selectedKeys, [1], 'selected keys');
-    assert.deepEqual(selection.selectionFilter(), [['id', '=', 1], 'and', ['!', ['id', '=', 2]]], 'selectionFilter');
+    assert.deepEqual(selection.selectionFilter(), ['id', '=', 1], 'selectionFilter');
+});
+
+// T874992
+QUnit.test('select 3 items, deselect 2 item, select item', function(assert) {
+    let selectedKeys;
+    const selection = this.createDeferredSelection(this.data);
+
+    selection.changeItemSelection(0, { control: true });
+    selection.changeItemSelection(1, { control: true });
+    selection.changeItemSelection(2, { control: true });
+    selection.changeItemSelection(0, { control: true });
+    selection.changeItemSelection(1, { control: true });
+    selection.changeItemSelection(3, { control: true });
+
+    // act
+    selection.getSelectedItemKeys().done(function(keys) {
+        selectedKeys = keys;
+    });
+
+    // assert
+    assert.deepEqual(selectedKeys, [3, 4], 'selected keys');
+    assert.deepEqual(selection.selectionFilter(), [['id', '=', 3], 'or', ['id', '=', 4]], 'selectionFilter');
+});
+
+// T874992
+QUnit.test('select all, deselect 3 items, select 2 item, dselect item', function(assert) {
+    let selectedKeys;
+    const selection = this.createDeferredSelection(this.data);
+
+    selection.selectAll();
+    selection.changeItemSelection(0, { control: true });
+    selection.changeItemSelection(1, { control: true });
+    selection.changeItemSelection(2, { control: true });
+    selection.changeItemSelection(0, { control: true });
+    selection.changeItemSelection(1, { control: true });
+    selection.changeItemSelection(3, { control: true });
+
+    // act
+    selection.getSelectedItemKeys().done(function(keys) {
+        selectedKeys = keys;
+    });
+
+    // assert
+    assert.deepEqual(selectedKeys, [1, 2, 5, 6, 7], 'selected keys');
+    assert.deepEqual(selection.selectionFilter(), [['!', ['id', '=', 3]], 'and', ['!', ['id', '=', 4]]], 'selectionFilter');
 });
 
 QUnit.test('select 2 items, deselect and select 1 item', function(assert) {
