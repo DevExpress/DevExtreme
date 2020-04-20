@@ -219,14 +219,14 @@ class FileManager extends Widget {
         this._setItemsViewAreaActive(false);
     }
 
-    _onItemViewSelectionChanged(e) {
-        this._updateToolbar(e.selectedItemInfos);
+    _onItemViewSelectionChanged({ selectedItemInfos, selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys }) {
+        this._updateToolbar(selectedItemInfos);
 
         this._lockSelectionProcessing = true;
-        this.option('selectedItemKeys', e.selectedItemKeys);
+        this.option('selectedItemKeys', selectedItemKeys);
         this._lockSelectionProcessing = false;
 
-        this._actions.onSelectionChanged(e);
+        this._actions.onSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
     }
 
     _onItemViewFocusedItemChanged(e) {

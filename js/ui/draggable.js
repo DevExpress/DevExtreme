@@ -718,8 +718,8 @@ const Draggable = DOMComponent.inherit({
         }
     },
 
-    getElementsFromPoint: function(position) {
-        const ownerDocument = this._$dragElement.get(0).ownerDocument;
+    getElementsFromPoint: function(position, dragElement) {
+        const ownerDocument = (dragElement || this._$dragElement.get(0)).ownerDocument;
 
         if(browser.msie) {
             const msElements = ownerDocument.msElementsFromPoint(position.x, position.y);
@@ -817,8 +817,31 @@ const Draggable = DOMComponent.inherit({
         }
     },
 
+    _isTargetOverAnotherDraggable: function(e) {
+        const sourceDraggable = this._getSourceDraggable();
+
+        if(this === sourceDraggable) {
+            return false;
+        }
+
+        if(!sourceDraggable._dragElementIsCloned()) {
+            return true;
+        }
+
+        const $sourceDraggableElement = sourceDraggable.$element();
+        const elements = this.getElementsFromPoint({
+            x: e.pageX,
+            y: e.pageY
+        }, e.target);
+        const firstWidgetElement = elements.filter((element) => $(element).hasClass(this._addWidgetPrefix()))[0];
+
+        return firstWidgetElement !== $sourceDraggableElement.get(0);
+    },
+
     _dragEnterHandler: function(e) {
-        this._setTargetDraggable();
+        if(this._isTargetOverAnotherDraggable(e)) {
+            this._setTargetDraggable();
+        }
 
         const sourceDraggable = this._getSourceDraggable();
         sourceDraggable.dragEnter(e);
