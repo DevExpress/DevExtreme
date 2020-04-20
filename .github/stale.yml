@@ -25,7 +25,10 @@ markComment: >
   for your contributions.
 
 # Comment to post when closing a stale issue. Set to `false` to disable
-closeComment: false
+issues:
+  closeComment: >
+     This issue was closed due to inactivity.
+     If you found a bug or have a question about our product, [create a new issue](https://github.com/DevExpress/DevExtreme/issues) on GitHub or submit a ticket in our [Support Center](https://www.devexpress.com/Support/Center/).
 
 # Optionally, specify configuration settings that are specific to just 'issues' or 'pulls':
 pulls:
