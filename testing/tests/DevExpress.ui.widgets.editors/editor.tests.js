@@ -779,6 +779,31 @@ QUnit.module('Validation Events', {
         // assert
         assert.ok(!handler.called, 'Validating handler should not be called');
     });
+
+    QUnit.test('validationRequest fires before valueChanged callback', function(assert) {
+        const editor = this.fixture.createEditor({
+            value: 'empty',
+            onValueChanged: ({ value, previousValue }) => {
+                assert.step(`Value changed from "${previousValue}" to "${value}"`);
+                if(value.toUpperCase() !== value) {
+                    editor.option('value', value.toUpperCase());
+                }
+            }
+        });
+
+        editor.validationRequest.add(({ value }) => {
+            assert.step(`Validate value: "${value}"`);
+        });
+
+        editor.option('value', 'test');
+
+        assert.verifySteps([
+            'Validate value: "test"',
+            'Value changed from "empty" to "test"',
+            'Validate value: "TEST"',
+            'Value changed from "test" to "TEST"'
+        ]);
+    });
 });
 
 QUnit.module('aria accessibility', {
