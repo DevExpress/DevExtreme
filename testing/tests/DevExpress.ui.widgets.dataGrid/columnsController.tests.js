@@ -7414,24 +7414,24 @@ QUnit.module('Band columns', { beforeEach: setupModule, afterEach: teardownModul
         const thirdRowColumns = this.columnsController.getVisibleColumns(2);
 
         // assert
-        assert.equal(firstRowColumns[0].caption, 'Field 1', 'caption');
-        assert.equal(firstRowColumns[0].rowspan, 3, 'rowspan');
-        assert.equal(firstRowColumns[1].caption, 'Field 2', 'caption');
-        assert.equal(firstRowColumns[1].rowspan, 3, 'rowspan');
-        assert.equal(firstRowColumns[2].caption, 'Field 3', 'caption');
-        assert.equal(firstRowColumns[2].rowspan, 3, 'rowspan');
-        assert.equal(firstRowColumns[3].caption, 'Field 1', 'caption');
-        assert.equal(firstRowColumns[3].rowspan, 3, 'rowspan');
-        assert.equal(firstRowColumns[4].caption, 'band2', 'caption');
-        assert.notOk(firstRowColumns[4].rowspan, 'rowspan');
+        assert.equal(firstRowColumns[0].caption, 'Field 1', 'caption of the first column of the first row');
+        assert.equal(firstRowColumns[0].rowspan, 3, 'rowspan of the first column of the first row');
+        assert.equal(firstRowColumns[1].caption, 'Field 2', 'caption of the second column of the first row');
+        assert.equal(firstRowColumns[1].rowspan, 3, 'rowspan of the second column of the first row');
+        assert.equal(firstRowColumns[2].caption, 'Field 3', 'caption of the third column of the first row');
+        assert.equal(firstRowColumns[2].rowspan, 3, 'rowspan of the third column of the first row');
+        assert.equal(firstRowColumns[3].caption, 'Field 1', 'caption of the fourth column of the first row');
+        assert.equal(firstRowColumns[3].rowspan, 3, 'rowspan of the fourth column of the first row');
+        assert.equal(firstRowColumns[4].caption, 'band2', 'caption of the fifth column of the first row');
+        assert.notOk(firstRowColumns[4].rowspan, 'rowspan of the fifth column of the first row');
 
-        assert.equal(secondRowColumns[0].caption, 'Field 2', 'caption');
-        assert.equal(secondRowColumns[0].rowspan, 2, 'rowspan');
-        assert.equal(secondRowColumns[1].caption, 'band3', 'caption');
-        assert.notOk(secondRowColumns[1].rowspan, 'rowspan');
+        assert.equal(secondRowColumns[0].caption, 'Field 2', 'caption of the first column of the second row');
+        assert.equal(secondRowColumns[0].rowspan, 2, 'rowspan of the first column of the second row');
+        assert.equal(secondRowColumns[1].caption, 'band3', 'caption of the second column of the second row');
+        assert.notOk(secondRowColumns[1].rowspan, 'rowspan of the second column of the second row');
 
-        assert.equal(thirdRowColumns[0].caption, 'Field 3', 'caption');
-        assert.notOk(thirdRowColumns[0].rowspan, 'rowspan');
+        assert.equal(thirdRowColumns[0].caption, 'Field 3', 'caption of the first column of the third row');
+        assert.notOk(thirdRowColumns[0].rowspan, 'rowspan of the first column of the third row');
     });
 
     QUnit.test('getFixedColumns for data columns', function(assert) {
