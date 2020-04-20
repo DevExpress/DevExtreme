@@ -5,14 +5,16 @@ const ts = require('gulp-typescript');
 const lint = require('gulp-eslint');
 const plumber = require('gulp-plumber');
 const gulpIf = require('gulp-if');
-const merge = require('merge-stream');
+// const merge = require('merge-stream');
 const babel = require('gulp-babel');
+const notify = require('gulp-notify');
+const watch = require('gulp-watch');
 
-const SRC = 'js/renovation/**/*.tsx';
+const SRC = ['js/renovation/**/*.tsx'];
 const DEST = 'js/renovation/';
 
 const GLOB_TS = require('../ts').GLOB_TS;
-const COMMON_SRC = ['js/**/*.*', '!' + GLOB_TS];
+const COMMON_SRC = ['js/**/*.*', `!${GLOB_TS}`, `!${SRC}`];
 
 const knownErrors = [
     'Cannot find module \'preact\'.',
@@ -49,38 +51,52 @@ gulp.task('generate-components', function() {
 });
 
 function addGenerationTask(frameworkName, knownErrors = []) {
+    const frameworkDest = `artifacts/${frameworkName}`;
     const generator = require(`devextreme-generator/${frameworkName}-generator`).default;
-    const buildDeclaration = (tsProject) => gulp.src('js/**/*.tsx')
-        .pipe(generateComponents(generator))
-        .pipe(plumber(() => null))
-        .pipe(tsProject({
-            error(e) {
-                if(!knownErrors.some(i => e.message.endsWith(i))) {
-                    console.log(e.message);
-                }
-            },
-            finish() { }
-        }));
-
-    gulp.task(`generate-${frameworkName}`, function() {
-        const tsProject = ts.createProject(`build/gulp/generator/ts-configs/${frameworkName}.tsconfig.json`);
-        generator.defaultOptionsModule = 'js/core/options/utils';
-
-        return merge(
-            gulp.src(COMMON_SRC),
-            buildDeclaration(tsProject)
-        ).pipe(babel())
-            .pipe(gulp.dest(`artifacts/${frameworkName}`));
-    });
+    const tsProject = ts.createProject(`build/gulp/generator/ts-configs/${frameworkName}.tsconfig.json`);
+    generator.defaultOptionsModule = 'js/core/options/utils';
 
     gulp.task(`generate-${frameworkName}-declaration-only`, function() {
-        const tsProject = ts.createProject(`build/gulp/generator/ts-configs/${frameworkName}.tsconfig.json`);
-        generator.defaultOptionsModule = 'js/core/options/utils';
-
-        return buildDeclaration(tsProject)
+        return gulp.src('js/**/*.tsx')
+            .pipe(generateComponents(generator))
+            .pipe(plumber(() => null))
+            .pipe(tsProject({
+                error(e) {
+                    if(!knownErrors.some(i => e.message.endsWith(i))) {
+                        console.log(e.message);
+                    }
+                },
+                finish() { }
+            }))
             .pipe(babel())
-            .pipe(gulp.dest(`artifacts/${frameworkName}`));
+            .pipe(gulp.dest(frameworkDest));
     });
+
+    gulp.task(`generate-${frameworkName}`, gulp.series(
+        `generate-${frameworkName}-declaration-only`,
+        function() {
+            return gulp.src(COMMON_SRC)
+                .pipe(babel())
+                .pipe(gulp.dest(frameworkDest));
+        }
+    ));
+
+    gulp.task(`generate-${frameworkName}-watch`, gulp.series(
+        `generate-${frameworkName}`,
+        gulp.parallel(
+            function() {
+                watch(COMMON_SRC)
+                    .pipe(plumber({
+                        errorHandler: notify.onError('Error: <%= error.message %>')
+                            .bind() // bind call is necessary to prevent firing 'end' event in notify.onError implementation
+                    }))
+                    .pipe(babel())
+                    .pipe(gulp.dest(frameworkDest));
+            },
+            function declarationBuild() {
+                gulp.watch(SRC, gulp.series(`generate-${frameworkName}-declaration-only`));
+            })
+    ));
 }
 
 addGenerationTask('react', ['Cannot find module \'csstype\'.']);
@@ -90,17 +106,5 @@ addGenerationTask('angular', [
 ]);
 
 gulp.task('generate-components-watch', gulp.series('generate-components', function() {
-    gulp.watch([SRC], gulp.series('generate-components'));
-}));
-
-gulp.task('generate-react-watch', gulp.series('generate-react', function() {
-    gulp.watch([SRC], gulp.series('generate-react-declaration'));
-}));
-
-gulp.task('generate-angular-watch', gulp.series('generate-angular', function() {
-    gulp.watch([SRC], gulp.series('generate-angular-declaration'));
-}));
-
-gulp.task('generate-renovation-watch', gulp.series('generate-react', 'generate-angular', function() {
-    gulp.watch([SRC], gulp.series('generate-react-declaration-only', 'generate-angular-declaration-only'));
+    gulp.watch(SRC, gulp.series('generate-components'));
 }));
