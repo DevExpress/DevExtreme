@@ -385,6 +385,8 @@ class FileManagerThumbnailListBox extends CollectionWidget {
     }
 
     selectAll() {
+        if(this.option('selectionMode') !== 'multipe') return;
+
         this._selection.selectAll();
         this._isPreserveSelectionMode = true;
     }
