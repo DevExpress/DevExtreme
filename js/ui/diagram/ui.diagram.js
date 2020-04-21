@@ -674,6 +674,7 @@ class Diagram extends Widget {
             notifySelectionChanged: this._raiseSelectionChanged.bind(this)
         });
         this._updateEventSubscriptionMethods();
+        this._updateDefaultItemProperties();
 
         this._updateShapeTexts();
         this._updateUnitItems();
@@ -871,12 +872,7 @@ class Diagram extends Widget {
                 setText: this._createOptionSetter('edges.textExpr'),
                 getLineOption: (lineOptionGetter = this._createOptionGetter('edges.lineTypeExpr')) && function(obj) {
                     const lineType = lineOptionGetter(obj);
-                    switch(lineType) {
-                        case 'straight':
-                            return ConnectorLineOption.Straight;
-                        default:
-                            return ConnectorLineOption.Orthogonal;
-                    }
+                    return this._getConnectorLineOption(lineType);
                 }.bind(this),
                 setLineOption: (lineOptionSetter = this._createOptionSetter('edges.lineTypeExpr')) && function(obj, value) {
                     switch(value) {
@@ -890,17 +886,8 @@ class Diagram extends Widget {
                     lineOptionSetter(obj, value);
                 }.bind(this),
                 getStartLineEnding: (startLineEndingGetter = this._createOptionGetter('edges.fromLineEndExpr')) && function(obj) {
-                    const lineType = startLineEndingGetter(obj);
-                    switch(lineType) {
-                        case 'arrow':
-                            return ConnectorLineEnding.Arrow;
-                        case 'outlinedTriangle':
-                            return ConnectorLineEnding.OutlinedTriangle;
-                        case 'filledTriangle':
-                            return ConnectorLineEnding.FilledTriangle;
-                        default:
-                            return ConnectorLineEnding.None;
-                    }
+                    const lineEnd = startLineEndingGetter(obj);
+                    return this._getConnectorLineEnding(lineEnd);
                 }.bind(this),
                 setStartLineEnding: (startLineEndingSetter = this._createOptionSetter('edges.fromLineEndExpr')) && function(obj, value) {
                     switch(value) {
@@ -920,17 +907,8 @@ class Diagram extends Widget {
                     startLineEndingSetter(obj, value);
                 }.bind(this),
                 getEndLineEnding: (endLineEndingGetter = this._createOptionGetter('edges.toLineEndExpr')) && function(obj) {
-                    const lineType = endLineEndingGetter(obj);
-                    switch(lineType) {
-                        case 'none':
-                            return ConnectorLineEnding.None;
-                        case 'outlinedTriangle':
-                            return ConnectorLineEnding.OutlinedTriangle;
-                        case 'filledTriangle':
-                            return ConnectorLineEnding.FilledTriangle;
-                        default:
-                            return ConnectorLineEnding.Arrow;
-                    }
+                    const lineEnd = endLineEndingGetter(obj);
+                    return this._getConnectorLineEnding(lineEnd);
                 }.bind(this),
                 setEndLineEnding: (endLineEndingSetter = this._createOptionSetter('edges.toLineEndExpr')) && function(obj, value) {
                     switch(value) {
@@ -953,6 +931,28 @@ class Diagram extends Widget {
             layoutParameters: this._getDataBindingLayoutParameters()
         };
         this._executeDiagramCommand(DiagramCommand.BindDocument, data);
+    }
+    _getConnectorLineOption(lineType) {
+        const { ConnectorLineOption } = getDiagram();
+        switch(lineType) {
+            case 'straight':
+                return ConnectorLineOption.Straight;
+            default:
+                return ConnectorLineOption.Orthogonal;
+        }
+    }
+    _getConnectorLineEnding(lineEnd) {
+        const { ConnectorLineEnding } = getDiagram();
+        switch(lineEnd) {
+            case 'arrow':
+                return ConnectorLineEnding.Arrow;
+            case 'outlinedTriangle':
+                return ConnectorLineEnding.OutlinedTriangle;
+            case 'filledTriangle':
+                return ConnectorLineEnding.FilledTriangle;
+            default:
+                return ConnectorLineEnding.None;
+        }
     }
     _getDataBindingLayoutParameters() {
         const { DataLayoutType, DataLayoutOrientation } = getDiagram();
@@ -1369,6 +1369,19 @@ class Diagram extends Widget {
         RenderHelper.removeEventListener = (element, eventName, handler) => {
             eventsEngine.off(element, eventName, handler);
         };
+    }
+    _updateDefaultItemProperties() {
+        if(this.option('defaultItemProperties.style')) {
+            this._diagramInstance.selection.inputPosition.setInitialStyleProperties(this.option('defaultItemProperties.style'));
+        }
+        if(this.option('defaultItemProperties.textStyle')) {
+            this._diagramInstance.selection.inputPosition.setInitialTextStyleProperties(this.option('defaultItemProperties.textStyle'));
+        }
+        this._diagramInstance.selection.inputPosition.setInitialConnectorProperties({
+            lineOption: this._getConnectorLineOption(this.option('defaultItemProperties.lineType')),
+            startLineEnding: this._getConnectorLineEnding(this.option('defaultItemProperties.fromLineEnd')),
+            endLineEnding: this._getConnectorLineEnding(this.option('defaultItemProperties.toLineEnd'))
+        });
     }
 
     focus() {
@@ -1988,6 +2001,34 @@ class Diagram extends Widget {
                 */
             },
 
+            defaultItemProperties: {
+                /**
+                * @name dxDiagramOptions.defaultItemProperties.style
+                * @type Object
+                */
+                /**
+                * @name dxDiagramOptions.defaultItemProperties.textStyle
+                * @type Object
+                */
+                /**
+                * @name dxDiagramOptions.defaultItemProperties.lineType
+                * @type Enums.DiagramConnectorLineType
+                * @default 'orthogonal'
+                */
+                lineType: 'orthogonal',
+                /**
+                * @name dxDiagramOptions.defaultItemProperties.fromLineEnd
+                * @type Enums.DiagramConnectorLineEnd
+                * @default 'none'
+                */
+                fromLineEnd: 'none',
+                /**
+                * @name dxDiagramOptions.defaultItemProperties.toLineEnd
+                * @type Enums.DiagramConnectorLineEnd
+                * @default 'arrow'
+                */
+                toLineEnd: 'arrow',
+            },
             export: {
                 /**
                  * @name dxDiagramOptions.export.fileName
@@ -2369,6 +2410,9 @@ class Diagram extends Widget {
                 break;
             case 'onCustomCommand':
                 this._createCustomCommand();
+                break;
+            case 'defaultItemProperties':
+                this._updateDefaultItemProperties();
                 break;
             case 'export':
                 if(this._mainToolbar) {

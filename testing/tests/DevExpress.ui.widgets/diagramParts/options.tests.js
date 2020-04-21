@@ -213,6 +213,32 @@ QUnit.module('Options', moduleConfig, () => {
         assert.equal(this.instance.option('simpleView'), true);
     });
 
+    test('should change defaultItemProperties', function(assert) {
+        assert.equal(this.instance._diagramInstance.selection.inputPosition.initialProperties.style, undefined);
+        assert.equal(this.instance._diagramInstance.selection.inputPosition.initialProperties.textStyle, undefined);
+        assert.equal(this.instance._diagramInstance.selection.inputPosition.initialProperties.connectionProperties, undefined);
+        this.instance.option('defaultItemProperties.style', { fill: '#ff0000' });
+        this.instance.option('defaultItemProperties.textStyle', { fill: '#ff0000' });
+        this.instance.option('defaultItemProperties.lineType', 'straight');
+        this.instance.option('defaultItemProperties.fromLineEnd', 'filledTriangle');
+        this.instance.option('defaultItemProperties.toLineEnd', 'filledTriangle');
+        assert.equal(this.instance._diagramInstance.selection.inputPosition.initialProperties.style['fill'], '#ff0000');
+        assert.equal(this.instance._diagramInstance.selection.inputPosition.initialProperties.textStyle['fill'], '#ff0000');
+        assert.equal(this.instance._diagramInstance.selection.inputPosition.initialProperties.connectorProperties.lineOption, 0);
+        assert.equal(this.instance._diagramInstance.selection.inputPosition.initialProperties.connectorProperties.startLineEnding, 3);
+        assert.equal(this.instance._diagramInstance.selection.inputPosition.initialProperties.connectorProperties.endLineEnding, 3);
+        this.instance.option('defaultItemProperties.style', { fill: '#ee0000' });
+        this.instance.option('defaultItemProperties.textStyle', { fill: '#ee0000' });
+        this.instance.option('defaultItemProperties.lineType', 'orthogonal');
+        this.instance.option('defaultItemProperties.fromLineEnd', 'outlinedTriangle');
+        this.instance.option('defaultItemProperties.toLineEnd', 'outlinedTriangle');
+        assert.equal(this.instance._diagramInstance.selection.inputPosition.initialProperties.style['fill'], '#ee0000');
+        assert.equal(this.instance._diagramInstance.selection.inputPosition.initialProperties.textStyle['fill'], '#ee0000');
+        assert.equal(this.instance._diagramInstance.selection.inputPosition.initialProperties.connectorProperties.lineOption, 1);
+        assert.equal(this.instance._diagramInstance.selection.inputPosition.initialProperties.connectorProperties.startLineEnding, 2);
+        assert.equal(this.instance._diagramInstance.selection.inputPosition.initialProperties.connectorProperties.endLineEnding, 2);
+    });
+
     test('should change dataSource options', function(assert) {
         assert.equal(this.instance._diagramInstance.documentDataSource, undefined);
         this.instance.option('nodes.dataSource', [
