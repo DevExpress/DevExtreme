@@ -1,7 +1,7 @@
 import { Component, ComponentBindings, JSXComponent, OneWay, TwoWay } from 'devextreme-generator/component_declaration/common';
-import Info from './info';
-import PageIndexSelector, { PagerPageIndexSelectorInput } from './page-index-selector';
-import PageSizeSelector, { PageSizeSelectorInput } from './page-size-selector';
+import InfoText from './info';
+import PageIndexSelector, { PageIndexSelectorProps } from './page-index-selector';
+import PageSizeSelector, { PageSizeSelectorProps } from './page-size-selector';
 
 // import { getFormatter } from '../../localization/message';
 
@@ -11,14 +11,14 @@ export const viewFunction = ({ pageSizeSelectorProps, pageIndexSelectorProps, pr
     return (<div className={PAGER_CLASS}>
         <PageSizeSelector {...pageSizeSelectorProps} />
         <div className={PAGER_PAGES_CLASS}>
-            <Info {...props} />
+            <InfoText {...props} />
             <PageIndexSelector {...pageIndexSelectorProps} />
         </div>
     </div>);
 };
 
 @ComponentBindings()
-export class PagerInput {
+export class PagerProps {
     // TODO messageLocalization.getFormatter('dxPager-infoText'),
     @OneWay() infoTextMessageTemplate = 'Page {0} of {1} ({2} items)';
     @OneWay() lightModeEnabled = false;
@@ -45,18 +45,18 @@ export class PagerInput {
     defaultOptionRules: null,
     view: viewFunction,
 })
-export default class Pager extends JSXComponent<PagerInput> {
+export default class Pager extends JSXComponent<PagerProps> {
     get InfoText() {
         const { pageCount } = this.props;
         return `Page count:${pageCount}`;
     }
-    get pageSizeSelectorProps(): PageSizeSelectorInput {
+    get pageSizeSelectorProps(): PageSizeSelectorProps {
         return {
             isLargeDisplayMode: !this.props.lightModeEnabled,
             ...this.props as any,
         };
     }
-    get pageIndexSelectorProps(): PagerPageIndexSelectorInput {
+    get pageIndexSelectorProps(): PageIndexSelectorProps {
         return {
             isLargeDisplayMode: !this.props.lightModeEnabled,
             ...this.props as any,

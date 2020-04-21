@@ -2,12 +2,12 @@ import { Component, ComponentBindings, JSXComponent, OneWay } from 'devextreme-g
 import { formatNumber } from '../../localization';
 import { format } from '../../core/utils/string';
 export const PAGER_INFO_CLASS = 'dx-info';
-export const viewFunction = ({ Text }: Info) => {
+export const viewFunction = ({ Text }: InfoText) => {
     return (<div className={PAGER_INFO_CLASS}>{Text}</div>);
 };
 
 @ComponentBindings()
-export class PagerInfoInput {
+export class InfoTextProps {
     @OneWay() infoTextMessageTemplate?: string;
     @OneWay() pageCount: number = 10;
     @OneWay() pageIndex = 0;
@@ -19,7 +19,7 @@ export class PagerInfoInput {
     defaultOptionRules: null,
     view: viewFunction,
 })
-export default class Info extends JSXComponent<PagerInfoInput> {
+export default class InfoText extends JSXComponent<InfoTextProps> {
     get Text() {
         const { infoTextMessageTemplate, pageIndex, pageCount, totalCount } = this.props;
         return format(infoTextMessageTemplate,

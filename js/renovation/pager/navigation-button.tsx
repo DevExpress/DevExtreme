@@ -41,12 +41,12 @@ const PAGER_PREV_BUTTON_CLASS = 'dx-prev-button';
 const PAGER_NEXT_BUTTON_CLASS = 'dx-next-button';
 
 function combineClassName(classes: string[]) { return classes.join(' '); }
-export const viewFunction = ({ className }: PagerNavigationButton) => {
+export const viewFunction = ({ className }: NavigationButton) => {
     return (<div className={className}/>);
 };
 
 @ComponentBindings()
-export class PagerNavigationButtonInput {
+export class NavigationButtonProps {
     @OneWay() direction: string = 'prev';
     @OneWay() rtlEnabled = false;
 }
@@ -59,7 +59,7 @@ const prevButtonClassName = combineClassName([PAGER_NAVIGATE_BUTTON, PAGER_PREV_
     view: viewFunction,
 })
 
-export default class PagerNavigationButton extends JSXComponent<PagerNavigationButtonInput> {
+export default class NavigationButton extends JSXComponent<NavigationButtonProps> {
     get className() {
         const
             { direction } = this.props;

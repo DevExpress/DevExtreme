@@ -3,12 +3,12 @@ import { Component, ComponentBindings, JSXComponent, OneWay } from 'devextreme-g
 const PAGER_PAGE_CLASS = 'dx-page';
 const PAGER_SELECTION_CLASS = 'dx-selection';
 const PAGER_PAGE_SELECTION_CLASS = `${PAGER_PAGE_CLASS} ${PAGER_SELECTION_CLASS}`;
-export const viewFunction = ({ className, value }: PagerPage) => {
+export const viewFunction = ({ className, value }: Page) => {
     return (<div className={className}>{value}</div>);
 };
 
 @ComponentBindings()
-export class PagerPageInput {
+export class PagerPageProps {
     @OneWay() index?: number;
     @OneWay() selected: boolean = false;
     @OneWay() value?: string;
@@ -20,7 +20,7 @@ export class PagerPageInput {
     view: viewFunction,
 })
 
-export default class PagerPage extends JSXComponent<PagerPageInput> {
+export default class Page extends JSXComponent<PagerPageProps> {
     get value() {
         const
             { value } = this.props;

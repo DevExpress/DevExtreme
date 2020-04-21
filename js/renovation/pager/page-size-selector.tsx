@@ -27,7 +27,7 @@ export const viewFunction = ({ pageSizesText, selectBoxProps,
 type FullPageSize = { text: string; value: number; };
 type PageSize = number | FullPageSize;
 @ComponentBindings()
-export class PageSizeSelectorInput {
+export class PageSizeSelectorProps {
     @OneWay() isLargeDisplayMode = true;
     @OneWay() pageSize = 5;
     @Event() pageSizeChanged?: (pageSize: number) => void = () => { }; // commonUtils.noop
@@ -40,7 +40,7 @@ export class PageSizeSelectorInput {
     defaultOptionRules: null,
     view: viewFunction,
 })
-export default class PageSizeSelector extends JSXComponent<PageSizeSelectorInput> {
+export default class PageSizeSelector extends JSXComponent<PageSizeSelectorProps> {
     get pageSizesText() {
         const { pageSize, pageSizes } = this.props;
         return this.normalizedPageSizes(pageSizes).map((processedPageSize) => {

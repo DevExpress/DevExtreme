@@ -1,21 +1,21 @@
 import { Component, ComponentBindings, JSXComponent, Event, OneWay, Fragment } from 'devextreme-generator/component_declaration/common';
-import PagerNavigationButton from './navigation-button';
+import NavigationButton from './navigation-button';
 import Pages from './pages';
 
-export const viewFunction = ({ renderNavButtons, props }: PagerPageIndexSelector) => {
+export const viewFunction = ({ renderNavButtons, props }: PageIndexSelector) => {
     const { rtlEnabled } = props;
     return (
         <Fragment>
             {renderNavButtons &&
-            <PagerNavigationButton rtlEnabled={rtlEnabled} direction={'prev'} />}
+            <NavigationButton rtlEnabled={rtlEnabled} direction={'prev'} />}
             <Pages {...props}/>
             {renderNavButtons &&
-            <PagerNavigationButton rtlEnabled={rtlEnabled} direction={'next'} />}
+            <NavigationButton rtlEnabled={rtlEnabled} direction={'next'} />}
         </Fragment>);
 };
 
 @ComponentBindings()
-export class PagerPageIndexSelectorInput {
+export class PageIndexSelectorProps {
     @OneWay() hasKnownLastPage ?= true;
     @OneWay() isLargeDisplayMode = true;
     @OneWay() maxPagesCount = 10;
@@ -34,7 +34,7 @@ export class PagerPageIndexSelectorInput {
     defaultOptionRules: null,
     view: viewFunction,
 })
-export default class PagerPageIndexSelector extends JSXComponent<PagerPageIndexSelectorInput> {
+export default class PageIndexSelector extends JSXComponent<PageIndexSelectorProps> {
     get renderNavButtons() {
         const
             { isLargeDisplayMode, showNavigationButtons } = this.props;

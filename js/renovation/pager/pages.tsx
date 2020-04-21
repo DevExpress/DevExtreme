@@ -1,6 +1,6 @@
 // tslint:disable-next-line: max-line-length
 import { Component, ComponentBindings, JSXComponent, Event, OneWay, Fragment, InternalState, TwoWay } from 'devextreme-generator/component_declaration/common';
-import PagerPage, { PagerPageInput } from './page';
+import Page, { PagerPageProps } from './page';
 import { PAGER_INFO_CLASS } from './info';
 import NumberBox from '../number-box';
 
@@ -15,7 +15,7 @@ export const viewFunction = ({ pages, numberBoxProps,
     if (isLargeDisplayMode) {
         const PagesMarkup = pages.map((pageInput, key) => {
             if (pageInput) {
-                return (<PagerPage key={key} {...pageInput} />);
+                return (<Page key={key} {...pageInput} />);
             }
             return (<div key={key} className={PAGER_PAGE_SEPARATOR_CLASS}>. . .</div>);
         });
@@ -26,12 +26,12 @@ export const viewFunction = ({ pages, numberBoxProps,
     return (<div className={'dx-light-pages'}>
         <NumberBox {...numberBoxProps} />
         <span className={PAGER_INFO_TEXT_CLASS}>{pagesCountText}</span>
-        <PagerPage selected={false} index={pageCount - 1} value={pageCount.toString()} />
+        <Page selected={false} index={pageCount - 1} value={pageCount.toString()} />
     </div>);
 };
 
 @ComponentBindings()
-export class PagesInput {
+export class PagesProps {
     @OneWay() isLargeDisplayMode = true;
     @OneWay() maxPagesCount = 10;
     @OneWay() pageCount = 10;
@@ -44,10 +44,10 @@ export class PagesInput {
 }
 
 const PAGES_LIMITER = 4;
-type DDD = PagerPageInput | null;
+type DDD = PagerPageProps | null;
 // tslint:disable-next-line: max-classes-per-file
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class Pages extends JSXComponent<PagesInput> {
+export default class Pages extends JSXComponent<PagesProps> {
     get pages() {
         const { pageIndex, pageCount, maxPagesCount } = this.props;
         const pages: DDD[] = [];
