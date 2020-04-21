@@ -3853,6 +3853,31 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         assert.strictEqual(this.dataController.pageCount(), 5, 'page count');
     });
 
+    // T750279
+    QUnit.test('setViewportItemIndex should be called for rowsScrollController and dataSource with same args after loadIfNeed call', function(assert) {
+        // act
+        this.dataController.setViewportPosition(50);
+
+        // assert
+        assert.strictEqual(this.dataController.getContentOffset('begin'), 50);
+
+        // act
+        const rowsScrollControllerSpy = sinon.spy(this.dataController._rowsScrollController, 'setViewportItemIndex');
+        const dataSourceSpy = sinon.spy(this.dataController._dataSource, 'setViewportItemIndex');
+
+        this.dataController.loadIfNeed();
+
+        // assert
+        assert.equal(rowsScrollControllerSpy.callCount, 1, 'setViewportItemIndex call count');
+        assert.equal(dataSourceSpy.callCount, 1, 'setViewportItemIndex call count');
+
+        const rowsScrollControllerCall = rowsScrollControllerSpy.getCall(0);
+        const dataSourceCall = dataSourceSpy.getCall(0);
+
+        assert.deepEqual(rowsScrollControllerCall.args, [5], 'setViewportItemIndex call args');
+        assert.deepEqual(dataSourceCall.args, [5], 'setViewportItemIndex call args');
+    });
+
 // =================================
 // scrollingDataSource tests
 });
