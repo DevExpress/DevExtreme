@@ -1313,6 +1313,32 @@ QUnit.module('dragTemplate', moduleConfig, () => {
         // assert
         assert.strictEqual($('#myDragElement').length, 0, 'there isn\'t a cloned element');
     });
+
+    QUnit.test('Dragging element should not be removed if dragTemplate option is changed during dragging (T867087)', function(assert) {
+        // arrange
+        this.createDraggable({
+            dragTemplate: function() {
+                return $('<div id=\'myDragElement1\'>');
+            }
+        });
+
+        this.pointer.down().move(10, 10);
+
+        this.draggableInstance.option('dragTemplate', function() {
+            return $('<div id=\'myDragElement2\'>');
+        });
+
+        // assert
+        assert.strictEqual($('#myDragElement1').length, 1, 'first dragTemplate is rendered');
+        assert.strictEqual($('#myDragElement2').length, 0, 'second dragTemplate is not rendered');
+
+        // act
+        this.pointer.up().down().move(10, 10);
+
+        // assert
+        assert.strictEqual($('#myDragElement1').length, 0, 'first dragTemplate is not rendered');
+        assert.strictEqual($('#myDragElement2').length, 1, 'second dragTemplate is rendered');
+    });
 });
 
 QUnit.module('filter', $.extend({}, moduleConfig, {
