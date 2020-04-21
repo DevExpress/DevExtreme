@@ -109,4 +109,4 @@ export default class Button extends Component {
     }
 }
 
-// registerComponent('Button', Button);
+registerComponent('Button', Button);
