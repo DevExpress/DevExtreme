@@ -693,16 +693,16 @@ $.each([null, [-180, 90, 180, -20], [-50, 90, 180, -90], [-180, 20, 180, -90], [
         assert.arraysEqual(this.projection2.getViewport(), this.projection1.getViewport());
     });
 
-    // QUnit.test('Northern edge - to viewport' + namePart, function (assert) {
-    //    this.setBounds(bounds);
-    //
-    //    this.projection1.setZoom(2).setCenter([0, 80]);
-    //
-    //    this.projection2.setViewport(this.projection1.getViewport());
-    //
-    //    assert.roughEqual(this.projection2.getZoom(), this.projection1.getZoom(), 1E-8, 'zoom');
-    //    assert.arraysEqual(this.projection2.getCenter(), this.projection1.getCenter(), 'center');
-    // });
+    QUnit.skip('Northern edge - to viewport' + namePart, function(assert) {
+        this.setBounds(bounds);
+
+        this.projection1.setZoom(2).setCenter([0, 80]);
+
+        this.projection2.setViewport(this.projection1.getViewport());
+
+        assert.roughEqual(this.projection2.getZoom(), this.projection1.getZoom(), 1E-8, 'zoom');
+        assert.arraysEqual(this.projection2.getCenter(), this.projection1.getCenter(), 'center');
+    });
 
     QUnit.test('Northern edge - from viewport' + namePart, function(assert) {
         this.setBounds(bounds);
@@ -715,16 +715,16 @@ $.each([null, [-180, 90, 180, -20], [-50, 90, 180, -90], [-180, 20, 180, -90], [
         assert.arraysEqual(this.projection2.getViewport(), this.projection1.getViewport());
     });
 
-    // QUnit.test('Eastern edge - to viewport' + namePart, function (assert) {
-    //    this.setBounds(bounds);
-    //
-    //    this.projection1.setZoom(1.75).setCenter([170, 15]);
-    //
-    //    this.projection2.setViewport(this.projection1.getViewport());
-    //
-    //    assert.roughEqual(this.projection2.getZoom(), this.projection1.getZoom(), 1E-8, 'zoom');
-    //    assert.arraysEqual(this.projection2.getCenter(), this.projection1.getCenter(), 'center');
-    // });
+    QUnit.skip('Eastern edge - to viewport' + namePart, function(assert) {
+        this.setBounds(bounds);
+
+        this.projection1.setZoom(1.75).setCenter([170, 15]);
+
+        this.projection2.setViewport(this.projection1.getViewport());
+
+        assert.roughEqual(this.projection2.getZoom(), this.projection1.getZoom(), 1E-8, 'zoom');
+        assert.arraysEqual(this.projection2.getCenter(), this.projection1.getCenter(), 'center');
+    });
 
     QUnit.test('Eastern edge - from viewport' + namePart, function(assert) {
         this.setBounds(bounds);
@@ -737,16 +737,16 @@ $.each([null, [-180, 90, 180, -20], [-50, 90, 180, -90], [-180, 20, 180, -90], [
         assert.arraysEqual(this.projection2.getViewport(), this.projection1.getViewport());
     });
 
-    // QUnit.test('Southern edge - to viewport' + namePart, function (assert) {
-    //    this.setBounds(bounds);
-    //
-    //    this.projection1.setZoom(2.3).setCenter([50, -75]);
-    //
-    //    this.projection2.setViewport(this.projection1.getViewport());
-    //
-    //    assert.roughEqual(this.projection2.getZoom(), this.projection1.getZoom(), 1E-8, 'zoom');
-    //    assert.arraysEqual(this.projection2.getCenter(), this.projection1.getCenter(), 'center');
-    // });
+    QUnit.skip('Southern edge - to viewport' + namePart, function(assert) {
+        this.setBounds(bounds);
+
+        this.projection1.setZoom(2.3).setCenter([50, -75]);
+
+        this.projection2.setViewport(this.projection1.getViewport());
+
+        assert.roughEqual(this.projection2.getZoom(), this.projection1.getZoom(), 1E-8, 'zoom');
+        assert.arraysEqual(this.projection2.getCenter(), this.projection1.getCenter(), 'center');
+    });
 
     QUnit.test('Southern edge - from viewport' + namePart, function(assert) {
         this.setBounds(bounds);
@@ -759,16 +759,16 @@ $.each([null, [-180, 90, 180, -20], [-50, 90, 180, -90], [-180, 20, 180, -90], [
         assert.arraysEqual(this.projection2.getViewport(), this.projection1.getViewport());
     });
 
-    // QUnit.test('Western edge - to viewport' + namePart, function (assert) {
-    //    this.setBounds(bounds);
-    //
-    //    this.projection1.setZoom(4.75).setCenter([-160, -10]);
-    //
-    //    this.projection2.setViewport(this.projection1.getViewport());
-    //
-    //    assert.roughEqual(this.projection2.getZoom(), this.projection1.getZoom(), 1E-8, 'zoom');
-    //    assert.arraysEqual(this.projection2.getCenter(), this.projection1.getCenter(), 'center');
-    // });
+    QUnit.skip('Western edge - to viewport' + namePart, function(assert) {
+        this.setBounds(bounds);
+
+        this.projection1.setZoom(4.75).setCenter([-160, -10]);
+
+        this.projection2.setViewport(this.projection1.getViewport());
+
+        assert.roughEqual(this.projection2.getZoom(), this.projection1.getZoom(), 1E-8, 'zoom');
+        assert.arraysEqual(this.projection2.getCenter(), this.projection1.getCenter(), 'center');
+    });
 
     QUnit.test('Western edge - from viewport' + namePart, function(assert) {
         this.setBounds(bounds);
