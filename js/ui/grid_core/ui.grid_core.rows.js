@@ -329,9 +329,7 @@ module.exports = {
                 _renderLoadPanel: renderLoadPanel,
 
                 _renderContent: function(contentElement, tableElement) {
-                    contentElement.replaceWith($('<div>')
-                        .addClass(this.addWidgetPrefix(CONTENT_CLASS))
-                        .append(tableElement));
+                    contentElement.empty().append(tableElement);
 
                     return this._findContentElement();
                 },
