@@ -4330,55 +4330,55 @@ QUnit.module('Headers reordering', {
         assert.ok(!$draggingHeader.is(':visible'), 'header is not displayed');
     });
 
-    // QUnit.test('target column index equals source column index after QUnit.start dragging without moving', function (assert) {
-    //    // arrange
-    //    var testElement = $('#container'),
-    //        dropParameters,
-    //        controller = this.createDraggingHeaderViewController(),
-    //        draggingHeader = new TestDraggingHeader(this.component);
-    //
-    //    // act
-    //    controller.drop = function (parameters) {
-    //        dropParameters = parameters;
-    //    };
-    //    controller.allowDrop = function (parameters) {
-    //        return true;
-    //    };
-    //
-    //    draggingHeader.init();
-    //
-    //    this.component._views.columnsSeparatorView.render(testElement);
-    //    draggingHeader.render(testElement);
-    //
-    //    draggingHeader.dragHeader({
-    //        sourceLocation: 'headers',
-    //        draggingPanels: this.draggingPanels,
-    //        columnIndex: 1,
-    //        deltaX: 2,
-    //        deltaY: 1,
-    //        sourceColumn: {
-    //            caption: "TestDrag",
-    //            allowReordering: true
-    //        }
-    //    });
-    //
-    //    draggingHeader.dropHeader({
-    //        event: {
-    //            data: {
-    //                that: draggingHeader,
-    //                rootElement: testElement
-    //            },
-    //            pageX: -10000,
-    //            pageY: 55,
-    //            type: 'mouse'
-    //        }
-    //    });
-    //
-    //    // assert
-    //    assert.ok(dropParameters);
-    //    assert.equal(dropParameters.sourceColumnIndex, 1);
-    //    assert.equal(dropParameters.targetColumnIndex, 1);
-    // });
+    QUnit.skip('target column index equals source column index after QUnit.start dragging without moving', function(assert) {
+        // arrange
+        const testElement = $('#container');
+        let dropParameters;
+        const controller = this.createDraggingHeaderViewController();
+        const draggingHeader = new TestDraggingHeader(this.component);
+
+        // act
+        controller.drop = function(parameters) {
+            dropParameters = parameters;
+        };
+        controller.allowDrop = function(parameters) {
+            return true;
+        };
+
+        draggingHeader.init();
+
+        this.component._views.columnsSeparatorView.render(testElement);
+        draggingHeader.render(testElement);
+
+        draggingHeader.dragHeader({
+            sourceLocation: 'headers',
+            draggingPanels: this.draggingPanels,
+            columnIndex: 1,
+            deltaX: 2,
+            deltaY: 1,
+            sourceColumn: {
+                caption: 'TestDrag',
+                allowReordering: true
+            }
+        });
+
+        draggingHeader.dropHeader({
+            event: {
+                data: {
+                    that: draggingHeader,
+                    rootElement: testElement
+                },
+                pageX: -10000,
+                pageY: 55,
+                type: 'mouse'
+            }
+        });
+
+        // assert
+        assert.ok(dropParameters);
+        assert.equal(dropParameters.sourceColumnIndex, 1);
+        assert.equal(dropParameters.targetColumnIndex, 1);
+    });
 
     QUnit.test('Rise element events', function(assert) {
         // arrange
@@ -6000,14 +6000,14 @@ QUnit.module('column chooser reordering', {
         assert.equal(offset.top, -9491, 'offset top');
     });
 
-    /* QUnit.test('Block separator move in column chooser when dragging down', function (assert) {
+    QUnit.skip('Block separator move in column chooser when dragging down', function(assert) {
         // arrange
-        var testElement = $('#container'),
-            blockSeparator;
+        const testElement = $('#container');
+        let blockSeparator;
 
         this.controller._rowsView = {};
-        this.controller._rowsView.setRowsOpacity = function () { };
-        this.controller._columnHeadersView.element = function () { return $('<div />'); };
+        this.controller._rowsView.setRowsOpacity = function() { };
+        this.controller._columnHeadersView.element = function() { return $('<div />'); };
 
         this.draggingHeaderView.render(testElement);
         this.blockSeparatorView.render(testElement);
@@ -6020,7 +6020,7 @@ QUnit.module('column chooser reordering', {
             deltaY: 1,
             columnElement: $('<div/>'),
             sourceColumn: {
-                caption: "TestDrag",
+                caption: 'TestDrag',
                 allowHiding: true
             }
         });
@@ -6036,7 +6036,7 @@ QUnit.module('column chooser reordering', {
                     that: this.draggingHeaderView,
                     rootElement: testElement
                 },
-                preventDefault: function () { },
+                preventDefault: function() { },
                 pageX: -9800,
                 pageY: -9305,
                 type: 'mouse'
@@ -6044,20 +6044,20 @@ QUnit.module('column chooser reordering', {
         });
 
         // assert
-        assert.equal($("#itemsContainerVertical").children().length, 2);
-        assert.ok($("#itemsContainerVertical").children().eq(2).hasClass('dx-block-separator'));
+        assert.equal($('#itemsContainerVertical').children().length, 2);
+        assert.ok($('#itemsContainerVertical').children().eq(2).hasClass('dx-block-separator'));
         blockSeparator = $('.dx-datagrid').children('.dx-block-separator');
         assert.ok(!blockSeparator.length, 'not has is separator');
     });
 
-    QUnit.test('Block separator move in column chooser when dragging up', function (assert) {
+    QUnit.skip('Block separator move in column chooser when dragging up', function(assert) {
         // arrange
-        var testElement = $('#container'),
-            blockSeparator;
+        const testElement = $('#container');
+        let blockSeparator;
 
         this.controller._rowsView = {};
-        this.controller._rowsView.setRowsOpacity = function () { };
-        this.controller._columnHeadersView.element = function () { return $('<div />'); };
+        this.controller._rowsView.setRowsOpacity = function() { };
+        this.controller._columnHeadersView.element = function() { return $('<div />'); };
 
         this.draggingHeaderView.render(testElement);
         this.blockSeparatorView.render(testElement);
@@ -6070,7 +6070,7 @@ QUnit.module('column chooser reordering', {
             deltaY: 1,
             columnElement: $('<div/>'),
             sourceColumn: {
-                caption: "TestDrag",
+                caption: 'TestDrag',
                 allowHiding: true
             }
         });
@@ -6086,7 +6086,7 @@ QUnit.module('column chooser reordering', {
                     that: this.draggingHeaderView,
                     rootElement: testElement
                 },
-                preventDefault: function () { },
+                preventDefault: function() { },
                 pageX: -9800,
                 pageY: -9495,
                 type: 'mouse'
@@ -6094,12 +6094,12 @@ QUnit.module('column chooser reordering', {
         });
 
         // assert
-        assert.equal($("#itemsContainerVertical").children().length, 3);
-        assert.ok($("#itemsContainerVertical").children().eq(0).hasClass('dx-block-separator'));
+        assert.equal($('#itemsContainerVertical').children().length, 3);
+        assert.ok($('#itemsContainerVertical').children().eq(0).hasClass('dx-block-separator'));
         blockSeparator = $('.dx-datagrid').children('.dx-block-separator');
         assert.ok(!blockSeparator.length, 'not has is separator');
     });
-    */
+
     QUnit.test('Reset opacity for target element', function(assert) {
         // arrange
         const testElement = $('#container');

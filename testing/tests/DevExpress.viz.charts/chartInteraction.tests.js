@@ -136,7 +136,7 @@ QUnit.module('Misc');
 // so "_dataSourceChangedHandler" is called during "_reinit".
 // The new data source should cause incident - so "incidentOccurred" event is triggered during "_dataSourceChangedHandler".
 // During incident processing "beginUpdate" must be called somehow.
-// In the customer's issue it is somehow accomplished by actions code. In the test (for simplicity) it is done manually.
+// In the customer's issue it is somehow accomplished by actions code. In tests (for simplicity) it is done manually.
 // On "beginUpdate" chart comes to invalid state and later crashes on "endUpdate".
 QUnit.test('There should be no crash when chart updating is began after option is changed and ended some time later', function(assert) {
     const chart = $('#chart').dxChart({

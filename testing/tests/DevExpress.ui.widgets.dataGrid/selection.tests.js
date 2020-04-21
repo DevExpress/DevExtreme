@@ -546,7 +546,8 @@ QUnit.test('selectRowsByIndexes for multiple selection. Indexes via arguments', 
     assert.ok(!this.dataController.items()[2].isSelected);
     assert.ok(this.dataController.items()[3].isSelected);
 });
-/* test("set selectedRows from user state", function () {
+
+QUnit.skip('set selectedRows from user state', function(assert) {
     // arrange
     this.applyOptions({
         selection: { mode: 'multiple' }
@@ -563,7 +564,7 @@ QUnit.test('selectRowsByIndexes for multiple selection. Indexes via arguments', 
     assert.ok(this.dataController.items()[1].isSelected);
     assert.ok(!this.dataController.items()[2].isSelected);
     assert.ok(this.dataController.items()[3].isSelected);
-}); */
+});
 
 QUnit.test('Set isSelected items', function(assert) {
     this.applyOptions({
@@ -1169,12 +1170,12 @@ QUnit.test('Not rise selectionChanged event on apply filter when selectedRows co
     assert.strictEqual(selectionChangedCount, 1);
 });
 
-/* test("Not rise event on second set selectedRows without changes", function () {
-    var selectionChangedCount = 0;
+QUnit.skip('Not rise event on second set selectedRows without changes', function(assert) {
+    let selectionChangedCount = 0;
 
     this.applyOptions({
         selection: { mode: 'multiple' },
-        onSelectionChanged: function () {
+        onSelectionChanged: function() {
             selectionChangedCount++;
         }
     });
@@ -1185,7 +1186,7 @@ QUnit.test('Not rise selectionChanged event on apply filter when selectedRows co
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
 
     assert.strictEqual(selectionChangedCount, 1);
-}); */
+});
 
 QUnit.test('changed on set selectedRows', function(assert) {
     let changedCount = 0;
@@ -1654,7 +1655,7 @@ QUnit.test('changeRowSelection. Checkboxes works as control key', function(asser
     assert.ok(!this.dataController.items()[2].isSelected);
 });
 
-/* test("changeRowSelection. Multiple. Several calls on different rows", function () {
+QUnit.skip('changeRowSelection. Multiple. Several calls on different rows', function(assert) {
     this.applyOptions({
         selection: { mode: 'multiple' }
     });
@@ -1669,7 +1670,7 @@ QUnit.test('changeRowSelection. Checkboxes works as control key', function(asser
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Vadim', age: 17 }, { name: 'Dmitry', age: 18 }]);
 });
 
-QUnit.test("changeRowSelection. Multiple. Several calls on same row", function (assert) {
+QUnit.skip('changeRowSelection. Multiple. Several calls on same row', function(assert) {
     this.applyOptions({
         selection: { mode: 'multiple' }
     });
@@ -1683,7 +1684,7 @@ QUnit.test("changeRowSelection. Multiple. Several calls on same row", function (
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), []);
 
     assert.ok(!this.dataController.items()[2].isSelected);
-}); */
+});
 
 QUnit.test('changeRowSelection. Several calls on different rows with control key', function(assert) {
     this.applyOptions({
@@ -1849,8 +1850,7 @@ QUnit.test('changeRowSelection with shift key. changeItemSelection before', func
     assert.ok(this.dataController.items()[4].isSelected);
 });
 
-/*
-QUnit.test("changeRowSelection with shift key. Select All and changeRowSelection with control before", function (assert) {
+QUnit.skip('changeRowSelection with shift key. Select All and changeRowSelection with control before', function(assert) {
     this.applyOptions({
         selection: { mode: 'multiple' }
     });
@@ -1867,7 +1867,7 @@ QUnit.test("changeRowSelection with shift key. Select All and changeRowSelection
     assert.ok(!this.dataController.items()[3].isSelected);
     assert.ok(!this.dataController.items()[4].isSelected);
     assert.ok(this.dataController.items()[5].isSelected);
-});*/
+});
 
 
 QUnit.test('changeRowSelection with shift key. Change shift selection from down to down', function(assert) {
