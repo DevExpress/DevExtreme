@@ -72,7 +72,7 @@ class LessMetadataPostCompiler {
             const escapedSelector = this.swatchSelector.replace('.', '\\.');
 
             const swatchOrderRegex = new RegExp(`([ \\t]*)([\\w\\.#:\\*][\\w\\.#:\\*\\->()\\s]*)(${escapedSelector}\\s)([^,{+~]*)`, 'gm');
-            const changeTypographyRulesOrderRegex = /(\.dx-swatch-my-custom)\s(\.dx-theme-.*?-typography)(.*?)\s{/g;
+            const changeTypographyRulesOrderRegex = /(\.dx-swatch-[^\.,\s]*?)\s(\.dx-theme-.*?-typography)(.*?)\s{/g;
             const themeMarkerRegex = /(\.dx-theme-marker\s*{\s*font-family:\s*['"]dx\..*?\.)(.*)(['"])/g;
 
             css = css
