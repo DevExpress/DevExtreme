@@ -409,6 +409,38 @@ QUnit.test('Dragging row if scrolling mode is virtual', function(assert) {
     assert.strictEqual(dragStartArgs.itemData, this.options.dataSource[2], 'onDragStart itemData');
 });
 
+QUnit.test('Dragging row to far page if scrolling mode is virtual (T867087)', function(assert) {
+    // arrange
+    const $testElement = $('#container');
+
+    this.options.scrolling = { mode: 'virtual' };
+    this.options.paging = { pageSize: 2, pageIndex: 0 };
+    const onReorder = this.options.rowDragging.onReorder = sinon.spy();
+
+    const rowsView = this.createRowsView();
+    rowsView.render($testElement);
+
+    // act
+    pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
+    this.dataGrid.pageIndex(4);
+
+    // assert
+    assert.ok($('.dx-sortable-dragging').is(':visible'), 'dragging element is visible');
+
+    // act
+    pointerMock($testElement).start().up();
+
+    // assert
+    const reorderArgs = onReorder.getCall(0).args[0];
+    assert.strictEqual(onReorder.callCount, 1, 'onReorder called once');
+    assert.strictEqual(reorderArgs.fromIndex, 0, 'onReorder fromIndex');
+    assert.strictEqual(reorderArgs.toIndex, 1, 'onReorder toIndex');
+    assert.strictEqual(reorderArgs.itemData, this.options.dataSource[0], 'onReorder itemData');
+
+    assert.strictEqual(this.dataGrid.getVisibleRows().length, 4, 'visible row count');
+    assert.strictEqual(this.dataGrid.getVisibleRows()[reorderArgs.toIndex].data, this.options.dataSource[7], 'onReorder toIndex data');
+});
+
 QUnit.test('Sortable should have height if dataSource is empty', function(assert) {
     // arrange
     let rowsView;
