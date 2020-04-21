@@ -842,6 +842,8 @@ QUnit.test('Group header should be rendered correct, groupByDate = true', functi
 QUnit.test('Group header should be rendered correct, groupByDate = true and crossScrollingEnabled = true', function(assert) {
     this.instance.option('crossScrollingEnabled', true);
 
+    resizeCallbacks.fire();
+
     const $headerPanel = this.instance.$element().find('.dx-scheduler-header-scrollable .dx-scheduler-header-panel');
     const $groupRow = $headerPanel.find('.dx-scheduler-group-row');
     const $groupHeaderCells = $groupRow.find('.dx-scheduler-group-header');
@@ -960,42 +962,43 @@ QUnit.module('TimelineDay with grouping by date', {
             items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
         }]);
     }
+}, () => {
+    QUnit.test('Get date range', function(assert) {
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2018, 2, 1, 9), new Date(2018, 2, 1, 11, 59)], 'Range is OK');
+
+        this.instance.option('intervalCount', 3);
+
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2018, 2, 1, 9), new Date(2018, 2, 3, 11, 59)], 'Range is OK');
+    });
+
+    QUnit.test('Group header should be rendered correct, groupByDate = true', function(assert) {
+        const $headerPanel = this.instance.$element().find('.dx-scheduler-header-scrollable .dx-scheduler-header-panel');
+        const $groupRow = $headerPanel.find('.dx-scheduler-group-row');
+        const $groupHeaderCells = $groupRow.find('.dx-scheduler-group-header');
+        const dateTableCellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').get(0).getBoundingClientRect().width;
+        const groupHeaderWidth = $groupHeaderCells.get(0).getBoundingClientRect().width;
+
+        assert.equal($groupHeaderCells.length, 12, 'Group header cells count is OK');
+        assert.roughEqual(dateTableCellWidth, groupHeaderWidth, 1.1, 'Group header cell has correct size');
+    });
+
+    QUnit.test('Group header should be rendered correct, groupByDate = true and crossScrollingEnabled = true', function(assert) {
+        this.instance.option('crossScrollingEnabled', true);
+
+        resizeCallbacks.fire();
+
+        const $headerPanel = this.instance.$element().find('.dx-scheduler-header-scrollable .dx-scheduler-header-panel');
+        const $groupRow = $headerPanel.find('.dx-scheduler-group-row');
+        const $groupHeaderCells = $groupRow.find('.dx-scheduler-group-header');
+        const $headerRow = $headerPanel.find('.dx-scheduler-header-row').eq(0);
+        const $headerCells = $headerRow.find('.dx-scheduler-header-panel-cell');
+
+        const dateTableCellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').get(0).getBoundingClientRect().width;
+        const groupHeaderWidth = $groupHeaderCells.get(0).getBoundingClientRect().width;
+        const headerCellWidth = $headerCells.get(0).getBoundingClientRect().width;
+
+        assert.equal($groupHeaderCells.length, 12, 'Group header cells count is OK');
+        assert.roughEqual(groupHeaderWidth, dateTableCellWidth, 1.1, 'Group header cell has correct size');
+        assert.roughEqual(headerCellWidth, dateTableCellWidth * 2, 1.1, 'Header cell has correct size');
+    });
 });
-
-QUnit.test('Get date range', function(assert) {
-    assert.deepEqual(this.instance.getDateRange(), [new Date(2018, 2, 1, 9), new Date(2018, 2, 1, 11, 59)], 'Range is OK');
-
-    this.instance.option('intervalCount', 3);
-
-    assert.deepEqual(this.instance.getDateRange(), [new Date(2018, 2, 1, 9), new Date(2018, 2, 3, 11, 59)], 'Range is OK');
-});
-
-QUnit.test('Group header should be rendered correct, groupByDate = true', function(assert) {
-    const $headerPanel = this.instance.$element().find('.dx-scheduler-header-scrollable .dx-scheduler-header-panel');
-    const $groupRow = $headerPanel.find('.dx-scheduler-group-row');
-    const $groupHeaderCells = $groupRow.find('.dx-scheduler-group-header');
-    const dateTableCellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').get(0).getBoundingClientRect().width;
-    const groupHeaderWidth = $groupHeaderCells.get(0).getBoundingClientRect().width;
-
-    assert.equal($groupHeaderCells.length, 12, 'Group header cells count is OK');
-    assert.roughEqual(dateTableCellWidth, groupHeaderWidth, 1.1, 'Group header cell has correct size');
-});
-
-QUnit.test('Group header should be rendered correct, groupByDate = true and crossScrollingEnabled = true', function(assert) {
-    this.instance.option('crossScrollingEnabled', true);
-
-    const $headerPanel = this.instance.$element().find('.dx-scheduler-header-scrollable .dx-scheduler-header-panel');
-    const $groupRow = $headerPanel.find('.dx-scheduler-group-row');
-    const $groupHeaderCells = $groupRow.find('.dx-scheduler-group-header');
-    const $headerRow = $headerPanel.find('.dx-scheduler-header-row').eq(0);
-    const $headerCells = $headerRow.find('.dx-scheduler-header-panel-cell');
-
-    const dateTableCellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').get(0).getBoundingClientRect().width;
-    const groupHeaderWidth = $groupHeaderCells.get(0).getBoundingClientRect().width;
-    const headerCellWidth = $headerCells.get(0).getBoundingClientRect().width;
-
-    assert.equal($groupHeaderCells.length, 12, 'Group header cells count is OK');
-    assert.roughEqual(groupHeaderWidth, dateTableCellWidth, 1.1, 'Group header cell has correct size');
-    assert.roughEqual(headerCellWidth, dateTableCellWidth * 2, 1.1, 'Header cell has correct size');
-});
-
