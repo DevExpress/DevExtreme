@@ -6079,6 +6079,9 @@ declare module DevExpress.ui {
     export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
         /** @name dxToolbar.Options.dataSource */
         dataSource?: string | Array<string | dxToolbarItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        /** @deprecated */
+        /** @name dxToolbar.Options.height */
+        height?: number | string | (() => number | string);
         /** @name dxToolbar.Options.items */
         items?: Array<string | dxToolbarItem | any>;
         /** @name dxToolbar.Options.menuItemTemplate */
