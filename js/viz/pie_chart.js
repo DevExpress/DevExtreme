@@ -309,7 +309,7 @@ const dxPieChart = BaseChart.inherit({
             return;
         }
 
-        this._renderSeriesElements(drawOptions, isRotated, isLegendInside);
+        this._renderSeriesElements(drawOptions, isLegendInside);
     },
 
     _renderExtraElements() {

@@ -1,7 +1,8 @@
-const patchFontOptions = require('../core/utils').patchFontOptions;
+import { patchFontOptions } from '../core/utils';
+import { consts } from './common';
 
+const POINTER_SIZE = consts.pointerSize;
 const SLIDER_MARKER_UPDATE_DELAY = 75;
-const POINTER_SIZE = require('./common').consts.pointerSize;
 
 function SliderMarker(renderer, root, isLeftPointer) {
     const that = this;
@@ -111,15 +112,13 @@ SliderMarker.prototype = {
     _update: function() {
         const that = this;
         let textSize;
-        let currentTextSize;
-        let rectSize;
 
         clearTimeout(that._timeout);
 
         that._label.attr({ text: that._text || '' });
 
-        currentTextSize = that._getTextSize();
-        rectSize = that._getRectSize(currentTextSize);
+        const currentTextSize = that._getTextSize();
+        const rectSize = that._getRectSize(currentTextSize);
 
         textSize = that._textSize || currentTextSize;
         textSize = that._textSize = (currentTextSize.width > textSize.width || currentTextSize.height > textSize.height) ? currentTextSize : textSize;
@@ -129,15 +128,11 @@ SliderMarker.prototype = {
         }, SLIDER_MARKER_UPDATE_DELAY);
 
         function updateSliderMarker(size, rectSize) {
-            let points;
-            let pointsData;
-            let offset;
-
             rectSize = rectSize || that._getRectSize(size);
             that._group.attr({ translateY: -(rectSize.height + POINTER_SIZE) });
-            pointsData = that._getAreaPointsInfo(size);
-            points = pointsData.points;
-            offset = pointsData.offset;
+            const pointsData = that._getAreaPointsInfo(size);
+            const points = pointsData.points;
+            const offset = pointsData.offset;
             that._area.attr({ points: points });
             that._border.attr({ x: that._isLeftPointer ? points[0] - 1 : points[2], height: pointsData.isCut ? rectSize.height : rectSize.height + POINTER_SIZE });
             that._tracker.attr({ translateX: offset, width: rectSize.width, height: rectSize.height + POINTER_SIZE });

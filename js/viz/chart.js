@@ -462,8 +462,8 @@ function updateMarkersInfo({ overloadedSeries, points }) {
         if(_isDefined(curPoint.x) && _isDefined(curPoint.y)) {
             for(let j = i + 1; j < points.length; j++) {
                 const nextPoint = points[j];
-                const next_x = _isDefined(nextPoint) ? nextPoint.x : null;
-                const next_y = _isDefined(nextPoint) ? nextPoint.y : null;
+                const next_x = nextPoint?.x;
+                const next_y = nextPoint?.y;
 
                 if(!_isDefined(next_x) || Math.abs(curPoint.x - next_x) >= size) {
                     isContinuousSeries &= j !== i + 1;

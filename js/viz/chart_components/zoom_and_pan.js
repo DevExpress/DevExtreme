@@ -569,7 +569,7 @@ module.exports = {
             },
 
             panningVisualRangeEnabled: function(targetAxes) {
-                if(targetAxes && targetAxes.length) {
+                if(targetAxes?.length) {
                     return targetAxes.some(axis => !axis.isExtremePosition(false) || !axis.isExtremePosition(true));
                 }
                 const enablePanByValueAxis =

@@ -1,11 +1,11 @@
-const extend = require('../../core/utils/extend').extend;
-const layoutElementModule = require('../core/layout_element');
-const _isNumber = require('../../core/utils/type').isNumeric;
+import { extend } from '../../core/utils/extend';
+import { isNumeric as _isNumber } from '../../core/utils/type';
+import layoutElementModule from '../core/layout_element';
+import consts from '../components/consts';
+const { floor, sqrt } = Math;
 const _min = Math.min;
 const _max = Math.max;
-const _floor = Math.floor;
-const _sqrt = Math.sqrt;
-const consts = require('../components/consts');
+
 const RADIAL_LABEL_INDENT = consts.radialLabelIndent;
 
 function getNearestCoord(firstCoord, secondCoord, pointCenterCoord) {
@@ -81,13 +81,13 @@ function correctLabelRadius(labelSizes, radius, series, canvas, averageWidthLabe
             curRadius && (curRadius += rSizes[i - 1]);
             continue;
         }
-        curRadius = _floor(curRadius ? curRadius + rSizes[i - 1] : radius);
+        curRadius = floor(curRadius ? curRadius + rSizes[i - 1] : radius);
         series[i].correctLabelRadius(curRadius);
         runningWidth += averageWidthLabels || sizes[i];
         rSizes[i] = averageWidthLabels || rSizes[i];
         series[i].setVisibleArea({
-            left: _floor(centerX - radius - runningWidth),
-            right: _floor(canvas.width - (centerX + radius + runningWidth)),
+            left: floor(centerX - radius - runningWidth),
+            right: floor(canvas.width - (centerX + radius + runningWidth)),
             top: canvas.top,
             bottom: canvas.bottom,
             width: canvas.width,
@@ -97,7 +97,7 @@ function correctLabelRadius(labelSizes, radius, series, canvas, averageWidthLabe
 }
 
 function getLengthFromCenter(x, y, paneCenterX, paneCenterY) {
-    return _sqrt((x - paneCenterX) * (x - paneCenterX) + (y - paneCenterY) * (y - paneCenterY));
+    return sqrt((x - paneCenterX) * (x - paneCenterX) + (y - paneCenterY) * (y - paneCenterY));
 }
 
 function getInnerRadius(series) {
@@ -208,10 +208,10 @@ LayoutManager.prototype = {
         }
 
         return {
-            centerX: _floor(paneCenterX),
-            centerY: _floor(paneCenterY),
-            radiusInner: _floor(availableRadius * getInnerRadius(series[0])),
-            radiusOuter: _floor(availableRadius)
+            centerX: floor(paneCenterX),
+            centerY: floor(paneCenterY),
+            radiusInner: floor(availableRadius * getInnerRadius(series[0])),
+            radiusOuter: floor(availableRadius)
         };
     },
 
@@ -219,10 +219,10 @@ LayoutManager.prototype = {
         const radius = layout.radius;
 
         return {
-            centerX: _floor(layout.x),
-            centerY: _floor(layout.y),
-            radiusInner: _floor(radius * getInnerRadius(series[0])),
-            radiusOuter: _floor(radius)
+            centerX: floor(layout.x),
+            centerY: floor(layout.y),
+            radiusInner: floor(radius * getInnerRadius(series[0])),
+            radiusOuter: floor(radius)
         };
     },
 
@@ -294,14 +294,12 @@ LayoutManager.prototype = {
         items.slice().reverse().forEach(function(item) {
             const layoutOptions = item.getLayoutOptions();
             let needRedraw = false;
-            let sizeObject;
-            let cutSide;
 
             if(!layoutOptions) {
                 return;
             }
 
-            sizeObject = extend({}, layoutOptions);
+            const sizeObject = extend({}, layoutOptions);
 
             needRedraw =
                 layoutOptions.cutSide === 'vertical' && size.width < 0 ||
@@ -309,7 +307,7 @@ LayoutManager.prototype = {
                 layoutOptions.cutSide === 'vertical' && size.height > 0 ||
                 layoutOptions.cutSide === 'horizontal' && size.width > 0;
 
-            cutSide = layoutOptions.cutSide === 'horizontal' ? 'width' : 'height';
+            const cutSide = layoutOptions.cutSide === 'horizontal' ? 'width' : 'height';
 
             if(needRedraw) {
                 let width = sizeObject.width - size.width;
@@ -335,13 +333,12 @@ LayoutManager.prototype = {
         const that = this;
         this._elements.forEach(function(item) {
             const layoutOptions = item.getLayoutOptions();
-            let sizeObject;
 
             if(!layoutOptions) {
                 return;
             }
 
-            sizeObject = { width: canvas.width - canvas.left - canvas.right, height: canvas.height - canvas.top - canvas.bottom };
+            const sizeObject = { width: canvas.width - canvas.left - canvas.right, height: canvas.height - canvas.top - canvas.bottom };
             if(layoutOptions.cutSide === 'vertical') {
                 sizeObject.height -= that._options.height;
             } else {
@@ -356,20 +353,17 @@ LayoutManager.prototype = {
     _drawElements: function(canvas) {
         this._elements.slice().reverse().forEach(function(item) {
             const layoutOptions = item.getLayoutOptions();
-            let sizeObject;
-            let cutSide;
-            let length;
 
             if(!layoutOptions) {
                 return;
             }
 
-            sizeObject = {
+            const sizeObject = {
                 width: canvas.width - canvas.left - canvas.right,
                 height: canvas.height - canvas.top - canvas.bottom
             };
-            cutSide = layoutOptions.cutSide;
-            length = cutSide === 'horizontal' ? 'width' : 'height';
+            const cutSide = layoutOptions.cutSide;
+            const length = cutSide === 'horizontal' ? 'width' : 'height';
 
             sizeObject[length] = layoutOptions[length];
             item.draw(sizeObject.width, sizeObject.height);
@@ -386,17 +380,14 @@ LayoutManager.prototype = {
 
         this._elements.slice().reverse().forEach(function(item) {
             const layoutOptions = item.getLayoutOptions();
-            let position;
-            let cutSide;
-            let my;
 
             if(!layoutOptions) {
                 return;
             }
 
-            position = layoutOptions.position;
-            cutSide = layoutOptions.cutSide;
-            my = {
+            const position = layoutOptions.position;
+            const cutSide = layoutOptions.cutSide;
+            const my = {
                 horizontal: position.horizontal,
                 vertical: position.vertical
             };
