@@ -395,6 +395,8 @@ class Gantt extends Widget {
                         expandedRowKeys.push(parentId);
                         this._treeList.option('expandedRowKeys', expandedRowKeys);
                     }
+                    this._setTreeListOption('selectedRowKeys', this._getArrayFromOneElement(insertedId));
+                    this._setTreeListOption('focusedRowKey', insertedId);
                 }
             });
         }
