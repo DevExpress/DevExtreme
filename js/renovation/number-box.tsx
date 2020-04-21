@@ -1,11 +1,27 @@
-import { Ref, Effect, Component, ComponentBindings, JSXComponent } from 'devextreme-generator/component_declaration/common';
+import { Ref, Effect, Component, ComponentBindings, JSXComponent, OneWay, Event, TwoWay } from 'devextreme-generator/component_declaration/common';
+import { WidgetProps } from './widget';
 
 export const viewFunction = ({ widgetRef }: NumberBox) => {
     return (<div ref={widgetRef as any}/>);
 };
 
 @ComponentBindings()
-class NumberBoxProps {
+class NumberBoxProps extends WidgetProps {
+    // props was copied from js\ui\number_box.d.ts
+
+    // buttons?: Array<'clear' | 'spins' | dxTextEditorButton>;
+    // format?: format;
+    @OneWay() invalidValueMessage?: string;
+    @OneWay() max?: number;
+    @OneWay() min?: number;
+    @OneWay() mode?: 'number' | 'text' | 'tel';
+    @OneWay() showSpinButtons?: boolean;
+    @OneWay() step?: number;
+    @OneWay() useLargeSpinButtons?: boolean;
+    @TwoWay() value?: number;
+    // tslint:disable-next-line: max-line-length
+    // onValueChanged?: ((e: { component?: T, element?: dxElement, model?: any, value?: any, previousValue?: any, event?: event }) => any);
+    @Event() valueChange?: ((value: number) => void) = () =>  {};
 
 }
 
