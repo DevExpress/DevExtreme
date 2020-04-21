@@ -5564,6 +5564,7 @@ QUnit.module('Virtual scrolling', {
             rowsView._dataController.getItemIndexByPosition = x.getItemIndexByPosition;
             rowsView._dataController._setViewportPositionCore = x._setViewportPositionCore;
             rowsView._dataController.option = rowsView.option.bind(rowsView);
+            rowsView._dataController.positionChanged = $.Callbacks();
             rowsView._dataController._dataSource = {
                 changingDuration: function() { return 50; },
                 totalItemsCount: function() {
