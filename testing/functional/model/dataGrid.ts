@@ -33,6 +33,7 @@ const CLASS = {
     textEditorInput: 'dx-texteditor-input',
     invalid: 'dx-invalid',
     invalidCell: 'dx-datagrid-invalid',
+    invalidOverlayMessage: 'dx-invalid-message',
     cellModified: 'dx-cell-modified',
     editFormRow: 'edit-form',
     button: 'dx-button',
@@ -46,7 +47,7 @@ const CLASS = {
     groupExpanded: 'group-opened',
     overlayContent: 'edit-popup',
     popupContent: 'dx-overlay-content',
-    toolbar: 'dx-toolbar,'
+    toolbar: 'dx-toolbar'
 };
 
 const addWidgetPrefix = function(widgetName: string, className: string) {
@@ -151,6 +152,7 @@ class DataCell extends DxElement {
     isValidationPending: Promise<boolean>;
     isInvalid: Promise<boolean>;
     isModified: Promise<boolean>;
+    hasInvalidMessage: Promise<boolean>;
 
     constructor(dataRow: Selector, index: number) {
         super(dataRow.find(`td:nth-child(${++index})`));
@@ -159,6 +161,7 @@ class DataCell extends DxElement {
         this.isValidationPending = this.element.find(`div.${CLASS.pendingIndicator}`).exists;
         this.isInvalid = this.element.hasClass(CLASS.invalidCell);
         this.isModified = this.element.hasClass(CLASS.cellModified);
+        this.hasInvalidMessage = this.element.find(`.${CLASS.invalidOverlayMessage} .${CLASS.popupContent}`).exists;
     }
 
     getEditor(): DxElement {
@@ -381,7 +384,7 @@ export default class DataGrid extends Widget {
 
     getPopupEditForm(): EditForm {
         const element = Selector(`.${this.addWidgetPrefix(CLASS.overlayContent)} .${CLASS.popupContent}`);
-        const buttons = element.find(`.${this.addWidgetPrefix(CLASS.toolbar)} .${CLASS.button}`);
+        const buttons = element.find(`.${CLASS.toolbar} .${CLASS.button}`);
 
         return new EditForm(element, buttons);
     }
