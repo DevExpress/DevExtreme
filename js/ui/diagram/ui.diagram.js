@@ -1378,9 +1378,9 @@ class Diagram extends Widget {
             this._diagramInstance.selection.inputPosition.setInitialTextStyleProperties(this.option('defaultItemProperties.textStyle'));
         }
         this._diagramInstance.selection.inputPosition.setInitialConnectorProperties({
-            lineOption: this._getConnectorLineOption(this.option('defaultItemProperties.lineType')),
-            startLineEnding: this._getConnectorLineEnding(this.option('defaultItemProperties.fromLineEnd')),
-            endLineEnding: this._getConnectorLineEnding(this.option('defaultItemProperties.toLineEnd'))
+            lineOption: this._getConnectorLineOption(this.option('defaultItemProperties.connectorLineType')),
+            startLineEnding: this._getConnectorLineEnding(this.option('defaultItemProperties.connectorLineStart')),
+            endLineEnding: this._getConnectorLineEnding(this.option('defaultItemProperties.connectorLineEnd'))
         });
     }
 
@@ -2011,23 +2011,23 @@ class Diagram extends Widget {
                 * @type Object
                 */
                 /**
-                * @name dxDiagramOptions.defaultItemProperties.lineType
+                * @name dxDiagramOptions.defaultItemProperties.connectorLineType
                 * @type Enums.DiagramConnectorLineType
                 * @default 'orthogonal'
                 */
-                lineType: 'orthogonal',
+                connectorLineType: 'orthogonal',
                 /**
-                * @name dxDiagramOptions.defaultItemProperties.fromLineEnd
+                * @name dxDiagramOptions.defaultItemProperties.connectorLineStart
                 * @type Enums.DiagramConnectorLineEnd
                 * @default 'none'
                 */
-                fromLineEnd: 'none',
+                connectorLineStart: 'none',
                 /**
-                * @name dxDiagramOptions.defaultItemProperties.toLineEnd
+                * @name dxDiagramOptions.defaultItemProperties.connectorLineEnd
                 * @type Enums.DiagramConnectorLineEnd
                 * @default 'arrow'
                 */
-                toLineEnd: 'arrow',
+                connectorLineEnd: 'arrow',
             },
             export: {
                 /**

@@ -219,9 +219,9 @@ QUnit.module('Options', moduleConfig, () => {
         assert.equal(this.instance._diagramInstance.selection.inputPosition.initialProperties.connectionProperties, undefined);
         this.instance.option('defaultItemProperties.style', { fill: '#ff0000' });
         this.instance.option('defaultItemProperties.textStyle', { fill: '#ff0000' });
-        this.instance.option('defaultItemProperties.lineType', 'straight');
-        this.instance.option('defaultItemProperties.fromLineEnd', 'filledTriangle');
-        this.instance.option('defaultItemProperties.toLineEnd', 'filledTriangle');
+        this.instance.option('defaultItemProperties.connectorLineType', 'straight');
+        this.instance.option('defaultItemProperties.connectorLineStart', 'filledTriangle');
+        this.instance.option('defaultItemProperties.connectorLineEnd', 'filledTriangle');
         assert.equal(this.instance._diagramInstance.selection.inputPosition.initialProperties.style['fill'], '#ff0000');
         assert.equal(this.instance._diagramInstance.selection.inputPosition.initialProperties.textStyle['fill'], '#ff0000');
         assert.equal(this.instance._diagramInstance.selection.inputPosition.initialProperties.connectorProperties.lineOption, 0);
@@ -229,9 +229,9 @@ QUnit.module('Options', moduleConfig, () => {
         assert.equal(this.instance._diagramInstance.selection.inputPosition.initialProperties.connectorProperties.endLineEnding, 3);
         this.instance.option('defaultItemProperties.style', { fill: '#ee0000' });
         this.instance.option('defaultItemProperties.textStyle', { fill: '#ee0000' });
-        this.instance.option('defaultItemProperties.lineType', 'orthogonal');
-        this.instance.option('defaultItemProperties.fromLineEnd', 'outlinedTriangle');
-        this.instance.option('defaultItemProperties.toLineEnd', 'outlinedTriangle');
+        this.instance.option('defaultItemProperties.connectorLineType', 'orthogonal');
+        this.instance.option('defaultItemProperties.connectorLineStart', 'outlinedTriangle');
+        this.instance.option('defaultItemProperties.connectorLineEnd', 'outlinedTriangle');
         assert.equal(this.instance._diagramInstance.selection.inputPosition.initialProperties.style['fill'], '#ee0000');
         assert.equal(this.instance._diagramInstance.selection.inputPosition.initialProperties.textStyle['fill'], '#ee0000');
         assert.equal(this.instance._diagramInstance.selection.inputPosition.initialProperties.connectorProperties.lineOption, 1);

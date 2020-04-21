@@ -76,7 +76,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    defaultItemProperties?: { style?: Object, textStyle?: Object, lineType?: 'straight' | 'orthogonal', fromLineEnd?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle', toLineEnd?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle' };
+    defaultItemProperties?: { style?: Object, textStyle?: Object, connectorLineType?: 'straight' | 'orthogonal', connectorLineStart?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle', connectorLineEnd?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle' };
     /**
      * @docid dxDiagramOptions.edges
      * @type Object
