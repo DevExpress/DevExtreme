@@ -1842,7 +1842,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     });
                 }).fail(createFailureHandler(deferred)).fail((arg) => that._fireDataErrorOccurred(arg));
 
-                if(typeUtils.isString(text) && options.column.displayValueMap) {
+                if(typeUtils.isDefined(text) && options.column.displayValueMap) {
                     options.column.displayValueMap[value] = text;
                 }
                 if(options.values) {

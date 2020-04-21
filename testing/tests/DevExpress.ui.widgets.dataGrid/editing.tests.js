@@ -7014,6 +7014,46 @@ QUnit.module('Editing with real dataController', {
         assert.equal($cell.text(), '\u00A0', 'display text is empty space');
     });
 
+    // T879946
+    [0, 42].forEach(number => {
+        QUnit.test('Change lookup editor value with calculateDisplayValue (displayExpr is number' + (number ? ' : zero value check)' : ')'), function(assert) {
+            // arrange
+            const that = this;
+            const rowsView = that.rowsView;
+            const testElement = $('#container');
+
+            that.options.columns.push({
+                dataField: 'stateId',
+                calculateDisplayValue: 'state.field',
+                lookup: {
+                    dataSource: [{ id: 1, field: number }],
+                    displayExpr: 'field',
+                    valueExpr: 'id'
+                }
+            });
+            that.options.editing = {
+                allowUpdating: true,
+                mode: 'batch'
+            };
+            rowsView.render(testElement);
+            that.columnsController.init();
+
+            // act
+            that.editCell(0, 5);
+            that.clock.tick();
+            const $selectBox = $(rowsView.getCellElement(0, 5)).find('.dx-selectbox');
+            $selectBox.dxSelectBox('instance').option('value', 1);
+            that.closeEditCell();
+            that.clock.tick();
+
+            // assert
+            const $cell = testElement.find('.dx-row').first().children('td').eq(5);
+
+            assert.ok($cell.hasClass('dx-cell-modified'), 'cell is modified');
+            assert.equal($cell.text(), `${number}`, 'display text');
+        });
+    });
+
     QUnit.test('Lookup editor in row mode do not update row', function(assert) {
     // arrange
         const that = this;
