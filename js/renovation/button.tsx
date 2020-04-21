@@ -138,6 +138,7 @@ const defaultOptionRules = createDefaultOptionRules<ButtonProps>([{
 // tslint:disable-next-line: max-classes-per-file
 @Component({
     defaultOptionRules,
+    // registerJQuery: true,
     view: viewFunction,
 })
 

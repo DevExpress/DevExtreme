@@ -91,7 +91,7 @@ ui.dxDropDownEditor = require('../../../ui/drop_down_editor/ui.drop_down_editor'
 
 // Renovation
 ui.Button = require('../../../renovation/dist/button.j').default;
-ui.Widget = require('../../../renovation/dist/widget.j').default;
+ui.Widget = require('../../../renovation/widget.j').default;
 // Renovation
 
 module.exports = ui;

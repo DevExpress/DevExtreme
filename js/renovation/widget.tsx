@@ -132,6 +132,7 @@ export class WidgetProps {
 // tslint:disable-next-line: max-classes-per-file
 @Component({
     defaultOptionRules: null,
+    registerJQuery: true,
     view: viewFunction,
 })
 

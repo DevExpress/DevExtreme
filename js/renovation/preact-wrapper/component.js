@@ -1,7 +1,6 @@
 import $ from '../../core/renderer';
 import DOMComponent from '../../core/dom_component';
 import * as Preact from 'preact';
-import { extend } from '../../core/utils/extend';
 import { getInnerActionName } from './utils';
 import { isEmpty } from '../../core/utils/string';
 import { wrapElement, removeDifferentElements } from '../preact-wrapper/utils';
@@ -30,21 +29,27 @@ export default class PreactWrapper extends DOMComponent {
     // _renderContent() { }
 
     getAllProps(isFirstRender) {
-        const options = extend({}, this.option());
+        const options = { ...this.option() };
         const attributes = this.$element()[0].attributes;
         const { width, height } = this.$element()[0].style;
 
         if(isFirstRender) {
-            options.elementAttr = extend(Object.keys(attributes).reduce((a, key) => {
-                if(attributes[key].specified) {
-                    a[attributes[key].name] = attributes[key].value;
-                }
-                return a;
-            }, {}), options.elementAttr);
+            options.elementAttr = {
+                ...Object.keys(attributes).reduce((a, key) => {
+                    if(attributes[key].specified) {
+                        a[attributes[key].name] = attributes[key].value;
+                    }
+                    return a;
+                }, {}),
+                ...options.elementAttr
+            };
         } else {
             if(attributes.id) {
                 // NOTE: workaround to save container id
-                options.elementAttr = extend({ [attributes.id.name]: attributes.id.value }, options.elementAttr);
+                options.elementAttr = {
+                    [attributes.id.name]: attributes.id.value,
+                    ...options.elementAttr
+                };
             }
             if(attributes.class) {
                 // NOTE: workaround to save custom classes on type changes
@@ -73,6 +78,7 @@ export default class PreactWrapper extends DOMComponent {
     _init() {
         super._init();
         this._initWidget && this._initWidget();
+        this._supportedKeys = () => ({});
     }
 
     _createViewRef() {
@@ -88,6 +94,10 @@ export default class PreactWrapper extends DOMComponent {
 
     _addAction(name, config) {
         this.option(getInnerActionName(name), this._createActionByOption(name, config));
+    }
+
+    _stateChange(name) {
+        return (value) => this.option(name, value);
     }
 
     _createTemplateComponent(props, templateOption, canBeAnonymous) {
@@ -126,9 +136,36 @@ export default class PreactWrapper extends DOMComponent {
         };
     }
 
+    _wrapKeyDownHandler(handler) {
+        return (event, options) => {
+            const { originalEvent, keyName, which } = options;
+            const keys = this._supportedKeys();
+            const func = keys[keyName] || keys[which];
+
+            // NOTE: registered handler has more priority
+            if(func !== undefined) {
+                const handler = func.bind(this);
+                const result = handler(originalEvent, options);
+
+                if(!result) {
+                    event.cancel = true;
+                    return event;
+                }
+            }
+
+            // NOTE: make it possible to pass onKeyDown property
+            return handler?.(event, options);
+        };
+    }
+
     // Public API
     repaint() {
         this._refresh();
+    }
+
+    registerKeyHandler(key, handler) {
+        const currentKeys = this._supportedKeys();
+        this._supportedKeys = () => ({ ...currentKeys, [key]: handler });
     }
 
     // NOTE: this method will be deprecated

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import 'renovation/dist/widget.j';
+import 'renovation/widget.j';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(`
