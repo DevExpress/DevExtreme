@@ -21,13 +21,14 @@ import { extend } from '../core/utils/extend';
 import { focusable } from '../ui/widget/selectors';
 import { isFakeClickEvent } from '../events/utils';
 
-const getStyles = ({ width, height }) => {
+const getStyles = ({ width, height, style }) => {
     const computedWidth = typeof width === 'function' ? width() : width;
     const computedHeight = typeof height === 'function' ? height() : height;
 
     return {
         height: computedHeight ?? void 0,
         width: computedWidth ?? void 0,
+        ...style,
     };
 };
 
@@ -64,7 +65,8 @@ const getCssClasses = (model: Partial<Widget> & Partial<WidgetProps>) => {
     const isFocusable = model.focusStateEnabled && !model.disabled;
     const isHoverable = model.hoverStateEnabled && !model.disabled;
 
-    model.className && className.push(model.className);
+    model.classes && className.push(model.classes);
+    model.restAttributes!.className && className.push(model.restAttributes!.className);
     model.disabled && className.push('dx-state-disabled');
     !model.visible && className.push('dx-state-invisible');
     model._focused && isFocusable && className.push('dx-state-focused');
@@ -82,11 +84,12 @@ export const viewFunction = (viewModel: Widget) => {
         <div
             ref={viewModel.widgetRef as any}
             {...viewModel.attributes}
-            className={viewModel.cssClasses}
             tabIndex={viewModel.tabIndex}
             title={viewModel.props.hint}
-            style={viewModel.styles}
             hidden={!viewModel.props.visible}
+            {...viewModel.props.restAttributes}
+            className={viewModel.cssClasses}
+            style={viewModel.styles}
         >
             {viewModel.props.children}
         </div>
@@ -102,7 +105,7 @@ export class WidgetProps {
     @OneWay() activeStateUnit?: string;
     @OneWay() aria?: any = {};
     @Slot() children?: any;
-    @OneWay() className?: string | undefined = '';
+    @OneWay() classes?: string | undefined = '';
     @OneWay() clickArgs?: any = {};
     @OneWay() disabled?: boolean = false;
     @OneWay() elementAttr?: { [name: string]: any };
@@ -119,6 +122,7 @@ export class WidgetProps {
     @Event() onKeyboardHandled?: (args: any) => any | undefined;
     @Event() onKeyDown?: (e: any, options: any) => any;
     @Event() onVisibilityChange?: (args: boolean) => undefined;
+    @OneWay() restAttributes: { [name: string]: any } = {};
     @OneWay() rtlEnabled?: boolean = config().rtlEnabled;
     @OneWay() tabIndex?: number = 0;
     @OneWay() visible?: boolean = true;
@@ -322,14 +326,14 @@ export default class Widget extends JSXComponent<WidgetProps> {
     }
 
     get styles() {
-        const { width, height } = this.props;
+        const { width, height, restAttributes } = this.props;
 
-        return getStyles({ width, height });
+        return getStyles({ width, height, style: restAttributes.style });
     }
 
     get cssClasses() {
         const {
-            className,
+            classes,
             disabled,
             elementAttr,
             focusStateEnabled,
@@ -337,12 +341,13 @@ export default class Widget extends JSXComponent<WidgetProps> {
             onVisibilityChange,
             rtlEnabled,
             visible,
+            restAttributes,
         } = this.props;
 
         return getCssClasses({
-            _active: this._active, _focused: this._focused, _hovered: this._hovered, className,
+            _active: this._active, _focused: this._focused, _hovered: this._hovered, classes,
             disabled, elementAttr, focusStateEnabled, hoverStateEnabled,
-            onVisibilityChange, rtlEnabled, visible,
+            onVisibilityChange, restAttributes, rtlEnabled, visible,
         });
     }
 

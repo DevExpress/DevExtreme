@@ -48,9 +48,12 @@ export default class PreactWrapper extends DOMComponent {
             }
             if(attributes.class) {
                 // NOTE: workaround to save custom classes on type changes
-                options.classNames = attributes.class.value
+                const customClass = attributes.class.value
                     .split(' ')
-                    .filter(name => name.indexOf('dx-') < 0);
+                    .filter(name => name.indexOf('dx-') < 0)
+                    .join(' ');
+                const classes = options.elementAttr.class ? options.elementAttr.class.concat(customClass) : customClass;
+                options.elementAttr = extend({ class: classes }, options.elementAttr);
             }
         }
         if(!isEmpty(width)) {

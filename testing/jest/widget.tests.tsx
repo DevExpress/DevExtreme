@@ -210,6 +210,38 @@ describe('Widget', () => {
             });
         });
 
+        describe('classes', () => {
+            it('should add className', () => {
+                const widget = render({ classes: 'custom-class' });
+
+                expect(widget.is('.custom-class.dx-widget')).toBe(true);
+            });
+        });
+
+        describe('restAttributes', () => {
+            it('should add merge `className` property', () => {
+                const widget = render({ restAttributes: { className: 'custom-class' } });
+
+                expect(widget.is('.custom-class.dx-widget')).toBe(true);
+            });
+
+            it('should add merge `style` property', () => {
+                const widget = render({ restAttributes: { style: { fontSize: '20px', height: 10 } } });
+
+                expect(widget.prop('style')).toMatchObject({
+                    fontSize: '20px',
+                    height: 10,
+                    width: void 0,
+                });
+            });
+
+            it('should add custom property', () => {
+                const widget = render({ restAttributes: { data: 'custom-data' } });
+
+                expect(widget.prop('data')).toBe('custom-data');
+            });
+        });
+
         describe('hint', () => {
             it('should not add `title` attribute by default', () => {
                 const widget = render();
@@ -226,7 +258,7 @@ describe('Widget', () => {
     });
 
     describe('aria', () => {
-       it('should pass custom `aria` attributes', () => {
+        it('should pass custom `aria` attributes', () => {
             const widget = render({ aria: {
                 label: 'custom-aria-label',
                 role: 'button',
@@ -486,7 +518,7 @@ describe('Widget', () => {
     describe('API', () => {
         describe('Focus', () => {
             it('should change state when called', () => {
-                const widgetAPIRef = createRef<WidgetRef>()
+                const widgetAPIRef = createRef<WidgetRef>();
                 const widget = render({ ref: widgetAPIRef, focusStateEnabled: true });
 
                 expect(widget.hasClass('dx-state-focused')).toBe(false);

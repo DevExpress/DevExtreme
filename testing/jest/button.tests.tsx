@@ -172,35 +172,35 @@ describe('Button', () => {
 
         describe('stylingMode', () => {
             it('should use `contained` as a default value', () => {
-                const button = render();
+                const classNames = render().prop('classes');
 
-                expect(button.hasClass('dx-button-mode-contained')).toBe(true);
-                expect(button.hasClass('dx-button-mode-text')).toBe(false);
-                expect(button.hasClass('dx-button-mode-outlined')).toBe(false);
+                expect(classNames.includes('dx-button-mode-contained')).toBe(true);
+                expect(classNames.includes('dx-button-mode-text')).toBe(false);
+                expect(classNames.includes('dx-button-mode-outlined')).toBe(false);
             });
 
             it('should add `dx-button-mode-text` class if the stylingMode is `text`', () => {
-                const button = render({ stylingMode: 'text' });
+                const classNames = render({ stylingMode: 'text' }).prop('classes');
 
-                expect(button.hasClass('dx-button-mode-text')).toBe(true);
-                expect(button.hasClass('dx-button-mode-contained')).toBe(false);
-                expect(button.hasClass('dx-button-mode-outlined')).toBe(false);
+                expect(classNames.includes('dx-button-mode-text')).toBe(true);
+                expect(classNames.includes('dx-button-mode-contained')).toBe(false);
+                expect(classNames.includes('dx-button-mode-outlined')).toBe(false);
             });
 
             it('should add `dx-button-mode-contained` class if the stylingMode is `contained`', () => {
-                const button = render({ stylingMode: 'contained' });
+                const classNames = render({ stylingMode: 'contained' }).prop('classes');
 
-                expect(button.hasClass('dx-button-mode-contained')).toBe(true);
-                expect(button.hasClass('dx-button-mode-text')).toBe(false);
-                expect(button.hasClass('dx-button-mode-outlined')).toBe(false);
+                expect(classNames.includes('dx-button-mode-contained')).toBe(true);
+                expect(classNames.includes('dx-button-mode-text')).toBe(false);
+                expect(classNames.includes('dx-button-mode-outlined')).toBe(false);
             });
 
             it('should add `dx-button-mode-outlined` class if the stylingMode is `outlined`', () => {
-                const button = render({ stylingMode: 'outlined' });
+                const classNames = render({ stylingMode: 'outlined' }).prop('classes');
 
-                expect(button.hasClass('dx-button-mode-outlined')).toBe(true);
-                expect(button.hasClass('dx-button-mode-text')).toBe(false);
-                expect(button.hasClass('dx-button-mode-contained')).toBe(false);
+                expect(classNames.includes('dx-button-mode-outlined')).toBe(true);
+                expect(classNames.includes('dx-button-mode-text')).toBe(false);
+                expect(classNames.includes('dx-button-mode-contained')).toBe(false);
             });
         });
 
@@ -212,26 +212,26 @@ describe('Button', () => {
             });
 
             it('should not render `text` by default', () => {
-                const button = render();
+                const classNames = render().prop('classes');
 
-                expect(button.hasClass('dx-button')).toBe(true);
-                expect(button.hasClass('dx-button-has-text')).toBe(false);
-                expect(button.exists('.dx-button-text')).toBe(false);
+                expect(classNames.includes('dx-button')).toBe(true);
+                expect(classNames.includes('dx-button-has-text')).toBe(false);
+                expect(render().find('.dx-button-text').exists()).toBe(false);
             });
         });
 
         describe('type', () => {
             it('should use `normal` as a default value', () => {
-                const button = render();
+                const classNames = render().prop('classes');
 
-                expect(button.hasClass('dx-button-normal')).toBe(true);
+                expect(classNames.includes('dx-button-normal')).toBe(true);
             });
 
             it('should add `dx-button-*` if the type is defined', () => {
-                const button = render({ type: 'custom' });
+                const classNames = render({ type: 'custom' }).prop('classes');
 
-                expect(button.hasClass('dx-button-custom')).toBe(true);
-                expect(button.hasClass('dx-button-normal')).toBe(false);
+                expect(classNames.includes('dx-button-custom')).toBe(true);
+                expect(classNames.includes('dx-button-normal')).toBe(false);
             });
         });
 
@@ -240,7 +240,7 @@ describe('Button', () => {
                 const button = render();
 
                 expect(button.prop('activeStateEnabled')).toBe(true);
-                expect(button.hasClass('dx-state-active')).toBe(false);
+                expect(button.prop('classes').includes('dx-state-active')).toBe(false);
             });
         });
 
@@ -289,8 +289,8 @@ describe('Button', () => {
 
             it('should get original icon prop', () => {
                 const button = render({
-                    render: ({ icon }) => <div>{icon}</div>,
                     icon: 'testicon',
+                    render: ({ icon }) => <div>{icon}</div>,
                     text: 'My button',
                 });
                 const buttonContentChildren = button.find('.dx-button-content').children();
@@ -310,7 +310,7 @@ describe('Button', () => {
             it('should render icon', () => {
                 const button = render({ icon: 'test' });
 
-                expect(button.is('.dx-button-has-icon')).toBe(true);
+                expect(button.prop('classes').includes('dx-button-has-icon')).toBe(true);
                 const { source } = button.find(Icon).props();
                 expect(source).toEqual('test');
             });
@@ -337,7 +337,7 @@ describe('Button', () => {
                 });
                 const elements = button.find('.dx-button-content').children();
 
-                expect(button.hasClass('dx-button-icon-right')).toBe(true);
+                expect(button.prop('classes').includes('dx-button-icon-right')).toBe(true);
                 expect(elements.at(0).is('.dx-button-text')).toBe(true);
                 expect(elements.at(1).is(Icon)).toBe(true);
                 expect(elements.at(1).props().position).toEqual('right');
@@ -649,8 +649,8 @@ describe('Button', () => {
     });
 
     it('should have dx-button class', () => {
-        const tree = render();
+        const classNames = render().prop('classes');
 
-        expect(tree.is('.dx-button')).toBe(true);
+        expect(classNames.includes('dx-button')).toBe(true);
     });
 });

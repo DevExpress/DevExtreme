@@ -19,7 +19,6 @@ import Icon from './icon';
 import InkRipple from './ink-ripple';
 import Widget, { WidgetProps } from './widget';
 
-const defaultClassNames = ['dx-button'];
 const stylingModes = ['outlined', 'text', 'contained'];
 
 const getInkRippleConfig = ({ text, icon, type }: ButtonProps) => {
@@ -35,7 +34,7 @@ const getInkRippleConfig = ({ text, icon, type }: ButtonProps) => {
 
 const getCssClasses = (model: ButtonProps) => {
     const { text, icon, stylingMode, type, iconPosition } = model;
-    const classNames = defaultClassNames.concat(model.classNames || []);
+    const classNames = ['dx-button'];
     const isValidStylingMode = stylingMode && stylingModes.indexOf(stylingMode) !== -1;
 
     classNames.push(`dx-button-mode-${isValidStylingMode ? stylingMode : 'contained'}`);
@@ -70,7 +69,7 @@ export const viewFunction = (viewModel: Button) => {
         accessKey={viewModel.props.accessKey}
         activeStateEnabled={viewModel.props.activeStateEnabled}
         aria={viewModel.aria}
-        className={viewModel.cssClasses}
+        classes={viewModel.cssClasses}
         disabled={viewModel.props.disabled}
         elementAttr={viewModel.elementAttr}
         focusStateEnabled={viewModel.props.focusStateEnabled}
@@ -86,6 +85,7 @@ export const viewFunction = (viewModel: Button) => {
         tabIndex={viewModel.props.tabIndex}
         visible={viewModel.props.visible}
         width={viewModel.props.width}
+        restAttributes={viewModel.restAttributes}
     >
         <div className="dx-button-content" ref={viewModel.contentRef as any}>
             {template &&
@@ -113,7 +113,6 @@ export const viewFunction = (viewModel: Button) => {
 @ComponentBindings()
 export class ButtonProps extends WidgetProps {
     @OneWay() activeStateEnabled?: boolean = true;
-    @OneWay() classNames?: string[];
     @OneWay() hoverStateEnabled?: boolean = true;
     @OneWay() icon?: string = '';
     @OneWay() iconPosition?: string = 'left';

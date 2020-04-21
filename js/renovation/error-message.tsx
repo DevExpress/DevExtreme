@@ -1,7 +1,10 @@
 import { Component, ComponentBindings, JSXComponent, OneWay } from 'devextreme-generator/component_declaration/common';
 
-export const viewFunction = ({ props: { message, className } }: ErrorMessage) => (
-    <div className={`dx-validationsummary dx-validationsummary-item ${className}`}>
+export const viewFunction = ({ props: { message, className }, restAttributes }: ErrorMessage) => (
+    <div
+        className={`dx-validationsummary dx-validationsummary-item ${className}`}
+        {...restAttributes}
+    >
         {message}
     </div>
 );
