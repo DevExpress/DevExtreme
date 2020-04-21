@@ -2257,6 +2257,18 @@ const overlappingEnvironment = $.extend({}, environment, {
         assert.deepEqual(series.adjustLabels.getCall(1).args, [true], 'Move from center (T586419)');
     });
 
+    QUnit.test('Last adjust labels before resolve overlapping with moving from center (T877200)', function(assert) {
+        const pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]);
+        const series = pie.getAllSeries()[0];
+        const points = series.getVisiblePoints();
+
+        // assert
+        assert.equal(series.adjustLabels.callCount, 5);
+        assert.ok(series.adjustLabels.lastCall.calledBefore(points[1].getLabels()[0].shift.lastCall));
+        assert.deepEqual(series.adjustLabels.getCall(1).args, [true]);
+    });
+
     QUnit.test('Do not Adjust labels after resolve overlapping in columns position', function(assert) {
         const pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
             { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }], 'columns');

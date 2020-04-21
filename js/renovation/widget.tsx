@@ -60,7 +60,7 @@ const getAttributes = ({ elementAttr, accessKey }) => {
     return attrs;
 };
 
-const getCssClasses = (model: Partial<Widget> & Partial<WidgetInput>) => {
+const getCssClasses = (model: Partial<Widget> & Partial<WidgetProps>) => {
     const className = ['dx-widget'];
     const isFocusable = model.focusStateEnabled && !model.disabled;
     const isHoverable = model.hoverStateEnabled && !model.disabled;
@@ -97,7 +97,7 @@ export const viewFunction = (viewModel: Widget) => {
 };
 
 @ComponentBindings()
-export class WidgetInput {
+export class WidgetProps {
     @OneWay() _feedbackHideTimeout?: number = 400;
     @OneWay() _feedbackShowTimeout?: number = 30;
     @OneWay() accessKey?: string | null = null;
@@ -120,7 +120,7 @@ export class WidgetInput {
     @Event() onDimensionChanged?: () => any;
     @Event() onInactive?: (e: any) => any;
     @Event() onKeyboardHandled?: (args: any) => any | undefined;
-    @Event() onKeyPress?: (e: any, options: any) => any;
+    @Event() onKeyDown?: (e: any, options: any) => any;
     @Event() onVisibilityChange?: (args: boolean) => undefined;
     @OneWay() restAttributes: { [name: string]: any } = {};
     @OneWay() rtlEnabled?: boolean = config().rtlEnabled;
@@ -135,7 +135,7 @@ export class WidgetInput {
     view: viewFunction,
 })
 
-export default class Widget extends JSXComponent<WidgetInput> {
+export default class Widget extends JSXComponent<WidgetProps> {
     @InternalState() _active: boolean = false;
     @InternalState() _focused: boolean = false;
     @InternalState() _hovered: boolean = false;
@@ -161,7 +161,7 @@ export default class Widget extends JSXComponent<WidgetInput> {
             return () => dxClick.off(this.widgetRef, { namespace });
         }
 
-        return null;
+        return void 0;
     }
 
     @Effect()
@@ -193,7 +193,7 @@ export default class Widget extends JSXComponent<WidgetInput> {
             return () => active.off(this.widgetRef, { selector, namespace });
         }
 
-        return null;
+        return void 0;
     }
 
     @Effect()
@@ -210,7 +210,7 @@ export default class Widget extends JSXComponent<WidgetInput> {
             return () => dxClick.off(this.widgetRef, { namespace });
         }
 
-        return null;
+        return void 0;
     }
 
     @Method()
@@ -237,7 +237,7 @@ export default class Widget extends JSXComponent<WidgetInput> {
             return () => focus.off(this.widgetRef, { namespace });
         }
 
-        return null;
+        return void 0;
     }
 
     @Effect()
@@ -257,21 +257,21 @@ export default class Widget extends JSXComponent<WidgetInput> {
             return () => hover.off(this.widgetRef, { selector, namespace });
         }
 
-        return null;
+        return void 0;
     }
 
     @Effect()
     keyboardEffect() {
-        const { focusStateEnabled, onKeyPress } = this.props;
+        const { focusStateEnabled, onKeyDown } = this.props;
 
-        if (focusStateEnabled || onKeyPress) {
+        if (focusStateEnabled || onKeyDown) {
             const id = keyboard.on(this.widgetRef, this.widgetRef,
-                options => onKeyPress!(options.originalEvent, options));
+                options => onKeyDown!(options.originalEvent, options));
 
             return () => keyboard.off(id);
         }
 
-        return null;
+        return void 0;
     }
 
     @Effect()
@@ -285,7 +285,7 @@ export default class Widget extends JSXComponent<WidgetInput> {
             return () => resize.off(this.widgetRef, { namespace });
         }
 
-        return null;
+        return void 0;
     }
 
     @Effect()
@@ -303,7 +303,7 @@ export default class Widget extends JSXComponent<WidgetInput> {
             return () => visibility.off(this.widgetRef, { namespace });
         }
 
-        return null;
+        return void 0;
     }
 
     get attributes() {

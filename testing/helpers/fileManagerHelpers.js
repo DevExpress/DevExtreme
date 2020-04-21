@@ -53,6 +53,7 @@ export const Consts = {
     ITEM_SELECTED_CLASS: 'dx-item-selected',
     FOCUSED_ROW_CLASS: 'dx-row-focused',
     SPLITTER_CLASS: 'dx-splitter',
+    FOCUSED_STATE_CLASS: 'dx-state-focused',
     DISABLED_STATE_CLASS: 'dx-state-disabled',
     UPLOAD_ICON_CLASS: 'dx-icon-upload',
     DROPDOWN_MENU_BUTTON_CLASS: 'dx-dropdownmenu-button',
@@ -211,6 +212,10 @@ export class FileManagerWrapper {
 
     isThumbnailsItemSelected(itemName) {
         return this.findThumbnailsItem(itemName).is(`.${Consts.ITEM_SELECTED_CLASS}`);
+    }
+
+    isThumbnailsItemFocused(itemName) {
+        return this.findThumbnailsItem(itemName).is(`.${Consts.FOCUSED_STATE_CLASS}`);
     }
 
     findDetailsItem(itemName) {
@@ -704,7 +709,7 @@ const createFileSystemItem = (parentPath, dataObj) => {
     item.size = dataObj.size;
     item.dataItem = dataObj;
     if(dataObj.isDirectory) {
-        item.hasSubDirs = true;
+        item.hasSubDirectories = true;
     }
     return item;
 };

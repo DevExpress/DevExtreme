@@ -11,7 +11,7 @@ export const viewFunction = ({ sourceType, cssClass, props: { source } }: Icon) 
 };
 
 @ComponentBindings()
-export class IconInput {
+export class IconProps {
     @OneWay() position?: string = 'left';
     @OneWay() source?: string = '';
 }
@@ -21,7 +21,7 @@ export class IconInput {
     defaultOptionRules: null,
     view: viewFunction,
 })
-export default class Icon extends JSXComponent<IconInput> {
+export default class Icon extends JSXComponent<IconProps> {
     get sourceType() {
         return getImageSourceType(this.props.source);
     }

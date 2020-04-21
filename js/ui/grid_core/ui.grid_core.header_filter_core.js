@@ -288,7 +288,9 @@ exports.HeaderFilterView = modules.View.inherit({
                         const selectedItems = e.component.option('selectedItems');
 
                         if(!e.component._selectedItemsUpdating && !e.component.option('searchValue') && !options.isFilterBuilder) {
-                            if(selectedItems.length === 0 && items.length && (!options.filterValues || options.filterValues.length <= 1)) {
+                            const filterValues = options.filterValues || [];
+                            const isExclude = options.filterType === 'exclude';
+                            if(selectedItems.length === 0 && items.length && (filterValues.length <= 1 || isExclude && filterValues.length === items.length - 1)) {
                                 options.filterType = 'include';
                                 options.filterValues = [];
                             } else if(selectedItems.length === items.length) {

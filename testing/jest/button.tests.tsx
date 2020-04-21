@@ -10,13 +10,13 @@ import Widget from '../../js/renovation/widget.p.js';
 
 jest.mock('../../js/core/devices', () => {
     const actualDevices = require.requireActual('../../js/core/devices');
+    const isSimulator = actualDevices.isSimulator.bind(actualDevices);
+    const real = actualDevices.real.bind(actualDevices);
 
-    return {
-        ...actualDevices,
-        ...actualDevices.__proto__,
-        isSimulator: jest.fn(() => false),
-        real: jest.fn(() => ({ deviceType: 'desktop' })),
-    };
+    actualDevices.isSimulator = jest.fn(isSimulator);
+    actualDevices.real = jest.fn(real);
+
+    return actualDevices;
 });
 
 jest.mock('../../js/ui/themes', () => ({
@@ -397,6 +397,78 @@ describe('Button', () => {
                 const tree = render({ tabIndex: 10 });
 
                 expect(tree.find(Widget).prop('tabIndex')).toBe(10);
+            });
+        });
+
+        describe('onKeyDown', () => {
+            it('should call custom handler on key press', () => {
+                const onClick = jest.fn();
+                const onKeyDown = jest.fn();
+
+                render({ onClick, onKeyDown });
+
+                expect(onClick).toHaveBeenCalledTimes(0);
+                expect(onKeyDown).toHaveBeenCalledTimes(0);
+
+                emitKeyboard(KEY.space);
+                expect(onClick).toHaveBeenCalledTimes(1);
+                expect(onKeyDown).toHaveBeenCalledTimes(1);
+
+                emitKeyboard(KEY.a);
+                expect(onClick).toHaveBeenCalledTimes(1);
+                expect(onKeyDown).toHaveBeenCalledTimes(2);
+            });
+
+            it('should call custom handler on press specific key', () => {
+                const onClick = jest.fn();
+                const customHandler = jest.fn();
+
+                render({
+                    onClick,
+                    onKeyDown: (event, { keyName, which }) => {
+                        if(keyName === 'a' || which === 'a') {
+                            customHandler();
+                        }
+                    }
+                });
+
+                expect(onClick).toHaveBeenCalledTimes(0);
+                expect(customHandler).toHaveBeenCalledTimes(0);
+
+                emitKeyboard(KEY.space);
+                expect(onClick).toHaveBeenCalledTimes(1);
+                expect(customHandler).toHaveBeenCalledTimes(0);
+
+                emitKeyboard(KEY.a);
+                expect(onClick).toHaveBeenCalledTimes(1);
+                expect(customHandler).toHaveBeenCalledTimes(1);
+            });
+
+            it('should not call onClick on press Enter and Space if prevented', () => {
+                const onClick = jest.fn();
+                const customHandler = jest.fn();
+
+                render({
+                    onClick,
+                    onKeyDown: (event, { keyName, which }) => {
+                        if(keyName === 'space' || which === 'space' || keyName === 'enter' || which === 'enter') {
+                            customHandler();
+                            event.cancel = true;
+                            return event;
+                        }
+                    }
+                });
+
+                expect(onClick).toHaveBeenCalledTimes(0);
+                expect(customHandler).toHaveBeenCalledTimes(0);
+
+                emitKeyboard(KEY.space);
+                expect(onClick).toHaveBeenCalledTimes(0);
+                expect(customHandler).toHaveBeenCalledTimes(1);
+
+                emitKeyboard(KEY.enter);
+                expect(onClick).toHaveBeenCalledTimes(0);
+                expect(customHandler).toHaveBeenCalledTimes(2);
             });
         });
     });

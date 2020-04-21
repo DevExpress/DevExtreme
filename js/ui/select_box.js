@@ -548,6 +548,7 @@ const SelectBox = DropDownList.inherit({
             const shouldCancelSearch = this._wasSearch() &&
                 !this.option('acceptCustomValue') &&
                 this.option('searchEnabled') &&
+                this.option('opened') &&
                 !this._isOverlayNestedTarget(e.relatedTarget);
             if(shouldCancelSearch) {
                 this._searchCanceled();
@@ -835,11 +836,6 @@ const SelectBox = DropDownList.inherit({
             case 'showSelectionControls':
             case 'useInkRipple':
                 this._invalidate();
-                break;
-            case 'selectedItem':
-                if(args.previousValue !== args.value) {
-                    this.callBase(args);
-                }
                 break;
             case 'allowClearing':
                 break;

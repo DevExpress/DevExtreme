@@ -178,6 +178,12 @@ const baseFixedColumns = {
             $cell.toggleClass(FIRST_CELL_CLASS, options.columnIndex === transparentColumnIndex);
         }
 
+        const isRowAltStyle = that.option('rowAlternationEnabled') && options.isAltRow;
+        // T823783, T852898, T865179, T875201
+        if(browser.mozilla && options.column.fixed && options.rowType !== 'group' && !isRowAltStyle) {
+            $cell.addClass(FIXED_COL_CLASS);
+        }
+
         return $cell;
     },
 

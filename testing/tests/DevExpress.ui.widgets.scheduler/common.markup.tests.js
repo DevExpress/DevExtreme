@@ -168,20 +168,6 @@ QUnit.module('Scheduler with config', {
         assert.equal($header.find('.dx-tab').eq(1).text(), 'Week');
     });
 
-    QUnit.test('Workspace shouldn\'t have specific class if maxAppointmentsPerCell=null', function(assert) {
-        this.createInstance({
-            currentView: 'Week',
-            maxAppointmentsPerCell: null,
-            views: [{
-                type: 'week',
-                name: 'Week',
-            }]
-        });
-
-        const $workSpace = this.instance.getWorkSpace().$element();
-        assert.notOk($workSpace.hasClass('dx-scheduler-work-space-overlapping'), 'workspace hasn\'t class');
-    });
-
     QUnit.test('Scheduler should not fail when crossScrollingEnabled is set', function(assert) {
         this.createInstance();
 

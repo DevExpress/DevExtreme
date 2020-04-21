@@ -1,34 +1,35 @@
+import $ from '../../core/renderer';
 import DOMComponent from '../../core/dom_component';
 import * as Preact from 'preact';
 import { extend } from '../../core/utils/extend';
 import { getInnerActionName } from './utils';
 import { isEmpty } from '../../core/utils/string';
+import { wrapElement, removeDifferentElements } from '../preact-wrapper/utils';
+import { useLayoutEffect } from 'preact/hooks';
+import { getPublicElement } from '../../core/utils/dom';
+
+const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
 export default class PreactWrapper extends DOMComponent {
     getInstance() {
         return this;
     }
 
-    getView() {
-        return null;
-    }
-
-    renderView(options) {
-        return Preact.h(this.getView(), options);
-    }
-
     _initMarkup() {
         const isFirstRender = this.$element().children().length === 0;
-        const container = isFirstRender ? this.$element().get(0) : undefined;
+        const hasParent = this.$element().parent().length > 0;
+        const container = isFirstRender && hasParent ? this.$element().get(0) : undefined;
 
-        Preact.render(this.renderView(this.getProps(isFirstRender)), this.$element().get(0), container);
+        Preact.render(Preact.h(this._viewComponent, this.getAllProps(isFirstRender)), this.$element().get(0), container);
     }
 
     _render() {
-        this._renderContent();
+        // NOTE: see ui.widget
+        // this._renderContent();
     }
+    // _renderContent() { }
 
-    getProps(isFirstRender) {
+    getAllProps(isFirstRender) {
         const options = extend({}, this.option());
         const attributes = this.$element()[0].attributes;
         const { width, height } = this.$element()[0].style;
@@ -62,10 +63,21 @@ export default class PreactWrapper extends DOMComponent {
             options.height = height;
         }
 
-        return options;
+        if(this.viewRef) {
+            options.ref = this.viewRef;
+        }
+
+        return this.getProps && this.getProps(options) || options;
     }
 
-    _renderContent() { }
+    _init() {
+        super._init();
+        this._initWidget && this._initWidget();
+    }
+
+    _createViewRef() {
+        this.viewRef = Preact.createRef();
+    }
 
     _optionChanged(option) {
         if(option) {
@@ -78,8 +90,50 @@ export default class PreactWrapper extends DOMComponent {
         this.option(getInnerActionName(name), this._createActionByOption(name, config));
     }
 
+    _createTemplateComponent(props, templateOption, canBeAnonymous) {
+        if(!templateOption && this.option('_hasAnonymousTemplateContent') && canBeAnonymous) {
+            templateOption = this._templateManager.anonymousTemplateName;
+        }
+        if(!templateOption) {
+            return;
+        }
+
+        const template = this._getTemplate(templateOption);
+        return ({ parentRef, ...restProps }) => {
+            useLayoutEffect(() => {
+                const $parent = $(parentRef.current);
+                const $children = $parent.contents();
+
+                let $template = $(template.render({
+                    container: getPublicElement($parent),
+                    model: restProps,
+                    transclude: canBeAnonymous && templateOption === this._templateManager.anonymousTemplateName,
+                    // TODO index
+                }));
+
+                if($template.hasClass(TEMPLATE_WRAPPER_CLASS)) {
+                    $template = wrapElement($parent, $template);
+                }
+                const $newChildren = $parent.contents();
+
+                return () => {
+                    // NOTE: order is important
+                    removeDifferentElements($children, $newChildren);
+                };
+            }, Object.keys(props).map(key => props[key]));
+
+            return (<Preact.Fragment/>);
+        };
+    }
+
     // Public API
     repaint() {
         this._refresh();
+    }
+
+    // NOTE: this method will be deprecated
+    //       aria changes should be defined in declaration or passed through property
+    setAria() {
+        throw new Error('"setAria" method is deprecated, use "aria" property instead');
     }
 }

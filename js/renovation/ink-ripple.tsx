@@ -7,7 +7,7 @@ export const viewFunction = (viewModel) => {
 };
 
 @ComponentBindings()
-export class InkRippleInput {
+export class InkRippleProps {
     @OneWay() config?: any = {};
 }
 
@@ -16,7 +16,7 @@ export class InkRippleInput {
     defaultOptionRules: null,
     view: viewFunction,
 })
-export default class InkRipple extends JSXComponent<InkRippleInput> {
+export default class InkRipple extends JSXComponent<InkRippleProps> {
     @Method()
     hideWave(event) {
         hideWave(this.getConfig, event);

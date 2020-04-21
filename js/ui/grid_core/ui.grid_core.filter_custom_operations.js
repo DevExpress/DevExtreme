@@ -53,13 +53,13 @@ function baseOperation(grid) {
             column = extend({}, column, { filterType: 'include', filterValues: [value] });
             const dataSourceOptions = headerFilterController.getDataSource(column);
             dataSourceOptions.paginate = false;
-            const headerFilterDataSource = headerFilter && headerFilter.dataSource;
-            if(!headerFilterDataSource && lookup.items) {
-                dataSourceOptions.store = lookup.items;
-            }
             const dataSource = new DataSource(dataSourceOptions);
             const result = new deferredUtils.Deferred();
 
+            const key = dataSource.store().key();
+            if(key) {
+                dataSource.filter([key, '=', fieldInfo.value]);
+            }
             dataSource.load().done(items => {
                 result.resolve(getSelectedItemsTexts(items)[0]);
             });

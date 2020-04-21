@@ -437,6 +437,7 @@ const DOMComponent = Component.inherit({
 
         if(anonymousTemplateMeta.name && !anonymousTemplate) {
             this._options.silent(`integrationOptions.templates.${anonymousTemplateMeta.name}`, anonymousTemplateMeta.template);
+            this._options.silent('_hasAnonymousTemplateContent', true);
         }
     },
 

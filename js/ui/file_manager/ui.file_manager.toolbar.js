@@ -373,7 +373,7 @@ class FileManagerToolbar extends Widget {
 
     _fileToolbarHasEffectiveItems(fileItems) {
         const items = this._fileToolbar.option('items');
-        return items.some(({ name }) => name !== 'clear' && name !== 'refresh' && this._commandManager.isCommandAvailable(name, fileItems));
+        return items.some(item => this._isFileToolbarItemAvailable(item, fileItems));
     }
 
     _executeCommand(command) {
@@ -393,6 +393,11 @@ class FileManagerToolbar extends Widget {
         }
 
         return this._commandManager.isCommandAvailable(toolbarItem.name, fileItems);
+    }
+
+    _isFileToolbarItemAvailable({ name, visible }, fileItems) {
+        return !this._isDefaultItem(name) && ensureDefined(visible, true) ||
+            name !== 'clear' && name !== 'refresh' && this._commandManager.isCommandAvailable(name, fileItems);
     }
 
     _updateItemInToolbar(toolbar, commandName, options) {

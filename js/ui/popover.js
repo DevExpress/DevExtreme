@@ -7,7 +7,6 @@ const eventsEngine = require('../events/core/events_engine');
 const registerComponent = require('../core/component_registrator');
 const commonUtils = require('../core/utils/common');
 const extend = require('../core/utils/extend').extend;
-const browser = require('../core/utils/browser');
 const translator = require('../animation/translator');
 const positionUtils = require('../animation/position');
 const typeUtils = require('../core/utils/type');
@@ -50,8 +49,6 @@ const SIDE_BORDER_WIDTH_STYLES = {
     'right': 'borderRightWidth',
     'bottom': 'borderBottomWidth'
 };
-
-const isFirefox = browser.mozilla;
 
 const getEventNameByOption = function(optionValue) {
     return typeUtils.isObject(optionValue) ? optionValue.name : optionValue;
@@ -512,15 +509,6 @@ const Popover = Popup.inherit({
         const verticalWeight = Math.abs(WEIGHT_OF_SIDES[my.v] - weightSign * WEIGHT_OF_SIDES[at.v]);
 
         return horizontalWeight > verticalWeight ? at.h : at.v;
-    },
-
-    _resetContentHeight: function() {
-        this.callBase();
-        if(isFirefox) { // T655040
-            const originalOverflow = this._$popupContent.css('overflow');
-            this._$popupContent.css('overflow', 'visible');
-            this._$popupContent.css('overflow', originalOverflow);
-        }
     },
 
     _isVerticalSide: function(side) {

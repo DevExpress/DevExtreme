@@ -31,7 +31,7 @@ const checkFormWithRecurrenceEditor = (assert, instance, visibility) => {
 const createInstance = function(options) {
     const defaultOption = {
         dataSource: [],
-        maxAppointmentsPerCell: null
+        maxAppointmentsPerCell: 2
     };
     const instance = $('#scheduler').dxScheduler($.extend(defaultOption, options)).dxScheduler('instance');
     return new SchedulerTestWrapper(instance);
@@ -41,7 +41,7 @@ const moduleOptions = {
     beforeEach: function() {
         this.instance = $('#scheduler').dxScheduler({
             dataSource: [],
-            maxAppointmentsPerCell: null,
+            maxAppointmentsPerCell: 2,
         }).dxScheduler('instance');
         fx.off = true;
         this.tasks = [

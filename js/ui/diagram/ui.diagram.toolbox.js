@@ -136,7 +136,7 @@ class DiagramToolbox extends DiagramFloatingPanel {
     updateMaxHeight() {
         if(this.isMobileView()) return;
 
-        let maxHeight = 4;
+        let maxHeight = 6;
         if(this._popup) {
             const $title = this._getPopupTitle();
             maxHeight += $title.outerHeight();

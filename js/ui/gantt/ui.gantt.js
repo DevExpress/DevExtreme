@@ -688,12 +688,6 @@ class Gantt extends Widget {
                  */
                 allowDependencyDeleting: true,
                 /**
-                 * @name dxGanttOptions.editing.allowDependencyUpdating
-                 * @type boolean
-                 * @default true
-                 */
-                allowDependencyUpdating: true,
-                /**
                 * @name dxGanttOptions.editing.allowResourceAdding
                 * @type boolean
                 * @default true
@@ -714,11 +708,11 @@ class Gantt extends Widget {
             },
             validation: {
                 /**
-                * @name dxGanttOptions.validation.enableDependencyValidation
+                * @name dxGanttOptions.validation.validateDependencies
                 * @type boolean
                 * @default false
                 */
-                enableDependencyValidation: false,
+                validateDependencies: false,
                 /**
                 * @name dxGanttOptions.validation.autoUpdateParentTasks
                 * @type boolean

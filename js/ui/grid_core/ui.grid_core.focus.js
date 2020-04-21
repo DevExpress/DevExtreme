@@ -256,8 +256,6 @@ exports.FocusController = core.ViewController.inherit((function() {
             const focusedRowIndex = this.getFocusedRowIndexByKey(key);
 
             if(this._isValidFocusedRowIndex(focusedRowIndex)) {
-                this.getController('keyboardNavigation').setFocusedRowIndex(focusedRowIndex);
-
                 if(this.option('focusedRowEnabled')) {
                     dataController.updateItems({
                         changeType: 'updateFocusedRow',
@@ -266,6 +264,8 @@ exports.FocusController = core.ViewController.inherit((function() {
                 } else {
                     this.getView('rowsView').scrollToRowElement(key);
                 }
+
+                this.getController('keyboardNavigation').setFocusedRowIndex(focusedRowIndex);
 
                 deferred && deferred.resolve(focusedRowIndex);
             } else {
@@ -450,8 +450,9 @@ module.exports = {
                 _updateFocusedCellPosition: function($cell, direction) {
                     const prevRowIndex = this.option('focusedRowIndex');
                     const prevColumnIndex = this.option('focusedColumnIndex');
+                    const position = this.callBase($cell, direction);
 
-                    if(this.callBase($cell, direction)) {
+                    if(position && position.columnIndex >= 0) {
                         this._fireFocusedCellChanged($cell, prevColumnIndex, prevRowIndex);
                     }
                 }

@@ -2112,6 +2112,542 @@ QUnit.test('Changing the item\'s option via the itemOption when these options ar
     assert.strictEqual($('#form').find('.test-class').length, 1, 'cssClass of item');
 });
 
+QUnit.module('visible/visibleIndex', () => {
+    QUnit.test('item1.visible:true (no visibleIndex)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [
+                { dataField: 'field1', visible: true },
+                { dataField: 'field2', visible: true } ]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field1', 'inputs');
+        assert.equal($inputs.eq(1).attr('name'), 'field2', 'inputs');
+    });
+
+    QUnit.test('item1.visible:true (sequential visibleIndex starting from 0)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [
+                { dataField: 'field1', visible: true, visibleIndex: 0 },
+                { dataField: 'field2', visible: true, visibleIndex: 1 } ]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field1', 'inputs');
+        assert.equal($inputs.eq(1).attr('name'), 'field2', 'inputs');
+    });
+
+    QUnit.test('item1.visible:true (sequantial visibleIndex starting from 0 does not fit with items order)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [
+                { dataField: 'field1', visible: true, visibleIndex: 1 },
+                { dataField: 'field2', visible: true, visibleIndex: 0 } ]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field2', 'inputs');
+        assert.equal($inputs.eq(1).attr('name'), 'field1', 'inputs');
+    });
+
+    QUnit.test('item1.visible:true (non sequensial visibleIndex starting from 2)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [
+                { dataField: 'field1', visible: true, visibleIndex: 2 },
+                { dataField: 'field2', visible: true, visibleIndex: 3 } ]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field1', 'inputs');
+        assert.equal($inputs.eq(1).attr('name'), 'field2', 'inputs');
+    });
+
+    QUnit.test('item1.visible:true (non sequantial visibleIndex starting from 2 does not fit with items order)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [
+                { dataField: 'field1', visible: true, visibleIndex: 5 },
+                { dataField: 'field2', visible: true, visibleIndex: 2 } ]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field2', 'inputs');
+        assert.equal($inputs.eq(1).attr('name'), 'field1', 'inputs');
+    });
+
+    QUnit.test('item1.visible:false -> item1.visible:true (no visibleIndex)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [
+                { dataField: 'field1', visible: false },
+                { dataField: 'field2', visible: true }
+            ]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field2');
+
+        form.itemOption('field1', 'visible', true);
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.eq(0).attr('name'), 'field1', 'inputs_1');
+        assert.equal($inputs_2.eq(1).attr('name'), 'field2', 'inputs_2');
+    });
+
+    QUnit.test('item1.visible:false -> item1.visible:true (sequential visibleIndex starting from 0)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [
+                { dataField: 'field1', visible: false, visibleIndex: 0 },
+                { dataField: 'field2', visible: true, visibleIndex: 1 } ]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field2');
+
+        form.itemOption('field1', 'visible', true);
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.eq(0).attr('name'), 'field1', 'inputs_2');
+        assert.equal($inputs_2.eq(1).attr('name'), 'field2', 'inputs_2');
+    });
+
+    QUnit.test('item1.visible:false -> item1.visible:true (sequantial visibleIndex starting from 0 does not fit with items order)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [
+                { dataField: 'field1', visible: false, visibleIndex: 1 },
+                { dataField: 'field2', visible: true, visibleIndex: 0 } ]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field2');
+
+        form.itemOption('field1', 'visible', true);
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.eq(0).attr('name'), 'field2', 'inputs_2');
+        assert.equal($inputs_2.eq(1).attr('name'), 'field1', 'inputs_2');
+    });
+
+    QUnit.test('item1.visible:false -> item1.visible:true (non sequensial visibleIndex starting from 2)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [
+                { dataField: 'field1', visible: false, visibleIndex: 2 },
+                { dataField: 'field2', visible: true, visibleIndex: 5 } ]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field2');
+
+        form.itemOption('field1', 'visible', true);
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.eq(0).attr('name'), 'field1', 'inputs_2');
+        assert.equal($inputs_2.eq(1).attr('name'), 'field2', 'inputs_2');
+    });
+
+    QUnit.test('item1.visible:false -> item1.visible:true (non sequantial visibleIndex starting from 2 does not fit with items order)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [
+                { dataField: 'field1', visible: false, visibleIndex: 5 },
+                { dataField: 'field2', visible: true, visibleIndex: 2 } ]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field2');
+
+        form.itemOption('field1', 'visible', true);
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.eq(0).attr('name'), 'field2', 'inputs_2');
+        assert.equal($inputs_2.eq(1).attr('name'), 'field1', 'inputs_2');
+    });
+
+    QUnit.test('group.item1.visible:true (no visibleIndex)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group',
+                colCount: 1,
+                items: [
+                    { dataField: 'field1', visible: true },
+                    { dataField: 'field2', visible: true } ]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field1', 'inputs');
+        assert.equal($inputs.eq(1).attr('name'), 'field2', 'inputs');
+    });
+
+    QUnit.test('group.item1.visible:true (sequential visibleIndex starting from 0)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group',
+                colCount: 1,
+                items: [
+                    { dataField: 'field1', visible: true, visibleIndex: 0 },
+                    { dataField: 'field2', visible: true, visibleIndex: 1 } ]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field1', 'inputs');
+        assert.equal($inputs.eq(1).attr('name'), 'field2', 'inputs');
+    });
+
+    QUnit.test('group.item1.visible:true (sequantial visibleIndex starting from 0 does not fit with items order)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group',
+                colCount: 1,
+                items: [
+                    { dataField: 'field1', visible: true, visibleIndex: 1 },
+                    { dataField: 'field2', visible: true, visibleIndex: 0 } ]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field2', 'inputs');
+        assert.equal($inputs.eq(1).attr('name'), 'field1', 'inputs');
+    });
+
+    QUnit.test('group.item1.visible:true (non sequensial visibleIndex starting from 2)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group',
+                colCount: 1,
+                items: [
+                    { dataField: 'field1', visible: true, visibleIndex: 2 },
+                    { dataField: 'field2', visible: true, visibleIndex: 3 } ]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field1', 'inputs');
+        assert.equal($inputs.eq(1).attr('name'), 'field2', 'inputs');
+    });
+
+    QUnit.test('group.item1.visible:true (non sequantial visibleIndex starting from 2 does not fit with items order)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group',
+                colCount: 1,
+                items: [
+                    { dataField: 'field1', visible: true, visibleIndex: 5 },
+                    { dataField: 'field2', visible: true, visibleIndex: 2 } ]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field2', 'inputs');
+        assert.equal($inputs.eq(1).attr('name'), 'field1', 'inputs');
+    });
+
+    QUnit.test('group.item1.visible:false -> group.item1.visible:true (no visibleIndex)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group',
+                colCount: 1,
+                name: 'group',
+                items: [
+                    { dataField: 'field1', visible: false },
+                    { dataField: 'field2', visible: true } ]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field2');
+
+        form.itemOption('group.field1', 'visible', true);
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.eq(0).attr('name'), 'field1', 'inputs_1');
+        assert.equal($inputs_2.eq(1).attr('name'), 'field2', 'inputs_2');
+    });
+
+    QUnit.test('group.item1.visible:false -> group.item1.visible:true (sequential visibleIndex starting from 0)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group',
+                colCount: 1,
+                name: 'group',
+                items: [
+                    { dataField: 'field1', visible: false, visibleIndex: 0 },
+                    { dataField: 'field2', visible: true, visibleIndex: 1 } ]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field2');
+
+        form.itemOption('group.field1', 'visible', true);
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.eq(0).attr('name'), 'field1', 'inputs_2');
+        assert.equal($inputs_2.eq(1).attr('name'), 'field2', 'inputs_2');
+    });
+
+    QUnit.test('group.item1.visible:false -> group.item1.visible:true (sequantial visibleIndex starting from 0 does not fit with items order)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group',
+                colCount: 1,
+                name: 'group',
+                items: [
+                    { dataField: 'field1', visible: false, visibleIndex: 1 },
+                    { dataField: 'field2', visible: true, visibleIndex: 0 } ]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field2');
+
+        form.itemOption('group.field1', 'visible', true);
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.eq(0).attr('name'), 'field2', 'inputs_2');
+        assert.equal($inputs_2.eq(1).attr('name'), 'field1', 'inputs_2');
+    });
+
+    QUnit.test('group.item1.visible:false -> group.item1.visible:true (non sequensial visibleIndex starting from 2)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group',
+                colCount: 1,
+                name: 'group',
+                items: [
+                    { dataField: 'field1', visible: false, visibleIndex: 2 },
+                    { dataField: 'field2', visible: true, visibleIndex: 5 } ]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field2');
+
+        form.itemOption('group.field1', 'visible', true);
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.eq(0).attr('name'), 'field1', 'inputs_2');
+        assert.equal($inputs_2.eq(1).attr('name'), 'field2', 'inputs_2');
+    });
+
+    QUnit.test('group.item1.visible:false -> group.item1.visible:true (non sequantial visibleIndex starting from 2 does not fit with items order)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group',
+                colCount: 1,
+                name: 'group',
+                items: [
+                    { dataField: 'field1', visible: false, visibleIndex: 5 },
+                    { dataField: 'field2', visible: true, visibleIndex: 2 } ]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field2');
+
+        form.itemOption('group.field1', 'visible', true);
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.eq(0).attr('name'), 'field2', 'inputs_2');
+        assert.equal($inputs_2.eq(1).attr('name'), 'field1', 'inputs_2');
+    });
+
+    QUnit.test('tabbedGroup.item1.visible:true (no visibleIndex)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'tabbed',
+                tabs: [ { title: 'tab', items: [
+                    { dataField: 'field1', visible: true },
+                    { dataField: 'field2', visible: true } ]
+                }]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field1', 'inputs');
+        assert.equal($inputs.eq(1).attr('name'), 'field2', 'inputs');
+    });
+
+    QUnit.test('tabbedGroup.item1.visible:true (sequential visibleIndex starting from 0)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'tabbed',
+                tabs: [ { title: 'tab', items: [
+                    { dataField: 'field1', visible: true, visibleIndex: 0 },
+                    { dataField: 'field2', visible: true, visibleIndex: 1 } ]
+                }]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field1', 'inputs');
+        assert.equal($inputs.eq(1).attr('name'), 'field2', 'inputs');
+    });
+
+    QUnit.test('tabbedGroup.item1.visible:true (sequantial visibleIndex starting from 0 does not fit with items order)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'tabbed',
+                tabs: [{
+                    title: 'tab', items: [
+                        { dataField: 'field1', visible: true, visibleIndex: 1 },
+                        { dataField: 'field2', visible: true, visibleIndex: 0 }]
+                }]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field2', 'inputs');
+        assert.equal($inputs.eq(1).attr('name'), 'field1', 'inputs');
+    });
+
+    QUnit.test('tabbedGroup.item1.visible:true (non sequensial visibleIndex starting from 2)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'tabbed',
+                tabs: [{
+                    title: 'tab', items: [
+                        { dataField: 'field1', visible: true, visibleIndex: 2 },
+                        { dataField: 'field2', visible: true, visibleIndex: 3 }]
+                }]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field1', 'inputs');
+        assert.equal($inputs.eq(1).attr('name'), 'field2', 'inputs');
+    });
+
+    QUnit.test('tabbedGroup.item1.visible:true (non sequantial visibleIndex starting from 2 does not fit with items order)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'tabbed',
+                tabs: [{
+                    title: 'tab', items: [
+                        { dataField: 'field1', visible: true, visibleIndex: 5 },
+                        { dataField: 'field2', visible: true, visibleIndex: 2 }]
+                }]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field2', 'inputs');
+        assert.equal($inputs.eq(1).attr('name'), 'field1', 'inputs');
+    });
+
+    QUnit.test('tabbedGroup.item1.visible:false -> tabbedGroup.item1.visible:true (no visibleIndex)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'tabbed',
+                name: 'tabbed',
+                tabs: [{
+                    title: 'tab', items: [
+                        { dataField: 'field1', visible: false },
+                        { dataField: 'field2', visible: true }]
+                }]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field2');
+
+        form.itemOption('tabbed.tab.field1', 'visible', true);
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.eq(0).attr('name'), 'field1', 'inputs_1');
+        assert.equal($inputs_2.eq(1).attr('name'), 'field2', 'inputs_2');
+    });
+
+    QUnit.test('tabbedGroup.item1.visible:false -> tabbedGroup.item1.visible:true (sequential visibleIndex starting from 0)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'tabbed',
+                name: 'tabbed',
+                tabs: [{
+                    title: 'tab', items: [
+                        { dataField: 'field1', visible: false, visibleIndex: 0 },
+                        { dataField: 'field2', visible: true, visibleIndex: 1 }]
+                }]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field2');
+
+        form.itemOption('tabbed.tab.field1', 'visible', true);
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.eq(0).attr('name'), 'field1', 'inputs_2');
+        assert.equal($inputs_2.eq(1).attr('name'), 'field2', 'inputs_2');
+    });
+
+    QUnit.test('tabbedGroup.item1.visible:false -> tabbedGroup.item1.visible:true (sequantial visibleIndex starting from 0 does not fit with items order)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'tabbed',
+                name: 'tabbed',
+                tabs: [{
+                    title: 'tab', items: [
+                        { dataField: 'field1', visible: false, visibleIndex: 1 },
+                        { dataField: 'field2', visible: true, visibleIndex: 0 }]
+                }]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field2');
+
+        form.itemOption('tabbed.tab.field1', 'visible', true);
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.eq(0).attr('name'), 'field2', 'inputs_2');
+        assert.equal($inputs_2.eq(1).attr('name'), 'field1', 'inputs_2');
+    });
+
+    QUnit.test('tabbedGroup.item1.visible:false -> tabbedGroup.item1.visible:true (non sequensial visibleIndex starting from 2)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'tabbed',
+                name: 'tabbed',
+                tabs: [{
+                    title: 'tab', items: [
+                        { dataField: 'field1', visible: false, visibleIndex: 2 },
+                        { dataField: 'field2', visible: true, visibleIndex: 5 }]
+                }]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field2');
+
+        form.itemOption('tabbed.tab.field1', 'visible', true);
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.eq(0).attr('name'), 'field1', 'inputs_2');
+        assert.equal($inputs_2.eq(1).attr('name'), 'field2', 'inputs_2');
+    });
+
+    QUnit.test('tabbedGroup.item1.visible:false -> tabbedGroup.item1.visible:true (non sequantial visibleIndex starting from 2 does not fit with items order)', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'tabbed',
+                name: 'tabbed',
+                tabs: [{
+                    title: 'tab', items: [
+                        { dataField: 'field1', visible: false, visibleIndex: 5 },
+                        { dataField: 'field2', visible: true, visibleIndex: 2 }]
+                }]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.eq(0).attr('name'), 'field2');
+
+        form.itemOption('tabbed.tab.field1', 'visible', true);
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.eq(0).attr('name'), 'field2', 'inputs_2');
+        assert.equal($inputs_2.eq(1).attr('name'), 'field1', 'inputs_2');
+    });
+});
+
 QUnit.test('resetValues - old test', function(assert) {
     const form = $('#form').dxForm({
         formData: {

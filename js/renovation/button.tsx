@@ -17,11 +17,11 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import Icon from './icon';
 import InkRipple from './ink-ripple';
-import Widget, { WidgetInput } from './widget';
+import Widget, { WidgetProps } from './widget';
 
 const stylingModes = ['outlined', 'text', 'contained'];
 
-const getInkRippleConfig = ({ text, icon, type }: ButtonInput) => {
+const getInkRippleConfig = ({ text, icon, type }: ButtonProps) => {
     const isOnlyIconButton = !text && icon || type === 'back';
     const config: any = isOnlyIconButton ? {
         isCentered: true,
@@ -32,7 +32,7 @@ const getInkRippleConfig = ({ text, icon, type }: ButtonInput) => {
     return config;
 };
 
-const getCssClasses = (model: ButtonInput) => {
+const getCssClasses = (model: ButtonProps) => {
     const { text, icon, stylingMode, type, iconPosition } = model;
     const classNames = ['dx-button'];
     const isValidStylingMode = stylingMode && stylingModes.indexOf(stylingMode) !== -1;
@@ -80,7 +80,7 @@ export const viewFunction = (viewModel: Button) => {
         onContentReady={viewModel.props.onContentReady}
         onClick={viewModel.onWidgetClick}
         onInactive={viewModel.onInactive}
-        onKeyPress={viewModel.onWidgetKeyPress}
+        onKeyDown={viewModel.onWidgetKeyDown}
         rtlEnabled={viewModel.props.rtlEnabled}
         tabIndex={viewModel.props.tabIndex}
         visible={viewModel.props.visible}
@@ -111,7 +111,7 @@ export const viewFunction = (viewModel: Button) => {
 };
 
 @ComponentBindings()
-export class ButtonInput extends WidgetInput {
+export class ButtonProps extends WidgetProps {
     @OneWay() activeStateEnabled?: boolean = true;
     @OneWay() hoverStateEnabled?: boolean = true;
     @OneWay() icon?: string = '';
@@ -120,7 +120,7 @@ export class ButtonInput extends WidgetInput {
     @Event() onSubmit?: (e: any) => any = noop;
     @OneWay() pressed?: boolean;
     @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
-    @Template() template?: any = '';
+    @Template({ canBeAnonymous: true }) template?: any = '';
     @OneWay() text?: string = '';
     @OneWay() type?: string;
     @OneWay() useInkRipple?: boolean = false;
@@ -128,7 +128,7 @@ export class ButtonInput extends WidgetInput {
     @OneWay() validationGroup?: string = undefined;
 }
 
-const defaultOptionRules = createDefaultOptionRules<ButtonInput>([{
+const defaultOptionRules = createDefaultOptionRules<ButtonProps>([{
     device: () => devices.real().deviceType === 'desktop' && !(devices as any).isSimulator(),
     options: { focusStateEnabled: true },
 }, {
@@ -141,7 +141,7 @@ const defaultOptionRules = createDefaultOptionRules<ButtonInput>([{
     view: viewFunction,
 })
 
-export default class Button extends JSXComponent<ButtonInput> {
+export default class Button extends JSXComponent<ButtonProps> {
     @Ref() contentRef!: HTMLDivElement;
     @Ref() inkRippleRef!: InkRipple;
     @Ref() submitInputRef!: HTMLInputElement;
@@ -181,7 +181,15 @@ export default class Button extends JSXComponent<ButtonInput> {
         useSubmitBehavior && this.submitInputRef.click();
     }
 
-    onWidgetKeyPress(event: Event, { keyName, which }) {
+    onWidgetKeyDown(event: Event, options) {
+        const { onKeyDown } = this.props;
+        const { keyName, which } = options;
+
+        const result = onKeyDown?.(event, options);
+        if (result?.cancel) {
+            return result;
+        }
+
         if (keyName === 'space' || which === 'space' || keyName === 'enter' || which === 'enter') {
             event.preventDefault();
             this.onWidgetClick(event);
@@ -202,7 +210,7 @@ export default class Button extends JSXComponent<ButtonInput> {
             return () => click.off(this.submitInputRef, { namespace });
         }
 
-        return null;
+        return void 0;
     }
 
     get aria() {

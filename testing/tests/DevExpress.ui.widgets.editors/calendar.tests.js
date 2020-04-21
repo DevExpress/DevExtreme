@@ -1391,6 +1391,141 @@ QUnit.module('Options', {
         this.calendar.option('value', new Date(2002, 2, 2));
     });
 
+    QUnit.test('firstDayOfWeek option', function(assert) {
+        const getFirstWeekDayCell = () => {
+            return getCurrentViewInstance(this.calendar).$element().find('th').get(0);
+        };
+
+        let $firstWeekDayCell = getFirstWeekDayCell();
+        assert.strictEqual($firstWeekDayCell.abbr, 'Sunday', 'first day of week is correct');
+
+        this.calendar.option('firstDayOfWeek', 1);
+
+        $firstWeekDayCell = getFirstWeekDayCell();
+        assert.strictEqual($firstWeekDayCell.abbr, 'Monday', 'first day of week is correct after runtime option change');
+    });
+
+    QUnit.test('dateSerializationFormat option', function(assert) {
+        this.calendar.option({
+            dateSerializationFormat: 'yyyy-MM-dd',
+            currentDate: new Date(2020, 0, 0)
+        });
+
+        const $cell = this.$element.find(toSelector(CALENDAR_CELL_CLASS)).eq(4);
+        $($cell).trigger('dxclick');
+
+        const selectedFormattedValue = '2019-11-28';
+        const value = this.calendar.option('value');
+        assert.strictEqual(value, selectedFormattedValue, 'value format is correct after dateSerializationFormat option runtime change');
+    });
+
+    QUnit.test('cellTemplate option', function(assert) {
+        this.calendar.option({
+            cellTemplate: function() {
+                return 'Custom template';
+            },
+            currentDate: new Date(2020, 0, 0)
+        });
+
+        const $cell = this.$element.find(toSelector(CALENDAR_CELL_CLASS)).eq(4);
+        const cellContent = $cell.text();
+
+        assert.strictEqual(cellContent, 'Custom template', 'cell content is correct after cellTemplate runtime change');
+    });
+
+    QUnit.test('showTodayButton option', function(assert) {
+        const getTodayButton = () => this.$element.find(toSelector(CALENDAR_TODAY_BUTTON_CLASS)).get(0);
+
+        this.calendar.option('showTodayButton', true);
+
+        let $todayButton = getTodayButton();
+        assert.strictEqual($todayButton.text, 'Today', 'todayButton is rendered after showTodayButton runtime change to true');
+
+        this.calendar.option('showTodayButton', false);
+        $todayButton = getTodayButton();
+        assert.strictEqual($todayButton, undefined, 'todayButton is not rendered after showTodayButton runtime change to false');
+    });
+
+    QUnit.test('onCellClick option runtime change', function(assert) {
+        const getCellElement = () => this.$element.find(toSelector(CALENDAR_CELL_CLASS)).eq(4);
+
+        const firstClickHandler = sinon.spy();
+        const secondClickHandler = sinon.spy();
+
+        this.calendar.option({
+            currentDate: new Date(2010, 10, 10),
+            focusStateEnabled: true,
+            onCellClick: firstClickHandler
+        });
+
+        $(getCellElement()).trigger('dxclick');
+        assert.ok(firstClickHandler.calledOnce, 'firstClickHandler is called once');
+
+        this.calendar.option('onCellClick', secondClickHandler);
+
+        $(getCellElement()).trigger('dxclick');
+        assert.ok(secondClickHandler.calledOnce, 'secondClickHandler is called once after onCellClick runtime option change');
+    });
+
+    QUnit.test('onCellClick option - subscription by "on" method', function(assert) {
+        const getCellElement = () => this.$element.find(toSelector(CALENDAR_CELL_CLASS)).eq(4);
+
+        const clickHandler = sinon.spy();
+
+        this.calendar.option({
+            currentDate: new Date(2010, 10, 10),
+            focusStateEnabled: true
+        });
+        this.calendar.on('cellClick', clickHandler);
+
+        $(getCellElement()).trigger('dxclick');
+        assert.ok(clickHandler.calledOnce, 'cellClick is called');
+
+        this.calendar.off('cellClick', clickHandler);
+
+        $(getCellElement()).trigger('dxclick');
+        assert.ok(clickHandler.calledOnce, 'cellClick is not called second time');
+    });
+
+    QUnit.test('onContouredChanged option runtime change', function(assert) {
+        const firstHandler = sinon.spy();
+        const secondHandler = sinon.spy();
+
+        this.reinit({
+            value: null,
+            onContouredChanged: firstHandler,
+            focusStateEnabled: true
+        });
+
+        assert.ok(firstHandler.calledOnce, 'first handler has been called');
+
+        this.calendar.option('onContouredChanged', secondHandler);
+        this.$element.trigger('focusin');
+        triggerKeydown(this.$element, UP_ARROW_KEY_CODE, true);
+
+        assert.ok(secondHandler.calledOnce, 'second handler has been called');
+    });
+
+    QUnit.test('onContouredChanged option - subscription by "on" method', function(assert) {
+        const goNextView = () => {
+            $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS))).trigger('dxclick');
+        };
+
+        const handler = sinon.spy();
+        this.reinit({
+            value: null,
+            focusStateEnabled: true
+        });
+
+        this.calendar.on('contouredChanged', handler);
+        goNextView();
+        assert.ok(handler.calledOnce, 'handler is called');
+
+        this.calendar.off('contouredChanged', handler);
+        goNextView();
+        assert.ok(handler.calledOnce, 'handler is not called second time');
+    });
+
     QUnit.test('onCellClick return not \'undefined\' after click on cell', function(assert) {
         const clickHandler = sinon.spy(noop);
 
