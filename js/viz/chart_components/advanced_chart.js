@@ -1,27 +1,21 @@
-const extend = require('../../core/utils/extend').extend;
-const inArray = require('../../core/utils/array').inArray;
-const iteratorModule = require('../../core/utils/iterator');
-const rangeModule = require('../translators/range');
-const DEFAULT_AXIS_NAME = 'defaultAxisName';
-const axisModule = require('../axes/base_axis');
-const seriesFamilyModule = require('../core/series_family');
-const BaseChart = require('./base_chart').BaseChart;
-const crosshairModule = require('./crosshair');
-const getViewPortFilter = require('../series/helpers/range_data_calculator').getViewPortFilter;
-
+import { extend as _extend } from '../../core/utils/extend';
+import { inArray } from '../../core/utils/array';
+import { each as _each, reverseEach as _reverseEach } from '../../core/utils/iterator';
+import rangeModule from '../translators/range';
+import axisModule from '../axes/base_axis';
+import seriesFamilyModule from '../core/series_family';
+import { BaseChart } from './base_chart';
+import crosshairModule from './crosshair';
+import { getViewPortFilter } from '../series/helpers/range_data_calculator';
+import { isDefined as _isDefined, type } from '../../core/utils/type';
+import { noop as _noop } from '../../core/utils/common';
+import {
+    convertVisualRangeObject, rangesAreEqual, map as _map,
+    mergeMarginOptions, setCanvasValues, unique
+} from '../core/utils';
 const _isArray = Array.isArray;
-const _isDefined = require('../../core/utils/type').isDefined;
-const _each = iteratorModule.each;
-const _reverseEach = iteratorModule.reverseEach;
-const _noop = require('../../core/utils/common').noop;
-const _extend = extend;
-const vizUtils = require('../core/utils');
-const type = require('../../core/utils/type').type;
-const convertVisualRangeObject = vizUtils.convertVisualRangeObject;
-const rangesAreEqual = vizUtils.rangesAreEqual;
-const _map = vizUtils.map;
-const mergeMarginOptions = vizUtils.mergeMarginOptions;
 
+const DEFAULT_AXIS_NAME = 'defaultAxisName';
 const FONT = 'font';
 const COMMON_AXIS_SETTINGS = 'commonAxisSettings';
 const DEFAULT_PANE_NAME = 'default';
@@ -159,7 +153,7 @@ const AdvancedChart = BaseChart.inherit({
 
     _updateSize() {
         this.callBase();
-        vizUtils.setCanvasValues(this._canvas);
+        setCanvasValues(this._canvas);
     },
 
     _reinitAxes: function() {
@@ -228,10 +222,10 @@ const AdvancedChart = BaseChart.inherit({
             if(axisOptions.pane) {
                 axisPanes.push(axisOptions.pane);
             }
-            if(axisOptions.panes && axisOptions.panes.length) {
+            if(axisOptions.panes?.length) {
                 axisPanes = axisPanes.concat(axisOptions.panes.slice(0));
             }
-            axisPanes = vizUtils.unique(axisPanes);
+            axisPanes = unique(axisPanes);
             if(!axisPanes.length) {
                 axisPanes.push(undefined);
             }
@@ -284,14 +278,13 @@ const AdvancedChart = BaseChart.inherit({
             axes = that._valueAxes = [];
         }
 
-        _each(axesBasis, (index, basis) => {
+        _each(axesBasis, (_, basis) => {
             let axis = basis.axis;
             if(basis.axis && isArgumentAxes) {
                 basis.axis.isVirtual = basis.axis.pane !== paneWithNonVirtualAxis;
             } else if(basis.options) {
                 axis = that._createAxis(isArgumentAxes, basis.options,
-                    isArgumentAxes ? basis.options.pane !== paneWithNonVirtualAxis : undefined,
-                    isArgumentAxes ? index : undefined);
+                    isArgumentAxes ? basis.options.pane !== paneWithNonVirtualAxis : undefined);
                 axes.push(axis);
             }
             axis.applyVisualRangeSetter(that._getVisualRangeSetter());
@@ -371,7 +364,7 @@ const AdvancedChart = BaseChart.inherit({
             negativesAsZeroes: _isDefined(negativesAsZeroes) ? negativesAsZeroes : negativesAsZeros
         };
 
-        if(that.seriesFamilies && that.seriesFamilies.length) {
+        if(that.seriesFamilies?.length) {
             _each(that.seriesFamilies, function(_, family) {
                 family.updateOptions(familyOptions);
                 family.adjustSeriesValues();
@@ -566,7 +559,7 @@ const AdvancedChart = BaseChart.inherit({
         return getViewPortFilter(series.getValueAxis().visualRange() || {});
     },
 
-    _createAxis(isArgumentAxes, options, virtual, index) {
+    _createAxis(isArgumentAxes, options, virtual) {
         const that = this;
         const typeSelector = isArgumentAxes ? 'argumentAxis' : 'valueAxis';
         const renderingSettings = _extend({

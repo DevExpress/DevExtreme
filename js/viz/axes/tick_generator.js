@@ -109,7 +109,7 @@ function resolveEndOnTickDate(curValue, tickValue, interval, businessViewInfo) {
 function getBusinessDelta(data, breaks) {
     let spacing = 0;
     if(breaks) {
-        spacing = breaks.reduce((prev, item) =>prev + (item.to - item.from), 0);
+        spacing = breaks.reduce((prev, item) => prev + (item.to - item.from), 0);
     }
     return mathAbs(data.max - data.min - spacing);
 }
@@ -385,7 +385,7 @@ function calculateTicks(addInterval, correctMinValue, adjustInterval, resolveEnd
         let cur = correctMinValue(min, tickInterval, businessViewInfo);
         const ticks = [];
 
-        if(breaks && breaks.length) {
+        if(breaks?.length) {
             addInterval = addIntervalWithBreaks(addInterval, breaks, correctMinValue);
         }
 
@@ -418,7 +418,7 @@ function calculateMinorTicks(updateTickInterval, addInterval, correctMinValue, c
         const firstMajor = majorTicks[0];
         let tickBalance = maxCount - 1;
 
-        if(breaks && breaks.length) {
+        if(breaks?.length) {
             addInterval = addIntervalWithBreaks(addInterval, breaks, correctMinValue);
         }
 
