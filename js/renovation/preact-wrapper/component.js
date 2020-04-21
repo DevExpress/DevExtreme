@@ -58,7 +58,7 @@ export default class PreactWrapper extends DOMComponent {
                     .filter(name => name.indexOf('dx-') < 0)
                     .join(' ');
                 const classes = options.elementAttr.class ? options.elementAttr.class.concat(customClass) : customClass;
-                options.elementAttr = extend({ class: classes }, options.elementAttr);
+                options.elementAttr = { class: classes, ...options.elementAttr };
             }
         }
         if(!isEmpty(width)) {
