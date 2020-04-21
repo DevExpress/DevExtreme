@@ -881,7 +881,6 @@ const Draggable = DOMComponent.inherit({
             case 'contentTemplate':
             case 'container':
             case 'clone':
-                this._resetDragElement();
                 break;
             case 'allowMoveByClick':
             case 'dragDirection':
