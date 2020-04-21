@@ -190,9 +190,12 @@ describe('LessTemplateLoader', () => {
             themeName,
             colorScheme,
             metadata).then(data => {
-            assert.equal(data.css, `.dx-swatch-my-custom,
-.dx-swatch-my-custom .dx-theme-accent-as-text-color,
-.dx-swatch-my-custom div {
+            assert.equal(data.css, `.dx-swatch-my-custom .dx-theme-accent-as-text-color,
+.dx-swatch-my-custom div,
+.dx-theme-generic-typography .dx-swatch-my-custom,
+.dx-theme-generic-typography .dx-swatch-my-custom .dx-theme-accent-as-text-color,
+.dx-theme-generic-typography.dx-swatch-my-custom,
+.dx-theme-generic-typography.dx-swatch-my-custom .dx-theme-accent-as-text-color {
   color: #fff;
 }
 `);
@@ -271,9 +274,12 @@ describe('LessTemplateLoader', () => {
         const lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.compileLess(less, {}, metadataVariables).then(data => {
-            assert.equal(data.css, `.dx-swatch-my-custom,
-.dx-swatch-my-custom .dx-theme-accent-as-text-color,
-.dx-swatch-my-custom div {
+            assert.equal(data.css, `.dx-swatch-my-custom .dx-theme-accent-as-text-color,
+.dx-swatch-my-custom div,
+.dx-theme-generic-typography .dx-swatch-my-custom,
+.dx-theme-generic-typography .dx-swatch-my-custom .dx-theme-accent-as-text-color,
+.dx-theme-generic-typography.dx-swatch-my-custom,
+.dx-theme-generic-typography.dx-swatch-my-custom .dx-theme-accent-as-text-color {
   color: #fff;
 }
 `);
@@ -362,9 +368,12 @@ describe('LessTemplateLoader', () => {
             assert.equal(data.css, `.dx-swatch-my-custom .dx-theme-marker {
   font-family: 'dx.generic.my-custom';
 }
-.dx-swatch-my-custom,
 .dx-swatch-my-custom .dx-theme-accent-as-text-color,
-.dx-swatch-my-custom div {
+.dx-swatch-my-custom div,
+.dx-theme-generic-typography .dx-swatch-my-custom,
+.dx-theme-generic-typography .dx-swatch-my-custom .dx-theme-accent-as-text-color,
+.dx-theme-generic-typography.dx-swatch-my-custom,
+.dx-theme-generic-typography.dx-swatch-my-custom .dx-theme-accent-as-text-color {
   color: #fff;
 }
 `);
