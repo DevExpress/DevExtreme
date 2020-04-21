@@ -17,12 +17,12 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import Icon from './icon';
 import InkRipple from './ink-ripple';
-import Widget, { WidgetInput } from './widget';
+import Widget, { WidgetProps } from './widget';
 
 const defaultClassNames = ['dx-button'];
 const stylingModes = ['outlined', 'text', 'contained'];
 
-const getInkRippleConfig = ({ text, icon, type }: ButtonInput) => {
+const getInkRippleConfig = ({ text, icon, type }: ButtonProps) => {
     const isOnlyIconButton = !text && icon || type === 'back';
     const config: any = isOnlyIconButton ? {
         isCentered: true,
@@ -33,7 +33,7 @@ const getInkRippleConfig = ({ text, icon, type }: ButtonInput) => {
     return config;
 };
 
-const getCssClasses = (model: ButtonInput) => {
+const getCssClasses = (model: ButtonProps) => {
     const { text, icon, stylingMode, type, iconPosition } = model;
     const classNames = defaultClassNames.concat(model.classNames || []);
     const isValidStylingMode = stylingMode && stylingModes.indexOf(stylingMode) !== -1;
@@ -111,7 +111,7 @@ export const viewFunction = (viewModel: Button) => {
 };
 
 @ComponentBindings()
-export class ButtonInput extends WidgetInput {
+export class ButtonProps extends WidgetProps {
     @OneWay() activeStateEnabled?: boolean = true;
     @OneWay() classNames?: string[];
     @OneWay() hoverStateEnabled?: boolean = true;
@@ -129,7 +129,7 @@ export class ButtonInput extends WidgetInput {
     @OneWay() validationGroup?: string = undefined;
 }
 
-const defaultOptionRules = createDefaultOptionRules<ButtonInput>([{
+const defaultOptionRules = createDefaultOptionRules<ButtonProps>([{
     device: () => devices.real().deviceType === 'desktop' && !(devices as any).isSimulator(),
     options: { focusStateEnabled: true },
 }, {
@@ -142,7 +142,7 @@ const defaultOptionRules = createDefaultOptionRules<ButtonInput>([{
     view: viewFunction,
 })
 
-export default class Button extends JSXComponent<ButtonInput> {
+export default class Button extends JSXComponent<ButtonProps> {
     @Ref() contentRef!: HTMLDivElement;
     @Ref() inkRippleRef!: InkRipple;
     @Ref() submitInputRef!: HTMLInputElement;
@@ -211,7 +211,7 @@ export default class Button extends JSXComponent<ButtonInput> {
             return () => click.off(this.submitInputRef, { namespace });
         }
 
-        return null;
+        return void 0;
     }
 
     get aria() {
