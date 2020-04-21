@@ -435,15 +435,18 @@ export class FileManagerProgressPanelWrapper {
         this._$element = $element;
     }
 
+    getInfosContainer() {
+        return this._$element.find('.dx-filemanager-progress-panel-infos-container');
+    }
+
     getInfos() {
-        return this._$element
-            .find('.dx-filemanager-progress-panel-infos-container > .dx-filemanager-progress-panel-info')
+        return this.getInfosContainer().find('.dx-filemanager-progress-panel-info')
             .map((_, info) => new FileManagerProgressPanelInfoWrapper($(info)))
             .get();
     }
 
     getSeparators() {
-        return this._$element.find('.dx-filemanager-progress-panel-infos-container > .dx-filemanager-progress-panel-separator');
+        return this.getInfosContainer().find('.dx-filemanager-progress-panel-separator');
     }
 
     findProgressBoxes($container) {
