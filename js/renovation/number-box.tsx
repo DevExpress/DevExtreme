@@ -5,7 +5,7 @@ export const viewFunction = ({ widgetRef }: NumberBox) => {
 };
 
 @ComponentBindings()
-class NumberBoxInput {
+class NumberBoxProps {
 
 }
 
@@ -14,7 +14,7 @@ class NumberBoxInput {
     defaultOptionRules: null,
     view: viewFunction,
 })
-export default class NumberBox extends JSXComponent<NumberBoxInput> {
+export default class NumberBox extends JSXComponent<NumberBoxProps> {
     @Ref()
     widgetRef!: HTMLDivElement;
     @Effect()

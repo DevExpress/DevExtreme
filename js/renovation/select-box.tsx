@@ -5,7 +5,7 @@ export const viewFunction = ({ widgetRef }: SelectBox) => {
 };
 
 @ComponentBindings()
-export class SelectBoxInput {
+export class SelectBoxProps {
 }
 
 // tslint:disable-next-line: max-classes-per-file
@@ -13,7 +13,7 @@ export class SelectBoxInput {
     defaultOptionRules: null,
     view: viewFunction,
 })
-export default class SelectBox extends JSXComponent<SelectBoxInput> {
+export default class SelectBox extends JSXComponent<SelectBoxProps> {
     @Ref()
     widgetRef!: HTMLDivElement;
     @Effect()
