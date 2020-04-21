@@ -63,23 +63,22 @@ function createGridView(options, userOptions) {
 }
 
 // Grid view module///
-(function() {
-    QUnit.module('Grid view', {
-        beforeEach: function() {
-            this.defaultOptions = {
-                columnsController: new MockColumnsController([]),
-                dataController: new MockDataController({
-                    pageCount: 1,
-                    pageIndex: 0,
-                    items: [{ values: {} }]
-                })
-            };
-            this.createGridView = createGridView;
-        },
-        afterEach: function() {
-            this.dispose();
-        }
-    });
+QUnit.module('Grid view', {
+    beforeEach: function() {
+        this.defaultOptions = {
+            columnsController: new MockColumnsController([]),
+            dataController: new MockDataController({
+                pageCount: 1,
+                pageIndex: 0,
+                items: [{ values: {} }]
+            })
+        };
+        this.createGridView = createGridView;
+    },
+    afterEach: function() {
+        this.dispose();
+    }
+}, () => {
 
     QUnit.test('Grid view container is empty after redraw', function(assert) {
         // arrange
@@ -1055,25 +1054,23 @@ function createGridView(options, userOptions) {
         // assert
         assert.strictEqual(parseFloat($(this.columnHeadersView.element()).css('paddingRight')), this.rowsView.getScrollbarWidth(), 'padding-right');
     });
-}());
+});
 
-// Synchronize columns module///
-(function() {
-    QUnit.module('Synchronize columns', {
-        beforeEach: function() {
-            this.options = {
-                columnAutoWidth: true,
-                showColumnHeaders: true
-            };
+QUnit.module('Synchronize columns', {
+    beforeEach: function() {
+        this.options = {
+            columnAutoWidth: true,
+            showColumnHeaders: true
+        };
 
-            this.createGridView = createGridView;
-            this.clock = sinon.useFakeTimers();
-        },
-        afterEach: function() {
-            this.dispose();
-            this.clock.restore();
-        }
-    });
+        this.createGridView = createGridView;
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.dispose();
+        this.clock.restore();
+    }
+}, () => {
 
     QUnit.test('Add class nowrap when columnWidth auto', function(assert) {
         // arrange
@@ -2147,26 +2144,24 @@ function createGridView(options, userOptions) {
         $fixedGroupRowElement = $(this.getRowElement(0)[1]);
         assert.strictEqual($fixedGroupRowElement.children().length, 3, 'cell count in the group row on the first level');
     });
-}());
+});
 
-// Fixed columns///
-(function() {
-    QUnit.module('Fixed columns', {
-        beforeEach: function() {
-            this.defaultOptions = {
-                columnsController: new MockColumnsController([]),
-                dataController: new MockDataController({
-                    pageCount: 1,
-                    pageIndex: 0,
-                    items: [{ values: {} }]
-                })
-            };
-            this.createGridView = createGridView;
-        },
-        afterEach: function() {
-            this.dispose();
-        }
-    });
+QUnit.module('Fixed columns', {
+    beforeEach: function() {
+        this.defaultOptions = {
+            columnsController: new MockColumnsController([]),
+            dataController: new MockDataController({
+                pageCount: 1,
+                pageIndex: 0,
+                items: [{ values: {} }]
+            })
+        };
+        this.createGridView = createGridView;
+    },
+    afterEach: function() {
+        this.dispose();
+    }
+}, () => {
 
     if(devices.real().deviceType === 'desktop') {
         QUnit.test('Draw grid view with a native scrolling', function(assert) {
@@ -2389,4 +2384,5 @@ function createGridView(options, userOptions) {
         $headerElement = $(gridView.getView('columnHeadersView').getCellElement(0, 0));
         assert.strictEqual($headerElement.outerWidth(), 215, 'width of the first header'); // width = 200(content width) + 14(padding) + 1(border)
     });
-}());
+});
+
