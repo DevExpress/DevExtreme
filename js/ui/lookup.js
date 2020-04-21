@@ -501,11 +501,15 @@ const Lookup = DropDownList.inherit({
     },
 
     _getPopupOffset: function(selectedIndex) {
+        const listItemsCount = this._list.option('items').length;
+
+        if(listItemsCount === 0) return;
+
         const selectedListItem = $(this._list.element()).find('.' + LIST_ITEM_SELECTED_CLASS);
         const differenceOfHeights = (selectedListItem.height() - $(this.element()).height()) / 2;
-        const listItemsCount = this._list.option('items').length;
         const lookupOffset = $(this._list.element()).offset().top;
-        const popupHeight = this.option('dropDownOptions.height')();
+        const dropDownHeightOption = this.option('dropDownOptions.height');
+        const popupHeight = (typeof dropDownHeightOption === 'function') ? dropDownHeightOption() : dropDownHeightOption;
         const windowHeight = $(window).height();
 
         let offsetTop = 0;

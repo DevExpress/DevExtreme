@@ -3195,7 +3195,15 @@ QUnit.module('default options', {
 
             $(lookup.field()).trigger('dxclick');
 
-            assert.equal(lookup.option('popupHeight')(), $('.dx-list-item').height() * 5 + 16, 'popup height contains 4 list items and 2 paddings (8px)');
+            assert.equal(lookup.option('popupHeight')(), $('.dx-list-item').height() * 4 + 16, 'if 4 items popup height 4 items and 2 paddings (8px)');
+
+            lookup.close();
+
+            lookup.option('dataSource', ['blue', 'orange', 'lime', 'purple', 'red', 'green']);
+
+            $(lookup.field()).trigger('dxclick');
+
+            assert.equal(lookup.option('popupHeight')(), $('.dx-list-item').height() * 5 + 16, 'if items more 4 popup height is 5 items and 2 paddings (8px)');
 
             lookup.close();
 
@@ -3207,13 +3215,13 @@ QUnit.module('default options', {
             assert.equal(lookup.option('popupHeight')(), $('.dx-lookup-search-wrapper').outerHeight() + $('.dx-list-item').height() * 5 + $('.dx-toolbar').outerHeight() + 16, 'popup height contains 4 list items when there are search and cancel button');
 
             lookup.close();
-            lookup.option('popupWidth', 200);
-            lookup.option('popupHeight', 300);
+            lookup.option('dropDownOptions.width', 200);
+            lookup.option('dropDownOptions.height', 300);
 
             $(lookup.field()).trigger('dxclick');
 
-            assert.equal(lookup.option('popupHeight'), 300, 'popup height changed if change popupHeight option value');
-            assert.equal(lookup.option('popupWidth'), 200, 'popup width changed if change popupWidth option value');
+            assert.equal(lookup.option('dropDownOptions.height'), 300, 'popup height changed if change popupHeight option value');
+            assert.equal(lookup.option('dropDownOptions.width'), 200, 'popup width changed if change popupWidth option value');
 
             lookup.close();
 
