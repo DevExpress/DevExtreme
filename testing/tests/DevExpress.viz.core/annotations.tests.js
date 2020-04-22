@@ -104,6 +104,36 @@ QUnit.test('Merge customizeAnnotation result and common+item options', function(
     assert.equal(customizeAnnotation.getCall(0).args[0], itemOptions);
 });
 
+// T881143
+QUnit.test('Merge customizeAnnotation result and common. Image as string', function(assert) {
+    const customizeAnnotation = sinon.stub().returns({ image: 'customized_url' });
+    const itemOptions = {
+        x: 10, y: 20,
+        type: 'image',
+        image: { url: 'some_url', width: 10 }
+    };
+    const annotation = this.createAnnotations([itemOptions], { image: { height: 10 } }, customizeAnnotation)[0];
+
+    annotation.draw(this.widget, this.group);
+
+    assert.deepEqual(this.renderer.image.firstCall.args, [0, 0, 10, 10, 'customized_url', 'center']);
+});
+
+// T881143
+QUnit.test('Merge customizeAnnotation result and common. Customize callback returned undefined', function(assert) {
+    const customizeAnnotation = sinon.stub().returns(undefined);
+    const itemOptions = {
+        x: 10, y: 20,
+        type: 'image',
+        image: { url: 'some_url', width: 10 }
+    };
+    const annotation = this.createAnnotations([itemOptions], { image: { height: 10 } }, customizeAnnotation)[0];
+
+    annotation.draw(this.widget, this.group);
+
+    assert.deepEqual(this.renderer.image.firstCall.args, [0, 0, 10, 10, 'some_url', 'center']);
+});
+
 QUnit.test('Image option is string', function(assert) {
     const itemOptions = {
         x: 10, y: 20,

@@ -102,6 +102,11 @@ export let createAnnotations = function(widget, items, commonAnnotationSettings 
     const commonImageOptions = getImageObject(commonAnnotationSettings.image);
     return items.reduce((arr, item) => {
         const currentImageOptions = getImageObject(item.image);
+        const customizedItem = customizeAnnotation && customizeAnnotation.call ? customizeAnnotation(item) : {};
+        if(customizedItem) {
+            customizedItem.image = getImageObject(customizedItem.image);// T881143
+        }
+
         const options = extend(
             true,
             {},
@@ -109,7 +114,7 @@ export let createAnnotations = function(widget, items, commonAnnotationSettings 
             item,
             { image: commonImageOptions },
             { image: currentImageOptions },
-            customizeAnnotation && customizeAnnotation.call ? customizeAnnotation(item) : {}
+            customizedItem
         );
         const templateFunction = getTemplateFunction(options, widget);
         const annotation = templateFunction && extend(true, pullOptions(options), coreAnnotation(options, widget._getTemplate(templateFunction)));
