@@ -9,9 +9,9 @@ export const viewFunction = ({ Text }: InfoText) => {
 @ComponentBindings()
 export class InfoTextProps {
     @OneWay() infoTextMessageTemplate?: string;
-    @OneWay() pageCount: number = 10;
-    @OneWay() pageIndex = 0;
-    @OneWay() totalCount = 0;
+    @OneWay() pageCount?: number = 10;
+    @OneWay() pageIndex ? = 0;
+    @OneWay() totalCount ? = 0;
 }
 
 // tslint:disable-next-line: max-classes-per-file
@@ -23,8 +23,8 @@ export default class InfoText extends JSXComponent<InfoTextProps> {
     get Text() {
         const { infoTextMessageTemplate, pageIndex, pageCount, totalCount } = this.props;
         return format(infoTextMessageTemplate,
-            formatNumber(pageIndex + 1, ''),
-            formatNumber(pageCount, ''),
-            formatNumber(totalCount, ''));
+            formatNumber(pageIndex! + 1, ''),
+            formatNumber(pageCount!, ''),
+            formatNumber(totalCount!, ''));
     }
 }

@@ -8,6 +8,11 @@ jest.mock('../../../js/renovation/select-box.p', () => {
         return 'selectbox';
     };
 });
+jest.mock('../../../js/renovation/pager/light-button.p', () => {
+    return (props) => {
+        return props.children;
+    };
+});
 
 describe('Pager size selector', () => {
     const render = (props: PageSizeSelectorProps) => mount(<PageSizesComponent {...props} />).childAt(0);
@@ -34,5 +39,11 @@ describe('Pager size selector', () => {
             value: 5,
             valueExpr: 'value',
         });
+    });
+    it('change pagesize in large selector', () => {
+        const pageSizeHandler = jest.fn();
+        const comp = render({ isLargeDisplayMode: true, pageSizes: [5, 10], pageSize: 5, pageSizeChanged: pageSizeHandler } as PageSizeSelectorProps);
+        (comp.find({ children: '10' }).prop('onClick') as any)();
+        expect(pageSizeHandler).toBeCalledWith(10);
     });
 });
