@@ -369,7 +369,7 @@ class Diagram extends Widget {
                 }
             },
             onVisibilityChanged: (e) => {
-                if(!e.visible) {
+                if(!e.visible && !this._textInputStarted) {
                     this._diagramCaptureFocus();
                 }
 
@@ -521,7 +521,7 @@ class Diagram extends Widget {
                 }
             },
             onVisibilityChanged: (e) => {
-                if(!e.visible) {
+                if(!e.visible && !this._textInputStarted) {
                     this._diagramCaptureFocus();
                 }
             },
@@ -2136,6 +2136,7 @@ class Diagram extends Widget {
         }
     }
     _raiseTextInputStart() {
+        this._textInputStarted = true;
         if(this._propertiesPanel) {
             if(this.isMobileScreenSize() && this._propertiesPanel.isVisible()) {
                 this._propertiesPanel.hide();
@@ -2162,6 +2163,7 @@ class Diagram extends Widget {
                 delete this._toolboxTextInputHidden;
             }
         }
+        this._textInputStarted = false;
     }
 
     _createItemClickAction() {
