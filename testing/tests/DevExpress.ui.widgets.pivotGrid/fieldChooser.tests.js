@@ -2105,8 +2105,6 @@ QUnit.module('Base Field chooser', {
     // T852897
     QUnit.test('Custom texts.emptyValue in header filter', function(assert) {
         const that = this;
-        let listItems;
-        let fieldElements;
         const fields = [
             { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true }
         ];
@@ -2129,14 +2127,14 @@ QUnit.module('Base Field chooser', {
             that.$container.append(that.fieldChooser.renderField(field));
         });
 
-        fieldElements = that.$container.find('.dx-area-field');
+        const fieldElements = that.$container.find('.dx-area-field');
 
         // act
         fieldElements.first().find('.dx-header-filter').trigger('dxclick');
         this.clock.tick(500);
 
         // assert
-        listItems = $('.dx-list').dxList('instance').option('items');
+        const listItems = $('.dx-list').dxList('instance').option('items');
 
         assert.equal(listItems.length, 2, 'header filter items');
         assert.equal(listItems[1].text, 'Test');
@@ -2145,8 +2143,6 @@ QUnit.module('Base Field chooser', {
     // T852897
     QUnit.test('Default texts.emptyValue in header filter', function(assert) {
         const that = this;
-        let listItems;
-        let fieldElements;
         const fields = [
             { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true }
         ];
@@ -2163,14 +2159,14 @@ QUnit.module('Base Field chooser', {
             that.$container.append(that.fieldChooser.renderField(field));
         });
 
-        fieldElements = that.$container.find('.dx-area-field');
+        const fieldElements = that.$container.find('.dx-area-field');
 
         // act
         fieldElements.first().find('.dx-header-filter').trigger('dxclick');
         this.clock.tick(500);
 
         // assert
-        listItems = $('.dx-list').dxList('instance').option('items');
+        const listItems = $('.dx-list').dxList('instance').option('items');
 
         assert.equal(listItems.length, 2, 'header filter items');
         assert.equal(listItems[0].text, '(Blanks)');

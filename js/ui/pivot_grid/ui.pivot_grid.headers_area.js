@@ -275,18 +275,15 @@ exports.VerticalHeadersArea = exports.HorizontalHeadersArea.inherit({
     updateColspans: function(columnCount) {
         const rows = this.tableElement()[0].rows;
         let columnOffset = 0;
-        let diff;
         const columnOffsetResetIndexes = [];
-        let i;
-        let j;
 
 
         if(this.getColumnsCount() - columnCount > 0) {
             return;
         }
 
-        for(i = 0; i < rows.length; i++) {
-            for(j = 0; j < rows[i].cells.length; j++) {
+        for(let i = 0; i < rows.length; i++) {
+            for(let j = 0; j < rows[i].cells.length; j++) {
                 const cell = rows[i].cells[j];
                 const rowSpan = cell.rowSpan;
 
@@ -295,7 +292,7 @@ exports.VerticalHeadersArea = exports.HorizontalHeadersArea.inherit({
                     columnOffsetResetIndexes[i] = 0;
                 }
 
-                diff = columnCount - (columnOffset + cell.colSpan);
+                const diff = columnCount - (columnOffset + cell.colSpan);
 
                 if(j === rows[i].cells.length - 1 && diff > 0) {
                     cell.colSpan = cell.colSpan + diff;

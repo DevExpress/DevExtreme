@@ -123,27 +123,18 @@ exports.XmlaStore = Class.inherit((function() {
     function generateCrossJoin(path, expandLevel, expandAllCount, expandIndex, slicePath, options, axisName, take) {
         const crossJoinArgs = [];
         const dimensions = options[axisName];
-        let dataField;
-        let allMember;
         const fields = [];
-        let hierarchyName;
         let arg;
         let prevDimension;
-        let prevHierarchyName;
-        let isLastDimensionInGroup;
-        let isFirstDimensionInGroup;
-        let expandAllIndex;
-        let field;
         let member;
-        let i;
 
-        for(i = expandIndex; i <= expandLevel; i++) {
-            field = dimensions[i];
-            dataField = field.dataField;
-            prevHierarchyName = dimensions[i - 1] && dimensions[i - 1].hierarchyName;
-            hierarchyName = field.hierarchyName;
-            isLastDimensionInGroup = !hierarchyName || !dimensions[i + 1] || dimensions[i + 1].hierarchyName !== hierarchyName;
-            expandAllIndex = path.length + expandAllCount + expandIndex;
+        for(let i = expandIndex; i <= expandLevel; i++) {
+            const field = dimensions[i];
+            const dataField = field.dataField;
+            const prevHierarchyName = dimensions[i - 1] && dimensions[i - 1].hierarchyName;
+            const hierarchyName = field.hierarchyName;
+            const isLastDimensionInGroup = !hierarchyName || !dimensions[i + 1] || dimensions[i + 1].hierarchyName !== hierarchyName;
+            const expandAllIndex = path.length + expandAllCount + expandIndex;
             arg = null;
 
             fields.push(field);
@@ -154,7 +145,7 @@ exports.XmlaStore = Class.inherit((function() {
                 }
             } else if(i <= expandAllIndex) {
                 if(i === 0 && expandAllCount === 0) {
-                    allMember = getAllMember(dimensions[expandIndex]);
+                    const allMember = getAllMember(dimensions[expandIndex]);
 
                     if(!hierarchyName) {
                         arg = getAllMembers(dimensions[expandIndex]);
@@ -185,7 +176,7 @@ exports.XmlaStore = Class.inherit((function() {
                     }
                 }
             } else {
-                isFirstDimensionInGroup = !hierarchyName || prevHierarchyName !== hierarchyName;
+                const isFirstDimensionInGroup = !hierarchyName || prevHierarchyName !== hierarchyName;
                 if(isFirstDimensionInGroup) {
                     arg = '(' + getAllMember(field) + ')';
                 }
@@ -477,13 +468,10 @@ exports.XmlaStore = Class.inherit((function() {
 
                 each(axisElement.getElementsByTagName('Tuple'), function(_, tupleElement) {
                     const tupleMembers = tupleElement.childNodes;
-                    let tuple;
                     let levelSum = 0;
                     const members = [];
-                    let level;
                     let membersCount = skipValues ? tupleMembers.length : tupleMembers.length - 1;
                     const isAxisWithMeasure = axes.length === 1;
-                    let i;
 
                     if(isAxisWithMeasure) {
                         membersCount--;
@@ -491,9 +479,9 @@ exports.XmlaStore = Class.inherit((function() {
 
                     axis.push(members);
 
-                    for(i = membersCount; i >= 0; i--) {
-                        tuple = tupleMembers[i];
-                        level = getNumber(getFirstChildText(tuple, 'LNum'));
+                    for(let i = membersCount; i >= 0; i--) {
+                        const tuple = tupleMembers[i];
+                        const level = getNumber(getFirstChildText(tuple, 'LNum'));
 
                         members[i] = {
                             caption: getFirstChildText(tuple, 'Caption'),
@@ -531,11 +519,9 @@ exports.XmlaStore = Class.inherit((function() {
         const cells = [];
         let cell = [];
         let index = 0;
-        let measureIndex;
         const cellsOriginal = [];
         const cellElements = xml.getElementsByTagName('Cell');
         const errorDictionary = {};
-        let row;
 
         for(let i = 0; i < cellElements.length; i++) {
             const xmlCell = cellElements[i];
@@ -556,10 +542,10 @@ exports.XmlaStore = Class.inherit((function() {
         }
 
         each(axes[1], function() {
-            row = [];
+            const row = [];
             cells.push(row);
             each(axes[0], function() {
-                measureIndex = index % measureCount;
+                const measureIndex = index % measureCount;
 
                 if(measureIndex === 0) {
                     cell = [];
@@ -727,12 +713,10 @@ exports.XmlaStore = Class.inherit((function() {
         const faultElementNS = xml.getElementsByTagName('soap:Fault');
         const faultElement = xml.getElementsByTagName('Fault');
         const errorElement = $([].slice.call(faultElement.length ? faultElement : faultElementNS)).find('Error');
-        let description;
-        let error;
 
         if(errorElement.length) {
-            description = errorElement.attr('Description');
-            error = new errors.Error('E4000', description);
+            const description = errorElement.attr('Description');
+            const error = new errors.Error('E4000', description);
             errors.log('E4000', description);
             return error;
         }
