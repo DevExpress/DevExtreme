@@ -644,15 +644,15 @@ const DateBox = DropDownEditor.inherit({
                 this._renderPlaceholder();
                 break;
             case 'min':
-            case 'max':
-                if(this.option('isValid')) {
-                    this._applyInternalValidation(this.dateOption('value'));
-                } else {
-                    this._applyInternalValidation(this.dateOption('value'));
+            case 'max': {
+                const isValid = this.option('isValid');
+                this._applyInternalValidation(this.dateOption('value'));
+                if(!isValid) {
                     this._applyCustomValidation(this.dateOption('value'));
                 }
                 this._invalidate();
                 break;
+            }
             case 'dateSerializationFormat':
             case 'interval':
             case 'disabledDates':
