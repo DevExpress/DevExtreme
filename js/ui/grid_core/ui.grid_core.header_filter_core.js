@@ -97,11 +97,21 @@ exports.HeaderFilterView = modules.View.inherit({
 
         if(!isSelectAll) {
             if(options.type === 'tree') {
-                fillSelectedItemKeys(filterValues, list.option('items'), options.filterType === 'exclude');
+                if(options.filterType) {
+                    options.filterType = 'include';
+                }
+
+                fillSelectedItemKeys(filterValues, list.option('items'), false);
                 options.filterValues = filterValues;
             }
-        } else if(Array.isArray(options.filterValues)) {
-            options.filterValues = [];
+        } else {
+            if(options.type === 'tree') {
+                options.filterType = 'exclude';
+            }
+
+            if(Array.isArray(options.filterValues)) {
+                options.filterValues = [];
+            }
         }
 
         if(options.filterValues && !options.filterValues.length) {
