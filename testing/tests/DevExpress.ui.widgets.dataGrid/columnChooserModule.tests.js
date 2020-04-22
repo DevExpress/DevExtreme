@@ -4,6 +4,7 @@ import 'ui/data_grid/ui.data_grid';
 
 import $ from 'jquery';
 import typeUtils from 'core/utils/type';
+import supportUtils from 'core/utils/support';
 import devices from 'core/devices';
 import themes from 'ui/themes';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
@@ -631,50 +632,50 @@ QUnit.module('Column chooser', {
         assert.ok($(document.body).hasClass('dx-datagrid-notouch-action'), 'no touch css class');
     });
 
-    // QUnit.test("Use simulated scrolling on win phone", function(assert) {
-    //    // arrange
-    //    var testElement = $("#container");
-    //
-    //    this.setTestElement(testElement);
-    //
-    //    this.columnChooserView._isWinDevice = function() {
-    //        return true;
-    //    };
-    //
-    //    this.renderColumnChooser();
-    //
-    //    this.clock.tick(1000);
-    //    this.columnChooserController.renderShowColumnChooserButton(testElement);
-    //    testElement.find(".dx-datagrid-column-chooser-button").trigger("dxclick"); // show
-    //
-    //    var treeView = $(".dx-datagrid-column-chooser-list").first().dxTreeView("instance");
-    //
-    //    assert.ok(!treeView.option("useNativeScrolling"), "use simulated scrolling");
-    // });
-    //
-    // QUnit.test("Use simulated scrolling is not force enabled on not win phone", function(assert) {
-    //    // arrange
-    //    var testElement = $("#container"),
-    //        supportNativeScrolling = supportUtils.nativeScrolling;
-    //
-    //    supportUtils.nativeScrolling = true;
-    //    this.columnChooserView._isWinDevice = function() {
-    //        return false;
-    //    };
-    //
-    //    this.setTestElement(testElement);
-    //
-    //    this.renderColumnChooser();
-    //
-    //    this.clock.tick(1000);
-    //    this.columnChooserController.renderShowColumnChooserButton(testElement);
-    //    testElement.find(".dx-datagrid-column-chooser-button").trigger("dxclick"); // show
-    //
-    //    var treeView = $(".dx-datagrid-column-chooser-list").first().dxTreeView("instance");
-    //
-    //    assert.equal(treeView.option("useNativeScrolling"), true, "use native scrolling");
-    //    supportUtils.nativeScrolling = supportNativeScrolling;
-    // });
+    QUnit.skip('Use simulated scrolling on win phone', function(assert) {
+        // arrange
+        var testElement = $('#container');
+
+        this.setTestElement(testElement);
+
+        this.columnChooserView._isWinDevice = function() {
+            return true;
+        };
+
+        this.renderColumnChooser();
+
+        this.clock.tick(1000);
+        this.columnChooserController.renderShowColumnChooserButton(testElement);
+        testElement.find('.dx-datagrid-column-chooser-button').trigger('dxclick'); // show
+
+        var treeView = $('.dx-datagrid-column-chooser-list').first().dxTreeView('instance');
+
+        assert.ok(!treeView.option('useNativeScrolling'), 'use simulated scrolling');
+    });
+
+    QUnit.skip('Use simulated scrolling is not force enabled on not win phone', function(assert) {
+        // arrange
+        var testElement = $('#container'),
+            supportNativeScrolling = supportUtils.nativeScrolling;
+
+        supportUtils.nativeScrolling = true;
+        this.columnChooserView._isWinDevice = function() {
+            return false;
+        };
+
+        this.setTestElement(testElement);
+
+        this.renderColumnChooser();
+
+        this.clock.tick(1000);
+        this.columnChooserController.renderShowColumnChooserButton(testElement);
+        testElement.find('.dx-datagrid-column-chooser-button').trigger('dxclick'); // show
+
+        var treeView = $('.dx-datagrid-column-chooser-list').first().dxTreeView('instance');
+
+        assert.equal(treeView.option('useNativeScrolling'), true, 'use native scrolling');
+        supportUtils.nativeScrolling = supportNativeScrolling;
+    });
 
     QUnit.test('Non touch class is not added when column chooser is shown on not win phone', function(assert) {
     // arrange

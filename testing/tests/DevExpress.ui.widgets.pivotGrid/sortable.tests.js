@@ -189,69 +189,69 @@ QUnit.module('sortable without containers', () => {
         assert.equal($items.eq(3).text(), '4', 'item 3 text');
     });
 
-    // QUnit.test("horizontal dragging between lines", function(assert) {
-    //    createHorizontalMarkUp(HORIZONTAL_WIDTH, true);
+    QUnit.skip('horizontal dragging between lines', function(assert) {
+        createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE, true);
 
-    //    var $sortable = $("#sortable").dxSortable({
-    //        itemSelector: ".test-item",
-    //        itemContainerSelector: ".test-container",
-    //        direction: "auto"
-    //    });
+        var $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            itemContainerSelector: '.test-container',
+            direction: 'auto'
+        });
 
-    //    var $item = $sortable.find(".test-item").eq(0);
-    //    var offset = $item.offset();
+        var $item = $sortable.find('.test-item').eq(0);
+        var offset = $item.offset();
 
-    //    // act
-    //    pointerMock($item)
-    //        .start()
-    //        .down()
-    //        .move(offset.left + 3, offset.top + 3)
-    //        .move(offset.left + 350, offset.top + 15)
-    //        .up();
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 3, offset.top + 3)
+            .move(offset.left + 350, offset.top + 15)
+            .up();
 
-    //    // assert
-    //    var $items = $sortable.find(".test-item");
+        // assert
+        var $items = $sortable.find('.test-item');
 
-    //    assert.equal($items.length, 6, "item count");
-    //    assert.equal($items.eq(0).text(), "2", "item 0 text");
-    //    assert.equal($items.eq(1).text(), "3", "item 1 text");
-    //    assert.equal($items.eq(2).text(), "4", "item 2 text");
-    //    assert.equal($items.eq(3).text(), "5", "item 3 text");
-    //    assert.equal($items.eq(4).text(), "1", "item 4 text");
-    //    assert.equal($items.eq(5).text(), "6", "item 5 text");
-    // });
+        assert.equal($items.length, 6, 'item count');
+        assert.equal($items.eq(0).text(), '2', 'item 0 text');
+        assert.equal($items.eq(1).text(), '3', 'item 1 text');
+        assert.equal($items.eq(2).text(), '4', 'item 2 text');
+        assert.equal($items.eq(3).text(), '5', 'item 3 text');
+        assert.equal($items.eq(4).text(), '1', 'item 4 text');
+        assert.equal($items.eq(5).text(), '6', 'item 5 text');
+    });
 
-    // QUnit.test("horizontal dragging between lines to the end of the first line", function(assert) {
-    //    createHorizontalMarkUp(HORIZONTAL_WIDTH, true);
+    QUnit.skip('horizontal dragging between lines to the end of the first line', function(assert) {
+        createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE, true);
 
-    //    var $sortable = $("#sortable").dxSortable({
-    //        itemSelector: ".test-item",
-    //        itemContainerSelector: ".test-container",
-    //        direction: "auto"
-    //    });
+        var $sortable = $('#sortable').dxSortable({
+            itemSelector: '.test-item',
+            itemContainerSelector: '.test-container',
+            direction: 'auto'
+        });
 
-    //    var $item = $sortable.find(".test-item").eq(0);
-    //    var offset = $item.offset();
+        var $item = $sortable.find('.test-item').eq(0);
+        var offset = $item.offset();
 
-    //    // act
-    //    pointerMock($item)
-    //        .start()
-    //        .down()
-    //        .move(offset.left + 3, offset.top + 3)
-    //        .move(offset.left + 551, offset.top)
-    //        .up();
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + 3, offset.top + 3)
+            .move(offset.left + 551, offset.top)
+            .up();
 
-    //    // assert
-    //    var $items = $sortable.find(".test-item");
+        // assert
+        var $items = $sortable.find('.test-item');
 
-    //    assert.equal($items.length, 6, "item count");
-    //    assert.equal($items.eq(0).text(), "2", "item 0 text");
-    //    assert.equal($items.eq(1).text(), "3", "item 1 text");
-    //    assert.equal($items.eq(2).text(), "1", "item 2 text");
-    //    assert.equal($items.eq(3).text(), "4", "item 3 text");
-    //    assert.equal($items.eq(4).text(), "5", "item 4 text");
-    //    assert.equal($items.eq(5).text(), "6", "item 5 text");
-    // });
+        assert.equal($items.length, 6, 'item count');
+        assert.equal($items.eq(0).text(), '2', 'item 0 text');
+        assert.equal($items.eq(1).text(), '3', 'item 1 text');
+        assert.equal($items.eq(2).text(), '1', 'item 2 text');
+        assert.equal($items.eq(3).text(), '4', 'item 3 text');
+        assert.equal($items.eq(4).text(), '5', 'item 4 text');
+        assert.equal($items.eq(5).text(), '6', 'item 5 text');
+    });
 
     QUnit.test('dragging inside table', function(assert) {
         createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE, true, true);
@@ -1697,34 +1697,34 @@ QUnit.module('Horizontal direction. RTL', {
         assert.strictEqual(this.sortable.option('onChanged').lastCall.args[0].targetIndex, 2);
     });
 
-    // QUnit.test("horizontal dragging between lines", function (assert) {
-    //    createHorizontalMarkUp(HORIZONTAL_WIDTH, true);
+    QUnit.skip('horizontal dragging between lines', function(assert) {
+        createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE, true);
 
-    //    var $sortable = this.createSortable({}),
-    //        $item = $sortable.find(".test-item").eq(0),
-    //        offset = $item.offset();
+        var $sortable = this.createSortable({}),
+            $item = $sortable.find('.test-item').eq(0),
+            offset = $item.offset();
 
-    //    // act
-    //    pointerMock($item)
-    //        .start()
-    //        .down()
-    //        .move(offset.left + $item.width() - 350, offset.top + 15)
-    //        .up();
+        // act
+        pointerMock($item)
+            .start()
+            .down()
+            .move(offset.left + $item.width() - 350, offset.top + 15)
+            .up();
 
-    //    // assert
-    //    var $items = $sortable.find(".test-item");
+        // assert
+        var $items = $sortable.find('.test-item');
 
-    //    assert.equal($items.length, 6, "item count");
-    //    assert.equal($items.eq(0).text(), "2", "item 0 text");
-    //    assert.equal($items.eq(1).text(), "3", "item 1 text");
-    //    assert.equal($items.eq(2).text(), "4", "item 2 text");
-    //    assert.equal($items.eq(3).text(), "5", "item 3 text");
-    //    assert.equal($items.eq(4).text(), "1", "item 4 text");
-    //    assert.equal($items.eq(5).text(), "6", "item 5 text");
+        assert.equal($items.length, 6, 'item count');
+        assert.equal($items.eq(0).text(), '2', 'item 0 text');
+        assert.equal($items.eq(1).text(), '3', 'item 1 text');
+        assert.equal($items.eq(2).text(), '4', 'item 2 text');
+        assert.equal($items.eq(3).text(), '5', 'item 3 text');
+        assert.equal($items.eq(4).text(), '1', 'item 4 text');
+        assert.equal($items.eq(5).text(), '6', 'item 5 text');
 
-    //    assert.strictEqual(this.sortable.option("onChanged").lastCall.args[0].sourceIndex, 0);
-    //    assert.strictEqual(this.sortable.option("onChanged").lastCall.args[0].targetIndex, 5);
-    // });
+        assert.strictEqual(this.sortable.option('onChanged').lastCall.args[0].sourceIndex, 0);
+        assert.strictEqual(this.sortable.option('onChanged').lastCall.args[0].targetIndex, 5);
+    });
 
     QUnit.test('drag to the end of the container', function(assert) {
         const $sortable = this.createSortable({});

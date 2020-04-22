@@ -424,42 +424,42 @@ QUnit.module('Keyboard keys', {
         assert.strictEqual(this.dataController.expandRow.callCount, 0, 'grid does not open master detail');
     });
 
-    /* test("Down arrow for master detail", function () {
+    QUnit.skip('Down arrow for master detail', function(assert) {
         // act
         this.options.masterDetail = {
             enabled: true,
-            template: function(container){
-                $(container).append($("<span>").text("TEST"));
+            template: function(container) {
+                $(container).append($('<span>').text('TEST'));
             }
         };
-        this.gridView.render($("#container"));
+        this.gridView.render($('#container'));
         this.focusFirstCell();
-        this.triggerKeyDown("rightArrow")
-        this.triggerKeyDown("downArrow");
-        this.triggerKeyDown("downArrow");
-        this.triggerKeyDown("downArrow");
-        this.triggerKeyDown("downArrow");
-        this.triggerKeyDown("downArrow");
+        this.triggerKeyDown('rightArrow');
+        this.triggerKeyDown('downArrow');
+        this.triggerKeyDown('downArrow');
+        this.triggerKeyDown('downArrow');
+        this.triggerKeyDown('downArrow');
+        this.triggerKeyDown('downArrow');
 
         // assert
-        assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "cellIndex");
-        assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 5, "rowIndex");
+        assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, 'cellIndex');
+        assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 5, 'rowIndex');
     });
 
-    QUnit.testInActiveWindow("Up arrow for master detail", function (assert) {
+    QUnit.skip('Up arrow for master detail', function(assert) {
         // act
-        this.gridView.render($("#container"));
+        this.gridView.render($('#container'));
 
         this.focusFirstCell();
 
-        this.triggerKeyDown("downArrow");
-        this.triggerKeyDown("downArrow");
-        this.triggerKeyDown("downArrow");
+        this.triggerKeyDown('downArrow');
+        this.triggerKeyDown('downArrow');
+        this.triggerKeyDown('downArrow');
 
         // assert
-        assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "cellIndex");
-        assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 2, "rowIndex");
-    }); */
+        assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, 'cellIndex');
+        assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 2, 'rowIndex');
+    });
 
     QUnit.testInActiveWindow('Update focus when row is editing with form_T306378', function(assert) {
         // arrange

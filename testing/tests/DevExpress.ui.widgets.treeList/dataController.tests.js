@@ -1614,42 +1614,41 @@ QUnit.module('Remote Operations', { beforeEach: function() {
         assert.strictEqual(items[0].isExpanded, false, 'item 1 is not expanded');
     });
 
-    /*
-QUnit.test("Initial load when dataSource has filter and filterMode is standard", function(assert) {
-    // arrange, act
-    var loadingArgs = [];
 
-    this.setupTreeList({
-        filterMode: "standard",
-        dataSource: {
-            store: {
-                type: "array",
-                data: this.items,
-                onLoading: function(e) {
-                    loadingArgs.push(e);
-                }
-            },
-            filter: ["age", "=", 19]
-        }
+    QUnit.skip('Initial load when dataSource has filter and filterMode is standard', function(assert) {
+        // arrange, act
+        var loadingArgs = [];
+
+        this.setupTreeList({
+            filterMode: 'standard',
+            dataSource: {
+                store: {
+                    type: 'array',
+                    data: this.items,
+                    onLoading: function(e) {
+                        loadingArgs.push(e);
+                    }
+                },
+                filter: ['age', '=', 19]
+            }
+        });
+
+        // assert
+        assert.deepEqual(loadingArgs, [
+            {
+                filter: [['parentId', '=', 0], 'and', ['age', '=', 19]],
+                group: null,
+                sort: null,
+                parentIds: [0],
+                userData: {}
+            }
+        ], 'loading arguments');
+
+        var items = this.dataController.items();
+        assert.equal(items.length, 2, 'count items');
+        assert.equal(items[0].data.name, 'Name 3', 'item 1 name value');
+        assert.equal(items[1].data.name, 'Name 1', 'item 2 name value');
     });
-
-    // assert
-    assert.deepEqual(loadingArgs, [
-        {
-            filter: [["parentId", "=", 0], "and", ["age", "=", 19]],
-            group: null,
-            sort: null,
-            parentIds: [0],
-            userData: {}
-        }
-    ], "loading arguments");
-
-    var items = this.dataController.items();
-    assert.equal(items.length, 2, "count items");
-    assert.equal(items[0].data.name, "Name 3", "item 1 name value");
-    assert.equal(items[1].data.name, "Name 1", "item 2 name value");
-});
-*/
 
     QUnit.test('Initial load when dataSource has filter and filterMode is withAncestors (default)', function(assert) {
     // arrange, act

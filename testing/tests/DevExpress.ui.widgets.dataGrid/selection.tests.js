@@ -544,24 +544,25 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         assert.ok(!this.dataController.items()[2].isSelected);
         assert.ok(this.dataController.items()[3].isSelected);
     });
-    /* test("set selectedRows from user state", function () {
-    // arrange
-    this.applyOptions({
-        selection: { mode: 'multiple' }
+
+    QUnit.skip('set selectedRows from user state', function(assert) {
+        // arrange
+        this.applyOptions({
+            selection: { mode: 'multiple' }
+        });
+
+        this.stateStoringController.state({ selectedItemKeys: [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }] }); // 1, 3
+
+        // act
+        this.stateStoringController.restoreSelectedItemKeys();
+
+        // assert
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
+        assert.ok(!this.dataController.items()[0].isSelected);
+        assert.ok(this.dataController.items()[1].isSelected);
+        assert.ok(!this.dataController.items()[2].isSelected);
+        assert.ok(this.dataController.items()[3].isSelected);
     });
-
-    this.stateStoringController.state({ selectedItemKeys: [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }] }); // 1, 3
-
-    // act
-    this.stateStoringController.restoreSelectedItemKeys();
-
-    // assert
-    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
-    assert.ok(!this.dataController.items()[0].isSelected);
-    assert.ok(this.dataController.items()[1].isSelected);
-    assert.ok(!this.dataController.items()[2].isSelected);
-    assert.ok(this.dataController.items()[3].isSelected);
-}); */
 
     QUnit.test('Set isSelected items', function(assert) {
         this.applyOptions({
@@ -1167,23 +1168,23 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         assert.strictEqual(selectionChangedCount, 1);
     });
 
-    /* test("Not rise event on second set selectedRows without changes", function () {
-    var selectionChangedCount = 0;
+    QUnit.skip('Not rise event on second set selectedRows without changes', function(assert) {
+        let selectionChangedCount = 0;
 
-    this.applyOptions({
-        selection: { mode: 'multiple' },
-        onSelectionChanged: function () {
-            selectionChangedCount++;
-        }
+        this.applyOptions({
+            selection: { mode: 'multiple' },
+            onSelectionChanged: function() {
+                selectionChangedCount++;
+            }
+        });
+
+        this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); // 1, 3
+        this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); // 1, 3
+
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
+
+        assert.strictEqual(selectionChangedCount, 1);
     });
-
-    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); // 1, 3
-    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); // 1, 3
-
-    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
-
-    assert.strictEqual(selectionChangedCount, 1);
-}); */
 
     QUnit.test('changed on set selectedRows', function(assert) {
         let changedCount = 0;
@@ -1655,36 +1656,36 @@ QUnit.module('ChangeRowSelection for single selection', { beforeEach: setupSelec
         assert.ok(!this.dataController.items()[2].isSelected);
     });
 
-    /* test("changeRowSelection. Multiple. Several calls on different rows", function () {
-    this.applyOptions({
-        selection: { mode: 'multiple' }
+    QUnit.skip('changeRowSelection. Multiple. Several calls on different rows', function(assert) {
+        this.applyOptions({
+            selection: { mode: 'multiple' }
+        });
+
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), []);
+
+        // act
+        this.selectionController.changeItemSelection(2);
+        this.selectionController.changeItemSelection(3);
+
+        // assert
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Vadim', age: 17 }, { name: 'Dmitry', age: 18 }]);
     });
 
-    assert.deepEqual(this.selectionController.getSelectedRowKeys(), []);
+    QUnit.skip('changeRowSelection. Multiple. Several calls on same row', function(assert) {
+        this.applyOptions({
+            selection: { mode: 'multiple' }
+        });
 
-    // act
-    this.selectionController.changeItemSelection(2);
-    this.selectionController.changeItemSelection(3);
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), []);
 
-    // assert
-    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Vadim', age: 17 }, { name: 'Dmitry', age: 18 }]);
-});
+        this.selectionController.changeItemSelection(2);
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Vadim', age: 17 }]);
 
-QUnit.test("changeRowSelection. Multiple. Several calls on same row", function (assert) {
-    this.applyOptions({
-        selection: { mode: 'multiple' }
+        this.selectionController.changeItemSelection(2);
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), []);
+
+        assert.ok(!this.dataController.items()[2].isSelected);
     });
-
-    assert.deepEqual(this.selectionController.getSelectedRowKeys(), []);
-
-    this.selectionController.changeItemSelection(2);
-    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Vadim', age: 17 }]);
-
-    this.selectionController.changeItemSelection(2);
-    assert.deepEqual(this.selectionController.getSelectedRowKeys(), []);
-
-    assert.ok(!this.dataController.items()[2].isSelected);
-}); */
 
     QUnit.test('changeRowSelection. Several calls on different rows with control key', function(assert) {
         this.applyOptions({
@@ -1851,25 +1852,24 @@ QUnit.module('ChangeRowSelection for multiple selection. DataSource with key', {
         assert.ok(this.dataController.items()[4].isSelected);
     });
 
-    /*
-QUnit.test("changeRowSelection with shift key. Select All and changeRowSelection with control before", function (assert) {
-    this.applyOptions({
-        selection: { mode: 'multiple' }
+    QUnit.skip('changeRowSelection with shift key. Select All and changeRowSelection with control before', function(assert) {
+        this.applyOptions({
+            selection: { mode: 'multiple' }
+        });
+
+        this.selectionController.selectAll();
+        this.selectionController.changeItemSelection(1, { control: true });
+
+        this.selectionController.changeItemSelection(4, { shift: true });
+
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [1, 6, 7]);
+        assert.ok(this.dataController.items()[0].isSelected);
+        assert.ok(!this.dataController.items()[1].isSelected);
+        assert.ok(!this.dataController.items()[2].isSelected);
+        assert.ok(!this.dataController.items()[3].isSelected);
+        assert.ok(!this.dataController.items()[4].isSelected);
+        assert.ok(this.dataController.items()[5].isSelected);
     });
-
-    this.selectionController.selectAll();
-    this.selectionController.changeItemSelection(1, { control: true });
-
-    this.selectionController.changeItemSelection(4, { shift: true });
-
-    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [1, 6, 7]);
-    assert.ok(this.dataController.items()[0].isSelected);
-    assert.ok(!this.dataController.items()[1].isSelected);
-    assert.ok(!this.dataController.items()[2].isSelected);
-    assert.ok(!this.dataController.items()[3].isSelected);
-    assert.ok(!this.dataController.items()[4].isSelected);
-    assert.ok(this.dataController.items()[5].isSelected);
-});*/
 
 
     QUnit.test('changeRowSelection with shift key. Change shift selection from down to down', function(assert) {

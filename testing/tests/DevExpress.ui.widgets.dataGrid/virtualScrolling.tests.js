@@ -136,24 +136,24 @@ QUnit.module('VirtualScrollingController. Virtual scrolling mode', moduleConfig,
     });
 
     // TODO Check it
-    // QUnit.test("Load when dataSource pageIndex > 0", function (assert) {
-    //    this.scrollController.viewportSize(12);
-    //    mockDataSource.pageIndex(5);
-    //    this.scrollController.load();
+    QUnit.skip('Load when dataSource pageIndex > 0', function(assert) {
+        this.scrollController.viewportSize(12);
+        mockDataSource.pageIndex(5);
+        this.scrollController.load();
 
 
-    //    assert.strictEqual(mockDataSource.load.callCount, 2);
-    //    assert.equal(this.externalDataChangedHandler.callCount, 2);  // TODO 1
-    //    // assert.ok(this.externalDataChangedHandler.calledAfter(mockDataSource.load.lastCall));
+        assert.strictEqual(mockDataSource.load.callCount, 2);
+        assert.equal(this.externalDataChangedHandler.callCount, 2); // TODO 1
+        // assert.ok(this.externalDataChangedHandler.calledAfter(mockDataSource.load.lastCall));
 
-    //    assert.strictEqual(this.scrollController.beginPageIndex(), 5);
-    //    assert.strictEqual(this.scrollController.endPageIndex(), 6);
+        assert.strictEqual(this.scrollController.beginPageIndex(), 5);
+        assert.strictEqual(this.scrollController.endPageIndex(), 6);
 
-    //    assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [{
-    //        changeType: "append",
-    //        items: []
-    //    }]);
-    // });
+        assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [{
+            changeType: 'append',
+            items: []
+        }]);
+    });
 
     QUnit.test('setContentSize. No items', function(assert) {
         this.scrollController.viewportSize(12);

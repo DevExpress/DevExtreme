@@ -2803,46 +2803,46 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     // TODO jsdmitry: wait fix T381435
-    /* QUnit.test("Columns hiding - do not hide fixed columns", function(assert) {
-    // arrange
-    $("#container").width(150);
+    QUnit.skip('Columns hiding - do not hide fixed columns', function(assert) {
+        // arrange
+        $('#container').width(150);
 
-    var dataGrid = $("#dataGrid").dxDataGrid({
-            loadingTimeout: undefined,
-            columnHidingEnabled: true,
-            dataSource: [{ firstName: "Blablablablablablablablablabla", lastName: "Psy", age: 40 }],
-            columns: [{ dataField: "firstName", fixed: true, fixedPosition: "left" }, "lastName", "age"]
-        }),
-        instance = dataGrid.dxDataGrid("instance"),
-        adaptiveColumnsController = instance.getController("adaptiveColumns"),
-        $cells,
-        $unfixedColumns;
+        var dataGrid = $('#dataGrid').dxDataGrid({
+                loadingTimeout: undefined,
+                columnHidingEnabled: true,
+                dataSource: [{ firstName: 'Blablablablablablablablablabla', lastName: 'Psy', age: 40 }],
+                columns: [{ dataField: 'firstName', fixed: true, fixedPosition: 'left' }, 'lastName', 'age']
+            }),
+            instance = dataGrid.dxDataGrid('instance'),
+            adaptiveColumnsController = instance.getController('adaptiveColumns'),
+            $cells,
+            $unfixedColumns;
 
-    this.clock.tick();
-    $cells = $(instance.$element().find(".dx-header-row").first().find("td"));
+        this.clock.tick();
+        $cells = $(instance.$element().find('.dx-header-row').first().find('td'));
 
-    // act
-    assert.equal($cells.length, 3, "columns count");
-    assert.equal($cells.eq(0).text(), "First Name", "First is 'firstName' column");
-    assert.equal($cells.eq(1).text(), "Age", "Second is 'firstName' column");
-    assert.equal(adaptiveColumnsController.getHiddenColumns()[0].dataField, "lastName", "'lastName' column is hidden");
-    assert.equal(adaptiveColumnsController.getHiddenColumns().length, 1, "Only one column is hidden");
-    assert.equal(adaptiveColumnsController.getHidingColumnsQueue().length, 0, "There is no columns in hiding queue");
+        // act
+        assert.equal($cells.length, 3, 'columns count');
+        assert.equal($cells.eq(0).text(), 'First Name', 'First is \'firstName\' column');
+        assert.equal($cells.eq(1).text(), 'Age', 'Second is \'firstName\' column');
+        assert.equal(adaptiveColumnsController.getHiddenColumns()[0].dataField, 'lastName', '\'lastName\' column is hidden');
+        assert.equal(adaptiveColumnsController.getHiddenColumns().length, 1, 'Only one column is hidden');
+        assert.equal(adaptiveColumnsController.getHidingColumnsQueue().length, 0, 'There is no columns in hiding queue');
 
-    $("#container").width(800);
-    instance.updateDimensions();
-    this.clock.tick();
-    $cells = $(instance.$element().find(".dx-header-row").first().find("td")),
-    $unfixedColumns = $(instance.$element().find(".dx-header-row").last().find("td"));
+        $('#container').width(800);
+        instance.updateDimensions();
+        this.clock.tick();
+        $cells = $(instance.$element().find('.dx-header-row').first().find('td')),
+        $unfixedColumns = $(instance.$element().find('.dx-header-row').last().find('td'));
 
-    // assert
-    assert.equal($cells.length, 3, "3 columns are visible");
-    assert.equal($cells.eq(0).text(), "First Name", "First is 'firstName' column");
-    assert.equal($unfixedColumns.eq(1).text(), "Last Name", "Second is 'lastName' column");
-    assert.equal($cells.eq(2).text(), "Age", "Third is 'age' column");
-    assert.equal(adaptiveColumnsController.getHiddenColumns().length, 0, "There is no hidden columns");
-    assert.equal(adaptiveColumnsController.getHidingColumnsQueue().length, 1, "There is 1 column in hiding queue");
-}); */
+        // assert
+        assert.equal($cells.length, 3, '3 columns are visible');
+        assert.equal($cells.eq(0).text(), 'First Name', 'First is \'firstName\' column');
+        assert.equal($unfixedColumns.eq(1).text(), 'Last Name', 'Second is \'lastName\' column');
+        assert.equal($cells.eq(2).text(), 'Age', 'Third is \'age\' column');
+        assert.equal(adaptiveColumnsController.getHiddenColumns().length, 0, 'There is no hidden columns');
+        assert.equal(adaptiveColumnsController.getHidingColumnsQueue().length, 1, 'There is 1 column in hiding queue');
+    });
 
     QUnit.test('Form item of adaptive detail row is rendered with the underscore template', function(assert) {
     // arrange
