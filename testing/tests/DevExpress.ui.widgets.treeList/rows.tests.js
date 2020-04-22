@@ -48,9 +48,6 @@ QUnit.module('Rows view', { beforeEach: setupModule, afterEach: teardownModule }
 
     QUnit.test('Render rows when all items collapsed', function(assert) {
     // arrange
-        let $iconElement;
-        let $cellElements;
-        let $rowElements;
         const $testElement = $('#treeList');
 
         this.items = this.items.slice(0, 1);
@@ -61,12 +58,12 @@ QUnit.module('Rows view', { beforeEach: setupModule, afterEach: teardownModule }
         this.rowsView.render($testElement);
 
         // assert
-        $rowElements = $testElement.find('tbody > .dx-data-row');
-        $cellElements = $rowElements.find('td');
+        const $rowElements = $testElement.find('tbody > .dx-data-row');
+        const $cellElements = $rowElements.find('td');
         assert.equal($rowElements.length, 1, 'count data row');
         assert.equal($cellElements.length, 3, 'count cell');
 
-        $iconElement = $cellElements.eq(0).find('.dx-treelist-empty-space');
+        const $iconElement = $cellElements.eq(0).find('.dx-treelist-empty-space');
         assert.ok($cellElements.eq(0).hasClass('dx-treelist-cell-expandable'), 'cell is expandable');
         assert.equal($iconElement.length, 1, 'count empty space of first cell of first row');
         assert.ok($iconElement.eq(0).hasClass('dx-treelist-collapsed'), 'expand icon');
@@ -75,8 +72,6 @@ QUnit.module('Rows view', { beforeEach: setupModule, afterEach: teardownModule }
     QUnit.test('Render rows when all items expanded', function(assert) {
     // arrange
         let $iconElement;
-        let $cellElements;
-        let $rowElements;
         const $testElement = $('#treeList');
 
         this.setupTreeList();
@@ -85,8 +80,8 @@ QUnit.module('Rows view', { beforeEach: setupModule, afterEach: teardownModule }
         this.rowsView.render($testElement);
 
         // assert
-        $rowElements = $testElement.find('tbody > .dx-data-row');
-        $cellElements = $rowElements.find('td');
+        const $rowElements = $testElement.find('tbody > .dx-data-row');
+        const $cellElements = $rowElements.find('td');
         assert.equal($rowElements.length, 3, 'count data row');
         assert.equal($cellElements.length, 9, 'count cell');
 

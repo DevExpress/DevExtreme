@@ -35,10 +35,8 @@ function createForeachTreeFunc(isAsync) {
         members = members || [];
         items = items || [];
 
-        let item;
         let i;
         let deferred;
-        let childrenDeferred;
 
         index = index || 0;
 
@@ -56,7 +54,7 @@ function createForeachTreeFunc(isAsync) {
                 return deferred;
             }
 
-            item = items[i];
+            const item = items[i];
 
             if(!isChildrenProcessing) {
                 members.unshift(item);
@@ -66,7 +64,7 @@ function createForeachTreeFunc(isAsync) {
                 }
 
                 if(item.children) {
-                    childrenDeferred = foreachTreeFunc(item.children, callback, parentAtFirst, members);
+                    const childrenDeferred = foreachTreeFunc(item.children, callback, parentAtFirst, members);
                     if(isAsync && childrenDeferred) {
                         deferred = new Deferred();
                         childrenDeferred.done(createForeachTreeAsyncHandler(deferred, i, true));
@@ -97,12 +95,10 @@ exports.foreachTree = createForeachTreeFunc(false);
 exports.foreachTreeAsync = createForeachTreeFunc(true);
 
 exports.findField = function(fields, id) {
-    let i;
-    let field;
 
     if(fields && isDefined(id)) {
-        for(i = 0; i < fields.length; i++) {
-            field = fields[i];
+        for(let i = 0; i < fields.length; i++) {
+            const field = fields[i];
             if(field.name === id || field.caption === id || field.dataField === id || field.index === id) {
                 return i;
             }
@@ -149,16 +145,13 @@ exports.getCompareFunction = function(valueSelector) {
 
 exports.createPath = function(items) {
     const result = [];
-    let i;
-    for(i = items.length - 1; i >= 0; i--) {
+    for(let i = items.length - 1; i >= 0; i--) {
         result.push(items[i].key || items[i].value);
     }
     return result;
 };
 
 exports.foreachDataLevel = function foreachDataLevel(data, callback, index, childrenField) {
-    let item;
-    let i;
     index = index || 0;
     childrenField = childrenField || 'children';
 
@@ -166,8 +159,8 @@ exports.foreachDataLevel = function foreachDataLevel(data, callback, index, chil
         callback(data, index);
     }
 
-    for(i = 0; i < data.length; i++) {
-        item = data[i];
+    for(let i = 0; i < data.length; i++) {
+        const item = data[i];
         if(item[childrenField] && item[childrenField].length) {
             foreachDataLevel(item[childrenField], callback, index + 1, childrenField);
         }
@@ -177,9 +170,8 @@ exports.foreachDataLevel = function foreachDataLevel(data, callback, index, chil
 
 exports.mergeArraysByMaxValue = function(values1, values2) {
     const result = [];
-    let i;
 
-    for(i = 0; i < values1.length; i++) {
+    for(let i = 0; i < values1.length; i++) {
         result.push(Math.max(values1[i] || 0, values2[i] || 0));
     }
     return result;
@@ -317,6 +309,8 @@ exports.getFiltersByPath = function(fields, path) {
 
 exports.storeDrillDownMixin = {
     createDrillDownDataSource: function(descriptions, params) {
+        let arrayStore;
+
         function createCustomStoreMethod(methodName) {
             return function(options) {
                 let d;
@@ -326,7 +320,7 @@ exports.storeDrillDownMixin = {
                 } else {
                     d = new Deferred();
                     when(items).done(function(data) {
-                        arrayStore = new ArrayStore(data);
+                        const arrayStore = new ArrayStore(data);
                         arrayStore[methodName](options).done(d.resolve).fail(d.reject);
                     }).fail(d.reject);
                 }
@@ -336,7 +330,6 @@ exports.storeDrillDownMixin = {
         }
 
         var items = this.getDrillDownItems(descriptions, params);
-        let arrayStore;
         const dataSource = new DataSource({
             load: createCustomStoreMethod('load'),
             totalCount: createCustomStoreMethod('totalCount'),
