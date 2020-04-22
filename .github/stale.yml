@@ -12,6 +12,7 @@ daysUntilClose: 5
 # WIP - pull requests that have "work in progress" status
 exemptLabels:
   - type/discussion
+  - type/enhancement
   - WIP
   - roadmap
 
