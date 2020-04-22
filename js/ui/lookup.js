@@ -475,9 +475,6 @@ const Lookup = DropDownList.inherit({
 
     _scrollToSelectedItem: function() {
         const selectedIndex = this._list.option('selectedIndex');
-
-        if(selectedIndex === -1) return;
-
         const listItems = this._list.option('items');
         const itemsCount = listItems.length;
 
@@ -514,33 +511,35 @@ const Lookup = DropDownList.inherit({
 
         let offsetTop = 0;
 
-        if(this._isCenteringEnabled(selectedIndex, listItemsCount)) {
-            this._scrollToSelectedItem();
+        if(selectedIndex !== -1) {
+            if(this._isCenteringEnabled(selectedIndex, listItemsCount)) {
+                this._scrollToSelectedItem();
 
-            const scrollOffsetTop = (popupHeight - selectedListItem.height()) / 2 - this._getDifferenceOffsets(selectedListItem);
+                const scrollOffsetTop = (popupHeight - selectedListItem.height()) / 2 - this._getDifferenceOffsets(selectedListItem);
 
-            this._list.scrollTo(this._list.scrollTop() + MATERIAL_LOOKUP_LIST_PADDING / 2 - scrollOffsetTop);
+                this._list.scrollTo(this._list.scrollTop() + MATERIAL_LOOKUP_LIST_PADDING / 2 - scrollOffsetTop);
 
-            offsetTop = differenceOfHeights + this._getDifferenceOffsets(selectedListItem);
+                offsetTop = differenceOfHeights + this._getDifferenceOffsets(selectedListItem);
 
-            if(lookupOffset < offsetTop && selectedIndex !== (listItemsCount - 3)) {
-                this._list.scrollTo(this._list.scrollTop() + this._getDifferenceOffsets(selectedListItem) / 2);
+                if(lookupOffset < offsetTop && selectedIndex !== (listItemsCount - 3)) {
+                    this._list.scrollTo(this._list.scrollTop() + this._getDifferenceOffsets(selectedListItem) / 2);
+
+                    offsetTop = differenceOfHeights + this._getDifferenceOffsets(selectedListItem);
+                }
+            } else if(selectedIndex <= 1) {
+                this._list.scrollTo(0);
+
+                offsetTop = differenceOfHeights + this._getDifferenceOffsets(selectedListItem);
+            } else if(selectedIndex >= (listItemsCount - 2)) {
+                this._scrollToSelectedItem();
 
                 offsetTop = differenceOfHeights + this._getDifferenceOffsets(selectedListItem);
             }
-        } else if(selectedIndex <= 1 && selectedIndex !== -1) {
-            this._list.scrollTo(0);
 
-            offsetTop = differenceOfHeights + this._getDifferenceOffsets(selectedListItem);
-        } else if(selectedIndex >= (listItemsCount - 2)) {
-            this._scrollToSelectedItem();
-
-            offsetTop = differenceOfHeights + this._getDifferenceOffsets(selectedListItem);
-        }
-
-        if(lookupOffset < offsetTop) {
-            this._scrollToSelectedItem();
-            offsetTop = differenceOfHeights + MATERIAL_LOOKUP_LIST_PADDING;
+            if(lookupOffset < offsetTop) {
+                this._scrollToSelectedItem();
+                offsetTop = differenceOfHeights + MATERIAL_LOOKUP_LIST_PADDING;
+            }
         }
 
         const offsetBottom = popupHeight - offsetTop - $(this.element()).height();
