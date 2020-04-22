@@ -15,14 +15,14 @@ class NumberBoxProps extends WidgetProps {
     @OneWay() max?: number;
     @OneWay() min?: number;
     @OneWay() mode?: 'number' | 'text' | 'tel';
+    // tslint:disable-next-line: max-line-length
+    // onValueChanged?: ((e: { component?: T, element?: dxElement, model?: any, value?: any, previousValue?: any, event?: event }) => any);
+    @Event() onValueChanged?: (e: {value: number}) => void;
     @OneWay() showSpinButtons?: boolean;
     @OneWay() step?: number;
     @OneWay() useLargeSpinButtons?: boolean;
     @TwoWay() value?: number;
-    // tslint:disable-next-line: max-line-length
-    // onValueChanged?: ((e: { component?: T, element?: dxElement, model?: any, value?: any, previousValue?: any, event?: event }) => any);
     @Event() valueChange?: ((value: number) => void) = () =>  {};
-
 }
 
 // tslint:disable-next-line: max-classes-per-file
