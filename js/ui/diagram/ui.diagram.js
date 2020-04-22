@@ -167,7 +167,7 @@ class Diagram extends Widget {
             this._updateFullscreenState();
         }
 
-        this._diagramInstance.barManager.registerBar(this.optionsUpdateBar);
+        this._diagramInstance.registerBar(this.optionsUpdateBar);
 
         if(hasWindow()) {
             resizeCallbacks.add(() => {
@@ -228,7 +228,7 @@ class Diagram extends Widget {
     }
     _registerBar(component) {
         component.bar.onChanged.add(this);
-        this._diagramInstance.barManager.registerBar(component.bar);
+        this._diagramInstance.registerBar(component.bar);
     }
     _getExcludeCommands() {
         const excludeCommands = [];
@@ -243,7 +243,7 @@ class Diagram extends Widget {
     _getToolbarBaseOptions() {
         return {
             onContentReady: ({ component }) => this._registerToolbar(component),
-            onSubMenuVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
+            onSubMenuVisibilityChanging: ({ component }) => this._diagramInstance.updateBarItemsState(component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option('export'),
             excludeCommands: this._getExcludeCommands(),
@@ -541,7 +541,7 @@ class Diagram extends Widget {
     }
     _updatePropertiesPanelGroupBars(component) {
         component.getActiveToolbars().forEach(toolbar => {
-            this._diagramInstance.barManager.updateBarItemsState(toolbar.bar);
+            this._diagramInstance.updateBarItemsState(toolbar.bar);
         });
     }
     _onPanelPointerUp() {
@@ -562,7 +562,7 @@ class Diagram extends Widget {
         this._contextMenu = this._createComponent($contextMenu, DiagramContextMenuWrapper, {
             commands: this.option('contextMenu.commands'),
             onContentReady: ({ component }) => this._registerBar(component),
-            onVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
+            onVisibilityChanging: ({ component }) => this._diagramInstance.updateBarItemsState(component.bar),
             onItemClick: (itemData) => { return this._onBeforeCommandExecuted(itemData.command); },
             export: this.option('export'),
             excludeCommands: this._getExcludeCommands(),
@@ -630,7 +630,7 @@ class Diagram extends Widget {
         if(this._dialogInstance) {
             this._dialogInstance.option('onGetContent', dialogParameters.onGetContent);
             this._dialogInstance.option('onHidden', function() { this._diagramCaptureFocus(); }.bind(this));
-            this._dialogInstance.option('command', this._diagramInstance.commandManager.getCommand(dialogParameters.command));
+            this._dialogInstance.option('command', this._diagramInstance.getCommand(dialogParameters.command));
             this._dialogInstance.option('title', dialogParameters.title);
             this._dialogInstance._show();
         }
@@ -732,7 +732,7 @@ class Diagram extends Widget {
         this._diagramInstance = undefined;
     }
     _executeDiagramCommand(command, parameter) {
-        this._diagramInstance.commandManager.getCommand(command).execute(parameter);
+        this._diagramInstance.getCommand(command).execute(parameter);
     }
     _refreshDataSources() {
         this._beginUpdateDiagram();
@@ -1372,12 +1372,12 @@ class Diagram extends Widget {
     }
     _updateDefaultItemProperties() {
         if(this.option('defaultItemProperties.style')) {
-            this._diagramInstance.selection.inputPosition.setInitialStyleProperties(this.option('defaultItemProperties.style'));
+            this._diagramInstance.setInitialStyleProperties(this.option('defaultItemProperties.style'));
         }
         if(this.option('defaultItemProperties.textStyle')) {
-            this._diagramInstance.selection.inputPosition.setInitialTextStyleProperties(this.option('defaultItemProperties.textStyle'));
+            this._diagramInstance.setInitialTextStyleProperties(this.option('defaultItemProperties.textStyle'));
         }
-        this._diagramInstance.selection.inputPosition.setInitialConnectorProperties({
+        this._diagramInstance.setInitialConnectorProperties({
             lineOption: this._getConnectorLineOption(this.option('defaultItemProperties.connectorLineType')),
             startLineEnding: this._getConnectorLineEnding(this.option('defaultItemProperties.connectorLineStart')),
             endLineEnding: this._getConnectorLineEnding(this.option('defaultItemProperties.connectorLineEnd'))
