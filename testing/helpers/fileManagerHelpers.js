@@ -7,6 +7,7 @@ import FileReaderMock from './fileManager/file_reader.mock.js';
 
 export const Consts = {
     WIDGET_CLASS: 'dx-filemanager',
+    WIDGET_WRAPPER_CLASS: 'dx-filemanager-wrapper',
     TOOLBAR_CLASS: 'dx-filemanager-toolbar',
     NATIVE_TOOLBAR_CLASS: 'dx-toolbar',
     GENERAL_TOOLBAR_CLASS: 'dx-filemanager-general-toolbar',
@@ -17,6 +18,7 @@ export const Consts = {
     DRAWER_MODE_SHRINK: 'dx-drawer-shrink',
     DRAWER_MODE_OVERLAP: 'dx-drawer-overlap',
     NOTIFICATION_DRAWER_CLASS: 'dx-filemanager-notification-drawer',
+    PROGRESS_PANEL_CLASS: 'dx-filemanager-progress-panel',
     DIRS_PANEL_CLASS: 'dx-filemanager-dirs-panel',
     DIRS_TREE_CLASS: 'dx-filemanager-dirs-tree',
     ITEMS_VIEW_CLASS: 'dx-filemanager-files-view',
@@ -53,6 +55,7 @@ export const Consts = {
     SELECTION_CLASS: 'dx-selection',
     ITEM_SELECTED_CLASS: 'dx-item-selected',
     FOCUSED_ROW_CLASS: 'dx-row-focused',
+    SPLITTER_WRAPPER_CLASS: 'dx-splitter-wrapper',
     SPLITTER_CLASS: 'dx-splitter',
     FOCUSED_STATE_CLASS: 'dx-state-focused',
     DISABLED_STATE_CLASS: 'dx-state-disabled',
