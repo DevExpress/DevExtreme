@@ -3309,7 +3309,7 @@ QUnit.module('default options', {
 
             lookup.close();
 
-            $lookup.css('margin-top', 200);
+            $lookup.css('margin-top', 100);
 
             $(lookup.field()).trigger('dxclick');
 
@@ -3318,6 +3318,8 @@ QUnit.module('default options', {
             assert.roughEqual($popup.find('.dx-overlay-content').position().top, -2.5 - $('.dx-list-item').height(), 2, 'popup position if second item is selected and there is top place');
 
             lookup.close();
+
+            $lookup.css('margin-top', 200);
 
             lookup.option('value', 'lime');
 
