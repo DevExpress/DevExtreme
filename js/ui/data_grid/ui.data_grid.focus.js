@@ -28,11 +28,10 @@ gridCore.registerModule('focus', extend(true, {}, focusModule, {
                     const rowIndex = this.getRowIndexByKey(focusedRowKey);
                     const focusedRow = rowIndex >= 0 && this.getVisibleRows()[rowIndex];
                     const groups = columnsController.getGroupDataSourceParameters(true);
-                    let getter;
 
                     if(focusedRow) {
                         for(let i = 0; i < path.length; ++i) {
-                            getter = compileGetter(groups[i] && groups[i].selector);
+                            const getter = compileGetter(groups[i] && groups[i].selector);
 
                             if(getter(focusedRow.data) !== path[i]) {
                                 return false;
@@ -77,7 +76,6 @@ gridCore.registerModule('focus', extend(true, {}, focusModule, {
                     const dataSource = that._dataSource;
                     const filter = that._generateFilterByKey(key);
                     const deferred = new Deferred();
-                    let groupPath;
                     const isGroupKey = Array.isArray(key);
                     const group = dataSource.group();
 
@@ -101,7 +99,7 @@ gridCore.registerModule('focus', extend(true, {}, focusModule, {
                             return deferred.resolve(-1).promise();
                         }
 
-                        groupPath = that._getGroupPath(data[0]);
+                        const groupPath = that._getGroupPath(data[0]);
 
                         that._expandGroupByPath(that, groupPath, 0).done(function() {
 
@@ -128,7 +126,6 @@ gridCore.registerModule('focus', extend(true, {}, focusModule, {
 
                     this._calculateGlobalRowIndexByFlatData(key, groupFilter).done(function(dataOffset) {
                         let count;
-                        let currentPageOffset;
                         let groupContinuationCount;
 
                         if(dataOffset < 0) {
@@ -136,7 +133,7 @@ gridCore.registerModule('focus', extend(true, {}, focusModule, {
                             return;
                         }
 
-                        currentPageOffset = (groupOffset % pageSize) || pageSize;
+                        const currentPageOffset = (groupOffset % pageSize) || pageSize;
 
                         count = currentPageOffset + dataOffset - groupPath.length;
 

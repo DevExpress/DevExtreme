@@ -312,7 +312,6 @@ QUnit.module('Editor Factory', {
     QUnit.test('Text editor with set onEditorPrepared', function(assert) {
     // arrange
         const $container = $('#container');
-        let textBox;
 
         this.options.onEditorPrepared = function(options) {
         // assert
@@ -331,7 +330,7 @@ QUnit.module('Editor Factory', {
             parentType: 'filterRow'
         });
 
-        textBox = $container.dxTextBox('instance');
+        const textBox = $container.dxTextBox('instance');
 
         // assert
         assert.equal(this.__actionConfigs.onEditorPrepared.category, 'rendering', 'onEditorPrepared category');
@@ -534,7 +533,6 @@ QUnit.module('Editor Factory', {
 
     QUnit.test('DateTime editor', function(assert) {
     // arrange
-        let editor;
         const $container = $('#container');
 
         // act
@@ -544,7 +542,7 @@ QUnit.module('Editor Factory', {
         });
 
         // assert
-        editor = $container.dxDateBox('instance');
+        const editor = $container.dxDateBox('instance');
         assert.ok(editor, 'has editor');
         assert.equal(editor.option('type'), 'datetime', 'editor type');
         assert.equal(editor.option('displayFormat'), 'shortDateShortTime', 'display format of the editor');
@@ -816,7 +814,6 @@ QUnit.module('Editor Factory', {
     QUnit.test('Lookup editor with showClearButton', function(assert) {
     // arrange
         const $container = $('#container');
-        let selectBox;
         const editorOptions = {
             lookup: {
                 dataSource: [{ id: 1, value: 'text1' }, { id: 2, value: 'text2' }, { id: 3, value: 'text3' }],
@@ -829,7 +826,7 @@ QUnit.module('Editor Factory', {
 
         // act
         this.editorFactoryController.createEditor($container, editorOptions);
-        selectBox = $container.dxSelectBox('instance');
+        const selectBox = $container.dxSelectBox('instance');
 
         // assert
         assert.ok(selectBox.option('showClearButton'), 'showClearButton');
@@ -838,7 +835,6 @@ QUnit.module('Editor Factory', {
     QUnit.test('Lookup editor with allowClearing', function(assert) {
     // arrange
         const $container = $('#container');
-        let selectBox;
         const editorOptions = {
             lookup: {
                 dataSource: [{ id: 1, value: 'text1' }, { id: 2, value: 'text2' }, { id: 3, value: 'text3' }],
@@ -851,7 +847,7 @@ QUnit.module('Editor Factory', {
 
         // act
         this.editorFactoryController.createEditor($container, editorOptions);
-        selectBox = $container.dxSelectBox('instance');
+        const selectBox = $container.dxSelectBox('instance');
 
         // assert
         assert.strictEqual(selectBox.option('allowClearing'), false, 'allowClearing should be passed to the editor');
@@ -860,7 +856,6 @@ QUnit.module('Editor Factory', {
     QUnit.test('Lookup editor with showClearButton and filtering', function(assert) {
     // arrange
         const $container = $('#container');
-        let selectBox;
         const editorOptions = {
             lookup: {
                 dataSource: [{ id: 1, value: 'text1' }, { id: 2, value: 'text2' }, { id: 3, value: 'text3' }],
@@ -874,7 +869,7 @@ QUnit.module('Editor Factory', {
 
         // act
         this.editorFactoryController.createEditor($container, editorOptions);
-        selectBox = $container.dxSelectBox('instance');
+        const selectBox = $container.dxSelectBox('instance');
 
         // assert
         assert.ok(!selectBox.option('showClearButton'), 'showClearButton');
@@ -1002,7 +997,6 @@ QUnit.module('Editor Factory', {
 
     QUnit.test('ReadOnly for textBox', function(assert) {
         const $container = $('#container');
-        let textBox;
         let value = 'A';
 
         // act
@@ -1013,14 +1007,13 @@ QUnit.module('Editor Factory', {
             },
             readOnly: true
         });
-        textBox = $container.dxTextBox('instance');
+        const textBox = $container.dxTextBox('instance');
 
         assert.ok(textBox.option('readOnly'));
     });
 
     QUnit.test('ReadOnly for numberBox', function(assert) {
         const $container = $('#container');
-        let numberBox;
         let value = 'A';
 
         // act
@@ -1032,14 +1025,13 @@ QUnit.module('Editor Factory', {
             },
             readOnly: true
         });
-        numberBox = $container.dxNumberBox('instance');
+        const numberBox = $container.dxNumberBox('instance');
 
         assert.ok(numberBox.option('readOnly'));
     });
 
     QUnit.test('ReadOnly for date editor', function(assert) {
         const $container = $('#container');
-        let editor;
         let value = new Date(2012, 1, 3);
 
         // act
@@ -1054,7 +1046,7 @@ QUnit.module('Editor Factory', {
         });
 
         // act
-        editor = $container.dxDateBox('instance');
+        const editor = $container.dxDateBox('instance');
 
         assert.ok(editor.option('readOnly'));
     });
@@ -1132,7 +1124,6 @@ QUnit.module('Editor Factory - RTL', {
     QUnit.test('Create TextBox with RTL', function(assert) {
         const $container = $('#container');
         let value = 'a';
-        let editor;
 
         this.editorFactoryController.createEditor($container, {
             setValue: function(newValue) {
@@ -1143,7 +1134,7 @@ QUnit.module('Editor Factory - RTL', {
             }
         });
 
-        editor = $container.dxTextBox('instance');
+        const editor = $container.dxTextBox('instance');
 
         assert.ok(editor.option('rtlEnabled'), 'textbox created with correct \'rtlEnabled\' option');
     });
@@ -1151,7 +1142,6 @@ QUnit.module('Editor Factory - RTL', {
     QUnit.test('Create Boolean editor with RTL', function(assert) {
         const $container = $('#container');
         let value = true;
-        let editor;
 
         this.editorFactoryController.createEditor($container, {
             dataType: 'boolean',
@@ -1163,7 +1153,7 @@ QUnit.module('Editor Factory - RTL', {
             }
         });
 
-        editor = $container.dxCheckBox('instance');
+        const editor = $container.dxCheckBox('instance');
 
         assert.ok(editor.option('rtlEnabled'), 'checkbox created with correct \'rtlEnabled\' option');
     });
@@ -1171,7 +1161,6 @@ QUnit.module('Editor Factory - RTL', {
     QUnit.test('Create date editor with RTL', function(assert) {
         const $container = $('#container');
         let value = new Date(2012, 1, 3);
-        let editor;
 
         this.editorFactoryController.createEditor($container, {
             dataType: 'date',
@@ -1184,7 +1173,7 @@ QUnit.module('Editor Factory - RTL', {
             }
         });
 
-        editor = $container.dxDateBox('instance');
+        const editor = $container.dxDateBox('instance');
 
         assert.ok(editor.option('rtlEnabled'), 'date editor created with correct \'rtlEnabled\' option');
     });
@@ -1192,7 +1181,6 @@ QUnit.module('Editor Factory - RTL', {
     QUnit.test('Create Boolean editor with RTL when filtering', function(assert) {
         const $container = $('#container');
         let value = true;
-        let editor;
 
         this.editorFactoryController.createEditor($container, {
             dataType: 'boolean',
@@ -1208,7 +1196,7 @@ QUnit.module('Editor Factory - RTL', {
             }
         });
 
-        editor = $container.dxSelectBox('instance');
+        const editor = $container.dxSelectBox('instance');
 
         assert.ok(editor.option('rtlEnabled'), 'selectbox created with correct \'rtlEnabled\' option');
     });
@@ -1216,7 +1204,6 @@ QUnit.module('Editor Factory - RTL', {
     QUnit.test('Create lookup editor with RTL', function(assert) {
         const $container = $('#container');
         let value = 2;
-        let editor;
 
         this.editorFactoryController.createEditor($container, {
             lookup: {
@@ -1233,7 +1220,7 @@ QUnit.module('Editor Factory - RTL', {
             }
         });
 
-        editor = $container.dxSelectBox('instance');
+        const editor = $container.dxSelectBox('instance');
 
         assert.ok(editor.option('rtlEnabled'), 'selectbox created with correct \'rtlEnabled\' option');
     });
@@ -1241,7 +1228,6 @@ QUnit.module('Editor Factory - RTL', {
     QUnit.test('Create lookup editor with RTL when filtering', function(assert) {
         const $container = $('#container');
         let value = 2;
-        let editor;
 
         this.editorFactoryController.createEditor($container, {
             lookup: {
@@ -1259,7 +1245,7 @@ QUnit.module('Editor Factory - RTL', {
             }
         });
 
-        editor = $container.dxSelectBox('instance');
+        const editor = $container.dxSelectBox('instance');
 
         assert.ok(editor.option('rtlEnabled'), 'selectbox created with correct \'rtlEnabled\' option');
     });
