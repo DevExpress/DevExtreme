@@ -478,9 +478,11 @@ QUnit.module('dxAutocomplete', {
             .type('Item')
             .change();
 
-        assert.strictEqual(loadMock.callCount, 1, 'dataSource load is not called immediately after typing');
 
-        this.clock.tick(500);
+        this.clock.tick(499);
+        assert.strictEqual(loadMock.callCount, 1, 'dataSource load is not called after typing if timeout is not up');
+
+        this.clock.tick(1);
         assert.strictEqual(loadMock.callCount, 2, 'dataSource is filtered when timeout is up');
     });
 
