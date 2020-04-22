@@ -25,7 +25,6 @@ const HeaderPanel = columnsView.ColumnsView.inherit({
     },
 
     _getToolbarOptions: function() {
-        let toolbarItems;
         const options = {
             toolbarOptions: {
                 items: this._getToolbarItems(),
@@ -42,7 +41,7 @@ const HeaderPanel = columnsView.ColumnsView.inherit({
         this.executeAction('onToolbarPreparing', options);
 
         if(options.toolbarOptions && !isDefined(options.toolbarOptions.visible)) {
-            toolbarItems = options.toolbarOptions.items;
+            const toolbarItems = options.toolbarOptions.items;
             options.toolbarOptions.visible = !!(toolbarItems && toolbarItems.length);
         }
 

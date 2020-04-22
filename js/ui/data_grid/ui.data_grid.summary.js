@@ -24,16 +24,14 @@ const DATAGRID_NOWRAP_CLASS = 'dx-datagrid-nowrap';
 const DATAGRID_GROUP_FOOTER_ROW_TYPE = 'groupFooter';
 
 const renderSummaryCell = function(cell, options) {
-    let i;
     const $cell = $(cell);
     const column = options.column;
     const summaryItems = options.summaryItems;
-    let summaryItem;
     const $summaryItems = [];
 
     if(!column.command && summaryItems) {
-        for(i = 0; i < summaryItems.length; i++) {
-            summaryItem = summaryItems[i];
+        for(let i = 0; i < summaryItems.length; i++) {
+            const summaryItem = summaryItems[i];
             $summaryItems.push($('<div>')
                 .css('textAlign', summaryItem.alignment || column.alignment)
                 .addClass(DATAGRID_SUMMARY_ITEM_CLASS)
@@ -621,13 +619,10 @@ gridCore.registerModule('summary', {
 
                     _isGroupFooterVisible: function() {
                         const groupItems = this.option('summary.groupItems') || [];
-                        let groupItem;
-                        let column;
-                        let i;
 
-                        for(i = 0; i < groupItems.length; i++) {
-                            groupItem = groupItems[i];
-                            column = this._columnsController.columnOption(groupItem.showInColumn || groupItem.column);
+                        for(let i = 0; i < groupItems.length; i++) {
+                            const groupItem = groupItems[i];
+                            const column = this._columnsController.columnOption(groupItem.showInColumn || groupItem.column);
                             if(groupItem.showInGroupFooter && this._isDataColumn(column)) {
                                 return true;
                             }
@@ -710,14 +705,13 @@ gridCore.registerModule('summary', {
                             const column = that._columnsController.columnOption(summaryItem.column);
                             const showInColumn = summaryItem.showInColumn && that._columnsController.columnOption(summaryItem.showInColumn) || column;
                             const columnIndex = calculateTargetColumnIndex(summaryItem, showInColumn);
-                            let aggregate;
 
                             if(columnIndex >= 0) {
                                 if(!summaryCellsByColumns[columnIndex]) {
                                     summaryCellsByColumns[columnIndex] = [];
                                 }
 
-                                aggregate = aggregates[summaryIndex];
+                                const aggregate = aggregates[summaryIndex];
                                 if(aggregate === aggregate) {
                                     let valueFormat;
                                     if(isDefined(summaryItem.valueFormat)) {
@@ -753,8 +747,6 @@ gridCore.registerModule('summary', {
 
                     _updateItemsCore: function(change) {
                         const that = this;
-                        let summaryCells;
-                        let totalAggregates;
                         const dataSource = that._dataSource;
                         const footerItems = that._footerItems;
                         const oldSummaryCells = footerItems && footerItems[0] && footerItems[0].summaryCells;
@@ -762,8 +754,8 @@ gridCore.registerModule('summary', {
 
                         that._footerItems = [];
                         if(dataSource && summaryTotalItems && summaryTotalItems.length) {
-                            totalAggregates = dataSource.totalAggregates();
-                            summaryCells = that._getSummaryCells(summaryTotalItems, totalAggregates);
+                            const totalAggregates = dataSource.totalAggregates();
+                            const summaryCells = that._getSummaryCells(summaryTotalItems, totalAggregates);
 
                             if(change && change.repaintChangesOnly && oldSummaryCells) {
                                 change.totalColumnIndices = summaryCells.map(function(summaryCell, index) {
@@ -826,7 +818,6 @@ gridCore.registerModule('summary', {
                             let aggregator = summaryItem.summaryType || 'count';
                             let selector = summaryItem.column;
                             const skipEmptyValues = isDefined(summaryItem.skipEmptyValues) ? summaryItem.skipEmptyValues : commonSkipEmptyValues;
-                            let options;
 
                             if(remoteOperations) {
                                 return {
@@ -841,7 +832,7 @@ gridCore.registerModule('summary', {
                                         errors.log('E1026');
                                         calculateCustomSummary = function() { };
                                     }
-                                    options = {
+                                    const options = {
                                         component: that.component,
                                         name: summaryItem.name
                                     };
@@ -882,9 +873,8 @@ gridCore.registerModule('summary', {
                     },
 
                     _addSortInfo: function(sortByGroups, groupColumn, selector, sortOrder) {
-                        let groupIndex;
                         if(groupColumn) {
-                            groupIndex = groupColumn.groupIndex;
+                            const groupIndex = groupColumn.groupIndex;
                             sortOrder = sortOrder || groupColumn.sortOrder;
                             if(isDefined(groupIndex)) {
                                 sortByGroups[groupIndex] = sortByGroups[groupIndex] || [];
@@ -1077,10 +1067,9 @@ gridCore.registerModule('summary', {
 
                     _getAlignByColumnCellCount: function(groupCellColSpan, options) {
                         let alignByColumnCellCount = 0;
-                        let columnIndex;
 
                         for(let i = 1; i < groupCellColSpan; i++) {
-                            columnIndex = options.row.summaryCells.length - i;
+                            const columnIndex = options.row.summaryCells.length - i;
                             alignByColumnCellCount = this._hasAlignByColumnSummaryItems(columnIndex, options) ? i : alignByColumnCellCount;
                         }
 

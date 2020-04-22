@@ -29,13 +29,12 @@ const CHECKBOX_SELECTOR = '.dx-checkbox';
 const CLICK_TIMEOUT = 300;
 
 const processItems = function(that, chooserColumns) {
-    let item;
     const items = [];
     const isSelectMode = that.option('columnChooser.mode') === 'select';
 
     if(chooserColumns.length) {
         each(chooserColumns, function(index, column) {
-            item = {
+            const item = {
                 text: column.caption,
                 cssClass: column.cssClass,
                 allowHiding: column.allowHiding,
@@ -188,8 +187,6 @@ const ColumnChooserView = columnsView.ColumnsView.inherit({
 
     _renderTreeView: function($container, items) {
         const that = this;
-        let scrollTop;
-        let scrollableInstance;
         const columnChooser = this.option('columnChooser');
         const isSelectMode = columnChooser.mode === 'select';
         const treeViewConfig = {
@@ -206,7 +203,6 @@ const ColumnChooserView = columnsView.ColumnsView.inherit({
             onItemRendered: function(e) {
                 if(e.itemData.disableCheckBox) {
                     const $treeViewNode = $(e.itemElement).closest(TREEVIEW_NODE_SELECTOR);
-                    let checkBoxInstance;
                     let $checkBox;
 
                     if($treeViewNode.length) {
@@ -214,7 +210,7 @@ const ColumnChooserView = columnsView.ColumnsView.inherit({
                         $checkBox = $treeViewNode.find(CHECKBOX_SELECTOR);
 
                         if($checkBox.length) {
-                            checkBoxInstance = $checkBox.data('dxCheckBox');
+                            const checkBoxInstance = $checkBox.data('dxCheckBox');
 
                             checkBoxInstance && checkBoxInstance.option('disabled', true);
                         }
@@ -223,8 +219,8 @@ const ColumnChooserView = columnsView.ColumnsView.inherit({
             }
         };
 
-        scrollableInstance = $container.find('.dx-scrollable').data('dxScrollable');
-        scrollTop = scrollableInstance && scrollableInstance.scrollTop();
+        const scrollableInstance = $container.find('.dx-scrollable').data('dxScrollable');
+        const scrollTop = scrollableInstance && scrollableInstance.scrollTop();
 
         if(isSelectMode && !this._columnsController.isBandColumnsUsed()) {
             $container.addClass(this.addWidgetPrefix(COLUMN_CHOOSER_PLAIN_CLASS));
@@ -332,7 +328,6 @@ const ColumnChooserView = columnsView.ColumnsView.inherit({
     getColumnElements: function() {
         const result = [];
         let $node;
-        let item;
         const isSelectMode = this.option('columnChooser.mode') === 'select';
         const chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
         const $content = this._popupContainer && this._popupContainer.$content();
@@ -341,7 +336,7 @@ const ColumnChooserView = columnsView.ColumnsView.inherit({
         if($nodes) {
             chooserColumns.forEach(function(column) {
                 $node = $nodes.filter('[data-item-id = \'' + column.index + '\']');
-                item = $node.length ? $node.children('.' + COLUMN_CHOOSER_ITEM_CLASS).get(0) : null;
+                const item = $node.length ? $node.children('.' + COLUMN_CHOOSER_ITEM_CLASS).get(0) : null;
                 result.push(item);
             });
         }
@@ -366,10 +361,9 @@ const ColumnChooserView = columnsView.ColumnsView.inherit({
     getBoundingRect: function() {
         const that = this;
         const container = that._popupContainer && that._popupContainer._container();
-        let offset;
 
         if(container && container.is(':visible')) {
-            offset = container.offset();
+            const offset = container.offset();
 
             return {
                 left: offset.left,

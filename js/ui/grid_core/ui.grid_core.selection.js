@@ -728,10 +728,9 @@ module.exports = {
 
                 _renderSelectAllCheckBox: function($container, column) {
                     const that = this;
-                    let groupElement;
                     const selectionController = that.getController('selection');
 
-                    groupElement = $('<div>')
+                    const groupElement = $('<div>')
                         .appendTo($container)
                         .addClass(SELECT_CHECKBOX_CLASS);
 
@@ -842,13 +841,12 @@ module.exports = {
                             each(tableElements, function(_, tableElement) {
                                 each(change.itemIndexes || [], function(_, index) {
                                     let $row;
-                                    let isSelected;
 
                                     // T108078
                                     if(change.items[index]) {
                                         $row = that._getRowElements($(tableElement)).eq(index);
                                         if($row.length) {
-                                            isSelected = change.items[index].isSelected;
+                                            const isSelected = change.items[index].isSelected;
                                             $row
                                                 .toggleClass(ROW_SELECTION_CLASS, isSelected === undefined ? false : isSelected)
                                                 .find('.' + SELECT_CHECKBOX_CLASS).dxCheckBox('option', 'value', isSelected);
@@ -894,10 +892,9 @@ module.exports = {
 
                 _createRow: function(row) {
                     const $row = this.callBase(row);
-                    let isSelected;
 
                     if(row) {
-                        isSelected = !!row.isSelected;
+                        const isSelected = !!row.isSelected;
                         if(isSelected) {
                             $row.addClass(ROW_SELECTION_CLASS);
                         }

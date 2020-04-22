@@ -110,7 +110,6 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
     });
 
     QUnit.test('check selection options for selection controller', function(assert) {
-        let selectionOptions;
 
         this.applyOptions({
             selection: {
@@ -122,7 +121,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
             selectedRowKeys: 'rowKeys',
         });
 
-        selectionOptions = this.selectionController._getSelectionConfig();
+        const selectionOptions = this.selectionController._getSelectionConfig();
         assert.strictEqual(selectionOptions.maxFilterLengthInRequest, 10);
         assert.strictEqual(selectionOptions.mode, 'single');
         assert.strictEqual(selectionOptions.deferred, false);
@@ -344,12 +343,11 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
     // arrange
         const item1 = { name: 'Alex', address: { country: 'USA', city: 'New York' } };
         const item2 = { name: 'Dan', address: { country: 'USA', city: 'Chicago' } };
-        let array;
 
         item1.item = item1;
         item2.item = item2;
 
-        array = [item1, item2];
+        const array = [item1, item2];
 
         this.dataSource = createDataSource(array);
         this.dataController.setDataSource(this.dataSource);
@@ -3458,14 +3456,13 @@ QUnit.module('Selection with views', {
     });
 
     QUnit.test('Indeterminate state of selectAll', function(assert) {
-        let $checkbox;
         const testElement = $('#container');
 
         this.setup();
         this.columnHeadersView.render(testElement);
         this.rowsView.render(testElement);
 
-        $checkbox = $('.dx-header-row').find('.dx-checkbox');
+        const $checkbox = $('.dx-header-row').find('.dx-checkbox');
 
         // act
         this.selectionController.changeItemSelection(1);
@@ -3506,7 +3503,6 @@ QUnit.module('Selection with views', {
 
 
     QUnit.test('Uncheck selectAll button call deselectAll', function(assert) {
-        let $checkbox;
         const testElement = $('#container');
 
         this.setup();
@@ -3517,7 +3513,7 @@ QUnit.module('Selection with views', {
         this.selectionController.selectAll();
 
         // assert
-        $checkbox = $('.dx-header-row').find('.dx-checkbox');
+        const $checkbox = $('.dx-header-row').find('.dx-checkbox');
         assert.strictEqual($checkbox.dxCheckBox('option', 'value'), true, 'true state of checkbox');
 
         // act
@@ -3531,7 +3527,6 @@ QUnit.module('Selection with views', {
 
     // T102394
     QUnit.test('Indeterminate state of selectAll when selectedRowKeys defined', function(assert) {
-        let $checkbox;
         const testElement = $('#container');
 
         this.options.selectedRowKeys = [this.array[1]];
@@ -3539,7 +3534,7 @@ QUnit.module('Selection with views', {
         this.columnHeadersView.render(testElement);
         this.rowsView.render(testElement);
 
-        $checkbox = $('.dx-header-row').find('.dx-checkbox');
+        const $checkbox = $('.dx-header-row').find('.dx-checkbox');
 
         // assert
         assert.ok($checkbox.hasClass('dx-checkbox-indeterminate'), 'indeterminate state of checkbox');
@@ -3547,14 +3542,13 @@ QUnit.module('Selection with views', {
 
 
     QUnit.test('Unchecked of selectAll when rows are not isSelected', function(assert) {
-        let $checkbox;
         const testElement = $('#container');
 
         this.setup();
         this.columnHeadersView.render(testElement);
         this.rowsView.render(testElement);
 
-        $checkbox = $('.dx-header-row').find('.dx-checkbox');
+        const $checkbox = $('.dx-header-row').find('.dx-checkbox');
 
         // act
         this.selectionController.changeItemSelection(1);
@@ -3566,14 +3560,13 @@ QUnit.module('Selection with views', {
 
     // B255078
     QUnit.test('Checked of selectAll when all rows are isSelected', function(assert) {
-        let $checkbox;
         const testElement = $('#container');
 
         this.setup();
         this.columnHeadersView.render(testElement);
         this.rowsView.render(testElement);
 
-        $checkbox = $('.dx-header-row').find('.dx-checkbox');
+        const $checkbox = $('.dx-header-row').find('.dx-checkbox');
 
         // act
         this.selectionController.selectAll();
@@ -3635,9 +3628,6 @@ QUnit.module('Selection with views', {
     // arrange
         const that = this;
         const testElement = $('#container').width(800);
-        let $headerCheckBox;
-        let isHeaderCheckBoxInIntermediateState;
-        let isHeaderCheckBoxChecked;
 
         this.options.selection.showCheckBoxesMode = 'onClick';
         that.setup();
@@ -3649,13 +3639,13 @@ QUnit.module('Selection with views', {
         that.selectionController.selectRows([{ name: 'Dan', age: 16 }]); // 1 rows
 
         // assert
-        $headerCheckBox = $('.dx-header-row .dx-checkbox');
-        isHeaderCheckBoxInIntermediateState = $headerCheckBox.length && $headerCheckBox.hasClass('dx-checkbox-indeterminate');
+        const $headerCheckBox = $('.dx-header-row .dx-checkbox');
+        const isHeaderCheckBoxInIntermediateState = $headerCheckBox.length && $headerCheckBox.hasClass('dx-checkbox-indeterminate');
         assert.ok(isHeaderCheckBoxInIntermediateState, 'After one item select, checkbox in header panel has indeterminate state');
 
         // act
         that.editingController.deleteRow(1);
-        isHeaderCheckBoxChecked = $headerCheckBox.length && ($headerCheckBox.hasClass('dx-checkbox-checked') || $headerCheckBox.hasClass('dx-checkbox-indeterminate'));
+        const isHeaderCheckBoxChecked = $headerCheckBox.length && ($headerCheckBox.hasClass('dx-checkbox-checked') || $headerCheckBox.hasClass('dx-checkbox-indeterminate'));
 
         // assert
         assert.equal(that.rowsView.element().find('.dx-select-checkboxes-hidden').length, 1, 'checkboxes are hidden');

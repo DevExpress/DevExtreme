@@ -1688,7 +1688,6 @@ QUnit.module('Keyboard keys', {
     QUnit.testInActiveWindow('onKeyDown should fire event if grid is empty (T837977)', function(assert) {
         // arrange
         let keyDownFiresCount = 0;
-        let $rowsView;
 
         this.options = {
             dataSource: [],
@@ -1702,7 +1701,7 @@ QUnit.module('Keyboard keys', {
 
         this.clock.tick();
 
-        $rowsView = $(this.gridView.getView('rowsView').element());
+        const $rowsView = $(this.gridView.getView('rowsView').element());
 
         // assert
         assert.equal($rowsView.attr('tabindex'), 111, 'rowsView element has tabindex');
@@ -1986,7 +1985,6 @@ QUnit.module('Keyboard keys', {
 
             const $container = $('#container');
             let isStoreUpdated;
-            let $input;
 
             this.$element = function() {
                 return $container;
@@ -2013,7 +2011,7 @@ QUnit.module('Keyboard keys', {
             this.triggerKeyDown('enter');
             this.clock.tick();
 
-            $input = $('.dx-row input').eq(1);
+            const $input = $('.dx-row input').eq(1);
             assert.ok($input.length, 'input found');
 
             $input.val('Test update cell');
@@ -2087,7 +2085,6 @@ QUnit.module('Keyboard keys', {
     QUnit.testInActiveWindow('Escape for cancel row editing', function(assert) {
         // arrange
         const $container = $('#container');
-        let isPreventDefaultCalled;
 
         setupModules(this);
 
@@ -2100,7 +2097,7 @@ QUnit.module('Keyboard keys', {
         this.triggerKeyDown('enter');
 
         this.keyboardNavigationController._focusedCellPosition = null;
-        isPreventDefaultCalled = this.triggerKeyDown('escape', false, false, $container.find('input')[0]).preventDefault;
+        const isPreventDefaultCalled = this.triggerKeyDown('escape', false, false, $container.find('input')[0]).preventDefault;
 
         // assert
         assert.ok(isPreventDefaultCalled, 'PreventDefault');
@@ -2215,7 +2212,6 @@ QUnit.module('Keyboard keys', {
     QUnit.testInActiveWindow('Edit cell should not lose focus after enter key', function(assert) {
         let inputBlurFired = false;
         let inputChangeFired = false;
-        let $input;
 
         // arrange
         setupModules(this);
@@ -2231,7 +2227,7 @@ QUnit.module('Keyboard keys', {
         this.clock.tick();
 
         // arrange
-        $input = dataGridWrapper.rowsView.getEditorInput(0, 0);
+        const $input = dataGridWrapper.rowsView.getEditorInput(0, 0);
 
         // assert
         assert.ok($input.is(':focus'), 'input is focused');
@@ -2440,7 +2436,6 @@ QUnit.module('Keyboard keys', {
 
     QUnit.testInActiveWindow('DataGrid should skip group rows after tab navigation from the editing cell (T714142, T715092)', function(assert) {
         // arrange
-        let $cell;
 
         this.columns = [
             { visible: true, command: 'expand' },
@@ -2476,7 +2471,7 @@ QUnit.module('Keyboard keys', {
         this.editCell(0, 1);
         this.clock.tick();
 
-        $cell = $('#container').find('.dx-data-row').eq(0).find('td:nth-child(2)').eq(0);
+        const $cell = $('#container').find('.dx-data-row').eq(0).find('td:nth-child(2)').eq(0);
 
         // assert
         assert.ok(this.editingController.isEditing(), 'is editing');
@@ -3014,7 +3009,6 @@ QUnit.module('Keyboard keys', {
 
     QUnit.testInActiveWindow('Edit next cell after tab key when edit disabled and row edited via API', function(assert) {
         // arrange
-        let $editRow;
 
         setupModules(this);
         this.keyboardNavigationController._focusedView = this.rowsView;
@@ -3024,7 +3018,7 @@ QUnit.module('Keyboard keys', {
 
         this.editingController.editRow(0);
         this.clock.tick();
-        $editRow = $('#container').find('.dx-data-row').first();
+        const $editRow = $('#container').find('.dx-data-row').first();
 
         assert.equal(this.editingController._editRowIndex, 0, 'edit row index');
 
@@ -3041,7 +3035,6 @@ QUnit.module('Keyboard keys', {
 
     if(device.deviceType === 'desktop') {
         QUnit.testInActiveWindow('Focus on first cell when insert Row', function(assert) {
-            let $newRow;
 
             setupModules(this);
             this.keyboardNavigationController._focusedView = this.rowsView;
@@ -3056,7 +3049,7 @@ QUnit.module('Keyboard keys', {
 
             this.editingController.addRow();
             this.clock.tick();
-            $newRow = $('#container').find('.dx-data-row').first();
+            const $newRow = $('#container').find('.dx-data-row').first();
 
             assert.equal(this.editingController._editRowIndex, 0, 'edit row index');
             assert.ok($newRow.find('input').first().parents('.dx-editor-cell').hasClass('dx-focused'));
@@ -3072,7 +3065,6 @@ QUnit.module('Keyboard keys', {
         });
 
         QUnit.testInActiveWindow('Focus on first cell when insert Row via API when not editing', function(assert) {
-            let $newRow;
 
             setupModules(this);
             this.keyboardNavigationController._focusedView = this.rowsView;
@@ -3086,7 +3078,7 @@ QUnit.module('Keyboard keys', {
 
             this.editingController.addRow();
             this.clock.tick();
-            $newRow = $('#container').find('.dx-data-row').first();
+            const $newRow = $('#container').find('.dx-data-row').first();
 
             assert.equal(this.editingController._editRowIndex, 0, 'edit row index');
             assert.ok($newRow.find('input').first().parents('.dx-editor-cell').hasClass('dx-focused'));
@@ -3422,7 +3414,6 @@ QUnit.module('Keyboard keys', {
 
         // act
         const $container = $('#container');
-        let $groupRow;
 
         this.gridView.render($container);
 
@@ -3434,7 +3425,7 @@ QUnit.module('Keyboard keys', {
         this.clock.tick();
 
         // assert
-        $groupRow = $container.find('.dx-group-row').first();
+        const $groupRow = $container.find('.dx-group-row').first();
         assert.ok($groupRow.attr('tabindex'), 'tab index');
     });
 
@@ -4004,8 +3995,6 @@ QUnit.module('Keyboard keys', {
     // T680076
     QUnit.testInActiveWindow('Down arrow key should work correctly after page down key press', function(assert) {
         // arrange
-        let scrollable;
-        let $scrollContainer;
 
         this.dataControllerOptions = {
             pageCount: 4,
@@ -4030,8 +4019,8 @@ QUnit.module('Keyboard keys', {
         this.gridView.render($('#container'));
         this.rowsView.height(70);
         this.rowsView.resize();
-        scrollable = this.rowsView.getScrollable();
-        $scrollContainer = $(scrollable._container());
+        const scrollable = this.rowsView.getScrollable();
+        const $scrollContainer = $(scrollable._container());
 
         this.focusFirstCell();
 
@@ -4052,7 +4041,6 @@ QUnit.module('Keyboard keys', {
 
     QUnit.testInActiveWindow('DataGrid should not scroll back to the focused editing cell after append rows in virtual scrolling (T715091)', function(assert) {
         // arrange
-        let $cell;
 
         this.dataControllerOptions = {
             pageCount: 4,
@@ -4088,7 +4076,7 @@ QUnit.module('Keyboard keys', {
         this.clock.tick();
 
         // act
-        $cell = $(this.getCellElement(0, 0));
+        const $cell = $(this.getCellElement(0, 0));
         this.triggerKeyDown('tab', false, false, $cell);
         this.keyboardNavigationController._updateFocus = function() {
             // assert
@@ -4144,8 +4132,6 @@ QUnit.module('Keyboard keys', {
     // T680076
     QUnit.testInActiveWindow('The page must be correct after several the \'Page Down\' key presses', function(assert) {
         // arrange
-        let scrollable;
-        let $scrollContainer;
 
         this.options = {
             dataSource: generateItems(10),
@@ -4162,8 +4148,8 @@ QUnit.module('Keyboard keys', {
         this.gridView.render($('#container'));
         this.rowsView.height(70);
         this.rowsView.resize();
-        scrollable = this.rowsView.getScrollable();
-        $scrollContainer = $(scrollable._container());
+        const scrollable = this.rowsView.getScrollable();
+        const $scrollContainer = $(scrollable._container());
 
         this.focusFirstCell();
         this.clock.tick();

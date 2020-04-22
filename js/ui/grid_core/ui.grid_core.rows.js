@@ -550,13 +550,10 @@ module.exports = {
 
                 _createRow: function(row) {
                     const $row = this.callBase(row);
-                    let isGroup;
-                    let isDataRow;
-                    let isRowExpanded;
 
                     if(row) {
-                        isGroup = row.rowType === 'group';
-                        isDataRow = row.rowType === 'data';
+                        const isGroup = row.rowType === 'group';
+                        const isDataRow = row.rowType === 'data';
 
                         isDataRow && $row.addClass(DATA_ROW_CLASS);
                         isDataRow && this.option('showRowLines') && $row.addClass(ROW_LINES_CLASS);
@@ -569,7 +566,7 @@ module.exports = {
 
                         if(isGroup) {
                             $row.addClass(GROUP_ROW_CLASS);
-                            isRowExpanded = row.isExpanded;
+                            const isRowExpanded = row.isExpanded;
                             this.setAria('role', 'row', $row);
                             this.setAria('expanded', isDefined(isRowExpanded) && isRowExpanded.toString(), $row);
                         }
@@ -760,7 +757,6 @@ module.exports = {
 
                 _createEmptyRow: function(className, isFixed, height) {
                     const that = this;
-                    let i;
                     let $cell;
                     const $row = that._createRow();
                     const columns = isFixed ? this.getFixedColumns() : this.getColumns();
@@ -769,7 +765,7 @@ module.exports = {
                         .addClass(className)
                         .toggleClass(COLUMN_LINES_CLASS, that.option('showColumnLines'));
 
-                    for(i = 0; i < columns.length; i++) {
+                    for(let i = 0; i < columns.length; i++) {
                         $cell = that._createCell({ column: columns[i], rowType: 'freeSpace', columnIndex: i, columns: columns });
                         isNumeric(height) && $cell.css('height', height);
 
@@ -827,12 +823,11 @@ module.exports = {
 
                 _updateRowHeight: function() {
                     const that = this;
-                    let rowsHeight;
                     const $tableElement = that._getTableElement();
                     const itemsCount = that._dataController.items().length;
 
                     if($tableElement && that._needUpdateRowHeight(itemsCount)) {
-                        rowsHeight = that._getRowsHeight($tableElement);
+                        const rowsHeight = that._getRowsHeight($tableElement);
                         that._rowHeight = rowsHeight / itemsCount;
                     }
                 },
@@ -909,16 +904,13 @@ module.exports = {
 
                 _renderGroupedCells: function($row, options) {
                     const row = options.row;
-                    let i;
                     let expandColumn;
                     const columns = options.columns;
                     const rowIndex = row.rowIndex;
                     let isExpanded;
-                    let groupColumn;
-                    let groupColumnAlignment;
                     const groupCellOptions = this._getGroupCellOptions(options);
 
-                    for(i = 0; i <= groupCellOptions.columnIndex; i++) {
+                    for(let i = 0; i <= groupCellOptions.columnIndex; i++) {
                         if(i === groupCellOptions.columnIndex && columns[i].allowCollapsing && options.scrollingMode !== 'infinite') {
                             isExpanded = !!row.isExpanded;
                             expandColumn = columns[i];
@@ -939,9 +931,9 @@ module.exports = {
                         });
                     }
 
-                    groupColumnAlignment = getDefaultAlignment(this.option('rtlEnabled'));
+                    const groupColumnAlignment = getDefaultAlignment(this.option('rtlEnabled'));
 
-                    groupColumn = extend(
+                    const groupColumn = extend(
                         {},
                         columns[groupCellOptions.columnIndex],
                         {
@@ -1028,7 +1020,6 @@ module.exports = {
 
                 _renderCore: function(change) {
                     const that = this;
-                    let $table;
                     const $element = that.element();
 
                     $element.addClass(that.addWidgetPrefix(ROWS_VIEW_CLASS)).toggleClass(that.addWidgetPrefix(NOWRAP_CLASS), !that.option('wordWrapEnabled'));
@@ -1036,7 +1027,7 @@ module.exports = {
 
                     that.setAria('role', 'presentation', $element);
 
-                    $table = that._renderTable({ change: change });
+                    const $table = that._renderTable({ change: change });
                     that._updateContent($table, change);
 
                     that.callBase(change);
@@ -1050,17 +1041,14 @@ module.exports = {
 
                 _getCellOptions: function(options) {
                     const that = this;
-                    let parameters;
                     const column = options.column;
                     const row = options.row;
                     const data = row.data;
                     const summaryCells = row && row.summaryCells;
                     const value = options.value;
                     const displayValue = getDisplayValue(column, value, data, row.rowType);
-                    let groupingTextsOptions;
-                    let scrollingMode;
 
-                    parameters = this.callBase(options);
+                    const parameters = this.callBase(options);
                     parameters.value = value;
                     parameters.oldValue = options.oldValue;
                     parameters.displayValue = displayValue;
@@ -1075,8 +1063,8 @@ module.exports = {
                     parameters.resized = column.resizedCallbacks;
 
                     if(isDefined(column.groupIndex) && !column.command) {
-                        groupingTextsOptions = that.option('grouping.texts');
-                        scrollingMode = that.option('scrolling.mode');
+                        const groupingTextsOptions = that.option('grouping.texts');
+                        const scrollingMode = that.option('scrolling.mode');
                         if(scrollingMode !== 'virtual' && scrollingMode !== 'infinite') {
                             parameters.groupContinuesMessage = data && data.isContinuationOnNextPage && groupingTextsOptions && groupingTextsOptions.groupContinuesMessage;
                             parameters.groupContinuedMessage = data && data.isContinuation && groupingTextsOptions && groupingTextsOptions.groupContinuedMessage;
@@ -1152,16 +1140,14 @@ module.exports = {
                     const itemCount = dataController.items(true).length;
                     const contentElement = that._findContentElement();
                     const freeSpaceRowElements = that._getFreeSpaceRowElements($table);
-                    let freeSpaceRowCount;
-                    let scrollingMode;
 
                     if(freeSpaceRowElements && contentElement && dataController.totalCount() >= 0) {
                         let isFreeSpaceRowVisible = false;
 
                         if(itemCount > 0) {
                             if(!that._hasHeight) {
-                                freeSpaceRowCount = dataController.pageSize() - itemCount;
-                                scrollingMode = that.option('scrolling.mode');
+                                const freeSpaceRowCount = dataController.pageSize() - itemCount;
+                                const scrollingMode = that.option('scrolling.mode');
 
                                 if(freeSpaceRowCount > 0 && dataController.pageCount() > 1 && scrollingMode !== 'virtual' && scrollingMode !== 'infinite') {
                                     styleUtils.setHeight(freeSpaceRowElements, freeSpaceRowCount * that._rowHeight);
@@ -1293,9 +1279,8 @@ module.exports = {
                     const lastColumnWidths = that._lastColumnWidths || [];
                     const columnWidths = [];
                     const columns = that.getColumns();
-                    let i;
 
-                    for(i = 0; i < columns.length; i++) {
+                    for(let i = 0; i < columns.length; i++) {
                         columnWidths[i] = columns[i].visibleWidth;
                         if(columns[i].resizedCallbacks && !isDefined(columns[i].groupIndex) && lastColumnWidths[i] !== columnWidths[i]) {
                             columns[i].resizedCallbacks.fire(columnWidths[i]);
@@ -1377,7 +1362,6 @@ module.exports = {
                     const loadPanelOptions = that.option('loadPanel') || {};
                     const animation = dataController.isLoaded() ? loadPanelOptions.animation : null;
                     const $element = that.element();
-                    let visibilityOptions;
 
                     if(!hasWindow()) {
                         return;
@@ -1388,7 +1372,7 @@ module.exports = {
                         loadPanel = that._loadPanel;
                     }
                     if(loadPanel) {
-                        visibilityOptions = {
+                        const visibilityOptions = {
                             message: messageText || loadPanelOptions.text,
                             animation: animation,
                             visible: isLoading
@@ -1411,10 +1395,9 @@ module.exports = {
 
                 _getCellElementsCore: function(rowIndex) {
                     const $cells = this.callBase(rowIndex);
-                    let groupCellIndex;
 
                     if($cells) {
-                        groupCellIndex = $cells.filter('.' + GROUP_CELL_CLASS).index();
+                        const groupCellIndex = $cells.filter('.' + GROUP_CELL_CLASS).index();
                         if(groupCellIndex >= 0 && $cells.length > groupCellIndex + 1) {
                             return $cells.slice(0, groupCellIndex + 1);
                         }
@@ -1427,8 +1410,6 @@ module.exports = {
                     let itemIndex = 0;
                     let prevOffsetTop = 0;
                     let offsetTop = 0;
-                    let rowElements;
-                    let rowElement;
                     const scrollPosition = that._scrollTop;
                     const $contentElement = that._findContentElement();
                     const contentElementOffsetTop = $contentElement && $contentElement.offset().top;
@@ -1436,11 +1417,11 @@ module.exports = {
                     const tableElement = that._getTableElement();
 
                     if(items.length && tableElement) {
-                        rowElements = that._getRowElements(tableElement).filter(':visible');
+                        const rowElements = that._getRowElements(tableElement).filter(':visible');
 
                         for(itemIndex = 0; itemIndex < items.length; itemIndex++) {
                             prevOffsetTop = offsetTop;
-                            rowElement = rowElements.eq(itemIndex);
+                            const rowElement = rowElements.eq(itemIndex);
                             if(rowElement.length) {
                                 offsetTop = rowElement.offset().top - contentElementOffsetTop;
                                 if(offsetTop > scrollPosition) {
