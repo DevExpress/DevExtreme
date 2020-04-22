@@ -14,11 +14,10 @@ const DATE_REGEX = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$
 var parseDates = function(state) {
     if(!state) return;
     each(state, function(key, value) {
-        let date;
         if(isPlainObject(value) || Array.isArray(value)) {
             parseDates(value);
         } else if(typeof value === 'string') {
-            date = DATE_REGEX.exec(value);
+            const date = DATE_REGEX.exec(value);
             if(date) {
                 state[key] = new Date(Date.UTC(+date[1], +date[2] - 1, +date[3], +date[4], +date[5], +date[6]));
             }
@@ -108,10 +107,9 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
 
         load: function() {
             const that = this;
-            let loadResult;
 
             that._isLoading = true;
-            loadResult = fromPromise(that._loadState());
+            const loadResult = fromPromise(that._loadState());
             loadResult.done(function(state) {
                 that._isLoaded = true;
                 that._isLoading = false;

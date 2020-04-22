@@ -687,7 +687,6 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('Enter key for changed editing cell if \'editOnKeyPress\' and cell edit mode', function(assert) {
         // arrange
-        let $input;
 
         this.options = {
             editing: {
@@ -708,7 +707,7 @@ QUnit.module('Customize keyboard navigation', {
         // assert
         assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Editing navigation mode');
 
-        $input = $('.dx-row .dx-texteditor-input').eq(0);
+        const $input = $('.dx-row .dx-texteditor-input').eq(0);
         $input.val('Test');
         this.triggerKeyDown('enter');
         this.clock.tick();
@@ -721,7 +720,6 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('Enter key for changed editing cell if \'editOnKeyPress\' and batch edit mode', function(assert) {
         // arrange
-        let $input;
 
         this.options = {
             editing: {
@@ -742,7 +740,7 @@ QUnit.module('Customize keyboard navigation', {
         // assert
         assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Editing navigation mode');
 
-        $input = $('.dx-row .dx-texteditor-input').eq(0);
+        const $input = $('.dx-row .dx-texteditor-input').eq(0);
         $input.val('Test');
         this.triggerKeyDown('enter');
         this.clock.tick();

@@ -19,13 +19,13 @@ function depthFirstSearch(i, depth, root, callback) {
 
 // NOTE: https://github.com/jquery/jquery/blame/master/src/core.js#L392
 function map(array, callback) {
-    let i; let result;
+    let i;
 
     if('map' in array) {
         return array.map(callback);
     }
 
-    result = new Array(array.length);
+    const result = new Array(array.length);
     for(i in array) {
         result[i] = callback(array[i], i);
     }
@@ -87,23 +87,21 @@ module.exports = Class.inherit({
     },
 
     _aggregate: function(aggregates, data, container) {
-        let i; let j;
         const length = data.items ? data.items.length : 0;
 
-        for(i = 0; i < aggregates.length; i++) {
+        for(let i = 0; i < aggregates.length; i++) {
             if(isCount(aggregates[i].aggregator)) {
                 container[i] = (container[i] || 0) + length;
                 continue;
             }
 
-            for(j = 0; j < length; j++) {
+            for(let j = 0; j < length; j++) {
                 this._accumulate(i, aggregates[i], container, data.items[j]);
             }
         }
     },
 
     _calculateTotals: function(level, data) {
-        let i;
         if(level === 0) {
             this._totals = this._seed(this._totalAggregates);
         }
@@ -111,7 +109,7 @@ module.exports = Class.inherit({
         if(level === this._groupLevel) {
             this._aggregate(this._totalAggregates, data, this._totals);
         } else {
-            for(i = 0; i < data.items.length; i++) {
+            for(let i = 0; i < data.items.length; i++) {
                 this._calculateTotals(level + 1, data.items[i]);
             }
         }

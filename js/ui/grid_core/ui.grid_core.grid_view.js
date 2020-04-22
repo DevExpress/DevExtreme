@@ -35,10 +35,9 @@ const isPixelWidth = function(width) {
 
 const mergeArraysByMaxValue = function(values1, values2) {
     let result = [];
-    let i;
 
     if(values1 && values2 && values1.length && (values1.length === values2.length)) {
-        for(i = 0; i < values1.length; i++) {
+        for(let i = 0; i < values1.length; i++) {
             result.push(values1[i] > values2[i] ? values1[i] : values2[i]);
         }
     } else if(values1 && values1.length) {
@@ -226,7 +225,6 @@ const ResizingController = modules.ViewController.inherit({
         let isColumnWidthsCorrected = false;
         let resultWidths = [];
         let focusedElement;
-        let isFocusOutsideWindow;
         let selectionRange;
         const normalizeWidthsByExpandColumns = function() {
             let expandColumnWidth;
@@ -294,7 +292,7 @@ const ResizingController = modules.ViewController.inherit({
                 that._toggleBestFitMode(false);
                 resetBestFitMode = false;
                 if(focusedElement && focusedElement !== domAdapter.getActiveElement()) {
-                    isFocusOutsideWindow = focusedElement.getBoundingClientRect().bottom < 0;
+                    const isFocusOutsideWindow = focusedElement.getBoundingClientRect().bottom < 0;
                     if(!isFocusOutsideWindow) {
                         if(browser.msie) {
                             setTimeout(function() { restoreFocus(focusedElement, selectionRange); });
@@ -345,8 +343,6 @@ const ResizingController = modules.ViewController.inherit({
         let isColumnWidthsCorrected = false;
         const $element = that.component.$element();
         const hasWidth = that._hasWidth;
-        let averageColumnsWidth;
-        let lastColumnIndex;
 
         for(i = 0; i < visibleColumns.length; i++) {
             const index = i;
@@ -357,7 +353,7 @@ const ResizingController = modules.ViewController.inherit({
 
             if(minWidth) {
                 if(width === undefined) {
-                    averageColumnsWidth = that._getAverageColumnsWidth(resultWidths);
+                    const averageColumnsWidth = that._getAverageColumnsWidth(resultWidths);
                     width = averageColumnsWidth;
                 } else if(isPercentWidth(width)) {
                     const freeWidth = calculateFreeWidthWithCurrentMinWidth(that, index, minWidth, resultWidths);
@@ -391,7 +387,7 @@ const ResizingController = modules.ViewController.inherit({
             const totalWidth = that._getTotalWidth(resultWidths, contentWidth);
 
             if(totalWidth < contentWidth) {
-                lastColumnIndex = gridCoreUtils.getLastResizableColumnIndex(visibleColumns, resultWidths);
+                const lastColumnIndex = gridCoreUtils.getLastResizableColumnIndex(visibleColumns, resultWidths);
 
                 if(lastColumnIndex >= 0) {
                     resultWidths[lastColumnIndex] = 'auto';
@@ -454,11 +450,9 @@ const ResizingController = modules.ViewController.inherit({
 
     _getTotalWidth: function(widths, groupWidth) {
         let result = 0;
-        let width;
-        let i;
 
-        for(i = 0; i < widths.length; i++) {
-            width = widths[i];
+        for(let i = 0; i < widths.length; i++) {
+            const width = widths[i];
             if(width && width !== HIDDEN_COLUMNS_WIDTH) {
                 result += this._getRealColumnWidth(width, groupWidth);
             }

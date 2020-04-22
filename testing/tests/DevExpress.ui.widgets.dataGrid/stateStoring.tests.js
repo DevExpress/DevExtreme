@@ -574,7 +574,6 @@ QUnit.module('State Storing with real controllers', {
     // T605891
     QUnit.test('apply filterValues', function(assert) {
     // arrange
-        let items;
         const data = [{ id: 1 }, { id: 2 }];
 
         this.setupDataGridModules({
@@ -592,14 +591,13 @@ QUnit.module('State Storing with real controllers', {
         this.clock.tick();
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.equal(items.length, 1, 'count item');
         assert.deepEqual(items[0].data, data[1], 'Apply filterValues');
     });
 
     QUnit.test('not apply filter for hidden column', function(assert) {
     // arrange
-        let items;
         const data = [{ id: 1, name: 'test1' }, { id: 2, name: 'test2' }];
 
         this.setupDataGridModules({
@@ -621,7 +619,7 @@ QUnit.module('State Storing with real controllers', {
         this.clock.tick();
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.equal(items.length, 2, 'count item');
     });
 
@@ -1451,8 +1449,6 @@ QUnit.module('State Storing with real controllers', {
         fx.off = true;
 
         try {
-            let filterMenu;
-            let filterMenuItem;
 
             this.$element = function() {
                 return $('#container');
@@ -1484,9 +1480,9 @@ QUnit.module('State Storing with real controllers', {
             this.gridView.render(this.$element());
             this.clock.tick();
 
-            filterMenu = this.$element().find('.dx-menu .dx-menu-item').first();
+            const filterMenu = this.$element().find('.dx-menu .dx-menu-item').first();
             $(filterMenu).trigger('dxclick'); // open filter menu
-            filterMenuItem = $('body').find('.dx-overlay-content').first().find('.dx-menu-item').last();
+            const filterMenuItem = $('body').find('.dx-overlay-content').first().find('.dx-menu-item').last();
 
             // act
             filterMenuItem.trigger('dxclick'); // Reset filter
@@ -1506,7 +1502,6 @@ QUnit.module('State Storing with real controllers', {
         this.clock.restore();
 
         const that = this;
-        let scrollTop;
         const done = assert.async();
         const $testElement = $('#container').height(60);
 
@@ -1540,7 +1535,7 @@ QUnit.module('State Storing with real controllers', {
 
         setTimeout(function() {
         // assert
-            scrollTop = that.getScrollable().scrollTop();
+            const scrollTop = that.getScrollable().scrollTop();
             assert.ok(scrollTop > 0, 'scrollTop');
             assert.ok($testElement.find('.dx-virtual-row').first().children().first().height() <= scrollTop, 'scrollTop should be less than or equal to virtual row height');
             done();

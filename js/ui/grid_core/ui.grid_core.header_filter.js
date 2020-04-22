@@ -156,8 +156,6 @@ const HeaderFilterController = modules.ViewController.inherit((function() {
 
         getDataSource: function(column) {
             const that = this;
-            let filter;
-            let cutoffLevel;
             const dataSource = that._dataController.dataSource();
             const group = gridCoreUtils.getHeaderFilterGroupParameters(column, dataSource && dataSource.remoteOperations().grouping);
             const headerFilterDataSource = column.headerFilter && column.headerFilter.dataSource;
@@ -184,10 +182,10 @@ const HeaderFilterController = modules.ViewController.inherit((function() {
                 }
                 options.dataSource = normalizeDataSourceOptions(lookupDataSourceOptions);
             } else {
-                cutoffLevel = Array.isArray(group) ? group.length - 1 : 0;
+                const cutoffLevel = Array.isArray(group) ? group.length - 1 : 0;
 
                 that._currentColumn = column;
-                filter = that._dataController.getCombinedFilter();
+                const filter = that._dataController.getCombinedFilter();
                 that._currentColumn = null;
 
                 options.dataSource = {

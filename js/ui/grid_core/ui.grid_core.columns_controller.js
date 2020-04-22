@@ -195,7 +195,6 @@ module.exports = {
 
             const createColumn = function(that, columnOptions, userStateColumnOptions, bandColumn) {
                 let commonColumnOptions = {};
-                let calculatedColumnOptions;
 
                 if(columnOptions) {
                     if(isString(columnOptions)) {
@@ -212,7 +211,7 @@ module.exports = {
                         if(userStateColumnOptions && userStateColumnOptions.name && userStateColumnOptions.dataField) {
                             columnOptions = extend({}, columnOptions, { dataField: userStateColumnOptions.dataField });
                         }
-                        calculatedColumnOptions = that._createCalculatedColumnOptions(columnOptions, bandColumn);
+                        const calculatedColumnOptions = that._createCalculatedColumnOptions(columnOptions, bandColumn);
                         if(columnOptions.dataField && !columnOptions.type) {
                             result = { headerId: `dx-col-${globalColumnId++}` };
                         }
@@ -269,13 +268,12 @@ module.exports = {
             };
 
             var getChildrenByBandColumn = function(columnIndex, columnChildrenByIndex, recursive) {
-                let column;
                 let result = [];
                 const children = columnChildrenByIndex[columnIndex];
 
                 if(children) {
                     for(let i = 0; i < children.length; i++) {
-                        column = children[i];
+                        const column = children[i];
                         if(!isDefined(column.groupIndex) || column.showWhenGrouped) {
                             result.push(column);
                             if(recursive && column.isBand) {
@@ -359,12 +357,10 @@ module.exports = {
             };
 
             const processBandColumns = function(that, columns, bandColumnsCache) {
-                let i;
-                let column;
                 let rowspan;
 
-                for(i = 0; i < columns.length; i++) {
-                    column = columns[i];
+                for(let i = 0; i < columns.length; i++) {
+                    const column = columns[i];
 
                     if(column.visible || column.command) {
                         if(column.isBand) {
@@ -464,10 +460,9 @@ module.exports = {
                 const firstItems = that._getFirstItems(dataSource);
                 let fieldName;
                 const processedFields = {};
-                let i;
                 const result = [];
 
-                for(i = 0; i < firstItems.length; i++) {
+                for(let i = 0; i < firstItems.length; i++) {
                     if(firstItems[i]) {
                         for(fieldName in firstItems[i]) {
                             if(!isFunction(firstItems[i][fieldName]) || isWrapped(firstItems[i][fieldName])) {
@@ -523,22 +518,19 @@ module.exports = {
             };
 
             const updateColumnVisibleIndexes = function(that, currentColumn) {
-                let i;
                 let key;
                 let column;
-                let bandColumnIndex;
-                let parentBandColumns;
                 const bandColumns = {};
                 const result = [];
                 const bandColumnsCache = that.getBandColumnsCache();
                 const columns = that._columns.filter((column) => !column.command);
 
-                for(i = 0; i < columns.length; i++) {
+                for(let i = 0; i < columns.length; i++) {
                     column = columns[i];
-                    parentBandColumns = getParentBandColumns(i, bandColumnsCache.columnParentByIndex);
+                    const parentBandColumns = getParentBandColumns(i, bandColumnsCache.columnParentByIndex);
 
                     if(parentBandColumns.length) {
-                        bandColumnIndex = parentBandColumns[parentBandColumns.length - 1].index;
+                        const bandColumnIndex = parentBandColumns[parentBandColumns.length - 1].index;
                         bandColumns[bandColumnIndex] = bandColumns[bandColumnIndex] || [];
                         bandColumns[bandColumnIndex].push(column);
                     } else {
@@ -601,17 +593,15 @@ module.exports = {
                 let allColumnsHaveState = true;
                 const userStateColumnIndexes = [];
                 let column;
-                let columnUserState;
                 let userStateColumnIndex;
                 let i;
 
                 function applyFieldsState(column, userStateColumn) {
-                    let fieldName;
 
                     if(!userStateColumn) return;
 
                     for(let index = 0; index < USER_STATE_FIELD_NAMES.length; index++) {
-                        fieldName = USER_STATE_FIELD_NAMES[index];
+                        const fieldName = USER_STATE_FIELD_NAMES[index];
 
                         if(inArray(fieldName, ignoreColumnOptionNames) >= 0) continue;
 
@@ -670,7 +660,7 @@ module.exports = {
 
                     let hasAddedBands = false;
                     for(i = 0; i < columnsUserState.length; i++) {
-                        columnUserState = columnsUserState[i];
+                        const columnUserState = columnsUserState[i];
                         if(columnUserState.added && findUserStateColumn(columns, columnUserState) < 0) {
                             column = createColumn(that, columnUserState.added);
                             applyFieldsState(column, columnUserState);
@@ -791,10 +781,8 @@ module.exports = {
                 const optionGetter = dataCoreUtils.compileGetter(optionName);
                 const columnIndex = column.index;
                 let prevValue;
-                let optionSetter;
                 let columns;
                 let changeType;
-                let fullOptionName;
                 let initialColumn;
 
                 if(arguments.length === 3) {
@@ -811,9 +799,9 @@ module.exports = {
                         changeType = 'columns';
                     }
 
-                    optionSetter = dataCoreUtils.compileSetter(optionName);
+                    const optionSetter = dataCoreUtils.compileSetter(optionName);
                     optionSetter(column, value, { functionsAsIs: true });
-                    fullOptionName = getColumnFullPath(that, column);
+                    const fullOptionName = getColumnFullPath(that, column);
 
                     if(COLUMN_INDEX_OPTIONS[optionName]) {
                         updateIndexes(that, column);
@@ -863,15 +851,13 @@ module.exports = {
             const defaultSetCellValue = function(data, value) {
                 const path = this.dataField.split('.');
                 const dotCount = path.length - 1;
-                let name;
-                let i;
 
                 if(this.serializeValue) {
                     value = this.serializeValue(value);
                 }
 
-                for(i = 0; i < dotCount; i++) {
-                    name = path[i];
+                for(let i = 0; i < dotCount; i++) {
+                    const name = path[i];
                     data = data[name] = data[name] || {};
                 }
                 data[path[dotCount]] = value;
@@ -966,9 +952,7 @@ module.exports = {
             };
 
             const mergeColumns = (that, columns, commandColumns, needToExtend) => {
-                let i;
                 let column;
-                let columnOptions;
                 let commandColumnIndex;
                 let result = columns.slice().map(column => extend({}, column));
                 const isColumnFixing = that._isColumnFixing();
@@ -979,7 +963,7 @@ module.exports = {
                 }, -1);
                 const callbackFilter = (commandColumn) => commandColumn.command !== commandColumns[commandColumnIndex].command;
 
-                for(i = 0; i < columns.length; i++) {
+                for(let i = 0; i < columns.length; i++) {
                     column = columns[i];
 
                     commandColumnIndex = column && (column.type || column.command) ? getCommandColumnIndex(column) : -1;
@@ -990,7 +974,7 @@ module.exports = {
                                 defaultCommandColumns = defaultCommandColumns.filter(callbackFilter);
                             }
                         } else {
-                            columnOptions = {
+                            const columnOptions = {
                                 visibleIndex: column.visibleIndex,
                                 index: column.index,
                                 headerId: column.headerId,
@@ -1045,14 +1029,12 @@ module.exports = {
                     let items = [];
 
                     var getFirstItemsCore = function(items, groupsCount) {
-                        let i;
-                        let childItems;
 
                         if(!items || !groupsCount) {
                             return items;
                         }
-                        for(i = 0; i < items.length; i++) {
-                            childItems = getFirstItemsCore(items[i].items || items[i].collapsedItems, groupsCount - 1);
+                        for(let i = 0; i < items.length; i++) {
+                            const childItems = getFirstItemsCore(items[i].items || items[i].collapsedItems, groupsCount - 1);
                             if(childItems && childItems.length) {
                                 return childItems;
                             }
@@ -1291,13 +1273,12 @@ module.exports = {
                 },
                 isAllDataTypesDefined: function(checkSerializers) {
                     const columns = this._columns;
-                    let i;
 
                     if(!columns.length) {
                         return false;
                     }
 
-                    for(i = 0; i < columns.length; i++) {
+                    for(let i = 0; i < columns.length; i++) {
                         if(!columns[i].dataField && columns[i].calculateCellValue === columns[i].defaultCalculateCellValue) {
                             continue;
                         }
@@ -1353,10 +1334,6 @@ module.exports = {
                 },
                 _getFixedColumnsCore: function() {
                     const that = this;
-                    let i;
-                    let j;
-                    let column;
-                    let prevColumn;
                     const result = [];
                     const rowCount = that.getRowCount();
                     const isColumnFixing = that._isColumnFixing();
@@ -1365,18 +1342,17 @@ module.exports = {
                     let notFixedColumnCount;
                     let transparentColumnIndex;
                     let lastFixedPosition;
-                    let visibleColumns;
 
                     if(isColumnFixing) {
-                        for(i = 0; i <= rowCount; i++) {
+                        for(let i = 0; i <= rowCount; i++) {
                             notFixedColumnCount = 0;
                             lastFixedPosition = null;
                             transparentColumnIndex = null;
-                            visibleColumns = that.getVisibleColumns(i, true);
+                            const visibleColumns = that.getVisibleColumns(i, true);
 
-                            for(j = 0; j < visibleColumns.length; j++) {
-                                prevColumn = visibleColumns[j - 1];
-                                column = visibleColumns[j];
+                            for(let j = 0; j < visibleColumns.length; j++) {
+                                const prevColumn = visibleColumns[j - 1];
+                                const column = visibleColumns[j];
 
                                 if(!column.fixed) {
                                     if(i === 0) {
@@ -1510,7 +1486,6 @@ module.exports = {
                     const result = [];
                     let rowspanGroupColumns = 0;
                     let rowspanExpandColumns = 0;
-                    let firstPositiveIndexColumn;
                     const rowCount = that.getRowCount();
                     const positiveIndexedColumns = [];
                     const negativeIndexedColumns = [];
@@ -1532,14 +1507,13 @@ module.exports = {
 
                     iteratorUtils.each(columns, function() {
                         const column = this;
-                        let rowIndex;
                         let visibleIndex = column.visibleIndex;
                         let indexedColumns;
                         const parentBandColumns = getParentBandColumns(column.index, bandColumnsCache.columnParentByIndex);
                         const visible = that._isColumnVisible(column);
 
                         if(visible && (!isDefined(column.groupIndex) || column.showWhenGrouped)) {
-                            rowIndex = parentBandColumns.length;
+                            const rowIndex = parentBandColumns.length;
 
                             if(visibleIndex < 0) {
                                 visibleIndex = -visibleIndex;
@@ -1583,7 +1557,7 @@ module.exports = {
                             result[rowIndex].unshift.apply(result[rowIndex], columns);
                         });
 
-                        firstPositiveIndexColumn = result[rowIndex].length;
+                        const firstPositiveIndexColumn = result[rowIndex].length;
                         iteratorUtils.each(positiveIndexedColumns[rowIndex], function(index, columnsByFixing) {
                             orderEach(columnsByFixing, function(_, columnsByVisibleIndex) {
                                 result[rowIndex].push.apply(result[rowIndex], columnsByVisibleIndex);
@@ -1675,10 +1649,9 @@ module.exports = {
                     const fromIndex = getColumnIndexByVisibleIndex(that, fromVisibleIndex, sourceLocation);
                     const toIndex = getColumnIndexByVisibleIndex(that, toVisibleIndex, targetLocation);
                     let targetGroupIndex;
-                    let column;
 
                     if(fromIndex >= 0) {
-                        column = that._columns[fromIndex];
+                        const column = that._columns[fromIndex];
                         toVisibleIndex = isObject(toVisibleIndex) ? toVisibleIndex.columnIndex : toVisibleIndex;
                         targetGroupIndex = toIndex >= 0 ? that._columns[toIndex].groupIndex : -1;
 
@@ -1952,11 +1925,10 @@ module.exports = {
                 },
                 _customizeColumns: function(columns) {
                     const that = this;
-                    let hasOwnerBand;
                     const customizeColumns = that.option('customizeColumns');
 
                     if(customizeColumns) {
-                        hasOwnerBand = columns.some(function(column) {
+                        const hasOwnerBand = columns.some(function(column) {
                             return isObject(column.ownerBand);
                         });
 
@@ -1981,16 +1953,14 @@ module.exports = {
                 },
                 updateColumns: function(dataSource, forceApplying) {
                     const that = this;
-                    let sortParameters;
-                    let groupParameters;
 
                     if(!forceApplying) {
                         that.updateSortingGrouping(dataSource);
                     }
 
                     if(!dataSource || dataSource.isLoaded()) {
-                        sortParameters = dataSource ? dataSource.sort() || [] : that.getSortDataSourceParameters();
-                        groupParameters = dataSource ? dataSource.group() || [] : that.getGroupDataSourceParameters();
+                        const sortParameters = dataSource ? dataSource.sort() || [] : that.getSortDataSourceParameters();
+                        const groupParameters = dataSource ? dataSource.group() || [] : that.getGroupDataSourceParameters();
 
                         that._customizeColumns(that._columns);
 
@@ -2027,21 +1997,15 @@ module.exports = {
                 updateSortingGrouping: function(dataSource, fromDataSource) {
                     const that = this;
                     let sortParameters;
-                    let groupParameters;
-                    let columnsGroupParameters;
-                    let columnsSortParameters;
                     let isColumnsChanged;
                     const updateSortGroupParameterIndexes = function(columns, sortParameters, indexParameterName) {
-                        let i;
-                        let selector;
-                        let isExpanded;
 
                         iteratorUtils.each(columns, function(index, column) {
                             delete column[indexParameterName];
                             if(sortParameters) {
-                                for(i = 0; i < sortParameters.length; i++) {
-                                    selector = sortParameters[i].selector;
-                                    isExpanded = sortParameters[i].isExpanded;
+                                for(let i = 0; i < sortParameters.length; i++) {
+                                    const selector = sortParameters[i].selector;
+                                    const isExpanded = sortParameters[i].isExpanded;
 
                                     if(selector === column.dataField || selector === column.name || selector === column.selector || selector === column.calculateCellValue || selector === column.calculateGroupValue) {
                                         column.sortOrder = column.sortOrder || (sortParameters[i].desc ? 'desc' : 'asc');
@@ -2060,9 +2024,9 @@ module.exports = {
 
                     if(dataSource) {
                         sortParameters = normalizeSortingInfo(dataSource.sort());
-                        groupParameters = normalizeSortingInfo(dataSource.group());
-                        columnsGroupParameters = that.getGroupDataSourceParameters();
-                        columnsSortParameters = that.getSortDataSourceParameters();
+                        const groupParameters = normalizeSortingInfo(dataSource.group());
+                        const columnsGroupParameters = that.getGroupDataSourceParameters();
+                        const columnsSortParameters = that.getSortDataSourceParameters();
                         if(!that._columns.length) {
                             iteratorUtils.each(groupParameters, function(index, group) {
                                 that._columns.push(group.selector);
@@ -2103,8 +2067,6 @@ module.exports = {
 
                     if(!Array.isArray(filter)) return filter;
 
-                    let column;
-                    let i;
 
                     filter = extend([], filter);
 
@@ -2112,7 +2074,7 @@ module.exports = {
                     filterValue = filter.filterValue !== undefined ? filter.filterValue : filterValue;
 
                     if(isString(filter[0])) {
-                        column = that.columnOption(filter[0]);
+                        const column = that.columnOption(filter[0]);
 
                         if(remoteFiltering) {
                             if(config().forceIsoDateParsing && column && column.serializeValue && filter.length > 1) {
@@ -2129,7 +2091,7 @@ module.exports = {
                         filter[0].filterValue = filterValue;
                     }
 
-                    for(i = 0; i < filter.length; i++) {
+                    for(let i = 0; i < filter.length; i++) {
                         filter[i] = that.updateFilter(filter[i], remoteFiltering, columnIndex, filterValue);
                     }
 
@@ -2140,7 +2102,6 @@ module.exports = {
                 },
                 columnOption: function(identifier, option, value, notFireEvent) {
                     const that = this;
-                    let i;
                     const identifierOptionName = isString(identifier) && identifier.substr(0, identifier.indexOf(':'));
                     const columns = that._columns.concat(that._commandColumns);
                     let column;
@@ -2151,7 +2112,7 @@ module.exports = {
                         identifier = identifier.substr(identifierOptionName.length + 1);
                     }
 
-                    for(i = 0; i < columns.length; i++) {
+                    for(let i = 0; i < columns.length; i++) {
                         if(identifierOptionName) {
                             if(('' + columns[i][identifierOptionName]) === identifier) {
                                 column = columns[i];
@@ -2187,11 +2148,10 @@ module.exports = {
                 clearSorting: function() {
                     const that = this;
                     const columnCount = this.columnCount();
-                    let i;
 
                     that.beginUpdate();
 
-                    for(i = 0; i < columnCount; i++) {
+                    for(let i = 0; i < columnCount; i++) {
                         that.columnOption(i, 'sortOrder', undefined);
                     }
                     that.endUpdate();
@@ -2199,21 +2159,19 @@ module.exports = {
                 clearGrouping: function() {
                     const that = this;
                     const columnCount = this.columnCount();
-                    let i;
 
                     that.beginUpdate();
 
-                    for(i = 0; i < columnCount; i++) {
+                    for(let i = 0; i < columnCount; i++) {
                         that.columnOption(i, 'groupIndex', undefined);
                     }
                     that.endUpdate();
                 },
 
                 getVisibleIndex: function(index, rowIndex) {
-                    let i;
                     const columns = this.getVisibleColumns(rowIndex);
 
-                    for(i = columns.length - 1; i >= 0; i--) {
+                    for(let i = columns.length - 1; i >= 0; i--) {
                         if(columns[i].index === index) {
                             return i;
                         }
@@ -2245,7 +2203,6 @@ module.exports = {
                 },
                 deleteColumn: function(id) {
                     const that = this;
-                    let childIndexes;
                     const column = that.columnOption(id);
 
                     if(column && column.index >= 0) {
@@ -2253,7 +2210,7 @@ module.exports = {
                         that._columns.splice(column.index, 1);
 
                         if(column.isBand) {
-                            childIndexes = that.getChildrenByBandColumn(column.index).map((column) => column.index);
+                            const childIndexes = that.getChildrenByBandColumn(column.index).map((column) => column.index);
                             that._columns = that._columns.filter((column) => childIndexes.indexOf(column.index) < 0);
                         }
 
@@ -2288,13 +2245,12 @@ module.exports = {
                 },
                 setUserState: function(state) {
                     const that = this;
-                    let commonColumnSettings;
                     const dataSource = that._dataSource;
                     let ignoreColumnOptionNames = that.option('stateStoring.ignoreColumnOptionNames');
 
                     if(!ignoreColumnOptionNames) {
                         ignoreColumnOptionNames = [];
-                        commonColumnSettings = that.getCommonSettings();
+                        const commonColumnSettings = that.getCommonSettings();
 
                         if(!that.option('columnChooser.enabled')) ignoreColumnOptionNames.push('visible');
                         if(that.option('sorting.mode') === 'none') ignoreColumnOptionNames.push('sortIndex', 'sortOrder');
@@ -2323,7 +2279,6 @@ module.exports = {
                 _createCalculatedColumnOptions: function(columnOptions, bandColumn) {
                     let calculatedColumnOptions = {};
                     let dataField = columnOptions.dataField;
-                    let getter;
 
                     if(Array.isArray(columnOptions.columns) && columnOptions.columns.length || columnOptions.isBand) {
                         calculatedColumnOptions.isBand = true;
@@ -2332,7 +2287,7 @@ module.exports = {
 
                     if(dataField) {
                         if(isString(dataField)) {
-                            getter = dataCoreUtils.compileGetter(dataField);
+                            const getter = dataCoreUtils.compileGetter(dataField);
                             calculatedColumnOptions = {
                                 caption: inflector.captionize(dataField),
                                 calculateCellValue: function(data, skipDeserialization) {
@@ -2425,17 +2380,13 @@ module.exports = {
                                 return this.deserializeValue && !skipDeserialization ? this.deserializeValue(value) : value;
                             },
                             updateValueMap: function() {
-                                let calculateValue;
-                                let calculateDisplayValue;
-                                let item;
-                                let i;
 
                                 this.valueMap = {};
                                 if(this.items) {
-                                    calculateValue = dataCoreUtils.compileGetter(this.valueExpr);
-                                    calculateDisplayValue = dataCoreUtils.compileGetter(this.displayExpr);
-                                    for(i = 0; i < this.items.length; i++) {
-                                        item = this.items[i];
+                                    const calculateValue = dataCoreUtils.compileGetter(this.valueExpr);
+                                    const calculateDisplayValue = dataCoreUtils.compileGetter(this.displayExpr);
+                                    for(let i = 0; i < this.items.length; i++) {
+                                        const item = this.items[i];
                                         const displayValue = calculateDisplayValue(item);
                                         this.valueMap[calculateValue(item)] = displayValue;
                                         this.dataType = this.dataType || getValueDataType(displayValue);
@@ -2445,7 +2396,6 @@ module.exports = {
                             update: function() {
                                 const that = this;
                                 let dataSource = that.dataSource;
-                                let dataSourceOptions;
 
                                 if(dataSource) {
                                     if(isFunction(dataSource) && !isWrapped(dataSource)) {
@@ -2453,7 +2403,7 @@ module.exports = {
                                     }
                                     if(isPlainObject(dataSource) || (dataSource instanceof Store) || Array.isArray(dataSource)) {
                                         if(that.valueExpr) {
-                                            dataSourceOptions = normalizeDataSourceOptions(dataSource);
+                                            const dataSourceOptions = normalizeDataSourceOptions(dataSource);
                                             dataSourceOptions.paginate = false;
                                             dataSource = new DataSource(dataSourceOptions);
                                             return dataSource.load().done(function(data) {
@@ -2477,9 +2427,8 @@ module.exports = {
                     }
 
                     iteratorUtils.each(calculatedColumnOptions, function(optionName) {
-                        let defaultOptionName;
                         if(isFunction(calculatedColumnOptions[optionName]) && optionName.indexOf('default') !== 0) {
-                            defaultOptionName = 'default' + optionName.charAt(0).toUpperCase() + optionName.substr(1);
+                            const defaultOptionName = 'default' + optionName.charAt(0).toUpperCase() + optionName.substr(1);
                             calculatedColumnOptions[defaultOptionName] = calculatedColumnOptions[optionName];
                         }
                     });

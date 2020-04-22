@@ -58,7 +58,6 @@ QUnit.module('Error handling', {
         const that = this;
         const $testElement = $('#container');
         let $headerRow;
-        let $errorRow;
 
         that.columnHeadersView.render($testElement);
 
@@ -75,7 +74,7 @@ QUnit.module('Error handling', {
         assert.equal($testElement.find('tbody > tr').length, 2, 'count rows');
         $headerRow = $testElement.find('tbody > tr').first();
         assert.ok($headerRow.hasClass('dx-header-row'), 'has header row');
-        $errorRow = $testElement.find('tbody > tr').last();
+        const $errorRow = $testElement.find('tbody > tr').last();
         assert.ok($errorRow.hasClass('dx-error-row'), 'has error row');
         assert.strictEqual($errorRow.find('td').first().text(), 'Test', 'error message');
     });
@@ -85,7 +84,6 @@ QUnit.module('Error handling', {
     // arrange
         const that = this;
         const $testElement = $('#container');
-        let $firstRow;
 
         this.options.showColumnHeaders = false;
 
@@ -96,7 +94,7 @@ QUnit.module('Error handling', {
 
         // assert
         assert.equal($testElement.find('tbody > tr').length, 5, 'row count');
-        $firstRow = $testElement.find('tbody > tr').first();
+        const $firstRow = $testElement.find('tbody > tr').first();
         assert.ok($firstRow.hasClass('dx-error-row'), 'first row is error row');
         assert.strictEqual($firstRow.find('td').first().text(), 'Test', 'error message');
     });
@@ -105,8 +103,6 @@ QUnit.module('Error handling', {
     // arrange
         const that = this;
         const $testElement = $('#container');
-        let $rowsView;
-        let $errorRow;
 
         that.columnHeadersView.getColumnCount = function() {
             return that.columns.length;
@@ -115,7 +111,7 @@ QUnit.module('Error handling', {
         that.rowsView.render($testElement);
 
         // assert
-        $rowsView = $testElement.find('.dx-datagrid-rowsview');
+        const $rowsView = $testElement.find('.dx-datagrid-rowsview');
         assert.equal($rowsView.length, 1, 'has rows view');
         assert.equal($testElement.find('tbody > tr').length, 4, 'count rows');
 
@@ -124,7 +120,7 @@ QUnit.module('Error handling', {
 
         // assert
         assert.equal($testElement.find('tbody > tr').length, 5, 'count rows');
-        $errorRow = $testElement.find('tbody > tr').eq(2);
+        const $errorRow = $testElement.find('tbody > tr').eq(2);
         assert.ok($errorRow.hasClass('dx-error-row'), 'has error row');
         assert.strictEqual($errorRow.find('td').first().text(), 'Test', 'error message');
     });
@@ -133,8 +129,6 @@ QUnit.module('Error handling', {
     // arrange
         const that = this;
         const $testElement = $('#container');
-        let $rowsView;
-        let $errorRow;
 
         that.columnHeadersView.getColumnCount = function() {
             return that.columns.length;
@@ -143,7 +137,7 @@ QUnit.module('Error handling', {
         that.rowsView.render($testElement);
 
         // assert
-        $rowsView = $testElement.find('.dx-datagrid-rowsview');
+        const $rowsView = $testElement.find('.dx-datagrid-rowsview');
         assert.equal($rowsView.length, 1, 'has rows view');
         assert.equal($testElement.find('tbody > tr').length, 4, 'count rows');
 
@@ -152,7 +146,7 @@ QUnit.module('Error handling', {
 
         // assert
         assert.equal($testElement.find('tbody > tr').length, 5, 'count rows');
-        $errorRow = $testElement.find('tbody > tr').eq(2);
+        const $errorRow = $testElement.find('tbody > tr').eq(2);
         assert.ok($errorRow.hasClass('dx-error-row'), 'has error row');
         assert.strictEqual($errorRow.find('td').first().text(), 'Test', 'error message');
 
@@ -213,7 +207,6 @@ QUnit.module('Error handling', {
     // arrange
         const that = this;
         const $testElement = $('#container');
-        let $errorRow;
 
         that.columnHeadersView.render($testElement);
         that.rowsView.render($testElement);
@@ -227,7 +220,7 @@ QUnit.module('Error handling', {
 
         // assert
         assert.equal($testElement.find('tbody > tr').length, 6, 'count rows');
-        $errorRow = $testElement.find('.dx-datagrid-rowsview .dx-error-row');
+        const $errorRow = $testElement.find('.dx-datagrid-rowsview .dx-error-row');
         assert.equal($errorRow.length, 1, 'has error row');
         assert.strictEqual($errorRow.find('td').first().text(), 'Test', 'error message');
 
@@ -247,8 +240,6 @@ QUnit.module('Error handling', {
     // arrange
         const that = this;
         const $testElement = $('#container');
-        let $table;
-        let $rowsView;
         let $errorRow;
 
         that.columnHeadersView.getColumnCount = function() {
@@ -262,8 +253,8 @@ QUnit.module('Error handling', {
         that.rowsView.render($testElement);
 
         // assert
-        $rowsView = $testElement.find('.dx-datagrid-rowsview');
-        $table = $rowsView.find('table').first();
+        const $rowsView = $testElement.find('.dx-datagrid-rowsview');
+        const $table = $rowsView.find('table').first();
         assert.equal($rowsView.length, 1, 'has rows view');
         assert.equal($table.children('tbody').children('tr').length, 4, 'count rows');
 

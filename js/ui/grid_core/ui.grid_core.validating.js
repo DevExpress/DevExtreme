@@ -115,10 +115,9 @@ const ValidatingController = modules.Controller.inherit((function() {
             this._isValidationInProgress = true;
             if(isFull) {
                 each(editingController._editData, (index, editData) => {
-                    let validationResult;
 
                     if(editData.type && editData.type !== 'remove') {
-                        validationResult = this.validateGroup(editData);
+                        const validationResult = this.validateGroup(editData);
                         completeList.push(validationResult);
 
                         validationResult.done(validationResult => {
@@ -230,8 +229,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                 const value = column.calculateCellValue(editData.data || {});
                 return value !== undefined ? value : parameters.value;
             };
-            let visibleColumns;
-            let columnsController;
+
             let showEditorAlways = column.showEditorAlways;
 
             if(isDefined(column.command) || !column.validationRules || !Array.isArray(column.validationRules) || !column.validationRules.length) return;
@@ -240,8 +238,8 @@ const ValidatingController = modules.Controller.inherit((function() {
 
             if(editIndex < 0) {
                 if(!showEditorAlways) {
-                    columnsController = that.getController('columns');
-                    visibleColumns = columnsController && columnsController.getVisibleColumns() || [];
+                    const columnsController = that.getController('columns');
+                    const visibleColumns = columnsController && columnsController.getVisibleColumns() || [];
                     showEditorAlways = visibleColumns.some(function(column) { return column.showEditorAlways; });
                 }
 
@@ -318,10 +316,9 @@ module.exports = {
                     const that = this;
                     const validatingController = that.getController('validating');
                     const editDataIndex = that.callBase(options, row);
-                    let editData;
 
                     if(editDataIndex >= 0) {
-                        editData = that._editData[editDataIndex];
+                        const editData = that._editData[editDataIndex];
                         validatingController.updateEditData(editData);
                     }
 
@@ -407,17 +404,15 @@ module.exports = {
 
                 processDataItem: function(item) {
                     const that = this;
-                    let editIndex;
-                    let editData;
                     const isInserted = item.data[INSERT_INDEX];
                     const key = isInserted ? item.data.key : item.key;
                     const editMode = that.getEditMode();
 
                     if(editMode === EDIT_MODE_BATCH && isInserted && key) {
-                        editIndex = getIndexByKey(key, that._editData);
+                        const editIndex = getIndexByKey(key, that._editData);
 
                         if(editIndex >= 0) {
-                            editData = that._editData[editIndex];
+                            const editData = that._editData[editIndex];
 
                             if(editData.type !== 'insert') {
                                 item.data = extend(true, {}, editData.oldData, editData.data);
@@ -482,12 +477,11 @@ module.exports = {
                 },
 
                 _beforeSaveEditData: function(editData, editIndex) {
-                    let isValid;
                     let result = this.callBase.apply(this, arguments);
                     const validatingController = this.getController('validating');
 
                     if(editData) {
-                        isValid = editData.type === 'remove' || editData.isValid;
+                        const isValid = editData.type === 'remove' || editData.isValid;
                         result = result || !isValid;
                     } else {
                         const disposeValidators = this._createInvisibleColumnValidators(this._editData);
@@ -571,10 +565,9 @@ module.exports = {
                 showHighlighting: function($cell, skipValidation) {
                     let isValid = true;
                     const callBase = this.callBase;
-                    let validator;
 
                     if(!skipValidation) {
-                        validator = $cell.data('dxValidator');
+                        const validator = $cell.data('dxValidator');
                         if(validator) {
                             const validationResult = validator.validate();
                             when(validationResult.complete || validationResult).done(validationResult => {
@@ -664,14 +657,13 @@ module.exports = {
                     },
 
                     _hideFixedGroupCell: function($cell, overlayOptions) {
-                        let nextRowOptions;
                         let $nextFixedRowElement;
                         let $groupCellElement;
                         const isFixedColumns = this._rowsView.isFixedColumns();
                         const isFormEditMode = this._editingController.isFormEditMode();
 
                         if(isFixedColumns && !isFormEditMode) {
-                            nextRowOptions = $cell.closest('.dx-row').next().data('options');
+                            const nextRowOptions = $cell.closest('.dx-row').next().data('options');
 
                             if(nextRowOptions && nextRowOptions.rowType === 'group') {
                                 $nextFixedRowElement = $(this._rowsView.getRowElement(nextRowOptions.rowIndex)).last();

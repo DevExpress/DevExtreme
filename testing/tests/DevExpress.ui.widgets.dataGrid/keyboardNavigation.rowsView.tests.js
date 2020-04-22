@@ -35,13 +35,12 @@ QUnit.module('Rows view', {
             { data: { name: 'test3', id: 3, date: new Date(2003, 2, 3) }, values: ['test3', 3, '3/03/2003'], rowType: 'data', dataIndex: 2 }];
 
         this.createRowsView = function(rows, dataController, columns, initDefaultOptions) {
-            let i;
 
             dataController = dataController || new MockDataController({ items: rows });
 
             if(!typeUtils.isDefined(columns)) {
                 columns = [];
-                for(i = 0; i < rows[0].values.length; i++) {
+                for(let i = 0; i < rows[0].values.length; i++) {
                     columns.push({});
                 }
             }
