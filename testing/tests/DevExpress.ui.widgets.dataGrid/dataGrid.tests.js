@@ -9321,13 +9321,16 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
             columns: ['id', 'group']
         }).dxDataGrid('instance');
 
-        dataGrid.getScrollable().scrollTo({ top: 1000000 });
+        const scrollable = dataGrid.getScrollable();
+        scrollable.scrollTo({ top: 1000000 });
+        const scrollTop = scrollable.scrollTop();
 
         realSetTimeout(function() {
-        // act
+            // act
             dataGrid.clearGrouping();
+
             // assert
-            assert.ok(dataGrid.getTopVisibleRowData().id < 1000, 'top visible row is correct');
+            assert.equal(scrollable.scrollTop(), scrollTop, 'scroll position is not changed');
             assert.ok($(dataGrid.element()).find('.dx-virtual-row').first().height() <= dataGrid.getScrollable().scrollTop(), 'first virtual row is not in viewport');
             assert.ok($(dataGrid.element()).find('.dx-virtual-row').last().position().top >= dataGrid.getScrollable().scrollTop(), 'second virtual row is not in viewport');
             done();
@@ -9530,12 +9533,9 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
             }
         }).dxDataGrid('instance');
 
-        // act
-        dataGrid.getScrollable().scrollTo(10000);
-
         // assert
         assert.equal(dataGrid.getVisibleRows().length, 20, 'visible rows');
-        assert.equal(dataGrid.getVisibleRows()[0].data.id, 6, 'top visible row');
+        assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, 'top visible row');
         assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 1, 'bottom loading exists');
 
         // act
@@ -9543,7 +9543,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
         // assert
         assert.equal(dataGrid.getVisibleRows().length, 20, 'visible rows');
-        assert.equal(dataGrid.getVisibleRows()[0].data.id, 11, 'top visible row');
+        assert.equal(dataGrid.getVisibleRows()[0].data.id, 6, 'top visible row');
         assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 0, 'not bottom loading');
     });
 
