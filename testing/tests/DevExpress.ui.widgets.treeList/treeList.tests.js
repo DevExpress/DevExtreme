@@ -24,11 +24,10 @@ import { TreeListWrapper } from '../../helpers/wrappers/dataGridWrappers.js';
 fx.off = true;
 
 const createTreeList = function(options) {
-    let treeList;
     const treeListElement = $('#treeList').dxTreeList(options);
 
     QUnit.assert.ok(treeListElement);
-    treeList = treeListElement.dxTreeList('instance');
+    const treeList = treeListElement.dxTreeList('instance');
     return treeList;
 };
 
@@ -119,12 +118,9 @@ QUnit.module('Initialization', {
             dataSource: [{ id: 1, firstName: 'Dmitriy', lastName: 'Semenov', room: 101, birthDay: '1992/08/06' }],
             columns: [{ dataField: 'firstName', width: 100 }, { dataField: 'lastName', width: 100 }, { dataField: 'room', width: 100 }, { dataField: 'birthDay', width: 100 }]
         });
-        let headersCols;
-        let rowsCols;
-        let resizeController;
 
         // act
-        resizeController = treeList.getController('columnsResizer');
+        const resizeController = treeList.getController('columnsResizer');
         resizeController._isResizing = true;
         resizeController._targetPoint = { columnIndex: 1 };
         resizeController._setupResizingInfo(-9800);
@@ -138,8 +134,8 @@ QUnit.module('Initialization', {
         });
 
         // assert
-        headersCols = $('.dx-treelist-headers col');
-        rowsCols = $('.dx-treelist-rowsview col');
+        const headersCols = $('.dx-treelist-headers col');
+        const rowsCols = $('.dx-treelist-rowsview col');
         assert.equal($(headersCols[1]).css('width'), '150px', 'width of two column - headers view');
         assert.equal($(headersCols[2]).css('width'), '50px', 'width of three column - headers view');
         assert.equal($(rowsCols[1]).css('width'), '150px', 'width of two column - rows view');
@@ -156,10 +152,9 @@ QUnit.module('Initialization', {
             dataSource: [{ id: 1, firstName: '1', lastName: '2', room: '3', birthDay: '4' }],
             columns: ['firstName', 'lastName', 'room', 'birthDay']
         });
-        let columnController;
 
         // act
-        columnController = treeList.getController('columns');
+        const columnController = treeList.getController('columns');
         columnController.moveColumn(0, 3);
 
         // assert
@@ -931,7 +926,6 @@ QUnit.module('Expand/Collapse rows', () => {
     QUnit.test('Nodes should not be shifted after expanding node on last page', function(assert) {
     // arrange
         const clock = sinon.useFakeTimers();
-        let topVisibleRowData;
         const treeList = createTreeList({
             height: 120,
             loadingTimeout: undefined,
@@ -965,7 +959,7 @@ QUnit.module('Expand/Collapse rows', () => {
             devices.real().deviceType !== 'desktop' && $(scrollable._container()).trigger('scroll');
             clock.tick();
 
-            topVisibleRowData = treeList.getTopVisibleRowData();
+            const topVisibleRowData = treeList.getTopVisibleRowData();
 
             // assert
             assert.strictEqual(treeList.pageIndex(), 4, 'page index');
@@ -1168,7 +1162,6 @@ QUnit.module('Focused Row', {
 
     QUnit.test('TreeList with remoteOperations(filtering, sorting, grouping) and focusedRowKey should not generate repeated node', function(assert) {
     // arrange, act
-        let childrenNodes;
         const treeList = createTreeList({
             dataSource: [
                 { 'Task_ID': 1, 'Task_Parent_ID': 0 },
@@ -1190,7 +1183,7 @@ QUnit.module('Focused Row', {
         this.clock.tick();
 
         // arrange
-        childrenNodes = treeList.getNodeByKey(1).children;
+        const childrenNodes = treeList.getNodeByKey(1).children;
 
         // assert
         assert.equal(childrenNodes.length, 1, 'children nodes count');
@@ -1348,7 +1341,6 @@ QUnit.module('Scroll', {
     // T757537
     QUnit.test('TreeList should not hang when scrolling', function(assert) {
     // arrange
-        let scrollable;
         const contentReadySpy = sinon.spy();
         const treeList = createTreeList({
             dataSource: [
@@ -1382,7 +1374,7 @@ QUnit.module('Scroll', {
 
         this.clock.tick(100);
         this.clock.restore();
-        scrollable = treeList.getScrollable();
+        const scrollable = treeList.getScrollable();
         contentReadySpy.reset();
 
         // act

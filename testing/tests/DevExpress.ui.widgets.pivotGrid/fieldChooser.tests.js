@@ -1244,14 +1244,13 @@ QUnit.module('dxPivotGridFieldChooser', {
                 { dataField: 'Field3' }
             ]
         };
-        let fields;
 
         this.setup(dataSourceOptions);
 
         assert.ok(this.fieldChooser);
         assert.ok(this.dataSource);
 
-        fields = this.$container.find('.dx-area-field');
+        const fields = this.$container.find('.dx-area-field');
 
         function getBorderColor($elem) {
             return $elem.css('border-color') || $elem.css('borderLeftColor');
@@ -1651,7 +1650,6 @@ QUnit.module('dxPivotGridFieldChooser context menu', {
     });
 
     QUnit.test('create event args from field', function(assert) {
-        let eventArgs;
         const onContextMenuPreparingHandler = sinon.stub();
         const e = $.Event('dxcontextmenu');
 
@@ -1668,7 +1666,7 @@ QUnit.module('dxPivotGridFieldChooser context menu', {
         // assert
         assert.strictEqual(onContextMenuPreparingHandler.callCount, 1);
 
-        eventArgs = onContextMenuPreparingHandler.lastCall.args[0];
+        const eventArgs = onContextMenuPreparingHandler.lastCall.args[0];
 
         assert.ok(eventArgs.event);
         assert.deepEqual(eventArgs.field, this.fields[1]);
@@ -1677,7 +1675,6 @@ QUnit.module('dxPivotGridFieldChooser context menu', {
     });
 
     QUnit.test('create event args from area', function(assert) {
-        let eventArgs;
         const onContextMenuPreparingHandler = sinon.stub();
         const e = $.Event('dxcontextmenu');
 
@@ -1694,7 +1691,7 @@ QUnit.module('dxPivotGridFieldChooser context menu', {
         // assert
         assert.strictEqual(onContextMenuPreparingHandler.callCount, 1);
 
-        eventArgs = onContextMenuPreparingHandler.lastCall.args[0];
+        const eventArgs = onContextMenuPreparingHandler.lastCall.args[0];
 
         assert.ok(eventArgs.event);
         assert.strictEqual(eventArgs.field, undefined);
@@ -1703,7 +1700,6 @@ QUnit.module('dxPivotGridFieldChooser context menu', {
     });
 
     QUnit.test('create event args from empty area', function(assert) {
-        let eventArgs;
         const onContextMenuPreparingHandler = sinon.stub();
         const e = $.Event('dxcontextmenu');
 
@@ -1719,7 +1715,7 @@ QUnit.module('dxPivotGridFieldChooser context menu', {
         // assert
         assert.strictEqual(onContextMenuPreparingHandler.callCount, 1);
 
-        eventArgs = onContextMenuPreparingHandler.lastCall.args[0];
+        const eventArgs = onContextMenuPreparingHandler.lastCall.args[0];
 
         assert.ok(eventArgs.event);
         assert.strictEqual(eventArgs.field, undefined);
@@ -1728,7 +1724,6 @@ QUnit.module('dxPivotGridFieldChooser context menu', {
     });
 
     QUnit.test('create event args from empty space', function(assert) {
-        let eventArgs;
         const onContextMenuPreparingHandler = sinon.stub();
         const e = $.Event('dxcontextmenu');
 
@@ -1744,7 +1739,7 @@ QUnit.module('dxPivotGridFieldChooser context menu', {
         // assert
         assert.strictEqual(onContextMenuPreparingHandler.callCount, 1);
 
-        eventArgs = onContextMenuPreparingHandler.lastCall.args[0];
+        const eventArgs = onContextMenuPreparingHandler.lastCall.args[0];
 
         assert.ok(eventArgs.event);
         assert.strictEqual(eventArgs.field, undefined);
@@ -1783,7 +1778,6 @@ QUnit.module('dxPivotGridFieldChooser context menu', {
 
     QUnit.test('onContextMenuPreparing handler can be changed at runtime', function(assert) {
         const onContextMenuPreparingHandler = sinon.stub();
-        let fieldChooser;
         // act
         this.setup({
             fields: this.fields,
@@ -1792,7 +1786,7 @@ QUnit.module('dxPivotGridFieldChooser context menu', {
             onContextMenuPreparing: function() { }
         });
 
-        fieldChooser = this.fieldChooser;
+        const fieldChooser = this.fieldChooser;
 
         fieldChooser.option({
             onContextMenuPreparing: onContextMenuPreparingHandler
@@ -1967,8 +1961,6 @@ QUnit.module('Base Field chooser', {
 
     QUnit.test('Show search box in headerFilter', function(assert) {
         const that = this;
-        let list;
-        let fieldElements;
         const fields = [
             { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true }
         ];
@@ -1990,14 +1982,14 @@ QUnit.module('Base Field chooser', {
             that.$container.append(that.fieldChooser.renderField(field));
         });
 
-        fieldElements = that.$container.find('.dx-area-field');
+        const fieldElements = that.$container.find('.dx-area-field');
 
         // act
         fieldElements.first().find('.dx-header-filter').trigger('dxclick');
         this.clock.tick(500);
 
         // assert
-        list = $('.dx-list').dxList('instance');
+        const list = $('.dx-list').dxList('instance');
         assert.ok(list.option('searchEnabled'), 'list with search bar');
         assert.equal(list.option('searchTimeout'), 300, 'search timeout is assinged');
         assert.equal(list.option('searchExpr'), 'text', 'expr is correct');
@@ -2005,8 +1997,6 @@ QUnit.module('Base Field chooser', {
 
     QUnit.test('HeaderFilter should be without search bar when column allowSearch is disabled', function(assert) {
         const that = this;
-        let list;
-        let fieldElements;
         const fields = [
             { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true,
                 headerFilter: {
@@ -2031,22 +2021,20 @@ QUnit.module('Base Field chooser', {
             that.$container.append(that.fieldChooser.renderField(field));
         });
 
-        fieldElements = that.$container.find('.dx-area-field');
+        const fieldElements = that.$container.find('.dx-area-field');
 
         // act
         fieldElements.first().find('.dx-header-filter').trigger('dxclick');
         this.clock.tick(500);
 
         // assert
-        list = $('.dx-list').dxList('instance');
+        const list = $('.dx-list').dxList('instance');
         assert.notOk(list.option('searchEnabled'), 'list without search bar');
     });
 
     QUnit.test('Search in headerFilter', function(assert) {
         const that = this;
-        let list;
         let $listItems;
-        let fieldElements;
         const fields = [
             { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true }
         ];
@@ -2067,12 +2055,12 @@ QUnit.module('Base Field chooser', {
             that.$container.append(that.fieldChooser.renderField(field));
         });
 
-        fieldElements = that.$container.find('.dx-area-field');
+        const fieldElements = that.$container.find('.dx-area-field');
         fieldElements.first().find('.dx-header-filter').trigger('dxclick');
         this.clock.tick(500);
 
         // act
-        list = $('.dx-list').dxList('instance');
+        const list = $('.dx-list').dxList('instance');
         list.option('searchValue', 't2');
 
         // assert

@@ -176,14 +176,13 @@ QUnit.module('Chart Binding', {
         const chart = createChart();
         const chartBinding = pivotGrid.bindChart(chart);
         const chartDataSource = this.getChartOptions().dataSource;
-        let newChartDS;
 
         chartBinding();
 
         pivotGrid.getDataSource().field(0, { area: null });
         pivotGrid.getDataSource().load();
 
-        newChartDS = this.getChartOptions().dataSource;
+        const newChartDS = this.getChartOptions().dataSource;
         assert.strictEqual(chartDataSource, newChartDS, 'chart dataSource is not updated');
         assert.ok(!chart.$element().data('dxPivotGridUnbinding'));
     });

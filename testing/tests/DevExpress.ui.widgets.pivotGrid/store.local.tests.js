@@ -568,8 +568,7 @@ QUnit.module('Array Local Store', moduleConfig, () => {
             assert.strictEqual(data.values[0][0].length, 6, 'measures count');
 
             const arrayToFixed = function(array, precision) {
-                let i;
-                for(i = 0; i < array.length; i++) {
+                for(let i = 0; i < array.length; i++) {
                     array[i] = Number(array[i].toFixed(precision));
                 }
                 return array;
@@ -605,8 +604,7 @@ QUnit.module('Array Local Store', moduleConfig, () => {
             assert.strictEqual(data.values[0][0].length, 1, 'measures count');
 
             const arrayToFixed = function(array, precision) {
-                let i;
-                for(i = 0; i < array.length; i++) {
+                for(let i = 0; i < array.length; i++) {
                     array[i] = Number(array[i].toFixed(precision));
                 }
                 return array;

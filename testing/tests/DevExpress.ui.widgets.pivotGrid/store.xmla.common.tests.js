@@ -551,12 +551,11 @@ QUnit.module('Send Request', {
 
     QUnit.test('send ajax request on load', function(assert) {
         const store = new Store(this.dataSource);
-        let ajaxArg;
 
         store.load(this.loadOptions);
 
         assert.ok(ajax.sendRequest.calledOnce);
-        ajaxArg = ajax.sendRequest.lastCall.args[0];
+        const ajaxArg = ajax.sendRequest.lastCall.args[0];
 
         assert.strictEqual(ajaxArg.url, this.dataSource.url, 'url');
         assert.strictEqual(ajaxArg.method, 'POST', 'method');
@@ -583,12 +582,11 @@ QUnit.module('Send Request', {
         dataSource.beforeSend = beforeSend;
 
         const store = new Store(dataSource);
-        let ajaxArg;
 
         store.load(this.loadOptions);
         // assert
         assert.ok(ajax.sendRequest.calledOnce);
-        ajaxArg = ajax.sendRequest.lastCall.args[0];
+        const ajaxArg = ajax.sendRequest.lastCall.args[0];
 
         assert.strictEqual(ajaxArg.url, dataSource.url, 'url');
         assert.strictEqual(ajaxArg.method, 'POST', 'method');
