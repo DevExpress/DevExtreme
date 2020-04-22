@@ -1181,6 +1181,20 @@ QUnit.test('customizeTooltip in item', function(assert) {
 
 QUnit.module('Misc', environment);
 
+QUnit.test('customizeAnnotation is not a function', function(assert) {
+    const customizeAnnotation = { call: true };
+    const itemOptions = {
+        x: 10, y: 20,
+        type: 'image',
+        image: { url: 'some_url', width: 10 }
+    };
+    const annotation = this.createAnnotations([itemOptions], { image: { height: 10 } }, customizeAnnotation)[0];
+
+    annotation.draw(this.widget, this.group);
+
+    assert.deepEqual(this.renderer.image.firstCall.args, [0, 0, 10, 10, 'some_url', 'center']);
+});
+
 QUnit.test('Do not create annotation with wrong type', function(assert) {
     const annotations = this.createAnnotations([
         { type: 'image' },
