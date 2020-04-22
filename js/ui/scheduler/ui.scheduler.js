@@ -802,6 +802,9 @@ const Scheduler = Widget.inherit({
                 break;
             case 'currentView':
                 this._processCurrentView();
+
+                this.fire('validateDayHours');
+
                 this.getLayoutManager().initRenderingStrategy(this._getAppointmentsRenderingStrategy());
 
                 this._validateCellDuration();
@@ -848,7 +851,7 @@ const Scheduler = Widget.inherit({
                 break;
             case 'startDayHour':
             case 'endDayHour':
-                this._validateDayHours();
+                this.fire('validateDayHours');
                 this._appointments.option('items', []);
                 this._updateOption('workSpace', name, value);
                 this._appointments.repaint();
@@ -1451,7 +1454,7 @@ const Scheduler = Widget.inherit({
     _initMarkup: function() {
         this.callBase();
 
-        this._validateDayHours();
+        this.fire('validateDayHours');
         this._validateCellDuration();
 
         this._processCurrentView();
@@ -1648,15 +1651,6 @@ const Scheduler = Widget.inherit({
                 return false;
             }
         });
-    },
-
-    _validateDayHours: function() {
-        const endDayHour = this._getCurrentViewOption('endDayHour');
-        const startDayHour = this._getCurrentViewOption('startDayHour');
-
-        if(startDayHour >= endDayHour) {
-            throw errors.Error('E1058');
-        }
     },
 
     _validateCellDuration: function() {
@@ -1888,7 +1882,7 @@ const Scheduler = Widget.inherit({
     },
 
     _cleanPopup: function() {
-        this._appointmentPopup.dispose();
+        this._appointmentPopup && this._appointmentPopup.dispose();
     },
 
     _convertDatesByTimezoneBack: function(applyAppointmentTimezone, sourceAppointmentData, targetAppointmentData) {
@@ -2453,7 +2447,7 @@ const Scheduler = Widget.inherit({
     },
 
     hideAppointmentPopup: function(saveChanges) {
-        if(this._appointmentPopup.isVisible()) {
+        if(this._appointmentPopup && this._appointmentPopup.isVisible()) {
             saveChanges && this._appointmentPopup.saveChanges();
             this._appointmentPopup.hide();
         }
@@ -2480,7 +2474,7 @@ const Scheduler = Widget.inherit({
     },
 
     hideAppointmentTooltip: function() {
-        this._appointmentTooltip.hide();
+        this._appointmentTooltip && this._appointmentTooltip.hide();
     },
 
     scrollToTime: function(hours, minutes, date) {

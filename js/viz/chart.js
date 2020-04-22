@@ -462,8 +462,8 @@ function updateMarkersInfo({ overloadedSeries, points }) {
         if(_isDefined(curPoint.x) && _isDefined(curPoint.y)) {
             for(let j = i + 1; j < points.length; j++) {
                 const nextPoint = points[j];
-                const next_x = _isDefined(nextPoint) ? nextPoint.x : null;
-                const next_y = _isDefined(nextPoint) ? nextPoint.y : null;
+                const next_x = nextPoint?.x;
+                const next_y = nextPoint?.y;
 
                 if(!_isDefined(next_x) || Math.abs(curPoint.x - next_x) >= size) {
                     isContinuousSeries &= j !== i + 1;
@@ -940,10 +940,14 @@ const dxChart = AdvancedChart.inherit({
         const that = this;
         const rotated = that._isRotated();
         const synchronizeMultiAxes = that._themeManager.getOptions('synchronizeMultiAxes');
-        const extendedArgAxes = (that._scrollBar ? [that._scrollBar] : []).concat(that._argumentAxes);
-        const verticalAxes = rotated ? extendedArgAxes : that._valueAxes;
-        const horizontalAxes = rotated ? that._valueAxes : extendedArgAxes;
+        const scrollBar = that._scrollBar ? [that._scrollBar] : [];
+        const extendedArgAxes = scrollBar.concat(that._argumentAxes);
+        const verticalAxes = rotated ? that._argumentAxes : that._valueAxes;
+        const verticalElements = rotated ? extendedArgAxes : that._valueAxes;
+        const horizontalAxes = rotated ? that._valueAxes : that._argumentAxes;
+        const horizontalElements = rotated ? that._valueAxes : extendedArgAxes;
         const allAxes = verticalAxes.concat(horizontalAxes);
+        const allElements = allAxes.concat(scrollBar);
 
         that._normalizePanesHeight();
         that._updatePanesCanvases(drawOptions);
@@ -980,26 +984,36 @@ const dxChart = AdvancedChart.inherit({
         }
 
         let vAxesMargins = { panes: {} };
-        let hAxesMargins = getHorizontalAxesMargins(horizontalAxes, axis => axis.estimateMargins(panesCanvases[axis.pane]));
+        let hAxesMargins = getHorizontalAxesMargins(horizontalElements, axis => axis.estimateMargins(panesCanvases[axis.pane]));
         panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
 
-        drawAxesWithTicks(verticalAxes, !rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
-        vAxesMargins = getVerticalAxesMargins(verticalAxes);
-        panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
+        const drawAxesAndSetCanvases = (isHorizontal) => {
+            const axes = isHorizontal ? horizontalAxes : verticalAxes;
+            const condition = (isHorizontal ? rotated : !rotated) && synchronizeMultiAxes;
+            drawAxesWithTicks(axes, condition, panesCanvases, panesBorderOptions);
+            if(isHorizontal) {
+                hAxesMargins = getHorizontalAxesMargins(horizontalElements, getAxisMargins);
+            } else {
+                vAxesMargins = getVerticalAxesMargins(verticalElements);
+            }
+            panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
+        };
 
-        drawAxesWithTicks(horizontalAxes, rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
-        hAxesMargins = getHorizontalAxesMargins(horizontalAxes, getAxisMargins);
-        panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
+        drawAxesAndSetCanvases(false);
+        drawAxesAndSetCanvases(true);
+        if(that._estimateTickIntervals(verticalAxes, panesCanvases)) {
+            drawAxesAndSetCanvases(false);
+        }
 
         let oldTitlesWidth = calculateTitlesWidth(verticalAxes);
 
         const visibleSeries = that._getVisibleSeries();
         const pointsToAnimation = that._getPointsToAnimation(visibleSeries);
 
-        performActionOnAxes(allAxes, 'updateSize', panesCanvases, axisAnimationEnabled(drawOptions, pointsToAnimation));
+        performActionOnAxes(allElements, 'updateSize', panesCanvases, axisAnimationEnabled(drawOptions, pointsToAnimation));
 
-        horizontalAxes.forEach(shiftAxis('top', 'bottom'));
-        verticalAxes.forEach(shiftAxis('left', 'right'));
+        horizontalElements.forEach(shiftAxis('top', 'bottom'));
+        verticalElements.forEach(shiftAxis('left', 'right'));
 
         that._renderScaleBreaks();
 
@@ -1025,7 +1039,7 @@ const dxChart = AdvancedChart.inherit({
 
                 panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
 
-                performActionOnAxes(allAxes, 'updateSize', panesCanvases, false, false);
+                performActionOnAxes(allElements, 'updateSize', panesCanvases, false, false);
                 oldTitlesWidth = calculateTitlesWidth(verticalAxes);
             }
         });
@@ -1035,6 +1049,10 @@ const dxChart = AdvancedChart.inherit({
         }
 
         return cleanPanesCanvases;
+    },
+
+    _estimateTickIntervals(axes, canvases) {
+        return axes.some(axis => axis.estimateTickInterval(canvases[axis.pane]));
     },
 
     checkForMoreSpaceForPanesCanvas() {

@@ -1018,7 +1018,7 @@ QUnit.module('selectedItem', moduleConfig, () => {
         assert.strictEqual(dropDownList.option('selectedItem'), null, 'Value should be reset');
     });
 
-    QUnit.test('onSelectionChanged action should not be fired when selectedItem was not changed', function(assert) {
+    QUnit.test('onSelectionChanged action should not be fired after dataSource has been updated and selectedItem was not changed', function(assert) {
         const selectionChangedHandler = sinon.spy();
         const dropDownList = $('#dropDownList').dxDropDownList({
             dataSource: [],
@@ -1032,6 +1032,23 @@ QUnit.module('selectedItem', moduleConfig, () => {
         dropDownList.option('dataSource', [{ id: 0, name: 'zero' }, { id: 1, name: 'one' }]);
 
         assert.strictEqual(selectionChangedHandler.callCount, 0, 'selectionChanged action was not fired');
+    });
+
+    QUnit.test('selectionChanged should not fire if selectedItem was not changed', function(assert) {
+        const selectionChangedHandler = sinon.stub();
+        const items = [{ name: 'item1' }, { name: 'item2' }];
+        const instance = $('#dropDownList').dxDropDownList({
+            dataSource: items,
+            value: items[0],
+            onSelectionChanged: selectionChangedHandler,
+            displayExpr: 'name'
+        }).dxDropDownList('instance');
+
+        assert.strictEqual(instance.option('selectedItem'), items[0], 'selectedItem is correct on init');
+
+        instance.option('selectedItem', items[0]);
+        assert.strictEqual(instance.option('selectedItem'), items[0], 'selectedItem was not changed');
+        assert.equal(selectionChangedHandler.callCount, 1, 'selectionChanged should not fire twice');
     });
 });
 
@@ -1129,21 +1146,22 @@ QUnit.module('popup', moduleConfig, () => {
             data.push(i);
         }
 
-        $('#qunit-fixture')
-            .css('left', 0)
-            .css('top', 0);
-
-        $('#dropDownList').dxDropDownList({
-            searchEnabled: true,
-            dataSource: {
-                store: new ArrayStore(data),
-                paginate: true,
-                pageSize: 40
-            },
-            opened: true,
-            searchTimeout: 0,
-            width: 200
-        });
+        $('#dropDownList')
+            .wrap($('<div>').css({
+                left: 0,
+                top: 0
+            }))
+            .dxDropDownList({
+                searchEnabled: true,
+                dataSource: {
+                    store: new ArrayStore(data),
+                    paginate: true,
+                    pageSize: 40
+                },
+                opened: true,
+                searchTimeout: 0,
+                width: 200
+            });
 
         const listInstance = $(`.${LIST_CLASS}`).dxList('instance');
 
@@ -1163,11 +1181,6 @@ QUnit.module('popup', moduleConfig, () => {
     QUnit.testInActiveWindow('After search and load new page scrollTop should not be changed', function(assert) {
         if(browser.msie) {
             assert.ok(true, 'not applicable in IE');
-            return;
-        }
-
-        if(browser.chrome && !window.INTRANET) {
-            assert.ok(true, 'TODO https://trello.com/c/l50V8hPU/');
             return;
         }
 
@@ -1309,6 +1322,37 @@ QUnit.module('dataSource integration', moduleConfig, function() {
 
         this.clock.tick(loadDelay / 2);
         assert.ok($loadPanel.is(':hidden'), 'load panel is not visible when loading has been finished');
+    });
+
+    QUnit.test('dataSource should not be reloaded while minSearchLength is not exceeded (T876423)', function(assert) {
+        const loadStub = sinon.stub().returns([{ name: 'test 1' }, { name: 'test 2' }, { name: 'test 3' }]);
+
+        const $dropDownList = $('#dropDownList').dxDropDownList({
+            dataSource: {
+                load: loadStub,
+                byKey: (id) => { return { name: id }; }
+            },
+            searchEnabled: true,
+            deferRendering: false,
+            showDataBeforeSearch: true,
+            valueExpr: 'name',
+            displayExpr: 'name',
+            searchExpr: 'name',
+            searchTimeout: 0,
+            minSearchLength: 3
+        });
+
+        const $input = $dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS);
+        const kb = keyboardMock($input);
+
+        kb.type('123');
+
+        assert.strictEqual(loadStub.callCount, 2);
+
+        kb.press('backspace')
+            .press('backspace');
+
+        assert.strictEqual(loadStub.callCount, 3);
     });
 });
 

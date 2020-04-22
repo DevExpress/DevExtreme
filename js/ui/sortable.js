@@ -158,13 +158,29 @@ const Sortable = Draggable.inherit({
         }
     },
 
+    _isInsideTargetDraggable: function(event) {
+        const $targetDraggable = this._getTargetDraggable().$element();
+        const $scrollable = this._getScrollable($targetDraggable);
+
+        if($scrollable) {
+            const offset = $scrollable.offset();
+            const validY = offset.top + $scrollable.height() >= event.pageY && offset.top <= event.pageY;
+            const validX = offset.left + $scrollable.width() >= event.pageX && offset.left <= event.pageX;
+
+            return validY && validX;
+        }
+
+        return true;
+    },
+
     dragEnd: function(sourceEvent) {
         const $sourceElement = this._getSourceElement();
         const sourceDraggable = this._getSourceDraggable();
         const isSourceDraggable = sourceDraggable.NAME !== this.NAME;
         const toIndex = this.option('toIndex');
+        const isInsideTargetDraggable = this._isInsideTargetDraggable(sourceEvent.event);
 
-        if(toIndex !== null && toIndex >= 0) {
+        if(toIndex !== null && toIndex >= 0 && isInsideTargetDraggable) {
             let cancelAdd;
             let cancelRemove;
 
@@ -399,19 +415,26 @@ const Sortable = Draggable.inherit({
         this._updateItemPoints();
     },
 
-    _makeWidthCorrection: function($item, width) {
+    _getScrollable: function($element) {
         const that = this;
-        that._$scrollable = null;
+        let $scrollable;
 
-        $item.parents().toArray().some(function(element) {
-            const $element = $(element);
+        $element.parents().toArray().some(function(parent) {
+            const $parent = $(parent);
 
-            if(that._horizontalScrollHelper.isScrollable($element)) {
-                that._$scrollable = $element;
+            if(that._horizontalScrollHelper.isScrollable($parent) || that._verticalScrollHelper.isScrollable($parent)) {
+                $scrollable = $parent;
 
                 return true;
             }
         });
+
+        return $scrollable;
+    },
+
+    _makeWidthCorrection: function($item, width) {
+        const that = this;
+        that._$scrollable = that._getScrollable($item);
 
         if(that._$scrollable && that._$scrollable.width() < width) {
             const scrollableWidth = that._$scrollable.width();

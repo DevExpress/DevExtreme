@@ -141,6 +141,8 @@ class Gantt extends Widget {
             onScroll: this._onGanttViewScroll.bind(this),
             onDialogShowing: this._showDialog.bind(this),
             onPopupMenuShowing: this._showPopupMenu.bind(this),
+            onExpandAll: this._expandAll.bind(this),
+            onCollapseAll: this._collapseAll.bind(this),
             modelChangesListener: this._createModelChangesListener()
         });
         this._fireContentReadyAction();
@@ -194,6 +196,22 @@ class Gantt extends Widget {
         if(ganttViewTaskAreaContainer.scrollTop !== treeListScrollView.component.scrollTop()) {
             ganttViewTaskAreaContainer.scrollTop = treeListScrollView.component.scrollTop();
         }
+    }
+    _expandAll() {
+        this._treeList.forEachNode(node => {
+            if(node.children && node.children.length) {
+                this._treeList.expandRow(node.key);
+                this._ganttView.changeTaskExpanded(node.key, true);
+            }
+        });
+    }
+    _collapseAll() {
+        this._treeList.forEachNode(node => {
+            if(node.children && node.children.length) {
+                this._treeList.collapseRow(node.key);
+                this._ganttView.changeTaskExpanded(node.key, false);
+            }
+        });
     }
 
     _initScrollSync(treeList) {
@@ -377,6 +395,8 @@ class Gantt extends Widget {
                         expandedRowKeys.push(parentId);
                         this._treeList.option('expandedRowKeys', expandedRowKeys);
                     }
+                    this._setTreeListOption('selectedRowKeys', this._getArrayFromOneElement(insertedId));
+                    this._setTreeListOption('focusedRowKey', insertedId);
                 }
             });
         }
@@ -688,12 +708,6 @@ class Gantt extends Widget {
                  */
                 allowDependencyDeleting: true,
                 /**
-                 * @name dxGanttOptions.editing.allowDependencyUpdating
-                 * @type boolean
-                 * @default true
-                 */
-                allowDependencyUpdating: true,
-                /**
                 * @name dxGanttOptions.editing.allowResourceAdding
                 * @type boolean
                 * @default true
@@ -714,11 +728,11 @@ class Gantt extends Widget {
             },
             validation: {
                 /**
-                * @name dxGanttOptions.validation.enableDependencyValidation
+                * @name dxGanttOptions.validation.validateDependencies
                 * @type boolean
                 * @default false
                 */
-                enableDependencyValidation: false,
+                validateDependencies: false,
                 /**
                 * @name dxGanttOptions.validation.autoUpdateParentTasks
                 * @type boolean

@@ -60,34 +60,29 @@ rendererModule.Renderer = function(parameters) {
 QUnit.module('Main functionality', {
     beforeEach: function() {
         this.options = getInitialOptions();
-        this.patchFontOptions = sinon.stub(vizUtils, 'patchFontOptions', function(arg) {
-            const obj = {};
-            for(const key in arg) {
-                obj[key + 'Patched'] = arg[key];
-            }
-            return obj;
-        });
+
+        this._oldPatchFontOptions = vizUtils.patchFontOptions;
+        this.patchFontOptions = sinon.spy(function() { return this._oldPatchFontOptions.apply(null, arguments); }.bind(this));
+        vizUtils.patchFontOptions = this.patchFontOptions;
     },
     afterEach: function() {
-        this.patchFontOptions.restore();
+        vizUtils.patchFontOptions = this._oldPatchFontOptions;
     }
 });
 
 QUnit.test('Create tooltip', function(assert) {
     const et = { event: 'trigger' };
-    let tooltip;
-    let wrapper;
     let div;
 
     // act
-    tooltip = new Tooltip({ eventTrigger: et, cssClass: 'tooltip-class', pathModified: 'pathModified-option' });
+    const tooltip = new Tooltip({ eventTrigger: et, cssClass: 'tooltip-class', pathModified: 'pathModified-option' });
 
     // assert
     assert.equal(tooltip._eventTrigger, et, 'eventTrigger');
     assert.deepEqual(tooltip._renderer.ctorArgs, [{ pathModified: 'pathModified-option', container: tooltip._wrapper[0] }], 'renderer with rendererOptions');
 
     assert.ok(tooltip._wrapper, 'wrapper');
-    wrapper = tooltip._wrapper.get(0);
+    const wrapper = tooltip._wrapper.get(0);
     assert.equal(wrapper.nodeName, 'DIV');
     assert.equal(wrapper.className, 'tooltip-class');
     assert.equal(wrapper.style.position, 'absolute');
@@ -131,10 +126,9 @@ QUnit.test('Create tooltip', function(assert) {
 QUnit.test('Set options. All options', function(assert) {
     const et = { event: 'trigger' };
     const tooltip = new Tooltip({ eventTrigger: et });
-    let result;
 
     // act
-    result = tooltip.setOptions(this.options);
+    const result = tooltip.setOptions(this.options);
 
     // assert
     assert.equal(tooltip, result);
@@ -143,7 +137,9 @@ QUnit.test('Set options. All options', function(assert) {
     assert.equal(this.patchFontOptions.callCount, 1, 'font');
     assert.deepEqual(this.patchFontOptions.firstCall.args, [this.options.font]);
     assert.equal(tooltip._textFontStyles, this.patchFontOptions.firstCall.returnValue); // reference
-    assert.equal(tooltip._textFontStyles.color, this.options.font.color); // additional value
+    assert.notEqual(tooltip._textFontStyles.color, this.options.font.color); // additional value
+    assert.equal(tooltip._textFontStyles.color, tooltip._textFontStyles.fill); // T879069
+    assert.notOk(tooltip._textFontStyles.color.opacity); // T879069
 
     assert.equal(tooltip._customizeTooltip, this.options.customizeTooltip, 'customizeTooltip');
 });
@@ -151,10 +147,9 @@ QUnit.test('Set options. All options', function(assert) {
 QUnit.test('Set options. Cloud border options', function(assert) {
     const et = { event: 'trigger' };
     const tooltip = new Tooltip({ eventTrigger: et });
-    let result;
     this.options.border.visible = false;
     // act
-    result = tooltip.setOptions(this.options);
+    const result = tooltip.setOptions(this.options);
 
     // assert
     assert.equal(tooltip, result);
@@ -164,11 +159,10 @@ QUnit.test('Set options. Cloud border options', function(assert) {
 QUnit.test('Set options. ZIndex', function(assert) {
     const et = { event: 'trigger' };
     const tooltip = new Tooltip({ eventTrigger: et });
-    let result;
     this.options.zIndex = 1000;
     // act
     sinon.spy(tooltip._wrapper, 'css');
-    result = tooltip.setOptions(this.options);
+    const result = tooltip.setOptions(this.options);
 
     // assert
     assert.equal(tooltip, result);
@@ -179,10 +173,9 @@ QUnit.test('Set options. ZIndex', function(assert) {
 QUnit.test('Set options. Container is incorrect', function(assert) {
     const et = { event: 'trigger' };
     const tooltip = new Tooltip({ eventTrigger: et });
-    let result;
     this.options.container = '.some-wrong-class-name';
     // act
-    result = tooltip.setOptions(this.options);
+    const result = tooltip.setOptions(this.options);
 
     // assert
     assert.equal(tooltip, result);
@@ -192,10 +185,9 @@ QUnit.test('Set options. Container is incorrect', function(assert) {
 QUnit.test('Set options. Container is correct', function(assert) {
     const et = { event: 'trigger' };
     const tooltip = new Tooltip({ eventTrigger: et });
-    let result;
     this.options.container = '.some-correct-class-name';
     // act
-    result = tooltip.setOptions(this.options);
+    const result = tooltip.setOptions(this.options);
 
     // assert
     assert.equal(tooltip, result);
@@ -300,10 +292,9 @@ QUnit.test('Body has horizontal scroll', function(assert) {
 QUnit.test('Set options. customizeTooltip', function(assert) {
     const et = { event: 'trigger' };
     const tooltip = new Tooltip({ eventTrigger: et });
-    let result;
     this.options.customizeTooltip = {};
     // act
-    result = tooltip.setOptions(this.options);
+    const result = tooltip.setOptions(this.options);
 
     // assert
     assert.equal(tooltip, result);
@@ -350,12 +341,11 @@ QUnit.test('Set options. Two times', function(assert) {
         }
     };
     const tooltip = new Tooltip({ eventTrigger: et });
-    let result;
 
     tooltip.setOptions(this.options);
 
     // act
-    result = tooltip.setOptions(options2);
+    const result = tooltip.setOptions(options2);
 
     // assert
     assert.equal(tooltip, result);
@@ -389,7 +379,6 @@ QUnit.test('Set renderer options / rtl enabled', function(assert) {
 QUnit.test('Render, enabled', function(assert) {
     const et = { event: 'trigger' };
     const tooltip = new Tooltip({ eventTrigger: et });
-    let result;
 
     tooltip.setOptions(this.options);
 
@@ -398,7 +387,7 @@ QUnit.test('Render, enabled', function(assert) {
     tooltip._textGroupHtml.css = sinon.spy();
 
     // act
-    result = tooltip.render();
+    const result = tooltip.render();
 
     // assert
     assert.equal(tooltip, result);
@@ -408,12 +397,19 @@ QUnit.test('Render, enabled', function(assert) {
 
     // for svg text ↓
     assert.equal(tooltip._text.css.callCount, 1, 'text styles');
-    assert.deepEqual(tooltip._text.css.firstCall.args, [tooltip._textFontStyles]);
+    assert.deepEqual(tooltip._text.css.firstCall.args[0], tooltip._textFontStyles);
     // for svg text ↑
 
     // for html text ↓
     assert.equal(tooltip._textGroupHtml.css.callCount, 1, 'textGroupHtml styles');
-    assert.deepEqual(tooltip._textGroupHtml.css.firstCall.args, [tooltip._textFontStyles]);
+    assert.deepEqual(tooltip._textGroupHtml.css.firstCall.args[0], {
+        color: 'rgba(147,147,147,0.7)',
+        fill: 'rgba(147,147,147,0.7)',
+        fontFamily: '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana',
+        fontSize: 14,
+        fontWeight: 400,
+        opacity: null
+    });
     // for html text ↑
 });
 
@@ -423,13 +419,12 @@ QUnit.test('Update', function(assert) {
     const tooltip = new Tooltip({ eventTrigger: et });
     const setOptions = tooltip.setOptions;
     const render = tooltip.render;
-    let result;
 
     tooltip.setOptions = sinon.spy(function() { return setOptions.apply(tooltip, arguments); });
     tooltip.render = sinon.spy(function() { return render.apply(tooltip, arguments); });
 
     // act
-    result = tooltip.update(options);
+    const result = tooltip.update(options);
 
     // assert
     assert.equal(tooltip, result);
@@ -620,7 +615,7 @@ QUnit.test('Show preparations. W/o customize, w/ text', function(assert) {
     assert.deepEqual(this.tooltip._state, {
         color: '#ffffff',
         borderColor: '#252525',
-        textColor: '#939393',
+        textColor: 'rgba(147,147,147,0.7)',
         formatObject: formatObject,
         text: 'some-text'
     }, 'state');
@@ -672,7 +667,7 @@ QUnit.test('Show preparations. W/o customize, w/ text from \'description\' filed
     assert.deepEqual(this.tooltip._state, {
         color: '#ffffff',
         borderColor: '#252525',
-        textColor: '#939393',
+        textColor: 'rgba(147,147,147,0.7)',
         text: 'some-text',
         formatObject: formatObject
     }, 'state');
@@ -1010,7 +1005,7 @@ QUnit.test('Show preparations. Certain container', function(assert) {
     assert.deepEqual(this.tooltip._state, {
         color: '#ffffff',
         borderColor: '#252525',
-        textColor: '#939393',
+        textColor: 'rgba(147,147,147,0.7)',
         text: 'some-text',
         formatObject
     }, 'state');
@@ -1044,7 +1039,7 @@ QUnit.test('Show. W/o params', function(assert) {
     assert.deepEqual(this.tooltip._state, {
         color: '#ffffff',
         borderColor: '#252525',
-        textColor: '#939393',
+        textColor: 'rgba(147,147,147,0.7)',
         text: 'some-text',
         formatObject
     }, 'state');
@@ -1054,7 +1049,7 @@ QUnit.test('Show. W/o params', function(assert) {
     assert.equal(cloud._stored_settings.stroke, '#252525');
 
     assert.equal(this.tooltip._text.css.callCount, 1, 'text styles');
-    assert.deepEqual(this.tooltip._text.css.firstCall.args, [{ fill: '#939393' }]);
+    assert.deepEqual(this.tooltip._text.css.firstCall.args, [{ fill: 'rgba(147,147,147,0.7)' }]);
 
     assert.equal(this.tooltip._text.attr.callCount, 1, 'text attrs');
     assert.deepEqual(this.tooltip._text.attr.firstCall.args, [{ text: 'some-text', 'class': 'tooltip_class' }]);
@@ -1096,7 +1091,7 @@ QUnit.test('Show. W/o params. Html', function(assert) {
     assert.deepEqual(this.tooltip._state, {
         color: '#ffffff',
         borderColor: '#252525',
-        textColor: '#939393',
+        textColor: 'rgba(147,147,147,0.7)',
         isRendered: true,
         html: 'some-html',
         formatObject
@@ -1107,7 +1102,7 @@ QUnit.test('Show. W/o params. Html', function(assert) {
     assert.equal(cloud._stored_settings.stroke, '#252525');
 
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroupHtml styles');
-    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: '#939393', width: 3000 }]);
+    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: 'rgba(147,147,147,0.7)', width: 3000 }]);
 
     assert.ok(this.tooltip._textHtml.html.calledOnce, 'textHtml html');
     assert.deepEqual(this.tooltip._textHtml.html.firstCall.args, ['some-html'], 'textHtml html');
@@ -1160,7 +1155,7 @@ QUnit.test('Show. W/o params. Template', function(assert) {
     assert.deepEqual(this.tooltip._state, {
         color: '#ffffff',
         borderColor: '#252525',
-        textColor: '#939393',
+        textColor: 'rgba(147,147,147,0.7)',
         isRendered: true,
         html: 'custom html',
         text: 'some-text',
@@ -1172,7 +1167,7 @@ QUnit.test('Show. W/o params. Template', function(assert) {
     assert.equal(cloud._stored_settings.stroke, '#252525');
 
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroupHtml styles');
-    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: '#939393', width: 3000 }]);
+    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: 'rgba(147,147,147,0.7)', width: 3000 }]);
 
     assert.ok(this.tooltip._textHtml.html.calledOnce, 'textHtml html');
     assert.deepEqual(this.tooltip._textHtml.html(), 'custom html', 'textHtml html');
@@ -1282,7 +1277,7 @@ QUnit.test('Show. W/o params. Do not call template if skipTemplate in formatObje
     assert.deepEqual(this.tooltip._state, {
         color: '#ffffff',
         borderColor: '#252525',
-        textColor: '#939393',
+        textColor: 'rgba(147,147,147,0.7)',
         text: 'some-text',
         formatObject
     }, 'state');
@@ -1292,7 +1287,7 @@ QUnit.test('Show. W/o params. Do not call template if skipTemplate in formatObje
     assert.equal(cloud._stored_settings.stroke, '#252525');
 
     assert.equal(this.tooltip._text.css.callCount, 1, 'text styles');
-    assert.deepEqual(this.tooltip._text.css.firstCall.args, [{ fill: '#939393' }]);
+    assert.deepEqual(this.tooltip._text.css.firstCall.args, [{ fill: 'rgba(147,147,147,0.7)' }]);
 
     assert.equal(this.tooltip._text.attr.callCount, 1, 'text attrs');
     assert.deepEqual(this.tooltip._text.attr.firstCall.args, [{ text: 'some-text', 'class': 'tooltip_class' }]);
@@ -1374,7 +1369,7 @@ QUnit.test('Show. W/ params', function(assert) {
     assert.deepEqual(this.tooltip._state, {
         color: '#ffffff',
         borderColor: '#252525',
-        textColor: '#939393',
+        textColor: 'rgba(147,147,147,0.7)',
         text: 'some-text',
         formatObject
     }, 'state');
@@ -1760,8 +1755,6 @@ QUnit.test('RB corner of page', function(assert) {
 });
 
 QUnit.test('Orientation is not changed', function(assert) {
-    let wrapper;
-
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
 
@@ -1773,7 +1766,7 @@ QUnit.test('Orientation is not changed', function(assert) {
     this.tooltip.move(500, 400, 10);
 
     // assert
-    wrapper = $('.test-title-class');
+    const wrapper = $('.test-title-class');
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 0, 'textGroupHtml move');
     assert.equal(this.renderer.path.callCount, 1);
     assert.deepEqual(this.getCloudPoints(), [480, 330, 520, 330, 520, 350, 530, 360, 520, 370, 520, 390, 480, 390]);
@@ -1874,8 +1867,6 @@ QUnit.test('Show after move w/o orientation changing', function(assert) {
 
 // T277991, T447623
 QUnit.test('Position when page\'s body has relative position and margins and page is scrolled. T277991, T447623', function(assert) {
-    let wrapper;
-
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
 
@@ -1896,7 +1887,7 @@ QUnit.test('Position when page\'s body has relative position and margins and pag
     this.tooltip.move(500, 400, 30);
 
     // assert
-    wrapper = $('.test-title-class');
+    const wrapper = $('.test-title-class');
     assert.strictEqual(wrapper.css('left'), '340px');
     assert.strictEqual(wrapper.css('top'), '181px');
 });

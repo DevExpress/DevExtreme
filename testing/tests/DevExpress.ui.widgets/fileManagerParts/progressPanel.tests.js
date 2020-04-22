@@ -360,7 +360,6 @@ QUnit.module('Progress panel tests', moduleConfig, () => {
         infos[0].common.$closeButton.trigger('dxclick');
         this.clock.tick(400);
 
-        infos = this.progressPanelWrapper.getInfos();
         separators = this.progressPanelWrapper.getSeparators();
         assert.equal(separators.length, 1, 'Correct number of separators');
 
@@ -385,6 +384,34 @@ QUnit.module('Progress panel tests', moduleConfig, () => {
         separators = this.progressPanelWrapper.getSeparators();
         assert.equal(separators.length, 0, 'Correct number of separators');
 
+        infos[0].common.$closeButton.trigger('dxclick');
+        this.clock.tick(400);
+
+        separators = this.progressPanelWrapper.getSeparators();
+        assert.equal(separators.length, 0, 'Correct number of separators');
+
+        const operationInfo5 = this.progressPanel.addOperation('Operation 5');
+        this.progressPanel.completeOperation(operationInfo5, 'Completed 5');
+
+        separators = this.progressPanelWrapper.getSeparators();
+        assert.equal(separators.length, 0, 'Correct number of separators');
+    });
+
+    test('Empty list text must be displayed when there are no operations on the panel', function(assert) {
+        createProgressPanel(this);
+
+        assert.strictEqual(this.progressPanelWrapper.getInfosContainer().text(), 'No operations', 'Empty list text rendered after first load');
+
+        const operationInfo1 = this.progressPanel.addOperation('Operation 1');
+        this.progressPanel.completeOperation(operationInfo1, 'Completed 1');
+
+        assert.notStrictEqual(this.progressPanelWrapper.getInfosContainer().text(), 'No operations', 'There are no empty list text');
+
+        const infos = this.progressPanelWrapper.getInfos();
+        infos[0].common.$closeButton.trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.progressPanelWrapper.getInfosContainer().text(), 'No operations', 'Empty list text rendered when there are no operatoins left');
     });
 
 });

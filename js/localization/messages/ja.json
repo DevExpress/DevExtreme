@@ -285,7 +285,7 @@
         "dxFileManager-commandRefresh": "更新",
         "dxFileManager-commandThumbnails": "縮小表示",
         "dxFileManager-commandDetails": "詳細表示",
-        "dxFileManager-commandClear": "選択のクリア",
+        "dxFileManager-commandClearSelection": "選択のクリア",
 
         "dxFileManager-dialogDirectoryChooserMoveTitle": "TODO",
         "dxFileManager-dialogDirectoryChooserMoveButtonText": "移動",
@@ -515,6 +515,15 @@
         "dxGantt-dialogConstraintViolationMessage": "移動しようとしているタスクは、依存関係により2つ目のタスクとリンクされています。どのように続行しますか？",
         "dxGantt-dialogCancelOperationMessage": "操作をキャンセルする",
         "dxGantt-dialogDeleteDependencyMessage": "依存関係を削除する",
-        "dxGantt-dialogMoveTaskAndKeepDependencyMessage": "タスクを移動して、依存関係を保持する"
+        "dxGantt-dialogMoveTaskAndKeepDependencyMessage": "タスクを移動して、依存関係を保持する",
+        "dxGantt-undo": "TODO",
+        "dxGantt-redo": "TODO",
+        "dxGantt-expandAll": "TODO",
+        "dxGantt-collapseAll": "TODO",
+        "dxGantt-addNewTask": "TODO",
+        "dxGantt-deleteSelectedTask": "TODO",
+        "dxGantt-zoomIn": "TODO",
+        "dxGantt-zoomOut": "TODO",
+        "dxGantt-fullScreen": "TODO"
     }
 }

@@ -10,6 +10,7 @@ const CLASS = {
     dataRow: 'dx-data-row',
     groupRow: 'dx-group-row',
     commandEdit: 'dx-command-edit',
+    commandExpand: 'dx-command-expand',
     commandLink: 'dx-link',
     editCell: 'dx-editor-cell',
     focused: 'dx-focused',
@@ -32,6 +33,7 @@ const CLASS = {
     textEditorInput: 'dx-texteditor-input',
     invalid: 'dx-invalid',
     invalidCell: 'dx-datagrid-invalid',
+    invalidOverlayMessage: 'dx-invalid-message',
     cellModified: 'dx-cell-modified',
     editFormRow: 'edit-form',
     button: 'dx-button',
@@ -41,7 +43,11 @@ const CLASS = {
     addRowButton: 'addrow-button',
     insertedRow: 'dx-row-inserted',
     editedRow: 'dx-edit-row',
-    saveButton: 'save-button'
+    saveButton: 'save-button',
+    groupExpanded: 'group-opened',
+    overlayContent: 'edit-popup',
+    popupContent: 'dx-overlay-content',
+    toolbar: 'dx-toolbar'
 };
 
 const addWidgetPrefix = function(widgetName: string, className: string) {
@@ -146,6 +152,7 @@ class DataCell extends DxElement {
     isValidationPending: Promise<boolean>;
     isInvalid: Promise<boolean>;
     isModified: Promise<boolean>;
+    hasInvalidMessage: Promise<boolean>;
 
     constructor(dataRow: Selector, index: number) {
         super(dataRow.find(`td:nth-child(${++index})`));
@@ -154,6 +161,7 @@ class DataCell extends DxElement {
         this.isValidationPending = this.element.find(`div.${CLASS.pendingIndicator}`).exists;
         this.isInvalid = this.element.hasClass(CLASS.invalidCell);
         this.isModified = this.element.hasClass(CLASS.cellModified);
+        this.hasInvalidMessage = this.element.find(`.${CLASS.invalidOverlayMessage} .${CLASS.popupContent}`).exists;
     }
 
     getEditor(): DxElement {
@@ -201,11 +209,17 @@ class DataRow extends DxElement {
 }
 
 class GroupRow extends DxElement {
+    widgetName: string;
     isFocusedRow: Promise<boolean>;
+    isFocused: Promise<boolean>;
+    isExpanded: Promise<boolean>;
 
-    constructor(element: Selector) {
+    constructor(element: Selector, widgetName: string) {
         super(element);
+        this.widgetName = widgetName;
         this.isFocusedRow = this.element.hasClass(CLASS.focusedRow);
+        this.isFocused = this.element.hasClass(CLASS.focused);
+        this.isExpanded = this.element.find(`.${CLASS.commandExpand} .${addWidgetPrefix(this.widgetName, CLASS.groupExpanded)}`).exists
     }
 
     getCell(index: number): DataCell {
@@ -318,7 +332,7 @@ export default class DataGrid extends Widget {
     }
 
     getGroupRow(index: number): GroupRow {
-        return new GroupRow(this.element.find(`.${CLASS.groupRow}`).nth(index));
+        return new GroupRow(this.element.find(`.${CLASS.groupRow}`).nth(index), this.name);
     }
 
     getFocusedRow(): Selector {
@@ -360,10 +374,17 @@ export default class DataGrid extends Widget {
         )();
     }
 
-    getEditForm() {
+    getEditForm(): EditForm {
         const editFormRowClass = this.addWidgetPrefix(CLASS.editFormRow);
         const element = this.element ? this.element.find(`.${editFormRowClass}`) :  Selector(`.${editFormRowClass}`);
         const buttons = element.find(`.${this.addWidgetPrefix(CLASS.formButtonsContainer)} .${CLASS.button}`);
+
+        return new EditForm(element, buttons);
+    }
+
+    getPopupEditForm(): EditForm {
+        const element = Selector(`.${this.addWidgetPrefix(CLASS.overlayContent)} .${CLASS.popupContent}`);
+        const buttons = element.find(`.${CLASS.toolbar} .${CLASS.button}`);
 
         return new EditForm(element, buttons);
     }
@@ -398,6 +419,30 @@ export default class DataGrid extends Widget {
         return ClientFunction(
             () => getGridInstance().cancelEditData(),
             { dependencies: { getGridInstance } }
+        )();
+    }
+
+    api_saveEditData() : Promise<void> {
+        const getGridInstance: any = this.getGridInstance;
+        return ClientFunction(
+            () => getGridInstance().saveEditData(),
+            { dependencies: { getGridInstance } }
+        )();
+    }
+
+    api_editCell(rowIndex: number, columnIndex: number) : Promise<void> {
+        const getGridInstance: any = this.getGridInstance;
+        return ClientFunction(
+            () => getGridInstance().editCell(rowIndex, columnIndex),
+            { dependencies: { getGridInstance, rowIndex, columnIndex } }
+        )();
+    }
+
+    api_cellValue(rowIndex: number, columnIndex: number, value: string) : Promise<void> {
+        const getGridInstance: any = this.getGridInstance;
+        return ClientFunction(
+            () => getGridInstance().editCell(rowIndex, columnIndex, value),
+            { dependencies: { getGridInstance, rowIndex, columnIndex, value } }
         )();
     }
 

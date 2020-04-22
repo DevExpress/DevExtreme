@@ -182,7 +182,7 @@ module.exports = {
         { import: '../list/sizes', type: 'index' },
         { import: '../button', type: 'index' },
         { import: '../button/colors', type: 'index' },
-        { import: '../menuBase', type: 'index' },
+        { import: '../button/sizes', type: 'index' },
         { regex: /@mixin dx-toolbar-item-padding\(\$MATERIAL_TOOLBAR_ITEM_SPACING\),/, replacement: '@include dx-toolbar-item-padding($MATERIAL_TOOLBAR_ITEM_SPACING);' },
         { regex: /.dx-toolbar-item-padding\(\$MATERIAL_MOBILE_TOOLBAR_ITEM_SPACING\),/, replacement: '@include dx-toolbar-item-padding($MATERIAL_MOBILE_TOOLBAR_ITEM_SPACING);' },
         { regex: /(-bg|-color|: 0|MATERIAL_LIST_ITEM_HEIGHT|MATERIAL_LIST_ITEM_HORIZONTAL_PADDING|4px|2 0|50%),/g, replacement: '$1;' },
@@ -493,6 +493,7 @@ module.exports = {
         { regex: /\.diagram-icon-colored\(d/g, replacement: '@include diagram-icon-colored(d' }
     ],
     'gantt': [
+        { import: '../../base/gantt', type: 'index' },
         { import: '../splitter', type: 'index' },
         { import: '../gridBase/colors', type: 'colors' },
         { import: '../gridBase/colors', type: 'index' },

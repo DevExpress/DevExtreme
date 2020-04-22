@@ -2847,6 +2847,44 @@ QUnit.module('search', moduleSetup, () => {
         assert.equal($(instance.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'filter was cleared');
     });
 
+    QUnit.testInActiveWindow('Filter should not be canceled after focusout if event target is not in editor\'s overlay (T838753)', function(assert) {
+        const items = ['111', '222', '333'];
+
+        const $selectBox = $('#selectBox').dxSelectBox({
+            searchTimeout: 0,
+            items,
+            searchEnabled: true,
+            applyValueMode: 'useButtons'
+        });
+
+        const instance = $selectBox.dxSelectBox('instance');
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        keyboardMock($input).type('1');
+        $input.trigger($.Event('focusout', { relatedTarget: $(instance.content()).parent().find('.dx-toolbar-items-container') }));
+
+        assert.equal($(instance.content()).find(toSelector(LIST_ITEM_CLASS)).length, 1, 'filter is not cleared');
+    });
+
+    QUnit.testInActiveWindow('Filter should not be canceled after focusout if the widget is closed (T876423)', function(assert) {
+        const items = ['111', '222', '333'];
+
+        const $selectBox = $('#selectBox').dxSelectBox({
+            searchTimeout: 0,
+            items,
+            searchEnabled: true
+        });
+
+        const instance = $selectBox.dxSelectBox('instance');
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        keyboardMock($input).type('1');
+        instance.close();
+        $input.trigger('focusout');
+
+        assert.equal($(instance.content()).find(toSelector(LIST_ITEM_CLASS)).length, 1, 'filter is not clear');
+    });
+
     QUnit.testInActiveWindow('Unfiltered editor should not be load data on blur (T873258)', function(assert) {
         const loadStub = sinon.stub().returns([1, 2, 3]);
         const $selectBox = $('#selectBox').dxSelectBox({

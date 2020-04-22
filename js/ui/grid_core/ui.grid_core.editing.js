@@ -1842,7 +1842,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     });
                 }).fail(createFailureHandler(deferred)).fail((arg) => that._fireDataErrorOccurred(arg));
 
-                if(typeUtils.isString(text) && options.column.displayValueMap) {
+                if(typeUtils.isDefined(text) && options.column.displayValueMap) {
                     options.column.displayValueMap[value] = text;
                 }
                 if(options.values) {
@@ -1909,7 +1909,8 @@ const EditingController = modules.ViewController.inherit((function() {
 
             if(showEditorAlways && !forceUpdateRow) {
                 if(isUpdateInCellMode) {
-                    that._editRowIndex = options.rowIndex + that._dataController.getRowIndexOffset();
+                    that._editRowIndex = options.row.rowIndex + that._dataController.getRowIndexOffset();
+
                     that._editColumnIndex = options.columnIndex;
                     return that.saveEditData();
                 } else if(editMode === EDIT_MODE_BATCH) {
@@ -2379,7 +2380,7 @@ const EditingController = modules.ViewController.inherit((function() {
         isCellModified: function(parameters) {
             const columnIndex = parameters.columnIndex;
             const modifiedValues = parameters.row && (parameters.row.isNewRow ? parameters.row.values : parameters.row.modifiedValues);
-            return modifiedValues && modifiedValues[columnIndex] !== undefined;
+            return !!modifiedValues && modifiedValues[columnIndex] !== undefined;
         }
     };
 })());

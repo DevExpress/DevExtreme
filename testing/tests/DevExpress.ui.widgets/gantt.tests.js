@@ -294,15 +294,14 @@ QUnit.module('Options', moduleConfig, () => {
         this.clock.tick();
         let coreEditingSettings = getGanttViewCore(this.instance).settings.editing;
         assert.equal(coreEditingSettings.enabled, false, 'editing is prohibited by default');
-        assert.equal(coreEditingSettings.allowTaskAdding, true, 'task adding allowed by default');
-        assert.equal(coreEditingSettings.allowTaskDeleting, true, 'task deleting allowed by default');
-        assert.equal(coreEditingSettings.allowTaskUpdating, true, 'task updating allowed by default');
-        assert.equal(coreEditingSettings.allowDependencyAdding, true, 'dependency adding allowed by default');
-        assert.equal(coreEditingSettings.allowDependencyDeleting, true, 'dependency deleting allowed by default');
-        assert.equal(coreEditingSettings.allowDependencyUpdating, true, 'dependency updating allowed by default');
-        assert.equal(coreEditingSettings.allowResourceAdding, true, 'resource adding allowed by default');
-        assert.equal(coreEditingSettings.allowResourceDeleting, true, 'resource deleting allowed by default');
-        assert.equal(coreEditingSettings.allowResourceUpdating, true, 'resource updating allowed by default');
+        assert.equal(coreEditingSettings.allowTaskInsert, true, 'task adding allowed by default');
+        assert.equal(coreEditingSettings.allowTaskDelete, true, 'task deleting allowed by default');
+        assert.equal(coreEditingSettings.allowTaskUpdate, true, 'task updating allowed by default');
+        assert.equal(coreEditingSettings.allowDependencyInsert, true, 'dependency adding allowed by default');
+        assert.equal(coreEditingSettings.allowDependencyDelete, true, 'dependency deleting allowed by default');
+        assert.equal(coreEditingSettings.allowResourceInsert, true, 'resource adding allowed by default');
+        assert.equal(coreEditingSettings.allowResourceDelete, true, 'resource deleting allowed by default');
+        assert.equal(coreEditingSettings.allowResourceUpdate, true, 'resource updating allowed by default');
         this.instance.option('editing', {
             enabled: true,
             allowTaskAdding: false,
@@ -310,22 +309,20 @@ QUnit.module('Options', moduleConfig, () => {
             allowTaskUpdating: false,
             allowDependencyAdding: false,
             allowDependencyDeleting: false,
-            allowDependencyUpdating: false,
             allowResourceAdding: false,
             allowResourceDeleting: false,
             allowResourceUpdating: false,
         });
         coreEditingSettings = getGanttViewCore(this.instance).settings.editing;
         assert.equal(coreEditingSettings.enabled, true, 'editing allowed');
-        assert.equal(coreEditingSettings.allowTaskAdding, false, 'task adding is prohibited');
-        assert.equal(coreEditingSettings.allowTaskDeleting, false, 'task deleting is prohibited');
-        assert.equal(coreEditingSettings.allowTaskUpdating, false, 'task updating is prohibited');
-        assert.equal(coreEditingSettings.allowDependencyAdding, false, 'dependency adding is prohibited');
-        assert.equal(coreEditingSettings.allowDependencyDeleting, false, 'dependency deleting is prohibited');
-        assert.equal(coreEditingSettings.allowDependencyUpdating, false, 'dependency updating is prohibited');
-        assert.equal(coreEditingSettings.allowResourceAdding, false, 'resource adding is prohibited');
-        assert.equal(coreEditingSettings.allowResourceDeleting, false, 'resource deleting is prohibited');
-        assert.equal(coreEditingSettings.allowResourceUpdating, false, 'resource updating is prohibited');
+        assert.equal(coreEditingSettings.allowTaskInsert, false, 'task adding is prohibited');
+        assert.equal(coreEditingSettings.allowTaskDelete, false, 'task deleting is prohibited');
+        assert.equal(coreEditingSettings.allowTaskUpdate, false, 'task updating is prohibited');
+        assert.equal(coreEditingSettings.allowDependencyInsert, false, 'dependency adding is prohibited');
+        assert.equal(coreEditingSettings.allowDependencyDelete, false, 'dependency deleting is prohibited');
+        assert.equal(coreEditingSettings.allowResourceInsert, false, 'resource adding is prohibited');
+        assert.equal(coreEditingSettings.allowResourceDelete, false, 'resource deleting is prohibited');
+        assert.equal(coreEditingSettings.allowResourceUpdate, false, 'resource updating is prohibited');
         this.instance.option('editing.enabled', false);
         coreEditingSettings = getGanttViewCore(this.instance).settings.editing;
         assert.equal(coreEditingSettings.enabled, false, 'editing is prohibited');
@@ -588,7 +585,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.equal($items.length, items.length, 'All items were rendered');
         assert.equal($items.find(TOOLBAR_SEPARATOR_SELECTOR).length, 2, 'Both separators were rendered');
         assert.equal($items.last().text(), 'Custom item', 'Custom item has custom text');
-        assert.equal($items.first().children().children().attr('aria-label'), 'undo', 'First button is undo button');
+        assert.equal($items.first().children().children().attr('aria-label'), 'dx-gantt-i dx-gantt-i-undo', 'First button is undo button');
     });
     test('changing', function(assert) {
         const items = [
@@ -619,7 +616,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
             'redo',
             'separator',
             {
-                formatName: 'zoomIn',
+                name: 'zoomIn',
                 options: {
                     text: 'test'
                 }

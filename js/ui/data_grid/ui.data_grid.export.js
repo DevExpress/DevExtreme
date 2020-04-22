@@ -674,18 +674,21 @@ dataGridCore.registerModule('export', {
                  * @name dxDataGridOptions.export.fileName
                  * @type string
                  * @default "DataGrid"
+                 * @deprecated
                  */
                 fileName: 'DataGrid',
                 /**
                  * @name dxDataGridOptions.export.excelFilterEnabled
                  * @type boolean
                  * @default false
+                 * @deprecated
                  */
                 excelFilterEnabled: false,
                 /**
                  * @name dxDataGridOptions.export.excelWrapTextEnabled
                  * @type boolean
                  * @default undefined
+                 * @deprecated
                  */
                 excelWrapTextEnabled: undefined,
                 /**
@@ -705,6 +708,7 @@ dataGridCore.registerModule('export', {
                 * @name dxDataGridOptions.export.ignoreExcelErrors
                 * @type boolean
                 * @default true
+                * @deprecated
                 */
                 ignoreExcelErrors: true,
                 /**
@@ -733,6 +737,7 @@ dataGridCore.registerModule('export', {
                 }
                 /**
                  * @name dxDataGridOptions.export.customizeExcelCell
+                 * @deprecated
                  * @type function(options)
                  * @type_function_param1 options:object
                  * @type_function_param1_field1 component:dxDataGrid

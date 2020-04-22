@@ -92,11 +92,11 @@ function filterBreaks(breaks, viewport, breakStyle) {
                 newBreak = {
                     from: from,
                     to: to,
-                    cumulativeWidth: (lastResult ? lastResult.cumulativeWidth : 0) + breakSize
+                    cumulativeWidth: (lastResult?.cumulativeWidth ?? 0) + breakSize
                 };
                 if(currentBreak.gapSize) {
                     newBreak.gapSize = dateUtils.convertMillisecondsToDateUnits(to - from);
-                    newBreak.cumulativeWidth = lastResult ? lastResult.cumulativeWidth : 0;
+                    newBreak.cumulativeWidth = lastResult?.cumulativeWidth ?? 0;
                 }
                 result.push(newBreak);
             }
@@ -445,7 +445,6 @@ module.exports = {
             const markerOptions = that._options.marker;
             const invert = that._translator.getBusinessRange().invert;
             const textIndent = markerOptions.width + markerOptions.textLeftIndent;
-            let text;
             let pathElement;
 
             if(options.x === null) return;
@@ -456,7 +455,7 @@ module.exports = {
                     .append(that._axisElementsGroup);
             }
 
-            text = String(that.formatLabel(date, options.labelOptions, range));
+            const text = String(that.formatLabel(date, options.labelOptions, range));
 
             return {
                 date: date,
@@ -496,11 +495,7 @@ module.exports = {
             const translator = that._translator;
             const viewport = that._getViewportRange();
             const minBound = viewport.minVisible;
-            let tickInterval;
-            let markerInterval;
-            let markerDates;
             let dateMarkers = [];
-            let markersAreaTop;
             let dateMarker;
 
             function draw(markerDate, format, withoutStick) {
@@ -516,11 +511,11 @@ module.exports = {
                 return [];
             }
 
-            markersAreaTop = that._axisPosition + options.marker.topIndent;
-            tickInterval = dateUtils.getDateUnitInterval(this._tickInterval);
-            markerInterval = getMarkerInterval(tickInterval);
+            const markersAreaTop = that._axisPosition + options.marker.topIndent;
+            const tickInterval = dateUtils.getDateUnitInterval(this._tickInterval);
+            const markerInterval = getMarkerInterval(tickInterval);
 
-            markerDates = getMarkerDates(minBound, viewport.maxVisible, markerInterval);
+            const markerDates = getMarkerDates(minBound, viewport.maxVisible, markerInterval);
 
             if(markerDates.length > 1
                 || (markerDates.length === 1 && minBound < markerDates[0])) {
@@ -1172,8 +1167,6 @@ module.exports = {
             let additionGroup;
             let additionBreakFrom;
             let additionBreakTo;
-            let mainGroup;
-            let breakOptions;
 
             that._disposeBreaksGroup();
 
@@ -1181,7 +1174,7 @@ module.exports = {
                 return;
             }
 
-            breakOptions = {
+            const breakOptions = {
                 color: that._options.containerColor,
                 borderColor: breakStyle.color,
                 isHorizontal: that._isHorizontal,
@@ -1196,7 +1189,7 @@ module.exports = {
                 positionTo = that._orthogonalPositions.end + (options.visible && (position === RIGHT || position === BOTTOM) ? SCALE_BREAK_OFFSET : 0);
             }
 
-            mainGroup = that._createBreaksGroup(positionFrom, positionTo);
+            const mainGroup = that._createBreaksGroup(positionFrom, positionTo);
 
             if(that._axisShift && options.visible) {
                 additionBreakFrom = that._axisPosition - that._axisShift - SCALE_BREAK_OFFSET;
@@ -1329,7 +1322,7 @@ module.exports = {
         },
 
         getPredefinedPosition(position) {
-            return this._orthogonalPositions ? this._orthogonalPositions[position === TOP || position === LEFT ? 'start' : 'end'] : undefined;
+            return this._orthogonalPositions?.[position === TOP || position === LEFT ? 'start' : 'end'];
         }
     }
 };

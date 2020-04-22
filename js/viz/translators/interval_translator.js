@@ -18,7 +18,7 @@ module.exports = {
             } else {
                 value = new Date(value.getTime());
             }
-            value = dateUtils.correctDateWithUnitBeginning(value, interval);
+            value = dateUtils.correctDateWithUnitBeginning(value, interval, null, this._options.firstDayOfWeek);
         } else {
             value = adjust(floor(adjust(value / interval)) * interval, interval);
         }

@@ -49,14 +49,14 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    editing?: { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowDependencyUpdating?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskUpdating?: boolean, enabled?: boolean };
+    editing?: { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskUpdating?: boolean, enabled?: boolean };
     /**
      * @docid dxGanttOptions.validation
      * @type Object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    validation?: { enableDependencyValidation?: boolean, autoUpdateParentTasks?: boolean };
+    validation?: { validateDependencies?: boolean, autoUpdateParentTasks?: boolean };
     /**
      * @docid dxGanttOptions.onSelectionChanged
      * @extends Action
@@ -177,17 +177,17 @@ export interface dxGanttToolbar {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'zoomIn' | 'zoomOut'>;
+    items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut'>;
 }
 
 export interface dxGanttToolbarItem extends dxToolbarItem {
     /**
-     * @docid dxGanttToolbarItem.formatName
+     * @docid dxGanttToolbarItem.name
      * @type Enums.GanttToolbarItem|string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    formatName?: 'separator' | 'undo' | 'redo' | 'zoomIn' | 'zoomOut' | string;
+    name?: 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | string;
     /**
      * @docid dxGanttToolbarItem.location
      * @default "before"

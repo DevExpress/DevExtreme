@@ -1,19 +1,19 @@
-const commonUtils = require('../../core/utils/common');
-const noop = commonUtils.noop;
-const eventsEngine = require('../../events/core/events_engine');
-const typeUtils = require('../../core/utils/type');
-const iteratorModule = require('../../core/utils/iterator');
-const extend = require('../../core/utils/extend').extend;
-const inArray = require('../../core/utils/array').inArray;
-const eventUtils = require('../../events/utils');
-const BaseWidget = require('../core/base_widget');
-const coreDataUtils = require('../../core/utils/data');
-const legendModule = require('../components/legend');
-const dataValidatorModule = require('../components/data_validator');
-const seriesModule = require('../series/base_series');
-const chartThemeManagerModule = require('../components/chart_theme_manager');
-const LayoutManagerModule = require('./layout_manager');
-const trackerModule = require('./tracker');
+import { noop, grep } from '../../core/utils/common';
+import eventsEngine from '../../events/core/events_engine';
+import { isDefined as _isDefined, isFunction } from '../../core/utils/type';
+import { each as _each, reverseEach as _reverseEach } from '../../core/utils/iterator';
+import { extend } from '../../core/utils/extend';
+import { inArray } from '../../core/utils/array';
+import { isTouchEvent, isPointerEvent } from '../../events/utils';
+import BaseWidget from '../core/base_widget';
+import legendModule from '../components/legend';
+import dataValidatorModule from '../components/data_validator';
+import seriesModule from '../series/base_series';
+import chartThemeManagerModule from '../components/chart_theme_manager';
+import LayoutManagerModule from './layout_manager';
+import trackerModule from './tracker';
+import { map as _map, setCanvasValues as _setCanvasValues, processSeriesTemplate } from '../core/utils';
+const _isArray = Array.isArray;
 
 const REINIT_REFRESH_ACTION = '_reinit';
 const REINIT_DATA_SOURCE_REFRESH_ACTION = '_updateDataSource';
@@ -21,14 +21,6 @@ const DATA_INIT_REFRESH_ACTION = '_dataInit';
 const FORCE_RENDER_REFRESH_ACTION = '_forceRender';
 const RESIZE_REFRESH_ACTION = '_resize';
 const ACTIONS_BY_PRIORITY = [REINIT_REFRESH_ACTION, REINIT_DATA_SOURCE_REFRESH_ACTION, DATA_INIT_REFRESH_ACTION, FORCE_RENDER_REFRESH_ACTION, RESIZE_REFRESH_ACTION];
-
-const vizUtils = require('../core/utils');
-const _map = vizUtils.map;
-const _each = iteratorModule.each;
-const _reverseEach = iteratorModule.reverseEach;
-const _isArray = Array.isArray;
-const _isDefined = typeUtils.isDefined;
-const _setCanvasValues = vizUtils.setCanvasValues;
 const DEFAULT_OPACITY = 0.3;
 
 const REFRESH_SERIES_DATA_INIT_ACTION_OPTIONS = [
@@ -371,7 +363,7 @@ const BaseChart = BaseWidget.inherit({
             ///#DEBUG
             that.eventType = 'contextmenu';
             ///#ENDDEBUG
-            if(eventUtils.isTouchEvent(event) || eventUtils.isPointerEvent(event)) {
+            if(isTouchEvent(event) || isPointerEvent(event)) {
                 event.preventDefault();
             }
         });
@@ -727,7 +719,7 @@ const BaseChart = BaseWidget.inherit({
 
     _renderSeries: function(drawOptions, isRotated, isLegendInside) {
         this._calculateSeriesLayout(drawOptions, isRotated);
-        this._renderSeriesElements(drawOptions, isRotated, isLegendInside);
+        this._renderSeriesElements(drawOptions, isLegendInside);
     },
 
     _calculateSeriesLayout: function(drawOptions, isRotated) {
@@ -758,7 +750,7 @@ const BaseChart = BaseWidget.inherit({
         });
     },
 
-    _renderSeriesElements: function(drawOptions, isRotated, isLegendInside) {
+    _renderSeriesElements: function(drawOptions, isLegendInside) {
         const that = this;
         let i;
         const series = that.series;
@@ -818,11 +810,11 @@ const BaseChart = BaseWidget.inherit({
                 func = this._resolveLabelOverlappingShift;
                 break;
         }
-        return typeUtils.isFunction(func) && func.call(this);
+        return isFunction(func) && func.call(this);
     },
 
     _getVisibleSeries: function() {
-        return commonUtils.grep(this.getAllSeries(), function(series) { return series.isVisible(); });
+        return grep(this.getAllSeries(), function(series) { return series.isVisible(); });
     },
 
     _resolveLabelOverlappingHide: function() {
@@ -989,7 +981,7 @@ const BaseChart = BaseWidget.inherit({
                 that.series.length = 0;
             }
         }
-        if(!that.series || !that.series.length) {
+        if(!that.series?.length) {
             that.series = [];
         }
     },
@@ -999,19 +991,6 @@ const BaseChart = BaseWidget.inherit({
         _each(that.seriesFamilies || [], function(_, family) { family.dispose(); });
         that.seriesFamilies = null;
         that._needHandleRenderComplete = true;
-    },
-
-    _simulateOptionChange(fullName, value, previousValue) {
-        const that = this;
-        const optionSetter = coreDataUtils.compileSetter(fullName);
-
-        optionSetter(that._options.silent(), value, {
-            functionsAsIs: true,
-            merge: !that._getOptionsByReference()[fullName]
-        });
-
-        that._notifyOptionChanged(fullName, value, previousValue);
-        that._changes.reset();
     },
 
     _optionChanged: function(arg) {
@@ -1252,7 +1231,7 @@ const BaseChart = BaseWidget.inherit({
         const that = this;
         const themeManager = that._themeManager;
         const seriesTemplate = themeManager.getOptions('seriesTemplate');
-        const seriesOptions = seriesTemplate ? vizUtils.processSeriesTemplate(seriesTemplate, data || []) : that.option('series');
+        const seriesOptions = seriesTemplate ? processSeriesTemplate(seriesTemplate, data || []) : that.option('series');
         const allSeriesOptions = (_isArray(seriesOptions) ? seriesOptions : (seriesOptions ? [seriesOptions] : []));
         const extraOptions = that._getExtraOptions();
         let particularSeriesOptions;

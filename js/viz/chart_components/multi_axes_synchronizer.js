@@ -59,7 +59,6 @@ function convertAxisInfo(axisInfo, converter) {
     const tickValues = axisInfo.tickValues;
     let tick;
     const ticks = [];
-    let interval;
 
     axisInfo.minValue = converter.transform(axisInfo.minValue, base);
     axisInfo.oldMinValue = converter.transform(axisInfo.oldMinValue, base);
@@ -71,7 +70,7 @@ function convertAxisInfo(axisInfo, converter) {
         axisInfo.tickInterval = 1;
     }
 
-    interval = converter.getInterval(base, axisInfo.tickInterval);
+    const interval = converter.getInterval(base, axisInfo.tickInterval);
     tick = converter.transform(tickValues[0], base);
     while(ticks.length < tickValues.length) {
         ticks.push(tick);

@@ -32,67 +32,66 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler"></div>');
 });
 
-(function() {
-    QUnit.module('Initialization', {
-        beforeEach: function() {
-            this.clock = sinon.useFakeTimers();
-            sinon.spy(errors, 'log');
+QUnit.module('Initialization', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        sinon.spy(errors, 'log');
 
-            this.instance = $('#scheduler').dxScheduler().dxScheduler('instance');
+        this.createInstance = function(options) {
+            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
             this.scheduler = new SchedulerTestWrapper(this.instance);
+        };
 
-            this.checkDateTime = function(assert, actualDate, expectedDate, messagePrefix) {
-                assert.equal(actualDate.getHours(), expectedDate.getHours(), messagePrefix + 'Hours\'re OK');
-                assert.equal(actualDate.getMinutes(), expectedDate.getMinutes(), messagePrefix + 'Minutes\'re OK');
-                assert.equal(actualDate.getSeconds(), expectedDate.getSeconds(), messagePrefix + 'Seconds\'re OK');
-                assert.equal(actualDate.getMilliseconds(), expectedDate.getMilliseconds(), messagePrefix + 'Milliseconds\'re OK');
-            };
-            fx.off = true;
-            this.tasks = [
-                {
-                    text: 'Task 1',
-                    startDate: new Date(2015, 1, 9, 1, 0),
-                    endDate: new Date(2015, 1, 9, 2, 0)
-                },
-                {
-                    text: 'Task 2',
-                    startDate: new Date(2015, 1, 9, 11, 0),
-                    endDate: new Date(2015, 1, 9, 12, 0)
-                }
-            ];
-        },
-        afterEach: function() {
-            errors.log.restore();
-            this.clock.restore();
-            fx.off = false;
-        }
-    });
-
+        this.checkDateTime = function(assert, actualDate, expectedDate, messagePrefix) {
+            assert.equal(actualDate.getHours(), expectedDate.getHours(), messagePrefix + 'Hours\'re OK');
+            assert.equal(actualDate.getMinutes(), expectedDate.getMinutes(), messagePrefix + 'Minutes\'re OK');
+            assert.equal(actualDate.getSeconds(), expectedDate.getSeconds(), messagePrefix + 'Seconds\'re OK');
+            assert.equal(actualDate.getMilliseconds(), expectedDate.getMilliseconds(), messagePrefix + 'Milliseconds\'re OK');
+        };
+        fx.off = true;
+        this.tasks = [
+            {
+                text: 'Task 1',
+                startDate: new Date(2015, 1, 9, 1, 0),
+                endDate: new Date(2015, 1, 9, 2, 0)
+            },
+            {
+                text: 'Task 2',
+                startDate: new Date(2015, 1, 9, 11, 0),
+                endDate: new Date(2015, 1, 9, 12, 0)
+            }
+        ];
+    },
+    afterEach: function() {
+        errors.log.restore();
+        this.clock.restore();
+        fx.off = false;
+    }
+}, () => {
     QUnit.test('Scheduler should have task model instance', function(assert) {
         const data = new DataSource({
             store: this.tasks
         });
-
-        this.instance.option({ dataSource: data });
+        this.createInstance({ dataSource: data });
 
         assert.ok(this.instance._appointmentModel instanceof dxSchedulerAppointmentModel, 'Task model is initialized on scheduler init');
         assert.ok(this.instance._appointmentModel._dataSource instanceof DataSource, 'Task model has data source instance');
     });
 
     QUnit.test('Scheduler should work correctly when wrong timeZone was set', function(assert) {
-        this.instance.option({ timeZone: 'Wrong/timeZone' });
-
+        this.createInstance({ timeZone: 'Wrong/timeZone' });
         assert.ok(true, 'Widget works correctly');
     });
 
     QUnit.test('Scheduler shouldn\'t have paginate in default DataSource', function(assert) {
-        this.instance.option({ dataSource: this.tasks });
+        this.createInstance({ dataSource: this.tasks });
 
         assert.notOk(this.instance._appointmentModel._dataSource.paginate(), 'Paginate is false');
     });
 
     QUnit.test('Rendering inside invisible element', function(assert) {
         try {
+            this.createInstance();
             domUtils.triggerHidingEvent($('#scheduler'));
             $('#scheduler').hide();
             this.instance.option({
@@ -113,6 +112,7 @@ QUnit.testStart(function() {
     });
 
     QUnit.test('Data expressions should be compiled on init', function(assert) {
+        this.createInstance();
         const dataAccessors = this.instance._dataAccessors;
 
         $.each([
@@ -130,147 +130,8 @@ QUnit.testStart(function() {
         });
     });
 
-    QUnit.test('Data expressions should be recompiled on optionChanged', function(assert) {
-        const repaintStub = sinon.stub(this.instance, 'repaint');
-
-        try {
-            this.instance.option({
-                'startDateExpr': '_startDate',
-                'endDateExpr': '_endDate',
-                'startDateTimeZoneExpr': '_startDateTimeZone',
-                'endDateTimeZoneExpr': '_endDateTimeZone',
-                'textExpr': '_text',
-                'descriptionExpr': '_description',
-                'allDayExpr': '_allDay',
-                'recurrenceRuleExpr': '_recurrenceRule',
-                'recurrenceExceptionExpr': '_recurrenceException'
-            });
-
-            const data = {
-                startDate: new Date(2017, 2, 22),
-                endDate: new Date(2017, 2, 23),
-                startDateTimeZone: 'America/Los_Angeles',
-                endDateTimeZone: 'America/Los_Angeles',
-                text: 'a',
-                description: 'b',
-                allDay: true,
-                recurrenceRule: 'abc',
-                recurrenceException: 'def'
-            };
-            const appointment = {
-                _startDate: data.startDate,
-                _endDate: data.endDate,
-                _startDateTimeZone: data.startDateTimeZone,
-                _endDateTimeZone: data.endDateTimeZone,
-                _text: data.text,
-                _description: data.description,
-                _allDay: data.allDay,
-                _recurrenceRule: data.recurrenceRule,
-                _recurrenceException: data.recurrenceException
-            };
-
-            const dataAccessors = this.instance._dataAccessors;
-
-            $.each(dataAccessors.getter, function(name, getter) {
-                assert.equal(dataAccessors.getter[name](appointment), data[name], 'getter for ' + name + ' is OK');
-            });
-
-            $.each(dataAccessors.setter, function(name, getter) {
-                dataAccessors.setter[name](appointment, 'xyz');
-                assert.equal(appointment['_' + name], 'xyz', 'setter for ' + name + ' is OK');
-            });
-        } finally {
-            repaintStub.restore();
-        }
-    });
-
-    QUnit.test('Data expressions should be recompiled on optionChanged and passed to appointmentModel', function(assert) {
-        const repaintStub = sinon.stub(this.instance, 'repaint');
-
-        try {
-            const appointmentModel = this.instance.getAppointmentModel();
-
-            this.instance.option({
-                'startDateExpr': '_startDate',
-                'endDateExpr': '_endDate',
-                'startDateTimeZoneExpr': '_startDateTimeZone',
-                'endDateTimeZoneExpr': '_endDateTimeZone',
-                'textExpr': '_text',
-                'descriptionExpr': '_description',
-                'allDayExpr': '_allDay',
-                'recurrenceRuleExpr': '_recurrenceRule',
-                'recurrenceExceptionExpr': '_recurrenceException'
-            });
-
-            const dataAccessors = this.instance._dataAccessors;
-
-            assert.deepEqual($.extend({ resources: {} }, dataAccessors.getter), appointmentModel._dataAccessors.getter, 'dataAccessors getters were passed to appointmentModel');
-            assert.deepEqual($.extend({ resources: {} }, dataAccessors.setter), appointmentModel._dataAccessors.setter, 'dataAccessors setters were passed to appointmentModel');
-            assert.deepEqual(dataAccessors.expr, appointmentModel._dataAccessors.expr, 'dataExpressions were passed to appointmentModel');
-        } finally {
-            repaintStub.restore();
-        }
-    });
-
-    QUnit.test('Appointment should be rendered correctly after expression changing', function(assert) {
-        this.instance.option({
-            dataSource: [{
-                text: 'a',
-                StartDate: new Date(2015, 6, 8, 8, 0),
-                endDate: new Date(2015, 6, 8, 17, 0),
-                allDay: true
-            }],
-            currentDate: new Date(2015, 6, 8)
-        });
-
-        this.instance.option('startDateExpr', 'StartDate');
-        this.clock.tick();
-        assert.equal(this.instance.$element().find('.dx-scheduler-appointment').length, 1, 'Appointment is rendered');
-    });
-
-    QUnit.test('Sheduler should be repainted after data expression option changing', function(assert) {
-        const repaintStub = sinon.stub(this.instance, 'repaint');
-
-        try {
-            this.instance.option({
-                'startDateExpr': '_startDate',
-                'endDateExpr': '_endDate',
-                'startDateTimeZoneExpr': '_startDateTimeZone',
-                'endDateTimeZoneExpr': '_endDateTimeZone',
-                'textExpr': '_text',
-                'descriptionExpr': '_description',
-                'allDayExpr': '_allDay',
-                'recurrenceRuleExpr': '_recurrenceRule',
-                'recurrenceExceptionExpr': '_recurrenceException'
-            });
-
-            assert.equal(repaintStub.callCount, 9, 'Scheduler was repainted');
-        } finally {
-            repaintStub.restore();
-        }
-    });
-
-    QUnit.test('Sheduler should have correct default template after data expression option changing', function(assert) {
-        this.instance.option({
-            dataSource: [{
-                text: 'a',
-                TEXT: 'New Text',
-                startDate: new Date(2015, 6, 8, 8, 0),
-                endDate: new Date(2015, 6, 8, 17, 0),
-                allDay: true
-            }],
-            currentDate: new Date(2015, 6, 8)
-        });
-
-        this.instance.option({
-            textExpr: 'TEXT'
-        });
-
-        assert.equal(this.instance.$element().find('.dx-scheduler-appointment-title').eq(0).text(), 'New Text', 'Appointment template is correct');
-    });
-
     QUnit.test('RecurrenceRule expression should not be compiled, if recurrenceRuleExpr = null', function(assert) {
-        this.instance.option({
+        this.createInstance({
             'startDateExpr': '_startDate',
             'endDateExpr': '_endDate',
             'textExpr': '_text',
@@ -286,7 +147,7 @@ QUnit.testStart(function() {
     });
 
     QUnit.test('appointmentCollectorTemplate rendering args should be correct', function(assert) {
-        this.instance.option({
+        this.createInstance({
             dataSource: [{
                 startDate: new Date(2015, 4, 24, 9, 10),
                 endDate: new Date(2015, 4, 24, 11, 1),
@@ -318,7 +179,7 @@ QUnit.testStart(function() {
         QUnit.test(`Generate error if startDayHour: ${dayHours.startDayHour} >= endDayHour: ${dayHours.endDayHour}`, function(assert) {
             assert.throws(
                 () => {
-                    this.instance.option({
+                    this.createInstance({
                         currentDate: new Date(2015, 4, 24),
                         views: ['day'],
                         currentView: 'day',
@@ -329,6 +190,7 @@ QUnit.testStart(function() {
                 e => /E1058/.test(e.message),
                 'E1058 Error message'
             );
+            this.clock.tick(1000);
         });
     });
 
@@ -337,7 +199,7 @@ QUnit.testStart(function() {
         { startDayHour: 8, endDayHour: 24, cellDuration: 90 }
     ].forEach(config => {
         QUnit.test(`Generate warning if cellDuration: ${config.cellDuration} could not divide the range from startDayHour: ${config.startDayHour} to the endDayHour: ${config.endDayHour} into even intervals`, function(assert) {
-            this.instance.option({
+            this.createInstance({
                 currentDate: new Date(2015, 4, 24),
                 views: ['day'],
                 currentView: 'day',
@@ -345,7 +207,6 @@ QUnit.testStart(function() {
                 endDayHour: config.endDayHour,
                 cellDuration: config.cellDuration
             });
-
 
             assert.equal(errors.log.callCount, 1, 'warning has been called once');
             assert.equal(errors.log.getCall(0).args[0], 'W1015', 'warning has correct error id');
@@ -357,7 +218,7 @@ QUnit.testStart(function() {
         { startDayHour: 8, endDayHour: 24, cellDuration: 10 }
     ].forEach(config => {
         QUnit.test(`Warning should not be generated if cellDuration: ${config.cellDuration} could divide the range from startDayHour: ${config.startDayHour} to the endDayHour: ${config.endDayHour} into even intervals`, function(assert) {
-            this.instance.option({
+            this.createInstance({
                 currentDate: new Date(2015, 4, 24),
                 views: ['day'],
                 currentView: 'day',
@@ -366,11 +227,10 @@ QUnit.testStart(function() {
                 cellDuration: config.cellDuration
             });
 
-
             assert.equal(errors.log.callCount, 0, 'there are not any warnings');
         });
     });
-})('Initialization');
+});
 
 (function() {
 
@@ -385,6 +245,7 @@ QUnit.testStart(function() {
                 this.instance = $('#scheduler').dxScheduler($.extend({
                     showCurrentTimeIndicator: false
                 }, options)).dxScheduler('instance');
+                this.scheduler = new SchedulerTestWrapper(this.instance);
             };
 
             this.clock = sinon.useFakeTimers();
@@ -1039,7 +900,7 @@ QUnit.testStart(function() {
 
     QUnit.test('Scheduler getWorkSpaceDateTableOffset should return right dateTable offset, crossScrollingEnabled=true, rtl mode', function(assert) {
         this.createInstance({
-            dataSource: 'day',
+            currentView: 'day',
             currentDate: new Date(2015, 10, 3),
             crossScrollingEnabled: true,
             rtlEnabled: true
@@ -1049,6 +910,19 @@ QUnit.testStart(function() {
         const offset = this.instance.getWorkSpaceDateTableOffset();
 
         assert.equal(offset, timePanelWidth, 'Date Table offset is correct');
+    });
+
+    QUnit.test('Scheduler dateTable should have right position, crossScrollingEnabled=true, rtl mode', function(assert) {
+        this.createInstance({
+            currentView: 'day',
+            currentDate: new Date(2015, 10, 3),
+            crossScrollingEnabled: true,
+            rtlEnabled: true
+        });
+
+        const dateTable = this.scheduler.workSpace.getDateTable();
+
+        assert.equal(dateTable.position().left, 0, 'Date Table left is correct');
     });
 
     QUnit.test('Timezone offset calculation(T388304)', function(assert) {
@@ -1404,6 +1278,148 @@ QUnit.testStart(function() {
             this.clock.restore();
             errors.log.restore();
         }
+    });
+
+    QUnit.test('Data expressions should be recompiled on optionChanged', function(assert) {
+        this.createInstance();
+        const repaintStub = sinon.stub(this.instance, 'repaint');
+
+        try {
+            this.instance.option({
+                'startDateExpr': '_startDate',
+                'endDateExpr': '_endDate',
+                'startDateTimeZoneExpr': '_startDateTimeZone',
+                'endDateTimeZoneExpr': '_endDateTimeZone',
+                'textExpr': '_text',
+                'descriptionExpr': '_description',
+                'allDayExpr': '_allDay',
+                'recurrenceRuleExpr': '_recurrenceRule',
+                'recurrenceExceptionExpr': '_recurrenceException'
+            });
+
+            const data = {
+                startDate: new Date(2017, 2, 22),
+                endDate: new Date(2017, 2, 23),
+                startDateTimeZone: 'America/Los_Angeles',
+                endDateTimeZone: 'America/Los_Angeles',
+                text: 'a',
+                description: 'b',
+                allDay: true,
+                recurrenceRule: 'abc',
+                recurrenceException: 'def'
+            };
+            const appointment = {
+                _startDate: data.startDate,
+                _endDate: data.endDate,
+                _startDateTimeZone: data.startDateTimeZone,
+                _endDateTimeZone: data.endDateTimeZone,
+                _text: data.text,
+                _description: data.description,
+                _allDay: data.allDay,
+                _recurrenceRule: data.recurrenceRule,
+                _recurrenceException: data.recurrenceException
+            };
+
+            const dataAccessors = this.instance._dataAccessors;
+
+            $.each(dataAccessors.getter, function(name, getter) {
+                assert.equal(dataAccessors.getter[name](appointment), data[name], 'getter for ' + name + ' is OK');
+            });
+
+            $.each(dataAccessors.setter, function(name, getter) {
+                dataAccessors.setter[name](appointment, 'xyz');
+                assert.equal(appointment['_' + name], 'xyz', 'setter for ' + name + ' is OK');
+            });
+        } finally {
+            repaintStub.restore();
+        }
+    });
+
+    QUnit.test('Data expressions should be recompiled on optionChanged and passed to appointmentModel', function(assert) {
+        this.createInstance();
+        const repaintStub = sinon.stub(this.instance, 'repaint');
+
+        try {
+            const appointmentModel = this.instance.getAppointmentModel();
+
+            this.instance.option({
+                'startDateExpr': '_startDate',
+                'endDateExpr': '_endDate',
+                'startDateTimeZoneExpr': '_startDateTimeZone',
+                'endDateTimeZoneExpr': '_endDateTimeZone',
+                'textExpr': '_text',
+                'descriptionExpr': '_description',
+                'allDayExpr': '_allDay',
+                'recurrenceRuleExpr': '_recurrenceRule',
+                'recurrenceExceptionExpr': '_recurrenceException'
+            });
+
+            const dataAccessors = this.instance._dataAccessors;
+
+            assert.deepEqual($.extend({ resources: {} }, dataAccessors.getter), appointmentModel._dataAccessors.getter, 'dataAccessors getters were passed to appointmentModel');
+            assert.deepEqual($.extend({ resources: {} }, dataAccessors.setter), appointmentModel._dataAccessors.setter, 'dataAccessors setters were passed to appointmentModel');
+            assert.deepEqual(dataAccessors.expr, appointmentModel._dataAccessors.expr, 'dataExpressions were passed to appointmentModel');
+        } finally {
+            repaintStub.restore();
+        }
+    });
+
+    QUnit.test('Appointment should be rendered correctly after expression changing', function(assert) {
+        this.createInstance({
+            dataSource: [{
+                text: 'a',
+                StartDate: new Date(2015, 6, 8, 8, 0),
+                endDate: new Date(2015, 6, 8, 17, 0),
+                allDay: true
+            }],
+            currentDate: new Date(2015, 6, 8)
+        });
+
+        this.instance.option('startDateExpr', 'StartDate');
+        this.clock.tick();
+        assert.equal(this.instance.$element().find('.dx-scheduler-appointment').length, 1, 'Appointment is rendered');
+    });
+
+    QUnit.test('Sheduler should be repainted after data expression option changing', function(assert) {
+        this.createInstance();
+        const repaintStub = sinon.stub(this.instance, 'repaint');
+
+        try {
+            this.instance.option({
+                'startDateExpr': '_startDate',
+                'endDateExpr': '_endDate',
+                'startDateTimeZoneExpr': '_startDateTimeZone',
+                'endDateTimeZoneExpr': '_endDateTimeZone',
+                'textExpr': '_text',
+                'descriptionExpr': '_description',
+                'allDayExpr': '_allDay',
+                'recurrenceRuleExpr': '_recurrenceRule',
+                'recurrenceExceptionExpr': '_recurrenceException'
+            });
+
+            assert.equal(repaintStub.callCount, 9, 'Scheduler was repainted');
+        } finally {
+            repaintStub.restore();
+        }
+    });
+
+    QUnit.test('Sheduler should have correct default template after data expression option changing', function(assert) {
+        this.createInstance({
+            dataSource: [{
+                text: 'a',
+                TEXT: 'New Text',
+                startDate: new Date(2015, 6, 8, 8, 0),
+                endDate: new Date(2015, 6, 8, 17, 0),
+                allDay: true
+            }],
+            currentDate: new Date(2015, 6, 8)
+        });
+
+        this.instance.option({
+            textExpr: 'TEXT'
+        });
+
+        assert.equal(this.instance.$element().find('.dx-scheduler-appointment-title').eq(0).text(), 'New Text', 'Appointment template is correct');
     });
 
     QUnit.test('Changing of \'currentView\' option after initializing should work correctly', function(assert) {
@@ -2159,6 +2175,62 @@ QUnit.testStart(function() {
                 () => {
                     this.instance.option('startDayHour', dayHours.startDayHour);
                     this.instance.option('endDayHour', dayHours.endDayHour);
+                },
+                e => /E1058/.test(e.message),
+                'E1058 Error message'
+            );
+        });
+
+        QUnit.test(`Generate error if workSpace option changed to startDayHour: ${dayHours.startDayHour} >= endDayHour: ${dayHours.endDayHour}`, function(assert) {
+            this.createInstance({
+                currentDate: new Date(2015, 4, 24),
+                views: [{
+                    name: 'day',
+                    type: 'day'
+                }],
+                currentView: 'day',
+                startDayHour: 8,
+                endDayHour: 12
+            });
+
+            assert.throws(
+                () => {
+                    const instance = this.instance;
+                    instance.option('views[0].startDayHour', dayHours.startDayHour);
+                    instance.option('views[0].endDayHour', dayHours.endDayHour);
+                },
+                e => /E1058/.test(e.message),
+                'E1058 Error message'
+            );
+        });
+
+        QUnit.test(`Generate error if currentView changed to view.startDayHour: ${dayHours.startDayHour} >= view.endDayHour: ${dayHours.endDayHour}`, function(assert) {
+            this.createInstance({
+                currentDate: new Date(2015, 4, 24),
+                dataSource: [
+                    {
+                        startDate: new Date(2015, 4, 24, 0),
+                        endDate: new Date(2015, 4, 24, 2),
+                        allDay: true
+                    }
+                ],
+                views: [{
+                    name: 'day',
+                    type: 'day'
+                }, {
+                    name: 'week',
+                    type: 'week',
+                    startDayHour: dayHours.startDayHour,
+                    endDayHour: dayHours.endDayHour
+                }],
+                currentView: 'day',
+                startDayHour: 8,
+                endDayHour: 12
+            });
+
+            assert.throws(
+                () => {
+                    this.instance.option('currentView', 'week');
                 },
                 e => /E1058/.test(e.message),
                 'E1058 Error message'

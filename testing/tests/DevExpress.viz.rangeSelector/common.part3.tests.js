@@ -911,6 +911,41 @@ QUnit.test('Calculate tickInterval based on screen delta (datetime. minRange is 
     assert.deepEqual(options.customTicks, [new Date(2015, 0, 15), new Date(2015, 1, 1)]);
 });
 
+QUnit.test('Scale starts from sunday by default (minRange is week)', function(assert) {
+    this.$container.width(1000);
+    this.createWidget({
+        scale: {
+            type: 'semidiscrete',
+            minRange: 'week',
+
+            startValue: new Date(2020, 2, 25),
+            endValue: new Date(2020, 3, 15)
+        }
+    });
+
+    const options = this.axis.updateOptions.lastCall.args[0];
+    assert.strictEqual(options.tickInterval, 'week');
+    assert.deepEqual(options.customTicks, [new Date(2020, 2, 22), new Date(2020, 2, 29), new Date(2020, 3, 5), new Date(2020, 3, 12)]);
+});
+
+QUnit.test('Scale starts from first day of defined scale.workWeek (minRange is week)', function(assert) {
+    this.$container.width(1000);
+    this.createWidget({
+        scale: {
+            type: 'semidiscrete',
+            minRange: 'week',
+            workWeek: [2, 3, 4, 5, 6],
+
+            startValue: new Date(2020, 2, 25),
+            endValue: new Date(2020, 3, 15)
+        }
+    });
+
+    const options = this.axis.updateOptions.lastCall.args[0];
+    assert.strictEqual(options.tickInterval, 'week');
+    assert.deepEqual(options.customTicks, [new Date(2020, 2, 24), new Date(2020, 2, 31), new Date(2020, 3, 7), new Date(2020, 3, 14)]);
+});
+
 QUnit.test('If not set - scale label format depends on tickInterval', function(assert) {
     this.createWidget({
         dataSource: [{ x: new Date(2016, 0, 1) }, { x: new Date(2016, 1, 1) }, { x: new Date(2016, 2, 1) }, { x: new Date(2016, 4, 10) }],

@@ -1,9 +1,9 @@
+import { isString as _isString } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import { patchFontOptions as _patchFontOptions, enumParser } from './utils';
 const _Number = Number;
-const _isString = require('../../core/utils/type').isString;
-const extend = require('../../core/utils/extend').extend;
-const _patchFontOptions = require('./utils').patchFontOptions;
-const parseHorizontalAlignment = require('./utils').enumParser(['left', 'center', 'right']);
-const parseVerticalAlignment = require('./utils').enumParser(['top', 'bottom']);
+const parseHorizontalAlignment = enumParser(['left', 'center', 'right']);
+const parseVerticalAlignment = enumParser(['top', 'bottom']);
 
 const DEFAULT_MARGIN = 10;
 
@@ -97,7 +97,6 @@ extend(Title.prototype, require('./layout_element').LayoutElement.prototype, {
         const subtitleElement = that._subtitleElement;
         const testText = 'A';
         let titleBox;
-        let y;
 
         titleElement.attr({ text: testText, y: 0 }).css(_patchFontOptions(options.font));
         titleBox = titleElement.getBBox(); // for multiline text
@@ -105,7 +104,7 @@ extend(Title.prototype, require('./layout_element').LayoutElement.prototype, {
 
         titleElement.attr({ text: options.text });
         titleBox = titleElement.getBBox();
-        y = -titleBox.y;
+        const y = -titleBox.y;
 
         titleElement.attr({ y: y });
 

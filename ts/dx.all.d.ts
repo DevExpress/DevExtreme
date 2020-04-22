@@ -1718,6 +1718,8 @@ declare module DevExpress.fileManagement {
         size: number;
         /** @name FileSystemItem.thumbnail */
         thumbnail: string;
+        /** @name FileSystemItem.getFileExtension() */
+        getFileExtension(): string;
     }
     /** @name FileSystemProviderBase.Options */
     export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
@@ -1746,7 +1748,7 @@ declare module DevExpress.fileManagement {
         /** @name FileSystemProviderBase.deleteItems() */
         deleteItems(items: Array<FileSystemItem>): Array<Promise<any> | JQueryPromise<any>>;
         /** @name FileSystemProviderBase.downloadItems() */
-        downloadItems(items: Array<FileSystemItem>): any;
+        downloadItems(items: Array<FileSystemItem>): void;
         /** @name FileSystemProviderBase.getItems() */
         getItems(parentDirectory: FileSystemItem): Promise<Array<any>> & JQueryPromise<Array<any>>;
         /** @name FileSystemProviderBase.getItemsContent() */
@@ -2940,6 +2942,7 @@ declare module DevExpress.ui {
         columns?: Array<dxDataGridColumn | string>;
         /** @name dxDataGrid.Options.customizeColumns */
         customizeColumns?: ((columns: Array<dxDataGridColumn>) => any);
+        /** @deprecated */
         /** @name dxDataGrid.Options.customizeExportData */
         customizeExportData?: ((columns: Array<dxDataGridColumn>, rows: Array<dxDataGridRowObject>) => any);
         /** @name dxDataGrid.Options.editing */
@@ -2970,10 +2973,12 @@ declare module DevExpress.ui {
         onEditorPrepared?: ((options: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, editorElement?: DevExpress.core.dxElement, readOnly?: boolean, dataField?: string, row?: dxDataGridRowObject }) => any);
         /** @name dxDataGrid.Options.onEditorPreparing */
         onEditorPreparing?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, cancel?: boolean, editorElement?: DevExpress.core.dxElement, readOnly?: boolean, editorName?: string, editorOptions?: any, dataField?: string, row?: dxDataGridRowObject }) => any);
+        /** @deprecated */
         /** @name dxDataGrid.Options.onExported */
         onExported?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** @name dxDataGrid.Options.onExporting */
         onExporting?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, fileName?: string, cancel?: boolean }) => any);
+        /** @deprecated */
         /** @name dxDataGrid.Options.onFileSaving */
         onFileSaving?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
         /** @name dxDataGrid.Options.onFocusedCellChanged */
@@ -3048,6 +3053,7 @@ declare module DevExpress.ui {
         expandAll(groupIndex?: number): void;
         /** @name dxDataGrid.expandRow(key) */
         expandRow(key: any): Promise<void> & JQueryPromise<void>;
+        /** @deprecated */
         /** @name dxDataGrid.exportToExcel(selectionOnly) */
         exportToExcel(selectionOnly: boolean): void;
         /** @name dxDataGrid.getSelectedRowKeys() */
@@ -3226,6 +3232,8 @@ declare module DevExpress.ui {
         customShapeTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, data: { item?: dxDiagramShape }) => any);
         /** @name dxDiagram.Options.customShapes */
         customShapes?: Array<{ allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageToolboxUrl?: string, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageWidth?: number, baseType?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string, category?: string, connectionPoints?: Array<{ x?: number, y?: number }>, defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: DevExpress.core.template | ((container: DevExpress.core.dxElement, data: { item?: dxDiagramShape }) => any), templateHeight?: number, templateLeft?: number, templateTop?: number, templateWidth?: number, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, type?: string }>;
+        /** @name dxDiagram.Options.defaultItemProperties */
+        defaultItemProperties?: { connectorLineEnd?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle', connectorLineStart?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle', connectorLineType?: 'straight' | 'orthogonal', style?: any, textStyle?: any };
         /** @name dxDiagram.Options.edges */
         edges?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, fromExpr?: string | ((data: any) => any), fromLineEndExpr?: string | ((data: any) => any), fromPointIndexExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), lineTypeExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), pointsExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), toExpr?: string | ((data: any) => any), toLineEndExpr?: string | ((data: any) => any), toPointIndexExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.export */
@@ -3241,7 +3249,7 @@ declare module DevExpress.ui {
         /** @name dxDiagram.Options.mainToolbar */
         mainToolbar?: { commands?: Array<dxDiagramCustomCommand> | Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor'>, visible?: boolean };
         /** @name dxDiagram.Options.nodes */
-        nodes?: { autoLayout?: 'auto' | 'off' | 'tree' | 'layered' | { orientation?: 'auto' | 'vertical' | 'horizontal', type?: 'auto' | 'off' | 'tree' | 'layered' }, childrenExpr?: string | ((data: any) => any), containerKeyExpr?: string | ((data: any) => any), dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, heightExpr?: string | ((data: any) => any), imageUrlExpr?: string | ((data: any) => any), itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), leftExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), topExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any), widthExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
+        nodes?: { autoLayout?: 'auto' | 'off' | 'tree' | 'layered' | { orientation?: 'auto' | 'vertical' | 'horizontal', type?: 'auto' | 'off' | 'tree' | 'layered' }, containerChildrenExpr?: string | ((data: any) => any), containerKeyExpr?: string | ((data: any) => any), dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, heightExpr?: string | ((data: any) => any), imageUrlExpr?: string | ((data: any) => any), itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), leftExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), topExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any), widthExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.onCustomCommand */
         onCustomCommand?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, name?: string }) => any);
         /** @name dxDiagram.Options.onItemClick */
@@ -3364,6 +3372,7 @@ declare module DevExpress.ui {
         revealMode?: 'slide' | 'expand';
         /** @name dxDrawer.Options.shading */
         shading?: boolean;
+        /** @deprecated */
         /** @name dxDrawer.Options.target */
         target?: string | Element | JQuery;
         /** @name dxDrawer.Options.template */
@@ -3608,7 +3617,7 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.currentPathKeys */
         currentPathKeys?: Array<string>;
         /** @name dxFileManager.Options.customizeDetailColumns */
-        customizeDetailColumns?: ((columns: Array<dxDataGridColumn>) => Array<dxDataGridColumn>);
+        customizeDetailColumns?: ((columns: Array<dxFileManagerDetailsColumn>) => Array<dxFileManagerDetailsColumn>);
         /** @name dxFileManager.Options.customizeThumbnail */
         customizeThumbnail?: ((fileSystemItem: DevExpress.fileManagement.FileSystemItem) => string);
         /** @name dxFileManager.Options.fileSystemProvider */
@@ -3675,8 +3684,12 @@ declare module DevExpress.ui {
         alignment?: 'center' | 'left' | 'right' | undefined;
         /** @name dxFileManagerDetailsColumn.caption */
         caption?: string;
+        /** @name dxFileManagerDetailsColumn.cssClass */
+        cssClass?: string;
         /** @name dxFileManagerDetailsColumn.dataField */
         dataField?: string;
+        /** @name dxFileManagerDetailsColumn.dataType */
+        dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
         /** @name dxFileManagerDetailsColumn.hidingPriority */
         hidingPriority?: number;
         /** @name dxFileManagerDetailsColumn.sortIndex */
@@ -3685,22 +3698,24 @@ declare module DevExpress.ui {
         sortOrder?: 'asc' | 'desc' | undefined;
         /** @name dxFileManagerDetailsColumn.visible */
         visible?: boolean;
+        /** @name dxFileManagerDetailsColumn.visibleIndex */
+        visibleIndex?: number;
         /** @name dxFileManagerDetailsColumn.width */
         width?: number | string;
     }
     /** @name dxFileManagerToolbar */
     export interface dxFileManagerToolbar {
         /** @name dxFileManagerToolbar.fileSelectionItems */
-        fileSelectionItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
+        fileSelectionItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator'>;
         /** @name dxFileManagerToolbar.items */
-        items?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
+        items?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator'>;
     }
     /** @name dxFileManagerToolbarItem */
     export interface dxFileManagerToolbarItem extends dxToolbarItem {
         /** @name dxFileManagerToolbarItem.location */
         location?: 'after' | 'before' | 'center';
         /** @name dxFileManagerToolbarItem.name */
-        name?: 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator' | string;
+        name?: 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator' | string;
         /** @name dxFileManagerToolbarItem.visible */
         visible?: boolean;
     }
@@ -4110,7 +4125,7 @@ declare module DevExpress.ui {
         /** @name dxGantt.Options.dependencies */
         dependencies?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | Function, predecessorIdExpr?: string | Function, successorIdExpr?: string | Function, typeExpr?: string | Function };
         /** @name dxGantt.Options.editing */
-        editing?: { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowDependencyUpdating?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskUpdating?: boolean, enabled?: boolean };
+        editing?: { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskUpdating?: boolean, enabled?: boolean };
         /** @name dxGantt.Options.onSelectionChanged */
         onSelectionChanged?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, selectedRowKey?: any }) => any);
         /** @name dxGantt.Options.resourceAssignments */
@@ -4136,7 +4151,7 @@ declare module DevExpress.ui {
         /** @name dxGantt.Options.toolbar */
         toolbar?: dxGanttToolbar;
         /** @name dxGantt.Options.validation */
-        validation?: { autoUpdateParentTasks?: boolean, enableDependencyValidation?: boolean };
+        validation?: { autoUpdateParentTasks?: boolean, validateDependencies?: boolean };
     }
     /** @name dxGantt */
     export class dxGantt extends Widget {
@@ -4157,14 +4172,14 @@ declare module DevExpress.ui {
     /** @name dxGanttToolbar */
     export interface dxGanttToolbar {
         /** @name dxGanttToolbar.items */
-        items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'zoomIn' | 'zoomOut'>;
+        items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut'>;
     }
     /** @name dxGanttToolbarItem */
     export interface dxGanttToolbarItem extends dxToolbarItem {
-        /** @name dxGanttToolbarItem.formatName */
-        formatName?: 'separator' | 'undo' | 'redo' | 'zoomIn' | 'zoomOut' | string;
         /** @name dxGanttToolbarItem.location */
         location?: 'after' | 'before' | 'center';
+        /** @name dxGanttToolbarItem.name */
+        name?: 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | string;
     }
     /** @name dxHtmlEditor.Options */
     export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
@@ -4517,7 +4532,7 @@ declare module DevExpress.ui {
         /** @name dxLookup.Options.closeOnOutsideClick */
         closeOnOutsideClick?: boolean | (() => boolean);
         /** @name dxLookup.Options.dropDownOptions */
-        dropDownOptions?: dxPopupOptions | dxPopoverOptions;
+        dropDownOptions?: dxPopoverOptions;
         /** @name dxLookup.Options.fieldTemplate */
         fieldTemplate?: DevExpress.core.template | ((selectedItem: any, fieldElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxLookup.Options.focusStateEnabled */
@@ -6066,6 +6081,9 @@ declare module DevExpress.ui {
     export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
         /** @name dxToolbar.Options.dataSource */
         dataSource?: string | Array<string | dxToolbarItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        /** @deprecated */
+        /** @name dxToolbar.Options.height */
+        height?: number | string | (() => number | string);
         /** @name dxToolbar.Options.items */
         items?: Array<string | dxToolbarItem | any>;
         /** @name dxToolbar.Options.menuItemTemplate */

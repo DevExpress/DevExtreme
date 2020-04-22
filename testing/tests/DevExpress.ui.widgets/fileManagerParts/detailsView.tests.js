@@ -183,7 +183,7 @@ QUnit.module('Details View', moduleConfig, () => {
     });
 
     test('Details view must has ScrollView', function(assert) {
-        assert.ok(this.wrapper.getDetailsItemScrollable().length);
+        assert.ok(this.wrapper.getDetailsViewScrollable().length);
     });
 
     test('\'Back\' directory must not be sortable', function(assert) {

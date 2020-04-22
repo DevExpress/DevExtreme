@@ -46,6 +46,7 @@ class FileManager extends Widget {
         this._firstItemViewLoad = true;
         this._lockSelectionProcessing = false;
         this._lockFocusedItemProcessing = false;
+        this._itemKeyToFocus = undefined;
 
         this._controller = new FileItemsController({
             currentPath: this.option('currentPath'),
@@ -207,7 +208,7 @@ class FileManager extends Widget {
             refresh: () => this._refreshAndShowProgress(),
             thumbnails: () => this.option('itemView.mode', 'thumbnails'),
             details: () => this.option('itemView.mode', 'details'),
-            clear: () => this._clearSelection(),
+            clearSelection: () => this._clearSelection(),
             showNavPane: () => this._adaptivityControl.toggleDrawer()
         });
         this._commandManager.registerActions(actions);
@@ -218,22 +219,25 @@ class FileManager extends Widget {
         this._setItemsViewAreaActive(false);
     }
 
-    _onItemViewSelectionChanged(e) {
-        this._updateToolbar(e.selectedItemInfos);
+    _onItemViewSelectionChanged({ selectedItemInfos, selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys }) {
+        this._updateToolbar(selectedItemInfos);
 
         this._lockSelectionProcessing = true;
-        this.option('selectedItemKeys', e.selectedItemKeys);
+        this.option('selectedItemKeys', selectedItemKeys);
         this._lockSelectionProcessing = false;
 
-        this._actions.onSelectionChanged(e);
+        this._actions.onSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
     }
 
     _onItemViewFocusedItemChanged(e) {
         this._lockFocusedItemProcessing = true;
-        this.option('focusedItemKey', e.focusedItemKey);
+        this.option('focusedItemKey', e.itemKey);
         this._lockFocusedItemProcessing = false;
 
-        this._actions.onFocusedItemChanged(e);
+        this._actions.onFocusedItemChanged({
+            item: e.item,
+            itemElement: e.itemElement
+        });
     }
 
     _onAdaptiveStateChanged({ enabled }) {
@@ -362,6 +366,7 @@ class FileManager extends Widget {
         parentDirItem.isParentFolder = true;
         parentDirItem.name = '..';
         parentDirItem.relativeName = '..';
+        parentDirItem.key = [];
 
         const itemsCopy = [...items];
         itemsCopy.unshift({
@@ -427,7 +432,7 @@ class FileManager extends Widget {
                 ],
 
                 fileSelectionItems: [
-                    'download', 'separator', 'move', 'copy', 'rename', 'separator', 'delete', 'clear',
+                    'download', 'separator', 'move', 'copy', 'rename', 'separator', 'delete', 'clearSelection',
                     {
                         name: 'separator',
                         location: 'after'
@@ -510,7 +515,7 @@ class FileManager extends Widget {
 
             onErrorOccurred: null,
 
-            allowedFileExtensions: ['.txt', '.rtf', '.doc', '.docx', '.odt', '.xls', '.xlsx', '.ods', '.ppt', '.pptx', '.odp', '.pdf', '.xml', '.png', '.svg', '.gif', '.jpg', '.jpeg', '.ico', '.bmp', '.avi', '.mpeg', '.mkv', ''],
+            allowedFileExtensions: [],
 
             upload: {
                 /**
@@ -615,11 +620,19 @@ class FileManager extends Widget {
             case 'toolbar':
                 {
                     const toolbarOptions = {};
-                    if(args.value.items) {
-                        toolbarOptions.generalItems = args.value.items;
+                    if(args.fullName === 'toolbar') {
+                        if(args.value.items) {
+                            toolbarOptions.generalItems = args.value.items;
+                        }
+                        if(args.value.fileSelectionItems) {
+                            toolbarOptions.fileItems = args.value.fileSelectionItems;
+                        }
                     }
-                    if(args.value.fileSelectionItems) {
-                        toolbarOptions.fileItems = args.value.fileSelectionItems;
+                    if(args.fullName === 'toolbar.items') {
+                        toolbarOptions.generalItems = args.value;
+                    }
+                    if(args.fullName === 'toolbar.fileSelectionItems') {
+                        toolbarOptions.fileItems = args.value;
                     }
                     this._toolbar.option(toolbarOptions);
                 }
@@ -674,8 +687,15 @@ class FileManager extends Widget {
         }
     }
 
-    _onDataLoading() {
-        this._itemView.refresh();
+    _onDataLoading({ operation }) {
+        let options = null;
+
+        if(operation === 'navigation') {
+            options = { focusedItemKey: this._itemKeyToFocus };
+            this._itemKeyToFocus = undefined;
+        }
+
+        this._itemView.refresh(options);
     }
 
     _onSelectedDirectoryChanged() {
@@ -732,6 +752,10 @@ class FileManager extends Widget {
         if(!fileItem.isDirectory) {
             this._actions.onSelectedFileOpened({ file: fileItem });
             return;
+        }
+
+        if(fileItem.isParentFolder) {
+            this._itemKeyToFocus = this._getCurrentDirectory().fileItem.key;
         }
 
         const newCurrentDirectory = fileItem.isParentFolder ? this._getCurrentDirectory().parentDirectory : fileItemInfo;

@@ -3666,7 +3666,7 @@ QUnit.test('Value axis. Set customPosition and offset options', function(assert)
     const chart = this.createChart({});
 
     chart.option('valueAxis[0].customPosition', 380);
-    assert.roughEqual(chart.getValueAxis('axis0')._axisPosition, 450, 5);
+    assert.roughEqual(chart.getValueAxis('axis0')._axisPosition, 450, 8);
 
     chart.option('valueAxis[2].customPosition', 1100);
     assert.roughEqual(chart.getValueAxis('axis2')._axisPosition, 990, 5);
@@ -3717,13 +3717,13 @@ QUnit.test('Zoom and pan', function(assert) {
         customPosition: 400
     });
 
-    assert.roughEqual(valAxis1._axisPosition, 340, 5);
+    assert.roughEqual(valAxis1._axisPosition, 340, 8);
 
     $root.trigger(new $.Event('dxdragstart', { pageX: 500, pageY: 250 }));
     $root.trigger(new $.Event('dxdrag', { offset: { x: -400, y: 0 } }));
     $root.trigger(new $.Event('dxdragend', {}));
 
-    assert.roughEqual(valAxis1._axisPosition, 125, 5);
+    assert.equal(valAxis1._axisPosition, chart.getValueAxis('axis0')._axisPosition);
     assert.roughEqual(valAxis1._axisShift, 37, 5);
 });
 
@@ -3778,5 +3778,5 @@ QUnit.test('Argument axis. Set customPositionAxis option', function(assert) {
 
     assert.roughEqual(initAxisPosition - emptyAxisPosition, 0, 8);
     assert.roughEqual(initAxisPosition - otherAxisPosition, 95, 8);
-    assert.roughEqual(defaultAxisPosition - initAxisPosition, 135, 8);
+    assert.roughEqual(defaultAxisPosition - initAxisPosition, 135, 10);
 });

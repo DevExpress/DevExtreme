@@ -1,8 +1,6 @@
 /* globals Intl */
 import dxConfig from '../../core/config';
 import { locale, getValueByClosestLocale } from '../core';
-import dxVersion from '../../core/version';
-import { compare as compareVersions } from '../../core/utils/version';
 import openXmlCurrencyFormat from '../open_xml_currency_format';
 import accountingFormats from '../cldr-data/accounting_formats';
 
@@ -87,46 +85,6 @@ module.exports = {
         }
 
         return this.callBase.apply(this, arguments);
-    },
-    parse: function(text, format) {
-        if(compareVersions(dxVersion, '17.2.8') >= 0) {
-            return this.callBase.apply(this, arguments);
-        }
-        if(!text) {
-            return;
-        }
-
-        if(format && format.parser) {
-            return format.parser(text);
-        }
-
-        text = this._normalizeNumber(text, format);
-
-        if(text.length > 15) {
-            return NaN;
-        }
-
-        return parseFloat(text);
-    },
-    _normalizeNumber: function(text, format) {
-        const isExponentialRegexp = /^[-+]?[0-9]*.?[0-9]+([eE][-+]?[0-9]+)+$/;
-        const legitDecimalSeparator = '.';
-
-        if(this.convertDigits) {
-            text = this.convertDigits(text, true);
-        }
-
-        if(isExponentialRegexp.test(text)) {
-            return text;
-        }
-
-        const decimalSeparator = this._getDecimalSeparator(format);
-        const cleanUpRegexp = new RegExp('[^0-9-\\' + decimalSeparator + ']', 'g');
-
-        return text.replace(cleanUpRegexp, '').replace(decimalSeparator, legitDecimalSeparator);
-    },
-    _getDecimalSeparator: function(format) {
-        return getFormatter(format)(0.1)[1];
     },
     _getCurrencySymbolInfo: function(currency) {
         const formatter = getCurrencyFormatter(currency);

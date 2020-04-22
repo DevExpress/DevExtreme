@@ -30,27 +30,16 @@ const Drawer = Widget.inherit({
 
     _getDefaultOptions() {
         return extend(this.callBase(), {
-
             position: 'left',
-
             opened: false,
-
             minSize: null,
-
             maxSize: null,
-
             shading: false,
-
             template: PANEL_TEMPLATE_NAME,
-
             openedStateMode: 'shrink',
-
             revealMode: 'slide',
-
             animationEnabled: true,
-
             animationDuration: 400,
-
             closeOnOutsideClick: false,
 
             /**
@@ -84,6 +73,14 @@ const Drawer = Widget.inherit({
             * @name dxDrawerOptions.tabIndex
             * @hidden
             */
+        });
+    },
+
+    _setDeprecatedOptions() {
+        this.callBase();
+
+        extend(this._deprecatedOptions, {
+            'target': { since: '20.1', message: 'Functionality associated with this option is not intended for the Drawer widget.' }
         });
     },
 
@@ -407,6 +404,7 @@ const Drawer = Widget.inherit({
     _dimensionChanged() {
         this._initMinMaxSize();
         this._strategy.refreshPanelElementSize(this.option('revealMode') === 'slide');
+        this._renderPosition(this.option('opened'), false);
     },
 
     _toggleShaderVisibility(visible) {
@@ -574,5 +572,4 @@ const Drawer = Widget.inherit({
 registerComponent('dxDrawer', Drawer);
 
 module.exports = Drawer;
-
 

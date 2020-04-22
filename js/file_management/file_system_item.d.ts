@@ -89,4 +89,13 @@ export default class FileSystemItem {
      * @public
      */
     dataItem: any;
+
+    /**
+     * @docid FileSystemItemMethods.getFileExtension
+     * @publicName getFileExtension()
+     * @return string
+     * @prevFileNamespace DevExpress.fileManagement
+     * @public
+     */
+    getFileExtension(): string;
 }

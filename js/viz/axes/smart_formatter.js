@@ -3,10 +3,9 @@ import { isDefined, isFunction, isExponential, isObject } from '../../core/utils
 import dateUtils from '../../core/utils/date';
 import { adjust, getPrecision, getExponent } from '../../core/utils/math';
 import { getAdjustedLog10 as log10 } from '../core/utils';
-
 const _format = formatHelper.format;
-const floor = Math.floor;
-const abs = Math.abs;
+const { abs, floor } = Math;
+
 const EXPONENTIAL = 'exponential';
 const formats = ['fixedPoint', 'thousands', 'millions', 'billions', 'trillions', EXPONENTIAL];
 const dateUnitIntervals = ['millisecond', 'second', 'minute', 'hour', 'day', 'month', 'year'];
@@ -15,7 +14,6 @@ function getDatesDifferences(prevDate, curDate, nextDate, tickFormat) {
     let prevDifferences;
     let nextDifferences;
     let dateUnitInterval;
-    let tickFormatIndex;
     const dateUnitsLength = dateUnitIntervals.length;
     let i;
     let j;
@@ -30,7 +28,7 @@ function getDatesDifferences(prevDate, curDate, nextDate, tickFormat) {
         tickFormat = 'second';
     }
 
-    tickFormatIndex = dateUnitIntervals.indexOf(tickFormat);
+    const tickFormatIndex = dateUnitIntervals.indexOf(tickFormat);
 
     if(nextDate) {
         nextDifferences = dateUtils.getDatesDifferences(curDate, nextDate);

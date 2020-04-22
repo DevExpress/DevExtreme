@@ -616,7 +616,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
         } else {
             startTime = startDate.getTime();
             endTime = needCorrectDates ? this._correctEndDateByDelta(endDate, deltaTime) : endDate.getTime() + deltaTime;
-            endTime += timeZoneUtils.getTimezoneOffsetChangeInMs(startDate, endDate, startDate, endTime);
+            endTime -= timeZoneUtils.getTimezoneOffsetChangeInMs(startDate, endDate, startDate, endTime);
         }
 
         return [startTime, endTime];

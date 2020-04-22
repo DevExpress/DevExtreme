@@ -317,7 +317,7 @@
         "dxFileManager-commandRefresh": "Refresh",
         "dxFileManager-commandThumbnails": "Thumbnails View",
         "dxFileManager-commandDetails": "Details View",
-        "dxFileManager-commandClear": "Clear selection",
+        "dxFileManager-commandClearSelection": "Clear selection",
 
         "dxFileManager-dialogDirectoryChooserMoveTitle": "Move to",
         "dxFileManager-dialogDirectoryChooserMoveButtonText": "Move",
@@ -547,6 +547,15 @@
         "dxGantt-dialogConstraintViolationMessage": "The task you are attempting to move is linked to a second task by a dependency relation. How would you like to proceed?",
         "dxGantt-dialogCancelOperationMessage": "Cancel the operation",
         "dxGantt-dialogDeleteDependencyMessage": "Delete the dependency",
-        "dxGantt-dialogMoveTaskAndKeepDependencyMessage": "Move the task and keep the dependency"
+        "dxGantt-dialogMoveTaskAndKeepDependencyMessage": "Move the task and keep the dependency",
+        "dxGantt-undo": "Undo",
+        "dxGantt-redo": "Redo",
+        "dxGantt-expandAll": "Expand All",
+        "dxGantt-collapseAll": "Collapse All",
+        "dxGantt-addNewTask": "Add New Task",
+        "dxGantt-deleteSelectedTask": "Delete Selected Task",
+        "dxGantt-zoomIn": "Zoom In",
+        "dxGantt-zoomOut": "Zoom Out",
+        "dxGantt-fullScreen": "Full Screen"
       }
 }

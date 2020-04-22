@@ -113,7 +113,7 @@ export default class FileItemsController {
 
         if(requireRaiseSelectedDirectory && this._isInitialized) {
             if(!this._dataLoading) {
-                this._raiseDataLoading();
+                this._raiseDataLoading('navigation');
             }
             this._raiseSelectedDirectoryChanged(directoryInfo);
         }
@@ -337,7 +337,7 @@ export default class FileItemsController {
 
         return this._executeDataLoad(() => {
             return this._refreshDeferred = this._refreshInternal();
-        });
+        }, 'refresh');
     }
 
     _refreshInternal() {
@@ -393,7 +393,7 @@ export default class FileItemsController {
     }
 
     _setCurrentDirectoryByPathParts(pathParts, useKeys) {
-        return this._executeDataLoad(() => this._setCurrentDirectoryByPathPartsInternal(pathParts, useKeys));
+        return this._executeDataLoad(() => this._setCurrentDirectoryByPathPartsInternal(pathParts, useKeys), 'navigation');
     }
 
     _setCurrentDirectoryByPathPartsInternal(pathParts, useKeys) {
@@ -406,12 +406,12 @@ export default class FileItemsController {
             });
     }
 
-    _executeDataLoad(action) {
+    _executeDataLoad(action, operation) {
         this._dataLoading = true;
         this._dataLoadingDeferred = new Deferred();
 
         if(this._isInitialized) {
-            this._raiseDataLoading();
+            this._raiseDataLoading(operation);
         }
 
         return action().always(() => {
@@ -500,7 +500,7 @@ export default class FileItemsController {
             return 'folder';
         }
 
-        const extension = fileItem.getExtension();
+        const extension = fileItem.getFileExtension();
         const icon = this._defaultIconMap[extension];
         return icon || 'doc';
     }
@@ -540,9 +540,9 @@ export default class FileItemsController {
         }
     }
 
-    _raiseDataLoading() {
+    _raiseDataLoading(operation) {
         if(this._options.onDataLoading) {
-            this._options.onDataLoading();
+            this._options.onDataLoading({ operation });
         }
     }
 

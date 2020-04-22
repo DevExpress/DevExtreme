@@ -72,9 +72,10 @@ class FileManagerProgressPanel extends Widget {
         });
 
         this._$infosContainer = $('<div>')
-            .text(messageLocalization.format('dxFileManager-notificationProgressPanelEmptyListText'))
             .addClass(FILE_MANAGER_PROGRESS_PANEL_INFOS_CONTAINER_CLASS)
             .appendTo($container);
+
+        this._renderEmptyListText();
     }
 
     _getDefaultOptions() {
@@ -231,6 +232,10 @@ class FileManagerProgressPanel extends Widget {
         this._renderOperationError(detailsItem, errorText);
     }
 
+    _renderEmptyListText() {
+        this._$infosContainer.text(messageLocalization.format('dxFileManager-notificationProgressPanelEmptyListText'));
+    }
+
     _renderOperationError(info, errorText) {
         this._removeProgressBar(info);
         this.renderError(info.$wrapper, info.$commonText, errorText);
@@ -318,6 +323,10 @@ class FileManagerProgressPanel extends Widget {
             this._raiseOperationClosed(info);
             info.$info.next(`.${FILE_MANAGER_PROGRESS_PANEL_SEPARATOR_CLASS}`).remove();
             info.$info.remove();
+            this._operationCount--;
+            if(!this._operationCount) {
+                this._renderEmptyListText();
+            }
         }
     }
 

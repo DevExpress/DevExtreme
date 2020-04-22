@@ -80,8 +80,8 @@ export class FileManagerCommandManager {
                 noFileItemRequired: true
             },
             {
-                name: 'clear',
-                text: messageLocalization.format('dxFileManager-commandClear'),
+                name: 'clearSelection',
+                text: messageLocalization.format('dxFileManager-commandClearSelection'),
                 icon: 'remove',
                 enabled: true
             },

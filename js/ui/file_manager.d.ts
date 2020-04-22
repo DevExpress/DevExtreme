@@ -15,10 +15,6 @@ import {
 } from './context_menu';
 
 import {
-    dxDataGridColumn
-} from './data_grid';
-
-import {
     dxToolbarItem
 } from './toolbar';
 
@@ -30,7 +26,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.allowedFileExtensions
      * @type Array<string>
-     * @default [".txt", ".rtf", ".doc", ".docx", ".odt", ".xls", ".xlsx", ".ods", ".ppt", ".pptx", ".odp", ".pdf", ".xml", ".png", ".svg", ".gif", ".jpg", ".jpeg", ".ico", ".bmp", ".avi", ".mpeg", ".mkv", ""]
+     * @default []
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -61,12 +57,12 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.customizeDetailColumns
      * @type function
-     * @type_function_param1 columns:Array<dxDataGridColumn>
-     * @type_function_return Array<dxDataGridColumn>
+     * @type_function_param1 columns:Array<dxFileManagerDetailsColumn>
+     * @type_function_return Array<dxFileManagerDetailsColumn>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customizeDetailColumns?: ((columns: Array<dxDataGridColumn>) => Array<dxDataGridColumn>);
+    customizeDetailColumns?: ((columns: Array<dxFileManagerDetailsColumn>) => Array<dxFileManagerDetailsColumn>);
     /**
      * @docid dxFileManagerOptions.customizeThumbnail
      * @type function
@@ -316,11 +312,11 @@ export interface dxFileManagerToolbar {
     /**
      * @docid dxFileManagerToolbar.fileSelectionItems
      * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
-     * @default [ "download", "separator", "move", "copy", "rename", "separator", "delete", "clear", { name: "separator", location: "after" }, "refresh" ]
+     * @default [ "download", "separator", "move", "copy", "rename", "separator", "delete", "clearSelection", { name: "separator", location: "after" }, "refresh" ]
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fileSelectionItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
+    fileSelectionItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator'>;
     /**
      * @docid dxFileManagerToolbar.items
      * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
@@ -328,7 +324,7 @@ export interface dxFileManagerToolbar {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
+    items?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator'>;
 }
 
 export interface dxFileManagerToolbarItem extends dxToolbarItem {
@@ -345,7 +341,7 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    name?: 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator' | string;
+    name?: 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator' | string;
     /**
      * @docid dxFileManagerToolbarItem.visible
      * @default undefined
@@ -374,6 +370,14 @@ export interface dxFileManagerDetailsColumn {
      */
     caption?: string;
     /**
+     * @docid dxFileManagerDetailsColumn.cssClass
+     * @type string
+     * @default undefined
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    cssClass?: string;
+    /**
      * @docid dxFileManagerDetailsColumn.dataField
      * @type string
      * @default undefined
@@ -381,6 +385,14 @@ export interface dxFileManagerDetailsColumn {
      * @public
      */
     dataField?: string;
+    /**
+     * @docid dxFileManagerDetailsColumn.dataType
+     * @type Enums.GridColumnDataType
+     * @default undefined
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
     /**
      * @docid dxFileManagerDetailsColumn.hidingPriority
      * @type number
@@ -414,6 +426,14 @@ export interface dxFileManagerDetailsColumn {
      * @public
      */
     visible?: boolean;
+    /**
+     * @docid dxFileManagerDetailsColumn.visibleIndex
+     * @type number
+     * @default undefined
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    visibleIndex?: number;
     /**
      * @docid dxFileManagerDetailsColumn.width
      * @type number|string

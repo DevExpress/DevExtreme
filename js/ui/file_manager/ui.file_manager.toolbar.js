@@ -81,7 +81,7 @@ const DEFAULT_ITEM_CONFIGS = {
             showText: 'inMenu'
         }
     },
-    clear: {
+    clearSelection: {
         location: 'after',
         locateInMenu: 'never',
         compactMode: {
@@ -167,32 +167,66 @@ class FileManagerToolbar extends Widget {
 
             return preparedItem;
         });
-        return this._updateSeparatorsVisibility(items);
-    }
-
-    _updateSeparatorsVisibility(items, toolbar) {
-        for(let i = 0; i < items.length; i++) {
-            if(items[i].name === 'separator') {
-                const isSeparatorVisible = this._groupHasItems(items, i, true) && this._groupHasItems(items, i, false);
-                if(toolbar) {
-                    const optionName = `items[${i}].visible`;
-                    toolbar.option(optionName, isSeparatorVisible);
-                } else {
-                    items[i].visible = isSeparatorVisible;
-                }
-            }
-        }
+        this._updateSeparatorsVisibility(items);
         return items;
     }
 
-    _groupHasItems(items, separatorIndex, isBeforeGroup) {
-        const delta = isBeforeGroup ? -1 : 1;
-        let i = separatorIndex + delta;
-        while(items[i] && items[i].name !== 'separator') {
-            if(items[i].visible) {
+    _updateSeparatorsVisibility(items, toolbar) {
+        let hasModifications = false;
+        const menuItems = this._getMenuItems(toolbar);
+        const hasItemsBefore = {
+            before: false,
+            center: false,
+            after: false
+        };
+        const itemGroups = {
+            before: this._getItemsInGroup(items, menuItems, 'before'),
+            center: this._getItemsInGroup(items, menuItems, 'center'),
+            after: this._getItemsInGroup(items, menuItems, 'after')
+        };
+        items.forEach((item, i) => {
+            const itemLocation = item.location;
+            if(item.name === 'separator') {
+                const isSeparatorVisible = hasItemsBefore[itemLocation] && this._groupHasItemsAfter(itemGroups[itemLocation]);
+                if(item.visible !== isSeparatorVisible) {
+                    hasModifications = true;
+                    item.visible = isSeparatorVisible;
+                }
+                hasItemsBefore[itemLocation] = false;
+            } else {
+                if(!this._isItemInMenu(menuItems, item)) {
+                    hasItemsBefore[itemLocation] = hasItemsBefore[itemLocation] || item.visible;
+                }
+                itemGroups[itemLocation].shift();
+            }
+        });
+
+        if(toolbar && hasModifications) {
+            toolbar.repaint();
+        }
+        return hasModifications;
+    }
+
+    _getMenuItems(toolbar) {
+        const result = toolbar ? toolbar._getMenuItems() : [];
+        return result.map(menuItem => menuItem.originalItemData);
+    }
+
+    _isItemInMenu(menuItems, item) {
+        return !!menuItems.length
+            && ensureDefined(item.locateInMenu, 'never') !== 'never'
+            && menuItems.indexOf(item.originalItemData) !== -1;
+    }
+
+    _getItemsInGroup(items, menuItems, groupName) {
+        return items.filter(item => item.location === groupName && !this._isItemInMenu(menuItems, item));
+    }
+
+    _groupHasItemsAfter(items) {
+        for(let i = 0; i < items.length; i++) {
+            if(items[i].name !== 'separator' && items[i].visible) {
                 return true;
             }
-            i += delta;
         }
         return false;
     }
@@ -231,11 +265,18 @@ class FileManagerToolbar extends Widget {
             if(!result.widget) {
                 result.widget = 'dxButton';
             }
+            if(result.widget === 'dxButton' && !result.compactMode && !result.showText && result.options.icon && result.options.text) {
+                result.compactMode = {
+                    showText: 'inMenu'
+                };
+            }
         }
 
         if(commandName && !result.name) {
             extend(result, { name: commandName });
         }
+
+        result.location = ensureDefined(result.location, 'before');
 
         if(result.widget === 'dxButton') {
             extend(true, result, { options: { stylingMode: 'text' } });
@@ -321,10 +362,10 @@ class FileManagerToolbar extends Widget {
     }
 
     _toggleCompactMode(toolbar, useCompactMode) {
-        toolbar.beginUpdate();
-
+        let hasModifications = false;
         const items = toolbar.option('items');
-        items.forEach((item, index) => {
+
+        items.forEach(item => {
             if(item.compactMode) {
                 let optionsSource = null;
 
@@ -336,11 +377,17 @@ class FileManagerToolbar extends Widget {
                 }
 
                 const options = this._getCompactModeOptions(optionsSource, item.available);
-                toolbar.option(`items[${index}]`, options);
+                extend(true, item, options);
+                hasModifications = true;
             }
         });
 
-        toolbar.endUpdate();
+        hasModifications = this._updateSeparatorsVisibility(items) || hasModifications;
+        if(hasModifications) {
+            toolbar.repaint();
+        }
+
+        this._updateSeparatorsVisibility(items, toolbar);
     }
 
     _getCompactModeOptions({ showText, locateInMenu }, available) {
@@ -352,28 +399,31 @@ class FileManagerToolbar extends Widget {
     }
 
     _ensureAvailableCommandsVisible(toolbar, fileItems) {
-        toolbar.beginUpdate();
-
+        let hasModifications = false;
         const items = toolbar.option('items');
 
-        items.forEach((item, index) => {
+        items.forEach(item => {
             if(item.name !== 'separator') {
                 const itemVisible = item.available;
                 item.available = this._isToolbarItemAvailable(item, fileItems);
                 if(item.available !== itemVisible) {
-                    const optionName = `items[${index}].visible`;
-                    toolbar.option(optionName, item.available);
+                    item.visible = item.available;
+                    hasModifications = true;
                 }
             }
         });
 
-        this._updateSeparatorsVisibility(toolbar.option('items'), toolbar);
-        toolbar.endUpdate();
+        hasModifications = this._updateSeparatorsVisibility(items) || hasModifications;
+        if(hasModifications) {
+            toolbar.repaint();
+        }
+
+        this._updateSeparatorsVisibility(items, toolbar);
     }
 
     _fileToolbarHasEffectiveItems(fileItems) {
         const items = this._fileToolbar.option('items');
-        return items.some(({ name }) => name !== 'clear' && name !== 'refresh' && this._commandManager.isCommandAvailable(name, fileItems));
+        return items.some(item => this._isFileToolbarItemAvailable(item, fileItems));
     }
 
     _executeCommand(command) {
@@ -393,6 +443,11 @@ class FileManagerToolbar extends Widget {
         }
 
         return this._commandManager.isCommandAvailable(toolbarItem.name, fileItems);
+    }
+
+    _isFileToolbarItemAvailable({ name, visible }, fileItems) {
+        return !this._isDefaultItem(name) && ensureDefined(visible, true) ||
+            name !== 'clearSelection' && name !== 'refresh' && this._commandManager.isCommandAvailable(name, fileItems);
     }
 
     _updateItemInToolbar(toolbar, commandName, options) {

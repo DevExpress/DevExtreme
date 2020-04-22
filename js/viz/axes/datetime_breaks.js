@@ -1,4 +1,4 @@
-const dateUtils = require('../../core/utils/date');
+import dateUtils from '../../core/utils/date';
 const days = [0, 1, 2, 3, 4, 5, 6];
 
 function getWeekendDays(workdays) {
@@ -109,11 +109,10 @@ function generateDateBreaksForWeekend(min, max, weekendDayIndices) {
 
             if(dayBetweenWeekend(weekend, day)) {
                 const from = new Date(currentDate);
-                let to;
 
                 currentDate.setDate(date + getDaysDistance(day, weekend.end));
 
-                to = new Date(currentDate);
+                const to = new Date(currentDate);
 
                 breaks.push({
                     from: from,

@@ -118,8 +118,17 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         this._tryRaiseSelectionChanged({ selectedItemInfos, selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
     }
 
-    _onItemListFocusedItemChanged(e) {
-        this._raiseFocusedItemChanged(e);
+    _onItemListFocusedItemChanged({ item, itemElement }) {
+        if(!this._isMultipleSelectionMode()) {
+            this._selectItemSingleSelection(item);
+        }
+
+        const fileSystemItem = item?.fileItem || null;
+        this._raiseFocusedItemChanged({
+            item: fileSystemItem,
+            itemKey: fileSystemItem?.key,
+            itemElement: itemElement || undefined
+        });
     }
 
     _setSelectedItemKeys(itemKeys) {
@@ -130,14 +139,29 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         this._itemList.option('focusedItemKey', itemKey);
     }
 
-    refresh() {
-        this.clearSelection();
-        this._itemList.option('dataSource', this._createDataSource());
+    refresh(options) {
+        const actualOptions = {
+            dataSource: this._createDataSource()
+        };
+
+        if(options && Object.prototype.hasOwnProperty.call(options, 'focusedItemKey')) {
+            actualOptions.focusedItemKey = options.focusedItemKey;
+        }
+
+        this._itemList.option(actualOptions);
     }
 
     _deselectItem(item) {
         const itemElement = this._itemList.getItemElementByItem(item);
         this._itemList.unselectItem(itemElement);
+    }
+
+    _selectItemSingleSelection(item) {
+        if(item) {
+            this._itemList.selectItem(item);
+        } else {
+            this._itemList.clearSelection();
+        }
     }
 
     clearSelection() {

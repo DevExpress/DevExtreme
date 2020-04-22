@@ -129,7 +129,6 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
                     return that._renderTime || 0;
                 }
             });
-
         },
         _handleLoadingChanged: function(isLoading) {
             const that = this;
@@ -248,6 +247,8 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
                         storeLoadOptions.skip = that.pageIndex() * that.pageSize();
                     }
                 }
+            } else if(isAppendMode(that) && storeLoadOptions.skip) {
+                storeLoadOptions.skip += that._skipCorrection;
             }
             return that.callBase.apply(that, arguments);
         },
@@ -279,7 +280,6 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
 
 const VirtualScrollingRowsViewExtender = (function() {
     const removeEmptyRows = function($emptyRows, className) {
-        let rowCount;
         const getRowParent = row => $(row).parent('.' + className).get(0);
         const tBodies = $emptyRows.toArray().map(getRowParent).filter(row => row);
 
@@ -287,7 +287,7 @@ const VirtualScrollingRowsViewExtender = (function() {
             $emptyRows = $(tBodies);
         }
 
-        rowCount = className === FREESPACE_CLASS ? $emptyRows.length - 1 : $emptyRows.length;
+        const rowCount = className === FREESPACE_CLASS ? $emptyRows.length - 1 : $emptyRows.length;
 
         for(let i = 0; i < rowCount; i++) {
             $emptyRows.eq(i).remove();
@@ -346,12 +346,11 @@ const VirtualScrollingRowsViewExtender = (function() {
 
         _renderCore: function(e) {
             const that = this;
-            let dataSource;
             const startRenderTime = new Date();
 
             that.callBase.apply(that, arguments);
 
-            dataSource = that._dataController._dataSource;
+            const dataSource = that._dataController._dataSource;
 
             if(dataSource && e) {
                 const itemCount = e.items ? e.items.length : 20;
@@ -905,9 +904,13 @@ module.exports = {
                                     return LOAD_TIMEOUT;
                                 }
 
-                                return dataSource && dataSource._renderTime || 0;
+                                return dataSource?._renderTime || 0;
                             }
                         }, true);
+
+                        that._rowsScrollController.positionChanged.add(() => {
+                            that._dataSource?.setViewportItemIndex(that._rowsScrollController.getViewportItemIndex());
+                        });
 
                         if(that.isLoaded()) {
                             that._rowsScrollController.load();
@@ -1033,11 +1036,9 @@ module.exports = {
                         const dataSource = this._dataSource;
 
                         if(rowsScrollController) {
-                            rowsScrollController.setViewportPosition.apply(rowsScrollController, arguments).done(function() {
-                                dataSource && dataSource.setViewportItemIndex(rowsScrollController.getViewportItemIndex());
-                            });
+                            rowsScrollController.setViewportPosition.apply(rowsScrollController, arguments);
                         } else {
-                            dataSource && dataSource.setViewportPosition.apply(dataSource, arguments);
+                            dataSource?.setViewportPosition.apply(dataSource, arguments);
                         }
                     },
                     setContentSize: function(sizes) {

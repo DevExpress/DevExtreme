@@ -14,7 +14,8 @@ import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import dataUtils from 'core/element_data';
 import dateSerialization from 'core/utils/date_serialization';
-import { SchedulerTestWrapper, initTestMarkup, createWrapper } from './helpers.js';
+import { SchedulerTestWrapper, initTestMarkup, createWrapper, CLASSES } from './helpers.js';
+import browser from 'core/utils/browser';
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
@@ -3278,38 +3279,94 @@ QUnit.test('Appointment should be resized correctly to left side in horizontal g
 });
 
 // Timezone-sensitive test, use US/Pacific for proper testing
-QUnit.test('Appointment should have correct dates after resizing through timezone change (T835544)', function(assert) {
-    this.createInstance({
-        dataSource: [{
-            text: 'Staff Productivity Report',
-            startDate: '2019-11-04T00:00',
-            endDate: '2019-11-06T00:00',
-        }],
-        views: ['timelineMonth'],
-        currentView: 'timelineMonth',
-        currentDate: new Date(2019, 10, 1),
-        height: 300,
-        startDayHour: 0,
+[{
+    handle: CLASSES.resizableHandle.left,
+    direction: -1,
+    currentDate: new Date(2019, 10, 1),
+    appointment: {
+        startDate: '2019-11-04T00:00',
+        endDate: '2019-11-06T00:00',
+    },
+    expectedValue: '12:00 AM - 12:00 AM',
+    expectedTooltipValue: 'November 3 12:00 AM - November 6 12:00 AM',
+    scrollDate: new Date(2019, 10, 1),
+    text: 'in case drag left handle to winter DST'
+}, {
+    handle: CLASSES.resizableHandle.left,
+    direction: -1,
+    currentDate: new Date(2019, 2, 10),
+    appointment: {
+        startDate: '2019-03-11T00:00',
+        endDate: '2019-03-13T00:00',
+    },
+    expectedValue: '12:00 AM - 12:00 AM',
+    expectedTooltipValue: 'March 10 12:00 AM - March 13 12:00 AM',
+    scrollDate: new Date(2019, 2, 10),
+    text: 'in case drag left handle to summer DST'
+}, {
+    handle: CLASSES.resizableHandle.right,
+    direction: 1,
+    currentDate: new Date(2019, 10, 1),
+    appointment: {
+        startDate: '2019-11-01T00:00',
+        endDate: '2019-11-03T00:00',
+    },
+    expectedValue: '12:00 AM - 12:00 AM',
+    expectedTooltipValue: 'November 1 12:00 AM - November 4 12:00 AM',
+    scrollDate: new Date(2019, 10, 1),
+    text: 'in case drag right handle to winter DST'
+}, {
+    handle: CLASSES.resizableHandle.right,
+    direction: 1,
+    currentDate: new Date(2019, 2, 10),
+    appointment: {
+        startDate: '2019-03-08T00:00',
+        endDate: '2019-03-10T00:00',
+    },
+    expectedValue: '12:00 AM - 12:00 AM',
+    expectedTooltipValue: 'March 8 12:00 AM - March 11 12:00 AM',
+    scrollDate: new Date(2019, 2, 7),
+    text: 'in case drag right handle to summer DST'
+}].forEach(testCase => {
+    QUnit.test(`Appointment should have correct dates after resizing ${testCase.text} (T835544)`, function(assert) {
+        this.createInstance({
+            editing: {
+                allowResizing: true
+            },
+            dataSource: [{
+                text: 'Staff Productivity Report',
+                startDate: testCase.appointment.startDate,
+                endDate: testCase.appointment.endDate,
+            }],
+            views: ['timelineMonth'],
+            currentView: 'timelineMonth',
+            currentDate: new Date(testCase.currentDate),
+            height: 300,
+            startDayHour: 0,
+        });
+
+        this.scheduler.instance.scrollToTime(0, 0, new Date(testCase.scrollDate));
+
+        const { getAppointment, getDateText } = this.scheduler.appointments;
+
+        const cellWidth = this.scheduler.workSpace.getCellWidth();
+        let pointer = pointerMock($(getAppointment()).find(testCase.handle).eq(0)).start();
+
+        pointer.dragStart().drag(testCase.direction * cellWidth, 0);
+        pointer.dragEnd();
+
+        assert.equal(getDateText(), testCase.expectedValue, 'Dates should correct after resizing');
+
+        this.scheduler.appointments.click();
+        assert.equal(this.scheduler.tooltip.getDateText(), testCase.expectedTooltipValue, 'Dates in tooltip should correct');
+
+        pointer = pointerMock($(getAppointment()).find(testCase.handle).eq(0)).start();
+
+        pointer.dragStart().drag(-testCase.direction * cellWidth, 0);
+        pointer.dragEnd();
+
+        assert.equal(getDateText(), testCase.expectedValue, 'Dates should correct');
     });
-
-    const cellWidth = this.scheduler.workSpace.getCellWidth();
-    let pointer = pointerMock($(this.scheduler.appointments.getAppointment()).find('.dx-resizable-handle-left').eq(0)).start();
-
-    pointer.dragStart().drag(-(cellWidth), 0);
-    pointer.dragEnd();
-
-    let appointmentContent = this.scheduler.appointments.getAppointment().find('.dx-scheduler-appointment-content-date').text();
-
-    assert.equal(appointmentContent, '12:00 AM - 12:00 AM', 'Dates are correct');
-
-    pointer = pointerMock($(this.scheduler.appointments.getAppointment()).find('.dx-resizable-handle-left').eq(0)).start();
-
-    pointer.dragStart().drag((cellWidth), 0);
-    pointer.dragEnd();
-
-    appointmentContent = this.scheduler.appointments.getAppointment().find('.dx-scheduler-appointment-content-date').text();
-
-    assert.equal(appointmentContent, '12:00 AM - 12:00 AM', 'Dates are correct');
 });
 
 QUnit.test('Tail of long appointment should have a right position, groupByDate = true', function(assert) {
@@ -3365,47 +3422,47 @@ QUnit.test('Appointment should be rendered without compact ones if only one per 
     assert.equal(this.scheduler.appointments.getAppointmentCount(), 30, 'Scheduler appointments are rendered without compact ones');
 });
 
-// QUnit.test("Appointments are rendered with custom cell width less than default (T816873)", function(assert) {
-//     let $style = $("<style>").text('#dxLineSchedule .dx-scheduler-date-table-cell, #dxLineSchedule .dx-scheduler-header-panel-cell {width: 100px !important;}');
-//     try {
-//         $style.appendTo("head");
+QUnit.skip('Appointments are rendered with custom cell width less than default (T816873)', function(assert) {
+    const $style = $('<style>').text('#dxLineSchedule .dx-scheduler-date-table-cell, #dxLineSchedule .dx-scheduler-header-panel-cell {width: 100px !important;}');
+    try {
+        $style.appendTo('head');
 
-//         const data = [{
-//             recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T130000",
-//             recurrenceException: "",
-//             startDate: "2019-09-19T18:00:00.000Z",
-//             endDate: "2019-09-19T18:04:00.000Z"
-//         }, {
-//             recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T050000",
-//             recurrenceException: "",
-//             startDate: "2019-09-20T10:00:00.000Z",
-//             endDate: "2019-09-20T04:59:59.000Z"
-//         }, {
-//             recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T045900",
-//             recurrenceException: "",
-//             startDate: "2019-09-20T09:59:00.000Z",
-//             endDate: "2019-09-20T10:00:00.000Z"
-//         }];
+        const data = [{
+            recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T130000',
+            recurrenceException: '',
+            startDate: '2019-09-19T18:00:00.000Z',
+            endDate: '2019-09-19T18:04:00.000Z'
+        }, {
+            recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T050000',
+            recurrenceException: '',
+            startDate: '2019-09-20T10:00:00.000Z',
+            endDate: '2019-09-20T04:59:59.000Z'
+        }, {
+            recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T045900',
+            recurrenceException: '',
+            startDate: '2019-09-20T09:59:00.000Z',
+            endDate: '2019-09-20T10:00:00.000Z'
+        }];
 
-//         this.createInstance({
-//             dataSource: data,
-//             elementAttr: {
-//                 id: "dxLineSchedule"
-//             },
-//             views: [{
-//                 type: "timelineWeek",
-//                 cellDuration: 120,
-//                 maxAppointmentsPerCell: "unlimited"
-//             }],
-//             currentView: 'timelineWeek',
-//             currentDate: new Date(2019, 8, 22)
-//         });
+        this.createInstance({
+            dataSource: data,
+            elementAttr: {
+                id: 'dxLineSchedule'
+            },
+            views: [{
+                type: 'timelineWeek',
+                cellDuration: 120,
+                maxAppointmentsPerCell: 'unlimited'
+            }],
+            currentView: 'timelineWeek',
+            currentDate: new Date(2019, 8, 22)
+        });
 
-//         assert.ok(this.scheduler.appointments.getAppointmentCount() > 0, "Appointments are rendered");
-//     } finally {
-//         $style.remove();
-//     }
-// });
+        assert.ok(this.scheduler.appointments.getAppointmentCount() > 0, 'Appointments are rendered');
+    } finally {
+        $style.remove();
+    }
+});
 
 QUnit.test('Long term appoinment inflict index shift in other appointments (T737780)', function(assert) {
     const data = [
@@ -3867,5 +3924,44 @@ QUnit.module('Appointments', () => {
 
         scheduler.instance.option('currentView', 'month');
         assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointments should be filtered and rendered after change view on "Month"');
+    });
+
+    QUnit.test('Long appointment should have correct parts count(T854740)', function(assert) {
+        const data = [{ text: 'Two Weeks App (Jan 6 - Jan 19)', startDate: new Date(2020, 0, 6), endDate: new Date(2020, 0, 19, 12), typeId: 1 }];
+
+        const scheduler = createWrapper({
+            dataSource: data,
+            views: ['month'],
+            firstDayOfWeek: 1,
+            currentView: 'month',
+            currentDate: new Date(2020, 0, 1),
+            height: 500,
+            width: 250
+        });
+
+        assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointment parts are ok');
+    });
+
+    QUnit.test('Long appointment should have correct parts count if widget is zoomed (T854740)', function(assert) {
+        if(!browser.webkit) {
+            assert.ok(true, 'Browser zooming is enabled in webkit');
+            return;
+        }
+
+        $('#scheduler').css('zoom', 1.25);
+
+        const data = [{ text: 'Two Weeks App (Jan 6 - Jan 19)', startDate: new Date(2020, 0, 6), endDate: new Date(2020, 0, 19, 12), typeId: 1 }];
+
+        const scheduler = createWrapper({
+            dataSource: data,
+            views: ['month'],
+            firstDayOfWeek: 1,
+            currentView: 'month',
+            currentDate: new Date(2020, 0, 1),
+            height: 500,
+            width: 250
+        });
+
+        assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointment parts are ok');
     });
 });

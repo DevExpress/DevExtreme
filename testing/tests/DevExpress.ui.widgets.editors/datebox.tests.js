@@ -1024,8 +1024,7 @@ QUnit.module('merging dates', moduleConfig, () => {
             .val('1:1:16 AM')
             .trigger('change');
 
-        const date = new Date(2000, 6, 31, 1, 1, 16);
-        assert.deepEqual(this.instance.option('value'), date);
+        assert.strictEqual(this.instance.option('value').getSeconds(), 16);
     });
 
     QUnit.test('mergeDates must merge milliseconds when type is \'time\'', function(assert) {
@@ -1040,9 +1039,7 @@ QUnit.module('merging dates', moduleConfig, () => {
             .val('16')
             .trigger('change');
 
-        const now = new Date();
-        const date = new Date(2000, 6, 31, now.getHours(), now.getMinutes(), now.getSeconds(), 16);
-        assert.deepEqual(this.instance.option('value'), date);
+        assert.strictEqual(this.instance.option('value').getMilliseconds(), 16);
     });
 });
 

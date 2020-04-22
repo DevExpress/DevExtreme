@@ -320,6 +320,36 @@ QUnit.test('Get options after resetTypes - axis type and data types are in lower
     }, 'Options should be correct');
 });
 
+QUnit.test('Check tickInterval with new canvas', function(assert) {
+    this.updateOptions({});
+    this.generatedTickInterval = 2;
+    this.axis.createTicks(this.canvas);
+    const translator = translator2DModule.Translator2D.lastCall.returnValue;
+    const canvas = {
+        top: 200,
+        bottom: 200,
+        left: 200,
+        right: 200,
+        width: 400,
+        height: 400
+    };
+
+    assert.ok(!this.axis.estimateTickInterval(canvas), 'tickInterval is not change');
+    assert.equal(translator.updateCanvas.lastCall.args[0], canvas, 'translator is updated');
+
+    this.generatedTickInterval = 3;
+    const newCanvas = {
+        top: 100,
+        bottom: 100,
+        left: 100,
+        right: 100,
+        width: 400,
+        height: 400
+    };
+    assert.ok(this.axis.estimateTickInterval(newCanvas), 'tickInterval is change');
+    assert.equal(translator.updateCanvas.lastCall.args[0], newCanvas, 'translator is updated');
+});
+
 QUnit.test('GetMarginOptions when they are not set', function(assert) {
     this.updateOptions({});
 

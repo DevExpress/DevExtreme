@@ -57,20 +57,43 @@ QUnit.testStart(function() {
                 <div id="item32" class="draggable" style="height: 50px; background: red;">item10</div>
             </div>
         </div>
-        <div id="bothScrolls" style="height: 600px; width: 300px; overflow: auto; background: grey; position: absolute; left: 0; top: 0;">
-        <div id="itemsWithBothScrolls" style="overflow: visible; width: 600px;">
-            <div id="item40" class="draggable" style="height: 50px; background: red; width: 600px;">item0</div>
-            <div id="item41" class="draggable" style="height: 50px; background: yellow; width: 600px;">item1</div>
-            <div id="item42" class="draggable" style="height: 50px; background: red; width: 600px;">item2</div>
-            <div id="item43" class="draggable" style="height: 50px; background: blue; width: 600px;">item3</div>
-            <div id="item44" class="draggable" style="height: 50px; background: yellow; width: 600px;">item4</div>
-            <div id="item45" class="draggable" style="height: 50px; background: red; width: 600px;">item5</div>
-            <div id="item46" class="draggable" style="height: 50px; background: blue; width: 600px;">item6</div>
-            <div id="item47" class="draggable" style="height: 50px; background: yellow; width: 600px;">item7</div>
-            <div id="item48" class="draggable" style="height: 50px; background: red; width: 600px;">item8</div>
-            <div id="item49" class="draggable" style="height: 50px; background: yellow; width: 600px;">item9</div>
+        <div id="bothScrolls" style="height: 600px; width: 300px; overflow: auto; background: grey; position: absolute; left: 0px; top: 0px;">
+            <div id="itemsWithBothScrolls" style="overflow: visible; width: 600px;">
+                <div id="item40" class="draggable" style="height: 50px; background: red; width: 600px;">item0</div>
+                <div id="item41" class="draggable" style="height: 50px; background: yellow; width: 600px;">item1</div>
+                <div id="item42" class="draggable" style="height: 50px; background: red; width: 600px;">item2</div>
+                <div id="item43" class="draggable" style="height: 50px; background: blue; width: 600px;">item3</div>
+                <div id="item44" class="draggable" style="height: 50px; background: yellow; width: 600px;">item4</div>
+                <div id="item45" class="draggable" style="height: 50px; background: red; width: 600px;">item5</div>
+                <div id="item46" class="draggable" style="height: 50px; background: blue; width: 600px;">item6</div>
+                <div id="item47" class="draggable" style="height: 50px; background: yellow; width: 600px;">item7</div>
+                <div id="item48" class="draggable" style="height: 50px; background: red; width: 600px;">item8</div>
+                <div id="item49" class="draggable" style="height: 50px; background: yellow; width: 600px;">item9</div>
+            </div>
         </div>
-    </div>
+        <div id="bothScrolls2" style="height: 300px; width: 300px; overflow: auto; background: grey; position: absolute; left: 500px; top: 500px;">
+            <div id="itemsWithBothScrolls2" style="overflow: visible; width: 600px;">
+                <div id="item50" class="draggable" style="height: 50px; background: red; width: 600px;">item0</div>
+                <div id="item51" class="draggable" style="height: 50px; background: yellow; width: 600px;">item1</div>
+                <div id="item52" class="draggable" style="height: 50px; background: red; width: 600px;">item2</div>
+                <div id="item53" class="draggable" style="height: 50px; background: blue; width: 600px;">item3</div>
+                <div id="item54" class="draggable" style="height: 50px; background: yellow; width: 600px;">item4</div>
+                <div id="item55" class="draggable" style="height: 50px; background: red; width: 600px;">item5</div>
+                <div id="item56" class="draggable" style="height: 50px; background: blue; width: 600px;">item6</div>
+                <div id="item57" class="draggable" style="height: 50px; background: yellow; width: 600px;">item7</div>
+                <div id="item58" class="draggable" style="height: 50px; background: red; width: 600px;">item8</div>
+                <div id="item59" class="draggable" style="height: 50px; background: yellow; width: 600px;">item9</div>
+            </div>
+        </div>
+        <div id="parentSortable" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: absolute; top: 0; left: 0; background: grey;">
+            <div id="item1" class="draggable" style="background: yellow;">item1</div>
+            <div id="item2" class="draggable" style="background: red;">item2</div>
+            
+            <div id="nestedSortable" class="subgroup" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
+                <div id="item3" class="draggable" style="background: blue;">item3</div>
+                <div id="item4" class="draggable" style="background: green;">item4</div>
+            </div>
+        </div>
         `;
 
     $('#qunit-fixture').html(markup);
@@ -125,7 +148,7 @@ QUnit.module('rendering', moduleConfig, () => {
     });
 
     QUnit.test('Drag template - check args', function(assert) {
-    // arrange
+        // arrange
         let items;
         const dragTemplate = sinon.spy(() => {
             return $('<div>');
@@ -150,7 +173,7 @@ QUnit.module('rendering', moduleConfig, () => {
 
     // T826089
     QUnit.test('Asynchronous drag template (React)', function(assert) {
-    // arrange
+        // arrange
         let $dragContainer;
 
         this.createSortable({
@@ -173,7 +196,7 @@ QUnit.module('rendering', moduleConfig, () => {
     });
 
     QUnit.test('Default drag template', function(assert) {
-    // arrange
+        // arrange
         this.createSortable({
         });
 
@@ -196,7 +219,7 @@ QUnit.module('rendering', moduleConfig, () => {
     });
 
     QUnit.test('While dragging cursor should be \'grabbing/pointer\'', function(assert) {
-    // arrange
+        // arrange
         this.createSortable({});
 
         // act
@@ -208,7 +231,7 @@ QUnit.module('rendering', moduleConfig, () => {
     });
 
     QUnit.test('The selector is specific enough to override the style applied to handle element', function(assert) {
-    // arrange
+        // arrange
         $('<div>Drag</div>').addClass('default').appendTo(this.$element);
 
         this.createSortable({
@@ -234,7 +257,7 @@ QUnit.module('rendering', moduleConfig, () => {
 QUnit.module('allowReordering', moduleConfig, () => {
 
     QUnit.test('allowReordering = false when dropFeedbackMode is \'push\'', function(assert) {
-    // arrange
+        // arrange
         const onDragChangeSpy = sinon.spy();
         const onReorderSpy = sinon.spy();
 
@@ -263,7 +286,7 @@ QUnit.module('allowReordering', moduleConfig, () => {
     });
 
     QUnit.test('allowReordering = false when dropFeedbackMode is \'indicate\'', function(assert) {
-    // arrange
+        // arrange
         const onDragChangeSpy = sinon.spy();
         const onReorderSpy = sinon.spy();
 
@@ -292,7 +315,7 @@ QUnit.module('allowReordering', moduleConfig, () => {
     });
 
     QUnit.test('allowReordering = false when allowDropInsideItem is true', function(assert) {
-    // arrange
+        // arrange
         const onDragChangeSpy = sinon.spy();
 
         this.createSortable({
@@ -318,7 +341,7 @@ QUnit.module('allowReordering', moduleConfig, () => {
     });
 
     QUnit.test('Move to root if allowReordering is false and allowDropInsideItem is true', function(assert) {
-    // arrange
+        // arrange
         const onDragChangeSpy = sinon.spy();
 
         this.createSortable({
@@ -349,7 +372,7 @@ QUnit.module('allowReordering', moduleConfig, () => {
     });
 
     QUnit.test('option changing', function(assert) {
-    // arrange
+        // arrange
         const sortable = this.createSortable({
             filter: '.draggable',
             moveItemOnDrop: true
@@ -370,7 +393,7 @@ QUnit.module('allowReordering', moduleConfig, () => {
     });
 
     QUnit.test('Move to top if allowReordering is false', function(assert) {
-    // arrange
+        // arrange
         const onDragChangeSpy = sinon.spy();
 
         this.createSortable({
@@ -391,7 +414,7 @@ QUnit.module('allowReordering', moduleConfig, () => {
 QUnit.module('placeholder and source', moduleConfig, () => {
 
     QUnit.test('Source item if filter is not defined', function(assert) {
-    // arrange
+        // arrange
         this.createSortable({
             dropFeedbackMode: 'push'
         });
@@ -413,7 +436,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
     });
 
     QUnit.test('Source item if content template is defined', function(assert) {
-    // arrange
+        // arrange
         this.$element = $('#itemsWithContentTemplate');
 
         this.createSortable({
@@ -437,7 +460,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
     });
 
     QUnit.test('Source item', function(assert) {
-    // arrange
+        // arrange
         this.createSortable({
             dropFeedbackMode: 'push',
             filter: '.draggable'
@@ -460,7 +483,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
     });
 
     QUnit.test('Initial placeholder if dropFeedbackMode is indicate', function(assert) {
-    // arrange
+        // arrange
         let items;
         let $placeholder;
         let $dragItemElement;
@@ -498,7 +521,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
     });
 
     QUnit.test('Initial placeholder if allowDropInsideItem is true', function(assert) {
-    // arrange
+        // arrange
         let items;
         let $placeholder;
         let $dragItemElement;
@@ -538,7 +561,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
     });
 
     QUnit.test('Initial placeholder if dropFeedbackMode is indicate and itemOrientation is horiontal', function(assert) {
-    // arrange
+        // arrange
         let items;
         let $placeholder;
         let $dragItemElement;
@@ -567,7 +590,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
     });
 
     QUnit.test('Source classes toggling', function(assert) {
-    // arrange
+        // arrange
         this.createSortable({
             dropFeedbackMode: 'push'
         });
@@ -593,7 +616,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
     });
 
     QUnit.test('Move items during dragging', function(assert) {
-    // arrange
+        // arrange
         let items;
         let $item;
         let $dragItemElement;
@@ -625,7 +648,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
     });
 
     QUnit.test('Move items during dragging if content tempalte is defined', function(assert) {
-    // arrange
+        // arrange
         let items;
         let $item;
         let $dragItemElement;
@@ -658,7 +681,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
     });
 
     QUnit.test('Drop when dropFeedbackMode is push', function(assert) {
-    // arrange
+        // arrange
         let items;
         let $dragItemElement;
 
@@ -682,7 +705,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
     });
 
     QUnit.test('Drop when dropFeedbackMode is indicate', function(assert) {
-    // arrange
+        // arrange
         let items;
         let $dragItemElement;
 
@@ -706,7 +729,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
     });
 
     QUnit.test('Remove placeholder after the drop end', function(assert) {
-    // arrange
+        // arrange
         this.createSortable({
             filter: '.draggable',
             dropFeedbackMode: 'indicate'
@@ -729,7 +752,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
     });
 
     QUnit.test('The source item should be correct after drag and drop items', function(assert) {
-    // arrange
+        // arrange
         let items;
         let $item;
 
@@ -759,7 +782,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
     });
 
     QUnit.test('Dragging an item to the last position when there is ignored (not draggable) item', function(assert) {
-    // arrange
+        // arrange
         let pointer;
         let items;
 
@@ -792,7 +815,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
     });
 
     QUnit.test('Dragging an item to the last position when there is ignored (not draggable) item and dropFeedbackMode option is \'indicate\'', function(assert) {
-    // arrange
+        // arrange
         let pointer;
         let items;
 
@@ -827,7 +850,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
     });
 
     QUnit.test('Dragging an item when the next item is hidden (dropFeedbackMode is "indicate")', function(assert) {
-    // arrange
+        // arrange
         const $items = $('#items').children();
         const onDragChangeSpy = sinon.spy();
 
@@ -856,7 +879,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
     });
 
     QUnit.test('Dragging an item when the prev item is hidden (dropFeedbackMode is "indicate")', function(assert) {
-    // arrange
+        // arrange
         const $items = $('#items').children();
         const onDragChangeSpy = sinon.spy();
 
@@ -885,7 +908,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
     });
 
     QUnit.test('Dragging an item to the last position when the last item is hidden (dropFeedbackMode is "indicate")', function(assert) {
-    // arrange
+        // arrange
         const $items = $('#items').children();
         const onDragChangeSpy = sinon.spy();
 
@@ -907,7 +930,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
     });
 
     QUnit.test('The placeholder should not be displayed for the last visible item when it is dragged (dropFeedbackMode is "indicate")', function(assert) {
-    // arrange
+        // arrange
         let $items = $('#items').children();
 
         $items.eq(1).hide();
@@ -935,7 +958,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
 QUnit.module('Events', crossComponentModuleConfig, () => {
 
     QUnit.test('onDragChange - check args when dragging an item down', function(assert) {
-    // arrange
+        // arrange
         let items;
         let args;
         const onDragChange = sinon.spy();
@@ -962,7 +985,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
     });
 
     QUnit.test('onDragChange - check args when dragging an item up', function(assert) {
-    // arrange
+        // arrange
         let items;
         let args;
         const onDragChange = sinon.spy();
@@ -985,7 +1008,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
     });
 
     QUnit.test('onDragChange - check args when dragging to last position', function(assert) {
-    // arrange
+        // arrange
         let items;
         let args;
         const onDragChange = sinon.spy();
@@ -1008,7 +1031,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
     });
 
     QUnit.test('\'onDragChange\' option changing', function(assert) {
-    // arrange
+        // arrange
         let args;
         let items;
         const onDragChange = sinon.spy();
@@ -1036,7 +1059,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
     });
 
     QUnit.test('\'onDragChange\' event - not drag item when eventArgs.cancel is true', function(assert) {
-    // arrange
+        // arrange
         let items;
         let $dragItemElement;
 
@@ -1061,7 +1084,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
     });
 
     QUnit.test('onDragEnd - check args when dragging an item down', function(assert) {
-    // arrange
+        // arrange
         let items;
         let args;
         const onDragEnd = sinon.spy();
@@ -1089,7 +1112,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
     });
 
     QUnit.test('onDragEnd - check args when dragging an item up', function(assert) {
-    // arrange
+        // arrange
         let items;
         let args;
         const onDragEnd = sinon.spy();
@@ -1113,7 +1136,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
     });
 
     QUnit.test('onDragEnd - check args when dragging to last position', function(assert) {
-    // arrange
+        // arrange
         let items;
         let args;
         const onDragEnd = sinon.spy();
@@ -1136,7 +1159,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
     });
 
     QUnit.test('onDragEnd with eventArgs.cancel is true - the draggable element should not change position', function(assert) {
-    // arrange
+        // arrange
         let items;
 
         this.createSortable({
@@ -1161,7 +1184,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
     });
 
     QUnit.test('onDragEnd - check args when dropping onto itself (dropFeedbackMode is \'indicate\')', function(assert) {
-    // arrange
+        // arrange
         let items;
         let args;
         const onDragEnd = sinon.spy();
@@ -1190,7 +1213,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
     });
 
     QUnit.test('The draggable element should not change position without moveItemOnDrop', function(assert) {
-    // arrange
+        // arrange
         let items;
 
         this.createSortable({
@@ -1211,7 +1234,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
     });
 
     QUnit.test('onDragEnd - check args when dragging inside item', function(assert) {
-    // arrange
+        // arrange
         let items;
         let args;
         const onDragEnd = sinon.spy();
@@ -1236,7 +1259,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
     });
 
     QUnit.test('onPlaceholderPrepared - check args when dragging', function(assert) {
-    // arrange
+        // arrange
         let items;
         let args;
         const onPlaceholderPrepared = sinon.spy();
@@ -1266,7 +1289,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
     });
 
     QUnit.test('\'onPlaceholderPrepared\' option changing', function(assert) {
-    // arrange
+        // arrange
         let args;
         let items;
         const onPlaceholderPrepared = sinon.spy();
@@ -1298,7 +1321,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
     });
 
     QUnit.test('onAdd - check args', function(assert) {
-    // arrange
+        // arrange
         const onAddSpy = sinon.spy();
 
         const sortable1 = this.createSortable({
@@ -1332,7 +1355,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
     });
 
     QUnit.test('onAdd - not add item when eventArgs.cancel is true', function(assert) {
-    // arrange
+        // arrange
         const onAddSpy = sinon.spy((e) => { e.cancel = true; });
 
         const sortable1 = this.createSortable({
@@ -1356,7 +1379,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
     });
 
     QUnit.test('onAdd - not add item without moveItemOnDrop', function(assert) {
-    // arrange
+        // arrange
         const onAddSpy = sinon.spy();
 
         const sortable1 = this.createSortable({
@@ -1379,7 +1402,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
     });
 
     QUnit.test('onRemove - check args', function(assert) {
-    // arrange
+        // arrange
         const onRemoveSpy = sinon.spy();
 
         const sortable1 = this.createSortable({
@@ -1413,7 +1436,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
     });
 
     QUnit.test('onRemove - not add item when eventArgs.cancel is true', function(assert) {
-    // arrange
+        // arrange
         const onRemoveSpy = sinon.spy((e) => { e.cancel = true; });
 
         const sortable1 = this.createSortable({
@@ -1439,7 +1462,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
     });
 
     QUnit.test('onRemove - not add item without moveItemOnDrop', function(assert) {
-    // arrange
+        // arrange
         const onRemoveSpy = sinon.spy();
 
         const sortable1 = this.createSortable({
@@ -1464,7 +1487,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
     });
 
     QUnit.test('onReorder - check args', function(assert) {
-    // arrange
+        // arrange
         const onReorderSpy = sinon.spy();
 
         const sortable = this.createSortable({
@@ -1489,7 +1512,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
     });
 
     QUnit.test('onDragMove, onDragEnd, onDragChange, onReorder - check itemData arg', function(assert) {
-    // arrange
+        // arrange
         const itemData = { test: true };
         const options = {
             filter: '.draggable',
@@ -1516,7 +1539,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
     });
 
     QUnit.test('onAdd, onRemove - check itemData arg', function(assert) {
-    // arrange
+        // arrange
         const itemData = { test: true };
         const onAddSpy = sinon.spy();
         const onRemoveSpy = sinon.spy();
@@ -1547,7 +1570,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
 
     // T835349
     QUnit.test('The onAdd event should be fired when there is horizontal scrolling', function(assert) {
-    // arrange
+        // arrange
         const onAddSpy = sinon.spy();
 
         const sortable1 = this.createSortable({
@@ -1574,7 +1597,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
 
     // T835349
     QUnit.test('The onAdd event should be fired when there is vertical scrolling', function(assert) {
-    // arrange
+        // arrange
         const onAddSpy = sinon.spy();
 
         $('#scroll').css('top', '300px');
@@ -1606,7 +1629,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
 QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => {
 
     QUnit.test('Dragging item to another the sortable widget', function(assert) {
-    // arrange
+        // arrange
         let items1;
         let items2;
 
@@ -1643,7 +1666,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
     });
 
     QUnit.test('Dragging item to another the sortable widget when allowReordering is false', function(assert) {
-    // arrange
+        // arrange
         let items1;
         let items2;
 
@@ -1682,7 +1705,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
     });
 
     QUnit.test('Dragging item to another the sortable widget if dragTemplate contains scrollable', function(assert) {
-    // arrange
+        // arrange
         let items1;
         let items2;
 
@@ -1725,7 +1748,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
     });
 
     QUnit.test('Dragging item to another the sortable widget without free space', function(assert) {
-    // arrange
+        // arrange
         $('#items2').css('height', '');
         $('#items2').children().last().css('margin', 1);
 
@@ -1758,7 +1781,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
     });
 
     QUnit.test('Dragging an item to another the sortable widget without free space when its last element is hidden', function(assert) {
-    // arrange
+        // arrange
         $('#items2').css('height', '');
         $('#items2').children().last().hide();
         $('#items2').children().eq(-2).css('margin', 1);
@@ -1793,7 +1816,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
 
 
     QUnit.test('Dragging item with dropFeedbackMode push to another the sortable widget with dropFeedbackMode indicate', function(assert) {
-    // arrange
+        // arrange
         let items1;
         let items2;
 
@@ -1824,7 +1847,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
     });
 
     QUnit.test('Dragging item to another the sortable widget when group as object', function(assert) {
-    // arrange
+        // arrange
         let items1;
         let items2;
         const group = {};
@@ -1861,7 +1884,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
     });
 
     QUnit.test('Dragging item should not work when another the sortable widget does not have a group', function(assert) {
-    // arrange
+        // arrange
         let items1;
         let items2;
 
@@ -1885,7 +1908,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
     });
 
     QUnit.test('Dropping item to another the sortable widget', function(assert) {
-    // arrange
+        // arrange
         let items1;
         let items2;
 
@@ -1913,7 +1936,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
     });
 
     QUnit.test('Dragging item to another the sortable widget with dropFeedbackMode indicate', function(assert) {
-    // arrange
+        // arrange
         let items1;
         let items2;
 
@@ -1941,7 +1964,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
     });
 
     QUnit.test('Dropping item to another the sortable widget with dropFeedbackMode indicate', function(assert) {
-    // arrange
+        // arrange
         let items1;
         let items2;
 
@@ -1971,7 +1994,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
     });
 
     QUnit.test('Dragging items between sortable widgets', function(assert) {
-    // arrange
+        // arrange
         let items1;
         let items2;
 
@@ -2011,7 +2034,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
     });
 
     QUnit.test('Animation should be stopped for target sortable items after leave', function(assert) {
-    // arrange
+        // arrange
         let items2;
 
         const sortable1 = this.createSortable({
@@ -2049,7 +2072,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
     });
 
     QUnit.test('items should not be moved after leave and enter', function(assert) {
-    // arrange
+        // arrange
         const sortable1 = this.createSortable({
             group: 'shared',
             dropFeedbackMode: 'push'
@@ -2072,7 +2095,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
     });
 
     QUnit.test('Items should be moved after leave sortable if group is defined', function(assert) {
-    // arrange
+        // arrange
         const sortable = this.createSortable({
             group: 'shared',
             dropFeedbackMode: 'push'
@@ -2090,7 +2113,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
     });
 
     QUnit.test('Items should not be moved after leave sortable if group is not defined', function(assert) {
-    // arrange
+        // arrange
         const sortable = this.createSortable({
             dropFeedbackMode: 'push'
         }, $('#items'));
@@ -2107,7 +2130,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
     });
 
     QUnit.test('Update item points when dragging an item to another the sortable widget if dropFeedbackMode is push', function(assert) {
-    // arrange
+        // arrange
         const sortable1 = this.createSortable({
             dropFeedbackMode: 'push',
             filter: '.draggable',
@@ -2137,7 +2160,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
     });
 
     QUnit.test('Drag and drop item from draggable to sortable', function(assert) {
-    // arrange
+        // arrange
         let items1;
         let items2;
 
@@ -2166,7 +2189,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
     });
 
     QUnit.test('Drag and drop item from sortable to draggable should not move item', function(assert) {
-    // arrange
+        // arrange
         let items1;
         let items2;
 
@@ -2191,7 +2214,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
     });
 
     QUnit.test('Drag and drop item from sortable to draggable with drop handler', function(assert) {
-    // arrange
+        // arrange
         let items1;
         let items2;
 
@@ -2224,7 +2247,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
     });
 
     QUnit.test('Drag and drop item to empty sortable', function(assert) {
-    // arrange
+        // arrange
         let items1;
         let items2;
 
@@ -2252,7 +2275,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
     });
 
     QUnit.test('Placeholder should not visible on drag item to empty sortable', function(assert) {
-    // arrange
+        // arrange
         const sortable1 = this.createSortable({
             filter: '.draggable',
             dropFeedbackMode: 'indicate',
@@ -2275,7 +2298,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
     });
 
     QUnit.test('Dragging an item to another sortable and back when it is alone in the collection', function(assert) {
-    // arrange
+        // arrange
         let items1;
         let items2;
 
@@ -2323,7 +2346,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
 
     // T846161
     QUnit.test('The onRemove event should be fired when dragging the item from sortable to draggable', function(assert) {
-    // arrange
+        // arrange
         const onRemoveSpy = sinon.spy();
         const onDragEndSpy = sinon.spy();
 
@@ -2390,7 +2413,7 @@ function getModuleConfigForTestsWithScroll(elementSelector, scrollSelector) {
 QUnit.module('With scroll', getModuleConfigForTestsWithScroll('#itemsWithScroll', '#scroll'), () => {
 
     QUnit.test('Placeholder position should be updated during autoscroll', function(assert) {
-    // arrange
+        // arrange
         let pointer;
         let items;
         let previousPlaceholderOffsetTop;
@@ -2424,7 +2447,7 @@ QUnit.module('With scroll', getModuleConfigForTestsWithScroll('#itemsWithScroll'
     });
 
     QUnit.test('Placeholder should not be visible outside bottom of scroll container', function(assert) {
-    // arrange
+        // arrange
         let pointer;
         let items;
 
@@ -2486,7 +2509,7 @@ QUnit.module('With scroll', getModuleConfigForTestsWithScroll('#itemsWithScroll'
     });
 
     QUnit.test('Placeholder should not be visible outside bottom of scroll container if overflow on sortable', function(assert) {
-    // arrange
+        // arrange
         let pointer;
         let items;
 
@@ -2517,7 +2540,7 @@ QUnit.module('With scroll', getModuleConfigForTestsWithScroll('#itemsWithScroll'
     });
 
     QUnit.test('Placeholder should not be visible outside top of scroll container', function(assert) {
-    // arrange
+        // arrange
         let pointer;
         let items;
 
@@ -2549,7 +2572,7 @@ QUnit.module('With both scrolls', getModuleConfigForTestsWithScroll('#itemsWithB
 
     // T830034
     QUnit.test('Placeholder width and offset should be correct if horizontal scroll exists and items have left margin', function(assert) {
-    // arrange
+        // arrange
         let items;
         const maxScroll = this.$scroll.prop('scrollWidth') - this.$scroll.width();
 
@@ -2613,7 +2636,7 @@ QUnit.module('With both scrolls', getModuleConfigForTestsWithScroll('#itemsWithB
 
     // T830034
     QUnit.test('Placeholder width and offset should be correct if horizontal scroll exists and items have right margin', function(assert) {
-    // arrange
+        // arrange
         let items;
         const maxScroll = this.$scroll.prop('scrollWidth') - this.$scroll.width();
 
@@ -2679,7 +2702,7 @@ QUnit.module('With both scrolls', getModuleConfigForTestsWithScroll('#itemsWithB
 
     // T830034
     QUnit.test('Placeholder width and offset should be correct if horizontal scroll exists and items have right and left margins', function(assert) {
-    // arrange
+        // arrange
         let items;
         const maxScroll = this.$scroll.prop('scrollWidth') - this.$scroll.width();
 
@@ -2743,5 +2766,241 @@ QUnit.module('With both scrolls', getModuleConfigForTestsWithScroll('#itemsWithB
         $('.draggable').css('width', '600px');
         $('.draggable').css('margin-right', '0px');
         $('.draggable').css('margin-left', '0px');
+    });
+
+    QUnit.test('onReorder should not be called if item was dropped under the sortable', function(assert) {
+        // arrange
+        $('#bothScrolls').height(300);
+        const onReorder = sinon.spy();
+
+        this.createSortable({
+            filter: '.draggable',
+            onReorder
+        });
+
+        // act
+        pointerMock(this.$element.children().eq(0)).start().down().move(0, 450).up();
+
+        // assert
+        assert.equal(onReorder.callCount, 0, 'onReorder call count');
+    });
+});
+
+QUnit.module('Dragging between sortables with scroll', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+
+        $('#qunit-fixture').addClass('qunit-fixture-visible');
+
+        this.$elements = [$('#itemsWithBothScrolls'), $('#itemsWithBothScrolls2')];
+        this.$scrolls = [$('#bothScrolls'), $('#bothScrolls2')];
+        this.instances = [];
+
+        this.createOneSortable = (options, $element) => {
+            const instance = $element.dxSortable(options).dxSortable('instance');
+
+            this.instances.push(instance);
+
+            return instance;
+        };
+
+        this.createSortable = (options) => {
+            this.$elements.forEach(($element) => {
+                this.createOneSortable(options, $element);
+            });
+        };
+    },
+    afterEach: function() {
+        this.clock.restore();
+        this.clock.reset();
+
+        $('#qunit-fixture').removeClass('qunit-fixture-visible');
+        this.instances.forEach((instance) => {
+            instance.dispose();
+        });
+    }
+}, () => {
+    function dragBetweenSortableTest(that, assert, scroll, dragPos) {
+        // arrange
+        const onAdd = sinon.spy();
+        const onRemove = sinon.spy();
+
+        that.createSortable({
+            filter: '.draggable',
+            group: 'shared',
+            moveItemOnDrop: true,
+            onAdd,
+            onRemove
+        });
+
+        // act
+        that.$elements[1].scrollLeft(scroll.left);
+        that.$elements[1].scrollTop(scroll.top);
+
+        pointerMock(that.$elements[0].children().eq(0)).start().down().move(dragPos.x, dragPos.y).move(1, 1).up();
+
+        // assert
+        assert.equal(that.$elements[0].children().length, 10, 'children count');
+        assert.equal(that.$elements[1].children().length, 10, 'children count');
+        assert.equal(onRemove.callCount, 0, 'onRemove call count');
+        assert.equal(onAdd.callCount, 0, 'onAdd call count');
+    }
+
+    QUnit.test('Dragging between two sortables with scroll', function(assert) {
+        // arrange
+        const onAdd = sinon.spy();
+        const onRemove = sinon.spy();
+
+        this.createSortable({
+            filter: '.draggable',
+            group: 'shared',
+            moveItemOnDrop: true,
+            onAdd,
+            onRemove
+        });
+
+        // act
+        pointerMock(this.$elements[0].children().eq(0)).start().down().move(650, 650).move(1, 1).up();
+
+        // assert
+        assert.equal(this.$elements[0].children().length, 9, 'children count');
+        assert.equal(this.$elements[1].children().length, 11, 'children count');
+        assert.equal(onRemove.callCount, 1, 'onRemove call count');
+        assert.equal(onAdd.callCount, 1, 'onAdd call count');
+    });
+
+    // T872379
+    [true, false].forEach((needBothScrolls) => {
+        QUnit.test('onAdd and onRemove events should not trigger after dragging under sortable' + (needBothScrolls ? '(both scrolls)' : '(vertical scroll)'), function(assert) {
+            if(!needBothScrolls) {
+                $('.draggable').width(280);
+                this.$elements[0].width(280);
+                this.$elements[1].width(280);
+            }
+
+            dragBetweenSortableTest(this, assert, {
+                left: 0,
+                top: 0
+            }, {
+                x: 650,
+                y: 800
+            });
+        });
+
+        QUnit.test('onAdd and onRemove events should not trigger after dragging above the sortable' + (needBothScrolls ? '(both scrolls)' : '(vertical scroll)'), function(assert) {
+            if(!needBothScrolls) {
+                $('.draggable').width(280);
+                this.$elements[0].width(280);
+                this.$elements[1].width(280);
+            }
+
+            dragBetweenSortableTest(this, assert, {
+                left: 0,
+                top: 0
+            }, {
+                x: 800,
+                y: 650
+            });
+        });
+
+        QUnit.test('onAdd and onRemove events should not trigger after dragging on the right of the sortable' + (needBothScrolls ? '(both scrolls)' : '(horizontal scroll)'), function(assert) {
+            !needBothScrolls && $('.draggable').height(25);
+
+            dragBetweenSortableTest(this, assert, {
+                left: 500,
+                top: 500
+            }, {
+                x: 650,
+                y: 400
+            });
+        });
+
+        QUnit.test('onAdd and onRemove events should not trigger after dragging on the left of the sortable' + (needBothScrolls ? '(both scrolls)' : '(horizontal scroll)'), function(assert) {
+            !needBothScrolls && $('.draggable').height(25);
+
+            dragBetweenSortableTest(this, assert, {
+                left: 500,
+                top: 500
+            }, {
+                x: 400,
+                y: 650
+            });
+        });
+    });
+});
+
+QUnit.module('Drag and drop with nested sortable', crossComponentModuleConfig, () => {
+    QUnit.test('The onReorder event should be raised for a nested sortable', function(assert) {
+        // arrange
+        const onReorder1 = sinon.spy();
+        const onReorder2 = sinon.spy();
+
+        this.createSortable({
+            dropFeedbackMode: 'push',
+            filter: '.draggable',
+            group: 'shared',
+            moveItemOnDrop: true,
+            onReorder: onReorder1
+        }, $('#parentSortable'));
+
+        const sortable2 = this.createSortable({
+            dropFeedbackMode: 'push',
+            filter: '.draggable',
+            group: 'shared',
+            moveItemOnDrop: true,
+            onReorder: onReorder2
+        }, $('#nestedSortable'));
+
+        // act
+        const $itemElement = sortable2.$element().children().eq(0);
+        pointerMock($itemElement).start({ x: 0, y: $itemElement.offset().top }).down().move(0, 25).move(0, 5).up();
+
+        // assert
+        assert.strictEqual(onReorder1.callCount, 0, 'parent sortable - onReorder event is not called');
+        assert.strictEqual(onReorder2.callCount, 1, 'nested sortable - onReorder event is called');
+        assert.deepEqual(onReorder2.getCall(0).args[0].fromComponent, sortable2, 'onReorder args - fromComponent');
+        assert.deepEqual(onReorder2.getCall(0).args[0].toComponent, sortable2, 'onReorder args - toComponent');
+    });
+
+    QUnit.test('Dragging item into a nested sortable', function(assert) {
+        // arrange
+        const onReorder1 = sinon.spy();
+        const onReorder2 = sinon.spy();
+        const onAdd = sinon.spy();
+        const onRemove = sinon.spy();
+
+        const sortable1 = this.createSortable({
+            dropFeedbackMode: 'push',
+            filter: '.draggable',
+            group: 'shared',
+            moveItemOnDrop: true,
+            onReorder: onReorder1,
+            onRemove: onRemove
+        }, $('#parentSortable'));
+
+        const sortable2 = this.createSortable({
+            dropFeedbackMode: 'push',
+            filter: '.draggable',
+            group: 'shared',
+            moveItemOnDrop: true,
+            onReorder: onReorder2,
+            onAdd: onAdd
+        }, $('#nestedSortable'));
+
+        // act
+        const $itemElement = sortable1.$element().children().eq(0);
+        const offsetTop = sortable2.$element().offset().top;
+
+        pointerMock($itemElement).start({ x: 0, y: $itemElement.offset().top }).down().move(0, offsetTop + 5).move(0, 5).up();
+
+        // assert
+        assert.strictEqual(onReorder1.callCount, 0, 'parent sortable - onReorder event is not called');
+        assert.strictEqual(onReorder2.callCount, 0, 'nested sortable - onReorder event is not called');
+
+        assert.strictEqual(onRemove.callCount, 1, 'parent sortable - onRemove event is called');
+        assert.strictEqual(onAdd.callCount, 1, 'nested sortable - onAdd event is called');
+        assert.deepEqual(onAdd.getCall(0).args[0].fromComponent, sortable1, 'onAdd args - fromComponent');
+        assert.deepEqual(onAdd.getCall(0).args[0].toComponent, sortable2, 'onAdd args - toComponent');
+        assert.strictEqual(onAdd.getCall(0).args[0].toIndex, 1, 'onAdd args - toIndex');
     });
 });

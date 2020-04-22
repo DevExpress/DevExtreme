@@ -6116,6 +6116,62 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok(dataGrid.getScrollable().scrollTop() > 0, 'scrollTop is not reseted');
     });
 
+    [false, true].forEach(function(grouping) {
+        QUnit.test(`loading data on scroll after deleting several rows if scrolling mode is infinite and refreshMode is repaint ${grouping ? 'and if grouping ' : ''}(T862268)`, function(assert) {
+            // arrange
+            const array = [];
+
+            for(let i = 1; i <= 50; i++) {
+                array.push({ id: i, group: Math.floor(i / 10) });
+            }
+
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                height: 100,
+                dataSource: array,
+                keyExpr: 'id',
+                editing: {
+                    allowDeleting: true,
+                    texts: {
+                        confirmDeleteMessage: ''
+                    },
+                    refreshMode: 'repaint'
+                },
+                scrolling: {
+                    mode: 'infinite',
+                    useNative: false
+                },
+                columns: ['id', {
+                    dataField: 'group',
+                    groupIndex: grouping ? 0 : undefined }
+                ],
+                loadingTimeout: undefined
+            }).dxDataGrid('instance');
+
+            const firstDataRowIndex = grouping ? 1 : 0;
+            // act
+            dataGrid.deleteRow(firstDataRowIndex);
+            dataGrid.deleteRow(firstDataRowIndex);
+            dataGrid.getScrollable().scrollTo({ y: 10000 });
+
+            // assert
+            let rows = dataGrid.getVisibleRows();
+            assert.equal(dataGrid.totalCount(), 38, 'totalCount');
+            assert.equal(rows.length, 38, 'visible row count');
+            assert.equal(rows[firstDataRowIndex].key, 3, 'row 0');
+            assert.equal(rows[18].key, grouping ? 19 : 21, 'row 18');
+            assert.equal(rows[37].key, grouping ? 36 : 40, 'row 37');
+
+            // act
+            dataGrid.refresh();
+
+            // assert
+            rows = dataGrid.getVisibleRows();
+            assert.equal(dataGrid.totalCount(), 20, 'totalCount');
+            assert.equal(rows.length, 20, 'visible row count');
+            assert.equal(rows[firstDataRowIndex].key, 3, 'row 0');
+        });
+    });
+
     QUnit.test('height from extern styles', function(assert) {
     // arrange, act
         const $dataGrid = $('#dataGrid').addClass('fixed-height').dxDataGrid({
@@ -9455,6 +9511,40 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.notOk($(dataGrid.getRowElement(1)).find('.dx-texteditor').length, 'row doesn\'t have editor');
     });
 
+    // T865715
+    QUnit.test('Row\'s height should be correct after updateDimensions while editing with popup edit mode', function(assert) {
+        // arrange
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            loadingTimeout: undefined,
+            width: 300,
+            columnHidingEnabled: true,
+            keyExpr: 'ID',
+            wordWrapEnabled: true,
+            editing: {
+                allowUpdating: true,
+                mode: 'popup'
+            },
+            dataSource: [{
+                ID: 1,
+                Comment: 'very long text very long text very long text very long text very long text very long text very long text very long text'
+            }, {
+                ID: 2,
+                Comment: 'very long text very long text very long text very long text very long text very long text very long text very long text'
+            }]
+        }).dxDataGrid('instance');
+
+        // act
+        const $firstRow = $(dataGrid.getRowElement(0));
+        const firstRowHeight = $firstRow.height();
+
+        dataGrid.editRow(0);
+        dataGrid.updateDimensions();
+
+        // assert
+        assert.equal($firstRow.height(), firstRowHeight, 'first row\'s height');
+        assert.ok($firstRow.find('td').eq(1).hasClass('dx-datagrid-hidden-column'), 'column hiding class');
+    });
+
     ['row', 'form'].forEach(editMode => {
         QUnit.test(`Should not throw exception after calling editRow() if KBN is disabled and edit mode is ${editMode}`, function(assert) {
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -9957,13 +10047,16 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
             columns: ['id', 'group']
         }).dxDataGrid('instance');
 
-        dataGrid.getScrollable().scrollTo({ top: 1000000 });
+        const scrollable = dataGrid.getScrollable();
+        scrollable.scrollTo({ top: 1000000 });
+        const scrollTop = scrollable.scrollTop();
 
         realSetTimeout(function() {
-        // act
+            // act
             dataGrid.clearGrouping();
+
             // assert
-            assert.ok(dataGrid.getTopVisibleRowData().id < 1000, 'top visible row is correct');
+            assert.equal(scrollable.scrollTop(), scrollTop, 'scroll position is not changed');
             assert.ok($(dataGrid.element()).find('.dx-virtual-row').first().height() <= dataGrid.getScrollable().scrollTop(), 'first virtual row is not in viewport');
             assert.ok($(dataGrid.element()).find('.dx-virtual-row').last().position().top >= dataGrid.getScrollable().scrollTop(), 'second virtual row is not in viewport');
             done();
@@ -10170,12 +10263,9 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
             }
         }).dxDataGrid('instance');
 
-        // act
-        dataGrid.getScrollable().scrollTo(10000);
-
         // assert
         assert.equal(dataGrid.getVisibleRows().length, 20, 'visible rows');
-        assert.equal(dataGrid.getVisibleRows()[0].data.id, 6, 'top visible row');
+        assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, 'top visible row');
         assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 1, 'bottom loading exists');
 
         // act
@@ -10183,7 +10273,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
         // assert
         assert.equal(dataGrid.getVisibleRows().length, 20, 'visible rows');
-        assert.equal(dataGrid.getVisibleRows()[0].data.id, 11, 'top visible row');
+        assert.equal(dataGrid.getVisibleRows()[0].data.id, 6, 'top visible row');
         assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 0, 'not bottom loading');
     });
 
@@ -10357,6 +10447,81 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         assert.ok(visibleRows[visibleRows.length - 1].data.id - topVisibleRowData.id > 10, 'visible rows are in viewport');
     });
 
+    // T878343
+    QUnit.test('cellValue should work correctly with virtual scrolling and row rendering', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test is not actual for mobile devices');
+            return;
+        }
+
+        const dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: {
+                load: function(options) {
+                    const items = [];
+                    const deferred = $.Deferred();
+
+                    for(let i = options.skip; i < options.skip + options.take && i < 10000; i++) {
+                        items.push({ id: i + 1, field: `some${i}` });
+                    }
+
+                    setTimeout(() => {
+                        deferred.resolve({ data: items, totalCount: 10000 });
+                    }, 1000);
+
+                    return deferred;
+                }
+            },
+            height: 550,
+            remoteOperations: true,
+            showBorders: true,
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual'
+            },
+            columns: [{
+                cellTemplate: function(element, info) {
+                    $('<div>')
+                        .appendTo(element)
+                        .dxCheckBox({
+                            onValueChanged: function(e) {
+                                const actualRowIdx = dataGrid.getRowIndexByKey(info.key);
+                                dataGrid.cellValue(actualRowIdx, 'field', 'new value');
+                            }
+                        });
+                },
+                width: 75
+            }, 'field']
+        });
+
+        this.clock.tick(2000);
+
+        // act
+        const scrollable = dataGrid.getScrollable();
+        scrollable.scrollBy(448);
+
+        this.clock.tick(1000);
+
+        scrollable.scrollBy(448);
+
+        this.clock.tick(1000);
+
+        const $checkBox = $(dataGrid.getRowElement(4)).find('.dx-checkbox');
+        $checkBox.trigger('dxpointerdown');
+        this.clock.tick();
+        $checkBox.trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.equal(dataGrid.cellValue(4, 'field'), 'new value', 'cell\'s value was changed');
+        assert.equal($(dataGrid.getCellElement(4, 1)).text(), 'new value', 'cell\'s text was changed');
+        assert.equal(scrollable.scrollTop(), 896, 'scrollTop');
+
+        const visibleRows = dataGrid.getVisibleRows();
+        assert.equal(visibleRows[0].data.id, 21, 'first visible row');
+        assert.equal(visibleRows[19].data.id, 40, 'last visible row');
+    });
+
     // T830138
     QUnit.test('Freespace row should not have huge height if rowRenderingMode is virtual and pageSize is large', function(assert) {
     // arrange
@@ -10441,6 +10606,68 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         // assert
         assert.ok(dataController._getLastItemIndex.callCount > 0, '_getLastItemIndex has called after set focusedRowKey');
         assert.equal(dataController._getLastItemIndex(), 99, 'Last item index');
+    });
+
+    // T872126
+    QUnit.test('Incorrect cell should not be focused after editing boolean column in cell edit mode', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test is not actual for mobile devices');
+            return;
+        }
+
+        // arrange
+        const store = [];
+
+        for(let i = 0; i < 60; i++) {
+            store.push({
+                id: i + 1,
+                field: true
+            });
+        }
+
+        const dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: store,
+            height: 200,
+            keyExpr: 'id',
+            editing: {
+                mode: 'cell',
+                allowUpdating: true,
+                refreshMode: 'repaint'
+            },
+            scrolling: {
+                rowRenderingMode: 'virtual'
+            },
+            paging: {
+                enabled: false
+            }
+        });
+
+        // act
+        const scrollable = dataGrid.getScrollable();
+        scrollable.scrollBy(400);
+        this.clock.tick();
+
+        const firstVisibleRowKey = dataGrid.getVisibleRows()[0].key;
+        const scrollTop = scrollable.scrollTop();
+
+        let $cell = $(dataGrid.getCellElement(2, 1));
+        const $checkBox = $cell.find('.dx-checkbox').eq(0);
+
+        $checkBox.trigger('dxpointerdown');
+        this.clock.tick();
+        $checkBox.trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows()[0].key, firstVisibleRowKey, 'first visible row key');
+        assert.equal(scrollable.scrollTop(), scrollTop, 'scrollTop');
+
+        $cell = $(dataGrid.getCellElement(2, 1));
+
+        assert.ok($cell.hasClass('dx-focused'), 'cell is focused');
+        assert.ok($cell.hasClass('dx-editor-cell'), 'cell is edited');
+        assert.equal($cell.siblings().text(), '13', 'sibling\'s text');
     });
 });
 
@@ -10622,6 +10849,32 @@ QUnit.module('Async render', baseModuleConfig, () => {
             'data-select', // command column is async
             'data-boolean' // showEditorAlways column is async
         ], 'asynchronous cellPrepared calls');
+    });
+
+    QUnit.test('Template in columns.buttons should render asynchronously if column renderAsync is true (T876950)', function(assert) {
+        let buttonTemplateCallCount = 0;
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 1 }],
+            loadingTimeout: undefined,
+            columns: [{
+                type: 'buttons',
+                width: 100,
+                renderAsync: true,
+                buttons: [{
+                    template: function() {
+                        buttonTemplateCallCount++;
+                        return $('<a>').text('Test');
+                    }
+                }]
+            }]
+        });
+
+        assert.equal(buttonTemplateCallCount, 0, 'template is not rendered');
+
+        this.clock.tick();
+
+        assert.equal(buttonTemplateCallCount, 1, 'template is rendered asynchronously');
+        assert.equal($(dataGrid.getCellElement(0, 0)).text(), 'Test', 'template is applied');
     });
 
     QUnit.test('showEditorAlways column should render synchronously if renderAsync is true and column renderAsync is false', function(assert) {
@@ -17887,6 +18140,90 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual(columns[0].width, 200, 'width of the first column');
         assert.strictEqual(columns[1].width, 200, 'width of the second column');
         assert.strictEqual(columns[2].width, 200, 'width of the third column');
+    });
+
+    QUnit.test('Group Row - expandRow should resolve its promise only after re-rendering (T880769)', function(assert) {
+        // arrange
+        const getRowsInfo = function(element) {
+            const $rows = $(element).find('.dx-datagrid-rowsview .dx-row[role=\'row\']');
+            return {
+                rowCount: $rows.length,
+                groupRow: $($rows.eq(0)).hasClass('dx-group-row'),
+                dataRow: $($rows.eq(1)).hasClass('dx-data-row')
+            };
+        };
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { column1: 'value1', column2: 'value2' }
+            ],
+            grouping: {
+                autoExpandAll: false,
+            },
+            columns: [
+                {
+                    dataField: 'column1',
+                    groupIndex: 0
+                },
+                'column2'
+            ],
+            onRowExpanded: function() {
+                const info = getRowsInfo(dataGrid.element());
+                assert.step(`rowExpanded rowCount: ${info.rowCount}, groupRow: ${info.groupRow}, dataRow: ${info.dataRow}`);
+            }
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.expandRow(['value1']).done(() => {
+            const info = getRowsInfo(dataGrid.element());
+
+            assert.step(`done rowCount: ${info.rowCount}, groupRow: ${info.groupRow}, dataRow: ${info.dataRow}`);
+        });
+        this.clock.tick();
+
+        assert.verifySteps([
+            'rowExpanded rowCount: 2, groupRow: true, dataRow: true',
+            'done rowCount: 2, groupRow: true, dataRow: true'
+        ]);
+    });
+
+    QUnit.test('Master Row - expandRow should resolve its promise only after re-rendering (T880769)', function(assert) {
+        // arrange
+        const getRowsInfo = function(element) {
+            const $rows = $(element).find('.dx-datagrid-rowsview .dx-row[role=\'row\']');
+            return {
+                rowCount: $rows.length,
+                masterRow: $($rows.eq(0)).hasClass('dx-data-row'),
+                detailRow: $($rows.eq(1)).hasClass('dx-master-detail-row')
+            };
+        };
+        const dataGrid = createDataGrid({
+            keyExpr: 'id',
+            dataSource: [
+                { id: 1 }
+            ],
+            masterDetail: {
+                enabled: true
+            },
+            onRowExpanded: function() {
+                const info = getRowsInfo(dataGrid.element());
+                assert.step(`rowExpanded rowCount: ${info.rowCount}, masterRow: ${info.masterRow}, detailRow: ${info.detailRow}`);
+            }
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.expandRow(1).done(() => {
+            const info = getRowsInfo(dataGrid.element());
+
+            assert.step(`done rowCount: ${info.rowCount}, masterRow: ${info.masterRow}, detailRow: ${info.detailRow}`);
+        });
+        this.clock.tick();
+
+        assert.verifySteps([
+            'rowExpanded rowCount: 2, masterRow: true, detailRow: true',
+            'done rowCount: 2, masterRow: true, detailRow: true'
+        ]);
     });
 });
 

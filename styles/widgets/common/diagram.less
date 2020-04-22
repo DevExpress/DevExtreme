@@ -198,6 +198,7 @@
     position: absolute;
     z-index: @OVERLAY_ZINDEX + 1;
     width: 100%;
+    transition: opacity 400ms ease;
 
     &.dx-diagram-properties-panel-toolbar-container {
         background: transparent;
@@ -320,6 +321,11 @@
     left: calc(50% - 32px);
     width: 64px;
     height: 64px;
+}
+
+.dx-diagram-touchbar-overlay,
+.dx-diagram-touch-context-toolbox .dx-popover-wrapper {
+    z-index: 1 !important; // stylelint-disable-line declaration-no-important
 }
 
 .dx-diagram-touchbar.dx-context-menu {

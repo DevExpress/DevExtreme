@@ -148,11 +148,10 @@ export default class FileSystemProviderBase {
      * @docid FileSystemProviderBaseMethods.downloadItems
      * @publicName downloadItems()
      * @param1 items:Array<FileSystemItem>
-     * @return any
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    downloadItems(items: Array<FileSystemItem>): any;
+    downloadItems(items: Array<FileSystemItem>): void;
 
     /**
      * @docid FileSystemProviderBaseMethods.getItemsContent

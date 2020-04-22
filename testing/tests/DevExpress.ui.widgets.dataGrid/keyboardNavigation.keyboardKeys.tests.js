@@ -3991,4 +3991,90 @@ QUnit.module('Keyboard keys', {
         assert.strictEqual(this.pageIndex(), 2, 'pageIndex');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 4 }, 'focused position');
     });
+
+    QUnit.testInActiveWindow('Focused cell position should be updated when the Enter key is pressed on the first focused group row (T869799)', function(assert) {
+        // arrange
+        this.columns = [
+            { visible: true, command: 'expand', cssClass: 'dx-command-expand' },
+            { caption: 'Column 1', visible: true, dataField: 'Column1' },
+            { caption: 'Column 2', visible: true, dataField: 'Column2' }
+        ];
+
+        this.dataControllerOptions = {
+            pageCount: 10,
+            pageIndex: 0,
+            pageSize: 10,
+            items: [
+                { values: ['group 1'], rowType: 'group', key: ['group 1'], groupIndex: 0 }
+            ]
+        };
+
+        setupModules(this);
+
+        // act
+        this.gridView.render($('#container'));
+
+        const $firstGroupRow = $(this.getRowElement(0));
+        $firstGroupRow.focus();
+        this.clock.tick();
+
+        // assert
+        assert.ok($firstGroupRow.hasClass('dx-focused'), 'the first group row is marked as focused');
+        assert.equal($(':focus').get(0), $firstGroupRow.get(0), 'the first group row is focused');
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { });
+
+        // act
+        this.triggerKeyDown('enter', false, false, $firstGroupRow.get(0));
+
+        // assert
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, {
+            rowIndex: 0,
+            columnIndex: 1
+        });
+    });
+
+    QUnit.testInActiveWindow('The second group row should be focused when the arrow down key is pressed on the first group row (T869799)', function(assert) {
+        // arrange
+        this.columns = [
+            { visible: true, command: 'expand', cssClass: 'dx-command-expand' },
+            { caption: 'Column 1', visible: true, dataField: 'Column1' },
+            { caption: 'Column 2', visible: true, dataField: 'Column2' }
+        ];
+
+        this.dataControllerOptions = {
+            pageCount: 10,
+            pageIndex: 0,
+            pageSize: 10,
+            items: [
+                { values: ['group 1'], rowType: 'group', key: ['group 1'], groupIndex: 0 },
+                { values: ['group 2'], rowType: 'group', key: ['group 2'], groupIndex: 0 }
+            ]
+        };
+
+        setupModules(this);
+
+        // act
+        this.gridView.render($('#container'));
+
+        const $firstGroupRow = $(this.getRowElement(0));
+        $firstGroupRow.focus();
+        this.clock.tick();
+
+        // assert
+        assert.ok($firstGroupRow.hasClass('dx-focused'), 'the first group row is marked as focused');
+        assert.equal($(':focus').get(0), $firstGroupRow.get(0), 'the first group row is focused');
+
+        // act
+        this.triggerKeyDown('downArrow', false, false, $firstGroupRow.get(0));
+        this.clock.tick();
+        const $secondGroupRow = $(this.getRowElement(1));
+
+        // assert
+        assert.ok($secondGroupRow.hasClass('dx-focused'), 'the second group row is marked as focused');
+        assert.equal($(':focus').get(0), $secondGroupRow.get(0), 'the second group row is focused');
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, {
+            rowIndex: 1,
+            columnIndex: 1
+        });
+    });
 });

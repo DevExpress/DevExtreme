@@ -1,3 +1,4 @@
+@import (once) "../base/gantt.less";
 @import (once) "./scrollView.material.less";
 @import (once) "./treeList.material.less";
 @import (once) "./splitter.material.less";
@@ -13,6 +14,10 @@
 
         .dx-gantt-toolbar-separator {
             border-left-color: @base-border-color;
+        }
+
+        .dx-toolbar .dx-toolbar-items-container {
+            height: 42px;
         }
     }
 
@@ -265,3 +270,5 @@
         background-color: @gantt-collapsable-row-bg;
     }
 }
+
+.gantt-icons-mixin(@gantt-icon-color);
