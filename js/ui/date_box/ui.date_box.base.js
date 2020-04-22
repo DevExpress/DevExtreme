@@ -492,8 +492,6 @@ const DateBox = DropDownEditor.inherit({
             } else {
                 this.dateValue(newValue, e);
             }
-        } else {
-            this._applyCustomValidation(newValue);
         }
     },
 
