@@ -60,6 +60,10 @@ function baseOperation(grid) {
             const dataSource = new DataSourceModule.DataSource(dataSourceOptions);
             const result = new deferredUtils.Deferred();
 
+            const key = dataSource.store().key();
+            if(key) {
+                dataSource.filter([key, '=', fieldInfo.value]);
+            }
             dataSource.load().done(items => {
                 result.resolve(getSelectedItemsTexts(items)[0]);
             });

@@ -158,8 +158,7 @@ const HeaderFilterController = modules.ViewController.inherit((function() {
             const that = this;
             let filter;
             let cutoffLevel;
-            let origPostProcess;
-            let dataSource = that._dataController.dataSource();
+            const dataSource = that._dataController.dataSource();
             const group = gridCoreUtils.getHeaderFilterGroupParameters(column, dataSource && dataSource.remoteOperations().grouping);
             const headerFilterDataSource = column.headerFilter && column.headerFilter.dataSource;
             const headerFilterOptions = that.option('headerFilter');
@@ -174,12 +173,16 @@ const HeaderFilterController = modules.ViewController.inherit((function() {
                 options.dataSource = normalizeDataSourceOptions(headerFilterDataSource);
             } else if(column.lookup) {
                 isLookup = true;
-                dataSource = column.lookup.dataSource;
-                if(isFunction(dataSource) && !isWrapped(dataSource)) {
-                    dataSource = dataSource({});
+                let lookupDataSourceOptions;
+                if(column.lookup.items) {
+                    lookupDataSourceOptions = column.lookup.items;
+                } else {
+                    lookupDataSourceOptions = column.lookup.dataSource;
+                    if(isFunction(lookupDataSourceOptions) && !isWrapped(lookupDataSourceOptions)) {
+                        lookupDataSourceOptions = lookupDataSourceOptions({});
+                    }
                 }
-                dataSource = normalizeDataSourceOptions(dataSource);
-                options.dataSource = dataSource;
+                options.dataSource = normalizeDataSourceOptions(lookupDataSourceOptions);
             } else {
                 cutoffLevel = Array.isArray(group) ? group.length - 1 : 0;
 
@@ -214,7 +217,7 @@ const HeaderFilterController = modules.ViewController.inherit((function() {
                 headerFilterDataSource.call(column, options);
             }
 
-            origPostProcess = options.dataSource.postProcess;
+            const origPostProcess = options.dataSource.postProcess;
             options.dataSource.postProcess = function(data) {
                 let items = data;
 
