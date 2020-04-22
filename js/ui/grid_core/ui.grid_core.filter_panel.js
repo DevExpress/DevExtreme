@@ -30,12 +30,11 @@ const FilterPanelView = modules.View.inherit({
     _renderCore: function() {
         const that = this;
         const $element = that.element();
-        let $leftContainer;
 
         $element
             .empty()
             .addClass(that.addWidgetPrefix(FILTER_PANEL_CLASS));
-        $leftContainer = $('<div>')
+        const $leftContainer = $('<div>')
             .addClass(that.addWidgetPrefix(FILTER_PANEL_LEFT_CONTAINER))
             .appendTo($element);
 

@@ -458,10 +458,6 @@ const DraggingHeaderView = modules.View.inherit({
     moveHeader: function(args) {
         const e = args.event;
         const that = e.data.that;
-        let newLeft;
-        let newTop;
-        let moveDeltaX;
-        let moveDeltaY;
         const eventData = getEventData(e);
         const isResizing = that._columnsResizerViewController ? that._columnsResizerViewController.isResizing() : false;
         const dragOptions = that._dragOptions;
@@ -469,15 +465,15 @@ const DraggingHeaderView = modules.View.inherit({
         if(that._isDragging && !isResizing) {
             const $element = that.element();
 
-            moveDeltaX = Math.abs(eventData.x - dragOptions.columnElement.offset().left - dragOptions.deltaX);
-            moveDeltaY = Math.abs(eventData.y - dragOptions.columnElement.offset().top - dragOptions.deltaY);
+            const moveDeltaX = Math.abs(eventData.x - dragOptions.columnElement.offset().left - dragOptions.deltaX);
+            const moveDeltaY = Math.abs(eventData.y - dragOptions.columnElement.offset().top - dragOptions.deltaY);
 
             if($element.is(':visible') || moveDeltaX > DRAGGING_DELTA || moveDeltaY > DRAGGING_DELTA) {
 
                 $element.show();
 
-                newLeft = eventData.x - dragOptions.deltaX;
-                newTop = eventData.y - dragOptions.deltaY;
+                const newLeft = eventData.x - dragOptions.deltaX;
+                const newTop = eventData.y - dragOptions.deltaY;
 
                 $element.css({ left: newLeft, top: newTop });
                 that.dockHeader(eventData);
@@ -490,10 +486,8 @@ const DraggingHeaderView = modules.View.inherit({
         const that = this;
         const targetDraggingPanel = that._getDraggingPanelByPos(eventData);
         const controller = that._controller;
-        let i;
         const params = that._dropOptions;
         const dragOptions = that._dragOptions;
-        let centerPosition;
 
         if(targetDraggingPanel) {
             const rtlEnabled = that.option('rtlEnabled');
@@ -520,8 +514,8 @@ const DraggingHeaderView = modules.View.inherit({
 
             params.targetLocation = targetLocation;
             if(pointsByColumns.length > 0) {
-                for(i = 0; i < pointsByColumns.length; i++) {
-                    centerPosition = pointsByColumns[i + 1] && (pointsByColumns[i][axisName] + pointsByColumns[i + 1][axisName]) / 2;
+                for(let i = 0; i < pointsByColumns.length; i++) {
+                    const centerPosition = pointsByColumns[i + 1] && (pointsByColumns[i][axisName] + pointsByColumns[i + 1][axisName]) / 2;
                     if(centerPosition === undefined || (rtlEnabled && axisName === 'x' ? eventData[axisName] > centerPosition : eventData[axisName] < centerPosition)) {
                         params.targetColumnIndex = that._getVisibleIndexObject(rowIndex, pointsByColumns[i].columnIndex);
                         if(columnElements[i]) {
@@ -571,12 +565,10 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
     _isHeadersRowArea: function(posY) {
         if(this._columnHeadersView) {
             const element = this._columnHeadersView.element();
-            let headersRowHeight;
-            let offsetTop;
 
             if(element) {
-                offsetTop = element.offset().top;
-                headersRowHeight = this._columnHeadersView.getHeadersRowHeight();
+                const offsetTop = element.offset().top;
+                const headersRowHeight = this._columnHeadersView.getHeadersRowHeight();
                 return posY >= offsetTop && posY <= offsetTop + headersRowHeight;
             }
         }
@@ -584,16 +576,14 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
     },
 
     _pointCreated: function(point, cellsLength, columns) {
-        let currentColumn;
         const isNextColumnMode = isNextColumnResizingMode(this);
         const rtlEnabled = this.option('rtlEnabled');
         const firstPointColumnIndex = !isNextColumnMode && rtlEnabled ? 0 : 1;
-        let nextColumn;
 
         if(point.index >= firstPointColumnIndex && point.index < cellsLength + (!isNextColumnMode && !rtlEnabled ? 1 : 0)) {
             point.columnIndex -= firstPointColumnIndex;
-            currentColumn = columns[point.columnIndex] || {};
-            nextColumn = columns[point.columnIndex + 1] || {};
+            const currentColumn = columns[point.columnIndex] || {};
+            const nextColumn = columns[point.columnIndex + 1] || {};
             return !(isNextColumnMode ? currentColumn.allowResizing && nextColumn.allowResizing : currentColumn.allowResizing);
         }
 
@@ -796,7 +786,6 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         let contentWidth = this._rowsView.contentWidth();
         const isNextColumnMode = isNextColumnResizingMode(this);
         const adaptColumnWidthByRatio = isNextColumnMode && this.option('adaptColumnWidthByRatio') && !this.option('columnAutoWidth');
-        let column;
         let minWidth;
         let nextColumn;
         let cellWidth;
@@ -824,10 +813,9 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
 
         function correctContentWidth(contentWidth, visibleColumns) {
             const allColumnsHaveWidth = visibleColumns.every(column => column.width);
-            let totalPercent;
 
             if(allColumnsHaveWidth) {
-                totalPercent = visibleColumns.reduce((sum, column) => {
+                const totalPercent = visibleColumns.reduce((sum, column) => {
                     if(isPercentWidth(column.width)) {
                         sum += parseFloat(column.width);
                     }
@@ -847,7 +835,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
             deltaX = -deltaX;
         }
         cellWidth = resizingInfo.currentColumnWidth + deltaX;
-        column = visibleColumns[resizingInfo.currentColumnIndex];
+        const column = visibleColumns[resizingInfo.currentColumnIndex];
         minWidth = column && column.minWidth || columnsSeparatorWidth;
         needUpdate = cellWidth >= minWidth;
 
@@ -902,11 +890,9 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
     },
 
     _unsubscribeFromCallbacks: function() {
-        let i;
-        let subscribe;
 
-        for(i = 0; i < this._subscribesToCallbacks.length; i++) {
-            subscribe = this._subscribesToCallbacks[i];
+        for(let i = 0; i < this._subscribesToCallbacks.length; i++) {
+            const subscribe = this._subscribesToCallbacks[i];
             subscribe.callback.remove(subscribe.handler);
         }
 
@@ -1086,9 +1072,7 @@ const DraggingHeaderViewController = modules.ViewController.inherit({
 
         each(draggingPanels, function(_, draggingPanel) {
             if(draggingPanel) {
-                let i;
                 let columns;
-                let columnElements;
                 const rowCount = draggingPanel.getRowCount ? draggingPanel.getRowCount() : 1;
                 const nameDraggingPanel = draggingPanel.getName();
                 const subscribeToEvents = function(index, columnElement) {
@@ -1122,8 +1106,8 @@ const DraggingHeaderViewController = modules.ViewController.inherit({
                     }
                 };
 
-                for(i = 0; i < rowCount; i++) {
-                    columnElements = draggingPanel.getColumnElements(i) || [];
+                for(let i = 0; i < rowCount; i++) {
+                    const columnElements = draggingPanel.getColumnElements(i) || [];
                     if(columnElements.length) {
                         columns = draggingPanel.getColumns(i) || [];
                         each(columnElements, subscribeToEvents);
@@ -1166,7 +1150,6 @@ const DraggingHeaderViewController = modules.ViewController.inherit({
 
     init: function() {
         const that = this;
-        let subscribeToEvents;
 
         that.callBase();
         that._columnsController = that.getController('columns');
@@ -1179,7 +1162,7 @@ const DraggingHeaderViewController = modules.ViewController.inherit({
         that._headerPanelView = that.getView('headerPanel');
         that._columnChooserView = that.getView('columnChooserView');
 
-        subscribeToEvents = function() {
+        const subscribeToEvents = function() {
             if(that._draggingHeaderView) {
                 const draggingPanels = [that._columnChooserView, that._columnHeadersView, that._headerPanelView];
 

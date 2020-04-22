@@ -118,7 +118,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 }, () => {
 
     QUnit.testInActiveWindow('FocusedRow should present if set focusedRowIndex', function(assert) {
-        let rowsView;
 
         // arrange
         this.$element = function() {
@@ -138,7 +137,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
 
         // assert
         assert.notOk($(rowsView.getRow(0)).hasClass('dx-row-focused'), 'Row 0 has no focus');
@@ -147,7 +146,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('TabIndex should set for the [focusedRowIndex; focusedColumnIndex] cell', function(assert) {
-        let rowsView;
 
         // arrange
         this.$element = function() {
@@ -165,7 +163,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         // act
         this.gridView.render($('#container'));
 
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
 
         // assert
         assert.equal(rowsView.getRow(0).attr('tabindex'), undefined, 'Row 0 tabIndex');
@@ -173,8 +171,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Arrow Up key should decrease focusedRowIndex', function(assert) {
-        let rowsView;
-        let keyboardController;
 
         // arrange
         this.$element = function() {
@@ -190,8 +186,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -203,8 +199,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Arrow keys should move focused row if columnHidingEnabled is true', function(assert) {
-        let rowsView;
-        let keyboardController;
 
         // arrange
         this.$element = function() {
@@ -223,8 +217,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -240,8 +234,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Handle arrow keys without focused cell if focusedRowIndex and columnHidingEnabled is true', function(assert) {
-        let rowsView;
-        let keyboardController;
 
         // arrange
         this.$element = function() {
@@ -260,8 +252,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         try {
@@ -277,8 +269,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Arrow Down key should increase focusedRowIndex', function(assert) {
-        let rowsView;
-        let keyboardController;
 
         // arrange
         this.$element = function() {
@@ -293,8 +283,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
         // assert
         assert.equal(this.option('focusedRowIndex'), 0, 'FocusedRowIndex is 0');
@@ -306,7 +296,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
     QUnit.testInActiveWindow('Click by cell should focus the row', function(assert) {
         let rowsView;
-        let keyboardController;
 
         // arrange
         this.$element = function() {
@@ -325,7 +314,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.clock.tick();
 
         rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const keyboardController = this.getController('keyboardNavigation');
 
         // assert
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex is undefined');
@@ -358,7 +347,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Tab key should focus the cell', function(assert) {
-        let rowsView;
 
         // arrange
         this.$element = function() {
@@ -379,7 +367,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
 
         // assert
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex is undefined');
@@ -398,7 +386,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
     QUnit.testInActiveWindow('Tab key before grid should focus the first row (legacyKbn)', function(assert) {
         const that = this;
-        let rowsView;
 
         // arrange
         this.$element = function() {
@@ -420,7 +407,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
 
         // assert
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex is undefined');
@@ -493,7 +480,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
     QUnit.testInActiveWindow('Tab key before rows view should focus the first row', function(assert) {
         const that = this;
-        let rowsView;
 
         // arrange
         this.$element = function() {
@@ -514,7 +500,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
 
         // assert
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex is undefined');
@@ -528,7 +514,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('LeftArrow key should focus the cell', function(assert) {
-        let rowsView;
 
         // arrange
         this.$element = function() {
@@ -549,7 +534,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
 
         // assert
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex is undefined');
@@ -567,7 +552,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('RightArrow key should focus the cell', function(assert) {
-        let rowsView;
 
         // arrange
         this.$element = function() {
@@ -588,7 +572,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
 
         // assert
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex is undefined');
@@ -606,7 +590,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('ArrowUp / ArrowDown should not change focus type', function(assert) {
-        let rowsView;
 
         // arrange
         this.$element = function() {
@@ -627,7 +610,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         addOptionChangedHandlers(this);
         this.gridView.render($('#container'));
         this.clock.tick();
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
 
         // assert
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex');
@@ -653,7 +636,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Focus row by click if virtual scrolling mode', function(assert) {
-        let rowsView;
 
         // arrange
         this.$element = function() {
@@ -689,7 +671,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
 
         // assert
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex is undefined');
@@ -701,7 +683,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Focus row if virtual scrolling mode', function(assert) {
-        let rowsView;
 
         // arrange
         this.$element = function() {
@@ -737,7 +718,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
 
         // assert
         assert.equal(this.option('focusedRowIndex'), 4, 'FocusedRowIndex = 4');
@@ -745,7 +726,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Focus row if virtual scrolling and index is on the not loaded page', function(assert) {
-        let rowsView;
 
         // arrange
         this.$element = function() {
@@ -783,7 +763,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
 
         // assert
         assert.equal(this.option('focusedRowIndex'), 3, 'focusedRowIndex');
@@ -951,7 +931,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Focus row if grouping and virtual scrolling mode', function(assert) {
-        let rowsView;
 
         // arrange
         this.$element = function() {
@@ -996,7 +975,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
 
         // assert
         assert.equal(this.option('focusedRowIndex'), 9, 'FocusedRowIndex');
@@ -1005,7 +984,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.test('Focus next row if grouping and virtual scrolling mode', function(assert) {
-        let rowsView;
 
         // arrange
         this.$element = function() {
@@ -1046,7 +1024,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         addOptionChangedHandlers(this);
 
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
 
         this.gridView.render($('#container'));
         rowsView.height(140);
@@ -1069,9 +1047,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('DataGrid should focus row by focusedRowIndex if data was filtered', function(assert) {
-        let rowsView;
-        let visibleRows;
-        let keyboardController;
 
         // arrange
         this.$element = function() {
@@ -1105,9 +1080,9 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.dataController.load();
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        visibleRows = this.dataController.getVisibleRows();
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const visibleRows = this.dataController.getVisibleRows();
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
         keyboardController.focus(rowsView.getRow(0).children('td').eq(0));
 
@@ -1119,8 +1094,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('DataGrid should focus the row by focusedRowKey if row key present in data after filter', function(assert) {
-        let rowsView;
-        let visibleRows;
 
         // arrange
         this.$element = function() {
@@ -1158,8 +1131,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.dataController.load();
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        visibleRows = this.dataController.getVisibleRows();
+        const rowsView = this.gridView.getView('rowsView');
+        const visibleRows = this.dataController.getVisibleRows();
 
         // assert
         assert.equal(this.option('focusedRowIndex'), 1, 'focusedRowIndex');
@@ -1169,8 +1142,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('DataGrid should restore focused row when data without focused row was filtered', function(assert) {
-        let rowsView;
-        let visibleRows;
 
         // arrange
         this.$element = function() {
@@ -1205,8 +1176,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.dataController.load();
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        visibleRows = this.dataController.getVisibleRows();
+        const rowsView = this.gridView.getView('rowsView');
+        const visibleRows = this.dataController.getVisibleRows();
 
         // assert
         assert.equal(this.option('focusedRowIndex'), 1, 'focusedRowIndex');
@@ -1216,8 +1187,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('DataGrid should restore focused row when focused row data was filtered', function(assert) {
-        let rowsView;
-        let visibleRows;
 
         // arrange
         this.$element = function() {
@@ -1252,8 +1221,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.dataController.load();
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        visibleRows = this.dataController.getVisibleRows();
+        const rowsView = this.gridView.getView('rowsView');
+        const visibleRows = this.dataController.getVisibleRows();
 
         // assert
         assert.equal(this.option('focusedRowIndex'), 1, 'focusedRowIndex');
@@ -1262,7 +1231,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('DataGrid should focus the corresponding group row if group collapsed and inner data row was focused', function(assert) {
-        let rowsView;
 
         // arrange
         this.$element = function() {
@@ -1295,7 +1263,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
 
         // assert
         assert.equal(this.getVisibleRows()[3].rowType, 'group', 'group row');
@@ -1314,7 +1282,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('DataGrid should focus the corresponding group row if group collapsed and inner data row was focused if calculateGroupValue is used', function(assert) {
-        let rowsView;
 
         // arrange
         this.$element = function() {
@@ -1347,7 +1314,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
 
         // assert
         assert.equal(this.getVisibleRows()[3].rowType, 'group', 'group row');
@@ -1366,7 +1333,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Tab index should not exist for the previous focused row', function(assert) {
-        let rowsView;
 
         // arrange
         this.$element = function() {
@@ -1387,7 +1353,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
 
         // act
         $(rowsView.getRow(0).find('td').eq(0)).trigger('dxpointerdown').click();
@@ -1405,7 +1371,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Set focusedRowIndex, focusedColumnIndex should focus the cell', function(assert) {
-        let rowsView;
 
         // arrange
         this.$element = function() {
@@ -1426,7 +1391,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
 
         // assert
         assert.equal(this.option('focusedRowIndex'), 1, 'FocusedRowIndex = 1');
@@ -1467,7 +1432,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Escape should change focus type from cell to row if focusedRowEnabled', function(assert) {
-        let rowsView;
 
         // arrange
         this.$element = function() {
@@ -1484,7 +1448,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
 
         // assert
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex is undefined');
@@ -1501,7 +1465,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Escape should not change focus type from cell to row if not focusedRowEnabled', function(assert) {
-        let rowsView;
 
         // arrange
         this.$element = function() {
@@ -1517,7 +1480,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
 
         // assert
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex is undefined');
@@ -1661,7 +1624,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     // T755462
     QUnit.testInActiveWindow('The page with focused row should load without errors after sorting the boolean column', function(assert) {
     // arrange
-        let focusedRowIndex;
 
         this.$element = function() {
             return $('#container');
@@ -1716,7 +1678,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.clock.tick();
 
         // assert
-        focusedRowIndex = this.option('focusedRowIndex');
+        const focusedRowIndex = this.option('focusedRowIndex');
         assert.strictEqual(this.pageIndex(), 1, 'pageIndex');
         assert.strictEqual(this.dataController.getVisibleRows()[focusedRowIndex].data, this.data[0], 'Focused row data is on the page');
 
@@ -1774,7 +1736,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
     QUnit.testInActiveWindow('Highlight cell on focus()', function(assert) {
         let focusedCellChangingCount = 0;
-        let keyboardController;
         // arrange
         this.$element = function() {
             return $('#container');
@@ -1794,7 +1755,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        keyboardController = this.getController('keyboardNavigation');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = this.getView('rowsView');
         keyboardController.focus(null);
         this.clock.tick();
@@ -1806,7 +1767,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
     QUnit.testInActiveWindow('Highlight cell on focus() if focusedRowIndex, focusedColumnIndex are not set', function(assert) {
         let focusedCellChangingCount = 0;
-        let keyboardController;
         // arrange
         this.$element = function() {
             return $('#container');
@@ -1822,7 +1782,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        keyboardController = this.getController('keyboardNavigation');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = this.getView('rowsView');
         keyboardController.focus();
         this.clock.tick();
@@ -1834,7 +1794,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
     QUnit.testInActiveWindow('Highlight cell on focus() if focusedRowEnabled is true and focusedColumnIndex, focusedRowIndex are set', function(assert) {
         let focusedCellChangingCount = 0;
-        let keyboardController;
         // arrange
         this.$element = function() {
             return $('#container');
@@ -1855,7 +1814,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        keyboardController = this.getController('keyboardNavigation');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = this.getView('rowsView');
         keyboardController.focus(null);
         this.clock.tick();
@@ -1867,7 +1826,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
     QUnit.testInActiveWindow('Not highlight cell on focus() if focusedRowEnabled is true and focusedColumnIndex is not set', function(assert) {
         let focusedCellChangingCount = 0;
-        let keyboardController;
         // arrange
         this.$element = function() {
             return $('#container');
@@ -1884,7 +1842,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        keyboardController = this.getController('keyboardNavigation');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = this.getView('rowsView');
         keyboardController.focus(null);
         this.clock.tick();
@@ -1895,7 +1853,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Group row should focused on focus()', function(assert) {
-        let keyboardController;
         let focusedCellChangingCount = 0;
 
         // arrange
@@ -1927,7 +1884,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        keyboardController = this.getController('keyboardNavigation');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = this.getView('rowsView');
         keyboardController.focus(null);
         this.clock.tick(500);
@@ -1939,7 +1896,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Highlight group row on focus()', function(assert) {
-        let keyboardController;
         let focusedCellChangingCount = 0;
 
         // arrange
@@ -1972,7 +1928,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        keyboardController = this.getController('keyboardNavigation');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = this.getView('rowsView');
         keyboardController.focus(null);
         this.clock.tick(500);
@@ -2031,9 +1987,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Fire onFocusedRowChanging by UpArrow key', function(assert) {
-        let rowsView;
         let focusedRowChangingCount = 0;
-        let keyboardController;
 
         // arrange
         this.$element = function() {
@@ -2070,8 +2024,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.clock.tick();
 
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -2084,9 +2038,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('DataGrid - should restore previos row index after the focus losing (T804103)', function(assert) {
-        let rowsView;
         let focusedRowChangingCount = 0;
-        let keyboardController;
 
         // arrange
         this.$element = function() {
@@ -2120,8 +2072,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
 
         // act
         $(rowsView.getCellElement(0, 0)).trigger(CLICK_EVENT);
@@ -2134,11 +2086,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
     QUnit.testInActiveWindow('Fire onFocusedRowChanging by UpArrow key when virtual scrolling is enabled', function(assert) {
     // arrange
-        let rowsView;
-        let scrollable;
-        let $scrollContainer;
         let focusedRowChangingCount = 0;
-        let keyboardController;
 
         this.$element = function() {
             return $('#container');
@@ -2172,12 +2120,12 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.setupModule();
 
         this.gridView.render($('#container'));
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
         rowsView.height(400);
         rowsView.resize();
-        scrollable = rowsView.getScrollable();
-        $scrollContainer = $(scrollable._container());
-        keyboardController = this.getController('keyboardNavigation');
+        const scrollable = rowsView.getScrollable();
+        const $scrollContainer = $(scrollable._container());
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -2194,9 +2142,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Fire onFocusedRowChanging by DownArrow key', function(assert) {
-        let rowsView;
         let focusedRowChangingCount = 0;
-        let keyboardController;
 
         // arrange
         this.$element = function() {
@@ -2233,8 +2179,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.clock.tick();
 
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -2247,8 +2193,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Fire onFocusedRowChanging by Tab key', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedRowChangingCounter = 0;
 
         // arrange
@@ -2289,8 +2233,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         $(this.gridView.getView('rowsView').getRow(1).find('td').eq(0)).trigger('dxpointerdown').click();
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -2317,8 +2261,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Fire onFocusedRowChanging by Tab key in back order (shift presset)', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedRowChangingCounter = 0;
 
         // arrange
@@ -2359,8 +2301,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         $(this.gridView.getView('rowsView').getRow(1).find('td').eq(2)).trigger('dxpointerdown').click();
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -2481,8 +2423,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     QUnit.testInActiveWindow('Focused row events should not fire if dataGrid is in loading phase', function(assert) {
         let focusedRowChangingCount = 0;
         let focusedRowChangedCount = 0;
-        let dataController;
-        let keyboardController;
         const items = [
             { name: 'Alex', phone: '111111', room: 6 },
             { name: 'Dan', phone: '2222222', room: 5 },
@@ -2534,11 +2474,11 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.gridView.render($('#container'));
 
-        dataController = this.getController('data');
+        const dataController = this.getController('data');
 
         this.clock.tick(10);
 
-        keyboardController = this.getController('keyboardNavigation');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = this.gridView.getView('rowsView');
 
         // act
@@ -2673,7 +2613,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     // arrange
         let focusedRowChangedCount = 0;
         let focusedRowChangingCount = 0;
-        let rowsView;
 
         this.$element = function() {
             return $('#container');
@@ -2704,7 +2643,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
 
         // act
         this.option('focusedRowEnabled', true);
@@ -2717,7 +2656,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('onFocusedCellChanged event', function(assert) {
-        let rowsView;
         let focusedCellChangedCount = 0;
 
         // arrange
@@ -2757,15 +2695,13 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.clock.tick();
 
         // act
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
         $(rowsView.getRow(1).find('td').eq(1)).trigger('dxpointerdown').click();
         assert.equal(focusedCellChangedCount, 1, 'onFocusedCellChanged fires count');
     });
 
     QUnit.testInActiveWindow('onFocusedCellChanged event should fire if row index changed', function(assert) {
-        let rowsView;
         let focusedCellChangedCount = 0;
-        let keyboardController;
 
         // arrange
         this.$element = function() {
@@ -2803,8 +2739,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.clock.tick();
 
         // act
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -2817,9 +2753,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('onFocusedCellChanged event should not fire if cell position not changed', function(assert) {
-        let rowsView;
         let focusedCellChangedCount = 0;
-        let keyboardController;
 
         // arrange
         this.$element = function() {
@@ -2854,8 +2788,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.clock.tick();
 
         // act
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -2870,9 +2804,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('onFocusedCellChanged event should not fire if cell position updates for not cell element', function(assert) {
-        let rowsView;
         let focusedCellChangedCount = 0;
-        let keyboardController;
 
         // arrange
         this.$element = function() {
@@ -2897,8 +2829,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.clock.tick();
 
         // act
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._updateFocusedCellPosition(rowsView.getRow(1));
 
         // assert
@@ -2951,8 +2883,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     QUnit.test('onFocusedCellChanged event should contains correct row object if scrolling mode is virtual', function(assert) {
         const that = this;
         let focusedCellChangedCount = 0;
-        let rowsView;
-        let scrollable;
 
         // arrange
         that.$element = function() {
@@ -2988,10 +2918,10 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         that.setupModule();
 
         that.gridView.render($('#container'));
-        rowsView = that.gridView.getView('rowsView');
+        const rowsView = that.gridView.getView('rowsView');
         rowsView.height(100);
         rowsView.resize();
-        scrollable = rowsView.getScrollable();
+        const scrollable = rowsView.getScrollable();
 
         that.clock.tick();
 
@@ -3006,8 +2936,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     QUnit.test('onFocusedCellChanged event should contains correct row object if scrolling, rowRenderingMode are virtual', function(assert) {
         const that = this;
         let focusedCellChangedCount = 0;
-        let rowsView;
-        let scrollable;
 
         // arrange
         that.$element = function() {
@@ -3044,10 +2972,10 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         that.setupModule();
 
         that.gridView.render($('#container'));
-        rowsView = that.gridView.getView('rowsView');
+        const rowsView = that.gridView.getView('rowsView');
         rowsView.height(100);
         rowsView.resize();
-        scrollable = rowsView.getScrollable();
+        const scrollable = rowsView.getScrollable();
 
         that.clock.tick();
 
@@ -3060,8 +2988,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Setting cancel in onFocusedCellChanging event should prevent focusing next cell', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedColumnChangingCount = 0;
 
         // arrange
@@ -3107,8 +3033,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -3122,8 +3048,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('DataGrid should fire onFocusedCellChanging event if next focused cell is not valid', function(assert) {
-        let rowsView;
-        let keyboardController;
         let onFocusedCellCount = 0;
 
         // arrange
@@ -3162,9 +3086,9 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
 
-        keyboardController = this.getController('keyboardNavigation');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -3179,8 +3103,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by click', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedColumnChangingCount = 0;
 
         // arrange
@@ -3215,8 +3137,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // act
@@ -3228,8 +3150,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Highlight cell by isHighlighted arg in the onFocusedCellChanging event by click event', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedColumnChangingCount = 0;
 
         // arrange
@@ -3259,8 +3179,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // act
@@ -3273,8 +3193,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('isHighlighted in the onFocusedCellChanged event', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedColumnChangingCount = 0;
         let focusedColumnChangedCount = 0;
 
@@ -3299,8 +3217,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // act
@@ -3345,8 +3263,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Not highlight cell by isHighlighted arg in the onFocusedCellChanging event by LeftArrow key', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedColumnChangingCount = 0;
 
         // arrange
@@ -3379,8 +3295,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -3396,8 +3312,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by LeftArrow key', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedColumnChangingCount = 0;
 
         // arrange
@@ -3439,8 +3353,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -3454,8 +3368,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by RightArrow key', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedColumnChangingCount = 0;
 
         // arrange
@@ -3496,8 +3408,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -3511,8 +3423,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by RightArrow key and change newRowIndex, newColumnIndex', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedColumnChangingCount = 0;
 
         // arrange
@@ -3550,8 +3460,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -3568,8 +3478,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging, onFocusedRowChanging by DownArrow key and change newRowIndex, newColumnIndex', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedColumnChangingCount = 0;
         let focusedRowChangingCount = 0;
 
@@ -3610,8 +3518,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -3630,8 +3538,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by UpArrow key', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedColumnChangingCount = 0;
 
         // arrange
@@ -3676,8 +3582,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -3693,8 +3599,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by DownArrow key', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedColumnChangingCount = 0;
 
         // arrange
@@ -3739,8 +3643,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -3756,7 +3660,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by UpDownArrow keys may prevent change focused row', function(assert) {
-        let keyboardController;
         let focusedColumnChangingCount = 0;
         let focusedRowChangingCount = 0;
 
@@ -3800,7 +3703,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        keyboardController = this.getController('keyboardNavigation');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = this.gridView.getView('rowsView');
 
         // act
@@ -3813,10 +3716,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by Tab key', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedCellChangingCounter = 0;
-        let columnIndex;
 
         // arrange
         this.$element = function() {
@@ -3839,7 +3739,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
             },
             onFocusedCellChanging: function(e) {
                 if(++focusedCellChangingCounter > 2) {
-                    columnIndex = focusedCellChangingCounter - 1;
+                    const columnIndex = focusedCellChangingCounter - 1;
                     assert.equal(e.cancel, false, 'Not canceled');
                     assert.equal(e.cellElement.text(), $(rowsView.getRow(1).find('td').eq(columnIndex)).text(), 'Cell element');
                     assert.equal(e.newColumnIndex, columnIndex);
@@ -3858,8 +3758,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         $(this.gridView.getView('rowsView').getRow(1).find('td').eq(0)).trigger('dxpointerdown').click();
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -3880,8 +3780,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by Tab key in back order (shift presset)', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedCellChangingCounter = 0;
 
         // arrange
@@ -3924,8 +3822,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         $(this.gridView.getView('rowsView').getRow(1).find('td').eq(2)).trigger('dxpointerdown').click();
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -3946,8 +3844,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by Tab key if cell is being edited', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedCellChangingCounter = 0;
 
         // arrange
@@ -3979,8 +3875,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         $(this.gridView.getView('rowsView').getRow(1).find('td').eq(0)).trigger('dxpointerdown').click();
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -4008,10 +3904,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'moveFocus\'', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedCellChangingCounter = 0;
-        let columnIndex;
 
         // arrange
         this.$element = function() {
@@ -4038,7 +3931,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
             },
             onFocusedCellChanging: function(e) {
                 if(++focusedCellChangingCounter > 2) {
-                    columnIndex = focusedCellChangingCounter - 1;
+                    const columnIndex = focusedCellChangingCounter - 1;
                     assert.equal(e.cancel, false, 'Not canceled');
                     assert.equal(e.cellElement.text(), $(rowsView.getRow(1).find('td').eq(columnIndex)).text(), 'Cell element');
                     assert.equal(e.newColumnIndex, columnIndex);
@@ -4057,8 +3950,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         $(this.gridView.getView('rowsView').getRow(1).find('td').eq(0)).trigger('dxpointerdown').click();
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -4079,10 +3972,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'startEdit\'', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedCellChangingCounter = 0;
-        let columnIndex;
 
         // arrange
         this.$element = function() {
@@ -4110,7 +4000,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
             },
             onFocusedCellChanging: function(e) {
                 if(++focusedCellChangingCounter > 2) {
-                    columnIndex = focusedCellChangingCounter - 1;
+                    const columnIndex = focusedCellChangingCounter - 1;
                     assert.equal(e.cancel, false, 'Not canceled');
                     assert.equal(e.cellElement.text(), $(rowsView.getRow(1).find('td').eq(columnIndex)).text(), 'Cell element');
                     assert.equal(e.newColumnIndex, columnIndex);
@@ -4129,8 +4019,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         $(this.gridView.getView('rowsView').getRow(1).find('td').eq(0)).trigger('dxpointerdown').click();
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -4155,10 +4045,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'moveFocus\'', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedCellChangingCounter = 0;
-        let columnIndex;
 
         // arrange
         this.$element = function() {
@@ -4186,7 +4073,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
             },
             onFocusedCellChanging: function(e) {
                 if(++focusedCellChangingCounter > 2) {
-                    columnIndex = focusedCellChangingCounter - 1;
+                    const columnIndex = focusedCellChangingCounter - 1;
                     assert.equal(e.cancel, false, 'Not canceled');
                     assert.equal(e.cellElement.text(), $(rowsView.getRow(1).find('td').eq(columnIndex)).text(), 'Cell element');
                     assert.equal(e.newColumnIndex, columnIndex);
@@ -4205,8 +4092,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         $(this.gridView.getView('rowsView').getRow(1).find('td').eq(0)).trigger('dxpointerdown').click();
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -4223,10 +4110,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyDirection\' is \'column\', \'enterKeyAction\' is \'startEdit\'', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedCellChangingCounter = 0;
-        let columnIndex;
 
         // arrange
         this.$element = function() {
@@ -4254,7 +4138,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
             },
             onFocusedCellChanging: function(e) {
                 if(++focusedCellChangingCounter > 2) {
-                    columnIndex = focusedCellChangingCounter - 1;
+                    const columnIndex = focusedCellChangingCounter - 1;
                     assert.equal(e.cancel, false, 'Not canceled');
                     assert.equal(e.cellElement.text(), $(rowsView.getRow(1).find('td').eq(columnIndex)).text(), 'Cell element');
                     assert.equal(e.newColumnIndex, columnIndex);
@@ -4273,8 +4157,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         $(this.gridView.getView('rowsView').getRow(1).find('td').eq(0)).trigger('dxpointerdown').click();
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -4299,10 +4183,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyDirection\' is \'column\', \'enterKeyAction\' is \'moveFocus\'', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedCellChangingCounter = 0;
-        let columnIndex;
 
         // arrange
         this.$element = function() {
@@ -4330,7 +4211,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
             },
             onFocusedCellChanging: function(e) {
                 if(++focusedCellChangingCounter > 2) {
-                    columnIndex = focusedCellChangingCounter - 1;
+                    const columnIndex = focusedCellChangingCounter - 1;
                     assert.equal(e.cancel, false, 'Not canceled');
                     assert.equal(e.cellElement.text(), $(rowsView.getRow(1).find('td').eq(columnIndex)).text(), 'Cell element');
                     assert.equal(e.newColumnIndex, columnIndex);
@@ -4349,8 +4230,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         $(this.gridView.getView('rowsView').getRow(1).find('td').eq(0)).trigger('dxpointerdown').click();
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -4367,8 +4248,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Changing row index by Enter key navigation if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'moveFocus\'', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedCellChangingCounter = 0;
 
         // arrange
@@ -4411,8 +4290,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         $(this.gridView.getView('rowsView').getRow(1).find('td').eq(0)).trigger('dxpointerdown').click();
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -4429,8 +4308,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Changing row index by Enter key navigation if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'startEdit\'', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedCellChangingCounter = 0;
 
         // arrange
@@ -4473,8 +4350,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         $(this.gridView.getView('rowsView').getRow(1).find('td').eq(0)).trigger('dxpointerdown').click();
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -4499,8 +4376,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Enter key navigation from the last cell should navigate to the new row and first column if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'startEdit\'', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedCellChangingCounter = 0;
 
         // arrange
@@ -4540,8 +4415,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         $(this.getCellElement(1, 2)).trigger('dxpointerdown').click();
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -4566,8 +4441,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Enter key navigation from the last cell should navigate to the new row and first column if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'moveFocus\'', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedCellChangingCounter = 0;
 
         // arrange
@@ -4607,8 +4480,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         $(this.getCellElement(1, 2)).trigger('dxpointerdown').click();
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -4625,7 +4498,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Test navigateToRow method if paging', function(assert) {
-        let keyboardController;
 
         // arrange
         this.$element = function() {
@@ -4656,7 +4528,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        keyboardController = this.getController('keyboardNavigation');
+        const keyboardController = this.getController('keyboardNavigation');
 
         assert.equal(this.pageIndex(), 0, 'Page index');
         assert.equal(keyboardController.getVisibleRowIndex(), undefined, 'Focused row index');
@@ -4669,7 +4541,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Test navigateToRow method if virtualScrolling', function(assert) {
-        let keyboardController;
 
         // arrange
         this.$element = function() {
@@ -4703,7 +4574,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        keyboardController = this.getController('keyboardNavigation');
+        const keyboardController = this.getController('keyboardNavigation');
 
         assert.equal(this.pageIndex(), 0, 'Page index');
         assert.equal(keyboardController.getVisibleRowIndex(), undefined, 'Focused row index');
@@ -4718,7 +4589,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
     QUnit.testInActiveWindow('Focused row should be visible if set focusedRowKey', function(assert) {
     // arrange
-        let rowsView;
         let counter = 0;
 
         this.$element = function() {
@@ -4744,7 +4614,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.setupModule();
 
         this.gridView.render($('#container'));
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
         rowsView._scrollToElement = function($row) {
             ++counter;
             assert.ok($row.find('td').eq(0).text(), 'Smith', 'Row');
@@ -4760,7 +4630,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
     QUnit.testInActiveWindow('Focused row should preserve on navigation to the other row in virual scrolling mode if page not loaded', function(assert) {
     // arrange
-        let rowsView;
 
         this.$element = function() {
             return $('#container');
@@ -4793,7 +4662,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.setupModule();
 
         this.gridView.render($('#container'));
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
         rowsView.height(100);
         rowsView.resize();
         this.clock.tick();
@@ -4808,7 +4677,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
     QUnit.test('Focused row should preserve on navigation to the other row in infinite scrolling mode if page not loaded', function(assert) {
     // arrange
-        let rowsView;
 
         this.$element = function() {
             return $('#container');
@@ -4841,7 +4709,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.setupModule();
 
         this.gridView.render($('#container'));
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
         rowsView.height(100);
         rowsView.resize();
         this.clock.tick();
@@ -4855,9 +4723,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('Keyboard navigation controller should find next cell if column index is wrong when jump from the group row', function(assert) {
-        let rowsView;
-        let keyboardController;
-        let $cell;
 
         // arrange
         this.$element = function() {
@@ -4898,20 +4763,18 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
         // assert
         assert.equal(this.option('focusedRowIndex'), 0, 'FocusedRowIndex is 0');
         // act
-        $cell = keyboardController._getNextCell('downArrow');
+        const $cell = keyboardController._getNextCell('downArrow');
         // assert
         assert.ok(keyboardController._isCellValid($cell), 'Found valid cell');
     });
 
     QUnit.testInActiveWindow('DataGrid should focus the row bellow by arrowDown key if grid focused and if selection multiple', function(assert) {
-        let rowsView;
-        let keyboardController;
 
         // arrange
         this.$element = function() {
@@ -4947,8 +4810,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
         // assert
         assert.equal(this.option('focusedRowIndex'), 0, 'FocusedRowIndex is 0');
@@ -4960,9 +4823,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('DataGrid should focus the row below by arrowDown key if grid focused and grouping enabled', function(assert) {
-        let rowsView;
-        let keyboardController;
-        let $cell;
 
         // arrange
         this.$element = function() {
@@ -4996,14 +4856,14 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // act
         keyboardController.setFocusedColumnIndex(0);
         keyboardController.focus(rowsView.getRow(1).find('td').eq(0));
-        $cell = keyboardController._getNextCell('downArrow');
+        const $cell = keyboardController._getNextCell('downArrow');
 
 
         // assert
@@ -5011,7 +4871,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('If editing in row edit mode and focusedRowEnabled - focusOverlay should render for the editing row', function(assert) {
-        let rowsView;
 
         // arrange
         this.$element = function() {
@@ -5040,7 +4899,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.gridView.component.editRow(1);
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
 
         $(rowsView.getRow(1).find('td').eq(0)).trigger('dxpointerdown').click();
 
@@ -5051,7 +4910,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('If editing in cell edit mode and focusedRowEnabled - focusOverlay should render for the editing row', function(assert) {
-        let rowsView;
 
         // arrange
         this.$element = function() {
@@ -5078,7 +4936,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
         // act
         this.editCell(1, 1);
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
         $(rowsView.getRow(1).find('td').eq(1)).trigger('dxpointerdown').click();
         this.clock.tick();
 
@@ -5148,8 +5006,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('DataGrid should not focus inserted but not saved rows (T727182)', function(assert) {
-        let rowsView;
-        let keyboardController;
 
         this.$element = function() {
             return $('#container');
@@ -5169,8 +5025,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         addOptionChangedHandlers(this);
         this.gridView.render($('#container'));
         this.clock.tick();
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // assert
@@ -5191,7 +5047,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
     QUnit.testInActiveWindow('DataGrid should not focus adaptive rows', function(assert) {
     // arrange
-        let rowsView;
         let focusedRowChangingCount = 0;
         let focusedRowChangedCount = 0;
 
@@ -5220,7 +5075,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         // act
         this.expandRow('Dan');
         this.clock.tick();
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
         $(rowsView.getRow(2).find('td').first()).trigger('dxpointerdown').click();
 
         // assert
@@ -5230,7 +5085,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
     QUnit.testInActiveWindow('DataGrid should reset focused row if focusedRowKey is set to undefined', function(assert) {
     // arrange
-        let rowsView;
         let focusedRowChangedCallsCount = 0;
 
         this.$element = function() {
@@ -5252,7 +5106,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.clock.tick();
 
         // assert
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
         assert.ok($(rowsView.getRow(1)).hasClass('dx-row-focused'), 'focused row');
         assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, this.option('focusedRowIndex'), 'Keyboard navigation focused row index');
 
@@ -5288,7 +5142,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
     QUnit.testInActiveWindow('DataGrid should reset focused row if focusedRowIndex is set to < 0', function(assert) {
     // arrange
-        let rowsView;
 
         this.$element = function() {
             return $('#container');
@@ -5306,7 +5159,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.clock.tick();
 
         // assert
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
         assert.ok($(rowsView.getRow(1)).hasClass('dx-row-focused'), 'focused row');
         assert.ok(this.option('focusedRowKey'), 'focusedRowKey');
 
@@ -5321,7 +5174,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     QUnit.testInActiveWindow('DataGrid should reset focused row if \'e.newRowIndex\' is set to < 0 value in the onFocusedRowChanging event (T745451)', function(assert) {
     // arrange
         let focusedRowChangingCount = 0;
-        let rowsView;
 
         this.$element = function() {
             return $('#container');
@@ -5340,7 +5192,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.setupModule();
         addOptionChangedHandlers(this);
         this.gridView.render($('#container'));
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
         this.clock.tick();
 
         try {
@@ -5525,8 +5377,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     });
 
     QUnit.testInActiveWindow('DataGrid - onFocusedCellChanging event should execute on cell click in batch edit mode (T743530)', function(assert) {
-        let rowsView;
-        let keyboardController;
         let focusedCellChangingCount = 0;
 
         // arrange
@@ -5551,8 +5401,8 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        rowsView = this.gridView.getView('rowsView');
-        keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // act
@@ -5564,8 +5414,6 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 
     QUnit.testInActiveWindow('DataGrid - click by cell should not generate exception if rowTemplate is used (T800604)', function(assert) {
         let d = $.Deferred();
-        let rowsView;
-        let keyboardController;
         const items = generateItems(1);
 
         // arrange
@@ -5601,11 +5449,11 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
         this.clock.tick();
 
         this.gridView.render($('#container'));
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
         rowsView.height(100);
         rowsView.resize();
 
-        keyboardController = this.getController('keyboardNavigation');
+        const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
         // act

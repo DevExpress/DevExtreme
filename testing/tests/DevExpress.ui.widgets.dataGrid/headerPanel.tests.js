@@ -46,7 +46,6 @@ QUnit.module('Header panel', {
     // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
-        let headerPanelElement;
         let searchPanel;
 
         this.options.searchPanel = {
@@ -58,7 +57,7 @@ QUnit.module('Header panel', {
         headerPanel.render(testElement);
 
         // assert
-        headerPanelElement = testElement.find('.dx-datagrid-header-panel');
+        const headerPanelElement = testElement.find('.dx-datagrid-header-panel');
 
         assert.ok(headerPanelElement.length);
         assert.ok(headerPanelElement.children().hasClass('dx-toolbar'), 'header panel contain dxToolbar');
@@ -103,7 +102,6 @@ QUnit.module('Header panel', {
     // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
-        let headerPanelElement;
         let groupPanel;
 
         this.options.groupPanel = {
@@ -117,7 +115,7 @@ QUnit.module('Header panel', {
         headerPanel.resize();
 
         // assert
-        headerPanelElement = testElement.find('.dx-datagrid-header-panel');
+        const headerPanelElement = testElement.find('.dx-datagrid-header-panel');
         assert.ok(headerPanelElement.length);
         groupPanel = headerPanelElement.find('.dx-datagrid-group-panel');
         assert.ok(groupPanel.length);
@@ -130,7 +128,6 @@ QUnit.module('Header panel', {
     // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
-        let headerPanelElement;
         let groupPanel;
         const countOfRenderedElements = devices.current().deviceType === 'desktop' ? 1 : 0;
 
@@ -145,7 +142,7 @@ QUnit.module('Header panel', {
         headerPanel.resize();
 
         // assert
-        headerPanelElement = testElement.find('.dx-datagrid-header-panel');
+        const headerPanelElement = testElement.find('.dx-datagrid-header-panel');
         assert.equal(headerPanelElement.length, countOfRenderedElements, 'Render on desktop only');
 
         groupPanel = headerPanelElement.find('.dx-datagrid-group-panel');
@@ -175,8 +172,6 @@ QUnit.module('Header panel', {
     // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
-        let boundingRect;
-        let isBoundingCorrect;
 
         this.options.groupPanel = {
             visible: true,
@@ -189,8 +184,8 @@ QUnit.module('Header panel', {
         headerPanel.resize();
 
         // assert
-        boundingRect = headerPanel.getBoundingRect();
-        isBoundingCorrect = typeUtils.isObject(boundingRect) && typeUtils.isDefined(boundingRect.top) && typeUtils.isDefined(boundingRect.bottom);
+        const boundingRect = headerPanel.getBoundingRect();
+        const isBoundingCorrect = typeUtils.isObject(boundingRect) && typeUtils.isDefined(boundingRect.top) && typeUtils.isDefined(boundingRect.bottom);
         assert.ok(isBoundingCorrect, 'Bounding rect return object with "top" and "bottom" properties when grouping zone is visible');
     });
 
@@ -198,7 +193,6 @@ QUnit.module('Header panel', {
     // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
-        let headerPanelElement;
         let groupPanel;
 
         this.options.groupPanel = {
@@ -213,7 +207,7 @@ QUnit.module('Header panel', {
         headerPanel.resize();
 
         // assert
-        headerPanelElement = testElement.find('.dx-datagrid-header-panel');
+        const headerPanelElement = testElement.find('.dx-datagrid-header-panel');
         assert.ok(headerPanelElement.length);
         groupPanel = headerPanelElement.find('.dx-datagrid-group-panel');
         assert.equal(groupPanel.length, 1);
@@ -226,10 +220,7 @@ QUnit.module('Header panel', {
 
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
-        let headerPanelElement;
         let groupPanel;
-        let groupPanelItem;
-        let columns;
 
         $.extend(this.columns[0], { groupIndex: 0, allowSorting: true });
 
@@ -242,16 +233,16 @@ QUnit.module('Header panel', {
         headerPanel.resize();
 
         // assert
-        headerPanelElement = testElement.find('.dx-datagrid-header-panel');
+        const headerPanelElement = testElement.find('.dx-datagrid-header-panel');
         assert.ok(headerPanelElement.length);
         groupPanel = headerPanelElement.find('.dx-datagrid-group-panel');
         assert.ok(groupPanel.length);
         assert.equal(groupPanel.length, 1);
-        groupPanelItem = groupPanel.find('.dx-group-panel-item');
+        const groupPanelItem = groupPanel.find('.dx-group-panel-item');
         assert.ok(groupPanelItem.length);
         assert.equal(groupPanelItem.find('.dx-column-indicators').css('float'), 'none', 'column indicators in group panel has no float style');
 
-        columns = this.columnsController.getVisibleColumns();
+        const columns = this.columnsController.getVisibleColumns();
         assert.equal(groupPanelItem.text(), columns[0].caption);
         assert.ok(groupPanelItem.find('.dx-sort').length);
     });
@@ -305,7 +296,6 @@ QUnit.module('Header panel', {
     // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
-        let headerPanelElement;
         let groupPanel;
         let searchPanel;
 
@@ -320,7 +310,7 @@ QUnit.module('Header panel', {
         headerPanel.render(testElement);
 
         // assert
-        headerPanelElement = testElement.find('.dx-datagrid-header-panel');
+        const headerPanelElement = testElement.find('.dx-datagrid-header-panel');
         assert.ok(headerPanelElement.length);
         assert.equal(headerPanelElement.outerWidth(), testElement.outerWidth());
         groupPanel = headerPanelElement.find('.dx-datagrid-group-panel');
@@ -387,7 +377,6 @@ QUnit.module('Header panel', {
     // arrange
         const headerPanel = this.headerPanel;
         const container = $('#container');
-        let $headerPanel;
 
         this.options.searchPanel = {
             visible: true
@@ -395,7 +384,7 @@ QUnit.module('Header panel', {
 
         headerPanel.render(container);
 
-        $headerPanel = container.find('.dx-datagrid-header-panel');
+        const $headerPanel = container.find('.dx-datagrid-header-panel');
         assert.strictEqual($headerPanel.css('display'), 'block', 'header panel visible');
 
         // act
@@ -537,7 +526,6 @@ QUnit.module('Draw buttons in header panel', {
 
     QUnit.test('Draw add row button', function(assert) {
     // arrange
-        let addRowButton;
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -550,7 +538,7 @@ QUnit.module('Draw buttons in header panel', {
 
         // act
         headerPanel.render(testElement);
-        addRowButton = testElement.find('.dx-datagrid-addrow-button');
+        const addRowButton = testElement.find('.dx-datagrid-addrow-button');
 
         // assert
         assert.equal(addRowButton.length, 1, 'has add row button');
@@ -559,8 +547,6 @@ QUnit.module('Draw buttons in header panel', {
 
     QUnit.test('Draw cancel and save buttons', function(assert) {
     // arrange
-        let cancelButton;
-        let saveButton;
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -575,8 +561,8 @@ QUnit.module('Draw buttons in header panel', {
 
         // act
         headerPanel.render(testElement);
-        cancelButton = testElement.find('.dx-datagrid-cancel-button');
-        saveButton = testElement.find('.dx-datagrid-save-button');
+        const cancelButton = testElement.find('.dx-datagrid-cancel-button');
+        const saveButton = testElement.find('.dx-datagrid-save-button');
 
         // assert
         // cancel button
@@ -590,7 +576,6 @@ QUnit.module('Draw buttons in header panel', {
 
     QUnit.test('Draw show column chooser button', function(assert) {
     // arrange
-        let showColumnChooserButton;
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -601,7 +586,7 @@ QUnit.module('Draw buttons in header panel', {
 
         // act
         headerPanel.render(testElement);
-        showColumnChooserButton = testElement.find('.dx-datagrid-column-chooser-button');
+        const showColumnChooserButton = testElement.find('.dx-datagrid-column-chooser-button');
 
         // assert
         assert.equal(showColumnChooserButton.length, 1, 'has show column chooser button');
@@ -648,7 +633,6 @@ QUnit.module('Draw buttons in header panel', {
 
     QUnit.test('Add button via the onToolbarPreparing option', function(assert) {
     // arrange
-        let $customButtonElement;
         let callCountToolbarPreparing = 0;
         const headerPanel = this.headerPanel;
         const $testElement = $('#container');
@@ -674,7 +658,7 @@ QUnit.module('Draw buttons in header panel', {
         // act
         headerPanel.init();
         headerPanel.render($testElement);
-        $customButtonElement = $testElement.find('.dx-toolbar .dx-item');
+        const $customButtonElement = $testElement.find('.dx-toolbar .dx-item');
 
         // assert
         assert.equal(callCountToolbarPreparing, 1, 'call count toolbar preparing');
@@ -684,7 +668,6 @@ QUnit.module('Draw buttons in header panel', {
 
     QUnit.test('Add button via the onToolbarPreparing option when there is column chooser button', function(assert) {
     // arrange
-        let $customButtonElements;
         const headerPanel = this.headerPanel;
         const $testElement = $('#container');
 
@@ -716,7 +699,7 @@ QUnit.module('Draw buttons in header panel', {
         // act
         headerPanel.init();
         headerPanel.render($testElement);
-        $customButtonElements = $testElement.find('.dx-toolbar .dx-item .dx-button');
+        const $customButtonElements = $testElement.find('.dx-toolbar .dx-item .dx-button');
 
         // assert
         assert.equal($customButtonElements.length, 2, 'count button');
@@ -727,7 +710,6 @@ QUnit.module('Draw buttons in header panel', {
     QUnit.test('onToolbarPreparing - setting handler to the click event for column chooser button', function(assert) {
     // arrange
         let callCountClick = 0;
-        let $columnChooserButton;
         const headerPanel = this.headerPanel;
         const $testElement = $('#container');
 
@@ -749,7 +731,7 @@ QUnit.module('Draw buttons in header panel', {
         headerPanel.render($testElement);
 
         // assert
-        $columnChooserButton = $testElement.find('.dx-toolbar .dx-item .dx-button');
+        const $columnChooserButton = $testElement.find('.dx-toolbar .dx-item .dx-button');
         assert.equal(callCountClick, 0, 'call count click');
         assert.equal($columnChooserButton.length, 1, 'count button');
         assert.ok($columnChooserButton.eq(0).hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');

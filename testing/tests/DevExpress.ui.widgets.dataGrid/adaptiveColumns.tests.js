@@ -411,14 +411,13 @@ QUnit.module('AdaptiveColumns', {
         this.resizingController.updateDimensions();
         this.clock.tick();
         let $cols = $('.dx-datagrid-rowsview col');
-        let adaptiveHeadersWidth;
         const adaptiveRowsWidth = $cols.eq($cols.length - 1).css('width');
 
         this.dataController.collapseAll();
         this.clock.tick();
 
         $cols = $('.dx-datagrid-headers col');
-        adaptiveHeadersWidth = $cols.eq($cols.length - 1).css('width');
+        const adaptiveHeadersWidth = $cols.eq($cols.length - 1).css('width');
 
         // assert
         assert.equal(adaptiveRowsWidth, adaptiveHeadersWidth, 'adaptive command column\'s width');
@@ -1718,7 +1717,6 @@ QUnit.module('AdaptiveColumns', {
 
     QUnit.test('Custom command column should not be hidden', function(assert) {
     // arrange
-        let hiddenColumns;
 
         $('.dx-datagrid').width(200);
 
@@ -1744,14 +1742,13 @@ QUnit.module('AdaptiveColumns', {
         this.clock.tick();
 
         // assert
-        hiddenColumns = this.adaptiveColumnsController.getHiddenColumns();
+        const hiddenColumns = this.adaptiveColumnsController.getHiddenColumns();
         assert.strictEqual(hiddenColumns.length, 1, 'hidden column count');
         assert.strictEqual(hiddenColumns[0].dataField, 'lastName', 'dataField of the hidden column');
     });
 
     QUnit.test('The last data column should be hidden when the command column has width and columnAutoWidth is enabled', function(assert) {
     // arrange
-        let hiddenColumns;
 
         $('.dx-datagrid').width(200);
 
@@ -1777,7 +1774,7 @@ QUnit.module('AdaptiveColumns', {
         this.clock.tick();
 
         // assert
-        hiddenColumns = this.adaptiveColumnsController.getHiddenColumns();
+        const hiddenColumns = this.adaptiveColumnsController.getHiddenColumns();
         assert.strictEqual(hiddenColumns.length, 1, 'hidden column count');
         assert.strictEqual(hiddenColumns[0].dataField, 'lastName', 'dataField of the hidden column');
     });
@@ -2116,7 +2113,6 @@ QUnit.module('Editing', {
     // T458653
     QUnit.test('Edit form. Editors of hidden columns are visible', function(assert) {
     // arrange
-        let $formItemElements;
 
         this.options = {
             editing: {
@@ -2134,7 +2130,7 @@ QUnit.module('Editing', {
         this.resizingController.updateDimensions();
         this.clock.tick();
 
-        $formItemElements = $('#container').find('.dx-datagrid-edit-form').first().find('.dx-datagrid-edit-form-item');
+        const $formItemElements = $('#container').find('.dx-datagrid-edit-form').first().find('.dx-datagrid-edit-form-item');
         assert.equal($formItemElements.length, 2, 'count editor');
         assert.notOk($formItemElements.first().hasClass('dx-datagrid-hidden-column'), 'editor is visible');
         assert.notOk($formItemElements.last().hasClass('dx-datagrid-hidden-column'), 'editor is visible');
@@ -2329,7 +2325,6 @@ QUnit.module('Editing', {
         // act
         this.editingController.editRow(0);
 
-        let form;
         let $editors = $('.dx-texteditor');
         const editor1 = $editors.eq(0).dxTextBox('instance');
         const editor2 = $editors.eq(2).dxTextBox('instance');
@@ -2340,7 +2335,7 @@ QUnit.module('Editing', {
         this.editingController.editRow(0);
 
         // assert
-        form = $('.dx-master-detail-row .dx-form').dxForm('instance');
+        const form = $('.dx-master-detail-row .dx-form').dxForm('instance');
         $editors = $('.dx-texteditor');
 
         assert.notStrictEqual(form, undefined, 'form is initialized');
@@ -2868,10 +2863,9 @@ QUnit.module('Editing', {
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
 
         let $itemsContent = $('.dx-field-item-content');
-        let editor;
 
         $($itemsContent.last()).trigger('dxclick');
-        editor = $('.dx-texteditor').first().dxNumberBox('instance');
+        const editor = $('.dx-texteditor').first().dxNumberBox('instance');
         editor.option('value', 102);
         this.editingController.saveEditData();
         $itemsContent = $('.dx-field-item-content');
@@ -2916,10 +2910,9 @@ QUnit.module('Editing', {
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
 
         let $itemsContent = $('.dx-field-item-content');
-        let editor;
 
         $($itemsContent.last()).trigger('dxclick');
-        editor = $('.dx-texteditor').first().dxNumberBox('instance');
+        const editor = $('.dx-texteditor').first().dxNumberBox('instance');
         this.clock.tick();
         editor.option('value', 102);
         $(document).trigger('dxpointerdown');
@@ -2968,10 +2961,9 @@ QUnit.module('Editing', {
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
 
         let $itemsContent = $('.dx-field-item-content');
-        let editor;
 
         $($itemsContent.last()).trigger('dxclick');
-        editor = $('.dx-texteditor').first().dxNumberBox('instance');
+        const editor = $('.dx-texteditor').first().dxNumberBox('instance');
         editor.option('value', 102);
         this.editingController.cancelEditData();
         $itemsContent = $('.dx-field-item-content');
@@ -3138,10 +3130,9 @@ QUnit.module('Editing', {
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
         let $itemsContent = $('.dx-field-item-content');
-        let editor;
 
         $($itemsContent.last()).trigger('dxclick');
-        editor = $('.dx-texteditor').first().dxNumberBox('instance');
+        const editor = $('.dx-texteditor').first().dxNumberBox('instance');
         editor.option('value', 14);
         $itemsContent = $('.dx-field-item-content');
         $($itemsContent.eq(0)).trigger('dxclick');
@@ -3186,10 +3177,9 @@ QUnit.module('Editing', {
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
         let $itemsContent = $('.dx-field-item-content');
-        let editor;
 
         $($itemsContent.last()).trigger('dxclick');
-        editor = $('.dx-texteditor').first().dxNumberBox('instance');
+        const editor = $('.dx-texteditor').first().dxNumberBox('instance');
         editor.option('value', 14);
         $itemsContent = $('.dx-field-item-content');
         $($itemsContent.eq(0)).trigger('dxclick');
@@ -3270,12 +3260,11 @@ QUnit.module('Editing', {
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
 
         const $itemsContent = $('.dx-field-item-content');
-        let editor;
 
         $($itemsContent.last()).trigger('dxclick');
         this.clock.tick();
 
-        editor = $('.dx-texteditor').first().dxNumberBox('instance');
+        const editor = $('.dx-texteditor').first().dxNumberBox('instance');
         editor.option('value', 102);
         $(document).trigger('dxpointerdown');
         $(document).trigger('dxclick');
@@ -3324,13 +3313,12 @@ QUnit.module('Editing', {
 
         const $itemsContent = $('.dx-field-item-content');
         let editor;
-        let formInstance;
 
         $($itemsContent.last()).trigger('dxclick');
         editor = $('.dx-texteditor').first().dxNumberBox('instance');
         editor.option('value', 102);
 
-        formInstance = $('.dx-master-detail-row .dx-form').dxForm('instance');
+        const formInstance = $('.dx-master-detail-row .dx-form').dxForm('instance');
         formInstance.repaint();
         editor = $('.dx-texteditor').first().dxNumberBox('instance');
         // assert
@@ -3502,11 +3490,10 @@ QUnit.module('Editing', {
         // act
         this.editingController.addRow();
         const $itemsContent = $('.dx-adaptive-detail-row .dx-field-item-content');
-        let editors;
 
         $($itemsContent.first()).trigger('dxclick');
 
-        editors = $('.dx-adaptive-detail-row .dx-texteditor');
+        const editors = $('.dx-adaptive-detail-row .dx-texteditor');
         editors.first().dxTextBox('instance').option('value', '12test');
         this.editingController.saveEditData();
 
@@ -3535,11 +3522,10 @@ QUnit.module('Editing', {
         // act
         this.editingController.addRow();
         const $itemsContent = $('.dx-adaptive-detail-row .dx-field-item-content');
-        let editors;
 
         $($itemsContent.first()).trigger('dxclick');
 
-        editors = $('.dx-texteditor');
+        const editors = $('.dx-texteditor');
         editors.first().dxTextBox('instance').option('value', '12test');
         this.editingController.cancelEditData();
 
@@ -3596,11 +3582,10 @@ QUnit.module('Editing', {
         this.clock.tick();
 
         const $itemsContent = $('.dx-adaptive-detail-row .dx-field-item-content');
-        let editors;
 
         $($itemsContent.first()).trigger('dxclick');
         this.clock.tick();
-        editors = $('.dx-texteditor');
+        const editors = $('.dx-texteditor');
 
         // assert
         assert.equal(editors.length, 1, 'editor\'s count');
@@ -3855,12 +3840,11 @@ QUnit.module('Validation', {
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
 
         let $itemsContent = $('.dx-field-item-content');
-        let editor;
 
         $($itemsContent.first()).trigger('dxclick');
         this.clock.tick();
 
-        editor = $('.dx-form .dx-texteditor').first().dxTextBox('instance');
+        const editor = $('.dx-form .dx-texteditor').first().dxTextBox('instance');
         editor.option('value', '');
         $(document).trigger('dxpointerdown');
         $(document).trigger('dxclick');
@@ -3957,12 +3941,11 @@ QUnit.module('Validation', {
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
 
         const $itemsContent = $('.dx-field-item-content');
-        let editor;
 
         $($itemsContent.first()).trigger('dxclick');
         this.clock.tick();
 
-        editor = $('.dx-form .dx-texteditor').first().dxTextBox('instance');
+        const editor = $('.dx-form .dx-texteditor').first().dxTextBox('instance');
         editor.option('value', '');
         $(document).trigger('dxpointerdown');
         $(document).trigger('dxclick');
@@ -4025,12 +4008,11 @@ QUnit.module('Validation', {
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
 
         let $itemsContent = $('.dx-field-item-content');
-        let editor;
 
         $($itemsContent.eq(1)).trigger('dxclick');
         this.clock.tick();
 
-        editor = $('.dx-form .dx-texteditor').first().dxTextBox('instance');
+        const editor = $('.dx-form .dx-texteditor').first().dxTextBox('instance');
         editor.option('value', '');
         $(document).trigger('dxpointerdown');
         $(document).trigger('dxclick');
@@ -4334,7 +4316,6 @@ QUnit.module('Keyboard navigation', {
 
         // arrange
         let rowDblClickCounter = 0;
-        let $fieldItemContent;
 
         this.options = {
             keyboardNavigation: {
@@ -4351,7 +4332,7 @@ QUnit.module('Keyboard navigation', {
 
         this.setupModule();
 
-        $fieldItemContent = $('.dx-field-item-content').eq(0);
+        const $fieldItemContent = $('.dx-field-item-content').eq(0);
 
         pointerMock($fieldItemContent).start().down().up();
 

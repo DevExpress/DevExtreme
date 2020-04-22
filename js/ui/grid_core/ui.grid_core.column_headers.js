@@ -44,13 +44,12 @@ module.exports = {
     views: {
         columnHeadersView: columnsView.ColumnsView.inherit((function() {
             const createCellContent = function(that, $cell, options) {
-                let showColumnLines;
                 const $cellContent = $('<div>').addClass(that.addWidgetPrefix(CELL_CONTENT_CLASS));
 
                 that.setAria('role', 'presentation', $cellContent);
 
                 addCssClassesToCellContent(that, $cell, options.column, $cellContent);
-                showColumnLines = that.option('showColumnLines');
+                const showColumnLines = that.option('showColumnLines');
                 return $cellContent[(showColumnLines || options.column.alignment === 'right') ? 'appendTo' : 'prependTo']($cell);
             };
 
@@ -250,12 +249,11 @@ module.exports = {
                 },
 
                 _getRows: function() {
-                    let i;
                     const result = [];
                     const rowCount = this.getRowCount();
 
                     if(this.option('showColumnHeaders')) {
-                        for(i = 0; i < rowCount; i++) {
+                        for(let i = 0; i < rowCount; i++) {
                             result.push({ rowType: 'header', rowIndex: i });
                         }
                     }
@@ -351,20 +349,17 @@ module.exports = {
 
                 getColumnElements: function(index, bandColumnIndex) {
                     const that = this;
-                    let rowIndex;
-                    let result;
                     let $cellElement;
-                    let visibleColumns;
                     const columnsController = that._columnsController;
                     const rowCount = that.getRowCount();
 
                     if(that.option('showColumnHeaders')) {
                         if(rowCount > 1 && (!isDefined(index) || isDefined(bandColumnIndex))) {
-                            result = [];
-                            visibleColumns = isDefined(bandColumnIndex) ? columnsController.getChildrenByBandColumn(bandColumnIndex, true) : columnsController.getVisibleColumns();
+                            const result = [];
+                            const visibleColumns = isDefined(bandColumnIndex) ? columnsController.getChildrenByBandColumn(bandColumnIndex, true) : columnsController.getVisibleColumns();
 
                             each(visibleColumns, function(_, column) {
-                                rowIndex = isDefined(index) ? index : columnsController.getRowIndex(column.index);
+                                const rowIndex = isDefined(index) ? index : columnsController.getRowIndex(column.index);
                                 $cellElement = that._getCellElement(rowIndex, columnsController.getVisibleIndex(column.index, rowIndex));
                                 $cellElement && result.push($cellElement.get(0));
                             });
@@ -406,7 +401,6 @@ module.exports = {
                     const rowIndex = column && this._columnsController.getRowIndex(column.index);
                     const columns = this.getColumns(rowIndex === 0 ? 0 : null);
                     let draggableColumnCount = 0;
-                    let draggingPanel;
                     const allowDrag = function(column) {
                         return column.allowReordering || column.allowGrouping || column.allowHiding;
                     };
@@ -424,7 +418,7 @@ module.exports = {
                     }
 
                     for(i = 0; i < draggingPanels.length; i++) {
-                        draggingPanel = draggingPanels[i];
+                        const draggingPanel = draggingPanels[i];
                         if(draggingPanel && draggingPanel.allowDragging(column, sourceLocation)) {
                             return true;
                         }
@@ -435,11 +429,10 @@ module.exports = {
 
                 getBoundingRect: function() {
                     const that = this;
-                    let offset;
                     const $columnElements = that.getColumnElements();
 
                     if($columnElements && $columnElements.length) {
-                        offset = that._getTableElement().offset();
+                        const offset = that._getTableElement().offset();
                         return {
                             top: offset.top
                         };
@@ -483,14 +476,12 @@ module.exports = {
                 getContextMenuItems: function(options) {
                     const that = this;
                     const column = options.column;
-                    let onItemClick;
-                    let sortingOptions;
 
                     if(options.row && (options.row.rowType === 'header' || options.row.rowType === 'detailAdaptive')) {
-                        sortingOptions = that.option('sorting');
+                        const sortingOptions = that.option('sorting');
 
                         if(sortingOptions && sortingOptions.mode !== 'none' && column && column.allowSorting) {
-                            onItemClick = function(params) {
+                            const onItemClick = function(params) {
                                 setTimeout(function() {
                                     that._columnsController.changeSortOrder(column.index, params.itemData.value);
                                 });

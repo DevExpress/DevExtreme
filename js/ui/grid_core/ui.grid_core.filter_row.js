@@ -162,24 +162,21 @@ const ColumnHeadersViewFilterRowExtender = (function() {
         _columnOptionChanged: function(e) {
             const that = this;
             const optionNames = e.optionNames;
-            let overlayInstance;
-            let visibleIndex;
-            let column;
             let $cell;
             let $editorContainer;
             let $editorRangeElements;
             let $menu;
 
             if(gridCoreUtils.checkChanges(optionNames, ['filterValue', 'bufferedFilterValue', 'selectedFilterOperation', 'bufferedSelectedFilterOperation']) && e.columnIndex !== undefined) {
-                visibleIndex = that._columnsController.getVisibleIndex(e.columnIndex);
-                column = that._columnsController.columnOption(e.columnIndex);
+                const visibleIndex = that._columnsController.getVisibleIndex(e.columnIndex);
+                const column = that._columnsController.columnOption(e.columnIndex);
                 $cell = that._getCellElement(that.element().find('.' + that.addWidgetPrefix(FILTER_ROW_CLASS)).index(), visibleIndex) || $();
                 $editorContainer = $cell.find('.' + EDITOR_CONTAINER_CLASS).first();
 
                 if(optionNames.filterValue || optionNames.bufferedFilterValue) {
                     that._updateEditorValue(column, $editorContainer);
 
-                    overlayInstance = $cell.find('.' + that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)).data('dxOverlay');
+                    const overlayInstance = $cell.find('.' + that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)).data('dxOverlay');
                     if(overlayInstance) {
                         $editorRangeElements = overlayInstance.$content().find('.' + EDITOR_CONTAINER_CLASS);
 
@@ -371,8 +368,6 @@ const ColumnHeadersViewFilterRowExtender = (function() {
             const that = this;
             const column = options.column;
             const $cell = $(cell);
-            let $container;
-            let $editorContainer;
 
             if(that.component.option('showColumnHeaders')) {
                 that.setAria('describedby', column.headerId, $cell);
@@ -380,8 +375,8 @@ const ColumnHeadersViewFilterRowExtender = (function() {
             that.setAria('label', messageLocalization.format('dxDataGrid-ariaFilterCell'), $cell);
 
             $cell.addClass(EDITOR_CELL_CLASS);
-            $container = $('<div>').appendTo($cell);
-            $editorContainer = $('<div>').addClass(EDITOR_CONTAINER_CLASS).appendTo($container);
+            const $container = $('<div>').appendTo($cell);
+            const $editorContainer = $('<div>').addClass(EDITOR_CONTAINER_CLASS).appendTo($container);
 
             if(getColumnSelectedFilterOperation(that, column) === 'between') {
                 that._renderFilterRangeContent($cell, column);
@@ -658,10 +653,9 @@ const DataControllerFilterRowExtender = {
         const columns = this._columnsController.getVisibleColumns();
 
         iteratorUtils.each(columns, function() {
-            let filter;
 
             if(this.allowFiltering && this.calculateFilterExpression && isDefined(this.filterValue)) {
-                filter = this.createFilterExpression(this.filterValue, this.selectedFilterOperation || this.defaultFilterOperation, 'filterRow');
+                const filter = this.createFilterExpression(this.filterValue, this.selectedFilterOperation || this.defaultFilterOperation, 'filterRow');
                 filters.push(filter);
             }
         });
@@ -860,16 +854,14 @@ module.exports = {
             columnsResizer: {
                 _startResizing: function() {
                     const that = this;
-                    let cellIndex;
-                    let overlayInstance;
 
                     that.callBase.apply(that, arguments);
 
                     if(that.isResizing()) {
-                        overlayInstance = that._columnHeadersView.getFilterRangeOverlayInstance();
+                        const overlayInstance = that._columnHeadersView.getFilterRangeOverlayInstance();
 
                         if(overlayInstance) {
-                            cellIndex = overlayInstance.$element().closest('td').index();
+                            const cellIndex = overlayInstance.$element().closest('td').index();
 
                             if(cellIndex === that._targetPoint.columnIndex || cellIndex === that._targetPoint.columnIndex + 1) {
                                 overlayInstance.$content().hide();
@@ -881,10 +873,9 @@ module.exports = {
                 _endResizing: function() {
                     const that = this;
                     let $cell;
-                    let overlayInstance;
 
                     if(that.isResizing()) {
-                        overlayInstance = that._columnHeadersView.getFilterRangeOverlayInstance();
+                        const overlayInstance = that._columnHeadersView.getFilterRangeOverlayInstance();
 
                         if(overlayInstance) {
                             $cell = overlayInstance.$element().closest('td');

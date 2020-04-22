@@ -6,17 +6,12 @@ import { when } from '../../core/utils/deferred';
 
 exports.createOffsetFilter = function(path, storeLoadOptions) {
     const groups = normalizeSortingInfo(storeLoadOptions.group);
-    let i;
-    let j;
-    let filterElement;
-    let selector;
-    let currentFilter;
     let filter = [];
 
-    for(i = 0; i < path.length; i++) {
-        filterElement = [];
-        for(j = 0; j <= i; j++) {
-            selector = groups[j].selector;
+    for(let i = 0; i < path.length; i++) {
+        const filterElement = [];
+        for(let j = 0; j <= i; j++) {
+            const selector = groups[j].selector;
             if(i === j && (path[j] === null || path[j] === false || path[j] === true)) {
                 if(path[j] === false) {
                     filterElement.push([selector, '=', groups[j].desc ? true : null]);
@@ -27,7 +22,7 @@ exports.createOffsetFilter = function(path, storeLoadOptions) {
                     filterElement.push([selector, '=', null]);
                 }
             } else {
-                currentFilter = [selector, i === j ? (groups[j].desc ? '>' : '<') : '=', path[j]];
+                const currentFilter = [selector, i === j ? (groups[j].desc ? '>' : '<') : '=', path[j]];
                 if(currentFilter[1] === '<') {
                     filterElement.push([currentFilter, 'or', [selector, '=', null]]);
                 } else {
@@ -52,7 +47,6 @@ exports.GroupingHelper = Class.inherit((function() {
     };
 
     const getGroupInfoIndexByOffset = function(groupsInfo, offset) {
-        let index;
         let leftIndex = 0;
         let rightIndex = groupsInfo.length - 1;
 
@@ -69,6 +63,7 @@ exports.GroupingHelper = Class.inherit((function() {
             }
         } while(rightIndex - leftIndex > 1);
 
+        let index;
         for(index = leftIndex; index <= rightIndex; index++) {
             if(groupsInfo[index].offset > offset) {
                 break;
@@ -78,9 +73,8 @@ exports.GroupingHelper = Class.inherit((function() {
     };
 
     var cleanGroupsInfo = function(groupsInfo, groupIndex, groupsCount) {
-        let i;
 
-        for(i = 0; i < groupsInfo.length; i++) {
+        for(let i = 0; i < groupsInfo.length; i++) {
             if(groupIndex + 1 >= groupsCount) {
                 groupsInfo[i].children = [];
             } else {
@@ -90,14 +84,13 @@ exports.GroupingHelper = Class.inherit((function() {
     };
 
     var calculateItemsCount = function(that, items, groupsCount) {
-        let i;
         let result = 0;
 
         if(items) {
             if(!groupsCount) {
                 result = items.length;
             } else {
-                for(i = 0; i < items.length; i++) {
+                for(let i = 0; i < items.length; i++) {
                     if(that.isGroupItemCountable(items[i])) {
                         result++;
                     }
@@ -202,11 +195,10 @@ exports.GroupingHelper = Class.inherit((function() {
         },
         findGroupInfo: function(path) {
             const that = this;
-            let pathIndex;
             let groupInfo;
             let groupsInfo = that._groupsInfo;
 
-            for(pathIndex = 0; groupsInfo && pathIndex < path.length; pathIndex++) {
+            for(let pathIndex = 0; groupsInfo && pathIndex < path.length; pathIndex++) {
                 groupInfo = findGroupInfoByKey(groupsInfo, path[pathIndex]);
                 groupsInfo = groupInfo && groupInfo.children;
             }
@@ -215,13 +207,11 @@ exports.GroupingHelper = Class.inherit((function() {
         },
         addGroupInfo: function(groupInfoData) {
             const that = this;
-            let index;
             let groupInfo;
             const path = groupInfoData.path;
-            let pathIndex;
             let groupsInfo = that._groupsInfo;
 
-            for(pathIndex = 0; pathIndex < path.length; pathIndex++) {
+            for(let pathIndex = 0; pathIndex < path.length; pathIndex++) {
                 groupInfo = findGroupInfoByKey(groupsInfo, path[pathIndex]);
                 if(!groupInfo) {
                     groupInfo = {
@@ -230,7 +220,7 @@ exports.GroupingHelper = Class.inherit((function() {
                         data: { offset: groupInfoData.offset, isExpanded: true, path: path.slice(0, pathIndex + 1) },
                         children: []
                     };
-                    index = getGroupInfoIndexByOffset(groupsInfo, groupInfoData.offset);
+                    const index = getGroupInfoIndexByOffset(groupsInfo, groupInfoData.offset);
                     groupsInfo.splice(index, 0, groupInfo);
                     groupsInfo.hash = groupsInfo.hash || {};
                     groupsInfo.hash[JSON.stringify(groupInfo.key)] = groupInfo;
@@ -249,7 +239,6 @@ exports.GroupingHelper = Class.inherit((function() {
         },
         refresh: function(options) {
             const that = this;
-            let groupIndex;
             const storeLoadOptions = options.storeLoadOptions;
             const groups = normalizeSortingInfo(storeLoadOptions.group || []);
             const oldGroups = '_group' in that ? normalizeSortingInfo(that._group || []) : groups;
@@ -257,7 +246,7 @@ exports.GroupingHelper = Class.inherit((function() {
 
             that._group = storeLoadOptions.group;
 
-            for(groupIndex = 0; groupIndex < groupsCount; groupIndex++) {
+            for(let groupIndex = 0; groupIndex < groupsCount; groupIndex++) {
                 if(oldGroups[groupIndex].selector !== groups[groupIndex].selector) {
                     groupsCount = groupIndex;
                     break;

@@ -91,7 +91,6 @@ QUnit.module('Context menu', {
     QUnit.test('Show context menu with defined menu items', function(assert) {
     // arrange
         const that = this;
-        let contextMenuInstance;
         const contextMenu = that.contextMenuView;
         const testElement = $('#container');
 
@@ -104,7 +103,7 @@ QUnit.module('Context menu', {
         // act
         contextMenu.render(testElement);
         $('#columnHeaders').children().trigger('contextmenu');
-        contextMenuInstance = contextMenu.element().dxContextMenu('instance');
+        const contextMenuInstance = contextMenu.element().dxContextMenu('instance');
 
         // assert
         assert.ok(contextMenuInstance._overlay.$content().find('.dx-submenu').first().is(':visible'), 'visible context menu');
@@ -116,14 +115,13 @@ QUnit.module('Context menu', {
     QUnit.test('Not show context menu with undefined menu items', function(assert) {
     // arrange
         const that = this;
-        let contextMenuInstance;
         const contextMenu = that.contextMenuView;
         const testElement = $('#container');
 
         // act
         contextMenu.render(testElement);
         $('#columnHeaders').children().trigger('contextmenu');
-        contextMenuInstance = contextMenu.element().dxContextMenu('instance');
+        const contextMenuInstance = contextMenu.element().dxContextMenu('instance');
 
         // assert
         assert.ok(!contextMenuInstance._overlay, 'not visible context menu');
@@ -132,7 +130,6 @@ QUnit.module('Context menu', {
     QUnit.test('Show context menu when several views', function(assert) {
     // arrange
         const that = this;
-        let contextMenuInstance;
         const contextMenu = that.contextMenuView;
         const testElement = $('#container');
         let text;
@@ -156,7 +153,7 @@ QUnit.module('Context menu', {
         contextMenu.render(testElement);
         $('#columnHeaders').children().trigger('contextmenu');
 
-        contextMenuInstance = contextMenu.element().dxContextMenu('instance');
+        const contextMenuInstance = contextMenu.element().dxContextMenu('instance');
 
         // assert
         assert.ok(contextMenuInstance._overlay.$content().find('.dx-submenu').first().is(':visible'), 'visible context menu');
@@ -191,14 +188,13 @@ QUnit.module('Context menu', {
         const rtlClass = 'dx-rtl';
         const testElement = $('#secondContainer');
         const contextMenu = this.contextMenuView;
-        let instance;
 
         testElement.dxDataGrid({ rtlEnabled: true });
 
         // act
         contextMenu.render(testElement);
         testElement.trigger('contextmenu');
-        instance = contextMenu.element().dxContextMenu('instance');
+        const instance = contextMenu.element().dxContextMenu('instance');
 
         // assert
         assert.ok(testElement.hasClass(rtlClass), 'first render - rtl is on');
@@ -245,7 +241,6 @@ QUnit.module('Context menu with rowsView', {
     QUnit.test('Context menu with option onContextMenuPreparing', function(assert) {
     // arrange
         const that = this;
-        let contextMenuInstance;
         let contextMenuOptions;
         const $testElement = $('#secondContainer');
 
@@ -269,7 +264,7 @@ QUnit.module('Context menu with rowsView', {
         // act
         $('#columnHeaders').children().trigger('contextmenu');
 
-        contextMenuInstance = that.contextMenuView.element().dxContextMenu('instance');
+        const contextMenuInstance = that.contextMenuView.element().dxContextMenu('instance');
 
         // assert
         assert.ok(!contextMenuInstance._overlay, 'not visible context menu');
@@ -292,8 +287,6 @@ QUnit.module('Context menu with rowsView', {
     QUnit.test('Context menu with option onContextMenuPreparing when no data and scrollbar', function(assert) {
     // arrange
         const that = this;
-        let $rowsViewElement;
-        let contextMenuInstance;
         const $testElement = $('#secondContainer');
 
         that.options = {
@@ -316,10 +309,10 @@ QUnit.module('Context menu with rowsView', {
         // act
         $('#columnHeaders').children().trigger('contextmenu');
 
-        contextMenuInstance = that.contextMenuView.element().dxContextMenu('instance');
+        const contextMenuInstance = that.contextMenuView.element().dxContextMenu('instance');
 
         // assert
-        $rowsViewElement = $testElement.find('.dx-datagrid-rowsview').first();
+        const $rowsViewElement = $testElement.find('.dx-datagrid-rowsview').first();
         assert.ok($rowsViewElement.length, 'has rows view');
         assert.ok(!$rowsViewElement.hasClass('dx-scrollable'), 'no scrollbar');
         assert.ok(!contextMenuInstance._overlay, 'not visible context menu');
@@ -337,7 +330,6 @@ QUnit.module('Context menu with rowsView', {
     QUnit.test('Context menu should not be shown without items', function(assert) {
     // arrange
         const that = this;
-        let contextMenuInstance;
         let contextMenuItems = [{ text: 'test' }];
         const $testElement = $('#secondContainer');
 
@@ -353,7 +345,7 @@ QUnit.module('Context menu with rowsView', {
         that.rowsView.render($testElement);
         that.contextMenuView.render($testElement);
 
-        contextMenuInstance = that.contextMenuView.element().dxContextMenu('instance');
+        const contextMenuInstance = that.contextMenuView.element().dxContextMenu('instance');
 
         // act
         $($testElement.find('td').eq(3)).trigger('contextmenu');
@@ -370,7 +362,6 @@ QUnit.module('Context menu with rowsView', {
     QUnit.test('Context menu with option onContextMenuPreparing for group row', function(assert) {
     // arrange
         const that = this;
-        let contextMenuInstance;
         let contextMenuPreparingArg;
         const $testElement = $('#secondContainer');
 
@@ -393,7 +384,7 @@ QUnit.module('Context menu with rowsView', {
         // act
         $('#columnHeaders').children().trigger('contextmenu');
 
-        contextMenuInstance = that.contextMenuView.element().dxContextMenu('instance');
+        const contextMenuInstance = that.contextMenuView.element().dxContextMenu('instance');
 
         // assert
         assert.ok(!contextMenuInstance._overlay, 'not visible context menu');

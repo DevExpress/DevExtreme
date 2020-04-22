@@ -513,7 +513,6 @@ QUnit.module('ColumnsSeparator', () => {
             NAME: 'dxDataGrid'
         };
         let tablePosition;
-        let $separator;
         const $container = $('#container');
         let separator;
 
@@ -537,7 +536,7 @@ QUnit.module('ColumnsSeparator', () => {
         tablePosition.update();
 
         // arrange
-        $separator = separator.element();
+        const $separator = separator.element();
         assert.equal($separator.height(), 145, 'height of columns separator');
         assert.equal($separator.css('top'), '100px', 'height of columns separator');
     });
@@ -603,7 +602,6 @@ QUnit.module('ColumnsSeparator', () => {
         };
         let tablePosition;
         const $container = $('#container');
-        let separator;
 
         // act
         $('<div/>')
@@ -614,7 +612,7 @@ QUnit.module('ColumnsSeparator', () => {
         component._controllers.tablePosition = tablePosition;
         tablePosition.init();
 
-        separator = new columnResizingReordering.ColumnsSeparatorView(component);
+        const separator = new columnResizingReordering.ColumnsSeparatorView(component);
         separator.init();
         separator.render($container);
 
@@ -669,7 +667,6 @@ QUnit.module('ColumnsSeparator', () => {
         };
         let tablePosition;
         const $container = $('#container');
-        let separator;
 
         // act
         $('<div/>')
@@ -680,7 +677,7 @@ QUnit.module('ColumnsSeparator', () => {
         component._controllers.tablePosition = tablePosition;
         tablePosition.init();
 
-        separator = new columnResizingReordering.ColumnsSeparatorView(component);
+        const separator = new columnResizingReordering.ColumnsSeparatorView(component);
         separator.init();
         separator.render($container);
 
@@ -951,7 +948,6 @@ QUnit.module('Columns resizing', {
         };
 
         that.createColumnsResizerViewController = function(columns) {
-            let controller;
 
             if(columns) {
                 that.component._controllers.columns = new MockColumnsController(columns, that.commonColumnSettings);
@@ -959,7 +955,7 @@ QUnit.module('Columns resizing', {
 
             that.component._controllers.editing = new MockEditingController();
 
-            that.resizeController = controller = new columnResizingReordering.ColumnsResizerViewController(that.component);
+            const controller = that.resizeController = new columnResizingReordering.ColumnsResizerViewController(that.component);
 
             controller.init();
 
@@ -1694,7 +1690,6 @@ QUnit.module('Columns resizing', {
 
     QUnit.test('Update height of separator when there is band columns', function(assert) {
         // arrange
-        let columnsSeparatorHeight;
 
         this.component._controllers.tablePosition = new columnResizingReordering.TablePositionViewController(this.component);
         const resizeController = this.createColumnsResizerViewController([
@@ -1721,7 +1716,7 @@ QUnit.module('Columns resizing', {
         this.component._controllers.tablePosition.update();
 
         // assert
-        columnsSeparatorHeight = resizeController._columnsSeparatorView.height();
+        const columnsSeparatorHeight = resizeController._columnsSeparatorView.height();
         assert.ok(columnsSeparatorHeight > 0, 'columnsSeparator height');
         assert.equal(parseInt(resizeController._columnsSeparatorView.element().css('top')), 0, 'columnsSeparator top');
 
@@ -2168,10 +2163,8 @@ QUnit.module('Columns resizing', {
     QUnit.test('Move separator when width of column is changed', function(assert) {
         // arrange
         const resizeController = this.createColumnsResizerViewController();
-        let posX;
         let testPosX;
         const $container = $('#container').width('300px');
-        let columnWidths;
 
         // act
         this.renderViews($container);
@@ -2182,7 +2175,7 @@ QUnit.module('Columns resizing', {
         resizeController._isResizing = true;
         resizeController._targetPoint = { x: -9850, columnIndex: 1, index: 2 };
         resizeController._resizingInfo = { startPosX: -9847, currentColumnIndex: 0 };
-        columnWidths = [this.options.columns[0].width + 7, this.options.columns[1].width - 7];
+        const columnWidths = [this.options.columns[0].width + 7, this.options.columns[1].width - 7];
         resizeController._columnHeadersView.setColumnWidths({ widths: columnWidths });
         resizeController._moveSeparator(getEvent({
             data: resizeController,
@@ -2191,7 +2184,7 @@ QUnit.module('Columns resizing', {
         }));
 
         // assert
-        posX = resizeController._targetPoint.x + (-9840 - resizeController._resizingInfo.startPosX);
+        const posX = resizeController._targetPoint.x + (-9840 - resizeController._resizingInfo.startPosX);
         assert.equal(resizeController._columnsSeparatorView._testPosX, posX, 'posX of columnsSeparator');
         assert.equal(testPosX, -9840, 'posX');
     });
@@ -2390,13 +2383,12 @@ QUnit.module('Columns resizing', {
     QUnit.test('Grid view is resized when vertical scrollbar is not shown', function(assert) {
         // arrange
         let isGridViewResized = false;
-        let resizeController;
 
         this.component.updateDimensions = function() {
             isGridViewResized = true;
         };
 
-        resizeController = this.createColumnsResizerViewController();
+        const resizeController = this.createColumnsResizerViewController();
 
         resizeController._pointsByColumns = [
             { x: -9875, columnIndex: 0, index: 1 },
@@ -2433,7 +2425,6 @@ QUnit.module('Columns resizing', {
     QUnit.test('Grid view is resized when vertical scrollbar is shown', function(assert) {
         // arrange
         let isGridViewResized = false;
-        let resizeController;
 
         this.component.updateDimensions = function() {
             isGridViewResized = true;
@@ -2443,7 +2434,7 @@ QUnit.module('Columns resizing', {
             return 16;
         };
 
-        resizeController = this.createColumnsResizerViewController();
+        const resizeController = this.createColumnsResizerViewController();
 
         resizeController._pointsByColumns = [
             { x: -9875, columnIndex: 0, index: 1 },
@@ -2480,7 +2471,6 @@ QUnit.module('Columns resizing', {
     QUnit.test('Grid view is not resized by move separator', function(assert) {
         // arrange
         let isGridViewResized = false;
-        let resizeController;
 
         this.component._views.gridView = {
             init: noop,
@@ -2490,7 +2480,7 @@ QUnit.module('Columns resizing', {
             render: noop
         };
 
-        resizeController = this.createColumnsResizerViewController();
+        const resizeController = this.createColumnsResizerViewController();
 
         resizeController._pointsByColumns = [
             { x: -9875, columnIndex: 0, index: 1 },
@@ -2524,12 +2514,11 @@ QUnit.module('Columns resizing', {
         // arrange
         let isFreeSpaceRowHeightUpdated;
         const tablePositionController = new columnResizingReordering.TablePositionViewController(this.component);
-        let resizeController;
 
         this.component._controllers.tablePosition = tablePositionController;
         tablePositionController.init();
 
-        resizeController = this.createColumnsResizerViewController();
+        const resizeController = this.createColumnsResizerViewController();
 
         resizeController._pointsByColumns = [
             { x: -9875, columnIndex: 0, index: 1 },
@@ -2578,12 +2567,11 @@ QUnit.module('Columns resizing', {
             { caption: 'Column 4', visible: true, width: '150px' }], this.commonColumnSettings);
 
         const tablePositionController = new columnResizingReordering.TablePositionViewController(this.component);
-        let resizeController;
 
         this.component._controllers.tablePosition = tablePositionController;
         tablePositionController.init();
 
-        resizeController = this.createColumnsResizerViewController();
+        const resizeController = this.createColumnsResizerViewController();
 
         resizeController._pointsByColumns = [
             { x: -9875, columnIndex: 0, index: 1 },
@@ -2616,14 +2604,13 @@ QUnit.module('Columns resizing', {
 
     QUnit.test('\'Process size changed\' method is not called', function(assert) {
         // arrange
-        let resizeController;
         let isProcessSizeChanged = false;
         const tablePositionController = new columnResizingReordering.TablePositionViewController(this.component);
 
         this.component._controllers.tablePosition = tablePositionController;
         tablePositionController.init();
 
-        resizeController = this.createColumnsResizerViewController();
+        const resizeController = this.createColumnsResizerViewController();
 
         resizeController._pointsByColumns = [
             { x: -9875, columnIndex: 0, index: 1 },
@@ -2653,11 +2640,9 @@ QUnit.module('Columns resizing', {
 
     function hasSubscribesToCallbacks(resizeController) {
         let checkCounter = 0;
-        let i;
-        let subscribe;
 
-        for(i = 0; i < resizeController._subscribesToCallbacks.length; i++) {
-            subscribe = resizeController._subscribesToCallbacks[i];
+        for(let i = 0; i < resizeController._subscribesToCallbacks.length; i++) {
+            const subscribe = resizeController._subscribesToCallbacks[i];
             if(subscribe.callback.has(subscribe.handler)) {
                 checkCounter++;
             }
@@ -2807,7 +2792,6 @@ QUnit.module('Columns resizing', {
             { caption: 'Column 2', width: '125px' },
             { caption: 'Column 3', width: '125px' }
         ]);
-        let resultHeight;
         const testElement = $('#container').height(102);
 
         // act
@@ -2824,7 +2808,7 @@ QUnit.module('Columns resizing', {
 
         controller._tablePositionController.update();
 
-        resultHeight = controller._columnHeadersView.getHeight() + controller._rowsView.height();
+        const resultHeight = controller._columnHeadersView.getHeight() + controller._rowsView.height();
 
         // assert
         assert.ok(controller._trackerView);
@@ -2842,12 +2826,11 @@ QUnit.module('Columns resizing', {
             { caption: 'Column 3', width: '125px' }
         ]);
 
-        let $tracker;
 
         // act
         this.renderViews($('#container'));
         this.component._controllers.tablePosition.positionChanged.fire({ top: 23, height: 345 });
-        $tracker = this.component._views.trackerView.element();
+        const $tracker = this.component._views.trackerView.element();
 
         // assert
         assert.equal($tracker.css('top'), 'auto', 'top');
@@ -3010,8 +2993,6 @@ QUnit.module('Columns resizing', {
         this.component._controllers.tablePosition.init();
 
         const $testElement = $('#container');
-        let $headersContainer;
-        let separatorOffsetTop;
         const resizeController = this.createColumnsResizerViewController();
 
         this.initViews();
@@ -3035,8 +3016,8 @@ QUnit.module('Columns resizing', {
         this.component._views.rowsView.resizeCompleted.fire();
 
         // assert
-        $headersContainer = $(resizeController._columnHeadersView.element());
-        separatorOffsetTop = $headersContainer.offset().top + $headersContainer.find('.dx-header-row')[0].getBoundingClientRect().height;
+        const $headersContainer = $(resizeController._columnHeadersView.element());
+        const separatorOffsetTop = $headersContainer.offset().top + $headersContainer.find('.dx-header-row')[0].getBoundingClientRect().height;
         assert.strictEqual(this.component._controllers.columns.columnOption(2, 'width'), 75, 'width of the first banded column');
         assert.strictEqual($(resizeController._columnsSeparatorView.element()).offset().top, separatorOffsetTop, 'separator offset top');
     });
@@ -3287,13 +3268,12 @@ QUnit.module('Headers reordering', {
             { caption: 'Column 3', width: '125px' }
         ];
         const controller = this.createDraggingHeaderViewController(testColumns);
-        let $cells;
 
         // act
         this.renderViews($('#container').css('width', '320px'));
 
         // assert
-        $cells = controller._columnHeadersView._tableElement.find('td');
+        const $cells = controller._columnHeadersView._tableElement.find('td');
         assert.deepEqual(gridCore.getPointsByColumns($cells, function(point) {
             return controller._pointCreated(point, testColumns, 'headers', testColumns[1]);
         }), [
@@ -3310,12 +3290,11 @@ QUnit.module('Headers reordering', {
             { caption: 'Column 2', allowReordering: false, allowGrouping: true, width: 125 }
         ];
         const controller = this.createDraggingHeaderViewController(testColumns);
-        let $cells;
 
         // act
         this.renderViews($('#container').width(250));
 
-        $cells = controller._columnHeadersView._tableElement.find('td');
+        const $cells = controller._columnHeadersView._tableElement.find('td');
 
         // assert
         assert.deepEqual(gridCore.getPointsByColumns($cells, function(point) {
@@ -3334,12 +3313,11 @@ QUnit.module('Headers reordering', {
             { caption: 'Column 2', allowReordering: false, allowGrouping: true, width: 125 }
         ];
         const controller = this.createDraggingHeaderViewController(testColumns);
-        let $cells;
 
         // act
         this.renderViews($('#container').width(250));
 
-        $cells = controller._columnHeadersView._tableElement.find('td');
+        const $cells = controller._columnHeadersView._tableElement.find('td');
 
         // assert
         assert.ok(!gridCore.getPointsByColumns($cells, function(point) {
@@ -3355,14 +3333,13 @@ QUnit.module('Headers reordering', {
             { caption: 'Column 2', width: '125px' },
             { caption: 'Column 3', width: '125px' }
         ]);
-        let $draggingHeader;
 
         // assert
         assert.ok(controller._draggingHeaderView, 'draggingHeader is not initialized');
 
         // act
         this.renderViews(testElement);
-        $draggingHeader = testElement.find('.dx-datagrid-drag-header');
+        const $draggingHeader = testElement.find('.dx-datagrid-drag-header');
 
         // assert
         assert.strictEqual($draggingHeader.length, 1, 'draggingHeader element');
@@ -3379,14 +3356,13 @@ QUnit.module('Headers reordering', {
             { caption: 'Column 3', width: '125px' }
         ]);
         const testElement = $('#container');
-        let $draggingHeader;
 
         // assert
         assert.ok(controller._draggingHeaderView, 'draggingHeader is not initialized');
 
         // act
         this.renderViews(testElement);
-        $draggingHeader = testElement.find('.dx-datagrid-drag-header');
+        const $draggingHeader = testElement.find('.dx-datagrid-drag-header');
 
         // assert
         assert.strictEqual($draggingHeader.length, 1, 'draggingHeader element');
@@ -3402,14 +3378,13 @@ QUnit.module('Headers reordering', {
             { caption: 'Column 3', width: '125px' }
         ]);
         const testElement = $('#container');
-        let $draggingHeader;
 
         // assert
         assert.ok(controller._draggingHeaderView, 'draggingHeader is not initialized');
 
         // act
         this.renderViews(testElement);
-        $draggingHeader = testElement.find('.dx-datagrid-drag-header');
+        const $draggingHeader = testElement.find('.dx-datagrid-drag-header');
 
         // assert
         assert.strictEqual($draggingHeader.length, 1, 'draggingHeader element');
@@ -3426,12 +3401,11 @@ QUnit.module('Headers reordering', {
         ]);
 
         const testElement = $('#container');
-        let td;
 
         // act
         this.renderViews(testElement);
 
-        td = testElement.find('.dx-datagrid-headers').first().find('td').first();
+        const td = testElement.find('.dx-datagrid-headers').first().find('td').first();
 
         // assert
         assert.ok(!$._data(td[0], 'events'), 'no dxpointerdown event subscription');
@@ -3441,12 +3415,10 @@ QUnit.module('Headers reordering', {
     QUnit.test('Drag header with nowrap', function(assert) {
         // arrange
         const testElement = $('#container');
-        let draggingHeader;
-        let $dragHeader;
 
         // act
         this.createDraggingHeaderViewController();
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
         draggingHeader.init();
         draggingHeader.render(testElement);
         draggingHeader.dragHeader({
@@ -3462,7 +3434,7 @@ QUnit.module('Headers reordering', {
                 caption: 'TestDrag'
             }
         });
-        $dragHeader = $('.dx-datagrid-drag-header');
+        const $dragHeader = $('.dx-datagrid-drag-header');
 
         // assert
         assert.ok(draggingHeader._isDragging, 'is dragging');
@@ -3477,12 +3449,10 @@ QUnit.module('Headers reordering', {
     QUnit.test('Drag header without nowrap', function(assert) {
         // arrange
         const testElement = $('#container');
-        let draggingHeader;
-        let $dragHeader;
 
         // act
         this.createDraggingHeaderViewController();
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
         draggingHeader.init();
         draggingHeader.render(testElement);
         draggingHeader.dragHeader({
@@ -3498,7 +3468,7 @@ QUnit.module('Headers reordering', {
             }
         });
 
-        $dragHeader = $('.dx-datagrid-drag-header');
+        const $dragHeader = $('.dx-datagrid-drag-header');
 
         // assert
         assert.ok(draggingHeader._isDragging, 'is dragging');
@@ -3514,7 +3484,6 @@ QUnit.module('Headers reordering', {
         const testElement = $('#container');
         let options;
         let draggingHeader;
-        let $draggingHeader;
         const controller = this.createDraggingHeaderViewController();
 
         // act
@@ -3550,7 +3519,7 @@ QUnit.module('Headers reordering', {
                 type: 'mouse'
             }
         });
-        $draggingHeader = $('.dx-datagrid-drag-header');
+        const $draggingHeader = $('.dx-datagrid-drag-header');
 
         // assert
         assert.equal(options.posX, -9875, 'dockedPosX');
@@ -3563,7 +3532,6 @@ QUnit.module('Headers reordering', {
         // arrange
         const testElement = $('#container');
         let draggingHeader;
-        let $draggingHeader;
         const controller = this.createDraggingHeaderViewController();
 
         controller.dock = function() { };
@@ -3596,7 +3564,7 @@ QUnit.module('Headers reordering', {
             }
         });
 
-        $draggingHeader = $('.dx-datagrid-drag-header');
+        const $draggingHeader = $('.dx-datagrid-drag-header');
 
         // act
         assert.notEqual($draggingHeader.css('display'), 'none', 'header is visible');
@@ -3612,7 +3580,6 @@ QUnit.module('Headers reordering', {
         const testElement = $('#container');
         let options;
         let draggingHeader;
-        let $draggingHeader;
         const controller = this.createDraggingHeaderViewController();
 
         testElement.css('direction', 'rtl');
@@ -3654,7 +3621,7 @@ QUnit.module('Headers reordering', {
             }
         });
 
-        $draggingHeader = $('.dx-datagrid-drag-header');
+        const $draggingHeader = $('.dx-datagrid-drag-header');
 
         // assert
         assert.equal(options.posX, -9250, 'dockedPosX');
@@ -3668,7 +3635,6 @@ QUnit.module('Headers reordering', {
         const testElement = $('#container');
         let dropParameters;
         let draggingHeader;
-        let $draggingHeader;
         const controller = this.createDraggingHeaderViewController();
 
         // act
@@ -3721,7 +3687,7 @@ QUnit.module('Headers reordering', {
 
         draggingHeader.dropHeader({ event: { data: { that: draggingHeader } } });
 
-        $draggingHeader = $('.dx-datagrid-drag-header');
+        const $draggingHeader = $('.dx-datagrid-drag-header');
 
         // assert
         assert.equal(dropParameters.sourceColumnIndex, 0, 'sourceColumnIndex');
@@ -3738,7 +3704,6 @@ QUnit.module('Headers reordering', {
         const testElement = $('#container');
         let dropParameters;
         let draggingHeader;
-        let $draggingHeader;
         const controller = this.createDraggingHeaderViewController();
 
         testElement.css('direction', 'rtl');
@@ -3799,7 +3764,7 @@ QUnit.module('Headers reordering', {
             }
         });
 
-        $draggingHeader = $('.dx-datagrid-drag-header');
+        const $draggingHeader = $('.dx-datagrid-drag-header');
 
         // assert
         assert.equal(dropParameters.sourceColumnIndex, 0, 'sourceColumnIndex');
@@ -3816,7 +3781,6 @@ QUnit.module('Headers reordering', {
         const testElement = $('#container');
         let dropParameters;
         let draggingHeader;
-        let $draggingHeader;
         const controller = this.createDraggingHeaderViewController();
 
         controller.drop = function(parameters) {
@@ -3875,7 +3839,7 @@ QUnit.module('Headers reordering', {
             }
         });
 
-        $draggingHeader = $('.dx-datagrid-drag-header');
+        const $draggingHeader = $('.dx-datagrid-drag-header');
 
         // assert
         assert.ok(!dropParameters, 'drop parameters');
@@ -4151,7 +4115,6 @@ QUnit.module('Headers reordering', {
         // arrange
         const testElement = $('#container').width(600);
         let dropParameters;
-        let $draggingHeader;
         const controller = this.createDraggingHeaderViewController();
         const draggingHeader = new TestDraggingHeader(this.component);
 
@@ -4246,7 +4209,7 @@ QUnit.module('Headers reordering', {
             }
         });
 
-        $draggingHeader = $('.dx-datagrid-drag-header');
+        const $draggingHeader = $('.dx-datagrid-drag-header');
 
         // assert
         assert.ok(!dropParameters, 'drop parameters');
@@ -4258,7 +4221,6 @@ QUnit.module('Headers reordering', {
         // arrange
         const testElement = $('#container').width(600);
         let dropParameters;
-        let $draggingHeader;
         const controller = this.createDraggingHeaderViewController();
         const draggingHeader = new TestDraggingHeader(this.component);
 
@@ -4347,7 +4309,7 @@ QUnit.module('Headers reordering', {
             }
         });
 
-        $draggingHeader = $('.dx-datagrid-drag-header');
+        const $draggingHeader = $('.dx-datagrid-drag-header');
 
         // assert
         assert.ok(!dropParameters, 'drop parameters');
@@ -4408,16 +4370,14 @@ QUnit.module('Headers reordering', {
     QUnit.test('Rise element events', function(assert) {
         // arrange
         const testElement = $('#container');
-        let controller;
-        let $draggingHeader;
 
         this.component._views.draggingHeaderView = new TestDraggingHeader2(this.component);
-        controller = this.createDraggingHeaderViewController([{ caption: 'Column 1', width: 100 }, { caption: 'Column 2', width: 200 }]);
+        const controller = this.createDraggingHeaderViewController([{ caption: 'Column 1', width: 100 }, { caption: 'Column 2', width: 200 }]);
 
         // act
         this.renderViews(testElement);
 
-        $draggingHeader = controller._columnHeadersView.element().find('td').first();
+        const $draggingHeader = controller._columnHeadersView.element().find('td').first();
         $($draggingHeader).trigger(dragEvents.start);
         $($draggingHeader).trigger(dragEvents.move);
         $($draggingHeader).trigger(dragEvents.end);
@@ -4429,7 +4389,6 @@ QUnit.module('Headers reordering', {
 
     QUnit.test('Reset opacity for rows', function(assert) {
         const testElement = $('#container');
-        let draggingHeader;
         let columnIndexOpacity;
         let opacityValue;
         const controller = this.createDraggingHeaderViewController();
@@ -4444,7 +4403,7 @@ QUnit.module('Headers reordering', {
             return $('<div/>');
         };
 
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
 
         draggingHeader.init();
 
@@ -4544,14 +4503,13 @@ QUnit.module('Headers reordering', {
         const testElement = $('#container');
         const rowsView = new RowsView(this.component);
         const columnHeadersView = new ColumnHeadersView(this.component);
-        let draggingHeader;
 
         // act
         const controller = this.createDraggingHeaderViewController();
         controller._rowsView = rowsView;
         controller._columnHeadersView = columnHeadersView;
 
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
         draggingHeader.init();
         draggingHeader._rowsView = rowsView;
         draggingHeader._columnHeadersView = columnHeadersView;
@@ -4594,12 +4552,10 @@ QUnit.module('Headers reordering', {
     QUnit.test('Drag command column', function(assert) {
         // arrange
         const testElement = $('#container');
-        let draggingHeader;
-        let $dragHeader;
 
         // act
         this.createDraggingHeaderViewController();
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
         draggingHeader.init();
         draggingHeader.render(testElement);
         draggingHeader.dragHeader({
@@ -4613,7 +4569,7 @@ QUnit.module('Headers reordering', {
                 type: 'buttons'
             }
         });
-        $dragHeader = $('.dx-datagrid-drag-header');
+        const $dragHeader = $('.dx-datagrid-drag-header');
 
         // assert
         assert.ok(draggingHeader._isDragging, 'is dragging');
@@ -4682,7 +4638,6 @@ QUnit.module('Group panel reordering', {
         // arrange
         const testElement = $('#container');
         let options;
-        let $draggingHeaderView;
 
         this.controller.dock = function(params) {
             options = params;
@@ -4714,7 +4669,7 @@ QUnit.module('Group panel reordering', {
                 type: 'mouse'
             }
         });
-        $draggingHeaderView = $('.dx-datagrid-drag-header');
+        const $draggingHeaderView = $('.dx-datagrid-drag-header');
 
         // assert
         const headerViewOffset = $draggingHeaderView.offset();
@@ -4729,7 +4684,6 @@ QUnit.module('Group panel reordering', {
         // arrange
         const testElement = $('#container');
         let dropParameters;
-        let $draggingHeaderView;
 
         this.controller.drop = function(parameters) {
             dropParameters = parameters;
@@ -4786,7 +4740,7 @@ QUnit.module('Group panel reordering', {
             }
         });
 
-        $draggingHeaderView = $('.dx-datagrid-drag-header');
+        const $draggingHeaderView = $('.dx-datagrid-drag-header');
 
         // assert
         assert.equal(dropParameters.sourceColumnIndex, 0, 'sourceColumnIndex');
@@ -4802,7 +4756,6 @@ QUnit.module('Group panel reordering', {
         // arrange
         const testElement = $('#container');
         let dropParameters;
-        let $draggingHeaderView;
 
         this.controller.drop = function(parameters) {
             if(this.allowDrop(parameters)) {
@@ -4861,7 +4814,7 @@ QUnit.module('Group panel reordering', {
             }
         });
 
-        $draggingHeaderView = $('.dx-datagrid-drag-header');
+        const $draggingHeaderView = $('.dx-datagrid-drag-header');
 
         // assert
         assert.ok(!dropParameters, 'drop parameters');
@@ -5123,7 +5076,6 @@ QUnit.module('Group panel reordering', {
     QUnit.test('Check block separator visibility after loading', function(assert) {
         // arrange
         const testElement = $('#container');
-        let $blockSeparator;
 
         this.controller._rowsView = {};
         this.controller._rowsView.setRowsOpacity = function() { };
@@ -5144,7 +5096,7 @@ QUnit.module('Group panel reordering', {
                 allowReordering: true
             }
         });
-        $blockSeparator = $('.dx-datagrid').children('.dx-block-separator');
+        const $blockSeparator = $('.dx-datagrid').children('.dx-block-separator');
 
         this.draggingHeaderView.moveHeader({
             event: {
@@ -5659,10 +5611,9 @@ QUnit.module('column chooser reordering', {
 
     QUnit.test('Get points by columns', function(assert) {
         // arrange
-        let pointsByColumns;
 
         // act
-        pointsByColumns = gridCore.getPointsByColumns($('#itemsContainerVertical').find('div'), false, true);
+        const pointsByColumns = gridCore.getPointsByColumns($('#itemsContainerVertical').find('div'), false, true);
 
         // act, assert
         assert.equal(pointsByColumns.length, 3, 'count points by columns');
@@ -5678,7 +5629,6 @@ QUnit.module('column chooser reordering', {
         // arrange
         const testElement = $('#container');
         let options;
-        let $draggingHeaderView;
 
         this.controller.dock = function(params) {
             options = params;
@@ -5710,7 +5660,7 @@ QUnit.module('column chooser reordering', {
                 type: 'mouse'
             }
         });
-        $draggingHeaderView = $('.dx-datagrid-drag-header');
+        const $draggingHeaderView = $('.dx-datagrid-drag-header');
 
         // assert
         assert.equal(options.targetColumnIndex, -1, 'targetColumnIndex');
@@ -5723,7 +5673,6 @@ QUnit.module('column chooser reordering', {
         // arrange
         const testElement = $('#container');
         let dropParameters;
-        let $draggingHeaderView;
 
         this.controller.drop = function(parameters) {
             dropParameters = parameters;
@@ -5781,7 +5730,7 @@ QUnit.module('column chooser reordering', {
             }
         });
 
-        $draggingHeaderView = $('.dx-datagrid-drag-header');
+        const $draggingHeaderView = $('.dx-datagrid-drag-header');
 
         // assert
         assert.equal(dropParameters.sourceColumnIndex, 0, 'sourceColumnIndex');
@@ -5797,7 +5746,6 @@ QUnit.module('column chooser reordering', {
         // arrange
         const testElement = $('#container');
         let dropParameters;
-        let $draggingHeaderView;
 
         this.controller.drop = function(parameters) {
             dropParameters = parameters;
@@ -5854,7 +5802,7 @@ QUnit.module('column chooser reordering', {
             }
         });
 
-        $draggingHeaderView = $('.dx-datagrid-drag-header');
+        const $draggingHeaderView = $('.dx-datagrid-drag-header');
 
         // assert
         assert.equal(dropParameters.sourceColumnIndex, 0, 'sourceColumnIndex');
@@ -5870,7 +5818,6 @@ QUnit.module('column chooser reordering', {
         // arrange
         const testElement = $('#container');
         let dropParameters;
-        let $draggingHeaderView;
 
         this.controller.drop = function(parameters) {
             if(this.allowDrop(parameters)) {
@@ -5929,7 +5876,7 @@ QUnit.module('column chooser reordering', {
             }
         });
 
-        $draggingHeaderView = $('.dx-datagrid-drag-header');
+        const $draggingHeaderView = $('.dx-datagrid-drag-header');
 
         // assert
         assert.ok(!dropParameters, 'drop parameters');
@@ -6389,8 +6336,6 @@ QUnit.module('column chooser reordering', {
         try {
             fx.off = true;
             const $testElement = $('#container');
-            let treeViewInstance;
-            let $item;
             let dropParameters;
 
             this.controller.drop = function(parameters) {
@@ -6410,10 +6355,10 @@ QUnit.module('column chooser reordering', {
             this.columnChooserView.render($testElement);
 
             this.showColumnChooser();
-            treeViewInstance = $('.dx-datagrid-column-chooser-list').dxTreeView('instance');
+            const treeViewInstance = $('.dx-datagrid-column-chooser-list').dxTreeView('instance');
             treeViewInstance.option('searchValue', '2');
 
-            $item = $(treeViewInstance.element()).find('.dx-treeview-item');
+            const $item = $(treeViewInstance.element()).find('.dx-treeview-item');
 
             // assert
             assert.ok($item.hasClass('dx-datagrid-drag-action'), 'item is draggable');
@@ -6554,14 +6499,13 @@ QUnit.module('Headers reordering inside color swatch', {
 
     QUnit.test('Header renders inside swatch', function(assert) {
         const testElement = $('#gridInSwatch');
-        let draggingHeader;
         const controller = this.createDraggingHeaderViewController();
 
         controller._columnHeadersView.element = function() {
             return $('<div/>');
         };
 
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
 
         draggingHeader.init();
 

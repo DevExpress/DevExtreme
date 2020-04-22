@@ -73,17 +73,15 @@ module.exports = {
         const that = this;
         const columns = that.getColumns();
         const $cells = that.getColumnElements();
-        let rowOptions;
         let $cell;
-        let i;
 
         if(!$cells || columns.length !== $cells.length) return;
 
-        for(i = 0; i < columns.length; i++) {
+        for(let i = 0; i < columns.length; i++) {
             $cell = $cells.eq(i);
             that._updateIndicator($cell, columns[i], indicatorName);
 
-            rowOptions = $cell.parent().data('options');
+            const rowOptions = $cell.parent().data('options');
 
             if(rowOptions && rowOptions.cells) {
                 rowOptions.cells[$cell.index()].column = columns[i];
