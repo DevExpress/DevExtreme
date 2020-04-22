@@ -508,11 +508,6 @@ const DateBox = DropDownEditor.inherit({
         return typeUtils.isDefined(parsedText) ? parsedText : undefined;
     },
 
-    _validateValue: function(value) {
-        this._applyInternalValidation(value);
-        this._applyCustomValidation(value);
-    },
-
     _applyInternalValidation(value) {
         const text = this.option('text');
         const hasText = !!text && value !== null;
@@ -655,7 +650,8 @@ const DateBox = DropDownEditor.inherit({
                 if(this.option('isValid')) {
                     this._applyInternalValidation(this.dateOption('value'));
                 } else {
-                    this._validateValue(this.dateOption('value'));
+                    this._applyInternalValidation(this.dateOption('value'));
+                    this._applyCustomValidation(this.dateOption('value'));
                 }
                 this._invalidate();
                 break;
