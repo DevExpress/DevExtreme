@@ -355,29 +355,6 @@ module('rendering', () => {
             textBox.option('readOnly', false);
             assert.ok(button.option('disabled'), 'button is disabled');
         });
-
-        test('editors content should not overlap the widgets bounds', function(assert) {
-            const widgetWidth = 200;
-            const $textBox = $('<div>').appendTo('#qunit-fixture').dxTextBox({
-                width: widgetWidth,
-                buttons: [{
-                    name: 'custom',
-                    location: 'before',
-                    options: {
-                        text: 'custom'
-                    }
-                }, {
-                    name: 'custom 2',
-                    location: 'after',
-                    options: {
-                        text: 'custom'
-                    }
-                }]
-            });
-            const { $before, $after } = getTextEditorButtons($textBox);
-            const $input = $textBox.find('.dx-texteditor-input-container');
-            assert.ok($before.eq(0).outerWidth() + $input.outerWidth() + $after.eq(0).outerWidth() < widgetWidth);
-        });
     });
 
     module('numberBox', () => {
