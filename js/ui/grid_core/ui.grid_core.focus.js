@@ -634,7 +634,6 @@ module.exports = {
                 },
                 _generateOperationFilterByKey: function(key, rowData, useGroup) {
                     const that = this;
-                    let booleanFilter;
                     const dataSource = that._dataSource;
                     let filter = that._generateFilterByKey(key, '<');
                     let sort = that._columnsController.getSortDataSourceParameters(!dataSource.remoteOperations().filtering, true);
@@ -661,7 +660,7 @@ module.exports = {
                             filter = [[selector, '=', value], 'and', filter];
 
                             if(value === null || isBoolean(value)) {
-                                booleanFilter = that._generateBooleanFilter(selector, value, sortInfo);
+                                const booleanFilter = that._generateBooleanFilter(selector, value, sortInfo);
 
                                 if(booleanFilter) {
                                     filter = [booleanFilter, 'or', filter];
@@ -677,7 +676,6 @@ module.exports = {
                 _generateFilterByKey: function(key, operation) {
                     const dataSourceKey = this._dataSource.key();
                     let filter = [];
-                    let keyPart;
 
                     if(!operation) {
                         operation = '=';
@@ -685,7 +683,7 @@ module.exports = {
 
                     if(Array.isArray(dataSourceKey)) {
                         for(let i = 0; i < dataSourceKey.length; ++i) {
-                            keyPart = key[dataSourceKey[i]];
+                            const keyPart = key[dataSourceKey[i]];
                             if(keyPart) {
                                 if(filter.length > 0) {
                                     filter.push('and');

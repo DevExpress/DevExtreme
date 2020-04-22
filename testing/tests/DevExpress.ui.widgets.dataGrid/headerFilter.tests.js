@@ -137,7 +137,6 @@ QUnit.module('Header Filter dataController', {
     QUnit.test('Header filter with custom dataSource - postProcess should not be ignored', function(assert) {
     // arrange
         let items;
-        let dataSource;
 
         this.setupDataGrid({
             dataSource: [],
@@ -159,7 +158,7 @@ QUnit.module('Header Filter dataController', {
         });
 
         // act
-        dataSource = new DataSource(this.headerFilterController.getDataSource(this.getVisibleColumns()[0]));
+        const dataSource = new DataSource(this.headerFilterController.getDataSource(this.getVisibleColumns()[0]));
         dataSource.load().done(function(data) {
             items = data;
         });
@@ -173,7 +172,6 @@ QUnit.module('Header Filter dataController', {
     QUnit.test('Header filter with dataSource as function - postProcess should not be ignored (for a lookup column)', function(assert) {
     // arrange
         let items;
-        let dataSource;
 
         this.setupDataGrid({
             dataSource: [],
@@ -200,7 +198,7 @@ QUnit.module('Header Filter dataController', {
         });
 
         // act
-        dataSource = new DataSource(this.headerFilterController.getDataSource(this.getVisibleColumns()[0]));
+        const dataSource = new DataSource(this.headerFilterController.getDataSource(this.getVisibleColumns()[0]));
         dataSource.load().done(function(data) {
             items = data;
         });
@@ -214,7 +212,6 @@ QUnit.module('Header Filter dataController', {
     QUnit.test('Header filter with custom dataSource if column with lookup', function(assert) {
     // arrange
         let items;
-        let dataSource;
 
         this.setupDataGrid({
             dataSource: [],
@@ -242,7 +239,7 @@ QUnit.module('Header Filter dataController', {
         });
 
         // act
-        dataSource = new DataSource(this.headerFilterController.getDataSource(this.getVisibleColumns()[0]));
+        const dataSource = new DataSource(this.headerFilterController.getDataSource(this.getVisibleColumns()[0]));
         dataSource.load().done(function(data) {
             items = data;
         });
@@ -294,14 +291,12 @@ QUnit.module('Header Filter', {
         };
 
         this.generateItems = function(count, duplicateCount) {
-            let i;
-            let j;
 
             duplicateCount = duplicateCount || 1;
 
             this.items = [];
-            for(i = 1; i <= count; i++) {
-                for(j = 0; j < duplicateCount; j++) {
+            for(let i = 1; i <= count; i++) {
+                for(let j = 0; j < duplicateCount; j++) {
                     this.items.push({ Test1: 'test' + (i < 10 ? '0' : '') + i });
                 }
             }
@@ -402,7 +397,6 @@ QUnit.module('Header Filter', {
     QUnit.test('Show header filter', function(assert) {
     // arrange
         const that = this;
-        let $popupContent;
         const testElement = $('#container');
 
         that.setupDataGrid();
@@ -417,7 +411,7 @@ QUnit.module('Header Filter', {
 
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.equal($('body').children('.dx-header-filter-menu').length, 1, 'has wrapper header filter menu');
         assert.ok($popupContent.is(':visible'), 'visible popup');
@@ -433,7 +427,6 @@ QUnit.module('Header Filter', {
     QUnit.test('Show header filter when no dataSource', function(assert) {
     // arrange
         const that = this;
-        let $popupContent;
         const testElement = $('#container');
 
         that.setupDataGrid();
@@ -451,7 +444,7 @@ QUnit.module('Header Filter', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.equal($('body').children('.dx-header-filter-menu').length, 1, 'has wrapper header filter menu');
         assert.ok($popupContent.is(':visible'), 'visible popup');
@@ -490,7 +483,6 @@ QUnit.module('Header Filter', {
     QUnit.test('Show header filter when column with dataType date', function(assert) {
     // arrange
         const that = this;
-        let $popupContent;
         const testElement = $('#container');
 
         that.columns[0].dataType = 'date';
@@ -506,7 +498,7 @@ QUnit.module('Header Filter', {
 
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.equal($('body').children('.dx-header-filter-menu').length, 1, 'has wrapper header filter menu');
         assert.ok($popupContent.is(':visible'), 'visible popup');
@@ -518,8 +510,6 @@ QUnit.module('Header Filter', {
     QUnit.test('Show header filter when column with encodeHtml is false', function(assert) {
     // arrange
         const that = this;
-        let $popupContent;
-        let $listItemElements;
         const $testElement = $('#container');
 
         that.items = [{ Test1: '<b>test1</b>', Test2: 'test2' }, { Test1: 'test3', Test2: 'test4' }];
@@ -535,11 +525,11 @@ QUnit.module('Header Filter', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
         assert.equal($('body').children('.dx-header-filter-menu').length, 1, 'has wrapper header filter menu');
         assert.ok($popupContent.is(':visible'), 'visible popup');
         assert.ok($popupContent.find('.dx-list').length, 'has list in header filter menu');
-        $listItemElements = $popupContent.find('.dx-list-item-content');
+        const $listItemElements = $popupContent.find('.dx-list-item-content');
         assert.equal($listItemElements.length, 2, 'count list item');
         assert.strictEqual($listItemElements.first().html(), '<b>test1</b>', 'html of the first list item');
         assert.strictEqual($listItemElements.first().text(), 'test1', 'text of the first list item');
@@ -550,8 +540,6 @@ QUnit.module('Header Filter', {
     QUnit.test('Show header filter when column with encodeHtml is true', function(assert) {
     // arrange
         const that = this;
-        let $popupContent;
-        let $listItemElements;
         const $testElement = $('#container');
 
         that.items = [{ Test1: '<b>test1</b>', Test2: 'test2' }, { Test1: 'test3', Test2: 'test4' }];
@@ -567,11 +555,11 @@ QUnit.module('Header Filter', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
         assert.equal($('body').children('.dx-header-filter-menu').length, 1, 'has wrapper header filter menu');
         assert.ok($popupContent.is(':visible'), 'visible popup');
         assert.ok($popupContent.find('.dx-list').length, 'has list in header filter menu');
-        $listItemElements = $popupContent.find('.dx-list-item-content');
+        const $listItemElements = $popupContent.find('.dx-list-item-content');
         assert.equal($listItemElements.length, 2, 'count list item');
         assert.notStrictEqual($listItemElements.first().html(), '<b>test1</b>', 'html of the first list item');
         assert.strictEqual($listItemElements.first().text(), '<b>test1</b>', 'text of the first list item');
@@ -581,7 +569,6 @@ QUnit.module('Header Filter', {
     QUnit.test('Hide header filter', function(assert) {
     // arrange
         const that = this;
-        let $popupContent;
         const testElement = $('#container');
 
         that.setupDataGrid();
@@ -595,7 +582,7 @@ QUnit.module('Header Filter', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.equal($('body').children('.dx-header-filter-menu').length, 1, 'has wrapper header filter menu');
         assert.ok($popupContent.is(':visible'), 'visible popup');
@@ -616,7 +603,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $popupContent;
 
         that.items = [{ Test1: 'test1', Test2: 'test2' }, { Test1: 'test3', Test2: 'test4' }];
         that.setupDataGrid();
@@ -628,7 +614,7 @@ QUnit.module('Header Filter', {
 
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.ok($popupContent.find('.dx-list').length, 'has list in header filter menu');
         assert.equal($popupContent.find('.dx-list-select-all').length, 1, 'has list select all');
@@ -643,7 +629,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $popupContent;
 
         that.generateItems(30, 5);
         that.setupDataGrid();
@@ -654,7 +639,7 @@ QUnit.module('Header Filter', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.ok($popupContent.find('.dx-list').length, 'has list in header filter menu');
         assert.equal($popupContent.find('.dx-list-select-all').length, 1, 'has list select all');
@@ -668,7 +653,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $popupContent;
 
         that.columns[0].dataType = 'date';
         that.items = [{ Test1: new Date(1986, 0, 1), Test2: 'test2' }, { Test1: new Date(1986, 0, 4), Test2: 'test4' }, { Test1: null, Test2: 'test6' }];
@@ -680,7 +664,7 @@ QUnit.module('Header Filter', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.ok($popupContent.find('.dx-treeview').length, 'has treeview in header filter menu');
         assert.equal($popupContent.find('.dx-treeview-select-all-item').length, 1, 'has treeview select all');
@@ -712,7 +696,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $popupContent;
 
         that.columns[0].lookup = { dataSource: ['test1', 'test2', 'test3'] };
         that.columns[0].filterValues = ['test3'];
@@ -725,7 +708,7 @@ QUnit.module('Header Filter', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.ok($popupContent.find('.dx-list').length, 'has list in header filter menu');
         assert.equal($popupContent.find('.dx-list-select-all').length, 1, 'has list select all');
@@ -744,7 +727,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $popupContent;
 
         that.columns[0].lookup = { valueExpr: 'id', displayExpr: 'value', dataSource: [{ id: 1, value: 'test1' }, { id: 2, value: 'test2' }, { id: 3, value: 'test3' }] };
         that.columns[0].filterValues = [3];
@@ -758,7 +740,7 @@ QUnit.module('Header Filter', {
 
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.ok($popupContent.find('.dx-list').length, 'has list in header filter menu');
         assert.equal($popupContent.find('.dx-list-select-all').length, 1, 'has list select all');
@@ -777,7 +759,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $popupContent;
 
         that.columns[0].lookup = {
             dataSource: function() {
@@ -793,7 +774,7 @@ QUnit.module('Header Filter', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.ok($popupContent.find('.dx-list').length, 'has list in header filter menu');
         assert.equal($popupContent.find('.dx-list-select-all').length, 1, 'has list select all');
@@ -809,7 +790,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $popupContent;
 
         that.columns[0].dataType = 'date';
         that.columns[0].filterValues = ['1986/1/4'];
@@ -823,7 +803,7 @@ QUnit.module('Header Filter', {
 
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.ok($popupContent.find('.dx-treeview').length, 'has treeview in header filter menu');
         assert.equal($popupContent.find('.dx-treeview-item').length, 1, 'count treeview item');
@@ -848,7 +828,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $popupContent;
 
         that.items = [{ Test1: 'test1', Test2: 'test2' }, { Test1: 'test3', Test2: 'test4' }];
         that.setupDataGrid();
@@ -860,7 +839,7 @@ QUnit.module('Header Filter', {
 
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.ok($popupContent.is(':visible'), 'visible popup');
         assert.ok($popupContent.find('.dx-list').length, 'has list in header filter menu');
@@ -900,7 +879,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $popupContent;
 
         that.generateItems(30);
         that.columns[0].filterValues = ['test25'];
@@ -915,7 +893,7 @@ QUnit.module('Header Filter', {
 
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.ok($popupContent.is(':visible'), 'visible popup');
         assert.ok($popupContent.find('.dx-list').length, 'has list in header filter menu');
@@ -947,7 +925,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $popupContent;
 
         that.generateItems(30);
         that.columns[0].filterValues = ['test25'];
@@ -962,7 +939,7 @@ QUnit.module('Header Filter', {
 
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.ok($popupContent.is(':visible'), 'visible popup');
         assert.ok($popupContent.find('.dx-list').length, 'has list in header filter menu');
@@ -983,7 +960,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $popupContent;
 
         that.generateItems(30);
 
@@ -999,7 +975,7 @@ QUnit.module('Header Filter', {
 
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.ok($popupContent.is(':visible'), 'visible popup');
         assert.ok($popupContent.find('.dx-list').length, 'has list in header filter menu');
@@ -1020,7 +996,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $popupContent;
 
         that.generateItems(30);
 
@@ -1036,7 +1011,7 @@ QUnit.module('Header Filter', {
 
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.ok($popupContent.is(':visible'), 'visible popup');
         assert.ok($popupContent.find('.dx-list').length, 'has list in header filter menu');
@@ -1057,7 +1032,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $popupContent;
 
         that.generateItems(30);
 
@@ -1072,7 +1046,7 @@ QUnit.module('Header Filter', {
 
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.ok($popupContent.is(':visible'), 'visible popup');
         assert.ok($popupContent.find('.dx-list').length, 'has list in header filter menu');
@@ -1096,7 +1070,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $popupContent;
 
         that.generateItems(30);
 
@@ -1111,7 +1084,7 @@ QUnit.module('Header Filter', {
 
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.ok($popupContent.is(':visible'), 'visible popup');
         assert.ok($popupContent.find('.dx-list').length, 'has list in header filter menu');
@@ -1136,7 +1109,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $popupContent;
 
         that.columns[0].dataType = 'date';
         that.items = [{ Test1: new Date(1986, 0, 1), Test2: 'test2' }, { Test1: new Date(1986, 3, 4), Test2: 'test4' }];
@@ -1149,7 +1121,7 @@ QUnit.module('Header Filter', {
 
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.ok($popupContent.find('.dx-treeview').length, 'has treeview in header filter menu');
         assert.equal($popupContent.find('.dx-treeview-item').length, 1, 'count treeview item');
@@ -1202,7 +1174,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $popupContent;
 
         that.columns[0].dataType = 'date';
         that.columns[0].filterType = 'exclude';
@@ -1216,7 +1187,7 @@ QUnit.module('Header Filter', {
         that.clock.tick(500);
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.ok($popupContent.find('.dx-treeview').length, 'has treeview in header filter menu');
         assert.equal($popupContent.find('.dx-treeview-item').length, 1, 'count treeview item');
@@ -1260,7 +1231,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $popupContent;
 
         that.items = [{ Test1: 'test1', Test2: 'test2' }, { Test1: 'test3', Test2: 'test4' }];
         that.columns[0].filterValues = ['test1'];
@@ -1273,7 +1243,7 @@ QUnit.module('Header Filter', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.ok($popupContent.is(':visible'), 'visible popup');
         assert.ok($popupContent.find('.dx-list').length, 'has list in header filter menu');
@@ -1298,7 +1268,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $popupContent;
 
         that.columns[0].filterValues = ['test3'];
         that.items = [{ Test1: 'test1', Test2: 'test2' }, { Test1: 'test3', Test2: 'test4' }];
@@ -1311,7 +1280,7 @@ QUnit.module('Header Filter', {
 
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.ok($popupContent.is(':visible'), 'visible popup');
         assert.ok($popupContent.find('.dx-list').length, 'has list in header filter menu');
@@ -1355,7 +1324,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $headerFilter;
 
         that.columns[0].filterValues = ['test3'];
         that.setupDataGrid();
@@ -1364,7 +1332,7 @@ QUnit.module('Header Filter', {
         that.columnHeadersView.render(testElement);
 
         // assert
-        $headerFilter = that.columnHeadersView.element().find('td').first().find('.dx-header-filter');
+        const $headerFilter = that.columnHeadersView.element().find('td').first().find('.dx-header-filter');
         assert.equal($headerFilter.length, 1, 'have header filter');
         assert.ok(!$headerFilter.hasClass('dx-header-filter-empty'), 'has no class dx-header-filter-empty');
     });
@@ -1374,7 +1342,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $headerFilter;
 
         that.setupDataGrid();
 
@@ -1382,7 +1349,7 @@ QUnit.module('Header Filter', {
         that.columnHeadersView.render(testElement);
 
         // assert
-        $headerFilter = that.columnHeadersView.element().find('td').first().find('.dx-header-filter');
+        const $headerFilter = that.columnHeadersView.element().find('td').first().find('.dx-header-filter');
         assert.equal($headerFilter.length, 1, 'have header filter');
         assert.ok($headerFilter.hasClass('dx-header-filter-empty'), 'has no class dx-header-filter-empty');
     });
@@ -1392,7 +1359,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $headerFilter;
 
         that.columns[0].groupIndex = 0;
         that.columns[0].filterValues = ['test3'];
@@ -1405,7 +1371,7 @@ QUnit.module('Header Filter', {
         that.headerPanel.render(testElement);
 
         // assert
-        $headerFilter = that.headerPanel.element().find('.dx-group-panel-item').first().find('.dx-header-filter');
+        const $headerFilter = that.headerPanel.element().find('.dx-group-panel-item').first().find('.dx-header-filter');
         assert.equal($headerFilter.length, 1, 'have header filter');
         assert.ok(!$headerFilter.hasClass('dx-header-filter-empty'), 'has no class dx-header-filter-empty');
         assert.strictEqual($headerFilter.css('color'), $headerFilter.parent().css('color'), 'color of the header should be as parent color');
@@ -1415,7 +1381,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $headerFilter;
 
         that.items = [{ Test1: 'test1', Test2: 'test2' }, { Test1: 'test3', Test2: 'test4' }];
         that.columns[0].groupIndex = 0;
@@ -1428,7 +1393,7 @@ QUnit.module('Header Filter', {
         that.headerPanel.render(testElement);
         that.headerFilterView.render(testElement);
 
-        $headerFilter = that.headerPanel.element().find('.dx-group-panel-item').first().find('.dx-header-filter');
+        const $headerFilter = that.headerPanel.element().find('.dx-group-panel-item').first().find('.dx-header-filter');
 
         // act
         $($headerFilter).trigger('dxclick');
@@ -1446,7 +1411,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $headerFilter;
 
         that.columns[0].groupIndex = 0;
         that.columns[0].showWhenGrouped = true;
@@ -1457,7 +1421,7 @@ QUnit.module('Header Filter', {
         that.columnHeadersView.render(testElement);
 
         // assert
-        $headerFilter = that.columnHeadersView.element().find('td').first().find('.dx-header-filter');
+        const $headerFilter = that.columnHeadersView.element().find('td').first().find('.dx-header-filter');
         assert.equal($headerFilter.length, 1, 'header filter is shown');
         assert.ok(!$headerFilter.hasClass('dx-header-filter-empty'), 'has no class dx-header-filter-empty');
     });
@@ -1467,7 +1431,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $headerFilter;
 
         that.items = [{ Test1: 'test1', Test2: 'test2' }, { Test1: 'test3', Test2: 'test4' }];
         that.columns[0].groupIndex = 0;
@@ -1478,7 +1441,7 @@ QUnit.module('Header Filter', {
         that.columnHeadersView.render(testElement);
         that.headerFilterView.render(testElement);
 
-        $headerFilter = that.columnHeadersView.element().find('td').first().find('.dx-header-filter');
+        const $headerFilter = that.columnHeadersView.element().find('td').first().find('.dx-header-filter');
         // act
         $($headerFilter).trigger('dxclick');
 
@@ -1494,7 +1457,6 @@ QUnit.module('Header Filter', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $headerFilter;
 
         that.columns[0].groupIndex = 0;
         that.options.groupPanel = {
@@ -1506,7 +1468,7 @@ QUnit.module('Header Filter', {
         that.headerPanel.render(testElement);
 
         // assert
-        $headerFilter = that.headerPanel.element().find('.dx-group-panel-item').first().find('.dx-header-filter');
+        const $headerFilter = that.headerPanel.element().find('.dx-group-panel-item').first().find('.dx-header-filter');
         assert.equal($headerFilter.length, 1, 'have header filter');
         assert.ok($headerFilter.hasClass('dx-header-filter-empty'), 'has no class dx-header-filter-empty');
         assert.notStrictEqual($headerFilter.css('color'), $headerFilter.parent().css('color'), 'color of the header filter should hava alpha');
@@ -1516,7 +1478,6 @@ QUnit.module('Header Filter', {
     QUnit.test('Show header filter with set a custom width and height by column', function(assert) {
     // arrange
         const that = this;
-        let $popupContainer;
         const testElement = $('#container');
 
         that.columns[0].headerFilter = {
@@ -1535,7 +1496,7 @@ QUnit.module('Header Filter', {
 
 
         // assert
-        $popupContainer = that.headerFilterView.getPopupContainer()._container();
+        const $popupContainer = that.headerFilterView.getPopupContainer()._container();
 
         assert.equal($('body').children('.dx-header-filter-menu').length, 1, 'has wrapper header filter menu');
         assert.ok($popupContainer.is(':visible'), 'visible popup');
@@ -1622,7 +1583,6 @@ QUnit.module('Header Filter', {
     QUnit.test('Checking filterValues of the column after deselect item of a loaded page when there is selected item of an unloaded page', function(assert) {
     // arrange
         const $testElement = $('#container');
-        let $popupContent;
 
         this.generateItems(30);
         this.columns[0].filterValues = ['test01', 'test30'];
@@ -1632,7 +1592,7 @@ QUnit.module('Header Filter', {
 
         this.headerFilterController.showHeaderFilterMenu(0);
 
-        $popupContent = this.headerFilterView.getPopupContainer().$content();
+        const $popupContent = this.headerFilterView.getPopupContainer().$content();
         $($popupContent.find('.dx-list-item').first()).trigger('dxclick'); // deselect first item
 
         // assert
@@ -1649,8 +1609,6 @@ QUnit.module('Header Filter', {
     QUnit.test('Show header filter with search bar', function(assert) {
     // arrange
         const that = this;
-        let $popupContent;
-        let list;
         const testElement = $('#container');
 
         that.options.headerFilter.allowSearch = true;
@@ -1662,8 +1620,8 @@ QUnit.module('Header Filter', {
         that.headerFilterView.render(testElement);
         that.headerFilterController.showHeaderFilterMenu(0);
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        list = $popupContent.find('.dx-list').dxList('instance');
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const list = $popupContent.find('.dx-list').dxList('instance');
 
         // assert
         assert.ok(list.option('searchEnabled'), 'list with search bar');
@@ -1691,8 +1649,6 @@ QUnit.module('Header Filter', {
     QUnit.test('Show header filter with search bar with searchMode equals', function(assert) {
     // arrange
         const that = this;
-        let $popupContent;
-        let list;
         const testElement = $('#container');
 
         that.options.headerFilter.allowSearch = true;
@@ -1705,8 +1661,8 @@ QUnit.module('Header Filter', {
         that.headerFilterView.render(testElement);
         that.headerFilterController.showHeaderFilterMenu(0);
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        list = $popupContent.find('.dx-list').dxList('instance');
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const list = $popupContent.find('.dx-list').dxList('instance');
 
         // assert
         assert.ok(list.option('searchEnabled'), 'list with search bar');
@@ -1718,8 +1674,6 @@ QUnit.module('Header Filter', {
     QUnit.test('Show header filter when column with dataType date with search bar', function(assert) {
     // arrange
         const that = this;
-        let $popupContent;
-        let treeView;
         const testElement = $('#container');
 
         that.options.headerFilter.allowSearch = true;
@@ -1732,8 +1686,8 @@ QUnit.module('Header Filter', {
         that.headerFilterView.render(testElement);
         that.headerFilterController.showHeaderFilterMenu(0);
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        treeView = $popupContent.find('.dx-treeview').dxTreeView('instance');
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const treeView = $popupContent.find('.dx-treeview').dxTreeView('instance');
 
         // assert
         assert.ok(treeView.option('searchEnabled'), 'treeView with search bar');
@@ -1744,8 +1698,6 @@ QUnit.module('Header Filter', {
     QUnit.test('HeaderFilter should be without search bar when column allowSearch is disabled', function(assert) {
     // arrange
         const that = this;
-        let list;
-        let $popupContent;
         const testElement = $('#container');
 
         that.options.headerFilter.allowSearch = true;
@@ -1759,8 +1711,8 @@ QUnit.module('Header Filter', {
         that.headerFilterView.render(testElement);
         that.headerFilterController.showHeaderFilterMenu(0);
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        list = $popupContent.find('.dx-list').dxList('instance');
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const list = $popupContent.find('.dx-list').dxList('instance');
 
         // assert
         assert.notOk(list.option('searchEnabled'), 'list without search bar');
@@ -1862,11 +1814,7 @@ QUnit.module('Header Filter', {
     QUnit.test('Check select all state after search and select if column dataType is date and search is by month', function(assert) {
     // arrange
         const that = this;
-        let treeView;
-        let $selectAll;
-        let column;
         const testElement = $('#container');
-        let $popupContent;
 
         that.options.headerFilter.allowSearch = true;
         that.columns[0].dataType = 'date';
@@ -1877,8 +1825,8 @@ QUnit.module('Header Filter', {
         that.headerFilterView.render(testElement);
         that.headerFilterController.showHeaderFilterMenu(0);
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        treeView = $popupContent.find('.dx-treeview').dxTreeView('instance');
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const treeView = $popupContent.find('.dx-treeview').dxTreeView('instance');
 
         // act
         treeView.option('searchValue', 'March');
@@ -1890,9 +1838,9 @@ QUnit.module('Header Filter', {
 
         // act
         treeView.option('searchValue', '');
-        $selectAll = treeView.$element().find('.dx-treeview-select-all-item');
+        const $selectAll = treeView.$element().find('.dx-treeview-select-all-item');
         $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // apply filter
-        column = that.columnsController.getVisibleColumns()[0];
+        const column = that.columnsController.getVisibleColumns()[0];
 
         // assert
         assert.ok(treeView.$element().find('.dx-treeview-select-all-item').is(':visible'), 'selectAll is visible');
@@ -1975,10 +1923,7 @@ QUnit.module('Header Filter', {
     QUnit.test('Check search in column lookup with simple types', function(assert) {
     // arrange
         const that = this;
-        let list;
-        let listItems;
         const testElement = $('#container');
-        let $popupContent;
 
         that.columns[0].lookup = {
             dataSource: ['test1', 'test2', 'test3']
@@ -1990,15 +1935,15 @@ QUnit.module('Header Filter', {
         that.headerFilterView.render(testElement);
         that.headerFilterController.showHeaderFilterMenu(0);
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        list = $popupContent.find('.dx-list').dxList('instance');
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const list = $popupContent.find('.dx-list').dxList('instance');
 
         // assert
         assert.equal(list.option('selectionMode'), 'all', 'selectAll item is visible');
 
         // act
         list.option('searchValue', 't2');
-        listItems = list.$element().find('.dx-list-item');
+        const listItems = list.$element().find('.dx-list-item');
 
         // assert
         assert.equal(list.option('searchExpr'), 'this', 'searchExpr is correct');
@@ -2010,10 +1955,7 @@ QUnit.module('Header Filter', {
     QUnit.test('Check filtering in column lookup with object types', function(assert) {
     // arrange
         const that = this;
-        let list;
-        let listItems;
         const testElement = $('#container');
-        let $popupContent;
 
         that.columns[0].lookup = {
             valueExpr: 'value',
@@ -2030,12 +1972,12 @@ QUnit.module('Header Filter', {
         that.headerFilterView.render(testElement);
         that.headerFilterController.showHeaderFilterMenu(0);
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        list = $popupContent.find('.dx-list').dxList('instance');
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const list = $popupContent.find('.dx-list').dxList('instance');
 
         // act
         list.option('searchValue', 't2');
-        listItems = list.$element().find('.dx-list-item');
+        const listItems = list.$element().find('.dx-list-item');
 
         // assert
         assert.equal(list.option('searchExpr'), 'text', 'searchExpr is correct');
@@ -2046,10 +1988,7 @@ QUnit.module('Header Filter', {
     QUnit.test('Search when custom dataSource to headerFilter is specified', function(assert) {
     // arrange
         const that = this;
-        let list;
-        let listItems;
         const testElement = $('#container');
-        let $popupContent;
 
         that.options.headerFilter.allowSearch = true;
         that.columns[0].headerFilter = {
@@ -2061,14 +2000,14 @@ QUnit.module('Header Filter', {
         that.headerFilterView.render(testElement);
         that.headerFilterController.showHeaderFilterMenu(0);
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        list = $popupContent.find('.dx-list').dxList('instance');
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const list = $popupContent.find('.dx-list').dxList('instance');
 
         // act
         list.option('searchValue', 't2');
 
         // assert
-        listItems = list.$element().find('.dx-list-item');
+        const listItems = list.$element().find('.dx-list-item');
         assert.strictEqual(listItems.length, 1, 'list item\'s count');
         assert.strictEqual(listItems.text(), 'Test2', 'correct item\'s text');
     });
@@ -2076,10 +2015,7 @@ QUnit.module('Header Filter', {
     QUnit.test('Search by custom column', function(assert) {
     // arrange
         const that = this;
-        let list;
-        let listItems;
         const testElement = $('#container');
-        let $popupContent;
 
         that.options.headerFilter.allowSearch = true;
         that.columns[0] = {
@@ -2098,14 +2034,14 @@ QUnit.module('Header Filter', {
 
         that.headerFilterController.showHeaderFilterMenu(0);
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        list = $popupContent.find('.dx-list').dxList('instance');
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const list = $popupContent.find('.dx-list').dxList('instance');
 
         // act
         list.option('searchValue', 't2');
 
         // assert
-        listItems = list.$element().find('.dx-list-item');
+        const listItems = list.$element().find('.dx-list-item');
         assert.strictEqual(listItems.length, 1, 'list item\'s count');
         assert.strictEqual(listItems.text(), 'test2', 'correct item\'s text');
     });
@@ -2114,10 +2050,7 @@ QUnit.module('Header Filter', {
     QUnit.test('Search by value from calculateCellValue', function(assert) {
     // arrange
         const that = this;
-        let list;
-        let listItems;
         const testElement = $('#container');
-        let $popupContent;
 
         that.options.headerFilter.allowSearch = true;
         that.columns = [{
@@ -2137,14 +2070,14 @@ QUnit.module('Header Filter', {
 
         that.headerFilterController.showHeaderFilterMenu(0);
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        list = $popupContent.find('.dx-list').dxList('instance');
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const list = $popupContent.find('.dx-list').dxList('instance');
 
         // act
         list.option('searchValue', 'test2111');
 
         // assert
-        listItems = list.$element().find('.dx-list-item');
+        const listItems = list.$element().find('.dx-list-item');
         assert.strictEqual(listItems.length, 1, 'list item\'s count');
         assert.strictEqual(listItems.text(), 'test2111', 'correct item\'s text');
     });
@@ -2155,7 +2088,6 @@ QUnit.module('Header Filter', {
         try {
             const that = this;
             const $testElement = $('#container');
-            let $popupContent;
             const headerFilterDataSource = [
                 { value: 1, text: 'test1' },
                 { value: 2, text: 'test2' }
@@ -2187,7 +2119,7 @@ QUnit.module('Header Filter', {
                     'value': headerFilterDataSource[1]
                 }], 'list items');
 
-            $popupContent = that.headerFilterView.getPopupContainer().$content();
+            const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
             // act
             $($popupContent.find('.dx-list-item').last()).trigger('dxclick');
@@ -2326,7 +2258,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Load data', function(assert) {
     // arrange
         const that = this;
-        let $popupContent;
         const testElement = $('#container');
 
         that.setupDataGrid({
@@ -2345,7 +2276,7 @@ QUnit.module('Header Filter with real columnsController', {
 
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.equal($('body').children('.dx-header-filter-menu').length, 1, 'has wrapper header filter menu');
         assert.ok($popupContent.is(':visible'), 'visible popup');
@@ -2425,8 +2356,6 @@ QUnit.module('Header Filter with real columnsController', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $listElements;
-        let $popupContent;
 
         that.options.columns[0].filterValues = ['test3'];
         that.options.columns[1].filterValues = ['test2', 'test4'];
@@ -2440,8 +2369,8 @@ QUnit.module('Header Filter with real columnsController', {
 
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        $listElements = $popupContent.find('.dx-list-item');
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $listElements = $popupContent.find('.dx-list-item');
 
         assert.ok($popupContent.find('.dx-list').length, 'has list in header filter menu');
         assert.equal($listElements.length, 2, 'count list items');
@@ -2456,7 +2385,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Header filter with filter row and apply filter button', function(assert) {
     // arrange
         const that = this;
-        let $popupContent;
         let applyFilterCallCount = 0;
         const testElement = $('#container');
 
@@ -2480,7 +2408,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
         $($popupContent.find('.dx-list-item').first()).trigger('dxclick');
 
         // assert
@@ -2497,7 +2425,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Header filter when set format by column', function(assert) {
     // arrange
         const that = this;
-        let $popupContent;
         const testElement = $('#container');
 
         that.options.dataSource = [{ Test1: 12, Test2: 'value1' }, { Test1: 6, Test2: 'value2' }];
@@ -2513,7 +2440,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         // assert
         assert.strictEqual($popupContent.find('.dx-list-item').first().text(), '$6', 'item text');
@@ -2524,7 +2451,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Filtering by empty null value', function(assert) {
     // arrange
         const that = this;
-        let $popupContent;
         let items;
         const testElement = $('#container');
 
@@ -2545,7 +2471,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         // assert
         assert.strictEqual($popupContent.find('.dx-list-item').first().text(), '(Blanks)', 'empty text item');
@@ -2569,7 +2495,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Filtering by empty undefined value', function(assert) {
     // arrange
         const that = this;
-        let $popupContent;
         let items;
         const testElement = $('#container');
 
@@ -2590,7 +2515,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         // assert
         assert.strictEqual($popupContent.find('.dx-list-item').first().text(), '(Blanks)', 'empty text item');
@@ -2614,7 +2539,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Filtering by empty string', function(assert) {
     // arrange
         const that = this;
-        let $popupContent;
         let items;
         const testElement = $('#container');
 
@@ -2635,7 +2559,7 @@ QUnit.module('Header Filter with real columnsController', {
         // arrange
         that.headerFilterController.showHeaderFilterMenu(0);
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         // assert
         assert.equal($popupContent.find('.dx-list-item').length, 2, 'count item');
@@ -2661,7 +2585,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Filtering by empty string with filterType is exclude', function(assert) {
     // arrange
         const that = this;
-        let $popupContent;
         let items;
         const testElement = $('#container');
 
@@ -2682,7 +2605,7 @@ QUnit.module('Header Filter with real columnsController', {
         // arrange
         that.headerFilterController.showHeaderFilterMenu(0);
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         // assert
         assert.equal($popupContent.find('.dx-list-item').length, 2, 'count item');
@@ -2707,7 +2630,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Header Filter when grid with CustomStore', function(assert) {
     // arrange
         const that = this;
-        let $popupContent;
         const loadArgs = [];
         const testElement = $('#container');
 
@@ -2726,7 +2648,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         // assert
         assert.strictEqual($popupContent.find('.dx-list-item').length, 2, 'header items count');
@@ -2740,7 +2662,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Header Filter when grid with CustomStore when remoteOperations false', function(assert) {
     // arrange
         const that = this;
-        let $popupContent;
         const loadArgs = [];
         const testElement = $('#container');
 
@@ -2760,7 +2681,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         // assert
         assert.strictEqual($popupContent.find('.dx-list-item').length, 2, 'header items count. value14 is filtered locally');
@@ -2797,7 +2718,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Header Filter when grid with CustomStore when remote grouping and remote summary', function(assert) {
     // arrange
         const that = this;
-        let $popupContent;
         const loadArgs = [];
         const testElement = $('#container');
 
@@ -2825,7 +2745,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         // assert
         assert.strictEqual($popupContent.find('.dx-list-item').length, 2, 'header items count. value14 is filtered locally');
@@ -2847,7 +2767,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Header Filter when grid with CustomStore when remote grouping and groupInterval defined', function(assert) {
     // arrange
         const that = this;
-        let $popupContent;
         const loadArgs = [];
         const testElement = $('#container');
 
@@ -2871,7 +2790,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         // assert
         assert.strictEqual($popupContent.find('.dx-list-item').length, 1, 'header items count');
@@ -2885,7 +2804,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Header Filter when grid with CustomStore when remote grouping and groupInterval defined as array', function(assert) {
     // arrange
         const that = this;
-        let $popupContent;
         const loadArgs = [];
         const testElement = $('#container');
 
@@ -2909,7 +2827,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         // assert
         assert.strictEqual($popupContent.find('.dx-treeview-item').length, 1, 'header items count');
@@ -2924,7 +2842,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Header Filter when grid with ODataStore with expand', function(assert) {
     // arrange
         const that = this;
-        let $popupContent;
         const loadArgs = [];
         const testElement = $('#container');
 
@@ -2948,7 +2865,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         // assert
         assert.strictEqual($popupContent.find('.dx-list-item').length, 2, 'header items count');
@@ -2966,7 +2883,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Not update indicator state for column with allowHeaderFiltering is false', function(assert) {
     // arrange
         const that = this;
-        let columns;
         let $cells;
         const testElement = $('#container');
 
@@ -2995,7 +2911,7 @@ QUnit.module('Header Filter with real columnsController', {
 
         // assert
         $cells = that.columnHeadersView.element().find('td');
-        columns = that.columnsController.getVisibleColumns();
+        const columns = that.columnsController.getVisibleColumns();
         assert.deepEqual(columns[1].filterValues, ['value2'], 'filter values in second column');
         assert.ok(!$cells.first().find('.dx-header-filter').length, 'not has header filter in first column');
         assert.ok($cells.last().find('.dx-header-filter').length, 'has header filter in second column');
@@ -3006,7 +2922,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Not show indicator when set filterValues for column and with headerFilter.visible is false', function(assert) {
     // arrange
         const that = this;
-        let columns;
         let $cells;
         const testElement = $('#container');
 
@@ -3033,7 +2948,7 @@ QUnit.module('Header Filter with real columnsController', {
 
         // assert
         $cells = that.columnHeadersView.element().find('td');
-        columns = that.columnsController.getVisibleColumns();
+        const columns = that.columnsController.getVisibleColumns();
         assert.deepEqual(columns[1].filterValues, ['value2'], 'filter values in second column');
         assert.ok(!$cells.first().find('.dx-header-filter').length, 'not has header filter in first column');
         assert.ok(!$cells.last().find('.dx-header-filter').length, 'not has header filter in second column');
@@ -3042,8 +2957,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Header Filter with CustomStore', function(assert) {
     // arrange
         const that = this;
-        let $listItems;
-        let $popupContent;
         let applyFilterCallCount = 0;
         const testElement = $('#container');
 
@@ -3064,8 +2977,8 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        $listItems = $popupContent.find('.dx-list-item');
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $listItems = $popupContent.find('.dx-list-item');
 
         // assert
         assert.equal($listItems.length, 2, 'count item');
@@ -3089,8 +3002,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Header Filter - customStore value with filter data options', function(assert) {
     // arrange
         const that = this;
-        let $listItems;
-        let $popupContent;
         let applyFilterCallCount = 0;
         const testElement = $('#container');
 
@@ -3111,8 +3022,8 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        $listItems = $popupContent.find('.dx-list-item');
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $listItems = $popupContent.find('.dx-list-item');
 
         // assert
         assert.equal($listItems.length, 2, 'count item');
@@ -3137,8 +3048,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Header Filter - saving state when customStore value with filter data options', function(assert) {
     // arrange
         const that = this;
-        let $listItems;
-        let $popupContent;
         const testElement = $('#container');
 
         that.options.dataSource = that.items;
@@ -3154,8 +3063,8 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        $listItems = $popupContent.find('.dx-list-item');
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $listItems = $popupContent.find('.dx-list-item');
 
         // assert
         assert.equal($listItems.length, 2, 'count item');
@@ -3167,8 +3076,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Header Filter - customization dataSource via event', function(assert) {
     // arrange
         const that = this;
-        let $listItems;
-        let $popupContent;
         let applyFilterCallCount = 0;
         const testElement = $('#container');
 
@@ -3198,8 +3105,8 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        $listItems = $popupContent.find('.dx-list-item');
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $listItems = $popupContent.find('.dx-list-item');
 
         // assert
         assert.equal($listItems.length, 3, 'count item');
@@ -3225,7 +3132,6 @@ QUnit.module('Header Filter with real columnsController', {
     // arrange
         const that = this;
         let $listItems;
-        let $popupContent;
         const testElement = $('#container');
 
         that.options.dataSource = that.items;
@@ -3250,7 +3156,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
         $listItems = $popupContent.find('.dx-list-item');
 
         // assert
@@ -3284,7 +3190,6 @@ QUnit.module('Header Filter with real columnsController', {
     // arrange
         const that = this;
         let $treeViewItems;
-        let $popupContent;
         const testElement = $('#container');
 
         that.options.dataSource = [{ Test1: new Date(1993, 7, 6), Test2: 'value1' }, { Test1: new Date(1994, 2, 6), Test2: 'value2' }];
@@ -3309,7 +3214,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
         $treeViewItems = $popupContent.find('.dx-treeview-item');
 
         // assert
@@ -3362,8 +3267,6 @@ QUnit.module('Header Filter with real columnsController', {
     // arrange
         const that = this;
         let i = 1;
-        let $listItems;
-        let $popupContent;
         let applyFilterCallCount = 0;
         const testElement = $('#container');
 
@@ -3391,8 +3294,8 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        $listItems = $popupContent.find('.dx-list-item');
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $listItems = $popupContent.find('.dx-list-item');
 
         // assert
         assert.equal($listItems.length, 2, 'count item');
@@ -3417,7 +3320,6 @@ QUnit.module('Header Filter with real columnsController', {
         const that = this;
         let i = 1;
         let $listItems;
-        let $popupContent;
         let applyFilterCallCount = 0;
         const testElement = $('#container');
 
@@ -3445,7 +3347,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
         $listItems = $popupContent.find('.dx-treeview-item');
 
         assert.equal($listItems.length, 1, 'count treeview item');
@@ -3477,9 +3379,6 @@ QUnit.module('Header Filter with real columnsController', {
     // arrange
         const that = this;
         let i = 0;
-        let filter;
-        let $listItems;
-        let $popupContent;
         const testElement = $('#container');
 
         that.options.dataSource = that.items;
@@ -3500,8 +3399,8 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        $listItems = $popupContent.find('.dx-list-item');
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $listItems = $popupContent.find('.dx-list-item');
 
         // assert
         assert.equal($listItems.length, 2, 'count item');
@@ -3517,15 +3416,13 @@ QUnit.module('Header Filter with real columnsController', {
         $($popupContent.parent().find('.dx-button').first()).trigger('dxclick');
 
         // assert
-        filter = that.getCombinedFilter();
+        const filter = that.getCombinedFilter();
         assert.strictEqual(filter[2], 'customFilterValue2', 'filter values of the first column');
     });
 
     QUnit.test('Apply header filter', function(assert) {
     // arrange
         const that = this;
-        let $listItems;
-        let $popupContent;
         let countCallColumnsChanged = 0;
         const testElement = $('#container');
 
@@ -3545,8 +3442,8 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        $listItems = $popupContent.find('.dx-list-item');
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $listItems = $popupContent.find('.dx-list-item');
 
         // assert
         assert.equal($listItems.length, 3, 'count item');
@@ -3567,10 +3464,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Header filter with group interval \'year\' for column with dataType \'date\'', function(assert) {
     // arrange
         const that = this;
-        let filter;
-        let $listItems;
-        let listInstance;
-        let $popupContent;
         const testElement = $('#container');
 
         that.options.dataSource = [{ Test1: new Date(1992, 7, 6), Test2: 'value1' }, { Test1: new Date(1997, 2, 6), Test2: 'value2' }];
@@ -3586,9 +3479,9 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        listInstance = that.headerFilterView.getListContainer(),
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        $listItems = $popupContent.find('.dx-list-item');
+        const listInstance = that.headerFilterView.getListContainer();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $listItems = $popupContent.find('.dx-list-item');
 
         // assert
         assert.equal(listInstance.NAME, 'dxList', 'dxList');
@@ -3606,7 +3499,7 @@ QUnit.module('Header Filter with real columnsController', {
         $($popupContent.parent().find('.dx-button').first()).trigger('dxclick');
 
         // assert
-        filter = that.getCombinedFilter();
+        const filter = that.getCombinedFilter();
         assert.equal(filter.length, 3, 'has filter');
         assert.deepEqual(filter[0][2], new Date(1997, 0, 1), 'first filter value');
         assert.deepEqual(filter[2][2], new Date(1998, 0, 1), 'second filter value');
@@ -3616,9 +3509,7 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Header filter with group interval \'quarter\' for column with dataType \'date\'', function(assert) {
     // arrange
         const that = this;
-        let filter;
         let $listItems;
-        let $popupContent;
         const testElement = $('#container');
 
         that.options.dataSource = [
@@ -3638,7 +3529,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
         $listItems = $popupContent.find('.dx-treeview-item');
 
         assert.equal($listItems.length, 1, 'count treeview item');
@@ -3663,7 +3554,7 @@ QUnit.module('Header Filter with real columnsController', {
         $($popupContent.parent().find('.dx-button').first()).trigger('dxclick');
 
         // assert
-        filter = that.getCombinedFilter();
+        const filter = that.getCombinedFilter();
         assert.equal(filter.length, 3, 'has filter');
         assert.deepEqual(filter[0][2], new Date(1992, 9, 1), 'first filter value');
         assert.deepEqual(filter[2][2], new Date(1993, 0, 1), 'second filter value');
@@ -3674,9 +3565,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Header filter with custom data source and group interval null for column with dataType \'date\'', function(assert) {
     // arrange
         const that = this;
-        let $listItems;
-        let listInstance;
-        let $popupContent;
         const testElement = $('#container');
 
         that.options.dataSource = [{ Test1: new Date(1992, 7, 6), Test2: 'value1' }];
@@ -3698,9 +3586,9 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        listInstance = that.headerFilterView.getListContainer(),
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        $listItems = $popupContent.find('.dx-list-item');
+        const listInstance = that.headerFilterView.getListContainer();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $listItems = $popupContent.find('.dx-list-item');
 
         // assert
         assert.equal(listInstance.NAME, 'dxList', 'dxList');
@@ -3712,9 +3600,7 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Header filter with group interval for column with dataType \'number\'', function(assert) {
     // arrange
         const that = this;
-        let filter;
         let $listItems;
-        let $popupContent;
         const testElement = $('#container');
 
         that.options.dataSource = [
@@ -3733,7 +3619,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
         $listItems = $popupContent.find('.dx-treeview-item');
 
         assert.equal($listItems.length, 2, 'count treeview item');
@@ -3758,7 +3644,7 @@ QUnit.module('Header Filter with real columnsController', {
         $($popupContent.parent().find('.dx-button').first()).trigger('dxclick');
 
         // assert
-        filter = that.getCombinedFilter();
+        const filter = that.getCombinedFilter();
         assert.equal(filter.length, 3, 'has filter');
         assert.equal(filter[0][2], 10, 'first filter value');
         assert.equal(filter[2][2], 20, 'second filter value');
@@ -3769,8 +3655,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Header filter with group interval for column with dataType \'number\' and format is \'currency\'', function(assert) {
     // arrange
         const that = this;
-        let $listItems;
-        let $popupContent;
         const testElement = $('#container');
 
         that.options.dataSource = [
@@ -3790,8 +3674,8 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        $listItems = $popupContent.find('.dx-list-item');
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $listItems = $popupContent.find('.dx-list-item');
 
         assert.equal($listItems.length, 2, 'count treeview item');
         assert.strictEqual($listItems.eq(0).text(), '$0 - $100', 'text of the first item');
@@ -3802,8 +3686,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('HeaderFilter - customizeText with group interval for column with dataType \'number\' and format is \'currency\'', function(assert) {
     // arrange
         const that = this;
-        let $listItems;
-        let $popupContent;
         let countCallCustomizeText = 0;
         const testElement = $('#container');
 
@@ -3844,8 +3726,8 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        $listItems = $popupContent.find('.dx-list-item');
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $listItems = $popupContent.find('.dx-list-item');
 
         assert.equal($listItems.length, 2, 'count treeview item');
         assert.equal(countCallCustomizeText, 2, 'count call customizeText');
@@ -3857,8 +3739,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Header filter should ignore calculateGroupValue column option', function(assert) {
     // arrange
         const that = this;
-        let $listItems;
-        let $popupContent;
         const testElement = $('#container');
 
         that.options.dataSource = [
@@ -3879,8 +3759,8 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        $listItems = $popupContent.find('.dx-list-item');
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $listItems = $popupContent.find('.dx-list-item');
 
         // assert
         assert.equal($listItems.length, 3, 'count treeview item');
@@ -3893,13 +3773,12 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Proxy customQueryParams load parameter during headerFilter operation', function(assert) {
     // arrange
         const that = this;
-        let column;
         let loadOptions;
 
         that.options.dataSource = { store: { type: 'odata' }, customQueryParams: { param: 'test' } };
         that.setupDataGrid();
 
-        column = that.columnsController.getVisibleColumns()[0];
+        const column = that.columnsController.getVisibleColumns()[0];
         that.dataController.store().on('loading', function(options) {
             loadOptions = options;
         });
@@ -3915,7 +3794,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('dataSource group parameter should contains compare option if column has sortingMethod callback', function(assert) {
     // arrange
         const that = this;
-        let column;
 
         let context;
         that.options.columns[0].sortingMethod = function(x, y) {
@@ -3927,7 +3805,7 @@ QUnit.module('Header Filter with real columnsController', {
 
         that.setupDataGrid();
 
-        column = that.columnsController.getVisibleColumns()[0];
+        const column = that.columnsController.getVisibleColumns()[0];
 
         // act
         const dataSource = that.headerFilterController.getDataSource(column);
@@ -3944,10 +3822,8 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Not apply filter when selected all items', function(assert) {
     // arrange
         const that = this;
-        let column;
         let callApplyFilter;
         const $testElement = $('#container');
-        let $popupContent;
 
         that.options.dataSource = [{ Test1: 'test1', Test2: 'test2' }];
         that.setupDataGrid();
@@ -3961,7 +3837,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
         // assert
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.ok($popupContent.is(':visible'), 'visible popup');
         assert.ok($popupContent.find('.dx-list').length, 'has list in header filter menu');
@@ -3978,7 +3854,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.clock.tick(500);
 
         // assert
-        column = that.columnsController.getVisibleColumns()[0];
+        const column = that.columnsController.getVisibleColumns()[0];
         assert.ok(!$popupContent.is(':visible'), 'not visible popup');
         assert.ok(!callApplyFilter, 'not apply filter');
         assert.strictEqual(column.filterValues, null, 'filterValues of the first column');
@@ -3988,7 +3864,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Draw header filter indicator for band columns', function(assert) {
     // arrange
         const that = this;
-        let $cells;
         const $testElement = $('#container');
 
         that.options.dataSource = [{ Column1: 12, Column2: 'value1', Column3: 'value2', Column4: 'value3', Column5: 'value4' }, { Column1: 6, Column2: 'value5', Column3: 'value6', Column4: 'value7', Column5: 'value8' }];
@@ -4000,7 +3875,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterView.render($testElement);
 
         // assert
-        $cells = $testElement.find('td');
+        const $cells = $testElement.find('td');
         assert.equal($cells.length, 7, 'count cell');
         assert.ok(!$cells.eq(0).find('.dx-header-filter').length, 'not has header filter indicator');
         assert.ok($cells.eq(1).find('.dx-header-filter').length, 'has header filter indicator');
@@ -4014,8 +3889,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Load data for column with dataType is \'datetime\'', function(assert) {
     // arrange
         let items;
-        let column;
-        let headerFilterDataSource;
         const getTreeText = function(items) {
             const result = [];
             let item = items[0];
@@ -4031,8 +3904,8 @@ QUnit.module('Header Filter with real columnsController', {
         this.options.dataSource = [{ birthday: new Date(1992, 8, 6, 12, 13, 14) }];
         this.options.columns = [{ dataField: 'birthday', dataType: 'datetime' }];
         this.setupDataGrid();
-        column = this.columnsController.getVisibleColumns()[0];
-        headerFilterDataSource = this.headerFilterController.getDataSource(column);
+        const column = this.columnsController.getVisibleColumns()[0];
+        const headerFilterDataSource = this.headerFilterController.getDataSource(column);
 
         // act
         headerFilterDataSource.load({ group: headerFilterDataSource.group }).done(function(data) {
@@ -4048,7 +3921,6 @@ QUnit.module('Header Filter with real columnsController', {
     QUnit.test('Header filter should consider the \'trueText\' and \'falseText\' column options', function(assert) {
     // arrange
         const that = this;
-        let $itemElements;
         const $testElement = $('#container');
 
         that.options.columns = [{
@@ -4069,7 +3941,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
         // assert
-        $itemElements = that.headerFilterView.getPopupContainer().$content().find('.dx-list-item');
+        const $itemElements = that.headerFilterView.getPopupContainer().$content().find('.dx-list-item');
         assert.equal($itemElements.length, 3, 'count item');
         assert.strictEqual($itemElements.eq(0).text(), '(Blanks)', 'text of the first item');
         assert.strictEqual($itemElements.eq(1).text(), 'No', 'text of the second item');
@@ -4082,7 +3954,6 @@ QUnit.module('Header Filter with real columnsController', {
         const that = this;
         let $listItems;
         let $popupContent;
-        let $cancelButton;
         const $testElement = $('#container');
 
         that.options.dataSource = that.items;
@@ -4110,7 +3981,7 @@ QUnit.module('Header Filter with real columnsController', {
         assert.ok($listItems.first().find('.dx-checkbox-checked').length, 'checkbox checked');
 
         // act
-        $cancelButton = $popupContent.parent().find('.dx-button').last();
+        const $cancelButton = $popupContent.parent().find('.dx-button').last();
         $cancelButton.trigger('dxclick');
 
         that.headerFilterController.showHeaderFilterMenu(0);

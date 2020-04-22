@@ -18,12 +18,10 @@ import { setupDataGridModules, MockDataController, MockColumnsController } from 
 import summaryModule from 'ui/data_grid/ui.data_grid.summary';
 
 function getFooterOptions(cellsByColumns, cellsCount) {
-    let i;
-    let cell;
     const cells = [];
 
-    for(i = 0; i < cellsCount; i++) {
-        cell = cellsByColumns[i.toString()];
+    for(let i = 0; i < cellsCount; i++) {
+        const cell = cellsByColumns[i.toString()];
         if(cell) {
             cells.push(cell);
         } else {
@@ -87,13 +85,11 @@ QUnit.module('Summary footer', {
     QUnit.test('Render when summary is defined', function(assert) {
     // arrange
         const footerView = this.createFooterView(this.defaultFooterOptions);
-        let $summary;
-        let $cells;
 
         // act
         footerView.render($('#container'));
-        $summary = $('.dx-datagrid-summary-item');
-        $cells = $('.dx-row td');
+        const $summary = $('.dx-datagrid-summary-item');
+        const $cells = $('.dx-row td');
 
         // assert
         assert.equal($('col').length, 5, 'col elements count');
@@ -151,11 +147,10 @@ QUnit.module('Summary footer', {
     QUnit.test('Text alignment by default', function(assert) {
     // arrange
         const footerView = this.createFooterView(this.defaultFooterOptions);
-        let $summaryItems;
 
         // act
         footerView.render($('#container'));
-        $summaryItems = $('.dx-datagrid-summary-item');
+        const $summaryItems = $('.dx-datagrid-summary-item');
 
         assert.equal($summaryItems.length, 5, 'cells count');
         assert.equal($summaryItems.eq(0).css('textAlign'), 'left');
@@ -178,11 +173,10 @@ QUnit.module('Summary footer', {
                 { summaryType: 'avg', value: 123.54, alignment: 'right' }
             ]
         }, 5));
-        let $summaryItems;
 
         // act
         footerView.render($('#container'));
-        $summaryItems = $('.dx-datagrid-summary-item');
+        const $summaryItems = $('.dx-datagrid-summary-item');
 
         assert.equal($summaryItems.length, 5, 'cells count');
         assert.equal($summaryItems.eq(0).css('textAlign'), 'center', 'count');
@@ -217,7 +211,6 @@ QUnit.module('Summary footer', {
                 { summaryType: 'max', value: 120001 }
             ]
         }, 5));
-        let $summary;
         const $container = $('#container');
 
         // act
@@ -228,7 +221,7 @@ QUnit.module('Summary footer', {
         this.rowsView.render = function() { };
         this.dataController.changed.fire({ changeType: 'refresh' });
 
-        $summary = $('.dx-datagrid-summary-item');
+        const $summary = $('.dx-datagrid-summary-item');
 
         // assert
         assert.equal($summary.eq(0).text(), 'Count: 21');
@@ -243,7 +236,6 @@ QUnit.module('Summary footer', {
                 summaryCount
             ]
         }, 5));
-        let $summary;
         const $container = $('#container');
 
         // act
@@ -252,7 +244,7 @@ QUnit.module('Summary footer', {
         this.dataController.changed.fire({ changeType: 'append' });
 
         // assert
-        $summary = $('.dx-datagrid-summary-item');
+        const $summary = $('.dx-datagrid-summary-item');
         assert.equal($summary.eq(0).text(), 'Count: 21');
     });
 
@@ -264,7 +256,6 @@ QUnit.module('Summary footer', {
                 summaryCount
             ]
         }, 5));
-        let $summary;
         const $container = $('#container');
 
         // act
@@ -273,7 +264,7 @@ QUnit.module('Summary footer', {
         this.dataController.changed.fire({ changeType: 'prepend' });
 
         // assert
-        $summary = $('.dx-datagrid-summary-item');
+        const $summary = $('.dx-datagrid-summary-item');
         assert.equal($summary.eq(0).text(), 'Count: 21');
     });
 
@@ -289,7 +280,6 @@ QUnit.module('Summary footer', {
             ]
         }, 5));
         let isRendered;
-        let $summary;
         const $container = $('#container');
 
         // act
@@ -302,7 +292,7 @@ QUnit.module('Summary footer', {
         };
         this.dataController.changed.fire({ changeType: 'update' });
 
-        $summary = $('.dx-datagrid-summary-item');
+        const $summary = $('.dx-datagrid-summary-item');
 
         // assert
         assert.ok(!isRendered, 'footer view is not rendered');
@@ -312,7 +302,6 @@ QUnit.module('Summary footer', {
     QUnit.test('View is rendered when width of column is changed', function(assert) {
     // arrange
         const footerView = this.createFooterView(this.defaultFooterOptions);
-        let $cols;
         const $container = $('#container');
 
         // act
@@ -323,7 +312,7 @@ QUnit.module('Summary footer', {
 
         this.columnsController.columnsChanged.fire({ columnIndex: 0, optionNames: { width: true, length: 1 }, changeTypes: {} });
 
-        $cols = $('.dx-datagrid-total-footer' + ' col');
+        const $cols = $('.dx-datagrid-total-footer' + ' col');
 
         // assert
         assert.equal($cols.eq(0).css('width'), '100px');
@@ -358,11 +347,10 @@ QUnit.module('Summary footer', {
             ]
         }, 5));
         const $container = $('#container');
-        let $summary;
 
         // act
         footerView.render($container);
-        $summary = $('.dx-datagrid-summary-item');
+        const $summary = $('.dx-datagrid-summary-item');
 
         // assert
         assert.equal($summary.eq(0).text(), 'Min: $100');
@@ -378,11 +366,10 @@ QUnit.module('Summary footer', {
             ]
         }, 5));
         const $container = $('#container');
-        let $summary;
 
         // act
         footerView.render($container);
-        $summary = $('.dx-datagrid-summary-item');
+        const $summary = $('.dx-datagrid-summary-item');
 
         // assert
         assert.equal($summary.eq(0).text(), 'Min: $100');
@@ -401,11 +388,10 @@ QUnit.module('Summary footer', {
             ]
         }, 5));
         const $container = $('#container');
-        let $summary;
 
         // act
         footerView.render($container);
-        $summary = $('.dx-datagrid-summary-item');
+        const $summary = $('.dx-datagrid-summary-item');
 
         // assert
         assert.equal($summary.eq(0).text(), 'test Min: $100 postfix');
@@ -424,11 +410,10 @@ QUnit.module('Summary footer', {
             ]
         }, 5));
         const $container = $('#container');
-        let $summary;
 
         // act
         footerView.render($container);
-        $summary = $('.dx-datagrid-summary-item');
+        const $summary = $('.dx-datagrid-summary-item');
 
         // assert
         assert.ok($summary.eq(0).hasClass('min-bold'), 'min-bold class');
@@ -475,7 +460,6 @@ QUnit.module('Summary footer', {
 
     QUnit.test('onCellPrepared for totalFooter', function(assert) {
     // arrange
-        let footerView;
         let resultOptions;
         let countCallCellPrepared = 0;
 
@@ -489,7 +473,7 @@ QUnit.module('Summary footer', {
             }
         };
 
-        footerView = this.createFooterView(this.defaultFooterOptions);
+        const footerView = this.createFooterView(this.defaultFooterOptions);
 
         // act
         footerView.render($('#container'));
@@ -506,7 +490,6 @@ QUnit.module('Summary footer', {
 
     QUnit.test('onRowPrepared for totalFooter', function(assert) {
     // arrange
-        let footerView;
         let resultOptions;
         let countCallRowPrepared = 0;
 
@@ -517,7 +500,7 @@ QUnit.module('Summary footer', {
             }
         };
 
-        footerView = this.createFooterView(this.defaultFooterOptions);
+        const footerView = this.createFooterView(this.defaultFooterOptions);
 
         // act
         footerView.render($('#container'));
@@ -600,11 +583,10 @@ QUnit.module('Group footer', {
                     { summaryType: 'avg', value: '34.009' }
                 ]]
         }]);
-        let $summaryItems;
 
         // act
         rowsView.render($('#container'));
-        $summaryItems = $('.dx-datagrid-summary-item');
+        const $summaryItems = $('.dx-datagrid-summary-item');
 
         // assert
         assert.ok($('.dx-datagrid-group-footer').length, 'group footer class');
@@ -617,7 +599,6 @@ QUnit.module('Group footer', {
 
     QUnit.test('onCellPrepared for group footer', function(assert) {
     // arrange
-        let rowsView;
         let resultOptions;
         let countCallCellPrepared = 0;
 
@@ -631,7 +612,7 @@ QUnit.module('Group footer', {
             }
         };
 
-        rowsView = this.createRowsView([{
+        const rowsView = this.createRowsView([{
             rowType: 'groupFooter', values: [], summaryCells: [
                 [
                     { summaryType: 'count', value: '10' },
@@ -657,7 +638,6 @@ QUnit.module('Group footer', {
 
     QUnit.test('onRowPrepared for group footer', function(assert) {
     // arrange
-        let rowsView;
         let resultOptions;
         let countCallRowPrepared = 0;
 
@@ -668,7 +648,7 @@ QUnit.module('Group footer', {
             }
         };
 
-        rowsView = this.createRowsView([{
+        const rowsView = this.createRowsView([{
             rowType: 'groupFooter', values: [], summaryCells: [
                 [
                     { summaryType: 'count', value: '10' },
@@ -1132,11 +1112,10 @@ QUnit.module('Footer with real dataController and columnController', {
 });
 
 const generateData = function(countRow) {
-    let i;
     let j = 1;
     const result = [];
 
-    for(i = 0; i < countRow; i++) {
+    for(let i = 0; i < countRow; i++) {
         result.push({ name: 'test name' + j, age: i, cash: 'test cash', regDate: new Date() });
         j += ((i + 1) % 7 === 0) ? 1 : 0;
     }

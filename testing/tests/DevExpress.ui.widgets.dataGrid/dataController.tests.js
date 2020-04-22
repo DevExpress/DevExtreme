@@ -3263,11 +3263,10 @@ const setupVirtualScrollingModule = function() {
     };
     setupModule.apply(this);
 
-    let i;
 
     const array = [];
 
-    for(i = 0; i < 1000; i++) {
+    for(let i = 0; i < 1000; i++) {
         array.push({
             id: i,
             value: 'value' + i.toString()
@@ -4506,11 +4505,10 @@ QUnit.module('Infinite scrolling', {
     beforeEach: function() {
         setupModule.apply(this);
 
-        let i;
 
         const array = [];
 
-        for(i = 0; i < 50; i++) {
+        for(let i = 0; i < 50; i++) {
             array.push({
                 id: i,
                 value: 'value' + i.toString()

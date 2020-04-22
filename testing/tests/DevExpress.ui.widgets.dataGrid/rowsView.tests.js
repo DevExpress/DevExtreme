@@ -52,7 +52,6 @@ function getText(element) {
 
 function createRowsView(rows, dataController, columns, initDefaultOptions, userOptions) {
     let i;
-    let columnsController;
 
     dataController = dataController || new MockDataController({ items: rows });
 
@@ -73,7 +72,7 @@ function createRowsView(rows, dataController, columns, initDefaultOptions, userO
         }
     });
 
-    columnsController = new MockColumnsController(columns);
+    const columnsController = new MockColumnsController(columns);
 
     this.options = $.extend({}, { disabled: false, noDataText: 'No Data' }, userOptions);
 
@@ -100,8 +99,7 @@ function createRowsView(rows, dataController, columns, initDefaultOptions, userO
     });
 
     this.setColumnWidths = function({ widths }) {
-        let i;
-        for(i = 0; i < columns.length; i++) {
+        for(let i = 0; i < columns.length; i++) {
             columns[i].visibleWidth = widths[i];
         }
         this.dataGrid.rowsView.setColumnWidths({ widths });
@@ -171,12 +169,11 @@ QUnit.module('Rows view', {
     QUnit.test('Render rows', function(assert) {
     // arrange
         const rowsView = this.createRowsView(this.items);
-        let cells;
         const testElement = $('#container');
 
         // act
         rowsView.render(testElement);
-        cells = getCells(testElement);
+        const cells = getCells(testElement);
 
         // assert
         assert.equal(getText(cells[0]), 'test1', 'row 1 cell 1');
@@ -197,12 +194,11 @@ QUnit.module('Rows view', {
     QUnit.test('Render rows with empty data', function(assert) {
     // arrange
         const rowsView = this.createRowsView([{ data: { test1: '   ', test2: undefined, test3: null, test4: '' }, values: ['   ', undefined, null, ''], rowType: 'data', dataIndex: 0 }]);
-        let cells;
         const testElement = $('#container');
 
         // act
         rowsView.render(testElement);
-        cells = testElement.find('.dx-data-row').children();
+        const cells = testElement.find('.dx-data-row').children();
 
         // assert
         assert.equal(cells.length, 4, 'count column');
@@ -255,21 +251,17 @@ QUnit.module('Rows view', {
     // arrange
         const rowsView = this.createRowsView(this.items);
         const testElement = $('#container');
-        let $rows;
-        let $cells;
-        let $freeSpaceCells;
-        let i;
 
         // act
         rowsView.render(testElement);
-        $rows = rowsView._getRowElements();
-        $freeSpaceCells = getCells(testElement).filter(function(i, cell) { return $(cell).parent().hasClass('dx-freespace-row'); });
-        $cells = getCells(testElement).filter(function(i, cell) { return !$(cell).parent().hasClass('dx-freespace-row'); });
+        const $rows = rowsView._getRowElements();
+        const $freeSpaceCells = getCells(testElement).filter(function(i, cell) { return $(cell).parent().hasClass('dx-freespace-row'); });
+        const $cells = getCells(testElement).filter(function(i, cell) { return !$(cell).parent().hasClass('dx-freespace-row'); });
 
         // assert
         assert.expect(15 - $freeSpaceCells.length);
 
-        for(i = 0; i < $cells.length; i++) {
+        for(let i = 0; i < $cells.length; i++) {
             if(i < $rows.length) {
                 assert.equal($rows.eq(i).attr('role'), 'row', 'Row has correct role');
             }
@@ -281,18 +273,15 @@ QUnit.module('Rows view', {
     // arrange
         const rowsView = this.createRowsView(this.items);
         const testElement = $('#container');
-        let $rows;
-        let $cells;
-        let i;
 
         // act
         rowsView.render(testElement);
 
-        $rows = rowsView._getRowElements().filter(function(i, row) { return $(row).hasClass('dx-freespace-row'); });
-        $cells = getCells(testElement).filter(function(i, cell) { return $(cell).parent().hasClass('dx-freespace-row'); });
+        const $rows = rowsView._getRowElements().filter(function(i, row) { return $(row).hasClass('dx-freespace-row'); });
+        const $cells = getCells(testElement).filter(function(i, cell) { return $(cell).parent().hasClass('dx-freespace-row'); });
 
         // assert
-        for(i = 0; i < $cells.length; i++) {
+        for(let i = 0; i < $cells.length; i++) {
             if(i < $rows.length) {
                 assert.equal($rows.eq(i).attr('aria-hidden'), true, 'Free space row has aria-hidden attribute');
             }
@@ -306,12 +295,11 @@ QUnit.module('Rows view', {
     QUnit.test('Render Lookup Column', function(assert) {
     // arrange
         const rowsView = this.createRowsView(this.items, null, [{}, { lookup: { calculateCellValue: function(value) { return 'Lookup ' + value; } } }, {}]);
-        let cells;
         const testElement = $('#container');
 
         // act
         rowsView.render(testElement);
-        cells = getCells(testElement);
+        const cells = getCells(testElement);
 
         // assert
         assert.equal(getText(cells[0]), 'test1', 'row 1 cell 1');
@@ -330,12 +318,11 @@ QUnit.module('Rows view', {
     QUnit.test('Render Lookup Column with calculateDisplayValue', function(assert) {
     // arrange
         const rowsView = this.createRowsView(this.items, null, [{}, { calculateDisplayValue: function(data) { return 'Lookup ' + data.id; }, dataField: 'id', lookup: { } }, {}]);
-        let cells;
         const testElement = $('#container');
 
         // act
         rowsView.render(testElement);
-        cells = getCells(testElement);
+        const cells = getCells(testElement);
 
         // assert
         assert.equal(getText(cells[0]), 'test1', 'row 1 cell 1');
@@ -518,11 +505,10 @@ QUnit.module('Rows view', {
         const columns = [{ alignment: 'right' }, { alignment: 'left' }, { alignment: 'center' }];
         const rowsView = this.createRowsView(this.items, null, columns);
         const testElement = $('#container');
-        let cellContents;
 
         // act
         rowsView.render(testElement);
-        cellContents = testElement.find('td');
+        const cellContents = testElement.find('td');
 
         // assert
         assert.equal($(cellContents[0]).css('text-align'), 'right', 'cell 1');
@@ -535,7 +521,6 @@ QUnit.module('Rows view', {
         const dataController = new MockDataController({ items: this.items });
         const rowsView = this.createRowsView(this.items, dataController, null, columns);
         const testElement = $('#container');
-        let cells;
 
         // act
         this.options.searchPanel = {
@@ -544,7 +529,7 @@ QUnit.module('Rows view', {
         };
 
         rowsView.render(testElement);
-        cells = testElement.find('td');
+        const cells = testElement.find('td');
 
         // assert
         assert.ok(cells.length > 3);
@@ -568,7 +553,6 @@ QUnit.module('Rows view', {
         const rowsView = this.createRowsView(this.items, dataController, columns);
         const $testElement = $('#container');
         const searchTextClass = 'dx-datagrid-search-text';
-        let cells;
 
         // act
         this.options.searchPanel = {
@@ -577,7 +561,7 @@ QUnit.module('Rows view', {
         };
 
         rowsView.render($testElement);
-        cells = $testElement.find('td');
+        const cells = $testElement.find('td');
 
         // assert
         assert.ok(cells.length > 3, 'Correct number of cells');
@@ -654,13 +638,12 @@ QUnit.module('Rows view', {
         const rowsView = this.createRowsView(this.items, dataController, columns);
         const $testElement = $('#container');
         const searchTextClass = 'dx-datagrid-search-text';
-        let cells;
 
         // act
         this.options.searchPanel = { highlightSearchText: true, text: 'te' };
 
         rowsView.render($testElement);
-        cells = $testElement.find('td');
+        const cells = $testElement.find('td');
 
         // assert
         assert.equal(getNormalizeMarkup(cells.eq(0)), '<div class=dx-template-wrapper><span><span class=' + searchTextClass + '>te</span>st</span></div>', 'cell 0');
@@ -683,7 +666,6 @@ QUnit.module('Rows view', {
         const rowsView = this.createRowsView(this.items, dataController, columns);
         const testElement = $('#container');
         const searchTextClass = 'dx-datagrid-search-text';
-        let cells;
 
         // act
         this.options.searchPanel = {
@@ -692,7 +674,7 @@ QUnit.module('Rows view', {
         };
 
         rowsView.render(testElement);
-        cells = testElement.find('td');
+        const cells = testElement.find('td');
 
         // assert
         assert.ok(cells.length > 3, 'Correct number of cells');
@@ -711,7 +693,6 @@ QUnit.module('Rows view', {
         const rowsView = this.createRowsView(this.items, dataController, columns);
         const testElement = $('#container');
         const searchTextClass = 'dx-datagrid-search-text';
-        let cells;
 
         this.options.searchPanel = {
             highlightSearchText: true,
@@ -726,7 +707,7 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render(testElement);
-        cells = testElement.find('td');
+        const cells = testElement.find('td');
 
         // assert
         assert.equal(getNormalizeMarkup(cells.eq(0)), 'test<span class=' + searchTextClass + '>1</span>', 'cell 1');
@@ -740,7 +721,6 @@ QUnit.module('Rows view', {
         const dataController = new MockDataController({ items: this.items });
         const rowsView = this.createRowsView(this.items, dataController, columns);
         const testElement = $('#container');
-        let cells;
 
         this.options.searchPanel = {
             highlightSearchText: true,
@@ -755,7 +735,7 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render(testElement);
-        cells = testElement.find('td');
+        const cells = testElement.find('td');
 
         // assert
         assert.equal(cells.length, 3 * 4 /* 3 rows + 1 freespace */, 'column count');
@@ -768,7 +748,6 @@ QUnit.module('Rows view', {
         const dataController = new MockDataController({ items: this.items });
         const rowsView = this.createRowsView(this.items, dataController, columns);
         const testElement = $('#container');
-        let rows;
 
         this.options.searchPanel = {
             highlightSearchText: true,
@@ -783,7 +762,7 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render(testElement);
-        rows = testElement.find('.dx-test');
+        const rows = testElement.find('.dx-test');
 
         // assert
         assert.equal(rows.length, 3, 'rows count');
@@ -795,7 +774,6 @@ QUnit.module('Rows view', {
         const dataController = new MockDataController({ items: this.items });
         const rowsView = this.createRowsView(this.items, dataController, [{ allowFiltering: true, dataType: 'string' }, { allowFiltering: true, dataType: 'number' }, { allowFiltering: true, dataType: 'date' }, { command: 'edit' }]);
         const testElement = $('#container');
-        let cells;
 
         this.options.searchPanel = {
             highlightSearchText: true,
@@ -811,7 +789,7 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render(testElement);
-        cells = testElement.find('td');
+        const cells = testElement.find('td');
 
         // assert
         assert.ok(cells.length > 4, 'Correct number of cells');
@@ -829,7 +807,6 @@ QUnit.module('Rows view', {
         const rowsView = this.createRowsView(this.items, dataController, columns);
         const testElement = $('#container');
         const searchTextClass = 'dx-datagrid-search-text';
-        let cells;
 
         this.options.searchPanel = {
             highlightSearchText: true,
@@ -838,7 +815,7 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render(testElement);
-        cells = testElement.find('td');
+        const cells = testElement.find('td');
 
         // assert
         assert.equal(getNormalizeMarkup(cells.eq(0)), 'test<span class=' + searchTextClass + '>1</span>', 'cell 1');
@@ -855,7 +832,6 @@ QUnit.module('Rows view', {
         const dataController = new MockDataController({ items: rows });
         const rowsView = this.createRowsView(this.items, dataController, columns);
         const testElement = $('#container');
-        let $rows;
 
         // act
         this.options.searchPanel = {
@@ -864,7 +840,7 @@ QUnit.module('Rows view', {
         };
 
         rowsView.render(testElement);
-        $rows = testElement.find('tbody > tr');
+        const $rows = testElement.find('tbody > tr');
 
         // assert
         assert.equal($rows.length, 4, 'Correct number of rows');
@@ -885,7 +861,6 @@ QUnit.module('Rows view', {
         const rowsView = this.createRowsView(this.items, dataController, columns);
         const testElement = $('#container');
         const store = new ODataStore({ url: 'test.org' });
-        let $rows;
 
         dataController.store = function() {
             return store;
@@ -899,7 +874,7 @@ QUnit.module('Rows view', {
         };
 
         rowsView.render(testElement);
-        $rows = testElement.find('tbody > tr');
+        const $rows = testElement.find('tbody > tr');
 
         // assert
         assert.equal($rows.length, 4, 'Correct number of rows');
@@ -920,7 +895,6 @@ QUnit.module('Rows view', {
         const rowsView = this.createRowsView(this.items, dataController, columns);
         const testElement = $('#container');
         const store = new ODataStore({ url: 'test.org' });
-        let $rows;
 
         dataController.store = function() {
             return store;
@@ -933,7 +907,7 @@ QUnit.module('Rows view', {
         };
 
         rowsView.render(testElement);
-        $rows = testElement.find('tbody > tr');
+        const $rows = testElement.find('tbody > tr');
 
         // assert
         assert.equal($rows.length, 4, 'Correct number of rows');
@@ -959,7 +933,6 @@ QUnit.module('Rows view', {
         const rowsView = this.createRowsView([{ data: { id: 1 }, values: [1], rowType: 'data', dataIndex: 0 }], null, columns);
         const $testElement = $('#container');
         const searchTextClass = 'dx-datagrid-search-text';
-        let $cells;
 
         // act
         this.options.searchPanel = {
@@ -968,7 +941,7 @@ QUnit.module('Rows view', {
         };
 
         rowsView.render($testElement);
-        $cells = $testElement.find('.dx-data-row').find('td');
+        const $cells = $testElement.find('.dx-data-row').find('td');
 
         // assert
         assert.equal($cells.length, 1, 'Correct number of cells');
@@ -1002,7 +975,6 @@ QUnit.module('Rows view', {
         ], null, columns);
         const $testElement = $('#container');
         const searchTextClass = 'dx-datagrid-search-text';
-        let $cells;
 
         this.options.searchPanel = {
             highlightSearchText: true,
@@ -1013,7 +985,7 @@ QUnit.module('Rows view', {
         rowsView.render($testElement);
 
         // assert
-        $cells = $testElement.find('.dx-data-row').find('td');
+        const $cells = $testElement.find('.dx-data-row').find('td');
         assert.strictEqual(getNormalizeMarkup($cells.eq(0)), '<span class=' + searchTextClass + '>Yes</span>', 'highlight text in cell');
     });
 
@@ -1044,7 +1016,6 @@ QUnit.module('Rows view', {
         ], null, columns);
         const $testElement = $('#container');
         const searchTextClass = 'dx-datagrid-search-text';
-        let $cells;
 
         this.options.searchPanel = {
             highlightSearchText: true,
@@ -1055,7 +1026,7 @@ QUnit.module('Rows view', {
         rowsView.render($testElement);
 
         // assert
-        $cells = $testElement.find('.dx-data-row').find('td');
+        const $cells = $testElement.find('.dx-data-row').find('td');
         assert.strictEqual(getNormalizeMarkup($cells.eq(0)), '<span class=' + searchTextClass + '>No</span>', 'highlight text in cell');
     });
 
@@ -1078,7 +1049,6 @@ QUnit.module('Rows view', {
             { data: { key: 'TestGroup', items: null }, values: ['TestGroup'], rowType: 'group', groupIndex: 0 }
         ], null, columns);
         const $testElement = $('#container');
-        let $cells;
 
         this.options.searchPanel = {
             highlightSearchText: true,
@@ -1091,19 +1061,18 @@ QUnit.module('Rows view', {
         this.clock.tick();
 
         // assert
-        $cells = $testElement.find('.dx-group-row').find('td');
+        const $cells = $testElement.find('.dx-group-row').find('td');
         assert.strictEqual(getNormalizeMarkup($cells.eq(1)), 'Group: <span class=dx-datagrid-search-text>Test</span>Group', 'highlight text in cell');
     });
 
     QUnit.test('All rows are not isSelected by default', function(assert) {
     // arrange
         const rowsView = this.createRowsView(this.items);
-        let rowsSelected;
         const testElement = $('#container');
 
         // act
         rowsView.render(testElement);
-        rowsSelected = testElement.find('.dx-selection');
+        const rowsSelected = testElement.find('.dx-selection');
 
         // assert
         assert.strictEqual(rowsSelected.length, 0, 'rows are not isSelected by default');
@@ -1208,14 +1177,13 @@ QUnit.module('Rows view', {
     // arrange
         const dataController = new MockDataController({ items: this.items });
         const rowsView = this.createRowsView(this.items, dataController);
-        let selectedCells;
         const testElement = $('#container');
 
         this.items[2].isSelected = true;
         // act
         rowsView.render(testElement);
 
-        selectedCells = getCells(testElement, '.dx-selection');
+        const selectedCells = getCells(testElement, '.dx-selection');
 
         // assert
         assert.equal(selectedCells.length, 3, '1 row, 3 cells isSelected');
@@ -1229,7 +1197,6 @@ QUnit.module('Rows view', {
     // arrange
         const dataController = new MockDataController({ items: this.items });
         const rowsView = this.createRowsView(this.items, dataController);
-        let selectedCells;
         const testElement = $('#container');
 
         // act
@@ -1238,7 +1205,7 @@ QUnit.module('Rows view', {
         this.items[2].isSelected = true;
         dataController.changed.fire({ changeType: 'updateSelection', itemIndexes: [1, 2], items: this.items });
 
-        selectedCells = getCells(testElement, '.dx-selection');
+        const selectedCells = getCells(testElement, '.dx-selection');
 
         // assert
         assert.equal(selectedCells.length, 3, '1 row, 3 cells isSelected');
@@ -1256,12 +1223,11 @@ QUnit.module('Rows view', {
         const rows = [{ values: [false, 'test1', 1, '1/01/2001'], rowType: 'data' }, { values: [true, 'test2', 2, '2/02/2002'], rowType: 'data' }, { values: [false, 'test3', 3, '3/03/2003'], rowType: 'data' }];
         const dataController = new MockDataController({ items: rows, selection: { mode: 'multiple', showCheckBoxesMode: 'always' } });
         const rowsView = this.createRowsView(this.items, dataController, [{ command: 'select', dataType: 'boolean' }, {}, {}, {}]);
-        let checkBoxes;
         const testElement = $('#container');
 
         // act
         rowsView.render(testElement);
-        checkBoxes = testElement.find('.dx-checkbox');
+        const checkBoxes = testElement.find('.dx-checkbox');
 
         // assert
         assert.equal(checkBoxes.length, 3, 'check boxs count');
@@ -1275,12 +1241,11 @@ QUnit.module('Rows view', {
         const rows = [{ values: [false, 'test1', 1, '1/01/2001'], rowType: 'data' }, { values: [false, 'test2', 2, '2/02/2002'], rowType: 'data' }, { values: [false, 'test3', 3, '3/03/2003'], rowType: 'data' }];
         const dataController = new MockDataController({ items: rows, selection: { mode: 'multiple', showCheckBoxesMode: 'always' } });
         const rowsView = this.createRowsView(this.items, dataController, [{ command: 'select', dataType: 'boolean', cssClass: 'dx-command-select' }, {}, {}, {}]);
-        let checkBoxes;
         const testElement = $('#container');
 
         // act
         rowsView.render(testElement);
-        checkBoxes = testElement.find('.dx-checkbox');
+        const checkBoxes = testElement.find('.dx-checkbox');
         assert.equal(checkBoxes.length, 3);
         checkBoxes.eq(1).trigger('dxclick');
 
@@ -1299,12 +1264,11 @@ QUnit.module('Rows view', {
         const rows = [{ values: [false, 'test1', 1, '1/01/2001'], rowType: 'data' }, { values: [false, 'test2', 2, '2/02/2002'], rowType: 'data' }, { values: [false, 'test3', 3, '3/03/2003'], rowType: 'data' }];
         const dataController = new MockDataController({ items: rows, selection: { mode: 'multiple', showCheckBoxesMode: 'always' } });
         const rowsView = this.createRowsView(this.items, dataController, [{ command: 'select', dataType: 'boolean', cssClass: 'dx-command-select' }, {}, {}, {}]);
-        let checkBoxes;
         const testElement = $('#container');
 
         // act
         rowsView.render(testElement);
-        checkBoxes = testElement.find('.dx-checkbox');
+        const checkBoxes = testElement.find('.dx-checkbox');
         assert.equal(checkBoxes.length, 3);
         checkBoxes.eq(1).trigger($.Event('keydown', { key: ' ' }));
 
@@ -1378,14 +1342,13 @@ QUnit.module('Rows view', {
             }
         }]);
         const testElement = $('#container');
-        let cells;
         const checkColor = function(result, expected1, expected2, message) {
             assert.ok(result === expected1 || result === expected2, message);
         };
 
         // act
         rowsView.render(testElement);
-        cells = testElement.find('.customTemplate');
+        const cells = testElement.find('.customTemplate');
 
         // assert
         checkColor($(cells[0]).css('background-color'), 'rgb(255, 0, 0)', 'red', 'row 1 cell 1');
@@ -1461,7 +1424,6 @@ QUnit.module('Rows view', {
             cellTemplate: 'testTemplate'
         }]);
         const testElement = $('#container');
-        let cells;
 
         rowsView.component._getTemplate = function() {
             return {
@@ -1474,7 +1436,7 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render(testElement);
-        cells = testElement.find('td');
+        const cells = testElement.find('td');
 
         // assert
         assert.equal($(cells[0]).text(), 'Custom Template - 1');
@@ -1529,7 +1491,6 @@ QUnit.module('Rows view', {
             cellTemplate: 'testTemplate'
         }]);
         const testElement = $('<div/>');
-        let cells;
 
         rowsView.component._getTemplate = function() {
             return {
@@ -1542,7 +1503,7 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render(testElement);
-        cells = testElement.find('td');
+        const cells = testElement.find('td');
 
         // assert
         assert.equal($(cells[0]).text(), '');
@@ -1561,7 +1522,6 @@ QUnit.module('Rows view', {
         const dataController = new MockDataController({ items: rows });
         const rowsView = this.createRowsView(rows, dataController, [{}]);
         const testElement = $('#container');
-        let cells;
 
         this.options.rowTemplate = 'test';
 
@@ -1578,7 +1538,7 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render(testElement);
-        cells = testElement.find('td');
+        const cells = testElement.find('td');
 
         // assert
         assert.equal($(cells[0]).text(), 'Custom Template - 1');
@@ -1591,7 +1551,6 @@ QUnit.module('Rows view', {
         const dataController = new MockDataController({ items: rows });
         const rowsView = this.createRowsView(rows, dataController, [{}]);
         const testElement = $('#container');
-        let cells;
 
         this.options.rowTemplate = 'test';
 
@@ -1608,7 +1567,7 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render(testElement);
-        cells = testElement.find('td');
+        const cells = testElement.find('td');
 
         // assert
         assert.equal($(cells[0]).text(), 'Custom Template - 1');
@@ -1645,7 +1604,6 @@ QUnit.module('Rows view', {
         this.items[0].rowType = 'group';
         const dataController = new MockDataController({ items: this.items });
         const rowsView = this.createRowsView(this.items, dataController, null);
-        let groupedRows;
         const testElement = $('#container');
 
         this.options.editing = {
@@ -1653,7 +1611,7 @@ QUnit.module('Rows view', {
             allowUpdating: true
         };
         rowsView.render(testElement);
-        groupedRows = testElement.find('.' + 'dx-group-row');
+        const groupedRows = testElement.find('.' + 'dx-group-row');
 
         // assert
         assert.equal(groupedRows.length, 1, 'grouped rows');
@@ -1675,7 +1633,6 @@ QUnit.module('Rows view', {
         const dataController = new MockDataController({ items: this.items });
         const rowsView = this.createRowsView(this.items, dataController);
         const testElement = $('#container');
-        let rows;
         const selectionOptions = this.selectionOptions;
 
         this.options.selection = {
@@ -1684,7 +1641,7 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render(testElement);
-        rows = testElement.find('tbody > tr');
+        const rows = testElement.find('tbody > tr');
 
         const mouse = pointerMock(rows.eq(1))
             .start()
@@ -1705,7 +1662,6 @@ QUnit.module('Rows view', {
         const rowsView = this.createRowsView(rowInfos, dataController);
         const testElement = $('#container');
         const selectionOptions = this.selectionOptions;
-        let rows;
 
         this.options.selection = {
             showCheckBoxesMode: 'onLongTap'
@@ -1713,7 +1669,7 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render(testElement);
-        rows = testElement.find('tbody > tr');
+        const rows = testElement.find('tbody > tr');
 
         const mouse = pointerMock(rows.eq(1))
             .start()
@@ -1734,14 +1690,13 @@ QUnit.module('Rows view', {
         const rowsView = this.createRowsView(rowInfos, dataController);
         const testElement = $('#container');
         const selectionOptions = this.selectionOptions;
-        let rows;
 
         this.options.selection = {
             showCheckBoxesMode: 'onLongTap'
         };
 
         rowsView.render(testElement);
-        rows = testElement.find('tbody > tr');
+        const rows = testElement.find('tbody > tr');
 
         // act
         rows.eq(1).trigger('dxclick');
@@ -1758,7 +1713,6 @@ QUnit.module('Rows view', {
         const rowsView = this.createRowsView(rowInfos, dataController);
         const testElement = $('#container');
         const selectionOptions = this.selectionOptions;
-        let rows;
 
         this.options.selection = {
             showCheckBoxesMode: 'none'
@@ -1766,7 +1720,7 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render(testElement);
-        rows = testElement.find('tbody > tr');
+        const rows = testElement.find('tbody > tr');
 
         const mouse = pointerMock(rows.eq(1))
             .start()
@@ -1788,7 +1742,6 @@ QUnit.module('Rows view', {
         const rowsView = this.createRowsView(rowInfos, dataController);
         const testElement = $('#container');
         const selectionOptions = this.selectionOptions;
-        let rows;
 
         this.options.selection = {
             showCheckBoxesMode: 'onLongTap'
@@ -1797,7 +1750,7 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render(testElement);
-        rows = testElement.find('tbody > tr');
+        const rows = testElement.find('tbody > tr');
 
         rows.eq(1).trigger('dxclick');
 
@@ -1814,7 +1767,6 @@ QUnit.module('Rows view', {
         const rowsView = this.createRowsView(rowInfos, dataController);
         const testElement = $('#container');
         const selectionOptions = this.selectionOptions;
-        let rows;
 
         this.dataGrid.contextMenuView.render(testElement);
 
@@ -1824,7 +1776,7 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render(testElement);
-        rows = testElement.find('tbody > tr');
+        const rows = testElement.find('tbody > tr');
 
         const mouse = pointerMock(rows.eq(1))
             .start(support.touch ? 'touch' : 'mouse')
@@ -1847,7 +1799,6 @@ QUnit.module('Rows view', {
         const rowsView = this.createRowsView(rowInfos, dataController);
         const testElement = $('#container');
         const selectionOptions = this.selectionOptions;
-        let rows;
 
         this.dataGrid.contextMenuView.render(testElement);
 
@@ -1857,7 +1808,7 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render(testElement);
-        rows = testElement.find('tbody > tr');
+        const rows = testElement.find('tbody > tr');
 
         const mouse = pointerMock(rows.eq(1))
             .start(support.touch ? 'touch' : 'mouse')
@@ -1880,7 +1831,6 @@ QUnit.module('Rows view', {
         const rowsView = this.createRowsView(rowInfos, dataController);
         const testElement = $('#container');
         const selectionOptions = this.selectionOptions;
-        let rows;
 
         this.options.selection = {
             showCheckBoxesMode: 'onClick',
@@ -1899,7 +1849,7 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render(testElement);
-        rows = testElement.find('tbody > tr');
+        const rows = testElement.find('tbody > tr');
 
         const mouse = pointerMock(rows.eq(1))
             .start('touch')
@@ -1921,7 +1871,6 @@ QUnit.module('Rows view', {
         const dataController = new MockDataController({ items: rowInfos });
         const rowsView = this.createRowsView(rowInfos, dataController);
         const testElement = $('#container');
-        let rows;
         let rowClickArgs;
 
         this.options.onRowClick = function(data) {
@@ -1930,7 +1879,7 @@ QUnit.module('Rows view', {
 
         rowsView.optionChanged({ name: 'onRowClick' });
         rowsView.render(testElement);
-        rows = testElement.find('tbody > tr');
+        const rows = testElement.find('tbody > tr');
 
         // act
         rows.eq(1).trigger('dxclick');
@@ -1951,7 +1900,6 @@ QUnit.module('Rows view', {
         const dataController = new MockDataController({ items: this.items });
         const rowsView = this.createRowsView(this.items, dataController);
         const testElement = $('#container');
-        let cells;
         let cellClickArgs;
 
         this.options.onCellClick = function(options) {
@@ -1960,7 +1908,7 @@ QUnit.module('Rows view', {
 
         rowsView.optionChanged({ name: 'onCellClick' });
         rowsView.render(testElement);
-        cells = testElement.find('td');
+        const cells = testElement.find('td');
 
         // act
         cells.eq(0).trigger('dxclick');
@@ -1978,7 +1926,6 @@ QUnit.module('Rows view', {
     });
 
     QUnit.test('onRowDblClick event handling', function(assert) {
-        let $rowElement;
         const dataController = new MockDataController({ items: this.items });
         const rowsView = this.createRowsView(this.items, dataController);
         const $testElement = $('#container');
@@ -1990,7 +1937,7 @@ QUnit.module('Rows view', {
 
         rowsView.optionChanged({ name: 'onRowDblClick' });
         rowsView.render($testElement);
-        $rowElement = $(rowsView.getRowElement(1));
+        const $rowElement = $(rowsView.getRowElement(1));
 
         // act
         $rowElement.trigger('dxdblclick');
@@ -2008,7 +1955,6 @@ QUnit.module('Rows view', {
     });
 
     QUnit.test('onCellDblClick event handling', function(assert) {
-        let $cellElement;
         const dataController = new MockDataController({ items: this.items });
         const rowsView = this.createRowsView(this.items, dataController);
         const $testElement = $('#container');
@@ -2020,7 +1966,7 @@ QUnit.module('Rows view', {
 
         rowsView.optionChanged({ name: 'onCellDblClick' });
         rowsView.render($testElement);
-        $cellElement = $(rowsView.getCellElement(0, 0));
+        const $cellElement = $(rowsView.getCellElement(0, 0));
 
         // act
         $cellElement.trigger('dxdblclick');
@@ -2064,13 +2010,11 @@ QUnit.module('Rows view', {
     // arrange
         const rowsView = this.createRowsView(this.items);
         let oldTableHeight;
-        let oldFunc;
-        let $table;
         const $testElement = $('#container');
 
         // act
         $testElement.height(300);
-        oldFunc = rowsView._renderScrollable;
+        const oldFunc = rowsView._renderScrollable;
         rowsView._renderScrollable = function() {
             oldTableHeight = this._getTableElement().height();
             oldFunc.call(rowsView);
@@ -2093,7 +2037,7 @@ QUnit.module('Rows view', {
         // act
         rowsView.height(300);
         rowsView.resize();
-        $table = $testElement.find('table');
+        const $table = $testElement.find('table');
 
         // assert
         assert.equal(rowsView._getFreeSpaceRowElements().css('display'), 'table-row', 'display style is table-row');
@@ -2255,7 +2199,6 @@ QUnit.module('Rows view', {
     QUnit.test('Free space row has not hover', function(assert) {
         const dataController = new MockDataController({ items: this.items });
         const rowsView = this.createRowsView(this.items, dataController);
-        let freeSpaceRow;
         const testElement = $('#container');
 
         // act
@@ -2263,7 +2206,7 @@ QUnit.module('Rows view', {
         rowsView.render(testElement);
         rowsView.height(300);
         rowsView.resize();
-        freeSpaceRow = testElement.find('.dx-freespace-row').get(0);
+        const freeSpaceRow = testElement.find('.dx-freespace-row').get(0);
 
         // assert
         assert.ok(!$(freeSpaceRow).hasClass('dx-state-hover'), 'free space row has not hover');
@@ -2273,7 +2216,6 @@ QUnit.module('Rows view', {
     // arrange
         const dataController = new MockDataController({ items: this.items });
         const rowsView = this.createRowsView(this.items, dataController);
-        let freeSpaceRow;
         const testElement = $('#container');
 
         // act
@@ -2281,7 +2223,7 @@ QUnit.module('Rows view', {
         rowsView.render(testElement);
         rowsView.height(300);
         rowsView.resize();
-        freeSpaceRow = testElement.find('.dx-freespace-row').first();
+        const freeSpaceRow = testElement.find('.dx-freespace-row').first();
 
         // assert
         assert.ok(freeSpaceRow.hasClass('dx-column-lines'), 'has class dx-column-lines');
@@ -2291,7 +2233,6 @@ QUnit.module('Rows view', {
     // arrange
         const dataController = new MockDataController({ items: this.items });
         const rowsView = this.createRowsView(this.items, dataController);
-        let freeSpaceRow;
         const testElement = $('#container');
 
         // act
@@ -2299,7 +2240,7 @@ QUnit.module('Rows view', {
         rowsView.render(testElement);
         rowsView.height(300);
         rowsView.resize();
-        freeSpaceRow = testElement.find('.dx-freespace-row').first();
+        const freeSpaceRow = testElement.find('.dx-freespace-row').first();
 
         // assert
         assert.ok(!freeSpaceRow.hasClass('dx-column-lines'), 'not has class dx-column-lines');
@@ -2309,16 +2250,14 @@ QUnit.module('Rows view', {
     // arrange
         const dataController = new MockDataController({ items: this.items, pageSize: 10, pageIndex: 1, pageCount: 2 });
         const rowsView = this.createRowsView(this.items, dataController);
-        let freeSpaceRow;
-        let expectedHeight;
         const testElement = $('#container');
 
         // act
         rowsView.render(testElement);
         rowsView.resize();
 
-        freeSpaceRow = testElement.find('.dx-freespace-row').first();
-        expectedHeight = freeSpaceRow.height();
+        const freeSpaceRow = testElement.find('.dx-freespace-row').first();
+        const expectedHeight = freeSpaceRow.height();
 
         rowsView.updateFreeSpaceRowHeight();
 
@@ -2996,7 +2935,6 @@ QUnit.module('Rows view', {
         }];
         const dataController = new MockDataController({ items: rows });
         const rowsView = this.createRowsView(rows, dataController, [{ command: 'expand' }, {}]);
-        let $masterDetail;
         const testElement = $('#container');
 
         this.options.masterDetail = {
@@ -3005,7 +2943,7 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render(testElement);
-        $masterDetail = testElement.find('.dx-master-detail-cell');
+        const $masterDetail = testElement.find('.dx-master-detail-cell');
 
         assert.equal($masterDetail.parent().children().length, 1, 'cells inside detail row');
         assert.equal($masterDetail.attr('colspan'), 2, 'colspan');
@@ -3054,7 +2992,6 @@ QUnit.module('Rows view', {
         }];
         const dataController = new MockDataController({ items: rows });
         const rowsView = this.createRowsView(rows, dataController, [{ command: 'expand' }, {}]);
-        let $masterDetail;
         const testElement = $('#container');
 
         this.options.showRowLines = true;
@@ -3064,7 +3001,7 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render(testElement);
-        $masterDetail = testElement.find('.dx-master-detail-cell');
+        const $masterDetail = testElement.find('.dx-master-detail-cell');
 
         assert.ok($masterDetail.parent().hasClass('dx-row-lines'), 'add css class');
     });
@@ -3100,14 +3037,13 @@ QUnit.module('Rows view', {
     QUnit.test('Set rows opacity', function(assert) {
     // arrange
         const rowsView = this.createRowsView(this.items);
-        let cells;
         const testElement = $('#container');
 
         rowsView.render(testElement);
 
         // act
         rowsView.setRowsOpacity(1, 0.5);
-        cells = getCells(testElement);
+        const cells = getCells(testElement);
 
         // assert
         assert.equal(cells.eq(0).css('opacity'), 1, 'row 1 cell 2 opacity 1');
@@ -3131,7 +3067,6 @@ QUnit.module('Rows view', {
             [{ caption: 'Column 3', index: 4, ownerBand: 3 }],
             [{ caption: 'Column 1', index: 1, ownerBand: 0 }, { caption: 'Column 2', index: 2, ownerBand: 0 }, { caption: 'Column 3', index: 4, ownerBand: 3 }]
         ]);
-        let $cells;
         const $testElement = $('#container');
 
         rowsView._columnsController.getColumns = function() {
@@ -3141,7 +3076,7 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.setRowsOpacity(0, 0.5);
-        $cells = getCells($testElement);
+        const $cells = getCells($testElement);
 
         // assert
         assert.equal($cells.eq(0).css('opacity'), 0.5, 'opacity of the first cell of the first row');
@@ -3158,7 +3093,6 @@ QUnit.module('Rows view', {
     QUnit.test('Rows with option showColumnLines true', function(assert) {
     // arrange
         const rowsView = this.createRowsView(this.items);
-        let rows;
         const testElement = $('#container');
 
         this.options.showColumnLines = true;
@@ -3166,7 +3100,7 @@ QUnit.module('Rows view', {
         // act
         rowsView.render(testElement);
 
-        rows = rowsView._getRowElements();
+        const rows = rowsView._getRowElements();
 
         // assert
         assert.ok(rows.eq(0).hasClass('dx-column-lines'), 'has class dx-column-lines');
@@ -3177,7 +3111,6 @@ QUnit.module('Rows view', {
     QUnit.test('Rows with option showColumnLines false', function(assert) {
     // arrange
         const rowsView = this.createRowsView(this.items);
-        let rows;
         const testElement = $('#container');
 
         this.options.showColumnLines = false;
@@ -3185,7 +3118,7 @@ QUnit.module('Rows view', {
         // act
         rowsView.render(testElement);
 
-        rows = rowsView._getRowElements();
+        const rows = rowsView._getRowElements();
 
         // assert
         assert.ok(!rows.eq(0).hasClass('dx-column-lines'), 'not has class dx-column-lines');
@@ -3196,7 +3129,6 @@ QUnit.module('Rows view', {
     QUnit.test('Rows with option showRowLines true', function(assert) {
     // arrange
         const rowsView = this.createRowsView(this.items);
-        let rows;
         const testElement = $('#container');
 
         this.options.showRowLines = true;
@@ -3204,7 +3136,7 @@ QUnit.module('Rows view', {
         // act
         rowsView.render(testElement);
 
-        rows = rowsView._getRowElements();
+        const rows = rowsView._getRowElements();
 
         // assert
         assert.ok(rows.eq(0).hasClass('dx-row-lines'), 'has class dx-row-lines');
@@ -3216,7 +3148,6 @@ QUnit.module('Rows view', {
     QUnit.test('Rows with option showRowLines false', function(assert) {
     // arrange
         const rowsView = this.createRowsView(this.items);
-        let rows;
         const testElement = $('#container');
 
         this.options.showRowLines = false;
@@ -3224,7 +3155,7 @@ QUnit.module('Rows view', {
         // act
         rowsView.render(testElement);
 
-        rows = rowsView._getRowElements();
+        const rows = rowsView._getRowElements();
 
         // assert
         assert.ok(!rows.eq(0).hasClass('dx-row-lines'), 'not has class dx-row-lines');
@@ -3235,7 +3166,6 @@ QUnit.module('Rows view', {
     QUnit.test('Rows with option rowAlternationEnabled true', function(assert) {
     // arrange
         const rowsView = this.createRowsView(this.items);
-        let rows;
         const testElement = $('#container');
 
         this.options.rowAlternationEnabled = true;
@@ -3243,7 +3173,7 @@ QUnit.module('Rows view', {
         // act
         rowsView.render(testElement);
 
-        rows = rowsView._getRowElements();
+        const rows = rowsView._getRowElements();
 
         // assert
         assert.ok(!rows.eq(0).hasClass('dx-row-alt'), 'not has class dx-row-alt');
@@ -3268,7 +3198,6 @@ QUnit.module('Rows view', {
             data: { isContinuation: true, name: 'test', id: 3, date: new Date(2003, 2, 3) }, values: ['test', 3, '3/03/2003'], rowType: 'data', dataIndex: 1
         }];
         const rowsView = this.createRowsView(items, null, [{ dataField: 'name', caption: 'Name', groupIndex: 0 }, 'id', 'date']);
-        let rows;
         const testElement = $('#container');
 
         this.options.rowAlternationEnabled = true;
@@ -3276,7 +3205,7 @@ QUnit.module('Rows view', {
         // act
         rowsView.render(testElement);
 
-        rows = rowsView._getRowElements();
+        const rows = rowsView._getRowElements();
 
         // assert
         assert.ok(!rows.eq(0).hasClass('dx-row-alt'), 'not has class dx-row-alt');
@@ -3288,7 +3217,6 @@ QUnit.module('Rows view', {
     QUnit.test('Rows with option rowAlternationEnabled false', function(assert) {
     // arrange
         const rowsView = this.createRowsView(this.items);
-        let rows;
         const testElement = $('#container');
 
         this.options.rowAlternationEnabled = false;
@@ -3296,7 +3224,7 @@ QUnit.module('Rows view', {
         // act
         rowsView.render(testElement);
 
-        rows = rowsView._getRowElements();
+        const rows = rowsView._getRowElements();
 
         // assert
         assert.ok(!rows.eq(0).hasClass('dx-row-alt'), 'not has class dx-row-alt');
@@ -3307,7 +3235,6 @@ QUnit.module('Rows view', {
     QUnit.test('Rows with option onCellPrepared', function(assert) {
     // arrange
         const rowsView = this.createRowsView(this.items);
-        let rows;
         const testElement = $('#container');
         let resultCell;
         let resultOptions;
@@ -3325,7 +3252,7 @@ QUnit.module('Rows view', {
         // act
         rowsView.render(testElement);
 
-        rows = rowsView._getRowElements();
+        const rows = rowsView._getRowElements();
 
         // assert
         assert.equal(this.dataGrid.__actionConfigs.onCellPrepared.category, 'rendering', 'onCellPrepared category');
@@ -3435,9 +3362,7 @@ QUnit.module('Rows view', {
         const rows = [{ rowType: 'data', values: [false, 'test1', 1, '1/01/2001'] }, { rowType: 'data', values: [true, 'test2', 2, '2/02/2002'] }, { rowType: 'data', values: [false, 'test3', 3, '3/03/2003'] }];
         const dataController = new MockDataController({ items: rows, selection: { mode: 'multiple', showCheckBoxesMode: 'always' } });
         const rowsView = this.createRowsView(this.items, dataController, [{ command: 'select', dataType: 'boolean' }, {}, {}, {}]);
-        let rowsElements;
         const testElement = $('#container');
-        let checkBoxes;
         let countCallCellPrepared = 0;
 
         this.options.onCellPrepared = function(options) {
@@ -3450,8 +3375,8 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render(testElement);
-        rowsElements = rowsView._getRowElements();
-        checkBoxes = testElement.find('.dx-checkbox');
+        const rowsElements = rowsView._getRowElements();
+        const checkBoxes = testElement.find('.dx-checkbox');
 
         // assert
         assert.equal(countCallCellPrepared, 12, 'countCallCellPrepared');
@@ -3464,7 +3389,6 @@ QUnit.module('Rows view', {
         const rows = [{ rowType: 'group', groupIndex: 0, isExpanded: true, values: [1], data: { isContinuationOnNextPage: true } }, { rowType: 'group', groupIndex: 1, isExpanded: false, values: [1, 2] }, { rowType: 'data', values: ['', '', 3] }];
         const dataController = new MockDataController({ items: rows });
         const rowsView = this.createRowsView(rows, dataController, [{ groupIndex: 0, caption: 'column 1', allowCollapsing: true }, { groupIndex: 1, caption: 'column 2', allowCollapsing: true }, {}]);
-        let rowsElements;
         const testElement = $('#container');
         let resultCell;
         let countCallCellPrepared = 0;
@@ -3480,7 +3404,7 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render(testElement);
-        rowsElements = rowsView._getRowElements();
+        const rowsElements = rowsView._getRowElements();
 
         // assert
         assert.equal(countCallCellPrepared, 8, 'countCallCellPrepared');
@@ -3491,7 +3415,6 @@ QUnit.module('Rows view', {
     QUnit.test('Rows with option onRowPrepared', function(assert) {
     // arrange
         const rowsView = this.createRowsView(this.items);
-        let rows;
         const testElement = $('#container');
         let resultRow;
         let resultOptions;
@@ -3509,7 +3432,7 @@ QUnit.module('Rows view', {
         // act
         rowsView.render(testElement);
 
-        rows = rowsView._getRowElements();
+        const rows = rowsView._getRowElements();
 
         // assert
         assert.equal(this.dataGrid.__actionConfigs.onRowPrepared.category, 'rendering', 'onRowPrepared category');
@@ -3580,12 +3503,11 @@ QUnit.module('Rows view', {
     // arrange
         const items = [{ values: ['text', '<b><i>italic</i></b>'] }];
         const rowsView = this.createRowsView(items, null, [{ caption: 'Column 1' }, { caption: 'Column 2', encodeHtml: false }]);
-        let $b;
         const testElement = $('#container');
 
         // act
         rowsView.render(testElement);
-        $b = testElement.find('.dx-row b');
+        const $b = testElement.find('.dx-row b');
 
         // assert
         assert.equal($b.length, 1);
@@ -3596,12 +3518,11 @@ QUnit.module('Rows view', {
     // arrange
         const items = [{ values: ['text', '<b><i>italic</i></b>'] }];
         const rowsView = this.createRowsView(items, null, [{ caption: 'Column 1' }, { caption: 'Column 2', encodeHtml: true }]);
-        let $cells;
         const testElement = $('#container');
 
         // act
         rowsView.render(testElement);
-        $cells = testElement.find('.dx-row td');
+        const $cells = testElement.find('.dx-row td');
 
         // assert
         assert.equal($cells.eq(1).text(), '<b><i>italic</i></b>');
@@ -3611,12 +3532,11 @@ QUnit.module('Rows view', {
     // arrange
         const items = [{ rowType: 'group', groupIndex: 0, values: ['<b><i>italic</i></b>', 'text2'] }];
         const rowsView = this.createRowsView(items, null, [{ caption: 'Column 1', encodeHtml: false, groupIndex: 0 }, { caption: 'Column 2' }], true);
-        let $groupRow;
         const testElement = $('#container');
 
         // act
         rowsView.render(testElement);
-        $groupRow = $('.' + 'dx-group-row');
+        const $groupRow = $('.' + 'dx-group-row');
 
         // assert
         assert.equal($groupRow.length, 1);
@@ -3645,11 +3565,10 @@ QUnit.module('Rows view', {
         ] }, { values: ['text', 'text2'] }];
         const rowsView = this.createRowsView(items, null, [{ caption: 'Column 1', groupIndex: 0 }, { caption: 'Column 2' }], true);
         const testElement = $('#container');
-        let $groupRow;
 
         // act
         rowsView.render(testElement);
-        $groupRow = $('.' + 'dx-group-row');
+        const $groupRow = $('.' + 'dx-group-row');
 
         assert.equal($groupRow.first().text(), 'Column 1: 1 (Sum: $1, 1-Count, Count: 1)');
     });
@@ -3668,11 +3587,10 @@ QUnit.module('Rows view', {
         ] }, { values: ['text', 'text2'] }];
         const rowsView = this.createRowsView(items, null, [{ caption: 'Column 1', groupIndex: 0 }, { caption: 'Column 2' }], true);
         const testElement = $('#container');
-        let $groupRow;
 
         // act
         rowsView.render(testElement);
-        $groupRow = $('.' + 'dx-group-row');
+        const $groupRow = $('.' + 'dx-group-row');
 
         assert.equal($groupRow.first().text(), 'Column 1: 1 (Column1 Sum: 1)');
     });
@@ -3698,11 +3616,10 @@ QUnit.module('Rows view', {
         }, { values: ['text', 'text2'] }];
         const rowsView = this.createRowsView(items, null, [{ command: 'expand', groupIndex: 0, caption: 'Column 1' }, {}, { caption: 'Column 2' }, { caption: 'Column 3' }], true);
         const testElement = $('#container');
-        let $groupRowCells;
 
         // act
         rowsView.render(testElement);
-        $groupRowCells = $('.' + 'dx-group-row').first().children();
+        const $groupRowCells = $('.' + 'dx-group-row').first().children();
 
         assert.equal($groupRowCells.length, 3);
         assert.equal($groupRowCells.eq(1).text(), 'Column 1: 1 (Column1 Sum: 1)', 'group cell text');
@@ -3736,11 +3653,10 @@ QUnit.module('Rows view', {
         }, { values: ['text', 'text2'] }];
         const rowsView = this.createRowsView(items, null, [{ command: 'expand', groupIndex: 0, caption: 'Column 1' }, {}, { caption: 'Column 2' }, { caption: 'Column 3' }], true);
         const testElement = $('#container');
-        let $groupRowCells;
 
         // act
         rowsView.render(testElement);
-        $groupRowCells = $('.' + 'dx-group-row').first().children();
+        const $groupRowCells = $('.' + 'dx-group-row').first().children();
 
         assert.equal($groupRowCells.length, 4);
         assert.equal($groupRowCells.eq(1).text(), 'Column 1: 1 (Column1 Sum: 1)', 'group cell text');
@@ -3776,11 +3692,10 @@ QUnit.module('Rows view', {
         }, { values: ['text', 'text2'] }];
         const rowsView = this.createRowsView(items, null, [{ command: 'expand', groupIndex: 0, caption: 'Column 1' }, {}, { groupIndex: null, caption: 'Column 2' }, { caption: 'Columns 3', groupIndex: null }, { groupIndex: null, caption: 'Column 4' }], true);
         const testElement = $('#container');
-        let $groupRowCells;
 
         // act
         rowsView.render(testElement);
-        $groupRowCells = $('.' + 'dx-group-row').first().children();
+        const $groupRowCells = $('.' + 'dx-group-row').first().children();
 
         assert.equal($groupRowCells.length, 5);
         assert.equal($groupRowCells.eq(1).text(), 'Column 1: 1 (Column1 Sum: 1)', 'group cell text');
@@ -3796,11 +3711,10 @@ QUnit.module('Rows view', {
             { values: ['text', 'text2'] }];
         const rowsView = this.createRowsView(items, null, [{ caption: 'Column 1', groupIndex: 0 }, { caption: 'Column 2' }], true);
         const testElement = $('#container');
-        let $groupRow;
 
         // act
         rowsView.render(testElement);
-        $groupRow = $('.' + 'dx-group-row');
+        const $groupRow = $('.' + 'dx-group-row');
 
         assert.equal($groupRow.first().text(), 'Column 1: 1');
     });
@@ -3841,9 +3755,6 @@ QUnit.module('Rows view', {
         const rows = [{ rowType: 'data', values: [true, 1] }, { rowType: 'detail', data: { detailInfo: 'Test Detail Information' } }];
         const dataController = new MockDataController({ items: rows });
         const rowsView = that.createRowsView(rows, dataController, [{ command: 'expand' }, {}]);
-        let $colgroup;
-        let $cols1;
-        let $cols2;
         const testElement = $('#container');
         let detailDataGrid;
 
@@ -3860,9 +3771,9 @@ QUnit.module('Rows view', {
         // act
         rowsView.render(testElement);
         rowsView.setColumnWidths({ widths: [100, 100] });
-        $colgroup = $(rowsView.element().find('colgroup'));
-        $cols1 = $colgroup.eq(0).children();
-        $cols2 = $colgroup.eq(1).children();
+        const $colgroup = $(rowsView.element().find('colgroup'));
+        const $cols1 = $colgroup.eq(0).children();
+        const $cols2 = $colgroup.eq(1).children();
 
         // assert
         assert.equal($colgroup.length, 2);
@@ -3961,7 +3872,6 @@ QUnit.module('Rows view', {
     // T349039
     QUnit.test('Rows view (with wordWrapEnabled is true) in container with \'nowrap\' value of the white-space property', function(assert) {
     // arrange
-        let $rowsViewElement;
         const rowsView = this.createRowsView([{ values: [1, 2, 3, 4, 5] }], null, [{ caption: 'Column 1', width: 30 }, { caption: 'Column 2', width: 50 }, { caption: 'Column 3', width: 73 },
             { caption: 'Column 4' }, { caption: 'Column 5', width: 91 }]);
         const $testElement = $('#container');
@@ -3973,7 +3883,7 @@ QUnit.module('Rows view', {
         rowsView.render($testElement);
 
         // assert
-        $rowsViewElement = $(rowsView.element());
+        const $rowsViewElement = $(rowsView.element());
         assert.ok(!$rowsViewElement.hasClass('dx-datagrid-nowrap'));
         assert.strictEqual($rowsViewElement.find('tbody > tr').find('td').first().css('whiteSpace'), 'normal', 'value of the white-space property');
     });
@@ -3982,7 +3892,6 @@ QUnit.module('Rows view', {
     QUnit.test('Render free space row with rowTemplate', function(assert) {
     // arrange
         const rowsView = this.createRowsView(this.items);
-        let $tableElement;
         const $testElement = $('#container');
 
         this.options.rowTemplate = function(container, options) {
@@ -3994,7 +3903,7 @@ QUnit.module('Rows view', {
         rowsView.render($testElement);
 
         // assert
-        $tableElement = $testElement.find('table');
+        const $tableElement = $testElement.find('table');
 
         // TODO is it necessary to remove our tbody? Maybe remove tbody if rowTemplate defined? Or if template define its own tbody - user must remove our tbody
         assert.equal($tableElement.children('tbody').length, 4, 'count tbody');
@@ -4093,7 +4002,6 @@ QUnit.module('Rows view with real dataController and columnController', {
     QUnit.test('onCellHoverChanged event handling', function(assert) {
     // arrange
         const testElement = $('#container');
-        let cells;
         let onCellHoverChanged;
 
         this.options.dataSource = {
@@ -4112,7 +4020,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         this.setupDataGridModules();
 
         this.rowsView.render(testElement);
-        cells = testElement.find('td');
+        const cells = testElement.find('td');
 
         // act
         cells.eq(0).trigger('mouseover');
@@ -4466,8 +4374,6 @@ QUnit.module('Rows view with real dataController and columnController', {
         const that = this;
         let scrollOffsetChangedCallCount = 0;
 
-        let scrollTop;
-        let timeoutID;
         this.rowsView.scrollChanged.add(function(e) {
             scrollOffsetChangedCallCount++;
             if(scrollOffsetChangedCallCount === 1) {
@@ -4476,8 +4382,8 @@ QUnit.module('Rows view with real dataController and columnController', {
                     that.dataController.filter(['age', '>', 10]);
                 });
             } else {
-                scrollTop = e.top;
-                timeoutID = timeoutID || setTimeout(function() {
+                const scrollTop = e.top;
+                const timeoutID = timeoutID || setTimeout(function() {
                     assert.equal(scrollTop, 0, 'scroll position is 0');
                     done();
                 });
@@ -4683,8 +4589,6 @@ QUnit.module('Rows view with real dataController and columnController', {
     // arrange
         const that = this;
         const testElement = $('#container').height(600);
-        let rows;
-        let freeSpaceRow;
 
         that.options.columns = [{ dataField: 'name', cssClass: 'customCssClass' }, 'age'];
 
@@ -4699,7 +4603,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         // act
         that.rowsView.render(testElement);
 
-        rows = that.rowsView._getRowElements();
+        const rows = that.rowsView._getRowElements();
 
         // assert
         assert.equal(rows.length, 3, 'count rows');
@@ -4713,7 +4617,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         assert.ok(!rows.eq(2).find('td').last().hasClass('customCssClass'), 'not has class customCssClass');
 
         // B254956
-        freeSpaceRow = testElement.find('.dx-datagrid-rowsview').first().find('.dx-freespace-row');
+        const freeSpaceRow = testElement.find('.dx-datagrid-rowsview').first().find('.dx-freespace-row');
         assert.ok(freeSpaceRow.length, 'free space row');
         assert.ok(freeSpaceRow.find('td').first().hasClass('customCssClass'), 'has class customCssClass');
         assert.ok(!freeSpaceRow.find('td').last().hasClass('customCssClass'), 'not has class customCssClass');
@@ -4755,7 +4659,6 @@ QUnit.module('Rows view with real dataController and columnController', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let rows;
 
         that.options.columns = [{ dataField: 'name', groupIndex: 0, autoExpandGroup: true }, 'age'];
 
@@ -4770,7 +4673,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         // act
         that.rowsView.render(testElement);
 
-        rows = that.rowsView._getRowElements();
+        const rows = that.rowsView._getRowElements();
 
         // assert
         assert.equal(rows.length, 6, 'count rows');
@@ -4787,7 +4690,6 @@ QUnit.module('Rows view with real dataController and columnController', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let rows;
 
         that.options.columns = [{ dataField: 'name', groupIndex: 0, autoExpandGroup: false, calculateDisplayValue: function(data) { return data.name + ' ' + data.age; } }, 'age'];
 
@@ -4802,7 +4704,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         // act
         that.rowsView.render(testElement);
 
-        rows = that.rowsView._getRowElements();
+        const rows = that.rowsView._getRowElements();
 
         // assert
         assert.equal(rows.length, 3, 'count rows');
@@ -4814,7 +4716,6 @@ QUnit.module('Rows view with real dataController and columnController', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let rows;
 
         that.options.columns = [{ dataField: 'name', groupIndex: 0, autoExpandGroup: false, calculateDisplayValue: 'fullName' }, 'age'];
 
@@ -4829,7 +4730,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         // act
         that.rowsView.render(testElement);
 
-        rows = that.rowsView._getRowElements();
+        const rows = that.rowsView._getRowElements();
 
         // assert
         assert.equal(rows.length, 3, 'count rows');
@@ -4840,7 +4741,6 @@ QUnit.module('Rows view with real dataController and columnController', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let rows;
 
         that.options.columns = [{
             dataField: 'name', groupIndex: 0, autoExpandGroup: false, lookup: {
@@ -4864,7 +4764,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         // act
         that.rowsView.render(testElement);
 
-        rows = that.rowsView._getRowElements();
+        const rows = that.rowsView._getRowElements();
 
         // assert
         assert.equal(rows.length, 3, 'count rows');
@@ -4875,7 +4775,6 @@ QUnit.module('Rows view with real dataController and columnController', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let rows;
 
         that.options.columns = ['name', 'age'];
 
@@ -4900,7 +4799,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         // act
         that.rowsView.render(testElement);
 
-        rows = that.rowsView._getRowElements();
+        const rows = that.rowsView._getRowElements();
 
         // assert
         assert.equal(rows.length, 3, 'count rows');
@@ -4913,8 +4812,6 @@ QUnit.module('Rows view with real dataController and columnController', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let $colGroups;
-        let $cols;
 
         that.options.columns = ['name', 'age', 'cash'];
         that.options.scrolling = {
@@ -4940,8 +4837,8 @@ QUnit.module('Rows view with real dataController and columnController', {
         that.rowsView._contentHeight = 0;
         that.rowsView.render();
 
-        $colGroups = $('colgroup');
-        $cols = $colGroups.eq(0).find('col');
+        const $colGroups = $('colgroup');
+        const $cols = $colGroups.eq(0).find('col');
 
         // assert
         assert.equal($cols[0].style.width, '13px', 'colgroup2 col 1');
@@ -4953,7 +4850,6 @@ QUnit.module('Rows view with real dataController and columnController', {
     // arrange
         const that = this;
         const testElement = $('#container');
-        let rows;
 
         that.options.columns = ['name', 'age'];
 
@@ -4980,7 +4876,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         // act
         that.rowsView.render(testElement);
 
-        rows = that.rowsView._getRowElements();
+        const rows = that.rowsView._getRowElements();
 
         // assert
         assert.equal(rows.length, 3, 'count rows');
@@ -5106,8 +5002,6 @@ QUnit.module('Rows view with real dataController and columnController', {
     QUnit.test('Show summary in a group row for column going after a grouped column', function(assert) {
     // arrange
         const testElement = $('#container');
-        let $rowElement;
-        let $cellElements;
 
         this.options.columns[0] = { dataField: 'name', groupIndex: 0 };
         this.options.summary = {
@@ -5127,8 +5021,8 @@ QUnit.module('Rows view with real dataController and columnController', {
         // act
         this.rowsView.render(testElement);
 
-        $rowElement = testElement.find('tbody > tr').first();
-        $cellElements = $rowElement.find('td');
+        const $rowElement = testElement.find('tbody > tr').first();
+        const $cellElements = $rowElement.find('td');
 
         // assert
         assert.ok($rowElement.hasClass('dx-group-row'), 'group row');
@@ -5140,8 +5034,6 @@ QUnit.module('Rows view with real dataController and columnController', {
     QUnit.test('Show summary in a group row with showWhenGrouped true', function(assert) {
     // arrange
         const testElement = $('#container');
-        let $rowElement;
-        let $cellElements;
 
         this.options.dataSource.store = [{ name: 'Alex', lastName: 'Jobs', age: 15 }];
         this.options.columns = ['name', 'lastName', { dataField: 'age', groupIndex: 0, showWhenGrouped: true }];
@@ -5168,8 +5060,8 @@ QUnit.module('Rows view with real dataController and columnController', {
         // act
         this.rowsView.render(testElement);
 
-        $rowElement = testElement.find('tbody > tr').first();
-        $cellElements = $rowElement.find('td');
+        const $rowElement = testElement.find('tbody > tr').first();
+        const $cellElements = $rowElement.find('td');
 
         // assert
         assert.ok($rowElement.hasClass('dx-group-row'), 'group row');
@@ -5183,8 +5075,6 @@ QUnit.module('Rows view with real dataController and columnController', {
     QUnit.test('Show summary in a group row for column going after a grouped column with showWhenGrouped true', function(assert) {
     // arrange
         const testElement = $('#container');
-        let $rowElement;
-        let $cellElements;
 
         this.options.columns[0] = { dataField: 'name', groupIndex: 0, showWhenGrouped: true };
         this.options.summary = {
@@ -5204,8 +5094,8 @@ QUnit.module('Rows view with real dataController and columnController', {
         // act
         this.rowsView.render(testElement);
 
-        $rowElement = testElement.find('tbody > tr').first();
-        $cellElements = $rowElement.find('td');
+        const $rowElement = testElement.find('tbody > tr').first();
+        const $cellElements = $rowElement.find('td');
 
         // assert
         assert.ok($rowElement.hasClass('dx-group-row'), 'group row');
@@ -5218,8 +5108,6 @@ QUnit.module('Rows view with real dataController and columnController', {
     QUnit.test('Show summary in a group row for column going after a grouped column with showWhenGrouped true and when has master detail', function(assert) {
     // arrange
         const testElement = $('#container');
-        let $rowElement;
-        let $cellElements;
 
         this.options.columns[0] = { dataField: 'name', groupIndex: 0, showWhenGrouped: true };
         this.options.masterDetail = {
@@ -5247,8 +5135,8 @@ QUnit.module('Rows view with real dataController and columnController', {
         // act
         this.rowsView.render(testElement);
 
-        $rowElement = testElement.find('tbody > tr').first();
-        $cellElements = $rowElement.find('td');
+        const $rowElement = testElement.find('tbody > tr').first();
+        const $cellElements = $rowElement.find('td');
 
         // assert
         assert.ok($rowElement.hasClass('dx-group-row'), 'group row');
@@ -5262,7 +5150,6 @@ QUnit.module('Rows view with real dataController and columnController', {
     QUnit.test('Show master detail with rowTemplate', function(assert) {
     // arrange
         const testElement = $('#container');
-        let $rowElements;
 
         this.options.masterDetail = {
             enabled: true,
@@ -5283,7 +5170,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         this.expandRow(this.getKeyByRowIndex(0));
 
         // assert
-        $rowElements = testElement.find('tbody > tr');
+        const $rowElements = testElement.find('tbody > tr');
 
         assert.equal($rowElements.length, 9, 'row count');
         assert.equal($rowElements.eq(0).children().eq(1).text(), 'Alex');
@@ -5469,7 +5356,6 @@ QUnit.module('Rows view with real dataController and columnController', {
     QUnit.test('Group row with the custom position of the group cell', function(assert) {
     // arrange
         const $testElement = $('#container');
-        let $groupCellElements;
 
         this.options.grouping = { allowCollapsing: true };
         this.options.columns[0] = { dataField: 'name', groupIndex: 0 };
@@ -5483,7 +5369,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         this.rowsView.render($testElement);
 
         // assert
-        $groupCellElements = $(this.getRowElement(0)).children();
+        const $groupCellElements = $(this.getRowElement(0)).children();
         assert.strictEqual($groupCellElements.length, 3, 'group cell count');
         assert.ok($groupCellElements.eq(0).hasClass('dx-datagrid-group-space'), 'first cell is empty');
         assert.ok($groupCellElements.eq(1).hasClass('dx-datagrid-expand'), 'second cell is expandable');
@@ -5493,7 +5379,6 @@ QUnit.module('Rows view with real dataController and columnController', {
     // T712541
     QUnit.test('Rows should be rendered properly on scrolling when virtual scrolling is enabled and a row template is used', function(assert) {
     // arrange
-        let scrollable;
         const clock = sinon.useFakeTimers();
         const $testElement = $('#container');
         const store = new ArrayStore(generateItems(10000));
@@ -5532,7 +5417,7 @@ QUnit.module('Rows view with real dataController and columnController', {
             this.rowsView.height(200);
             this.rowsView.resize();
 
-            scrollable = this.rowsView._scrollable;
+            const scrollable = this.rowsView._scrollable;
             scrollable.scrollTo({ y: 2500 });
             $(scrollable._container()).trigger('scroll');
             clock.tick(500);
@@ -5597,7 +5482,6 @@ QUnit.module('Virtual scrolling', {
         const dataController = new MockDataController(options);
         const rowsView = this.createRowsView(options.items, dataController);
         const testElement = $('#container');
-        let $virtualRows;
 
         // act
         this.options.scrolling = {
@@ -5618,7 +5502,7 @@ QUnit.module('Virtual scrolling', {
         assert.equal(content.children().eq(0)[0].tagName, 'TABLE');
         assert.equal(content.children().eq(0).find('tbody > tr').length, 6, '3 data row + 1 freespace row + 2 virtual row');
 
-        $virtualRows = content.children().eq(0).find('.dx-virtual-row');
+        const $virtualRows = content.children().eq(0).find('.dx-virtual-row');
         assert.roughEqual($virtualRows.eq(0).height(), rowHeight * 10, 1);
         assert.roughEqual($virtualRows.eq(1).height(), rowHeight * 7, 1);
         assert.equal(content.children().eq(1).find('.' + 'dx-datagrid-group-space').length, 0, 'group space class');
@@ -6419,7 +6303,6 @@ QUnit.module('Virtual scrolling', {
         const rows = [{ rowType: 'data', values: [true, 1] }, { rowType: 'detail', data: { detailInfo: 'Test Detail Information' } }];
         const dataController = new MockDataController({ items: rows, virtualItemsCount: { begin: 10, end: 10 } });
         const rowsView = this.createRowsView(rows, dataController, [{ command: 'expand' }, {}]);
-        let $tables;
         const testElement = $('#container');
 
         this.options.scrolling = {
@@ -6429,7 +6312,7 @@ QUnit.module('Virtual scrolling', {
         // act
         rowsView.render(testElement);
         rowsView.resize();
-        $tables = testElement.find('table');
+        const $tables = testElement.find('table');
 
         // assert
         assert.equal($tables.eq(0).find('.dx-virtual-row .dx-datagrid-group-space').length, 2);
@@ -6456,7 +6339,6 @@ QUnit.module('Virtual scrolling', {
             }
         });
         const rowsView = this.createRowsView(rows, dataController, ['col1', 'col2', 'col3']);
-        let $tables;
         const testElement = $('#container');
 
         this.options.scrolling = {
@@ -6479,7 +6361,7 @@ QUnit.module('Virtual scrolling', {
         });
 
         // assert
-        $tables = $('.dx-datagrid-table');
+        const $tables = $('.dx-datagrid-table');
         assert.equal($tables.length, 1, 'one table with content');
         assert.equal($tables.eq(0).find('col').length, 2, 'table with content');
     });
@@ -6505,7 +6387,6 @@ QUnit.module('Virtual scrolling', {
             }
         });
         const rowsView = this.createRowsView(rows, dataController, ['col1', 'col2', 'col3']);
-        let $cellWithColumnLines;
         const testElement = $('#container');
 
         this.options.showColumnLines = true;
@@ -6526,13 +6407,12 @@ QUnit.module('Virtual scrolling', {
         rowsView.endUpdate();
 
         // assert
-        $cellWithColumnLines = $('.dx-datagrid-table .dx-column-lines');
+        const $cellWithColumnLines = $('.dx-datagrid-table .dx-column-lines');
         assert.equal($cellWithColumnLines.length, 0, 'cells with column lines class');
     });
 
     QUnit.test('Set column widths for virtual table', function(assert) {
     // arrange
-        let $colElements;
         const options = {
             items: [
                 { values: [1, 2, 3] },
@@ -6558,7 +6438,7 @@ QUnit.module('Virtual scrolling', {
         rowsView.setColumnWidths({ widths: [10, 20, 30] });
 
         // assert
-        $colElements = $testElement.find('table:not(.dx-datagrid-table-content)').find('col');
+        const $colElements = $testElement.find('table:not(.dx-datagrid-table-content)').find('col');
         assert.equal($colElements.length, 3, 'count col');
         assert.equal($colElements[0].style.width, '10px', 'width of the first col');
         assert.equal($colElements[1].style.width, '20px', 'width of the second col');
@@ -6639,7 +6519,6 @@ QUnit.module('Virtual scrolling', {
             }
         });
         const done = assert.async();
-        let scrollTop;
         let $tableElement;
         const $testElement = $('#container');
 
@@ -6653,7 +6532,7 @@ QUnit.module('Virtual scrolling', {
         assert.equal($tableElement.find('tbody').length, 1, 'count page');
 
         // act
-        scrollTop = $tableElement.find('.dx-virtual-row').eq(0).height() - 50;
+        const scrollTop = $tableElement.find('.dx-virtual-row').eq(0).height() - 50;
         rowsView.scrollTo(scrollTop);
         options.items = [
             { rowType: 'data', values: [10] },
@@ -7004,12 +6883,11 @@ QUnit.module('No data text', {
             items: rows
         });
         const rowsView = this.createRowsView(rows, dataController);
-        let noDataElement;
 
         // act
         rowsView.render(container);
         rowsView.resize();
-        noDataElement = container.find('.dx-datagrid-nodata');
+        const noDataElement = container.find('.dx-datagrid-nodata');
         // assert
         assert.strictEqual(noDataElement.is('span'), true, 'valid noDataElement');
         assert.strictEqual(noDataElement.css('display'), 'none', 'noDataElement is hidden');
@@ -7026,11 +6904,10 @@ QUnit.module('No data text', {
             noDataText: 'No Data'
         });
         const rowsView = this.createRowsView(rows, dataController);
-        let noDataElement;
         // act
         rowsView.render(container);
         rowsView.resize();
-        noDataElement = container.find('.dx-datagrid-nodata');
+        const noDataElement = container.find('.dx-datagrid-nodata');
         // assert
         assert.strictEqual(noDataElement.is('span'), true, 'valid noDataElement');
         assert.ok(noDataElement.is(':visible'), 'noDataElement is visible');
@@ -7045,7 +6922,6 @@ QUnit.module('No data text', {
             items: []
         });
         const rowsView = this.createRowsView(rows, dataController);
-        let noDataElement;
 
         // act
         rowsView.render(container);
@@ -7053,7 +6929,7 @@ QUnit.module('No data text', {
         rowsView.height(50);
         rowsView.resize();
 
-        noDataElement = container.find('.dx-datagrid-nodata');
+        const noDataElement = container.find('.dx-datagrid-nodata');
         assert.ok(noDataElement.is(':visible'), 'noDataElement is visible');
     });
 
@@ -7066,7 +6942,6 @@ QUnit.module('No data text', {
             items: []
         });
         const rowsView = this.createRowsView(rows, dataController);
-        let noDataElement;
 
         this.options.noDataText = noDataText;
 
@@ -7075,7 +6950,7 @@ QUnit.module('No data text', {
         rowsView.height(21);
         rowsView.resize();
         // assert
-        noDataElement = container.find('.dx-datagrid-nodata');
+        const noDataElement = container.find('.dx-datagrid-nodata');
 
         assert.ok(noDataElement.is(':visible'), 'noDataElement is visible');
         assert.strictEqual(noDataElement.text(), noDataText);
@@ -7092,7 +6967,6 @@ QUnit.module('No data text', {
             items: []
         });
         const rowsView = this.createRowsView(rows, dataController);
-        let noDataElement;
 
         this.options.noDataText = 'Custom no data text';
         rowsView.render(container);
@@ -7100,7 +6974,7 @@ QUnit.module('No data text', {
         // act
         rowsView.height(50);
         rowsView.resize();
-        noDataElement = container.find('.dx-datagrid-nodata');
+        const noDataElement = container.find('.dx-datagrid-nodata');
 
         // assert
         assert.ok(noDataElement.is(':visible'), 'noDataElement is visible');
@@ -7135,14 +7009,13 @@ QUnit.module('Bottom Load Panel', {
             hasKnownLastPage: false
         });
         const rowsView = this.createRowsView(rows, dataController);
-        let bottomLoadPanel;
 
         this.options.scrolling = {
             appendMode: false
         };
         // act
         rowsView.render(container);
-        bottomLoadPanel = container.find('.dx-datagrid-bottom-load-panel');
+        const bottomLoadPanel = container.find('.dx-datagrid-bottom-load-panel');
 
         // assert
         assert.equal(bottomLoadPanel.length, 0);
@@ -7158,14 +7031,13 @@ QUnit.module('Bottom Load Panel', {
             isLoaded: true
         });
         const rowsView = this.createRowsView(rows, dataController);
-        let bottomLoadPanel;
 
         this.options.scrolling = {
             mode: 'infinite'
         };
         // act
         rowsView.render(container);
-        bottomLoadPanel = container.find('.dx-datagrid-bottom-load-panel');
+        const bottomLoadPanel = container.find('.dx-datagrid-bottom-load-panel');
 
         // assert
         assert.equal(bottomLoadPanel.length, 1);
@@ -7186,14 +7058,13 @@ QUnit.module('Bottom Load Panel', {
             hasKnownLastPage: false
         });
         const rowsView = this.createRowsView(rows, dataController);
-        let bottomLoadPanel;
 
         this.options.scrolling = {
             mode: 'virtual'
         };
         // act
         rowsView.render(container);
-        bottomLoadPanel = container.find('.dx-datagrid-bottom-load-panel');
+        const bottomLoadPanel = container.find('.dx-datagrid-bottom-load-panel');
         // rowsView.height(21);
         // assert
         assert.equal(bottomLoadPanel.length, 1);
@@ -7210,14 +7081,13 @@ QUnit.module('Bottom Load Panel', {
             isLoaded: true
         });
         const rowsView = this.createRowsView(rows, dataController);
-        let bottomLoadPanel;
 
         this.options.scrolling = {
             mode: 'infinite'
         };
         // act
         rowsView.render(container);
-        bottomLoadPanel = container.find('.dx-datagrid-bottom-load-panel');
+        const bottomLoadPanel = container.find('.dx-datagrid-bottom-load-panel');
 
         // assert
         assert.strictEqual(bottomLoadPanel.length, 0);
@@ -7234,7 +7104,6 @@ QUnit.module('Bottom Load Panel', {
         };
         const dataController = new MockDataController(options);
         const rowsView = this.createRowsView(rows, dataController);
-        let bottomLoadPanel;
 
         this.options.scrolling = {
             mode: 'infinite'
@@ -7246,7 +7115,7 @@ QUnit.module('Bottom Load Panel', {
         dataController.changed.fire({ items: [], changeType: 'append' });
 
         // assert
-        bottomLoadPanel = container.find('.dx-datagrid-bottom-load-panel');
+        const bottomLoadPanel = container.find('.dx-datagrid-bottom-load-panel');
         assert.strictEqual(bottomLoadPanel.length, 0);
     });
 
@@ -7295,7 +7164,6 @@ QUnit.module('Bottom Load Panel', {
             isLoaded: true
         });
         const rowsView = this.createRowsView(rows, dataController);
-        let bottomLoadPanel;
 
         this.options.loadPanel = {
             enabled: true
@@ -7307,7 +7175,7 @@ QUnit.module('Bottom Load Panel', {
 
         // act
         rowsView.setLoading(true);
-        bottomLoadPanel = container.find('.dx-datagrid-bottom-load-panel');
+        const bottomLoadPanel = container.find('.dx-datagrid-bottom-load-panel');
 
         // assert
         assert.strictEqual(bottomLoadPanel.length, 1);
@@ -7326,7 +7194,6 @@ QUnit.module('Bottom Load Panel', {
             isLoaded: true
         });
         const rowsView = this.createRowsView(rows, dataController);
-        let bottomLoadPanel;
 
         this.options.loadPanel = {
             enabled: true
@@ -7338,7 +7205,7 @@ QUnit.module('Bottom Load Panel', {
 
         // act
         rowsView.setLoading(true);
-        bottomLoadPanel = container.find('.dx-datagrid-bottom-load-panel');
+        const bottomLoadPanel = container.find('.dx-datagrid-bottom-load-panel');
 
         // assert
         assert.strictEqual(bottomLoadPanel.length, 1, 'bottom load panel is rendered');
@@ -7355,7 +7222,6 @@ QUnit.module('Bottom Load Panel', {
             isLoaded: false
         });
         const rowsView = this.createRowsView(rows, dataController);
-        let bottomLoadPanel;
 
         this.options.loadPanel = {
             enabled: true
@@ -7367,7 +7233,7 @@ QUnit.module('Bottom Load Panel', {
 
         // act
         rowsView.setLoading(true);
-        bottomLoadPanel = container.find('.dx-datagrid-bottom-load-panel');
+        const bottomLoadPanel = container.find('.dx-datagrid-bottom-load-panel');
 
         // assert
         assert.strictEqual(bottomLoadPanel.length, 0);
@@ -7555,7 +7421,6 @@ QUnit.module('Custom Loading', {
     // arrange
         const that = this;
         let $loadPanelElement;
-        let loadPanelPosition;
         const rows = [{ values: [1], data: { field: 1 } }];
         const dataController = new MockDataController({
             items: rows
@@ -7566,7 +7431,7 @@ QUnit.module('Custom Loading', {
 
         // assert
         $loadPanelElement = $('.dx-loadpanel-content');
-        loadPanelPosition = $loadPanelElement.position();
+        const loadPanelPosition = $loadPanelElement.position();
         assert.ok($loadPanelElement.length, 'has load panel');
         assert.ok(that.rowsView._loadPanel.option('visible'), 'visible load panel');
 

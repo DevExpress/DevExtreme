@@ -153,27 +153,24 @@ QUnit.module('API methods', {
         // arrange
         const that = this;
         const $container = $('#container').width(200);
-        let $table;
-        let firstCellElement;
-        let lastCellElement;
 
         that.option('cellHintEnabled', true);
         that.columns.length = 0;
         that.columns.push({ caption: 'Column 1', width: 100 });
         that.columns.push({ caption: 'Column 2', width: 100 });
 
-        $table = $(that.columnsView._createTable());
+        const $table = $(that.columnsView._createTable());
         $container.html($('<div class = \'dx-datagrid-rowsview dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td>Test</td><td>Test Test Test Test Test</td></tr>'))));
 
         // act
-        firstCellElement = $table.find('td').first();
+        const firstCellElement = $table.find('td').first();
         firstCellElement.trigger('mousemove');
 
         // assert
         assert.strictEqual(firstCellElement.attr('title'), undefined, 'not has attribute title in first cell');
 
         // act
-        lastCellElement = $table.find('td').last();
+        const lastCellElement = $table.find('td').last();
         lastCellElement.trigger('mousemove');
 
         // assert
@@ -185,27 +182,24 @@ QUnit.module('API methods', {
         // arrange
         const that = this;
         const $container = $('#container').width(200);
-        let $table;
-        let firstCellElement;
-        let lastCellElement;
 
         that.option('cellHintEnabled', false);
         that.columns.length = 0;
         that.columns.push({ caption: 'Column 1', width: 100 });
         that.columns.push({ caption: 'Column 2', width: 100 });
 
-        $table = $(that.columnsView._createTable());
+        const $table = $(that.columnsView._createTable());
         $container.html($('<div class = \'dx-datagrid-rowsview dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td>Test</td><td>Test Test Test Test Test</td></tr>'))));
 
         // act
-        firstCellElement = $table.find('td').first();
+        const firstCellElement = $table.find('td').first();
         firstCellElement.trigger('mousemove');
 
         // assert
         assert.strictEqual(firstCellElement.attr('title'), undefined, 'not has attribute title in first cell');
 
         // act
-        lastCellElement = $table.find('td').last();
+        const lastCellElement = $table.find('td').last();
         lastCellElement.trigger('mousemove');
 
         // assert
@@ -217,27 +211,24 @@ QUnit.module('API methods', {
         // arrange
         const that = this;
         const $container = $('#container').width(200);
-        let $table;
-        let firstCellElement;
-        let lastCellElement;
 
         that.option('cellHintEnabled', true);
         that.columns.length = 0;
         that.columns.push({ caption: 'Column 1', width: 100 });
         that.columns.push({ caption: 'Column 2', width: 100, cellTemplate: function() { } });
 
-        $table = $(that.columnsView._createTable());
+        const $table = $(that.columnsView._createTable());
         $container.html($('<div class = \'dx-datagrid-rowsview dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row dx-data-row"><td>Test Test Test Test Test</td><td>Test Test Test Test Test</td></tr>'))));
 
         // act
-        firstCellElement = $table.find('td').first();
+        const firstCellElement = $table.find('td').first();
         firstCellElement.trigger('mousemove');
 
         // assert
         assert.strictEqual(firstCellElement.attr('title'), 'Test Test Test Test Test', 'has attribute title in first cell');
 
         // act
-        lastCellElement = $table.find('td').last();
+        const lastCellElement = $table.find('td').last();
         lastCellElement.trigger('mousemove');
 
         // assert
@@ -249,9 +240,6 @@ QUnit.module('API methods', {
         // arrange
         const that = this;
         const $container = $('#container').width(100);
-        let $table;
-        let firstCellElement;
-        let lastCellElement;
 
         that.option('cellHintEnabled', true);
         that.columns.length = 0;
@@ -259,7 +247,7 @@ QUnit.module('API methods', {
         that.columns.push({ caption: 'Column 2', width: 50, groupIndex: 1, groupCellTemplate: function() { } });
         that.columns.push({ caption: 'Column 3', width: 50 });
 
-        $table = $(that.columnsView._createTable());
+        const $table = $(that.columnsView._createTable());
         $container.html($('<div class = \'dx-datagrid-rowsview dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns),
             $('<tr class = "dx-row dx-group-row"><td class="dx-datagrid-group-space"></td><td colspan="2">Test Test Test Test Test</td></tr>'),
             $('<tr class = "dx-row dx-group-row"><td class="dx-datagrid-group-space"></td><td class="dx-datagrid-group-space"></td><td>Test Test Test Test Test</td></tr>')
@@ -269,14 +257,14 @@ QUnit.module('API methods', {
         dataUtils.data($table.find('tr').get(1), 'options', { cells: [{}, {}, { column: that.columns[1] }] });
 
         // act
-        firstCellElement = $table.find('tr').eq(0).find('td').last();
+        const firstCellElement = $table.find('tr').eq(0).find('td').last();
         firstCellElement.trigger('mousemove');
 
         // assert
         assert.strictEqual(firstCellElement.attr('title'), 'Test Test Test Test Test', 'has attribute title in first group cell');
 
         // act
-        lastCellElement = $table.find('tr').eq(1).find('td').last();
+        const lastCellElement = $table.find('tr').eq(1).find('td').last();
         lastCellElement.trigger('mousemove');
 
         // assert
@@ -289,27 +277,24 @@ QUnit.module('API methods', {
         // arrange
         const that = this;
         const $container = $('#container').width(200);
-        let $table;
-        let firstCellElement;
-        let lastCellElement;
 
         that.option('cellHintEnabled', true);
         that.columns.length = 0;
         that.columns.push({ caption: 'Column 1', width: 100 });
         that.columns.push({ caption: 'Column 2', width: 100, headerCellTemplate: function() { } });
 
-        $table = $(that.columnsView._createTable());
+        const $table = $(that.columnsView._createTable());
         $container.html($('<div class = \'dx-datagrid-headers dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row dx-header-row"><td>Test Test Test Test Test</td><td>Test Test Test Test Test</td></tr>'))));
 
         // act
-        firstCellElement = $table.find('td').first();
+        const firstCellElement = $table.find('td').first();
         firstCellElement.trigger('mousemove');
 
         // assert
         assert.strictEqual(firstCellElement.attr('title'), 'Test Test Test Test Test', 'has attribute title in first cell');
 
         // act
-        lastCellElement = $table.find('td').last();
+        const lastCellElement = $table.find('td').last();
         lastCellElement.trigger('mousemove');
 
         // assert
@@ -321,20 +306,17 @@ QUnit.module('API methods', {
         // arrange
         const that = this;
         const $container = $('#container').width(200);
-        let $table;
-        let firstCellElement;
-        let lastCellElement;
 
         that.option('cellHintEnabled', true);
         that.columns.length = 0;
         that.columns.push({ caption: 'Column 1', width: 100 });
         that.columns.push({ caption: 'Column 2', width: 100 });
 
-        $table = $(that.columnsView._createTable());
+        const $table = $(that.columnsView._createTable());
         $container.html($('<div class = \'dx-datagrid-rowsview dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row dx-data-row"><td><div title="User Title">Test Test Test Test Test</div></td><td><div>Test Test Test Test Test</div></td></tr>'))));
 
         // act
-        firstCellElement = $table.find('td').first();
+        const firstCellElement = $table.find('td').first();
         firstCellElement.children().trigger('mousemove');
 
         // assert
@@ -342,7 +324,7 @@ QUnit.module('API methods', {
         assert.strictEqual(firstCellElement.children().attr('title'), 'User Title', 'user title on div in first cell');
 
         // act
-        lastCellElement = $table.find('td').last();
+        const lastCellElement = $table.find('td').last();
         lastCellElement.children().trigger('mousemove');
 
         // assert
@@ -355,27 +337,24 @@ QUnit.module('API methods', {
         // arrange
         const that = this;
         const $container = $('#container').width(200);
-        let $table;
-        let firstCellElement;
-        let lastCellElement;
 
         that.option('cellHintEnabled', true);
         that.columns.length = 0;
         that.columns.push({ caption: 'Column 1', width: 100 });
         that.columns.push({ caption: 'Column 2', width: 100 });
 
-        $table = $(that.columnsView._createTable());
+        const $table = $(that.columnsView._createTable());
         $container.html($('<div class = \'dx-datagrid-headers dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td><div class="dx-datagrid-text-content">Test</div></td><td><div class="dx-datagrid-text-content">Test Test Test Test Test</div></td></tr>'))));
 
         // act
-        firstCellElement = $table.find('div').first();
+        const firstCellElement = $table.find('div').first();
         firstCellElement.trigger('mousemove');
 
         // assert
         assert.strictEqual(firstCellElement.attr('title'), undefined, 'not has attribute title in first cell');
 
         // act
-        lastCellElement = $table.find('div').last();
+        const lastCellElement = $table.find('div').last();
         lastCellElement.trigger('mousemove');
 
         // assert
@@ -387,27 +366,24 @@ QUnit.module('API methods', {
         // arrange
         const that = this;
         const $container = $('#container').width(200);
-        let $table;
-        let firstCellElement;
-        let lastCellElement;
 
         that.option('cellHintEnabled', false);
         that.columns.length = 0;
         that.columns.push({ caption: 'Column 1', width: 100 });
         that.columns.push({ caption: 'Column 2', width: 100 });
 
-        $table = $(that.columnsView._createTable());
+        const $table = $(that.columnsView._createTable());
         $container.html($('<div class = \'dx-datagrid-headers dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td><div class="dx-datagrid-text-content">Test</div></td><td><div class="dx-datagrid-text-content">Test Test Test Test Test</div></td></tr>'))));
 
         // act
-        firstCellElement = $table.find('div').first();
+        const firstCellElement = $table.find('div').first();
         firstCellElement.trigger('mousemove');
 
         // assert
         assert.strictEqual(firstCellElement.attr('title'), undefined, 'not has attribute title in first cell');
 
         // act
-        lastCellElement = $table.find('div').last();
+        const lastCellElement = $table.find('div').last();
         lastCellElement.trigger('mousemove');
 
         // assert
@@ -503,11 +479,10 @@ QUnit.module('API methods', {
     // T616759
     QUnit.test('The title attribute should not be set for content inside detail row', function(assert) {
         // arrange
-        let $table;
         const $container = $('#container').width(200);
 
         this.option('cellHintEnabled', true);
-        $table = $(this.columnsView._createTable());
+        const $table = $(this.columnsView._createTable());
         $container.html($('<div class = \'dx-datagrid-rowsview dx-datagrid-nowrap\' />').append($table.append(this.columnsView._createColGroup(this.columns), '<tr class="dx-row dx-master-detail-row"><td><div id="content" style="overflow: hidden;"><div style="width: 600px; height: 30px;">Test</div></div></td></tr>')));
 
         // act

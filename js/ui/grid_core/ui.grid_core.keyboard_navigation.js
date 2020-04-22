@@ -352,7 +352,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
         let rowIndex = this.getVisibleRowIndex();
         const $row = this._focusedView && this._focusedView.getRow(rowIndex);
         const $event = eventArgs.originalEvent;
-        let rowHeight;
         const isUpArrow = eventArgs.keyName === 'upArrow';
         const dataSource = this._dataController.dataSource();
         const isEditingNavigationMode = this._isFastEditingStarted();
@@ -362,7 +361,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             isEditingNavigationMode && this._editingController.closeEditCell();
             if(!this._navigateNextCell($event, eventArgs.keyName)) {
                 if(this._isVirtualScrolling() && isUpArrow && dataSource && !dataSource.isLoading()) {
-                    rowHeight = $row.outerHeight();
+                    const rowHeight = $row.outerHeight();
                     rowIndex = this._focusedCellPosition.rowIndex - 1;
                     this._scrollBy(-rowHeight, rowIndex, $event);
                 }
@@ -394,11 +393,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
     _spaceKeyHandler: function(eventArgs, isEditing) {
         const rowIndex = this.getVisibleRowIndex();
         const $target = $(eventArgs.originalEvent && eventArgs.originalEvent.target);
-        let isFocusedRowElement;
-        let isFocusedSelectionCell;
         if(this.option('selection') && this.option('selection').mode !== 'none' && !isEditing) {
-            isFocusedRowElement = this._getElementType($target) === 'row' && this.isRowFocusType() && isDataRow($target);
-            isFocusedSelectionCell = $target.hasClass(COMMAND_SELECT_CLASS);
+            const isFocusedRowElement = this._getElementType($target) === 'row' && this.isRowFocusType() && isDataRow($target);
+            const isFocusedSelectionCell = $target.hasClass(COMMAND_SELECT_CLASS);
             if(isFocusedSelectionCell && this.option('selection.showCheckBoxesMode') === 'onClick') {
                 this._selectionController.startSelectionWithCheckboxes();
             }
@@ -1008,13 +1005,12 @@ const KeyboardNavigationController = core.ViewController.inherit({
     },
     _getCellPosition: function($cell, direction) {
         const that = this;
-        let rowIndex;
         let columnIndex;
         const $row = isElementDefined($cell) && $cell.closest('tr');
         const rowsView = this.getView('rowsView');
 
         if(isElementDefined($row)) {
-            rowIndex = that._getRowIndex($row);
+            const rowIndex = that._getRowIndex($row);
 
             columnIndex = rowsView.getCellIndex($cell, rowIndex);
 
@@ -1319,14 +1315,12 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const focusedCellPosition = cellPosition || this._focusedCellPosition;
         const isRowFocusType = this.isRowFocusType();
         const includeCommandCells = isRowFocusType || inArray(keyCode, ['next', 'previous']) > -1;
-        let rowIndex;
-        let newFocusedCellPosition;
         const isLastCellOnDirection = keyCode === 'previous' ? this._isFirstValidCell(focusedCellPosition) : this._isLastValidCell(focusedCellPosition);
         let $cell;
         let $row;
 
         if(this._focusedView && focusedCellPosition) {
-            newFocusedCellPosition = this._getNewPositionByCode(focusedCellPosition, elementType, keyCode);
+            const newFocusedCellPosition = this._getNewPositionByCode(focusedCellPosition, elementType, keyCode);
             $cell = $(this._getCell(newFocusedCellPosition));
 
             if(isElementDefined($cell) && !this._isCellValid($cell) && this._isCellInRow(newFocusedCellPosition, includeCommandCells) && !isLastCellOnDirection) {
@@ -1339,7 +1333,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
             $row = isElementDefined($cell) && $cell.parent();
             if(this._hasSkipRow($row)) {
-                rowIndex = this._getRowIndex($row);
+                const rowIndex = this._getRowIndex($row);
                 if(!this._isLastRow(rowIndex)) {
                     $cell = this._getNextCell(keyCode, 'row', { columnIndex: focusedCellPosition.columnIndex, rowIndex: rowIndex });
                 } else {
@@ -1536,7 +1530,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
     _fireFocusedRowChanged: function($rowElement) {
         let row;
-        let dataController;
 
         const focusedRowKey = this.option('focusedRowKey');
 
@@ -1545,7 +1538,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
         if(this.option('focusedRowEnabled')) {
             if(focusedRowIndex >= 0) {
-                dataController = this.getController('data');
+                const dataController = this.getController('data');
                 row = focusedRowIndex >= 0 && dataController.getVisibleRows()[focusedRowIndex - dataController.getRowIndexOffset()];
             }
             this.executeAction('onFocusedRowChanged', {

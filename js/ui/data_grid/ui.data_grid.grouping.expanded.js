@@ -50,14 +50,11 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
     };
 
     const processGroupItems = function(that, items, path, offset, skipFirstItem, take) {
-        let i;
-        let item;
-        let offsetInfo;
         let removeLastItemsCount = 0;
         let needRemoveFirstItem = false;
 
-        for(i = 0; i < items.length; i++) {
-            item = items[i];
+        for(let i = 0; i < items.length; i++) {
+            const item = items[i];
             if(item.items !== undefined) {
                 path.push(item.key);
                 const groupInfo = that.findGroupInfo(path);
@@ -74,7 +71,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
                         needRemoveFirstItem = true;
                     }
                 } else if(item.items) {
-                    offsetInfo = processGroupItems(that, item.items, path, offset, skipFirstItem, take);
+                    const offsetInfo = processGroupItems(that, item.items, path, offset, skipFirstItem, take);
                     if(skipFirstItem) {
                         if(offsetInfo.offset - offset > 1) {
                             item.isContinuation = true;
@@ -119,9 +116,8 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
     };
 
     const pathEquals = function(path1, path2) {
-        let i;
         if(path1.length !== path2.length) return false;
-        for(i = 0; i < path1.length; i++) {
+        for(let i = 0; i < path1.length; i++) {
             if(!keysEqual(null, path1[i], path2[i])) {
                 return false;
             }
@@ -130,13 +126,11 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
     };
 
     const updateGroupOffsets = function(that, items, path, offset, additionalGroupInfo) {
-        let i;
-        let item;
 
         if(!items) return;
 
-        for(i = 0; i < items.length; i++) {
-            item = items[i];
+        for(let i = 0; i < items.length; i++) {
+            const item = items[i];
             if('key' in item && item.items !== undefined) {
                 path.push(item.key);
                 if(additionalGroupInfo && pathEquals(additionalGroupInfo.path, path) && !item.isContinuation) {
@@ -160,12 +154,10 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
     };
 
     const removeGroupLoadOption = function(storeLoadOptions, loadOptions) {
-        let groups;
-        let sorts;
 
         if(loadOptions.group) {
-            groups = normalizeSortingInfo(loadOptions.group);
-            sorts = normalizeSortingInfo(storeLoadOptions.sort);
+            const groups = normalizeSortingInfo(loadOptions.group);
+            const sorts = normalizeSortingInfo(storeLoadOptions.sort);
             storeLoadOptions.sort = arrangeSortingInfo(groups, sorts);
             delete loadOptions.group;
         }
@@ -173,14 +165,11 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
 
     const createNotGroupFilter = function(path, storeLoadOptions, group) {
         const groups = normalizeSortingInfo(group || storeLoadOptions.group);
-        let i;
-        let j;
-        let filterElement;
         let filter = [];
 
-        for(i = 0; i < path.length; i++) {
-            filterElement = [];
-            for(j = 0; j <= i; j++) {
+        for(let i = 0; i < path.length; i++) {
+            const filterElement = [];
+            for(let j = 0; j <= i; j++) {
                 filterElement.push([groups[j].selector, i === j ? '<>' : '=', path[j]]);
             }
             filter.push(combineFilters(filterElement));
@@ -192,11 +181,10 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
 
     const getGroupCount = function(item, groupCount) {
         let count = item.count || item.items.length;
-        let i;
 
         if(!item.count && groupCount > 1) {
             count = 0;
-            for(i = 0; i < item.items.length; i++) {
+            for(let i = 0; i < item.items.length; i++) {
                 count += getGroupCount(item.items[i], groupCount - 1);
             }
         }
@@ -208,7 +196,6 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
         handleDataLoading: function(options) {
             const that = this;
             const storeLoadOptions = options.storeLoadOptions;
-            let loadOptions;
             const collapsedGroups = [];
             let collapsedItemsCount = 0;
             let skipFirstItem = false;
@@ -224,7 +211,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
                 return;
             }
 
-            loadOptions = extend({}, storeLoadOptions);
+            const loadOptions = extend({}, storeLoadOptions);
 
             loadOptions.skip = correctSkipLoadOption(that, storeLoadOptions.skip);
 
@@ -263,8 +250,6 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
         handleDataLoaded: function(options, callBase) {
             const that = this;
             let data = options.data;
-            let pathIndex;
-            let query;
             const collapsedGroups = options.collapsedGroups;
             const groups = normalizeSortingInfo(options.group);
             const groupCount = groups.length;
@@ -272,8 +257,8 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
             function appendCollapsedPath(data, path, groups, collapsedGroup, offset) {
                 if(!data || !path.length || !groups.length) return;
 
-                let i;
                 let keyValue;
+                let i;
                 const pathValue = toComparable(path[0], true);
 
                 for(i = 0; i < data.length; i++) {
@@ -298,12 +283,12 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
             callBase(options);
 
             if(groupCount) {
-                query = dataQuery(data);
+                const query = dataQuery(data);
                 multiLevelGroup(query, groups).enumerate().done(function(groupedData) {
                     data = groupedData;
                 });
                 if(collapsedGroups) {
-                    for(pathIndex = 0; pathIndex < collapsedGroups.length; pathIndex++) {
+                    for(let pathIndex = 0; pathIndex < collapsedGroups.length; pathIndex++) {
                         appendCollapsedPath(data, collapsedGroups[pathIndex].path, groups, collapsedGroups[pathIndex], options.skip);
                     }
                 }
