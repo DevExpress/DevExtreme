@@ -815,7 +815,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         const $element = this.element();
         const $scrollContainer = $element && $element.children('.' + this.addWidgetPrefix(SCROLL_CONTAINER_CLASS)).not('.' + this.addWidgetPrefix(CONTENT_FIXED_CLASS));
 
-        if(typeUtils.isDefined(pos) && typeUtils.isDefined(pos.left)) {
+        if(typeUtils.isDefined(pos) && typeUtils.isDefined(pos.left) && this._scrollLeft !== pos.left) {
             this._scrollLeft = pos.left;
             $scrollContainer && $scrollContainer.scrollLeft(pos.left);
         }
