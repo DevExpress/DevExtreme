@@ -64,7 +64,6 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
     QUnit.test('Edit row', function(assert) {
     // arrange
-        let $rowElement;
         const $testElement = $('#treeList');
 
         this.setupTreeList();
@@ -74,7 +73,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         this.editRow(0);
 
         // assert
-        $rowElement = $testElement.find('tbody > tr').first();
+        const $rowElement = $testElement.find('tbody > tr').first();
         assert.ok($rowElement.hasClass('dx-edit-row'), 'edit row');
         assert.equal($rowElement.find('.dx-texteditor').length, 3, 'count editor');
         assert.ok(!$rowElement.children().first().find('.dx-treelist-icon-container').length, 'hasn\'t expand icon');
@@ -182,7 +181,6 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
     QUnit.test('Insert row', function(assert) {
     // arrange
-        let items;
         let $rowElements;
         const $testElement = $('#treeList');
 
@@ -206,7 +204,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         $rowElements = $testElement.find('tbody > .dx-data-row:not(.dx-row-inserted)');
         assert.equal($rowElements.length, 2, 'count data row');
 
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.equal(items.length, 2, 'count item');
         assert.equal(items[1].rowType, 'data', 'rowType of second item');
         assert.deepEqual(items[1].values, ['666', undefined, undefined, null], 'values of second item');
@@ -415,7 +413,6 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
     QUnit.test('Editing with validation - save edit data', function(assert) {
     // arrange
-        let items;
         let $cellElement;
         const $testElement = $('#treeList');
 
@@ -431,7 +428,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         this.saveEditData();
 
         // assert
-        items = this.getDataSource().items();
+        const items = this.getDataSource().items();
         $cellElement = $testElement.find('tbody > .dx-data-row').first().children().first();
         assert.notOk($cellElement.hasClass('dx-treelist-invalid'), 'first cell value isn\'t valid');
         assert.equal(items[0].data.field1, '666');
@@ -439,7 +436,6 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
     QUnit.test('Editing with validation - not save edit data when there are invalid', function(assert) {
     // arrange
-        let items;
         let $cellElement;
         const $testElement = $('#treeList');
 
@@ -455,7 +451,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         this.saveEditData();
 
         // assert
-        items = this.getDataSource().items();
+        const items = this.getDataSource().items();
         $cellElement = $testElement.find('tbody > .dx-data-row').first().children().first();
         assert.ok($cellElement.hasClass('dx-treelist-invalid'), 'first cell value isn\'t valid');
         assert.equal(items[0].data.field1, 'test1');

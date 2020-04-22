@@ -51,7 +51,6 @@ QUnit.module('State Storing', {
 
     QUnit.test('Apply state storing', function(assert) {
     // arrange
-        let rows;
 
         // act
         this.setupDataGridModules({
@@ -75,7 +74,7 @@ QUnit.module('State Storing', {
             }
         });
 
-        rows = this.getVisibleRows();
+        const rows = this.getVisibleRows();
         assert.strictEqual(rows.length, 4, 'row count');
         assert.strictEqual(rows[0].key, 1, 'key of the first row');
         assert.strictEqual(rows[1].key, 2, 'key of the second row');

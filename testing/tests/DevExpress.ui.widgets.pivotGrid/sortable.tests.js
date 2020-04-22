@@ -575,7 +575,6 @@ QUnit.module('\'useIndicator\' option', () => {
     QUnit.test('indicator is shown on right dragging', function(assert) {
         createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE, true, true);
 
-        let indicator;
         const $sortable = $('#sortable').dxSortable({
             itemSelector: '.test-item',
             direction: 'auto',
@@ -594,7 +593,7 @@ QUnit.module('\'useIndicator\' option', () => {
             .move(offset.left + 3, offset.top + 3)
             .move(offset.left + 500, offset.top);
 
-        indicator = $('.dx-position-indicator');
+        const indicator = $('.dx-position-indicator');
 
         assert.ok(indicator.length, 'indicator is rendered');
         assert.notOk($targetItem.is(':visible'));
@@ -609,7 +608,6 @@ QUnit.module('\'useIndicator\' option', () => {
     QUnit.test('indicator should not be shown on small dragging', function(assert) {
         createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE, true, true);
 
-        let indicator;
         const $sortable = $('#sortable').dxSortable({
             itemSelector: '.test-item',
             direction: 'auto',
@@ -626,7 +624,7 @@ QUnit.module('\'useIndicator\' option', () => {
             .down()
             .move(offset.left + 153, offset.top + 3);
 
-        indicator = $('.dx-position-indicator');
+        const indicator = $('.dx-position-indicator');
 
         assert.ok(!indicator.length, 'indicator is rendered');
     });
@@ -634,7 +632,6 @@ QUnit.module('\'useIndicator\' option', () => {
     QUnit.test('indicator is shown on left dragging', function(assert) {
         createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE, true, true);
 
-        let indicator;
         const $sortable = $('#sortable').dxSortable({
             itemSelector: '.test-item',
             direction: 'auto',
@@ -652,7 +649,7 @@ QUnit.module('\'useIndicator\' option', () => {
             .move(offset.left - 3, offset.top + 3)
             .move(offset.left - 302, offset.top);
 
-        indicator = $('.dx-position-indicator');
+        const indicator = $('.dx-position-indicator');
 
 
         assert.ok(indicator.length, 'indicator is rendered');
@@ -662,7 +659,6 @@ QUnit.module('\'useIndicator\' option', () => {
     QUnit.test('indicator is shown after last item dragging', function(assert) {
         createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE * 2, true, true);
 
-        let indicator;
         const $sortable = $('#sortable').dxSortable({
             itemSelector: '.test-item',
             direction: 'auto',
@@ -680,7 +676,7 @@ QUnit.module('\'useIndicator\' option', () => {
             .move(offset.left + 3, offset.top + 3)
             .move(offset.left + 1500, offset.top);
 
-        indicator = $('.dx-position-indicator');
+        const indicator = $('.dx-position-indicator');
 
         assert.ok(indicator.length, 'indicator is rendered');
         assert.ok(indicator.offset().left > $sortable.find('.test-item').eq(5).offset().left, 'indicator was rendered after 4 item');
@@ -755,7 +751,6 @@ QUnit.module('\'useIndicator\' option', () => {
                                             </div>\
                                         </div>');
 
-        let indicator;
         const $sortable = $('#sortable').dxSortable({
             itemSelector: '.test-item',
             groupSelector: '.group',
@@ -773,7 +768,7 @@ QUnit.module('\'useIndicator\' option', () => {
             .move(offset.left + 3, offset.top + 3)
             .move(offset.left, offset.top + 20);
 
-        indicator = $('.dx-position-indicator');
+        const indicator = $('.dx-position-indicator');
         assert.ok(indicator.length);
     });
 
@@ -791,7 +786,6 @@ QUnit.module('\'useIndicator\' option', () => {
                                             <div class="test-container" style="height: 30px;"></div>\
                                         </div>');
 
-        let indicator;
         const $sortable = $('#sortable').dxSortable({
             itemSelector: '.test-item',
             groupSelector: '.group',
@@ -809,14 +803,13 @@ QUnit.module('\'useIndicator\' option', () => {
             .move(offset.left + 3, offset.top + 3)
             .move(offset.left, offset.top + 20);
 
-        indicator = $('.dx-position-indicator');
+        const indicator = $('.dx-position-indicator');
         assert.ok(!indicator.length); // TODO: indicator should be shown
     });
 
     QUnit.test('indicator is shown on bottom dragging when items are set in two lines', function(assert) {
         createHorizontalMarkUp(HORIZONTAL_WIDTH_SMALL, true, true);
 
-        let indicator;
         const $sortable = $('#sortable').dxSortable({
             itemSelector: '.test-item',
             direction: 'auto',
@@ -835,7 +828,7 @@ QUnit.module('\'useIndicator\' option', () => {
             .move(offset.left - 3, offset.top + 3)
             .move(offset.left - 103, offset.top + 15);
 
-        indicator = $('.dx-position-indicator');
+        const indicator = $('.dx-position-indicator');
 
         assert.ok(indicator.length, 'indicator is rendered');
         assert.notOk($targetItem.is(':visible'));
@@ -848,7 +841,6 @@ QUnit.module('\'useIndicator\' option', () => {
     });
 
     QUnit.test('indicator is shown on bottom dragging', function(assert) {
-        let indicator;
         const $sortable = $('#sortable').dxSortable({
             itemSelector: '.test-item',
             itemContainerSelector: '.test-container',
@@ -866,7 +858,7 @@ QUnit.module('\'useIndicator\' option', () => {
             .move(offset.left, offset.top + 22);
 
         // assert
-        indicator = $('.dx-position-indicator');
+        const indicator = $('.dx-position-indicator');
 
         assert.ok(indicator.length, 'indicator is rendered');
 
@@ -879,7 +871,6 @@ QUnit.module('\'useIndicator\' option', () => {
     });
 
     QUnit.test('indicator is shown on bottom dragging. RTL', function(assert) {
-        let indicator;
         const $sortable = $('#sortable').dxSortable({
             itemSelector: '.test-item',
             itemContainerSelector: '.test-container',
@@ -898,7 +889,7 @@ QUnit.module('\'useIndicator\' option', () => {
             .move(offset.left, offset.top + 22);
 
         // assert
-        indicator = $('.dx-position-indicator');
+        const indicator = $('.dx-position-indicator');
 
         assert.ok(indicator.length, 'indicator is rendered');
 
@@ -911,7 +902,6 @@ QUnit.module('\'useIndicator\' option', () => {
     });
 
     QUnit.test('indicator is shown after last item bottom dragging', function(assert) {
-        let indicator;
         const $sortable = $('#sortable').dxSortable({
             itemSelector: '.test-item',
             itemContainerSelector: '.test-container',
@@ -929,7 +919,7 @@ QUnit.module('\'useIndicator\' option', () => {
             .move(offset.left, offset.top + 45);
 
         // assert
-        indicator = $('.dx-position-indicator');
+        const indicator = $('.dx-position-indicator');
 
         assert.ok(indicator.length, 'indicator is rendered');
 
@@ -940,7 +930,6 @@ QUnit.module('\'useIndicator\' option', () => {
     });
 
     QUnit.test('indicator is shown after last item bottom dragging. RTL', function(assert) {
-        let indicator;
         const $sortable = $('#sortable').dxSortable({
             itemSelector: '.test-item',
             itemContainerSelector: '.test-container',
@@ -959,7 +948,7 @@ QUnit.module('\'useIndicator\' option', () => {
             .move(offset.left, offset.top + 45);
 
         // assert
-        indicator = $('.dx-position-indicator');
+        const indicator = $('.dx-position-indicator');
 
         assert.ok(indicator.length, 'indicator is rendered');
 

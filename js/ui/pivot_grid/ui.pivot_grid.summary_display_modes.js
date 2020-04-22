@@ -113,8 +113,6 @@ function createCache() {
 }
 
 function getFieldPos(descriptions, field, cache) {
-    let fieldIndex;
-    let allFields;
     let fieldParams = {
         index: -1
     };
@@ -123,8 +121,8 @@ function getFieldPos(descriptions, field, cache) {
         if(cache.fields[field]) {
             field = cache[field];
         } else {
-            allFields = descriptions.columns.concat(descriptions.rows).concat(descriptions.values);
-            fieldIndex = findField(allFields, field);
+            const allFields = descriptions.columns.concat(descriptions.rows).concat(descriptions.values);
+            const fieldIndex = findField(allFields, field);
             field = cache[field] = allFields[fieldIndex];
         }
     }
@@ -268,10 +266,9 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
         const item = currentPath[0];
         let parent = this.parent(direction);
         let siblings;
-        let index;
 
         if(parent) {
-            index = inArray(item, currentPath[1].children);
+            const index = inArray(item, currentPath[1].children);
             siblings = parent.children(direction);
 
             if(siblings[index + 1]) {
@@ -312,10 +309,9 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
         const item = currentPath[0];
         let parent = this.parent(direction);
         let siblings;
-        let index;
 
         if(parent) {
-            index = inArray(item, currentPath[1].children);
+            const index = inArray(item, currentPath[1].children);
             siblings = parent.children(direction);
 
             if(siblings[index - 1]) {
@@ -367,9 +363,8 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     */
     child: function(direction, fieldValue) {
         const children = this.children(direction);
-        let childLevelField;
         for(let i = 0; i < children.length; i++) {
-            childLevelField = childLevelField || children[i].field(direction);
+            const childLevelField = childLevelField || children[i].field(direction);
             if(children[i].value(childLevelField) === fieldValue) {
                 return children[i];
             }
@@ -391,23 +386,19 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
         const fieldPos = getFieldPos(this._descriptions, field, this._fieldsCache);
         const area = fieldPos.area;
         const fieldIndex = fieldPos.index;
-        let childItems;
-        let path;
-        let currentValue;
-        let level;
         let sliceCell = NULL;
         const newPath = [];
 
         if(area === ROW || area === COLUMN) {
-            path = this._getPath(area).slice();
-            level = fieldIndex !== -1 && (path.length - 2 - fieldIndex);
+            const path = this._getPath(area).slice();
+            const level = fieldIndex !== -1 && (path.length - 2 - fieldIndex);
 
             if(path[level]) {
                 newPath[path.length - 1] = path[path.length - 1];
                 for(let i = level; i >= 0; i--) {
                     if(path[i + 1]) {
-                        childItems = path[i + 1].children || [];
-                        currentValue = i === level ? value : path[i].value;
+                        const childItems = path[i + 1].children || [];
+                        const currentValue = i === level ? value : path[i].value;
                         path[i] = undefined;
 
                         for(let childIndex = 0; childIndex < childItems.length; childIndex++) {
@@ -458,18 +449,16 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
         const cell = this._cell;
         let fieldIndex = this._fieldIndex;
         const fistArgIsBoolean = arg1 === true || arg1 === false;
-        let path;
         const field = !fistArgIsBoolean ? arg1 : NULL;
         const needCalculatedValue = fistArgIsBoolean && arg1 || arg2;
-        let level;
 
         if(isDefined(field)) {
             const fieldPos = getFieldPos(this._descriptions, field, this._fieldsCache);
             fieldIndex = fieldPos.index;
 
             if(fieldPos.area !== 'data') {
-                path = this._getPath(fieldPos.area);
-                level = fieldIndex !== -1 && (path.length - 2 - fieldIndex);
+                const path = this._getPath(fieldPos.area);
+                const level = fieldIndex !== -1 && (path.length - 2 - fieldIndex);
 
                 return path[level] && path[level].value;
             }
@@ -539,25 +528,20 @@ exports.applyDisplaySummaryMode = function(descriptions, data) {
 
         foreachTree(columnElements, function(columnPath) {
             const columnItem = columnPath[0];
-            let expression;
-            let expressionArg;
-            let cell;
-            let field;
             let isEmptyCell;
-            let value;
 
             columnItem.isEmpty = columnItem.isEmpty || [];
 
             processDataCell(data, rowItem.index, columnItem.index, false);
 
             for(let i = 0; i < valueFields.length; i++) {
-                field = valueFields[i];
-                expression = expressions[i] = (expressions[i] === undefined ? getExpression(field) : expressions[i]);
+                const field = valueFields[i];
+                const expression = expressions[i] = (expressions[i] === undefined ? getExpression(field) : expressions[i]);
                 isEmptyCell = false;
                 if(expression) {
-                    expressionArg = new SummaryCell(columnPath, rowPath, data, descriptions, i, fieldsCache);
-                    cell = expressionArg.cell();
-                    value = cell[i] = expression(expressionArg);
+                    const expressionArg = new SummaryCell(columnPath, rowPath, data, descriptions, i, fieldsCache);
+                    const cell = expressionArg.cell();
+                    const value = cell[i] = expression(expressionArg);
                     isEmptyCell = value === null || value === undefined;
                 }
                 if(columnItem.isEmpty[i] === undefined) {
@@ -592,20 +576,16 @@ exports.applyRunningTotal = function(descriptions, data) {
 
         foreachTree(columnElements, function(columnPath) {
             const columnItem = columnPath[0];
-            let expression;
-            let expressionArg;
-            let cell;
-            let field;
 
             processDataCell(data, rowItem.index, columnItem.index, true);
 
             for(let i = 0; i < valueFields.length; i++) {
-                field = valueFields[i];
-                expression = expressions[i] = (expressions[i] === undefined ? createRunningTotalExpr(field) : expressions[i]);
+                const field = valueFields[i];
+                const expression = expressions[i] = (expressions[i] === undefined ? createRunningTotalExpr(field) : expressions[i]);
 
                 if(expression) {
-                    expressionArg = new SummaryCell(columnPath, rowPath, data, descriptions, i, fieldsCache);
-                    cell = expressionArg.cell();
+                    const expressionArg = new SummaryCell(columnPath, rowPath, data, descriptions, i, fieldsCache);
+                    const cell = expressionArg.cell();
                     cell[i] = expression(expressionArg);
                 }
             }

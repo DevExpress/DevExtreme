@@ -70,14 +70,12 @@ const EditingController = editingModule.controllers.editing.inherit((function() 
         },
 
         _beforeSaveEditData: function(editData) {
-            let key;
-            let store;
             const dataController = this._dataController;
             const result = this.callBase.apply(this, arguments);
 
             if(editData && editData.type !== DATA_EDIT_DATA_INSERT_TYPE) {
-                store = dataController && dataController.store();
-                key = store && store.key();
+                const store = dataController && dataController.store();
+                const key = store && store.key();
 
                 if(!isDefined(key)) {
                     throw errors.Error('E1045');

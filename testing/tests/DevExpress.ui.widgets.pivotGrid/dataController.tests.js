@@ -44,16 +44,12 @@ const texts = {
 
 const prepareCellsInfo = function(cellsInfo) {
     const result = [];
-    let rowIndex;
-    let cellInfo;
-    let preparedCellInfo;
-    let columnIndex;
 
-    for(rowIndex = 0; rowIndex < cellsInfo.length; rowIndex++) {
+    for(let rowIndex = 0; rowIndex < cellsInfo.length; rowIndex++) {
         result.push([]);
-        for(columnIndex = 0; columnIndex < cellsInfo[rowIndex].length; columnIndex++) {
-            cellInfo = cellsInfo[rowIndex][columnIndex];
-            preparedCellInfo = {
+        for(let columnIndex = 0; columnIndex < cellsInfo[rowIndex].length; columnIndex++) {
+            const cellInfo = cellsInfo[rowIndex][columnIndex];
+            const preparedCellInfo = {
                 rowType: cellInfo.rowType,
                 columnType: cellInfo.columnType,
                 text: cellInfo.text
@@ -5491,12 +5487,11 @@ QUnit.module('Virtual scrolling', {
             },
             texts: texts
         }));
-        let columnsInfo;
 
         dataController.columnPageSize(2);
         dataController._columnsScrollController.beginPageIndex.returns(4);
         dataController._columnsScrollController.endPageIndex.returns(5);
-        columnsInfo = dataController.getColumnsInfo();
+        const columnsInfo = dataController.getColumnsInfo();
 
         assert.strictEqual(columnsInfo.length, 2);
 
@@ -5532,12 +5527,11 @@ QUnit.module('Virtual scrolling', {
             },
             texts: texts
         }));
-        let columnsInfo;
 
         dataController.columnPageSize(2);
         dataController._columnsScrollController.beginPageIndex.returns(4);
         dataController._columnsScrollController.endPageIndex.returns(5);
-        columnsInfo = dataController.getColumnsInfo(true);
+        const columnsInfo = dataController.getColumnsInfo(true);
 
         assert.strictEqual(columnsInfo.length, 2);
         assert.strictEqual(columnsInfo[0].length, 9);

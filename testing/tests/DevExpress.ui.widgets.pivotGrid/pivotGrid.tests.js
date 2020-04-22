@@ -114,11 +114,10 @@ const moduleConfig = {
 };
 
 const createPivotGrid = function(options, assert) {
-    let pivotGrid;
     const pivotGridElement = $('#pivotGrid').dxPivotGrid(options);
 
     assert.ok(pivotGridElement);
-    pivotGrid = pivotGridElement.dxPivotGrid('instance');
+    const pivotGrid = pivotGridElement.dxPivotGrid('instance');
     return pivotGrid;
 };
 
@@ -250,14 +249,12 @@ QUnit.module('dxPivotGrid', {
 
     QUnit.test('Create PivotGrid with Data', function(assert) {
         const onContentReadyCallback = sinon.stub();
-        let pivotGrid;
-        let $noDataElement;
 
         this.testOptions.onContentReady = onContentReadyCallback;
 
-        pivotGrid = createPivotGrid(this.testOptions, assert);
+        const pivotGrid = createPivotGrid(this.testOptions, assert);
 
-        $noDataElement = $(pivotGrid.$element().find('.dx-pivotgrid-nodata'));
+        const $noDataElement = $(pivotGrid.$element().find('.dx-pivotgrid-nodata'));
 
         assert.equal($noDataElement.length, 1);
         assert.ok(!$noDataElement.is(':visible'));
@@ -282,11 +279,10 @@ QUnit.module('dxPivotGrid', {
 
     QUnit.test('Loading DataSource', function(assert) {
         const onContentReadyCallback = sinon.stub();
-        let pivotGrid;
         let $noDataElement;
 
         // act
-        pivotGrid = createPivotGrid({
+        const pivotGrid = createPivotGrid({
             height: 200,
             dataSource: [{ sum: 100 }],
             fields: [{ dataField: 'sum', summaryType: 'sum', area: 'data' }],
@@ -324,7 +320,6 @@ QUnit.module('dxPivotGrid', {
 
     QUnit.test('Loading DataSource longer 1000 ms', function(assert) {
         const onContentReadyCallback = sinon.stub();
-        let pivotGrid;
         const progresses = [];
         const loadingChangedArgs = [];
 
@@ -332,7 +327,7 @@ QUnit.module('dxPivotGrid', {
 
         const d = $.Deferred();
 
-        pivotGrid = createPivotGrid({
+        const pivotGrid = createPivotGrid({
             height: 200,
             dataSource: {
                 onLoadingChanged: function(isLoading) {
@@ -1653,9 +1648,8 @@ QUnit.module('dxPivotGrid', {
         const pivotGrid = createPivotGrid({
             onContextMenuPreparing: sinon.stub,
         }, assert);
-        let $target;
 
-        $target = $('#pivotGrid').find('.dx-widget.dx-pivotgrid');
+        const $target = $('#pivotGrid').find('.dx-widget.dx-pivotgrid');
 
         // act
         $($target).trigger('dxcontextmenu');
@@ -2454,13 +2448,11 @@ QUnit.module('dxPivotGrid', {
     QUnit.test('pivot grid render', function(assert) {
     // assert, act
         const pivotGrid = createPivotGrid({}, assert);
-        let mainTable;
-        let rows;
         const testElement = $('#pivotGrid');
 
         // act
-        mainTable = testElement.find('table')[0];
-        rows = mainTable.rows;
+        const mainTable = testElement.find('table')[0];
+        const rows = mainTable.rows;
 
         // assert
         assert.ok(mainTable, 'pivotGrid container is rendered');
@@ -2483,10 +2475,9 @@ QUnit.module('dxPivotGrid', {
             wordWrapEnabled: false
         }, assert);
 
-        let mainTable;
         const testElement = $('#pivotGrid');
 
-        mainTable = testElement.find('table')[0];
+        const mainTable = testElement.find('table')[0];
 
         // assert
         assert.ok(!$(mainTable).hasClass('dx-word-wrap'));
@@ -2650,14 +2641,12 @@ QUnit.module('dxPivotGrid', {
             height: 400,
             overflow: 'auto'
         }).appendTo($('#pivotGrid').parent());
-        let pivot;
-        let tableElement;
 
         $pivotGridElement.appendTo($parentElement);
 
-        pivot = createPivotGrid(this.testOptions, assert);
+        const pivot = createPivotGrid(this.testOptions, assert);
 
-        tableElement = $pivotGridElement.find('table').first();
+        const tableElement = $pivotGridElement.find('table').first();
 
         assert.strictEqual(tableElement.width(), $pivotGridElement.width()),
         assert.ok((pivot._dataArea.groupWidth() + pivot._rowsArea.groupWidth()) <= $pivotGridElement.width());
@@ -2825,18 +2814,14 @@ QUnit.module('dxPivotGrid', {
     QUnit.test('Synchronize areas', function(assert) {
     // arrange, act
         const testElement = $('#pivotGrid');
-        let pivotGrid;
-        let colsElement;
-        let rows;
-        let dataAreaElement;
 
         testElement.width(800);
         testElement.height(300);
-        pivotGrid = createPivotGrid(this.testOptions, assert);
+        const pivotGrid = createPivotGrid(this.testOptions, assert);
         this.clock.tick();
-        dataAreaElement = testElement.find('.dx-pivotgrid-area-data table');
-        rows = dataAreaElement[0].rows;
-        colsElement = dataAreaElement.find('col');
+        const dataAreaElement = testElement.find('.dx-pivotgrid-area-data table');
+        const rows = dataAreaElement[0].rows;
+        const colsElement = dataAreaElement.find('col');
 
         // assert
         assert.equal(rows.length, 7, 'data area rows count');
@@ -4917,15 +4902,13 @@ QUnit.module('headersArea', {
     // arrange
         const headersArea = createHeadersArea();
         const testElement = $('#pivotArea');
-        let table;
-        let rows;
 
         headersArea.render(testElement, [
             [{ text: '1' }, { text: '12', rowspan: 2 }, { text: '123', colspan: 2 }],
             [{ text: '1234' }, { text: '12345' }, { text: '123456' }]
         ]);
-        table = testElement.find('table');
-        rows = table[0].rows;
+        const table = testElement.find('table');
+        const rows = table[0].rows;
         // act
         const columnWidths = headersArea.getColumnsWidth();
 
@@ -4941,13 +4924,11 @@ QUnit.module('headersArea', {
     // arrange
         const headersArea = createHeadersArea();
         const testElement = $('#pivotArea');
-        let table;
-        let rows;
 
         // act
         headersArea.render(testElement, this.headers);
-        table = testElement.find('table');
-        rows = table[0].rows;
+        const table = testElement.find('table');
+        const rows = table[0].rows;
 
         // assert
         assert.strictEqual(table.length, 1, 'tables count');
@@ -4971,16 +4952,14 @@ QUnit.module('headersArea', {
     // arrange
         const headersArea = createHeadersArea();
         const testElement = $('#pivotArea');
-        let table;
-        let rows;
 
         // act
         headersArea.render(testElement, [
             [{ text: 'A', colspan: 2, expanded: true, type: 'D', path: ['A'] }, { text: 'Grand total', rowspan: 2, index: 2, type: 'GT', wordWrapEnabled: false }],
             [{ text: '1', index: 0, type: 'D', expanded: false, path: ['1'], wordWrapEnabled: true }, { text: '2', index: 1, type: 'D' }]
         ]);
-        table = testElement.find('table');
-        rows = table[0].rows;
+        const table = testElement.find('table');
+        const rows = table[0].rows;
 
         // assert
         assert.equal($(rows[0].cells[1]).find('span').get(0).style.whiteSpace, 'nowrap', 'cell 2 (GrandTotal)');
@@ -4992,15 +4971,13 @@ QUnit.module('headersArea', {
     // arrange
         const headersArea = createHeadersArea();
         const testElement = $('#pivotArea');
-        let table;
-        let rows;
 
         this.headers[0][0].width = 700;
 
         // act
         headersArea.render(testElement, this.headers);
-        table = testElement.find('table');
-        rows = table[0].rows;
+        const table = testElement.find('table');
+        const rows = table[0].rows;
         // assert
         assert.equal($(rows[0].cells[0]).css('min-width'), '700px', 'cell 1 - has correct width');
     });
@@ -5049,7 +5026,6 @@ QUnit.module('headersArea', {
     // arrange
         const headersArea = createHeadersArea();
         const testElement = $('#pivotGrid');
-        let rows;
 
         function getLastCellText(row) {
             const childNodes = row.cells[row.cells.length - 1].childNodes;
@@ -5066,7 +5042,7 @@ QUnit.module('headersArea', {
             [{ text: '21', type: 'D' }, { text: '22', type: 'D' }]
         ]);
 
-        rows = testElement.find('table')[0].rows;
+        const rows = testElement.find('table')[0].rows;
 
         // assert
         assert.equal(getLastCellText(rows[0]), 'Grand total', '1 row last cell - text');
@@ -5083,7 +5059,6 @@ QUnit.module('headersArea', {
     // arrange
         const headersArea = createHeadersArea();
         const testElement = $('#pivotArea');
-        let rows;
 
         // act
         headersArea.render(testElement, [
@@ -5091,7 +5066,7 @@ QUnit.module('headersArea', {
             [{ text: '1', rowspan: 2, type: 'D', expanded: false }, { text: '2', colspan: 2, type: 'D', expanded: true }],
             [{ text: '21', type: 'D' }, { text: '22', type: 'D' }]
         ]);
-        rows = testElement.find('tr');
+        const rows = testElement.find('tr');
 
         // assert
         assert.equal($(rows[1].cells[0]).text(), '1', 'row 1 cell 0 text');
@@ -5676,8 +5651,6 @@ QUnit.module('Data area', () => {
 
         // arrange
         const dataArea = createDataArea();
-        let rows;
-        let table;
         const testElement = $('#pivotArea');
 
         // act
@@ -5695,8 +5668,8 @@ QUnit.module('Data area', () => {
                 { columnType: 'GT', rowType: 'D', text: '9' }
             ]
         ]);
-        table = testElement.find('table');
-        rows = table[0].rows;
+        const table = testElement.find('table');
+        const rows = table[0].rows;
 
         // assert
         assert.equal(table.length, 1, 'data area table is rendered');
