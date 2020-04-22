@@ -131,7 +131,6 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
 
                 isSelectAll: function() {
                     const component = this.component;
-                    let hasIndeterminateState;
                     const visibleKeys = this._getSelectAllNodeKeys();
 
                     const selectedVisibleKeys = visibleKeys.filter(function(key) {
@@ -139,7 +138,7 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                     });
 
                     if(!selectedVisibleKeys.length) {
-                        hasIndeterminateState = visibleKeys.some(function(key) {
+                        const hasIndeterminateState = visibleKeys.some(function(key) {
                             return component.isRowSelected(key) === undefined;
                         });
 
@@ -202,19 +201,17 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                     const that = this;
                     let state = isSelected;
                     const parentNode = node.parent;
-                    let hasNonSelectedState;
-                    let hasSelectedState;
 
                     if(parentNode) {
                         if(parentNode.children.length > 1) {
                             if(isSelected === false) {
-                                hasSelectedState = parentNode.children.some(function(childNode, index, children) {
+                                const hasSelectedState = parentNode.children.some(function(childNode, index, children) {
                                     return that._selectionStateByKey[childNode.key];
                                 });
 
                                 state = hasSelectedState ? undefined : false;
                             } else if(isSelected === true) {
-                                hasNonSelectedState = parentNode.children.some(function(childNode) {
+                                const hasNonSelectedState = parentNode.children.some(function(childNode) {
                                     return !that._selectionStateByKey[childNode.key];
                                 });
 
@@ -244,12 +241,11 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 _updateSelectionStateCore: function(keys, isSelected) {
-                    let node;
                     const dataController = this._dataController;
 
                     for(let i = 0; i < keys.length; i++) {
                         this._selectionStateByKey[keys[i]] = isSelected;
-                        node = dataController.getNodeByKey(keys[i]);
+                        const node = dataController.getNodeByKey(keys[i]);
 
                         if(node) {
                             this._updateParentSelectionState(node, isSelected);
@@ -259,7 +255,6 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 _getSelectedParentKeys: function(key, selectedItemKeys, useCash) {
-                    let isSelected;
                     let selectedParentNode;
                     const node = this._dataController.getNodeByKey(key);
                     let parentNode = node && node.parent;
@@ -267,7 +262,7 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
 
                     while(parentNode && parentNode.level >= 0) {
                         result.unshift(parentNode.key);
-                        isSelected = useCash ? !nodeExists(selectedItemKeys, parentNode.key) && this.isRowSelected(parentNode.key) : selectedItemKeys.indexOf(parentNode.key) >= 0;
+                        const isSelected = useCash ? !nodeExists(selectedItemKeys, parentNode.key) && this.isRowSelected(parentNode.key) : selectedItemKeys.indexOf(parentNode.key) >= 0;
 
                         if(isSelected) {
                             selectedParentNode = parentNode;
@@ -302,9 +297,6 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
 
                 _normalizeParentKeys: function(key, args) {
                     const that = this;
-                    let index;
-                    let childKeys;
-                    let parentNode;
                     let keysToIgnore = [key];
                     const parentNodeKeys = that._getSelectedParentKeys(key, args.selectedRowKeys);
 
@@ -312,26 +304,25 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                         keysToIgnore = keysToIgnore.concat(parentNodeKeys);
 
                         keysToIgnore.forEach(function(key) {
-                            index = args.selectedRowKeys.indexOf(key);
+                            const index = args.selectedRowKeys.indexOf(key);
 
                             if(index >= 0) {
                                 args.selectedRowKeys.splice(index, 1);
                             }
                         });
 
-                        parentNode = that._dataController.getNodeByKey(parentNodeKeys[0]);
-                        childKeys = that._getSelectedChildKeys(parentNode, keysToIgnore);
+                        const parentNode = that._dataController.getNodeByKey(parentNodeKeys[0]);
+                        const childKeys = that._getSelectedChildKeys(parentNode, keysToIgnore);
                         args.selectedRowKeys = args.selectedRowKeys.concat(childKeys);
                     }
                 },
 
                 _normalizeChildrenKeys: function(key, args) {
                     const that = this;
-                    let index;
                     const node = that._dataController.getNodeByKey(key);
 
                     node && node.children.forEach(function(childNode) {
-                        index = args.selectedRowKeys.indexOf(childNode.key);
+                        const index = args.selectedRowKeys.indexOf(childNode.key);
                         if(index >= 0) {
                             args.selectedRowKeys.splice(index, 1);
                         }
@@ -342,7 +333,6 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
 
                 _normalizeSelectedRowKeysCore: function(keys, args, isSelect) {
                     const that = this;
-                    let index;
 
                     keys.forEach(function(key) {
                         if(that.isRowSelected(key) === isSelect) {
@@ -350,7 +340,7 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                         }
 
                         that._normalizeChildrenKeys(key, args);
-                        index = args.selectedRowKeys.indexOf(key);
+                        const index = args.selectedRowKeys.indexOf(key);
 
                         if(isSelect) {
                             if(index < 0) {

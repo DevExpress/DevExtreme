@@ -1512,11 +1512,6 @@ const PivotGrid = Widget.inherit({
         const rowsArea = that._rowsArea;
         const columnsArea = that._columnsArea;
         const dataArea = that._dataArea;
-        let dataAreaHeights;
-        let rowsAreaHeights;
-        let resultHeights;
-        let resultWidths;
-        let rowsAreaColumnWidths;
         let bordersWidth;
         let totalWidth = 0;
         let totalHeight = 0;
@@ -1532,21 +1527,14 @@ const PivotGrid = Widget.inherit({
         const descriptionCell = tableElement.find('.' + DESCRIPTION_AREA_CELL_CLASS);
         const filterHeaderCell = tableElement.find('.dx-filter-header');
         const columnHeaderCell = tableElement.find('.dx-column-header');
-        let elementWidth;
-        let columnsAreaHeight;
-        let descriptionCellHeight;
-        let columnsAreaRowHeights;
-        let rowHeights;
         const rowFieldsHeader = that._rowFields;
-        let columnsAreaRowCount;
-        let needSynchronizeFieldPanel;
         const d = new Deferred();
 
         if(!hasWindow()) {
             return;
         }
 
-        needSynchronizeFieldPanel = rowFieldsHeader.isVisible() && that.option('rowHeaderLayout') !== 'tree',
+        const needSynchronizeFieldPanel = rowFieldsHeader.isVisible() && that.option('rowHeaderLayout') !== 'tree';
 
         ///#DEBUG
         that.__scrollBarUseNative = scrollBarInfo.scrollBarUseNative;
@@ -1576,27 +1564,27 @@ const PivotGrid = Widget.inherit({
         };
 
         deferUpdate(function() {
-            resultWidths = dataArea.getColumnsWidth();
+            const resultWidths = dataArea.getColumnsWidth();
 
-            rowHeights = rowsArea.getRowsHeight();
+            const rowHeights = rowsArea.getRowsHeight();
 
-            rowsAreaHeights = needSynchronizeFieldPanel ? rowHeights.slice(1) : rowHeights;
-            dataAreaHeights = dataArea.getRowsHeight();
+            const rowsAreaHeights = needSynchronizeFieldPanel ? rowHeights.slice(1) : rowHeights;
+            const dataAreaHeights = dataArea.getRowsHeight();
 
-            descriptionCellHeight = getSize(descriptionCell[0], 'height', {
+            const descriptionCellHeight = getSize(descriptionCell[0], 'height', {
                 paddings: true,
                 borders: true,
                 margins: true
             }) + (needSynchronizeFieldPanel ? rowHeights[0] : 0);
 
-            columnsAreaRowCount = that._dataController.getColumnsInfo().length;
+            const columnsAreaRowCount = that._dataController.getColumnsInfo().length;
 
-            resultHeights = mergeArraysByMaxValue(rowsAreaHeights, dataAreaHeights.slice(columnsAreaRowCount));
+            const resultHeights = mergeArraysByMaxValue(rowsAreaHeights, dataAreaHeights.slice(columnsAreaRowCount));
 
-            columnsAreaRowHeights = dataAreaHeights.slice(0, columnsAreaRowCount);
-            columnsAreaHeight = getArraySum(columnsAreaRowHeights);
+            const columnsAreaRowHeights = dataAreaHeights.slice(0, columnsAreaRowCount);
+            const columnsAreaHeight = getArraySum(columnsAreaRowHeights);
 
-            rowsAreaColumnWidths = rowsArea.getColumnsWidth();
+            const rowsAreaColumnWidths = rowsArea.getColumnsWidth();
 
             let filterAreaHeight = 0;
             let dataAreaHeight = 0;
@@ -1617,7 +1605,7 @@ const PivotGrid = Widget.inherit({
 
             rowsAreaWidth = getArraySum(rowsAreaColumnWidths);
 
-            elementWidth = that.$element().width();
+            const elementWidth = that.$element().width();
 
             bordersWidth = getCommonBorderWidth([rowAreaCell, dataAreaCell, tableElement], 'width');
             groupWidth = elementWidth - rowsAreaWidth - bordersWidth;

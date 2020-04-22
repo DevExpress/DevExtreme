@@ -617,7 +617,6 @@ QUnit.module('Recursive selection', {
 
     QUnit.test('Selecting row', function(assert) {
     // arrange
-        let items;
         const $testElement = $('#treeList');
 
         this.options.expandedRowKeys = [1];
@@ -628,7 +627,7 @@ QUnit.module('Recursive selection', {
         this.selectRows(1);
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.deepEqual(this.option('selectedRowKeys'), [1], 'selected row keys');
         assert.ok(items[0].isSelected, 'first item is selected');
         assert.ok(items[1].isSelected, 'second item is selected');
@@ -636,7 +635,6 @@ QUnit.module('Recursive selection', {
 
     QUnit.test('Deselecting row', function(assert) {
     // arrange
-        let items;
         const $testElement = $('#treeList');
 
         this.options.dataSource = [
@@ -655,7 +653,7 @@ QUnit.module('Recursive selection', {
         this.deselectRows(2);
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.deepEqual(this.option('selectedRowKeys'), [3, 4], 'selected row keys');
         assert.strictEqual(items[0].isSelected, undefined, 'selection state of the first item is indeterminate');
         assert.notOk(items[1].isSelected, 'second item isn\'t selected');
@@ -665,7 +663,6 @@ QUnit.module('Recursive selection', {
 
     QUnit.test('Selecting a row when several of his children are selected', function(assert) {
     // arrange
-        let items;
         const $testElement = $('#treeList');
 
         this.options.dataSource = [
@@ -683,7 +680,7 @@ QUnit.module('Recursive selection', {
         this.selectRows(1);
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.deepEqual(this.option('selectedRowKeys'), [1], 'selected row keys');
         assert.ok(items[0].isSelected, 'first item is selected');
         assert.ok(items[1].isSelected, 'second item is selected');
@@ -693,7 +690,6 @@ QUnit.module('Recursive selection', {
 
     QUnit.test('Deselecting the row when all children are selected', function(assert) {
     // arrange
-        let items;
         const $testElement = $('#treeList');
 
         this.options.dataSource = [
@@ -710,7 +706,7 @@ QUnit.module('Recursive selection', {
         this.deselectRows(1);
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.deepEqual(this.option('selectedRowKeys'), [], 'selected row keys');
         assert.notOk(items[0].isSelected, 'first item isn\'t selected');
         assert.notOk(items[1].isSelected, 'second item isn\'t selected');
@@ -719,7 +715,6 @@ QUnit.module('Recursive selection', {
 
     QUnit.test('Select All', function(assert) {
     // arrange
-        let items;
         const $testElement = $('#treeList');
 
         this.options.dataSource = [
@@ -737,7 +732,7 @@ QUnit.module('Recursive selection', {
         this.selectAll();
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.deepEqual(this.option('selectedRowKeys'), [1, 5], 'selected row keys');
         assert.ok(items[0].isSelected, 'first item is selected');
         assert.ok(items[1].isSelected, 'second item is selected');
@@ -748,7 +743,6 @@ QUnit.module('Recursive selection', {
 
     QUnit.test('Select All when several rows are selected', function(assert) {
     // arrange
-        let items;
         const $testElement = $('#treeList');
 
         this.options.dataSource = [
@@ -767,7 +761,7 @@ QUnit.module('Recursive selection', {
         this.selectAll();
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.deepEqual(this.option('selectedRowKeys'), [1, 5], 'selected row keys');
         assert.ok(items[0].isSelected, 'first item is selected');
         assert.ok(items[1].isSelected, 'second item is selected');
@@ -778,7 +772,6 @@ QUnit.module('Recursive selection', {
 
     QUnit.test('Deselect All', function(assert) {
     // arrange
-        let items;
         const $testElement = $('#treeList');
 
         this.options.dataSource = [
@@ -796,7 +789,7 @@ QUnit.module('Recursive selection', {
         this.deselectAll();
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.deepEqual(this.option('selectedRowKeys'), [], 'selected row keys');
         assert.notOk(items[0].isSelected, 'first item isn\'t selected');
         assert.notOk(items[1].isSelected, 'second item isn\'t selected');
@@ -1097,7 +1090,6 @@ QUnit.module('Recursive selection', {
 
     QUnit.test('Checkbox of the parent node should be in an indeterminate state when deselecting child node', function(assert) {
     // arrange
-        let items;
         const $testElement = $('#treeList');
 
         this.options.dataSource = [
@@ -1116,7 +1108,7 @@ QUnit.module('Recursive selection', {
         this.deselectRows(2);
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.strictEqual(items[0].isSelected, undefined, 'selection state of the first item is indeterminate');
         assert.ok($testElement.find('.dx-checkbox').first().hasClass('dx-checkbox-indeterminate'), 'Checkbox of the first row in an indeterminate state');
     });
@@ -1175,7 +1167,6 @@ QUnit.module('Recursive selection', {
 
     QUnit.test('Deselecting child node when all nodes are selected', function(assert) {
     // arrange
-        let items;
         const $testElement = $('#treeList');
 
         this.options.dataSource = [
@@ -1196,7 +1187,7 @@ QUnit.module('Recursive selection', {
         this.deselectRows(4);
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.deepEqual(this.option('selectedRowKeys'), [1, 2, 5, 6], 'selected row keys');
         assert.ok(items[0].isSelected, 'first item is selected');
         assert.ok(items[1].isSelected, 'second item is selected');
@@ -1297,7 +1288,6 @@ QUnit.module('Recursive selection', {
 
     QUnit.test('Selecting a node and its child node', function(assert) {
     // arrange
-        let items;
         const $testElement = $('#treeList');
 
         this.options.dataSource = [
@@ -1313,7 +1303,7 @@ QUnit.module('Recursive selection', {
         this.selectRows([1, 2]);
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.deepEqual(this.option('selectedRowKeys'), [1, 2], 'selected row keys');
         assert.ok(items[0].isSelected, 'first item is selected');
         assert.ok(items[1].isSelected, 'second item is selected');
@@ -1348,7 +1338,6 @@ QUnit.module('Recursive selection', {
     // T558153
     QUnit.test('Selection state should be updated correctly after options are changed', function(assert) {
     // arrange
-        let items;
         const $testElement = $('#treeList');
         const clock = sinon.useFakeTimers();
 
@@ -1371,7 +1360,7 @@ QUnit.module('Recursive selection', {
             clock.tick(30);
 
             // assert
-            items = this.dataController.items();
+            const items = this.dataController.items();
             assert.strictEqual(items.length, 2, 'count row');
             assert.ok(items[0].isSelected, 'first row is selected');
             assert.ok(items[1].isSelected, 'second row is selected');
