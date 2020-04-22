@@ -1397,7 +1397,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by Tab key', function(assert) {
         let focusedCellChangingCounter = 0;
-        let columnIndex;
 
         // arrange
         this.data = [
@@ -1416,7 +1415,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             },
             onFocusedCellChanging: function(e) {
                 if(++focusedCellChangingCounter > 2) {
-                    columnIndex = focusedCellChangingCounter - 1;
+                    const columnIndex = focusedCellChangingCounter - 1;
                     assert.equal(e.cancel, false, 'Not canceled');
                     assert.equal(e.cellElement.text(), $(rowsView.getRow(1).find('td').eq(columnIndex)).text(), 'Cell element');
                     assert.equal(e.newColumnIndex, columnIndex);
@@ -1574,7 +1573,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if "enterKeyDirection" is "row", "enterKeyAction" is "moveFocus"', function(assert) {
         let focusedCellChangingCounter = 0;
-        let columnIndex;
 
         // arrange
         this.data = [
@@ -1597,7 +1595,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             },
             onFocusedCellChanging: function(e) {
                 if(++focusedCellChangingCounter > 2) {
-                    columnIndex = focusedCellChangingCounter - 1;
+                    const columnIndex = focusedCellChangingCounter - 1;
                     assert.equal(e.cancel, false, 'Not canceled');
                     assert.equal(e.cellElement.text(), $(rowsView.getRow(1).find('td').eq(columnIndex)).text(), 'Cell element');
                     assert.equal(e.newColumnIndex, columnIndex);
@@ -1639,7 +1637,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if "enterKeyDirection" is "row", "enterKeyAction" is "startEdit"', function(assert) {
         let focusedCellChangingCounter = 0;
-        let columnIndex;
 
         // arrange
         this.data = [
@@ -1663,7 +1660,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             },
             onFocusedCellChanging: function(e) {
                 if(++focusedCellChangingCounter > 2) {
-                    columnIndex = focusedCellChangingCounter - 1;
+                    const columnIndex = focusedCellChangingCounter - 1;
                     assert.equal(e.cancel, false, 'Not canceled');
                     assert.equal(e.cellElement.text(), $(rowsView.getRow(1).find('td').eq(columnIndex)).text(), 'Cell element');
                     assert.equal(e.newColumnIndex, columnIndex);
@@ -1709,7 +1706,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if "enterKeyDirection" is "row", "enterKeyAction" is "moveFocus"', function(assert) {
         let focusedCellChangingCounter = 0;
-        let columnIndex;
 
         // arrange
         this.data = [
@@ -1733,7 +1729,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             },
             onFocusedCellChanging: function(e) {
                 if(++focusedCellChangingCounter > 2) {
-                    columnIndex = focusedCellChangingCounter - 1;
+                    const columnIndex = focusedCellChangingCounter - 1;
                     assert.equal(e.cancel, false, 'Not canceled');
                     assert.equal(e.cellElement.text(), $(rowsView.getRow(1).find('td').eq(columnIndex)).text(), 'Cell element');
                     assert.equal(e.newColumnIndex, columnIndex);
@@ -1771,7 +1767,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if enterKeyDirection: column, enterKeyAction: startEdit', function(assert) {
         let focusedCellChangingCounter = 0;
-        let columnIndex;
 
         // arrange
         this.data = [
@@ -1795,7 +1790,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             },
             onFocusedCellChanging: function(e) {
                 if(++focusedCellChangingCounter > 2) {
-                    columnIndex = focusedCellChangingCounter - 1;
+                    const columnIndex = focusedCellChangingCounter - 1;
                     assert.equal(e.cancel, false, 'Not canceled');
                     assert.equal(e.cellElement.text(), $(rowsView.getRow(1).find('td').eq(columnIndex)).text(), 'Cell element');
                     assert.equal(e.newColumnIndex, columnIndex);
@@ -1841,7 +1836,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if enterKeyDirection: column, enterKeyAction: moveFocus', function(assert) {
         let focusedCellChangingCounter = 0;
-        let columnIndex;
 
         // arrange
         this.data = [
@@ -1865,7 +1859,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             },
             onFocusedCellChanging: function(e) {
                 if(++focusedCellChangingCounter > 2) {
-                    columnIndex = focusedCellChangingCounter - 1;
+                    const columnIndex = focusedCellChangingCounter - 1;
                     assert.equal(e.cancel, false, 'Not canceled');
                     assert.equal(e.cellElement.text(), $(rowsView.getRow(1).find('td').eq(columnIndex)).text(), 'Cell element');
                     assert.equal(e.newColumnIndex, columnIndex);

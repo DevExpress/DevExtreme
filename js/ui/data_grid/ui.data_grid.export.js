@@ -213,12 +213,8 @@ exports.DataProvider = Class.inherit({
         const result = { cellSourceData: {}, value };
         let column;
         let value;
-        let i;
-        let summaryItems;
         const columns = this.getColumns();
         const correctedCellIndex = this._correctCellIndex(cellIndex);
-        let itemValues;
-        let item;
 
         if(rowIndex < this.getHeaderRowCount()) {
             const columnsRow = this.getColumns(true)[rowIndex];
@@ -229,10 +225,10 @@ exports.DataProvider = Class.inherit({
         } else {
             rowIndex -= this.getHeaderRowCount();
 
-            item = this._options.items.length && this._options.items[rowIndex];
+            const item = this._options.items.length && this._options.items[rowIndex];
 
             if(item) {
-                itemValues = item.values;
+                const itemValues = item.values;
                 result.cellSourceData.rowType = item.rowType;
                 result.cellSourceData.column = columns[cellIndex] && columns[cellIndex].gridColumn;
                 switch(item.rowType) {
@@ -257,11 +253,11 @@ exports.DataProvider = Class.inherit({
                             result.cellSourceData.groupSummaryItems = this._convertFromGridGroupSummaryItems(item.summaryCells[0]);
                             result.value = this._getGroupValue(item);
                         } else {
-                            summaryItems = item.values[correctedCellIndex];
+                            const summaryItems = item.values[correctedCellIndex];
                             if(Array.isArray(summaryItems)) {
                                 result.cellSourceData.groupSummaryItems = this._convertFromGridGroupSummaryItems(summaryItems);
                                 value = '';
-                                for(i = 0; i < summaryItems.length; i++) {
+                                for(let i = 0; i < summaryItems.length; i++) {
                                     value += (i > 0 ? (isExcelJS ? '\n' : ' \n ') : '') + dataGridCore.getSummaryText(summaryItems[i], this._options.summaryTexts);
                                 }
                                 result.value = value;
@@ -341,16 +337,12 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
     _getColumns: function(initialColumnWidthsByColumnIndex) {
         let result = [];
         let i;
-        let j;
-        let column;
         let columns;
         const columnsController = this._columnsController;
         const rowCount = columnsController.getRowCount();
-        let currentHeaderRow;
-        let currentColspan;
 
         for(i = 0; i <= rowCount; i++) {
-            currentHeaderRow = [];
+            const currentHeaderRow = [];
             columns = columnsController.getVisibleColumns(i, true);
             let columnWidthsByColumnIndex;
             if(i === rowCount) {
@@ -366,14 +358,14 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
                     }
                 }
             }
-            for(j = 0; j < columns.length; j++) {
-                column = extend({}, columns[j], {
+            for(let j = 0; j < columns.length; j++) {
+                const column = extend({}, columns[j], {
                     dataType: columns[j].dataType === 'datetime' ? 'date' : columns[j].dataType,
                     gridColumn: columns[j],
                 });
 
                 if(this._needColumnExporting(column)) {
-                    currentColspan = this._calculateExportColspan(column);
+                    const currentColspan = this._calculateExportColspan(column);
                     if(isDefined(currentColspan)) {
                         column.exportColspan = currentColspan;
                     }
@@ -417,17 +409,13 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
     _getFooterSummaryItems: function(summaryCells, isTotal) {
         const result = [];
         let estimatedItemsCount = 1;
-        let values;
-        let itemsLength;
-        let summaryCell;
-        let j;
         let i = 0;
 
         do {
-            values = [];
-            for(j = 0; j < summaryCells.length; j++) {
-                summaryCell = summaryCells[j];
-                itemsLength = summaryCell.length;
+            const values = [];
+            for(let j = 0; j < summaryCells.length; j++) {
+                const summaryCell = summaryCells[j];
+                const itemsLength = summaryCell.length;
                 if(estimatedItemsCount < itemsLength) {
                     estimatedItemsCount = itemsLength;
                 }
@@ -440,11 +428,10 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
     },
 
     _hasSummaryGroupFooters: function() {
-        let i;
         const groupItems = this.option('summary.groupItems');
 
         if(isDefined(groupItems)) {
-            for(i = 0; i < groupItems.length; i++) {
+            for(let i = 0; i < groupItems.length; i++) {
                 if(groupItems[i].showInGroupFooter) {
                     return true;
                 }
@@ -455,14 +442,12 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
     },
 
     _getItemsWithSummaryGroupFooters: function(sourceItems) {
-        let item;
         let result = [];
         let beforeGroupFooterItems = [];
         let groupFooterItems = [];
-        let i;
 
-        for(i = 0; i < sourceItems.length; i++) {
-            item = sourceItems[i];
+        for(let i = 0; i < sourceItems.length; i++) {
+            const item = sourceItems[i];
             if(item.rowType === 'groupFooter') {
                 groupFooterItems = this._getFooterSummaryItems(item.summaryCells);
                 result = result.concat(beforeGroupFooterItems, groupFooterItems);
@@ -476,23 +461,16 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
     },
 
     _updateGroupValuesWithSummaryByColumn: function(sourceItems) {
-        let item;
-        let summaryCells;
-        let summaryItem;
         let summaryValues = [];
-        let groupColumnCount;
-        let k;
-        let j;
-        let i;
 
-        for(i = 0; i < sourceItems.length; i++) {
-            item = sourceItems[i];
-            summaryCells = item.summaryCells;
+        for(let i = 0; i < sourceItems.length; i++) {
+            const item = sourceItems[i];
+            const summaryCells = item.summaryCells;
             if(item.rowType === 'group' && summaryCells && summaryCells.length > 1) {
-                groupColumnCount = item.values.length;
-                for(j = 1; j < summaryCells.length; j++) {
-                    for(k = 0; k < summaryCells[j].length; k++) {
-                        summaryItem = summaryCells[j][k];
+                const groupColumnCount = item.values.length;
+                for(let j = 1; j < summaryCells.length; j++) {
+                    for(let k = 0; k < summaryCells[j].length; k++) {
+                        const summaryItem = summaryCells[j][k];
                         if(summaryItem && summaryItem.alignByColumn) {
                             if(!Array.isArray(summaryValues[j - groupColumnCount])) {
                                 summaryValues[j - groupColumnCount] = [];
@@ -513,20 +491,16 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
     _processUnExportedItems: function(items) {
         const columns = this._columnsController.getVisibleColumns(null, true);
         const groupColumns = this._columnsController.getGroupColumns();
-        let item;
-        let column;
         let values;
         let summaryCells;
-        let i;
-        let j;
 
-        for(i = 0; i < items.length; i++) {
-            item = items[i];
+        for(let i = 0; i < items.length; i++) {
+            const item = items[i];
             values = [];
             summaryCells = [];
 
-            for(j = 0; j < columns.length; j++) {
-                column = columns[j];
+            for(let j = 0; j < columns.length; j++) {
+                const column = columns[j];
                 if(this._needColumnExporting(column)) {
                     if(item.values) {
                         if(item.rowType === 'group' && !values.length) {
@@ -562,7 +536,6 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
         const totalItem = footerItems.length && footerItems[0];
         const summaryTotalItems = that.option('summary.totalItems');
         let summaryCells;
-        let summaryItems;
 
         when(data).done(function(data) {
             dataController.loadAll(data).done(function(sourceItems, totalAggregates) {
@@ -578,7 +551,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
                     summaryCells = dataController._getSummaryCells(summaryTotalItems, totalAggregates);
                 }
 
-                summaryItems = totalItem && that._getFooterSummaryItems(summaryCells, true);
+                const summaryItems = totalItem && that._getFooterSummaryItems(summaryCells, true);
                 if(summaryItems) {
                     sourceItems = sourceItems.concat(summaryItems);
                 }

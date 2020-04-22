@@ -156,7 +156,6 @@ QUnit.module('Headers', {
     QUnit.test('Draw headers', function(assert) {
     // arrange
         const testElement = $('#container');
-        let i;
 
         $.extend(this.columns, [{ caption: 'Column 1' }, { caption: 'Column 2' }, { caption: 'Column 3' },
             { caption: 'Column 4' }, { caption: 'Column 5' }]);
@@ -169,7 +168,7 @@ QUnit.module('Headers', {
         assert.equal(cells.length, 5, 'headers count');
 
         // T218997
-        for(i = 0; i < cells.length; i++) {
+        for(let i = 0; i < cells.length; i++) {
             const headerNumber = i + 1;
 
             assert.equal(getText(cells[i]), 'Column ' + headerNumber, headerNumber + ' header text');

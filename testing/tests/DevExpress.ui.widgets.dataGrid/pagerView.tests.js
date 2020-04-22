@@ -63,7 +63,6 @@ QUnit.module('Pager', {
     // arrange
         const testElement = $('#container');
         const pagerView = this.pagerView;
-        let pager;
 
         this.options.pager.visible = false;
 
@@ -71,7 +70,7 @@ QUnit.module('Pager', {
 
         // act
         pagerView.render(testElement);
-        pager = pagerView._getPager();
+        const pager = pagerView._getPager();
 
         // assert
         assert.ok(!pager);
@@ -82,13 +81,12 @@ QUnit.module('Pager', {
     // arrange
         const testElement = $('#container');
         const pagerView = this.pagerView;
-        let pager;
 
         this.dataControllerOptions.hasKnownLastPage = false;
 
         // act
         pagerView.render(testElement);
-        pager = pagerView._getPager();
+        const pager = pagerView._getPager();
 
         // assert
         assert.equal(testElement.find('.dx-pager').length, 1, 'pager element');
@@ -709,8 +707,6 @@ QUnit.module('Pager', {
     QUnit.test('Key down Enter, Space key by page size element', function(assert) {
     // arrange
         const $testElement = $('#container');
-        let $pageElement;
-        let pager;
 
         this.options.pager.allowedPageSizes = [2, 4, 6];
         this.dataControllerOptions = {
@@ -721,11 +717,11 @@ QUnit.module('Pager', {
         };
         this.pagerView.render($testElement);
 
-        pager = this.pagerView.element().dxPager('instance');
+        const pager = this.pagerView.element().dxPager('instance');
         sinon.spy(pager, '_renderPageSizes');
 
         // act
-        $pageElement = $(this.pagerView.element().find('.dx-page-sizes .dx-page-size').eq(1)).focus();
+        const $pageElement = $(this.pagerView.element().find('.dx-page-sizes .dx-page-size').eq(1)).focus();
         $pageElement.trigger(eventUtils.createEvent('keydown', { target: $pageElement.get(0), key: 'Enter' }));
 
         // assert

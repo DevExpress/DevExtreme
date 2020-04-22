@@ -107,14 +107,12 @@ module.exports = {
                     },
                     _changeRowExpandCore: function(key) {
                         const that = this;
-                        let expandIndex;
-                        let editingController;
 
                         let result;
                         if(Array.isArray(key)) {
                             result = that.callBase.apply(that, arguments);
                         } else {
-                            expandIndex = gridCoreUtils.getIndexByKey(key, that._expandedItems);
+                            const expandIndex = gridCoreUtils.getIndexByKey(key, that._expandedItems);
                             if(expandIndex >= 0) {
                                 const visible = that._expandedItems[expandIndex].visible;
 
@@ -122,7 +120,7 @@ module.exports = {
                             } else {
                                 that._expandedItems.push({ key: key, visible: true });
 
-                                editingController = that.getController('editing');
+                                const editingController = that.getController('editing');
                                 if(editingController) {
                                     editingController.correctEditRowIndexAfterExpand(key);
                                 }
@@ -161,7 +159,6 @@ module.exports = {
                     _processItems: function(items, change) {
                         const that = this;
                         const changeType = change.changeType;
-                        let expandIndex;
                         const result = [];
 
                         items = that.callBase.apply(that, arguments);
@@ -176,7 +173,7 @@ module.exports = {
 
                         each(items, function(index, item) {
                             result.push(item);
-                            expandIndex = gridCoreUtils.getIndexByKey(item.key, that._expandedItems);
+                            const expandIndex = gridCoreUtils.getIndexByKey(item.key, that._expandedItems);
 
                             if(item.rowType === 'data' && (item.isExpanded || expandIndex >= 0) && !item.isNewRow) {
                                 result.push({
@@ -193,8 +190,6 @@ module.exports = {
                     },
                     optionChanged: function(args) {
                         const that = this;
-                        let value;
-                        let previousValue;
                         let isEnabledChanged;
                         let isAutoExpandAllChanged;
 
@@ -202,13 +197,13 @@ module.exports = {
                             args.name = 'dataSource';
 
                             switch(args.fullName) {
-                                case 'masterDetail':
-                                    value = args.value || {};
-                                    previousValue = args.previousValue || {};
+                                case 'masterDetail': {
+                                    const value = args.value || {};
+                                    const previousValue = args.previousValue || {};
                                     isEnabledChanged = value.enabled !== previousValue.enabled;
                                     isAutoExpandAllChanged = value.autoExpandAll !== previousValue.autoExpandAll;
                                     break;
-
+                                }
                                 case 'masterDetail.enabled':
                                     isEnabledChanged = true;
                                     break;
