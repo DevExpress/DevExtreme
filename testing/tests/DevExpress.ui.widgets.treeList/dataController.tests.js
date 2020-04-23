@@ -243,8 +243,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
     });
 
     QUnit.test('Initialize from dataSource with hierarchical structure', function(assert) {
-    // arrange
-        let items;
+        // arrange
         const array = [
             { name: 'Category1', phone: '55-55-55' },
             { name: 'Category2', phone: '98-75-21', items: [
@@ -267,7 +266,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.expandRow(2);
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.equal(items.length, 4, 'count items');
 
         assert.equal(items[0].key, 1, 'key of first item');
@@ -290,8 +289,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
     });
 
     QUnit.test('Initialize from dataSource with hierarchical structure when \'keyExpr\' option is specified', function(assert) {
-    // arrange
-        let items;
+        // arrange
         const array = [
             { name: 'Category1', phone: '55-55-55', key: 'key1' },
             { name: 'Category2', phone: '98-75-21', key: 'key2', items: [
@@ -315,7 +313,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.expandRow('key2');
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.equal(items.length, 4, 'count items');
 
         assert.equal(items[0].key, 'key1', 'key of first item');
@@ -777,8 +775,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
     // T621620
     QUnit.test('Initialize from dataSource with hierarchical structure when \'parentIdExpr\' option is specified', function(assert) {
-    // arrange
-        let items;
+        // arrange
         const array = [
             { name: 'Category1', phone: '55-55-55', key: 'key1' },
             { name: 'Category2', phone: '98-75-21', key: 'key2', parentId: 'key1', items: [
@@ -801,7 +798,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         dataSource.load();
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.equal(items.length, 4, 'count items');
 
         assert.equal(items[0].key, 'key1', 'key of first item');
@@ -2608,9 +2605,6 @@ QUnit.module('Filtering', { beforeEach: function() {
 }, afterEach: teardownModule }, () => {
 
     QUnit.test('Search should work correctly with hierarchical structure', function(assert) {
-    // arrange
-        let items;
-
         // act
         this.setupTreeList({
             itemsExpr: 'items',
@@ -2625,7 +2619,7 @@ QUnit.module('Filtering', { beforeEach: function() {
         });
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.strictEqual(items.length, 2, 'item count');
         assert.deepEqual(items[0].data, { 'id': 1, 'name': 'Alex', 'parentId': 0 }, 'first item');
         assert.deepEqual(items[1].data, { 'id': 2, 'name': 'Bob', 'parentId': 1 }, 'second item');

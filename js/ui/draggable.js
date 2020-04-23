@@ -568,9 +568,6 @@ const Draggable = DOMComponentWithTemplate.inherit({
     },
 
     _dragStartHandler: function(e) {
-        let $dragElement;
-        let initialOffset;
-        let isFixedPosition;
         const $element = this._getDraggableElement(e);
 
         if(this._$sourceElement) {
@@ -593,12 +590,12 @@ const Draggable = DOMComponentWithTemplate.inherit({
         this._setSourceDraggable();
 
         this._$sourceElement = $element;
-        initialOffset = $element.offset();
-        $dragElement = this._$dragElement = this._createDragElement($element);
+        const initialOffset = $element.offset();
+        const $dragElement = this._$dragElement = this._createDragElement($element);
 
         this._toggleDraggingClass(true);
         this._toggleDragSourceClass(true);
-        isFixedPosition = $dragElement.css('position') === 'fixed';
+        const isFixedPosition = $dragElement.css('position') === 'fixed';
 
         this._initPosition(extend({}, dragStartArgs, {
             dragElement: $dragElement.get(0),

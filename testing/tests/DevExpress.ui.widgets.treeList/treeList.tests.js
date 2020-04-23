@@ -149,9 +149,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
     });
 
     QUnit.test('Reordering column', function(assert) {
-    // arrange
-        let $cellElement;
-        let $iconContainer;
+        // arrange
         const treeList = createTreeList({
             allowColumnReordering: true,
             loadingTimeout: undefined,
@@ -164,8 +162,8 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         columnController.moveColumn(0, 3);
 
         // assert
-        $cellElement = $('#treeList').find('.dx-treelist-rowsview').find('.dx-data-row > td').first();
-        $iconContainer = $('#treeList').find('.dx-treelist-rowsview').find('.dx-treelist-icon-container');
+        const $cellElement = $('#treeList').find('.dx-treelist-rowsview').find('.dx-data-row > td').first();
+        const $iconContainer = $('#treeList').find('.dx-treelist-rowsview').find('.dx-treelist-icon-container');
         assert.equal($iconContainer.length, 1, 'count expand icon');
         assert.equal($cellElement.children('.dx-treelist-icon-container').length, 1, 'first cell have expand icon');
         assert.equal($cellElement.text(), '2', 'first cell value');
@@ -315,9 +313,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
 
     // T516918
     QUnit.test('Filter menu items should have icons', function(assert) {
-    // arrange
-        let $filterMenuElement;
-        let $menuItemElements;
+        // arrange
         const treeList = createTreeList({
             filterRow: {
                 visible: true
@@ -333,11 +329,11 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         this.clock.tick();
 
         // act
-        $filterMenuElement = $(treeList.$element().find('.dx-treelist-filter-row').find('.dx-menu').first().find('.dx-menu-item'));
+        const $filterMenuElement = $(treeList.$element().find('.dx-treelist-filter-row').find('.dx-menu').first().find('.dx-menu-item'));
         $($filterMenuElement).trigger('dxclick'); // show menu
 
         // assert
-        $menuItemElements = $('.dx-overlay-wrapper').find('.dx-menu-item');
+        const $menuItemElements = $('.dx-overlay-wrapper').find('.dx-menu-item');
         assert.ok($menuItemElements.length > 0, 'has filter menu items');
         assert.equal($menuItemElements.first().find('.dx-icon').css('fontFamily'), 'DXIcons', 'first item has icon');
     });
@@ -581,11 +577,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
     });
 
     QUnit.test('Aria accessibility', function(assert) {
-    // arrange, act
-        let $dataRows;
-        let $headerTable;
-        let $dataTable;
-        let $treeList;
+        // arrange, act
         const treeList = createTreeList({
             dataSource: [
                 { id: 1, parentId: 0, name: 'Name 1', age: 19 },
@@ -599,17 +591,17 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        $treeList = $(treeList.$element());
+        const $treeList = $(treeList.$element());
 
         assert.equal($treeList.find('.dx-gridbase-container').attr('role'), 'treegrid', 'treeList base container - value of \'role\' attribute');
 
-        $headerTable = $treeList.find('.dx-treelist-headers table').first();
+        const $headerTable = $treeList.find('.dx-treelist-headers table').first();
         assert.equal($headerTable.attr('role'), 'presentation', 'header table - value of \'role\' attribute');
 
-        $dataTable = $treeList.find('.dx-treelist-rowsview table').first();
+        const $dataTable = $treeList.find('.dx-treelist-rowsview table').first();
         assert.equal($dataTable.attr('role'), 'presentation', 'data table - value of \'role\' attribute');
 
-        $dataRows = $dataTable.find('.dx-data-row');
+        const $dataRows = $dataTable.find('.dx-data-row');
         assert.equal($dataRows.eq(0).attr('aria-expanded'), 'true', 'first data row - value of \'aria-expanded\' attribute');
         assert.equal($dataRows.eq(0).attr('aria-level'), '0', 'first data row - value of \'aria-level\' attribute');
         assert.equal($dataRows.eq(1).attr('aria-expanded'), 'false', 'second data row - value of \'aria-expanded\' attribute');
@@ -745,8 +737,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
     });
 
     QUnit.test('TreeList with paging', function(assert) {
-    // arrange, act
-        let $treeListElement;
+        // arrange, act
         const treeList = createTreeList({
             autoExpandAll: true,
             dataSource: generateData(5),
@@ -763,7 +754,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        $treeListElement = $(treeList.$element());
+        const $treeListElement = $(treeList.$element());
         assert.strictEqual($treeListElement.find('.dx-treelist-pager').length, 1, 'has pager');
         assert.strictEqual($treeListElement.find('.dx-page').length, 2, 'number of containers for page');
         assert.ok($treeListElement.find('.dx-page').first().hasClass('dx-selection'), 'current page - first');
@@ -1634,8 +1625,7 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
 
     // T806547
     QUnit.test('TreeList should correctly switch dx-row-alt class for fixed column after expand if repaintChangesOnly = true', function(assert) {
-    // arrange
-        let $row;
+        // arrange
         const treeList = createTreeList({
             rowAlternationEnabled: true,
             autoExpandAll: false,
@@ -1664,7 +1654,7 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
         // act
         treeList.expandRow(1);
         this.clock.tick();
-        $row = $(treeList.getRowElement(2));
+        const $row = $(treeList.getRowElement(2));
 
         // assert
         assert.notOk($row.eq(0).hasClass('dx-row-alt'), 'unfixed table row element');
@@ -1672,8 +1662,7 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
     });
 
     QUnit.test('TreeList should reshape data after update dataSource if reshapeOnPush set true (T815367)', function(assert) {
-    // arrange
-        let $row;
+        // arrange
         const treeList = createTreeList({
             dataSource: {
                 store: [{
@@ -1698,7 +1687,7 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
         this.clock.tick();
 
         // arrange
-        $row = $(treeList.getRowElement(1));
+        const $row = $(treeList.getRowElement(1));
 
         // assert
         assert.ok($row && $row.text() === 'Alex', 'pushed item displays');

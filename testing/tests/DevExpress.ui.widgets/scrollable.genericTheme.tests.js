@@ -63,7 +63,7 @@ QUnit.module('ScrollProps: native strategy', () => {
         ['vertical', 'horizontal', 'both'].forEach((outerDirection) => {
             ['vertical', 'horizontal', 'both'].forEach((innerDirection) => {
                 ['always', 'never', 'onHover', 'onScroll'].forEach((showScrollbar) => {
-                    let config = { rtlEnabled, outerDirection, innerDirection, showScrollbar };
+                    const config = { rtlEnabled, outerDirection, innerDirection, showScrollbar };
                     config.message = Object.keys(config).reduce((message, key) => message += `${key}: ${config[key]}, `, '');
                     configs.push(config);
                 });
