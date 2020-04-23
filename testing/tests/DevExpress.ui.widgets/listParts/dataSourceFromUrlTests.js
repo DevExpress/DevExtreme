@@ -28,7 +28,6 @@ QUnit.module(
         QUnit.test('list refresh', function(assert) {
             const done = assert.async();
             let dataVersion = 1;
-            let list;
 
             appendWidgetContainer();
             setupAjaxMock(function() {
@@ -38,7 +37,7 @@ QUnit.module(
                 }
             });
 
-            list = new List('#list', {
+            const list = new List('#list', {
                 dataSource: TEST_URL,
                 onItemRendered: handleItemRendered
             });
@@ -62,7 +61,6 @@ QUnit.module(
 
         QUnit.test('list search', function(assert) {
             const done = assert.async();
-            let list;
             let itemRenderedCount = 0;
             let searching = false;
 
@@ -71,7 +69,7 @@ QUnit.module(
                 return [ 'a', 'z' ];
             });
 
-            list = new List('#list', {
+            const list = new List('#list', {
                 dataSource: TEST_URL,
                 onItemRendered: handleItemRendered
             });

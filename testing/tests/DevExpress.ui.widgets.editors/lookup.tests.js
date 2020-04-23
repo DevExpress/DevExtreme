@@ -1585,10 +1585,8 @@ QUnit.module('options', {
             searchPlaceholder: 'searchPlaceHolderTest'
         }).dxLookup('instance');
 
-        let search;
-
         $(instance._$field).trigger('dxclick');
-        search = instance._searchBox;
+        const search = instance._searchBox;
 
         assert.equal(search.option('placeholder'), instance.option('searchPlaceholder'));
 
@@ -1602,11 +1600,8 @@ QUnit.module('options', {
             dataSource: []
         }).dxLookup('instance');
 
-        let popup;
-        let $search;
-
-        popup = instance._popup;
-        $search = instance._$searchBox;
+        const popup = instance._popup;
+        const $search = instance._$searchBox;
 
         assert.ok($(popup._wrapper()).hasClass('dx-lookup-popup-search'));
         assert.ok($search.is(':visible'), 'default value');
@@ -1662,10 +1657,9 @@ QUnit.module('options', {
         assert.expect(2);
 
         const instance = $('#lookup').dxLookup({ noDataText: 'nope' }).dxLookup('instance');
-        let listInstance;
 
         $(instance._$field).trigger('dxclick');
-        listInstance = instance._list;
+        const listInstance = instance._list;
 
         assert.equal(listInstance.option('noDataText'), 'nope', 'correct initialization');
 
@@ -1832,10 +1826,9 @@ QUnit.module('options', {
         const dataSource1 = [1, 2, 3];
         const dataSource2 = [4, 5];
         const instance = $('#lookup').dxLookup({ dataSource: dataSource1 }).dxLookup('instance');
-        let list;
 
         $(instance._$field).trigger('dxclick');
-        list = instance._list;
+        const list = instance._list;
 
         assert.strictEqual(instance._dataSource, list._dataSource);
         assert.deepEqual(instance._dataSource._items, dataSource1);
@@ -1849,10 +1842,9 @@ QUnit.module('options', {
         const items1 = [1, 2, 3];
         const items2 = [4, 5];
         const instance = $('#lookup').dxLookup({ items: items1 }).dxLookup('instance');
-        let list;
 
         $(instance._$field).trigger('dxclick');
-        list = instance._list;
+        const list = instance._list;
 
         assert.deepEqual(list._dataSource._items, items1);
 
@@ -3099,10 +3091,9 @@ QUnit.module('device and theme specific tests', {
 
     QUnit.test('popup title collapse if empty title option (B232073)', function(assert) {
         const instance = $('#lookup').dxLookup({}).dxLookup('instance');
-        let popup;
 
         $(instance._$field).trigger('dxclick');
-        popup = instance._popup;
+        const popup = instance._popup;
 
         const $popupTitle = $(popup._wrapper()).find('.dx-popup-title');
         assert.ok($popupTitle.height() > 0);

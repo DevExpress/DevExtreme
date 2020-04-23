@@ -1299,7 +1299,6 @@ QUnit.module('value option', moduleConfig, () => {
     });
 
     QUnit.test('T823593 file list shoud be rerendered if widget invalidated', function(assert) {
-        let fileUploader;
         let eventHandled = false;
 
         const onValueChanged = e => {
@@ -1309,6 +1308,7 @@ QUnit.module('value option', moduleConfig, () => {
                 eventHandled = true;
             }
 
+            const fileUploader = e.component;
             fileUploader.beginUpdate();
             fileUploader.option('value', e.value);
             fileUploader.option('allowedFileExtensions', ['.png', '.gif']);
@@ -1321,7 +1321,6 @@ QUnit.module('value option', moduleConfig, () => {
             allowedFileExtensions: ['.png', '.gif'],
             onValueChanged: onValueChanged
         });
-        fileUploader = $fileUploader.dxFileUploader('instance');
 
         simulateFileChoose($fileUploader, fakeFile);
 
