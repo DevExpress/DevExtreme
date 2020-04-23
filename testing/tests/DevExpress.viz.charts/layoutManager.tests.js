@@ -721,20 +721,18 @@ QUnit.module('check need space panes canvas');
 
 QUnit.test('space sufficiently', function(assert) {
     const panes = [{ canvas: { width: 200, left: 10, right: 20, height: 300, top: 30, bottom: 40 } }];
-    let updateSide;
     const layoutManager = createLayoutManager();
 
-    updateSide = layoutManager.needMoreSpaceForPanesCanvas(panes);
+    const updateSide = layoutManager.needMoreSpaceForPanesCanvas(panes);
 
     assert.equal(updateSide, false);
 });
 
 QUnit.test('need width space', function(assert) {
     const panes = [{ canvas: { width: 200, left: 40, right: 20, height: 300, top: 30, bottom: 40 } }];
-    let updateSide;
     const layoutManager = createLayoutManager();
 
-    updateSide = layoutManager.needMoreSpaceForPanesCanvas(panes);
+    const updateSide = layoutManager.needMoreSpaceForPanesCanvas(panes);
 
     assert.deepEqual(updateSide, {
         height: 0,
@@ -744,10 +742,9 @@ QUnit.test('need width space', function(assert) {
 
 QUnit.test('need height space', function(assert) {
     const panes = [{ canvas: { width: 200, left: 10, right: 20, height: 300, top: 130, bottom: 40 } }];
-    let updateSide;
     const layoutManager = createLayoutManager();
 
-    updateSide = layoutManager.needMoreSpaceForPanesCanvas(panes);
+    const updateSide = layoutManager.needMoreSpaceForPanesCanvas(panes);
 
     assert.deepEqual(updateSide, {
         height: 30,
@@ -757,10 +754,9 @@ QUnit.test('need height space', function(assert) {
 
 QUnit.test('need both side space', function(assert) {
     const panes = [{ canvas: { width: 200, left: 10, right: 50, height: 300, top: 130, bottom: 40 } }];
-    let updateSide;
     const layoutManager = createLayoutManager();
 
-    updateSide = layoutManager.needMoreSpaceForPanesCanvas(panes);
+    const updateSide = layoutManager.needMoreSpaceForPanesCanvas(panes);
 
     assert.deepEqual(updateSide, {
         height: 30,
@@ -771,10 +767,9 @@ QUnit.test('need both side space', function(assert) {
 QUnit.test('for several panes', function(assert) {
     const panes = [{ canvas: { width: 200, left: 10, right: 50, height: 300, top: 130, bottom: 40 } },
         { canvas: { width: 200, left: 10, right: 20, height: 300, top: 30, bottom: 40 } }];
-    let updateSide;
     const layoutManager = createLayoutManager();
 
-    updateSide = layoutManager.needMoreSpaceForPanesCanvas(panes);
+    const updateSide = layoutManager.needMoreSpaceForPanesCanvas(panes);
 
     assert.deepEqual(updateSide, {
         height: 30,
@@ -785,10 +780,9 @@ QUnit.test('for several panes', function(assert) {
 QUnit.test('for several rotated panes', function(assert) {
     const panes = [{ canvas: { width: 200, left: 10, right: 50, height: 300, top: 130, bottom: 40 } },
         { canvas: { width: 300, left: 145, right: 20, height: 300, top: 130, bottom: 40 } }];
-    let updateSide;
     const layoutManager = createLayoutManager();
 
-    updateSide = layoutManager.needMoreSpaceForPanesCanvas(panes, true);
+    const updateSide = layoutManager.needMoreSpaceForPanesCanvas(panes, true);
 
     assert.deepEqual(updateSide, {
         height: 30,
@@ -798,10 +792,9 @@ QUnit.test('for several rotated panes', function(assert) {
 
 QUnit.test('space with radius', function(assert) {
     const panes = [{ canvas: { width: 500, left: 110, right: 50, height: 500, top: 130, bottom: 40 } }];
-    let updateSide;
     const layoutManager = createLayoutManager({ piePercentage: 0.7 });
 
-    updateSide = layoutManager.needMoreSpaceForPanesCanvas(panes, false);
+    const updateSide = layoutManager.needMoreSpaceForPanesCanvas(panes, false);
 
     assert.deepEqual(updateSide, { height: 20, width: 10 });
 });

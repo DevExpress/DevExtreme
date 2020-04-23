@@ -535,12 +535,11 @@ module.exports = {
         const that = this;
         let navigator = window.navigator;
         const r = that._options.styles.normal.r;
-        let minTrackerSize;
         ///#DEBUG
         navigator = that.__debug_navigator || navigator;
         that.__debug_browserNavigator = navigator;
         ///#ENDDEBUG
-        minTrackerSize = windowUtils.hasProperty('ontouchstart') || (navigator.msPointerEnabled && navigator.msMaxTouchPoints || navigator.pointerEnabled && navigator.maxTouchPoints) ? 20 : 6;
+        const minTrackerSize = windowUtils.hasProperty('ontouchstart') || (navigator.msPointerEnabled && navigator.msMaxTouchPoints || navigator.pointerEnabled && navigator.maxTouchPoints) ? 20 : 6;
         that._options.trackerR = r < minTrackerSize ? minTrackerSize : r;
         return that._options.trackerR;
     },

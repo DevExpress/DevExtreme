@@ -11,7 +11,6 @@ const minVisibleSelector = 'minVisible';
 const maxVisibleSelector = 'maxVisible';
 const baseSelector = 'base';
 const axisTypeSelector = 'axisType';
-let _Range;
 
 function otherLessThan(thisValue, otherValue) {
     return otherValue < thisValue;
@@ -33,7 +32,7 @@ function compareAndReplace(thisValue, otherValue, setValue, compare) {
     }
 }
 
-_Range = exports.Range = function(range) {
+const _Range = exports.Range = function(range) {
     range && extend(this, range);
 };
 
