@@ -34,6 +34,11 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         this._itemList = this._createComponent($itemListContainer, FileManagerThumbnailListBox, {
             dataSource: this._createDataSource(),
             selectionMode,
+            selectableItemFilter: itemInfo => {
+                const a = !this._isParentDirectoryItem(itemInfo);
+                // debugger;
+                return a;
+            },
             selectedItemKeys: this.option('selectedItemKeys'),
             focusedItemKey: this.option('focusedItemKey'),
             activeStateEnabled: true,

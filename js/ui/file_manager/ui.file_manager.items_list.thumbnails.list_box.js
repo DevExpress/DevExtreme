@@ -25,6 +25,12 @@ const FILE_MANAGER_THUMBNAILS_LIST_BOX_NAMESPACE = 'dxFileManagerThumbnailsListB
 const FILE_MANAGER_THUMBNAILS_LIST_BOX_HOLD_EVENT_NAME = addNamespace(holdEvent.name, FILE_MANAGER_THUMBNAILS_LIST_BOX_NAMESPACE);
 
 class FileManagerThumbnailListBox extends CollectionWidget {
+    _init() {
+        super._init();
+        this._selection.options.filter = () => this.option('selectableItemFilter');
+        this._selection.options.isSelectableItem = this.option('selectableItemFilter');
+    }
+
     _initMarkup() {
         this._initActions();
 
