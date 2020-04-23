@@ -231,10 +231,9 @@ QUnit.test('Subscriptions on init', function(assert) {
     const rootElement = this.renderer.root;
 
     assert.ok(this.tracker);
-    assert.strictEqual(rootElement.on.callCount, 3, 'root subscription');
+    assert.strictEqual(rootElement.on.callCount, 2, 'root subscription'); // T880908 - Don't use dxhold event
     assert.strictEqual(rootElement.on.getCall(0).args[0], 'dxpointerdown.dxChartTracker dxpointermove.dxChartTracker', 'pointer events');
     assert.strictEqual(rootElement.on.getCall(1).args[0], 'dxclick.dxChartTracker', 'click event');
-    assert.strictEqual(rootElement.on.getCall(2).args[0], 'dxhold.dxChartTracker', 'hold event');
 });
 
 QUnit.test('dxpointermove without series over', function(assert) {
@@ -1093,6 +1092,7 @@ QUnit.test('hold on series', function(assert) {
         .up();
 
     this.clock.tick(0);
+    assert.ok(this.tracker._isHolding);
     assert.ok(!this.options.eventTrigger.withArgs('seriesClick').called);
 
     delete rootElement.get(0)['chart-data-series'];
