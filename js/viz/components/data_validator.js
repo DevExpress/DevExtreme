@@ -206,13 +206,12 @@ function groupMinSlices(originalData, argumentField, valueField, smallValuesGrou
 
     const mode = smallValuesGrouping.mode;
     const others = {};
-    let data;
 
     if(!mode || mode === 'none') { return; }
     others[argumentField] = String(smallValuesGrouping.groupName || 'others');
     others[valueField] = 0;
 
-    data = sortValues(originalData.slice(), false, function(a) { return a[valueField]; });
+    const data = sortValues(originalData.slice(), false, function(a) { return a[valueField]; });
 
     groupingValues(data, others, valueField, mode === 'smallValueThreshold' ? findIndexByThreshold(data, valueField, smallValuesGrouping.threshold) : smallValuesGrouping.topCount);
 
@@ -466,8 +465,6 @@ function verifyData(source, incidentOccurred) {
 }
 
 function validateData(data, groupsData, incidentOccurred, options) {
-    let dataByArgumentFields;
-
     data = verifyData(data, incidentOccurred);
 
     groupsData.argumentType = groupsData.argumentAxisType = null;
@@ -483,7 +480,7 @@ function validateData(data, groupsData, incidentOccurred, options) {
     }
     groupPieData(data, groupsData);
 
-    dataByArgumentFields = sortData(data, groupsData, options, getUniqueArgumentFields(groupsData));
+    const dataByArgumentFields = sortData(data, groupsData, options, getUniqueArgumentFields(groupsData));
 
     return dataByArgumentFields;
 }

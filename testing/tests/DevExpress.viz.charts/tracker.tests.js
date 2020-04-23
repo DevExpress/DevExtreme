@@ -2347,7 +2347,6 @@ QUnit.test('legend item click, several series', function(assert) {
     // arrange
     const argument = 'arg';
     const extraSeries = createSeries();
-    let legendClick;
     const points = ['firstPoint', 'secondPoint'];
 
     this.legend.coordsIn.withArgs(97, 45).returns(true);
@@ -2363,7 +2362,7 @@ QUnit.test('legend item click, several series', function(assert) {
 
     // act
     $(this.renderer.root.element).trigger(event);
-    legendClick = this.options.eventTrigger.withArgs('legendClick');
+    const legendClick = this.options.eventTrigger.withArgs('legendClick');
 
     // assert
     assert.ok(legendClick.calledOnce, 'legendClick');

@@ -206,13 +206,11 @@ function getTextCloudInfo(options) {
 const BaseTextCloudMarker = BaseIndicator.inherit({
     _move: function() {
         const that = this;
-        let bBox;
-        let info;
         const textCloudOptions = that._getTextCloudOptions();
         const text = _formatValue(that._actualValue, that._options.text);
         that._text.attr({ text: text });
-        bBox = that._text.getBBox();
-        info = getTextCloudInfo({
+        const bBox = that._text.getBBox();
+        const info = getTextCloudInfo({
             x: textCloudOptions.x,
             y: textCloudOptions.y,
             textWidth: bBox.width || text.length * that._textUnitWidth, // T346511
@@ -303,7 +301,6 @@ const BaseRangeBar = BaseIndicator.inherit({
     _updateBarItems: function() {
         const that = this;
         const options = that._options;
-        let backgroundColor;
         let spaceColor;
         const translator = that._translator;
 
@@ -313,7 +310,7 @@ const BaseRangeBar = BaseIndicator.inherit({
         that._basePosition = translator.translate(options.baseValue);
         that._space = that._getSpace();
 
-        backgroundColor = options.backgroundColor || 'none';
+        const backgroundColor = options.backgroundColor || 'none';
         if(backgroundColor !== 'none' && that._space > 0) {
             spaceColor = options.containerBackgroundColor || 'none';
         } else {
