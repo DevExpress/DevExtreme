@@ -120,7 +120,7 @@
 
 .set-offset-agenda-group-mixin(@offset) {
     .dx-scheduler-date-table {
-        margin-right: -@offset;
+        margin-right: -@offset - @SCHEDULER_LEFT_COLUMN_WIDTH;
 
         .dx-scheduler-small & {
             margin-left: -@offset * @SCHEDULER_SMALL_SIZE_FACTOR;
@@ -2149,6 +2149,12 @@
         &.dx-scheduler-work-space-grouped {
             .dx-scheduler-date-table {
                 float: right;
+            }
+
+            .dx-scheduler-date-table-row {
+                &:before {
+                    display: none;
+                }
             }
 
             .dx-scheduler-group-row {
