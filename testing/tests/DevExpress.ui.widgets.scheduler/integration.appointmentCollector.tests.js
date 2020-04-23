@@ -272,7 +272,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             currentView: 'month',
             currentDate: new Date(2019, 4, 29),
             width: 800,
-            height: 500
+            height: 490
         });
         this.clock.tick(300);
         this.instance.focus();
@@ -365,7 +365,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             currentDate: new Date(2015, 2, 4),
             views: ['month'],
             width: 840,
-            height: 500,
+            height: 490,
             currentView: 'month',
             firstDayOfWeek: 1,
             onAppointmentClick(args) {
@@ -462,7 +462,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             currentDate: new Date(2015, 2, 4),
             views: ['month'],
             width: 840,
-            height: 500,
+            height: 490,
             currentView: 'month',
             firstDayOfWeek: 1,
             resources: [
@@ -508,7 +508,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             currentDate: new Date(2015, 2, 4),
             views: ['month'],
             width: 840,
-            height: 500,
+            height: 490,
             currentView: 'month',
             firstDayOfWeek: 1,
             resources: [
@@ -596,10 +596,10 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             startDateExpr: 'Start',
             endDateExpr: 'End',
             textExpr: 'Text',
-            height: 500,
+            height: 490,
             maxAppointmentsPerCell: 'auto',
             dropDownAppointmentTemplate(data) {
-                return '<div class=\'custom-title\'>' + data.Text + '</div>';
+                return `<div class='custom-title'>${data.Text}</div>`;
             }
         });
 
@@ -634,10 +634,10 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             startDateExpr: 'Start',
             endDateExpr: 'End',
             textExpr: 'Text',
-            height: 500,
+            height: 490,
             maxAppointmentsPerCell: 'auto',
             appointmentCollectorTemplate(data) {
-                return '<div class=\'button-title\'>Appointment count is ' + data.appointmentCount + '</div>';
+                return `<div class='button-title'>Appointment count is ${data.appointmentCount}</div>`;
             }
         });
 

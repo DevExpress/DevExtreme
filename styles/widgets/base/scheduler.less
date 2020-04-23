@@ -17,6 +17,7 @@
 @SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT * 0.5;
 @SCHEDULER_VERTICAL_GROUPED_ALL_DAY_TABLE_CELL_HEIGHT: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
 @SCHEDULER_VERTICAL_GROUP_HEADER_CONTENT_TOP_OFFSET: 16px;
+@SCHEDULER_MONTH_WORKSPACE_DATE_TABLE_HEIGHT: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT * 6;
 
 @SCHEDULER_GROUP_HEADER_TABLE_CELL_HEIGHT: 30px;
 
@@ -956,6 +957,7 @@
 
     .dx-scheduler-scrollable-fixed-content {
         height: 100%;
+        min-height: @SCHEDULER_MONTH_WORKSPACE_DATE_TABLE_HEIGHT;
     }
 
     .dx-scheduler-work-space-month {
@@ -1003,7 +1005,7 @@
         }
 
         .dx-scheduler-date-table-cell {
-            height: auto;
+            height: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
             vertical-align: top;
             text-align: right;
             font-size: @SCHEDULER_MONTH_DATE_TEXT_SIZE;

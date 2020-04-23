@@ -29,10 +29,10 @@ module('RTL', moduleConfig, () => {
             const expectedValues = {
                 month: [
                     {
-                        top: 257,
+                        top: 260,
                         left: 599
                     }, {
-                        top: 257,
+                        top: 260,
                         left: 250
                     }
                 ],

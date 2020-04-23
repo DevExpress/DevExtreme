@@ -1729,7 +1729,7 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     assert.roughEqual($appointment.eq(3).outerWidth(), tableCellWidth, 1.5, 'appointment is full-size');
 });
 
-QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, height is small \'auto\' mode', function(assert) {
+QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, height is small "auto" mode', function(assert) {
     const items = [ { text: 'Task 1', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
         { text: 'Task 2', startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) },
         { text: 'Task 3', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 5, 0) },
@@ -1752,7 +1752,7 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     const dropDownMenuText = $dropDownMenu.find('span').first().text();
 
     assert.equal($dropDownMenu.length, 1, 'ddAppointment is rendered');
-    assert.equal(dropDownMenuText, '4 more', 'DropDown menu has correct text');
+    assert.equal(dropDownMenuText, '3 more', 'DropDown menu has correct text');
 });
 
 QUnit.test('Full-size appointment should have correct height, \'auto\' mode', function(assert) {
