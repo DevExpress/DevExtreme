@@ -206,12 +206,11 @@ QUnit.test('dataSource instance', function(assert) {
 
 QUnit.test('dataSource, paginate', function(assert) {
     const ds = [];
-    let chart;
     for(let i = 0; i < 100; i++) {
         ds.push(i);
     }
     this.options = { dataSource: ds, series: [{}] };
-    chart = this.createChart();
+    const chart = this.createChart();
 
     assert.equal(chart.getDataSource().isLastPage(), true, 'data on one page');
 });
@@ -233,10 +232,9 @@ QUnit.test('data initialization after load dataSource', function(assert) {
 
 QUnit.test('update dataSource after option changing', function(assert) {
     const chart = this.createChart();
-    let ds;
 
     chart.option('dataSource', [{}]);
-    ds = chart.getDataSource();
+    const ds = chart.getDataSource();
 
     assert.ok(ds.isLoaded());
     assert.deepEqual(ds.items(), [{}]);
@@ -245,10 +243,9 @@ QUnit.test('update dataSource after option changing', function(assert) {
 QUnit.test('update with null dataSource', function(assert) {
     this.options = { dataSource: [{}], series: [{}] };
     const chart = this.createChart();
-    let ds;
 
     chart.option('dataSource', null);
-    ds = chart.getDataSource();
+    const ds = chart.getDataSource();
 
     assert.ok(!ds);
     assert.equal(this.validateData.callCount, 2);

@@ -915,13 +915,11 @@ QUnit.test('Update clipRects. With financial series', function(assert) {
 });
 
 QUnit.test('Update clipRects. After update elements & canvas', function(assert) {
-    let dirtyCanvas;
-
     const chart = this.createChart({
         size: { width: 800, height: 800 },
         margin: { left: 80, right: 90, top: 10, bottom: 80 }
     });
-    dirtyCanvas = chart.DEBUG_dirtyCanvas;
+    const dirtyCanvas = chart.DEBUG_dirtyCanvas;
 
     assert.equal(chart._canvasClipRect.attr.callCount, 1);
     assert.deepEqual(chart._canvasClipRect.attr.lastCall.args, [{ x: dirtyCanvas.left, y: dirtyCanvas.top, width: dirtyCanvas.width - dirtyCanvas.left - dirtyCanvas.right, height: dirtyCanvas.height - dirtyCanvas.top - dirtyCanvas.bottom }]);

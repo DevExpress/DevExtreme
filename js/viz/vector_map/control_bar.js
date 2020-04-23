@@ -146,12 +146,10 @@ ControlBar.prototype = {
 
     _createElements: function(renderer, container, dataKey) {
         const that = this;
-        let buttonsGroups;
-        let trackersGroup;
 
         that._root = renderer.g().attr({ 'class': 'dxm-control-bar' }).linkOn(container, 'control-bar');
-        buttonsGroups = that._buttonsGroup = renderer.g().attr({ 'class': 'dxm-control-buttons' }).append(that._root);
-        trackersGroup = renderer.g().attr({ stroke: 'none', 'stroke-width': 0, fill: '#000000', opacity: 0.0001 }).css({ cursor: 'pointer' }).append(that._root);
+        const buttonsGroups = that._buttonsGroup = renderer.g().attr({ 'class': 'dxm-control-buttons' }).append(that._root);
+        const trackersGroup = renderer.g().attr({ stroke: 'none', 'stroke-width': 0, fill: '#000000', opacity: 0.0001 }).css({ cursor: 'pointer' }).append(that._root);
         that._createButtons(renderer, dataKey, buttonsGroups);
         that._createTrackers(renderer, dataKey, trackersGroup);
     },
@@ -266,15 +264,13 @@ ControlBar.prototype = {
 
     _adjustZoom: function(zoom) {
         const that = this;
-        let transform;
-        let y;
         const start = SIZE_OPTIONS.sliderLineStartOffset;
         const end = SIZE_OPTIONS.sliderLineEndOffset;
         const h = SIZE_OPTIONS.sliderWidth;
 
         that._zoomFactor = _max(_min(_round(zoom), that._zoomPartition), 0);
-        transform = { translateY: -_round(that._zoomFactor * that._sliderUnitLength) };
-        y = end - (h / 2) + transform.translateY;
+        const transform = { translateY: -_round(that._zoomFactor * that._sliderUnitLength) };
+        const y = end - (h / 2) + transform.translateY;
         that._zoomLine.attr({ points: [[0, start, 0, _max(start, y)], [0, _min(end, y + h), 0, end]] });
         that._zoomDrag.attr(transform);
         that._zoomDragTracker.attr(transform);

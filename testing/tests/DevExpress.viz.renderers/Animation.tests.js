@@ -521,11 +521,10 @@ const vizMocks = require('../../helpers/vizMocks.js');
     QUnit.test('Start', function(assert) {
         const animation = new this.Animation(this.element, this.params, this.options);
         const firstTick = animation.tick;
-        let secondTick;
 
         // Act
         const result = animation.tick(new Date().getTime());
-        secondTick = animation.tick;
+        const secondTick = animation.tick;
         // Assert
         assert.ok(new Date() - animation._startTime < 1000);
         assert.strictEqual(result, true);

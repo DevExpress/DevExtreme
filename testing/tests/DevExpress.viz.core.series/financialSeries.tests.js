@@ -114,10 +114,9 @@ const checkGroups = function(assert, series) {
     QUnit.test('Creation financial point', function(assert) {
         const series = createSeries({ type: 'stock', argumentField: 'arg', highValueField: 'h', lowValueField: 'l', openValueField: 'o', closeValueField: 'c', reduction: { level: 'open' }, label: { visible: false } });
         const data = [{ arg: 1, h: 3, l: -10, o: 1, c: -4 }];
-        let points;
         series.updateData(data);
         series.createPoints();
-        points = series.getPoints();
+        const points = series.getPoints();
 
         assert.ok(points, 'Points should be created');
         assert.equal(points.length, 1, 'Series should have one point');
@@ -135,11 +134,10 @@ const checkGroups = function(assert, series) {
             highValueField: 'h', lowValueField: 'l', openValueField: 'o', closeValueField: 'c', reduction: { level: 'open' }, label: { visible: false }
         });
         const data = [{ arg: 1, h: 3, l: -10, o: 1, c: -4, lowErrorField: 0, highErrorField: 4 }];
-        let points;
 
         series.updateData(data);
         series.createPoints();
-        points = series.getPoints();
+        const points = series.getPoints();
 
         assert.ok(points, 'Points should be created');
         assert.equal(points.length, 1, 'Series should have one point');
@@ -157,11 +155,10 @@ const checkGroups = function(assert, series) {
     QUnit.test('Creation financial point. Default fields', function(assert) {
         const series = createSeries({ type: 'stock', reduction: { level: 'open' }, label: { visible: false } });
         const data = [{ date: 1, high: 3, low: -10, open: 1, close: -4 }];
-        let points;
 
         series.updateData(data);
         series.createPoints();
-        points = series.getPoints();
+        const points = series.getPoints();
 
         assert.ok(points, 'Points should be created');
         assert.equal(points.length, 1, 'Series should have one point');
@@ -220,10 +217,10 @@ const checkGroups = function(assert, series) {
     QUnit.test('Creation financial point. Null values, ingoreEmptyPoints false', function(assert) {
         const series = createSeries({ type: 'stock', argumentField: 'arg', highValueField: 'h', lowValueField: 'l', openValueField: 'o', closeValueField: 'c', reduction: { level: 'open' }, label: { visible: false } });
         const data = [{ arg: 1, h: null, l: null, o: null, c: null }];
-        let points;
+
         series.updateData(data);
         series.createPoints();
-        points = series.getPoints();
+        const points = series.getPoints();
 
         assert.equal(points.length, 1, 'Series should have one point');
         assert.equal(this.createPoint.firstCall.args[1].argument, 1, 'Argument should be correct');
@@ -236,10 +233,9 @@ const checkGroups = function(assert, series) {
     QUnit.test('Creation financial point. Null values, ingoreEmptyPoints true', function(assert) {
         const series = createSeries({ type: 'stock', ignoreEmptyPoints: true, argumentField: 'arg', highValueField: 'h', lowValueField: 'l', openValueField: 'o', closeValueField: 'c', reduction: { level: 'open' }, label: { visible: false } });
         const data = [{ arg: 1, h: null, l: null, o: null, c: null }];
-        let points;
         series.updateData(data);
         series.createPoints();
-        points = series.getPoints();
+        const points = series.getPoints();
 
         assert.equal(points.length, 0);
     });
@@ -1967,11 +1963,11 @@ const checkGroups = function(assert, series) {
             reduction: { color: 'reduction', level: 'high' },
             innerColor: 'innerColor'
         });
-        let styles;
+
         series.updateData(this.data);
         series.createPoints();
 
-        styles = series._getPointOptions().styles;
+        const styles = series._getPointOptions().styles;
 
         assert.strictEqual(styles.hover.fill, 'mainSeriesColor', 'hover.fill color');
         assert.strictEqual(styles.hover.stroke, 'mainSeriesColor', 'hover.stroke color');
@@ -2023,11 +2019,10 @@ const checkGroups = function(assert, series) {
             reduction: { color: 'reduction', level: 'high' },
             innerColor: 'innerColor'
         });
-        let styles;
 
         series.updateData(this.data);
         series.createPoints();
-        styles = series._getPointOptions().styles;
+        const styles = series._getPointOptions().styles;
 
         assert.strictEqual(styles.hover.fill, 'seriesColor', 'hover.fill color');
         assert.strictEqual(styles.hover.stroke, 'seriesColor', 'hover.stroke color');
@@ -2084,11 +2079,10 @@ const checkGroups = function(assert, series) {
             reduction: { color: 'reduction', level: 'high' },
             innerColor: 'innerColor'
         }, { renderer: this.renderer });
-        let styles;
         series.updateData(this.data);
         series.createPoints();
 
-        styles = series._getPointOptions().styles;
+        const styles = series._getPointOptions().styles;
         assert.strictEqual(styles.hover.fill, 'h-color', 'hover.fill color');
         assert.strictEqual(styles.hover.stroke, 'h-color', 'hover.stroke color');
 

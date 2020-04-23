@@ -920,14 +920,12 @@ QUnit.module('drawn', stubLayersEnvironment);
 QUnit.test('call drawn after layer collection ready', function(assert) {
     const onDrawn = sinon.spy();
     const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
-    let notifyDirty;
-    let notifyReady;
     this.createMap({
         onDrawn: onDrawn
     });
     onDrawn.reset();
-    notifyDirty = spy.lastCall.args[0].notifyDirty;
-    notifyReady = spy.lastCall.args[0].notifyReady;
+    const notifyDirty = spy.lastCall.args[0].notifyDirty;
+    const notifyReady = spy.lastCall.args[0].notifyReady;
 
     notifyDirty();
     notifyDirty();

@@ -220,9 +220,8 @@ const triangleMarker = SimpleIndicator.inherit({
         const y1 = options.y - options.radius;
         const dx = options.width / 2 || 0;
         const y2 = y1 - _Number(options.length);
-        let settings;
         that._element = that._element || that._renderer.path([], 'area').append(that._rootElement);
-        settings = { points: [x, y1, x - dx, y2, x + dx, y2], stroke: 'none', 'stroke-width': 0, 'stroke-linecap': 'square' };
+        const settings = { points: [x, y1, x - dx, y2, x + dx, y2], stroke: 'none', 'stroke-width': 0, 'stroke-linecap': 'square' };
         if(options.space > 0) {
             settings['stroke-width'] = Math.min(options.space, options.width / 4) || 0;
             settings.stroke = settings['stroke-width'] > 0 ? options.containerBackgroundColor || 'none' : 'none';
@@ -283,12 +282,10 @@ const textCloud = BaseTextCloudMarker.inherit({
     measure: function(layout) {
         const that = this;
         const arrowLength = _Number(that._options.arrowLength) || 0;
-        let verticalOffset;
-        let horizontalOffset;
 
         that._measureText();
-        verticalOffset = that._textFullHeight + arrowLength;
-        horizontalOffset = that._textFullWidth + arrowLength;
+        const verticalOffset = that._textFullHeight + arrowLength;
+        const horizontalOffset = that._textFullWidth + arrowLength;
 
         return {
             min: layout.radius,
