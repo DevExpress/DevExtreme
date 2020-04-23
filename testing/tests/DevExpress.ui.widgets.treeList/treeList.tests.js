@@ -1146,7 +1146,7 @@ QUnit.module('Expand/Collapse rows', () => {
             const topVisibleRowData = treeList.getTopVisibleRowData();
 
             // assert
-            assert.strictEqual(treeList.pageIndex(), 4, 'page index');
+            assert.strictEqual(treeList.pageIndex(), 3, 'page index');
             assert.strictEqual(treeList.pageCount(), 5, 'page count');
 
             // act
