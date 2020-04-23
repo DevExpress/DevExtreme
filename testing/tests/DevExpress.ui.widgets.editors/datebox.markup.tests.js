@@ -3,6 +3,7 @@ import support from 'core/utils/support';
 import uiDateUtils from 'ui/date_box/ui.date_utils';
 import DateBox from 'ui/date_box';
 import dateLocalization from 'localization/date';
+import keyboardMock from '../../helpers/keyboardMock.js';
 
 QUnit.testStart(function() {
     const markup =
@@ -183,6 +184,29 @@ QUnit.module('Rendering input', moduleConfig, () => {
 
         assert.equal($input.attr('min'), '2015-06-02', 'minimum date initialized correctly');
         assert.equal($input.attr('max'), '2015-08-02', 'maximum date initialized correctly');
+    });
+
+    QUnit.test('DateBox with masked behavior should not set the selection of the hidden unfocused input', function(assert) {
+        this.$element.hide();
+        this.createInstance({
+            value: new Date('10/10/2012 13:07'),
+            useMaskBehavior: true,
+            mode: 'text',
+            displayFormat: 'd.MM.yyyy',
+            pickerType: 'calendar'
+        });
+        this.$element.show();
+
+        const $input = this.$element.find('.dx-texteditor-input');
+        const keyboard = keyboardMock($input, true);
+
+        const {
+            start: selectionStart,
+            end: selectionEnd
+        } = keyboard.caret();
+        const isDayPartSelected = selectionStart === 0 && selectionEnd === 2;
+
+        assert.notOk(isDayPartSelected, 'correct intial position');
     });
 });
 
