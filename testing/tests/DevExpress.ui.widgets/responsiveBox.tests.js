@@ -301,6 +301,44 @@ QUnit.module('layouting', moduleConfig, () => {
         assert.equal($second.height(), maxSize, 'height is max-height');
     });
 
+    QUnit.test('default value of minWidth and minHeight in an item for a row direction of the container', function(assert) {
+        const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+            rows: [{ ratio: 1 }],
+            cols: [{ ratio: 1 }, { ratio: 1 }],
+            items: [
+                { location: { row: 0, col: 0 }, html: '<div class=\'first\'></div>' },
+                { location: { row: 0, col: 1 }, html: '<div class=\'second\'></div>' }
+            ]
+        });
+
+        const $first = $responsiveBox.find('.first').closest('.dx-box-item');
+        const $second = $responsiveBox.find('.second').closest('.dx-box-item');
+
+        assert.equal($first.css('minWidth'), '0px', 'minWidth of the first item');
+        assert.equal($second.css('minWidth'), '0px', 'minWidth of the second item');
+        assert.equal($first.css('minHeight'), 'auto', 'minHeight of the first item');
+        assert.equal($second.css('minHeight'), 'auto', 'minHeight of the second item');
+    });
+
+    QUnit.test('default value of minWidth and minHeight in an item for a column direction of the container', function(assert) {
+        const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+            rows: [{ ratio: 1 }, { ratio: 1 }],
+            cols: [{ ratio: 1 }],
+            items: [
+                { location: { row: 0, col: 0 }, html: '<div class=\'first\'></div>' },
+                { location: { row: 1, col: 0 }, html: '<div class=\'second\'></div>' }
+            ]
+        });
+
+        const $first = $responsiveBox.find('.first').closest('.dx-box-item');
+        const $second = $responsiveBox.find('.second').closest('.dx-box-item');
+
+        assert.equal($first.css('minWidth'), 'auto', 'minWidth of the first item');
+        assert.equal($second.css('minWidth'), 'auto', 'minWidth of the second item');
+        assert.equal($first.css('minHeight'), 'auto', 'minHeight of the first item');
+        assert.equal($second.css('minHeight'), 'auto', 'minHeight of the second item');
+    });
+
     QUnit.test('singleColumnScreen render items with baseSize: auto', function(assert) {
         this.updateScreenSize(500);
 
