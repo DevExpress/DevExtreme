@@ -60,11 +60,12 @@ class MentionModule extends PopupModule {
         this.editorInstance = options.editorInstance;
 
         options.mentions.forEach((item) => {
-            let { marker, template } = item;
+            let marker = item.marker;
             if(!marker) {
                 item.marker = marker = DEFAULT_MARKER;
             }
 
+            const template = item.template;
             if(template) {
                 const preparedTemplate = this.editorInstance._getTemplate(template);
                 preparedTemplate && Mention.addTemplate(marker, preparedTemplate);

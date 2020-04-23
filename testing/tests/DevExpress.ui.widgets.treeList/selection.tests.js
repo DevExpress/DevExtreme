@@ -364,8 +364,7 @@ QUnit.module('Selection', { beforeEach: setupModule, afterEach: teardownModule }
     });
 
     QUnit.test('Checking state selectAll checkbox - select all when there is filter', function(assert) {
-    // arrange
-        let $selectAllCheckBox;
+        // arrange
         const $testElement = $('#treeList');
 
         this.options.dataSource = [
@@ -390,7 +389,7 @@ QUnit.module('Selection', { beforeEach: setupModule, afterEach: teardownModule }
         this.selectAll();
 
         // assert
-        $selectAllCheckBox = $testElement.find('.dx-header-row').children().first().find('.dx-select-checkbox');
+        const $selectAllCheckBox = $testElement.find('.dx-header-row').children().first().find('.dx-select-checkbox');
         assert.ok($selectAllCheckBox.hasClass('dx-checkbox-checked'), 'selectAll checkbox is checked');
     });
 

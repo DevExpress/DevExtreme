@@ -1055,8 +1055,6 @@ QUnit.module('options changed', moduleSetup, () => {
     });
 
     QUnit.test('searchEditorOptions', function(assert) {
-        let searchEditorInstance;
-
         const $element = $('#list').dxList({
             dataSource: [
                 { text: 'test1', value: '3' },
@@ -1071,7 +1069,7 @@ QUnit.module('options changed', moduleSetup, () => {
 
         const instance = $element.dxList('instance');
 
-        searchEditorInstance = $element.children('.dx-list-search').dxTextBox('instance');
+        const searchEditorInstance = $element.children('.dx-list-search').dxTextBox('instance');
         assert.strictEqual(searchEditorInstance.option('placeholder'), 'Search', 'placeholder of the search box');
 
         instance.option('searchEditorOptions', { placeholder: 'Test' });
@@ -1382,15 +1380,13 @@ QUnit.module('dataSource integration', moduleSetup, () => {
 
     QUnit.test('shared data source', function(assert) {
         const dataSource = new DataSource();
-        let widget;
-        let changedHandler;
 
         this.element.dxList({
             dataSource
         });
 
-        widget = this.element.dxList('instance');
-        changedHandler = widget._proxiedDataSourceChangedHandler;
+        const widget = this.element.dxList('instance');
+        const changedHandler = widget._proxiedDataSourceChangedHandler;
         assert.ok($.isFunction(changedHandler));
         assert.ok(dataSource._eventsStrategy._events['changed'].has(changedHandler));
 
@@ -2707,23 +2703,19 @@ QUnit.module('keyboard navigation', {
 
 QUnit.module('Search', () => {
     QUnit.test('Render search editor', function(assert) {
-        let $searchEditor;
-
         const $element = $('#list').dxList({
             dataSource: [1, 2, 3],
             searchEnabled: true,
             searchValue: '3'
         });
 
-        $searchEditor = $element.children().first();
+        const $searchEditor = $element.children().first();
         assert.ok($element.hasClass('dx-list-with-search'), 'list with search');
         assert.ok($searchEditor.hasClass('dx-list-search'), 'has search editor');
         assert.strictEqual($searchEditor.dxTextBox('instance').option('value'), '3', 'editor value');
     });
 
     QUnit.test('Search', function(assert) {
-        let searchEditor;
-
         const $element = $('#list').dxList({
             dataSource: [1, 2, 3],
             searchEnabled: true,
@@ -2732,7 +2724,7 @@ QUnit.module('Search', () => {
 
         const instance = $element.dxList('instance');
 
-        searchEditor = $element.children().first().dxTextBox('instance');
+        const searchEditor = $element.children().first().dxTextBox('instance');
         searchEditor.option('value', '2');
 
         assert.deepEqual(instance.option('items'), [2], 'items');
@@ -2773,8 +2765,6 @@ QUnit.module('Search', () => {
     });
 
     QUnit.test('Search when searchMode is specified', function(assert) {
-        let searchEditor;
-
         const $element = $('#list').dxList({
             dataSource: [1, 12, 23],
             searchEnabled: true,
@@ -2784,7 +2774,7 @@ QUnit.module('Search', () => {
 
         const instance = $element.dxList('instance');
 
-        searchEditor = $element.children().first().dxTextBox('instance');
+        const searchEditor = $element.children().first().dxTextBox('instance');
         searchEditor.option('value', '2');
 
         assert.deepEqual(instance.option('items'), [23], 'items');
