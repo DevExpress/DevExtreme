@@ -2274,32 +2274,30 @@ QUnit.module('Editing', {
         assert.ok(!isCellClosed);
     });
 
-    /*
-TODO Unstable test
-asyncTest('Focus on first editor after Edit Click', function () {
-    // arrange
-    var that = this,
-        rowsView = this.rowsView,
-        testElement = $('#container');
+    // TODO Unstable test
+    QUnit.skip('Focus on first editor after Edit Click', function(assert) {
+        // arrange
+        var done = assert.async(),
+            rowsView = this.rowsView,
+            testElement = $('#container');
 
-    rowsView.applyOptions({
-        editing: {
-            allowAdding: true
-        }
+        rowsView.applyOptions({
+            editing: {
+                allowAdding: true
+            }
+        });
+        rowsView.render(testElement);
+
+        // act
+        testElement.find('tbody > tr').first().find('a').trigger('click'); // New
+
+        // assert
+        assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 3);
+        setTimeout(function() {
+            assert.equal(testElement.find('input:focus').val(), testElement.find('input')[0].value);
+            done();
+        });
     });
-    rowsView.render(testElement);
-
-    // act
-    testElement.find('tbody > tr').first().find('a').trigger('click'); // New
-
-    // assert
-    assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 3);
-    setTimeout(function () {
-        assert.equal(testElement.find("input:focus").val(), testElement.find('input')[0].value);
-
-    });
-});
-*/
 
     // T287356
     QUnit.test('Not apply column options to cell editor', function(assert) {

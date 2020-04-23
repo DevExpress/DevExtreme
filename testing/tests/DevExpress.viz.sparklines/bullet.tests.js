@@ -1069,72 +1069,72 @@ QUnit.test('Change size if size = 0,10 - B239871', function(assert) {
     assert.ok(redrawFunctionCalled, 'Redraw function was not called');
 });
 
-// QUnit.test('Rendering in container with container size 0, 0', function (assert) {
-//    var container = $('#containerForResize'),
-//        sparkCont = $('<div style="width: 10px; height: 0px">').appendTo(container),
-//        options = {
-//            value: 10,
-//            startScaleValue: 0,
-//            endScaleValue: 10,
-//            target: 8
-//        },
-//        renderCalled = 0;
-//
-//    dxBullet.prototype._drawWidgetElements = function () {
-//        renderCalled++;
-//    };
-//
-//    sparkCont.dxBullet(options);
-//    sparkCont.width(200);
-//    sparkCont.height(400);
-//    sparkCont.dxBullet('instance').render();
-//
-//    assert.equal(renderCalled, 2, 'Render called 2 time');
-// });
-//
-// QUnit.test('Rendering in container with size 0, 0', function (assert) {
-//    var container = $('#containerForResize'),
-//        sparkCont = $('<div style="width: 10px; height: 10px">').appendTo(container),
-//        options = {
-//            value: 10,
-//            startScaleValue: 0,
-//            endScaleValue: 10,
-//            target: 8,
-//            size: {
-//                width: 0,
-//                height: 0
-//            }
-//        },
-//        renderCalled = 0;
-//
-//    dxBullet.prototype._drawWidgetElements = function () {
-//        renderCalled++;
-//    };
-//
-//    sparkCont.dxBullet(options);
-//    sparkCont.dxBullet('instance').option('size', { width: 200, height: 30 });
-//
-//    assert.equal(renderCalled, 1, 'Render called 1 time');
-// });
-//
-// QUnit.test('Rendering in container with big margin', function (assert) {
-//    var container = $('#containerForResize'),
-//        sparkCont = $('<div style="width: 2px; height: 2px">').appendTo(container),
-//        options = {
-//        },
-//        renderCalled = 0;
-//
-//    dxBullet.prototype._drawWidgetElements = function () {
-//        renderCalled++;
-//    };
-//
-//    sparkCont.dxBullet(options);
-//    sparkCont.width(200);
-//    sparkCont.height(400);
-//    sparkCont.dxBullet('instance').render();
-//
-//    assert.equal(renderCalled, 1, 'Render called 2 time');
-// });
+QUnit.skip('Rendering in container with container size 0, 0', function(assert) {
+    var container = $('#containerForResize'),
+        sparkCont = $('<div style="width: 10px; height: 0px">').appendTo(container),
+        options = {
+            value: 10,
+            startScaleValue: 0,
+            endScaleValue: 10,
+            target: 8
+        },
+        renderCalled = 0;
+
+    BaseWidget.prototype._drawWidgetElements = function() {
+        renderCalled++;
+    };
+
+    sparkCont.dxBullet(options);
+    sparkCont.width(200);
+    sparkCont.height(400);
+    sparkCont.dxBullet('instance').render();
+
+    assert.equal(renderCalled, 2, 'Render called 2 time');
+});
+
+QUnit.skip('Rendering in container with size 0, 0', function(assert) {
+    var container = $('#containerForResize'),
+        sparkCont = $('<div style="width: 10px; height: 10px">').appendTo(container),
+        options = {
+            value: 10,
+            startScaleValue: 0,
+            endScaleValue: 10,
+            target: 8,
+            size: {
+                width: 0,
+                height: 0
+            }
+        },
+        renderCalled = 0;
+
+    // dxBullet.prototype._drawWidgetElements = function() {
+    //     renderCalled++;
+    // };
+
+    sparkCont.dxBullet(options);
+    sparkCont.dxBullet('instance').option('size', { width: 200, height: 30 });
+
+    assert.equal(renderCalled, 1, 'Render called 1 time');
+});
+
+QUnit.skip('Rendering in container with big margin', function(assert) {
+    var container = $('#containerForResize'),
+        sparkCont = $('<div style="width: 2px; height: 2px">').appendTo(container),
+        options = {
+        },
+        renderCalled = 0;
+
+    BaseWidget.prototype._drawWidgetElements = function() {
+        renderCalled++;
+    };
+
+    sparkCont.dxBullet(options);
+    sparkCont.width(200);
+    sparkCont.height(400);
+    sparkCont.dxBullet('instance').render();
+
+    assert.equal(renderCalled, 1, 'Render called 2 time');
+});
 
 QUnit.module('drawn', {
     beforeEach: function() {

@@ -311,15 +311,15 @@ QUnit.test('encodeHtml', function(assert) {
     // assert.deepEqual(this.onHandleThemeOptionsCore.lastCall.args, [], "theme options handled");
 });
 
-// QUnit.test("Option from the invalidating list", function (assert) {
-//    this.createWidget();
-//    var spy = sinon.spy(this.widget, "_invalidate");
-//    this.widget._invalidatingOptions = ["test-option"];
-//
-//    this.widget.option("test-option", "test-value");
-//
-//    assert.deepEqual(spy.lastCall.args, []);
-// });
+QUnit.skip('Option from the invalidating list', function(assert) {
+    this.createWidget();
+    const spy = sinon.spy(this.widget, '_invalidate');
+    this.widget._invalidatingOptions = ['test-option'];
+
+    this.widget.option('test-option', 'test-value');
+
+    assert.deepEqual(spy.lastCall.args, []);
+});
 
 QUnit.test('Unknown option', function(assert) {
     this.createWidget();
