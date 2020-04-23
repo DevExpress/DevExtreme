@@ -737,6 +737,59 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal($(dataGrid.$element()).find('.dx-datagrid-headers').css('paddingRight'), '0px');
     });
 
+    QUnit.test('rowsview should be syncronized while headersView scrolling (T844512)', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [{}],
+            loadingTimeout: undefined,
+            scrolling: {
+                useNative: false
+            },
+            width: 150,
+            columnWidth: 100,
+            columns: ['column1', 'column2', 'column3']
+        });
+
+        const $headerScrollContainer = $(dataGrid.$element().find('.dx-datagrid-headers .dx-datagrid-scroll-container'));
+
+        // act
+        $headerScrollContainer.scrollLeft(50);
+        $headerScrollContainer.trigger('scroll');
+
+        $headerScrollContainer.scrollLeft(60);
+        $headerScrollContainer.trigger('scroll');
+
+        // assert
+        assert.equal($headerScrollContainer.scrollLeft(), 60, 'headersView scrollleft');
+        assert.equal(dataGrid.getScrollable().scrollLeft(), 60, 'rowsview scrollleft');
+    });
+
+    QUnit.test('headersView should be syncronized while rowsview scrolling (T844512)', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [{}],
+            loadingTimeout: undefined,
+            scrolling: {
+                useNative: false
+            },
+            width: 150,
+            columnWidth: 100,
+            columns: ['column1', 'column2', 'column3']
+        });
+
+        const $headerScrollContainer = $(dataGrid.$element().find('.dx-datagrid-headers .dx-datagrid-scroll-container'));
+        const $scrollContainer = $(dataGrid.$element().find('.dx-datagrid-rowsview .dx-scrollable-container'));
+
+        // act
+        $scrollContainer.scrollLeft(50);
+        $scrollContainer.trigger('scroll');
+
+        $scrollContainer.scrollLeft(60);
+        $scrollContainer.trigger('scroll');
+
+        // assert
+        assert.equal($headerScrollContainer.scrollLeft(), 60, 'headersView scrollleft');
+        assert.equal($scrollContainer.scrollLeft(), 60, 'rowsview scrollleft');
+    });
+
     // T608687
     QUnit.test('Horizontal scrollbar should not be shown if container height is not integer', function(assert) {
     // act
