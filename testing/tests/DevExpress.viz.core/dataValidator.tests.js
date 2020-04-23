@@ -1238,11 +1238,10 @@ QUnit.test('Numeric, series with same field, sortingMethod true - sort data by a
     const options = {
         sortingMethod: true
     };
-    let result;
 
     groups.argumentOptions = group1.argumentOptions;
 
-    result = testValidateData(data, groups, null, options);
+    const result = testValidateData(data, groups, null, options);
 
     checkParsedData(result, {
         arg: {
@@ -1280,11 +1279,10 @@ QUnit.test('Numeric, series with different fields, sortingMethod true - sort dat
     const options = {
         sortingMethod: true
     };
-    let result;
 
     groups.argumentOptions = group1.argumentOptions;
 
-    result = testValidateData(data, groups, null, options);
+    const result = testValidateData(data, groups, null, options);
 
     checkParsedData(result, {
         arg: {
@@ -1370,11 +1368,10 @@ QUnit.test('Numeric, series with same field, sortingMethod callback - sort data 
             return a.val - b.val;
         }
     };
-    let result;
 
     groups.argumentOptions = group1.argumentOptions;
 
-    result = testValidateData(data, groups, null, options);
+    const result = testValidateData(data, groups, null, options);
 
     checkParsedData(result, {
         arg: {
@@ -1418,11 +1415,10 @@ QUnit.test('T532528. Different argumentFields, each dataSource item is only for 
     const options = {
         sortingMethod: true
     };
-    let result;
 
     groups.argumentOptions = group1.argumentOptions;
 
-    result = testValidateData(data, groups, null, options);
+    const result = testValidateData(data, groups, null, options);
 
     checkParsedData(result, {
         arg: {
@@ -1465,11 +1461,10 @@ QUnit.test('Numeric, series with different fields (skipped items), sortingMethod
     const options = {
         sortingMethod: true
     };
-    let result;
 
     groups.argumentOptions = group1.argumentOptions;
 
-    result = testValidateData(data, groups, null, options);
+    const result = testValidateData(data, groups, null, options);
 
     checkParsedData(result, {
         arg: {
@@ -1585,11 +1580,10 @@ QUnit.test('String, series with same field, sortingMethod callback - sort data b
             return a.val - b.val;
         }
     };
-    let result;
 
     groups.argumentOptions = group1.argumentOptions;
 
-    result = testValidateData(data, groups, null, options);
+    const result = testValidateData(data, groups, null, options);
 
     checkParsedData(result, {
         arg: {
@@ -2368,17 +2362,14 @@ QUnit.test('Source empty array. should not call incidentOccurred', function(asse
 });
 
 function createStubSeries(options) {
-    let mockSeries;
-    let prepOptions;
-
     options.argumentField = options.argumentField ? options.argumentField : 'arg';
     options.valueFields = options.valueFields ? options.valueFields : 'val';
-    prepOptions = {
+    const prepOptions = {
         argumentField: options.argumentField,
         valueFields: Array.isArray(options.valueFields) ? options.valueFields : [options.valueFields]
     };
     $.extend(options, prepOptions);
-    mockSeries = sinon.createStubInstance(seriesModule.Series);
+    const mockSeries = sinon.createStubInstance(seriesModule.Series);
     mockSeries.getArgumentField.returns(options.argumentField);
     mockSeries.getValueFields.returns(options.valueFields);
     mockSeries.getSizeField.returns(options.sizeField);

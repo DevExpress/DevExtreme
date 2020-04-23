@@ -66,10 +66,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const elem = new this.Element(this.rendererStub, 'svg');
         const anotherElement = { element: document.createElement('div') };
-        let result;
 
         // act
-        result = elem.append(anotherElement);
+        const result = elem.append(anotherElement);
 
         // assert
         assert.equal(result, elem);
@@ -82,10 +81,9 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Append to undefined parent. backward compatibility!!!', function(assert) {
         // arrange
         const elem = new this.Element(this.rendererStub, 'svg');
-        let result;
 
         // act
-        result = elem.append();
+        const result = elem.append();
 
         // assert
         assert.equal(result, elem);
@@ -99,10 +97,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const parent = { element: document.createElement('div') };
         const elem1 = (new this.Element(this.rendererStub, 'svg')).append(parent);
         const elem2 = (new this.Element(this.rendererStub, 'svg')).append(parent);
-        let result;
 
         // act
-        result = elem1.remove();
+        const result = elem1.remove();
 
         // assert
         assert.equal(result, elem1);
@@ -126,15 +123,13 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('toForeground', function(assert) {
         // arrange
         const parent = { element: document.createElement('div') };
-        let elem1;
-        let result;
 
-        elem1 = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const elem1 = (new this.Element(this.rendererStub, 'svg')).append(parent);
         (new this.Element(this.rendererStub, 'svg')).append(parent);
         (new this.Element(this.rendererStub, 'svg')).append(parent);
 
         // act
-        result = elem1.toForeground();
+        const result = elem1.toForeground();
 
         // assert
         assert.equal(result, elem1);
@@ -145,15 +140,13 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('toBackground', function(assert) {
         // arrange
         const parent = { element: document.createElement('div') };
-        let elem3;
-        let result;
 
         (new this.Element(this.rendererStub, 'svg')).append(parent);
         (new this.Element(this.rendererStub, 'svg')).append(parent);
-        elem3 = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const elem3 = (new this.Element(this.rendererStub, 'svg')).append(parent);
 
         // act
-        result = elem3.toBackground();
+        const result = elem3.toBackground();
 
         // assert
         assert.equal(result, elem3);
@@ -171,12 +164,6 @@ function checkDashStyle(assert, elem, result, style, value) {
         const rect4 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const rect5 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const rect6 = (new this.Element(this.rendererStub, 'rect')).append(svg);
-        let result1;
-        let result2;
-        let result3;
-        let result4;
-        let result5;
-        let result6;
         rect1.attr = sinon.spy(); rect1.animate = sinon.spy();
         rect2.attr = sinon.spy(); rect2.animate = sinon.spy();
         rect3.attr = sinon.spy(); rect3.animate = sinon.spy();
@@ -185,12 +172,12 @@ function checkDashStyle(assert, elem, result, style, value) {
         rect6.attr = sinon.spy(); rect6.animate = sinon.spy();
 
         // act
-        result1 = rect1.move();
-        result2 = rect2.move(10, 20);
-        result3 = rect3.move(10, 20, true);
-        result4 = rect4.move(10, 20, true, { a: 'ff' });
-        result5 = rect5.move(10);
-        result6 = rect6.move(undefined, 10);
+        const result1 = rect1.move();
+        const result2 = rect2.move(10, 20);
+        const result3 = rect3.move(10, 20, true);
+        const result4 = rect4.move(10, 20, true, { a: 'ff' });
+        const result5 = rect5.move(10);
+        const result6 = rect6.move(undefined, 10);
 
         // assert
         assert.equal(result1, rect1);
@@ -237,7 +224,6 @@ function checkDashStyle(assert, elem, result, style, value) {
         const rect5 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const rect6 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const rect7 = (new this.Element(this.rendererStub, 'rect')).append(svg);
-        let result1; let result2; let result3; let result4; let result5; let result6; let result7;
         rect1.attr = sinon.spy(); rect1.animate = sinon.spy();
         rect2.attr = sinon.spy(); rect2.animate = sinon.spy();
         rect3.attr = sinon.spy(); rect3.animate = sinon.spy();
@@ -247,13 +233,13 @@ function checkDashStyle(assert, elem, result, style, value) {
         rect7.attr = sinon.spy(); rect7.animate = sinon.spy();
 
         // act
-        result1 = rect1.rotate();
-        result2 = rect2.rotate(10, 20, 30);
-        result3 = rect3.rotate(10, 20, 30, true);
-        result4 = rect4.rotate(10, 20, 30, true, { a: 'ff' });
-        result5 = rect5.rotate(10);
-        result6 = rect6.rotate(10, 20);
-        result7 = rect7.rotate(10, undefined, 20);
+        const result1 = rect1.rotate();
+        const result2 = rect2.rotate(10, 20, 30);
+        const result3 = rect3.rotate(10, 20, 30, true);
+        const result4 = rect4.rotate(10, 20, 30, true, { a: 'ff' });
+        const result5 = rect5.rotate(10);
+        const result6 = rect6.rotate(10, 20);
+        const result7 = rect7.rotate(10, undefined, 20);
 
         // assert
         assert.equal(result1, rect1);
@@ -298,11 +284,10 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const parent = { element: document.createElement('div') };
         const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
-        let offset;
         $('#qunit-fixture').append(parent);
 
         // act
-        offset = svg.getOffset();
+        const offset = svg.getOffset();
 
         // assert
         assert.deepEqual(offset, $(svg.element).offset());
@@ -327,12 +312,11 @@ function checkDashStyle(assert, elem, result, style, value) {
         const parent = { element: document.createElement('div') };
         const root = (new this.Element(this.rendererStub, 'svg')).append(parent);
         const elem = (new this.Element(this.rendererStub, 'g')).attr({ x: 1, y: 2, width: 3, height: 4, 'stroke-width': 5 }).append(root);
-        let result;
 
         elem.attr = sinon.spy(function() { return this; });
 
         // act
-        result = elem.sharp();
+        const result = elem.sharp();
 
         // assert
         assert.equal(result, elem);
@@ -345,12 +329,11 @@ function checkDashStyle(assert, elem, result, style, value) {
         const parent = { element: document.createElement('div') };
         const root = (new this.Element(this.rendererStub, 'svg')).append(parent);
         const elem = (new this.Element(this.rendererStub, 'g')).attr({ x: 1, y: 2, width: 3, height: 4, 'stroke-width': 5 }).append(root);
-        let result;
 
         elem.attr = sinon.spy(function() { return this; });
 
         // act
-        result = elem.sharp('h', -1);
+        const result = elem.sharp('h', -1);
 
         // assert
         assert.equal(result, elem);
@@ -361,10 +344,9 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Data, object', function(assert) {
         // arrange
         const elem = (new this.Element(this.rendererStub, 'svg'));
-        let result;
 
         // act
-        result = elem.data({ key1: 'value1', key2: 'value2' });
+        const result = elem.data({ key1: 'value1', key2: 'value2' });
 
         // assert
         assert.equal(result, elem);
@@ -375,10 +357,9 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Data, key_value', function(assert) {
         // arrange
         const elem = (new this.Element(this.rendererStub, 'svg'));
-        let result;
 
         // act
-        result = elem.data('key1', 'value1');
+        const result = elem.data('key1', 'value1');
 
         // assert
         assert.equal(result, elem);
@@ -470,7 +451,6 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const parent = { element: document.createElement('div') };
         const svg = (new rendererModule.SvgElement({}, 'svg')).append(parent);
-        let markupString;
         $('#qunit-fixture').append(parent);
 
         svg.element.appendChild(document.createTextNode('Some content'));
@@ -482,7 +462,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         // act
-        markupString = svg.markup();
+        const markupString = svg.markup();
 
         // assert
         assert.deepEqual(mapFromStr(markupString), mapFromStr('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">Some content</svg>'));
@@ -491,7 +471,6 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Can return markup on detached element', function(assert) {
         // arrange
         const svg = (new rendererModule.SvgElement({}, 'svg'));
-        let markupString;
 
         svg.element.appendChild(document.createTextNode('Some content'));
 
@@ -500,7 +479,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         // act
-        markupString = svg.markup();
+        const markupString = svg.markup();
 
         // assert
         assert.strictEqual(markupString.replace(/\s*/g, ''), '<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">Some content</svg>'.replace(/\s*/g, ''));
@@ -510,11 +489,11 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const svg = (new rendererModule.SvgElement({}, 'svg'));
         const text = (new rendererModule.TextSvgElement({})).append(svg);
-        let markupString;
+
         text.attr({ text: '&amp;&lt;&gt;&nbsp; &copy;&Oslash;' });
 
         // act
-        markupString = svg.markup();
+        const markupString = svg.markup();
 
         // assert
         assert.notStrictEqual(markupString.indexOf('&#38;&#60;&#62;&#160; ©Ø'), -1);
@@ -524,11 +503,10 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const svg = (new rendererModule.SvgElement({}, 'svg'));
         const text = (new rendererModule.TextSvgElement({})).append(svg);
-        let markupString;
         text.attr({ text: '1&nbsp;2&nbsp;3' });
 
         // act
-        markupString = svg.markup();
+        const markupString = svg.markup();
 
         // assert
         assert.notStrictEqual(markupString.indexOf('1&#160;2&#160;3'), -1);
@@ -563,10 +541,9 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Clear', function(assert) {
         // arrange
         const elem = (new this.Element(this.rendererStub, 'svg'));
-        let result;
 
         // act
-        result = elem.clear();
+        const result = elem.clear();
 
         // assert
         assert.equal(result, elem);
@@ -577,10 +554,9 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Disposing', function(assert) {
         // arrange
         const elem = (new this.Element(this.rendererStub, 'svg'));
-        let result;
 
         // act
-        result = elem.dispose();
+        const result = elem.dispose();
 
         // assert
         assert.equal(result, elem);
@@ -591,10 +567,9 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('On', function(assert) {
         // arrange
         const elem = (new this.Element(this.rendererStub, 'svg'));
-        let result;
 
         // act
-        result = elem.on(1, 2, 3, 4);
+        const result = elem.on(1, 2, 3, 4);
 
         // assert
 
@@ -607,10 +582,9 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Off', function(assert) {
         // arrange
         const elem = (new this.Element(this.rendererStub, 'svg'));
-        let result;
 
         // act
-        result = elem.off(1, 2, 3, 4);
+        const result = elem.off(1, 2, 3, 4);
 
         // assert
         assert.equal(result, elem);
@@ -623,10 +597,9 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Trigger', function(assert) {
         // arrange
         const elem = (new this.Element(this.rendererStub, 'svg'));
-        let result;
 
         // act
-        result = elem.trigger(1, 2, 3, 4);
+        const result = elem.trigger(1, 2, 3, 4);
 
         // assert
         assert.equal(result, elem);
@@ -653,10 +626,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
         const g = (new this.Element(this.rendererStub, 'g')).append(svg);
         const rect = (new this.Element(this.rendererStub, 'rect')).append(g);
-        let result;
 
         // act
-        result = rect.attr();
+        const result = rect.attr();
 
         // assert
         assert.equal(result, rect);
@@ -668,10 +640,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
         const g = (new this.Element(this.rendererStub, 'g')).append(svg);
         const rect = (new this.Element(this.rendererStub, 'rect')).append(g);
-        let result;
 
         // act
-        result = rect.attr({ 'some-attr': 'some value 1', 'someAttr': 'some value 2' });
+        const result = rect.attr({ 'some-attr': 'some value 1', 'someAttr': 'some value 2' });
 
         // assert
         assert.equal(result, rect);
@@ -692,20 +663,14 @@ function checkDashStyle(assert, elem, result, style, value) {
         const elem4 = (new this.Element(this.rendererStub, 'path')).append(svg);
         const elem5 = (new this.Element(this.rendererStub, 'path')).append(svg);
         const elem6 = (new this.Element(this.rendererStub, 'path')).append(svg);
-        let result1;
-        let result2;
-        let result3;
-        let result4;
-        let result5;
-        let result6;
 
         // act
-        result1 = elem1.attr({ 'dashStyle': 'longdash' });
-        result2 = elem2.attr({ 'dashStyle': 'dash' });
-        result3 = elem3.attr({ 'dashStyle': 'dot' });
-        result4 = elem4.attr({ 'dashStyle': 'solid' });
-        result5 = elem5.attr({ 'dashStyle': 'none' });
-        result6 = elem6.attr({ 'dashStyle': 'longdashdotdashlongdash' });
+        const result1 = elem1.attr({ 'dashStyle': 'longdash' });
+        const result2 = elem2.attr({ 'dashStyle': 'dash' });
+        const result3 = elem3.attr({ 'dashStyle': 'dot' });
+        const result4 = elem4.attr({ 'dashStyle': 'solid' });
+        const result5 = elem5.attr({ 'dashStyle': 'none' });
+        const result6 = elem6.attr({ 'dashStyle': 'longdashdotdashlongdash' });
 
         // assert
         checkDashStyle(assert, elem1, result1, 'longdash', '8,3');
@@ -726,15 +691,14 @@ function checkDashStyle(assert, elem, result, style, value) {
         const elem4 = (new this.Element(this.rendererStub, 'path')).append(svg);
         const elem5 = (new this.Element(this.rendererStub, 'path')).append(svg);
         const elem6 = (new this.Element(this.rendererStub, 'path')).append(svg);
-        let result1; let result2; let result3; let result4; let result5; let result6;
 
         // act
-        result1 = elem1.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'longdash' });
-        result2 = elem2.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'dash' });
-        result3 = elem3.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'dot' });
-        result4 = elem4.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'solid' });
-        result5 = elem5.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'none' });
-        result6 = elem6.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'longdashdotdashlongdash' });
+        const result1 = elem1.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'longdash' });
+        const result2 = elem2.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'dash' });
+        const result3 = elem3.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'dot' });
+        const result4 = elem4.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'solid' });
+        const result5 = elem5.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'none' });
+        const result6 = elem6.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'longdashdotdashlongdash' });
 
         // assert
         checkDashStyle(assert, elem1, result1, 'longdash', '16,6');
@@ -755,19 +719,13 @@ function checkDashStyle(assert, elem, result, style, value) {
         const elem4 = (new this.Element(this.rendererStub, 'path')).append(svg);
         const elem5 = (new this.Element(this.rendererStub, 'path')).append(svg);
         const elem6 = (new this.Element(this.rendererStub, 'path')).append(svg);
-        let result1;
-        let result2;
-        let result3;
-        let result4;
-        let result5;
-        let result6;
         // act
-        result1 = elem1.attr({ 'dashStyle': 'longdash' }).attr({ 'stroke-width': 2 });
-        result2 = elem2.attr({ 'dashStyle': 'dash' }).attr({ 'stroke-width': 2 });
-        result3 = elem3.attr({ 'dashStyle': 'dot' }).attr({ 'stroke-width': 2 });
-        result4 = elem4.attr({ 'dashStyle': 'solid' }).attr({ 'stroke-width': 2 });
-        result5 = elem5.attr({ 'dashStyle': 'none' }).attr({ 'stroke-width': 2 });
-        result6 = elem6.attr({ 'dashStyle': 'longdashdotdashlongdash' }).attr({ 'stroke-width': 2 });
+        const result1 = elem1.attr({ 'dashStyle': 'longdash' }).attr({ 'stroke-width': 2 });
+        const result2 = elem2.attr({ 'dashStyle': 'dash' }).attr({ 'stroke-width': 2 });
+        const result3 = elem3.attr({ 'dashStyle': 'dot' }).attr({ 'stroke-width': 2 });
+        const result4 = elem4.attr({ 'dashStyle': 'solid' }).attr({ 'stroke-width': 2 });
+        const result5 = elem5.attr({ 'dashStyle': 'none' }).attr({ 'stroke-width': 2 });
+        const result6 = elem6.attr({ 'dashStyle': 'longdashdotdashlongdash' }).attr({ 'stroke-width': 2 });
 
         // assert
         checkDashStyle(assert, elem1, result1, 'longdash', '16,6');
@@ -788,15 +746,14 @@ function checkDashStyle(assert, elem, result, style, value) {
         const elem4 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const elem5 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const elem6 = (new this.Element(this.rendererStub, 'rect')).append(svg);
-        let result1; let result2; let result3; let result4; let result5; let result6;
 
         // act
-        result1 = elem1.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'longdash' });
-        result2 = elem2.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'dash' });
-        result3 = elem3.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'dot' });
-        result4 = elem4.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'solid' });
-        result5 = elem5.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'none' });
-        result6 = elem6.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'longdashdotdashlongdash' });
+        const result1 = elem1.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'longdash' });
+        const result2 = elem2.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'dash' });
+        const result3 = elem3.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'dot' });
+        const result4 = elem4.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'solid' });
+        const result5 = elem5.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'none' });
+        const result6 = elem6.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'longdashdotdashlongdash' });
 
         // assert
         checkDashStyle(assert, elem1, result1, 'longdash', '16,6');
@@ -817,15 +774,14 @@ function checkDashStyle(assert, elem, result, style, value) {
         const elem4 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const elem5 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const elem6 = (new this.Element(this.rendererStub, 'rect')).append(svg);
-        let result1; let result2; let result3; let result4; let result5; let result6;
 
         // act
-        result1 = elem1.attr({ 'dashStyle': 'longdash' }).attr({ 'stroke-width': 2 });
-        result2 = elem2.attr({ 'dashStyle': 'dash' }).attr({ 'stroke-width': 2 });
-        result3 = elem3.attr({ 'dashStyle': 'dot' }).attr({ 'stroke-width': 2 });
-        result4 = elem4.attr({ 'dashStyle': 'solid' }).attr({ 'stroke-width': 2 });
-        result5 = elem5.attr({ 'dashStyle': 'none' }).attr({ 'stroke-width': 2 });
-        result6 = elem6.attr({ 'dashStyle': 'longdashdotdashlongdash' }).attr({ 'stroke-width': 2 });
+        const result1 = elem1.attr({ 'dashStyle': 'longdash' }).attr({ 'stroke-width': 2 });
+        const result2 = elem2.attr({ 'dashStyle': 'dash' }).attr({ 'stroke-width': 2 });
+        const result3 = elem3.attr({ 'dashStyle': 'dot' }).attr({ 'stroke-width': 2 });
+        const result4 = elem4.attr({ 'dashStyle': 'solid' }).attr({ 'stroke-width': 2 });
+        const result5 = elem5.attr({ 'dashStyle': 'none' }).attr({ 'stroke-width': 2 });
+        const result6 = elem6.attr({ 'dashStyle': 'longdashdotdashlongdash' }).attr({ 'stroke-width': 2 });
 
         // assert
         checkDashStyle(assert, elem1, result1, 'longdash', '16,6');
@@ -841,10 +797,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const parent = { element: document.createElement('div') };
         const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
         const elem = (new this.Element(this.rendererStub, 'path')).attr({ 'dashStyle': 'longdash' }).append(svg);
-        let result;
 
         // act
-        result = elem.attr({ 'dashStyle': undefined });
+        const result = elem.attr({ 'dashStyle': undefined });
 
         // assert
         checkDashStyle(assert, elem, result, 'longdash', '8,3');
@@ -855,10 +810,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const parent = { element: document.createElement('div') };
         const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
         const elem = (new this.Element(this.rendererStub, 'path')).attr({ 'dashStyle': 'longdash' }).append(svg);
-        let result;
 
         // act
-        result = elem.attr({ 'dashStyle': null });
+        const result = elem.attr({ 'dashStyle': null });
 
         // assert
         assert.equal(result, elem);
@@ -871,10 +825,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const parent = { element: document.createElement('div') };
         const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
         const elem = (new this.Element(this.rendererStub, 'path')).attr({ 'dashStyle': 'longdash' }).append(svg);
-        let result;
 
         // act
-        result = elem.attr({ 'dashStyle': 'solid' });
+        const result = elem.attr({ 'dashStyle': 'solid' });
 
         // assert
         assert.equal(result, elem);
@@ -889,14 +842,11 @@ function checkDashStyle(assert, elem, result, style, value) {
         const rect1 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const rect2 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const rect3 = (new this.Element(this.rendererStub, 'rect')).append(svg);
-        let result1;
-        let result2;
-        let result3;
 
         // act
-        result1 = rect1.attr({ 'align': 'left' });
-        result2 = rect2.attr({ 'align': 'center' });
-        result3 = rect3.attr({ 'align': 'right' });
+        const result1 = rect1.attr({ 'align': 'left' });
+        const result2 = rect2.attr({ 'align': 'center' });
+        const result3 = rect3.attr({ 'align': 'right' });
 
         // assert
         assert.equal(result1, rect1);
@@ -924,14 +874,11 @@ function checkDashStyle(assert, elem, result, style, value) {
         const rect1 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const rect2 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const rect3 = (new this.Element(this.rendererStub, 'rect')).append(svg);
-        let result1;
-        let result2;
-        let result3;
 
         // act
-        result1 = rect1.attr({ 'align': 'left' });
-        result2 = rect2.attr({ 'align': 'center' });
-        result3 = rect3.attr({ 'align': 'right' });
+        const result1 = rect1.attr({ 'align': 'left' });
+        const result2 = rect2.attr({ 'align': 'center' });
+        const result3 = rect3.attr({ 'align': 'right' });
 
         // assert
         assert.equal(result1, rect1);
@@ -957,10 +904,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const parent = { element: document.createElement('div') };
         const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
         const rect = (new this.Element(this.rendererStub, 'rect')).attr({ 'align': 'left' }).append(svg);
-        let result;
 
         // act
-        result = rect.attr({ 'align': null });
+        const result = rect.attr({ 'align': null });
 
         // assert
         assert.equal(result, rect);
@@ -974,10 +920,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const parent = { element: document.createElement('div') };
         const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
         const rect = (new this.Element(this.rendererStub, 'circle')).attr({ 'cy': 100, dashStyle: 'dot' }).append(svg);
-        let result;
 
         // act
-        result = rect.attr({ 'cy': undefined, dashStyle: undefined });
+        const result = rect.attr({ 'cy': undefined, dashStyle: undefined });
 
         // assert
         assert.equal(result, rect);
@@ -993,10 +938,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const parent = { element: document.createElement('div') };
         const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
         const rect = (new this.Element(this.rendererStub, 'circle')).attr({ 'cy': 100, dashStyle: 'dot' }).append(svg);
-        let result;
 
         // act
-        result = rect.attr({ 'cy': null, dashStyle: null });
+        const result = rect.attr({ 'cy': null, dashStyle: null });
 
         // assert
         assert.equal(result, rect);
@@ -1021,12 +965,11 @@ function checkDashStyle(assert, elem, result, style, value) {
         const parent = { element: document.createElement('div') };
         const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
         const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
-        let result;
 
         rect._applyTransformation = sinon.spy();
 
         // act
-        result = rect.attr({ fill: 'red', stroke: 'blue' });
+        const result = rect.attr({ fill: 'red', stroke: 'blue' });
 
         // assert
         assert.equal(result, rect);
@@ -1038,13 +981,12 @@ function checkDashStyle(assert, elem, result, style, value) {
         const parent = { element: document.createElement('div') };
         const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
         const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
-        let result;
 
         rect._applyTransformation = sinon.spy();
         rect.element.setAttribute = sinon.spy();
 
         // act
-        result = rect.attr({ fill: 'red', stroke: 'blue', x: 1, y: 2, translateX: 10, scaleY: 20, rotate: 90 });
+        const result = rect.attr({ fill: 'red', stroke: 'blue', x: 1, y: 2, translateX: 10, scaleY: 20, rotate: 90 });
 
         // assert
         assert.equal(result, rect);
@@ -1067,13 +1009,12 @@ function checkDashStyle(assert, elem, result, style, value) {
         const parent = { element: document.createElement('div') };
         const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
         const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
-        let result;
 
         rect._applyTransformation = sinon.spy();
         rect.element.setAttribute = sinon.spy();
 
         // act
-        result = rect.attr({
+        const result = rect.attr({
             translateX: 11, translateY: 22,
             rotate: 33, rotateX: 44, rotateY: 55,
             scaleX: 66, scaleY: 77,
@@ -1111,7 +1052,6 @@ function checkDashStyle(assert, elem, result, style, value) {
         const rect2 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const rect3 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const rect4 = (new this.Element(this.rendererStub, 'rect')).append(svg);
-        let result1; let result2; let result3; let result4;
 
         rect1.element.setAttribute = sinon.spy();
         rect2.element.setAttribute = sinon.spy();
@@ -1119,10 +1059,10 @@ function checkDashStyle(assert, elem, result, style, value) {
         rect4.element.setAttribute = sinon.spy();
 
         // act
-        result1 = rect1.attr({ translateX: null });
-        result2 = rect2.attr({ translateX: 10 });
-        result3 = rect3.attr({ translateY: 20 });
-        result4 = rect4.attr({ translateX: 30, translateY: 40 });
+        const result1 = rect1.attr({ translateX: null });
+        const result2 = rect2.attr({ translateX: 10 });
+        const result3 = rect3.attr({ translateY: 20 });
+        const result4 = rect4.attr({ translateX: 30, translateY: 40 });
 
         // assert
         assert.equal(result1, rect1);
@@ -1154,7 +1094,6 @@ function checkDashStyle(assert, elem, result, style, value) {
         const rect5 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const rect6 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const rect7 = (new this.Element(this.rendererStub, 'rect')).append(svg);
-        let result1; let result2; let result3; let result4; let result5; let result6; let result7;
 
         rect1.element.setAttribute = sinon.spy();
         rect2.element.setAttribute = sinon.spy();
@@ -1165,13 +1104,13 @@ function checkDashStyle(assert, elem, result, style, value) {
         rect7.element.setAttribute = sinon.spy();
 
         // act
-        result1 = rect1.attr({ rotate: null });
-        result2 = rect2.attr({ rotate: 10 });
-        result3 = rect3.attr({ rotate: 20, rotateX: 30 });
-        result4 = rect4.attr({ rotate: 40, rotateY: 50 });
-        result5 = rect5.attr({ rotate: 60, rotateX: 70, rotateY: 80 });
-        result6 = rect6.attr({ rotate: 90, x: 100, y: 110 });
-        result7 = rect7.attr({ rotate: 120, x: 130, rotateY: 140, y: 150 });
+        const result1 = rect1.attr({ rotate: null });
+        const result2 = rect2.attr({ rotate: 10 });
+        const result3 = rect3.attr({ rotate: 20, rotateX: 30 });
+        const result4 = rect4.attr({ rotate: 40, rotateY: 50 });
+        const result5 = rect5.attr({ rotate: 60, rotateX: 70, rotateY: 80 });
+        const result6 = rect6.attr({ rotate: 90, x: 100, y: 110 });
+        const result7 = rect7.attr({ rotate: 120, x: 130, rotateY: 140, y: 150 });
 
         // assert
         assert.equal(result1, rect1);
@@ -1219,7 +1158,6 @@ function checkDashStyle(assert, elem, result, style, value) {
         const rect2 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const rect3 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const rect4 = (new this.Element(this.rendererStub, 'rect')).append(svg);
-        let result1; let result2; let result3; let result4;
 
         rect1.element.setAttribute = sinon.spy();
         rect2.element.setAttribute = sinon.spy();
@@ -1227,10 +1165,10 @@ function checkDashStyle(assert, elem, result, style, value) {
         rect4.element.setAttribute = sinon.spy();
 
         // act
-        result1 = rect1.attr({ scaleX: null });
-        result2 = rect2.attr({ scaleX: 10 });
-        result3 = rect3.attr({ scaleY: 20 });
-        result4 = rect4.attr({ scaleX: 30, scaleY: 40 });
+        const result1 = rect1.attr({ scaleX: null });
+        const result2 = rect2.attr({ scaleX: 10 });
+        const result3 = rect3.attr({ scaleY: 20 });
+        const result4 = rect4.attr({ scaleX: 30, scaleY: 40 });
 
         // assert
         assert.equal(result1, rect1);
@@ -1256,12 +1194,11 @@ function checkDashStyle(assert, elem, result, style, value) {
         const parent = { element: document.createElement('div') };
         const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
         const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
-        let result;
 
         rect.element.setAttribute = sinon.spy();
 
         // act
-        result = rect.attr({ translateX: 10, translateY: 20, scaleX: 30, scaleY: 40, rotate: 50, rotateX: 60, rotateY: 70 });
+        const result = rect.attr({ translateX: 10, translateY: 20, scaleX: 30, scaleY: 40, rotate: 50, rotateX: 60, rotateY: 70 });
 
         // assert
         assert.equal(result, rect);
@@ -1282,14 +1219,13 @@ function checkDashStyle(assert, elem, result, style, value) {
         const parent = { element: document.createElement('div') };
         const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
         const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
-        let result;
 
         rect.element.setAttribute = sinon.spy();
 
         rect.attr({ translateX: 10, translateY: 20, scaleX: 30, scaleY: 40, rotate: 50, rotateX: 60, rotateY: 70 });
 
         // act
-        result = rect.attr({ translateX: 100, scaleY: 400, rotateX: 600 });
+        const result = rect.attr({ translateX: 100, scaleY: 400, rotateX: 600 });
 
         // assert
         assert.equal(result, rect);
@@ -1317,7 +1253,6 @@ function checkDashStyle(assert, elem, result, style, value) {
         const elem6 = (new this.Element(this.rendererStub, 'circle')).append(svg);
         const elem7 = (new this.Element(this.rendererStub, 'circle')).append(svg);
         const elem8 = (new this.Element(this.rendererStub, 'circle')).append(svg);
-        let result1; let result2; let result3; let result4; let result5; let result6; let result7; let result8;
 
         elem1.element.setAttribute = sinon.spy();
         elem2.element.setAttribute = sinon.spy();
@@ -1329,14 +1264,14 @@ function checkDashStyle(assert, elem, result, style, value) {
         elem8.element.setAttribute = sinon.spy();
 
         // act
-        result1 = elem1.attr({ sharp: true });
-        result2 = elem2.attr({ sharp: true, 'stroke-width': 1 });
-        result3 = elem3.attr({ sharp: true, 'stroke-width': 2 });
-        result4 = elem4.attr({ sharp: true, 'stroke-width': 1, translateX: 30, translateY: 40 });
-        result5 = elem5.attr({ sharp: true, 'stroke-width': 1, translateX: 30, translateY: 40 }).attr({ sharp: undefined });
-        result6 = elem6.attr({ sharp: true, 'stroke-width': 1, translateX: 30, translateY: 40 }).attr({ sharp: false });
-        result7 = elem7.attr({ sharp: true, 'stroke-width': 1, translateX: 30, translateY: 40 }).attr({ sharp: null });
-        result8 = elem8.attr({ sharp: false });
+        const result1 = elem1.attr({ sharp: true });
+        const result2 = elem2.attr({ sharp: true, 'stroke-width': 1 });
+        const result3 = elem3.attr({ sharp: true, 'stroke-width': 2 });
+        const result4 = elem4.attr({ sharp: true, 'stroke-width': 1, translateX: 30, translateY: 40 });
+        const result5 = elem5.attr({ sharp: true, 'stroke-width': 1, translateX: 30, translateY: 40 }).attr({ sharp: undefined });
+        const result6 = elem6.attr({ sharp: true, 'stroke-width': 1, translateX: 30, translateY: 40 }).attr({ sharp: false });
+        const result7 = elem7.attr({ sharp: true, 'stroke-width': 1, translateX: 30, translateY: 40 }).attr({ sharp: null });
+        const result8 = elem8.attr({ sharp: false });
 
         // assert
         assert.equal(result1, elem1);
@@ -1376,7 +1311,6 @@ function checkDashStyle(assert, elem, result, style, value) {
         const elem6 = (new this.Element(this.rendererStub, 'circle')).append(svg);
         const elem7 = (new this.Element(this.rendererStub, 'circle')).append(svg);
         const elem8 = (new this.Element(this.rendererStub, 'circle')).append(svg);
-        let result1; let result2; let result3; let result4; let result5; let result6; let result7; let result8;
 
         elem1.element.setAttribute = sinon.spy();
         elem2.element.setAttribute = sinon.spy();
@@ -1388,14 +1322,14 @@ function checkDashStyle(assert, elem, result, style, value) {
         elem8.element.setAttribute = sinon.spy();
 
         // act
-        result1 = elem1.attr({ sharp: 'v' });
-        result2 = elem2.attr({ sharp: 'v', 'stroke-width': 1 });
-        result3 = elem3.attr({ sharp: 'v', 'stroke-width': 2 });
-        result4 = elem4.attr({ sharp: 'v', 'stroke-width': 1, translateX: 30, translateY: 40 });
-        result5 = elem5.attr({ sharp: 'v', 'stroke-width': 1, translateX: 30, translateY: 40 }).attr({ sharp: undefined });
-        result6 = elem6.attr({ sharp: 'v', 'stroke-width': 1, translateX: 30, translateY: 40 }).attr({ sharp: false });
-        result7 = elem7.attr({ sharp: 'v', 'stroke-width': 1, translateX: 30, translateY: 40 }).attr({ sharp: null });
-        result8 = elem8.attr({ sharp: false });
+        const result1 = elem1.attr({ sharp: 'v' });
+        const result2 = elem2.attr({ sharp: 'v', 'stroke-width': 1 });
+        const result3 = elem3.attr({ sharp: 'v', 'stroke-width': 2 });
+        const result4 = elem4.attr({ sharp: 'v', 'stroke-width': 1, translateX: 30, translateY: 40 });
+        const result5 = elem5.attr({ sharp: 'v', 'stroke-width': 1, translateX: 30, translateY: 40 }).attr({ sharp: undefined });
+        const result6 = elem6.attr({ sharp: 'v', 'stroke-width': 1, translateX: 30, translateY: 40 }).attr({ sharp: false });
+        const result7 = elem7.attr({ sharp: 'v', 'stroke-width': 1, translateX: 30, translateY: 40 }).attr({ sharp: null });
+        const result8 = elem8.attr({ sharp: false });
 
         // assert
         assert.equal(result1, elem1);
@@ -1444,7 +1378,6 @@ function checkDashStyle(assert, elem, result, style, value) {
         const elem6 = (new this.Element(this.rendererStub, 'circle')).append(svg);
         const elem7 = (new this.Element(this.rendererStub, 'circle')).append(svg);
         const elem8 = (new this.Element(this.rendererStub, 'circle')).append(svg);
-        let result1; let result2; let result3; let result4; let result5; let result6; let result7; let result8;
 
         elem1.element.setAttribute = sinon.spy();
         elem2.element.setAttribute = sinon.spy();
@@ -1456,14 +1389,14 @@ function checkDashStyle(assert, elem, result, style, value) {
         elem8.element.setAttribute = sinon.spy();
 
         // act
-        result1 = elem1.attr({ sharp: 'h' });
-        result2 = elem2.attr({ sharp: 'h', 'stroke-width': 1 });
-        result3 = elem3.attr({ sharp: 'h', 'stroke-width': 2 });
-        result4 = elem4.attr({ sharp: 'h', 'stroke-width': 1, translateX: 30, translateY: 40 });
-        result5 = elem5.attr({ sharp: 'h', 'stroke-width': 1, translateX: 30, translateY: 40 }).attr({ sharp: undefined });
-        result6 = elem6.attr({ sharp: 'h', 'stroke-width': 1, translateX: 30, translateY: 40 }).attr({ sharp: false });
-        result7 = elem7.attr({ sharp: 'h', 'stroke-width': 1, translateX: 30, translateY: 40 }).attr({ sharp: null });
-        result8 = elem8.attr({ sharp: false });
+        const result1 = elem1.attr({ sharp: 'h' });
+        const result2 = elem2.attr({ sharp: 'h', 'stroke-width': 1 });
+        const result3 = elem3.attr({ sharp: 'h', 'stroke-width': 2 });
+        const result4 = elem4.attr({ sharp: 'h', 'stroke-width': 1, translateX: 30, translateY: 40 });
+        const result5 = elem5.attr({ sharp: 'h', 'stroke-width': 1, translateX: 30, translateY: 40 }).attr({ sharp: undefined });
+        const result6 = elem6.attr({ sharp: 'h', 'stroke-width': 1, translateX: 30, translateY: 40 }).attr({ sharp: false });
+        const result7 = elem7.attr({ sharp: 'h', 'stroke-width': 1, translateX: 30, translateY: 40 }).attr({ sharp: null });
+        const result8 = elem8.attr({ sharp: false });
 
         // assert
         assert.equal(result1, elem1);
@@ -1507,11 +1440,10 @@ function checkDashStyle(assert, elem, result, style, value) {
         const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
         const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const getAttrSpy = sinon.spy(rect.element.setAttribute.withArgs);
-        let result;
         rect.attr({ 'some-attr': 'some value 1', 'someAttr': 'some value 2' });
 
         // act
-        result = rect.attr('some-attr');
+        const result = rect.attr('some-attr');
 
         // assert
         assert.equal(result, 'some value 1');
@@ -1524,11 +1456,10 @@ function checkDashStyle(assert, elem, result, style, value) {
         const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
         const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const getAttrSpy = sinon.spy(rect.element.setAttribute.withArgs);
-        let result;
         rect.attr({ 'align': 'left' });
 
         // act
-        result = rect.attr('align');
+        const result = rect.attr('align');
 
         // assert
         assert.equal(result, 'left');
@@ -1541,11 +1472,10 @@ function checkDashStyle(assert, elem, result, style, value) {
         const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
         const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const getAttrSpy = sinon.spy(rect.element.setAttribute.withArgs);
-        let result;
         rect.attr({ 'some-attr': 'some value 1' });
 
         // act
-        result = rect.attr('x');
+        const result = rect.attr('x');
 
         // assert
         assert.strictEqual(result, 0);
@@ -1913,12 +1843,11 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const rect = this.rect;
         const renderer = rect.renderer;
-        let result;
         rect._settings.x = 10;
         rect._settings.width = 100;
 
         // act
-        result = rect.animate({ x: 20, width: 50 });
+        const result = rect.animate({ x: 20, width: 50 });
 
         // assert
         assert.equal(result, rect, 'return value');
@@ -1934,12 +1863,11 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const rect = this.rect;
         const renderer = rect.renderer;
-        let result;
         rect.element.setAttribute('x', 1);
         rect.element.setAttribute('width', 2);
 
         // act
-        result = rect.animate({ x: 20, width: 50 });
+        const result = rect.animate({ x: 20, width: 50 });
 
         // assert
         assert.equal(result, rect, 'return value');
@@ -1955,10 +1883,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const rect = this.rect;
         const renderer = rect.renderer;
-        let result;
 
         // act
-        result = rect.animate({ x: 20, width: 50 });
+        const result = rect.animate({ x: 20, width: 50 });
 
         // assert
         assert.equal(result, rect, 'return value');
@@ -1974,10 +1901,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const rect = this.rect;
         const renderer = rect.renderer;
-        let result;
 
         // act
-        result = rect.animate({ x: 20 }, { someNewOption: 'newOption', somethingElse: 'changed' });
+        const result = rect.animate({ x: 20 }, { someNewOption: 'newOption', somethingElse: 'changed' });
 
         // assert
         assert.equal(result, rect, 'return value');
@@ -1994,10 +1920,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const rect = this.rect;
         const renderer = rect.renderer;
         const complete = sinon.spy();
-        let result;
 
         // act
-        result = rect.animate({ x: 20 }, {}, complete);
+        const result = rect.animate({ x: 20 }, {}, complete);
 
         // assert
         assert.equal(result, rect, 'return value');
@@ -2015,12 +1940,11 @@ function checkDashStyle(assert, elem, result, style, value) {
         const renderer = rect.renderer;
         const complete = sinon.spy();
         const step = sinon.spy();
-        let result;
 
         renderer._animation.enabled = false;
 
         // act
-        result = rect.animate({ x: 20, width: 200, translateX: 30 }, { step: step }, complete);
+        const result = rect.animate({ x: 20, width: 200, translateX: 30 }, { step: step }, complete);
 
         // assert
         assert.equal(result, rect, 'return value');
@@ -2042,12 +1966,11 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const rect = this.rect;
         const renderer = rect.renderer;
-        let result;
 
         renderer._animation.enabled = false;
 
         // act
-        result = rect.animate({ x: 20, width: 200, translateX: 30 });
+        const result = rect.animate({ x: 20, width: 200, translateX: 30 });
 
         // assert
         assert.equal(result, rect, 'return value');
@@ -2074,7 +1997,6 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const rect = this.rect;
         const renderer = rect.renderer;
-        let result;
         rect._settings.translateX = 10;
         rect._settings.translateY = 20;
         rect._settings.rotate = 30;
@@ -2084,7 +2006,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         rect._settings.scaleY = 70;
 
         // act
-        result = rect.animate({
+        const result = rect.animate({
             translateX: 100,
             translateY: 200,
             rotate: 300,
@@ -2129,10 +2051,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const rect = this.rect;
         const renderer = rect.renderer;
-        let result;
 
         // act
-        result = rect.animate({
+        const result = rect.animate({
             translateX: 100,
             translateY: 200,
             rotate: 300,
@@ -2177,10 +2098,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const rect = this.rect;
         const renderer = rect.renderer;
-        let result;
 
         // act
-        result = rect.animate({
+        const result = rect.animate({
             arc: {
                 from: { arcFrom: 'fromArc' },
                 to: { arcTo: 'toArc' }
@@ -2205,12 +2125,11 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Stop animation', function(assert) {
         // arrange
         const rect = this.rect;
-        let result;
 
         rect.animation = { stop: sinon.spy() };
 
         // act
-        result = rect.stopAnimation({ disableCompleteParam: true });
+        const result = rect.stopAnimation({ disableCompleteParam: true });
 
         // assert
         assert.equal(result, rect, 'return value');
@@ -2767,10 +2686,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. without params', function(assert) {
         const rect = new this.Element(this.renderer);
-        let res;
 
         // act
-        res = rect.attr();
+        const res = rect.attr();
 
         // assert
         assert.equal(res, rect);
@@ -2783,10 +2701,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const rect = new this.Element(this.renderer);
         const attrs = { x: 1, y: 2, width: 30, height: 40, 'stroke-width': 6 };
-        let res;
 
         // act
-        res = rect.attr(attrs);
+        const res = rect.attr(attrs);
 
         // assert
         assert.equal(res, rect);
@@ -2809,10 +2726,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const rect = new this.Element(this.renderer);
         const attrs = { x: 1, y: 2, width: 30, height: 40, 'stroke-width': 5 };
-        let res;
 
         // act
-        res = rect.attr(attrs);
+        const res = rect.attr(attrs);
 
         // assert
         assert.equal(res, rect);
@@ -2835,10 +2751,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const rect = new this.Element(this.renderer);
         const attrs = { width: 30, height: 40, 'stroke-width': 6 };
-        let res;
 
         // act
-        res = rect.attr(attrs);
+        const res = rect.attr(attrs);
 
         // assert
         assert.equal(res, rect);
@@ -2861,10 +2776,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const rect = new this.Element(this.renderer);
         const attrs = { width: 30, height: 40, 'stroke-width': 3 };
-        let res;
 
         // act
-        res = rect.attr(attrs);
+        const res = rect.attr(attrs);
 
         // assert
         assert.equal(res, rect);
@@ -2887,10 +2801,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const rect = new this.Element(this.renderer);
         const attrs = { x: 1, y: 2, width: 4, height: 40, 'stroke-width': 6 };
-        let res;
 
         // act
-        res = rect.attr(attrs);
+        const res = rect.attr(attrs);
 
         // assert
         assert.equal(res, rect);
@@ -2913,10 +2826,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const rect = new this.Element(this.renderer);
         const attrs = { x: 1, y: 2, width: 4, height: 40, 'stroke-width': 5 };
-        let res;
 
         // act
-        res = rect.attr(attrs);
+        const res = rect.attr(attrs);
 
         // assert
         assert.equal(res, rect);
@@ -2939,10 +2851,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const rect = new this.Element(this.renderer);
         const attrs = { x: 1, y: 2, width: 30, height: 4, 'stroke-width': 6 };
-        let res;
 
         // act
-        res = rect.attr(attrs);
+        const res = rect.attr(attrs);
 
         // assert
         assert.equal(res, rect);
@@ -2965,10 +2876,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const rect = new this.Element(this.renderer);
         const attrs = { x: 1, y: 2, width: 30, height: 4, 'stroke-width': 5 };
-        let res;
 
         // act
-        res = rect.attr(attrs);
+        const res = rect.attr(attrs);
 
         // assert
         assert.equal(res, rect);
@@ -2991,10 +2901,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const rect = (new this.Element(this.renderer)).attr({ x: 1, y: 2, width: 30, height: 40, 'stroke-width': 6 });
         const attrs = { x: 10, y: 20, width: 300, height: 400, 'stroke-width': 10, fill: 'red' };
-        let res;
 
         // act
-        res = rect.attr(attrs);
+        const res = rect.attr(attrs);
 
         // assert
         assert.equal(res, rect);
@@ -3019,10 +2928,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const rect = (new this.Element(this.renderer)).attr({ x: 1, y: 2, width: 4, height: 40, 'stroke-width': 6 });
         const attrs = { x: 10, y: 20, fill: 'red' };
-        let res;
 
         // act
-        res = rect.attr(attrs);
+        const res = rect.attr(attrs);
 
         // assert
         assert.equal(res, rect);
@@ -3047,10 +2955,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const rect = (new this.Element(this.renderer)).attr({ x: 1, y: 2, width: 4, height: 40, 'stroke-width': 6 });
         const attrs = { fill: 'red' };
-        let res;
 
         // act
-        res = rect.attr(attrs);
+        const res = rect.attr(attrs);
 
         // assert
         assert.equal(res, rect);
@@ -3075,10 +2982,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const rect = (new this.Element(this.renderer)).attr({ x: 1, y: 2, width: 30, height: 40, 'stroke-width': 6 });
         const attrs = { x: 10, y: undefined };
-        let res;
 
         // act
-        res = rect.attr(attrs);
+        const res = rect.attr(attrs);
 
         // assert
         assert.equal(res, rect);
@@ -3101,12 +3007,11 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const rect = (new this.Element(this.renderer)).attr({ x: 1, y: 2, width: 30, height: 40, 'stroke-width': 6 });
         const attrs = { sharp: true };
-        let res;
 
         rect.element.setAttribute = sinon.spy();
 
         // act
-        res = rect.attr(attrs);
+        const res = rect.attr(attrs);
 
         // assert
         assert.equal(res, rect);
@@ -3157,10 +3062,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. without params', function(assert) {
         const path = this.createElement('line');
-        let res;
 
         // act
-        res = path.attr();
+        const res = path.attr();
 
         // assert
         assert.equal(res, path);
@@ -3177,10 +3081,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const attrs = { points: [1, 2, 3, 4] };
         const path = this.createElement('wrong-type');
         const expected_d = 'M 0 0';
-        let res;
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3198,10 +3101,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const attrs = { points: [] };
         const path = this.createElement('line');
         const expected_d = 'M 0 0';
-        let res;
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3219,10 +3121,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const attrs = { points: [1, 2, 3, 4, 5.123, 6.456] };
         const path = this.createElement('line');
         const expected_d = 'M 1 2 L 3 4 L 5.123 6.456';
-        let res;
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3240,10 +3141,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const attrs = { points: [[1, 2, 3, 4, 5.123, 6.456], [10, 20, 30, 40, 50.123, 60.456]] };
         const path = this.createElement('line');
         const expected_d = 'M 1 2 L 3 4 L 5.123 6.456 M 10 20 L 30 40 L 50.123 60.456';
-        let res;
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3262,10 +3162,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const attrs = { points: [{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }] };
         const path = this.createElement('line');
         const expected_d = 'M 1 2 L 3 4 L 5.123 6.456';
-        let res;
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3284,10 +3183,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const attrs = { points: [[{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }], [{ x: 10, y: 20 }, { x: 30, y: 40 }, { x: 50.123, y: 60.456 }]] };
         const path = this.createElement('line');
         const expected_d = 'M 1 2 L 3 4 L 5.123 6.456 M 10 20 L 30 40 L 50.123 60.456';
-        let res;
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3305,10 +3203,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const attrs = { points: [] };
         const path = this.createElement('area');
         const expected_d = 'M 0 0 Z';
-        let res;
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3326,10 +3223,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const attrs = { points: [1, 2, 3, 4, 5.123, 6.456] };
         const path = this.createElement('area');
         const expected_d = 'M 1 2 L 3 4 L 5.123 6.456 Z';
-        let res;
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3347,10 +3243,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const attrs = { points: [[1, 2, 3, 4, 5.123, 6.456], [10, 20, 30, 40, 50.123, 60.456]] };
         const path = this.createElement('area');
         const expected_d = 'M 1 2 L 3 4 L 5.123 6.456 Z M 10 20 L 30 40 L 50.123 60.456 Z';
-        let res;
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3369,10 +3264,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const attrs = { points: [{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }] };
         const path = this.createElement('area');
         const expected_d = 'M 1 2 L 3 4 L 5.123 6.456 Z';
-        let res;
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3391,10 +3285,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const attrs = { points: [[{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }], [{ x: 10, y: 20 }, { x: 30, y: 40 }, { x: 50.123, y: 60.456 }]] };
         const path = this.createElement('area');
         const expected_d = 'M 1 2 L 3 4 L 5.123 6.456 Z M 10 20 L 30 40 L 50.123 60.456 Z';
-        let res;
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3412,10 +3305,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const attrs = { points: [] };
         const path = this.createElement('bezier');
         const expected_d = 'M 0 0';
-        let res;
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3433,10 +3325,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const attrs = { points: [1, 2, 3, 4, 5.123, 6.456, 7.891, 8.345, 9, 10, 11, 12, 13, 14] };
         const path = this.createElement('bezier');
         const expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 C 9 10 11 12 13 14';
-        let res;
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3454,10 +3345,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const attrs = { points: [[1, 2, 3, 4, 5.123, 6.456, 7.891, 8.345], [9, 10, 11, 12, 13, 14, 15, 16]] };
         const path = this.createElement('bezier');
         const expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 M 9 10 C 11 12 13 14 15 16';
-        let res;
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3476,10 +3366,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const attrs = { points: [{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }, { x: 7.891, y: 8.345 }, { x: 9, y: 10 }, { x: 11, y: 12 }, { x: 13, y: 14 }] };
         const path = this.createElement('bezier');
         const expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 C 9 10 11 12 13 14';
-        let res;
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3498,10 +3387,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const attrs = { points: [[{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }, { x: 7.891, y: 8.345 }], [{ x: 9, y: 10 }, { x: 11, y: 12 }, { x: 13, y: 14 }, { x: 15, y: 16 }]] };
         const path = this.createElement('bezier');
         const expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 M 9 10 C 11 12 13 14 15 16';
-        let res;
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3519,10 +3407,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const attrs = { points: [] };
         const path = this.createElement('bezierarea');
         const expected_d = 'M 0 0 Z';
-        let res;
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3540,10 +3427,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const attrs = { points: [1, 2, 3, 4, 5.123, 6.456, 7.891, 8.345, 9, 10, 11, 12, 13, 14] };
         const path = this.createElement('bezierarea');
         const expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 C 9 10 11 12 13 14 Z';
-        let res;
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3561,10 +3447,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const attrs = { points: [[1, 2, 3, 4, 5.123, 6.456, 7.891, 8.345], [9, 10, 11, 12, 13, 14, 15, 16]] };
         const path = this.createElement('bezierarea');
         const expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 Z M 9 10 C 11 12 13 14 15 16 Z';
-        let res;
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3583,10 +3468,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const attrs = { points: [{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }, { x: 7.891, y: 8.345 }, { x: 9, y: 10 }, { x: 11, y: 12 }, { x: 13, y: 14 }] };
         const path = this.createElement('bezierarea');
         const expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 C 9 10 11 12 13 14 Z';
-        let res;
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3605,10 +3489,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const attrs = { points: [[{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }, { x: 7.891, y: 8.345 }], [{ x: 9, y: 10 }, { x: 11, y: 12 }, { x: 13, y: 14 }, { x: 15, y: 16 }]] };
         const path = this.createElement('bezierarea');
         const expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 Z M 9 10 C 11 12 13 14 15 16 Z';
-        let res;
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3625,13 +3508,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Attr. change points attr + extra attrs', function(assert) {
         // arrange
         const attrs = { points: [1, 2, 3, 4], fill: 'red' };
-        let path;
-        let res;
-
-        path = this.createElement('line').attr({ points: [10, 20, 30, 40] });
+        const path = this.createElement('line').attr({ points: [10, 20, 30, 40] });
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3650,13 +3530,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Attr. change segments attr + extra attrs', function(assert) {
         // arrange
         const attrs = { segments: [['M', 1, 2], ['L', 3, 4]], fill: 'red' };
-        let path;
-        let res;
-
-        path = this.createElement('line').attr({ points: [10, 20, 30, 40] });
+        const path = this.createElement('line').attr({ points: [10, 20, 30, 40] });
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3674,14 +3551,12 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. change only extra attrs', function(assert) {
         // arrange
-        let path;
         const attrs = { fill: 'red' };
-        let res;
 
-        path = this.createElement('line').attr({ points: [10, 20, 30, 40] });
+        const path = this.createElement('line').attr({ points: [10, 20, 30, 40] });
 
         // act
-        res = path.attr(attrs);
+        const res = path.attr(attrs);
 
         // assert
         assert.equal(res, path);
@@ -3700,15 +3575,11 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. Get attribute', function(assert) {
         // arrange
-        let getAttrSpy;
-        let path;
-        let result;
-
-        path = (new this.Element(this.renderer, 'line')).attr({ points: [1, 2, 3, 4] });
-        getAttrSpy = sinon.spy(path.element.setAttribute.withArgs),
+        const path = (new this.Element(this.renderer, 'line')).attr({ points: [1, 2, 3, 4] });
+        const getAttrSpy = sinon.spy(path.element.setAttribute.withArgs);
 
         // act
-        result = path.attr('d');
+        const result = path.attr('d');
 
         // assert
         assert.equal(result, 'M 1 2 L 3 4');
@@ -3718,11 +3589,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. line. equal length', function(assert) {
         // arrange
         const path = (new this.Element(this.renderer, 'line')).attr({ points: [1, 2, 3, 4, 5, 6] });
-        let result;
         path.attr = sinon.spy();
 
         // act
-        result = path.animate({ points: [10, 20, 30, 40, 50, 60] });
+        const result = path.animate({ points: [10, 20, 30, 40, 50, 60] });
 
         // assert
         assert.equal(result, path);
@@ -3743,11 +3613,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. line. old length > new length', function(assert) {
         // arrange
         const path = (new this.Element(this.renderer, 'line')).attr({ points: [1, 2, 3, 4, 5, 6] });
-        let result;
         path.attr = sinon.spy();
 
         // act
-        result = path.animate({ points: [10, 20, 30, 40] });
+        const result = path.animate({ points: [10, 20, 30, 40] });
 
         // assert
         assert.equal(result, path);
@@ -3768,11 +3637,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. line. old length < new length', function(assert) {
         // arrange
         const path = (new this.Element(this.renderer, 'line')).attr({ points: [1, 2, 3, 4] });
-        let result;
         path.attr = sinon.spy();
 
         // act
-        result = path.animate({ points: [10, 20, 30, 40, 50, 60] });
+        const result = path.animate({ points: [10, 20, 30, 40, 50, 60] });
 
         // assert
         assert.equal(result, path);
@@ -3793,11 +3661,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. line. old length < new length, old is single point', function(assert) {
         // arrange
         const path = (new this.Element(this.renderer, 'line')).attr({ points: [1, 2] });
-        let result;
         path.attr = sinon.spy();
 
         // act
-        result = path.animate({ points: [10, 20, 30, 40, 50, 60] });
+        const result = path.animate({ points: [10, 20, 30, 40, 50, 60] });
 
         // assert
         assert.equal(result, path);
@@ -3818,11 +3685,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. line. old length < new length, old is empty', function(assert) {
         // arrange
         const path = (new this.Element(this.renderer, 'line'));
-        let result;
         path.attr = sinon.spy();
 
         // act
-        result = path.animate({ points: [10, 20, 30, 40, 50, 60] });
+        const result = path.animate({ points: [10, 20, 30, 40, 50, 60] });
 
         // assert
         assert.equal(result, path);
@@ -3843,11 +3709,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. bezier. equal length', function(assert) {
         // arrange
         const path = (new this.Element(this.renderer, 'bezier')).attr({ points: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] });
-        let result;
         path.attr = sinon.spy();
 
         // act
-        result = path.animate({ points: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140] });
+        const result = path.animate({ points: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140] });
 
         // assert
         assert.equal(result, path);
@@ -3868,11 +3733,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. bezier. old length > new length', function(assert) {
         // arrange
         const path = (new this.Element(this.renderer, 'bezier')).attr({ points: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] });
-        let result;
         path.attr = sinon.spy();
 
         // act
-        result = path.animate({ points: [10, 20, 30, 40, 50, 60, 70, 80] });
+        const result = path.animate({ points: [10, 20, 30, 40, 50, 60, 70, 80] });
 
         // assert
         assert.equal(result, path);
@@ -3893,11 +3757,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. bezier. old length < new length', function(assert) {
         // arrange
         const path = (new this.Element(this.renderer, 'bezier')).attr({ points: [1, 2, 3, 4, 5, 6, 7, 8] });
-        let result;
         path.attr = sinon.spy();
 
         // act
-        result = path.animate({ points: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140] });
+        const result = path.animate({ points: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140] });
 
         // assert
         assert.equal(result, path);
@@ -3918,11 +3781,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. bezier. old length < new length, old is single point', function(assert) {
         // arrange
         const path = (new this.Element(this.renderer, 'bezier')).attr({ points: [1, 2] });
-        let result;
         path.attr = sinon.spy();
 
         // act
-        result = path.animate({ points: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140] });
+        const result = path.animate({ points: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140] });
 
         // assert
         assert.equal(result, path);
@@ -3943,11 +3805,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. bezier. old length < new length, old is empty', function(assert) {
         // arrange
         const path = (new this.Element(this.renderer, 'bezier'));
-        let result;
         path.attr = sinon.spy();
 
         // act
-        result = path.animate({ points: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140] });
+        const result = path.animate({ points: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140] });
 
         // assert
         assert.equal(result, path);
@@ -3968,11 +3829,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. area. equal length', function(assert) {
         // arrange
         const path = (new this.Element(this.renderer, 'area')).attr({ points: [100, 150, 300, 50, 500, 150, 500, 300, 300, 400, 100, 300] });
-        let result;
         path.attr = sinon.spy();
 
         // act
-        result = path.animate({ points: [10, 15, 30, 5, 50, 15, 50, 30, 30, 40, 10, 30] });
+        const result = path.animate({ points: [10, 15, 30, 5, 50, 15, 50, 30, 30, 40, 10, 30] });
 
         // assert
         assert.equal(result, path);
@@ -3993,11 +3853,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. area. old length > new length', function(assert) {
         // arrange
         const path = (new this.Element(this.renderer, 'area')).attr({ points: [100, 150, 300, 50, 500, 150, 500, 300, 300, 400, 100, 300] });
-        let result;
         path.attr = sinon.spy();
 
         // act
-        result = path.animate({ points: [10, 15, 30, 5, 30, 40, 10, 30] });
+        const result = path.animate({ points: [10, 15, 30, 5, 30, 40, 10, 30] });
 
         // assert
         assert.equal(result, path);
@@ -4018,11 +3877,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. area. old length < new length', function(assert) {
         // arrange
         const path = (new this.Element(this.renderer, 'area')).attr({ points: [100, 150, 300, 50, 300, 400, 100, 300] });
-        let result;
         path.attr = sinon.spy();
 
         // act
-        result = path.animate({ points: [10, 15, 30, 5, 50, 15, 50, 30, 30, 40, 10, 30] });
+        const result = path.animate({ points: [10, 15, 30, 5, 50, 15, 50, 30, 30, 40, 10, 30] });
 
         // assert
         assert.equal(result, path);
@@ -4043,11 +3901,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. area. old length < new length, old is single point', function(assert) {
         // arrange
         const path = (new this.Element(this.renderer, 'area')).attr({ points: [100, 150, 100, 300] });
-        let result;
         path.attr = sinon.spy();
 
         // act
-        result = path.animate({ points: [10, 15, 30, 5, 50, 15, 50, 30, 30, 40, 10, 30] });
+        const result = path.animate({ points: [10, 15, 30, 5, 50, 15, 50, 30, 30, 40, 10, 30] });
 
         // assert
         assert.equal(result, path);
@@ -4068,11 +3925,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. area. old length < new length, old is empty', function(assert) {
         // arrange
         const path = (new this.Element(this.renderer, 'area'));
-        let result;
         path.attr = sinon.spy();
 
         // act
-        result = path.animate({ points: [10, 15, 30, 5, 50, 15, 50, 30, 30, 40, 10, 30] });
+        const result = path.animate({ points: [10, 15, 30, 5, 50, 15, 50, 30, 30, 40, 10, 30] });
 
         // assert
         assert.equal(result, path);
@@ -4094,11 +3950,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. bezierarea. equal length', function(assert) {
         // arrange
         const path = (new this.Element(this.renderer, 'bezierarea')).attr({ points: [100, 150, 100, 100, 200, 50, 300, 50, 400, 50, 500, 100, 500, 150, 500, 150, 500, 300, 500, 300, 500, 350, 400, 400, 300, 400, 200, 400, 100, 350, 100, 300] });
-        let result;
         path.attr = sinon.spy();
 
         // act
-        result = path.animate({ points: [10, 15, 10, 10, 20, 5, 30, 5, 40, 5, 50, 10, 50, 15, 50, 15, 50, 30, 50, 30, 50, 35, 40, 40, 30, 40, 20, 40, 10, 35, 10, 30] });
+        const result = path.animate({ points: [10, 15, 10, 10, 20, 5, 30, 5, 40, 5, 50, 10, 50, 15, 50, 15, 50, 30, 50, 30, 50, 35, 40, 40, 30, 40, 20, 40, 10, 35, 10, 30] });
 
         // assert
         assert.equal(result, path);
@@ -4133,11 +3988,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. bezierarea. old length > new length', function(assert) {
         // arrange
         const path = (new this.Element(this.renderer, 'bezierarea')).attr({ points: [100, 150, 100, 100, 200, 50, 300, 50, 400, 50, 500, 100, 500, 150, 500, 150, 500, 300, 500, 300, 500, 350, 400, 400, 300, 400, 200, 400, 100, 350, 100, 300] });
-        let result;
         path.attr = sinon.spy();
 
         // act
-        result = path.animate({ points: [10, 15, 10, 10, 20, 5, 30, 5, 30, 5, 30, 40, 30, 40, 20, 40, 10, 35, 10, 30] });
+        const result = path.animate({ points: [10, 15, 10, 10, 20, 5, 30, 5, 30, 5, 30, 40, 30, 40, 20, 40, 10, 35, 10, 30] });
 
         // assert
         assert.equal(result, path);
@@ -4177,11 +4031,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. bezierarea. old length < new length', function(assert) {
         // arrange
         const path = (new this.Element(this.renderer, 'bezierarea')).attr({ points: [100, 150, 100, 100, 200, 50, 300, 50, 300, 50, 300, 400, 300, 400, 200, 400, 100, 350, 100, 300] });
-        let result;
         path.attr = sinon.spy();
 
         // act
-        result = path.animate({ points: [10, 15, 10, 10, 20, 5, 30, 5, 40, 5, 50, 10, 50, 15, 50, 15, 50, 30, 50, 30, 50, 35, 40, 40, 30, 40, 20, 40, 10, 35, 10, 30] });
+        const result = path.animate({ points: [10, 15, 10, 10, 20, 5, 30, 5, 40, 5, 50, 10, 50, 15, 50, 15, 50, 30, 50, 30, 50, 35, 40, 40, 30, 40, 20, 40, 10, 35, 10, 30] });
 
         // assert
         assert.equal(result, path);
@@ -4216,11 +4069,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. bezierarea. old length < new length, old is single point', function(assert) {
         // arrange
         const path = (new this.Element(this.renderer, 'bezierarea')).attr({ points: [100, 150, 100, 150, 100, 300, 100, 300] });
-        let result;
         path.attr = sinon.spy();
 
         // act
-        result = path.animate({ points: [10, 15, 10, 10, 20, 5, 30, 5, 40, 5, 50, 10, 50, 15, 50, 15, 50, 30, 50, 30, 50, 35, 40, 40, 30, 40, 20, 40, 10, 35, 10, 30] });
+        const result = path.animate({ points: [10, 15, 10, 10, 20, 5, 30, 5, 40, 5, 50, 10, 50, 15, 50, 15, 50, 30, 50, 30, 50, 35, 40, 40, 30, 40, 20, 40, 10, 35, 10, 30] });
 
         // assert
         assert.equal(result, path);
@@ -4255,11 +4107,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. bezierarea. old length < new length, old is empty', function(assert) {
         // arrange
         const path = (new this.Element(this.renderer, 'bezierarea'));
-        let result;
         path.attr = sinon.spy();
 
         // act
-        result = path.animate({ points: [10, 15, 10, 10, 20, 5, 30, 5, 40, 5, 50, 10, 50, 15, 50, 15, 50, 30, 50, 30, 50, 35, 40, 40, 30, 40, 20, 40, 10, 35, 10, 30] });
+        const result = path.animate({ points: [10, 15, 10, 10, 20, 5, 30, 5, 40, 5, 50, 10, 50, 15, 50, 15, 50, 30, 50, 30, 50, 35, 40, 40, 30, 40, 20, 40, 10, 35, 10, 30] });
 
         // assert
         assert.equal(result, path);
@@ -4294,11 +4145,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. path params + extra', function(assert) {
         // arrange
         const path = (new this.Element(this.renderer, 'line')).attr({ points: [1, 2, 3, 4] });
-        let result;
         path.attr = sinon.spy();
 
         // act
-        result = path.animate({ points: [10, 20, 30, 40], someAttr: 12 });
+        const result = path.animate({ points: [10, 20, 30, 40], someAttr: 12 });
 
         // assert
         assert.equal(result, path);
@@ -4323,12 +4173,11 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. path params (stored in wrapper) + extra, animation disabled', function(assert) {
         // arrange
         const path = (new this.Element(this.renderer, 'line')).attr({ points: [1, 2, 3, 4] });
-        let result;
         path.attr = sinon.spy();
         this.renderer._animation.enabled = false;
 
         // act
-        result = path.animate({ points: [10, 20, 30, 40], someAttr: 12 });
+        const result = path.animate({ points: [10, 20, 30, 40], someAttr: 12 });
 
         // assert
         assert.equal(result, path);
@@ -4370,10 +4219,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. without params', function(assert) {
         const arc = this.createElement();
-        let res;
 
         // act
-        res = arc.attr();
+        const res = arc.attr();
 
         // assert
         assert.equal(res, arc);
@@ -4387,10 +4235,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const arc = (this.createElement());
         const attrs = { x: 100, y: 200, innerRadius: 300, outerRadius: 400, startAngle: 0, endAngle: 90 };
         const expected_d = 'M 500.00000 200.00000 A 400.00000 400.00000 0 0 0 100.00000 -200.00000 L 100.00000 -100.00000 A 300.00000 300.00000 0 0 1 400.00000 200.00000 Z';
-        let res;
 
         // act
-        res = arc.attr(attrs);
+        const res = arc.attr(attrs);
 
         // assert
         assert.equal(res, arc);
@@ -4412,10 +4259,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const arc = (this.createElement());
         const attrs = { x: 100, y: 200, innerRadius: 300, outerRadius: 400, startAngle: 90, endAngle: 450 };
         const expected_d = 'M 500.00000 200.00000 A 400.00000 400.00000 0 1 0 499.99999 200.06981 M 400.00000 200.05236 A 300.00000 300.00000 0 1 1 400.00000 200.00000 Z';
-        let res;
 
         // act
-        res = arc.attr(attrs);
+        const res = arc.attr(attrs);
 
         // assert
         assert.equal(res, arc);
@@ -4450,10 +4296,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const arc = (this.createElement());
         const attrs = { x: 100, y: 200, innerRadius: 300, outerRadius: 400, startAngle: 179.999, endAngle: 180 };
         const expected_d = 'M -300.00000 199.99302 A 400.00000 400.00000 0 0 0 -300.00000 200.00000 L -200.00000 200.00000 A 300.00000 300.00000 0 0 1 -200.00000 199.99476 Z';
-        let res;
 
         // act
-        res = arc.attr(attrs);
+        const res = arc.attr(attrs);
 
         // assert
         assert.equal(res, arc);
@@ -4475,10 +4320,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const arc = (this.createElement());
         const attrs = { x: 100, y: 200, innerRadius: 300, outerRadius: 400, startAngle: 360, endAngle: 450 };
         const expected_d = 'M 500.00000 200.00000 A 400.00000 400.00000 0 0 0 100.00000 -200.00000 L 100.00000 -100.00000 A 300.00000 300.00000 0 0 1 400.00000 200.00000 Z';
-        let res;
 
         // act
-        res = arc.attr(attrs);
+        const res = arc.attr(attrs);
 
         // assert
         assert.equal(res, arc);
@@ -4500,10 +4344,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const arc = (this.createElement());
         const attrs = { x: 100, y: 200, innerRadius: 300, outerRadius: 400, startAngle: 90, endAngle: 810 };
         const expected_d = 'M 500.00000 200.00000 A 400.00000 400.00000 0 1 0 499.99999 200.06981 M 400.00000 200.05236 A 300.00000 300.00000 0 1 1 400.00000 200.00000 Z';
-        let res;
 
         // act
-        res = arc.attr(attrs);
+        const res = arc.attr(attrs);
 
         // assert
         assert.equal(res, arc);
@@ -4525,11 +4368,10 @@ function checkDashStyle(assert, elem, result, style, value) {
         const arc = (new this.Element(this.renderer)).attr({ x: 1000, y: 2000, innerRadius: 50, outerRadius: 100, startAngle: 90, endAngle: 180 });
         const attrs = { x: 10000, y: 20000, innerRadius: 500, outerRadius: 1000, startAngle: 900, endAngle: 1800, fill: 'red' };
         const expected_d = 'M 9000.00000 20000.00000 A 1000.00000 1000.00000 0 1 0 11000.00000 20000.00000 L 10500.00000 20000.00000 A 500.00000 500.00000 0 1 1 9500.00000 20000.00000 Z';
-        let res;
         arc.element.setAttribute = sinon.spy();
 
         // act
-        res = arc.attr(attrs);
+        const res = arc.attr(attrs);
 
         // assert
         assert.equal(res, arc);
@@ -4556,11 +4398,10 @@ function checkDashStyle(assert, elem, result, style, value) {
         const arc = (new this.Element(this.renderer)).attr({ x: 1000, y: 2000, innerRadius: 50, outerRadius: 100, startAngle: 90, endAngle: 180 });
         const attrs = { x: 10000, innerRadius: 500, startAngle: 900, fill: 'red' };
         const expected_d = 'M 10500.00000 2000.00000 A 500.00000 500.00000 0 1 0 10499.99999 2000.08727 M 10100.00000 2000.01745 A 100.00000 100.00000 0 1 1 10100.00000 2000.00000 Z';
-        let res;
         arc.element.setAttribute = sinon.spy();
 
         // act
-        res = arc.attr(attrs);
+        const res = arc.attr(attrs);
 
         // assert
         assert.equal(res, arc);
@@ -4588,11 +4429,10 @@ function checkDashStyle(assert, elem, result, style, value) {
         const arc = (new this.Element(this.renderer)).attr({ x: 1000, y: 2000, innerRadius: 50, outerRadius: 100, startAngle: 90, endAngle: 180 });
         const attrs = { fill: 'red' };
         const expected_d = 'M 1000.00000 1900.00000 A 100.00000 100.00000 0 0 0 900.00000 2000.00000 L 950.00000 2000.00000 A 50.00000 50.00000 0 0 1 1000.00000 1950.00000 Z';
-        let res;
         arc.element.setAttribute = sinon.spy();
 
         // act
-        res = arc.attr(attrs);
+        const res = arc.attr(attrs);
 
         // assert
         assert.equal(res, arc);
@@ -4616,10 +4456,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         const arc = (new this.Element(this.renderer)).attr({ x: 100, y: 200, innerRadius: 300, outerRadius: 400, startAngle: 0, endAngle: 90 });
         const expected_d = 'M 500.00000 200.00000 A 400.00000 400.00000 0 0 0 100.00000 -200.00000 L 100.00000 -100.00000 A 300.00000 300.00000 0 0 1 400.00000 200.00000 Z';
         const getAttrSpy = sinon.spy(arc.element.setAttribute.withArgs);
-        let res;
 
         // act
-        res = arc.attr('d');
+        const res = arc.attr('d');
 
         // assert
         assert.strictEqual(res, expected_d);
@@ -4629,11 +4468,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. arc params (stored in wrapper) + extra', function(assert) {
         // arrange
         const arc = (new this.Element(this.renderer)).attr({ x: 1000, y: 2000, innerRadius: 50, outerRadius: 100, startAngle: 90, endAngle: 180 });
-        let result;
         arc.attr = sinon.spy();
 
         // act
-        result = arc.animate({ x: 10000, y: 20000, innerRadius: 500, outerRadius: 1000, startAngle: 900, endAngle: 1800, someAttr: 12 });
+        const result = arc.animate({ x: 10000, y: 20000, innerRadius: 500, outerRadius: 1000, startAngle: 900, endAngle: 1800, someAttr: 12 });
 
         // assert
         assert.equal(result, arc);
@@ -4657,11 +4495,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. arc params (not stored) + extra', function(assert) {
         // arrange
         const arc = (new this.Element(this.renderer));
-        let result;
         arc.attr = sinon.spy();
 
         // act
-        result = arc.animate({ x: 10000, y: 20000, innerRadius: 500, outerRadius: 1000, startAngle: 900, endAngle: 1800, someAttr: 12 });
+        const result = arc.animate({ x: 10000, y: 20000, innerRadius: 500, outerRadius: 1000, startAngle: 900, endAngle: 1800, someAttr: 12 });
 
         // assert
         assert.equal(result, arc);
@@ -4685,12 +4522,11 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Animate. arc params (stored in wrapper) + extra, animation disabled', function(assert) {
         // arrange
         const arc = (new this.Element(this.renderer)).attr({ x: 1000, y: 2000, innerRadius: 50, outerRadius: 100, startAngle: 90, endAngle: 180 });
-        let result;
         arc.attr = sinon.spy();
         this.renderer._animation.enabled = false;
 
         // act
-        result = arc.animate({ x: 10000, y: 20000, innerRadius: 500, outerRadius: 1000, startAngle: 900, endAngle: 1800, someAttr: 12 });
+        const result = arc.animate({ x: 10000, y: 20000, innerRadius: 500, outerRadius: 1000, startAngle: 900, endAngle: 1800, someAttr: 12 });
 
         // assert
         assert.equal(result, arc);
@@ -4723,9 +4559,8 @@ function checkDashStyle(assert, elem, result, style, value) {
             $('#qunit-fixture').append(this.parent);
         },
         prepareRenderBeforeEllipsis: function() {
-            let element;
             this.renderer.root = new this.SvgElement({}, 'svg');
-            element = new this.Element(this.renderer);
+            const element = new this.Element(this.renderer);
             element.getBBox = sinon.stub().returns({ width: 20 });
             this.renderer.text = sinon.stub().returns(element);
         },
@@ -4833,10 +4668,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. without params', function(assert) {
         const text = this.createText();
-        let res;
 
         // act
-        res = text.attr();
+        const res = text.attr();
 
         // assert
         assert.equal(res, text);
@@ -4858,10 +4692,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const text = this.createText();
         const attrs = { x: 1, y: 2 };
-        let result;
 
         // act
-        result = text.attr(attrs);
+        const result = text.attr(attrs);
 
         // assert
         assert.strictEqual(result, text, 'method result');
@@ -4872,10 +4705,9 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Do not create any textNodes if text is null', function(assert) {
         // arrange
         const text = this.createText();
-        let result;
 
         // act
-        result = text.attr({ x: 1, y: 2, text: null });
+        const result = text.attr({ x: 1, y: 2, text: null });
 
         // assert
         assert.strictEqual(result, text, 'method result');
@@ -4885,10 +4717,9 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Do not create any textNodes if text is undefined', function(assert) {
         // arrange
         const text = this.createText();
-        let result;
 
         // act
-        result = text.attr({ x: 1, y: 2, text: undefined });
+        const result = text.attr({ x: 1, y: 2, text: undefined });
 
         // assert
         assert.strictEqual(result, text, 'method result');
@@ -4899,10 +4730,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const text = this.createText();
         const attrs = { text: 'simple text', x: 1, y: 2 };
-        let result;
 
         // act
-        result = text.attr(attrs);
+        const result = text.attr(attrs);
 
         // assert
         assert.strictEqual(result, text, 'method result');
@@ -4914,10 +4744,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const text = this.createText();
         const attrs = { text: 0, x: 1, y: 2, align: 'right' };
-        let result;
 
         // act
-        result = text.attr(attrs);
+        const result = text.attr(attrs);
 
         // assert
         assert.strictEqual(result, text, 'method result');
@@ -4929,10 +4758,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const text = this.createText();
         const attrs = { text: '', x: 1, y: 2 };
-        let result;
 
         // act
-        result = text.attr(attrs);
+        const result = text.attr(attrs);
 
         // assert
         assert.strictEqual(result, text, 'method result');
@@ -4944,10 +4772,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const text = this.createText();
         const attrs = { text: 123456, x: 1, y: 2 };
-        let result;
 
         // act
-        result = text.attr(attrs);
+        const result = text.attr(attrs);
 
         // assert
         assert.strictEqual(result, text, 'method result');
@@ -4959,10 +4786,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const text = this.createText();
         const attrs = { text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 };
-        let result;
 
         // act
-        result = text.attr(attrs);
+        const result = text.attr(attrs);
 
         // assert
         assert.strictEqual(result, text, 'method result');
@@ -4979,10 +4805,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const text = this.createText();
         const attrs = { text: '  simple text', x: 10, y: 20, stroke: 'black', 'stroke-width': 3, 'stroke-opacity': 0.4 };
-        let result;
 
         // act
-        result = text.attr(attrs);
+        const result = text.attr(attrs);
 
         // assert
         assert.strictEqual(result, text, 'method result');
@@ -4995,10 +4820,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const text = this.createText();
         const attrs = { text: '  simple text\r\n with multiple\n lines', x: 10, y: 20 };
-        let result;
 
         // act
-        result = text.attr(attrs);
+        const result = text.attr(attrs);
 
         // assert
         assert.strictEqual(result, text, 'method result');
@@ -5014,10 +4838,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         this.renderer.encodeHtml = true;
         const text = this.createText();
         const attrs = { text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 };
-        let result;
 
         // act
-        result = text.attr(attrs);
+        const result = text.attr(attrs);
 
         // assert
         assert.strictEqual(result, text, 'method result');
@@ -5033,10 +4856,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const text = this.createText().css({ 'font-size': 18 });
         const attrs = { text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 };
-        let result;
 
         // act
-        result = text.attr(attrs);
+        const result = text.attr(attrs);
 
         // assert
         assert.strictEqual(result, text, 'method result');
@@ -5052,10 +4874,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const text = this.createText().css({ 'font-size': '0.9em' });
         const attrs = { text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 };
-        let result;
 
         // act
-        result = text.attr(attrs);
+        const result = text.attr(attrs);
 
         // assert
         assert.strictEqual(result, text, 'method result');
@@ -5071,10 +4892,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const text = this.createText().css({ 'font-size': 'large' });
         const attrs = { text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 };
-        let result;
 
         // act
-        result = text.attr(attrs);
+        const result = text.attr(attrs);
 
         // assert
         assert.strictEqual(result, text, 'method result');
@@ -5090,10 +4910,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const text = this.createText().attr({ text: 'text is very simple', x: 50, y: 40 });
         const attrs = { text: 'simple text\r\nwith multiple\nlines' };
-        let result;
 
         // act
-        result = text.attr(attrs);
+        const result = text.attr(attrs);
 
         // assert
         assert.strictEqual(result, text, 'method result');
@@ -5199,10 +5018,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const text = this.createText().attr({ text: 'simple text\r\nwith multiple\nlines', x: 1, y: 2 });
         const attrs = { text: 'text is very simple', x: 3, y: 4 };
-        let result;
 
         // act
-        result = text.attr(attrs);
+        const result = text.attr(attrs);
 
         // assert
         assert.strictEqual(result, text, 'method result');
@@ -5214,10 +5032,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const text = this.createText().attr({ text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 });
         const attrs = { text: undefined };
-        let result;
 
         // act
-        result = text.attr(attrs);
+        const result = text.attr(attrs);
 
         // assert
         assert.strictEqual(result, text, 'method result');
@@ -5234,10 +5051,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         const text = this.createText().attr({ text: 'simple text\r\nwith multiple\nlines' });
         const attrs = { text: null };
-        let result;
 
         // act
-        result = text.attr(attrs);
+        const result = text.attr(attrs);
 
         // assert
         assert.strictEqual(result, text, 'method result');
@@ -5248,10 +5064,9 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Css with empty param', function(assert) {
         // arrange
         const text = this.createText().attr({ text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 });
-        let result;
 
         // act
-        result = text.css();
+        const result = text.css();
 
         // assert
         assert.strictEqual(result, text, 'method result');
@@ -5260,10 +5075,9 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Update text line positions if font size changed', function(assert) {
         // arrange
         const text = this.createText().attr({ text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 });
-        let result;
 
         // act
-        result = text.css({ 'font-size': 18 });
+        const result = text.css({ 'font-size': 18 });
 
         // assert
         assert.strictEqual(result, text, 'method result');
@@ -5277,10 +5091,9 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Update text line positions if text position changed', function(assert) {
         // arrange
         const text = this.createText().attr({ text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 });
-        let result;
 
         // act
-        result = text.attr({ x: 30, y: 40 });
+        const result = text.attr({ x: 30, y: 40 });
 
         // assert
         assert.strictEqual(result, text, 'method result');
@@ -5452,11 +5265,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('Apply ellipsis. Single line', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test text for checking ellipsis with single line' });
-            let hasEllipsis;
 
             text.element.getBBox = sinon.stub().returns({ width: 300 });
             this.prepareRenderBeforeEllipsis();
-            hasEllipsis = text.applyEllipsis(110);
+            const hasEllipsis = text.applyEllipsis(110);
 
             this.checkSimple(assert, text, { text: 'There is test t...' }, { x: 0, y: 0 });
             assert.strictEqual(hasEllipsis, true);
@@ -5464,11 +5276,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('Apply ellipsis. Single line. Complex line', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There <b>is</b> test text for <i>checking</i> ellipsis with single line' });
-            let hasEllipsis;
 
             text.element.getBBox = sinon.stub().returns({ width: 300 });
             this.prepareRenderBeforeEllipsis();
-            hasEllipsis = text.applyEllipsis(105);
+            const hasEllipsis = text.applyEllipsis(105);
 
             this.checkTspans(assert, text, [
                 { x: 0, y: 0, text: 'There ' },
@@ -5480,11 +5291,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('Apply ellipsis. Single line, big max width', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test text for checking ellipsis with single line' });
-            let hasEllipsis;
 
             text.element.getBBox = sinon.stub().returns({ width: 300 });
             this.prepareRenderBeforeEllipsis();
-            hasEllipsis = text.applyEllipsis(1000);
+            const hasEllipsis = text.applyEllipsis(1000);
 
             this.checkSimple(assert, text, { text: 'There is test text for checking ellipsis with single line' }, { x: 0, y: 0 });
             assert.strictEqual(hasEllipsis, false);
@@ -5492,11 +5302,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('Apply ellipsis. Single line, zero width', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test text for checking ellipsis with single line' });
-            let hasEllipsis;
 
             text.element.getBBox = sinon.stub().returns({ width: 300 });
             this.prepareRenderBeforeEllipsis();
-            hasEllipsis = text.applyEllipsis(0);
+            const hasEllipsis = text.applyEllipsis(0);
 
             this.checkSimple(assert, text, { text: '...' }, { x: 0, y: 0 });
             assert.strictEqual(hasEllipsis, true);
@@ -5504,11 +5313,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('Apply ellipsis. Single line, negative width', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test text for checking ellipsis with single line' });
-            let hasEllipsis;
 
             text.element.getBBox = sinon.stub().returns({ width: 300 });
             this.prepareRenderBeforeEllipsis();
-            hasEllipsis = text.applyEllipsis(-10);
+            const hasEllipsis = text.applyEllipsis(-10);
 
             this.checkSimple(assert, text, { text: '...' }, { x: 0, y: 0 });
             assert.strictEqual(hasEllipsis, true);
@@ -5516,11 +5324,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('Apply ellipsis. Single line. Complex line. required length equal startindex of text', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There <b>is</b> test text for <i>checking</i> ellipsis with single line' });
-            let hasEllipsis;
 
             text.element.getBBox = sinon.stub().returns({ width: 280 });
             this.prepareRenderBeforeEllipsis();
-            hasEllipsis = text.applyEllipsis(78);
+            const hasEllipsis = text.applyEllipsis(78);
 
             this.checkTspans(assert, text, [
                 { x: 0, y: 0, text: 'There ' },
@@ -5532,11 +5339,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('Text should not ellipsis if maxWidth = text width', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test' });
-            let hasEllipsis;
 
             text.element.getBBox = sinon.stub().returns({ width: 40 });
             this.prepareRenderBeforeEllipsis();
-            hasEllipsis = text.applyEllipsis(40);
+            const hasEllipsis = text.applyEllipsis(40);
 
             this.checkSimple(assert, text, { text: 'There is test' }, { x: 0, y: 0 });
             assert.strictEqual(hasEllipsis, false);
@@ -5544,11 +5350,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('There is not text', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: '' });
-            let hasEllipsis;
 
             text.element.getBBox = sinon.stub().returns({ width: 0 });
             this.prepareRenderBeforeEllipsis();
-            hasEllipsis = text.applyEllipsis(-10);
+            const hasEllipsis = text.applyEllipsis(-10);
 
             this.checkSimple(assert, text, { text: '' }, { x: 0, y: 0 });
             assert.strictEqual(hasEllipsis, false);
@@ -5556,11 +5361,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('Apply ellipsis. Required length less than width of the ellipsis', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There <b>is</b> test text for <i>checking</i> ellipsis with single line' });
-            let hasEllipsis;
 
             text.element.getBBox = sinon.stub().returns({ width: 280 });
             this.prepareRenderBeforeEllipsis();
-            hasEllipsis = text.applyEllipsis(18);
+            const hasEllipsis = text.applyEllipsis(18);
 
             this.checkTspans(assert, text, [
                 { x: 0, y: 0, text: '...' }
@@ -5570,11 +5374,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('Apply ellipsis. Multiline', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test\ntext for checking<br/>ellipsis with multi\nline and four lines' });
-            let hasEllipsis;
 
             text.element.getBBox = sinon.stub().returns({ width: 300 });
             this.prepareRenderBeforeEllipsis();
-            hasEllipsis = text.applyEllipsis(60);
+            const hasEllipsis = text.applyEllipsis(60);
 
             this.checkTspans(assert, text, [
                 { x: 0, y: 0, text: 'There...' },
@@ -5651,11 +5454,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('Not apply ellipsis. One symbol', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: '7' });
-            let hasEllipsis;
 
             text.element.getBBox = sinon.stub().returns({ width: 300, height: 20, x: 0, y: 0 });
             this.prepareRenderBeforeEllipsis();
-            hasEllipsis = text.applyEllipsis(1);
+            const hasEllipsis = text.applyEllipsis(1);
 
             this.checkSimple(assert, text, { text: '7' }, { x: 0, y: 0 });
             assert.ok(!hasEllipsis);
@@ -5663,15 +5465,13 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('Apply ellipsis second time with new width', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test text for checking ellipsis' });
-            let textAfterFirstIteration;
-            let textAfterSecondIteration;
             this.prepareRenderBeforeEllipsis();
             text.applyEllipsis(40);
-            textAfterFirstIteration = text.element.childNodes[0].wholeText;
+            const textAfterFirstIteration = text.element.childNodes[0].wholeText;
 
             // act
             text.applyEllipsis(80);
-            textAfterSecondIteration = text.element.childNodes[0].wholeText;
+            const textAfterSecondIteration = text.element.childNodes[0].wholeText;
 
             // assert
             assert.ok(textAfterSecondIteration.length > textAfterFirstIteration.length);
@@ -5721,10 +5521,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('Apply ellipsis of rotated element', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 0, y: 0, rotate: 270, text: 'There is test text for checking ellipsis with single line' });
-            let hasEllipsis;
 
             this.prepareRenderBeforeEllipsis();
-            hasEllipsis = text.applyEllipsis(100);
+            const hasEllipsis = text.applyEllipsis(100);
 
             assert.strictEqual(hasEllipsis, true);
             assert.equal(text.element.childNodes[0].wholeText.substr(-3), '...');
@@ -5732,10 +5531,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('Do not apply ellipsis if element not added', function(assert) {
             const text = this.createText().attr({ x: 0, y: 0, text: 'There is test text for checking ellipsis with single line' });
-            let hasEllipsis;
 
             this.prepareRenderBeforeEllipsis();
-            hasEllipsis = text.applyEllipsis(100);
+            const hasEllipsis = text.applyEllipsis(100);
 
             assert.strictEqual(hasEllipsis, false);
         });
@@ -5781,10 +5579,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('WordWrap normal', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: '<b>There is test text for checking ellipsis with single line<b>' });
-            let result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxSize(110, undefined, {
+            const result = text.setMaxSize(110, undefined, {
                 wordWrap: 'normal'
             });
             assert.deepEqual(result, { rowCount: 5, textChanged: true, textIsEmpty: false });
@@ -5802,10 +5599,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('WordWrap normal. Single long word', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: '<b>longlonglonglonglong<b>' });
-            let result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxSize(110, undefined, {
+            const result = text.setMaxSize(110, undefined, {
                 wordWrap: 'normal',
                 textOverflow: 'clip'
             });
@@ -5821,10 +5617,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('Single line. wordWrap word-break', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: '<b>longlonglonglonglonglonglong<b>' });
-            let result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxSize(110, undefined, {
+            const result = text.setMaxSize(110, undefined, {
                 wordWrap: 'word-break'
             });
 
@@ -5838,10 +5633,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('Single line. wordWrap normal. text overflow clip', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: '<b>long longlonglonglonglonglong long<b>' });
-            let result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxSize(110, undefined, {
+            const result = text.setMaxSize(110, undefined, {
                 wordWrap: 'normal',
                 textOverflow: 'clip'
             });
@@ -5861,10 +5655,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('wordWrap normal. text overflow ellipsis', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: '<b>long longlonglonglonglonglong long<b>' });
-            let result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxSize(110, undefined, {
+            const result = text.setMaxSize(110, undefined, {
                 wordWrap: 'normal',
                 textOverflow: 'ellipsis'
             });
@@ -5878,10 +5671,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('wordWrap normal. text overflow hide', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: '<b>long longlonglonglonglonglong long<b>' });
-            let result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxSize(110, undefined, {
+            const result = text.setMaxSize(110, undefined, {
                 wordWrap: 'normal',
                 textOverflow: 'hide'
             });
@@ -5892,10 +5684,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('wordWrap normal. Simple text', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'There is test text for checking ellipsis with single line' });
-            let result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxSize(110, undefined, {
+            const result = text.setMaxSize(110, undefined, {
                 wordWrap: 'normal'
             });
 
@@ -5913,10 +5704,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('Single line. wordWrap none', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: '<b>longlonglonglonglonglonglong<b>' });
-            let result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxSize(110, undefined, {
+            const result = text.setMaxSize(110, undefined, {
                 wordWrap: 'none',
                 textOverflow: 'ellipsis'
             });
@@ -5931,10 +5721,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('Complex text. wordWrap normal', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'There <b>is</b> test <b>text for</b> <br/>checking <b>ellipsis</b> with single <i>line</i>' });
-            let result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxSize(110, undefined, {
+            const result = text.setMaxSize(110, undefined, {
                 wordWrap: 'normal',
                 textOverflow: 'ellipsis'
             });
@@ -5960,10 +5749,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('Complex text. wordWrap: none, text overflow: ellipsis - remove test next to ellipsis', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'longlonglonglonglong <b>longlonglonglonglong</b>' });
-            let result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxSize(110, undefined, {
+            const result = text.setMaxSize(110, undefined, {
                 wordWrap: 'none',
                 textOverflow: 'ellipsis'
             });
@@ -5987,10 +5775,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('Complex text. wordWrap: normal, text overflow: ellipsis - wrap word', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'longlonglonglonglong <b>longlonglonglonglong</b>' });
-            let result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxSize(110, undefined, {
+            const result = text.setMaxSize(110, undefined, {
                 wordWrap: 'normal',
                 textOverflow: 'ellipsis'
             });
@@ -6005,10 +5792,9 @@ function checkDashStyle(assert, elem, result, style, value) {
                 x: 35, y: 100, fill: 'black', stroke: 'black', 'stroke-width': 3,
                 text: 'There is test text for checking ellipsis with single line'
             });
-            let result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxSize(110, undefined, {
+            const result = text.setMaxSize(110, undefined, {
                 wordWrap: 'normal'
             });
 
@@ -6027,10 +5813,9 @@ function checkDashStyle(assert, elem, result, style, value) {
                 x: 35, y: 100, fill: 'black', stroke: 'black',
                 text: 'There is'
             });
-            let result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxSize(1, undefined, {
+            const result = text.setMaxSize(1, undefined, {
                 wordWrap: 'none',
                 textOverflow: 'ellipsis'
             });
@@ -6231,11 +6016,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('WordWrap normal with title element', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'Text Text Text Text Text Text' });
-            let result;
 
             text.setTitle('hint');
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxSize(110, undefined, {
+            const result = text.setMaxSize(110, undefined, {
                 wordWrap: 'normal'
             });
             assert.ok(result.textChanged);

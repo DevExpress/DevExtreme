@@ -344,20 +344,16 @@ module.exports = _extend({}, symbolPoint, {
         const argument = !rotated ? that.x : that.y;
         const maxValue = !rotated ? _max(that.minY, that.y) : _max(that.minX, that.x);
         const minValue = !rotated ? _min(that.minY, that.y) : _min(that.minX, that.x);
-        let notVisibleByArg;
-        let notVisibleByVal;
         let tmp;
         let visibleTopMarker = true;
         let visibleBottomMarker = true;
         let visibleRangeArea = true;
-        let visibleArgArea;
-        let visibleValArea;
 
-        visibleArgArea = that.series.getArgumentAxis().getVisibleArea();
-        visibleValArea = that.series.getValueAxis().getVisibleArea();
+        const visibleArgArea = that.series.getArgumentAxis().getVisibleArea();
+        const visibleValArea = that.series.getValueAxis().getVisibleArea();
 
-        notVisibleByArg = (visibleArgArea[1] < argument) || (visibleArgArea[0] > argument);
-        notVisibleByVal = ((visibleValArea[0] > minValue) && (visibleValArea[0] > maxValue)) || ((visibleValArea[1] < minValue) && (visibleValArea[1] < maxValue));
+        const notVisibleByArg = (visibleArgArea[1] < argument) || (visibleArgArea[0] > argument);
+        const notVisibleByVal = ((visibleValArea[0] > minValue) && (visibleValArea[0] > maxValue)) || ((visibleValArea[1] < minValue) && (visibleValArea[1] < maxValue));
 
         if(notVisibleByArg || notVisibleByVal) {
             visibleTopMarker = visibleBottomMarker = visibleRangeArea = false;

@@ -10038,7 +10038,6 @@ QUnit.module('Scale breaks drawing', environment);
 
 QUnit.test('Drawing scale breaks. Value axis. Elements creation.', function(assert) {
     // arrange
-    let elementsGroup;
     const scaleBreaksGroup = this.renderer.g();
 
     this.createAxisWithBreaks({ breakStyle: {
@@ -10053,7 +10052,7 @@ QUnit.test('Drawing scale breaks. Value axis. Elements creation.', function(asse
 
     this.axis.drawScaleBreaks();
 
-    elementsGroup = this.renderer.g.lastCall.returnValue;
+    const elementsGroup = this.renderer.g.lastCall.returnValue;
 
     // assert
     assert.strictEqual(this.renderer.path.callCount, 3);
@@ -10236,8 +10235,6 @@ QUnit.test('Cliprect disposing', function(assert) {
 
 QUnit.test('Drawing scale breaks using drawScaleBreaks method', function(assert) {
     // arrange
-    let elementsGroup;
-
     this.createAxisWithBreaks({}, this.renderer.g());
 
     this.translator.stub('translate').withArgs(20).returns(20);
@@ -10247,7 +10244,7 @@ QUnit.test('Drawing scale breaks using drawScaleBreaks method', function(assert)
     // act
     this.axis.drawScaleBreaks();
 
-    elementsGroup = this.renderer.g.lastCall.returnValue;
+    const elementsGroup = this.renderer.g.lastCall.returnValue;
     // assert
     assert.strictEqual(this.renderer.path.callCount, 3);
     assert.strictEqual(this.renderer.path.getCall(0).returnValue.append.lastCall.args[0], elementsGroup);

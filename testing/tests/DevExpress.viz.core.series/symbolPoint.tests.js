@@ -1209,7 +1209,6 @@ QUnit.test('Animate point with complete', function(assert) {
     this.options.symbol = 'cross';
     const point = createPoint(this.series, { argument: 1, value: 1 }, this.options);
     const stubComplete = sinon.stub();
-    let complete;
 
     point.x = 10,
     point.y = 20,
@@ -1219,7 +1218,7 @@ QUnit.test('Animate point with complete', function(assert) {
     point.draw(this.renderer, this.groups, true);
 
     point.animate(stubComplete, { translate: { x: point.x, y: point.y } });
-    complete = point.graphic.stub('animate').lastCall.args[2];
+    const complete = point.graphic.stub('animate').lastCall.args[2];
     // act
     complete();
     // assert

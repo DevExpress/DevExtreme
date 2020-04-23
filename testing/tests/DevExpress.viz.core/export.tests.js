@@ -822,10 +822,9 @@ QUnit.module('API', {
 QUnit.test('Get layout options', function(assert) {
     // arrange
     const exportMenu = this.createExportMenu();
-    let layout;
 
     // act
-    layout = exportMenu.getLayoutOptions();
+    const layout = exportMenu.getLayoutOptions();
 
     // assert
     assert.deepEqual(layout, {

@@ -169,13 +169,10 @@ exports.stock = _extend({}, scatterSeries, {
         const that = this;
         const innerColor = that._options.innerColor;
         const styles = that._getDefaultStyle(pointOptions);
-        let positiveStyle;
-        let reductionStyle;
-        let reductionPositiveStyle;
 
-        positiveStyle = _extend(true, {}, styles);
-        reductionStyle = that._getReductionStyle(pointOptions);
-        reductionPositiveStyle = _extend(true, {}, reductionStyle);
+        const positiveStyle = _extend(true, {}, styles);
+        const reductionStyle = that._getReductionStyle(pointOptions);
+        const reductionPositiveStyle = _extend(true, {}, reductionStyle);
 
         positiveStyle.normal.fill = positiveStyle.hover.fill = positiveStyle.selection.fill = innerColor;
         reductionPositiveStyle.normal.fill = reductionPositiveStyle.hover.fill = reductionPositiveStyle.selection.fill = innerColor;

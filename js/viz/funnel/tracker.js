@@ -26,11 +26,10 @@ exports.plugin = {
             getData: function(e, tooltipData) {
                 const target = e.target;
                 const data = target[dataKey];
-                let proxyData;
                 if(isDefined(data)) {
                     return data;
                 }
-                proxyData = getProxyData(e);
+                const proxyData = getProxyData(e);
 
                 if(tooltipData && proxyData && proxyData.type !== 'inside-label') {
                     return;

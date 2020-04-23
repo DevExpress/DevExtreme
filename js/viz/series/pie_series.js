@@ -196,19 +196,16 @@ exports.pie = _extend({}, barSeries, {
         const originalPoints = that._points || [];
         const minSegmentSize = that._options.minSegmentSize;
         let minShownValue;
-        let total;
         let isAllPointsNegative = true;
-        let points;
         let i = 0;
         const len = originalPoints.length;
-        let maxValue;
 
         while(i < len && isAllPointsNegative) {
             isAllPointsNegative = originalPoints[i].value <= 0;
             i++;
         }
 
-        points = that._points = _map(originalPoints, function(point) {
+        const points = that._points = _map(originalPoints, function(point) {
             if(point.value === null || (!isAllPointsNegative && point.value < 0)) {
                 that._removePoint(point);
                 return null;
@@ -217,14 +214,14 @@ exports.pie = _extend({}, barSeries, {
             }
         });
 
-        maxValue = points.reduce(function(max, p) {
+        const maxValue = points.reduce(function(max, p) {
             return _max(max, Math.abs(p.initialValue));
         }, 0);
         points.forEach(function(p) {
             p.normalInitialValue = p.initialValue / (maxValue !== 0 ? maxValue : 1);
         });
 
-        total = points.reduce(function(total, point) {
+        const total = points.reduce(function(total, point) {
             return total + (point.isVisible() ? point.normalInitialValue : 0);
         }, 0);
         if(minSegmentSize) {

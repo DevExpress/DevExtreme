@@ -62,12 +62,10 @@ const dxBullet = BaseSparkline.inherit({
         let level;
         let value;
         let target;
-        let isValueUndefined;
-        let isTargetUndefined;
 
         that._allOptions = options = that.callBase();
-        isValueUndefined = that._allOptions.value === undefined;
-        isTargetUndefined = that._allOptions.target === undefined;
+        const isValueUndefined = that._allOptions.value === undefined;
+        const isTargetUndefined = that._allOptions.target === undefined;
 
         that._tooltipEnabled = !(isValueUndefined && isTargetUndefined);
         if(isValueUndefined) {

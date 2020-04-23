@@ -17,10 +17,9 @@ const defaultCorrection = {
 };
 
 const createPoint = function(series, data, options) {
-    let point;
     options = options || {};
     options.type = options.type || 'pie';
-    point = new pointModule.Point(series, data, options);
+    const point = new pointModule.Point(series, data, options);
     point.correctPosition(defaultCorrection);
     return point;
 };

@@ -80,14 +80,13 @@ const rectangle = SimpleIndicator.inherit({
     _render: function() {
         const that = this;
         const options = that._options;
-        let p;
         let x1;
         let x2;
         let y1;
         let y2;
 
         that.callBase();
-        p = that._zeroPosition;
+        const p = that._zeroPosition;
         if(that.vertical) {
             x1 = options.x - options.length / 2;
             x2 = options.x + options.length / 2;
@@ -136,7 +135,6 @@ const circle = SimpleIndicator.inherit({
         const options = that._options;
         let x;
         let y;
-        let r;
 
         that.callBase();
         if(that.vertical) {
@@ -146,7 +144,7 @@ const circle = SimpleIndicator.inherit({
             x = that._zeroPosition;
             y = options.y;
         }
-        r = options.length / 2 || 0;
+        const r = options.length / 2 || 0;
         that._element = that._element || that._renderer.circle().append(that._rootElement);
         that._element.attr({ cx: x, cy: y, r: r });
     }

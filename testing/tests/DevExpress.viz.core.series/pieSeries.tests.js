@@ -317,8 +317,6 @@ const checkTwoGroups = function(assert, series) {
             point: { visible: false },
             label: { visible: false }
         };
-        let complete;
-        let points;
         const series = createSeries($.extend({ type: seriesType }, options), { renderer: this.renderer, trackerGroup: {} });
 
         series.updateData(this.data.slice(0, 3));
@@ -339,13 +337,13 @@ const checkTwoGroups = function(assert, series) {
             assert.strictEqual(point.animate.lastCall.args[2].toFixed(2), delay.toFixed(2), 'delay');
         }
 
-        points = series.getAllPoints();
+        const points = series.getAllPoints();
 
         assertAnimationArguments(points[0], 0.7, 0, false);
         assertAnimationArguments(points[1], 0.7, 0.15, false);
         assertAnimationArguments(points[2], 0.7, 0.3, true);
 
-        complete = points[2].animate.lastCall.args[0];
+        const complete = points[2].animate.lastCall.args[0];
 
         complete();
         assert.deepEqual(series._labelsGroup.stub('animate').lastCall.args[0], { opacity: 1 });
@@ -628,11 +626,10 @@ const checkTwoGroups = function(assert, series) {
 
     QUnit.test('All options defined', function(assert) {
         const series = createSeries(this.options);
-        let styles;
 
         series.updateData(this.data);
         series.createPoints();
-        styles = series._getPointOptions().styles;
+        const styles = series._getPointOptions().styles;
 
         assert.deepEqual(styles.hover, {
             fill: 'h-color',
@@ -787,11 +784,10 @@ const checkTwoGroups = function(assert, series) {
         this.options.hoverStyle.border.visible = false;
         this.options.selectionStyle.border.visible = false;
         const series = createSeries(this.options);
-        let styles;
 
         series.updateData(this.data);
         series.createPoints();
-        styles = series._getPointOptions().styles;
+        const styles = series._getPointOptions().styles;
 
         assert.strictEqual(styles.hover['stroke-width'], 0);
         assert.strictEqual(styles.normal['stroke-width'], 0);
@@ -815,10 +811,9 @@ const checkTwoGroups = function(assert, series) {
                 }
             }
         });
-        let styles;
         series.updateData(this.data);
         series.createPoints();
-        styles = series._getPointOptions({ argument: 'arg' }).styles;
+        const styles = series._getPointOptions({ argument: 'arg' }).styles;
 
         assert.strictEqual(styles.hover.fill, 'arg', 'hover.fill');
         assert.strictEqual(styles.hover.stroke, 'arg', 'hover.stroke');
@@ -852,13 +847,12 @@ const checkTwoGroups = function(assert, series) {
                 }
             }
         });
-        let styles;
         series.updateData(this.data);
         series.createPoints();
 
         assert.ok(this.createPoint.calledOnce);
 
-        styles = this.createPoint.getCall(0).args[2].styles;
+        const styles = this.createPoint.getCall(0).args[2].styles;
 
         assert.strictEqual(styles.hover.fill, 'arg2', 'hover.fill');
         assert.strictEqual(styles.hover.stroke, 'arg2', 'hover.stroke');
@@ -1031,11 +1025,10 @@ const checkTwoGroups = function(assert, series) {
             type: seriesType,
             label: { visible: false }
         });
-        let points;
 
         series.updateData(data);
         series.createPoints();
-        points = series.getPoints();
+        const points = series.getPoints();
         series.arrangePoints();
 
         points[2].isVisible = function() {
