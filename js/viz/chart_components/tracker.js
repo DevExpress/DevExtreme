@@ -72,6 +72,7 @@ const baseTrackerPrototype = {
 
         that._renderer.root.off(DOT_EVENT_NS)
             .on(POINTER_ACTION, data, that._pointerHandler)
+            .on(addNamespace(pointerEvents.up, EVENT_NS), () => clearTimeout(that._holdTimer))
             .on(addNamespace(clickEvent.name, EVENT_NS), data, that._clickHandler);
     },
 
