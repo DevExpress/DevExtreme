@@ -739,6 +739,10 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
             e.preventDefault();
             e.stopPropagation();
         }
+
+        if(this.isResizing()) {
+            this.getController('editorFactory').loseFocus();
+        }
     },
 
     _generatePointsByColumns: function() {
@@ -1284,6 +1288,17 @@ module.exports = {
                     const isResizing = columnsResizerController.isResizing();
 
                     return this.callBase.apply(this, arguments) || itemCount > 0 && wordWrapEnabled && isResizing;
+                }
+            }
+        },
+        controllers: {
+            editorFactory: {
+                renderFocusOverlay: function() {
+                    if(this.getController('columnsResizer').isResizing()) {
+                        return;
+                    }
+
+                    return this.callBase.apply(this, arguments);
                 }
             }
         }
