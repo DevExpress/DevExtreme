@@ -85,7 +85,7 @@ export const viewFunction = (viewModel: Button) => {
         tabIndex={viewModel.props.tabIndex}
         visible={viewModel.props.visible}
         width={viewModel.props.width}
-        restAttributes={viewModel.restAttributes}
+        {...viewModel.restAttributes}
     >
         <div className="dx-button-content" ref={viewModel.contentRef as any}>
             {template &&

@@ -66,7 +66,7 @@ const getCssClasses = (model: Partial<Widget> & Partial<WidgetProps>) => {
     const isHoverable = model.hoverStateEnabled && !model.disabled;
 
     model.classes && className.push(model.classes);
-    model.restAttributes!.className && className.push(model.restAttributes!.className);
+    model.className && className.push(model.className);
     model.disabled && className.push('dx-state-disabled');
     !model.visible && className.push('dx-state-invisible');
     model._focused && isFocusable && className.push('dx-state-focused');
@@ -87,9 +87,9 @@ export const viewFunction = (viewModel: Widget) => {
             tabIndex={viewModel.tabIndex}
             title={viewModel.props.hint}
             hidden={!viewModel.props.visible}
-            {...viewModel.props.restAttributes}
             className={viewModel.cssClasses}
             style={viewModel.styles}
+            {...viewModel.restAttributes}
         >
             {viewModel.props.children}
         </div>
@@ -106,6 +106,7 @@ export class WidgetProps {
     @OneWay() aria?: any = {};
     @Slot() children?: any;
     @OneWay() classes?: string | undefined = '';
+    @OneWay() className?: string = '';
     @OneWay() clickArgs?: any = {};
     @OneWay() disabled?: boolean = false;
     @OneWay() elementAttr?: { [name: string]: any };
@@ -122,8 +123,8 @@ export class WidgetProps {
     @Event() onKeyboardHandled?: (args: any) => any | undefined;
     @Event() onKeyDown?: (e: any, options: any) => any;
     @Event() onVisibilityChange?: (args: boolean) => undefined;
-    @OneWay() restAttributes: { [name: string]: any } = {};
     @OneWay() rtlEnabled?: boolean = config().rtlEnabled;
+    @OneWay() style?: { [name: string]: any };
     @OneWay() tabIndex?: number = 0;
     @OneWay() visible?: boolean = true;
     @OneWay() width?: string | number | null = null;
@@ -327,14 +328,15 @@ export default class Widget extends JSXComponent<WidgetProps> {
     }
 
     get styles() {
-        const { width, height, restAttributes } = this.props;
+        const { width, height, style } = this.props;
 
-        return getStyles({ width, height, style: restAttributes.style });
+        return getStyles({ width, height, style });
     }
 
     get cssClasses() {
         const {
             classes,
+            className,
             disabled,
             elementAttr,
             focusStateEnabled,
@@ -342,13 +344,12 @@ export default class Widget extends JSXComponent<WidgetProps> {
             onVisibilityChange,
             rtlEnabled,
             visible,
-            restAttributes,
         } = this.props;
 
         return getCssClasses({
-            _active: this._active, _focused: this._focused, _hovered: this._hovered, classes,
-            disabled, elementAttr, focusStateEnabled, hoverStateEnabled,
-            onVisibilityChange, restAttributes, rtlEnabled, visible,
+            _active: this._active, _focused: this._focused, _hovered: this._hovered, className,
+            classes, disabled, elementAttr, focusStateEnabled, hoverStateEnabled,
+            onVisibilityChange, rtlEnabled, visible,
         });
     }
 

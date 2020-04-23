@@ -220,13 +220,13 @@ describe('Widget', () => {
 
         describe('restAttributes', () => {
             it('should add merge `className` property', () => {
-                const widget = render({ restAttributes: { className: 'custom-class' } });
+                const widget = render({ className: 'custom-class' });
 
                 expect(widget.is('.custom-class.dx-widget')).toBe(true);
             });
 
             it('should add merge `style` property', () => {
-                const widget = render({ restAttributes: { style: { fontSize: '20px', height: 10 } } });
+                const widget = render({ style: { fontSize: '20px', height: 10 } });
 
                 expect(widget.prop('style')).toMatchObject({
                     fontSize: '20px',
@@ -236,7 +236,7 @@ describe('Widget', () => {
             });
 
             it('should add custom property', () => {
-                const widget = render({ restAttributes: { data: 'custom-data' } });
+                const widget = render({ data: 'custom-data' });
 
                 expect(widget.prop('data')).toBe('custom-data');
             });
