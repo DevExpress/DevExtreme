@@ -1,4 +1,5 @@
 import { Ref, Effect, Component, ComponentBindings, JSXComponent, OneWay, Event, TwoWay } from 'devextreme-generator/component_declaration/common';
+import dxNumberBox from '../ui/number_box';
 import { WidgetProps } from './widget';
 
 export const viewFunction = ({ widgetRef }: NumberBox) => {
@@ -6,7 +7,7 @@ export const viewFunction = ({ widgetRef }: NumberBox) => {
 };
 
 @ComponentBindings()
-class NumberBoxProps extends WidgetProps {
+export class NumberBoxProps extends WidgetProps {
     // props was copied from js\ui\number_box.d.ts
 
     // buttons?: Array<'clear' | 'spins' | dxTextEditorButton>;
@@ -15,9 +16,9 @@ class NumberBoxProps extends WidgetProps {
     @OneWay() max?: number;
     @OneWay() min?: number;
     @OneWay() mode?: 'number' | 'text' | 'tel';
+    // Needed only for jQuery. Should be auto-generated
     // tslint:disable-next-line: max-line-length
     // onValueChanged?: ((e: { component?: T, element?: dxElement, model?: any, value?: any, previousValue?: any, event?: event }) => any);
-    @Event() onValueChanged?: (e: {value: number}) => void;
     @OneWay() showSpinButtons?: boolean;
     @OneWay() step?: number;
     @OneWay() useLargeSpinButtons?: boolean;
@@ -35,7 +36,14 @@ export default class NumberBox extends JSXComponent<NumberBoxProps> {
     widgetRef!: HTMLDivElement;
     @Effect()
     setupWidget() {
-        ($(this.widgetRef) as any).dxNumberBox(this.props as any);
+        const { valueChange } = this.props;
+        // tslint:disable-next-line: no-unused-expression
+        new dxNumberBox(this.widgetRef, {
+            ...this.props as any,
+            onValueChanged: (e) => {
+                valueChange!(e.value);
+            },
+        });
     }
 
 }
