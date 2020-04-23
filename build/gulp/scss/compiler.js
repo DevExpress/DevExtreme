@@ -1,10 +1,17 @@
 const sass = require('gulp-dart-sass');
 const gulp = require('gulp');
+const del = require('del');
+const through = require('through2');
+const path = require('path');
+const fs = require('fs');
+const replace = require('gulp-replace');
 const config = require('./config');
 const dataUri = require('../gulp-data-uri');
 const cleanCss = require('gulp-clean-css');
 const autoPrefix = require('gulp-autoprefixer');
-const cleanCssOptions = require('../../../themebuilder/modules/clean-css-options');
+const cleanCssOptions = require('../../../themebuilder-scss/modules/clean-css-options');
+const MetadataGenerator = require('../../../themebuilder-scss/modules/metadata-generator');
+const generatorScss = new MetadataGenerator();
 
 const outputPath = config.outputPath;
 const tmpPath = `${outputPath}/tmp`;
@@ -30,7 +37,45 @@ function compile() {
     ]);
 }
 
+function clean() {
+    return del(`${tmpPath}`);
+}
+
 gulp.task('compile-scss', gulp.series(
     processDataUri,
-    compile
+    compile,
+    clean
+));
+
+// metadata/scss generator for themebuilder on scss
+const context = require('../context');
+const commentsRegex = /\s*\/\*[\S\s]*?\*\//g;
+
+gulp.task('style-compiler-tb-scss-assets', gulp.series(
+    function generateScss() {
+        const assetsPath = path.join(process.cwd(), 'themebuilder-scss', 'data', 'scss');
+        return gulp.src('scss/**/*.scss')
+            .pipe(through.obj((chunk, enc, callback) => {
+                const content = generatorScss.collectMetadata(
+                    process.cwd(),
+                    chunk.path,
+                    chunk.contents.toString()
+                );
+
+                chunk.contents = Buffer.from(content);
+                callback(null, chunk);
+            }))
+            .pipe(replace(commentsRegex, ''))
+            .pipe(dataUri())
+            .pipe(gulp.dest(assetsPath));
+    },
+    function saveMetadata(callback) {
+        const metadataPath = path.join(process.cwd(), 'themebuilder-scss', 'data', 'metadata', 'dx-theme-builder-metadata.js');
+        const metadata = generatorScss.getMetadata();
+        metadata['_metadata_version'] = context.version.package;
+        const meta = 'module.exports = ' + JSON.stringify(metadata) + ';';
+        fs.mkdirSync(path.dirname(metadataPath), { recursive: true });
+        fs.writeFileSync(metadataPath, meta);
+        callback();
+    }
 ));
