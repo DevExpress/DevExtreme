@@ -186,7 +186,6 @@ const DateBox = DropDownEditor.inherit({
         this._initStrategy();
         this.option(extend({}, this._strategy.getDefaultOptions(), this._userOptions));
         delete this._userOptions;
-        this._skipCustomValidation = false;
         this.callBase();
     },
 
@@ -475,7 +474,7 @@ const DateBox = DropDownEditor.inherit({
         const currentValue = this.dateOption('value');
 
         if(text === this._getDisplayedText(currentValue)) {
-            this._validateValue(currentValue);
+            this._applyInternalValidation(currentValue);
             return;
         }
 
@@ -494,8 +493,6 @@ const DateBox = DropDownEditor.inherit({
                 this.dateValue(newValue, e);
             }
         }
-
-        this._applyCustomValidation(newValue);
     },
 
     _getDateByDefault: function() {
@@ -507,13 +504,6 @@ const DateBox = DropDownEditor.inherit({
         const parsedText = this._strategy.getParsedText(text, displayFormat);
 
         return typeUtils.isDefined(parsedText) ? parsedText : undefined;
-    },
-
-    _validateValue: function(value) {
-        const internalResult = this._applyInternalValidation(value);
-        const customResult = !this._skipCustomValidation ? this._applyCustomValidation(value) : true;
-        this._skipCustomValidation = false;
-        return internalResult && customResult;
     },
 
     _applyInternalValidation(value) {
@@ -546,8 +536,6 @@ const DateBox = DropDownEditor.inherit({
             editor: this,
             value: this._serializeDate(value)
         });
-
-        return this.option('isValid');
     },
 
     _isValueChanged: function(newValue) {
@@ -656,14 +644,15 @@ const DateBox = DropDownEditor.inherit({
                 this._renderPlaceholder();
                 break;
             case 'min':
-            case 'max':
-                if(this.option('isValid')) {
-                    this._applyInternalValidation(this.dateOption('value'));
-                } else {
-                    this._validateValue(this.dateOption('value'));
+            case 'max': {
+                const isValid = this.option('isValid');
+                this._applyInternalValidation(this.dateOption('value'));
+                if(!isValid) {
+                    this._applyCustomValidation(this.dateOption('value'));
                 }
                 this._invalidate();
                 break;
+            }
             case 'dateSerializationFormat':
             case 'interval':
             case 'disabledDates':
@@ -722,7 +711,7 @@ const DateBox = DropDownEditor.inherit({
 
     _updateValue: function(value) {
         this.callBase();
-        this._validateValue(value || this.dateOption('value'));
+        this._applyInternalValidation(value || this.dateOption('value'));
     },
 
     dateValue: function(value, dxEvent) {
@@ -732,8 +721,12 @@ const DateBox = DropDownEditor.inherit({
             this._saveValueChangeEvent(dxEvent);
         }
 
-        if(!isValueChanged && this._isTextChanged(value)) {
-            this._updateValue(value);
+        if(!isValueChanged) {
+            if(this._isTextChanged(value)) {
+                this._updateValue(value);
+            } else if(this.option('text') === '') {
+                this._applyCustomValidation(value);
+            }
         }
 
         return this.dateOption('value', value);
@@ -753,8 +746,6 @@ const DateBox = DropDownEditor.inherit({
     },
 
     reset: function() {
-        const defaultOptions = this._getDefaultOptions();
-        this._skipCustomValidation = defaultOptions.value === this.dateOption('value');
         this.callBase();
         this._updateValue(this.dateOption('value'));
     }
