@@ -192,8 +192,7 @@
     var dxErrors = errors.ERROR_MESSAGES;
 
     function ObjectPool(ctor) {
-        var that = this,
-            wrapCtor;
+        const that = this;
 
         this.ctor = ctor;
         this.stubIndex = 0;
@@ -201,8 +200,8 @@
         this.returnValues = [];// for consistency with sinon.js
 
         this.getItem = function() {
-            var stub,
-                oldStub = this.returnValues[this.stubIndex];
+            let stub;
+            const oldStub = this.returnValues[this.stubIndex];
 
             if(this.returnValues[this.stubIndex]) {
                 stub = this._resetStub(oldStub);
@@ -231,7 +230,7 @@
             that.stubIndex = 0;
         };
 
-        wrapCtor = function() {
+        const wrapCtor = function() {
             return that.getItem();
         };
         wrapCtor.resetIndex = this.resetIndex;

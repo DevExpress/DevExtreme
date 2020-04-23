@@ -121,11 +121,10 @@ const seriesType = 'scatter';
     QUnit.test('Creation simple point', function(assert) {
         const series = createSeries({ type: 'line', label: { visible: false } });
         const data = [{ arg: 1, val: 3 }];
-        let points;
 
         series.updateData(data);
         series.createPoints();
-        points = series.getPoints();
+        const points = series.getPoints();
 
         assert.ok(points, 'Points should be created');
         assert.equal(points.length, 1, 'Series should have one point');
@@ -238,11 +237,10 @@ const seriesType = 'scatter';
     QUnit.test('Creation simple point with valueErrorBar', function(assert) {
         const series = createSeries(this.options);
         const data = [{ arg: 1, val: 2, lowErrorValue: 0, highErrorValue: 4, 'originallowErrorValue': 0, 'originalhighErrorValue': 4 }];
-        let points;
 
         series.updateData(data);
         series.createPoints();
-        points = series.getPoints();
+        const points = series.getPoints();
 
         assert.equal(points.length, 1, 'created one point');
         assert.equal(this.createPoint.firstCall.args[1].lowError, 0, 'lowError passed to point');
@@ -252,12 +250,11 @@ const seriesType = 'scatter';
     QUnit.test('Creation simple point with valueErrorBar. discrete data', function(assert) {
         const series = createSeries(this.options);
         const data = [{ arg: 1, val: 'q2', lowErrorValue: 0, highErrorValue: 4 }];
-        let points;
 
         series.updateDataType({ valueAxisType: 'discrete' });
         series.updateData(data);
         series.createPoints();
-        points = series.getPoints();
+        const points = series.getPoints();
 
         assert.equal(points.length, 1, 'created one point');
         assert.equal(this.createPoint.firstCall.args[1].lowError, undefined, 'lowError passed to point');
@@ -267,12 +264,11 @@ const seriesType = 'scatter';
     QUnit.test('Creation simple point with valueErrorBar. logarithmic data', function(assert) {
         const series = createSeries(this.options);
         const data = [{ arg: 1, val: 5, lowErrorValue: 0, highErrorValue: 4 }];
-        let points;
 
         series.updateDataType({ valueAxisType: 'logarithmic' });
         series.updateData(data);
         series.createPoints();
-        points = series.getPoints();
+        const points = series.getPoints();
 
         assert.equal(points.length, 1, 'created one point');
         assert.equal(this.createPoint.firstCall.args[1].lowError, undefined, 'lowError passed to point');
@@ -282,12 +278,11 @@ const seriesType = 'scatter';
     QUnit.test('Creation simple point with valueErrorBar. datetime data', function(assert) {
         const series = createSeries(this.options);
         const data = [{ arg: 1, val: new Date(2011, 1, 1), lowErrorValue: new Date(2011, 0, 31), highErrorValue: new Date(2011, 1, 10) }];
-        let points;
 
         series.updateDataType({ valueType: 'datetime' });
         series.updateData(data);
         series.createPoints();
-        points = series.getPoints();
+        const points = series.getPoints();
 
         assert.equal(points.length, 1, 'created one point');
         assert.equal(this.createPoint.firstCall.args[1].lowError, undefined, 'lowError passed to point');
@@ -297,11 +292,10 @@ const seriesType = 'scatter';
     QUnit.test('Creation simple point with valueErrorBar and custom lowValueField & highValueField', function(assert) {
         const series = createSeries({ type: 'line', valueErrorBar: { lowValueField: 'customLow', highValueField: 'customHigh' } });
         const data = [{ arg: 1, val: 2, customLow: 0, customHigh: 4, 'originalcustomLow': 0, 'originalcustomHigh': 4 }];
-        let points;
 
         series.updateData(data);
         series.createPoints();
-        points = series.getPoints();
+        const points = series.getPoints();
 
         assert.equal(points.length, 1, 'created one point');
         assert.equal(this.createPoint.firstCall.args[1].lowError, 0, 'lowError passed to point');
@@ -611,8 +605,6 @@ const seriesType = 'scatter';
             renderer: this.renderer,
             seriesGroup: this.seriesGroup
         });
-        let completeAnimation;
-        let points;
         series.updateData(this.data);
         series.createPoints();
         $.each(series._points, function(i, pt) {
@@ -650,14 +642,14 @@ const seriesType = 'scatter';
             'stroke-width': 3
         }]);
 
-        points = series.getPoints();
+        const points = series.getPoints();
 
         $.each(points, function(i, p) {
             assert.equal(p.draw.lastCall.args[1].errorBars, errorBarGroup, 'correct errorBar group pass to point ' + i);
             assert.equal(p.animate.callCount, 1, i + ' point draw without animate');
         });
         assert.ok(!errorBarGroup.animate.called);
-        completeAnimation = points[points.length - 1].animate.lastCall.args[0];
+        const completeAnimation = points[points.length - 1].animate.lastCall.args[0];
         completeAnimation();
 
         assert.deepEqual(errorBarGroup.animate.lastCall.args, [{
@@ -680,8 +672,6 @@ const seriesType = 'scatter';
             renderer: this.renderer,
             seriesGroup: this.seriesGroup
         });
-        let completeAnimation;
-        let points;
         series.updateData(this.data);
         series.createPoints();
         $.each(series._points, function(i, pt) {
@@ -719,14 +709,14 @@ const seriesType = 'scatter';
             'stroke-width': 3
         }]);
 
-        points = series.getPoints();
+        const points = series.getPoints();
 
         $.each(points, function(i, p) {
             assert.equal(p.draw.lastCall.args[1].errorBars, errorBarGroup, 'correct errorBar group pass to point ' + i);
             assert.equal(p.animate.callCount, 1, i + ' point draw without animate');
         });
         assert.ok(!errorBarGroup.animate.called);
-        completeAnimation = points[points.length - 1].animate.lastCall.args[0];
+        const completeAnimation = points[points.length - 1].animate.lastCall.args[0];
         completeAnimation();
 
         assert.deepEqual(errorBarGroup.animate.lastCall.args, [{

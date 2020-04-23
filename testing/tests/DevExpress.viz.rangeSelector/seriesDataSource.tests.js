@@ -135,7 +135,6 @@ QUnit.test('theme manager', function(assert) {
 // B253717
 QUnit.test('datetime in chart valueAxis', function(assert) {
     // arrange
-    let range;
     const seriesDataSource = createSeriesDataSource({
         dataSource: [
             { y: new Date(1980, 5, 17), x: new Date(1980, 5, 18) },
@@ -156,7 +155,7 @@ QUnit.test('datetime in chart valueAxis', function(assert) {
     });
 
     // act
-    range = seriesDataSource.getBoundRange();
+    const range = seriesDataSource.getBoundRange();
     // assert
     assert.strictEqual(range.val.min.toUTCString(), (new Date(1980, 5, 11)).toUTCString());
     assert.strictEqual(range.val.max.toUTCString(), (new Date(1980, 6, 20)).toUTCString());

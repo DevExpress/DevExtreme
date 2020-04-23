@@ -649,22 +649,20 @@ QUnit.test('Update canvas', function(assert) {
 });
 
 QUnit.test('Get business range', function(assert) {
-    let range;
     const canvas = $.extend({}, canvasTemplate);
     const translator = new translator2DModule.Translator2D($.extend({ minVisible: 10, maxVisible: 90, invert: true }, numericRange), canvas, optionsHorizontal);
 
-    range = translator.getBusinessRange();
+    const range = translator.getBusinessRange();
 
     assert.ok(range);
     assert.deepEqual(getObjectData(range), { min: 0, minVisible: 10, max: 100, maxVisible: 90, interval: 20, axisType: 'continuous', dataType: 'numeric', invert: true });
 });
 
 QUnit.test('Get canvas visible area', function(assert) {
-    let visibleArea;
     const canvas = $.extend({}, canvasTemplate);
     const translator = new translator2DModule.Translator2D($.extend({ minVisible: 10, maxVisible: 90, invert: true }, numericRange), canvas, optionsHorizontal);
 
-    visibleArea = translator.getCanvasVisibleArea();
+    const visibleArea = translator.getCanvasVisibleArea();
 
     assert.ok(visibleArea);
     assert.deepEqual(visibleArea, { min: 70, max: 580 });
@@ -2294,10 +2292,9 @@ QUnit.module('Zooming and scrolling', environment);
 QUnit.test('scroll', function(assert) {
     const range = $.extend({ minVisible: 10, maxVisible: 90, invert: false }, numericRange);
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
     let zoom;
 
-    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+    const translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
     assert.ok(translator);
 
@@ -2351,10 +2348,9 @@ QUnit.test('scroll', function(assert) {
 QUnit.test('scroll. Logarithmic axis', function(assert) {
     const range = $.extend({ minVisible: 100, maxVisible: 1000, invert: false }, logarithmicRange);
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
     let zoom;
 
-    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+    const translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
     assert.ok(translator);
 
@@ -2401,10 +2397,8 @@ QUnit.test('scroll. Logarithmic axis', function(assert) {
 QUnit.test('scroll. Canvas start point is zero', function(assert) {
     const range = $.extend({ invert: false }, numericRange);
     const canvas = $.extend({}, canvasTemplate, { left: 0 });
-    let translator;
-    let zoom;
 
-    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+    const translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
     assert.ok(translator);
 
@@ -2416,7 +2410,7 @@ QUnit.test('scroll. Canvas start point is zero', function(assert) {
     assert.equal(translator._canvasOptions.startPoint, 0);
     assert.equal(translator._canvasOptions.endPoint, 580);
 
-    zoom = translator.zoom(-100, 1);
+    const zoom = translator.zoom(-100, 1);
     assert.roughEqual(zoom.min.toFixed(2), 0 - 100 / 580 * 100, 0.1, 'negative big scroll min');
     assert.roughEqual(zoom.max.toFixed(2), 100 - 100 / 580 * 100, 0.1, 'negative big scroll max');
 
@@ -2427,10 +2421,9 @@ QUnit.test('scroll. Canvas start point is zero', function(assert) {
 QUnit.test('scroll inverted range', function(assert) {
     const range = $.extend({ minVisible: 10, maxVisible: 90, invert: true }, numericRange);
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
     let zoom;
 
-    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+    const translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
     assert.ok(translator);
 
@@ -2485,12 +2478,10 @@ QUnit.test('scroll inverted range', function(assert) {
 QUnit.test('zoom single point range', function(assert) {
     const range = $.extend({}, numericRange, { min: 100, max: 100 });
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-    let zoom;
 
-    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true });
+    const translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true });
 
-    zoom = translator.zoom(48, 1.1);
+    const zoom = translator.zoom(48, 1.1);
 
     assert.deepEqual(zoom, {
         min: 100,
@@ -2503,12 +2494,10 @@ QUnit.test('zoom single point range', function(assert) {
 QUnit.test('scroll null size visual range', function(assert) {
     const range = $.extend({}, numericRange, { minVisible: 50, maxVisible: 50 });
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-    let zoom;
 
-    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true });
+    const translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true });
 
-    zoom = translator.zoom(100, 1);
+    const zoom = translator.zoom(100, 1);
 
     assert.roughEqual(zoom.max, 50.196, 0.001, 'scroll null size visual range');
     assert.roughEqual(zoom.min, 49.804, 0.001, 'scroll null size visual range');
@@ -2517,10 +2506,9 @@ QUnit.test('scroll null size visual range', function(assert) {
 QUnit.test('scale without scroll', function(assert) {
     const range = $.extend({ minVisible: 10, maxVisible: 90, invert: false }, numericRange);
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
     let zoom;
 
-    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+    const translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin, 0);
@@ -3060,7 +3048,6 @@ QUnit.test('positive scroll. Vertical Translator. Inverted', function(assert) {
 
 QUnit.test('positive scroll with stick=true', function(assert) {
     const translator = this.createTranslator({ minVisible: 'a1', maxVisible: 'a4' }, { stick: true });
-    let zoom;
 
     translator.zoom(250, 1);
 
@@ -3069,7 +3056,7 @@ QUnit.test('positive scroll with stick=true', function(assert) {
     assert.strictEqual(translator._canvasOptions.startPointIndex, 0);
     assert.equal(translator._canvasOptions.interval.toFixed(2), 333.33);
 
-    zoom = translator.zoom(250, 1);
+    const zoom = translator.zoom(250, 1);
     assert.equal(zoom.min, 'a2');
     assert.equal(zoom.max, 'a5');
     assert.equal(zoom.translate, 333);
@@ -3078,7 +3065,6 @@ QUnit.test('positive scroll with stick=true', function(assert) {
 
 QUnit.test('negative scroll with stick=true', function(assert) {
     const translator = this.createTranslator({ minVisible: 'a2', maxVisible: 'a5' }, { stick: true });
-    let zoom;
 
     translator.zoom(250, 1);
 
@@ -3087,7 +3073,7 @@ QUnit.test('negative scroll with stick=true', function(assert) {
     assert.strictEqual(translator._canvasOptions.startPointIndex, 1);
     assert.equal(translator._canvasOptions.interval.toFixed(2), 333.33);
 
-    zoom = translator.zoom(-250, 1);
+    const zoom = translator.zoom(-250, 1);
     assert.equal(zoom.min, 'a1');
     assert.equal(zoom.max, 'a4');
     assert.equal(zoom.translate, -333);

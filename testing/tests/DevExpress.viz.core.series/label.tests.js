@@ -1152,12 +1152,11 @@ QUnit.module('Layouted label', $.extend({}, environment, {
 
 QUnit.test('simple shift', function(assert) {
     const label = this.createLabel();
-    let innerGroup;
     label.show();
 
     label.shift(10, 10);
 
-    innerGroup = label._insideGroup;
+    const innerGroup = label._insideGroup;
     assert.ok(innerGroup);
     assert.deepEqual(innerGroup._stored_settings, { translateX: 10 - 1, translateY: 10 - 2 });
     assert.equal(label._insideGroup.stub('append').lastCall.args[0], label._group);
@@ -1176,11 +1175,10 @@ QUnit.test('disposing elements. not crash', function(assert) {
 
 QUnit.test('Cache boundingRect', function(assert) {
     const label = this.createAndDrawLabel();
-    let BBox;
 
     label.shift(1, 2);
     label.getBoundingRect();
-    BBox = label.getBoundingRect();
+    const BBox = label.getBoundingRect();
 
     assert.ok(BBox, 'bbox returned');
     assert.deepEqual(BBox, {
@@ -1194,14 +1192,13 @@ QUnit.test('Cache boundingRect', function(assert) {
 QUnit.test('getBoundingRect. After redraw', function(assert) {
     this.options.connector = null;
     const label = this.createLabel();
-    let BBox;
 
     label.show();
     label.shift(1, 2);
 
     label.show();
 
-    BBox = label.getBoundingRect();
+    const BBox = label.getBoundingRect();
 
     assert.ok(BBox, 'bbox returned');
     assert.deepEqual(BBox, {
@@ -1217,16 +1214,14 @@ QUnit.test('getBoundingRect. After redraw', function(assert) {
 
 QUnit.test('getBoundingRect after shift', function(assert) {
     const label = this.createLabel();
-    let innerGroup;
-    let BBox;
 
     label.show();
 
-    innerGroup = this.group.children[0];
+    const innerGroup = this.group.children[0];
 
     label.shift(100, 100);
 
-    BBox = label.getBoundingRect();
+    const BBox = label.getBoundingRect();
 
     assert.ok(BBox, 'bbox returned');
     assert.ok(!innerGroup.stub('getBBox').called);
@@ -1240,17 +1235,15 @@ QUnit.test('getBoundingRect after shift', function(assert) {
 
 QUnit.test('getBoundingRect after double shift', function(assert) {
     const label = this.createLabel();
-    let innerGroup;
-    let BBox;
 
     label.show();
 
-    innerGroup = this.group.children[0];
+    const innerGroup = this.group.children[0];
 
     label.shift(100, 100);
     label.shift(200, 200);
 
-    BBox = label.getBoundingRect();
+    const BBox = label.getBoundingRect();
 
     assert.ok(BBox, 'bbox returned');
     assert.ok(!innerGroup.stub('getBBox').called);

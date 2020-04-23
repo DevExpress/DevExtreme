@@ -196,11 +196,10 @@ exports.polar.bar = _extend({}, polarSeries, baseBarSeriesMethods, {
     _setMarkerGroupSettings: function() {
         const that = this;
         const markersSettings = that._createPointStyles(that._getMarkerGroupOptions()).normal;
-        let groupSettings;
 
         markersSettings['class'] = 'dxc-markers';
         that._applyMarkerClipRect(markersSettings);
-        groupSettings = _extend({}, markersSettings);
+        const groupSettings = _extend({}, markersSettings);
         delete groupSettings.opacity; // T110796
         that._markersGroup.attr(groupSettings);
     },

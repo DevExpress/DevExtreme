@@ -91,13 +91,12 @@ QUnit.module('Process range data on updating. Simple');
 
 QUnit.test('Numeric', function(assert) {
     const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
-    let rangeData;
     const series = createSeries({ type: 'line', argumentAxisType: 'continuous' });
 
     series.updateData(data);
     series.createPoints();
 
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
@@ -113,12 +112,11 @@ QUnit.test('Numeric', function(assert) {
 
 QUnit.test('Numeric. Date with same arguments', function(assert) {
     const data = getOriginalData([{ arg: 2, val: 11 }, { arg: 2, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }, { arg: 20, val: 15 }]);
-    let rangeData;
     const series = createSeries({ type: 'line', argumentAxisType: 'continuous' });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
@@ -135,12 +133,11 @@ QUnit.test('Numeric. Date with same arguments', function(assert) {
 QUnit.test('Data with valueErrorBar (lowError < highError)', function(assert) {
     const data = getOriginalData([{ arg: 2, val: 11, highError: 27, lowError: 20 }, { arg: 5, val: 22, highError: 25, lowError: 20 },
         { arg: 13, val: 10, highError: 3, lowError: 5 }, { arg: 20, val: 15, highError: 1, lowError: 8 }]);
-    let rangeData;
     const series = createSeries({ type: 'line', argumentAxisType: 'continuous', valueErrorBar: { displayMode: 'auto', highValueField: 'highError', lowValueField: 'lowError' } });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.val.min, 1, 'Min arg should be correct');
@@ -152,12 +149,11 @@ QUnit.test('Data with valueErrorBar (lowError < highError)', function(assert) {
 QUnit.test('Data with valueErrorBar (lowError > highError)', function(assert) {
     const data = getOriginalData([{ arg: 2, val: 11, highError: 20, lowError: 27 }, { arg: 5, val: 22, highError: 25, lowError: 20 },
         { arg: 13, val: 10, highError: 3, lowError: 5 }, { arg: 20, val: 15, highError: 10, lowError: 8 }]);
-    let rangeData;
     const series = createSeries({ type: 'line', argumentAxisType: 'continuous', valueErrorBar: { displayMode: 'auto', highValueField: 'highError', lowValueField: 'lowError' } });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.val.min, 3, 'Min arg should be correct');
@@ -169,12 +165,11 @@ QUnit.test('Data with valueErrorBar (lowError > highError)', function(assert) {
 QUnit.test('Data with valueErrorBar. low mode', function(assert) {
     const data = getOriginalData([{ arg: 2, val: 11, highError: 3, lowError: 2 }, { arg: 5, val: 22, highError: 40, lowError: 1 },
         { arg: 13, val: 3, highError: 5, lowError: 4 }, { arg: 20, val: 15, highError: 6, lowError: 6 }]);
-    let rangeData;
     const series = createSeries({ type: 'line', argumentAxisType: 'continuous', valueErrorBar: { displayMode: 'low', highValueField: 'highError', lowValueField: 'lowError' } });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.val.min, 1, 'Min arg should be correct');
@@ -186,12 +181,11 @@ QUnit.test('Data with valueErrorBar. low mode', function(assert) {
 QUnit.test('Data with valueErrorBar. high mode', function(assert) {
     const data = getOriginalData([{ arg: 2, val: 11, highError: 3, lowError: 2 }, { arg: 5, val: 22, highError: 40, lowError: 1 },
         { arg: 13, val: 3, highError: 5, lowError: 4 }, { arg: 20, val: 15, highError: 6, lowError: 6 }]);
-    let rangeData;
     const series = createSeries({ type: 'line', argumentAxisType: 'continuous', valueErrorBar: { displayMode: 'high', highValueField: 'highError', lowValueField: 'lowError' } });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.val.min, 3, 'Min arg should be correct');
@@ -203,12 +197,11 @@ QUnit.test('Data with valueErrorBar. high mode', function(assert) {
 QUnit.test('Data with valueErrorBar. none mode', function(assert) {
     const data = getOriginalData([{ arg: 2, val: 11, highError: 3, lowError: 2 }, { arg: 5, val: 22, highError: 40, lowError: 1 },
         { arg: 13, val: 3, highError: 5, lowError: 4 }, { arg: 20, val: 15, highError: 6, lowError: 6 }]);
-    let rangeData;
     const series = createSeries({ type: 'line', argumentAxisType: 'continuous', valueErrorBar: { displayMode: 'none', highValueField: 'highError', lowValueField: 'lowError' } });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.val.min, 3, 'Min arg should be correct');
@@ -220,12 +213,11 @@ QUnit.test('Data with valueErrorBar. none mode', function(assert) {
 QUnit.test('Data with valueErrorBar. invalid mode', function(assert) {
     const data = getOriginalData([{ arg: 2, val: 11, highError: 27, lowError: 20 }, { arg: 5, val: 22, highError: 25, lowError: 20 },
         { arg: 13, val: 10, highError: 3, lowError: 5 }, { arg: 20, val: 15, highError: 1, lowError: 8 }]);
-    let rangeData;
     const series = createSeries({ type: 'line', argumentAxisType: 'continuous', valueErrorBar: { displayMode: 'invalidMode', highValueField: 'highError', lowValueField: 'lowError' } });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.val.min, 1, 'Min arg should be correct');
@@ -240,12 +232,11 @@ QUnit.test('Data with valueErrorBar - some items do not have errorbar data (T808
         { arg: 5, val: 1 },
         { arg: 13, val: 10, highError: 9, lowError: 12 }
     ]);
-    let rangeData;
     const series = createSeries({ type: 'line', argumentAxisType: 'continuous', valueErrorBar: { displayMode: 'auto', highValueField: 'highError', lowValueField: 'lowError' } });
     series.updateData(data);
     series.createPoints();
 
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.val.min, 1, 'Min arg should be correct');
@@ -264,12 +255,11 @@ QUnit.test('Datetime.', function(assert) {
     const date7 = new Date(3000);
     const date8 = new Date(4000);
     const data = getOriginalData([{ arg: date4, val: date5 }, { arg: date3, val: date6 }, { arg: date2, val: date7 }, { arg: date1, val: date8 }]);
-    let rangeData;
     const series = createSeries({ type: 'line', argumentAxisType: 'continuous' });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.deepEqual(rangeData.arg.min, date1, 'Min arg should be correct');
@@ -286,12 +276,11 @@ QUnit.test('Datetime.', function(assert) {
 QUnit.test('Numeric. Categories', function(assert) {
     const data = getOriginalData([{ arg: 13, val: 2 }, { arg: 5, val: 3 }, { arg: 20, val: 4 }, { arg: 2, val: 1 }]);
     const options = { type: 'line', argumentAxisType: 'discrete', valueAxisType: 'discrete' };
-    let rangeData;
     const series = createSeries(options);
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min arg should be undefined');
@@ -316,12 +305,11 @@ QUnit.test('Datetime. Categories', function(assert) {
     const date8 = new Date(8000);
     const data = getOriginalData([{ arg: date4, val: date8 }, { arg: date3, val: date7 }, { arg: date2, val: date6 }, { arg: date1, val: date5 }]);
     const options = { type: 'line', argumentAxisType: 'discrete', valueAxisType: 'discrete' };
-    let rangeData;
     const series = createSeries(options);
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min arg should be undefined');
@@ -337,12 +325,11 @@ QUnit.test('Datetime. Categories', function(assert) {
 
 QUnit.test('String.', function(assert) {
     const data = getOriginalData([{ arg: '13', val: '6' }, { arg: '5', val: '3' }, { arg: '20', val: '7' }, { arg: '2', val: '1' }]);
-    let rangeData;
     const series = createSeries({ type: 'line', argumentAxisType: 'discrete', valueAxisType: 'discrete' });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData);
     assert.strictEqual(rangeData.arg.min, undefined, 'Min arg should be undefined');
@@ -360,12 +347,11 @@ QUnit.module('Process range data on updating. Simple. With null values');
 
 QUnit.test('Numeric.', function(assert) {
     const data = getOriginalData([{ arg: 2, val: 7 }, { arg: 5, val: 16 }, { arg: 20, val: null }, { arg: 13, val: 11 }]);
-    let rangeData;
     const series = createSeries({ type: 'line' });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
@@ -388,12 +374,11 @@ QUnit.test('Datetime.', function(assert) {
     const date13 = new Date(13000);
     const date14 = new Date(14000);
     const data = getOriginalData([{ arg: date4, val: date11 }, { arg: date3, val: date13 }, { arg: date2, val: null }, { arg: date1, val: date14 }]);
-    let rangeData;
     const series = createSeries({ type: 'line' });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.deepEqual(rangeData.arg.min, date1, 'Min arg should be correct');
@@ -410,12 +395,11 @@ QUnit.test('Datetime.', function(assert) {
 QUnit.test('Numeric. Categories', function(assert) {
     const data = getOriginalData([{ arg: 13, val: 11 }, { arg: 5, val: 16 }, { arg: 20, val: null }, { arg: 2, val: 7 }]);
     const options = { type: 'line', argumentAxisType: 'discrete', valueAxisType: 'discrete' };
-    let rangeData;
     const series = createSeries(options);
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be correct');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min arg should be undefined');
@@ -439,12 +423,11 @@ QUnit.test('Datetime. Categories', function(assert) {
     const date14 = new Date(14000);
     const data = [{ arg: date4, val: date13 }, { arg: date3, val: date11 }, { arg: date2, val: null }, { arg: date1, val: date14 }];
     const options = { type: 'line', argumentAxisType: 'discrete', valueAxisType: 'discrete' };
-    let rangeData;
     const series = createSeries(options);
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min arg should be undefined');
@@ -460,12 +443,11 @@ QUnit.test('Datetime. Categories', function(assert) {
 
 QUnit.test('String.', function(assert) {
     const data = [{ arg: '13', val: '11' }, { arg: '5', val: '16' }, { arg: '20', val: null }, { arg: '2', val: '7' }];
-    let rangeData;
     const series = createSeries({ type: 'line', argumentAxisType: 'discrete', valueAxisType: 'discrete' });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be correct');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min arg should be undefined');
@@ -483,12 +465,11 @@ QUnit.module('Process range data on updating. Simple. For each types');
 
 QUnit.test('Line', function(assert) {
     const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
-    let rangeData;
     const series = createSeries({ type: 'line', argumentAxisType: 'continuous' });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
@@ -502,12 +483,11 @@ QUnit.test('Line', function(assert) {
 
 QUnit.test('Scatter', function(assert) {
     const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
-    let rangeData;
     const series = createSeries({ type: 'scatter', argumentAxisType: 'continuous' });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
@@ -521,12 +501,11 @@ QUnit.test('Scatter', function(assert) {
 
 QUnit.test('Spline', function(assert) {
     const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
-    let rangeData;
     const series = createSeries({ type: 'spline', argumentAxisType: 'continuous' });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
@@ -540,12 +519,11 @@ QUnit.test('Spline', function(assert) {
 
 QUnit.test('Stepline', function(assert) {
     const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
-    let rangeData;
     const series = createSeries({ type: 'stepline', argumentAxisType: 'continuous' });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
@@ -561,12 +539,11 @@ QUnit.module('Process range data on updating. Range series');
 
 QUnit.test('Numeric', function(assert) {
     const data = [{ arg: 1, val1: 11, val2: 110 }, { arg: 2, val1: 22, val2: 100 }, { arg: 3, val1: 3, val2: 4 }, { arg: 4, val1: 15, val2: 115 }];
-    let rangeData;
     const series = createSeries({ type: 'rangebar', argumentAxisType: 'continuous', mainSeriesColor: function() { } });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 1, 'Min arg should be correct');
@@ -590,12 +567,11 @@ QUnit.test('Datetime.', function(assert) {
     const date7 = new Date(3000);
     const date8 = new Date(4000);
     const data = [{ arg: 1, val1: date1, val2: date2 }, { arg: 2, val1: date3, val2: date4 }, { arg: 3, val1: date5, val2: date6 }, { arg: 4, val1: date7, val2: date8 }];
-    let rangeData;
     const series = createSeries({ type: 'rangebar', argumentAxisType: 'continuous' });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.deepEqual(rangeData.arg.min, 1, 'Min arg should be correct');
@@ -612,12 +588,11 @@ QUnit.test('Datetime.', function(assert) {
 QUnit.test('Numeric. Categories', function(assert) {
     const data = [{ arg: 1, val1: 11, val2: 110 }, { arg: 2, val1: 22, val2: 100 }, { arg: 3, val1: 3, val2: 15 }, { arg: 4, val1: 15, val2: 115 }];
     const options = { type: 'rangebar', argumentAxisType: 'discrete', valueAxisType: 'discrete' };
-    let rangeData;
     const series = createSeries(options);
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min arg should be undefined');
@@ -642,12 +617,11 @@ QUnit.test('Datetime. Categories', function(assert) {
     const date8 = new Date(8000);
     const data = [{ arg: 1, val1: date1, val2: date2 }, { arg: 2, val1: date3, val2: date4 }, { arg: 3, val1: date5, val2: date6 }, { arg: 4, val1: date7, val2: date8 }];
     const options = { type: 'rangebar', argumentAxisType: 'discrete', valueAxisType: 'discrete' };
-    let rangeData;
     const series = createSeries(options);
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min arg should be undefined');
@@ -663,12 +637,11 @@ QUnit.test('Datetime. Categories', function(assert) {
 
 QUnit.test('String.', function(assert) {
     const data = [{ arg: '1', val1: '11', val2: '110' }, { arg: '2', val1: '22', val2: '100' }, { arg: '3', val1: '3', val2: '4' }, { arg: '4', val1: '15', val2: '115' }];
-    let rangeData;
     const series = createSeries({ type: 'rangebar', argumentAxisType: 'discrete', valueAxisType: 'discrete' });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData);
     assert.strictEqual(rangeData.arg.min, undefined, 'Min arg should be undefined');
@@ -686,12 +659,11 @@ QUnit.module('Process range data on updating. Range series. With null values');
 
 QUnit.test('Numeric', function(assert) {
     const data = [{ arg: 1, val1: 11, val2: 110 }, { arg: 2, val1: null, val2: 22 }, { arg: 3, val1: 3, val2: 4 }, { arg: 4, val1: null, val2: 115 }];
-    let rangeData;
     const series = createSeries({ type: 'rangebar', argumentAxisType: 'continuous' });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 1, 'Min arg should be correct');
@@ -713,12 +685,11 @@ QUnit.test('Datetime.', function(assert) {
     const date7 = new Date(3000);
     const date8 = new Date(4000);
     const data = [{ arg: 1, val1: date1, val2: date2 }, { arg: 2, val1: null, val2: date4 }, { arg: 3, val1: date5, val2: null }, { arg: 4, val1: date7, val2: date8 }];
-    let rangeData;
     const series = createSeries({ type: 'rangebar', argumentAxisType: 'continuous' });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.deepEqual(rangeData.arg.min, 1, 'Min arg should be correct');
@@ -735,12 +706,11 @@ QUnit.test('Datetime.', function(assert) {
 QUnit.test('Numeric. Categories', function(assert) {
     const data = [{ arg: 1, val1: 11, val2: null }, { arg: 2, val1: 22, val2: 100 }, { arg: 3, val1: null, val2: 4 }, { arg: 4, val1: 15, val2: 115 }];
     const options = { type: 'rangebar', argumentAxisType: 'discrete', valueAxisType: 'discrete' };
-    let rangeData;
     const series = createSeries(options);
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min arg should be undefined');
@@ -763,12 +733,11 @@ QUnit.test('Datetime. Categories', function(assert) {
     const date8 = new Date(8000);
     const data = [{ arg: 1, val1: date1, val2: null }, { arg: 2, val1: date3, val2: date4 }, { arg: 3, val1: null, val2: date6 }, { arg: 4, val1: date7, val2: date8 }];
     const options = { type: 'rangebar', argumentAxisType: 'discrete', valueAxisType: 'discrete' };
-    let rangeData;
     const series = createSeries(options);
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min arg should be undefined');
@@ -784,12 +753,11 @@ QUnit.test('Datetime. Categories', function(assert) {
 
 QUnit.test('String.', function(assert) {
     const data = [{ arg: '1', val1: null, val2: '110' }, { arg: '2', val1: '22', val2: '100' }, { arg: '3', val1: '3', val2: null }, { arg: '4', val1: '15', val2: '115' }];
-    let rangeData;
     const series = createSeries({ type: 'rangebar', argumentAxisType: 'discrete', valueAxisType: 'discrete' });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData);
     assert.strictEqual(rangeData.arg.min, undefined, 'Min arg should be undefined');
@@ -807,12 +775,11 @@ QUnit.module('Process range data on updating. Range series. For each types');
 
 QUnit.test('Rangebar', function(assert) {
     const data = [{ arg: 1, val1: 11, val2: 110 }, { arg: 2, val1: 22, val2: 100 }, { arg: 3, val1: 3, val2: 4 }, { arg: 4, val1: 15, val2: 115 }];
-    let rangeData;
     const series = createSeries({ type: 'rangebar', argumentAxisType: 'continuous' });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 1, 'Min arg should be correct');
@@ -826,12 +793,11 @@ QUnit.test('Rangebar', function(assert) {
 
 QUnit.test('Rangearea', function(assert) {
     const data = [{ arg: 1, val1: 11, val2: 110 }, { arg: 2, val1: 22, val2: 100 }, { arg: 3, val1: 3, val2: 4 }, { arg: 4, val1: 15, val2: 115 }];
-    let rangeData;
     const series = createSeries({ type: 'rangebar', argumentAxisType: 'continuous' });
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 1, 'Min arg should be correct');
@@ -858,12 +824,11 @@ QUnit.module('Get range data. Simple', {
 
 QUnit.test('Get range data for one point', function(assert) {
     const data = [{ arg: 2, val: 11 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: 'argumentAxisType', argumentType: 'argumentType', valueAxisType: 'valueAxisType', valueType: 'valueType' }));
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
@@ -884,12 +849,11 @@ QUnit.test('Get range data for one point', function(assert) {
 
 QUnit.test('Numeric', function(assert) {
     const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: 'continuous' }));
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
@@ -913,12 +877,11 @@ QUnit.test('Datetime.', function(assert) {
     const date7 = new Date(3000);
     const date8 = new Date(4000);
     const data = [{ arg: date4, val: date5 }, { arg: date3, val: date6 }, { arg: date2, val: date7 }, { arg: date1, val: date8 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: 'continuous' }));
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.deepEqual(rangeData.arg.min, date1, 'Min arg should be correct');
@@ -935,12 +898,11 @@ QUnit.test('Datetime.', function(assert) {
 QUnit.test('Numeric. Categories', function(assert) {
     const data = [{ arg: 13, val: 2 }, { arg: 5, val: 3 }, { arg: 20, val: 4 }, { arg: 2, val: 1 }];
     const options = $.extend(true, {}, this.defaultOptions, { argumentAxisType: 'discrete', valueAxisType: 'discrete' });
-    let rangeData;
     const series = createSeries(options);
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min arg should be undefined');
@@ -965,12 +927,11 @@ QUnit.test('Datetime. Categories', function(assert) {
     const date8 = new Date(8000);
     const data = [{ arg: date4, val: date8 }, { arg: date3, val: date7 }, { arg: date2, val: date6 }, { arg: date1, val: date5 }];
     const options = $.extend(true, {}, this.defaultOptions, { argumentAxisType: 'discrete', valueAxisType: 'discrete' });
-    let rangeData;
     const series = createSeries(options);
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min arg should be undefined');
@@ -986,12 +947,11 @@ QUnit.test('Datetime. Categories', function(assert) {
 
 QUnit.test('String.', function(assert) {
     const data = [{ arg: '13', val: '6' }, { arg: '5', val: '3' }, { arg: '20', val: '7' }, { arg: '2', val: '1' }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: 'discrete', valueAxisType: 'discrete' }));
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData);
     assert.strictEqual(rangeData.arg.min, undefined, 'Min arg should be undefined');
@@ -1018,12 +978,11 @@ QUnit.module('Get range data. Simple. For each types', {
 
 QUnit.test('Line', function(assert) {
     const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'line', argumentAxisType: 'continuous' }));
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
@@ -1039,12 +998,11 @@ QUnit.test('Line', function(assert) {
 
 QUnit.test('Scatter', function(assert) {
     const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'scatter', argumentAxisType: 'continuous' }));
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
@@ -1060,12 +1018,11 @@ QUnit.test('Scatter', function(assert) {
 
 QUnit.test('Spline', function(assert) {
     const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'spline', argumentAxisType: 'continuous' }));
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
@@ -1081,12 +1038,11 @@ QUnit.test('Spline', function(assert) {
 
 QUnit.test('Stepline', function(assert) {
     const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'stepline', argumentAxisType: 'continuous' }));
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
@@ -1102,13 +1058,12 @@ QUnit.test('Stepline', function(assert) {
 
 QUnit.test('Stackedline', function(assert) {
     const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'stackedline', argumentAxisType: 'continuous' }));
 
     series.updateData(data);
     series.createPoints();
 
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
@@ -1124,12 +1079,11 @@ QUnit.test('Stackedline', function(assert) {
 
 QUnit.test('Stackedspline', function(assert) {
     const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'stackedspline', argumentAxisType: 'continuous' }));
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
@@ -1146,7 +1100,6 @@ QUnit.test('Stackedspline', function(assert) {
 QUnit.test('Stackedline, update data', function(assert) {
     const data1 = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
     const data2 = [{ arg: 2, val: 1 }, { arg: 5, val: 2 }, { arg: 13, val: 3 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'stackedline', argumentAxisType: 'continuous' }));
 
     series.updateData(data1);
@@ -1155,7 +1108,7 @@ QUnit.test('Stackedline, update data', function(assert) {
 
     series.updateData(data2);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
@@ -1171,12 +1124,11 @@ QUnit.test('Stackedline, update data', function(assert) {
 
 QUnit.test('Bubble', function(assert) {
     const data = [{ arg: 2, val: 11, size: 1 }, { arg: 5, val: 22, size: 1 }, { arg: 13, val: 3, size: 1 }, { arg: 20, val: 15, size: 1 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'bubble', argumentAxisType: 'continuous' }));
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
@@ -1206,11 +1158,10 @@ QUnit.module('Get range data. Bar/area', {
 QUnit.test('Positive points', function(assert) {
     const data = [{ arg: '1', val: 4 }, { arg: '2', val: 10 }, { arg: '3', val: 7 }, { arg: '4', val: 3 }];
     const series = createSeries(this.defaultOptions);
-    let rangeData;
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min x should be undefined');
@@ -1222,11 +1173,10 @@ QUnit.test('Positive points', function(assert) {
 QUnit.test('Negative points', function(assert) {
     const data = [{ arg: '1', val: -4 }, { arg: '2', val: -10 }, { arg: '3', val: -7 }, { arg: '4', val: -3 }];
     const series = createSeries(this.defaultOptions);
-    let rangeData;
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min x should be undefined');
@@ -1238,11 +1188,10 @@ QUnit.test('Negative points', function(assert) {
 QUnit.test('Positive and negative points', function(assert) {
     const data = [{ arg: '1', val: -4 }, { arg: '2', val: 10 }, { arg: '3', val: -7 }, { arg: '4', val: 3 }];
     const series = createSeries(this.defaultOptions);
-    let rangeData;
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min x should be undefined');
@@ -1254,11 +1203,10 @@ QUnit.test('Positive and negative points', function(assert) {
 QUnit.test('Numeric', function(assert) {
     const data = [{ arg: 1, val: 4 }, { arg: 2, val: 10 }, { arg: 3, val: 7 }, { arg: 4, val: 3 }];
     const series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: 'continuous' }));
-    let rangeData;
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 1, 'Min x should be correct');
@@ -1277,12 +1225,11 @@ QUnit.test('Datetime', function(assert) {
     const date7 = new Date(3000);
     const date8 = new Date(4000);
     const data = [{ arg: date4, val: date5 }, { arg: date3, val: date6 }, { arg: date2, val: date7 }, { arg: date1, val: date8 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { valueType: 'datetime', argumentAxisType: 'continuous' }));
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.deepEqual(rangeData.arg.min, date1, 'Min x should be correct');
@@ -1299,12 +1246,11 @@ QUnit.test('Datetime', function(assert) {
 QUnit.test('showZero === undefined', function(assert) {
     const options = $.extend({}, true, this.defaultOptions, { label: { visible: true } });
     const data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }];
-    let rangeData;
     const series = createSeries(options);
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.strictEqual(rangeData.val.min, 0, 'minY');
 });
@@ -1312,13 +1258,12 @@ QUnit.test('showZero === undefined', function(assert) {
 QUnit.test('showZero === false', function(assert) {
     const options = $.extend({}, true, this.defaultOptions, { label: { visible: true } });
     const data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }];
-    let rangeData;
     const series = createSeries(options);
 
     series.updateData(data);
     series.createPoints();
     series.updateDataType({ showZero: false });
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.strictEqual(rangeData.val.min, 10, 'minY');
 });
@@ -1326,11 +1271,10 @@ QUnit.test('showZero === false', function(assert) {
 QUnit.test('Positive points. Polar bar point', function(assert) {
     const data = [{ arg: '1', val: 4 }, { arg: '2', val: 10 }, { arg: '3', val: 7 }, { arg: '4', val: 3 }];
     const series = createSeries(this.defaultOptions, undefined, 'polar');
-    let rangeData;
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min x should be undefined');
@@ -1355,11 +1299,10 @@ QUnit.module('Get range data. Bar/area. For each types', {
 QUnit.test('Bar', function(assert) {
     const data = [{ arg: '1', val: 4 }, { arg: '2', val: 10 }, { arg: '3', val: 7 }, { arg: '4', val: 3 }];
     const series = createSeries(this.defaultOptions);
-    let rangeData;
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min x should be undefined');
@@ -1371,11 +1314,10 @@ QUnit.test('Bar', function(assert) {
 QUnit.test('Stackedbar', function(assert) {
     const data = [{ arg: '1', val: 4 }, { arg: '2', val: 10 }, { arg: '3', val: 7 }, { arg: '4', val: 3 }];
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'stackedbar' }));
-    let rangeData;
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min x should be undefined');
@@ -1388,7 +1330,6 @@ QUnit.test('Stackedbar, update data', function(assert) {
     const data1 = [{ arg: '1', val: 4 }, { arg: '2', val: 10 }, { arg: '3', val: 7 }, { arg: '4', val: 3 }];
     const data2 = [{ arg: '1', val: 4 }, { arg: '2', val: 10 }, { arg: '3', val: 7 }];
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'stackedbar', argumentAxisType: 'continuous' }));
-    let rangeData;
 
     series.updateData(data1);
     series.createPoints();
@@ -1396,7 +1337,7 @@ QUnit.test('Stackedbar, update data', function(assert) {
 
     series.updateData(data2);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, '1', 'Min x should be undefined');
@@ -1408,11 +1349,10 @@ QUnit.test('Stackedbar, update data', function(assert) {
 QUnit.test('Fullstackedbar', function(assert) {
     const data = [{ arg: '1', val: 4 }, { arg: '2', val: 10 }, { arg: '3', val: 7 }, { arg: '4', val: 3 }];
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'fullstackedbar' }));
-    let rangeData;
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min x should be undefined');
@@ -1424,11 +1364,10 @@ QUnit.test('Fullstackedbar', function(assert) {
 QUnit.test('Area', function(assert) {
     const data = [{ arg: '1', val: 4 }, { arg: '2', val: 10 }, { arg: '3', val: 7 }, { arg: '4', val: 3 }];
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'area' }));
-    let rangeData;
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min x should be undefined');
@@ -1440,11 +1379,10 @@ QUnit.test('Area', function(assert) {
 QUnit.test('Stackedarea', function(assert) {
     const data = [{ arg: '1', val: 4 }, { arg: '2', val: 10 }, { arg: '3', val: 7 }, { arg: '4', val: 3 }];
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'stackedarea' }));
-    let rangeData;
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min x should be undefined');
@@ -1456,11 +1394,10 @@ QUnit.test('Stackedarea', function(assert) {
 QUnit.test('Stackedsplinearea', function(assert) {
     const data = [{ arg: '1', val: 4 }, { arg: '2', val: 10 }, { arg: '3', val: 7 }, { arg: '4', val: 3 }];
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'stackedsplinearea' }));
-    let rangeData;
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min x should be undefined');
@@ -1473,7 +1410,6 @@ QUnit.test('Stackedarea, update data', function(assert) {
     const data1 = [{ arg: '1', val: 4 }, { arg: '2', val: 10 }, { arg: '3', val: 7 }, { arg: '4', val: 3 }];
     const data2 = [{ arg: '1', val: 4 }, { arg: '2', val: 10 }, { arg: '3', val: 7 }];
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'stackedarea', argumentAxisType: 'continuous' }));
-    let rangeData;
 
     series.updateData(data1);
     series.createPoints();
@@ -1481,7 +1417,7 @@ QUnit.test('Stackedarea, update data', function(assert) {
 
     series.updateData(data2);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, '1', 'Min x should be undefined');
@@ -1493,7 +1429,6 @@ QUnit.test('Stackedarea, update data', function(assert) {
 QUnit.test('Stackedarea, rearrange series family', function(assert) {
     const data1 = [{ arg: '1', val: 4 }, { arg: '2', val: 10 }, { arg: '3', val: 7 }, { arg: '4', val: 3 }];
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'stackedarea', argumentAxisType: 'continuous' }));
-    let rangeData;
 
     series.updateData(data1);
     series.createPoints();
@@ -1502,7 +1437,7 @@ QUnit.test('Stackedarea, rearrange series family', function(assert) {
     $.each(series.getPoints(), function(_, p) {
         p.value -= 2;
     });
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, '1', 'Min x should be undefined');
@@ -1514,11 +1449,10 @@ QUnit.test('Stackedarea, rearrange series family', function(assert) {
 QUnit.test('Steparea', function(assert) {
     const data = [{ arg: '1', val: 4 }, { arg: '2', val: 10 }, { arg: '3', val: 7 }, { arg: '4', val: 3 }];
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'steparea' }));
-    let rangeData;
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min x should be undefined');
@@ -1530,11 +1464,10 @@ QUnit.test('Steparea', function(assert) {
 QUnit.test('Splinearea', function(assert) {
     const data = [{ arg: '1', val: 4 }, { arg: '2', val: 10 }, { arg: '3', val: 7 }, { arg: '4', val: 3 }];
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'splinearea' }));
-    let rangeData;
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min x should be undefined');
@@ -1558,13 +1491,12 @@ QUnit.module('Get range data. Fullstacked series', {
 
     testGetRange: function(assert, seriesType, data, labelVisibility, min, max, minCorrected, maxCorrected) {
         const series = createSeries($.extend(true, {}, this.defaultOptions, { type: seriesType, label: { visible: labelVisibility } }));
-        let rangeData;
 
         series.updateData(data);
         series.createPoints();
 
         // act
-        rangeData = series.getRangeData();
+        const rangeData = series.getRangeData();
 
         // assert
         assert.ok(rangeData, 'Range data should be created');
@@ -1576,7 +1508,6 @@ QUnit.module('Get range data. Fullstacked series', {
 
     testGetRangeWithDataUpdate: function(assert, seriesType, data1, data2, min, max, minArg, maxArg) {
         const series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: 'continuous', type: seriesType }));
-        let rangeData;
 
         series.updateData(data1);
         series.createPoints();
@@ -1584,7 +1515,7 @@ QUnit.module('Get range data. Fullstacked series', {
         series.updateData(data2);
         series.createPoints();
         // act
-        rangeData = series.getRangeData();
+        const rangeData = series.getRangeData();
 
         // assert
         assert.ok(rangeData, 'Range data should be created');
@@ -1775,12 +1706,11 @@ QUnit.module('Get range data. Range series', {
 
 QUnit.test('Numeric', function(assert) {
     const data = [{ arg: 1, val1: 11, val2: 110 }, { arg: 2, val1: 22, val2: 100 }, { arg: 3, val1: 3, val2: 4 }, { arg: 4, val1: 15, val2: 115 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: 'continuous' }));
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 1, 'Min arg should be correct');
@@ -1804,12 +1734,11 @@ QUnit.test('Datetime.', function(assert) {
     const date7 = new Date(3000);
     const date8 = new Date(4000);
     const data = [{ arg: 1, val1: date1, val2: date2 }, { arg: 2, val1: date3, val2: date4 }, { arg: 3, val1: date5, val2: date6 }, { arg: 4, val1: date7, val2: date8 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: 'continuous' }));
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.deepEqual(rangeData.arg.min, 1, 'Min arg should be correct');
@@ -1826,12 +1755,11 @@ QUnit.test('Datetime.', function(assert) {
 QUnit.test('Numeric. Categories', function(assert) {
     const data = [{ arg: 1, val1: 11, val2: 110 }, { arg: 2, val1: 22, val2: 100 }, { arg: 3, val1: 3, val2: 15 }, { arg: 4, val1: 15, val2: 115 }];
     const options = $.extend(true, {}, this.defaultOptions, { argumentAxisType: 'discrete', valueAxisType: 'discrete' });
-    let rangeData;
     const series = createSeries(options);
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min arg should be undefined');
@@ -1856,12 +1784,11 @@ QUnit.test('Datetime. Categories', function(assert) {
     const date8 = new Date(8000);
     const data = [{ arg: 1, val1: date1, val2: date2 }, { arg: 2, val1: date3, val2: date4 }, { arg: 3, val1: date5, val2: date6 }, { arg: 4, val1: date7, val2: date8 }];
     const options = $.extend(true, {}, this.defaultOptions, { argumentAxisType: 'discrete', valueAxisType: 'discrete' });
-    let rangeData;
     const series = createSeries(options);
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min arg should be undefined');
@@ -1877,13 +1804,12 @@ QUnit.test('Datetime. Categories', function(assert) {
 
 QUnit.test('String.', function(assert) {
     const data = [{ arg: '1', val1: '11', val2: '110' }, { arg: '2', val1: '22', val2: '100' }, { arg: '3', val1: '3', val2: '4' }, { arg: '4', val1: '15', val2: '115' }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: 'discrete', valueAxisType: 'discrete' }));
 
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData);
     assert.strictEqual(rangeData.arg.min, undefined, 'Min arg should be undefined');
@@ -1911,12 +1837,11 @@ QUnit.module('Get range data. Range series. For each types', {
 
 QUnit.test('Rangebar', function(assert) {
     const data = [{ arg: 1, val1: 11, val2: 110 }, { arg: 2, val1: 22, val2: 100 }, { arg: 3, val1: 3, val2: 4 }, { arg: 4, val1: 15, val2: 115 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'rangebar' }));
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 1, 'Min arg should be correct');
@@ -1932,12 +1857,11 @@ QUnit.test('Rangebar', function(assert) {
 
 QUnit.test('Rangearea', function(assert) {
     const data = [{ arg: 1, val1: 11, val2: 110 }, { arg: 2, val1: 22, val2: 100 }, { arg: 3, val1: 3, val2: 4 }, { arg: 4, val1: 15, val2: 115 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'rangearea' }));
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 1, 'Min arg should be correct');
@@ -1973,12 +1897,11 @@ QUnit.module('Get range data. Financial series', {
 
 QUnit.test('Numeric', function(assert) {
     const data = [{ arg: 1, l: 11, h: 110, o: 11, c: 110 }, { arg: 2, l: 22, h: 100, o: 22, c: 100 }, { arg: 3, l: 3, h: 4, o: 3, c: 4 }, { arg: 4, l: 15, h: 115, o: 15, c: 115 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: 'continuous' }));
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 1, 'Min arg should be correct');
@@ -2002,12 +1925,11 @@ QUnit.test('Datetime.', function(assert) {
     const date7 = new Date(3000);
     const date8 = new Date(4000);
     const data = [{ arg: 1, l: date1, h: date2, o: date1, c: date2 }, { arg: 2, l: date3, h: date4, o: date3, c: date4 }, { arg: 3, l: date5, h: date6, o: date5, c: date6 }, { arg: 4, l: date7, h: date8, o: date7, c: date8 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: 'continuous' }));
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.deepEqual(rangeData.arg.min, 1, 'Min arg should be correct');
@@ -2024,12 +1946,11 @@ QUnit.test('Datetime.', function(assert) {
 QUnit.test('Numeric. Categories', function(assert) {
     const data = [{ arg: 1, l: 11, h: 110, o: 11, c: 110 }, { arg: 2, l: 22, h: 100, o: 22, c: 100 }, { arg: 3, l: 3, h: 4, o: 3, c: 4 }, { arg: 4, l: 15, h: 115, o: 15, c: 115 }];
     const options = $.extend(true, {}, this.defaultOptions, { argumentAxisType: 'discrete', valueAxisType: 'discrete' });
-    let rangeData;
     const series = createSeries(options);
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min arg should be undefined');
@@ -2054,12 +1975,11 @@ QUnit.test('Datetime. Categories', function(assert) {
     const date8 = new Date(8000);
     const data = [{ arg: 1, l: date1, h: date2, o: date1, c: date2 }, { arg: 2, l: date3, h: date4, o: date3, c: date4 }, { arg: 3, l: date5, h: date6, o: date5, c: date6 }, { arg: 4, l: date7, h: date8, o: date7, c: date8 }];
     const options = $.extend(true, {}, this.defaultOptions, { argumentAxisType: 'discrete', valueAxisType: 'discrete' });
-    let rangeData;
     const series = createSeries(options);
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, undefined, 'Min arg should be undefined');
@@ -2075,13 +1995,12 @@ QUnit.test('Datetime. Categories', function(assert) {
 
 QUnit.test('String.', function(assert) {
     const data = [{ arg: '1', l: '11', h: '110', o: '11', c: '110' }, { arg: '2', l: '22', h: '100', o: '22', c: '100' }, { arg: '3', l: '3', h: '4', o: '3', c: '4' }, { arg: '4', l: '15', h: '115', o: '15', c: '115' }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: 'discrete', valueAxisType: 'discrete' }));
 
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData);
     assert.strictEqual(rangeData.arg.min, undefined, 'Min arg should be undefined');
@@ -2117,12 +2036,11 @@ QUnit.module('Get range data. Financial series. For each types', {
 
 QUnit.test('Stock', function(assert) {
     const data = [{ arg: 1, l: 11, h: 110, o: 11, c: 110 }, { arg: 2, l: 22, h: 100, o: 22, c: 100 }, { arg: 3, l: 3, h: 4, o: 3, c: 4 }, { arg: 4, l: 15, h: 115, o: 15, c: 115 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'stock' }));
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 1, 'Min arg should be correct');
@@ -2138,12 +2056,11 @@ QUnit.test('Stock', function(assert) {
 
 QUnit.test('Candlestick', function(assert) {
     const data = [{ arg: 1, l: 11, h: 110, o: 11, c: 110 }, { arg: 2, l: 22, h: 100, o: 22, c: 100 }, { arg: 3, l: 3, h: 4, o: 3, c: 4 }, { arg: 4, l: 15, h: 115, o: 15, c: 115 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'candlestick' }));
 
     series.updateData(data);
     series.createPoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 1, 'Min arg should be correct');
@@ -2174,13 +2091,12 @@ QUnit.module('Get range data. Pie series', {
 
 QUnit.test('Positive points', function(assert) {
     const data = [{ arg: '1', val: 12 }, { arg: '2', val: 20 }, { arg: '3', val: 3 }, { arg: '4', val: 15 }];
-    let rangeData;
     const series = createSeries(this.defaultOptions);
 
     series.updateData(data);
     series.createPoints();
     series.arrangePoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.deepEqual(rangeData, { val: { min: 0, max: 50 / 20 } });
@@ -2188,26 +2104,24 @@ QUnit.test('Positive points', function(assert) {
 
 QUnit.test('Positive and negative points', function(assert) {
     const data = [{ arg: '1', val: -11 }, { arg: '2', val: 20 }, { arg: '3', val: -3 }, { arg: '4', val: 15 }];
-    let rangeData;
     const series = createSeries(this.defaultOptions);
 
     series.updateData(data);
     series.createPoints();
     series.arrangePoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.deepEqual(rangeData, { val: { min: 0, max: 35 / 20 } });
 });
 
 QUnit.test('Negative points', function(assert) {
     const data = [{ arg: '1', val: -12 }, { arg: '2', val: -20 }, { arg: '3', val: -3 }, { arg: '4', val: -15 }];
-    let rangeData;
     const series = createSeries(this.defaultOptions);
 
     series.updateData(data);
     series.createPoints();
     series.arrangePoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.deepEqual(rangeData, { val: { min: 0, max: -50 / 20 } });
 });
@@ -2227,26 +2141,24 @@ QUnit.module('Get range data. Pie series. For each types', {
 
 QUnit.test('Pie', function(assert) {
     const data = [{ arg: '1', val: 12 }, { arg: '2', val: 20 }, { arg: '3', val: 3 }, { arg: '4', val: 15 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'pie' }), null, 'pie');
 
     series.updateData(data);
     series.createPoints();
     series.arrangePoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.deepEqual(rangeData, { val: { min: 0, max: 50 / 20 } });
 });
 
 QUnit.test('Doughnut', function(assert) {
     const data = [{ arg: '1', val: 12 }, { arg: '2', val: 20 }, { arg: '3', val: 3 }, { arg: '4', val: 15 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { type: 'doughnut' }), null, 'pie');
 
     series.updateData(data);
     series.createPoints();
     series.arrangePoints();
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.deepEqual(rangeData, { val: { min: 0, max: 50 / 20 } });
 });
@@ -2279,7 +2191,6 @@ QUnit.module('Zooming range data', {
 
 QUnit.test('Set incorrect min zoom (null)', function(assert) {
     const data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }];
-    let rangeData;
     const series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
@@ -2287,7 +2198,7 @@ QUnit.test('Set incorrect min zoom (null)', function(assert) {
 
     this.zoom(null, 4);
 
-    rangeData = series.getViewport();
+    const rangeData = series.getViewport();
 
     assert.ok(rangeData, 'Returned object');
     assert.equal(rangeData.min, 10, 'min y');
@@ -2296,7 +2207,6 @@ QUnit.test('Set incorrect min zoom (null)', function(assert) {
 
 QUnit.test('Set incorrect max zoom (undefined)', function(assert) {
     const data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }];
-    let rangeData;
     const series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
@@ -2304,7 +2214,7 @@ QUnit.test('Set incorrect max zoom (undefined)', function(assert) {
 
     this.zoom(3, undefined);
 
-    rangeData = series.getViewport();
+    const rangeData = series.getViewport();
 
     assert.ok(rangeData, 'Returned object');
     assert.equal(rangeData.min, 30, 'min y');
@@ -2313,7 +2223,6 @@ QUnit.test('Set incorrect max zoom (undefined)', function(assert) {
 
 QUnit.test('Set incorrect max zoom (null)', function(assert) {
     const data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }];
-    let rangeData;
     const series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
@@ -2321,7 +2230,7 @@ QUnit.test('Set incorrect max zoom (null)', function(assert) {
 
     this.zoom(3, null);
 
-    rangeData = series.getViewport();
+    const rangeData = series.getViewport();
 
     assert.ok(rangeData, 'Returned object');
     assert.equal(rangeData.min, 30, 'min y');
@@ -2330,7 +2239,6 @@ QUnit.test('Set incorrect max zoom (null)', function(assert) {
 
 QUnit.test('Set incorrect min zoom (undefined)', function(assert) {
     const data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }];
-    let rangeData;
     const series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
@@ -2338,7 +2246,7 @@ QUnit.test('Set incorrect min zoom (undefined)', function(assert) {
 
     this.zoom(undefined, 5);
 
-    rangeData = series.getViewport();
+    const rangeData = series.getViewport();
 
     assert.ok(rangeData, 'Returned object');
     assert.equal(rangeData.min, 10, 'min y');
@@ -2349,13 +2257,12 @@ QUnit.test('GetViewport without zooming', function(assert) {
     this.defaultOptions.type = 'bar';
 
     const data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }];
-    let rangeData;
     const series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
     series.createPoints();
 
-    rangeData = series.getViewport();
+    const rangeData = series.getViewport();
 
     assert.ok(rangeData, 'Returned object');
     assert.equal(rangeData.min, 0, 'min y');
@@ -2390,7 +2297,6 @@ QUnit.module('Zooming range data. Simple', {
 
 QUnit.test('Numeric.', function(assert) {
     const data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }];
-    let rangeData;
     const series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
@@ -2398,7 +2304,7 @@ QUnit.test('Numeric.', function(assert) {
 
     this.zoom(3, 4.5);
 
-    rangeData = series.getViewport();
+    const rangeData = series.getViewport();
 
     assert.ok(rangeData, 'Returned object');
     assert.equal(rangeData.min, 30, 'min y');
@@ -2407,7 +2313,6 @@ QUnit.test('Numeric.', function(assert) {
 
 QUnit.test('Numeric. zooming args between points.', function(assert) {
     const data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }];
-    let rangeData;
     const series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
@@ -2415,7 +2320,7 @@ QUnit.test('Numeric. zooming args between points.', function(assert) {
 
     this.zoom(3, 4);
 
-    rangeData = series.getViewport();
+    const rangeData = series.getViewport();
 
     assert.ok(rangeData, 'Returned object');
     assert.equal(rangeData.min, 30, 'min y');
@@ -2424,7 +2329,6 @@ QUnit.test('Numeric. zooming args between points.', function(assert) {
 
 QUnit.test('Datetime values.', function(assert) {
     const data = [{ arg: 1, val: new Date(2016, 6, 1) }, { arg: 2, val: new Date(2016, 6, 2) }, { arg: 3, val: new Date(2016, 6, 3) }, { arg: 4, val: new Date(2016, 6, 4) }, { arg: 5, val: new Date(2016, 6, 5) }, { arg: 6, val: 60 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { valueType: 'datetime', valueAxisType: 'continuous' }), { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
@@ -2432,7 +2336,7 @@ QUnit.test('Datetime values.', function(assert) {
 
     this.zoom(3, 4.5);
 
-    rangeData = series.getViewport();
+    const rangeData = series.getViewport();
 
     assert.ok(rangeData, 'Returned object');
     assert.equal(rangeData.min.getTime(), new Date(2016, 6, 3).getTime(), 'min y');
@@ -2442,14 +2346,13 @@ QUnit.test('Datetime values.', function(assert) {
 // T583086
 QUnit.test('Zooming points with null values', function(assert) {
     const data = getOriginalData([{ arg: 1, val: null }, { arg: 1, val: 16 }, { arg: 2, val: 90 }, { arg: 3, val: 100 }, { arg: 4, val: 100 }]);
-    let rangeData;
     const series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
     series.createPoints();
     this.zoom(0.5, 4.5);
 
-    rangeData = series.getViewport();
+    const rangeData = series.getViewport();
 
     assert.ok(rangeData, 'Returned object');
     assert.equal(rangeData.min, 16, 'min y');
@@ -2460,7 +2363,6 @@ QUnit.test('Numeric. Area', function(assert) {
     this.defaultOptions.type = 'area';
 
     const data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }];
-    let rangeData;
     const series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
@@ -2468,7 +2370,7 @@ QUnit.test('Numeric. Area', function(assert) {
 
     this.zoom(3, 4.5);
 
-    rangeData = series.getViewport();
+    const rangeData = series.getViewport();
 
     assert.ok(rangeData, 'Returned object');
     assert.equal(rangeData.min, 0, 'min y');
@@ -2479,7 +2381,6 @@ QUnit.test('Numeric. Area', function(assert) {
 
 QUnit.test('Range data has viewport', function(assert) {
     const data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }];
-    let rangeData;
     const series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
@@ -2487,7 +2388,7 @@ QUnit.test('Range data has viewport', function(assert) {
 
     this.zoom(3, 4.5);
 
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Returned object');
     assert.equal(rangeData.viewport.min, 30, 'min visible y');
@@ -2516,7 +2417,6 @@ QUnit.test('T179635. With error bars', function(assert) {
     }, {
         arg: 6, val: 60, low: 55, high: 65
     }]);
-    let rangeData;
     const series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
@@ -2524,7 +2424,7 @@ QUnit.test('T179635. With error bars', function(assert) {
 
     this.zoom(2, 5);
 
-    rangeData = series.getViewport();
+    const rangeData = series.getViewport();
 
     assert.ok(rangeData, 'Returned object');
 
@@ -2541,7 +2441,6 @@ QUnit.test('Datetime argument. String value.', function(assert) {
     const argDate6 = new Date(6000);
     const testDate = new Date(4500);
     const data = [{ arg: argDate1, val: '10' }, { arg: argDate2, val: '20' }, { arg: argDate3, val: '30' }, { arg: argDate4, val: '40' }, { arg: argDate5, val: '50' }, { arg: argDate6, val: '60' }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { valueAxisType: 'discrete' }), { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
@@ -2549,7 +2448,7 @@ QUnit.test('Datetime argument. String value.', function(assert) {
 
     this.zoom(argDate3, testDate);
 
-    rangeData = series.getViewport();
+    const rangeData = series.getViewport();
 
     assert.ok(rangeData, 'Returned object');
 
@@ -2560,7 +2459,6 @@ QUnit.test('Datetime argument. String value.', function(assert) {
 
 QUnit.test('Discrete argument axis.', function(assert) {
     const data = [{ arg: 'a', val: 10 }, { arg: 'b', val: 20 }, { arg: 'c', val: 30 }, { arg: 'd', val: 40 }, { arg: 'e', val: 50 }, { arg: 'f', val: 60 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: 'discrete' }), { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
@@ -2575,7 +2473,7 @@ QUnit.test('Discrete argument axis.', function(assert) {
         return visualRange;
     };
 
-    rangeData = series.getViewport();
+    const rangeData = series.getViewport();
 
     assert.ok(rangeData, 'Returned object');
     assert.equal(rangeData.min, 30, 'min y');
@@ -2615,7 +2513,6 @@ QUnit.module('Zooming range data. Bar/area', {
 
 QUnit.test('Positive points', function(assert) {
     const data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }];
-    let rangeData;
     const series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
@@ -2623,7 +2520,7 @@ QUnit.test('Positive points', function(assert) {
 
     this.zoom(2, 4.5);
 
-    rangeData = series.getViewport();
+    const rangeData = series.getViewport();
 
     assert.equal(rangeData.min, 0, 'min Visible Y');
     assert.equal(rangeData.max, 45, 'max Visible Y');
@@ -2631,7 +2528,6 @@ QUnit.test('Positive points', function(assert) {
 
 QUnit.test('Bar. In the range shouldn\'t be the points that out of the zoom area', function(assert) {
     const data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }];
-    let rangeData;
     const series = createSeries($.extend({}, this.defaultOptions, { type: 'bar' }), { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
@@ -2639,7 +2535,7 @@ QUnit.test('Bar. In the range shouldn\'t be the points that out of the zoom area
 
     this.zoom(2, 4.5);
 
-    rangeData = series.getViewport();
+    const rangeData = series.getViewport();
 
     assert.equal(rangeData.min, 0, 'min Visible Y');
     assert.equal(rangeData.max, 40, 'max Visible Y');
@@ -2647,7 +2543,6 @@ QUnit.test('Bar. In the range shouldn\'t be the points that out of the zoom area
 
 QUnit.test('Negative points', function(assert) {
     const data = [{ arg: 1, val: -10 }, { arg: 2, val: -20 }, { arg: 3, val: -30 }, { arg: 4, val: -40 }, { arg: 5, val: -50 }, { arg: 6, val: -60 }];
-    let rangeData;
     const series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
@@ -2655,7 +2550,7 @@ QUnit.test('Negative points', function(assert) {
 
     this.zoom(3, 4.5);
 
-    rangeData = series.getViewport();
+    const rangeData = series.getViewport();
 
     assert.equal(rangeData.max, 0, 'max Visible Y');
     assert.equal(rangeData.min, -45, 'min Visible Y');
@@ -2663,14 +2558,13 @@ QUnit.test('Negative points', function(assert) {
 
 QUnit.test('ShowZero === false', function(assert) {
     const data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }];
-    let rangeData;
     const series = createSeries($.extend(true, {}, this.defaultOptions, { showZero: false }), { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
     series.createPoints();
 
     this.zoom(3, 4.5);
-    rangeData = series.getViewport();
+    const rangeData = series.getViewport();
 
     assert.equal(rangeData.min, 30, 'min Visible Y');
     assert.equal(rangeData.max, 45, 'max Visible Y');
@@ -2679,7 +2573,6 @@ QUnit.test('ShowZero === false', function(assert) {
 QUnit.test('Discrete data', function(assert) {
     this.defaultOptions.argumentAxisType = 'discrete';
     const data = [{ arg: '1', val: 10 }, { arg: '2', val: 20 }, { arg: '3', val: 30 }, { arg: '4', val: 40 }, { arg: '5', val: 50 }, { arg: '6', val: 60 }];
-    let rangeData;
     const series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
@@ -2694,7 +2587,7 @@ QUnit.test('Discrete data', function(assert) {
         return visualRange;
     };
 
-    rangeData = series.getViewport();
+    const rangeData = series.getViewport();
 
     assert.equal(rangeData.min, 0, 'min Y');
     assert.equal(rangeData.max, 40, 'max Y');
@@ -2985,13 +2878,12 @@ QUnit.test('Get argument range when discrete data', function(assert) {
 
 QUnit.test('Calculate interval in range data when aggregation is enabled', function(assert) {
     const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
-    let rangeData;
     const series = createSeries({ type: 'scatter', argumentAxisType: 'continuous', aggregation: { enabled: true } });
 
     series.updateData(data);
     series.createPoints();
 
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');

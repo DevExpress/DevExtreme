@@ -764,7 +764,6 @@ QUnit.test('Pass errorBars options to point (on update). ErrorBars are not visib
         }
     });
     const data = [{ arg: 1, val: 2 }];
-    let points;
     series.areErrorBarsVisible = function() { return false; };
     series.updateData(data);
     series.createPoints();
@@ -773,7 +772,7 @@ QUnit.test('Pass errorBars options to point (on update). ErrorBars are not visib
     series.updateOptions($.extend(true, {}, series.getOptions(), { valueErrorBar: { error: true } }));
     series.updateData(data);
     series.createPoints();
-    points = series.getPoints();
+    const points = series.getPoints();
 
     // assert
     assert.equal(points[0].update.callCount, 1);
@@ -788,7 +787,6 @@ QUnit.test('Pass errorBars options to point (on update). ErrorBars are visible',
         }
     });
     const data = [{ arg: 1, val: 2 }];
-    let points;
     series.areErrorBarsVisible = function() { return true; };
     series.updateData(data);
     series.createPoints();
@@ -800,7 +798,7 @@ QUnit.test('Pass errorBars options to point (on update). ErrorBars are visible',
     }));
     series.updateData(data);
     series.createPoints();
-    points = series.getPoints();
+    const points = series.getPoints();
 
     // assert
     assert.equal(points[0].update.callCount, 1);
@@ -1126,11 +1124,10 @@ QUnit.test('Draw simple data. hide layout labels = true', function(assert) {
 
 QUnit.test('Draw simple data with null values', function(assert) {
     const series = this.series;
-    let points;
 
     series.updateData([{ arg: 11, val: 1 }, { arg: 22, val: 2 }, { arg: 33, val: null }, { arg: 44, val: 2 }, { arg: 55, val: null }, { arg: 66, val: 3 }]);
     series.createPoints();
-    points = series.getAllPoints();
+    const points = series.getAllPoints();
 
     series.draw(true);
 
@@ -1162,11 +1159,10 @@ QUnit.test('Draw simple data with null values', function(assert) {
 
 QUnit.test('Draw simple data with null values. Three null in row', function(assert) {
     const series = this.series;
-    let points;
 
     series.updateData([{ arg: 11, val: 1 }, { arg: 22, val: 2 }, { arg: 33, val: null }, { arg: 44, val: null }, { arg: 55, val: null }, { arg: 66, val: 3 }]);
     series.createPoints();
-    points = series.getAllPoints();
+    const points = series.getAllPoints();
 
     series.draw(true);
 
@@ -1539,13 +1535,12 @@ QUnit.test('Fields disposing', function(assert) {
 
 QUnit.test('Groups disposing when tracker not drawn', function(assert) {
     const series = this.series;
-    let errorBarGroup;
 
     series._elementsGroup = this.renderer.g();
     series._bordersGroup = this.renderer.g();
     series._labelsGroup = this.renderer.g();
     series._markersGroup = this.renderer.g();
-    errorBarGroup = series._errorBarGroup = this.renderer.g();
+    const errorBarGroup = series._errorBarGroup = this.renderer.g();
     series._group = this.renderer.g();
 
     const groupDetachSpy = series._group.stub('dispose');
@@ -4408,11 +4403,10 @@ QUnit.test('get axes', function(assert) {
 QUnit.test('notification of series. allSeriesPoints mode', function(assert) {
     // arrange
     const series = createSeries();
-    let target;
     series.updateData([{ arg: 1 }, { arg: 2 }]);
     series.createPoints();
 
-    target = series.getAllPoints()[0];
+    const target = series.getAllPoints()[0];
     target.getOptions.returns({ selectionMode: 'allSeriesPoints' });
     // act
     series.notify({
@@ -4426,11 +4420,11 @@ QUnit.test('notification of series. allSeriesPoints mode', function(assert) {
 QUnit.test('notification of series. allSeriesPoints. apply normal style. single mode', function(assert) {
     // arrange
     const series = createSeries();
-    let target;
+
     series.updateData([{ arg: 1 }, { arg: 2 }]);
     series.createPoints();
 
-    target = series.getAllPoints()[0];
+    const target = series.getAllPoints()[0];
     target.getOptions.returns({ selectionMode: 'allSeriesPoints' });
     series.notify({
         action: 'pointSelect',
@@ -4448,13 +4442,11 @@ QUnit.test('notification of series. allSeriesPoints. apply normal style. single 
 QUnit.test('notification of series. allSeriesPoints. multiply mode', function(assert) {
     // arrange
     const series = createSeries();
-    let target1;
-    let target2;
     series.updateData([{ arg: 1 }, { arg: 2 }, { arg: 3 }]);
     series.createPoints();
 
-    target1 = series.getAllPoints()[0];
-    target2 = series.getAllPoints()[1];
+    const target1 = series.getAllPoints()[0];
+    const target2 = series.getAllPoints()[1];
     target1.getOptions.returns({ selectionMode: 'allSeriesPoints' });
     target2.getOptions.returns({ selectionMode: 'allSeriesPoints' });
     target1.isSelected.returns(true); // emulation multiple mode
@@ -4483,11 +4475,10 @@ QUnit.test('notification of series. allSeriesPoints. multiply mode', function(as
 QUnit.test('notification of series. allSeriesPoints. release selection multiply mode', function(assert) { // check this
     // arrange
     const series = createSeries();
-    let allPoints;
     series.updateData([{ arg: 1 }, { arg: 2 }]);
     series.createPoints();
 
-    allPoints = series.getAllPoints();
+    const allPoints = series.getAllPoints();
     allPoints.forEach(function(point) { point.getOptions.returns({ selectionMode: 'allSeriesPoints' }); });
     allPoints[0].isSelected.returns(true);
     series.notify({
@@ -4603,15 +4594,14 @@ QUnit.test('notification of series. allArgumentPoints. multiple mode', function(
     // arrange
     const series1 = createSeries();
     const series2 = createSeries();
-    let series1_point1;
-    let series2_point1;
+
     series1.updateData([{ arg: 1, val: 1 }]);
     series2.updateData([{ arg: 1, val: 1 }]);
     series1.createPoints();
     series2.createPoints();
 
-    series1_point1 = series1.getAllPoints()[0];
-    series2_point1 = series2.getAllPoints()[0];
+    const series1_point1 = series1.getAllPoints()[0];
+    const series2_point1 = series2.getAllPoints()[0];
     series1_point1.getOptions.returns({ selectionMode: 'allArgumentPoints' });
     series2_point1.getOptions.returns({ selectionMode: 'allArgumentPoints' });
     series1_point1.isSelected.returns(true);
@@ -4658,8 +4648,7 @@ QUnit.test('allArgumentPoints & multiple modes', function(assert) {
             pointSelectionMode: 'multiple'
         }
     })];
-    let point1;
-    let point2;
+
     const selectPoint = function(target) {
         target.isSelected.returns(true);
         series.forEach(function(currentSeries) {
@@ -4673,8 +4662,8 @@ QUnit.test('allArgumentPoints & multiple modes', function(assert) {
     series[1].updateData([{ arg: 1 }]);
     series[0].createPoints();
     series[1].createPoints();
-    point1 = series[0].getAllPoints()[0];
-    point2 = series[1].getAllPoints()[0];
+    const point1 = series[0].getAllPoints()[0];
+    const point2 = series[1].getAllPoints()[0];
     point1.getOptions.returns({ selectionMode: 'allArgumentPoints' });
     point2.getOptions.returns({ selectionMode: 'allArgumentPoints' });
     selectPoint(point1);

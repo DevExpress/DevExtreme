@@ -142,11 +142,10 @@ QUnit.test('setOptions', function(assert) {
 QUnit.test('Update animation options', function(assert) {
     // arrange
     const renderer = this.createRenderer();
-    let result;
     renderer.setOptions({ animation: { enabled: false, duration: 2000, easing: 'linear' } });
 
     // act
-    result = renderer.updateAnimationOptions({ duration: 3000, someOtherOption: 1 });
+    const result = renderer.updateAnimationOptions({ duration: 3000, someOtherOption: 1 });
 
     // assert
     assert.equal(result, renderer);
@@ -168,12 +167,10 @@ QUnit.test('stopAllAnimations', function(assert) {
     // arrange
     const renderer1 = this.createRenderer();
     const renderer2 = this.createRenderer();
-    let result1;
-    let result2;
 
     // act
-    result1 = renderer1.stopAllAnimations();
-    result2 = renderer2.stopAllAnimations(true);
+    const result1 = renderer1.stopAllAnimations();
+    const result2 = renderer2.stopAllAnimations(true);
 
     // assert
     assert.equal(result1, renderer1);
@@ -190,10 +187,9 @@ QUnit.test('animateElement', function(assert) {
     const params = { b: 'b' };
     const options = { c: 'c' };
     const renderer = this.createRenderer();
-    let result;
 
     // act
-    result = renderer.animateElement(element, params, options);
+    const result = renderer.animateElement(element, params, options);
 
     // assert
     assert.equal(result, renderer);
@@ -206,12 +202,11 @@ QUnit.test('animateElement', function(assert) {
 QUnit.test('Resize with wrong size', function(assert) {
     // arrange
     const renderer = this.createRenderer();
-    let result;
 
     renderer.root.stub('attr').reset();
 
     // act
-    result = renderer.resize(0, -10);
+    const result = renderer.resize(0, -10);
 
     // assert
     assert.equal(result, renderer);
@@ -221,12 +216,11 @@ QUnit.test('Resize with wrong size', function(assert) {
 QUnit.test('Resize with good size', function(assert) {
     // arrange
     const renderer = this.createRenderer();
-    let result;
 
     renderer.root.stub('attr').reset();
 
     // act
-    result = renderer.resize(1000, 100);
+    const result = renderer.resize(1000, 100);
 
     // assert
     assert.equal(result, renderer);
@@ -238,12 +232,11 @@ QUnit.test('Resize with good size', function(assert) {
 QUnit.test('Svg method', function(assert) {
     // arrange
     const renderer = this.createRenderer();
-    let svgString;
 
     renderer.root.stub('markup').returns('root\'s markup');
 
     // act
-    svgString = renderer.svg();
+    const svgString = renderer.svg();
 
     // assert
     assert.strictEqual(renderer.root.stub('markup').callCount, 1, 'got root\'s markup');
@@ -253,12 +246,11 @@ QUnit.test('Svg method', function(assert) {
 QUnit.test('getRootOffset', function(assert) {
     // arrange
     const renderer = this.createRenderer();
-    let offset;
 
     renderer.root.stub('getOffset').returns({ top: 5, left: 10 });
 
     // act
-    offset = renderer.getRootOffset();
+    const offset = renderer.getRootOffset();
 
     // assert
     assert.strictEqual(renderer.root.stub('getOffset').callCount, 1, 'got root\'s offset');
@@ -268,11 +260,9 @@ QUnit.test('getRootOffset', function(assert) {
 QUnit.test('Disposing', function(assert) {
     const renderer = this.createRenderer();
     let animationControllerDisposed = false;
-    let rootDispose;
-    let defsDispose;
 
-    rootDispose = renderer.root.stub('dispose');
-    defsDispose = renderers.SvgElement.getCall(1).returnValue.stub('dispose');
+    const rootDispose = renderer.root.stub('dispose');
+    const defsDispose = renderers.SvgElement.getCall(1).returnValue.stub('dispose');
     renderer._animationController.dispose = function() {
         animationControllerDisposed = true;
     };
@@ -291,12 +281,11 @@ QUnit.test('onEndAnimation', function(assert) {
     // arrange
     const renderer = this.createRenderer();
     const endAnimation = 'endAnimation';
-    let animationControllerEndAnimationStub;
 
     // act
     renderer.onEndAnimation(endAnimation);
 
-    animationControllerEndAnimationStub = renderer._animationController.stub('onEndAnimation');
+    const animationControllerEndAnimationStub = renderer._animationController.stub('onEndAnimation');
 
     // assert
     assert.equal(animationControllerEndAnimationStub.callCount, 1);
@@ -838,14 +827,13 @@ QUnit.test('shadowFilter with params', function(assert) {
 QUnit.test('shadowFilter change filter attr function (full list of params)', function(assert) {
     // arrange
     const shadow = this.renderer.shadowFilter(10, 20, 30, 40, 50, 60, 70, 'red', 0.6);
-    let result;
     shadow.gaussianBlur.stub('attr').reset();
     shadow.offset.stub('attr').reset();
     shadow.flood.stub('attr').reset();
     shadow.element.setAttribute = sinon.spy();
 
     // act
-    result = shadow.attr({ x: 100, y: 200, width: 300, height: 400, offsetX: 500, offsetY: 600, blur: 700, color: 'green', opacity: 0.9 });
+    const result = shadow.attr({ x: 100, y: 200, width: 300, height: 400, offsetX: 500, offsetY: 600, blur: 700, color: 'green', opacity: 0.9 });
 
     // assert
     // main filter
@@ -872,14 +860,13 @@ QUnit.test('shadowFilter change filter attr function (full list of params)', fun
 QUnit.test('shadowFilter change filter attr function (short list of params)', function(assert) {
     // arrange
     const shadow = this.renderer.shadowFilter(10, 20, 30, 40, 50, 60, 70, 'red', 0.6);
-    let result;
     shadow.gaussianBlur.stub('attr').reset();
     shadow.offset.stub('attr').reset();
     shadow.flood.stub('attr').reset();
     shadow.element.setAttribute = sinon.spy();
 
     // act
-    result = shadow.attr({ width: 300, height: 400, offsetY: 600, opacity: 0.9 });
+    const result = shadow.attr({ width: 300, height: 400, offsetY: 600, opacity: 0.9 });
 
     // assert
     // main filter
