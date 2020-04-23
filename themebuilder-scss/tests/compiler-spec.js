@@ -7,21 +7,14 @@ const Compiler = require('../modules/compiler');
 
 describe('compileBundle', () => {
     beforeEach(() => {
-        mock('../data/metadata/dx-theme-builder-metadata', {
-            'metadata': [
-                { 'Key': '$base-font-family', 'Name': '', 'Type': 'text', 'Path': 'tb/widgets/generic/colors' },
-                { 'Key': '$base-accent', 'Name': '', 'Type': 'color', 'Path': 'tb/widgets/generic/colors' },
-                { 'Key': '$accordion-title-color', 'Name': '', 'Type': 'color', 'Path': 'tb/widgets/generic/accordion/colors' },
-                { 'Key': '$accordion-item-title-opened-bg', 'Name': '', 'Type': 'color', 'Path': 'tb/widgets/generic/accordion/colors' }
-            ]
-        });
+        mock('../data/metadata/dx-theme-builder-metadata', require('./data/metadata'));
     });
 
     afterEach(() => {
         mock.stopAll();
     });
 
-    const bundle = path.join(path.resolve(), 'tests', 'test-scss', 'bundles', 'dx.light.scss');
+    const bundle = path.join(path.resolve(), 'tests', 'data', 'scss', 'bundles', 'dx.light.scss');
 
     it('Compile with empty modifications', () => {
         const compiler = new Compiler();
