@@ -4606,6 +4606,58 @@ QUnit.module('datebox validation', {}, () => {
         assert.notOk(dateBox.option('isValid'), 'datebox is invalid');
     });
 
+    QUnit.test('Validation callback should be called only once when value changes (T879881)', function(assert) {
+        const validationCallbackSpy = sinon.spy();
+
+        const dateBox = $('#dateBox').dxDateBox({
+            value: '2020-01-15'
+        }).dxValidator({
+            validationRules: [{
+                type: 'custom',
+                reevaluate: true,
+                validationCallback: validationCallbackSpy
+            }]
+        }).dxDateBox('instance');
+
+        const date = new Date(2020, 0, 1);
+        dateBox.option('value', date);
+
+        const args = validationCallbackSpy.getCall(0).args[0];
+        assert.ok(validationCallbackSpy.calledOnce, 'validation callback is called only once');
+        assert.strictEqual(args.value, date, 'value is correct');
+        assert.ok(args.validator, 'validator is passed');
+        assert.ok(args.rule, 'rule is passed');
+    });
+
+    QUnit.test('Validation callback should be called only once when value changes by keyboard typing (T879881)', function(assert) {
+        const validationCallbackSpy = sinon.spy();
+
+        const dateBox = $('#dateBox').dxDateBox({
+            value: '2020-01-15',
+            pickerType: 'calendar'
+        }).dxValidator({
+            validationRules: [{
+                type: 'custom',
+                reevaluate: true,
+                validationCallback: validationCallbackSpy
+            }]
+        }).dxDateBox('instance');
+
+        const $input = $(dateBox.$element().find(`.${TEXTEDITOR_INPUT_CLASS}`));
+        const keyboard = keyboardMock($input);
+
+        keyboard
+            .caret({ start: 0, end: 9 })
+            .type('1/1/2020')
+            .press('enter');
+
+        const args = validationCallbackSpy.getCall(0).args[0];
+        assert.ok(validationCallbackSpy.calledOnce, 'validation callback is called only once');
+        assert.strictEqual(args.value, '2020-01-01', 'value is correct');
+        assert.ok(args.validator, 'validator is passed');
+        assert.ok(args.rule, 'rule is passed');
+    });
+
     QUnit.testInActiveWindow('DateBox should validate value after remove an invalid characters', function(assert) {
         const $element = $('#dateBox');
         const dateBox = $element.dxDateBox({
