@@ -1,6 +1,3 @@
-/* global console */
-/* eslint no-console: off */
-
 const sass = require('sass');
 const Fiber = require('fibers');
 
@@ -11,20 +8,25 @@ class Compiler {
         this.meta = require('../data/metadata/dx-theme-builder-metadata')['metadata'];
     }
 
-    compileBundle(bundlePath, items) {
-        console.log(bundlePath);
+    compile(bundlePath, items, customOptions) {
         this.changedVariables = [];
-        this.userItems = items;
+        this.userItems = items || [];
+
+        let compilerOptions = {
+            file: bundlePath,
+            fiber: Fiber,
+            importer: this.setter.bind(this),
+            functions: {
+                'collector($map)': this.collector.bind(this)
+            }
+        };
+
+        if(customOptions) {
+            compilerOptions = { ...compilerOptions, ...customOptions };
+        }
 
         return new Promise((resolve, reject) => {
-            sass.render({
-                file: bundlePath,
-                fiber: Fiber,
-                importer: this.setter.bind(this),
-                functions: {
-                    'collector($map)': this.collector.bind(this)
-                }
-            }, (error, result) => {
+            sass.render(compilerOptions, (error, result) => {
                 this.importerCache = {};
 
                 if(error) {

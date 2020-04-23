@@ -2,10 +2,14 @@ const assert = require('chai').assert;
 const mock = require('mock-require');
 const sass = require('sass');
 const path = require('path');
+const fs = require('fs');
 
 const Compiler = require('../modules/compiler');
 
-describe('compileBundle', () => {
+const dataPath = path.join(path.resolve(), 'tests', 'data');
+const noModificationsResult = require('./data/compilation-results/without-modifications-css');
+
+describe('compile', () => {
     beforeEach(() => {
         mock('../data/metadata/dx-theme-builder-metadata', require('./data/metadata'));
     });
@@ -14,50 +18,21 @@ describe('compileBundle', () => {
         mock.stopAll();
     });
 
-    const bundle = path.join(path.resolve(), 'tests', 'data', 'scss', 'bundles', 'dx.light.scss');
+    const bundle = path.join(dataPath, 'scss', 'bundles', 'dx.light.scss');
 
-    it('Compile with empty modifications', () => {
+    it('Compile with empty modifications (check that items can be undefined)', () => {
         const compiler = new Compiler();
-        return compiler.compileBundle(bundle, []).then(data => {
+        return compiler.compile(bundle).then(data => {
             // compiled css
-            assert.equal(`.dx-accordion {
-  background-color: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif;
-  color: #337ab7;
-}
-.dx-accordion .from-base {
-  background-color: transparent;
-  color: #337ab7;
-}`,
-            data.result.css.toString());
+            assert.equal(noModificationsResult, data.result.css.toString());
             // collected variables
-            assert.deepEqual([
-                {
-                    Key: '$base-font-family',
-                    Value: '"Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif',
-                    Path: 'tb/widgets/generic/colors'
-                },
-                {
-                    Key: '$base-accent',
-                    Value: 'rgba(51,122,183,1)',
-                    Path: 'tb/widgets/generic/colors'
-                },
-                {
-                    Key: '$accordion-title-color',
-                    Value: 'rgba(51,122,183,1)',
-                    Path: 'tb/widgets/generic/accordion/colors'
-                },
-                {
-                    Key: '$accordion-item-title-opened-bg',
-                    Value: 'rgba(0,0,0,0)',
-                    Path: 'tb/widgets/generic/accordion/colors'
-                }
-            ], data.changedVariables);
+            assert.deepEqual(require('./data/compilation-results/without-modifications-meta'), data.changedVariables);
         });
     });
 
     it('Compile with one base and one accordion items modified', () => {
         const compiler = new Compiler();
-        return compiler.compileBundle(bundle, [
+        return compiler.compile(bundle, [
             { key: '$base-accent', value: 'red' },
             { key: '$accordion-item-title-opened-bg', value: 'green' },
         ]).then(data => {
@@ -99,13 +74,28 @@ describe('compileBundle', () => {
 
     it('Compile with error', () => {
         const compiler = new Compiler();
-        return compiler.compileBundle('dx.error.scss', []).then(
+        return compiler.compile('dx.error.scss', []).then(
             data => assert.notOk(true, 'Error bundle was resolved'),
             error => {
                 assert.equal(3, error.status);
                 assert.equal('Error: dx.error.scss: no such file or directory', error.formatted);
             }
         );
+    });
+
+    it('Compile with custom sass compiler options (try to compile with custom data)', () => {
+        const compiler = new Compiler();
+        const bundleContent = fs.readFileSync(bundle, 'utf8');
+        const extraOptions = {
+            data: bundleContent + '.extra-class { color: red; }',
+            outputStyle: 'compressed'
+        };
+        return compiler.compile(bundle, [], extraOptions).then(data => {
+            // compiled css
+            assert.equal('.dx-accordion{background-color:"Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif;\
+color:#337ab7}.dx-accordion .from-base{background-color:transparent;color:#337ab7}.extra-class{color:red}',
+            data.result.css.toString());
+        });
     });
 });
 
