@@ -55,9 +55,7 @@ exports.LocalStore = Class.inherit((function() {
     function prepareFields(fields) {
         each(fields || [], function(_, field) {
             let fieldSelector;
-            let intervalSelector;
             const dataField = field.dataField;
-            let groupInterval;
             const levels = field.levels;
             let dataSelector;
 
@@ -73,7 +71,7 @@ exports.LocalStore = Class.inherit((function() {
                 }
 
                 if(field.dataType === 'date') {
-                    intervalSelector = DATE_INTERVAL_SELECTORS[field.groupInterval];
+                    const intervalSelector = DATE_INTERVAL_SELECTORS[field.groupInterval];
                     const valueSelector = getDateValue(dataSelector);
 
                     fieldSelector = function(data) {
@@ -81,7 +79,7 @@ exports.LocalStore = Class.inherit((function() {
                         return intervalSelector ? intervalSelector(value) : value;
                     };
                 } else if(field.dataType === 'number') {
-                    groupInterval = isNumeric(field.groupInterval) && field.groupInterval > 0 && field.groupInterval;
+                    const groupInterval = isNumeric(field.groupInterval) && field.groupInterval > 0 && field.groupInterval;
 
                     fieldSelector = function(data) {
                         let value = dataSelector(data);
@@ -118,14 +116,12 @@ exports.LocalStore = Class.inherit((function() {
     function fillHierarchyItemIndexesCore(indexes, options, children, expandIndex, pathHash) {
         const dimension = options.dimensions[expandIndex];
         const expandedPathsHash = options.expandedPathsHash;
-        let dimensionValue;
-        let hierarchyItem;
 
         if(dimension) {
-            dimensionValue = dimension.selector(options.data);
+            const dimensionValue = dimension.selector(options.data);
             pathHash = pathHash !== undefined ? pathHash + PATH_DELIMETER + dimensionValue : dimensionValue + '';
 
-            hierarchyItem = addHierarchyItem(dimensionValue, children, pathHash, options.childrenHash);
+            const hierarchyItem = addHierarchyItem(dimensionValue, children, pathHash, options.childrenHash);
 
             indexes.push(hierarchyItem.index);
 
@@ -156,17 +152,15 @@ exports.LocalStore = Class.inherit((function() {
     function generateAggregationCells(data, cells, headers, options) {
         const cellSet = [];
         let x; let y;
-        let rowIndex;
-        let columnIndex;
 
         const rowIndexes = generateHierarchyItems(data, options, headers, 'rows');
         const columnIndexes = generateHierarchyItems(data, options, headers, 'columns');
 
         for(y = 0; y < rowIndexes.length; y++) {
-            rowIndex = rowIndexes[y];
+            const rowIndex = rowIndexes[y];
             cells[rowIndex] = cells[rowIndex] || [];
             for(x = 0; x < columnIndexes.length; x++) {
-                columnIndex = columnIndexes[x];
+                const columnIndex = columnIndexes[x];
                 cellSet.push(cells[rowIndex][columnIndex] = cells[rowIndex][columnIndex] || []);
             }
         }
@@ -300,12 +294,11 @@ exports.LocalStore = Class.inherit((function() {
         each(dimension, function(_, field) {
             const filterValues = field.filterValues || [];
             const groupName = field.groupName;
-            let filter;
 
             if(groupName && isNumeric(field.groupIndex)) {
                 return;
             }
-            filter = function(dataItem) {
+            const filter = function(dataItem) {
                 const value = field.levels ? getGroupValue(field.levels, dataItem) : field.selector(dataItem);
                 let result = false;
                 for(let i = 0; i < filterValues.length; i++) {
@@ -329,9 +322,8 @@ exports.LocalStore = Class.inherit((function() {
 
         if(expandedDimensions) {
             filters.push(function(dataItem) {
-                let expandValue;
                 for(let i = 0; i < path.length; i++) {
-                    expandValue = expandedDimensions[i].selector(dataItem);
+                    const expandValue = expandedDimensions[i].selector(dataItem);
                     if(toComparable(expandValue, true) !== toComparable(path[i], true)) {
                         return false;
                     }
@@ -358,13 +350,10 @@ exports.LocalStore = Class.inherit((function() {
             rowsHash: { length: 1 }
         };
         const values = [];
-        let aggregationCells;
-        let filter;
-        let data;
         const d = new Deferred();
         let i = 0;
 
-        filter = createFilter(options);
+        const filter = createFilter(options);
 
         function processData() {
             const t = new Date();
@@ -379,9 +368,9 @@ exports.LocalStore = Class.inherit((function() {
                         return;
                     }
                 }
-                data = items[i];
+                const data = items[i];
                 if(filter(data)) {
-                    aggregationCells = generateAggregationCells(data, values, headers, options);
+                    const aggregationCells = generateAggregationCells(data, values, headers, options);
                     aggregationStep(options.values, aggregationCells, data);
                 }
             }

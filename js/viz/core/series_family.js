@@ -37,14 +37,13 @@ function correctStackCoordinates(series, currentStacks, arg, stack, parameters, 
         const barWidth = series.getOptions().barWidth;
         let offset = getOffset(stackIndex, parameters);
         let width = parameters.width;
-        let extraParameters;
 
         if(stackIndex === -1) {
             return;
         }
 
         if(isDefined(barPadding) || isDefined(barWidth)) {
-            extraParameters = calculateParams(barsArea, currentStacks.length, 1 - barPadding, barWidth);
+            const extraParameters = calculateParams(barsArea, currentStacks.length, 1 - barPadding, barWidth);
             width = extraParameters.width;
             offset = getOffset(stackIndex, extraParameters);
         }
@@ -209,7 +208,6 @@ function adjustStackedSeriesValues() {
             let argument = point.argument.valueOf();
             let stacks = (value >= 0) ? stackKeepers.positive : stackKeepers.negative;
             const isNotBarSeries = singleSeries.type !== 'bar';
-            let currentStack;
 
             if(negativesAsZeroes && value < 0) {
                 stacks = stackKeepers.positive;
@@ -218,7 +216,7 @@ function adjustStackedSeriesValues() {
             }
 
             stacks[stackName] = stacks[stackName] || {};
-            currentStack = stacks[stackName];
+            const currentStack = stacks[stackName];
 
             if(currentStack[argument]) {
                 if(isNotBarSeries) point.correctValue(currentStack[argument]);
@@ -288,17 +286,14 @@ function updateStackedSeriesValues() {
             }
             let value = point.initialValue && point.initialValue.valueOf();
             const argument = point.argument.valueOf();
-            let updateValue;
-            let valueType;
-            let currentStack;
 
             if(that.fullStacked) {
                 value = ((value / (getAbsStackSumByArg(stack, stackName, argument))) || 0);
             }
 
-            updateValue = valueAxisTranslator.checkMinBarSize(value, minShownBusinessValue, point.value);
-            valueType = getValueType(updateValue);
-            currentStack = stackKeepers[valueType][stackName] = stackKeepers[valueType][stackName] || {};
+            const updateValue = valueAxisTranslator.checkMinBarSize(value, minShownBusinessValue, point.value);
+            const valueType = getValueType(updateValue);
+            const currentStack = stackKeepers[valueType][stackName] = stackKeepers[valueType][stackName] || {};
 
             if(currentStack[argument]) {
                 point.minValue = currentStack[argument];
@@ -367,10 +362,6 @@ function adjustBubbleSeriesDimensions() {
     let minPointSize = Infinity;
     let maxPointSize = -Infinity;
     let pointSize;
-    let bubbleArea;
-    let sizeProportion;
-    let sizeDispersion;
-    let areaDispersion;
 
     _each(series, function(_, seriesItem) {
         _each(seriesItem.getPoints(), function(_, point) {
@@ -378,16 +369,16 @@ function adjustBubbleSeriesDimensions() {
             minPointSize = minPointSize < point.size ? minPointSize : point.size;
         });
     });
-    sizeDispersion = maxPointSize - minPointSize;
-    areaDispersion = _abs(maxBubbleArea - minBubbleArea);
+    const sizeDispersion = maxPointSize - minPointSize;
+    const areaDispersion = _abs(maxBubbleArea - minBubbleArea);
 
     _each(series, function(_, seriesItem) {
         _each(seriesItem.getPoints(), function(_, point) {
             if(maxPointSize === minPointSize) {
                 pointSize = _round(equalBubbleSize);
             } else {
-                sizeProportion = _abs(point.size - minPointSize) / sizeDispersion;
-                bubbleArea = areaDispersion * sizeProportion + minBubbleArea;
+                const sizeProportion = _abs(point.size - minPointSize) / sizeDispersion;
+                const bubbleArea = areaDispersion * sizeProportion + minBubbleArea;
                 pointSize = _round(_math.sqrt(bubbleArea));
             }
             point.correctCoordinates(pointSize);

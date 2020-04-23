@@ -133,10 +133,9 @@ function map(array, callback) {
     let i = 0;
     const len = array.length;
     const result = [];
-    let value;
 
     while(i < len) {
-        value = callback(array[i], i);
+        const value = callback(array[i], i);
         if(value !== null) {
             result.push(value);
         }
@@ -264,10 +263,9 @@ extend(exports, {
 
     convertPolarToXY: function(centerCoords, startAngle, angle, radius) {
         const shiftAngle = 90;
-        let cosSin;
 
         angle = isDefined(angle) ? angle + startAngle - shiftAngle : 0;
-        cosSin = getCosAndSin(angle);
+        const cosSin = getCosAndSin(angle);
 
         return { x: _round(centerCoords.x + radius * cosSin.cos), y: _round(centerCoords.y + radius * cosSin.sin) };
     },
@@ -286,12 +284,10 @@ extend(exports, {
         const seriesOrder = [];
         let series;
         let i = 0;
-        let length;
-        let data;
 
         items = items || [];
-        for(length = items.length; i < length; i++) {
-            data = items[i];
+        for(let length = items.length; i < length; i++) {
+            const data = items[i];
             if(nameField in data) {
                 series = generatedSeries[data[nameField]];
                 if(!series) {
@@ -316,24 +312,21 @@ extend(exports, {
         const categoriesValue = map(categories, function(category) {
             return isDefined(category) ? category.valueOf() : null;
         });
-        let visibleCategories;
         let indexStartValue = categoriesValue.indexOf(startValue.valueOf());
         let indexEndValue = categoriesValue.indexOf(endValue.valueOf());
-        let swapBuf;
         let inverted = false;
-        let lastIdx;
 
         indexStartValue < 0 && (indexStartValue = 0);
         indexEndValue < 0 && (indexEndValue = categories.length - 1);
         if(indexEndValue < indexStartValue) {
-            swapBuf = indexEndValue;
+            const swapBuf = indexEndValue;
             indexEndValue = indexStartValue;
             indexStartValue = swapBuf;
             inverted = true;
         }
 
-        visibleCategories = categories.slice(indexStartValue, indexEndValue + 1);
-        lastIdx = visibleCategories.length - 1;
+        const visibleCategories = categories.slice(indexStartValue, indexEndValue + 1);
+        const lastIdx = visibleCategories.length - 1;
         return {
             categories: visibleCategories,
             start: visibleCategories[inverted ? lastIdx : 0],

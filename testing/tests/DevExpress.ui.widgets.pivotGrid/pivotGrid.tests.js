@@ -279,7 +279,6 @@ QUnit.module('dxPivotGrid', {
 
     QUnit.test('Loading DataSource', function(assert) {
         const onContentReadyCallback = sinon.stub();
-        let $noDataElement;
 
         // act
         const pivotGrid = createPivotGrid({
@@ -289,7 +288,7 @@ QUnit.module('dxPivotGrid', {
             onContentReady: onContentReadyCallback
         }, assert);
 
-        $noDataElement = $(pivotGrid.$element().find('.dx-pivotgrid-nodata'));
+        const $noDataElement = $(pivotGrid.$element().find('.dx-pivotgrid-nodata'));
 
         assert.equal($noDataElement.length, 1);
         assert.ok(!$noDataElement.is(':visible'));
@@ -1624,7 +1623,6 @@ QUnit.module('dxPivotGrid', {
 
     QUnit.test('Context menu when no data', function(assert) {
         const contextMenuArgs = [];
-        let $dataArea;
 
         createPivotGrid({
             onContextMenuPreparing: function(e) {
@@ -1633,7 +1631,7 @@ QUnit.module('dxPivotGrid', {
         }, assert);
 
         this.clock.tick();
-        $dataArea = $('#pivotGrid').find('.dx-pivotgrid-area-data');
+        const $dataArea = $('#pivotGrid').find('.dx-pivotgrid-area-data');
         // act
         $($dataArea.children().eq(0)).trigger('dxcontextmenu');
 
@@ -5152,7 +5150,6 @@ QUnit.module('headersArea', {
         const headersArea = createHeadersArea(null, false, {
             encodeHtml: true
         });
-        let $cells;
         const testElement = $('#pivotArea');
 
         // act
@@ -5163,7 +5160,7 @@ QUnit.module('headersArea', {
         ]);
 
         // assert
-        $cells = testElement.find('td');
+        const $cells = testElement.find('td');
         assert.equal(testElement.find('b').length, 0, 'bold tegs count');
         assert.equal($cells.eq(0).children().eq(1).text(), '<b>A</b>', 'cell 0 text');
         assert.equal(testElement.find('h1').length, 0, 'header 1 tegs count');
@@ -5734,7 +5731,6 @@ QUnit.module('Data area', () => {
             encodeHtml: true
         });
         const testElement = $('#pivotArea');
-        let $cells;
         const data = [
             [
                 { columnType: 'D', rowType: 'D', text: '<b>1</b>' },
@@ -5754,7 +5750,7 @@ QUnit.module('Data area', () => {
         dataArea.render(testElement, data);
 
         // assert
-        $cells = testElement.find('td');
+        const $cells = testElement.find('td');
         assert.equal(testElement.find('b').length, 0, 'bold tegs count');
         assert.equal($cells.eq(0).text(), '<b>1</b>', 'cell 0 text');
         assert.equal(testElement.find('h1').length, 0, 'header 1 tegs count');

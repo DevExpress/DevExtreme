@@ -512,9 +512,7 @@ QUnit.module('ColumnsSeparator', () => {
 
             NAME: 'dxDataGrid'
         };
-        let tablePosition;
         const $container = $('#container');
-        let separator;
 
         // act
         $('<div/>')
@@ -525,11 +523,11 @@ QUnit.module('ColumnsSeparator', () => {
             .addClass('dx-datagrid-headers')
             .appendTo($container);
 
-        tablePosition = new columnResizingReordering.TablePositionViewController(component);
+        const tablePosition = new columnResizingReordering.TablePositionViewController(component);
         component._controllers.tablePosition = tablePosition;
         tablePosition.init();
 
-        separator = new columnResizingReordering.ColumnsSeparatorView(component);
+        const separator = new columnResizingReordering.ColumnsSeparatorView(component);
         separator.init();
         separator.render($container);
 
@@ -600,7 +598,6 @@ QUnit.module('ColumnsSeparator', () => {
 
             NAME: 'dxDataGrid'
         };
-        let tablePosition;
         const $container = $('#container');
 
         // act
@@ -608,7 +605,7 @@ QUnit.module('ColumnsSeparator', () => {
             .addClass('dx-datagrid-headers')
             .appendTo($container);
 
-        tablePosition = new columnResizingReordering.TablePositionViewController(component);
+        const tablePosition = new columnResizingReordering.TablePositionViewController(component);
         component._controllers.tablePosition = tablePosition;
         tablePosition.init();
 
@@ -665,7 +662,6 @@ QUnit.module('ColumnsSeparator', () => {
 
             NAME: 'dxDataGrid'
         };
-        let tablePosition;
         const $container = $('#container');
 
         // act
@@ -673,7 +669,7 @@ QUnit.module('ColumnsSeparator', () => {
             .addClass('dx-datagrid-headers')
             .appendTo($container);
 
-        tablePosition = new columnResizingReordering.TablePositionViewController(component);
+        const tablePosition = new columnResizingReordering.TablePositionViewController(component);
         component._controllers.tablePosition = tablePosition;
         tablePosition.init();
 
@@ -3483,14 +3479,13 @@ QUnit.module('Headers reordering', {
         // arrange
         const testElement = $('#container');
         let options;
-        let draggingHeader;
         const controller = this.createDraggingHeaderViewController();
 
         // act
         controller.dock = function(params) {
             options = params;
         };
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
         draggingHeader.init();
         draggingHeader.render(testElement);
 
@@ -3531,11 +3526,10 @@ QUnit.module('Headers reordering', {
     QUnit.test('Check dragging header visibility after loading', function(assert) {
         // arrange
         const testElement = $('#container');
-        let draggingHeader;
         const controller = this.createDraggingHeaderViewController();
 
         controller.dock = function() { };
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
         draggingHeader.init();
         draggingHeader.render(testElement);
 
@@ -3579,7 +3573,6 @@ QUnit.module('Headers reordering', {
         // arrange
         const testElement = $('#container');
         let options;
-        let draggingHeader;
         const controller = this.createDraggingHeaderViewController();
 
         testElement.css('direction', 'rtl');
@@ -3590,7 +3583,7 @@ QUnit.module('Headers reordering', {
         controller.dock = function(params) {
             options = params;
         };
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
         draggingHeader.init();
         draggingHeader.render(testElement);
 
@@ -3634,7 +3627,6 @@ QUnit.module('Headers reordering', {
         // arrange
         const testElement = $('#container');
         let dropParameters;
-        let draggingHeader;
         const controller = this.createDraggingHeaderViewController();
 
         // act
@@ -3653,7 +3645,7 @@ QUnit.module('Headers reordering', {
         controller._rowsView.setRowsOpacity = function() { };
         controller._columnHeadersView.element = function() { return $('<div />'); };
 
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
         draggingHeader.init();
 
         this.component._views.columnsSeparatorView.render(testElement);
@@ -3703,7 +3695,6 @@ QUnit.module('Headers reordering', {
         // arrange
         const testElement = $('#container');
         let dropParameters;
-        let draggingHeader;
         const controller = this.createDraggingHeaderViewController();
 
         testElement.css('direction', 'rtl');
@@ -3726,7 +3717,7 @@ QUnit.module('Headers reordering', {
         controller._rowsView.setRowsOpacity = function() { };
         controller._columnHeadersView.element = function() { return $('<div />'); };
 
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
         draggingHeader.init();
 
         this.component._views.columnsSeparatorView.render(testElement);
@@ -3780,7 +3771,6 @@ QUnit.module('Headers reordering', {
         // arrange
         const testElement = $('#container');
         let dropParameters;
-        let draggingHeader;
         const controller = this.createDraggingHeaderViewController();
 
         controller.drop = function(parameters) {
@@ -3799,7 +3789,7 @@ QUnit.module('Headers reordering', {
         controller._rowsView.setRowsOpacity = function() { };
         controller._columnHeadersView.element = function() { return $('<div />'); };
 
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
 
         draggingHeader.init();
 

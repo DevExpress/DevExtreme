@@ -133,11 +133,10 @@ var ExcelCreator = Class.inherit({
         return result;
     },
     _tryConvertToExcelNumberFormat: function(format, dataType) {
-        let currency;
         const newFormat = this._formatObjectConverter(format, dataType);
 
         format = newFormat.format;
-        currency = newFormat.currency;
+        const currency = newFormat.currency;
         dataType = newFormat.dataType;
 
         if(isDefined(format) && dataType === 'date') {
@@ -178,7 +177,9 @@ var ExcelCreator = Class.inherit({
 
     _prepareValue: function(rowIndex, cellIndex) {
         const dataProvider = this._dataProvider;
-        let { value, cellSourceData } = dataProvider.getCellData(rowIndex, cellIndex) || {};
+        const cellData = dataProvider.getCellData(rowIndex, cellIndex) || {};
+        let { value } = cellData;
+        const { cellSourceData } = cellData;
         let sourceValue;
         let type = this._getDataType(dataProvider.getCellType(rowIndex, cellIndex));
 
@@ -499,7 +500,6 @@ var ExcelCreator = Class.inherit({
         let rowIndex;
         let cellData;
         let xmlCells;
-        let rightBottomCellRef;
         let xmlRows = [];
         const rowsLength = this._cellsArray.length;
         let cellsLength;
@@ -563,7 +563,7 @@ var ExcelCreator = Class.inherit({
         xmlResult.push(xmlRows.join(''));
         xmlRows = [];
 
-        rightBottomCellRef = this._convertToExcelCellRef(this._maxRowIndex, this._maxColumnIndex);
+        const rightBottomCellRef = this._convertToExcelCellRef(this._maxRowIndex, this._maxColumnIndex);
         xmlResult.push(
             '</sheetData>' +
             this._getAutoFilterXML(rightBottomCellRef) +
@@ -587,7 +587,6 @@ var ExcelCreator = Class.inherit({
         const columnsLength = this._dataProvider.getColumns().length;
         const usedArea = [];
         const mergeArray = [];
-        let mergeArrayLength;
         let mergeIndex;
         let mergeXML = '';
 
@@ -613,7 +612,7 @@ var ExcelCreator = Class.inherit({
             }
         }
 
-        mergeArrayLength = mergeArray.length;
+        const mergeArrayLength = mergeArray.length;
         for(mergeIndex = 0; mergeIndex < mergeArrayLength; mergeIndex++) {
             mergeXML = mergeXML + this._getXMLTag('mergeCell', [{ name: 'ref', value: mergeArray[mergeIndex].start + ':' + mergeArray[mergeIndex].end }]);
         }
@@ -623,12 +622,11 @@ var ExcelCreator = Class.inherit({
 
     _generateCommonXML: function() {
         const relsFileContent = XML_TAG + this._createXMLRelationships(this._createXMLRelationship(1, 'officeDocument', 'xl/' + WORKBOOK_FILE_NAME));
-        let xmlRelationships;
         const folder = this._zip.folder(XL_FOLDER_NAME);
         let relsXML = XML_TAG;
 
         this._zip.folder('_' + RELATIONSHIP_PART_NAME).file('.' + RELATIONSHIP_PART_NAME, relsFileContent);
-        xmlRelationships = this._createXMLRelationship(1, 'worksheet', 'worksheets/' + WORKSHEET_FILE_NAME) + this._createXMLRelationship(2, 'styles', STYLE_FILE_NAME) + this._createXMLRelationship(3, 'sharedStrings', SHAREDSTRING_FILE_NAME);
+        const xmlRelationships = this._createXMLRelationship(1, 'worksheet', 'worksheets/' + WORKSHEET_FILE_NAME) + this._createXMLRelationship(2, 'styles', STYLE_FILE_NAME) + this._createXMLRelationship(3, 'sharedStrings', SHAREDSTRING_FILE_NAME);
         relsXML = relsXML + this._createXMLRelationships(xmlRelationships);
 
         folder.folder('_' + RELATIONSHIP_PART_NAME).file(WORKBOOK_FILE_NAME + '.rels', relsXML);

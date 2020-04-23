@@ -225,9 +225,8 @@ const overlappingEnvironment = $.extend({}, environment, {
     QUnit.module('Pie dxChart', environment);
 
     QUnit.test('dxChart creation', function(assert) {
-        let chart;
 
-        chart = createPieChart.call(this, {});
+        const chart = createPieChart.call(this, {});
 
         assert.ok(chart);
         assert.strictEqual(commons.rendererModule.Renderer.firstCall.args[0]['cssClass'], 'dxc dxc-chart', 'root class');
@@ -1093,7 +1092,6 @@ const overlappingEnvironment = $.extend({}, environment, {
     QUnit.test('Create legend with two series, different arguments', function(assert) {
         chartMocks.seriesMockData.series.push(this.stubSeries);
         const points = this.stubPoints;
-        let i;
         const points2 = [
             new MockPoint({ argument: 'First', value: 10, visible: true }),
             new MockPoint({ argument: 'Fourth', value: 11, visible: true }),
@@ -1114,7 +1112,7 @@ const overlappingEnvironment = $.extend({}, environment, {
         const updateArgs = commons.getLegendStub().stub('update').lastCall.args;
 
         assert.equal(updateArgs[0].length, 5, 'update args');
-        for(i = 0; i < updateArgs[0].length; i++) {
+        for(let i = 0; i < updateArgs[0].length; i++) {
             assert.strictEqual(updateArgs[0][i].text, points[i].argument, 'Legend item name for ' + i.toString());
             assert.deepEqual(updateArgs[0][i].states, { hover: undefined, selection: undefined, normal: {} }, 'Legend stated for ' + i.toString());
             assert.deepEqual(updateArgs[0][i].states, points[i].getLegendStyles(), 'Legend states for ' + i.toString());
@@ -1134,7 +1132,6 @@ const overlappingEnvironment = $.extend({}, environment, {
         });
         chartMocks.seriesMockData.series.push(stubSeries);
         const points = stubPoints;
-        let i;
         const points2 = [
             new MockPoint({ argument: 'First', value: 10, visible: true }),
             new MockPoint({ argument: 'Fourth', value: 11, visible: true }),
@@ -1157,7 +1154,7 @@ const overlappingEnvironment = $.extend({}, environment, {
         const updateArgs = commons.getLegendStub().stub('update').lastCall.args;
 
         assert.equal(updateArgs[0].length, 7, 'update args');
-        for(i = 0; i < updateArgs[0].length; i++) {
+        for(let i = 0; i < updateArgs[0].length; i++) {
             assert.strictEqual(updateArgs[0][i].text, points[i].argument, 'Legend item name for ' + i.toString());
             assert.deepEqual(updateArgs[0][i].states, { hover: undefined, selection: undefined, normal: {} }, 'Legend states for ' + i.toString());
             assert.deepEqual(updateArgs[0][i].states, points[i].getLegendStyles(), 'Legend states for ' + i.toString());

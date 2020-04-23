@@ -20,14 +20,14 @@ const emptyHeader = () => { return ''; };
 describe('Migration LessTemplateLoader', () => {
 
     it('compileLess', () => {
-        let config = {
+        const config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
             outColorScheme: 'my-custom',
             makeSwatch: true,
         };
 
-        let less = `
+        const less = `
         div { color: @base-bg; }
         div { color: @base-text-color; }
         .dx-datagrid {
@@ -37,13 +37,13 @@ describe('Migration LessTemplateLoader', () => {
             color: @treelist-base-color;
         }`;
 
-        let metadataVariables = {};
+        const metadataVariables = {};
 
         metadata.forEach(metaItem => {
             metadataVariables[metaItem.Key.replace('@', '')] = metaItem.Key;
         });
 
-        let lessTemplateLoader = new LessTemplateLoader(config);
+        const lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.compileLess(less, {
             'base-bg': '#fff',

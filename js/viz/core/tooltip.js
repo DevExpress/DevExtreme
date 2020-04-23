@@ -36,7 +36,6 @@ function getSpecialFormatOptions(options, specialFormat) {
 function Tooltip(params) {
     const that = this;
     let renderer;
-    let root;
 
     that._eventTrigger = params.eventTrigger;
     that._widgetRoot = params.widgetRoot;
@@ -46,7 +45,7 @@ function Tooltip(params) {
         .addClass(params.cssClass);
 
     that._renderer = renderer = new rendererModule.Renderer({ pathModified: params.pathModified, container: that._wrapper[0] });
-    root = renderer.root;
+    const root = renderer.root;
     root.attr({ 'pointer-events': 'none' });
 
     // svg text

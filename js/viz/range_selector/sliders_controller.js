@@ -28,10 +28,9 @@ function isGreater(a, b) {
 function selectClosestValue(target, values) {
     let start = 0;
     let end = values ? values.length - 1 : 0;
-    let middle;
     let val = target;
     while(end - start > 1) {
-        middle = (start + end) >> 1;
+        const middle = (start + end) >> 1;
         val = values[middle];
         if(val === target) {
             return target;
@@ -167,11 +166,10 @@ SlidersController.prototype = {
 
     _applyTotalPosition: function(isAnimated) {
         const sliders = this._sliders;
-        let areOverlapped;
         isAnimated = this._animationEnabled && isAnimated;
         sliders[0].applyPosition(isAnimated);
         sliders[1].applyPosition(isAnimated);
-        areOverlapped = sliders[0].getCloudBorder() > sliders[1].getCloudBorder();
+        const areOverlapped = sliders[0].getCloudBorder() > sliders[1].getCloudBorder();
         sliders[0].setOverlapped(areOverlapped);
         sliders[1].setOverlapped(areOverlapped);
         this._applyAreaTrackersPosition();
@@ -192,12 +190,11 @@ SlidersController.prototype = {
         const verticalRange = that._verticalRange;
         const pos1 = that._sliders[0].getPosition();
         const pos2 = that._sliders[1].getPosition();
-        let screenRange;
         let points;
         if(that._isCompactMode) {
             points = [pos1 + Math.ceil(that._shutterOffset), (verticalRange[0] + verticalRange[1]) / 2, pos2 - Math.floor(that._shutterOffset), (verticalRange[0] + verticalRange[1]) / 2];
         } else {
-            screenRange = that._params.axis.getVisibleArea();
+            const screenRange = that._params.axis.getVisibleArea();
             points = [
                 buildRectPoints(screenRange[0], verticalRange[0], Math.max(pos1 - Math.floor(that._shutterOffset), screenRange[0]), verticalRange[1]),
                 buildRectPoints(screenRange[1], verticalRange[0], Math.min(pos2 + Math.ceil(that._shutterOffset), screenRange[1]), verticalRange[1])
@@ -291,7 +288,6 @@ SlidersController.prototype = {
         const interval = sliders[1].getPosition() - sliders[0].getPosition();
         let startPosition = screenPosition - interval / 2;
         let endPosition = screenPosition + interval / 2;
-        let startValue;
         if(startPosition < translator.getScreenRange()[0]) {
             startPosition = translator.getScreenRange()[0];
             endPosition = startPosition + interval;
@@ -302,7 +298,7 @@ SlidersController.prototype = {
         }
 
         // Check for "minRange" and "maxRange" is not performed because it was not performed in the previous code, though I find it strange.
-        startValue = selectClosestValue(translator.from(startPosition, -1), that._values);
+        const startValue = selectClosestValue(translator.from(startPosition, -1), that._values);
         sliders[0].setDisplayValue(startValue);
         sliders[1].setDisplayValue(selectClosestValue(translator.from(translator.to(startValue, -1) + interval, +1), that._values));
         sliders[0]._position = startPosition;
@@ -324,7 +320,6 @@ SlidersController.prototype = {
         let thresholdPosition;
         const positions = [];
         const values = [];
-        let handler;
         values[index] = translator.from(firstPosition, dir);
         values[1 - index] = translator.from(secondPosition, -dir);
         positions[1 - index] = secondPosition;
@@ -365,7 +360,7 @@ SlidersController.prototype = {
             that._processSelectionChanged(e);
         }
 
-        handler = that.beginSliderMoving(1 - index, secondPosition);
+        const handler = that.beginSliderMoving(1 - index, secondPosition);
         sliders[1 - index]._sliderGroup.stopAnimation();
         that._shutter.stopAnimation();
         handler(secondPosition);
@@ -395,10 +390,6 @@ SlidersController.prototype = {
 
         function move(position, e) {
             let isValid;
-            let temp;
-            let pos;
-            let slider;
-            let value;
 
             if(position !== currentPosition) {
                 if(compareMin(position + swapOffset, staticPosition)) {
@@ -411,7 +402,7 @@ SlidersController.prototype = {
                         that._changeMovingSlider(index);
                         index = 1 - index;
                         dir = -dir;
-                        temp = compareMin;
+                        const temp = compareMin;
                         compareMin = compareMax;
                         compareMax = temp;
                         moveOffset = -dir * Math.abs(moveOffset);
@@ -420,9 +411,9 @@ SlidersController.prototype = {
                 }
                 if(compareMax(position + moveOffset, staticPosition)) {
                     isValid = true;
-                    slider = sliders[index];
-                    value = sliders[1 - index].getValue();
-                    pos = Math.max(Math.min(position + moveOffset, maxPosition), minPosition);
+                    const slider = sliders[index];
+                    const value = sliders[1 - index].getValue();
+                    const pos = Math.max(Math.min(position + moveOffset, maxPosition), minPosition);
                     // TODO: Write it as single operation (isValid = ... && ... && ...) when code is stable.
                     // Check - if moving slider is closer to static slider than a span of a single category.
                     if(isValid && translator.isValueProlonged) {

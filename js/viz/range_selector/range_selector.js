@@ -77,16 +77,12 @@ function calculateScaleLabelHalfWidth(renderer, value, scaleOptions, tickInterva
 }
 
 function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions, tickIntervalsInfo) {
-    let leftMarkerHeight;
     let leftScaleLabelWidth = 0;
     let rightScaleLabelWidth = 0;
-    let rightMarkerHeight;
     let placeholderWidthLeft;
     let placeholderWidthRight;
     let placeholderHeight;
     const ticks = scale.type === 'semidiscrete' ? scale.customTicks : tickIntervalsInfo.ticks;
-    let startTickValue;
-    let endTickValue;
 
     indentOptions = indentOptions || {};
 
@@ -96,16 +92,16 @@ function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions, t
     placeholderHeight = sliderMarkerOptions.placeholderHeight;
 
     if(sliderMarkerOptions.visible) {
-        leftMarkerHeight = calculateMarkerHeight(renderer, scale.startValue, sliderMarkerOptions);
-        rightMarkerHeight = calculateMarkerHeight(renderer, scale.endValue, sliderMarkerOptions);
+        const leftMarkerHeight = calculateMarkerHeight(renderer, scale.startValue, sliderMarkerOptions);
+        const rightMarkerHeight = calculateMarkerHeight(renderer, scale.endValue, sliderMarkerOptions);
         if(placeholderHeight === undefined) {
             placeholderHeight = _max(leftMarkerHeight, rightMarkerHeight);
         }
     }
 
     if(scale.label.visible) {
-        startTickValue = _isDefined(scale.startValue) ? ticks[0] : undefined;
-        endTickValue = _isDefined(scale.endValue) ? ticks[ticks.length - 1] : undefined;
+        const startTickValue = _isDefined(scale.startValue) ? ticks[0] : undefined;
+        const endTickValue = _isDefined(scale.endValue) ? ticks[ticks.length - 1] : undefined;
         leftScaleLabelWidth = calculateScaleLabelHalfWidth(renderer, startTickValue, scale, tickIntervalsInfo);
         rightScaleLabelWidth = calculateScaleLabelHalfWidth(renderer, endTickValue, scale, tickIntervalsInfo);
     }
@@ -143,13 +139,11 @@ function updateTranslatorRangeInterval(translatorRange, scaleOptions) {
 }
 
 function checkLogarithmicOptions(options, defaultLogarithmBase, incidentOccurred) {
-    let logarithmBase;
-
     if(!options) {
         return;
     }
 
-    logarithmBase = options.logarithmBase;
+    const logarithmBase = options.logarithmBase;
     if(options.type === LOGARITHMIC && logarithmBase <= 0 || (logarithmBase && !_isNumber(logarithmBase))) {
         options.logarithmBase = defaultLogarithmBase;
         incidentOccurred('E2104');
@@ -242,14 +236,12 @@ function updateTickIntervals(scaleOptions, screenDelta, incidentOccurred, range)
     const min = _isDefined(range.minVisible) ? range.minVisible : range.min;
     const max = _isDefined(range.maxVisible) ? range.maxVisible : range.max;
     const categoriesInfo = scaleOptions._categoriesInfo;
-    let ticksInfo;
-    let length;
     const bounds = {};
 
     if(scaleOptions.type === SEMIDISCRETE) {
         result = calculateTickIntervalsForSemidiscreteScale(scaleOptions, min, max, screenDelta);
     } else {
-        ticksInfo = tickGeneratorModule.tickGenerator({
+        const ticksInfo = tickGeneratorModule.tickGenerator({
             axisType: scaleOptions.type,
             dataType: scaleOptions.valueType,
             logBase: scaleOptions.logarithmBase,
@@ -277,7 +269,7 @@ function updateTickIntervals(scaleOptions, screenDelta, incidentOccurred, range)
             scaleOptions.minorTickCount
         );
 
-        length = ticksInfo.ticks.length;
+        const length = ticksInfo.ticks.length;
         bounds.minVisible = ticksInfo.ticks[0] < min ? ticksInfo.ticks[0] : min;
         bounds.maxVisible = ticksInfo.ticks[length - 1] > max ? ticksInfo.ticks[length - 1] : max;
 
@@ -301,12 +293,11 @@ function calculateTranslatorRange(seriesDataSource, scaleOptions) {
     let categoriesInfo;
     // TODO: There should be something like "seriesDataSource.getArgumentRange()"
     let translatorRange = seriesDataSource ? seriesDataSource.getBoundRange().arg : new rangeModule.Range();
-    let rangeForCategories;
     const isDate = scaleOptions.valueType === 'datetime';
     const minRange = scaleOptions.minRange;
 
     if(scaleOptions.type === DISCRETE) {
-        rangeForCategories = new rangeModule.Range({
+        const rangeForCategories = new rangeModule.Range({
             minVisible: startValue,
             maxVisible: endValue
         });
@@ -387,14 +378,12 @@ function getDateMarkerVisibilityChecker(screenDelta) {
 }
 
 function updateScaleOptions(scaleOptions, seriesDataSource, translatorRange, tickIntervalsInfo, checkDateMarkerVisibility) {
-    let bounds;
     let isEmptyInterval;
     const categoriesInfo = scaleOptions._categoriesInfo;
-    let intervals;
     const isDateTime = scaleOptions.valueType === DATETIME;
 
     if(seriesDataSource && !seriesDataSource.isEmpty() && !translatorRange.isEmpty()) {
-        bounds = tickIntervalsInfo.bounds;
+        const bounds = tickIntervalsInfo.bounds;
         translatorRange.addRange(bounds);
         scaleOptions.startValue = translatorRange.invert ? bounds.maxVisible : bounds.minVisible;
         scaleOptions.endValue = translatorRange.invert ? bounds.minVisible : bounds.maxVisible;
@@ -430,7 +419,7 @@ function updateScaleOptions(scaleOptions, seriesDataSource, translatorRange, tic
     }
 
     if(scaleOptions.type === SEMIDISCRETE) {
-        intervals = getIntervalCustomTicks(scaleOptions);
+        const intervals = getIntervalCustomTicks(scaleOptions);
         scaleOptions.customMinorTicks = intervals.altIntervals;
         scaleOptions.customTicks = intervals.intervals;
         scaleOptions.customBoundTicks = [scaleOptions.customTicks[0]];
@@ -440,7 +429,6 @@ function updateScaleOptions(scaleOptions, seriesDataSource, translatorRange, tic
 function prepareScaleOptions(scaleOption, calculatedValueType, incidentOccurred, containerColor) {
     let parsedValue = 0;
     let valueType = parseUtils.correctValueType(_normalizeEnum(scaleOption.valueType));
-    let parser;
     const validateStartEndValues = function(field, parser) {
         const messageToIncidentOccurred = field === START_VALUE ? 'start' : 'end';
 
@@ -470,7 +458,7 @@ function prepareScaleOptions(scaleOption, calculatedValueType, incidentOccurred,
 
     scaleOption.valueType = valueType;
     scaleOption.dataType = valueType;
-    parser = parseUtils.getParser(valueType);
+    const parser = parseUtils.getParser(valueType);
 
     validateStartEndValues(START_VALUE, parser);
     validateStartEndValues(END_VALUE, parser);
@@ -579,11 +567,6 @@ const dxRangeSelector = baseWidgetModule.inherit({
         const that = this;
         const renderer = that._renderer;
         const root = renderer.root;
-        let rangeViewGroup;
-        let slidersGroup;
-        let scaleGroup;
-        let scaleBreaksGroup;
-        let trackersGroup;
 
         // TODO: Move it to the SlidersEventManager
         root.css({
@@ -593,11 +576,11 @@ const dxRangeSelector = baseWidgetModule.inherit({
         // RangeContainer
         that._clipRect = renderer.clipRect(); // TODO: Try to remove it
         // TODO: Groups could be created by the corresponding components
-        rangeViewGroup = renderer.g().attr({ 'class': 'dxrs-view' }).append(root);
-        slidersGroup = renderer.g().attr({ 'class': 'dxrs-slidersContainer', 'clip-path': that._clipRect.id }).append(root);
-        scaleGroup = renderer.g().attr({ 'class': 'dxrs-scale', 'clip-path': that._clipRect.id }).append(root);
-        scaleBreaksGroup = renderer.g().attr({ 'class': 'dxrs-scale-breaks' }).append(root);
-        trackersGroup = renderer.g().attr({ 'class': 'dxrs-trackers' }).append(root);
+        const rangeViewGroup = renderer.g().attr({ 'class': 'dxrs-view' }).append(root);
+        const slidersGroup = renderer.g().attr({ 'class': 'dxrs-slidersContainer', 'clip-path': that._clipRect.id }).append(root);
+        const scaleGroup = renderer.g().attr({ 'class': 'dxrs-scale', 'clip-path': that._clipRect.id }).append(root);
+        const scaleBreaksGroup = renderer.g().attr({ 'class': 'dxrs-scale-breaks' }).append(root);
+        const trackersGroup = renderer.g().attr({ 'class': 'dxrs-trackers' }).append(root);
 
         that._axis = new AxisWrapper({
             renderer: renderer,
@@ -836,9 +819,6 @@ const dxRangeSelector = baseWidgetModule.inherit({
         seriesDataSource && that._completeSeriesDataSourceCreation(scaleOptions, seriesDataSource);
         const argTranslatorRange = calculateTranslatorRange(seriesDataSource, scaleOptions);
         const tickIntervalsInfo = updateTickIntervals(scaleOptions, canvas.width, that._incidentOccurred, argTranslatorRange);
-        let sliderMarkerOptions;
-        let indents;
-        let rangeContainerCanvas;
         const chartThemeManager = seriesDataSource && seriesDataSource.isShowChart() && seriesDataSource.getThemeManager();
 
         if(chartThemeManager) {
@@ -848,9 +828,9 @@ const dxRangeSelector = baseWidgetModule.inherit({
 
         updateScaleOptions(scaleOptions, seriesDataSource, argTranslatorRange, tickIntervalsInfo, getDateMarkerVisibilityChecker(canvas.width));
         updateTranslatorRangeInterval(argTranslatorRange, scaleOptions);
-        sliderMarkerOptions = that._prepareSliderMarkersOptions(scaleOptions, canvas.width, tickIntervalsInfo, argTranslatorRange);
-        indents = calculateIndents(that._renderer, scaleOptions, sliderMarkerOptions, that.option('indent'), tickIntervalsInfo);
-        rangeContainerCanvas = {
+        const sliderMarkerOptions = that._prepareSliderMarkersOptions(scaleOptions, canvas.width, tickIntervalsInfo, argTranslatorRange);
+        const indents = calculateIndents(that._renderer, scaleOptions, sliderMarkerOptions, that.option('indent'), tickIntervalsInfo);
+        const rangeContainerCanvas = {
             left: canvas.left + indents.left,
             top: canvas.top + indents.top,
             width: canvas.left + indents.left + _max(canvas.width - indents.left - indents.right, 1),
@@ -983,12 +963,11 @@ const dxRangeSelector = baseWidgetModule.inherit({
     },
 
     setValue: function(value, e) {
-        let current;
         const visualRange = parseValue(value);
         if(!this._isUpdating && value) {
             this._validateRange(visualRange.startValue, visualRange.endValue);
             // TODO: Move the check inside the SlidersController
-            current = this._slidersController.getSelectedRange();
+            const current = this._slidersController.getSelectedRange();
             if(!current || current.startValue !== visualRange.startValue || current.endValue !== visualRange.endValue) {
                 this._slidersController.setSelectedRange(parseValue(value), e);
             }

@@ -64,7 +64,7 @@ class ariaAccessibilityTestHelper {
     _checkItemAttributes(options, index, defaultValue) {
         const { attributes, focusedItemIndex, role, tabindex } = options;
 
-        let itemAttributes = {};
+        const itemAttributes = {};
         attributes && attributes.forEach((attrName) => {
             itemAttributes[attrName] = defaultValue;
         });
@@ -95,7 +95,7 @@ class ariaAccessibilityTestHelper {
         const $item = this.getItems().eq(index);
         const node = this.widget._getNode($item);
 
-        let nodeAttributes = {
+        const nodeAttributes = {
             role: 'treeitem',
             'data-item-id': node.id.toString(),
             'aria-level': $item.parents('.dx-treeview-node').length.toString(),

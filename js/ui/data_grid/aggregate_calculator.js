@@ -19,14 +19,12 @@ function depthFirstSearch(i, depth, root, callback) {
 
 // NOTE: https://github.com/jquery/jquery/blame/master/src/core.js#L392
 function map(array, callback) {
-    let i; let result;
-
     if('map' in array) {
         return array.map(callback);
     }
 
-    result = new Array(array.length);
-    for(i in array) {
+    const result = new Array(array.length);
+    for(const i in array) {
         result[i] = callback(array[i], i);
     }
 

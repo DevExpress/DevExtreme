@@ -599,18 +599,15 @@ function rectAttr(attrs) {
 
 function textAttr(attrs) {
     const that = this;
-    let settings;
     let isResetRequired;
-    let wasStroked;
-    let isStroked;
 
     if(!isObjectArgument(attrs)) {
         return baseAttr(that, attrs);
     }
 
     attrs = extend({}, attrs);
-    settings = that._settings;
-    wasStroked = isDefined(settings[KEY_STROKE]) && isDefined(settings[KEY_STROKE_WIDTH]);
+    const settings = that._settings;
+    const wasStroked = isDefined(settings[KEY_STROKE]) && isDefined(settings[KEY_STROKE_WIDTH]);
 
     if(attrs[KEY_TEXT] !== undefined) {
         settings[KEY_TEXT] = attrs[KEY_TEXT];
@@ -630,7 +627,7 @@ function textAttr(attrs) {
         delete attrs[KEY_STROKE_OPACITY];
     }
 
-    isStroked = isDefined(settings[KEY_STROKE]) && isDefined(settings[KEY_STROKE_WIDTH]);
+    const isStroked = isDefined(settings[KEY_STROKE]) && isDefined(settings[KEY_STROKE_WIDTH]);
     baseAttr(that, attrs);
     isResetRequired = isResetRequired || (isStroked !== wasStroked && settings[KEY_TEXT]);
     if(isResetRequired) {
@@ -771,13 +768,11 @@ function applyEllipsis(maxWidth) {
     let j;
     let jj;
     let text;
-    let ellipsis;
-    let ellipsisWidth;
 
     restoreText.call(that);
 
-    ellipsis = that.renderer.text(ELLIPSIS).attr(that._styles).append(that.renderer.root);
-    ellipsisWidth = ellipsis.getBBox().width;
+    const ellipsis = that.renderer.text(ELLIPSIS).attr(that._styles).append(that.renderer.root);
+    const ellipsisWidth = ellipsis.getBBox().width;
     if(that._getElementBBox().width > maxWidth) {
         if(maxWidth - ellipsisWidth < 0) {
             maxWidth = 0;
@@ -838,15 +833,13 @@ function setMaxSize(maxWidth, maxHeight, options = {}) {
     let lines = [];
     let textChanged = false;
     let textIsEmpty = false;
-    let ellipsis;
-    let ellipsisWidth;
     let ellipsisMaxWidth = maxWidth;
 
     restoreText.call(that);
     const restoreTitleElement = detachAndStoreTitleElements(this.element);
 
-    ellipsis = that.renderer.text(ELLIPSIS).attr(that._styles).append(that.renderer.root);
-    ellipsisWidth = ellipsis.getBBox().width;
+    const ellipsis = that.renderer.text(ELLIPSIS).attr(that._styles).append(that.renderer.root);
+    const ellipsisWidth = ellipsis.getBBox().width;
 
     const { width, height } = that._getElementBBox();
 
@@ -1548,8 +1541,6 @@ SvgElement.prototype = {
 
     _applyTransformation() {
         const tr = this._settings;
-        let scaleXDefined;
-        let scaleYDefined;
         let rotateX;
         let rotateY;
         const transformations = [];
@@ -1576,8 +1567,8 @@ SvgElement.prototype = {
 
             transformations.push('rotate(' + tr.rotate + ',' + (rotateX || 0) + ',' + (rotateY || 0) + ')');
         }
-        scaleXDefined = isDefined(tr.scaleX);
-        scaleYDefined = isDefined(tr.scaleY);
+        const scaleXDefined = isDefined(tr.scaleX);
+        const scaleYDefined = isDefined(tr.scaleY);
         if(scaleXDefined || scaleYDefined) {
             transformations.push('scale(' + (scaleXDefined ? tr.scaleX : 1) + ',' + (scaleYDefined ? tr.scaleY : 1) + ')');
         }
@@ -2015,10 +2006,9 @@ Renderer.prototype = {
     },
 
     linearGradient: function(stops) {
-        let gradient;
         const id = getNextDefsSvgId();
         const that = this;
-        gradient = that._createElement('linearGradient', { id: id }).append(that._defs);
+        const gradient = that._createElement('linearGradient', { id: id }).append(that._defs);
         gradient.id = id;
 
         stops.forEach((stop) => {
@@ -2033,26 +2023,21 @@ Renderer.prototype = {
         hatching = hatching || {};
 
         const that = this;
-        let id;
-        let d;
-        let pattern;
-        let rect;
-        let path;
         const step = hatching.step || 6;
         const stepTo2 = step / 2;
         const stepBy15 = step * 1.5;
 
-        id = _id || getNextDefsSvgId();
+        const id = _id || getNextDefsSvgId();
 
-        d = (normalizeEnum(hatching.direction) === 'right' ?
+        const d = (normalizeEnum(hatching.direction) === 'right' ?
             'M ' + stepTo2 + ' ' + (-stepTo2) + ' L ' + (-stepTo2) + ' ' + stepTo2 + ' M 0 ' + step + ' L ' + step + ' 0 M ' + stepBy15 + ' ' + stepTo2 + ' L ' + stepTo2 + ' ' + stepBy15
             : 'M 0 0 L ' + step + ' ' + step + ' M ' + (-stepTo2) + ' ' + stepTo2 + ' L ' + stepTo2 + ' ' + stepBy15 + ' M ' + stepTo2 + ' ' + (-stepTo2) + ' L ' + stepBy15 + ' ' + stepTo2);
 
-        pattern = that._createElement('pattern', { id: id, width: step, height: step, patternUnits: 'userSpaceOnUse' }).append(that._defs);
+        const pattern = that._createElement('pattern', { id: id, width: step, height: step, patternUnits: 'userSpaceOnUse' }).append(that._defs);
         pattern.id = id;
 
-        rect = that.rect(0, 0, step, step).attr({ fill: color, opacity: hatching.opacity }).append(pattern);
-        path = (new exports.PathSvgElement(this)).attr({ d: d, 'stroke-width': hatching.width || 1, stroke: color }).append(pattern);
+        const rect = that.rect(0, 0, step, step).attr({ fill: color, opacity: hatching.opacity }).append(pattern);
+        const path = (new exports.PathSvgElement(this)).attr({ d: d, 'stroke-width': hatching.width || 1, stroke: color }).append(pattern);
 
         ///#DEBUG
         pattern.rect = rect;

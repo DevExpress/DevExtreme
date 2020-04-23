@@ -116,13 +116,11 @@ module.exports = Class.inherit((function() {
     };
 
     var getHeaderItemsLastIndex = function(headerItems, grandTotalIndex) {
-        let i;
         let lastIndex = -1;
-        let headerItem;
 
         if(headerItems) {
-            for(i = 0; i < headerItems.length; i++) {
-                headerItem = headerItems[i];
+            for(let i = 0; i < headerItems.length; i++) {
+                const headerItem = headerItems[i];
                 if(headerItem.index !== undefined) {
                     lastIndex = Math.max(lastIndex, headerItem.index);
                 }
@@ -215,17 +213,13 @@ module.exports = Class.inherit((function() {
     };
 
     const updateDataSourceCells = function(dataSource, newDataSourceCells, newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent) {
-        let newRowIndex;
-        let newColumnIndex;
-        let newRowCells;
-        let newCell;
         let rowIndex;
         let columnIndex;
         const dataSourceCells = dataSource.values;
 
         if(newDataSourceCells) {
-            for(newRowIndex = 0; newRowIndex <= newDataSourceCells.length; newRowIndex++) {
-                newRowCells = newDataSourceCells[newRowIndex];
+            for(let newRowIndex = 0; newRowIndex <= newDataSourceCells.length; newRowIndex++) {
+                const newRowCells = newDataSourceCells[newRowIndex];
                 rowIndex = newRowItemIndexesToCurrent[newRowIndex];
                 if(!isDefined(rowIndex)) {
                     rowIndex = dataSource.grandTotalRowIndex;
@@ -234,8 +228,8 @@ module.exports = Class.inherit((function() {
                     if(!dataSourceCells[rowIndex]) {
                         dataSourceCells[rowIndex] = [];
                     }
-                    for(newColumnIndex = 0; newColumnIndex <= newRowCells.length; newColumnIndex++) {
-                        newCell = newRowCells[newColumnIndex];
+                    for(let newColumnIndex = 0; newColumnIndex <= newRowCells.length; newColumnIndex++) {
+                        const newCell = newRowCells[newColumnIndex];
                         columnIndex = newColumnItemIndexesToCurrent[newColumnIndex];
                         if(!isDefined(columnIndex)) {
                             columnIndex = dataSource.grandTotalColumnIndex;
@@ -261,7 +255,6 @@ module.exports = Class.inherit((function() {
 
     function createStore(dataSourceOptions, notifyProgress) {
         let store;
-        let storeOptions;
 
         if(isPlainObject(dataSourceOptions) && dataSourceOptions.load) {
             store = createLocalOrRemoteStore(dataSourceOptions, notifyProgress);
@@ -271,7 +264,7 @@ module.exports = Class.inherit((function() {
                 dataSourceOptions = { store: dataSourceOptions };
             }
 
-            storeOptions = dataSourceOptions.store;
+            const storeOptions = dataSourceOptions.store;
 
             if(storeOptions.type === 'xmla') {
                 store = new XmlaStore(storeOptions);
@@ -486,11 +479,10 @@ module.exports = Class.inherit((function() {
         const result = new Deferred();
         const store = that._store;
         const storeFields = store && store.getFields(that._fields);
-        let mergedFields;
 
         when(storeFields).done(function(storeFields) {
             that._storeFields = storeFields;
-            mergedFields = mergeFields(that._fields, storeFields, that._retrieveFields);
+            const mergedFields = mergeFields(that._fields, storeFields, that._retrieveFields);
             result.resolve(mergedFields);
         }).fail(result.reject);
 
@@ -985,13 +977,12 @@ module.exports = Class.inherit((function() {
         */
         getAreaFields: function(area, collectGroups) {
             let areaFields = [];
-            let descriptions;
 
             if(collectGroups || area === 'data') {
                 areaFields = getAreaFields(this._fields, area);
                 sortFieldsByAreaIndex(areaFields);
             } else {
-                descriptions = this._descriptions || {};
+                const descriptions = this._descriptions || {};
                 areaFields = descriptions[DESCRIPTION_NAME_BY_AREA[area]] || [];
             }
 
@@ -1034,7 +1025,6 @@ module.exports = Class.inherit((function() {
             const that = this;
             const fields = that._fields;
             const field = fields && fields[isNumeric(id) ? id : findField(fields, id)];
-            let levels;
 
             if(field && options) {
                 each(options, function(optionName, optionValue) {
@@ -1043,7 +1033,7 @@ module.exports = Class.inherit((function() {
                     setFieldProperty(field, optionName, optionValue, isInitialization);
 
                     if(optionName === 'sortOrder') {
-                        levels = field.levels || [];
+                        const levels = field.levels || [];
                         for(let i = 0; i < levels.length; i++) {
                             levels[i][optionName] = optionValue;
                         }
@@ -1318,10 +1308,9 @@ module.exports = Class.inherit((function() {
 
         _changeLoadingCount: function(increment) {
             const oldLoading = this.isLoading();
-            let newLoading;
 
             this._loadingCount += increment;
-            newLoading = this.isLoading();
+            const newLoading = this.isLoading();
 
             if(oldLoading ^ newLoading) {
                 this.fireEvent('loadingChanged', [newLoading]);
@@ -1634,14 +1623,12 @@ module.exports = Class.inherit((function() {
          */
         expandHeaderItem: function(area, path) {
             const that = this;
-            let hasCache;
             const headerItems = area === 'column' ? that._data.columns : that._data.rows;
             const headerItem = findHeaderItem(headerItems, path);
-            let options;
 
             if(headerItem && !headerItem.children) {
-                hasCache = !!headerItem.collapsedChildren;
-                options = {
+                const hasCache = !!headerItem.collapsedChildren;
+                const options = {
                     area: area,
                     path: path,
                     expanded: true,
@@ -1663,15 +1650,13 @@ module.exports = Class.inherit((function() {
         mergePartialDataSource: function(dataSource, deferred) {
             const that = this;
             const loadedData = that._data;
-            let newRowItemIndexesToCurrent;
-            let newColumnItemIndexesToCurrent;
 
             if(dataSource && dataSource.values) {
                 dataSource.rows = dataSource.rows || [];
                 dataSource.columns = dataSource.columns || [];
 
-                newRowItemIndexesToCurrent = updateHeaderItems(loadedData.rows, dataSource.rows, loadedData.grandTotalColumnIndex);
-                newColumnItemIndexesToCurrent = updateHeaderItems(loadedData.columns, dataSource.columns, loadedData.grandTotalColumnIndex);
+                const newRowItemIndexesToCurrent = updateHeaderItems(loadedData.rows, dataSource.rows, loadedData.grandTotalColumnIndex);
+                const newColumnItemIndexesToCurrent = updateHeaderItems(loadedData.columns, dataSource.columns, loadedData.grandTotalColumnIndex);
 
                 when(newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent).done(function(newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent) {
                     if(newRowItemIndexesToCurrent.length || newColumnItemIndexesToCurrent.length) {
@@ -1686,17 +1671,15 @@ module.exports = Class.inherit((function() {
             const that = this;
             const loadedData = that._data;
             const headerItems = area === 'column' ? loadedData.columns : loadedData.rows;
-            let headerItem;
             const oppositeHeaderItems = area === 'column' ? loadedData.rows : loadedData.columns;
-            let oppositeHeaderItem;
             let newRowItemIndexesToCurrent;
             let newColumnItemIndexesToCurrent;
 
             if(dataSource && dataSource.values) {
                 dataSource.rows = dataSource.rows || [];
                 dataSource.columns = dataSource.columns || [];
-                headerItem = findHeaderItem(headerItems, path);
-                oppositeHeaderItem = oppositePath && findHeaderItem(oppositeHeaderItems, oppositePath);
+                const headerItem = findHeaderItem(headerItems, path);
+                const oppositeHeaderItem = oppositePath && findHeaderItem(oppositeHeaderItems, oppositePath);
                 if(headerItem) {
                     if(area === 'column') {
                         newColumnItemIndexesToCurrent = updateHeaderItemChildren(headerItems, headerItem, dataSource.columns, loadedData.grandTotalColumnIndex);

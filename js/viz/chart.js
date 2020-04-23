@@ -104,10 +104,8 @@ function findAxisOptions(valueAxes, valueAxesOptions, axisName) {
 }
 
 function findAxis(paneName, axisName, axes) {
-    let axis;
-    let i;
-    for(i = 0; i < axes.length; i++) {
-        axis = axes[i];
+    for(let i = 0; i < axes.length; i++) {
+        const axis = axes[i];
         if(axis.name === axisName && axis.pane === paneName) {
             return axis;
         }
@@ -305,10 +303,9 @@ function shiftAxis(side1, side2) {
 function getCommonSize(side, margins) {
     let size = 0;
     let pane;
-    let paneMargins;
 
     for(pane in margins.panes) {
-        paneMargins = margins.panes[pane];
+        const paneMargins = margins.panes[pane];
         size = size + (side === 'height' ? (paneMargins.top + paneMargins.bottom) : (paneMargins.left + paneMargins.right));
     }
 
@@ -977,9 +974,8 @@ const dxChart = AdvancedChart.inherit({
     _getPanesParameters: function() {
         const that = this;
         const panes = that.panes;
-        let i;
         const params = [];
-        for(i = 0; i < panes.length; i++) {
+        for(let i = 0; i < panes.length; i++) {
             if(that._getPaneBorderVisibility(i)) {
                 params.push({ coords: panes[i].borderCoords, clipRect: that._panesClipRects.fixed[i] });
             }
@@ -1006,13 +1002,11 @@ const dxChart = AdvancedChart.inherit({
     },
 
     _getCommonCanvas: function() {
-        let i;
-        let canvas;
         let commonCanvas;
         const panes = this.panes;
 
-        for(i = 0; i < panes.length; i++) {
-            canvas = panes[i].canvas;
+        for(let i = 0; i < panes.length; i++) {
+            const canvas = panes[i].canvas;
             if(!commonCanvas) { // TODO
                 commonCanvas = _extend({}, canvas);
             } else {
@@ -1026,20 +1020,17 @@ const dxChart = AdvancedChart.inherit({
     _createPanesBackground: function() {
         const that = this;
         const defaultBackgroundColor = that._themeManager.getOptions('commonPaneSettings').backgroundColor;
-        let backgroundColor;
         const renderer = that._renderer;
-        let rect;
-        let i;
         const rects = [];
         that._panesBackgroundGroup.clear();
 
-        for(i = 0; i < that.panes.length; i++) {
-            backgroundColor = that.panes[i].backgroundColor || defaultBackgroundColor;
+        for(let i = 0; i < that.panes.length; i++) {
+            const backgroundColor = that.panes[i].backgroundColor || defaultBackgroundColor;
             if(!backgroundColor || backgroundColor === 'none') {
                 rects.push(null);
                 continue;
             }
-            rect = renderer.rect(0, 0, 0, 0).attr({
+            const rect = renderer.rect(0, 0, 0, 0).attr({
                 fill: backgroundColor,
                 'stroke-width': 0
             }).append(that._panesBackgroundGroup);
@@ -1050,10 +1041,9 @@ const dxChart = AdvancedChart.inherit({
 
     _fillPanesBackground: function() {
         const that = this;
-        let bc;
 
         _each(that.panes, function(i, pane) {
-            bc = pane.borderCoords;
+            const bc = pane.borderCoords;
 
             if(that.panesBackground[i] !== null) {
                 that.panesBackground[i].attr({ x: bc.left, y: bc.top, width: bc.width, height: bc.height });
@@ -1080,9 +1070,7 @@ const dxChart = AdvancedChart.inherit({
         that._panesBorderGroup.linkRemove().clear();
 
         _each(that.panes, function(i, pane) {
-            let bc;
             const borderOptions = panesBorderOptions[pane.name];
-            let segmentRectParams;
             const attr = {
                 fill: 'none',
                 stroke: borderOptions.color,
@@ -1097,9 +1085,9 @@ const dxChart = AdvancedChart.inherit({
             if(!borderOptions.visible) {
                 return;
             }
-            bc = pane.borderCoords;
+            const bc = pane.borderCoords;
 
-            segmentRectParams = prepareSegmentRectPoints(bc.left, bc.top, bc.width, bc.height, borderOptions);
+            const segmentRectParams = prepareSegmentRectPoints(bc.left, bc.top, bc.width, bc.height, borderOptions);
             that._renderer.path(segmentRectParams.points, segmentRectParams.pathType).attr(attr).append(that._panesBorderGroup);
         });
 
@@ -1182,9 +1170,8 @@ const dxChart = AdvancedChart.inherit({
     _getCanvasForPane: function(paneName) {
         const panes = this.panes;
         const panesNumber = panes.length;
-        let i;
 
-        for(i = 0; i < panesNumber; i++) {
+        for(let i = 0; i < panesNumber; i++) {
             if(panes[i].name === paneName) {
                 return panes[i].canvas;
             }

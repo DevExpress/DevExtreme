@@ -243,11 +243,9 @@ function parseResult(data, total, descriptions, result) {
 
     function getItem(dataItem, dimensionName, path, level, field) {
         const dimensionHash = result[dimensionName + 'Hash'];
-        let parentItem;
         let parentItemChildren;
         let item;
         const pathValue = path.slice(0, level + 1).join('/');
-        let parentPathValue;
 
         if(dimensionHash[pathValue] !== undefined) {
             item = dimensionHash[pathValue];
@@ -257,10 +255,10 @@ function parseResult(data, total, descriptions, result) {
                 index: result[dimensionName + 'Index']++
             };
 
-            parentPathValue = path.slice(0, level).join('/');
+            const parentPathValue = path.slice(0, level).join('/');
 
             if(level > 0 && dimensionHash[parentPathValue] !== undefined) {
-                parentItem = dimensionHash[parentPathValue];
+                const parentItem = dimensionHash[parentPathValue];
                 parentItemChildren = parentItem.children = parentItem.children || [];
             } else {
                 parentItemChildren = result[dimensionName + 's'];
@@ -411,7 +409,6 @@ function getFirstCollapsedIndex(fields) {
 function getRequestsData(options) {
     const rowExpandedLevel = getExpandedLevel(options, 'rows');
     const columnExpandedLevel = getExpandedLevel(options, 'columns');
-    let columnTotalsOptions;
     let filters = options.filters || [];
     const columnExpandedIndex = getExpandedIndex(options, 'columns');
     const firstCollapsedColumnIndex = getFirstCollapsedIndex(options.columns);
@@ -423,7 +420,7 @@ function getRequestsData(options) {
         .concat(getFiltersForDimension(options.columns))
         .concat(getFiltersForExpandedDimension(options));
 
-    columnTotalsOptions = getGrandTotalRequest(options, 'columns', columnExpandedIndex, columnExpandedLevel, filters, firstCollapsedColumnIndex);
+    const columnTotalsOptions = getGrandTotalRequest(options, 'columns', columnExpandedIndex, columnExpandedLevel, filters, firstCollapsedColumnIndex);
 
     if(options.rows.length && options.columns.length) {
         if(options.headerName !== 'rows') {

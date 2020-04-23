@@ -39,7 +39,6 @@ function adjust(value, interval) {
     const separatedValue = value.toString().split('.');
     const sourceValue = value;
     const absValue = Math.abs(value);
-    let separatedAdjustedValue;
     const isExponentValue = isExponential(value);
     const integerPart = absValue > 1 ? 10 : 0;
 
@@ -58,7 +57,7 @@ function adjust(value, interval) {
     precision = ((_isEdgeBug() && (getExponent(value) > 6)) || precision > 7) ? 15 : 7; // fix toPrecision() bug in Edge (T570217)
 
     if(!isExponentValue) {
-        separatedAdjustedValue = parseFloat(value.toPrecision(precision)).toString().split('.');
+        const separatedAdjustedValue = parseFloat(value.toPrecision(precision)).toString().split('.');
         if(separatedAdjustedValue[0] === integerPart.toString()) {
             return parseFloat(separatedValue[0] + '.' + separatedAdjustedValue[1]);
         }
@@ -68,14 +67,12 @@ function adjust(value, interval) {
 
 function getPrecision(value) {
     const str = value.toString();
-    let mantissa;
-    let positionOfDelimiter;
 
     if(str.indexOf('.') < 0) {
         return 0;
     }
-    mantissa = str.split('.');
-    positionOfDelimiter = mantissa[1].indexOf('e');
+    const mantissa = str.split('.');
+    const positionOfDelimiter = mantissa[1].indexOf('e');
 
     return positionOfDelimiter >= 0 ? positionOfDelimiter : mantissa[1].length;
 }

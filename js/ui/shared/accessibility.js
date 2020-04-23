@@ -80,9 +80,8 @@ function getActiveAccessibleElements(ariaLabel, viewElement) {
 function findFocusedViewElement(viewSelectors) {
     for(const index in viewSelectors) {
         const selector = viewSelectors[index];
-        let $focusViewElement;
 
-        $focusViewElement = $(selector).first();
+        const $focusViewElement = $(selector).first();
 
         if($focusViewElement.length) {
             return $focusViewElement;

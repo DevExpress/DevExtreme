@@ -2,10 +2,8 @@ const vizUtils = require('../core/utils');
 const isDefined = require('../../core/utils/type').isDefined;
 const extend = require('../../core/utils/extend').extend;
 const constants = require('./axes_constants');
-let circularAxes;
 const xyAxesLinear = require('./xy_axes').linear;
 const tick = require('./tick').tick;
-let polarAxes;
 const _map = vizUtils.map;
 const baseAxisModule = require('./base_axis');
 
@@ -37,9 +35,9 @@ function getPolarQuarter(angle) {
     return quarter;
 }
 
-polarAxes = exports;
+const polarAxes = exports;
 
-circularAxes = polarAxes.circular = {
+const circularAxes = polarAxes.circular = {
     _calculateValueMargins(ticks) {
         let { minVisible, maxVisible } = this._getViewportRange();
         if(ticks && ticks.length > 1) {
@@ -482,21 +480,19 @@ polarAxes.circularSpider = _extend({}, circularAxes, {
         const spiderTicks = this.getSpiderTicks();
         let firstTick;
         let lastTick;
-        let nextTick;
-        let tick;
         const points = [];
         let i = 0;
         const len = spiderTicks.length;
 
         while(i < len) {
-            tick = spiderTicks[i].coords;
+            const tick = spiderTicks[i].coords;
             if(tick.angle >= fromAngle && tick.angle <= toAngle) {
                 if(!firstTick) {
                     firstTick = (spiderTicks[i - 1] || spiderTicks[spiderTicks.length - 1]).coords;
                     points.push((tick.x + firstTick.x) / 2, (tick.y + firstTick.y) / 2);
                 }
                 points.push(tick.x, tick.y);
-                nextTick = (spiderTicks[i + 1] || spiderTicks[0]).coords;
+                const nextTick = (spiderTicks[i + 1] || spiderTicks[0]).coords;
                 lastTick = ({ x: (tick.x + nextTick.x) / 2, y: (tick.y + nextTick.y) / 2 });
             }
             i++;
@@ -582,11 +578,9 @@ polarAxes.linear = {
         const cosSin = vizUtils.getCosAndSin(labelCoords.angle);
         const indentFromAxis = that._options.label.indentFromAxis || 0;
         const box = tick.labelBBox;
-        let x;
-        let y;
 
-        x = labelCoords.x - _abs(indentFromAxis * cosSin.sin) + _abs(box.width / 2 * cosSin.cos) - box.width / 2;
-        y = labelY + (labelY - box.y) - _abs(box.height / 2 * cosSin.sin) + _abs(indentFromAxis * cosSin.cos);
+        const x = labelCoords.x - _abs(indentFromAxis * cosSin.sin) + _abs(box.width / 2 * cosSin.cos) - box.width / 2;
+        const y = labelY + (labelY - box.y) - _abs(box.height / 2 * cosSin.sin) + _abs(indentFromAxis * cosSin.cos);
 
         return { x: x, y: y };
     },

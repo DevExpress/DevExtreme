@@ -270,7 +270,6 @@ module.exports = gridCore.Controller.inherit((function() {
             const that = this;
             const dataSource = that._dataSource;
             const lastLoadOptions = that._lastLoadOptions;
-            let operationTypes;
 
             that.customizeStoreLoadOptions.fire(options);
 
@@ -286,7 +285,7 @@ module.exports = gridCore.Controller.inherit((function() {
 
             const loadOptions = extend({ pageIndex: that.pageIndex() }, options.storeLoadOptions);
 
-            operationTypes = calculateOperationTypes(loadOptions, lastLoadOptions);
+            const operationTypes = calculateOperationTypes(loadOptions, lastLoadOptions);
 
             that._customizeRemoteOperations(options, isReload, operationTypes);
 

@@ -38,11 +38,10 @@ QUnit.module('Form', () => {
         const testingOptions = ['formData', 'items', 'colCount', 'onFieldDataChanged', 'labelLocation',
             'alignItemLabels', 'showColonAfterLabel', 'customizeItem', 'minColWidth', 'alignItemLabelsInAllGroups', 'onEditorEnterKey', 'scrollingEnabled', 'formID'];
         const form = $('#form').dxForm().dxForm('instance');
-        let i;
         const invalidateStub = sinon.stub(form, '_invalidate');
 
         // act
-        for(i = 0; i < testingOptions.length; i++) {
+        for(let i = 0; i < testingOptions.length; i++) {
             const testingOption = testingOptions[i];
             let value;
 
@@ -367,17 +366,15 @@ QUnit.module('Form', () => {
     test('Update of editor\'s value when formOption is changed and items is defined', function(assert) {
         // arrange
         const $testContainer = $('#form');
-        let form;
-        let $textBoxes;
         const textBoxes = [];
 
-        form = $testContainer.dxForm({
+        const form = $testContainer.dxForm({
             items: ['name', 'lastName']
         }).dxForm('instance');
 
         sinon.spy(form._rootLayoutManager, '_invalidate');
 
-        $textBoxes = $testContainer.find('.dx-textbox');
+        const $textBoxes = $testContainer.find('.dx-textbox');
         $.each($textBoxes, (_, element) => {
             textBoxes.push($(element).dxTextBox('instance'));
         });

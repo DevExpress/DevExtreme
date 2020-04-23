@@ -8,10 +8,9 @@ const isPrimitive = require('../../core/utils/type').isPrimitive;
 const watchChanges = (function() {
 
     const start = function(rawData, watchMethod, fields, fieldsMap, callback) {
-        let globalDispose;
         let fieldsDispose;
 
-        globalDispose = globalWatch(rawData, watchMethod, function(dataWithRawFields) {
+        const globalDispose = globalWatch(rawData, watchMethod, function(dataWithRawFields) {
             fieldsDispose && fieldsDispose();
 
             if(isPrimitive(dataWithRawFields)) {

@@ -1306,9 +1306,8 @@ QUnit.test('Numeric, sortingMethod false - do not sort data', function(assert) {
     const options = {
         sortingMethod: false
     };
-    let result;
 
-    result = testValidateData(data, groups, null, options);
+    const result = testValidateData(data, groups, null, options);
 
     checkParsedData(result, {
         arg: {
@@ -1328,9 +1327,8 @@ QUnit.test('DateTime, sortingMethod true - sort data by argument', function(asse
     const options = {
         sortingMethod: true
     };
-    let result;
 
-    result = testValidateData(data, groups, null, options);
+    const result = testValidateData(data, groups, null, options);
 
     checkParsedData(result, {
         arg: {
@@ -1490,9 +1488,8 @@ QUnit.test('DateTime, sortingMethod true - sort data by argument', function(asse
     const options = {
         sortingMethod: true
     };
-    let result;
 
-    result = testValidateData(data, groups, null, options);
+    const result = testValidateData(data, groups, null, options);
 
     checkParsedData(result, {
         arg: {
@@ -1514,9 +1511,8 @@ QUnit.test('Numeric, sortingMethod false - do not sort data', function(assert) {
     const options = {
         sortingMethod: false
     };
-    let result;
 
-    result = testValidateData(data, groups, null, options);
+    const result = testValidateData(data, groups, null, options);
 
     checkParsedData(result, {
         arg: {
@@ -1538,9 +1534,8 @@ QUnit.test('String, sortingMethod true (not a callback) - do not sort data', fun
     const options = {
         sortingMethod: true
     };
-    let result;
 
-    result = testValidateData(data, groups, null, options);
+    const result = testValidateData(data, groups, null, options);
 
     checkParsedData(result, {
         arg: {
@@ -1611,9 +1606,8 @@ QUnit.test('String, user categories, sortingMethod true - sort data by categorie
         valueType: 'numeric'
     });
     const options = {};
-    let result;
 
-    result = testValidateData(data, groups, null, options);
+    const result = testValidateData(data, groups, null, options);
 
     checkParsedData(result, {
         arg: {
@@ -1642,9 +1636,8 @@ QUnit.test('Numeric, user categories, sortingMethod true - sort data by categori
     const options = {
         sortingMethod: true
     };
-    let result;
 
-    result = testValidateData(data, groups, null, options);
+    const result = testValidateData(data, groups, null, options);
 
     checkParsedData(result, {
         arg: {
@@ -1675,9 +1668,8 @@ QUnit.test('Numeric, user categories, sortingMethod callback - sort data by cate
             return b.arg - a.arg;
         }
     };
-    let result;
 
-    result = testValidateData(data, groups, null, options);
+    const result = testValidateData(data, groups, null, options);
 
     checkParsedData(result, {
         arg: {

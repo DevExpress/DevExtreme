@@ -97,7 +97,6 @@ extend(Title.prototype, require('./layout_element').LayoutElement.prototype, {
         const subtitleElement = that._subtitleElement;
         const testText = 'A';
         let titleBox;
-        let y;
 
         titleElement.attr({ text: testText, y: 0 }).css(_patchFontOptions(options.font));
         titleBox = titleElement.getBBox(); // for multiline text
@@ -105,7 +104,7 @@ extend(Title.prototype, require('./layout_element').LayoutElement.prototype, {
 
         titleElement.attr({ text: options.text });
         titleBox = titleElement.getBBox();
-        y = -titleBox.y;
+        const y = -titleBox.y;
 
         titleElement.attr({ y: y });
 
@@ -223,9 +222,8 @@ extend(Title.prototype, require('./layout_element').LayoutElement.prototype, {
         const options = that._options;
         const margin = options.margin;
         const boundingRect = that._boundingRect;
-        let box;
 
-        box = that._hasText ? that._group.getBBox() : { width: 0, height: 0, x: 0, y: 0, isEmpty: true };
+        const box = that._hasText ? that._group.getBBox() : { width: 0, height: 0, x: 0, y: 0, isEmpty: true };
 
         if(!box.isEmpty) {
             box.height += margin.top + margin.bottom - that._baseLineCorrection;

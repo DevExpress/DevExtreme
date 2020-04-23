@@ -217,13 +217,11 @@ Projection.prototype = {
     _setupScaling: function() {
         const that = this;
         let k = _round(TWO_TO_LN2 * _ln(that._maxZoom));
-        let step;
-        let zoom;
         let i = 1;
 
         k = k > 4 ? k : 4;
-        step = _pow(that._maxZoom, 1 / k);
-        zoom = that._minZoom;
+        const step = _pow(that._maxZoom, 1 / k);
+        let zoom = that._minZoom;
         that._scale = [zoom];
         for(; i <= k; ++i) {
             that._scale.push(zoom *= step);
@@ -300,11 +298,9 @@ Projection.prototype = {
 
     moveCenter: function(shift) {
         const that = this;
-        let current;
-        let center;
         if(that._moveCenter) {
-            current = that._toScreen(that._toTransformed(that._engine.project(that._center)));
-            center = that._engine.unproject(that._fromTransformed(that._fromScreen([current[0] + shift[0], current[1] + shift[1]])));
+            const current = that._toScreen(that._toTransformed(that._engine.project(that._center)));
+            const center = that._engine.unproject(that._fromTransformed(that._fromScreen([current[0] + shift[0], current[1] + shift[1]])));
             that._changeCenter(center);
         }
     },
@@ -426,11 +422,10 @@ Engine.prototype.bounds = function(bounds) {
     const p1 = parameters.to(b1);
     const p2 = parameters.to(b2);
     const delta = _min(_abs(p2[0] - p1[0]) > MIN_BOUNDS_RANGE ? _abs(p2[0] - p1[0]) : 2, _abs(p2[1] - p1[1]) > MIN_BOUNDS_RANGE ? _abs(p2[1] - p1[1]) : 2);
-    let engine;
     if(delta < 2) {
         extend(parameters, createProjectUnprojectMethods(parameters.to, parameters.from, p1, p2, delta));
     }
-    engine = new Engine(parameters);
+    const engine = new Engine(parameters);
     engine.original = this.original;
     setMinMax(engine, b1, b2);
     return engine;

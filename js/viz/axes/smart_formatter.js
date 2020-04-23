@@ -15,7 +15,6 @@ function getDatesDifferences(prevDate, curDate, nextDate, tickFormat) {
     let prevDifferences;
     let nextDifferences;
     let dateUnitInterval;
-    let tickFormatIndex;
     const dateUnitsLength = dateUnitIntervals.length;
     let i;
     let j;
@@ -30,7 +29,7 @@ function getDatesDifferences(prevDate, curDate, nextDate, tickFormat) {
         tickFormat = 'second';
     }
 
-    tickFormatIndex = dateUnitIntervals.indexOf(tickFormat);
+    const tickFormatIndex = dateUnitIntervals.indexOf(tickFormat);
 
     if(nextDate) {
         nextDifferences = dateUtils.getDatesDifferences(curDate, nextDate);

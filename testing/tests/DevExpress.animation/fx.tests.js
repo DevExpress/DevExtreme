@@ -233,12 +233,11 @@ QUnit.test('Fallback to no animation strategy', function(assert) {
     assert.expect(1);
 
     const $element = $('#test');
-    let result;
     const savedSupport = support.transition;
 
     support.transition = function() { return false; };
 
-    result = this.animate($element, {
+    const result = this.animate($element, {
         type: 'css',
         from: 'my-animation',
         to: 'my-animation-active',
@@ -452,7 +451,6 @@ QUnit.test('regressions: \'stop\' method w/o \'jumpToEnd\' should prevent \'comp
     const done = assert.async();
     let called = 0;
     const element = $('#test');
-    let lastElementLeft;
 
     this.animate(element, {
         from: { left: 100 },
@@ -466,7 +464,7 @@ QUnit.test('regressions: \'stop\' method w/o \'jumpToEnd\' should prevent \'comp
 
     this.clock.tick(100);
 
-    lastElementLeft = element.position().left;
+    const lastElementLeft = element.position().left;
     assert.ok(lastElementLeft > 0);
 
     fx.stop(element);

@@ -7,11 +7,10 @@ import objectUtils from '../core/utils/object';
 import { keysEqual, rejectedPromise, trivialPromise } from './utils';
 
 function hasKey(target, keyOrKeys) {
-    let key;
     const keys = typeof keyOrKeys === 'string' ? keyOrKeys.split() : keyOrKeys.slice();
 
     while(keys.length) {
-        key = keys.shift();
+        const key = keys.shift();
         if(key in target) {
             return true;
         }
@@ -21,13 +20,11 @@ function hasKey(target, keyOrKeys) {
 }
 
 function findItems(keyInfo, items, key, groupCount) {
-    let childItems;
-    let result;
 
     if(groupCount) {
         for(let i = 0; i < items.length; i++) {
-            childItems = items[i].items || items[i].collapsedItems || [];
-            result = findItems(keyInfo, childItems || [], key, groupCount - 1);
+            const childItems = items[i].items || items[i].collapsedItems || [];
+            const result = findItems(keyInfo, childItems || [], key, groupCount - 1);
             if(result) {
                 return result;
             }
@@ -124,10 +121,9 @@ function update(keyInfo, array, key, data, isBatch) {
 
 function insert(keyInfo, array, data, index, isBatch) {
     let keyValue;
-    let obj;
     const keyExpr = keyInfo.key();
 
-    obj = isPlainObject(data) ? extend({}, data) : data;
+    const obj = isPlainObject(data) ? extend({}, data) : data;
 
     if(keyExpr) {
         keyValue = keyInfo.keyOf(obj);
