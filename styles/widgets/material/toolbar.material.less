@@ -242,3 +242,18 @@
 .dx-toolbar .dx-tab {
     padding: 4px;
 }
+
+.dx-toolbar-hidden-button-group {
+    .dx-toolbar-item-auto-hide {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .dx-buttongroup-wrapper {
+        .dx-buttongroup-item.dx-button {
+            .dx-button-content {
+                padding: @MATERIAL_TOOLBAR_PADDING @MATERIAL_LIST_ITEM_HORIZONTAL_PADDING;
+            }
+        }
+    }
+}

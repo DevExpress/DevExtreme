@@ -173,3 +173,22 @@
 .dx-toolbar-item-invisible {
     display: none;
 }
+
+.dx-toolbar-hidden-button-group {
+    &.dx-state-hover {
+        background-color: transparent;
+    }
+
+    .dx-buttongroup-wrapper {
+        flex-direction: column;
+
+        .dx-buttongroup-item.dx-button {
+            border: none;
+            text-align: left;
+
+            //&.dx-state-hover {
+            //    background-color: rgba(0, 0, 0, 0);
+            //}
+        }
+    }
+}
