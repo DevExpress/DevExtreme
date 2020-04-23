@@ -706,7 +706,7 @@ module('Common', commonModuleConfig, () => {
         const $element = scheduler.appointments.getAppointment();
         let elementPosition = getAbsolutePosition($element);
         const cellWidth = scheduler.workSpace.getCellWidth();
-        let pointer = pointerMock($element).start();
+        const pointer = pointerMock($element).start();
 
         pointer.down(elementPosition.left, elementPosition.top).move(-(cellWidth * 2), 0);
         pointer.up();
