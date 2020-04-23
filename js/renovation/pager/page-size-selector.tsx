@@ -11,14 +11,6 @@ export const PAGER_SELECTED_PAGE_SIZE_CLASS = `${PAGER_PAGE_SIZE_CLASS} ${PAGER_
 function smallSelector(selectBoxProps) {
     return (<SelectBox {...selectBoxProps} />);
 }
-
-export function getAdditionalProps(label: string) {
-    return {
-        label,
-        role: 'button',
-        tabIndex: 0,
-    };
-}
 type PageSizeProps = { className: string; click: () => void; label: string; text: string; };
 function largeSelector(pageSizesText: PageSizeProps[]) {
     return pageSizesText.map(({ text, className, label, click }, key) => (

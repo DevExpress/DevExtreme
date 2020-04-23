@@ -1,7 +1,7 @@
 
 import { h, createRef } from 'preact';
 import { mount } from 'enzyme';
-import ClickableDiv from '../../../js/renovation/pager/clickable-div.p';
+import ClickableDiv from '../../../js/renovation/pager/light-button.p';
 import { LightButtonProps } from '../../../js/renovation/pager/light-button';
 import { EVENT, emit, eventHandlers } from '../utils/events-mock';
 
