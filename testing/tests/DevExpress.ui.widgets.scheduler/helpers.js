@@ -204,6 +204,7 @@ export class SchedulerTestWrapper {
             getDateTable: () => $('.dx-scheduler-date-table'),
             getDateTableHeight: () => this.workSpace.getDateTable().height(),
 
+            getRowCount: () => $('.dx-scheduler-date-table-row').length,
             getRows: (index = 0) => $('.dx-scheduler-date-table-row').eq(index),
             getCells: () => $('.dx-scheduler-date-table-cell'),
             getCell: (rowIndex, cellIndex) => {
@@ -280,6 +281,10 @@ export class SchedulerTestWrapper {
             getGroupHeaders: () => $('.dx-scheduler-group-header'),
             getGroupHeader: (index = 0) => this.grouping.getGroupHeaders().eq(index),
             getGroupHeaderHeight: () => this.grouping.getGroupHeader(0).outerHeight(),
+            getGroupHeaderContents: () => $('.dx-scheduler-group-header-content'),
+            getGroupHeaderContentCount: () => this.grouping.getGroupHeaderContents().length,
+            getGroupHeaderContent: (index = 0) => this.grouping.getGroupHeaderContents().eq(index),
+            getGroupHeaderContentHeight: (index = 0) => this.grouping.getGroupHeaderContent(index).outerHeight(),
             getGroupTable: () => $('.dx-scheduler-group-table'),
             getGroupTableHeight: () => this.grouping.getGroupTable().height()
         };

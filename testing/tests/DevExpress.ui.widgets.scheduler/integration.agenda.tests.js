@@ -638,6 +638,58 @@ QUnit.test('Group header height should depend on existing appointment count', fu
     assert.roughEqual($headers.eq(3).outerHeight(), 240, 2, 'Header height is OK');
 });
 
+QUnit.test('Group agenda with recurrence appointments should be rendered correctly (T683374)', function(assert) {
+    const data = [
+        {
+            text: 'Upgrade Personal Computers',
+            priorityId: 1,
+            startDate: new Date(2018, 4, 13, 9),
+            endDate: new Date(2018, 4, 13, 11, 30),
+            recurrenceRule: 'FREQ=DAILY;COUNT=4'
+        },
+        {
+            text: 'Prepare 2018 Marketing Plan',
+            priorityId: 2,
+            startDate: new Date(2018, 4, 14, 11, 0),
+            endDate: new Date(2018, 4, 14, 13, 30)
+        }
+    ];
+
+    const priorityData = [
+        {
+            text: 'Low Priority',
+            id: 1,
+            color: '#1e90ff'
+        }, {
+            text: 'High Priority',
+            id: 2,
+            color: '#ff9747'
+        }
+    ];
+
+    const scheduler = createInstance({
+        dataSource: data,
+        views: ['agenda'],
+        currentView: 'agenda',
+        currentDate: new Date(2018, 4, 14),
+        groups: ['priorityId'],
+        resources: [
+            {
+                fieldExpr: 'priorityId',
+                allowMultiple: false,
+                dataSource: priorityData,
+                label: 'Priority'
+            }
+        ],
+        height: 700
+    });
+
+    assert.equal(scheduler.grouping.getGroupHeaderContentCount(), 2, 'Header count is OK');
+    assert.roughEqual(scheduler.grouping.getGroupHeaderContentHeight(0), 240, 2, 'Header height is OK');
+    assert.roughEqual(scheduler.grouping.getGroupHeaderContentHeight(1), 80, 2, 'Header height is OK');
+    assert.equal(scheduler.workSpace.getRowCount(), 4, 'Row count is OK');
+});
+
 QUnit.test('Group header should be rendered in right place (T374948)', function(assert) {
     this.createInstance({
         views: ['agenda'],
