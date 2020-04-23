@@ -1299,7 +1299,7 @@ const Scheduler = Widget.inherit({
                 if(this._isAgenda()) {
                     this._workSpace._renderView();
                     // TODO: remove rows calculation from this callback
-                    this._dataSourceLoadedCallback.fireWith(this, [this._filteredItems]);
+                    this._dataSourceLoadedCallback.fireWith(this, [result]);
                 }
             }).bind(this));
         }
