@@ -707,7 +707,6 @@ QUnit.test('Appointments should be rendered correctly when resourses store is as
 QUnit.test('Add new appointment with delay(T381444)', function(assert) {
     const done = assert.async();
     const data = [];
-    let popup;
 
     this.clock.restore();
 
@@ -743,13 +742,12 @@ QUnit.test('Add new appointment with delay(T381444)', function(assert) {
 
     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-    popup = this.instance.getAppointmentPopup();
+    const popup = this.instance.getAppointmentPopup();
 });
 
 QUnit.test('Add new appointment with delay and an error(T381444)', function(assert) {
     const done = assert.async();
     const data = [];
-    let popup;
 
     this.clock.restore();
 
@@ -781,7 +779,7 @@ QUnit.test('Add new appointment with delay and an error(T381444)', function(asse
 
     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-    popup = this.instance.getAppointmentPopup();
+    const popup = this.instance.getAppointmentPopup();
 });
 
 QUnit.test('Scheduler should not update scroll position if appointment is visible ', function(assert) {

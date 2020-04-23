@@ -626,11 +626,11 @@ class BaseRenderingStrategy {
 
     _customizeCoordinates(coordinates, height, appointmentCountPerCell, topOffset, isAllDay) {
         const index = coordinates.index;
-        let appointmentHeight = height / appointmentCountPerCell;
+        const appointmentHeight = height / appointmentCountPerCell;
         const appointmentTop = coordinates.top + (index * appointmentHeight);
-        let top = appointmentTop + topOffset;
-        let width = coordinates.width;
-        let left = coordinates.left;
+        const top = appointmentTop + topOffset;
+        const width = coordinates.width;
+        const left = coordinates.left;
 
         if(coordinates.isCompact) {
             this._isAdaptive() && this._correctCollectorCoordinatesInAdaptive(coordinates, isAllDay);

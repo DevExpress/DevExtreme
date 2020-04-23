@@ -21,16 +21,14 @@ $.each(DevExpress.ui, function(componentName) {
         QUnit.test(componentName + ' should not leak memory by creating redundant dom elements after refreshing', function(assert) {
             const testNode = memoryLeaksHelper.createTestNode();
             const component = $(testNode)[componentName](memoryLeaksHelper.getComponentOptions(componentName))[componentName]('instance');
-            let originalDomElements;
-            let newDomElements;
 
             this.clock.tick(0);
-            originalDomElements = memoryLeaksHelper.getAllPossibleEventTargets();
+            const originalDomElements = memoryLeaksHelper.getAllPossibleEventTargets();
 
             component._refresh();
 
             this.clock.tick(0);
-            newDomElements = memoryLeaksHelper.getAllPossibleEventTargets();
+            const newDomElements = memoryLeaksHelper.getAllPossibleEventTargets();
             if(newDomElements.length === originalDomElements.length) {
                 assert.ok(true, 'After an option changes and causes re-rendering, no additional dom elements must be created');
             } else {
