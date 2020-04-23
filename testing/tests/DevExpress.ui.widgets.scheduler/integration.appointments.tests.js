@@ -1271,38 +1271,38 @@ QUnit.test('Task dragging', function(assert) {
 });
 
 // TODO remove
-// QUnit.test("Appointment should have correct position while vertical dragging", function(assert) {
-//     this.createInstance({
-//         height: 500,
-//         editing: true,
-//         currentDate: new Date(2015, 1, 9),
-//         currentView: "week",
-//         dataSource: [{
-//             text: "a",
-//             startDate: new Date(2015, 1, 9, 7),
-//             endDate: new Date(2015, 1, 9, 7, 30)
-//         }]
-//     });
+QUnit.skip('Appointment should have correct position while vertical dragging', function(assert) {
+    this.createInstance({
+        height: 500,
+        editing: true,
+        currentDate: new Date(2015, 1, 9),
+        currentView: 'week',
+        dataSource: [{
+            text: 'a',
+            startDate: new Date(2015, 1, 9, 7),
+            endDate: new Date(2015, 1, 9, 7, 30)
+        }]
+    });
 
-//     var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
-//         scrollable = this.instance.getWorkSpace().$element().find(".dx-scrollable").dxScrollable("instance"),
-//         allDayHeight = this.instance.$element().find(".dx-scheduler-all-day-table-cell").first().outerHeight(),
-//         scrollDistance = 400,
-//         dragDistance = -300,
-//         headerPanelHeight = this.instance.$element().find(".dx-scheduler-header-panel").outerHeight(true);
+    var $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0),
+        scrollable = this.instance.getWorkSpace().$element().find('.dx-scrollable').dxScrollable('instance'),
+        allDayHeight = this.instance.$element().find('.dx-scheduler-all-day-table-cell').first().outerHeight(),
+        scrollDistance = 400,
+        dragDistance = -300,
+        headerPanelHeight = this.instance.$element().find('.dx-scheduler-header-panel').outerHeight(true);
 
-//     scrollable.scrollBy(scrollDistance);
+    scrollable.scrollBy(scrollDistance);
 
-//     var pointer = pointerMock($appointment).start(),
-//         startPosition = translator.locate($appointment);
+    var pointer = pointerMock($appointment).start(),
+        startPosition = translator.locate($appointment);
 
-//     pointer.dragStart().drag(0, dragDistance);
+    pointer.dragStart().drag(0, dragDistance);
 
-//     var currentPosition = translator.locate($appointment);
+    var currentPosition = translator.locate($appointment);
 
-//     assert.roughEqual(startPosition.top, currentPosition.top + scrollDistance - allDayHeight - dragDistance - headerPanelHeight, 1, "Appointment position is correct");
-//     pointer.dragEnd();
-// });
+    assert.roughEqual(startPosition.top, currentPosition.top + scrollDistance - allDayHeight - dragDistance - headerPanelHeight, 1, 'Appointment position is correct');
+    pointer.dragEnd();
+});
 
 QUnit.test('Appointment should be dragged correctly in grouped timeline (T739132)', function(assert) {
     const data = new DataSource({
@@ -1406,57 +1406,57 @@ QUnit.test('Appointment should have correct position while dragging from group',
 });
 
 // TODO remove
-// QUnit.test("getWorkSpaceScrollableScrollTop should be called while dragging from allDay panel, vertical grouping", function(assert) {
-//     var spy = sinon.spy();
-//     this.createInstance({
-//         currentDate: new Date(2015, 6, 10),
-//         editing: true,
-//         views: [{
-//             type: "week",
-//             name: "Week",
-//             groupOrientation: "vertical"
-//         }],
-//         currentView: "week",
-//         dataSource: [{
-//             text: "a",
-//             startDate: new Date(2015, 6, 7, 10),
-//             endDate: new Date(2015, 6, 7, 10, 30),
-//             allDay: true,
-//             ownerId: { id: 2 }
-//         }],
-//         startDayHour: 9,
-//         endDayHour: 12,
-//         groups: ["ownerId.id"],
-//         resources: [
-//             {
-//                 field: "ownerId.id",
-//                 allowMultiple: false,
-//                 dataSource: [
-//                     { id: 1, text: "one" },
-//                     { id: 2, text: "two" }
-//                 ]
-//             }
-//         ],
-//         width: 800,
-//         height: 500
-//     });
+QUnit.skip('getWorkSpaceScrollableScrollTop should be called while dragging from allDay panel, vertical grouping', function(assert) {
+    var spy = sinon.spy();
+    this.createInstance({
+        currentDate: new Date(2015, 6, 10),
+        editing: true,
+        views: [{
+            type: 'week',
+            name: 'Week',
+            groupOrientation: 'vertical'
+        }],
+        currentView: 'week',
+        dataSource: [{
+            text: 'a',
+            startDate: new Date(2015, 6, 7, 10),
+            endDate: new Date(2015, 6, 7, 10, 30),
+            allDay: true,
+            ownerId: { id: 2 }
+        }],
+        startDayHour: 9,
+        endDayHour: 12,
+        groups: ['ownerId.id'],
+        resources: [
+            {
+                field: 'ownerId.id',
+                allowMultiple: false,
+                dataSource: [
+                    { id: 1, text: 'one' },
+                    { id: 2, text: 'two' }
+                ]
+            }
+        ],
+        width: 800,
+        height: 500
+    });
 
-//     var getScrollableOffset = this.instance.getWorkSpaceScrollableScrollTop;
-//     this.instance.getWorkSpaceScrollableScrollTop = spy;
+    var getScrollableOffset = this.instance.getWorkSpaceScrollableScrollTop;
+    this.instance.getWorkSpaceScrollableScrollTop = spy;
 
-//     try {
-//         var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0);
-//         var pointer = pointerMock($appointment).start();
-//         pointer.dragStart().drag(0, 100);
+    try {
+        var $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+        var pointer = pointerMock($appointment).start();
+        pointer.dragStart().drag(0, 100);
 
-//         assert.ok(spy.calledOnce, "getWorkSpaceScrollableScrollTop was called");
-//         assert.strictEqual(spy.getCall(0).args[0], true, "getWorkSpaceScrollableScrollTop was called with right args");
+        assert.ok(spy.calledOnce, 'getWorkSpaceScrollableScrollTop was called');
+        assert.strictEqual(spy.getCall(0).args[0], true, 'getWorkSpaceScrollableScrollTop was called with right args');
 
-//         pointer.dragEnd();
-//     } finally {
-//         this.instance.getWorkSpaceScrollableScrollTop = getScrollableOffset;
-//     }
-// });
+        pointer.dragEnd();
+    } finally {
+        this.instance.getWorkSpaceScrollableScrollTop = getScrollableOffset;
+    }
+});
 
 QUnit.test('Appointment should have correct position while dragging from group, vertical grouping', function(assert) {
     this.createInstance({
@@ -1676,113 +1676,116 @@ QUnit.test('Appointment should push correct data to the onAppointmentUpdating ev
     this.clock.tick();
 });
 
-// QUnit.test("Appointment should not twitch on drag start with horizontal dragging", function(assert) {
-//     if(skipTestOnMobile(assert)) return;
-//     let resourcesData = [
-//         {
-//             text: "Samantha Bright",
-//             id: 1,
-//             color: "#cb6bb2"
-//         }, {
-//             text: "John Heart",
-//             id: 2,
-//             color: "#56ca85"
-//         }
-//     ];
+QUnit.skip('Appointment should not twitch on drag start with horizontal dragging', function(assert) {
+    // if(skipTestOnMobile(assert)) {
+    //     return;
+    // }
+    let resourcesData = [
+        {
+            text: 'Samantha Bright',
+            id: 1,
+            color: '#cb6bb2'
+        }, {
+            text: 'John Heart',
+            id: 2,
+            color: '#56ca85'
+        }
+    ];
 
-//     let priorityData = [
-//         {
-//             text: "Low Priority",
-//             id: 1,
-//             color: "#1e90ff"
-//         }, {
-//             text: "High Priority",
-//             id: 2,
-//             color: "#ff9747"
-//         }
-//     ];
+    let priorityData = [
+        {
+            text: 'Low Priority',
+            id: 1,
+            color: '#1e90ff'
+        }, {
+            text: 'High Priority',
+            id: 2,
+            color: '#ff9747'
+        }
+    ];
 
-//     let data = [{
-//         "text": "Google AdWords Strategy",
-//         "ownerId": [2],
-//         "startDate": new Date(2017, 4, 1, 9, 0),
-//         "endDate": new Date(2017, 4, 1, 10, 30),
-//         "priority": 1
-//     }, {
-//         "text": "New Brochures",
-//         "ownerId": [1],
-//         "startDate": new Date(2017, 4, 1, 11, 30),
-//         "endDate": new Date(2017, 4, 1, 14, 15),
-//         "priority": 2
-//     }];
+    let data = [{
+        'text': 'Google AdWords Strategy',
+        'ownerId': [2],
+        'startDate': new Date(2017, 4, 1, 9, 0),
+        'endDate': new Date(2017, 4, 1, 10, 30),
+        'priority': 1
+    }, {
+        'text': 'New Brochures',
+        'ownerId': [1],
+        'startDate': new Date(2017, 4, 1, 11, 30),
+        'endDate': new Date(2017, 4, 1, 14, 15),
+        'priority': 2
+    }];
 
-//     this.createInstance({
-//         dataSource: data,
-//         views: ["timelineDay"],
-//         currentView: "timelineDay",
-//         currentDate: new Date(2017, 4, 1),
-//         firstDayOfWeek: 0,
-//         startDayHour: 8,
-//         endDayHour: 20,
-//         cellDuration: 60,
-//         groups: ["priority"],
-//         resources: [{
-//             fieldExpr: "ownerId",
-//             allowMultiple: true,
-//             dataSource: resourcesData,
-//             label: "Owner",
-//             useColorAsDefault: true
-//         }, {
-//             fieldExpr: "priority",
-//             allowMultiple: false,
-//             dataSource: priorityData,
-//             label: "Priority"
-//         }],
-//         height: 400
-//     });
+    this.createInstance({
+        dataSource: data,
+        views: ['timelineDay'],
+        currentView: 'timelineDay',
+        currentDate: new Date(2017, 4, 1),
+        firstDayOfWeek: 0,
+        startDayHour: 8,
+        endDayHour: 20,
+        cellDuration: 60,
+        groups: ['priority'],
+        resources: [{
+            fieldExpr: 'ownerId',
+            allowMultiple: true,
+            dataSource: resourcesData,
+            label: 'Owner',
+            useColorAsDefault: true
+        }, {
+            fieldExpr: 'priority',
+            allowMultiple: false,
+            dataSource: priorityData,
+            label: 'Priority'
+        }],
+        height: 400
+    });
 
-//     let $appointment = this.scheduler.appointments.getAppointment(),
-//         dragDistance = 50;
+    let $appointment = this.scheduler.appointments.getAppointment(),
+        dragDistance = 50;
 
-//     const defaultPosition = translator.locate($appointment);
-//     let pointer = pointerMock($appointment).start();
+    const defaultPosition = translator.locate($appointment);
+    let pointer = pointerMock($appointment).start();
 
-//     //pointer.dragStart().drag(dragDistance, 0);
-//     pointer.dragStart().drag(0, 0);
+    // pointer.dragStart().drag(dragDistance, 0);
+    pointer.dragStart().drag(0, 0);
 
-//     let startPosition = translator.locate($appointment);
-//     assert.roughEqual(defaultPosition.left, startPosition.left - dragDistance, 1, "Appointment start position does not twitch after drag start");
-// });
+    let startPosition = translator.locate($appointment);
+    assert.roughEqual(defaultPosition.left, startPosition.left - dragDistance, 1, 'Appointment start position does not twitch after drag start');
+});
 
 // TODO remove
-// QUnit.test("Appointment should have correct position while horizontal dragging", function(assert) {
-//     if(skipTestOnMobile(assert)) return;
-//     this.createInstance({
-//         height: 500,
-//         editing: true,
-//         currentDate: new Date(2015, 1, 9),
-//         currentView: "week",
-//         dataSource: [{
-//             text: "a",
-//             startDate: new Date(2015, 1, 9, 1),
-//             endDate: new Date(2015, 1, 9, 1, 30)
-//         }]
-//     });
+QUnit.skip('Appointment should have correct position while horizontal dragging', function(assert) {
+    // if(skipTestOnMobile(assert)) return;
+    this.createInstance({
+        height: 500,
+        editing: true,
+        currentDate: new Date(2015, 1, 9),
+        currentView: 'week',
+        dataSource: [{
+            text: 'a',
+            startDate: new Date(2015, 1, 9, 1),
+            endDate: new Date(2015, 1, 9, 1, 30)
+        }]
+    });
 
-//     let $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
-//         dragDistance = 150,
-//         timePanelWidth = this.instance.$element().find(".dx-scheduler-time-panel").outerWidth(true);
+    let $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0),
+        dragDistance = 150;
 
-//     let pointer = pointerMock($appointment).start(),
-//         startPosition = translator.locate($appointment);
+    this.instance.$element().find('.dx-scheduler-time-panel').outerWidth(true);
 
-//     pointer.dragStart().drag(dragDistance, 0);
+    let pointer = pointerMock($appointment).start(),
+        startPosition = translator.locate($appointment);
 
-//     let currentPosition = translator.locate($appointment);
+    pointer.dragStart().drag(dragDistance, 0);
 
-//     assert.roughEqual(startPosition.left, currentPosition.left - dragDistance, 2, "Appointment position is correct");
-//     pointer.dragEnd();
-// });
+    let currentPosition = translator.locate($appointment);
+
+    assert.roughEqual(startPosition.left, currentPosition.left - dragDistance, 2, 'Appointment position is correct');
+    pointer.dragEnd();
+});
 
 QUnit.test('Appointment should not be updated if it is dropped to the initial cell (week view)', function(assert) {
     this.createInstance({
@@ -3699,47 +3702,47 @@ QUnit.test('Appointment should be rendered without compact ones if only one per 
     assert.equal(this.scheduler.appointments.getAppointmentCount(), 30, 'Scheduler appointments are rendered without compact ones');
 });
 
-// QUnit.test("Appointments are rendered with custom cell width less than default (T816873)", function(assert) {
-//     let $style = $("<style>").text('#dxLineSchedule .dx-scheduler-date-table-cell, #dxLineSchedule .dx-scheduler-header-panel-cell {width: 100px !important;}');
-//     try {
-//         $style.appendTo("head");
+QUnit.skip('Appointments are rendered with custom cell width less than default (T816873)', function(assert) {
+    const $style = $('<style>').text('#dxLineSchedule .dx-scheduler-date-table-cell, #dxLineSchedule .dx-scheduler-header-panel-cell {width: 100px !important;}');
+    try {
+        $style.appendTo('head');
 
-//         const data = [{
-//             recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T130000",
-//             recurrenceException: "",
-//             startDate: "2019-09-19T18:00:00.000Z",
-//             endDate: "2019-09-19T18:04:00.000Z"
-//         }, {
-//             recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T050000",
-//             recurrenceException: "",
-//             startDate: "2019-09-20T10:00:00.000Z",
-//             endDate: "2019-09-20T04:59:59.000Z"
-//         }, {
-//             recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T045900",
-//             recurrenceException: "",
-//             startDate: "2019-09-20T09:59:00.000Z",
-//             endDate: "2019-09-20T10:00:00.000Z"
-//         }];
+        const data = [{
+            recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T130000',
+            recurrenceException: '',
+            startDate: '2019-09-19T18:00:00.000Z',
+            endDate: '2019-09-19T18:04:00.000Z'
+        }, {
+            recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T050000',
+            recurrenceException: '',
+            startDate: '2019-09-20T10:00:00.000Z',
+            endDate: '2019-09-20T04:59:59.000Z'
+        }, {
+            recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T045900',
+            recurrenceException: '',
+            startDate: '2019-09-20T09:59:00.000Z',
+            endDate: '2019-09-20T10:00:00.000Z'
+        }];
 
-//         this.createInstance({
-//             dataSource: data,
-//             elementAttr: {
-//                 id: "dxLineSchedule"
-//             },
-//             views: [{
-//                 type: "timelineWeek",
-//                 cellDuration: 120,
-//                 maxAppointmentsPerCell: "unlimited"
-//             }],
-//             currentView: 'timelineWeek',
-//             currentDate: new Date(2019, 8, 22)
-//         });
+        this.createInstance({
+            dataSource: data,
+            elementAttr: {
+                id: 'dxLineSchedule'
+            },
+            views: [{
+                type: 'timelineWeek',
+                cellDuration: 120,
+                maxAppointmentsPerCell: 'unlimited'
+            }],
+            currentView: 'timelineWeek',
+            currentDate: new Date(2019, 8, 22)
+        });
 
-//         assert.ok(this.scheduler.appointments.getAppointmentCount() > 0, "Appointments are rendered");
-//     } finally {
-//         $style.remove();
-//     }
-// });
+        assert.ok(this.scheduler.appointments.getAppointmentCount() > 0, 'Appointments are rendered');
+    } finally {
+        $style.remove();
+    }
+});
 
 QUnit.test('Long term appoinment inflict index shift in other appointments (T737780)', function(assert) {
     const data = [
