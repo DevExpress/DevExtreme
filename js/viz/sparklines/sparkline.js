@@ -245,15 +245,13 @@ const dxSparkline = BaseSparkline.inherit({
 
     _updateSeries: function() {
         const that = this;
-        let groupsData;
-        let seriesOptions;
         const singleSeries = that._series;
 
         that._prepareDataSource();
-        seriesOptions = that._prepareSeriesOptions();
+        const seriesOptions = that._prepareSeriesOptions();
         singleSeries.updateOptions(seriesOptions);
 
-        groupsData = { groups: [{ series: [singleSeries] }] };
+        const groupsData = { groups: [{ series: [singleSeries] }] };
         groupsData.argumentOptions = {
             type: seriesOptions.type === 'bar' ? 'discrete' : undefined
         };
@@ -393,10 +391,9 @@ const dxSparkline = BaseSparkline.inherit({
         const hasMinY = _isDefined(minValue) && _isFinite(minValue);
         const maxValue = that._allOptions.maxValue;
         const hasMaxY = _isDefined(maxValue) && _isFinite(maxValue);
-        let valCoef;
         let argCoef;
 
-        valCoef = (rangeData.val.max - rangeData.val.min) * DEFAULT_VALUE_RANGE_MARGIN;
+        const valCoef = (rangeData.val.max - rangeData.val.min) * DEFAULT_VALUE_RANGE_MARGIN;
         if(isBarType || isWinlossType || type === 'area') {
             if(rangeData.val.min !== 0) {
                 rangeData.val.min -= valCoef;

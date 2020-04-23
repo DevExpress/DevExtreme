@@ -33,10 +33,9 @@ if(typeof ArrayBuffer !== 'undefined') {
         QUnit.test(testDataItem.name, function(assert) {
             const done = assert.async();
             $.when(loadBinaryData(TEST_DATA_URL + testDataItem.name + '.shp'), loadBinaryData(TEST_DATA_URL + testDataItem.name + '.dbf')).then(function(shapeData, dataBaseFileData) {
-                let func;
                 let data;
                 let errors;
-                func = parse({ 'shp': shapeData, 'dbf': dataBaseFileData }, function(data_, errors_) {
+                const func = parse({ 'shp': shapeData, 'dbf': dataBaseFileData }, function(data_, errors_) {
                     data = data_;
                     errors = errors_;
                 });

@@ -9,7 +9,6 @@ module.exports = {
         const that = this;
         const canvasOptions = that._canvasOptions;
         const categoryIndex = that._categoriesToPoints[category.valueOf()];
-        let stickDelta;
         const specialValue = that.translateSpecialCase(category);
         const startPointIndex = canvasOptions.startPointIndex || 0;
         const stickInterval = that._options.stick ? 0 : 0.5;
@@ -24,7 +23,7 @@ module.exports = {
         }
         directionOffset = directionOffset || 0;
 
-        stickDelta = categoryIndex + stickInterval - startPointIndex + directionOffset * 0.5;
+        const stickDelta = categoryIndex + stickInterval - startPointIndex + directionOffset * 0.5;
         return round(that._calculateProjection(canvasOptions.interval * stickDelta));
     },
 
@@ -49,8 +48,6 @@ module.exports = {
         let startCategoryIndex = parseInt((canvasOptions.startPointIndex || 0) + translateCategories + 0.5);
         const categoriesLength = parseInt(adjust(canvasOptions.canvasLength / interval) + (stick ? 1 : 0)) || 1;
         let endCategoryIndex;
-        let newVisibleCategories;
-        let newInterval;
 
         if(invert) {
             startCategoryIndex = parseInt((canvasOptions.startPointIndex || 0) + visibleCount - translateCategories + 0.5) - categoriesLength;
@@ -70,9 +67,9 @@ module.exports = {
             }
         }
 
-        newVisibleCategories = categories.slice(parseInt(startCategoryIndex), parseInt(endCategoryIndex));
+        const newVisibleCategories = categories.slice(parseInt(startCategoryIndex), parseInt(endCategoryIndex));
 
-        newInterval = that._getDiscreteInterval(newVisibleCategories.length, canvasOptions);
+        const newInterval = that._getDiscreteInterval(newVisibleCategories.length, canvasOptions);
 
         scale = newInterval / canvasOptions.interval;
         translate = (that.translate(!invert ? newVisibleCategories[0] : newVisibleCategories[newVisibleCategories.length - 1]) * scale - (canvasOptions.startPoint + (stick ? 0 : newInterval / 2)));

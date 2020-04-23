@@ -1281,15 +1281,12 @@ QUnit.test('null values. ignoreEmptyPoints for all series is true and equalBarWi
     const series2 = createSeries({ points: pointsForStacking.barWidthPoints2(), ignoreEmptyPoints: true });
     const series3 = createSeries({ points: pointsForStacking.barWidthPoints3(), ignoreEmptyPoints: true });
     const series = [series1, series2, series3];
-    let series1Points;
-    let series2Points;
-    let series3Points;
 
     createSeriesFamily('bar', series, { equalBarWidth: true });
 
-    series1Points = series1.getPoints();
-    series2Points = series2.getPoints();
-    series3Points = series3.getPoints();
+    const series1Points = series1.getPoints();
+    const series2Points = series2.getPoints();
+    const series3Points = series3.getPoints();
 
     assert.deepEqual(series1Points[0].coordinatesCorrection, { width: 20, offset: -25 }, 'Width and offset, Series 1, point 1');
     assert.ok(!series1Points[1].coordinatesCorrection, 'Width and offset, Series 1, point 2');
@@ -1309,15 +1306,12 @@ QUnit.test('null values. ignoreEmptyPoints is set for the second series - null v
     const series2 = createSeries({ points: pointsForStacking.barWidthPoints2(), ignoreEmptyPoints: true });
     const series3 = createSeries({ points: pointsForStacking.barWidthPoints3() });
     const series = [series1, series2, series3];
-    let series1Points;
-    let series2Points;
-    let series3Points;
 
     createSeriesFamily('bar', series, { equalBarWidth: true });
 
-    series1Points = series1.getPoints();
-    series2Points = series2.getPoints();
-    series3Points = series3.getPoints();
+    const series1Points = series1.getPoints();
+    const series2Points = series2.getPoints();
+    const series3Points = series3.getPoints();
 
     assert.deepEqual(series1Points[0].coordinatesCorrection, { width: 20, offset: -25 }, 'Width and offset, Series 1, point 1');
     assert.deepEqual(series1Points[1].coordinatesCorrection, { width: 32, offset: -19.5 }, 'Width and offset, Series 1, point 2');

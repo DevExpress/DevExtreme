@@ -152,12 +152,11 @@ QUnit.test('Boolean animation options. False', function(assert) {
 
 QUnit.test('Boolean animation options. True', function(assert) {
     this.themeManager.getOptions.withArgs('animation').returns({ enabled: true });
-    let chart;
     const defaultOptions = {
         enabled: true
     };
 
-    chart = commons.createChartInstance({
+    const chart = commons.createChartInstance({
         animation: true
     }, this.$container);
     vizMocks.forceThemeOptions(this.themeManager);

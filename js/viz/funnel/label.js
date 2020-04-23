@@ -192,7 +192,6 @@ exports.plugin = {
             const adaptiveLayout = this._getOption('adaptiveLayout');
             const rect = this._rect;
             let labelWidth = 0;
-            let groupWidth;
             const width = rect[2] - rect[0];
 
             this._labelRect = rect.slice();
@@ -204,7 +203,7 @@ exports.plugin = {
                 return;
             }
 
-            groupWidth = this._labels.map(function(label) {
+            const groupWidth = this._labels.map(function(label) {
                 label.resetEllipsis();
                 return label.getBoundingRect().width;
             }).reduce(function(max, width) {
@@ -258,8 +257,6 @@ exports.plugin = {
 
             that._labels.forEach(function(label, index) {
                 const item = that._items[index];
-                let bBox;
-                let pos;
                 const borderWidth = item.getNormalStyle()['stroke-width'];
                 const halfBorderWidth = inverted ? borderWidth / 2 : -borderWidth / 2;
                 const coords = halfBorderWidth ? item.coords.map(function(coord, index) {
@@ -281,8 +278,8 @@ exports.plugin = {
                     that._correctLabelWidth(label, item.coords, options);
                 }
 
-                bBox = label.getBoundingRect();
-                pos = correctLabelPosition(getCoords(coords, bBox, options, inverted), bBox, that._labelRect);
+                const bBox = label.getBoundingRect();
+                const pos = correctLabelPosition(getCoords(coords, bBox, options, inverted), bBox, that._labelRect);
 
                 label.setFigureToDrawConnector(coords);
                 label.shift(pos.x, pos.y);

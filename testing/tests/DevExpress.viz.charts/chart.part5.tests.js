@@ -610,7 +610,6 @@ QUnit.test('ScrollBar option changed', function(assert) {
         }
     });
     const scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue;
-    let range;
 
     scrollBar.init.reset();
     scrollBar.setPosition.reset();
@@ -626,7 +625,7 @@ QUnit.test('ScrollBar option changed', function(assert) {
         color: 'new'
     });
 
-    range = chart._argumentAxes[0].getTranslator().getBusinessRange();
+    const range = chart._argumentAxes[0].getTranslator().getBusinessRange();
 
     // assert
     assert.ok(scrollBarClassModule.ScrollBar.calledOnce);
@@ -685,8 +684,6 @@ QUnit.test('Options changed - show scrollBar', function(assert) {
             color: 'old'
         }
     });
-    let scrollBar;
-    let range;
 
     this.themeManager.getOptions.withArgs('scrollBar').returns({
         visible: true,
@@ -698,7 +695,7 @@ QUnit.test('Options changed - show scrollBar', function(assert) {
         visible: true,
         color: 'new'
     });
-    scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue;
+    const scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue;
     // assert
     assert.ok(scrollBarClassModule.ScrollBar.calledOnce);
     assert.deepEqual(scrollBarClassModule.ScrollBar.lastCall.args, [chart._renderer, chart._scrollBarGroup]);
@@ -710,7 +707,7 @@ QUnit.test('Options changed - show scrollBar', function(assert) {
         color: 'new'
     }]);
 
-    range = chart._argumentAxes[0].getTranslator().getBusinessRange();
+    const range = chart._argumentAxes[0].getTranslator().getBusinessRange();
 
     assert.equal(scrollBar.init.callCount, 1, 'scroll bar init calls');
     assert.deepEqual(scrollBar.init.lastCall.args, [range, true]);
@@ -728,13 +725,12 @@ QUnit.test('Options changed - rotated (false->true)', function(assert) {
             visible: true
         }
     });
-    let scrollBar;
 
     this.themeManager.getOptions.withArgs('rotated').returns(true);
 
     // act
     chart.option('rotated', true);
-    scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue;
+    const scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue;
 
     // assert
     assert.deepEqual(scrollBar.update.lastCall.args, [{ rotated: true, visible: true }]);
@@ -749,13 +745,12 @@ QUnit.test('Options changed - rotated (true->false)', function(assert) {
             visible: true
         }
     });
-    let scrollBar;
 
     this.themeManager.getOptions.withArgs('rotated').returns(false);
 
     // act
     chart.option('rotated', false);
-    scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue;
+    const scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue;
 
     // assert
     assert.deepEqual(scrollBar.update.lastCall.args, [{ rotated: false, visible: true }]);

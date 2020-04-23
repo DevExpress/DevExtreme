@@ -129,13 +129,12 @@ const environment = {
     },
     createSimpleAxis: function(options) {
         options = $.extend(true, {}, this.options, options);
-        let axis;
 
         this.range.categories = options.categories;
         this.range.minVisible = options.min;
         this.range.maxVisible = options.max;
 
-        axis = this.createAxis(this.renderSettings, options);
+        const axis = this.createAxis(this.renderSettings, options);
 
         axis.validate();
         axis.setBusinessRange(this.range);
@@ -635,11 +634,10 @@ QUnit.test('measuring label, label visibility is false', function(assert) {
 QUnit.test('measuring label, label creation', function(assert) {
     this.generatedTicks = [0, 1, 2];
     const axis = this.createSimpleAxis({ label: { visible: true, customizeText: function() { return this.value + ' sec'; }, font: { color: 'color' } } });
-    let text;
 
     axis.measureLabels(this.canvas);
 
-    text = this.renderer.text;
+    const text = this.renderer.text;
 
     assert.equal(text.args[0][0], '0 sec', 'text of the label');
     assert.equal(text.args[0][1], 0, 'x coord');
@@ -1028,12 +1026,11 @@ QUnit.test('horizontal axis, labels overlap, rotationAngle is 90', function(asse
         { x: 45, y: 0, width: 10, height: 5 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { rotationAngle: 90, overlappingBehavior: 'rotate', indentFromAxis: 0 } });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
     for(i = 0; i < texts.callCount; i++) {
         assert.equal(texts.getCall(i).returnValue.rotate.args[0][0], 90, i + ' text is rotated at an angle');
@@ -1053,11 +1050,10 @@ QUnit.test('alignment of labels after rotate', function(assert) {
         { x: 45, y: 0, width: 10, height: 5 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { rotationAngle: 90, overlappingBehavior: 'rotate', indentFromAxis: 0 } });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
 
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateX, -597.5);
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 0);
@@ -1077,11 +1073,10 @@ QUnit.test('alignment of labels after rotate, angle less than 0', function(asser
         { x: 45, y: 0, width: 10, height: 5 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { rotationAngle: -40, overlappingBehavior: 'rotate', indentFromAxis: 0 } });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateX, 374);
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 467);
 });
@@ -1099,11 +1094,10 @@ QUnit.test('custom alignment for labels', function(assert) { // TODO: remove use
         { x: 45, y: 0, width: 10, height: 5 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { alignment: 'right', userAlignment: true, overlappingBehavior: 'rotate', indentFromAxis: 0 } });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
 
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateX, -10);
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600);
@@ -1122,13 +1116,12 @@ QUnit.test('vertical labels overlap but shouldn\'t rotate', function(assert) {
         { x: 0, y: 15, height: 10, width: 4 },
         { x: 0, y: 0, height: 10, width: 4 }
     ];
-    let texts;
     let i;
     this.options.isHorizontal = false;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', indentFromAxis: 0 } });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     for(i = 0; i < texts.callCount; i++) {
         assert.ok(!texts.getCall(i).returnValue.rotate.called);
     }
@@ -1151,7 +1144,6 @@ QUnit.test('Check title offset after olerlap resolving', function(assert) {
         { x: 45, y: 0, width: 10, height: 5 },
         { x: 60, y: 0, width: 10, height: 5 },
     ];
-    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
 
     this.drawAxisWithOptions({
@@ -1168,7 +1160,7 @@ QUnit.test('Check title offset after olerlap resolving', function(assert) {
         }
     });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 616, 'title offset');
 });
 
@@ -1180,11 +1172,10 @@ QUnit.test('labels overlap after rotation', function(assert) {
         { x: 45, y: 0, width: 10, height: 20 },
         { x: 60, y: 0, width: 10, height: 20 }
     ];
-    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', rotationAngle: 90 } });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, ['3', '7'], 'labels decimated');
 
     assert.equal(texts.getCall(0).returnValue.rotate.args[0][0], 90, '0 text is rotated at an angle');
@@ -1202,11 +1193,10 @@ QUnit.test('labels overlap, rotationAngle is zero', function(assert) {
         { x: 45, y: 0, width: 10, height: 5 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', rotationAngle: 0 } });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, ['3', '5', '9'], 'labels decimated');
 
     assert.equal(texts.getCall(0).returnValue.rotate.args[0][0], 0, '0 text is rotated at an angle');
@@ -1224,11 +1214,10 @@ QUnit.test('labels overlap, rotationAngle less then zero', function(assert) {
         { x: 45, y: 0, width: 10, height: 8 },
         { x: 60, y: 0, width: 10, height: 8 }
     ];
-    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', rotationAngle: -30 } });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, ['3', '7'], 'labels decimated');
 
     assert.equal(texts.getCall(0).returnValue.rotate.args[0][0], -30, '0 text is rotated at an angle');
@@ -1246,11 +1235,10 @@ QUnit.test('labels overlap, rotationAngle is 180', function(assert) {
         { x: 45, y: 0, width: 10, height: 5 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', rotationAngle: 180 } });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, ['3', '5', '9'], 'labels decimated');
 
     assert.equal(texts.getCall(0).returnValue.rotate.args[0][0], 180, '0 text is rotated at an angle');
@@ -1268,11 +1256,10 @@ QUnit.test('labels overlap, rotationAngle less then 90', function(assert) {
         { x: 45, y: 0, width: 10, height: 5 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', rotationAngle: 20 } });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, ['3', '7'], 'labels decimated');
 
     assert.equal(texts.getCall(0).returnValue.rotate.args[0][0], 20, '0 text is rotated at an angle');
@@ -1290,11 +1277,10 @@ QUnit.test('labels overlap, rotationAngle more then 90', function(assert) {
         { x: 45, y: 0, width: 10, height: 5 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', rotationAngle: 160 } });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, ['3', '7'], 'labels decimated');
 
     assert.equal(texts.getCall(0).returnValue.rotate.args[0][0], 160, '0 text is rotated at an angle');
@@ -1312,7 +1298,6 @@ QUnit.test('Alignment of labels after their rotation and updating width of canva
         { x: 45, y: 0, width: 10, height: 5 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     const axis = this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', rotationAngle: 40 } });
@@ -1325,7 +1310,7 @@ QUnit.test('Alignment of labels after their rotation and updating width of canva
     this.translator.translate.withArgs(9).returns(130);
     axis.draw(this.canvas);
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     for(i = 0; i < texts.callCount; i++) {
         assert.equal(texts.getCall(i).returnValue._stored_settings.align, 'center', i + ' text align after update');
     }
@@ -1341,7 +1326,6 @@ QUnit.test('Labels overlap', function(assert) {
         { x: 45, y: 0, width: 10, height: 7 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1,
@@ -1353,7 +1337,7 @@ QUnit.test('Labels overlap', function(assert) {
         }
     });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, '0 text not moved');
@@ -1373,7 +1357,6 @@ QUnit.test('Check title offset after olerlap resolving', function(assert) {
         { x: 60, y: 0, width: 10, height: 5 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
 
     this.drawAxisWithOptions({
@@ -1390,7 +1373,7 @@ QUnit.test('Check title offset after olerlap resolving', function(assert) {
         }
     });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 614, 'title offset');
@@ -1407,7 +1390,6 @@ QUnit.test('Labels overlap, some of them hide', function(assert) {
         { x: 100, y: 0, width: 10, height: 5 },
         { x: 115, y: 0, width: 10, height: 5 }
     ];
-    let texts;
 
     this.generatedTicks = [1, 3, 5, 7, 9, 11, 13, 15];
 
@@ -1426,7 +1408,7 @@ QUnit.test('Labels overlap, some of them hide', function(assert) {
         }
     });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, ['3', '7', '11', '15'], 'decimated labels');
 
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, '0 text not moved');
@@ -1483,7 +1465,6 @@ QUnit.test('Axis position is top', function(assert) {
         { x: 45, y: 0, width: 10, height: 7 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1,
@@ -1496,7 +1477,7 @@ QUnit.test('Axis position is top', function(assert) {
         }
     });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 5, '0 text not moved');
@@ -1514,7 +1495,6 @@ QUnit.test('staggeringSpacing more than zero', function(assert) {
         { x: 45, y: 0, width: 10, height: 7 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1,
@@ -1526,7 +1506,7 @@ QUnit.test('staggeringSpacing more than zero', function(assert) {
         }
     });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, '0 text not moved');
@@ -1546,7 +1526,6 @@ QUnit.test('Labels overlap and apply stagger mode', function(assert) {
         { x: 45, y: 0, width: 10, height: 7 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1,
@@ -1558,7 +1537,7 @@ QUnit.test('Labels overlap and apply stagger mode', function(assert) {
         }
     });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, '0 text not moved');
@@ -1576,12 +1555,11 @@ QUnit.test('Labels overlap and rotate -45 degrees', function(assert) {
         { x: 45, y: 0, width: 10, height: 5 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'auto' } });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
     for(i = 0; i < texts.callCount; i++) {
         assert.equal(texts.getCall(i).returnValue.rotate.args[0][0], -45, i + ' text is rotated at an angle');
@@ -1596,12 +1574,11 @@ QUnit.test('Labels overlap and rotate -90 degrees', function(assert) {
         { x: 30, y: 0, width: 10, height: 5 },
         { x: 40, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'auto' } });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
     for(i = 0; i < texts.callCount; i++) {
         assert.equal(texts.getCall(i).returnValue.rotate.args[0][0], -90, i + ' text is rotated at an angle');
@@ -1616,11 +1593,10 @@ QUnit.test('Labels overlap, rotate -90 degrees and hide', function(assert) {
         { x: 30, y: 0, width: 10, height: 5 },
         { x: 40, y: 0, width: 10, height: 10 }
     ];
-    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'auto' } });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, ['3', '7'], 'labels decimated');
 
     assert.equal(texts.getCall(0).returnValue.rotate.args[0][0], -90, '0 text is rotated at an angle');
@@ -1679,7 +1655,6 @@ QUnit.test('Auto mode. After first draw - rotate, after second - stagger. Reset 
         { x: 30, y: 0, width: 10, height: 5 },
         { x: 40, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
 
@@ -1694,7 +1669,7 @@ QUnit.test('Auto mode. After first draw - rotate, after second - stagger. Reset 
         }
     });
 
-    texts = this.renderer.text;
+    let texts = this.renderer.text;
     for(i = 0; i < texts.callCount; i++) {
         texts.getCall(i).returnValue.rotate.reset();
     }
@@ -1742,7 +1717,6 @@ QUnit.test('Auto mode. After first draw - stagger, after second - rotate. Reset 
         { x: 45, y: 0, width: 10, height: 7 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
 
@@ -1757,7 +1731,7 @@ QUnit.test('Auto mode. After first draw - stagger, after second - rotate. Reset 
         }
     });
 
-    texts = this.renderer.text;
+    let texts = this.renderer.text;
     markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 10, y: 0, width: 10, height: 5 },
@@ -1806,12 +1780,11 @@ QUnit.test('Rotated mode with positive angle. No overlapping after second draw. 
         { x: 45, y: 0, width: 10, height: 5 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     const axis = this.drawAxisWithOptions({ min: 1, max: 10, label: { rotationAngle: -89, overlappingBehavior: 'rotate', indentFromAxis: 0 } });
 
-    texts = this.renderer.text;
+    let texts = this.renderer.text;
     for(i = 0; i < texts.callCount; i++) {
         texts.getCall(i).returnValue.rotate.reset();
     }
@@ -1861,12 +1834,11 @@ QUnit.test('Custom rotation angle, overlapping mode is none', function(assert) {
         { x: 30, y: 0, width: 10, height: 5 },
         { x: 40, y: 0, width: 10, height: 10 }
     ];
-    let texts;
     let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: 'rotate', rotationAngle: 40, overlappingBehavior: 'none' } });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, [], 'labels is not decimated');
 
     for(i = 0; i < texts.callCount; i++) {
@@ -1882,12 +1854,11 @@ QUnit.test('Custom rotation angle, overlapping mode is ignore', function(assert)
         { x: 30, y: 0, width: 10, height: 5 },
         { x: 40, y: 0, width: 10, height: 10 }
     ];
-    let texts;
     let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: 'rotate', rotationAngle: 40, overlappingBehavior: 'ignore' } });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, [], 'labels is not decimated');
 
     for(i = 0; i < texts.callCount; i++) {
@@ -1903,12 +1874,11 @@ QUnit.test('Custom rotation angle, overlapping mode is hide, labels are not over
         { x: 30, y: 0, width: 10, height: 5 },
         { x: 40, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: 'rotate', rotationAngle: 40, overlappingBehavior: 'hide' } });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, [], 'labels is not decimated');
 
     for(i = 0; i < texts.callCount; i++) {
@@ -1924,12 +1894,11 @@ QUnit.test('Custom rotation angle, overlapping mode is hide, labels are overlap'
         { x: 30, y: 0, width: 10, height: 5 },
         { x: 40, y: 0, width: 10, height: 10 }
     ];
-    let texts;
     let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: 'rotate', rotationAngle: 40, overlappingBehavior: 'hide' } });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, ['3', '7'], 'labels is not decimated');
 
     for(i = 0; i < texts.callCount; i += 2) {
@@ -1956,12 +1925,11 @@ QUnit.test('Custom rotation angle, overlapping mode besides hide, none or ignor 
         { x: 30, y: 0, width: 10, height: 5 },
         { x: 40, y: 0, width: 10, height: 10 }
     ];
-    let texts;
     let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: 'rotate', rotationAngle: 40, overlappingBehavior: 'stagger' } });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, ['3', '7'], 'labels should decimated');
     for(i = 0; i < texts.callCount; i += 2) {
         assert.equal(texts.getCall(i).returnValue.rotate.args[0][0], 40, i + ' text is rotated at an angle');
@@ -1979,7 +1947,6 @@ QUnit.test('Custom staggering spacing, overlapping mode is hide, labels are not 
         { x: 45, y: 0, width: 10, height: 7 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1,
@@ -1992,7 +1959,7 @@ QUnit.test('Custom staggering spacing, overlapping mode is hide, labels are not 
         }
     });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, '0 text not moved');
@@ -2010,7 +1977,6 @@ QUnit.test('Custom staggering spacing, overlapping mode is hide, labels are over
         { x: 45, y: 0, width: 20, height: 7 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1,
@@ -2023,7 +1989,7 @@ QUnit.test('Custom staggering spacing, overlapping mode is hide, labels are over
         }
     });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, ['3', '7'], 'labels should decimated');
 
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, '0 text not moved');
@@ -2039,7 +2005,6 @@ QUnit.test('Custom staggering spacing, overlapping mode is none, labels are not 
         { x: 45, y: 0, width: 10, height: 7 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1,
@@ -2052,7 +2017,7 @@ QUnit.test('Custom staggering spacing, overlapping mode is none, labels are not 
         }
     });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, '0 text not moved');
@@ -2070,7 +2035,6 @@ QUnit.test('Custom staggering spacing, overlapping mode is ignore, labels are no
         { x: 45, y: 0, width: 10, height: 7 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1,
@@ -2083,7 +2047,7 @@ QUnit.test('Custom staggering spacing, overlapping mode is ignore, labels are no
         }
     });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, '0 text not moved');
@@ -2101,7 +2065,6 @@ QUnit.test('Custom staggering spacing, overlapping mode is none, labels are over
         { x: 45, y: 0, width: 10, height: 7 },
         { x: 60, y: 0, width: 20, height: 5 }
     ];
-    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1,
@@ -2114,7 +2077,7 @@ QUnit.test('Custom staggering spacing, overlapping mode is none, labels are over
         }
     });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, '0 text not moved');
@@ -2132,7 +2095,6 @@ QUnit.test('Custom staggering spacing, overlapping mode is ignore, labels are ov
         { x: 45, y: 0, width: 10, height: 7 },
         { x: 60, y: 0, width: 20, height: 5 }
     ];
-    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1,
@@ -2145,7 +2107,7 @@ QUnit.test('Custom staggering spacing, overlapping mode is ignore, labels are ov
         }
     });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, '0 text not moved');
@@ -2169,12 +2131,11 @@ QUnit.test('For value axis shouldn\'t apply display mode', function(assert) {
         { x: 0, y: 0, height: 10, width: 4 }
     ];
     let i;
-    let texts;
     this.options.isHorizontal = false;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: 'rotate', rotationAngle: 30, overlappingBehavior: 'hide' } });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.equal(texts.callCount, 5);
     assert.deepEqual(this.arrayRemovedElements, ['3', '5', '9']);
 
@@ -2191,12 +2152,11 @@ QUnit.test('Invalid display mode', function(assert) {
         { x: 45, y: 0, width: 10, height: 7 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: 'invalid', overlappingBehavior: 'hide' } });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, ['3', '5', '9'], 'labels should decimated');
 
     for(i = 0; i < texts.length; i++) {
@@ -2234,7 +2194,6 @@ QUnit.test('Temporary _auto mode support', function(assert) {
         { x: 45, y: 0, width: 10, height: 7 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1,
@@ -2245,7 +2204,7 @@ QUnit.test('Temporary _auto mode support', function(assert) {
         }
     });
 
-    texts = this.renderer.text;
+    const texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, '0 text not moved');
