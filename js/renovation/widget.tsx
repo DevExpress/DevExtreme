@@ -87,7 +87,7 @@ export const viewFunction = (viewModel: Widget) => {
             tabIndex={viewModel.tabIndex}
             title={viewModel.props.hint}
             hidden={!viewModel.props.visible}
-            {...viewModel.props.restAttributes}
+            {...viewModel.restAttributes}
             className={viewModel.cssClasses}
             style={viewModel.styles}
         >
@@ -122,7 +122,6 @@ export class WidgetProps {
     @Event() onKeyboardHandled?: (args: any) => any | undefined;
     @Event() onKeyDown?: (e: any, options: any) => any;
     @Event() onVisibilityChange?: (args: boolean) => undefined;
-    @OneWay() restAttributes: { [name: string]: any } = {};
     @OneWay() rtlEnabled?: boolean = config().rtlEnabled;
     @OneWay() tabIndex?: number = 0;
     @OneWay() visible?: boolean = true;
@@ -327,9 +326,9 @@ export default class Widget extends JSXComponent<WidgetProps> {
     }
 
     get styles() {
-        const { width, height, restAttributes } = this.props;
+        const { width, height } = this.props;
 
-        return getStyles({ width, height, style: restAttributes.style });
+        return getStyles({ width, height, style: this.restAttributes.style });
     }
 
     get cssClasses() {
@@ -342,13 +341,12 @@ export default class Widget extends JSXComponent<WidgetProps> {
             onVisibilityChange,
             rtlEnabled,
             visible,
-            restAttributes,
         } = this.props;
 
         return getCssClasses({
             _active: this._active, _focused: this._focused, _hovered: this._hovered, classes,
             disabled, elementAttr, focusStateEnabled, hoverStateEnabled,
-            onVisibilityChange, restAttributes, rtlEnabled, visible,
+            onVisibilityChange, restAttributes: this.restAttributes, rtlEnabled, visible,
         });
     }
 
