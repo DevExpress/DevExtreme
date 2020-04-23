@@ -244,18 +244,5 @@ module.exports = {
     },
     controllers: {
         editorFactory: EditorFactory
-    },
-    extenders: {
-        controllers: {
-            columnsResizer: {
-                _startResizing: function(args) {
-                    this.callBase(args);
-
-                    if(this.isResizing()) {
-                        this.getController('editorFactory').loseFocus();
-                    }
-                }
-            }
-        }
     }
 };
