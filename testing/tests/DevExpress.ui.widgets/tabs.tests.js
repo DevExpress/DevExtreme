@@ -1008,6 +1008,7 @@ QUnit.module('Render in the ResponsiveBox. Flex strategy', () => {
         cols,
         rows,
         itemTemplate,
+        screenByWidth: () => 'md',
         items
     });
 
@@ -1026,7 +1027,8 @@ QUnit.module('Render in the ResponsiveBox. Flex strategy', () => {
             ]
         });
         const testWrapper = new TestTabsWrapper($('#tabsInTemplate'), {
-            itemsCount: 10
+            itemsCount: 10,
+            showNavButtons: true
         });
         testWrapper.checkTabsWithScrollable();
         testWrapper.checkNavigationButtons(true);
@@ -1050,7 +1052,8 @@ QUnit.module('Render in the ResponsiveBox. Flex strategy', () => {
             ]
         });
         const testWrapper = new TestTabsWrapper($('#tabsInTemplate'), {
-            itemsCount: 10
+            itemsCount: 10,
+            showNavButtons: true
         });
         testWrapper.checkTabsWithScrollable();
         testWrapper.checkNavigationButtons(true);
@@ -1071,7 +1074,8 @@ QUnit.module('Render in the ResponsiveBox. Flex strategy', () => {
             ]
         });
         const testWrapper = new TestTabsWrapper($('#tabsInTemplate'), {
-            itemsCount: 10
+            itemsCount: 10,
+            showNavButtons: true
         });
         testWrapper.checkTabsWithScrollable();
         testWrapper.checkNavigationButtons(true);
@@ -1092,7 +1096,8 @@ QUnit.module('Render in the ResponsiveBox. Flex strategy', () => {
             ]
         });
         const testWrapper = new TestTabsWrapper($('#tabsInTemplate'), {
-            itemsCount: 10
+            itemsCount: 10,
+            showNavButtons: true
         });
         testWrapper.checkTabsWithScrollable();
         testWrapper.checkNavigationButtons(true);
