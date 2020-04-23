@@ -3,6 +3,7 @@ const noop = require('../core/utils/common').noop;
 const registerComponent = require('../core/component_registrator');
 const extend = require('../core/utils/extend').extend;
 const DropDownList = require('./drop_down_editor/ui.drop_down_list');
+const Deferred = require('../core/utils/deferred').Deferred;
 
 const AUTOCOMPLETE_CLASS = 'dx-autocomplete';
 const AUTOCOMPLETE_POPUP_WRAPPER_CLASS = 'dx-autocomplete-popup-wrapper';
@@ -149,6 +150,12 @@ const Autocomplete = DropDownList.inherit({
     _searchCanceled: function() {
         this.callBase();
         this.close();
+    },
+
+    _loadItem: function(value, cache) {
+        const selectedItem = this._getItemFromPlain(value, cache);
+
+        return new Deferred().resolve(selectedItem).promise();
     },
 
     _dataSourceOptions: function() {
