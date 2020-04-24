@@ -60,10 +60,15 @@
     flex-grow: 0;
     flex-basis: content;
     align-items: center;
+    overflow: hidden;
 }
 
 .dx-texteditor-input-container {
     .dx-editor-content-wrapper();
+
+    .dx-texteditor-compressed & {
+        flex-basis: 0;
+    }
 }
 
 .dx-texteditor-input {
