@@ -13271,7 +13271,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.equal($scrollableContainer.scrollLeft(), 100);
     });
 
-    QUnit.test('round scroll position for columnHeadersView', function(assert) {
+    QUnit.test('scrollLeft for columnHeadersView should be equal scrollLeft for rowsView (T307737, T861910)', function(assert) {
         const $dataGrid = $('#dataGrid').dxDataGrid({
             width: 100,
             scrolling: {
@@ -13289,10 +13289,11 @@ QUnit.module('API methods', baseModuleConfig, () => {
         scrollable.scrollTo(100.7);
 
         // assert
-        assert.equal(Math.round(scrollable.scrollLeft()), 101);
+        assert.equal(scrollable.scrollLeft(), 100.7);
+        assert.equal(scrollable._container().scrollLeft(), 100);
 
         const $headersScrollable = $dataGrid.find('.dx-datagrid-headers' + ' .dx-datagrid-scroll-container').first();
-        assert.equal($headersScrollable.scrollLeft(), 101);
+        assert.equal($headersScrollable.scrollLeft(), 100);
     });
 
     // T372552
