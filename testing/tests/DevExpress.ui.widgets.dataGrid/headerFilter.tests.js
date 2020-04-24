@@ -1211,8 +1211,8 @@ QUnit.module('Header Filter', {
 
         // assert
         assert.deepEqual(that.columnsController.updateOptions[0].optionName, {
-            filterValues: ['1986/4'],
-            filterType: 'exclude'
+            filterValues: ['1986/1'],
+            filterType: 'include'
         }, 'option name');
 
         // act
@@ -1221,10 +1221,9 @@ QUnit.module('Header Filter', {
         $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // OK button
         that.clock.tick(500);
         assert.deepEqual(that.columnsController.updateOptions[1].optionName, {
-            filterValues: ['1986/4'],
-            filterType: 'exclude'
+            filterValues: ['1986/1'],
+            filterType: 'include'
         }, 'option name');
-
     });
 
     QUnit.test('Update when select all items', function(assert) {
@@ -1260,6 +1259,37 @@ QUnit.module('Header Filter', {
         assert.equal(that.columnsController.updateOptions[0].columnIndex, 0, 'column index');
         assert.deepEqual(that.columnsController.updateOptions[0].optionName, {
             filterValues: null, // T500956
+            filterType: 'exclude'
+        }, 'column options');
+    });
+
+    // T881628
+    QUnit.test('Update when select all items with dataType date', function(assert) {
+        // arrange
+        const that = this;
+        const testElement = $('#container');
+
+        that.columns[0].dataType = 'date';
+        that.items = [{ Test1: new Date(1986, 0, 1), Test2: 'test2' }, { Test1: new Date(1986, 3, 4), Test2: 'test4' }, { Test1: new Date(1987, 3, 4), Test2: 'test4' }];
+        that.setupDataGrid();
+        that.columnHeadersView.render(testElement);
+        that.headerFilterView.render(testElement);
+
+        // act
+        that.headerFilterController.showHeaderFilterMenu(0);
+
+        // assert
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        $($popupContent.find('.dx-treeview-select-all-item')).trigger('dxclick');
+        $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // OK button
+        that.clock.tick(500);
+
+        // assert
+        assert.ok(!$popupContent.is(':visible'), 'not visible popup');
+
+        assert.equal(that.columnsController.updateOptions[0].columnIndex, 0, 'column index');
+        assert.deepEqual(that.columnsController.updateOptions[0].optionName, {
+            filterValues: undefined,
             filterType: 'exclude'
         }, 'column options');
     });

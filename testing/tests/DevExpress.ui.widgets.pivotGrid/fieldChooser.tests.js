@@ -1126,8 +1126,8 @@ QUnit.module('dxPivotGridFieldChooser', {
         // assert
         assert.strictEqual(this.dataSource.field.callCount, 1);
         assert.deepEqual(this.dataSource.field.getCall(0).args, [0, {
-            filterType: 'exclude',
-            filterValues: [[2002, 2]]
+            filterType: 'include',
+            filterValues: [[2001], [2002, 1]]
         }]);
 
     });
