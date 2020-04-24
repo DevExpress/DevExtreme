@@ -1,1 +1,1 @@
-require('../DevExpress.ui.widgets/fileManager.markup.tests.js');
+require('../DevExpress.ui.widgets/fileManagerParts/markup.tests.js');
