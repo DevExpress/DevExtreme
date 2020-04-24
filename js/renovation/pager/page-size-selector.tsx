@@ -32,11 +32,11 @@ type FullPageSize = { text: string; value: number; };
 type PageSize = number | FullPageSize;
 @ComponentBindings()
 export class PageSizeSelectorProps {
-    @OneWay() isLargeDisplayMode = true;
-    @OneWay() pageSize = 5;
+    @OneWay() isLargeDisplayMode?: boolean = true;
+    @OneWay() pageSize?: number = 5;
     @Event() pageSizeChanged?: (pageSize: number) => void = () => { }; // commonUtils.noop
     // tslint:disable-next-line: member-ordering
-    @OneWay() pageSizes: PageSize[] = [5, 10];
+    @OneWay() pageSizes?: PageSize[] = [5, 10];
 }
 
 // tslint:disable-next-line: max-classes-per-file
@@ -47,7 +47,7 @@ export class PageSizeSelectorProps {
 export default class PageSizeSelector extends JSXComponent<PageSizeSelectorProps> {
     get pageSizesText() {
         const { pageSize, pageSizes } = this.props;
-        return this.normalizedPageSizes(pageSizes).map(({ value: processedPageSize, text }) => {
+        return this.normalizedPageSizes(pageSizes!).map(({ value: processedPageSize, text }) => {
             const selected = processedPageSize === pageSize;
             const className = selected ? PAGER_SELECTED_PAGE_SIZE_CLASS : PAGER_PAGE_SIZE_CLASS;
             return {
@@ -61,10 +61,10 @@ export default class PageSizeSelector extends JSXComponent<PageSizeSelectorProps
     get selectBoxProps() {
         const { pageSizes, pageSize } = this.props;
         return {
-            dataSource: this.normalizedPageSizes(pageSizes),
+            dataSource: this.normalizedPageSizes(pageSizes!),
             displayExpr: 'text',
-            onSelectionChanged: this.onSelectionChanged,
             value: pageSize,
+            valueChanged: this.onPageSizeChanged,
             valueExpr: 'value',
             width: this.calculateLightPageSizesWidth(pageSizes),
         };
@@ -87,9 +87,5 @@ export default class PageSizeSelector extends JSXComponent<PageSizeSelectorProps
         return () => {
             this.props.pageSizeChanged!(processedPageSize);
         };
-    }
-    private onSelectionChanged({ selectedItem }: { selectedItem: FullPageSize }) {
-        const { pageSizeChanged } = this.props;
-        pageSizeChanged!(selectedItem.value);
     }
 }

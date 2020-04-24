@@ -3,6 +3,7 @@ import { mount, shallow } from 'enzyme';
 import PageSizesComponent from '../../../js/renovation/pager/page-size-selector.p';
 import { PageSizeSelectorProps, PAGER_PAGE_SIZES_CLASS, PAGER_SELECTED_PAGE_SIZE_CLASS, PAGER_PAGE_SIZE_CLASS } from '../../../js/renovation/pager/page-size-selector';
 
+jest.mock('../../../js/renovation/select-box', () => {});
 jest.mock('../../../js/renovation/select-box.p', () => {
     return (props) => {
         return 'selectbox';

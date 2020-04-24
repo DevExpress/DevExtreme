@@ -16,17 +16,17 @@ export const viewFunction = ({ renderNavButtons, props }: PageIndexSelector) => 
 
 @ComponentBindings()
 export class PageIndexSelectorProps {
-    @OneWay() hasKnownLastPage ?= true;
-    @OneWay() isLargeDisplayMode = true;
-    @OneWay() maxPagesCount = 10;
-    @OneWay() pageCount = 10;
-    @OneWay() pageIndex = 0;
-    @Event() pageIndexChanged ?= null; // commonUtils.noop
+    @OneWay() hasKnownLastPage?: boolean = true;
+    @OneWay() isLargeDisplayMode?: boolean = true;
+    @OneWay() maxPagesCount?: number = 10;
+    @OneWay() pageCount?: number = 10;
+    @OneWay() pageIndex?: number = 0;
+    @Event() pageIndexChanged? : (value: number) => void; // commonUtils.noop
     // TODO messageLocalization.getFormatter('dxPager-pagesCountText');
-    @OneWay() pagesCountText = 'Of';
-    @OneWay() rtlEnabled = false;
-    @OneWay() showNavigationButtons = false;
-    @OneWay() totalCount = 0;
+    @OneWay() pagesCountText?: string = 'Of';
+    @OneWay() rtlEnabled?: boolean = false;
+    @OneWay() showNavigationButtons? : boolean = false;
+    @OneWay() totalCount?: number = 0;
 }
 
 // tslint:disable-next-line: max-classes-per-file

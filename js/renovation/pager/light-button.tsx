@@ -4,16 +4,17 @@ import clickEvent from '../../events/click';
 import eventsEngine from '../../events/core/events_engine';
 
 export const viewFunction = ({ widgetRef,
-                               props: { className, children: content, label } }: LightButton) => {
+                               props: { key, className, children, label } }: LightButton) => {
     return (
         <div
+            key={key}
             ref={widgetRef as any}
             className={className}
             tabIndex={0}
             role={'button'}
-            label={label}
+            {...{ label }}
         >
-            {content}
+            {children}
         </div>);
 };
 
@@ -21,6 +22,7 @@ export const viewFunction = ({ widgetRef,
 export class LightButtonProps {
     @Slot() children?: any = null;
     @OneWay() className?: string = '';
+    key?: any;
     label?: string = '';
     @Event() onClick?: (e: any) => void;
 }

@@ -8,9 +8,9 @@ export const viewFunction = ({ className, value }: Page) => {
 };
 
 @ComponentBindings()
-export class PagerPageProps {
+export class PageProps {
     @OneWay() index?: number;
-    @OneWay() selected: boolean = false;
+    @OneWay() selected?: boolean = false;
     @OneWay() value?: string;
 }
 
@@ -20,7 +20,7 @@ export class PagerPageProps {
     view: viewFunction,
 })
 
-export default class Page extends JSXComponent<PagerPageProps> {
+export default class Page extends JSXComponent<PageProps> {
     get value() {
         const
             { value } = this.props;

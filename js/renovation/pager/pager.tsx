@@ -1,18 +1,47 @@
-import { Component, ComponentBindings, JSXComponent, OneWay, TwoWay } from 'devextreme-generator/component_declaration/common';
+import { Component, ComponentBindings, JSXComponent, OneWay, TwoWay, Event } from 'devextreme-generator/component_declaration/common';
 import InfoText from './info';
-import PageIndexSelector, { PageIndexSelectorProps } from './page-index-selector';
-import PageSizeSelector, { PageSizeSelectorProps } from './page-size-selector';
+import PageIndexSelector from './page-index-selector';
+import PageSizeSelector from './page-size-selector';
 
 // import { getFormatter } from '../../localization/message';
 
-const PAGER_CLASS = 'dx-pager';
-const PAGER_PAGES_CLASS = 'dx-pages';
-export const viewFunction = ({ pageSizeSelectorProps, pageIndexSelectorProps, props }: Pager) => {
+export const PAGER_CLASS = 'dx-pager';
+export const PAGER_PAGES_CLASS = 'dx-pages';
+export const viewFunction = ({
+    pageSizeChangeHandler,
+    isLargeDisplayMode,
+    pageIndexChangeHandler,
+    props: { infoTextMessageTemplate, maxPagesCount, pageIndex,
+             pageCount, pageSize, pageSizes,
+             pagesCountText, rtlEnabled,
+             showNavigationButtons, totalCount },
+    }: Pager) => {
     return (<div className={PAGER_CLASS}>
-        <PageSizeSelector {...pageSizeSelectorProps} />
+        <PageSizeSelector
+            isLargeDisplayMode={isLargeDisplayMode}
+            pageSize={pageSize}
+            pageSizeChanged={pageSizeChangeHandler}
+            pageSizes={pageSizes}
+        />
         <div className={PAGER_PAGES_CLASS}>
-            <InfoText {...props} />
-            <PageIndexSelector {...pageIndexSelectorProps} />
+            <InfoText
+                infoTextMessageTemplate={infoTextMessageTemplate}
+                pageCount={pageCount}
+                pageIndex={pageIndex}
+                totalCount={totalCount}
+            />
+            <PageIndexSelector
+                // hasKnownLastPage={hasKnownLastPage}
+                isLargeDisplayMode={isLargeDisplayMode}
+                maxPagesCount={maxPagesCount}
+                pageCount={pageCount}
+                pageIndex={pageIndex}
+                pageIndexChanged={pageIndexChangeHandler}
+                pagesCountText={pagesCountText}
+                rtlEnabled={rtlEnabled}
+                showNavigationButtons={showNavigationButtons}
+                totalCount={totalCount}
+            />
         </div>
     </div>);
 };
@@ -26,10 +55,12 @@ export class PagerProps {
     @OneWay() pageCount ? = 10;
     // visible: true,
     // pagesNavigatorVisible: 'auto',
-    @TwoWay() pageIndex ? = 0;
+    @TwoWay() pageIndex?: number = 0;
     // TODO messageLocalization.getFormatter('dxPager-pagesCountText');
     @OneWay() pagesCountText ? = 'Of';
-    @TwoWay() pageSize ? = 5;    // showPageSizes: true,
+    @TwoWay() pageSize?: number = 5;
+    // showPageSizes: true,
+    @Event() pageSizeChange?: (pageSize: number) => void;
     @OneWay() pageSizes ? = [5, 10];
     @OneWay() rtlEnabled ? = false;
     @OneWay() showNavigationButtons ? = false;
@@ -45,26 +76,18 @@ export class PagerProps {
     view: viewFunction,
 })
 export default class Pager extends JSXComponent<PagerProps> {
+    // get pageSizeChangeHanler => this.pageSi
+    get isLargeDisplayMode() { return !this.props.lightModeEnabled; }
+    get pageIndexChangeHandler() {
+        return this.pageIndexChanged;
+    }
+    private pageIndexChanged(newPageIndex: number) {
+        this.props.pageIndex = newPageIndex;
+    }
     private pageSizeChanged(newPageSize: number) {
         this.props.pageSize = newPageSize;
     }
-    get InfoText() {
-        const { pageCount } = this.props;
-        return `Page count:${pageCount}`;
-    }
-    get pageSizeSelectorProps(): PageSizeSelectorProps {
-        const pageSize = this.props.pageSize;
-        return {
-            isLargeDisplayMode: !this.props.lightModeEnabled,
-            ...this.props as any,
-            pageSize,
-            pageSizeChanged: this.pageSizeChanged,
-        };
-    }
-    get pageIndexSelectorProps(): PageIndexSelectorProps {
-        return {
-            isLargeDisplayMode: !this.props.lightModeEnabled,
-            ...this.props as any,
-        };
+    get pageSizeChangeHandler() {
+        return this.pageSizeChanged;
     }
 }

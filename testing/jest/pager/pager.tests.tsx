@@ -1,18 +1,23 @@
-import { h, createRef } from 'preact';
+import { h } from 'preact';
 import { mount } from 'enzyme';
 import PagerComponent, { PagerProps } from '../../../js/renovation/pager/pager.p';
-import { PageSizeSelectorProps } from '../../../js/renovation/pager/page-size-selector';
-import { PageIndexSelectorProps } from '../../../js/renovation/pager/page-index-selector';
-import { InfoTextProps } from '../../../js/renovation/pager/info';
+import PageSizeSelectorComponent from '../../../js/renovation/pager/page-size-selector.p';
+import PageIndexSelectorComponent from '../../../js/renovation/pager/page-index-selector.p';
+import InfoTextComponent from '../../../js/renovation/pager/info.p';
+import { PAGER_CLASS, PAGER_PAGES_CLASS } from '../../../js/renovation/pager/pager';
 
-const pageSizeComp = jest.fn();
+const pageSizeRender = jest.fn();
+
 jest.mock('../../../js/renovation/pager/page-size-selector.p', () => {
-    return (...args) => pageSizeComp(args);
+    return (props) => {
+        return pageSizeRender(props);
+    };
 });
+jest.mock('../../../js/renovation/select-box', () => { });
 
-const pageIndexSelector = jest.fn();
+const pageIndexSelectorRender = jest.fn();
 jest.mock('../../../js/renovation/pager/page-index-selector.p', () => {
-    return (...args) => pageIndexSelector(args);
+    return (...args) => pageIndexSelectorRender(args);
 });
 
 const InfoTextComp = jest.fn();
@@ -22,29 +27,56 @@ jest.mock('../../../js/renovation/pager/info.p', () => {
 type PagerPropsType = Partial<typeof PagerProps>;
 
 describe('Pager size selector', () => {
-    const render = (props: PagerPropsType) => mount(<PagerComponent {...props as typeof PagerProps} />).childAt(0);
+    const render = (props: PagerPropsType) => {
+        const root = mount(<PagerComponent {...props as typeof PagerProps} />);
+        // Vitik: Use function instead of property because property return old value after update
+        return {
+            root,
+            // tslint:disable-next-line: object-literal-sort-keys
+            container: root.childAt(0),
+            pageSize: () => root.find(PageSizeSelectorComponent),
+            pageSelectorContainer: () => root.childAt(0).childAt(1),
+            pageIndexSelector: () => root.find(PageIndexSelectorComponent),
+            infoText: () => root.find(InfoTextComponent),
+        };
+    };
     beforeEach(() => {
-        pageSizeComp.mockClear();
-        pageIndexSelector.mockClear();
+        pageSizeRender.mockClear();
+        pageIndexSelectorRender.mockClear();
         InfoTextComp.mockClear();
     });
     it('render pager', () => {
-        const comp = render({});
-        expect(comp.props()).toMatchObject({ className: 'dx-pager' });
-        expect(comp.childAt(0).props()).toMatchObject({ pageSize: 5 } as PageSizeSelectorProps);
-        expect(comp.childAt(1).childAt(0).props()).toMatchObject({ pageIndex: 0 } as PageIndexSelectorProps);
-        expect(comp.childAt(1).childAt(1).props()).toMatchObject({ infoTextMessageTemplate: 'Page {0} of {1} ({2} items)' } as InfoTextProps);
-        expect(pageSizeComp).toHaveBeenCalledTimes(1);
-        expect(pageIndexSelector).toHaveBeenCalledTimes(1);
+        const { container, pageSize, pageSelectorContainer, pageIndexSelector, infoText } = render({});
+        // Vitik: Test real class instead of props for child component
+        expect(container.getDOMNode().className).toBe(PAGER_CLASS);
+        expect(pageSize().props()).toMatchObject({ isLargeDisplayMode: true, pageSize: 5, pageSizes: [5, 10] });
+        expect(pageSelectorContainer().getDOMNode().className).toBe(PAGER_PAGES_CLASS);
+        expect(pageIndexSelector().props()).toMatchObject({ isLargeDisplayMode: true, pageIndex: 0, maxPagesCount: 10 });
+        expect(infoText().props()).toMatchObject({ infoTextMessageTemplate: 'Page {0} of {1} ({2} items)', pageCount: 10, pageIndex: 0, totalCount: 0 });
+        expect(pageSizeRender).toHaveBeenCalledTimes(1);
+        expect(pageIndexSelectorRender).toHaveBeenCalledTimes(1);
         expect(InfoTextComp).toHaveBeenCalledTimes(1);
     });
-    it.skip('change page size', () => {
+    it('change page size uncontrolled', async () => {
         const pageSizeChangeHandler = jest.fn() as any;
-        const comp = render({ pageSizeChange: pageSizeChangeHandler, pageSize: 5 });
-        expect(pageSizeComp).toHaveBeenCalledTimes(1);
-        (comp.childAt(0).props() as PageSizeSelectorProps).pageSizeChanged(10);
-        expect(pageSizeChangeHandler).toBeCalledTimes(1);
-        // expect(pageSizeComp).toHaveBeenCalledTimes(2);
-        expect(comp.childAt(0).props()).toMatchObject({ pageSize: 10 } as PageSizeSelectorProps);
+        const { root, pageSize } = render({ pageSizeChange: pageSizeChangeHandler, defaultPageSize: 5 });
+        expect(pageSize().props()).toMatchObject({ pageSize: 5 });
+        (pageSize().props()).pageSizeChanged(10);
+        // Vitik: Update work only on the root component
+        root.update();
+        expect(pageSize().props()).toMatchObject({ pageSize: 10 });
+    });
+    it('change page size controlled', async () => {
+        const pageSizeChangeHandler = jest.fn() as any;
+        const { root, pageSize } = render({ pageSizeChange: pageSizeChangeHandler, pageSize: 5 });
+        expect(pageSize().props()).toMatchObject({ pageSize: 5 });
+        (pageSize().props()).pageSizeChanged(10);
+        // Vitik: Update work only on the root component
+        root.update();
+        // Vitik: no reaction because pageSize doesn't changed
+        expect(pageSize().props()).toMatchObject({ pageSize: 5 });
+        // Vitik: simulate pageSize changing in pageSizeChange
+        root.setProps({ pageSizeChange: pageSizeChangeHandler, pageSize: 10 });
+        expect(pageSize().props()).toMatchObject({ pageSize: 10 });
     });
 });

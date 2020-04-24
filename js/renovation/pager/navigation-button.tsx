@@ -47,8 +47,8 @@ export const viewFunction = ({ className }: NavigationButton) => {
 
 @ComponentBindings()
 export class NavigationButtonProps {
-    @OneWay() direction: string = 'prev';
-    @OneWay() rtlEnabled = false;
+    @OneWay() direction?: string = 'prev';
+    @OneWay() rtlEnabled?: boolean = false;
 }
 
 const nextButtonClassName = combineClassName([PAGER_NAVIGATE_BUTTON, PAGER_NEXT_BUTTON_CLASS]);
