@@ -2174,8 +2174,9 @@
             }
 
             .dx-scheduler-date-table-last-row {
-                &.dx-scheduler-date-table-row {
-                    border-bottom: @SCHEDULER_BASE_BORDER;
+                .dx-scheduler-time-panel-cell,
+                .dx-scheduler-date-table-cell {
+                    box-shadow: inset 0 -1px 0 0 @SCHEDULER_ACCENT_BORDER_COLOR;
                 }
             }
         }
@@ -2206,14 +2207,7 @@
         .dx-scheduler-group-header-content {
             width: @SCHEDULER_GROUP_HEADER_TABLE_CELL_WIDTH;
             overflow: hidden;
-
-            &:before {
-                content: "";
-                display: block;
-                height: 1px;
-                width: 100%;
-                border-bottom: @SCHEDULER_BASE_BORDER;
-            }
+            box-shadow: inset 0 -1px 0 0 @SCHEDULER_ACCENT_BORDER_COLOR;
 
             .dx-scheduler-small & {
                 width: @SCHEDULER_GROUP_HEADER_TABLE_CELL_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR - 2px;
