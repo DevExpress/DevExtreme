@@ -843,7 +843,6 @@ QUnit.module('Create editor', function() {
 
     QUnit.test('dataType - date', function(assert) {
         const container = $('#container');
-        let dateBoxInstance;
 
         container.dxFilterBuilder({
             allowHierarchicalFields: true,
@@ -853,13 +852,12 @@ QUnit.module('Create editor', function() {
 
         const valueField = $('.' + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
         clickByValue();
-        dateBoxInstance = valueField.find('.dx-datebox').dxDateBox('instance');
+        const dateBoxInstance = valueField.find('.dx-datebox').dxDateBox('instance');
         assert.strictEqual(dateBoxInstance.option('type'), 'date');
     });
 
     QUnit.test('dataType - datetime', function(assert) {
         const container = $('#container');
-        let dateBoxInstance;
 
         container.dxFilterBuilder({
             allowHierarchicalFields: true,
@@ -869,7 +867,7 @@ QUnit.module('Create editor', function() {
 
         const valueField = $('.' + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
         clickByValue();
-        dateBoxInstance = valueField.find('.dx-datebox').dxDateBox('instance');
+        const dateBoxInstance = valueField.find('.dx-datebox').dxDateBox('instance');
         assert.strictEqual(dateBoxInstance.option('type'), 'datetime');
     });
 
@@ -1174,7 +1172,6 @@ QUnit.module('on value changed', function() {
         // arrange
         const container = $('#container');
         const value = [['CompanyName', 'K&S Music']];
-        let popupInstance;
 
         container.dxFilterBuilder({
             value: value,
@@ -1184,7 +1181,7 @@ QUnit.module('on value changed', function() {
         // act
         $('.' + FILTER_BUILDER_IMAGE_ADD_CLASS).trigger('dxclick');
 
-        popupInstance = container.children('.dx-filterbuilder-overlay').dxPopup('instance');
+        const popupInstance = container.children('.dx-filterbuilder-overlay').dxPopup('instance');
 
         // assert
         assert.equal(popupInstance.option('closeOnTargetScroll'), true, 'popup\'s closeOnTargetScroll');

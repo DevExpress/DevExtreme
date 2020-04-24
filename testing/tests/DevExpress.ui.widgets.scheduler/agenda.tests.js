@@ -81,10 +81,9 @@ QUnit.test('the getStartViewDate method', function(assert) {
 
 QUnit.test('_removeEmptyRows method', function(assert) {
     const rows = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 1], [0, 0, 0, 0, 0], [1, 1, 1, 0, 1]];
-    let resultRows;
 
     this.createInstance();
-    resultRows = this.instance._removeEmptyRows(rows);
+    const resultRows = this.instance._removeEmptyRows(rows);
 
     assert.deepEqual(resultRows, [[0, 0, 0, 0, 1], [1, 1, 1, 0, 1]], 'The empty rows was removed');
 });

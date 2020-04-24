@@ -187,7 +187,6 @@ const Pager = Widget.inherit({
         const page = that._getPageByValue(value);
         const pages = that._pages;
         let pagesLength = pages.length;
-        let prevPage;
         let nextPage;
         let morePage;
 
@@ -195,7 +194,7 @@ const Pager = Widget.inherit({
             return;
         }
 
-        prevPage = that._pages[page.index - 1];
+        const prevPage = that._pages[page.index - 1];
         nextPage = that._pages[page.index + 1];
 
         if(nextPage && nextPage.value() === '>') {
@@ -342,8 +341,6 @@ const Pager = Widget.inherit({
         const that = this;
         const pageCount = this.option('pageCount');
         const pageIndex = this.option('pageIndex');
-        let $pageCount;
-        let $pageIndex;
         const clickAction = that._createAction(function() {
             that.option('pageIndex', pageCount);
         });
@@ -353,7 +350,7 @@ const Pager = Widget.inherit({
             .addClass(LIGHT_PAGES_CLASS)
             .appendTo(this._$pagesChooser);
 
-        $pageIndex = $('<div>').addClass(PAGER_PAGE_INDEX_CLASS).appendTo($container);
+        const $pageIndex = $('<div>').addClass(PAGER_PAGE_INDEX_CLASS).appendTo($container);
 
         that._pageIndexEditor = that._createComponent($pageIndex, NumberBox, {
             value: pageIndex,
@@ -370,7 +367,7 @@ const Pager = Widget.inherit({
             .addClass(PAGER_INFO_TEXT_CLASS + ' ' + PAGER_INFO_CLASS)
             .appendTo($container);
 
-        $pageCount = $('<span>')
+        const $pageCount = $('<span>')
             .addClass(PAGER_PAGES_COUNT_CLASS)
             .text(pageCount);
 
@@ -483,10 +480,9 @@ const Pager = Widget.inherit({
 
     _renderLightPageSizes: function() {
         const that = this;
-        let $editor;
         const pageSizes = that.option('pageSizes');
 
-        $editor = $('<div>').appendTo(that._$pagesSizeChooser);
+        const $editor = $('<div>').appendTo(that._$pagesSizeChooser);
 
         that._pageSizeEditor = that._createComponent($editor, SelectBox, {
             dataSource: pageSizes,

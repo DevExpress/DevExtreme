@@ -147,8 +147,6 @@ QUnit.test('Initialize from array store with observable fields', function(assert
 // T387248
 QUnit.test('Set selectedRows where there is a nested knockout observable value inside dataSource', function(assert) {
     // arrange
-    let items;
-
     this.array = [
         { name: ko.observable('Alex'), age: ko.observable(15), birthDate: ko.observable(new Date(1995, 5, 23)) },
         { name: ko.observable('Dan'), age: ko.observable(16), birthDate: ko.observable(new Date(1991, 6, 15)) },
@@ -165,7 +163,7 @@ QUnit.test('Set selectedRows where there is a nested knockout observable value i
     this.selectionController.selectRows(this.array[1]);
 
     // assert
-    items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [this.array[1]], 'keys of the selected rows');
     assert.equal(items.length, 3, 'count item');
     assert.ok(!items[0].isSelected, 'first item isn\'t selected');
@@ -364,11 +362,10 @@ QUnit.module('Editing', {
     // T566012
     QUnit.test('Row mode: DataSource fields should not be changed when editing row', function(assert) {
         // arrange
-        let $input;
         const dataGrid = this.createDataGrid();
 
         dataGrid.editRow(0);
-        $input = $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-editor-cell input').first();
+        const $input = $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-editor-cell input').first();
 
         // assert
         assert.strictEqual($input.length, 1, 'has input');

@@ -1539,8 +1539,6 @@ QUnit.test('paging with continuation token', function(assert) {
 
         load: function(options) {
             const userData = options.userData;
-            let token;
-            let serverResponse;
 
             if(userData.lastPageIndex && source.pageIndex() > userData.lastPageIndex) {
                 return $.Deferred().resolve([]);
@@ -1548,9 +1546,9 @@ QUnit.test('paging with continuation token', function(assert) {
 
             userData.pageTokens = userData.pageTokens || {};
 
-            token = userData.pageTokens[source.pageIndex()];
+            const token = userData.pageTokens[source.pageIndex()];
 
-            serverResponse = simulateServerResponse(token);
+            const serverResponse = simulateServerResponse(token);
             if('nextToken' in serverResponse) {
                 userData.pageTokens[1 + source.pageIndex()] = serverResponse.nextToken;
             } else {

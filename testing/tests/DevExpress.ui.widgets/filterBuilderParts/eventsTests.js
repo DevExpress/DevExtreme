@@ -22,10 +22,8 @@ import 'ui/filter_builder/filter_builder';
 QUnit.module('Events', function() {
     QUnit.test('onEditorPreparing', function(assert) {
         // arrange
-        let args;
         const spy = sinon.spy();
         const container = $('#container');
-        let companyNameValueField;
 
         container.dxFilterBuilder({
             value: [
@@ -36,11 +34,11 @@ QUnit.module('Events', function() {
         });
 
         // act
-        companyNameValueField = $('.' + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        const companyNameValueField = $('.' + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
         companyNameValueField.find('.' + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger('dxclick');
 
         // assert
-        args = spy.args[0][0];
+        const args = spy.args[0][0];
         assert.strictEqual(spy.callCount, 1, 'onEditorPreparing is called');
         assert.strictEqual(args.dataField, 'CompanyName', 'args -> dataField');
         assert.strictEqual(args.value, 'DevExpress', 'args -> value');
@@ -52,7 +50,6 @@ QUnit.module('Events', function() {
         // arrange
         const spy = sinon.spy();
         const container = $('#container');
-        let companyNameValueField;
 
         container.dxFilterBuilder({
             value: [
@@ -66,7 +63,7 @@ QUnit.module('Events', function() {
         });
 
         // act
-        companyNameValueField = $('.' + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        const companyNameValueField = $('.' + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
         companyNameValueField.find('.' + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger('dxclick');
 
         // assert
@@ -83,10 +80,8 @@ QUnit.module('Events', function() {
 
     QUnit.test('onEditorPrepared', function(assert) {
         // arrange
-        let args;
         const spy = sinon.spy();
         const container = $('#container');
-        let companyNameValueField;
 
         container.dxFilterBuilder({
             value: [
@@ -97,11 +92,11 @@ QUnit.module('Events', function() {
         });
 
         // act
-        companyNameValueField = $('.' + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        const companyNameValueField = $('.' + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
         companyNameValueField.find('.' + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger('dxclick');
 
         // assert
-        args = spy.args[0][0];
+        const args = spy.args[0][0];
         assert.strictEqual(spy.callCount, 1, 'onEditorPrepared is called');
         assert.strictEqual(args.dataField, 'CompanyName', 'args -> dataField');
         assert.strictEqual(args.value, 'DevExpress', 'args -> value');
@@ -113,7 +108,6 @@ QUnit.module('Events', function() {
         // arrange
         const spy = sinon.spy();
         const container = $('#container');
-        let companyNameValueField;
 
         container.dxFilterBuilder({
             value: [
@@ -127,7 +121,7 @@ QUnit.module('Events', function() {
         });
 
         // act
-        companyNameValueField = $('.' + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        const companyNameValueField = $('.' + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
         companyNameValueField.find('.' + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger('dxclick');
 
         // assert
@@ -186,7 +180,6 @@ QUnit.module('Events', function() {
 
     QUnit.test('onValueChanged', function(assert) {
         // arrange
-        let args;
         const spy = sinon.spy();
         const container = $('#container');
 
@@ -200,7 +193,7 @@ QUnit.module('Events', function() {
         container.dxFilterBuilder('instance').option('value', ['CompanyName', '=', 'DevExpress']);
 
         // assert
-        args = spy.args[0][0];
+        const args = spy.args[0][0];
         assert.strictEqual(spy.callCount, 1, 'onValueChanged is called');
         assert.deepEqual(args.previousValue, ['Zipcode', '=', '666'], 'previous value');
         assert.deepEqual(args.value, ['CompanyName', '=', 'DevExpress'], 'current value');

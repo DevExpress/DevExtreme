@@ -86,12 +86,10 @@ const moduleSetup = {
 
 QUnit.module('rendering with css', {}, () => {
     QUnit.test('Right width of popup', function(assert) {
-        let $element; let instance; let $popup;
-
-        $element = $('#selectBox').dxSelectBox({ width: 100 });
-        instance = $element.dxSelectBox('instance');
+        const $element = $('#selectBox').dxSelectBox({ width: 100 });
+        const instance = $element.dxSelectBox('instance');
         instance.open();
-        $popup = $(instance._popup.$element());
+        const $popup = $(instance._popup.$element());
 
         assert.ok($popup.hasClass(POPUP_CLASS));
 
