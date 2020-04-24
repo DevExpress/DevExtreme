@@ -143,7 +143,9 @@ export class TooltipStrategyBase {
         if(this._extraOptions.clickEvent) {
             this._extraOptions.clickEvent(e);
         }
-        this._options.showAppointmentPopup(e.itemData.data, false, e.itemData.currentData);
+        // TODO:
+        const currentData = (e.itemData.settings && e.itemData.settings.targetedAppointmentData) || e.itemData.currentData || e.itemData.data;
+        this._options.showAppointmentPopup(e.itemData.data, false, currentData);
     }
 
     _createItemListContent(data, currentData, color) {
