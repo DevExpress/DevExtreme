@@ -1755,7 +1755,7 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     assert.equal(dropDownMenuText, '3 more', 'DropDown menu has correct text');
 });
 
-QUnit.test('Full-size appointment should have correct height, \'auto\' mode', function(assert) {
+QUnit.test('Full-size appointment should have correct height, "auto" mode', function(assert) {
     const items = [ { text: 'Task 1', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
         { text: 'Task 2', startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) },
         { text: 'Task 3', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 5, 0) },
@@ -1776,17 +1776,17 @@ QUnit.test('Full-size appointment should have correct height, \'auto\' mode', fu
 
     let $appointment = $(this.instance.$element().find('.dx-scheduler-appointment'));
 
-    assert.roughEqual($appointment.eq(0).outerHeight(), 23.5, 1, 'appointment height is ok');
-    assert.roughEqual($appointment.eq(1).outerHeight(), 23.5, 1, 'appointment height is ok');
+    assert.roughEqual($appointment.eq(0).outerHeight(), 23.5, 1.1, 'appointment height is ok');
+    assert.roughEqual($appointment.eq(1).outerHeight(), 23.5, 1.1, 'appointment height is ok');
 
     this.instance.option('height', 900);
     $appointment = $(this.instance.$element().find('.dx-scheduler-appointment'));
 
-    assert.roughEqual($appointment.eq(0).outerHeight(), 21, 1, 'appointment height is ok');
-    assert.roughEqual($appointment.eq(1).outerHeight(), 21, 1, 'appointment height is ok');
+    assert.roughEqual($appointment.eq(0).outerHeight(), 21, 1.1, 'appointment height is ok');
+    assert.roughEqual($appointment.eq(1).outerHeight(), 21, 1.1, 'appointment height is ok');
 });
 
-QUnit.test('Full-size appointment should not have empty class in \'auto\' mode', function(assert) {
+QUnit.test('Full-size appointment should not have empty class in "auto" mode', function(assert) {
     const items = [ { text: 'Task 1', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
         { text: 'Task 2', startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) } ];
 

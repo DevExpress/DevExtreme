@@ -957,7 +957,6 @@
 
     .dx-scheduler-scrollable-fixed-content {
         height: 100%;
-        min-height: @SCHEDULER_MONTH_WORKSPACE_DATE_TABLE_HEIGHT;
     }
 
     .dx-scheduler-work-space-month {
@@ -1002,6 +1001,10 @@
             &:first-child {
                 border-left: none;
             }
+        }
+
+        .dx-scheduler-date-table-scrollable .dx-scrollable-content {
+            height: @SCHEDULER_MONTH_WORKSPACE_DATE_TABLE_HEIGHT;
         }
 
         .dx-scheduler-date-table-cell {
