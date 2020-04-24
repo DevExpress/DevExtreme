@@ -9675,6 +9675,58 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(selectionChanged.callCount, 0, 'selectionChanged is not called');
         assert.notOk($firstRow.hasClass('dx-selection'), 'the first row is not selected');
     });
+
+    QUnit.test('The freeSpace row height should not be more than 1 pixel when any command column is enabled with virtual row rendering mode (T881439)', function(assert) {
+        // NOTE: chromium browsers render TR with the height equals 1 pixels even if the row height is set to 0 pixels.
+        // That's why we need to check if the row height does not exceed 1 pixel.
+
+        // arrange
+        const freeSpaceRowHeightStatuses = [];
+        const data = [];
+
+        for(let i = 0; i < 50; i++) {
+            data.push({
+                id: i + 1,
+                name: `name_${i + 1}`
+            });
+        }
+
+        const gridOptions = {
+            keyExpr: 'name',
+            width: 100,
+            dataSource: {
+                store: data,
+                group: 'id'
+            },
+            showBorders: true,
+            remoteOperations: false,
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual'
+            },
+            masterDetail: {
+                enabled: true
+            },
+            selection: {
+                mode: 'multiple'
+            },
+            editing: {
+                allowUpdating: true
+            },
+            columnHidingEnabled: true,
+            onContentReady: function(e) {
+                const $freeSpaceRow = $(e.component.getView('rowsView')._getFreeSpaceRowElements());
+                freeSpaceRowHeightStatuses.push($freeSpaceRow.height() <= 1);
+            }
+        };
+
+        createDataGrid(gridOptions);
+        this.clock.tick();
+
+        // assert
+        assert.ok(freeSpaceRowHeightStatuses.length);
+        freeSpaceRowHeightStatuses.forEach(heightStatus => assert.ok(heightStatus));
+    });
 });
 
 
