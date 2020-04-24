@@ -933,7 +933,7 @@ QUnit.module('Tooltip', environment, function() {
         chart.clearHover = sinon.spy();
 
         pointer.start({ x: 30, y: 30 }).down().up();
-        rootPointer.start().down(40, 40);
+        rootPointer.start().down(40, 40).up();
         eventsEngine.trigger(getDocument(), 'dxpointerdown');
 
         const tooltip = this.tooltip;
