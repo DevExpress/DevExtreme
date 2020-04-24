@@ -2144,7 +2144,6 @@
         .dx-scheduler-time-panel-cell,
         .dx-scheduler-date-table-cell {
             border: none;
-            box-shadow: inset 0 -1px 0 0 @SCHEDULER_BASE_BORDER_COLOR;
         }
 
         &.dx-scheduler-work-space-grouped {
@@ -2172,13 +2171,6 @@
 
             .dx-scheduler-time-panel-cell:after {
                 display: none;
-            }
-
-            .dx-scheduler-date-table-last-row {
-                .dx-scheduler-time-panel-cell,
-                .dx-scheduler-date-table-cell {
-                    box-shadow: inset 0 -1px 0 0 @SCHEDULER_ACCENT_BORDER_COLOR;
-                }
             }
         }
 
@@ -2208,7 +2200,6 @@
         .dx-scheduler-group-header-content {
             width: @SCHEDULER_GROUP_HEADER_TABLE_CELL_WIDTH;
             overflow: hidden;
-            box-shadow: inset 0 -1px 0 0 @SCHEDULER_ACCENT_BORDER_COLOR;
 
             .dx-scheduler-small & {
                 width: @SCHEDULER_GROUP_HEADER_TABLE_CELL_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR - 2px;
