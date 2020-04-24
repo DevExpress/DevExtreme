@@ -131,16 +131,13 @@ const ResizingController = modules.ViewController.inherit({
             return this._rowsView.getColumnWidths();
         }
 
-        const that = this;
-        let resultWidths;
+        const rowsColumnWidths = this._rowsView.getColumnWidths();
+        const headerColumnWidths = this._columnHeadersView && this._columnHeadersView.getColumnWidths();
+        const footerColumnWidths = this._footerView && this._footerView.getColumnWidths();
 
-        const rowsColumnWidths = that._rowsView.getColumnWidths();
-        const headerColumnWidths = that._columnHeadersView && that._columnHeadersView.getColumnWidths();
-        const footerColumnWidths = that._footerView && that._footerView.getColumnWidths();
-
-
-        resultWidths = mergeArraysByMaxValue(rowsColumnWidths, headerColumnWidths);
+        let resultWidths = mergeArraysByMaxValue(rowsColumnWidths, headerColumnWidths);
         resultWidths = mergeArraysByMaxValue(resultWidths, footerColumnWidths);
+
         return resultWidths;
     },
 
@@ -403,7 +400,6 @@ const ResizingController = modules.ViewController.inherit({
         const groupSize = this._rowsView.contentWidth();
         const tableSize = this._getTotalWidth(resultSizes, groupSize);
         const unusedIndexes = { length: 0 };
-        let onePixelElementsCount;
 
         if(!resultSizes.length) return;
 
@@ -416,7 +412,7 @@ const ResizingController = modules.ViewController.inherit({
 
         const diff = groupSize - tableSize;
         const diffElement = Math.floor(diff / (resultSizes.length - unusedIndexes.length));
-        onePixelElementsCount = diff - diffElement * (resultSizes.length - unusedIndexes.length);
+        let onePixelElementsCount = diff - diffElement * (resultSizes.length - unusedIndexes.length);
         if(diff >= 0) {
             for(let i = 0; i < resultSizes.length; i++) {
                 if(unusedIndexes[i]) {
@@ -569,7 +565,6 @@ const ResizingController = modules.ViewController.inherit({
     },
     _updateDimensionsCore: function() {
         const that = this;
-        let hasHeight;
         const dataController = that._dataController;
         const rowsView = that._rowsView;
         const $rootElement = that.component.$element();
@@ -583,7 +578,7 @@ const ResizingController = modules.ViewController.inherit({
         let $testDiv;
 
         that.updateSize($rootElement);
-        hasHeight = that._hasHeight || maxHeightHappened;
+        const hasHeight = that._hasHeight || maxHeightHappened;
 
         if(height && (that._hasHeight ^ height !== 'auto')) {
             $testDiv = $('<div>').height(height).appendTo($rootElement);
