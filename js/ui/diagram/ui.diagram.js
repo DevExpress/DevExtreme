@@ -50,7 +50,7 @@ const DIAGRAM_DEFAULT_UNIT = 'in';
 const DIAGRAM_DEFAULT_ZOOMLEVEL = 1;
 const DIAGRAM_DEFAULT_AUTOZOOM_MODE = 'disabled';
 const DIAGRAM_DEFAULT_PAGE_ORIENTATION = 'portrait';
-const DIAGRAM_DEFAULT_PAGE_COLOR = 'white';
+const DIAGRAM_DEFAULT_PAGE_COLOR = '#ffffff';
 
 const DIAGRAM_MAX_MOBILE_WINDOW_WIDTH = 576;
 const DIAGRAM_TOOLBOX_ITEM_SPACING = 12;
@@ -73,8 +73,6 @@ class Diagram extends Widget {
         this._initDiagram();
 
         this._createCustomCommand();
-
-        this.optionsUpdateBar = new DiagramOptionsUpdateBar(this);
     }
     _initMarkup() {
         super._initMarkup();
@@ -166,8 +164,6 @@ class Diagram extends Widget {
         if(this.option('fullScreen')) {
             this._updateFullscreenState();
         }
-
-        this._diagramInstance.registerBar(this.optionsUpdateBar);
 
         if(hasWindow()) {
             resizeCallbacks.add(() => {
@@ -715,6 +711,9 @@ class Diagram extends Widget {
         if(this.option('zoomLevel.items')) {
             this._updateZoomLevelItemsState();
         }
+
+        this.optionsUpdateBar = new DiagramOptionsUpdateBar(this);
+        this._diagramInstance.registerBar(this.optionsUpdateBar);
 
         this._updateCustomShapes(this._getCustomShapes());
         this._refreshDataSources();
@@ -2083,7 +2082,9 @@ class Diagram extends Widget {
     }
 
     _raiseDataChangeAction() {
-        this.option('hasChanges', true);
+        if(this._initialized) {
+            this.option('hasChanges', true);
+        }
     }
     _raiseEdgeInsertedAction(data, callback, errorCallback) {
         if(this._edgesOption) {
