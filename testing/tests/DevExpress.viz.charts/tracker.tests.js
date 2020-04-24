@@ -6,6 +6,7 @@ import axisModule from 'viz/axes/base_axis';
 import { Crosshair } from 'viz/chart_components/crosshair';
 import trackers from 'viz/chart_components/tracker';
 import { MockAxis } from '../../helpers/chartMocks.js';
+import holdEvent from 'events/hold';
 
 function getEvent(type, params) {
     $.Event(type, params);
@@ -229,12 +230,15 @@ QUnit.module('Root events', $.extend({}, chartEnvironment, {
 
 QUnit.test('Subscriptions on init', function(assert) {
     const rootElement = this.renderer.root;
+    const events = $._data(rootElement.element, 'events') || {};
+    const holdEvents = events[holdEvent.name] || [];
 
     assert.ok(this.tracker);
     assert.strictEqual(rootElement.on.callCount, 3, 'root subscription');
     assert.strictEqual(rootElement.on.getCall(0).args[0], 'dxpointerdown.dxChartTracker dxpointermove.dxChartTracker', 'pointer events');
-    assert.strictEqual(rootElement.on.getCall(1).args[0], 'dxclick.dxChartTracker', 'click event');
-    assert.strictEqual(rootElement.on.getCall(2).args[0], 'dxhold.dxChartTracker', 'hold event');
+    assert.strictEqual(rootElement.on.getCall(1).args[0], 'dxpointerup.dxChartTracker', 'pointer up event');
+    assert.strictEqual(rootElement.on.getCall(2).args[0], 'dxclick.dxChartTracker', 'click event');
+    assert.strictEqual(holdEvents.length, 0, 'dxhold event handler is not exists'); // T880908 - Don't use dxhold event
 });
 
 QUnit.test('dxpointermove without series over', function(assert) {
@@ -1093,6 +1097,7 @@ QUnit.test('hold on series', function(assert) {
         .up();
 
     this.clock.tick(0);
+    assert.ok(this.tracker._isHolding);
     assert.ok(!this.options.eventTrigger.withArgs('seriesClick').called);
 
     delete rootElement.get(0)['chart-data-series'];

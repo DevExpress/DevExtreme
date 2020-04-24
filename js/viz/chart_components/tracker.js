@@ -8,7 +8,6 @@ const eventsConsts = consts.events;
 
 const vizUtils = require('../core/utils');
 const pointerEvents = require('../../events/pointer');
-const holdEvent = require('../../events/hold');
 const addNamespace = require('../../events/utils').addNamespace;
 const isDefined = require('../../core/utils/type').isDefined;
 const _normalizeEnum = vizUtils.normalizeEnum;
@@ -30,6 +29,7 @@ const POINT_DATA = 'chart-data-point';
 const SERIES_DATA = 'chart-data-series';
 const ARG_DATA = 'chart-data-argument';
 const DELAY = 100;
+const HOLD_TIMEOUT = 300;
 
 const NONE_MODE = 'none';
 const ALL_ARGUMENT_POINTS_MODE = 'allargumentpoints';
@@ -77,8 +77,8 @@ const baseTrackerPrototype = {
 
         that._renderer.root.off(DOT_EVENT_NS)
             .on(POINTER_ACTION, data, that._pointerHandler)
-            .on(addNamespace(clickEvent.name, EVENT_NS), data, that._clickHandler)
-            .on(addNamespace(holdEvent.name, EVENT_NS), { timeout: 300 }, _noop);
+            .on(addNamespace(pointerEvents.up, EVENT_NS), () => clearTimeout(that._holdTimer))
+            .on(addNamespace(clickEvent.name, EVENT_NS), data, that._clickHandler);
     },
 
     update: function(options) {
@@ -345,6 +345,12 @@ const baseTrackerPrototype = {
         let series = getData(e, SERIES_DATA);
         let point = getData(e, POINT_DATA) || series && series.getPointByCoord(x, y);
 
+        that._isHolding = false;
+        clearTimeout(that._holdTimer);
+        if(e.type === pointerEvents.down) {
+            that._holdTimer = setTimeout(() => that._isHolding = true, HOLD_TIMEOUT);
+        }
+
         if(point && !point.getMarkerVisibility()) {
             point = undefined;
         }
@@ -420,6 +426,11 @@ const baseTrackerPrototype = {
 
     _clickHandler: function(e) {
         const that = e.data.tracker;
+
+        if(that._isHolding) {
+            return;
+        }
+
         const rootOffset = that._renderer.getRootOffset();
         const x = _floor(e.pageX - rootOffset.left);
         const y = _floor(e.pageY - rootOffset.top);
