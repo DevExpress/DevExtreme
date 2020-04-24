@@ -20133,7 +20133,7 @@ QUnit.module('Row dragging', baseModuleConfig, () => {
 
         // assert
         assert.equal(items.length, 2, '2 items in group panel');
-        assert.ok(groupPanel.innerWidth() >= itemsWidth, 'enough space for children display');
+        assert.roughEqual(groupPanel.innerWidth(), itemsWidth, 1.01, 'enough space for children display');
     });
 
     QUnit.test('The onFocusedRowChanged should be fired if change focusedRowKey to same page and loadPanel in onContentReady (T827960)', function(assert) {
