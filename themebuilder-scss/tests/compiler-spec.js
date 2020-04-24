@@ -7,7 +7,7 @@ const fs = require('fs');
 const Compiler = require('../modules/compiler');
 
 const dataPath = path.join(path.resolve(), 'tests', 'data');
-const noModificationsResult = require('./data/compilation-results/without-modifications-css');
+const noModificationsResult = require('./data/compilation-results/no-changes-css');
 
 describe('compile', () => {
     beforeEach(() => {
@@ -26,7 +26,7 @@ describe('compile', () => {
             // compiled css
             assert.equal(noModificationsResult, data.result.css.toString());
             // collected variables
-            assert.deepEqual(require('./data/compilation-results/without-modifications-meta'), data.changedVariables);
+            assert.deepEqual(require('./data/compilation-results/no-changes-meta'), data.changedVariables);
         });
     });
 

@@ -4,7 +4,7 @@ const path = require('path');
 let CompileManager = require('../modules/compile-manager');
 
 const dataPath = path.join(path.resolve(), 'tests', 'data');
-const noModificationsResult = require('./data/compilation-results/without-modifications-css');
+const noModificationsResult = require('./data/compilation-results/no-changes-css');
 
 
 describe('Compile manager - integration test on test sass', () => {
@@ -24,7 +24,7 @@ describe('Compile manager - integration test on test sass', () => {
         const manager = new CompileManager();
         return manager.compile({}).then(result => {
             assert.equal(noModificationsResult, result.css);
-            assert.deepEqual(require('./data/compilation-results/without-modifications-meta'), result.compiledMetadata);
+            assert.deepEqual(require('./data/compilation-results/no-changes-meta'), result.compiledMetadata);
         });
     });
 
@@ -42,7 +42,7 @@ describe('Compile manager - integration test on test sass', () => {
   background-color: transparent;
   color: #337ab7;
 }`, result.css);
-            assert.deepEqual(require('./data/compilation-results/without-modifications-meta'), result.compiledMetadata);
+            assert.deepEqual(require('./data/compilation-results/no-changes-meta'), result.compiledMetadata);
         });
     });
 });
