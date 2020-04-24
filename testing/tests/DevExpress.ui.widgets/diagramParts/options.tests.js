@@ -254,7 +254,7 @@ QUnit.module('Options', moduleConfig, () => {
         assert.equal(this.instance.option('pageColor'), '#ffffff');
         assert.notOk(this.onOptionChanged.called);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.PageColor).execute('red');
-        assert.equal(this.instance.option('pageColor'), '#ff0000'); // FF0000
+        assert.equal(this.instance.option('pageColor'), '#ff0000');
         assert.equal(this.onOptionChanged.getCalls().length, 2); // +hasChanges
     });
     test('should change simpleView property', function(assert) {
