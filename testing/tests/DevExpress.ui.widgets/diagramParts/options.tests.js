@@ -2,11 +2,38 @@ import $ from 'jquery';
 const { test } = QUnit;
 import 'common.css!';
 import 'ui/diagram';
+
 import { DiagramCommand, DataLayoutType } from 'devexpress-diagram';
+import { Consts } from '../../../helpers/diagramHelpers.js';
 
 const moduleConfig = {
     beforeEach: function() {
-        this.$element = $('#diagram').dxDiagram();
+        this.onOptionChanged = sinon.spy();
+        this.$element = $('#diagram').dxDiagram({
+            onOptionChanged: this.onOptionChanged
+        });
+        this.instance = this.$element.dxDiagram('instance');
+    }
+};
+
+const moduleConfigWithBoundDiagram = {
+    beforeEach: function() {
+        this.onOptionChanged = sinon.spy();
+        this.$element = $('#diagram').dxDiagram({
+            onOptionChanged: this.onOptionChanged,
+            nodes: {
+                dataSource: [
+                    {
+                        id: '1',
+                        text: 'text1'
+                    },
+                    {
+                        id: '2',
+                        text: 'text2'
+                    }
+                ]
+            }
+        });
         this.instance = this.$element.dxDiagram('instance');
     }
 };
@@ -28,8 +55,10 @@ QUnit.module('Options', moduleConfig, () => {
     });
     test('should sync zoomLevel property', function(assert) {
         assert.equal(this.instance.option('zoomLevel'), 1);
+        assert.notOk(this.onOptionChanged.called);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.ZoomLevel).execute(1.5);
         assert.equal(this.instance.option('zoomLevel'), 1.5);
+        assert.ok(this.onOptionChanged.called);
     });
     test('should change zoomLevel object property', function(assert) {
         assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1);
@@ -42,10 +71,13 @@ QUnit.module('Options', moduleConfig, () => {
         assert.equal(this.instance._diagramInstance.settings.zoomLevelItems.length, 2);
     });
     test('should sync zoomLevel object property', function(assert) {
+        assert.notOk(this.onOptionChanged.called);
         this.instance.option('zoomLevel', { value: 1.5, items: [ 1, 1.5, 2 ] });
         assert.equal(this.instance.option('zoomLevel.value'), 1.5);
+        assert.ok(this.onOptionChanged.called);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.ZoomLevel).execute(2);
         assert.equal(this.instance.option('zoomLevel.value'), 2);
+        assert.equal(this.onOptionChanged.getCalls().length, 2);
     });
     test('should change autoZoom property', function(assert) {
         assert.equal(this.instance._diagramInstance.settings.autoZoom, 0);
@@ -58,8 +90,10 @@ QUnit.module('Options', moduleConfig, () => {
     });
     test('should sync autoZoom property', function(assert) {
         assert.equal(this.instance.option('autoZoomMode'), 'disabled');
+        assert.notOk(this.onOptionChanged.called);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.SwitchAutoZoom).execute(1);
         assert.equal(this.instance.option('autoZoomMode'), 'fitContent');
+        assert.ok(this.onOptionChanged.called);
     });
     test('should change fullScreen property', function(assert) {
         assert.notOk(this.instance._diagramInstance.settings.fullscreen);
@@ -70,8 +104,10 @@ QUnit.module('Options', moduleConfig, () => {
     });
     test('should sync fullScreen property', function(assert) {
         assert.equal(this.instance.option('fullScreen'), false);
+        assert.notOk(this.onOptionChanged.called);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Fullscreen).execute(true);
         assert.equal(this.instance.option('fullScreen'), true);
+        assert.ok(this.onOptionChanged.called);
     });
     test('should change showGrid property', function(assert) {
         assert.ok(this.instance._diagramInstance.settings.showGrid);
@@ -82,8 +118,10 @@ QUnit.module('Options', moduleConfig, () => {
     });
     test('should sync showGrid property', function(assert) {
         assert.equal(this.instance.option('showGrid'), true);
+        assert.notOk(this.onOptionChanged.called);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.ShowGrid).execute(false);
         assert.equal(this.instance.option('showGrid'), false);
+        assert.ok(this.onOptionChanged.called);
     });
     test('should change snapToGrid property', function(assert) {
         assert.ok(this.instance._diagramInstance.settings.snapToGrid);
@@ -94,8 +132,10 @@ QUnit.module('Options', moduleConfig, () => {
     });
     test('should sync snapToGrid property', function(assert) {
         assert.equal(this.instance.option('snapToGrid'), true);
+        assert.notOk(this.onOptionChanged.called);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.SnapToGrid).execute(false);
         assert.equal(this.instance.option('snapToGrid'), false);
+        assert.ok(this.onOptionChanged.called);
     });
     test('should change gridSize property', function(assert) {
         assert.equal(this.instance._diagramInstance.settings.gridSize, 180);
@@ -106,8 +146,10 @@ QUnit.module('Options', moduleConfig, () => {
     });
     test('should sync gridSize property', function(assert) {
         assert.equal(this.instance.option('gridSize'), 0.125);
+        assert.notOk(this.onOptionChanged.called);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.GridSize).execute(0.25);
         assert.equal(this.instance.option('gridSize'), 0.25);
+        assert.ok(this.onOptionChanged.called);
     });
     test('should change gridSize object property', function(assert) {
         assert.equal(this.instance._diagramInstance.settings.gridSize, 180);
@@ -120,10 +162,13 @@ QUnit.module('Options', moduleConfig, () => {
         assert.equal(this.instance._diagramInstance.settings.gridSizeItems.length, 2);
     });
     test('should sync gridSize object property', function(assert) {
+        assert.notOk(this.onOptionChanged.called);
         this.instance.option('gridSize', { value: 0.25, items: [0.125, 0.25, 1] });
+        assert.ok(this.onOptionChanged.called);
         assert.equal(this.instance.option('gridSize.value'), 0.25);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.GridSize).execute(1);
         assert.equal(this.instance.option('gridSize.value'), 1);
+        assert.equal(this.onOptionChanged.getCalls().length, 2);
     });
     test('should change viewUnits property', function(assert) {
         assert.equal(this.instance._diagramInstance.settings.viewUnits, 0);
@@ -134,8 +179,10 @@ QUnit.module('Options', moduleConfig, () => {
     });
     test('should sync viewUnits property', function(assert) {
         assert.equal(this.instance.option('viewUnits'), 'in');
+        assert.notOk(this.onOptionChanged.called);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.ViewUnits).execute(1);
         assert.equal(this.instance.option('viewUnits'), 'cm');
+        assert.ok(this.onOptionChanged.called);
     });
     test('should change units property', function(assert) {
         assert.equal(this.instance._diagramInstance.model.units, 0);
@@ -152,12 +199,15 @@ QUnit.module('Options', moduleConfig, () => {
         assert.equal(this.instance._diagramInstance.model.pageSize.height, 7200);
     });
     test('should sync pageSize property', function(assert) {
+        assert.notOk(this.onOptionChanged.called);
         this.instance.option('pageSize', { width: 3, height: 5 });
         assert.equal(this.instance.option('pageSize.width'), 3);
         assert.equal(this.instance.option('pageSize.height'), 5);
+        assert.equal(this.onOptionChanged.getCalls().length, 2); // +hasChanges
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.PageSize).execute({ width: 4, height: 6 });
         assert.equal(this.instance.option('pageSize.width'), 4);
         assert.equal(this.instance.option('pageSize.height'), 6);
+        assert.equal(this.onOptionChanged.getCalls().length, 3); // +hasChanges
     });
     test('should change pageSize object property', function(assert) {
         assert.equal(this.instance._diagramInstance.model.pageSize.width, 8391);
@@ -169,12 +219,15 @@ QUnit.module('Options', moduleConfig, () => {
         assert.equal(this.instance._diagramInstance.settings.pageSizeItems.length, 1);
     });
     test('should sync pageSize object property', function(assert) {
+        assert.notOk(this.onOptionChanged.called);
         this.instance.option('pageSize', { width: 3, height: 5, items: [{ width: 3, height: 5, text: 'A10' }, { width: 4, height: 6, text: 'A11' }] });
         assert.equal(this.instance.option('pageSize.width'), 3);
         assert.equal(this.instance.option('pageSize.height'), 5);
+        assert.equal(this.onOptionChanged.getCalls().length, 2); // +hasChanges
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.PageSize).execute({ width: 4, height: 6 });
         assert.equal(this.instance.option('pageSize.width'), 4);
         assert.equal(this.instance.option('pageSize.height'), 6);
+        assert.equal(this.onOptionChanged.getCalls().length, 3); // +hasChanges
     });
     test('should change pageOrientation property', function(assert) {
         assert.equal(this.instance._diagramInstance.model.pageLandscape, false);
@@ -185,8 +238,10 @@ QUnit.module('Options', moduleConfig, () => {
     });
     test('should sync pageOrientation property', function(assert) {
         assert.equal(this.instance.option('pageOrientation'), 'portrait');
+        assert.notOk(this.onOptionChanged.called);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.PageLandscape).execute(1);
         assert.equal(this.instance.option('pageOrientation'), 'landscape');
+        assert.equal(this.onOptionChanged.getCalls().length, 2); // +hasChanges
     });
     test('should change pageColor property', function(assert) {
         assert.equal(this.instance._diagramInstance.model.pageColor, -1); // FFFFFF
@@ -197,8 +252,10 @@ QUnit.module('Options', moduleConfig, () => {
     });
     test('should sync pageColor property', function(assert) {
         assert.equal(this.instance.option('pageColor'), '#ffffff');
+        assert.notOk(this.onOptionChanged.called);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.PageColor).execute('red');
-        assert.equal(this.instance.option('pageColor'), '#ff0000'); // FF0000
+        assert.equal(this.instance.option('pageColor'), '#ff0000');
+        assert.equal(this.onOptionChanged.getCalls().length, 2); // +hasChanges
     });
     test('should change simpleView property', function(assert) {
         assert.equal(this.instance._diagramInstance.settings.simpleView, false);
@@ -209,8 +266,10 @@ QUnit.module('Options', moduleConfig, () => {
     });
     test('should sync simpleView property', function(assert) {
         assert.equal(this.instance.option('simpleView'), false);
+        assert.notOk(this.onOptionChanged.called);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.ToggleSimpleView).execute(true);
         assert.equal(this.instance.option('simpleView'), true);
+        assert.ok(this.onOptionChanged.called);
     });
 
     test('should change defaultItemProperties', function(assert) {
@@ -351,5 +410,48 @@ QUnit.module('Options', moduleConfig, () => {
             }
         ]);
         assert.equal(Object.keys(descriptions).length, 44);
+    });
+
+    test('hasChanges changes on import or editing of an unbound diagram', function(assert) {
+        assert.equal(this.instance.option('hasChanges'), false, 'on init');
+        assert.notOk(this.onOptionChanged.called);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(Consts.SIMPLE_DIAGRAM);
+        assert.equal(this.instance.option('hasChanges'), true, 'on import');
+        assert.ok(this.onOptionChanged.called);
+        this.instance.option('hasChanges', false);
+        this.instance._diagramInstance.selection.set(['107']);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Bold).execute(true);
+        assert.equal(this.instance.option('hasChanges'), true, 'on edit');
+    });
+    test('hasChanges changes on data bind a diagram', function(assert) {
+        assert.equal(this.instance.option('hasChanges'), false, 'on init');
+        assert.notOk(this.onOptionChanged.called);
+        this.instance.option('nodes.dataSource', [
+            {
+                id: '1',
+                text: 'text1'
+            },
+            {
+                id: '2',
+                text: 'text2'
+            }
+        ]);
+        assert.equal(this.instance.option('hasChanges'), true, 'on data bind');
+        assert.ok(this.onOptionChanged.called);
+        this.instance.option('hasChanges', false);
+        this.instance._diagramInstance.selection.set(['1']);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Bold).execute(true);
+        assert.equal(this.instance.option('hasChanges'), true, 'on edit');
+    });
+});
+
+QUnit.module('Options with bound diagram', moduleConfigWithBoundDiagram, () => {
+    test('hasChanges changes on a data bound diagram', function(assert) {
+        assert.equal(this.instance.option('hasChanges'), false, 'on init');
+        assert.notOk(this.onOptionChanged.called);
+        this.instance._diagramInstance.selection.set(['1']);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Bold).execute(true);
+        assert.equal(this.instance.option('hasChanges'), true, 'on edit');
+        assert.ok(this.onOptionChanged.called);
     });
 });
