@@ -239,8 +239,8 @@ const subscribes = {
     getTextAndFormatDate(data, currentData, format) {
         const fields = ['startDate', 'endDate', 'startDateTimeZone', 'endDateTimeZone', 'allDay', 'text'];
         const appointmentFields = this.fire('_getAppointmentFields', extend({}, data, currentData), fields);
-        let startDate = appointmentFields.startDate;
-        let endDate = appointmentFields.endDate;
+        const startDate = appointmentFields.startDate;
+        const endDate = appointmentFields.endDate;
 
         const formatType = format || this.fire('_getTypeFormat', startDate, endDate, appointmentFields.allDay);
 
@@ -656,6 +656,7 @@ const subscribes = {
         let total = 0;
 
         $appts.css('marginBottom', innerRowOffset);
+        $appts.css('marginTop', innerRowOffset);
 
         const applyOffset = function(_, count) {
             const index = count + total - 1;
