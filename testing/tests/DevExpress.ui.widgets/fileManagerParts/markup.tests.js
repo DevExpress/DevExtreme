@@ -23,12 +23,12 @@ const getDefaultConfig = () => {
     };
 };
 
-const prepareFileManager = function(isPure, options) {
+const prepareFileManager = (context, isPure, options) => {
     const config = $.extend(true, isPure ? {} : getDefaultConfig(), options || {});
-    this.$element = $('#fileManager').dxFileManager(config);
-    this.clock.tick(400);
-    this.wrapper = new FileManagerWrapper(this.$element.dxFileManager());
-    this.clock.tick(400);
+    context.$element = $('#fileManager').dxFileManager(config);
+    context.clock.tick(400);
+    context.wrapper = new FileManagerWrapper(context.$element.dxFileManager());
+    context.clock.tick(400);
 };
 
 
@@ -59,7 +59,7 @@ const moduleConfig = {
 QUnit.module('Markup rendering', moduleConfig, () => {
 
     test('default render state', function(assert) {
-        prepareFileManager.call(this, true);
+        prepareFileManager(this, true);
         assert.ok(this.$element.hasClass(Consts.WIDGET_CLASS), 'element has a widget-specific class');
 
         const progressDrawer = this.$element.find(`.${Consts.NOTIFICATION_DRAWER_CLASS}`);
@@ -104,7 +104,7 @@ QUnit.module('Markup rendering', moduleConfig, () => {
     });
 
     test('details view render', function(assert) {
-        prepareFileManager.call(this, false, {
+        prepareFileManager(this, false, {
             itemView: {
                 mode: 'details'
             }
@@ -129,7 +129,7 @@ QUnit.module('Markup rendering', moduleConfig, () => {
     });
 
     test('details view must has ScrollView', function(assert) {
-        prepareFileManager.call(this, false, {
+        prepareFileManager(this, false, {
             itemView: {
                 mode: 'details'
             }
@@ -144,7 +144,7 @@ QUnit.module('Markup rendering', moduleConfig, () => {
     });
 
     test('thumbnails view items render', function(assert) {
-        prepareFileManager.call(this);
+        prepareFileManager(this);
 
         const $item = this.wrapper.findThumbnailsItem('Folder 1');
         const $itemContent = $item.children(`.${Consts.THUMBNAILS_ITEM_CONTENT_CLASS}`);
@@ -159,14 +159,14 @@ QUnit.module('Markup rendering', moduleConfig, () => {
     });
 
     test('thumbnails view must has ScrollView', function(assert) {
-        prepareFileManager.call(this);
+        prepareFileManager(this);
         assert.ok(this.wrapper.getThumbnailsViewScrollable().length);
     });
 
     test('customize thumbnail', function(assert) {
         let counter = 0;
 
-        prepareFileManager.call(this, false, {
+        prepareFileManager(this, false, {
             customizeThumbnail: item => {
                 if(item.isDirectory) {
                     return '';
@@ -184,7 +184,7 @@ QUnit.module('Markup rendering', moduleConfig, () => {
         const fileSystem = createTestFileSystem();
         fileSystem[1].name = 'Folder 2 test 11111111 testtesttestest 22222 test test 1111111 test 1 222222';
 
-        prepareFileManager.call(this, false, {
+        prepareFileManager(this, false, {
             fileSystemProvider: fileSystem,
             itemView: {
                 mode: 'details'
@@ -195,13 +195,18 @@ QUnit.module('Markup rendering', moduleConfig, () => {
         const $node = this.wrapper.getFolderNode(2);
         const $text = $node.find('.dx-filemanager-dirs-tree-item-text');
         const $button = $node.find('.dx-filemanager-file-actions-button');
-        const textBottom = $text[0].offsetTop + $text[0].clientHeight;
+        let textBottom = 0;
+        if(!windowUtils.hasWindow()) {
+            textBottom = $text[0].offsetTop + $text[0].clientHeight;
+        } else {
+            textBottom = $text.position().top + $text.height();
+        }
         const buttonTop = $button[0].offsetTop;
         assert.ok(buttonTop < textBottom, 'text and button on the same line');
     });
 
     test('active area switches on itemView and dirsPanel click', function(assert) {
-        prepareFileManager.call(this);
+        prepareFileManager(this);
         const dirsPanel = this.wrapper.getDirsPanel();
         const itemsView = this.wrapper.getItemsView();
 
