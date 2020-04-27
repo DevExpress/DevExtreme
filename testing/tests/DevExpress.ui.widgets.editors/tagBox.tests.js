@@ -31,6 +31,8 @@ QUnit.testStart(() => {
 const LIST_CLASS = 'dx-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
+const LIST_CKECKBOX_CLASS = 'dx-list-select-checkbox';
+const POPUP_DONE_BUTTON_CLASS = 'dx-popup-done';
 const TEXTBOX_CLASS = 'dx-texteditor-input';
 const EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
 const TAGBOX_TAG_CONTAINER_CLASS = 'dx-tag-container';
@@ -1306,7 +1308,7 @@ QUnit.module('the \'onCustomItemCreating\' option', moduleSetup, () => {
 
         const $tags = $tagBox.find('.dx-tag');
         const $listItems = $(instance.content()).find('.dx-list-item.dx-list-item-selected');
-        const checkbox = $listItems.eq(0).find('.dx-list-select-checkbox').dxCheckBox('instance');
+        const checkbox = $listItems.eq(0).find(`.${LIST_CKECKBOX_CLASS}`).dxCheckBox('instance');
 
         assert.equal($tags.length, 0, 'tags should not be rendered before button click');
         assert.equal($listItems.length, 1, 'list item should be selected after enter press');
@@ -3188,6 +3190,35 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         assert.ok($input.width() > inputWidth, 'input size is changed for substitution');
     });
 
+    QUnit.test('the previous value should be still selected after the new value was added after the new search (T880346)', function(assert) {
+        const items = ['aaa', 'aab', 'bbb'];
+        const $element = $('#tagBox').dxTagBox({
+            dataSource: items,
+            searchEnabled: true,
+            applyValueMode: 'useButtons',
+            searchTimeout: 0,
+            showSelectionControls: true,
+            deferRendering: true,
+            minSearchLength: 2
+        });
+        const instance = $element.dxTagBox('instance');
+        const $input = $element.find(`.${TEXTBOX_CLASS}`);
+
+        keyboardMock($input)
+            .type('aa');
+
+        pointerMock($(instance.content()).find(`.${LIST_CKECKBOX_CLASS}`).eq(0)).start().click();
+        $(instance.content()).parent().find(`.${POPUP_DONE_BUTTON_CLASS}`).trigger('dxclick');
+
+        keyboardMock($input)
+            .type('aa');
+
+        pointerMock($(`.${LIST_CKECKBOX_CLASS}`).eq(1)).start().click();
+        $(instance.content()).parent().find(`.${POPUP_DONE_BUTTON_CLASS}`).trigger('dxclick');
+
+        assert.strictEqual(instance.option('selectedItems').length, 2);
+    });
+
     QUnit.test('filter should be reset after the search value clearing (T385456)', function(assert) {
         const items = ['111', '222', '333'];
 
@@ -3717,7 +3748,7 @@ QUnit.module('the \'selectedItems\' option', moduleSetup, () => {
 
         $('.dx-list-select-all-checkbox').trigger('dxclick');
 
-        $('.dx-list-select-checkbox').first().trigger('dxclick');
+        $(`.${LIST_CKECKBOX_CLASS}`).first().trigger('dxclick');
         $('.dx-tag-remove-button').last().trigger('dxclick');
 
         $('.dx-list-select-all-checkbox').trigger('dxclick');
@@ -4049,7 +4080,7 @@ QUnit.module('applyValueMode = \'useButtons\'', {
         $($listItems.eq(1)).trigger('dxclick');
         assert.deepEqual(this.instance.option('value'), [], 'value is not changed after items are clicked');
 
-        $(this.$popupWrapper.find('.dx-popup-done')).trigger('dxclick');
+        $(this.$popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`)).trigger('dxclick');
         assert.ok(!this.instance.option('opened'), 'popup is hidden after the \'done\' button is clicked');
         assert.deepEqual(this.instance.option('value'), [items[0], items[1]], 'value is changed to selected list items');
     });
@@ -4232,12 +4263,12 @@ QUnit.module('applyValueMode = \'useButtons\'', {
         const $listItems = this.$listItems;
 
         $($listItems.eq(1)).trigger('dxclick');
-        $(this.$popupWrapper.find('.dx-popup-done')).trigger('dxclick');
+        $(this.$popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`)).trigger('dxclick');
 
         this.instance.option('opened', true);
 
         $($listItems.eq(0)).trigger('dxclick');
-        $(this.$popupWrapper.find('.dx-popup-done')).trigger('dxclick');
+        $(this.$popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`)).trigger('dxclick');
 
         assert.deepEqual(this.instance.option('value'), [items[1], items[0]], 'tags order is correct');
     });
@@ -4254,12 +4285,12 @@ QUnit.module('applyValueMode = \'useButtons\'', {
         const $listItems = this.$listItems;
 
         $($listItems.eq(1)).trigger('dxclick');
-        $(this.$popupWrapper.find('.dx-popup-done')).trigger('dxclick');
+        $(this.$popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`)).trigger('dxclick');
 
         this.instance.option('opened', true);
 
         $($listItems.eq(0)).trigger('dxclick');
-        $(this.$popupWrapper.find('.dx-popup-done')).trigger('dxclick');
+        $(this.$popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`)).trigger('dxclick');
 
         assert.deepEqual(this.instance.option('value'), [items[1].id, items[0].id], 'tags order is correct');
     });
@@ -4276,12 +4307,12 @@ QUnit.module('applyValueMode = \'useButtons\'', {
         const $listItems = this.$listItems;
 
         $($listItems.eq(1)).trigger('dxclick');
-        $(this.$popupWrapper.find('.dx-popup-done')).trigger('dxclick');
+        $(this.$popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`)).trigger('dxclick');
 
         this.instance.option('opened', true);
 
         $($listItems.eq(0)).trigger('dxclick');
-        $(this.$popupWrapper.find('.dx-popup-done')).trigger('dxclick');
+        $(this.$popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`)).trigger('dxclick');
 
         assert.deepEqual(this.instance.option('value'), [items[1], items[0]], 'tags order is correct');
     });
@@ -4292,11 +4323,11 @@ QUnit.module('applyValueMode = \'useButtons\'', {
 
         $($listItems.eq(0)).trigger('dxclick');
         $($listItems.eq(1)).trigger('dxclick');
-        $(this.$popupWrapper.find('.dx-popup-done')).trigger('dxclick');
+        $(this.$popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`)).trigger('dxclick');
         assert.deepEqual(this.instance.option('value'), [items[0], items[1]], 'tags order is correct');
 
         this.instance.option('opened', true);
-        $(this.$popupWrapper.find('.dx-popup-done')).trigger('dxclick');
+        $(this.$popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`)).trigger('dxclick');
         assert.deepEqual(this.instance.option('value'), [items[0], items[1]], 'tags order is correct');
     });
 
@@ -4306,13 +4337,13 @@ QUnit.module('applyValueMode = \'useButtons\'', {
 
         $($listItems.eq(1)).trigger('dxclick');
         $($listItems.eq(2)).trigger('dxclick');
-        $(this.$popupWrapper.find('.dx-popup-done')).trigger('dxclick');
+        $(this.$popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`)).trigger('dxclick');
         assert.deepEqual(this.instance.option('value'), [items[1], items[2]], 'tags order is correct');
 
         this.instance.option('opened', true);
         $($listItems.eq(1)).trigger('dxclick');
         $($listItems.eq(0)).trigger('dxclick');
-        $(this.$popupWrapper.find('.dx-popup-done')).trigger('dxclick');
+        $(this.$popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`)).trigger('dxclick');
         assert.deepEqual(this.instance.option('value'), [items[2], items[0]], 'tags order is correct');
     });
 
@@ -4329,11 +4360,11 @@ QUnit.module('applyValueMode = \'useButtons\'', {
 
         $($listItems.eq(0)).trigger('dxclick');
         $($listItems.eq(1)).trigger('dxclick');
-        $(this.$popupWrapper.find('.dx-popup-done')).trigger('dxclick');
+        $(this.$popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`)).trigger('dxclick');
         assert.deepEqual(this.instance.option('value'), [items[0].id, items[1].id], 'tags order is correct');
 
         this.instance.option('opened', true);
-        $(this.$popupWrapper.find('.dx-popup-done')).trigger('dxclick');
+        $(this.$popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`)).trigger('dxclick');
         assert.deepEqual(this.instance.option('value'), [items[0].id, items[1].id], 'tags order is correct');
     });
 
@@ -4350,13 +4381,13 @@ QUnit.module('applyValueMode = \'useButtons\'', {
 
         $($listItems.eq(0)).trigger('dxclick');
         $($listItems.eq(1)).trigger('dxclick');
-        $(this.$popupWrapper.find('.dx-popup-done')).trigger('dxclick');
+        $(this.$popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`)).trigger('dxclick');
 
         this.instance.option('opened', true);
-        $(this.$popupWrapper.find('.dx-popup-done')).trigger('dxclick');
+        $(this.$popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`)).trigger('dxclick');
         assert.deepEqual(this.instance.option('value'), [items[0], items[1]], 'tags order is correct');
 
-        $(this.$popupWrapper.find('.dx-popup-done')).trigger('dxclick');
+        $(this.$popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`)).trigger('dxclick');
         assert.deepEqual(this.instance.option('value'), [items[0], items[1]], 'tags order is correct');
     });
 
