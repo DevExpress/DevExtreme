@@ -4082,6 +4082,7 @@ QUnit.module('Initialization', {
         beforeEach: function() {
             this.createInstance = function(options) {
                 this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
+                this.scheduler = new SchedulerTestWrapper(this.instance);
             };
             this.clock = sinon.useFakeTimers();
         },
@@ -4499,21 +4500,78 @@ QUnit.module('Initialization', {
         assert.ok(result, 'Appointment takes all day');
     });
 
-    QUnit.module('Options for Material theme in components', {
-        beforeEach: function() {
-            this.origIsMaterial = themes.isMaterial;
-            themes.isMaterial = function() { return true; };
-            this.createInstance = function(options) {
-                this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
-            };
-            this.clock = sinon.useFakeTimers();
-        },
-        afterEach: function() {
-            this.clock.restore();
-            themes.isMaterial = this.origIsMaterial;
-        }
+    QUnit.test('Month View - Cell should have default height', function(assert) {
+        const DEFAULT_CELL_HEIGHT = 50;
+
+        this.createInstance({
+            views: ['month'],
+            currentView: 'month'
+        });
+
+        const cellHeight = this.scheduler.workSpace.getCellHeight(0, 0);
+        assert.equal(cellHeight, DEFAULT_CELL_HEIGHT, 'Cell has min height');
     });
 
+    [undefined, 2, 3].forEach(intervalCount => {
+        [200, 300, 800].forEach(height => {
+            QUnit.test(`Month View - Workspace vertical scroll should be equal to the dataTable height if view.intervalCount=${intervalCount}, height: ${height}`, function(assert) {
+                this.createInstance({
+                    height: height,
+                    views: [{
+                        type: 'month',
+                        name: 'month',
+                        intervalCount: intervalCount
+                    }],
+                    currentView: 'month'
+                });
+
+                const dateTableHeight = this.scheduler.workSpace.getDateTableHeight();
+                const scrollable = this.scheduler.workSpace.getScrollable();
+                assert.equal(scrollable.scrollHeight(), dateTableHeight, 'Scroll height > minWorspaceHeight');
+            });
+
+            QUnit.test(`Month View - Workspace vertical scroll should be equal to the dataTable height if grouping, view.intervalCount=${intervalCount}, height: ${height}`, function(assert) {
+                this.createInstance({
+                    height: height,
+                    views: [{
+                        type: 'month',
+                        name: 'month',
+                        intervalCount: intervalCount
+                    }],
+                    currentView: 'month',
+                    groups: ['any'],
+                    resources: [{
+                        fieldExpr: 'any',
+                        dataSource: [
+                            { text: 'Group_2', id: 1 },
+                            { text: 'Group_2', id: 2 }
+                        ],
+                    }]
+                });
+
+                const dateTableHeight = this.scheduler.workSpace.getDateTableHeight();
+                const scrollable = this.scheduler.workSpace.getScrollable();
+                assert.equal(scrollable.scrollHeight(), dateTableHeight, 'Scroll height > minWorspaceHeight');
+            });
+        });
+    });
+
+})('View with configuration');
+
+QUnit.module('Options for Material theme in components', {
+    beforeEach: function() {
+        this.origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
+        this.createInstance = function(options) {
+            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
+        };
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+        themes.isMaterial = this.origIsMaterial;
+    }
+}, () => {
     QUnit.test('_dropDownButtonIcon option should be passed to SchedulerHeader', function(assert) {
         this.createInstance({
             currentView: 'week',
@@ -4555,5 +4613,22 @@ QUnit.module('Initialization', {
 
         assert.equal(appointments.option('_collectorOffset'), 0, 'SchedulerAppointments has correct _collectorOffset');
     });
+});
 
-})('View with configuration');
+QUnit.module('Month View', {
+    beforeEach: function() {
+        sinon.spy(errors, 'log');
+
+        this.createInstance = function(options) {
+            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
+            this.scheduler = new SchedulerTestWrapper(this.instance);
+        };
+
+        fx.off = true;
+    },
+    afterEach: function() {
+        errors.log.restore();
+        fx.off = false;
+    }
+}, () => {
+});

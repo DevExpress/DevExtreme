@@ -20,7 +20,6 @@ import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_work_week';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
-import { SchedulerTestWrapper } from './helpers.js';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
@@ -1373,18 +1372,6 @@ QUnit.testStart(function() {
 
         assert.deepEqual(secondCellData.startDate, new Date(2018, 2, 6, 0), 'cell has right startDate');
         assert.deepEqual(secondCellData.endDate, new Date(2018, 2, 7, 0), 'cell has right endtDate');
-    });
-
-    QUnit.test('Workspace scroll is visible if month view default height is greater than component height', function(assert) {
-        this.instance.option({
-            currentDate: new Date(2018, 2, 1),
-            height: 200
-        });
-
-        const wrapper = new SchedulerTestWrapper(this.instance);
-        const scrollable = wrapper.workSpace.getScrollable();
-
-        assert.ok(scrollable.scrollHeight() > 200, 'Scrollable height is greater than scheduler height');
     });
 
 })('Work Space Month');
