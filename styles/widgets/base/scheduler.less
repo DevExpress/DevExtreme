@@ -64,6 +64,8 @@
 @SCHEDULER_REDUCED_ICON_OFFSET: 5px;
 @SCHEDULER_RECURRENCE_ICON_OFFSET: 20px;
 
+@SCHEDULER_AGENDA_APPOINTMENT_MARGIN: 5px;
+@SCHEDULER_AGENDA_LAST_IN_DATE_APPOINTMENT_MARGIN: 20px;
 @SCHEDULER_AGENDA_APPOINTMENT_FONT_SIZE: 16px;
 @SCHEDULER_AGENDA_LEFT_COLUMN_WIDTH: 70px;
 
@@ -2109,11 +2111,6 @@
             height: 0;
         }
 
-        .dx-scheduler-appointment {
-            position: relative;
-            box-shadow: none;
-        }
-
         .dx-scheduler-time-panel-cell {
             vertical-align: top;
         }
@@ -2195,6 +2192,17 @@
 
             div {
                 white-space: normal;
+            }
+        }
+
+        .dx-scheduler-appointment {
+            position: relative;
+            box-shadow: none;
+            margin-top: @SCHEDULER_AGENDA_APPOINTMENT_MARGIN;
+            margin-bottom: @SCHEDULER_AGENDA_APPOINTMENT_MARGIN;
+
+            &.dx-scheduler-last-in-date-agenda-appointment {
+                margin-bottom: @SCHEDULER_AGENDA_LAST_IN_DATE_APPOINTMENT_MARGIN;
             }
         }
 

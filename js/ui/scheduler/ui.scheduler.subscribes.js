@@ -13,6 +13,7 @@ import SchedulerTimezones from './timezones/ui.scheduler.timezones';
 import { Deferred } from '../../core/utils/deferred';
 import dateLocalization from '../../localization/date';
 import timeZoneUtils from './utils.timeZone';
+import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './constants';
 
 const MINUTES_IN_HOUR = 60;
 const toMs = dateUtils.dateToMilliseconds;
@@ -651,21 +652,18 @@ const subscribes = {
         return this.forceMaxAppointmentPerCell();
     },
 
-    agendaIsReady: function(rows, innerRowOffset, outerRowOffset) {
+    agendaIsReady: function(rows) {
         const $appts = this.getAppointmentsInstance()._itemElements();
         let total = 0;
 
-        $appts.css('marginBottom', innerRowOffset);
-        $appts.css('marginTop', innerRowOffset);
-
-        const applyOffset = function(_, count) {
+        const applyClass = function(_, count) {
             const index = count + total - 1;
-            $appts.eq(index).css('marginBottom', outerRowOffset);
+            $appts.eq(index).addClass(AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS);
             total += count;
         };
 
         for(let i = 0; i < rows.length; i++) {
-            each(rows[i], applyOffset);
+            each(rows[i], applyClass);
         }
     },
 
