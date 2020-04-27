@@ -337,7 +337,7 @@ const TextEditorBase = Editor.inherit({
     _compressInputContainer: function() {
         const $element = this.$element();
         const isIE11 = browser.msie && browser.version <= 11;
-        if(isIE11 && this.$element().css('display') === 'block') {
+        if(isIE11 && $element.css('display') === 'block') {
             $element.addClass(TEXTEDITOR_COMPRESSED_CLASS);
         }
     },
