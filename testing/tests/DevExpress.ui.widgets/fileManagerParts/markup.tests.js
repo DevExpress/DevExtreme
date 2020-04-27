@@ -2,7 +2,8 @@ const { test } = QUnit;
 import $ from 'jquery';
 import 'ui/file_manager';
 import fx from 'animation/fx';
-import { FileManagerWrapper, createTestFileSystem, Consts } from '../../../helpers/fileManagerHelpers.js';
+import windowUtils from 'core/utils/window';
+import { FileManagerWrapper, createTestFileSystem, Consts, isDesktopDevice } from '../../../helpers/fileManagerHelpers.js';
 import 'common.css!';
 
 const getDefaultConfig = () => {
@@ -61,10 +62,18 @@ QUnit.module('Markup rendering', moduleConfig, () => {
 
         assert.ok(this.$element.hasClass(Consts.WIDGET_CLASS), 'element has a widget-specific class');
 
-        const progressDrawer = this.wrapper.getProgressDrawer();
+        const progressDrawer = this.$element.find(`.${Consts.NOTIFICATION_DRAWER_CLASS}`);
+        const progressPanel = progressDrawer.find(`.${Consts.DRAWER_PANEL_CONTENT_CLASS} > .${Consts.PROGRESS_PANEL_CLASS}`);
 
         assert.strictEqual(progressDrawer.length, 1, 'notification drawer is rendered');
-        assert.strictEqual(progressDrawer.find(`.${Consts.DRAWER_PANEL_CONTENT_CLASS} > .${Consts.PROGRESS_PANEL_CLASS}`).length, 1, 'progress panel is rendered');
+        assert.strictEqual(progressPanel.length, 1, 'progress panel is rendered');
+        assert.strictEqual(progressPanel.find(`.${Consts.SCROLLABLE_ClASS}`).length, 1, 'progress panel has scrollView');
+
+        const progressPanelContainer = progressPanel.find(`.${Consts.PROGRESS_PANEL_CONTAINER_CLASS}`);
+
+        assert.strictEqual(progressPanelContainer.children().length, 2, 'progress panel container has two children');
+        assert.ok(progressPanelContainer.children().eq(0).hasClass(Consts.PROGRESS_PANEL_TITLE_CLASS), 'progress panel has title');
+        assert.ok(progressPanelContainer.children().eq(1).hasClass(Consts.PROGRESS_PANEL_INFOS_CONTAINER_CLASS), 'progress panel has content');
 
         const widgetWrapper = progressDrawer.find(`.${Consts.DRAWER_CONTENT_CLASS} > .${Consts.NOTIFICATION_DRAWER_PANEL_CLASS} > .${Consts.WIDGET_WRAPPER_CLASS}`);
 
@@ -91,6 +100,66 @@ QUnit.module('Markup rendering', moduleConfig, () => {
 
         assert.strictEqual(rootFolder.length, 1, 'has only root folder');
         assert.strictEqual(rootFolder.text(), 'Files', 'root folder has correct default text');
+    });
+
+    test('details view render', function(assert) {
+        this.prepareFileManager(false, {
+            itemView: {
+                mode: 'details'
+            }
+        });
+
+        const $headers = this.wrapper.getDetailsColumnsHeaders();
+
+        let indexOffset = 0;
+        if(isDesktopDevice()) {
+            assert.strictEqual($headers.length, 6, 'column headres number is correct');
+            assert.ok($headers.eq(0).hasClass('dx-command-select'), 'selection header is rendered');
+            indexOffset = 1;
+        } else {
+            assert.strictEqual($headers.length, 5, 'column headres number is correct');
+        }
+        assert.ok($headers.eq(indexOffset).hasClass('dx-filemanager-details-item-is-directory'), 'thumbnail header is rendered');
+        assert.strictEqual($headers.eq(indexOffset + 1).text(), 'Name', 'name header is rendered');
+        assert.strictEqual($headers.eq(indexOffset + 2).text(), 'Date Modified', 'modified header is rendered');
+        assert.strictEqual($headers.eq(indexOffset + 3).text(), 'File Size', 'size header is rendered');
+        assert.ok($headers.eq(indexOffset + 4).hasClass('dx-command-adaptive'), 'adaptivity header is rendered');
+
+    });
+
+    test('details view must has ScrollView', function(assert) {
+        this.prepareFileManager(false, {
+            itemView: {
+                mode: 'details'
+            }
+        });
+
+        if(!windowUtils.hasWindow()) {
+            assert.ok(true, 'only if there is a window');
+            return;
+        }
+
+        assert.ok(this.wrapper.getDetailsViewScrollable().length);
+    });
+
+    test('thumbnails view items render', function(assert) {
+        this.prepareFileManager();
+
+        const $item = this.wrapper.findThumbnailsItem('Folder 1');
+        const $itemContent = $item.children(`.${Consts.THUMBNAILS_ITEM_CONTENT_CLASS}`);
+
+        assert.strictEqual($itemContent.length, 1, 'item has content');
+        assert.strictEqual($itemContent.children().length, 3, 'item content has three subitems');
+
+        assert.ok($itemContent.children().eq(0).hasClass('dx-icon-folder'), 'item has icon');
+        assert.ok($itemContent.children().eq(0).hasClass(Consts.THUMBNAILS_ITEM_THUMBNAIL_CLASS), 'item icon has specific class');
+        assert.ok($itemContent.children().eq(1).hasClass(Consts.THUMBNAILS_ITEM_SPACER_CLASS), 'item has spacer');
+        assert.ok($itemContent.children().eq(2).hasClass(Consts.THUMBNAILS_ITEM_NAME_CLASS), 'item name');
+    });
+
+    test('thumbnails view must has ScrollView', function(assert) {
+        this.prepareFileManager();
+        assert.ok(this.wrapper.getThumbnailsViewScrollable().length);
     });
 
     test('customize thumbnail', function(assert) {

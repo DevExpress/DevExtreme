@@ -21,6 +21,16 @@ export const Consts = {
     NOTIFICATION_DRAWER_PANEL_CLASS: 'dx-filemanager-notification-drawer-panel',
     ADAPTIVITY_DRAWER_PANEL_CLASS: 'dx-filemanager-adaptivity-drawer-panel',
     PROGRESS_PANEL_CLASS: 'dx-filemanager-progress-panel',
+    PROGRESS_PANEL_CLOSE_BUTTON_CLASS: 'dx-filemanager-progress-panel-close-button',
+    PROGRESS_PANEL_TITLE_CLASS: 'dx-filemanager-progress-panel-title',
+    PROGRESS_PANEL_CONTAINER_CLASS: 'dx-filemanager-progress-panel-container',
+    PROGRESS_PANEL_INFOS_CONTAINER_CLASS: 'dx-filemanager-progress-panel-infos-container',
+    PROGRESS_PANEL_INFO_CLASS: 'dx-filemanager-progress-panel-info',
+    PROGRESS_PANEL_PROGRESS_BOX_CLASS: 'dx-filemanager-progress-box',
+    PROGRESS_PANEL_PROGRESS_BOX_WRAPPER_CLASS: 'dx-filemanager-progress-box-wrapper',
+    PROGRESS_PANEL_PROGRESS_BOX_COMMON_CLASS: 'dx-filemanager-progress-box-common',
+    PROGRESS_PANEL_PROGRESS_BOX_PROGRESS_BAR_CLASS: 'dx-filemanager-progress-box-progress-bar',
+    PROGRESS_PANEL_PROGRESS_BOX_CLOSE_BUTTON_CLASS: 'dx-filemanager-progress-box-close-button',
     DIRS_PANEL_CLASS: 'dx-filemanager-dirs-panel',
     DIRS_TREE_CLASS: 'dx-filemanager-dirs-tree',
     ITEMS_VIEW_CLASS: 'dx-filemanager-files-view',
@@ -29,6 +39,8 @@ export const Consts = {
     THUMBNAILS_VIEW_PORT_CLASS: 'dx-filemanager-thumbnails-view-port',
     THUMBNAILS_ITEM_CLASS: 'dx-filemanager-thumbnails-item',
     THUMBNAILS_ITEM_NAME_CLASS: 'dx-filemanager-thumbnails-item-name',
+    THUMBNAILS_ITEM_SPACER_CLASS: 'dx-filemanager-thumbnails-item-spacer',
+    THUMBNAILS_ITEM_THUMBNAIL_CLASS: 'dx-filemanager-thumbnails-item-thumbnail',
     THUMBNAILS_ITEM_CONTENT_CLASS: 'dx-filemanager-thumbnails-item-content',
     GRID_DATA_ROW_CLASS: 'dx-data-row',
     FILE_ACTION_BUTTON_CLASS: 'dx-filemanager-file-actions-button',
@@ -312,6 +324,10 @@ export class FileManagerWrapper {
         return this._$element.find('[id*=dx-col]').eq(index);
     }
 
+    getDetailsColumnsHeaders() {
+        return this.getDetailsItemList().find('.dx-header-row > td');
+    }
+
     getDetailsCell(columnCaption, rowIndex) {
         const $itemList = this.getDetailsItemList();
         const columnIndex = $itemList.find(`.dx-header-row > td:contains('${columnCaption}')`).index();
@@ -444,11 +460,11 @@ export class FileManagerProgressPanelWrapper {
     }
 
     getInfosContainer() {
-        return this._$element.find('.dx-filemanager-progress-panel-infos-container');
+        return this._$element.find(`.${Consts.PROGRESS_PANEL_INFOS_CONTAINER_CLASS}`);
     }
 
     getInfos() {
-        return this.getInfosContainer().find('.dx-filemanager-progress-panel-info')
+        return this.getInfosContainer().find(`.${Consts.PROGRESS_PANEL_INFO_CLASS}`)
             .map((_, info) => new FileManagerProgressPanelInfoWrapper($(info)))
             .get();
     }
@@ -459,7 +475,7 @@ export class FileManagerProgressPanelWrapper {
 
     findProgressBoxes($container) {
         return $container
-            .children('.dx-filemanager-progress-box')
+            .children(`.${Consts.PROGRESS_PANEL_PROGRESS_BOX_CLASS}`)
             .map((_, element) => new FileManagerProgressPanelProgressBoxWrapper($(element)))
             .get();
     }
@@ -469,7 +485,7 @@ export class FileManagerProgressPanelWrapper {
     }
 
     get $closeButton() {
-        return this._$element.find('.dx-filemanager-progress-panel-close-button');
+        return this._$element.find(`.${Consts.PROGRESS_PANEL_CLOSE_BUTTON_CLASS}`);
     }
 
 }
