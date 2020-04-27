@@ -21,16 +21,9 @@ export const Consts = {
     NOTIFICATION_DRAWER_PANEL_CLASS: 'dx-filemanager-notification-drawer-panel',
     ADAPTIVITY_DRAWER_PANEL_CLASS: 'dx-filemanager-adaptivity-drawer-panel',
     PROGRESS_PANEL_CLASS: 'dx-filemanager-progress-panel',
-    PROGRESS_PANEL_CLOSE_BUTTON_CLASS: 'dx-filemanager-progress-panel-close-button',
     PROGRESS_PANEL_TITLE_CLASS: 'dx-filemanager-progress-panel-title',
     PROGRESS_PANEL_CONTAINER_CLASS: 'dx-filemanager-progress-panel-container',
     PROGRESS_PANEL_INFOS_CONTAINER_CLASS: 'dx-filemanager-progress-panel-infos-container',
-    PROGRESS_PANEL_INFO_CLASS: 'dx-filemanager-progress-panel-info',
-    PROGRESS_PANEL_PROGRESS_BOX_CLASS: 'dx-filemanager-progress-box',
-    PROGRESS_PANEL_PROGRESS_BOX_WRAPPER_CLASS: 'dx-filemanager-progress-box-wrapper',
-    PROGRESS_PANEL_PROGRESS_BOX_COMMON_CLASS: 'dx-filemanager-progress-box-common',
-    PROGRESS_PANEL_PROGRESS_BOX_PROGRESS_BAR_CLASS: 'dx-filemanager-progress-box-progress-bar',
-    PROGRESS_PANEL_PROGRESS_BOX_CLOSE_BUTTON_CLASS: 'dx-filemanager-progress-box-close-button',
     DIRS_PANEL_CLASS: 'dx-filemanager-dirs-panel',
     DIRS_TREE_CLASS: 'dx-filemanager-dirs-tree',
     ITEMS_VIEW_CLASS: 'dx-filemanager-files-view',
@@ -460,11 +453,11 @@ export class FileManagerProgressPanelWrapper {
     }
 
     getInfosContainer() {
-        return this._$element.find(`.${Consts.PROGRESS_PANEL_INFOS_CONTAINER_CLASS}`);
+        return this._$element.find('.dx-filemanager-progress-panel-infos-container');
     }
 
     getInfos() {
-        return this.getInfosContainer().find(`.${Consts.PROGRESS_PANEL_INFO_CLASS}`)
+        return this.getInfosContainer().find('.dx-filemanager-progress-panel-info')
             .map((_, info) => new FileManagerProgressPanelInfoWrapper($(info)))
             .get();
     }
@@ -475,7 +468,7 @@ export class FileManagerProgressPanelWrapper {
 
     findProgressBoxes($container) {
         return $container
-            .children(`.${Consts.PROGRESS_PANEL_PROGRESS_BOX_CLASS}`)
+            .children('.dx-filemanager-progress-box')
             .map((_, element) => new FileManagerProgressPanelProgressBoxWrapper($(element)))
             .get();
     }
@@ -485,7 +478,7 @@ export class FileManagerProgressPanelWrapper {
     }
 
     get $closeButton() {
-        return this._$element.find(`.${Consts.PROGRESS_PANEL_CLOSE_BUTTON_CLASS}`);
+        return this._$element.find('.dx-filemanager-progress-panel-close-button');
     }
 
 }
