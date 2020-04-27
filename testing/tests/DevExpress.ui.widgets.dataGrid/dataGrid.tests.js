@@ -2375,13 +2375,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.ok($overlay.length, 'overlay is rendered');
-
-        if(browser.msie && browser.version !== 11) {
-            // TODO: fix this for Edge
-            assert.ok($overlay.hasClass('dx-hidden'), 'overlay is hidden');
-        } else {
-            assert.notOk($overlay.hasClass('dx-hidden'), 'overlay is not hidden');
-        }
+        assert.notOk($overlay.hasClass('dx-hidden'), 'overlay is not hidden');
     });
 
     QUnit.test('export.enabled: true, allowExportSelectedData: true -> check export menu icons (T757579)', function(assert) {
