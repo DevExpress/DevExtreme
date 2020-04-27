@@ -23,6 +23,14 @@ const getDefaultConfig = () => {
     };
 };
 
+const prepareFileManager = function(isPure, options) {
+    const config = $.extend(true, isPure ? {} : getDefaultConfig(), options || {});
+    this.$element = $('#fileManager').dxFileManager(config);
+    this.clock.tick(400);
+    this.wrapper = new FileManagerWrapper(this.$element.dxFileManager());
+    this.clock.tick(400);
+};
+
 
 QUnit.testStart(function() {
     const markup =
@@ -36,13 +44,6 @@ const moduleConfig = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         fx.off = true;
-
-        this.prepareFileManager = (isPure, options) => {
-            const config = $.extend(true, isPure ? {} : getDefaultConfig(), options || {});
-            this.$element = $('#fileManager').dxFileManager(config);
-            this.wrapper = new FileManagerWrapper(this.$element.dxFileManager());
-            this.clock.tick(400);
-        };
     },
 
     afterEach: function() {
@@ -58,8 +59,8 @@ const moduleConfig = {
 QUnit.module('Markup rendering', moduleConfig, () => {
 
     test('default render state', function(assert) {
-        this.prepareFileManager(true);
-
+        prepareFileManager.call(this, true);
+        this.clock.tick(800);
         assert.ok(this.$element.hasClass(Consts.WIDGET_CLASS), 'element has a widget-specific class');
 
         const progressDrawer = this.$element.find(`.${Consts.NOTIFICATION_DRAWER_CLASS}`);
@@ -103,7 +104,7 @@ QUnit.module('Markup rendering', moduleConfig, () => {
     });
 
     test('details view render', function(assert) {
-        this.prepareFileManager(false, {
+        prepareFileManager.call(this, false, {
             itemView: {
                 mode: 'details'
             }
@@ -128,7 +129,7 @@ QUnit.module('Markup rendering', moduleConfig, () => {
     });
 
     test('details view must has ScrollView', function(assert) {
-        this.prepareFileManager(false, {
+        prepareFileManager.call(this, false, {
             itemView: {
                 mode: 'details'
             }
@@ -143,7 +144,7 @@ QUnit.module('Markup rendering', moduleConfig, () => {
     });
 
     test('thumbnails view items render', function(assert) {
-        this.prepareFileManager();
+        prepareFileManager.call(this);
 
         const $item = this.wrapper.findThumbnailsItem('Folder 1');
         const $itemContent = $item.children(`.${Consts.THUMBNAILS_ITEM_CONTENT_CLASS}`);
@@ -158,14 +159,14 @@ QUnit.module('Markup rendering', moduleConfig, () => {
     });
 
     test('thumbnails view must has ScrollView', function(assert) {
-        this.prepareFileManager();
+        prepareFileManager.call(this);
         assert.ok(this.wrapper.getThumbnailsViewScrollable().length);
     });
 
     test('customize thumbnail', function(assert) {
         let counter = 0;
 
-        this.prepareFileManager(false, {
+        prepareFileManager.call(this, false, {
             customizeThumbnail: item => {
                 if(item.isDirectory) {
                     return '';
@@ -183,7 +184,7 @@ QUnit.module('Markup rendering', moduleConfig, () => {
         const fileSystem = createTestFileSystem();
         fileSystem[1].name = 'Folder 2 test 11111111 testtesttestest 22222 test test 1111111 test 1 222222';
 
-        this.prepareFileManager(false, {
+        prepareFileManager.call(this, false, {
             fileSystemProvider: fileSystem,
             itemView: {
                 mode: 'details'
@@ -200,7 +201,7 @@ QUnit.module('Markup rendering', moduleConfig, () => {
     });
 
     test('active area switches on itemView and dirsPanel click', function(assert) {
-        this.prepareFileManager();
+        prepareFileManager.call(this);
         const dirsPanel = this.wrapper.getDirsPanel();
         const itemsView = this.wrapper.getItemsView();
 
