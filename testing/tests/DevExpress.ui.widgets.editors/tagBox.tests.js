@@ -3206,14 +3206,12 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
         keyboardMock($input)
             .type('aa');
-
-        pointerMock($(instance.content()).find(`.${LIST_CKECKBOX_CLASS}`).eq(0)).start().click();
+        $(instance.content()).find(`.${LIST_CKECKBOX_CLASS}`).eq(0).trigger('dxclick');
         $(instance.content()).parent().find(`.${POPUP_DONE_BUTTON_CLASS}`).trigger('dxclick');
 
         keyboardMock($input)
             .type('aa');
-
-        pointerMock($(`.${LIST_CKECKBOX_CLASS}`).eq(1)).start().click();
+        $(`.${LIST_CKECKBOX_CLASS}`).eq(1).trigger('dxclick');
         $(instance.content()).parent().find(`.${POPUP_DONE_BUTTON_CLASS}`).trigger('dxclick');
 
         assert.strictEqual(instance.option('selectedItems').length, 2);
