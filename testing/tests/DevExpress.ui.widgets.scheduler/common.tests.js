@@ -21,7 +21,7 @@ import SchedulerTimezones from 'ui/scheduler/timezones/ui.scheduler.timezones';
 import dataUtils from 'core/element_data';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import themes from 'ui/themes';
-import { SchedulerTestWrapper } from './helpers.js';
+import { SchedulerTestWrapper, createWrapper } from './helpers.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 
 import 'ui/scheduler/ui.scheduler';
@@ -4082,7 +4082,6 @@ QUnit.module('Initialization', {
         beforeEach: function() {
             this.createInstance = function(options) {
                 this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
-                this.scheduler = new SchedulerTestWrapper(this.instance);
             };
             this.clock = sinon.useFakeTimers();
         },
@@ -4503,19 +4502,19 @@ QUnit.module('Initialization', {
     QUnit.test('Month View - Cell should have default height', function(assert) {
         const DEFAULT_CELL_HEIGHT = 50;
 
-        this.createInstance({
+        const scheduler = createWrapper({
             views: ['month'],
             currentView: 'month'
         });
 
-        const cellHeight = this.scheduler.workSpace.getCellHeight(0, 0);
+        const cellHeight = scheduler.workSpace.getCellHeight(0, 0);
         assert.equal(cellHeight, DEFAULT_CELL_HEIGHT, 'Cell has min height');
     });
 
     [undefined, 2, 3].forEach(intervalCount => {
         [200, 300, 800].forEach(height => {
             QUnit.test(`Month View - Workspace vertical scroll should be equal to the dataTable height if view.intervalCount=${intervalCount}, height: ${height}`, function(assert) {
-                this.createInstance({
+                const scheduler = createWrapper({
                     height: height,
                     views: [{
                         type: 'month',
@@ -4525,13 +4524,13 @@ QUnit.module('Initialization', {
                     currentView: 'month'
                 });
 
-                const dateTableHeight = this.scheduler.workSpace.getDateTableHeight();
-                const scrollable = this.scheduler.workSpace.getScrollable();
+                const dateTableHeight = scheduler.workSpace.getDateTableHeight();
+                const scrollable = scheduler.workSpace.getScrollable();
                 assert.equal(scrollable.scrollHeight(), dateTableHeight, 'Scroll height > minWorspaceHeight');
             });
 
             QUnit.test(`Month View - Workspace vertical scroll should be equal to the dataTable height if grouping, view.intervalCount=${intervalCount}, height: ${height}`, function(assert) {
-                this.createInstance({
+                const scheduler = createWrapper({
                     height: height,
                     views: [{
                         type: 'month',
@@ -4549,8 +4548,8 @@ QUnit.module('Initialization', {
                     }]
                 });
 
-                const dateTableHeight = this.scheduler.workSpace.getDateTableHeight();
-                const scrollable = this.scheduler.workSpace.getScrollable();
+                const dateTableHeight = scheduler.workSpace.getDateTableHeight();
+                const scrollable = scheduler.workSpace.getScrollable();
                 assert.equal(scrollable.scrollHeight(), dateTableHeight, 'Scroll height > minWorspaceHeight');
             });
         });
