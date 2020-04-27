@@ -275,8 +275,4 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
         assert.strictEqual($(spy.args[1][0].element).get(0), this.$element.get(0), 'element is correct');
     });
 
-    test('Thumbnails view must has ScrollView', function(assert) {
-        assert.ok(this.wrapper.getThumbnailsViewScrollable().length);
-    });
-
 });
