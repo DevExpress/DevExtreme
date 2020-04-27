@@ -4,8 +4,10 @@ import holdEvent from 'events/hold';
 import pointerMock from '../../helpers/pointerMock.js';
 import { DataSource } from 'data/data_source/data_source';
 import { extend } from 'core/utils/extend';
+import { TestAsyncTabsWrapper, TestTabsWrapper } from '../../helpers/wrappers/tabsWrappers.js';
 
 import 'ui/tabs';
+import 'ui/responsive_box';
 import 'common.css!';
 
 QUnit.testStart(function() {
@@ -42,7 +44,7 @@ const TAB_OFFSET = 30;
 
 const toSelector = cssClass => `.${cssClass}`;
 
-QUnit.module('general', () => {
+QUnit.module('General', () => {
     QUnit.test('mouseup switch selected tab', function(assert) {
         const tabsElement = $('#tabs').dxTabs({
             items: [
@@ -152,7 +154,7 @@ QUnit.module('general', () => {
     });
 });
 
-QUnit.module('tab select action', () => {
+QUnit.module('Tab select action', () => {
     QUnit.test('should not be triggered when is already selected', function(assert) {
         let count = 0;
 
@@ -250,7 +252,7 @@ QUnit.module('tab select action', () => {
     });
 });
 
-QUnit.module('horizontal scrolling', () => {
+QUnit.module('Horizontal scrolling', () => {
     const SCROLLABLE_CLASS = 'dx-scrollable';
 
     QUnit.test('tabs should be wrapped into scrollable if scrollingEnabled=true', function(assert) {
@@ -855,74 +857,6 @@ QUnit.module('Live Update', {
     });
 });
 
-class TestAsyncTabsWrapper {
-    constructor(options) {
-        const { itemsCount } = options;
-        const tabsOptions = extend({
-            items: this._generateItems(itemsCount),
-            templatesRenderAsynchronously: true,
-            integrationOptions: {
-                templates: {
-                    'testItem': {
-                        render(args) {
-                            setTimeout(() => {
-                                $(args.container).append($('<div>').text(args.model.text));
-                                args.onRendered();
-                            });
-                        }
-                    }
-                }
-            }
-        }, options);
-
-        if(options.itemTemplate !== null) {
-            tabsOptions.itemTemplate = 'testItem';
-        } else {
-            delete tabsOptions.itemTemplate;
-        }
-
-        this._$tabs = $('#tabs').dxTabs(tabsOptions);
-        this._tabs = this._$tabs.dxTabs('instance');
-    }
-
-    _generateItems(count = 5) {
-        return [...new Array(count)].map((value, index) => ({ text: `item ${index}` }));
-    }
-
-    _checkTabsContent($tabs) {
-        const items = this._tabs.option('items');
-        $tabs.toArray().forEach((tabElement, index) =>
-            QUnit.assert.equal($(tabElement).text(), items[index].text, `text of the ${index} tab`)
-        );
-    }
-
-    set width(value) {
-        this._tabs.option('width', value);
-    }
-
-    setItemsByCount(count) {
-        this._tabs.option('items', this._generateItems(count));
-    }
-
-    checkTabsWithoutScrollable() {
-        const $tabs = this._$tabs.find('> .dx-tabs-wrapper > .dx-tab');
-        QUnit.assert.equal($tabs.length, this._tabs.option('items').length, 'tabs are rendered');
-        this._checkTabsContent($tabs);
-    }
-
-    checkTabsWithScrollable() {
-        const $tabs = this._$tabs.find('> .dx-tabs-scrollable .dx-scrollable-content > .dx-tabs-wrapper > .dx-tab');
-        QUnit.assert.equal($tabs.length, this._tabs.option('items').length, 'tabs are rendered in the Scrollable');
-        this._checkTabsContent($tabs);
-    }
-
-    checkNavigationButtons(expected) {
-        const visibilityStateText = expected ? 'shown' : 'hidden';
-        QUnit.assert.equal(this._$tabs.find('> .dx-tabs-nav-button-left').length, Number(expected), `the left nav button element is ${visibilityStateText}`);
-        QUnit.assert.equal(this._$tabs.find('> .dx-tabs-nav-button-right').length, Number(expected), `the right nav button element is ${visibilityStateText}`);
-    }
-}
-
 QUnit.module('Async templates', {
     beforeEach() {
         this.clock = sinon.useFakeTimers();
@@ -932,14 +866,14 @@ QUnit.module('Async templates', {
     }
 }, () => {
     QUnit.test('render tabs', function() {
-        const testWrapper = new TestAsyncTabsWrapper({ width: 220 });
+        const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 220 });
         this.clock.tick();
         testWrapper.checkTabsWithoutScrollable();
         testWrapper.checkNavigationButtons(false);
     });
 
     QUnit.test('render tabs. use default and custom templates', function() {
-        const testWrapper = new TestAsyncTabsWrapper({
+        const testWrapper = new TestAsyncTabsWrapper($('#tabs'), {
             width: 150,
             items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3', template: 'item' }],
             itemTemplate: null
@@ -951,7 +885,7 @@ QUnit.module('Async templates', {
     });
 
     QUnit.test('render tabs with scrollable. use default and custom templates', function() {
-        const testWrapper = new TestAsyncTabsWrapper({
+        const testWrapper = new TestAsyncTabsWrapper($('#tabs'), {
             width: 100,
             items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3', template: 'item' }],
             showNavButtons: false,
@@ -964,7 +898,7 @@ QUnit.module('Async templates', {
     });
 
     QUnit.test('render tabs with scrollable and navigation buttons. use default and custom templates', function() {
-        const testWrapper = new TestAsyncTabsWrapper({
+        const testWrapper = new TestAsyncTabsWrapper($('#tabs'), {
             width: 100,
             items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3', template: 'item' }],
             showNavButtons: true,
@@ -977,21 +911,21 @@ QUnit.module('Async templates', {
     });
 
     QUnit.test('render tabs with scrollable', function() {
-        const testWrapper = new TestAsyncTabsWrapper({ width: 150, showNavButtons: false });
+        const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 150, showNavButtons: false });
         this.clock.tick();
         testWrapper.checkTabsWithScrollable();
         testWrapper.checkNavigationButtons(false);
     });
 
     QUnit.test('render tabs with scrollable and navigation buttons', function() {
-        const testWrapper = new TestAsyncTabsWrapper({ width: 150, showNavButtons: true });
+        const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 150, showNavButtons: true });
         this.clock.tick();
         testWrapper.checkTabsWithScrollable();
         testWrapper.checkNavigationButtons(true);
     });
 
     QUnit.test('Add scrollable when width is changed from large to small', function() {
-        const testWrapper = new TestAsyncTabsWrapper({ width: 220, showNavButtons: false });
+        const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 220, showNavButtons: false });
         this.clock.tick();
         testWrapper.width = 150;
         testWrapper.checkTabsWithScrollable();
@@ -999,7 +933,7 @@ QUnit.module('Async templates', {
     });
 
     QUnit.test('Add scrollable and navigation buttons when width is changed from large to small', function() {
-        const testWrapper = new TestAsyncTabsWrapper({ width: 220, showNavButtons: true });
+        const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 220, showNavButtons: true });
         this.clock.tick();
         testWrapper.width = 150;
         testWrapper.checkTabsWithScrollable();
@@ -1007,7 +941,7 @@ QUnit.module('Async templates', {
     });
 
     QUnit.test('Remove scrollable when width is changed from small to large', function() {
-        const testWrapper = new TestAsyncTabsWrapper({ width: 150, showNavButtons: false });
+        const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 150, showNavButtons: false });
         this.clock.tick();
         testWrapper.width = 220;
         testWrapper.checkTabsWithoutScrollable();
@@ -1015,7 +949,7 @@ QUnit.module('Async templates', {
     });
 
     QUnit.test('Remove scrollable and navigation buttons when width is changed from small to large', function() {
-        const testWrapper = new TestAsyncTabsWrapper({ width: 150, showNavButtons: true });
+        const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 150, showNavButtons: true });
         this.clock.tick();
         testWrapper.width = 220;
         testWrapper.checkTabsWithoutScrollable();
@@ -1024,7 +958,7 @@ QUnit.module('Async templates', {
 
     [false, true].forEach(repaintChangesOnly => {
         QUnit.test(`Add scrollable when items are changed from 5 to 10, repaintChangesOnly: ${repaintChangesOnly}`, function() {
-            const testWrapper = new TestAsyncTabsWrapper({ width: 220, showNavButtons: false, repaintChangesOnly });
+            const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 220, showNavButtons: false, repaintChangesOnly });
 
             this.clock.tick();
             testWrapper.setItemsByCount(10);
@@ -1035,7 +969,7 @@ QUnit.module('Async templates', {
         });
 
         QUnit.test(`Add scrollable and navigation buttons when items are changed from 5 to 10, repaintChangesOnly: ${repaintChangesOnly}`, function() {
-            const testWrapper = new TestAsyncTabsWrapper({ width: 220, showNavButtons: true, repaintChangesOnly });
+            const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 220, showNavButtons: true, repaintChangesOnly });
 
             this.clock.tick();
             testWrapper.setItemsByCount(10);
@@ -1046,7 +980,7 @@ QUnit.module('Async templates', {
         });
 
         QUnit.test(`Remove scrollable when items are changed from 10 to 5, repaintChangesOnly: ${repaintChangesOnly}`, function() {
-            const testWrapper = new TestAsyncTabsWrapper({ width: 220, showNavButtons: false, repaintChangesOnly, itemsCount: 10 });
+            const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 220, showNavButtons: false, repaintChangesOnly, itemsCount: 10 });
 
             this.clock.tick();
             testWrapper.setItemsByCount(5);
@@ -1057,7 +991,7 @@ QUnit.module('Async templates', {
         });
 
         QUnit.test(`Remove scrollable and navigation buttons when items are changed from 10 to 5, repaintChangesOnly: ${repaintChangesOnly}`, function() {
-            const testWrapper = new TestAsyncTabsWrapper({ width: 220, showNavButtons: true, repaintChangesOnly, itemsCount: 10 });
+            const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 220, showNavButtons: true, repaintChangesOnly, itemsCount: 10 });
 
             this.clock.tick();
             testWrapper.setItemsByCount(5);
@@ -1066,5 +1000,109 @@ QUnit.module('Async templates', {
             testWrapper.checkTabsWithoutScrollable();
             testWrapper.checkNavigationButtons(false);
         });
+    });
+});
+
+QUnit.module('Render in the ResponsiveBox. Flex strategy', () => {
+    const itemTemplate = () => $('<div>').width(150).height(150).css('border', '1px solid black');
+    const createResponsiveBox = ({ cols, rows, items }) => $('#widget').dxResponsiveBox({
+        width: 300,
+        _layoutStrategy: 'flex',
+        cols,
+        rows,
+        itemTemplate,
+        screenByWidth: () => 'md',
+        items
+    });
+
+    QUnit.test('render tabs with scrollable and navigation buttons', function() {
+        createResponsiveBox({
+            cols: [{ ratio: 1 }, { ratio: 1 }],
+            rows: [{ ratio: 1 }],
+            items: [
+                {
+                    location: { col: 0, row: 0 },
+                    template: () => $('<div id=\'tabsInTemplate\'>')
+                },
+                {
+                    location: { col: 1, row: 0 }
+                }
+            ]
+        });
+        const testWrapper = new TestTabsWrapper($('#tabsInTemplate'), {
+            itemsCount: 10,
+            showNavButtons: true
+        });
+        testWrapper.checkTabsWithScrollable();
+        testWrapper.checkNavigationButtons(true);
+    });
+
+    QUnit.test('render tabs with scrollable and navigation buttons. ResponsiveBox item has colSpan', function() {
+        createResponsiveBox({
+            cols: [{ ratio: 1 }, { ratio: 1 }, { ratio: 1 }],
+            rows: [{ ratio: 1 }],
+            items: [
+                {
+                    location: { col: 0, row: 0, colspan: 2 },
+                    template: () => $('<div id=\'tabsInTemplate\'>')
+                },
+                {
+                    location: { col: 1, row: 0 }
+                },
+                {
+                    location: { col: 2, row: 0 }
+                }
+            ]
+        });
+        const testWrapper = new TestTabsWrapper($('#tabsInTemplate'), {
+            itemsCount: 10,
+            showNavButtons: true
+        });
+        testWrapper.checkTabsWithScrollable();
+        testWrapper.checkNavigationButtons(true);
+    });
+
+    QUnit.test('render tabs with scrollable and navigation buttons. ResponsiveBox row has ratio = 2', function() {
+        createResponsiveBox({
+            cols: [{ ratio: 2 }, { ratio: 1 }],
+            rows: [{ ratio: 1 }],
+            items: [
+                {
+                    location: { col: 0, row: 0 },
+                    template: () => $('<div id=\'tabsInTemplate\'>')
+                },
+                {
+                    location: { col: 1, row: 0 }
+                }
+            ]
+        });
+        const testWrapper = new TestTabsWrapper($('#tabsInTemplate'), {
+            itemsCount: 10,
+            showNavButtons: true
+        });
+        testWrapper.checkTabsWithScrollable();
+        testWrapper.checkNavigationButtons(true);
+    });
+
+    QUnit.test('render tabs with scrollable and navigation buttons. ResponsiveBox in one column', function() {
+        createResponsiveBox({
+            cols: [{ ratio: 1 }],
+            rows: [{ ratio: 1 }, { ratio: 1 }],
+            items: [
+                {
+                    location: { col: 0, row: 0 }
+                },
+                {
+                    location: { col: 0, row: 1 },
+                    template: () => $('<div id=\'tabsInTemplate\'>')
+                }
+            ]
+        });
+        const testWrapper = new TestTabsWrapper($('#tabsInTemplate'), {
+            itemsCount: 10,
+            showNavButtons: true
+        });
+        testWrapper.checkTabsWithScrollable();
+        testWrapper.checkNavigationButtons(true);
     });
 });
