@@ -211,7 +211,6 @@ const TextEditorBase = Editor.inherit({
         this._renderStylingMode();
         this._renderInputType();
         this._renderPlaceholder();
-        this._compressInputContainer();
 
         this._renderProps();
 
@@ -228,6 +227,7 @@ const TextEditorBase = Editor.inherit({
         this._renderEnterKeyAction();
         this._renderEmptinessEvent();
         this.callBase();
+        this._compressInputContainer();
     },
 
     _renderInput: function() {
