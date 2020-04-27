@@ -1286,7 +1286,7 @@ QUnit.test('dateCellTemplate should take cellElement with correct geometry (T453
             endDate: new Date(2016, 10, 28, 2)
         }],
         dateCellTemplate: function(cellData, cellIndex, cellElement) {
-            assert.equal($(cellElement).outerWidth(), 100, 'Date cell width is OK');
+            assert.equal($(cellElement).outerWidth(), 70, 'Date cell width is OK');
             assert.equal($(cellElement).outerHeight(), 80, 'Date cell height is OK');
         }
     });
