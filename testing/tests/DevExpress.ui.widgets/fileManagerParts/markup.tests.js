@@ -60,11 +60,10 @@ QUnit.module('Markup rendering', moduleConfig, () => {
 
     test('default render state', function(assert) {
         prepareFileManager.call(this, true);
-        this.clock.tick(800);
         assert.ok(this.$element.hasClass(Consts.WIDGET_CLASS), 'element has a widget-specific class');
 
         const progressDrawer = this.$element.find(`.${Consts.NOTIFICATION_DRAWER_CLASS}`);
-        const progressPanel = progressDrawer.find(`.${Consts.DRAWER_PANEL_CONTENT_CLASS} > .${Consts.PROGRESS_PANEL_CLASS}`);
+        const progressPanel = progressDrawer.find(`.${Consts.DRAWER_PANEL_CONTENT_CLASS} .${Consts.PROGRESS_PANEL_CLASS}`);
 
         assert.strictEqual(progressDrawer.length, 1, 'notification drawer is rendered');
         assert.strictEqual(progressPanel.length, 1, 'progress panel is rendered');
@@ -72,6 +71,7 @@ QUnit.module('Markup rendering', moduleConfig, () => {
 
         const progressPanelContainer = progressPanel.find(`.${Consts.PROGRESS_PANEL_CONTAINER_CLASS}`);
 
+        assert.strictEqual(progressPanelContainer.length, 1, 'progress panel container is in touch');
         assert.strictEqual(progressPanelContainer.children().length, 2, 'progress panel container has two children');
         assert.ok(progressPanelContainer.children().eq(0).hasClass(Consts.PROGRESS_PANEL_TITLE_CLASS), 'progress panel has title');
         assert.ok(progressPanelContainer.children().eq(1).hasClass(Consts.PROGRESS_PANEL_INFOS_CONTAINER_CLASS), 'progress panel has content');
