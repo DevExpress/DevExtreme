@@ -102,6 +102,35 @@ QUnit.module('Markup rendering', moduleConfig, () => {
         assert.strictEqual(rootFolder.text(), 'Files', 'root folder has correct default text');
     });
 
+    test('progress panel items render', function(assert) {
+        this.prepareFileManager();
+        // this.wrapper.findThumbnailsItem('Folder 1').trigger('pointerdown');
+        // this.clock.tick(400);
+        this.wrapper.findThumbnailsItem('Folder 1').trigger('click');
+        this.clock.tick(400);
+        // debugger;
+        const $item = this.wrapper.getToolbarButton('Delete');
+        // const $item = this.$element.find(`.dx-filemanager-file-toolbar .${Consts.BUTTON_CLASS}`).eq(9);
+        // debugger;
+        $($item).trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
+        const $infosContainer = this.$element.find(`.${Consts.PROGRESS_PANEL_INFOS_CONTAINER_CLASS}`);
+
+        assert.strictEqual($infosContainer.children().length, 1, 'there is one info on panel');
+        assert.ok($infosContainer.children().eq(0).hasClass(Consts.PROGRESS_PANEL_INFO_CLASS), 'info has specific class');
+        assert.strictEqual($infosContainer.children().eq(0).children().length, 1, 'info has one progress box');
+
+        const $progressBox = $infosContainer.children().eq(0).children().eq(0);
+        assert.ok($progressBox.hasClass(Consts.PROGRESS_PANEL_PROGRESS_BOX_CLASS), 'progress box has specific class');
+        assert.strictEqual($progressBox.children().length, 2, 'there are two children in progress box');
+        assert.ok($progressBox.children().eq(0).hasClass(Consts.PROGRESS_PANEL_PROGRESS_BOX_WRAPPER_CLASS), 'has wrapper');
+        assert.ok($progressBox.children().eq(1).hasClass(Consts.PROGRESS_PANEL_PROGRESS_BOX_CLOSE_BUTTON_CLASS), 'has close button');
+
+    });
+
     test('details view render', function(assert) {
         this.prepareFileManager(false, {
             itemView: {
