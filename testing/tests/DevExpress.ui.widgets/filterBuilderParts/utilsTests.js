@@ -1684,6 +1684,12 @@ QUnit.module('Between operation', function() {
         filterExpression = utils.getFilterExpression(['field', 'between', [null, null]], fields, customOperations);
         // assert
         assert.deepEqual(filterExpression, null);
+
+        // act
+        filterExpression = utils.getFilterExpression([['field', 'between', [123, null]], 'and', ['field', '>', 100]], fields, customOperations); // T882759
+
+        // assert
+        assert.deepEqual(filterExpression, ['field', '>', 100]);
     });
 
     QUnit.test('between.customizeText', function(assert) {

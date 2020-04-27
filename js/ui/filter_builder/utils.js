@@ -412,9 +412,9 @@ function getFilterExpression(value, fields, customOperations, target) {
     if(isCondition(criteria)) {
         return getConditionFilterExpression(criteria, fields, customOperations, target) || null;
     } else {
+        let result = [];
         let filterExpression;
         const groupValue = getGroupValue(criteria);
-        const result = [];
 
         for(let i = 0; i < criteria.length; i++) {
             if(isGroup(criteria[i])) {
@@ -426,11 +426,16 @@ function getFilterExpression(value, fields, customOperations, target) {
             } else if(isCondition(criteria[i])) {
                 filterExpression = getConditionFilterExpression(criteria[i], fields, customOperations, target);
                 if(filterExpression) {
-                    i && result.push(groupValue);
+                    result.length && result.push(groupValue);
                     result.push(filterExpression);
                 }
             }
         }
+
+        if(result.length === 1) {
+            result = result[0];
+        }
+
         return result.length ? result : null;
     }
 }
