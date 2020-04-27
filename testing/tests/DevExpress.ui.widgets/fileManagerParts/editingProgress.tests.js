@@ -199,9 +199,9 @@ const createTestData = () => {
                 type: 'progress-createErrorDetailsProgressBox'
             },
             { errorText: 'Unspecified error.', type: 'progress-renderError' },
-            { errorMode: true, commonText: 'Item wasn\'t deleted', detailsText: 'File 2.jpgUnspecified error.', type: 'notification-_showPopup' },
-            { message: 'Item wasn\'t deleted', status: 'error', type: 'notification-onActionProgress' },
-            { operationId: 1, commonText: 'Item wasn\'t deleted', isError: true, type: 'progress-completeOperation' },
+            { errorMode: true, commonText: 'Item was not deleted', detailsText: 'File 2.jpgUnspecified error.', type: 'notification-_showPopup' },
+            { message: 'Item was not deleted', status: 'error', type: 'notification-onActionProgress' },
+            { operationId: 1, commonText: 'Item was not deleted', isError: true, type: 'progress-completeOperation' },
             { message: '', status: 'error', type: 'notification-onActionProgress' },
             { updatedOnlyFiles: false, type: 'editing-onSuccess' }
         ],
@@ -225,8 +225,8 @@ const createTestData = () => {
                 type: 'progress-createErrorDetailsProgressBox'
             },
             { errorText: 'Unspecified error.', type: 'progress-renderError' },
-            { errorMode: true, commonText: 'Item wasn\'t deleted', detailsText: 'File 1.txtUnspecified error.', type: 'notification-_showPopup' },
-            { message: 'Item wasn\'t deleted', status: 'error', type: 'notification-onActionProgress' },
+            { errorMode: true, commonText: 'Item was not deleted', detailsText: 'File 1.txtUnspecified error.', type: 'notification-_showPopup' },
+            { message: 'Item was not deleted', status: 'error', type: 'notification-onActionProgress' },
             { operationId: 1, index: 1, errorText: 'Unspecified error.', type: 'progress-addOperationDetailsError' },
             { errorText: 'Unspecified error.', type: 'progress-renderError' },
             {
@@ -235,9 +235,9 @@ const createTestData = () => {
                 type: 'progress-createErrorDetailsProgressBox'
             },
             { errorText: 'Unspecified error.', type: 'progress-renderError' },
-            { errorMode: true, commonText: '2 items weren\'t deleted', detailsText: 'File 2.jpgUnspecified error.', type: 'notification-_showPopup' },
-            { message: '2 items weren\'t deleted', status: 'error', type: 'notification-onActionProgress' },
-            { operationId: 1, commonText: '2 items weren\'t deleted', isError: true, type: 'progress-completeOperation' },
+            { errorMode: true, commonText: '2 items were not deleted', detailsText: 'File 2.jpgUnspecified error.', type: 'notification-_showPopup' },
+            { message: '2 items were not deleted', status: 'error', type: 'notification-onActionProgress' },
+            { operationId: 1, commonText: '2 items were not deleted', isError: true, type: 'progress-completeOperation' },
             { message: '', status: 'error', type: 'notification-onActionProgress' }
         ],
 
@@ -261,9 +261,9 @@ const createTestData = () => {
                 type: 'progress-createErrorDetailsProgressBox'
             },
             { errorText: 'Unspecified error.', type: 'progress-renderError' },
-            { errorMode: true, commonText: 'Item wasn\'t deleted', detailsText: 'File 2.jpgUnspecified error.', type: 'notification-_showPopup' },
-            { message: 'Item wasn\'t deleted', status: 'error', type: 'notification-onActionProgress' },
-            { operationId: 1, commonText: 'Item wasn\'t deleted', isError: true, type: 'progress-completeOperation' },
+            { errorMode: true, commonText: 'Item was not deleted', detailsText: 'File 2.jpgUnspecified error.', type: 'notification-_showPopup' },
+            { message: 'Item was not deleted', status: 'error', type: 'notification-onActionProgress' },
+            { operationId: 1, commonText: 'Item was not deleted', isError: true, type: 'progress-completeOperation' },
             { message: '', status: 'error', type: 'notification-onActionProgress' }
         ],
 
@@ -282,10 +282,10 @@ const createTestData = () => {
             { operationId: 1, errorText: 'Unspecified error.', type: 'progress-completeSingleOperationWithError' },
             { errorText: 'Unspecified error.', type: 'progress-renderError' },
             { errorText: 'Unspecified error.', type: 'progress-renderError' },
-            { errorMode: true, commonText: 'Some items weren\'t deleted', detailsText: 'Unspecified error.', type: 'notification-_showPopup' },
-            { message: 'Some items weren\'t deleted', status: 'error', type: 'notification-onActionProgress' },
+            { errorMode: true, commonText: 'Some items were not deleted', detailsText: 'Unspecified error.', type: 'notification-_showPopup' },
+            { message: 'Some items were not deleted', status: 'error', type: 'notification-onActionProgress' },
             { updatedOnlyFiles: false, type: 'editing-onSuccess' },
-            { operationId: 1, commonText: 'Some items weren\'t deleted', isError: true, type: 'progress-completeOperation' },
+            { operationId: 1, commonText: 'Some items were not deleted', isError: true, type: 'progress-completeOperation' },
             { message: '', status: 'error', type: 'notification-onActionProgress' },
             { updatedOnlyFiles: false, type: 'editing-onSuccess' }
         ],
@@ -336,11 +336,11 @@ const createTestData = () => {
                 type: 'progress-createErrorDetailsProgressBox'
             },
             { errorText: 'Unspecified error.', type: 'progress-renderError' },
-            { errorMode: true, commonText: 'Item wasn\'t uploaded', detailsText: 'Upload file 1.txtUnspecified error.', type: 'notification-_showPopup' },
-            { message: 'Item wasn\'t uploaded', status: 'error', type: 'notification-onActionProgress' },
+            { errorMode: true, commonText: 'Item was not uploaded', detailsText: 'Upload file 1.txtUnspecified error.', type: 'notification-_showPopup' },
+            { message: 'Item was not uploaded', status: 'error', type: 'notification-onActionProgress' },
             { operationId: 1, itemIndex: 0, itemProgress: 100, commonProgress: 62, type: 'progress-updateOperationItemProgress' },
             { operationId: 1, itemIndex: 0, commonProgress: 0, type: 'progress-completeOperationItem' },
-            { operationId: 1, commonText: 'Item wasn\'t uploaded', isError: true, type: 'progress-completeOperation' },
+            { operationId: 1, commonText: 'Item was not uploaded', isError: true, type: 'progress-completeOperation' },
             { message: '', status: 'error', type: 'notification-onActionProgress' },
             { updatedOnlyFiles: true, type: 'editing-onSuccess' }
         ],
@@ -362,15 +362,15 @@ const createTestData = () => {
             { errorText: 'Unspecified error.', type: 'progress-renderError' },
             { item: { commonText: 'Upload file 0.txt', imageUrl: 'txtfile' }, errorText: 'Unspecified error.', type: 'progress-createErrorDetailsProgressBox' },
             { errorText: 'Unspecified error.', type: 'progress-renderError' },
-            { errorMode: true, commonText: 'Item wasn\'t uploaded', detailsText: 'Upload file 0.txtUnspecified error.', type: 'notification-_showPopup' },
-            { message: 'Item wasn\'t uploaded', status: 'error', type: 'notification-onActionProgress' },
+            { errorMode: true, commonText: 'Item was not uploaded', detailsText: 'Upload file 0.txtUnspecified error.', type: 'notification-_showPopup' },
+            { message: 'Item was not uploaded', status: 'error', type: 'notification-onActionProgress' },
             { operationId: 1, index: 1, errorText: 'Unspecified error.', type: 'progress-addOperationDetailsError' },
             { errorText: 'Unspecified error.', type: 'progress-renderError' },
             { item: { commonText: 'Upload file 1.txt', imageUrl: 'txtfile' }, errorText: 'Unspecified error.', type: 'progress-createErrorDetailsProgressBox' },
             { errorText: 'Unspecified error.', type: 'progress-renderError' },
-            { errorMode: true, commonText: '2 items weren\'t uploaded', detailsText: 'Upload file 1.txtUnspecified error.', type: 'notification-_showPopup' },
-            { message: '2 items weren\'t uploaded', status: 'error', type: 'notification-onActionProgress' },
-            { operationId: 1, commonText: '2 items weren\'t uploaded', isError: true, type: 'progress-completeOperation' },
+            { errorMode: true, commonText: '2 items were not uploaded', detailsText: 'Upload file 1.txtUnspecified error.', type: 'notification-_showPopup' },
+            { message: '2 items were not uploaded', status: 'error', type: 'notification-onActionProgress' },
+            { operationId: 1, commonText: '2 items were not uploaded', isError: true, type: 'progress-completeOperation' },
             { message: '', status: 'error', type: 'notification-onActionProgress' }
         ],
 
@@ -409,8 +409,8 @@ const createTestData = () => {
             },
             { operationId: 1, itemIndex: 0, itemProgress: 66.7, commonProgress: 25, type: 'progress-updateOperationItemProgress' },
             { operationId: 1, itemIndex: 1, itemProgress: 40, commonProgress: 50, type: 'progress-updateOperationItemProgress' },
-            { commonText: '2 items weren\'t uploaded', type: 'notification-_showPopup' },
-            { operationId: 1, commonText: '2 items weren\'t uploaded', isError: false, statusText: 'Canceled', type: 'progress-completeOperation' },
+            { commonText: '2 items were not uploaded', type: 'notification-_showPopup' },
+            { operationId: 1, commonText: '2 items were not uploaded', isError: false, statusText: 'Canceled', type: 'progress-completeOperation' },
             { message: '', status: 'success', type: 'notification-onActionProgress' }
         ],
 
@@ -428,8 +428,8 @@ const createTestData = () => {
             },
             { operationId: 1, itemIndex: 0, itemProgress: 66.7, commonProgress: 25, type: 'progress-updateOperationItemProgress' },
             { operationId: 1, itemIndex: 1, itemProgress: 40, commonProgress: 50, type: 'progress-updateOperationItemProgress' },
-            { commonText: '2 items weren\'t uploaded', type: 'notification-_showPopup' },
-            { operationId: 1, commonText: '2 items weren\'t uploaded', isError: false, statusText: 'Canceled', type: 'progress-completeOperation' },
+            { commonText: '2 items were not uploaded', type: 'notification-_showPopup' },
+            { operationId: 1, commonText: '2 items were not uploaded', isError: false, statusText: 'Canceled', type: 'progress-completeOperation' },
             { message: '', status: 'success', type: 'notification-onActionProgress' }
         ],
 
@@ -451,9 +451,9 @@ const createTestData = () => {
             { errorText: 'Unspecified error.', type: 'progress-renderError' },
             { item: { commonText: 'Upload file 1.txt', imageUrl: 'txtfile' }, errorText: 'Unspecified error.', type: 'progress-createErrorDetailsProgressBox' },
             { errorText: 'Unspecified error.', type: 'progress-renderError' },
-            { errorMode: true, commonText: 'Item wasn\'t uploaded', detailsText: 'Upload file 1.txtUnspecified error.', type: 'notification-_showPopup' },
-            { message: 'Item wasn\'t uploaded', status: 'error', type: 'notification-onActionProgress' },
-            { operationId: 1, commonText: 'Item wasn\'t uploaded', isError: true, type: 'progress-completeOperation' },
+            { errorMode: true, commonText: 'Item was not uploaded', detailsText: 'Upload file 1.txtUnspecified error.', type: 'notification-_showPopup' },
+            { message: 'Item was not uploaded', status: 'error', type: 'notification-onActionProgress' },
+            { operationId: 1, commonText: 'Item was not uploaded', isError: true, type: 'progress-completeOperation' },
             { message: '', status: 'error', type: 'notification-onActionProgress' }
         ]
 
