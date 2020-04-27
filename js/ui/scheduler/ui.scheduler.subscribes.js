@@ -652,7 +652,7 @@ const subscribes = {
         return this.forceMaxAppointmentPerCell();
     },
 
-    agendaIsReady: function(rows) {
+    onAgendaReady: function(rows) {
         const $appts = this.getAppointmentsInstance()._itemElements();
         let total = 0;
 

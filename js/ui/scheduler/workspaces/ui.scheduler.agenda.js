@@ -152,7 +152,7 @@ const SchedulerAgenda = SchedulerWorkSpace.inherit({
 
         this._renderTimePanel();
         this._renderDateTable();
-        this.invoke('agendaIsReady', rows);
+        this.invoke('onAgendaReady', rows);
         this._applyCellTemplates(cellTemplates);
         this._dateTableScrollable.update();
     },
