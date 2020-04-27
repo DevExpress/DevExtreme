@@ -607,6 +607,7 @@ const ResponsiveBox = CollectionWidget.inherit({
     },
 
     _blockSize: function(block, direction) {
+        const defaultMinSize = direction === 'row' ? 'auto' : 0;
         const sizeConfigs = (direction === 'row') ? this._rows : this._cols;
         const result = extend(this._createDefaultSizeConfig(), { ratio: 0 });
 
@@ -622,7 +623,7 @@ const ResponsiveBox = CollectionWidget.inherit({
             }
         }
 
-        result.minSize = result.minSize ? result.minSize : 'auto';
+        result.minSize = result.minSize ? result.minSize : defaultMinSize;
         result.maxSize = result.maxSize ? result.maxSize : 'auto';
 
         this._isSingleColumnScreen() && (result.baseSize = 'auto');
