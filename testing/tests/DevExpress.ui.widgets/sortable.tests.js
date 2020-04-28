@@ -4,6 +4,7 @@ import 'ui/sortable';
 import fx from 'animation/fx';
 import animationFrame from 'animation/frame';
 import browser from 'core/utils/browser';
+import translator from 'animation/translator';
 
 import 'common.css!';
 
@@ -32,9 +33,7 @@ QUnit.testStart(function() {
         </div>
         <div id="items3" style="vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;"></div>
         <div id="itemsHorizontal" style="width: 250px; height: 300px;">
-            <div style="width: 30px; height: 300px; float: left;">item1</div>
-            <div style="width: 30px; height: 300px; float: left;">item2</div>
-            <div style="width: 30px; height: 300px; float: left;">item3</div>
+            <div style="width: 30px; height: 300px; display: inline-block;">item1</div><div style="width: 30px; height: 300px; display: inline-block;">item2</div><div style="width: 30px; height: 300px; display: inline-block;">item3</div>
         </div>
         <div id="itemsWithContentTemplate" style="width: 300px; height: 250px; position: relative; background: grey;">
             <div data-options="dxTemplate:{ name:'content' }">
@@ -587,6 +586,35 @@ QUnit.module('placeholder and source', moduleConfig, () => {
         assert.equal($placeholder.get(0).style.height, '300px', 'placeholder height style');
         assert.equal($placeholder.get(0).style.width, '', 'placeholder width style');
         assert.equal($placeholder.get(0).style.transform, 'translate(60px, 500px)', 'placeholder position');
+    });
+
+    QUnit.test('Placeholder should be displayed correctly when dragging item to last position (dropFeedbackMode is indicate and itemOrientation is horiontal)', function(assert) {
+        // arrange
+        let items;
+        let $placeholder;
+        let $dragItemElement;
+
+        this.$element = $('#itemsHorizontal');
+
+        this.createSortable({
+            dropFeedbackMode: 'indicate',
+            itemOrientation: 'horizontal'
+        });
+
+        items = this.$element.children();
+        $dragItemElement = items.eq(0);
+
+        // act
+        pointerMock($dragItemElement).start().down(0, 0).move(100, 0);
+
+        // assert
+        items = this.$element.children();
+        $placeholder = $('.dx-sortable-placeholder');
+        assert.strictEqual(items.length, 3, 'item count');
+        assert.equal($placeholder.length, 1, 'element has placeholder class');
+        assert.equal($placeholder.get(0).style.height, '300px', 'placeholder height style');
+        assert.equal($placeholder.get(0).style.width, '', 'placeholder width style');
+        assert.deepEqual(translator.locate($placeholder), { left: 90, top: 500 }, 'placeholder position');
     });
 
     QUnit.test('Source classes toggling', function(assert) {
@@ -3002,5 +3030,208 @@ QUnit.module('Drag and drop with nested sortable', crossComponentModuleConfig, (
         assert.deepEqual(onAdd.getCall(0).args[0].fromComponent, sortable1, 'onAdd args - fromComponent');
         assert.deepEqual(onAdd.getCall(0).args[0].toComponent, sortable2, 'onAdd args - toComponent');
         assert.strictEqual(onAdd.getCall(0).args[0].toIndex, 1, 'onAdd args - toIndex');
+    });
+});
+
+QUnit.module('Drag and drop in RTL mode', moduleConfig, () => {
+    // T877953
+    QUnit.test('Dragging an item should work correctly when itemOrientation is "horizontal" and dropFeedbackMode is "push"', function(assert) {
+        // arrange
+        let $items;
+        let $dragItemElement;
+
+        this.$element = $('#itemsHorizontal');
+
+        this.createSortable({
+            dropFeedbackMode: 'push',
+            itemOrientation: 'horizontal',
+            rtlEnabled: true
+        });
+
+        $items = this.$element.children();
+        $dragItemElement = $items.first();
+
+        // act
+        pointerMock($dragItemElement).start().down(220, 0).move(-20, 0).move(-10, 0);
+
+        // assert
+        $items = this.$element.children();
+        assert.strictEqual($items.length, 3, 'item count');
+        assert.deepEqual(translator.locate($items.eq(0)), { left: 0, top: 0 }, 'first item position');
+        assert.deepEqual(translator.locate($items.eq(1)), { left: 30, top: 0 }, 'second item position');
+        assert.deepEqual(translator.locate($items.eq(2)), { left: 0, top: 0 }, 'third item position');
+    });
+
+    QUnit.test('Dragging an item should work correctly when itemOrientation is "vertical" and dropFeedbackMode is "push"', function(assert) {
+        // arrange
+        let $items;
+        let $dragItemElement;
+
+        this.createSortable({
+            dropFeedbackMode: 'push',
+            itemOrientation: 'vertical',
+            rtlEnabled: true
+        });
+
+        $items = this.$element.children();
+        $dragItemElement = $items.first();
+
+        // act
+        pointerMock($dragItemElement).start().down().move(0, 30).move(0, 15);
+
+        // assert
+        $items = this.$element.children();
+        assert.strictEqual($items.length, 3, 'item count');
+        assert.deepEqual(translator.locate($items.eq(0)), { left: 0, top: 0 }, 'first item position');
+        assert.deepEqual(translator.locate($items.eq(1)), { left: 0, top: -30 }, 'second item position');
+        assert.deepEqual(translator.locate($items.eq(2)), { left: 0, top: 0 }, 'third item position');
+    });
+
+    QUnit.test('Initial placeholder if itemOrientation is "horiontal" and dropFeedbackMode is "indicate"', function(assert) {
+        // arrange
+        let $items;
+        let $placeholder;
+        let $dragItemElement;
+
+        this.$element = $('#itemsHorizontal');
+
+        this.createSortable({
+            dropFeedbackMode: 'indicate',
+            itemOrientation: 'horizontal',
+            rtlEnabled: true
+        });
+
+        $items = this.$element.children();
+        $dragItemElement = $items.eq(0);
+
+        // act
+        pointerMock($dragItemElement).start().down(235, 0).move(-30, 0);
+
+        // assert
+        $items = this.$element.children();
+        $placeholder = $('.dx-sortable-placeholder');
+        assert.strictEqual($items.length, 3, 'item count');
+        assert.equal($placeholder.length, 1, 'element has placeholder class');
+        assert.equal($placeholder.get(0).style.height, '300px', 'placeholder height style');
+        assert.equal($placeholder.get(0).style.width, '', 'placeholder width style');
+        assert.deepEqual(translator.locate($placeholder), { left: 190, top: 500 }, 'placeholder position');
+    });
+
+    QUnit.test('Placeholder should be displayed correctly when dragging item to last position (dropFeedbackMode is "indicate" and itemOrientation is "horiontal")', function(assert) {
+        // arrange
+        let items;
+        let $placeholder;
+        let $dragItemElement;
+
+        this.$element = $('#itemsHorizontal');
+
+        this.createSortable({
+            dropFeedbackMode: 'indicate',
+            itemOrientation: 'horizontal',
+            rtlEnabled: true
+        });
+
+        items = this.$element.children();
+        $dragItemElement = items.eq(0);
+
+        // act
+        pointerMock($dragItemElement).start().down(250, 0).move(-100, 0);
+
+        // assert
+        items = this.$element.children();
+        $placeholder = $('.dx-sortable-placeholder');
+        assert.strictEqual(items.length, 3, 'item count');
+        assert.equal($placeholder.length, 1, 'element has placeholder class');
+        assert.equal($placeholder.get(0).style.height, '300px', 'placeholder height style');
+        assert.equal($placeholder.get(0).style.width, '', 'placeholder width style');
+        assert.deepEqual(translator.locate($placeholder), { left: 160, top: 500 }, 'placeholder position');
+    });
+
+    QUnit.test('Initial placeholder if allowDropInsideItem is true and itemOrientation is "horiontal"', function(assert) {
+        // arrange
+        let items;
+        let $placeholder;
+        let $dragItemElement;
+
+        this.$element = $('#itemsHorizontal');
+
+        this.createSortable({
+            itemOrientation: 'horizontal',
+            rtlEnabled: true,
+            allowDropInsideItem: true
+        });
+
+        items = this.$element.children();
+        $dragItemElement = items.eq(0);
+
+        // act
+        const pointer = pointerMock($dragItemElement).start().down(235, 0).move(-30, 0);
+
+        // assert
+        items = this.$element.children();
+        $placeholder = $('.dx-sortable-placeholder');
+        assert.strictEqual(items.length, 3, 'item count');
+        assert.ok($placeholder.hasClass('dx-sortable-placeholder'), 'element has placeholder class');
+        assert.ok($placeholder.hasClass('dx-sortable-placeholder-inside'), 'element has placeholder-inside class');
+        assert.equal($placeholder.get(0).style.height, '300px', 'placeholder height');
+        assert.equal($placeholder.get(0).style.width, '30px', 'placeholder width');
+        assert.equal($placeholder.get(0).style.transform, 'translate(190px, 500px)', 'placeholder position');
+
+        // act
+        pointer.move(-15, 0);
+
+        // assert
+        items = this.$element.children();
+        $placeholder = $('.dx-sortable-placeholder');
+        assert.strictEqual(items.length, 3, 'item count');
+        assert.equal($placeholder.length, 1, 'placeholder exists');
+        assert.notOk($placeholder.hasClass('dx-sortable-placeholder-inside'), 'element has not placeholder-inside class');
+        assert.equal($placeholder.get(0).style.height, '300px', 'placeholder height');
+        assert.equal($placeholder.get(0).style.width, '', 'placeholder width');
+        assert.equal($placeholder.get(0).style.transform, 'translate(190px, 500px)', 'placeholder position');
+    });
+
+    QUnit.test('Placeholder should be displayed correctly when dragging inward the last item (dropFeedbackMode is "indicate" and itemOrientation is "horiontal")', function(assert) {
+        // arrange
+        let items;
+        let $placeholder;
+        let $dragItemElement;
+
+        this.$element = $('#itemsHorizontal');
+
+        this.createSortable({
+            itemOrientation: 'horizontal',
+            rtlEnabled: true,
+            allowDropInsideItem: true
+        });
+
+        items = this.$element.children();
+        $dragItemElement = items.eq(0);
+
+        // act
+        const pointer = pointerMock($dragItemElement).start().down(235, 0).move(-45, 0);
+
+        // assert
+        items = this.$element.children();
+        $placeholder = $('.dx-sortable-placeholder');
+        assert.strictEqual(items.length, 3, 'item count');
+        assert.equal($placeholder.length, 1, 'placeholder exists');
+        assert.notOk($placeholder.hasClass('dx-sortable-placeholder-inside'), 'element has not placeholder-inside class');
+        assert.equal($placeholder.get(0).style.height, '300px', 'placeholder height');
+        assert.equal($placeholder.get(0).style.width, '', 'placeholder width');
+        assert.equal($placeholder.get(0).style.transform, 'translate(190px, 500px)', 'placeholder position');
+
+        // act
+        pointer.move(-15, 0);
+
+        // assert
+        items = this.$element.children();
+        $placeholder = $('.dx-sortable-placeholder');
+        assert.strictEqual(items.length, 3, 'item count');
+        assert.equal($placeholder.length, 1, 'placeholder exists');
+        assert.ok($placeholder.hasClass('dx-sortable-placeholder-inside'), 'element has placeholder-inside class');
+        assert.equal($placeholder.get(0).style.height, '300px', 'placeholder height');
+        assert.equal($placeholder.get(0).style.width, '30px', 'placeholder width');
+        assert.equal($placeholder.get(0).style.transform, 'translate(160px, 500px)', 'placeholder position');
     });
 });
