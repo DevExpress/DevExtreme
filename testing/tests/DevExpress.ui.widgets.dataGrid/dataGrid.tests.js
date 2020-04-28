@@ -20161,6 +20161,33 @@ QUnit.module('Row dragging', baseModuleConfig, () => {
         }
     });
 
+    QUnit.test('GroupPanel items should be visible by adding new one (T880880)', function(assert) {
+        // arrange
+        const headerPanelWrapper = dataGridWrapper.headerPanel;
+        createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{ field1: 1, field2: 2, field3: 3 }],
+            groupPanel: {
+                visible: true
+            },
+            columns: [
+                { dataField: 'field1', groupIndex: 0 },
+                { dataField: 'field2' }
+            ]
+        });
+
+        // act
+        const groupPanel = headerPanelWrapper.getGroupPanelElement();
+        $('<div>').addClass('dx-group-panel-item').text('test').appendTo(groupPanel);
+
+        const items = headerPanelWrapper.getGroupPanelItems();
+        const itemsWidth = items.eq(0).outerWidth(true) + items.eq(1).outerWidth(true);
+
+        // assert
+        assert.equal(items.length, 2, '2 items in group panel');
+        assert.roughEqual(groupPanel.innerWidth(), itemsWidth, 1.01, 'enough space for children display');
+    });
+
     QUnit.test('The onFocusedRowChanged should be fired if change focusedRowKey to same page and loadPanel in onContentReady (T827960)', function(assert) {
     // arrange
         const onFocusedRowChangedSpy = sinon.spy();

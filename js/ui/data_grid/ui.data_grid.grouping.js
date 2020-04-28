@@ -351,21 +351,20 @@ const GroupingHeaderPanelExtender = (function() {
         },
 
         _appendGroupingItem: function(items) {
-            const that = this;
-            let isRendered = false;
-            const groupPanelRenderedCallback = function(e) {
-                const $groupPanel = $(e.itemElement).find('.' + DATAGRID_GROUP_PANEL_CLASS);
-                that._updateGroupPanelContent($groupPanel);
-                registerKeyboardAction('groupPanel', that, $groupPanel, undefined, that._handleActionKeyDown.bind(that));
-                isRendered && that.renderCompleted.fire();
-                isRendered = true;
-            };
-
-            if(that._isGroupPanelVisible()) {
+            if(this._isGroupPanelVisible()) {
+                let isRendered = false;
                 const toolbarItem = {
-                    html: '<div class=\'' + DATAGRID_GROUP_PANEL_CLASS + '\'></div>',
+                    template: () => {
+                        const $groupPanel = $('<div>').addClass(DATAGRID_GROUP_PANEL_CLASS);
+                        this._updateGroupPanelContent($groupPanel);
+                        registerKeyboardAction('groupPanel', this, $groupPanel, undefined, this._handleActionKeyDown.bind(this));
+                        return $groupPanel;
+                    },
                     name: 'groupPanel',
-                    onItemRendered: groupPanelRenderedCallback,
+                    onItemRendered: () => {
+                        isRendered && this.renderCompleted.fire();
+                        isRendered = true;
+                    },
                     location: 'before',
                     locateInMenu: 'never',
                     sortIndex: 1
