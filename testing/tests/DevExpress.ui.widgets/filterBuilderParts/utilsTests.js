@@ -1265,20 +1265,19 @@ QUnit.module('Custom filter expressions', {
 
         // act, assert
         assert.deepEqual(utils.getFilterExpression(value, this.fields, []), [
-            ['!',
+            '!',
+            [
                 [
+                    ['field1', '<>', 1], 'or', ['field1', '=', 10]
+                ],
+                'and',
+                ['!',
                     [
-                        ['field1', '<>', 1], 'or', ['field1', '=', 10]
-                    ],
-                    'and',
-                    ['!',
                         [
-                            [
-                                ['field1', '<>', 20], 'or', ['field1', '=', 10]
-                            ],
-                            'or',
-                            ['field2', '=', '30']
-                        ]
+                            ['field1', '<>', 20], 'or', ['field1', '=', 10]
+                        ],
+                        'or',
+                        ['field2', '=', '30']
                     ]
                 ]
             ]
