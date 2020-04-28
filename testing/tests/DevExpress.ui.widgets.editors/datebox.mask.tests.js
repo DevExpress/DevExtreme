@@ -875,7 +875,7 @@ module('Empty dateBox', {
 
     QUnit.testInActiveWindow('Bluring the input after first input should update the value', function(assert) {
         this.keyboard.type('1');
-        this.instance.blur();
+        this.$input.focusout();
 
         assert.strictEqual(this.$input.val(), 'January 14 2015', 'text is correct');
         assert.strictEqual(this.instance.option('value').getMonth(), 0, 'value is correct');
