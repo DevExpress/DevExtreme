@@ -1401,6 +1401,11 @@ const TagBox = SelectBox.inherit({
         return result;
     },
 
+    _setListDataSource: function() {
+        this.callBase();
+        this._refreshSelected();
+    },
+
     _renderOpenedState: function() {
         this.callBase();
 
