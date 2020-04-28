@@ -4499,58 +4499,87 @@ QUnit.module('Initialization', {
         assert.ok(result, 'Appointment takes all day');
     });
 
-    QUnit.test('Month View - Cell should have default height', function(assert) {
-        const DEFAULT_CELL_HEIGHT = 50;
 
-        const scheduler = createWrapper({
-            views: ['month'],
-            currentView: 'month'
-        });
+    ['day', 'week', 'month'].forEach(viewName => {
+        QUnit.test(`Cell should have default height if view: '${viewName}'`, function(assert) {
+            const DEFAULT_CELL_HEIGHT = 50;
 
-        const cellHeight = scheduler.workSpace.getCellHeight(0, 0);
-        assert.equal(cellHeight, DEFAULT_CELL_HEIGHT, 'Cell has min height');
-    });
-
-    [undefined, 2, 3].forEach(intervalCount => {
-        [200, 300, 800].forEach(height => {
-            QUnit.test(`Month View - Workspace vertical scroll should be equal to the dataTable height if view.intervalCount=${intervalCount}, height: ${height}`, function(assert) {
-                const scheduler = createWrapper({
-                    height: height,
-                    views: [{
-                        type: 'month',
-                        name: 'month',
-                        intervalCount: intervalCount
-                    }],
-                    currentView: 'month'
-                });
-
-                const dateTableHeight = scheduler.workSpace.getDateTableHeight();
-                const scrollable = scheduler.workSpace.getScrollable();
-                assert.equal(scrollable.scrollHeight(), dateTableHeight, 'Scroll height > minWorspaceHeight');
+            const scheduler = createWrapper({
+                views: [viewName],
+                currentView: viewName
             });
 
-            QUnit.test(`Month View - Workspace vertical scroll should be equal to the dataTable height if grouping, view.intervalCount=${intervalCount}, height: ${height}`, function(assert) {
-                const scheduler = createWrapper({
-                    height: height,
-                    views: [{
-                        type: 'month',
-                        name: 'month',
-                        intervalCount: intervalCount
-                    }],
-                    currentView: 'month',
-                    groups: ['any'],
-                    resources: [{
-                        fieldExpr: 'any',
-                        dataSource: [
-                            { text: 'Group_2', id: 1 },
-                            { text: 'Group_2', id: 2 }
-                        ],
-                    }]
+            const cellHeight = scheduler.workSpace.getCellHeight(0, 0);
+            assert.equal(cellHeight, DEFAULT_CELL_HEIGHT, 'Cell has min height');
+        });
+    });
+
+    ['timelineDay', 'timelineWeek', 'timelineMonth'].forEach(viewName => {
+        QUnit.test(`Group header height should be equals to the grouping cell height if view: '${viewName}'`, function(assert) {
+            const scheduler = createWrapper({
+                views: [viewName],
+                currentView: viewName,
+                groups: ['any'],
+                resources: [{
+                    fieldExpr: 'any',
+                    dataSource: [
+                        { text: 'Group_2', id: 1 },
+                        { text: 'Group_2', id: 2 }
+                    ],
+                }]
+            });
+
+            const $groupHeaders = scheduler.workSpace.groups.getGroupHeaders(0);
+            $.each($groupHeaders, (index, groupHeader) => {
+                const groupHeaderHeight = $(groupHeader).outerHeight();
+                const groupingCellHeight = scheduler.workSpace.getCellHeight(index, 0);
+                assert.equal(groupHeaderHeight, groupingCellHeight, `Group header ${index} has min height`);
+            });
+        });
+    });
+
+    ['day', 'week', 'month', 'timelineDay', 'timelineWeek', 'timelineMonth'].forEach(viewName => {
+        [undefined, 2, 3].forEach(intervalCount => {
+            [undefined, 200, 300, 800].forEach(height => {
+                QUnit.test(`Workspace vertical scroll should be equal to the dataTable height if view: '${viewName}', view.intervalCount: ${intervalCount}, height: ${height}`, function(assert) {
+                    const scheduler = createWrapper({
+                        height: height,
+                        views: [{
+                            type: viewName,
+                            name: viewName,
+                            intervalCount: intervalCount
+                        }],
+                        currentView: viewName
+                    });
+
+                    const dateTableHeight = scheduler.workSpace.getDateTableHeight();
+                    const scrollable = scheduler.workSpace.getScrollable();
+                    assert.roughEqual(scrollable.scrollHeight(), dateTableHeight, 1.01, 'Scroll height > minWorspaceHeight');
                 });
 
-                const dateTableHeight = scheduler.workSpace.getDateTableHeight();
-                const scrollable = scheduler.workSpace.getScrollable();
-                assert.equal(scrollable.scrollHeight(), dateTableHeight, 'Scroll height > minWorspaceHeight');
+                QUnit.test(`Workspace vertical scroll should be equal to the dataTable height if grouping, view: '${viewName}', view.intervalCount=${intervalCount}, height: ${height}`, function(assert) {
+                    const scheduler = createWrapper({
+                        height: height,
+                        views: [{
+                            type: viewName,
+                            name: viewName,
+                            intervalCount: intervalCount
+                        }],
+                        currentView: viewName,
+                        groups: ['any'],
+                        resources: [{
+                            fieldExpr: 'any',
+                            dataSource: [
+                                { text: 'Group_1', id: 1 },
+                                { text: 'Group_2', id: 2 }
+                            ],
+                        }]
+                    });
+
+                    const dateTableHeight = scheduler.workSpace.getDateTableHeight();
+                    const scrollable = scheduler.workSpace.getScrollable();
+                    assert.roughEqual(scrollable.scrollHeight(), dateTableHeight, 1.01, 'Scroll height > minWorspaceHeight');
+                });
             });
         });
     });
@@ -4612,22 +4641,4 @@ QUnit.module('Options for Material theme in components', {
 
         assert.equal(appointments.option('_collectorOffset'), 0, 'SchedulerAppointments has correct _collectorOffset');
     });
-});
-
-QUnit.module('Month View', {
-    beforeEach: function() {
-        sinon.spy(errors, 'log');
-
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
-            this.scheduler = new SchedulerTestWrapper(this.instance);
-        };
-
-        fx.off = true;
-    },
-    afterEach: function() {
-        errors.log.restore();
-        fx.off = false;
-    }
-}, () => {
 });
