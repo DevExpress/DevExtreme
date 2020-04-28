@@ -47,6 +47,8 @@ export default class Button extends Component {
     _optionChanged(option) {
         const { name, value } = option;
 
+        this._changeAction(option);
+
         switch(name) {
             case 'useSubmitBehavior':
                 value === true && this.option('onSubmit', this._getSubmitAction());
