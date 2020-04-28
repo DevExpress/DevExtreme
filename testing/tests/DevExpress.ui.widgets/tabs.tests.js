@@ -4,8 +4,10 @@ import holdEvent from 'events/hold';
 import pointerMock from '../../helpers/pointerMock.js';
 import { DataSource } from 'data/data_source/data_source';
 import { extend } from 'core/utils/extend';
+import { TestTabsWrapper } from '../../helpers/wrappers/tabsWrappers.js';
 
 import 'ui/tabs';
+import 'ui/responsive_box';
 import 'common.css!';
 
 QUnit.testStart(function() {
@@ -15,7 +17,7 @@ QUnit.testStart(function() {
                 display: table-cell;
                 padding: 35px;
             }
-            
+
             .bigtab.dx-tabs-expanded .dx-tab {
                 width: 1000px;
             }
@@ -42,7 +44,7 @@ const TAB_OFFSET = 30;
 
 const toSelector = cssClass => `.${cssClass}`;
 
-QUnit.module('general', () => {
+QUnit.module('General', () => {
     QUnit.test('mouseup switch selected tab', function(assert) {
         const tabsElement = $('#tabs').dxTabs({
             items: [
@@ -152,7 +154,7 @@ QUnit.module('general', () => {
     });
 });
 
-QUnit.module('tab select action', () => {
+QUnit.module('Tab select action', () => {
     QUnit.test('should not be triggered when is already selected', function(assert) {
         let count = 0;
 
@@ -250,7 +252,7 @@ QUnit.module('tab select action', () => {
     });
 });
 
-QUnit.module('horizontal scrolling', () => {
+QUnit.module('Horizontal scrolling', () => {
     const SCROLLABLE_CLASS = 'dx-scrollable';
 
     QUnit.test('tabs should be wrapped into scrollable if scrollingEnabled=true', function(assert) {
@@ -853,5 +855,109 @@ QUnit.module('Live Update', {
 
         const $element = tabs.$element();
         assert.equal($element.find(`.${TABS_SCROLLABLE_CLASS}`).length, 0, 'scrolling is disabled');
+    });
+});
+
+QUnit.module('Render in the ResponsiveBox. Flex strategy', () => {
+    const itemTemplate = () => $('<div>').width(150).height(150).css('border', '1px solid black');
+    const createResponsiveBox = ({ cols, rows, items }) => $('#widget').dxResponsiveBox({
+        width: 300,
+        _layoutStrategy: 'flex',
+        cols,
+        rows,
+        itemTemplate,
+        screenByWidth: () => 'md',
+        items
+    });
+
+    QUnit.test('render tabs with scrollable and navigation buttons', function() {
+        createResponsiveBox({
+            cols: [{ ratio: 1 }, { ratio: 1 }],
+            rows: [{ ratio: 1 }],
+            items: [
+                {
+                    location: { col: 0, row: 0 },
+                    template: () => $('<div id=\'tabsInTemplate\'>')
+                },
+                {
+                    location: { col: 1, row: 0 }
+                }
+            ]
+        });
+        const testWrapper = new TestTabsWrapper($('#tabsInTemplate'), {
+            itemsCount: 10,
+            showNavButtons: true
+        });
+        testWrapper.checkTabsWithScrollable();
+        testWrapper.checkNavigationButtons(true);
+    });
+
+    QUnit.test('render tabs with scrollable and navigation buttons. ResponsiveBox item has colSpan', function() {
+        createResponsiveBox({
+            cols: [{ ratio: 1 }, { ratio: 1 }, { ratio: 1 }],
+            rows: [{ ratio: 1 }],
+            items: [
+                {
+                    location: { col: 0, row: 0, colspan: 2 },
+                    template: () => $('<div id=\'tabsInTemplate\'>')
+                },
+                {
+                    location: { col: 1, row: 0 }
+                },
+                {
+                    location: { col: 2, row: 0 }
+                }
+            ]
+        });
+        const testWrapper = new TestTabsWrapper($('#tabsInTemplate'), {
+            itemsCount: 10,
+            showNavButtons: true
+        });
+        testWrapper.checkTabsWithScrollable();
+        testWrapper.checkNavigationButtons(true);
+    });
+
+    QUnit.test('render tabs with scrollable and navigation buttons. ResponsiveBox row has ratio = 2', function() {
+        createResponsiveBox({
+            cols: [{ ratio: 2 }, { ratio: 1 }],
+            rows: [{ ratio: 1 }],
+            items: [
+                {
+                    location: { col: 0, row: 0 },
+                    template: () => $('<div id=\'tabsInTemplate\'>')
+                },
+                {
+                    location: { col: 1, row: 0 }
+                }
+            ]
+        });
+        const testWrapper = new TestTabsWrapper($('#tabsInTemplate'), {
+            itemsCount: 10,
+            showNavButtons: true
+        });
+        testWrapper.checkTabsWithScrollable();
+        testWrapper.checkNavigationButtons(true);
+    });
+
+    QUnit.test('render tabs with scrollable and navigation buttons. ResponsiveBox in one column', function() {
+        createResponsiveBox({
+            cols: [{ ratio: 1 }],
+            rows: [{ ratio: 1 }, { ratio: 1 }],
+            items: [
+                {
+                    location: { col: 0, row: 0 }
+                },
+                {
+                    location: { col: 0, row: 1 },
+                    template: () => $('<div id=\'tabsInTemplate\'>')
+                }
+            ]
+        });
+        const testWrapper = new TestTabsWrapper($('#tabsInTemplate'), {
+            itemsCount: 10,
+            showNavButtons: true
+        });
+        testWrapper.checkTabsWithScrollable();
+        testWrapper.checkNavigationButtons(true);
     });
 });
