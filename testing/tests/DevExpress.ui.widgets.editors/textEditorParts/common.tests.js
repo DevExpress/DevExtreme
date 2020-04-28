@@ -423,7 +423,7 @@ QUnit.module('general', {}, () => {
         browser.version = '11.0';
         try {
             const $textEditor = $('#texteditor').dxTextEditor({});
-            assert.ok($textEditor.hasClass('dx-texteditor-compressed'));
+            assert.ok($textEditor.hasClass('dx-texteditor-collapsed-flex-layout'));
         } finally {
             browser.msie = origBrowser.msie;
             browser.version = origBrowser.version;

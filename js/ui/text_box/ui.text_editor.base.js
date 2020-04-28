@@ -33,7 +33,7 @@ const ALLOWED_STYLE_CLASSES = [
     TEXTEDITOR_STYLING_MODE_PREFIX + 'filled',
     TEXTEDITOR_STYLING_MODE_PREFIX + 'underlined'
 ];
-const TEXTEDITOR_COMPRESSED_CLASS = 'dx-texteditor-compressed';
+const TEXTEDITOR_COLLAPSED_FLEX_LAYOUT_CLASS = 'dx-texteditor-collapsed-flex-layout';
 
 const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 const TEXTEDITOR_PENDING_INDICATOR_CLASS = 'dx-pending-indicator';
@@ -338,7 +338,7 @@ const TextEditorBase = Editor.inherit({
         const $element = this.$element();
         const isIE11 = browser.msie && browser.version <= 11;
         if(isIE11 && $element.css('display') === 'block') {
-            $element.addClass(TEXTEDITOR_COMPRESSED_CLASS);
+            $element.addClass(TEXTEDITOR_COLLAPSED_FLEX_LAYOUT_CLASS);
         }
     },
 
