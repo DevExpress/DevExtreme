@@ -1,4 +1,4 @@
-module.exports = [
+const meta: Array<MetaItem> = [
     {
         Key: '$base-font-family',
         Value: '"Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif',
@@ -20,3 +20,5 @@ module.exports = [
         Path: 'tb/widgets/generic/accordion/colors'
     }
 ];
+
+export default meta;

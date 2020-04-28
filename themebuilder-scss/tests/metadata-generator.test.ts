@@ -1,24 +1,24 @@
-const assert = require('chai').assert;
-const MetadataGenerator = require('../modules/metadata-generator');
+import { MetadataGenerator } from '../modules/metadata-generator';
+
 const generator = new MetadataGenerator();
 
 describe('Metadata generator - parseComments', () => {
-    const commentSamples = [
+    const commentSamples: Array<string> = [
         '* $name 10. Constant name',
         '* $wrong some wrong comment',
         '* $name 10. Name\n* $type select\n* $typeValues 1|2'
     ];
 
-    it('name parsed correctly', () => {
-        assert.deepEqual(generator.parseComments(commentSamples[0]), { 'Name': '10. Constant name' });
+    test('name parsed correctly', () => {
+        expect(generator.parseComments(commentSamples[0])).toEqual({ 'Name': '10. Constant name' });
     });
 
-    it('allowed only variables parsed', () => {
-        assert.deepEqual(generator.parseComments(commentSamples[1]), {});
+    test('allowed only variables parsed', () => {
+        expect(generator.parseComments(commentSamples[1])).toEqual({});
     });
 
-    it('multiple variables parsed', () => {
-        assert.deepEqual(generator.parseComments(commentSamples[2]), {
+    test('multiple variables parsed', () => {
+        expect(generator.parseComments(commentSamples[2])).toEqual({
             'Name': '10. Name',
             'Type': 'select',
             'TypeValues': '1|2'
@@ -27,7 +27,11 @@ describe('Metadata generator - parseComments', () => {
 });
 
 describe('Metadata generator - getMetaItems (one item)', () => {
-    const scssSamples = [
+    interface Samples {
+        [key: string]: string
+    }
+
+    const scssSamples: Array<Samples> = [
         {
             'no new line after comment':
 `/**
@@ -65,8 +69,8 @@ $slideout-background: #000;`
 
     scssSamples.forEach((sample) => {
         const key = Object.keys(sample)[0];
-        it(key, () => {
-            assert.deepEqual(generator.getMetaItems(sample[key]), [{
+        test(key, () => {
+            expect(generator.getMetaItems(sample[key])).toEqual([{
                 'Name': 'Slide out background',
                 'Type': 'color',
                 'Key': '$slideout-background'
@@ -104,13 +108,13 @@ $slideout-background2:  $base-color;
 */
 $slideout-background3: #000;`;
 
-    it('parse several items', () => {
+    test('parse several items', () => {
         const result = generator.getMetaItems(sample);
 
-        assert.equal(result.length, 4);
+        expect(result.length).toBe(4);
 
         result.forEach((item, index) => {
-            assert.deepEqual(item, {
+            expect(item).toEqual({
                 'Name': 'Slide out background',
                 'Type': 'color',
                 'Key': `$slideout-background${index}`
@@ -137,12 +141,12 @@ $slideout-background: #000;
 $base-color: rgb(0,170,0);
 `;
 
-    it('parse items with duplicates', () => {
+    test('parse items with duplicates', () => {
         const result = generator.getMetaItems(sample);
 
-        assert.equal(result.length, 1);
+        expect(result.length).toBe(1);
 
-        assert.deepEqual(result[0], {
+        expect(result[0]).toEqual({
             'Name': 'Slide out background1',
             'Type': 'color',
             'Key': '$slideout-background'
@@ -151,7 +155,13 @@ $base-color: rgb(0,170,0);
 });
 
 describe('Metadata generator - normalizePath', () => {
-    const matrix = [
+    interface TestData {
+        cwd: string;
+        path: string;
+        expected: string;
+    }
+
+    const matrix: Array<TestData> = [
         { cwd: '/', path: '/scss/widgets/generic/toolbar/_colors.scss', expected: 'tb/widgets/generic/toolbar/colors' },
         { cwd: '/', path: '/scss/widgets/generic/navBar/_colors.scss', expected: 'tb/widgets/generic/navBar/colors' },
         { cwd: '/repo', path: '/repo/scss/widgets/generic/toolbar/_sizes.scss', expected: 'tb/widgets/generic/toolbar/sizes' },
@@ -161,36 +171,36 @@ describe('Metadata generator - normalizePath', () => {
         { cwd: 'd:\\repo', path: 'd:\\repo\\scss\\widgets\\generic\\toolbar\\_colors.scss', expected: 'tb/widgets/generic/toolbar/colors' },
         { cwd: 'd:\\repo\\', path: 'd:\\repo\\scss\\widgets\\generic\\toolbar\\_colors.scss', expected: 'tb/widgets/generic/toolbar/colors' },
     ];
-    it('normalizePath works as expected', () => {
+    test('normalizePath works as expected', () => {
         matrix.forEach((item) => {
-            assert.equal(generator.normalizePath(item.cwd, item.path), item.expected);
+            expect(generator.normalizePath(item.cwd, item.path)).toBe(item.expected);
         });
     });
 });
 
 describe('Metadata generator - getMapFromMeta', () => {
-    const testMetadata = [
+    const testMetadata: Array<MetaItem> = [
         { 'Key': '$menu-color' },
         { 'Key': '$menu-item-selected-bg' }
     ];
-    it('getMapFromMeta works as expected', () => {
-        assert.equal(generator.getMapFromMeta(testMetadata, '/'),
-            '(\n"path": "/",\n"$menu-color": $menu-color,\n"$menu-item-selected-bg": $menu-item-selected-bg,\n)');
+    test('getMapFromMeta works as expected', () => {
+        expect(generator.getMapFromMeta(testMetadata, '/'))
+            .toBe('(\n"path": "/",\n"$menu-color": $menu-color,\n"$menu-item-selected-bg": $menu-item-selected-bg,\n)');
     });
 });
 
 describe('Metadata generator - collectMetadata', () => {
-    it('collectMetadata for file without comments return the same content and add nothing to metadata', () => {
+    test('collectMetadata for file without comments return the same content and add nothing to metadata', () => {
         const cwd = '/';
         const path = '/scss/widgets/generic/toolbar/_colors.scss';
         const content = '@use "colors";';
 
         const result = generator.collectMetadata(cwd, path, content);
-        assert.equal(content, result);
-        assert.deepEqual(generator.getMetadata(), { 'metadata': [] });
+        expect(content).toBe(result);
+        expect(generator.getMetadata()).toEqual({ 'metadata': [] });
     });
 
-    it('collectMetadata for file with comments modify file content and add data to metadata', () => {
+    test('collectMetadata for file with comments modify file content and add data to metadata', () => {
         const cwd = '/';
         const path = '/scss/widgets/generic/toolbar/_colors.scss';
         const content = `
@@ -219,8 +229,8 @@ $never-used: collector((
 `;
 
         const result = generator.collectMetadata(cwd, path, content);
-        assert.equal(expected, result);
-        assert.deepEqual(generator.getMetadata(), {
+        expect(expected).toBe(result);
+        expect(generator.getMetadata()).toEqual({
             'metadata': [{
                 'Name': 'Slide out background',
                 'Type': 'color',
@@ -230,14 +240,14 @@ $never-used: collector((
         });
     });
 
-    it('clean method clean metadata', () => {
+    test('clean method clean metadata', () => {
         // metadata is not empty because of the previous test
-        assert.notDeepEqual(generator.getMetadata(), { 'metadata': [] });
+        expect(generator.getMetadata()).not.toEqual({ 'metadata': [] });
         generator.clean();
-        assert.deepEqual(generator.getMetadata(), { 'metadata': [] });
+        expect(generator.getMetadata()).toEqual({ 'metadata': [] });
     });
 
-    it('collectMetadata add several item for different files with the same variables names', () => {
+    test('collectMetadata add several item for different files with the same variables names', () => {
         const cwd = '/';
         const path1 = '/scss/widgets/generic/toolbar/_colors.scss';
         const path2 = '/scss/widgets/material/toolbar/_colors.scss';
@@ -253,7 +263,7 @@ $slideout-background: #000;
         generator.collectMetadata(cwd, path1, content);
         generator.collectMetadata(cwd, path2, content);
 
-        assert.deepEqual(generator.getMetadata(), {
+        expect(generator.getMetadata()).toEqual({
             'metadata': [{
                 'Name': 'Slide out background',
                 'Type': 'color',

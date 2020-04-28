@@ -1,6 +1,6 @@
 import { Compiler } from './compiler';
 import { PreCompiler } from './pre-compiler';
-import resolveBundle from './bundle-resolver';
+import { resolveBundle } from './bundle-resolver';
 
 export class CompileManager {
     compiler = new Compiler();

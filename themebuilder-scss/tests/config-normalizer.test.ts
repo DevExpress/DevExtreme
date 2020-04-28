@@ -1,29 +1,26 @@
-const mock = require('mock-require');
-const assert = require('chai').assert;
-const normalizeConfig = require('../modules/config-normalizer');
-const commands = require('../modules/commands');
+import normalizeConfig from '../modules/config-normalizer';
+import commands from '../modules/commands';
+
+const reader = () => {};
 
 describe('Cli arguments normalizer', () => {
-    after(() => {
-        mock.stopAll();
-    });
 
-    it('Commands stay unchanged', () => {
-        let config = { command: 'build-theme' };
+    test('Commands stay unchanged', () => {
+        let config: ConfigSettings = { command: 'build-theme' };
         normalizeConfig(config);
-        assert.equal(config.command, commands.BUILD_THEME);
+        expect(config.command).toBe(commands.BUILD_THEME);
 
         config = { command: 'export-theme-vars' };
 
         normalizeConfig(config);
-        assert.equal(config.command, commands.BUILD_VARS);
+        expect(config.command).toBe(commands.BUILD_VARS);
     });
 
-    it('build-theme default parameters', () => {
-        const config = { command: 'build-theme' };
+    test('build-theme default parameters', () => {
+        const config: ConfigSettings = { command: 'build-theme' };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 0,
             'colorScheme': 'light',
@@ -38,11 +35,11 @@ describe('Cli arguments normalizer', () => {
         });
     });
 
-    it('export-theme-vars default parameters', () => {
-        const config = { command: 'export-theme-vars' };
+    test('export-theme-vars default parameters', () => {
+        const config: ConfigSettings = { command: 'export-theme-vars' };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 0,
             'colorScheme': 'light',
@@ -57,11 +54,11 @@ describe('Cli arguments normalizer', () => {
         });
     });
 
-    it('build-theme bootstrap configuration', () => {
-        let config = { command: 'build-theme', inputFile: 'vars.less' };
+    test('build-theme bootstrap configuration', () => {
+        let config: ConfigSettings = { command: 'build-theme', inputFile: 'vars.less' };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 3,
             'colorScheme': 'light',
@@ -79,7 +76,7 @@ describe('Cli arguments normalizer', () => {
         config = { command: 'build-theme', inputFile: 'vars.scss' };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 4,
             'colorScheme': 'light',
@@ -94,11 +91,11 @@ describe('Cli arguments normalizer', () => {
         });
     });
 
-    it('export-theme-vars bootstrap configuration', () => {
-        let config = { command: 'export-theme-vars', inputFile: 'vars.less' };
-        normalizeConfig(config);
+    test('export-theme-vars bootstrap configuration', () => {
+        const config1: ConfigSettings = { command: 'export-theme-vars', inputFile: 'vars.less' };
+        normalizeConfig(config1);
 
-        assert.deepEqual(config, {
+        expect(config1).toEqual({
             'base': false,
             'bootstrapVersion': 3,
             'colorScheme': 'light',
@@ -112,10 +109,10 @@ describe('Cli arguments normalizer', () => {
             'themeName': 'generic'
         });
 
-        config = { command: 'export-theme-vars', inputFile: 'vars.scss' };
-        normalizeConfig(config);
+        const config2: ConfigSettings = { command: 'export-theme-vars', inputFile: 'vars.scss' };
+        normalizeConfig(config2);
 
-        assert.deepEqual(config, {
+        expect(config2).toEqual({
             'base': false,
             'bootstrapVersion': 4,
             'colorScheme': 'light',
@@ -129,10 +126,10 @@ describe('Cli arguments normalizer', () => {
             'themeName': 'generic'
         });
 
-        config = { command: 'export-theme-vars', inputFile: 'vars.scss', outputFile: './dir/file.scss' };
-        normalizeConfig(config);
+        const config3: ConfigSettings = { command: 'export-theme-vars', inputFile: 'vars.scss', outputFile: './dir/file.scss' };
+        normalizeConfig(config3);
 
-        assert.deepEqual(config, {
+        expect(config3).toEqual({
             'base': false,
             'bootstrapVersion': 4,
             'colorScheme': 'light',
@@ -147,11 +144,11 @@ describe('Cli arguments normalizer', () => {
         });
     });
 
-    it('build-theme output parameters (file and color scheme)', () => {
-        const config = { command: 'build-theme', outputFile: './dir/file.css', outputColorScheme: 'green' };
+    test('build-theme output parameters (file and color scheme)', () => {
+        const config: ConfigSettings = { command: 'build-theme', outputFile: './dir/file.css', outputColorScheme: 'green' };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 0,
             'colorScheme': 'light',
@@ -166,11 +163,11 @@ describe('Cli arguments normalizer', () => {
         });
     });
 
-    it('build-theme output parameters (color scheme only)', () => {
-        const config = { command: 'build-theme', outputColorScheme: 'green' };
+    test('build-theme output parameters (color scheme only)', () => {
+        const config: ConfigSettings = { command: 'build-theme', outputColorScheme: 'green' };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 0,
             'colorScheme': 'light',
@@ -185,11 +182,11 @@ describe('Cli arguments normalizer', () => {
         });
     });
 
-    it('build-theme output parameters (color scheme, swatch, base)', () => {
-        const config = { command: 'build-theme', outputColorScheme: 'green', makeSwatch: true, base: true };
+    test('build-theme output parameters (color scheme, swatch, base)', () => {
+        const config: ConfigSettings = { command: 'build-theme', outputColorScheme: 'green', makeSwatch: true, base: true };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': true,
             'bootstrapVersion': 0,
             'colorScheme': 'light',
@@ -204,11 +201,11 @@ describe('Cli arguments normalizer', () => {
         });
     });
 
-    it('build-theme output parameters (color scheme not valid)', () => {
-        const config = { command: 'build-theme', outputColorScheme: '$#@green' };
+    test('build-theme output parameters (color scheme not valid)', () => {
+        const config: ConfigSettings = { command: 'build-theme', outputColorScheme: '$#@green' };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 0,
             'colorScheme': 'light',
@@ -223,11 +220,11 @@ describe('Cli arguments normalizer', () => {
         });
     });
 
-    it('export-theme-vars output parameters (color scheme)', () => {
-        const config = { command: 'export-theme-vars', outputColorScheme: 'green' };
+    test('export-theme-vars output parameters (color scheme)', () => {
+        const config: ConfigSettings = { command: 'export-theme-vars', outputColorScheme: 'green' };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 0,
             'colorScheme': 'light',
@@ -242,11 +239,11 @@ describe('Cli arguments normalizer', () => {
         });
     });
 
-    it('export-theme-vars output parameters (color scheme, output file: less)', () => {
-        const config = { command: 'export-theme-vars', outputColorScheme: 'green', outputFile: 'vars.less' };
+    test('export-theme-vars output parameters (color scheme, output file: less)', () => {
+        const config: ConfigSettings = { command: 'export-theme-vars', outputColorScheme: 'green', outputFile: 'vars.less' };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 0,
             'colorScheme': 'light',
@@ -261,11 +258,11 @@ describe('Cli arguments normalizer', () => {
         });
     });
 
-    it('export-theme-vars output parameters (color scheme, output file: scss)', () => {
-        const config = { command: 'export-theme-vars', outputColorScheme: 'green', outputFile: 'vars.scss' };
+    test('export-theme-vars output parameters (color scheme, output file: scss)', () => {
+        const config: ConfigSettings = { command: 'export-theme-vars', outputColorScheme: 'green', outputFile: 'vars.scss' };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 0,
             'colorScheme': 'light',
@@ -280,11 +277,11 @@ describe('Cli arguments normalizer', () => {
         });
     });
 
-    it('export-theme-vars output parameters (color scheme, output file: scss, file format: less) (wrong file format - file extension pair)', () => {
-        const config = { command: 'export-theme-vars', outputColorScheme: 'green', outputFile: 'vars.scss', outputFormat: 'less' };
+    test('export-theme-vars output parameters (color scheme, output file: scss, file format: less) (wrong file format - file extension pair)', () => {
+        const config: ConfigSettings = { command: 'export-theme-vars', outputColorScheme: 'green', outputFile: 'vars.scss', outputFormat: 'less' };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 0,
             'colorScheme': 'light',
@@ -299,11 +296,11 @@ describe('Cli arguments normalizer', () => {
         });
     });
 
-    it('export-theme-vars output parameters (color scheme, output file: scss, file format: scss)', () => {
-        const config = { command: 'export-theme-vars', outputColorScheme: 'green', outputFormat: 'scss' };
+    test('export-theme-vars output parameters (color scheme, output file: scss, file format: scss)', () => {
+        const config: ConfigSettings = { command: 'export-theme-vars', outputColorScheme: 'green', outputFormat: 'scss' };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 0,
             'colorScheme': 'light',
@@ -318,11 +315,11 @@ describe('Cli arguments normalizer', () => {
         });
     });
 
-    it('build-theme input parameters (base theme)', () => {
-        const config = { command: 'build-theme', baseTheme: 'material.blue.light' };
+    test('build-theme input parameters (base theme)', () => {
+        const config: ConfigSettings = { command: 'build-theme', baseTheme: 'material.blue.light' };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 0,
             'colorScheme': 'blue-light',
@@ -337,11 +334,11 @@ describe('Cli arguments normalizer', () => {
         });
     });
 
-    it('build-theme input parameters (base theme) - material compact', () => {
-        const config = { command: 'build-theme', baseTheme: 'material.blue.light.compact' };
+    test('build-theme input parameters (base theme) - material compact', () => {
+        const config: ConfigSettings = { command: 'build-theme', baseTheme: 'material.blue.light.compact' };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 0,
             'colorScheme': 'blue-light-compact',
@@ -356,11 +353,11 @@ describe('Cli arguments normalizer', () => {
         });
     });
 
-    it('build-theme input parameters (base theme, input file)', () => {
-        const config = { command: 'build-theme', baseTheme: 'material.blue.light', inputFile: 'file.json' };
+    test('build-theme input parameters (base theme, input file)', () => {
+        const config: ConfigSettings = { command: 'build-theme', baseTheme: 'material.blue.light', inputFile: 'file.json' };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 0,
             'colorScheme': 'blue-light',
@@ -375,19 +372,19 @@ describe('Cli arguments normalizer', () => {
         });
     });
 
-    it('build-theme \'data\', \'items\', \'reader\', \'lessCompiler\' stay unchanged', () => {
-        const config = {
+    test('build-theme \'data\', \'items\', \'reader\', \'lessCompiler\' stay unchanged', () => {
+        const config: ConfigSettings = {
             command: 'build-theme',
             baseTheme: 'material.blue.light',
             inputFile: 'file.json',
             data: 'somedata',
             items: [{ key: '1', value: '2' }],
-            reader: 'r',
+            reader: reader,
             lessCompiler: 'l'
         };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 0,
             'colorScheme': 'blue-light',
@@ -400,16 +397,24 @@ describe('Cli arguments normalizer', () => {
             'makeSwatch': false,
             'out': 'dx.material.custom-scheme.css',
             'outColorScheme': 'custom-scheme',
-            'reader': 'r',
+            'reader': reader,
             'themeName': 'material'
         });
     });
 
-    it('build-theme: if \'data\' is empty string it will be unchanged', () => {
-        const config = { command: 'build-theme', baseTheme: 'material.blue.light', data: '', items: [{ key: '', value: '' }], reader: 'r', lessCompiler: 'l' };
+    test('build-theme: if \'data\' is empty string it will be unchanged', () => {
+        const config: ConfigSettings = {
+            command: 'build-theme',
+            baseTheme: 'material.blue.light',
+            data: '',
+            items: [{ key: '', value: '' }],
+            reader: reader,
+            lessCompiler: 'l'
+        };
+
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 0,
             'colorScheme': 'blue-light',
@@ -422,16 +427,16 @@ describe('Cli arguments normalizer', () => {
             'makeSwatch': false,
             'out': 'dx.material.custom-scheme.css',
             'outColorScheme': 'custom-scheme',
-            'reader': 'r',
+            'reader': reader,
             'themeName': 'material'
         });
     });
 
-    it('build-theme: if themeId is set, but baseTheme not - right theme will be set', () => {
-        const config = { command: 'build-theme', themeId: 27 };
+    test('build-theme: if themeId is set, but baseTheme not - right theme will be set', () => {
+        const config: ConfigSettings = { command: 'build-theme', themeId: 27 };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 0,
             'colorScheme': 'teal-light',
@@ -446,11 +451,11 @@ describe('Cli arguments normalizer', () => {
         });
     });
 
-    it('build-theme: if themeId and baseTheme both are set - themeId will be ignored', () => {
-        const config = { command: 'build-theme', themeId: 27, baseTheme: 'material.blue.light' };
+    test('build-theme: if themeId and baseTheme both are set - themeId will be ignored', () => {
+        const config: ConfigSettings = { command: 'build-theme', themeId: 27, baseTheme: 'material.blue.light' };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 0,
             'colorScheme': 'blue-light',
@@ -465,11 +470,11 @@ describe('Cli arguments normalizer', () => {
         });
     });
 
-    it('build-theme: if themeId is wrong, generic.light will be used', () => {
-        const config = { command: 'build-theme', themeId: 270 };
+    test('build-theme: if themeId is wrong, generic.light will be used', () => {
+        const config: ConfigSettings = { command: 'build-theme', themeId: 270 };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 0,
             'colorScheme': 'light',
@@ -484,11 +489,11 @@ describe('Cli arguments normalizer', () => {
         });
     });
 
-    it('build-theme: if baseTheme is wrong, generic.light will be used', () => {
-        const config = { command: 'build-theme', baseTheme: 'wrong.theme' };
+    test('build-theme: if baseTheme is wrong, generic.light will be used', () => {
+        const config: ConfigSettings = { command: 'build-theme', baseTheme: 'wrong.theme' };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 0,
             'colorScheme': 'light',
@@ -503,11 +508,11 @@ describe('Cli arguments normalizer', () => {
         });
     });
 
-    it('export-theme-meta: default file format - json', () => {
-        const config = { command: 'export-theme-meta' };
+    test('export-theme-meta: default file format - json', () => {
+        const config: ConfigSettings = { command: 'export-theme-meta' };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 0,
             'colorScheme': 'light',
@@ -522,23 +527,23 @@ describe('Cli arguments normalizer', () => {
         });
     });
 
-    it('Paths are always normalized', () => {
+    test('Paths are always normalized', () => {
         let config = { lessPath: 'my/custom/less', scssPath: 'my/custom/scss' };
         normalizeConfig(config);
-        assert.equal(config.lessPath, 'my/custom/less/');
-        assert.equal(config.scssPath, 'my/custom/scss/');
+        expect(config.lessPath).toBe('my/custom/less/');
+        expect(config.scssPath).toBe('my/custom/scss/');
 
         config = { lessPath: 'my/custom/less/', scssPath: 'my/custom/scss/' };
         normalizeConfig(config);
-        assert.equal(config.lessPath, 'my/custom/less/');
-        assert.equal(config.scssPath, 'my/custom/scss/');
+        expect(config.lessPath).toBe('my/custom/less/');
+        expect(config.scssPath).toBe('my/custom/scss/');
     });
 
-    it('build-theme: \'widgets\' field is normalized', () => {
-        const config = { command: 'build-theme', widgets: ['datagrid'] };
+    test('build-theme: \'widgets\' field is normalized', () => {
+        const config: ConfigSettings = { command: 'build-theme', widgets: ['datagrid'] };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 0,
             'colorScheme': 'light',
@@ -554,19 +559,19 @@ describe('Cli arguments normalizer', () => {
         });
     });
 
-    it('build-theme @treelist constants change to the @datagrid constants', () => {
-        const config = {
+    test('build-theme @treelist constants change to the @datagrid constants', () => {
+        const config: ConfigSettings = {
             command: 'build-theme',
             baseTheme: 'material.blue.light',
             inputFile: 'file.json',
             data: 'somedata',
             items: [{ key: '1', value: '2' }, { key: '@treelist-bg-color', value: '2' }, { key: '@treelist-border-color', value: '3' }],
-            reader: 'r',
+            reader: reader,
             lessCompiler: 'l'
         };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 0,
             'colorScheme': 'blue-light',
@@ -579,24 +584,24 @@ describe('Cli arguments normalizer', () => {
             'makeSwatch': false,
             'out': 'dx.material.custom-scheme.css',
             'outColorScheme': 'custom-scheme',
-            'reader': 'r',
+            'reader': reader,
             'themeName': 'material'
         });
     });
 
-    it('"@" is replaced with "$" in the "key" field in items', () => {
-        const config = {
+    test('"@" is replaced with "$" in the "key" field in items', () => {
+        const config: ConfigSettings = {
             command: 'build-theme',
             baseTheme: 'material.blue.light',
             inputFile: 'file.json',
             data: 'somedata',
             items: [{ key: '@datagrid-bg-color', value: '2' }, { key: '@datagrid-border-color', value: '3' }],
-            reader: 'r',
+            reader: reader,
             lessCompiler: 'l'
         };
         normalizeConfig(config);
 
-        assert.deepEqual(config, {
+        expect(config).toEqual({
             'base': false,
             'bootstrapVersion': 0,
             'colorScheme': 'blue-light',
@@ -609,7 +614,7 @@ describe('Cli arguments normalizer', () => {
             'makeSwatch': false,
             'out': 'dx.material.custom-scheme.css',
             'outColorScheme': 'custom-scheme',
-            'reader': 'r',
+            'reader': reader,
             'themeName': 'material'
         });
     });

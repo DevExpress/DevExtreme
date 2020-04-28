@@ -1,53 +1,55 @@
-const assert = require('chai').assert;
-const mock = require('mock-require');
-const sass = require('sass');
-const path = require('path');
-const fs = require('fs');
+import { ImportMock } from 'ts-mock-imports';
+import sass from 'sass';
+import path from 'path';
+import fs from 'fs';
+import * as realMetadata from '../data/metadata/dx-theme-builder-metadata';
+import { metadata } from './data/metadata';
 
-const Compiler = require('../modules/compiler');
+import { Compiler } from '../modules/compiler';
+import noModificationsResult from './data/compilation-results/no-changes-css';
+import noModificationsMeta from './data/compilation-results/no-changes-meta';
 
-const dataPath = path.join(path.resolve(), 'tests', 'data');
-const noModificationsResult = require('./data/compilation-results/no-changes-css');
+const dataPath: string = path.join(path.resolve(), 'tests', 'data');
 
 describe('compile', () => {
     beforeEach(() => {
-        mock('../data/metadata/dx-theme-builder-metadata', require('./data/metadata'));
+        ImportMock.mockOther(realMetadata, 'metadata', metadata);
     });
 
     afterEach(() => {
-        mock.stopAll();
+        ImportMock.restore();
     });
 
     const bundle = path.join(dataPath, 'scss', 'bundles', 'dx.light.scss');
 
-    it('Compile with empty modifications (check that items can be undefined)', () => {
+    test('Compile with empty modifications (check that items can be undefined)', () => {
+        // expect.assertions(2);
         const compiler = new Compiler();
-        return compiler.compile(bundle).then(data => {
+        return compiler.compile(bundle, null, null).then(data => {
             // compiled css
-            assert.equal(noModificationsResult, data.result.css.toString());
+            expect(noModificationsResult).toBe(data.result.css.toString());
             // collected variables
-            assert.deepEqual(require('./data/compilation-results/no-changes-meta'), data.changedVariables);
+            expect(noModificationsMeta).toEqual(data.changedVariables);
         });
     });
 
-    it('Compile with one base and one accordion items modified', () => {
+    test('Compile with one base and one accordion items modified', () => {
         const compiler = new Compiler();
         return compiler.compile(bundle, [
             { key: '$base-accent', value: 'red' },
             { key: '$accordion-item-title-opened-bg', value: 'green' },
-        ]).then(data => {
+        ], null).then(data => {
             // compiled css
-            assert.equal(`.dx-accordion {
+            expect(data.result.css.toString()).toBe(`.dx-accordion {
   background-color: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif;
   color: red;
 }
 .dx-accordion .from-base {
   background-color: green;
   color: red;
-}`,
-            data.result.css.toString());
+}`);
             // collected variables
-            assert.deepEqual([
+            expect(data.changedVariables).toEqual([
                 {
                     Key: '$base-font-family',
                     Value: '"Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif',
@@ -68,56 +70,53 @@ describe('compile', () => {
                     Value: 'rgba(0,128,0,1)', // green
                     Path: 'tb/widgets/generic/accordion/colors'
                 }
-            ], data.changedVariables);
+            ]);
         });
     });
 
-    it('Compile with error', () => {
+    test('Compile with error', () => {
         const compiler = new Compiler();
-        return compiler.compile('dx.error.scss', []).then(
-            data => assert.notOk(true, 'Error bundle was resolved'),
+        return compiler.compile('dx.error.scss', [], null).then(
+            data => expect(false).toBe(true),
             error => {
-                assert.equal(3, error.status);
-                assert.equal('Error: dx.error.scss: no such file or directory', error.formatted);
+                expect(error.status).toBe(3);
+                expect(error.formatted).toBe('Error: dx.error.scss: no such file or directory');
             }
         );
     });
 
-    it('Compile with custom sass compiler options (try to compile with custom data)', () => {
+    test('Compile with custom sass compiler options (try to compile with custom data)', () => {
         const compiler = new Compiler();
         const bundleContent = fs.readFileSync(bundle, 'utf8');
         const extraOptions = {
             data: bundleContent + '.extra-class { color: red; }',
-            outputStyle: 'compressed'
+            outputStyle: 'compressed' as const
         };
         return compiler.compile(bundle, [], extraOptions).then(data => {
             // compiled css
-            assert.equal('.dx-accordion{background-color:"Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif;\
-color:#337ab7}.dx-accordion .from-base{background-color:transparent;color:#337ab7}.extra-class{color:red}',
-            data.result.css.toString());
+            expect(data.result.css.toString()).toBe('.dx-accordion{background-color:"Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif;\
+color:#337ab7}.dx-accordion .from-base{background-color:transparent;color:#337ab7}.extra-class{color:red}');
         });
     });
 });
 
 describe('Sass features', () => {
     beforeEach(() => {
-        mock('../data/metadata/dx-theme-builder-metadata', {
-            'metadata': [
-                { 'Key': '$var0', 'Name': '10. Font size', 'Type': 'text', 'Path': 'tb/path' },
-                { 'Key': '$var1', 'Name': '10. Font family', 'Type': 'text', 'Path': 'tb/path' },
-                { 'Key': '$var2', 'Name': '10. Accent color', 'Type': 'color', 'Path': 'tb/path' },
-                { 'Key': '$var3', 'Name': '10. Select color', 'Type': 'color', 'Path': 'tb/another/path' }
-            ]
-        });
+        ImportMock.mockOther(realMetadata, 'metadata', [
+            { 'Key': '$var0', 'Name': '10. Font size', 'Type': 'text', 'Path': 'tb/path' },
+            { 'Key': '$var1', 'Name': '10. Font family', 'Type': 'text', 'Path': 'tb/path' },
+            { 'Key': '$var2', 'Name': '10. Accent color', 'Type': 'color', 'Path': 'tb/path' },
+            { 'Key': '$var3', 'Name': '10. Select color', 'Type': 'color', 'Path': 'tb/another/path' }
+        ]);
     });
 
     afterEach(() => {
-        mock.stopAll();
+        ImportMock.restore();
     });
 
-    it('collector function', () => {
+    test('collector function', () => {
         const compiler = new Compiler();
-        const map = new sass.types.Map(5);
+        const map = new sass.types.Map(7);
 
         // path is always the first
         map.setKey(0, new sass.types.String('path'));
@@ -133,25 +132,36 @@ describe('Sass features', () => {
         map.setValue(3, new sass.types.Color(50, 60, 70, 0.4));
         // list variable
         map.setKey(4, new sass.types.String('$var4'));
-        const list = new sass.types.List(3);
-        list.setValue(0, new sass.types.Number(10, 'px'));
-        list.setValue(1, new sass.types.Number(15, 'px'));
-        list.setValue(2, new sass.types.Number(32, 'px'));
-        list.setSeparator(true);
-        map.setValue(4, list);
-
+        const list1 = new sass.types.List(3);
+        list1.setValue(0, new sass.types.Number(10, 'px'));
+        list1.setValue(1, new sass.types.Number(15, 'px'));
+        list1.setValue(2, new sass.types.Number(32, 'px'));
+        list1.setSeparator(true);
+        map.setValue(4, list1);
+        // list variable with ','
+        map.setKey(5, new sass.types.String('$var5'));
+        const list2 = new sass.types.List(3);
+        list2.setValue(0, new sass.types.Number(10, 'px'));
+        list2.setValue(1, new sass.types.Number(15, 'px'));
+        list2.setValue(2, new sass.types.Number(32, 'px'));
+        list2.setSeparator(false);
+        map.setValue(5, list2);
+        // null variable
+        map.setKey(6, new sass.types.String('$var6'));
+        map.setValue(6, sass.types.Null.NULL);
 
         compiler.collector(map);
 
-        assert.deepEqual(compiler.changedVariables, [
+        expect(compiler.changedVariables).toEqual([
             { Key: '$var1', Value: '300px', Path: 'tb/path' },
             { Key: '$var2', Value: 'Helvetica', Path: 'tb/path' },
             { Key: '$var3', Value: 'rgba(50,60,70,0.4)', Path: 'tb/path' },
             { Key: '$var4', Value: '10px,15px,32px', Path: 'tb/path' },
+            { Key: '$var5', Value: '10px 15px 32px', Path: 'tb/path' },
         ]);
     });
 
-    it('getMatchingUserItemsAsString - return right string for the url', () => {
+    test('getMatchingUserItemsAsString - return right string for the url', () => {
         const compiler = new Compiler();
 
         const testCases = [
@@ -197,11 +207,11 @@ describe('Sass features', () => {
 
             const content = compiler.getMatchingUserItemsAsString(testCase.url);
 
-            assert.equal(content, testCase.expected);
+            expect(content).toEqual(testCase.expected);
         });
     });
 
-    it('setter function (custom importer)', (done) => {
+    test('setter function (custom importer)', () => {
         const compiler = new Compiler();
         compiler.userItems = [{
             key: '$var2',
@@ -211,24 +221,20 @@ describe('Sass features', () => {
             value: '10px'
         }];
 
-        compiler.setter('tb/path', '', data => {
-            assert.deepEqual(data, { contents: '$var2: rgba(0,0,0,0);$var0: 10px;' });
-            assert.deepEqual(compiler.importerCache, { 'tb/path': '$var2: rgba(0,0,0,0);$var0: 10px;' });
-            done();
-        });
+        const setterResult = compiler.setter('tb/path', '');
+        expect(setterResult).toEqual({ contents: '$var2: rgba(0,0,0,0);$var0: 10px;' });
+        expect(compiler.importerCache).toEqual({ 'tb/path': '$var2: rgba(0,0,0,0);$var0: 10px;' });
     });
 
-    it('setter call getMatchingUserItemsAsString once for every url', (done) => {
-        let counter = 0;
+    test('setter call getMatchingUserItemsAsString once for every url', () => {
         const url = 'path1';
         const compiler = new Compiler();
-        compiler.getMatchingUserItemsAsString = () => ++counter;
-        compiler.setter(url, '', () => {
-            compiler.setter(url, '', () => {
-                assert.equal(counter, 1, 'getMatchingUserItemsAsString was called once');
-                assert.equal(compiler.importerCache[url], 1, 'Cache for url is filled');
-                done();
-            });
-        });
+        compiler.getMatchingUserItemsAsString = jest.fn().mockImplementation(() => 'content');;
+        compiler.setter(url, '');
+        compiler.setter(url, '');
+        compiler.setter(url, '');
+
+        expect(compiler.getMatchingUserItemsAsString).toHaveBeenCalledTimes(1);
+        expect(compiler.importerCache[url]).toBe('content');
     });
 });

@@ -27,6 +27,7 @@ interface ConfigSettings {
     base?: boolean;
     items?: Array<ConfigMetaItem>;
     data?: string;
+    widgets?: Array<string>
 
     fileFormat?: string;
     baseTheme?: string;
@@ -44,6 +45,9 @@ interface ConfigSettings {
     lessPath?: string;
     scssPath?: string;
     out?: string; // TODO need?
+
+    reader?: Function; //TODO need?
+    lessCompiler?: any; //TODO need?
 }
 
 interface CompilerResult {

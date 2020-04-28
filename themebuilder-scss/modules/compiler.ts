@@ -1,20 +1,19 @@
 import * as sass from 'sass';
-import Fiber from 'fibers';
 import { metadata } from '../data/metadata/dx-theme-builder-metadata';
 
 export class Compiler {
     changedVariables: Array<MetaItem> = [];
-    importerCache: { [key: string]: string };
+    importerCache: Record<string, string> = {};
     meta: Array<MetaItem> = metadata;
     userItems: Array<ConfigMetaItem> = [];
 
-    compile(bundlePath: string, items: Array<ConfigMetaItem>, customOptions: sass.Options): Promise<CompilerResult> {
+    compile(bundlePath: string, items: Array<ConfigMetaItem>, customOptions: sass.SyncOptions): Promise<CompilerResult> {
         this.changedVariables = [];
         this.userItems = items || [];
 
-        let compilerOptions: sass.Options = {
+        let compilerOptions: sass.SyncOptions = {
             file: bundlePath,
-            fiber: Fiber,
+            // fiber: Fiber,
             importer: this.setter.bind(this),
             functions: {
                 'collector($map)': this.collector.bind(this)
@@ -26,18 +25,16 @@ export class Compiler {
         }
 
         return new Promise((resolve, reject) => {
-            sass.render(compilerOptions, (error: sass.SassError, result: sass.Result) => {
+            try {
+                const result = sass.renderSync(compilerOptions);
                 this.importerCache = {};
-
-                if(error) {
-                    reject(error);
-                } else {
-                    resolve({
-                        result,
-                        changedVariables: this.changedVariables
-                    });
-                }
-            });
+                resolve({
+                    result,
+                    changedVariables: this.changedVariables
+                });
+            } catch(e) {
+                reject(e);
+            }
         });
     }
 
@@ -52,7 +49,7 @@ export class Compiler {
             .join('');
     }
 
-    setter(url: string, _: any, done: Function) {
+    setter(url: string, _: any): sass.ImporterReturnType {
         let content = this.importerCache[url];
 
         if(!content) {
@@ -60,10 +57,10 @@ export class Compiler {
             this.importerCache[url] = content;
         }
 
-        done({ contents: content });
+        return { contents: content };
     }
 
-    collector(map: sass.types.Map) {
+    collector(map: sass.types.Map): sass.types.ReturnValue {
         const path = (<sass.types.String>map.getValue(0)).getValue();
 
         for(let i = 1; i < map.getLength(); i++) {
@@ -81,8 +78,9 @@ export class Compiler {
                 for(let i = 0; i < value.getLength(); i++) {
                     listValues.push(value.getValue(i));
                 }
-
                 variableValue = listValues.join(value.getSeparator() ? ',' : ' ');
+            } else {
+                return sass.types.Null.NULL;
             }
 
             this.changedVariables.push({
