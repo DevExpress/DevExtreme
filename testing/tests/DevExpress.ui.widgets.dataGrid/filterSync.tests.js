@@ -734,6 +734,20 @@ QUnit.module('getCombinedFilter', {
             filterRowFilter
         ], 'combined filter');
     });
+
+    // T882759
+    QUnit.test('The combined filter should be correct when the "between" filter value is incomplete', function(assert) {
+        // act
+        this.setupDataGrid({
+            dataSource: [],
+            columns: ['field1', 'field2'],
+            filterSyncEnabled: true,
+            filterValue: [['field1', 'between', [undefined, 1]], 'and', ['field2', '=', 'test']]
+        });
+
+        // assert
+        assert.deepEqual(this.getCombinedFilter(true), ['field2', '=', 'test'], 'combined filter');
+    });
 });
 
 QUnit.module('Sync on initialization', {
