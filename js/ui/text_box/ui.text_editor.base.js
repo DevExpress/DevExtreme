@@ -227,7 +227,7 @@ const TextEditorBase = Editor.inherit({
         this._renderEnterKeyAction();
         this._renderEmptinessEvent();
         this.callBase();
-        this._compressInputContainer();
+        this._collapseInputContainer();
     },
 
     _renderInput: function() {
@@ -334,7 +334,7 @@ const TextEditorBase = Editor.inherit({
         });
     },
 
-    _compressInputContainer: function() {
+    _collapseInputContainer: function() {
         const $element = this.$element();
         const isIE11 = browser.msie && browser.version <= 11;
         if(isIE11 && $element.css('display') === 'block') {
