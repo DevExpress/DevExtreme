@@ -3,7 +3,7 @@ import ValidationEngine from '../../ui/validation_engine';
 import Component from '../preact-wrapper/component';
 import ButtonComponent from '../button.p';
 
-class Button extends Component {
+export default class Button extends Component {
     get _viewComponent() {
         return ButtonComponent;
     }
