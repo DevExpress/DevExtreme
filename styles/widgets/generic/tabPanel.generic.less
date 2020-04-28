@@ -1,80 +1,53 @@
 @import (once) "./multiView.generic.less";
 @import (once) "./tabs.generic.less";
 
-.dx-tabpanel {
-    .dx-tabpanel-tabs {
-        .dx-tabs-scrollable {
-            .dx-tabs-wrapper {
-                border-bottom: none;
-            }
-        }
+#inset(@color: @tabs-border-color) {
+    left: inset @GENERIC_TABS_BORDER_WIDTH 0 @color;
+    top: inset 0 @GENERIC_TABS_BORDER_WIDTH @color;
+    right: inset -@GENERIC_TABS_BORDER_WIDTH 0 @color;
+    bottom: inset 0 -@GENERIC_TABS_BORDER_WIDTH @color;
+}
 
-        .dx-tabs {
-            &:before {
-                content: "";
-                display: block;
-                position: absolute;
-                left: -1 * @GENERIC_TABS_BORDER_WIDTH;
-                right: -1 * @GENERIC_TABS_BORDER_WIDTH;
-                bottom: 0;
-                height: 0;
-                border-bottom: @GENERIC_TABS_BORDER;
-                z-index: 0;
-            }
-
-            .dx-tabs-nav-button:before,
-            .dx-tab.dx-state-hover:not(.dx-tab-selected):before {
-                content: "";
-                pointer-events: none;
-                position: absolute;
-                left: 0;
-                right: 0;
-                z-index: 2;
-                height: 0;
-                border-bottom: @GENERIC_TABS_BORDER;
-                bottom: 0;
-            }
-
-            .dx-tabs-nav-button:before {
-                left: -1 * @GENERIC_TABS_BORDER_WIDTH;
-                right: -1 * @GENERIC_TABS_BORDER_WIDTH;
-            }
-
-            .dx-tab {
-                &.dx-tab-selected:before {
-                    content: "";
-                    pointer-events: none;
-                    position: absolute;
-                    left: 0;
-                    right: 0;
-                    z-index: 2;
-                    height: 0;
-                    border-bottom: @GENERIC_TABS_BORDER_WIDTH solid @tabs-tab-selected-bg;
-                    bottom: 0;
-                }
-
-                &.dx-tab-selected:after {
-                    bottom: 0;
-                }
-            }
-        }
+.dx-tabs-nav-button-border-mixin(@bottom-shadow-color) {
+    .dx-tabs-nav-button-left {
+        box-shadow: #inset(@bottom-shadow-color)[bottom], #inset()[left], #inset()[top];
     }
 
+    .dx-tabs-nav-button-right {
+        box-shadow: #inset(@bottom-shadow-color)[bottom], #inset()[top], #inset()[right];
+    }
+}
+
+.dx-tabpanel {
     .dx-tabs {
         display: block;
-        border-bottom: none;
+        border: none;
         background-color: @tabs-tab-bg;
+        box-shadow: #inset()[bottom], #inset()[top], #inset()[right], #inset()[left];
 
         .dx-empty-collection& {
-            border-top: none;
+            border-bottom: @GENERIC_TABS_BORDER;
         }
     }
 
     .dx-tab {
         width: 140px;
+        box-shadow: #inset()[bottom], #inset()[top];
+        
+        &:first-of-type {
+            box-shadow: #inset()[bottom], #inset()[left], #inset()[top];
+        }
 
-        &:not(.dx-tab-selected):not(.dx-state-hover) {
-            background: none;
+        &.dx-tab-selected {
+            box-shadow: #inset()[top], #inset()[right], #inset()[left];
+
+            &:after {
+                border: none;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                left: 0;
+            }
         }
     }
 
@@ -83,40 +56,57 @@
     }
 
     &.dx-state-focused {
-        .dx-tabpanel-tabs {
-            .dx-tabs {
-                &:before {
-                    border-bottom: @GENERIC_TAB_FOCUS_BORDER;
-                }
+        .dx-tabs {
+            box-shadow: #inset(@tabs-focused-border-color)[bottom], #inset()[top], #inset()[right], #inset()[left];
+        }
 
-                .dx-tabs-nav-button:before,
-                .dx-tab.dx-state-hover:not(.dx-tab-selected):before {
-                    border-bottom: @GENERIC_TAB_FOCUS_BORDER;
-                }
+        .dx-tab:not(.dx-tab-selected) {
+            box-shadow: #inset()[top], #inset(@tabs-focused-border-color)[bottom];
 
-                .dx-tab {
-                    &.dx-tab-selected:after {
-                        border-top: @GENERIC_TAB_FOCUS_BORDER;
-                        border-right: @GENERIC_TAB_FOCUS_BORDER;
-                        border-left: @GENERIC_TAB_FOCUS_BORDER;
-                    }
+            &:first-of-type  {
+                box-shadow: #inset(@tabs-focused-border-color)[bottom], #inset()[left], #inset()[top];
+            }
+        }
 
-                    &.dx-state-focused:after,
-                    &.dx-state-hove:after {
-                        border-bottom: none;
-                    }
+        .dx-tab-selected {
+            box-shadow: #inset(@tabs-focused-border-color)[top], #inset(@tabs-focused-border-color)[right], #inset(@tabs-focused-border-color)[left];
+        }
+
+        .dx-tabs-scrollable {    
+            .dx-tab:not(.dx-tab-selected) {
+                &:first-of-type {
+                    box-shadow: #inset(@tabs-focused-border-color)[bottom], #inset()[top];
                 }
             }
         }
 
+        .dx-tabs-nav-button-border-mixin(@tabs-focused-border-color);
+        
         .dx-multiview-wrapper {
             border-color: @tabs-focused-border-color;
         }
     }
 
+    .dx-tabs-scrollable {
+        margin-top: 0;
+        margin-bottom: 0;
+        height: 100%;
+
+        .dx-tabs-wrapper {
+            border: none;
+        }
+
+        .dx-tab:not(.dx-tab-selected) {
+            &:first-of-type {
+                box-shadow: #inset()[bottom], #inset()[top];
+            }
+        }
+    }
+
+    .dx-tabs-nav-button-border-mixin(@tabs-border-color);
+
     .dx-multiview-wrapper {
-        border-left: @GENERIC_TABS_BORDER;
-        border-right: @GENERIC_TABS_BORDER;
-        border-bottom: @GENERIC_TABS_BORDER;
+        border: @GENERIC_TABS_BORDER;
+        border-top: none;
     }
 }
