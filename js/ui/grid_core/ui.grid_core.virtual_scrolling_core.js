@@ -483,7 +483,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                     if(that._dataSource.hasKnownLastPage()) {
                         newPageIndex = pageCount - 1;
                         const lastPageSize = totalItemsCount % pageSize;
-                        if(newPageIndex > 0 && lastPageSize > 0 && lastPageSize < pageSize / 2) {
+                        if(newPageIndex > 0 && lastPageSize > 0 && lastPageSize < that._viewportSize) {
                             newPageIndex--;
                         }
                     } else {

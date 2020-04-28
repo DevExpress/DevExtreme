@@ -3450,6 +3450,25 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
         assert.strictEqual(virtualItemsCount.end, 0);
     });
 
+    // T866890
+    QUnit.test('virtual items on end when last page size less than viewport size', function(assert) {
+        const dataController = this.dataController;
+        dataController.store().insert({ id: 1001 });
+        dataController.store().insert({ id: 1002 });
+        dataController.store().insert({ id: 1003 });
+        dataController.store().insert({ id: 1004 });
+        dataController.refresh();
+
+        dataController.viewportSize(3);
+
+        // act
+        dataController.setViewportItemIndex(1002);
+
+        // assert
+        assert.strictEqual(this.dataController.pageIndex(), 50);
+        assert.strictEqual(dataController.items().length, 24, 'items');
+    });
+
     // B233350
     QUnit.test('virtual items on end when visibleRowsCount < pageSize and last page size greater than half page size', function(assert) {
         const dataController = this.dataController;
