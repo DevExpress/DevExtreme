@@ -186,9 +186,9 @@ module.exports = {
         { regex: /@mixin dx-toolbar-item-padding\(\$MATERIAL_TOOLBAR_ITEM_SPACING\),/, replacement: '@include dx-toolbar-item-padding($MATERIAL_TOOLBAR_ITEM_SPACING);' },
         { regex: /.dx-toolbar-item-padding\(\$MATERIAL_MOBILE_TOOLBAR_ITEM_SPACING\),/, replacement: '@include dx-toolbar-item-padding($MATERIAL_MOBILE_TOOLBAR_ITEM_SPACING);' },
         { regex: /(-bg|-color|: 0|MATERIAL_LIST_ITEM_HEIGHT|MATERIAL_LIST_ITEM_HORIZONTAL_PADDING|4px|2 0|50%),/g, replacement: '$1;' },
-        { regex: /@mixin dx-icon-sizing\(\$MATERIAL_BUTTON_ICON_SIZE\),/, replacement: '@include dx-icon-sizing($MATERIAL_BUTTON_ICON_SIZE);' },
+        { regex: /(@mixin\s|\.)dx-icon-sizing\(\$MATERIAL_BUTTON_ICON_SIZE\),/g, replacement: '@include dx-icon-sizing($MATERIAL_BUTTON_ICON_SIZE);' },
         { regex: /\.dx-button-onlyicon-sizing\(\),/g, replacement: '@include dx-button-onlyicon-sizing();' },
-        { regex: /\.dx-icon-margin\(6px\),/, replacement: '@include dx-icon-margin(6px);' },
+        { regex: /\.dx-icon-margin\(6px\),/, replacement: '@include dx-icon-margin(6px);' }
     ],
     'popup': [
         { import: '../../base/icons', type: 'index' },
