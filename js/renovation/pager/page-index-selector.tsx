@@ -1,16 +1,50 @@
 import { Component, ComponentBindings, JSXComponent, Event, OneWay, Fragment } from 'devextreme-generator/component_declaration/common';
-import NavigationButton from './navigation-button';
 import Pages from './pages';
+import LightButton from './light-button';
 
-export const viewFunction = ({ renderNavButtons, props }: PageIndexSelector) => {
-    const { rtlEnabled } = props;
+const PAGER_NAVIGATE_BUTTON = 'dx-navigate-button';
+const PAGER_PREV_BUTTON_CLASS = 'dx-prev-button';
+const PAGER_NEXT_BUTTON_CLASS = 'dx-next-button';
+export const PAGER_BUTTON_DISABLE_CLASS = 'dx-button-disable';
+const nextButtonClassName = `${PAGER_NAVIGATE_BUTTON} ${PAGER_NEXT_BUTTON_CLASS}`;
+const prevButtonClassName = `${PAGER_NAVIGATE_BUTTON} ${PAGER_PREV_BUTTON_CLASS}`;
+const nextButtonDisabledClassName = `${PAGER_BUTTON_DISABLE_CLASS} ${PAGER_NAVIGATE_BUTTON} ${PAGER_NEXT_BUTTON_CLASS}`;
+const prevButtonDisabledClassName = `${PAGER_BUTTON_DISABLE_CLASS} ${PAGER_NAVIGATE_BUTTON} ${PAGER_PREV_BUTTON_CLASS}`;
+export const viewFunction = ({
+    renderNavButtons,
+    prevClassName,
+    navigateToPrevPage,
+    nextClassName,
+    navigateToNextPage,
+    props: {
+        hasKnownLastPage, isLargeDisplayMode, maxPagesCount,
+        pageCount, pageIndex, pageIndexChange: pageIndexChanged, pagesCountText,
+        rtlEnabled, totalCount,
+    } }: PageIndexSelector) => {
     return (
         <Fragment>
             {renderNavButtons &&
-            <NavigationButton rtlEnabled={rtlEnabled} direction={'prev'} />}
-            <Pages {...props}/>
+                <LightButton
+                    className={prevClassName}
+                    label={'Previous page'}
+                    onClick={navigateToPrevPage}
+                />}
+            <Pages
+                isLargeDisplayMode={isLargeDisplayMode}
+                maxPagesCount={maxPagesCount}
+                pageCount={pageCount}
+                pageIndex={pageIndex}
+                pageIndexChange={pageIndexChanged}
+                pagesCountText={pagesCountText}
+                rtlEnabled={rtlEnabled}
+                totalCount={totalCount}
+            />
             {renderNavButtons &&
-            <NavigationButton rtlEnabled={rtlEnabled} direction={'next'} />}
+                <LightButton
+                    className={nextClassName}
+                    label={'Next page'}
+                    onClick={navigateToNextPage}
+                />}
         </Fragment>);
 };
 
@@ -21,11 +55,11 @@ export class PageIndexSelectorProps {
     @OneWay() maxPagesCount?: number = 10;
     @OneWay() pageCount?: number = 10;
     @OneWay() pageIndex?: number = 0;
-    @Event() pageIndexChanged? : (value: number) => void; // commonUtils.noop
+    @Event() pageIndexChange?: (value: number) => void; // commonUtils.noop
     // TODO messageLocalization.getFormatter('dxPager-pagesCountText');
     @OneWay() pagesCountText?: string = 'Of';
     @OneWay() rtlEnabled?: boolean = false;
-    @OneWay() showNavigationButtons? : boolean = false;
+    @OneWay() showNavigationButtons?: boolean = false;
     @OneWay() totalCount?: number = 0;
 }
 
@@ -34,15 +68,47 @@ export class PageIndexSelectorProps {
     defaultOptionRules: null,
     view: viewFunction,
 })
+
 export default class PageIndexSelector extends JSXComponent<PageIndexSelectorProps> {
+    get nextClassName() {
+        const direction = this.getNextDirection();
+        const canNavigate = this.canNavigateTo(direction);
+        return canNavigate ? nextButtonClassName : nextButtonDisabledClassName;
+    }
+    get prevClassName() {
+        const direction = this.getPrevDirection();
+        const canNavigate = this.canNavigateTo(direction);
+        return canNavigate ? prevButtonClassName : prevButtonDisabledClassName;
+    }
     get renderNavButtons() {
         const
             { isLargeDisplayMode, showNavigationButtons } = this.props;
         return !isLargeDisplayMode || showNavigationButtons;
     }
-    getClick() {
-        // const {rtlEnabled} = this.props;
-        // isNext = (!rtlEnabled && direction === "prev") || (rtlEnabled && direction === "next");
+    getNextDirection() {
+        return !this.props.rtlEnabled ? 'next' : 'prev';
     }
-
+    getPrevDirection() {
+        return !this.props.rtlEnabled ? 'prev' : 'next';
+    }
+    navigateToNextPage() {
+        this.navigateToPage(this.getNextDirection());
+    }
+    navigateToPrevPage() {
+        this.navigateToPage(this.getPrevDirection());
+    }
+    private canNavigateTo(direction: 'next' | 'prev') {
+        const isNextDirection = direction === 'next';
+        const { pageCount, pageIndex } = this.props as Required<PageIndexSelectorProps>;
+        return isNextDirection ? pageIndex < pageCount - 1 : pageIndex > 0;
+    }
+    private getIncrement(direction: 'next' | 'prev') {
+        return direction === 'next' ? +1 : -1;
+    }
+    private navigateToPage(direction: 'next' | 'prev') {
+        const canNavigate = this.canNavigateTo(direction);
+        if (canNavigate) {
+            this.props.pageIndexChange!(this.props.pageIndex! + this.getIncrement(direction));
+        }
+    }
 }

@@ -5,12 +5,12 @@ import PageSizeSelector from './page-size-selector';
 
 // import { getFormatter } from '../../localization/message';
 
-export const PAGER_CLASS = 'dx-pager';
+export const PAGER_CLASS = 'dx-pager dx-datagrid-pager';
 export const PAGER_PAGES_CLASS = 'dx-pages';
 export const viewFunction = ({
-    pageSizeChangeHandler,
+    pageSizeChanged,
     isLargeDisplayMode,
-    pageIndexChangeHandler,
+    pageIndexChange,
     props: { infoTextMessageTemplate, maxPagesCount, pageIndex,
              pageCount, pageSize, pageSizes,
              pagesCountText, rtlEnabled,
@@ -20,7 +20,7 @@ export const viewFunction = ({
         <PageSizeSelector
             isLargeDisplayMode={isLargeDisplayMode}
             pageSize={pageSize}
-            pageSizeChanged={pageSizeChangeHandler}
+            pageSizeChanged={pageSizeChanged}
             pageSizes={pageSizes}
         />
         <div className={PAGER_PAGES_CLASS}>
@@ -36,7 +36,7 @@ export const viewFunction = ({
                 maxPagesCount={maxPagesCount}
                 pageCount={pageCount}
                 pageIndex={pageIndex}
-                pageIndexChanged={pageIndexChangeHandler}
+                pageIndexChange={pageIndexChange}
                 pagesCountText={pagesCountText}
                 rtlEnabled={rtlEnabled}
                 showNavigationButtons={showNavigationButtons}
@@ -76,18 +76,11 @@ export class PagerProps {
     view: viewFunction,
 })
 export default class Pager extends JSXComponent<PagerProps> {
-    // get pageSizeChangeHanler => this.pageSi
     get isLargeDisplayMode() { return !this.props.lightModeEnabled; }
-    get pageIndexChangeHandler() {
-        return this.pageIndexChanged;
-    }
-    private pageIndexChanged(newPageIndex: number) {
+    pageIndexChanged(newPageIndex: number) {
         this.props.pageIndex = newPageIndex;
     }
-    private pageSizeChanged(newPageSize: number) {
+    pageSizeChanged(newPageSize: number) {
         this.props.pageSize = newPageSize;
-    }
-    get pageSizeChangeHandler() {
-        return this.pageSizeChanged;
     }
 }
