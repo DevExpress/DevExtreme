@@ -117,7 +117,10 @@ export class WidgetProps {
     @OneWay() name?: string = '';
     @Event() onActive?: (e: any) => any;
     @Event() onClick?: (e: any) => void;
-    @Event() onContentReady?: (e: any) => any = (() => {});
+    @Event({
+        actionConfig: { excludeValidators: ['disabled', 'readOnly'] },
+    })
+    onContentReady?: (e: any) => any = (() => {});
     @Event() onDimensionChanged?: () => any;
     @Event() onInactive?: (e: any) => any;
     @Event() onKeyboardHandled?: (args: any) => any | undefined;
