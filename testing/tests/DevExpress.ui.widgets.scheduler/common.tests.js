@@ -4523,14 +4523,15 @@ QUnit.module('Initialization', {
                 resources: [{
                     fieldExpr: 'any',
                     dataSource: [
-                        { text: 'Group_2', id: 1 },
-                        { text: 'Group_2', id: 2 }
+                        { text: 'Group_1', id: 1 },
+                        { text: 'Group_2', id: 2 },
+                        { text: 'Group_3', id: 3 }
                     ],
                 }]
             });
 
-            const $groupHeaders = scheduler.workSpace.groups.getGroupHeaders(0);
-            $.each($groupHeaders, (index, groupHeader) => {
+            const $groupHeaders = $(scheduler.workSpace.groups.getGroupHeaders(0));
+            $groupHeaders.each((index, groupHeader) => {
                 const groupHeaderHeight = $(groupHeader).outerHeight();
                 const groupingCellHeight = scheduler.workSpace.getCellHeight(index, 0);
                 assert.equal(groupHeaderHeight, groupingCellHeight, `Group header ${index} has min height`);
@@ -4538,7 +4539,7 @@ QUnit.module('Initialization', {
         });
     });
 
-    ['day', 'week', 'month', 'timelineDay', 'timelineWeek', 'timelineMonth'].forEach(viewName => {
+    ['day', 'week', 'month'].forEach(viewName => {
         [undefined, 2, 3].forEach(intervalCount => {
             [undefined, 200, 300, 800].forEach(height => {
                 QUnit.test(`Workspace vertical scroll should be equal to the dataTable height if view: '${viewName}', view.intervalCount: ${intervalCount}, height: ${height}`, function(assert) {
@@ -4571,7 +4572,8 @@ QUnit.module('Initialization', {
                             fieldExpr: 'any',
                             dataSource: [
                                 { text: 'Group_1', id: 1 },
-                                { text: 'Group_2', id: 2 }
+                                { text: 'Group_2', id: 2 },
+                                { text: 'Group_3', id: 2 }
                             ],
                         }]
                     });
