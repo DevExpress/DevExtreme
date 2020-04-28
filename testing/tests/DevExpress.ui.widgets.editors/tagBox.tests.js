@@ -3203,16 +3203,21 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         });
         const instance = $element.dxTagBox('instance');
         const $input = $element.find(`.${TEXTBOX_CLASS}`);
+        const keyboard = keyboardMock($input);
 
-        keyboardMock($input)
-            .type('aa');
-        $(instance.content()).find(`.${LIST_CKECKBOX_CLASS}`).eq(0).trigger('dxclick');
-        $(instance.content()).parent().find(`.${POPUP_DONE_BUTTON_CLASS}`).trigger('dxclick');
+        instance.open();
+        const $popupWrapper = $(instance.content()).parents(`.${TAGBOX_POPUP_WRAPPER_CLASS}`);
 
-        keyboardMock($input)
-            .type('aa');
-        $(`.${LIST_CKECKBOX_CLASS}`).eq(1).trigger('dxclick');
-        $(instance.content()).parent().find(`.${POPUP_DONE_BUTTON_CLASS}`).trigger('dxclick');
+        keyboard.type('aa');
+        $popupWrapper.find(`.${LIST_CKECKBOX_CLASS}`).eq(0).trigger('dxclick');
+        $popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`).trigger('dxclick');
+
+        instance.close();
+        instance.open();
+
+        keyboard.type('aa');
+        $popupWrapper.find(`.${LIST_CKECKBOX_CLASS}`).eq(1).trigger('dxclick');
+        $popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`).trigger('dxclick');
 
         assert.strictEqual(instance.option('selectedItems').length, 2);
     });
