@@ -97,17 +97,13 @@ export default class PreactWrapper extends DOMComponent {
     }
 
     _optionChanged(option) {
-        if(option) {
-            super._optionChanged(option);
-        }
-        this._invalidate();
-    }
-
-    _changeAction(option) {
         const { name } = option;
         if(this._getActionsMap()[name]) {
             this._addAction(name, this._getActionsMap()[name]);
+        } else if(name === 'onOptionChanged') {
+            super._optionChanged(option);
         }
+        this._invalidate();
     }
 
     _addAction(name, config) {

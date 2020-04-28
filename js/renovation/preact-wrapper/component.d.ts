@@ -19,8 +19,6 @@ export default class PreactWrapper extends DOMComponent {
 
     _optionChanged(option: any): any;
 
-    _changeAction(option: any): void;
-
     _addAction(name: string, config:any): any;
 
     _stateChange(name: string): (value: any) => void;
