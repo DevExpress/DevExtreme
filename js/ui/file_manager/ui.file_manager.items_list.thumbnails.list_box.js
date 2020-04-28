@@ -377,7 +377,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
     }
 
     getItemElementByItem(item) {
-        return this._findItemElementByItem(item);
+        return this._editStrategy.getItemElement(item);
     }
 
     getItemByItemElement(itemElement) {

@@ -275,4 +275,25 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
         assert.strictEqual($(spy.args[1][0].element).get(0), this.$element.get(0), 'element is correct');
     });
 
+    test('Select all - parent directory ignored', function(assert) {
+        const selectionSpy = sinon.spy();
+
+        this.fileManager.option({
+            currentPath: 'Folder 1',
+            onSelectionChanged: selectionSpy
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getThumbnailsViewPort().trigger($.Event('keydown', { key: 'A', ctrlKey: true }));
+        this.clock.tick(400);
+
+        assert.strictEqual(selectionSpy.callCount, 1, 'event raised');
+        assert.deepEqual(selectionSpy.args[0][0].selectedItems.filter(item => item.name === '..').length, 0, 'selection valid');
+        assert.deepEqual(selectionSpy.args[0][0].selectedItemKeys.filter(item => Array.isArray(item)).length, 0, 'selection keys valid');
+        assert.deepEqual(selectionSpy.args[0][0].currentSelectedItemKeys.filter(item => Array.isArray(item)).length, 0, 'parent folder is not selected');
+        assert.deepEqual(selectionSpy.args[0][0].currentDeselectedItemKeys, [], 'no item deselected');
+        assert.strictEqual(this.fileManager.getSelectedItems().filter(item => item.name === '..').length, 0, 'parent folder is not selected');
+        assert.notOk(this.wrapper.isThumbnailsItemSelected('..'), 'parent folder is not visually highlited');
+    });
+
 });
