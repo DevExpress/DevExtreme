@@ -1,14 +1,14 @@
 /* global console */
 /* eslint no-console: 0 */
 
-const commands = require('./commands');
-const themes = require('./themes');
+import commands from './commands';
+import themes from './themes';
 
 const DEFAULT_OUT_COLOR_SCHEME = 'custom-scheme';
 
-const extname = filename => filename.substring(filename.lastIndexOf('.'));
+const extname = (filename: string): string => filename.substring(filename.lastIndexOf('.'));
 
-const getBootstrapConfig = fileName => {
+const getBootstrapConfig = (fileName: string): ConfigSettings => {
     const extension = extname(fileName);
     let bootstrap = false;
     let version = 0;
@@ -24,7 +24,7 @@ const getBootstrapConfig = fileName => {
     return { isBootstrap: bootstrap, bootstrapVersion: version };
 };
 
-const getOutParameters = (command, themeName, config) => {
+const getOutParameters = (command: string, themeName: string, config: ConfigSettings): ConfigSettings => {
     let outputFile = config.outputFile || '';
     let outColorScheme = config.outputColorScheme || '';
     let fileFormat = config.outputFormat || extname(outputFile).substr(1);
@@ -66,7 +66,7 @@ const getOutParameters = (command, themeName, config) => {
     };
 };
 
-const getThemeAndColorScheme = config => {
+const getThemeAndColorScheme = (config: ConfigSettings): ConfigSettings => {
     let themeName = 'generic';
     let colorScheme = 'light';
     let foundTheme = null;
@@ -83,7 +83,7 @@ const getThemeAndColorScheme = config => {
             console.log(`The base theme with name ${config.baseTheme} does not exist.`);
         }
     } else if(config.themeId) {
-        foundTheme = themes.find(t => t.themeId === parseInt(config.themeId));
+        foundTheme = themes.find(t => t.themeId === parseInt(config.themeId.toString()));
         if(!foundTheme) {
             console.log(`The theme with ID ${config.themeId} does not exist.`);
         }
@@ -100,7 +100,7 @@ const getThemeAndColorScheme = config => {
     };
 };
 
-const replaceItemKeys = (config, searchValue, replaceValue) => {
+const replaceItemKeys = (config: ConfigSettings, searchValue: RegExp, replaceValue: string): void => {
     if(config.items && config.items.length) {
         config.items.forEach(item => {
             item.key = item.key.replace(searchValue, replaceValue);
@@ -108,13 +108,13 @@ const replaceItemKeys = (config, searchValue, replaceValue) => {
     }
 };
 
-const convertTreeListConstants = config => replaceItemKeys(config, /@treelist/, '@datagrid');
+const convertTreeListConstants = (config: ConfigSettings): void => replaceItemKeys(config, /@treelist/, '@datagrid');
 
-const convertItemKeysToSassFormat = config => replaceItemKeys(config, /@/, '$');
+const convertItemKeysToSassFormat = (config: ConfigSettings): void => replaceItemKeys(config, /@/, '$');
 
-const normalizePath = path => path + (path[path.length - 1] !== '/' ? '/' : '');
+const normalizePath = (path: string): string => path + (path[path.length - 1] !== '/' ? '/' : '');
 
-const parseConfig = config => {
+const parseConfig = (config: ConfigSettings): void => {
     const command = config.command;
     const metadataFilePath = config.inputFile || '';
     const themeInfo = getThemeAndColorScheme(config);
@@ -153,6 +153,6 @@ const parseConfig = config => {
     });
 };
 
-module.exports = parseConfig;
+export default parseConfig;
 
 

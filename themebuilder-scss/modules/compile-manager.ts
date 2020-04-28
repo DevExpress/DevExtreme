@@ -1,18 +1,16 @@
-const Compiler = require('./compiler');
-const PreCompiler = require('./pre-compiler');
-const resolveBundle = require('./bundle-resolver');
+import { Compiler } from './compiler';
+import { PreCompiler } from './pre-compiler';
+import resolveBundle from './bundle-resolver';
 
-class CompileManager {
-    constructor() {
-        this.compiler = new Compiler();
-    }
+export class CompileManager {
+    compiler = new Compiler();
 
-    async compile(config) {
+    async compile(config: ConfigSettings): Promise<any> {
         const bundle = resolveBundle(config.themeName, config.colorScheme);
         const items = config.items;
 
         try {
-            const data = await this.compiler.compile(bundle, items);
+            const data = await this.compiler.compile(bundle, items, null);
             let css = data.result.css;
 
             if(config.makeSwatch) {
@@ -31,5 +29,3 @@ class CompileManager {
         }
     }
 }
-
-module.exports = CompileManager;

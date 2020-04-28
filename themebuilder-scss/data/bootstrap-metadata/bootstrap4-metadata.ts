@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     'base-font-family': '$font-family-sans-serif',
     'base-accent': '$primary',
     'base-bg': '$body-bg',

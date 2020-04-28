@@ -1,4 +1,6 @@
-module.exports = {
+import type CleanCSS from 'clean-css';
+
+export const cleanCssOptions: CleanCSS.Options = {
     rebase: false,
     format: {
         breaks: {
@@ -21,7 +23,14 @@ module.exports = {
             beforeValue: true
         },
         wrapAt: false,
-        semicolonAfterLastProperty: true
     },
-    level: 2
+    level: {
+        1: {
+            all: false,
+            semicolonAfterLastProperty: true
+        },
+        2: {
+            all: true
+        }
+    }
 };

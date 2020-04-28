@@ -1,4 +1,11 @@
-module.exports = [
+interface Theme {
+    themeId: Number;
+    name: string;
+    colorScheme: string;
+    text: string;
+    group: string;
+}
+const themes: Array<Theme> = [
     { themeId: 1, name: 'generic', colorScheme: 'light', text: 'Light', group: 'Generic' },
     { themeId: 2, name: 'generic', colorScheme: 'dark', text: 'Dark', group: 'Generic' },
     { themeId: 13, name: 'generic', colorScheme: 'carmine', text: 'Carmine', group: 'Generic' },
@@ -37,3 +44,5 @@ module.exports = [
 
     { themeId: 3, name: 'ios7', colorScheme: 'default', text: 'iOS', group: 'Mobile' }
 ];
+
+export default themes;

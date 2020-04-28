@@ -1,34 +1,32 @@
 
 const path = require('path');
 
-class MetadataGenerator {
-    constructor() {
-        this.metadata = [];
-    }
+export class MetadataGenerator {
+    metadata: Array<MetaItem> = [];
 
-    capitalize(key) {
+    capitalize(key: string): string {
         return key.charAt(0).toUpperCase() + key.slice(1);
     }
 
-    clean() {
+    clean(): void {
         this.metadata = [];
     }
 
-    getMetadata() {
-        return { 'metadata': this.metadata };
+    getMetadata(): Metadata {
+        return { metadata: this.metadata };
     }
 
-    executor(str, regex, handler) {
-        let matches;
+    executor(str: string, regex: RegExp, handler: Function) {
+        let matches: RegExpMatchArray;
         while((matches = regex.exec(str)) !== null) {
             handler(matches);
         }
     }
 
-    parseComments(comments) {
-        const metaItem = {};
+    parseComments(comments: string): MetaItem {
+        const metaItem: MetaItem = {};
 
-        this.executor(comments, /\$(type|name|typeValues)\s(.+)/g, (matches) => {
+        this.executor(comments, /\$(type|name|typeValues)\s(.+)/g, (matches: RegExpMatchArray) => {
             const key = this.capitalize(matches[1]);
             metaItem[key] = matches[2].trim();
         });
@@ -36,10 +34,10 @@ class MetadataGenerator {
         return metaItem;
     }
 
-    getMetaItems(scss) {
-        const metaItems = [];
+    getMetaItems(scss: string): Array<MetaItem> {
+        const metaItems: Array<MetaItem> = [];
 
-        this.executor(scss, /\/\*\*[\n\r]([\s\S]*?)\*\/\s*[\n\r]*([-$a-z_0-9]+):/gim, (matches) => {
+        this.executor(scss, /\/\*\*[\n\r]([\s\S]*?)\*\/\s*[\n\r]*([-$a-z_0-9]+):/gim, (matches: RegExpMatchArray) => {
             const key = matches[2];
 
             if(metaItems.some(item => item.Key === key)) return;
@@ -54,7 +52,7 @@ class MetadataGenerator {
         return metaItems;
     }
 
-    normalizePath(cwd, filePath) {
+    normalizePath(cwd: string, filePath: string): string {
         return path.relative(path.join(cwd, 'scss'), filePath)
             .replace(/\\/g, '/')
             .replace(/\.scss/, '')
@@ -62,7 +60,7 @@ class MetadataGenerator {
             .replace(/^/, 'tb/');
     }
 
-    getMapFromMeta(metaItems, path) {
+    getMapFromMeta(metaItems: Array<MetaItem>, path: string): string {
         let result = `"path": "${path}",\n`;
         metaItems.forEach(item => {
             result += `"${item.Key}": ${item.Key},\n`;
@@ -70,7 +68,7 @@ class MetadataGenerator {
         return `(\n${result})`;
     }
 
-    collectMetadata(cwd, filePath, content) {
+    collectMetadata(cwd: string, filePath: string, content: string): string {
         const path = this.normalizePath(cwd, filePath);
         const metaItems = this.getMetaItems(content);
 
@@ -87,5 +85,3 @@ class MetadataGenerator {
         return content;
     }
 }
-
-module.exports = MetadataGenerator;

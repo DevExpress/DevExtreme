@@ -1,18 +1,18 @@
-const sass = require('sass');
-const Fiber = require('fibers');
+import * as sass from 'sass';
+import Fiber from 'fibers';
+import { metadata } from '../data/metadata/dx-theme-builder-metadata';
 
-class Compiler {
-    constructor() {
-        this.changedVariables = [];
-        this.importerCache = {};
-        this.meta = require('../data/metadata/dx-theme-builder-metadata')['metadata'];
-    }
+export class Compiler {
+    changedVariables: Array<MetaItem> = [];
+    importerCache: { [key: string]: string };
+    meta: Array<MetaItem> = metadata;
+    userItems: Array<ConfigMetaItem> = [];
 
-    compile(bundlePath, items, customOptions) {
+    compile(bundlePath: string, items: Array<ConfigMetaItem>, customOptions: sass.Options): Promise<CompilerResult> {
         this.changedVariables = [];
         this.userItems = items || [];
 
-        let compilerOptions = {
+        let compilerOptions: sass.Options = {
             file: bundlePath,
             fiber: Fiber,
             importer: this.setter.bind(this),
@@ -26,7 +26,7 @@ class Compiler {
         }
 
         return new Promise((resolve, reject) => {
-            sass.render(compilerOptions, (error, result) => {
+            sass.render(compilerOptions, (error: sass.SassError, result: sass.Result) => {
                 this.importerCache = {};
 
                 if(error) {
@@ -41,8 +41,8 @@ class Compiler {
         });
     }
 
-    getMatchingUserItemsAsString(url) {
-        const metaKeysForUrl = this.meta
+    getMatchingUserItemsAsString(url: string): string {
+        const metaKeysForUrl: Array<string> = this.meta
             .filter(item => item.Path === url)
             .map(item => item.Key);
 
@@ -52,7 +52,7 @@ class Compiler {
             .join('');
     }
 
-    setter(url, _, done) {
+    setter(url: string, _: any, done: Function) {
         let content = this.importerCache[url];
 
         if(!content) {
@@ -63,8 +63,8 @@ class Compiler {
         done({ contents: content });
     }
 
-    collector(map) {
-        const path = map.getValue(0).getValue();
+    collector(map: sass.types.Map) {
+        const path = (<sass.types.String>map.getValue(0)).getValue();
 
         for(let i = 1; i < map.getLength(); i++) {
             const value = map.getValue(i);
@@ -86,7 +86,7 @@ class Compiler {
             }
 
             this.changedVariables.push({
-                Key: map.getKey(i).getValue(),
+                Key: (<sass.types.String>map.getKey(i)).getValue(),
                 Value: variableValue,
                 Path: path
             });
@@ -95,4 +95,3 @@ class Compiler {
     }
 }
 
-module.exports = Compiler;

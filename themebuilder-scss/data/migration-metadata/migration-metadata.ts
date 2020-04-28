@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     generic: [
         '@radiogroup-checked-bg',
         '@radiogroup-border-color',
