@@ -11,6 +11,7 @@ const registerEvent = require('./event_registrator');
 const eventUtils = require('../utils');
 const pointerEvents = require('../pointer');
 const wheelEvent = require('./wheel');
+const windowUtils = require('../../core/utils/window');
 
 const MANAGER_EVENT = 'dxEventManager';
 const EMITTER_DATA = 'dxEmitter';
@@ -32,6 +33,10 @@ const EventManager = Class.inherit({
             eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(pointerEvents.move, MANAGER_EVENT), this._pointerMoveHandler.bind(this));
             eventsEngine.subscribeGlobal(document, eventUtils.addNamespace([pointerEvents.up, pointerEvents.cancel].join(' '), MANAGER_EVENT), this._pointerUpHandler.bind(this));
             eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(wheelEvent.name, MANAGER_EVENT), this._mouseWheelHandler.bind(this));
+
+            if(windowUtils.hasWindow()) {
+                eventsEngine.subscribeGlobal(windowUtils.getWindow(), 'blur', this._windowBlurHandler.bind(this));
+            }
         }.bind(this));
     },
 
@@ -170,6 +175,10 @@ const EventManager = Class.inherit({
 
     _pointerUpHandler: function(e) {
         this._updateEmitters(e);
+    },
+
+    _windowBlurHandler: function(e) {
+        this._cleanEmitters(e);
     },
 
     _mouseWheelHandler: function(e) {
