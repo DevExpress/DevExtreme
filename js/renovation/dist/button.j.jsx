@@ -50,6 +50,7 @@ export default class Button extends Component {
         switch(name) {
             case 'useSubmitBehavior':
                 value === true && this.option('onSubmit', this._getSubmitAction());
+                option = undefined;
                 break;
         }
 
