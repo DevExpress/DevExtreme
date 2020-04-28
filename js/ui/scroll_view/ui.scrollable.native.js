@@ -157,6 +157,20 @@ const NativeStrategy = Class.inherit({
         this._pushBackFromBoundary();
     },
 
+    handleWindowBlur: function() {
+        const $container = this._$container;
+        const prevOverflowX = $container.css('overflowX');
+        const prevOverflowY = $container.css('overflowY');
+
+        $container.css('overflowX', 'hidden');
+        $container.css('overflowY', 'hidden');
+
+        setTimeout(function() {
+            $container.css('overflowX', prevOverflowX);
+            $container.css('overflowY', prevOverflowY);
+        }, 1);
+    },
+
     _pushBackFromBoundary: function() {
         const pushBackValue = this.option('pushBackValue');
         if(!pushBackValue || this._disablePushBack) {

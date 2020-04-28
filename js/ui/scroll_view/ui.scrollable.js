@@ -219,6 +219,10 @@ const Scrollable = DOMComponent.inherit({
 
         eventsEngine.off(this._$container, '.' + SCROLLABLE);
         eventsEngine.on(this._$container, eventUtils.addNamespace('scroll', SCROLLABLE), strategy.handleScroll.bind(strategy));
+
+        if(windowUtils.hasWindow()) {
+            eventsEngine.on(windowUtils.getWindow(), 'blur', strategy.handleWindowBlur.bind(strategy));
+        }
     },
 
     _validate: function(e) {

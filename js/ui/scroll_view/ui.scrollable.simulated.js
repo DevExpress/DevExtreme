@@ -26,6 +26,7 @@ const SCROLLABLE_SIMULATED_CLASS = 'dx-scrollable-simulated';
 const SCROLLABLE_SCROLLBARS_HIDDEN = 'dx-scrollable-scrollbars-hidden';
 const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = 'dx-scrollable-scrollbars-alwaysvisible';
 const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
+const SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = 'dx-scrollable-scrollbar-active';
 
 const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
@@ -734,6 +735,13 @@ const SimulatedStrategy = Class.inherit({
 
     handleScroll: function() {
         this._scrollAction();
+    },
+
+    handleWindowBlur: function() {
+        const $scrollbar = this._$container.find(`.${SCROLLABLE_SCROLLBAR_CLASS}`);
+        if($scrollbar.hasClass(SCROLLABLE_SCROLLBAR_ACTIVE_CLASS)) {
+            this._$container.trigger('dxpointerup');
+        }
     },
 
     _attachKeyboardHandler: function() {
