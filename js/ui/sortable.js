@@ -215,12 +215,14 @@ const Sortable = Draggable.inherit({
         const isVertical = this._isVerticalOrientation();
         const axisName = isVertical ? 'top' : 'left';
         const cursorPosition = isVertical ? e.pageY : e.pageX;
+        const rtlEnabled = this.option('rtlEnabled');
+
         let itemPoint;
 
         for(let i = itemPoints.length - 1; i >= 0; i--) {
             const centerPosition = itemPoints[i + 1] && (itemPoints[i][axisName] + itemPoints[i + 1][axisName]) / 2;
 
-            if(centerPosition > cursorPosition || centerPosition === undefined) {
+            if((!isVertical && rtlEnabled ? cursorPosition > centerPosition : centerPosition > cursorPosition) || centerPosition === undefined) {
                 itemPoint = itemPoints[i];
             } else {
                 break;
@@ -287,39 +289,40 @@ const Sortable = Draggable.inherit({
 
     _getItemPoints: function() {
         const that = this;
-        let result;
+        let result = [];
+        let $item;
+        let offset;
+        let itemWidth;
+        const rtlEnabled = that.option('rtlEnabled');
         const isVertical = that._isVerticalOrientation();
         const itemElements = that._getItems();
         const visibleItemElements = itemElements.filter(isElementVisible);
+        const visibleItemCount = visibleItemElements.length;
         const $draggableItem = this._getDraggableElement();
         const draggableVisibleIndex = visibleItemElements.indexOf($draggableItem.get(0));
 
-        result = visibleItemElements
-            .map((item, visibleIndex) => {
-                const offset = $(item).offset();
+        if(visibleItemCount) {
+            for(let i = 0; i <= visibleItemCount; i++) {
+                const needCorrectLeftPosition = !isVertical && (rtlEnabled ^ (i === visibleItemCount));
+                const needCorrectTopPosition = isVertical && i === visibleItemCount;
 
-                return {
+                if(i < visibleItemCount) {
+                    $item = $(visibleItemElements[i]);
+                    offset = $item.offset();
+                    itemWidth = $item.outerWidth();
+                }
+
+                result.push({
                     dropInsideItem: false,
-                    left: offset.left,
-                    top: offset.top,
-                    index: itemElements.indexOf(item),
-                    $item: $(item),
-                    width: $(item).outerWidth(),
-                    height: $(item).outerHeight(),
-                    isValid: that._isValidPoint(visibleIndex, draggableVisibleIndex)
-                };
-            });
-
-        if(result.length) {
-            const lastItem = result[result.length - 1];
-
-            result.push({
-                dropInsideItem: false,
-                index: itemElements.length,
-                top: isVertical ? lastItem.top + lastItem.height : lastItem.top,
-                left: !isVertical ? lastItem.left + lastItem.width : lastItem.left,
-                isValid: this._isValidPoint(visibleItemElements.length, draggableVisibleIndex)
-            });
+                    left: offset.left + (needCorrectLeftPosition ? itemWidth : 0),
+                    top: offset.top + (needCorrectTopPosition ? result[i - 1].height : 0),
+                    index: i === visibleItemCount ? itemElements.length : itemElements.indexOf($item.get(0)),
+                    $item: $item,
+                    width: $item.outerWidth(),
+                    height: $item.outerHeight(),
+                    isValid: that._isValidPoint(i, draggableVisibleIndex)
+                });
+            }
 
             if(this.option('allowDropInsideItem')) {
                 const points = result;
@@ -552,12 +555,9 @@ const Sortable = Draggable.inherit({
         }
     },
 
-    _optionChangedDropInsideItem: function(args) {
+    _optionChangedDropInsideItem: function() {
         if(this._isIndicateMode() && this._$placeholderElement) {
-            const toIndex = this.option('toIndex');
-            const itemElement = this._getItems()[toIndex];
-
-            this._updatePlaceholderSizes(this._$placeholderElement, itemElement);
+            this._movePlaceholder();
         }
     },
 
@@ -626,6 +626,8 @@ const Sortable = Draggable.inherit({
         const toIndex = that.option('toIndex');
         const itemElement = items[toIndex];
         const isVerticalOrientation = that._isVerticalOrientation();
+        const rtlEnabled = this.option('rtlEnabled');
+        const dropInsideItem = that.option('dropInsideItem');
         let position = null;
         let leftMargin = 0;
 
@@ -636,12 +638,21 @@ const Sortable = Draggable.inherit({
 
             position = $itemElement.offset();
             leftMargin = parseFloat($itemElement.css('marginLeft'));
+
+            if(!isVerticalOrientation && rtlEnabled && !dropInsideItem) {
+                position.left += $itemElement.outerWidth(true);
+            }
         } else {
             const prevVisibleItemElement = this._getPrevVisibleItem(items, toIndex);
 
             if(prevVisibleItemElement) {
                 position = $(prevVisibleItemElement).offset();
-                position.top += isVerticalOrientation ? $(prevVisibleItemElement).outerHeight(true) : $(prevVisibleItemElement).outerWidth(true);
+
+                if(isVerticalOrientation) {
+                    position.top += $(prevVisibleItemElement).outerHeight(true);
+                } else if(!rtlEnabled) {
+                    position.left += $(prevVisibleItemElement).outerWidth(true);
+                }
             }
         }
 
@@ -702,6 +713,7 @@ const Sortable = Draggable.inherit({
         const prevPositions = this._getPositions(items, elementSize, fromIndex, prevToIndex);
         const positions = this._getPositions(items, elementSize, fromIndex, toIndex);
         const animationConfig = this.option('animation');
+        const rtlEnabled = this.option('rtlEnabled');
 
         for(let i = 0; i < items.length; i++) {
             const $item = $(items[i]);
@@ -714,7 +726,7 @@ const Sortable = Draggable.inherit({
             } else if(prevPosition !== position) {
                 fx.stop($item);
                 fx.animate($item, extend({}, animationConfig, {
-                    to: { [positionPropName]: position }
+                    to: { [positionPropName]: !isVerticalOrientation && rtlEnabled ? -position : position }
                 }));
             }
         }
