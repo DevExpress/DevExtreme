@@ -6682,6 +6682,8 @@ declare module DevExpress.viz {
         contentTemplate?: DevExpress.core.template | ((pointInfo: any, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name BaseChart.Options.tooltip.customizeTooltip */
         customizeTooltip?: ((pointInfo: any) => any);
+        /** @name BaseChart.Options.tooltip.interactive */
+        interactive?: boolean;
         /** @name BaseChart.Options.tooltip.shared */
         shared?: boolean;
     }
@@ -6870,6 +6872,8 @@ declare module DevExpress.viz {
         contentTemplate?: DevExpress.core.template | ((scaleValue: { value?: number, valueText?: string }, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name BaseGauge.Options.tooltip.customizeTooltip */
         customizeTooltip?: ((scaleValue: { value?: number, valueText?: string }) => any);
+        /** @name BaseGauge.Options.tooltip.interactive */
+        interactive?: boolean;
     }
     /** @name BaseGauge */
     export class BaseGauge extends BaseWidget {
@@ -6949,6 +6953,8 @@ declare module DevExpress.viz {
         customizeTooltip?: ((pointsInfo: any) => any);
         /** @name BaseSparkline.Options.tooltip.enabled */
         enabled?: boolean;
+        /** @name BaseSparkline.Options.tooltip.interactive */
+        interactive?: boolean;
     }
     /** @name BaseSparkline */
     export class BaseSparkline extends BaseWidget {
@@ -7500,6 +7506,8 @@ declare module DevExpress.viz {
         contentTemplate?: DevExpress.core.template | ((scaleValue: { value?: number, valueText?: string, index?: number }, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxBarGauge.Options.tooltip.customizeTooltip */
         customizeTooltip?: ((scaleValue: { value?: number, valueText?: string, index?: number }) => any);
+        /** @name dxBarGauge.Options.tooltip.interactive */
+        interactive?: boolean;
     }
     /** @name dxBarGauge */
     export class dxBarGauge extends BaseWidget {

@@ -300,6 +300,14 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
      * @public
      */
     customizeTooltip?: ((scaleValue: { value?: number, valueText?: string, index?: number }) => any);
+    /**
+     * @docid dxBarGaugeOptions.tooltip.interactive
+     * @type boolean
+     * @default false
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    interactive?: boolean;
 }
 /**
  * @docid dxBarGauge

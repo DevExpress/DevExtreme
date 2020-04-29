@@ -291,6 +291,14 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
      * @public
      */
     shared?: boolean;
+    /**
+     * @docid BaseChartOptions.tooltip.interactive
+     * @type boolean
+     * @default false
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    interactive?: boolean;
 }
 /**
  * @docid BaseChart

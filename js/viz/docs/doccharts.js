@@ -1171,7 +1171,8 @@ const dxPolarChart = {
         endOnTick: false
     },
     tooltip: {
-        shared: false
+        shared: false,
+        interactive: false
     },
     commonAnnotationSettings: undefined,
     annotations: [{}],
@@ -1219,7 +1220,8 @@ const BaseChart = {
         customizeTooltip: undefined,
         contentTemplate: undefined,
         argumentFormat: '',
-        shared: false
+        shared: false,
+        interactive: false
     },
     onPointClick: function() { },
     onPointSelectionChanged: function() { },

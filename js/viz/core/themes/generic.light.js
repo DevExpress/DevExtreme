@@ -120,7 +120,8 @@ registerTheme({
             offsetY: 4,
             blur: 2,
             color: BLACK
-        }
+        },
+        interactive: false
     },
     legend: {
         hoverMode: 'includePoints',
