@@ -13,7 +13,6 @@ export class Compiler {
 
         let compilerOptions: sass.SyncOptions = {
             file: bundlePath,
-            // fiber: Fiber,
             importer: this.setter.bind(this),
             functions: {
                 'collector($map)': this.collector.bind(this)

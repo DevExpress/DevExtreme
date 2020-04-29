@@ -6,11 +6,6 @@
 /js/localization/cldr-data
 /themebuilder/data/less
 /themebuilder/data/metadata
-/themebuilder-scss/data/scss
-/themebuilder-scss/data/metadata
-/themebuilder-scss/dist
-/themebuilder-scss/coverage
-/themebuilder-scss/build
 /scss
 bin
 node_modules

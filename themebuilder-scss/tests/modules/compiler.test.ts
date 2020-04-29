@@ -2,12 +2,12 @@ import { ImportMock } from 'ts-mock-imports';
 import sass from 'sass';
 import path from 'path';
 import fs from 'fs';
-import * as realMetadata from '../data/metadata/dx-theme-builder-metadata';
-import { metadata } from './data/metadata';
+import * as realMetadata from '../../data/metadata/dx-theme-builder-metadata';
+import { metadata } from '../data/metadata';
 
-import { Compiler } from '../modules/compiler';
-import noModificationsResult from './data/compilation-results/no-changes-css';
-import noModificationsMeta from './data/compilation-results/no-changes-meta';
+import { Compiler } from '../../modules/compiler';
+import noModificationsResult from '../data/compilation-results/no-changes-css';
+import noModificationsMeta from '../data/compilation-results/no-changes-meta';
 
 const dataPath: string = path.join(path.resolve(), 'tests', 'data');
 

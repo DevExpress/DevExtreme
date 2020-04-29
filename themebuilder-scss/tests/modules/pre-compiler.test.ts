@@ -1,5 +1,5 @@
 
-import { PreCompiler } from '../modules/pre-compiler';
+import { PreCompiler } from '../../modules/pre-compiler';
 
 describe('PreCompiler class tests', () => {
     test('createSassForSwatch', () => {

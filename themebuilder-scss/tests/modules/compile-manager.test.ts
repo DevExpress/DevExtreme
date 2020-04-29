@@ -1,13 +1,13 @@
 import path from 'path';
 import { ImportMock } from 'ts-mock-imports';
-import { CompileManager } from '../modules/compile-manager';
+import { CompileManager } from '../../modules/compile-manager';
 
-import * as realMetadata from '../data/metadata/dx-theme-builder-metadata';
-import * as bundleResolver from '../modules/bundle-resolver';
-import { metadata } from './data/metadata';
+import * as realMetadata from '../../data/metadata/dx-theme-builder-metadata';
+import * as bundleResolver from '../../modules/bundle-resolver';
+import { metadata } from '../data/metadata';
 
-import noModificationsResult from './data/compilation-results/no-changes-css';
-import noModificationsMeta from './data/compilation-results/no-changes-meta';
+import noModificationsResult from '../data/compilation-results/no-changes-css';
+import noModificationsMeta from '../data/compilation-results/no-changes-meta';
 
 const dataPath = path.join(path.resolve(), 'tests', 'data');
 

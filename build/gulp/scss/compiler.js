@@ -6,11 +6,11 @@ const path = require('path');
 const fs = require('fs');
 const replace = require('gulp-replace');
 const config = require('./config');
-const dataUri = require('../gulp-data-uri');
+const dataUri = require('../gulp-data-uri').gulpPipe;
 const cleanCss = require('gulp-clean-css');
 const autoPrefix = require('gulp-autoprefixer');
-const cleanCssOptions = require('../../../themebuilder-scss/modules/clean-css-options');
-const MetadataGenerator = require('../../../themebuilder-scss/modules/metadata-generator');
+const cleanCssOptions = require('../../../themebuilder-scss/dist/modules/clean-css-options');
+const MetadataGenerator = require('../../../themebuilder-scss/dist/modules/metadata-generator');
 const generatorScss = new MetadataGenerator();
 
 const outputPath = config.outputPath;
@@ -70,10 +70,11 @@ gulp.task('style-compiler-tb-scss-assets', gulp.series(
             .pipe(gulp.dest(assetsPath));
     },
     function saveMetadata(callback) {
-        const metadataPath = path.join(process.cwd(), 'themebuilder-scss', 'data', 'metadata', 'dx-theme-builder-metadata.js');
+        const metadataPath = path.join(process.cwd(), 'themebuilder-scss', 'data', 'metadata', 'dx-theme-builder-metadata.ts');
         const metadata = generatorScss.getMetadata();
-        metadata['_metadata_version'] = context.version.package;
-        const meta = 'module.exports = ' + JSON.stringify(metadata) + ';';
+        const version = context.version.package;
+        let meta = 'export const metadata: Array<MetaItem> = ' + JSON.stringify(metadata) + ';\n';
+        meta += `export const version: string = '${version}';\n`;
         fs.mkdirSync(path.dirname(metadataPath), { recursive: true });
         fs.writeFileSync(metadataPath, meta);
         callback();

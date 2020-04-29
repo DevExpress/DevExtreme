@@ -20,9 +20,10 @@
   },
   "scripts": {
     "test": "jest --coverage --verbose --detectOpenHandles",
-    "build": "npm run build-ts && npm run copy-static-assets",
+    "clean-metadata": "",
+    "generate-metadata": "ts-node --files=true metadata/generate.ts",
     "build-ts": "tsc",
-    "copy-static-assets": ""
+    "build": "npm run generate-metadata && npm run build-ts"
   },
   "devDependencies": {
     "@types/clean-css": "^4.2.1",

@@ -1,4 +1,4 @@
-import { resolveBundle } from '../modules/bundle-resolver';
+import { resolveBundle } from '../../modules/bundle-resolver';
 
 interface ThemeData {
     theme: string;
