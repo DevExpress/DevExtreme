@@ -17,7 +17,8 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import Icon from './icon';
 import InkRipple from './ink-ripple';
-import Widget, { WidgetProps } from './widget';
+import Widget from './widget';
+import { BaseProps } from './utils/base-props';
 
 const stylingModes = ['outlined', 'text', 'contained'];
 
@@ -111,7 +112,7 @@ export const viewFunction = (viewModel: Button) => {
 };
 
 @ComponentBindings()
-export class ButtonProps extends WidgetProps {
+export class ButtonProps extends BaseProps {
     @OneWay() activeStateEnabled?: boolean = true;
     @OneWay() hoverStateEnabled?: boolean = true;
     @OneWay() icon?: string = '';

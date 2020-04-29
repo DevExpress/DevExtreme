@@ -1,4 +1,3 @@
-import config from '../core/config';
 import {
     Component,
     ComponentBindings,
@@ -20,6 +19,7 @@ import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import { focusable } from '../ui/widget/selectors';
 import { isFakeClickEvent } from '../events/utils';
+import { BaseProps } from './utils/base-props';
 
 const getStyles = ({ width, height, style }) => {
     const computedWidth = typeof width === 'function' ? width() : width;
@@ -97,37 +97,22 @@ export const viewFunction = (viewModel: Widget) => {
 };
 
 @ComponentBindings()
-export class WidgetProps {
+export class WidgetProps extends BaseProps {
     @OneWay() _feedbackHideTimeout?: number = 400;
     @OneWay() _feedbackShowTimeout?: number = 30;
-    @OneWay() accessKey?: string | null = null;
-    @OneWay() activeStateEnabled?: boolean = false;
     @OneWay() activeStateUnit?: string;
     @OneWay() aria?: any = {};
     @Slot() children?: any;
     @OneWay() classes?: string | undefined = '';
     @OneWay() className?: string = '';
     @OneWay() clickArgs?: any = {};
-    @OneWay() disabled?: boolean = false;
-    @OneWay() elementAttr?: { [name: string]: any };
-    @OneWay() focusStateEnabled?: boolean = false;
-    @OneWay() height?: string | number | null = null;
-    @OneWay() hint?: string;
-    @OneWay() hoverStateEnabled?: boolean = false;
     @OneWay() name?: string = '';
     @Event() onActive?: (e: any) => any;
-    @Event() onClick?: (e: any) => void;
-    @Event() onContentReady?: (e: any) => any = (() => {});
     @Event() onDimensionChanged?: () => any;
     @Event() onInactive?: (e: any) => any;
     @Event() onKeyboardHandled?: (args: any) => any | undefined;
-    @Event() onKeyDown?: (e: any, options: any) => any;
     @Event() onVisibilityChange?: (args: boolean) => undefined;
-    @OneWay() rtlEnabled?: boolean = config().rtlEnabled;
     @OneWay() style?: { [name: string]: any };
-    @OneWay() tabIndex?: number = 0;
-    @OneWay() visible?: boolean = true;
-    @OneWay() width?: string | number | null = null;
 }
 
 // tslint:disable-next-line: max-classes-per-file
