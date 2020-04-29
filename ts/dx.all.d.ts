@@ -3570,6 +3570,8 @@ declare module DevExpress.ui {
         chunkSize?: number;
         /** @name dxFileUploader.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
+        /** @name dxFileUploader.Options.inputAttr */
+        inputAttr?: any;
         /** @name dxFileUploader.Options.invalidFileExtensionMessage */
         invalidFileExtensionMessage?: string;
         /** @name dxFileUploader.Options.invalidMaxFileSizeMessage */

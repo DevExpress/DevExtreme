@@ -133,6 +133,8 @@ class FileUploader extends Editor {
 
             minFileSize: 0,
 
+            inputAttr: {},
+
             invalidFileExtensionMessage: messageLocalization.format('dxFileUploader-invalidFileExtension'),
 
             invalidMaxFileSizeMessage: messageLocalization.format('dxFileUploader-invalidMaxFileSize'),
@@ -747,9 +749,14 @@ class FileUploader extends Editor {
 
         this._renderInput();
 
+        const labelId = `dx-fileuploader-input-label-${new Guid()}`;
+
         this._$inputLabel
+            .attr('id', labelId)
             .addClass(FILEUPLOADER_INPUT_LABEL_CLASS)
             .appendTo(this._$inputContainer);
+
+        this.setAria('labelledby', labelId, this._$fileInput);
     }
 
     _renderInput() {
@@ -759,6 +766,7 @@ class FileUploader extends Editor {
             this._$fileInput.appendTo(this._$inputContainer);
             this._selectButton.option('template', 'content');
         }
+        this._applyInputAttributes(this.option('inputAttr'));
     }
 
     _selectButtonInputTemplate(data, content) {
@@ -793,6 +801,10 @@ class FileUploader extends Editor {
         eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace('dragover', this.NAME), this._dragOverHandler.bind(this));
         eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace('dragleave', this.NAME), this._dragLeaveHandler.bind(this));
         eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace('drop', this.NAME), this._dropHandler.bind(this));
+    }
+
+    _applyInputAttributes(customAttributes) {
+        this._$fileInput.attr(customAttributes);
     }
 
     _useInputForDrop() {
@@ -1148,6 +1160,9 @@ class FileUploader extends Editor {
                 break;
             case 'nativeDropSupported':
                 this._invalidate();
+                break;
+            case 'inputAttr':
+                this._applyInputAttributes(value);
                 break;
             default:
                 super._optionChanged(args);

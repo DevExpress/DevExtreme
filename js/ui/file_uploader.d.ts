@@ -93,6 +93,14 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     invalidMinFileSizeMessage?: string;
     /**
+     * @docid dxFileUploaderOptions.inputAttr
+     * @type object
+     * @default {}
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    inputAttr?: any;
+    /**
      * @docid dxFileUploaderOptions.labelText
      * @type string
      * @default "or Drop file here"
