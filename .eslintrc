@@ -2,8 +2,10 @@
     "env": {
         "es6": true
     },
-    "parser": "babel-eslint",
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
+        "createDefaultProgram": true,
+        "project": "./tsconfig.json",
         "ecmaVersion": 6,
         "sourceType": "module",
         "ecmaFeatures": {
@@ -122,7 +124,7 @@
                     "xs", // extra small
                     "xy", // XY-diagram
                     "vm", // view-model
-
+                    "unmount",
                     "amd",          // AMD modules
                     "bing",
                     "browserslist", // auto-prefixer browsers list
