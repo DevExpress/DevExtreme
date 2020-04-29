@@ -2247,6 +2247,30 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         }
     });
 
+    // T882682
+    QUnit.test('focus overlay should not be rendered during resizing', function(assert) {
+        // arrange
+        const $dataGrid = $('#dataGrid').dxDataGrid({
+            width: 1000,
+            dataSource: [{}],
+            loadingTimeout: undefined,
+            columns: ['CompanyName', 'City'],
+            showBorders: true,
+            allowColumnResizing: true
+        });
+        const dataGrid = $dataGrid.dxDataGrid('instance');
+
+        // act
+        const resizeController = dataGrid.getController('columnsResizer');
+        resizeController._isResizing = true;
+
+        dataGrid.focus(dataGrid.getCellElement(0, 0));
+        this.clock.tick();
+
+        // assert
+        assert.notOk($dataGrid.find('.dx-datagrid-focus-overlay').length, 'overlay is not rendered');
+    });
+
     QUnit.test('export.enabled: true, allowExportSelectedData: true -> check export menu icons (T757579)', function(assert) {
         $('#dataGrid').dxDataGrid({
             export: {
