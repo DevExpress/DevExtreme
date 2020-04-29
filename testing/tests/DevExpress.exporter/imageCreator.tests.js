@@ -2034,12 +2034,11 @@ QUnit.test('Pattern canvas has same siza as pattern', function(assert) {
     const markup = testingMarkupStart + '<defs><pattern id="DevExpress_3" width="6" height="6"><rect x="0" y="0" width="6" height="6" fill="#ffa500" opacity="0.75"></rect><path d="M 3 -3 L -3 3 M 0 6 L 6 0 M 9 3 L 3 9" stroke-width="2" stroke="#ffa500"></path></pattern></defs><rect x="10" y="10" width="70" height="150" stroke-width="0" fill="url(#DevExpress_3)" stroke="#ffa500"></rect>' + testingMarkupEnd;
     const imageBlob = getData(markup);
     const context = window.CanvasRenderingContext2D.prototype;
-    let canvas;
 
     assert.expect(2);
     $.when(imageBlob).done(function(blob) {
         try {
-            canvas = context.createPattern.lastCall.args[0];
+            const canvas = context.createPattern.lastCall.args[0];
             assert.strictEqual(canvas.width, 6);
             assert.strictEqual(canvas.height, 6);
         } finally {
@@ -2296,7 +2295,6 @@ QUnit.test('getData returns Base64 when Blob not supported by Browser', function
     }
 
     // arrange. act
-    let deferred;
     const done = assert.async();
     const _getBlob = imageCreator._getBlob;
     const _getBase64 = imageCreator._getBase64;
@@ -2310,7 +2308,7 @@ QUnit.test('getData returns Base64 when Blob not supported by Browser', function
         return 'base64Data';
     };
 
-    deferred = imageCreator.getData(testingMarkup, { backgroundColor: '#aaa' });
+    const deferred = imageCreator.getData(testingMarkup, { backgroundColor: '#aaa' });
 
     assert.expect(1);
     $.when(deferred).done(function(data) {

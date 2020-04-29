@@ -50,23 +50,17 @@ function arcTo(x1, y1, x2, y2, radius, largeArcFlag, clockwise, context) {
     const cBy = (y1 + y2) / 2;
     let aB = _atan2(y1 - y2, x1 - x2);
     const k = largeArcFlag ? 1 : -1;
-    let opSide;
-    let adjSide;
-    let centerX;
-    let centerY;
-    let startAngle;
-    let endAngle;
 
     aB += 90 * (PI / 180) * (clockwise ? 1 : -1);
 
-    opSide = _sqrt(_pow(x2 - x1, 2) + _pow(y2 - y1, 2)) / 2;
-    adjSide = _sqrt(_abs(_pow(radius, 2) - _pow(opSide, 2)));
+    const opSide = _sqrt(_pow(x2 - x1, 2) + _pow(y2 - y1, 2)) / 2;
+    const adjSide = _sqrt(_abs(_pow(radius, 2) - _pow(opSide, 2)));
 
-    centerX = cBx + k * (adjSide * _cos(aB));
-    centerY = cBy + k * (adjSide * _sin(aB));
+    const centerX = cBx + k * (adjSide * _cos(aB));
+    const centerY = cBy + k * (adjSide * _sin(aB));
 
-    startAngle = _atan2(y1 - centerY, x1 - centerX);
-    endAngle = _atan2(y2 - centerY, x2 - centerX);
+    const startAngle = _atan2(y1 - centerY, x1 - centerX);
+    const endAngle = _atan2(y2 - centerY, x2 - centerX);
 
     context.arc(centerX, centerY, radius, startAngle, endAngle, !clockwise);
 }
@@ -166,12 +160,11 @@ function drawImage(context, options, shared) {
 function drawPath(context, dAttr) {
     const dArray = dAttr.replace(/,/g, ' ').split(/([A-Z])/i).filter(item => item.trim() !== '');
     let i = 0;
-    let params;
     let prevParams;
     let prevParamsLen;
 
     do {
-        params = (dArray[i + 1] || '').trim().split(' ');
+        const params = (dArray[i + 1] || '').trim().split(' ');
         switch(dArray[i]) {
             case 'M':
                 context.moveTo(_number(params[0]), _number(params[1]));
@@ -537,7 +530,6 @@ function createGradient(element) {
 
 function createFilter(element) {
     let color;
-    let opacity;
     const filterOptions = {};
 
     _each(element.childNodes, function(_, node) {
@@ -555,11 +547,12 @@ function createFilter(element) {
                 filterOptions.offsetX = _number(attr.dx.value);
                 filterOptions.offsetY = _number(attr.dy.value);
                 break;
-            case 'floodResult':
+            case 'floodResult': {
                 color = attr['flood-color'] ? attr['flood-color'].value : '#000';
-                opacity = attr['flood-opacity'] ? attr['flood-opacity'].value : 1;
+                const opacity = attr['flood-opacity'] ? attr['flood-opacity'].value : 1;
                 filterOptions.color = hex2rgba(color, opacity);
                 break;
+            }
         }
     });
 
@@ -774,10 +767,9 @@ exports.imageCreator = {
     },
 
     _getBlob: function(binaryData, mimeType) {
-        let i;
         const dataArray = new Uint8Array(binaryData.length);
 
-        for(i = 0; i < binaryData.length; i++) {
+        for(let i = 0; i < binaryData.length; i++) {
             dataArray[i] = binaryData.charCodeAt(i);
         }
 
