@@ -3,7 +3,7 @@
 
 @GENERIC_TABPANEL_INSET_SHADOW_LEFT: inset @GENERIC_TABS_BORDER_WIDTH 0 @tabs-border-color;
 @GENERIC_TABPANEL_INSET_SHADOW_TOP: inset 0 @GENERIC_TABS_BORDER_WIDTH @tabs-border-color;
-@GENERIC_TABPANEL_INSET_SHADOW_RIGHT: inset -@GENERIC_TABS_BORDER_WIDTH 0 @tabs-border-color;
+@GENERIC_TABPANEL_INSET_SHADOW_RIGHT: inset (-@GENERIC_TABS_BORDER_WIDTH) 0 @tabs-border-color;
 @GENERIC_TABPANEL_INSET_SHADOW_BOTTOM: inset 0 (-@GENERIC_TABS_BORDER_WIDTH) @tabs-border-color;
 
 .tabpanel-shadow-mixin(@accent-color) {
@@ -16,7 +16,7 @@
             box-shadow: @GENERIC_TABPANEL_INSET_SHADOW_TOP, inset 0 (-@GENERIC_TABS_BORDER_WIDTH) @accent-color;
 
             &.dx-tab-selected {
-                box-shadow: inset 0 @GENERIC_TABS_BORDER_WIDTH @accent-color, inset -@GENERIC_TABS_BORDER_WIDTH 0 @accent-color, inset @GENERIC_TABS_BORDER_WIDTH 0 @accent-color;
+                box-shadow: inset 0 @GENERIC_TABS_BORDER_WIDTH @accent-color, inset (-@GENERIC_TABS_BORDER_WIDTH) 0 @accent-color, inset @GENERIC_TABS_BORDER_WIDTH 0 @accent-color;
             }
         }
 
