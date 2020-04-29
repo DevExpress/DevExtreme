@@ -963,7 +963,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _animateNodeContainer: function(node, state, e, completionCallback) {
         const $node = this._getNodeElement(node);
         const $nodeContainer = $node.children(`.${NODE_CONTAINER_CLASS}`);
-        let nodeHeight;
 
         if(node && completionCallback && $nodeContainer.length === 0) {
             completionCallback.resolve();
@@ -971,7 +970,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         // NOTE: The height of node container is should be used when the container is shown (T606878)
         $nodeContainer.addClass(OPENED_NODE_CONTAINER_CLASS);
-        nodeHeight = $nodeContainer.height();
+        const nodeHeight = $nodeContainer.height();
 
         fx.stop($nodeContainer, true);
         fx.animate($nodeContainer, {

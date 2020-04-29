@@ -294,12 +294,10 @@ const Form = Widget.inherit({
 
     _getLabelText: function(labelText) {
         const length = labelText.children.length;
-        let child;
         let result = '';
-        let i;
 
-        for(i = 0; i < length; i++) {
-            child = labelText.children[i];
+        for(let i = 0; i < length; i++) {
+            const child = labelText.children[i];
             result = result + (!isEmpty(child.innerText) ? child.innerText : child.innerHTML);
         }
 
@@ -309,12 +307,11 @@ const Form = Widget.inherit({
     _applyLabelsWidthByCol: function($container, index, options) {
         const $labelTexts = $container.find(this._getLabelsSelectorByCol(index, options));
         const $labelTextsLength = $labelTexts.length;
-        let labelWidth;
         let i;
         let maxWidth = 0;
 
         for(i = 0; i < $labelTextsLength; i++) {
-            labelWidth = this._getLabelWidthByText(this._getLabelText($labelTexts[i]));
+            const labelWidth = this._getLabelWidthByText(this._getLabelText($labelTexts[i]));
             if(labelWidth > maxWidth) {
                 maxWidth = labelWidth;
             }
@@ -330,9 +327,8 @@ const Form = Widget.inherit({
             excludeTabbed: excludeTabbed,
             inOneColumn: inOneColumn
         };
-        let i;
 
-        for(i = 0; i < colCount; i++) {
+        for(let i = 0; i < colCount; i++) {
             this._applyLabelsWidthByCol($container, i, applyLabelsOptions);
         }
     },
@@ -351,8 +347,7 @@ const Form = Widget.inherit({
             this._applyLabelsWidthWithNestedGroups($container, colCount, excludeTabbed);
         } else {
             const $groups = this.$element().find('.' + FORM_GROUP_CLASS);
-            let i;
-            for(i = 0; i < $groups.length; i++) {
+            for(let i = 0; i < $groups.length; i++) {
                 this._applyLabelsWidth($groups.eq(i), excludeTabbed);
             }
         }
@@ -360,20 +355,17 @@ const Form = Widget.inherit({
 
     _applyLabelsWidthWithNestedGroups: function($container, colCount, excludeTabbed) {
         const applyLabelsOptions = { excludeTabbed: excludeTabbed };
-        let colIndex;
-        let groupsColIndex;
-        let groupColIndex;
         let $groupsByCol;
 
-        for(colIndex = 0; colIndex < colCount; colIndex++) {
+        for(let colIndex = 0; colIndex < colCount; colIndex++) {
             $groupsByCol = this._getGroupElementsInColumn($container, colIndex);
             this._applyLabelsWidthByCol($groupsByCol, 0, applyLabelsOptions);
 
-            for(groupsColIndex = 0; groupsColIndex < this._groupsColCount.length; groupsColIndex++) {
+            for(let groupsColIndex = 0; groupsColIndex < this._groupsColCount.length; groupsColIndex++) {
                 $groupsByCol = this._getGroupElementsInColumn($container, colIndex, this._groupsColCount[groupsColIndex]);
                 const groupColCount = this._getGroupColCount($groupsByCol);
 
-                for(groupColIndex = 1; groupColIndex < groupColCount; groupColIndex++) {
+                for(let groupColIndex = 1; groupColIndex < groupColCount; groupColIndex++) {
                     this._applyLabelsWidthByCol($groupsByCol, groupColIndex, applyLabelsOptions);
                 }
             }
@@ -649,9 +641,6 @@ const Form = Widget.inherit({
             .toggleClass(FORM_GROUP_WITH_CAPTION_CLASS, isDefined(item.caption) && item.caption.length)
             .addClass(FORM_GROUP_CLASS)
             .appendTo($container);
-        let $groupContent;
-        let colCount;
-        let layoutManager;
 
         if(item.caption) {
             $('<span>')
@@ -660,7 +649,7 @@ const Form = Widget.inherit({
                 .appendTo($group);
         }
 
-        $groupContent = $('<div>')
+        const $groupContent = $('<div>')
             .addClass(FORM_GROUP_CONTENT_CLASS)
             .appendTo($group);
 
@@ -674,7 +663,7 @@ const Form = Widget.inherit({
                 container: getPublicElement($groupContent)
             });
         } else {
-            layoutManager = this._renderLayoutManager(this._tryGetItemsForTemplate(item), $groupContent, {
+            const layoutManager = this._renderLayoutManager(this._tryGetItemsForTemplate(item), $groupContent, {
                 colCount: item.colCount,
                 colCountByScreen: item.colCountByScreen,
                 alignItemLabels: item.alignItemLabels,
@@ -683,7 +672,7 @@ const Form = Widget.inherit({
 
             this._itemsRunTimeInfo && this._itemsRunTimeInfo.extendRunTimeItemInfoByKey(item.guid, { layoutManager });
 
-            colCount = layoutManager._getColCount();
+            const colCount = layoutManager._getColCount();
             if(inArray(colCount, this._groupsColCount) === -1) {
                 this._groupsColCount.push(colCount);
             }
@@ -695,7 +684,6 @@ const Form = Widget.inherit({
     _renderLayoutManager: function(items, $rootElement, options) {
         const $element = $('<div>');
         const that = this;
-        let instance;
         const config = that._getLayoutManagerConfig(items, options);
         const baseColCountByScreen = {
             lg: options.colCount,
@@ -706,7 +694,7 @@ const Form = Widget.inherit({
 
         that._cachedColCountOptions.push({ colCountByScreen: extend(baseColCountByScreen, options.colCountByScreen) });
         $element.appendTo($rootElement);
-        instance = that._createComponent($element, 'dxLayoutManager', config);
+        const instance = that._createComponent($element, 'dxLayoutManager', config);
         instance.on('autoColCountChanged', function() { that._refresh(); });
         that._cachedLayoutManagers.push(instance);
         return instance;
@@ -873,10 +861,9 @@ const Form = Widget.inherit({
         let result;
 
         if(splitFullName.length > 1) {
-            let i;
             const rootOptionName = splitFullName[0];
 
-            for(i = 0; i < expectedRootNames.length; i++) {
+            for(let i = 0; i < expectedRootNames.length; i++) {
                 if(rootOptionName.search(expectedRootNames[i]) !== -1) {
                     result = expectedRootNames[i];
                 }
@@ -1027,9 +1014,8 @@ const Form = Widget.inherit({
 
     _getItemPath: function(nameParts) {
         let itemPath = nameParts[0];
-        let i;
 
-        for(i = 1; i < nameParts.length; i++) {
+        for(let i = 1; i < nameParts.length; i++) {
             if(nameParts[i].search(/items\[\d+]|tabs\[\d+]/) !== -1) {
                 itemPath += '.' + nameParts[i];
             } else {

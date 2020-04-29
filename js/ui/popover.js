@@ -67,10 +67,6 @@ const getEventDelay = function(that, optionName) {
     return typeUtils.isObject(optionValue) && optionValue.delay;
 };
 const attachEvent = function(that, name) {
-    let delay;
-    let action;
-    let handler;
-    let eventName;
     const target = that.option('target');
     const isSelector = typeUtils.isString(target);
     const event = getEventName(that, name + 'Event');
@@ -79,9 +75,9 @@ const attachEvent = function(that, name) {
         return;
     }
 
-    eventName = eventUtils.addNamespace(event, that.NAME);
-    action = that._createAction((function() {
-        delay = getEventDelay(that, name + 'Event');
+    const eventName = eventUtils.addNamespace(event, that.NAME);
+    const action = that._createAction((function() {
+        const delay = getEventDelay(that, name + 'Event');
         this._clearEventsTimeouts();
 
         if(delay) {
@@ -93,7 +89,7 @@ const attachEvent = function(that, name) {
         }
     }).bind(that), { validatingTargetName: 'target' });
 
-    handler = function(e) {
+    const handler = function(e) {
         action({ event: e, target: $(e.currentTarget) });
     };
 

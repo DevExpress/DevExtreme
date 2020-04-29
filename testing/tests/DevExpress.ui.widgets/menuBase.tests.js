@@ -297,11 +297,10 @@ QUnit.module('Menu rendering', () => {
     QUnit.test('Change item content in runtime', function(assert) {
     // arrange
         const menuBase = createMenu({ items: [{ text: 'item' }] });
-        let $item;
 
         // act
         menuBase.instance.option('items[0].icon', 'add');
-        $item = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS).children();
+        const $item = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS).children();
 
         // assert
         assert.ok($item.hasClass(DX_ITEM_HAS_ICON), 'item has dx-menu-item-has-icon class');
@@ -495,11 +494,10 @@ QUnit.module('Selection', () => {
             items: dataSource,
             selectionMode: 'single'
         });
-        let selectedItem;
 
         assert.ok(menuBase.instance);
         menuBase.instance.option('selectedItem', dataSource[1]);
-        selectedItem = menuBase.instance.option('selectedItem');
+        const selectedItem = menuBase.instance.option('selectedItem');
         assert.equal(selectedItem.text, 'item2');
     });
 

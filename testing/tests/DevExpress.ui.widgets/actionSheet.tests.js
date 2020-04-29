@@ -207,24 +207,21 @@ QUnit.module('action sheet', {
                 disabled: true
             }
         ];
-        let itemElements;
-        let first;
-        let second;
 
         this.instance.option('items', items);
         this.instance.show();
 
-        itemElements = $('.dx-actionsheet-item', $($('.dx-popup', this.element).dxPopup('instance').$content()));
+        const itemElements = $('.dx-actionsheet-item', $($('.dx-popup', this.element).dxPopup('instance').$content()));
         assert.equal(itemElements.length, 2, 'correct items count');
 
-        first = itemElements.find('.dx-button').eq(0);
+        const first = itemElements.find('.dx-button').eq(0);
         assert.equal(first.dxButton('instance').option('text'), items[0].text, 'correct item text');
         assert.equal(first.dxButton('instance').option('type'), items[0].type, 'correct item type');
 
         first.trigger('dxclick');
         assert.equal(clickedAction, 1, 'correct item click handler');
 
-        second = itemElements.find('.dx-button').eq(-1);
+        const second = itemElements.find('.dx-button').eq(-1);
         assert.ok(second.dxButton('instance').option('disabled'), 'correct item disabled state');
 
         // NOTE: B233186
@@ -309,16 +306,13 @@ QUnit.module('action sheet', {
                 disabled: true
             }
         ];
-        let itemElements;
-        let first;
-        let second;
 
         this.instance.option('items', items);
         this.instance.show();
 
-        itemElements = $('.dx-actionsheet-item', $($('.dx-popup', this.element).dxPopup('instance').$content()));
-        first = itemElements.first();
-        second = itemElements.last();
+        const itemElements = $('.dx-actionsheet-item', $($('.dx-popup', this.element).dxPopup('instance').$content()));
+        const first = itemElements.first();
+        const second = itemElements.last();
 
         const popup = this.element.find('.dx-popup').dxPopup('instance');
 
@@ -370,10 +364,9 @@ QUnit.module('action sheet', {
                 }
             }
         ];
-        let $button;
 
         this.instance.option('items', items);
-        $button = this.element.find('.dx-actionsheet-item').eq(0);
+        const $button = this.element.find('.dx-actionsheet-item').eq(0);
 
         this.instance.option('disabled', true);
         this.instance.show();
@@ -541,13 +534,12 @@ QUnit.module('regressions', {
             }
         ];
         const $actionSheet = $('#actionSheet');
-        let $itemElements;
 
         $actionSheet.dxActionSheet({ items: items });
         $actionSheet.dxActionSheet('show');
         $actionSheet.dxActionSheet('option', 'items', items);
 
-        $itemElements = $('.dx-actionsheet-item', $('.dx-popup', $actionSheet).dxPopup('instance').$content());
+        const $itemElements = $('.dx-actionsheet-item', $('.dx-popup', $actionSheet).dxPopup('instance').$content());
         assert.equal($itemElements.length, 2, 'correct items count');
     });
 

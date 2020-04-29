@@ -301,7 +301,8 @@ class Button extends Widget {
     }
 
     _updateAriaLabel() {
-        let { icon, text } = this.option();
+        let icon = this.option('icon');
+        const text = this.option('text');
 
         if(getImageSourceType(icon) === 'image') {
             icon = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
