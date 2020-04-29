@@ -6680,6 +6680,8 @@ declare module DevExpress.viz {
         contentTemplate?: DevExpress.core.template | ((pointInfo: any, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name BaseChart.Options.tooltip.customizeTooltip */
         customizeTooltip?: ((pointInfo: any) => any);
+        /** @name BaseChart.Options.tooltip.interactive */
+        interactive?: boolean;
         /** @name BaseChart.Options.tooltip.shared */
         shared?: boolean;
     }
