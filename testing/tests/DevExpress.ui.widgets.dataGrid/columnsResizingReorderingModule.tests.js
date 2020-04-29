@@ -894,6 +894,10 @@ QUnit.module('Columns resizing', {
 
                 columnsResizer: {
                     isResizing: () => true
+                },
+
+                editorFactory: {
+                    loseFocus: noop
                 }
             },
 

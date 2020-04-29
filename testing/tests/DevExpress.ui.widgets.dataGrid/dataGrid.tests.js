@@ -2312,6 +2312,76 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         }
     });
 
+    // T882682
+    QUnit.test('focus overlay should not be rendered during resizing', function(assert) {
+        // arrange
+        const $dataGrid = $('#dataGrid').dxDataGrid({
+            width: 1000,
+            dataSource: [{}],
+            loadingTimeout: undefined,
+            columns: ['CompanyName', 'City'],
+            showBorders: true,
+            allowColumnResizing: true
+        });
+        const dataGrid = $dataGrid.dxDataGrid('instance');
+
+        // act
+        const resizeController = dataGrid.getController('columnsResizer');
+        resizeController._isResizing = true;
+
+        dataGrid.focus(dataGrid.getCellElement(0, 0));
+        this.clock.tick();
+
+        // assert
+        assert.notOk($dataGrid.find('.dx-datagrid-focus-overlay').length, 'overlay is not rendered');
+    });
+
+    // T882682
+    QUnit.test('focus overlay should be shown again after resizing', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test is not actual for mobile devices');
+            return;
+        }
+        // arrange
+        const $dataGrid = $('#dataGrid').dxDataGrid({
+            width: 1000,
+            dataSource: [{ field1: '1111', field2: '2222' }],
+            loadingTimeout: undefined,
+            columns: ['field1', 'field2'],
+            showBorders: true,
+            allowColumnResizing: true
+        });
+        const dataGrid = $dataGrid.dxDataGrid('instance');
+
+        // act
+        const resizeController = dataGrid.getController('columnsResizer');
+        const $columnsSeparator = $dataGrid.find('.dx-datagrid-columns-separator');
+
+        dataGrid.focus(dataGrid.getCellElement(0, 0));
+        this.clock.tick();
+
+        // assert
+        const $overlay = $dataGrid.find('.dx-datagrid-focus-overlay');
+        assert.ok($overlay.length, 'overlay is rendered');
+
+        // act
+        resizeController._isResizing = true;
+        $columnsSeparator.trigger($.Event('dxpointerdown'));
+        $(dataGrid.getCellElement(0, 0)).trigger($.Event('focusin'));
+
+        // assert
+        assert.ok($overlay.hasClass('dx-hidden'), 'overlay is hidden');
+
+        // act
+        resizeController._isResizing = false;
+        $dataGrid.trigger($.Event('dxclick'));
+        this.clock.tick();
+
+        // assert
+        assert.ok($overlay.length, 'overlay is rendered');
+        assert.notOk($overlay.hasClass('dx-hidden'), 'overlay is not hidden');
+    });
+
     QUnit.test('export.enabled: true, allowExportSelectedData: true -> check export menu icons (T757579)', function(assert) {
         $('#dataGrid').dxDataGrid({
             export: {
