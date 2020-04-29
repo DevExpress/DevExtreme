@@ -13,8 +13,10 @@ export class BaseWidgetProps {
     @OneWay() height?: string | number | null = null;
     @OneWay() hint?: string;
     @OneWay() hoverStateEnabled?: boolean = false;
-    @Event() onClick?: (e: any) => any;
-    @Event() onContentReady?: (e: any) => any = (() => {});
+    @Event() onClick?: (e: any) => void;
+    @Event({
+        actionConfig: { excludeValidators: ['disabled', 'readOnly'] },
+    }) onContentReady?: (e: any) => any = (() => {});
     @Event() onKeyDown?: (e: any, options: any) => any;
     @OneWay() rtlEnabled?: boolean = config().rtlEnabled;
     @OneWay() tabIndex?: number = 0;

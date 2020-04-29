@@ -72,11 +72,22 @@ export default class PreactWrapper extends DOMComponent {
             options.ref = this.viewRef;
         }
 
+        Object.keys(this._getActionsMap()).forEach((name) => {
+            options[name] = this.option(getInnerActionName(name));
+        });
+
         return this.getProps && this.getProps(options) || options;
     }
 
+    _getActionsMap() { return {}; }
+
     _init() {
         super._init();
+
+        Object.keys(this._getActionsMap()).forEach((name) => {
+            this._addAction(name, this._getActionsMap()[name]);
+        });
+
         this._initWidget && this._initWidget();
         this._supportedKeys = () => ({});
     }
@@ -86,6 +97,16 @@ export default class PreactWrapper extends DOMComponent {
     }
 
     _optionChanged(option) {
+        const { name } = option || {};
+        if(name) {
+            if(this._getActionsMap()[name]) {
+                this._addAction(name, this._getActionsMap()[name]);
+                option = undefined;
+            } else if(Object.keys(this._getActionsMap()).some(event => getInnerActionName(event) === name)) {
+                option = undefined;
+            }
+        }
+
         if(option) {
             super._optionChanged(option);
         }

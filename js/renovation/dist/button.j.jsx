@@ -2,12 +2,6 @@ import registerComponent from '../../core/component_registrator';
 import ValidationEngine from '../../ui/validation_engine';
 import Component from '../preact-wrapper/component';
 import ButtonComponent from '../button.p';
-import { getInnerActionName } from '../preact-wrapper/utils';
-
-const actions = {
-    onClick: { excludeValidators: ['readOnly'] },
-    onContentReady: { excludeValidators: ['disabled', 'readOnly'] },
-};
 
 export default class Button extends Component {
     get _viewComponent() {
@@ -17,12 +11,6 @@ export default class Button extends Component {
     getProps(props) {
         props.render = this._createTemplateComponent(props, props.template, true);
         props.onKeyDown = this._wrapKeyDownHandler(props.onKeyDown);
-
-        props.pressedChange = (pressed) => this.option('pressed', pressed);
-
-        Object.keys(actions).forEach((name) => {
-            props[name] = this.option(getInnerActionName(name));
-        });
 
         props.validationGroup = ValidationEngine.getGroupConfig(this._findGroup());
 
@@ -47,28 +35,26 @@ export default class Button extends Component {
         if(this.option('useSubmitBehavior')) {
             this.option('onSubmit', this._getSubmitAction());
         }
+    }
 
-        Object.keys(actions).forEach((name) => {
-            this._addAction(name, actions[name]);
-        });
+    _getActionsMap() {
+        return {
+            onClick: { excludeValidators: ['readOnly'] },
+            onContentReady: { excludeValidators: ['disabled', 'readOnly'] },
+        };
     }
 
     _optionChanged(option) {
         const { name, value } = option;
-        if(actions[name]) {
-            this._addAction(name, actions[name]);
-        }
 
         switch(name) {
             case 'useSubmitBehavior':
                 value === true && this.option('onSubmit', this._getSubmitAction());
-                break;
-            case 'onOptionChanged':
-                super._optionChanged(option);
+                option = undefined;
                 break;
         }
 
-        super._optionChanged();
+        super._optionChanged(option);
     }
 
     _getSubmitAction() {

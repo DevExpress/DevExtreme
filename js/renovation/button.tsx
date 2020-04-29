@@ -117,7 +117,10 @@ export class ButtonProps extends BaseWidgetProps {
     @OneWay() hoverStateEnabled?: boolean = true;
     @OneWay() icon?: string = '';
     @OneWay() iconPosition?: string = 'left';
-    @Event() onClick?: (e: any) => any = noop;
+    @Event({
+        actionConfig: { excludeValidators: ['readOnly'] },
+    })
+    onClick?: (e: any) => any = noop;
     @Event() onSubmit?: (e: any) => any = noop;
     @OneWay() pressed?: boolean;
     @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
