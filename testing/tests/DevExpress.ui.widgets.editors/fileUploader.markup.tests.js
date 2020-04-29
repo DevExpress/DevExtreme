@@ -132,6 +132,34 @@ QUnit.module('fileUploader markup', () => {
         instance.option('uploadButtonText', uploadButtonText);
         assert.equal($button.text(), uploadButtonText, 'button text is correct');
     });
+
+    QUnit.test('file input accessability attrbutes rendered', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons'
+        });
+
+        const $fileInput = $fileUploader.find(`.${FILEUPLOADER_INPUT_CLASS}`);
+        const $fileInputLabel = $fileUploader.find(`.${FILEUPLOADER_INPUT_LABEL_CLASS}`);
+
+        const labelId = $fileInputLabel.attr('id');
+        assert.strictEqual($fileInput.attr('aria-labelledby'), labelId, 'aria attribute rendered');
+    });
+
+    QUnit.test('file input custom attrbutes rendered', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            inputAttr: {
+                role: 'test_role1',
+                id: 'test_id1'
+            }
+        });
+
+        const $fileInput = $fileUploader.find(`.${FILEUPLOADER_INPUT_CLASS}`);
+
+        assert.strictEqual($fileInput.attr('role'), 'test_role1', 'custom attribute rendered');
+        assert.strictEqual($fileInput.attr('id'), 'test_id1', 'custom attribute rendered');
+    });
+
 });
 
 QUnit.module('multiple option', () => {
