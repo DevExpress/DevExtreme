@@ -18,7 +18,7 @@ import {
 import Icon from './icon';
 import InkRipple from './ink-ripple';
 import Widget from './widget';
-import { BaseProps } from './utils/base-props';
+import { BaseWidgetProps } from './utils/base-props';
 
 const stylingModes = ['outlined', 'text', 'contained'];
 
@@ -112,7 +112,7 @@ export const viewFunction = (viewModel: Button) => {
 };
 
 @ComponentBindings()
-export class ButtonProps extends BaseProps {
+export class ButtonProps extends BaseWidgetProps {
     @OneWay() activeStateEnabled?: boolean = true;
     @OneWay() hoverStateEnabled?: boolean = true;
     @OneWay() icon?: string = '';

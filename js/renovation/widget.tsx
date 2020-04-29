@@ -19,7 +19,7 @@ import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import { focusable } from '../ui/widget/selectors';
 import { isFakeClickEvent } from '../events/utils';
-import { BaseProps } from './utils/base-props';
+import { BaseWidgetProps } from './utils/base-props';
 
 const getStyles = ({ width, height, style }) => {
     const computedWidth = typeof width === 'function' ? width() : width;
@@ -97,7 +97,7 @@ export const viewFunction = (viewModel: Widget) => {
 };
 
 @ComponentBindings()
-export class WidgetProps extends BaseProps {
+export class WidgetProps extends BaseWidgetProps {
     @OneWay() _feedbackHideTimeout?: number = 400;
     @OneWay() _feedbackShowTimeout?: number = 30;
     @OneWay() activeStateUnit?: string;
