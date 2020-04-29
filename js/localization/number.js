@@ -40,12 +40,11 @@ const numberLocalization = dependencyInjector({
     defaultLargeNumberFormatPostfixes: LargeNumberFormatPostfixes,
 
     _parseNumberFormatString: function(formatType) {
-        let formatList;
         const formatObject = {};
 
         if(!formatType || typeof formatType !== 'string') return;
 
-        formatList = formatType.toLowerCase().split(' ');
+        const formatList = formatType.toLowerCase().split(' ');
         each(formatList, (index, value) => {
             if(inArray(value, NUMERIC_FORMATS) > -1) {
                 formatObject.formatType = value;
@@ -97,7 +96,6 @@ const numberLocalization = dependencyInjector({
         return result;
     },
     _formatNumber: function(value, formatObject, formatConfig) {
-        let powerPostfix;
         let result;
 
         if(formatObject.power === 'auto') {
@@ -108,7 +106,7 @@ const numberLocalization = dependencyInjector({
             value = this._getNumberByPower(value, formatObject.power, 1000);
         }
 
-        powerPostfix = this.defaultLargeNumberFormatPostfixes[formatObject.power] || '';
+        const powerPostfix = this.defaultLargeNumberFormatPostfixes[formatObject.power] || '';
 
         result = this._formatNumberCore(value, formatObject.formatType, formatConfig);
 
@@ -120,7 +118,6 @@ const numberLocalization = dependencyInjector({
     _formatNumberExponential: function(value, formatConfig) {
         let power = this._calculateNumberPower(value, DECIMAL_BASE);
         let number = this._getNumberByPower(value, power, DECIMAL_BASE);
-        let powString;
 
         if(formatConfig.precision === undefined) {
             formatConfig.precision = 1;
@@ -131,7 +128,7 @@ const numberLocalization = dependencyInjector({
             number = number / DECIMAL_BASE;
         }
 
-        powString = (power >= 0 ? '+' : '') + power.toString();
+        const powString = (power >= 0 ? '+' : '') + power.toString();
 
         return this._formatNumberCore(number, 'fixedpoint', formatConfig) + 'E' + powString;
     },

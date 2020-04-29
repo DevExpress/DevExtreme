@@ -70,15 +70,12 @@ const getNextDateUnit = function(unit, withWeeks) {
 };
 
 const convertMillisecondsToDateUnits = function(value) {
-    let i;
-    let dateUnitCount;
-    let dateUnitInterval;
     const dateUnitIntervals = ['millisecond', 'second', 'minute', 'hour', 'day', 'month', 'year'];
     const result = {};
 
-    for(i = dateUnitIntervals.length - 1; i >= 0; i--) {
-        dateUnitInterval = dateUnitIntervals[i];
-        dateUnitCount = Math.floor(value / toMilliseconds(dateUnitInterval));
+    for(let i = dateUnitIntervals.length - 1; i >= 0; i--) {
+        const dateUnitInterval = dateUnitIntervals[i];
+        const dateUnitCount = Math.floor(value / toMilliseconds(dateUnitInterval));
         if(dateUnitCount > 0) {
             result[dateUnitInterval + 's'] = dateUnitCount;
             value -= convertDateUnitToMilliseconds(dateUnitInterval, dateUnitCount);
@@ -107,7 +104,6 @@ var convertDateUnitToMilliseconds = function(dateUnit, count) {
 // refactor for performance
 var getDateUnitInterval = function(tickInterval) {
     let maxInterval = -1;
-    let i;
 
     if(isString(tickInterval)) {
         return tickInterval;
@@ -115,7 +111,7 @@ var getDateUnitInterval = function(tickInterval) {
 
     if(isObject(tickInterval)) {
         each(tickInterval, function(key, value) {
-            for(i = 0; i < dateUnitIntervals.length; i++) {
+            for(let i = 0; i < dateUnitIntervals.length; i++) {
                 if(value && (key === dateUnitIntervals[i] + 's' || key === dateUnitIntervals[i]) && maxInterval < i) {
                     maxInterval = i;
                 }
@@ -157,8 +153,6 @@ const getFirstQuarterMonth = function(month) {
 const correctDateWithUnitBeginning = function(date, dateInterval, withCorrection, firstDayOfWeek) {
     date = new Date(date.getTime());
     const oldDate = new Date(date.getTime());
-    let firstQuarterMonth;
-    let month;
     const dateUnitInterval = getDateUnitInterval(dateInterval);
 
     switch(dateUnitInterval) {
@@ -184,9 +178,9 @@ const correctDateWithUnitBeginning = function(date, dateInterval, withCorrection
             date = getFirstWeekDate(date, firstDayOfWeek || 0);
             date.setHours(0, 0, 0, 0);
             break;
-        case 'quarter':
-            firstQuarterMonth = getFirstQuarterMonth(date.getMonth());
-            month = date.getMonth();
+        case 'quarter': {
+            const firstQuarterMonth = getFirstQuarterMonth(date.getMonth());
+            const month = date.getMonth();
 
             date.setDate(1);
             date.setHours(0, 0, 0, 0);
@@ -194,6 +188,7 @@ const correctDateWithUnitBeginning = function(date, dateInterval, withCorrection
                 date.setMonth(firstQuarterMonth);
             }
             break;
+        }
     }
 
     if(withCorrection && dateUnitInterval !== 'hour' && dateUnitInterval !== 'minute' && dateUnitInterval !== 'second') {
@@ -215,10 +210,9 @@ const setToDayEnd = function(date) {
 
 
 const getDatesDifferences = function(date1, date2) {
-    let differences;
     let counter = 0;
 
-    differences = {
+    const differences = {
         year: date1.getFullYear() !== date2.getFullYear(),
         month: date1.getMonth() !== date2.getMonth(),
         day: date1.getDate() !== date2.getDate(),
@@ -577,15 +571,13 @@ var fixTimezoneGap = function(oldDate, newDate) {
     }
 
     const diff = newDate.getHours() - oldDate.getHours();
-    let sign;
-    let trial;
 
     if(diff === 0) {
         return;
     }
 
-    sign = (diff === 1 || diff === -23) ? -1 : 1;
-    trial = new Date(newDate.getTime() + sign * 3600000);
+    const sign = (diff === 1 || diff === -23) ? -1 : 1;
+    const trial = new Date(newDate.getTime() + sign * 3600000);
 
     if(sign > 0 || trial.getDate() === newDate.getDate()) {
         newDate.setTime(trial.getTime());

@@ -114,21 +114,17 @@ var combineGetters = function(getters) {
         each(compiledGetters, function(name) {
             const value = this(obj, options);
             let current;
-            let path;
-            let pathItem;
-            let last;
-            let i;
 
             if(value === undefined) {
                 return;
             }
 
             current = (result || (result = {}));
-            path = name.split('.');
-            last = path.length - 1;
+            const path = name.split('.');
+            const last = path.length - 1;
 
-            for(i = 0; i < last; i++) {
-                pathItem = path[i];
+            for(let i = 0; i < last; i++) {
+                const pathItem = path[i];
                 if(!(pathItem in current)) {
                     current[pathItem] = { };
                 }
