@@ -1566,11 +1566,10 @@ const Scheduler = Widget.inherit({
     },
 
     _headerConfig: function() {
-        let result;
         const currentViewOptions = this._getCurrentViewOptions();
         const countConfig = this._getViewCountConfig();
 
-        result = extend({
+        const result = extend({
             isAdaptive: this.option('adaptivityEnabled'),
             firstDayOfWeek: this.option('firstDayOfWeek'),
             currentView: this._currentView,
@@ -1712,10 +1711,9 @@ const Scheduler = Widget.inherit({
     },
 
     _workSpaceConfig: function(groups, countConfig) {
-        let result;
         const currentViewOptions = this._getCurrentViewOptions();
 
-        result = extend({
+        const result = extend({
             noDataText: this.option('noDataText'),
             firstDayOfWeek: this.option('firstDayOfWeek'),
             startDayHour: this.option('startDayHour'),

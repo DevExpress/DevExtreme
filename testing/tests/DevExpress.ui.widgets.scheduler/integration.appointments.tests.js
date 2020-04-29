@@ -1678,7 +1678,7 @@ QUnit.skip('Appointment should not twitch on drag start with horizontal dragging
     // if(skipTestOnMobile(assert)) {
     //     return;
     // }
-    let resourcesData = [
+    const resourcesData = [
         {
             text: 'Samantha Bright',
             id: 1,
@@ -1690,7 +1690,7 @@ QUnit.skip('Appointment should not twitch on drag start with horizontal dragging
         }
     ];
 
-    let priorityData = [
+    const priorityData = [
         {
             text: 'Low Priority',
             id: 1,
@@ -1702,7 +1702,7 @@ QUnit.skip('Appointment should not twitch on drag start with horizontal dragging
         }
     ];
 
-    let data = [{
+    const data = [{
         'text': 'Google AdWords Strategy',
         'ownerId': [2],
         'startDate': new Date(2017, 4, 1, 9, 0),
@@ -1741,16 +1741,16 @@ QUnit.skip('Appointment should not twitch on drag start with horizontal dragging
         height: 400
     });
 
-    let $appointment = this.scheduler.appointments.getAppointment(),
+    const $appointment = this.scheduler.appointments.getAppointment(),
         dragDistance = 50;
 
     const defaultPosition = translator.locate($appointment);
-    let pointer = pointerMock($appointment).start();
+    const pointer = pointerMock($appointment).start();
 
     // pointer.dragStart().drag(dragDistance, 0);
     pointer.dragStart().drag(0, 0);
 
-    let startPosition = translator.locate($appointment);
+    const startPosition = translator.locate($appointment);
     assert.roughEqual(defaultPosition.left, startPosition.left - dragDistance, 1, 'Appointment start position does not twitch after drag start');
 });
 
@@ -1769,17 +1769,17 @@ QUnit.skip('Appointment should have correct position while horizontal dragging',
         }]
     });
 
-    let $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0),
+    const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0),
         dragDistance = 150;
 
     this.instance.$element().find('.dx-scheduler-time-panel').outerWidth(true);
 
-    let pointer = pointerMock($appointment).start(),
+    const pointer = pointerMock($appointment).start(),
         startPosition = translator.locate($appointment);
 
     pointer.dragStart().drag(dragDistance, 0);
 
-    let currentPosition = translator.locate($appointment);
+    const currentPosition = translator.locate($appointment);
 
     assert.roughEqual(startPosition.left, currentPosition.left - dragDistance, 2, 'Appointment position is correct');
     pointer.dragEnd();

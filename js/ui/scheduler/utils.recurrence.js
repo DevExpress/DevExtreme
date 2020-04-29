@@ -119,7 +119,6 @@ const dateGetterMap = {
         return date.getDay();
     },
     'byweekno': function(date, weekStart) {
-        let daysFromYearStart;
         const current = new Date(date);
         let diff = leastDaysInWeek - current.getDay() + days[weekStart] - 1;
         const dayInMilliseconds = toMs('day');
@@ -134,7 +133,7 @@ const dateGetterMap = {
         const yearStart = new Date(current.getFullYear(), 0, 1);
         const timezoneDiff = (yearStart.getTimezoneOffset() - current.getTimezoneOffset()) * toMs('minute');
 
-        daysFromYearStart = 1 + (current - yearStart + timezoneDiff) / dayInMilliseconds;
+        const daysFromYearStart = 1 + (current - yearStart + timezoneDiff) / dayInMilliseconds;
 
         return Math.ceil(daysFromYearStart / 7);
     },
@@ -221,7 +220,6 @@ const dateIsRecurrenceException = function(date, recurrenceException) {
 
 const doNextIteration = function(date, startIntervalDate, endIntervalDate, recurrenceRule, iterationCount) {
     let matchCountIsCorrect = true;
-    let dateInInterval;
 
     endIntervalDate = endIntervalDate.getTime();
 
@@ -237,7 +235,7 @@ const doNextIteration = function(date, startIntervalDate, endIntervalDate, recur
         }
     }
 
-    dateInInterval = date.getTime() <= endIntervalDate;
+    const dateInInterval = date.getTime() <= endIntervalDate;
 
     return dateInInterval && matchCountIsCorrect;
 };
@@ -248,14 +246,13 @@ var getDatesByRecurrence = function(options) {
     let iterationResult = {};
     const rule = recurrenceRule.rule;
     const recurrenceStartDate = options.start;
-    let dateRules;
 
     if(!recurrenceRule.isValid || !rule.freq) {
         return result;
     }
 
     rule.interval = normalizeInterval(rule);
-    dateRules = splitDateRules(rule, options.firstDayOfWeek);
+    const dateRules = splitDateRules(rule, options.firstDayOfWeek);
 
     const duration = options.end ? options.end.getTime() - options.start.getTime() : toMs('day');
 
