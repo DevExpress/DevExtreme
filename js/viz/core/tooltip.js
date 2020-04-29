@@ -102,15 +102,16 @@ Tooltip.prototype = {
 
         this.setTemplate(options.contentTemplate);
 
-        let pointerEvents = 'none';
+        const pointerEvents = options.interactive ? 'auto' : 'none';
+        if(options.interactive) {
+            this._renderer.root.css({ '-ms-user-select': 'auto', '-moz-user-select': 'auto', '-webkit-user-select': 'auto' });
+        }
+
         const drawTooltip = (tooltip, group) => {
             const state = tooltip._state;
             const template = tooltip._template;
             const useTemplate = template && !state.formatObject.skipTemplate;
             if(state.html || useTemplate) {
-                if(options.interactive) {
-                    pointerEvents = 'auto';
-                }
                 if(!state.isRendered) {
                     if(useTemplate) {
                         template.render({ model: state.formatObject, container: textHtml });
@@ -127,7 +128,10 @@ Tooltip.prototype = {
                     state.isRendered = true;
                 }
             } else {
-                that._text.css({ fill: state.textColor }).attr({ text: state.text, class: options.cssClass }).append(group.attr({ align: options.textAlignment }));
+                that._text
+                    .css({ fill: state.textColor })
+                    .attr({ text: state.text, class: options.cssClass, 'pointer-events': pointerEvents })
+                    .append(group.attr({ align: options.textAlignment }));
             }
             tooltip.plaque.customizeCloud({ fill: state.color, stroke: state.borderColor, 'pointer-events': pointerEvents });
         };
