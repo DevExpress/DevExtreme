@@ -16,47 +16,6 @@ const moduleConfig = {
     }
 };
 
-const moduleConfigWithBoundDiagram = {
-    beforeEach: function() {
-        this.onOptionChanged = sinon.spy();
-        this.$element = $('#diagram').dxDiagram({
-            onOptionChanged: this.onOptionChanged,
-            nodes: {
-                dataSource: [
-                    {
-                        id: '1',
-                        text: 'text1'
-                    },
-                    {
-                        id: '2',
-                        text: 'text2'
-                    }
-                ]
-            }
-        });
-        this.instance = this.$element.dxDiagram('instance');
-    }
-};
-
-const moduleConfigWithNonDefaultDiagram = {
-    beforeEach: function() {
-        this.onOptionChanged = sinon.spy();
-        this.$element = $('#diagram').dxDiagram({
-            onOptionChanged: this.onOptionChanged,
-            simpleView: true,
-            readOnly: true,
-            zoomLevel: 2,
-            fullScreen: true,
-            showGrid: false,
-            snapToGrid: false,
-            gridSize: 0.25,
-            viewUnits: 'cm',
-            units: 'cm',
-        });
-        this.instance = this.$element.dxDiagram('instance');
-    }
-};
-
 QUnit.module('Options', moduleConfig, () => {
     test('should change readOnly property', function(assert) {
         assert.notOk(this.instance._diagramInstance.settings.readOnly);
@@ -464,28 +423,72 @@ QUnit.module('Options', moduleConfig, () => {
     });
 });
 
-QUnit.module('Options with bound diagram', moduleConfigWithBoundDiagram, () => {
+QUnit.module('Options (initially set)', {}, () => {
     test('hasChanges changes on a data bound diagram', function(assert) {
-        assert.equal(this.instance.option('hasChanges'), false, 'on init');
-        assert.notOk(this.onOptionChanged.called);
-        this.instance._diagramInstance.selection.set(['1']);
-        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Bold).execute(true);
-        assert.equal(this.instance.option('hasChanges'), true, 'on edit');
-        assert.ok(this.onOptionChanged.called);
-    });
-});
+        const onOptionChanged = sinon.spy();
+        const $element = $('#diagram').dxDiagram({
+            onOptionChanged: onOptionChanged,
+            nodes: {
+                dataSource: [
+                    {
+                        id: '1',
+                        text: 'text1'
+                    },
+                    {
+                        id: '2',
+                        text: 'text2'
+                    }
+                ]
+            }
+        });
+        const instance = $element.dxDiagram('instance');
 
-QUnit.module('Non-default options diagram', moduleConfigWithNonDefaultDiagram, () => {
+        assert.equal(instance.option('hasChanges'), false, 'on init');
+        assert.notOk(onOptionChanged.called);
+        instance._diagramInstance.selection.set(['1']);
+        instance._diagramInstance.commandManager.getCommand(DiagramCommand.Bold).execute(true);
+        assert.equal(instance.option('hasChanges'), true, 'on edit');
+        assert.ok(onOptionChanged.called);
+    });
+
     test('should has non-default options', function(assert) {
-        assert.ok(this.instance._diagramInstance.settings.simpleView);
-        assert.ok(this.instance._diagramInstance.settings.readOnly);
-        assert.equal(this.instance._diagramInstance.settings.zoomLevel, 2);
-        assert.ok(this.instance._diagramInstance.settings.fullscreen);
-        assert.notOk(this.instance._diagramInstance.settings.showGrid);
-        assert.notOk(this.instance._diagramInstance.settings.snapToGrid);
-        assert.equal(this.instance._diagramInstance.settings.gridSize, 142);
-        assert.equal(this.instance._diagramInstance.settings.viewUnits, 1);
-        assert.equal(this.instance._diagramInstance.model.units, 1);
-        assert.notOk(this.onOptionChanged.called);
+        const onOptionChanged = sinon.spy();
+        const $element = $('#diagram').dxDiagram({
+            onOptionChanged: onOptionChanged,
+            simpleView: true,
+            readOnly: true,
+            zoomLevel: 2,
+            fullScreen: true,
+            showGrid: false,
+            snapToGrid: false,
+            gridSize: 0.25,
+            viewUnits: 'cm',
+            units: 'cm',
+        });
+        const instance = $element.dxDiagram('instance');
+
+        assert.ok(instance._diagramInstance.settings.simpleView);
+        assert.ok(instance._diagramInstance.settings.readOnly);
+        assert.equal(instance._diagramInstance.settings.zoomLevel, 2);
+        assert.ok(instance._diagramInstance.settings.fullscreen);
+        assert.notOk(instance._diagramInstance.settings.showGrid);
+        assert.notOk(instance._diagramInstance.settings.snapToGrid);
+        assert.equal(instance._diagramInstance.settings.gridSize, 142);
+        assert.equal(instance._diagramInstance.settings.viewUnits, 1);
+        assert.equal(instance._diagramInstance.model.units, 1);
+        assert.notOk(onOptionChanged.called);
+    });
+
+    test('should has non-default autoZoomMode option', function(assert) {
+        const onOptionChanged = sinon.spy();
+        const $element = $('#diagram').dxDiagram({
+            onOptionChanged: onOptionChanged,
+            autoZoomMode: 'fitContent',
+        });
+        const instance = $element.dxDiagram('instance');
+
+        assert.equal(instance._diagramInstance.settings.autoZoom, 1);
+        assert.equal(onOptionChanged.getCalls().length, 1);
+        assert.equal(onOptionChanged.getCall(0).args[0]['name'], 'zoomLevel');
     });
 });
