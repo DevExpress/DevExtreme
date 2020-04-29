@@ -665,18 +665,6 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
             that._columnsSeparatorView.changeCursor();
             that._trackerView.hide();
 
-            if(!isNextColumnResizingMode(that)) {
-                const pageIndex = that.component.pageIndex();
-                that.component.updateDimensions();
-
-                if(that.option('wordWrapEnabled') && that.option('scrolling.mode') === 'virtual') {
-                    const dataSource = that.component.getDataSource();
-                    dataSource && dataSource.load().done(function() {
-                        that._rowsView.scrollToPage(pageIndex);
-                    });
-                }
-            }
-
             that._isReadyResizing = false;
             that._isResizing = false;
         }
@@ -877,6 +865,9 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
             }
 
             columnsController.endUpdate();
+            if(!isNextColumnMode) {
+                this.component.updateDimensions();
+            }
         }
 
         return needUpdate;
