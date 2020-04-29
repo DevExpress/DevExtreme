@@ -1,3 +1,4 @@
+/* eslint-disable */
 import $ from '../../core/renderer';
 import DOMComponent from '../../core/dom_component';
 import * as Preact from 'preact';
@@ -186,3 +187,4 @@ export default class PreactWrapper extends DOMComponent {
         throw new Error('"setAria" method is deprecated, use "aria" property instead');
     }
 }
+/* eslint-enable */
