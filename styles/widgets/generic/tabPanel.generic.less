@@ -1,21 +1,73 @@
 @import (once) "./multiView.generic.less";
 @import (once) "./tabs.generic.less";
 
-#inset(@color: @tabs-border-color) {
-    left: inset @GENERIC_TABS_BORDER_WIDTH 0 @color;
-    top: inset 0 @GENERIC_TABS_BORDER_WIDTH @color;
-    right: inset -@GENERIC_TABS_BORDER_WIDTH 0 @color;
-    bottom: inset 0 -@GENERIC_TABS_BORDER_WIDTH @color;
+#inset(@shadow-color) {
+    left: inset @GENERIC_TABS_BORDER_WIDTH 0 @shadow-color;
+    top: inset 0 @GENERIC_TABS_BORDER_WIDTH @shadow-color;
+    right: inset -@GENERIC_TABS_BORDER_WIDTH 0 @shadow-color;
+    bottom: inset 0 -@GENERIC_TABS_BORDER_WIDTH @shadow-color;
 }
 
 .dx-tabs-nav-button-border-mixin(@bottom-shadow-color) {
     .dx-tabs-nav-button-left {
-        box-shadow: #inset(@bottom-shadow-color)[bottom], #inset()[left], #inset()[top];
+        box-shadow: #inset(@bottom-shadow-color) [bottom], #inset(@tabs-border-color) [left], #inset(@tabs-border-color) [top];
     }
 
     .dx-tabs-nav-button-right {
-        box-shadow: #inset(@bottom-shadow-color)[bottom], #inset()[top], #inset()[right];
+        box-shadow: #inset(@bottom-shadow-color) [bottom], #inset(@tabs-border-color) [top], #inset(@tabs-border-color) [right];
     }
+}
+
+.tabpanel-shadow-mixin(@accent-color) {
+    & > .dx-tabpanel-tabs {
+        .dx-tabs {
+            box-shadow: #inset(@accent-color) [bottom], #inset(@tabs-border-color) [top], #inset(@tabs-border-color) [right], #inset(@tabs-border-color) [left];
+        }
+
+        .dx-tab {
+            box-shadow: #inset(@tabs-border-color) [top], #inset(@accent-color) [bottom];
+
+            &.dx-tab-selected {
+                box-shadow: #inset(@accent-color) [top], #inset(@accent-color) [right], #inset(@accent-color) [left];
+            }
+        }
+
+        .dx-tabs-expanded {
+            .dx-tab:not(.dx-tab-selected) {
+                &:first-of-type {
+                    box-shadow: #inset(@accent-color) [bottom], #inset(@tabs-border-color) [left], #inset(@tabs-border-color) [top];
+
+                    .dx-rtl&,
+                    .dx-rtl & {
+                        box-shadow: #inset(@accent-color) [bottom], #inset(@tabs-border-color) [right], #inset(@tabs-border-color) [top];
+                    }
+                }
+            }
+        }
+
+        .dx-tabs-stretched {
+            .dx-tab:not(.dx-tab-selected) {
+                &:last-of-type {
+                    box-shadow: #inset(@accent-color) [bottom], #inset(@tabs-border-color) [right], #inset(@tabs-border-color) [top];
+
+                    .dx-rtl&,
+                    .dx-rtl & {
+                        box-shadow: #inset(@accent-color) [bottom], #inset(@tabs-border-color) [left], #inset(@tabs-border-color) [top];
+                    }
+                }
+            }
+        }
+
+        .dx-tabs-nav-button-border-mixin(@accent-color);
+    }
+
+    .dx-multiview-wrapper {
+        border-color: @accent-color;
+    }
+}
+
+.dx-multiview-wrapper {
+    border: @GENERIC_TABS_BORDER;
 }
 
 .dx-tabpanel {
@@ -23,68 +75,6 @@
         display: block;
         border: none;
         background-color: @tabs-tab-bg;
-        box-shadow: #inset()[bottom], #inset()[top], #inset()[right], #inset()[left];
-
-        .dx-empty-collection& {
-            border-bottom: @GENERIC_TABS_BORDER;
-        }
-    }
-
-    .dx-tab {
-        width: 140px;
-        box-shadow: #inset()[bottom], #inset()[top];
-        
-        &:first-of-type {
-            box-shadow: #inset()[bottom], #inset()[left], #inset()[top];
-        }
-
-        &.dx-tab-selected {
-            box-shadow: #inset()[top], #inset()[right], #inset()[left];
-
-            &:after {
-                border: none;
-                top: 0;
-                bottom: 0;
-                right: 0;
-                left: 0;
-            }
-        }
-    }
-
-    .dx-tabs-wrapper {
-        display: block;
-    }
-
-    &.dx-state-focused {
-        .dx-tabs {
-            box-shadow: #inset(@tabs-focused-border-color)[bottom], #inset()[top], #inset()[right], #inset()[left];
-        }
-
-        .dx-tab:not(.dx-tab-selected) {
-            box-shadow: #inset()[top], #inset(@tabs-focused-border-color)[bottom];
-
-            &:first-of-type  {
-                box-shadow: #inset(@tabs-focused-border-color)[bottom], #inset()[left], #inset()[top];
-            }
-        }
-
-        .dx-tab-selected {
-            box-shadow: #inset(@tabs-focused-border-color)[top], #inset(@tabs-focused-border-color)[right], #inset(@tabs-focused-border-color)[left];
-        }
-
-        .dx-tabs-scrollable {    
-            .dx-tab:not(.dx-tab-selected) {
-                &:first-of-type {
-                    box-shadow: #inset(@tabs-focused-border-color)[bottom], #inset()[top];
-                }
-            }
-        }
-
-        .dx-tabs-nav-button-border-mixin(@tabs-focused-border-color);
-        
-        .dx-multiview-wrapper {
-            border-color: @tabs-focused-border-color;
-        }
     }
 
     .dx-tabs-scrollable {
@@ -93,20 +83,29 @@
         height: 100%;
 
         .dx-tabs-wrapper {
+            display: block;
             border: none;
-        }
-
-        .dx-tab:not(.dx-tab-selected) {
-            &:first-of-type {
-                box-shadow: #inset()[bottom], #inset()[top];
-            }
         }
     }
 
-    .dx-tabs-nav-button-border-mixin(@tabs-border-color);
+    .dx-tab {
+        width: 140px;
 
-    .dx-multiview-wrapper {
-        border: @GENERIC_TABS_BORDER;
-        border-top: none;
+        &:after,
+        &:before {
+            content: none;
+        }
+    }
+
+    &:not(.dx-empty-collection) {
+        .dx-multiview-wrapper {
+            border-top: none;
+        }
+    }
+
+    .tabpanel-shadow-mixin(@tabs-border-color);
+
+    &.dx-state-focused {
+        .tabpanel-shadow-mixin(@tabs-focused-border-color);
     }
 }
