@@ -149,22 +149,6 @@ class Diagram extends Widget {
             });
         }
 
-        if(this.option('zoomLevel') !== DIAGRAM_DEFAULT_ZOOMLEVEL) {
-            this._updateZoomLevelState();
-        }
-        if(this.option('autoZoomMode') !== DIAGRAM_DEFAULT_AUTOZOOM_MODE) {
-            this._updateAutoZoomState();
-        }
-        if(this.option('simpleView')) {
-            this._updateSimpleViewState();
-        }
-        if(this.option('readOnly') || this.option('disabled')) {
-            this._updateReadOnlyState();
-        }
-        if(this.option('fullScreen')) {
-            this._updateFullscreenState();
-        }
-
         if(hasWindow()) {
             resizeCallbacks.add(() => {
                 this._killBrowserResizeTimer();
@@ -710,6 +694,22 @@ class Diagram extends Widget {
         }
         if(this.option('zoomLevel.items')) {
             this._updateZoomLevelItemsState();
+        }
+
+        if(this.option('simpleView')) {
+            this._updateSimpleViewState();
+        }
+        if(this.option('readOnly') || this.option('disabled')) {
+            this._updateReadOnlyState();
+        }
+        if(this.option('zoomLevel') !== DIAGRAM_DEFAULT_ZOOMLEVEL) {
+            this._updateZoomLevelState();
+        }
+        if(this.option('autoZoomMode') !== DIAGRAM_DEFAULT_AUTOZOOM_MODE) {
+            this._updateAutoZoomState();
+        }
+        if(this.option('fullScreen')) {
+            this._updateFullscreenState();
         }
 
         this.optionsUpdateBar = new DiagramOptionsUpdateBar(this);
