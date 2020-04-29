@@ -8174,7 +8174,7 @@ QUnit.module('Editing with real dataController', {
                     const rowsView = this.rowsView;
                     const $testElement = $('#container');
                     let dataSourceCallCount = 0;
-                    let lookup2InitializedSpy = sinon.spy();
+                    const lookup2InitializedSpy = sinon.spy();
 
                     this.options.repaintChangesOnly = repaintChangesOnly;
                     this.options.editing = {
@@ -11776,8 +11776,6 @@ QUnit.module('Editing with validation', {
         this.clock.restore();
         const rowsView = this.rowsView;
         const testElement = $('#container');
-        let $formRow;
-        let inputElement;
         const done = assert.async();
 
         rowsView.render(testElement);
@@ -11804,9 +11802,9 @@ QUnit.module('Editing with validation', {
 
         // act
         this.editRow(0);
-        $formRow = rowsView.getRow(0);
+        const $formRow = rowsView.getRow(0);
 
-        inputElement = getInputElements(testElement).first();
+        const inputElement = getInputElements(testElement).first();
         inputElement.val('');
         inputElement.trigger('change');
         this.saveEditData().done(() => {
@@ -11825,8 +11823,6 @@ QUnit.module('Editing with validation', {
         this.clock.restore();
         const rowsView = this.rowsView;
         const testElement = $('#container');
-        let $formRow;
-        let inputElement;
         const done = assert.async();
 
         rowsView.render(testElement);
@@ -11854,9 +11850,9 @@ QUnit.module('Editing with validation', {
 
         // act
         this.editRow(0);
-        $formRow = rowsView.getRow(0);
+        const $formRow = rowsView.getRow(0);
 
-        inputElement = getInputElements(testElement).first();
+        const inputElement = getInputElements(testElement).first();
         inputElement.val('');
         inputElement.trigger('change');
 
@@ -11883,7 +11879,6 @@ QUnit.module('Editing with validation', {
     // arrange
         const rowsView = this.rowsView;
         const testElement = $('#container');
-        let inputElement;
         const validationCallback = sinon.spy(function() { return new Deferred().resolve().promise(); });
 
         rowsView.render(testElement);
@@ -11906,7 +11901,7 @@ QUnit.module('Editing with validation', {
         // act
         this.editRow(0);
 
-        inputElement = getInputElements(testElement).first();
+        const inputElement = getInputElements(testElement).first();
         inputElement.val('');
         inputElement.trigger('change');
 

@@ -116,12 +116,11 @@ QUnit.module('Summary footer', {
 
         // arrange
         const footerView = this.createFooterView(this.defaultFooterOptions);
-        let $summary;
         var rowClickArgs = [];
 
 
         footerView.render($('#container'));
-        $summary = $('.dx-datagrid-summary-item');
+        const $summary = $('.dx-datagrid-summary-item');
 
         // act
         $summary.eq(1).trigger('dxclick');

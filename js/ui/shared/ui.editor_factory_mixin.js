@@ -171,13 +171,12 @@ const EditorFactoryMixin = (function() {
 
     var prepareSelectBox = function(options) {
         const lookup = options.lookup;
-        let displayGetter;
         let dataSource;
         let postProcess;
         const isFilterRow = options.parentType === 'filterRow';
 
         if(lookup) {
-            displayGetter = compileGetter(lookup.displayExpr);
+            const displayGetter = compileGetter(lookup.displayExpr);
             dataSource = lookup.dataSource;
 
             if(typeUtils.isFunction(dataSource) && !isWrapped(dataSource)) {
@@ -277,8 +276,6 @@ const EditorFactoryMixin = (function() {
     };
     return {
         createEditor: function($container, options) {
-            let editorName;
-
             options.cancel = false;
             options.editorElement = getPublicElement($container);
 
@@ -306,7 +303,7 @@ const EditorFactoryMixin = (function() {
                 }
             }
 
-            editorName = options.editorName;
+            const editorName = options.editorName;
             this.executeAction('onEditorPreparing', options);
 
             if(options.cancel) {

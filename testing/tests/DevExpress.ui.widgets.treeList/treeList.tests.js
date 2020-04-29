@@ -36,11 +36,10 @@ const defaultModuleConfig = {
 };
 
 const createTreeList = function(options) {
-    let treeList;
     const treeListElement = $('#treeList').dxTreeList(options);
 
     QUnit.assert.ok(treeListElement);
-    treeList = treeListElement.dxTreeList('instance');
+    const treeList = treeListElement.dxTreeList('instance');
     return treeList;
 };
 
@@ -989,7 +988,7 @@ QUnit.module('Option Changed', defaultModuleConfig, () => {
     ['standard', 'virual'].forEach((rowRenderingMode) => {
         QUnit.test(`Modified expand state should be displayed correctly when repaintChangesOnly is true and scrolling.rowRenderingMode is ${rowRenderingMode}`, function(assert) {
         // arrange
-            let data = generateData(2),
+            const data = generateData(2),
                 treeList = createTreeList({
                     dataSource: data,
                     autoExpandAll: true,
@@ -1022,7 +1021,7 @@ QUnit.module('Option Changed', defaultModuleConfig, () => {
 
     QUnit.test('The select checkbox should be displayed after changing expand state when repaintChangesOnly is true', function(assert) {
     // arrange
-        let data = generateData(2),
+        const data = generateData(2),
             treeList = createTreeList({
                 dataSource: data,
                 autoExpandAll: true,

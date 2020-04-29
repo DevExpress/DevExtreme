@@ -618,10 +618,9 @@ module.exports = {
 
                 _renderSelectAllCheckBox: function($container, column) {
                     const that = this;
-                    let groupElement;
                     const selectionController = that.getController('selection');
 
-                    groupElement = $('<div>')
+                    const groupElement = $('<div>')
                         .appendTo($container)
                         .addClass(SELECT_CHECKBOX_CLASS);
 

@@ -439,7 +439,6 @@ QUnit.module('Keyboard controller', {
 
     QUnit.testInActiveWindow('KeyDownProcessor is disposed when controller is initialized', function(assert) {
         // arrange
-        let navigationController;
         let isDisposeCalled = false;
         const $rowsElement = $('<div />').append($('<tr class=\'dx-row\'><td/></tr>'));
 
@@ -448,7 +447,7 @@ QUnit.module('Keyboard controller', {
         };
 
         // act
-        navigationController = new KeyboardNavigationController(this.component);
+        const navigationController = new KeyboardNavigationController(this.component);
         navigationController.init();
 
         navigationController._keyDownProcessor = {

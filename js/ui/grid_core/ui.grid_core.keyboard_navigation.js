@@ -1810,7 +1810,6 @@ module.exports = {
                     const dataController = this._dataController;
                     let rowIndex = this.option('focusedRowIndex') || 0;
                     const $rowsView = this.element();
-                    let cellElements;
 
                     if($rowsView && !focused($rowsView)) {
                         $rowsView.attr('tabIndex', null);
@@ -1820,7 +1819,7 @@ module.exports = {
                         rowIndex = 0;
                     }
 
-                    cellElements = this.getCellElements(rowIndex);
+                    const cellElements = this.getCellElements(rowIndex);
 
                     if(this.getController('keyboardNavigation').isKeyboardEnabled() && cellElements) {
                         this.updateFocusElementTabIndex(cellElements);

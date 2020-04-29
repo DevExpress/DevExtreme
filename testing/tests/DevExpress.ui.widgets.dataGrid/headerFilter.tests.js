@@ -1751,12 +1751,7 @@ QUnit.module('Header Filter', {
     QUnit.test('Check select all state after filtering', function(assert) {
     // arrange
         const that = this;
-        let list;
-        let $selectAll;
-        let selectAll;
-        let column;
         const testElement = $('#container');
-        let $popupContent;
 
         that.options.headerFilter.allowSearch = true;
 
@@ -1766,17 +1761,17 @@ QUnit.module('Header Filter', {
         that.headerFilterView.render(testElement);
         that.headerFilterController.showHeaderFilterMenu(0);
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        list = $popupContent.find('.dx-list').dxList('instance');
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const list = $popupContent.find('.dx-list').dxList('instance');
 
         // act
         list.option('searchValue', '3');
-        $selectAll = list.$element().find('.dx-list-select-all-checkbox');
+        const $selectAll = list.$element().find('.dx-list-select-all-checkbox');
         $($selectAll).trigger('dxclick');
         $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // apply filter
 
-        selectAll = $selectAll.dxCheckBox('instance');
-        column = that.columnsController.getVisibleColumns()[0];
+        const selectAll = $selectAll.dxCheckBox('instance');
+        const column = that.columnsController.getVisibleColumns()[0];
 
         // assert
         assert.equal(selectAll.option('value'), true, 'select all has correct state');
@@ -1787,12 +1782,7 @@ QUnit.module('Header Filter', {
     QUnit.test('Check select all state after filtering if column dataType is date', function(assert) {
     // arrange
         const that = this;
-        let treeView;
-        let $selectAll;
-        let selectAll;
-        let column;
         const testElement = $('#container');
-        let $popupContent;
 
         that.options.headerFilter.allowSearch = true;
         that.columns[0].dataType = 'date';
@@ -1803,18 +1793,18 @@ QUnit.module('Header Filter', {
         that.headerFilterView.render(testElement);
         that.headerFilterController.showHeaderFilterMenu(0);
 
-        $popupContent = that.headerFilterView.getPopupContainer().$content();
-        treeView = $popupContent.find('.dx-treeview').dxTreeView('instance');
+        const $popupContent = that.headerFilterView.getPopupContainer().$content();
+        const treeView = $popupContent.find('.dx-treeview').dxTreeView('instance');
 
         // act
         treeView.option('searchValue', '4');
 
-        $selectAll = treeView.$element().find('.dx-treeview-select-all-item');
+        const $selectAll = treeView.$element().find('.dx-treeview-select-all-item');
         $($selectAll).trigger('dxclick');
         $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // apply filter
 
-        selectAll = $selectAll.dxCheckBox('instance');
-        column = that.columnsController.getVisibleColumns()[0];
+        const selectAll = $selectAll.dxCheckBox('instance');
+        const column = that.columnsController.getVisibleColumns()[0];
 
         // assert
         assert.equal(selectAll.option('value'), undefined, 'select all has correct state'); // should be true after treeview fix
@@ -1825,7 +1815,6 @@ QUnit.module('Header Filter', {
     QUnit.test('Check select all state after filtering if column dataType is date and search is by month', function(assert) {
     // arrange
         const that = this;
-        let selectAll;
         const testElement = $('#container');
 
         that.options.headerFilter.allowSearch = true;
@@ -1847,7 +1836,7 @@ QUnit.module('Header Filter', {
         $($selectAll).trigger('dxclick');
         $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // apply filter
         const column = that.columnsController.getVisibleColumns()[0];
-        selectAll = $selectAll.dxCheckBox('instance');
+        const selectAll = $selectAll.dxCheckBox('instance');
 
         // assert
         assert.equal(selectAll.option('value'), undefined, 'select all has correct state'); // should be true after treeview fix
