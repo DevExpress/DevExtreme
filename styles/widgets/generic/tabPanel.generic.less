@@ -1,45 +1,33 @@
 @import (once) "./multiView.generic.less";
 @import (once) "./tabs.generic.less";
 
-#inset(@shadow-color) {
-    left: inset @GENERIC_TABS_BORDER_WIDTH 0 @shadow-color;
-    top: inset 0 @GENERIC_TABS_BORDER_WIDTH @shadow-color;
-    right: inset -@GENERIC_TABS_BORDER_WIDTH 0 @shadow-color;
-    bottom: inset 0 -@GENERIC_TABS_BORDER_WIDTH @shadow-color;
-}
-
-.dx-tabs-nav-button-border-mixin(@bottom-shadow-color) {
-    .dx-tabs-nav-button-left {
-        box-shadow: #inset(@bottom-shadow-color) [bottom], #inset(@tabs-border-color) [left], #inset(@tabs-border-color) [top];
-    }
-
-    .dx-tabs-nav-button-right {
-        box-shadow: #inset(@bottom-shadow-color) [bottom], #inset(@tabs-border-color) [top], #inset(@tabs-border-color) [right];
-    }
-}
+@GENERIC_TABPANEL_INSET_SHADOW_LEFT: inset @GENERIC_TABS_BORDER_WIDTH 0 @tabs-border-color;
+@GENERIC_TABPANEL_INSET_SHADOW_TOP: inset 0 @GENERIC_TABS_BORDER_WIDTH @tabs-border-color;
+@GENERIC_TABPANEL_INSET_SHADOW_RIGHT: inset -@GENERIC_TABS_BORDER_WIDTH 0 @tabs-border-color;
+@GENERIC_TABPANEL_INSET_SHADOW_BOTTOM: inset 0 -@GENERIC_TABS_BORDER_WIDTH @tabs-border-color;
 
 .tabpanel-shadow-mixin(@accent-color) {
     & > .dx-tabpanel-tabs {
         .dx-tabs {
-            box-shadow: #inset(@accent-color) [bottom], #inset(@tabs-border-color) [top], #inset(@tabs-border-color) [right], #inset(@tabs-border-color) [left];
+            box-shadow: inset 0 -@GENERIC_TABS_BORDER_WIDTH @accent-color, @GENERIC_TABPANEL_INSET_SHADOW_TOP, @GENERIC_TABPANEL_INSET_SHADOW_RIGHT, @GENERIC_TABPANEL_INSET_SHADOW_LEFT;
         }
 
         .dx-tab {
-            box-shadow: #inset(@tabs-border-color) [top], #inset(@accent-color) [bottom];
+            box-shadow: @GENERIC_TABPANEL_INSET_SHADOW_TOP, inset 0 -@GENERIC_TABS_BORDER_WIDTH @accent-color;
 
             &.dx-tab-selected {
-                box-shadow: #inset(@accent-color) [top], #inset(@accent-color) [right], #inset(@accent-color) [left];
+                box-shadow: inset 0 @GENERIC_TABS_BORDER_WIDTH @accent-color, inset -@GENERIC_TABS_BORDER_WIDTH 0 @accent-color, inset @GENERIC_TABS_BORDER_WIDTH 0 @accent-color;
             }
         }
 
         .dx-tabs-expanded {
             .dx-tab:not(.dx-tab-selected) {
                 &:first-of-type {
-                    box-shadow: #inset(@accent-color) [bottom], #inset(@tabs-border-color) [left], #inset(@tabs-border-color) [top];
+                    box-shadow: inset 0 -@GENERIC_TABS_BORDER_WIDTH @accent-color, @GENERIC_TABPANEL_INSET_SHADOW_LEFT, @GENERIC_TABPANEL_INSET_SHADOW_TOP;
 
                     .dx-rtl&,
                     .dx-rtl & {
-                        box-shadow: #inset(@accent-color) [bottom], #inset(@tabs-border-color) [right], #inset(@tabs-border-color) [top];
+                        box-shadow: inset 0 -@GENERIC_TABS_BORDER_WIDTH @accent-color, @GENERIC_TABPANEL_INSET_SHADOW_RIGHT, @GENERIC_TABPANEL_INSET_SHADOW_TOP;
                     }
                 }
             }
@@ -48,17 +36,23 @@
         .dx-tabs-stretched {
             .dx-tab:not(.dx-tab-selected) {
                 &:last-of-type {
-                    box-shadow: #inset(@accent-color) [bottom], #inset(@tabs-border-color) [right], #inset(@tabs-border-color) [top];
+                    box-shadow: inset 0 -@GENERIC_TABS_BORDER_WIDTH @accent-color, @GENERIC_TABPANEL_INSET_SHADOW_RIGHT, @GENERIC_TABPANEL_INSET_SHADOW_TOP;
 
                     .dx-rtl&,
                     .dx-rtl & {
-                        box-shadow: #inset(@accent-color) [bottom], #inset(@tabs-border-color) [left], #inset(@tabs-border-color) [top];
+                        box-shadow: inset 0 -@GENERIC_TABS_BORDER_WIDTH @accent-color, @GENERIC_TABPANEL_INSET_SHADOW_LEFT, @GENERIC_TABPANEL_INSET_SHADOW_TOP;
                     }
                 }
             }
         }
 
-        .dx-tabs-nav-button-border-mixin(@accent-color);
+        .dx-tabs-nav-button-left {
+            box-shadow: inset 0 -@GENERIC_TABS_BORDER_WIDTH @accent-color, @GENERIC_TABPANEL_INSET_SHADOW_LEFT, @GENERIC_TABPANEL_INSET_SHADOW_TOP;
+        }
+
+        .dx-tabs-nav-button-right {
+            box-shadow: inset 0 -@GENERIC_TABS_BORDER_WIDTH @accent-color, @GENERIC_TABPANEL_INSET_SHADOW_TOP, @GENERIC_TABPANEL_INSET_SHADOW_RIGHT;
+        }
     }
 
     .dx-multiview-wrapper {
