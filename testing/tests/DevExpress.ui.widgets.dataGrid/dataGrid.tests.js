@@ -2296,7 +2296,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         checkDxFontIcon(assert, '.dx-datagrid-export-button .dx-icon', DX_ICON_XLSX_FILE_CONTENT_CODE);
     });
 
-    // T571282, T835869
+    // T571282, T835869, T881314
     QUnit.test('Resizing columns should work correctly when scrolling mode is \'virtual\' and wordWrapEnabled is true', function(assert) {
     // arrange
         const generateData = function(count) {
@@ -2344,6 +2344,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok(rowHeight > 50, 'rowHeight > 50');
         assert.strictEqual(instance.getVisibleRows().length, 6, 'row count');
         assert.strictEqual(instance.pageIndex(), 10, 'current page index');
+        assert.strictEqual(instance.getTopVisibleRowData().name, 'name20', 'top visible row');
 
         // act
         const resizeController = instance.getController('columnsResizer');
@@ -2366,7 +2367,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         deviceType !== 'desktop' && $(scrollable._container()).trigger('scroll');
 
         // assert
-        assert.strictEqual(instance.pageIndex(), 10, 'current page index');
+        assert.strictEqual(instance.pageIndex(), 18, 'current page index is changed'); // T881314
+        assert.strictEqual(instance.getTopVisibleRowData().name, 'name38', 'top visible row is changed');
         assert.notStrictEqual(rowsView._rowHeight, rowHeight, 'row height has changed');
         assert.ok(rowsView._rowHeight < 50, 'rowHeight < 50');
         assert.strictEqual(instance.getVisibleRows().length, 8, 'row count');
@@ -3363,17 +3365,12 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         const startPosition = -9900;
         resizeController._setupResizingInfo(startPosition);
-        resizeController._moveSeparator({
+        resizeController._moveSeparator({ // T881314
             event: {
                 data: resizeController,
                 type: 'mousemove',
                 pageX: startPosition - 20,
                 preventDefault: commonUtils.noop
-            }
-        });
-        resizeController._endResizing({ // T571282
-            event: {
-                data: resizeController
             }
         });
 
@@ -3427,13 +3424,13 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.strictEqual(instance.columnOption(0, 'width'), 80);
-        assert.strictEqual(instance.columnOption(0, 'visibleWidth'), null);
+        assert.strictEqual(instance.columnOption(0, 'visibleWidth'), 80);
         assert.strictEqual(instance.columnOption(1, 'width'), 100);
-        assert.strictEqual(instance.columnOption(1, 'visibleWidth'), undefined);
+        assert.strictEqual(instance.columnOption(1, 'visibleWidth'), 100);
         assert.strictEqual(instance.columnOption(2, 'width'), 100);
         assert.strictEqual(instance.columnOption(2, 'visibleWidth'), 'auto');
         assert.strictEqual(instance.columnOption(3, 'width'), 100);
-        assert.strictEqual(instance.columnOption(3, 'visibleWidth'), undefined);
+        assert.strictEqual(instance.columnOption(3, 'visibleWidth'), 100);
 
         const colGroups = $('.dx-datagrid colgroup');
         assert.strictEqual(colGroups.length, 2);
@@ -3480,7 +3477,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.strictEqual(instance.columnOption(0, 'width'), 120);
-        assert.strictEqual(instance.columnOption(0, 'visibleWidth'), null);
+        assert.strictEqual(instance.columnOption(0, 'visibleWidth'), undefined);
         assert.strictEqual(instance.columnOption(1, 'width'), 100);
         assert.strictEqual(instance.columnOption(1, 'visibleWidth'), undefined);
         assert.strictEqual(instance.columnOption(2, 'width'), 100);
@@ -3529,7 +3526,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 preventDefault: commonUtils.noop
             }
         });
-        resizeController._moveSeparator({
+        resizeController._moveSeparator({ // T881314
             event: {
                 data: resizeController,
                 type: 'mousemove',
@@ -3537,11 +3534,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 preventDefault: commonUtils.noop
             }
         });
-        resizeController._endResizing({ // T571282
-            event: {
-                data: resizeController
-            }
-        });
+
 
         // assert
         assert.strictEqual(instance.$element().children().width(), 250);
@@ -3690,17 +3683,12 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         const startPosition = -9900;
         resizeController._setupResizingInfo(startPosition);
-        resizeController._moveSeparator({
+        resizeController._moveSeparator({ // T881314
             event: {
                 data: resizeController,
                 type: 'mousemove',
                 pageX: startPosition - 20,
                 preventDefault: commonUtils.noop
-            }
-        });
-        resizeController._endResizing({ // T571282
-            event: {
-                data: resizeController
             }
         });
 
