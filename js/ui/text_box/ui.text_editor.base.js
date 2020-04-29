@@ -15,6 +15,7 @@ const ClearButton = require('./ui.text_editor.clear').default;
 const TextEditorButtonCollection = require('./texteditor_button_collection/index').default;
 const config = require('../../core/config');
 const errors = require('../widget/ui.errors');
+const browser = require('../../core/utils/browser');
 const Deferred = require('../../core/utils/deferred').Deferred;
 
 const TEXTEDITOR_CLASS = 'dx-texteditor';
@@ -31,6 +32,7 @@ const ALLOWED_STYLE_CLASSES = [
     TEXTEDITOR_STYLING_MODE_PREFIX + 'filled',
     TEXTEDITOR_STYLING_MODE_PREFIX + 'underlined'
 ];
+const TEXTEDITOR_COLLAPSED_CLASS = 'dx-texteditor-collapsed';
 
 const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 
@@ -406,6 +408,7 @@ const TextEditorBase = Editor.inherit({
         this._renderEnterKeyAction();
         this._renderEmptinessEvent();
         this.callBase();
+        this._collapseInputContainer();
     },
 
     _renderInput: function() {
@@ -467,6 +470,14 @@ const TextEditorBase = Editor.inherit({
                 buttonInstance.option && buttonInstance.option('stylingMode', editorStylingMode === 'underlined' ? 'text' : 'contained');
             }
         });
+    },
+
+    _collapseInputContainer: function() {
+        const $element = this.$element();
+        const isIE11 = browser.msie && browser.version <= 11;
+        if(isIE11 && $element.css('display') === 'block') {
+            $element.addClass(TEXTEDITOR_COLLAPSED_CLASS);
+        }
     },
 
     _renderValue: function() {
