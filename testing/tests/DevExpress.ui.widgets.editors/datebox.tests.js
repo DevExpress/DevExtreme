@@ -3047,53 +3047,71 @@ QUnit.module('datebox with time component', {
         assert.deepEqual(dateBox.option('value'), new Date(2014, 1, 16, 11, 20), 'date and time are correct');
     });
 
-    QUnit.test('T231015 - widget should set default date or time if only one widget\'s value is chosen', function(assert) {
-        const $element = $('#dateBox').dxDateBox({
-            pickerType: 'calendar',
-            type: 'datetime',
-            value: null
-        });
+    QUnit.test('T231015 - widget should set default date if only one widget\'s value is chosen', function(assert) {
+        const clock = sinon.useFakeTimers(new Date(2001, 1, 1, 1, 1, 0, 0).valueOf());
 
-        const dateBox = $element.dxDateBox('instance');
+        try {
+            const $element = $('#dateBox').dxDateBox({
+                pickerType: 'calendar',
+                type: 'datetime',
+                value: null
+            });
 
-        dateBox.open();
-        let date = new Date();
-        dateBox._strategy._widget.option('value', new Date(2015, 3, 21));
-        $(dateBox._popup._wrapper()).find('.dx-popup-done').trigger('dxclick');
+            const dateBox = $element.dxDateBox('instance');
+            const date = new Date(2002, 2, 2, 1, 1);
 
-        date.setFullYear(2015, 3, 21);
-        uiDateUtils.normalizeTime(date);
-        assert.equal(Math.floor(dateBox.option('value').getTime() / 1000 / 10), Math.floor(date.getTime() / 1000 / 10), 'value is correct if only calendar value is changed');
+            dateBox.open();
+            dateBox._strategy._widget.option('value', new Date(2002, 2, 2, 2, 2));
+            $(dateBox._popup._wrapper()).find('.dx-popup-done').trigger('dxclick');
+            assert.strictEqual(dateBox.option('value').getTime(), date.getTime(), 'value is correct if only calendar value is changed');
+        } finally {
+            clock.restore();
+        }
+    });
 
-        dateBox.option('value', null);
-        dateBox._strategy._widget.option('value', null);
-        dateBox.open();
-        date = new Date();
-        dateBox._strategy._timeView.option('value', new Date(2015, 3, 21, 15, 15));
-        $(dateBox._popup._wrapper()).find('.dx-popup-done').trigger('dxclick');
+    QUnit.test('T231015 - widget should set default time if only one widget\'s value is chosen', function(assert) {
+        const clock = sinon.useFakeTimers(new Date(2001, 1, 1, 1, 1, 0, 0).valueOf());
 
-        date.setHours(15, 15);
-        uiDateUtils.normalizeTime(date);
-        assert.equal(Math.floor(dateBox.option('value').getTime() / 1000 / 10), Math.floor(date.getTime() / 1000 / 10), 'value is correct if only timeView value is changed');
+        try {
+            const $element = $('#dateBox').dxDateBox({
+                pickerType: 'calendar',
+                type: 'datetime',
+                value: null
+            });
+
+            const dateBox = $element.dxDateBox('instance');
+            const date = new Date(2001, 1, 1, 2, 2);
+
+            dateBox.open();
+            dateBox._strategy._timeView.option('value', new Date(2002, 2, 2, 2, 2));
+            $(dateBox._popup._wrapper()).find('.dx-popup-done').trigger('dxclick');
+            assert.strictEqual(dateBox.option('value').getTime(), date.getTime(), 'value is correct if only timeView value is changed');
+        } finally {
+            clock.restore();
+        }
     });
 
     QUnit.test('T253298 - widget should set default date and time if value is null and the \'OK\' button is clicked', function(assert) {
-        const $element = $('#dateBox').dxDateBox({
-            pickerType: 'calendar',
-            type: 'datetime',
-            value: null
-        });
+        const clock = sinon.useFakeTimers(new Date(2001, 1, 1, 1, 1, 1, 1).valueOf());
 
-        const dateBox = $element.dxDateBox('instance');
+        try {
+            const $element = $('#dateBox').dxDateBox({
+                pickerType: 'calendar',
+                type: 'datetime',
+                value: null
+            });
 
-        dateBox.open();
-        const date = new Date();
-        uiDateUtils.normalizeTime(date);
-        $(dateBox._popup._wrapper()).find('.dx-popup-done').trigger('dxclick');
+            const dateBox = $element.dxDateBox('instance');
 
-        const value = dateBox.option('value');
-        assert.equal(value.getMilliseconds(), 0, 'milliseconds is should be zero');
-        assert.equal(Math.round(value.getTime() / 1000 / 10), Math.round(date.getTime() / 1000 / 10), 'value is correct');
+            dateBox.open();
+            const date = new Date(2001, 1, 1, 1, 1, 0, 0);
+            $(dateBox._popup._wrapper()).find('.dx-popup-done').trigger('dxclick');
+
+            const value = dateBox.option('value');
+            assert.equal(value.getTime(), date.getTime(), 'value is correct');
+        } finally {
+            clock.restore();
+        }
     });
 
     QUnit.test('DateBox should have time part when pickerType is rollers', function(assert) {
@@ -3767,7 +3785,8 @@ QUnit.module('keyboard navigation', {
     }
 }, () => {
     QUnit.testInActiveWindow('popup hides on tab', function(assert) {
-        this.dateBox.focus();
+        this.$input.focusin();
+
         assert.ok(this.$dateBox.hasClass(STATE_FOCUSED_CLASS), 'element is focused');
         this.dateBox.option('opened', true);
         this.keyboard.keyDown('tab');
