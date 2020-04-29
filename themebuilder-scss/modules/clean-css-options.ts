@@ -1,5 +1,7 @@
 import type CleanCSS from 'clean-css';
 
+// TODO we need to share this option with scss compiler (in gulp task)
+
 export const cleanCssOptions: CleanCSS.Options = {
     rebase: false,
     format: {
