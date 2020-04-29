@@ -162,7 +162,6 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
 
     _init: function() {
         const that = this;
-        let linkTarget;
 
         that._$element.children('.' + SIZED_ELEMENT_CLASS).remove();
 
@@ -178,7 +177,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
         that._renderElementAttributes();
         that._initRenderer();
         // Shouldn't "_useLinks" be passed to the renderer instead of doing 3 checks here?
-        linkTarget = that._useLinks && that._renderer.root;
+        const linkTarget = that._useLinks && that._renderer.root;
         // There is an implicit relation between `_useLinks` and `loading indicator` - it uses links
         // Though this relation is not ensured in code we will immediately know when it is broken - `loading indicator` will break on construction
         linkTarget && linkTarget.enableLinks().virtualLink('core').virtualLink('peripheral');
@@ -454,10 +453,9 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
         const canvas = this._canvas;
         const layout = this._layout;
         let rect = canvas.width > 0 && canvas.height > 0 ? [canvas.left, canvas.top, canvas.width - canvas.right, canvas.height - canvas.bottom] : [0, 0, 0, 0];
-        let nextRect;
 
         rect = layout.forward(rect, this._getMinSize());
-        nextRect = this._applySize(rect) || rect;
+        const nextRect = this._applySize(rect) || rect;
         layout.backward(nextRect, this._getAlignmentRect() || nextRect);
     },
 

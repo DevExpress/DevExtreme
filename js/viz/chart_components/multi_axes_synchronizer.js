@@ -59,7 +59,6 @@ function convertAxisInfo(axisInfo, converter) {
     const tickValues = axisInfo.tickValues;
     let tick;
     const ticks = [];
-    let interval;
 
     axisInfo.minValue = converter.transform(axisInfo.minValue, base);
     axisInfo.oldMinValue = converter.transform(axisInfo.oldMinValue, base);
@@ -71,7 +70,7 @@ function convertAxisInfo(axisInfo, converter) {
         axisInfo.tickInterval = 1;
     }
 
-    interval = converter.getInterval(base, axisInfo.tickInterval);
+    const interval = converter.getInterval(base, axisInfo.tickInterval);
     tick = converter.transform(tickValues[0], base);
     while(ticks.length < tickValues.length) {
         ticks.push(tick);
@@ -90,7 +89,6 @@ function populateAxesInfo(axes) {
         const businessRange = axis.getTranslator().getBusinessRange();
         const visibleArea = axis.getVisibleArea();
 
-        let axisInfo;
         let tickInterval = axis._tickInterval;
         const synchronizedValue = options.synchronizedValue;
 
@@ -115,7 +113,7 @@ function populateAxesInfo(axes) {
                 maxValue = majorTicks[0] + tickInterval;
             }
 
-            axisInfo = {
+            const axisInfo = {
                 axis: axis,
                 isLogarithmic: options.type === 'logarithmic',
                 logarithmicBase: businessRange.base,
@@ -149,8 +147,6 @@ function updateTickValues(axesInfo) {
     }, 0);
 
     axesInfo.forEach(axisInfo => {
-        let ticksMultiplier;
-        let ticksCount;
         let additionalStartTicksCount = 0;
         const synchronizedValue = axisInfo.synchronizedValue;
         const tickValues = axisInfo.tickValues;
@@ -161,8 +157,8 @@ function updateTickValues(axesInfo) {
             axisInfo.tickValues = [axisInfo.baseTickValue];
         } else {
             if(tickValues.length > 1 && tickInterval) {
-                ticksMultiplier = _floor((maxTicksCount + 1) / tickValues.length);
-                ticksCount = ticksMultiplier > 1 ? _floor((maxTicksCount + 1) / ticksMultiplier) : maxTicksCount;
+                const ticksMultiplier = _floor((maxTicksCount + 1) / tickValues.length);
+                const ticksCount = ticksMultiplier > 1 ? _floor((maxTicksCount + 1) / ticksMultiplier) : maxTicksCount;
                 additionalStartTicksCount = _floor((ticksCount - tickValues.length) / 2);
 
                 while(additionalStartTicksCount > 0 && (tickValues[0] !== 0)) {
@@ -198,10 +194,7 @@ function correctMinMaxValues(axesInfo) {
     const mainAxisInfoTickInterval = mainAxisInfo.tickInterval;
 
     axesInfo.forEach(axisInfo => {
-        let scale;
-        let move;
         let mainAxisBaseValueOffset;
-        let valueFromAxisInfo;
 
         if(axisInfo !== mainAxisInfo) {
             if(mainAxisInfoTickInterval && axisInfo.tickInterval) {
@@ -209,7 +202,7 @@ function correctMinMaxValues(axesInfo) {
                     axisInfo.oldMinValue = axisInfo.minValue = axisInfo.baseTickValue - (mainAxisInfo.baseTickValue - mainAxisInfo.minValue) / mainAxisInfoTickInterval * axisInfo.tickInterval;
                     axisInfo.oldMaxValue = axisInfo.maxValue = axisInfo.baseTickValue - (mainAxisInfo.baseTickValue - mainAxisInfo.maxValue) / mainAxisInfoTickInterval * axisInfo.tickInterval;
                 }
-                scale = mainAxisInfoTickInterval / getAxisRange(mainAxisInfo) / axisInfo.tickInterval * getAxisRange(axisInfo);
+                const scale = mainAxisInfoTickInterval / getAxisRange(mainAxisInfo) / axisInfo.tickInterval * getAxisRange(axisInfo);
                 axisInfo.maxValue = axisInfo.minValue + getAxisRange(axisInfo) / scale;
             }
             if((mainAxisInfo.inverted && !axisInfo.inverted) || (!mainAxisInfo.inverted && axisInfo.inverted)) {
@@ -217,8 +210,8 @@ function correctMinMaxValues(axesInfo) {
             } else {
                 mainAxisBaseValueOffset = mainAxisInfo.baseTickValue - mainAxisInfo.minValue;
             }
-            valueFromAxisInfo = getAxisRange(axisInfo);
-            move = (mainAxisBaseValueOffset / getAxisRange(mainAxisInfo) - (axisInfo.baseTickValue - axisInfo.minValue) / valueFromAxisInfo) * valueFromAxisInfo;
+            const valueFromAxisInfo = getAxisRange(axisInfo);
+            const move = (mainAxisBaseValueOffset / getAxisRange(mainAxisInfo) - (axisInfo.baseTickValue - axisInfo.minValue) / valueFromAxisInfo) * valueFromAxisInfo;
             axisInfo.minValue -= move;
             axisInfo.maxValue -= move;
         }
@@ -226,15 +219,13 @@ function correctMinMaxValues(axesInfo) {
 }
 
 function calculatePaddings(axesInfo) {
-    let minPadding;
-    let maxPadding;
     let startPadding = 0;
     let endPadding = 0;
 
     axesInfo.forEach(axisInfo => {
         const inverted = axisInfo.inverted;
-        minPadding = axisInfo.minValue > axisInfo.oldMinValue ? (axisInfo.minValue - axisInfo.oldMinValue) / getAxisRange(axisInfo) : 0;
-        maxPadding = axisInfo.maxValue < axisInfo.oldMaxValue ? (axisInfo.oldMaxValue - axisInfo.maxValue) / getAxisRange(axisInfo) : 0;
+        const minPadding = axisInfo.minValue > axisInfo.oldMinValue ? (axisInfo.minValue - axisInfo.oldMinValue) / getAxisRange(axisInfo) : 0;
+        const maxPadding = axisInfo.maxValue < axisInfo.oldMaxValue ? (axisInfo.oldMaxValue - axisInfo.maxValue) / getAxisRange(axisInfo) : 0;
 
         startPadding = _max(startPadding, inverted ? maxPadding : minPadding);
         endPadding = _max(endPadding, inverted ? minPadding : maxPadding);
@@ -370,15 +361,13 @@ function updateMinorTicks(axesInfo) {
 const multiAxesSynchronizer = {
     synchronize: function(valueAxes) {
         each(getValueAxesPerPanes(valueAxes), function(_, axes) {
-            let axesInfo;
-            let paddings;
             if(axes.length > 1) {
-                axesInfo = populateAxesInfo(axes);
+                const axesInfo = populateAxesInfo(axes);
                 if(axesInfo.length < 2 || !getMainAxisInfo(axesInfo)) return;
                 updateTickValues(axesInfo);
 
                 correctMinMaxValues(axesInfo);
-                paddings = calculatePaddings(axesInfo);
+                const paddings = calculatePaddings(axesInfo);
 
                 correctMinMaxValuesByPaddings(axesInfo, paddings);
 

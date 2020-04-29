@@ -221,7 +221,6 @@ const dxTreeMap = require('../core/base_widget').inherit({
     _buildNodes: function() {
         const that = this;
         const root = that._root = that._topNode = new Node();
-        let processedData;
 
         root._id = 0;
         root.parent = {};
@@ -231,7 +230,7 @@ const dxTreeMap = require('../core/base_widget').inherit({
         root.label = null;
         that._nodes = [root];
         that._handlers.beginBuildNodes();
-        processedData = that._processDataSourceItems(that._dataSourceItems() || []);
+        const processedData = that._processDataSourceItems(that._dataSourceItems() || []);
         traverseDataItems(root, processedData.items, 0, {
             itemsField: !processedData.isPlain && that._getOption('childrenField', true) || 'items',
             valueField: that._getOption('valueField', true) || 'value',
@@ -412,11 +411,10 @@ const dxTreeMap = require('../core/base_widget').inherit({
     _getTextBBox: function(fontOptions) {
         const renderer = this._renderer;
         const text = this._textForCalculations || renderer.text('0', 0, 0);
-        let bBox;
 
         this._textForCalculations = text;
         text.css(_patchFontOptions(fontOptions)).append(renderer.root);
-        bBox = text.getBBox();
+        const bBox = text.getBBox();
         text.remove();
         return bBox;
     }
@@ -425,16 +423,13 @@ const dxTreeMap = require('../core/base_widget').inherit({
 function traverseDataItems(root, dataItems, level, params) {
     const nodes = [];
     const allNodes = params.nodes;
-    let node;
     let i;
     const ii = dataItems.length;
-    let dataItem;
     let totalValue = 0;
-    let items;
 
     for(i = 0; i < ii; ++i) {
-        dataItem = dataItems[i];
-        node = new Node();
+        const dataItem = dataItems[i];
+        const node = new Node();
         node._id = allNodes.length;
         node.ctx = params.ctx;
         node.parent = root;
@@ -444,7 +439,7 @@ function traverseDataItems(root, dataItems, level, params) {
         params.buildNode(node);
         allNodes.push(node);
         nodes.push(node);
-        items = dataItem[params.itemsField];
+        const items = dataItem[params.itemsField];
         if(items && items.length) {
             traverseDataItems(node, items, level + 1, params);
         }
@@ -459,12 +454,11 @@ function traverseDataItems(root, dataItems, level, params) {
 
 function processNodes(context, root, process) {
     const nodes = root.nodes;
-    let node;
     let i;
     const ii = nodes.length;
 
     for(i = 0; i < ii; ++i) {
-        node = nodes[i];
+        const node = nodes[i];
         process(context, node);
         if(node.isNode()) {
             processNodes(context, node, process);
@@ -546,12 +540,11 @@ function calculateRects(context, root) {
 function processTiling(context, node) {
     let rect = node.parent.rects[node.index];
     const rectOffsets = context.rectOffsets;
-    let headerHeight;
 
     if(node.isNode()) {
         setRectAttrs(node.tile.outer, buildTileRect(rect, node.parent.innerRect, rectOffsets.headerEdge, rectOffsets.headerInner));
         rect = marginateRect(rect, context.groupPadding);
-        headerHeight = Math.min(context.headerHeight, rect[3] - rect[1]);
+        const headerHeight = Math.min(context.headerHeight, rect[3] - rect[1]);
         node.rect = [rect[0], rect[1], rect[2], rect[1] + headerHeight];
         setRectAttrs(node.tile.inner, marginateRect(node.rect, rectOffsets.headerEdge));
         rect[1] += headerHeight;

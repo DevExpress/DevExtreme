@@ -249,9 +249,8 @@ function createAxis(translatorData, orthogonalTranslatorData, allOptions, isHori
     const translator = createTranslator(translatorData, allOptions);
     const orthogonalTranslator = createTranslator(orthogonalTranslatorData, allOptions);
     const mergedOptions = $.extend(true, {}, allOptions);
-    let axis;
 
-    axis = new axisModule.Axis({
+    const axis = new axisModule.Axis({
         renderer: new vizMocks.Renderer(),
         stripsGroup: allOptions.stripsGroup,
         labelAxesGroup: allOptions.labelAxesGroup,

@@ -98,7 +98,6 @@ const ThemeManager = BaseThemeManager.inherit((function() {
             const themeCommonSettings = theme.commonSeriesSettings;
             const widgetType = that._themeSection.split('.').slice(-1)[0];
             const type = _normalizeEnum(userOptions.type || userCommonSettings.type || themeCommonSettings.type || (widgetType === 'pie' && theme.type)); // userCommonSettings.type && themeCommonSettings.type deprecated in 15.2 in pie
-            let settings;
             const palette = that.palette;
             const isBar = ~type.indexOf('bar');
             const isLine = ~type.indexOf('line');
@@ -108,17 +107,16 @@ const ThemeManager = BaseThemeManager.inherit((function() {
             const resolveLabelsOverlapping = that.getOptions('resolveLabelsOverlapping');
             const containerBackgroundColor = that.getOptions('containerBackgroundColor');
             const seriesTemplate = applyParticularTheme.seriesTemplate.call(this);
-            let seriesVisibility;
 
             if(isBar || isBubble) {
                 userOptions = extend(true, {}, userCommonSettings, userCommonSettings[type], userOptions);
-                seriesVisibility = userOptions.visible;
+                const seriesVisibility = userOptions.visible;
                 userCommonSettings = { type: {} };
                 extend(true, userOptions, userOptions.point);
                 userOptions.visible = seriesVisibility;
             }
 
-            settings = extend(true, { aggregation: {} }, themeCommonSettings, themeCommonSettings[type], userCommonSettings, userCommonSettings[type], userOptions);
+            const settings = extend(true, { aggregation: {} }, themeCommonSettings, themeCommonSettings[type], userCommonSettings, userCommonSettings[type], userOptions);
 
             settings.aggregation.enabled = widgetType === 'chart' && normalizeAggregationEnabled(settings.aggregation, that.getOptions('useAggregation'));
             settings.type = type;

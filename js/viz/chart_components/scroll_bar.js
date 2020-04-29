@@ -203,7 +203,6 @@ ScrollBar.prototype = {
     _applyPosition: function(x1, x2) {
         const that = this;
         const visibleArea = that._translator.getCanvasVisibleArea();
-        let height;
 
         x1 = _max(x1, visibleArea.min);
         x1 = _min(x1, visibleArea.max);
@@ -211,7 +210,7 @@ ScrollBar.prototype = {
         x2 = _min(x2, visibleArea.max);
         x2 = _max(x2, visibleArea.min);
 
-        height = Math.abs(x2 - x1);
+        const height = Math.abs(x2 - x1);
         that._scroll.attr({
             y: x1,
             height: height < MIN_SCROLL_BAR_SIZE ? MIN_SCROLL_BAR_SIZE : height

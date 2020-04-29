@@ -201,10 +201,9 @@ function guessTypeByData(sample) {
 let selectStrategy = function(options, data) {
     let type = _normalizeEnum(options.type);
     let elementType = _normalizeEnum(options.elementType);
-    let sample;
     const strategy = _extend({}, emptyStrategy);
     if(data.count() > 0) {
-        sample = data.geometry(data.item(0));
+        const sample = data.geometry(data.item(0));
         type = strategiesByType[type] ? type : guessTypeByData(sample);
         _extend(strategy, strategiesByType[type]);
         strategy.fullType = strategy.type = type;
@@ -468,10 +467,6 @@ strategiesByElementType[TYPE_MARKER] = {
             const dataField = settings.dataField;
             const minSize = settings.minSize > 0 ? _Number(settings.minSize) : 0;
             const maxSize = settings.maxSize > minSize ? _Number(settings.maxSize) : minSize;
-            let minValue;
-            let maxValue;
-            let deltaValue;
-            let deltaSize;
 
             if(settings.sizeGroups) {
                 return;
@@ -480,10 +475,10 @@ strategiesByElementType[TYPE_MARKER] = {
             for(i = 0; i < ii; ++i) {
                 values[i] = _max(getDataValue(handles[i].proxy, dataField) || 0, 0);
             }
-            minValue = _min.apply(null, values);
-            maxValue = _max.apply(null, values);
-            deltaValue = (maxValue - minValue) || 1;
-            deltaSize = maxSize - minSize;
+            const minValue = _min.apply(null, values);
+            const maxValue = _max.apply(null, values);
+            const deltaValue = (maxValue - minValue) || 1;
+            const deltaSize = maxSize - minSize;
             for(i = 0; i < ii; ++i) {
                 handles[i]._settings.size = minSize + deltaSize * (values[i] - minValue) / deltaValue;
             }
@@ -560,7 +555,6 @@ strategiesByElementType[TYPE_MARKER] = {
             const dataField = context.settings.dataField;
             let values;
             let count = 0;
-            let palette;
             for(i = 0; i < ii; ++i) {
                 values = getDataValue(handles[i].proxy, dataField);
                 if(values && values.length > count) {
@@ -568,7 +562,7 @@ strategiesByElementType[TYPE_MARKER] = {
                 }
             }
             if(count > 0) {
-                palette = context.params.themeManager.createPalette(context.settings.palette, { useHighlight: true, extensionMode: 'alternate' });
+                const palette = context.params.themeManager.createPalette(context.settings.palette, { useHighlight: true, extensionMode: 'alternate' });
                 values = palette.generateColors(count);
 
                 context.settings._colors = values;
@@ -655,11 +649,10 @@ function transformList(projection, coordinates) {
     const output = [];
     let i;
     const ii = coordinates.length;
-    let item;
     let k = 0;
     output.length = 2 * ii;
     for(i = 0; i < ii; ++i) {
-        item = projection.transform(coordinates[i]);
+        const item = projection.transform(coordinates[i]);
         output[k++] = item[0];
         output[k++] = item[1];
     }
@@ -712,13 +705,12 @@ function findGroupingIndex(value, partition) {
     let start = 0;
     let end = partition.length - 1;
     let index = -1;
-    let middle;
     if(partition[start] <= value && value <= partition[end]) {
         if(value === partition[end]) {
             index = end - 1;
         } else {
             while(end - start > 1) {
-                middle = (start + end) >> 1;
+                const middle = (start + end) >> 1;
                 if(value < partition[middle]) {
                     end = middle;
                 } else {
@@ -750,9 +742,8 @@ function processCommonSettings(context, options) {
     const settings = combineSettings(_extend({ label: {}, color: strategy.getDefaultColor(context, options.palette) }, themeManager.theme('layer:' + strategy.fullType)), options);
     let colors;
     let i;
-    let palette;
     if(settings.paletteSize > 0) {
-        palette = themeManager.createDiscretePalette(settings.palette, settings.paletteSize);
+        const palette = themeManager.createDiscretePalette(settings.palette, settings.paletteSize);
         for(i = 0, colors = []; i < settings.paletteSize; ++i) {
             colors.push(palette.getColor(i));
         }
@@ -766,9 +757,8 @@ function valueCallback(proxy, dataField) {
 }
 
 let performGrouping = function(context, partition, settingField, dataField, valuesCallback) {
-    let values;
     if(dataField && partition && partition.length > 1) {
-        values = valuesCallback(partition.length - 1);
+        const values = valuesCallback(partition.length - 1);
         context.grouping[settingField] = {
             callback: _isFunction(dataField) ? dataField : valueCallback,
             field: dataField,
@@ -791,9 +781,8 @@ function dropGrouping(context) {
 var groupByColor = function(context) {
     performGrouping(context, context.settings.colorGroups, 'color', context.settings.colorGroupingField, function(count) {
         const _palette = context.params.themeManager.createDiscretePalette(context.settings.palette, count);
-        let i;
         const list = [];
-        for(i = 0; i < count; ++i) {
+        for(let i = 0; i < count; ++i) {
             list.push(_palette.getColor(i));
         }
         return list;
@@ -1057,9 +1046,8 @@ MapLayer.prototype = _extend({
         const geometry = data.geometry;
         const attributes = data.attributes;
         let handle;
-        let dataItem;
         for(i = 0; i < ii; ++i) {
-            dataItem = data.item(i);
+            const dataItem = data.item(i);
             handles[i] = new MapLayerElement(context, i, geometry(dataItem), attributes(dataItem));
         }
         // Customization must be performed before anything else happens to element (that is the idea of customization)
@@ -1291,18 +1279,16 @@ MapLayerElement.prototype = {
 
     measureLabel: function() {
         const label = this._label;
-        let bBox;
         if(label.value) {
-            bBox = label.text.getBBox();
+            const bBox = label.text.getBBox();
             label.size = [bBox.width, bBox.height, -bBox.y - bBox.height / 2];
         }
     },
 
     adjustLabel: function() {
         const label = this._label;
-        let offset;
         if(label.value) {
-            offset = this._ctx.str.getLabelOffset(label, label.settings);
+            const offset = this._ctx.str.getLabelOffset(label, label.settings);
             label.settings = null;
             label.text.attr({ x: offset[0], y: offset[1] + label.size[2] });
         }
@@ -1349,10 +1335,9 @@ MapLayerElement.prototype = {
         const currentState = hasFlag(that._state, STATE_SELECTED);
         const newState = !!state;
         const selection = that._ctx.selection;
-        let tmp;
         if(selection && currentState !== newState) {
             that._state = setFlag(that._state, STATE_SELECTED, newState);
-            tmp = selection.state[selection.single];
+            const tmp = selection.state[selection.single];
             selection.state[selection.single] = null; // This is to prevent stack overflow
             if(tmp) {
                 tmp.setSelected(false);
@@ -1384,11 +1369,8 @@ MapLayerElement.prototype = {
 
 // http://en.wikipedia.org/wiki/Centroid
 function calculatePolygonCentroid(coordinates) {
-    let i;
     const length = coordinates.length;
-    let v1;
     let v2 = coordinates[length - 1];
-    let cross;
     let cx = 0;
     let cy = 0;
     let area = 0;
@@ -1397,10 +1379,10 @@ function calculatePolygonCentroid(coordinates) {
     let minY = Infinity;
     let maxY = -Infinity;
 
-    for(i = 0; i < length; ++i) {
-        v1 = v2;
+    for(let i = 0; i < length; ++i) {
+        const v1 = v2;
         v2 = coordinates[i];
-        cross = v1[0] * v2[1] - v2[0] * v1[1];
+        const cross = v1[0] * v2[1] - v2[0] * v1[1];
         area += cross;
         cx += (v1[0] + v2[0]) * cross;
         cy += (v1[1] + v2[1]) * cross;
@@ -1431,7 +1413,6 @@ function calculateLineStringData(coordinates) {
     let max0 = v2[0];
     let min1 = v2[1];
     let max1 = v2[1];
-    let t;
 
     for(i = 1; i < ii; ++i) {
         v1 = v2;
@@ -1446,7 +1427,7 @@ function calculateLineStringData(coordinates) {
     i = findGroupingIndex(totalLength / 2, items);
     v1 = coordinates[i];
     v2 = coordinates[i + 1];
-    t = (totalLength / 2 - items[i]) / (items[i + 1] - items[i]);
+    const t = (totalLength / 2 - items[i]) / (items[i + 1] - items[i]);
     return ii ? [
         [
             v1[0] * (1 - t) + v2[0] * t,
@@ -1465,12 +1446,11 @@ function calculateLineStringData(coordinates) {
 function projectAreaLabel(coordinates) {
     let i;
     const ii = coordinates.length;
-    let centroid;
     let resultCentroid;
     let maxArea = 0;
 
     for(i = 0; i < ii; ++i) {
-        centroid = calculatePolygonCentroid(coordinates[i]);
+        const centroid = calculatePolygonCentroid(coordinates[i]);
         if(centroid.area > maxArea) {
             maxArea = centroid.area;
             resultCentroid = centroid;
@@ -1484,11 +1464,10 @@ function projectLineLabel(coordinates) {
     let i;
     const ii = coordinates.length;
     let maxLength = 0;
-    let data;
     let resultData;
 
     for(i = 0; i < ii; ++i) {
-        data = calculateLineStringData(coordinates[i]);
+        const data = calculateLineStringData(coordinates[i]);
         if(data[2] > maxLength) {
             maxLength = data[2];
             resultData = data;

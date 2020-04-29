@@ -294,14 +294,12 @@ LayoutManager.prototype = {
         items.slice().reverse().forEach(function(item) {
             const layoutOptions = item.getLayoutOptions();
             let needRedraw = false;
-            let sizeObject;
-            let cutSide;
 
             if(!layoutOptions) {
                 return;
             }
 
-            sizeObject = extend({}, layoutOptions);
+            const sizeObject = extend({}, layoutOptions);
 
             needRedraw =
                 layoutOptions.cutSide === 'vertical' && size.width < 0 ||
@@ -309,7 +307,7 @@ LayoutManager.prototype = {
                 layoutOptions.cutSide === 'vertical' && size.height > 0 ||
                 layoutOptions.cutSide === 'horizontal' && size.width > 0;
 
-            cutSide = layoutOptions.cutSide === 'horizontal' ? 'width' : 'height';
+            const cutSide = layoutOptions.cutSide === 'horizontal' ? 'width' : 'height';
 
             if(needRedraw) {
                 let width = sizeObject.width - size.width;
@@ -335,13 +333,12 @@ LayoutManager.prototype = {
         const that = this;
         this._elements.forEach(function(item) {
             const layoutOptions = item.getLayoutOptions();
-            let sizeObject;
 
             if(!layoutOptions) {
                 return;
             }
 
-            sizeObject = { width: canvas.width - canvas.left - canvas.right, height: canvas.height - canvas.top - canvas.bottom };
+            const sizeObject = { width: canvas.width - canvas.left - canvas.right, height: canvas.height - canvas.top - canvas.bottom };
             if(layoutOptions.cutSide === 'vertical') {
                 sizeObject.height -= that._options.height;
             } else {
@@ -356,20 +353,17 @@ LayoutManager.prototype = {
     _drawElements: function(canvas) {
         this._elements.slice().reverse().forEach(function(item) {
             const layoutOptions = item.getLayoutOptions();
-            let sizeObject;
-            let cutSide;
-            let length;
 
             if(!layoutOptions) {
                 return;
             }
 
-            sizeObject = {
+            const sizeObject = {
                 width: canvas.width - canvas.left - canvas.right,
                 height: canvas.height - canvas.top - canvas.bottom
             };
-            cutSide = layoutOptions.cutSide;
-            length = cutSide === 'horizontal' ? 'width' : 'height';
+            const cutSide = layoutOptions.cutSide;
+            const length = cutSide === 'horizontal' ? 'width' : 'height';
 
             sizeObject[length] = layoutOptions[length];
             item.draw(sizeObject.width, sizeObject.height);
@@ -386,17 +380,14 @@ LayoutManager.prototype = {
 
         this._elements.slice().reverse().forEach(function(item) {
             const layoutOptions = item.getLayoutOptions();
-            let position;
-            let cutSide;
-            let my;
 
             if(!layoutOptions) {
                 return;
             }
 
-            position = layoutOptions.position;
-            cutSide = layoutOptions.cutSide;
-            my = {
+            const position = layoutOptions.position;
+            const cutSide = layoutOptions.cutSide;
+            const my = {
                 horizontal: position.horizontal,
                 vertical: position.vertical
             };
