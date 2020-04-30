@@ -980,14 +980,13 @@ QUnit.test('boundOffset of non allDay appointments should be recalculated', func
 
     const $allDayPanel = $(this.instance.$element()).find('.dx-scheduler-all-day-table-cell').eq(0);
     let $a = $(this.instance.$element()).find('.dx-scheduler-appointment').eq(0);
-    let $b;
 
     assert.roughEqual($a.dxDraggable('instance').option('boundOffset').top, -$allDayPanel.outerHeight(), 0.501, 'Bound offset is correct');
 
     this.instance.addAppointment(newItem);
 
     $a = $(this.instance.$element()).find('.dx-scheduler-appointment').eq(0);
-    $b = $(this.instance.$element()).find('.dx-scheduler-appointment').eq(1);
+    const $b = $(this.instance.$element()).find('.dx-scheduler-appointment').eq(1);
 
     assert.roughEqual($a.dxDraggable('instance').option('boundOffset').top, -$allDayPanel.outerHeight(), 0.501, 'Bound offset is correct');
     assert.roughEqual($b.dxDraggable('instance').option('boundOffset').top, -$allDayPanel.outerHeight(), 0.501, 'Bound offset is correct');

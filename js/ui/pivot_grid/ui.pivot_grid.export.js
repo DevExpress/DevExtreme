@@ -35,11 +35,10 @@ exports.ExportMixin = extend({}, exportMixin, {
     },
 
     _getLength: function(items) {
-        let i;
         const itemCount = items[0].length;
         let cellCount = 0;
 
-        for(i = 0; i < itemCount; i++) {
+        for(let i = 0; i < itemCount; i++) {
             cellCount += items[0][i].colspan || 1;
         }
 
@@ -64,10 +63,7 @@ exports.ExportMixin = extend({}, exportMixin, {
     },
 
     _getAllItems: function(columnsInfo, rowsInfoItems, cellsInfo) {
-        let cellIndex;
-        let rowIndex;
         let correctedCellsInfo = cellsInfo;
-        let sourceItems;
         const rowsLength = this._getLength(rowsInfoItems);
         const headerRowsCount = columnsInfo.length;
 
@@ -77,10 +73,10 @@ exports.ExportMixin = extend({}, exportMixin, {
                 correctedCellsInfo = this._correctCellsInfoItemLengths(cellsInfo, cellInfoItemLength);
             }
         }
-        sourceItems = columnsInfo.concat(correctedCellsInfo);
+        const sourceItems = columnsInfo.concat(correctedCellsInfo);
 
-        for(rowIndex = 0; rowIndex < rowsInfoItems.length; rowIndex++) {
-            for(cellIndex = rowsInfoItems[rowIndex].length - 1; cellIndex >= 0; cellIndex--) {
+        for(let rowIndex = 0; rowIndex < rowsInfoItems.length; rowIndex++) {
+            for(let cellIndex = rowsInfoItems[rowIndex].length - 1; cellIndex >= 0; cellIndex--) {
                 if(!isDefined(sourceItems[rowIndex + headerRowsCount])) {
                     sourceItems[rowIndex + headerRowsCount] = [];
                 }

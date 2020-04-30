@@ -135,9 +135,7 @@ const dateLocalization = dependencyInjector({
 
     parse: function(text, format) {
         const that = this;
-        let result;
         let ldmlFormat;
-        let formatter;
 
         if(!text) {
             return;
@@ -154,7 +152,7 @@ const dateLocalization = dependencyInjector({
         if(typeof format === 'string' && !FORMATS_TO_PATTERN_MAP[format.toLowerCase()]) {
             ldmlFormat = format;
         } else {
-            formatter = function(value) {
+            const formatter = function(value) {
                 const text = that.format(value, format);
                 return numberLocalization.convertDigits(text, true);
             };
@@ -169,7 +167,7 @@ const dateLocalization = dependencyInjector({
         }
 
         errors.log('W0012');
-        result = new Date(text);
+        const result = new Date(text);
 
         if(!result || isNaN(result.getTime())) {
             return;

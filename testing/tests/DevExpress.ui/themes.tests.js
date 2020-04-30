@@ -47,15 +47,13 @@ QUnit.module('Selector check', () => {
 
     function isGoodSelector(selectorText) {
         const parts = selectorText.split(/(?=[#.\s])/g);
-        let i;
-        let part;
 
         function isTag(text) {
             return text === '*' || /^\w+$/.test(text);
         }
 
-        for(i = 0; i < parts.length; i++) {
-            part = $.trim(parts[i]);
+        for(let i = 0; i < parts.length; i++) {
+            const part = $.trim(parts[i]);
 
             if(part === '') {
                 continue;
@@ -114,13 +112,12 @@ QUnit.module('Selector check', () => {
             frameDoc.write('<link rel=stylesheet href=\'' + cssUrl + '\'>');
 
             function isCssLoaded() {
-                let ourSheet;
 
                 if(frameDoc.styleSheets.length <= defaultSheetCount) {
                     return false;
                 }
 
-                ourSheet = $.grep(frameDoc.styleSheets, function(i) { return i.href.indexOf(cssUrl) > -1; })[0];
+                const ourSheet = $.grep(frameDoc.styleSheets, function(i) { return i.href.indexOf(cssUrl) > -1; })[0];
                 return rulesFromSheet(ourSheet).length > 0;
             }
 

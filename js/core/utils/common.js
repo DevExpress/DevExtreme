@@ -12,7 +12,6 @@ const ensureDefined = function(value, defaultValue) {
 const executeAsync = function(action, context/* , internal */) {
     const deferred = new Deferred();
     const normalizedContext = context || this;
-    let timerId;
     const task = {
         promise: deferred.promise(),
         abort: function() {
@@ -33,7 +32,7 @@ const executeAsync = function(action, context/* , internal */) {
         }
     };
 
-    timerId = (arguments[2] || setTimeout)(callback, typeof context === 'number' ? context : 0);
+    const timerId = (arguments[2] || setTimeout)(callback, typeof context === 'number' ? context : 0);
 
     return task;
 };
@@ -301,11 +300,10 @@ const asyncNoop = function() { return new Deferred().resolve().promise(); };
 
 const grep = function(elements, checkFunction, invert) {
     const result = [];
-    let check;
     const expectedCheck = !invert;
 
     for(let i = 0; i < elements.length; i++) {
-        check = !!checkFunction(elements[i], i);
+        const check = !!checkFunction(elements[i], i);
 
         if(check === expectedCheck) {
             result.push(elements[i]);

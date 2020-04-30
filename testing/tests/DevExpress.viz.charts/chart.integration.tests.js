@@ -2702,10 +2702,9 @@ QUnit.test('Checking border hover when pie chart palette changed. B237181', func
             point.select();
         }
     });
-    let hoverState;
 
     chart.option({ palette: 'Soft Pastel' });
-    hoverState = chart.getAllSeries()[0].getPoints()[0].getOptions().styles.hover;
+    const hoverState = chart.getAllSeries()[0].getPoints()[0].getOptions().styles.hover;
     assert.equal(hoverState.stroke, '#60a69f', 'Hover color is color of series');
     assert.equal(hoverState['stroke-width'], 0, 'Hover width was 0');
 });

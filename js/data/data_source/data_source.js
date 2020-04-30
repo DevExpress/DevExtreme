@@ -717,10 +717,9 @@ const DataSource = Class.inherit({
 
     _changeLoadingCount: function(increment) {
         const oldLoading = this.isLoading();
-        let newLoading;
 
         this._loadingCount += increment;
-        newLoading = this.isLoading();
+        const newLoading = this.isLoading();
 
         if(oldLoading ^ newLoading) {
             this.fireEvent('loadingChanged', [newLoading]);
@@ -823,7 +822,6 @@ const DataSource = Class.inherit({
     load: function() {
         const that = this;
         const d = new Deferred();
-        let loadOperation;
 
         function loadTask() {
             if(that._disposed) {
@@ -841,7 +839,7 @@ const DataSource = Class.inherit({
         this._scheduleFailCallbacks(d);
         this._scheduleChangedCallbacks(d);
 
-        loadOperation = this._createLoadOperation(d);
+        const loadOperation = this._createLoadOperation(d);
 
         this.fireEvent('customizeStoreLoadOptions', [loadOperation]);
 

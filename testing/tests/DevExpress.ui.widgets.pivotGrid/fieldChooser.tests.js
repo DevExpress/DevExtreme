@@ -2034,7 +2034,6 @@ QUnit.module('Base Field chooser', {
 
     QUnit.test('Search in headerFilter', function(assert) {
         const that = this;
-        let $listItems;
         const fields = [
             { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true }
         ];
@@ -2064,7 +2063,7 @@ QUnit.module('Base Field chooser', {
         list.option('searchValue', 't2');
 
         // assert
-        $listItems = list.$element().find('.dx-list-item');
+        const $listItems = list.$element().find('.dx-list-item');
         assert.strictEqual($listItems.length, 1, 'list item\'s count');
         assert.strictEqual($listItems.text(), 'test2', 'correct item\'s text');
     });

@@ -177,10 +177,9 @@ const ODataStore = Store.inherit({
     */
     createQuery: function(loadOptions) {
         let url;
-        let queryOptions;
 
         loadOptions = loadOptions || {};
-        queryOptions = {
+        const queryOptions = {
             adapter: 'odata',
 
             beforeSend: this._beforeSend,

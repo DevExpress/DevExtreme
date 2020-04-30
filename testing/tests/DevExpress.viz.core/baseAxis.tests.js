@@ -83,11 +83,10 @@ QUnit.test('Create axis', function(assert) {
     const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
     const axesContainerGroup = renderer.g();
     const gridGroup = renderer.g();
-    let axis;
 
     renderer.g.reset();
 
-    axis = new Axis({
+    const axis = new Axis({
         renderer: renderer,
         stripsGroup: stripsGroup,
         labelAxesGroup: labelAxesGroup,
@@ -756,7 +755,6 @@ QUnit.test('getViewport return object with field \'action\' if need', function(a
 });
 
 QUnit.test('hold min/max for single point series', function(assert) {
-    let businessRange;
     this.updateOptions({
         tick: {
             visible: true
@@ -765,7 +763,7 @@ QUnit.test('hold min/max for single point series', function(assert) {
     this.axis.setBusinessRange({ min: 4, max: 4 });
     this.generatedTicks = [3.2, 3.4, 3.6, 3.8, 4.0, 4.2, 4.4, 4.6, 4.8];
     this.axis.createTicks(this.canvas);
-    businessRange = this.axis.getTranslator().getBusinessRange();
+    const businessRange = this.axis.getTranslator().getBusinessRange();
 
     assert.equal(businessRange.min, 4, 'min');
     assert.equal(businessRange.max, 4, 'max');

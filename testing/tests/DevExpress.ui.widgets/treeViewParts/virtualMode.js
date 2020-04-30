@@ -682,12 +682,12 @@ QUnit.test('Clear searchValue in virtualMode', function(assert) {
         dataStructure: 'plain',
         virtualModeEnabled: true,
         searchValue: 'a'
-    }); let items;
+    });
 
     treeView.expandItem(1);
     treeView.option('searchValue', '');
 
-    items = treeView.option('items');
+    const items = treeView.option('items');
     assert.equal(items.length, 6, '6 items were rendered after filtration');
 });
 

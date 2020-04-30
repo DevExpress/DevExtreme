@@ -45,10 +45,9 @@ const processItems = function(groupItems, field) {
         const item = items[0];
         const path = createPath(items);
         const preparedFilterValueByText = isTree ? map(items, function(item) { return item.text; }).reverse().join('/') : item.text;
-        let preparedFilterValue;
 
         item.value = isTree ? path.slice(0) : (item.key || item.value);
-        preparedFilterValue = isTree ? path.join('/') : item.value && item.value.valueOf();
+        const preparedFilterValue = isTree ? path.join('/') : item.value && item.value.valueOf();
 
         if(item.children) {
             item.items = item.children;

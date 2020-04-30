@@ -641,12 +641,11 @@ const environment = {
                 enabled: true
             }
         });
-        let paneClipRect;
         const stubSeries = new MockSeries({
             points: getPoints(DEFAULT_ANIMATION_LIMIT - 1)
         });
         chartMocks.seriesMockData.series.push(stubSeries);
-        paneClipRect = chart._panesClipRects.base[0];
+        const paneClipRect = chart._panesClipRects.base[0];
         resetMocksInChart(chart);
         $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
         $.each(chart.seriesFamilies, function(_, family) { family.dispose = function() { chart.seriesFamiliesDisposed = true; }; });
@@ -796,12 +795,11 @@ const environment = {
                 subtitle: {}
             }
         });
-        let paneClipRect;
         const stubSeries = new MockSeries({
             points: getPoints(DEFAULT_ANIMATION_LIMIT - 1)
         });
         chartMocks.seriesMockData.series.push(stubSeries);
-        paneClipRect = chart._panesClipRects.base[0];
+        const paneClipRect = chart._panesClipRects.base[0];
         resetMocksInChart(chart);
         $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
         $.each(chart.seriesFamilies, function(_, family) { family.dispose = function() { chart.seriesFamiliesDisposed = true; }; });
@@ -1433,9 +1431,8 @@ const environment = {
                 subtitle: {}
             }
         });
-        let loadIndicator;
         chart.showLoadingIndicator();
-        loadIndicator = chart._loadingIndicator;
+        const loadIndicator = chart._loadingIndicator;
 
         const countDisposedObjects = function(propName, fields) {
             chart[propName + 'Disposed'] = chart[propName + 'Disposed'] || 0;
@@ -1595,10 +1592,9 @@ const environment = {
     });
 }());
 
-var getPoints = function(count) {
-    let i;
+const getPoints = function(count) {
     const points = [];
-    for(i = 0; i < count; i++) {
+    for(let i = 0; i < count; i++) {
         points.push(new MockPoint({}));
     }
 

@@ -346,14 +346,13 @@ module.exports = {
                     const addInValidItem = function(editData) {
                         const data = { key: editData.key };
                         const index = getIndexByEditData(editData, items);
-                        let rowIndex;
 
                         if(index >= 0) {
                             return;
                         }
 
                         editData.rowIndex = editData.rowIndex > itemsCount ? editData.rowIndex % itemsCount : editData.rowIndex;
-                        rowIndex = editData.rowIndex;
+                        const rowIndex = editData.rowIndex;
 
                         data[INSERT_INDEX] = 1;
                         items.splice(rowIndex, 0, data);

@@ -46,7 +46,6 @@ QUnit.module('Header panel', {
     // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
-        let searchPanel;
 
         this.options.searchPanel = {
             visible: true,
@@ -64,7 +63,7 @@ QUnit.module('Header panel', {
 
         const input = testElement.find('input');
 
-        searchPanel = testElement.find('.dx-datagrid-search-panel');
+        const searchPanel = testElement.find('.dx-datagrid-search-panel');
         assert.strictEqual(input.length, 1);
         assert.strictEqual(searchPanel.length, 1);
         assert.equal(searchPanel.outerWidth(), 160, 'search panel width');
@@ -102,7 +101,6 @@ QUnit.module('Header panel', {
     // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
-        let groupPanel;
 
         this.options.groupPanel = {
             visible: true,
@@ -117,7 +115,7 @@ QUnit.module('Header panel', {
         // assert
         const headerPanelElement = testElement.find('.dx-datagrid-header-panel');
         assert.ok(headerPanelElement.length);
-        groupPanel = headerPanelElement.find('.dx-datagrid-group-panel');
+        const groupPanel = headerPanelElement.find('.dx-datagrid-group-panel');
         assert.ok(groupPanel.length);
         assert.equal(groupPanel.length, 1);
         assert.ok(groupPanel.css('maxWidth'), 'Group panel has an max width');
@@ -125,10 +123,9 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Render groupPanel with visible="auto"', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
-        let groupPanel;
         const countOfRenderedElements = devices.current().deviceType === 'desktop' ? 1 : 0;
 
         this.options.groupPanel = {
@@ -145,7 +142,7 @@ QUnit.module('Header panel', {
         const headerPanelElement = testElement.find('.dx-datagrid-header-panel');
         assert.equal(headerPanelElement.length, countOfRenderedElements, 'Render on desktop only');
 
-        groupPanel = headerPanelElement.find('.dx-datagrid-group-panel');
+        const groupPanel = headerPanelElement.find('.dx-datagrid-group-panel');
         assert.equal(groupPanel.length, countOfRenderedElements, 'Render on desktop only');
     });
 
@@ -190,10 +187,9 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Group items with cssClass', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
-        let groupPanel;
 
         this.options.groupPanel = {
             visible: true
@@ -209,18 +205,17 @@ QUnit.module('Header panel', {
         // assert
         const headerPanelElement = testElement.find('.dx-datagrid-header-panel');
         assert.ok(headerPanelElement.length);
-        groupPanel = headerPanelElement.find('.dx-datagrid-group-panel');
+        const groupPanel = headerPanelElement.find('.dx-datagrid-group-panel');
         assert.equal(groupPanel.length, 1);
         assert.ok(groupPanel.find('.dx-group-panel-item').first().hasClass('customCssClass'), 'has class customCssClass');
         assert.ok(!groupPanel.find('.dx-group-panel-item').last().hasClass('customCssClass'), 'not has class customCssClass');
     });
 
     QUnit.test('Draw groupPanel with grouping', function(assert) {
-    // arrange
+        // arrange
 
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
-        let groupPanel;
 
         $.extend(this.columns[0], { groupIndex: 0, allowSorting: true });
 
@@ -235,7 +230,7 @@ QUnit.module('Header panel', {
         // assert
         const headerPanelElement = testElement.find('.dx-datagrid-header-panel');
         assert.ok(headerPanelElement.length);
-        groupPanel = headerPanelElement.find('.dx-datagrid-group-panel');
+        const groupPanel = headerPanelElement.find('.dx-datagrid-group-panel');
         assert.ok(groupPanel.length);
         assert.equal(groupPanel.length, 1);
         const groupPanelItem = groupPanel.find('.dx-group-panel-item');
@@ -296,8 +291,6 @@ QUnit.module('Header panel', {
     // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
-        let groupPanel;
-        let searchPanel;
 
         this.options.groupPanel = {
             visible: true
@@ -313,9 +306,9 @@ QUnit.module('Header panel', {
         const headerPanelElement = testElement.find('.dx-datagrid-header-panel');
         assert.ok(headerPanelElement.length);
         assert.equal(headerPanelElement.outerWidth(), testElement.outerWidth());
-        groupPanel = headerPanelElement.find('.dx-datagrid-group-panel');
+        const groupPanel = headerPanelElement.find('.dx-datagrid-group-panel');
         assert.ok(groupPanel.length);
-        searchPanel = headerPanelElement.find('.dx-datagrid-search-panel');
+        const searchPanel = headerPanelElement.find('.dx-datagrid-search-panel');
         assert.ok(searchPanel.length);
     });
 
@@ -335,7 +328,6 @@ QUnit.module('Header panel', {
     // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
-        let searchPanel;
 
         this.options.searchPanel = {
             visible: true
@@ -345,7 +337,7 @@ QUnit.module('Header panel', {
         headerPanel.render(testElement);
 
         // assert
-        searchPanel = testElement.find('.dx-datagrid-search-panel');
+        const searchPanel = testElement.find('.dx-datagrid-search-panel');
         assert.strictEqual(searchPanel.length, 1);
         searchPanel.dxTextBox('instance').option('value', '123');
         assert.equal(this.option('searchPanel.text'), '123');
@@ -355,7 +347,6 @@ QUnit.module('Header panel', {
     // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
-        let searchPanel;
 
         this.options.searchPanel = {
             visible: true,
@@ -367,7 +358,7 @@ QUnit.module('Header panel', {
 
         // assert
         const input = testElement.find('input');
-        searchPanel = testElement.find('.dx-datagrid-search-panel');
+        const searchPanel = testElement.find('.dx-datagrid-search-panel');
         assert.strictEqual(input.length, 1);
         assert.strictEqual(searchPanel.length, 1);
         assert.equal(searchPanel.outerWidth(), 213, 'default search panel width');

@@ -75,19 +75,17 @@ QUnit.module('Main functionality', {
 
 QUnit.test('Create tooltip', function(assert) {
     const et = { event: 'trigger' };
-    let tooltip;
-    let wrapper;
     let div;
 
     // act
-    tooltip = new Tooltip({ eventTrigger: et, cssClass: 'tooltip-class', pathModified: 'pathModified-option' });
+    const tooltip = new Tooltip({ eventTrigger: et, cssClass: 'tooltip-class', pathModified: 'pathModified-option' });
 
     // assert
     assert.equal(tooltip._eventTrigger, et, 'eventTrigger');
     assert.deepEqual(tooltip._renderer.ctorArgs, [{ pathModified: 'pathModified-option', container: tooltip._wrapper[0] }], 'renderer with rendererOptions');
 
     assert.ok(tooltip._wrapper, 'wrapper');
-    wrapper = tooltip._wrapper.get(0);
+    const wrapper = tooltip._wrapper.get(0);
     assert.equal(wrapper.nodeName, 'DIV');
     assert.equal(wrapper.className, 'tooltip-class');
     assert.equal(wrapper.style.position, 'absolute');
@@ -131,10 +129,9 @@ QUnit.test('Create tooltip', function(assert) {
 QUnit.test('Set options. All options', function(assert) {
     const et = { event: 'trigger' };
     const tooltip = new Tooltip({ eventTrigger: et });
-    let result;
 
     // act
-    result = tooltip.setOptions(this.options);
+    const result = tooltip.setOptions(this.options);
 
     // assert
     assert.equal(tooltip, result);
@@ -151,10 +148,9 @@ QUnit.test('Set options. All options', function(assert) {
 QUnit.test('Set options. Cloud border options', function(assert) {
     const et = { event: 'trigger' };
     const tooltip = new Tooltip({ eventTrigger: et });
-    let result;
     this.options.border.visible = false;
     // act
-    result = tooltip.setOptions(this.options);
+    const result = tooltip.setOptions(this.options);
 
     // assert
     assert.equal(tooltip, result);
@@ -164,11 +160,10 @@ QUnit.test('Set options. Cloud border options', function(assert) {
 QUnit.test('Set options. ZIndex', function(assert) {
     const et = { event: 'trigger' };
     const tooltip = new Tooltip({ eventTrigger: et });
-    let result;
     this.options.zIndex = 1000;
     // act
     sinon.spy(tooltip._wrapper, 'css');
-    result = tooltip.setOptions(this.options);
+    const result = tooltip.setOptions(this.options);
 
     // assert
     assert.equal(tooltip, result);
@@ -179,10 +174,9 @@ QUnit.test('Set options. ZIndex', function(assert) {
 QUnit.test('Set options. Container is incorrect', function(assert) {
     const et = { event: 'trigger' };
     const tooltip = new Tooltip({ eventTrigger: et });
-    let result;
     this.options.container = '.some-wrong-class-name';
     // act
-    result = tooltip.setOptions(this.options);
+    const result = tooltip.setOptions(this.options);
 
     // assert
     assert.equal(tooltip, result);
@@ -192,10 +186,9 @@ QUnit.test('Set options. Container is incorrect', function(assert) {
 QUnit.test('Set options. Container is correct', function(assert) {
     const et = { event: 'trigger' };
     const tooltip = new Tooltip({ eventTrigger: et });
-    let result;
     this.options.container = '.some-correct-class-name';
     // act
-    result = tooltip.setOptions(this.options);
+    const result = tooltip.setOptions(this.options);
 
     // assert
     assert.equal(tooltip, result);
@@ -300,10 +293,9 @@ QUnit.test('Body has horizontal scroll', function(assert) {
 QUnit.test('Set options. customizeTooltip', function(assert) {
     const et = { event: 'trigger' };
     const tooltip = new Tooltip({ eventTrigger: et });
-    let result;
     this.options.customizeTooltip = {};
     // act
-    result = tooltip.setOptions(this.options);
+    const result = tooltip.setOptions(this.options);
 
     // assert
     assert.equal(tooltip, result);
@@ -350,12 +342,11 @@ QUnit.test('Set options. Two times', function(assert) {
         }
     };
     const tooltip = new Tooltip({ eventTrigger: et });
-    let result;
 
     tooltip.setOptions(this.options);
 
     // act
-    result = tooltip.setOptions(options2);
+    const result = tooltip.setOptions(options2);
 
     // assert
     assert.equal(tooltip, result);
@@ -389,7 +380,6 @@ QUnit.test('Set renderer options / rtl enabled', function(assert) {
 QUnit.test('Render, enabled', function(assert) {
     const et = { event: 'trigger' };
     const tooltip = new Tooltip({ eventTrigger: et });
-    let result;
 
     tooltip.setOptions(this.options);
 
@@ -398,7 +388,7 @@ QUnit.test('Render, enabled', function(assert) {
     tooltip._textGroupHtml.css = sinon.spy();
 
     // act
-    result = tooltip.render();
+    const result = tooltip.render();
 
     // assert
     assert.equal(tooltip, result);
@@ -423,13 +413,12 @@ QUnit.test('Update', function(assert) {
     const tooltip = new Tooltip({ eventTrigger: et });
     const setOptions = tooltip.setOptions;
     const render = tooltip.render;
-    let result;
 
     tooltip.setOptions = sinon.spy(function() { return setOptions.apply(tooltip, arguments); });
     tooltip.render = sinon.spy(function() { return render.apply(tooltip, arguments); });
 
     // act
-    result = tooltip.update(options);
+    const result = tooltip.update(options);
 
     // assert
     assert.equal(tooltip, result);
@@ -1547,7 +1536,6 @@ QUnit.test('RB corner of page', function(assert) {
 });
 
 QUnit.test('Orientation is not changed', function(assert) {
-    let wrapper;
 
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
@@ -1560,7 +1548,7 @@ QUnit.test('Orientation is not changed', function(assert) {
     this.tooltip.move(500, 400, 10);
 
     // assert
-    wrapper = $('.test-title-class');
+    const wrapper = $('.test-title-class');
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 0, 'textGroupHtml move');
     assert.equal(this.renderer.path.callCount, 1);
     assert.deepEqual(this.getCloudPoints(), [480, 330, 520, 330, 520, 350, 530, 360, 520, 370, 520, 390, 480, 390]);
@@ -1661,7 +1649,6 @@ QUnit.test('Show after move w/o orientation changing', function(assert) {
 
 // T277991, T447623
 QUnit.test('Position when page\'s body has relative position and margins and page is scrolled. T277991, T447623', function(assert) {
-    let wrapper;
 
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
@@ -1683,7 +1670,7 @@ QUnit.test('Position when page\'s body has relative position and margins and pag
     this.tooltip.move(500, 400, 30);
 
     // assert
-    wrapper = $('.test-title-class');
+    const wrapper = $('.test-title-class');
     assert.strictEqual(wrapper.css('left'), '340px');
     assert.strictEqual(wrapper.css('top'), '181px');
 });

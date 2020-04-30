@@ -80,15 +80,13 @@ QUnit.module('Render content delimiters', {
         const options = { showFirstSubmenuMode: 'onClick', items: [{ text: 'itemB', items: [{ text: 'itemB-A' }] }] };
         const menu = createMenuInWindow(options);
         const rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
-        let submenu;
-        let delimiter;
 
         assert.ok(menu);
         assert.ok(!rootMenuItem.children('.' + DX_CONTEXT_MENU_CLASS).length);
         $(rootMenuItem).trigger('dxclick');
-        submenu = getSubMenuInstance(rootMenuItem);
+        const submenu = getSubMenuInstance(rootMenuItem);
         assert.ok(submenu._overlay.option('visible'));
-        delimiter = submenu.$contentDelimiter;
+        const delimiter = submenu.$contentDelimiter;
         assert.ok(delimiter);
         assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
         assert.equal(delimiter.height(), 2, 'ok');
@@ -101,15 +99,13 @@ QUnit.module('Render content delimiters', {
         const options = { orientation: 'vertical', showFirstSubmenuMode: 'onClick', items: [{ text: 'itemB', items: [{ text: 'itemB-A' }] }] };
         const menu = createMenuInWindow(options);
         const rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
-        let submenu;
-        let delimiter;
 
         assert.ok(menu);
         assert.ok(!rootMenuItem.children('.' + DX_CONTEXT_MENU_CLASS).length);
         $(rootMenuItem).trigger('dxclick');
-        submenu = getSubMenuInstance(rootMenuItem);
+        const submenu = getSubMenuInstance(rootMenuItem);
         assert.ok(submenu._overlay.option('visible'));
-        delimiter = submenu.$contentDelimiter;
+        const delimiter = submenu.$contentDelimiter;
         assert.ok(delimiter);
         assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
         assert.equal(delimiter.width(), 2, 'ok');
@@ -122,15 +118,13 @@ QUnit.module('Render content delimiters', {
         const options = { rtlEnabled: true, showFirstSubmenuMode: 'onClick', items: [{ text: 'itemB', items: [{ text: 'itemB-A' }] }] };
         const menu = createMenuInWindow(options);
         const rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
-        let submenu;
-        let delimiter;
 
         assert.ok(menu);
         assert.ok(!rootMenuItem.children('.' + DX_CONTEXT_MENU_CLASS).length);
         $(rootMenuItem).trigger('dxclick');
-        submenu = getSubMenuInstance(rootMenuItem);
+        const submenu = getSubMenuInstance(rootMenuItem);
         assert.ok(submenu._overlay.option('visible'));
-        delimiter = submenu.$contentDelimiter;
+        const delimiter = submenu.$contentDelimiter;
         assert.ok(delimiter);
         assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
         assert.equal(delimiter.height(), 2, 'ok');
@@ -143,15 +137,13 @@ QUnit.module('Render content delimiters', {
         const options = { rtlEnabled: true, orientation: 'vertical', showFirstSubmenuMode: 'onClick', items: [{ text: 'itemB', items: [{ text: 'itemB-A' }] }] };
         const menu = createMenuInWindow(options);
         const rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
-        let submenu;
-        let delimiter;
 
         assert.ok(menu);
         assert.ok(!rootMenuItem.children('.' + DX_CONTEXT_MENU_CLASS).length);
         $(rootMenuItem).trigger('dxclick');
-        submenu = getSubMenuInstance(rootMenuItem);
+        const submenu = getSubMenuInstance(rootMenuItem);
         assert.ok(submenu._overlay.option('visible'));
-        delimiter = submenu.$contentDelimiter;
+        const delimiter = submenu.$contentDelimiter;
         assert.ok(delimiter);
         assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
         assert.equal(delimiter.width(), 2, 'ok');
@@ -222,21 +214,19 @@ QUnit.module('Menu rendering', {
         });
         const $item1 = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
         let submenu;
-        let $item11;
-        let $item111;
 
         assert.equal($item1.text(), 'item 1', 'root item rendered correct');
         assert.ok($item1.find('.' + DX_MENU_ITEM_POPOUT_CLASS).length, 'popout was rendered');
 
         $($item1).trigger('dxclick');
         submenu = getSubMenuInstance($item1)._overlay.$content();
-        $item11 = submenu.find('.' + DX_MENU_ITEM_CLASS).eq(0);
+        const $item11 = submenu.find('.' + DX_MENU_ITEM_CLASS).eq(0);
         assert.equal($item11.text(), 'item 11');
         assert.ok($item11.find('.' + DX_MENU_ITEM_POPOUT_CLASS).length, 'popout was rendered');
 
         $($item11).trigger('dxclick');
         submenu = getSubMenuInstance($item1)._overlay.$content();
-        $item111 = submenu.find('.' + DX_MENU_ITEM_CLASS).eq(1);
+        const $item111 = submenu.find('.' + DX_MENU_ITEM_CLASS).eq(1);
         assert.equal($item111.text(), 'item 111');
     });
 
@@ -276,11 +266,10 @@ QUnit.module('Menu rendering', {
             }]
         });
         const rootMenuItem = $($menu.dxMenu('instance').$element()).find('.' + DX_MENU_ITEM_CLASS).eq(0);
-        let submenu;
 
         assert.equal($menu.find('.' + DX_MENU_ITEM_CLASS).length, 1);
         rootMenuItem.trigger('dxclick');
-        submenu = getSubMenuInstance(rootMenuItem);
+        const submenu = getSubMenuInstance(rootMenuItem);
         assert.equal($(submenu._overlay.$content()).find('.' + DX_MENU_ITEM_CLASS).eq(0).text(), 'test');
     });
 
@@ -294,11 +283,10 @@ QUnit.module('Menu rendering', {
                 }]
         });
         const rootMenuItem = $($menu.dxMenu('instance').$element()).find('.' + DX_MENU_ITEM_CLASS).eq(0);
-        let submenu;
 
         assert.equal($menu.find('.' + DX_MENU_ITEM_CLASS).length, 1);
         rootMenuItem.trigger('dxclick');
-        submenu = getSubMenuInstance(rootMenuItem);
+        const submenu = getSubMenuInstance(rootMenuItem);
         assert.equal($.trim($(submenu._overlay.$content()).find('.' + DX_MENU_ITEM_CLASS).eq(0).text()), 'Menu Test');
     });
 
@@ -308,12 +296,11 @@ QUnit.module('Menu rendering', {
             items: [{ text: 'itemA', items: [{ text: 'itemA-A' }] }]
         });
         const rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
-        let submenu;
 
         assert.ok(menu);
         assert.ok(!submenu);
         rootMenuItem.trigger('dxclick');
-        submenu = getSubMenuInstance(rootMenuItem);
+        const submenu = getSubMenuInstance(rootMenuItem);
         assert.ok(submenu.option('visible'));
         assert.ok($(submenu._$element[0]).offset().top > $(rootMenuItem[0]).offset().top);
         assert.strictEqual($(submenu._$element[0]).offset().left, $(rootMenuItem[0]).offset().left);
@@ -327,11 +314,10 @@ QUnit.module('Menu rendering', {
             items: [{ text: 'itemA', items: [{ text: 'itemA-A' }] }]
         });
         const rootMenuItem = $($menu.find('.' + DX_MENU_ITEM_CLASS)[0]);
-        let submenu;
 
         assert.ok(!rootMenuItem.children('.' + DX_CONTEXT_MENU_CLASS).length);
         rootMenuItem.trigger('dxclick');
-        submenu = getSubMenuInstance(rootMenuItem)._overlay;
+        const submenu = getSubMenuInstance(rootMenuItem)._overlay;
         assert.ok(submenu.option('visible'));
         assert.equal(Math.round($(submenu._$content[0]).offset().top), Math.round($(rootMenuItem[0]).offset().top));
         assert.ok($(submenu._$content[0]).offset().left > $(rootMenuItem[0]).offset().left);
@@ -349,12 +335,11 @@ QUnit.module('Menu rendering', {
             left: 100
         });
         const rootMenuItem = $($menu.find('.' + DX_MENU_ITEM_CLASS)[0]);
-        let submenu;
 
         assert.ok($menu);
         assert.ok(!rootMenuItem.children('.' + DX_CONTEXT_MENU_CLASS).length);
         rootMenuItem.trigger('dxclick');
-        submenu = getSubMenuInstance(rootMenuItem)._overlay;
+        const submenu = getSubMenuInstance(rootMenuItem)._overlay;
         assert.ok(submenu.option('visible'));
         assert.ok($(submenu._$content[0]).offset().top < $(rootMenuItem[0]).offset().top);
         assert.strictEqual($(submenu._$content[0]).offset().left, $(rootMenuItem[0]).offset().left);
@@ -368,12 +353,11 @@ QUnit.module('Menu rendering', {
             left: 100
         });
         const rootMenuItem = $($menu.find('.' + DX_MENU_ITEM_CLASS)[0]);
-        let submenu;
 
         assert.ok($menu);
         assert.ok(!rootMenuItem.children('.' + DX_CONTEXT_MENU_CLASS).length);
         rootMenuItem.trigger('dxclick');
-        submenu = getSubMenuInstance(rootMenuItem)._overlay;
+        const submenu = getSubMenuInstance(rootMenuItem)._overlay;
         assert.ok(submenu.option('visible'));
         assert.equal(Math.round($(submenu._$content[0]).offset().top), Math.round($(rootMenuItem[0]).offset().top));
         assert.ok($(submenu._$content[0]).offset().left < $(rootMenuItem[0]).offset().left);
@@ -471,14 +455,13 @@ QUnit.module('Menu - selection', {
                 ]
             },
             { text: 'item3', selected: true }];
-        let menu; let $items;
 
-        menu = createMenu({
+        const menu = createMenu({
             items: items,
             selectionMode: 'single'
         });
 
-        $items = $(menu.element).find('.' + DX_MENU_ITEM_SELECTED_CLASS);
+        const $items = $(menu.element).find('.' + DX_MENU_ITEM_SELECTED_CLASS);
         assert.equal($items.length, 1);
         assert.equal($items.find('.' + DX_MENU_ITEM_TEXT_CLASS).text(), 'item3');
     });
@@ -498,27 +481,27 @@ QUnit.module('Menu - selection', {
         const item1 = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
         const item2 = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(1);
         const item3 = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(2);
-        let item11; let item21; let item31; let submenu;
+        let submenu;
 
 
         assert.ok(menu, 'menu is created');
         assert.equal($(menu.element).find('.' + DX_MENU_ITEM_SELECTED_CLASS).length, 0, 'no selected items');
         item1.trigger('dxclick');
         submenu = getSubMenuInstance(item1);
-        item11 = $(submenu._overlay.content()).find('.' + DX_MENU_ITEM_CLASS).eq(0);
+        const item11 = $(submenu._overlay.content()).find('.' + DX_MENU_ITEM_CLASS).eq(0);
         item11.trigger('dxclick');
         assert.ok(item11.hasClass(DX_MENU_ITEM_SELECTED_CLASS));
 
         item2.trigger('dxclick');
         submenu = getSubMenuInstance(item2);
-        item21 = $(submenu._overlay.content()).find('.' + DX_MENU_ITEM_CLASS).eq(0);
+        const item21 = $(submenu._overlay.content()).find('.' + DX_MENU_ITEM_CLASS).eq(0);
         item21.trigger('dxclick');
         assert.ok(!item11.hasClass(DX_MENU_ITEM_SELECTED_CLASS));
         assert.ok(item21.hasClass(DX_MENU_ITEM_SELECTED_CLASS));
 
         item3.trigger('dxclick');
         submenu = getSubMenuInstance(item3);
-        item31 = $(submenu._overlay.content()).find('.' + DX_MENU_ITEM_CLASS).eq(0);
+        const item31 = $(submenu._overlay.content()).find('.' + DX_MENU_ITEM_CLASS).eq(0);
         item31.trigger('dxclick');
         assert.ok(!item11.hasClass(DX_MENU_ITEM_SELECTED_CLASS));
         assert.ok(!item21.hasClass(DX_MENU_ITEM_SELECTED_CLASS));
@@ -597,7 +580,7 @@ QUnit.module('Menu - selection', {
         const $items = $(menu.element).find('.' + DX_MENU_ITEM_CLASS);
         const $item1 = $items.eq(0);
         const $item2 = $items.eq(1);
-        let submenu; let $item11;
+        let submenu;
 
         assert.ok(menu, 'menu is created');
         assert.equal($(menu.element).find('.' + DX_MENU_ITEM_SELECTED_CLASS).length, 0, 'no selected items');
@@ -606,7 +589,7 @@ QUnit.module('Menu - selection', {
         $($item1).trigger('dxclick');
         submenu = getSubMenuInstance($item1);
         assert.equal($(submenu._overlay.content()).find('.' + DX_MENU_ITEM_SELECTED_CLASS).length, 1);
-        $item11 = $($(submenu._overlay.content()).find('.' + DX_MENU_ITEM_CLASS).eq(0));
+        const $item11 = $($(submenu._overlay.content()).find('.' + DX_MENU_ITEM_CLASS).eq(0));
 
         menu.instance.selectItem(items[1].items[0]);
         assert.equal(menu.instance.option('selectedItem').text, 'item2-1');
@@ -632,14 +615,14 @@ QUnit.module('Menu - selection', {
                 counter++;
             }
         });
-        const item1 = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0); let submenu; let item11;
+        const item1 = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
         assert.ok(menu, 'menu is created');
         assert.equal($(menu.element).find('.' + DX_MENU_ITEM_SELECTED_CLASS).length, 0, 'no selected items');
         item1.trigger('dxclick');
         assert.equal(counter, 0);
-        submenu = getSubMenuInstance(item1);
-        item11 = $(submenu._overlay.content()).find('.' + DX_MENU_ITEM_CLASS).eq(0);
+        const submenu = getSubMenuInstance(item1);
+        const item11 = $(submenu._overlay.content()).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
         item11.trigger('dxclick');
         this.clock.tick(CLICKTIMEOUT);
@@ -696,11 +679,10 @@ QUnit.module('Menu tests', {
         const options = { showFirstSubmenuMode: 'onClick', items: [{ text: 'itemB', items: [{ text: 'itemB-A' }] }] };
         const menu = createMenu(options);
         const $itemB = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
-        let submenu;
 
         $($itemB).trigger('dxclick');
 
-        submenu = getSubMenuInstance($itemB);
+        const submenu = getSubMenuInstance($itemB);
         assert.ok($itemB.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'expanded submenu should have expanded class');
         assert.ok(submenu.option('visible'), 'submenu was shown');
 
@@ -748,10 +730,9 @@ QUnit.module('Menu tests', {
         const menu = createMenu(options);
         const $items = $(menu.element).find('.' + DX_MENU_ITEM_CLASS);
         const $item2 = $items.eq(1);
-        let submenu;
 
         $($item2).trigger('dxclick');
-        submenu = getSubMenuInstance($item2);
+        const submenu = getSubMenuInstance($item2);
         assert.ok(submenu.option('visible'), 'submenu was opened');
 
         eventsEngine.trigger($('body'), 'scroll');
@@ -854,13 +835,12 @@ QUnit.module('Menu tests', {
         const options = { showFirstSubmenuMode: 'onHover', items: [{ text: 'item1', items: [{ text: 'item1-1' }] }] };
         const menu = createMenu(options);
         const rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
-        let submenu;
         const e = $.Event('mouseenter');
         e.which = 1;
 
         assert.ok(menu);
         $(rootMenuItem).trigger(e);
-        submenu = rootMenuItem.children('.' + DX_CONTEXT_MENU_CLASS);
+        const submenu = rootMenuItem.children('.' + DX_CONTEXT_MENU_CLASS);
         assert.ok(!submenu.length, 'Menu is not shown');
     });
 
@@ -951,19 +931,17 @@ QUnit.module('Menu tests', {
         const options = { items: items };
         const menu = createMenu(options);
         const rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
-        let submenu;
         let $menuItem;
-        let $submenu;
 
         assert.ok(menu);
         $(rootMenuItem).trigger('dxclick');
-        submenu = getSubMenuInstance(rootMenuItem);
+        const submenu = getSubMenuInstance(rootMenuItem);
         assert.ok(submenu._overlay.option('visible'));
 
         $menuItem = $($(submenu._overlay.content()).find('.' + DX_MENU_ITEM_CLASS).first()),
         assert.equal($menuItem.text(), 'itemA-A');
         $($menuItem).trigger('dxclick');
-        $submenu = $($(submenu._overlay.content()).find('.' + DX_SUBMENU_CLASS).eq(1));
+        const $submenu = $($(submenu._overlay.content()).find('.' + DX_SUBMENU_CLASS).eq(1));
         this.clock.tick(ANIMATION_TIMEOUT);
         assert.equal($submenu.css('visibility'), 'visible');
     });
@@ -1765,10 +1743,9 @@ QUnit.module('Menu with templates', {
         };
         const menu = createMenu(options);
         const $item = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(1);
-        let submenu;
 
         $($item).trigger('dxclick');
-        submenu = getSubMenuInstance($item);
+        const submenu = getSubMenuInstance($item);
 
         assert.equal($($item).text(), 'test', 'template rendered');
         assert.equal($(submenu._overlay.content()).find('.' + DX_MENU_ITEM_CLASS).eq(0).text(), 'test', 'template rendered');
@@ -2470,11 +2447,10 @@ QUnit.module('adaptivity: behavior', {
         });
 
         const $item = this.$element.find('.' + DX_MENU_ITEM_CLASS).eq(1);
-        let submenu;
 
         $($item).trigger('dxclick');
 
-        submenu = getSubMenuInstance($item);
+        const submenu = getSubMenuInstance($item);
         assert.ok(submenu.option('visible'), 'submenu is visible');
 
         $('#qunit-fixture').width(50);

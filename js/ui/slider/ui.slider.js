@@ -509,8 +509,6 @@ const Slider = TrackBar.inherit({
 
     _swipeStartHandler: function(e) {
         const rtlEnabled = this.option('rtlEnabled');
-        let startOffset;
-        let endOffset;
 
         if(eventUtils.isTouchEvent(e.event)) {
             this._createAction(this._startHandler.bind(this))({ event: e.event });
@@ -521,8 +519,8 @@ const Slider = TrackBar.inherit({
         this._toggleActiveState(this._activeHandle(), this.option('activeStateEnabled'));
 
         this._startOffset = this._currentRatio;
-        startOffset = this._startOffset * this._swipePixelRatio();
-        endOffset = (1 - this._startOffset) * this._swipePixelRatio();
+        const startOffset = this._startOffset * this._swipePixelRatio();
+        const endOffset = (1 - this._startOffset) * this._swipePixelRatio();
         e.event.maxLeftOffset = rtlEnabled ? endOffset : startOffset;
         e.event.maxRightOffset = rtlEnabled ? startOffset : endOffset;
 

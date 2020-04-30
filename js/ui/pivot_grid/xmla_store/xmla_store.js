@@ -423,7 +423,6 @@ exports.XmlaStore = Class.inherit((function() {
         const maxRowCount = params.maxRowCount;
         const customColumns = params.customColumns || [];
         const customColumnsString = customColumns.length > 0 ? ' return ' + customColumns.join(',') : '';
-        let coreMDX;
 
         createDrillDownAxisSlice(slice, columns, params.columnPath || []);
 
@@ -433,7 +432,7 @@ exports.XmlaStore = Class.inherit((function() {
             axisStrings.push([(dataFields[params.dataIndex] || dataFields[0]) + ' on 0']);
         }
 
-        coreMDX = generateMdxCore(axisStrings, withArray, columns, rows, options.filters, slice, cubeName);
+        const coreMDX = generateMdxCore(axisStrings, withArray, columns, rows, options.filters, slice, cubeName);
 
         return coreMDX ? 'drillthrough' + (maxRowCount > 0 ? ' maxrows ' + maxRowCount : '') + coreMDX + customColumnsString : coreMDX;
     }
@@ -620,7 +619,6 @@ exports.XmlaStore = Class.inherit((function() {
     }
 
     function processMember(dataIndex, member, parentItem) {
-        let currentItem;
         let children = parentItem.children = parentItem.children || [];
         const hash = children.hash = children.hash || {};
         const grandTotalHash = children.grandTotalHash = children.grandTotalHash || {};
@@ -630,7 +628,7 @@ exports.XmlaStore = Class.inherit((function() {
             children = parentItem.children = parentItem.children || [];
         }
 
-        currentItem = getItem(hash, member.name, member, dataIndex);
+        const currentItem = getItem(hash, member.name, member, dataIndex);
 
         if(member.hasValue && !currentItem.added) {
             currentItem.index = dataIndex;
@@ -667,7 +665,6 @@ exports.XmlaStore = Class.inherit((function() {
     }
 
     function fillDataSourceAxes(dataSourceAxis, axisTuples, measureCount, visibleLevels) {
-        let grandTotalIndex;
         const result = [];
 
         each(axisTuples, function(tupleIndex, members) {
@@ -687,7 +684,7 @@ exports.XmlaStore = Class.inherit((function() {
 
         parentItem.children = getVisibleChildren(parentItem, visibleLevels);
 
-        grandTotalIndex = getGrandTotalIndex(parentItem, visibleLevels);
+        const grandTotalIndex = getGrandTotalIndex(parentItem, visibleLevels);
 
         foreachTree(parentItem.children, function(items) {
             const item = items[0];
@@ -731,11 +728,10 @@ exports.XmlaStore = Class.inherit((function() {
             columns: [],
             rows: []
         };
-        let axes;
 
         const measureCount = parseOptions.measureCount;
 
-        axes = parseAxes(xml, parseOptions.skipValues);
+        const axes = parseAxes(xml, parseOptions.skipValues);
 
         dataSource.grandTotalColumnIndex = fillDataSourceAxes(dataSource.columns, axes[0], measureCount, parseOptions.visibleLevels);
 

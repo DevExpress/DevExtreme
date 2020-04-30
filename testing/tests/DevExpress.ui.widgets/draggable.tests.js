@@ -80,10 +80,9 @@ $.each(DRAGGABLE_ACTION_TO_EVENT_MAP, function(callbackName, eventName) {
     QUnit.test('\'' + callbackName + '\' callback fired', function(assert) {
         const callbackSpy = sinon.spy(noop);
         const options = {};
-        let draggable;
 
         options[callbackName] = callbackSpy;
-        draggable = this.createDraggable(options);
+        const draggable = this.createDraggable(options);
 
         this.pointer.dragStart().drag().dragEnd();
         checkCallback.call(this, draggable, callbackSpy, assert);

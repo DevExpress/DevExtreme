@@ -777,7 +777,6 @@ QUnit.module('Custom rule with user\'s callback', () => {
     });
 
     QUnit.test('Validation callback must have the \'data\' in arguments when validator has \'dataGetter\' option', function(assert) {
-        let params;
         const customCallback = sinon.spy(function() { return true; });
         const data = { test: 'test' };
         const validator = {
@@ -800,7 +799,7 @@ QUnit.module('Custom rule with user\'s callback', () => {
         assert.ok(result, 'Result is defined');
         assert.ok(customCallback.calledOnce, 'Validation callback was called');
 
-        params = customCallback.getCall(0).args[0];
+        const params = customCallback.getCall(0).args[0];
         assert.equal(params.value, value, 'Correct value should be passed');
         assert.strictEqual(params.validator, validator, 'Validator should be passed');
         assert.strictEqual(params.rule, rule, 'Rule should be passed');

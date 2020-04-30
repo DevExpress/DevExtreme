@@ -246,12 +246,11 @@ function createAxis(translatorData, orthogonalTranslatorData, allOptions, isHori
     translatorData = $.extend({}, translatorData);
     orthogonalTranslatorData = $.extend({}, orthogonalTranslatorData);
 
-    var translator = createTranslator(translatorData, allOptions),
-        orthogonalTranslator = createTranslator(orthogonalTranslatorData, allOptions),
-        mergedOptions = $.extend(true, {}, allOptions),
-        axis;
+    const translator = createTranslator(translatorData, allOptions);
+    const orthogonalTranslator = createTranslator(orthogonalTranslatorData, allOptions);
+    const mergedOptions = $.extend(true, {}, allOptions);
 
-    axis = new axisModule.Axis({
+    const axis = new axisModule.Axis({
         renderer: new vizMocks.Renderer(),
         stripsGroup: allOptions.stripsGroup,
         labelAxesGroup: allOptions.labelAxesGroup,

@@ -588,14 +588,13 @@ QUnit.test('TreeView with empty dataSource should updates after item inserted in
 
 
 QUnit.test('Render Search editor with default options', function(assert) {
-    let searchEditorInstance;
     const treeViewInstance = initTree({
         items: $.extend(true, [], DATA[1]),
         keyExpr: 'key',
         searchEnabled: true
     }).dxTreeView('instance');
 
-    searchEditorInstance = treeViewInstance.$element().children().first().dxTextBox('instance');
+    const searchEditorInstance = treeViewInstance.$element().children().first().dxTextBox('instance');
     assert.equal(searchEditorInstance.option('placeholder'), 'Search');
     assert.equal(searchEditorInstance.option('value'), '');
     assert.equal(searchEditorInstance.option('valueChangeEvent'), 'input');
@@ -607,10 +606,9 @@ QUnit.test('Render nodata message if filter has no matches', function(assert) {
     const treeViewInstance = initTree({
         items: [{ id: 1, text: '1' }, { id: 2, text: '1' }, { id: 3, text: '1' }]
     }).dxTreeView('instance');
-    let noData;
 
     treeViewInstance.option('searchValue', '2');
-    noData = treeViewInstance.$element().find('.dx-empty-message');
+    const noData = treeViewInstance.$element().find('.dx-empty-message');
 
     assert.ok(noData.length, 'no data is rendered');
     assert.ok(noData.is(':visible'), 'nodata is visible');
@@ -621,10 +619,9 @@ QUnit.test('Remove nodata message after clear searchValue', function(assert) {
         items: [{ id: 1, text: '1' }, { id: 2, text: '1' }, { id: 3, text: '1' }],
         searchValue: '2'
     }).dxTreeView('instance');
-    let noData;
 
     treeViewInstance.option('searchValue', '');
-    noData = treeViewInstance.$element().find('.dx-empty-message');
+    const noData = treeViewInstance.$element().find('.dx-empty-message');
 
     assert.notOk(noData.length, 'no data is removed');
 });

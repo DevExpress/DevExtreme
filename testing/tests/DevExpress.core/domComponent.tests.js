@@ -342,8 +342,6 @@ QUnit.test('mass method invoking should return first instance method result', fu
     const $firstElement = $('#component');
     const $secondElement = $('#anotherComponent');
     const $elements = $($firstElement).add($secondElement);
-    let firstInstance;
-    let result;
 
     registerComponent('TestComponent', this.TestComponent.inherit({
         setterReturningThis: function() {
@@ -351,9 +349,9 @@ QUnit.test('mass method invoking should return first instance method result', fu
         }
     }));
 
-    firstInstance = $firstElement.TestComponent().TestComponent('instance');
+    const firstInstance = $firstElement.TestComponent().TestComponent('instance');
     $secondElement.TestComponent().TestComponent('instance');
-    result = $elements.TestComponent('setterReturningThis');
+    const result = $elements.TestComponent('setterReturningThis');
 
     assert.strictEqual(firstInstance, result);
 });

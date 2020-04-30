@@ -1720,7 +1720,6 @@ QUnit.module('Header Filter', {
     QUnit.test('Check select all state after filtering', function(assert) {
     // arrange
         const that = this;
-        let selectAll;
         const testElement = $('#container');
 
         that.options.headerFilter.allowSearch = true;
@@ -1740,7 +1739,7 @@ QUnit.module('Header Filter', {
         $($selectAll).trigger('dxclick');
         $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // apply filter
 
-        selectAll = $selectAll.dxCheckBox('instance');
+        const selectAll = $selectAll.dxCheckBox('instance');
         const column = that.columnsController.getVisibleColumns()[0];
 
         // assert
@@ -1752,7 +1751,6 @@ QUnit.module('Header Filter', {
     QUnit.test('Check select all state after filtering if column dataType is date', function(assert) {
     // arrange
         const that = this;
-        let selectAll;
         const testElement = $('#container');
 
         that.options.headerFilter.allowSearch = true;
@@ -1774,7 +1772,7 @@ QUnit.module('Header Filter', {
         $($selectAll).trigger('dxclick');
         $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // apply filter
 
-        selectAll = $selectAll.dxCheckBox('instance');
+        const selectAll = $selectAll.dxCheckBox('instance');
         const column = that.columnsController.getVisibleColumns()[0];
 
         // assert
@@ -1786,7 +1784,6 @@ QUnit.module('Header Filter', {
     QUnit.test('Check select all state after filtering if column dataType is date and search is by month', function(assert) {
     // arrange
         const that = this;
-        let selectAll;
         const testElement = $('#container');
 
         that.options.headerFilter.allowSearch = true;
@@ -1808,7 +1805,7 @@ QUnit.module('Header Filter', {
         $($selectAll).trigger('dxclick');
         $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // apply filter
 
-        selectAll = $selectAll.dxCheckBox('instance');
+        const selectAll = $selectAll.dxCheckBox('instance');
         const column = that.columnsController.getVisibleColumns()[0];
 
         // assert

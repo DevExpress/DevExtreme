@@ -8,9 +8,9 @@ createTestCafe('localhost', 1437, 1438)
     .then(tc => {
         testCafe = tc;
 
-        let args = getArgs(),
-            testName = args.test.trim(),
-            componentFolder = args.componentFolder.trim();
+        const args = getArgs();
+        const testName = args.test.trim();
+        let componentFolder = args.componentFolder.trim();
 
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
 

@@ -319,13 +319,12 @@ QUnit.test('current expansion should be saved after searchMode option was change
         }]
     });
     const instance = $treeView.dxTreeView('instance');
-    let items;
 
     instance.collapseItem('1');
     instance.collapseItem('2');
 
     instance.option('searchMode', 'startswith');
-    items = instance.option('items');
+    const items = instance.option('items');
 
     assert.notOk(items[0].expanded, 'item is collapsed');
     assert.notOk(items[1].expanded, 'item is collapsed');
