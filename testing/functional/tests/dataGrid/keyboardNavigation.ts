@@ -592,11 +592,11 @@ test('Cell should be highlighted after editing another cell when startEditAction
         .expect(cell0.isFocused).notOk()
         .expect(cell1.isFocused).notOk()
 
-        .doubleClick(cell0.element, { speed: 0.8 })
+        .doubleClick(cell0.element)
         .expect(cell0.isFocused).ok()
         .expect(cell0.isEditCell).ok()
 
-        .click(cell1.element, { speed: 0.8 })
+        .click(cell1.element)
         .expect(cell1.isFocused).ok()
         .expect(cell0.isFocused).notOk()
         .expect(cell0.isEditCell).notOk();
