@@ -416,7 +416,7 @@ describe('Widget', () => {
       });
 
       it('should detach `dxhoverend` and `dxhoverstart` events before rerendering', () => {
-        const widget = mount(<Widget hovgetEventHandlerserStateEnabled />);
+        const widget = mount(<Widget hoverStateEnabled />);
 
         expect(getEventHandlers(EVENT.hoverStart).length).toBe(1);
         expect(getEventHandlers(EVENT.hoverEnd).length).toBe(1);
@@ -494,7 +494,7 @@ describe('Widget', () => {
       });
 
       it('should detach `dxshown` and `dxhiding` events before rerendering', () => {
-        const widget = mount(<Widget ongetEventHandlersVisibilityChange={() => undefined} />);
+        const widget = mount(<Widget onVisibilityChange={() => undefined} />);
 
         expect(getEventHandlers(EVENT.shown).length).toBe(1);
         expect(getEventHandlers(EVENT.hiding).length).toBe(1);
