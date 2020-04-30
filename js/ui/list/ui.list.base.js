@@ -736,7 +736,7 @@ const ListBase = CollectionWidget.inherit({
         this._upInkRippleHandler = this._upInkRippleHandler || this.upInkRippleHandler.bind(this);
 
         const downArguments = [$element, 'dxpointerdown', selector, this._downInkRippleHandler];
-        const upArguments = [$element, 'dxpointerup dxhoverend', selector, this._upInkRippleHandler];
+        const upArguments = [$element, 'dxpointerup dxpointerout', selector, this._upInkRippleHandler];
 
         eventsEngine.off(...downArguments);
         eventsEngine.on(...downArguments);
