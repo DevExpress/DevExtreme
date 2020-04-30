@@ -2821,9 +2821,6 @@ QUnit.module('Customize keyboard navigation', {
                 assert.notEqual($input.val(), 'a', 'entered value is not modified');
 
                 this.clock.tick(25);
-
-                assert.strictEqual($input.val(), 'a', 'entered value is correct');
-                return;
             }
 
             assert.strictEqual($input.val(), 'a', 'entered value is correct');
