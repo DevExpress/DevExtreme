@@ -18,7 +18,7 @@ export const viewFunction = ({
     navigateToNextPage,
     props: {
         hasKnownLastPage, isLargeDisplayMode, maxPagesCount,
-        pageCount, pageIndex, pageIndexChange: pageIndexChanged, pagesCountText,
+        pageCount, pageIndex, pageIndexChange, pagesCountText,
         rtlEnabled, totalCount,
     } }: PageIndexSelector) => {
     return (
@@ -34,7 +34,7 @@ export const viewFunction = ({
                 maxPagesCount={maxPagesCount}
                 pageCount={pageCount}
                 pageIndex={pageIndex}
-                pageIndexChange={pageIndexChanged}
+                pageIndexChange={pageIndexChange}
                 pagesCountText={pagesCountText}
                 rtlEnabled={rtlEnabled}
                 totalCount={totalCount}
@@ -107,8 +107,8 @@ export default class PageIndexSelector extends JSXComponent<PageIndexSelectorPro
     }
     private navigateToPage(direction: 'next' | 'prev') {
         const canNavigate = this.canNavigateTo(direction);
-        if (canNavigate) {
-            this.props.pageIndexChange!(this.props.pageIndex! + this.getIncrement(direction));
+        if (canNavigate && this.props.pageIndexChange) {
+            this.props.pageIndexChange(this.props.pageIndex! + this.getIncrement(direction));
         }
     }
 }

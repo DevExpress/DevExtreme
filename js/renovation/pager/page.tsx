@@ -1,17 +1,22 @@
-import { Component, ComponentBindings, JSXComponent, OneWay } from 'devextreme-generator/component_declaration/common';
+import { Component, ComponentBindings, JSXComponent, OneWay, Event } from 'devextreme-generator/component_declaration/common';
+import LightButton from './light-button';
 
 const PAGER_PAGE_CLASS = 'dx-page';
 const PAGER_SELECTION_CLASS = 'dx-selection';
 const PAGER_PAGE_SELECTION_CLASS = `${PAGER_PAGE_CLASS} ${PAGER_SELECTION_CLASS}`;
-export const viewFunction = ({ className, value }: Page) => {
-    return (<div className={className}>{value}</div>);
+export const viewFunction = ({ className, value, label, props: { key, onClick } }: Page) => {
+    return (
+        <LightButton key={key} className={className} label={label} onClick={onClick}>
+            {value}
+        </LightButton>);
 };
 
 @ComponentBindings()
 export class PageProps {
     @OneWay() index?: number;
+    @OneWay() key?: any;
+    @Event() onClick?: () => void;
     @OneWay() selected?: boolean = false;
-    @OneWay() value?: string;
 }
 
 // tslint:disable-next-line: max-classes-per-file
@@ -21,11 +26,11 @@ export class PageProps {
 })
 
 export default class Page extends JSXComponent<PageProps> {
+    get label() {
+        return `Page ${this.value}`;
+    }
     get value() {
-        const
-            { value } = this.props;
-        // TODO Vitik: copy code from pager.js
-        return value;
+        return this.props.index! + 1;
     }
     get className() {
         const

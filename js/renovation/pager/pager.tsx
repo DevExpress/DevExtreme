@@ -8,7 +8,7 @@ import PageSizeSelector from './page-size-selector';
 export const PAGER_CLASS = 'dx-pager dx-datagrid-pager';
 export const PAGER_PAGES_CLASS = 'dx-pages';
 export const viewFunction = ({
-    pageSizeChanged,
+    pageSizeChange,
     isLargeDisplayMode,
     pageIndexChange,
     props: { infoTextMessageTemplate, maxPagesCount, pageIndex,
@@ -20,7 +20,7 @@ export const viewFunction = ({
         <PageSizeSelector
             isLargeDisplayMode={isLargeDisplayMode}
             pageSize={pageSize}
-            pageSizeChanged={pageSizeChanged}
+            pageSizeChanged={pageSizeChange}
             pageSizes={pageSizes}
         />
         <div className={PAGER_PAGES_CLASS}>
@@ -77,10 +77,10 @@ export class PagerProps {
 })
 export default class Pager extends JSXComponent<PagerProps> {
     get isLargeDisplayMode() { return !this.props.lightModeEnabled; }
-    pageIndexChanged(newPageIndex: number) {
+    pageIndexChange(newPageIndex: number) {
         this.props.pageIndex = newPageIndex;
     }
-    pageSizeChanged(newPageSize: number) {
+    pageSizeChange(newPageSize: number) {
         this.props.pageSize = newPageSize;
     }
 }
