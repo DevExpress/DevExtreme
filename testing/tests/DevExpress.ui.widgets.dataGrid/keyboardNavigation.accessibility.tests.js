@@ -669,13 +669,12 @@ QUnit.module('Keyboard navigation accessibility', {
     });
 
     testInDesktop('Rows view focus state', function(assert) {
-        let $rowsView;
 
         // arrange
         this.setupModule();
         this.gridView.render($('#container'));
         this.focusCell(1, 1);
-        $rowsView = this.keyboardNavigationController._focusedView.element();
+        const $rowsView = this.keyboardNavigationController._focusedView.element();
 
         // assert
         assert.notOk($rowsView.hasClass('dx-state-focused'), 'RowsView focus state');

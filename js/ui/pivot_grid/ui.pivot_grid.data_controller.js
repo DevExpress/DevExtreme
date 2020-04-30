@@ -121,7 +121,6 @@ exports.DataController = Class.inherit((function() {
         };
 
         const addInfoItem = function(info, options) {
-            let itemInfo;
             const breadth = (options.lastIndex - options.index) || 1;
             const addInfoItemCore = function(info, infoItem, itemIndex, depthIndex, isHorizontal) {
                 const index = isHorizontal ? depthIndex : itemIndex;
@@ -135,7 +134,7 @@ exports.DataController = Class.inherit((function() {
                 }
             };
 
-            itemInfo = createInfoItem(options.headerItem, breadth, options.isHorizontal, options.isTree);
+            const itemInfo = createInfoItem(options.headerItem, breadth, options.isHorizontal, options.isTree);
             addInfoItemCore(info, itemInfo, options.index, options.depth, options.isHorizontal);
             if(!options.headerItem.children || options.headerItem.children.length === 0) {
                 return options.lastIndex + 1;
@@ -277,13 +276,12 @@ exports.DataController = Class.inherit((function() {
             const headerDescriptionsCount = (headerDescriptions && headerDescriptions.length) || 0;
             const childrenStack = [];
             const d = new Deferred();
-            let headerItem;
 
             when(foreachTreeAsync(headerItems, function(items, index) {
                 const item = items[0];
                 const path = createPath(items);
 
-                headerItem = createHeaderItem(childrenStack, path.length, index);
+                const headerItem = createHeaderItem(childrenStack, path.length, index);
 
                 headerItem.type = DATA_TYPE;
                 headerItem.value = item.value;
@@ -307,12 +305,11 @@ exports.DataController = Class.inherit((function() {
         var addMetricHeaderItems = function(headerItems, cellDescriptions, options) {
             foreachTree(headerItems, function(items) {
                 const item = items[0];
-                let i;
 
                 if(!item.children || item.children.length === 0) {
 
                     item.children = [];
-                    for(i = 0; i < cellDescriptions.length; i++) {
+                    for(let i = 0; i < cellDescriptions.length; i++) {
                         const isGrandTotal = item.type === GRAND_TOTAL_TYPE;
                         const isTotal = item.type === TOTAL_TYPE;
                         const isValue = item.type === DATA_TYPE;
@@ -392,17 +389,15 @@ exports.DataController = Class.inherit((function() {
 
         const fillHeaderInfo = function(info, viewHeaderItems, depthSize, isHorizontal, isTree) {
             let lastIndex = 0;
-            let index;
-            let depth;
             const indexesByDepth = [0];
 
             foreachTree(viewHeaderItems, function(items) {
                 const headerItem = items[0];
-                depth = headerItem.isMetric ? depthSize : items.length - 1;
+                const depth = headerItem.isMetric ? depthSize : items.length - 1;
                 while(indexesByDepth.length - 1 < depth) {
                     indexesByDepth.push(indexesByDepth[indexesByDepth.length - 1]);
                 }
-                index = indexesByDepth[depth] || 0;
+                const index = indexesByDepth[depth] || 0;
                 lastIndex = addInfoItem(info, {
                     headerItem: headerItem,
                     index: index, lastIndex: lastIndex,
@@ -480,13 +475,12 @@ exports.DataController = Class.inherit((function() {
 
                 if(columnInfo.isLast && dataField) {
                     let cell = dataRow[columnInfo.dataSourceIndex >= 0 ? columnInfo.dataSourceIndex : data.grandTotalColumnIndex];
-                    let cellValue;
 
                     if(!Array.isArray(cell)) {
                         cell = [cell];
                     }
 
-                    cellValue = cell[dataIndex];
+                    const cellValue = cell[dataIndex];
 
                     row[columnIndex] = {
                         text: formatCellValue(cellValue, dataField, errorText),
@@ -719,16 +713,15 @@ exports.DataController = Class.inherit((function() {
             const rowExpandedPaths = options.rowExpandedPaths;
             let levels = [];
             const expandedPathIndexes = {};
-            let i; let j;
             let path;
 
             rowExpandedPaths.forEach((path, index) => {
                 expandedPathIndexes[path] = index;
             });
 
-            for(i = 0; i < rowCount; i++) {
+            for(let i = 0; i < rowCount; i++) {
                 takes.length = skips.length = levels.length + 1;
-                for(j = 0; j < rows[i].length; j++) {
+                for(let j = 0; j < rows[i].length; j++) {
                     const cell = rows[i][j];
 
                     if(cell.type === 'D') {

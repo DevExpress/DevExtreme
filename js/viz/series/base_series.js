@@ -239,7 +239,6 @@ Series.prototype = {
         const options = that._getCreatingPointOptions(data);
         const arg = data.argument.valueOf();
         let point = oldPoint;
-        let pointByArgument;
 
         if(point) {
             point.update(data, options);
@@ -250,7 +249,7 @@ Series.prototype = {
             }
         }
 
-        pointByArgument = pointsByArgument[arg];
+        const pointByArgument = pointsByArgument[arg];
         if(pointByArgument) {
             pointByArgument.push(point);
         } else {
@@ -449,14 +448,13 @@ Series.prototype = {
         const that = this;
         const oldPointsByArgument = that.pointsByArgument || {};
         const data = that._getData();
-        let points;
 
         that.pointsByArgument = {};
 
         that._calculateErrorBars(data);
 
         const skippedFields = {};
-        points = data.reduce((points, pointDataItem) => {
+        const points = data.reduce((points, pointDataItem) => {
             if(that._checkData(pointDataItem, skippedFields)) {
                 const pointIndex = points.length;
                 const oldPoint = that._getOldPoint(pointDataItem, oldPointsByArgument, pointIndex);
@@ -499,13 +497,12 @@ Series.prototype = {
             markers: that._markersGroup,
             errorBars: that._errorBarGroup
         };
-        let segments;
 
         that._drawnPoints = [];
         that._graphics = that._graphics || [];
         that._segments = [];
 
-        segments = points.reduce(function(segments, p) {
+        const segments = points.reduce(function(segments, p) {
             const segment = segments[segments.length - 1];
 
             if(!p.translated || translateAllPoints) {

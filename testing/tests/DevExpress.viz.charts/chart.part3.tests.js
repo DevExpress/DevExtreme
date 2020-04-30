@@ -57,8 +57,6 @@ QUnit.test('Create Horizontal Category Axis, Vertical Continuous axis', function
         range: { val: { min: 1, max: 3 } }
     });
     chartMocks.seriesMockData.series.push(stubSeries);
-    let argumentAxis;
-    let valueAxis;
 
     // act
     const chart = this.createChart({
@@ -79,13 +77,13 @@ QUnit.test('Create Horizontal Category Axis, Vertical Continuous axis', function
     assert.ok(chart._argumentAxes[0]._constantLinesGroup);
     assert.ok(chart.getValueAxis()._constantLinesGroup);
     assert.ok(chart.getValueAxis().gridGroup);
-    argumentAxis = chart._argumentAxes[0];
+    const argumentAxis = chart._argumentAxes[0];
 
     assert.ok(argumentAxis.getOptions().categories, 'Categories should be assigned');
     assert.deepEqual(argumentAxis.getOptions().categories, categories);
     assertCommonAxesProperties(assert, argumentAxis, {});
 
-    valueAxis = chart.getValueAxis();
+    const valueAxis = chart.getValueAxis();
     assert.ok(!valueAxis.getOptions().categories, 'Categories should not be assigned');
     assertCommonAxesProperties(assert, valueAxis, {});
     assert.equal(this.themeManager.getOptions.withArgs('argumentAxis').callCount, 1);
@@ -104,7 +102,6 @@ QUnit.test('Argument axis is empty array', function(assert) {
         range: { minY: 1, maxY: 3 }
     });
     chartMocks.seriesMockData.series.push(stubSeries);
-    let argumentAxis;
 
     // act
     const chart = this.createChart({
@@ -118,7 +115,7 @@ QUnit.test('Argument axis is empty array', function(assert) {
     assert.ok(chart._argumentAxes[0]);
     assert.ok(chart._argumentAxes[0]._stripsGroup);
     assert.ok(chart._argumentAxes[0]._constantLinesGroup);
-    argumentAxis = chart._argumentAxes[0];
+    const argumentAxis = chart._argumentAxes[0];
     assertCommonAxesProperties(assert, argumentAxis, {});
 });
 
@@ -358,8 +355,6 @@ QUnit.test('Create Horizontal Continuous Axis, Vertical Continuous axis', functi
         range: { val: { min: 1, max: 3 } }
     });
     chartMocks.seriesMockData.series.push(stubSeries);
-    let argumentAxis;
-    let valueAxis;
 
     // act
     const chart = this.createChart({
@@ -391,11 +386,11 @@ QUnit.test('Create Horizontal Continuous Axis, Vertical Continuous axis', functi
     assert.ok(chart.getValueAxis()._constantLinesGroup);
     assert.ok(chart.getValueAxis().gridGroup);
 
-    argumentAxis = chart._argumentAxes[0];
+    const argumentAxis = chart._argumentAxes[0];
     assert.ok(!argumentAxis.getOptions().categories, 'Categories should not be assigned');
     assertCommonAxesProperties(assert, argumentAxis, { });
 
-    valueAxis = chart.getValueAxis();
+    const valueAxis = chart.getValueAxis();
     assert.ok(!valueAxis.getOptions().categories, 'Categories should not be assigned');
     assertCommonAxesProperties(assert, valueAxis, {});
 });
@@ -406,8 +401,6 @@ QUnit.test('Create Horizontal Continuous Axis, Vertical Continuous axis (horizon
         range: { val: { min: 1, max: 3 }, arg: { min: 10, max: 20 } }
     });
     chartMocks.seriesMockData.series.push(stubSeries);
-    let argumentAxis;
-    let valueAxis;
 
     // act
     const chart = this.createChart({
@@ -435,11 +428,11 @@ QUnit.test('Create Horizontal Continuous Axis, Vertical Continuous axis (horizon
     assert.ok(chart.getValueAxis()._constantLinesGroup);
     assert.ok(chart.getValueAxis().gridGroup);
 
-    argumentAxis = chart._argumentAxes[0];
+    const argumentAxis = chart._argumentAxes[0];
     assert.ok(!argumentAxis.getOptions().categories, 'Categories should not be assigned');
     assertCommonAxesProperties(assert, argumentAxis, {});
 
-    valueAxis = chart.getValueAxis();
+    const valueAxis = chart.getValueAxis();
     assert.ok(!valueAxis.getOptions().categories, 'Categories should not be assigned');
     assertCommonAxesProperties(assert, valueAxis, {});
 });
@@ -450,8 +443,6 @@ QUnit.test('Create Vertical Category Axis, Horizontal Continuous axis (rotated)'
         range: { val: { min: 1, max: 3 } }
     });
     chartMocks.seriesMockData.series.push(stubSeries);
-    let valueAxis;
-    let argumentAxis;
 
     // act
     const chart = this.createChart({
@@ -473,12 +464,12 @@ QUnit.test('Create Vertical Category Axis, Horizontal Continuous axis (rotated)'
     assert.ok(chart._argumentAxes[0]._constantLinesGroup);
     assert.ok(chart.getValueAxis().gridGroup);
 
-    argumentAxis = chart._argumentAxes[0];
+    const argumentAxis = chart._argumentAxes[0];
     assert.ok(argumentAxis.getOptions().categories, 'Categories should be assigned');
     assert.deepEqual(argumentAxis.getOptions().categories, categories);
     assertCommonAxesProperties(assert, argumentAxis, { });
 
-    valueAxis = chart.getValueAxis();
+    const valueAxis = chart.getValueAxis();
     assert.ok(!valueAxis.getOptions().categories, 'Categories should not be assigned');
     assertCommonAxesProperties(assert, valueAxis, {});
 
@@ -495,8 +486,6 @@ QUnit.test('Create Vertical Continuous Axis, Horizontal Continuous axis (rotated
         range: { val: { min: 1, max: 3 } }
     });
     chartMocks.seriesMockData.series.push(stubSeries);
-    let valueAxis;
-    let argumentAxis;
 
     // act
     const chart = this.createChart({
@@ -519,13 +508,13 @@ QUnit.test('Create Vertical Continuous Axis, Horizontal Continuous axis (rotated
     assert.ok(chart._argumentAxes[0]._constantLinesGroup);
     assert.ok(chart.getValueAxis().gridGroup);
 
-    argumentAxis = chart._argumentAxes[0];
+    const argumentAxis = chart._argumentAxes[0];
     assert.ok(!argumentAxis.getOptions().categories);
     assert.equal(argumentAxis.getOptions().min, 10, 'Vertical min');
     assert.equal(argumentAxis.getOptions().max, 20, 'Vertical max');
     assertCommonAxesProperties(assert, argumentAxis, {});
 
-    valueAxis = chart.getValueAxis();
+    const valueAxis = chart.getValueAxis();
     assert.ok(!valueAxis.getOptions().categories);
     assertCommonAxesProperties(assert, valueAxis, {});
 });
@@ -1443,9 +1432,8 @@ QUnit.test('Panes border, default attributes. Two render', function(assert) {
     assert.ok(chart._panesBorderGroup.clear.called);
     assert.ok(chart._renderer.g.callCount);
     const bordersGroups = [];
-    let attrCall;
     for(let i = 0; i < chart._renderer.g.callCount; i++) {
-        attrCall = chart._renderer.g.getCall(i).returnValue.stub('attr');
+        const attrCall = chart._renderer.g.getCall(i).returnValue.stub('attr');
         if(attrCall.called && attrCall.firstCall.args[0]['class'] === 'dxc-border') {
             bordersGroups.push(chart._renderer.g.getCall(i).returnValue);
         }

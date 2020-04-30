@@ -580,10 +580,6 @@ QUnit.module('placeholder and source', moduleConfig, () => {
 
     QUnit.test('Placeholder should be displayed correctly when dragging item to last position (dropFeedbackMode is indicate and itemOrientation is horiontal)', function(assert) {
         // arrange
-        let items;
-        let $placeholder;
-        let $dragItemElement;
-
         this.$element = $('#itemsHorizontal');
 
         this.createSortable({
@@ -591,15 +587,15 @@ QUnit.module('placeholder and source', moduleConfig, () => {
             itemOrientation: 'horizontal'
         });
 
-        items = this.$element.children();
-        $dragItemElement = items.eq(0);
+        let items = this.$element.children();
+        const $dragItemElement = items.eq(0);
 
         // act
         pointerMock($dragItemElement).start().down(0, 0).move(100, 0);
 
         // assert
         items = this.$element.children();
-        $placeholder = $('.dx-sortable-placeholder');
+        const $placeholder = $('.dx-sortable-placeholder');
         assert.strictEqual(items.length, 3, 'item count');
         assert.equal($placeholder.length, 1, 'element has placeholder class');
         assert.equal($placeholder.get(0).style.height, '300px', 'placeholder height style');
@@ -2925,7 +2921,6 @@ QUnit.module('Drag and drop in RTL mode', moduleConfig, () => {
     QUnit.test('Dragging an item should work correctly when itemOrientation is "horizontal" and dropFeedbackMode is "push"', function(assert) {
         // arrange
         let $items;
-        let $dragItemElement;
 
         this.$element = $('#itemsHorizontal');
 
@@ -2936,7 +2931,7 @@ QUnit.module('Drag and drop in RTL mode', moduleConfig, () => {
         });
 
         $items = this.$element.children();
-        $dragItemElement = $items.first();
+        const $dragItemElement = $items.first();
 
         // act
         pointerMock($dragItemElement).start().down(220, 0).move(-20, 0).move(-10, 0);
@@ -2952,7 +2947,6 @@ QUnit.module('Drag and drop in RTL mode', moduleConfig, () => {
     QUnit.test('Dragging an item should work correctly when itemOrientation is "vertical" and dropFeedbackMode is "push"', function(assert) {
         // arrange
         let $items;
-        let $dragItemElement;
 
         this.createSortable({
             dropFeedbackMode: 'push',
@@ -2961,7 +2955,7 @@ QUnit.module('Drag and drop in RTL mode', moduleConfig, () => {
         });
 
         $items = this.$element.children();
-        $dragItemElement = $items.first();
+        const $dragItemElement = $items.first();
 
         // act
         pointerMock($dragItemElement).start().down().move(0, 30).move(0, 15);
@@ -2977,8 +2971,6 @@ QUnit.module('Drag and drop in RTL mode', moduleConfig, () => {
     QUnit.test('Initial placeholder if itemOrientation is "horiontal" and dropFeedbackMode is "indicate"', function(assert) {
         // arrange
         let $items;
-        let $placeholder;
-        let $dragItemElement;
 
         this.$element = $('#itemsHorizontal');
 
@@ -2989,14 +2981,14 @@ QUnit.module('Drag and drop in RTL mode', moduleConfig, () => {
         });
 
         $items = this.$element.children();
-        $dragItemElement = $items.eq(0);
+        const $dragItemElement = $items.eq(0);
 
         // act
         pointerMock($dragItemElement).start().down(235, 0).move(-30, 0);
 
         // assert
         $items = this.$element.children();
-        $placeholder = $('.dx-sortable-placeholder');
+        const $placeholder = $('.dx-sortable-placeholder');
         assert.strictEqual($items.length, 3, 'item count');
         assert.equal($placeholder.length, 1, 'element has placeholder class');
         assert.equal($placeholder.get(0).style.height, '300px', 'placeholder height style');
@@ -3007,8 +2999,6 @@ QUnit.module('Drag and drop in RTL mode', moduleConfig, () => {
     QUnit.test('Placeholder should be displayed correctly when dragging item to last position (dropFeedbackMode is "indicate" and itemOrientation is "horiontal")', function(assert) {
         // arrange
         let items;
-        let $placeholder;
-        let $dragItemElement;
 
         this.$element = $('#itemsHorizontal');
 
@@ -3019,14 +3009,14 @@ QUnit.module('Drag and drop in RTL mode', moduleConfig, () => {
         });
 
         items = this.$element.children();
-        $dragItemElement = items.eq(0);
+        const $dragItemElement = items.eq(0);
 
         // act
         pointerMock($dragItemElement).start().down(250, 0).move(-100, 0);
 
         // assert
         items = this.$element.children();
-        $placeholder = $('.dx-sortable-placeholder');
+        const $placeholder = $('.dx-sortable-placeholder');
         assert.strictEqual(items.length, 3, 'item count');
         assert.equal($placeholder.length, 1, 'element has placeholder class');
         assert.equal($placeholder.get(0).style.height, '300px', 'placeholder height style');
@@ -3038,7 +3028,6 @@ QUnit.module('Drag and drop in RTL mode', moduleConfig, () => {
         // arrange
         let items;
         let $placeholder;
-        let $dragItemElement;
 
         this.$element = $('#itemsHorizontal');
 
@@ -3049,7 +3038,7 @@ QUnit.module('Drag and drop in RTL mode', moduleConfig, () => {
         });
 
         items = this.$element.children();
-        $dragItemElement = items.eq(0);
+        const $dragItemElement = items.eq(0);
 
         // act
         const pointer = pointerMock($dragItemElement).start().down(235, 0).move(-30, 0);
@@ -3082,7 +3071,6 @@ QUnit.module('Drag and drop in RTL mode', moduleConfig, () => {
         // arrange
         let items;
         let $placeholder;
-        let $dragItemElement;
 
         this.$element = $('#itemsHorizontal');
 
@@ -3093,7 +3081,7 @@ QUnit.module('Drag and drop in RTL mode', moduleConfig, () => {
         });
 
         items = this.$element.children();
-        $dragItemElement = items.eq(0);
+        const $dragItemElement = items.eq(0);
 
         // act
         const pointer = pointerMock($dragItemElement).start().down(235, 0).move(-45, 0);

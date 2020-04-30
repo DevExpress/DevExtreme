@@ -927,7 +927,6 @@ QUnit.module('Layout manager', () => {
             }]
         });
         const layoutManager = $testContainer.dxLayoutManager('instance');
-        let $fieldItems;
 
         // act
         layoutManager.option('items', [{
@@ -944,7 +943,7 @@ QUnit.module('Layout manager', () => {
             editorType: 'dxDateBox'
         }]);
 
-        $fieldItems = $testContainer.find('.' + internals.FIELD_ITEM_CLASS);
+        const $fieldItems = $testContainer.find('.' + internals.FIELD_ITEM_CLASS);
 
         // assert
         assert.ok($fieldItems.eq(0).find('.dx-numberbox').length, 'First item is dxNumberBox');
@@ -993,7 +992,6 @@ QUnit.module('Layout manager', () => {
 
     test('Set values from layoutData', function(assert) {
         // arrange, act
-        let $editors;
         const $testContainer = $('#container');
 
         $testContainer.dxLayoutManager({
@@ -1005,7 +1003,7 @@ QUnit.module('Layout manager', () => {
             }
         });
 
-        $editors = $testContainer.find('.dx-texteditor, .dx-checkbox');
+        const $editors = $testContainer.find('.dx-texteditor, .dx-checkbox');
 
         // assert
         assert.equal($editors.eq(0).dxTextBox('instance').option('value'), 'Patti', '1 editor');
@@ -1059,7 +1057,6 @@ QUnit.module('Layout manager', () => {
 
     test('Set value via editor options', function(assert) {
         // arrange, act
-        let $editors;
         const $testContainer = $('#container');
 
         $testContainer.dxLayoutManager({
@@ -1078,7 +1075,7 @@ QUnit.module('Layout manager', () => {
             }
         });
 
-        $editors = $testContainer.find('.dx-texteditor, .dx-checkbox');
+        const $editors = $testContainer.find('.dx-texteditor, .dx-checkbox');
 
         // assert
         assert.equal($editors.eq(2).dxNumberBox('instance').option('value'), 34);
@@ -1086,7 +1083,6 @@ QUnit.module('Layout manager', () => {
 
     test('Change item.visible on customizeItem works correct', function(assert) {
         // arrange, act
-        let $editors;
         const $testContainer = $('#container');
 
         $testContainer.dxLayoutManager({
@@ -1101,7 +1097,7 @@ QUnit.module('Layout manager', () => {
             }
         });
 
-        $editors = $testContainer.find('.dx-texteditor');
+        const $editors = $testContainer.find('.dx-texteditor');
 
         // assert
         assert.equal($editors.length, 1, 'There is only one editor');
@@ -1110,7 +1106,6 @@ QUnit.module('Layout manager', () => {
 
     test('CustomizeItem work well after option change', function(assert) {
         // arrange, act
-        let $editors;
         const $testContainer = $('#container');
 
         $testContainer.dxLayoutManager({
@@ -1132,7 +1127,7 @@ QUnit.module('Layout manager', () => {
             }
         );
 
-        $editors = $testContainer.find('.dx-texteditor, .dx-checkbox');
+        const $editors = $testContainer.find('.dx-texteditor, .dx-checkbox');
 
         // assert
         assert.equal($editors.eq(2).dxNumberBox('instance').option('value'), 34);

@@ -457,7 +457,6 @@ class MenuBase extends HierarchicalCollectionWidget {
 
     _renderItem(index, node, $nodeContainer, $nodeElement) {
         const items = this.option('items');
-        let $itemFrame;
 
         const $node = $nodeElement || this._createDOMElement($nodeContainer);
 
@@ -465,7 +464,7 @@ class MenuBase extends HierarchicalCollectionWidget {
             $node.addClass(DX_MENU_ITEM_LAST_GROUP_ITEM);
         }
 
-        $itemFrame = super._renderItem(index, node.internalFields.item, $node);
+        const $itemFrame = super._renderItem(index, node.internalFields.item, $node);
 
         if(node.internalFields.item === this.option('selectedItem')) {
             $itemFrame.addClass(DX_MENU_SELECTED_ITEM_CLASS);

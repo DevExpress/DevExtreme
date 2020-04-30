@@ -46,13 +46,11 @@ require('./tree_map.base').addChange({
     handler: function() {
         const that = this;
         const option = _normalizeEnum(that._getOption('selectionMode', true));
-        let mode;
         const selectionList = that._selectionList;
-        let tmp;
 
-        mode = option === 'none' ? MODE_NONE : (option === 'multiple' ? MODE_MULTIPLE : MODE_SINGLE);
+        const mode = option === 'none' ? MODE_NONE : (option === 'multiple' ? MODE_MULTIPLE : MODE_SINGLE);
         if(mode === MODE_SINGLE && selectionList.length > 1) {
-            tmp = selectionList.pop();
+            const tmp = selectionList.pop();
             that.clearSelection();
             selectionList.push(tmp);
         } else if(mode === MODE_NONE) {
@@ -74,10 +72,9 @@ expand(proto, '_applyTilesAppearance', function() {
 function bringSelectedTilesToForeground(nodes, selectionList) {
     let i;
     const ii = selectionList.length;
-    let node;
 
     for(i = 0; i < ii; ++i) {
-        node = nodes[selectionList[i]];
+        const node = nodes[selectionList[i]];
         tileToFront[Number(node.isNode())](node.tile);
     }
 }
@@ -102,18 +99,15 @@ proto._applySelectionState = function(index, state) {
 
 proto._selectNode = function(index, state) {
     const that = this;
-    let selectionList;
-    let k;
-    let tmp;
 
     if(that._selectionMode !== MODE_NONE) {
         that._context.suspend();
-        selectionList = that._selectionList;
-        k = _inArray(index, selectionList);
+        const selectionList = that._selectionList;
+        const k = _inArray(index, selectionList);
         if(state && k === -1) {
             if(that._selectionMode === MODE_SINGLE) {
                 if(selectionList.length) {
-                    tmp = selectionList.pop();
+                    const tmp = selectionList.pop();
                     that._applySelectionState(tmp, false);
                 }
             }

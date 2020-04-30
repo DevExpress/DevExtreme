@@ -28,7 +28,6 @@ module.exports = {
     },
 
     _renderSearch: function() {
-        let editorOptions;
         const $element = this.$element();
         const searchEnabled = this.option('searchEnabled');
         const searchBoxClassName = this._addWidgetPrefix('search');
@@ -40,7 +39,7 @@ module.exports = {
             return;
         }
 
-        editorOptions = this._getSearchEditorOptions();
+        const editorOptions = this._getSearchEditorOptions();
 
         if(this._searchEditor) {
             this._searchEditor.option(editorOptions);

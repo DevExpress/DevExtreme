@@ -381,11 +381,10 @@ QUnit.test('disabled: scroll was not moved when disabled is true', function(asse
         disabled: true
     });
     const mouse = pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS)).start();
-    let location;
     const distance = -10;
 
     mouse.down().move(0, distance);
-    location = getScrollOffset($scrollable);
+    const location = getScrollOffset($scrollable);
     assert.equal(location.top, 0, 'scroll was not moved when disabled is true');
     mouse.up();
 });

@@ -95,7 +95,6 @@ const TransitionAnimationStrategy = {
         const transitionEndFired = new Deferred();
         const simulatedTransitionEndFired = new Deferred();
         let simulatedEndEventTimer;
-        let waitForJSCompleteTimer;
         const transitionEndEventName = support.transitionEndEventName() + '.dxFX';
 
         config.transitionAnimation.cleanup = function() {
@@ -117,7 +116,7 @@ const TransitionAnimationStrategy = {
             deferred.reject();
         });
 
-        waitForJSCompleteTimer = setTimeout(function() { // Fix for a visual bug (T244514): do not setup the timer until all js code has finished working
+        const waitForJSCompleteTimer = setTimeout(function() { // Fix for a visual bug (T244514): do not setup the timer until all js code has finished working
             simulatedEndEventTimer = setTimeout(function() {
                 simulatedTransitionEndFired.reject();
             }, config.duration + config.delay + fx._simulatedTransitionEndDelay /* T255863 */);

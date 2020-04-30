@@ -680,12 +680,11 @@ const EditingController = modules.ViewController.inherit((function() {
         processItems: function(items, change) {
             const changeType = change.changeType;
             const dataController = this._dataController;
-            let editData;
             let dataRowIndex = -1;
 
             this.update(changeType);
 
-            editData = this._editData;
+            const editData = this._editData;
             for(let i = 0; i < editData.length; i++) {
                 const key = editData[i].key;
 
@@ -713,11 +712,10 @@ const EditingController = modules.ViewController.inherit((function() {
         processDataItem: function(item, options, generateDataValues) {
             const that = this;
             let data;
-            let editIndex;
             const columns = options.visibleColumns;
             const key = item.data[INSERT_INDEX] ? item.data.key : item.key;
 
-            editIndex = getIndexByKey(key, that._editData);
+            const editIndex = getIndexByKey(key, that._editData);
 
             if(editIndex >= 0) {
                 const editMode = getEditMode(that);
@@ -773,19 +771,17 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _getInsertKey: function(parentKey) {
             const that = this;
-            let insertKey;
             const dataController = that._dataController;
             const rows = dataController.items();
-            let row;
             const editMode = getEditMode(that);
 
-            insertKey = {
+            const insertKey = {
                 parentKey,
                 pageIndex: dataController.pageIndex(),
                 rowIndex: that._getInsertRowIndex(parentKey)
             };
 
-            row = rows[insertKey.rowIndex];
+            const row = rows[insertKey.rowIndex];
 
             if(row && (!row.isEditing && row.rowType === 'detail' || row.rowType === 'detailAdaptive')) {
                 insertKey.rowIndex++;

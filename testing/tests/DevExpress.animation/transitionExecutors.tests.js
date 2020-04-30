@@ -238,12 +238,11 @@ QUnit.test('enter/leave/start custom animations', function(assert) {
     const animationStartLog = [];
     const $toEnter = $('<div/>');
     const $toLeave = $('<div/>');
-    let customAnimation;
     const customAnimationNoResult = { enter: noop, leave: noop };
     const modifiers = { test: 'test' };
     const deferred = $.Deferred();
 
-    customAnimation = {
+    const customAnimation = {
         enter: function(element, config) {
             const result = new MockAnimation({
                 element: element,

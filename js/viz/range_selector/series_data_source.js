@@ -8,7 +8,6 @@ const vizUtils = require('../core/utils');
 const rangeModule = require('../translators/range');
 const dataValidatorModule = require('../components/data_validator');
 const ChartThemeManager = require('../components/chart_theme_manager').ThemeManager;
-let SeriesDataSource;
 
 const createThemeManager = function(chartOptions) {
     return new ChartThemeManager({
@@ -47,15 +46,13 @@ const processSeriesFamilies = function(series, equalBarWidth, minBubbleSize, max
     return families;
 };
 
-SeriesDataSource = function(options) {
+const SeriesDataSource = function(options) {
     const that = this;
     const themeManager = that._themeManager = createThemeManager(options.chart);
-    let topIndent;
-    let bottomIndent;
 
     themeManager.setTheme(options.chart.theme);
-    topIndent = themeManager.getOptions('topIndent');
-    bottomIndent = themeManager.getOptions('bottomIndent');
+    const topIndent = themeManager.getOptions('topIndent');
+    const bottomIndent = themeManager.getOptions('bottomIndent');
 
     that._indent = {
         top: (topIndent >= 0 && topIndent < 1) ? topIndent : 0,
@@ -74,18 +71,13 @@ SeriesDataSource.prototype = {
     _calculateSeries: function(options) {
         const that = this;
         const series = [];
-        let particularSeriesOptions;
-        let seriesTheme;
         const data = options.dataSource || [];
-        let parsedData;
         const chartThemeManager = that._themeManager;
         const seriesTemplate = chartThemeManager.getOptions('seriesTemplate');
         let allSeriesOptions = seriesTemplate ? vizUtils.processSeriesTemplate(seriesTemplate, data) : options.chart.series;
         let dataSourceField;
         const valueAxis = that._valueAxis;
         let i;
-        let newSeries;
-        let groupsData;
 
         if(options.dataSource && !allSeriesOptions) {
             dataSourceField = options.dataSourceField || 'arg';
@@ -99,18 +91,18 @@ SeriesDataSource.prototype = {
         allSeriesOptions = (Array.isArray(allSeriesOptions) ? allSeriesOptions : (allSeriesOptions ? [allSeriesOptions] : []));
 
         for(i = 0; i < allSeriesOptions.length; i++) {
-            particularSeriesOptions = extend(true, {}, allSeriesOptions[i]);
+            const particularSeriesOptions = extend(true, {}, allSeriesOptions[i]);
 
             particularSeriesOptions.rotated = false;
 
-            seriesTheme = chartThemeManager.getOptions('series', particularSeriesOptions, allSeriesOptions.length);
+            const seriesTheme = chartThemeManager.getOptions('series', particularSeriesOptions, allSeriesOptions.length);
             seriesTheme.argumentField = seriesTheme.argumentField || options.dataSourceField;// B253068
             if(!seriesTheme.name) {
                 seriesTheme.name = 'Series ' + (i + 1).toString();
             }
             if(data && data.length > 0) {
                 // TODO
-                newSeries = new seriesModule.Series({
+                const newSeries = new seriesModule.Series({
                     renderer: options.renderer,
                     argumentAxis: options.argumentAxis,
                     valueAxis: options.valueAxis,
@@ -121,7 +113,7 @@ SeriesDataSource.prototype = {
         }
 
         if(series.length) {
-            groupsData = {
+            const groupsData = {
                 groups: [{
                     series: series,
                     valueAxis: options.valueAxis,
@@ -136,7 +128,7 @@ SeriesDataSource.prototype = {
                     type: options.axisType
                 }
             };
-            parsedData = dataValidatorModule.validateData(data, groupsData, options.incidentOccurred, chartThemeManager.getOptions('dataPrepareSettings'));
+            const parsedData = dataValidatorModule.validateData(data, groupsData, options.incidentOccurred, chartThemeManager.getOptions('dataPrepareSettings'));
             that.argCategories = groupsData.categories;
             for(i = 0; i < series.length; i++) {
                 series[i].updateData(parsedData[series[i].getArgumentField()]);
@@ -186,7 +178,6 @@ SeriesDataSource.prototype = {
 
     getBoundRange: function() {
         const that = this;
-        let rangeData;
         const valueAxis = that._valueAxis;
         const valRange = new rangeModule.Range({
             min: valueAxis.min,
@@ -197,22 +188,18 @@ SeriesDataSource.prototype = {
             base: valueAxis.logarithmBase
         });
         const argRange = new rangeModule.Range({});
-        let rangeYSize;
-        let rangeVisibleSizeY;
-        let minIndent;
-        let maxIndent;
 
         each(that._series, function(_, series) {
-            rangeData = series.getRangeData();
+            const rangeData = series.getRangeData();
             valRange.addRange(rangeData.val);
             argRange.addRange(rangeData.arg);
         });
 
         if(!valRange.isEmpty() && !argRange.isEmpty()) {
-            minIndent = valueAxis.inverted ? that._indent.top : that._indent.bottom;
-            maxIndent = valueAxis.inverted ? that._indent.bottom : that._indent.top;
-            rangeYSize = valRange.max - valRange.min;
-            rangeVisibleSizeY = (typeUtils.isNumeric(valRange.maxVisible) ? valRange.maxVisible : valRange.max) - (typeUtils.isNumeric(valRange.minVisible) ? valRange.minVisible : valRange.min);
+            const minIndent = valueAxis.inverted ? that._indent.top : that._indent.bottom;
+            const maxIndent = valueAxis.inverted ? that._indent.bottom : that._indent.top;
+            const rangeYSize = valRange.max - valRange.min;
+            const rangeVisibleSizeY = (typeUtils.isNumeric(valRange.maxVisible) ? valRange.maxVisible : valRange.max) - (typeUtils.isNumeric(valRange.minVisible) ? valRange.minVisible : valRange.min);
             // B253717
             if(typeUtils.isDate(valRange.min)) {
                 valRange.min = new Date(valRange.min.valueOf() - rangeYSize * minIndent);

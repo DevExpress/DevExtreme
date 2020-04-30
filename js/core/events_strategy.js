@@ -26,13 +26,12 @@ module.exports = Class.inherit({
 
     on: function(eventName, eventHandler) {
         let callbacks = this._events[eventName];
-        let addFn;
 
         if(!callbacks) {
             callbacks = Callbacks();
             this._events[eventName] = callbacks;
         }
-        addFn = callbacks.originalAdd || callbacks.add;
+        const addFn = callbacks.originalAdd || callbacks.add;
         addFn.call(callbacks, eventHandler);
     },
 

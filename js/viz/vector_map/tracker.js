@@ -80,14 +80,12 @@ Tracker.prototype = {
 
     _endClick: function(event, data) {
         const state = this._clickState;
-        let threshold;
-        let coords;
 
         if(!state) { return; }
 
         if(data && _now() - state.time <= CLICK_TIME_THRESHOLD) {
-            threshold = state.threshold;
-            coords = getEventCoords(event);
+            const threshold = state.threshold;
+            const coords = getEventCoords(event);
             if(_abs(coords.x - state.x) <= threshold && _abs(coords.y - state.y) <= threshold) {
                 this._fire(EVENT_CLICK, { data: data, x: coords.x, y: coords.y, $event: event });
             }
@@ -104,13 +102,11 @@ Tracker.prototype = {
 
     _moveDrag: function(event, data) {
         const state = this._dragState;
-        let coords;
-        let threshold;
 
         if(!state) { return; }
 
-        coords = getEventCoords(event);
-        threshold = isTouchEvent(event) ? DRAG_COORD_THRESHOLD_TOUCH : DRAG_COORD_THRESHOLD_MOUSE;
+        const coords = getEventCoords(event);
+        const threshold = isTouchEvent(event) ? DRAG_COORD_THRESHOLD_TOUCH : DRAG_COORD_THRESHOLD_MOUSE;
         if(state.active || _abs(coords.x - state.x) > threshold || _abs(coords.y - state.y) > threshold) {
             state.x = coords.x;
             state.y = coords.y;
@@ -132,8 +128,6 @@ Tracker.prototype = {
         const that = this;
         const lock = that._wheelLock;
         const time = _now();
-        let delta;
-        let coords;
 
         if(time - lock.time <= WHEEL_COOLDOWN) { return; }
         // T136650
@@ -141,11 +135,11 @@ Tracker.prototype = {
             lock.dir = 0;
         }
         // T107589, T136650
-        delta = adjustWheelDelta(event.delta / 120 || 0, lock);
+        const delta = adjustWheelDelta(event.delta / 120 || 0, lock);
 
         if(delta === 0) { return; }
 
-        coords = getEventCoords(event);
+        const coords = getEventCoords(event);
         that._fire(EVENT_ZOOM, { delta: delta, x: coords.x, y: coords.y });
         lock.time = lock.dirTime = time;
     },
@@ -208,16 +202,14 @@ Tracker.prototype = {
 
     _endZoom: function(event) {
         const state = this._zoomState;
-        let startDistance;
-        let currentDistance;
 
         if(!state || !isTouchEvent(event)) {
             return;
         }
 
         if(state.ready) {
-            startDistance = getDistance(state.x1_0, state.y1_0, state.x2_0, state.y2_0);
-            currentDistance = getDistance(state.x1, state.y1, state.x2, state.y2);
+            const startDistance = getDistance(state.x1_0, state.y1_0, state.x2_0, state.y2_0);
+            const currentDistance = getDistance(state.x1, state.y1, state.x2, state.y2);
             this._fire(EVENT_ZOOM, { ratio: currentDistance / startDistance, x: (state.x1_0 + state.x2_0) / 2, y: (state.y1_0 + state.y2_0) / 2 });
         }
         this._zoomState = null;

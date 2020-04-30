@@ -172,12 +172,10 @@ const LayoutManager = Widget.inherit({
         const userItems = this.option('items');
         const isUserItemsExist = isDefined(userItems);
         const customizeItem = that.option('customizeItem');
-        let items;
-        let processedItems;
 
-        items = isUserItemsExist ? userItems : this._generateItemsByData(layoutData);
+        const items = isUserItemsExist ? userItems : this._generateItemsByData(layoutData);
         if(isDefined(items)) {
-            processedItems = [];
+            const processedItems = [];
 
             each(items, function(index, item) {
                 if(that._isAcceptableItem(item)) {
@@ -324,11 +322,10 @@ const LayoutManager = Widget.inherit({
         if(that._items && that._items.length) {
             const colCount = that._getColCount();
             const $container = $('<div>').appendTo(that.$element());
-            let layoutItems;
 
             that._prepareItemsWithMerging(colCount);
 
-            layoutItems = that._generateLayoutItems();
+            const layoutItems = that._generateLayoutItems();
             that._extendItemsWithDefaultTemplateOptions(layoutItems, that._items);
 
             that._responsiveBox = that._createComponent($container, ResponsiveBox, that._getResponsiveBoxConfig(layoutItems, colCount, templatesInfo));
@@ -484,22 +481,18 @@ const LayoutManager = Widget.inherit({
 
     _prepareItemsWithMerging: function(colCount) {
         const items = this._items.slice(0);
-        let item;
-        let itemsMergedByCol;
         let result = [];
-        let j;
-        let i;
 
-        for(i = 0; i < items.length; i++) {
-            item = items[i];
+        for(let i = 0; i < items.length; i++) {
+            const item = items[i];
             result.push(item);
 
             if(this.option('alignItemLabels') || item.alignItemLabels || item.colSpan) {
                 item.col = this._getColByIndex(result.length - 1, colCount);
             }
             if(item.colSpan > 1 && (item.col + item.colSpan <= colCount)) {
-                itemsMergedByCol = [];
-                for(j = 0; j < item.colSpan - 1; j++) {
+                const itemsMergedByCol = [];
+                for(let j = 0; j < item.colSpan - 1; j++) {
                     itemsMergedByCol.push({ merged: true });
                 }
                 result = result.concat(itemsMergedByCol);
@@ -518,11 +511,9 @@ const LayoutManager = Widget.inherit({
         const items = this._items;
         const colCount = this._getColCount();
         const result = [];
-        let item;
-        let i;
 
-        for(i = 0; i < items.length; i++) {
-            item = items[i];
+        for(let i = 0; i < items.length; i++) {
+            const item = items[i];
 
             if(!item.merged) {
                 const generatedItem = {
@@ -791,7 +782,6 @@ const LayoutManager = Widget.inherit({
         const dataValue = this._getDataByField(options.dataField);
         const defaultEditorOptions = dataValue !== undefined ? { value: dataValue } : {};
         const isDeepExtend = true;
-        let editorOptions;
 
         if(EDITORS_WITH_ARRAY_VALUE.indexOf(options.editorType) !== -1) {
             defaultEditorOptions.value = defaultEditorOptions.value || [];
@@ -799,7 +789,7 @@ const LayoutManager = Widget.inherit({
 
         const formInstance = this.option('form');
 
-        editorOptions = extend(isDeepExtend, defaultEditorOptions, options.editorOptions, {
+        const editorOptions = extend(isDeepExtend, defaultEditorOptions, options.editorOptions, {
             inputAttr: {
                 id: options.id
             },
@@ -1002,9 +992,8 @@ const LayoutManager = Widget.inherit({
     _createComponent: function($editor, type, editorOptions) {
         const that = this;
         const readOnlyState = this.option('readOnly');
-        let instance;
 
-        instance = that.callBase($editor, type, editorOptions);
+        const instance = that.callBase($editor, type, editorOptions);
 
         readOnlyState && instance.option('readOnly', readOnlyState);
 
@@ -1076,11 +1065,9 @@ const LayoutManager = Widget.inherit({
 
     _generateRatio: function(count, isAutoSize) {
         const result = [];
-        let ratio;
-        let i;
 
-        for(i = 0; i < count; i++) {
-            ratio = { ratio: 1 };
+        for(let i = 0; i < count; i++) {
+            const ratio = { ratio: 1 };
             if(isAutoSize) {
                 ratio.baseSize = 'auto';
             }

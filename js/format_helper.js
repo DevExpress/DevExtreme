@@ -120,15 +120,12 @@ module.exports = dependencyInjector({
         return this._normalizeFormat(resultFormat);
     },
     getDateFormatByTicks: function(ticks) {
-        let resultFormat;
         let maxDiff;
-        let currentDiff;
-        let i;
 
         if(ticks.length > 1) {
             maxDiff = dateUtils.getDatesDifferences(ticks[0], ticks[1]);
-            for(i = 1; i < ticks.length - 1; i++) {
-                currentDiff = dateUtils.getDatesDifferences(ticks[i], ticks[i + 1]);
+            for(let i = 1; i < ticks.length - 1; i++) {
+                const currentDiff = dateUtils.getDatesDifferences(ticks[i], ticks[i + 1]);
                 if(maxDiff.count < currentDiff.count) {
                     maxDiff = currentDiff;
                 }
@@ -145,13 +142,11 @@ module.exports = dependencyInjector({
             };
         }
 
-        resultFormat = this.getDateFormatByDifferences(maxDiff);
+        const resultFormat = this.getDateFormatByDifferences(maxDiff);
         return resultFormat;
     },
 
     getDateFormatByTickInterval: function(startValue, endValue, tickInterval) {
-        let resultFormat;
-        let dateDifferences;
         let dateUnitInterval;
         const dateDifferencesConverter = { week: 'day' };
         const correctDateDifferences = function(dateDifferences, tickInterval, value) {
@@ -211,7 +206,7 @@ module.exports = dependencyInjector({
             }
         };
         tickInterval = typeUtils.isString(tickInterval) ? tickInterval.toLowerCase() : tickInterval;
-        dateDifferences = dateUtils.getDatesDifferences(startValue, endValue);
+        const dateDifferences = dateUtils.getDatesDifferences(startValue, endValue);
 
         if(startValue !== endValue) {
             correctDifferencesByMaxDate(dateDifferences, startValue > endValue ? endValue : startValue, startValue > endValue ? startValue : endValue);
@@ -226,7 +221,7 @@ module.exports = dependencyInjector({
 
         dateDifferences[dateDifferencesConverter[dateUnitInterval] || dateUnitInterval] = true;
 
-        resultFormat = this.getDateFormatByDifferences(dateDifferences);
+        const resultFormat = this.getDateFormatByDifferences(dateDifferences);
         return resultFormat;
     }
 });

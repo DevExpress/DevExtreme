@@ -1451,7 +1451,6 @@ QUnit.module('Rows view', {
             cellTemplate: 'testTemplate'
         }]);
         const testElement = $('#container');
-        let cells;
 
         rowsView.component._getTemplate = function() {
             return {
@@ -1475,7 +1474,7 @@ QUnit.module('Rows view', {
 
         rowsView.render(testElement);
         rowsView.resize();
-        cells = testElement.find('td');
+        const cells = testElement.find('td');
 
         // assert
         assert.equal($(cells[0]).text(), 'Custom Template - 1');

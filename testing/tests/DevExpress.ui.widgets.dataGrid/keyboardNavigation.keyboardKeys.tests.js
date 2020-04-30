@@ -1583,8 +1583,7 @@ QUnit.module('Keyboard keys', {
 
     QUnit.testInActiveWindow('onKeyDown should fire if grid is empty (T837977)', function(assert) {
         // arrange
-        let keyDownFiresCount = 0,
-            $rowsView;
+        let keyDownFiresCount = 0;
 
         this.options = {
             dataSource: [],
@@ -1598,7 +1597,7 @@ QUnit.module('Keyboard keys', {
 
         this.clock.tick();
 
-        $rowsView = $(this.gridView.getView('rowsView').element());
+        const $rowsView = $(this.gridView.getView('rowsView').element());
 
         // assert
         assert.equal($rowsView.attr('tabindex'), 111, 'rowsView element has tabindex');

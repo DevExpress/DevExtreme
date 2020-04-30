@@ -356,8 +356,6 @@ QUnit.module('default', {
         const $firstElement = $('#component');
         const $secondElement = $('#anotherComponent');
         const $elements = $($firstElement).add($secondElement);
-        let firstInstance;
-        let result;
 
         registerComponent('TestComponent', this.TestComponent.inherit({
             setterReturningThis() {
@@ -365,9 +363,9 @@ QUnit.module('default', {
             }
         }));
 
-        firstInstance = $firstElement.TestComponent().TestComponent('instance');
+        const firstInstance = $firstElement.TestComponent().TestComponent('instance');
         $secondElement.TestComponent().TestComponent('instance');
-        result = $elements.TestComponent('setterReturningThis');
+        const result = $elements.TestComponent('setterReturningThis');
 
         assert.strictEqual(firstInstance, result);
     });

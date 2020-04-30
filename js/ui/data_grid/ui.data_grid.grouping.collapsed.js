@@ -87,7 +87,6 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
         const remotePaging = options.remoteOperations.paging;
         let offset = 0;
         let totalCount = 0;
-        let count;
 
         groupIndex = groupIndex || 0;
         path = path || [];
@@ -109,7 +108,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
 
                 updateGroupInfoItem(that, item, isLastGroupLevel, path, offset + i);
 
-                count = item.items ? updateGroupInfos(that, options, item.items, loadedGroupCount, groupIndex + 1, path, i) : item.count || -1;
+                const count = item.items ? updateGroupInfos(that, options, item.items, loadedGroupCount, groupIndex + 1, path, i) : item.count || -1;
                 if(count < 0) {
                     return -1;
                 }
@@ -382,7 +381,6 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
                     groupInfo.skipChildrenTotalCount = 0;
                 });
                 foreachExpandedGroups(that, function(groupInfo, parents) {
-                    let skip;
                     let take;
                     let takeCorrection = 0;
                     let parentTakeCorrection = 0;
@@ -394,7 +392,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
 
                     callback && callback(groupInfo, totalOffset);
 
-                    skip = options.skip - totalOffset;
+                    const skip = options.skip - totalOffset;
                     if(totalOffset <= options.skip + options.take && groupInfoCount) {
                         take = options.take;
 

@@ -57,6 +57,7 @@
         "no-console": "error",
         "no-whitespace-before-property": "error",
         "object-curly-spacing": [ "error", "always" ],
+        "prefer-const": "error",
         "semi-spacing": "error",
         "semi": "error",
         "space-before-blocks": "error",

@@ -780,7 +780,6 @@ module.exports = {
             const columnOptionCore = function(that, column, optionName, value, notFireEvent) {
                 const optionGetter = dataCoreUtils.compileGetter(optionName);
                 const columnIndex = column.index;
-                let prevValue;
                 let columns;
                 let changeType;
                 let initialColumn;
@@ -788,7 +787,7 @@ module.exports = {
                 if(arguments.length === 3) {
                     return optionGetter(column, { functionsAsIs: true });
                 }
-                prevValue = optionGetter(column, { functionsAsIs: true });
+                const prevValue = optionGetter(column, { functionsAsIs: true });
                 if(prevValue !== value) {
                     if(optionName === 'groupIndex' || optionName === 'calculateGroupValue') {
                         changeType = 'grouping';

@@ -9178,7 +9178,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Render should be sync while slowly scrolling if server is slow and page size is huge', function(assert) {
     // arrange
         const data = [];
-        let dataGrid;
         const loadedPages = [];
         const responseTime = 500;
         const that = this;
@@ -9188,7 +9187,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             data.push({ field: 'someData' });
         }
 
-        dataGrid = createDataGrid({
+        const dataGrid = createDataGrid({
             height: 300,
             remoteOperations: true,
             dataSource: {
