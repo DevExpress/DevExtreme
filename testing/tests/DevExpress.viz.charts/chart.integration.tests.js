@@ -3699,13 +3699,14 @@ QUnit.test('Zoom and pan', function(assert) {
     assert.roughEqual(valAxis2._axisPosition, 165, 5);
 
     const $root = $(chart._renderer.root.element);
-
+    chart._lastRenderingTime = 0;
     $root.trigger(new $.Event('dxdragstart', { pageX: 200, pageY: 250 }));
     $root.trigger(new $.Event('dxdrag', { offset: { x: 100, y: 0 } }));
     $root.trigger(new $.Event('dxdragend', {}));
 
     assert.roughEqual(valAxis2._axisPosition, 265, 5);
 
+    chart._lastRenderingTime = 0;
     $root.trigger(new $.Event('dxdragstart', { pageX: 500, pageY: 250 }));
     $root.trigger(new $.Event('dxdrag', { offset: { x: -250, y: 0 } }));
     $root.trigger(new $.Event('dxdragend', {}));
@@ -3719,6 +3720,7 @@ QUnit.test('Zoom and pan', function(assert) {
 
     assert.roughEqual(valAxis1._axisPosition, 340, 8);
 
+    chart._lastRenderingTime = 0;
     $root.trigger(new $.Event('dxdragstart', { pageX: 500, pageY: 250 }));
     $root.trigger(new $.Event('dxdrag', { offset: { x: -400, y: 0 } }));
     $root.trigger(new $.Event('dxdragend', {}));
