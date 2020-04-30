@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import 'renovation/dist/button.j';
+import 'renovation/button.j';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import ValidationEngine from 'ui/validation_engine';
