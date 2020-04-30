@@ -2337,7 +2337,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     // T882682
-    QUnit.skip('focus overlay should be shown again after resizing', function(assert) {
+    QUnit.test('focus overlay should be shown again after resizing', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'test is not actual for mobile devices');
             return;
@@ -2367,7 +2367,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // act
         resizeController._isResizing = true;
         $columnsSeparator.trigger($.Event('dxpointerdown'));
-        $(dataGrid.getCellElement(0, 0)).trigger($.Event('focusin'));
+        $(dataGrid.getCellElement(0, 0)).trigger($.Event('focus'));
 
         // assert
         assert.ok($overlay.hasClass('dx-hidden'), 'overlay is hidden');
