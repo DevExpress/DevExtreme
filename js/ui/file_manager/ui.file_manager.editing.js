@@ -50,6 +50,7 @@ class FileManagerEditingControl extends Widget {
             onOperationCanceled: ({ info }) => this._onCancelUploadSession(info),
             onOperationItemCanceled: ({ item, itemIndex }) => this._onCancelFileUpload(item, itemIndex)
         });
+        this._controller._notificationControl = this._notificationControl;
     }
 
     _getFileUploaderComponent() {
@@ -145,7 +146,9 @@ class FileManagerEditingControl extends Widget {
             },
 
             getItemContent: {
-                action: arg => this._getItemContent(arg)
+                action: arg => this._getItemContent(arg),
+                singleItemProcessingMessage: 'Folder Access Denied', // messageLocalization.format('dxFileManager-errorNoAccess'),
+                commonErrorMessage: messageLocalization.format('dxFileManager-errorNoAccess')
             }
 
         };
