@@ -2337,7 +2337,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     // T882682
-    QUnit.test('focus overlay should be shown again after resizing', function(assert) {
+    QUnit.skip('focus overlay should be shown again after resizing', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'test is not actual for mobile devices');
             return;
