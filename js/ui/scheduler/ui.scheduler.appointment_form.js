@@ -230,7 +230,7 @@ const SchedulerAppointmentForm = {
         ];
     },
 
-    prepareAppointmentFormEditors: function(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, allowEditingTimeZones) {
+    prepareAppointmentFormEditors: function(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, allowEditingTimeZones, readOnly) {
         const recurrenceEditorVisibility = !!this.getRecurrenceRule(appointmentData, dataExprs);
 
         this._editors = [
@@ -247,6 +247,7 @@ const SchedulerAppointmentForm = {
                 dataField: dataExprs.recurrenceRuleExpr,
                 editorType: 'dxRecurrenceEditor',
                 editorOptions: {
+                    readOnly: readOnly,
                     firstDayOfWeek: schedulerInst.option('firstDayOfWeek'),
                     onInitialized: (e) => {
                         const form = this._appointmentForm;
