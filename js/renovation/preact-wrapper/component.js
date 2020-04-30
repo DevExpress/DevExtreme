@@ -1,7 +1,6 @@
 import $ from '../../core/renderer';
 import DOMComponent from '../../core/dom_component';
 import * as Preact from 'preact';
-import { getInnerActionName } from './utils';
 import { isEmpty } from '../../core/utils/string';
 import { wrapElement, removeDifferentElements } from '../preact-wrapper/utils';
 import { useLayoutEffect } from 'preact/hooks';
@@ -72,24 +71,27 @@ export default class PreactWrapper extends DOMComponent {
             options.ref = this.viewRef;
         }
 
-        Object.keys(this._getActionsMap()).forEach((name) => {
-            options[name] = this.option(getInnerActionName(name));
+        Object.keys(this._actionsMap).forEach(name => {
+            options[name] = this._actionsMap[name];
         });
 
         return this.getProps && this.getProps(options) || options;
     }
 
-    _getActionsMap() { return {}; }
+    _getActionConfigs() { return {}; }
 
     _init() {
         super._init();
+        this._actionsMap = {};
 
-        Object.keys(this._getActionsMap()).forEach((name) => {
-            this._addAction(name, this._getActionsMap()[name]);
-        });
+        Object.keys(this._getActionConfigs()).forEach(name => this._addAction(name));
 
         this._initWidget && this._initWidget();
         this._supportedKeys = () => ({});
+    }
+
+    _addAction(event, action) {
+        this._actionsMap[event] = action || this._createActionByOption(event, this._getActionConfigs()[event]);
     }
 
     _createViewRef() {
@@ -98,23 +100,12 @@ export default class PreactWrapper extends DOMComponent {
 
     _optionChanged(option) {
         const { name } = option || {};
-        if(name) {
-            if(this._getActionsMap()[name]) {
-                this._addAction(name, this._getActionsMap()[name]);
-                option = undefined;
-            } else if(Object.keys(this._getActionsMap()).some(event => getInnerActionName(event) === name)) {
-                option = undefined;
-            }
+        if(name && this._getActionConfigs()[name]) {
+            this._addAction(name);
         }
 
-        if(option) {
-            super._optionChanged(option);
-        }
+        super._optionChanged(option);
         this._invalidate();
-    }
-
-    _addAction(name, config) {
-        this.option(getInnerActionName(name), this._createActionByOption(name, config));
     }
 
     _stateChange(name) {

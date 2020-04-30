@@ -2,7 +2,7 @@ import $ from 'jquery';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 
-import 'renovation/dist/button.j';
+import 'renovation/button.j';
 import 'common.css!';
 
 QUnit.testStart(function() {

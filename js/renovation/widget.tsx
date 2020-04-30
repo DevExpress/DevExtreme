@@ -118,7 +118,9 @@ export class WidgetProps extends BaseWidgetProps {
 // tslint:disable-next-line: max-classes-per-file
 @Component({
     defaultOptionRules: null,
-    registerJQuery: true,
+    jQuery: {
+        register: true,
+    },
     view: viewFunction,
 })
 

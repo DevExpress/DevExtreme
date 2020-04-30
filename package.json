@@ -59,7 +59,7 @@
     "cldrjs": "^0.5.0",
     "cssom": "^0.4.4",
     "del": "^2.2.2",
-    "devextreme-generator": "^1.0.56",
+    "devextreme-generator": "^1.0.58",
     "devextreme-cldr-data": "^1.0.2",
     "devextreme-internal-tools": "~1.2.24",
     "enzyme": "^3.11.0",

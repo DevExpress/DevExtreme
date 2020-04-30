@@ -19,6 +19,7 @@ import Icon from './icon';
 import InkRipple from './ink-ripple';
 import Widget from './widget';
 import { BaseWidgetProps } from './utils/base-props';
+import BaseComponent from './preact-wrapper/button';
 
 const stylingModes = ['outlined', 'text', 'contained'];
 
@@ -142,7 +143,10 @@ const defaultOptionRules = createDefaultOptionRules<ButtonProps>([{
 // tslint:disable-next-line: max-classes-per-file
 @Component({
     defaultOptionRules,
-    // registerJQuery: true,
+    jQuery: {
+        component: BaseComponent,
+        register: true,
+    },
     view: viewFunction,
 })
 

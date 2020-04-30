@@ -38,7 +38,3 @@ export const removeDifferentElements = ($children, $newChildren) => {
         }
     });
 };
-
-export const getInnerActionName = (actionName) => {
-    return actionName.charAt(2).toLowerCase() + actionName.substr(3) + 'Action';
-};
