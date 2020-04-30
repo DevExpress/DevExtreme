@@ -2806,18 +2806,25 @@ QUnit.module('Customize keyboard navigation', {
             // act
             this.focusCell(0, 0);
             this.triggerKeyDown('a');
-
-            // NOTE:
-            // This is ahack to fix the issue, because Firefox triggers keypress, keyup and input events
-            // even if an input is focused with a delay using a zero timeout.
-            // That is why it is necessary to increase a timeout to 25 for Firefox
-            const timeout = browser.mozilla ? 25 : 0;
-
-            this.clock.tick(timeout);
+            this.clock.tick();
             const $input = $('.dx-texteditor-input');
 
             // assert
             assert.equal($input.length, 1, 'Editor is rendered');
+
+            // NOTE:
+            // This is a hack to fix the issue, because Firefox triggers keypress, keyup and input events
+            // even if an input is focused with a delay using a zero timeout.
+            // That is why it is necessary to increase a timeout to 25 for Firefox
+            if(browser.mozilla) {
+                assert.notEqual($input.val(), 'a', 'entered value is not modified');
+
+                this.clock.tick(25);
+
+                assert.strictEqual($input.val(), 'a', 'entered value is correct');
+                return;
+            }
+
             assert.strictEqual($input.val(), 'a', 'entered value is correct');
         });
     });
