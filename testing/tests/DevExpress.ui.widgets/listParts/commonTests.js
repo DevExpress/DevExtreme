@@ -688,6 +688,27 @@ QUnit.module('collapsible groups', moduleSetup, () => {
             fx.off = false;
         }
     });
+
+    QUnit.test('attachGroupHeaderInkRippleEvents should remove previously attached events (T882408)', function(assert) {
+        const instance = this.element.dxList({
+            items: [{ key: 'a', items: ['0'] }],
+            grouped: true,
+            collapsibleGroups: true
+        }).dxList('instance');
+
+        sinon.spy(instance, 'downInkRippleHandler');
+
+        for(let i = 100; i > 0; i--) {
+            instance.attachGroupHeaderInkRippleEvents();
+        }
+
+        const groupHeaderElement = this.element.find('.' + LIST_GROUP_HEADER_CLASS);
+        groupHeaderElement.trigger('dxpointerdown');
+
+        assert.ok(instance.downInkRippleHandler.calledOnce);
+
+        instance.downInkRippleHandler.restore();
+    });
 });
 
 QUnit.module('next button', moduleSetup, () => {
