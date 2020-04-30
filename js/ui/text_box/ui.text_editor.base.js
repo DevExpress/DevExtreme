@@ -347,9 +347,17 @@ const TextEditorBase = Editor.inherit({
     _collapseInputContainer: function() {
         const $element = this.$element();
         const isIE11 = browser.msie && browser.version <= 11;
-        if(isIE11 && $element.css('display') === 'block') {
+        if(isIE11 && $element.css('display') === 'block' && $element.parent().width() > this._editorMinWidth()) {
             $element.addClass(TEXTEDITOR_COLLAPSED_CLASS);
         }
+    },
+
+    _editorMinWidth: function() {
+        const $input = this._input();
+        return ($(this._$beforeButtonsContainer).width() || 0) +
+            ($(this._$afterButtonsContainer).width() || 0) +
+            parseFloat($input.css('paddingRight')) +
+            parseFloat($input.css('paddingLeft'));
     },
 
     _renderValue: function() {
