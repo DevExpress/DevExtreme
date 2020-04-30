@@ -185,11 +185,11 @@ export default class FileItemsController {
             .then(
                 fileItems => this._securityController.getAllowedItems(fileItems),
                 errorInfo => {
-                    const actionInfo = this._createEditActionInfo('getItemContent', [], parentDirectoryInfo);
+                    const actionInfo = this._createEditActionInfo('getItemContent', parentDirectoryInfo, parentDirectoryInfo);
                     this._raiseEditActionStarting(actionInfo);
                     // actionInfo.customData.context._actionMetadata.singleItemErrorMessage = errorInfo.message;
                     this._raiseEditActionItemError(actionInfo, {
-                        errorInfo: 0,
+                        errorId: 8,
                         fileItem: parentDirectoryInfo.fileItem,
                         index: 0
                     });

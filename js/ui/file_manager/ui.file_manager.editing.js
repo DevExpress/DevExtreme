@@ -147,8 +147,9 @@ class FileManagerEditingControl extends Widget {
 
             getItemContent: {
                 action: arg => this._getItemContent(arg),
-                singleItemProcessingMessage: 'Folder Access Denied', // messageLocalization.format('dxFileManager-errorNoAccess'),
-                commonErrorMessage: messageLocalization.format('dxFileManager-errorNoAccess')
+                singleItemProcessingMessage: 'Can not open folder {0}',
+                singleItemErrorMessage: 'Can not open folder',
+                commonErrorMessage: 'Can not open folder {0}'
             }
 
         };
