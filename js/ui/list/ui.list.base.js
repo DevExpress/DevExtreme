@@ -719,18 +719,29 @@ const ListBase = CollectionWidget.inherit({
         });
     },
 
+    downInkRippleHandler: function(e) {
+        this._toggleActiveState($(e.currentTarget), true, e);
+    },
+
+    upInkRippleHandler: function(e) {
+        this._toggleActiveState($(e.currentTarget), false);
+    },
+
     attachGroupHeaderInkRippleEvents: function() {
-        const that = this;
         const selector = '.' + LIST_GROUP_HEADER_CLASS;
         const $element = this.$element();
 
-        eventsEngine.on($element, 'dxpointerdown', selector, function(e) {
-            that._toggleActiveState($(e.currentTarget), true, e);
-        });
+        this._downInkRippleHandler = this._downInkRippleHandler || this.downInkRippleHandler.bind(this);
+        this._upInkRippleHandler = this._upInkRippleHandler || this.upInkRippleHandler.bind(this);
 
-        eventsEngine.on($element, 'dxpointerup dxhoverend', selector, function(e) {
-            that._toggleActiveState($(e.currentTarget), false);
-        });
+        const downArguments = [$element, 'dxpointerdown', selector, this._downInkRippleHandler];
+        const upArguments = [$element, 'dxpointerup dxpointerout', selector, this._upInkRippleHandler];
+
+        eventsEngine.off(...downArguments);
+        eventsEngine.on(...downArguments);
+
+        eventsEngine.off(...upArguments);
+        eventsEngine.on(...upArguments);
     },
 
     _createGroupRenderAction: function() {
