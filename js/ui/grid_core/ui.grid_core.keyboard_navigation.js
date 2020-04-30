@@ -1394,7 +1394,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
         if(!keyDownEvent.isDefaultPrevented()) {
             eventsEngine.trigger($input, keyPressEvent);
             if(!keyPressEvent.isDefaultPrevented()) {
-                setTimeout(function() {
+                const timeout = browser.mozilla ? 25 : 0; // T882996
+                setTimeout(() => {
                     $input.val(editorValue);
 
                     const $widgetContainer = $input.closest(`.${WIDGET_CLASS}`);
@@ -1403,7 +1404,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
                         eventsEngine.trigger($input, 'change');
                     });
                     eventsEngine.trigger($input, inputEvent);
-                });
+                }, timeout);
+
             }
         }
     },
