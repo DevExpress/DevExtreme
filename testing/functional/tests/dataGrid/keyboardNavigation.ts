@@ -165,29 +165,24 @@ test('Navigation through views using Tab, Shift+Tab', async t => {
     await t
         .pressKey('tab')
         .expect(headers.hasFocusedState).ok()
-        .expect(headerRow.getHeaderCell(0).element.focused).ok()
-        .pressKey('tab')
-        .expect(headers.hasFocusedState).ok()
-        .expect(headerRow.getHeaderCell(0).getFilterIcon().focused).ok()
+        .expect(headerRow.getCommandCell(0).element.focused).notOk()
+        .expect(headerRow.getCommandCell(0).getSelectCheckBox().focused).ok()
 
         .pressKey('tab')
-        .expect(headers.hasFocusedState).ok()
         .expect(headerRow.getHeaderCell(1).element.focused).ok()
         .pressKey('tab')
         .expect(headers.hasFocusedState).ok()
-        .expect(headerRow.getHeaderCell(1).getFilterIcon().focused).ok();
+        .expect(headerRow.getHeaderCell(1).getFilterIcon().focused).ok()
+
+        .pressKey('tab')
+        .expect(headers.hasFocusedState).ok()
+        .expect(headerRow.getHeaderCell(2).element.focused).ok()
+        .pressKey('tab')
+        .expect(headers.hasFocusedState).ok()
+        .expect(headerRow.getHeaderCell(2).getFilterIcon().focused).ok();
 
     // filter row
     await t
-        .pressKey('tab')
-        .expect(headers.hasFocusedState).ok()
-        .expect(filterRow.getFilterCell(0).getSearchIcon().element.focused).ok()
-        .expect(filterRow.getFilterCell(0).getSearchIcon().hasFocusedState).ok()
-
-        .pressKey('tab')
-        .expect(headers.hasFocusedState).ok()
-        .expect(filterRow.getFilterCell(0).getEditor().element.focused).ok()
-
         .pressKey('tab')
         .expect(headers.hasFocusedState).ok()
         .expect(filterRow.getFilterCell(1).getSearchIcon().element.focused).ok()
@@ -195,37 +190,58 @@ test('Navigation through views using Tab, Shift+Tab', async t => {
 
         .pressKey('tab')
         .expect(headers.hasFocusedState).ok()
-        .expect(filterRow.getFilterCell(1).getEditor().element.focused).ok();
+        .expect(filterRow.getFilterCell(1).getEditor().element.focused).ok()
+
+        .pressKey('tab')
+        .expect(headers.hasFocusedState).ok()
+        .expect(filterRow.getFilterCell(2).getSearchIcon().element.focused).ok()
+        .expect(filterRow.getFilterCell(2).getSearchIcon().hasFocusedState).ok()
+
+        .pressKey('tab')
+        .expect(headers.hasFocusedState).ok()
+        .expect(filterRow.getFilterCell(2).getEditor().element.focused).ok();
 
     // rowsView
     await t
         // 1st row
         .pressKey('tab')
-        .expect(dataGrid.getDataRow(0).getDataCell(0).element.focused).ok()
-        .expect(dataGrid.getDataRow(0).getDataCell(0).isFocused).ok()
+        .expect(dataGrid.getDataRow(0).getCommandCell(0).getSelectCheckBox().focused).ok()
+        .expect(dataGrid.getDataRow(0).getCommandCell(0).element.focused).notOk()
+        .expect(dataGrid.getDataRow(0).getCommandCell(0).isFocused).ok()
 
         .pressKey('tab')
         .expect(dataGrid.getDataRow(0).getDataCell(1).element.focused).ok()
         .expect(dataGrid.getDataRow(0).getDataCell(1).isFocused).ok()
 
         .pressKey('tab')
-        .expect(dataGrid.getDataRow(0).getCommandCell(2).getButton(0).focused).ok()
+        .expect(dataGrid.getDataRow(0).getDataCell(2).element.focused).ok()
+        .expect(dataGrid.getDataRow(0).getDataCell(2).isFocused).ok()
 
         .pressKey('tab')
-        .expect(dataGrid.getDataRow(0).getCommandCell(2).getButton(1).focused).ok()
+        .expect(dataGrid.getDataRow(0).getCommandCell(3).getButton(0).focused).ok()
+
+        .pressKey('tab')
+        .expect(dataGrid.getDataRow(0).getCommandCell(3).getButton(1).focused).ok()
 
         // 2nd row
         .pressKey('tab')
-        .expect(dataGrid.getDataRow(1).getDataCell(0).isFocused).ok()
+        .expect(dataGrid.getDataRow(1).getCommandCell(0).getSelectCheckBox().focused).ok()
+        .expect(dataGrid.getDataRow(1).getCommandCell(0).element.focused).notOk()
+        .expect(dataGrid.getDataRow(1).getCommandCell(0).isFocused).ok()
 
         .pressKey('tab')
+        .expect(dataGrid.getDataRow(1).getDataCell(1).element.focused).ok()
         .expect(dataGrid.getDataRow(1).getDataCell(1).isFocused).ok()
 
         .pressKey('tab')
-        .expect(dataGrid.getDataRow(1).getCommandCell(2).getButton(0).focused).ok()
+        .expect(dataGrid.getDataRow(1).getDataCell(2).element.focused).ok()
+        .expect(dataGrid.getDataRow(1).getDataCell(2).isFocused).ok()
 
         .pressKey('tab')
-        .expect(dataGrid.getDataRow(1).getCommandCell(2).getButton(1).focused).ok();
+        .expect(dataGrid.getDataRow(1).getCommandCell(3).getButton(0).focused).ok()
+
+        .pressKey('tab')
+        .expect(dataGrid.getDataRow(1).getCommandCell(3).getButton(1).focused).ok();
 
     // filterPanel
     await t
@@ -309,32 +325,60 @@ test('Navigation through views using Tab, Shift+Tab', async t => {
     await t
         // 2nd row
         .pressKey('shift+tab')
-        .expect(dataGrid.getDataRow(1).getCommandCell(2).getButton(1).focused).ok()
+        .expect(dataGrid.getDataRow(1).getCommandCell(3).getButton(1).focused).ok()
 
         .pressKey('shift+tab')
-        .expect(dataGrid.getDataRow(1).getCommandCell(2).getButton(0).focused).ok()
+        .expect(dataGrid.getDataRow(1).getCommandCell(3).getButton(0).focused).ok()
 
         .pressKey('shift+tab')
+        .expect(dataGrid.getDataRow(1).getDataCell(2).element.focused).ok()
+        .expect(dataGrid.getDataRow(1).getDataCell(2).isFocused).ok()
+
+        .pressKey('shift+tab')
+        .expect(dataGrid.getDataRow(1).getDataCell(1).element.focused).ok()
         .expect(dataGrid.getDataRow(1).getDataCell(1).isFocused).ok()
 
         .pressKey('shift+tab')
-        .expect(dataGrid.getDataRow(1).getDataCell(0).isFocused).ok()
+        .expect(dataGrid.getDataRow(1).getCommandCell(0).getSelectCheckBox().focused).ok()
+        .expect(dataGrid.getDataRow(1).getCommandCell(0).element.focused).notOk()
+        .expect(dataGrid.getDataRow(1).getCommandCell(0).isFocused).ok()
 
         // 1st row
         .pressKey('shift+tab')
-        .expect(dataGrid.getDataRow(0).getCommandCell(2).getButton(1).focused).ok()
+        .expect(dataGrid.getDataRow(0).getCommandCell(3).getButton(1).focused).ok()
 
         .pressKey('shift+tab')
-        .expect(dataGrid.getDataRow(0).getCommandCell(2).getButton(0).focused).ok()
+        .expect(dataGrid.getDataRow(0).getCommandCell(3).getButton(0).focused).ok()
 
         .pressKey('shift+tab')
+        .expect(dataGrid.getDataCell(0, 2).element.focused).ok()
+        .expect(dataGrid.getDataCell(0, 2).isFocused).ok()
+
+        .pressKey('shift+tab')
+        .expect(dataGrid.getDataCell(0, 1).element.focused).ok()
         .expect(dataGrid.getDataCell(0, 1).isFocused).ok()
 
         .pressKey('shift+tab')
-        .expect(dataGrid.getDataCell(0, 0).isFocused).ok();
+        .expect(dataGrid.getDataRow(0).getCommandCell(0).getSelectCheckBox().focused).ok()
+        .expect(dataGrid.getDataRow(0).getCommandCell(0).element.focused).notOk()
+        .expect(dataGrid.getDataRow(0).getCommandCell(0).isFocused).ok()
+
+        .pressKey('shift+tab')
+        .expect(dataGrid.getDataRow(0).getCommandCell(0).getSelectCheckBox().focused).notOk()
+        .expect(dataGrid.getDataRow(0).getCommandCell(0).element.focused).ok()
+        .expect(dataGrid.getDataRow(0).getCommandCell(0).isFocused).ok()
 
     // filter row
     await t
+        .pressKey('shift+tab')
+        .expect(headers.hasFocusedState).ok()
+        .expect(filterRow.getFilterCell(2).getEditor().element.focused).ok()
+
+        .pressKey('shift+tab')
+        .expect(headers.hasFocusedState).ok()
+        .expect(filterRow.getFilterCell(2).getSearchIcon().element.focused).ok()
+        .expect(filterRow.getFilterCell(2).getSearchIcon().hasFocusedState).ok()
+
         .pressKey('shift+tab')
         .expect(headers.hasFocusedState).ok()
         .expect(filterRow.getFilterCell(1).getEditor().element.focused).ok()
@@ -342,19 +386,17 @@ test('Navigation through views using Tab, Shift+Tab', async t => {
         .pressKey('shift+tab')
         .expect(headers.hasFocusedState).ok()
         .expect(filterRow.getFilterCell(1).getSearchIcon().element.focused).ok()
-        .expect(filterRow.getFilterCell(1).getSearchIcon().hasFocusedState).ok()
-
-        .pressKey('shift+tab')
-        .expect(headers.hasFocusedState).ok()
-        .expect(filterRow.getFilterCell(0).getEditor().element.focused).ok()
-
-        .pressKey('shift+tab')
-        .expect(headers.hasFocusedState).ok()
-        .expect(filterRow.getFilterCell(0).getSearchIcon().element.focused).ok()
-        .expect(filterRow.getFilterCell(0).getSearchIcon().hasFocusedState).ok();
+        .expect(filterRow.getFilterCell(1).getSearchIcon().hasFocusedState).ok();
 
     // header row
     await t
+        .pressKey('shift+tab')
+        .expect(headers.hasFocusedState).ok()
+        .expect(headerRow.getHeaderCell(2).getFilterIcon().focused).ok()
+        .pressKey('shift+tab')
+        .expect(headers.hasFocusedState).ok()
+        .expect(headerRow.getHeaderCell(2).element.focused).ok()
+
         .pressKey('shift+tab')
         .expect(headers.hasFocusedState).ok()
         .expect(headerRow.getHeaderCell(1).getFilterIcon().focused).ok()
@@ -364,10 +406,8 @@ test('Navigation through views using Tab, Shift+Tab', async t => {
 
         .pressKey('shift+tab')
         .expect(headers.hasFocusedState).ok()
-        .expect(headerRow.getHeaderCell(0).getFilterIcon().focused).ok()
-        .pressKey('shift+tab')
-        .expect(headers.hasFocusedState).ok()
-        .expect(headerRow.getHeaderCell(0).element.focused).ok();
+        .expect(headerRow.getCommandCell(0).element.focused).notOk()
+        .expect(headerRow.getCommandCell(0).getSelectCheckBox().focused).ok();
 
     // focus BODY
     await t
@@ -401,7 +441,11 @@ test('Navigation through views using Tab, Shift+Tab', async t => {
         paging: {
             pageSize: 2,
         },
-        focusedRowEnabled: true
+        focusedRowEnabled: true,
+        selection: {
+            mode: 'multiple',
+            showCheckBoxesMode: 'always',
+        }
     });
 });
 
