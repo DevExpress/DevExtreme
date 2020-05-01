@@ -11,6 +11,7 @@ const CLASS = {
     groupRow: 'dx-group-row',
     commandEdit: 'dx-command-edit',
     commandExpand: 'dx-command-expand',
+    selectCommand: 'dx-command-select',
     commandLink: 'dx-link',
     editCell: 'dx-editor-cell',
     focused: 'dx-focused',
@@ -143,6 +144,10 @@ class HeaderRow extends DxElement {
     getHeaderCell(index: number): HeaderCell {
         return new HeaderCell(this.element, index);
     }
+
+    getCommandCell(index: number): CommandCell {
+        return new CommandCell(this.element, index);
+    }
 }
 
 class DataCell extends DxElement {
@@ -170,12 +175,20 @@ class DataCell extends DxElement {
 }
 
 class CommandCell extends DxElement {
+    isFocused: Promise<boolean>;
+
     constructor(dataRow: Selector, index: number) {
-        super(dataRow.find(`td:nth-child(${++index}).${CLASS.commandEdit}`));
+        const childrenSelector = `td:nth-child(${++index})`;
+        super(dataRow.find(`${childrenSelector}.${CLASS.commandEdit}, ${childrenSelector}.${CLASS.selectCommand}`));
+        this.isFocused = this.element.hasClass(CLASS.focused);
     }
 
     getButton(index: number) {
         return this.element.find(`.${CLASS.commandLink}:nth-child(${index + 1})`);
+    }
+
+    getSelectCheckBox(): Selector {
+        return this.element.find(`.${CLASS.selectCheckBox}`);
     }
 }
 
