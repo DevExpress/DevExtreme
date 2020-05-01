@@ -179,7 +179,7 @@ class CommandCell extends DxElement {
 
     constructor(dataRow: Selector, index: number) {
         const childrenSelector = `td:nth-child(${++index})`;
-        super(dataRow.find(`${childrenSelector}.${CLASS.commandEdit}, ${childrenSelector}.${CLASS.selectCommand}`));
+        super(dataRow.find(`${childrenSelector}.${CLASS.commandEdit}, ${childrenSelector}.${CLASS.selectCommand}, ${childrenSelector}.${CLASS.commandExpand}`));
         this.isFocused = this.element.hasClass(CLASS.focused);
     }
 

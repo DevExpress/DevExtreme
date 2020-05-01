@@ -449,6 +449,183 @@ test('Navigation through views using Tab, Shift+Tab', async t => {
     });
 });
 
+test('Select - The first command cell should be focused using Tab (T884646)', async t => {
+    const dataGrid = new DataGrid('#container');
+    const headerRow = dataGrid.getHeaders().getHeaderRow(0);
+    const dataRow = dataGrid.getDataRow(0);
+
+    //header row
+    await t
+        .pressKey('tab')
+        .expect(headerRow.getCommandCell(0).element.focused).notOk()
+        .expect(headerRow.getCommandCell(0).getSelectCheckBox().focused).ok()
+
+        .pressKey('tab')
+        .expect(headerRow.getHeaderCell(1).element.focused).ok();
+
+    //data row
+    await t
+        .pressKey('tab')
+        .expect(dataRow.getCommandCell(0).isFocused).ok()
+        .expect(dataRow.getCommandCell(0).element.focused).ok()
+        .expect(dataRow.getCommandCell(0).getSelectCheckBox().focused).notOk()
+        .pressKey('tab')
+        .expect(dataRow.getCommandCell(0).isFocused).ok()
+        .expect(dataRow.getCommandCell(0).element.focused).notOk()
+        .expect(dataRow.getCommandCell(0).getSelectCheckBox().focused).ok()
+
+        .pressKey('tab')
+        .expect(dataRow.getDataCell(1).isFocused).ok()
+        .expect(dataRow.getDataCell(1).element.focused).ok()
+
+        .pressKey('shift+tab')
+        .expect(dataRow.getCommandCell(0).isFocused).ok()
+        .expect(dataRow.getCommandCell(0).element.focused).notOk()
+        .expect(dataRow.getCommandCell(0).getSelectCheckBox().focused).ok()
+        .pressKey('shift+tab')
+        .expect(dataRow.getCommandCell(0).isFocused).ok()
+        .expect(dataRow.getCommandCell(0).element.focused).ok()
+        .expect(dataRow.getCommandCell(0).getSelectCheckBox().focused).notOk();
+
+
+    //header row
+    await t
+        .pressKey('shift+tab')
+        .expect(headerRow.getHeaderCell(1).element.focused).ok()
+
+        .pressKey('shift+tab')
+        .expect(headerRow.getCommandCell(0).element.focused).notOk()
+        .expect(headerRow.getCommandCell(0).getSelectCheckBox().focused).ok();
+
+    // focus BODY
+    await t
+        .pressKey('shift+tab')
+        .expect(Selector('BODY').focused).ok();
+
+}).before(async () => {
+    await createWidget('dxDataGrid', {
+        width: 300,
+        dataSource: [
+            { name: 'Alex' }
+        ],
+        keyExpr: 'name',
+        selection: {
+            mode: 'multiple',
+            showCheckBoxesMode: 'always'
+        }
+    });
+});
+
+test('Edit - The first command cell should be focused using Tab (T884646)', async t => {
+    const dataGrid = new DataGrid('#container');
+    const headerRow = dataGrid.getHeaders().getHeaderRow(0);
+    const dataRow = dataGrid.getDataRow(0);
+
+    //header row
+    await t
+        .pressKey('tab')
+        .expect(headerRow.getHeaderCell(1).element.focused).ok();
+
+    //data row
+    await t
+        .pressKey('tab')
+        .expect(dataRow.getCommandCell(0).isFocused).ok()
+        .expect(dataRow.getCommandCell(0).element.focused).ok()
+        .expect(dataRow.getCommandCell(0).getButton(0).focused).notOk()
+        .pressKey('tab')
+        .expect(dataRow.getCommandCell(0).isFocused).notOk()
+        .expect(dataRow.getCommandCell(0).element.focused).notOk()
+        .expect(dataRow.getCommandCell(0).getButton(0).focused).ok()
+
+        .pressKey('tab')
+        .expect(dataRow.getDataCell(1).isFocused).ok()
+        .expect(dataRow.getDataCell(1).element.focused).ok()
+
+        .pressKey('shift+tab')
+        .expect(dataRow.getCommandCell(0).isFocused).notOk()
+        .expect(dataRow.getCommandCell(0).element.focused).notOk()
+        .expect(dataRow.getCommandCell(0).getButton(0).focused).ok()
+        .pressKey('shift+tab')
+        .expect(dataRow.getCommandCell(0).isFocused).ok()
+        .expect(dataRow.getCommandCell(0).element.focused).ok()
+        .expect(dataRow.getCommandCell(0).getButton(0).focused).notOk();
+
+
+    //header row
+    await t
+        .pressKey('shift+tab')
+        .expect(headerRow.getHeaderCell(1).element.focused).ok()
+
+    // focus BODY
+    await t
+        .pressKey('shift+tab')
+        .expect(Selector('BODY').focused).ok();
+
+}).before(async () => {
+    await createWidget('dxDataGrid', {
+        width: 300,
+        dataSource: [
+            { name: 'Alex' }
+        ],
+        columns: [
+            { type: 'buttons' },
+            'name'
+        ],
+        keyExpr: 'name',
+        editing: {
+            mode: 'row',
+            allowUpdating: true
+        }
+    });
+});
+
+test('Detail - The first command cell should be focused using Tab (T884646)', async t => {
+    const dataGrid = new DataGrid('#container');
+    const headerRow = dataGrid.getHeaders().getHeaderRow(0);
+    const dataRow = dataGrid.getDataRow(0);
+
+    //header row
+    await t
+        .pressKey('tab')
+        .expect(headerRow.getHeaderCell(1).element.focused).ok();
+
+    //data row
+    await t
+        .pressKey('tab')
+        .expect(dataRow.getCommandCell(0).isFocused).ok()
+        .expect(dataRow.getCommandCell(0).element.focused).ok()
+
+        .pressKey('tab')
+        .expect(dataRow.getDataCell(1).isFocused).ok()
+        .expect(dataRow.getDataCell(1).element.focused).ok()
+
+        .pressKey('shift+tab')
+        .expect(dataRow.getCommandCell(0).isFocused).ok()
+        .expect(dataRow.getCommandCell(0).element.focused).ok();
+
+    //header row
+    await t
+        .pressKey('shift+tab')
+        .expect(headerRow.getHeaderCell(1).element.focused).ok()
+
+    // focus BODY
+    await t
+        .pressKey('shift+tab')
+        .expect(Selector('BODY').focused).ok();
+
+}).before(async () => {
+    await createWidget('dxDataGrid', {
+        width: 300,
+        dataSource: [
+            { name: 'Alex' }
+        ],
+        keyExpr: 'name',
+        masterDetail: {
+            enabled: true
+        }
+    });
+});
+
 test('Select views by Ctrl+Up, Ctrl+Down keys', async t => {
     const dataGrid = new DataGrid('#container');
     const headers = dataGrid.getHeaders();
@@ -732,3 +909,4 @@ test('The first group row should be expanded when the Enter key is pressed (T869
         autoExpandAll: false
     }
 }));
+
