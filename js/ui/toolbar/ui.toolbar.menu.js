@@ -102,15 +102,19 @@ const ToolbarMenu = List.inherit({
                     buttonGroupInstance._buttonsCollection.onFocusMoveHandler = (direction) => {
                         const buttonGroupFocusedElement = buttonGroupInstance._buttonsCollection.option('focusedElement');
                         if(direction === 'up' && buttonGroupItems.index(buttonGroupFocusedElement) === 0) {
+                            toolbarMenu.focus();
                             toolbarMenu._moveFocus('up');
                             return true;
                         } else if(direction === 'down' && buttonGroupItems.index(buttonGroupFocusedElement) === buttonGroupItems.length - 1) {
+                            toolbarMenu.focus();
                             toolbarMenu._moveFocus('down');
                             return true;
                         } else if(direction === 'first') {
+                            toolbarMenu.focus();
                             toolbarMenu._moveFocus('first');
                             return true;
                         } else if(direction === 'last') {
+                            toolbarMenu.focus();
                             toolbarMenu._moveFocus('last');
                             return true;
                         }
