@@ -459,7 +459,7 @@ const ValidatingController = modules.Controller.inherit((function() {
         removeCellValidationResult: function({ editData, columnIndex }) {
             if(editData && editData.validationResults) {
                 const result = editData.validationResults[columnIndex];
-                result.deferred && result.deferred.reject('cancel');
+                result && result.deferred && result.deferred.reject('cancel');
                 delete editData.validationResults[columnIndex];
             }
         },
@@ -476,8 +476,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                 rowKey,
                 columnIndex
             });
-            const editData = this._editingController.getEditDataByKey(rowKey);
-            return result && result.status === 'invalid' && editData && editData.validated;
+            return !!result && result.status === VALIDATION_STATUS.invalid;
         },
 
         getCellValidator: function({ rowKey, columnIndex }) {
@@ -760,10 +759,12 @@ module.exports = {
                 },
 
                 updateFieldValue: function(e) {
-
                     const validatingController = this.getController('validating');
                     const deferred = new Deferred();
-                    validatingController.resetRowValidationResults(this.getEditDataByKey(e.key));
+                    validatingController.removeCellValidationResult({
+                        editData: this.getEditDataByKey(e.key),
+                        columnIndex: e.column.index
+                    });
 
                     this.callBase.apply(this, arguments).done(() => {
                         const currentValidator = validatingController.getCellValidator({
@@ -799,7 +800,7 @@ module.exports = {
                 },
 
                 highlightDataCell: function($cell, parameters) {
-                    const isEditableCell = parameters.setValue;
+                    const isEditableCell = !!parameters.setValue;
                     const cellModified = this.isCellModified(parameters);
 
                     if(!cellModified && isEditableCell) {
@@ -821,11 +822,13 @@ module.exports = {
 
                 isCellModified: function(parameters) {
                     const cellModified = this.callBase(parameters);
-                    const isCellInvalidInNewRow = parameters.row && parameters.row.isNewRow && this.getController('validating').isInvalidCell({
+                    const editData = this.getEditDataByKey(parameters.key);
+                    const isRowValidated = !!editData && !!editData.validated;
+                    const isCellInvalid = !!parameters.row && this.getController('validating').isInvalidCell({
                         rowKey: parameters.key,
                         columnIndex: parameters.column.index
                     });
-                    return cellModified || isCellInvalidInNewRow;
+                    return cellModified || (isRowValidated && isCellInvalid);
                 }
             },
             editorFactory: (function() {

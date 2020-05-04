@@ -2,7 +2,7 @@ import $ from 'jquery';
 const { test } = QUnit;
 import 'ui/file_manager';
 import fx from 'animation/fx';
-import { FileManagerWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
+import { FileManagerWrapper, createTestFileSystem, isDesktopDevice } from '../../../helpers/fileManagerHelpers.js';
 import { triggerCellClick } from '../../../helpers/fileManager/events.js';
 
 const moduleConfig = {
@@ -218,6 +218,64 @@ QUnit.module('Selection', moduleConfig, () => {
 
         assert.strictEqual(this.wrapper.getThumbnailsSelectedItems().length, 0, 'no selected items in markup');
         assert.strictEqual(selectionSpy.callCount, 1, 'no event fired');
+    });
+
+    test('Details view - select all raises selection changed event', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true);
+            return;
+        }
+
+        const selectionSpy = sinon.spy();
+
+        createFileManager(this, {
+            selectionMode: 'multiple',
+            currentPath: 'Folder 1',
+            onSelectionChanged: selectionSpy
+        });
+
+        this.wrapper.getSelectAllCheckBox().trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(selectionSpy.callCount, 1, 'event fired');
+        assert.strictEqual(selectionSpy.args[0][0].selectedItems.length, 4, 'all items in selection');
+        assert.strictEqual(selectionSpy.args[0][0].selectedItemKeys.length, 4, 'all selected keys provided');
+        assert.strictEqual(selectionSpy.args[0][0].currentSelectedItemKeys.length, 4, 'all items became selected');
+        assert.deepEqual(selectionSpy.args[0][0].currentDeselectedItemKeys, [], 'one item became deselected');
+    });
+
+    test('Thumbnails view - single selection works same as in details', function(assert) {
+        const selectionSpy = sinon.spy();
+
+        createFileManager(this, {
+            selectionMode: 'single',
+            itemView: {
+                mode: 'thumbnails'
+            },
+            onSelectionChanged: selectionSpy
+        });
+
+        const $item = this.wrapper.findThumbnailsItem('Folder 1');
+        triggerCellClick($item);
+        this.clock.tick(400);
+
+        assert.ok(this.wrapper.isThumbnailsItemSelected('Folder 1'), 'item selected');
+        assert.ok(this.wrapper.isThumbnailsItemFocused('Folder 1'), 'item focused');
+        assert.strictEqual(this.wrapper.getThumbnailsSelectedItems().length, 1, 'one item is selected in markup');
+        assert.strictEqual(selectionSpy.callCount, 1, 'event fired');
+
+        this.wrapper.getThumbnailsViewPort().trigger($.Event('keydown', { key: 'ArrowRight' }));
+        this.clock.tick(400);
+
+        assert.ok(this.wrapper.isThumbnailsItemSelected('Folder 2'), 'next item selected');
+        assert.ok(this.wrapper.isThumbnailsItemFocused('Folder 2'), 'next item focused');
+        assert.strictEqual(this.wrapper.getThumbnailsSelectedItems().length, 1, 'one item is selected in markup');
+        assert.strictEqual(selectionSpy.callCount, 2, 'event fired');
+
+        assert.deepEqual(selectionSpy.args[1][0].selectedItems.map(item => item.key), [ 'Folder 2' ], 'item in selection');
+        assert.deepEqual(selectionSpy.args[1][0].selectedItemKeys, [ 'Folder 2' ], 'selected item key provided');
+        assert.deepEqual(selectionSpy.args[1][0].currentSelectedItemKeys, [ 'Folder 2' ], 'one item became selected');
+        assert.deepEqual(selectionSpy.args[1][0].currentDeselectedItemKeys, [ 'Folder 1' ], 'one item became deselected');
     });
 
 });

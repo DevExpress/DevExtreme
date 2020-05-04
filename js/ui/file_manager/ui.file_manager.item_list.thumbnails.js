@@ -119,6 +119,10 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     }
 
     _onItemListFocusedItemChanged({ item, itemElement }) {
+        if(!this._isMultipleSelectionMode()) {
+            this._selectItemSingleSelection(item);
+        }
+
         const fileSystemItem = item?.fileItem || null;
         this._raiseFocusedItemChanged({
             item: fileSystemItem,
@@ -150,6 +154,14 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     _deselectItem(item) {
         const itemElement = this._itemList.getItemElementByItem(item);
         this._itemList.unselectItem(itemElement);
+    }
+
+    _selectItemSingleSelection(item) {
+        if(item) {
+            this._itemList.selectItem(item);
+        } else {
+            this._itemList.clearSelection();
+        }
     }
 
     clearSelection() {

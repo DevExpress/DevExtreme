@@ -354,15 +354,15 @@ const Editor = Widget.inherit({
                 this._refreshFocusState();
                 break;
             case 'value':
-                if(!this._valueChangeActionSuppressed) {
-                    this._raiseValueChangeAction(args.value, args.previousValue);
-                    this._saveValueChangeEvent(undefined);
-                }
                 if(args.value != args.previousValue) { // eslint-disable-line eqeqeq
                     this.validationRequest.fire({
                         value: args.value,
                         editor: this
                     });
+                }
+                if(!this._valueChangeActionSuppressed) {
+                    this._raiseValueChangeAction(args.value, args.previousValue);
+                    this._saveValueChangeEvent(undefined);
                 }
                 break;
             case 'width':

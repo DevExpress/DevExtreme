@@ -21,6 +21,7 @@ export const Consts = {
     DIRS_TREE_CLASS: 'dx-filemanager-dirs-tree',
     ITEMS_VIEW_CLASS: 'dx-filemanager-files-view',
     DIALOG_CLASS: 'dx-filemanager-dialog',
+    THUMBNAILS_VIEW_PORT_CLASS: 'dx-filemanager-thumbnails-view-port',
     THUMBNAILS_ITEM_CLASS: 'dx-filemanager-thumbnails-item',
     THUMBNAILS_ITEM_NAME_CLASS: 'dx-filemanager-thumbnails-item-name',
     THUMBNAILS_ITEM_CONTENT_CLASS: 'dx-filemanager-thumbnails-item-content',
@@ -61,6 +62,7 @@ export const Consts = {
     DROPDOWN_MENU_CONTENT_CLASS: 'dx-scrollview-content',
     DROPDOWN_MENU_LIST_ITEM_CLASS: 'dx-list-item',
     SCROLLABLE_ClASS: 'dx-scrollable',
+    SCROLLABLE_CONTAINER_ClASS: 'dx-scrollable-container',
     EDITING_CONTAINER: 'dx-filemanager-editing-container',
     FILE_UPLOADER_INPUT: 'dx-fileuploader-input'
 };
@@ -199,6 +201,10 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.ITEMS_GRID_VIEW_CLASS}`);
     }
 
+    getThumbnailsViewPort() {
+        return this._$element.find(`.${Consts.THUMBNAILS_VIEW_PORT_CLASS}`);
+    }
+
     getThumbnailsItems() {
         return this._$element.find(`.${Consts.THUMBNAILS_ITEM_CLASS}`);
     }
@@ -227,12 +233,24 @@ export class FileManagerWrapper {
         return this.findThumbnailsItem(itemName).is(`.${Consts.FOCUSED_STATE_CLASS}`);
     }
 
+    getThumbnailsViewScrollable() {
+        return this.getThumbnailsViewPort().find(`.${Consts.SCROLLABLE_ClASS}`);
+    }
+
+    getThumbnailsViewScrollableContainer() {
+        return this.getThumbnailsViewScrollable().find(`.${Consts.SCROLLABLE_CONTAINER_ClASS}`);
+    }
+
     findDetailsItem(itemName) {
         return this._$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td:contains('${itemName}')`);
     }
 
-    getDetailsItemScrollable() {
+    getDetailsViewScrollable() {
         return this.getDetailsItemList().find(`.${Consts.SCROLLABLE_ClASS}`);
+    }
+
+    getDetailsViewScrollableContainer() {
+        return this.getDetailsViewScrollable().find(`.${Consts.SCROLLABLE_CONTAINER_ClASS}`);
     }
 
     getDetailsItemsNames() {
@@ -417,15 +435,18 @@ export class FileManagerProgressPanelWrapper {
         this._$element = $element;
     }
 
+    getInfosContainer() {
+        return this._$element.find('.dx-filemanager-progress-panel-infos-container');
+    }
+
     getInfos() {
-        return this._$element
-            .find('.dx-filemanager-progress-panel-infos-container > .dx-filemanager-progress-panel-info')
+        return this.getInfosContainer().find('.dx-filemanager-progress-panel-info')
             .map((_, info) => new FileManagerProgressPanelInfoWrapper($(info)))
             .get();
     }
 
     getSeparators() {
-        return this._$element.find('.dx-filemanager-progress-panel-infos-container > .dx-filemanager-progress-panel-separator');
+        return this.getInfosContainer().find('.dx-filemanager-progress-panel-separator');
     }
 
     findProgressBoxes($container) {
@@ -670,6 +691,17 @@ export const createTestFileSystem = () => {
             isDirectory: false
         }
     ];
+};
+
+export const createHugeFileSystem = () => {
+    const result = [];
+    for(let i = 0; i < 10; i++) {
+        result.push({
+            name: `File ${i}.txt`,
+            isDirectory: false
+        });
+    }
+    return result;
 };
 
 export const createUploaderFiles = count => {
