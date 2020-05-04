@@ -2,6 +2,7 @@ const $ = require('../../core/renderer');
 const registerComponent = require('../../core/component_registrator');
 const each = require('../../core/utils/iterator').each;
 const List = require('../list/ui.list.base');
+const getPublicElement = require('../../core/utils/dom').getPublicElement;
 
 const TOOLBAR_MENU_ACTION_CLASS = 'dx-toolbar-menu-action';
 const TOOLBAR_HIDDEN_BUTTON_CLASS = 'dx-toolbar-hidden-button';
@@ -77,6 +78,50 @@ const ToolbarMenu = List.inherit({
         itemElement.addClass(item.cssClass);
 
         return itemElement;
+    },
+
+
+    _optionChanged: function(args) {
+        const name = args.name;
+        switch(name) {
+            case 'focusedElement':
+                this.callBase.apply(this, arguments);
+                if(args.value.hasClass(TOOLBAR_HIDDEN_BUTTON_GROUP_CLASS)) {
+                    const menuItems = this.element().find('.dx-list-item');
+                    const isDirectionUp = args.previousValue && (menuItems.index(args.previousValue) - 1 === menuItems.index(args.value));
+
+                    const buttonGroupInstance = args.value.find('.dx-buttongroup').dxButtonGroup('instance');
+                    const buttonGroupItems = buttonGroupInstance.element().find('.dx-buttongroup-item');
+                    const buttonGroupFocusedItemIndex = isDirectionUp ? buttonGroupItems.length - 1 : 0;
+
+                    const focusedElement = getPublicElement(buttonGroupItems.eq(buttonGroupFocusedItemIndex));
+                    buttonGroupInstance._buttonsCollection.option('focusedElement', focusedElement);
+                    buttonGroupInstance.focus();
+
+                    const toolbarMenu = this;
+                    buttonGroupInstance._buttonsCollection.onFocusMoveHandler = (direction) => {
+                        const buttonGroupFocusedElement = buttonGroupInstance._buttonsCollection.option('focusedElement');
+                        if(direction === 'up' && buttonGroupItems.index(buttonGroupFocusedElement) === 0) {
+                            toolbarMenu._moveFocus('up');
+                            return true;
+                        } else if(direction === 'down' && buttonGroupItems.index(buttonGroupFocusedElement) === buttonGroupItems.length - 1) {
+                            toolbarMenu._moveFocus('down');
+                            return true;
+                        } else if(direction === 'first') {
+                            toolbarMenu._moveFocus('first');
+                            return true;
+                        } else if(direction === 'last') {
+                            toolbarMenu._moveFocus('last');
+                            return true;
+                        }
+                        return false;
+                    };
+                    break;
+                }
+                break;
+            default:
+                this.callBase.apply(this, arguments);
+        }
     },
 
     _getItemTemplateName: function(args) {
