@@ -3561,7 +3561,7 @@ testModule('scrollable interaction', {
         const $overlay = $($('#overlay').dxOverlay());
         const $scrollable = $('<div>');
 
-        $overlay.dxOverlay('option', 'visible', true);
+        $overlay.dxOverlay('instance').option('visible', true);
         const $content = $($overlay.dxOverlay('$content')).append($scrollable);
 
         $scrollable.dxScrollable({
