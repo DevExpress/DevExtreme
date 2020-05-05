@@ -999,7 +999,7 @@ const Overlay = Widget.inherit({
             const originalEvent = e.originalEvent.originalEvent;
             e._cancelPreventDefault = true;
 
-            if(originalEvent && originalEvent.type !== 'mousemove') {
+            if(originalEvent && originalEvent.type !== 'mousemove' && e.cancelable !== false) {
                 e.preventDefault();
             }
         });

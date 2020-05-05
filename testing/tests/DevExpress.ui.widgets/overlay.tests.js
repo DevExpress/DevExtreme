@@ -3554,6 +3554,52 @@ testModule('scrollable interaction', {
             .off('.TEST');
     });
 
+    // T886654
+    test('Scroll event should not prevented on overlay that avoid the [Intervation] error when event is not cancelable', function(assert) {
+        assert.expect(1);
+
+        const $overlay = $($('#overlay').dxOverlay());
+        const $scrollable = $('<div>');
+
+        $overlay.dxOverlay('option', 'visible', true);
+        const $content = $($overlay.dxOverlay('$content')).append($scrollable);
+
+        $scrollable.dxScrollable({
+            useNative: true,
+            bounceEnabled: false,
+            direction: 'vertical',
+            inertiaEnabled: false
+        });
+
+        const $overlayWrapper = $content.closest(toSelector(OVERLAY_WRAPPER_CLASS));
+
+        $($overlayWrapper).on('dxdrag.TEST', {
+            getDirection: function() { return 'both'; },
+            validate: function(e) {
+                e.cancelable = false;
+                return true;
+            }
+        }, function(e) {
+            assert.strictEqual(e.isDefaultPrevented(), false, 'event should not be prevented');
+        });
+
+        $($overlayWrapper.parent()).on('dxdrag.TEST', {
+            getDirection: function() { return 'both'; },
+            validate: function() { return true; }
+        }, function() {
+            assert.ok(false, 'event should not be fired');
+        });
+
+        pointerMock($scrollable.find('.dx-scrollable-container'))
+            .start()
+            .wheel(10);
+
+        $overlayWrapper
+            .off('.TEST')
+            .parent()
+            .off('.TEST');
+    });
+
     test('scroll event does not prevent gestures', function(assert) {
         const $gestureCover = $('.dx-gesture-cover');
         const originalPointerEvents = $gestureCover.css('pointerEvents');
