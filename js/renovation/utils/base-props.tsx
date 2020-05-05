@@ -4,7 +4,7 @@ import {
 import config from '../../core/config';
 
 @ComponentBindings()
-export default class BaseWidgetProps {
+export class BaseWidgetProps { // eslint-disable-line import/prefer-default-export
   @OneWay() accessKey?: string | null = null;
 
   @OneWay() activeStateEnabled?: boolean = false;
