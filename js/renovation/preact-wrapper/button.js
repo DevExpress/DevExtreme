@@ -1,3 +1,4 @@
+/* eslint-disable */
 import ValidationEngine from '../../ui/validation_engine';
 import Component from './component';
 
@@ -55,3 +56,4 @@ export default class Button extends Component {
         return this.option('validationGroup') || ValidationEngine.findGroup($element, this._modelByElement($element));
     }
 }
+/* eslint-enable */

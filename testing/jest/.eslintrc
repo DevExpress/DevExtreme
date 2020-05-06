@@ -1,14 +1,33 @@
 {
     "env": {
-        "jest": true
+        "jest": true,
+        "node": true
     },
     "plugins": [
         "jest",
-        "react"
+        "jest-formatting",
+        "@typescript-eslint"
     ],
-    "extends": ["plugin:jest/recommended"],
+    "extends": [
+        "plugin:jest/recommended",
+        "plugin:jest-formatting/recommended",
+        "plugin:@typescript-eslint/recommended",
+        "airbnb-typescript"
+    ],
+    "settings": {
+        "react": { "pragma": "h" }
+    },
     "rules": {
-        "no-unused-vars": ["error", { "varsIgnorePattern": "h" }],
-        "react/jsx-uses-vars": 2
+        // Use devDependencies modules in the tests
+        "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+
+        // Create temporary JSX components in the tests without props validation
+        "react/prop-types": ["error", { "skipUndeclared": true }],
+
+        // Allow to use props spreading for the JSX components
+        "react/jsx-props-no-spreading": "off",
+
+        // Allow to define widg et's 'accessKey' attribute
+        "jsx-a11y/no-access-key": "off"
     }
 }

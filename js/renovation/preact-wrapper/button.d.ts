@@ -1,12 +1,13 @@
-import ValidationEngine from '../../ui/validation_engine';
+/* eslint-disable no-underscore-dangle */
 import Component from './component';
 
 export default class Button extends Component {
-    _init(): any;
+  getAllProps(isFirstRender: boolean): any;
 
-    getAllProps(isFirstRender: boolean): any;
+  _init(): any;
 
-    _getSubmitAction(): any;
+  _getSubmitAction(): any;
 
-    _findGroup(): any;
+  _findGroup(): any;
 }
+/* eslint-enable no-underscore-dangle */

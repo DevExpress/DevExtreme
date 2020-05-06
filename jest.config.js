@@ -28,7 +28,7 @@ module.exports = {
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     preset: 'ts-jest',
     setupFiles: [
-        path.join(path.resolve('.'), './testing/jest/setup-enzyme.js'),
+        path.join(path.resolve('.'), './testing/jest/setup-enzyme.ts'),
     ],
     testMatch: [
         path.join(path.resolve('.'), './testing/jest/**/*.tests.[jt]s?(x)')

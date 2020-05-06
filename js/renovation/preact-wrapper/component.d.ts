@@ -1,36 +1,38 @@
+/* eslint-disable no-underscore-dangle */
 import DOMComponent from '../../core/dom_component';
 
 export default class PreactWrapper extends DOMComponent {
-    viewRef: any;
+  viewRef: any;
 
-    getInstance(): this;
+  getInstance(): this;
 
-    _initMarkup(): void;
+  _initMarkup(): void;
 
-    _render(): void;
+  _render(): void;
 
-    getAllProps(isFirstRender: boolean): any;
+  getAllProps(isFirstRender: boolean): any;
 
-    _getActionsMap(): any;
+  _getActionsMap(): any;
 
-    _init(): any;
+  _init(): any;
 
-    _createViewRef(): any;
+  _createViewRef(): any;
 
-    _optionChanged(option: any): any;
+  _optionChanged(option: any): any;
 
-    _addAction(name: string, config:any): any;
+  _addAction(name: string, config: any): any;
 
-    _stateChange(name: string): (value: any) => void;
+  _stateChange(name: string): (value: any) => void;
 
-    _createTemplateComponent(props: any, templateOption: any, canBeAnonymous: boolean): any;
+  _createTemplateComponent(props: any, templateOption: any, canBeAnonymous: boolean): any;
 
-    _wrapKeyDownHandler(handler: (event: any, options: any) => any): any;
+  _wrapKeyDownHandler(handler: (event: any, options: any) => any): any;
 
-    // Public API
-    repaint(): any;
+  // Public API
+  repaint(): any;
 
-    registerKeyHandler(key: string, handler: (e: any) => any): void;
+  registerKeyHandler(key: string, handler: (e: any) => any): void;
 
-    setAria(): any;
+  setAria(): any;
 }
+/* eslint-enable no-underscore-dangle */
