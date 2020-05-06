@@ -136,6 +136,8 @@ test("From on disabled appointments should be read only (T835731)", async t => {
     const { appointmentPopup } = scheduler;
 
 await t.doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element)
+        .expect(appointmentPopup.freqElement.hasClass('dx-state-readonly')).ok()
+
         .expect(appointmentPopup.subjectElement.value)
         .eql(APPOINTMENT_TEXT)
 
@@ -157,9 +159,11 @@ await t.doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element)
         text: "Install New Router in Dev Room",
         startDate: new Date(2017, 4, 22, 14, 30),
         endDate: new Date(2017, 4, 25, 15, 30),
-        disabled: true
+        disabled: true,
+        recurrenceRule: "FREQ=DAILY"
     }],
     currentView: "week",
+    recurrenceEditMode: 'series',
     currentDate: new Date(2017, 4, 25),
     startDayHour: 9,
     height: 600,
