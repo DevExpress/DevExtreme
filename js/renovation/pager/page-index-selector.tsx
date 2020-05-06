@@ -1,6 +1,7 @@
 import { Component, ComponentBindings, JSXComponent, Event, OneWay, Fragment } from 'devextreme-generator/component_declaration/common';
-import Pages from './pages';
 import LightButton from './light-button';
+import LargePages from './pages-large';
+import SmallPages from './pages-small';
 
 const PAGER_NAVIGATE_BUTTON = 'dx-navigate-button';
 const PAGER_PREV_BUTTON_CLASS = 'dx-prev-button';
@@ -19,7 +20,7 @@ export const viewFunction = ({
     props: {
         hasKnownLastPage, isLargeDisplayMode, maxPagesCount,
         pageCount, pageIndex, pageIndexChange, pagesCountText,
-        rtlEnabled, totalCount,
+        rtlEnabled,
     } }: PageIndexSelector) => {
     return (
         <Fragment>
@@ -29,16 +30,20 @@ export const viewFunction = ({
                     label={'Previous page'}
                     onClick={navigateToPrevPage}
                 />}
-            <Pages
-                isLargeDisplayMode={isLargeDisplayMode}
+            {isLargeDisplayMode && <LargePages
                 maxPagesCount={maxPagesCount}
+                pageCount={pageCount}
+                pageIndex={pageIndex}
+                pageIndexChange={pageIndexChange}
+                rtlEnabled={rtlEnabled}
+            />}
+            {!isLargeDisplayMode && <SmallPages
                 pageCount={pageCount}
                 pageIndex={pageIndex}
                 pageIndexChange={pageIndexChange}
                 pagesCountText={pagesCountText}
                 rtlEnabled={rtlEnabled}
-                totalCount={totalCount}
-            />
+            />}
             {renderNavButtons &&
                 <LightButton
                     className={nextClassName}

@@ -1,5 +1,5 @@
 import { Component, ComponentBindings, JSXComponent, Event, OneWay } from 'devextreme-generator/component_declaration/common';
-import SelectBox from '../select-box';
+import SelectBox, { SelectBoxProps } from '../select-box';
 import { isObject } from '../../core/utils/type';
 import LightButton from './light-button';
 
@@ -7,25 +7,17 @@ const PAGER_SELECTION_CLASS = 'dx-selection';
 export const PAGER_PAGE_SIZES_CLASS = 'dx-page-sizes';
 export const PAGER_PAGE_SIZE_CLASS = 'dx-page-size';
 export const PAGER_SELECTED_PAGE_SIZE_CLASS = `${PAGER_PAGE_SIZE_CLASS} ${PAGER_SELECTION_CLASS}`;
-
-function smallSelector(selectBoxProps) {
-    return (<SelectBox {...selectBoxProps} />);
-}
-type PageSizeProps = { className: string; click: () => void; label: string; text: string; };
-function largeSelector(pageSizesText: PageSizeProps[]) {
-    return pageSizesText.map(({ text, className, label, click }, key) => (
-        <LightButton key={key} className={className} label={label} onClick={click}>
-            {text}
-        </LightButton>
-    ));
-}
-export const viewFunction = ({ pageSizesText, selectBoxProps,
-                               props: { isLargeDisplayMode } }: PageSizeSelector) => {
-    const PageSizesComponent = isLargeDisplayMode ?
-        largeSelector(pageSizesText) : smallSelector(selectBoxProps);
+export const viewFunction = ({
+    pageSizesText, selectBoxProps,
+    props: { isLargeDisplayMode } }: PageSizeSelector) => {
     return (
         <div className={PAGER_PAGE_SIZES_CLASS}>
-            {PageSizesComponent}
+            {isLargeDisplayMode && pageSizesText.map(({ text, className, label, click }, key) => (
+                <LightButton key={key} className={className} label={label} onClick={click}>
+                    {text}
+                </LightButton>
+            ))}
+            {!isLargeDisplayMode && <SelectBox {...selectBoxProps} />}
         </div>);
 };
 type FullPageSize = { text: string; value: number; };
@@ -58,13 +50,13 @@ export default class PageSizeSelector extends JSXComponent<PageSizeSelectorProps
             };
         });
     }
-    get selectBoxProps() {
+    get selectBoxProps(): SelectBoxProps {
         const { pageSizes, pageSize } = this.props;
         return {
             dataSource: this.normalizedPageSizes(pageSizes!),
             displayExpr: 'text',
             value: pageSize,
-            valueChanged: this.onPageSizeChanged,
+            valueChange: this.props.pageSizeChanged,
             valueExpr: 'value',
             width: this.calculateLightPageSizesWidth(pageSizes),
         };
@@ -85,7 +77,9 @@ export default class PageSizeSelector extends JSXComponent<PageSizeSelectorProps
     }
     private onPageSizeChanged(processedPageSize) {
         return () => {
-            this.props.pageSizeChanged!(processedPageSize);
+            if (this.props.pageSizeChanged) {
+                this.props.pageSizeChanged(processedPageSize);
+            }
         };
     }
 }

@@ -8,54 +8,36 @@ import {
     InternalState,
 } from 'devextreme-generator/component_declaration/common';
 import Page, { PageProps } from './page';
-import { PAGER_INFO_CLASS } from './info';
-import NumberBox from '../number-box';
 
 const PAGER_PAGE_SEPARATOR_CLASS = 'dx-separator';
-const PAGER_INFO_TEXT_CLASS = `${PAGER_INFO_CLASS}  dx-info-text`;
 export const viewFunction = ({
     pages,
-    numberBoxProps,
-    props: { isLargeDisplayMode, pageCount, pagesCountText },
-}: Pages) => {
-    if (isLargeDisplayMode) {
-        const PagesMarkup = pages.map((pageProps, key) => {
-            if (pageProps !== null) {
-                const { index, selected, onClick } = pageProps;
-                return (
-                    <Page
-                        key={key}
-                        index={index}
-                        selected={selected}
-                        onClick={onClick}
-                    />
-                );
-            }
+}: LargePages) => {
+    const PagesMarkup = pages.map((pageProps, key) => {
+        if (pageProps !== null) {
+            const { index, selected, onClick } = pageProps;
             return (
-                <div key={key} className={PAGER_PAGE_SEPARATOR_CLASS}>{'. . .'}</div>
+                <Page
+                    key={key}
+                    index={index}
+                    selected={selected}
+                    onClick={onClick}
+                />
             );
-        });
-        return <Fragment>{PagesMarkup}</Fragment>;
-    }
-    return (
-        <div className={'dx-light-pages'}>
-            <NumberBox {...numberBoxProps} />
-            <span className={PAGER_INFO_TEXT_CLASS}>{pagesCountText}</span>
-            <Page selected={false} index={pageCount! - 1} />
-        </div>
-    );
+        }
+        return (
+            <div key={key} className={PAGER_PAGE_SEPARATOR_CLASS}>{'. . .'}</div>
+        );
+    });
+    return <Fragment>{PagesMarkup}</Fragment>;
 };
 
 @ComponentBindings()
-export class PagesProps {
-    @OneWay() isLargeDisplayMode?: boolean = true;
+export class LargePagesProps {
     @OneWay() maxPagesCount?: number = 10;
     @OneWay() pageCount?: number = 10;
     @OneWay() pageIndex?: number = 0;
-    // tslint:disable-next-line: max-line-length
-    @OneWay() pagesCountText?: string = 'of'; // TODO messageLocalization.getFormatter('dxPager-pagesCountText');
     @OneWay() rtlEnabled?: boolean = false;
-    @OneWay() totalCount?: number = 0;
     @Event() pageIndexChange?: (pageIndex: number) => void = () => { }; // commonUtils.noop
 }
 
@@ -69,21 +51,10 @@ type PagesState = {
 
 // tslint:disable-next-line: max-classes-per-file
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class Pages extends JSXComponent<PagesProps> {
-    get numberBoxProps() /*: NumberBoxProps */ {
-        const { pageIndex, pageCount } = this.props as Required<PagesProps>;
-        return {
-            value: pageIndex + 1,
-            // tslint:disable-next-line: object-literal-sort-keys
-            min: 1,
-            max: pageCount,
-            width: this.calculateLightPagesWidth(pageCount),
-            valueChange: this.valueChanged,
-        };
-    }
+export default class LargePages extends JSXComponent<LargePagesProps> {
     get pages(): PageType[] {
         const { pageIndex, pageCount, maxPagesCount } = this.props as Required<
-            PagesProps
+            LargePagesProps
         >;
         let pageIndexes: (number | null)[] = [];
         const createPage = (index: number) => {
@@ -99,12 +70,12 @@ export default class Pages extends JSXComponent<PagesProps> {
                     pageIndexes.push(i);
                 }
             } else {
-                const usePrevState = this.canUsePrevState(pageIndex);
                 const startIndex = this.getStartIndex(pageIndex, pageCount);
+                const usePrevState = this.canUsePrevState(pageIndex, pageCount);
                 pageIndexes = usePrevState
                     ? this.prevState!.pageIndexes
                     : this.getPageIndexes(startIndex, pageCount);
-                if (!this.prevState || this.prevState?.startPageIndex !== startIndex) {
+                if (!usePrevState) {
                     this.prevState = {
                         lastPageIndex: startIndex + PAGES_LIMITER - 1,
                         pageIndexes,
@@ -122,17 +93,21 @@ export default class Pages extends JSXComponent<PagesProps> {
             this.props.pageIndexChange(pageIndex);
         }
     }
-    private calculateLightPagesWidth(pageCount: number) {
-        // tslint:disable-next-line: max-line-length
-        // return /*Number($pageIndex.css('minWidth').replace('px', '')) 40 + 10 * pageCount.toString().length; */
-        return 40 + 10 * pageCount.toString().length;
-    }
-    private canUsePrevState(pageIndex: number) {
-        return (
-            this.prevState !== null &&
-            this.prevState.startPageIndex < pageIndex &&
-            pageIndex < this.prevState.lastPageIndex
-        );
+    private canUsePrevState(pageIndex: number, pageCount: number) {
+        if (this.prevState !== null) {
+            const { startPageIndex, lastPageIndex } = this.prevState;
+            const isFirstOrLastPage = pageIndex === 0 || pageIndex === pageCount - 1;
+            const isInRange = (startPageIndex < pageIndex && pageIndex < lastPageIndex);
+            const isNextAfterFirst = (startPageIndex === 1 && startPageIndex === pageIndex);
+            const isPrevBeforeLast = (lastPageIndex === pageIndex &&
+                lastPageIndex === pageCount - 2);
+            const isNotFirstOrLastInRange = startPageIndex !== pageIndex ||
+                lastPageIndex !== pageIndex;
+            return isFirstOrLastPage ||
+                (isInRange || isNextAfterFirst || isPrevBeforeLast) &&
+                isNotFirstOrLastInRange;
+        }
+        return false;
     }
     private getPageIndexes(startIndex: number, pageCount: number) {
         const pageIndexes: (number | null)[] = [];
@@ -160,8 +135,5 @@ export default class Pages extends JSXComponent<PagesProps> {
         startIndex = Math.max(startIndex, 1);
         const isLastPage = startIndex + PAGES_LIMITER >= pageCount;
         return isLastPage ? pageCount - PAGES_LIMITER - 1 : startIndex;
-    }
-    private valueChanged() {
-        // this.seelct option('pageIndex', e.value);
     }
 }

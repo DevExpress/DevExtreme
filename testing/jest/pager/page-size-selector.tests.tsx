@@ -1,6 +1,7 @@
 import { h, createRef } from 'preact';
 import { mount } from 'enzyme';
 import PageSizesComponent from '../../../js/renovation/pager/page-size-selector.p';
+import SelectBox from '../../../js/renovation/select-box.p';
 import { PageSizeSelectorProps, PAGER_PAGE_SIZES_CLASS, PAGER_SELECTED_PAGE_SIZE_CLASS, PAGER_PAGE_SIZE_CLASS } from '../../../js/renovation/pager/page-size-selector';
 
 jest.mock('../../../js/renovation/select-box', () => {});
@@ -45,6 +46,12 @@ describe('Pager size selector', () => {
         const pageSizeHandler = jest.fn();
         const comp = render({ isLargeDisplayMode: true, pageSizes: [5, 10], pageSize: 5, pageSizeChanged: pageSizeHandler } as PageSizeSelectorProps);
         (comp.find({ children: '10' }).prop('onClick') as any)();
+        expect(pageSizeHandler).toBeCalledWith(10);
+    });
+    it('change pagesize in small selector', () => {
+        const pageSizeHandler = jest.fn();
+        const comp = render({ isLargeDisplayMode: false, pageSizes: [5, 10], pageSize: 5, pageSizeChanged: pageSizeHandler } as PageSizeSelectorProps);
+        (comp.find(SelectBox).prop('valueChange') as any)(10);
         expect(pageSizeHandler).toBeCalledWith(10);
     });
 });
