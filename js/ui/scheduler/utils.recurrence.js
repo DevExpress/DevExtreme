@@ -19,9 +19,6 @@ const intervalMap = {
     yearly: 'years'
 };
 
-// Wrong date needs to mark specific date as incorrect.
-const wrongDateTime = new Date(0, 0, 0).getTime();
-
 const dateSetterMap = {
     'bysecond': function(date, value) {
         date.setSeconds(value);
@@ -709,7 +706,8 @@ var getDatesByRules = function(dateRules, startDate, rule) {
         if(Array.isArray(updatedDate)) {
             result = result.concat(updatedDate);
         } else {
-            result.push(new Date(updatedDate));
+            const date = !isWrongDate(updatedDate) ? new Date(updatedDate) : updatedDate;
+            result.push(date);
         }
     }
 
@@ -819,11 +817,11 @@ const getRecurrenceString = function(object) {
 };
 
 const markWrongDate = function(date) {
-    date.setTime(wrongDateTime);
+    date.isWrongDate = true;
 };
 
 const isWrongDate = function(date) {
-    return date.getTime() === wrongDateTime;
+    return date.isWrongDate;
 };
 
 var resultUtils = {
