@@ -16,8 +16,11 @@ import TextEditorButtonCollection from './texteditor_button_collection/index';
 import config from '../../core/config';
 import errors from '../widget/ui.errors';
 import browser from '../../core/utils/browser';
+import { getWindow } from '../../core/utils/window';
 import { Deferred } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
+
+const window = getWindow();
 
 const TEXTEDITOR_CLASS = 'dx-texteditor';
 const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
@@ -356,8 +359,9 @@ const TextEditorBase = Editor.inherit({
         const $input = this._input();
         const buttonsWidth = ($(this._$beforeButtonsContainer).width() || 0) +
             ($(this._$afterButtonsContainer).width() || 0);
-        const inputPaddings = $input
-            ? (parseFloat($input.css('paddingRight')) + parseFloat($input.css('paddingLeft')))
+        const styles = window.getComputedStyle($input.get(0));
+        const inputPaddings = ($input && styles)
+            ? (parseFloat(styles.paddingRight) + parseFloat(styles.paddingLeft))
             : 0;
         return buttonsWidth + inputPaddings;
     },
