@@ -420,10 +420,15 @@ module.exports = {
 
                 _appendEmptyRow: function($table, $emptyRow, location) {
                     const $tBodies = this._getBodies($table);
-                    const $container = $tBodies.length && !$emptyRow.is('tbody') ? $tBodies : $table;
+                    const isTableContainer = !$tBodies.length || $emptyRow.is('tbody');
+                    const $container = isTableContainer ? $table : $tBodies;
 
                     if(location === 'top') {
                         $container.first().prepend($emptyRow);
+                        if(isTableContainer) {
+                            const $colgroup = $container.children('colgroup');
+                            $container.prepend($colgroup);
+                        }
                     } else {
                         $container.last().append($emptyRow);
                     }
