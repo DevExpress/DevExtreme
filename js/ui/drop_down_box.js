@@ -144,8 +144,7 @@ const DropDownBox = DropDownEditor.inherit({
             .always((function() {
                 this.option('displayValue', values);
                 callBase(values.length && values);
-            }).bind(this))
-            .fail(callBase);
+            }).bind(this));
     },
 
     _loadItem: function(value) {
