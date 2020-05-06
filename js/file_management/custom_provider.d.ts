@@ -10,13 +10,13 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @docid CustomFileSystemProviderOptions.abortFileUpload
      * @type function
      * @type_function_param1 file:File
-     * @type_function_param2 uploadInfo?:UploadInfo
+     * @type_function_param2 uploadInfo:UploadInfo
      * @type_function_param3 destinationDirectory:FileSystemItem
      * @type_function_return Promise<any>|any
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    abortFileUpload?: ((file: File, uploadInfo?: UploadInfo, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
+    abortFileUpload?: ((file: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
 
     /**
      * @docid CustomFileSystemProviderOptions.copyItem
