@@ -1670,7 +1670,7 @@ declare module DevExpress.fileManagement {
     /** @name CustomFileSystemProvider.Options */
     export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseOptions<CustomFileSystemProvider> {
         /** @name CustomFileSystemProvider.Options.abortFileUpload */
-        abortFileUpload?: ((file: File, uploadInfo?: UploadInfo) => Promise<any> | JQueryPromise<any> | any);
+        abortFileUpload?: ((file: File, uploadInfo?: UploadInfo, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
         /** @name CustomFileSystemProvider.Options.copyItem */
         copyItem?: ((item: FileSystemItem, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
         /** @name CustomFileSystemProvider.Options.createDirectory */
@@ -1690,7 +1690,7 @@ declare module DevExpress.fileManagement {
         /** @name CustomFileSystemProvider.Options.renameItem */
         renameItem?: ((item: FileSystemItem, newName: string) => Promise<any> | JQueryPromise<any> | any);
         /** @name CustomFileSystemProvider.Options.uploadFileChunk */
-        uploadFileChunk?: ((file: File, uploadInfo: UploadInfo) => Promise<any> | JQueryPromise<any> | any);
+        uploadFileChunk?: ((file: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
     }
     /** @name CustomFileSystemProvider */
     export class CustomFileSystemProvider extends FileSystemProviderBase {
