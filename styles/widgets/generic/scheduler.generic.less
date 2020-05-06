@@ -657,14 +657,21 @@
 
     .dx-scheduler-group-header-content {
         width: @GENERIC_SCHEDULER_GROUP_HEADER_TABLE_CELL_WIDTH;
-        text-align: left;
         padding: @GENERIC_SCHEDULER_AGENDA_GROUP_HEADER_PADDING;
         box-shadow: inset 0 -1px 0 0 @SCHEDULER_ACCENT_BORDER_COLOR;
     }
 
     .dx-scheduler-time-panel-cell {
-        text-align: left;
         padding-top: @GENERIC_SCHEDULER_AGENDA_TIME_CELL_PADDING;
+    }
+
+    .dx-scheduler-group-header-content,
+    .dx-scheduler-time-panel-cell {
+        text-align: left;
+
+        .dx-rtl & {
+            text-align: right;
+        }
     }
 
     .dx-scheduler-time-panel-cell,
