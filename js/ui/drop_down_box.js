@@ -258,9 +258,19 @@ const DropDownBox = DropDownEditor.inherit({
         this._popupPosition = e.position;
     },
 
+    _getDefaultPopupPosition: function(isRtlEnabled) {
+        const { my, at } = this.callBase(isRtlEnabled);
+
+        return {
+            my,
+            at,
+            offset: { v: -1 },
+            collision: 'flipfit'
+        };
+    },
+
     _popupConfig: function() {
         const { focusStateEnabled } = this.option();
-        const horizontalAlignment = this.option('rtlEnabled') ? 'right' : 'left';
 
         return extend(this.callBase(), {
             width: function() {
@@ -272,15 +282,9 @@ const DropDownBox = DropDownEditor.inherit({
             focusStateEnabled,
             contentTemplate: ANONYMOUS_TEMPLATE_NAME,
             closeOnTargetScroll: this._shouldCloseOnTargetScroll.bind(this),
-            position: {
+            position: extend(this.option('popupPosition'), {
                 of: this.$element(),
-                collision: 'flipfit',
-                my: 'top ' + horizontalAlignment,
-                at: 'bottom ' + horizontalAlignment,
-                offset: {
-                    y: -1
-                }
-            },
+            }),
             onKeyboardHandled: opts => this.option('focusStateEnabled') && this._popupElementTabHandler(opts),
             maxHeight: function() {
                 const popupLocation = this._popupPosition?.v.location;
