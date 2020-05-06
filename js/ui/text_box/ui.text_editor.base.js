@@ -352,7 +352,7 @@ const TextEditorBase = Editor.inherit({
         const isIE11 = browser.msie && browser.version <= 11;
         const parentElement = $element.parent();
 
-        if(isIE11 && $element.css('display') === 'block' && (!domUtils.contains(window.document, parentElement) || parentElement.innerWidth() > this._editorMinWidth())) {
+        if(isIE11 && $element.css('display') === 'block' && (!window.getComputedStyle(parentElement.get(0)) || parentElement.innerWidth() > this._editorMinWidth())) {
             $element.addClass(TEXTEDITOR_COLLAPSED_CLASS);
         }
     },
