@@ -655,6 +655,20 @@ QUnit.module('popup options', moduleConfig, () => {
             }
         });
     });
+
+    QUnit.test('popup should be positioned with the correct popupPosition offset', function(assert) {
+        const vOffset = 2;
+        const instance = new DropDownBox(this.$element, {
+            opened: true,
+            width: 100,
+            popupPosition: { offset: { v: vOffset } }
+        });
+
+        const { bottom: elementBottom } = this.$element.get(0).getBoundingClientRect();
+        const { top: popupTop } = $(instance.content()).get(0).getBoundingClientRect();
+
+        assert.strictEqual(popupTop - elementBottom, vOffset, 'popup offset is correct');
+    });
 });
 
 QUnit.module('keyboard navigation', moduleConfig, () => {
