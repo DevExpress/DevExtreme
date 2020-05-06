@@ -130,7 +130,7 @@
         }
 
         .dx-rtl & {
-            margin-left: -@offset;
+            margin-left: -@offset - @SCHEDULER_AGENDA_LEFT_COLUMN_WIDTH;
 
             .dx-scheduler-small & {
                 margin-left: -@offset * @SCHEDULER_SMALL_SIZE_FACTOR;
@@ -2520,7 +2520,7 @@
             }
         }
 
-        .dx-scheduler-work-space:not(.dx-scheduler-timeline):not(.dx-scheduler-work-space-month):not(.dx-scheduler-work-space-vertical-grouped):not(.dx-scheduler-work-space-both-scrollbar) {
+        .dx-scheduler-work-space:not(.dx-scheduler-timeline):not(.dx-scheduler-work-space-month):not(.dx-scheduler-work-space-vertical-grouped):not(.dx-scheduler-work-space-both-scrollbar):not(.dx-scheduler-agenda) {
             .dx-scheduler-date-table {
                 float: right;
                 margin-left: 0;
