@@ -543,6 +543,56 @@ QUnit.module('submit behavior', {
         ValidationEngine.registerValidatorInGroup('testGroup', validator);
         this.$element.trigger('dxclick');
     });
+
+    QUnit.test('Form should be submitted only when an async validation rule is passed positively (T887207)', function(assert) {
+        this.clock.restore();
+        let value = 'a';
+        const validValue = 'b';
+        const validator = new Validator($('<div>').appendTo(this.$form), {
+            adapter: sinon.createStubInstance(DefaultAdapter),
+            validationRules: [{
+                type: 'async',
+                validationCallback: function() {
+                    const d = new Deferred();
+                    setTimeout(() => {
+                        d.resolve({
+                            isValid: value === validValue
+                        });
+                    }, 10);
+                    return d.promise();
+                }
+            }]
+        });
+        const done = assert.async();
+        const onSubmit = () => {
+            assert.strictEqual(value, validValue, 'submitted with valid value');
+
+            this.$form.off('submit', onSubmit);
+            done();
+        };
+        const triggerButtonClick = () => {
+            this.$element.trigger('dxclick');
+        };
+
+        this.$form.on('submit', onSubmit);
+
+        this.$element.dxButton({
+            validationGroup: 'testGroup',
+            onOptionChanged: function(args) {
+                if(args.name === 'disabled') {
+                    if(args.value === false && validator._validationInfo.result.status === 'invalid') {
+                        setTimeout(function() {
+                            value = validValue;
+                            triggerButtonClick();
+                        });
+                    }
+                }
+            }
+        });
+
+        ValidationEngine.registerValidatorInGroup('testGroup', validator);
+        triggerButtonClick();
+    });
 });
 
 QUnit.module('templates', () => {
