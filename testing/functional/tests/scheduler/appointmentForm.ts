@@ -130,7 +130,7 @@ test("Appointment should have correct form data on consecutive shows (T832711)",
     height: 580
 }, true));
 
-test("From on disabled appointments should be read only (T835731)", async t => {
+test("From elements for disabled appointments should be read only (T835731)", async t => {
     const APPOINTMENT_TEXT = "Install New Router in Dev Room";
     const scheduler = new Scheduler("#container");
     const { appointmentPopup } = scheduler;
