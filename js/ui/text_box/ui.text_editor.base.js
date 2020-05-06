@@ -350,7 +350,9 @@ const TextEditorBase = Editor.inherit({
     _collapseInputContainer: function() {
         const $element = this.$element();
         const isIE11 = browser.msie && browser.version <= 11;
-        if(isIE11 && $element.css('display') === 'block' && $element.parent().width() > this._editorMinWidth()) {
+        const parentElement = $element.parent();
+
+        if(isIE11 && $element.css('display') === 'block' && (!domUtils.contains(window.document, parentElement) || parentElement.innerWidth() > this._editorMinWidth())) {
             $element.addClass(TEXTEDITOR_COLLAPSED_CLASS);
         }
     },
@@ -359,9 +361,8 @@ const TextEditorBase = Editor.inherit({
         const $input = this._input();
         const buttonsWidth = ($(this._$beforeButtonsContainer).width() || 0) +
             ($(this._$afterButtonsContainer).width() || 0);
-        const styles = window.getComputedStyle($input.get(0));
-        const inputPaddings = ($input && styles)
-            ? (parseFloat(styles.paddingRight) + parseFloat(styles.paddingLeft))
+        const inputPaddings = $input
+            ? (parseFloat($input.css('paddingRight')) + parseFloat($input.css('paddingLeft')))
             : 0;
         return buttonsWidth + inputPaddings;
     },
