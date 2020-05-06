@@ -3573,31 +3573,29 @@ testModule('scrollable interaction', {
 
         const $overlayWrapper = $content.closest(toSelector(OVERLAY_WRAPPER_CLASS));
 
-        $($overlayWrapper).on('dxdrag.TEST', {
-            getDirection: function() { return 'both'; },
-            validate: function(e) {
-                e.cancelable = false;
-                return true;
-            }
-        }, function(e) {
-            assert.strictEqual(e.isDefaultPrevented(), false, 'event should not be prevented');
+        $($overlayWrapper).on('dxdrag', {
+            getDirection: () => 'both',
+            validate: () => true
+        }, (e) => {
+            assert.strictEqual(e.isDefaultPrevented(), false, 'not cancelable event should not be prevented');
         });
 
-        $($overlayWrapper.parent()).on('dxdrag.TEST', {
+
+        $($overlayWrapper.parent()).on('dxdrag', {
             getDirection: function() { return 'both'; },
             validate: function() { return true; }
         }, function() {
             assert.ok(false, 'event should not be fired');
         });
 
-        pointerMock($scrollable.find('.dx-scrollable-container'))
-            .start()
-            .wheel(10);
+        const event = $.Event('dxdrag', {
+            cancelable: false,
+            originalEvent: $.Event('dxpointermove', {
+                originalEvent: $.Event('touchmove')
+            })
+        });
 
-        $overlayWrapper
-            .off('.TEST')
-            .parent()
-            .off('.TEST');
+        $($overlayWrapper).trigger(event);
     });
 
     test('scroll event does not prevent gestures', function(assert) {
