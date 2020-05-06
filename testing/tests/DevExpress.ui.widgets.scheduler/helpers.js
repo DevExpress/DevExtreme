@@ -214,6 +214,26 @@ export class SchedulerTestWrapper {
                 return this.workSpace.getCells().eq(rowIndex);
             },
             getCellPosition: (rowIndex, cellIndex) => this.workSpace.getCell(rowIndex, cellIndex).position(),
+            getCellWorkspaceRect: (rowIndex, cellIndex) => {
+                const cell = this.workSpace.getCell(rowIndex, cellIndex);
+                const cellPosition = cell.position();
+                const rect = { };
+
+                rect.top = cellPosition.top;
+                rect.left = cellPosition.left;
+                rect.height = cell.outerHeight();
+                rect.width = cell.outerWidth();
+
+                if(this.instance.option('currentView') === 'month') {
+                    const monthNum = cell.find('div').eq(0);
+                    if(monthNum.length > 0) {
+                        rect.top += monthNum.outerHeight();
+                        rect.height -= monthNum.outerHeight();
+                    }
+                }
+
+                return rect;
+            },
             getAllDayCells: () => $('.dx-scheduler-all-day-table-cell'),
             getAllDayCell: (index) => this.workSpace.getAllDayCells().eq(index),
             getCellWidth: () => this.workSpace.getCells().eq(0).outerWidth(),

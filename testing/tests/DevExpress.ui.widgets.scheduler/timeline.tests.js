@@ -444,7 +444,7 @@ QUnit.test('Group table cells should have correct height, groupOrientation = hor
     const $groupHeader = $groupRows.eq(0).find('.dx-scheduler-group-header').eq(0);
     const groupHeaderHeight = $groupHeader.get(0).getBoundingClientRect().height;
 
-    assert.roughEqual(30, groupHeaderHeight, 1.1, 'Cell height is OK');
+    assert.roughEqual(50, groupHeaderHeight, 1.1, 'Cell height is OK');
 });
 
 QUnit.test('the \'getCoordinatesByDate\' method should return right coordinates for grouped timeline, groupOrientation = horizontal', function(assert) {

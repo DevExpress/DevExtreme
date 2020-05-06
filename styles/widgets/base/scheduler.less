@@ -17,6 +17,8 @@
 @SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT * 0.5;
 @SCHEDULER_VERTICAL_GROUPED_ALL_DAY_TABLE_CELL_HEIGHT: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
 @SCHEDULER_VERTICAL_GROUP_HEADER_CONTENT_TOP_OFFSET: 16px;
+@SCHEDULER_MONTH_WORKSPACE_ROWS_COUNT: 6;
+@SCHEDULER_MONTH_WORKSPACE_DATE_TABLE_HEIGHT: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT * @SCHEDULER_MONTH_WORKSPACE_ROWS_COUNT;
 
 @SCHEDULER_GROUP_HEADER_TABLE_CELL_HEIGHT: 30px;
 
@@ -1005,8 +1007,12 @@
             }
         }
 
+        .dx-scheduler-date-table-scrollable .dx-scrollable-content {
+            min-height: @SCHEDULER_MONTH_WORKSPACE_DATE_TABLE_HEIGHT;
+        }
+
         .dx-scheduler-date-table-cell {
-            height: auto;
+            height: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
             vertical-align: top;
             text-align: right;
             font-size: @SCHEDULER_MONTH_DATE_TEXT_SIZE;
@@ -1103,6 +1109,7 @@
                 align-items: stretch;
                 flex: 1 1 auto;
                 height: inherit;
+                min-height: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
             }
         }
 
@@ -1117,6 +1124,10 @@
 
                 height: 100%;
             }
+        }
+
+        .dx-scheduler-group-header {
+            min-height: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
         }
 
         .dx-scheduler-group-header-content {
