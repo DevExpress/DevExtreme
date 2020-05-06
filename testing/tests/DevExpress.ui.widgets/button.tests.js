@@ -566,6 +566,7 @@ QUnit.module('submit behavior', {
         const onSubmit = () => {
             assert.strictEqual(value, validValue, 'submitted with valid value');
 
+            ValidationEngine.initGroups();
             this.$form.off('submit', onSubmit);
             done();
         };
