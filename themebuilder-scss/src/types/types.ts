@@ -1,8 +1,3 @@
-interface Metadata {
-    metadata: Array<MetaItem>;
-    version?: string;
-}
-
 interface MetaItem {
     Key?: string;
     Name?: string;

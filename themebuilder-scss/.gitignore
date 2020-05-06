@@ -1,5 +1,4 @@
-data/scss
+src/data/scss
 dist
 coverage
 build
-metadata

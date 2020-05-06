@@ -1,5 +1,5 @@
-import normalizeConfig from '../../modules/config-normalizer';
-import commands from '../../modules/commands';
+import normalizeConfig from '../../src/modules/config-normalizer';
+import commands from '../../src/modules/commands';
 
 const reader = () => {};
 

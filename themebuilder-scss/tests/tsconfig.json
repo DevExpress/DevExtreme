@@ -1,10 +1,17 @@
 {
     "extends": "../tsconfig.json",
     "compilerOptions": {
-        "baseUrl": "./",
-        "rootDir": "../",
+        "baseUrl": ".",
+        "paths": {
+            "sass": [
+                "../node_modules/@types/node-sass"
+            ]
+        }
     },
     "include": [
-        "**/*.ts"
+        "./**/*.ts"
+    ],
+    "files": [
+        "../src/types/types.ts"
     ]
 }

@@ -2,10 +2,10 @@ import { ImportMock } from 'ts-mock-imports';
 import sass from 'sass';
 import path from 'path';
 import fs from 'fs';
-import * as realMetadata from '../../data/metadata/dx-theme-builder-metadata';
+import * as realMetadata from '../../src/data/metadata/dx-theme-builder-metadata';
 import { metadata } from '../data/metadata';
 
-import { Compiler } from '../../modules/compiler';
+import { Compiler } from '../../src/modules/compiler';
 import noModificationsResult from '../data/compilation-results/no-changes-css';
 import noModificationsMeta from '../data/compilation-results/no-changes-meta';
 

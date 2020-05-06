@@ -132,6 +132,7 @@
                     "eol",          // end of line
                     "etag",         // HTTP header
                     "eula",         // EULA
+                    "globals",      // jest settings
                     "jsrender",     // JsRender template engine
                     "hsl",          // HSL color
                     "hsv",          // HSV color

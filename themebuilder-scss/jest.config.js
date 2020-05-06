@@ -1,16 +1,20 @@
 module.exports = {
-    preset: 'ts-jest',
-    testEnvironment: 'node',
+    globals: {
+        'ts-jest': {
+            tsConfig: 'tests/tsconfig.json'
+        }
+    },
     moduleFileExtensions: [
         'ts',
-        'js',
-        'node'
+        'js'
     ],
     transform: {
         '^.+\\.(ts|tsx)$': 'ts-jest'
     },
+    testEnvironment: 'node',
     testMatch: [
-        '**/tests/**/*.test.ts'
+        '**/tests/**/*.test.ts',
+
     ],
     coverageThreshold: {
         global: {

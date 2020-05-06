@@ -16,15 +16,11 @@
             ],
             "*": [
                 "node_modules/*",
-                "modules/types/*"
-            ],
-            
-            
+                "src/types/*"
+            ]
         }
     },
     "include": [
-        "modules/**/*",
-        "generator/**/*",
-        "data/**/*"
+        "src/**/*"
     ]
 }

@@ -1,9 +1,9 @@
 import path from 'path';
 import { ImportMock } from 'ts-mock-imports';
-import { CompileManager } from '../../modules/compile-manager';
+import { CompileManager } from '../../src/modules/compile-manager';
 
-import * as realMetadata from '../../data/metadata/dx-theme-builder-metadata';
-import * as bundleResolver from '../../modules/bundle-resolver';
+import * as realMetadata from '../../src/data/metadata/dx-theme-builder-metadata';
+import * as bundleResolver from '../../src/modules/bundle-resolver';
 import { metadata } from '../data/metadata';
 
 import noModificationsResult from '../data/compilation-results/no-changes-css';
