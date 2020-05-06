@@ -155,16 +155,16 @@ class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
     calculateRows(appointments, agendaDuration, currentDate, needClearSettings) {
         this._rows = [];
 
-        const appts = {
-            indexes: [],
-            parts: []
-        };
         const groupedAppointments = this.instance.fire('groupAppointmentsByResources', appointments);
         currentDate = dateUtils.trimTime(new Date(currentDate));
 
         each(groupedAppointments, function(groupIndex, currentAppointments) {
 
             const groupResult = [];
+            const appts = {
+                indexes: [],
+                parts: []
+            };
 
             if(!currentAppointments.length) {
                 this._rows.push([]);
