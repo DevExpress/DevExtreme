@@ -667,7 +667,8 @@ QUnit.module('popup options', moduleConfig, () => {
         const { bottom: elementBottom } = this.$element.get(0).getBoundingClientRect();
         const { top: popupTop } = $(instance.content()).get(0).getBoundingClientRect();
 
-        assert.strictEqual(popupTop - elementBottom, vOffset, 'popup offset is correct');
+        const actualOffset = Math.round(popupTop) - Math.round(elementBottom);
+        assert.strictEqual(actualOffset, vOffset, 'popup offset is correct');
     });
 });
 
