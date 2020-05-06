@@ -11,7 +11,7 @@ const CLASS = {
     groupRow: 'dx-group-row',
     commandEdit: 'dx-command-edit',
     commandExpand: 'dx-command-expand',
-    selectCommand: 'dx-command-select',
+    commandSelect: 'dx-command-select',
     commandLink: 'dx-link',
     editCell: 'dx-editor-cell',
     focused: 'dx-focused',
@@ -179,7 +179,7 @@ class CommandCell extends DxElement {
 
     constructor(dataRow: Selector, index: number) {
         const childrenSelector = `td:nth-child(${++index})`;
-        super(dataRow.find(`${childrenSelector}.${CLASS.commandEdit}, ${childrenSelector}.${CLASS.selectCommand}, ${childrenSelector}.${CLASS.commandExpand}`));
+        super(dataRow.find(`${childrenSelector}.${CLASS.commandEdit}, ${childrenSelector}.${CLASS.commandSelect}, ${childrenSelector}.${CLASS.commandExpand}`));
         this.isFocused = this.element.hasClass(CLASS.focused);
     }
 
