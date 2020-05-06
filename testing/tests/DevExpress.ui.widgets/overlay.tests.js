@@ -3580,7 +3580,6 @@ testModule('scrollable interaction', {
             assert.strictEqual(e.isDefaultPrevented(), false, 'not cancelable event should not be prevented');
         });
 
-
         $($overlayWrapper.parent()).on('dxdrag', {
             getDirection: function() { return 'both'; },
             validate: function() { return true; }
