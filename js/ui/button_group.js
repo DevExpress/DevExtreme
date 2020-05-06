@@ -78,13 +78,6 @@ const ButtonCollection = CollectionWidget.inherit({
         return this.$element().parent();
     },
 
-    _moveFocus: function(location) {
-        if(this.onFocusMoveHandler && this.onFocusMoveHandler(location)) {
-            return;
-        }
-        this.callBase(location);
-    },
-
     _keyboardEventBindingTarget() {
         return this._focusTarget();
     },
