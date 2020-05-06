@@ -1088,6 +1088,9 @@ export const MockAxis = function(renderOptions) {
         hasCustomPosition() {
             return false;
         },
+        getResolvedBoundaryPosition() {
+            return 'bottom';
+        },
         getMarginOptions: sinon.stub.returns({}),
         applyVisualRangeSetter: sinon.spy(),
         _setVisualRange: sinon.spy(),

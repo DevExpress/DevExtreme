@@ -2647,6 +2647,116 @@ QUnit.test('Rotated. ScrollBar on left. Shift argument axis by ScrollBar margin'
     }, 'shift argAxis');
 });
 
+QUnit.test('ScrollBar on top. Don\'t shift argument axis (axis position is top, label position is bottom)', function(assert) {
+    const argAxis = createAxisStubs();
+    const scrollBar = this.setupScrollBar();
+
+    argAxis
+        .getMargins.returns({ left: 0, top: 7, right: 0, bottom: 0 });
+    scrollBar
+        .getMargins.returns({ left: 0, top: 15, right: 0, bottom: 0 });
+
+    this.setupAxes([argAxis, createAxisStubs()]);
+
+    new dxChart(this.container, {
+        scrollBar: { visible: true, position: 'top' },
+        argumentAxis: { position: 'top', label: { position: 'bottom' } },
+        series: [{}],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    // assert
+    // 6. shift horizontal axes
+    // argAxis
+    assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, { top: 0, left: 0, bottom: 0, right: 0 }, 'don\'t shift argAxis');
+    // scrollBar
+    assert.deepEqual(this.scrollBarStub.getCall(0).returnValue._scroll.attr.getCall(4).args[0], { translateX: 0, translateY: 10 }, 'shift scrollBar');
+});
+
+QUnit.test('ScrollBar on bottom. Don\'t shift argument axis (axis position is bottom, label position is top)', function(assert) {
+    const argAxis = createAxisStubs();
+    const scrollBar = this.setupScrollBar();
+
+    argAxis
+        .getMargins.returns({ left: 0, top: 0, right: 0, bottom: 10 });
+    scrollBar
+        .getMargins.returns({ left: 0, top: 0, right: 0, bottom: 15 });
+
+    this.setupAxes([argAxis, createAxisStubs()]);
+
+    new dxChart(this.container, {
+        scrollBar: { visible: true, position: 'bottom' },
+        argumentAxis: { position: 'bottom', label: { position: 'top' } },
+        series: [{}],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    // assert
+    // 6. shift horizontal axes
+    // argAxis
+    assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, { top: 0, left: 0, bottom: 0, right: 0 }, 'don\'t shift argAxis');
+    // scrollBar
+    assert.deepEqual(this.scrollBarStub.getCall(0).returnValue._scroll.attr.getCall(4).args[0], { translateX: 0, translateY: 600 }, 'shift scrollBar');
+});
+
+QUnit.test('Rotated. ScrollBar on right. Don\'t shift argument axis (axis position is right, label position is left)', function(assert) {
+    const argAxis = createAxisStubs();
+    const scrollBar = this.setupScrollBar();
+
+    argAxis
+        .getMargins.returns({ left: 0, top: 0, right: 7, bottom: 0 });
+    scrollBar
+        .getMargins.returns({ left: 0, top: 0, right: 15, bottom: 0 });
+
+    this.setupAxes([argAxis, createAxisStubs()]);
+
+    new dxChart(this.container, {
+        rotated: true,
+        scrollBar: { visible: true, position: 'right' },
+        argumentAxis: { position: 'right', label: { position: 'left' } },
+        series: [{}],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    // assert
+    // 6. shift horizontal axes
+    // argAxis
+    assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, { top: 0, left: 0, bottom: 0, right: 0 }, 'don\'t shift argAxis');
+    // scrollBar
+    assert.deepEqual(this.scrollBarStub.getCall(0).returnValue._scroll.attr.getCall(4).args[0], { translateX: 790, translateY: 0 }, 'shift scrollBar');
+});
+
+QUnit.test('Rotated. ScrollBar on left. Don\'t shift argument axis (axis position is left, label position is right)', function(assert) {
+    const argAxis = createAxisStubs();
+    const scrollBar = this.setupScrollBar();
+
+    argAxis
+        .getMargins.returns({ left: 7, top: 0, right: 0, bottom: 0 });
+    scrollBar
+        .getMargins.returns({ left: 15, top: 0, right: 0, bottom: 0 });
+
+    this.setupAxes([argAxis, createAxisStubs()]);
+
+    new dxChart(this.container, {
+        rotated: true,
+        scrollBar: { visible: true, position: 'left' },
+        argumentAxis: { position: 'left', label: { position: 'right' } },
+        series: [{}],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    // assert
+    // 6. shift horizontal axes
+    // argAxis
+    assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, { top: 0, left: 0, bottom: 0, right: 0 }, 'don\'t shift argAxis');
+    // scrollBar
+    assert.deepEqual(this.scrollBarStub.getCall(0).returnValue._scroll.attr.getCall(4).args[0], { translateX: 0, translateY: 0 }, 'shift scrollBar');
+});
+
 QUnit.test('UpdateSize - scrollBar gets canvas', function(assert) {
     const argAxis = createAxisStubs();
     const valAxis = createAxisStubs();
