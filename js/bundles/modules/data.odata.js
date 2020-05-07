@@ -2,8 +2,8 @@
 
 require('./data');
 
-DevExpress.data.ODataStore = require('../../data/odata/store');
-DevExpress.data.ODataContext = require('../../data/odata/context');
+DevExpress.data.ODataStore = require('../../data/odata/store').default;
+DevExpress.data.ODataContext = require('../../data/odata/context').default;
 
 DevExpress.data.utils = DevExpress.data.utils || {};
 DevExpress.data.utils.odata = {};

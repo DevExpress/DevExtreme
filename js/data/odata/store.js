@@ -203,6 +203,4 @@ const ODataStore = Store.inherit({
 
 }, 'odata');
 
-// TODO: replace by "export default" after "js/bundles/modules/data.odata" refactor
-//       (should replace all "require" by "import")
-module.exports = ODataStore;
+export default ODataStore;

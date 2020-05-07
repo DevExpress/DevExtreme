@@ -85,6 +85,4 @@ const ODataContext = Class.inherit({
     },
 });
 
-// TODO: replace by "export default" after "js/bundles/modules/data.odata" refactor
-//       (should replace all "require" by "import")
-module.exports = ODataContext;
+export default ODataContext;
