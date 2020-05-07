@@ -2601,6 +2601,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         dataGrid.addRow();
         dataGrid.cellValue(0, 0, '2');
+        this.clock.tick();
         dataGrid.closeEditCell();
         this.clock.tick();
         dataGrid.option('dataSource', array);
