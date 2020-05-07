@@ -275,7 +275,7 @@ const Drawer = Widget.inherit({
     },
 
     getOverlayTarget() {
-        return this.option('target') || this._$wrapper;
+        return this._options.silent('target') || this._$wrapper;
     },
 
     getOverlay() {

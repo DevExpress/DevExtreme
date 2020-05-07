@@ -376,25 +376,44 @@ QUnit.module('Drawer behavior', () => {
         assert.ok($(instance._overlay.option('position').of).hasClass('dx-drawer-content'), 'target is ok');
     });
 
-    QUnit.test('show warning if deprecated \'target\' option is used', function(assert) {
-        sinon.spy(errors, 'log');
+    ['shrink', 'overlap', 'push'].forEach((openedStateMode) => {
+        QUnit.test(`warnings for deprecated 'target' option, ${openedStateMode}, target: notInitialized`, function(assert) {
+            sinon.spy(errors, 'log');
 
-        try {
-            $('#drawer').dxDrawer({
-                openedStateMode: 'overlap',
-                target: '#someID'
+            try {
+                $('#drawer').dxDrawer({
+                    openedStateMode: openedStateMode
+                });
+
+                assert.strictEqual(errors.log.callCount, 0, 'log.callCount');
+            } finally {
+                errors.log.restore();
+            }
+        });
+
+        [null, undefined, '#someID'].forEach((target) => {
+            QUnit.test(`warnings for deprecated 'target' option, openedStateMode: ${openedStateMode}, target: ${target}`, function(assert) {
+                sinon.spy(errors, 'log');
+
+                try {
+                    $('#drawer').dxDrawer({
+                        openedStateMode: openedStateMode,
+                        target: target
+                    });
+
+                    assert.strictEqual(errors.log.callCount, 1, 'log.callCount');
+                    assert.deepEqual(errors.log.firstCall.args, [
+                        'W0001',
+                        'dxDrawer',
+                        'target',
+                        '20.1',
+                        'Functionality associated with this option is not intended for the Drawer widget.'
+                    ], 'args of the log method');
+                } finally {
+                    errors.log.restore();
+                }
             });
-
-            assert.deepEqual(errors.log.lastCall.args, [
-                'W0001',
-                'dxDrawer',
-                'target',
-                '20.1',
-                'Functionality associated with this option is not intended for the Drawer widget.'
-            ], 'args of the log method');
-        } finally {
-            errors.log.restore();
-        }
+        });
     });
 
     QUnit.test('content() function', function(assert) {

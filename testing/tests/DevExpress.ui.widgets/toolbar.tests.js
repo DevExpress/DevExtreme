@@ -275,6 +275,42 @@ QUnit.module('render', {
         assert.ok(templateUsed);
         assert.equal(this.element.find('.custom-template').length, 1);
     });
+
+    QUnit.test('show warning if deprecated "height" option is used', function(assert) {
+        sinon.spy(errors, 'log');
+
+        try {
+            $('#toolbar').dxToolbar({
+                items: [ { location: 'before', text: 'text1' } ],
+                height: 50
+            });
+
+            assert.strictEqual(errors.log.callCount, 1, 'log.callCount');
+            assert.deepEqual(errors.log.firstCall.args, [
+                'W0001',
+                'dxToolbar',
+                'height',
+                '20.1',
+                'Functionality associated with this option is not intended for the Toolbar widget.'
+            ], 'args of the log method');
+        } finally {
+            errors.log.restore();
+        }
+    });
+
+    QUnit.test('Warning messages not displaying if deprecated "height" option not used', function(assert) {
+        sinon.spy(errors, 'log');
+
+        try {
+            $('#toolbar').dxToolbar({
+                items: [ { location: 'before', text: 'text1' } ]
+            });
+
+            assert.strictEqual(errors.log.callCount, 0, 'log.callCount');
+        } finally {
+            errors.log.restore();
+        }
+    });
 });
 
 QUnit.module('toolbar with menu', {
@@ -1571,23 +1607,6 @@ QUnit.module('Waiting fonts for material theme', {
         this.clock.tick(15);
 
         themes.isMaterial = origIsMaterial;
-    });
-
-    QUnit.test('show warning if deprecated "height" option is used', function(assert) {
-        sinon.spy(errors, 'log');
-
-        $('#toolbar').dxToolbar({
-            items: [ { location: 'before', text: 'text1' } ],
-            height: 50
-        });
-
-        assert.deepEqual(errors.log.lastCall.args, [
-            'W0001',
-            'dxToolbar',
-            'height',
-            '20.1',
-            'Functionality associated with this option is not intended for the Toolbar widget.'
-        ], 'args of the log method');
     });
 });
 
