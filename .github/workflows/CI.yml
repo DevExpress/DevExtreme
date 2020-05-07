@@ -37,8 +37,9 @@ jobs:
       env:
         CONSTEL: ${{ matrix.CONSTEL }}
       run: |
+        Write-Host "Start"
         $runner = Start-Process -FilePath dotnet -ArgumentList './testing/runner/bin/runner.dll --single-run' -passthru -RedirectStandardOutput "output.txt"
-
+        Write-Host "Runner starting"
         $runner_host = "http://localhost:20050"
         $request = [System.Net.WebRequest]::Create($runner_host)
         $request.Method = "HEAD"
@@ -52,9 +53,11 @@ jobs:
             Write-Host "The Site may be down, please check!"
         }
         $response.Close()
-
+        Write-Host "Runner started"
         $url = "$runner_host/run?notimers=true&nojquery=true&constellation=$env:CONSTEL"
         & "C:\Program Files\Internet Explorer\iexplore.exe" "$url"
+        Write-Host "IE started"
         Wait-Process -InputObject $runner
+        Write-Host "Runner stopped"
         Get-Content -Path .\output.txt
         exit $runner.ExitCode
