@@ -43,8 +43,15 @@ jobs:
         $request = [System.Net.WebRequest]::Create($runner_host)
         $request.Method = "HEAD"
         $request.Timeout = 30000
-        $request.GetResponse()
-        $request.Close()
+        $response = $request.GetResponse()
+        $status_code = [int]$response.StatusCode
+        If ($status_code -eq 200) {
+            Write-Host "Site is OK!"
+        }
+        Else {
+            Write-Host "The Site may be down, please check!"
+        }
+        $response.Close()
 
         $url = "$runner_host/run?notimers=true&nojquery=true&constellation=$env:CONSTEL"
         & "C:\Program Files\Internet Explorer\iexplore.exe" "$url"
