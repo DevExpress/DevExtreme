@@ -38,8 +38,15 @@ jobs:
         CONSTEL: ${{ matrix.CONSTEL }}
       run: |
         $runner = Start-Process -FilePath dotnet -ArgumentList './testing/runner/bin/runner.dll --single-run' -passthru -RedirectStandardOutput "output.txt"
-        $url = "http://localhost:20050/run?notimers=true&nojquery=true&constellation=$env:CONSTEL"
-        Start-Sleep -s 5
+
+        $runner_host = "http://localhost:20050"
+        $request = [System.Net.WebRequest]::Create($runner_host)
+        $request.Method = "HEAD"
+        $request.Timeout = 30000
+        $request.GetResponse()
+        $request.Close()
+
+        $url = "$runner_host/run?notimers=true&nojquery=true&constellation=$env:CONSTEL"
         & "C:\Program Files\Internet Explorer\iexplore.exe" "$url"
         Wait-Process -InputObject $runner
         Get-Content -Path .\output.txt
