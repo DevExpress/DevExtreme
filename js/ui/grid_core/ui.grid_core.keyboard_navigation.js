@@ -71,7 +71,7 @@ function isCellElement($element) {
 }
 
 function isEditorCell(that, $cell) {
-    return !that._isRowEditMode() && $cell && $cell.hasClass(EDITOR_CELL_CLASS);
+    return !that._isRowEditMode() && $cell && !$cell.hasClass(COMMAND_SELECT_CLASS) && $cell.hasClass(EDITOR_CELL_CLASS);
 }
 
 function isElementDefined($element) {
