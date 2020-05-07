@@ -1719,6 +1719,10 @@
         .dx-scheduler-date-table-row {
             .dx-scheduler-pseudo-cell-mixin();
         }
+
+        .dx-scheduler-agenda & {
+            margin-left: -@SCHEDULER_AGENDA_LEFT_COLUMN_WIDTH;
+        }
     }
 
     .dx-scheduler-date-table-cell { // stylelint-disable-line no-duplicate-selectors
@@ -2147,15 +2151,15 @@
             border: none;
         }
 
+        .dx-scheduler-date-table-row {
+            &:before {
+                display: none;
+            }
+        }
+
         &.dx-scheduler-work-space-grouped {
             .dx-scheduler-date-table {
                 float: right;
-            }
-
-            .dx-scheduler-date-table-row {
-                &:before {
-                    display: none;
-                }
             }
 
             .dx-scheduler-group-row {
