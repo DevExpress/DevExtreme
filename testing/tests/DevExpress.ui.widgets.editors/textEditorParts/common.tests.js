@@ -422,13 +422,39 @@ QUnit.module('general', {}, () => {
         themes.isMaterial = realIsMaterial;
     });
 
-    QUnit.test('editors has collapsed class in IE11 (T879885)', function(assert) {
+    QUnit.test('editor has collapsed class in IE11 (T879885)', function(assert) {
         const origBrowser = $.extend({}, browser);
-        browser.msie = true;
-        browser.version = '11.0';
+        $.extend(browser, { msie: true, version: '11.0' });
         try {
             const $textEditor = $('#texteditor').dxTextEditor({});
             assert.ok($textEditor.hasClass('dx-texteditor-collapsed'));
+        } finally {
+            browser.msie = origBrowser.msie;
+            browser.version = origBrowser.version;
+        }
+    });
+
+    QUnit.test('editor has no collapsed class in IE11 if the editor has custom display style', function(assert) {
+        const origBrowser = $.extend({}, browser);
+        $.extend(browser, { msie: true, version: '11.0' });
+        const $element = $('#texteditor');
+        try {
+            $element.css('display', 'inline-block');
+            const $textEditor = $element.dxTextEditor({});
+            assert.notOk($textEditor.hasClass('dx-texteditor-collapsed'));
+        } finally {
+            browser.msie = origBrowser.msie;
+            browser.version = origBrowser.version;
+        }
+    });
+
+    QUnit.test('editor has no collapsed class in IE11 if the editor has auto width container', function(assert) {
+        const origBrowser = $.extend({}, browser);
+        $.extend(browser, { msie: true, version: '11.0' });
+        const $container = $('<div></div>').css('width', 0);
+        try {
+            const $textEditor = $('#texteditor').wrap($container).dxTextEditor({});
+            assert.notOk($textEditor.hasClass('dx-texteditor-collapsed'));
         } finally {
             browser.msie = origBrowser.msie;
             browser.version = origBrowser.version;

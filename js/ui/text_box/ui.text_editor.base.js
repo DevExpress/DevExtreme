@@ -16,6 +16,7 @@ const TextEditorButtonCollection = require('./texteditor_button_collection/index
 const config = require('../../core/config');
 const errors = require('../widget/ui.errors');
 const browser = require('../../core/utils/browser');
+const getWindow = require('../../core/utils/window').getWindow;
 const Deferred = require('../../core/utils/deferred').Deferred;
 
 const TEXTEDITOR_CLASS = 'dx-texteditor';
@@ -473,11 +474,28 @@ const TextEditorBase = Editor.inherit({
     },
 
     _collapseInputContainer: function() {
-        const $element = this.$element();
         const isIE11 = browser.msie && browser.version <= 11;
-        if(isIE11 && $element.css('display') === 'block') {
+        const $element = this.$element();
+        const $parentElement = $element.parent();
+
+        if(isIE11 && $element.css('display') === 'block' && this._hasParentEnoughWidth($parentElement)) {
             $element.addClass(TEXTEDITOR_COLLAPSED_CLASS);
         }
+    },
+
+    _hasParentEnoughWidth: function($parent) {
+        const window = getWindow();
+        return !window.getComputedStyle($parent.get(0)) || $parent.width() > this._calculateEditorMinWidth();
+    },
+
+    _calculateEditorMinWidth: function() {
+        const $input = this._input();
+        const beforeButtonsWidth = $(this._$beforeButtonsContainer).width() || 0;
+        const afterButtonsWidth = $(this._$afterButtonsContainer).width() || 0;
+        const inputLeftPadding = parseFloat($input.css('paddingLeft'));
+        const inputRightPadding = parseFloat($input.css('paddingRight'));
+
+        return beforeButtonsWidth + afterButtonsWidth + inputLeftPadding + inputRightPadding;
     },
 
     _renderValue: function() {
