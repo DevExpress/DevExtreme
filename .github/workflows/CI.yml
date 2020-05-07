@@ -41,13 +41,13 @@ jobs:
         Write-Host "Runner starting"
         $runner_host = "http://localhost:20050"
         $attempt_count = 30
-        For ($i=0; $i -le $attempt_count; $i++) {
+        For ($i=0; $i -lt $attempt_count; $i++) {
           try {
             Invoke-WebRequest $runner_host -Method 'HEAD' -TimeoutSec 5;
             break
           }
           catch {
-            Write-Host "Waiting for server... Attempt $i"
+            Write-Host "Waiting for runner... Attempt $i"
             Start-Sleep -s 1
           }
         }
