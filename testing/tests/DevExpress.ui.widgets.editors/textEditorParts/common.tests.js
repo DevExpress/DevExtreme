@@ -426,8 +426,7 @@ QUnit.module('general', {}, () => {
             const $textEditor = $('#texteditor').dxTextEditor({});
             assert.ok($textEditor.hasClass('dx-texteditor-collapsed'));
         } finally {
-            browser.msie = origBrowser.msie;
-            browser.version = origBrowser.version;
+            browser = origBrowser;
         }
     });
 
@@ -440,8 +439,7 @@ QUnit.module('general', {}, () => {
             const $textEditor = $element.dxTextEditor({});
             assert.notOk($textEditor.hasClass('dx-texteditor-collapsed'));
         } finally {
-            browser.msie = origBrowser.msie;
-            browser.version = origBrowser.version;
+            browser = origBrowser;
         }
     });
 
@@ -453,8 +451,7 @@ QUnit.module('general', {}, () => {
             const $textEditor = $('#texteditor').wrap($container).dxTextEditor({});
             assert.notOk($textEditor.hasClass('dx-texteditor-collapsed'));
         } finally {
-            browser.msie = origBrowser.msie;
-            browser.version = origBrowser.version;
+            browser = origBrowser;
         }
     });
 });

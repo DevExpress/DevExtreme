@@ -362,12 +362,12 @@ const TextEditorBase = Editor.inherit({
 
     _editorMinWidth: function() {
         const $input = this._input();
-        const buttonsWidth = ($(this._$beforeButtonsContainer).width() || 0) +
-            ($(this._$afterButtonsContainer).width() || 0);
-        const inputPaddings = $input
-            ? (parseFloat($input.css('paddingRight')) + parseFloat($input.css('paddingLeft')))
-            : 0;
-        return buttonsWidth + inputPaddings;
+        const beforeButtonsWidth = $(this._$beforeButtonsContainer).width() || 0;
+        const afterButtonsWidth = $(this._$afterButtonsContainer).width() || 0;
+        const paddingLeft = parseFloat($input.css('paddingLeft'));
+        const paddingRight = parseFloat($input.css('paddingRight'));
+
+        return beforeButtonsWidth + afterButtonsWidth + paddingLeft + paddingRight;
     },
 
     _renderValue: function() {
