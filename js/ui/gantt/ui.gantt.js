@@ -360,22 +360,22 @@ class Gantt extends Widget {
 
     _createModelChangesListener() {
         return { // IModelChangesListener
-            NotifyTaskCreated: (task, callback) => { this._onRecordInserted(GANTT_TASKS, task, callback); },
-            NotifyTaskRemoved: (taskId) => { this._onRecordRemoved(GANTT_TASKS, taskId); },
-            NotifyTaskTitleChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'title', newValue); },
-            NotifyTaskDescriptionChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'description', newValue); },
-            NotifyTaskStartChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'start', newValue); },
-            NotifyTaskEndChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'end', newValue); },
-            NotifyTaskProgressChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'progress', newValue); },
+            NotifyTaskCreated: (task, callback, errorCallback) => { this._onRecordInserted(GANTT_TASKS, task, callback); },
+            NotifyTaskRemoved: (taskId, errorCallback) => { this._onRecordRemoved(GANTT_TASKS, taskId); },
+            NotifyTaskTitleChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'title', newValue); },
+            NotifyTaskDescriptionChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'description', newValue); },
+            NotifyTaskStartChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'start', newValue); },
+            NotifyTaskEndChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'end', newValue); },
+            NotifyTaskProgressChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'progress', newValue); },
 
-            NotifyDependencyInserted: (dependency, callback) => { this._onRecordInserted(GANTT_DEPENDENCIES, dependency, callback); },
-            NotifyDependencyRemoved: (dependencyId) => { this._onRecordRemoved(GANTT_DEPENDENCIES, dependencyId); },
+            NotifyDependencyInserted: (dependency, callback, errorCallback) => { this._onRecordInserted(GANTT_DEPENDENCIES, dependency, callback); },
+            NotifyDependencyRemoved: (dependencyId, errorCallback) => { this._onRecordRemoved(GANTT_DEPENDENCIES, dependencyId); },
 
-            NotifyResourceCreated: (resource, callback) => { this._onRecordInserted(GANTT_RESOURCES, resource, callback); },
-            NotifyResourceRemoved: (resource) => { this._onRecordRemoved(GANTT_RESOURCES, resource); },
+            NotifyResourceCreated: (resource, callback, errorCallback) => { this._onRecordInserted(GANTT_RESOURCES, resource, callback); },
+            NotifyResourceRemoved: (resource, errorCallback) => { this._onRecordRemoved(GANTT_RESOURCES, resource); },
 
-            NotifyResourceAssigned: (assignment, callback) => { this._onRecordInserted(GANTT_RESOURCE_ASSIGNMENTS, assignment, callback); },
-            NotifyResourceUnassigned: (assignmentId) => { this._onRecordRemoved(GANTT_RESOURCE_ASSIGNMENTS, assignmentId); },
+            NotifyResourceAssigned: (assignment, callback, errorCallback) => { this._onRecordInserted(GANTT_RESOURCE_ASSIGNMENTS, assignment, callback); },
+            NotifyResourceUnassigned: (assignmentId, errorCallback) => { this._onRecordRemoved(GANTT_RESOURCE_ASSIGNMENTS, assignmentId); },
             NotifyParentDataRecalculated: (data) => { this._onParentTasksRecalculated(data); }
         };
     }
