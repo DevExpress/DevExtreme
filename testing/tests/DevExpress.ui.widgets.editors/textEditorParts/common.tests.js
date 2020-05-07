@@ -419,7 +419,7 @@ QUnit.module('general', {}, () => {
         themes.isMaterial = realIsMaterial;
     });
 
-    QUnit.test('editors has collapsed class in IE11 (T879885)', function(assert) {
+    QUnit.test('editor has collapsed class in IE11 (T879885)', function(assert) {
         const origBrowser = $.extend({}, browser);
         $.extend(browser, { msie: true, version: '11.0' });
         try {
