@@ -43,16 +43,11 @@ jobs:
         $attempt_count = 30
         For ($i=0; $i -le $attempt_count; $i++) {
           try {
-            $request = [System.Net.WebRequest]::Create($runner_host)
-            $request.Method = "HEAD"
-            $request.Timeout = 30000
-            $response = $request.GetResponse()
-            $status_code = [int]$response.StatusCode
-            $response.Close()
+            Invoke-WebRequest $runner_host -Method 'HEAD' -TimeoutSec 5;
             break
           }
           catch {
-            Write-Host "Attempt $i"
+            Write-Host "Waiting for server... Attempt $i"
             Start-Sleep -s 1
           }
         }
