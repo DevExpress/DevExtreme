@@ -20,8 +20,6 @@ import { getWindow } from '../../core/utils/window';
 import { Deferred } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
 
-const window = getWindow();
-
 const TEXTEDITOR_CLASS = 'dx-texteditor';
 const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
@@ -358,6 +356,7 @@ const TextEditorBase = Editor.inherit({
     },
 
     _parentHasEnoughWidth: function($parent) {
+        const window = getWindow();
         return !window.getComputedStyle($parent.get(0)) || $parent.width() > this._editorMinWidth();
     },
 
