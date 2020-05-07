@@ -127,7 +127,6 @@ const DropDownEditor = TextBox.inherit({
             applyButtonText: formatMessage('OK'),
             cancelButtonText: formatMessage('Cancel'),
             buttonsLocation: 'default',
-            showPopupTitle: false,
             useHiddenSubmitElement: false
 
             /**

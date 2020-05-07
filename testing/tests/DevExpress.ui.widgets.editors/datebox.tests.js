@@ -17,6 +17,7 @@ import support from 'core/utils/support';
 import typeUtils from 'core/utils/type';
 import uiDateUtils from 'ui/date_box/ui.date_utils';
 import { noop } from 'core/utils/common';
+import { logger } from 'core/utils/console';
 
 import '../../helpers/calendarFixtures.js';
 
@@ -3263,6 +3264,13 @@ QUnit.module('datebox with time component', {
 });
 
 QUnit.module('datebox w/ time list', {
+    before: function() {
+        this.checkForIncorrectKeyWarning = function(assert) {
+            const isIncorrectKeyWarning = logger.warn.lastCall.args[0].indexOf('W1002') > -1;
+            assert.ok(logger.warn.calledOnce);
+            assert.ok(isIncorrectKeyWarning);
+        };
+    },
     beforeEach: function() {
         fx.off = true;
 
@@ -3399,6 +3407,7 @@ QUnit.module('datebox w/ time list', {
     });
 
     QUnit.test('T240639 - correct list item should be highlighted if appropriate datebox value is set', function(assert) {
+        sinon.stub(logger, 'warn');
         this.dateBox.option({
             type: 'time',
             pickerType: 'list',
@@ -3413,8 +3422,10 @@ QUnit.module('datebox w/ time list', {
 
         this.dateBox.option('value', new Date(2016, 1, 1, 12, 20));
 
+        this.checkForIncorrectKeyWarning(assert);
         assert.equal(list.option('selectedIndex'), -1, 'there is no selected list item');
         assert.equal(list.option('selectedItem'), null, 'there is no selected list item');
+        logger.warn.restore();
     });
 
     QUnit.test('T351678 - the date is reset after item click', function(assert) {
@@ -3534,6 +3545,7 @@ QUnit.module('datebox w/ time list', {
     });
 
     QUnit.test('All items in list should be present if value and min options are belong to different days', function(assert) {
+        sinon.stub(logger, 'warn');
         this.dateBox.option({
             min: new Date(2016, 1, 1, 13, 45),
             value: new Date(2016, 1, 1, 14, 45),
@@ -3550,8 +3562,10 @@ QUnit.module('datebox w/ time list', {
 
         items = $timeList.find(LIST_ITEM_SELECTOR);
 
+        this.checkForIncorrectKeyWarning(assert);
         assert.equal(items.length, 24, 'interval is correct');
         assert.equal(items.eq(0).text(), '12:45 AM', 'start time is correct');
+        logger.warn.restore();
     });
 
     QUnit.test('The situation when value and max options are belong to one day', function(assert) {
@@ -3648,6 +3662,7 @@ QUnit.module('datebox w/ time list', {
     });
 
     QUnit.test('validator correctly check value with \'time\' format', function(assert) {
+        sinon.stub(logger, 'warn');
         const $dateBox = $('#dateBox').dxDateBox({
             type: 'time',
             pickerType: 'list',
@@ -3663,10 +3678,12 @@ QUnit.module('datebox w/ time list', {
         $input.val('11:30 AM').change();
 
         const value = dateBox.option('value');
+        this.checkForIncorrectKeyWarning(assert);
         assert.equal($input.val(), '11:30 AM', 'Correct input value');
         assert.equal(value.getHours(), 11, 'Correct hours');
         assert.equal(value.getMinutes(), 30, 'Correct minutes');
         assert.equal(dateBox.option('isValid'), true, 'Editor should be marked as valid');
+        logger.warn.restore();
     });
 
     QUnit.testInActiveWindow('select a new value via the Enter key', function(assert) {

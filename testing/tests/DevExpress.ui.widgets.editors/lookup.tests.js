@@ -2217,7 +2217,7 @@ QUnit.module('popup options', {
                 },
                 update: function(values) { }
             }),
-            showPopupTitle: false,
+            dropDownOptions: { showTitle: false },
             usePopover: false,
             opened: true
         });

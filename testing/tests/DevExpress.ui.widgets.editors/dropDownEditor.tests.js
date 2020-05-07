@@ -10,6 +10,7 @@ import DropDownEditor from 'ui/drop_down_editor/ui.drop_down_editor';
 import Overlay from 'ui/overlay';
 import { isRenderer } from 'core/utils/type';
 import caretWorkaround from './textEditorParts/caretWorkaround.js';
+import { logger } from 'core/utils/console';
 
 import 'common.css!';
 
@@ -960,6 +961,7 @@ QUnit.module('Templates', () => {
                 return $('<div>').dxTextBox();
             }
         };
+        sinon.stub(logger, 'warn');
 
         $.each(events, function(_, event) {
             const spy = sinon.spy();
@@ -983,6 +985,13 @@ QUnit.module('Templates', () => {
             $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`).trigger(event);
             assert.equal(spies[eventName].callCount, 1, 'the \'' + eventName + '\' event was fired after value change');
         });
+
+        assert.ok(logger.warn.calledTwice, 'init + handle OnKeyPress');
+        const firstWarnMessage = logger.warn.firstCall.args[0];
+        const secondWarnMessage = logger.warn.lastCall.args[0];
+        const isOnKeyPressWarnings = firstWarnMessage.indexOf('onKeyPress') > -1 && secondWarnMessage.indexOf('onKeyPress') > -1;
+        assert.ok(isOnKeyPressWarnings);
+        logger.warn.restore();
     });
 
     QUnit.test('should have no errors after value change if text editor buttons were directly removed (T743479)', function(assert) {
@@ -1213,6 +1222,21 @@ QUnit.module('options', () => {
 
         assert.equal($input.val(), 'one', 'value is not changed');
     });
+
+    QUnit.test('"showPopupTitle" should change built-in popup "showTitle" option', function(assert) {
+        const instance = $('#dropDownEditorLazy').dxDropDownEditor({
+            opened: true,
+            dropDownOptions: { showTitle: true }
+        }).dxDropDownEditor('instance');
+
+        sinon.stub(logger, 'warn');
+
+        instance.option('showPopupTitle', false);
+
+        assert.ok(logger.warn.calledOnce);
+        assert.strictEqual(instance._popup.option('showTitle'), false, 'Option has been changed');
+        logger.warn.restore();
+    });
 });
 
 QUnit.module('popup integration', () => {
@@ -1227,15 +1251,16 @@ QUnit.module('popup integration', () => {
         });
     });
 
-    QUnit.test('showPopupTitle option', function(assert) {
+    QUnit.test('showTitle option', function(assert) {
         const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
-            showPopupTitle: true, opened: true
+            dropDownOptions: { showTitle: true },
+            opened: true
         }).dxDropDownEditor('instance');
 
         assert.equal($('.dx-overlay-content .dx-popup-title').length, 1, 'popup title is rendered');
 
         dropDownEditor.close();
-        dropDownEditor.option('showPopupTitle', false);
+        dropDownEditor.option('dropDownOptions.showTitle', false);
         dropDownEditor.open();
 
         assert.equal($('.dx-overlay-content .dx-popup-title').length, 0, 'popup title is not rendered');
@@ -1303,7 +1328,7 @@ QUnit.module('popup buttons', {
             .appendTo('body');
         this.dropDownEditor = this.$dropDownEditor.dxDropDownEditor({
             applyValueMode: 'useButtons',
-            showPopupTitle: true
+            dropDownOptions: { showTitle: true }
         }).dxDropDownEditor('instance');
     },
     reinitFixture(options) {
@@ -1322,7 +1347,9 @@ QUnit.module('popup buttons', {
 }, () => {
     QUnit.test('applyValueMode option should affect on buttons rendering inside popup', function(assert) {
         if(!devices.current().ios) {
-            this.reinitFixture({ showPopupTitle: false, applyValueMode: 'useButtons' });
+            this.reinitFixture({
+                dropDownOptions: { showTitle: false },
+                applyValueMode: 'useButtons' });
         }
 
         this.dropDownEditor.open();
@@ -1356,7 +1383,11 @@ QUnit.module('popup buttons', {
     });
 
     QUnit.test('Render apply button with custom text', function(assert) {
-        this.reinitFixture({ applyButtonText: 'Apply', applyValueMode: 'useButtons', showPopupTitle: true });
+        this.reinitFixture({
+            applyButtonText: 'Apply',
+            applyValueMode: 'useButtons',
+            dropDownOptions: { showTitle: true }
+        });
         this.dropDownEditor.open();
 
         const $applyButton = $('.dx-popup-done.dx-button').eq(0);
@@ -1380,7 +1411,11 @@ QUnit.module('popup buttons', {
     });
 
     QUnit.test('Render cancel button with custom text', function(assert) {
-        this.reinitFixture({ cancelButtonText: 'Discard', applyValueMode: 'useButtons', showPopupTitle: true });
+        this.reinitFixture({
+            cancelButtonText: 'Discard',
+            applyValueMode: 'useButtons',
+            dropDownOptions: { showTitle: true }
+        });
         this.dropDownEditor.open();
 
         const $cancelButton = $('.dx-popup-cancel.dx-button').eq(0);
