@@ -1,10 +1,11 @@
 import { h, createRef } from 'preact';
 import { mount, shallow } from 'enzyme';
-import Widget from '../../js/renovation/widget.p';
-import type { WidgetRef } from '../../js/renovation/widget.p';
+// Should be before component import
 import {
   clear as clearEventHandlers, defaultEvent, emit, getEventHandlers, fakeClickEvent, EVENT,
 } from './utils/events-mock';
+import Widget from '../../js/renovation/widget.p';
+import type { WidgetRef } from '../../js/renovation/widget.p';
 
 describe('Widget', () => {
   const render = (props = {}) => shallow(<Widget {...props} />);
