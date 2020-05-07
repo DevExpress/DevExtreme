@@ -391,6 +391,7 @@ QUnit.module('custom uploading', moduleConfig, () => {
 
         this.clock.tick(500);
         assert.strictEqual(uploadFileSpy.callCount, 1, 'custom function called');
+        assert.strictEqual(uploadFileSpy.args[0][0].name, 'image1.png', 'custom function has valid argument');
         assert.strictEqual(onProgressSpy.callCount, 0, 'progress event is not called');
         assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised');
 
