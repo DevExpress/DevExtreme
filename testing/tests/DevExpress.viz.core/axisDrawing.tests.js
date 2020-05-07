@@ -1050,7 +1050,27 @@ QUnit.test('Vertical. Position right. Positive tick offset', function(assert) {
     assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0], { points: [89, 70, 99, 70], opacity: 1 });
 });
 
-QUnit.module('XY linear axis. Draw. Check tick marks. Label position \'inside\'', environment);
+QUnit.module('XY linear axis. Draw. Check tick marks. Label position \'inside\'', $.extend(true, {}, environment, {
+    updateOptions(options) {
+        environment.updateOptions.call(this, $.extend(true, {
+            tick: {
+                visible: true,
+                color: '#123456',
+                opacity: 0.3,
+                width: 5,
+                length: 10,
+                shift: 5
+            }
+        }, options));
+    },
+    checkTicksPath(assert, path, group) {
+        [0, 1, 2].forEach(i => {
+            assert.deepEqual(path.getCall(i).args, [[], 'line'], 'path type');
+            assert.deepEqual(path.getCall(i).returnValue.attr.getCall(0).args[0], { stroke: '#123456', 'stroke-width': 5, 'stroke-opacity': 0.3, opacity: 1 }, 'attributes');
+            assert.deepEqual(path.getCall(i).returnValue.append.getCall(0).args[0], group, 'group');
+        });
+    }
+}));
 
 QUnit.test('Horizontal top', function(assert) {
     // arrange
@@ -1061,14 +1081,6 @@ QUnit.test('Horizontal top', function(assert) {
         width: 2,
         label: {
             position: 'inside'
-        },
-        tick: {
-            visible: true,
-            color: '#123456',
-            opacity: 0.3,
-            width: 5,
-            length: 10,
-            shift: 5
         }
     });
 
@@ -1085,15 +1097,7 @@ QUnit.test('Horizontal top', function(assert) {
     const group = this.renderer.g.getCall(4).returnValue;
 
     assert.equal(path.callCount, 3);
-    assert.deepEqual(path.getCall(0).args, [[], 'line']);
-    assert.deepEqual(path.getCall(1).args, [[], 'line']);
-    assert.deepEqual(path.getCall(2).args, [[], 'line']);
-    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(0).args[0], { stroke: '#123456', 'stroke-width': 5, 'stroke-opacity': 0.3, opacity: 1 });
-    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(0).args[0], { stroke: '#123456', 'stroke-width': 5, 'stroke-opacity': 0.3, opacity: 1 });
-    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(0).args[0], { stroke: '#123456', 'stroke-width': 5, 'stroke-opacity': 0.3, opacity: 1 });
-    assert.deepEqual(path.getCall(0).returnValue.append.getCall(0).args[0], group);
-    assert.deepEqual(path.getCall(1).returnValue.append.getCall(0).args[0], group);
-    assert.deepEqual(path.getCall(2).returnValue.append.getCall(0).args[0], group);
+    this.checkTicksPath(assert, path, group);
 
     assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [30, 30, 30, 30 + 10], opacity: 1 });
     assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [60, 30, 60, 30 + 10], opacity: 1 });
@@ -1111,14 +1115,6 @@ QUnit.test('Horizontal bottom', function(assert) {
         position: 'bottom',
         label: {
             position: 'inside'
-        },
-        tick: {
-            visible: true,
-            color: '#123456',
-            opacity: 0.3,
-            width: 5,
-            length: 10,
-            shift: 5
         }
     });
 
@@ -1132,6 +1128,10 @@ QUnit.test('Horizontal bottom', function(assert) {
     this.axis.draw(this.canvas);
 
     const path = this.renderer.path;
+    const group = this.renderer.g.getCall(4).returnValue;
+
+    assert.equal(path.callCount, 3);
+    this.checkTicksPath(assert, path, group);
 
     assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [30, 69 - 10, 30, 69], opacity: 1 });
     assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [50, 69 - 10, 50, 69], opacity: 1 });
@@ -1147,14 +1147,6 @@ QUnit.test('Vertical left', function(assert) {
         position: 'left',
         label: {
             position: 'inside'
-        },
-        tick: {
-            visible: true,
-            color: '#123456',
-            opacity: 0.3,
-            width: 5,
-            length: 10,
-            shift: 5
         }
     });
 
@@ -1168,6 +1160,10 @@ QUnit.test('Vertical left', function(assert) {
     this.axis.draw(this.canvas);
 
     const path = this.renderer.path;
+    const group = this.renderer.g.getCall(4).returnValue;
+
+    assert.equal(path.callCount, 3);
+    this.checkTicksPath(assert, path, group);
 
     assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [10 + 1, 40, 10 + 11, 40], opacity: 1 });
     assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [10 + 1, 50, 10 + 11, 50], opacity: 1 });
@@ -1182,14 +1178,6 @@ QUnit.test('Vertical right', function(assert) {
         position: 'right',
         label: {
             position: 'inside'
-        },
-        tick: {
-            visible: true,
-            color: '#123456',
-            opacity: 0.3,
-            width: 5,
-            length: 10,
-            shift: 5
         }
     });
 
@@ -1203,6 +1191,10 @@ QUnit.test('Vertical right', function(assert) {
     this.axis.draw(this.canvas);
 
     const path = this.renderer.path;
+    const group = this.renderer.g.getCall(4).returnValue;
+
+    assert.equal(path.callCount, 3);
+    this.checkTicksPath(assert, path, group);
 
     assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [90 - 11, 40, 90 - 1, 40], opacity: 1 });
     assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [90 - 11, 50, 90 - 1, 50], opacity: 1 });

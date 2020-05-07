@@ -2669,7 +2669,12 @@ QUnit.test('ScrollBar on top. Don\'t shift argument axis (axis position is top, 
     // assert
     // 6. shift horizontal axes
     // argAxis
-    assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, { top: 0, left: 0, bottom: 0, right: 0 }, 'don\'t shift argAxis');
+    assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, {
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0
+    }, 'don\'t shift argAxis');
     // scrollBar
     assert.deepEqual(this.scrollBarStub.getCall(0).returnValue._scroll.attr.getCall(4).args[0], { translateX: 0, translateY: 10 }, 'shift scrollBar');
 });
@@ -2696,7 +2701,12 @@ QUnit.test('ScrollBar on bottom. Don\'t shift argument axis (axis position is bo
     // assert
     // 6. shift horizontal axes
     // argAxis
-    assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, { top: 0, left: 0, bottom: 0, right: 0 }, 'don\'t shift argAxis');
+    assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, {
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0
+    }, 'don\'t shift argAxis');
     // scrollBar
     assert.deepEqual(this.scrollBarStub.getCall(0).returnValue._scroll.attr.getCall(4).args[0], { translateX: 0, translateY: 600 }, 'shift scrollBar');
 });
@@ -2722,9 +2732,14 @@ QUnit.test('Rotated. ScrollBar on right. Don\'t shift argument axis (axis positi
     });
 
     // assert
-    // 6. shift horizontal axes
+    // 7. shift vertical axes
     // argAxis
-    assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, { top: 0, left: 0, bottom: 0, right: 0 }, 'don\'t shift argAxis');
+    assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, {
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0
+    }, 'don\'t shift argAxis');
     // scrollBar
     assert.deepEqual(this.scrollBarStub.getCall(0).returnValue._scroll.attr.getCall(4).args[0], { translateX: 790, translateY: 0 }, 'shift scrollBar');
 });
@@ -2750,9 +2765,14 @@ QUnit.test('Rotated. ScrollBar on left. Don\'t shift argument axis (axis positio
     });
 
     // assert
-    // 6. shift horizontal axes
+    // 7. shift vertical axes
     // argAxis
-    assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, { top: 0, left: 0, bottom: 0, right: 0 }, 'don\'t shift argAxis');
+    assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, {
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0
+    }, 'don\'t shift argAxis');
     // scrollBar
     assert.deepEqual(this.scrollBarStub.getCall(0).returnValue._scroll.attr.getCall(4).args[0], { translateX: 0, translateY: 0 }, 'shift scrollBar');
 });

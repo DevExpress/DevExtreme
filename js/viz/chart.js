@@ -1143,17 +1143,16 @@ const dxChart = AdvancedChart.inherit({
     _isArgumentAxisBeforeScrollBar() {
         const that = this;
         const argumentAxis = that.getArgumentAxis();
-        let isArgAxisFirst = false;
 
         if(that._scrollBar) {
             const argAxisPosition = argumentAxis.getResolvedBoundaryPosition();
             const argAxisLabelPosition = argumentAxis.getOptions().label?.position;
             const scrollBarPosition = that._scrollBar.getOptions().position;
 
-            isArgAxisFirst = argumentAxis.hasCustomPosition() || scrollBarPosition === argAxisPosition && argAxisLabelPosition !== scrollBarPosition;
+            return argumentAxis.hasCustomPosition() || scrollBarPosition === argAxisPosition && argAxisLabelPosition !== scrollBarPosition;
         }
 
-        return isArgAxisFirst;
+        return false;
     },
 
     _getPanesParameters: function() {
