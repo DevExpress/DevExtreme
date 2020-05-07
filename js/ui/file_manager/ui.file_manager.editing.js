@@ -148,7 +148,7 @@ class FileManagerEditingControl extends Widget {
             getItemContent: {
                 action: arg => this._getItemContent(arg),
                 singleItemProcessingMessage: 'Can not open folder {0}',
-                singleItemErrorMessage: 'Can not open folder',
+                singleItemErrorMessage: 'Can not open folder {0}',
                 commonErrorMessage: 'Can not open folder {0}'
             }
 
