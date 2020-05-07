@@ -275,41 +275,44 @@ QUnit.module('render', {
         assert.ok(templateUsed);
         assert.equal(this.element.find('.custom-template').length, 1);
     });
+});
 
+QUnit.module('Deprecated options', {
+    afterEach: function() {
+        this.stub.restore();
+    }
+}, () => {
     QUnit.test('show warning if deprecated "height" option is used', function(assert) {
-        sinon.spy(errors, 'log');
-
-        try {
-            $('#toolbar').dxToolbar({
-                items: [ { location: 'before', text: 'text1' } ],
-                height: 50
-            });
-
-            assert.strictEqual(errors.log.callCount, 1, 'log.callCount');
-            assert.deepEqual(errors.log.firstCall.args, [
+        assert.expect(2);
+        this.stub = sinon.stub(errors, 'log', () => {
+            assert.deepEqual(errors.log.lastCall.args, [
                 'W0001',
-                'dxToolbar',
-                'height',
+                'dxDrawer',
+                'target',
                 '20.1',
-                'Functionality associated with this option is not intended for the Toolbar widget.'
+                'Functionality associated with this option is not intended for the Drawer widget.'
             ], 'args of the log method');
-        } finally {
-            errors.log.restore();
-        }
+        });
+
+        $('#toolbar').dxToolbar({
+            items: [ { location: 'before', text: 'text1' } ],
+            height: 50
+        });
+
+        assert.strictEqual(this.stub.callCount, 1, 'error.log.callCount');
     });
 
     QUnit.test('Warning messages not displaying if deprecated "height" option not used', function(assert) {
-        sinon.spy(errors, 'log');
+        assert.expect(1);
+        this.stub = sinon.stub(errors, 'log', () => {
+            assert.strictEqual(true, false, 'error.log should not be called');
+        });
 
-        try {
-            $('#toolbar').dxToolbar({
-                items: [ { location: 'before', text: 'text1' } ]
-            });
+        $('#toolbar').dxToolbar({
+            items: [ { location: 'before', text: 'text1' } ]
+        });
 
-            assert.strictEqual(errors.log.callCount, 0, 'log.callCount');
-        } finally {
-            errors.log.restore();
-        }
+        assert.strictEqual(this.stub.callCount, 0, 'error.log.callCount');
     });
 });
 
