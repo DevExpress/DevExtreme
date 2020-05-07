@@ -16,6 +16,7 @@ import TextEditorButtonCollection from './texteditor_button_collection/index';
 import config from '../../core/config';
 import errors from '../widget/ui.errors';
 import browser from '../../core/utils/browser';
+import { getWindow } from '../../core/utils/window';
 import { Deferred } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
 
@@ -335,11 +336,28 @@ const TextEditorBase = Editor.inherit({
     },
 
     _collapseInputContainer: function() {
-        const $element = this.$element();
         const isIE11 = browser.msie && browser.version <= 11;
-        if(isIE11 && $element.css('display') === 'block') {
+        const $element = this.$element();
+        const $parentElement = $element.parent();
+
+        if(isIE11 && $element.css('display') === 'block' && this._hasParentEnoughWidth($parentElement)) {
             $element.addClass(TEXTEDITOR_COLLAPSED_CLASS);
         }
+    },
+
+    _hasParentEnoughWidth: function($parent) {
+        const window = getWindow();
+        return !window.getComputedStyle($parent.get(0)) || $parent.width() > this._calculateEditorMinWidth();
+    },
+
+    _calculateEditorMinWidth: function() {
+        const $input = this._input();
+        const beforeButtonsWidth = $(this._$beforeButtonsContainer).width() || 0;
+        const afterButtonsWidth = $(this._$afterButtonsContainer).width() || 0;
+        const inputLeftPadding = parseFloat($input.css('paddingLeft'));
+        const inputRightPadding = parseFloat($input.css('paddingRight'));
+
+        return beforeButtonsWidth + afterButtonsWidth + inputLeftPadding + inputRightPadding;
     },
 
     _renderValue: function() {
