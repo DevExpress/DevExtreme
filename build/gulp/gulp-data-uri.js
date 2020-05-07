@@ -4,10 +4,10 @@ const fs = require('fs');
 const dataUriRegex = /data-uri\((?:'(image\/svg\+xml;charset=UTF-8)',\s)?['"]?([^)'"]+)['"]?\)/g;
 
 const svg = (buffer, svgEncoding) => {
-    const encoding = svgEncoding || 'data:image/svg+xml;charset=UTF-8';
+    const encoding = svgEncoding || 'image/svg+xml;charset=UTF-8';
     const svg = encodeURIComponent(buffer.toString());
 
-    return `"${encoding},${svg}"`;
+    return `"data:${encoding},${svg}"`;
 };
 
 const img = (buffer, ext) => {
