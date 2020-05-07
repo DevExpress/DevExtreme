@@ -118,7 +118,7 @@ const DateBox = DropDownEditor.inherit({
             {
                 device: { platform: 'ios' },
                 options: {
-                    showPopupTitle: true
+                    'dropDownOptions.showTitle': true
                 }
             },
             {
