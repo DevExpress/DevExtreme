@@ -60,10 +60,6 @@
     }
 }
 
-.dx-multiview-wrapper {
-    border: @GENERIC_TABS_BORDER;
-}
-
 .dx-tabpanel {
     .dx-tabs {
         display: block;
@@ -101,5 +97,9 @@
 
     &.dx-state-focused {
         .tabpanel-shadow-mixin(@tabs-focused-border-color);
+    }
+
+    .dx-multiview-wrapper {
+        border: @GENERIC_TABS_BORDER;
     }
 }
