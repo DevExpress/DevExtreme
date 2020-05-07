@@ -37,10 +37,9 @@ jobs:
       env:
         CONSTEL: ${{ matrix.CONSTEL }}
       run: |
-        $runner = Start-Process -FilePath dotnet -ArgumentList './testing/runner/bin/runner.dll --single-run' -passthru -RedirectStandardOutput "output.txt"
+        $runner = Start-Process -FilePath dotnet -ArgumentList './testing/runner/bin/runner.dll --single-run' -PassThru -NoNewWindow
         $url = "http://localhost:20050/run?notimers=true&nojquery=true&constellation=$env:CONSTEL"
         Start-Sleep -s 5
         & "C:\Program Files\Internet Explorer\iexplore.exe" "$url"
         Wait-Process -InputObject $runner
-        Get-Content -Path .\output.txt
         exit $runner.ExitCode
