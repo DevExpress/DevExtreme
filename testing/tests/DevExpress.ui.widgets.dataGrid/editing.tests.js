@@ -1613,6 +1613,31 @@ QUnit.module('Editing', {
         assert.deepEqual(updateArgs, ['test1', { 'name': 'Test update cell' }]);
     });
 
+    // T837043
+    QUnit.test('Editing Cell should be closed without timeout on click outside dataGrid', function(assert) {
+        const testElement = $('#container');
+
+        this.options.editing = {
+            allowUpdating: true,
+            mode: 'cell'
+        };
+
+        this.rowsView.render(testElement);
+
+        // act
+        this.editCell(0, 0);
+        this.clock.tick();
+
+        // assert
+        assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1, 'editor is rendered');
+
+        // act
+        $(document).trigger('dxclick');
+
+        // assert
+        assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0, 'editor is closed');
+    });
+
     // T749034
     QUnit.test('Changed value should be saved on click outside dataGrid on mobile devices when cell editing mode', function(assert) {
         if(devices.real().deviceType === 'desktop') {
@@ -9239,7 +9264,7 @@ QUnit.module('Editing with validation', {
     // arrange
         const that = this;
         const rowsView = that.rowsView;
-        const testElement = $('#container');
+        const testElement = $('#container').children();
 
         that.options.columns[0] = {
             dataField: 'name',
