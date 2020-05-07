@@ -25,9 +25,9 @@ describe('Small pager pages', () => {
     };
 
     it('render pages', () => {
-        const { container, pageIndexNumberBox, span, maxPage } = render({ pageCount: 3, pageIndex: 2 });
+        const { container, pageIndexNumberBox, span, maxPage } = render({ pageCount: 3, pageIndex: 2, rtlEnabled: true });
         expect(container.props().className).toBe('dx-light-pages');
-        expect(pageIndexNumberBox.props()).toMatchObject({ max: 3, min: 1, value: 3, width: 50 });
+        expect(pageIndexNumberBox.props()).toMatchObject({ max: 3, min: 1, value: 3, width: 50, rtlEnabled: true });
         expect(span.text()).toEqual('of');
         expect(maxPage.props()).toEqual({ index: 2, selected: false });
     });

@@ -16,7 +16,7 @@ export const viewFunction = ({
     valueChanged,
     width,
     value,
-    props: { pageCount, pagesCountText },
+    props: { pageCount, pagesCountText, rtlEnabled },
 }: SmallPages) => {
     return (
         <div className={'dx-light-pages'}>
@@ -25,6 +25,7 @@ export const viewFunction = ({
                 max={pageCount}
                 width={width}
                 value={value}
+                rtlEnabled={rtlEnabled}
                 valueChange={valueChanged}
             />
             <span className={PAGER_INFO_TEXT_CLASS}>{pagesCountText}</span>

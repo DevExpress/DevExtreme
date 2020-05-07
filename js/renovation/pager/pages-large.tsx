@@ -53,9 +53,7 @@ type PagesState = {
 @Component({ defaultOptionRules: null, view: viewFunction })
 export default class LargePages extends JSXComponent<LargePagesProps> {
     get pages(): PageType[] {
-        const { pageIndex, pageCount, maxPagesCount } = this.props as Required<
-            LargePagesProps
-        >;
+        const { pageIndex, pageCount, maxPagesCount } = this.props as Required<LargePagesProps>;
         let pageIndexes: (number | null)[] = [];
         const createPage = (index: number) => {
             return {
@@ -82,10 +80,10 @@ export default class LargePages extends JSXComponent<LargePagesProps> {
                         startPageIndex: startIndex,
                     };
                 }
-                return pageIndexes.map(index => index === null ? null : createPage(index));
             }
         }
-        return pageIndexes.map(index => index === null ? null : createPage(index));
+        const rtlPageIndexies = this.props.rtlEnabled ? [...pageIndexes].reverse() : pageIndexes;
+        return rtlPageIndexies.map(index => index === null ? null : createPage(index));
     }
     @InternalState() private prevState: PagesState = null;
     onPageClick(pageIndex: number) {

@@ -26,9 +26,9 @@ type PageSize = number | FullPageSize;
 export class PageSizeSelectorProps {
     @OneWay() isLargeDisplayMode?: boolean = true;
     @OneWay() pageSize?: number = 5;
-    @Event() pageSizeChanged?: (pageSize: number) => void = () => { }; // commonUtils.noop
-    // tslint:disable-next-line: member-ordering
     @OneWay() pageSizes?: PageSize[] = [5, 10];
+    @OneWay() rtlEnabled?: boolean = false;
+    @Event() pageSizeChanged?: (pageSize: number) => void = () => { }; // commonUtils.noop
 }
 
 // tslint:disable-next-line: max-classes-per-file
@@ -38,8 +38,11 @@ export class PageSizeSelectorProps {
 })
 export default class PageSizeSelector extends JSXComponent<PageSizeSelectorProps> {
     get pageSizesText() {
-        const { pageSize, pageSizes } = this.props;
-        return this.normalizedPageSizes(pageSizes!).map(({ value: processedPageSize, text }) => {
+        const { pageSize, pageSizes, rtlEnabled } = this.props;
+        const normPageSizes = rtlEnabled ?
+            [...this.normalizedPageSizes(pageSizes!)].reverse() :
+            this.normalizedPageSizes(pageSizes!);
+        return normPageSizes.map(({ value: processedPageSize, text }) => {
             const selected = processedPageSize === pageSize;
             const className = selected ? PAGER_SELECTED_PAGE_SIZE_CLASS : PAGER_PAGE_SIZE_CLASS;
             return {
@@ -51,10 +54,11 @@ export default class PageSizeSelector extends JSXComponent<PageSizeSelectorProps
         });
     }
     get selectBoxProps(): SelectBoxProps {
-        const { pageSizes, pageSize } = this.props;
+        const { pageSizes, pageSize, rtlEnabled } = this.props;
         return {
             dataSource: this.normalizedPageSizes(pageSizes!),
             displayExpr: 'text',
+            rtlEnabled,
             value: pageSize,
             valueChange: this.props.pageSizeChanged,
             valueExpr: 'value',

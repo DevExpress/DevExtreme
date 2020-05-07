@@ -15,13 +15,14 @@ export const viewFunction = ({
              pageCount, pageSize, pageSizes,
              pagesCountText, rtlEnabled,
              showNavigationButtons, totalCount },
-    }: Pager) => {
+}: Pager) => {
     return (<div className={PAGER_CLASS}>
         <PageSizeSelector
             isLargeDisplayMode={isLargeDisplayMode}
             pageSize={pageSize}
             pageSizeChanged={pageSizeChange}
             pageSizes={pageSizes}
+            rtlEnabled={rtlEnabled}
         />
         <div className={PAGER_PAGES_CLASS}>
             <InfoText
@@ -49,25 +50,24 @@ export const viewFunction = ({
 @ComponentBindings()
 export class PagerProps {
     // TODO messageLocalization.getFormatter('dxPager-infoText'),
-    @OneWay() infoTextMessageTemplate ? = 'Page {0} of {1} ({2} items)';
-    @OneWay() lightModeEnabled ? = false;
-    @OneWay() maxPagesCount ? = 10;
-    @OneWay() pageCount ? = 10;
+    @OneWay() infoTextMessageTemplate?: string = 'Page {0} of {1} ({2} items)';
+    @OneWay() lightModeEnabled?: boolean = false;
+    @OneWay() maxPagesCount?: number = 10;
+    @OneWay() pageCount?: number = 10;
     // visible: true,
     // pagesNavigatorVisible: 'auto',
     @TwoWay() pageIndex?: number = 0;
     // TODO messageLocalization.getFormatter('dxPager-pagesCountText');
-    @OneWay() pagesCountText ? = 'Of';
+    @OneWay() pagesCountText?: string = 'Of';
     @TwoWay() pageSize?: number = 5;
     // showPageSizes: true,
     @Event() pageSizeChange?: (pageSize: number) => void;
-    @OneWay() pageSizes ? = [5, 10];
-    @OneWay() rtlEnabled ? = false;
-    @OneWay() showNavigationButtons ? = false;
-    @OneWay() totalCount ? = 0;
+    @OneWay() pageSizes?: number[] = [5, 10];
+    @OneWay() rtlEnabled?: boolean = false;
+    @OneWay() showNavigationButtons?: boolean = false;
+    @OneWay() totalCount?: number = 0;
     // hasKnownLastPage: true,
     // showInfo: false,
-    // messageLocalization.getFormatter('dxPager-infoText'),
 }
 
 // tslint:disable-next-line: max-classes-per-file

@@ -40,6 +40,10 @@ describe('Pager pages', () => {
         const pages = new Pages({ pageCount: 30, maxPagesCount: 3, pageIndex: 2 });
         expect(pages.pages.map(p => p && p.index)).toEqual([0, 1, 2, 3, 4, null, 29]);
     });
+    it('calulate pages for rtlEnabled', () => {
+        const pages = new Pages({ rtlEnabled: true, pageCount: 30, maxPagesCount: 3, pageIndex: 3 });
+        expect(pages.pages.map(p => p && p.index)).toEqual([29, null, 5, 4, 3, 2, null, 0]);
+    });
     it('update selection: pageIndex changed to low range limit', () => {
         // const pages = new Pages({ pageCount: 30, maxPagesCount: 10, pageIndex: 20 });
         // expect(pages.pages.map(p => p && p.index)).toEqual([0, null, 20, 21, 22, 23, null, 29]);

@@ -4,7 +4,7 @@ import PageSizesComponent from '../../../js/renovation/pager/page-size-selector.
 import SelectBox from '../../../js/renovation/select-box.p';
 import { PageSizeSelectorProps, PAGER_PAGE_SIZES_CLASS, PAGER_SELECTED_PAGE_SIZE_CLASS, PAGER_PAGE_SIZE_CLASS } from '../../../js/renovation/pager/page-size-selector';
 
-jest.mock('../../../js/renovation/select-box', () => {});
+jest.mock('../../../js/renovation/select-box', () => { });
 jest.mock('../../../js/renovation/select-box.p', () => {
     return (props) => {
         return 'selectbox';
@@ -29,6 +29,16 @@ describe('Pager size selector', () => {
             PAGER_PAGE_SIZE_CLASS,
         ]);
     });
+    it('render large page sizes rtlEnabled', () => {
+        const comp = render({ rtlEnabled: true, isLargeDisplayMode: true, pageSizes: [5, 10, 20], pageSize: 5 } as PageSizeSelectorProps);
+        expect(comp.children().map(c => c.text())).toEqual(['20', '10', '5']);
+    });
+    it('change pagesize in large selector', () => {
+        const pageSizeHandler = jest.fn();
+        const comp = render({ isLargeDisplayMode: true, pageSizes: [5, 10], pageSize: 5, pageSizeChanged: pageSizeHandler } as PageSizeSelectorProps);
+        (comp.find({ children: '10' }).prop('onClick') as any)();
+        expect(pageSizeHandler).toBeCalledWith(10);
+    });
     it('render small page sizes text', () => {
         const comp = render({ isLargeDisplayMode: false, pageSizes: [5, 10], pageSize: 5 } as PageSizeSelectorProps);
         expect(comp.prop('className')).toBe(PAGER_PAGE_SIZES_CLASS);
@@ -42,11 +52,9 @@ describe('Pager size selector', () => {
             valueExpr: 'value',
         });
     });
-    it('change pagesize in large selector', () => {
-        const pageSizeHandler = jest.fn();
-        const comp = render({ isLargeDisplayMode: true, pageSizes: [5, 10], pageSize: 5, pageSizeChanged: pageSizeHandler } as PageSizeSelectorProps);
-        (comp.find({ children: '10' }).prop('onClick') as any)();
-        expect(pageSizeHandler).toBeCalledWith(10);
+    it('render small page sizes rtlEnabled', () => {
+        const comp = render({ rtlEnabled: true, isLargeDisplayMode: false, pageSizes: [5, 10], pageSize: 5 } as PageSizeSelectorProps);
+        expect(comp.children().at(0).props()).toMatchObject({ rtlEnabled: true });
     });
     it('change pagesize in small selector', () => {
         const pageSizeHandler = jest.fn();
