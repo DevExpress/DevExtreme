@@ -301,6 +301,37 @@ QUnit.module('AdaptiveColumns', {
         assert.ok(checkAdaptiveWidth($cols.get(3).style.width), 'Fourth column is hidden');
     });
 
+    // T885383
+    QUnit.test('Columns without dataField should be hidden if need', function(assert) {
+        // arrange
+        $('.dx-datagrid').width(265);
+
+        this.columns = [
+            { caption: 'firstName blablabla', hidingPriority: 0 },
+            { caption: 'lastName', hidingPriority: 1 },
+            { caption: 'address blablabla', hidingPriority: 2 },
+            { caption: 'country blablablabla', hidingPriority: 3 }
+        ];
+
+        this.options = {
+            showColumnHeaders: true
+        };
+
+        setupDataGrid(this);
+        this.gridView.render($('#container'));
+        this.resizingController.updateDimensions();
+        this.clock.tick();
+
+        // act
+        const $cols = $('.dx-datagrid-rowsview col');
+
+        // assert
+        assert.ok(checkAdaptiveWidth($cols.get(0).style.width), 'First column is hidden');
+        assert.ok(checkAdaptiveWidth($cols.get(1).style.width), 'Second column is hidden');
+        assert.ok(checkAdaptiveWidth($cols.get(2).style.width), 'Third column is hidden');
+        assert.notOk(checkAdaptiveWidth($cols.get(3).style.width), 'Fourth column is not hidden');
+    });
+
     // T402287
     QUnit.test('Hidden columns must have zero widths for virtual scrolling table', function(assert) {
     // arrange
