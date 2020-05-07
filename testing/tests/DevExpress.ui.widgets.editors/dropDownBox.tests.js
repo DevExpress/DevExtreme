@@ -381,6 +381,16 @@ QUnit.module('common', moduleConfig, () => {
 
         assert.equal(instance.option('displayValue'), '12', 'displayValue option has been changed');
     });
+
+    QUnit.test('displayValueFormatter should be called once (T883129)', function(assert) {
+        const spy = sinon.spy();
+        new DropDownBox(this.$element, {
+            value: 1,
+            displayValueFormatter: spy
+        });
+
+        assert.strictEqual(spy.callCount, 1, 'value has been applied');
+    });
 });
 
 QUnit.module('popup options', moduleConfig, () => {
