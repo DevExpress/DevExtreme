@@ -37,38 +37,34 @@ jobs:
       env:
         CONSTEL: ${{ matrix.CONSTEL }}
       run: |
-        Write-Host "Start"
         $runner = Start-Process -FilePath dotnet -ArgumentList './testing/runner/bin/runner.dll --single-run' -passthru -RedirectStandardOutput "output.txt"
         Write-Host "Runner starting"
         $runner_host = "http://localhost:20050"
-        For ($i=0; $i -le 10; $i++) {
+        $attempt_count = 30
+        For ($i=0; $i -le $attempt_count; $i++) {
           try {
             $request = [System.Net.WebRequest]::Create($runner_host)
             $request.Method = "HEAD"
             $request.Timeout = 30000
             $response = $request.GetResponse()
             $status_code = [int]$response.StatusCode
-            If ($status_code -eq 200) {
-                Write-Host "Site is OK!"
-            }
-            Else {
-                Write-Host "The Site may be down, please check!"
-            }
             $response.Close()
             break
           }
           catch {
             Write-Host "Attempt $i"
-            $error_message = $_.Exception.Message
-            Write-Host $error_message
             Start-Sleep -s 1
           }
+        }
+        If ($i -eq $attempt_count) {
+          Write-Host "Runner doesn't respond"
+          exit 1
         }
         Write-Host "Runner started"
         $url = "$runner_host/run?notimers=true&nojquery=true&constellation=$env:CONSTEL"
         & "C:\Program Files\Internet Explorer\iexplore.exe" "$url"
         Write-Host "IE started"
         Wait-Process -InputObject $runner
-        Write-Host "Runner stopped"
+        Write-Host "Runner finished"
         Get-Content -Path .\output.txt
         exit $runner.ExitCode
