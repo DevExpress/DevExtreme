@@ -1,5 +1,7 @@
-const $ = require('jquery');
-const simpleProjection = require('viz/vector_map/projection').projection({
+import $ from 'jquery';
+import CustomStore from 'data/custom_store';
+import { projection } from 'viz/vector_map/projection';
+const simpleProjection = projection({
     aspectRatio: 4 / 3,
     to: function(coordinates) {
         return [
@@ -16,7 +18,7 @@ const simpleProjection = require('viz/vector_map/projection').projection({
     }
 });
 
-require('viz/vector_map/vector_map');
+import 'viz/vector_map/vector_map';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id=\'container\'></div>');
@@ -143,4 +145,54 @@ QUnit.test('VectorMap should set prepared bounds from dataSource (collect from f
 
     assert.deepEqual(map._projection._engine.min(), [-10, -10]);
     assert.deepEqual(map._projection._engine.max(), [120, 60]);
+});
+
+QUnit.module('VectorMap custom store', {
+    beforeEach: function() {
+        const dataObject = {
+            type: 'FeatureCollection',
+            features: [
+                [
+                    [[100, 50], [120, 50], [150, 20], [50, 40]]
+                ],
+                [
+                    [[100, 10], [50, 60], [50, 30]],
+                    [[-10, 0], [0, 30], [40, 30], [40, -10]]
+                ],
+                []
+            ].map(function(item) {
+                return {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Polygon',
+                        coordinates: item.coordinates ? item.coordinates : item
+                    },
+                    properties: item.properties || {}
+                };
+            })
+        };
+
+        this.dataSource = {
+            store: new CustomStore({
+                'loadMode': 'raw',
+                'load': function() {
+                    const d = $.Deferred();
+                    setTimeout(() => {
+                        d.resolve(dataObject);
+                    }, 1);
+                    return d;
+                }
+            })
+        };
+    }
+});
+
+QUnit.test('Vector Map should not failed (T885056)', function(assert) {
+    $('#container').dxVectorMap({
+        layers: {
+            dataSource: this.dataSource
+        }
+    });
+
+    assert.ok(true);
 });
