@@ -350,24 +350,24 @@ const TextEditorBase = Editor.inherit({
         const $element = this.$element();
         const $parentElement = $element.parent();
 
-        if(isIE11 && $element.css('display') === 'block' && this._parentHasEnoughWidth($parentElement)) {
+        if(isIE11 && $element.css('display') === 'block' && this._hasParentEnoughWidth($parentElement)) {
             $element.addClass(TEXTEDITOR_COLLAPSED_CLASS);
         }
     },
 
-    _parentHasEnoughWidth: function($parent) {
+    _hasParentEnoughWidth: function($parent) {
         const window = getWindow();
-        return !window.getComputedStyle($parent.get(0)) || $parent.width() > this._editorMinWidth();
+        return !window.getComputedStyle($parent.get(0)) || $parent.width() > this._calculateEditorMinWidth();
     },
 
-    _editorMinWidth: function() {
+    _calculateEditorMinWidth: function() {
         const $input = this._input();
         const beforeButtonsWidth = $(this._$beforeButtonsContainer).width() || 0;
         const afterButtonsWidth = $(this._$afterButtonsContainer).width() || 0;
-        const paddingLeft = parseFloat($input.css('paddingLeft'));
-        const paddingRight = parseFloat($input.css('paddingRight'));
+        const inputLeftPadding = parseFloat($input.css('paddingLeft'));
+        const inputRightPadding = parseFloat($input.css('paddingRight'));
 
-        return beforeButtonsWidth + afterButtonsWidth + paddingLeft + paddingRight;
+        return beforeButtonsWidth + afterButtonsWidth + inputLeftPadding + inputRightPadding;
     },
 
     _renderValue: function() {
