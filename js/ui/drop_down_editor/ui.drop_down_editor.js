@@ -121,7 +121,7 @@ const DropDownEditor = TextBox.inherit({
 
             buttons: void 0,
 
-            dropDownOptions: {},
+            dropDownOptions: { showTitle: false },
             popupPosition: this._getDefaultPopupPosition(),
             onPopupInitialized: null,
             applyButtonText: formatMessage('OK'),

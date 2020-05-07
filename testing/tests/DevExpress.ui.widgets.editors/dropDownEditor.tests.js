@@ -963,35 +963,38 @@ QUnit.module('Templates', () => {
         };
         sinon.stub(logger, 'warn');
 
-        $.each(events, function(_, event) {
-            const spy = sinon.spy();
-            options['on' + event] = spy;
-            spies[event] = spy;
-        });
+        try {
+            $.each(events, function(_, event) {
+                const spy = sinon.spy();
+                options['on' + event] = spy;
+                spies[event] = spy;
+            });
 
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor(options);
-        const instance = $dropDownEditor.dxDropDownEditor('instance');
+            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor(options);
+            const instance = $dropDownEditor.dxDropDownEditor('instance');
 
-        instance.option('value', 2);
+            instance.option('value', 2);
 
-        $.each(events, function(_, eventName) {
-            const params = {};
+            $.each(events, function(_, eventName) {
+                const params = {};
 
-            if(eventName.indexOf('Key') !== -1) {
-                params.key = '';
-            }
+                if(eventName.indexOf('Key') !== -1) {
+                    params.key = '';
+                }
 
-            const event = $.Event(eventName.toLowerCase(), params);
-            $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`).trigger(event);
-            assert.equal(spies[eventName].callCount, 1, 'the \'' + eventName + '\' event was fired after value change');
-        });
+                const event = $.Event(eventName.toLowerCase(), params);
+                $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`).trigger(event);
+                assert.equal(spies[eventName].callCount, 1, 'the \'' + eventName + '\' event was fired after value change');
+            });
 
-        assert.ok(logger.warn.calledTwice, 'init + handle OnKeyPress');
-        const firstWarnMessage = logger.warn.firstCall.args[0];
-        const secondWarnMessage = logger.warn.lastCall.args[0];
-        const isOnKeyPressWarnings = firstWarnMessage.indexOf('onKeyPress') > -1 && secondWarnMessage.indexOf('onKeyPress') > -1;
-        assert.ok(isOnKeyPressWarnings);
-        logger.warn.restore();
+            assert.ok(logger.warn.calledTwice, 'init + handle OnKeyPress');
+            const firstWarnMessage = logger.warn.firstCall.args[0];
+            const secondWarnMessage = logger.warn.lastCall.args[0];
+            const isOnKeyPressWarnings = firstWarnMessage.indexOf('onKeyPress') > -1 && secondWarnMessage.indexOf('onKeyPress') > -1;
+            assert.ok(isOnKeyPressWarnings);
+        } finally {
+            logger.warn.restore();
+        }
     });
 
     QUnit.test('should have no errors after value change if text editor buttons were directly removed (T743479)', function(assert) {
@@ -1231,11 +1234,14 @@ QUnit.module('options', () => {
 
         sinon.stub(logger, 'warn');
 
-        instance.option('showPopupTitle', false);
+        try {
+            instance.option('showPopupTitle', false);
 
-        assert.ok(logger.warn.calledOnce);
-        assert.strictEqual(instance._popup.option('showTitle'), false, 'Option has been changed');
-        logger.warn.restore();
+            assert.ok(logger.warn.calledOnce);
+            assert.strictEqual(instance._popup.option('showTitle'), false, 'Option has been changed');
+        } finally {
+            logger.warn.restore();
+        }
     });
 });
 
