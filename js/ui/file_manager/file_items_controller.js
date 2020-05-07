@@ -162,7 +162,6 @@ export default class FileItemsController {
         loadItemsDeferred = this._getFileItems(parentDirectoryInfo)
             .then(fileItems => {
                 if(!fileItems) {
-                    // return fileItems;
                     return [];
                 }
                 parentDirectoryInfo.items = fileItems.map(fileItem =>
@@ -189,7 +188,7 @@ export default class FileItemsController {
                     this._raiseEditActionStarting(actionInfo);
                     // actionInfo.customData.context._actionMetadata.singleItemErrorMessage = errorInfo.message;
                     this._raiseEditActionError(actionInfo, {
-                        errorId: 8,
+                        errorId: ErrorCode.LocationUnavailable,
                         fileItem: parentDirectoryInfo.fileItem,
                         index: 0
                     });

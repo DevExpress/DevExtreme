@@ -147,7 +147,7 @@ class FileManagerEditingControl extends Widget {
 
             getItemContent: {
                 action: arg => this._getItemContent(arg),
-                singleItemProcessingMessage: 'Can not open folder {0}',
+                singleItemProcessingMessage: '',
                 singleItemErrorMessage: 'Can not open folder {0}',
                 commonErrorMessage: 'Can not open folder {0}'
             }
@@ -475,7 +475,9 @@ class FileManagerActionContext {
 
     processSingleRequestError(errorText) {
         this._errorState.failedCount = 1;
-        this._errorState.commonErrorText = this._multipleItems ? this._actionMetadata.commonErrorMessage : this._actionMetadata.singleItemErrorMessage;
+        this._errorState.commonErrorText = this._multipleItems
+            ? this._actionMetadata.commonErrorMessage
+            : format(this._actionMetadata.singleItemErrorMessage, this._location);
 
         const itemIndex = this._multipleItems ? -1 : 1;
         const itemInfo = this.getItemForSingleRequestError();
