@@ -126,6 +126,7 @@ class AppointmentPopup {
     doneButton: Selector;
     cancelButton: Selector;
 
+    freqElement: Selector;
 
     constructor(scheduler: Selector) {
         this.element = scheduler.find(`.${CLASS.popup}.${CLASS.appointmentPopup}`);
@@ -136,6 +137,8 @@ class AppointmentPopup {
         this.endDateElement = this.wrapper.find(".dx-texteditor-input").nth(2);
         this.descriptionElement = this.wrapper.find(".dx-texteditor-input").nth(3);
         this.allDayElement = this.wrapper.find(".dx-switch").nth(0);
+
+        this.freqElement = this.wrapper.find(".dx-recurrence-selectbox-freq");
 
         this.doneButton = this.wrapper.find(".dx-popup-done.dx-button");
         this.cancelButton = this.wrapper.find(`.${CLASS.cancelButton}`);
