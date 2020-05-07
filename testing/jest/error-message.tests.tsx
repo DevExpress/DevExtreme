@@ -1,9 +1,9 @@
 import { h } from 'preact';
-import { mount } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 import ErrorMessage from '../../js/renovation/error-message.p';
 
 describe('ErrorMessage', () => {
-  const render = (props = {}) => mount(<ErrorMessage {...props} />).childAt(0);
+  const render = (props = {}): ReactWrapper => mount(<ErrorMessage {...props} />).childAt(0);
 
   describe('Props', () => {
     it('should render `messages` inside the component', () => {

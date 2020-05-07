@@ -156,7 +156,7 @@
   "scripts": {
     "lint": "npm-run-all -p -c lint-js lint-css",
     "lint-js": "eslint .",
-    "lint-ts": "eslint ./testing/jest/**/*.ts ./testing/jest/**/*.tsx ./js/renovation/**/*.tsx ./js/renovation/**/*.ts",
+    "lint-ts": "eslint ./js/renovation/*.{ts,tsx} ./js/renovation/**/*.{ts,tsx} ./testing/jest/**/*.{ts,tsx}",
     "lint-css": "stylelint styles",
     "lint-staged": "lint-staged && npm run lint-ts",
     "build": "dotnet build build/build-dotnet.sln && gulp default",

@@ -1,14 +1,15 @@
 import { h, createRef } from 'preact';
-import { mount, shallow } from 'enzyme';
 // Should be before component import
+import { mount, shallow, ShallowWrapper } from 'enzyme';
 import {
   clear as clearEventHandlers, defaultEvent, emit, getEventHandlers, fakeClickEvent, EVENT,
 } from './utils/events-mock';
 import Widget from '../../js/renovation/widget.p';
 import type { WidgetRef } from '../../js/renovation/widget.p';
+import type { WidgetProps } from '../../js/renovation/widget';
 
 describe('Widget', () => {
-  const render = (props = {}) => shallow(<Widget {...props} />);
+  const render = (props = {}): ShallowWrapper => shallow(<Widget {...props} />);
 
   beforeEach(clearEventHandlers);
 
@@ -16,20 +17,23 @@ describe('Widget', () => {
     describe('accessKey', () => {
       it('should render `accesskey` attribute', () => {
         const widget = render({ accessKey: 'y', focusStateEnabled: true });
+        const props = widget.props() as WidgetProps;
 
-        expect(widget.props().accessKey).toBe('y');
+        expect(props.accessKey).toBe('y');
       });
 
       it('should not render if disabled', () => {
         const widget = render({ accessKey: 'y', focusStateEnabled: true, disabled: true });
+        const props = widget.props() as WidgetProps;
 
-        expect(widget.props().accessKey).toBe(undefined);
+        expect(props.accessKey).toBe(undefined);
       });
 
       it('should not render if `focusStateEnabled` is false', () => {
         const widget = render({ accessKey: 'y', focusStateEnabled: false });
+        const props = widget.props() as WidgetProps;
 
-        expect(widget.props().accessKey).toBe(undefined);
+        expect(props.accessKey).toBe(undefined);
       });
 
       it('should take a focus if the `accessKey` is pressed', () => {
@@ -82,26 +86,30 @@ describe('Widget', () => {
     describe('width/height', () => {
       it('should have the ability to be a function', () => {
         const widget = render({ width: () => 50, height: () => 'auto' });
+        const props = widget.props() as WidgetProps;
 
-        expect(widget.props().style).toEqual({ width: 50, height: 'auto' });
+        expect(props.style).toEqual({ width: 50, height: 'auto' });
       });
 
       it('should process string values', () => {
         const widget = render({ width: '50px', height: () => '100%' });
+        const props = widget.props() as WidgetProps;
 
-        expect(widget.props().style).toEqual({ width: '50px', height: '100%' });
+        expect(props.style).toEqual({ width: '50px', height: '100%' });
       });
 
       it('should process number values', () => {
         const widget = render({ width: 50, height: 70 });
+        const props = widget.props() as WidgetProps;
 
-        expect(widget.props().style).toEqual({ width: 50, height: 70 });
+        expect(props.style).toEqual({ width: 50, height: 70 });
       });
 
       it('should ignore null/undefined values', () => {
         const widget = render({ width: null, height: undefined });
+        const props = widget.props() as WidgetProps;
 
-        expect(widget.props().style).toEqual({});
+        expect(props.style).toEqual({});
       });
     });
 
@@ -190,8 +198,9 @@ describe('Widget', () => {
     describe('activeStateEnabled', () => {
       it('should be disabled by default', () => {
         const widget = render();
+        const props = widget.instance().props as WidgetProps;
 
-        expect(widget.instance().props.activeStateEnabled).toBe(false);
+        expect(props.activeStateEnabled).toBe(false);
         expect(widget.hasClass('dx-state-active')).toBe(false);
       });
     });
@@ -199,8 +208,9 @@ describe('Widget', () => {
     describe('hoverStateEnabled', () => {
       it('should be disabled by default', () => {
         const widget = render();
+        const props = widget.instance().props as WidgetProps;
 
-        expect(widget.instance().props.hoverStateEnabled).toBe(false);
+        expect(props.hoverStateEnabled).toBe(false);
         expect(widget.hasClass('dx-state-hover')).toBe(false);
       });
     });
@@ -208,8 +218,9 @@ describe('Widget', () => {
     describe('focusStateEnabled', () => {
       it('should be disabled by default', () => {
         const widget = render();
+        const props = widget.instance().props as WidgetProps;
 
-        expect(widget.instance().props.focusStateEnabled).toBe(false);
+        expect(props.focusStateEnabled).toBe(false);
         expect(widget.hasClass('dx-state-focus')).toBe(false);
       });
     });
@@ -450,7 +461,7 @@ describe('Widget', () => {
   describe('Events', () => {
     describe('onClick', () => {
       it('should detach `dxclick` event before rerendering', () => {
-        const widget = mount(<Widget onClick={() => undefined} />);
+        const widget = mount(<Widget onClick={(): void => undefined} />);
 
         expect(getEventHandlers(EVENT.dxClick).length).toBe(1);
         widget.unmount();
@@ -469,7 +480,7 @@ describe('Widget', () => {
 
     describe('onDimensionChanged', () => {
       it('should detach `dxresize` event before rerendering', () => {
-        const widget = mount(<Widget onDimensionChanged={() => undefined} />);
+        const widget = mount(<Widget onDimensionChanged={(): void => undefined} />);
 
         expect(getEventHandlers(EVENT.resize).length).toBe(1);
         widget.unmount();
@@ -495,7 +506,7 @@ describe('Widget', () => {
       });
 
       it('should detach `dxshown` and `dxhiding` events before rerendering', () => {
-        const widget = mount(<Widget onVisibilityChange={() => undefined} />);
+        const widget = mount(<Widget onVisibilityChange={(): void => undefined} />);
 
         expect(getEventHandlers(EVENT.shown).length).toBe(1);
         expect(getEventHandlers(EVENT.hiding).length).toBe(1);
