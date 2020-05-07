@@ -287,10 +287,10 @@ QUnit.module('Deprecated options', {
         this.stub = sinon.stub(errors, 'log', () => {
             assert.deepEqual(errors.log.lastCall.args, [
                 'W0001',
-                'dxDrawer',
-                'target',
+                'dxToolbar',
+                'height',
                 '20.1',
-                'Functionality associated with this option is not intended for the Drawer widget.'
+                'Functionality associated with this option is not intended for the Toolbar widget.'
             ], 'args of the log method');
         });
 
