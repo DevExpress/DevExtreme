@@ -203,5 +203,4 @@ const ODataStore = Store.inherit({
 
 }, 'odata');
 
-// TODO: replace by "export default" after "odata/context" refactor
-module.exports = ODataStore;
+export default ODataStore;
