@@ -1593,7 +1593,7 @@ class CustomWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
 
         const uploadFile = this.fileUploader.option('uploadFile');
         try {
-            const result = uploadFile(file, progressCallback);
+            const result = uploadFile(file.value, progressCallback);
             return fromPromise(result);
         } catch(error) {
             return new Deferred().reject(error).promise();
