@@ -177,9 +177,7 @@ QUnit.module('VectorMap custom store', {
                 'loadMode': 'raw',
                 'load': function() {
                     const d = $.Deferred();
-                    setTimeout(() => {
-                        d.resolve(dataObject);
-                    }, 1);
+                    d.resolve(dataObject);
                     return d;
                 }
             })
