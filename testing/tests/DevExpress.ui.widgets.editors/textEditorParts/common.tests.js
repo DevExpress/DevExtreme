@@ -421,8 +421,7 @@ QUnit.module('general', {}, () => {
 
     QUnit.test('editors has collapsed class in IE11 (T879885)', function(assert) {
         const origBrowser = $.extend({}, browser);
-        browser.msie = true;
-        browser.version = '11.0';
+        $.extend(browser, { msie: true, version: '11.0' });
         try {
             const $textEditor = $('#texteditor').dxTextEditor({});
             assert.ok($textEditor.hasClass('dx-texteditor-collapsed'));
@@ -441,7 +440,8 @@ QUnit.module('general', {}, () => {
             const $textEditor = $element.dxTextEditor({});
             assert.notOk($textEditor.hasClass('dx-texteditor-collapsed'));
         } finally {
-            $.extend(browser, { msie: origBrowser.msie, version: origBrowser.version });
+            browser.msie = origBrowser.msie;
+            browser.version = origBrowser.version;
         }
     });
 
@@ -453,7 +453,8 @@ QUnit.module('general', {}, () => {
             const $textEditor = $('#texteditor').wrap($container).dxTextEditor({});
             assert.notOk($textEditor.hasClass('dx-texteditor-collapsed'));
         } finally {
-            $.extend(browser, { msie: origBrowser.msie, version: origBrowser.version });
+            browser.msie = origBrowser.msie;
+            browser.version = origBrowser.version;
         }
     });
 });
