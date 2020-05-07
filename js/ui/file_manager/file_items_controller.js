@@ -188,7 +188,7 @@ export default class FileItemsController {
                     const actionInfo = this._createEditActionInfo('getItemContent', parentDirectoryInfo, parentDirectoryInfo);
                     this._raiseEditActionStarting(actionInfo);
                     // actionInfo.customData.context._actionMetadata.singleItemErrorMessage = errorInfo.message;
-                    this._raiseEditActionItemError(actionInfo, {
+                    this._raiseEditActionError(actionInfo, {
                         errorId: 8,
                         fileItem: parentDirectoryInfo.fileItem,
                         index: 0
