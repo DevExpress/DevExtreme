@@ -432,34 +432,28 @@ QUnit.module('general', {}, () => {
         }
     });
 
-    QUnit.test('editors has no collapsed class in IE11 if the editor has custom display style', function(assert) {
+    QUnit.test('editor has no collapsed class in IE11 if the editor has custom display style', function(assert) {
         const origBrowser = $.extend({}, browser);
-        browser.msie = true;
-        browser.version = '11.0';
+        $.extend(browser, { msie: true, version: '11.0' });
         const $element = $('#texteditor');
         try {
             $element.css('display', 'inline-block');
             const $textEditor = $element.dxTextEditor({});
             assert.notOk($textEditor.hasClass('dx-texteditor-collapsed'));
         } finally {
-            browser.msie = origBrowser.msie;
-            browser.version = origBrowser.version;
-            $element.css('display', 'block');
+            $.extend(browser, { msie: origBrowser.msie, version: origBrowser.version });
         }
     });
 
-    QUnit.test('editors has no collapsed class in IE11 if the editor has auto width container', function(assert) {
+    QUnit.test('editor has no collapsed class in IE11 if the editor has auto width container', function(assert) {
         const origBrowser = $.extend({}, browser);
-        browser.msie = true;
-        browser.version = '11.0';
-        const $container = $('<div><div id=\'inner-texteditor\'></div></div>').css('width', 0).appendTo('#qunit-fixture');
+        $.extend(browser, { msie: true, version: '11.0' });
+        const $container = $('<div></div>').css('width', 0);
         try {
-            const $textEditor = $('#inner-texteditor').dxTextEditor({});
+            const $textEditor = $('#texteditor').wrap($container).dxTextEditor({});
             assert.notOk($textEditor.hasClass('dx-texteditor-collapsed'));
         } finally {
-            browser.msie = origBrowser.msie;
-            browser.version = origBrowser.version;
-            $container.remove();
+            $.extend(browser, { msie: origBrowser.msie, version: origBrowser.version });
         }
     });
 });
