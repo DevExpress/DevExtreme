@@ -26,13 +26,14 @@ export class MetadataCollector {
         }
     }
 
-    async *readFiles(dirName: string): AsyncGenerator<FileInfo> {
+    async *readFiles(dirName: string, handler: (content: string) => string): AsyncGenerator<FileInfo> {
         const iterator = this.getFileList(dirName);
 
         for await(const filePath of iterator) {
             const realtivePath = relative(dirName, filePath);
             const fileContent = await fs.readFile(filePath, 'utf-8');
-            const modifiedContent = this.generator.collectMetadata(dirName, filePath, fileContent);
+            let modifiedContent = this.generator.collectMetadata(dirName, filePath, fileContent);
+            modifiedContent = handler(modifiedContent);
             yield new FileInfo(realtivePath, modifiedContent);
         }
     }

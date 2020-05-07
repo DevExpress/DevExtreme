@@ -7,7 +7,6 @@
         "noImplicitAny": true,
         "allowJs": true,
         "moduleResolution": "node",
-        "sourceMap": true,
         "outDir": "dist",
         "baseUrl": ".",
         "paths": {
@@ -21,6 +20,8 @@
         }
     },
     "include": [
-        "src/**/*"
+        "src/modules/*",
+        "src/data/*",
+        "src/types/*"
     ]
 }

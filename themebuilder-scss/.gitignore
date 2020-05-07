@@ -1,4 +1,5 @@
-src/data/scss
-dist
-coverage
 build
+coverage
+dist
+src/data/scss
+src/data/metadata

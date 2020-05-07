@@ -38,7 +38,8 @@ describe('MetadataCollector', () => {
 
     test('readFiles', async () => {
         const collector = new MetadataCollector();
-        const iterator = collector.readFiles(join(rootDir, 'tests', 'data', 'scss'));
+        const handler = (content: string) => content;
+        const iterator = collector.readFiles(join(rootDir, 'tests', 'data', 'scss'), handler);
         const filesInfo: Array<FileInfo> = [];
 
         for await(const file of iterator) {
@@ -51,6 +52,16 @@ describe('MetadataCollector', () => {
             expect(file.content).not.toBeFalsy();
             expect(file.content.length > 0).toBeTruthy();
         });
+    });
+
+    test('readFiles handle files with additional handler', async () => {
+        const collector = new MetadataCollector();
+        const handler = (content: string) => '123' + content;
+        const iterator = collector.readFiles(join(rootDir, 'tests', 'data', 'scss'), handler);
+
+        for await(const file of iterator) {
+            expect(file.content.slice(0, 3)).toBe('123');
+        }
     });
 
     test('saveScssFile', async () => {
