@@ -156,24 +156,24 @@ $base-color: rgb(0,170,0);
 
 describe('Metadata generator - normalizePath', () => {
     interface TestData {
-        cwd: string;
+        scssPath: string;
         path: string;
         expected: string;
     }
 
     const matrix: Array<TestData> = [
-        { cwd: '/', path: '/scss/widgets/generic/toolbar/_colors.scss', expected: 'tb/widgets/generic/toolbar/colors' },
-        { cwd: '/', path: '/scss/widgets/generic/navBar/_colors.scss', expected: 'tb/widgets/generic/navBar/colors' },
-        { cwd: '/repo', path: '/repo/scss/widgets/generic/toolbar/_sizes.scss', expected: 'tb/widgets/generic/toolbar/sizes' },
-        { cwd: '/repo/', path: '/repo/scss/widgets/generic/toolbar/_sizes.scss', expected: 'tb/widgets/generic/toolbar/sizes' },
-        { cwd: '/repo/../', path: '/scss/widgets/generic/toolbar/_sizes.scss', expected: 'tb/widgets/generic/toolbar/sizes' },
-        { cwd: '/repo/../', path: '/repo/../scss/widgets/generic/toolbar/_sizes.scss', expected: 'tb/widgets/generic/toolbar/sizes' },
-        { cwd: 'd:\\repo', path: 'd:\\repo\\scss\\widgets\\generic\\toolbar\\_colors.scss', expected: 'tb/widgets/generic/toolbar/colors' },
-        { cwd: 'd:\\repo\\', path: 'd:\\repo\\scss\\widgets\\generic\\toolbar\\_colors.scss', expected: 'tb/widgets/generic/toolbar/colors' },
+        { scssPath: '/scss', path: '/scss/widgets/generic/toolbar/_colors.scss', expected: 'tb/widgets/generic/toolbar/colors' },
+        { scssPath: '/scss', path: '/scss/widgets/generic/navBar/_colors.scss', expected: 'tb/widgets/generic/navBar/colors' },
+        { scssPath: '/repo/scss', path: '/repo/scss/widgets/generic/toolbar/_sizes.scss', expected: 'tb/widgets/generic/toolbar/sizes' },
+        { scssPath: '/repo/scss', path: '/repo/scss/widgets/generic/toolbar/_sizes.scss', expected: 'tb/widgets/generic/toolbar/sizes' },
+        { scssPath: '/repo/../scss', path: '/scss/widgets/generic/toolbar/_sizes.scss', expected: 'tb/widgets/generic/toolbar/sizes' },
+        { scssPath: '/repo/../scss', path: '/repo/../scss/widgets/generic/toolbar/_sizes.scss', expected: 'tb/widgets/generic/toolbar/sizes' },
+        { scssPath: 'd:\\repo\\scss', path: 'd:\\repo\\scss\\widgets\\generic\\toolbar\\_colors.scss', expected: 'tb/widgets/generic/toolbar/colors' },
+        { scssPath: 'd:\\repo\\scss', path: 'd:\\repo\\scss\\widgets\\generic\\toolbar\\_colors.scss', expected: 'tb/widgets/generic/toolbar/colors' },
     ];
     test('normalizePath works as expected', () => {
         matrix.forEach((item) => {
-            expect(generator.normalizePath(item.cwd, item.path)).toBe(item.expected);
+            expect(generator.normalizePath(item.scssPath, item.path)).toBe(item.expected);
         });
     });
 });
@@ -191,17 +191,17 @@ describe('Metadata generator - getMapFromMeta', () => {
 
 describe('Metadata generator - collectMetadata', () => {
     test('collectMetadata for file without comments return the same content and add nothing to metadata', () => {
-        const cwd = '/';
+        const scssPath = '/scss';
         const path = '/scss/widgets/generic/toolbar/_colors.scss';
         const content = '@use "colors";';
 
-        const result = generator.collectMetadata(cwd, path, content);
+        const result = generator.collectMetadata(scssPath, path, content);
         expect(content).toBe(result);
         expect(generator.getMetadata()).toEqual([]);
     });
 
     test('collectMetadata for file with comments modify file content and add data to metadata', () => {
-        const cwd = '/';
+        const scssPath = '/scss';
         const path = '/scss/widgets/generic/toolbar/_colors.scss';
         const content = `
 @use "colors";
@@ -228,7 +228,7 @@ $never-used: collector((
 ));
 `;
 
-        const result = generator.collectMetadata(cwd, path, content);
+        const result = generator.collectMetadata(scssPath, path, content);
         expect(expected).toBe(result);
         expect(generator.getMetadata()).toEqual([{
             'Name': 'Slide out background',
@@ -246,7 +246,7 @@ $never-used: collector((
     });
 
     test('collectMetadata add several item for different files with the same variables names', () => {
-        const cwd = '/';
+        const scssPath = '/scss';
         const path1 = '/scss/widgets/generic/toolbar/_colors.scss';
         const path2 = '/scss/widgets/material/toolbar/_colors.scss';
         const content = `
@@ -258,8 +258,8 @@ $never-used: collector((
 $slideout-background: #000;
 `;
 
-        generator.collectMetadata(cwd, path1, content);
-        generator.collectMetadata(cwd, path2, content);
+        generator.collectMetadata(scssPath, path1, content);
+        generator.collectMetadata(scssPath, path2, content);
 
         expect(generator.getMetadata()).toEqual([{
             'Name': 'Slide out background',

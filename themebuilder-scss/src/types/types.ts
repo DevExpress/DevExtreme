@@ -54,3 +54,8 @@ interface PackageResult {
     css: string;
     compiledMetadata: Array<MetaItem>;
 }
+
+interface Metadata {
+    metadata: Array<MetaItem>;
+    version: string;
+}

@@ -229,7 +229,7 @@ describe('Sass features', () => {
     test('setter call getMatchingUserItemsAsString once for every url', () => {
         const url = 'path1';
         const compiler = new Compiler();
-        compiler.getMatchingUserItemsAsString = jest.fn().mockImplementation(() => 'content');;
+        compiler.getMatchingUserItemsAsString = jest.fn().mockImplementation(() => 'content');
         compiler.setter(url, '');
         compiler.setter(url, '');
         compiler.setter(url, '');

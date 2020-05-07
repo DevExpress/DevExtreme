@@ -51,8 +51,8 @@ export class MetadataGenerator {
         return metaItems;
     }
 
-    normalizePath(cwd: string, filePath: string): string {
-        return path.relative(path.join(cwd, 'scss'), filePath)
+    normalizePath(scssDir: string, filePath: string): string {
+        return path.relative(scssDir, filePath)
             .replace(/\\/g, '/')
             .replace(/\.scss/, '')
             .replace('_', '')
@@ -67,8 +67,8 @@ export class MetadataGenerator {
         return `(\n${result})`;
     }
 
-    collectMetadata(cwd: string, filePath: string, content: string): string {
-        const path = this.normalizePath(cwd, filePath);
+    collectMetadata(scssDir: string, filePath: string, content: string): string {
+        const path = this.normalizePath(scssDir, filePath);
         const metaItems = this.getMetaItems(content);
 
         if(metaItems.length) {
