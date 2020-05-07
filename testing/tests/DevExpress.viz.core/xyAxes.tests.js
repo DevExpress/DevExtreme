@@ -922,7 +922,7 @@ QUnit.test('There is no real overlap of the labels. Alignment value is left', fu
         { x: 80, y: 0, width: 10, height: 5 }
     ];
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide', alignment: 'left' } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide', alignment: 'left', userAlignment: true } });
 
     assert.equal(this.renderer.text.callCount, 5);
     assert.deepEqual(this.arrayRemovedElements, []);
@@ -937,7 +937,7 @@ QUnit.test('There is real overlap of the labels. Alignment value is left', funct
         { x: 32, y: 0, width: 10, height: 5 }
     ];
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide', alignment: 'left' } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide', alignment: 'left', userAlignment: true } });
 
     assert.equal(this.renderer.text.callCount, 5);
     assert.deepEqual(this.arrayRemovedElements, ['3', '7']);
@@ -952,7 +952,7 @@ QUnit.test('There is real overlap of the labels. Alignment value is center', fun
         { x: 40, y: 0, width: 30, height: 5 }
     ];
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide', alignment: 'center' } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide', alignment: 'center', userAlignment: true } });
 
     assert.equal(this.renderer.text.callCount, 5);
     assert.deepEqual(this.arrayRemovedElements, ['3', '5', '7']);
@@ -967,7 +967,7 @@ QUnit.test('There is real overlap of the labels. Alignment value is right', func
         { x: 40, y: 0, width: 10, height: 5 }
     ];
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide', alignment: 'right' } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide', alignment: 'right', userAlignment: true } });
 
     assert.equal(this.renderer.text.callCount, 5);
     assert.deepEqual(this.arrayRemovedElements, ['3', '7']);
@@ -982,7 +982,7 @@ QUnit.test('There is not real overlap of the labels. Alignment value is right', 
         { x: 70, y: 0, width: 10, height: 5 }
     ];
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide', alignment: 'right' } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide', alignment: 'right', userAlignment: true } });
 
     assert.equal(this.renderer.text.callCount, 5);
     assert.deepEqual(this.arrayRemovedElements, []);

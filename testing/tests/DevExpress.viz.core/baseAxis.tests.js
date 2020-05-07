@@ -246,7 +246,9 @@ QUnit.test('Get options', function(assert) {
         hoverMode: 'none',
         label: {
             minSpacing: 5,
-            visible: true
+            visible: true,
+            position: 'bottom',
+            alignment: 'center'
         },
         position: 'bottom',
         grid: {},
@@ -274,7 +276,9 @@ QUnit.test('Get options - axis type and data types are in lower case', function(
         hoverMode: 'none',
         label: {
             minSpacing: 5,
-            visible: true
+            visible: true,
+            position: 'bottom',
+            alignment: 'center'
         },
         position: 'bottom',
         grid: {},
@@ -307,7 +311,9 @@ QUnit.test('Get options after resetTypes - axis type and data types are in lower
         hoverMode: 'none',
         label: {
             minSpacing: 5,
-            visible: true
+            visible: true,
+            position: 'bottom',
+            alignment: 'center'
         },
         position: 'bottom',
         grid: {},
@@ -318,6 +324,94 @@ QUnit.test('Get options after resetTypes - axis type and data types are in lower
         marker: {},
         _customVisualRange: undefined
     }, 'Options should be correct');
+});
+
+QUnit.test('Validate label position option: left to bottom (by default)', function(assert) {
+    this.updateOptions({
+        label: {
+            position: 'left'
+        }
+    });
+
+    assert.strictEqual(this.axis.getOptions().label.position, 'bottom', 'Label position option should be correct');
+});
+
+QUnit.test('Validate label position option: right to bottom (by default)', function(assert) {
+    this.updateOptions({
+        label: {
+            position: 'right'
+        }
+    });
+
+    assert.strictEqual(this.axis.getOptions().label.position, 'bottom', 'Label position option should be correct');
+});
+
+QUnit.test('Validate label position option: left to top', function(assert) {
+    this.updateOptions({
+        position: 'top',
+        label: {
+            position: 'left'
+        }
+    });
+
+    assert.strictEqual(this.axis.getOptions().label.position, 'top', 'Label position option should be correct');
+});
+
+QUnit.test('Validate label position option: right to top', function(assert) {
+    this.updateOptions({
+        position: 'top',
+        label: {
+            position: 'right'
+        }
+    });
+
+    assert.strictEqual(this.axis.getOptions().label.position, 'top', 'Label position option should be correct');
+});
+
+QUnit.test('Validate label position option: top to left (by default)', function(assert) {
+    this.updateOptions({
+        isHorizontal: false,
+        label: {
+            position: 'top'
+        }
+    });
+
+    assert.strictEqual(this.axis.getOptions().label.position, 'left', 'Label position option should be correct');
+});
+
+QUnit.test('Validate label position option: bottom to left (by default)', function(assert) {
+    this.updateOptions({
+        isHorizontal: false,
+        label: {
+            position: 'bottom'
+        }
+    });
+
+    assert.strictEqual(this.axis.getOptions().label.position, 'left', 'Label position option should be correct');
+});
+
+QUnit.test('Validate label position option: top to right', function(assert) {
+    this.updateOptions({
+        isHorizontal: false,
+        position: 'right',
+        label: {
+            position: 'top'
+        }
+    });
+
+    assert.strictEqual(this.axis.getOptions().label.position, 'right', 'Label position option should be correct');
+});
+
+QUnit.test('Validate label position option: bottom to right', function(assert) {
+    this.updateOptions({
+        isHorizontal: false,
+        position: 'right',
+        label: {
+            position: 'bottom'
+        }
+    });
+
+    assert.strictEqual(this.axis.getOptions().label.position, 'right', 'Label position option should be correct');
 });
 
 QUnit.test('Check tickInterval with new canvas', function(assert) {

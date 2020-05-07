@@ -345,14 +345,15 @@ module.exports = {
 
         _getTickMarkPoints(coords, length, tickOptions) {
             const isHorizontal = this._isHorizontal;
-            const options = this._options;
+            const tickOrientation = this._options.tickOrientation;
+            const labelPosition = this._options.label.position;
             let tickStartCoord;
 
-            if(isDefined(options.tickOrientation)) {
-                tickStartCoord = TICKS_CORRECTIONS[options.tickOrientation] * length;
+            if(isDefined(tickOrientation)) {
+                tickStartCoord = TICKS_CORRECTIONS[tickOrientation] * length;
             } else {
                 let shift = tickOptions.shift || 0;
-                if(options.position === LEFT || options.position === TOP) {
+                if(!isHorizontal && labelPosition === LEFT || isHorizontal && labelPosition !== BOTTOM) {
                     shift = -shift;
                 }
                 tickStartCoord = shift + this.getTickStartPositionShift(length);
