@@ -348,9 +348,9 @@ const TextEditorBase = Editor.inherit({
     _collapseInputContainer: function() {
         const isIE11 = browser.msie && browser.version <= 11;
         const $element = this.$element();
-        const parentElement = $element.parent();
+        const $parentElement = $element.parent();
 
-        if(isIE11 && $element.css('display') === 'block' && this._parentHasEnoughWidth(parentElement)) {
+        if(isIE11 && $element.css('display') === 'block' && this._parentHasEnoughWidth($parentElement)) {
             $element.addClass(TEXTEDITOR_COLLAPSED_CLASS);
         }
     },
