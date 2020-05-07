@@ -18475,9 +18475,9 @@ QUnit.module('templates', baseModuleConfig, () => {
         assert.strictEqual($rowElements.eq(3).text(), 'Row Content More info', 'row 3 content');
     });
 
-    // T821418
+    // T821418, T878862
     QUnit.test('rowTemplate with tbody should works with virtual scrolling', function(assert) {
-    // arrange, act
+        // arrange, act
         const data = [...Array(20)].map((_, i) => ({ id: i + 1 }));
         const rowHeight = 50;
         const dataGrid = createDataGrid({
@@ -18504,6 +18504,10 @@ QUnit.module('templates', baseModuleConfig, () => {
         assert.strictEqual(dataGrid.getVisibleRows()[0].data.id, 3, 'first visible row');
         assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), '3', 'first visible cell text');
         assert.strictEqual($(dataGrid.element()).find('tbody.dx-virtual-row').length, 2, 'virtual row count');
+        const $colgroup = $(dataGrid.element()).find('.dx-datagrid-rowsview colgroup');
+        assert.strictEqual($colgroup.length, 1, 'colgroup element exists');
+        // T878862
+        assert.strictEqual($colgroup.index(), 0, 'colgroup is first element in table');
 
         // act
         dataGrid.getScrollable().scrollTo({ top: 0 });
