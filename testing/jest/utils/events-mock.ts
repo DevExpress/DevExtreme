@@ -1,9 +1,7 @@
-import eventsEngine from '../../../js/events/core/events_engine';
 import { keyboard } from '../../../js/events/short';
 
 let eventHandlers = {};
 let keyboardHandlers = {};
-
 export const KEY = {
   enter: 'enter',
   space: 'space',
@@ -58,7 +56,7 @@ export const emitKeyboard = (key, which = key, e = defaultEvent) => {
   });
 };
 
-export const emit = (event, e = defaultEvent, element) => {
+export const emit = (event, e = defaultEvent, element = null) => {
     eventHandlers[event]?.forEach(({ handler, el }) => {
       if (!element || el === element) {
         handler(e);
@@ -68,34 +66,39 @@ export const emit = (event, e = defaultEvent, element) => {
 
 let keyboardSubscriberId = 0;
 
-keyboard.on = (el, focusTarget, handler) => {
+keyboard.on = (el, focusTarget, handler): string => {
   keyboardSubscriberId += 1;
   keyboardHandlers[keyboardSubscriberId] = keyboardHandlers[keyboardSubscriberId] || [];
   keyboardHandlers[keyboardSubscriberId].push(handler);
 
-  return keyboardSubscriberId;
-};
-
-eventsEngine.on = (...args) => {
-  const event = args[1].split('.')[0];
-
-  if (!eventHandlers[event]) {
-    eventHandlers[event] = [];
-  }
-
-  eventHandlers[event].push({
-    handler: args[args.length - 1],
-    el: args[0],
-  });
-};
-
-eventsEngine.off = (...args) => {
-  const event = args[1].split('.')[0];
-  eventHandlers[event] = [];
-};
-
-eventsEngine.trigger = (element, event) => {
-  emit(EVENT[event], undefined, element);
+  return keyboardSubscriberId.toString();
 };
 
 keyboard.off = (id) => delete keyboardHandlers[id];
+
+jest.mock('../../../js/events/core/events_engine', () => {
+  const originalEventsEngine = jest.requireActual('../../../js/events/core/events_engine');
+  return (
+    {
+      ...originalEventsEngine,
+      on: (el, eventName, ...args): void => {
+        const event = eventName.split('.')[0];
+
+        if (!eventHandlers[event]) {
+          eventHandlers[event] = [];
+        }
+
+        eventHandlers[event].push({
+          handler: args[args.length - 1],
+          el,
+        });
+      },
+      off: (_, eventName): void => {
+        const event = eventName.split('.')[0];
+        eventHandlers[event] = [];
+      },
+      trigger: (element, event): void => {
+        emit(EVENT[event], undefined, element);
+      },
+    });
+});
