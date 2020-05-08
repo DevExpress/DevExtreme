@@ -696,14 +696,19 @@ QUnit.module('DataSources', moduleConfig, () => {
         assert.equal(removedTask, undefined, 'task was removed');
     });
     test('custom store', function(assert) {
+        const t = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red' },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 60 },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-21T09:00:00.000Z'), 'progress': 100 },
+        ];
         const ds = new DataSource({
             key: 'id',
             paginate: false,
-            load: () => tasks,
+            load: () => t,
             update: (key, values) => {
                 let row = {};
-                for(let i = 0; i < tasks.length; i++) {
-                    const task = tasks[i];
+                for(let i = 0; i < t.length; i++) {
+                    const task = t[i];
                     if(task.id === key) {
                         row = task;
                         break;
@@ -724,7 +729,7 @@ QUnit.module('DataSources', moduleConfig, () => {
         const updatedTitle = 'test';
         getGanttViewCore(this.instance).commandManager.changeTaskTitleCommand.execute(updatedTaskId.toString(), updatedTitle);
         this.clock.tick();
-        const updatedTask = tasks.filter((t) => t.id === updatedTaskId)[0];
+        const updatedTask = t.filter((task) => task.id === updatedTaskId)[0];
         assert.equal(updatedTask.title, updatedTitle, 'task title is updated');
     });
 });
