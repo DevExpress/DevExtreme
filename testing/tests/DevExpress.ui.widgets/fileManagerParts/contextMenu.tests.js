@@ -28,6 +28,7 @@ const moduleConfig = {
         });
 
         this.wrapper = new FileManagerWrapper(this.$element);
+        this.fileManager = this.wrapper.getInstance();
 
         this.clock.tick(400);
     },
@@ -399,6 +400,19 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         this.clock.tick(400);
 
         assert.equal(this.wrapper.getDetailsItemName(0), 'New name.txt', 'file is renamed');
+    });
+
+    test('context menu items can be updated for visible menu after action button click', function(assert) {
+        this.fileManager.option('contextMenu.items', [ { text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' } ]);
+
+        this.wrapper.getRowInDetailsView(1).trigger('dxhoverstart');
+        this.wrapper.getRowActionButtonInDetailsView(1).trigger('dxclick');
+        this.clock.tick(400);
+
+        this.fileManager.option('contextMenu.items[1].disabled', true);
+        this.clock.tick(400);
+
+        assert.ok(this.wrapper.getContextMenuItems().eq(1).is(`.${Consts.DISABLED_STATE_CLASS}`), 'item disabled');
     });
 
 });

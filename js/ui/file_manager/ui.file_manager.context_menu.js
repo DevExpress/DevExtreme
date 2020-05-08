@@ -185,6 +185,12 @@ class FileManagerContextMenu extends Widget {
             case 'commandManager':
                 this.repaint();
                 break;
+            case 'items':
+                if(this._isVisible) {
+                    const items = this.createContextMenuItems(this._targetFileItems);
+                    this._contextMenu.option('dataSource', items);
+                }
+                break;
             case 'onContextMenuHidden':
                 this._createContextMenuHiddenAction();
                 break;
