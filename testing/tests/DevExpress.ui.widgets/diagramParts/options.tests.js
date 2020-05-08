@@ -456,7 +456,6 @@ QUnit.module('Options (initially set)', {}, () => {
         const $element = $('#diagram').dxDiagram({
             onOptionChanged: onOptionChanged,
             simpleView: true,
-            readOnly: true,
             zoomLevel: 2,
             fullScreen: true,
             showGrid: false,
@@ -464,11 +463,12 @@ QUnit.module('Options (initially set)', {}, () => {
             gridSize: 0.25,
             viewUnits: 'cm',
             units: 'cm',
+            pageColor: '#ff0000',
+            pageSize: { width: 3, height: 5 }
         });
         const instance = $element.dxDiagram('instance');
 
         assert.ok(instance._diagramInstance.settings.simpleView);
-        assert.ok(instance._diagramInstance.settings.readOnly);
         assert.equal(instance._diagramInstance.settings.zoomLevel, 2);
         assert.ok(instance._diagramInstance.settings.fullscreen);
         assert.notOk(instance._diagramInstance.settings.showGrid);
@@ -476,6 +476,9 @@ QUnit.module('Options (initially set)', {}, () => {
         assert.equal(instance._diagramInstance.settings.gridSize, 142);
         assert.equal(instance._diagramInstance.settings.viewUnits, 1);
         assert.equal(instance._diagramInstance.model.units, 1);
+        assert.equal(instance._diagramInstance.model.pageColor, -65536); // FF0000
+        assert.equal(instance._diagramInstance.model.pageSize.width, 1701);
+        assert.equal(instance._diagramInstance.model.pageSize.height, 2835);
         assert.notOk(onOptionChanged.called);
     });
 
@@ -491,4 +494,21 @@ QUnit.module('Options (initially set)', {}, () => {
         assert.equal(onOptionChanged.getCalls().length, 1);
         assert.equal(onOptionChanged.getCall(0).args[0]['name'], 'zoomLevel');
     });
+
+    test('should not change model options if readOnly=true', function(assert) {
+        const $element = $('#diagram').dxDiagram({
+            readOnly: true,
+            pageColor: '#ff0000',
+            pageSize: { width: 3, height: 5 },
+            snapToGrid: false
+        });
+        const instance = $element.dxDiagram('instance');
+
+        assert.ok(instance._diagramInstance.settings.readOnly);
+        assert.equal(instance._diagramInstance.model.pageColor, -1); // FFFFFF
+        assert.equal(instance._diagramInstance.model.pageSize.width, 8391);
+        assert.equal(instance._diagramInstance.model.pageSize.height, 11906);
+        assert.ok(instance._diagramInstance.settings.snapToGrid);
+    });
+
 });
