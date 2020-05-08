@@ -1955,7 +1955,7 @@ QUnit.module('Initialization', {
             allowDeleting: true,
             allowResizing: true,
             allowDragging: true,
-            allowEditingTimeZones: false,
+            allowTimeZoneEditing: false,
         };
 
         if(devices.real().platform !== 'generic') {

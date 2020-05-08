@@ -967,8 +967,8 @@ QUnit.test('It should be possible to render endDateTimeZone editor on appt form'
     assert.equal(endDateTimezoneEditor.option('observer'), this.instance, 'Observer is defined');
 });
 
-QUnit.test('startDateTimeZone and endDateTimeZone editor should be rendered with allowEditingTimeZones option', function(assert) {
-    this.instance.option('editing.allowEditingTimeZones', true);
+QUnit.test('startDateTimeZone and endDateTimeZone editor should be rendered with allowTimeZoneEditing option', function(assert) {
+    this.instance.option('editing.allowTimeZoneEditing', true);
     this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
 
     const form = this.instance.getAppointmentDetailsForm();
@@ -983,7 +983,7 @@ QUnit.test('startDateTimeZone and endDateTimeZone editor should be rendered with
 });
 
 QUnit.test('Change value in startDateTimeZone editor should trigger change value in endDateTimeZone editor', function(assert) {
-    this.instance.option('editing.allowEditingTimeZones', true);
+    this.instance.option('editing.allowTimeZoneEditing', true);
     this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
 
     const form = this.instance.getAppointmentDetailsForm();
@@ -997,7 +997,7 @@ QUnit.test('Change value in startDateTimeZone editor should trigger change value
 });
 
 QUnit.test('Change value in endDateTimeZone editor shouldn\'t trigger change value in startDateTimeZone editor', function(assert) {
-    this.instance.option('editing.allowEditingTimeZones', true);
+    this.instance.option('editing.allowTimeZoneEditing', true);
     this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
 
     const form = this.instance.getAppointmentDetailsForm();
