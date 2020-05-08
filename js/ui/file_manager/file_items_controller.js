@@ -147,12 +147,6 @@ export default class FileItemsController {
                 .promise();
         }
 
-        if(parentDirectoryInfo.itemsLoaded) {
-            return new Deferred()
-                .resolve(parentDirectoryInfo.items)
-                .promise();
-        }
-
         const dirKey = parentDirectoryInfo.getInternalKey();
         let loadItemsDeferred = this._loadedItems[dirKey];
         if(loadItemsDeferred) {
@@ -162,12 +156,11 @@ export default class FileItemsController {
         loadItemsDeferred = this._getFileItems(parentDirectoryInfo, noNavigationRequired)
             .then(fileItems => {
                 if(!fileItems) {
-                    return [];
+                    fileItems = [];
                 }
                 parentDirectoryInfo.items = fileItems.map(fileItem =>
                     fileItem.isDirectory && this._createDirectoryInfo(fileItem, parentDirectoryInfo) || this._createFileInfo(fileItem, parentDirectoryInfo)
                 );
-                parentDirectoryInfo.itemsLoaded = true;
                 return parentDirectoryInfo.items;
             });
 
@@ -509,7 +502,6 @@ export default class FileItemsController {
     }
 
     _resetDirectoryState(directoryInfo) {
-        directoryInfo.itemsLoaded = false;
         directoryInfo.items = [ ];
     }
 
