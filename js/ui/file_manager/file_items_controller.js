@@ -130,8 +130,8 @@ export default class FileItemsController {
         return onlyFiles ? this.getFiles(currentDirectory) : this.getDirectoryContents(currentDirectory);
     }
 
-    getDirectories(parentDirectoryInfo) {
-        return this.getDirectoryContents(parentDirectoryInfo)
+    getDirectories(parentDirectoryInfo, noNavigationRequired) {
+        return this.getDirectoryContents(parentDirectoryInfo, noNavigationRequired)
             .then(itemInfos => itemInfos.filter(info => info.fileItem.isDirectory));
     }
 
@@ -140,7 +140,7 @@ export default class FileItemsController {
             .then(itemInfos => itemInfos.filter(info => !info.fileItem.isDirectory));
     }
 
-    getDirectoryContents(parentDirectoryInfo) {
+    getDirectoryContents(parentDirectoryInfo, noNavigationRequired) {
         if(!parentDirectoryInfo) {
             return new Deferred()
                 .resolve([ this._rootDirectoryInfo ])
@@ -159,7 +159,7 @@ export default class FileItemsController {
             return loadItemsDeferred;
         }
 
-        loadItemsDeferred = this._getFileItems(parentDirectoryInfo)
+        loadItemsDeferred = this._getFileItems(parentDirectoryInfo, noNavigationRequired)
             .then(fileItems => {
                 if(!fileItems) {
                     return [];
@@ -179,7 +179,7 @@ export default class FileItemsController {
         return loadItemsDeferred;
     }
 
-    _getFileItems(parentDirectoryInfo) {
+    _getFileItems(parentDirectoryInfo, noNavigationRequired) {
         return when(this._fileProvider.getItems(parentDirectoryInfo.fileItem))
             .then(
                 fileItems => this._securityController.getAllowedItems(fileItems),
@@ -193,7 +193,9 @@ export default class FileItemsController {
                         index: 0
                     });
                     this._resetDirectoryState(parentDirectoryInfo);
-                    this.setCurrentDirectory(parentDirectoryInfo.parentDirectory);
+                    if(!noNavigationRequired) {
+                        this.setCurrentDirectory(parentDirectoryInfo.parentDirectory);
+                    }
                 });
     }
 

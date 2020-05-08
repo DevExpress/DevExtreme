@@ -733,8 +733,8 @@ class FileManager extends Widget {
         this.option(options);
     }
 
-    getDirectories(parentDirectoryInfo) {
-        return this._controller.getDirectories(parentDirectoryInfo);
+    getDirectories(parentDirectoryInfo, noNavigationRequired) {
+        return this._controller.getDirectories(parentDirectoryInfo, noNavigationRequired);
     }
 
     _getSelectedItemInfos() {
