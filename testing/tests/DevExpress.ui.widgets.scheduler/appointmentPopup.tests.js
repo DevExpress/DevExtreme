@@ -967,48 +967,50 @@ QUnit.test('It should be possible to render endDateTimeZone editor on appt form'
     assert.equal(endDateTimezoneEditor.option('observer'), this.instance, 'Observer is defined');
 });
 
-QUnit.test('startDateTimeZone and endDateTimeZone editor should be rendered with allowTimeZoneEditing option', function(assert) {
-    this.instance.option('editing.allowTimeZoneEditing', true);
-    this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+['allowTimeZoneEditing', 'allowEditingTimeZones'].forEach(allowTimeZoneEditingOption => {
+    QUnit.test(`startDateTimeZone and endDateTimeZone editor should be rendered with ${allowTimeZoneEditingOption} option`, function(assert) {
+        this.instance.option(`editing.${allowTimeZoneEditingOption}`, true);
+        this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
 
-    const form = this.instance.getAppointmentDetailsForm();
-    const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
-    const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
+        const form = this.instance.getAppointmentDetailsForm();
+        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+        const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
 
-    assert.ok(startDateTimezoneEditor.option('visible'), 'startDateTimeZone editor is visible');
-    assert.ok(endDateTimezoneEditor.option('visible'), 'endDateTimeZone editor is visible');
+        assert.ok(startDateTimezoneEditor.option('visible'), 'startDateTimeZone editor is visible');
+        assert.ok(endDateTimezoneEditor.option('visible'), 'endDateTimeZone editor is visible');
 
-    assert.equal(startDateTimezoneEditor.option('value'), null, 'startDateTimeZone editor value should be null');
-    assert.equal(endDateTimezoneEditor.option('value'), null, 'endDateTimeZone editor value should be null');
-});
+        assert.equal(startDateTimezoneEditor.option('value'), null, 'startDateTimeZone editor value should be null');
+        assert.equal(endDateTimezoneEditor.option('value'), null, 'endDateTimeZone editor value should be null');
+    });
 
-QUnit.test('Change value in startDateTimeZone editor should trigger change value in endDateTimeZone editor', function(assert) {
-    this.instance.option('editing.allowTimeZoneEditing', true);
-    this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+    QUnit.test(`Change value in startDateTimeZone editor should trigger change value in endDateTimeZone editor if ${allowTimeZoneEditingOption}: true`, function(assert) {
+        this.instance.option(`editing.${allowTimeZoneEditingOption}`, true);
+        this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
 
-    const form = this.instance.getAppointmentDetailsForm();
-    const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
-    const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
+        const form = this.instance.getAppointmentDetailsForm();
+        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+        const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
 
-    startDateTimezoneEditor.option('value', 'Africa/Cairo');
+        startDateTimezoneEditor.option('value', 'Africa/Cairo');
 
-    assert.equal(startDateTimezoneEditor.option('value'), 'Africa/Cairo', 'startDateTimeZone editor value should be "Africa/Cairo"');
-    assert.equal(endDateTimezoneEditor.option('value'), 'Africa/Cairo', 'endDateTimeZone editor value should be "Africa/Cairo"');
-});
+        assert.equal(startDateTimezoneEditor.option('value'), 'Africa/Cairo', 'startDateTimeZone editor value should be "Africa/Cairo"');
+        assert.equal(endDateTimezoneEditor.option('value'), 'Africa/Cairo', 'endDateTimeZone editor value should be "Africa/Cairo"');
+    });
 
-QUnit.test('Change value in endDateTimeZone editor shouldn\'t trigger change value in startDateTimeZone editor', function(assert) {
-    this.instance.option('editing.allowTimeZoneEditing', true);
-    this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+    QUnit.test(`Change value in endDateTimeZone editor shouldn't trigger change value in startDateTimeZone editor if ${allowTimeZoneEditingOption}: true`, function(assert) {
+        this.instance.option('editing.allowTimeZoneEditing', true);
+        this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
 
-    const form = this.instance.getAppointmentDetailsForm();
-    const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
-    const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
+        const form = this.instance.getAppointmentDetailsForm();
+        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+        const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
 
-    startDateTimezoneEditor.option('value', 'Asia/Pyongyang');
-    endDateTimezoneEditor.option('value', 'Africa/Cairo');
+        startDateTimezoneEditor.option('value', 'Asia/Pyongyang');
+        endDateTimezoneEditor.option('value', 'Africa/Cairo');
 
-    assert.equal(startDateTimezoneEditor.option('value'), 'Asia/Pyongyang', 'startDateTimeZone editor value should be "Africa/Cairo"');
-    assert.equal(endDateTimezoneEditor.option('value'), 'Africa/Cairo', 'endDateTimeZone editor value should be "Africa/Cairo"');
+        assert.equal(startDateTimezoneEditor.option('value'), 'Asia/Pyongyang', 'startDateTimeZone editor value should be "Africa/Cairo"');
+        assert.equal(endDateTimezoneEditor.option('value'), 'Africa/Cairo', 'endDateTimeZone editor value should be "Africa/Cairo"');
+    });
 });
 
 QUnit.test('Validate works always before done click', function(assert) {

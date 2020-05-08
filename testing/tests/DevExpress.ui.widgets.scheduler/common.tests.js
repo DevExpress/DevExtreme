@@ -1956,6 +1956,7 @@ QUnit.module('Initialization', {
             allowResizing: true,
             allowDragging: true,
             allowTimeZoneEditing: false,
+            allowEditingTimeZones: false
         };
 
         if(devices.real().platform !== 'generic') {
