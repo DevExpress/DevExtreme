@@ -426,8 +426,16 @@ class Gantt extends Widget {
     }
     _onParentTasksRecalculated(data) {
         const setters = this._compileSettersByOption(GANTT_TASKS);
-        const treeDataSource = data.map(this._prepareSetterMapHandler(setters));
+        const treeDataSource = this._appendCustomFields(data.map(this._prepareSetterMapHandler(setters)));
         this._setTreeListOption('dataSource', treeDataSource);
+    }
+    _appendCustomFields(data) {
+        const modelData = this._tasksOption._getItems();
+        return data.reduce((previous, item) => {
+            const modelItem = modelData && modelData.find((obj) => obj.id === item.id);
+            previous.push(Object.assign({}, modelItem, item));
+            return previous;
+        }, []);
     }
     _updateTreeListDataSource() {
         if(!this._skipUpdateTreeListDataSource()) {
