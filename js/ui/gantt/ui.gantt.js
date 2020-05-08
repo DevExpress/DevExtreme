@@ -433,7 +433,15 @@ class Gantt extends Widget {
         const modelData = this._tasksOption._getItems();
         return data.reduce((previous, item) => {
             const modelItem = modelData && modelData.filter((obj) => obj.id === item.id)[0];
-            previous.push(Object.assign({}, modelItem, item));
+            if(!modelItem) {
+                previous.push(item);
+            } else {
+                const updatedItem = {};
+                for(const field in modelItem) {
+                    updatedItem[field] = Object.prototype.hasOwnProperty.call(item, field) ? item[field] : modelItem[field];
+                }
+                previous.push(updatedItem);
+            }
             return previous;
         }, []);
     }
