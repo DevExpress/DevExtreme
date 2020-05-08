@@ -43,7 +43,7 @@ jobs:
         $attempt_count = 30
         For ($i=0; $i -lt $attempt_count; $i++) {
           try {
-            Invoke-WebRequest $runner_host -Method 'HEAD' -TimeoutSec 5;
+            Invoke-WebRequest $runner_host -Method 'HEAD' -TimeoutSec 5 | Out-Null
             break
           }
           catch {
