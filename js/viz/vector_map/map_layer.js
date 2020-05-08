@@ -934,6 +934,14 @@ MapLayer.prototype = _extend({
         return this._specificDataSourceOption;
     },
 
+    _normalizeDataSource: function(dataSource) {
+        const store = dataSource.store();
+        if(store._loadMode === 'raw') {
+            store._loadMode = undefined;
+        }
+        return dataSource;
+    },
+
     _offProjection: function() {
         this._removeHandlers();
         this._removeHandlers = null;
