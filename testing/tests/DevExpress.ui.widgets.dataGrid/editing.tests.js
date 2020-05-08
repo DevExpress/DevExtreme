@@ -1099,10 +1099,14 @@ QUnit.module('Editing', {
 
     // T124946
     QUnit.test('Api method editCell with button', function(assert) {
-    // arrange
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'The problem is fixed for desktop only');
+            return;
+        }
+
         const that = this;
         const rowsView = this.rowsView;
-        const testElement = $('#container').parent();
+        const testElement = $('#container');
         const $input = $('<input/>', {
             type: 'button',
             click: function(e) {
