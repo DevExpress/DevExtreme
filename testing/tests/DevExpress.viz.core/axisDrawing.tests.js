@@ -1889,6 +1889,135 @@ QUnit.test('Vertical left. Alignment center', function(assert) {
     assert.deepEqual(renderer.text.getCall(1).returnValue.attr.getCall(3).args[0], { translateX: 10 - 10 - 14 / 2 - (3 + 14 / 2), translateY: 60 - 4 - 8 / 2 }, 'Text args');
 });
 
+QUnit.test('Vertical left. Alignment center by theme', function(assert) {
+    // arrange
+    const renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: false,
+        position: 'left',
+        label: {
+            visible: true,
+            indentFromAxis: 10,
+            alignment: 'center',
+            userAlignment: false
+        }
+    });
+
+    this.generatedTicks = [1, 2];
+
+    this.translator.stub('translate').withArgs(1).returns(40);
+    this.translator.stub('translate').withArgs(2).returns(60);
+
+    this.renderer.bBoxTemplate = (function() {
+        let idx = 0;
+        return function() {
+            return [
+                { x: 1, y: 2, width: 12, height: 6 },
+                { x: 3, y: 4, width: 14, height: 8 }
+            ][idx++];
+        };
+    })();
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.equal(renderer.text.callCount, 2, 'Text call count');
+
+    assert.deepEqual(renderer.text.getCall(0).returnValue.attr.getCall(1).args[0], { x: 10, y: 40 });
+    assert.deepEqual(renderer.text.getCall(1).returnValue.attr.getCall(1).args[0], { x: 10, y: 60 });
+
+    assert.deepEqual(renderer.text.getCall(0).returnValue.attr.getCall(3).args[0], { translateX: 10 - 10 - 14 / 2 - (1 + 12 / 2), translateY: 40 - 2 - 6 / 2 }, 'Text args');
+    assert.deepEqual(renderer.text.getCall(1).returnValue.attr.getCall(3).args[0], { translateX: 10 - 10 - 14 / 2 - (3 + 14 / 2), translateY: 60 - 4 - 8 / 2 }, 'Text args');
+});
+
+QUnit.test('Vertical left. Alignment right (left by theme)', function(assert) {
+    // arrange
+    const renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: false,
+        position: 'left',
+        label: {
+            visible: true,
+            indentFromAxis: 10,
+            alignment: 'left',
+            userAlignment: false
+        }
+    });
+
+    this.generatedTicks = [1, 2];
+
+    this.translator.stub('translate').withArgs(1).returns(40);
+    this.translator.stub('translate').withArgs(2).returns(60);
+
+    this.renderer.bBoxTemplate = (function() {
+        let idx = 0;
+        return function() {
+            return [
+                { x: 1, y: 2, width: 12, height: 6 },
+                { x: 3, y: 4, width: 14, height: 8 }
+            ][idx++];
+        };
+    })();
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.equal(renderer.text.callCount, 2, 'Text call count');
+
+    assert.deepEqual(renderer.text.getCall(0).returnValue.attr.getCall(1).args[0], { x: 10, y: 40 });
+    assert.deepEqual(renderer.text.getCall(1).returnValue.attr.getCall(1).args[0], { x: 10, y: 60 });
+
+    assert.deepEqual(renderer.text.getCall(0).returnValue.attr.getCall(3).args[0], { translateX: 10 - 10 - (1 + 12), translateY: 40 - 2 - 6 / 2 }, 'Text args');
+    assert.deepEqual(renderer.text.getCall(1).returnValue.attr.getCall(3).args[0], { translateX: 10 - 10 - (3 + 14), translateY: 60 - 4 - 8 / 2 }, 'Text args');
+});
+
+QUnit.test('Vertical right. Alignment left (right by theme)', function(assert) {
+    // arrange
+    const renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: false,
+        position: 'right',
+        label: {
+            visible: true,
+            indentFromAxis: 10,
+            alignment: 'right',
+            userAlignment: false
+        }
+    });
+
+    this.generatedTicks = [1, 2];
+
+    this.translator.stub('translate').withArgs(1).returns(40);
+    this.translator.stub('translate').withArgs(2).returns(60);
+
+    this.renderer.bBoxTemplate = (function() {
+        let idx = 0;
+        return function() {
+            return [
+                { x: 1, y: 2, width: 12, height: 6 },
+                { x: 3, y: 4, width: 14, height: 8 }
+            ][idx++];
+        };
+    })();
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.equal(renderer.text.callCount, 2, 'Text call count');
+
+    assert.deepEqual(renderer.text.getCall(0).returnValue.attr.getCall(1).args[0], { x: 90, y: 40 });
+    assert.deepEqual(renderer.text.getCall(1).returnValue.attr.getCall(1).args[0], { x: 90, y: 60 });
+
+    assert.deepEqual(renderer.text.getCall(0).returnValue.attr.getCall(3).args[0], { translateX: 90 + 10 - 1, translateY: 40 - 2 - 6 / 2 }, 'Text args');
+    assert.deepEqual(renderer.text.getCall(1).returnValue.attr.getCall(3).args[0], { translateX: 90 + 10 - 3, translateY: 60 - 4 - 8 / 2 }, 'Text args');
+});
+
 QUnit.test('Vertical left. Alignment right', function(assert) {
     // arrange
     const renderer = this.renderer;
