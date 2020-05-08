@@ -37,7 +37,7 @@ jobs:
       env:
         CONSTEL: ${{ matrix.CONSTEL }}
       run: |
-        $runner = Start-Process -FilePath dotnet -ArgumentList './testing/runner/bin/runner.dll --single-run' -passthru -RedirectStandardOutput "output.txt"
+        $runner = Start-Process -FilePath dotnet -ArgumentList './testing/runner/bin/runner.dll --single-run' -PassThru -NoNewWindow
         Write-Host "Runner starting"
         $runner_host = "http://localhost:20050"
         $attempt_count = 30
@@ -61,5 +61,4 @@ jobs:
         Write-Host "IE started"
         Wait-Process -InputObject $runner
         Write-Host "Runner finished"
-        Get-Content -Path .\output.txt
         exit $runner.ExitCode
