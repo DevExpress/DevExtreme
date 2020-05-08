@@ -1,6 +1,7 @@
 import { Compiler } from './compiler';
 import { PreCompiler } from './pre-compiler';
 import { resolveBundle } from './bundle-resolver';
+import { PostCompiler } from './post-compiler';
 
 export class CompileManager {
     compiler = new Compiler();
@@ -18,6 +19,11 @@ export class CompileManager {
                 const swatchSass = preCompiler.createSassForSwatch(config.outColorScheme, css);
                 const swatchResult = await this.compiler.compile(bundle, [], { data: swatchSass });
                 css = swatchResult.result.css;
+            }
+
+            if(config.assetsBasePath) {
+                const postCompiler = new PostCompiler();
+                css = postCompiler.addBasePath(css, config.assetsBasePath);
             }
 
             return {

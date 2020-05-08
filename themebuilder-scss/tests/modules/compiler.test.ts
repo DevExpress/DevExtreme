@@ -43,6 +43,7 @@ describe('compile', () => {
             expect(data.result.css.toString()).toBe(`.dx-accordion {
   background-color: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif;
   color: red;
+  font: url("icons/icons.woff2");
 }
 .dx-accordion .from-base {
   background-color: green;
@@ -95,7 +96,7 @@ describe('compile', () => {
         return compiler.compile(bundle, [], extraOptions).then(data => {
             // compiled css
             expect(data.result.css.toString()).toBe('.dx-accordion{background-color:"Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif;\
-color:#337ab7}.dx-accordion .from-base{background-color:transparent;color:#337ab7}.extra-class{color:red}');
+color:#337ab7;font:url("icons/icons.woff2")}.dx-accordion .from-base{background-color:transparent;color:#337ab7}.extra-class{color:red}');
         });
     });
 });

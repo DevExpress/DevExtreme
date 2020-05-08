@@ -29,7 +29,7 @@ describe('Compile manager - integration test on test sass', () => {
         });
     });
 
-    test('compile test bundle without swatch', () => {
+    test('compile test bundle with swatch', () => {
         const manager = new CompileManager();
         return manager.compile({
             makeSwatch: true,
@@ -38,8 +38,27 @@ describe('Compile manager - integration test on test sass', () => {
             expect(result.css).toBe(`.dx-swatch-test-theme .dx-accordion {
   background-color: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif;
   color: #337ab7;
+  font: url("icons/icons.woff2");
 }
 .dx-swatch-test-theme .dx-accordion .from-base {
+  background-color: transparent;
+  color: #337ab7;
+}`);
+            expect(result.compiledMetadata).toEqual(noModificationsMeta);
+        });
+    });
+
+    test('compile test bundle with assetsBasePath', () => {
+        const manager = new CompileManager();
+        return manager.compile({
+            assetsBasePath: 'base-path'
+        }).then(result => {
+            expect(result.css).toBe(`.dx-accordion {
+  background-color: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif;
+  color: #337ab7;
+  font: url("base-path/icons/icons.woff2");
+}
+.dx-accordion .from-base {
   background-color: transparent;
   color: #337ab7;
 }`);
