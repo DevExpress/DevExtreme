@@ -133,11 +133,11 @@ class Button extends Widget {
                         this.option('disabled', true);
 
                         complete.then(({ status }) => {
-                            needValidate = true;
                             this.option('disabled', false);
 
                             validationStatus = status;
                             validationStatus === 'valid' && this._submitInput().click();
+                            needValidate = true;
                         });
                     }
                 }
