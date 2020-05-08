@@ -432,7 +432,7 @@ class Gantt extends Widget {
     _appendCustomFields(data) {
         const modelData = this._tasksOption._getItems();
         return data.reduce((previous, item) => {
-            const modelItem = modelData && modelData.find((obj) => obj.id === item.id);
+            const modelItem = modelData && modelData.filter((obj) => obj.id === item.id)[0];
             previous.push(Object.assign({}, modelItem, item));
             return previous;
         }, []);
