@@ -149,9 +149,8 @@ const Tabs = CollectionWidget.inherit({
                 }
 
                 const $iconElement = getImageContainer(data.icon);
-
-                $container.wrapInner($('<span>').addClass(TABS_ITEM_TEXT_CLASS));
                 $iconElement && $iconElement.prependTo($container);
+                $container.wrapInner($('<span>').addClass(TABS_ITEM_TEXT_CLASS));
             }).bind(this), ['text', 'html', 'icon'], this.option('integrationOptions.watchMethod'))
         });
     },
