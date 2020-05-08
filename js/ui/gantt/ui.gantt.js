@@ -430,7 +430,7 @@ class Gantt extends Widget {
         this._setTreeListOption('dataSource', treeDataSource);
     }
     _appendCustomFields(data) {
-        const modelData = this._tasksOption._getItems();
+        const modelData = this._tasksOption.getItems();
         return data.reduce((previous, item) => {
             const modelItem = modelData && modelData.filter((obj) => obj.id === item.id)[0];
             if(!modelItem) {
@@ -447,8 +447,7 @@ class Gantt extends Widget {
     }
     _updateTreeListDataSource() {
         if(!this._skipUpdateTreeListDataSource()) {
-            const storeArray = this._tasksOption._getStore()._array;
-            this._setTreeListOption('dataSource', storeArray ? storeArray : this.option('tasks.dataSource'));
+            this._setTreeListOption('dataSource', this._tasksOption.getItems());
         }
     }
     _skipUpdateTreeListDataSource() {

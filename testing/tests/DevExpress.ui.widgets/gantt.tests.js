@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import { DataSource } from 'data/data_source/data_source';
 const { test } = QUnit;
 import 'common.css!';
 import 'ui/gantt';
@@ -693,6 +694,38 @@ QUnit.module('DataSources', moduleConfig, () => {
         assert.equal(tasks.length, tasksCount - 1, 'tasks less');
         const removedTask = tasks.filter((t) => t.id === removedTaskId)[0];
         assert.equal(removedTask, undefined, 'task was removed');
+    });
+    test('custom store', function(assert) {
+        const ds = new DataSource({
+            key: 'id',
+            paginate: false,
+            load: () => tasks,
+            update: (key, values) => {
+                let row = {};
+                for(let i = 0; i < tasks.length; i++) {
+                    const task = tasks[i];
+                    if(task.id === key) {
+                        row = task;
+                        break;
+                    }
+                }
+                for(const val in values) {
+                    row[val] = values[val];
+                }
+            }
+        });
+        this.createInstance({
+            tasks: { dataSource: ds },
+            editing: { enabled: true }
+        });
+        this.clock.tick();
+
+        const updatedTaskId = 3;
+        const updatedTitle = 'test';
+        getGanttViewCore(this.instance).commandManager.changeTaskTitleCommand.execute(updatedTaskId.toString(), updatedTitle);
+        this.clock.tick();
+        const updatedTask = tasks.filter((t) => t.id === updatedTaskId)[0];
+        assert.equal(updatedTask.title, updatedTitle, 'task title is updated');
     });
 });
 
