@@ -85,4 +85,4 @@ const ODataContext = Class.inherit({
     },
 });
 
-export default ODataContext;
+module.exports = ODataContext;
