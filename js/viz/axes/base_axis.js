@@ -203,7 +203,7 @@ function validateAxisOptions(options) {
         labelPosition = position;
     }
 
-    if(!labelOptions.userAlignment) {
+    if(labelOptions.alignment !== CENTER && !labelOptions.userAlignment) {
         labelOptions.alignment = {
             [TOP]: CENTER,
             [BOTTOM]: CENTER,
