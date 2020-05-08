@@ -1261,14 +1261,12 @@ module.exports = Class.inherit((function() {
 
         expandHeaderItem: function(area, path) {
             const that = this;
-            let hasCache;
             const headerItems = area === 'column' ? that._data.columns : that._data.rows;
             const headerItem = findHeaderItem(headerItems, path);
-            let options;
 
             if(headerItem && !headerItem.children) {
-                hasCache = !!headerItem.collapsedChildren;
-                options = {
+                const hasCache = !!headerItem.collapsedChildren;
+                const options = {
                     area: area,
                     path: path,
                     expanded: true,
@@ -1279,7 +1277,7 @@ module.exports = Class.inherit((function() {
                     headerItem.children = headerItem.collapsedChildren;
                     delete headerItem.collapsedChildren;
                     that._update();
-                } else {
+                } else if(this.store()) {
                     that.load(options);
                 }
                 return hasCache;

@@ -1788,11 +1788,18 @@ QUnit.module('dxPivotGrid DataController', moduleConfig, () => {
                 { value: 'C' }]
             }
         });
+        const changedSpy = sinon.spy();
+        const expandValueChangingSpy = sinon.spy();
+        dataController.changed.add(changedSpy);
+        dataController.expandValueChanging.add(expandValueChangingSpy);
 
         // act, assert
         assert.ok(!dataController.expandHeaderItem('column', ['C']));
+        // when expandHeaderItem return false, need request for partial dataController for children
 
-    // when expandHeaderItem return false, need request for partial dataController for children
+        assert.strictEqual(expandValueChangingSpy.callCount, 1, 'expandValueChanging is called');
+        // T887002
+        assert.strictEqual(changedSpy.callCount, 0, 'changed is not called');
     });
 
     QUnit.test('apply partial dataController with columns path', function(assert) {
