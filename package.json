@@ -55,7 +55,7 @@
     "cssom": "^0.4.4",
     "del": "^2.2.2",
     "devextreme-cldr-data": "^1.0.2",
-    "devextreme-internal-tools": "~1.2.0",
+    "devextreme-internal-tools": "stable",
     "eslint": "^6.0.0",
     "eslint-plugin-qunit": "^4.0.0",
     "eslint-plugin-spellcheck": "0.0.11",
