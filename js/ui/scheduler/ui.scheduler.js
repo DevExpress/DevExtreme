@@ -424,7 +424,8 @@ const Scheduler = Widget.inherit({
                 allowDragging: true,
                 allowResizing: true,
                 allowUpdating: true,
-                allowEditingTimeZones: false,
+                allowTimeZoneEditing: false,
+                allowEditingTimeZones: false
             },
 
             /**
@@ -455,7 +456,7 @@ const Scheduler = Widget.inherit({
                  * @default false @for Android|iOS
                 */
             /**
-                * @name dxSchedulerOptions.editing.allowEditingTimeZones
+                * @name dxSchedulerOptions.editing.allowTimeZoneEditing
                 * @type boolean
                 * @default false
                 */

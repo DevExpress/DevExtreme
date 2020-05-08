@@ -143,7 +143,7 @@ export default class AppointmentPopup {
     _createForm(element) {
         const { expr } = this.scheduler._dataAccessors;
         const resources = this.scheduler.option('resources');
-        const allowEditingTimeZones = this.scheduler.option('editing').allowEditingTimeZones;
+        const allowTimeZoneEditing = this._getAllowTimeZoneEditing();
         const appointmentData = this.state.appointment.data;
         const formData = this._createAppointmentFormData(appointmentData);
         const readOnly = this._isReadOnly(appointmentData);
@@ -154,7 +154,7 @@ export default class AppointmentPopup {
             this.triggerResize.bind(this),
             this.changeSize.bind(this),
             formData,
-            allowEditingTimeZones,
+            allowTimeZoneEditing,
             readOnly
         );
 
@@ -168,6 +168,11 @@ export default class AppointmentPopup {
             readOnly,
             formData,
         );
+    }
+
+    _getAllowTimeZoneEditing() {
+        const scheduler = this.scheduler;
+        return scheduler.option('editing.allowTimeZoneEditing') || scheduler.option('editing.allowEditingTimeZones');
     }
 
     _isReadOnly(data) {
