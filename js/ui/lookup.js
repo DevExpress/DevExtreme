@@ -497,12 +497,13 @@ const Lookup = DropDownList.inherit({
         return 1 < index && index < (count - 2);
     },
 
-    _getPopupOffset: function(selectedIndex) {
-        const listItemsCount = this._list.option('items').length;
+    _getPopupOffset: function() {
+        const listItemsCount = this._listItemElements().length;
 
         if(listItemsCount === 0) return;
 
         const selectedListItem = $(this._list.element()).find('.' + LIST_ITEM_SELECTED_CLASS);
+        const selectedIndex = this._listItemElements().index(selectedListItem);
         const differenceOfHeights = (selectedListItem.height() - $(this.element()).height()) / 2;
         const lookupOffset = $(this._list.element()).offset().top;
         const dropDownHeightOption = this.option('dropDownOptions.height');
@@ -555,12 +556,11 @@ const Lookup = DropDownList.inherit({
     _setPopupPosition: function() {
         if(!this.option('itemCenteringEnabled')) return;
 
-        const selectedIndex = this._list.option('selectedIndex');
         const flipped = this._popup._$wrapper.hasClass(LOOKUP_POPOVER_FLIP_VERTICAL_CLASS);
         if(flipped) return;
 
         const popupContentParent = $(this._popup.content()).parent();
-        const popupOffset = this._getPopupOffset(selectedIndex);
+        const popupOffset = this._getPopupOffset();
 
         const position = translator.locate(popupContentParent);
 
@@ -571,7 +571,7 @@ const Lookup = DropDownList.inherit({
 
     _getPopupHeight: function() {
         if(this._list && this._list.itemElements() && this.option('itemCenteringEnabled')) {
-            const itemsCount = this._list.option('items').length;
+            const itemsCount = this._listItemElements().length;
             const requiredItemsCount = itemsCount < MATERIAL_LOOKUP_LIST_ITEMS_COUNT ? itemsCount : MATERIAL_LOOKUP_LIST_ITEMS_COUNT;
 
             return (this._list.itemElements().height() * requiredItemsCount) +
