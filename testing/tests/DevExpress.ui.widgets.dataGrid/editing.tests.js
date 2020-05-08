@@ -1102,7 +1102,7 @@ QUnit.module('Editing', {
     // arrange
         const that = this;
         const rowsView = this.rowsView;
-        const testElement = $('#container');
+        const testElement = $('#container').parent();
         const $input = $('<input/>', {
             type: 'button',
             click: function(e) {
