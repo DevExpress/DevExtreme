@@ -38,8 +38,27 @@ jobs:
         CONSTEL: ${{ matrix.CONSTEL }}
       run: |
         $runner = Start-Process -FilePath dotnet -ArgumentList './testing/runner/bin/runner.dll --single-run' -PassThru -NoNewWindow
-        $url = "http://localhost:20050/run?notimers=true&nojquery=true&constellation=$env:CONSTEL"
-        Start-Sleep -s 5
+        Write-Host "Runner starting"
+        $runner_host = "http://localhost:20050"
+        $attempt_count = 30
+        For ($i=0; $i -lt $attempt_count; $i++) {
+          try {
+            Invoke-WebRequest $runner_host -Method 'HEAD' -TimeoutSec 5 | Out-Null
+            break
+          }
+          catch {
+            Write-Host "Waiting for runner... Attempt $i"
+            Start-Sleep -s 1
+          }
+        }
+        If ($i -eq $attempt_count) {
+          Write-Host "Runner doesn't respond"
+          exit 1
+        }
+        Write-Host "Runner started"
+        $url = "$runner_host/run?notimers=true&nojquery=true&constellation=$env:CONSTEL"
         & "C:\Program Files\Internet Explorer\iexplore.exe" "$url"
+        Write-Host "IE started"
         Wait-Process -InputObject $runner
+        Write-Host "Runner finished"
         exit $runner.ExitCode
