@@ -295,10 +295,10 @@
         "dxFileManager-dialogRenameItemButtonText": "Сохранить",
         "dxFileManager-dialogCreateDirectoryTitle": "Новая папка",
         "dxFileManager-dialogCreateDirectoryButtonText": "Создать",
-        "dxFileManager-dialogDeleteItemTitle": "TODO",
-        "dxFileManager-dialogDeleteItemButtonText": "TODO",
-        "dxFileManager-dialogDeleteItemSingleItemConfirmation": "TODO",
-        "dxFileManager-dialogDeleteItemMultipleItemsConfirmation": "TODO",
+        "dxFileManager-dialogDeleteItemTitle": "Удаление элемента",
+        "dxFileManager-dialogDeleteItemButtonText": "Удалить",
+        "dxFileManager-dialogDeleteItemSingleItemConfirmation": "Вы действительно хотите удалить {0}?",
+        "dxFileManager-dialogDeleteItemMultipleItemsConfirmation": "Вы действительно хотите удалить {0}",
 
         "dxFileManager-editingCreateSingleItemProcessingMessage": "Создаётся папка в {0}",
         "dxFileManager-editingCreateSingleItemSuccessMessage": "Создана папка в {0}",
@@ -515,14 +515,14 @@
         "dxGantt-dialogCancelOperationMessage": "Отменить операцию",
         "dxGantt-dialogDeleteDependencyMessage": "Удалить задачу",
         "dxGantt-dialogMoveTaskAndKeepDependencyMessage": "Сохранить зависимость и передвинуть задачу",
-        "dxGantt-undo": "TODO",
-        "dxGantt-redo": "TODO",
-        "dxGantt-expandAll": "TODO",
-        "dxGantt-collapseAll": "TODO",
-        "dxGantt-addNewTask": "TODO",
-        "dxGantt-deleteSelectedTask": "TODO",
-        "dxGantt-zoomIn": "TODO",
-        "dxGantt-zoomOut": "TODO",
-        "dxGantt-fullScreen": "TODO"
+        "dxGantt-undo": "Отменить операцию",
+        "dxGantt-redo": "Повторить операцию",
+        "dxGantt-expandAll": "Развернуть все",
+        "dxGantt-collapseAll": "Свернуть все",
+        "dxGantt-addNewTask": "Создать новую задачу",
+        "dxGantt-deleteSelectedTask": "Удалить выделенную задачу",
+        "dxGantt-zoomIn": "Увеличить масштаб",
+        "dxGantt-zoomOut": "Уменьшить масштаб",
+        "dxGantt-fullScreen": "Раскрыть во весь экран"
     }
 }
