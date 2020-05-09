@@ -145,20 +145,33 @@
     border-bottom: none;
 }
 
-.dx-toolbar-menu-section .dx-toolbar-hidden-button .dx-button {
-    border: none;
-    background: none;
-    margin: 0;
-    width: 100%;
-    text-align: left;
-    padding: 10px;
+.dx-toolbar-menu-section {
+    .dx-toolbar-hidden-button {
+        .dx-button {
+            border: none;
+            background: none;
+            margin: 0;
+            width: 100%;
+            text-align: left;
+            padding: 10px;
+        
+            .dx-button-text {
+                line-height: normal;
+            }
+        
+            .dx-button-content {
+                text-align: left;
 
-    .dx-button-text {
-        line-height: normal;
-    }
+                .dx-rtl &,
+                .dx-rtl& {
+                        text-align: right;
+                }
+            }
+        }
 
-    .dx-button-content {
-        text-align: left;
+        .dx-toolbar-item-auto-hide {
+            padding: 0;
+        }
     }
 }
 
