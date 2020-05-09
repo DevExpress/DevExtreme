@@ -9,7 +9,8 @@
         "plugin:node/recommended"
     ],
     "rules": {
-        "no-console": "off"
+        "no-console": "off",
+        "node/no-unpublished-require": "off"
     },
     "globals": {
         "console": true
