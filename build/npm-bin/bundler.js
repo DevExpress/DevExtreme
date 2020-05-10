@@ -11,7 +11,7 @@ let bundle = process.argv.length > 2 ? process.argv[2] : 'dx.custom';
 
 bundle = bundle.replace(/.config.js$/, '');
 
-const baseConfig = require('./webpack.config.js');
+const baseConfig = require('./webpack.config.js'); // eslint-disable-line node/no-missing-require
 const createConfig = function(outputFile, mode) {
     const config = Object.assign({}, baseConfig);
 

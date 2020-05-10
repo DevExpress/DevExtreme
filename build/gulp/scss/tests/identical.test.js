@@ -181,4 +181,4 @@ files.forEach(file => {
     }
 });
 
-process.exit(exitCode);
+process.exit(exitCode); // eslint-disable-line no-process-exit
