@@ -1,3 +1,5 @@
+'use strict';
+
 const replaceAsync = require('gulp-replace-async');
 const path = require('path');
 const lessCompiler = require('less');

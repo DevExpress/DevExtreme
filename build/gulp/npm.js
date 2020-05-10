@@ -1,3 +1,5 @@
+'use strict';
+
 const gulp = require('gulp');
 const eol = require('gulp-eol');
 const replace = require('gulp-replace');
