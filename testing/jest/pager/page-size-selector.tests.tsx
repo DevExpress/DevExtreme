@@ -7,7 +7,9 @@ import SelectBox from '../../../js/renovation/select-box.p';
 import {
   PAGER_PAGE_SIZES_CLASS, PAGER_SELECTED_PAGE_SIZE_CLASS, PAGER_PAGE_SIZE_CLASS,
 } from '../../../js/renovation/pager/page-size-selector';
+import getElementComputedStyle from '../../../js/renovation/pager/get-computed-style.p';
 
+jest.mock('../../../js/renovation/pager/get-computed-style.p');
 jest.mock('../../../js/renovation/select-box', () => { });
 jest.mock('../../../js/renovation/select-box.p', () => () => 'selectbox');
 jest.mock('../../../js/renovation/pager/light-button.p', () => (props) => props.children);
@@ -54,6 +56,14 @@ describe('Pager size selector', () => {
       valueExpr: 'value',
     });
   });
+  it('render small page sizes selectBox width', () => {
+    (getElementComputedStyle as jest.Mock).mockReturnValue({ minWidth: '42px' });
+    const comp = render({
+      isLargeDisplayMode: false, pageSizes: [5, 10, 1000],
+    });
+    expect(comp.children().at(0).props().width).toBe(42 + 10 * 4);
+  });
+
   it('render small page sizes rtlEnabled', () => {
     const comp = render({
       rtlEnabled: true, isLargeDisplayMode: false, pageSizes: [5, 10], pageSize: 5,
