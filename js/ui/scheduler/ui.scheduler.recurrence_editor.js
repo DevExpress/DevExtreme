@@ -384,7 +384,8 @@ const RecurrenceEditor = Editor.inherit({
         const byDay = this._recurrenceRule.rules()['byday'] ?
             this._recurrenceRule.rules()['byday'].split(',') : days[firstDayOfWeek];
         const that = this;
-        const itemsButtonGroup = days.slice(firstDayOfWeek).concat(days.slice(0, firstDayOfWeek)).map(item => { return { text: item }; });
+        const localDaysNames = dateLocalization.getDayNames('abbreviated');
+        const itemsButtonGroup = localDaysNames.slice(firstDayOfWeek).concat(localDaysNames.slice(0, firstDayOfWeek)).map(item => { return { text: item.toUpperCase() }; });
 
         this._$repeatOnWeek = $('<div>').addClass(RECURRENCE_BUTTON_GROUP).appendTo(this._$repeatOnEditor);
 

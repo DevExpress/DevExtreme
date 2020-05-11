@@ -10,6 +10,7 @@ import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { Deferred, when } from '../../core/utils/deferred';
 import { isDefined } from '../../core/utils/type';
+import messageLocalization from '../../localization/message';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -282,7 +283,7 @@ export default class AppointmentPopup {
         return [
             {
                 shortcut: 'done',
-                options: { text: 'Done' },
+                options: { text: messageLocalization.format('Done') },
                 location: TOOLBAR_ITEM_AFTER_LOCATION,
                 onClick: (e) => this._doneButtonClickHandler(e)
             },
