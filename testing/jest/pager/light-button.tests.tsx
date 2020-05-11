@@ -1,9 +1,9 @@
 
 import { h } from 'preact';
 import { mount } from 'enzyme';
+import { EVENT, emit, getEventHandlers } from '../utils/events-mock';
 import ClickableDiv from '../../../js/renovation/pager/light-button.p';
 import { LightButtonProps } from '../../../js/renovation/pager/light-button';
-import { EVENT, emit, getEventHandlers } from '../utils/events-mock';
 
 describe('LightButton', () => {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -15,7 +15,7 @@ describe('LightButton', () => {
     const comp = render({ children: 'text', className: 'class', label: 'label' });
     expect(comp.childAt(0).getDOMNode().classList).toHaveLength(1);
     expect(comp.childAt(0).props()).toEqual({
-      className: 'class', label: 'label', role: 'button', tabIndex: 0,
+      className: 'class', 'aria-label': 'label', role: 'button', tabIndex: 0,
     });
     expect(comp.childAt(0).childAt(0).text()).toBe('text');
   });

@@ -15,12 +15,12 @@ export const viewFunction = ({
 }: LightButton) => (
   <div
     key={key}
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ref={widgetRef as any}
     className={className}
     tabIndex={0}
     role="button"
-    label={label}
+    aria-label={label}
   >
     {children}
   </div>
