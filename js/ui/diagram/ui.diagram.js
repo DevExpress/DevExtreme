@@ -9,7 +9,7 @@ import positionUtils from '../../animation/position';
 import resizeCallbacks from '../../core/utils/resize_callbacks';
 import { getDiagram } from './diagram.importer';
 import { hasWindow, getWindow } from '../../core/utils/window';
-import domUtils from '../../core/utils/dom';
+import { getPublicElement } from '../../core/element';
 import eventsEngine from '../../events/core/events_engine';
 import * as eventUtils from '../../events/utils';
 import messageLocalization from '../../localization/message';
@@ -1066,7 +1066,7 @@ class Diagram extends Widget {
                         createTemplate: template && ((container, item) => {
                             template.render({
                                 model: this._nativeItemToDiagramItem(item),
-                                container: domUtils.getPublicElement($(container))
+                                container: getPublicElement($(container))
                             });
                         }),
                         templateLeft: s.templateLeft,

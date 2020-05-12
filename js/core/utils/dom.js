@@ -9,13 +9,12 @@ const typeUtils = require('./type');
 const isDefined = typeUtils.isDefined;
 const isRenderer = typeUtils.isRenderer;
 const htmlParser = require('../../core/utils/html_parser');
-let elementStrategy;
 
 const resetActiveElement = function() {
     const activeElement = domAdapter.getActiveElement();
     const body = domAdapter.getBody();
 
-    // todo: remove this hack after msie 11 support stopped
+    // TODO: remove this hack after msie 11 support stopped
     if(activeElement && activeElement !== body && activeElement.blur) {
         try {
             activeElement.blur();
@@ -178,18 +177,6 @@ const contains = function(container, element) {
     return domAdapter.isDocument(container) ? container.documentElement.contains(element) : container.contains(element);
 };
 
-const getPublicElement = function($element) {
-    return elementStrategy($element);
-};
-
-const setPublicElementWrapper = function(value) {
-    elementStrategy = value;
-};
-
-setPublicElementWrapper(function(element) {
-    return element && element.get(0);
-});
-
 const createTextElementHiddenCopy = function(element, text, options) {
     const elementStyles = window.getComputedStyle($(element).get(0));
     const includePaddings = options && options.includePaddings;
@@ -213,20 +200,18 @@ const createTextElementHiddenCopy = function(element, text, options) {
     });
 };
 
-exports.setPublicElementWrapper = setPublicElementWrapper;
 exports.resetActiveElement = resetActiveElement;
-exports.createMarkupFromString = createMarkupFromString;
-exports.triggerShownEvent = triggerVisibilityChangeEvent('dxshown');
-exports.triggerHidingEvent = triggerVisibilityChangeEvent('dxhiding');
-exports.triggerResizeEvent = triggerVisibilityChangeEvent('dxresize');
-exports.getElementOptions = getElementOptions;
-exports.createComponents = createComponents;
-exports.extractTemplateMarkup = extractTemplateMarkup;
-exports.normalizeTemplateElement = normalizeTemplateElement;
+exports.createMarkupFromString = createMarkupFromString; // TODO: Remove and inline no WinJS code in themes
+exports.triggerShownEvent = triggerVisibilityChangeEvent('dxshown'); // TODO: extract to events
+exports.triggerHidingEvent = triggerVisibilityChangeEvent('dxhiding'); // TODO: extract to events
+exports.triggerResizeEvent = triggerVisibilityChangeEvent('dxresize'); // TODO: extract to events
+exports.getElementOptions = getElementOptions; // TODO: extract somewhere
+exports.createComponents = createComponents; // TODO: Why does it exists? Remove?
+exports.extractTemplateMarkup = extractTemplateMarkup; // TODO:  // TODO: extract to script template module
+exports.normalizeTemplateElement = normalizeTemplateElement; // TODO:  // TODO: extract to script template module?
 exports.clearSelection = clearSelection;
-exports.uniqueId = uniqueId;
+exports.uniqueId = uniqueId; // TODO: remove
 exports.closestCommonParent = closestCommonParent;
 exports.clipboardText = clipboardText;
 exports.contains = contains;
-exports.getPublicElement = getPublicElement;
-exports.createTextElementHiddenCopy = createTextElementHiddenCopy;
+exports.createTextElementHiddenCopy = createTextElementHiddenCopy; // TODO: Discuss with editors. It needs only for tagbox and datebox

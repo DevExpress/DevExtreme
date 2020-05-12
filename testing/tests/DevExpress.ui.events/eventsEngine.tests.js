@@ -141,7 +141,7 @@ QUnit.test('triggering \'click\' event for checkbox calls native click method', 
 
     const handler = function() { counter++; };
 
-    document.body.appendChild(checkbox);
+    document.body.appendChild(checkbox); // TODO: Use fixture!
 
     eventsEngine.on(checkbox, 'click', handler);
 

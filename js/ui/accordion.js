@@ -6,7 +6,7 @@ import devices from '../core/devices';
 import domAdapter from '../core/dom_adapter';
 import { extend } from '../core/utils/extend';
 import { deferRender } from '../core/utils/common';
-import { getPublicElement } from '../core/utils/dom';
+import { getPublicElement } from '../core/element';
 import iteratorUtils from '../core/utils/iterator';
 import { isPlainObject, isDefined } from '../core/utils/type';
 import registerComponent from '../core/component_registrator';

@@ -8,7 +8,7 @@ import { attachInstanceToElement, getInstanceByElement } from './utils/public_co
 import { cleanDataRecursive } from './element_data';
 import { each } from './utils/iterator';
 import { extend } from './utils/extend';
-import { getPublicElement } from '../core/utils/dom';
+import { getPublicElement } from '../core/element';
 import { grep, noop } from './utils/common';
 import { inArray } from './utils/array';
 import { isString, isDefined } from './utils/type';

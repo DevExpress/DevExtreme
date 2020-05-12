@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import dataUtils from '../../core/element_data';
-import domUtils from '../../core/utils/dom';
+import { getPublicElement } from '../../core/element';
 import Widget from '../widget/ui.widget';
 import { fixTimezoneGap, getShortDateFormat, getFirstDateView } from '../../core/utils/date';
 import { extend } from '../../core/utils/extend';
@@ -189,7 +189,7 @@ const BaseView = Widget.inherit({
                 date: cellDate,
                 view: this._getViewName()
             },
-            container: domUtils.getPublicElement($cell),
+            container: getPublicElement($cell),
             index: cellIndex
         };
     },
