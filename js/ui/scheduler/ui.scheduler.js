@@ -459,8 +459,14 @@ const Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions.editing.allowTimeZoneEditing
                 * @type boolean
                 * @default false
+                * @deprecated dxSchedulerOptions.editing.allowEditingTimeZones
                 */
 
+            /**
+                * @name dxSchedulerOptions.editing.allowEditingTimeZones
+                * @type boolean
+                * @default false
+                */
 
             /**
                * @name dxSchedulerOptions.appointmentDragging.autoScroll
@@ -728,7 +734,8 @@ const Scheduler = Widget.inherit({
 
         extend(this._deprecatedOptions, {
             onAppointmentFormCreated: { since: '18.2', alias: 'onAppointmentFormOpening' },
-            dropDownAppointmentTemplate: { since: '19.2', message: 'appointmentTooltipTemplate' }
+            dropDownAppointmentTemplate: { since: '19.2', alias: 'appointmentTooltipTemplate' },
+            allowEditingTimeZones: { since: '20.1', alias: 'allowTimeZoneEditing' }
         });
     },
 
