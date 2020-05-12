@@ -1073,6 +1073,7 @@ QUnit.test('Done button default configuration should be correct', function(asser
         }
     });
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption' });
+    $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 });
 
 QUnit.test('Done button custom configuration should be correct', function(assert) {
