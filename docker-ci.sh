@@ -212,7 +212,6 @@ function start_runner_watchdog {
 }
 
 echo "node $(node -v), npm $(npm -v), dotnet $(dotnet --version)"
-npm ls jquery
 
 TARGET_FUNC="run_$TARGET"
 
