@@ -626,6 +626,88 @@ test('Detail - The first command cell should be focused using Tab (T884646)', as
     });
 });
 
+test('Adaptive - Hidden cells should not be focused using Tab (T887014)', async t => {
+    const dataGrid = new DataGrid('#container');
+    const headerRow = dataGrid.getHeaders().getHeaderRow(0);
+    const dataRow = dataGrid.getDataRow(0);
+
+    //header row
+    await t
+        .pressKey('tab')
+        .expect(headerRow.getHeaderCell(1).element.focused).ok()
+        .expect(headerRow.getHeaderCell(1).element.hasAttribute('tabindex')).ok()
+        .expect(headerRow.getHeaderCell(2).isHidden).ok()
+        .expect(headerRow.getHeaderCell(2).element.hasAttribute('tabindex')).notOk('the third header cell does not have tabindex')
+
+        .pressKey('tab')
+        .expect(headerRow.getHeaderCell(3).element.focused).ok()
+        .expect(headerRow.getHeaderCell(3).element.hasAttribute('tabindex')).ok();
+
+    //data row
+    await t
+        .pressKey('tab')
+        .expect(dataRow.getCommandCell(0).isFocused).ok()
+        .expect(dataRow.getCommandCell(0).element.focused).ok()
+
+        .pressKey('tab')
+        .expect(dataRow.getDataCell(1).isFocused).ok()
+        .expect(dataRow.getDataCell(1).element.focused).ok()
+        .expect(dataRow.getDataCell(2).isHidden).ok()
+        .expect(dataRow.getDataCell(2).element.hasAttribute('tabindex')).notOk('the third data cell does not have tabindex')
+
+        .pressKey('tab')
+        .expect(dataRow.getDataCell(3).isFocused).ok()
+        .expect(dataRow.getDataCell(3).element.focused).ok()
+
+        .pressKey('shift+tab')
+        .expect(dataRow.getDataCell(2).isHidden).ok()
+        .expect(dataRow.getDataCell(2).element.hasAttribute('tabindex')).notOk('the third data cell does not have tabindex')
+        .expect(dataRow.getDataCell(1).isFocused).ok()
+        .expect(dataRow.getDataCell(1).element.focused).ok()
+
+        .pressKey('shift+tab')
+        .expect(dataRow.getCommandCell(0).isFocused).ok()
+        .expect(dataRow.getCommandCell(0).element.focused).ok();
+
+    //header row
+    await t
+        .pressKey('shift+tab')
+        .expect(headerRow.getHeaderCell(3).element.focused).ok()
+        .expect(headerRow.getHeaderCell(3).element.hasAttribute('tabindex')).ok()
+
+        .pressKey('shift+tab')
+        .expect(headerRow.getHeaderCell(2).isHidden).ok()
+        .expect(headerRow.getHeaderCell(2).element.hasAttribute('tabindex')).notOk('the third header cell does not have tabindex')
+        .expect(headerRow.getHeaderCell(1).element.focused).ok()
+        .expect(headerRow.getHeaderCell(1).element.hasAttribute('tabindex')).ok()
+
+    // focus BODY
+    await t
+        .pressKey('shift+tab')
+        .expect(Selector('BODY').focused).ok();
+
+}).before(async () => {
+    await createWidget('dxDataGrid', {
+        keyExpr: 'name',
+        dataSource: [
+            { name: 'Alex', phone: '5555555555', room: 1 }
+        ],
+        width: 150,
+        columnHidingEnabled: true,
+        columns: [
+            {
+                type: 'adaptive'
+            },
+            'name',
+            {
+                dataField: 'phone',
+                hidingPriority: 0
+            },
+            'room'
+        ]
+    });
+});
+
 test('Select views by Ctrl+Up, Ctrl+Down keys', async t => {
     const dataGrid = new DataGrid('#container');
     const headers = dataGrid.getHeaders();
