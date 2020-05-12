@@ -1,5 +1,6 @@
 import registerEventCallbacks from './event_registrator_callbacks';
 import { extend } from '../../core/utils/extend';
+import { contains } from '../../core/utils/dom';
 import domAdapter from '../../core/dom_adapter';
 import windowUtils from '../../core/utils/window';
 const window = windowUtils.getWindow();
@@ -198,7 +199,7 @@ function getHandlersController(element, eventName) {
                 let result;
 
                 if(eventName in NATIVE_EVENTS_TO_SUBSCRIBE) {
-                    secondaryTargetIsInside = relatedTarget && target && (relatedTarget === target || target.contains(relatedTarget));
+                    secondaryTargetIsInside = relatedTarget && target && (relatedTarget === target || contains(target, relatedTarget));
                 }
 
                 if(extraParameters !== undefined) {
