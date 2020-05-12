@@ -464,7 +464,7 @@ const Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions.editing.allowEditingTimeZones
                 * @type boolean
                 * @default false
-                * @deprecated dxSchedulerOptions.editing.allowEditingTimeZones
+                * @deprecated dxSchedulerOptions.editing.allowTimeZoneEditing
                 */
             /**
                * @name dxSchedulerOptions.appointmentDragging.autoScroll
