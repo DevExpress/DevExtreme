@@ -87,7 +87,7 @@
     "handlebars": "^4.1.2",
     "hogan.js": "3.0.2",
     "intl": "^1.2.5",
-    "jquery": "^3.5.0",
+    "jquery": "^3.5.1",
     "jquery.1": "^1.0.0",
     "jquery.2": "^1.0.0",
     "jquery.tmpl": "0.0.2",
