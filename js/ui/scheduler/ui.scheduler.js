@@ -459,13 +459,13 @@ const Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions.editing.allowTimeZoneEditing
                 * @type boolean
                 * @default false
-                * @deprecated dxSchedulerOptions.editing.allowEditingTimeZones
                 */
 
             /**
                 * @name dxSchedulerOptions.editing.allowEditingTimeZones
                 * @type boolean
                 * @default false
+                * @deprecated dxSchedulerOptions.editing.allowEditingTimeZones
                 */
 
             /**
