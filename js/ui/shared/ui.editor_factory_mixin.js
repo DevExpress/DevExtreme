@@ -7,7 +7,7 @@ const compileGetter = require('../../core/utils/data').compileGetter;
 const browser = require('../../core/utils/browser');
 const extend = require('../../core/utils/extend').extend;
 const devices = require('../../core/devices');
-const getPublicElement = require('../../core/element');
+const getPublicElement = require('../../core/element').getPublicElement;
 const normalizeDataSourceOptions = require('../../data/data_source/utils').normalizeDataSourceOptions;
 const normalizeKeyName = require('../../events/utils').normalizeKeyName;
 
