@@ -383,9 +383,11 @@ const RecurrenceEditor = Editor.inherit({
         const firstDayOfWeek = this._getFirstDayOfWeek();
         const byDay = this._recurrenceRule.rules()['byday'] ?
             this._recurrenceRule.rules()['byday'].split(',') : days[firstDayOfWeek];
-        const that = this;
+
         const localDaysNames = dateLocalization.getDayNames('abbreviated');
-        const itemsButtonGroup = localDaysNames.slice(firstDayOfWeek).concat(localDaysNames.slice(0, firstDayOfWeek)).map(item => { return { text: item.toUpperCase() }; });
+        const dayNames = days.slice(firstDayOfWeek).concat(days.slice(0, firstDayOfWeek));
+
+        const itemsButtonGroup = localDaysNames.slice(firstDayOfWeek).concat(localDaysNames.slice(0, firstDayOfWeek)).map((item, index) => { return { text: item, key: dayNames[index] }; });
 
         this._$repeatOnWeek = $('<div>').addClass(RECURRENCE_BUTTON_GROUP).appendTo(this._$repeatOnEditor);
 
@@ -393,9 +395,10 @@ const RecurrenceEditor = Editor.inherit({
             items: itemsButtonGroup,
             selectionMode: 'multiple',
             selectedItemKeys: byDay,
+            keyExpr: 'key',
             onSelectionChanged: (e) => {
                 const selectedKeys = e.component.option('selectedItemKeys');
-                that._recurrenceRule.makeRule('byday', selectedKeys);
+                this._recurrenceRule.makeRule('byday', selectedKeys);
                 this._changeEditorValue();
             }
         });
