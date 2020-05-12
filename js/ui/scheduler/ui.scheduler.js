@@ -734,7 +734,7 @@ const Scheduler = Widget.inherit({
 
         extend(this._deprecatedOptions, {
             onAppointmentFormCreated: { since: '18.2', alias: 'onAppointmentFormOpening' },
-            dropDownAppointmentTemplate: { since: '19.2', alias: 'appointmentTooltipTemplate' },
+            dropDownAppointmentTemplate: { since: '19.2', message: 'appointmentTooltipTemplate' },
             allowEditingTimeZones: { since: '20.1', alias: 'allowTimeZoneEditing' }
         });
     },
