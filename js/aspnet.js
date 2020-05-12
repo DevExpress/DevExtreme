@@ -132,17 +132,29 @@
     function createComponent(name, options, id, validatorOptions) {
         var selector = '#' + String(id).replace(/[^\w-]/g, '\\$&');
         pendingCreateComponentRoutines.push(function() {
-            var $component = $(selector)[name](options);
-            if($.isPlainObject(validatorOptions)) {
-                $component.dxValidator(validatorOptions);
+            var $element = $(selector);
+            if($element.length) {
+                var $component = $(selector)[name](options);
+                if($.isPlainObject(validatorOptions)) {
+                    $component.dxValidator(validatorOptions);
+                }
+                return true;
             }
+            return false;
         });
     }
 
     templateRendered.add(function() {
         var snapshot = pendingCreateComponentRoutines.slice();
+        var leftover = [ ];
+
         pendingCreateComponentRoutines = [ ];
-        snapshot.forEach(function(func) { func(); });
+        snapshot.forEach(function(func) {
+            if(!func()) {
+                leftover.push(func);
+            }
+        });
+        pendingCreateComponentRoutines = pendingCreateComponentRoutines.concat(leftover);
     });
 
     return {
