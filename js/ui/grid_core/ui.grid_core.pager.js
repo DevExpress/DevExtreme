@@ -19,6 +19,8 @@ const PagerView = modules.View.inherit({
                 const pager = that._getPager();
                 if(pager) {
                     pager.option({
+                        pageIndex: that._getPageIndex(dataController),
+                        pageSize: dataController.pageSize(),
                         pageCount: dataController.pageCount(),
                         totalCount: dataController.totalCount(),
                         hasKnownLastPage: dataController.hasKnownLastPage()
@@ -45,7 +47,7 @@ const PagerView = modules.View.inherit({
         const keyboardController = that.getController('keyboardNavigation');
         const options = {
             maxPagesCount: MAX_PAGES_COUNT,
-            pageIndex: 1 + (parseInt(dataController.pageIndex()) || 0),
+            pageIndex: that._getPageIndex(dataController),
             pageCount: dataController.pageCount(),
             pageSize: dataController.pageSize(),
             showPageSizes: pagerOptions.showPageSizeSelector,
@@ -77,6 +79,10 @@ const PagerView = modules.View.inherit({
         }
 
         that._createComponent($element, Pager, options);
+    },
+
+    _getPageIndex: function(dataController) {
+        return 1 + (parseInt(dataController.pageIndex()) || 0);
     },
 
     getPageSizes: function() {
