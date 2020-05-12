@@ -9770,6 +9770,38 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok(freeSpaceRowHeightStatuses.length);
         freeSpaceRowHeightStatuses.forEach(heightStatus => assert.ok(heightStatus));
     });
+
+    QUnit.test('Deferred selection - The onSelectionChanged event should not fire on initial loading if a restored state contains selecitonFilter (T885777)', function(assert) {
+        // arrange
+        const onSelectionChangedHandler = sinon.spy();
+        const gridOptions = {
+            keyExpr: 'id',
+            dataSource: [{ id: 1 }],
+            columns: ['id'],
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return { selectionFilter: ['id', '=', 1] };
+                }
+            },
+            selection: {
+                mode: 'multiple',
+                deferred: true
+            },
+            onSelectionChanged: onSelectionChangedHandler
+        };
+        const dataGrid = createDataGrid(gridOptions);
+        this.clock.tick();
+
+        let selectedKeys;
+        dataGrid.getSelectedRowKeys().done(keys => selectedKeys = keys);
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(selectedKeys, [1]);
+        assert.notOk(onSelectionChangedHandler.called, 'onSelectionChanged is not called');
+    });
 });
 
 
