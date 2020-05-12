@@ -24,7 +24,7 @@ import BaseComponent from './preact-wrapper/button';
 const stylingModes = ['outlined', 'text', 'contained'];
 
 const getInkRippleConfig = ({ text, icon, type }: ButtonProps) => {
-  const isOnlyIconButton = !text && icon || type === 'back';
+  const isOnlyIconButton = (!text && icon) || (type === 'back');
   const config: any = isOnlyIconButton ? {
     isCentered: true,
     useHoldAnimation: false,

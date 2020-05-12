@@ -1,6 +1,7 @@
 
 import { h, createRef } from 'preact';
-import { mount, ReactWrapper, Element } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
+import { JSXInternal } from 'preact/src/jsx';
 import devices from '../../js/core/devices';
 import themes from '../../js/ui/themes';
 import {
@@ -17,6 +18,10 @@ import Button, { defaultOptions } from '../../js/renovation/button.p';
 import type ButtonRef from '../../js/renovation/button.p';
 import Icon from '../../js/renovation/icon.p';
 import Widget from '../../js/renovation/widget.p';
+import type { WidgetProps } from '../../js/renovation/widget';
+import type { ButtonProps } from '../../js/renovation/button';
+
+type Mock = jest.Mock;
 
 jest.mock('../../js/core/devices', () => {
   const actualDevices = require.requireActual('../../js/core/devices');
@@ -38,9 +43,10 @@ describe('Button', () => {
   const render = (props = {}): ReactWrapper => mount(<Button {...props} />).childAt(0);
 
   beforeEach(() => {
-    (devices.real as any).mockImplementation(() => ({ deviceType: 'desktop' }));
+    (devices.real as Mock).mockImplementation(() => ({ deviceType: 'desktop' }));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (devices as any).isSimulator.mockImplementation(() => false);
-    (themes.current as any).mockImplementation(() => 'generic');
+    (themes.current as Mock).mockImplementation(() => 'generic');
   });
 
   afterEach(() => {
@@ -53,14 +59,14 @@ describe('Button', () => {
       describe('Wave position and size', () => {
         it('should calc correct position and size for the back button', () => {
           const button = render({ useInkRipple: true, type: 'back' });
-          const content: Element = button.find('.dx-button-content').getDOMNode();
-          const { onActive } = button.find(Widget).props();
+          const content = button.find('.dx-button-content').getDOMNode<HTMLDivElement>();
+          const { onActive } = button.find(Widget).props() as WidgetProps;
 
           content.style.width = '10px';
           content.style.height = '10px';
           onActive(fakeClickEvent);
 
-          const wave = content.querySelectorAll('.dx-inkripple-wave')[0];
+          const wave = content.querySelectorAll<HTMLDivElement>('.dx-inkripple-wave')[0];
 
           expect(wave.style).toMatchObject({
             left: '-2px', top: '-2px', width: '14px', height: '14px',
@@ -69,14 +75,14 @@ describe('Button', () => {
 
         it('should calc correct position and size for the icon only button', () => {
           const button = render({ useInkRipple: true, text: '', icon: 'icon' });
-          const content: Element = button.find('.dx-button-content').getDOMNode();
-          const { onActive } = button.find(Widget).props();
+          const content = button.find('.dx-button-content').getDOMNode<HTMLDivElement>();
+          const { onActive } = button.find(Widget).props() as WidgetProps;
 
           content.style.width = '10px';
           content.style.height = '10px';
           onActive(fakeClickEvent);
 
-          const wave = content.querySelectorAll('.dx-inkripple-wave')[0];
+          const wave = content.querySelectorAll<HTMLDivElement>('.dx-inkripple-wave')[0];
 
           expect(wave.style).toMatchObject({
             left: '-2px', top: '-2px', width: '14px', height: '14px',
@@ -85,14 +91,14 @@ describe('Button', () => {
 
         it('should calc correct position and size for the regular button', () => {
           const button = render({ useInkRipple: true });
-          const content: Element = button.find('.dx-button-content').getDOMNode();
-          const { onActive } = button.find(Widget).props();
+          const content = button.find('.dx-button-content').getDOMNode<HTMLDivElement>();
+          const { onActive } = button.find(Widget).props() as WidgetProps;
 
           content.style.width = '10px';
           content.style.height = '10px';
           onActive(fakeClickEvent);
 
-          const wave = content.querySelectorAll('.dx-inkripple-wave')[0];
+          const wave = content.querySelectorAll<HTMLDivElement>('.dx-inkripple-wave')[0];
 
           expect(wave.style).toMatchObject({
             left: '-14px', top: '-14px', width: '28px', height: '28px',
@@ -102,8 +108,8 @@ describe('Button', () => {
 
       it('should be `false` by default', () => {
         const button = render();
-        const content: Element = button.find('.dx-button-content').getDOMNode();
-        const { onActive } = button.find(Widget).props();
+        const content = button.find('.dx-button-content').getDOMNode<HTMLDivElement>();
+        const { onActive } = button.find(Widget).props() as WidgetProps;
 
         onActive(defaultEvent);
         expect(content.querySelectorAll('.dx-inkripple')).toHaveLength(0);
@@ -112,7 +118,7 @@ describe('Button', () => {
       it('should render on active event and clear on inactive event', () => {
         const button = render({ useInkRipple: true });
         const content: Element = button.find('.dx-button-content').getDOMNode();
-        const { onActive, onInactive } = button.find(Widget).props();
+        const { onActive, onInactive } = button.find(Widget).props() as WidgetProps;
 
         expect(content.querySelectorAll('.dx-inkripple-wave')).toHaveLength(0);
         expect(content.querySelectorAll('.dx-inkripple-hiding')).toHaveLength(0);
@@ -146,7 +152,7 @@ describe('Button', () => {
         const submitInput = button.find('input.dx-button-submit-input');
         const submitInputClick = jest.fn();
 
-        (submitInput.getDOMNode() as Element).click = submitInputClick;
+        submitInput.getDOMNode<HTMLInputElement>().click = submitInputClick;
         expect(submitInputClick).toHaveBeenCalledTimes(0);
         emit(EVENT.dxClick, defaultEvent, button.getDOMNode());
         expect(submitInputClick).toHaveBeenCalledTimes(1);
@@ -157,7 +163,7 @@ describe('Button', () => {
         const submitInput = button.find('input.dx-button-submit-input');
         const submitInputClick = jest.fn();
 
-        (submitInput.getDOMNode() as Element).click = submitInputClick;
+        submitInput.getDOMNode<HTMLInputElement>().click = submitInputClick;
         expect(submitInputClick).toHaveBeenCalledTimes(0);
         emitKeyboard(KEY.enter);
         expect(submitInputClick).toHaveBeenCalledTimes(1);
@@ -165,17 +171,17 @@ describe('Button', () => {
 
       it('should submit form by space press', () => {
         const button = render({ useSubmitBehavior: true });
-        const submitInput = button.find('input.dx-button-submit-input');
+        const submitInput = button.find('input.dx-button-submit-input').getDOMNode<HTMLInputElement>();
         const submitInputClick = jest.fn();
 
-        submitInput.getDOMNode().click = submitInputClick;
+        submitInput.click = submitInputClick;
         expect(submitInputClick).toHaveBeenCalledTimes(0);
         emitKeyboard(KEY.space);
         expect(submitInputClick).toHaveBeenCalledTimes(1);
       });
 
       it('should stop event propagation', () => {
-        const onSubmit = ({ event }) => event.stopPropagation();
+        const onSubmit = ({ event }): boolean => event.stopPropagation();
         const button = render({ useSubmitBehavior: true, onSubmit });
         const submitInput = button.find('input.dx-button-submit-input');
         const e = { ...defaultEvent, stopPropagation: jest.fn() };
@@ -188,7 +194,7 @@ describe('Button', () => {
 
     describe('stylingMode', () => {
       it('should use `contained` as a default value', () => {
-        const classNames = render().prop('classes');
+        const classNames = render().prop('classes') as string[];
 
         expect(classNames.includes('dx-button-mode-contained')).toBe(true);
         expect(classNames.includes('dx-button-mode-text')).toBe(false);
@@ -196,7 +202,7 @@ describe('Button', () => {
       });
 
       it('should add `dx-button-mode-text` class if the stylingMode is `text`', () => {
-        const classNames = render({ stylingMode: 'text' }).prop('classes');
+        const classNames = render({ stylingMode: 'text' }).prop('classes') as string[];
 
         expect(classNames.includes('dx-button-mode-text')).toBe(true);
         expect(classNames.includes('dx-button-mode-contained')).toBe(false);
@@ -204,7 +210,7 @@ describe('Button', () => {
       });
 
       it('should add `dx-button-mode-contained` class if the stylingMode is `contained`', () => {
-        const classNames = render({ stylingMode: 'contained' }).prop('classes');
+        const classNames = render({ stylingMode: 'contained' }).prop('classes') as string[];
 
         expect(classNames.includes('dx-button-mode-contained')).toBe(true);
         expect(classNames.includes('dx-button-mode-text')).toBe(false);
@@ -212,7 +218,7 @@ describe('Button', () => {
       });
 
       it('should add `dx-button-mode-outlined` class if the stylingMode is `outlined`', () => {
-        const classNames = render({ stylingMode: 'outlined' }).prop('classes');
+        const classNames = render({ stylingMode: 'outlined' }).prop('classes') as string[];
 
         expect(classNames.includes('dx-button-mode-outlined')).toBe(true);
         expect(classNames.includes('dx-button-mode-text')).toBe(false);
@@ -228,7 +234,7 @@ describe('Button', () => {
       });
 
       it('should not render `text` by default', () => {
-        const classNames = render().prop('classes');
+        const classNames = render().prop('classes') as string[];
 
         expect(classNames.includes('dx-button')).toBe(true);
         expect(classNames.includes('dx-button-has-text')).toBe(false);
@@ -238,13 +244,13 @@ describe('Button', () => {
 
     describe('type', () => {
       it('should use `normal` as a default value', () => {
-        const classNames = render().prop('classes');
+        const classNames = render().prop('classes') as string[];
 
         expect(classNames.includes('dx-button-normal')).toBe(true);
       });
 
       it('should add `dx-button-*` if the type is defined', () => {
-        const classNames = render({ type: 'custom' }).prop('classes');
+        const classNames = render({ type: 'custom' }).prop('classes') as string[];
 
         expect(classNames.includes('dx-button-custom')).toBe(true);
         expect(classNames.includes('dx-button-normal')).toBe(false);
@@ -254,14 +260,15 @@ describe('Button', () => {
     describe('activeStateEnabled', () => {
       it('should be enabled by default', () => {
         const button = render();
+        const classNames = button.prop('classes') as string[];
 
         expect(button.prop('activeStateEnabled')).toBe(true);
-        expect(button.prop('classes').includes('dx-state-active')).toBe(false);
+        expect(classNames.includes('dx-state-active')).toBe(false);
       });
     });
 
     describe('template', () => {
-      const template = ({ text }) => <div className="custom-content">{`${text}123`}</div>;
+      const template = ({ text }): JSXInternal.Element => <div className="custom-content">{`${text}123`}</div>;
 
       it('should render template', () => {
         const button = render({
@@ -325,8 +332,9 @@ describe('Button', () => {
 
       it('should render icon', () => {
         const button = render({ icon: 'test' });
+        const classNames = button.prop('classes') as string[];
 
-        expect(button.prop('classes').includes('dx-button-has-icon')).toBe(true);
+        expect(classNames.includes('dx-button-has-icon')).toBe(true);
         const { source } = button.find(Icon).props();
         expect(source).toEqual('test');
       });
@@ -352,8 +360,9 @@ describe('Button', () => {
           text: 'myButton',
         });
         const elements = button.find('.dx-button-content').children();
+        const classNames = button.prop('classes') as string[];
 
-        expect(button.prop('classes').includes('dx-button-icon-right')).toBe(true);
+        expect(classNames.includes('dx-button-icon-right')).toBe(true);
         expect(elements.at(0).is('.dx-button-text')).toBe(true);
         expect(elements.at(1).is(Icon)).toBe(true);
         expect(elements.at(1).props().position).toEqual('right');
@@ -472,6 +481,7 @@ describe('Button', () => {
             if (keyName === 'space' || which === 'space' || keyName === 'enter' || which === 'enter') {
               customHandler();
               event.cancel = true; // eslint-disable-line no-param-reassign
+
               return event;
             }
 
@@ -614,17 +624,18 @@ describe('Button', () => {
   });
 
   describe('Default option rules', () => {
-    const getDefaultProps = () => {
+    const getDefaultProps = (): ButtonProps => {
       defaultOptions({
         device: () => false,
         options: {},
       });
-      return (Button as any).defaultProps;
+
+      return Button.defaultProps as ButtonProps;
     };
 
     describe('focusStateEnabled', () => {
       it('should be false if device is not desktop', () => {
-        (devices.real as any).mockImplementation(() => ({ deviceType: 'android' }));
+        (devices.real as Mock).mockImplementation(() => ({ deviceType: 'android' }));
         expect(getDefaultProps().focusStateEnabled).toBe(false);
       });
 
@@ -633,6 +644,7 @@ describe('Button', () => {
       });
 
       it('should be false on simulator', () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (devices as any).isSimulator.mockImplementation(() => true);
         expect(getDefaultProps().focusStateEnabled).toBe(false);
       });
@@ -640,12 +652,12 @@ describe('Button', () => {
 
     describe('useInkRiple', () => {
       it('should be true if material theme', () => {
-        (themes.current as any).mockImplementation(() => 'material');
+        (themes.current as Mock).mockImplementation(() => 'material');
         expect(getDefaultProps().useInkRipple).toBe(true);
       });
 
       it('should be false if theme is not material', () => {
-        (themes.current as any).mockImplementation(() => 'generic');
+        (themes.current as Mock).mockImplementation(() => 'generic');
         expect(getDefaultProps().useInkRipple).toBe(false);
       });
     });
@@ -653,14 +665,14 @@ describe('Button', () => {
 
   describe('API', () => {
     describe('Focus', () => {
-      it('should call Widget.focus API', () => {
+      it('should call .focus API', () => {
         const apiRef = createRef<ButtonRef>();
         const button = render({ ref: apiRef, focusStateEnabled: true });
-        const { ref: widgetRef } = button.find(Widget).props();
+        const { ref: widgetRef } = button.find(Widget).props() as WidgetProps & { ref };
         const widgetFocusApi = jest.fn();
-        widgetRef.current.focus = widgetFocusApi;
 
-        apiRef.current.focus();
+        (widgetRef as ButtonRef & { current }).current.focus = widgetFocusApi;
+        (apiRef as ButtonRef & { current }).current.focus();
 
         expect(widgetFocusApi).toHaveBeenCalledTimes(1);
       });
@@ -668,7 +680,7 @@ describe('Button', () => {
   });
 
   it('should have dx-button class', () => {
-    const classNames = render().prop('classes');
+    const classNames = render().prop('classes') as string[];
 
     expect(classNames.includes('dx-button')).toBe(true);
   });
