@@ -537,8 +537,10 @@ const Lookup = DropDownList.inherit({
     },
 
     _renderPopup: function() {
-        if(this.option('usePopover')) {
-            if(this.option('_scrollToSelectedItemEnabled') && !this.option('itemCenteringEnabled') || !this.option('dropDownOptions.fullScreen')) {
+        if(this.option('usePopover') && !this.option('dropDownOptions.fullScreen')) {
+            if(this.option('_scrollToSelectedItemEnabled') && this.option('itemCenteringEnabled')) {
+                this.callBase();
+            } else {
                 this._renderPopover();
             }
         } else {

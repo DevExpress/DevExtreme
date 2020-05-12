@@ -261,7 +261,7 @@ const commonSpecificReplacement = (content, fileName) => {
             } else if(r.import) {
                 // const withPart = addImportedVariables(r, folder); // it seems we do not need it in common
                 const alias = r.alias || '*';
-                content = content.replace(/\/\/\sadduse/, `@use "${r.import}" as ${alias};\n// adduse`); // TODO // adduse at the end
+                content = content.replace(/\/\/\sadduse/, `@use "${r.import}" as ${alias};\n// adduse`);
             }
         });
     }

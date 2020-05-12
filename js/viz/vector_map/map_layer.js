@@ -378,8 +378,15 @@ strategiesByType[TYPE_MARKER] = {
 };
 
 strategiesByGeometry[TYPE_AREA] = function(sample) {
-    const coordinates = sample.coordinates;
-    return { project: coordinates[0] && coordinates[0][0] && coordinates[0][0][0] && typeof coordinates[0][0][0][0] === 'number' ? projectMultiPolygon : projectPolygon };
+    return {
+        project(projection, coordinates) {
+            return coordinates[0]
+            && coordinates[0][0]
+            && coordinates[0][0][0]
+            && typeof coordinates[0][0][0][0] === 'number' ? projectMultiPolygon(projection, coordinates) : projectPolygon(projection, coordinates);
+
+        }
+    };
 };
 
 strategiesByGeometry[TYPE_LINE] = function(sample) {
