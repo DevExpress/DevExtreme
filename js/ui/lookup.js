@@ -10,7 +10,7 @@ import inkRipple from './widget/utils.ink_ripple';
 import messageLocalization from '../localization/message';
 import devices from '../core/devices';
 import registerComponent from '../core/component_registrator';
-import eventUtils from '../events/utils';
+import { addNamespace } from '../events/utils';
 import DropDownList from './drop_down_editor/ui.drop_down_list';
 import themes from './themes';
 import clickEvent from '../events/click';
@@ -371,7 +371,7 @@ const Lookup = DropDownList.inherit({
         });
 
         this._$field = $('<div>').addClass(LOOKUP_FIELD_CLASS);
-        eventsEngine.on(this._$field, eventUtils.addNamespace(clickEvent.name, this.NAME), e => {
+        eventsEngine.on(this._$field, addNamespace(clickEvent.name, this.NAME), e => {
             fieldClickAction({ event: e });
         });
 
