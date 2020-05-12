@@ -1,7 +1,6 @@
-import { keyboard } from '../../../js/events/short';
-
 let eventHandlers = {};
 let keyboardHandlers = {};
+
 export const KEY = {
   enter: 'enter',
   space: 'space',
@@ -66,15 +65,25 @@ export const emit = (event, e = defaultEvent, element = null): void => {
 
 let keyboardSubscriberId = 0;
 
-keyboard.on = (el, focusTarget, handler): string => {
-  keyboardSubscriberId += 1;
-  keyboardHandlers[keyboardSubscriberId] = keyboardHandlers[keyboardSubscriberId] || [];
-  keyboardHandlers[keyboardSubscriberId].push(handler);
+jest.mock('../../../js/events/short', () => {
+  const originalShort = jest.requireActual('../../../js/events/short');
 
-  return keyboardSubscriberId.toString();
-};
+  return {
+    ...originalShort,
 
-keyboard.off = (id): boolean => delete keyboardHandlers[id];
+    keyboard: {
+      on: (el, focusTarget, handler): string => {
+        keyboardSubscriberId += 1;
+        keyboardHandlers[keyboardSubscriberId] = keyboardHandlers[keyboardSubscriberId] || [];
+        keyboardHandlers[keyboardSubscriberId].push(handler);
+
+        return keyboardSubscriberId.toString();
+      },
+
+      off: (id): boolean => delete keyboardHandlers[id],
+    },
+  };
+});
 
 jest.mock('../../../js/events/core/events_engine', () => {
   const originalEventsEngine = jest.requireActual('../../../js/events/core/events_engine');
