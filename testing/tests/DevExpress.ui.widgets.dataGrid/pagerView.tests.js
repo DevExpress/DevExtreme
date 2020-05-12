@@ -254,7 +254,7 @@ QUnit.module('Pager', {
         assert.equal(pagerView._createComponent.callCount, 1, '_createComponent call count after partial update');
     });
 
-    QUnit.test('pageCount is updated on partial update with repaintChangesOnly', function(assert) {
+    QUnit.test('pageCount, pageIndex, pageSize are updated on partial update with repaintChangesOnly', function(assert) {
     // arrange
         const testElement = $('#container');
         const pagerView = this.pagerView;
@@ -276,7 +276,9 @@ QUnit.module('Pager', {
         assert.deepEqual(pagerView._getPager().option.getCall(0).args, [{
             hasKnownLastPage: true, // T697587
             totalCount: 143, // #7259
-            pageCount: 20
+            pageCount: 20,
+            pageIndex: 2, // T886628
+            pageSize: 7 // T886628
         }], 'pager option args');
     });
 
