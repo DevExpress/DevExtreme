@@ -81,7 +81,6 @@
     "gulp-plumber": "^1.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.4",
-    "gulp-replace-async": "0.0.1",
     "gulp-tap": "^1.0.1",
     "gulp-template": "^4.0.0",
     "gulp-typescript": "^5.0.0",
