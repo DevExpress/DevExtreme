@@ -74,15 +74,6 @@ const triggerVisibilityChangeEvent = function(eventName) {
     };
 };
 
-const uniqueId = (function() {
-    let counter = 0;
-
-    return function(prefix) {
-        return (prefix || '') + counter++;
-    };
-})();
-
-
 const dataOptionsAttributeName = 'data-options';
 
 const getElementOptions = function(element) {
@@ -210,7 +201,6 @@ exports.createComponents = createComponents; // TODO: Why does it exists? Remove
 exports.extractTemplateMarkup = extractTemplateMarkup; // TODO:  // TODO: extract to script template module
 exports.normalizeTemplateElement = normalizeTemplateElement; // TODO:  // TODO: extract to script template module?
 exports.clearSelection = clearSelection;
-exports.uniqueId = uniqueId; // TODO: remove
 exports.closestCommonParent = closestCommonParent;
 exports.clipboardText = clipboardText;
 exports.contains = contains;
