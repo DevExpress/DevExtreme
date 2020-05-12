@@ -7,6 +7,10 @@ import { hasWindow } from '../../core/utils/window';
 const PAGER_CLASS = 'pager';
 const MAX_PAGES_COUNT = 10;
 
+const getPageIndex = function(dataController) {
+    return 1 + (parseInt(dataController.pageIndex()) || 0);
+};
+
 const PagerView = modules.View.inherit({
     init: function() {
         const that = this;
@@ -19,7 +23,7 @@ const PagerView = modules.View.inherit({
                 const pager = that._getPager();
                 if(pager) {
                     pager.option({
-                        pageIndex: that._getPageIndex(dataController),
+                        pageIndex: getPageIndex(dataController),
                         pageSize: dataController.pageSize(),
                         pageCount: dataController.pageCount(),
                         totalCount: dataController.totalCount(),
@@ -47,7 +51,7 @@ const PagerView = modules.View.inherit({
         const keyboardController = that.getController('keyboardNavigation');
         const options = {
             maxPagesCount: MAX_PAGES_COUNT,
-            pageIndex: that._getPageIndex(dataController),
+            pageIndex: getPageIndex(dataController),
             pageCount: dataController.pageCount(),
             pageSize: dataController.pageSize(),
             showPageSizes: pagerOptions.showPageSizeSelector,
@@ -79,10 +83,6 @@ const PagerView = modules.View.inherit({
         }
 
         that._createComponent($element, Pager, options);
-    },
-
-    _getPageIndex: function(dataController) {
-        return 1 + (parseInt(dataController.pageIndex()) || 0);
     },
 
     getPageSizes: function() {
