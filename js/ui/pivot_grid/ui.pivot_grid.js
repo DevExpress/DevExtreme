@@ -4,7 +4,7 @@ const window = getWindow();
 import { msie } from '../../core/utils/browser';
 import eventsEngine from '../../events/core/events_engine';
 import registerComponent from '../../core/component_registrator';
-import { getPublicElement } from '../../core/utils/dom';
+import { getPublicElement } from '../../core/element';
 import { format as formatString } from '../../core/utils/string';
 import { noop, deferRender, deferUpdate } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';

@@ -8,7 +8,7 @@ import windowUtils from '../../core/utils/window';
 import { isDefined, isPrimitive, isFunction, isString } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
-import { getPublicElement } from '../../core/utils/dom';
+import { getPublicElement } from '../../core/element';
 import CheckBox from '../check_box';
 import HierarchicalCollectionWidget from '../hierarchical_collection/ui.hierarchical_collection_widget';
 import { addNamespace } from '../../events/utils';

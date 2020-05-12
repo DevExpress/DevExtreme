@@ -5,7 +5,7 @@ import browser from '../../core/utils/browser';
 import commonUtils from '../../core/utils/common';
 import typeUtils from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-import { getPublicElement } from '../../core/utils/dom';
+import { getPublicElement } from '../../core/element';
 import windowUtils from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import devices from '../../core/devices';

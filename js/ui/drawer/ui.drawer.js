@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import typeUtils from '../../core/utils/type';
-import { getPublicElement } from '../../core/utils/dom';
+import { getPublicElement } from '../../core/element';
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
 import Widget from '../widget/ui.widget';

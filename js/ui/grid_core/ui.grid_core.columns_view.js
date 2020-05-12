@@ -9,7 +9,7 @@ import dblclickEvent from '../../events/double_click';
 import browser from '../../core/utils/browser';
 import { noop } from '../../core/utils/common';
 import styleUtils from '../../core/utils/style';
-import { getPublicElement } from '../../core/utils/dom';
+import { getPublicElement } from '../../core/element';
 import typeUtils from '../../core/utils/type';
 import iteratorUtils from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
