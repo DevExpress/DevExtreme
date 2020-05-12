@@ -22,6 +22,7 @@ const GROUP_FOOTER_CLASS = 'group-footer';
 const ROW_CLASS = 'dx-row';
 const DATA_ROW_CLASS = 'dx-data-row';
 const GROUP_ROW_CLASS = 'dx-group-row';
+const HEADER_ROW_CLASS = 'dx-header-row';
 const EDIT_FORM_ITEM_CLASS = 'edit-form-item';
 const MASTER_DETAIL_ROW_CLASS = 'dx-master-detail-row';
 const FREESPACE_ROW_CLASS = 'dx-freespace-row';
@@ -49,6 +50,9 @@ const EDIT_MODE_CELL = 'cell';
 
 const FOCUS_TYPE_ROW = 'row';
 const FOCUS_TYPE_CELL = 'cell';
+
+const COLUMN_HEADERS_VIEW = 'columnHeadersView';
+
 
 function isGroupRow($row) {
     return $row && $row.hasClass(GROUP_ROW_CLASS);
@@ -80,6 +84,10 @@ function isElementDefined($element) {
 
 function isMobile() {
     return devices.current().deviceType !== 'desktop';
+}
+
+function isCellInHeaderRow($cell) {
+    return !!$cell.closest(`.${HEADER_ROW_CLASS}`).length;
 }
 
 const KeyboardNavigationController = core.ViewController.inherit({
@@ -2012,6 +2020,23 @@ module.exports = {
                             focusedCellPosition.rowIndex += focusedRowIndexCorrection;
                             editorFactory.focus(editorFactory.focus());
                         }
+                    }
+                }
+            },
+            adaptiveColumns: {
+                _showHiddenCellsInView: function({ viewName, $cells, isCommandColumn }) {
+                    this.callBase.apply(this, arguments);
+
+                    viewName === COLUMN_HEADERS_VIEW && !isCommandColumn && $cells.each((_, cellElement) => {
+                        const $cell = $(cellElement);
+                        isCellInHeaderRow($cell) && $cell.attr('tabindex', 0);
+                    });
+                },
+                _hideVisibleCellInView: function({ viewName, $cell, isCommandColumn }) {
+                    this.callBase.apply(this, arguments);
+
+                    if(viewName === COLUMN_HEADERS_VIEW && !isCommandColumn && isCellInHeaderRow($cell)) {
+                        $cell.removeAttr('tabindex');
                     }
                 }
             }
