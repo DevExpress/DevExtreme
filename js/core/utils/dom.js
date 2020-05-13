@@ -3,7 +3,6 @@ const config = require('../../core/config');
 const domAdapter = require('../../core/dom_adapter');
 const windowUtils = require('./window');
 const window = windowUtils.getWindow();
-const eventsEngine = require('../../events/core/events_engine');
 const inArray = require('./array').inArray;
 const typeUtils = require('./type');
 const isDefined = typeUtils.isDefined;
@@ -56,22 +55,6 @@ const closestCommonParent = function(startTarget, endTarget) {
             return $startParents.get(i);
         }
     }
-};
-
-
-const triggerVisibilityChangeEvent = function(eventName) {
-    const VISIBILITY_CHANGE_SELECTOR = '.dx-visibility-change-handler';
-
-    return function(element) {
-        const $element = $(element || 'body');
-
-        const changeHandlers = $element.filter(VISIBILITY_CHANGE_SELECTOR).
-            add($element.find(VISIBILITY_CHANGE_SELECTOR));
-
-        for(let i = 0; i < changeHandlers.length; i++) {
-            eventsEngine.triggerHandler(changeHandlers[i], eventName);
-        }
-    };
 };
 
 const dataOptionsAttributeName = 'data-options';
@@ -193,9 +176,6 @@ const createTextElementHiddenCopy = function(element, text, options) {
 
 exports.resetActiveElement = resetActiveElement;
 exports.createMarkupFromString = createMarkupFromString; // TODO: Remove and inline no WinJS code in themes
-exports.triggerShownEvent = triggerVisibilityChangeEvent('dxshown'); // TODO: extract to events
-exports.triggerHidingEvent = triggerVisibilityChangeEvent('dxhiding'); // TODO: extract to events
-exports.triggerResizeEvent = triggerVisibilityChangeEvent('dxresize'); // TODO: extract to events
 exports.getElementOptions = getElementOptions; // TODO: extract somewhere
 exports.createComponents = createComponents; // TODO: Why does it exists? Remove?
 exports.extractTemplateMarkup = extractTemplateMarkup; // TODO:  // TODO: extract to script template module
