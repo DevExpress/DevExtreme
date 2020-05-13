@@ -595,7 +595,6 @@
     }
 
     .dx-scheduler-date-time-shader-all-day {
-        margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
         width: 100%;
         background-color: @SCHEDULER_TIME_INDICATOR_BACKGROUND_COLOR;
         position: absolute;
@@ -653,8 +652,13 @@
             }
         }
 
-        .dx-scheduler-date-time-shader {
+        .dx-scheduler-date-time-shader,
+        .dx-scheduler-date-time-shader-all-day {
             margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
+
+            .dx-scheduler-small & {
+                margin-left: -@SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+            }
         }
 
         .dx-scheduler-date-time-shader-top,
@@ -667,6 +671,10 @@
                 position: absolute;
                 margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
                 background-color: @SCHEDULER_TIME_INDICATOR_BACKGROUND_COLOR;
+
+                .dx-scheduler-small & {
+                    margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                }
             }
         }
 
