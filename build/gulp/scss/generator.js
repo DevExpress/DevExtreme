@@ -1,3 +1,5 @@
+'use strict';
+
 const gulp = require('gulp');
 const path = require('path');
 const fs = require('fs');
@@ -98,7 +100,7 @@ gulp.task('fix-bundles', gulp.parallel(
             ];
             let content = chunk.contents.toString();
             widgets.forEach(widget => content += `@use "../widgets/common/${widget}";\n`);
-            chunk.contents = new Buffer(content);
+            chunk.contents = new Buffer.from(content);
             callback(null, chunk);
         }))
         .pipe(gulp.dest(`${outputPath}/bundles`))
@@ -153,7 +155,7 @@ gulp.task('fix-base', () => {
             let content = file.contents.toString();
             content = replaceColorFunctions(content);
             content = replaceInterpolatedCalcContent(content);
-            file.contents = new Buffer(content);
+            file.contents = Buffer.from(content);
             callback(null, file);
         }))
         .pipe(rename((path) => {
@@ -176,7 +178,7 @@ gulp.task(function fixCommon() {
             content = `@use "../base/mixins" as *;\n// adduse\n${content}`;
             content = commonSpecificReplacement(content, chunk.path);
             content = replaceInterpolatedCalcContent(content);
-            chunk.contents = new Buffer(content);
+            chunk.contents = Buffer.from(content);
             callback(null, chunk);
         }))
         .pipe(gulp.dest(`${outputPath}/widgets/common`));
@@ -296,7 +298,7 @@ gulp.task('create-widgets', () => {
             indexContent = replaceColorFunctions(indexContent);
             indexContent = replaceInterpolatedCalcContent(indexContent);
             indexContent = indexContent.replace(parentSelectorRegex, parentSelectorReplacement);
-            chunk.contents = new Buffer(indexContent);
+            chunk.contents = Buffer.from(indexContent);
 
             let colorsContent = '@use "sass:color";\n';
             colorsContent += '@use "../sizes" as *;\n';
