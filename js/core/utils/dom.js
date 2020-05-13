@@ -139,11 +139,11 @@ const createTextElementHiddenCopy = function(element, text, options) {
 };
 
 exports.resetActiveElement = resetActiveElement;
-exports.getElementOptions = getElementOptions; // TODO: extract somewhere
-exports.extractTemplateMarkup = extractTemplateMarkup; // TODO: extract to script template module
-exports.normalizeTemplateElement = normalizeTemplateElement; // TODO: extract to script template module?
+exports.getElementOptions = getElementOptions; // TODO: extract
+exports.extractTemplateMarkup = extractTemplateMarkup; // TODO: extract
+exports.normalizeTemplateElement = normalizeTemplateElement; // TODO: extract
 exports.clearSelection = clearSelection;
 exports.closestCommonParent = closestCommonParent;
 exports.clipboardText = clipboardText;
 exports.contains = contains;
-exports.createTextElementHiddenCopy = createTextElementHiddenCopy; // TODO: Discuss with editors. It needs only for tagbox and datebox
+exports.createTextElementHiddenCopy = createTextElementHiddenCopy; // TODO: extract
