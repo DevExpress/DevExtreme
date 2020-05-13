@@ -5,7 +5,6 @@ import 'common.css!';
 import config from 'core/config';
 import devices from 'core/devices';
 import { Template } from 'core/templates/template';
-import domUtils from 'core/utils/dom';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
 import { value as viewPort } from 'core/utils/view_port';
@@ -2663,7 +2662,7 @@ testModule('API', moduleConfig, () => {
         const instance = $element.dxOverlay({
             visible: true
         }).dxOverlay('instance');
-        const resizeStub = sinon.stub(domUtils, 'triggerResizeEvent');
+        const resizeStub = sinon.stub(visibilityChange, 'triggerResizeEvent');
 
         instance.repaint();
 
