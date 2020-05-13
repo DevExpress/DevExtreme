@@ -49,7 +49,7 @@ build:
 
   pre_ci_boot:
     image_name: docker.io/devexpress/devextreme-build
-    image_tag: "20_1"
+    image_tag: "20_2"
     pull: true
 
   ci:
