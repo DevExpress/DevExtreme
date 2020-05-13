@@ -104,7 +104,7 @@ export default class FileManagerNotificationControl extends Widget {
 
         this._progressPanel.completeOperation(info, commonText, isError, statusText);
 
-        if(!this._isProgressDrawerOpened() || !this._tryHideActionProgress()) {
+        if(!this.isProgressDrawerOpened() || !this._tryHideActionProgress()) {
             const status = this._failedOperationCount === 0 ? 'success' : 'error';
             this._updateActionProgress('', status);
         }
@@ -208,12 +208,12 @@ export default class FileManagerNotificationControl extends Widget {
         }
     }
 
-    _isProgressDrawerOpened() {
+    isProgressDrawerOpened() {
         return this._progressDrawer.option('opened');
     }
 
     _showPopup(content, errorMode) {
-        if(this._isProgressDrawerOpened()) {
+        if(this.isProgressDrawerOpened()) {
             return;
         }
         this._getNotificationPopup()._wrapper().toggleClass(FILE_MANAGER_NOTIFICATION_POPUP_ERROR_CLASS, !!errorMode);

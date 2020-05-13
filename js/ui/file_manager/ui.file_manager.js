@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { extend } from '../../core/utils/extend';
 import typeUtils from '../../core/utils/type';
-import { when } from '../../core/utils/deferred';
+import { Deferred, when } from '../../core/utils/deferred';
 import { equalByValue } from '../../core/utils/common';
 
 import messageLocalization from '../../localization/message';
@@ -261,8 +261,11 @@ class FileManager extends Widget {
     }
 
     _refreshAndShowProgress() {
-        return when(this._notificationControl.tryShowProgressPanel(), this._controller.refresh())
-            .then(() => this._filesTreeView.refresh());
+        return when(this._notificationControl.isProgressDrawerOpened()
+            ? new Deferred().resolve().promise()
+            : this._notificationControl.tryShowProgressPanel())
+            .always(() => this._controller.refresh())
+            .always(() => this._filesTreeView.refresh());
     }
 
     _updateToolbar(selectedItems) {
