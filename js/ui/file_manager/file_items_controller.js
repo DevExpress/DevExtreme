@@ -186,9 +186,8 @@ export default class FileItemsController {
                 errorInfo => {
                     const actionInfo = this._createEditActionInfo('getItemContent', parentDirectoryInfo, parentDirectoryInfo);
                     this._raiseEditActionStarting(actionInfo);
-                    // actionInfo.customData.context._actionMetadata.singleItemErrorMessage = errorInfo.message;
                     this._raiseEditActionError(actionInfo, {
-                        errorId: ErrorCode.LocationUnavailable,
+                        errorId: errorInfo.errorId || ErrorCode.LocationUnavailable,
                         fileItem: parentDirectoryInfo.fileItem,
                         index: 0
                     });
