@@ -1,3 +1,5 @@
+'use strict';
+
 const gulp = require('gulp');
 const babel = require('gulp-babel');
 const jsonEditor = require('gulp-json-editor');

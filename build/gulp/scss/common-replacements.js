@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
     // regex, replacement - replace
     // import, type - additional import (

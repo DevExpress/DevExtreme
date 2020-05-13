@@ -1,3 +1,5 @@
+'use strict';
+
 const sass = require('gulp-dart-sass');
 const gulp = require('gulp');
 const del = require('del');

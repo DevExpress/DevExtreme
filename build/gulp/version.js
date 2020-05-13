@@ -1,3 +1,5 @@
+'use strict';
+
 const envTail = 'DEVEXTREME_TMP_TAIL';
 
 if(!process.env[envTail]) {
