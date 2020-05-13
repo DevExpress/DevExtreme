@@ -1,7 +1,6 @@
 import config from '../../core/config';
 import domAdapter from '../../core/dom_adapter';
 import $ from '../../core/renderer';
-import htmlParser from '../../core/utils/html_parser';
 import typeUtils from './type';
 import windowUtils from './window';
 
@@ -63,19 +62,6 @@ const getElementOptions = function(element) {
     const optionsString = $(element).attr(dataOptionsAttributeName) || '';
 
     return config().optionsParser(optionsString);
-};
-
-const createMarkupFromString = function(str) {
-    if(!window.WinJS) {
-        return $(htmlParser.parseHTML(str));
-    }
-
-    const tempElement = $('<div>');
-
-    // otherwise WinJS browser strips HTML comments required for KO
-    window.WinJS.Utilities.setInnerHTMLUnsafe(tempElement.get(0), str);
-
-    return tempElement.contents();
 };
 
 const extractTemplateMarkup = function(element) {
@@ -153,10 +139,9 @@ const createTextElementHiddenCopy = function(element, text, options) {
 };
 
 exports.resetActiveElement = resetActiveElement;
-exports.createMarkupFromString = createMarkupFromString; // TODO: Remove and inline no WinJS code in themes
 exports.getElementOptions = getElementOptions; // TODO: extract somewhere
-exports.extractTemplateMarkup = extractTemplateMarkup; // TODO:  // TODO: extract to script template module
-exports.normalizeTemplateElement = normalizeTemplateElement; // TODO:  // TODO: extract to script template module?
+exports.extractTemplateMarkup = extractTemplateMarkup; // TODO: extract to script template module
+exports.normalizeTemplateElement = normalizeTemplateElement; // TODO: extract to script template module?
 exports.clearSelection = clearSelection;
 exports.closestCommonParent = closestCommonParent;
 exports.clipboardText = clipboardText;
