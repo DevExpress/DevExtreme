@@ -1727,6 +1727,7 @@ const EditingController = modules.ViewController.inherit((function() {
         hasEditData: function() {
             return this.hasChanges();
         },
+
         closeEditCell: function(isError, withoutSaveEditData) {
             const that = this;
             let result = deferredUtils.when();
@@ -1734,11 +1735,9 @@ const EditingController = modules.ViewController.inherit((function() {
 
             if(!isRowEditMode(that)) {
                 result = deferredUtils.Deferred();
-                setTimeout(() => {
-                    this.executeOperation(result, () => {
-                        this._closeEditCellCore(isError, oldEditRowIndex, withoutSaveEditData);
-                        result.resolve();
-                    });
+                this.executeOperation(result, () => {
+                    this._closeEditCellCore(isError, oldEditRowIndex, withoutSaveEditData);
+                    result.resolve();
                 });
             }
             return result.promise();
