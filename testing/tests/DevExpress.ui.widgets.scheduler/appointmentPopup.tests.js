@@ -9,6 +9,7 @@ import SchedulerTimezoneEditor from 'ui/scheduler/timezones/ui.scheduler.timezon
 import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
 import resizeCallbacks from 'core/utils/resize_callbacks';
+import messageLocalization from 'localization/message';
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
@@ -1056,6 +1057,23 @@ QUnit.test('Done button shouldn\'t be disabled if validation fail', function(ass
 
     const doneButton = $('.dx-scheduler-appointment-popup .dx-popup-done.dx-button').dxButton('instance');
     assert.equal(doneButton.option('disabled'), false, 'done button is not disabled');
+});
+
+QUnit.test('Done button default configuration should be correct', function(assert) {
+    this.instance.option({
+        onAppointmentFormOpening: function(e) {
+            const popup = e.component.getAppointmentPopup();
+            const buttons = popup.option('toolbarItems');
+            const doneButton = buttons[0];
+
+            assert.equal(doneButton.options.text, messageLocalization.format('Done'), 'done button text is ok');
+        },
+        onAppointmentAdding: function(e) {
+            e.cancel = true;
+        }
+    });
+    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption' });
+    $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 });
 
 QUnit.test('Done button custom configuration should be correct', function(assert) {

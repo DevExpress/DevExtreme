@@ -715,13 +715,13 @@ QUnit.test('Repeat-until dateBox should have right firstDayOfWeek after firstDay
     assert.equal(untilDate.option('calendarOptions.firstDayOfWeek'), 1, 'First day of the week is ok');
 });
 
+const dayNames = [{ key: 'SU', text: 'Sun' }, { key: 'MO', text: 'Mon' }, { key: 'TU', text: 'Tue' }, { key: 'WE', text: 'Wed' }, { key: 'TH', text: 'Thu' }, { key: 'FR', text: 'Fri' }, { key: 'SA', text: 'Sat' }];
+
 QUnit.test('Repeat-on-week editor should be rendered correctly', function(assert) {
     this.createInstance({ firstDayOfWeek: 3, value: 'FREQ=WEEKLY;BYDAY=TU' });
 
     const buttonGroup = $('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance');
-    assert.deepEqual(buttonGroup.option('items'), [
-        { text: 'WE' }, { text: 'TH' }, { text: 'FR' }, { text: 'SA' }, { text: 'SU' }, { text: 'MO' }, { text: 'TU' }
-    ]);
+    assert.deepEqual(buttonGroup.option('items'), dayNames.slice(3).concat(dayNames.slice(0, 3)));
 });
 
 QUnit.test('Repeat-on-week editor should be rendered correctly after firstDayOfWeek option changing', function(assert) {
@@ -729,9 +729,7 @@ QUnit.test('Repeat-on-week editor should be rendered correctly after firstDayOfW
     this.instance.option('firstDayOfWeek', 5);
 
     const buttonGroup = $('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance');
-    assert.deepEqual(buttonGroup.option('items'), [
-        { text: 'FR' }, { text: 'SA' }, { text: 'SU' }, { text: 'MO' }, { text: 'TU' }, { text: 'WE' }, { text: 'TH' }
-    ]);
+    assert.deepEqual(buttonGroup.option('items'), dayNames.slice(5).concat(dayNames.slice(0, 5)));
 });
 
 QUnit.test('Repeat-count editor should have correct value after re-initializing values', function(assert) {
