@@ -72,5 +72,5 @@ script:
     -e COMPONENT=$COMPONENT
     -e JQUERY=$JQUERY
     -v $TRAVIS_BUILD_DIR:/devextreme
-    docker.io/devexpress/devextreme-build:20_1
+    docker.io/devexpress/devextreme-build:20_2
     ./docker-ci.sh
