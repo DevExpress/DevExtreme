@@ -1,13 +1,13 @@
-const $ = require('../../core/renderer');
-const config = require('../../core/config');
-const domAdapter = require('../../core/dom_adapter');
-const windowUtils = require('./window');
+import config from '../../core/config';
+import domAdapter from '../../core/dom_adapter';
+import $ from '../../core/renderer';
+import htmlParser from '../../core/utils/html_parser';
+import typeUtils from './type';
+import windowUtils from './window';
+
 const window = windowUtils.getWindow();
-const inArray = require('./array').inArray;
-const typeUtils = require('./type');
 const isDefined = typeUtils.isDefined;
 const isRenderer = typeUtils.isRenderer;
-const htmlParser = require('../../core/utils/html_parser');
 
 const resetActiveElement = function() {
     const activeElement = domAdapter.getActiveElement();
@@ -63,28 +63,6 @@ const getElementOptions = function(element) {
     const optionsString = $(element).attr(dataOptionsAttributeName) || '';
 
     return config().optionsParser(optionsString);
-};
-
-const createComponents = function(elements, componentTypes) {
-    const result = [];
-    const selector = '[' + dataOptionsAttributeName + ']';
-
-    const $items = elements.find(selector).add(elements.filter(selector));
-    $items.each(function(index, element) {
-        const $element = $(element);
-        const options = getElementOptions(element);
-
-        for(const componentName in options) {
-            if(!componentTypes || inArray(componentName, componentTypes) > -1) {
-                if($element[componentName]) {
-                    $element[componentName](options[componentName]);
-                    result.push($element[componentName]('instance'));
-                }
-            }
-        }
-    });
-
-    return result;
 };
 
 const createMarkupFromString = function(str) {
@@ -177,7 +155,6 @@ const createTextElementHiddenCopy = function(element, text, options) {
 exports.resetActiveElement = resetActiveElement;
 exports.createMarkupFromString = createMarkupFromString; // TODO: Remove and inline no WinJS code in themes
 exports.getElementOptions = getElementOptions; // TODO: extract somewhere
-exports.createComponents = createComponents; // TODO: Why does it exists? Remove?
 exports.extractTemplateMarkup = extractTemplateMarkup; // TODO:  // TODO: extract to script template module
 exports.normalizeTemplateElement = normalizeTemplateElement; // TODO:  // TODO: extract to script template module?
 exports.clearSelection = clearSelection;
