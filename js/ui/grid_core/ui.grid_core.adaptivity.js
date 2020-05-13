@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import * as eventUtils from '../../events/utils';
+import { addNamespace } from '../../events/utils';
 import clickEvent from '../../events/click';
 import typeUtils from '../../core/utils/type';
 import browser from '../../core/utils/browser';
@@ -58,7 +58,7 @@ function adaptiveCellTemplate(container, options) {
 
     if(options.rowType === 'data') {
         $adaptiveColumnButton = $('<span>').addClass(adaptiveColumnsController.addWidgetPrefix(ADAPTIVE_COLUMN_BUTTON_CLASS));
-        eventsEngine.on($adaptiveColumnButton, eventUtils.addNamespace(clickEvent.name, ADAPTIVE_NAMESPACE), adaptiveColumnsController.createAction(function() {
+        eventsEngine.on($adaptiveColumnButton, addNamespace(clickEvent.name, ADAPTIVE_NAMESPACE), adaptiveColumnsController.createAction(function() {
             adaptiveColumnsController.toggleExpandAdaptiveDetailRow(options.key);
         }));
         $adaptiveColumnButton.appendTo($container);

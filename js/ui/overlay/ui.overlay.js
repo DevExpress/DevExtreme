@@ -24,14 +24,14 @@ import eventsEngine from '../../events/core/events_engine';
 import dragEvents from '../../events/drag';
 import pointerEvents from '../../events/pointer';
 import { keyboard } from '../../events/short';
-import eventUtils from '../../events/utils';
+import { addNamespace, normalizeKeyName } from '../../events/utils';
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '../../events/visibility_change';
 import { hideCallback as hideTopOverlayCallback } from '../../mobile/hide_top_overlay';
 import Resizable from '../resizable';
 import selectors from '../widget/selectors';
 import swatch from '../widget/swatch_container';
 import Widget from '../widget/ui.widget';
-import zIndexPool from './z_index';
+import * as zIndexPool from './z_index';
 const window = windowUtils.getWindow();
 const navigator = windowUtils.getNavigator();
 const viewPortChanged = viewPortUtils.changeCallback;
@@ -731,7 +731,7 @@ const Overlay = Widget.inherit({
     },
 
     _toggleTabTerminator: function(enabled) {
-        const eventName = eventUtils.addNamespace('keydown', this.NAME);
+        const eventName = addNamespace('keydown', this.NAME);
         if(enabled) {
             eventsEngine.on(domAdapter.getDocument(), eventName, this._proxiedTabTerminatorHandler);
         } else {
@@ -762,7 +762,7 @@ const Overlay = Widget.inherit({
     },
 
     _tabKeyHandler: function(e) {
-        if(eventUtils.normalizeKeyName(e) !== TAB_KEY || !this._isTopOverlay()) {
+        if(normalizeKeyName(e) !== TAB_KEY || !this._isTopOverlay()) {
             return;
         }
 
@@ -815,7 +815,7 @@ const Overlay = Widget.inherit({
         const target = this._position.of || $();
         const closeOnScroll = this.option('closeOnTargetScroll');
         let $parents = getElement(target).parents();
-        const scrollEvent = eventUtils.addNamespace('scroll', this.NAME);
+        const scrollEvent = addNamespace('scroll', this.NAME);
 
         if(devices.real().deviceType === 'desktop') {
             $parents = $parents.add(window);
@@ -938,8 +938,8 @@ const Overlay = Widget.inherit({
             return;
         }
 
-        const startEventName = eventUtils.addNamespace(dragEvents.start, this.NAME);
-        const updateEventName = eventUtils.addNamespace(dragEvents.move, this.NAME);
+        const startEventName = addNamespace(dragEvents.start, this.NAME);
+        const updateEventName = addNamespace(dragEvents.move, this.NAME);
 
         eventsEngine.off($dragTarget, startEventName);
         eventsEngine.off($dragTarget, updateEventName);
@@ -978,7 +978,7 @@ const Overlay = Widget.inherit({
 
     _renderScrollTerminator: function() {
         const $scrollTerminator = this._wrapper();
-        const terminatorEventName = eventUtils.addNamespace(dragEvents.move, this.NAME);
+        const terminatorEventName = addNamespace(dragEvents.move, this.NAME);
 
         eventsEngine.off($scrollTerminator, terminatorEventName);
         eventsEngine.on($scrollTerminator, terminatorEventName, {

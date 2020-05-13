@@ -1,10 +1,10 @@
 import $ from '../../core/renderer';
 import Widget from '../widget/ui.widget';
 import eventsEngine from '../../events/core/events_engine';
-import * as eventUtils from '../../events/utils';
+import { addNamespace } from '../../events/utils';
 import pointerEvents from '../../events/pointer';
 
-const POINTERUP_EVENT_NAME = eventUtils.addNamespace(pointerEvents.up, 'dxDiagramPanel');
+const POINTERUP_EVENT_NAME = addNamespace(pointerEvents.up, 'dxDiagramPanel');
 const PREVENT_REFOCUS_SELECTOR = '.dx-textbox';
 
 class DiagramPanel extends Widget {

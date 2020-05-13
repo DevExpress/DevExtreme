@@ -17,7 +17,7 @@ import 'ui/data_grid/ui.data_grid';
 import $ from 'jquery';
 import { setupDataGridModules, MockDataController } from '../../helpers/dataGridMocks.js';
 import dataUtils from 'core/element_data';
-import * as eventUtils from 'events/utils';
+import { createEvent } from 'events/utils';
 
 import Pager from 'ui/pager';
 
@@ -693,14 +693,14 @@ QUnit.module('Pager', {
 
         // act
         $pageElement = $(this.pagerView.element().find('.dx-pages .dx-page').eq(2)).focus();
-        $pageElement.trigger(eventUtils.createEvent('keydown', { target: $pageElement.get(0), key: 'Enter' }));
+        $pageElement.trigger(createEvent('keydown', { target: $pageElement.get(0), key: 'Enter' }));
 
         // assert
         assert.equal(this.pagerView.element().dxPager('instance').selectedPage.index, 2, 'Selected page index');
 
         // act
         $pageElement = $(this.pagerView.element().find('.dx-pages .dx-page').eq(3)).focus();
-        $pageElement.trigger(eventUtils.createEvent('keydown', { target: $pageElement.get(0), key: ' ' }));
+        $pageElement.trigger(createEvent('keydown', { target: $pageElement.get(0), key: ' ' }));
 
         // assert
         assert.equal(this.pagerView.element().dxPager('instance').selectedPage.index, 3, 'Selected page index');
@@ -724,7 +724,7 @@ QUnit.module('Pager', {
 
         // act
         const $pageElement = $(this.pagerView.element().find('.dx-page-sizes .dx-page-size').eq(1)).focus();
-        $pageElement.trigger(eventUtils.createEvent('keydown', { target: $pageElement.get(0), key: 'Enter' }));
+        $pageElement.trigger(createEvent('keydown', { target: $pageElement.get(0), key: 'Enter' }));
 
         // assert
         assert.equal(pager._renderPageSizes.callCount, 1, 'Selected page index');

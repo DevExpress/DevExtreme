@@ -12,7 +12,7 @@ import iteratorUtils from '../../core/utils/iterator';
 import Action from '../../core/action';
 import Guid from '../../core/guid';
 import Widget from '../widget/ui.widget';
-import * as eventUtils from '../../events/utils';
+import { addNamespace } from '../../events/utils';
 import pointerEvents from '../../events/pointer';
 import DataHelperMixin from '../../data_helper';
 import CollectionWidgetItem from './item';
@@ -669,8 +669,8 @@ const CollectionWidget = Widget.inherit({
 
     _attachClickEvent: function() {
         const itemSelector = this._itemSelector();
-        const clickEventNamespace = eventUtils.addNamespace(clickEvent.name, this.NAME);
-        const pointerDownEventNamespace = eventUtils.addNamespace(pointerEvents.down, this.NAME);
+        const clickEventNamespace = addNamespace(clickEvent.name, this.NAME);
+        const pointerDownEventNamespace = addNamespace(pointerEvents.down, this.NAME);
         const that = this;
 
         const pointerDownAction = new Action(function(args) {
@@ -746,7 +746,7 @@ const CollectionWidget = Widget.inherit({
     _attachHoldEvent: function() {
         const $itemContainer = this._itemContainer();
         const itemSelector = this._itemSelector();
-        const eventName = eventUtils.addNamespace(holdEvent.name, this.NAME);
+        const eventName = addNamespace(holdEvent.name, this.NAME);
 
         eventsEngine.off($itemContainer, eventName, itemSelector);
         eventsEngine.on($itemContainer, eventName, itemSelector, { timeout: this._getHoldTimeout() }, this._itemHoldHandler.bind(this));
@@ -771,7 +771,7 @@ const CollectionWidget = Widget.inherit({
     _attachContextMenuEvent: function() {
         const $itemContainer = this._itemContainer();
         const itemSelector = this._itemSelector();
-        const eventName = eventUtils.addNamespace(contextMenuEvent.name, this.NAME);
+        const eventName = addNamespace(contextMenuEvent.name, this.NAME);
 
         eventsEngine.off($itemContainer, eventName, itemSelector);
         eventsEngine.on($itemContainer, eventName, itemSelector, this._itemContextMenuHandler.bind(this));

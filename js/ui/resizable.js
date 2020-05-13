@@ -11,7 +11,7 @@ import typeUtils from '../core/utils/type';
 import windowUtils from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
 import dragEvents from '../events/drag';
-import eventUtils from '../events/utils';
+import { addNamespace } from '../events/utils';
 import { triggerResizeEvent } from '../events/visibility_change';
 const isPlainObject = typeUtils.isPlainObject;
 const isFunction = typeUtils.isFunction;
@@ -28,9 +28,9 @@ const RESIZABLE_HANDLE_RIGHT_CLASS = 'dx-resizable-handle-right';
 
 const RESIZABLE_HANDLE_CORNER_CLASS = 'dx-resizable-handle-corner';
 
-const DRAGSTART_START_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, RESIZABLE);
-const DRAGSTART_EVENT_NAME = eventUtils.addNamespace(dragEvents.move, RESIZABLE);
-const DRAGSTART_END_EVENT_NAME = eventUtils.addNamespace(dragEvents.end, RESIZABLE);
+const DRAGSTART_START_EVENT_NAME = addNamespace(dragEvents.start, RESIZABLE);
+const DRAGSTART_EVENT_NAME = addNamespace(dragEvents.move, RESIZABLE);
+const DRAGSTART_END_EVENT_NAME = addNamespace(dragEvents.end, RESIZABLE);
 
 const SIDE_BORDER_WIDTH_STYLES = {
     'left': 'borderLeftWidth',

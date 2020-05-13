@@ -1,5 +1,5 @@
 import eventsEngine from '../../events/core/events_engine';
-import * as eventUtils from '../../events/utils';
+import { fireEvent } from '../../events/utils';
 import { extend } from '../../core/utils/extend';
 import translator2DModule from '../translators/translator2d';
 import { isDefined } from '../../core/utils/type';
@@ -46,7 +46,7 @@ ScrollBar.prototype = {
         const scrollElement = this._scroll.element;
 
         eventsEngine.on(scrollElement, dragEvents.start, e => {
-            eventUtils.fireEvent({
+            fireEvent({
                 type: 'dxc-scroll-start',
                 originalEvent: e,
                 target: scrollElement
@@ -59,7 +59,7 @@ ScrollBar.prototype = {
             const lx = this._offset - (this._layoutOptions.vertical ? dY : dX) / this._scale;
             this._applyPosition(lx, lx + this._translator.canvasLength / this._scale);
 
-            eventUtils.fireEvent({
+            fireEvent({
                 type: 'dxc-scroll-move',
                 originalEvent: e,
                 target: scrollElement,
@@ -71,7 +71,7 @@ ScrollBar.prototype = {
         });
 
         eventsEngine.on(scrollElement, dragEvents.end, e => {
-            eventUtils.fireEvent({
+            fireEvent({
                 type: 'dxc-scroll-end',
                 originalEvent: e,
                 target: scrollElement,

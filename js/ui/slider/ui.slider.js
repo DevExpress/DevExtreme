@@ -9,7 +9,7 @@ import feedbackEvents from '../../events/core/emitter.feedback';
 import eventsEngine from '../../events/core/events_engine';
 import Swipeable from '../../events/gesture/swipeable';
 import pointerEvents from '../../events/pointer';
-import eventUtils from '../../events/utils';
+import { addNamespace, isMouseEvent, isTouchEvent, eventData } from '../../events/utils';
 import { triggerShownEvent } from '../../events/visibility_change';
 import numberLocalization from '../../localization/number';
 import themes from '../themes';
@@ -232,8 +232,8 @@ const Slider = TrackBar.inherit({
         this.callBase();
 
         const namespace = this.NAME + SLIDER_VALIDATION_NAMESPACE;
-        const focusInEvent = eventUtils.addNamespace('focusin', namespace);
-        const focusOutEvent = eventUtils.addNamespace('focusout', namespace);
+        const focusInEvent = addNamespace('focusin', namespace);
+        const focusOutEvent = addNamespace('focusout', namespace);
 
         const $focusTarget = this._focusTarget();
         eventsEngine.on($focusTarget, focusInEvent, this._toggleValidationMessage.bind(this, true));
@@ -428,14 +428,14 @@ const Slider = TrackBar.inherit({
     },
 
     _renderStartHandler: function() {
-        const pointerDownEventName = eventUtils.addNamespace(pointerEvents.down, this.NAME);
-        const clickEventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
+        const pointerDownEventName = addNamespace(pointerEvents.down, this.NAME);
+        const clickEventName = addNamespace(clickEvent.name, this.NAME);
         const startAction = this._createAction(this._startHandler.bind(this));
         const $element = this.$element();
 
         eventsEngine.off($element, pointerDownEventName);
         eventsEngine.on($element, pointerDownEventName, e => {
-            if(eventUtils.isMouseEvent(e)) {
+            if(isMouseEvent(e)) {
                 startAction({ event: e });
             }
         });
@@ -458,7 +458,7 @@ const Slider = TrackBar.inherit({
     _swipeStartHandler: function(e) {
         const rtlEnabled = this.option('rtlEnabled');
 
-        if(eventUtils.isTouchEvent(e.event)) {
+        if(isTouchEvent(e.event)) {
             this._createAction(this._startHandler.bind(this))({ event: e.event });
         }
 
@@ -564,7 +564,7 @@ const Slider = TrackBar.inherit({
     _startHandler: function(args) {
         const e = args.event;
 
-        this._currentRatio = (eventUtils.eventData(e).x - this._$bar.offset().left) / this._$bar.width();
+        this._currentRatio = (eventData(e).x - this._$bar.offset().left) / this._$bar.width();
 
         if(this.option('rtlEnabled')) {
             this._currentRatio = 1 - this._currentRatio;
