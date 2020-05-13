@@ -1,18 +1,17 @@
-import $ from 'jquery';
-import { noop } from 'core/utils/common';
 import registerComponent from 'core/component_registrator';
 import config from 'core/config';
-import resizeCallbacks from 'core/utils/resize_callbacks';
 import devices from 'core/devices';
 import DOMComponent from 'core/dom_component';
+import dataUtils from 'core/element_data';
 import TemplateManager from 'core/template_manager';
-import domUtils from 'core/utils/dom';
+import { noop } from 'core/utils/common';
 import publicComponentUtils from 'core/utils/public_component';
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import eventsEngine from 'events/core/events_engine';
+import { triggerResizeEvent } from 'events/visibility_change';
+import $ from 'jquery';
 
 const nameSpace = {};
-import coreConfig from 'core/config';
-import eventsEngine from 'events/core/events_engine';
-import dataUtils from 'core/element_data';
 
 QUnit.testStart(() => {
     const markup = '<div id="component"></div>' + '<div id="anotherComponent"></div>';
@@ -644,13 +643,13 @@ QUnit.module('default', {
     });
 
     QUnit.test('DevExpress.rtlEnabled proxied to DOMComponent', function(assert) {
-        assert.equal(coreConfig().rtlEnabled, false, 'DevExpress.rtlEnabled equals false by default');
+        assert.equal(config().rtlEnabled, false, 'DevExpress.rtlEnabled equals false by default');
         assert.equal(new DOMComponent($('<div/>')).option('rtlEnabled'), false, 'false by default');
 
-        coreConfig({ rtlEnabled: true });
+        config({ rtlEnabled: true });
         assert.equal(new DOMComponent($('<div/>')).option('rtlEnabled'), true, 'DevExpress.rtlEnabled equals true');
 
-        coreConfig({ rtlEnabled: false });
+        config({ rtlEnabled: false });
     });
 
     QUnit.test('_visibilityChanged is called on dxhiding and dxshown events and special css class is attached', function(assert) {
@@ -838,7 +837,7 @@ QUnit.module('default', {
 
         assert.equal(dimensionChanged, 0, 'no dimension change on start');
 
-        domUtils.triggerResizeEvent($element);
+        triggerResizeEvent($element);
 
         assert.equal(dimensionChanged, 1, 'dimension changed fired');
     });

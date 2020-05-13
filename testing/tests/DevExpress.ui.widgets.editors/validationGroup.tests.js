@@ -1,11 +1,11 @@
-import $ from 'jquery';
 import Class from 'core/class';
-import domUtils from 'core/utils/dom';
+import { Deferred } from 'core/utils/deferred';
+import { triggerShownEvent } from 'events/visibility_change';
+import $ from 'jquery';
 import DefaultAdapter from 'ui/validation/default_adapter';
 import ValidationEngine from 'ui/validation_engine';
-import { Deferred } from 'core/utils/deferred';
-
 import 'ui/validation_group';
+
 
 const Fixture = Class.inherit({
 
@@ -50,7 +50,7 @@ QUnit.module('General', {
 
         // act
         $validator.appendTo($container);
-        domUtils.triggerShownEvent($container);
+        triggerShownEvent($container);
         ValidationEngine.validateGroup(group);
 
         // assert
@@ -81,7 +81,7 @@ QUnit.module('General', {
 
         // act
         $validator.appendTo($container);
-        domUtils.triggerShownEvent($container);
+        triggerShownEvent($container);
         const result = ValidationEngine.validateGroup(group);
 
         assert.ok(result.isValid, 'result.isValid == true');
@@ -131,7 +131,7 @@ QUnit.module('General', {
 
         // act
         $validator.appendTo($container);
-        domUtils.triggerShownEvent($container);
+        triggerShownEvent($container);
         const result = ValidationEngine.validateGroup(group);
 
         assert.ok(result.isValid, 'result.isValid == true');
@@ -189,7 +189,7 @@ QUnit.module('General', {
         // act
         $validator1.appendTo($container);
         $validator2.appendTo($container);
-        domUtils.triggerShownEvent($container);
+        triggerShownEvent($container);
         const result = ValidationEngine.validateGroup(group);
 
         assert.ok(result.isValid, 'result.isValid == true');
@@ -237,7 +237,7 @@ QUnit.module('General', {
 
         // act
         $validator1.appendTo($container);
-        domUtils.triggerShownEvent($container);
+        triggerShownEvent($container);
         const result = ValidationEngine.validateGroup(group);
 
         assert.strictEqual(result.validators.length, 1, 'result.validators contains one validator');

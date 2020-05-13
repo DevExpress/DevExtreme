@@ -1,27 +1,26 @@
-import $ from 'jquery';
-import resizeCallbacks from 'core/utils/resize_callbacks';
-import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
-import typeUtils from 'core/utils/type';
-import browser from 'core/utils/browser';
-import domUtils from 'core/utils/dom';
-import { __internals as internals } from 'ui/form/ui.form';
-import themes from 'ui/themes';
+import 'common.css!';
 import device from 'core/devices';
-import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import domAdapter from 'core/dom_adapter';
-
-import 'ui/text_area';
+import browser from 'core/utils/browser';
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import typeUtils from 'core/utils/type';
+import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
+import 'generic_light.css!';
+import $ from 'jquery';
 import 'ui/autocomplete';
 import 'ui/calendar';
 import 'ui/date_box';
 import 'ui/drop_down_box';
+import { __internals as internals } from 'ui/form/ui.form';
 import 'ui/html_editor';
 import 'ui/lookup';
 import 'ui/radio_group';
 import 'ui/tag_box';
+import 'ui/text_area';
+import themes from 'ui/themes';
+import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
+import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 
-import 'common.css!';
-import 'generic_light.css!';
 
 const INVALID_CLASS = 'dx-invalid';
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
@@ -315,8 +314,8 @@ QUnit.test('Refresh form when visibility changed to \'true\' in msie browser', f
     }).dxForm('instance');
 
     const refreshStub = sinon.stub(form, '_refresh');
-    domUtils.triggerHidingEvent($testContainer);
-    domUtils.triggerShownEvent($testContainer);
+    triggerHidingEvent($testContainer);
+    triggerShownEvent($testContainer);
 
     assert.equal(refreshStub.callCount, expectedRefreshCount, 'Refresh on visibility changed to \'true\' if browser is IE or Edge');
     refreshStub.restore();

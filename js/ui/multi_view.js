@@ -4,7 +4,7 @@ import translator from '../animation/translator';
 import mathUtils from '../core/utils/math';
 import { extend } from '../core/utils/extend';
 import { noop, deferRender } from '../core/utils/common';
-import { triggerResizeEvent } from '../core/utils/dom';
+import { triggerResizeEvent } from '../events/visibility_change';
 import { getPublicElement } from '../core/element';
 import { isDefined } from '../core/utils/type';
 import devices from '../core/devices';

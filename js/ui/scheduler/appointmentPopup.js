@@ -1,16 +1,16 @@
-import $ from '../../core/renderer';
-import Popup from '../popup';
-import windowUtils from '../../core/utils/window';
-import AppointmentForm from './ui.scheduler.appointment_form';
 import devices from '../../core/devices';
-import domUtils from '../../core/utils/dom';
-import objectUtils from '../../core/utils/object';
+import $ from '../../core/renderer';
 import dateUtils from '../../core/utils/date';
+import { Deferred, when } from '../../core/utils/deferred';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
-import { Deferred, when } from '../../core/utils/deferred';
+import objectUtils from '../../core/utils/object';
 import { isDefined } from '../../core/utils/type';
+import windowUtils from '../../core/utils/window';
+import { triggerResizeEvent } from '../../events/visibility_change';
 import messageLocalization from '../../localization/message';
+import Popup from '../popup';
+import AppointmentForm from './ui.scheduler.appointment_form';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -250,7 +250,7 @@ export default class AppointmentPopup {
     }
 
     triggerResize() {
-        this._popup && domUtils.triggerResizeEvent(this._popup.$element());
+        this._popup && triggerResizeEvent(this._popup.$element());
     }
 
     _getMaxWidth(isRecurrence) {

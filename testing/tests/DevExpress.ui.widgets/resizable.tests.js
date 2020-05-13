@@ -1,10 +1,10 @@
-import $ from 'jquery';
 import translator from 'animation/translator';
-import pointerMock from '../../helpers/pointerMock.js';
-import domUtils from 'core/utils/dom';
-
 import 'common.css!';
+import { triggerResizeEvent } from 'events/visibility_change';
+import $ from 'jquery';
 import 'ui/resizable';
+import pointerMock from '../../helpers/pointerMock.js';
+
 
 QUnit.testStart(function() {
     const markup =
@@ -813,18 +813,18 @@ QUnit.module('actions', () => {
     QUnit.test('dxresize event should be fired during resize', function(assert) {
         const $resizable = $('#resizable').dxResizable(); const $handle = $resizable.find('.' + RESIZABLE_HANDLE_CORNER_CLASS + '-bottom-right'); const pointer = pointerMock($handle).start();
 
-        const triggerFunction = domUtils.triggerResizeEvent;
+        const triggerFunction = triggerResizeEvent;
         assert.expect(1);
 
         try {
-            domUtils.triggerResizeEvent = function() {
+            triggerResizeEvent = function() {
                 assert.ok(true, 'event triggered');
             };
 
             pointer.dragStart().drag(10, 0);
 
         } finally {
-            domUtils.triggerResizeEvent = triggerFunction;
+            triggerResizeEvent = triggerFunction;
         }
     });
 

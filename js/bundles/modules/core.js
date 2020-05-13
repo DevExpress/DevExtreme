@@ -41,8 +41,8 @@ DevExpress.utils.initMobileViewport = require('../../mobile/init_mobile_viewport
 // TODO: MODULARITY: Remove this
 DevExpress.utils.extendFromObject = require('../../core/utils/extend').extendFromObject;
 DevExpress.utils.createComponents = require('../../core/utils/dom').createComponents;
-DevExpress.utils.triggerShownEvent = require('../../core/utils/dom').triggerShownEvent;
-DevExpress.utils.triggerHidingEvent = require('../../core/utils/dom').triggerHidingEvent;
+DevExpress.utils.triggerShownEvent = require('../../events/visibility_change').triggerShownEvent;
+DevExpress.utils.triggerHidingEvent = require('../../events/visibility_change').triggerHidingEvent;
 DevExpress.utils.resetActiveElement = require('../../core/utils/dom').resetActiveElement;
 DevExpress.utils.findBestMatches = require('../../core/utils/common').findBestMatches;
 DevExpress.createQueue = require('../../core/utils/queue').create;

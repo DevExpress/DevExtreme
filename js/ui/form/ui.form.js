@@ -9,7 +9,7 @@ import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import { isEmpty } from '../../core/utils/string';
 import browser from '../../core/utils/browser';
-import { triggerShownEvent } from '../../core/utils/dom';
+import { triggerShownEvent } from '../../events/visibility_change';
 import { getPublicElement } from '../../core/element';
 import messageLocalization from '../../localization/message';
 import Widget from '../widget/ui.widget';

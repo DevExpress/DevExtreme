@@ -14,7 +14,7 @@ import { animation } from './ui.drawer.rendering.strategy';
 import { name as CLICK_EVENT_NAME } from '../../events/click';
 import fx from '../../animation/fx';
 import { Deferred } from '../../core/utils/deferred';
-import { triggerResizeEvent } from '../../core/utils/dom';
+import { triggerResizeEvent } from '../../events/visibility_change';
 
 const DRAWER_CLASS = 'dx-drawer';
 const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';

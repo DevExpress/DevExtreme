@@ -1,40 +1,40 @@
-const $ = require('../../core/renderer');
-const domAdapter = require('../../core/dom_adapter');
-const windowUtils = require('../../core/utils/window');
-const ready = require('../../core/utils/ready_callbacks').add;
+import fx from '../../animation/fx';
+import positionUtils from '../../animation/position';
+import translator from '../../animation/translator';
+import registerComponent from '../../core/component_registrator';
+import devices from '../../core/devices';
+import domAdapter from '../../core/dom_adapter';
+import { getPublicElement } from '../../core/element';
+import $ from '../../core/renderer';
+import { EmptyTemplate } from '../../core/templates/empty_template';
+import { inArray } from '../../core/utils/array';
+import browser from '../../core/utils/browser';
+import { noop } from '../../core/utils/common';
+import { Deferred } from '../../core/utils/deferred';
+import domUtils from '../../core/utils/dom';
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import { fitIntoRange } from '../../core/utils/math';
+import { add as ready } from '../../core/utils/ready_callbacks';
+import typeUtils from '../../core/utils/type';
+import { compare as compareVersions } from '../../core/utils/version';
+import viewPortUtils from '../../core/utils/view_port';
+import windowUtils from '../../core/utils/window';
+import eventsEngine from '../../events/core/events_engine';
+import dragEvents from '../../events/drag';
+import pointerEvents from '../../events/pointer';
+import { keyboard } from '../../events/short';
+import eventUtils from '../../events/utils';
+import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '../../events/visibility_change';
+import { hideCallback as hideTopOverlayCallback } from '../../mobile/hide_top_overlay';
+import Resizable from '../resizable';
+import selectors from '../widget/selectors';
+import swatch from '../widget/swatch_container';
+import Widget from '../widget/ui.widget';
+import zIndexPool from './z_index';
 const window = windowUtils.getWindow();
 const navigator = windowUtils.getNavigator();
-const eventsEngine = require('../../events/core/events_engine');
-const fx = require('../../animation/fx');
-const translator = require('../../animation/translator');
-const compareVersions = require('../../core/utils/version').compare;
-const viewPortUtils = require('../../core/utils/view_port');
-const extend = require('../../core/utils/extend').extend;
-const inArray = require('../../core/utils/array').inArray;
-const getPublicElement = require('../../core/element').getPublicElement;
 const viewPortChanged = viewPortUtils.changeCallback;
-const hideTopOverlayCallback = require('../../mobile/hide_top_overlay').hideCallback;
-const positionUtils = require('../../animation/position');
-const fitIntoRange = require('../../core/utils/math').fitIntoRange;
-const domUtils = require('../../core/utils/dom');
-const noop = require('../../core/utils/common').noop;
-const typeUtils = require('../../core/utils/type');
-const each = require('../../core/utils/iterator').each;
-const devices = require('../../core/devices');
-const browser = require('../../core/utils/browser');
-const registerComponent = require('../../core/component_registrator');
-const Widget = require('../widget/ui.widget');
-const keyboard = require('../../events/short').keyboard;
-
-const selectors = require('../widget/selectors');
-const dragEvents = require('../../events/drag');
-const eventUtils = require('../../events/utils');
-const pointerEvents = require('../../events/pointer');
-const Resizable = require('../resizable');
-const EmptyTemplate = require('../../core/templates/empty_template').EmptyTemplate;
-const Deferred = require('../../core/utils/deferred').Deferred;
-const zIndexPool = require('./z_index');
-const swatch = require('../widget/swatch_container');
 
 const OVERLAY_CLASS = 'dx-overlay';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
@@ -77,7 +77,7 @@ const iOS = realDevice.platform === 'ios';
 const hasSafariAddressBar = browser.safari && realDevice.deviceType !== 'desktop';
 const android4_0nativeBrowser = realDevice.platform === 'android' && compareVersions(realVersion, [4, 0], 2) === 0 && navigator.userAgent.indexOf('Chrome') === -1;
 
-const forceRepaint = function($element) {
+const forceRepaint = $element => {
     // NOTE: force layout recalculation on FF desktop (T581681)
     if(firefoxDesktop) {
         $element.width();
@@ -97,12 +97,12 @@ const forceRepaint = function($element) {
 };
 
 
-const getElement = function(value) {
+const getElement = value => {
     return value && $(value.target || value);
 };
 
-ready(function() {
-    eventsEngine.subscribeGlobal(domAdapter.getDocument(), pointerEvents.down, function(e) {
+ready(() => {
+    eventsEngine.subscribeGlobal(domAdapter.getDocument(), pointerEvents.down, e => {
         for(let i = OVERLAY_STACK.length - 1; i >= 0; i--) {
             if(!OVERLAY_STACK[i]._proxiedDocumentDownHandler(e)) {
                 return;
@@ -221,7 +221,7 @@ const Overlay = Widget.inherit({
             target: undefined,
             container: undefined,
 
-            hideTopOverlayHandler: function() { this.hide(); }.bind(this),
+            hideTopOverlayHandler: () => { this.hide(); },
             closeOnTargetScroll: false,
             onPositioned: null,
             boundaryOffset: { h: 0, v: 0 },
@@ -311,7 +311,7 @@ const Overlay = Widget.inherit({
         // NOTE: hack to fix B251087
         eventsEngine.on(this._$wrapper, 'MSPointerDown', noop);
         // NOTE: bootstrap integration T342292
-        eventsEngine.on(this._$wrapper, 'focusin', function(e) { e.stopPropagation(); });
+        eventsEngine.on(this._$wrapper, 'focusin', e => { e.stopPropagation(); });
 
         this._toggleViewPortSubscription(true);
         this._initHideTopOverlayHandler(this.option('hideTopOverlayHandler'));
@@ -341,7 +341,7 @@ const Overlay = Widget.inherit({
             'animation.show.to.position.of',
             'animation.hide.from.position.of',
             'animation.hide.to.position.of'
-        ], function(_, path) {
+        ], (_, path) => {
             const pathParts = path.split('.');
 
             let option = options;
@@ -378,17 +378,17 @@ const Overlay = Widget.inherit({
     _initActions: function() {
         this._actions = {};
 
-        each(ACTIONS, (function(_, action) {
+        each(ACTIONS, (_, action) => {
             this._actions[action] = this._createActionByOption(action, {
                 excludeValidators: ['disabled', 'readOnly']
             }) || noop;
-        }).bind(this));
+        });
     },
 
     _initCloseOnOutsideClickHandler: function() {
         const that = this;
         this._proxiedDocumentDownHandler = function() {
-            return that._documentDownHandler.apply(that, arguments);
+            return that._documentDownHandler(...arguments);
         };
     },
 
@@ -492,7 +492,7 @@ const Overlay = Widget.inherit({
         const deferred = new Deferred();
 
         this._parentHidden = this._isParentHidden();
-        deferred.done(function() {
+        deferred.done(() => {
             delete that._parentHidden;
         });
 
@@ -518,7 +518,7 @@ const Overlay = Widget.inherit({
             delete this._isHidingActionCanceled;
             deferred.resolve();
         } else {
-            const show = function() {
+            const show = () => {
                 this._renderVisibility(true);
 
                 if(this._isShowingActionCanceled) {
@@ -542,7 +542,7 @@ const Overlay = Widget.inherit({
                     startShowAnimation.apply(this, arguments);
                     that._showAnimationProcessing = true;
                 });
-            }.bind(this);
+            };
 
             if(this.option('templatesRenderAsynchronously')) {
                 this._stopShowTimer();
@@ -659,7 +659,7 @@ const Overlay = Widget.inherit({
         this._stopAnimation();
 
         if(!visible) {
-            domUtils.triggerHidingEvent(this._$content);
+            triggerHidingEvent(this._$content);
         }
 
         this._toggleVisibility(visible);
@@ -685,8 +685,8 @@ const Overlay = Widget.inherit({
             this._moveToContainer();
             this._renderGeometry();
 
-            domUtils.triggerShownEvent(this._$content);
-            domUtils.triggerResizeEvent(this._$content);
+            triggerShownEvent(this._$content);
+            triggerResizeEvent(this._$content);
         } else {
             this._moveFromContainer();
         }
@@ -726,7 +726,7 @@ const Overlay = Widget.inherit({
     _initTabTerminatorHandler: function() {
         const that = this;
         this._proxiedTabTerminatorHandler = function() {
-            that._tabKeyHandler.apply(that, arguments);
+            that._tabKeyHandler(...arguments);
         };
     },
 
@@ -822,7 +822,7 @@ const Overlay = Widget.inherit({
         }
 
         this._proxiedTargetParentsScrollHandler = this._proxiedTargetParentsScrollHandler
-            || (function(e) { this._targetParentsScrollHandler(e); }).bind(this);
+            || (e => { this._targetParentsScrollHandler(e); });
 
         eventsEngine.off($().add(this._$prevTargetParents), scrollEvent, this._proxiedTargetParentsScrollHandler);
 
@@ -995,7 +995,7 @@ const Overlay = Widget.inherit({
             },
             _clearSelection: noop,
             isNative: true
-        }, function(e) {
+        }, e => {
             const originalEvent = e.originalEvent.originalEvent;
             e._cancelPreventDefault = true;
 
@@ -1284,7 +1284,7 @@ const Overlay = Widget.inherit({
         const $target = $(e.target);
 
         if($target.is(this._$content) || !this.option('ignoreChildEvents')) {
-            this.callBase.apply(this, arguments);
+            this.callBase(...arguments);
         }
     },
 
@@ -1345,7 +1345,7 @@ const Overlay = Widget.inherit({
     },
 
     _toggleDisabledState: function(value) {
-        this.callBase.apply(this, arguments);
+        this.callBase(...arguments);
         this._$content.toggleClass(DISABLED_STATE_CLASS, Boolean(value));
     },
 
@@ -1388,13 +1388,13 @@ const Overlay = Widget.inherit({
                 this._renderGeometry();
                 break;
             case 'visible':
-                this._renderVisibilityAnimate(value).done((function() {
+                this._renderVisibilityAnimate(value).done(() => {
                     if(!this._animateDeferred) {
                         return;
                     }
 
                     this._animateDeferred.resolveWith(this);
-                }).bind(this));
+                });
                 break;
             case 'target':
                 this._initTarget(value);
@@ -1446,10 +1446,10 @@ const Overlay = Widget.inherit({
         this._animateDeferred = animateDeferred;
         this.option('visible', showing);
 
-        animateDeferred.promise().done((function() {
+        animateDeferred.promise().done(() => {
             delete this._animateDeferred;
             result.resolveWith(this, [this.option('visible')]);
-        }).bind(this));
+        });
 
         return result.promise();
     },
@@ -1472,7 +1472,7 @@ const Overlay = Widget.inherit({
 
     repaint: function() {
         this._renderGeometry();
-        domUtils.triggerResizeEvent(this._$content);
+        triggerResizeEvent(this._$content);
     }
 });
 
@@ -1480,7 +1480,7 @@ const Overlay = Widget.inherit({
 * @name ui.dxOverlay
 * @section utils
 */
-Overlay.baseZIndex = function(zIndex) {
+Overlay.baseZIndex = zIndex => {
     return zIndexPool.base(zIndex);
 };
 

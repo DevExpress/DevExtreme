@@ -1,21 +1,21 @@
-const $ = require('../../core/renderer');
-const eventsEngine = require('../../events/core/events_engine');
-const domUtils = require('../../core/utils/dom');
-const numberLocalization = require('../../localization/number');
-const devices = require('../../core/devices');
-const extend = require('../../core/utils/extend').extend;
-const applyServerDecimalSeparator = require('../../core/utils/common').applyServerDecimalSeparator;
-const registerComponent = require('../../core/component_registrator');
-const TrackBar = require('../track_bar');
-const eventUtils = require('../../events/utils');
-const pointerEvents = require('../../events/pointer');
-const feedbackEvents = require('../../events/core/emitter.feedback');
-const SliderHandle = require('./ui.slider_handle');
-const inkRipple = require('../widget/utils.ink_ripple');
-const clickEvent = require('../../events/click');
-const Swipeable = require('../../events/gesture/swipeable');
-const themes = require('../themes');
-const Deferred = require('../../core/utils/deferred').Deferred;
+import registerComponent from '../../core/component_registrator';
+import devices from '../../core/devices';
+import $ from '../../core/renderer';
+import { applyServerDecimalSeparator } from '../../core/utils/common';
+import { Deferred } from '../../core/utils/deferred';
+import { extend } from '../../core/utils/extend';
+import clickEvent from '../../events/click';
+import feedbackEvents from '../../events/core/emitter.feedback';
+import eventsEngine from '../../events/core/events_engine';
+import Swipeable from '../../events/gesture/swipeable';
+import pointerEvents from '../../events/pointer';
+import eventUtils from '../../events/utils';
+import { triggerShownEvent } from '../../events/visibility_change';
+import numberLocalization from '../../localization/number';
+import themes from '../themes';
+import TrackBar from '../track_bar';
+import inkRipple from '../widget/utils.ink_ripple';
+import SliderHandle from './ui.slider_handle';
 
 const SLIDER_CLASS = 'dx-slider';
 const SLIDER_WRAPPER_CLASS = 'dx-slider-wrapper';
@@ -37,7 +37,7 @@ const Slider = TrackBar.inherit({
         const isRTL = this.option('rtlEnabled');
 
         const that = this;
-        const roundedValue = function(offset, isLeftDirection) {
+        const roundedValue = (offset, isLeftDirection) => {
             offset = that._valueStep(offset);
             const step = that.option('step');
             const value = that.option('value');
@@ -59,10 +59,10 @@ const Slider = TrackBar.inherit({
             return result;
         };
 
-        const moveHandleRight = function(offset) {
+        const moveHandleRight = offset => {
             that.option('value', roundedValue(offset, isRTL));
         };
-        const moveHandleLeft = function(offset) {
+        const moveHandleLeft = offset => {
             that.option('value', roundedValue(offset, !isRTL));
         };
 
@@ -279,7 +279,7 @@ const Slider = TrackBar.inherit({
         }
 
         const config = {
-            element: element,
+            element,
             event: dxEvent,
             wave: waveIndex
         };
@@ -342,9 +342,9 @@ const Slider = TrackBar.inherit({
             .toggleClass(SLIDER_TOOLTIP_POSITION_CLASS_PREFIX + 'top', tooltipEnabled && tooltipPosition === 'top');
 
         this._createComponent($handle, SliderHandle, {
-            value: value,
-            tooltipEnabled: tooltipEnabled,
-            tooltipPosition: tooltipPosition,
+            value,
+            tooltipEnabled,
+            tooltipPosition,
             tooltipFormat: format,
             tooltipShowMode: this.option('tooltip.showMode'),
             tooltipFitIn: this.$element()
@@ -434,13 +434,13 @@ const Slider = TrackBar.inherit({
         const $element = this.$element();
 
         eventsEngine.off($element, pointerDownEventName);
-        eventsEngine.on($element, pointerDownEventName, function(e) {
+        eventsEngine.on($element, pointerDownEventName, e => {
             if(eventUtils.isMouseEvent(e)) {
                 startAction({ event: e });
             }
         });
         eventsEngine.off($element, clickEventName);
-        eventsEngine.on($element, clickEventName, (function(e) {
+        eventsEngine.on($element, clickEventName, e => {
             const $handle = this._activeHandle();
 
             if($handle) {
@@ -448,7 +448,7 @@ const Slider = TrackBar.inherit({
                 eventsEngine.trigger($handle, 'focus');
             }
             startAction({ event: e });
-        }).bind(this));
+        });
     },
 
     _itemWidthFunc: function() {
@@ -605,7 +605,7 @@ const Slider = TrackBar.inherit({
                 this.callBase(args);
                 this._renderHandle();
                 this._repaintHandle();
-                domUtils.triggerShownEvent(this.$element()); // TODO: move firing dxshown event to Widget
+                triggerShownEvent(this.$element()); // TODO: move firing dxshown event to Widget
                 break;
             case 'min':
             case 'max':

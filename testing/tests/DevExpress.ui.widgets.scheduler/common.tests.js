@@ -1,32 +1,30 @@
-import pointerMock from '../../helpers/pointerMock.js';
-
-import $ from 'jquery';
-import { noop } from 'core/utils/common';
-import { isRenderer } from 'core/utils/type';
-import translator from 'animation/translator';
-import devices from 'core/devices';
-import domUtils from 'core/utils/dom';
-import errors from 'ui/widget/ui.errors';
-import Color from 'color';
 import fx from 'animation/fx';
-import config from 'core/config';
-import dxSchedulerAppointmentModel from 'ui/scheduler/ui.scheduler.appointment_model';
-import dxScheduler from 'ui/scheduler/ui.scheduler';
-import dxSchedulerWorkSpaceDay from 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
-import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
-import dragEvents from 'events/drag';
-import { DataSource } from 'data/data_source/data_source';
-import CustomStore from 'data/custom_store';
-import SchedulerTimezones from 'ui/scheduler/timezones/ui.scheduler.timezones';
-import dataUtils from 'core/element_data';
-import keyboardMock from '../../helpers/keyboardMock.js';
-import themes from 'ui/themes';
-import { SchedulerTestWrapper, createWrapper } from './helpers.js';
-import resizeCallbacks from 'core/utils/resize_callbacks';
-
-import 'ui/scheduler/ui.scheduler';
+import translator from 'animation/translator';
+import Color from 'color';
 import 'common.css!';
+import config from 'core/config';
+import devices from 'core/devices';
+import dataUtils from 'core/element_data';
+import { noop } from 'core/utils/common';
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import { isRenderer } from 'core/utils/type';
+import CustomStore from 'data/custom_store';
+import { DataSource } from 'data/data_source/data_source';
+import dragEvents from 'events/drag';
+import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
+import $ from 'jquery';
+import SchedulerTimezones from 'ui/scheduler/timezones/ui.scheduler.timezones';
+import 'ui/scheduler/ui.scheduler';
+import dxScheduler from 'ui/scheduler/ui.scheduler';
+import dxSchedulerAppointmentModel from 'ui/scheduler/ui.scheduler.appointment_model';
+import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
+import dxSchedulerWorkSpaceDay from 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
+import themes from 'ui/themes';
+import errors from 'ui/widget/ui.errors';
+import keyboardMock from '../../helpers/keyboardMock.js';
+import pointerMock from '../../helpers/pointerMock.js';
+import { createWrapper, SchedulerTestWrapper } from './helpers.js';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler"></div>');
@@ -92,7 +90,7 @@ QUnit.module('Initialization', {
     QUnit.test('Rendering inside invisible element', function(assert) {
         try {
             this.createInstance();
-            domUtils.triggerHidingEvent($('#scheduler'));
+            triggerHidingEvent($('#scheduler'));
             $('#scheduler').hide();
             this.instance.option({
                 dataSource: [{
@@ -105,7 +103,7 @@ QUnit.module('Initialization', {
             });
         } finally {
             $('#scheduler').show();
-            domUtils.triggerShownEvent($('#scheduler'));
+            triggerShownEvent($('#scheduler'));
             this.clock.tick();
             assert.equal(this.instance.$element().find('.dx-scheduler-appointment').length, 1, 'Appointment is rendered');
         }
@@ -1678,11 +1676,11 @@ QUnit.module('Initialization', {
 
         const initialAppointmentHeight = this.instance.$element().find('.dx-scheduler-appointment').eq(0).outerHeight();
 
-        domUtils.triggerHidingEvent($('#scheduler'));
+        triggerHidingEvent($('#scheduler'));
         $('#scheduler').hide();
         this.instance.option('height', 400);
         $('#scheduler').show();
-        domUtils.triggerShownEvent($('#scheduler'));
+        triggerShownEvent($('#scheduler'));
         this.clock.tick();
 
         assert.notEqual(this.instance.$element().find('.dx-scheduler-appointment').eq(0).outerHeight(), initialAppointmentHeight, 'Appointment was repainted');
@@ -4053,7 +4051,7 @@ QUnit.module('Initialization', {
 
     QUnit.test('Rendering small scheduler inside invisible element', function(assert) {
         try {
-            domUtils.triggerHidingEvent($('#scheduler'));
+            triggerHidingEvent($('#scheduler'));
             this.createInstance({
                 width: 300,
                 currentView: 'week',
@@ -4067,7 +4065,7 @@ QUnit.module('Initialization', {
             $('#scheduler').hide();
         } finally {
             $('#scheduler').show();
-            domUtils.triggerShownEvent($('#scheduler'));
+            triggerShownEvent($('#scheduler'));
             this.instance.option('width', 600);
             this.clock.tick();
 

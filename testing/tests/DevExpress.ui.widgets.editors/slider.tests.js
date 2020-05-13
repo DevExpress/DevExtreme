@@ -1,17 +1,17 @@
-import $ from 'jquery';
-import Tooltip from 'ui/tooltip';
-import resizeCallbacks from 'core/utils/resize_callbacks';
-import domUtils from 'core/utils/dom';
+import fx from 'animation/fx';
 import positionUtils from 'animation/position';
-import browser from 'core/utils/browser';
+import 'common.css!';
 import config from 'core/config';
+import browser from 'core/utils/browser';
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import { triggerShownEvent } from 'events/visibility_change';
+import $ from 'jquery';
 import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_top_overlay';
+import 'ui/slider';
+import Tooltip from 'ui/tooltip';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
-import fx from 'animation/fx';
-import 'ui/slider';
 
-import 'common.css!';
 
 const { module, testStart, test, testInActiveWindow } = QUnit;
 
@@ -1500,7 +1500,7 @@ module('visibility change', () => {
         });
 
         $parent.show();
-        domUtils.triggerShownEvent($parent);
+        triggerShownEvent($parent);
 
         const $tooltip = $slider.find('.' + TOOLTIP_CONTENT_CLASS);
         const $arrow = $('.dx-popover-arrow');

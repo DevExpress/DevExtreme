@@ -1,19 +1,17 @@
 import 'common.css!';
+import dateUtils from 'core/utils/date';
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
-import 'ui/scheduler/workspaces/ui.scheduler.timeline';
-import 'ui/scheduler/workspaces/ui.scheduler.timeline_day';
-import 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
-import 'ui/scheduler/workspaces/ui.scheduler.timeline_work_week';
-import 'ui/scheduler/workspaces/ui.scheduler.timeline_month';
-
-import pointerMock from '../../helpers/pointerMock.js';
-import keyboardMock from '../../helpers/keyboardMock.js';
-
 import $ from 'jquery';
 import SchedulerResourcesManager from 'ui/scheduler/ui.scheduler.resource_manager';
-import domUtils from 'core/utils/dom';
-import resizeCallbacks from 'core/utils/resize_callbacks';
-import dateUtils from 'core/utils/date';
+import 'ui/scheduler/workspaces/ui.scheduler.timeline';
+import 'ui/scheduler/workspaces/ui.scheduler.timeline_day';
+import 'ui/scheduler/workspaces/ui.scheduler.timeline_month';
+import 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
+import 'ui/scheduler/workspaces/ui.scheduler.timeline_work_week';
+import keyboardMock from '../../helpers/keyboardMock.js';
+import pointerMock from '../../helpers/pointerMock.js';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler-timeline"></div>\
@@ -57,8 +55,8 @@ QUnit.test('Header scrollable should update position if date scrollable position
     const headerScrollable = $element.find('.dx-scheduler-header-scrollable').dxScrollable('instance');
     const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
 
-    domUtils.triggerHidingEvent($element);
-    domUtils.triggerShownEvent($element);
+    triggerHidingEvent($element);
+    triggerShownEvent($element);
 
     dateTableScrollable.scrollTo({ left: 100 });
 
@@ -81,8 +79,8 @@ QUnit.test('Header scrollable shouldn\'t update position if date scrollable posi
     const headerScrollable = $element.find('.dx-scheduler-header-scrollable').dxScrollable('instance');
     const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
 
-    domUtils.triggerHidingEvent($element);
-    domUtils.triggerShownEvent($element);
+    triggerHidingEvent($element);
+    triggerShownEvent($element);
 
     dateTableScrollable.scrollTo({ top: 100 });
 
@@ -97,8 +95,8 @@ QUnit.test('Date table should have a correct width if cell is less than 75px', f
 
     $cells.css('width', 30);
 
-    domUtils.triggerHidingEvent($element);
-    domUtils.triggerShownEvent($element);
+    triggerHidingEvent($element);
+    triggerShownEvent($element);
 
     const dateTableWidth = $element.find('.dx-scheduler-date-table').outerWidth();
     assert.equal(dateTableWidth, 1440, 'Width is OK');
@@ -118,8 +116,8 @@ QUnit.test('Sidebar scrollable should update position if date scrollable positio
     const groupPanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
     const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
 
-    domUtils.triggerHidingEvent($element);
-    domUtils.triggerShownEvent($element);
+    triggerHidingEvent($element);
+    triggerShownEvent($element);
 
     dateTableScrollable.scrollTo({ top: 200 });
 
@@ -141,8 +139,8 @@ QUnit.test('Date table scrollable should update position if sidebar position is 
     const groupPanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
     const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
 
-    domUtils.triggerHidingEvent($element);
-    domUtils.triggerShownEvent($element);
+    triggerHidingEvent($element);
+    triggerShownEvent($element);
 
     groupPanelScrollable.scrollTo({ top: 200 });
 
@@ -154,8 +152,8 @@ QUnit.test('Date table scrollable should update position if header scrollable po
     const headerScrollable = $element.find('.dx-scheduler-header-scrollable').dxScrollable('instance');
     const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
 
-    domUtils.triggerHidingEvent($element);
-    domUtils.triggerShownEvent($element);
+    triggerHidingEvent($element);
+    triggerShownEvent($element);
 
     headerScrollable.scrollTo({ left: 100 });
 
@@ -350,7 +348,7 @@ QUnit.test('Get visible bounds', function(assert) {
 
     const scrollable = this.instance.getScrollable();
 
-    domUtils.triggerShownEvent(this.instance.$element());
+    triggerShownEvent(this.instance.$element());
 
     scrollable.scrollBy(0);
 
@@ -369,7 +367,7 @@ QUnit.test('Get visible bounds if scroll position is not null', function(assert)
 
     const scrollable = this.instance.getScrollable();
 
-    domUtils.triggerShownEvent(this.instance.$element());
+    triggerShownEvent(this.instance.$element());
 
     scrollable.scrollBy(1000);
 
@@ -389,7 +387,7 @@ QUnit.test('Get visible bounds if hoursInterval is set', function(assert) {
 
     const scrollable = this.instance.getScrollable();
 
-    domUtils.triggerShownEvent(this.instance.$element());
+    triggerShownEvent(this.instance.$element());
 
     scrollable.scrollBy(1000);
 
@@ -419,7 +417,7 @@ QUnit.test('Get visible bounds, groupOrientation = horizontal', function(assert)
 
     const scrollable = this.instance.getScrollable();
 
-    domUtils.triggerShownEvent(this.instance.$element());
+    triggerShownEvent(this.instance.$element());
 
     scrollable.scrollBy(0);
 
@@ -601,7 +599,7 @@ QUnit.test('Get visible bounds for timelineWeek on init', function(assert) {
 
     const scrollable = this.instance.getScrollable();
 
-    domUtils.triggerShownEvent(this.instance.$element());
+    triggerShownEvent(this.instance.$element());
 
     scrollable.scrollBy(0);
 
@@ -620,7 +618,7 @@ QUnit.test('Get visible bounds for timelineWeek', function(assert) {
     });
     const scrollable = this.instance.getScrollable();
 
-    domUtils.triggerShownEvent(this.instance.$element());
+    triggerShownEvent(this.instance.$element());
 
     scrollable.scrollBy(10600);
 
@@ -641,7 +639,7 @@ QUnit.test('Get visible bounds for timelineWeek, rtl mode', function(assert) {
 
     const scrollable = instance.getScrollable();
 
-    domUtils.triggerShownEvent(instance.$element());
+    triggerShownEvent(instance.$element());
 
     scrollable.scrollBy(-10600);
 
