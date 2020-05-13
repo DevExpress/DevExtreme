@@ -1,3 +1,5 @@
+'use strict';
+
 const gulp = require('gulp');
 const merge = require('merge-stream');
 const rename = require('gulp-rename');

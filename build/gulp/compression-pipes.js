@@ -1,3 +1,5 @@
+'use strict';
+
 const lazyPipe = require('lazypipe');
 const replace = require('gulp-replace');
 const uglify = require('gulp-uglify');

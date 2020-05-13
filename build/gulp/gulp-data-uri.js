@@ -1,3 +1,5 @@
+'use strict';
+
 const replace = require('gulp-replace');
 const path = require('path');
 const fs = require('fs');
