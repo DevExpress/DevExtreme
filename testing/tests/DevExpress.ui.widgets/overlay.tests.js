@@ -10,7 +10,8 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
 import { value as viewPort } from 'core/utils/view_port';
 import eventsEngine from 'events/core/events_engine';
-import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from 'events/visibility_change';
+import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
+import visibilityChange from 'events/visibility_change';
 import $ from 'jquery';
 import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_top_overlay';
 import Overlay from 'ui/overlay';
@@ -706,10 +707,10 @@ testModule('visibility', moduleConfig, () => {
     test('dxresize event should be fired only once when container shows first time (T306921)', function(assert) {
         assert.expect(2);
 
-        const triggerFunction = triggerResizeEvent;
+        const triggerFunction = visibilityChange.triggerResizeEvent;
 
         try {
-            triggerResizeEvent = () => {
+            visibilityChange.triggerResizeEvent = () => {
                 assert.ok(true, 'event triggered');
             };
 
@@ -720,7 +721,7 @@ testModule('visibility', moduleConfig, () => {
             overlay.show();
 
         } finally {
-            triggerResizeEvent = triggerFunction;
+            visibilityChange.triggerResizeEvent = triggerFunction;
         }
     });
 

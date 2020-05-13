@@ -6,7 +6,7 @@ import errors from 'core/errors';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import typeUtils from 'core/utils/type';
 import eventsEngine from 'events/core/events_engine';
-import { triggerResizeEvent } from 'events/visibility_change';
+import visibilityChange from 'events/visibility_change';
 import $ from 'jquery';
 import Button from 'ui/button';
 import Drawer from 'ui/drawer';
@@ -162,12 +162,12 @@ QUnit.module('Drawer behavior', () => {
         });
 
         const instance = $element.dxDrawer('instance');
-        const triggerFunction = triggerResizeEvent;
+        const triggerFunction = visibilityChange.triggerResizeEvent;
         assert.expect(2);
 
         try {
             fx.off = true;
-            triggerResizeEvent = ($element) => {
+            visibilityChange.triggerResizeEvent = ($element) => {
                 assert.ok(true, 'event was triggered');
                 assert.equal($element, instance.viewContent(), 'Event was triggered for right element');
             };
@@ -176,7 +176,7 @@ QUnit.module('Drawer behavior', () => {
 
         } finally {
             fx.off = false;
-            triggerResizeEvent = triggerFunction;
+            visibilityChange.triggerResizeEvent = triggerFunction;
         }
     });
 
@@ -187,11 +187,11 @@ QUnit.module('Drawer behavior', () => {
         });
 
         const instance = $element.dxDrawer('instance');
-        const triggerFunction = triggerResizeEvent;
+        const triggerFunction = visibilityChange.triggerResizeEvent;
         assert.expect(2);
 
         try {
-            triggerResizeEvent = function($element) {
+            visibilityChange.triggerResizeEvent = function($element) {
                 assert.ok(true, 'event was triggered');
                 assert.equal($element, instance.viewContent(), 'Event was triggered for right element');
             };
@@ -199,7 +199,7 @@ QUnit.module('Drawer behavior', () => {
             instance.option('position', 'left');
 
         } finally {
-            triggerResizeEvent = triggerFunction;
+            visibilityChange.triggerResizeEvent = triggerFunction;
         }
     });
 
