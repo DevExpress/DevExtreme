@@ -69,6 +69,8 @@
 @SCHEDULER_SMALL_SIZE_FACTOR: 0.5;
 @SCHEDULER_SMALL_FONT_SIZE: 14px;
 
+@SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+
 @SCHEDULER_TIME_INDICATOR_FONT_SIZE: 30px;
 @SCHEDULER_TIME_INDICATOR_SIZE: 1px;
 @SCHEDULER_TIME_INDICATOR_TOP: 14px;
@@ -141,7 +143,7 @@
             padding-left: @offset + @SCHEDULER_LEFT_COLUMN_WIDTH;
 
             .dx-scheduler-small & {
-                padding-left: @offset * @SCHEDULER_SMALL_SIZE_FACTOR + @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                padding-left: @offset * @SCHEDULER_SMALL_SIZE_FACTOR + @SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
             }
 
             .dx-rtl & {
@@ -149,7 +151,7 @@
                 padding-right: @offset + @SCHEDULER_LEFT_COLUMN_WIDTH;
 
                 .dx-scheduler-small & {
-                    padding-right: @offset * @SCHEDULER_SMALL_SIZE_FACTOR + @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                    padding-right: @offset * @SCHEDULER_SMALL_SIZE_FACTOR + @SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
                 }
             }
         }
@@ -648,7 +650,7 @@
             .dx-icon-spinright;
 
             .dx-scheduler-small & {
-                margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                margin-left: @SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
             }
         }
 
@@ -657,7 +659,7 @@
             margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
 
             .dx-scheduler-small & {
-                margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                margin-left: @SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
             }
         }
 
@@ -673,7 +675,7 @@
                 background-color: @SCHEDULER_TIME_INDICATOR_BACKGROUND_COLOR;
 
                 .dx-scheduler-small & {
-                    margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                    margin-left: @SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
                 }
             }
         }
@@ -1417,7 +1419,7 @@
                 }
 
                 .dx-scheduler-small & {
-                    margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                    margin-left: @SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
                 }
             }
         }
@@ -1458,7 +1460,7 @@
                 border-right: @SCHEDULER_BASE_BORDER;
 
                 .dx-scheduler-small & {
-                    width: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                    width: @SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
                 }
             }
         }
@@ -1486,7 +1488,7 @@
             margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
 
             .dx-scheduler-small & {
-                margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                margin-left: @SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
             }
         }
 
@@ -1509,7 +1511,7 @@
             padding: 0;
 
             .dx-scheduler-small & {
-                margin: 0 0 0 @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                margin: 0 0 0 @SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
             }
 
             .dx-rtl & {
@@ -1517,7 +1519,7 @@
             }
 
             .dx-rtl.dx-scheduler-small & {
-                margin: 0 @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR 0 0;
+                margin: 0 @SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET 0 0;
             }
         }
 
@@ -1718,7 +1720,7 @@
         margin-left: -@SCHEDULER_LEFT_COLUMN_WIDTH;
 
         .dx-scheduler-small & {
-            margin-left: -@SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+            margin-left: -@SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
         }
 
         .dx-scheduler-date-table-row {
@@ -2113,10 +2115,10 @@
             .dx-scheduler-small & {
                 &.dx-rtl {
                     padding-left: 0;
-                    padding-right: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                    padding-right: @SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
                 }
 
-                padding-left: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                padding-left: @SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
             }
 
             width: 100%;
@@ -2554,7 +2556,7 @@
                 margin-right: -@SCHEDULER_LEFT_COLUMN_WIDTH;
 
                 .dx-scheduler-small & {
-                    margin-right: -@SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                    margin-right: -@SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
                 }
             }
         }
@@ -2614,7 +2616,7 @@
                 margin-left: auto;
 
                 .dx-scheduler-small & {
-                    margin-right: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                    margin-right: @SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
                 }
             }
 
@@ -2678,7 +2680,7 @@
             &:not(.dx-scheduler-work-space-all-day) {
                 .dx-scheduler-header-scrollable {
                     .dx-scheduler-small & {
-                        margin-right: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                        margin-right: @SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
                     }
 
                     margin-left: 0;
