@@ -43,6 +43,7 @@ _Range.prototype = {
         const that = this;
         const categories = that.categories;
         const otherCategories = otherRange.categories;
+        const isDiscrete = that[axisTypeSelector] === 'discrete';
 
         const compareAndReplaceByField = function(field, compare) {
             compareAndReplace(that[field], otherRange[field], function(value) { that[field] = value; }, compare);
@@ -69,7 +70,7 @@ _Range.prototype = {
 
         compareAndReplaceByField(minSelector, otherLessThan);
         compareAndReplaceByField(maxSelector, otherGreaterThan);
-        if(that[axisTypeSelector] === 'discrete') {
+        if(isDiscrete) {
             checkField(minVisibleSelector);
             checkField(maxVisibleSelector);
         } else {
@@ -78,7 +79,7 @@ _Range.prototype = {
         }
         compareAndReplaceByField('interval', otherLessThan);
 
-        if(that[axisTypeSelector] !== 'discrete') {
+        if(!isDiscrete) {
             controlValuesByVisibleBounds(minSelector, minVisibleSelector, otherLessThan);
             controlValuesByVisibleBounds(minSelector, maxVisibleSelector, otherLessThan);
             controlValuesByVisibleBounds(maxSelector, maxVisibleSelector, otherGreaterThan);
