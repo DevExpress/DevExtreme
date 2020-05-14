@@ -7,6 +7,7 @@ import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
+import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 
 QUnit.module('Rendering', {
     beforeEach: function() {
@@ -634,4 +635,20 @@ QUnit.test('searchMode equals', function(assert) {
     });
 
     assert.equal($treeView.find('.dx-item').length, 1, 'one item is rendered');
+});
+
+QUnit.module('visibility data source property (T888410)', {}, () => {
+    [true, false, undefined].forEach(visible => {
+        QUnit.test(`allItems.visible: ${visible}`, function(assert) {
+            const wrapper = new TreeViewTestWrapper({ items: [
+                { text: 'item1', visible: visible },
+                { text: 'item2', visible: visible }
+            ] });
+            const $nodes = wrapper.getNodes();
+            $nodes.each((index) => {
+                const $node = $nodes.eq(index);
+                assert.equal(wrapper.hasInvisibleClass($node), visible === false, $node.index() + ' has invisible class');
+            });
+        });
+    });
 });
