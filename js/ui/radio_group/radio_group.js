@@ -270,8 +270,10 @@ class RadioGroup extends Editor {
             accessKey,
             focusStateEnabled,
             itemTemplate,
-            tabIndex
+            tabIndex,
+            valueExpr
         } = this.option();
+        const isNullSelectable = valueExpr !== 'this';
 
         this._radios = this._createComponent($radios, RadioCollection, {
             displayExpr,
@@ -286,7 +288,7 @@ class RadioGroup extends Editor {
             scrollingEnabled: false,
             selectionByClick: false,
             selectionMode: 'single',
-            selectedItemKeys: isDefined(value) ? [value] : [],
+            selectedItemKeys: isNullSelectable || isDefined(value) ? [value] : [],
             tabIndex
         });
         this._areRadiosCreated.resolve();
