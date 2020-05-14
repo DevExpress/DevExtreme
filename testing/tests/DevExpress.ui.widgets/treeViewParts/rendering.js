@@ -650,5 +650,27 @@ QUnit.module('visibility data source property (T888410)', {}, () => {
                 assert.equal(wrapper.hasInvisibleClass($node), visible === false, $node.index() + ' has invisible class');
             });
         });
+
+        QUnit.test('createChildren.allItems.visible: ${visible}', function(assert) {
+            const promise = new Promise(function(resolve) {
+                resolve([ { text: 'item1', visible: visible }, { text: 'item2', visible: visible }]);
+            });
+            const wrapper = new TreeViewTestWrapper({
+                dataStructure: 'plain',
+                createChildren: function() {
+                    return promise;
+                }
+            });
+
+            const done = assert.async();
+            promise.then(function() {
+                const $nodes = wrapper.getNodes();
+                $nodes.each((index) => {
+                    const $node = $nodes.eq(index);
+                    assert.equal(wrapper.hasInvisibleClass($node), visible === false, $node.index() + ' has invisible class');
+                });
+                done();
+            });
+        });
     });
 });
