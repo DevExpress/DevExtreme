@@ -27,8 +27,11 @@ describe('MetadataCollector', () => {
   test('getFileList', async () => {
     const collector = new MetadataCollector();
     const fileList = await collector.getFileList(join(rootDir, 'tests', 'data', 'scss'));
+    const expectedFullPaths = expectedFileList.map((file) => join(scssDir, file));
 
-    expect(fileList).toEqual(expectedFileList.map((file) => join(scssDir, file)));
+    expect(fileList.length).toBe(expectedFullPaths.length);
+
+    fileList.forEach((file) => expect(expectedFullPaths).toContain(file));
   });
 
   test('readFiles', async () => {
@@ -36,9 +39,10 @@ describe('MetadataCollector', () => {
     const handler = (content: string): string => content;
     const filesInfo = await collector.readFiles(join(rootDir, 'tests', 'data', 'scss'), handler);
 
-    expect(filesInfo.map((file) => file.path)).toEqual(expectedFileList);
+    expect(filesInfo.length).toBe(expectedFileList.length);
 
     filesInfo.forEach((file) => {
+      expect(expectedFileList).toContain(file.path);
       expect(typeof file.content).toBe('string');
       expect(file.content.length).toBeGreaterThan(0);
     });

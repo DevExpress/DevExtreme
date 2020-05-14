@@ -160,6 +160,8 @@ describe('Metadata generator - normalizePath', () => {
     expected: string;
   }
 
+  const isWin = process.platform === 'win32';
+
   const matrix: Array<TestData> = [
     { scssPath: '/scss', path: '/scss/widgets/generic/toolbar/_colors.scss', expected: 'tb/widgets/generic/toolbar/colors' },
     { scssPath: '/scss', path: '/scss/widgets/generic/navBar/_colors.scss', expected: 'tb/widgets/generic/navBar/colors' },
@@ -167,9 +169,16 @@ describe('Metadata generator - normalizePath', () => {
     { scssPath: '/repo/scss', path: '/repo/scss/widgets/generic/toolbar/_sizes.scss', expected: 'tb/widgets/generic/toolbar/sizes' },
     { scssPath: '/repo/../scss', path: '/scss/widgets/generic/toolbar/_sizes.scss', expected: 'tb/widgets/generic/toolbar/sizes' },
     { scssPath: '/repo/../scss', path: '/repo/../scss/widgets/generic/toolbar/_sizes.scss', expected: 'tb/widgets/generic/toolbar/sizes' },
-    { scssPath: 'd:\\repo\\scss', path: 'd:\\repo\\scss\\widgets\\generic\\toolbar\\_colors.scss', expected: 'tb/widgets/generic/toolbar/colors' },
-    { scssPath: 'd:\\repo\\scss', path: 'd:\\repo\\scss\\widgets\\generic\\toolbar\\_colors.scss', expected: 'tb/widgets/generic/toolbar/colors' },
   ];
+
+  if (isWin) {
+    const additionalWindowsPaths: Array<TestData> = [
+      { scssPath: 'd:\\repo\\scss', path: 'd:\\repo\\scss\\widgets\\generic\\toolbar\\_colors.scss', expected: 'tb/widgets/generic/toolbar/colors' },
+      { scssPath: 'd:\\repo\\scss', path: 'd:\\repo\\scss\\widgets\\generic\\toolbar\\_colors.scss', expected: 'tb/widgets/generic/toolbar/colors' },
+    ];
+
+    matrix.push(...additionalWindowsPaths);
+  }
 
   test('normalizePath works as expected', () => {
     matrix.forEach((item) => {
