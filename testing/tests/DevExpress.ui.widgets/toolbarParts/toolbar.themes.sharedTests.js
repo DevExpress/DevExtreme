@@ -29,7 +29,7 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
 
         configs.forEach((config) => {
             // T886693
-            QUnit.test(`Button styling in menu: - config ${config.message} width: 50`, function(assert) {
+            QUnit.test(`Buttons in menu: - config ${config.message} width: 50`, function(assert) {
                 const toolbarOptions = {
                     items: [{
                         location: config.location,
@@ -49,7 +49,7 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
 
                 const dropDownMenuElement = toolbarElement.querySelector(`.${DROP_DOWN_MENU_CLASS}`);
                 if(config.locateInMenu === 'never') {
-                    assert.strictEqual(dropDownMenuElement, null, 'dropDownMenuElement not rendered');
+                    assert.strictEqual(dropDownMenuElement, null, 'dropDownMenuElement not rendered in menu');
                 } else {
                     const dropDown = DropDownMenu.getInstance(dropDownMenuElement);
                     dropDown.open();
@@ -60,9 +60,9 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
 
                     const expectedItemWidth = dropDownMenuRect.width - 2;
 
-                    [...menuButtons].forEach((button) => {
-                        const itemRect = button.getBoundingClientRect();
-                        assert.strictEqual(itemRect.width, expectedItemWidth, 'button.width');
+                    [].forEach.call(menuButtons, (button) => {
+                        const buttonRect = button.getBoundingClientRect();
+                        assert.strictEqual(buttonRect.width, expectedItemWidth, `button.width ${expectedItemWidth}`);
                         assert.strictEqual(window.getComputedStyle(button.querySelector(`.${BUTTON_CONTENT_CLASS}`)).textAlign, config.rtlEnabled ? 'right' : 'left', 'buttonContent.textAlign');
                     });
                 }
