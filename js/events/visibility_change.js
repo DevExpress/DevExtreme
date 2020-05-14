@@ -17,6 +17,6 @@ const triggerVisibilityChangeEvent = function(eventName) {
 };
 
 
-exports.triggerShownEvent = triggerVisibilityChangeEvent('dxshown'); // TODO: extract to events
-exports.triggerHidingEvent = triggerVisibilityChangeEvent('dxhiding'); // TODO: extract to events
-exports.triggerResizeEvent = triggerVisibilityChangeEvent('dxresize'); // TODO: extract to events
+exports.triggerShownEvent = triggerVisibilityChangeEvent('dxshown');
+exports.triggerHidingEvent = triggerVisibilityChangeEvent('dxhiding');
+exports.triggerResizeEvent = triggerVisibilityChangeEvent('dxresize');
