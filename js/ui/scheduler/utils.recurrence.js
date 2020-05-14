@@ -244,6 +244,7 @@ function getDatesByRecurrence(options) {
     let iterationResult = {};
     const rule = recurrenceRule.rule;
     const recurrenceStartDate = options.start;
+    const maxDate = correctMaxDate(options.max, rule);
 
     if(!recurrenceRule.isValid || !rule.freq) {
         return result;
@@ -269,7 +270,7 @@ function getDatesByRecurrence(options) {
 
         getDatesByCount(dateRules, new Date(recurrenceStartDate), new Date(recurrenceStartDate), rule)
             .forEach(function(currentDate, i) {
-                if(currentDate < options.max) {
+                if(currentDate < maxDate) {
                     iteration++;
                     iterationResult = pushToResult(iteration, iterationResult, currentDate, i, config, true);
                 }
@@ -279,7 +280,7 @@ function getDatesByRecurrence(options) {
             .forEach(function(currentDate, i) {
                 let iteration = 0;
 
-                while(doNextIteration(currentDate, recurrenceStartDate, options.max, rule, iteration)) {
+                while(doNextIteration(currentDate, recurrenceStartDate, maxDate, rule, iteration)) {
                     iteration++;
                     iterationResult = pushToResult(iteration, iterationResult, currentDate, i, config);
 
@@ -298,6 +299,7 @@ function getDatesByRecurrence(options) {
         result = result.concat(iterationDates);
     });
 
+    result = result.filter(date => date <= options.max);
 
     result.sort(function(a, b) {
         return a - b;
@@ -344,6 +346,19 @@ function filterDatesBySetPos(dates, bySetPos) {
     });
 
     return resultArray;
+}
+
+function correctMaxDate(maxDate, rule) {
+    const newMaxDate = new Date(maxDate);
+    switch(rule.freq) {
+        case 'MONTHLY':
+            newMaxDate.setMonth(newMaxDate.getMonth() + 1);
+            break;
+        case 'YEARLY':
+            newMaxDate.setYear(newMaxDate.getYear() + 1);
+            break;
+    }
+    return newMaxDate > maxDate ? newMaxDate : maxDate;
 }
 
 function correctDate(originalDate, date) {
