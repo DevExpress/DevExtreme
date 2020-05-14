@@ -132,7 +132,7 @@
   },
   "scripts": {
     "lint": "npm-run-all -p -c lint-js lint-css",
-    "lint-js": "eslint --ignore-pattern themebuilder-scss/**/* .",
+    "lint-js": "eslint .",
     "lint-css": "stylelint styles",
     "lint-staged": "lint-staged",
     "build": "dotnet build build/build-dotnet.sln && gulp default",

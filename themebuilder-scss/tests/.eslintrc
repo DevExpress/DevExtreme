@@ -1,8 +1,0 @@
-{
-    "extends": [
-        "devextreme/jest"
-    ],
-    "parserOptions": {
-        "project": "tests/tsconfig.json"
-    }
-}

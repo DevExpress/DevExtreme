@@ -20,7 +20,7 @@
   },
   "scripts": {
     "test-code": "jest --coverage --verbose --detectOpenHandles",
-    "lint": "eslint .",
+    "lint": "eslint --config .eslintrc-themebuilder .",
     "test": "npm run lint && npm run test-code",
     "clean-metadata": "",
     "generate-metadata": "ts-node --files=true src/metadata/generate.ts",

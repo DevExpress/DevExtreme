@@ -1,4 +1,5 @@
 {
+    "root": true,
     "env": {
         "es6": true,
         "node": true
@@ -14,5 +15,16 @@
     },
     "extends": [
         "devextreme/typescript"
+    ],
+    "overrides": [
+        {
+            "files": ["tests/**/*.ts"],
+            "extends": [
+                "devextreme/jest"
+            ],
+            "parserOptions": {
+                "project": "tests/tsconfig.json"
+            }
+        }
     ]
 }
