@@ -192,6 +192,7 @@ export default class FileItemsController {
                         index: 0
                     });
                     this._resetDirectoryState(parentDirectoryInfo);
+                    parentDirectoryInfo.expanded = false;
                     if(!noNavigationRequired) {
                         this.setCurrentDirectory(parentDirectoryInfo.parentDirectory);
                     }
