@@ -45,7 +45,7 @@ export default class MetadataCollector {
     const metadata = this.generator.getMetadata();
     const metaString = JSON.stringify(metadata)
       .replace(/"/g, '\'')
-      .replace(/'(ON|OFF)'/g, '"$1"'); // TODO test it!
+      .replace(/'(ON|OFF)'/g, '"$1"');
     let metaContent = `export const metadata: Array<MetaItem> = ${metaString};\n`;
     metaContent += `export const version: string = '${version}';\n`;
     await fs.mkdir(dirname(absolutePath), { recursive: true });

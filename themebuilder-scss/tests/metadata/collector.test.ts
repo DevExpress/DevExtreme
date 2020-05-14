@@ -81,7 +81,10 @@ describe('MetadataCollector', () => {
     const fileName = join('metadata', 'dx-theme-builder-metadata.ts');
     const expectedFileName = resolve(fileName);
     const expectedDirName = dirname(expectedFileName);
-    let metaContent = `export const metadata: Array<MetaItem> = ${JSON.stringify([])};\n`;
+
+    collector.generator.metadata = [{ Key: '$var', Value: '\'ON\'' }];
+
+    let metaContent = 'export const metadata: Array<MetaItem> = [{\'Key\':\'$var\',\'Value\':\'"ON"\'}];\n';
     metaContent += `export const version: string = '${version}';\n`;
 
     await collector.saveMetadata(fileName, version);
