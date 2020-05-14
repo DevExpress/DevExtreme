@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import fx from 'animation/fx';
 import Toolbar from 'ui/toolbar';
 import DropDownMenu from 'ui/drop_down_menu';
 import 'ui/button';
@@ -11,7 +12,11 @@ const DROP_DOWN_MENU_LIST_CLASS = 'dx-dropdownmenu-list';
 export const runThemesSharedTests = function(moduleNamePostfix) {
     QUnit.module('Scenarios.' + moduleNamePostfix, {
         beforeEach: function() {
-            $('#qunit-fixture').css('position', 'initial').html('<div id="toolbar"></div>');
+            $('#qunit-fixture').html('<div id="toolbar"></div>');
+            fx.off = true;
+        },
+        afterEach: function() {
+            fx.off = false;
         }
     }, function() {
         const configs = [];
@@ -54,16 +59,16 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
                     const dropDown = DropDownMenu.getInstance(dropDownMenuElement);
                     dropDown.open();
 
-                    const dropDownMenuList = document.querySelector(`.${DROP_DOWN_MENU_LIST_CLASS}`);
-                    const dropDownMenuRect = dropDownMenuList.getBoundingClientRect();
-                    const menuButtons = dropDownMenuList.querySelectorAll(`.${BUTTON_CLASS}`);
+                    const dropDownMenuListElement = document.querySelector(`.${DROP_DOWN_MENU_LIST_CLASS}`);
+                    const dropDownMenuRect = dropDownMenuListElement.getBoundingClientRect();
+                    const menuButtonElements = dropDownMenuListElement.querySelectorAll(`.${BUTTON_CLASS}`);
 
                     const expectedItemWidth = dropDownMenuRect.width - 2;
 
-                    [].forEach.call(menuButtons, (button) => {
-                        const buttonRect = button.getBoundingClientRect();
+                    [].forEach.call(menuButtonElements, (buttonElement) => {
+                        const buttonRect = buttonElement.getBoundingClientRect();
                         assert.strictEqual(buttonRect.width, expectedItemWidth, `button.width ${expectedItemWidth}`);
-                        assert.strictEqual(window.getComputedStyle(button.querySelector(`.${BUTTON_CONTENT_CLASS}`)).textAlign, config.rtlEnabled ? 'right' : 'left', 'buttonContent.textAlign');
+                        assert.strictEqual(window.getComputedStyle(buttonElement.querySelector(`.${BUTTON_CONTENT_CLASS}`)).textAlign, config.rtlEnabled ? 'right' : 'left', 'buttonContent.textAlign');
                     });
                 }
             });
