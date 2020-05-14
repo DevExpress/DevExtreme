@@ -7,7 +7,7 @@ import Popup from './popup';
 import List from './list';
 import { compileGetter } from '../core/utils/data';
 import windowUtils from '../core/utils/window';
-import domUtils from '../core/utils/dom';
+import { getPublicElement } from '../core/element';
 import { getImageContainer } from '../core/utils/icon';
 import DataHelperMixin from '../data_helper';
 import { DataSource } from '../data/data_source/data_source';
@@ -295,7 +295,7 @@ const DropDownButton = Widget.inherit({
         this.setAria('id', this._popupContentId, $content);
 
         return template.render({
-            container: domUtils.getPublicElement($content),
+            container: getPublicElement($content),
             model: this.option('items') || this._dataSource
         });
     },

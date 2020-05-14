@@ -1,17 +1,17 @@
-import $ from 'jquery';
 import fx from 'animation/fx';
 import translator from 'animation/translator';
-import domUtils from 'core/utils/dom';
+import 'common.css!';
+import config from 'core/config';
 import devices from 'core/devices';
 import { isRenderer } from 'core/utils/type';
-import config from 'core/config';
-import { animation } from 'ui/multi_view';
-import pointerMock from '../../helpers/pointerMock.js';
-import keyboardMock from '../../helpers/keyboardMock.js';
 import Swipeable from 'events/gesture/swipeable';
-
-import 'common.css!';
+import { triggerShownEvent } from 'events/visibility_change';
+import $ from 'jquery';
 import 'ui/multi_view';
+import { animation } from 'ui/multi_view';
+import keyboardMock from '../../helpers/keyboardMock.js';
+import pointerMock from '../../helpers/pointerMock.js';
+
 
 QUnit.testStart(() => {
     const markup =
@@ -114,7 +114,7 @@ QUnit.module('rendering', () => {
             });
 
             $container.appendTo('#qunit-fixture');
-            domUtils.triggerShownEvent($container);
+            triggerShownEvent($container);
 
             const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
             assert.equal($items.eq(0).outerHeight(), $multiView.outerHeight(), 'element has correct height');

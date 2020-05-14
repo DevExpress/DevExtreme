@@ -4,17 +4,16 @@ QUnit.testStart(function() {
 });
 
 import 'common.css!';
-import 'generic_light.css!';
-import 'ui/pivot_grid/ui.pivot_grid.field_chooser';
-
-import PivotGridDataSource from 'ui/pivot_grid/data_source';
-
-import $ from 'jquery';
-import pointerMock from '../../helpers/pointerMock.js';
-import domUtils from 'core/utils/dom';
 import devices from 'core/devices';
 import dataUtils from 'core/element_data';
 import renderer from 'core/renderer';
+import { triggerShownEvent } from 'events/visibility_change';
+import 'generic_light.css!';
+import $ from 'jquery';
+import PivotGridDataSource from 'ui/pivot_grid/data_source';
+import 'ui/pivot_grid/ui.pivot_grid.field_chooser';
+import pointerMock from '../../helpers/pointerMock.js';
+
 
 const createMockDataSource = function(options) {
     $.each(options.fields || [], function(index, field) {
@@ -200,7 +199,7 @@ QUnit.module('dxPivotGridFieldChooser', {
 
         $('#container').show();
 
-        domUtils.triggerShownEvent($('#container'));
+        triggerShownEvent($('#container'));
 
         // assert
         const columns = $('#container').find('.dx-col');

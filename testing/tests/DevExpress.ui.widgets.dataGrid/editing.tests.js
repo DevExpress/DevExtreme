@@ -1,10 +1,28 @@
-import $ from 'jquery';
-import renderer from 'core/renderer';
-import eventsEngine from 'events/core/events_engine';
-import keyboardMock from '../../helpers/keyboardMock.js';
-import pointerEvents from 'events/pointer';
-import { Deferred } from 'core/utils/deferred';
+import fx from 'animation/fx';
+import 'common.css!';
+import config from 'core/config';
+import devices from 'core/devices';
 import dataUtils from 'core/element_data';
+import renderer from 'core/renderer';
+import browser from 'core/utils/browser';
+import commonUtils from 'core/utils/common';
+import { Deferred } from 'core/utils/deferred';
+import typeUtils from 'core/utils/type';
+import eventsEngine from 'events/core/events_engine';
+import pointerEvents from 'events/pointer';
+import { triggerResizeEvent } from 'events/visibility_change';
+import 'generic_light.css!';
+import $ from 'jquery';
+import 'ui/autocomplete';
+import 'ui/color_box';
+import 'ui/data_grid/ui.data_grid';
+import 'ui/drop_down_box';
+import 'ui/validator';
+import errors from 'ui/widget/ui.errors';
+import { getCells, MockColumnsController, MockDataController, setupDataGridModules } from '../../helpers/dataGridMocks.js';
+import keyboardMock from '../../helpers/keyboardMock.js';
+import pointerMock from '../../helpers/pointerMock.js';
+import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 
 QUnit.testStart(function() {
     const markup =
@@ -27,26 +45,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
-import 'generic_light.css!';
-
-import 'ui/data_grid/ui.data_grid';
-import 'ui/autocomplete';
-import 'ui/color_box';
-import 'ui/validator';
-import 'ui/drop_down_box';
-
-import fx from 'animation/fx';
-import pointerMock from '../../helpers/pointerMock.js';
-import { MockColumnsController, MockDataController, setupDataGridModules, getCells } from '../../helpers/dataGridMocks.js';
-import domUtils from 'core/utils/dom';
-import browser from 'core/utils/browser';
-import typeUtils from 'core/utils/type';
-import commonUtils from 'core/utils/common';
-import config from 'core/config';
-import errors from 'ui/widget/ui.errors';
-import devices from 'core/devices';
-import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 
 const device = devices.real();
 const dataGridWrapper = new DataGridWrapper('#container');
@@ -16516,7 +16514,7 @@ QUnit.module('Editing - "popup" mode', {
         const editForm = this.editingController._editForm;
 
         screenFactor = 'lg';
-        domUtils.triggerResizeEvent(editForm.element());
+        triggerResizeEvent(editForm.element());
 
         assert.equal(spy1.callCount, 1, 'repaint is thrown');
         assert.equal(spy2.callCount, 0, 'render is called after repaint');

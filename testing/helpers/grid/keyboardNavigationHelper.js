@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import devices from 'core/devices';
-import * as eventUtils from 'events/utils';
+import { addNamespace, createEvent } from 'events/utils';
 import {
     setupDataGridModules,
     MockDataController,
@@ -88,7 +88,7 @@ export function setupModules(that, modulesOptions, gridModules) {
 export const device = devices.real();
 export const isMobile = device.deviceType !== 'desktop';
 const pointerEventName = !isMobile ? pointerEvents.down : clickEvent.name;
-export const CLICK_EVENT = eventUtils.addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation');
+export const CLICK_EVENT = addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation');
 
 const KEYS = {
     'tab': 'Tab',
@@ -152,7 +152,7 @@ export function triggerKeyDown(key, ctrl, shift, target, result) {
 }
 
 export function fireKeyDown($target, key, ctrlKey) {
-    $target.trigger(eventUtils.createEvent('keydown', { target: $target.get(0), key: key, ctrlKey: ctrlKey }));
+    $target.trigger(createEvent('keydown', { target: $target.get(0), key: key, ctrlKey: ctrlKey }));
 }
 
 export function focusCell(columnIndex, rowIndex) {

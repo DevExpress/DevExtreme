@@ -1,18 +1,18 @@
-const $ = require('../core/renderer');
-const domAdapter = require('../core/dom_adapter');
-const windowUtils = require('../core/utils/window');
+import TransitionExecutorModule from '../animation/transition_executor/transition_executor';
+import registerComponent from '../core/component_registrator';
+import domAdapter from '../core/dom_adapter';
+import $ from '../core/renderer';
+import commonUtils from '../core/utils/common';
+import deferredUtils from '../core/utils/deferred';
+import { extend } from '../core/utils/extend';
+import { each } from '../core/utils/iterator';
+import { isPromise } from '../core/utils/type';
+import windowUtils from '../core/utils/window';
+import eventsEngine from '../events/core/events_engine';
+import { triggerShownEvent } from '../events/visibility_change';
+import LoadIndicator from './load_indicator';
+import Widget from './widget/ui.widget';
 const window = windowUtils.getWindow();
-const eventsEngine = require('../events/core/events_engine');
-const registerComponent = require('../core/component_registrator');
-const commonUtils = require('../core/utils/common');
-const extend = require('../core/utils/extend').extend;
-const each = require('../core/utils/iterator').each;
-const domUtils = require('../core/utils/dom');
-const TransitionExecutorModule = require('../animation/transition_executor/transition_executor');
-const Widget = require('./widget/ui.widget');
-const LoadIndicator = require('./load_indicator');
-const isPromise = require('../core/utils/type').isPromise;
-const deferredUtils = require('../core/utils/deferred');
 const Deferred = deferredUtils.Deferred;
 
 const WIDGET_CLASS = 'dx-widget';
@@ -69,7 +69,7 @@ const DeferRendering = Widget.inherit({
         const $element = this.$element();
         const renderWhen = this.option('renderWhen');
 
-        const doRender = function() {
+        const doRender = () => {
             return that._renderDeferredContent();
         };
 
@@ -86,9 +86,9 @@ const DeferRendering = Widget.inherit({
     _initActions: function() {
         this._actions = {};
 
-        each(ACTIONS, (function(_, action) {
+        each(ACTIONS, (_, action) => {
             this._actions[action] = this._createActionByOption(action) || commonUtils.noop;
-        }).bind(this));
+        });
     },
 
 
@@ -97,7 +97,7 @@ const DeferRendering = Widget.inherit({
 
         if(!this._initContent) {
             this._initContent = this._renderContent;
-            this._renderContent = function() {};
+            this._renderContent = () => {};
         }
 
         this._initContent();
@@ -118,9 +118,9 @@ const DeferRendering = Widget.inherit({
         $element.addClass(PENDING_RENDERING_ACTIVE_CLASS);
 
         this._abortRenderTask();
-        this._renderTask = commonUtils.executeAsync(function() {
+        this._renderTask = commonUtils.executeAsync(() => {
             that._renderImpl()
-                .done(function() {
+                .done(() => {
                     const shownArgs = { element: $element };
                     that._actions.onShown([shownArgs]);
                     result.resolve(shownArgs);
@@ -227,7 +227,7 @@ const DeferRendering = Widget.inherit({
         $element.removeClass(PENDING_RENDERING_CLASS);
         $element.removeClass(PENDING_RENDERING_ACTIVE_CLASS);
 
-        domUtils.triggerShownEvent($element.children());
+        triggerShownEvent($element.children());
     },
 
     _optionChanged: function(args) {

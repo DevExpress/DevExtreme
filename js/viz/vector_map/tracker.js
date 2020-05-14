@@ -2,7 +2,7 @@ import eventsEngine from '../../events/core/events_engine';
 import windowUtils from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import eventEmitterModule from './event_emitter';
-import * as eventUtils from '../../events/utils';
+import { addNamespace } from '../../events/utils';
 import { name as wheelEventName } from '../../events/core/wheel';
 import { parseScalar } from '../core/utils';
 
@@ -11,7 +11,7 @@ const _math = Math;
 const _abs = _math.abs;
 const _sqrt = _math.sqrt;
 const _round = _math.round;
-const _addNamespace = eventUtils.addNamespace;
+const _addNamespace = addNamespace;
 const _now = Date.now;
 
 const _NAME = 'dxVectorMap';

@@ -1,4 +1,4 @@
-const setPublicElementWrapper = require('../../core/utils/dom').setPublicElementWrapper;
+import { setPublicElementWrapper } from '../../core/element';
 const useJQuery = require('./use_jquery')();
 
 const getPublicElement = function($element) {

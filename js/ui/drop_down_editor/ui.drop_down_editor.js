@@ -7,7 +7,7 @@ import { focused } from '../widget/selectors';
 import { each } from '../../core/utils/iterator';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-import { getPublicElement } from '../../core/utils/dom';
+import { getPublicElement } from '../../core/element';
 import errors from '../widget/ui.errors';
 import { setup as setupPosition } from '../../animation/position';
 import { getDefaultAlignment } from '../../core/utils/position';

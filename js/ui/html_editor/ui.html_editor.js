@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isDefined, isFunction } from '../../core/utils/type';
-import { getPublicElement } from '../../core/utils/dom';
+import { getPublicElement } from '../../core/element';
 import { executeAsync, noop } from '../../core/utils/common';
 import registerComponent from '../../core/component_registrator';
 import { EmptyTemplate } from '../../core/templates/empty_template';

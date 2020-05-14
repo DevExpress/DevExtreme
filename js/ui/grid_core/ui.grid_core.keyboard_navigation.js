@@ -6,7 +6,7 @@ import { focusAndSelectElement, getWidgetInstance } from './ui.grid_core.utils';
 import { isDefined } from '../../core/utils/type';
 import { inArray } from '../../core/utils/array';
 import { focused } from '../widget/selectors';
-import * as eventUtils from '../../events/utils';
+import { addNamespace, createEvent } from '../../events/utils';
 import pointerEvents from '../../events/pointer';
 import clickEvent from '../../events/click';
 import { noop } from '../../core/utils/common';
@@ -133,8 +133,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
             const isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($rowsView).length || (browser.msie && $focusedElement.is('body'));
             const pointerEventName = !isMobile() ? pointerEvents.down : clickEvent.name;
 
-            eventsEngine.off($rowsView, eventUtils.addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation'), pointerEventAction);
-            eventsEngine.on($rowsView, eventUtils.addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation'), clickSelector, pointerEventAction);
+            eventsEngine.off($rowsView, addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation'), pointerEventAction);
+            eventsEngine.on($rowsView, addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation'), clickSelector, pointerEventAction);
 
             that._initKeyDownHandler($rowsView, e => that._keyDownHandler(e));
 
@@ -160,7 +160,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             }
         });
 
-        eventsEngine.on(document, eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), that._documentClickHandler);
+        eventsEngine.on(document, addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), that._documentClickHandler);
     },
 
     _setRowsViewAttributes: function($rowsView) {
@@ -179,7 +179,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         this.callBase();
         this._focusedView = null;
         keyboard.off(this._keyDownListener);
-        eventsEngine.off(domAdapter.getDocument(), eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), this._documentClickHandler);
+        eventsEngine.off(domAdapter.getDocument(), addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), this._documentClickHandler);
         accessibility.unsubscribeVisibilityChange();
     },
     // #endregion Initialization
@@ -1391,9 +1391,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
     },
     _editingCellHandler: function(eventArgs, editorValue) {
         const $input = this._getFocusedCell().find('.dx-texteditor-input').eq(0);
-        const keyDownEvent = eventUtils.createEvent(eventArgs, { type: 'keydown', target: $input.get(0) });
-        const keyPressEvent = eventUtils.createEvent(eventArgs, { type: 'keypress', target: $input.get(0) });
-        const inputEvent = eventUtils.createEvent(eventArgs, { type: 'input', target: $input.get(0) });
+        const keyDownEvent = createEvent(eventArgs, { type: 'keydown', target: $input.get(0) });
+        const keyPressEvent = createEvent(eventArgs, { type: 'keypress', target: $input.get(0) });
+        const inputEvent = createEvent(eventArgs, { type: 'input', target: $input.get(0) });
 
         eventsEngine.trigger($input, keyDownEvent);
         if(!keyDownEvent.isDefaultPrevented()) {
@@ -1800,7 +1800,7 @@ module.exports = {
                         const row = this.getController('data').items()[e.rowIndex];
 
                         if(keyboardController._isAllowEditing(row, column)) {
-                            const eventArgs = eventUtils.createEvent(originalEvent, { currentTarget: originalEvent.target });
+                            const eventArgs = createEvent(originalEvent, { currentTarget: originalEvent.target });
                             keyboardController._pointerEventHandler(eventArgs);
                         }
                     }

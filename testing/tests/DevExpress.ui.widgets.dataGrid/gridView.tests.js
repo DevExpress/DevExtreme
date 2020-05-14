@@ -22,15 +22,13 @@ QUnit.testStart(function() {
 
 
 import 'common.css!';
-import 'generic_light.css!';
-
-import 'ui/data_grid/ui.data_grid';
-
-import $ from 'jquery';
-import gridCore from 'ui/data_grid/ui.data_grid.core';
-import domUtils from 'core/utils/dom';
 import devices from 'core/devices';
-import { setupDataGridModules, MockDataController, MockColumnsController, getCells } from '../../helpers/dataGridMocks.js';
+import visibilityChange from 'events/visibility_change';
+import 'generic_light.css!';
+import $ from 'jquery';
+import 'ui/data_grid/ui.data_grid';
+import gridCore from 'ui/data_grid/ui.data_grid.core';
+import { getCells, MockColumnsController, MockDataController, setupDataGridModules } from '../../helpers/dataGridMocks.js';
 
 function getTextFromCell(cell) {
     return $(cell).text();
@@ -904,7 +902,7 @@ QUnit.module('Grid view', {
 
         this.createGridView(this.defaultOptions);
 
-        domUtils.triggerShownEvent = function() {
+        visibilityChange.triggerShownEvent = function() {
             isShownEventTriggered = true;
         };
 

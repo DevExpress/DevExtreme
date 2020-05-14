@@ -1,12 +1,11 @@
-import $ from 'jquery';
-import domUtils from 'core/utils/dom';
-import devices from 'core/devices';
-import SchedulerResourcesManager from 'ui/scheduler/ui.scheduler.resource_manager';
-
 import 'common.css!';
+import devices from 'core/devices';
+import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
+import $ from 'jquery';
 import 'ui/scheduler/ui.scheduler';
-
+import SchedulerResourcesManager from 'ui/scheduler/ui.scheduler.resource_manager';
+import 'ui/scheduler/ui.scheduler';
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler-work-space"></div>');
 });
@@ -21,7 +20,7 @@ QUnit.module('Vertical Workspace with horizontal scrollbar', {
 });
 
 QUnit.test('Header scrollable should contain header panel, all-day container and all-day panel', function(assert) {
-    domUtils.triggerResizeEvent(this.instance.$element());
+    triggerResizeEvent(this.instance.$element());
     const headerScrollable = this.instance.$element().find('.dx-scheduler-header-scrollable').dxScrollable('instance');
     const scrollableContent = headerScrollable.$content();
 
@@ -31,7 +30,7 @@ QUnit.test('Header scrollable should contain header panel, all-day container and
 });
 
 QUnit.test('Date table scrollable should contain date table', function(assert) {
-    domUtils.triggerResizeEvent(this.instance.$element());
+    triggerResizeEvent(this.instance.$element());
     const dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
     const scrollableContent = dateTableScrollable.$content();
 
@@ -65,8 +64,8 @@ QUnit.test('Header scrollable should update position if date scrollable position
     const headerScrollable = $element.find('.dx-scheduler-header-scrollable').dxScrollable('instance');
     const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
 
-    domUtils.triggerHidingEvent($element);
-    domUtils.triggerShownEvent($element);
+    triggerHidingEvent($element);
+    triggerShownEvent($element);
 
     dateTableScrollable.scrollTo({ left: 100 });
 
@@ -82,8 +81,8 @@ QUnit.test('Time panel scrollable should update position if date scrollable posi
     const timePanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
     const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
 
-    domUtils.triggerHidingEvent($element);
-    domUtils.triggerShownEvent($element);
+    triggerHidingEvent($element);
+    triggerShownEvent($element);
 
     dateTableScrollable.scrollTo({ top: 100 });
 
@@ -98,8 +97,8 @@ QUnit.test('Date table scrollable should update position if time panel position 
     const timePanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
     const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
 
-    domUtils.triggerHidingEvent($element);
-    domUtils.triggerShownEvent($element);
+    triggerHidingEvent($element);
+    triggerShownEvent($element);
 
     timePanelScrollable.scrollTo({ top: 100 });
 
@@ -117,8 +116,8 @@ QUnit.test('Date table scrollable should update position if header scrollable po
     const headerScrollable = $element.find('.dx-scheduler-header-scrollable').dxScrollable('instance');
     const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
 
-    domUtils.triggerHidingEvent($element);
-    domUtils.triggerShownEvent($element);
+    triggerHidingEvent($element);
+    triggerShownEvent($element);
 
     headerScrollable.scrollTo({ left: 100 });
 
@@ -130,8 +129,8 @@ QUnit.test('the \'getCellIndexByCoordinates\' method should return a right resul
 
     const $element = this.instance.$element();
 
-    domUtils.triggerHidingEvent($element);
-    domUtils.triggerShownEvent($element);
+    triggerHidingEvent($element);
+    triggerShownEvent($element);
 
     const index = this.instance.getCellIndexByCoordinates({ left: 85, top: 55 });
 
@@ -142,8 +141,8 @@ QUnit.test('Header panel, all-day panel, date table should have a correct width'
     this.instance.option('width', 400);
 
     const $element = this.instance.$element();
-    domUtils.triggerHidingEvent($element);
-    domUtils.triggerShownEvent($element);
+    triggerHidingEvent($element);
+    triggerShownEvent($element);
 
     const headerPanelWidth = $element.find('.dx-scheduler-header-panel').outerWidth();
     const allDayTableWidth = $element.find('.dx-scheduler-all-day-table').outerWidth();
@@ -160,8 +159,8 @@ QUnit.test('Header panel, all-day panel, date table should have a correct width 
 
     $cells.get(0).style.width = '300px';
 
-    domUtils.triggerHidingEvent($element);
-    domUtils.triggerShownEvent($element);
+    triggerHidingEvent($element);
+    triggerShownEvent($element);
 
     const headerPanelWidth = $element.find('.dx-scheduler-header-panel').outerWidth();
     const allDayTableWidth = $element.find('.dx-scheduler-all-day-table').outerWidth();
@@ -177,8 +176,8 @@ QUnit.test('Header panel, all-day panel, date table should always take all work 
 
     this.instance.option('width', 1000);
     this.instance.option('width', 600);
-    domUtils.triggerHidingEvent($element);
-    domUtils.triggerShownEvent($element);
+    triggerHidingEvent($element);
+    triggerShownEvent($element);
 
     const headerPanelWidth = $element.find('.dx-scheduler-header-panel').outerWidth();
     const allDayTableWidth = $element.find('.dx-scheduler-all-day-table').outerWidth();
@@ -195,8 +194,8 @@ QUnit.test('Workspace tables width should not be less than element width', funct
 
     sinon.stub(this.instance, '_getWorkSpaceWidth').returns(50);
 
-    domUtils.triggerHidingEvent($element);
-    domUtils.triggerShownEvent($element);
+    triggerHidingEvent($element);
+    triggerShownEvent($element);
 
     const headerPanelWidth = $element.find('.dx-scheduler-header-panel').outerWidth();
     const allDayTableWidth = $element.find('.dx-scheduler-all-day-table').outerWidth();
@@ -259,7 +258,7 @@ QUnit.module('Vertical Workspace with horizontal scrollbar, groupOrientation = v
 });
 
 QUnit.test('Header scrollable should contain header panel, groupOrientation = vertical', function(assert) {
-    domUtils.triggerResizeEvent(this.instance.$element());
+    triggerResizeEvent(this.instance.$element());
     const headerScrollable = this.instance.$element().find('.dx-scheduler-header-scrollable').dxScrollable('instance');
     const scrollableContent = headerScrollable.$content();
 
@@ -267,7 +266,7 @@ QUnit.test('Header scrollable should contain header panel, groupOrientation = ve
 });
 
 QUnit.test('Date table scrollable should contain date table, all-day container and all-day tables, groupOrientation = vertical', function(assert) {
-    domUtils.triggerResizeEvent(this.instance.$element());
+    triggerResizeEvent(this.instance.$element());
     const dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
     const scrollableContent = dateTableScrollable.$content();
 
@@ -277,7 +276,7 @@ QUnit.test('Date table scrollable should contain date table, all-day container a
 });
 
 QUnit.test('SideBar scrollable should contain timePanel and groupTable, groupOrientation = vertical', function(assert) {
-    domUtils.triggerResizeEvent(this.instance.$element());
+    triggerResizeEvent(this.instance.$element());
     const sidebarScrollable = this.instance.$element().find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
     const scrollableContent = sidebarScrollable.$content();
 
@@ -288,8 +287,8 @@ QUnit.test('SideBar scrollable should contain timePanel and groupTable, groupOri
 QUnit.test('the \'getCellIndexByCoordinates\' method should return a right result, groupOrientation = vertical', function(assert) {
     const $element = this.instance.$element();
 
-    domUtils.triggerHidingEvent($element);
-    domUtils.triggerShownEvent($element);
+    triggerHidingEvent($element);
+    triggerShownEvent($element);
 
     const index = this.instance.getCellIndexByCoordinates({ left: 85, top: 55 });
 
@@ -298,8 +297,8 @@ QUnit.test('the \'getCellIndexByCoordinates\' method should return a right resul
 
 QUnit.test('Header panel and date table should have a correct width, groupOrientation = vertical', function(assert) {
     const $element = this.instance.$element();
-    domUtils.triggerHidingEvent($element);
-    domUtils.triggerShownEvent($element);
+    triggerHidingEvent($element);
+    triggerShownEvent($element);
 
     const headerPanelWidth = $element.find('.dx-scheduler-header-panel').outerWidth(true);
     const dateTableWidth = $element.find('.dx-scheduler-date-table').outerWidth(true);

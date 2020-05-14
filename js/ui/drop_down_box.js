@@ -14,7 +14,7 @@ import { normalizeKeyName } from '../events/utils';
 import { keyboard } from '../events/short';
 import devices from '../core/devices';
 import { getActiveElement } from '../core/dom_adapter';
-import { getPublicElement } from '../core/utils/dom';
+import { getPublicElement } from '../core/element';
 
 const DROP_DOWN_BOX_CLASS = 'dx-dropdownbox';
 const ANONYMOUS_TEMPLATE_NAME = 'content';

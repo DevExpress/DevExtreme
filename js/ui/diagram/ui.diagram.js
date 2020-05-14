@@ -9,9 +9,9 @@ import positionUtils from '../../animation/position';
 import resizeCallbacks from '../../core/utils/resize_callbacks';
 import { getDiagram } from './diagram.importer';
 import { hasWindow, getWindow } from '../../core/utils/window';
-import domUtils from '../../core/utils/dom';
+import { getPublicElement } from '../../core/element';
 import eventsEngine from '../../events/core/events_engine';
-import * as eventUtils from '../../events/utils';
+import { addNamespace } from '../../events/utils';
 import messageLocalization from '../../localization/message';
 import numberLocalization from '../../localization/number';
 import * as zIndexPool from '../overlay/z_index';
@@ -58,10 +58,10 @@ const DIAGRAM_TOOLBOX_ITEM_COUNT_IN_ROW = 3;
 const DIAGRAM_CONTEXT_TOOLBOX_ITEM_COUNT_IN_ROW = 4;
 
 const DIAGRAM_NAMESPACE = 'dxDiagramEvent';
-const FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace('fullscreenchange', DIAGRAM_NAMESPACE);
-const IE_FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace('msfullscreenchange', DIAGRAM_NAMESPACE);
-const WEBKIT_FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace('webkitfullscreenchange', DIAGRAM_NAMESPACE);
-const MOZ_FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace('mozfullscreenchange', DIAGRAM_NAMESPACE);
+const FULLSCREEN_CHANGE_EVENT_NAME = addNamespace('fullscreenchange', DIAGRAM_NAMESPACE);
+const IE_FULLSCREEN_CHANGE_EVENT_NAME = addNamespace('msfullscreenchange', DIAGRAM_NAMESPACE);
+const WEBKIT_FULLSCREEN_CHANGE_EVENT_NAME = addNamespace('webkitfullscreenchange', DIAGRAM_NAMESPACE);
+const MOZ_FULLSCREEN_CHANGE_EVENT_NAME = addNamespace('mozfullscreenchange', DIAGRAM_NAMESPACE);
 
 class Diagram extends Widget {
     _init() {
@@ -1066,7 +1066,7 @@ class Diagram extends Widget {
                         createTemplate: template && ((container, item) => {
                             template.render({
                                 model: this._nativeItemToDiagramItem(item),
-                                container: domUtils.getPublicElement($(container))
+                                container: getPublicElement($(container))
                             });
                         }),
                         templateLeft: s.templateLeft,

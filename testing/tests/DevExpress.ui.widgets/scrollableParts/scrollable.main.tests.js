@@ -1,30 +1,30 @@
-import $ from 'jquery';
-import browser from 'core/utils/browser';
-import support from 'core/utils/support';
-import styleUtils from 'core/utils/style';
-import translator from 'animation/translator';
 import animationFrame from 'animation/frame';
-import domUtils from 'core/utils/dom';
-import initMobileViewport from 'mobile/init_mobile_viewport';
+import translator from 'animation/translator';
+import 'common.css!';
 import devices from 'core/devices';
+import browser from 'core/utils/browser';
+import domUtils from 'core/utils/dom';
+import styleUtils from 'core/utils/style';
+import support from 'core/utils/support';
+import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
+import $ from 'jquery';
+import initMobileViewport from 'mobile/init_mobile_viewport';
+import 'ui/scroll_view/ui.scrollable';
 import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
-import 'ui/scroll_view/ui.scrollable';
-
-import 'common.css!';
-
 import {
+    calculateInertiaDistance,
     SCROLLABLE_CLASS,
     SCROLLABLE_CONTAINER_CLASS,
-    SCROLLABLE_WRAPPER_CLASS,
     SCROLLABLE_CONTENT_CLASS,
+    SCROLLABLE_DISABLED_CLASS,
+    SCROLLABLE_SCROLLBARS_HIDDEN,
     SCROLLABLE_SCROLLBAR_CLASS,
     SCROLLABLE_SCROLL_CLASS,
-    SCROLLABLE_SCROLLBARS_HIDDEN,
-    SCROLLABLE_DISABLED_CLASS,
-    SCROLLBAR_HOVERABLE_CLASS,
-    calculateInertiaDistance
+    SCROLLABLE_WRAPPER_CLASS,
+    SCROLLBAR_HOVERABLE_CLASS
 } from './scrollable.constants.js';
+
 
 const moduleConfig = {
     beforeEach: function() {
@@ -819,14 +819,14 @@ QUnit.test('scroll should save position on dxhiding and restore on dxshown', fun
 
     scrollable.scrollTo({ left: 10, top: 20 });
 
-    domUtils.triggerHidingEvent($scrollable);
+    triggerHidingEvent($scrollable);
 
     $scrollable.hide();
 
     scrollable.scrollTo({ left: 0, top: 0 });
 
     $scrollable.show();
-    domUtils.triggerShownEvent($scrollable);
+    triggerShownEvent($scrollable);
 
     assert.deepEqual(scrollable.scrollOffset(), { left: 10, top: 20 }, 'scroll position restored after dxshown');
 });
@@ -841,11 +841,11 @@ QUnit.test('scroll should restore on second dxshown', function(assert) {
 
     scrollable.scrollTo({ left: 10, top: 20 });
 
-    domUtils.triggerHidingEvent($scrollable);
-    domUtils.triggerShownEvent($scrollable);
+    triggerHidingEvent($scrollable);
+    triggerShownEvent($scrollable);
 
     scrollable.scrollTo({ left: 0, top: 0 });
-    domUtils.triggerShownEvent($scrollable);
+    triggerShownEvent($scrollable);
 
     assert.deepEqual(scrollable.scrollOffset(), { left: 0, top: 0 }, 'scroll position was not changed');
 });
@@ -858,13 +858,13 @@ QUnit.test('scroll should save position on dxhiding when scroll is hidden', func
     }).dxScrollable('instance');
 
     scrollable.scrollTo({ left: 0, top: 20 });
-    domUtils.triggerHidingEvent($scrollable);
+    triggerHidingEvent($scrollable);
     $scrollable.hide();
 
     scrollable.scrollTo({ left: 0, top: 0 });
 
     $scrollable.show();
-    domUtils.triggerShownEvent($scrollable);
+    triggerShownEvent($scrollable);
 
     assert.deepEqual(scrollable.scrollOffset(), { left: 0, top: 20 }, 'scroll position restored after dxshown');
 });

@@ -15,7 +15,7 @@ import Button from './button';
 import ProgressBar from './progress_bar';
 import browser from '../core/utils/browser';
 import devices from '../core/devices';
-import * as eventUtils from '../events/utils';
+import { addNamespace } from '../events/utils';
 import clickEvent from '../events/click';
 import messageLocalization from '../localization/message';
 import themes from './themes';
@@ -797,10 +797,10 @@ class FileUploader extends Editor {
 
         this._dragEventsTargets = [];
 
-        eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace('dragenter', this.NAME), this._dragEnterHandler.bind(this));
-        eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace('dragover', this.NAME), this._dragOverHandler.bind(this));
-        eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace('dragleave', this.NAME), this._dragLeaveHandler.bind(this));
-        eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace('drop', this.NAME), this._dropHandler.bind(this));
+        eventsEngine.on(this._$inputWrapper, addNamespace('dragenter', this.NAME), this._dragEnterHandler.bind(this));
+        eventsEngine.on(this._$inputWrapper, addNamespace('dragover', this.NAME), this._dragOverHandler.bind(this));
+        eventsEngine.on(this._$inputWrapper, addNamespace('dragleave', this.NAME), this._dragLeaveHandler.bind(this));
+        eventsEngine.on(this._$inputWrapper, addNamespace('drop', this.NAME), this._dropHandler.bind(this));
     }
 
     _applyInputAttributes(customAttributes) {

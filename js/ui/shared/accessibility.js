@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import * as eventUtils from '../../events/utils';
+import { normalizeKeyName } from '../../events/utils';
 import { extend } from '../../core/utils/extend';
 import domAdapter from '../../core/dom_adapter';
 
@@ -42,7 +42,7 @@ function processKeyDown(viewName, instance, event, action, $mainElement, execute
         return;
     }
 
-    const keyName = eventUtils.normalizeKeyName(event);
+    const keyName = normalizeKeyName(event);
 
     if(keyName === 'enter' || keyName === 'space') {
         saveFocusedElementInfo(event.target, instance);
@@ -161,7 +161,7 @@ module.exports = {
     },
 
     selectView: function(viewName, instance, event) {
-        const keyName = eventUtils.normalizeKeyName(event);
+        const keyName = normalizeKeyName(event);
 
         if(event.ctrlKey && (keyName === 'upArrow' || keyName === 'downArrow')) {
             const viewNames = Object.keys(viewItemSelectorMap);

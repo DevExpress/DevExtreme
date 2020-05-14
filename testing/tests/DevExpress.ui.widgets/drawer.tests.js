@@ -1,18 +1,18 @@
-import $ from 'jquery';
 import fx from 'animation/fx';
 import translator from 'animation/translator';
-import resizeCallbacks from 'core/utils/resize_callbacks';
+import 'common.css!';
 import config from 'core/config';
+import errors from 'core/errors';
+import resizeCallbacks from 'core/utils/resize_callbacks';
 import typeUtils from 'core/utils/type';
+import eventsEngine from 'events/core/events_engine';
+import visibilityChange from 'events/visibility_change';
+import $ from 'jquery';
+import Button from 'ui/button';
+import Drawer from 'ui/drawer';
 import { animation } from 'ui/drawer/ui.drawer.rendering.strategy';
 import Overlay from 'ui/overlay';
-import Button from 'ui/button';
-import domUtils from 'core/utils/dom';
-import eventsEngine from 'events/core/events_engine';
-import errors from 'core/errors';
-import Drawer from 'ui/drawer';
 
-import 'common.css!';
 
 const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
 const DRAWER_PANEL_CONTENT_CLASS = 'dx-drawer-panel-content';
@@ -162,12 +162,12 @@ QUnit.module('Drawer behavior', () => {
         });
 
         const instance = $element.dxDrawer('instance');
-        const triggerFunction = domUtils.triggerResizeEvent;
+        const triggerFunction = visibilityChange.triggerResizeEvent;
         assert.expect(2);
 
         try {
             fx.off = true;
-            domUtils.triggerResizeEvent = ($element) => {
+            visibilityChange.triggerResizeEvent = ($element) => {
                 assert.ok(true, 'event was triggered');
                 assert.equal($element, instance.viewContent(), 'Event was triggered for right element');
             };
@@ -176,7 +176,7 @@ QUnit.module('Drawer behavior', () => {
 
         } finally {
             fx.off = false;
-            domUtils.triggerResizeEvent = triggerFunction;
+            visibilityChange.triggerResizeEvent = triggerFunction;
         }
     });
 
@@ -187,11 +187,11 @@ QUnit.module('Drawer behavior', () => {
         });
 
         const instance = $element.dxDrawer('instance');
-        const triggerFunction = domUtils.triggerResizeEvent;
+        const triggerFunction = visibilityChange.triggerResizeEvent;
         assert.expect(2);
 
         try {
-            domUtils.triggerResizeEvent = function($element) {
+            visibilityChange.triggerResizeEvent = function($element) {
                 assert.ok(true, 'event was triggered');
                 assert.equal($element, instance.viewContent(), 'Event was triggered for right element');
             };
@@ -199,7 +199,7 @@ QUnit.module('Drawer behavior', () => {
             instance.option('position', 'left');
 
         } finally {
-            domUtils.triggerResizeEvent = triggerFunction;
+            visibilityChange.triggerResizeEvent = triggerFunction;
         }
     });
 

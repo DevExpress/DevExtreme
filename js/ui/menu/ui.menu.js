@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import registerComponent from '../../core/component_registrator';
 import { noop } from '../../core/utils/common';
-import { getPublicElement } from '../../core/utils/dom';
+import { getPublicElement } from '../../core/element';
 import { each } from '../../core/utils/iterator';
 import { isPlainObject, isObject, isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';

@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import Class from '../../core/class';
-import { getPublicElement } from '../../core/utils/dom';
+import { getPublicElement } from '../../core/element';
 import { extend } from '../../core/utils/extend';
 import { isDefined } from '../../core/utils/type';
 

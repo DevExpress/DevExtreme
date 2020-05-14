@@ -9,7 +9,8 @@ import { inArray } from '../../core/utils/array';
 import { each } from '../../core/utils/iterator';
 import themes from '../themes';
 import Editor from '../editor/editor';
-import * as eventUtils from '../../events/utils';
+import { addNamespace } from '../../events/utils';
+import { normalizeKeyName } from '../../events/utils';
 import pointerEvents from '../../events/pointer';
 import ClearButton from './ui.text_editor.clear';
 import TextEditorButtonCollection from './texteditor_button_collection/index';
@@ -465,7 +466,7 @@ const TextEditorBase = Editor.inherit({
     },
 
     _attachPlaceholderEvents: function() {
-        const startEvent = eventUtils.addNamespace(pointerEvents.up, this.NAME);
+        const startEvent = addNamespace(pointerEvents.up, this.NAME);
 
         eventsEngine.on(this._$placeholder, startEvent, () => {
             eventsEngine.trigger(this._input(), 'focus');
@@ -500,7 +501,7 @@ const TextEditorBase = Editor.inherit({
 
                 const action = this._createActionByOption('on' + event, { excludeValidators: ['readOnly'] });
 
-                eventsEngine.on($input, eventUtils.addNamespace(event.toLowerCase(), this.NAME), (e) => {
+                eventsEngine.on($input, addNamespace(event.toLowerCase(), this.NAME), (e) => {
                     if(this._disposed) {
                         return;
                     }
@@ -515,7 +516,7 @@ const TextEditorBase = Editor.inherit({
         const $input = this._input();
 
         each(EVENTS_LIST, (_, event) => {
-            eventsEngine.off($input, eventUtils.addNamespace(event.toLowerCase(), this.NAME));
+            eventsEngine.off($input, addNamespace(event.toLowerCase(), this.NAME));
         });
 
         this._renderEvents();
@@ -527,7 +528,7 @@ const TextEditorBase = Editor.inherit({
 
     _keyDownHandler: function(e) {
         const $input = this._input();
-        const isCtrlEnter = e.ctrlKey && eventUtils.normalizeKeyName(e) === 'enter';
+        const isCtrlEnter = e.ctrlKey && normalizeKeyName(e) === 'enter';
         const isNewValue = $input.val() !== this.option('value');
 
         if(isCtrlEnter && isNewValue) {
@@ -536,9 +537,9 @@ const TextEditorBase = Editor.inherit({
     },
 
     _renderValueChangeEvent: function() {
-        const keyPressEvent = eventUtils.addNamespace(this._renderValueEventName(), `${this.NAME}TextChange`);
-        const valueChangeEvent = eventUtils.addNamespace(this.option('valueChangeEvent'), `${this.NAME}ValueChange`);
-        const keyDownEvent = eventUtils.addNamespace('keydown', `${this.NAME}TextChange`);
+        const keyPressEvent = addNamespace(this._renderValueEventName(), `${this.NAME}TextChange`);
+        const valueChangeEvent = addNamespace(this.option('valueChangeEvent'), `${this.NAME}ValueChange`);
+        const keyDownEvent = addNamespace('keydown', `${this.NAME}TextChange`);
         const $input = this._input();
 
         eventsEngine.on($input, keyPressEvent, this._keyPressHandler.bind(this));
@@ -647,7 +648,7 @@ const TextEditorBase = Editor.inherit({
             return;
         }
 
-        if(eventUtils.normalizeKeyName(e) === 'enter') {
+        if(normalizeKeyName(e) === 'enter') {
             this._enterKeyAction({ event: e });
         }
     },

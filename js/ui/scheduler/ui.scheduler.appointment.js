@@ -6,7 +6,7 @@ import { extend } from '../../core/utils/extend';
 import registerComponent from '../../core/component_registrator';
 import tooltip from '../tooltip/ui.tooltip';
 import publisherMixin from './ui.scheduler.publisher_mixin';
-import * as eventUtils from '../../events/utils';
+import { addNamespace } from '../../events/utils';
 import pointerEvents from '../../events/pointer';
 import DOMComponent from '../../core/dom_component';
 import Resizable from '../resizable';
@@ -23,8 +23,8 @@ import { EMPTY_APPOINTMENT_CLASS,
 const DEFAULT_HORIZONTAL_HANDLES = 'left right';
 const DEFAULT_VERTICAL_HANDLES = 'top bottom';
 
-const REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME = eventUtils.addNamespace(pointerEvents.enter, 'dxSchedulerAppointment');
-const REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME = eventUtils.addNamespace(pointerEvents.leave, 'dxSchedulerAppointment');
+const REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME = addNamespace(pointerEvents.enter, 'dxSchedulerAppointment');
+const REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME = addNamespace(pointerEvents.leave, 'dxSchedulerAppointment');
 
 const Appointment = DOMComponent.inherit({
 

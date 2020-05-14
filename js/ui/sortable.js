@@ -2,7 +2,7 @@ import $ from '../core/renderer';
 import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
 import Draggable from './draggable';
-import { getPublicElement } from '../core/utils/dom';
+import { getPublicElement } from '../core/element';
 import { getWindow } from '../core/utils/window';
 import translator from '../animation/translator';
 import fx from '../animation/fx';

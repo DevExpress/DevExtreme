@@ -1,25 +1,25 @@
-import $ from 'jquery';
 import fx from 'animation/fx';
-import { locate } from 'animation/translator';
-import { value as viewPort } from 'core/utils/view_port';
-import config from 'core/config';
-import { isRenderer } from 'core/utils/type';
-import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_top_overlay';
 import positionUtils from 'animation/position';
-import domUtils from 'core/utils/dom';
-import resizeCallbacks from 'core/utils/resize_callbacks';
+import { locate } from 'animation/translator';
+import 'common.css!';
+import config from 'core/config';
 import devices from 'core/devices';
 import { Template } from 'core/templates/template';
-import Overlay from 'ui/overlay';
-import pointerMock from '../../helpers/pointerMock.js';
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import { isRenderer } from 'core/utils/type';
+import { value as viewPort } from 'core/utils/view_port';
 import eventsEngine from 'events/core/events_engine';
-import keyboardMock from '../../helpers/keyboardMock.js';
+import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
+import visibilityChange from 'events/visibility_change';
+import $ from 'jquery';
+import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_top_overlay';
+import Overlay from 'ui/overlay';
 import * as zIndex from 'ui/overlay/z_index';
+import 'ui/scroll_view/ui.scrollable';
 import selectors from 'ui/widget/selectors';
 import swatch from 'ui/widget/swatch_container';
-
-import 'common.css!';
-import 'ui/scroll_view/ui.scrollable';
+import keyboardMock from '../../helpers/keyboardMock.js';
+import pointerMock from '../../helpers/pointerMock.js';
 
 QUnit.testStart(function() {
     const markup =
@@ -679,13 +679,13 @@ testModule('visibility', moduleConfig, () => {
         });
         const overlay = $overlay.dxOverlay('instance');
 
-        domUtils.triggerHidingEvent($overlay);
+        triggerHidingEvent($overlay);
 
         assert.strictEqual(onHiddenCounter.callCount, 0, 'onHidden action not fired');
 
         $overlay.dxOverlay('show');
         overlay.option('onShown', onShownCounter);
-        domUtils.triggerShownEvent($overlay);
+        triggerShownEvent($overlay);
 
         assert.strictEqual(onShownCounter.callCount, 0, 'onShown action not fired');
     });
@@ -698,7 +698,7 @@ testModule('visibility', moduleConfig, () => {
             visible: true
         });
         $overlay.dxOverlay('hide');
-        domUtils.triggerHidingEvent($overlay);
+        triggerHidingEvent($overlay);
 
         assert.strictEqual(onHidingCounter.callCount, 1, 'onHiding action fired once');
     });
@@ -706,10 +706,10 @@ testModule('visibility', moduleConfig, () => {
     test('dxresize event should be fired only once when container shows first time (T306921)', function(assert) {
         assert.expect(2);
 
-        const triggerFunction = domUtils.triggerResizeEvent;
+        const triggerFunction = visibilityChange.triggerResizeEvent;
 
         try {
-            domUtils.triggerResizeEvent = () => {
+            visibilityChange.triggerResizeEvent = () => {
                 assert.ok(true, 'event triggered');
             };
 
@@ -720,7 +720,7 @@ testModule('visibility', moduleConfig, () => {
             overlay.show();
 
         } finally {
-            domUtils.triggerResizeEvent = triggerFunction;
+            visibilityChange.triggerResizeEvent = triggerFunction;
         }
     });
 
@@ -2662,7 +2662,7 @@ testModule('API', moduleConfig, () => {
         const instance = $element.dxOverlay({
             visible: true
         }).dxOverlay('instance');
-        const resizeStub = sinon.stub(domUtils, 'triggerResizeEvent');
+        const resizeStub = sinon.stub(visibilityChange, 'triggerResizeEvent');
 
         instance.repaint();
 

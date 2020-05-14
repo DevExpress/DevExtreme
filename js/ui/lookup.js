@@ -1,23 +1,23 @@
-const $ = require('../core/renderer');
-const eventsEngine = require('../events/core/events_engine');
+import $ from '../core/renderer';
+import eventsEngine from '../events/core/events_engine';
 const window = require('../core/utils/window').getWindow();
-const support = require('../core/utils/support');
-const commonUtils = require('../core/utils/common');
-const domUtils = require('../core/utils/dom');
-const each = require('../core/utils/iterator').each;
-const extend = require('../core/utils/extend').extend;
-const inkRipple = require('./widget/utils.ink_ripple');
-const messageLocalization = require('../localization/message');
-const devices = require('../core/devices');
-const registerComponent = require('../core/component_registrator');
-const eventUtils = require('../events/utils');
-const DropDownList = require('./drop_down_editor/ui.drop_down_list');
-const themes = require('./themes');
-const clickEvent = require('../events/click');
-const Popover = require('./popover');
-const TextBox = require('./text_box');
-const ChildDefaultTemplate = require('../core/templates/child_default_template').ChildDefaultTemplate;
-const translator = require('../animation/translator');
+import support from '../core/utils/support';
+import commonUtils from '../core/utils/common';
+import { getPublicElement } from '../core/element';
+import { each } from '../core/utils/iterator';
+import { extend } from '../core/utils/extend';
+import inkRipple from './widget/utils.ink_ripple';
+import messageLocalization from '../localization/message';
+import devices from '../core/devices';
+import registerComponent from '../core/component_registrator';
+import { addNamespace } from '../events/utils';
+import DropDownList from './drop_down_editor/ui.drop_down_list';
+import themes from './themes';
+import clickEvent from '../events/click';
+import Popover from './popover';
+import TextBox from './text_box';
+import { ChildDefaultTemplate } from '../core/templates/child_default_template';
+import translator from '../animation/translator';
 
 const LOOKUP_CLASS = 'dx-lookup';
 const LOOKUP_SEARCH_CLASS = 'dx-lookup-search';
@@ -309,8 +309,8 @@ const Lookup = DropDownList.inherit({
                     dropDownOptions: {
                         closeOnOutsideClick: true,
 
-                        width: (function() { return this._getPopupWidth(); }).bind(this),
-                        height: (function() { return this._getPopupHeight(MATERIAL_LOOKUP_LIST_ITEMS_COUNT); }).bind(this),
+                        width: () => { return this._getPopupWidth(); },
+                        height: () => { return this._getPopupHeight(MATERIAL_LOOKUP_LIST_ITEMS_COUNT); },
                         showTitle: false,
 
                         shading: false
@@ -366,12 +366,12 @@ const Lookup = DropDownList.inherit({
     },
 
     _renderInput: function() {
-        const fieldClickAction = this._createAction((function() {
+        const fieldClickAction = this._createAction(() => {
             this._toggleOpenState();
-        }).bind(this));
+        });
 
         this._$field = $('<div>').addClass(LOOKUP_FIELD_CLASS);
-        eventsEngine.on(this._$field, eventUtils.addNamespace(clickEvent.name, this.NAME), function(e) {
+        eventsEngine.on(this._$field, addNamespace(clickEvent.name, this.NAME), e => {
             fieldClickAction({ event: e });
         });
 
@@ -402,7 +402,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _toggleActiveState: function($element, value, e) {
-        this.callBase.apply(this, arguments);
+        this.callBase(...arguments);
 
         if(!this._inkRipple) {
             return;
@@ -449,7 +449,7 @@ const Lookup = DropDownList.inherit({
         const data = this._fieldRenderData();
         template.render({
             model: data,
-            container: domUtils.getPublicElement(this._$field)
+            container: getPublicElement(this._$field)
         });
     },
 
@@ -458,7 +458,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _popupShowingHandler: function() {
-        this.callBase.apply(this, arguments);
+        this.callBase(...arguments);
 
         if(this.option('cleanSearchOnOpening')) {
             if(this.option('searchEnabled') && this._searchBox.option('value')) {
@@ -560,7 +560,7 @@ const Lookup = DropDownList.inherit({
             shading: false,
             closeOnTargetScroll: true,
             width: this._isInitialOptionValue('dropDownOptions.width')
-                ? (function() { return this.$element().outerWidth(); }).bind(this)
+                ? () => { return this.$element().outerWidth(); }
                 : this._popupConfig().width
         }));
 
@@ -624,12 +624,12 @@ const Lookup = DropDownList.inherit({
             };
         }
 
-        each(['position', 'animation', 'width', 'height'], (function(_, optionName) {
+        each(['position', 'animation', 'width', 'height'], (_, optionName) => {
             const popupOptionValue = this.option(`dropDownOptions.${ optionName }`);
             if(popupOptionValue !== undefined) {
                 result[optionName] = popupOptionValue;
             }
-        }).bind(this));
+        });
 
         return result;
     },
@@ -669,9 +669,9 @@ const Lookup = DropDownList.inherit({
             shortcut: 'cancel',
             onClick: this._cancelButtonHandler.bind(this),
             options: {
-                onInitialized: function(e) {
+                onInitialized: e => {
                     e.component.registerKeyHandler('escape', this.close.bind(this));
-                }.bind(this),
+                },
                 text: this.option('cancelButtonText')
             }
         } : null;
@@ -811,9 +811,9 @@ const Lookup = DropDownList.inherit({
     _renderList: function() {
         this.callBase();
 
-        this._list.registerKeyHandler('escape', (function() {
+        this._list.registerKeyHandler('escape', () => {
             this.close();
-        }).bind(this));
+        });
     },
 
     _listConfig: function() {
@@ -842,7 +842,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _listContentReadyHandler: function() {
-        this.callBase.apply(this, arguments);
+        this.callBase(...arguments);
         this._refreshSelected();
     },
 
@@ -896,9 +896,9 @@ const Lookup = DropDownList.inherit({
     },
 
     _renderInputValue: function() {
-        return this.callBase().always((function() {
+        return this.callBase().always(() => {
             this._refreshSelected();
-        }).bind(this));
+        });
     },
 
     _renderPlaceholder: function() {
@@ -939,7 +939,7 @@ const Lookup = DropDownList.inherit({
 
         switch(name) {
             case 'dataSource':
-                this.callBase.apply(this, arguments);
+                this.callBase(...arguments);
                 this._renderField();
                 break;
             case 'searchEnabled':
@@ -953,7 +953,7 @@ const Lookup = DropDownList.inherit({
                 break;
             case 'minSearchLength':
                 this._setSearchPlaceholder();
-                this.callBase.apply(this, arguments);
+                this.callBase(...arguments);
                 break;
             case 'title':
             case 'titleTemplate':
@@ -975,7 +975,7 @@ const Lookup = DropDownList.inherit({
                 this._setPopupOption('toolbarItems', this._getPopupToolbarItems());
                 break;
             case 'applyValueMode':
-                this.callBase.apply(this, arguments);
+                this.callBase(...arguments);
                 break;
             case 'popupWidth':
                 this._setPopupOption('width', value === 'auto' ? this.initialOption('dropDownOptions').width : value);
@@ -1011,7 +1011,7 @@ const Lookup = DropDownList.inherit({
                 }
                 break;
             default:
-                this.callBase.apply(this, arguments);
+                this.callBase(...arguments);
         }
     },
 

@@ -1,8 +1,8 @@
-import $ from 'jquery';
-import domUtils from 'core/utils/dom';
-
-import 'ui/tab_panel';
 import 'common.css!css';
+import { triggerResizeEvent, triggerShownEvent } from 'events/visibility_change';
+import $ from 'jquery';
+import 'ui/tab_panel';
+
 
 const TABS_ITEM_CLASS = 'dx-tab';
 const TABS_NAV_BUTTON_CLASS = 'dx-tabs-nav-button';
@@ -35,7 +35,7 @@ QUnit.module('Tabs width', () => {
                 this.setContainerWidth(width);
             }
 
-            domUtils.triggerShownEvent(this.$container);
+            triggerShownEvent(this.$container);
         }
 
         _isOptionApproach() {
@@ -85,7 +85,7 @@ QUnit.module('Tabs width', () => {
                     break;
                 case 'resizeBrowser':
                     this.setContainerWidth(width);
-                    domUtils.triggerResizeEvent(this.$container);
+                    triggerResizeEvent(this.$container);
                     break;
             }
         }

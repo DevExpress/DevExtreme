@@ -1,14 +1,14 @@
-import $ from 'jquery';
-import domUtils from 'core/utils/dom';
-import holdEvent from 'events/hold';
-import pointerMock from '../../helpers/pointerMock.js';
-import { DataSource } from 'data/data_source/data_source';
+import 'common.css!';
 import { extend } from 'core/utils/extend';
+import { DataSource } from 'data/data_source/data_source';
+import holdEvent from 'events/hold';
+import { triggerShownEvent } from 'events/visibility_change';
+import $ from 'jquery';
+import 'ui/responsive_box';
+import 'ui/tabs';
+import pointerMock from '../../helpers/pointerMock.js';
 import { TestAsyncTabsWrapper, TestTabsWrapper } from '../../helpers/wrappers/tabsWrappers.js';
 
-import 'ui/tabs';
-import 'ui/responsive_box';
-import 'common.css!';
 
 QUnit.testStart(function() {
     const markup =
@@ -349,7 +349,7 @@ QUnit.module('Horizontal scrolling', () => {
             });
 
             $container.appendTo('#qunit-fixture');
-            domUtils.triggerShownEvent($container);
+            triggerShownEvent($container);
 
             assert.equal($element.find('.' + TABS_NAV_BUTTON_CLASS).length, 2, 'nav buttons are rendered');
         } finally {

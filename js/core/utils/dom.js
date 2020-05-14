@@ -1,21 +1,18 @@
-const $ = require('../../core/renderer');
-const config = require('../../core/config');
-const domAdapter = require('../../core/dom_adapter');
-const windowUtils = require('./window');
+import config from '../../core/config';
+import domAdapter from '../../core/dom_adapter';
+import $ from '../../core/renderer';
+import typeUtils from './type';
+import windowUtils from './window';
+
 const window = windowUtils.getWindow();
-const eventsEngine = require('../../events/core/events_engine');
-const inArray = require('./array').inArray;
-const typeUtils = require('./type');
 const isDefined = typeUtils.isDefined;
 const isRenderer = typeUtils.isRenderer;
-const htmlParser = require('../../core/utils/html_parser');
-let elementStrategy;
 
 const resetActiveElement = function() {
     const activeElement = domAdapter.getActiveElement();
     const body = domAdapter.getBody();
 
-    // todo: remove this hack after msie 11 support stopped
+    // TODO: remove this hack after msie 11 support stopped
     if(activeElement && activeElement !== body && activeElement.blur) {
         try {
             activeElement.blur();
@@ -59,72 +56,12 @@ const closestCommonParent = function(startTarget, endTarget) {
     }
 };
 
-
-const triggerVisibilityChangeEvent = function(eventName) {
-    const VISIBILITY_CHANGE_SELECTOR = '.dx-visibility-change-handler';
-
-    return function(element) {
-        const $element = $(element || 'body');
-
-        const changeHandlers = $element.filter(VISIBILITY_CHANGE_SELECTOR).
-            add($element.find(VISIBILITY_CHANGE_SELECTOR));
-
-        for(let i = 0; i < changeHandlers.length; i++) {
-            eventsEngine.triggerHandler(changeHandlers[i], eventName);
-        }
-    };
-};
-
-const uniqueId = (function() {
-    let counter = 0;
-
-    return function(prefix) {
-        return (prefix || '') + counter++;
-    };
-})();
-
-
 const dataOptionsAttributeName = 'data-options';
 
 const getElementOptions = function(element) {
     const optionsString = $(element).attr(dataOptionsAttributeName) || '';
 
     return config().optionsParser(optionsString);
-};
-
-const createComponents = function(elements, componentTypes) {
-    const result = [];
-    const selector = '[' + dataOptionsAttributeName + ']';
-
-    const $items = elements.find(selector).add(elements.filter(selector));
-    $items.each(function(index, element) {
-        const $element = $(element);
-        const options = getElementOptions(element);
-
-        for(const componentName in options) {
-            if(!componentTypes || inArray(componentName, componentTypes) > -1) {
-                if($element[componentName]) {
-                    $element[componentName](options[componentName]);
-                    result.push($element[componentName]('instance'));
-                }
-            }
-        }
-    });
-
-    return result;
-};
-
-const createMarkupFromString = function(str) {
-    if(!window.WinJS) {
-        return $(htmlParser.parseHTML(str));
-    }
-
-    const tempElement = $('<div>');
-
-    // otherwise WinJS browser strips HTML comments required for KO
-    window.WinJS.Utilities.setInnerHTMLUnsafe(tempElement.get(0), str);
-
-    return tempElement.contents();
 };
 
 const extractTemplateMarkup = function(element) {
@@ -178,18 +115,6 @@ const contains = function(container, element) {
     return domAdapter.isDocument(container) ? container.documentElement.contains(element) : container.contains(element);
 };
 
-const getPublicElement = function($element) {
-    return elementStrategy($element);
-};
-
-const setPublicElementWrapper = function(value) {
-    elementStrategy = value;
-};
-
-setPublicElementWrapper(function(element) {
-    return element && element.get(0);
-});
-
 const createTextElementHiddenCopy = function(element, text, options) {
     const elementStyles = window.getComputedStyle($(element).get(0));
     const includePaddings = options && options.includePaddings;
@@ -213,20 +138,12 @@ const createTextElementHiddenCopy = function(element, text, options) {
     });
 };
 
-exports.setPublicElementWrapper = setPublicElementWrapper;
 exports.resetActiveElement = resetActiveElement;
-exports.createMarkupFromString = createMarkupFromString;
-exports.triggerShownEvent = triggerVisibilityChangeEvent('dxshown');
-exports.triggerHidingEvent = triggerVisibilityChangeEvent('dxhiding');
-exports.triggerResizeEvent = triggerVisibilityChangeEvent('dxresize');
-exports.getElementOptions = getElementOptions;
-exports.createComponents = createComponents;
-exports.extractTemplateMarkup = extractTemplateMarkup;
-exports.normalizeTemplateElement = normalizeTemplateElement;
+exports.getElementOptions = getElementOptions; // TODO: extract
+exports.extractTemplateMarkup = extractTemplateMarkup; // TODO: extract
+exports.normalizeTemplateElement = normalizeTemplateElement; // TODO: extract
 exports.clearSelection = clearSelection;
-exports.uniqueId = uniqueId;
 exports.closestCommonParent = closestCommonParent;
 exports.clipboardText = clipboardText;
 exports.contains = contains;
-exports.getPublicElement = getPublicElement;
-exports.createTextElementHiddenCopy = createTextElementHiddenCopy;
+exports.createTextElementHiddenCopy = createTextElementHiddenCopy; // TODO: extract

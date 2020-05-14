@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import { getPublicElement } from '../../core/utils/dom';
+import { getPublicElement } from '../../core/element';
 import { noop } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import modules from './ui.grid_core.modules';

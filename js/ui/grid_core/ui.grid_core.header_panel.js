@@ -3,7 +3,7 @@ import Toolbar from '../toolbar';
 import columnsView from './ui.grid_core.columns_view';
 import { noop } from '../../core/utils/common';
 import { isDefined } from '../../core/utils/type';
-import { triggerResizeEvent } from '../../core/utils/dom';
+import { triggerResizeEvent } from '../../events/visibility_change';
 
 require('../drop_down_menu');
 const HEADER_PANEL_CLASS = 'header-panel';

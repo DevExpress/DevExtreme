@@ -1,18 +1,16 @@
-import $ from 'jquery';
-import devices from 'core/devices';
-import browser from 'core/utils/browser';
-import domUtils from 'core/utils/dom';
-import pointerMock from '../../helpers/pointerMock.js';
-import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import fx from 'animation/fx';
 import translator from 'animation/translator';
-import dateLocalization from 'localization/date';
-
 import 'common.css!';
+import devices from 'core/devices';
+import browser from 'core/utils/browser';
+import { triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
-
+import $ from 'jquery';
+import dateLocalization from 'localization/date';
 import 'ui/date_box/ui.date_view';
 import 'ui/date_box/ui.date_view_roller';
+import executeAsyncMock from '../../helpers/executeAsyncMock.js';
+import pointerMock from '../../helpers/pointerMock.js';
 
 
 QUnit.testStart(function() {
@@ -277,7 +275,7 @@ QUnit.module('dateView', {
             type: 'datetime'
         });
 
-        domUtils.triggerShownEvent('#qunit-fixture');
+        triggerShownEvent('#qunit-fixture');
 
         const instance = $dateView.dxDateView('instance');
 
@@ -298,7 +296,7 @@ QUnit.module('dateView', {
         const datePickerElement = this.wrapper;
         const clock = this.clock;
         // NOTE: simulate triggering visibility change event in popup
-        domUtils.triggerShownEvent('#qunit-fixture');
+        triggerShownEvent('#qunit-fixture');
 
         $.each(this.instance._rollers, function(type) {
             const pointer = pointerMock(this._$container);

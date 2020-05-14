@@ -12,7 +12,7 @@ import $ from 'jquery';
 import 'common.css!';
 import 'generic_light.css!';
 import 'ui/data_grid/ui.data_grid';
-import * as eventUtils from 'events/utils';
+import { createEvent } from 'events/utils';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import {
     CLICK_EVENT,
@@ -897,7 +897,7 @@ QUnit.module('Keyboard navigation accessibility', {
         this.clock.tick();
 
         // act
-        $(document).trigger(eventUtils.createEvent('visibilitychange', { visibilityState: 'visible' }));
+        $(document).trigger(createEvent('visibilitychange', { visibilityState: 'visible' }));
 
         const $headersElement = dataGridWrapper.headers.getElement();
         const $headerItem = dataGridWrapper.headers.getHeaderItem(0, 0);

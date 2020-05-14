@@ -4,7 +4,7 @@ import eventsEngine from '../../events/core/events_engine';
 import readyCallback from '../../core/utils/ready_callbacks';
 import translator from '../../animation/translator';
 import Widget from '../widget/ui.widget';
-import * as eventUtils from '../../events/utils';
+import { addNamespace } from '../../events/utils';
 import commonUtils from '../../core/utils/common';
 import { isPlainObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
@@ -88,7 +88,7 @@ const Scrollbar = Widget.inherit({
     },
 
     _attachPointerDownHandler: function() {
-        eventsEngine.on(this._$thumb, eventUtils.addNamespace(pointerEvents.down, SCROLLBAR), this.feedbackOn.bind(this));
+        eventsEngine.on(this._$thumb, addNamespace(pointerEvents.down, SCROLLBAR), this.feedbackOn.bind(this));
     },
 
     feedbackOn: function() {
@@ -252,7 +252,7 @@ const Scrollbar = Widget.inherit({
 });
 
 readyCallback.add(function() {
-    eventsEngine.subscribeGlobal(domAdapter.getDocument(), eventUtils.addNamespace(pointerEvents.up, SCROLLBAR), function() {
+    eventsEngine.subscribeGlobal(domAdapter.getDocument(), addNamespace(pointerEvents.up, SCROLLBAR), function() {
         if(activeScrollbar) {
             activeScrollbar.feedbackOff();
         }

@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import * as eventUtils from '../../events/utils';
+import { isDxMouseWheelEvent } from '../../events/utils';
 import { noop } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import devices from '../../core/devices';
@@ -287,7 +287,7 @@ const NativeStrategy = Class.inherit({
             return false;
         }
 
-        if(eventUtils.isDxMouseWheelEvent(e) && this._isScrolledInMaxDirection(e)) {
+        if(isDxMouseWheelEvent(e) && this._isScrolledInMaxDirection(e)) {
             return false;
         }
 

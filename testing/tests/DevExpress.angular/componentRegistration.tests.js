@@ -2,7 +2,7 @@ import $ from 'jquery';
 import config from 'core/config';
 import commonUtils from 'core/utils/common';
 const noop = commonUtils.noop;
-import domUtils from 'core/utils/dom';
+import visibilityChange from 'events/visibility_change';
 import angular from 'angular';
 import registerComponent from 'core/component_registrator';
 import DOMComponent from 'core/dom_component';
@@ -1232,7 +1232,7 @@ QUnit.test('Angular component should have \'templatesRenderAsynchronously\' opti
 QUnit.test('Angular component should not fire \'triggerResizeEvent\' on \'contentReady\' event (T351071)', function(assert) {
     this.clock = sinon.useFakeTimers();
 
-    const resizeEventSpy = sinon.spy(domUtils, 'triggerResizeEvent');
+    const resizeEventSpy = sinon.spy(visibilityChange, 'triggerResizeEvent');
 
     const $markup = $('<div></div>')
         .attr('dx-test', 'options')

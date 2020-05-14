@@ -2,7 +2,7 @@ import $ from 'jquery';
 import devices from 'core/devices';
 import fx from 'animation/fx';
 import ContextMenu from 'ui/context_menu';
-import * as eventUtils from 'events/utils';
+import { addNamespace } from 'events/utils';
 import contextMenuEvent from 'events/contextmenu';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
@@ -1133,7 +1133,7 @@ QUnit.module('Options', moduleConfig, () => {
             visible: false
         });
 
-        const eventName = eventUtils.addNamespace(contextMenuEvent.name, instance.NAME);
+        const eventName = addNamespace(contextMenuEvent.name, instance.NAME);
 
         instance.show();
 
