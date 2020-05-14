@@ -78,10 +78,12 @@ _Range.prototype = {
         }
         compareAndReplaceByField('interval', otherLessThan);
 
-        controlValuesByVisibleBounds(minSelector, minVisibleSelector, otherLessThan);
-        controlValuesByVisibleBounds(minSelector, maxVisibleSelector, otherLessThan);
-        controlValuesByVisibleBounds(maxSelector, maxVisibleSelector, otherGreaterThan);
-        controlValuesByVisibleBounds(maxSelector, minVisibleSelector, otherGreaterThan);
+        if(that[axisTypeSelector] !== 'discrete') {
+            controlValuesByVisibleBounds(minSelector, minVisibleSelector, otherLessThan);
+            controlValuesByVisibleBounds(minSelector, maxVisibleSelector, otherLessThan);
+            controlValuesByVisibleBounds(maxSelector, maxVisibleSelector, otherGreaterThan);
+            controlValuesByVisibleBounds(maxSelector, minVisibleSelector, otherGreaterThan);
+        }
 
         if(categories === undefined) {
             that.categories = otherCategories;
