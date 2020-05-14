@@ -264,8 +264,8 @@ class FileManager extends Widget {
         return when(this._notificationControl.isProgressDrawerOpened()
             ? new Deferred().resolve().promise()
             : this._notificationControl.tryShowProgressPanel())
-            .always(() => this._controller.refresh())
-            .always(() => this._filesTreeView.refresh());
+            .then(() => this._controller.refresh())
+            .then(() => this._filesTreeView.refresh());
     }
 
     _updateToolbar(selectedItems) {
