@@ -74,6 +74,8 @@
 @SCHEDULER_SMALL_SIZE_FACTOR: 0.5;
 @SCHEDULER_SMALL_FONT_SIZE: 14px;
 
+@SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+
 @SCHEDULER_TIME_INDICATOR_FONT_SIZE: 30px;
 @SCHEDULER_TIME_INDICATOR_SIZE: 1px;
 @SCHEDULER_TIME_INDICATOR_TOP: 14px;
@@ -651,7 +653,7 @@
             .dx-icon(spinright);
 
             .dx-scheduler-small & {
-                margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                margin-left: @SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
             }
         }
 
@@ -660,7 +662,7 @@
             margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
 
             .dx-scheduler-small & {
-                margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                margin-left: @SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
             }
         }
 
@@ -676,7 +678,7 @@
                 background-color: @SCHEDULER_TIME_INDICATOR_BACKGROUND_COLOR;
 
                 .dx-scheduler-small & {
-                    margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                    margin-left: @SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
                 }
             }
         }
@@ -1421,7 +1423,7 @@
                 }
 
                 .dx-scheduler-small & {
-                    margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                    margin-left: @SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
                 }
             }
         }
@@ -1490,7 +1492,7 @@
             margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
 
             .dx-scheduler-small & {
-                margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                margin-left: @SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
             }
         }
 
@@ -1513,7 +1515,7 @@
             padding: 0;
 
             .dx-scheduler-small & {
-                margin: 0 0 0 @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                margin: 0 0 0 @SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
             }
 
             .dx-rtl & {
@@ -1521,7 +1523,7 @@
             }
 
             .dx-rtl.dx-scheduler-small & {
-                margin: 0 @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR 0 0;
+                margin: 0 @SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET 0 0;
             }
         }
 
@@ -1721,7 +1723,7 @@
         margin-left: -@SCHEDULER_LEFT_COLUMN_WIDTH;
 
         .dx-scheduler-small & {
-            margin-left: -@SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+            margin-left: -@SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
         }
 
         .dx-scheduler-date-table-row {
@@ -2550,7 +2552,7 @@
                 margin-right: -@SCHEDULER_LEFT_COLUMN_WIDTH;
 
                 .dx-scheduler-small & {
-                    margin-right: -@SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                    margin-right: -@SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
                 }
             }
         }
@@ -2610,7 +2612,7 @@
                 margin-left: auto;
 
                 .dx-scheduler-small & {
-                    margin-right: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                    margin-right: @SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
                 }
             }
 
@@ -2674,7 +2676,7 @@
             &:not(.dx-scheduler-work-space-all-day) {
                 .dx-scheduler-header-scrollable {
                     .dx-scheduler-small & {
-                        margin-right: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                        margin-right: @SCHEDULER_SMALL_SIZE_ELEMENT_OFFSET;
                     }
 
                     margin-left: 0;
@@ -2688,7 +2690,7 @@
                 padding-left: 0;
 
                 .dx-scheduler-small & {
-                    padding-right: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+                    padding-right: @SCHEDULER_AGENDA_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
                 }
             }
 
