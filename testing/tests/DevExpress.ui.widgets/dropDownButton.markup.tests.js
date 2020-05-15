@@ -299,8 +299,6 @@ QUnit.module('common use cases', {
         assert.ok($icons.eq(0).hasClass('dx-icon-group'), 'first icon is correct');
         assert.ok($icons.eq(1).hasClass('dx-icon-spindown'), 'second icon is correct');
     });
-
-
 });
 
 QUnit.module('data expressions', {
