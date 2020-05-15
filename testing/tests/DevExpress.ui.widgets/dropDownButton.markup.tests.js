@@ -9,6 +9,7 @@ import 'generic_light.css!';
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
 const DROP_DOWN_BUTTON_ACTION_CLASS = 'dx-dropdownbutton-action';
 const DROP_DOWN_BUTTON_TOGGLE_CLASS = 'dx-dropdownbutton-toggle';
+const DROP_DOWN_BUTTON_HAS_ARROW_CLASS = 'dx-dropdownbutton-has-arrow';
 
 QUnit.testStart(() => {
     const markup =
@@ -139,6 +140,31 @@ QUnit.module('common markup', {
 
         dropDownButton.option('stylingMode', 'outlined');
         assert.strictEqual(getButtonGroup(dropDownButton).option('stylingMode'), 'outlined', 'stylingMode was successfully changed');
+    });
+
+    QUnit.test('widget should have specific class if it has an arrow part (T888866)', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton', {
+            text: 'Item 1',
+            icon: 'box',
+            stylingMode: 'text'
+        });
+
+        const $dropDownButton = dropDownButton.$element();
+
+        assert.ok($dropDownButton.hasClass(DROP_DOWN_BUTTON_HAS_ARROW_CLASS));
+    });
+
+    QUnit.test('widget should have specific class if it has an no arrow part', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton', {
+            text: 'Item 1',
+            icon: 'box',
+            stylingMode: 'text',
+            showArrowIcon: false
+        });
+
+        const $dropDownButton = dropDownButton.$element();
+
+        assert.notOk($dropDownButton.hasClass(DROP_DOWN_BUTTON_HAS_ARROW_CLASS));
     });
 });
 
@@ -273,6 +299,8 @@ QUnit.module('common use cases', {
         assert.ok($icons.eq(0).hasClass('dx-icon-group'), 'first icon is correct');
         assert.ok($icons.eq(1).hasClass('dx-icon-spindown'), 'second icon is correct');
     });
+
+
 });
 
 QUnit.module('data expressions', {
