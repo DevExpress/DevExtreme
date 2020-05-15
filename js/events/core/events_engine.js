@@ -1,6 +1,5 @@
 import registerEventCallbacks from './event_registrator_callbacks';
 import { extend } from '../../core/utils/extend';
-import { contains } from '../../core/utils/dom';
 import domAdapter from '../../core/dom_adapter';
 import windowUtils from '../../core/utils/window';
 const window = windowUtils.getWindow();
@@ -163,6 +162,12 @@ function detectPassiveEventHandlersSupport() {
 }
 
 const passiveEventHandlersSupported = callOnce(detectPassiveEventHandlersSupport);
+
+const contains = (container, element) => {
+    return container.contains
+        ? container.contains(element)
+        : !!(element.compareDocumentPosition(container) & element.DOCUMENT_POSITION_CONTAINS);
+};
 
 function getHandlersController(element, eventName) {
     let elementData = elementDataMap.get(element);
