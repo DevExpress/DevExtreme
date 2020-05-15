@@ -87,7 +87,7 @@ function isMobile() {
 }
 
 function isCellInHeaderRow($cell) {
-    return !!$cell.closest(`.${HEADER_ROW_CLASS}`).length;
+    return !!$cell.parent(`.${HEADER_ROW_CLASS}`).length;
 }
 
 const KeyboardNavigationController = core.ViewController.inherit({
