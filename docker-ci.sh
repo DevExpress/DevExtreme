@@ -20,7 +20,7 @@ function run_ts {
     npm i
     unlink package-lock.json
     npm update devextreme-internal-tools
-    npm ls devextreme-internal-tools
+    npm ls devextreme-internal-tools || :
 
     npm run update-ts
 
