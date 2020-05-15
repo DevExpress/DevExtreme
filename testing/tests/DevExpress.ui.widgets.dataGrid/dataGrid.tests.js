@@ -9804,7 +9804,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.notOk(onSelectionChangedHandler.called, 'onSelectionChanged is not called');
     });
 
-    QUnit.test('Data rows shouuld not be scrolled on refresh (T884308)', function(assert) {
+    QUnit.test('Data rows should not be scrolled on refresh (T884308)', function(assert) {
         // arrange
         const onScrollHandler = sinon.spy();
         const generateData = function() {
