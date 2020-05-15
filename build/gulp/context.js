@@ -1,3 +1,5 @@
+'use strict';
+
 // See tests in version-spec.js
 
 const argv = require('yargs')

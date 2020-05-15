@@ -1,3 +1,5 @@
+'use strict';
+
 const fs = require('fs');
 const path = require('path');
 const cssom = require('cssom');
@@ -179,4 +181,4 @@ files.forEach(file => {
     }
 });
 
-process.exit(exitCode);
+process.exit(exitCode); // eslint-disable-line no-process-exit

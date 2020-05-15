@@ -7,6 +7,10 @@ import { hasWindow } from '../../core/utils/window';
 const PAGER_CLASS = 'pager';
 const MAX_PAGES_COUNT = 10;
 
+const getPageIndex = function(dataController) {
+    return 1 + (parseInt(dataController.pageIndex()) || 0);
+};
+
 const PagerView = modules.View.inherit({
     init: function() {
         const that = this;
@@ -19,6 +23,8 @@ const PagerView = modules.View.inherit({
                 const pager = that._getPager();
                 if(pager) {
                     pager.option({
+                        pageIndex: getPageIndex(dataController),
+                        pageSize: dataController.pageSize(),
                         pageCount: dataController.pageCount(),
                         totalCount: dataController.totalCount(),
                         hasKnownLastPage: dataController.hasKnownLastPage()
@@ -45,7 +51,7 @@ const PagerView = modules.View.inherit({
         const keyboardController = that.getController('keyboardNavigation');
         const options = {
             maxPagesCount: MAX_PAGES_COUNT,
-            pageIndex: 1 + (parseInt(dataController.pageIndex()) || 0),
+            pageIndex: getPageIndex(dataController),
             pageCount: dataController.pageCount(),
             pageSize: dataController.pageSize(),
             showPageSizes: pagerOptions.showPageSizeSelector,

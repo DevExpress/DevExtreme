@@ -75,6 +75,9 @@ class DataOption extends Component {
     _getStore() {
         return this._dataSource.store();
     }
+    _getItems() {
+        return this._getStore()._array || this._dataSource.items();
+    }
 }
 DataOption.include(DataHelperMixin);
 

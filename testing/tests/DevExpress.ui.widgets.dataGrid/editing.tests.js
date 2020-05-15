@@ -1099,7 +1099,11 @@ QUnit.module('Editing', {
 
     // T124946
     QUnit.test('Api method editCell with button', function(assert) {
-    // arrange
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'The problem is fixed for desktop only');
+            return;
+        }
+
         const that = this;
         const rowsView = this.rowsView;
         const testElement = $('#container');
@@ -1614,6 +1618,31 @@ QUnit.module('Editing', {
         this.editingController.saveEditData();
 
         assert.deepEqual(updateArgs, ['test1', { 'name': 'Test update cell' }]);
+    });
+
+    // T837043
+    QUnit.test('Editing Cell should be closed without timeout on click outside dataGrid', function(assert) {
+        const testElement = $('#container');
+
+        this.options.editing = {
+            allowUpdating: true,
+            mode: 'cell'
+        };
+
+        this.rowsView.render(testElement);
+
+        // act
+        this.editCell(0, 0);
+        this.clock.tick();
+
+        // assert
+        assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1, 'editor is rendered');
+
+        // act
+        $(document).trigger('dxclick');
+
+        // assert
+        assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0, 'editor is closed');
     });
 
     // T749034
@@ -9300,7 +9329,7 @@ QUnit.module('Editing with validation', {
     // arrange
         const that = this;
         const rowsView = that.rowsView;
-        const testElement = $('#container');
+        const testElement = $('#container').children();
 
         that.options.columns[0] = {
             dataField: 'name',
