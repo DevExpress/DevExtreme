@@ -287,6 +287,16 @@ module.exports = {
                     clearTimeout(this._restoreStateTimeoutID);
                     this.callBase();
                 }
+            },
+            selection: {
+                _fireSelectionChanged: function(options) {
+                    const stateStoringController = this.getController('stateStoring');
+                    const isDeferredSelection = this.option('selection.deferred');
+                    if(stateStoringController.isLoading() && isDeferredSelection) {
+                        return;
+                    }
+                    this.callBase.apply(this, arguments);
+                }
             }
         }
     }

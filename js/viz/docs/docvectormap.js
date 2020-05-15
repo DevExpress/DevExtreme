@@ -28,7 +28,7 @@ var dxVectorMap = {
         name: undefined,
         /**
         * @name dxVectorMapOptions.layers.dataSource
-        * @type object|DataSource|DataSourceOptions|string
+        * @type object|DataSource|DataSourceOptions|string|Array<any>
         * @extends CommonVizDataSource
         */
         dataSource: undefined,

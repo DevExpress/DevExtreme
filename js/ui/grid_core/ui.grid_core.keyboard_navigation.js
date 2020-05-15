@@ -334,6 +334,12 @@ const KeyboardNavigationController = core.ViewController.inherit({
         return !!args.handled;
     },
 
+    _closeEditCell: function() {
+        setTimeout(() => {
+            this._editingController.closeEditCell();
+        });
+    },
+
     _leftRightKeysHandler: function(eventArgs, isEditing) {
         const rowIndex = this.getVisibleRowIndex();
         const $event = eventArgs.originalEvent;
@@ -345,7 +351,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         if(allowNavigate) {
             this.setCellFocusType();
 
-            isEditingNavigationMode && this._editingController.closeEditCell();
+            isEditingNavigationMode && this._closeEditCell();
             const $cell = this._getNextCell(directionCode);
             if(isElementDefined($cell)) {
                 this._arrowKeysHandlerFocusCell($event, $cell);
@@ -365,7 +371,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const allowNavigate = (!isEditing || isEditingNavigationMode) && $row && !isDetailRow($row);
 
         if(allowNavigate) {
-            isEditingNavigationMode && this._editingController.closeEditCell();
+            isEditingNavigationMode && this._closeEditCell();
             if(!this._navigateNextCell($event, eventArgs.keyName)) {
                 if(this._isVirtualScrolling() && isUpArrow && dataSource && !dataSource.isLoading()) {
                     const rowHeight = $row.outerHeight();
@@ -491,7 +497,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         }
 
         if(!isEditingAllowed) {
-            this._editingController.closeEditCell();
+            this._closeEditCell();
         }
 
         if(this._focusCell($cell, !nextCellInfo.isHighlighted)) {
@@ -644,8 +650,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             setTimeout(this._editingController.saveEditData.bind(this._editingController));
         } else {
             eventsEngine.trigger($(target), 'change');
-
-            this._editingController.closeEditCell();
+            this._closeEditCell();
 
             event.preventDefault();
         }

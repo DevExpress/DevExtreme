@@ -8,6 +8,7 @@ const DATA_SOURCE_LOAD_ERROR_METHOD = '_dataSourceLoadErrorHandler';
 const DATA_SOURCE_LOADING_CHANGED_METHOD = '_dataSourceLoadingChangedHandler';
 const DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD = '_dataSourceFromUrlLoadMode';
 const SPECIFIC_DATA_SOURCE_OPTION = '_getSpecificDataSourceOption';
+const NORMALIZE_DATA_SOURCE = '_normalizeDataSource';
 
 
 const DataHelperMixin = {
@@ -43,6 +44,10 @@ const DataHelperMixin = {
                 });
 
                 this._dataSource = new dataSourceType(extend(true, {}, widgetDataSourceOptions, dataSourceOptions));
+            }
+
+            if(NORMALIZE_DATA_SOURCE in this) {
+                this._dataSource = this[NORMALIZE_DATA_SOURCE](this._dataSource);
             }
 
             this._addDataSourceHandlers();

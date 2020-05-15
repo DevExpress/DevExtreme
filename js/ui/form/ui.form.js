@@ -905,7 +905,7 @@ const Form = Widget.inherit({
             !layoutManager._updateLockCount && layoutManager.beginUpdate();
             const key = this._itemsRunTimeInfo.getKeyByPath(path);
             this.postponedOperations.add(key, () => {
-                layoutManager.endUpdate();
+                !layoutManager._disposed && layoutManager.endUpdate();
                 return new Deferred().resolve();
             });
         }
