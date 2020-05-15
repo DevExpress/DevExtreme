@@ -51,6 +51,7 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
                 const buttonRect = menuButtonElement.getBoundingClientRect();
                 assert.strictEqual(buttonRect.width, expectedItemWidth, `button.width ${expectedItemWidth}`);
                 assert.strictEqual(window.getComputedStyle(menuButtonElement.querySelector(`.${BUTTON_CONTENT_CLASS}`)).textAlign, rtlEnabled ? 'right' : 'left', 'buttonContent.textAlign');
+
             });
         });
     });
