@@ -20,8 +20,6 @@ export const FileManagerMessages = {
                 return messageLocalization.format('dxFileManager-errorMaxFileSizeExceeded');
             case ErrorCode.InvalidSymbols:
                 return messageLocalization.format('dxFileManager-errorInvalidSymbols');
-            case ErrorCode.LocationUnavailable:
-                return messageLocalization.format('dxFileManager-errorLocationUnavailable', args);
         }
 
         return messageLocalization.format('dxFileManager-errorDefault');

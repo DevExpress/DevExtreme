@@ -7,7 +7,6 @@ const ErrorCode = {
     WrongFileExtension: 5,
     MaxFileSizeExceeded: 6,
     InvalidSymbols: 7,
-    LocationUnavailable: 8,
     Other: 32767
 };
 
