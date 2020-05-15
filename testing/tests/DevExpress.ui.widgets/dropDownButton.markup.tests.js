@@ -166,6 +166,20 @@ QUnit.module('common markup', {
 
         assert.notOk($dropDownButton.hasClass(DROP_DOWN_BUTTON_HAS_ARROW_CLASS));
     });
+
+    QUnit.test('widget should have specific class if splitButton is true', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton', {
+            text: 'Item 1',
+            icon: 'box',
+            stylingMode: 'text',
+            showArrowIcon: false,
+            splitButton: true
+        });
+
+        const $dropDownButton = dropDownButton.$element();
+
+        assert.ok($dropDownButton.hasClass(DROP_DOWN_BUTTON_HAS_ARROW_CLASS));
+    });
 });
 
 QUnit.module('button group integration', {}, () => {
