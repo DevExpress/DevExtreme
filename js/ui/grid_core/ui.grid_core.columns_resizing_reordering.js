@@ -578,9 +578,10 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
     _pointCreated: function(point, cellsLength, columns) {
         const isNextColumnMode = isNextColumnResizingMode(this);
         const rtlEnabled = this.option('rtlEnabled');
-        const firstPointColumnIndex = !isNextColumnMode && rtlEnabled ? 0 : 1;
+        const parentGridContainerInRtlMode = this._parentGridContainerInRtlMode;
+        const firstPointColumnIndex = !isNextColumnMode && rtlEnabled && !parentGridContainerInRtlMode ? 0 : 1;
 
-        if(point.index >= firstPointColumnIndex && point.index < cellsLength + (!isNextColumnMode && !rtlEnabled ? 1 : 0)) {
+        if(point.index >= firstPointColumnIndex && point.index < cellsLength + (!isNextColumnMode && (!rtlEnabled || parentGridContainerInRtlMode) ? 1 : 0)) {
             point.columnIndex -= firstPointColumnIndex;
             const currentColumn = columns[point.columnIndex] || {};
             const nextColumn = columns[point.columnIndex + 1] || {};
@@ -613,12 +614,14 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         const parentOffset = that._$parentContainer.offset();
         const parentOffsetLeft = parentOffset.left;
         const eventData = getEventData(e);
+        const rtlEnabled = that.option('rtlEnabled');
+        const parentGridContainerInRtlMode = this._parentGridContainerInRtlMode;
 
         if(that._isResizing && that._resizingInfo) {
-            if(parentOffsetLeft <= eventData.x && (!isNextColumnMode || eventData.x <= parentOffsetLeft + that._$parentContainer.width())) {
+            if((parentOffsetLeft <= eventData.x || rtlEnabled && parentGridContainerInRtlMode) && (!isNextColumnMode || eventData.x <= parentOffsetLeft + that._$parentContainer.width())) {
                 if(that._updateColumnsWidthIfNeeded(eventData.x)) {
                     const $cell = that._columnHeadersView.getColumnElements().eq(that._resizingInfo.currentColumnIndex);
-                    that._columnsSeparatorView.moveByX($cell.offset().left + (isNextColumnMode && that.option('rtlEnabled') ? 0 : $cell.outerWidth()));
+                    that._columnsSeparatorView.moveByX($cell.offset().left + ((isNextColumnMode || parentGridContainerInRtlMode) && rtlEnabled ? 0 : $cell.outerWidth()));
                     that._tablePositionController.update(that._targetPoint.y);
                     e.preventDefault();
                 }
@@ -724,6 +727,12 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
             that._tablePositionController.update(that._targetPoint.y);
             that._columnsSeparatorView.show();
             that._trackerView.show();
+            const scrollable = that.component.getScrollable();
+
+            if(scrollable && that.option('rtlEnabled') && that._parentGridContainerInRtlMode) {
+                that._scrollRight = scrollable.$content().width() - scrollable._container().width() - scrollable.scrollLeft();
+            }
+
             e.preventDefault();
             e.stopPropagation();
         }
@@ -782,6 +791,8 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         let minWidth;
         let nextColumn;
         let cellWidth;
+        const rtlEnabled = this.option('rtlEnabled');
+        const parentGridContainerInRtlMode = this._parentGridContainerInRtlMode;
 
         function isPercentWidth(width) {
             return typeUtils.isString(width) && width.slice(-1) === '%';
@@ -824,7 +835,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         }
 
         deltaX = posX - resizingInfo.startPosX;
-        if(isNextColumnMode && this.option('rtlEnabled')) {
+        if((isNextColumnMode || parentGridContainerInRtlMode) && rtlEnabled) {
             deltaX = -deltaX;
         }
         cellWidth = resizingInfo.currentColumnWidth + deltaX;
@@ -871,6 +882,12 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
             columnsController.endUpdate();
             if(!isNextColumnMode) {
                 this.component.updateDimensions();
+
+                const scrollable = this.component.getScrollable();
+                if(scrollable && rtlEnabled && parentGridContainerInRtlMode) {
+                    const left = scrollable.$content().width() - scrollable._container().width() - this._scrollRight;
+                    scrollable.scrollTo({ left: left });
+                }
             }
         }
 
@@ -920,7 +937,8 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         that._rowsView = that.getView('rowsView');
         that._columnsController = that.getController('columns');
         that._tablePositionController = that.getController('tablePosition');
-        that._$parentContainer = that._columnsSeparatorView.component.$element();
+        that._$parentContainer = that.component.$element();
+        that._parentGridContainerInRtlMode = that._$parentContainer.parent().css('direction') === 'rtl';
 
         that._subscribeToCallback(that._columnHeadersView.renderCompleted, generatePointsByColumnsHandler);
         that._subscribeToCallback(that._columnHeadersView.resizeCompleted, generatePointsByColumnsHandler);
