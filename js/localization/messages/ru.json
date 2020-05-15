@@ -269,6 +269,7 @@
         "dxFileManager-errorFileExistsFormat": "Файл {0} уже существует.",
         "dxFileManager-errorFileNotFoundFormat": "Файл {0} не найден.",
         "dxFileManager-errorDirectoryNotFoundFormat": "Каталог '{0}' не найден.",
+        "dxFileManager-errorLocationUnavailable": "Расположение '{0}' недоступно",
         "dxFileManager-errorWrongFileExtension": "Неверное расширение файла.",
         "dxFileManager-errorMaxFileSizeExceeded": "Размер файла превышает допустимое значение.",
         "dxFileManager-errorInvalidSymbols": "Введённое имя содержит недопустимые символы.",
@@ -341,6 +342,8 @@
         "dxFileManager-editingUploadSingleItemErrorMessage": "Не удалось загрузить элемент",
         "dxFileManager-editingUploadMultipleItemsErrorMessage": "{0} элементов не были загружены",
         "dxFileManager-editingUploadCanceledMessage": "Отменено",
+
+        "dxFileManager-editingGetItemContentSingleItemErrorMessage": "Не удалось открыть папку '{0}'",
 
         "dxFileManager-listDetailsColumnCaptionName": "Название",
         "dxFileManager-listDetailsColumnCaptionDateModified": "Дата изменения",
