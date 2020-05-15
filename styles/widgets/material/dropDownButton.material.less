@@ -9,8 +9,6 @@
     @MATERIAL_TOGGLE_BUTTON_FLEX: 0 0 20px;
 }
 
-@MATERIAL_DROPDOWNBUTTON_HORIZONTAL_PADDING: 8px;
-
 .dx-size-dropdownbutton() {
     min-width: 0;
     height: 100%;
@@ -53,7 +51,7 @@
         min-width: 0;
 
         .dx-button-content {
-            padding-left: @MATERIAL_DROPDOWNBUTTON_HORIZONTAL_PADDING;
+            padding-left: 8px;
             padding-right: 2px;
 
             .dx-icon.dx-icon-right.dx-icon-spindown {
@@ -64,7 +62,7 @@
 
             .dx-rtl & {
                 padding-left: 2px;
-                padding-right: @MATERIAL_DROPDOWNBUTTON_HORIZONTAL_PADDING;
+                padding-right: 8px;
             }
         }
     }
@@ -72,8 +70,8 @@
     &:not(.dx-dropdownbutton-splitted) {
         .dx-button-has-text.dx-button {
             .dx-button-content {
-                padding-left: @MATERIAL_DROPDOWNBUTTON_HORIZONTAL_PADDING;
-                padding-right: @MATERIAL_DROPDOWNBUTTON_HORIZONTAL_PADDING;
+                padding-left: 8px;
+                padding-right: 8px;
             }
         }
     }
