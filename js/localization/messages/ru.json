@@ -342,7 +342,7 @@
         "dxFileManager-editingUploadMultipleItemsErrorMessage": "{0} элементов не были загружены",
         "dxFileManager-editingUploadCanceledMessage": "Отменено",
 
-        "dxFileManager-editingGetItemContentSingleItemErrorMessage": "Не удалось открыть папку '{0}'",
+        "dxFileManager-editingGetItemContentSingleItemErrorMessage": "Не удалось открыть папку",
 
         "dxFileManager-listDetailsColumnCaptionName": "Название",
         "dxFileManager-listDetailsColumnCaptionDateModified": "Дата изменения",
