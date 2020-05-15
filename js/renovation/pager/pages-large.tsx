@@ -102,7 +102,7 @@ export default class LargePages extends JSXComponent<LargePagesProps> {
     return rtlPageIndexes.map((index) => (index === null ? null : createPage(index)));
   }
 
-  @InternalState() private prevState: PagesState = null;
+  @InternalState() private prevState = null as PagesState;
 
   onPageClick(pageIndex: number): void {
     if (this.props.pageIndexChange) {

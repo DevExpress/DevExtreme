@@ -109,8 +109,10 @@ export default class PageIndexSelector extends JSXComponent<PageIndexSelectorPro
   }
 
   get renderNavButtons(): boolean {
-    const
-      { isLargeDisplayMode = true, showNavigationButtons = true } = this.props;
+    const {
+      isLargeDisplayMode,
+      showNavigationButtons,
+    } = this.props as Required<PageIndexSelectorProps>;
     return !isLargeDisplayMode || showNavigationButtons;
   }
 

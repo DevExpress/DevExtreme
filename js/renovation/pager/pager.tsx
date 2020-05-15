@@ -1,17 +1,19 @@
+// import { h } from 'preact';
 import {
   Component, ComponentBindings, JSXComponent, OneWay, TwoWay, Event,
 } from 'devextreme-generator/component_declaration/common';
+import noop from '../utils/noop';
 import InfoText from './info';
 import PageIndexSelector from './page-index-selector';
 import PageSizeSelector from './page-size-selector';
+import { PAGER_PAGES_CLASS, PAGER_CLASS_FULL, LIGHT_MODE_CLASS } from './consts';
 
 // import { getFormatter } from '../../localization/message';
 
-export const PAGER_CLASS = 'dx-pager dx-datagrid-pager';
-export const PAGER_PAGES_CLASS = 'dx-pages';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
+  className,
   pageSizeChange,
   isLargeDisplayMode,
   pageIndexChange,
@@ -22,7 +24,7 @@ export const viewFunction = ({
     showNavigationButtons, totalCount,
   },
 }: Pager) => (
-  <div className={PAGER_CLASS}>
+  <div className={className}>
     <PageSizeSelector
       isLargeDisplayMode={isLargeDisplayMode}
       pageSize={pageSize}
@@ -74,7 +76,7 @@ export class PagerProps {
   @TwoWay() pageSize?: number = 5;
 
   // showPageSizes: true,
-  @Event() pageSizeChange?: (pageSize: number) => void;
+  @Event() pageSizeChange?: (pageSize: number) => void = noop;
 
   @OneWay() pageSizes?: number[] = [5, 10];
 
@@ -95,6 +97,10 @@ export class PagerProps {
 export default class Pager extends JSXComponent<PagerProps> {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   get isLargeDisplayMode() { return !this.props.lightModeEnabled; }
+
+  get className(): string {
+    return this.isLargeDisplayMode ? PAGER_CLASS_FULL : `${PAGER_CLASS_FULL}  ${LIGHT_MODE_CLASS}`;
+  }
 
   pageIndexChange(newPageIndex: number): void {
     this.props.pageIndex = newPageIndex;

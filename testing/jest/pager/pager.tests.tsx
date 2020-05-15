@@ -6,7 +6,7 @@ import PagerComponent from '../../../js/renovation/pager/pager.p';
 import PageSizeSelectorComponent from '../../../js/renovation/pager/page-size-selector.p';
 import PageIndexSelectorComponent from '../../../js/renovation/pager/page-index-selector.p';
 import InfoTextComponent from '../../../js/renovation/pager/info.p';
-import { PAGER_CLASS, PAGER_PAGES_CLASS } from '../../../js/renovation/pager/pager';
+import { PAGER_CLASS_FULL, PAGER_PAGES_CLASS, LIGHT_MODE_CLASS } from '../../../js/renovation/pager/consts';
 
 const pageSizeRender = jest.fn();
 
@@ -39,12 +39,12 @@ describe('Pager size selector', () => {
     pageIndexSelectorRender.mockClear();
     InfoTextComp.mockClear();
   });
-  it('render pager', () => {
+  it('render pager, default props', () => {
     const {
       container, pageSize, pageSelectorContainer, pageIndexSelector, infoText,
     } = render({});
     // Vitik: Test real class instead of props for child component
-    expect(container.getDOMNode().className).toBe(PAGER_CLASS);
+    expect(container.getDOMNode().className).toBe(PAGER_CLASS_FULL);
     expect(pageSize().props())
       .toMatchObject({ isLargeDisplayMode: true, pageSize: 5, pageSizes: [5, 10] });
     expect(pageSelectorContainer().getDOMNode().className)
@@ -57,6 +57,12 @@ describe('Pager size selector', () => {
     expect(pageSizeRender).toHaveBeenCalledTimes(1);
     expect(pageIndexSelectorRender).toHaveBeenCalledTimes(1);
     expect(InfoTextComp).toHaveBeenCalledTimes(1);
+  });
+  it('render pager, small display mode', () => {
+    const {
+      container,
+    } = render({ lightModeEnabled: true });
+    expect(container.getDOMNode().className.indexOf(LIGHT_MODE_CLASS)).not.toBe(-1);
   });
   it('change page size uncontrolled', async () => {
     const pageSizeChangeHandler = jest.fn();

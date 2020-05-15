@@ -2,15 +2,20 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Event,
 } from 'devextreme-generator/component_declaration/common';
 import LightButton from './light-button';
+import { PAGER_PAGE_CLASS } from './consts';
 
-const PAGER_PAGE_CLASS = 'dx-page';
 const PAGER_SELECTION_CLASS = 'dx-selection';
 const PAGER_PAGE_SELECTION_CLASS = `${PAGER_PAGE_CLASS} ${PAGER_SELECTION_CLASS}`;
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   className, value, label, props: { key, onClick },
 }: Page) => (
-  <LightButton key={key} className={className} label={label} onClick={onClick}>
+  <LightButton
+    key={key}
+    className={className}
+    label={label}
+    onClick={onClick}
+  >
     {value}
   </LightButton>
 );
