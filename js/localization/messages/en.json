@@ -376,7 +376,7 @@
         "dxFileManager-editingUploadMultipleItemsErrorMessage": "{0} items were not uploaded",
         "dxFileManager-editingUploadCanceledMessage": "Canceled",
 
-        "dxFileManager-editingGetItemContentSingleItemErrorMessage": "Can not open folder",
+        "dxFileManager-editingGetItemContentSingleItemErrorMessage": "Can not open folder '{0}'",
 
         "dxFileManager-listDetailsColumnCaptionName": "Name",
         "dxFileManager-listDetailsColumnCaptionDateModified": "Date Modified",
