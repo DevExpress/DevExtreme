@@ -3,7 +3,11 @@ import { h } from 'preact';
 import { mount } from 'enzyme';
 import { EVENT, emit, getEventHandlers } from '../utils/events-mock';
 import ClickableDiv from '../../../js/renovation/pager/light-button.p';
+import { registerKeyboardAction } from '../../../js/ui/shared/accessibility';
+
 import { LightButtonProps } from '../../../js/renovation/pager/light-button';
+
+jest.mock('../../../js/ui/shared/accessibility');
 
 describe('LightButton', () => {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -28,5 +32,11 @@ describe('LightButton', () => {
     expect(clickHandler).toHaveBeenCalledTimes(1);
     comp.unmount();
     expect(getEventHandlers(EVENT.dxClick).length).toBe(0);
+  });
+  it('registerKeyboardEvents', () => {
+    (registerKeyboardAction as jest.Mock).mockClear();
+    render({ });
+    // TODO Vitik: check registerKeyboardAction parameters
+    expect(registerKeyboardAction).toHaveBeenCalledTimes(1);
   });
 });
