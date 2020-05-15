@@ -302,7 +302,7 @@
         "dxFileManager-errorFileExistsFormat": "File '{0}' already exists.",
         "dxFileManager-errorFileNotFoundFormat": "File '{0}' not found.",
         "dxFileManager-errorDirectoryNotFoundFormat": "Directory '{0}' not found.",
-        "dxFileManager-errorLocationUnavailable": "Location is unavailable",
+        "dxFileManager-errorLocationUnavailable": "Location '{0}' is unavailable",
         "dxFileManager-errorWrongFileExtension": "File extension is not allowed.",
         "dxFileManager-errorMaxFileSizeExceeded": "File size exceeds the maximum allowed size.",
         "dxFileManager-errorInvalidSymbols": "This name contains invalid characters.",
@@ -375,6 +375,8 @@
         "dxFileManager-editingUploadSingleItemErrorMessage": "Item was not uploaded",
         "dxFileManager-editingUploadMultipleItemsErrorMessage": "{0} items were not uploaded",
         "dxFileManager-editingUploadCanceledMessage": "Canceled",
+
+        "dxFileManager-editingGetItemContentSingleItemErrorMessage": "Can not open folder",
 
         "dxFileManager-listDetailsColumnCaptionName": "Name",
         "dxFileManager-listDetailsColumnCaptionDateModified": "Date Modified",

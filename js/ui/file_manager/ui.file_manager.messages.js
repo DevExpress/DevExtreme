@@ -21,7 +21,7 @@ export const FileManagerMessages = {
             case ErrorCode.InvalidSymbols:
                 return messageLocalization.format('dxFileManager-errorInvalidSymbols');
             case ErrorCode.LocationUnavailable:
-                return messageLocalization.format('dxFileManager-errorLocationUnavailable');
+                return messageLocalization.format('dxFileManager-errorLocationUnavailable', args);
         }
 
         return messageLocalization.format('dxFileManager-errorDefault');
