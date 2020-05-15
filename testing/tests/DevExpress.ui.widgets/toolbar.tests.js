@@ -1118,10 +1118,12 @@ QUnit.module('adaptivity', {
         $buttonGroupToolbarItem = getButtonGroupToolbarItem();
         assert.equal($buttonGroupToolbarItem.hasClass(TOOLBAR_ITEM_INVISIBLE_CLASS), true, 'buttonGroup is hidden in toolbar');
 
+        const done = assert.async();
         const $dropDown = toolbar.$element().find('.' + DROP_DOWN_MENU_CLASS);
         const dropDown = $dropDown.dxDropDownMenu('instance');
         dropDown.option('onItemRendered', function(args) {
             assert.equal($(args.itemElement).find(`.${BUTTON_GROUP_CLASS}`).length, 1, 'button group was rendered in menu');
+            done();
         });
         dropDown.open();
     });
