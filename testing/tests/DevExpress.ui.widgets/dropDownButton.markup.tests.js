@@ -154,7 +154,7 @@ QUnit.module('common markup', {
         assert.ok($dropDownButton.hasClass(DROP_DOWN_BUTTON_HAS_ARROW_CLASS));
     });
 
-    QUnit.test('widget should have specific class if it has an no arrow part', function(assert) {
+    QUnit.test('widget should have specific class if it has no arrow part', function(assert) {
         const dropDownButton = new DropDownButton('#dropDownButton', {
             text: 'Item 1',
             icon: 'box',
