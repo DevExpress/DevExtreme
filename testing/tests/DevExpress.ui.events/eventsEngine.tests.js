@@ -314,11 +314,32 @@ QUnit.test('Should not fire event when relatedTarget is children of a target', f
         fired++;
     });
 
-    const event = new eventsEngine.Event('mouseleave', { target: div, relatedTarget: childNode });
+    const event = new eventsEngine.Event('mouseleave', {
+        target: div,
+        relatedTarget: childNode
+    });
 
     eventsEngine.trigger(div, event);
 
     assert.equal(fired, 0);
+});
+
+QUnit.test('Should work with SVG element as a target', function(assert) {
+    const svgContainer = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const childElement = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+
+    svgContainer.appendChild(childElement);
+
+    eventsEngine.on(svgContainer, 'mouseleave', () => {});
+
+    const event = new eventsEngine.Event('mouseleave', {
+        target: svgContainer,
+        relatedTarget: childElement
+    });
+
+    eventsEngine.trigger(svgContainer, event);
+
+    assert.ok(true, 'Not failed');
 });
 
 QUnit.test('On/trigger/off event listeners', function(assert) {
