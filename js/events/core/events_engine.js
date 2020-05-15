@@ -163,6 +163,12 @@ function detectPassiveEventHandlersSupport() {
 
 const passiveEventHandlersSupported = callOnce(detectPassiveEventHandlersSupport);
 
+const contains = (container, element) => {
+    return container.contains
+        ? container.contains(element)
+        : !!(element.compareDocumentPosition(container) & element.DOCUMENT_POSITION_CONTAINS);
+};
+
 function getHandlersController(element, eventName) {
     let elementData = elementDataMap.get(element);
 
@@ -198,7 +204,7 @@ function getHandlersController(element, eventName) {
                 let result;
 
                 if(eventName in NATIVE_EVENTS_TO_SUBSCRIBE) {
-                    secondaryTargetIsInside = relatedTarget && target && (relatedTarget === target || target.contains(relatedTarget));
+                    secondaryTargetIsInside = relatedTarget && target && (relatedTarget === target || contains(target, relatedTarget));
                 }
 
                 if(extraParameters !== undefined) {
