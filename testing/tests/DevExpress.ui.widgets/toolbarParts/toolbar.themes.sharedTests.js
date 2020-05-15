@@ -19,14 +19,23 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
             fx.off = false;
         }
     }, function() {
+        const configs = [];
         [false, true].forEach((rtlEnabled) => {
+            ['always', 'auto'].forEach((locateInMenu) => {
+                const config = { rtlEnabled, locateInMenu };
+                config.message = Object.keys(config).reduce((message, key) => message += `${key}: ${config[key]}, `, '');
+                configs.push(config);
+            });
+        });
+
+        configs.forEach((config) => {
             // T886693
-            QUnit.test(`Buttons in menu: - rtlEnabled: ${rtlEnabled} width: 50`, function(assert) {
+            QUnit.test(`Buttons in menu: - config ${config.message} width: 50`, function(assert) {
                 const toolbarOptions = {
                     items: [{
                         widget: 'dxButton',
-                        locateInMenu: 'always',
-                        options: { icon: 'plus', text: 'button text' }
+                        locateInMenu: config.locateInMenu,
+                        options: { icon: 'plus', text: `text(${config.locateInMenu})` }
                     }]
                 };
 
@@ -34,7 +43,7 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
                 new Toolbar(toolbarElement, {
                     ...toolbarOptions,
                     width: 50,
-                    rtlEnabled: rtlEnabled
+                    rtlEnabled: config.rtlEnabled
                 });
 
                 const dropDownMenuElement = toolbarElement.querySelector(`.${DROP_DOWN_MENU_CLASS}`);
@@ -50,7 +59,7 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
 
                 const buttonRect = menuButtonElement.getBoundingClientRect();
                 assert.strictEqual(buttonRect.width, expectedItemWidth, `button.width ${expectedItemWidth}`);
-                assert.strictEqual(window.getComputedStyle(menuButtonElement.querySelector(`.${BUTTON_CONTENT_CLASS}`)).textAlign, rtlEnabled ? 'right' : 'left', 'buttonContent.textAlign');
+                assert.strictEqual(window.getComputedStyle(menuButtonElement.querySelector(`.${BUTTON_CONTENT_CLASS}`)).textAlign, config.rtlEnabled ? 'right' : 'left', 'buttonContent.textAlign');
             });
         });
     });
