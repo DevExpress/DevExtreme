@@ -733,6 +733,13 @@ class Diagram extends Widget {
     _executeDiagramCommand(command, parameter) {
         this._diagramInstance.getCommand(command).execute(parameter);
     }
+
+    getNodeDataSource() {
+        return this._nodesOption && this._nodesOption.getDataSource();
+    }
+    getEdgeDataSource() {
+        return this._edgesOption && this._edgesOption.getDataSource();
+    }
     _refreshDataSources() {
         this._beginUpdateDiagram();
         this._refreshNodesDataSource();
