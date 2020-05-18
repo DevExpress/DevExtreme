@@ -3293,6 +3293,10 @@ declare module DevExpress.ui {
         export(): string;
         /** @name dxDiagram.exportTo(format, callback) */
         exportTo(format: 'svg' | 'png' | 'jpg', callback: Function): void;
+        /** @name dxDiagram.getEdgeDataSource() */
+        getEdgeDataSource(): DevExpress.data.DataSource;
+        /** @name dxDiagram.getNodeDataSource() */
+        getNodeDataSource(): DevExpress.data.DataSource;
         /** @name dxDiagram.import(data, updateExistingItemsOnly) */
         import(data: string, updateExistingItemsOnly?: boolean): void;
     }
