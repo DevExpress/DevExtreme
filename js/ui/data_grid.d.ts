@@ -2557,7 +2557,7 @@ declare class dxDataGrid extends Widget implements GridBase {
     /**
      * @docid dxDataGridMethods.exportToExcel
      * @publicName exportToExcel(selectionOnly)
-     * @deprecated excelExporterMethods.exportDataGrid
+     * @deprecated excelExporter.exportDataGrid
      * @param1 selectionOnly:boolean
      * @prevFileNamespace DevExpress.ui
      * @public
