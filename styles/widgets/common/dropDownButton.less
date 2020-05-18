@@ -2,6 +2,8 @@
 @import (once) "./popup.less";
 @import (once) "./list.less";
 
+@DROPDOWNBUTTON_HORIZONTAL_PADDING: 5px;
+
 .dx-dropdownbutton {
     display: inline-block;
 }
@@ -42,12 +44,28 @@
 
 .dx-dropdownbutton-action.dx-buttongroup-last-item {
     &.dx-button .dx-button-content {
-        padding-left: 10px;
+        padding-left: @DROPDOWNBUTTON_HORIZONTAL_PADDING * 2;
         padding-right: 0;
 
         .dx-rtl & {
             padding-left: 0;
-            padding-right: 10px;
+            padding-right: @DROPDOWNBUTTON_HORIZONTAL_PADDING * 2;
+        }
+    }
+}
+
+.dx-dropdownbutton:not(.dx-dropdownbutton-splitted) {
+    .dx-button-has-icon:not(.dx-button-has-text) {
+        .dx-button-content {
+            padding-left: @DROPDOWNBUTTON_HORIZONTAL_PADDING;
+            padding-right: @DROPDOWNBUTTON_HORIZONTAL_PADDING;
+        }
+    }
+
+    .dx-button-has-text.dx-button {
+        .dx-button-content {
+            padding-left: @DROPDOWNBUTTON_HORIZONTAL_PADDING * 2;
+            padding-right: @DROPDOWNBUTTON_HORIZONTAL_PADDING * 2;
         }
     }
 }
