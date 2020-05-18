@@ -1,33 +1,40 @@
 @import (once) "./multiView.generic.less";
 @import (once) "./tabs.generic.less";
 
-@GENERIC_TABPANEL_INSET_SHADOW_LEFT: inset @GENERIC_TABS_BORDER_WIDTH 0 @tabs-border-color;
-@GENERIC_TABPANEL_INSET_SHADOW_TOP: inset 0 @GENERIC_TABS_BORDER_WIDTH @tabs-border-color;
-@GENERIC_TABPANEL_INSET_SHADOW_RIGHT: inset (-@GENERIC_TABS_BORDER_WIDTH) 0 @tabs-border-color;
-@GENERIC_TABPANEL_INSET_SHADOW_BOTTOM: inset 0 (-@GENERIC_TABS_BORDER_WIDTH) @tabs-border-color;
+@GENERIC_TABPANEL_INSET_SHADOW_LEFT: inset @GENERIC_TABS_BORDER_WIDTH 0;
+@GENERIC_TABPANEL_INSET_SHADOW_TOP: inset 0 @GENERIC_TABS_BORDER_WIDTH;
+@GENERIC_TABPANEL_INSET_SHADOW_RIGHT: inset (-@GENERIC_TABS_BORDER_WIDTH) 0;
+@GENERIC_TABPANEL_INSET_SHADOW_BOTTOM: inset 0 (-@GENERIC_TABS_BORDER_WIDTH);
 
 .tabpanel-shadow-mixin(@accent-color) {
     & > .dx-tabpanel-tabs {
         .dx-tabs {
-            box-shadow: inset 0 (-@GENERIC_TABS_BORDER_WIDTH) @accent-color, @GENERIC_TABPANEL_INSET_SHADOW_TOP, @GENERIC_TABPANEL_INSET_SHADOW_RIGHT, @GENERIC_TABPANEL_INSET_SHADOW_LEFT;
+            box-shadow: @GENERIC_TABPANEL_INSET_SHADOW_BOTTOM @accent-color, @GENERIC_TABPANEL_INSET_SHADOW_TOP, @GENERIC_TABPANEL_INSET_SHADOW_RIGHT, @GENERIC_TABPANEL_INSET_SHADOW_LEFT;
         }
 
         .dx-tab {
-            box-shadow: @GENERIC_TABPANEL_INSET_SHADOW_TOP, inset 0 (-@GENERIC_TABS_BORDER_WIDTH) @accent-color;
+            box-shadow: @GENERIC_TABPANEL_INSET_SHADOW_TOP, @GENERIC_TABPANEL_INSET_SHADOW_BOTTOM @accent-color;
 
             &.dx-tab-selected {
-                box-shadow: inset 0 @GENERIC_TABS_BORDER_WIDTH @accent-color, inset (-@GENERIC_TABS_BORDER_WIDTH) 0 @accent-color, inset @GENERIC_TABS_BORDER_WIDTH 0 @accent-color;
+                box-shadow: @GENERIC_TABPANEL_INSET_SHADOW_TOP @accent-color, @GENERIC_TABPANEL_INSET_SHADOW_RIGHT @accent-color, @GENERIC_TABPANEL_INSET_SHADOW_LEFT @accent-color;
+            }
+
+            &.dx-tab-selected,
+            &.dx-tab-active {
+                .dx-tab-content {
+                    color: @tabs-tab-selected-color;
+                }
             }
         }
 
         .dx-tabs-expanded {
             .dx-tab:not(.dx-tab-selected) {
                 &:first-of-type {
-                    box-shadow: inset 0 (-@GENERIC_TABS_BORDER_WIDTH) @accent-color, @GENERIC_TABPANEL_INSET_SHADOW_LEFT, @GENERIC_TABPANEL_INSET_SHADOW_TOP;
+                    box-shadow: @GENERIC_TABPANEL_INSET_SHADOW_BOTTOM @accent-color, @GENERIC_TABPANEL_INSET_SHADOW_LEFT, @GENERIC_TABPANEL_INSET_SHADOW_TOP;
 
                     .dx-rtl&,
                     .dx-rtl & {
-                        box-shadow: inset 0 (-@GENERIC_TABS_BORDER_WIDTH) @accent-color, @GENERIC_TABPANEL_INSET_SHADOW_RIGHT, @GENERIC_TABPANEL_INSET_SHADOW_TOP;
+                        box-shadow: @GENERIC_TABPANEL_INSET_SHADOW_BOTTOM @accent-color, @GENERIC_TABPANEL_INSET_SHADOW_RIGHT, @GENERIC_TABPANEL_INSET_SHADOW_TOP;
                     }
                 }
             }
@@ -36,22 +43,22 @@
         .dx-tabs-stretched {
             .dx-tab:not(.dx-tab-selected) {
                 &:last-of-type {
-                    box-shadow: inset 0 (-@GENERIC_TABS_BORDER_WIDTH) @accent-color, @GENERIC_TABPANEL_INSET_SHADOW_RIGHT, @GENERIC_TABPANEL_INSET_SHADOW_TOP;
+                    box-shadow: @GENERIC_TABPANEL_INSET_SHADOW_BOTTOM @accent-color, @GENERIC_TABPANEL_INSET_SHADOW_RIGHT, @GENERIC_TABPANEL_INSET_SHADOW_TOP;
 
                     .dx-rtl&,
                     .dx-rtl & {
-                        box-shadow: inset 0 (-@GENERIC_TABS_BORDER_WIDTH) @accent-color, @GENERIC_TABPANEL_INSET_SHADOW_LEFT, @GENERIC_TABPANEL_INSET_SHADOW_TOP;
+                        box-shadow: @GENERIC_TABPANEL_INSET_SHADOW_BOTTOM @accent-color, @GENERIC_TABPANEL_INSET_SHADOW_LEFT, @GENERIC_TABPANEL_INSET_SHADOW_TOP;
                     }
                 }
             }
         }
 
         .dx-tabs-nav-button-left {
-            box-shadow: inset 0 (-@GENERIC_TABS_BORDER_WIDTH) @accent-color, @GENERIC_TABPANEL_INSET_SHADOW_LEFT, @GENERIC_TABPANEL_INSET_SHADOW_TOP;
+            box-shadow: @GENERIC_TABPANEL_INSET_SHADOW_BOTTOM @accent-color, @GENERIC_TABPANEL_INSET_SHADOW_LEFT, @GENERIC_TABPANEL_INSET_SHADOW_TOP;
         }
 
         .dx-tabs-nav-button-right {
-            box-shadow: inset 0 (-@GENERIC_TABS_BORDER_WIDTH) @accent-color, @GENERIC_TABPANEL_INSET_SHADOW_TOP, @GENERIC_TABPANEL_INSET_SHADOW_RIGHT;
+            box-shadow: @GENERIC_TABPANEL_INSET_SHADOW_BOTTOM @accent-color, @GENERIC_TABPANEL_INSET_SHADOW_TOP, @GENERIC_TABPANEL_INSET_SHADOW_RIGHT;
         }
     }
 
@@ -65,6 +72,25 @@
         display: block;
         border: none;
         background-color: @tabs-tab-bg;
+        color: @tabs-border-color;
+
+        .dx-tab {
+            width: 140px;
+            color: @tabs-border-color;
+
+            .dx-tab-content {
+                color: @tabs-tab-color;
+            }
+
+            &:after,
+            &:before {
+                content: none;
+            }
+        }
+
+        .dx-tabs-nav-button {
+            color: @tabs-border-color;
+        }
     }
 
     .dx-tabs-scrollable {
@@ -75,15 +101,6 @@
         .dx-tabs-wrapper {
             display: block;
             border: none;
-        }
-    }
-
-    .dx-tab {
-        width: 140px;
-
-        &:after,
-        &:before {
-            content: none;
         }
     }
 
