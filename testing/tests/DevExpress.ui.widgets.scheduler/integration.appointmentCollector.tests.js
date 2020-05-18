@@ -35,7 +35,7 @@ const integrationCollectorConfig = {
 
 QUnit.module('Integration: collector', integrationCollectorConfig, () => {
     QUnit.test('Start date should be equal targetedAppointmentData.startDate in appointment popup form in case recurrent appointment(T882652)', function(assert) {
-        var data = [{
+        const data = [{
             text: '1',
             startDate: new Date(2017, 4, 16, 9, 30),
             endDate: new Date(2017, 4, 16, 11),
