@@ -12,6 +12,8 @@ const CLASS = {
     commandEdit: 'dx-command-edit',
     commandExpand: 'dx-command-expand',
     commandSelect: 'dx-command-select',
+    commandAdaptive: 'dx-command-adaptive',
+    hiddenColumn: 'hidden-column',
     commandLink: 'dx-link',
     editCell: 'dx-editor-cell',
     focused: 'dx-focused',
@@ -90,7 +92,7 @@ class Headers extends DxElement {
     }
 
     getHeaderRow(index: number): HeaderRow {
-        return new HeaderRow(this.element.find(`.${CLASS.headerRow}:nth-child(${++index})`));
+        return new HeaderRow(this.element.find(`.${CLASS.headerRow}:nth-child(${++index})`), this.widgetName);
     }
 
     getFilterRow(): FilterRow {
@@ -123,8 +125,11 @@ class FilterCell extends DxElement {
 }
 
 class HeaderCell extends DxElement {
-    constructor(headerRow: Selector, index: number) {
+    isHidden: Promise<boolean>;
+
+    constructor(headerRow: Selector, index: number, widgetName: string) {
         super(headerRow.find(`td:nth-child(${++index})`));
+        this.isHidden = this.element.hasClass(addWidgetPrefix(widgetName, CLASS.hiddenColumn));
     }
 
     getFilterIcon(): Selector {
@@ -133,16 +138,19 @@ class HeaderCell extends DxElement {
 }
 
 class HeaderRow extends DxElement {
-    constructor(element: Selector) {
+    widgetName: string;
+
+    constructor(element: Selector, widgetName: string) {
         super(element);
+        this.widgetName = widgetName;
     }
 
     getHeaderCell(index: number): HeaderCell {
-        return new HeaderCell(this.element, index);
+        return new HeaderCell(this.element, index, this.widgetName);
     }
 
     getCommandCell(index: number): CommandCell {
-        return new CommandCell(this.element, index);
+        return new CommandCell(this.element, index, this.widgetName);
     }
 }
 
@@ -152,13 +160,15 @@ class DataCell extends DxElement {
     isFocused: Promise<boolean>;
     isInvalid: Promise<boolean>;
     isModified: Promise<boolean>;
+    isHidden: Promise<boolean>;
 
-    constructor(dataRow: Selector, index: number) {
+    constructor(dataRow: Selector, index: number, widgetName: string) {
         super(dataRow.find(`td:nth-child(${++index})`));
         this.isEditCell = this.element.hasClass(CLASS.editCell);
         this.isFocused = this.element.hasClass(CLASS.focused);
         this.isInvalid = this.element.hasClass(CLASS.invalidCell);
         this.isModified = this.element.hasClass(CLASS.cellModified);
+        this.isHidden = this.element.hasClass(addWidgetPrefix(widgetName, CLASS.hiddenColumn));
     }
 
     getEditor(): DxElement {
@@ -168,11 +178,14 @@ class DataCell extends DxElement {
 
 class CommandCell extends DxElement {
     isFocused: Promise<boolean>;
+    isHidden: Promise<boolean>;
 
-    constructor(dataRow: Selector, index: number) {
+    constructor(dataRow: Selector, index: number, widgetName: string) {
         const childrenSelector = `td:nth-child(${++index})`;
-        super(dataRow.find(`${childrenSelector}.${CLASS.commandEdit}, ${childrenSelector}.${CLASS.commandSelect}, ${childrenSelector}.${CLASS.commandExpand}`));
+        const commandSelector = `${childrenSelector}.${CLASS.commandEdit}, ${childrenSelector}.${CLASS.commandSelect}, ${childrenSelector}.${CLASS.commandExpand}, ${childrenSelector}.${CLASS.commandAdaptive}`;
+        super(dataRow.find(commandSelector));
         this.isFocused = this.element.hasClass(CLASS.focused);
+        this.isHidden = this.element.hasClass(addWidgetPrefix(widgetName, CLASS.hiddenColumn));
     }
 
     getButton(index: number) {
@@ -185,13 +198,15 @@ class CommandCell extends DxElement {
 }
 
 class DataRow extends DxElement {
+    widgetName: string;
     isRemoved: Promise<boolean>;
     isFocusedRow: Promise<boolean>;
     isSelected: Promise<boolean>;
     isEdited: Promise<boolean>;
 
-    constructor(element: Selector) {
+    constructor(element: Selector, widgetName: string) {
         super(element);
+        this.widgetName = widgetName;
         this.isRemoved = this.element.hasClass(CLASS.rowRemoved);
         this.isFocusedRow = this.element.hasClass(CLASS.focusedRow);
         this.isSelected = this.element.hasClass(CLASS.selection);
@@ -199,11 +214,11 @@ class DataRow extends DxElement {
     }
 
     getDataCell(index: number): DataCell {
-        return new DataCell(this.element, index);
+        return new DataCell(this.element, index, this.widgetName);
     }
 
     getCommandCell(index: number): CommandCell {
-        return new CommandCell(this.element, index);
+        return new CommandCell(this.element, index, this.widgetName);
     }
 
     getSelectCheckBox(): Selector {
@@ -226,7 +241,7 @@ class GroupRow extends DxElement {
     }
 
     getCell(index: number): DataCell {
-        return new DataCell(this.element, index);
+        return new DataCell(this.element, index, this.widgetName);
     }
 }
 
@@ -327,7 +342,7 @@ export default class DataGrid extends Widget {
     }
 
     getDataRow(index: number): DataRow {
-        return new DataRow(this.element.find(`.${CLASS.dataRow}:nth-child(${++index})`));
+        return new DataRow(this.element.find(`.${CLASS.dataRow}:nth-child(${++index})`), this.name);
     }
 
     getDataCell(rowIndex: number, columnIndex: number): DataCell {
