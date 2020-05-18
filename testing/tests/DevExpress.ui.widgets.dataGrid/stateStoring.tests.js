@@ -1724,16 +1724,13 @@ QUnit.module('State Storing with real controllers', {
             },
         });
 
-        this.clock.tick();
-
-        // act
-        this.refresh();
         this.clock.tick(2000);
 
         // assert
         assert.ok(customSave.calledOnce, 'customSave is called once');
         assert.strictEqual(customSave.getCall(0).args[0].searchText, '1', 'customSave is called with the searchPanel.text initial value');
         assert.strictEqual(this.option('searchPanel.text'), '1', 'searchPanel.text equals its initial value');
+        assert.equal(this.dataController.items().length, 1);
     });
 });
 
