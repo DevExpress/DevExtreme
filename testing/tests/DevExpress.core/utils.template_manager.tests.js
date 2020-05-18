@@ -2,7 +2,7 @@ import domUtils from 'core/utils/dom';
 import type from 'core/utils/type';
 import renderer from 'core/renderer';
 import {
-    suitableTemplatesByName, addOneRenderedCall, templateKey,
+    findTemplates, suitableTemplatesByName, addOneRenderedCall, templateKey,
     getNormalizedTemplateArgs, validateTemplateSource,
     defaultCreateElement, acquireIntegrationTemplate, acquireTemplate,
 } from 'core/utils/template_manager';
@@ -45,6 +45,34 @@ QUnit.test('#templateKey', function(assert) {
     assert.strictEqual(templateKey(templateSource), templateSource, 'should return a first array item if if is a renderer function');
 
     isRenderer.restore();
+});
+
+QUnit.test('#findTemplates', function(assert) {
+    const container = document.createElement('div');
+    const template1 = document.createElement('div');
+    template1.setAttribute('data-options', 'optionsName: { name: \'t1\' }');
+    const template2 = document.createElement('div');
+    template2.setAttribute('data-options', 'optionsName: { name: \'t2\' }');
+    const templateWithoutOptions = document.createElement('div');
+    templateWithoutOptions.setAttribute('data-options', '');
+    const notATemplate = document.createElement('div');
+
+    [ template1, template2, templateWithoutOptions, notATemplate ].forEach((element) => {
+        container.appendChild(element);
+    });
+
+    const templates = findTemplates(container, 'optionsName');
+
+    assert.deepEqual(templates, [
+        {
+            element: template1,
+            options: { name: 't1' }
+        },
+        {
+            element: template2,
+            options: { name: 't2' }
+        }
+    ]);
 });
 
 QUnit.test('#suitableTemplatesByName', function(assert) {
