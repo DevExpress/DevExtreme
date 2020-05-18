@@ -18,7 +18,7 @@ function run_ts {
 
     npm i
     npm update devextreme-internal-tools
-    npm ls devextreme-internal-tools
+    npm ls devextreme-internal-tools || :
 
     npm run update-ts
 
