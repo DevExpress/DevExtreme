@@ -664,7 +664,6 @@ QUnit.module('Visibility data source property', () => {
     QUnit.test('allItems.visible: true -> treeview.option(item1.visible: false) -> treeview.repaint()', function(assert) {
         const items = [ { text: 'item1' }, { text: 'item2' } ];
         const wrapper = new TreeViewTestWrapper({ items: items });
-        items[0].visible = false;
         wrapper.instance.option('items[0].visible', false);
         wrapper.instance.repaint();
 
