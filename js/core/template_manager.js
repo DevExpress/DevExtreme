@@ -3,19 +3,22 @@ import { isDefined, isFunction, isRenderer } from './utils/type';
 import { noop } from './utils/common';
 import { extend } from './utils/extend';
 import { log } from './errors';
-import { findTemplates } from './templates/data_options';
 import { FunctionTemplate } from './templates/function_template';
 import { EmptyTemplate } from './templates/empty_template';
 import { camelize } from './utils/inflector';
 import {
-    suitableTemplatesByName, templateKey,
-    getNormalizedTemplateArgs, validateTemplateSource,
-    defaultCreateElement, acquireTemplate,
+    findTemplates,
+    suitableTemplatesByName,
+    templateKey,
+    getNormalizedTemplateArgs,
+    validateTemplateSource,
+    defaultCreateElement,
+    acquireTemplate,
 } from './utils/template_manager';
 
 const TEXT_NODE = 3;
 const ANONYMOUS_TEMPLATE_NAME = 'template';
-const TEMPLATE_OPTIONS_NAME = '[data-options*="dxTemplate"]';
+const TEMPLATE_OPTIONS_NAME = 'dxTemplate';
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 const DEPRECATED_WIDGET_NAMES = { button: true, tabs: true, dropDownMenu: true };
 const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) => {

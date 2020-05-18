@@ -1,4 +1,6 @@
+import config from '../config';
 import devices from '../devices';
+import { Error } from '../errors';
 import $ from '../renderer';
 import { ChildDefaultTemplate } from '../templates/child_default_template';
 import { EmptyTemplate } from '../templates/empty_template';
@@ -7,9 +9,21 @@ import { TemplateBase } from '../templates/template_base';
 import { groupBy } from './array';
 import { findBestMatches } from './common';
 import { normalizeTemplateElement } from './dom';
-import { Error } from '../errors';
 import { extend } from './extend';
 import { isFunction, isRenderer } from './type';
+
+export const findTemplates = (element, name) => {
+    const optionsAttributeName = 'data-options';
+    const templates = $(element).contents().filter(`[${optionsAttributeName}*="${name}"]`);
+
+    return [].slice.call(templates).map((element) => {
+        const optionsString = $(element).attr(optionsAttributeName) || '';
+        return {
+            element,
+            options: config().optionsParser(optionsString)[name]
+        };
+    }).filter(template => !!template.options);
+};
 
 export const suitableTemplatesByName = (rawTemplates) => {
     const templatesMap = groupBy(rawTemplates, (template) => template.options.name);
