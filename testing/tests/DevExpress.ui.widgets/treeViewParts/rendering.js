@@ -637,47 +637,50 @@ QUnit.test('searchMode equals', function(assert) {
     assert.equal($treeView.find('.dx-item').length, 1, 'one item is rendered');
 });
 
-QUnit.module('visibility data source property (T888410)', {}, () => {
-    [true, false, undefined].forEach(visible => {
+QUnit.module('visibility data source property', {}, () => {
+    QUnit.test('allItems.visible: default', function(assert) {
+        const wrapper = new TreeViewTestWrapper({ items: [
+            { text: 'item1' },
+            { text: 'item2' }
+        ] });
+        const $nodes = wrapper.getNodes();
+        assert.equal(wrapper.hasInvisibleClass($nodes.eq(0)), false, '0 node has no invisible class');
+        assert.equal(wrapper.hasInvisibleClass($nodes.eq(1)), false, '1 node has no invisible class');
+    });
+
+    [true, false].forEach(visible => {
+        // (T888410)
         QUnit.test(`allItems.visible: ${visible}`, function(assert) {
             const wrapper = new TreeViewTestWrapper({ items: [
                 { text: 'item1', visible: visible },
                 { text: 'item2', visible: visible }
             ] });
             const $nodes = wrapper.getNodes();
-            assert.equal(wrapper.hasInvisibleClass($nodes.eq(0)), visible === false, '0 node has correct class');
-            assert.equal(wrapper.hasInvisibleClass($nodes.eq(1)), visible === false, '1 node has correct class');
+            assert.equal(wrapper.hasInvisibleClass($nodes.eq(0)), !visible, '0 node has correct visible class');
+            assert.equal(wrapper.hasInvisibleClass($nodes.eq(1)), !visible, '1 node has correct visible class');
         });
+    });
 
-        QUnit.test(`createChildren.allItems.visible: ${visible}`, function(assert) {
-            const promise = new Promise(function(resolve) {
-                resolve([ { text: 'item1', visible: visible }, { text: 'item2', visible: visible }]);
-            });
-            const wrapper = new TreeViewTestWrapper({
-                dataStructure: 'plain',
-                createChildren: function() {
-                    return promise;
-                }
-            });
+    QUnit.test('allItems.visible: true -> treeview.option(item1.visible: false) -> treeview.repaint()', function(assert) {
+        const items = [ { text: 'item1' }, { text: 'item2' } ];
+        const wrapper = new TreeViewTestWrapper({ items: items });
+        items[0].visible = false;
+        wrapper.instance.option('items[0].visible', false);
+        wrapper.instance.repaint();
 
-            const done = assert.async();
-            promise.then(function() {
-                const $nodes = wrapper.getNodes();
-                assert.equal(wrapper.hasInvisibleClass($nodes.eq(0)), visible === false, '0 node has correct class');
-                assert.equal(wrapper.hasInvisibleClass($nodes.eq(1)), visible === false, '1 node has correct class');
-                done();
-            });
-        });
+        const $nodes = wrapper.getNodes();
+        assert.equal(wrapper.hasInvisibleClass($nodes.eq(0)), true, '0 node has invisible class');
+        assert.equal(wrapper.hasInvisibleClass($nodes.eq(1)), false, '1 node has no invisible class');
+    });
 
-        QUnit.test('allItems.visible: true -> ite1.visible: false', function(assert) {
-            const items = [ { text: 'item1' }, { text: 'item2' } ];
-            const wrapper = new TreeViewTestWrapper({ items: items });
-            items[0].visible = false;
-            wrapper.instance.option('items', items);
+    QUnit.test('allItems.visible: true -> item1.visible: false -> treeview.option("items", items)', function(assert) {
+        const items = [ { text: 'item1' }, { text: 'item2' } ];
+        const wrapper = new TreeViewTestWrapper({ items: items });
+        items[0].visible = false;
+        wrapper.instance.option('items', items);
 
-            const $nodes = wrapper.getNodes();
-            assert.equal(wrapper.hasInvisibleClass($nodes.eq(0)), true, '0 node has invisible class');
-            assert.equal(wrapper.hasInvisibleClass($nodes.eq(1)), false, '1 node has no invisible class');
-        });
+        const $nodes = wrapper.getNodes();
+        assert.equal(wrapper.hasInvisibleClass($nodes.eq(0)), true, '0 node has invisible class');
+        assert.equal(wrapper.hasInvisibleClass($nodes.eq(1)), false, '1 node has no invisible class');
     });
 });
