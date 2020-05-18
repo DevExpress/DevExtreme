@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import translator from 'animation/translator';
 import fx from 'animation/fx';
-import { SchedulerTestWrapper } from './helpers.js';
+import { SchedulerTestWrapper, createWrapper } from './helpers.js';
 import themes from 'ui/themes';
 import { CompactAppointmentsHelper } from 'ui/scheduler/compactAppointmentsHelper';
 import Widget from 'ui/widget/ui.widget';
@@ -23,6 +23,55 @@ const ADAPTIVE_COLLECTOR_DEFAULT_SIZE = 28;
 const ADAPTIVE_COLLECTOR_BOTTOM_OFFSET = 40;
 const ADAPTIVE_COLLECTOR_RIGHT_OFFSET = 5;
 const COMPACT_THEME_ADAPTIVE_COLLECTOR_RIGHT_OFFSET = 1;
+
+const integrationCollectorConfig = {
+    beforeEach: function() {
+        fx.off = true;
+    },
+    afterEach: function() {
+        fx.off = false;
+    }
+};
+
+QUnit.module('Integration: collector', integrationCollectorConfig, () => {
+    QUnit.test('Start date should be equal targetedAppointmentData.startDate in appointment popup form in case recurrent appointment(T882652)', function(assert) {
+        const data = [{
+            text: '1',
+            startDate: new Date(2017, 4, 16, 9, 30),
+            endDate: new Date(2017, 4, 16, 11),
+
+        }, {
+            text: '2',
+            startDate: new Date(2017, 4, 16, 9, 30),
+            endDate: new Date(2017, 4, 16, 11),
+
+        }, {
+            text: 'Recurrence',
+            startDate: new Date(2017, 4, 1, 9, 30),
+            endDate: new Date(2017, 4, 1, 11),
+            recurrenceRule: 'FREQ=DAILY'
+        }];
+
+        const scheduler = createWrapper({
+            dataSource: data,
+            views: ['month'],
+            currentView: 'month',
+            currentDate: new Date(2017, 4, 25),
+            height: 600,
+            onAppointmentFormOpening: e => {
+                const startDate = e.form.getEditor('startDate').option('value');
+                assert.equal(startDate.getDate(), 16, 'Recurrence appointment date should be display equal targetedAppointmentData date in form');
+            }
+        });
+
+        scheduler.appointments.compact.click();
+        assert.equal(scheduler.tooltip.getDateText(),
+            'May 16 9:30 AM - 11:00 AM', 'Recurrence appointment date should be display equal targetedAppointmentData date in tooltip');
+
+        scheduler.tooltip.clickOnItem();
+        scheduler.appointmentPopup.dialog.clickEditAppointment();
+    });
+});
 
 QUnit.module('Integration: Appointments Collector Base Tests', {
     beforeEach: function() {
