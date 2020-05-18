@@ -1703,6 +1703,38 @@ QUnit.module('State Storing with real controllers', {
         // assert
         assert.strictEqual(customSaveCallCount, 0, 'customSave is not fired');
     });
+
+    QUnit.test('searchPanel.text should not be ignored (T887758)', function(assert) {
+        // arrange
+        const customSave = sinon.spy();
+
+        this.setupDataGridModules({
+            dataSource: [{ id: 1 }, { id: 2 }],
+            searchPanel: {
+                visible: true,
+                text: '1'
+            },
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return null;
+                },
+                customSave
+            },
+        });
+
+        this.clock.tick();
+
+        // act
+        this.refresh();
+        this.clock.tick(2000);
+
+        // assert
+        assert.ok(customSave.calledOnce, 'customSave is called once');
+        assert.strictEqual(customSave.getCall(0).args[0].searchText, '1', 'customSave is called with the searchPanel.text initial value');
+        assert.strictEqual(this.option('searchPanel.text'), '1', 'searchPanel.text equals its initial value');
+    });
 });
 
 QUnit.module('State Storing for filterPanel', {
