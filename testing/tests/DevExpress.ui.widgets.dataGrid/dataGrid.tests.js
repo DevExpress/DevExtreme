@@ -9818,6 +9818,36 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.deepEqual(selectedKeys, [1]);
         assert.notOk(onSelectionChangedHandler.called, 'onSelectionChanged is not called');
     });
+
+    QUnit.test('Data rows should not be scrolled on refresh (T884308)', function(assert) {
+        // arrange
+        const onScrollHandler = sinon.spy();
+        const generateData = function() {
+            const data = [];
+            for(let i = 0; i < 100; i++) {
+                data.push({
+                    id: i + 1
+                });
+            }
+            return data;
+        };
+        const gridOptions = {
+            dataSource: generateData(),
+            height: 400,
+            keyExpr: 'id',
+            scrolling: {
+                mode: 'virtual'
+            }
+        };
+        const dataGrid = createDataGrid(gridOptions);
+        this.clock.tick();
+        dataGrid.getScrollable().on('scroll', onScrollHandler);
+        dataGrid.refresh();
+        this.clock.tick();
+
+        // assert
+        assert.notOk(onScrollHandler.called, 'onScroll handler is not called');
+    });
 });
 
 
