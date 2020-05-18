@@ -204,6 +204,9 @@ module.exports = {
         { import: '../button', type: 'index' },
         { import: '../button/sizes', type: 'index' },
         { import: '../common', type: 'index' },
+        { regex: /@mixin dx-icon-sizing\(\$MATERIAL_BUTTON_ICON_SIZE\),/, replacement: '@include dx-icon-sizing($MATERIAL_BUTTON_ICON_SIZE);' },
+        { regex: /(0|2px|_PADDING),/g, replacement: '$1;' },
+
     ],
     'popover': [
         { import: '../overlay/colors', type: 'colors' },

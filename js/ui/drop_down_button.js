@@ -23,6 +23,7 @@ const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
 const DROP_DOWN_BUTTON_CONTENT = 'dx-dropdownbutton-content';
 const DROP_DOWN_BUTTON_ACTION_CLASS = 'dx-dropdownbutton-action';
 const DROP_DOWN_BUTTON_TOGGLE_CLASS = 'dx-dropdownbutton-toggle';
+const DROP_DOWN_BUTTON_HAS_ARROW_CLASS = 'dx-dropdownbutton-has-arrow';
 const DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS = 'dx-dropdownbutton-popup-wrapper';
 const DX_BUTTON_TEXT_CLASS = 'dx-button-text';
 const DX_ICON_RIGHT_CLASS = 'dx-icon-right';
@@ -158,6 +159,7 @@ const DropDownButton = Widget.inherit({
         this.callBase();
         this.$element().addClass(DROP_DOWN_BUTTON_CLASS);
         this._renderButtonGroup();
+        this._updateArrowClass();
         this._loadSelectedItem().done(this._updateActionButton.bind(this));
     },
 
@@ -426,6 +428,11 @@ const DropDownButton = Widget.inherit({
         this._bindInnerWidgetOptions(this._buttonGroup, 'buttonGroupOptions');
     },
 
+    _updateArrowClass() {
+        const hasArrow = this.option('splitButton') || this.option('showArrowIcon');
+        this.$element().toggleClass(DROP_DOWN_BUTTON_HAS_ARROW_CLASS, hasArrow);
+    },
+
     toggle(visible) {
         if(!this._popup) {
             this._renderPopup();
@@ -518,6 +525,7 @@ const DropDownButton = Widget.inherit({
                 this._selectModeChanged(value);
                 break;
             case 'splitButton':
+                this._updateArrowClass();
                 this._renderButtonGroup();
                 break;
             case 'displayExpr':
@@ -564,6 +572,7 @@ const DropDownButton = Widget.inherit({
                 this._actionButtonOptionChanged(args);
                 break;
             case 'showArrowIcon':
+                this._updateArrowClass();
                 this._buttonGroup.repaint();
                 this._popup && this._popup.repaint();
                 break;
