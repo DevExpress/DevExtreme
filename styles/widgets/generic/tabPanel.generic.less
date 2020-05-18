@@ -74,6 +74,20 @@
         background-color: @tabs-tab-bg;
         color: @tabs-border-color;
 
+        .dx-tab {
+            width: 140px;
+            color: @tabs-border-color;
+
+            .dx-tab-content {
+                color: @tabs-tab-color;
+            }
+
+            &:after,
+            &:before {
+                content: none;
+            }
+        }
+
         .dx-tabs-nav-button {
             color: @tabs-border-color;
         }
@@ -87,20 +101,6 @@
         .dx-tabs-wrapper {
             display: block;
             border: none;
-        }
-    }
-
-    .dx-tab {
-        width: 140px;
-        color: @tabs-border-color;
-
-        .dx-tab-content {
-            color: @tabs-tab-color;
-        }
-
-        &:after,
-        &:before {
-            content: none;
         }
     }
 
