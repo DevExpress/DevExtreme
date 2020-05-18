@@ -29,30 +29,30 @@ import 'generic_light.css!';
 QUnit.testStart(function() {
     const markup =
         '<div id="lookup"></div>\
-            <div id="secondLookup"></div>\
-            <div id="thirdLookup"></div>\
-            <div id="fourthLookup">\
-                <div data-options="dxTemplate: { name: \'test\' }">\
-                    <span data-bind="text: $data.id"></span>- <span data-bind="text: $data.caption"></span>\
-                </div>\
+        <div id="secondLookup"></div>\
+        <div id="thirdLookup"></div>\
+        <div id="fourthLookup">\
+            <div data-options="dxTemplate: { name: \'test\' }">\
+                <span data-bind="text: $data.id"></span>- <span data-bind="text: $data.caption"></span>\
             </div>\
-            <div id="widget"></div>\
-            <div id="widthRootStyle" style="width: 300px;"></div>\
-            <div id="lookupOptions">\
-                <div data-options="dxTemplate: { name: \'customTitle\' }">testTitle</div>\
-                <div data-options="dxTemplate: { name: \'testGroupTemplate\' }">testGroupTemplate</div>\
+        </div>\
+        <div id="widget"></div>\
+        <div id="widthRootStyle" style="width: 300px;"></div>\
+        <div id="lookupOptions">\
+            <div data-options="dxTemplate: { name: \'customTitle\' }">testTitle</div>\
+            <div data-options="dxTemplate: { name: \'testGroupTemplate\' }">testGroupTemplate</div>\
+        </div>\
+        \
+        <div id="lookupFieldTemplate">\
+            <div data-options="dxTemplate: { name: \'field\' }">\
+                <span>test</span>\
             </div>\
-            \
-            <div id="lookupFieldTemplate">\
-                <div data-options="dxTemplate: { name: \'field\' }">\
-                    <span>test</span>\
-                </div>\
+        </div>\
+        \
+        <div id="lookupWithFieldTemplate">\
+            <div data-options="dxTemplate: {name: \'field\'}">\
             </div>\
-            \
-            <div id="lookupWithFieldTemplate">\
-                <div data-options="dxTemplate: {name: \'field\'}">\
-                </div>\
-            </div>';
+        </div>';
 
     $('#qunit-fixture').html(markup);
 });
@@ -71,6 +71,7 @@ const LIST_GROUP_HEADER_CLASS = 'dx-list-group-header';
 const LOOKUP_SEARCH_CLASS = 'dx-lookup-search';
 const LOOKUP_SEARCH_WRAPPER_CLASS = 'dx-lookup-search-wrapper';
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
+const CLEAR_BUTTON_CLASS = 'dx-popup-clear';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
@@ -223,47 +224,6 @@ QUnit.module('Lookup', {
             .dxLookup('instance');
 
         assert.strictEqual(lookup._list, undefined, 'List dataSource');
-    });
-
-    QUnit.test('onContentReady', function(assert) {
-        let count = 0;
-        const load = $.Deferred();
-        const items = [1, 2, 3];
-
-        const instance = $('#thirdLookup').dxLookup({
-            onContentReady: function() { count++; },
-            dataSource: {
-                load: function() {
-                    return load.promise();
-                }
-            },
-            deferRendering: false,
-            searchTimeout: 0,
-            animation: {},
-            cleanSearchOnOpening: false
-        }).dxLookup('instance');
-        count = 0;
-
-        instance.open();
-        assert.equal(count, 0, 'onContentReady fired after rendering');
-
-        load.resolve(items);
-        assert.equal(count, 1, 'onContentReady fired after dataSource load');
-
-        instance.close();
-        instance.open();
-
-        assert.equal(count, 1, 'onContentReady does not fired after second show popup');
-
-        instance._searchBox.option('value', '2');
-
-        assert.equal(count, 2, 'onContentReady fired after search something');
-
-        instance.close();
-        assert.equal(count, 2, 'onContentReady does not fired after hide popup with search results');
-
-        instance.open();
-        assert.equal(count, 2, 'onContentReady does not fired after show popup with search results');
     });
 
     QUnit.test('search value should be cleared after popup close for better UX (T253304)', function(assert) {
@@ -1166,7 +1126,7 @@ QUnit.module('Lookup', {
             })
             .dxLookup('instance');
 
-        const $clearButton = $(lookup.content()).parent().find('.dx-popup-clear');
+        const $clearButton = $(lookup.content()).parent().find(toSelector(CLEAR_BUTTON_CLASS));
         $clearButton.trigger('dxclick');
 
         assert.equal(valueChangedHandler.callCount, 1, 'valueChangedHandler has been called');
@@ -2002,6 +1962,24 @@ QUnit.module('options', {
 
         assert.equal($(instance.content()).find('.' + LOOKUP_SEARCH_WRAPPER_CLASS).length, 1, 'search wrapper is rendered');
     });
+
+    QUnit.test('clear button option runtime change', function(assert) {
+        const getClearButton = (instance) => $(instance.content()).parent().find(toSelector(CLEAR_BUTTON_CLASS)).get(0);
+
+        const lookup = $('#lookup')
+            .dxLookup({
+                deferRendering: false,
+                showClearButton: true
+            })
+            .dxLookup('instance');
+
+        let $clearButton = getClearButton(lookup);
+        assert.ok($clearButton, 'clearButton is rendered');
+
+        lookup.option('showClearButton', false);
+        $clearButton = getClearButton(lookup);
+        assert.notOk($clearButton, 'clearButton is not rendered after option runtime change');
+    });
 });
 
 QUnit.module('popup options', {
@@ -2274,6 +2252,41 @@ QUnit.module('popup options', {
         } finally {
             $rootLookup.remove();
         }
+    });
+
+    ['onTitleRendered', 'closeOnOutsideClick'].forEach(option => {
+        QUnit.test(`${option} should be passed to the popup`, function(assert) {
+            const stub = sinon.stub();
+            const fullOptionName = `dropDownOptions.${option}`;
+
+            const instance = $('#lookup').dxLookup({
+                [fullOptionName]: stub,
+                deferRendering: false
+            }).dxLookup('instance');
+            const popup = instance._popup;
+
+            assert.strictEqual(popup.option(option), stub, `${option} is passed to the popup on init`);
+
+            instance.option(fullOptionName, null);
+            assert.strictEqual(popup.option(option), null, `${option} is passed to the popup after runtime change`);
+        });
+    });
+
+    QUnit.test('animation option should be passed to the popup', function(assert) {
+        const animationStub = {
+            show: { type: 'slide', duration: 400 }
+        };
+
+        const instance = $('#lookup').dxLookup({
+            animation: animationStub,
+            deferRendering: false
+        }).dxLookup('instance');
+        const popup = instance._popup;
+
+        assert.deepEqual(popup.option('animation'), animationStub, 'animation option is passed to the popup on init');
+
+        instance.option('animation', null);
+        assert.strictEqual(popup.option('animation'), null, 'animation option is passed to the popup after runtime change');
     });
 });
 
@@ -3468,4 +3481,203 @@ QUnit.module('Events', {
         assert.ok(initialScrollStub.notCalled, 'initial handled does not invoked');
         assert.ok(newScrollStub.calledOnce, 'onScroll event handled');
     });
+
+    QUnit.test('onPageLoading handler should be passed to the list', function(assert) {
+        const pageLoadingHandler = sinon.stub();
+
+        const instance = $('#lookup').dxLookup({
+            deferRendering: false,
+            onPageLoading: pageLoadingHandler
+        }).dxLookup('instance');
+
+        const list = instance._list;
+        assert.strictEqual(list.option('onPageLoading'), pageLoadingHandler, 'onPageLoading handler is passed on the init');
+
+        instance.option('onPageLoading', null);
+        assert.strictEqual(list.option('onPageLoading'), null, 'onPageLoading handler is passed after runtime change');
+    });
+
+    QUnit.skip('onPageLoading handler should be passed to the list - subscription by "on" method', function(assert) {
+        const pageLoadingHandler = sinon.stub();
+
+        const instance = $('#lookup').dxLookup({
+            deferRendering: false,
+        }).dxLookup('instance');
+        instance.on('pageLoading', pageLoadingHandler);
+
+        const list = instance._list;
+        assert.strictEqual(list.option('onPageLoading'), pageLoadingHandler, 'onPageLoading handler is passed on the init');
+
+        instance.off('pageLoading', pageLoadingHandler);
+        assert.strictEqual(list.option('onPageLoading'), null, 'onPageLoading handler is passed after runtime change');
+    });
+
+    QUnit.test('onPullRefresh handler should be passed to the list', function(assert) {
+        const pullRefreshHandler = sinon.stub();
+
+        const instance = $('#lookup').dxLookup({
+            deferRendering: false,
+            onPullRefresh: pullRefreshHandler
+        }).dxLookup('instance');
+
+        const list = instance._list;
+        assert.strictEqual(list.option('onPullRefresh'), pullRefreshHandler, 'onPullRefresh handler is passed on the init');
+
+        instance.option('onPullRefresh', null);
+        assert.strictEqual(list.option('onPullRefresh'), null, 'onPullRefresh handler is passed after runtime change');
+    });
+
+    QUnit.skip('onPullRefresh handler should be passed to the list - subscription by "on" method', function(assert) {
+        const pullRefreshHandler = sinon.stub();
+
+        const instance = $('#lookup').dxLookup({
+            deferRendering: false,
+        }).dxLookup('instance');
+        instance.on('pullRefresh', pullRefreshHandler);
+
+        const list = instance._list;
+        assert.strictEqual(list.option('onPullRefresh'), pullRefreshHandler, 'onPullRefresh handler is passed on the init');
+
+        instance.off('pullRefresh', pullRefreshHandler);
+        assert.strictEqual(list.option('onPullRefresh'), null, 'onPullRefresh handler is passed after runtime change');
+    });
 });
+
+QUnit.module('onContentReady', {
+    beforeEach: function() {
+        fx.off = true;
+        executeAsyncMock.setup();
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        executeAsyncMock.teardown();
+        this.clock.restore();
+        fx.off = false;
+    }
+}, () => {
+    QUnit.test('Basic contentReady usage - subscription by "on" method', function(assert) {
+        const contentReadyHandler = sinon.spy();
+        const load = $.Deferred();
+        const items = [1, 2, 3];
+
+        const instance = $('#lookup').dxLookup({
+            dataSource: {
+                load: function() {
+                    return load.promise();
+                }
+            },
+            deferRendering: true,
+            searchTimeout: 0,
+            animation: {},
+            cleanSearchOnOpening: false
+        }).dxLookup('instance');
+        instance.on('contentReady', contentReadyHandler);
+
+        instance.open();
+        assert.ok(contentReadyHandler.calledOnce, 'onContentReady is fired after list rendering');
+
+        load.resolve(items);
+        assert.strictEqual(contentReadyHandler.callCount, 2, 'onContentReady is fired after dataSource load');
+
+        instance.close();
+        instance.open();
+
+        assert.strictEqual(contentReadyHandler.callCount, 2, 'onContentReady is not fired after second popup showing');
+
+        instance._searchBox.option('value', '2');
+
+        assert.strictEqual(contentReadyHandler.callCount, 3, 'onContentReady is fired after search');
+
+        instance.close();
+        assert.strictEqual(contentReadyHandler.callCount, 3, 'onContentReady is not fired after popup with search results hiding');
+
+        instance.open();
+        assert.strictEqual(contentReadyHandler.callCount, 3, 'onContentReady is not fired after popup with search results showing');
+    });
+
+    QUnit.skip('onContentReady should be fired after input rendering when deferRendering=true', function(assert) {
+        assert.expect(2);
+
+        $('#lookup').dxLookup({
+            onContentReady: (e) => {
+                assert.ok(true, 'contentReady is fired after input rendering');
+                assert.strictEqual(e.component._$field.get(0), $('.dx-lookup-field').get(0), 'input is rendered');
+            },
+            deferRendering: true
+        });
+    });
+
+    QUnit.test('onContentReady should be fired after list rendering when deferRendering=true', function(assert) {
+        assert.expect(2);
+
+        const instance = $('#lookup').dxLookup({
+            deferRendering: true
+        }).dxLookup('instance');
+
+        instance.option('onContentReady', () => {
+            assert.ok(true, 'contentReady is fired after list rendering');
+            assert.strictEqual(instance._list.NAME, 'dxList', 'list is rendered');
+        });
+
+        instance.open();
+    });
+
+    QUnit.test('onContentReady should be fired after input and list rendering when deferRendering=false', function(assert) {
+        assert.expect(3);
+
+        $('#lookup').dxLookup({
+            onContentReady: (e) => {
+                assert.ok(true, 'contentReady is fired');
+                assert.strictEqual(e.component._$field.get(0), $('.dx-lookup-field').get(0), 'input is rendered');
+                assert.ok(e.component._$list, 'list is rendered');
+            },
+            deferRendering: false
+        });
+    });
+
+    QUnit.test('onContentReady should be fired after new items loading', function(assert) {
+        assert.expect(2);
+
+        const load = $.Deferred();
+        const items = [1, 2, 3];
+
+        const instance = $('#lookup').dxLookup({
+            dataSource: {
+                load: function() {
+                    return load.promise();
+                }
+            },
+            deferRendering: false
+        }).dxLookup('instance');
+
+        instance.option('onContentReady', (e) => {
+            assert.ok(true, 'contentReady is fired');
+            assert.strictEqual(instance._list.option('items').length, 3, 'items is loaded');
+        });
+
+        load.resolve(items);
+    });
+
+    QUnit.test('onContentReady should be fired after items filtering', function(assert) {
+        assert.expect(2);
+
+        const items = [1, 2, 3];
+
+        const instance = $('#lookup').dxLookup({
+            dataSource: items,
+            deferRendering: false,
+            searchTimeout: 0,
+            animation: {},
+            cleanSearchOnOpening: false
+        }).dxLookup('instance');
+
+        instance.option('onContentReady', (e) => {
+            assert.ok(true, 'contentReady is fired');
+            const items = instance._list.$element().find('.dx-list-item');
+            assert.strictEqual(items.length, 1, 'items are filtered');
+        });
+
+        instance._searchBox.option('value', '2');
+    });
+});
+
