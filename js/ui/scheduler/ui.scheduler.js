@@ -780,7 +780,6 @@ const Scheduler = Widget.inherit({
                 break;
             case 'dataSource':
                 this._initDataSource();
-                this._customizeStoreLoadOptions();
                 this._appointmentModel.setDataSource(this._dataSource);
 
                 this._postponeResourceLoading().done((resources) => {
@@ -1205,9 +1204,6 @@ const Scheduler = Widget.inherit({
 
         this._loadedResources = [];
 
-        this._proxiedCustomizeStoreLoadOptionsHandler = this._customizeStoreLoadOptionsHandler.bind(this);
-        this._customizeStoreLoadOptions();
-
         this.$element()
             .addClass(WIDGET_CLASS)
             .toggleClass(WIDGET_WIN_NO_TOUCH_CLASS, !!(browser.msie && touch));
@@ -1411,10 +1407,6 @@ const Scheduler = Widget.inherit({
         return result;
     },
 
-    _customizeStoreLoadOptions: function() {
-        this._dataSource && this._dataSource.on('customizeStoreLoadOptions', this._proxiedCustomizeStoreLoadOptionsHandler);
-    },
-
     _dispose: function() {
         this._appointmentTooltip && this._appointmentTooltip.dispose();
         this.hideAppointmentPopup();
@@ -1423,17 +1415,7 @@ const Scheduler = Widget.inherit({
         this._asyncTemplatesTimers.forEach(clearTimeout);
         this._asyncTemplatesTimers = [];
 
-        this._dataSource && this._dataSource.off('customizeStoreLoadOptions', this._proxiedCustomizeStoreLoadOptionsHandler);
         this.callBase();
-    },
-
-    _customizeStoreLoadOptionsHandler: function(options) {
-        // TODO: deprecated since 16.1 (manually)
-        options.storeLoadOptions.dxScheduler = {
-            startDate: this.getStartViewDate(),
-            endDate: this.getEndViewDate(),
-            resources: this.option('resources')
-        };
     },
 
     _initActions: function() {
