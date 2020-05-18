@@ -194,7 +194,7 @@
         "dxScheduler-openAppointment": "Open appointment",
 
         "dxScheduler-recurrenceNever": "Never",
-        "dxScheduler-recurrenceMinutely": "Minutely",
+        "dxScheduler-recurrenceMinutely": "Every minute",
         "dxScheduler-recurrenceHourly": "Hourly",
         "dxScheduler-recurrenceDaily": "Daily",
         "dxScheduler-recurrenceWeekly": "Weekly",
