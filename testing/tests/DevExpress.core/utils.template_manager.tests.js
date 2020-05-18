@@ -1,9 +1,8 @@
 import domUtils from 'core/utils/dom';
 import type from 'core/utils/type';
-import common from 'core/utils/common';
 import renderer from 'core/renderer';
 import {
-    findTemplateByDevice, addOneRenderedCall, templateKey,
+    suitableTemplatesByName, addOneRenderedCall, templateKey,
     getNormalizedTemplateArgs, validateTemplateSource,
     defaultCreateElement, acquireIntegrationTemplate, acquireTemplate,
 } from 'core/utils/template_manager';
@@ -11,6 +10,7 @@ import { Template } from 'core/templates/template';
 import { TemplateBase } from 'core/templates/template_base';
 import { EmptyTemplate } from 'core/templates/empty_template';
 import { ChildDefaultTemplate } from 'core/templates/child_default_template';
+import devices from 'core/devices';
 
 QUnit.module('TemplateManager utils', {
     beforeEach: function() {
@@ -47,16 +47,32 @@ QUnit.test('#templateKey', function(assert) {
     isRenderer.restore();
 });
 
-QUnit.test('#findTemplateByDevice', function(assert) {
-    const findBestMatches = sinon.stub(common, 'findBestMatches').returns('bestTemplate');
-    const templates = ['template1', 'b', 'template2'];
+QUnit.test('#suitableTemplatesByName', function(assert) {
+    const currentDeviceMethod = sinon.stub(devices, 'current').returns({ testDevice: true });
+    const templates = [
+        {
+            element: 'el1',
+            options: { name: 'a' }
+        },
+        {
+            element: 'el2',
+            options: { name: 'a', testDevice: true }
+        },
+        {
+            element: 'el3',
+            options: { name: 'b', testDevice: true }
+        },
+        {
+            element: 'el4',
+            options: { name: 'c', testDevice: false }
+        }
+    ];
 
-    const result = findTemplateByDevice(templates);
+    const result = suitableTemplatesByName(templates);
 
-    assert.strictEqual(result, 'b', 'should return best matches');
-    assert.strictEqual(this.$remove.callCount, 2, 'should return calls remove method only for non best matches');
+    assert.deepEqual(result, { a: 'el2', b: 'el3' }, 'should return suitable templates');
 
-    findBestMatches.restore();
+    currentDeviceMethod.restore();
 });
 
 QUnit.test('#addOneRenderedCall', function(assert) {

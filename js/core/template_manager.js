@@ -2,20 +2,20 @@ import $ from './renderer';
 import { isDefined, isFunction, isRenderer } from './utils/type';
 import { noop } from './utils/common';
 import { extend } from './utils/extend';
-import { Error, log } from './errors';
-import { getElementOptions } from './utils/dom';
+import { log } from './errors';
+import { findTemplates } from './templates/data_options';
 import { FunctionTemplate } from './templates/function_template';
 import { EmptyTemplate } from './templates/empty_template';
 import { camelize } from './utils/inflector';
 import {
-    findTemplateByDevice, templateKey,
+    suitableTemplatesByName, templateKey,
     getNormalizedTemplateArgs, validateTemplateSource,
     defaultCreateElement, acquireTemplate,
 } from './utils/template_manager';
 
 const TEXT_NODE = 3;
 const ANONYMOUS_TEMPLATE_NAME = 'template';
-const TEMPLATE_SELECTOR = '[data-options*="dxTemplate"]';
+const TEMPLATE_OPTIONS_NAME = '[data-options*="dxTemplate"]';
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 const DEPRECATED_WIDGET_NAMES = { button: true, tabs: true, dropDownMenu: true };
 const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) => {
@@ -86,36 +86,23 @@ export default class TemplateManager {
     }
 
     _extractTemplates($el) {
-        const templateElements = $el.contents().filter(TEMPLATE_SELECTOR);
-        const templatesMap = {};
+        const templates = findTemplates($el, TEMPLATE_OPTIONS_NAME);
+        const suitableTemplates = suitableTemplatesByName(templates);
 
-        templateElements.each((_, template) => {
-            const templateOptions = getElementOptions(template).dxTemplate;
-
-            if(!templateOptions) {
-                return;
+        templates.forEach(({ element, options: { name } }) => {
+            if(element === suitableTemplates[name]) {
+                $(element).addClass(TEMPLATE_WRAPPER_CLASS).detach();
+            } else {
+                $(element).remove();
             }
-
-            if(!templateOptions.name) {
-                throw Error('E0023');
-            }
-
-            $(template).addClass(TEMPLATE_WRAPPER_CLASS).detach();
-            templatesMap[templateOptions.name] = templatesMap[templateOptions.name] || [];
-            templatesMap[templateOptions.name].push(template);
         });
 
-        const templates = [];
-        for(const templateName in templatesMap) {
-            const deviceTemplate = findTemplateByDevice(templatesMap[templateName]);
-            if(deviceTemplate) {
-                templates.push({
-                    name: templateName,
-                    template: this._createTemplate(deviceTemplate),
-                });
-            }
-        }
-        return templates;
+        return Object.keys(suitableTemplates).map((name) => {
+            return {
+                name,
+                template: this._createTemplate(suitableTemplates[name]),
+            };
+        });
     }
 
     _extractAnonymousTemplate($el) {

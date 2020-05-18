@@ -1,28 +1,38 @@
-import $ from '../renderer';
-import { isRenderer, isFunction } from './type';
-import { findBestMatches } from './common';
-import { extend } from './extend';
-import { ChildDefaultTemplate } from '../templates/child_default_template';
-import { TemplateBase } from '../templates/template_base';
-import { EmptyTemplate } from '../templates/empty_template';
-import { getElementOptions, normalizeTemplateElement } from './dom';
 import devices from '../devices';
+import $ from '../renderer';
+import { ChildDefaultTemplate } from '../templates/child_default_template';
+import { EmptyTemplate } from '../templates/empty_template';
 import { Template } from '../templates/template';
+import { TemplateBase } from '../templates/template_base';
+import { groupBy } from './array';
+import { findBestMatches } from './common';
+import { normalizeTemplateElement } from './dom';
+import { Error } from '../errors';
+import { extend } from './extend';
+import { isFunction, isRenderer } from './type';
 
-export const findTemplateByDevice = (templates) => {
-    const suitableTemplate = findBestMatches(
-        devices.current(),
-        templates,
-        template => getElementOptions(template).dxTemplate
-    )[0];
+export const suitableTemplatesByName = (rawTemplates) => {
+    const templatesMap = groupBy(rawTemplates, (template) => template.options.name);
 
-    templates.forEach((template) => {
-        if(template !== suitableTemplate) {
-            $(template).remove();
+    if(templatesMap[undefined]) {
+        throw Error('E0023');
+    }
+
+    const result = {};
+
+    Object.keys(templatesMap).forEach((name) => {
+        const suitableTemplate = findBestMatches(
+            devices.current(),
+            templatesMap[name],
+            template => template.options
+        )[0]?.element;
+
+        if(suitableTemplate) {
+            result[name] = suitableTemplate;
         }
     });
 
-    return suitableTemplate;
+    return result;
 };
 
 export const addOneRenderedCall = (template) => {

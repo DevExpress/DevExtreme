@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import commonUtils from '../../core/utils/common';
-import { getElementOptions } from '../../core/utils/dom';
+import { findTemplates } from '../../core/templates/data_options';
 import { getPublicElement } from '../../core/element';
 import domAdapter from '../../core/dom_adapter';
 import { isPlainObject, isFunction, isDefined } from '../../core/utils/type';
@@ -31,7 +31,7 @@ const ITEM_CONTENT_PLACEHOLDER_CLASS = 'dx-item-content-placeholder';
 const ITEM_DATA_KEY = 'dxItemData';
 const ITEM_INDEX_KEY = 'dxItemIndex';
 const ITEM_TEMPLATE_ID_PREFIX = 'tmpl-';
-const ITEMS_SELECTOR = '[data-options*=\'dxItem\']';
+const ITEMS_OPTIONS_NAME = 'dxItem';
 const SELECTED_ITEM_CLASS = 'dx-item-selected';
 const ITEM_RESPONSE_WAIT_CLASS = 'dx-item-response-wait';
 const EMPTY_COLLECTION = 'dx-empty-collection';
@@ -208,31 +208,30 @@ const CollectionWidget = Widget.inherit({
     },
 
     _initItemsFromMarkup: function() {
-        const $items = this.$element().contents().filter(ITEMS_SELECTOR);
-        if(!$items.length || this.option('items').length) {
+        const rawItems = findTemplates(this.$element(), ITEMS_OPTIONS_NAME);
+
+        if(!rawItems.length || this.option('items').length) {
             return;
         }
 
-        const items = [].slice.call($items).map((item) => {
-            const $item = $(item);
-            const result = getElementOptions(item).dxItem;
-            const isTemplateRequired = $item.html().trim() && !result.template;
+        const items = rawItems.map(({ element, options }) => {
+            const isTemplateRequired = /\S/.test(element.innerHTML) && !options.template;
 
             if(isTemplateRequired) {
-                result.template = this._prepareItemTemplate($item);
+                options.template = this._prepareItemTemplate(element);
             } else {
-                $item.remove();
+                $(element).remove();
             }
 
-            return result;
+            return options;
         });
 
         this.option('items', items);
     },
 
-    _prepareItemTemplate: function($item) {
+    _prepareItemTemplate: function(item) {
         const templateId = ITEM_TEMPLATE_ID_PREFIX + new Guid();
-        const $template = $item
+        const $template = $(item)
             .detach()
             .clone()
             .removeAttr('data-options')
