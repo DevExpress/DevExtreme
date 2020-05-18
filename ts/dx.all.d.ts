@@ -2302,7 +2302,7 @@ declare module DevExpress.ui {
         /** @name GridBaseColumn.falseText */
         falseText?: string;
         /** @name GridBaseColumn.filterOperations */
-        filterOperations?: Array<'=' | '<>' | '<' | '<=' | '>' | '>=' | 'notcontains' | 'contains' | 'startswith' | 'endswith' | 'between'>;
+        filterOperations?: Array<'=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between' | 'anyof' | 'noneof' | string>;
         /** @name GridBaseColumn.filterType */
         filterType?: 'exclude' | 'include';
         /** @name GridBaseColumn.filterValue */

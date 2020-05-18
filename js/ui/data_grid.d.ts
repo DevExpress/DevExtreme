@@ -1669,13 +1669,12 @@ export interface GridBaseColumn {
     falseText?: string;
     /**
      * @docid GridBaseColumn.filterOperations
-     * @type Array<string>
-     * @acceptValues "=" | "<>" | "<" | "<=" | ">" | ">=" | "notcontains" | "contains" | "startswith" | "endswith" | "between"
+     * @type Array<Enums.GridFilterOperations, string>
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    filterOperations?: Array<'=' | '<>' | '<' | '<=' | '>' | '>=' | 'notcontains' | 'contains' | 'startswith' | 'endswith' | 'between'>;
+    filterOperations?: Array<'=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between' | 'anyof' | 'noneof'>;
     /**
      * @docid GridBaseColumn.filterType
      * @type Enums.FilterType
