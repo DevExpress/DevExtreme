@@ -1,4 +1,3 @@
-import config from '../../core/config';
 import domAdapter from '../../core/dom_adapter';
 import $ from '../../core/renderer';
 import typeUtils from './type';
@@ -54,14 +53,6 @@ const closestCommonParent = function(startTarget, endTarget) {
             return $startParents.get(i);
         }
     }
-};
-
-const dataOptionsAttributeName = 'data-options';
-
-const getElementOptions = function(element) {
-    const optionsString = $(element).attr(dataOptionsAttributeName) || '';
-
-    return config().optionsParser(optionsString);
 };
 
 const extractTemplateMarkup = function(element) {
@@ -139,7 +130,6 @@ const createTextElementHiddenCopy = function(element, text, options) {
 };
 
 exports.resetActiveElement = resetActiveElement;
-exports.getElementOptions = getElementOptions; // TODO: extract
 exports.extractTemplateMarkup = extractTemplateMarkup; // TODO: extract
 exports.normalizeTemplateElement = normalizeTemplateElement; // TODO: extract
 exports.clearSelection = clearSelection;
