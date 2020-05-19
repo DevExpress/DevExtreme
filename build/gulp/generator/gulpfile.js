@@ -58,7 +58,7 @@ function addGenerationTask(
 ) {
     const frameworkDest = `artifacts/${frameworkName}`;
     const generator = require(`devextreme-generator/${frameworkName}-generator`).default;
-    let tsProject = null;
+    let tsProject = () => () => { };
     if(compileTs) {
         tsProject = ts.createProject(`build/gulp/generator/ts-configs/${frameworkName}.tsconfig.json`);
     }
@@ -69,7 +69,7 @@ function addGenerationTask(
         return gulp.src('js/**/*.tsx')
             .pipe(generateComponents(generator))
             .pipe(plumber(() => null))
-            .pipe(gulpIf(compileTs, () => tsProject({
+            .pipe(gulpIf(compileTs, tsProject({
                 error(e) {
                     if(!knownErrors.some(i => e.message.endsWith(i))) {
                         console.log(e.message);
@@ -77,7 +77,7 @@ function addGenerationTask(
                 },
                 finish() { }
             })))
-            .pipe(gulpIf(babelGeneratedFiles, ()=>babel()))
+            .pipe(gulpIf(babelGeneratedFiles, babel()))
             .pipe(gulp.dest(frameworkDest));
     });
 
