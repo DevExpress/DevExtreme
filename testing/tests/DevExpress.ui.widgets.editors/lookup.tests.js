@@ -3496,7 +3496,7 @@ QUnit.module('Events', {
         instance._list._scrollBottomHandler();
     });
 
-    QUnit.test('onPullRefresh handler should be hassed to the list', function(assert) {
+    QUnit.test('onPullRefresh handler should be passed to the list', function(assert) {
         assert.expect(1);
 
         const data = [1, 2, 3];
