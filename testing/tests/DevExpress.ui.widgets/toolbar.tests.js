@@ -70,9 +70,9 @@ QUnit.module('render', {
     QUnit.test('items - long labels', function(assert) {
         this.element.dxToolbar({
             items: [
-                { location: 'before', widget: 'button', options: { text: 'Before Button' } },
-                { location: 'before', widget: 'button', options: { text: 'Second Before Button' } },
-                { location: 'after', widget: 'button', options: { text: 'After Button' } },
+                { location: 'before', widget: 'dxButton', options: { text: 'Before Button' } },
+                { location: 'before', widget: 'dxButton', options: { text: 'Second Before Button' } },
+                { location: 'after', widget: 'dxButton', options: { text: 'After Button' } },
                 { location: 'center', text: 'Very very very very very very very very very very very long label' }
             ],
             width: '400px'
@@ -97,9 +97,9 @@ QUnit.module('render', {
     QUnit.test('items - long custom html', function(assert) {
         this.element.dxToolbar({
             items: [
-                { location: 'before', widget: 'button', options: { text: 'Before Button' } },
-                { location: 'before', widget: 'button', options: { text: 'Second Before Button' } },
-                { location: 'after', widget: 'button', options: { text: 'After Button' } },
+                { location: 'before', widget: 'dxButton', options: { text: 'Before Button' } },
+                { location: 'before', widget: 'dxButton', options: { text: 'Second Before Button' } },
+                { location: 'after', widget: 'dxButton', options: { text: 'After Button' } },
                 { location: 'center', html: '<b>Very very very very very very very very very very very long label</b>' }
             ],
             width: 400
@@ -335,7 +335,7 @@ QUnit.module('toolbar with menu', {
                 count++;
             },
             items: [
-                { location: 'menu', text: 'item2' }
+                { locateInMenu: 'always', text: 'item2' }
             ],
             submenuType: 'dropDownMenu'
         });
@@ -360,20 +360,20 @@ QUnit.module('toolbar with menu', {
         const instance = this.element.dxToolbar({
             submenuType: 'dropDownMenu',
             items: [
-                { location: 'menu', text: 'a', visible: true }
+                { locateInMenu: 'always', text: 'a', visible: true }
             ],
         }).dxToolbar('instance');
 
         assert.strictEqual(this.element.find('.' + DROP_DOWN_MENU_CLASS).length, 1, 'dropdown was rendered');
 
-        instance.option('items', [{ location: 'menu', text: 'a', visible: false }]);
+        instance.option('items', [{ locateInMenu: 'always', text: 'a', visible: false }]);
         assert.strictEqual(this.element.find('.' + DROP_DOWN_MENU_CLASS).length, 0, 'dropdown was not rendered');
     });
 
     QUnit.test('changing field of item in submenu', function(assert) {
         this.element.dxToolbar({
             items: [
-                { location: 'menu', disabled: true }
+                { locateInMenu: 'always', disabled: true }
             ],
             submenuType: 'actionSheet'
         });
@@ -387,7 +387,7 @@ QUnit.module('toolbar with menu', {
     QUnit.test('dropdown menu should have correct position', function(assert) {
         this.element.dxToolbar({
             items: [
-                { location: 'menu', disabled: true }
+                { locateInMenu: 'always', disabled: true }
             ],
             submenuType: 'dropDownMenu'
         });
@@ -1096,12 +1096,13 @@ QUnit.module('adaptivity', {
             items: [
                 { location: 'before', locateInMenu: 'auto', widget: 'dxButton', options: { text: 'test text' } },
                 { location: 'before', template: function() { return $('<div>').width(100); } },
-                { location: 'menu', text: 'test text' }
+                { locateInMenu: 'auto', text: 'test text' }
             ],
             width: 100
         });
 
-        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDown.dxDropDownMenu('instance');
+        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS);
+        const dropDown = $dropDown.dxDropDownMenu('instance');
 
         dropDown.open();
         dropDown.close();

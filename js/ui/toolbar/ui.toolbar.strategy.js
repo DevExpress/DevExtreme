@@ -58,7 +58,7 @@ const ToolbarStrategy = Class.inherit({
             const itemVisible = optionGetter(item, { functionsAsIs: true });
             const itemOverflow = overflowGetter(item, { functionsAsIs: true });
 
-            if(itemVisible !== false && (itemOverflow === 'auto' || itemOverflow === 'always')) {
+            if(itemVisible !== false && (itemOverflow === 'auto' || itemOverflow === 'always') || item.location === 'menu') {
                 result = true;
             }
         });
