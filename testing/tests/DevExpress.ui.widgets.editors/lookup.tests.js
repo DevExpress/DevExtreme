@@ -3472,7 +3472,7 @@ QUnit.module('Events', {
             }
         }).dxLookup('instance');
 
-        instance._list.scrollTo(50);
+        instance._list._scrollBottomHandler();
     });
 
     QUnit.test('onPageLoading handler should be passed to the list - subscription by "on" method', function(assert) {
@@ -3492,7 +3492,8 @@ QUnit.module('Events', {
         instance.on('pageLoading', (e) => {
             assert.ok(true, 'onPageLoading is fired');
         });
-        instance._list.scrollTo(50);
+
+        instance._list._scrollBottomHandler();
     });
 
     QUnit.test('onPullRefresh handler should be hassed to the list', function(assert) {
