@@ -638,7 +638,7 @@ QUnit.test('searchMode equals', function(assert) {
 });
 
 QUnit.module('Visibility data source property', () => {
-    QUnit.test('allItems.visible: default', function(assert) {
+    QUnit.test('Render items with default visibility', function(assert) {
         const wrapper = new TreeViewTestWrapper({ items: [
             { text: 'item1' },
             { text: 'item2' }
@@ -650,7 +650,7 @@ QUnit.module('Visibility data source property', () => {
 
     [true, false].forEach(visible => {
         // (T888410)
-        QUnit.test(`allItems.visible: ${visible}`, function(assert) {
+        QUnit.test(`Render items with visibility: ${visible}`, function(assert) {
             const wrapper = new TreeViewTestWrapper({ items: [
                 { text: 'item1', visible: visible },
                 { text: 'item2', visible: visible }
@@ -661,7 +661,7 @@ QUnit.module('Visibility data source property', () => {
         });
     });
 
-    QUnit.test('allItems.visible: true -> treeview.option(item1.visible: false) -> treeview.repaint()', function(assert) {
+    QUnit.test('Change item1 visibility: true -> false (via item visibility option and repaint)', function(assert) {
         const items = [ { text: 'item1' }, { text: 'item2' } ];
         const wrapper = new TreeViewTestWrapper({ items: items });
         wrapper.instance.option('items[0].visible', false);
@@ -672,7 +672,18 @@ QUnit.module('Visibility data source property', () => {
         assert.strictEqual(wrapper.hasInvisibleClass($nodes.eq(1)), false, '1 node has no invisible class');
     });
 
-    QUnit.test('allItems.visible: true -> item1.visible: false -> treeview.option("items", items)', function(assert) {
+    QUnit.test('Change item1 visibility: false -> true (via item visibility option and repaint)', function(assert) {
+        const items = [ { text: 'item1', visible: false }, { text: 'item2' } ];
+        const wrapper = new TreeViewTestWrapper({ items: items });
+        wrapper.instance.option('items[0].visible', true);
+        wrapper.instance.repaint();
+
+        const $nodes = wrapper.getNodes();
+        assert.strictEqual(wrapper.hasInvisibleClass($nodes.eq(0)), false, '0 node has no invisible class');
+        assert.strictEqual(wrapper.hasInvisibleClass($nodes.eq(1)), false, '1 node has no invisible class');
+    });
+
+    QUnit.test('Change item1 visibility: true -> false (via refreshing data source)', function(assert) {
         const items = [ { text: 'item1' }, { text: 'item2' } ];
         const wrapper = new TreeViewTestWrapper({ items: items });
         items[0].visible = false;
@@ -680,6 +691,17 @@ QUnit.module('Visibility data source property', () => {
 
         const $nodes = wrapper.getNodes();
         assert.strictEqual(wrapper.hasInvisibleClass($nodes.eq(0)), true, '0 node has invisible class');
+        assert.strictEqual(wrapper.hasInvisibleClass($nodes.eq(1)), false, '1 node has no invisible class');
+    });
+
+    QUnit.test('Change item1 visibility: false -> true (via refreshing data source)', function(assert) {
+        const items = [ { text: 'item1', visible: false }, { text: 'item2' } ];
+        const wrapper = new TreeViewTestWrapper({ items: items });
+        items[0].visible = true;
+        wrapper.instance.option('items', items);
+
+        const $nodes = wrapper.getNodes();
+        assert.strictEqual(wrapper.hasInvisibleClass($nodes.eq(0)), false, '0 node has no invisible class');
         assert.strictEqual(wrapper.hasInvisibleClass($nodes.eq(1)), false, '1 node has no invisible class');
     });
 });
