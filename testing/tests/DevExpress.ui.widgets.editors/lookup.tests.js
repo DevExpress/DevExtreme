@@ -2284,14 +2284,14 @@ QUnit.module('popup options', {
         };
 
         const instance = $('#lookup').dxLookup({
-            animation: animationStub,
+            'dropDownOptions.animation': animationStub,
             deferRendering: false
         }).dxLookup('instance');
         const popup = instance._popup;
 
         assert.deepEqual(popup.option('animation'), animationStub, 'animation option is passed to the popup on init');
 
-        instance.option('animation', null);
+        instance.option('dropDownOptions.animation', null);
         assert.strictEqual(popup.option('animation'), null, 'animation option is passed to the popup after runtime change');
     });
 });
@@ -3520,7 +3520,7 @@ QUnit.module('onContentReady', {
             },
             deferRendering: true,
             searchTimeout: 0,
-            animation: {},
+            'dropDownOptions.animation': {},
             cleanSearchOnOpening: false
         }).dxLookup('instance');
         instance.on('contentReady', contentReadyHandler);
@@ -3619,7 +3619,7 @@ QUnit.module('onContentReady', {
             dataSource: items,
             deferRendering: false,
             searchTimeout: 0,
-            animation: {},
+            'dropDownOptions.animation': {},
             cleanSearchOnOpening: false
         }).dxLookup('instance');
 
