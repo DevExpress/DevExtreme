@@ -221,7 +221,7 @@ module.exports = {
 
                     that.component.endUpdate();
 
-                    that.option('searchPanel.text', searchText || '');
+                    searchText && that.option('searchPanel.text', searchText);
 
                     that.option('filterValue', getFilterValue(that, state));
 
