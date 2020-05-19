@@ -597,6 +597,8 @@ Axis.prototype = {
 
     _adjustLabels: function(offset) {
         const that = this;
+        const options = that.getOptions();
+        const positionsAreConsistent = options.position === options.label.position;
         const maxSize = that._majorTicks.reduce(function(size, tick) {
             if(!tick.label) return size;
             const bBox = tick.labelRotationAngle ? vizUtils.rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle) : tick.labelBBox;
@@ -606,11 +608,11 @@ Axis.prototype = {
                 offset: _max(size.offset || 0, tick.labelOffset || 0)
             };
         }, {});
-        const additionalOffset = that._isHorizontal ? maxSize.height : maxSize.width;
+        const additionalOffset = positionsAreConsistent ? (that._isHorizontal ? maxSize.height : maxSize.width) : 0;
 
         that._adjustLabelsCoord(offset, maxSize.width);
 
-        return offset + additionalOffset + (additionalOffset && that._options.label.indentFromAxis) + maxSize.offset;
+        return offset + additionalOffset + (additionalOffset && that._options.label.indentFromAxis) + (positionsAreConsistent ? maxSize.offset : 0);
     },
 
     _getLabelAdjustedCoord: function(tick, offset, maxWidth) {
