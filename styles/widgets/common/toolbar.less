@@ -130,14 +130,6 @@
         right: auto;
         left: 0;
     }
-
-    .dx-toolbar-hidden-button-group {
-        .dx-buttongroup-wrapper {
-            .dx-buttongroup-item {
-                text-align: right;
-            }
-        }
-    }
 }
 
 .dx-toolbar-menu-section:empty {
@@ -215,6 +207,11 @@
             .dx-buttongroup-item {
                 border: none;
                 text-align: left;
+
+                .dx-rtl&,
+                .dx-rtl & {
+                    text-align: right;
+                }
             }
         }
     }
