@@ -3455,6 +3455,88 @@ QUnit.module('Events', {
         assert.ok(scrollStub.notCalled, 'onScroll event handler detached');
     });
 
+    QUnit.test('onPageLoading handler should be passed to the list', function(assert) {
+        assert.expect(1);
+
+        const data = [1, 2, 3];
+
+        const instance = $('#lookup').dxLookup({
+            deferRendering: false,
+            dataSource: {
+                store: data,
+                paginate: true,
+                pageSize: 1
+            },
+            onPageLoading: (e) => {
+                assert.ok(true, 'onPageLoading is fired');
+            }
+        }).dxLookup('instance');
+
+        instance._list.scrollTo(50);
+    });
+
+    QUnit.test('onPageLoading handler should be passed to the list - subscription by "on" method', function(assert) {
+        assert.expect(1);
+
+        const data = [1, 2, 3];
+
+        const instance = $('#lookup').dxLookup({
+            deferRendering: false,
+            dataSource: {
+                store: data,
+                paginate: true,
+                pageSize: 1
+            },
+        }).dxLookup('instance');
+
+        instance.on('pageLoading', (e) => {
+            assert.ok(true, 'onPageLoading is fired');
+        });
+        instance._list.scrollTo(50);
+    });
+
+    QUnit.test('onPullRefresh handler should be hassed to the list', function(assert) {
+        assert.expect(1);
+
+        const data = [1, 2, 3];
+
+        const instance = $('#lookup').dxLookup({
+            deferRendering: false,
+            dataSource: {
+                store: data,
+                paginate: true,
+                pageSize: 1
+            },
+            onPullRefresh: (e) => {
+                assert.ok(true, 'onPullRefresh is fired');
+            }
+        }).dxLookup('instance');
+
+        instance._list._pullDownHandler();
+    });
+
+    QUnit.test('onPullRefresh handler should be passed to the list - subscription by "on" method', function(assert) {
+        assert.expect(1);
+
+        const data = [1, 2, 3];
+
+        const instance = $('#lookup').dxLookup({
+            deferRendering: false,
+            dataSource: {
+                store: data,
+                paginate: true,
+                pageSize: 1
+            },
+            pullRefreshEnabled: true
+        }).dxLookup('instance');
+
+        instance.on('pullRefresh', (e) => {
+            assert.ok(true, 'onPullRefresh is fired');
+        });
+
+        instance._list._pullDownHandler();
+    });
+
     QUnit.test('change "onScroll" handler runtime', function(assert) {
         const initialScrollStub = sinon.stub();
         const newScrollStub = sinon.stub();
