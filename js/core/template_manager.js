@@ -2,10 +2,8 @@ import $ from './renderer';
 import { isDefined, isFunction, isRenderer } from './utils/type';
 import { noop } from './utils/common';
 import { extend } from './utils/extend';
-import { log } from './errors';
 import { FunctionTemplate } from './templates/function_template';
 import { EmptyTemplate } from './templates/empty_template';
-import { camelize } from './utils/inflector';
 import {
     findTemplates,
     suitableTemplatesByName,
@@ -20,19 +18,12 @@ const TEXT_NODE = 3;
 const ANONYMOUS_TEMPLATE_NAME = 'template';
 const TEMPLATE_OPTIONS_NAME = 'dxTemplate';
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
-const DEPRECATED_WIDGET_NAMES = { button: true, tabs: true, dropDownMenu: true };
 const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) => {
-    let widgetName = model.widget;
+    const widgetName = model.widget;
     if(!widgetName) return $();
 
     const widgetElement = $('<div>');
     const widgetOptions = model.options || {};
-
-    if(DEPRECATED_WIDGET_NAMES[widgetName]) {
-        const deprecatedName = widgetName;
-        widgetName = camelize('dx-' + widgetName);
-        log('W0001', 'dxToolbar - "widget" item field', deprecatedName, '16.1', 'Use: ' + widgetName + 'instead');
-    }
 
     if(parent) {
         parent._createComponent(widgetElement, widgetName, widgetOptions);

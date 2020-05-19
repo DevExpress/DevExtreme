@@ -1,7 +1,6 @@
 const $ = require('../../core/renderer');
 const noop = require('../../core/utils/common').noop;
 const each = require('../../core/utils/iterator').each;
-const errors = require('../../core/errors');
 const compileGetter = require('../../core/utils/data').compileGetter;
 const Class = require('../../core/class');
 const Button = require('../button');
@@ -55,23 +54,14 @@ const ToolbarStrategy = Class.inherit({
         const optionGetter = compileGetter('visible');
         const overflowGetter = compileGetter('locateInMenu');
 
-        let menuLocation = false;
         each(menuItems, function(index, item) {
             const itemVisible = optionGetter(item, { functionsAsIs: true });
             const itemOverflow = overflowGetter(item, { functionsAsIs: true });
 
-            if(item.location === 'menu') {
-                menuLocation = true;
-            }
-
-            if(itemVisible !== false && (itemOverflow === 'auto' || itemOverflow === 'always' || item.location === 'menu')) {
+            if(itemVisible !== false && (itemOverflow === 'auto' || itemOverflow === 'always')) {
                 result = true;
             }
         });
-
-        if(menuLocation) {
-            errors.log('W0001', 'dxToolbar - \'location\' item field', 'menu', '16.1', 'Use \'locateInMenu\' item field instead.');
-        }
 
         return result;
     },
