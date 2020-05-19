@@ -3481,66 +3481,6 @@ QUnit.module('Events', {
         assert.ok(initialScrollStub.notCalled, 'initial handled does not invoked');
         assert.ok(newScrollStub.calledOnce, 'onScroll event handled');
     });
-
-    QUnit.test('onPageLoading handler should be passed to the list', function(assert) {
-        const pageLoadingHandler = sinon.stub();
-
-        const instance = $('#lookup').dxLookup({
-            deferRendering: false,
-            onPageLoading: pageLoadingHandler
-        }).dxLookup('instance');
-
-        const list = instance._list;
-        assert.strictEqual(list.option('onPageLoading'), pageLoadingHandler, 'onPageLoading handler is passed on the init');
-
-        instance.option('onPageLoading', null);
-        assert.strictEqual(list.option('onPageLoading'), null, 'onPageLoading handler is passed after runtime change');
-    });
-
-    QUnit.skip('onPageLoading handler should be passed to the list - subscription by "on" method', function(assert) {
-        const pageLoadingHandler = sinon.stub();
-
-        const instance = $('#lookup').dxLookup({
-            deferRendering: false,
-        }).dxLookup('instance');
-        instance.on('pageLoading', pageLoadingHandler);
-
-        const list = instance._list;
-        assert.strictEqual(list.option('onPageLoading'), pageLoadingHandler, 'onPageLoading handler is passed on the init');
-
-        instance.off('pageLoading', pageLoadingHandler);
-        assert.strictEqual(list.option('onPageLoading'), null, 'onPageLoading handler is passed after runtime change');
-    });
-
-    QUnit.test('onPullRefresh handler should be passed to the list', function(assert) {
-        const pullRefreshHandler = sinon.stub();
-
-        const instance = $('#lookup').dxLookup({
-            deferRendering: false,
-            onPullRefresh: pullRefreshHandler
-        }).dxLookup('instance');
-
-        const list = instance._list;
-        assert.strictEqual(list.option('onPullRefresh'), pullRefreshHandler, 'onPullRefresh handler is passed on the init');
-
-        instance.option('onPullRefresh', null);
-        assert.strictEqual(list.option('onPullRefresh'), null, 'onPullRefresh handler is passed after runtime change');
-    });
-
-    QUnit.skip('onPullRefresh handler should be passed to the list - subscription by "on" method', function(assert) {
-        const pullRefreshHandler = sinon.stub();
-
-        const instance = $('#lookup').dxLookup({
-            deferRendering: false,
-        }).dxLookup('instance');
-        instance.on('pullRefresh', pullRefreshHandler);
-
-        const list = instance._list;
-        assert.strictEqual(list.option('onPullRefresh'), pullRefreshHandler, 'onPullRefresh handler is passed on the init');
-
-        instance.off('pullRefresh', pullRefreshHandler);
-        assert.strictEqual(list.option('onPullRefresh'), null, 'onPullRefresh handler is passed after runtime change');
-    });
 });
 
 QUnit.module('onContentReady', {
