@@ -2270,17 +2270,16 @@ QUnit.module('popup options', {
     ['onTitleRendered', 'closeOnOutsideClick'].forEach(option => {
         QUnit.test(`${option} should be passed to the popup`, function(assert) {
             const stub = sinon.stub();
-            const fullOptionName = `dropDownOptions.${option}`;
 
             const instance = $('#lookup').dxLookup({
-                [fullOptionName]: stub,
+                [option]: stub,
                 deferRendering: false
             }).dxLookup('instance');
             const popup = instance._popup;
 
             assert.strictEqual(popup.option(option), stub, `${option} is passed to the popup on init`);
 
-            instance.option(fullOptionName, null);
+            instance.option(option, null);
             assert.strictEqual(popup.option(option), null, `${option} is passed to the popup after runtime change`);
         });
     });
