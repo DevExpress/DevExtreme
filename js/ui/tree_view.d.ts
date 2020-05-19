@@ -228,6 +228,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @override
      */
     onSelectionChanged?: ((e: { component?: dxTreeView, element?: dxElement, model?: any }) => any);
     /**
