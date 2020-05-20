@@ -3481,7 +3481,7 @@ QUnit.module('Events', {
     });
 
     QUnit.test('onPageLoading handler should be passed to the list', function(assert) {
-        assert.expect(1);
+        const done = assert.async();
 
         const data = [1, 2, 3];
 
@@ -3492,12 +3492,22 @@ QUnit.module('Events', {
                 paginate: true,
                 pageSize: 1
             },
+            pageLoadMode: 'scrollBottom',
+            useNativeScrolling: true,
             onPageLoading: (e) => {
                 assert.ok(true, 'onPageLoading is fired');
+                done();
             }
         }).dxLookup('instance');
 
-        instance._list._scrollBottomHandler();
+        const list = instance._list;
+        list.option('useNative', true);
+        instance.open();
+
+        setTimeout(() => {
+            list.scrollTo(50);
+        }, 2000);
+        this.clock.tick(2000);
     });
 
     QUnit.test('onPageLoading handler should be passed to the list - subscription by "on" method', function(assert) {
