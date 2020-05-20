@@ -503,11 +503,18 @@ QUnit.module('ColumnsSeparator', () => {
                     getScrollbarWidth: function() {
                         return 0;
                     }
+                },
+                draggingHeaderView: {
+                    isDragging: () => false
                 }
             },
 
             getController: function(name) {
                 return this._controllers[name];
+            },
+
+            getView: function(name) {
+                return this._views[name];
             },
 
             NAME: 'dxDataGrid'
@@ -589,11 +596,18 @@ QUnit.module('ColumnsSeparator', () => {
                     getHeight: function() {
                         return 10;
                     }
+                },
+                draggingHeaderView: {
+                    isDragging: () => false
                 }
             },
 
             getController: function(name) {
                 return this._controllers[name];
+            },
+
+            getView: function(name) {
+                return this._views[name];
             },
 
             NAME: 'dxDataGrid'
@@ -619,7 +633,7 @@ QUnit.module('ColumnsSeparator', () => {
         assert.equal(separator.element().height(), columnHeadersViewHeight + rowsViewHeight - scrollBarWidth, 'height of columns separator');
     });
 
-    QUnit.test('Column separator height should be equal to the headers heigth if \'resizing\' is false', function(assert) {
+    function columnSeparatorHeightTest(assert, isResizing, isDragging) {
         // arrange
         const columnHeadersViewHeight = 45;
         const rowsViewHeight = 100;
@@ -630,7 +644,7 @@ QUnit.module('ColumnsSeparator', () => {
             },
             _controllers: {
                 columnsResizer: {
-                    isResizing: () => false
+                    isResizing: () => isResizing
                 }
             },
             _views: {
@@ -653,11 +667,18 @@ QUnit.module('ColumnsSeparator', () => {
                     getScrollbarWidth: function(isHorizontal) {
                         return isHorizontal ? scrollBarWidth : 0;
                     }
+                },
+                draggingHeaderView: {
+                    isDragging: () => isDragging
                 }
             },
 
             getController: function(name) {
                 return this._controllers[name];
+            },
+
+            getView: function(name) {
+                return this._views[name];
             },
 
             NAME: 'dxDataGrid'
@@ -680,7 +701,28 @@ QUnit.module('ColumnsSeparator', () => {
         tablePosition.update();
 
         // arrange
-        assert.equal(separator.element().height(), columnHeadersViewHeight, 'height of columns separator');
+        let expectedHeight = columnHeadersViewHeight;
+
+        if(isResizing || isDragging) {
+            expectedHeight += rowsViewHeight - scrollBarWidth;
+        }
+
+        assert.equal(separator.element().height(), expectedHeight, 'height of columns separator');
+    }
+
+    // T816406, T889787
+    QUnit.test('Column separator height should be equal to the headers heigth if \'resizing\' and \'dragging\' are false', function(assert) {
+        columnSeparatorHeightTest(assert, false, false);
+    });
+
+    // T889787
+    QUnit.test('Column separator height should not be equal to the headers heigth if \'resizing\' is true', function(assert) {
+        columnSeparatorHeightTest(assert, true, false);
+    });
+
+    // T889787
+    QUnit.test('Column separator height should not be equal to the headers heigth if \'dragging\' is true', function(assert) {
+        columnSeparatorHeightTest(assert, false, true);
     });
 
     QUnit.test('IsVisible when columns options is empty', function(assert) {
@@ -901,6 +943,12 @@ QUnit.module('Columns resizing', {
                 }
             },
 
+            _views: {
+                draggingHeaderView: {
+                    isDragging: () => false
+                }
+            },
+
             _createComponent: function(element, name, config) {
                 name = typeof name === 'string' ? name : publicComponentUtils.name(name);
                 const $element = $(element)[name](config || {});
@@ -913,6 +961,10 @@ QUnit.module('Columns resizing', {
 
             getController: function(name) {
                 return this._controllers[name];
+            },
+
+            getView: function(name) {
+                return this._views[name];
             }
         };
 
