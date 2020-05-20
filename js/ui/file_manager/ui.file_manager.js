@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { extend } from '../../core/utils/extend';
 import typeUtils from '../../core/utils/type';
-import { Deferred, when } from '../../core/utils/deferred';
+import { when } from '../../core/utils/deferred';
 import { equalByValue } from '../../core/utils/common';
 
 import messageLocalization from '../../localization/message';
@@ -261,9 +261,7 @@ class FileManager extends Widget {
     }
 
     _refreshAndShowProgress() {
-        return when(this._notificationControl.isProgressDrawerOpened()
-            ? new Deferred().resolve().promise()
-            : this._notificationControl.tryShowProgressPanel())
+        return when(this._notificationControl.tryShowProgressPanel())
             .then(() => this._controller.refresh())
             .then(() => this._filesTreeView.refresh());
     }
@@ -736,8 +734,8 @@ class FileManager extends Widget {
         this.option(options);
     }
 
-    getDirectories(parentDirectoryInfo, noNavigationRequired) {
-        return this._controller.getDirectories(parentDirectoryInfo, noNavigationRequired);
+    getDirectories(parentDirectoryInfo, skipNavigationOnError) {
+        return this._controller.getDirectories(parentDirectoryInfo, skipNavigationOnError);
     }
 
     _getSelectedItemInfos() {

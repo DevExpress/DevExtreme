@@ -50,7 +50,6 @@ class FileManagerEditingControl extends Widget {
             onOperationCanceled: ({ info }) => this._onCancelUploadSession(info),
             onOperationItemCanceled: ({ item, itemIndex }) => this._onCancelFileUpload(item, itemIndex)
         });
-        this._controller._notificationControl = this._notificationControl;
     }
 
     _getFileUploaderComponent() {
@@ -146,10 +145,13 @@ class FileManagerEditingControl extends Widget {
             },
 
             getItemContent: {
-                action: arg => this._getItemContent(arg),
+                action: arg => this._getItemContent(arg)
+            },
+
+            getItems: {
                 singleItemProcessingMessage: '',
-                singleItemErrorMessage: messageLocalization.format('dxFileManager-editingGetItemContentSingleItemErrorMessage'),
-                commonErrorMessage: messageLocalization.format('dxFileManager-editingGetItemContentSingleItemErrorMessage')
+                singleItemErrorMessage: messageLocalization.format('dxFileManager-errorDirectoryOpenFailed'),
+                commonErrorMessage: messageLocalization.format('dxFileManager-errorDirectoryOpenFailed')
             }
 
         };
@@ -205,10 +207,8 @@ class FileManagerEditingControl extends Widget {
     _onEditActionResultAcquired(actionInfo) {
         const { context, operationInfo } = actionInfo.customData;
         context.singleRequest = actionInfo.singleRequest;
-        if(!context.singleRequest) {
-            const details = context.itemInfos.map(itemInfo => this._getItemProgressDisplayInfo(itemInfo));
-            this._notificationControl.addOperationDetails(operationInfo, details, context.actionMetadata.allowCancel);
-        }
+        const details = context.itemInfos.map(itemInfo => this._getItemProgressDisplayInfo(itemInfo));
+        this._notificationControl.addOperationDetails(operationInfo, details, context.actionMetadata.allowCancel);
     }
 
     _onEditActionError(actionInfo, error) {
@@ -227,9 +227,7 @@ class FileManagerEditingControl extends Widget {
         const { context, operationInfo } = actionInfo.customData;
         if(!info.result || !info.result.canceled) {
             context.completeOperationItem(info.index);
-            if(!context.singleRequest) {
-                this._notificationControl.completeOperationItem(operationInfo, info.index, context.commonProgress);
-            }
+            this._notificationControl.completeOperationItem(operationInfo, info.index, context.commonProgress);
         }
     }
 
@@ -475,9 +473,7 @@ class FileManagerActionContext {
 
     processSingleRequestError(errorText) {
         this._errorState.failedCount = 1;
-        this._errorState.commonErrorText = this._multipleItems
-            ? this._actionMetadata.commonErrorMessage
-            : format(this._actionMetadata.singleItemErrorMessage, this._location);
+        this._errorState.commonErrorText = this._multipleItems ? this._actionMetadata.commonErrorMessage : this._actionMetadata.singleItemErrorMessage;
 
         const itemIndex = this._multipleItems ? -1 : 1;
         const itemInfo = this.getItemForSingleRequestError();
