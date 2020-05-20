@@ -576,7 +576,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
     },
 
     _isRtlParentStyle: function() {
-        return this._$parentContainer && this.option('rtlEnabled') && this._$parentContainer.parent().css('direction') === 'rtl';
+        return this.option('rtlEnabled') && this._$parentContainer?.parent().css('direction') === 'rtl';
     },
 
     _pointCreated: function(point, cellsLength, columns) {
@@ -733,7 +733,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
             that._trackerView.show();
             const scrollable = that.component.getScrollable();
 
-            if(scrollable && that.option('rtlEnabled') && that._isRtlParentStyle()) {
+            if(scrollable && that._isRtlParentStyle()) {
                 that._scrollRight = scrollable.$content().width() - scrollable._container().width() - scrollable.scrollLeft();
             }
 
