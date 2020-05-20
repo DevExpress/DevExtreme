@@ -3696,7 +3696,7 @@ QUnit.test('Zoom and pan', function(assert) {
     const valAxis2 = chart.getValueAxis('axis2');
 
     chart.option('valueAxis[2].customPosition', 320);
-    assert.roughEqual(valAxis2._axisPosition, 159, 5);
+    assert.roughEqual(valAxis2._axisPosition, 164, 6);
 
     const $root = $(chart._renderer.root.element);
     chart._lastRenderingTime = 0;
@@ -3704,14 +3704,14 @@ QUnit.test('Zoom and pan', function(assert) {
     $root.trigger(new $.Event('dxdrag', { offset: { x: 100, y: 0 } }));
     $root.trigger(new $.Event('dxdragend', {}));
 
-    assert.roughEqual(valAxis2._axisPosition, 259, 5);
+    assert.roughEqual(valAxis2._axisPosition, 264, 6);
 
     chart._lastRenderingTime = 0;
     $root.trigger(new $.Event('dxdragstart', { pageX: 500, pageY: 250 }));
     $root.trigger(new $.Event('dxdrag', { offset: { x: -250, y: 0 } }));
     $root.trigger(new $.Event('dxdragend', {}));
 
-    assert.roughEqual(valAxis2._axisPosition, 106, 5);
+    assert.roughEqual(valAxis2._axisPosition, 111, 6);
 
     chart.option('valueAxis[1]', {
         position: 'left',
@@ -3797,11 +3797,11 @@ QUnit.test('Custom position is set for argument and value axis (T889092)', funct
         }
     });
 
-    assert.equal(chart.getArgumentAxis()._axisPosition, 537);
-    assert.roughEqual(chart._valueAxes[0]._axisPosition, 139, 5);
+    assert.roughEqual(chart.getArgumentAxis()._axisPosition, 538, 2);
+    assert.roughEqual(chart._valueAxes[0]._axisPosition, 144, 6);
 
     chart.option('valueAxis.customPosition', -21);
 
-    assert.equal(chart.getArgumentAxis()._axisPosition, 492);
-    assert.roughEqual(chart._valueAxes[0]._axisPosition, 139, 5);
+    assert.roughEqual(chart.getArgumentAxis()._axisPosition, 493, 2);
+    assert.roughEqual(chart._valueAxes[0]._axisPosition, 144, 6);
 });
