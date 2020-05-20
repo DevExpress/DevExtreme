@@ -50,7 +50,7 @@ const replaceColorFunctions = (content) => {
         return `color.${colorFunction}(${color}, $alpha: ${percent / 100})${sign}`;
     });
 
-    content = content.replace(/(\s)(screen|difference)\(/g, '$1extColor.$2(');
+    content = content.replace(/(\s)(screen|difference)\(/g, '$1extcolor.$2(');
     return content;
 };
 
@@ -462,7 +462,7 @@ gulp.task('create-base-widget-generic-colors', (callback) => {
         '$base-grid-selectedrow-border-color'
     ]);
 
-    let colorsContent = '@use "sass:color";\n@use "./color" as extColor;\n$color: null !default;\n\n';
+    let colorsContent = '@use "sass:color";\n@use "./color" as extcolor;\n$color: null !default;\n\n';
     colorsContent += generateDefaultVariablesBlock(genericBaseVariables);
     colorsContent += '\n';
 
@@ -570,8 +570,6 @@ gulp.task('create-base-widget', gulp.series(
     'create-base-widget-sizes'
 ));
 
-// TODO - ui - need only into dx.common.css bundle
-
 gulp.task('create-theme-index', (callback) => {
     const source = require('./index-data');
 
@@ -605,4 +603,8 @@ gulp.task('create-theme-index', (callback) => {
     });
 
     callback();
+});
+
+gulp.task('lint-scss', (callback) => {
+    exec('npx stylelint scss --fix', () => callback());
 });
