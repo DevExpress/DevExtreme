@@ -3802,6 +3802,6 @@ QUnit.test('Custom position is set for argument and value axis (T889092)', funct
 
     chart.option('valueAxis.customPosition', -21);
 
-    assert.roughEqual(chart.getArgumentAxis()._axisPosition, 493, 2);
+    assert.roughEqual(chart.getArgumentAxis()._axisPosition, 490, 5);
     assert.roughEqual(chart._valueAxes[0]._axisPosition, 144, 6);
 });
