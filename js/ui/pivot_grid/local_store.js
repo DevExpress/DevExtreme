@@ -259,7 +259,9 @@ exports.LocalStore = Class.inherit((function() {
                     each(row, function(_, cell) {
                         if(cell && cell[aggregatorIndex] !== undefined) {
                             const aggregatorResult = aggregator.finalize(cell[aggregatorIndex]);
-                            cell[aggregatorIndex] = isNaN(aggregatorResult) ? '' : aggregatorResult;
+                            // because isNaN function works incorrectly with strings and undefined
+                            const isNaN = aggregatorResult !== aggregatorResult;
+                            cell[aggregatorIndex] = isNaN ? '' : aggregatorResult;
                         }
                     });
                 });
