@@ -3782,3 +3782,26 @@ QUnit.test('Argument axis. Set customPositionAxis option', function(assert) {
     assert.roughEqual(initAxisPosition - otherAxisPosition, 95, 8);
     assert.roughEqual(defaultAxisPosition - initAxisPosition, 135, 10);
 });
+
+QUnit.test('Custom position is set for argument and value axis (T889092)', function(assert) {
+    const chart = this.createChart({
+        dataSource: [{ arg: -13, val: -13 }, { arg: 13, val: 13 }],
+        argumentAxis: {
+            visualRange: [-20, 20],
+            customPosition: 20
+        },
+        valueAxis: {
+            endOnTick: false,
+            visualRange: [-20, 20],
+            customPosition: -20
+        }
+    });
+
+    assert.equal(chart.getArgumentAxis()._axisPosition, 539);
+    assert.equal(chart._valueAxes[0]._axisPosition, 155);
+
+    chart.option('valueAxis.customPosition', -21);
+
+    assert.equal(chart.getArgumentAxis()._axisPosition, 494);
+    assert.equal(chart._valueAxes[0]._axisPosition, 155);
+});
