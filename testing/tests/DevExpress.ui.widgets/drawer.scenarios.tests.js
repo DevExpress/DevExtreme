@@ -154,6 +154,27 @@ configs.forEach(config => {
             assert.strictEqual(window.getComputedStyle(drawerElement).display, 'none', 'drawerElement.display');
         });
 
+        [true, false].forEach((closeOnOutsideClick) => {
+            testOrSkip(`opened: true -> click by viewContent, closeOnOutsideClick: ${closeOnOutsideClick}`, () => configIs('push', 'top'), function(assert) {
+                const drawerElement = document.getElementById(drawerTesters.drawerElementId);
+                const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
+                    opened: true,
+                    closeOnOutsideClick: closeOnOutsideClick,
+                    template: drawerTesters[config.position].template
+                }));
+
+                this.clock.tick(100);
+                $(drawer.viewContent()).trigger('dxclick');
+                this.clock.tick(100);
+
+                if(closeOnOutsideClick) {
+                    drawerTesters[config.position].checkHidden(assert, drawer, drawerElement);
+                } else {
+                    drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
+                }
+            });
+        });
+
         testOrSkip('opened: true -> visible: false -> visible: true', () => configIs('push', 'top'), function(assert) {
             const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({

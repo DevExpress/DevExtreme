@@ -146,7 +146,6 @@ const Drawer = Widget.inherit({
             }
 
             this.hide();
-            this._toggleShaderVisibility(false);
         }
     },
 
