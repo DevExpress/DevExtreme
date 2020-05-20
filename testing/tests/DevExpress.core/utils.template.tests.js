@@ -1,18 +1,24 @@
-import domUtils from 'core/utils/dom';
 import type from 'core/utils/type';
 import renderer from 'core/renderer';
-import {
-    findTemplates, suitableTemplatesByName, addOneRenderedCall, templateKey,
-    getNormalizedTemplateArgs, validateTemplateSource,
-    defaultCreateElement, acquireIntegrationTemplate, acquireTemplate,
-} from 'core/utils/template_manager';
+import templateUtils, {
+    findTemplates,
+    suitableTemplatesByName,
+    addOneRenderedCall,
+    templateKey,
+    getNormalizedTemplateArgs,
+    validateTemplateSource,
+    defaultCreateElement,
+    acquireIntegrationTemplate,
+    acquireTemplate,
+    normalizeTemplateElement
+} from 'core/utils/template';
 import { Template } from 'core/templates/template';
 import { TemplateBase } from 'core/templates/template_base';
 import { EmptyTemplate } from 'core/templates/empty_template';
 import { ChildDefaultTemplate } from 'core/templates/child_default_template';
 import devices from 'core/devices';
 
-QUnit.module('TemplateManager utils', {
+QUnit.module('Template utils', {
     beforeEach: function() {
         const $ = renderer;
         this.$remove = sinon.stub($.fn, 'remove');
@@ -23,7 +29,7 @@ QUnit.module('TemplateManager utils', {
 });
 
 QUnit.test('#validateTemplateSource', function(assert) {
-    const normalize = sinon.stub(domUtils, 'normalizeTemplateElement');
+    const normalize = sinon.stub(templateUtils, 'normalizeTemplateElement');
 
     assert.strictEqual(validateTemplateSource(1), 1, 'should return value if it is not a string');
     assert.notOk(normalize.called, 'should not normalize template element if value is a string');
@@ -200,4 +206,14 @@ QUnit.test('#acquireTemplate', function(assert) {
     const result5 = acquireTemplate('templateSource', createTemplate, { templateSource: false }, true, [], { templateSource: false });
     assert.strictEqual(result5, 'result5', 'should call `createTemplate` if all conditions above are false');
     assert.strictEqual(createTemplate.callCount, 3, 'should call `createTemplate` if template has nodeType');
+});
+
+QUnit.test('normalizeTemplateElement with script element', function(assert) {
+    const domElement = document.createElement('script');
+
+    domElement.innerHTML = 'Test';
+
+    const $result = normalizeTemplateElement(domElement);
+
+    assert.equal($result.text(), 'Test', 'template based on script element works fine');
 });

@@ -1,6 +1,6 @@
 import $ from '../renderer';
 import { TemplateBase } from './template_base';
-import { normalizeTemplateElement } from '../utils/dom';
+import { normalizeTemplateElement } from '../utils/template';
 import { getCurrentTemplateEngine, registerTemplateEngine, setTemplateEngine } from './template_engine_registry';
 import './template_engines';
 

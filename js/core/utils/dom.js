@@ -1,11 +1,8 @@
 import domAdapter from '../../core/dom_adapter';
 import $ from '../../core/renderer';
-import typeUtils from './type';
 import windowUtils from './window';
 
 const window = windowUtils.getWindow();
-const isDefined = typeUtils.isDefined;
-const isRenderer = typeUtils.isRenderer;
 
 const resetActiveElement = function() {
     const activeElement = domAdapter.getActiveElement();
@@ -55,38 +52,6 @@ const closestCommonParent = function(startTarget, endTarget) {
     }
 };
 
-const extractTemplateMarkup = function(element) {
-    element = $(element);
-
-    const templateTag = element.length && element.filter(function isNotExecutableScript() {
-        const $node = $(this);
-        return $node.is('script[type]') && ($node.attr('type').indexOf('script') < 0);
-    });
-
-    if(templateTag.length) {
-        return templateTag.eq(0).html();
-    } else {
-        element = $('<div>').append(element);
-        return element.html();
-    }
-};
-
-const normalizeTemplateElement = function(element) {
-    let $element = isDefined(element) && (element.nodeType || isRenderer(element))
-        ? $(element)
-        : $('<div>').html(element).contents();
-
-    if($element.length === 1) {
-        if($element.is('script')) {
-            $element = normalizeTemplateElement($element.html().trim());
-        } else if($element.is('table')) {
-            $element = $element.children('tbody').contents();
-        }
-    }
-
-    return $element;
-};
-
 const clipboardText = function(event, text) {
     const clipboard = (event.originalEvent && event.originalEvent.clipboardData) || window.clipboardData;
 
@@ -130,10 +95,8 @@ const createTextElementHiddenCopy = function(element, text, options) {
 };
 
 exports.resetActiveElement = resetActiveElement;
-exports.extractTemplateMarkup = extractTemplateMarkup; // TODO: extract
-exports.normalizeTemplateElement = normalizeTemplateElement; // TODO: extract
 exports.clearSelection = clearSelection;
 exports.closestCommonParent = closestCommonParent;
 exports.clipboardText = clipboardText;
 exports.contains = contains;
-exports.createTextElementHiddenCopy = createTextElementHiddenCopy; // TODO: extract
+exports.createTextElementHiddenCopy = createTextElementHiddenCopy;

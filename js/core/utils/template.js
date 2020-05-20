@@ -8,9 +8,8 @@ import { Template } from '../templates/template';
 import { TemplateBase } from '../templates/template_base';
 import { groupBy } from './array';
 import { findBestMatches } from './common';
-import { normalizeTemplateElement } from './dom';
 import { extend } from './extend';
-import { isFunction, isRenderer } from './type';
+import { isFunction, isRenderer, isDefined } from './type';
 
 export const findTemplates = (element, name) => {
     const optionsAttributeName = 'data-options';
@@ -49,6 +48,22 @@ export const suitableTemplatesByName = (rawTemplates) => {
     return result;
 };
 
+export const extractTemplateMarkup = (element) => {
+    element = $(element);
+
+    const templateTag = element.length && element.filter(function isNotExecutableScript() {
+        const $node = $(this);
+        return $node.is('script[type]') && ($node.attr('type').indexOf('script') < 0);
+    });
+
+    if(templateTag.length) {
+        return templateTag.eq(0).html();
+    } else {
+        element = $('<div>').append(element);
+        return element.html();
+    }
+};
+
 export const addOneRenderedCall = (template) => {
     const render = template.render.bind(template);
     return extend({}, template, {
@@ -58,6 +73,22 @@ export const addOneRenderedCall = (template) => {
             return templateResult;
         }
     });
+};
+
+export const normalizeTemplateElement = (element) => {
+    let $element = isDefined(element) && (element.nodeType || isRenderer(element))
+        ? $(element)
+        : $('<div>').html(element).contents();
+
+    if($element.length === 1) {
+        if($element.is('script')) {
+            $element = normalizeTemplateElement($element.html().trim());
+        } else if($element.is('table')) {
+            $element = $element.children('tbody').contents();
+        }
+    }
+
+    return $element;
 };
 
 export const getNormalizedTemplateArgs = (options) => {

@@ -12,7 +12,7 @@ import {
     validateTemplateSource,
     defaultCreateElement,
     acquireTemplate,
-} from './utils/template_manager';
+} from './utils/template';
 
 const TEXT_NODE = 3;
 const ANONYMOUS_TEMPLATE_NAME = 'template';

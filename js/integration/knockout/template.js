@@ -3,7 +3,7 @@ import { createElement } from '../../core/dom_adapter';
 import ko from 'knockout';
 import { isDefined } from '../../core/utils/type';
 import { TemplateBase } from '../../core/templates/template_base';
-import { normalizeTemplateElement } from '../../core/utils/dom';
+import { normalizeTemplateElement } from '../../core/utils/template';
 import { getClosestNodeWithContext } from './utils';
 
 const getParentContext = function(data) {

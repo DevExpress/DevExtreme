@@ -7,19 +7,6 @@ import devices from 'core/devices';
 import initMobileViewport from 'mobile/init_mobile_viewport';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
-QUnit.module('createMarkup');
-
-QUnit.test('normalizeTemplateElement with script element', function(assert) {
-    const domElement = document.createElement('script');
-
-    domElement.innerHTML = 'Test';
-
-    const $result = domUtils.normalizeTemplateElement(domElement);
-
-    assert.equal($result.text(), 'Test', 'template based on script element works fine');
-});
-
-
 QUnit.module('clipboard');
 
 QUnit.test('get text from clipboard', function(assert) {

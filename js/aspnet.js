@@ -10,7 +10,7 @@
                 require('./core/guid'),
                 require('./ui/validation_engine'),
                 require('./core/utils/iterator'),
-                require('./core/utils/dom').extractTemplateMarkup,
+                require('./core/utils/template').extractTemplateMarkup,
                 require('./core/utils/string').encodeHtml,
                 require('./core/utils/ajax'),
                 require('./core/utils/console')
@@ -24,7 +24,7 @@
             DevExpress.data.Guid,
             DevExpress.validationEngine,
             DevExpress.utils.iterator,
-            DevExpress.utils.dom.extractTemplateMarkup,
+            DevExpress.utils.template.extractTemplateMarkup,
             DevExpress.utils.string.encodeHtml,
             DevExpress.utils.ajax,
             DevExpress.utils.console

@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import commonUtils from '../../core/utils/common';
-import { findTemplates } from '../../core/utils/template_manager';
+import { findTemplates } from '../../core/utils/template';
 import { getPublicElement } from '../../core/element';
 import domAdapter from '../../core/dom_adapter';
 import { isPlainObject, isFunction, isDefined } from '../../core/utils/type';
