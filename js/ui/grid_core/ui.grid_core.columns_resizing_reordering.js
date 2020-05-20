@@ -344,6 +344,10 @@ const BlockSeparatorView = SeparatorView.inherit({
 const DraggingHeaderView = modules.View.inherit({
     _isDragging: false,
 
+    isDragging: function() {
+        return this._isDragging;
+    },
+
     _getDraggingPanelByPos: function(pos) {
         const that = this;
         let result;
@@ -1005,9 +1009,13 @@ const TablePositionViewController = modules.ViewController.inherit({
         const scrollBarWidth = that._rowsView.getScrollbarWidth(true);
         const rowsHeight = that._rowsView ? that._rowsView.height() - scrollBarWidth : 0;
         const columnsResizerController = that.component.getController('columnsResizer');
+        const draggingHeaderView = that.component.getView('draggingHeaderView');
 
         params.height = columnsHeadersHeight;
-        if(columnsResizerController.isResizing() !== false) {
+
+        const isDraggingOrResizing = columnsResizerController.isResizing() !== false || draggingHeaderView.isDragging();
+
+        if(isDraggingOrResizing) {
             params.height += rowsHeight - diffOffsetTop;
         }
 
