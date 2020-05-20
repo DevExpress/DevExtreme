@@ -3962,4 +3962,38 @@ QUnit.module('Appointments', () => {
 
         assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointment parts are ok');
     });
+
+    QUnit.test('Appointments from neighbor cells should not overlap each other if widget is zoomed (T885595)', function(assert) {
+        if(!browser.webkit) {
+            assert.ok(true, 'Browser zooming is enabled in webkit');
+            return;
+        }
+
+        $('#scheduler').css('zoom', 1.1);
+
+        const data = [{
+            text: 'Provide New Health Insurance Docs',
+            startDate: new Date(2017, 4, 22, 12, 45),
+            endDate: new Date(2017, 4, 22, 14, 15)
+        }, {
+            text: 'Recall Rebate Form',
+            startDate: new Date(2017, 4, 23, 12, 45),
+            endDate: new Date(2017, 4, 23, 13, 15)
+        }];
+
+        const scheduler = createWrapper({
+            dataSource: data,
+            width: 1023.1,
+            views: [{
+                type: 'month',
+                name: 'Auto Mode',
+                maxAppointmentsPerCell: 'auto'
+            }],
+            currentView: 'Auto Mode',
+            currentDate: new Date(2017, 4, 25),
+            height: 650
+        });
+
+        assert.equal(scheduler.appointments.getAppointmentPosition(0).top, scheduler.appointments.getAppointmentPosition(1).top, 'Appointment positions are correct');
+    });
 });
