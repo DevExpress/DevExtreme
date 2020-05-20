@@ -575,17 +575,17 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         return false;
     },
 
-    _isRtlMode: function() {
-        return this._$parentContainer && this._$parentContainer.parent().css('direction') === 'rtl';
+    _isRtlParentStyle: function() {
+        return this._$parentContainer && this.option('rtlEnabled') && this._$parentContainer.parent().css('direction') === 'rtl';
     },
 
     _pointCreated: function(point, cellsLength, columns) {
         const isNextColumnMode = isNextColumnResizingMode(this);
         const rtlEnabled = this.option('rtlEnabled');
-        const isRtlMode = this._isRtlMode();
-        const firstPointColumnIndex = !isNextColumnMode && rtlEnabled && !isRtlMode ? 0 : 1;
+        const isRtlParentStyle = this._isRtlParentStyle();
+        const firstPointColumnIndex = !isNextColumnMode && rtlEnabled && !isRtlParentStyle ? 0 : 1;
 
-        if(point.index >= firstPointColumnIndex && point.index < cellsLength + (!isNextColumnMode && (!rtlEnabled || isRtlMode) ? 1 : 0)) {
+        if(point.index >= firstPointColumnIndex && point.index < cellsLength + (!isNextColumnMode && (!rtlEnabled || isRtlParentStyle) ? 1 : 0)) {
             point.columnIndex -= firstPointColumnIndex;
             const currentColumn = columns[point.columnIndex] || {};
             const nextColumn = columns[point.columnIndex + 1] || {};
@@ -619,13 +619,13 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         const parentOffsetLeft = parentOffset.left;
         const eventData = getEventData(e);
         const rtlEnabled = that.option('rtlEnabled');
-        const isRtlMode = this._isRtlMode();
+        const isRtlParentStyle = this._isRtlParentStyle();
 
         if(that._isResizing && that._resizingInfo) {
-            if((parentOffsetLeft <= eventData.x || rtlEnabled && isRtlMode) && (!isNextColumnMode || eventData.x <= parentOffsetLeft + that._$parentContainer.width())) {
+            if((parentOffsetLeft <= eventData.x || !isNextColumnMode && isRtlParentStyle) && (!isNextColumnMode || eventData.x <= parentOffsetLeft + that._$parentContainer.width())) {
                 if(that._updateColumnsWidthIfNeeded(eventData.x)) {
                     const $cell = that._columnHeadersView.getColumnElements().eq(that._resizingInfo.currentColumnIndex);
-                    that._columnsSeparatorView.moveByX($cell.offset().left + ((isNextColumnMode || isRtlMode) && rtlEnabled ? 0 : $cell.outerWidth()));
+                    that._columnsSeparatorView.moveByX($cell.offset().left + ((isNextColumnMode || isRtlParentStyle) && rtlEnabled ? 0 : $cell.outerWidth()));
                     that._tablePositionController.update(that._targetPoint.y);
                     e.preventDefault();
                 }
@@ -733,7 +733,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
             that._trackerView.show();
             const scrollable = that.component.getScrollable();
 
-            if(scrollable && that.option('rtlEnabled') && that._isRtlMode()) {
+            if(scrollable && that.option('rtlEnabled') && that._isRtlParentStyle()) {
                 that._scrollRight = scrollable.$content().width() - scrollable._container().width() - scrollable.scrollLeft();
             }
 
@@ -796,7 +796,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         let nextColumn;
         let cellWidth;
         const rtlEnabled = this.option('rtlEnabled');
-        const isRtlMode = this._isRtlMode();
+        const isRtlParentStyle = this._isRtlParentStyle();
 
         function isPercentWidth(width) {
             return typeUtils.isString(width) && width.slice(-1) === '%';
@@ -839,7 +839,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         }
 
         deltaX = posX - resizingInfo.startPosX;
-        if((isNextColumnMode || isRtlMode) && rtlEnabled) {
+        if((isNextColumnMode || isRtlParentStyle) && rtlEnabled) {
             deltaX = -deltaX;
         }
         cellWidth = resizingInfo.currentColumnWidth + deltaX;
@@ -888,7 +888,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
                 this.component.updateDimensions();
 
                 const scrollable = this.component.getScrollable();
-                if(scrollable && rtlEnabled && isRtlMode) {
+                if(scrollable && isRtlParentStyle) {
                     const left = scrollable.$content().width() - scrollable._container().width() - this._scrollRight;
                     scrollable.scrollTo({ left: left });
                 }
