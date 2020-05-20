@@ -703,7 +703,7 @@ gridCore.registerModule('summary', {
                                 }
 
                                 const aggregate = aggregates[summaryIndex];
-                                if(aggregate === aggregate) {
+                                if(!isNaN(aggregate)) {
                                     let valueFormat;
                                     if(isDefined(summaryItem.valueFormat)) {
                                         valueFormat = summaryItem.valueFormat;

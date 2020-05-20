@@ -258,7 +258,8 @@ exports.LocalStore = Class.inherit((function() {
                 each(cells, function(_, row) {
                     each(row, function(_, cell) {
                         if(cell && cell[aggregatorIndex] !== undefined) {
-                            cell[aggregatorIndex] = aggregator.finalize(cell[aggregatorIndex]);
+                            const aggregatorResult = aggregator.finalize(cell[aggregatorIndex]);
+                            cell[aggregatorIndex] = isNaN(aggregatorResult) ? '' : aggregatorResult;
                         }
                     });
                 });
