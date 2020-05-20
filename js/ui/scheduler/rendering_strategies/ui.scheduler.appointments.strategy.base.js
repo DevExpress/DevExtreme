@@ -312,14 +312,18 @@ class BaseRenderingStrategy {
         return Math.abs(result) > 1 ? result : 0;
     }
 
-    _isItemsCross(item, currentItem, orientation) {
-        const side_1 = Math.floor(item[orientation[0]]);
-        const side_2 = Math.floor(item[orientation[1]]);
-        const isItemCross = Math.abs(item[orientation[2]] - currentItem[orientation[2]]) <= 1;
-        return isItemCross && !!item.allDay === !!currentItem.allDay && (
-            (side_1 <= currentItem[orientation[0]] && side_2 > currentItem[orientation[0]]) ||
-                (side_1 < currentItem[orientation[1]] && side_2 >= currentItem[orientation[1]] || (
-                    side_1 === currentItem[orientation[0]] && side_2 === currentItem[orientation[1]]
+    _isItemsCross(firstItem, secondItem, orientation) {
+        const firstItemSide_1 = Math.floor(firstItem[orientation[0]]);
+        const firstItemSide_2 = Math.floor(firstItem[orientation[1]]);
+
+        const secondItemSide_1 = Math.ceil(secondItem[orientation[0]]);
+        const secondItemSide_2 = Math.ceil(secondItem[orientation[1]]);
+
+        const isItemCross = Math.abs(firstItem[orientation[2]] - secondItem[orientation[2]]) <= 1;
+        return isItemCross && (
+            (firstItemSide_1 <= secondItemSide_1 && firstItemSide_2 > secondItemSide_1) ||
+                (firstItemSide_1 < secondItemSide_2 && firstItemSide_2 >= secondItemSide_2 || (
+                    firstItemSide_1 === secondItemSide_1 && firstItemSide_2 === secondItemSide_2
                 ))
         );
     }
