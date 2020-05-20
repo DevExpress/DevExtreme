@@ -557,9 +557,6 @@ const dxRangeSelector = baseWidgetModule.inherit({
             'chart.barWidth': {
                 since: '18.1', message: 'Use the \'chart.commonSeriesSettings.barPadding\' or \'chart.series.barPadding\' option instead'
             },
-            'chart.equalBarWidth': {
-                since: '18.1', message: 'Use the \'chart.commonSeriesSettings.ignoreEmptyPoints\' or \'chart.series.ignoreEmptyPoints\' option instead'
-            },
             'chart.useAggregation': {
                 since: '18.1', message: 'Use the \'chart.commonSeriesSettings.aggregation.enabled\' or \'chart.series.aggregation.enabled\' option instead'
             }

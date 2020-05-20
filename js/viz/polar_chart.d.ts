@@ -162,14 +162,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      */
     dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) };
     /**
-     * @docid dxPolarChartOptions.equalBarWidth
-     * @type boolean
-     * @deprecated dxPolarChartSeriesTypes.CommonPolarChartSeries.ignoreEmptyPoints
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    equalBarWidth?: boolean;
-    /**
      * @docid dxPolarChartOptions.legend
      * @type object
      * @prevFileNamespace DevExpress.viz

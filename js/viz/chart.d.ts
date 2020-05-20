@@ -647,14 +647,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      */
     defaultPane?: string;
     /**
-     * @docid dxChartOptions.equalBarWidth
-     * @type boolean
-     * @deprecated dxChartSeriesTypes.CommonSeries.ignoreEmptyPoints
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    equalBarWidth?: boolean;
-    /**
      * @docid dxChartOptions.legend
      * @type object
      * @prevFileNamespace DevExpress.viz

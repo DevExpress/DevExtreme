@@ -17,9 +17,9 @@ function validateBarGroupPadding(barGroupPadding) {
     return (barGroupPadding < 0 || barGroupPadding > 1) ? DEFAULT_BAR_GROUP_PADDING : barGroupPadding;
 }
 
-function isStackExist(series, arg, equalBarWidth) {
+function isStackExist(series, arg) {
     return series.some(function(s) {
-        return (equalBarWidth && !s.getOptions().ignoreEmptyPoints) || s.getPointsByArg(arg, true).some(function(point) {
+        return (!s.getOptions().ignoreEmptyPoints) || s.getPointsByArg(arg, true).some(function(point) {
             return point.hasValue();
         });
     });
@@ -76,7 +76,7 @@ function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback
 
     allArguments.forEach(function(arg) {
         const currentStacks = commonStacks.reduce((stacks, stack) => {
-            if(isStackExist(seriesInStacks[stack], arg, options.equalBarWidth)) {
+            if(isStackExist(seriesInStacks[stack], arg)) {
                 stacks.push(stack);
             }
 
@@ -339,7 +339,7 @@ function updateBarSeriesValues() {
 
 function adjustCandlestickSeriesDimensions() {
     const series = getVisibleSeries(this);
-    adjustBarSeriesDimensionsCore(series, { barWidth: null, equalBarWidth: true, barGroupPadding: 0.3 }, getSeriesStackIndexCallback(isInverted(series)));
+    adjustBarSeriesDimensionsCore(series, { barWidth: null, barGroupPadding: 0.3 }, getSeriesStackIndexCallback(isInverted(series)));
 }
 
 function adjustBubbleSeriesDimensions() {

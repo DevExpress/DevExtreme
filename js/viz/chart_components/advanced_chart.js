@@ -70,8 +70,7 @@ const AdvancedChart = BaseChart.inherit({
     _setDeprecatedOptions: function() {
         this.callBase.apply(this, arguments);
         _extend(this._deprecatedOptions, {
-            'barWidth': { since: '18.1', message: 'Use the \'commonSeriesSettings.barPadding\' or \'series.barPadding\' option instead' },
-            'equalBarWidth': { since: '18.1', message: 'Use the \'commonSeriesSettings.ignoreEmptyPoints\' or \'series.ignoreEmptyPoints\' option instead' }
+            'barWidth': { since: '18.1', message: 'Use the \'commonSeriesSettings.barPadding\' or \'series.barPadding\' option instead' }
         });
     },
 
@@ -355,7 +354,6 @@ const AdvancedChart = BaseChart.inherit({
         const negativesAsZeroes = themeManager.getOptions('negativesAsZeroes');
         const negativesAsZeros = themeManager.getOptions('negativesAsZeros'); // misspelling case
         const familyOptions = {
-            equalBarWidth: themeManager.getOptions('equalBarWidth'),
             minBubbleSize: themeManager.getOptions('minBubbleSize'),
             maxBubbleSize: themeManager.getOptions('maxBubbleSize'),
             barWidth: themeManager.getOptions('barWidth'),
@@ -385,7 +383,6 @@ const AdvancedChart = BaseChart.inherit({
                 const family = new seriesFamilyModule.SeriesFamily({
                     type: type,
                     pane: pane.name,
-                    equalBarWidth: familyOptions.equalBarWidth,
                     minBubbleSize: familyOptions.minBubbleSize,
                     maxBubbleSize: familyOptions.maxBubbleSize,
                     barWidth: familyOptions.barWidth,

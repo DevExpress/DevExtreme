@@ -819,42 +819,10 @@ const environment = {
         assert.ok(!chart.verticalAxesDisposed, 'Vertical axes should be disposed');
     });
 
-    QUnit.test('EqualBarWidth updating', function(assert) {
-        // arrange
-        const chart = this.createChart({
-            equalBarWidth: false,
-            dataSource: [{ arg: 1, val: 1 }],
-            series: { type: 'line' }
-        });
-        const series = chart.getAllSeries()[0];
-        const valAxis = chart._valueAxes[0];
-        const argAxis = chart._argumentAxes[0];
-
-        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
-        $.each(chart.seriesFamilies, function(_, family) {
-            sinon.stub(family, 'updateOptions', function(options) {
-                chart.seriesFamiliesUpdatingOptions = options;
-            });
-        });
-
-        // act
-        this.themeManager.getOptions.withArgs('equalBarWidth').returns(true);
-
-        chart.option({
-            equalBarWidth: true,
-        });
-        // assert
-        assert.equal(chart.seriesFamiliesUpdatingOptions.equalBarWidth, true, 'series family should be updated');
-
-        assert.strictEqual(series, chart.getAllSeries()[0], 'Series should not be recreated');
-        assert.strictEqual(valAxis, chart._valueAxes[0], 'Val axis should not be recreated');
-        assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should not be recreated');
-    });
-
     QUnit.test('T552944. Update series family and option that recreates series - series families are processed first', function(assert) {
         // arrange
         const chart = this.createChart({
-            equalBarWidth: false,
+            barGroupPadding: 0.5,
             dataSource: [{ arg: 1, val: 1 }],
             series: { type: 'line' }
         });
@@ -863,11 +831,11 @@ const environment = {
         chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
 
         // act
-        this.themeManager.getOptions.withArgs('equalBarWidth').returns(true);
+        this.themeManager.getOptions.withArgs('barGroupPadding').returns(0.8);
 
         chart.option({
             palette: ['green'],
-            equalBarWidth: true
+            barGroupPadding: 0.8
         });
         // assert
         assert.notStrictEqual(chart.getAllSeries(), series, 'series recreated');

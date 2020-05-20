@@ -66,7 +66,6 @@ function createStubThemeManager() {
     themeManager.getOptions.withArgs('margin').returns({ top: 5, bottom: 10, left: 5, right: 10 });
     themeManager.getOptions.withArgs('polarTranslatorOptions').returns({});
     themeManager.getOptions.withArgs('animation').returns({ enabled: true, maxPointCountSupported: 100 });
-    themeManager.getOptions.withArgs('equalBarWidth').returns(true);
     themeManager.getOptions.withArgs('tooltip').returns({ enabled: true, font: {} });
     themeManager.getOptions.withArgs('rotated').returns(true);
     themeManager.getOptions.returns({});
@@ -551,7 +550,6 @@ QUnit.test('create correct seriesFamily', function(assert) {
     assert.ok(chart.seriesFamilies);
     assert.equal(chart.seriesFamilies.length, 1);
     assert.equal(this.createSeriesFamily.args[0][0].type, 'line');
-    assert.equal(this.createSeriesFamily.args[0][0].equalBarWidth, true);
     assert.deepEqual(chart.seriesFamilies[0].add.args[0][0], chart.series);
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce);
 });

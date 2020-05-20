@@ -17,7 +17,7 @@ const createThemeManager = function(chartOptions) {
     });
 };
 
-const processSeriesFamilies = function(series, equalBarWidth, minBubbleSize, maxBubbleSize, barOptions, negativesAsZeroes) {
+const processSeriesFamilies = function(series, minBubbleSize, maxBubbleSize, barOptions, negativesAsZeroes) {
     const families = [];
     const types = [];
 
@@ -30,7 +30,6 @@ const processSeriesFamilies = function(series, equalBarWidth, minBubbleSize, max
     each(types, function(_, type) {
         const family = new seriesFamilyModule.SeriesFamily({
             type: type,
-            equalBarWidth: equalBarWidth,
             minBubbleSize: minBubbleSize,
             maxBubbleSize: maxBubbleSize,
             barWidth: barOptions.barWidth,
@@ -164,7 +163,6 @@ SeriesDataSource.prototype = {
         series.forEach(function(s) { s.createPoints(); });
 
         this._seriesFamilies = processSeriesFamilies(series,
-            themeManager.getOptions('equalBarWidth'),
             themeManager.getOptions('minBubbleSize'),
             themeManager.getOptions('maxBubbleSize'),
             {
