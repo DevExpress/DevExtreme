@@ -1241,7 +1241,7 @@ module.exports = {
 
         getCustomPosition(position) {
             const that = this;
-            const oppositeAxis = that.getCustomPositionAxis();
+            const oppositeAxis = that.getOppositeAxis();
             const resolvedPosition = position ?? that.getResolvedPositionOption();
             const offset = that.getOptions().offset;
             const oppositeTranslator = oppositeAxis.getTranslator();
@@ -1270,12 +1270,12 @@ module.exports = {
 
         getCustomBoundaryPosition(position) {
             const that = this;
-            const oppositeAxis = that.getCustomPositionAxis();
+            const oppositeAxis = that.getOppositeAxis();
             const resolvedPosition = position ?? that.getResolvedPositionOption();
-            const boundaryPositions = that._orthogonalPositions;
             const oppositeTranslator = oppositeAxis.getTranslator();
+            const visibleArea = oppositeTranslator.getCanvasVisibleArea();
 
-            if(!isDefined(boundaryPositions) || !isDefined(oppositeAxis._orthogonalPositions) || oppositeTranslator.canvasLength === 0) {
+            if(!isDefined(oppositeAxis._orthogonalPositions) || oppositeTranslator.canvasLength === 0) {
                 return undefined;
             }
 
@@ -1283,10 +1283,10 @@ module.exports = {
 
             if(!isDefined(currentPosition)) {
                 return that.getResolvedBoundaryPosition();
-            } else if(currentPosition <= boundaryPositions.start || currentPosition >= boundaryPositions.end) {
-                const isStartPosition = currentPosition <= boundaryPositions.start;
-                return isStartPosition ? (that._isHorizontal ? TOP : LEFT) :
-                    (that._isHorizontal ? BOTTOM : RIGHT);
+            } else if(currentPosition <= visibleArea.min) {
+                return that._isHorizontal ? TOP : LEFT;
+            } else if(currentPosition >= visibleArea.max) {
+                return that._isHorizontal ? BOTTOM : RIGHT;
             }
 
             return currentPosition;
@@ -1299,7 +1299,7 @@ module.exports = {
 
         customPositionIsAvailable() {
             const options = this.getOptions();
-            return isDefined(this.getCustomPositionAxis()) && (isDefined(options.customPosition) || isFinite(options.offset));
+            return isDefined(this.getOppositeAxis()) && (isDefined(options.customPosition) || isFinite(options.offset));
         },
 
         hasCustomPosition() {
