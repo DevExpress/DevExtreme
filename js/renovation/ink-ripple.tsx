@@ -4,7 +4,12 @@ import {
 import { initConfig, showWave, hideWave } from '../ui/widget/utils.ink_ripple';
 
 // TODO: remake old ink ripple in new JSX component
-export const viewFunction = () => <div className="dx-inkripple" />;
+export const viewFunction = (model: InkRipple) => (
+  <div
+    className="dx-inkripple"
+    {...model.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
+  />
+);
 
 @ComponentBindings()
 export class InkRippleProps {
