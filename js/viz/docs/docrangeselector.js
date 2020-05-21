@@ -651,12 +651,6 @@ const dxRangeSelector = {
             customizeSeries: function() { }
         },
         /**
-        * @name dxRangeSelectorOptions.chart.barWidth
-        * @type number
-        * @deprecated dxChartSeriesTypes.CommonSeries.barPadding
-        */
-        barWidth: undefined,
-        /**
         * @name dxRangeSelectorOptions.chart.barGroupPadding
         * @type number
         * @default 0.3

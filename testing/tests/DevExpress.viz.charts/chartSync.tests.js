@@ -903,37 +903,6 @@ const environment = {
         assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should not be recreated');
     });
 
-    QUnit.test('BarWidth updating', function(assert) {
-        // arrange
-        const chart = this.createChart({
-            barWidth: 7,
-            dataSource: [{ arg: 1, val: 1 }],
-            series: { type: 'line' }
-        });
-        const series = chart.getAllSeries()[0];
-        const valAxis = chart._valueAxes[0];
-        const argAxis = chart._argumentAxes[0];
-        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
-        $.each(chart.seriesFamilies, function(_, family) {
-            sinon.stub(family, 'updateOptions', function(options) {
-                chart.seriesFamiliesUpdatingOptions = options;
-            });
-        });
-
-        // act
-        this.themeManager.getOptions.withArgs('barWidth').returns(11);
-
-        chart.option({
-            barWidth: 11
-        });
-        // assert
-        assert.equal(chart.seriesFamiliesUpdatingOptions.barWidth, 11, 'series family should be updated');
-
-        assert.strictEqual(series, chart.getAllSeries()[0], 'Series should not be recreated');
-        assert.strictEqual(valAxis, chart._valueAxes[0], 'Val axis should not be recreated');
-        assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should not be recreated');
-    });
-
     QUnit.test('barGroupPadding updating', function(assert) {
         // arrange
         const chart = this.createChart({

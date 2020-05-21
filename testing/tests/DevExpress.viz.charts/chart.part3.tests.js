@@ -1819,7 +1819,6 @@ QUnit.test('pass to ctor', function(assert) {
 
 
     this.createChart({
-        barWidth: 'barWidth-option',
         rotated: 'rotated-option',
         series: [{ name: 'name1', type: 'line' }, { name: 'name2', type: 'bar' }],
         maxBubbleSize: 'someMaxBubbleSize',
@@ -1835,7 +1834,6 @@ QUnit.test('pass to ctor', function(assert) {
         type: 'line',
         pane: 'default',
         rotated: 'rotated-option',
-        barWidth: 'barWidth-option',
         negativesAsZeroes: 'someNegativesAsZeroes',
         barGroupPadding: 'barGroupPadding-option',
         barGroupWidth: 'barGroupWidth-option'

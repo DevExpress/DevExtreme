@@ -104,14 +104,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      */
     barGroupWidth?: number;
     /**
-     * @docid dxPolarChartOptions.barWidth
-     * @type number
-     * @deprecated dxPolarChartSeriesTypes.CommonPolarChartSeries.barPadding
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    barWidth?: number;
-    /**
      * @docid dxPolarChartOptions.commonAnnotationSettings
      * @type dxPolarChartCommonAnnotationConfig
      * @prevFileNamespace DevExpress.viz
@@ -1473,15 +1465,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
      * @public
      */
     barPadding?: number;
-    /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.barWidth
-     * @type number
-     * @default undefined
-     * @propertyOf dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    barWidth?: number;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.border
      * @type object

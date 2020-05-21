@@ -670,15 +670,6 @@ QUnit.test('Add array of different series', function(assert) {
 
 QUnit.module('Bar series - side-by-side width calculation');
 
-QUnit.test('Set single series', function(assert) {
-    const series = createSeries({ points: pointsForStacking.points1() });
-    const expectedWidth = 42;
-
-    createSeriesFamily('bar', [series], { barWidth: 0.6 });
-
-    checkSeries(assert, series, expectedWidth, 0);
-});
-
 QUnit.test('Set single series, bar width is specify', function(assert) {
     const series = createSeries({ points: pointsForStacking.points1() });
     const expectedWidth = 70;
@@ -740,25 +731,6 @@ QUnit.test('Set five series', function(assert) {
     const expectedWidth = 12;
 
     createSeriesFamily('bar', series, { });
-
-    checkSeries(assert, series1, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth - expectedSpacing - expectedWidth / 2);
-    checkSeries(assert, series2, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth / 2);
-    checkSeries(assert, series3, expectedWidth, 0);
-    checkSeries(assert, series4, expectedWidth, ZERO + expectedWidth / 2 + expectedSpacing + expectedWidth / 2);
-    checkSeries(assert, series5, expectedWidth, ZERO + expectedWidth / 2 + expectedSpacing + expectedWidth + expectedSpacing + expectedWidth / 2);
-});
-
-QUnit.test('Set five series, width is specified', function(assert) {
-    const series1 = createSeries({ points: pointsForStacking.points1() });
-    const series2 = createSeries({ points: pointsForStacking.points2() });
-    const series3 = createSeries({ points: pointsForStacking.points3() });
-    const series4 = createSeries({ points: pointsForStacking.points4() });
-    const series5 = createSeries({ points: pointsForStacking.points5() });
-    const series = [series1, series2, series3, series4, series5];
-    const expectedSpacing = 14;
-    const expectedWidth = 3;
-
-    createSeriesFamily('bar', series, { barWidth: 0.2 });
 
     checkSeries(assert, series1, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth - expectedSpacing - expectedWidth / 2);
     checkSeries(assert, series2, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth / 2);
@@ -868,19 +840,6 @@ QUnit.test('Set two series, barPadding is 1', function(assert) {
 
     checkSeries(assert, series1, 1, -35.5);
     checkSeries(assert, series2, 1, 35.5);
-});
-
-QUnit.test('Set three series, barWidth is specified', function(assert) {
-    const series1 = createSeries({ points: pointsForStacking.points1(), barWidth: 5 });
-    const series2 = createSeries({ points: pointsForStacking.points2(), barWidth: 10 });
-    const series3 = createSeries({ points: pointsForStacking.points3(), barWidth: 15 });
-    const series = [series1, series2, series3];
-
-    createSeriesFamily('bar', series);
-
-    checkSeries(assert, series1, 5, -33);
-    checkSeries(assert, series2, 10, 0);
-    checkSeries(assert, series3, 15, 28);
 });
 
 QUnit.test('Set three series, all of them in one group', function(assert) {
@@ -3117,7 +3076,7 @@ QUnit.test('Translator interval is too small - bar width is 1px', function(asser
     const series = createSeries({ points: pointsForStacking.points1() }, undefined, undefined, 2);
     const expectedWidth = 1;
 
-    createSeriesFamily('bar', [series], { barWidth: 0.3 });
+    createSeriesFamily('bar', [series], { });
 
     checkSeries(assert, series, expectedWidth, 0);
 });

@@ -67,13 +67,6 @@ function setAxisVisualRangeByOption(arg, axis, isDirectOption, index) {
 
 const AdvancedChart = BaseChart.inherit({
 
-    _setDeprecatedOptions: function() {
-        this.callBase.apply(this, arguments);
-        _extend(this._deprecatedOptions, {
-            'barWidth': { since: '18.1', message: 'Use the \'commonSeriesSettings.barPadding\' or \'series.barPadding\' option instead' }
-        });
-    },
-
     _fontFields: [COMMON_AXIS_SETTINGS + '.label.' + FONT, COMMON_AXIS_SETTINGS + '.title.' + FONT],
 
     _partialOptionChangesMap: {
@@ -356,7 +349,6 @@ const AdvancedChart = BaseChart.inherit({
         const familyOptions = {
             minBubbleSize: themeManager.getOptions('minBubbleSize'),
             maxBubbleSize: themeManager.getOptions('maxBubbleSize'),
-            barWidth: themeManager.getOptions('barWidth'),
             barGroupPadding: themeManager.getOptions('barGroupPadding'),
             barGroupWidth: themeManager.getOptions('barGroupWidth'),
             negativesAsZeroes: _isDefined(negativesAsZeroes) ? negativesAsZeroes : negativesAsZeros
@@ -385,7 +377,6 @@ const AdvancedChart = BaseChart.inherit({
                     pane: pane.name,
                     minBubbleSize: familyOptions.minBubbleSize,
                     maxBubbleSize: familyOptions.maxBubbleSize,
-                    barWidth: familyOptions.barWidth,
                     barGroupPadding: familyOptions.barGroupPadding,
                     barGroupWidth: familyOptions.barGroupWidth,
                     negativesAsZeroes: familyOptions.negativesAsZeroes,

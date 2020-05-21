@@ -36,7 +36,6 @@ const REFRESH_SERIES_DATA_INIT_ACTION_OPTIONS = [
 const REFRESH_SERIES_FAMILIES_ACTION_OPTIONS = [
     'minBubbleSize',
     'maxBubbleSize',
-    'barWidth',
     'barGroupPadding',
     'barGroupWidth',
     'negativesAsZeroes',

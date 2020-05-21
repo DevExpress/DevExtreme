@@ -554,9 +554,6 @@ const dxRangeSelector = baseWidgetModule.inherit({
     _setDeprecatedOptions: function() {
         this.callBase.apply(this, arguments);
         extend(this._deprecatedOptions, {
-            'chart.barWidth': {
-                since: '18.1', message: 'Use the \'chart.commonSeriesSettings.barPadding\' or \'chart.series.barPadding\' option instead'
-            },
             'chart.useAggregation': {
                 since: '18.1', message: 'Use the \'chart.commonSeriesSettings.aggregation.enabled\' or \'chart.series.aggregation.enabled\' option instead'
             }

@@ -32,7 +32,6 @@ const processSeriesFamilies = function(series, minBubbleSize, maxBubbleSize, bar
             type: type,
             minBubbleSize: minBubbleSize,
             maxBubbleSize: maxBubbleSize,
-            barWidth: barOptions.barWidth,
             barGroupPadding: barOptions.barGroupPadding,
             barGroupWidth: barOptions.barGroupWidth,
             negativesAsZeroes: negativesAsZeroes
@@ -166,7 +165,6 @@ SeriesDataSource.prototype = {
             themeManager.getOptions('minBubbleSize'),
             themeManager.getOptions('maxBubbleSize'),
             {
-                barWidth: themeManager.getOptions('barWidth'),
                 barGroupPadding: themeManager.getOptions('barGroupPadding'),
                 barGroupWidth: themeManager.getOptions('barGroupWidth')
             },

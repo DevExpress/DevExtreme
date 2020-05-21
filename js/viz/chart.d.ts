@@ -566,14 +566,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      */
     barGroupWidth?: number;
     /**
-     * @docid dxChartOptions.barWidth
-     * @type number
-     * @deprecated dxChartSeriesTypes.CommonSeries.barPadding
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    barWidth?: number;
-    /**
      * @docid dxChartOptions.commonAnnotationSettings
      * @type dxChartCommonAnnotationConfig
      * @prevFileNamespace DevExpress.viz
@@ -3087,15 +3079,6 @@ export interface dxChartSeriesTypesCommonSeries {
      * @public
      */
     barPadding?: number;
-    /**
-     * @docid dxChartSeriesTypes.CommonSeries.barWidth
-     * @type number
-     * @default undefined
-     * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    barWidth?: number;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.border
      * @type object
