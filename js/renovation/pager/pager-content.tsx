@@ -3,7 +3,6 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Event,
 } from 'devextreme-generator/component_declaration/common';
-import noop from '../utils/noop';
 import InfoText from './info';
 import PageIndexSelector from './page-index-selector';
 import PageSizeSelector from './page-size-selector';
@@ -69,10 +68,10 @@ export type TwoWayProps = {
 };
 
 @ComponentBindings()
-export class PagerContentProps extends PagerProps /* implements TwoWayProps */ {
-  @Event() pageIndexChange?: (pageIndex: number) => void = noop;
+export class PagerContentProps extends PagerProps /* bug in generator  implements TwoWayProps */ {
+  @Event() pageIndexChange!: (pageIndex: number) => void;
 
-  @Event() pageSizeChange?: (pageSize: number) => void = noop;
+  @Event() pageSizeChange!: (pageSize: number) => void;
 
   @OneWay() infoTextVisible = true;
 
@@ -88,10 +87,7 @@ export class PagerContentProps extends PagerProps /* implements TwoWayProps */ {
 }
 
 // tslint:disable-next-line: max-classes-per-file
-@Component({
-  defaultOptionRules: null,
-  view: viewFunction,
-})
+@Component({ defaultOptionRules: null, view: viewFunction })
 export default class PagerContent extends JSXComponent<PagerContentProps> {
   get isLargeDisplayMode(): boolean {
     return !(this.props.lightModeEnabled

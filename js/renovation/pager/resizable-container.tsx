@@ -2,7 +2,6 @@ import {
   Component, ComponentBindings, JSXComponent, Fragment,
   Ref, Effect, Template, InternalState, Event,
 } from 'devextreme-generator/component_declaration/common';
-import noop from '../utils/noop';
 import getElementComputedStyle from './get-computed-style';
 import resizeCallbacks from '../../core/utils/resize_callbacks';
 import PagerProps from './pager-props';
@@ -119,9 +118,9 @@ export function updateChildProps(
 
 @ComponentBindings()
 export class ResizableContainerProps extends PagerProps {
-  @Event() pageIndexChange?: (pageIndex: number) => void = noop;
+  @Event() pageIndexChange!: (pageIndex: number) => void;
 
-  @Event() pageSizeChange?: (pageSize: number) => void = noop;
+  @Event() pageSizeChange!: (pageSize: number) => void;
 
   // TODO Vitik: bug in generator it should be @Template() content!: ContentPagerProps;
   @Template() content: any;
