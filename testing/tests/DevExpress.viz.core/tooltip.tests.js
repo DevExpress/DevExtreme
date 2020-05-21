@@ -632,7 +632,8 @@ QUnit.test('Show preparations. W/o customize, w/ text', function(assert) {
         dashStyle: 'solid',
         type: 'area',
         opacity: 0.8,
-        'pointer-events': 'none'
+        'pointer-events': 'none',
+        filter: 'shadowFilter.id'
     });
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
