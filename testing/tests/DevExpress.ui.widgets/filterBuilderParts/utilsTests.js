@@ -23,18 +23,19 @@ const groupOperations = [{
     value: '!or'
 }];
 const filterOperationsDescriptions = {
+    between: 'Is between',
+    contains: 'Contains',
+    endsWith: 'Ends with',
     equal: 'Equals',
-    notEqual: 'Does not equal',
-    lessThan: 'Is less than',
-    lessThanOrEqual: 'Is less than or equal to',
     greaterThan: 'Is greater than',
     greaterThanOrEqual: 'Is greater than or equal to',
-    startsWith: 'Starts with',
-    contains: 'Contains',
-    notContains: 'Does not contain',
-    endsWith: 'Ends with',
     isBlank: 'Is blank',
-    isNotBlank: 'Is not blank'
+    isNotBlank: 'Is not blank',
+    lessThan: 'Is less than',
+    lessThanOrEqual: 'Is less than or equal to',
+    notContains: 'Does not contain',
+    notEqual: 'Does not equal',
+    startsWith: 'Starts with'
 };
 
 QUnit.module('Errors', function() {
@@ -1120,6 +1121,32 @@ QUnit.module('getAvailableOperations', {
 
         // assert
         assert.strictEqual(operations[0].text, 'Last Days');
+    });
+
+    // T889066
+    QUnit.test('the \'between\' operation should not be listed for a lookup field (dataType === number)', function(assert) {
+        // arrange, act
+        const customOperations = [
+            {
+                name: 'between',
+                dataTypes: ['number']
+            },
+            {
+                name: 'anyof',
+                dataTypes: ['number']
+            }
+        ];
+        const field = {
+            dataField: 'test',
+            dataType: 'number',
+            lookup: {}
+        };
+
+        const operations = utils.getAvailableOperations(field, filterOperationsDescriptions, customOperations);
+        const betweenOperation = operations.filter(operation => operation.value === 'between');
+
+        // assert
+        assert.equal(betweenOperation.length, 0, 'the \'between\' operation should not be found');
     });
 });
 
