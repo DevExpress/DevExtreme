@@ -9,6 +9,7 @@ import dateUtils from '../../core/utils/date';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { Deferred, when } from '../../core/utils/deferred';
+import loading from './ui.loading';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -30,6 +31,7 @@ export default class AppointmentPopup {
 
         this.state = {
             lastEditData: null,
+            saveChangesLocker: false,
             appointment: {
                 data: null,
                 processTimeZone: false,
@@ -254,7 +256,7 @@ export default class AppointmentPopup {
         ];
     }
 
-    saveChanges(disableButton) {
+    saveChanges(showLoadPanel) {
         const deferred = new Deferred();
         const validation = this._appointmentForm.validate();
         const state = this.state.appointment;
@@ -266,11 +268,11 @@ export default class AppointmentPopup {
             return new Date(date.getTime() + tzDiff);
         };
 
-        disableButton && this._disableDoneButton();
+        showLoadPanel && this._showLoadPanel();
 
         when(validation && validation.complete || validation).done((validation) => {
             if(validation && !validation.isValid) {
-                this._enableDoneButton();
+                this._hideLoadPanel();
                 deferred.resolve(false);
                 return;
             }
@@ -294,9 +296,9 @@ export default class AppointmentPopup {
             }
 
             if(oldData && !recData) {
-                this.scheduler.updateAppointment(oldData, formData);
+                this.scheduler.updateAppointment(oldData, formData)
+                    .done(deferred.resolve);
             } else {
-
                 if(recData) {
                     this.scheduler.updateAppointment(oldData, recData);
                     delete this.scheduler._updatedRecAppointment;
@@ -307,14 +309,16 @@ export default class AppointmentPopup {
                     }
                 }
 
-                this.scheduler.addAppointment(formData);
+                this.scheduler.addAppointment(formData)
+                    .done(deferred.resolve);
             }
-            this._enableDoneButton();
 
-            this.state.lastEditData = formData;
-
-            deferred.resolve(true);
+            deferred.done(() => {
+                this._hideLoadPanel();
+                this.state.lastEditData = formData;
+            });
         });
+
         return deferred.promise();
     }
 
@@ -336,26 +340,48 @@ export default class AppointmentPopup {
 
     saveEditData() {
         const deferred = new Deferred();
-        when(this.saveChanges(true)).done(() => {
-            if(this.state.lastEditData) {
-                const startDate = this.scheduler.fire('getField', 'startDate', this.state.lastEditData);
-                this.scheduler._workSpace.updateScrollPosition(startDate);
-                this.state.lastEditData = null;
-            }
-            deferred.resolve();
-        });
+
+        if(this._tryLockSaveChanges()) {
+            when(this.saveChanges(true)).done(() => {
+                if(this.state.lastEditData) {
+                    const startDate = this.scheduler.fire('getField', 'startDate', this.state.lastEditData);
+                    this.scheduler._workSpace.updateScrollPosition(startDate);
+                    this.state.lastEditData = null;
+                }
+
+                this._unlockSaveChanges();
+
+                deferred.resolve();
+            });
+        }
+
         return deferred.promise();
     }
 
-    _enableDoneButton() {
-        const toolbarItems = this._popup.option('toolbarItems');
-        toolbarItems[0].options = extend(toolbarItems[0].options, { disabled: false });
-        this._popup.option('toolbarItems', toolbarItems);
+    _hideLoadPanel() {
+        loading.hide();
     }
 
-    _disableDoneButton() {
-        const toolbarItems = this._popup.option('toolbarItems');
-        toolbarItems[0].options = extend(toolbarItems[0].options, { disabled: true });
-        this._popup.option('toolbarItems', toolbarItems);
+    _showLoadPanel() {
+        const $overlayContent = this._popup.overlayContent();
+
+        loading.show({
+            container: $overlayContent,
+            position: {
+                of: $overlayContent
+            }
+        });
+    }
+
+    _tryLockSaveChanges() {
+        if(this.state.saveChangesLocker === false) {
+            this.state.saveChangesLocker = true;
+            return true;
+        }
+        return false;
+    }
+
+    _unlockSaveChanges() {
+        this.state.saveChangesLocker = false;
     }
 }

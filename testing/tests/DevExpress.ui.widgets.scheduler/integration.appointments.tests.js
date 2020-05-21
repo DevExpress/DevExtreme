@@ -18,6 +18,7 @@ import dataUtils from 'core/element_data';
 import dateSerialization from 'core/utils/date_serialization';
 import { SchedulerTestWrapper, initTestMarkup, createWrapper, CLASSES } from './helpers.js';
 import browser from 'core/utils/browser';
+import { Deferred } from 'core/utils/deferred';
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
@@ -728,7 +729,7 @@ QUnit.test('Add new appointment', function(assert) {
 
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
     const addAppointment = this.instance.addAppointment;
-    const spy = sinon.spy(noop);
+    const spy = sinon.spy(() => new Deferred());
     const newItem = { startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption' };
     this.instance.addAppointment = spy;
     try {
@@ -1048,7 +1049,7 @@ QUnit.test('Update appointment', function(assert) {
     this.clock.tick();
 
     const updateAppointment = this.instance.updateAppointment;
-    const spy = sinon.spy(noop);
+    const spy = sinon.spy(() => new Deferred());
     const updatedItem = this.tasks[0];
     this.instance.updateAppointment = spy;
     try {
@@ -3332,9 +3333,9 @@ QUnit.test('Appointments should be rendered correctly, Month view with intervalC
     assert.equal($appointments.length, 3, 'Appointments were rendered correctly');
 });
 
-QUnit.test('Scheduler should add only one appointment at multiple \'done\' button clicks on appointment form', function(assert) {
+QUnit.test('Scheduler should add only one appointment at multiple "done" button clicks on appointment form', function(assert) {
     const a = { text: 'a', startDate: new Date(2017, 7, 9), endDate: new Date(2017, 7, 9, 0, 15) };
-    this.createInstance({
+    const scheduler = createWrapper({
         dataSource: [],
         currentDate: new Date(2017, 7, 9),
         currentView: 'week',
@@ -3349,14 +3350,16 @@ QUnit.test('Scheduler should add only one appointment at multiple \'done\' butto
             e.cancel = d.promise();
         }
     });
+    const appointmentPopup = scheduler.appointmentPopup;
 
-    this.instance.showAppointmentPopup(a, true);
-    $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick').trigger('dxclick');
+    scheduler.instance.showAppointmentPopup(a, true);
+
+    appointmentPopup.clickDoneButton();
+    appointmentPopup.clickDoneButton();
+
     this.clock.tick(300);
 
-    const $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
-
-    assert.equal($appointments.length, 1, 'right appointment quantity');
+    assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'right appointment quantity');
 });
 
 QUnit.test('Appointments should be rendered correctly in vertical grouped workspace Month', function(assert) {
