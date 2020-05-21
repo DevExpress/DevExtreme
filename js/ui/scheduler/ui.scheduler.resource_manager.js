@@ -25,6 +25,7 @@ export default class ResourceManager {
         } else {
             return new DataSourceModule.DataSource({
                 store: DataSourceModule.normalizeDataSourceOptions(dataSource).store,
+                filter: dataSource.filter,
                 pageSize: 0
             });
         }
