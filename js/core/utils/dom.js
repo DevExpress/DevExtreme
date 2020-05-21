@@ -173,9 +173,18 @@ const contains = function(container, element) {
     if(!element) {
         return false;
     }
-    element = domAdapter.isTextNode(element) ? element.parentNode : element;
 
-    return domAdapter.isDocument(container) ? container.documentElement.contains(element) : container.contains(element);
+    if(domAdapter.isTextNode(element)) {
+        element = element.parentNode;
+    }
+
+    if(domAdapter.isDocument(container)) {
+        return container.documentElement.contains(element);
+    }
+
+    return container.contains
+        ? container.contains(element)
+        : !!(element.compareDocumentPosition(container) & element.DOCUMENT_POSITION_CONTAINS);
 };
 
 const getPublicElement = function($element) {
