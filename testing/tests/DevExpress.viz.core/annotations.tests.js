@@ -184,10 +184,11 @@ QUnit.test('Draw image inside a plaque with borders and arrow', function(assert)
         stroke: '#000000',
         dashStyle: 'solid',
         fill: '#AAAAAA',
-        filter: 'shadowFilter.id',
         opacity: 0.5
     }]);
     const cloudGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(cloudGroup.attr.firstCall.args, [{ filter: 'shadowFilter.id' }]);
+
     assert.deepEqual(plaque.append.firstCall.args, [cloudGroup]);
     assert.equal(plaque.sharp.callCount, 1);
     checkCloudPath(assert, plaque, [80, 140, 120, 140, 120, 145, 140, 160, 120, 175, 120, 180, 80, 180], [90, 100, 160]);
@@ -240,7 +241,6 @@ QUnit.test('Draw image inside a plaque without borders', function(assert) {
     assert.deepEqual(plaque.attr.firstCall.args, [{
         'stroke-width': 0,
         fill: '#AAAAAA',
-        filter: 'shadowFilter.id',
         opacity: 0.5
     }]);
 });

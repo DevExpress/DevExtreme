@@ -308,6 +308,7 @@ export class Plaque {
             this.anchorX = anchorX;
             this.anchorY = anchorY;
             this.move(x, y);
+            this._root?.append(this.root);
         };
 
         if(this.contentTemplate.render) {
@@ -325,7 +326,7 @@ export class Plaque {
         const shadowSettings = extend({ x: '-50%', y: '-50%', width: '200%', height: '200%' }, options.shadow);
         const shadow = this._shadow = renderer.shadowFilter().attr(shadowSettings);
 
-        const cloudSettings = { opacity: options.opacity, filter: shadow.id, 'stroke-width': 0, fill: options.color };
+        const cloudSettings = { opacity: options.opacity, 'stroke-width': 0, fill: options.color };
         const borderOptions = options.border || {};
 
         if(borderOptions.visible) {
@@ -341,7 +342,7 @@ export class Plaque {
         if(options.type) {
             group.attr({ class: `dxc-${options.type}-annotation` });
         }
-        const cloudGroup = renderer.g().append(group);
+        const cloudGroup = renderer.g().attr({ filter: shadow.id }).append(group);
         this._cloud = renderer.path([], 'area').attr(cloudSettings).sharp().append(cloudGroup);
 
         this._contentGroup = renderer.g().append(group);
