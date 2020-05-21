@@ -313,8 +313,8 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
                 update: (key, values) => {
                     return new Promise(resolve => {
                         setTimeout(() => {
-                            const appointmentData = data.find(item => item.id === key);
-                            Object.assign(appointmentData, values);
+                            const appointmentData = data.filter(item => item.id === key)[0];
+                            $.extend(appointmentData, values);
                             scheduler.instance.repaint();
                             resolve();
                             done();
