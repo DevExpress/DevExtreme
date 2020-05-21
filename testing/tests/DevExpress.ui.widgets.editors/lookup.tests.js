@@ -3535,7 +3535,7 @@ QUnit.module('Events', {
             }
         }).dxLookup('instance');
 
-        instance._list._pullDownHandler();
+        instance._list.option('onPullRefresh')();
     });
 
     QUnit.test('onPullRefresh handler should be passed to the list - subscription by "on" method', function(assert) {
@@ -3557,7 +3557,7 @@ QUnit.module('Events', {
             assert.ok(true, 'onPullRefresh is fired');
         });
 
-        instance._list._pullDownHandler();
+        instance._list.option('onPullRefresh')();
     });
 
     QUnit.test('change "onScroll" handler runtime', function(assert) {
