@@ -175,13 +175,15 @@ export class SchedulerTestWrapper {
             },
 
             getDoneButton: () => this.appointmentPopup.getPopup().find('.dx-button.dx-popup-done'),
-            clickDoneButton: () => !this.appointmentPopup.hasLoadPanel() && this.appointmentPopup.getDoneButton().trigger('dxclick'),
+            clickDoneButton: () => this.appointmentPopup.getDoneButton().trigger('dxclick'),
 
             getCancelButton: () => this.appointmentPopup.getPopup().find('.dx-popup-cancel'),
-            clickCancelButton: () => !this.appointmentPopup.hasLoadPanel() && this.appointmentPopup.getCancelButton().trigger('dxclick'),
+            clickCancelButton: () => this.appointmentPopup.getCancelButton().trigger('dxclick'),
             saveAppointmentData: () => this.instance._appointmentPopup.saveEditData.call(this.instance._appointmentPopup),
 
-            hasLoadPanel: () => this.appointmentPopup.getPopup().find('.dx-loadpanel').length !== 0
+            hasLoadPanel: () => this.appointmentPopup.getPopup().find('.dx-loadpanel').length !== 0,
+
+            getInstance: () => this.instance._appointmentPopup
         };
 
         this.appointmentForm = {

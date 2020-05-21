@@ -337,6 +337,8 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
 
         const deferred = scheduler.appointmentPopup.saveAppointmentData();
 
+        assert.notOk(scheduler.appointmentPopup.getInstance()._tryLockSaveChanges(), 'Save changes already locked');
+
         assert.ok(scheduler.appointmentPopup.hasLoadPanel(), 'has load panel');
 
         deferred.done(() => {
@@ -1144,8 +1146,7 @@ QUnit.test('Load panel should not be shown if validation is fail', function(asse
 
     scheduler.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption' });
 
-    const $doneButton = scheduler.appointmentPopup.getDoneButton();
-    $doneButton.trigger('dxclick');
+    scheduler.appointmentPopup.clickDoneButton();
 
     assert.notOk(scheduler.appointmentPopup.hasLoadPanel());
 });

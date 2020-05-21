@@ -37,6 +37,7 @@ export default class AppointmentPopup {
 
         this.state = {
             lastEditData: null,
+            saveChangesLocker: false,
             appointment: {
                 data: null,
                 processTimeZone: false,
@@ -382,14 +383,21 @@ export default class AppointmentPopup {
 
     saveEditData() {
         const deferred = new Deferred();
-        when(this.saveChanges(true)).done(() => {
-            if(this.state.lastEditData) {
-                const startDate = this.scheduler.fire('getField', 'startDate', this.state.lastEditData);
-                this.scheduler._workSpace.updateScrollPosition(startDate);
-                this.state.lastEditData = null;
-            }
-            deferred.resolve();
-        });
+
+        if(this._tryLockSaveChanges()) {
+            when(this.saveChanges(true)).done(() => {
+                if(this.state.lastEditData) {
+                    const startDate = this.scheduler.fire('getField', 'startDate', this.state.lastEditData);
+                    this.scheduler._workSpace.updateScrollPosition(startDate);
+                    this.state.lastEditData = null;
+                }
+
+                this._unlockSaveChanges();
+
+                deferred.resolve();
+            });
+        }
+
         return deferred.promise();
     }
 
@@ -406,5 +414,17 @@ export default class AppointmentPopup {
                 of: $overlayContent
             }
         });
+    }
+
+    _tryLockSaveChanges() {
+        if(this.state.saveChangesLocker === false) {
+            this.state.saveChangesLocker = true;
+            return true;
+        }
+        return false;
+    }
+
+    _unlockSaveChanges() {
+        this.state.saveChangesLocker = false;
     }
 }
