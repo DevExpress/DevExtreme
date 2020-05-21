@@ -61,7 +61,7 @@
     "cssom": "^0.4.4",
     "del": "^2.2.2",
     "devextreme-cldr-data": "^1.0.2",
-    "devextreme-generator": "^1.0.58",
+    "devextreme-generator": "1.0.62",
     "devextreme-internal-tools": "~1.2.24",
     "enzyme": "^3.11.0",
     "enzyme-adapter-preact-pure": "^2.2.0",
@@ -156,7 +156,7 @@
   "scripts": {
     "lint": "npm-run-all -p -c lint-js lint-css",
     "lint-js": "eslint .",
-    "lint-ts": "eslint ./testing/jest/**/*.ts ./testing/jest/**/*.tsx ./js/renovation/**/*.tsx ./js/renovation/**/*.ts",
+    "lint-ts": "eslint ./js/renovation/*.{ts,tsx} ./js/renovation/**/*.{ts,tsx} ./testing/jest/**/*.{ts,tsx}",
     "lint-css": "stylelint styles",
     "lint-staged": "lint-staged && npm run lint-ts",
     "build": "dotnet build build/build-dotnet.sln && gulp default",

@@ -1,9 +1,9 @@
 import { h } from 'preact';
-import { mount } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 import Icon from '../../js/renovation/icon.p';
 
 describe('Icon', () => {
-  const render = (props = {}) => mount(<Icon {...props} />);
+  const render = (props = {}): ReactWrapper => mount(<Icon {...props} />);
 
   describe('Props', () => {
     describe('source', () => {
