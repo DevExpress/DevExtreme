@@ -12,8 +12,7 @@ const watch = require('gulp-watch');
 const SRC = ['js/renovation/**/*.tsx'];
 const DEST = 'js/renovation/';
 
-const GLOB_TS = require('../ts').GLOB_TS;
-const COMMON_SRC = ['js/**/*.*', `!${GLOB_TS}`, `!${SRC}`];
+const COMMON_SRC = ['js/**/*.*', `!${SRC}`];
 
 const knownErrors = [
     'Cannot find module \'preact\'.',
@@ -87,7 +86,12 @@ function addGenerationTask(
         `generate-${frameworkName}-declaration-only`,
         function() {
             return gulp.src(COMMON_SRC)
-                .pipe(babel())
+                .pipe(
+                    gulpIf(
+                        file => file.extname === '.js',
+                        babel()
+                    )
+                )
                 .pipe(gulp.dest(frameworkDest));
         }];
 
@@ -107,7 +111,12 @@ function addGenerationTask(
                     errorHandler: notify.onError('Error: <%= error.message %>')
                         .bind() // bind call is necessary to prevent firing 'end' event in notify.onError implementation
                 }))
-                .pipe(babel())
+                .pipe(
+                    gulpIf(
+                        file => file.extname === '.js',
+                        babel()
+                    )
+                )
                 .pipe(gulp.dest(frameworkDest));
         },
         function declarationBuild() {
@@ -129,7 +138,7 @@ function addGenerationTask(
     ));
 }
 
-addGenerationTask('react', ['Cannot find module \'csstype\'.']);
+addGenerationTask('react', ['Cannot find module \'csstype\'.'], false, true, false);
 addGenerationTask('angular', [
     'Cannot find module \'@angular/core\'.',
     'Cannot find module \'@angular/common\'.'
