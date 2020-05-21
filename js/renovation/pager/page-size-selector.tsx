@@ -1,26 +1,26 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
-  ComponentBindings, JSXComponent, Event, OneWay, InternalState, Effect, Ref, Component,
+  ComponentBindings, JSXComponent, Event, OneWay, InternalState, Effect, Component, Method, Ref,
 } from 'devextreme-generator/component_declaration/common';
 import SelectBox, { SelectBoxProps } from '../select-box';
 import LightButton from './light-button';
 import getElementComputedStyle from './get-computed-style';
 import { calculateValuesFittedWidth } from './calculate-values-fitted-width';
+import type { GetHtmlElement } from './resizable-container';
 
 const PAGER_SELECTION_CLASS = 'dx-selection';
 export const PAGER_PAGE_SIZES_CLASS = 'dx-page-sizes';
 export const PAGER_PAGE_SIZE_CLASS = 'dx-page-size';
 export const PAGER_SELECTED_PAGE_SIZE_CLASS = `${PAGER_PAGE_SIZE_CLASS} ${PAGER_SELECTION_CLASS}`;
 export const viewFunction = ({
-  containerRef,
-  pageSizesText, selectBoxProps,
+  pageSizesText, selectBoxProps, htmlRef,
   props: { isLargeDisplayMode },
 }: PageSizeSelector) => {
   const {
     dataSource, rtlEnabled, value, valueChange, width,
   } = selectBoxProps;
   return (
-    <div ref={containerRef as never} className={PAGER_PAGE_SIZES_CLASS}>
+    <div ref={htmlRef as never} className={PAGER_PAGE_SIZES_CLASS}>
       {isLargeDisplayMode && pageSizesText.map(({
         text, className, label, click,
       }) => (
@@ -57,12 +57,14 @@ export class PageSizeSelectorProps {
   @Event() pageSizeChanged?: (pageSize: number) => void = () => { }; // commonUtils.noop
 }
 
-@Component({
-  defaultOptionRules: null,
-  view: viewFunction,
-})
-export default class PageSizeSelector extends JSXComponent<PageSizeSelectorProps> {
-  @Ref() containerRef!: HTMLDivElement;
+@Component({ defaultOptionRules: null, view: viewFunction })
+export default class PageSizeSelector extends JSXComponent<PageSizeSelectorProps>
+  implements GetHtmlElement {
+  @Method() getHtmlElement(): HTMLElement {
+    return this.htmlRef;
+  }
+
+  @Ref() htmlRef!: HTMLDivElement;
 
   get pageSizesText() {
     const { pageSize, rtlEnabled } = this.props;
@@ -97,7 +99,7 @@ export default class PageSizeSelector extends JSXComponent<PageSizeSelectorProps
   @InternalState() private minWidth = 10;
 
   @Effect() updateWidth(): void {
-    const style = getElementComputedStyle(this.containerRef);
+    const style = getElementComputedStyle(this.htmlRef);
     if (style) {
       this.minWidth = Number(style.minWidth.replace('px', ''));
     }

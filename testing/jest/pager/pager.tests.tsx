@@ -12,6 +12,10 @@ const pageSizeRender = jest.fn();
 
 jest.mock('../../../js/renovation/pager/page-size-selector.p', () => (props) => pageSizeRender(props));
 jest.mock('../../../js/renovation/select-box', () => { });
+jest.mock('../../../js/renovation/pager/resizable-container.p', () => (props) => {
+  const { infoTextVisible = true, isLargeDisplayMode = true } = props;
+  return props.content({ infoTextVisible, isLargeDisplayMode });
+});
 
 const pageIndexSelectorRender = jest.fn();
 jest.mock('../../../js/renovation/pager/page-index-selector.p', () => (...args) => pageIndexSelectorRender(args));
@@ -20,7 +24,7 @@ const InfoTextComp = jest.fn();
 jest.mock('../../../js/renovation/pager/info.p', () => (...args) => InfoTextComp(args));
 type PagerPropsType = Partial<typeof PagerProps>;
 
-describe('Pager size selector', () => {
+describe('Pager', () => {
   const render = (props: PagerPropsType) => {
     const root = mount(<PagerComponent {...props as typeof PagerProps} />);
     // Vitik: Use function instead of property because property return old value after update
@@ -29,7 +33,7 @@ describe('Pager size selector', () => {
       // tslint:disable-next-line: object-literal-sort-keys
       container: root.childAt(0),
       pageSize: () => root.find(PageSizeSelectorComponent),
-      pageSelectorContainer: () => root.childAt(0).childAt(1),
+      pageSelectorContainer: () => root.childAt(0).childAt(0).childAt(1),
       pageIndexSelector: () => root.find(PageIndexSelectorComponent),
       infoText: () => root.find(InfoTextComponent),
     };
@@ -42,13 +46,12 @@ describe('Pager size selector', () => {
   it('render pager, default props', () => {
     const {
       container, pageSize, pageSelectorContainer, pageIndexSelector, infoText,
-    } = render({});
+    } = render({ showInfo: true });
     // Vitik: Test real class instead of props for child component
     expect(container.getDOMNode().className).toBe(PAGER_CLASS_FULL);
     expect(pageSize().props())
       .toMatchObject({ isLargeDisplayMode: true, pageSize: 5, pageSizes: [5, 10] });
-    expect(pageSelectorContainer().getDOMNode().className)
-      .toBe(PAGER_PAGES_CLASS);
+    expect(pageSelectorContainer().getDOMNode().className).toBe(PAGER_PAGES_CLASS);
     expect(pageIndexSelector().props())
       .toMatchObject({ isLargeDisplayMode: true, pageIndex: 0, maxPagesCount: 10 });
     expect(infoText().props()).toMatchObject({
