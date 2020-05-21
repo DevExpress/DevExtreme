@@ -580,6 +580,14 @@ QUnit.module('Manipulation', {
     }
 });
 
+QUnit.test('Tug plaque content for shadow (T891490)', function(assert) {
+    this.tooltip.update(this.options);
+
+    this.tooltip.show({ valueText: 'some-text' }, { x: 100, y: 200, offset: 300 });
+
+    assert.equal(this.tooltip.plaque._root.append.callCount, 2, 'Plaque tugged after render');
+});
+
 QUnit.test('Show preparations. W/o customize, empty text', function(assert) {
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
@@ -632,8 +640,7 @@ QUnit.test('Show preparations. W/o customize, w/ text', function(assert) {
         dashStyle: 'solid',
         type: 'area',
         opacity: 0.8,
-        'pointer-events': 'none',
-        filter: 'shadowFilter.id'
+        'pointer-events': 'none'
     });
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
