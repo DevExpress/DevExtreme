@@ -23,11 +23,16 @@ export default class ResourceManager {
         if(dataSource instanceof DataSourceModule.DataSource) {
             return dataSource;
         }
-        return new DataSourceModule.DataSource({
+        const result = {
             store: DataSourceModule.normalizeDataSourceOptions(dataSource).store,
-            filter: dataSource.filter,
             pageSize: 0
-        });
+        };
+
+        if(!Array.isArray(dataSource)) {
+            result.filter = dataSource.filter;
+        }
+
+        return new DataSourceModule.DataSource(result);
     }
 
     _mapResourceData(resource, data) {
