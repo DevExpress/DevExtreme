@@ -1124,29 +1124,51 @@ QUnit.module('getAvailableOperations', {
     });
 
     // T889066
-    QUnit.test('the \'between\' operation should not be listed for a lookup field (dataType === number)', function(assert) {
+    QUnit.test('a custom operation with enabled notForLookup option should not be listed for a lookup column', function(assert) {
         // arrange, act
         const customOperations = [
             {
-                name: 'between',
+                name: 'test1',
+                notForLookup: true,
                 dataTypes: ['number']
             },
             {
-                name: 'anyof',
+                name: 'test2',
+                notForLookup: false,
+                dataTypes: ['number']
+            },
+            {
+                name: 'test3',
                 dataTypes: ['number']
             }
         ];
-        const field = {
+        const field1 = {
+            dataField: 'test',
+            dataType: 'number'
+        };
+        const field2 = {
             dataField: 'test',
             dataType: 'number',
             lookup: {}
         };
 
-        const operations = utils.getAvailableOperations(field, filterOperationsDescriptions, customOperations);
-        const betweenOperation = operations.filter(operation => operation.value === 'between');
+        // act
+        let operations = utils.getAvailableOperations(field1, filterOperationsDescriptions, customOperations);
+        let operationValues = operations.map(operation => operation.value);
 
         // assert
-        assert.equal(betweenOperation.length, 0, 'the \'between\' operation should not be found');
+        assert.ok(operationValues.indexOf('test1') >= 0, 'test1 is in the list');
+        assert.ok(operationValues.indexOf('test2') >= 0, 'test2 is in the list');
+        assert.ok(operationValues.indexOf('test3') >= 0, 'test3 is in the list');
+
+        // act
+        operations = utils.getAvailableOperations(field2, filterOperationsDescriptions, customOperations);
+        operationValues = operations.map(operation => operation.value);
+
+        // assert
+        assert.equal(operationValues.indexOf('test1'), -1, 'test1 is not listed');
+        assert.ok(operationValues.indexOf('test2') >= 0, 'test2 is in the list');
+        assert.ok(operationValues.indexOf('test3') >= 0, 'test3 is in the list');
     });
 });
 

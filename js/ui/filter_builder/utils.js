@@ -30,7 +30,6 @@ const DEFAULT_FORMAT = {
     'datetime': 'shortDateShortTime'
 };
 const LOOKUP_OPERATIONS = ['=', '<>', 'isblank', 'isnotblank'];
-const FORBIDDEN_LOOKUP_OPERATIONS = ['between'];
 const AVAILABLE_FIELD_PROPERTIES = [
     'caption',
     'customizeText',
@@ -195,13 +194,12 @@ function getCustomOperation(customOperations, name) {
 
 function getAvailableOperations(field, filterOperationDescriptions, customOperations) {
     const filterOperations = getFilterOperations(field);
-
+    const isLookupField = !!field.lookup;
     customOperations.forEach(function(customOperation) {
-        const isLookupField = !!field.lookup;
-        const isOperationForbidden = isLookupField ? FORBIDDEN_LOOKUP_OPERATIONS.indexOf(customOperation.name) >= 0 : false;
-        if(!field.filterOperations && !isOperationForbidden && filterOperations.indexOf(customOperation.name) === -1) {
+        if(!field.filterOperations && filterOperations.indexOf(customOperation.name) === -1) {
             const dataTypes = customOperation && customOperation.dataTypes;
-            if(dataTypes && dataTypes.indexOf(field.dataType || DEFAULT_DATA_TYPE) >= 0) {
+            const isOperationForbidden = isLookupField ? !!customOperation.notForLookup : false;
+            if(!isOperationForbidden && dataTypes && dataTypes.indexOf(field.dataType || DEFAULT_DATA_TYPE) >= 0) {
                 filterOperations.push(customOperation.name);
             }
         }
