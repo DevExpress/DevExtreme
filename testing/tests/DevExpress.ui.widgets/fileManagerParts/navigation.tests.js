@@ -781,7 +781,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.strictEqual(this.fileManager.option('currentPath'), '', 'Current path is correct');
     });
 
-    test('Forbiddance of current folder and refresh leads to navigating up and rising only one error', function(assert) {
+    test('Forbiddance of current folder and refresh leads to navigating up and rising an error', function(assert) {
         this.fileManager.option('fileSystemProvider',
             new CustomFileSystemProvider({
                 getItems: pathInfo => {
@@ -815,7 +815,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         this.clock.tick(400);
 
         infos = this.progressPanelWrapper.getInfos();
-        assert.strictEqual(infos.length, 1, 'There is one notification on panel');
+        assert.strictEqual(infos.length, 2, 'There is some notification on panel');
 
         assert.strictEqual(infos[0].common.commonText, 'The folder cannot be opened', 'Title is correct');
 
