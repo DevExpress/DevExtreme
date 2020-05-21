@@ -2,153 +2,153 @@ const errors = require('../../core/errors');
 const extend = require('../../core/utils/extend').extend;
 const each = require('../../core/utils/iterator').each;
 const inArray = require('../../core/utils/array').inArray;
-const isDefined = require('../../core/utils/type').isDefined;
-const dateUtils = require('../../core/utils/date');
+// const isDefined = require('../../core/utils/type').isDefined;
+// const dateUtils = require('../../core/utils/date');
 
-const toMs = dateUtils.dateToMilliseconds;
-
-const leastDaysInWeek = 4;
+// const toMs = dateUtils.dateToMilliseconds;
+import { RRule, RRuleSet } from 'rrule';
+// const leastDaysInWeek = 4;
 const ruleNames = ['freq', 'interval', 'byday', 'byweekno', 'byyearday', 'bymonth', 'bymonthday', 'count', 'until', 'byhour', 'byminute', 'bysecond', 'bysetpos', 'wkst'];
 const freqNames = ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY', 'SECONDLY', 'MINUTELY', 'HOURLY'];
 const days = { SU: 0, MO: 1, TU: 2, WE: 3, TH: 4, FR: 5, SA: 6 };
-const daysNames = { 0: 'SU', 1: 'MO', 2: 'TU', 3: 'WE', 4: 'TH', 5: 'FR', 6: 'SA' };
+// const daysNames = { 0: 'SU', 1: 'MO', 2: 'TU', 3: 'WE', 4: 'TH', 5: 'FR', 6: 'SA' };
 
-const intervalMap = {
-    secondly: 'seconds',
-    minutely: 'minutes',
-    hourly: 'hours',
-    daily: 'days',
-    weekly: 'weeks',
-    monthly: 'months',
-    yearly: 'years'
-};
+// const intervalMap = {
+//     secondly: 'seconds',
+//     minutely: 'minutes',
+//     hourly: 'hours',
+//     daily: 'days',
+//     weekly: 'weeks',
+//     monthly: 'months',
+//     yearly: 'years'
+// };
 
 const resultUtils = {};
 
-const dateSetterMap = {
-    'bysecond': function(date, value) {
-        date.setSeconds(value);
-    },
-    'byminute': function(date, value) {
-        date.setMinutes(value);
-    },
-    'byhour': function(date, value) {
-        date.setHours(value);
-    },
-    'bymonth': function(date, value) {
-        date.setMonth(value);
-    },
-    'bymonthday': function(date, value) {
-        if(value < 0) {
-            const initialDate = new Date(date);
+// const dateSetterMap = {
+//     'bysecond': function(date, value) {
+//         date.setSeconds(value);
+//     },
+//     'byminute': function(date, value) {
+//         date.setMinutes(value);
+//     },
+//     'byhour': function(date, value) {
+//         date.setHours(value);
+//     },
+//     'bymonth': function(date, value) {
+//         date.setMonth(value);
+//     },
+//     'bymonthday': function(date, value) {
+//         if(value < 0) {
+//             const initialDate = new Date(date);
 
-            setDateByNegativeValue(initialDate, 1, -1);
+//             setDateByNegativeValue(initialDate, 1, -1);
 
-            const daysInMonth = initialDate.getDate();
+//             const daysInMonth = initialDate.getDate();
 
-            if(daysInMonth >= Math.abs(value)) {
-                setDateByNegativeValue(date, 1, value);
-            } else {
-                setDateByNegativeValue(date, 2, value);
-            }
+//             if(daysInMonth >= Math.abs(value)) {
+//                 setDateByNegativeValue(date, 1, value);
+//             } else {
+//                 setDateByNegativeValue(date, 2, value);
+//             }
 
-        } else {
-            if(value <= dateUtils.getLastMonthDay(date)) {
-                date.setDate(value);
-            } else {
-                markWrongDate(date);
-            }
-        }
-    },
-    'byday': function(date, byDay, appointmentWeekStart, frequency, firstDayOfWeek) {
-        const appointmentDayOfWeek = date.getDay();
-        const weekStart = days[appointmentWeekStart];
+//         } else {
+//             if(value <= dateUtils.getLastMonthDay(date)) {
+//                 date.setDate(value);
+//             } else {
+//                 markWrongDate(date);
+//             }
+//         }
+//     },
+//     'byday': function(date, byDay, appointmentWeekStart, frequency, firstDayOfWeek) {
+//         const appointmentDayOfWeek = date.getDay();
+//         const weekStart = days[appointmentWeekStart];
 
-        byDay += ((byDay >= weekStart) === weekStart > appointmentDayOfWeek) ? 7 : 0;
+//         byDay += ((byDay >= weekStart) === weekStart > appointmentDayOfWeek) ? 7 : 0;
 
-        date.setDate(date.getDate() - appointmentDayOfWeek + byDay);
-    },
-    'byweekno': function(date, weekNumber, weekStart) {
-        const initialDate = new Date(date);
-        const firstYearDate = new Date(initialDate.setMonth(0, 1));
-        const dayShift = firstYearDate.getDay() - days[weekStart];
-        const firstDayOfYear = firstYearDate.getTime() - dayShift * toMs('day');
-        const newFirstYearDate = dayShift + 1;
+//         date.setDate(date.getDate() - appointmentDayOfWeek + byDay);
+//     },
+//     'byweekno': function(date, weekNumber, weekStart) {
+//         const initialDate = new Date(date);
+//         const firstYearDate = new Date(initialDate.setMonth(0, 1));
+//         const dayShift = firstYearDate.getDay() - days[weekStart];
+//         const firstDayOfYear = firstYearDate.getTime() - dayShift * toMs('day');
+//         const newFirstYearDate = dayShift + 1;
 
-        if(newFirstYearDate > leastDaysInWeek) {
-            date.setTime(firstDayOfYear + weekNumber * 7 * toMs('day'));
-        } else {
-            date.setTime(firstDayOfYear + (weekNumber - 1) * 7 * toMs('day'));
-        }
+//         if(newFirstYearDate > leastDaysInWeek) {
+//             date.setTime(firstDayOfYear + weekNumber * 7 * toMs('day'));
+//         } else {
+//             date.setTime(firstDayOfYear + (weekNumber - 1) * 7 * toMs('day'));
+//         }
 
-        const timezoneDiff = (date.getTimezoneOffset() - firstYearDate.getTimezoneOffset()) * toMs('minute');
-        timezoneDiff && date.setTime(date.getTime() + timezoneDiff);
-    },
-    'byyearday': function(date, dayOfYear) {
-        date.setMonth(0, 1);
-        date.setDate(dayOfYear);
-    }
-};
+//         const timezoneDiff = (date.getTimezoneOffset() - firstYearDate.getTimezoneOffset()) * toMs('minute');
+//         timezoneDiff && date.setTime(date.getTime() + timezoneDiff);
+//     },
+//     'byyearday': function(date, dayOfYear) {
+//         date.setMonth(0, 1);
+//         date.setDate(dayOfYear);
+//     }
+// };
 
-function setDateByNegativeValue(date, month, value) {
-    const initialDate = new Date(date);
+// function setDateByNegativeValue(date, month, value) {
+//     const initialDate = new Date(date);
 
-    date.setMonth(date.getMonth() + month);
+//     date.setMonth(date.getMonth() + month);
 
-    if((date.getMonth() - initialDate.getMonth()) > month) {
-        date.setDate(value + 1);
-    }
+//     if((date.getMonth() - initialDate.getMonth()) > month) {
+//         date.setDate(value + 1);
+//     }
 
-    date.setDate(value + 1);
-}
+//     date.setDate(value + 1);
+// }
 
-const dateGetterMap = {
-    'bysecond': function(date) {
-        return date.getSeconds();
-    },
-    'byminute': function(date) {
-        return date.getMinutes();
-    },
-    'byhour': function(date) {
-        return date.getHours();
-    },
-    'bymonth': function(date) {
-        return date.getMonth();
-    },
-    'bymonthday': function(date) {
-        return date.getDate();
-    },
-    'byday': function(date) {
-        return date.getDay();
-    },
-    'byweekno': function(date, weekStart) {
-        const current = new Date(date);
-        let diff = leastDaysInWeek - current.getDay() + days[weekStart] - 1;
-        const dayInMilliseconds = toMs('day');
+// const dateGetterMap = {
+//     'bysecond': function(date) {
+//         return date.getSeconds();
+//     },
+//     'byminute': function(date) {
+//         return date.getMinutes();
+//     },
+//     'byhour': function(date) {
+//         return date.getHours();
+//     },
+//     'bymonth': function(date) {
+//         return date.getMonth();
+//     },
+//     'bymonthday': function(date) {
+//         return date.getDate();
+//     },
+//     'byday': function(date) {
+//         return date.getDay();
+//     },
+//     'byweekno': function(date, weekStart) {
+//         const current = new Date(date);
+//         let diff = leastDaysInWeek - current.getDay() + days[weekStart] - 1;
+//         const dayInMilliseconds = toMs('day');
 
-        if(date.getDay() < days[weekStart]) {
-            diff -= 7;
-        }
+//         if(date.getDay() < days[weekStart]) {
+//             diff -= 7;
+//         }
 
-        current.setHours(0, 0, 0);
-        current.setDate(current.getDate() + diff);
+//         current.setHours(0, 0, 0);
+//         current.setDate(current.getDate() + diff);
 
-        const yearStart = new Date(current.getFullYear(), 0, 1);
-        const timezoneDiff = (yearStart.getTimezoneOffset() - current.getTimezoneOffset()) * toMs('minute');
+//         const yearStart = new Date(current.getFullYear(), 0, 1);
+//         const timezoneDiff = (yearStart.getTimezoneOffset() - current.getTimezoneOffset()) * toMs('minute');
 
-        const daysFromYearStart = 1 + (current - yearStart + timezoneDiff) / dayInMilliseconds;
+//         const daysFromYearStart = 1 + (current - yearStart + timezoneDiff) / dayInMilliseconds;
 
-        return Math.ceil(daysFromYearStart / 7);
-    },
-    'byyearday': function(date) {
-        const yearStart = new Date(date.getFullYear(), 0, 0);
-        const timezoneDiff = date.getTimezoneOffset() - yearStart.getTimezoneOffset();
-        const diff = date - yearStart - timezoneDiff * toMs('minute');
-        const dayLength = toMs('day');
+//         return Math.ceil(daysFromYearStart / 7);
+//     },
+//     'byyearday': function(date) {
+//         const yearStart = new Date(date.getFullYear(), 0, 0);
+//         const timezoneDiff = date.getTimezoneOffset() - yearStart.getTimezoneOffset();
+//         const diff = date - yearStart - timezoneDiff * toMs('minute');
+//         const dayLength = toMs('day');
 
-        return Math.floor(diff / dayLength);
-    }
-};
+//         return Math.floor(diff / dayLength);
+//     }
+// };
 
 function getTimeZoneOffset() {
     return new Date().getTimezoneOffset();
@@ -164,19 +164,19 @@ const dateInRecurrenceRange = function(options) {
     return !!result.length;
 };
 
-const normalizeInterval = function(rule) {
-    const interval = rule.interval;
-    const freq = rule.freq;
-    const intervalObject = {};
-    let intervalField = intervalMap[freq.toLowerCase()];
+// const normalizeInterval = function(rule) {
+//     const interval = rule.interval;
+//     const freq = rule.freq;
+//     const intervalObject = {};
+//     let intervalField = intervalMap[freq.toLowerCase()];
 
-    if(freq === 'MONTHLY' && rule['byday']) {
-        intervalField = intervalMap['daily'];
-    }
-    intervalObject[intervalField] = interval;
+//     if(freq === 'MONTHLY' && rule['byday']) {
+//         intervalField = intervalMap['daily'];
+//     }
+//     intervalObject[intervalField] = interval;
 
-    return intervalObject;
-};
+//     return intervalObject;
+// };
 
 const getDatesByRecurrenceException = function(ruleValues, date) {
     const result = [];
@@ -188,165 +188,189 @@ const getDatesByRecurrenceException = function(ruleValues, date) {
     return result;
 };
 
-const dateIsRecurrenceException = function(date, recurrenceException) {
-    let result = false;
+// const dateIsRecurrenceException = function(date, recurrenceException) {
+//     let result = false;
 
-    if(!recurrenceException) {
-        return result;
-    }
+//     if(!recurrenceException) {
+//         return result;
+//     }
 
-    const splitDates = recurrenceException.split(',');
-    const exceptDates = getDatesByRecurrenceException(splitDates, date);
-    const shortFormat = /\d{8}$/;
+//     const splitDates = recurrenceException.split(',');
+//     const exceptDates = getDatesByRecurrenceException(splitDates, date);
+//     const shortFormat = /\d{8}$/;
 
-    for(let i = 0, len = exceptDates.length; i < len; i++) {
-        if(splitDates[i].match(shortFormat)) {
-            const diffs = getDatePartDiffs(date, exceptDates[i]);
+//     for(let i = 0, len = exceptDates.length; i < len; i++) {
+//         if(splitDates[i].match(shortFormat)) {
+//             const diffs = getDatePartDiffs(date, exceptDates[i]);
 
-            if(diffs.years === 0 && diffs.months === 0 && diffs.days === 0) {
-                result = true;
-            }
-        } else {
-            if(date.getTime() === exceptDates[i].getTime()) {
-                result = true;
-            }
-        }
-    }
+//             if(diffs.years === 0 && diffs.months === 0 && diffs.days === 0) {
+//                 result = true;
+//             }
+//         } else {
+//             if(date.getTime() === exceptDates[i].getTime()) {
+//                 result = true;
+//             }
+//         }
+//     }
 
-    return result;
-};
+//     return result;
+// };
 
-const doNextIteration = function(date, startIntervalDate, endIntervalDate, recurrenceRule, iterationCount) {
-    let matchCountIsCorrect = true;
+// const doNextIteration = function(date, startIntervalDate, endIntervalDate, recurrenceRule, iterationCount) {
+//     let matchCountIsCorrect = true;
 
-    endIntervalDate = endIntervalDate.getTime();
+//     endIntervalDate = endIntervalDate.getTime();
 
-    if(recurrenceRule.until) {
-        if(recurrenceRule.until.getTime() < endIntervalDate) {
-            endIntervalDate = recurrenceRule.until.getTime();
-        }
-    }
+//     if(recurrenceRule.until) {
+//         if(recurrenceRule.until.getTime() < endIntervalDate) {
+//             endIntervalDate = recurrenceRule.until.getTime();
+//         }
+//     }
 
-    if(recurrenceRule.count) {
-        if(iterationCount === recurrenceRule.count) {
-            matchCountIsCorrect = false;
-        }
-    }
+//     if(recurrenceRule.count) {
+//         if(iterationCount === recurrenceRule.count) {
+//             matchCountIsCorrect = false;
+//         }
+//     }
 
-    const dateInInterval = date.getTime() <= endIntervalDate;
+//     const dateInInterval = date.getTime() <= endIntervalDate;
 
-    return dateInInterval && matchCountIsCorrect;
-};
+//     return dateInInterval && matchCountIsCorrect;
+// };
 
 function getDatesByRecurrence(options) {
-    let result = [];
+    const result = [];
     const recurrenceRule = getRecurrenceRule(options.rule);
-    let iterationResult = {};
+    // const iterationResult = {};
     const rule = recurrenceRule.rule;
-    const recurrenceStartDate = options.start;
+
+    const dateUtc = Date.UTC(
+        options.start.getUTCFullYear(),
+        options.start.getUTCMonth(),
+        options.start.getUTCDate(),
+        options.start.getUTCHours(),
+        options.start.getUTCMinutes()
+    );
+
+    const recurrenceStartDate = new Date(dateUtc);
     const maxDate = correctMaxDate(options.max, rule);
 
     if(!recurrenceRule.isValid || !rule.freq) {
         return result;
     }
 
-    rule.interval = normalizeInterval(rule);
-    const dateRules = splitDateRules(rule, options.firstDayOfWeek);
+    const rRuleSet = new RRuleSet();
 
-    const duration = options.end ? options.end.getTime() - options.start.getTime() : toMs('day');
+    const ruleOptions = RRule.parseString(options.rule);
+    ruleOptions.dtstart = recurrenceStartDate;
 
-    const config = {
-        exception: options.exception,
-        min: options.min,
-        dateRules: dateRules,
-        rule: rule,
-        recurrenceStartDate: recurrenceStartDate,
-        recurrenceEndDate: options.end,
-        duration: duration
-    };
+    const rRule = new RRule(ruleOptions);
+    rRuleSet.rrule(rRule);
 
-    if(dateRules.length && rule.count) {
-        let iteration = 0;
-
-        getDatesByCount(dateRules, new Date(recurrenceStartDate), new Date(recurrenceStartDate), rule)
-            .forEach(function(currentDate, i) {
-                if(currentDate < maxDate) {
-                    iteration++;
-                    iterationResult = pushToResult(iteration, iterationResult, currentDate, i, config, true);
-                }
-            });
-    } else {
-        getDatesByRules(dateRules, new Date(recurrenceStartDate), rule)
-            .forEach(function(currentDate, i) {
-                let iteration = 0;
-
-                while(doNextIteration(currentDate, recurrenceStartDate, maxDate, rule, iteration)) {
-                    iteration++;
-                    iterationResult = pushToResult(iteration, iterationResult, currentDate, i, config);
-
-                    currentDate = incrementDate(currentDate, recurrenceStartDate, rule, i);
-                }
-            });
-    }
-
-    if(rule['bysetpos']) {
-        each(iterationResult, function(iterationIndex, iterationDates) {
-            iterationResult[iterationIndex] = filterDatesBySetPos(iterationDates, rule['bysetpos']);
-        });
-    }
-
-    each(iterationResult, function(_, iterationDates) {
-        result = result.concat(iterationDates);
-    });
-
-    result = result.filter(date => date <= options.max);
-
-    result.sort(function(a, b) {
-        return a - b;
-    });
-
-    return result;
-}
-
-function pushToResult(iteration, iterationResult, currentDate, i, config, verifiedField) {
-    if(!iterationResult[iteration]) {
-        iterationResult[iteration] = [];
-    }
-
-    if(checkDate(currentDate, i, config, verifiedField)) {
-        iterationResult[iteration].push(currentDate);
-    }
-
-    return iterationResult;
-}
-
-function checkDate(currentDate, i, config, verifiedField) {
-    if(!dateIsRecurrenceException(currentDate, config.exception)) {
-        const duration = dateUtils.sameDate(currentDate, config.recurrenceEndDate) && config.recurrenceEndDate.getTime() > currentDate.getTime() ? config.recurrenceEndDate.getTime() - currentDate.getTime() : config.duration;
-
-        if(currentDate.getTime() >= config.recurrenceStartDate.getTime() && (currentDate.getTime() + duration) > config.min.getTime()) {
-            return verifiedField || checkDateByRule(currentDate, [config.dateRules[i]], config.rule['wkst']);
+    if(options.exception && options.exception.length) {
+        const splitDates = options.exception.split(',');
+        const exceptDates = getDatesByRecurrenceException(splitDates, recurrenceStartDate);
+        for(let i = 0; i < exceptDates.length; i++) {
+            rRuleSet.exdate(exceptDates[i]);
         }
     }
 
-    return false;
+    // rule.interval = normalizeInterval(rule);
+    // const dateRules = splitDateRules(rule, options.firstDayOfWeek);
+
+    // const duration = options.end ? options.end.getTime() - options.start.getTime() : toMs('day');
+
+    // const config = {
+    //     exception: options.exception,
+    //     min: options.min,
+    //     dateRules: dateRules,
+    //     rule: rule,
+    //     recurrenceStartDate: recurrenceStartDate,
+    //     recurrenceEndDate: options.end,
+    //     duration: duration
+    // };
+
+    // if(dateRules.length && rule.count) {
+    //     let iteration = 0;
+
+    //     getDatesByCount(dateRules, new Date(recurrenceStartDate), new Date(recurrenceStartDate), rule)
+    //         .forEach(function(currentDate, i) {
+    //             if(currentDate < options.max) {
+    //                 iteration++;
+    //                 iterationResult = pushToResult(iteration, iterationResult, currentDate, i, config, true);
+    //             }
+    //         });
+    // } else {
+    //     getDatesByRules(dateRules, new Date(recurrenceStartDate), rule)
+    //         .forEach(function(currentDate, i) {
+    //             let iteration = 0;
+
+    //             while(doNextIteration(currentDate, recurrenceStartDate, options.max, rule, iteration)) {
+    //                 iteration++;
+    //                 iterationResult = pushToResult(iteration, iterationResult, currentDate, i, config);
+
+    //                 currentDate = incrementDate(currentDate, recurrenceStartDate, rule, i);
+    //             }
+    //         });
+    // }
+
+    // if(rule['bysetpos']) {
+    //     each(iterationResult, function(iterationIndex, iterationDates) {
+    //         iterationResult[iterationIndex] = filterDatesBySetPos(iterationDates, rule['bysetpos']);
+    //     });
+    // }
+
+    // each(iterationResult, function(_, iterationDates) {
+    //     result = result.concat(iterationDates);
+    // });
+
+
+    // result.sort(function(a, b) {
+    //     return a - b;
+    // });
+
+    return rRuleSet.between(options.min, maxDate, true);
 }
 
-function filterDatesBySetPos(dates, bySetPos) {
-    const resultArray = [];
+// function pushToResult(iteration, iterationResult, currentDate, i, config, verifiedField) {
+//     if(!iterationResult[iteration]) {
+//         iterationResult[iteration] = [];
+//     }
 
-    bySetPos.split(',').forEach(function(index) {
-        index = Number(index);
+//     if(checkDate(currentDate, i, config, verifiedField)) {
+//         iterationResult[iteration].push(currentDate);
+//     }
 
-        const dateIndex = (index > 0) ? index - 1 : dates.length + index;
+//     return iterationResult;
+// }
 
-        if(dates[dateIndex]) {
-            resultArray.push(dates[dateIndex]);
-        }
-    });
+// function checkDate(currentDate, i, config, verifiedField) {
+//     if(!dateIsRecurrenceException(currentDate, config.exception)) {
+//         const duration = dateUtils.sameDate(currentDate, config.recurrenceEndDate) && config.recurrenceEndDate.getTime() > currentDate.getTime() ? config.recurrenceEndDate.getTime() - currentDate.getTime() : config.duration;
 
-    return resultArray;
-}
+//         if(currentDate.getTime() >= config.recurrenceStartDate.getTime() && (currentDate.getTime() + duration) > config.min.getTime()) {
+//             return verifiedField || checkDateByRule(currentDate, [config.dateRules[i]], config.rule['wkst']);
+//         }
+//     }
+
+//     return false;
+// }
+
+// function filterDatesBySetPos(dates, bySetPos) {
+//     const resultArray = [];
+
+//     bySetPos.split(',').forEach(function(index) {
+//         index = Number(index);
+
+//         const dateIndex = (index > 0) ? index - 1 : dates.length + index;
+
+//         if(dates[dateIndex]) {
+//             resultArray.push(dates[dateIndex]);
+//         }
+//     });
+
+//     return resultArray;
+// }
 
 function correctMaxDate(maxDate, rule) {
     const newMaxDate = new Date(maxDate);
@@ -361,64 +385,64 @@ function correctMaxDate(maxDate, rule) {
     return newMaxDate > maxDate ? newMaxDate : maxDate;
 }
 
-function correctDate(originalDate, date) {
-    if(originalDate.getDate() !== date) {
-        originalDate.setDate(date);
-    }
-}
+// function correctDate(originalDate, date) {
+//     if(originalDate.getDate() !== date) {
+//         originalDate.setDate(date);
+//     }
+// }
 
-function incrementDate(date, originalStartDate, rule, iterationStep) {
-    const initialDate = new Date(date);
-    let needCorrect = true;
+// function incrementDate(date, originalStartDate, rule, iterationStep) {
+//     const initialDate = new Date(date);
+//     let needCorrect = true;
 
-    date = dateUtils.addInterval(date, rule.interval);
+//     date = dateUtils.addInterval(date, rule.interval);
 
-    if(rule.freq === 'DAILY' && !isDefined(rule['byhour']) && originalStartDate.getHours() !== date.getHours()) {
-        date = new Date(date.getTime() - (initialDate.getHours() - originalStartDate.getHours()) * toMs('hour'));
-    }
+//     if(rule.freq === 'DAILY' && !isDefined(rule['byhour']) && originalStartDate.getHours() !== date.getHours()) {
+//         date = new Date(date.getTime() - (initialDate.getHours() - originalStartDate.getHours()) * toMs('hour'));
+//     }
 
-    if(rule.freq === 'MONTHLY' && !rule['byday']) {
-        let expectedDate = originalStartDate.getDate();
+//     if(rule.freq === 'MONTHLY' && !rule['byday']) {
+//         let expectedDate = originalStartDate.getDate();
 
-        if(rule['bymonthday']) {
-            expectedDate = Number(rule['bymonthday'].split(',')[iterationStep]);
+//         if(rule['bymonthday']) {
+//             expectedDate = Number(rule['bymonthday'].split(',')[iterationStep]);
 
-            if(expectedDate < 0) {
-                initialDate.setMonth(initialDate.getMonth() + 1, 1);
-                dateSetterMap['bymonthday'](initialDate, expectedDate);
-                date = initialDate;
-                needCorrect = false;
-            }
-        }
-        needCorrect && correctDate(date, expectedDate);
-    }
+//             if(expectedDate < 0) {
+//                 initialDate.setMonth(initialDate.getMonth() + 1, 1);
+//                 dateSetterMap['bymonthday'](initialDate, expectedDate);
+//                 date = initialDate;
+//                 needCorrect = false;
+//             }
+//         }
+//         needCorrect && correctDate(date, expectedDate);
+//     }
 
-    if(rule.freq === 'YEARLY') {
-        if(rule['byyearday']) {
-            const dayNumber = Number(rule['byyearday'].split(',')[iterationStep]);
-            dateSetterMap['byyearday'](date, dayNumber);
-        }
+//     if(rule.freq === 'YEARLY') {
+//         if(rule['byyearday']) {
+//             const dayNumber = Number(rule['byyearday'].split(',')[iterationStep]);
+//             dateSetterMap['byyearday'](date, dayNumber);
+//         }
 
-        const dateRules = splitDateRules(rule);
+//         const dateRules = splitDateRules(rule);
 
-        for(const field in dateRules[iterationStep]) {
-            dateSetterMap[field] && dateSetterMap[field](date, dateRules[iterationStep][field], rule['wkst']);
-        }
-    }
+//         for(const field in dateRules[iterationStep]) {
+//             dateSetterMap[field] && dateSetterMap[field](date, dateRules[iterationStep][field], rule['wkst']);
+//         }
+//     }
 
-    return date;
-}
+//     return date;
+// }
 
-function getDatePartDiffs(date1, date2) {
-    return {
-        years: date1.getFullYear() - date2.getFullYear(),
-        months: date1.getMonth() - date2.getMonth(),
-        days: date1.getDate() - date2.getDate(),
-        hours: date1.getHours() - date2.getHours(),
-        minutes: date1.getMinutes() - date2.getMinutes(),
-        seconds: date1.getSeconds() - date2.getSeconds()
-    };
-}
+// function getDatePartDiffs(date1, date2) {
+//     return {
+//         years: date1.getFullYear() - date2.getFullYear(),
+//         months: date1.getMonth() - date2.getMonth(),
+//         days: date1.getDate() - date2.getDate(),
+//         hours: date1.getHours() - date2.getHours(),
+//         minutes: date1.getMinutes() - date2.getMinutes(),
+//         seconds: date1.getSeconds() - date2.getSeconds()
+//     };
+// }
 
 function getRecurrenceRule(recurrence) {
     const result = {
@@ -638,182 +662,182 @@ function getAsciiStringByDate(date) {
         'T' + ('0' + (date.getHours())).slice(-2) + ('0' + (date.getMinutes())).slice(-2) + ('0' + (date.getSeconds())).slice(-2) + 'Z';
 }
 
-function splitDateRules(rule, firstDayOfWeek = null) {
-    let result = [];
+// function splitDateRules(rule, firstDayOfWeek = null) {
+//     let result = [];
 
-    if(isDefined(firstDayOfWeek)) {
-        rule['fdow'] = firstDayOfWeek;
-    }
+//     if(isDefined(firstDayOfWeek)) {
+//         rule['fdow'] = firstDayOfWeek;
+//     }
 
-    if(!rule['wkst']) {
-        rule['wkst'] = isDefined(firstDayOfWeek) ? daysNames[firstDayOfWeek] : 'MO';
-    }
+//     if(!rule['wkst']) {
+//         rule['wkst'] = isDefined(firstDayOfWeek) ? daysNames[firstDayOfWeek] : 'MO';
+//     }
 
-    if(rule['byweekno'] && !rule['byday']) {
-        const dayNames = Object.keys(days);
+//     if(rule['byweekno'] && !rule['byday']) {
+//         const dayNames = Object.keys(days);
 
-        for(let i = 0; i < days[rule['wkst']]; i++) {
-            dayNames.push(dayNames.shift());
-        }
+//         for(let i = 0; i < days[rule['wkst']]; i++) {
+//             dayNames.push(dayNames.shift());
+//         }
 
-        rule['byday'] = dayNames.join(',');
-    }
+//         rule['byday'] = dayNames.join(',');
+//     }
 
-    for(const field in dateSetterMap) {
-        if(!rule[field]) {
-            continue;
-        }
+//     for(const field in dateSetterMap) {
+//         if(!rule[field]) {
+//             continue;
+//         }
 
-        const ruleFieldValues = rule[field].split(',');
-        const ruleArray = getDateRuleArray(field, ruleFieldValues);
+//         const ruleFieldValues = rule[field].split(',');
+//         const ruleArray = getDateRuleArray(field, ruleFieldValues);
 
-        result = result.length ? extendObjectArray(ruleArray, result) : ruleArray;
-    }
+//         result = result.length ? extendObjectArray(ruleArray, result) : ruleArray;
+//     }
 
-    return result;
-}
+//     return result;
+// }
 
-function getDateRuleArray(field, values) {
-    const result = [];
-    for(let i = 0, length = values.length; i < length; i++) {
-        const dateRule = {};
-        dateRule[field] = handleRuleFieldValue(field, values[i]);
-        result.push(dateRule);
-    }
-    return result;
-}
+// function getDateRuleArray(field, values) {
+//     const result = [];
+//     for(let i = 0, length = values.length; i < length; i++) {
+//         const dateRule = {};
+//         dateRule[field] = handleRuleFieldValue(field, values[i]);
+//         result.push(dateRule);
+//     }
+//     return result;
+// }
 
-function handleRuleFieldValue(field, value) {
-    let result = parseInt(value);
+// function handleRuleFieldValue(field, value) {
+//     let result = parseInt(value);
 
-    if(field === 'bymonth') {
-        result -= 1;
-    }
+//     if(field === 'bymonth') {
+//         result -= 1;
+//     }
 
-    if(field === 'byday') {
-        result = days[value];
-    }
+//     if(field === 'byday') {
+//         result = days[value];
+//     }
 
-    return result;
-}
+//     return result;
+// }
 
-function extendObjectArray(firstArray, secondArray) {
-    const result = [];
+// function extendObjectArray(firstArray, secondArray) {
+//     const result = [];
 
-    for(let i = 0, firstArrayLength = firstArray.length; i < firstArrayLength; i++) {
-        for(let j = 0, secondArrayLength = secondArray.length; j < secondArrayLength; j++) {
-            result.push(extend({}, firstArray[i], secondArray[j]));
-        }
-    }
-    return result;
-}
+//     for(let i = 0, firstArrayLength = firstArray.length; i < firstArrayLength; i++) {
+//         for(let j = 0, secondArrayLength = secondArray.length; j < secondArrayLength; j++) {
+//             result.push(extend({}, firstArray[i], secondArray[j]));
+//         }
+//     }
+//     return result;
+// }
 
-function getDatesByRules(dateRules, startDate, rule) {
-    let result = [];
+// function getDatesByRules(dateRules, startDate, rule) {
+//     let result = [];
 
-    for(let i = 0, len = dateRules.length; i < len; i++) {
-        const current = dateRules[i];
-        const updatedDate = prepareDate(startDate, dateRules, rule['wkst']);
+//     for(let i = 0, len = dateRules.length; i < len; i++) {
+//         const current = dateRules[i];
+//         const updatedDate = prepareDate(startDate, dateRules, rule['wkst']);
 
-        for(const field in current) {
-            dateSetterMap[field] && dateSetterMap[field](updatedDate, current[field], rule['wkst'], rule.freq, rule['fdow']);
-        }
+//         for(const field in current) {
+//             dateSetterMap[field] && dateSetterMap[field](updatedDate, current[field], rule['wkst'], rule.freq, rule['fdow']);
+//         }
 
-        if(Array.isArray(updatedDate)) {
-            result = result.concat(updatedDate);
-        } else {
-            const date = !isWrongDate(updatedDate) ? new Date(updatedDate) : updatedDate;
-            result.push(date);
-        }
-    }
+//         if(Array.isArray(updatedDate)) {
+//             result = result.concat(updatedDate);
+//         } else {
+//             const date = !isWrongDate(updatedDate) ? new Date(updatedDate) : updatedDate;
+//             result.push(date);
+//         }
+//     }
 
-    if(!result.length) {
-        result.push(startDate);
-    }
+//     if(!result.length) {
+//         result.push(startDate);
+//     }
 
-    return result;
-}
+//     return result;
+// }
 
-function getDatesByCount(dateRules, startDate, recurrenceStartDate, rule) {
-    const result = [];
-    const count = rule.count;
-    let counter = 0;
-    let date = prepareDate(startDate, dateRules, rule['wkst']);
+// function getDatesByCount(dateRules, startDate, recurrenceStartDate, rule) {
+//     const result = [];
+//     const count = rule.count;
+//     let counter = 0;
+//     let date = prepareDate(startDate, dateRules, rule['wkst']);
 
-    while(counter < count) {
-        const dates = getDatesByRules(dateRules, date, rule);
+//     while(counter < count) {
+//         const dates = getDatesByRules(dateRules, date, rule);
 
-        const checkedDates = [];
-        dates.forEach(checkedDate => {
-            if(!isWrongDate(checkedDate)) {
-                if(checkedDate.getTime() >= recurrenceStartDate.getTime()) {
-                    checkedDates.push(checkedDate);
-                }
-            }
-        });
+//         const checkedDates = [];
+//         dates.forEach(checkedDate => {
+//             if(!isWrongDate(checkedDate)) {
+//                 if(checkedDate.getTime() >= recurrenceStartDate.getTime()) {
+//                     checkedDates.push(checkedDate);
+//                 }
+//             }
+//         });
 
-        const length = checkedDates.length;
+//         const length = checkedDates.length;
 
-        counter = counter + length;
+//         counter = counter + length;
 
-        const delCount = counter - count;
-        if(counter > count) {
-            checkedDates.splice(length - delCount, delCount);
-        }
+//         const delCount = counter - count;
+//         if(counter > count) {
+//             checkedDates.splice(length - delCount, delCount);
+//         }
 
-        checkedDates.forEach(checkedDate => result.push(checkedDate));
+//         checkedDates.forEach(checkedDate => result.push(checkedDate));
 
-        let interval = rule.interval;
+//         let interval = rule.interval;
 
-        if(Object.keys(interval)[0] === 'days') {
-            interval = { weeks: 1 };
-        }
+//         if(Object.keys(interval)[0] === 'days') {
+//             interval = { weeks: 1 };
+//         }
 
-        date = dateUtils.addInterval(date, interval);
-    }
+//         date = dateUtils.addInterval(date, interval);
+//     }
 
-    return result;
-}
+//     return result;
+// }
 
-function prepareDate(startDate, dateRules, weekStartRule) {
-    const date = new Date(startDate);
-    const day = date.getDay();
+// function prepareDate(startDate, dateRules, weekStartRule) {
+//     const date = new Date(startDate);
+//     const day = date.getDay();
 
-    if(dateRules.length && isDefined(dateRules[0]['byday'])) {
-        date.setDate(date.getDate() - day + days[weekStartRule] - (day < days[weekStartRule] ? 7 : 0));
-    } else {
-        date.setDate(1);
-    }
+//     if(dateRules.length && isDefined(dateRules[0]['byday'])) {
+//         date.setDate(date.getDate() - day + days[weekStartRule] - (day < days[weekStartRule] ? 7 : 0));
+//     } else {
+//         date.setDate(1);
+//     }
 
-    return date;
-}
+//     return date;
+// }
 
-function checkDateByRule(date, rules, weekStart) {
-    let result = false;
+// function checkDateByRule(date, rules, weekStart) {
+//     let result = false;
 
-    for(let i = 0; i < rules.length; i++) {
-        const current = rules[i];
-        let currentRuleResult = true;
+//     for(let i = 0; i < rules.length; i++) {
+//         const current = rules[i];
+//         let currentRuleResult = true;
 
-        for(const field in current) {
-            const processNegative = field === 'bymonthday' && current[field] < 0;
+//         for(const field in current) {
+//             const processNegative = field === 'bymonthday' && current[field] < 0;
 
-            if(dateGetterMap[field] && (!processNegative && current[field] !== dateGetterMap[field](date, weekStart))) {
-                currentRuleResult = false;
-            }
-        }
-        result = result || currentRuleResult;
-    }
-    return result || !rules.length;
-}
+//             if(dateGetterMap[field] && (!processNegative && current[field] !== dateGetterMap[field](date, weekStart))) {
+//                 currentRuleResult = false;
+//             }
+//         }
+//         result = result || currentRuleResult;
+//     }
+//     return result || !rules.length;
+// }
 
-function markWrongDate(date) {
-    date.isWrongDate = true;
-}
+// function markWrongDate(date) {
+//     date.isWrongDate = true;
+// }
 
-function isWrongDate(date) {
-    return date.isWrongDate;
-}
+// function isWrongDate(date) {
+//     return date.isWrongDate;
+// }
 
 const getRecurrenceString = function(object) {
     if(!object || !object.freq) {
