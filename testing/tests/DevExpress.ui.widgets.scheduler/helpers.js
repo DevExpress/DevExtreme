@@ -174,18 +174,24 @@ export class SchedulerTestWrapper {
                 return buttonNames.every((name, index) => $buttons.eq(index).hasClass(`dx-popup-${name}`));
             },
 
-            getDoneButton: () => this.appointmentPopup.getPopup().find('.dx-popup-done'),
+            getDoneButton: () => this.appointmentPopup.getPopup().find('.dx-button.dx-popup-done'),
             clickDoneButton: () => this.appointmentPopup.getDoneButton().trigger('dxclick'),
 
             getCancelButton: () => this.appointmentPopup.getPopup().find('.dx-popup-cancel'),
             clickCancelButton: () => this.appointmentPopup.getCancelButton().trigger('dxclick'),
             saveAppointmentData: () => this.instance._appointmentPopup.saveEditData.call(this.instance._appointmentPopup),
+
+            hasLoadPanel: () => this.appointmentPopup.getPopup().find('.dx-loadpanel').length !== 0,
+
+            getInstance: () => this.instance._appointmentPopup
         };
 
         this.appointmentForm = {
             getFormInstance: () => this.appointmentPopup.getPopup().find('.dx-form').dxForm('instance'),
             getEditor: name => this.appointmentForm.getFormInstance().getEditor(name),
             setSubject: (value) => this.appointmentForm.getEditor('text').option('value', value),
+            setStartDate: (value) => this.appointmentForm.getEditor('startDate').option('value', value),
+            setEndDate: (value) => this.appointmentForm.getEditor('endDate').option('value', value),
 
             hasFormSingleColumn: () => this.appointmentPopup.getPopup().find('.dx-responsivebox').hasClass('dx-responsivebox-screen-xs'),
             getRecurrentAppointmentFormDialogButtons: () => $('.dx-dialog-buttons .dx-button'),
@@ -255,6 +261,7 @@ export class SchedulerTestWrapper {
                 getGroupHeaders: (index) => this.workSpace.groups.getGroup(index).find('.dx-scheduler-group-header'),
                 getGroupHeader: (index, groupRow = 0) => this.workSpace.groups.getGroupHeaders(groupRow).eq(index),
             },
+            clickCell: (rowIndex, cellIndex) => this.workSpace.getCell(rowIndex, cellIndex).trigger('dxclick')
         };
 
         this.navigator = {
