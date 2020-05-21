@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import getElementComputedStyle from '../../../js/renovation/pager/get-computed-style';
 import { updateChildProps } from '../../../js/renovation/pager/resizable-container';
-import type { GetHtmlElement } from '../../../artifacts/react/renovation/pager/resizable-container';
+import type { GetHtmlElement } from '../../../js/renovation/pager/resizable-container';
 
 jest.mock('../../../js/renovation/pager/get-computed-style');
 

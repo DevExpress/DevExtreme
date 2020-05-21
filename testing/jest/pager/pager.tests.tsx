@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h } from 'preact';
 import { mount } from 'enzyme';
-import type { PagerProps } from '../../../js/renovation/pager/pager.p';
+import type PagerProps from '../../../js/renovation/pager/pager-props.p';
 import PagerComponent from '../../../js/renovation/pager/pager.p';
 import PageSizeSelectorComponent from '../../../js/renovation/pager/page-size-selector.p';
+import type { PageSizeSelectorPropsType } from '../../../js/renovation/pager/page-size-selector.p';
 import PageIndexSelectorComponent from '../../../js/renovation/pager/page-index-selector.p';
 import InfoTextComponent from '../../../js/renovation/pager/info.p';
 import { PAGER_CLASS_FULL, PAGER_PAGES_CLASS, LIGHT_MODE_CLASS } from '../../../js/renovation/pager/consts';
@@ -13,8 +14,8 @@ const pageSizeRender = jest.fn();
 jest.mock('../../../js/renovation/pager/page-size-selector.p', () => (props) => pageSizeRender(props));
 jest.mock('../../../js/renovation/select-box', () => { });
 jest.mock('../../../js/renovation/pager/resizable-container.p', () => (props) => {
-  const { infoTextVisible = true, isLargeDisplayMode = true } = props;
-  return props.content({ infoTextVisible, isLargeDisplayMode });
+  const { content, ...containerProps } = props;
+  return content({ ...containerProps, isLargeDisplayMode: true, infoTextVisible: true });
 });
 
 const pageIndexSelectorRender = jest.fn();
@@ -65,7 +66,8 @@ describe('Pager', () => {
     const {
       container,
     } = render({ lightModeEnabled: true });
-    expect(container.getDOMNode().className.indexOf(LIGHT_MODE_CLASS)).not.toBe(-1);
+    const hasLightModeClass = container.getDOMNode().className.indexOf(LIGHT_MODE_CLASS) !== -1;
+    expect(hasLightModeClass).toBe(true);
   });
   it('change page size uncontrolled', async () => {
     const pageSizeChangeHandler = jest.fn();
@@ -74,7 +76,7 @@ describe('Pager', () => {
       defaultPageSize: 5,
     });
     expect(pageSize().props()).toMatchObject({ pageSize: 5 });
-    (pageSize().props()).pageSizeChanged(10);
+    (pageSize().props() as PageSizeSelectorPropsType).pageSizeChanged(10);
     // Vitik: Update work only on the root component
     root.update();
     expect(pageSize().props()).toMatchObject({ pageSize: 10 });
@@ -83,7 +85,7 @@ describe('Pager', () => {
     const pageSizeChangeHandler = jest.fn();
     const { root, pageSize } = render({ pageSizeChange: pageSizeChangeHandler, pageSize: 5 });
     expect(pageSize().props()).toMatchObject({ pageSize: 5 });
-    (pageSize().props()).pageSizeChanged(10);
+    (pageSize().props() as PageSizeSelectorPropsType).pageSizeChanged(10);
     // Vitik: Update work only on the root component
     root.update();
     // Vitik: no reaction because pageSize doesn't changed

@@ -13,11 +13,11 @@ export const viewFunction = ({
   props,
 }: Pager) => (
   <ResizableContainer
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    {...props as PagerProps}
+    content={PagerContent}
     pageSizeChange={pageSizeChange}
     pageIndexChange={pageIndexChange}
-    content={PagerContent}
-  // eslint-disable-next-line react/jsx-props-no-spreading
-    {...props as PagerProps}
   />
 );
 
