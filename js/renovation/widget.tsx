@@ -113,8 +113,6 @@ export class WidgetProps extends BaseWidgetProps {
 
   @OneWay() className?: string = '';
 
-  @OneWay() clickArgs?: any = {};
-
   @OneWay() name?: string = '';
 
   @Event() onActive?: (e: any) => any;
@@ -202,12 +200,12 @@ export default class Widget extends JSXComponent<WidgetProps> {
 
   @Effect()
   clickEffect() {
-    const { name, clickArgs, onClick } = this.props;
+    const { name, onClick } = this.props;
     const namespace = name;
 
     if (onClick) {
       dxClick.on(this.widgetRef,
-        (e) => onClick({ ...clickArgs, ...e }),
+        (e) => onClick(e),
         { namespace });
 
       return () => dxClick.off(this.widgetRef, { namespace });
