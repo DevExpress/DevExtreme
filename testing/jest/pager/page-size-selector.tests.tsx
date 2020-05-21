@@ -11,7 +11,7 @@ import getElementComputedStyle from '../../../js/renovation/pager/get-computed-s
 
 jest.mock('../../../js/renovation/pager/get-computed-style.p');
 jest.mock('../../../js/renovation/select-box', () => { });
-jest.mock('../../../js/renovation/select-box.p', () => () => 'selectbox');
+jest.mock('../../../js/renovation/select-box.p', () => () => { });
 jest.mock('../../../js/renovation/pager/light-button.p', () => (props) => props.children);
 
 describe('Pager size selector', () => {
@@ -48,20 +48,28 @@ describe('Pager size selector', () => {
     expect(comp.prop('className')).toBe(PAGER_PAGE_SIZES_CLASS);
     // expect(comp.children().find('selectbox')).toHaveLength(1);
     // expect(comp.children('selectbox')).toHaveLength(1);
-    expect(comp.children().at(0).text()).toBe('selectbox');
-    expect(comp.children().at(0).props()).toMatchObject({
-      dataSource: [{ text: '5', value: 5 }, { text: '10', value: 10 }],
+    expect(comp.childAt(0).props()).toMatchObject({
+      rtlEnabled: false,
+      pageSizes: [{ text: '5', value: 5 }, { text: '10', value: 10 }],
+      pageSize: 5,
+    });
+    // TODO Vitik: move to small-page-size.test
+    expect(comp.childAt(0).childAt(0).props()).toMatchObject({
       displayExpr: 'text',
-      value: 5,
       valueExpr: 'value',
+      dataSource: [{ text: '5', value: 5 }, { text: '10', value: 10 }],
+      rtlEnabled: false,
+      value: 5,
+      width: 30,
     });
   });
+  // TODO Vitik: move to small-page-size.test
   it('render small page sizes selectBox width', () => {
     (getElementComputedStyle as jest.Mock).mockReturnValue({ minWidth: '42px' });
     const comp = render({
       isLargeDisplayMode: false, pageSizes: [5, 10, 1000],
     });
-    expect(comp.children().at(0).props().width).toBe(42 + 10 * 4);
+    expect(comp.childAt(0).childAt(0).props().width).toBe(42 + 10 * 4);
   });
 
   it('render small page sizes rtlEnabled', () => {
