@@ -1639,7 +1639,7 @@ module.exports = Class.inherit((function() {
                     headerItem.children = headerItem.collapsedChildren;
                     delete headerItem.collapsedChildren;
                     that._update();
-                } else {
+                } else if(this.store()) {
                     that.load(options);
                 }
                 return hasCache;
