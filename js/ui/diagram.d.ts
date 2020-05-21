@@ -399,7 +399,7 @@ export interface dxDiagramShape extends dxDiagramItem {
 export interface dxDiagramCustomCommand {
     /**
      * @docid dxDiagramCustomCommand.name
-     * @type String
+     * @type String|Enums.DiagramCommand
      * @prevFileNamespace DevExpress.ui
      * @public
      */

@@ -26,12 +26,12 @@ const DiagramMenuHelper = {
         return DIAGRAM_CONTEXT_MENU_CLASS;
     },
     onContextMenuItemClick(widget, itemData, actionHandler) {
-        if(itemData.command !== undefined && (!Array.isArray(itemData.items) || !itemData.items.length)) {
+        if((itemData.command !== undefined || itemData.name !== undefined) && (!Array.isArray(itemData.items) || !itemData.items.length)) {
             const parameter = DiagramMenuHelper.getItemCommandParameter(widget, itemData);
-            actionHandler.call(this, itemData.command, parameter);
+            actionHandler.call(this, itemData.command, itemData.name, parameter);
         } else if(itemData.rootCommand !== undefined && itemData.value !== undefined) {
             const parameter = DiagramMenuHelper.getItemCommandParameter(widget, itemData, itemData.value);
-            actionHandler.call(this, itemData.rootCommand, parameter);
+            actionHandler.call(this, itemData.rootCommand, undefined, parameter);
         }
     },
     getItemValue(item) {
