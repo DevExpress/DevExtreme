@@ -3468,54 +3468,54 @@ QUnit.module('Events', {
     });
 
     QUnit.test('onPageLoading handler should be passed to the list', function(assert) {
-        const done = assert.async();
+        assert.expect(1);
 
-        const data = [1, 2, 3];
+        const data = [];
+
+        for(let i = 100; i >= 0; i--) {
+            data.push(i);
+        }
 
         const instance = $('#lookup').dxLookup({
             deferRendering: false,
             dataSource: {
                 store: data,
                 paginate: true,
-                pageSize: 1
+                pageSize: 40
             },
-            pageLoadMode: 'scrollBottom',
-            useNativeScrolling: true,
+            opened: true,
             onPageLoading: (e) => {
                 assert.ok(true, 'onPageLoading is fired');
-                done();
             }
         }).dxLookup('instance');
 
-        const list = instance._list;
-        list.option('useNative', true);
-        instance.open();
-
-        setTimeout(() => {
-            list.scrollTo(50);
-        }, 2000);
-        this.clock.tick(2000);
+        instance._list.scrollTo(2000);
     });
 
     QUnit.test('onPageLoading handler should be passed to the list - subscription by "on" method', function(assert) {
         assert.expect(1);
 
-        const data = [1, 2, 3];
+        const data = [];
+
+        for(let i = 100; i >= 0; i--) {
+            data.push(i);
+        }
 
         const instance = $('#lookup').dxLookup({
             deferRendering: false,
             dataSource: {
                 store: data,
                 paginate: true,
-                pageSize: 1
+                pageSize: 40
             },
+            opened: true
         }).dxLookup('instance');
 
         instance.on('pageLoading', (e) => {
             assert.ok(true, 'onPageLoading is fired');
         });
 
-        instance._list._scrollBottomHandler();
+        instance._list.scrollTo(2000);
     });
 
     QUnit.test('onPullRefresh handler should be passed to the list', function(assert) {
