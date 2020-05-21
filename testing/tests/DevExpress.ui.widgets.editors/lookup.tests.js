@@ -3483,11 +3483,7 @@ QUnit.module('Events', {
     QUnit.test('onPageLoading handler should be passed to the list', function(assert) {
         assert.expect(1);
 
-        const data = [];
-
-        for(let i = 100; i >= 0; i--) {
-            data.push(i);
-        }
+        const data = [1, 2, 3];
 
         const instance = $('#lookup').dxLookup({
             deferRendering: false,
@@ -3496,23 +3492,18 @@ QUnit.module('Events', {
                 paginate: true,
                 pageSize: 40
             },
-            opened: true,
             onPageLoading: (e) => {
                 assert.ok(true, 'onPageLoading is fired');
             }
         }).dxLookup('instance');
 
-        instance._list.scrollTo(2000);
+        instance._list.option('onPageLoading')();
     });
 
     QUnit.test('onPageLoading handler should be passed to the list - subscription by "on" method', function(assert) {
         assert.expect(1);
 
-        const data = [];
-
-        for(let i = 100; i >= 0; i--) {
-            data.push(i);
-        }
+        const data = [1, 2, 3];
 
         const instance = $('#lookup').dxLookup({
             deferRendering: false,
@@ -3520,15 +3511,14 @@ QUnit.module('Events', {
                 store: data,
                 paginate: true,
                 pageSize: 40
-            },
-            opened: true
+            }
         }).dxLookup('instance');
 
         instance.on('pageLoading', (e) => {
             assert.ok(true, 'onPageLoading is fired');
         });
 
-        instance._list.scrollTo(2000);
+        instance._list.option('onPageLoading')();
     });
 
     QUnit.test('onPullRefresh handler should be passed to the list', function(assert) {
