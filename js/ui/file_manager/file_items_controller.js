@@ -178,13 +178,13 @@ export default class FileItemsController {
     }
 
     _getFileItems(parentDirectoryInfo, skipNavigationOnError) {
-        let loadItemsActionResult = null;
+        let loadItemsDeferred = null;
         try {
-            loadItemsActionResult = this._fileProvider.getItems(parentDirectoryInfo.fileItem);
+            loadItemsDeferred = this._fileProvider.getItems(parentDirectoryInfo.fileItem);
         } catch(error) {
             return this._handleItemLoadError(parentDirectoryInfo, error, skipNavigationOnError);
         }
-        return when(loadItemsActionResult)
+        return when(loadItemsDeferred)
             .then(
                 fileItems => this._securityController.getAllowedItems(fileItems),
                 errorInfo => this._handleItemLoadError(parentDirectoryInfo, errorInfo, skipNavigationOnError));

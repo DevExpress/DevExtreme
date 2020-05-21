@@ -2,10 +2,11 @@ import $ from 'jquery';
 import renderer from 'core/renderer';
 const { test } = QUnit;
 import 'ui/file_manager';
+import CustomFileSystemProvider from 'file_management/custom_provider';
 import FileItemsController from 'ui/file_manager/file_items_controller';
 import FileManagerBreadcrumbs from 'ui/file_manager/ui.file_manager.breadcrumbs';
 import fx from 'animation/fx';
-import { FileManagerWrapper, FileManagerBreadcrumbsWrapper, createTestFileSystem, createHugeFileSystem, Consts } from '../../../helpers/fileManagerHelpers.js';
+import { FileManagerWrapper, FileManagerBreadcrumbsWrapper, FileManagerProgressPanelWrapper, createTestFileSystem, createHugeFileSystem, Consts } from '../../../helpers/fileManagerHelpers.js';
 
 const moduleConfig = {
 
@@ -33,6 +34,7 @@ const moduleConfig = {
         this.fileManager = this.$element.dxFileManager('instance');
 
         this.wrapper = new FileManagerWrapper(this.$element);
+        this.progressPanelWrapper = new FileManagerProgressPanelWrapper(this.$element);
 
         this.clock.tick(400);
     },
@@ -742,5 +744,181 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         this.clock.tick(400);
 
         assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), detailsScrollPosition, 'details scroll position is the same');
+    });
+
+    test('Navigation to forbidden folder rises an error', function(assert) {
+        this.fileManager.option('fileSystemProvider',
+            new CustomFileSystemProvider({
+                getItems: pathInfo => {
+                    if(pathInfo.path === '') {
+                        return [{ name: 'Folder', isDirectory: 'true' }];
+                    } else {
+                        throw new Error('Error');
+                    }
+                }
+            }));
+        this.clock.tick(400);
+
+        this.wrapper.findThumbnailsItem('Folder').trigger('dxdblclick');
+        this.clock.tick(400);
+
+        const infos = this.progressPanelWrapper.getInfos();
+        assert.strictEqual(infos.length, 1, 'There is one notification on panel');
+
+        assert.strictEqual(infos[0].common.commonText, 'The folder cannot be opened', 'Title is correct');
+
+        const details = infos[0].details;
+        assert.strictEqual(details.length, 1, 'Notification has one details section');
+
+        assert.strictEqual(details[0].commonText, 'Folder', 'Common text is correct');
+        assert.strictEqual(details[0].errorText, 'Unspecified error.', 'Error text is correct');
+
+        assert.strictEqual(this.wrapper.getThumbnailsItems().length, 1);
+        assert.strictEqual(this.wrapper.getThumbnailsItemName(0), 'Folder', 'The only item is shown');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files', 'Breadcrumbs has correct path');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Files', 'Root folder selected');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().path, '', 'Current directory is root');
+        assert.strictEqual(this.fileManager.option('currentPath'), '', 'Current path is correct');
+    });
+
+    test('Forbiddance of current folder and refresh leads to navigating up and rising only one error', function(assert) {
+        this.fileManager.option('fileSystemProvider',
+            new CustomFileSystemProvider({
+                getItems: pathInfo => {
+                    if(pathInfo.path === '') {
+                        return [{ name: 'Folder', isDirectory: 'true' }];
+                    } else if(pathInfo.path === 'Folder' && !this.forbidAll) {
+                        return [{ name: 'Subfolder', isDirectory: 'true' }];
+                    } else if(pathInfo.path === 'Folder/Subfolder' && !this.forbidAll) {
+                        return [];
+                    } else {
+                        throw new Error('Error');
+                    }
+                }
+            }));
+        this.clock.tick(400);
+
+        this.wrapper.findThumbnailsItem('Folder').trigger('dxdblclick');
+        this.clock.tick(400);
+
+        let infos = this.progressPanelWrapper.getInfos();
+        assert.strictEqual(infos.length, 0, 'No notifications');
+
+        this.wrapper.findThumbnailsItem('Subfolder').trigger('dxdblclick');
+        this.clock.tick(400);
+
+        infos = this.progressPanelWrapper.getInfos();
+        assert.strictEqual(infos.length, 0, 'No notifications');
+
+        this.forbidAll = true;
+        this.wrapper.getToolbarButton('Refresh').trigger('dxclick');
+        this.clock.tick(400);
+
+        infos = this.progressPanelWrapper.getInfos();
+        assert.strictEqual(infos.length, 1, 'There is one notification on panel');
+
+        assert.strictEqual(infos[0].common.commonText, 'The folder cannot be opened', 'Title is correct');
+
+        const details = infos[0].details;
+        assert.strictEqual(details.length, 1, 'Notification has one details section');
+
+        assert.strictEqual(details[0].commonText, 'Folder', 'Common text is correct');
+        assert.strictEqual(details[0].errorText, 'Unspecified error.', 'Error text is correct');
+
+        assert.strictEqual(this.wrapper.getThumbnailsItems().length, 1);
+        assert.strictEqual(this.wrapper.getThumbnailsItemName(0), 'Folder', 'The only item is shown');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files', 'Breadcrumbs has correct path');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Files', 'Root folder selected');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().path, '', 'Current directory is root');
+        assert.strictEqual(this.fileManager.option('currentPath'), '', 'Current path is correct');
+    });
+
+    test('Expanding forbidden treeview node leads to rising an error and no navigating up', function(assert) {
+        this.fileManager.option('fileSystemProvider',
+            new CustomFileSystemProvider({
+                getItems: pathInfo => {
+                    if(pathInfo.path === '') {
+                        return [{ name: 'Folder', isDirectory: 'true' }, { name: 'Other folder', isDirectory: 'true' }];
+                    } else if(pathInfo.path === 'Folder') {
+                        return [{ name: 'Subfolder', isDirectory: 'true' }];
+                    } else {
+                        throw new Error('Error');
+                    }
+                }
+            }));
+        this.clock.tick(400);
+
+        this.wrapper.findThumbnailsItem('Folder').trigger('dxdblclick');
+        this.clock.tick(400);
+
+        let infos = this.progressPanelWrapper.getInfos();
+        assert.strictEqual(infos.length, 0, 'No notifications');
+
+        this.wrapper.getFolderToggle(2).trigger('dxclick');
+        this.clock.tick(400);
+
+        infos = this.progressPanelWrapper.getInfos();
+        assert.strictEqual(infos.length, 1, 'There is one notification on panel');
+
+        assert.strictEqual(infos[0].common.commonText, 'The folder cannot be opened', 'Title is correct');
+
+        const details = infos[0].details;
+        assert.strictEqual(details.length, 1, 'Notification has one details section');
+
+        assert.strictEqual(details[0].commonText, 'Other folder', 'Common text is correct');
+        assert.strictEqual(details[0].errorText, 'Unspecified error.', 'Error text is correct');
+
+        assert.strictEqual(this.wrapper.getThumbnailsItems().length, 2);
+        assert.strictEqual(this.wrapper.getThumbnailsItemName(0), '..', 'The parent folder item is shown');
+        assert.strictEqual(this.wrapper.getThumbnailsItemName(1), 'Subfolder', 'The subfolder item is shown');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files/Folder', 'Breadcrumbs has correct path');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Folder', 'Root folder selected');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().path, 'Folder', 'Current directory is root');
+        assert.strictEqual(this.fileManager.option('currentPath'), 'Folder', 'Current path is correct');
+    });
+
+    test('When current folder not found and refresh then an error rises without navigating up', function(assert) {
+        const changeableFolder = { name: 'Folder', isDirectory: 'true' };
+        this.fileManager.option('fileSystemProvider',
+            new CustomFileSystemProvider({
+                getItems: pathInfo => {
+                    if(pathInfo.path === '') {
+                        return [changeableFolder];
+                    } else if(pathInfo.path === 'Folder') {
+                        return [{ name: 'Subfolder', isDirectory: 'true' }];
+                    } else if(pathInfo.path === 'Folder/Subfolder') {
+                        return [];
+                    } else {
+                        throw new Error('Error');
+                    }
+                }
+            }));
+        this.clock.tick(400);
+
+        this.wrapper.findThumbnailsItem('Folder').trigger('dxdblclick');
+        this.clock.tick(400);
+
+        let infos = this.progressPanelWrapper.getInfos();
+        assert.strictEqual(infos.length, 0, 'No notifications');
+
+        this.wrapper.findThumbnailsItem('Subfolder').trigger('dxdblclick');
+        this.clock.tick(400);
+
+        infos = this.progressPanelWrapper.getInfos();
+        assert.strictEqual(infos.length, 0, 'No notifications');
+
+        changeableFolder.name = 'Folder1';
+        this.wrapper.getToolbarButton('Refresh').trigger('dxclick');
+        this.clock.tick(400);
+
+        infos = this.progressPanelWrapper.getInfos();
+        assert.strictEqual(infos.length, 0, 'No notifications');
+
+        assert.strictEqual(this.wrapper.getThumbnailsItems().length, 1);
+        assert.strictEqual(this.wrapper.getThumbnailsItemName(0), 'Folder1', 'The only item is shown');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files', 'Breadcrumbs has correct path');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Files', 'Root folder selected');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().path, '', 'Current directory is root');
+        assert.strictEqual(this.fileManager.option('currentPath'), '', 'Current path is correct');
     });
 });
