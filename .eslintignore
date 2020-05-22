@@ -7,3 +7,4 @@ testing/helpers/sinon/*
 *.j.js
 *.p.d.ts
 *.j.d.ts
+playground/react/*
