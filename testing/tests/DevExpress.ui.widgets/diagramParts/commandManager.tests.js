@@ -20,7 +20,7 @@ const customCommands = [
             'selectAll'
         ]
     },
-    'showToolbox'
+    'toolbox'
 ];
 
 const customTabs = [
