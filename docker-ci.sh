@@ -194,9 +194,6 @@ function run_test_scss {
     npx gulp generate-scss
     npm run build-themes
     node build/gulp/scss/tests/identical.test.js
-
-    cd themebuilder-scss
-    npm i && npm run build && npm run test
 }
 
 function start_runner_watchdog {

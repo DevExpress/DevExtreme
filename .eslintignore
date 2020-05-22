@@ -3,4 +3,3 @@ js/viz/docs/*
 node_modules/*
 testing/helpers/sinon/*
 themebuilder/data/metadata/*
-themebuilder-scss/**/*
