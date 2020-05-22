@@ -965,7 +965,9 @@ QUnit.module('Columns resizing', {
 
             getView: function(name) {
                 return this._views[name];
-            }
+            },
+
+            getScrollable: function() {}
         };
 
         that.component._views = {
@@ -1071,33 +1073,6 @@ QUnit.module('Columns resizing', {
             { x: -9750, y: -10000, columnIndex: 1, index: 2 },
             { x: -9625, y: -10000, columnIndex: 2, index: 3 },
             { x: -9500, y: -10000, columnIndex: 3, index: 4 }
-        ], 'points by columns');
-    });
-
-    QUnit.test('Get points by columns if columnResizingMode is widget and RTL', function(assert) {
-        // arrange
-        this.options.columnResizingMode = 'widget';
-        this.options.rtlEnabled = true;
-        $('#container').css('direction', 'rtl');
-        const resizeController = this.createColumnsResizerViewController([
-            { caption: 'Column 1', width: '125px' },
-            { caption: 'Column 2', width: '125px' },
-            { caption: 'Column 3', width: '125px' },
-            { caption: 'Column 4', width: '125px' }
-        ]);
-        const $container = $('#container');
-
-        // act
-        $container.css({ width: '500px', height: '500px' });
-        resizeController._columnHeadersView.render($container);
-        resizeController._columnsSeparatorView.render($container);
-
-        // assert
-        assert.deepEqual(resizeController.pointsByColumns(), [
-            { x: -9500, y: -10000, columnIndex: 0, index: 0 },
-            { x: -9625, y: -10000, columnIndex: 1, index: 1 },
-            { x: -9750, y: -10000, columnIndex: 2, index: 2 },
-            { x: -9875, y: -10000, columnIndex: 3, index: 3 }
         ], 'points by columns');
     });
 
@@ -1424,59 +1399,6 @@ QUnit.module('Columns resizing', {
             { columnIndex: 0, optionName: 'width', optionValue: '55.000%' },
             { columnIndex: 1, optionName: 'visibleWidth', optionValue: 90 },
             { columnIndex: 1, optionName: 'width', optionValue: '45.000%' }
-        ], 'update column options after resizing');
-    });
-
-
-    QUnit.test('Set new width of column in the separatorMoving callback function RTL', function(assert) {
-        // arrange
-        const resizeController = this.createColumnsResizerViewController();
-        this.options.rtlEnabled = true;
-        $('#container').css('direction', 'rtl');
-        // act
-        this.renderViews($('#container'));
-
-        resizeController._isResizing = true;
-        resizeController._targetPoint = { columnIndex: 0 };
-        resizeController._setupResizingInfo(-9850);
-        resizeController._moveSeparator(getEvent({
-            data: resizeController,
-            type: 'mousemove',
-            pageX: -9840
-        }));
-
-        // assert
-        assert.deepEqual(resizeController._columnsController.updateOptions, [
-            { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
-            { columnIndex: 0, optionName: 'width', optionValue: 140 },
-            { columnIndex: 1, optionName: 'visibleWidth', optionValue: null },
-            { columnIndex: 1, optionName: 'width', optionValue: 160 },
-        ], 'update column options after resizing');
-    });
-
-    QUnit.test('Set new width of column in the separatorMoving callback function if RTL and columnResizingMode is widget', function(assert) {
-        // arrange
-        const resizeController = this.createColumnsResizerViewController();
-        this.options.rtlEnabled = true;
-        this.options.columnResizingMode = 'widget';
-        this.component.updateDimensions = $.noop;
-        $('#container').css('direction', 'rtl');
-        // act
-        this.renderViews($('#container'));
-
-        resizeController._isResizing = true;
-        resizeController._targetPoint = { columnIndex: 0 };
-        resizeController._setupResizingInfo(-9850);
-        resizeController._moveSeparator(getEvent({
-            data: resizeController,
-            type: 'mousemove',
-            pageX: -9840
-        }));
-
-        // assert
-        assert.deepEqual(resizeController._columnsController.updateOptions, [
-            { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
-            { columnIndex: 0, optionName: 'width', optionValue: 160 }
         ], 'update column options after resizing');
     });
 
@@ -3069,59 +2991,232 @@ QUnit.module('Columns resizing', {
         assert.strictEqual($(resizeController._columnsSeparatorView.element()).offset().top, separatorOffsetTop, 'separator offset top');
     });
 
-    // T815002
-    QUnit.test('Resizing of the column should work correctly when rtlEnabled is true and columnResizingMode is set to \'widget\'', function(assert) {
-        // arrange
-        this.options.rtlEnabled = true;
-        this.options.columnResizingMode = 'widget';
-        this.options.columns = [
-            { caption: 'Field 1' },
-            { caption: 'Field 2', width: 125 },
-            { caption: 'Field 3', width: 125 },
-        ];
+    QUnit.module('RTL mode', {
+        beforeEach: function() {
+            this.options.rtlEnabled = true;
+            $('#container').css('direction', 'rtl').addClass('dx-rtl');
+        }
+    }, () => {
+        QUnit.test('Get points by columns if columnResizingMode is widget and RTL', function(assert) {
+            // arrange
+            this.options.columnResizingMode = 'widget';
+            const resizeController = this.createColumnsResizerViewController([
+                { caption: 'Column 1', width: '125px' },
+                { caption: 'Column 2', width: '125px' },
+                { caption: 'Column 3', width: '125px' },
+                { caption: 'Column 4', width: '125px' }
+            ]);
+            const $container = $('#container');
 
-        this.component._notifyOptionChanged = noop;
-        this.component._controllers.columns = new ColumnsController(this.component);
-        this.component._controllers.tablePosition = new columnResizingReordering.TablePositionViewController(this.component);
+            // act
+            $container.css({ width: '500px', height: '500px' });
+            resizeController._columnHeadersView.render($container);
+            resizeController._columnsSeparatorView.render($container);
 
-        this.component._controllers.columns.init();
-        this.component._controllers.tablePosition.init();
-
-        const $testElement = $('#container').css({
-            'width': '600px',
-            'direction': 'rtl'
-        }).addClass('dx-rtl');
-        const resizeController = this.createColumnsResizerViewController();
-
-        this.initViews();
-        this.renderViews($testElement);
-        this.component._controllers.tablePosition.update();
-
-        // assert
-        assert.notOk($(resizeController._rowsView.element()).hasClass('dx-scrollable'), 'no scrolling');
-
-        // act
-        resizeController._isResizing = true;
-        resizeController._targetPoint = { columnIndex: 1 };
-        resizeController._setupResizingInfo(-9750);
-        resizeController._moveSeparator({
-            event: {
-                data: resizeController,
-                type: 'mousemove',
-                pageX: -9650,
-                preventDefault: function() {}
-            }
+            // assert
+            assert.deepEqual(resizeController.pointsByColumns(), [
+                { x: -9500, y: -10000, columnIndex: 0, index: 0 },
+                { x: -9625, y: -10000, columnIndex: 1, index: 1 },
+                { x: -9750, y: -10000, columnIndex: 2, index: 2 },
+                { x: -9875, y: -10000, columnIndex: 3, index: 3 }
+            ], 'points by columns');
         });
 
-        // assert
-        const $headers = resizeController._columnHeadersView.getColumnElements();
-        const $dataCells = resizeController._rowsView.getCellElements(0);
+        QUnit.test('Set new width of column in the separatorMoving callback function RTL', function(assert) {
+            // arrange
+            const resizeController = this.createColumnsResizerViewController();
 
-        assert.strictEqual($headers.length, 3, 'header count');
+            // act
+            this.renderViews($('#container'));
 
-        $headers.each((index, header) => {
-            const $dataCell = $dataCells.eq(index);
-            assert.strictEqual($(header).offset().left, $dataCell.offset().left, `cells with index ${index}: header position matches cell position`);
+            resizeController._isResizing = true;
+            resizeController._targetPoint = { columnIndex: 0 };
+            resizeController._setupResizingInfo(-9850);
+            resizeController._moveSeparator(getEvent({
+                data: resizeController,
+                type: 'mousemove',
+                pageX: -9840
+            }));
+
+            // assert
+            assert.deepEqual(resizeController._columnsController.updateOptions, [
+                { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
+                { columnIndex: 0, optionName: 'width', optionValue: 140 },
+                { columnIndex: 1, optionName: 'visibleWidth', optionValue: null },
+                { columnIndex: 1, optionName: 'width', optionValue: 160 },
+            ], 'update column options after resizing');
+        });
+
+        QUnit.test('Set new width of column in the separatorMoving callback function if RTL and columnResizingMode is widget', function(assert) {
+            // arrange
+            const resizeController = this.createColumnsResizerViewController();
+            this.options.columnResizingMode = 'widget';
+            this.component.updateDimensions = $.noop;
+
+            // act
+            this.renderViews($('#container'));
+
+            resizeController._isResizing = true;
+            resizeController._targetPoint = { columnIndex: 0 };
+            resizeController._setupResizingInfo(-9850);
+            resizeController._moveSeparator(getEvent({
+                data: resizeController,
+                type: 'mousemove',
+                pageX: -9840
+            }));
+
+            // assert
+            assert.deepEqual(resizeController._columnsController.updateOptions, [
+                { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
+                { columnIndex: 0, optionName: 'width', optionValue: 160 }
+            ], 'update column options after resizing');
+        });
+
+        // T815002
+        QUnit.test('Resizing of the column should work correctly when rtlEnabled is true and columnResizingMode is set to \'widget\'', function(assert) {
+            // arrange
+            this.options.columnResizingMode = 'widget';
+            this.options.columns = [
+                { caption: 'Field 1' },
+                { caption: 'Field 2', width: 125 },
+                { caption: 'Field 3', width: 125 },
+            ];
+
+            this.component._notifyOptionChanged = noop;
+            this.component._controllers.columns = new ColumnsController(this.component);
+            this.component._controllers.tablePosition = new columnResizingReordering.TablePositionViewController(this.component);
+
+            this.component._controllers.columns.init();
+            this.component._controllers.tablePosition.init();
+
+            const $testElement = $('#container').css('width', '600px');
+            const resizeController = this.createColumnsResizerViewController();
+
+            this.initViews();
+            this.renderViews($testElement);
+            this.component._controllers.tablePosition.update();
+
+            // assert
+            assert.notOk($(resizeController._rowsView.element()).hasClass('dx-scrollable'), 'no scrolling');
+
+            // act
+            resizeController._isResizing = true;
+            resizeController._targetPoint = { columnIndex: 1 };
+            resizeController._setupResizingInfo(-9750);
+            resizeController._moveSeparator({
+                event: {
+                    data: resizeController,
+                    type: 'mousemove',
+                    pageX: -9650,
+                    preventDefault: function() {}
+                }
+            });
+
+            // assert
+            const $headers = resizeController._columnHeadersView.getColumnElements();
+            const $dataCells = resizeController._rowsView.getCellElements(0);
+
+            assert.strictEqual($headers.length, 3, 'header count');
+
+            $headers.each((index, header) => {
+                const $dataCell = $dataCells.eq(index);
+                assert.strictEqual($(header).offset().left, $dataCell.offset().left, `cells with index ${index}: header position matches cell position`);
+            });
+        });
+
+        QUnit.test('Get points by columns if columnResizingMode is widget and parent grid container in RTL mode', function(assert) {
+            // arrange
+            const $container = $('#container');
+            $container.css({ width: '500px', height: '500px' });
+            $container.parent().attr('dir', 'rtl').css({ width: '1000px', height: '500px' });
+
+            this.options.columnResizingMode = 'widget';
+            const resizeController = this.createColumnsResizerViewController([
+                { caption: 'Column 1', width: '125px' },
+                { caption: 'Column 2', width: '125px' },
+                { caption: 'Column 3', width: '125px' },
+                { caption: 'Column 4', width: '125px' }
+            ]);
+
+            // act
+            resizeController._columnHeadersView.render($container);
+            resizeController._columnsSeparatorView.render($container);
+
+            // assert
+            assert.deepEqual(resizeController.pointsByColumns(), [
+                { x: -9125, y: -10000, columnIndex: 0, index: 1 },
+                { x: -9250, y: -10000, columnIndex: 1, index: 2 },
+                { x: -9375, y: -10000, columnIndex: 2, index: 3 },
+                { x: -9500, y: -10000, columnIndex: 3, index: 4 }
+            ], 'points by columns');
+        });
+
+        QUnit.test('Resizing of the column should work correctly when columnResizingMode is widget and parent grid container in RTL mode', function(assert) {
+            // arrange
+            const $container = $('#container');
+            $container.css({ width: '500px', height: '500px' });
+            $container.parent().attr('dir', 'rtl').css({ width: '1000px', height: '500px' });
+
+            this.options.columnResizingMode = 'widget';
+            const resizeController = this.createColumnsResizerViewController([
+                { caption: 'Column 1', width: '125px' },
+                { caption: 'Column 2', width: '125px' },
+                { caption: 'Column 3', width: '125px' },
+                { caption: 'Column 4', width: '125px' }
+            ]);
+            this.component.updateDimensions = $.noop;
+
+            // act
+            this.renderViews($('#container'));
+
+            resizeController._isResizing = true;
+            resizeController._targetPoint = { columnIndex: 0 };
+            resizeController._setupResizingInfo(-9125);
+            resizeController._moveSeparator(getEvent({
+                data: resizeController,
+                type: 'mousemove',
+                pageX: -9225
+            }));
+
+            // assert
+            assert.deepEqual(resizeController._columnsController.updateOptions, [
+                { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
+                { columnIndex: 0, optionName: 'width', optionValue: 225 }
+            ], 'update column options after resizing');
+        });
+
+        QUnit.test('Resizing of the last column should work correctly when columnResizingMode is widget and parent grid container in RTL mode', function(assert) {
+            // arrange
+            const $container = $('#container');
+            $container.css({ width: '500px', height: '500px' });
+            $container.parent().attr('dir', 'rtl').css({ width: '1000px', height: '500px' });
+
+            this.options.columnResizingMode = 'widget';
+            const resizeController = this.createColumnsResizerViewController([
+                { caption: 'Column 1', width: '125px' },
+                { caption: 'Column 2', width: '125px' },
+                { caption: 'Column 3', width: '125px' },
+                { caption: 'Column 4', width: '125px' }
+            ]);
+            this.component.updateDimensions = $.noop;
+
+            // act
+            this.renderViews($('#container'));
+
+            resizeController._isResizing = true;
+            resizeController._targetPoint = { columnIndex: 3 };
+            resizeController._setupResizingInfo(-9500);
+            resizeController._moveSeparator(getEvent({
+                data: resizeController,
+                type: 'mousemove',
+                pageX: -9600
+            }));
+
+            // assert
+            assert.deepEqual(resizeController._columnsController.updateOptions, [
+                { columnIndex: 3, optionName: 'visibleWidth', optionValue: null },
+                { columnIndex: 3, optionName: 'width', optionValue: 225 }
+            ], 'update column options after resizing');
         });
     });
 });

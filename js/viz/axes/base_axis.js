@@ -365,7 +365,7 @@ Axis.prototype = {
         return false;
     },
 
-    getCustomPositionAxis: _noop,
+    getOppositeAxis: _noop,
 
     getCustomPosition: _noop,
 
