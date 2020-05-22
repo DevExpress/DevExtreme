@@ -175,22 +175,7 @@ const ThemeManager = BaseThemeManager.inherit((function() {
                 };
             }
 
-            let userOptions = this._userOptions.zoomAndPan;
-
-            if(!_isDefined(userOptions)) {
-                const zoomingMode = _normalizeEnum(this.getOptions('zoomingMode'));
-                const scrollingMode = _normalizeEnum(this.getOptions('scrollingMode'));
-                const allowZoom = ['all', 'mouse', 'touch'].indexOf(zoomingMode) !== -1;
-                const allowScroll = ['all', 'mouse', 'touch'].indexOf(scrollingMode) !== -1;
-
-                userOptions = {
-                    argumentAxis: (allowZoom && allowScroll) ? 'both' : (allowZoom ? 'zoom' : (allowScroll ? 'pan' : 'none')),
-                    allowMouseWheel: zoomingMode === 'all' || zoomingMode === 'mouse',
-                    allowTouchGestures: zoomingMode === 'all' || zoomingMode === 'touch' || scrollingMode === 'all' || scrollingMode === 'touch'
-                };
-            }
-
-            const options = mergeOptions.call(this, 'zoomAndPan', userOptions);
+            const options = mergeOptions.call(this, 'zoomAndPan');
 
             return {
                 valueAxis: parseOption(options.valueAxis),

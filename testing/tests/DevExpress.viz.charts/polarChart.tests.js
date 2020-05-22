@@ -638,8 +638,6 @@ QUnit.test('Create Tracker.', function(assert) {
         commonPaneSettings: {
             border: { visible: true }
         },
-        zoomingMode: 'zoomingModeValue',
-        scrollingMode: 'scrollingModeValue',
         pointSelectionMode: 'pointSelectionMode',
         seriesSelectionMode: 'serieSelectionModeWithTheme',
         rotated: 'rotated'
@@ -652,8 +650,6 @@ QUnit.test('Create Tracker.', function(assert) {
     assert.equal(updateArg0.argumentAxis, chart._argumentAxes[0], 'argument axis');
     assert.equal(updateArg0.chart, chart, 'chart instances should be not passed');
     assert.equal(updateArg0.rotated, undefined, 'rotated');
-    assert.equal(updateArg0.zoomingMode, undefined, 'zoomingMode');
-    assert.equal(updateArg0.scrollingMode, undefined, 'scrollingMode');
 
     assert.ok(tracker.stub('setCanvases').calledOnce, 'setCanvases is called once');
     assert.deepEqual(tracker.stub('setCanvases').lastCall.args, [{

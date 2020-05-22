@@ -235,8 +235,6 @@ const dxChart = {
         */
        allowTouchGestures: true
     },
-    zoomingMode: 'none',
-    scrollingMode: 'none',
     stickyHovering: true,
     crosshair: {
         /**

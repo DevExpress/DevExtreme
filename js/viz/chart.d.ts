@@ -816,15 +816,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      */
     scrollBar?: { color?: string, offset?: number, opacity?: number, position?: 'bottom' | 'left' | 'right' | 'top', visible?: boolean, width?: number };
     /**
-     * @docid dxChartOptions.scrollingMode
-     * @type Enums.ChartPointerType
-     * @default 'none'
-     * @deprecated dxChartOptions.zoomAndPan
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    scrollingMode?: 'all' | 'mouse' | 'none' | 'touch';
-    /**
      * @docid dxChartOptions.series
      * @type ChartSeries|Array<ChartSeries>
      * @default undefined
@@ -890,15 +881,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @public
      */
     zoomAndPan?: { allowMouseWheel?: boolean, allowTouchGestures?: boolean, argumentAxis?: 'both' | 'none' | 'pan' | 'zoom', dragBoxStyle?: { color?: string, opacity?: number }, dragToZoom?: boolean, panKey?: 'alt' | 'ctrl' | 'meta' | 'shift', valueAxis?: 'both' | 'none' | 'pan' | 'zoom' };
-    /**
-     * @docid dxChartOptions.zoomingMode
-     * @type Enums.ChartPointerType
-     * @default 'none'
-     * @deprecated dxChartOptions.zoomAndPan
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    zoomingMode?: 'all' | 'mouse' | 'none' | 'touch';
 }
 export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     /**

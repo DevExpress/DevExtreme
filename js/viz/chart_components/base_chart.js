@@ -47,8 +47,6 @@ const FORCE_RENDER_REFRESH_ACTION_OPTIONS = [
     'crosshair',
     'resolveLabelOverlapping',
     'adjustOnZoom',
-    'zoomingMode',
-    'scrollingMode',
     'stickyHovering'
 ];
 

@@ -776,8 +776,6 @@ registerTheme({
         adjustOnZoom: true,
         autoHidePointMarkers: true,
         rotated: false,
-        zoomingMode: NONE,
-        scrollingMode: NONE,
         synchronizeMultiAxes: true,
         stickyHovering: true,
         barGroupPadding: 0.3,
