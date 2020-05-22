@@ -178,6 +178,11 @@
 
     .dx-button-content {
         padding: 4px;
+
+        .dx-icon {
+            color: @toolbar-color;
+            .dx-icon-sizing(@MATERIAL_BUTTON_ICON_SIZE);
+        }
     }
 
     .dx-toolbar-item-auto-hide {
@@ -241,4 +246,19 @@
 
 .dx-toolbar .dx-tab {
     padding: 4px;
+}
+
+.dx-toolbar-hidden-button-group {
+    margin-top: @MATERIAL_TOOLBAR_PADDING;
+    margin-bottom: @MATERIAL_TOOLBAR_PADDING;
+
+    .dx-buttongroup-wrapper {
+        .dx-buttongroup-item.dx-button {
+            box-shadow: none;
+
+            .dx-button-content {
+                padding: @MATERIAL_TOOLBAR_PADDING @MATERIAL_LIST_ITEM_HORIZONTAL_PADDING;
+            }
+        }
+    }
 }

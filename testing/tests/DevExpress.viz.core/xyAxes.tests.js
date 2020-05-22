@@ -4901,8 +4901,8 @@ QUnit.module('Custom positioning', {
         const horizontalAxis = this.createSimpleAxis($.extend(true, { isArgumentAxis: false, argumentType: 'numeric' }, horizontalAxisOptions));
         const verticalAxis = this.createSimpleAxis($.extend(true, { isArgumentAxis: false, isHorizontal: false, valueType: 'numeric' }, verticalAxisOptions));
 
-        horizontalAxis.getCustomPositionAxis = () => { return verticalAxis; };
-        verticalAxis.getCustomPositionAxis = () => { return horizontalAxis; };
+        horizontalAxis.getOppositeAxis = () => { return verticalAxis; };
+        verticalAxis.getOppositeAxis = () => { return horizontalAxis; };
 
         horizontalAxis.draw(this.canvas);
         verticalAxis.draw(this.canvas);

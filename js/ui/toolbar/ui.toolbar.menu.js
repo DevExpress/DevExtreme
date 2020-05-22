@@ -5,6 +5,7 @@ const List = require('../list/ui.list.base');
 
 const TOOLBAR_MENU_ACTION_CLASS = 'dx-toolbar-menu-action';
 const TOOLBAR_HIDDEN_BUTTON_CLASS = 'dx-toolbar-hidden-button';
+const TOOLBAR_HIDDEN_BUTTON_GROUP_CLASS = 'dx-toolbar-hidden-button-group';
 const TOOLBAR_MENU_SECTION_CLASS = 'dx-toolbar-menu-section';
 const TOOLBAR_MENU_LAST_SECTION_CLASS = 'dx-toolbar-menu-last-section';
 
@@ -67,6 +68,10 @@ const ToolbarMenu = List.inherit({
 
         if(item.widget === 'dxButton') {
             itemElement.addClass(TOOLBAR_HIDDEN_BUTTON_CLASS);
+        }
+
+        if(item.widget === 'dxButtonGroup') {
+            itemElement.addClass(TOOLBAR_HIDDEN_BUTTON_GROUP_CLASS);
         }
 
         itemElement.addClass(item.cssClass);

@@ -927,7 +927,6 @@ QUnit.module('Animation', {
 
         const drawer = $drawer.dxDrawer('instance');
 
-
         drawer.option('animationDuration', 300);
 
         drawer.toggle();
@@ -1150,14 +1149,23 @@ QUnit.module('Rtl', () => {
     });
 });
 
-QUnit.module('CloseOnOutsideClick', () => {
+QUnit.module('CloseOnOutsideClick', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+        this.clock = undefined;
+    }
+}, () => {
     QUnit.test('drawer should be hidden after click on content', function(assert) {
+        const clock = sinon.useFakeTimers();
         const drawer = $('#drawer').dxDrawer({
             closeOnOutsideClick: false,
             opened: true,
-            shading: true
-        })
-            .dxDrawer('instance');
+            shading: true,
+            animationDuration: 0
+        }).dxDrawer('instance');
         const $content = drawer.viewContent();
 
         $($content).trigger('dxclick');
@@ -1165,7 +1173,9 @@ QUnit.module('CloseOnOutsideClick', () => {
         drawer.option('closeOnOutsideClick', true);
 
         const $shader = drawer.$element().find('.' + DRAWER_SHADER_CLASS);
+
         $($content).trigger('dxclick');
+        clock.tick();
 
         assert.equal(drawer.option('opened'), false, 'drawer is hidden');
         assert.ok($shader.is(':hidden'), 'shader is hidden');

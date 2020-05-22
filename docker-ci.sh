@@ -18,8 +18,9 @@ function run_ts {
 
     npm i
     npm update devextreme-internal-tools
-    npm ls devextreme-internal-tools
+    npm ls devextreme-internal-tools || :
 
+    npm run validate-declarations
     npm run update-ts
 
     if ! diff $target.current $target -U 5 > $target.diff; then
