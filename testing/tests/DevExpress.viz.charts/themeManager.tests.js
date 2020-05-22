@@ -645,7 +645,7 @@ function createThemeManager(options, themeGroupName) {
         assert.ok(theme.point.areaMerged, 'Params from line type specific-branch were applied');
     });
 
-    QUnit.test('Apply user commonSeriesSetting with more priority then theme commonSeriesSetting.line', function(assert) {
+    QUnit.test('Apply user commonSeriesSetting (without line) with more priority then theme commonSeriesSetting.line', function(assert) {
         // arrange
         const themeManager = createThemeManager({
             commonSeriesSettings: {
@@ -670,7 +670,7 @@ function createThemeManager(options, themeGroupName) {
         assert.strictEqual(theme.width, 10, 'Params from user-defined common series setting were were applied');
     });
 
-    QUnit.test('Apply user commonSeriesSetting with more priority then theme commonSeriesSetting.line', function(assert) {
+    QUnit.test('Apply user commonSeriesSetting (with line) with more priority then theme commonSeriesSetting.line', function(assert) {
         // arrange
         const themeManager = createThemeManager({
             commonSeriesSettings: {

@@ -1003,24 +1003,6 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
      */
     logarithmBase?: number;
     /**
-     * @docid dxChartOptions.argumentAxis.max
-     * @type number | datetime | string
-     * @deprecated dxChartOptions.argumentAxis.visualRange
-     * @default undefined
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    max?: number | Date | string;
-    /**
-     * @docid dxChartOptions.argumentAxis.min
-     * @type number | datetime | string
-     * @deprecated dxChartOptions.argumentAxis.visualRange
-     * @default undefined
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    min?: number | Date | string;
-    /**
      * @docid dxChartOptions.argumentAxis.minVisualRangeLength
      * @inherits VizTimeInterval
      * @default undefined
@@ -2090,15 +2072,6 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
      */
     logarithmBase?: number;
     /**
-     * @docid dxChartOptions.valueAxis.max
-     * @type number | datetime | string
-     * @deprecated dxChartOptions.valueAxis.visualRange
-     * @default undefined
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    max?: number | Date | string;
-    /**
      * @docid dxChartOptions.valueAxis.maxAutoBreakCount
      * @type numeric
      * @default 4
@@ -2106,15 +2079,6 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
      * @public
      */
     maxAutoBreakCount?: number;
-    /**
-     * @docid dxChartOptions.valueAxis.min
-     * @type number | datetime | string
-     * @deprecated dxChartOptions.valueAxis.visualRange
-     * @default undefined
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    min?: number | Date | string;
     /**
      * @docid dxChartOptions.valueAxis.minVisualRangeLength
      * @inherits VizTimeInterval

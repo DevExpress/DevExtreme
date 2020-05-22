@@ -7665,12 +7665,6 @@ declare module DevExpress.viz {
         linearThreshold?: number;
         /** @name dxChart.Options.argumentAxis.logarithmBase */
         logarithmBase?: number;
-        /** @deprecated */
-        /** @name dxChart.Options.argumentAxis.max */
-        max?: number | Date | string;
-        /** @deprecated */
-        /** @name dxChart.Options.argumentAxis.min */
-        min?: number | Date | string;
         /** @name dxChart.Options.argumentAxis.minVisualRangeLength */
         minVisualRangeLength?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /** @name dxChart.Options.argumentAxis.minorTickCount */
@@ -7994,14 +7988,8 @@ declare module DevExpress.viz {
         linearThreshold?: number;
         /** @name dxChart.Options.valueAxis.logarithmBase */
         logarithmBase?: number;
-        /** @deprecated */
-        /** @name dxChart.Options.valueAxis.max */
-        max?: number | Date | string;
         /** @name dxChart.Options.valueAxis.maxAutoBreakCount */
         maxAutoBreakCount?: number;
-        /** @deprecated */
-        /** @name dxChart.Options.valueAxis.min */
-        min?: number | Date | string;
         /** @name dxChart.Options.valueAxis.minVisualRangeLength */
         minVisualRangeLength?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /** @name dxChart.Options.valueAxis.minorTickCount */

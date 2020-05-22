@@ -491,16 +491,6 @@ const dxChart = AdvancedChart.inherit({
 
     _fontFields: ['crosshair.label.font' ],
 
-    _setDeprecatedOptions: function() {
-        this.callBase.apply(this, arguments);
-        _extend(this._deprecatedOptions, {
-            'argumentAxis.min': { since: '18.2', message: 'Use the \'argumentAxis.visualRange\' option instead' },
-            'argumentAxis.max': { since: '18.2', message: 'Use the \'argumentAxis.visualRange\' option instead' },
-            'valueAxis.min': { since: '18.2', message: 'Use the \'valueAxis.visualRange\' option instead' },
-            'valueAxis.max': { since: '18.2', message: 'Use the \'valueAxis.visualRange\' option instead' }
-        });
-    },
-
     _initCore: function() {
         this.paneAxis = {};
         this.callBase();
