@@ -1466,6 +1466,15 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
      */
     barPadding?: number;
     /**
+     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.barWidth
+     * @type number
+     * @default undefined
+     * @propertyOf dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    barWidth?: number;
+    /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.border
      * @type object
      * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries

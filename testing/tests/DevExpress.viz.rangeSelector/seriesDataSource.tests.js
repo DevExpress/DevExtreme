@@ -1321,26 +1321,6 @@ QUnit.test('seriesDataSource with barGroupWidth option', function(assert) {
     assert.equal(seriesDataSource._seriesFamilies[0].options.barGroupWidth, 300);
 });
 
-QUnit.test('seriesDataSource with barWidth option', function(assert) {
-    const seriesDataSource = createSeriesDataSource({
-        dataSource: [{ arg: 'a', val: 3 },
-            { arg: 'b', val: 6 },
-            { arg: 'c', val: 12 }],
-        chart: {
-            commonSeriesSettings: {
-                type: 'area'
-            },
-            barWidth: 0.8,
-            series: [{
-                type: 'line'
-            }]
-        },
-        renderer: new vizMocks.Renderer(),
-        argumentAxis: this.argumentAxis
-    });
-    assert.deepEqual(seriesDataSource._seriesFamilies[0].options.barWidth, 0.8);
-});
-
 QUnit.test('seriesDataSource with negativesAsZeroes option', function(assert) {
     const seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 'a', val: 3 },

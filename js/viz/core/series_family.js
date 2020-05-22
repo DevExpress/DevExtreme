@@ -19,7 +19,7 @@ function validateBarGroupPadding(barGroupPadding) {
 
 function isStackExist(series, arg) {
     return series.some(function(s) {
-        return (!s.getOptions().ignoreEmptyPoints) || s.getPointsByArg(arg, true).some(function(point) {
+        return !s.getOptions().ignoreEmptyPoints || s.getPointsByArg(arg, true).some(function(point) {
             return point.hasValue();
         });
     });
@@ -30,6 +30,7 @@ function correctStackCoordinates(series, currentStacks, arg, stack, parameters, 
         const stackIndex = seriesStackIndexCallback(currentStacks.indexOf(stack), currentStacks.length);
         const points = series.getPointsByArg(arg, true);
         const barPadding = validateBarPadding(series.getOptions().barPadding);
+        const barWidth = series.getOptions().barWidth;
         let offset = getOffset(stackIndex, parameters);
         let width = parameters.width;
         let extraParameters;
@@ -38,8 +39,8 @@ function correctStackCoordinates(series, currentStacks, arg, stack, parameters, 
             return;
         }
 
-        if(isDefined(barPadding)) {
-            extraParameters = calculateParams(barsArea, currentStacks.length, 1 - barPadding);
+        if(isDefined(barPadding) || isDefined(barWidth)) {
+            extraParameters = calculateParams(barsArea, currentStacks.length, 1 - barPadding, barWidth);
             width = extraParameters.width;
             offset = getOffset(stackIndex, extraParameters);
         }
@@ -88,11 +89,14 @@ function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback
     });
 }
 
-function calculateParams(barsArea, count, percentWidth) {
+function calculateParams(barsArea, count, percentWidth, fixedBarWidth) {
     let spacing;
     let width;
 
-    if(isDefined(percentWidth)) {
+    if(fixedBarWidth) {
+        width = _min(fixedBarWidth, round(barsArea / count));
+        spacing = count > 1 ? round((barsArea - width * count) / (count - 1)) : 0;
+    } else if(isDefined(percentWidth)) {
         width = round(barsArea * percentWidth / count);
         spacing = round(count > 1 ? (barsArea - barsArea * percentWidth) / (count - 1) : 0);
     } else {

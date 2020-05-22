@@ -7562,9 +7562,6 @@ declare module DevExpress.viz {
         barGroupPadding?: number;
         /** @name dxChart.Options.barGroupWidth */
         barGroupWidth?: number;
-        /** @deprecated */
-        /** @name dxChart.Options.barWidth */
-        barWidth?: number;
         /** @name dxChart.Options.commonAnnotationSettings */
         commonAnnotationSettings?: dxChartCommonAnnotationConfig;
         /** @name dxChart.Options.commonAxisSettings */
@@ -7583,9 +7580,6 @@ declare module DevExpress.viz {
         dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: any, b: any) => number) };
         /** @name dxChart.Options.defaultPane */
         defaultPane?: string;
-        /** @deprecated */
-        /** @name dxChart.Options.equalBarWidth */
-        equalBarWidth?: boolean;
         /** @name dxChart.Options.legend */
         legend?: dxChartLegend;
         /** @name dxChart.Options.maxBubbleSize */
@@ -9310,9 +9304,6 @@ declare module DevExpress.viz {
         barGroupPadding?: number;
         /** @name dxPolarChart.Options.barGroupWidth */
         barGroupWidth?: number;
-        /** @deprecated */
-        /** @name dxPolarChart.Options.barWidth */
-        barWidth?: number;
         /** @name dxPolarChart.Options.commonAnnotationSettings */
         commonAnnotationSettings?: dxPolarChartCommonAnnotationConfig;
         /** @name dxPolarChart.Options.commonAxisSettings */
@@ -9325,9 +9316,6 @@ declare module DevExpress.viz {
         customizeAnnotation?: ((annotation: dxPolarChartAnnotationConfig | any) => dxPolarChartAnnotationConfig);
         /** @name dxPolarChart.Options.dataPrepareSettings */
         dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) };
-        /** @deprecated */
-        /** @name dxPolarChart.Options.equalBarWidth */
-        equalBarWidth?: boolean;
         /** @name dxPolarChart.Options.legend */
         legend?: dxPolarChartLegend;
         /** @name dxPolarChart.Options.negativesAsZeroes */
@@ -9864,7 +9852,7 @@ declare module DevExpress.viz {
         /** @name dxRangeSelector.Options.behavior */
         behavior?: { allowSlidersSwap?: boolean, animationEnabled?: boolean, callValueChanged?: 'onMoving' | 'onMovingComplete', manualRangeSelectionEnabled?: boolean, moveSelectedRangeByClick?: boolean, snapToTicks?: boolean };
         /** @name dxRangeSelector.Options.chart */
-        chart?: { barGroupPadding?: number, barGroupWidth?: number, barWidth?: number, bottomIndent?: number, commonSeriesSettings?: dxChartCommonSeriesSettings, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) }, equalBarWidth?: boolean, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate', series?: ChartSeries | Array<ChartSeries>, seriesTemplate?: { customizeSeries?: ((seriesName: any) => ChartSeries), nameField?: string }, topIndent?: number, useAggregation?: boolean, valueAxis?: { inverted?: boolean, logarithmBase?: number, max?: number, min?: number, type?: 'continuous' | 'logarithmic', valueType?: 'datetime' | 'numeric' | 'string' } };
+        chart?: { barGroupPadding?: number, barGroupWidth?: number, bottomIndent?: number, commonSeriesSettings?: dxChartCommonSeriesSettings, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) }, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate', series?: ChartSeries | Array<ChartSeries>, seriesTemplate?: { customizeSeries?: ((seriesName: any) => ChartSeries), nameField?: string }, topIndent?: number, useAggregation?: boolean, valueAxis?: { inverted?: boolean, logarithmBase?: number, max?: number, min?: number, type?: 'continuous' | 'logarithmic', valueType?: 'datetime' | 'numeric' | 'string' } };
         /** @name dxRangeSelector.Options.containerBackgroundColor */
         containerBackgroundColor?: string;
         /** @name dxRangeSelector.Options.dataSource */

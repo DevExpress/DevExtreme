@@ -286,6 +286,7 @@ const commonSeries = {
     minBarSize: undefined,
     ignoreEmptyPoints: false,
     barPadding: undefined,
+    barWidth: undefined,
     label: {
         customizeText: undefined,
         visible: false,

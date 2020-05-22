@@ -3080,6 +3080,15 @@ export interface dxChartSeriesTypesCommonSeries {
      */
     barPadding?: number;
     /**
+     * @docid dxChartSeriesTypes.CommonSeries.barWidth
+     * @type number
+     * @default undefined
+     * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    barWidth?: number;
+    /**
      * @docid dxChartSeriesTypes.CommonSeries.border
      * @type object
      * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
