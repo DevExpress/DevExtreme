@@ -1863,7 +1863,8 @@ const Scheduler = Widget.inherit({
     },
 
     getMaxAppointmentsPerCell: function() {
-        return this._getCurrentViewOption('maxAppointmentsPerCell');
+        const maxAppointmentsPerCell = this._getCurrentViewOption('maxAppointmentsPerCell');
+        return maxAppointmentsPerCell !== 0 ? maxAppointmentsPerCell : 'auto';
     },
 
     _cleanPopup: function() {
