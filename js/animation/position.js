@@ -315,11 +315,12 @@ const calculatePosition = function(what, options) {
             h.atSize = of.width();
             v.atSize = of.height();
         } else {
+            const ofRect = of.get(0).getBoundingClientRect();
             const o = of.offset();
             h.atLocation = o.left;
             v.atLocation = o.top;
-            h.atSize = of.outerWidth();
-            v.atSize = of.outerHeight();
+            h.atSize = ofRect.width;
+            v.atSize = ofRect.height;
         }
     }
 
