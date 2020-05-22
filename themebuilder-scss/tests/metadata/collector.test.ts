@@ -12,6 +12,7 @@ describe('MetadataCollector', () => {
     join('widgets', 'generic', 'accordion', '_colors.scss'),
     join('widgets', 'generic', 'accordion', '_index.scss'),
     join('widgets', 'generic', 'accordion', '_sizes.scss'),
+    join('widgets', 'generic', 'dateBox', '_index.scss'),
     join('widgets', 'generic', '_colors.scss'),
     join('widgets', 'generic', '_index.scss'),
     join('widgets', 'generic', '_sizes.scss'),

@@ -153,6 +153,10 @@ const parseConfig = (config: ConfigSettings): void => {
     config.scssPath = normalizePath(config.scssPath);
   }
 
+  if (config.widgets) {
+    config.widgets = config.widgets.map((w) => w.toLowerCase());
+  }
+
   convertTreeListConstants(config);
   convertItemKeysToSassFormat(config);
 

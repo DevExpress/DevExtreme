@@ -5,7 +5,7 @@ import { metadata } from '../data/metadata';
 import noModificationsResult from '../data/compilation-results/no-changes-css';
 import noModificationsMeta from '../data/compilation-results/no-changes-meta';
 
-import Compiler from '../../src/modules/compiler';
+import Compiler, { ImportType } from '../../src/modules/compiler';
 
 jest.mock('../../src/data/metadata/dx-theme-builder-metadata', () => ({
   __esModule: true,
@@ -13,26 +13,37 @@ jest.mock('../../src/data/metadata/dx-theme-builder-metadata', () => ({
 }));
 
 const dataPath: string = path.join(path.resolve(), 'tests', 'data');
+const indexFileName = path.join(dataPath, 'scss', 'widgets', 'generic', '_index.scss');
+const defaultIndexFileContent = fs.readFileSync(indexFileName, 'utf8');
 
 describe('compile', () => {
-  const bundle = path.join(dataPath, 'scss', 'bundles', 'dx.light.scss');
+  const file = path.join(dataPath, 'scss', 'bundles', 'dx.light.scss');
+  const includePaths = [path.join(dataPath, 'scss', 'widgets', 'generic')];
 
   test('Compile with empty modifications (check that items can be undefined)', () => {
     const compiler = new Compiler();
-    return compiler.compile(bundle, null, null).then((data) => {
+    compiler.indexFileContent = defaultIndexFileContent;
+    return compiler.compile(null, {
+      file,
+      includePaths,
+    }).then((data) => {
       // compiled css
-      expect(noModificationsResult).toBe(data.result.css.toString());
+      expect(data.result.css.toString()).toBe(noModificationsResult);
       // collected variables
-      expect(noModificationsMeta).toEqual(data.changedVariables);
+      expect(data.changedVariables).toEqual(noModificationsMeta);
     });
   });
 
   test('Compile with one base and one accordion items modified', () => {
     const compiler = new Compiler();
-    return compiler.compile(bundle, [
+    compiler.indexFileContent = defaultIndexFileContent;
+    return compiler.compile([
       { key: '$base-accent', value: 'red' },
       { key: '$accordion-item-title-opened-bg', value: 'green' },
-    ], null).then((data) => {
+    ], {
+      file,
+      includePaths,
+    }).then((data) => {
       // compiled css
       expect(data.result.css.toString()).toBe(`.dx-accordion {
   background-color: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif;
@@ -71,7 +82,8 @@ describe('compile', () => {
 
   test('Compile with error', () => {
     const compiler = new Compiler();
-    return compiler.compile('dx.error.scss', [], null).then(
+    compiler.indexFileContent = defaultIndexFileContent;
+    return compiler.compile([], { file: 'dx.error.scss' }).then(
       () => expect(false).toBe(true),
       (error) => {
         expect(error.status).toBe(3);
@@ -82,12 +94,14 @@ describe('compile', () => {
 
   test('Compile with custom sass compiler options (try to compile with custom data)', () => {
     const compiler = new Compiler();
-    const bundleContent = fs.readFileSync(bundle, 'utf8');
+    compiler.indexFileContent = defaultIndexFileContent;
+    const bundleContent = fs.readFileSync(file, 'utf8');
     const extraOptions = {
       data: `${bundleContent}.extra-class { color: red; }`,
+      includePaths,
       outputStyle: 'compressed' as const,
     };
-    return compiler.compile(bundle, [], extraOptions).then((data) => {
+    return compiler.compile([], extraOptions).then((data) => {
       // compiled css
       expect(data.result.css.toString()).toBe(
         '.dx-accordion{background-color:'
@@ -96,5 +110,22 @@ describe('compile', () => {
         + '.from-base{background-color:transparent;color:#337ab7}.extra-class{color:red}',
       );
     });
+  });
+});
+
+describe('compile with widgets', () => {
+  test('getImportType', () => {
+    expect(Compiler.getImportType('tb/url')).toBe(ImportType.Color);
+    expect(Compiler.getImportType('../widgets/generic/tb_index')).toBe(ImportType.Index);
+    expect(Compiler.getImportType('colors')).toBe(ImportType.Unknown);
+  });
+
+  test('setter return indexFileContent for index file', () => {
+    const compiler = new Compiler();
+    const contentOfIndexFile = 'some content';
+    const indexFileUrl = '../widgets/generic/tb_index';
+    compiler.indexFileContent = contentOfIndexFile;
+
+    expect(compiler.setter(indexFileUrl)).toEqual({ contents: contentOfIndexFile });
   });
 });

@@ -283,3 +283,32 @@ $slideout-background: #000;
     }]);
   });
 });
+
+describe('Metadata generator - generate bundles content', () => {
+  test('isBundleFile', () => {
+    expect(MetadataGenerator.isBundleFile('bundles/dx.light.scss')).toBe(true);
+    expect(MetadataGenerator.isBundleFile('bundles\\dx.light.scss')).toBe(true);
+    expect(MetadataGenerator.isBundleFile('/bundles/dx.light.scss')).toBe(true);
+    expect(MetadataGenerator.isBundleFile('path/bundles/dx.light.scss')).toBe(true);
+    expect(MetadataGenerator.isBundleFile('path/widgets/generic/accordion/_index.scss')).toBe(false);
+    expect(MetadataGenerator.isBundleFile('base/accordion/_index.scss')).toBe(false);
+  });
+
+  test('getBundleContent', () => {
+    const genericBundleContent = '@use "../widgets/generic" with ( $color: "carmine", $size: "compact");';
+    const materialBundleContent = '@use "../widgets/material" with ( $color: "carmine", $size: "compact", $size: "default");';
+    const commonBundleContent = '@use "../widgets/common/ui"';
+
+    const expectedGenericBundleContent = '@use "../widgets/generic/tb_index" with ( $color: "carmine", $size: "compact");';
+    const expectedMaterialBundleContent = '@use "../widgets/material/tb_index" with ( $color: "carmine", $size: "compact", $size: "default");';
+
+    expect(MetadataGenerator.getBundleContent(genericBundleContent))
+      .toBe(expectedGenericBundleContent);
+
+    expect(MetadataGenerator.getBundleContent(materialBundleContent))
+      .toBe(expectedMaterialBundleContent);
+
+    expect(MetadataGenerator.getBundleContent(commonBundleContent))
+      .toBe(commonBundleContent);
+  });
+});
