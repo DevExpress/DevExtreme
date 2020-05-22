@@ -966,19 +966,25 @@ QUnit.test('\'getMaxAppointmentsPerCell\' should return correct value in accorda
         }, {
             name: 'WEEK',
             type: 'week'
+        },
+        {
+            name: 'MONTH',
+            type: 'month',
+            maxAppointmentsPerCell: 0
         }],
         currentView: 'DAY',
         dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
     });
 
     let countPerCell = this.instance.fire('getMaxAppointmentsPerCell');
-
     assert.equal(countPerCell, 5, 'overlappingMode is OK');
 
     this.instance.option('currentView', 'WEEK');
-
     countPerCell = this.instance.fire('getMaxAppointmentsPerCell');
+    assert.equal(countPerCell, 'auto', 'overlappingMode is OK');
 
+    this.instance.option('currentView', 'MONTH');
+    countPerCell = this.instance.fire('getMaxAppointmentsPerCell');
     assert.equal(countPerCell, 'auto', 'overlappingMode is OK');
 });
 
