@@ -207,13 +207,14 @@ module.exports = gridCore.Controller.inherit((function() {
                 return !dataSource.paginate() || change.type !== 'insert' || change.index !== undefined;
             });
 
-            const oldItemCount = this.itemsCount();
+            const getItemCount = () => groupCount ? this.itemsCount() : this._items.length;
+            const oldItemCount = getItemCount();
 
             arrayUtils.applyBatch(keyInfo, this._items, changes, groupCount, true);
             arrayUtils.applyBatch(keyInfo, dataSource.items(), changes, groupCount, true);
 
             if(this._currentTotalCount > 0) {
-                this._skipCorrection += this.itemsCount() - oldItemCount;
+                this._skipCorrection += getItemCount() - oldItemCount;
             }
 
             changes.splice(0, changes.length);
