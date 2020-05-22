@@ -85,8 +85,8 @@ QUnit.module('_createWrappedDataSource', () => {
             })
         });
 
-        assert.ok(dataSource instanceof DataSource, '_createWrappedDataSource should be return DataSource object if passed JSON');
-        assert.deepEqual(dataSource.filter(), filterValue, 'Filter should pass to created dataSource');
+        assert.ok(dataSource instanceof DataSource, '_createWrappedDataSource should return DataSource object if JSON is passed');
+        assert.deepEqual(dataSource.filter(), filterValue, 'Filter should be passed to the created dataSource');
     });
 
     QUnit.test('Array data should be wrapped to DataSource object', function(assert) {
