@@ -1,4 +1,0 @@
-coverage
-dist
-src/data/metadata/*
-jest.config.js
