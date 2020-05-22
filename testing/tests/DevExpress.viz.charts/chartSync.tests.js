@@ -310,7 +310,7 @@ const environment = {
             tooltip: { enabled: true },
             legend: { position: 'outside' },
             dataSource: [{ arg: 1, val: 1 }],
-            series: { type: 'line' },
+            series: { type: 'line', aggregation: { enabled: true } },
             title: {
                 text: 'test title',
                 verticalAlignment: 'bottom',
@@ -318,8 +318,7 @@ const environment = {
             },
             'export': {
                 enabled: true
-            },
-            useAggregation: true
+            }
         });
 
         testEverythingWasDrawn(assert, chart, { firstDraw: true, withNewData: true });

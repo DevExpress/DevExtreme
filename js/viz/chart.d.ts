@@ -876,14 +876,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      */
     tooltip?: dxChartTooltip;
     /**
-     * @docid dxChartOptions.useAggregation
-     * @type boolean
-     * @deprecated dxChartSeriesTypes.CommonSeries.aggregation.enabled
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    useAggregation?: boolean;
-    /**
      * @docid dxChartOptions.valueAxis
      * @type Object|Array<Object>
      * @inherits dxChartOptions.commonAxisSettings

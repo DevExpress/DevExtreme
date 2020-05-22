@@ -238,7 +238,6 @@ const dxChart = {
     zoomingMode: 'none',
     scrollingMode: 'none',
     stickyHovering: true,
-    useAggregation: false,
     crosshair: {
         /**
         * @name dxChartOptions.crosshair.enabled

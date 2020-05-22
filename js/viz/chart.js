@@ -494,7 +494,6 @@ const dxChart = AdvancedChart.inherit({
     _setDeprecatedOptions: function() {
         this.callBase.apply(this, arguments);
         _extend(this._deprecatedOptions, {
-            'useAggregation': { since: '18.1', message: 'Use the \'commonSeriesSettings.aggregation.enabled\' or \'series.aggregation.enabled\' option instead' },
             'argumentAxis.min': { since: '18.2', message: 'Use the \'argumentAxis.visualRange\' option instead' },
             'argumentAxis.max': { since: '18.2', message: 'Use the \'argumentAxis.visualRange\' option instead' },
             'valueAxis.min': { since: '18.2', message: 'Use the \'valueAxis.visualRange\' option instead' },

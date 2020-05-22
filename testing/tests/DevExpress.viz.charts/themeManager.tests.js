@@ -782,28 +782,6 @@ function createThemeManager(options, themeGroupName) {
         assert.equal(theme.resolveLabelsOverlapping, true);
     });
 
-    QUnit.test('Merge useAggregation with series.aggregation.enabled (undefined)', function(assert) {
-        const themeManager = createThemeManager({
-            useAggregation: true
-        }, 'chart');
-        themeManager.setTheme({});
-        const theme = themeManager.getOptions('series', {});
-
-        assert.ok(theme);
-        assert.equal(theme.aggregation.enabled, true);
-    });
-
-    QUnit.test('Merge useAggregation with series.aggregation.enabled (defined)', function(assert) {
-        const themeManager = createThemeManager({
-            useAggregation: false
-        }, 'chart');
-        themeManager.setTheme({});
-        const theme = themeManager.getOptions('series', { aggregation: { enabled: true } });
-
-        assert.ok(theme);
-        assert.equal(theme.aggregation.enabled, true);
-    });
-
     QUnit.test('Merge series.aggregation.enabled whith chart type (pie)', function(assert) {
         const themeManager = createThemeManager({}, 'pie');
         themeManager.setTheme({});

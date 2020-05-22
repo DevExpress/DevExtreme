@@ -576,12 +576,6 @@ const dxRangeSelector = {
             sortingMethod: true
         },
         /**
-        * @name dxRangeSelectorOptions.chart.useAggregation
-        * @type boolean
-        * @deprecated dxChartSeriesTypes.CommonSeries.aggregation.enabled
-        */
-        useAggregation: false,
-        /**
         * @name dxRangeSelectorOptions.chart.valueAxis
         * @type object
         */

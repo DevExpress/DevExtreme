@@ -551,15 +551,6 @@ const dxRangeSelector = baseWidgetModule.inherit({
         'onValueChanged': { name: VALUE_CHANGED }
     },
 
-    _setDeprecatedOptions: function() {
-        this.callBase.apply(this, arguments);
-        extend(this._deprecatedOptions, {
-            'chart.useAggregation': {
-                since: '18.1', message: 'Use the \'chart.commonSeriesSettings.aggregation.enabled\' or \'chart.series.aggregation.enabled\' option instead'
-            }
-        });
-    },
-
     _rootClassPrefix: 'dxrs',
 
     _rootClass: 'dxrs-range-selector',

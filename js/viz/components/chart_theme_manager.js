@@ -119,7 +119,7 @@ const ThemeManager = BaseThemeManager.inherit((function() {
 
             const settings = extend(true, { aggregation: {} }, themeCommonSettings, themeCommonSettings[type], userCommonSettings, userCommonSettings[type], userOptions);
 
-            settings.aggregation.enabled = widgetType === 'chart' && normalizeAggregationEnabled(settings.aggregation, that.getOptions('useAggregation'));
+            settings.aggregation.enabled = widgetType === 'chart' && !!settings.aggregation.enabled;
             settings.type = type;
             settings.widgetType = widgetType;
             settings.containerBackgroundColor = containerBackgroundColor;
@@ -207,10 +207,6 @@ const ThemeManager = BaseThemeManager.inherit((function() {
             };
         }
     };
-
-    function normalizeAggregationEnabled(aggregation, useAggregation) {
-        return !!(!_isDefined(aggregation.enabled) ? useAggregation : aggregation.enabled);
-    }
 
     return {
         _themeSection: 'chart',
