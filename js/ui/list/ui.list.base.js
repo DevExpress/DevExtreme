@@ -667,9 +667,10 @@ const ListBase = CollectionWidget.inherit({
         });
     },
 
-    _nextButtonHandler: function() {
-        const source = this._dataSource;
+    _nextButtonHandler: function(e) {
+        this._pageLoadingAction(e);
 
+        const source = this._dataSource;
         if(source && !source.isLoading()) {
             this._scrollView.toggleLoading(true);
             this._$nextButton.detach();
