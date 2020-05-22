@@ -95,7 +95,7 @@ QUnit.module('_createWrappedDataSource', () => {
             { id: 1 }
         ]);
 
-        assert.ok(dataSource instanceof DataSource, '_createWrappedDataSource should be return DataSource object if passed array');
+        assert.ok(dataSource instanceof DataSource, '_createWrappedDataSource should return DataSource object if array passed');
         assert.equal(dataSource.filter(), undefined, 'Filter shouldn\'t exist in DataSource');
     });
 
