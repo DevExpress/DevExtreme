@@ -2396,7 +2396,7 @@ declare module DevExpress.ui {
         /** @name GridBaseColumn.falseText */
         falseText?: string;
         /** @name GridBaseColumn.filterOperations */
-        filterOperations?: Array<'=' | '<>' | '<' | '<=' | '>' | '>=' | 'notcontains' | 'contains' | 'startswith' | 'endswith' | 'between'>;
+        filterOperations?: Array<'=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between' | 'anyof' | 'noneof' | string>;
         /** @name GridBaseColumn.filterType */
         filterType?: 'exclude' | 'include';
         /** @name GridBaseColumn.filterValue */
@@ -3293,6 +3293,10 @@ declare module DevExpress.ui {
         export(): string;
         /** @name dxDiagram.exportTo(format, callback) */
         exportTo(format: 'svg' | 'png' | 'jpg', callback: Function): void;
+        /** @name dxDiagram.getEdgeDataSource() */
+        getEdgeDataSource(): DevExpress.data.DataSource;
+        /** @name dxDiagram.getNodeDataSource() */
+        getNodeDataSource(): DevExpress.data.DataSource;
         /** @name dxDiagram.import(data, updateExistingItemsOnly) */
         import(data: string, updateExistingItemsOnly?: boolean): void;
     }
@@ -3312,7 +3316,7 @@ declare module DevExpress.ui {
         /** @name dxDiagramCustomCommand.items */
         items?: Array<dxDiagramCustomCommand>;
         /** @name dxDiagramCustomCommand.name */
-        name?: string;
+        name?: string | 'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor';
         /** @name dxDiagramCustomCommand.text */
         text?: string;
     }

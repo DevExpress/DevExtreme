@@ -20,15 +20,20 @@ export default class ResourceManager {
         this.setResources(resources);
     }
 
-    _wrapDataSource(dataSource) {
+    _createWrappedDataSource(dataSource) {
         if(dataSource instanceof DataSource) {
             return dataSource;
-        } else {
-            return new DataSource({
-                store: normalizeDataSourceOptions(dataSource).store,
-                pageSize: 0
-            });
         }
+        const result = {
+            store: normalizeDataSourceOptions(dataSource).store,
+            pageSize: 0
+        };
+
+        if(!Array.isArray(dataSource)) {
+            result.filter = dataSource.filter;
+        }
+
+        return new DataSource(result);
     }
 
     _mapResourceData(resource, data) {
@@ -114,7 +119,7 @@ export default class ResourceManager {
 
             result.push({
                 editorOptions: {
-                    dataSource: currentResourceItems.length ? currentResourceItems : that._wrapDataSource(resource.dataSource),
+                    dataSource: currentResourceItems.length ? currentResourceItems : that._createWrappedDataSource(resource.dataSource),
                     displayExpr: getDisplayExpr(resource),
                     valueExpr: getValueExpr(resource)
                 },
@@ -134,7 +139,7 @@ export default class ResourceManager {
         iteratorUtils.each(this.getResources(), function(_, resource) {
             const resourceField = that.getField(resource);
             if(resourceField === field) {
-                const dataSource = that._wrapDataSource(resource.dataSource);
+                const dataSource = that._createWrappedDataSource(resource.dataSource);
                 const valueExpr = getValueExpr(resource);
 
                 if(!that._resourceLoader[field]) {
@@ -218,7 +223,7 @@ export default class ResourceManager {
             const field = that.getField(resource);
             deferreds.push(deferred);
 
-            that._wrapDataSource(resource.dataSource)
+            that._createWrappedDataSource(resource.dataSource)
                 .load()
                 .done(function(data) {
                     deferred.resolve({

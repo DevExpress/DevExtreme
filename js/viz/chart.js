@@ -575,8 +575,8 @@ const dxChart = AdvancedChart.inherit({
         const valueAxis = that._valueAxes.filter(v => v.pane === argumentAxis.pane && (!valueAxisName || valueAxisName === v.name))[0];
 
         that._valueAxes.forEach(v => {
-            if(argumentAxis !== v.getCustomPositionAxis()) {
-                v.getCustomPositionAxis = () => {
+            if(argumentAxis !== v.getOppositeAxis()) {
+                v.getOppositeAxis = () => {
                     return argumentAxis;
                 };
                 v.customPositionIsBoundaryOppositeAxis = () => {
@@ -585,15 +585,15 @@ const dxChart = AdvancedChart.inherit({
             }
         });
 
-        if(_isDefined(valueAxis) && valueAxis !== argumentAxis.getCustomPositionAxis()) {
-            argumentAxis.getCustomPositionAxis = () => {
+        if(_isDefined(valueAxis) && valueAxis !== argumentAxis.getOppositeAxis()) {
+            argumentAxis.getOppositeAxis = () => {
                 return valueAxis;
             };
             argumentAxis.customPositionIsBoundaryOppositeAxis = () => {
                 return that._valueAxes.some(v => v.customPositionIsBoundary());
             };
-        } else if(_isDefined(argumentAxis.getCustomPositionAxis()) && !_isDefined(valueAxis)) {
-            argumentAxis.getCustomPositionAxis = noop;
+        } else if(_isDefined(argumentAxis.getOppositeAxis()) && !_isDefined(valueAxis)) {
+            argumentAxis.getOppositeAxis = noop;
         }
     },
 

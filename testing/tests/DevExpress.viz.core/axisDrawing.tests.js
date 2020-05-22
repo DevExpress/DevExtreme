@@ -5304,6 +5304,40 @@ QUnit.test('Vertical right. alignment = right', function(assert) {
     assert.equal(renderer.text.getCall(0).returnValue.attr.getCall(0).args[0].align, 'right');
 });
 
+QUnit.test('Axis has a title and labels are positioned inside the chart (T891064)', function(assert) {
+    // arrange
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: 'top',
+        width: 2,
+        label: {
+            visible: true,
+            position: 'inside'
+        },
+        title: {
+            margin: 5,
+            text: 'Title text',
+            font: {
+                color: '#123456',
+                weight: 200,
+                size: 10,
+                family: 'Tahoma'
+            }
+        }
+    });
+
+    this.axis._adjustTitle = sinon.spy();
+
+    this.renderer.bBoxTemplate = { x: 1, y: 2, width: 12, height: 6 };
+    this.generatedTicks = [1, 2, 3];
+
+    // act
+    this.axis.draw(this.canvas);
+
+    assert.equal(this.axis._adjustTitle.getCall(0).args[0], 0, 'Positive sharp direction');
+});
+
 QUnit.module('XY linear axis. Draw. Date marker', environment);
 
 QUnit.test('Full markers', function(assert) {
