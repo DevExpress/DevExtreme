@@ -223,6 +223,39 @@
             drop: function() {
                 fixtures.simple.drop();
             }
+        },
+
+        svg: {
+            create: function() {
+                const rect = $('<rect>').css({
+                    x: 10,
+                    y: 20,
+                    width: 30,
+                    height: 50,
+                    fill: 'red'
+                });
+                const g = $('<g id=where>');
+                const svg = $('<svg viewbox="0 0 250 150">');
+
+                rect.appendTo(g);
+                g.appendTo(svg);
+                svg.appendTo(document.body);
+
+
+                $('<div id=what>').css({
+                    position: 'absolute',
+                    background: 'orange',
+                    width: 50,
+                    height: 50,
+                    top: 0,
+                    left: 0
+                }).appendTo(document.body);
+            },
+
+            drop: function() {
+                $('#where').remove();
+                $('#what').remove();
+            }
         }
     };
 

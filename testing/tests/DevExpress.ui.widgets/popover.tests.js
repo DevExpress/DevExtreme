@@ -636,6 +636,74 @@ QUnit.module('content positioning', () => {
         }
     });
 
+    QUnit.test('Popover should be positioned correctly on the target right side when target is inside of svg (T891214)', function(assert) {
+        fixtures.svg.create();
+        try {
+            const $target = $('#where');
+            const $popover = $('#what');
+
+            new Popover($popover, {
+                position: {
+                    my: 'left',
+                    at: 'right'
+                },
+                height: 40,
+                target: $target,
+                animation: null,
+                visible: true
+            });
+
+            const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
+            const $content = wrapper().find('.dx-overlay-content');
+
+            const contentOffsetTop = Math.round($target.height() / 2 - 20);
+            const contentOffsetLeft = Math.round($target.width() + $arrow.width());
+            const arrowOffsetTop = Math.round($content.offset().top + ($content.outerHeight() - $arrow.height()) / 2);
+            const arrowOffsetLeft = $target.offset().left + $target.width();
+
+            assert.strictEqual($content.offset().top, contentOffsetTop, 'popover content top offset is correct');
+            assert.strictEqual($content.offset().left, contentOffsetLeft, 'popover content left offset is correct');
+            assert.strictEqual($arrow.offset().top, arrowOffsetTop, 'arrow offset top is correct');
+            assert.strictEqual($arrow.offset().left, arrowOffsetLeft, 'arrow offset left is correct');
+        } finally {
+            fixtures.svg.drop();
+        }
+    });
+
+    QUnit.test('Popover should be positioned correctly on the target bottom when target is inside of svg (T891214)', function(assert) {
+        fixtures.svg.create();
+        try {
+            const $target = $('#where');
+            const $popover = $('#what');
+
+            new Popover($popover, {
+                position: {
+                    my: 'top',
+                    at: 'bottom'
+                },
+                width: 40,
+                target: $target,
+                animation: null,
+                visible: true
+            });
+
+            const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
+            const $content = wrapper().find('.dx-overlay-content');
+
+            const contentOffsetTop = Math.round($target.height() + $arrow.height());
+            const contentOffsetLeft = Math.round($target.width() / 2 - 20);
+            const arrowOffsetTop = $target.offset().top + $target.height();
+            const arrowOffsetLeft = Math.round($content.offset().left + ($content.outerWidth() - $arrow.width()) / 2);
+
+            assert.strictEqual($content.offset().top, contentOffsetTop, 'popover content top offset is correct');
+            assert.strictEqual($content.offset().left, contentOffsetLeft, 'popover content left offset is correct');
+            assert.strictEqual($arrow.offset().top, arrowOffsetTop, 'arrow offset top is correct');
+            assert.strictEqual($arrow.offset().left, arrowOffsetLeft, 'arrow offset left is correct');
+        } finally {
+            fixtures.svg.drop();
+        }
+    });
+
     QUnit.test('content left bottom position', function(assert) {
         fixtures.collisionTopLeft.create();
         try {
