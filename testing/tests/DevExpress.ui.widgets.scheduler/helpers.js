@@ -35,8 +35,8 @@ class ElementWrapper {
     }
 
     getElement() {
-        if(parent) {
-            return parent.find(this.selector);
+        if(this.parent) {
+            return this.parent.find(this.selector);
         }
         return $(this.selector);
     }
