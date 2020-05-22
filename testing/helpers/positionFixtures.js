@@ -238,6 +238,8 @@
                 );
 
                 $container.appendTo(document.body);
+
+                // NOTE: converts HtmlElement to SvgElement
                 $container.html($container.html());
 
                 $('<div id=what>').appendTo(document.body);
