@@ -288,6 +288,22 @@ export default class dxDiagram extends Widget {
     constructor(element: Element, options?: dxDiagramOptions)
     constructor(element: JQuery, options?: dxDiagramOptions)
     /**
+     * @docid dxDiagramMethods.getNodeDataSource
+     * @publicName getNodeDataSource()
+     * @return DataSource
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getNodeDataSource(): DataSource;
+    /**
+     * @docid dxDiagramMethods.getEdgeDataSource
+     * @publicName getEdgeDataSource()
+     * @return DataSource
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getEdgeDataSource(): DataSource;
+    /**
      * @docid dxDiagramMethods.export
      * @publicName export()
      * @return string
@@ -383,7 +399,7 @@ export interface dxDiagramShape extends dxDiagramItem {
 export interface dxDiagramCustomCommand {
     /**
      * @docid dxDiagramCustomCommand.name
-     * @type String
+     * @type String|Enums.DiagramCommand
      * @prevFileNamespace DevExpress.ui
      * @public
      */

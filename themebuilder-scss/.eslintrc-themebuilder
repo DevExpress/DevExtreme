@@ -1,0 +1,29 @@
+{
+    "env": {
+        "es6": true,
+        "node": true
+    },
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "parserOptions": {
+        "project": "./tsconfig.json",
+        "ecmaVersion": 6,
+        "sourceType": "module"
+    },
+    "extends": [
+        "devextreme/typescript"
+    ],
+    "overrides": [
+        {
+            "files": ["tests/**/*.ts"],
+            "extends": [
+                "devextreme/jest"
+            ],
+            "parserOptions": {
+                "project": "tests/tsconfig.json"
+            }
+        }
+    ]
+}
