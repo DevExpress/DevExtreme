@@ -65,7 +65,7 @@ class FileManagerFilesTreeView extends Widget {
     _onFilesTreeViewCreateSubDirectories(rootItem) {
         const getDirectories = this.option('getDirectories');
         const directoryInfo = rootItem && rootItem.itemData || null;
-        return getDirectories && getDirectories(directoryInfo);
+        return getDirectories && getDirectories(directoryInfo, true);
     }
 
     _onFilesTreeViewItemRendered({ itemData }) {
