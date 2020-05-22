@@ -10073,9 +10073,6 @@ declare module DevExpress.viz {
         onSelectionChanged?: ((e: { component?: dxTreeMap, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeMapNode }) => any);
         /** @name dxTreeMap.Options.parentField */
         parentField?: string;
-        /** @deprecated */
-        /** @name dxTreeMap.Options.resolveLabelOverflow */
-        resolveLabelOverflow?: 'ellipsis' | 'hide';
         /** @name dxTreeMap.Options.selectionMode */
         selectionMode?: 'multiple' | 'none' | 'single';
         /** @name dxTreeMap.Options.tile */
