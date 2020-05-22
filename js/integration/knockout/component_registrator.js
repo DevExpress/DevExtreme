@@ -1,8 +1,6 @@
 import $ from '../../core/renderer';
 import ko from 'knockout';
 import Callbacks from '../../core/utils/callbacks';
-import errors from '../../core/errors';
-import inflector from '../../core/utils/inflector';
 import { isPlainObject } from '../../core/utils/type';
 import registerComponentCallbacks from '../../core/component_registrator_callbacks';
 import Widget from '../../ui/widget/ui.widget';
@@ -87,15 +85,9 @@ const registerComponentKoBinding = function(componentName, componentClass) {
                     templates: {
                         'dx-polymorph-widget': {
                             render: function(options) {
-                                let widgetName = ko.utils.unwrapObservable(options.model.widget);
+                                const widgetName = ko.utils.unwrapObservable(options.model.widget);
                                 if(!widgetName) {
                                     return;
-                                }
-
-                                if(widgetName === 'button' || widgetName === 'tabs' || widgetName === 'dropDownMenu') {
-                                    const deprecatedName = widgetName;
-                                    widgetName = inflector.camelize('dx-' + widgetName);
-                                    errors.log('W0001', 'dxToolbar - \'widget\' item field', deprecatedName, '16.1', 'Use: \'' + widgetName + '\' instead');
                                 }
 
                                 const markup = $('<div>').attr('data-bind', widgetName + ': options').get(0);
