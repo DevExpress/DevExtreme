@@ -514,14 +514,14 @@ const DiagramCommandsManager = {
                     cssClass: CSS_CLASSES.SMALL_EDITOR_ITEM
                 },
                 // Custom commands
-                showToolbox: {
+                toolbox: {
                     command: this.SHOW_TOOLBOX_COMMAND_NAME,
                     iconChecked: 'dx-diagram-i dx-diagram-i-button-toolbox-close',
                     iconUnchecked: 'dx-diagram-i dx-diagram-i-button-toolbox-open',
                     hint: messageLocalization.format('dxDiagram-uiShowToolbox'),
                     text: messageLocalization.format('dxDiagram-uiShowToolbox')
                 },
-                showPropertiesPanel: {
+                propertiesPanel: {
                     command: this.SHOW_PROPERTIES_PANEL_COMMAND_NAME,
                     iconChecked: 'close',
                     iconUnchecked: 'dx-diagram-i dx-diagram-i-button-properties-panel-open',
@@ -601,7 +601,7 @@ const DiagramCommandsManager = {
                 allCommands['undo'],
                 allCommands['redo'],
                 allCommands['separator'],
-                allCommands['showToolbox']
+                allCommands['toolbox']
             ]);
     },
     getViewToolbarCommands: function(commands, excludeCommands) {
@@ -640,7 +640,7 @@ const DiagramCommandsManager = {
                         allCommands['gridSize'],
                         allCommands['separator'],
                         allCommands['simpleView'],
-                        allCommands['showToolbox']
+                        allCommands['toolbox']
                     ]
                 }
             ]);
@@ -654,7 +654,7 @@ const DiagramCommandsManager = {
     _getDefaultPropertiesToolbarCommands: function(allCommands) {
         return this._defaultPropertiesToolbarCommands ||
             (this._defaultPropertiesToolbarCommands = [
-                allCommands['showPropertiesPanel']
+                allCommands['propertiesPanel']
             ]);
     },
 
@@ -774,7 +774,8 @@ const DiagramCommandsManager = {
                 return allCommands[c];
             } else if(c.text || c.icon) {
                 const command = {
-                    command: c.name,
+                    command: c.name && allCommands[c.name] && allCommands[c.name].command,
+                    name: c.name,
                     text: c.text,
                     hint: c.text,
                     icon: c.icon,
