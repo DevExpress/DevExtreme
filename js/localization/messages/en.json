@@ -307,6 +307,8 @@
         "dxFileManager-errorInvalidSymbols": "This name contains invalid characters.",
         "dxFileManager-errorDefault": "Unspecified error.",
 
+        "dxFileManager-errorDirectoryOpenFailed": "The folder cannot be opened",
+
         "dxFileManager-commandCreate": "New directory",
         "dxFileManager-commandRename": "Rename",
         "dxFileManager-commandMove": "Move to",
@@ -374,6 +376,7 @@
         "dxFileManager-editingUploadSingleItemErrorMessage": "Item was not uploaded",
         "dxFileManager-editingUploadMultipleItemsErrorMessage": "{0} items were not uploaded",
         "dxFileManager-editingUploadCanceledMessage": "Canceled",
+
 
         "dxFileManager-listDetailsColumnCaptionName": "Name",
         "dxFileManager-listDetailsColumnCaptionDateModified": "Date Modified",

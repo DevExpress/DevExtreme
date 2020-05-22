@@ -261,7 +261,8 @@ class FileManager extends Widget {
     }
 
     _refreshAndShowProgress() {
-        return when(this._notificationControl.tryShowProgressPanel(), this._controller.refresh())
+        return when(this._notificationControl.tryShowProgressPanel())
+            .then(() => this._controller.refresh())
             .then(() => this._filesTreeView.refresh());
     }
 
@@ -733,8 +734,8 @@ class FileManager extends Widget {
         this.option(options);
     }
 
-    getDirectories(parentDirectoryInfo) {
-        return this._controller.getDirectories(parentDirectoryInfo);
+    getDirectories(parentDirectoryInfo, skipNavigationOnError) {
+        return this._controller.getDirectories(parentDirectoryInfo, skipNavigationOnError);
     }
 
     _getSelectedItemInfos() {
