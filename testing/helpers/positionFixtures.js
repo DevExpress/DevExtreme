@@ -227,33 +227,25 @@
 
         svg: {
             create: function() {
-                const rect = $('<rect>').css({
-                    x: 10,
-                    y: 20,
-                    width: 30,
-                    height: 50,
-                    fill: 'red'
-                });
-                const g = $('<g id=where>');
-                const svg = $('<svg viewbox="0 0 250 150">');
+                const $container = $(
+                    `<div id="container">
+                        <svg viewBox="0 0 250 150">
+                            <g id="where">
+                                <rect x="10" y="20" width="30" height="40" fill="red" />
+                            </g>
+                        </svg>
+                    </div>`
+                );
 
-                rect.appendTo(g);
-                g.appendTo(svg);
-                svg.appendTo(document.body);
+                $container.appendTo(document.body);
+                $container.html($container.html());
 
 
-                $('<div id=what>').css({
-                    position: 'absolute',
-                    background: 'orange',
-                    width: 50,
-                    height: 50,
-                    top: 0,
-                    left: 0
-                }).appendTo(document.body);
+                $('<div id=what>').appendTo(document.body);
             },
 
             drop: function() {
-                $('#where').remove();
+                $('#container').remove();
                 $('#what').remove();
             }
         }
