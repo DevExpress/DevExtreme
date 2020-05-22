@@ -3,6 +3,7 @@
 const replace = require('gulp-replace');
 const path = require('path');
 const fs = require('fs');
+const sass = require('sass');
 const dataUriRegex = /data-uri\((?:'(image\/svg\+xml;charset=UTF-8)',\s)?['"]?([^)'"]+)['"]?\)/g;
 
 const svg = (buffer, svgEncoding) => {
@@ -26,7 +27,18 @@ const handler = (_, svgEncoding, fileName) => {
     return `url(${escapedString})`;
 };
 
+const sassFunction = (args) => {
+    const hasEncoding = args.getLength() === 2;
+    const encoding = hasEncoding ? args.getValue(0).getValue() : null;
+    const url = hasEncoding ? args.getValue(1).getValue() : args.getValue(0).getValue();
+
+    return new sass.types.String(handler(null, encoding, url));
+};
+
 module.exports = {
     gulpPipe: () => replace(dataUriRegex, handler),
-    resolveDataUri: (content) => content.replace(dataUriRegex, handler)
+    resolveDataUri: (content) => content.replace(dataUriRegex, handler),
+    sassFunctions: {
+        'data-uri($args...)': sassFunction
+    }
 };
