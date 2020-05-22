@@ -240,7 +240,6 @@
                 $container.appendTo(document.body);
                 $container.html($container.html());
 
-
                 $('<div id=what>').appendTo(document.body);
             },
 
