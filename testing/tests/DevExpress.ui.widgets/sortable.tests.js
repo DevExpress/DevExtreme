@@ -1482,6 +1482,90 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
         assert.strictEqual($(onReorderSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), 'itemElement');
     });
 
+    ['push', 'indicate'].forEach((dropFeedbackMode) => {
+        QUnit.test(`onReorder - eventArgs.promise is resolved (dropFeedbackMode = ${dropFeedbackMode})`, function(assert) {
+            // arrange
+            const d = $.Deferred();
+            const onReorderSpy = sinon.spy((e) => {
+                e.promise = d.promise();
+            });
+
+            const sortable = this.createSortable({
+                filter: '.draggable',
+                data: 'x',
+                onReorder: onReorderSpy,
+                moveItemOnDrop: true,
+                dropFeedbackMode: dropFeedbackMode
+            }, $('#items'));
+
+            const $sourceElement = sortable.$element().children().eq(0);
+
+            // act
+            pointerMock($sourceElement).start().down().move(0, 40).move(0, 10).up();
+
+            // assert
+            let $sortableDragging = $('body').children('.dx-sortable-dragging');
+            assert.strictEqual($sortableDragging.length, 1, 'there is a drag element');
+            assert.strictEqual(onReorderSpy.callCount, 1, 'onRemove is called');
+            assert.ok(onReorderSpy.getCall(0).args[0].promise, 'event args - promise');
+            assert.ok($sourceElement.hasClass('dx-sortable-source'), 'source element');
+
+            if(dropFeedbackMode === 'push') {
+                assert.ok($sourceElement.hasClass('dx-sortable-source-hidden'), 'source element is hidden');
+            }
+
+            // act
+            d.resolve();
+
+            // assert
+            $sortableDragging = $('body').children('.dx-sortable-dragging');
+            assert.strictEqual($sortableDragging.length, 0, 'there is not a drag element');
+            assert.notOk($sourceElement.hasClass('dx-sortable-source'), 'element has not source class');
+            assert.notOk($sourceElement.hasClass('dx-sortable-source-hidden'), 'element has not source-hidden class');
+        });
+
+        QUnit.test(`onReorder - eventArgs.promise is rejected (dropFeedbackMode = ${dropFeedbackMode})`, function(assert) {
+            // arrange
+            const d = $.Deferred();
+            const onReorderSpy = sinon.spy((e) => {
+                e.promise = d.promise();
+            });
+
+            const sortable = this.createSortable({
+                filter: '.draggable',
+                data: 'x',
+                onReorder: onReorderSpy,
+                moveItemOnDrop: true,
+                dropFeedbackMode: dropFeedbackMode
+            }, $('#items'));
+
+            const $sourceElement = sortable.$element().children().eq(0);
+
+            // act
+            pointerMock($sourceElement).start().down().move(0, 40).move(0, 10).up();
+
+            // assert
+            let $sortableDragging = $('body').children('.dx-sortable-dragging');
+            assert.strictEqual($sortableDragging.length, 1, 'there is a drag element');
+            assert.strictEqual(onReorderSpy.callCount, 1, 'onRemove is called');
+            assert.ok(onReorderSpy.getCall(0).args[0].promise, 'event args - promise');
+            assert.ok($sourceElement.hasClass('dx-sortable-source'), 'source element');
+
+            if(dropFeedbackMode === 'push') {
+                assert.ok($sourceElement.hasClass('dx-sortable-source-hidden'), 'source element is hidden');
+            }
+
+            // act
+            d.reject();
+
+            // assert
+            $sortableDragging = $('body').children('.dx-sortable-dragging');
+            assert.strictEqual($sortableDragging.length, 0, 'there is not a drag element');
+            assert.notOk($sourceElement.hasClass('dx-sortable-source'), 'element has not source class');
+            assert.notOk($sourceElement.hasClass('dx-sortable-source-hidden'), 'element has not source-hidden class');
+        });
+    });
+
     QUnit.test('onDragMove, onDragEnd, onDragChange, onReorder - check itemData arg', function(assert) {
         // arrange
         const itemData = { test: true };

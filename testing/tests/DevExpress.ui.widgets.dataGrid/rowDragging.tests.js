@@ -663,6 +663,67 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         assert.strictEqual($placeholderElement.offset().top, $(rowsView.getRowElement(4)).offset().top, 'placeholder position');
         assert.strictEqual(onDragChangeSpy.getCall(0).args[0].toIndex, 3, 'toIndex');
     });
+
+    // T887897
+    ['push', 'indicate'].forEach((dropFeedbackMode) => {
+        QUnit.test(`The dragged row should not be displayed in its original position for a moment after row is dropped (dropFeedbackMode = ${dropFeedbackMode})`, function(assert) {
+            // arrange
+            const $testElement = $('#container');
+            const items = generateData(10);
+            let d = $.Deferred();
+
+            this.options.dataSource = {
+                load: function() {
+                    return d.promise();
+                }
+            };
+            this.options.rowDragging = {
+                allowReordering: true,
+                dropFeedbackMode: dropFeedbackMode,
+                onReorder: sinon.spy((e) => {
+                    const toIndex = items.indexOf(items[e.toIndex]);
+                    const fromIndex = items.indexOf(e.itemData);
+
+                    items.splice(fromIndex, 1);
+                    items.splice(toIndex, 0, e.itemData);
+                    e.promise = this.dataGrid.refresh();
+                })
+            };
+
+            const rowsView = this.createRowsView();
+            d.resolve(items);
+            d = $.Deferred();
+
+            rowsView.render($testElement);
+
+            // act
+            pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70).up();
+
+            // assert
+            const onReorder = this.options.rowDragging.onReorder;
+            let $rowElement = $(rowsView.getRowElement(0));
+            let $draggableElement = $('body').children('.dx-sortable-dragging');
+
+            assert.strictEqual(onReorder.callCount, 1, 'onReorder called once');
+            assert.strictEqual($draggableElement.length, 1, 'there is dragging element');
+            assert.ok($rowElement.hasClass('dx-sortable-source'), 'source row');
+
+            if(dropFeedbackMode === 'push') {
+                assert.ok($rowElement.hasClass('dx-sortable-source-hidden'), 'source element is hidden');
+            }
+
+            // act
+            d.resolve();
+
+            // assert
+            $draggableElement = $('body').children('.dx-sortable-dragging');
+            $rowElement = $(rowsView.getRowElement(0));
+
+            assert.strictEqual($draggableElement.length, 0, 'there is not dragging element');
+            assert.notOk($rowElement.hasClass('dx-sortable-source'), 'element has not source class');
+            assert.notOk($rowElement.hasClass('dx-sortable-source-hidden'), 'element has not source-hidden class');
+        });
+    });
 });
 
 QUnit.module('Handle', $.extend({}, moduleConfig, {
