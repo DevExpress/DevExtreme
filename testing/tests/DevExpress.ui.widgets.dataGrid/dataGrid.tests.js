@@ -5179,6 +5179,52 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
     });
 
+    QUnit.test('loading data on scroll after deleting several rows if scrolling mode is infinite, rowRenderingMode is virtual and refreshMode is repaint (T862268)', function(assert) {
+        // arrange
+        const array = [];
+
+        for(let i = 1; i <= 150; i++) {
+            array.push({ id: i });
+        }
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            height: 100,
+            dataSource: array,
+            keyExpr: 'id',
+            editing: {
+                allowDeleting: true,
+                texts: {
+                    confirmDeleteMessage: ''
+                },
+                refreshMode: 'repaint'
+            },
+            paging: {
+                pageSize: 50
+            },
+            scrolling: {
+                mode: 'infinite',
+                rowRenderingMode: 'virtual',
+                useNative: false
+            },
+            columns: ['id'],
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ y: 10000 });
+        dataGrid.getScrollable().scrollTo({ y: 0 });
+        dataGrid.deleteRow(0);
+        dataGrid.deleteRow(0);
+        dataGrid.deleteRow(0);
+        dataGrid.getScrollable().scrollTo({ y: 10000 });
+        dataGrid.getScrollable().scrollTo({ y: 10000 });
+
+        // assert
+        const rows = dataGrid.getVisibleRows();
+        assert.equal(dataGrid.totalCount(), 147, 'totalCount');
+        assert.equal(rows[rows.length - 1].key, 150, 'last row key');
+    });
+
     QUnit.test('height from extern styles', function(assert) {
     // arrange, act
         const $dataGrid = $('#dataGrid').addClass('fixed-height').dxDataGrid({
