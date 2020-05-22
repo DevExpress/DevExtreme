@@ -658,13 +658,11 @@ QUnit.module('content positioning', () => {
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
             const $content = wrapper().find('.dx-overlay-content');
-            const arrowRect = getRect($arrow);
-            const contentRect = getRect($content);
             const targetRect = getRect($target);
 
-            const contentOffsetTop = Math.round($target.offset().top + targetRect.height / 2 - contentRect.height / 2);
-            const contentOffsetLeft = Math.round($target.offset().left + targetRect.width + arrowRect.width);
-            const arrowOffsetTop = Math.round($target.offset().top + targetRect.height / 2 - arrowRect.height / 2);
+            const contentOffsetTop = Math.round($target.offset().top + targetRect.height / 2 - $content.height() / 2);
+            const contentOffsetLeft = Math.round($target.offset().left + targetRect.width + $arrow.width());
+            const arrowOffsetTop = Math.round($target.offset().top + targetRect.height / 2 - $arrow.height() / 2);
             const arrowOffsetLeft = Math.round($target.offset().left + targetRect.width);
 
             assert.strictEqual($content.offset().top, contentOffsetTop, 'popover content top offset is correct');
@@ -695,14 +693,12 @@ QUnit.module('content positioning', () => {
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
             const $content = wrapper().find('.dx-overlay-content');
-            const arrowRect = getRect($arrow);
-            const contentRect = getRect($content);
             const targetRect = getRect($target);
 
-            const contentOffsetTop = Math.round($target.offset().top + targetRect.height + arrowRect.height);
-            const contentOffsetLeft = Math.round($target.offset().left + targetRect.width / 2 - contentRect.width / 2);
+            const contentOffsetTop = Math.round($target.offset().top + targetRect.height + $arrow.height());
+            const contentOffsetLeft = Math.round($target.offset().left + targetRect.width / 2 - $content.width() / 2);
             const arrowOffsetTop = Math.round($target.offset().top + targetRect.height);
-            const arrowOffsetLeft = Math.round($target.offset().left + targetRect.width / 2 - arrowRect.width / 2);
+            const arrowOffsetLeft = Math.round($target.offset().left + targetRect.width / 2 - $arrow.width() / 2);
 
             assert.strictEqual($content.offset().top, contentOffsetTop, 'popover content top offset is correct');
             assert.strictEqual($content.offset().left, contentOffsetLeft, 'popover content left offset is correct');
