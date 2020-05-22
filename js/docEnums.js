@@ -387,6 +387,11 @@
  */
 
 /**
+ * @typedef {string} Enums.GridFilterOperations
+ * @enum {'='|'<>'|'<'|'<='|'>'|'>='|'contains'|'endswith'|'isblank'|'isnotblank'|'notcontains'|'startswith'|'between'|'anyof'|'noneof'}
+ */
+
+/**
  * @typedef {string} Enums.FilterType
  * @enum {'exclude'|'include'}
  */

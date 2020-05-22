@@ -1046,6 +1046,16 @@ QUnit.module('default', {}, () => {
         assert.equal(logRecord[1].arguments[0].value, value, 'the \'optionChanged\' method option value is correct');
     });
 
+    QUnit.test('T885682 - should have cachedDeprecatedName for each component separately', function(assert) {
+        const firstComponent = new TestComponent();
+        const secondComponent = new TestComponent();
+
+        const firstCachedNames = firstComponent._optionManager._cachedDeprecateNames;
+        const secondCachedNames = secondComponent._optionManager._cachedDeprecateNames;
+
+        assert.notStrictEqual(firstCachedNames, secondCachedNames, 'each component has own cachedDeprecatedName');
+    });
+
     QUnit.test('the isOptionDeprecated method', function(assert) {
         const instance = new TestComponent();
         assert.ok(instance.isOptionDeprecated('deprecated'), 'it is correct for deprecated option');

@@ -230,18 +230,18 @@ QUnit.module('Default template', moduleConfig, () => {
     QUnit.test('template should be rendered correctly with icon', function(assert) {
         const $content = this.prepareItemTest({ icon: 'test' });
 
-        assert.equal($content.filter('.dx-icon-test').length, 1);
+        assert.equal($content.find('.dx-icon-test').length, 1);
     });
 
     QUnit.test('template should be rendered correctly with icon path', function(assert) {
         const $content = this.prepareItemTest({ icon: 'test.jpg' });
 
-        assert.equal($content.filter('.dx-icon').attr('src'), 'test.jpg');
+        assert.equal($content.find('.dx-icon').attr('src'), 'test.jpg');
     });
 
     QUnit.test('template should be rendered correctly with external icon', function(assert) {
         const $content = this.prepareItemTest({ icon: 'fa fa-icon' });
 
-        assert.equal($content.filter('.fa.fa-icon').length, 1);
+        assert.equal($content.find('.fa.fa-icon').length, 1);
     });
 });

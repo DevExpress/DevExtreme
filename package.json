@@ -1,6 +1,6 @@
 {
   "name": "devextreme",
-  "version": "19.2.7",
+  "version": "19.2.8",
   "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
   "keywords": [
     "html5",
@@ -54,8 +54,8 @@
     "cldrjs": "^0.5.0",
     "del": "^2.2.2",
     "devextreme-cldr-data": "^1.0.2",
-    "devextreme-internal-tools": "~1.2.0",
-    "eslint": "^6.0.0",
+    "devextreme-internal-tools": "stable",
+    "eslint": "^7.0.0",
     "eslint-plugin-qunit": "^4.0.0",
     "eslint-plugin-spellcheck": "0.0.11",
     "exceljs": "3.3.1",
@@ -87,7 +87,7 @@
     "handlebars": "^4.1.2",
     "hogan.js": "3.0.2",
     "intl": "^1.2.5",
-    "jquery": "^3.5.0",
+    "jquery": "^3.5.1",
     "jquery.1": "^1.0.0",
     "jquery.2": "^1.0.0",
     "jquery.tmpl": "0.0.2",
