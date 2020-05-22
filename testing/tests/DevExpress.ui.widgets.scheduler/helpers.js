@@ -67,18 +67,6 @@ class NavigatorWrapper extends ElementWrapper {
         return new NavigatorCaption(this.getElement());
     }
 
-
-}
-
-class HeaderWrapper extends ElementWrapper {
-    constructor() {
-        super(CLASSES.header);
-    }
-
-    get navigator() {
-        return new NavigatorWrapper();
-    }
-
     get prevButton() {
         return new ClickElementWrapper(CLASSES.navigatorPrevButton);
     }
@@ -89,6 +77,16 @@ class HeaderWrapper extends ElementWrapper {
 
     get isPopupVisible() {
         return $('.dx-scheduler-navigator-calendar-popover > .dx-overlay-content').is(':visible');
+    }
+}
+
+class HeaderWrapper extends ElementWrapper {
+    constructor() {
+        super(CLASSES.header);
+    }
+
+    get navigator() {
+        return new NavigatorWrapper();
     }
 }
 
