@@ -782,20 +782,21 @@ QUnit.module('Navigation operations', moduleConfig, () => {
     });
 
     test('Forbiddance of current folder and refresh leads to navigating up and rising an error', function(assert) {
-        this.fileManager.option('fileSystemProvider',
-            new CustomFileSystemProvider({
-                getItems: pathInfo => {
-                    if(pathInfo.path === '') {
-                        return [{ name: 'Folder', isDirectory: 'true' }];
-                    } else if(pathInfo.path === 'Folder' && !this.forbidAll) {
-                        return [{ name: 'Subfolder', isDirectory: 'true' }];
-                    } else if(pathInfo.path === 'Folder/Subfolder' && !this.forbidAll) {
-                        return [];
-                    } else {
-                        throw new Error('Error');
-                    }
+        const provider = new CustomFileSystemProvider({
+            getItems: function(pathInfo) {
+                if(pathInfo.path === '') {
+                    return [{ name: 'Folder', isDirectory: 'true' }];
+                } else if(pathInfo.path === 'Folder' && !this.forbidAll) {
+                    return [{ name: 'Subfolder', isDirectory: 'true' }];
+                } else if(pathInfo.path === 'Folder/Subfolder' && !this.forbidAll) {
+                    return [];
+                } else {
+                    throw new Error('Error');
                 }
-            }));
+            }
+        });
+
+        this.fileManager.option('fileSystemProvider', provider);
         this.clock.tick(400);
 
         this.wrapper.findThumbnailsItem('Folder').trigger('dxdblclick');
@@ -810,9 +811,9 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         infos = this.progressPanelWrapper.getInfos();
         assert.strictEqual(infos.length, 0, 'No notifications');
 
-        this.forbidAll = true;
+        provider.forbidAll = true;
         this.wrapper.getToolbarButton('Refresh').trigger('dxclick');
-        this.clock.tick(400);
+        this.clock.tick(700);
 
         infos = this.progressPanelWrapper.getInfos();
         assert.strictEqual(infos.length, 2, 'There is some notification on panel');
@@ -825,8 +826,6 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.strictEqual(details[0].commonText, 'Folder', 'Common text is correct');
         assert.strictEqual(details[0].errorText, 'Unspecified error.', 'Error text is correct');
 
-        assert.strictEqual(this.wrapper.getThumbnailsItems().length, 1);
-        assert.strictEqual(this.wrapper.getThumbnailsItemName(0), 'Folder', 'The only item is shown');
         assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files', 'Breadcrumbs has correct path');
         assert.strictEqual(this.wrapper.getFocusedItemText(), 'Files', 'Root folder selected');
         assert.strictEqual(this.fileManager.getCurrentDirectory().path, '', 'Current directory is root');
@@ -854,7 +853,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         let infos = this.progressPanelWrapper.getInfos();
         assert.strictEqual(infos.length, 0, 'No notifications');
 
-        this.wrapper.getFolderToggle(2).trigger('dxclick');
+        this.wrapper.getFolderToggles().last().trigger('dxclick');
         this.clock.tick(400);
 
         infos = this.progressPanelWrapper.getInfos();
