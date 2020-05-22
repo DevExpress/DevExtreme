@@ -247,13 +247,13 @@ function getDatesByRecurrence(options) {
     // const iterationResult = {};
     const rule = recurrenceRule.rule;
 
-    // const dateUtc = Date.UTC(
-    //     options.start.getUTCFullYear(),
-    //     options.start.getUTCMonth(),
-    //     options.start.getUTCDate(),
-    //     options.start.getUTCHours(),
-    //     options.start.getUTCMinutes()
-    // );
+    const dateUtc = Date.UTC(
+        options.start.getUTCFullYear(),
+        options.start.getUTCMonth(),
+        options.start.getUTCDate(),
+        options.start.getUTCHours(),
+        options.start.getUTCMinutes()
+    );
 
     // rule.all().map(date =>
     //     DateTime.fromJSDate(date)
@@ -262,8 +262,10 @@ function getDatesByRecurrence(options) {
     //         .toJSDate()
     //     )
     // const recurrenceStartDate = DateTime.fromJSDate(options.start).toUTC().setZone('local', { keepLocalTime: true }).toJSDate();
-
-    const recurrenceStartDate = options.start;
+    // const min = DateTime.fromJSDate(options.min).toUTC().setZone('local', { keepLocalTime: true }).toJSDate();
+    // const max = DateTime.fromJSDate(options.max).toUTC().setZone('local', { keepLocalTime: true }).toJSDate();
+    // const min = DateTime.fromJSDate(options.start).toUTC().setZone('local', { keepLocalTime: true }).toJSDate();
+    const recurrenceStartDate = new Date(dateUtc);
 
     // const maxDate = correctMaxDate(options.max, rule);
 
@@ -274,7 +276,7 @@ function getDatesByRecurrence(options) {
     const rRuleSet = new RRuleSet();
 
     const ruleOptions = RRule.parseString(options.rule);
-    ruleOptions.dtstart = recurrenceStartDate;
+    ruleOptions.dtstart = options.start;
     // ruleOptions.tzid = 'UTC';
 
     const rRule = new RRule(ruleOptions);
@@ -288,6 +290,7 @@ function getDatesByRecurrence(options) {
         }
     }
 
+    return rRuleSet.between(options.min, options.max, true);
     // rule.interval = normalizeInterval(rule);
     // const dateRules = splitDateRules(rule, options.firstDayOfWeek);
 
@@ -348,7 +351,12 @@ function getDatesByRecurrence(options) {
     //         .setZone('local', { keepLocalTime: true })
     //         .toJSDate()
     // );
-    return rRuleSet.between(options.min, options.max, true);
+    // return rRuleSet.between(options.min, options.max, true).map(date =>
+    //     DateTime.fromJSDate(date)
+    //         .toUTC()
+    //         .setZone('local', { keepLocalTime: true })
+    //         .toJSDate()
+    // );
 }
 
 // function pushToResult(iteration, iterationResult, currentDate, i, config, verifiedField) {
