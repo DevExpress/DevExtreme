@@ -7,6 +7,9 @@ const inArray = require('../../core/utils/array').inArray;
 
 // const toMs = dateUtils.dateToMilliseconds;
 import { RRule, RRuleSet } from 'rrule';
+// import { DateTime } from 'luxon';
+
+// var { DateTime } = require('luxon');
 // const leastDaysInWeek = 4;
 const ruleNames = ['freq', 'interval', 'byday', 'byweekno', 'byyearday', 'bymonth', 'bymonthday', 'count', 'until', 'byhour', 'byminute', 'bysecond', 'bysetpos', 'wkst'];
 const freqNames = ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY', 'SECONDLY', 'MINUTELY', 'HOURLY'];
@@ -244,16 +247,25 @@ function getDatesByRecurrence(options) {
     // const iterationResult = {};
     const rule = recurrenceRule.rule;
 
-    const dateUtc = Date.UTC(
-        options.start.getUTCFullYear(),
-        options.start.getUTCMonth(),
-        options.start.getUTCDate(),
-        options.start.getUTCHours(),
-        options.start.getUTCMinutes()
-    );
+    // const dateUtc = Date.UTC(
+    //     options.start.getUTCFullYear(),
+    //     options.start.getUTCMonth(),
+    //     options.start.getUTCDate(),
+    //     options.start.getUTCHours(),
+    //     options.start.getUTCMinutes()
+    // );
 
-    const recurrenceStartDate = new Date(dateUtc);
-    const maxDate = correctMaxDate(options.max, rule);
+    // rule.all().map(date =>
+    //     DateTime.fromJSDate(date)
+    //         .toUTC()
+    //         .setZone('local', { keepLocalTime: true })
+    //         .toJSDate()
+    //     )
+    // const recurrenceStartDate = DateTime.fromJSDate(options.start).toUTC().setZone('local', { keepLocalTime: true }).toJSDate();
+
+    const recurrenceStartDate = options.start;
+
+    // const maxDate = correctMaxDate(options.max, rule);
 
     if(!recurrenceRule.isValid || !rule.freq) {
         return result;
@@ -263,6 +275,7 @@ function getDatesByRecurrence(options) {
 
     const ruleOptions = RRule.parseString(options.rule);
     ruleOptions.dtstart = recurrenceStartDate;
+    // ruleOptions.tzid = 'UTC';
 
     const rRule = new RRule(ruleOptions);
     rRuleSet.rrule(rRule);
@@ -329,7 +342,13 @@ function getDatesByRecurrence(options) {
     //     return a - b;
     // });
 
-    return rRuleSet.between(options.min, maxDate, true);
+    // return rRuleSet.between(options.min, options.max, true).map(date =>
+    //     DateTime.fromJSDate(date)
+    //         .toUTC()
+    //         .setZone('local', { keepLocalTime: true })
+    //         .toJSDate()
+    // );
+    return rRuleSet.between(options.min, options.max, true);
 }
 
 // function pushToResult(iteration, iterationResult, currentDate, i, config, verifiedField) {
@@ -372,18 +391,18 @@ function getDatesByRecurrence(options) {
 //     return resultArray;
 // }
 
-function correctMaxDate(maxDate, rule) {
-    const newMaxDate = new Date(maxDate);
-    switch(rule.freq) {
-        case 'MONTHLY':
-            newMaxDate.setMonth(newMaxDate.getMonth() + 1);
-            break;
-        case 'YEARLY':
-            newMaxDate.setYear(newMaxDate.getYear() + 1);
-            break;
-    }
-    return newMaxDate > maxDate ? newMaxDate : maxDate;
-}
+// function correctMaxDate(maxDate, rule) {
+//     const newMaxDate = new Date(maxDate);
+//     switch(rule.freq) {
+//         case 'MONTHLY':
+//             newMaxDate.setMonth(newMaxDate.getMonth() + 1);
+//             break;
+//         case 'YEARLY':
+//             newMaxDate.setYear(newMaxDate.getYear() + 1);
+//             break;
+//     }
+//     return newMaxDate > maxDate ? newMaxDate : maxDate;
+// }
 
 // function correctDate(originalDate, date) {
 //     if(originalDate.getDate() !== date) {
