@@ -228,16 +228,16 @@
         svg: {
             create: function() {
                 const $container = $(
-                    `<div id="container">
+                    `<div id="container" style="position:absolute; top:0;">
                         <svg viewBox="0 0 500 500">
                             <g id="where">
                                 <rect x="10" y="20" width="30" height="40" fill="red" />
-                                </g>
+                            </g>
                         </svg>
                     </div>`
                 );
 
-                $container.appendTo($('#qunit-fixture'));
+                $container.appendTo(document.body);
 
                 // NOTE: converts HtmlElement to SvgElement
                 $container.html($container.html());
