@@ -232,12 +232,12 @@
                         <svg viewBox="0 0 500 500">
                             <g id="where">
                                 <rect x="10" y="20" width="30" height="40" fill="red" />
-                            </g>
+                                </g>
                         </svg>
                     </div>`
                 );
 
-                $container.appendTo(document.body);
+                $container.appendTo($('#qunit-fixture'));
 
                 // NOTE: converts HtmlElement to SvgElement
                 $container.html($container.html());
