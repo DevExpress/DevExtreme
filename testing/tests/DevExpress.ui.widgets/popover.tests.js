@@ -650,7 +650,6 @@ QUnit.module('content positioning', () => {
                     my: 'left',
                     at: 'right'
                 },
-                height: 40,
                 target: $target,
                 animation: null,
                 visible: true
@@ -685,7 +684,6 @@ QUnit.module('content positioning', () => {
                     my: 'top',
                     at: 'bottom'
                 },
-                width: 40,
                 target: $target,
                 animation: null,
                 visible: true
