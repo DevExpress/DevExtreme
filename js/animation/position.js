@@ -66,6 +66,7 @@ const window = windowUtils.getWindow();
 const domAdapter = require('../core/dom_adapter');
 const isWindow = require('../core/utils/type').isWindow;
 const extend = require('../core/utils/extend').extend;
+const getBoundingRect = require('../core/utils/position').getBoundingRect;
 const browser = require('../core/utils/browser');
 
 const translator = require('./translator');
@@ -315,7 +316,7 @@ const calculatePosition = function(what, options) {
             h.atSize = of.width();
             v.atSize = of.height();
         } else {
-            const ofRect = of.get(0).getBoundingClientRect();
+            const ofRect = getBoundingRect(of);
             const o = of.offset();
             h.atLocation = o.left;
             v.atLocation = o.top;

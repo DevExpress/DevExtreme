@@ -13,6 +13,7 @@ const typeUtils = require('../core/utils/type');
 const mathUtils = require('../core/utils/math');
 const eventUtils = require('../events/utils');
 const Popup = require('./popup');
+const getBoundingRect = require('../core/utils/position').getBoundingRect;
 
 const POPOVER_CLASS = 'dx-popover';
 const POPOVER_WRAPPER_CLASS = 'dx-popover-wrapper';
@@ -419,18 +420,7 @@ const Popover = Popup.inherit({
     },
 
     _renderArrowPosition: function(side) {
-        const getRect = (instance) => {
-            const element = instance.get(0);
-            if(typeUtils.isWindow(element)) {
-                return {
-                    width: element.outerWidth,
-                    height: element.outerHeight
-                };
-            }
-            return element.getBoundingClientRect();
-        };
-
-        const arrowRect = getRect(this._$arrow);
+        const arrowRect = getBoundingRect(this._$arrow);
         const arrowFlip = -(this._isVerticalSide(side) ? arrowRect.height : arrowRect.width);
         this._$arrow.css(POSITION_FLIP_MAP[side], arrowFlip);
 
@@ -443,9 +433,9 @@ const Popover = Popup.inherit({
 
         const arrowSize = arrowRect[sizeProperty];
         const contentLocation = contentOffset[axis];
-        const contentSize = getRect(this._$content)[sizeProperty];
+        const contentSize = getBoundingRect(this._$content)[sizeProperty];
         const targetLocation = targetOffset[axis];
-        const targetSize = $target.get(0).preventDefault ? 0 : getRect($target)[sizeProperty];
+        const targetSize = $target.get(0).preventDefault ? 0 : getBoundingRect($target)[sizeProperty];
 
         const min = Math.max(contentLocation, targetLocation);
         const max = Math.min(contentLocation + contentSize, targetLocation + targetSize);
