@@ -1,22 +1,21 @@
-const $ = require('../../core/renderer');
-const noop = require('../../core/utils/common').noop;
-const isNumeric = require('../../core/utils/type').isNumeric;
-const errors = require('../widget/ui.errors');
-const dateUtils = require('../../core/utils/date');
-const typeUtils = require('../../core/utils/type');
-const extend = require('../../core/utils/extend').extend;
-const registerComponent = require('../../core/component_registrator');
-const devices = require('../../core/devices');
-const Widget = require('../widget/ui.widget');
-const Button = require('../button');
-const Calendar = require('../calendar');
-const Popover = require('../popover');
-const Popup = require('../popup');
-const publisherMixin = require('./ui.scheduler.publisher_mixin');
-const dateLocalization = require('../../localization/date');
-const isDefined = require('../../core/utils/type').isDefined;
-
-const Scrollable = require('../scroll_view/ui.scrollable');
+import $ from '../../core/renderer';
+import { noop } from '../../core/utils/common';
+import { isNumeric } from '../../core/utils/type';
+import errors from '../widget/ui.errors';
+import dateUtils from '../../core/utils/date';
+import typeUtils from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import registerComponent from '../../core/component_registrator';
+import devices from '../../core/devices';
+import Widget from '../widget/ui.widget';
+import Button from '../button';
+import Calendar from '../calendar';
+import Popover from '../popover';
+import Popup from '../popup';
+import publisherMixin from './ui.scheduler.publisher_mixin';
+import dateLocalization from '../../localization/date';
+import { isDefined } from '../../core/utils/type';
+import Scrollable from '../scroll_view/ui.scrollable';
 
 const ELEMENT_CLASS = 'dx-scheduler-navigator';
 const CALENDAR_CLASS = 'dx-scheduler-navigator-calendar';
@@ -27,22 +26,22 @@ const CALENDAR_POPOVER_CLASS = 'dx-scheduler-navigator-calendar-popover';
 
 const MONDAY_INDEX = 1;
 
-const getDefaultFirstDayOfWeekIndex = function(shift) {
+const getDefaultFirstDayOfWeekIndex = shift => {
     return shift ? MONDAY_INDEX : dateLocalization.firstDayOfWeekIndex();
 };
 
-const getDateMonthFormat = function(short) {
+const getDateMonthFormat = short => {
     return function(date) {
         const monthName = dateLocalization.getMonthNames(short ? 'abbreviated' : 'wide')[date.getMonth()];
         return [dateLocalization.format(date, 'day'), monthName].join(' ');
     };
 };
 
-const getMonthYearFormat = function(date) {
+const getMonthYearFormat = date => {
     return dateLocalization.getMonthNames('abbreviated')[date.getMonth()] + ' ' + dateLocalization.format(date, 'year');
 };
 
-const getCaptionFormat = function(short, intervalCount, duration) {
+const getCaptionFormat = (short, intervalCount, duration) => {
     const dateMonthFormat = getDateMonthFormat(short);
     return function(date) {
         if(intervalCount > 1) {
@@ -62,7 +61,7 @@ const getCaptionFormat = function(short, intervalCount, duration) {
     };
 };
 
-const getWeekCaption = function(date, shift, rejectWeekend) {
+const getWeekCaption = (date, shift, rejectWeekend) => {
     const firstDayOfWeek = this.option('firstDayOfWeek');
     let firstDayOfWeekIndex = isDefined(firstDayOfWeek) ? firstDayOfWeek : getDefaultFirstDayOfWeekIndex(shift);
 
@@ -97,7 +96,7 @@ const getWeekCaption = function(date, shift, rejectWeekend) {
     };
 };
 
-function formatCaptionByMonths(lastDate, firstDate) {
+const formatCaptionByMonths = (lastDate, firstDate) => {
     const isDifferentMonthDates = firstDate.getMonth() !== lastDate.getMonth();
     const isDifferentYears = firstDate.getFullYear() !== lastDate.getFullYear();
     const useShortFormat = isDifferentMonthDates || this.option('_useShortDateFormat');
@@ -113,9 +112,9 @@ function formatCaptionByMonths(lastDate, firstDate) {
     }
 
     return firstDateText + '-' + lastDateText;
-}
+};
 
-const getMonthCaption = function(date) {
+const getMonthCaption = date => {
     const firstDate = new Date(dateUtils.getFirstMonthDate(date));
     let lastDate = new Date(dateUtils.getLastMonthDate(firstDate));
     let text;
@@ -141,11 +140,11 @@ const getMonthCaption = function(date) {
     };
 };
 
-const dateGetter = function(date, offset) {
+const dateGetter = (date, offset) => {
     return new Date(date[this.setter](date[this.getter]() + offset));
 };
 
-const getConfig = function(step) {
+const getConfig = step => {
     let agendaDuration;
 
     switch(step) {
