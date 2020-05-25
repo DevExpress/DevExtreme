@@ -176,19 +176,6 @@ QUnit.module('Local Store Initialization', () => {
             assert.ok(false);
         });
     });
-
-    // T889965
-    QUnit.test('Summary value should not be NaN if the only column value is null', function(assert) {
-        this.store = new LocalStore([{ field: null }]);
-
-        this.store.load({
-            columns: [{ dataField: 'field' }],
-            values: [{ summaryType: 'avg' }]
-        }).done(function(result) {
-            assert.equal(result.values[0][0], '', 'first value');
-            assert.equal(result.values[0][1], '', 'second value');
-        });
-    });
 });
 
 QUnit.module('Array Local Store', moduleConfig, () => {
