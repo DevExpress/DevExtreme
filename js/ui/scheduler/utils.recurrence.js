@@ -314,13 +314,14 @@ function getDatesByRecurrence(options) {
 
     });
 
-    return dates.map((date) => {
-        if(date.getTime() < options.min.getTime()) {
-            return options.min;
-        } else {
-            return date;
-        }
-    });
+    return dates;
+    // return dates.map((date) => {
+    //     if(date.getTime() < options.min.getTime()) {
+    //         return options.min;
+    //     } else {
+    //         return date;
+    //     }
+    // });
     // rule.interval = normalizeInterval(rule);
     // const dateRules = splitDateRules(rule, options.firstDayOfWeek);
 
