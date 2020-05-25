@@ -552,11 +552,6 @@ const LayoutManager = Widget.inherit({
             return item.horizontalAlignment;
         }
 
-        if(isDefined(item.alignment)) {
-            errors.log('W0001', 'dxForm', 'alignment', '18.1', 'Use the \'horizontalAlignment\' option in button items instead.');
-            return item.alignment;
-        }
-
         return 'right';
     },
 

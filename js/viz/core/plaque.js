@@ -308,6 +308,7 @@ export class Plaque {
             this.anchorX = anchorX;
             this.anchorY = anchorY;
             this.move(x, y);
+            this._root?.append(this.root);
         };
 
         if(this.contentTemplate.render) {
@@ -322,6 +323,9 @@ export class Plaque {
         const renderer = this.widget._renderer;
         const options = this.options;
 
+        const shadowSettings = extend({ x: '-50%', y: '-50%', width: '200%', height: '200%' }, options.shadow);
+        const shadow = this._shadow = renderer.shadowFilter().attr(shadowSettings);
+
         const cloudSettings = { opacity: options.opacity, 'stroke-width': 0, fill: options.color };
         const borderOptions = options.border || {};
 
@@ -333,9 +337,6 @@ export class Plaque {
                 dashStyle: borderOptions.dashStyle
             });
         }
-
-        const shadowSettings = extend({ x: '-50%', y: '-50%', width: '200%', height: '200%' }, options.shadow);
-        const shadow = this._shadow = renderer.shadowFilter().attr(shadowSettings);
 
         const group = this._root = renderer.g().append(this.root);
         if(options.type) {

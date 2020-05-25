@@ -11,16 +11,20 @@ const customCommands = [
     'separator',
     { 'text': 'AAA' },
     { 'icon': 'BBB' },
-    { 'xxx': 'CCC' },
+    { 'name': 'CCC' },
+    { 'name': 'bold' },
+    { 'name': 'bold', 'text': 'Custom bold1' },
+    { 'name': 'bold', 'icon': 'Custom bold2' },
+    { 'xxx': 'DDD' },
     {
-        'text': 'DDD',
+        'text': 'EEE',
         'items': [
             'cut',
             'separator',
             'selectAll'
         ]
     },
-    'showToolbox'
+    'toolbox'
 ];
 
 const customTabs = [
@@ -83,37 +87,55 @@ QUnit.module('CommandManager', {
     });
     test('custom main toolbar commands', function(assert) {
         const commands = DiagramCommandsManager.getMainToolbarCommands(customCommands);
-        assert.equal(commands.length, 7);
-        assert.equal(commands[5].items.length, 2);
-        assert.equal(commands[5].items[1].beginGroup, true);
+        assert.equal(commands.length, 11);
+        assert.equal(commands[6].command, 16);
+        assert.equal(commands[6].icon, 'bold');
+        assert.equal(commands[6].text, 'Bold');
+        assert.equal(commands[7].command, 16);
+        assert.equal(commands[7].icon, 'bold');
+        assert.equal(commands[7].text, 'Custom bold1');
+        assert.equal(commands[8].command, 16);
+        assert.equal(commands[8].icon, 'Custom bold2');
+        assert.equal(commands[8].text, 'Bold');
+        assert.equal(commands[9].items.length, 2);
+        assert.equal(commands[9].items[1].beginGroup, true);
     });
     test('custom history toolbar commands', function(assert) {
         const commands = DiagramCommandsManager.getHistoryToolbarCommands(customCommands);
-        assert.equal(commands.length, 7);
-        assert.equal(commands[5].items.length, 2);
-        assert.equal(commands[5].items[1].beginGroup, true);
+        assert.equal(commands.length, 11);
+        assert.equal(commands[9].items.length, 2);
+        assert.equal(commands[9].items[1].beginGroup, true);
     });
     test('custom view toolbar commands', function(assert) {
         const commands = DiagramCommandsManager.getViewToolbarCommands(customCommands);
-        assert.equal(commands.length, 7);
-        assert.equal(commands[5].items.length, 2);
-        assert.equal(commands[5].items[1].beginGroup, true);
+        assert.equal(commands.length, 11);
+        assert.equal(commands[9].items.length, 2);
+        assert.equal(commands[9].items[1].beginGroup, true);
     });
     test('custom view toolbar commands with excludes', function(assert) {
         const commands = DiagramCommandsManager.getViewToolbarCommands(customCommands, ['toolbox']);
-        assert.equal(commands.length, 6);
-        assert.equal(commands[5].items.length, 2);
-        assert.equal(commands[5].items[1].beginGroup, true);
+        assert.equal(commands.length, 10);
+        assert.equal(commands[9].items.length, 2);
+        assert.equal(commands[9].items[1].beginGroup, true);
     });
     test('default context menu commands', function(assert) {
         assert.equal(DiagramCommandsManager.getContextMenuCommands().length, 12);
     });
     test('custom context menu commands', function(assert) {
         const commands = DiagramCommandsManager.getContextMenuCommands(customCommands);
-        assert.equal(commands.length, 6);
+        assert.equal(commands.length, 10);
         assert.equal(commands[2].beginGroup, true);
-        assert.equal(commands[4].items.length, 2);
-        assert.equal(commands[4].items[1].beginGroup, true);
+        assert.equal(commands[5].command, 16);
+        assert.equal(commands[5].icon, 'bold');
+        assert.equal(commands[5].text, 'Bold');
+        assert.equal(commands[6].command, 16);
+        assert.equal(commands[6].icon, 'bold');
+        assert.equal(commands[6].text, 'Custom bold1');
+        assert.equal(commands[7].command, 16);
+        assert.equal(commands[7].icon, 'Custom bold2');
+        assert.equal(commands[7].text, 'Bold');
+        assert.equal(commands[8].items.length, 2);
+        assert.equal(commands[8].items[1].beginGroup, true);
     });
     test('default properties panel command tabs', function(assert) {
         const groups = DiagramCommandsManager.getPropertyPanelCommandTabs();

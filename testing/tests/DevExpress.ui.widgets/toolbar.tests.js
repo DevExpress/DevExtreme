@@ -10,6 +10,8 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import themes from 'ui/themes';
 import eventsEngine from 'events/core/events_engine';
 
+import 'ui/button_group';
+
 import 'common.css!';
 import 'ui/button';
 import 'ui/tabs';
@@ -41,7 +43,7 @@ const TOOLBAR_LABEL_CLASS = 'dx-toolbar-label';
 const TOOLBAR_MENU_BUTTON_CLASS = 'dx-toolbar-menu-button';
 const TOOLBAR_MENU_SECTION_CLASS = 'dx-toolbar-menu-section';
 const LIST_ITEM_CLASS = 'dx-list-item';
-
+const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 
 const DROP_DOWN_MENU_CLASS = 'dx-dropdownmenu';
 const DROP_DOWN_MENU_POPUP_WRAPPER_CLASS = 'dx-dropdownmenu-popup-wrapper';
@@ -70,9 +72,9 @@ QUnit.module('render', {
     QUnit.test('items - long labels', function(assert) {
         this.element.dxToolbar({
             items: [
-                { location: 'before', widget: 'button', options: { text: 'Before Button' } },
-                { location: 'before', widget: 'button', options: { text: 'Second Before Button' } },
-                { location: 'after', widget: 'button', options: { text: 'After Button' } },
+                { location: 'before', widget: 'dxButton', options: { text: 'Before Button' } },
+                { location: 'before', widget: 'dxButton', options: { text: 'Second Before Button' } },
+                { location: 'after', widget: 'dxButton', options: { text: 'After Button' } },
                 { location: 'center', text: 'Very very very very very very very very very very very long label' }
             ],
             width: '400px'
@@ -97,9 +99,9 @@ QUnit.module('render', {
     QUnit.test('items - long custom html', function(assert) {
         this.element.dxToolbar({
             items: [
-                { location: 'before', widget: 'button', options: { text: 'Before Button' } },
-                { location: 'before', widget: 'button', options: { text: 'Second Before Button' } },
-                { location: 'after', widget: 'button', options: { text: 'After Button' } },
+                { location: 'before', widget: 'dxButton', options: { text: 'Before Button' } },
+                { location: 'before', widget: 'dxButton', options: { text: 'Second Before Button' } },
+                { location: 'after', widget: 'dxButton', options: { text: 'After Button' } },
                 { location: 'center', html: '<b>Very very very very very very very very very very very long label</b>' }
             ],
             width: 400
@@ -335,7 +337,7 @@ QUnit.module('toolbar with menu', {
                 count++;
             },
             items: [
-                { location: 'menu', text: 'item2' }
+                { locateInMenu: 'always', text: 'item2' }
             ],
             submenuType: 'dropDownMenu'
         });
@@ -360,20 +362,20 @@ QUnit.module('toolbar with menu', {
         const instance = this.element.dxToolbar({
             submenuType: 'dropDownMenu',
             items: [
-                { location: 'menu', text: 'a', visible: true }
+                { locateInMenu: 'always', text: 'a', visible: true }
             ],
         }).dxToolbar('instance');
 
         assert.strictEqual(this.element.find('.' + DROP_DOWN_MENU_CLASS).length, 1, 'dropdown was rendered');
 
-        instance.option('items', [{ location: 'menu', text: 'a', visible: false }]);
+        instance.option('items', [{ locateInMenu: 'always', text: 'a', visible: false }]);
         assert.strictEqual(this.element.find('.' + DROP_DOWN_MENU_CLASS).length, 0, 'dropdown was not rendered');
     });
 
     QUnit.test('changing field of item in submenu', function(assert) {
         this.element.dxToolbar({
             items: [
-                { location: 'menu', disabled: true }
+                { locateInMenu: 'always', disabled: true }
             ],
             submenuType: 'actionSheet'
         });
@@ -387,7 +389,7 @@ QUnit.module('toolbar with menu', {
     QUnit.test('dropdown menu should have correct position', function(assert) {
         this.element.dxToolbar({
             items: [
-                { location: 'menu', disabled: true }
+                { locateInMenu: 'always', disabled: true }
             ],
             submenuType: 'dropDownMenu'
         });
@@ -422,11 +424,11 @@ QUnit.module('disabled state', () => {
                     [true, false].forEach((changeDisabledOrder) => {
                         ['never', 'always'].forEach((locateInMenu) => {
                             QUnit.test(`new dxToolbar({
-                                    toolbar.disabled: ${isToolbarDisabled}, 
-                                    button.disabled: ${isButtonDisabled}), 
-                                    toolbar.disabled new: ${isToolbarDisabledNew}, 
-                                    button.disabled new: ${isButtonDisabledNew}, 
-                                    changeDisableOrder: ${changeDisabledOrder}, 
+                                    toolbar.disabled: ${isToolbarDisabled},
+                                    button.disabled: ${isButtonDisabled}),
+                                    toolbar.disabled new: ${isToolbarDisabledNew},
+                                    button.disabled new: ${isButtonDisabledNew},
+                                    changeDisableOrder: ${changeDisabledOrder},
                                     locateInMenu: ${locateInMenu}`,
                             function(assert) {
                                 const itemClickHandler = sinon.spy();
@@ -1096,12 +1098,13 @@ QUnit.module('adaptivity', {
             items: [
                 { location: 'before', locateInMenu: 'auto', widget: 'dxButton', options: { text: 'test text' } },
                 { location: 'before', template: function() { return $('<div>').width(100); } },
-                { location: 'menu', text: 'test text' }
+                { locateInMenu: 'auto', text: 'test text' }
             ],
             width: 100
         });
 
-        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDown.dxDropDownMenu('instance');
+        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS);
+        const dropDown = $dropDown.dxDropDownMenu('instance');
 
         dropDown.open();
         dropDown.close();
@@ -1136,6 +1139,33 @@ QUnit.module('adaptivity', {
         assert.equal($section.find('.dx-toolbar-menu-action').length, 1, 'click on button should close menu');
         assert.equal($section.find('.dx-toolbar-hidden-button').length, 1, 'button has specific class for override styles');
         assert.equal($section.find('.dx-list-item').text(), 'test text', 'button text was rendered');
+    });
+
+    QUnit.test('buttonGroup.locateInMenu: auto -> toolbar.setWidth(100) -> toolbar.openMenu', function(assert) {
+        const toolbar = $('#widget').dxToolbar({
+            items: [
+                { locateInMenu: 'never', template: function() { return $('<div>').width(100); } },
+                { locateInMenu: 'auto', widget: 'dxButtonGroup', options: { width: 100, items: [ { text: 'text1' } ] } }
+            ]
+        }).dxToolbar('instance');
+
+        const getButtonGroupToolbarItem = () => toolbar.$element().find(`.${BUTTON_GROUP_CLASS}`).closest(`.${TOOLBAR_ITEM_CLASS}`);
+
+        let $buttonGroupToolbarItem = getButtonGroupToolbarItem();
+        assert.equal($buttonGroupToolbarItem.hasClass(TOOLBAR_ITEM_INVISIBLE_CLASS), false, 'buttonGroup is visible in toolbar');
+
+        toolbar.option('width', 100);
+        $buttonGroupToolbarItem = getButtonGroupToolbarItem();
+        assert.equal($buttonGroupToolbarItem.hasClass(TOOLBAR_ITEM_INVISIBLE_CLASS), true, 'buttonGroup is hidden in toolbar');
+
+        const done = assert.async();
+        const $dropDown = toolbar.$element().find('.' + DROP_DOWN_MENU_CLASS);
+        const dropDown = $dropDown.dxDropDownMenu('instance');
+        dropDown.option('onItemRendered', function(args) {
+            assert.equal($(args.itemElement).find(`.${BUTTON_GROUP_CLASS}`).length, 1, 'button group was rendered in menu');
+            done();
+        });
+        dropDown.open();
     });
 
     QUnit.test('overflow item should rendered with correct template in menu and in toolbar', function(assert) {

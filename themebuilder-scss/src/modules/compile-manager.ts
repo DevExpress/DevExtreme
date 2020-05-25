@@ -1,37 +1,49 @@
-import { Compiler } from './compiler';
-import { PreCompiler } from './pre-compiler';
-import { resolveBundle } from './bundle-resolver';
-import { PostCompiler } from './post-compiler';
+import Compiler from './compiler';
+import WidgetsHandler from './widgets-handler';
+import PreCompiler from './pre-compiler';
+import resolveBundle from './bundle-resolver';
+import PostCompiler from './post-compiler';
 
-export class CompileManager {
-    compiler = new Compiler();
+export default class CompileManager {
+  compiler = new Compiler();
 
-    async compile(config: ConfigSettings): Promise<any> {
-        const bundle = resolveBundle(config.themeName, config.colorScheme);
-        const items = config.items;
+  async compile(config: ConfigSettings): Promise<PackageResult> {
+    const bundleOptions = resolveBundle(config.themeName, config.colorScheme);
+    const { items, widgets } = config;
 
-        try {
-            const data = await this.compiler.compile(bundle, items, null);
-            let css = data.result.css;
+    const widgetsHandler = new WidgetsHandler(widgets, bundleOptions.file);
+    const widgetsLists = await widgetsHandler.getIndexContent();
+    this.compiler.indexFileContent = widgetsLists.indexContent;
 
-            if(config.makeSwatch) {
-                const preCompiler = new PreCompiler();
-                const swatchSass = preCompiler.createSassForSwatch(config.outColorScheme, css);
-                const swatchResult = await this.compiler.compile(bundle, [], { data: swatchSass });
-                css = swatchResult.result.css;
-            }
+    try {
+      const data = await this.compiler.compile(items, bundleOptions);
+      let css = data.result.css.toString();
+      let swatchSelector: string = null;
 
-            if(config.assetsBasePath) {
-                const postCompiler = new PostCompiler();
-                css = postCompiler.addBasePath(css, config.assetsBasePath);
-            }
+      if (config.makeSwatch) {
+        const swatchSass = PreCompiler.createSassForSwatch(config.outColorScheme, css);
+        const swatchResult = await this.compiler.compile([], {
+          data: swatchSass.sass,
+          ...bundleOptions,
+        });
 
-            return {
-                compiledMetadata: data.changedVariables,
-                css: css.toString()
-            };
-        } catch(e) {
-            throw new Error(`Compilation failed. bundle: ${bundle}, e: ${e}`);
-        }
+        css = swatchResult.result.css.toString();
+        swatchSelector = swatchSass.selector;
+      }
+
+      if (config.assetsBasePath) {
+        css = PostCompiler.addBasePath(css, config.assetsBasePath);
+      }
+
+      return {
+        compiledMetadata: data.changedVariables,
+        css,
+        widgets: widgetsLists.widgets,
+        unusedWidgets: widgetsLists.unusedWidgets,
+        swatchSelector,
+      };
+    } catch (e) {
+      throw new Error(`Compilation failed. bundle: ${bundleOptions}, e: ${e}`);
     }
+  }
 }

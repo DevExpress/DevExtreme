@@ -31,7 +31,7 @@ module('Lookup', {
         this.clock = sinon.useFakeTimers();
 
         this.element = $('#lookup');
-        this.instance = this.element.dxLookup({ fullScreen: false }).dxLookup('instance');
+        this.instance = this.element.dxLookup({ 'dropDownOptions.fullScreen': false }).dxLookup('instance');
         this.$field = $(this.instance._$field);
     },
     afterEach: function() {

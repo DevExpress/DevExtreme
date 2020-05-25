@@ -15,6 +15,7 @@ const DROP_DOWN_BUTTON_TOGGLE_CLASS = 'dx-dropdownbutton-toggle';
 const BUTTON_GROUP_WRAPPER = 'dx-buttongroup-wrapper';
 const BUTTON_TEXT = 'dx-button-text';
 const LIST_GROUP_HEADER_CLASS = 'dx-list-group-header';
+const DROP_DOWN_BUTTON_HAS_ARROW_CLASS = 'dx-dropdownbutton-has-arrow';
 
 QUnit.testStart(() => {
     const markup =
@@ -764,6 +765,22 @@ QUnit.module('common use cases', {
         eventsEngine.trigger(firstListItems[0], 'dxclick');
 
         assert.strictEqual(this.dropDownButton.option('selectedItem'), items[0], 'selectedItem is correct');
+    });
+
+    QUnit.test('widget should have specific class if it\'s is shown or hidden runtime', function(assert) {
+        this.dropDownButton.option({
+            showArrowIcon: false
+        });
+
+        const $dropDownButton = this.dropDownButton.$element();
+        this.dropDownButton.option('showArrowIcon', true);
+        assert.ok($dropDownButton.hasClass(DROP_DOWN_BUTTON_HAS_ARROW_CLASS));
+
+        this.dropDownButton.option('showArrowIcon', false);
+        assert.notOk($dropDownButton.hasClass(DROP_DOWN_BUTTON_HAS_ARROW_CLASS));
+
+        this.dropDownButton.option('splitButton', true);
+        assert.ok($dropDownButton.hasClass(DROP_DOWN_BUTTON_HAS_ARROW_CLASS));
     });
 });
 

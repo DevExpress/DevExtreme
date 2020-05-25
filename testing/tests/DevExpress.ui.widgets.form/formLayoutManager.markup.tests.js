@@ -6,7 +6,6 @@ import config from 'core/config';
 import typeUtils from 'core/utils/type';
 import { inArray } from 'core/utils/array';
 import windowUtils from 'core/utils/window';
-import errors from 'ui/widget/ui.errors';
 
 import 'ui/switch';
 import 'ui/autocomplete';
@@ -2457,37 +2456,6 @@ QUnit.module('Button item', () => {
         assert.ok($buttonItems.first().hasClass('dx-first-col'), 'Correct column index');
         assert.ok($buttonItems.last().hasClass('dx-col-1'), 'Correct column index');
         assert.ok($buttonItems.last().hasClass('dx-last-col'), 'Correct column index');
-    });
-
-    test('Check deprecated alignment option', function(assert) {
-        const $testContainer = $('#container');
-        const logStub = sinon.stub(errors, 'log');
-
-        $testContainer.dxLayoutManager({
-            items: [{
-                itemType: 'button'
-            }, {
-                itemType: 'button',
-                alignment: 'left'
-            }, {
-                itemType: 'button',
-                alignment: 'center'
-            }]
-        });
-
-        const $buttonItems = $testContainer.find('.dx-field-button-item');
-
-        assert.equal($buttonItems.first().css('textAlign'), 'right', 'By default buttons align by the right');
-        assert.equal($buttonItems.eq(1).css('textAlign'), 'left', 'Left alignment accepted');
-        assert.equal($buttonItems.last().css('textAlign'), 'center', 'Center alignment accepted');
-        assert.deepEqual(logStub.firstCall.args, [
-            'W0001',
-            'dxForm',
-            'alignment',
-            '18.1',
-            'Use the \'horizontalAlignment\' option in button items instead.'
-        ], 'Check warning parameters');
-        logStub.restore();
     });
 
     test('Horizontal alignment', function(assert) {

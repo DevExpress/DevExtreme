@@ -821,6 +821,46 @@ QUnit.module('next button', moduleSetup, () => {
         assert.ok($('.dx-list-next-button', this.element).text());
     });
 
+    QUnit.test('Click on nextButton should raise pageLoading event (T892010)', function(assert) {
+        assert.expect(1);
+
+        this.element.dxList({
+            dataSource: {
+                store: [1, 2, 3],
+                paginate: true,
+                pageSize: 1
+            },
+            pageLoadMode: 'nextButton',
+            onPageLoading: (e) => {
+                assert.ok(true, 'pageLoading is raised after click on nextButton');
+            }
+        });
+
+        const nextButton = $('.dx-list-next-button ', this.element);
+        $('.dx-button', nextButton).trigger('dxclick');
+    });
+
+
+    QUnit.test('Click on nextButton should raise pageLoading event - subscription by "on" method (T892010)', function(assert) {
+        assert.expect(1);
+
+        const list = this.element.dxList({
+            dataSource: {
+                store: [1, 2, 3],
+                paginate: true,
+                pageSize: 1
+            },
+            pageLoadMode: 'nextButton'
+        }).dxList('instance');
+
+        list.on('pageLoading', (e) => {
+            assert.ok(true, 'pageLoading is raised after click on nextButton');
+        });
+
+        const nextButton = $('.dx-list-next-button ', this.element);
+        $('.dx-button', nextButton).trigger('dxclick');
+    });
+
     QUnit.test('nextButton should be removed after search if result items count is smaller than page size, repaintChangesOnly=true (T838645)', function(assert) {
         const list = this.element.dxList({
             repaintChangesOnly: true,
