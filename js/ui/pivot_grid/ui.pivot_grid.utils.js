@@ -108,9 +108,11 @@ exports.findField = function(fields, id) {
 };
 
 exports.formatValue = function(value, options) {
+    // because isNaN function works incorrectly with strings and undefined (T878428)
+    const valueText = value === value && format(value, options.format);
     const formatObject = {
         value: value,
-        valueText: format(value, options.format) || ''
+        valueText: valueText || ''
     };
     return options.customizeText ? options.customizeText.call(options, formatObject) : formatObject.valueText;
 };
