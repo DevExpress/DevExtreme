@@ -35,13 +35,12 @@ export const recurrenceUtils = {
             return result;
         }
 
-        const rRuleSet = new RRuleSet();
         const ruleOptions = RRule.parseString(options.rule);
         const recurrenceStartDate = getRRuleUtcDate(options.start);
-
         ruleOptions.dtstart = recurrenceStartDate;
 
         const rRule = new RRule(ruleOptions);
+        const rRuleSet = new RRuleSet();
         rRuleSet.rrule(rRule);
 
         const min = getRRuleUtcDate(options.min);
@@ -50,19 +49,11 @@ export const recurrenceUtils = {
         const startTime = options.start && options.start.getTime();
         const endTime = options.end && options.end.getTime();
         const duration = endTime ? endTime - startTime : 0;
+        const leftBorder = recurrenceUtils.getLeftBorder(min, recurrenceStartDate, duration);
 
-        rRuleSet.between(min, max, true).forEach(date => {
-            let isValidDate = true;
-
-            if(duration && date.getTime() < recurrenceStartDate.getTime()) {
-                const comparableDate = new Date(date.getTime() + duration);
-
-                if(comparableDate.getTime() <= max.getTime()) {
-                    date = recurrenceStartDate;
-                } else {
-                    isValidDate = false;
-                }
-            }
+        rRuleSet.between(leftBorder, max, true).forEach(date => {
+            const endDate = new Date(date.getTime() + duration);
+            const isValidDate = endDate > min;
 
             if(isValidDate) {
                 correctTimezoneOffset(date);
@@ -74,6 +65,10 @@ export const recurrenceUtils = {
         });
 
         return result;
+    },
+
+    getLeftBorder: function(min, startDate, duration) {
+        return min > startDate ? new Date(min.getTime() - duration) : min;
     },
 
     getRecurrenceRule: function(recurrence) {
