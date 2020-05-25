@@ -52,8 +52,8 @@ export const recurrenceUtils = {
         const leftBorder = recurrenceUtils.getLeftBorder(min, recurrenceStartDate, duration);
 
         rRuleSet.between(leftBorder, max, true).forEach(date => {
-            const endDate = new Date(date.getTime() + duration);
-            const isValidDate = endDate > min;
+            const endAppointmentDate = new Date(date.getTime() + duration);
+            const isValidDate = endAppointmentDate > min;
 
             if(isValidDate) {
                 correctTimezoneOffset(date);
