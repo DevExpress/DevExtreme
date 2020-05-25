@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import config from '../config';
 import typeUtils from '../utils/type';
 
@@ -8,7 +9,7 @@ const getDefaultAlignment = function(isRtlEnabled) {
 };
 
 const getBoundingRect = (instance) => {
-    const element = instance.get(0);
+    const element = $(instance).get(0);
     if(typeUtils.isWindow(element)) {
         return {
             width: element.outerWidth,

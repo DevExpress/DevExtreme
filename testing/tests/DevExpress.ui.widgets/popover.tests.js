@@ -4,6 +4,7 @@ import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import positionUtils from 'animation/position';
 import Popover from 'ui/popover';
+import { getBoundingRect } from 'core/utils/position';
 
 import 'common.css!';
 
@@ -56,10 +57,6 @@ const getElementsPositionAndSize = function($popover, $target) {
             offsetLeft: $content.offset().left
         }
     };
-};
-
-const getRect = function($element) {
-    return $element.get(0).getBoundingClientRect();
 };
 
 QUnit.module('render', () => {
@@ -657,7 +654,7 @@ QUnit.module('content positioning', () => {
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
             const $content = wrapper().find('.dx-overlay-content');
-            const targetRect = getRect($target);
+            const targetRect = getBoundingRect($target);
 
             const contentOffsetTop = Math.round($target.offset().top + targetRect.height / 2 - $content.height() / 2);
             const contentOffsetLeft = Math.round($target.offset().left + targetRect.width + $arrow.width());
@@ -691,7 +688,7 @@ QUnit.module('content positioning', () => {
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
             const $content = wrapper().find('.dx-overlay-content');
-            const targetRect = getRect($target);
+            const targetRect = getBoundingRect($target);
 
             const contentOffsetTop = Math.round($target.offset().top + targetRect.height + $arrow.height());
             const contentOffsetLeft = Math.round($target.offset().left + targetRect.width / 2 - $content.width() / 2);
