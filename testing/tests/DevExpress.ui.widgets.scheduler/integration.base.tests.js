@@ -13,7 +13,6 @@ require('generic_light.css!');
 
 const noop = require('core/utils/common').noop;
 const errors = require('ui/widget/ui.errors');
-const DataSource = require('data/data_source/data_source').DataSource;
 const config = require('core/config');
 
 require('ui/scheduler/ui.scheduler');
@@ -105,7 +104,7 @@ QUnit.test('Height of \'dx-scheduler-group-row\' should be equal with height of 
     const groupRow = $element.find('.dx-scheduler-group-flex-container .dx-scheduler-group-row:last-child .dx-scheduler-group-header').eq(0);
     const dataTableRow = $element.find('.dx-scheduler-date-table-row').eq(0);
 
-    assert.roughEqual(groupRow.outerHeight(), dataTableRow.outerHeight(), 0.02, 'Row heights is equal');
+    assert.roughEqual(groupRow.outerHeight(), dataTableRow.outerHeight(), 0.3, 'Row heights are equal');
 });
 
 QUnit.test('Header should be initialized with correct \'width\' option', function(assert) {
@@ -212,27 +211,6 @@ QUnit.test('Scheduler should be able to invoke unit methods', function(assert) {
     const result = this.instance.getWorkSpace().invoke('testFn', 1, 2);
 
     assert.equal(result, 3, 'result is OK');
-});
-
-QUnit.test('Filter options should be passed to the load method', function(assert) {
-    const resources = [
-        { field: 'r1', dataSource: [{ id: 1, text: 'a' }] },
-        { field: 'r2', dataSource: [{ id: 1, text: 'b' }] }
-    ];
-    this.createInstance({
-        currentDate: new Date(2015, 5, 29),
-        firstDayOfWeek: 1,
-        currentView: 'week',
-        resources: resources,
-        dataSource: new DataSource({
-            load: function(options) {
-                const schedulerOptions = options.dxScheduler;
-                assert.deepEqual(schedulerOptions.startDate, new Date(2015, 5, 29), 'Start date is OK');
-                assert.deepEqual(schedulerOptions.endDate, new Date(2015, 6, 5, 23, 59), 'End date is OK');
-                assert.deepEqual(schedulerOptions.resources, resources, 'Resources are OK');
-            }
-        })
-    });
 });
 
 QUnit.test('scheduler should work with disabled: true', function(assert) {

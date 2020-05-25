@@ -304,6 +304,9 @@ class DiagramToolbox extends DiagramFloatingPanel {
             const $tooltipContainer = $($element);
             this._createTooltips($tooltipContainer.find('[data-toggle="' + DIAGRAM_TOOLTIP_DATATOGGLE + '"]'));
         });
+
+        this.updateMaxHeight();
+        this._scrollView.update();
     }
 
     _createOnShapeCategoryRenderedAction() {

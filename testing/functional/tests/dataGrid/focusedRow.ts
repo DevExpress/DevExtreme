@@ -37,25 +37,48 @@ test('onFocusedRowChanged event should fire once after changing focusedRowKey if
     }
 }));
 
-test('Focused row should not being reseted after begin edit row if form editing mode (T851400)', async t => {
+test('Form - Focused row should not be reset after editing a row (T851400)', async t => {
     const dataGrid = new DataGrid('#container');
     const dataRow0 = dataGrid.getDataRow(0);
     const dataRow1 = dataGrid.getDataRow(1);
     const editForm = dataGrid.getEditForm();
+    const editor = editForm.getItem('c0');
 
     await t
         .expect(dataRow1.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(6)
         .click(dataRow1.getCommandCell(2).getButton(0))
         .expect(editForm.element.exists).ok()
         .click(editForm.cancelButton)
-        .expect(dataRow1.isFocusedRow).ok();
+        .expect(dataRow1.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(6);
+
+    await t
+        .click(dataRow1.getCommandCell(2).getButton(0))
+        .expect(editForm.element.exists).ok()
+        .click(editor)
+        .typeText(editor, 'test')
+        .click(editForm.saveButton)
+        .expect(dataRow1.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(6);
 
     await t
         .click(dataRow0.getCommandCell(2).getButton(0))
         .expect(editForm.element.exists).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(5)
         .click(editForm.cancelButton)
-        .expect(dataRow1.isFocusedRow).ok()
-        .expect(dataRow0.isFocusedRow).notOk();
+        .expect(dataRow0.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(5);
+
+    await t
+        .click(dataRow0.getCommandCell(2).getButton(0))
+        .expect(editForm.element.exists).ok()
+        .click(editor)
+        .typeText(editor, 'test')
+        .click(editForm.saveButton)
+        .expect(dataRow0.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(5);
+
 }).before(() => createWidget('dxDataGrid', {
     dataSource: [
         { id: 5, c0: 'c0_0' },
@@ -70,22 +93,188 @@ test('Focused row should not being reseted after begin edit row if form editing 
     }
 }));
 
-test('Focused row should not being reseted after begin edit row by API if form edit mode (T851400)', async t => {
+test('Popup - Focused row should not be reset after editing a row (T879627)', async t => {
+    const dataGrid = new DataGrid('#container');
+    const dataRow0 = dataGrid.getDataRow(0);
+    const dataRow1 = dataGrid.getDataRow(1);
+    const popupEditForm = dataGrid.getPopupEditForm();
+    const editor = popupEditForm.getItem('c0');
+
+    await t
+        .expect(dataRow1.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(6)
+        .click(dataRow1.getCommandCell(2).getButton(0))
+        .expect(popupEditForm.element.visible).ok()
+        .click(popupEditForm.cancelButton)
+        .expect(dataRow1.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(6);
+
+    await t
+        .click(dataRow1.getCommandCell(2).getButton(0))
+        .expect(popupEditForm.element.visible).ok()
+        .click(editor)
+        .typeText(editor, 'test')
+        .click(popupEditForm.saveButton)
+        .expect(dataRow1.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(6);
+
+    await t
+        .click(dataRow0.getCommandCell(2).getButton(0))
+        .expect(popupEditForm.element.visible).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(5)
+        .click(popupEditForm.cancelButton)
+        .expect(dataRow0.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(5);
+
+    await t
+        .click(dataRow0.getCommandCell(2).getButton(0))
+        .expect(popupEditForm.element.visible).ok()
+        .click(editor)
+        .typeText(editor, 'test')
+        .click(popupEditForm.saveButton)
+        .expect(dataRow0.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(5);
+
+}).before(() => createWidget('dxDataGrid', {
+    dataSource: [
+        { id: 5, c0: 'c0_0' },
+        { id: 6, c0: 'c0_1' }
+    ],
+    keyExpr: 'id',
+    focusedRowEnabled: true,
+    focusedRowKey: 6,
+    editing: {
+        mode: 'popup',
+        allowUpdating: true,
+        popup: {
+            animation: null
+        }
+    }
+}));
+
+["Form", "Popup"].forEach(mode => {
+    test(`${mode} - Focused row should not be reset after editing a row by API (T879627)`, async t => {
+        const dataGrid = new DataGrid('#container');
+        const dataRow1 = dataGrid.getDataRow(1);
+
+        await t
+            .expect(dataGrid.option('focusedRowKey')).eql(6)
+            .expect(dataRow1.isFocusedRow).ok();
+
+        await dataGrid.api_editRow(1);
+
+        await t.expect(dataGrid.option('focusedRowKey')).eql(6);
+
+        await dataGrid.api_cancelEditData();
+
+        await t.expect(dataGrid.option('focusedRowKey')).eql(6);
+
+        await dataGrid.api_editRow(0);
+
+        await t.expect(dataGrid.option('focusedRowKey')).eql(6);
+
+        await dataGrid.api_saveEditData();
+
+        await t.expect(dataGrid.option('focusedRowKey')).eql(6);
+
+    }).before(() => createWidget('dxDataGrid', {
+        dataSource: [
+            { id: 5, c0: 'c0_0' },
+            { id: 6, c0: 'c0_1' }
+        ],
+        keyExpr: 'id',
+        focusedRowEnabled: true,
+        focusedRowKey: 6,
+        editing: {
+            mode: mode.toLowerCase(),
+            allowUpdating: true,
+            popup: {
+                animation: null
+            }
+        }
+    }));
+});
+
+test('Row - Focused row should not be reset after editing a row (T879627)', async t => {
+    const dataGrid = new DataGrid('#container');
+    const dataRow0 = dataGrid.getDataRow(0);
+    const dataRow1 = dataGrid.getDataRow(1);
+
+    await t
+        .expect(dataRow1.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(6)
+        .click(dataRow1.getCommandCell(2).getButton(0))
+        .expect(dataRow1.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(6)
+        .click(dataRow1.getCommandCell(2).getButton(1))
+        .expect(dataRow1.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(6);
+
+    let editor = dataRow1.getDataCell(1).getEditor();
+
+    await t
+        .click(dataRow1.getCommandCell(2).getButton(0))
+        .click(editor.element)
+        .typeText(editor.element, 'test')
+        .click(dataRow1.getCommandCell(2).getButton(0))
+        .expect(dataRow1.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(6);
+
+    await t
+        .click(dataRow0.getCommandCell(2).getButton(0))
+        .expect(dataGrid.option('focusedRowKey')).eql(5)
+        .click(dataRow0.getCommandCell(2).getButton(1))
+        .expect(dataRow0.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(5);
+
+    editor = dataRow0.getDataCell(1).getEditor();
+
+    await t
+        .click(dataRow0.getCommandCell(2).getButton(0))
+        .click(editor.element)
+        .typeText(editor.element, 'test')
+        .click(dataRow0.getCommandCell(2).getButton(0))
+        .expect(dataRow0.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(5);
+
+}).before(() => createWidget('dxDataGrid', {
+    dataSource: [
+        { id: 5, c0: 'c0_0' },
+        { id: 6, c0: 'c0_1' }
+    ],
+    keyExpr: 'id',
+    focusedRowEnabled: true,
+    focusedRowKey: 6,
+    editing: {
+        mode: 'row',
+        allowUpdating: true
+    }
+}));
+
+test('Row - Focused row should be reset after editing a row by API (T879627)', async t => {
     const dataGrid = new DataGrid('#container');
     const dataRow1 = dataGrid.getDataRow(1);
 
     await t
-        .expect(dataGrid.api_option('focusedRowKey')).eql(6)
+        .expect(dataGrid.option('focusedRowKey')).eql(6)
         .expect(dataRow1.isFocusedRow).ok();
 
     await dataGrid.api_editRow(1);
 
-    await t.expect(dataGrid.api_option('focusedRowKey')).eql(6);
+    await t.expect(dataGrid.option('focusedRowKey')).eql(6);
 
     await dataGrid.api_cancelEditData();
 
     await t.expect(dataGrid.option('focusedRowKey')).eql(6);
 
+    await dataGrid.api_editRow(0);
+
+    await t.expect(dataGrid.option('focusedRowKey')).eql(5);
+
+    await dataGrid.api_saveEditData();
+
+    await t.expect(dataGrid.option('focusedRowKey')).eql(5);
+
 }).before(() => createWidget('dxDataGrid', {
     dataSource: [
         { id: 5, c0: 'c0_0' },
@@ -95,10 +284,191 @@ test('Focused row should not being reseted after begin edit row by API if form e
     focusedRowEnabled: true,
     focusedRowKey: 6,
     editing: {
-        mode: 'form',
+        mode: 'row',
         allowUpdating: true
     }
 }));
+
+test('Cell - Focused row should not be reset after editing a cell (T879627)', async t => {
+    const dataGrid = new DataGrid('#container');
+    const dataRow0 = dataGrid.getDataRow(0);
+    const dataRow1 = dataGrid.getDataRow(1);
+    const dataCell01 = dataRow0.getDataCell(1);
+    const dataCell11 = dataRow1.getDataCell(1);
+
+    let editor = dataCell11.getEditor();
+
+    await t
+        .expect(dataRow1.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(6)
+        .click(dataCell11.element)
+        .expect(editor.element.exists).ok()
+        .expect(dataRow1.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(6)
+        .pressKey('esc')
+        .expect(editor.element.exists).notOk()
+        .expect(dataRow1.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(6);
+
+    await t
+        .click(dataCell11.element)
+        .expect(editor.element.exists).ok()
+        .click(editor.element)
+        .typeText(editor.element, 'test')
+        .pressKey('enter')
+        .expect(editor.element.exists).notOk()
+        .expect(dataRow1.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(6);
+
+    editor = dataCell01.getEditor();
+
+    await t
+        .click(dataCell01.element)
+        .expect(editor.element.exists).ok()
+        .expect(dataRow0.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(5)
+        .pressKey('esc')
+        .expect(dataRow0.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(5);
+
+    await t
+        .click(dataCell01.element)
+        .expect(editor.element.exists).ok()
+        .click(editor.element)
+        .typeText(editor.element, 'test')
+        .pressKey('enter')
+        .expect(editor.element.exists).notOk()
+        .expect(dataRow0.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(5);
+
+}).before(() => createWidget('dxDataGrid', {
+    dataSource: [
+        { id: 5, c0: 'c0_0' },
+        { id: 6, c0: 'c0_1' }
+    ],
+    keyExpr: 'id',
+    focusedRowEnabled: true,
+    focusedRowKey: 6,
+    editing: {
+        mode: 'cell',
+        allowUpdating: true
+    }
+}));
+
+test('Batch - Focused row should not be reset after editing a cell (T879627)', async t => {
+    const dataGrid = new DataGrid('#container');
+    const saveButton = dataGrid.getHeaderPanel().getSaveButton();
+    const dataRow0 = dataGrid.getDataRow(0);
+    const dataRow1 = dataGrid.getDataRow(1);
+    const dataCell01 = dataRow0.getDataCell(1);
+    const dataCell11 = dataRow1.getDataCell(1);
+
+    let editor = dataCell11.getEditor();
+
+    await t
+        .expect(dataRow1.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(6)
+        .click(dataCell11.element)
+        .expect(editor.element.exists).ok()
+        .expect(dataRow1.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(6)
+        .pressKey('esc')
+        .expect(editor.element.exists).notOk()
+        .expect(dataRow1.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(6);
+
+    await t
+        .click(dataCell11.element)
+        .expect(editor.element.exists).ok()
+        .click(editor.element)
+        .typeText(editor.element, 'test')
+        .pressKey('enter')
+        .expect(editor.element.exists).notOk()
+        .expect(dataRow1.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(6)
+        .click(saveButton)
+        .expect(dataRow1.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(6);
+
+    editor = dataCell01.getEditor();
+
+    await t
+        .click(dataCell01.element)
+        .expect(editor.element.exists).ok()
+        .expect(dataRow0.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(5)
+        .pressKey('esc')
+        .expect(dataRow0.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(5);
+
+    await t
+        .click(dataCell01.element)
+        .expect(editor.element.exists).ok()
+        .click(editor.element)
+        .typeText(editor.element, 'test')
+        .pressKey('enter')
+        .expect(editor.element.exists).notOk()
+        .expect(dataRow0.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(5)
+        .click(saveButton)
+        .expect(dataRow0.isFocusedRow).ok()
+        .expect(dataGrid.option('focusedRowKey')).eql(5);
+
+}).before(() => createWidget('dxDataGrid', {
+    dataSource: [
+        { id: 5, c0: 'c0_0' },
+        { id: 6, c0: 'c0_1' }
+    ],
+    keyExpr: 'id',
+    focusedRowEnabled: true,
+    focusedRowKey: 6,
+    editing: {
+        mode: 'batch',
+        allowUpdating: true
+    }
+}));
+
+["Cell", "Batch"].forEach(mode => {
+    test(`${mode} - Focused row should not be reset after editing a cell by API (T879627)`, async t => {
+        const dataGrid = new DataGrid('#container');
+        const dataRow1 = dataGrid.getDataRow(1);
+
+        await t
+            .expect(dataGrid.option('focusedRowKey')).eql(6)
+            .expect(dataRow1.isFocusedRow).ok();
+
+        await dataGrid.api_editCell(1, 1);
+
+        await t.expect(dataGrid.option('focusedRowKey')).eql(6);
+
+        await dataGrid.api_cancelEditData();
+
+        await t.expect(dataGrid.option('focusedRowKey')).eql(6);
+
+        await dataGrid.api_editCell(0, 1);
+
+        await dataGrid.api_cellValue(0, 1, 'test');
+
+        await t.expect(dataGrid.option('focusedRowKey')).eql(6);
+
+        await dataGrid.api_saveEditData();
+
+        await t.expect(dataGrid.option('focusedRowKey')).eql(6);
+
+    }).before(() => createWidget('dxDataGrid', {
+        dataSource: [
+            { id: 5, c0: 'c0_0' },
+            { id: 6, c0: 'c0_1' }
+        ],
+        keyExpr: 'id',
+        focusedRowEnabled: true,
+        focusedRowKey: 6,
+        editing: {
+            mode: mode.toLowerCase(),
+            allowUpdating: true
+        }
+    }));
+});
 
 test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged events on scrolling if scrolling.mode and rowRenderingMode are virtual', async t => {
     const dataGrid = new DataGrid('#container');

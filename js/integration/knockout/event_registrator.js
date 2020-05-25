@@ -3,10 +3,10 @@ import eventsEngine from '../../events/core/events_engine';
 import ko from 'knockout';
 import { isPlainObject } from '../../core/utils/type';
 import eventRegistratorCallbacks from '../../events/core/event_registrator_callbacks';
-import * as eventUtils from '../../events/utils';
+import { addNamespace } from '../../events/utils';
 
 eventRegistratorCallbacks.add(function(name) {
-    const koBindingEventName = eventUtils.addNamespace(name, name + 'Binding');
+    const koBindingEventName = addNamespace(name, name + 'Binding');
 
     ko.bindingHandlers[name] = {
         update: function(element, valueAccessor, allBindingsAccessor, viewModel) {

@@ -7,7 +7,8 @@ import browser from '../core/utils/browser';
 import { noop, ensureDefined, equalByValue } from '../core/utils/common';
 import { SelectionFilterCreator as FilterCreator } from '../core/utils/selection_filter';
 import { Deferred, when } from '../core/utils/deferred';
-import { getPublicElement, createTextElementHiddenCopy } from '../core/utils/dom';
+import { createTextElementHiddenCopy } from '../core/utils/dom';
+import { getPublicElement } from '../core/element';
 import { isDefined, isObject, isString } from '../core/utils/type';
 import { hasWindow } from '../core/utils/window';
 import { extend } from '../core/utils/extend';
@@ -1310,6 +1311,11 @@ const TagBox = SelectBox.inherit({
         });
 
         return result;
+    },
+
+    _setListDataSource: function() {
+        this.callBase();
+        this._refreshSelected();
     },
 
     _renderOpenedState: function() {

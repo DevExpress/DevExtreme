@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import { extend } from 'core/utils/extend';
 import { drawerTesters } from '../../helpers/drawerHelpers.js';
+import resizeCallbacks from 'core/utils/resize_callbacks';
 import { clearStack } from 'ui/overlay/z_index';
 
 import 'common.css!';
@@ -153,6 +154,27 @@ configs.forEach(config => {
             assert.strictEqual(window.getComputedStyle(drawerElement).display, 'none', 'drawerElement.display');
         });
 
+        [true, false].forEach((closeOnOutsideClick) => {
+            testOrSkip(`opened: true -> click by viewContent, closeOnOutsideClick: ${closeOnOutsideClick}`, () => configIs('push', 'top'), function(assert) {
+                const drawerElement = document.getElementById(drawerTesters.drawerElementId);
+                const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
+                    opened: true,
+                    closeOnOutsideClick: closeOnOutsideClick,
+                    template: drawerTesters[config.position].template
+                }));
+
+                this.clock.tick(100);
+                $(drawer.viewContent()).trigger('dxclick');
+                this.clock.tick(100);
+
+                if(closeOnOutsideClick) {
+                    drawerTesters[config.position].checkHidden(assert, drawer, drawerElement);
+                } else {
+                    drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
+                }
+            });
+        });
+
         testOrSkip('opened: true -> visible: false -> visible: true', () => configIs('push', 'top'), function(assert) {
             const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
@@ -193,6 +215,30 @@ configs.forEach(config => {
 
             this.clock.tick(100);
             drawer.repaint();
+            this.clock.tick(100);
+
+            drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
+        });
+
+        testOrSkip('opened: false -> resize -> opened: true, update position config after resize', () => configIs('push', 'top'), function(assert) {
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
+            const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
+                opened: false,
+                template: drawerTesters[config.position].template
+            }));
+
+            const originalRenderPositionFunc = drawer._renderPosition;
+
+            try {
+                sinon.spy(drawer, '_renderPosition');
+                resizeCallbacks.fire();
+            } finally {
+                drawer._renderPosition = originalRenderPositionFunc;
+            }
+
+            resizeCallbacks.fire();
+            this.clock.tick(100);
+            drawer.option('opened', true);
             this.clock.tick(100);
 
             drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);

@@ -104,7 +104,6 @@ function getViewportReducer(series) {
     const rangeCalculator = getRangeCalculator(series.valueAxisType);
     const argumentAxis = series.getArgumentAxis();
     const viewport = argumentAxis && series.getArgumentAxis().visualRange() || {};
-    let viewportFilter;
     const calculatePointBetweenPoints = isLineSeries(series) ? calculateRangeBetweenPoints : noop;
 
     if(argumentAxis && argumentAxis.getMarginOptions().checkInterval) {
@@ -118,7 +117,7 @@ function getViewportReducer(series) {
         }
     }
 
-    viewportFilter = getViewPortFilter(viewport);
+    const viewportFilter = getViewPortFilter(viewport);
 
     return function(range, point, index, points) {
         const argument = point.argument;

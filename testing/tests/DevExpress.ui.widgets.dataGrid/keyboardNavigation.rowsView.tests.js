@@ -13,7 +13,7 @@ import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/data_grid/ui.data_grid';
 import commonUtils from 'core/utils/common';
-import * as eventUtils from 'events/utils';
+import { createEvent } from 'events/utils';
 import typeUtils from 'core/utils/type';
 import pointerEvents from 'events/pointer';
 import eventsEngine from 'events/core/events_engine';
@@ -35,13 +35,12 @@ QUnit.module('Rows view', {
             { data: { name: 'test3', id: 3, date: new Date(2003, 2, 3) }, values: ['test3', 3, '3/03/2003'], rowType: 'data', dataIndex: 2 }];
 
         this.createRowsView = function(rows, dataController, columns, initDefaultOptions) {
-            let i;
 
             dataController = dataController || new MockDataController({ items: rows });
 
             if(!typeUtils.isDefined(columns)) {
                 columns = [];
-                for(i = 0; i < rows[0].values.length; i++) {
+                for(let i = 0; i < rows[0].values.length; i++) {
                     columns.push({});
                 }
             }
@@ -296,7 +295,7 @@ QUnit.module('Rows view', {
         assert.notOk($cell0.hasClass('dx-focused'), 'Cell has no .dx-focused');
 
         // act
-        eventsEngine.trigger($cell0, eventUtils.createEvent('blur'));
+        eventsEngine.trigger($cell0, createEvent('blur'));
 
         // assert
         assert.ok($cell0.hasClass('dx-cell-focus-disabled'), 'Cell has no disabled focus class');

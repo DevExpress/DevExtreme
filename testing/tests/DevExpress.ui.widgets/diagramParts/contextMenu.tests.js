@@ -74,25 +74,44 @@ QUnit.module('Context Menu', {
     test('should execute custom commands on click', function(assert) {
         this.instance.option('contextMenu.commands', [
             {
-                name: 'custom',
-                text: 'custom'
+                name: 'custom1',
+                text: 'custom1',
+            },
+            {
+                name: 'bold',
+                text: 'custom bold',
             },
             {
                 text: 'sub menu',
                 items: [{
                     name: 'custom2',
                     text: 'custom2'
+                }, {
+                    name: 'italic',
+                    text: 'custom italic'
                 }]
             }
         ]);
+
+        assert.notOk(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Bold).getState().value);
+        assert.notOk(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Italic).getState().value);
+
         const contextMenu = getContextMenuInstance(this.$element);
         contextMenu.show();
-        findContextMenuItem(this.$element, 'custom').trigger('dxclick');
+        findContextMenuItem(this.$element, 'custom1').trigger('dxclick');
+        findContextMenuItem(this.$element, 'custom bold').trigger('dxclick');
         findContextMenuItem(this.$element, 'sub menu').trigger('dxclick');
         findContextMenuItem(this.$element, 'custom2').trigger('dxclick');
+        findContextMenuItem(this.$element, 'sub menu').trigger('dxclick');
+        findContextMenuItem(this.$element, 'custom italic').trigger('dxclick');
         assert.ok(this.onCustomCommand.called);
-        assert.equal(this.onCustomCommand.getCalls().length, 2);
-        assert.equal(this.onCustomCommand.getCall(0).args[0]['name'], 'custom');
-        assert.equal(this.onCustomCommand.getCall(1).args[0]['name'], 'custom2');
+        assert.equal(this.onCustomCommand.getCalls().length, 4);
+        assert.equal(this.onCustomCommand.getCall(0).args[0]['name'], 'custom1');
+        assert.equal(this.onCustomCommand.getCall(1).args[0]['name'], 'bold');
+        assert.equal(this.onCustomCommand.getCall(2).args[0]['name'], 'custom2');
+        assert.equal(this.onCustomCommand.getCall(3).args[0]['name'], 'italic');
+
+        assert.ok(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Bold).getState().value);
+        assert.ok(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Italic).getState().value);
     });
 });

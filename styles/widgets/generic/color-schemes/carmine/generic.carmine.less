@@ -1519,8 +1519,8 @@
 * @type color
 */
 @form-group-border-color: #edc1b9;
-@form-field-required-color: saturate(lighten(@form-field-item-color, 39.3%), 80%);
-@form-field-mark-color: lighten(@form-field-item-color, 48.5%);
+@form-field-required-color: darken(@base-danger, 10%);
+@form-field-mark-color: lighten(@base-text-color, 55%);
 
 // Fieldset
 
@@ -1624,6 +1624,7 @@
 @gantt-collapsable-row-bg: darken(@base-bg, 5%);
 @gantt-selection-bg: fade(@datagrid-selection-bg, 25%);
 @gantt-parent-task-bg: @base-success;
+@gantt-icon-color: lighten(@base-text-color, 20%);
 
 // Splitter
 @splitter-inactive-color: @base-border-color;

@@ -2088,6 +2088,7 @@ QUnit.test('Drag. Small chart rendering time on start and big time in the middle
 
     // act
     // drag start
+    chart._lastRenderingTime = 0;
     this.pointer.start({ x: 150, y: 100 }).dragStart();
 
     // assert

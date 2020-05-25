@@ -323,7 +323,7 @@ const Toolbar = ToolbarBase.inherit({
 
     _changeMenuOption: function(name, value) {
         this._menuStrategy.widgetOption(name, value);
-    }
+    },
 
     /**
      * @name dxToolbarMethods.registerKeyHandler

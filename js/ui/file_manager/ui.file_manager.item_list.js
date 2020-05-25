@@ -109,7 +109,7 @@ class FileManagerItemListBase extends Widget {
         this._actions.onSelectedItemOpened({ fileItemInfo });
     }
 
-    _tryRaiseSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys }) {
+    _tryRaiseSelectionChanged({ selectedItemInfos, selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys }) {
         const parentDirectoryItem = this._findParentDirectoryItem(this.getSelectedItems());
         if(parentDirectoryItem) {
             this._deselectItem(parentDirectoryItem);
@@ -119,11 +119,12 @@ class FileManagerItemListBase extends Widget {
         raiseEvent = raiseEvent || this._hasValidKeys(currentSelectedItemKeys) || this._hasValidKeys(currentDeselectedItemKeys);
 
         if(raiseEvent) {
+            selectedItemInfos = this._filterOutItemByPredicate(selectedItemInfos, item => item.fileItem.key === this._parentDirectoryItemKey);
             selectedItems = this._filterOutParentDirectory(selectedItems);
             selectedItemKeys = this._filterOutParentDirectoryKey(selectedItemKeys, true);
             currentSelectedItemKeys = this._filterOutParentDirectoryKey(currentSelectedItemKeys, true);
             currentDeselectedItemKeys = this._filterOutParentDirectoryKey(currentDeselectedItemKeys, true);
-            this._raiseSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
+            this._raiseSelectionChanged({ selectedItemInfos, selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
         }
     }
 

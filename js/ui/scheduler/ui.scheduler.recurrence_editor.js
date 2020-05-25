@@ -1,21 +1,21 @@
-import $ from '../../core/renderer';
-import Guid from '../../core/guid';
 import registerComponent from '../../core/component_registrator';
-import recurrenceUtils from './utils.recurrence';
-import domUtils from '../../core/utils/dom';
-import { isDefined } from '../../core/utils/type';
+import Guid from '../../core/guid';
+import $ from '../../core/renderer';
+import dateUtils from '../../core/utils/date';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
-import Editor from '../editor/editor';
-import RadioGroup from '../radio_group';
-import ButtonGroup from '../button_group';
-import NumberBox from '../number_box';
-import SelectBox from '../select_box';
-import DateBox from '../date_box';
-import messageLocalization from '../../localization/message';
+import { isDefined } from '../../core/utils/type';
+import { triggerShownEvent } from '../../events/visibility_change';
 import dateLocalization from '../../localization/date';
-import dateUtils from '../../core/utils/date';
+import messageLocalization from '../../localization/message';
+import ButtonGroup from '../button_group';
+import DateBox from '../date_box';
+import Editor from '../editor/editor';
+import NumberBox from '../number_box';
+import RadioGroup from '../radio_group';
+import SelectBox from '../select_box';
 import publisherMixin from './ui.scheduler.publisher_mixin';
+import recurrenceUtils from './utils.recurrence';
 
 const RECURRENCE_EDITOR = 'dx-recurrence-editor';
 const LABEL_POSTFIX = '-label';
@@ -192,7 +192,7 @@ const RecurrenceEditor = Editor.inherit({
     _renderContainerVisibility(value) {
         if(value) {
             this._$container.show();
-            domUtils.triggerShownEvent(this._$container);
+            triggerShownEvent(this._$container);
         } else {
             this._$container.hide();
         }
@@ -383,8 +383,11 @@ const RecurrenceEditor = Editor.inherit({
         const firstDayOfWeek = this._getFirstDayOfWeek();
         const byDay = this._recurrenceRule.rules()['byday'] ?
             this._recurrenceRule.rules()['byday'].split(',') : days[firstDayOfWeek];
-        const that = this;
-        const itemsButtonGroup = days.slice(firstDayOfWeek).concat(days.slice(0, firstDayOfWeek)).map(item => { return { text: item }; });
+
+        const localDaysNames = dateLocalization.getDayNames('abbreviated');
+        const dayNames = days.slice(firstDayOfWeek).concat(days.slice(0, firstDayOfWeek));
+
+        const itemsButtonGroup = localDaysNames.slice(firstDayOfWeek).concat(localDaysNames.slice(0, firstDayOfWeek)).map((item, index) => { return { text: item, key: dayNames[index] }; });
 
         this._$repeatOnWeek = $('<div>').addClass(RECURRENCE_BUTTON_GROUP).appendTo(this._$repeatOnEditor);
 
@@ -392,9 +395,10 @@ const RecurrenceEditor = Editor.inherit({
             items: itemsButtonGroup,
             selectionMode: 'multiple',
             selectedItemKeys: byDay,
+            keyExpr: 'key',
             onSelectionChanged: (e) => {
                 const selectedKeys = e.component.option('selectedItemKeys');
-                that._recurrenceRule.makeRule('byday', selectedKeys);
+                this._recurrenceRule.makeRule('byday', selectedKeys);
                 this._changeEditorValue();
             }
         });

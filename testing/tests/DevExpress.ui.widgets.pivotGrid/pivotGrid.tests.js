@@ -15,26 +15,25 @@ QUnit.testStart(function() {
 });
 
 import 'common.css!';
+import config from 'core/config';
+import devices from 'core/devices';
+import dataUtils from 'core/element_data';
+import browser from 'core/utils/browser';
+import { getSize } from 'core/utils/size';
+import { isRenderer } from 'core/utils/type';
+import { triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
-
-import 'ui/pivot_grid/ui.pivot_grid';
-
 import $ from 'jquery';
-import pointerMock from '../../helpers/pointerMock.js';
-import pivotGridDataController from 'ui/pivot_grid/ui.pivot_grid.data_controller';
+import dateLocalization from 'localization/date';
+import PivotGridDataSource from 'ui/pivot_grid/data_source';
+import 'ui/pivot_grid/ui.pivot_grid';
+import { getRealElementWidth } from 'ui/pivot_grid/ui.pivot_grid.area_item';
 import dataArea from 'ui/pivot_grid/ui.pivot_grid.data_area';
+import pivotGridDataController from 'ui/pivot_grid/ui.pivot_grid.data_controller';
 import headersArea from 'ui/pivot_grid/ui.pivot_grid.headers_area';
 import pivotGridUtils from 'ui/pivot_grid/ui.pivot_grid.utils';
-import { getRealElementWidth } from 'ui/pivot_grid/ui.pivot_grid.area_item';
-import PivotGridDataSource from 'ui/pivot_grid/data_source';
-import domUtils from 'core/utils/dom';
-import { isRenderer } from 'core/utils/type';
-import config from 'core/config';
-import dateLocalization from 'localization/date';
-import devices from 'core/devices';
-import browser from 'core/utils/browser';
-import dataUtils from 'core/element_data';
-import { getSize } from 'core/utils/size';
+import pointerMock from '../../helpers/pointerMock.js';
+
 
 function sumArray(array) {
     let sum = 0;
@@ -217,7 +216,7 @@ QUnit.module('dxPivotGrid', {
         // act
         $pivotGridElement.show();
 
-        domUtils.triggerShownEvent($pivotGridElement);
+        triggerShownEvent($pivotGridElement);
         this.clock.tick();
 
         const $noDataElement = $(pivotGrid.$element().find('.dx-pivotgrid-nodata'));
@@ -2082,7 +2081,7 @@ QUnit.module('dxPivotGrid', {
 
         $pivotGridElement.show();
 
-        domUtils.triggerShownEvent($pivotGridElement);
+        triggerShownEvent($pivotGridElement);
 
         assert.ok(pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
         assert.ok(!pivotGrid._columnsArea.hasScroll(), 'has no horizontal scroll');
@@ -4035,7 +4034,49 @@ QUnit.module('dxPivotGrid', {
         assert.strictEqual(textRect.left, expandIconRect.right, 'text is after expand icon');
     });
 
+    // T878428
+    QUnit.test('Sort icon should be correctly positioned when header text was wrapped to the next line', function(assert) {
+        const getHeaderElement = () => {
+            return $('#pivotGrid').find('.dx-pivotgrid-horizontal-headers td').eq(0);
+        };
 
+        // arrange
+        createPivotGrid({
+            dataSource: {
+                fields: [
+                    { dataField: 'city', area: 'row' },
+                    { dataField: 'price', area: 'data' },
+                    { dataField: 'country', area: 'column' }
+                ],
+                store: [{
+                    country: 'United Kingdom',
+                    city: 'London'
+                }]
+            },
+            allowSortingBySummary: true,
+            width: 200
+        }, assert);
+        this.clock.tick();
+
+        // act
+        getHeaderElement().trigger('dxcontextmenu');
+        $('.dx-context-menu.dx-pivotgrid').find('.dx-menu-item').eq(0).trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        const $header = getHeaderElement();
+        assert.ok($header.hasClass('dx-pivotgrid-sorted'));
+        assert.notEqual($header.find('span').css('display'), 'inline-flex', 'no inline-flex');
+
+        const $sortIcon = $header.find('.dx-icon-sorted');
+        const sortIconRect = $sortIcon.get(0).getBoundingClientRect();
+        const headerIconRect = $header.get(0).getBoundingClientRect();
+
+        assert.ok(sortIconRect.top > headerIconRect.top, 'top');
+        assert.ok(sortIconRect.bottom < headerIconRect.bottom, 'bottom');
+        assert.ok(sortIconRect.left > headerIconRect.left, 'left');
+        assert.ok(sortIconRect.right < headerIconRect.right, 'right');
+    });
 });
 
 QUnit.module('Field Panel', {

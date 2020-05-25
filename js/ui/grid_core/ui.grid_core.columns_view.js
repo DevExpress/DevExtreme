@@ -9,7 +9,7 @@ import dblclickEvent from '../../events/double_click';
 import browser from '../../core/utils/browser';
 import { noop } from '../../core/utils/common';
 import styleUtils from '../../core/utils/style';
-import { getPublicElement } from '../../core/utils/dom';
+import { getPublicElement } from '../../core/element';
 import typeUtils from '../../core/utils/type';
 import iteratorUtils from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
@@ -106,11 +106,10 @@ const copyAttributes = function(element, newElement) {
 
     const oldAttributes = element.attributes;
     const newAttributes = newElement.attributes;
-    let name;
     let i;
 
     for(i = 0; i < oldAttributes.length; i++) {
-        name = oldAttributes[i].nodeName;
+        const name = oldAttributes[i].nodeName;
         if(!newElement.hasAttribute(name)) {
             element.removeAttribute(name);
         }
@@ -236,7 +235,6 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         if(that.option('cellHintEnabled')) {
             eventsEngine.on($table, 'mousemove', '.dx-row > td', this.createAction(function(args) {
                 const e = args.event;
-                let difference;
                 const $element = $(e.target);
                 const $cell = $(e.currentTarget);
                 const $row = $cell.parent();
@@ -260,7 +258,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                         $element.data(CELL_HINT_VISIBLE, false);
                     }
 
-                    difference = $element[0].scrollWidth - $element[0].clientWidth - msieCorrection; // T598499
+                    const difference = $element[0].scrollWidth - $element[0].clientWidth - msieCorrection; // T598499
                     if(difference > 0 && !typeUtils.isDefined($element.attr('title'))) {
                         $element.attr('title', $element.text());
                         $element.data(CELL_HINT_VISIBLE, true);
@@ -272,21 +270,19 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         const getOptions = function(event) {
             const $cell = $(event.currentTarget);
             const $fieldItemContent = $(event.target).closest('.' + FORM_FIELD_ITEM_CONTENT_CLASS);
-            let formItemOptions;
             const rowOptions = $cell.parent().data('options');
             const options = rowOptions && rowOptions.cells && rowOptions.cells[$cell.index()];
-            let resultOptions;
 
             if(!$cell.closest('table').is(event.delegateTarget)) return;
 
-            resultOptions = extend({}, options, {
+            const resultOptions = extend({}, options, {
                 cellElement: getPublicElement($cell),
                 event: event,
                 eventType: event.type
             });
 
             if($fieldItemContent.length) {
-                formItemOptions = $fieldItemContent.data('dx-form-item');
+                const formItemOptions = $fieldItemContent.data('dx-form-item');
                 if(formItemOptions.column) {
                     resultOptions.column = formItemOptions.column;
                     resultOptions.columnIndex = that._columnsController.getVisibleIndex(resultOptions.column.index);
@@ -330,15 +326,12 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _rowDblClick: noop,
 
     _createColGroup: function(columns) {
-        let i;
-        let j;
         const colgroupElement = $('<colgroup>');
-        let colspan;
 
-        for(i = 0; i < columns.length; i++) {
-            colspan = columns[i].colspan || 1;
+        for(let i = 0; i < columns.length; i++) {
+            const colspan = columns[i].colspan || 1;
 
-            for(j = 0; j < colspan; j++) {
+            for(let j = 0; j < colspan; j++) {
                 colgroupElement.append(this._createCol(columns[i]));
             }
         }
@@ -379,11 +372,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     _renderDelayedTemplatesCore: function(templates, isAsync) {
-        let templateParameters;
         const date = new Date();
 
         while(templates.length) {
-            templateParameters = templates.shift();
+            const templateParameters = templates.shift();
 
             const options = templateParameters.options;
             const doc = domAdapter.getDocument();
@@ -404,7 +396,6 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _processTemplate: function(template) {
         const that = this;
-        let templateID;
         let renderingTemplate;
 
         if(template && template.render && !typeUtils.isRenderer(template)) {
@@ -426,7 +417,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 }
             };
         } else {
-            templateID = typeUtils.isString(template) ? template : $(template).attr('id');
+            const templateID = typeUtils.isString(template) ? template : $(template).attr('id');
 
             if(!templateID) {
                 renderingTemplate = that.getTemplate(template);
@@ -502,12 +493,11 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     _resizeCore: function() {
-        const that = this;
-        const scrollLeft = that._scrollLeft;
+        const scrollLeft = this._scrollLeft;
 
         if(scrollLeft >= 0) {
-            that._scrollLeft = 0;
-            that.scrollTo({ left: scrollLeft });
+            this._scrollLeft = 0;
+            this.scrollTo({ left: scrollLeft });
         }
     },
 
@@ -522,50 +512,42 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _renderTable: function(options) {
         options = options || {};
 
-        const that = this;
-        let $table;
-
-        options.columns = that._columnsController.getVisibleColumns();
+        options.columns = this._columnsController.getVisibleColumns();
         const changeType = options.change && options.change.changeType;
-        $table = that._createTable(options.columns, changeType === 'append' || changeType === 'prepend' || changeType === 'update');
+        const $table = this._createTable(options.columns, changeType === 'append' || changeType === 'prepend' || changeType === 'update');
 
-        that._renderRows($table, options);
+        this._renderRows($table, options);
 
         return $table;
     },
 
     _renderRows: function($table, options) {
         const that = this;
-        let i;
         const rows = that._getRows(options.change);
         const columnIndices = options.change && options.change.columnIndices || [];
         const changeTypes = options.change && options.change.changeTypes || [];
 
-        for(i = 0; i < rows.length; i++) {
+        for(let i = 0; i < rows.length; i++) {
             that._renderRow($table, extend({ row: rows[i], columnIndices: columnIndices[i], changeType: changeTypes[i] }, options));
         }
     },
 
     _renderRow: function($table, options) {
-        const that = this;
-        let $row;
-        let $wrappedRow;
-
         if(!options.columnIndices) {
             options.row.cells = [];
         }
 
-        $row = that._createRow(options.row);
-        $wrappedRow = that._wrapRowIfNeed($table, $row);
+        const $row = this._createRow(options.row);
+        const $wrappedRow = this._wrapRowIfNeed($table, $row);
         if(options.changeType !== 'remove') {
-            that._renderCells($row, options);
+            this._renderCells($row, options);
         }
-        that._appendRow($table, $wrappedRow);
+        this._appendRow($table, $wrappedRow);
         const rowOptions = extend({ columns: options.columns }, options.row);
 
-        that._addWatchMethod(rowOptions, options.row);
+        this._addWatchMethod(rowOptions, options.row);
 
-        that._rowPrepared($wrappedRow, rowOptions, options.row);
+        this._rowPrepared($wrappedRow, rowOptions, options.row);
     },
 
     _needRenderCell: function(columnIndex, columnIndices) {
@@ -574,12 +556,11 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _renderCells: function($row, options) {
         const that = this;
-        let i;
         let columnIndex = 0;
         const row = options.row;
         const columns = options.columns;
 
-        for(i = 0; i < columns.length; i++) {
+        for(let i = 0; i < columns.length; i++) {
             if(this._needRenderCell(i, options.columnIndices)) {
                 that._renderCell($row, extend({ column: columns[i], columnIndex: columnIndex, value: row.values && row.values[columnIndex], oldValue: row.oldValues && row.oldValues[columnIndex] }, options));
             }
@@ -821,38 +802,32 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     scrollTo: function(pos) {
-        const that = this;
-        const $element = that.element();
-        const $scrollContainer = $element && $element.children('.' + that.addWidgetPrefix(SCROLL_CONTAINER_CLASS)).not('.' + that.addWidgetPrefix(CONTENT_FIXED_CLASS));
+        const $element = this.element();
+        const $scrollContainer = $element && $element.children('.' + this.addWidgetPrefix(SCROLL_CONTAINER_CLASS)).not('.' + this.addWidgetPrefix(CONTENT_FIXED_CLASS));
 
-        that._skipScrollChanged = false;
-
-        if(typeUtils.isDefined(pos) && typeUtils.isDefined(pos.left) && that._scrollLeft !== pos.left) {
-            that._scrollLeft = pos.left;
+        if(typeUtils.isDefined(pos) && typeUtils.isDefined(pos.left) && this._scrollLeft !== pos.left) {
+            this._scrollLeft = pos.left;
             $scrollContainer && $scrollContainer.scrollLeft(pos.left);
-            that._skipScrollChanged = true;
         }
     },
 
     _wrapTableInScrollContainer: function($table) {
-        const that = this;
-        let $scrollContainer;
+        const $scrollContainer = $('<div>');
 
-        $scrollContainer = $('<div>');
+        eventsEngine.on($scrollContainer, 'scroll', () => {
+            const scrollLeft = $scrollContainer.scrollLeft();
 
-        eventsEngine.on($scrollContainer, 'scroll', function() {
-            !that._skipScrollChanged && that.scrollChanged.fire({
-                left: $scrollContainer.scrollLeft()
-            }, that.name);
-            that._skipScrollChanged = false;
+            if(scrollLeft !== this._scrollLeft) {
+                this.scrollChanged.fire({ left: scrollLeft }, this.name);
+            }
         });
 
-        $scrollContainer.addClass(that.addWidgetPrefix(CONTENT_CLASS))
-            .addClass(that.addWidgetPrefix(SCROLL_CONTAINER_CLASS))
+        $scrollContainer.addClass(this.addWidgetPrefix(CONTENT_CLASS))
+            .addClass(this.addWidgetPrefix(SCROLL_CONTAINER_CLASS))
             .append($table)
-            .appendTo(that.element());
+            .appendTo(this.element());
 
-        that.setAria('role', 'presentation', $scrollContainer);
+        this.setAria('role', 'presentation', $scrollContainer);
 
         return $scrollContainer;
     },
@@ -868,13 +843,12 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         const result = [];
         const legacyRendering = this.option('legacyRendering');
         let width;
-        let clientRect;
 
         if($cellElements) {
             iteratorUtils.each($cellElements, function(index, item) {
                 width = item.offsetWidth;
                 if(item.getBoundingClientRect) {
-                    clientRect = item.getBoundingClientRect();
+                    const clientRect = item.getBoundingClientRect();
                     if(clientRect.width > width - 1) {
                         width = legacyRendering ? Math.ceil(clientRect.width) : clientRect.width;
                     }
@@ -921,7 +895,6 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     setColumnWidths: function({ widths, $tableElement, columns, fixed }) {
         let $cols;
-        let i;
         let width;
         let minWidth;
         let columnIndex;
@@ -936,7 +909,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             styleUtils.setWidth($cols, 'auto');
             columns = columns || this.getColumns(null, $tableElement);
 
-            for(i = 0; i < columns.length; i++) {
+            for(let i = 0; i < columns.length; i++) {
                 if(!legacyRendering && columnAutoWidth && !fixed) {
                     width = columns[i].width;
 
@@ -1032,10 +1005,9 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     _getVisibleColumnIndex: function($cells, rowIndex, columnIdentifier) {
-        let columnIndex;
 
         if(typeUtils.isString(columnIdentifier)) {
-            columnIndex = this._columnsController.columnOption(columnIdentifier, 'index');
+            const columnIndex = this._columnsController.columnOption(columnIdentifier, 'index');
             return this._columnsController.getVisibleIndex(columnIndex);
         }
 

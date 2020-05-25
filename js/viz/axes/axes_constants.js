@@ -1,4 +1,4 @@
-const _map = require('../core/utils').map;
+import { map as _map } from '../core/utils';
 
 module.exports = {
     logarithmic: 'logarithmic',
@@ -44,8 +44,6 @@ module.exports = {
         let x2 = bBox2.x;
         const width1 = bBox1.width;
         const width2 = bBox2.width;
-        let hasHorizontalOverlapping;
-        let hasVerticalOverlapping;
 
         if(alignment === 'left') {
             x1 += width1 / 2;
@@ -55,8 +53,8 @@ module.exports = {
             x2 -= width2 / 2;
         }
 
-        hasHorizontalOverlapping = horizontalInverted ? (x2 + width2 + spacing) > x1 : (x1 + width1 + spacing) > x2;
-        hasVerticalOverlapping = verticalInverted ? (bBox2.y + bBox2.height) > bBox1.y : (bBox1.y + bBox1.height) > bBox2.y;
+        const hasHorizontalOverlapping = horizontalInverted ? (x2 + width2 + spacing) > x1 : (x1 + width1 + spacing) > x2;
+        const hasVerticalOverlapping = verticalInverted ? (bBox2.y + bBox2.height) > bBox1.y : (bBox1.y + bBox1.height) > bBox2.y;
 
         return hasHorizontalOverlapping && hasVerticalOverlapping;
     }

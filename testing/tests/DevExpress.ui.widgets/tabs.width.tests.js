@@ -1,8 +1,8 @@
-import $ from 'jquery';
-import domUtils from 'core/utils/dom';
-
-import 'ui/tabs';
 import 'common.css!';
+import { triggerResizeEvent, triggerShownEvent } from 'events/visibility_change';
+import $ from 'jquery';
+import 'ui/tabs';
+
 
 const TABS_ITEM_CLASS = 'dx-tab';
 const TABS_NAV_BUTTON_CLASS = 'dx-tabs-nav-button';
@@ -36,7 +36,7 @@ QUnit.module('Width', () => {
                 this.setContainerWidth(width);
             }
 
-            domUtils.triggerShownEvent(this.$container);
+            triggerShownEvent(this.$container);
         }
 
         _isOptionApproach() {
@@ -111,7 +111,7 @@ QUnit.module('Width', () => {
                     break;
                 case 'resizeBrowser':
                     this.setContainerWidth(width);
-                    domUtils.triggerResizeEvent(this.$container);
+                    triggerResizeEvent(this.$container);
                     break;
             }
         }
@@ -186,7 +186,7 @@ QUnit.module('Width', () => {
         });
         $container.appendTo('#qunit-fixture');
 
-        domUtils.triggerShownEvent($container);
+        triggerShownEvent($container);
 
         assert.equal($tabs.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0);
 
@@ -214,7 +214,7 @@ QUnit.module('Width', () => {
         });
         $container.appendTo('#qunit-fixture');
 
-        domUtils.triggerShownEvent($container);
+        triggerShownEvent($container);
 
         assert.equal($tabs.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 2);
 

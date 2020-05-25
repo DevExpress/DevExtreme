@@ -585,7 +585,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.equal($items.length, items.length, 'All items were rendered');
         assert.equal($items.find(TOOLBAR_SEPARATOR_SELECTOR).length, 2, 'Both separators were rendered');
         assert.equal($items.last().text(), 'Custom item', 'Custom item has custom text');
-        assert.equal($items.first().children().children().attr('aria-label'), 'undo', 'First button is undo button');
+        assert.equal($items.first().children().children().attr('aria-label'), 'dx-gantt-i dx-gantt-i-undo', 'First button is undo button');
     });
     test('changing', function(assert) {
         const items = [
@@ -855,5 +855,32 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
         $parentTasks = this.$element.find(PARENT_TASK_SELECTOR);
         assert.equal(dataToCheck.length, 0, 'length');
         assert.equal($parentTasks.length, 0, 'parent tasks exists');
+    });
+
+    test('custom fields load', function(assert) {
+        const start = new Date('2019-02-19');
+        const end = new Date('2019-02-26');
+        const tasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-22'), 'progress': 0, 'customField': 'test0' },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-20'), 'end': new Date('2019-02-20'), 'progress': 0, 'customField': 'test1' },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': start, 'end': end, 'progress': 50, 'customField': 'test2' }
+        ];
+        const options = {
+            tasks: { dataSource: tasks },
+            validation: { autoUpdateParentTasks: true },
+            columns: [{
+                dataField: 'customField',
+                caption: 'custom'
+            }]
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const customCellText0 = this.$element.find(TREELIST_DATA_ROW_SELECTOR).first().find('td').first().text();
+        const customCellText1 = this.$element.find(TREELIST_DATA_ROW_SELECTOR).eq(1).find('td').first().text();
+        const customCellText2 = this.$element.find(TREELIST_DATA_ROW_SELECTOR).last().find('td').first().text();
+        assert.equal(customCellText0, 'test0', 'custom fields text not shown');
+        assert.equal(customCellText1, 'test1', 'custom fields text not shown');
+        assert.equal(customCellText2, 'test2', 'custom fields text not shown');
     });
 });

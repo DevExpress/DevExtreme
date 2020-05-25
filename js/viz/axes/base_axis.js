@@ -183,17 +183,39 @@ function validateAxisOptions(options) {
     const defaultPosition = options.isHorizontal ? BOTTOM : LEFT;
     const secondaryPosition = options.isHorizontal ? TOP : RIGHT;
 
+    let labelPosition = labelOptions.position;
+
     if(position !== defaultPosition && position !== secondaryPosition) {
         position = defaultPosition;
     }
 
-    if(position === RIGHT && !labelOptions.userAlignment) {
-        labelOptions.alignment = LEFT;
+    if(!labelPosition || labelPosition === 'outside') {
+        labelPosition = position;
+    } else if(labelPosition === 'inside') {
+        labelPosition = {
+            [TOP]: BOTTOM,
+            [BOTTOM]: TOP,
+            [LEFT]: RIGHT,
+            [RIGHT]: LEFT
+        }[position];
+    }
+    if(labelPosition !== defaultPosition && labelPosition !== secondaryPosition) {
+        labelPosition = position;
+    }
+
+    if(labelOptions.alignment !== CENTER && !labelOptions.userAlignment) {
+        labelOptions.alignment = {
+            [TOP]: CENTER,
+            [BOTTOM]: CENTER,
+            [LEFT]: RIGHT,
+            [RIGHT]: LEFT
+        }[labelPosition];
     }
 
     options.position = position;
+    labelOptions.position = labelPosition;
     options.hoverMode = options.hoverMode ? options.hoverMode.toLowerCase() : 'none';
-    labelOptions.minSpacing = isDefined(labelOptions.minSpacing) ? labelOptions.minSpacing : DEFAULT_AXIS_LABEL_SPACING;
+    labelOptions.minSpacing = labelOptions.minSpacing ?? DEFAULT_AXIS_LABEL_SPACING;
 
     options.type && (options.type = options.type.toLowerCase());
     options.argumentType && (options.argumentType = options.argumentType.toLowerCase());
@@ -343,7 +365,7 @@ Axis.prototype = {
         return false;
     },
 
-    getCustomPositionAxis: _noop,
+    getOppositeAxis: _noop,
 
     getCustomPosition: _noop,
 
@@ -461,7 +483,7 @@ Axis.prototype = {
 
         that._checkAlignmentConstantLineLabels(lineLabelOptions);
 
-        text = isDefined(text) ? text : that.formatLabel(parsedValue, labelOptions);
+        text = text ?? that.formatLabel(parsedValue, labelOptions);
         const coords = that._getConstantLineLabelsCoords(value, lineLabelOptions);
 
         return that._drawConstantLineLabelText(text, coords.x, coords.y, lineLabelOptions, group);
@@ -575,6 +597,8 @@ Axis.prototype = {
 
     _adjustLabels: function(offset) {
         const that = this;
+        const options = that.getOptions();
+        const positionsAreConsistent = options.position === options.label.position;
         const maxSize = that._majorTicks.reduce(function(size, tick) {
             if(!tick.label) return size;
             const bBox = tick.labelRotationAngle ? vizUtils.rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle) : tick.labelBBox;
@@ -584,11 +608,11 @@ Axis.prototype = {
                 offset: _max(size.offset || 0, tick.labelOffset || 0)
             };
         }, {});
-        const additionalOffset = that._isHorizontal ? maxSize.height : maxSize.width;
+        const additionalOffset = positionsAreConsistent ? (that._isHorizontal ? maxSize.height : maxSize.width) : 0;
 
         that._adjustLabelsCoord(offset, maxSize.width);
 
-        return offset + additionalOffset + (additionalOffset && that._options.label.indentFromAxis) + maxSize.offset;
+        return offset + additionalOffset + (additionalOffset && that._options.label.indentFromAxis) + (positionsAreConsistent ? maxSize.offset : 0);
     },
 
     _getLabelAdjustedCoord: function(tick, offset, maxWidth) {
@@ -596,11 +620,11 @@ Axis.prototype = {
         const that = this;
         const options = that._options;
         const box = vizUtils.rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle || 0);
-        const position = options.position;
         const textAlign = tick.labelAlignment || options.label.alignment;
         const isDiscrete = that._options.type === 'discrete';
         const isFlatLabel = tick.labelRotationAngle % 90 === 0;
         const indentFromAxis = options.label.indentFromAxis;
+        const labelPosition = options.label.position;
         const axisPosition = that._axisPosition;
         const labelCoords = tick.labelCoords;
         const labelX = labelCoords.x;
@@ -608,7 +632,7 @@ Axis.prototype = {
         let translateY;
 
         if(that._isHorizontal) {
-            if(position === BOTTOM) {
+            if(labelPosition === BOTTOM) {
                 translateY = axisPosition + indentFromAxis - box.y + offset;
             } else {
                 translateY = axisPosition - indentFromAxis - (box.y + box.height) - offset;
@@ -623,7 +647,7 @@ Axis.prototype = {
             }
         } else {
             translateY = labelCoords.y - box.y - box.height / 2;
-            if(position === LEFT) {
+            if(labelPosition === LEFT) {
                 if(textAlign === LEFT) {
                     translateX = axisPosition - indentFromAxis - maxWidth - box.x;
                 } else if(textAlign === CENTER) {
@@ -730,7 +754,7 @@ Axis.prototype = {
             valueText: _format(value, {
                 labelOptions: labelOptions,
                 ticks: ticks || convertTicksToValues(this._majorTicks),
-                tickInterval: isDefined(tickInterval) ? tickInterval : this._tickInterval,
+                tickInterval: tickInterval ?? this._tickInterval,
                 dataType: this._options.dataType,
                 logarithmBase: this._options.logarithmBase,
                 type: this._options.type,
@@ -1055,8 +1079,8 @@ Axis.prototype = {
         const maxVisible = maxDefined ? visualRange.endValue : result.maxVisible;
 
         if(!isDiscrete) {
-            result.min = isDefined(wholeRange.startValue) ? wholeRange.startValue : result.min;
-            result.max = isDefined(wholeRange.endValue) ? wholeRange.endValue : result.max;
+            result.min = wholeRange.startValue ?? result.min;
+            result.max = wholeRange.endValue ?? result.max;
         } else {
             const categoriesInfo = vizUtils.getCategoriesInfo(categories, wholeRange.startValue, wholeRange.endValue);
 
@@ -1441,8 +1465,8 @@ Axis.prototype = {
         const marginOptions = that._marginOptions;
         const businessRange = new Range(that.getTranslator().getBusinessRange()).addRange(range);
         const visualRange = that.getViewport();
-        const minVisible = visualRange && isDefined(visualRange.startValue) ? visualRange.startValue : businessRange.minVisible;
-        const maxVisible = visualRange && isDefined(visualRange.endValue) ? visualRange.endValue : businessRange.maxVisible;
+        const minVisible = visualRange?.startValue ?? businessRange.minVisible;
+        const maxVisible = visualRange?.endValue ?? businessRange.maxVisible;
         let ticks = [];
 
         if(options.type === constants.discrete && options.aggregateByCategory) {
@@ -1599,7 +1623,7 @@ Axis.prototype = {
             return;
         }
 
-        translator.updateBusinessRange(that.adjustViewport(range));
+        translator.updateBusinessRange(range);
     },
 
     _getViewportRange() {
@@ -1611,13 +1635,7 @@ Axis.prototype = {
     },
 
     getMarginOptions() {
-        return isDefined(this._marginOptions) ? this._marginOptions : {};
-    },
-
-    allowToExtendVisualRange(isEnd) {
-        const wholeRange = this.adjustRange(getVizRangeObject(this._options.wholeRange));
-        const bound = isEnd ? wholeRange.endValue : wholeRange.startValue;
-        return !this.isArgumentAxis || !isDefined(bound) && this.isExtremePosition(isEnd);
+        return this._marginOptions ?? {};
     },
 
     _calculateRangeInterval: function(interval) {
@@ -1781,11 +1799,11 @@ Axis.prototype = {
 
         if(!isDiscrete) {
             if(this._translator.isInverted()) {
-                minValue = isDefined(minValue) ? minValue : translator.from(canvasStartEnd.start + screenDelta * minPercentPadding, -1);
-                maxValue = isDefined(maxValue) ? maxValue : translator.from(canvasStartEnd.end - screenDelta * maxPercentPadding, 1);
+                minValue = minValue ?? translator.from(canvasStartEnd.start + screenDelta * minPercentPadding, -1);
+                maxValue = maxValue ?? translator.from(canvasStartEnd.end - screenDelta * maxPercentPadding, 1);
             } else {
-                minValue = isDefined(minValue) ? minValue : translator.from(canvasStartEnd.start - screenDelta * minPercentPadding, -1);
-                maxValue = isDefined(maxValue) ? maxValue : translator.from(canvasStartEnd.end + screenDelta * maxPercentPadding, 1);
+                minValue = minValue ?? translator.from(canvasStartEnd.start - screenDelta * minPercentPadding, -1);
+                maxValue = maxValue ?? translator.from(canvasStartEnd.end + screenDelta * maxPercentPadding, 1);
             }
         }
 
@@ -2209,8 +2227,8 @@ Axis.prototype = {
             let startValue = adjustedRange.minVisible;
             let endValue = adjustedRange.maxVisible;
             if(that._options.type === constants.discrete) {
-                startValue = isDefined(startValue) ? startValue : adjustedRange.categories[0];
-                endValue = isDefined(endValue) ? endValue : adjustedRange.categories[adjustedRange.categories.length - 1];
+                startValue = startValue ?? adjustedRange.categories[0];
+                endValue = endValue ?? adjustedRange.categories[adjustedRange.categories.length - 1];
                 return {
                     startValue,
                     endValue,
@@ -2588,7 +2606,7 @@ Axis.prototype = {
             interval: options.semiDiscreteInterval,
             firstDayOfWeek: options.workWeek?.[0],
             stick: this._getStick(),
-            breaksSize: options.breakStyle ? options.breakStyle.width : 0
+            breaksSize: options.breakStyle?.width ?? 0
         };
     },
 
@@ -2649,7 +2667,7 @@ Axis.prototype = {
             sort = argCategories;
         } else {
             const categoriesSortingMethod = this._options.categoriesSortingMethod;
-            sort = isDefined(categoriesSortingMethod) ? categoriesSortingMethod : this._options.categories;
+            sort = categoriesSortingMethod ?? this._options.categories;
         }
 
         return sort;

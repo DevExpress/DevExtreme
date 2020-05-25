@@ -1,5 +1,5 @@
 import eventsEngine from '../../events/core/events_engine';
-import * as eventUtils from '../../events/utils';
+import { fireEvent } from '../../events/utils';
 import { extend } from '../../core/utils/extend';
 import translator2DModule from '../translators/translator2d';
 import { isDefined } from '../../core/utils/type';
@@ -46,7 +46,7 @@ ScrollBar.prototype = {
         const scrollElement = this._scroll.element;
 
         eventsEngine.on(scrollElement, dragEvents.start, e => {
-            eventUtils.fireEvent({
+            fireEvent({
                 type: 'dxc-scroll-start',
                 originalEvent: e,
                 target: scrollElement
@@ -59,7 +59,7 @@ ScrollBar.prototype = {
             const lx = this._offset - (this._layoutOptions.vertical ? dY : dX) / this._scale;
             this._applyPosition(lx, lx + this._translator.canvasLength / this._scale);
 
-            eventUtils.fireEvent({
+            fireEvent({
                 type: 'dxc-scroll-move',
                 originalEvent: e,
                 target: scrollElement,
@@ -71,7 +71,7 @@ ScrollBar.prototype = {
         });
 
         eventsEngine.on(scrollElement, dragEvents.end, e => {
-            eventUtils.fireEvent({
+            fireEvent({
                 type: 'dxc-scroll-end',
                 originalEvent: e,
                 target: scrollElement,
@@ -175,9 +175,22 @@ ScrollBar.prototype = {
         return margins;
     },
 
-    // Axis like functions
-    shift: noop,
+    shift: function(margins) {
+        const that = this;
+        const options = that._layoutOptions;
+        const side = options.position;
+        const isVertical = options.vertical;
+        const attr = {
+            translateX: that._scroll.attr('translateX') ?? 0,
+            translateY: that._scroll.attr('translateY') ?? 0
+        };
+        const shift = margins[side];
 
+        attr[isVertical ? 'translateX' : 'translateY'] += (side === 'left' || side === 'top' ? -1 : 1) * shift;
+        that._scroll.attr(attr);
+    },
+
+    // Axis like functions
     hideTitle: noop,
 
     hideOuterElements: noop,
@@ -207,7 +220,6 @@ ScrollBar.prototype = {
     _applyPosition: function(x1, x2) {
         const that = this;
         const visibleArea = that._translator.getCanvasVisibleArea();
-        let height;
 
         x1 = _max(x1, visibleArea.min);
         x1 = _min(x1, visibleArea.max);
@@ -215,7 +227,7 @@ ScrollBar.prototype = {
         x2 = _min(x2, visibleArea.max);
         x2 = _max(x2, visibleArea.min);
 
-        height = Math.abs(x2 - x1);
+        const height = Math.abs(x2 - x1);
         that._scroll.attr({
             y: x1,
             height: height < MIN_SCROLL_BAR_SIZE ? MIN_SCROLL_BAR_SIZE : height

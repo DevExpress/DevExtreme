@@ -1,3 +1,5 @@
+'use strict';
+
 const gulp = require('gulp');
 const eol = require('gulp-eol');
 const replace = require('gulp-replace');
@@ -56,7 +58,7 @@ const addDefaultExport = lazyPipe().pipe(function() {
         const moduleMeta = MODULES.filter(m => m.name === moduleName)[0];
 
         if(moduleMeta && moduleMeta.exports && moduleMeta.exports.default) {
-            chunk.contents = new Buffer(String(chunk.contents) + 'module.exports.default = module.exports;');
+            chunk.contents = Buffer.from(String(chunk.contents) + 'module.exports.default = module.exports;');
         }
         callback(null, chunk);
     });

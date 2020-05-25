@@ -1,0 +1,17 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "sass": [
+                "../node_modules/@types/node-sass"
+            ]
+        }
+    },
+    "include": [
+        "./**/*.ts"
+    ],
+    "files": [
+        "../src/types/types.ts"
+    ]
+}

@@ -44,7 +44,7 @@ env:
     - TARGET=test BROWSER=firefox JQUERY=true CONSTEL=ui.scheduler
     - TARGET=test BROWSER=firefox JQUERY=true CONSTEL=viz
     - TARGET=test BROWSER=firefox JQUERY=true CONSTEL=renovation
-    - TARGET=test_functional COMPONENT=dataGrid
+    - TARGET=test_functional COMPONENT=dataGrid QUARANTINE_MODE=true
     - TARGET=test_functional COMPONENT=scheduler QUARANTINE_MODE=true
     - TARGET=test_functional COMPONENT=editors
     - TARGET=test_functional COMPONENT=navigation
@@ -75,5 +75,5 @@ script:
     -e COMPONENT=$COMPONENT
     -e JQUERY=$JQUERY
     -v $TRAVIS_BUILD_DIR:/devextreme
-    docker.io/devexpress/devextreme-build:20_1
+    docker.io/devexpress/devextreme-build:20_2
     ./docker-ci.sh

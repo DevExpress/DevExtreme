@@ -391,6 +391,7 @@ QUnit.module('custom uploading', moduleConfig, () => {
 
         this.clock.tick(500);
         assert.strictEqual(uploadFileSpy.callCount, 1, 'custom function called');
+        assert.strictEqual(uploadFileSpy.args[0][0].name, 'image1.png', 'custom function has valid argument');
         assert.strictEqual(onProgressSpy.callCount, 0, 'progress event is not called');
         assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised');
 
@@ -1299,7 +1300,6 @@ QUnit.module('value option', moduleConfig, () => {
     });
 
     QUnit.test('T823593 file list shoud be rerendered if widget invalidated', function(assert) {
-        let fileUploader;
         let eventHandled = false;
 
         const onValueChanged = e => {
@@ -1309,6 +1309,7 @@ QUnit.module('value option', moduleConfig, () => {
                 eventHandled = true;
             }
 
+            const fileUploader = e.component;
             fileUploader.beginUpdate();
             fileUploader.option('value', e.value);
             fileUploader.option('allowedFileExtensions', ['.png', '.gif']);
@@ -1321,7 +1322,6 @@ QUnit.module('value option', moduleConfig, () => {
             allowedFileExtensions: ['.png', '.gif'],
             onValueChanged: onValueChanged
         });
-        fileUploader = $fileUploader.dxFileUploader('instance');
 
         simulateFileChoose($fileUploader, fakeFile);
 

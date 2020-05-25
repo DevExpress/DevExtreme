@@ -1,26 +1,23 @@
 const seriesNS = {};
-const typeUtils = require('../../core/utils/type');
-const _extend = require('../../core/utils/extend').extend;
-const _each = require('../../core/utils/iterator').each;
-const pointModule = require('./points/base_point');
-const _isDefined = typeUtils.isDefined;
-const vizUtils = require('../core/utils');
-const _isEmptyObject = typeUtils.isEmptyObject;
-const _normalizeEnum = vizUtils.normalizeEnum;
-const _noop = require('../../core/utils/common').noop;
-const states = require('../components/consts').states;
+import { isFunction, isDefined as _isDefined, isEmptyObject as _isEmptyObject } from '../../core/utils/type';
+import { extend as _extend } from '../../core/utils/extend';
+import { each as _each } from '../../core/utils/iterator';
+import pointModule from './points/base_point';
+import { normalizeEnum as _normalizeEnum } from '../core/utils';
+import { noop as _noop } from '../../core/utils/common';
+import { states } from '../components/consts';
 
-const rangeCalculator = require('./helpers/range_data_calculator');
+import rangeCalculator from './helpers/range_data_calculator';
 
-const scatterSeries = require('./scatter_series');
-const lineSeries = require('./line_series');
-const areaSeries = require('./area_series');
-const barSeries = require('./bar_series');
-const rangeSeries = require('./range_series');
-const bubbleSeries = require('./bubble_series');
-const pieSeries = require('./pie_series');
-const financialSeries = require('./financial_series');
-const stackedSeries = require('./stacked_series');
+import scatterSeries from './scatter_series';
+import lineSeries from './line_series';
+import areaSeries from './area_series';
+import barSeries from './bar_series';
+import rangeSeries from './range_series';
+import bubbleSeries from './bubble_series';
+import pieSeries from './pie_series';
+import financialSeries from './financial_series';
+import stackedSeries from './stacked_series';
 
 const DISCRETE = 'discrete';
 const SELECTED_STATE = states.selectedMark;
@@ -95,7 +92,7 @@ function getLabelOptions(labelOptions, defaultColor) {
         alignment: opt.alignment,
         format: opt.format,
         argumentFormat: opt.argumentFormat,
-        customizeText: typeUtils.isFunction(opt.customizeText) ? opt.customizeText : undefined,
+        customizeText: isFunction(opt.customizeText) ? opt.customizeText : undefined,
         attributes: { font: labelFont },
         visible: labelFont.size !== 0 ? opt.visible : false,
         showForZeroValues: opt.showForZeroValues,
@@ -527,7 +524,7 @@ Series.prototype = {
             }
         }, segments);
 
-        that._firstDrawing = points.length ? false : true;
+        that._firstDrawing = !points.length;
 
         that._removeOldSegments();
 
@@ -1235,7 +1232,7 @@ Series.prototype = {
 
     getPointByCoord: function(x, y) {
         const point = this.getNeighborPoint(x, y);
-        return point && point.coordsIn(x, y) ? point : null;
+        return point?.coordsIn(x, y) ? point : null;
     },
 
     getValueAxis: function() {

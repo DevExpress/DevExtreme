@@ -298,7 +298,7 @@ configs.forEach(config => {
 
             let expectedKeys = [0, 1];
             let expectedNodes = [0, 1];
-            let expectedEventLog = ['selectionChanged'];
+            const expectedEventLog = ['selectionChanged'];
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                 // unexpected result
                 expectedKeys = [0];
@@ -380,7 +380,7 @@ configs.forEach(config => {
             const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded }]);
-            let selectResult = wrapper.instance.selectItem(1);
+            const selectResult = wrapper.instance.selectItem(1);
 
             let expectedKeys = [1];
             let expectedNodes = [1];
@@ -482,7 +482,7 @@ configs.forEach(config => {
 
             let expectedKeys = [];
             let expectedNodes = [];
-            let expectedEventLog = ['selectionChanged'];
+            const expectedEventLog = ['selectionChanged'];
 
             wrapper.checkSelection(expectedKeys, expectedNodes, 'after unselect');
             wrapper.checkEventLog(expectedEventLog, 'after unselect');
@@ -698,7 +698,7 @@ configs.forEach(config => {
 
             wrapper.instance.unselectAll();
 
-            let expectedEventLog = ['selectionChanged'];
+            const expectedEventLog = ['selectionChanged'];
             wrapper.checkSelection([], [], 'after unselect');
             wrapper.checkEventLog(expectedEventLog, 'after unselect');
             wrapper.clearEventLog();
@@ -824,7 +824,7 @@ configs.forEach(config => {
 
             let expectedKeys = [];
             let expectedNodes = [];
-            let expectedEventLog = ['selectionChanged'];
+            const expectedEventLog = ['selectionChanged'];
 
             wrapper.checkSelection(expectedKeys, expectedNodes, 'after unselect');
             wrapper.checkEventLog(expectedEventLog, 'after unselect');

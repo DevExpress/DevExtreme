@@ -169,10 +169,10 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _customizeVerticalCoordinates(coordinates, width, appointmentCountPerCell, topOffset, isAllDay) {
-        let appointmentWidth = Math.max(width / appointmentCountPerCell, width / coordinates.count);
+        const appointmentWidth = Math.max(width / appointmentCountPerCell, width / coordinates.count);
         const height = coordinates.height;
-        let appointmentLeft = coordinates.left + (coordinates.index * appointmentWidth);
-        let top = coordinates.top;
+        const appointmentLeft = coordinates.left + (coordinates.index * appointmentWidth);
+        const top = coordinates.top;
 
         if(coordinates.isCompact) {
             this._markAppointmentAsVirtual(coordinates, isAllDay);

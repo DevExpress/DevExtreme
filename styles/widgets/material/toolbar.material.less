@@ -14,16 +14,13 @@
 
 .dx-size-default() {
     @MATERIAL_TOOLBAR_HEIGHT: 76px;
-    @MATERIAL_TOOLBAR_MENU_ITEM_LINE_HEIGHT: 21px;
-    @MATERIAL_TOOLBAR_MENU_VERTICAL_PADDING: 6px;
+    @MATERIAL_TOOLBAR_MENU_VERTICAL_PADDING: 7px;
 }
 
 .dx-size-compact() {
     @MATERIAL_TOOLBAR_HEIGHT: 56px;
-    @MATERIAL_TOOLBAR_MENU_ITEM_LINE_HEIGHT: 12px;
     @MATERIAL_TOOLBAR_MENU_VERTICAL_PADDING: 5px;
 }
-
 
 @MATERIAL_TOOLBAR_PADDING: 0;
 @MATERIAL_TOOLBAR_ITEM_SPACING: 5px;
@@ -181,6 +178,11 @@
 
     .dx-button-content {
         padding: 4px;
+
+        .dx-icon {
+            color: @toolbar-color;
+            .dx-icon-sizing(@MATERIAL_BUTTON_ICON_SIZE);
+        }
     }
 
     .dx-toolbar-item-auto-hide {
@@ -213,10 +215,11 @@
             color: @toolbar-color;
             font-size: @MATERIAL_BASE_FONT_SIZE;
             font-weight: 500;
+            height: @MATERIAL_BUTTON_HEIGHT;
 
             .dx-menu-item-content {
-                line-height: @MATERIAL_TOOLBAR_MENU_ITEM_LINE_HEIGHT;
-                padding: @MATERIAL_TOOLBAR_MENU_VERTICAL_PADDING @MATERIAL_MENU_HORIZONTAL_PADDING;
+                padding-top: @MATERIAL_TOOLBAR_MENU_VERTICAL_PADDING;
+                padding-bottom: @MATERIAL_TOOLBAR_MENU_VERTICAL_PADDING;
             }
 
             &.dx-menu-item-has-text.dx-menu-item-has-icon {
@@ -243,4 +246,19 @@
 
 .dx-toolbar .dx-tab {
     padding: 4px;
+}
+
+.dx-toolbar-hidden-button-group {
+    margin-top: @MATERIAL_TOOLBAR_PADDING;
+    margin-bottom: @MATERIAL_TOOLBAR_PADDING;
+
+    .dx-buttongroup-wrapper {
+        .dx-buttongroup-item.dx-button {
+            box-shadow: none;
+
+            .dx-button-content {
+                padding: @MATERIAL_TOOLBAR_PADDING @MATERIAL_LIST_ITEM_HORIZONTAL_PADDING;
+            }
+        }
+    }
 }

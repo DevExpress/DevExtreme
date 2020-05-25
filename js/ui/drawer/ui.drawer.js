@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import typeUtils from '../../core/utils/type';
-import { getPublicElement } from '../../core/utils/dom';
+import { getPublicElement } from '../../core/element';
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
 import Widget from '../widget/ui.widget';
@@ -14,7 +14,7 @@ import { animation } from './ui.drawer.rendering.strategy';
 import { name as CLICK_EVENT_NAME } from '../../events/click';
 import fx from '../../animation/fx';
 import { Deferred } from '../../core/utils/deferred';
-import { triggerResizeEvent } from '../../core/utils/dom';
+import { triggerResizeEvent } from '../../events/visibility_change';
 
 const DRAWER_CLASS = 'dx-drawer';
 const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
@@ -30,27 +30,16 @@ const Drawer = Widget.inherit({
 
     _getDefaultOptions() {
         return extend(this.callBase(), {
-
             position: 'left',
-
             opened: false,
-
             minSize: null,
-
             maxSize: null,
-
             shading: false,
-
             template: PANEL_TEMPLATE_NAME,
-
             openedStateMode: 'shrink',
-
             revealMode: 'slide',
-
             animationEnabled: true,
-
             animationDuration: 400,
-
             closeOnOutsideClick: false,
 
             /**
@@ -84,6 +73,14 @@ const Drawer = Widget.inherit({
             * @name dxDrawerOptions.tabIndex
             * @hidden
             */
+        });
+    },
+
+    _setDeprecatedOptions() {
+        this.callBase();
+
+        extend(this._deprecatedOptions, {
+            'target': { since: '20.1', message: 'Functionality associated with this option is not intended for the Drawer widget.' }
         });
     },
 
@@ -149,7 +146,6 @@ const Drawer = Widget.inherit({
             }
 
             this.hide();
-            this._toggleShaderVisibility(false);
         }
     },
 
@@ -278,7 +274,7 @@ const Drawer = Widget.inherit({
     },
 
     getOverlayTarget() {
-        return this.option('target') || this._$wrapper;
+        return this._options.silent('target') || this._$wrapper;
     },
 
     getOverlay() {
@@ -407,6 +403,7 @@ const Drawer = Widget.inherit({
     _dimensionChanged() {
         this._initMinMaxSize();
         this._strategy.refreshPanelElementSize(this.option('revealMode') === 'slide');
+        this._renderPosition(this.option('opened'), false);
     },
 
     _toggleShaderVisibility(visible) {
@@ -574,5 +571,4 @@ const Drawer = Widget.inherit({
 registerComponent('dxDrawer', Drawer);
 
 module.exports = Drawer;
-
 

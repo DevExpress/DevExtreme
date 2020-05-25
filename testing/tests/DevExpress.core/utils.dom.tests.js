@@ -9,32 +9,6 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 
 QUnit.module('createMarkup');
 
-QUnit.test('createMarkupFromString', function(assert) {
-    const originalWinJS = window.WinJS;
-    const str = '<div>test</div>';
-    let $resultElement;
-
-    try {
-        window.WinJS = undefined;
-        $resultElement = domUtils.createMarkupFromString(str);
-        assert.equal($resultElement.length, 1);
-        assert.equal($resultElement.text(), 'test');
-
-        window.WinJS = {
-            Utilities: {
-                setInnerHTMLUnsafe: function(tempElement, str) {
-                    $(tempElement).append(str);
-                }
-            }
-        };
-        $resultElement = domUtils.createMarkupFromString(str);
-        assert.equal($resultElement.length, 1);
-        assert.equal($resultElement.text(), 'test');
-    } finally {
-        window.WinJS = originalWinJS;
-    }
-});
-
 QUnit.test('normalizeTemplateElement with script element', function(assert) {
     const domElement = document.createElement('script');
 
@@ -149,4 +123,13 @@ QUnit.test('it correctly detect the body element', function(assert) {
     const body = document.body;
 
     assert.ok(domUtils.contains(document, body), 'Document contains the body element');
+});
+
+QUnit.test('it correctly works with svg elements', function(assert) {
+    const svgContainer = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const childElement = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+
+    svgContainer.appendChild(childElement);
+
+    assert.ok(domUtils.contains(svgContainer, childElement));
 });

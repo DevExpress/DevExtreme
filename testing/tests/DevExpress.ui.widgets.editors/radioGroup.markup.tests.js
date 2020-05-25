@@ -74,6 +74,29 @@ QUnit.module('buttons group rendering', moduleConfig, () => {
 
         assert.ok(!$radioGroup.find('.dx-collection').hasClass('dx-state-disabled'), 'inner collection hasn\'t disabled-state class');
     });
+
+    test('widget should not try to load undefined initial value from the data source', function(assert) {
+        const loadStub = sinon.stub().returns([1, 2, 3]);
+        $('#radioGroup').dxRadioGroup({
+            dataSource: {
+                load: loadStub
+            }
+        });
+
+        assert.ok(loadStub.calledOnce, 'load callback called once');
+    });
+
+    test('widget should not try to extra load initial value from the data source', function(assert) {
+        const loadStub = sinon.stub().returns([1, 2, 3]);
+        $('#radioGroup').dxRadioGroup({
+            dataSource: {
+                load: loadStub
+            },
+            value: 2
+        });
+
+        assert.ok(loadStub.calledOnce, 'load callback called once');
+    });
 });
 
 QUnit.module('buttons rendering', moduleConfig, () => {

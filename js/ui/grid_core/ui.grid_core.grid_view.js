@@ -34,10 +34,9 @@ const isPixelWidth = function(width) {
 
 const mergeArraysByMaxValue = function(values1, values2) {
     let result = [];
-    let i;
 
     if(values1 && values2 && values1.length && (values1.length === values2.length)) {
-        for(i = 0; i < values1.length; i++) {
+        for(let i = 0; i < values1.length; i++) {
             result.push(values1[i] > values2[i] ? values1[i] : values2[i]);
         }
     } else if(values1 && values1.length) {
@@ -135,19 +134,13 @@ const ResizingController = modules.ViewController.inherit({
             return this._rowsView.getColumnWidths();
         }
 
-        const that = this;
-        let rowsColumnWidths;
-        let headerColumnWidths;
-        let footerColumnWidths;
-        let resultWidths;
+        const rowsColumnWidths = this._rowsView.getColumnWidths();
+        const headerColumnWidths = this._columnHeadersView && this._columnHeadersView.getColumnWidths();
+        const footerColumnWidths = this._footerView && this._footerView.getColumnWidths();
 
-        rowsColumnWidths = that._rowsView.getColumnWidths();
-        headerColumnWidths = that._columnHeadersView && that._columnHeadersView.getColumnWidths();
-        footerColumnWidths = that._footerView && that._footerView.getColumnWidths();
-
-
-        resultWidths = mergeArraysByMaxValue(rowsColumnWidths, headerColumnWidths);
+        let resultWidths = mergeArraysByMaxValue(rowsColumnWidths, headerColumnWidths);
         resultWidths = mergeArraysByMaxValue(resultWidths, footerColumnWidths);
+
         return resultWidths;
     },
 
@@ -231,7 +224,6 @@ const ResizingController = modules.ViewController.inherit({
         let isColumnWidthsCorrected = false;
         let resultWidths = [];
         let focusedElement;
-        let isFocusOutsideWindow;
         let selectionRange;
         const normalizeWidthsByExpandColumns = function() {
             let expandColumnWidth;
@@ -299,7 +291,7 @@ const ResizingController = modules.ViewController.inherit({
                 that._toggleBestFitMode(false);
                 resetBestFitMode = false;
                 if(focusedElement && focusedElement !== domAdapter.getActiveElement()) {
-                    isFocusOutsideWindow = focusedElement.getBoundingClientRect().bottom < 0;
+                    const isFocusOutsideWindow = focusedElement.getBoundingClientRect().bottom < 0;
                     if(!isFocusOutsideWindow) {
                         if(browser.msie) {
                             setTimeout(function() { restoreFocus(focusedElement, selectionRange); });
@@ -350,8 +342,6 @@ const ResizingController = modules.ViewController.inherit({
         let isColumnWidthsCorrected = false;
         const $element = that.component.$element();
         const hasWidth = that._hasWidth;
-        let averageColumnsWidth;
-        let lastColumnIndex;
 
         for(i = 0; i < visibleColumns.length; i++) {
             const index = i;
@@ -362,7 +352,7 @@ const ResizingController = modules.ViewController.inherit({
 
             if(minWidth) {
                 if(width === undefined) {
-                    averageColumnsWidth = that._getAverageColumnsWidth(resultWidths);
+                    const averageColumnsWidth = that._getAverageColumnsWidth(resultWidths);
                     width = averageColumnsWidth;
                 } else if(isPercentWidth(width)) {
                     const freeWidth = calculateFreeWidthWithCurrentMinWidth(that, index, minWidth, resultWidths);
@@ -396,7 +386,7 @@ const ResizingController = modules.ViewController.inherit({
             const totalWidth = that._getTotalWidth(resultWidths, contentWidth);
 
             if(totalWidth < contentWidth) {
-                lastColumnIndex = gridCoreUtils.getLastResizableColumnIndex(visibleColumns, resultWidths);
+                const lastColumnIndex = gridCoreUtils.getLastResizableColumnIndex(visibleColumns, resultWidths);
 
                 if(lastColumnIndex >= 0) {
                     resultWidths[lastColumnIndex] = 'auto';
@@ -415,10 +405,6 @@ const ResizingController = modules.ViewController.inherit({
         const groupSize = this._rowsView.contentWidth();
         const tableSize = this._getTotalWidth(resultSizes, groupSize);
         const unusedIndexes = { length: 0 };
-        let diff;
-        let diffElement;
-        let onePixelElementsCount;
-        let i;
 
         if(!resultSizes.length) return;
 
@@ -429,11 +415,11 @@ const ResizingController = modules.ViewController.inherit({
             }
         });
 
-        diff = groupSize - tableSize;
-        diffElement = Math.floor(diff / (resultSizes.length - unusedIndexes.length));
-        onePixelElementsCount = diff - diffElement * (resultSizes.length - unusedIndexes.length);
+        const diff = groupSize - tableSize;
+        const diffElement = Math.floor(diff / (resultSizes.length - unusedIndexes.length));
+        let onePixelElementsCount = diff - diffElement * (resultSizes.length - unusedIndexes.length);
         if(diff >= 0) {
-            for(i = 0; i < resultSizes.length; i++) {
+            for(let i = 0; i < resultSizes.length; i++) {
                 if(unusedIndexes[i]) {
                     continue;
                 }
@@ -463,11 +449,9 @@ const ResizingController = modules.ViewController.inherit({
 
     _getTotalWidth: function(widths, groupWidth) {
         let result = 0;
-        let width;
-        let i;
 
-        for(i = 0; i < widths.length; i++) {
-            width = widths[i];
+        for(let i = 0; i < widths.length; i++) {
+            const width = widths[i];
             if(width && width !== HIDDEN_COLUMNS_WIDTH) {
                 result += this._getRealColumnWidth(width, groupWidth);
             }
@@ -583,7 +567,6 @@ const ResizingController = modules.ViewController.inherit({
     },
     _updateDimensionsCore: function() {
         const that = this;
-        let hasHeight;
         const dataController = that._dataController;
         const rowsView = that._rowsView;
         const $rootElement = that.component.$element();
@@ -597,7 +580,7 @@ const ResizingController = modules.ViewController.inherit({
         let $testDiv;
 
         that.updateSize($rootElement);
-        hasHeight = that._hasHeight || maxHeightHappened;
+        const hasHeight = that._hasHeight || maxHeightHappened;
 
         if(height && (that._hasHeight ^ height !== 'auto')) {
             $testDiv = $('<div>').height(height).appendTo($rootElement);
@@ -674,12 +657,10 @@ const SynchronizeScrollingController = modules.ViewController.inherit({
     },
 
     init: function() {
-        let view;
         const views = [this.getView('columnHeadersView'), this.getView('footerView'), this.getView('rowsView')];
-        let i;
 
-        for(i = 0; i < views.length; i++) {
-            view = views[i];
+        for(let i = 0; i < views.length; i++) {
+            const view = views[i];
             if(view) {
                 view.scrollChanged.add(this._scrollChangedHandler.bind(this, views));
             }

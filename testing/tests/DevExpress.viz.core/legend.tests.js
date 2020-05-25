@@ -302,11 +302,10 @@ QUnit.test('visible = false', function(assert) {
 QUnit.test('Creates correct types of objects for series', function(assert) {
     let marker;
     let text;
-    let elements;
 
     this.createAndDrawLegend(200, 200);
 
-    elements = this.getRenderedElements();
+    const elements = this.getRenderedElements();
 
     assert.equal(elements.insideLegendGroup.append.firstCall.args[0], this.rootGroup, 'Series groups were added, trackers was added');
     assert.equal(this.renderer.g.callCount, 9, 'renderer must create 6 groups (insideLegendGroup, titleGroup, markersGroup, dataItems group, marker group)');
@@ -2092,15 +2091,13 @@ QUnit.test('Can hide all items', function(assert) {
 });
 
 QUnit.test('markers centering(partial markers sizes).', function(assert) {
-    let createMarker;
-
     this.options.itemTextPosition = 'right';
     $.each(this.data, function(i, data) {
         data.size = i + 4;
     });
     this.createAndDrawLegend();
 
-    createMarker = this.createMarker;
+    const createMarker = this.createMarker;
 
     $.each(this.data, function(i) {
         assert.deepEqual(createMarker.getCall(i).returnValue.attr.lastCall.args, [{ fill: 'color-' + (1 + i), opacity: 1 }]);
@@ -2109,8 +2106,6 @@ QUnit.test('markers centering(partial markers sizes).', function(assert) {
 });
 
 QUnit.test('markers centering(partial markers sizes). markerShape = circle', function(assert) {
-    let createMarker;
-
     this.options.itemTextPosition = 'right';
     this.options.markerShape = 'circle';
     $.each(this.data, function(i, data) {
@@ -2118,7 +2113,7 @@ QUnit.test('markers centering(partial markers sizes). markerShape = circle', fun
     });
     this.createAndDrawLegend();
 
-    createMarker = this.createMarker;
+    const createMarker = this.createMarker;
     $.each(this.data, function(i) {
         assert.deepEqual(createMarker.getCall(i).returnValue.attr.lastCall.args, [{ fill: 'color-' + (1 + i), opacity: 1 }]);
         assert.deepEqual(createMarker.getCall(i).args[1], i + 4, 'marker size');

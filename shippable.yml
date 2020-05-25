@@ -40,7 +40,7 @@ env:
     - TARGET=test BROWSER=firefox JQUERY=true CONSTEL=ui.scheduler
     - TARGET=test BROWSER=firefox JQUERY=true CONSTEL=viz
     - TARGET=test BROWSER=firefox JQUERY=true CONSTEL=renovation
-    - TARGET=test_functional COMPONENT=dataGrid
+    - TARGET=test_functional COMPONENT=dataGrid QUARANTINE_MODE=true
     - TARGET=test_functional COMPONENT=scheduler QUARANTINE_MODE=true
     - TARGET=test_functional COMPONENT=editors
     - TARGET=test_functional COMPONENT=navigation
@@ -52,7 +52,7 @@ build:
 
   pre_ci_boot:
     image_name: docker.io/devexpress/devextreme-build
-    image_tag: "20_1"
+    image_tag: "20_2"
     pull: true
 
   ci:

@@ -1,19 +1,19 @@
-import $ from 'jquery';
 import fx from 'animation/fx';
-import support from 'core/utils/support';
-import domUtils from 'core/utils/dom';
-import { deferUpdate } from 'core/utils/common';
+import 'common.css!css';
+import config from 'core/config';
 import devices from 'core/devices';
 import browser from 'core/utils/browser';
-import TabPanel from 'ui/tab_panel';
-import pointerMock from '../../helpers/pointerMock.js';
-import keyboardMock from '../../helpers/keyboardMock.js';
-import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
+import { deferUpdate } from 'core/utils/common';
+import support from 'core/utils/support';
 import { isRenderer } from 'core/utils/type';
-import config from 'core/config';
-
-import 'common.css!css';
+import { triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
+import $ from 'jquery';
+import TabPanel from 'ui/tab_panel';
+import keyboardMock from '../../helpers/keyboardMock.js';
+import pointerMock from '../../helpers/pointerMock.js';
+import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
+
 
 QUnit.testStart(() => {
     const markup =
@@ -118,7 +118,7 @@ QUnit.module('rendering', {
         });
 
         $tabPanel.appendTo('#qunit-fixture');
-        domUtils.triggerShownEvent($tabPanel);
+        triggerShownEvent($tabPanel);
 
         const $container = $tabPanel.find('.' + TABPANEL_CONTAINER_CLASS);
         const $tabs = $tabPanel.find('.' + TABS_CLASS);

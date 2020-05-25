@@ -9,12 +9,12 @@ function foreachColumnInfo(info, callback, rowIndex, offsets, columnCount, lastP
     const row = info[rowIndex];
     const startIndex = lastProcessedIndexes[rowIndex] + 1 || 0;
     let processedColumnCount = 0;
+    let colIndex;
 
     if(!row) {
         return;
     }
 
-    let colIndex;
 
     for(colIndex = startIndex; colIndex < row.length; colIndex++) {
         const cell = row[colIndex];

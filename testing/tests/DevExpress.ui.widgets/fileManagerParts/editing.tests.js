@@ -12,6 +12,8 @@ const { test } = QUnit;
 
 const FileUploaderInternals = FileUploader.__internals;
 
+const ALLOWED_FILE_EXTENSIONS = [ '.txt', '.jpg', '.png', '.xml' ];
+
 const moduleConfig = {
     beforeEach: function() {
         const fileSystem = createTestFileSystem();
@@ -440,6 +442,9 @@ QUnit.module('Editing operations', moduleConfig, () => {
     });
 
     test('rename file failed for not allowed extension', function(assert) {
+        this.fileManager.option('allowedFileExtensions', ALLOWED_FILE_EXTENSIONS);
+        this.clock.tick(400);
+
         assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
 
         this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
@@ -622,6 +627,9 @@ QUnit.module('Editing operations', moduleConfig, () => {
     });
 
     test('errorOccurred event raised', function(assert) {
+        this.fileManager.option('allowedFileExtensions', ALLOWED_FILE_EXTENSIONS);
+        this.clock.tick(400);
+
         const errorSpy = sinon.spy();
         this.fileManager.option('onErrorOccurred', errorSpy);
 

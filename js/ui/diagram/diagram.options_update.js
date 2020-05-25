@@ -40,7 +40,12 @@ class DiagramOptionsUpdateBar extends DiagramBar {
             }
         };
         this.commandOptions[DiagramCommand.ViewUnits] = 'viewUnits';
-        this.commandOptions[DiagramCommand.PageSize] = 'pageSize';
+        this.commandOptions[DiagramCommand.PageSize] = function(value) {
+            const pageSize = this._getOption('pageSize');
+            if(pageSize === undefined || pageSize.width !== value.width || pageSize.height !== value.height) {
+                this._setOption('pageSize', value);
+            }
+        };
         this.commandOptions[DiagramCommand.PageLandscape] = function(value) {
             this._setOption('pageOrientation', value ? 'landscape' : 'portrait');
         };

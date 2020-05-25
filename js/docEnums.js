@@ -387,6 +387,11 @@
  */
 
 /**
+ * @typedef {string} Enums.GridFilterOperations
+ * @enum {'='|'<>'|'<'|'<='|'>'|'>='|'contains'|'endswith'|'isblank'|'isnotblank'|'notcontains'|'startswith'|'between'|'anyof'|'noneof'}
+ */
+
+/**
  * @typedef {string} Enums.FilterType
  * @enum {'exclude'|'include'}
  */
@@ -1053,7 +1058,7 @@
 
 /**
  * @typedef {string} Enums.FileManagerToolbarItem
- * @enum {'showNavPane'|'create'|'upload'|'refresh'|'switchView'|'download'|'move'|'copy'|'rename'|'delete'|'clear'|'separator'}
+ * @enum {'showNavPane'|'create'|'upload'|'refresh'|'switchView'|'download'|'move'|'copy'|'rename'|'delete'|'clearSelection'|'separator'}
  */
 
 /**
@@ -1142,7 +1147,7 @@
 
 /**
  * @typedef {string} Enums.GanttToolbarItem
- * @enum {'separator'|'undo'|'redo'|'zoomIn'|'zoomOut'}
+ * @enum {'separator'|'undo'|'redo'|'expandAll'|'collapseAll'|'addTask'|'deleteTask'|'zoomIn'| 'zoomOut'}
  */
 
 /**

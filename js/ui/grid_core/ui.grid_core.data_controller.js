@@ -234,14 +234,13 @@ module.exports = {
                     const that = this;
                     const dataSource = that._dataSource;
                     const columnsController = that._columnsController;
-                    let additionalFilter;
 
                     if(dataSource) {
                         if(filter === undefined) {
                             filter = dataSource.filter();
                         }
 
-                        additionalFilter = that._calculateAdditionalFilter();
+                        const additionalFilter = that._calculateAdditionalFilter();
                         if(additionalFilter) {
                             if(columnsController.isDataSourceApplied() || columnsController.isAllDataTypesDefined()) {
                                 filter = gridCoreUtils.combineFilters([additionalFilter, filter]);
@@ -525,11 +524,10 @@ module.exports = {
                 },
                 generateDataValues: function(data, columns, isModified) {
                     const values = [];
-                    let column;
                     let value;
 
                     for(let i = 0; i < columns.length; i++) {
-                        column = columns[i];
+                        const column = columns[i];
                         value = isModified ? undefined : null;
                         if(!column.command) {
                             if(column.calculateCellValue) {
@@ -820,7 +818,6 @@ module.exports = {
                 _updateItemsCore: function(change) {
                     const that = this;
                     let items;
-                    let oldItems;
                     const dataSource = that._dataSource;
                     const changeType = change.changeType || 'refresh';
 
@@ -832,12 +829,13 @@ module.exports = {
                         items = that._processItems(items, change);
 
                         change.items = items;
-                        oldItems = that._items.length === items.length && that._items;
+                        const oldItems = that._items.length === items.length && that._items;
 
                         that._applyChange(change);
 
+                        const rowIndexDelta = that.getRowIndexDelta();
                         each(that._items, function(index, item) {
-                            item.rowIndex = index;
+                            item.rowIndex = index - rowIndexDelta;
                             if(oldItems) {
                                 item.cells = oldItems[index].cells || [];
                             }
@@ -855,10 +853,9 @@ module.exports = {
                         e.changes.forEach(function(change) {
                             if(change.type === 'insert' && change.index >= 0) {
                                 let dataIndex = 0;
-                                let row;
 
                                 for(let i = 0; i < change.index; i++) {
-                                    row = rows[i];
+                                    const row = rows[i];
                                     if(row && (row.rowType === 'data' || row.rowType === 'group')) {
                                         dataIndex++;
                                     }
@@ -951,9 +948,8 @@ module.exports = {
                     const columnsController = that._columnsController;
                     const clearColumnOption = function(optionName) {
                         const columnCount = columnsController.columnCount();
-                        let index;
 
-                        for(index = 0; index < columnCount; index++) {
+                        for(let index = 0; index < columnCount; index++) {
                             columnsController.columnOption(index, optionName, undefined);
                         }
                     };

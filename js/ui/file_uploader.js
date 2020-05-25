@@ -8,14 +8,14 @@ import { isDefined, isFunction } from '../core/utils/type';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import { inArray } from '../core/utils/array';
-import { Deferred, when } from '../core/utils/deferred';
+import { Deferred, fromPromise } from '../core/utils/deferred';
 import ajax from '../core/utils/ajax';
 import Editor from './editor/editor';
 import Button from './button';
 import ProgressBar from './progress_bar';
 import browser from '../core/utils/browser';
 import devices from '../core/devices';
-import * as eventUtils from '../events/utils';
+import { addNamespace } from '../events/utils';
 import clickEvent from '../events/click';
 import messageLocalization from '../localization/message';
 import themes from './themes';
@@ -132,6 +132,8 @@ class FileUploader extends Editor {
             maxFileSize: 0,
 
             minFileSize: 0,
+
+            inputAttr: {},
 
             invalidFileExtensionMessage: messageLocalization.format('dxFileUploader-invalidFileExtension'),
 
@@ -747,9 +749,14 @@ class FileUploader extends Editor {
 
         this._renderInput();
 
+        const labelId = `dx-fileuploader-input-label-${new Guid()}`;
+
         this._$inputLabel
+            .attr('id', labelId)
             .addClass(FILEUPLOADER_INPUT_LABEL_CLASS)
             .appendTo(this._$inputContainer);
+
+        this.setAria('labelledby', labelId, this._$fileInput);
     }
 
     _renderInput() {
@@ -759,6 +766,7 @@ class FileUploader extends Editor {
             this._$fileInput.appendTo(this._$inputContainer);
             this._selectButton.option('template', 'content');
         }
+        this._applyInputAttributes(this.option('inputAttr'));
     }
 
     _selectButtonInputTemplate(data, content) {
@@ -789,10 +797,14 @@ class FileUploader extends Editor {
 
         this._dragEventsTargets = [];
 
-        eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace('dragenter', this.NAME), this._dragEnterHandler.bind(this));
-        eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace('dragover', this.NAME), this._dragOverHandler.bind(this));
-        eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace('dragleave', this.NAME), this._dragLeaveHandler.bind(this));
-        eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace('drop', this.NAME), this._dropHandler.bind(this));
+        eventsEngine.on(this._$inputWrapper, addNamespace('dragenter', this.NAME), this._dragEnterHandler.bind(this));
+        eventsEngine.on(this._$inputWrapper, addNamespace('dragover', this.NAME), this._dragOverHandler.bind(this));
+        eventsEngine.on(this._$inputWrapper, addNamespace('dragleave', this.NAME), this._dragLeaveHandler.bind(this));
+        eventsEngine.on(this._$inputWrapper, addNamespace('drop', this.NAME), this._dropHandler.bind(this));
+    }
+
+    _applyInputAttributes(customAttributes) {
+        this._$fileInput.attr(customAttributes);
     }
 
     _useInputForDrop() {
@@ -1149,6 +1161,9 @@ class FileUploader extends Editor {
             case 'nativeDropSupported':
                 this._invalidate();
                 break;
+            case 'inputAttr':
+                this._applyInputAttributes(value);
+                break;
             default:
                 super._optionChanged(args);
         }
@@ -1236,7 +1251,7 @@ class FileUploadStrategyBase {
             let deferred = null;
             try {
                 const result = abortUpload(file.value, arg);
-                deferred = when(result);
+                deferred = fromPromise(result);
             } catch(error) {
                 deferred = new Deferred().reject(error).promise();
             }
@@ -1467,7 +1482,7 @@ class CustomChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
         const uploadChunk = this.fileUploader.option('uploadChunk');
         try {
             const result = uploadChunk(file.value, chunksInfo);
-            return when(result);
+            return fromPromise(result);
         } catch(error) {
             return new Deferred().reject(error).promise();
         }
@@ -1578,8 +1593,8 @@ class CustomWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
 
         const uploadFile = this.fileUploader.option('uploadFile');
         try {
-            const result = uploadFile(file, progressCallback);
-            return when(result);
+            const result = uploadFile(file.value, progressCallback);
+            return fromPromise(result);
         } catch(error) {
             return new Deferred().reject(error).promise();
         }

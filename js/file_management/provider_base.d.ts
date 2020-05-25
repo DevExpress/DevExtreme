@@ -60,11 +60,11 @@ export default class FileSystemProviderBase {
      * @docid FileSystemProviderBaseMethods.getItems
      * @publicName getItems()
      * @param1 parentDirectory:FileSystemItem
-     * @return Promise<Array<object>>
+     * @return Promise<Array<FileSystemItem>>
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    getItems(parentDirectory: FileSystemItem): Promise<Array<any>> & JQueryPromise<Array<any>>;
+    getItems(parentDirectory: FileSystemItem): Promise<Array<FileSystemItem>> & JQueryPromise<Array<FileSystemItem>>;
 
     /**
      * @docid FileSystemProviderBaseMethods.renameItem
@@ -148,11 +148,10 @@ export default class FileSystemProviderBase {
      * @docid FileSystemProviderBaseMethods.downloadItems
      * @publicName downloadItems()
      * @param1 items:Array<FileSystemItem>
-     * @return any
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    downloadItems(items: Array<FileSystemItem>): any;
+    downloadItems(items: Array<FileSystemItem>): void;
 
     /**
      * @docid FileSystemProviderBaseMethods.getItemsContent

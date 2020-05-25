@@ -141,6 +141,8 @@ class Gantt extends Widget {
             onScroll: this._onGanttViewScroll.bind(this),
             onDialogShowing: this._showDialog.bind(this),
             onPopupMenuShowing: this._showPopupMenu.bind(this),
+            onExpandAll: this._expandAll.bind(this),
+            onCollapseAll: this._collapseAll.bind(this),
             modelChangesListener: this._createModelChangesListener()
         });
         this._fireContentReadyAction();
@@ -194,6 +196,22 @@ class Gantt extends Widget {
         if(ganttViewTaskAreaContainer.scrollTop !== treeListScrollView.component.scrollTop()) {
             ganttViewTaskAreaContainer.scrollTop = treeListScrollView.component.scrollTop();
         }
+    }
+    _expandAll() {
+        this._treeList.forEachNode(node => {
+            if(node.children && node.children.length) {
+                this._treeList.expandRow(node.key);
+                this._ganttView.changeTaskExpanded(node.key, true);
+            }
+        });
+    }
+    _collapseAll() {
+        this._treeList.forEachNode(node => {
+            if(node.children && node.children.length) {
+                this._treeList.collapseRow(node.key);
+                this._ganttView.changeTaskExpanded(node.key, false);
+            }
+        });
     }
 
     _initScrollSync(treeList) {
@@ -342,22 +360,22 @@ class Gantt extends Widget {
 
     _createModelChangesListener() {
         return { // IModelChangesListener
-            NotifyTaskCreated: (task, callback) => { this._onRecordInserted(GANTT_TASKS, task, callback); },
-            NotifyTaskRemoved: (taskId) => { this._onRecordRemoved(GANTT_TASKS, taskId); },
-            NotifyTaskTitleChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'title', newValue); },
-            NotifyTaskDescriptionChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'description', newValue); },
-            NotifyTaskStartChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'start', newValue); },
-            NotifyTaskEndChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'end', newValue); },
-            NotifyTaskProgressChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'progress', newValue); },
+            NotifyTaskCreated: (task, callback, errorCallback) => { this._onRecordInserted(GANTT_TASKS, task, callback); },
+            NotifyTaskRemoved: (taskId, errorCallback) => { this._onRecordRemoved(GANTT_TASKS, taskId); },
+            NotifyTaskTitleChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'title', newValue); },
+            NotifyTaskDescriptionChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'description', newValue); },
+            NotifyTaskStartChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'start', newValue); },
+            NotifyTaskEndChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'end', newValue); },
+            NotifyTaskProgressChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'progress', newValue); },
 
-            NotifyDependencyInserted: (dependency, callback) => { this._onRecordInserted(GANTT_DEPENDENCIES, dependency, callback); },
-            NotifyDependencyRemoved: (dependencyId) => { this._onRecordRemoved(GANTT_DEPENDENCIES, dependencyId); },
+            NotifyDependencyInserted: (dependency, callback, errorCallback) => { this._onRecordInserted(GANTT_DEPENDENCIES, dependency, callback); },
+            NotifyDependencyRemoved: (dependencyId, errorCallback) => { this._onRecordRemoved(GANTT_DEPENDENCIES, dependencyId); },
 
-            NotifyResourceCreated: (resource, callback) => { this._onRecordInserted(GANTT_RESOURCES, resource, callback); },
-            NotifyResourceRemoved: (resource) => { this._onRecordRemoved(GANTT_RESOURCES, resource); },
+            NotifyResourceCreated: (resource, callback, errorCallback) => { this._onRecordInserted(GANTT_RESOURCES, resource, callback); },
+            NotifyResourceRemoved: (resource, errorCallback) => { this._onRecordRemoved(GANTT_RESOURCES, resource); },
 
-            NotifyResourceAssigned: (assignment, callback) => { this._onRecordInserted(GANTT_RESOURCE_ASSIGNMENTS, assignment, callback); },
-            NotifyResourceUnassigned: (assignmentId) => { this._onRecordRemoved(GANTT_RESOURCE_ASSIGNMENTS, assignmentId); },
+            NotifyResourceAssigned: (assignment, callback, errorCallback) => { this._onRecordInserted(GANTT_RESOURCE_ASSIGNMENTS, assignment, callback); },
+            NotifyResourceUnassigned: (assignmentId, errorCallback) => { this._onRecordRemoved(GANTT_RESOURCE_ASSIGNMENTS, assignmentId); },
             NotifyParentDataRecalculated: (data) => { this._onParentTasksRecalculated(data); }
         };
     }
@@ -377,6 +395,8 @@ class Gantt extends Widget {
                         expandedRowKeys.push(parentId);
                         this._treeList.option('expandedRowKeys', expandedRowKeys);
                     }
+                    this._setTreeListOption('selectedRowKeys', this._getArrayFromOneElement(insertedId));
+                    this._setTreeListOption('focusedRowKey', insertedId);
                 }
             });
         }
@@ -406,8 +426,24 @@ class Gantt extends Widget {
     }
     _onParentTasksRecalculated(data) {
         const setters = this._compileSettersByOption(GANTT_TASKS);
-        const treeDataSource = data.map(this._prepareSetterMapHandler(setters));
+        const treeDataSource = this._appendCustomFields(data.map(this._prepareSetterMapHandler(setters)));
         this._setTreeListOption('dataSource', treeDataSource);
+    }
+    _appendCustomFields(data) {
+        const modelData = this._tasksOption._getItems();
+        return data.reduce((previous, item) => {
+            const modelItem = modelData && modelData.filter((obj) => obj.id === item.id)[0];
+            if(!modelItem) {
+                previous.push(item);
+            } else {
+                const updatedItem = {};
+                for(const field in modelItem) {
+                    updatedItem[field] = Object.prototype.hasOwnProperty.call(item, field) ? item[field] : modelItem[field];
+                }
+                previous.push(updatedItem);
+            }
+            return previous;
+        }, []);
     }
     _updateTreeListDataSource() {
         if(!this._skipUpdateTreeListDataSource()) {

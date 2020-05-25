@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = [
     // each object has one of these tasks:
     // widget - widget reference

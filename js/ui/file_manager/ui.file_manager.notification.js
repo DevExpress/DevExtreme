@@ -15,6 +15,7 @@ const ADAPTIVE_STATE_SCREEN_WIDTH = 1000;
 
 const FILE_MANAGER_NOTIFICATION_CLASS = 'dx-filemanager-notification';
 const FILE_MANAGER_NOTIFICATION_DRAWER_CLASS = `${FILE_MANAGER_NOTIFICATION_CLASS}-drawer`;
+const FILE_MANAGER_NOTIFICATION_DRAWER_PANEL_CLASS = `${FILE_MANAGER_NOTIFICATION_DRAWER_CLASS}-panel`;
 const FILE_MANAGER_NOTIFICATION_POPUP_CLASS = `${FILE_MANAGER_NOTIFICATION_CLASS}-popup`;
 const FILE_MANAGER_NOTIFICATION_POPUP_ERROR_CLASS = `${FILE_MANAGER_NOTIFICATION_CLASS}-popup-error`;
 const FILE_MANAGER_NOTIFICATION_COMMON_CLASS = `${FILE_MANAGER_NOTIFICATION_CLASS}-common`;
@@ -39,10 +40,9 @@ export default class FileManagerNotificationControl extends Widget {
             .addClass(FILE_MANAGER_NOTIFICATION_DRAWER_CLASS)
             .appendTo($progressPanelContainer);
 
-        const contentRenderer = this.option('contentTemplate');
-        if(isFunction(contentRenderer)) {
-            contentRenderer($progressDrawer);
-        }
+        $('<div>')
+            .addClass(FILE_MANAGER_NOTIFICATION_DRAWER_PANEL_CLASS)
+            .appendTo($progressDrawer);
 
         const drawerOptions = extend({
             opened: false,
@@ -52,11 +52,18 @@ export default class FileManagerNotificationControl extends Widget {
         this._getProgressDrawerAdaptiveOptions());
 
         this._progressDrawer = this._createComponent($progressDrawer, Drawer, drawerOptions);
+
+        const $drawerContent = $progressDrawer.find(`.${FILE_MANAGER_NOTIFICATION_DRAWER_PANEL_CLASS}`).first();
+
+        const contentRenderer = this.option('contentTemplate');
+        if(isFunction(contentRenderer)) {
+            contentRenderer($drawerContent);
+        }
     }
 
     tryShowProgressPanel() {
         const promise = new Deferred();
-        if(this._actionProgressStatus === 'default') {
+        if(this._actionProgressStatus === 'default' || this._isProgressDrawerOpened()) {
             return promise.resolve().promise();
         }
 

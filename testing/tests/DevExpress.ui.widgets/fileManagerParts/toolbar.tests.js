@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import 'ui/file_manager';
 import fx from 'animation/fx';
+import renderer from 'core/renderer';
 import { Consts, FileManagerWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
 
 const { test } = QUnit;
@@ -635,6 +636,310 @@ QUnit.module('Toolbar', moduleConfig, () => {
 
         assert.ok($toolbar.hasClass(Consts.GENERAL_TOOLBAR_CLASS), 'general toolbar displayed');
         assert.ok(!$toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), 'file toolbar hidden');
+    });
+
+    test('toolbar separators must take location into account', function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            permissions: {
+                download: true
+            },
+            toolbar: {
+                fileSelectionItems: ['download', 'separator', 'clearSelection']
+            }
+        });
+        this.clock.tick(400);
+
+        const $item = this.wrapper.findDetailsItem('File 1.txt');
+        $item.trigger('dxclick');
+        this.clock.tick(400);
+
+        const $separators = this.wrapper.getToolbarSeparators();
+        assert.equal($separators.length, 0, 'file toolbar has no separators');
+    });
+
+    test('toolbar separators must render one time for empty group', function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            toolbar: {
+                items: [
+                    {
+                        options: {
+                            text: 'item0'
+                        },
+                        visible: true,
+                        location: 'before'
+                    },
+                    'separator',
+                    {
+                        options: {
+                            text: 'item1'
+                        },
+                        visible: false,
+                        location: 'before'
+                    },
+                    'separator',
+                    {
+                        options: {
+                            text: 'item2'
+                        },
+                        visible: true,
+                        location: 'before'
+                    }
+                ]
+            }
+        });
+        this.clock.tick(400);
+
+        const $separators = this.wrapper.getToolbarSeparators();
+        assert.equal($separators.length, 1, 'toolbar has one separator');
+    });
+
+    test('toolbar separators must support default items in menu', function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            toolbar: {
+                fileSelectionItems: [
+                    'download', 'move', 'copy', 'rename', 'separator', 'delete', 'refresh', 'clearSelection',
+                    {
+                        widget: 'dxButton',
+                        options: {
+                            text: 'some button with very-very long text to make it easier to hide some items in toolbar menu'
+                        }
+                    },
+                    {
+                        widget: 'dxButton',
+                        options: {
+                            text: 'some item 2 with text'
+                        }
+                    }
+                ]
+            }
+        });
+        this.clock.tick(400);
+
+        const originalWidth = renderer.fn.width;
+        renderer.fn.width = () => 700;
+        $('#fileManager').css('width', '100%');
+        fileManager.repaint();
+        this.clock.tick(800);
+
+        const $item = this.wrapper.findDetailsItem('File 1.txt');
+        $item.trigger('dxclick');
+        this.clock.tick(400);
+
+        const $separators = this.wrapper.getToolbarSeparators();
+        assert.equal($separators.length, 0, 'file toolbar has no separators');
+
+        renderer.fn.width = originalWidth;
+    });
+
+    test('toolbar separators must support custom items in menu', function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            toolbar: {
+                fileSelectionItems: [
+                    'download', 'move', 'copy', 'rename', 'separator', 'refresh', 'clearSelection',
+                    {
+                        widget: 'dxButton',
+                        options: {
+                            text: 'some item 1 with text'
+                        },
+                        locateInMenu: 'auto'
+                    }
+                ]
+            }
+        });
+        this.clock.tick(400);
+
+        const originalWidth = renderer.fn.width;
+        renderer.fn.width = () => 400;
+        $('#fileManager').css('width', '100%');
+        fileManager.repaint();
+        this.clock.tick(800);
+
+        const $item = this.wrapper.findDetailsItem('File 1.txt');
+        $item.trigger('dxclick');
+        this.clock.tick(400);
+        const $separators = this.wrapper.getToolbarSeparators();
+        assert.equal($separators.length, 0, 'file toolbar has no separators');
+
+        renderer.fn.width = originalWidth;
+    });
+
+    test('items can render in menu after first load', function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            toolbar: {
+                fileSelectionItems: [
+                    'download', 'move', 'copy', 'rename', 'separator', 'refresh', 'clearSelection',
+                    {
+                        widget: 'dxButton',
+                        options: {
+                            text: 'some item 1 with text'
+                        },
+                        locateInMenu: 'auto'
+                    }
+                ]
+            }
+        });
+        this.clock.tick(400);
+
+        const originalWidth = renderer.fn.width;
+        renderer.fn.width = () => 400;
+        $('#fileManager').css('width', '100%');
+        fileManager.repaint();
+        this.clock.tick(800);
+
+        const $item = this.wrapper.findDetailsItem('File 1.txt');
+        $item.trigger('dxclick');
+        this.clock.tick(400);
+
+        const $toolbarDropDownMenuButton = this.wrapper.getToolbarDropDownMenuButton();
+        $toolbarDropDownMenuButton.trigger('dxclick');
+        this.clock.tick(400);
+
+        const toolbarDropDownMenuItem = this.wrapper.getToolbarDropDownMenuItem(0);
+        assert.notStrictEqual($(toolbarDropDownMenuItem).find('.dx-button-text').text().indexOf('some item 1 with text'), -1, 'custom button is rendered in the dropDown menu');
+        renderer.fn.width = originalWidth;
+    });
+
+    test('items must render in \'before\' section by default', function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            toolbar: {
+                items: [
+                    {
+                        widget: 'dxButton',
+                        options: {
+                            text: 'item 1'
+                        },
+                        locateInMenu: 'never'
+                    }
+                ]
+            }
+        });
+        this.clock.tick(400);
+
+        const $beforeItems = this.wrapper.getToolbarElementsInSection('before');
+        const $centerItems = this.wrapper.getToolbarElementsInSection('center');
+        const $afterItems = this.wrapper.getToolbarElementsInSection('after');
+
+        assert.strictEqual($beforeItems.length, 1, 'there is one item in before group');
+        assert.strictEqual($beforeItems.text(), 'item 1', 'the item is correct');
+        assert.strictEqual($centerItems.length, 0, 'there is no items in center group');
+        assert.strictEqual($afterItems.length, 0, 'there is no items in after group');
+    });
+
+    test('toolbar items can be specified by option full name', function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option('toolbar.items', [
+            'create',
+            {
+                widget: 'dxButton',
+                options: {
+                    text: 'item 1'
+                },
+                locateInMenu: 'never'
+            },
+            'upload']);
+        this.clock.tick(400);
+        fileManager.option('toolbar.fileSelectionItems', [
+            'move',
+            {
+                widget: 'dxButton',
+                options: {
+                    text: 'item 2'
+                },
+                locateInMenu: 'never'
+            },
+            'rename']);
+        this.clock.tick(400);
+
+        const $generalToolbarElements = this.wrapper.getGeneralToolbarElements();
+        assert.strictEqual($generalToolbarElements.length, 3, 'there are three elements in general toolbar');
+        assert.strictEqual($generalToolbarElements.eq(0).text(), 'New directory', 'fisrt general element correct');
+        assert.strictEqual($generalToolbarElements.eq(1).text(), 'item 1', 'second general element correct');
+        assert.strictEqual($generalToolbarElements.eq(2).text(), 'Upload files', 'third general element correct');
+
+        const $item = this.wrapper.findDetailsItem('File 1.txt');
+        $item.trigger('dxclick');
+        this.clock.tick(400);
+
+        const $fileToolbarElements = this.wrapper.getFileSelectionToolbarElements();
+        assert.strictEqual($fileToolbarElements.length, 3, 'there are three elements in file toolbar');
+        assert.strictEqual($fileToolbarElements.eq(0).text(), 'Move to', 'fisrt file element correct');
+        assert.strictEqual($fileToolbarElements.eq(1).text(), 'item 2', 'second file element correct');
+        assert.strictEqual($fileToolbarElements.eq(2).text(), 'Rename', 'third file element correct');
+    });
+
+    test('custom toolbar items have compact mode', function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option('toolbar.items', [
+            {
+                widget: 'dxButton',
+                options: {
+                    text: 'item with long name 0',
+                    icon: 'upload'
+                },
+                locateInMenu: 'never'
+            },
+            {
+                widget: 'dxButton',
+                options: {
+                    text: 'item with long name 1',
+                    icon: 'upload'
+                },
+                locateInMenu: 'never'
+            },
+            {
+                widget: 'dxButton',
+                options: {
+                    text: 'item with long name 2'
+                },
+                locateInMenu: 'never'
+            }
+        ]);
+        this.clock.tick(400);
+
+        const originalWidth = renderer.fn.width;
+        renderer.fn.width = () => 400;
+        $('#fileManager').css('width', '100%');
+        fileManager.repaint();
+        this.clock.tick(800);
+
+        const $generalToolbarElements = this.wrapper.getGeneralToolbarElements();
+
+        assert.strictEqual($generalToolbarElements.length, 3, 'there are three elements in general toolbar');
+        assert.strictEqual($generalToolbarElements.eq(0).find(`.${Consts.BUTTON_TEXT_CLASS}:visible`).text(), '', 'fisrt general element correct');
+        assert.strictEqual($generalToolbarElements.eq(1).find(`.${Consts.BUTTON_TEXT_CLASS}:visible`).text(), '', 'second general element correct');
+        assert.strictEqual($generalToolbarElements.eq(2).find(`.${Consts.BUTTON_TEXT_CLASS}:visible`).text(), 'item with long name 2', 'third general element correct');
+
+        renderer.fn.width = originalWidth;
     });
 
 });

@@ -9,9 +9,9 @@ import positionUtils from '../../animation/position';
 import resizeCallbacks from '../../core/utils/resize_callbacks';
 import { getDiagram } from './diagram.importer';
 import { hasWindow, getWindow } from '../../core/utils/window';
-import domUtils from '../../core/utils/dom';
+import { getPublicElement } from '../../core/element';
 import eventsEngine from '../../events/core/events_engine';
-import * as eventUtils from '../../events/utils';
+import { addNamespace } from '../../events/utils';
 import messageLocalization from '../../localization/message';
 import numberLocalization from '../../localization/number';
 import * as zIndexPool from '../overlay/z_index';
@@ -22,7 +22,7 @@ import DiagramMainToolbar from './ui.diagram.main_toolbar';
 import DiagramHistoryToolbar from './ui.diagram.history_toolbar';
 import DiagramViewToolbar from './ui.diagram.view_toolbar';
 import DiagramPropertiesToolbar from './ui.diagram.properties_toolbar';
-import DiagramContextMenu from './ui.diagram.context_menu';
+import { DiagramContextMenuWrapper } from './ui.diagram.context_menu';
 import DiagramContextToolbox from './ui.diagram.context_toolbox';
 import DiagramDialog from './ui.diagram.dialogs';
 import DiagramScrollView from './ui.diagram.scroll_view';
@@ -50,7 +50,7 @@ const DIAGRAM_DEFAULT_UNIT = 'in';
 const DIAGRAM_DEFAULT_ZOOMLEVEL = 1;
 const DIAGRAM_DEFAULT_AUTOZOOM_MODE = 'disabled';
 const DIAGRAM_DEFAULT_PAGE_ORIENTATION = 'portrait';
-const DIAGRAM_DEFAULT_PAGE_COLOR = 'white';
+const DIAGRAM_DEFAULT_PAGE_COLOR = '#ffffff';
 
 const DIAGRAM_MAX_MOBILE_WINDOW_WIDTH = 576;
 const DIAGRAM_TOOLBOX_ITEM_SPACING = 12;
@@ -58,10 +58,10 @@ const DIAGRAM_TOOLBOX_ITEM_COUNT_IN_ROW = 3;
 const DIAGRAM_CONTEXT_TOOLBOX_ITEM_COUNT_IN_ROW = 4;
 
 const DIAGRAM_NAMESPACE = 'dxDiagramEvent';
-const FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace('fullscreenchange', DIAGRAM_NAMESPACE);
-const IE_FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace('msfullscreenchange', DIAGRAM_NAMESPACE);
-const WEBKIT_FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace('webkitfullscreenchange', DIAGRAM_NAMESPACE);
-const MOZ_FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace('mozfullscreenchange', DIAGRAM_NAMESPACE);
+const FULLSCREEN_CHANGE_EVENT_NAME = addNamespace('fullscreenchange', DIAGRAM_NAMESPACE);
+const IE_FULLSCREEN_CHANGE_EVENT_NAME = addNamespace('msfullscreenchange', DIAGRAM_NAMESPACE);
+const WEBKIT_FULLSCREEN_CHANGE_EVENT_NAME = addNamespace('webkitfullscreenchange', DIAGRAM_NAMESPACE);
+const MOZ_FULLSCREEN_CHANGE_EVENT_NAME = addNamespace('mozfullscreenchange', DIAGRAM_NAMESPACE);
 
 class Diagram extends Widget {
     _init() {
@@ -73,13 +73,12 @@ class Diagram extends Widget {
         this._initDiagram();
 
         this._createCustomCommand();
-
-        this.optionsUpdateBar = new DiagramOptionsUpdateBar(this);
     }
     _initMarkup() {
         super._initMarkup();
 
         this._toolbars = [];
+        delete this._isMobileScreenSize;
 
         const isServerSide = !hasWindow();
         this.$element().addClass(DIAGRAM_CLASS);
@@ -129,15 +128,15 @@ class Diagram extends Widget {
 
         delete this._contextMenu;
         if(this.option('contextMenu.enabled')) {
-            this._renderContextMenu(this._$content);
+            this._renderContextMenu($contentWrapper);
         }
 
         delete this._contextToolbox;
         if(this.option('contextToolbox.enabled')) {
-            this._renderContextToolbox(this._$content);
+            this._renderContextToolbox($contentWrapper);
         }
 
-        this._renderDialog(this._$content);
+        this._renderDialog($contentWrapper);
 
         if(!isServerSide) {
             const $scrollViewWrapper = $('<div>')
@@ -149,24 +148,6 @@ class Diagram extends Widget {
                 }
             });
         }
-
-        if(this.option('zoomLevel') !== DIAGRAM_DEFAULT_ZOOMLEVEL) {
-            this._updateZoomLevelState();
-        }
-        if(this.option('autoZoomMode') !== DIAGRAM_DEFAULT_AUTOZOOM_MODE) {
-            this._updateAutoZoomState();
-        }
-        if(this.option('simpleView')) {
-            this._updateSimpleViewState();
-        }
-        if(this.option('readOnly') || this.option('disabled')) {
-            this._updateReadOnlyState();
-        }
-        if(this.option('fullScreen')) {
-            this._updateFullscreenState();
-        }
-
-        this._diagramInstance.barManager.registerBar(this.optionsUpdateBar);
 
         if(hasWindow()) {
             resizeCallbacks.add(() => {
@@ -185,11 +166,21 @@ class Diagram extends Widget {
         this._killBrowserResizeTimer();
     }
     _processDiagramResize() {
-        this._historyToolbarResizeCallback.call(this);
-        this._propertiesToolbarResizeCallback.call(this);
-        this._propertiesPanelResizeCallback.call(this);
-        this._viewToolbarResizeCallback.call(this);
-        this._toolboxResizeCallback.call(this);
+        if(this._historyToolbarResizeCallback) {
+            this._historyToolbarResizeCallback.call(this);
+        }
+        if(this._propertiesToolbarResizeCallback) {
+            this._propertiesToolbarResizeCallback.call(this);
+        }
+        if(this._propertiesPanelResizeCallback) {
+            this._propertiesPanelResizeCallback.call(this);
+        }
+        if(this._viewToolbarResizeCallback) {
+            this._viewToolbarResizeCallback.call(this);
+        }
+        if(this._toolboxResizeCallback) {
+            this._toolboxResizeCallback.call(this);
+        }
     }
     _killBrowserResizeTimer() {
         if(this._browserResizeTimer > -1) {
@@ -198,13 +189,18 @@ class Diagram extends Widget {
         this._browserResizeTimer = -1;
     }
     isMobileScreenSize() {
-        if(this._isMobileScreenSize !== undefined) {
-            return this._isMobileScreenSize;
+        if(this._isMobileScreenSize === undefined) {
+            this._isMobileScreenSize = hasWindow() && this.$element().outerWidth() < DIAGRAM_MAX_MOBILE_WINDOW_WIDTH;
         }
-        return (this._isMobileScreenSize = hasWindow() && getWindow().innerWidth < DIAGRAM_MAX_MOBILE_WINDOW_WIDTH);
+        return this._isMobileScreenSize;
+    }
+    _diagramCaptureFocus() {
+        if(this._diagramInstance) {
+            this._diagramInstance.captureFocus();
+        }
     }
     notifyBarCommandExecuted() {
-        this._diagramInstance.captureFocus();
+        this._diagramCaptureFocus();
     }
     _registerToolbar(component) {
         this._registerBar(component);
@@ -212,7 +208,7 @@ class Diagram extends Widget {
     }
     _registerBar(component) {
         component.bar.onChanged.add(this);
-        this._diagramInstance.barManager.registerBar(component.bar);
+        this._diagramInstance.registerBar(component.bar);
     }
     _getExcludeCommands() {
         const excludeCommands = [];
@@ -227,15 +223,16 @@ class Diagram extends Widget {
     _getToolbarBaseOptions() {
         return {
             onContentReady: ({ component }) => this._registerToolbar(component),
-            onSubMenuVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
+            onSubMenuVisibilityChanging: ({ component }) => this._diagramInstance.updateBarItemsState(component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option('export'),
             excludeCommands: this._getExcludeCommands(),
+            onInternalCommand: this._onInternalCommand.bind(this),
             onCustomCommand: this._onCustomCommand.bind(this),
             isMobileView: this.isMobileScreenSize()
         };
     }
-    _onCustomCommand(e) {
+    _onInternalCommand(e) {
         switch(e.command) {
             case DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME:
                 if(this._toolbox) {
@@ -247,9 +244,10 @@ class Diagram extends Widget {
                     this._propertiesPanel.toggle();
                 }
                 break;
-            default:
-                this._customCommandAction({ name: e.command });
         }
+    }
+    _onCustomCommand(e) {
+        this._customCommandAction({ name: e.name });
     }
     _renderMainToolbar() {
         const $toolbarWrapper = $('<div>')
@@ -263,7 +261,7 @@ class Diagram extends Widget {
         );
     }
     _isHistoryToolbarVisible() {
-        return this.option('historyToolbar.visible') && !this.option('readOnly') && !this.option('disabled');
+        return this.option('historyToolbar.visible') && !this.isReadOnlyMode();
     }
     _renderHistoryToolbar($parent) {
         const isServerSide = !hasWindow();
@@ -292,7 +290,7 @@ class Diagram extends Widget {
         });
     }
     _isToolboxEnabled() {
-        return this.option('toolbox.visibility') !== 'disabled' && !this.option('readOnly') && !this.option('disabled');
+        return this.option('toolbox.visibility') !== 'disabled' && !this.isReadOnlyMode();
     }
     _isToolboxVisible() {
         return this.option('toolbox.visibility') === 'visible' || (this.option('toolbox.visibility') === 'auto' && !this.isMobileScreenSize());
@@ -311,6 +309,7 @@ class Diagram extends Widget {
             offsetX: bounds.offsetX,
             offsetY: bounds.offsetY,
             toolboxGroups: this._getToolboxGroups(),
+
             onShapeCategoryRendered: (e) => {
                 if(isServerSide) return;
 
@@ -346,16 +345,24 @@ class Diagram extends Widget {
                         this._historyToolbar.$element().css('boxShadow', 'none');
                     }
                 }
+
+                if(this._viewToolbar) {
+                    this._viewToolbar.$element().css('opacity', e.visible && this.isMobileScreenSize() ? '0' : '1');
+                }
             },
             onVisibilityChanged: (e) => {
-                if(isServerSide) return;
+                if(!e.visible && !this._textInputStarted) {
+                    this._diagramCaptureFocus();
+                }
 
-                if(this._historyToolbar) {
-                    if(!e.visible && this.isMobileScreenSize() && this._historyToolbarZIndex) {
-                        zIndexPool.remove(this._historyToolbarZIndex);
-                        this._historyToolbar.$element().css('zIndex', '');
-                        this._historyToolbar.$element().css('boxShadow', '');
-                        this._historyToolbarZIndex = undefined;
+                if(!isServerSide) {
+                    if(this._historyToolbar) {
+                        if(!e.visible && this.isMobileScreenSize() && this._historyToolbarZIndex) {
+                            zIndexPool.remove(this._historyToolbarZIndex);
+                            this._historyToolbar.$element().css('zIndex', '');
+                            this._historyToolbar.$element().css('boxShadow', '');
+                            this._historyToolbarZIndex = undefined;
+                        }
                     }
                 }
             },
@@ -426,7 +433,7 @@ class Diagram extends Widget {
         });
     }
     _isPropertiesPanelEnabled() {
-        return this.option('propertiesPanel.visibility') !== 'disabled' && !this.option('readOnly') && !this.option('disabled');
+        return this.option('propertiesPanel.visibility') !== 'disabled' && !this.isReadOnlyMode();
     }
     _isPropertiesPanelVisible() {
         return this.option('propertiesPanel.visibility') === 'visible';
@@ -495,6 +502,11 @@ class Diagram extends Widget {
                     }
                 }
             },
+            onVisibilityChanged: (e) => {
+                if(!e.visible && !this._textInputStarted) {
+                    this._diagramCaptureFocus();
+                }
+            },
             onSelectedGroupChanged: ({ component }) => this._updatePropertiesPanelGroupBars(component),
             onPointerUp: this._onPanelPointerUp.bind(this)
         });
@@ -511,12 +523,12 @@ class Diagram extends Widget {
     }
     _updatePropertiesPanelGroupBars(component) {
         component.getActiveToolbars().forEach(toolbar => {
-            this._diagramInstance.barManager.updateBarItemsState(toolbar.bar);
+            this._diagramInstance.updateBarItemsState(toolbar.bar);
         });
     }
     _onPanelPointerUp() {
         this._captureFocusTimeout = setTimeout(() => {
-            this._diagramInstance.captureFocus();
+            this._diagramCaptureFocus();
             delete this._captureFocusTimeout;
         }, 100);
     }
@@ -526,29 +538,29 @@ class Diagram extends Widget {
             delete this._captureFocusTimeout;
         }
     }
-    _renderContextMenu($mainElement) {
+    _renderContextMenu($parent) {
         const $contextMenu = $('<div>')
-            .appendTo(this.$element());
-        this._contextMenu = this._createComponent($contextMenu, DiagramContextMenu, {
+            .appendTo($parent);
+        this._contextMenu = this._createComponent($contextMenu, DiagramContextMenuWrapper, {
             commands: this.option('contextMenu.commands'),
-            container: $mainElement,
             onContentReady: ({ component }) => this._registerBar(component),
-            onVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
+            onVisibilityChanging: ({ component }) => this._diagramInstance.updateBarItemsState(component.bar),
             onItemClick: (itemData) => { return this._onBeforeCommandExecuted(itemData.command); },
             export: this.option('export'),
             excludeCommands: this._getExcludeCommands(),
+            onInternalCommand: this._onInternalCommand.bind(this),
             onCustomCommand: this._onCustomCommand.bind(this)
         });
     }
 
-    _renderContextToolbox($mainElement) {
+    _renderContextToolbox($parent) {
         const isServerSide = !hasWindow();
         const category = this.option('contextToolbox.category');
         const displayMode = this.option('contextToolbox.displayMode');
         const shapes = this.option('contextToolbox.shapes');
 
         const $contextToolbox = $('<div>')
-            .appendTo(this.$element());
+            .appendTo($parent);
         this._contextToolbox = this._createComponent($contextToolbox, DiagramContextToolbox, {
             onShown: (e) => {
                 if(isServerSide) return;
@@ -571,7 +583,7 @@ class Diagram extends Widget {
                     },
                     (shapeType) => {
                         e.callback(shapeType);
-                        this._diagramInstance.captureFocus();
+                        this._diagramCaptureFocus();
                         e.hide();
                     }
                 );
@@ -592,16 +604,16 @@ class Diagram extends Widget {
         return !!dialogParameters;
     }
 
-    _renderDialog($mainElement) {
-        const $dialogElement = $('<div>').appendTo($mainElement);
+    _renderDialog($parent) {
+        const $dialogElement = $('<div>').appendTo($parent);
         this._dialogInstance = this._createComponent($dialogElement, DiagramDialog, { });
     }
 
     _showDialog(dialogParameters) {
         if(this._dialogInstance) {
             this._dialogInstance.option('onGetContent', dialogParameters.onGetContent);
-            this._dialogInstance.option('onHidden', function() { this._diagramInstance.captureFocus(); }.bind(this));
-            this._dialogInstance.option('command', this._diagramInstance.commandManager.getCommand(dialogParameters.command));
+            this._dialogInstance.option('onHidden', function() { this._diagramCaptureFocus(); }.bind(this));
+            this._dialogInstance.option('command', this._diagramInstance.getCommand(dialogParameters.command));
             this._dialogInstance.option('title', dialogParameters.title);
             this._dialogInstance._show();
         }
@@ -645,6 +657,7 @@ class Diagram extends Widget {
             notifySelectionChanged: this._raiseSelectionChanged.bind(this)
         });
         this._updateEventSubscriptionMethods();
+        this._updateDefaultItemProperties();
 
         this._updateShapeTexts();
         this._updateUnitItems();
@@ -652,6 +665,9 @@ class Diagram extends Widget {
 
         if(this.option('units') !== DIAGRAM_DEFAULT_UNIT) {
             this._updateUnitsState();
+        }
+        if(this.isReadOnlyMode()) {
+            this._updateReadOnlyState();
         }
         if(this.option('pageSize')) {
             if(this.option('pageSize.items')) {
@@ -686,6 +702,22 @@ class Diagram extends Widget {
             this._updateZoomLevelItemsState();
         }
 
+        if(this.option('simpleView')) {
+            this._updateSimpleViewState();
+        }
+        if(this.option('zoomLevel') !== DIAGRAM_DEFAULT_ZOOMLEVEL) {
+            this._updateZoomLevelState();
+        }
+        if(this.option('autoZoomMode') !== DIAGRAM_DEFAULT_AUTOZOOM_MODE) {
+            this._updateAutoZoomState();
+        }
+        if(this.option('fullScreen')) {
+            this._updateFullscreenState();
+        }
+
+        this.optionsUpdateBar = new DiagramOptionsUpdateBar(this);
+        this._diagramInstance.registerBar(this.optionsUpdateBar);
+
         this._updateCustomShapes(this._getCustomShapes());
         this._refreshDataSources();
     }
@@ -702,7 +734,14 @@ class Diagram extends Widget {
         this._diagramInstance = undefined;
     }
     _executeDiagramCommand(command, parameter) {
-        this._diagramInstance.commandManager.getCommand(command).execute(parameter);
+        this._diagramInstance.getCommand(command).execute(parameter);
+    }
+
+    getNodeDataSource() {
+        return this._nodesOption && this._nodesOption.getDataSource();
+    }
+    getEdgeDataSource() {
+        return this._edgesOption && this._edgesOption.getDataSource();
     }
     _refreshDataSources() {
         this._beginUpdateDiagram();
@@ -741,6 +780,9 @@ class Diagram extends Widget {
     _setDiagramData(data, keepExistingItems) {
         const { DiagramCommand } = getDiagram();
         this._executeDiagramCommand(DiagramCommand.Import, { data, keepExistingItems });
+    }
+    isReadOnlyMode() {
+        return this.option('readOnly') || this.option('disabled');
     }
 
     _onDataSourceChanged() {
@@ -842,12 +884,7 @@ class Diagram extends Widget {
                 setText: this._createOptionSetter('edges.textExpr'),
                 getLineOption: (lineOptionGetter = this._createOptionGetter('edges.lineTypeExpr')) && function(obj) {
                     const lineType = lineOptionGetter(obj);
-                    switch(lineType) {
-                        case 'straight':
-                            return ConnectorLineOption.Straight;
-                        default:
-                            return ConnectorLineOption.Orthogonal;
-                    }
+                    return this._getConnectorLineOption(lineType);
                 }.bind(this),
                 setLineOption: (lineOptionSetter = this._createOptionSetter('edges.lineTypeExpr')) && function(obj, value) {
                     switch(value) {
@@ -861,17 +898,8 @@ class Diagram extends Widget {
                     lineOptionSetter(obj, value);
                 }.bind(this),
                 getStartLineEnding: (startLineEndingGetter = this._createOptionGetter('edges.fromLineEndExpr')) && function(obj) {
-                    const lineType = startLineEndingGetter(obj);
-                    switch(lineType) {
-                        case 'arrow':
-                            return ConnectorLineEnding.Arrow;
-                        case 'outlinedTriangle':
-                            return ConnectorLineEnding.OutlinedTriangle;
-                        case 'filledTriangle':
-                            return ConnectorLineEnding.FilledTriangle;
-                        default:
-                            return ConnectorLineEnding.None;
-                    }
+                    const lineEnd = startLineEndingGetter(obj);
+                    return this._getConnectorLineEnding(lineEnd);
                 }.bind(this),
                 setStartLineEnding: (startLineEndingSetter = this._createOptionSetter('edges.fromLineEndExpr')) && function(obj, value) {
                     switch(value) {
@@ -891,17 +919,8 @@ class Diagram extends Widget {
                     startLineEndingSetter(obj, value);
                 }.bind(this),
                 getEndLineEnding: (endLineEndingGetter = this._createOptionGetter('edges.toLineEndExpr')) && function(obj) {
-                    const lineType = endLineEndingGetter(obj);
-                    switch(lineType) {
-                        case 'none':
-                            return ConnectorLineEnding.None;
-                        case 'outlinedTriangle':
-                            return ConnectorLineEnding.OutlinedTriangle;
-                        case 'filledTriangle':
-                            return ConnectorLineEnding.FilledTriangle;
-                        default:
-                            return ConnectorLineEnding.Arrow;
-                    }
+                    const lineEnd = endLineEndingGetter(obj);
+                    return this._getConnectorLineEnding(lineEnd);
                 }.bind(this),
                 setEndLineEnding: (endLineEndingSetter = this._createOptionSetter('edges.toLineEndExpr')) && function(obj, value) {
                     switch(value) {
@@ -924,6 +943,28 @@ class Diagram extends Widget {
             layoutParameters: this._getDataBindingLayoutParameters()
         };
         this._executeDiagramCommand(DiagramCommand.BindDocument, data);
+    }
+    _getConnectorLineOption(lineType) {
+        const { ConnectorLineOption } = getDiagram();
+        switch(lineType) {
+            case 'straight':
+                return ConnectorLineOption.Straight;
+            default:
+                return ConnectorLineOption.Orthogonal;
+        }
+    }
+    _getConnectorLineEnding(lineEnd) {
+        const { ConnectorLineEnding } = getDiagram();
+        switch(lineEnd) {
+            case 'arrow':
+                return ConnectorLineEnding.Arrow;
+            case 'outlinedTriangle':
+                return ConnectorLineEnding.OutlinedTriangle;
+            case 'filledTriangle':
+                return ConnectorLineEnding.FilledTriangle;
+            default:
+                return ConnectorLineEnding.None;
+        }
     }
     _getDataBindingLayoutParameters() {
         const { DataLayoutType, DataLayoutOrientation } = getDiagram();
@@ -1035,7 +1076,7 @@ class Diagram extends Widget {
                         createTemplate: template && ((container, item) => {
                             template.render({
                                 model: this._nativeItemToDiagramItem(item),
-                                container: domUtils.getPublicElement($(container))
+                                container: getPublicElement($(container))
                             });
                         }),
                         templateLeft: s.templateLeft,
@@ -1050,7 +1091,7 @@ class Diagram extends Widget {
     _onToggleFullScreen(fullScreen) {
         this._changeNativeFullscreen(fullScreen);
         this.$element().toggleClass(DIAGRAM_FULLSCREEN_CLASS, fullScreen);
-        this._diagramInstance.updateLayout();
+        this._diagramInstance.updateLayout(true);
 
         this._processDiagramResize();
         if(this._toolbox) {
@@ -1160,9 +1201,8 @@ class Diagram extends Widget {
     }
     _updateReadOnlyState() {
         const { DiagramCommand } = getDiagram();
-        const readOnly = this.option('readOnly') || this.option('disabled');
+        const readOnly = this.isReadOnlyMode();
         this._executeDiagramCommand(DiagramCommand.ToggleReadOnly, readOnly);
-        this._setToolboxVisible(!readOnly);
     }
     _updateZoomLevelState() {
         let zoomLevel = this.option('zoomLevel.value');
@@ -1341,9 +1381,22 @@ class Diagram extends Widget {
             eventsEngine.off(element, eventName, handler);
         };
     }
+    _updateDefaultItemProperties() {
+        if(this.option('defaultItemProperties.style')) {
+            this._diagramInstance.setInitialStyleProperties(this.option('defaultItemProperties.style'));
+        }
+        if(this.option('defaultItemProperties.textStyle')) {
+            this._diagramInstance.setInitialTextStyleProperties(this.option('defaultItemProperties.textStyle'));
+        }
+        this._diagramInstance.setInitialConnectorProperties({
+            lineOption: this._getConnectorLineOption(this.option('defaultItemProperties.connectorLineType')),
+            startLineEnding: this._getConnectorLineEnding(this.option('defaultItemProperties.connectorLineStart')),
+            endLineEnding: this._getConnectorLineEnding(this.option('defaultItemProperties.connectorLineEnd'))
+        });
+    }
 
     focus() {
-        this._diagramInstance.captureFocus();
+        this._diagramCaptureFocus();
     }
     export() {
         return this._getDiagramData();
@@ -1959,6 +2012,34 @@ class Diagram extends Widget {
                 */
             },
 
+            defaultItemProperties: {
+                /**
+                * @name dxDiagramOptions.defaultItemProperties.style
+                * @type Object
+                */
+                /**
+                * @name dxDiagramOptions.defaultItemProperties.textStyle
+                * @type Object
+                */
+                /**
+                * @name dxDiagramOptions.defaultItemProperties.connectorLineType
+                * @type Enums.DiagramConnectorLineType
+                * @default 'orthogonal'
+                */
+                connectorLineType: 'orthogonal',
+                /**
+                * @name dxDiagramOptions.defaultItemProperties.connectorLineStart
+                * @type Enums.DiagramConnectorLineEnd
+                * @default 'none'
+                */
+                connectorLineStart: 'none',
+                /**
+                * @name dxDiagramOptions.defaultItemProperties.connectorLineEnd
+                * @type Enums.DiagramConnectorLineEnd
+                * @default 'arrow'
+                */
+                connectorLineEnd: 'arrow',
+            },
             export: {
                 /**
                  * @name dxDiagramOptions.export.fileName
@@ -2013,7 +2094,9 @@ class Diagram extends Widget {
     }
 
     _raiseDataChangeAction() {
-        this.option('hasChanges', true);
+        if(this._initialized) {
+            this.option('hasChanges', true);
+        }
     }
     _raiseEdgeInsertedAction(data, callback, errorCallback) {
         if(this._edgesOption) {
@@ -2066,10 +2149,17 @@ class Diagram extends Widget {
         }
     }
     _raiseTextInputStart() {
+        this._textInputStarted = true;
         if(this._propertiesPanel) {
             if(this.isMobileScreenSize() && this._propertiesPanel.isVisible()) {
                 this._propertiesPanel.hide();
                 this._propertiesPanelTextInputHidden = true;
+            }
+        }
+        if(this._toolbox) {
+            if(this.isMobileScreenSize() && this._toolbox.isVisible()) {
+                this._toolbox.hide();
+                this._toolboxTextInputHidden = true;
             }
         }
     }
@@ -2080,6 +2170,13 @@ class Diagram extends Widget {
                 delete this._propertiesPanelTextInputHidden;
             }
         }
+        if(this._toolbox) {
+            if(this._toolboxTextInputHidden) {
+                this._toolbox.show();
+                delete this._toolboxTextInputHidden;
+            }
+        }
+        this._textInputStarted = false;
     }
 
     _createItemClickAction() {
@@ -2181,13 +2278,6 @@ class Diagram extends Widget {
             });
         }
     }
-    _setToolboxVisible(visible) {
-        if(this._toolbox) {
-            this._toolbox.option({
-                visible: visible
-            });
-        }
-    }
 
     _optionChanged(args) {
         if(this.optionsUpdateBar.isUpdateLocked()) return;
@@ -2204,6 +2294,7 @@ class Diagram extends Widget {
             case 'readOnly':
             case 'disabled':
                 this._updateReadOnlyState();
+                this._invalidate();
                 break;
             case 'zoomLevel':
                 if(args.fullName === 'zoomLevel' || args.fullName === 'zoomLevel.items') {
@@ -2328,6 +2419,9 @@ class Diagram extends Widget {
                 break;
             case 'onCustomCommand':
                 this._createCustomCommand();
+                break;
+            case 'defaultItemProperties':
+                this._updateDefaultItemProperties();
                 break;
             case 'export':
                 if(this._mainToolbar) {

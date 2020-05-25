@@ -220,7 +220,7 @@ function createMenuItems(renderer, options) {
 function getBackgroundColorFromMarkup(markup) {
     const parsedMarkup = GET_COLOR_REGEX.exec(markup);
 
-    return parsedMarkup ? parsedMarkup[1] : undefined;
+    return parsedMarkup?.[1];
 }
 
 export const exportFromMarkup = function(markup, options) {

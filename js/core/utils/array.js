@@ -130,6 +130,17 @@ const find = function(array, condition) {
     }
 };
 
+const groupBy = (array, cb) => array.reduce(
+    (result, item) => ({
+        ...result,
+        [cb(item)]: [
+            ...(result[cb(item)] || []),
+            item,
+        ],
+    }),
+    {}
+);
+
 exports.isEmpty = isEmpty;
 exports.wrapToArray = wrapToArray;
 exports.intersection = intersection;
@@ -138,3 +149,4 @@ exports.normalizeIndexes = normalizeIndexes;
 exports.inArray = inArray;
 exports.merge = merge;
 exports.find = find;
+exports.groupBy = groupBy;

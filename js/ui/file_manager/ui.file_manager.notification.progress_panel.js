@@ -72,9 +72,10 @@ class FileManagerProgressPanel extends Widget {
         });
 
         this._$infosContainer = $('<div>')
-            .text(messageLocalization.format('dxFileManager-notificationProgressPanelEmptyListText'))
             .addClass(FILE_MANAGER_PROGRESS_PANEL_INFOS_CONTAINER_CLASS)
             .appendTo($container);
+
+        this._renderEmptyListText();
     }
 
     _getDefaultOptions() {
@@ -209,7 +210,7 @@ class FileManagerProgressPanel extends Widget {
 
     completeSingleOperationWithError(info, errorText) {
         info.completed = true;
-        this._renderOperationError(info.common, errorText);
+        this._renderOperationError(info.details ? info.details[0] : info.common, errorText);
         this._setCloseButtonVisible(info.common, true);
     }
 
@@ -229,6 +230,10 @@ class FileManagerProgressPanel extends Widget {
     createErrorDetailsProgressBox($container, item, errorText) {
         const detailsItem = this._createDetailsItem($container, item, -1, true);
         this._renderOperationError(detailsItem, errorText);
+    }
+
+    _renderEmptyListText() {
+        this._$infosContainer.text(messageLocalization.format('dxFileManager-notificationProgressPanelEmptyListText'));
     }
 
     _renderOperationError(info, errorText) {
@@ -318,6 +323,10 @@ class FileManagerProgressPanel extends Widget {
             this._raiseOperationClosed(info);
             info.$info.next(`.${FILE_MANAGER_PROGRESS_PANEL_SEPARATOR_CLASS}`).remove();
             info.$info.remove();
+            this._operationCount--;
+            if(!this._operationCount) {
+                this._renderEmptyListText();
+            }
         }
     }
 

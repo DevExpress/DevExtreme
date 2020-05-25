@@ -129,10 +129,9 @@ const ValidatingController = modules.Controller.inherit((function() {
             if(isFull) {
                 editingController.addDeferred(deferred);
                 each(editingController._editData, (index, editData) => {
-                    let validationResult;
 
                     if(editData.type && editData.type !== 'remove') {
-                        validationResult = this.validateGroup(editData);
+                        const validationResult = this.validateGroup(editData);
                         completeList.push(validationResult);
                         validationResult.done((validationResult) => {
                             editData.validated = true;
@@ -314,8 +313,6 @@ const ValidatingController = modules.Controller.inherit((function() {
         createValidator: function(parameters, $container) {
             let editData;
             let editIndex;
-            let visibleColumns;
-            let columnsController;
             const editingController = this._editingController;
             const column = parameters.column;
 
@@ -331,8 +328,8 @@ const ValidatingController = modules.Controller.inherit((function() {
 
             if(editIndex < 0) {
                 if(!showEditorAlways) {
-                    columnsController = this.getController('columns');
-                    visibleColumns = columnsController && columnsController.getVisibleColumns() || [];
+                    const columnsController = this.getController('columns');
+                    const visibleColumns = columnsController && columnsController.getVisibleColumns() || [];
                     showEditorAlways = visibleColumns.some(function(column) { return column.showEditorAlways; });
                 }
 
@@ -459,7 +456,7 @@ const ValidatingController = modules.Controller.inherit((function() {
         removeCellValidationResult: function({ editData, columnIndex }) {
             if(editData && editData.validationResults) {
                 const result = editData.validationResults[columnIndex];
-                result.deferred && result.deferred.reject('cancel');
+                result && result.deferred && result.deferred.reject('cancel');
                 delete editData.validationResults[columnIndex];
             }
         },
@@ -476,8 +473,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                 rowKey,
                 columnIndex
             });
-            const editData = this._editingController.getEditDataByKey(rowKey);
-            return result && result.status === 'invalid' && editData && editData.validated;
+            return !!result && result.status === VALIDATION_STATUS.invalid;
         },
 
         getCellValidator: function({ rowKey, columnIndex }) {
@@ -512,10 +508,9 @@ module.exports = {
                     const that = this;
                     const validatingController = that.getController('validating');
                     const editDataIndex = that.callBase(options, row);
-                    let editData;
 
                     if(editDataIndex >= 0) {
-                        editData = that._editData[editDataIndex];
+                        const editData = that._editData[editDataIndex];
                         validatingController.updateEditData(editData);
                     }
 
@@ -601,17 +596,15 @@ module.exports = {
 
                 processDataItem: function(item) {
                     const that = this;
-                    let editIndex;
-                    let editData;
                     const isInserted = item.data[INSERT_INDEX];
                     const key = isInserted ? item.data.key : item.key;
                     const editMode = that.getEditMode();
 
                     if(editMode === EDIT_MODE_BATCH && isInserted && key) {
-                        editIndex = getIndexByKey(key, that._editData);
+                        const editIndex = getIndexByKey(key, that._editData);
 
                         if(editIndex >= 0) {
-                            editData = that._editData[editIndex];
+                            const editData = that._editData[editIndex];
 
                             if(editData.type !== EDIT_DATA_INSERT_TYPE) {
                                 item.data = extend(true, {}, editData.oldData, editData.data);
@@ -676,12 +669,11 @@ module.exports = {
                 },
 
                 _beforeSaveEditData: function(editData, editIndex) {
-                    let isValid;
                     let result = this.callBase.apply(this, arguments);
                     const validatingController = this.getController('validating');
 
                     if(editData) {
-                        isValid = editData.type === 'remove' || editData.isValid;
+                        const isValid = editData.type === 'remove' || editData.isValid;
                         result = result || !isValid;
                     } else {
                         const disposeValidators = this._createInvisibleColumnValidators(this._editData);
@@ -760,10 +752,12 @@ module.exports = {
                 },
 
                 updateFieldValue: function(e) {
-
                     const validatingController = this.getController('validating');
                     const deferred = new Deferred();
-                    validatingController.resetRowValidationResults(this.getEditDataByKey(e.key));
+                    validatingController.removeCellValidationResult({
+                        editData: this.getEditDataByKey(e.key),
+                        columnIndex: e.column.index
+                    });
 
                     this.callBase.apply(this, arguments).done(() => {
                         const currentValidator = validatingController.getCellValidator({
@@ -778,10 +772,9 @@ module.exports = {
                 showHighlighting: function($cell, skipValidation) {
                     let isValid = true;
                     const callBase = this.callBase;
-                    let validator;
 
                     if(!skipValidation) {
-                        validator = $cell.data('dxValidator');
+                        const validator = $cell.data('dxValidator');
                         if(validator) {
                             when(this.getController('validating').validateCell(validator)).done((validationResult) => {
                                 isValid = validationResult.status === VALIDATION_STATUS.valid;
@@ -799,7 +792,7 @@ module.exports = {
                 },
 
                 highlightDataCell: function($cell, parameters) {
-                    const isEditableCell = parameters.setValue;
+                    const isEditableCell = !!parameters.setValue;
                     const cellModified = this.isCellModified(parameters);
 
                     if(!cellModified && isEditableCell) {
@@ -821,11 +814,13 @@ module.exports = {
 
                 isCellModified: function(parameters) {
                     const cellModified = this.callBase(parameters);
-                    const isCellInvalidInNewRow = parameters.row && parameters.row.isNewRow && this.getController('validating').isInvalidCell({
+                    const editData = this.getEditDataByKey(parameters.key);
+                    const isRowValidated = !!editData && !!editData.validated;
+                    const isCellInvalid = !!parameters.row && this.getController('validating').isInvalidCell({
                         rowKey: parameters.key,
                         columnIndex: parameters.column.index
                     });
-                    return cellModified || isCellInvalidInNewRow;
+                    return cellModified || (isRowValidated && isCellInvalid);
                 }
             },
             editorFactory: (function() {
@@ -899,14 +894,13 @@ module.exports = {
                     },
 
                     _hideFixedGroupCell: function($cell, overlayOptions) {
-                        let nextRowOptions;
                         let $nextFixedRowElement;
                         let $groupCellElement;
                         const isFixedColumns = this._rowsView.isFixedColumns();
                         const isFormEditMode = this._editingController.isFormEditMode();
 
                         if(isFixedColumns && !isFormEditMode) {
-                            nextRowOptions = $cell.closest('.dx-row').next().data('options');
+                            const nextRowOptions = $cell.closest('.dx-row').next().data('options');
 
                             if(nextRowOptions && nextRowOptions.rowType === 'group') {
                                 $nextFixedRowElement = $(this._rowsView.getRowElement(nextRowOptions.rowIndex)).last();

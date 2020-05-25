@@ -35,6 +35,7 @@ const DX_MENU_ITEM_LAST_GROUP_ITEM = DX_MENU_CLASS + '-last-group-item';
 
 const DX_ITEM_SELECTED_CLASS = 'dx-menu-item-selected';
 const DX_STATE_DISABLED_CLASS = 'dx-state-disabled';
+const DX_STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 
 const DX_ITEM_HAS_TEXT = DX_MENU_ITEM_CLASS + '-has-text';
 const DX_ITEM_HAS_ICON = DX_MENU_ITEM_CLASS + '-has-icon';
@@ -241,11 +242,42 @@ QUnit.module('Menu rendering', () => {
         assert.equal(menuBase.element.find('.dx-menu-separator').length, 0, 'there is no separators');
     });
 
-
     QUnit.test('Render menu with hidden items (T310028)', function(assert) {
-        createMenu({ items: [{ text: 'item 1' }, { text: 'item 2', visible: false }, { text: 'item 3' }] });
+        const menu = createMenu({ items: [{ text: 'item 0' }, { text: 'item 1', visible: false }, { text: 'item 2' }] });
 
-        assert.equal($('.' + DX_MENU_ITEM_WRAPPER_CLASS).length, 2, 'menu should not render invisible item wrappers');
+        const menuItems = menu.element.find(`.${DX_MENU_ITEM_CLASS}`);
+        assert.equal(menuItems.length, 3, 'menu items count');
+        assert.equal(menuItems.eq(0).hasClass(DX_STATE_INVISIBLE_CLASS), false, 'item0 is visible');
+        assert.equal(menuItems.eq(1).hasClass(DX_STATE_INVISIBLE_CLASS), true, 'item1 is not visible');
+        assert.equal(menuItems.eq(2).hasClass(DX_STATE_INVISIBLE_CLASS), false, 'item2 is visible');
+    });
+
+    QUnit.test('item1.visible: false -> item1.setVisible(true) -> item1.setVisible(false) (T879766)', function(assert) {
+        const menu = createMenu({ items: [{ text: 'item 0', visible: false }] });
+
+        menu.instance.option('items[0].visible', true);
+        let menuItems = menu.element.find(`.${DX_MENU_ITEM_CLASS}`);
+        assert.equal(menuItems.length, 1, 'menu items count');
+        assert.equal(menuItems.eq(0).hasClass(DX_STATE_INVISIBLE_CLASS), false, 'item1 is  visible');
+
+        menu.instance.option('items[0].visible', false);
+        menuItems = menu.element.find(`.${DX_MENU_ITEM_CLASS}`);
+        assert.equal(menuItems.length, 1, 'menu items count');
+        assert.equal(menuItems.eq(0).hasClass(DX_STATE_INVISIBLE_CLASS), true, 'item1 is not visible');
+    });
+
+    QUnit.test('item1.visible: true -> item1.setVisible(false) -> item1.setVisible(true) (T879766)', function(assert) {
+        const menu = createMenu({ items: [{ text: 'item 0', visible: true }] });
+
+        menu.instance.option('items[0].visible', false);
+        let menuItems = menu.element.find(`.${DX_MENU_ITEM_CLASS}`);
+        assert.equal(menuItems.length, 1, 'menu items count');
+        assert.equal(menuItems.eq(0).hasClass(DX_STATE_INVISIBLE_CLASS), true, 'item1 is not visible');
+
+        menu.instance.option('items[0].visible', true);
+        menuItems = menu.element.find(`.${DX_MENU_ITEM_CLASS}`);
+        assert.equal(menuItems.length, 1, 'menu items count');
+        assert.equal(menuItems.eq(0).hasClass(DX_STATE_INVISIBLE_CLASS), false, 'item1 is visible');
     });
 
     QUnit.test('item container should have dx-menu-no-icons class when menu level have no icons', function(assert) {

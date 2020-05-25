@@ -7,6 +7,7 @@ import positionUtils from '../../animation/position';
 import { each } from '../../core/utils/iterator';
 import Class from '../../core/class';
 import { Deferred, when } from '../../core/utils/deferred';
+import Callbacks from '../../core/utils/callbacks';
 
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
@@ -177,9 +178,6 @@ exports.VirtualScrollController = Class.inherit((function() {
 
     const getPageIndexForLoad = function(that) {
         let result = -1;
-        let needToLoadNextPage;
-        let needToLoadPrevPage;
-        let needToLoadPageBeforeLast;
         const beginPageIndex = getBeginPageIndex(that);
         const dataSource = that._dataSource;
 
@@ -189,8 +187,8 @@ exports.VirtualScrollController = Class.inherit((function() {
             result = that._pageIndex;
         } else if(beginPageIndex >= 0 && that._viewportSize >= 0) {
             if(beginPageIndex > 0) {
-                needToLoadPageBeforeLast = getEndPageIndex(that) + 1 === dataSource.pageCount() && that._cache.length < getPreloadPageCount(that) + 1;
-                needToLoadPrevPage = needToLoadPageBeforeLast || that._pageIndex === beginPageIndex && getPreloadPageCount(that, true);
+                const needToLoadPageBeforeLast = getEndPageIndex(that) + 1 === dataSource.pageCount() && that._cache.length < getPreloadPageCount(that) + 1;
+                const needToLoadPrevPage = needToLoadPageBeforeLast || that._pageIndex === beginPageIndex && getPreloadPageCount(that, true);
 
                 if(needToLoadPrevPage) {
                     result = beginPageIndex - 1;
@@ -198,7 +196,7 @@ exports.VirtualScrollController = Class.inherit((function() {
             }
 
             if(result < 0) {
-                needToLoadNextPage = beginPageIndex + that._cache.length <= that._pageIndex + getPreloadPageCount(that);
+                const needToLoadNextPage = beginPageIndex + that._cache.length <= that._pageIndex + getPreloadPageCount(that);
 
                 if(needToLoadNextPage) {
                     result = beginPageIndex + that._cache.length;
@@ -311,6 +309,7 @@ exports.VirtualScrollController = Class.inherit((function() {
             that._cache = [];
             that._isVirtual = isVirtual;
             that._loadingPageIndexes = {};
+            that.positionChanged = Callbacks();
         },
 
         getItemSizes: function() {
@@ -325,17 +324,15 @@ exports.VirtualScrollController = Class.inherit((function() {
             const that = this;
             let pageIndex;
             let itemsCount = 0;
-            let beginItemsCount;
-            let endItemsCount;
 
             if(isVirtualMode(that)) {
                 pageIndex = getBeginPageIndex(that);
                 if(pageIndex < 0) {
                     pageIndex = that._dataSource.pageIndex();
                 }
-                beginItemsCount = pageIndex * that._dataSource.pageSize();
+                const beginItemsCount = pageIndex * that._dataSource.pageSize();
                 itemsCount = that._cache.length * that._dataSource.pageSize();
-                endItemsCount = Math.max(0, that._dataSource.totalItemsCount() - itemsCount - beginItemsCount);
+                const endItemsCount = Math.max(0, that._dataSource.totalItemsCount() - itemsCount - beginItemsCount);
                 return {
                     begin: beginItemsCount,
                     end: endItemsCount
@@ -375,7 +372,6 @@ exports.VirtualScrollController = Class.inherit((function() {
             const defaultItemSize = that.getItemSize();
             let offset = 0;
             let itemOffset = 0;
-            let itemSize;
 
             const itemOffsetsWithSize = Object.keys(that._itemSizes).concat(-1);
             for(let i = 0; i < itemOffsetsWithSize.length && offset < position; i++) {
@@ -389,7 +385,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                     offset += itemOffsetDiff * defaultItemSize;
                     itemOffset += itemOffsetDiff;
                 }
-                itemSize = that._itemSizes[itemOffsetWithSize];
+                const itemSize = that._itemSizes[itemOffsetWithSize];
                 offset += itemSize;
                 itemOffset += offset < position ? 1 : (position - offset + itemSize) / itemSize;
             }
@@ -400,7 +396,9 @@ exports.VirtualScrollController = Class.inherit((function() {
             this._position = position;
 
             const itemIndex = this.getItemIndexByPosition();
-            return this.setViewportItemIndex(itemIndex);
+            const result = this.setViewportItemIndex(itemIndex);
+            this.positionChanged.fire();
+            return result;
         },
 
         setContentSize: function(size) {
@@ -476,8 +474,6 @@ exports.VirtualScrollController = Class.inherit((function() {
             const virtualMode = isVirtualMode(that);
             const appendMode = isAppendMode(that);
             const totalItemsCount = that._dataSource.totalItemsCount();
-            let lastPageSize;
-            let maxPageIndex;
             let newPageIndex;
 
             that._viewportItemIndex = itemIndex;
@@ -486,8 +482,8 @@ exports.VirtualScrollController = Class.inherit((function() {
                 if(that._viewportSize && (itemIndex + that._viewportSize) >= totalItemsCount && !that._isVirtual) {
                     if(that._dataSource.hasKnownLastPage()) {
                         newPageIndex = pageCount - 1;
-                        lastPageSize = totalItemsCount % pageSize;
-                        if(newPageIndex > 0 && lastPageSize > 0 && lastPageSize < pageSize / 2) {
+                        const lastPageSize = totalItemsCount % pageSize;
+                        if(newPageIndex > 0 && lastPageSize > 0 && lastPageSize < that._viewportSize) {
                             newPageIndex--;
                         }
                     } else {
@@ -495,7 +491,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                     }
                 } else {
                     newPageIndex = Math.floor(itemIndex / pageSize);
-                    maxPageIndex = pageCount - 1;
+                    const maxPageIndex = pageCount - 1;
                     newPageIndex = Math.max(newPageIndex, 0);
                     newPageIndex = Math.min(newPageIndex, maxPageIndex);
                 }
@@ -541,17 +537,15 @@ exports.VirtualScrollController = Class.inherit((function() {
             return this._dataSource.pageSize();
         },
         load: function() {
-            let pageIndexForLoad;
             const that = this;
             const dataSource = that._dataSource;
-            let loadResult;
             let result;
 
             if(isVirtualMode(that) || isAppendMode(that)) {
-                pageIndexForLoad = getPageIndexForLoad(that);
+                const pageIndexForLoad = getPageIndexForLoad(that);
 
                 if(pageIndexForLoad >= 0) {
-                    loadResult = loadCore(that, pageIndexForLoad);
+                    const loadResult = loadCore(that, pageIndexForLoad);
                     if(loadResult) {
                         result = new Deferred();
                         loadResult.done(function() {
@@ -591,17 +585,15 @@ exports.VirtualScrollController = Class.inherit((function() {
         },
         handleDataChanged: function(callBase, e) {
             const that = this;
-            let beginPageIndex;
             const dataSource = that._dataSource;
             let lastCacheLength = that._cache.length;
             let changeType;
             let removeInvisiblePages;
-            let cacheItem;
 
             if(e && e.changes) {
                 fireChanged(that, callBase, e);
             } else if(isVirtualMode(that) || isAppendMode(that)) {
-                beginPageIndex = getBeginPageIndex(that);
+                const beginPageIndex = getBeginPageIndex(that);
                 if(beginPageIndex >= 0) {
                     if(isVirtualMode(that) && beginPageIndex + that._cache.length !== dataSource.pageIndex() && beginPageIndex - 1 !== dataSource.pageIndex()) {
                         lastCacheLength = 0;
@@ -617,7 +609,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                     }
                 }
 
-                cacheItem = { pageIndex: dataSource.pageIndex(), itemsLength: dataSource.items(true).length, itemsCount: that.itemsCount(true) };
+                const cacheItem = { pageIndex: dataSource.pageIndex(), itemsLength: dataSource.items(true).length, itemsCount: that.itemsCount(true) };
 
                 if(!that.option('legacyRendering') && that.option('scrolling.removeInvisiblePages') && isVirtualMode(that)) {
                     removeInvisiblePages = that._cache.length > Math.max(getPreloadPageCount(this) + (that.option('scrolling.preloadEnabled') ? 1 : 0), 2);

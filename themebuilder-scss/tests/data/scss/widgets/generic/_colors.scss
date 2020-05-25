@@ -1,0 +1,21 @@
+@forward "tb/widgets/generic/colors";
+@use "tb/widgets/generic/colors" as *;
+@use "sass:color";
+@use "./color" as extColor;
+$color: null !default;
+
+$base-font-family: null !default;
+$base-accent: null !default;
+
+
+@if $color == "light" {
+    $base-font-family: 'Helvetica Neue', 'Segoe UI', Helvetica, Verdana, sans-serif !default;
+    $base-accent: #337ab7 !default;
+}
+
+
+$never-used: collector((
+"path": "tb/widgets/generic/colors",
+"$base-font-family": $base-font-family,
+"$base-accent": $base-accent,
+));

@@ -4,7 +4,7 @@ import Guid from '../../core/guid';
 import { default as FormItemsRunTimeInfo } from './ui.form.items_runtime_info';
 import registerComponent from '../../core/component_registrator';
 import { isDefined, isEmptyObject, isFunction, isObject, type } from '../../core/utils/type';
-import domUtils from '../../core/utils/dom';
+import { getPublicElement } from '../../core/element';
 import { isWrapped, isWritableWrapped, unwrap } from '../../core/utils/variable_wrapper';
 import windowUtils from '../../core/utils/window';
 import stringUtils from '../../core/utils/string';
@@ -552,11 +552,6 @@ const LayoutManager = Widget.inherit({
             return item.horizontalAlignment;
         }
 
-        if(isDefined(item.alignment)) {
-            errors.log('W0001', 'dxForm', 'alignment', '18.1', 'Use the \'horizontalAlignment\' option in button items instead.');
-            return item.alignment;
-        }
-
         return 'right';
     },
 
@@ -904,7 +899,7 @@ const LayoutManager = Widget.inherit({
 
             template.render({
                 model: data,
-                container: domUtils.getPublicElement($container)
+                container: getPublicElement($container)
             });
         } else {
             const $editor = $('<div>').appendTo($container);

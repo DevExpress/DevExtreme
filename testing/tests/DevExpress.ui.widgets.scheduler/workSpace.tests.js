@@ -1,25 +1,22 @@
-import pointerMock from '../../helpers/pointerMock.js';
-import keyboardMock from '../../helpers/keyboardMock.js';
-
-import $ from 'jquery';
-import { noop } from 'core/utils/common';
-import { isRenderer } from 'core/utils/type';
-import config from 'core/config';
-import SchedulerResourcesManager from 'ui/scheduler/ui.scheduler.resource_manager';
-import domUtils from 'core/utils/dom';
-import resizeCallbacks from 'core/utils/resize_callbacks';
-import dateUtils from 'core/utils/date';
-import dateLocalization from 'localization/date';
-import dragEvents from 'events/drag';
-import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
-
 import 'common.css!';
+import config from 'core/config';
+import { noop } from 'core/utils/common';
+import dateUtils from 'core/utils/date';
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import { isRenderer } from 'core/utils/type';
+import dragEvents from 'events/drag';
+import { triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
-
+import $ from 'jquery';
+import dateLocalization from 'localization/date';
+import SchedulerResourcesManager from 'ui/scheduler/ui.scheduler.resource_manager';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
+import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_work_week';
-import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
+import keyboardMock from '../../helpers/keyboardMock.js';
+import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
+import pointerMock from '../../helpers/pointerMock.js';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
@@ -887,7 +884,7 @@ QUnit.testStart(function() {
 
         const scrollable = this.instance.getScrollable();
 
-        domUtils.triggerShownEvent(this.instance.$element());
+        triggerShownEvent(this.instance.$element());
 
         scrollable.scrollBy(0);
 
@@ -909,7 +906,7 @@ QUnit.testStart(function() {
 
         const scrollable = this.instance.getScrollable();
 
-        domUtils.triggerShownEvent(this.instance.$element());
+        triggerShownEvent(this.instance.$element());
 
         scrollable.scrollBy(220);
 
@@ -934,7 +931,7 @@ QUnit.testStart(function() {
 
         scrollable = this.instance.getScrollable();
 
-        domUtils.triggerShownEvent(this.instance.$element());
+        triggerShownEvent(this.instance.$element());
 
         scrollable.scrollBy(200);
 
@@ -1157,7 +1154,7 @@ QUnit.testStart(function() {
         assert.equal($allDayPanel.css('display'), 'none', 'allDay panel is invisible');
     });
 
-    QUnit.test('Scheduler all day panel is invisible on month view after switching showAllDayPanel option', function(assert) {
+    QUnit.test('Scheduler all day title is invisible on month view after switching showAllDayPanel option', function(assert) {
         this.instance.option('showAllDayPanel', false);
         this.instance.option('showAllDayPanel', true);
 

@@ -5,14 +5,14 @@ import browser from '../../core/utils/browser';
 import commonUtils from '../../core/utils/common';
 import typeUtils from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-import { getPublicElement } from '../../core/utils/dom';
+import { getPublicElement } from '../../core/element';
 import windowUtils from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import devices from '../../core/devices';
 import registerComponent from '../../core/component_registrator';
 import DOMComponent from '../../core/dom_component';
 import selectors from '../widget/selectors';
-import * as eventUtils from '../../events/utils';
+import { addNamespace } from '../../events/utils';
 import scrollEvents from './ui.events.emitter.gesture.scroll';
 import simulatedStrategy from './ui.scrollable.simulated';
 import NativeStrategy from './ui.scrollable.native';
@@ -149,7 +149,7 @@ const Scrollable = DOMComponent.inherit({
         const $content = this._$content = $('<div>').addClass(SCROLLABLE_CONTENT_CLASS);
 
         if(domAdapter.hasDocumentProperty('onbeforeactivate') && browser.msie && browser.version < 12) {
-            eventsEngine.on($element, eventUtils.addNamespace('beforeactivate', SCROLLABLE), function(e) {
+            eventsEngine.on($element, addNamespace('beforeactivate', SCROLLABLE), function(e) {
                 if(!$(e.target).is(selectors.focusable)) {
                     e.preventDefault();
                 }
@@ -210,15 +210,15 @@ const Scrollable = DOMComponent.inherit({
         };
 
         eventsEngine.off(this._$wrapper, '.' + SCROLLABLE);
-        eventsEngine.on(this._$wrapper, eventUtils.addNamespace(scrollEvents.init, SCROLLABLE), initEventData, this._initHandler.bind(this));
-        eventsEngine.on(this._$wrapper, eventUtils.addNamespace(scrollEvents.start, SCROLLABLE), strategy.handleStart.bind(strategy));
-        eventsEngine.on(this._$wrapper, eventUtils.addNamespace(scrollEvents.move, SCROLLABLE), strategy.handleMove.bind(strategy));
-        eventsEngine.on(this._$wrapper, eventUtils.addNamespace(scrollEvents.end, SCROLLABLE), strategy.handleEnd.bind(strategy));
-        eventsEngine.on(this._$wrapper, eventUtils.addNamespace(scrollEvents.cancel, SCROLLABLE), strategy.handleCancel.bind(strategy));
-        eventsEngine.on(this._$wrapper, eventUtils.addNamespace(scrollEvents.stop, SCROLLABLE), strategy.handleStop.bind(strategy));
+        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.init, SCROLLABLE), initEventData, this._initHandler.bind(this));
+        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.start, SCROLLABLE), strategy.handleStart.bind(strategy));
+        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.move, SCROLLABLE), strategy.handleMove.bind(strategy));
+        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.end, SCROLLABLE), strategy.handleEnd.bind(strategy));
+        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.cancel, SCROLLABLE), strategy.handleCancel.bind(strategy));
+        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.stop, SCROLLABLE), strategy.handleStop.bind(strategy));
 
         eventsEngine.off(this._$container, '.' + SCROLLABLE);
-        eventsEngine.on(this._$container, eventUtils.addNamespace('scroll', SCROLLABLE), strategy.handleScroll.bind(strategy));
+        eventsEngine.on(this._$container, addNamespace('scroll', SCROLLABLE), strategy.handleScroll.bind(strategy));
     },
 
     _validate: function(e) {

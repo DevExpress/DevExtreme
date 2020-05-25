@@ -5,7 +5,7 @@ import * as Preact from 'preact';
 import { isEmpty } from '../../core/utils/string';
 import { wrapElement, removeDifferentElements } from '../preact-wrapper/utils';
 import { useLayoutEffect } from 'preact/hooks';
-import { getPublicElement } from '../../core/utils/dom';
+import { getPublicElement } from '../../core/element';
 
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 

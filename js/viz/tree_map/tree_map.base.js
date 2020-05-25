@@ -443,7 +443,7 @@ function traverseDataItems(root, dataItems, level, params) {
         allNodes.push(node);
         nodes.push(node);
         items = dataItem[params.itemsField];
-        if(items && items.length) {
+        if(items?.length) {
             traverseDataItems(node, items, level + 1, params);
         }
         if(dataItem[params.valueField] > 0) {

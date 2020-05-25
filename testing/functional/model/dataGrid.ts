@@ -1,5 +1,5 @@
-import { ClientFunction, Selector } from "testcafe";
-import Widget from "./internal/widget";
+import { ClientFunction, Selector } from 'testcafe';
+import Widget from './internal/widget';
 
 const CLASS = {
     headers: 'headers',
@@ -11,6 +11,9 @@ const CLASS = {
     groupRow: 'dx-group-row',
     commandEdit: 'dx-command-edit',
     commandExpand: 'dx-command-expand',
+    commandSelect: 'dx-command-select',
+    commandAdaptive: 'dx-command-adaptive',
+    hiddenColumn: 'hidden-column',
     commandLink: 'dx-link',
     editCell: 'dx-editor-cell',
     focused: 'dx-focused',
@@ -33,6 +36,7 @@ const CLASS = {
     textEditorInput: 'dx-texteditor-input',
     invalid: 'dx-invalid',
     invalidCell: 'dx-datagrid-invalid',
+    invalidOverlayMessage: 'dx-invalid-message',
     cellModified: 'dx-cell-modified',
     editFormRow: 'edit-form',
     button: 'dx-button',
@@ -43,7 +47,10 @@ const CLASS = {
     insertedRow: 'dx-row-inserted',
     editedRow: 'dx-edit-row',
     saveButton: 'save-button',
-    groupExpanded: 'group-opened'
+    groupExpanded: 'group-opened',
+    overlayContent: 'edit-popup',
+    popupContent: 'dx-overlay-content',
+    toolbar: 'dx-toolbar'
 };
 
 const addWidgetPrefix = function(widgetName: string, className: string) {
@@ -89,7 +96,7 @@ class Headers extends DxElement {
     }
 
     getHeaderRow(index: number): HeaderRow {
-        return new HeaderRow(this.element.find(`.${CLASS.headerRow}:nth-child(${++index})`));
+        return new HeaderRow(this.element.find(`.${CLASS.headerRow}:nth-child(${++index})`), this.widgetName);
     }
 
     getFilterRow(): FilterRow {
@@ -122,22 +129,32 @@ class FilterCell extends DxElement {
 }
 
 class HeaderCell extends DxElement {
-    constructor(headerRow: Selector, index: number) {
+    isHidden: Promise<boolean>;
+
+    constructor(headerRow: Selector, index: number, widgetName: string) {
         super(headerRow.find(`td:nth-child(${++index})`));
+        this.isHidden = this.element.hasClass(addWidgetPrefix(widgetName, CLASS.hiddenColumn));
     }
 
     getFilterIcon(): Selector {
-        return this.element.find(`.dx-column-indicators > .dx-header-filter`);
+        return this.element.find('.dx-column-indicators > .dx-header-filter');
     }
 }
 
 class HeaderRow extends DxElement {
-    constructor(element: Selector) {
+    widgetName: string;
+
+    constructor(element: Selector, widgetName: string) {
         super(element);
+        this.widgetName = widgetName;
     }
 
     getHeaderCell(index: number): HeaderCell {
-        return new HeaderCell(this.element, index);
+        return new HeaderCell(this.element, index, this.widgetName);
+    }
+
+    getCommandCell(index: number): CommandCell {
+        return new CommandCell(this.element, index, this.widgetName);
     }
 }
 
@@ -148,14 +165,18 @@ class DataCell extends DxElement {
     isValidationPending: Promise<boolean>;
     isInvalid: Promise<boolean>;
     isModified: Promise<boolean>;
+    hasInvalidMessage: Promise<boolean>;
+    isHidden: Promise<boolean>;
 
-    constructor(dataRow: Selector, index: number) {
+    constructor(dataRow: Selector, index: number, widgetName: string) {
         super(dataRow.find(`td:nth-child(${++index})`));
         this.isEditCell = this.element.hasClass(CLASS.editCell);
         this.isFocused = this.element.hasClass(CLASS.focused);
         this.isValidationPending = this.element.find(`div.${CLASS.pendingIndicator}`).exists;
         this.isInvalid = this.element.hasClass(CLASS.invalidCell);
         this.isModified = this.element.hasClass(CLASS.cellModified);
+        this.hasInvalidMessage = this.element.find(`.${CLASS.invalidOverlayMessage} .${CLASS.popupContent}`).exists;
+        this.isHidden = this.element.hasClass(addWidgetPrefix(widgetName, CLASS.hiddenColumn));
     }
 
     getEditor(): DxElement {
@@ -164,24 +185,37 @@ class DataCell extends DxElement {
 }
 
 class CommandCell extends DxElement {
-    constructor(dataRow: Selector, index: number) {
-        super(dataRow.find(`td:nth-child(${++index}).${CLASS.commandEdit}`));
+    isFocused: Promise<boolean>;
+    isHidden: Promise<boolean>;
+
+    constructor(dataRow: Selector, index: number, widgetName: string) {
+        const childrenSelector = `td:nth-child(${++index})`;
+        const commandSelector = `${childrenSelector}.${CLASS.commandEdit}, ${childrenSelector}.${CLASS.commandSelect}, ${childrenSelector}.${CLASS.commandExpand}, ${childrenSelector}.${CLASS.commandAdaptive}`;
+        super(dataRow.find(commandSelector));
+        this.isFocused = this.element.hasClass(CLASS.focused);
+        this.isHidden = this.element.hasClass(addWidgetPrefix(widgetName, CLASS.hiddenColumn));
     }
 
     getButton(index: number) {
         return this.element.find(`.${CLASS.commandLink}:nth-child(${index + 1})`);
     }
+
+    getSelectCheckBox(): Selector {
+        return this.element.find(`.${CLASS.selectCheckBox}`);
+    }
 }
 
 class DataRow extends DxElement {
+    widgetName: string;
     isRemoved: Promise<boolean>;
     isFocusedRow: Promise<boolean>;
     isSelected: Promise<boolean>;
     isInserted: Promise<boolean>;
     isEdited: Promise<boolean>;
 
-    constructor(element: Selector) {
+    constructor(element: Selector, widgetName: string) {
         super(element);
+        this.widgetName = widgetName;
         this.isRemoved = this.element.hasClass(CLASS.rowRemoved);
         this.isFocusedRow = this.element.hasClass(CLASS.focusedRow);
         this.isSelected = this.element.hasClass(CLASS.selection);
@@ -190,11 +224,11 @@ class DataRow extends DxElement {
     }
 
     getDataCell(index: number): DataCell {
-        return new DataCell(this.element, index);
+        return new DataCell(this.element, index, this.widgetName);
     }
 
     getCommandCell(index: number): CommandCell {
-        return new CommandCell(this.element, index);
+        return new CommandCell(this.element, index, this.widgetName);
     }
 
     getSelectCheckBox(): Selector {
@@ -213,11 +247,11 @@ class GroupRow extends DxElement {
         this.widgetName = widgetName;
         this.isFocusedRow = this.element.hasClass(CLASS.focusedRow);
         this.isFocused = this.element.hasClass(CLASS.focused);
-        this.isExpanded = this.element.find(`.${CLASS.commandExpand} .${addWidgetPrefix(this.widgetName, CLASS.groupExpanded)}`).exists
+        this.isExpanded = this.element.find(`.${CLASS.commandExpand} .${addWidgetPrefix(this.widgetName, CLASS.groupExpanded)}`).exists;
     }
 
     getCell(index: number): DataCell {
-        return new DataCell(this.element, index);
+        return new DataCell(this.element, index, this.widgetName);
     }
 }
 
@@ -281,7 +315,7 @@ export class EditForm extends DxElement {
     }
 
     getItem(id): Selector {
-        return this.form.find(`.${CLASS.textEditorInput}[id*=_${id}]`)
+        return this.form.find(`.${CLASS.textEditorInput}[id*=_${id}]`);
     }
 
     getInvalids(): Selector {
@@ -295,7 +329,7 @@ export default class DataGrid extends Widget {
 
     name: string;
 
-    constructor(id: string, name='dxDataGrid') {
+    constructor(id: string, name = 'dxDataGrid') {
         super(id);
 
         this.name = name;
@@ -305,7 +339,7 @@ export default class DataGrid extends Widget {
 
         this.getGridInstance = ClientFunction(
             () => $(grid())[`${name}`]('instance'),
-            { dependencies: { grid, name }}
+            { dependencies: { grid, name } }
         );
     }
 
@@ -318,7 +352,7 @@ export default class DataGrid extends Widget {
     }
 
     getDataRow(index: number): DataRow {
-        return new DataRow(this.element.find(`.${CLASS.dataRow}:nth-child(${++index})`));
+        return new DataRow(this.element.find(`.${CLASS.dataRow}:nth-child(${++index})`), this.name);
     }
 
     getDataCell(rowIndex: number, columnIndex: number): DataCell {
@@ -368,10 +402,17 @@ export default class DataGrid extends Widget {
         )();
     }
 
-    getEditForm() {
+    getEditForm(): EditForm {
         const editFormRowClass = this.addWidgetPrefix(CLASS.editFormRow);
-        const element = this.element ? this.element.find(`.${editFormRowClass}`) :  Selector(`.${editFormRowClass}`);
+        const element = this.element ? this.element.find(`.${editFormRowClass}`) : Selector(`.${editFormRowClass}`);
         const buttons = element.find(`.${this.addWidgetPrefix(CLASS.formButtonsContainer)} .${CLASS.button}`);
+
+        return new EditForm(element, buttons);
+    }
+
+    getPopupEditForm(): EditForm {
+        const element = Selector(`.${this.addWidgetPrefix(CLASS.overlayContent)} .${CLASS.popupContent}`);
+        const buttons = element.find(`.${CLASS.toolbar} .${CLASS.button}`);
 
         return new EditForm(element, buttons);
     }
@@ -409,11 +450,35 @@ export default class DataGrid extends Widget {
         )();
     }
 
+    api_saveEditData() : Promise<void> {
+        const getGridInstance: any = this.getGridInstance;
+        return ClientFunction(
+            () => getGridInstance().saveEditData(),
+            { dependencies: { getGridInstance } }
+        )();
+    }
+
+    api_editCell(rowIndex: number, columnIndex: number) : Promise<void> {
+        const getGridInstance: any = this.getGridInstance;
+        return ClientFunction(
+            () => getGridInstance().editCell(rowIndex, columnIndex),
+            { dependencies: { getGridInstance, rowIndex, columnIndex } }
+        )();
+    }
+
+    api_cellValue(rowIndex: number, columnIndex: number, value: string) : Promise<void> {
+        const getGridInstance: any = this.getGridInstance;
+        return ClientFunction(
+            () => getGridInstance().editCell(rowIndex, columnIndex, value),
+            { dependencies: { getGridInstance, rowIndex, columnIndex, value } }
+        )();
+    }
+
     api_getCellValidationStatus(rowIndex: number, columnIndex: number) : Promise<any> {
         const getGridInstance: any = this.getGridInstance;
         return ClientFunction(() => {
             const dataGrid = getGridInstance();
-            const result = dataGrid.getController('validating').getCellValidationResult({ rowKey : dataGrid.getKeyByRowIndex(rowIndex), columnIndex });
+            const result = dataGrid.getController('validating').getCellValidationResult({ rowKey: dataGrid.getKeyByRowIndex(rowIndex), columnIndex });
             return result ? result.status : null;
         }, { dependencies: { getGridInstance, rowIndex, columnIndex } }
         )();

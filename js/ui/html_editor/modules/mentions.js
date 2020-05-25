@@ -3,7 +3,7 @@ import Quill from 'quill';
 import { compileGetter } from '../../../core/utils/data';
 import { isString } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
-import { getPublicElement } from '../../../core/utils/dom';
+import { getPublicElement } from '../../../core/element';
 import { Event as dxEvent } from '../../../events/core/events_engine';
 
 import PopupModule from './popup';
@@ -66,11 +66,12 @@ if(Quill) {
             this.editorInstance = options.editorInstance;
 
             options.mentions.forEach((item) => {
-                let { marker, template } = item;
+                let marker = item.marker;
                 if(!marker) {
                     item.marker = marker = DEFAULT_MARKER;
                 }
 
+                const template = item.template;
                 if(template) {
                     const preparedTemplate = this.editorInstance._getTemplate(template);
                     preparedTemplate && Mention.addTemplate(marker, preparedTemplate);

@@ -29,6 +29,7 @@ const moduleConfig = {
         });
 
         this.wrapper = new FileManagerWrapper(this.$element);
+        this.fileManager = this.wrapper.getInstance();
 
         this.clock.tick(400);
     },
@@ -615,6 +616,67 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         menuItems = this.wrapper.getContextMenuItems();
         assert.strictEqual(menuItems.length, 1, 'one menu item shown');
         assert.strictEqual(menuItems.eq(0).text(), 'Refresh', '\'refresh\' menu item shown');
+    });
+
+    test('context menu items can be updated on selection changed event after right button click', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
+
+        this.fileManager.option({
+            contextMenu: {
+                items: [ { text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' } ]
+            },
+            onSelectionChanged: () => {
+                this.fileManager.option('contextMenu.items[1].disabled', true);
+            }
+        });
+
+        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxcontextmenu');
+        this.clock.tick(400);
+
+        assert.ok(this.wrapper.getContextMenuItems().eq(1).is(`.${Consts.DISABLED_STATE_CLASS}`), 'item disabled');
+    });
+
+    test('context menu items can be updated on selection changed event after action button click', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
+
+        this.fileManager.option({
+            contextMenu: {
+                items: [ { text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' } ]
+            },
+            onSelectionChanged: () => {
+                this.fileManager.option('contextMenu.items[1].disabled', true);
+            }
+        });
+
+        this.wrapper.getRowInDetailsView(1).trigger('dxhoverstart');
+        this.wrapper.getRowActionButtonInDetailsView(1).trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.ok(this.wrapper.getContextMenuItems().eq(1).is(`.${Consts.DISABLED_STATE_CLASS}`), 'item disabled');
+    });
+
+    test('context menu items can be updated for visible menu after action button click', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
+
+        this.fileManager.option('contextMenu.items', [ { text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' } ]);
+
+        this.wrapper.getRowInDetailsView(1).trigger('dxhoverstart');
+        this.wrapper.getRowActionButtonInDetailsView(1).trigger('dxclick');
+        this.clock.tick(400);
+
+        this.fileManager.option('contextMenu.items[1].disabled', true);
+        this.clock.tick(400);
+
+        assert.ok(this.wrapper.getContextMenuItems().eq(1).is(`.${Consts.DISABLED_STATE_CLASS}`), 'item disabled');
     });
 
 });

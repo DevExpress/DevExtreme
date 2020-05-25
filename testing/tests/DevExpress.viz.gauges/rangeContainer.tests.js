@@ -166,14 +166,11 @@ QUnit.module('BaseRangeContainer - ranges ', $.extend({}, environment, {
     checkRanges: function(assert, ranges, expected) {
         const translatorAsc = new Translator1D(-50, 150, 300, 500);
         const translatorDesc = new Translator1D(50, -150, 300, 500);
-        let rangesAsc;
-        let rangesDesc;
         const expectedAsc = [];
         const expectedDesc = [];
-        let list;
 
-        rangesAsc = ranges.slice(0);
-        rangesDesc = $.map(rangesAsc, function(item) {
+        const rangesAsc = ranges.slice(0);
+        const rangesDesc = $.map(rangesAsc, function(item) {
             return { startValue: -item.startValue, endValue: -item.endValue, color: item.color };
         });
 
@@ -209,7 +206,7 @@ QUnit.module('BaseRangeContainer - ranges ', $.extend({}, environment, {
             width: 10,
             ranges: rangesAsc
         }).resize();
-        list = this.rangeContainer.elements;
+        let list = this.rangeContainer.elements;
         assert.strictEqual(list.length, expectedAsc.length, 'count (ascending)');
         $.each(list, function(i, item) {
             assert.deepEqual(item.range, expectedAsc[i], 'range ' + i.toString() + ' (ascending)');
@@ -439,11 +436,9 @@ QUnit.test('descending width', function(assert) {
 
 QUnit.module('BaseRangeContainer - palette', $.extend({}, environment, {
     checkColors: function(assert, rangeColors, palette, expectedColors, paletteExtensionMode) {
-        let ranges;
-        let list;
         const step = 100 / (rangeColors.length + 1);
         let pos = 0;
-        ranges = $.map(rangeColors, function(color) {
+        const ranges = $.map(rangeColors, function(color) {
             const range = { startValue: pos, endValue: pos + step, color: color };
             pos += step;
             return range;
@@ -456,7 +451,7 @@ QUnit.module('BaseRangeContainer - palette', $.extend({}, environment, {
             palette: palette,
             paletteExtensionMode: paletteExtensionMode
         }).resize();
-        list = this.rangeContainer.elements;
+        const list = this.rangeContainer.elements;
         $.each(expectedColors, function(i, color) {
             assert.strictEqual(list[i].range.color, color, 'range ' + i.toString());
         });

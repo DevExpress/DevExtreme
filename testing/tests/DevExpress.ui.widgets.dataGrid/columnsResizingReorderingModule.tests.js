@@ -503,11 +503,18 @@ QUnit.module('ColumnsSeparator', () => {
                     getScrollbarWidth: function() {
                         return 0;
                     }
+                },
+                draggingHeaderView: {
+                    isDragging: () => false
                 }
             },
 
             getController: function(name) {
                 return this._controllers[name];
+            },
+
+            getView: function(name) {
+                return this._views[name];
             },
 
             NAME: 'dxDataGrid'
@@ -589,11 +596,18 @@ QUnit.module('ColumnsSeparator', () => {
                     getHeight: function() {
                         return 10;
                     }
+                },
+                draggingHeaderView: {
+                    isDragging: () => false
                 }
             },
 
             getController: function(name) {
                 return this._controllers[name];
+            },
+
+            getView: function(name) {
+                return this._views[name];
             },
 
             NAME: 'dxDataGrid'
@@ -619,7 +633,7 @@ QUnit.module('ColumnsSeparator', () => {
         assert.equal(separator.element().height(), columnHeadersViewHeight + rowsViewHeight - scrollBarWidth, 'height of columns separator');
     });
 
-    QUnit.test('Column separator height should be equal to the headers heigth if \'resizing\' is false', function(assert) {
+    function columnSeparatorHeightTest(assert, isResizing, isDragging) {
         // arrange
         const columnHeadersViewHeight = 45;
         const rowsViewHeight = 100;
@@ -630,7 +644,7 @@ QUnit.module('ColumnsSeparator', () => {
             },
             _controllers: {
                 columnsResizer: {
-                    isResizing: () => false
+                    isResizing: () => isResizing
                 }
             },
             _views: {
@@ -653,11 +667,18 @@ QUnit.module('ColumnsSeparator', () => {
                     getScrollbarWidth: function(isHorizontal) {
                         return isHorizontal ? scrollBarWidth : 0;
                     }
+                },
+                draggingHeaderView: {
+                    isDragging: () => isDragging
                 }
             },
 
             getController: function(name) {
                 return this._controllers[name];
+            },
+
+            getView: function(name) {
+                return this._views[name];
             },
 
             NAME: 'dxDataGrid'
@@ -680,7 +701,28 @@ QUnit.module('ColumnsSeparator', () => {
         tablePosition.update();
 
         // arrange
-        assert.equal(separator.element().height(), columnHeadersViewHeight, 'height of columns separator');
+        let expectedHeight = columnHeadersViewHeight;
+
+        if(isResizing || isDragging) {
+            expectedHeight += rowsViewHeight - scrollBarWidth;
+        }
+
+        assert.equal(separator.element().height(), expectedHeight, 'height of columns separator');
+    }
+
+    // T816406, T889787
+    QUnit.test('Column separator height should be equal to the headers heigth if \'resizing\' and \'dragging\' are false', function(assert) {
+        columnSeparatorHeightTest(assert, false, false);
+    });
+
+    // T889787
+    QUnit.test('Column separator height should not be equal to the headers heigth if \'resizing\' is true', function(assert) {
+        columnSeparatorHeightTest(assert, true, false);
+    });
+
+    // T889787
+    QUnit.test('Column separator height should not be equal to the headers heigth if \'dragging\' is true', function(assert) {
+        columnSeparatorHeightTest(assert, false, true);
     });
 
     QUnit.test('IsVisible when columns options is empty', function(assert) {
@@ -894,6 +936,16 @@ QUnit.module('Columns resizing', {
 
                 columnsResizer: {
                     isResizing: () => true
+                },
+
+                editorFactory: {
+                    loseFocus: noop
+                }
+            },
+
+            _views: {
+                draggingHeaderView: {
+                    isDragging: () => false
                 }
             },
 
@@ -909,7 +961,13 @@ QUnit.module('Columns resizing', {
 
             getController: function(name) {
                 return this._controllers[name];
-            }
+            },
+
+            getView: function(name) {
+                return this._views[name];
+            },
+
+            getScrollable: function() {}
         };
 
         that.component._views = {
@@ -940,7 +998,6 @@ QUnit.module('Columns resizing', {
         };
 
         that.createColumnsResizerViewController = function(columns) {
-            let controller;
 
             if(columns) {
                 that.component._controllers.columns = new MockColumnsController(columns, that.commonColumnSettings);
@@ -948,7 +1005,7 @@ QUnit.module('Columns resizing', {
 
             that.component._controllers.editing = new MockEditingController();
 
-            that.resizeController = controller = new columnResizingReordering.ColumnsResizerViewController(that.component);
+            const controller = that.resizeController = new columnResizingReordering.ColumnsResizerViewController(that.component);
 
             controller.init();
 
@@ -1016,33 +1073,6 @@ QUnit.module('Columns resizing', {
             { x: -9750, y: -10000, columnIndex: 1, index: 2 },
             { x: -9625, y: -10000, columnIndex: 2, index: 3 },
             { x: -9500, y: -10000, columnIndex: 3, index: 4 }
-        ], 'points by columns');
-    });
-
-    QUnit.test('Get points by columns if columnResizingMode is widget and RTL', function(assert) {
-        // arrange
-        this.options.columnResizingMode = 'widget';
-        this.options.rtlEnabled = true;
-        $('#container').css('direction', 'rtl');
-        const resizeController = this.createColumnsResizerViewController([
-            { caption: 'Column 1', width: '125px' },
-            { caption: 'Column 2', width: '125px' },
-            { caption: 'Column 3', width: '125px' },
-            { caption: 'Column 4', width: '125px' }
-        ]);
-        const $container = $('#container');
-
-        // act
-        $container.css({ width: '500px', height: '500px' });
-        resizeController._columnHeadersView.render($container);
-        resizeController._columnsSeparatorView.render($container);
-
-        // assert
-        assert.deepEqual(resizeController.pointsByColumns(), [
-            { x: -9500, y: -10000, columnIndex: 0, index: 0 },
-            { x: -9625, y: -10000, columnIndex: 1, index: 1 },
-            { x: -9750, y: -10000, columnIndex: 2, index: 2 },
-            { x: -9875, y: -10000, columnIndex: 3, index: 3 }
         ], 'points by columns');
     });
 
@@ -1369,59 +1399,6 @@ QUnit.module('Columns resizing', {
             { columnIndex: 0, optionName: 'width', optionValue: '55.000%' },
             { columnIndex: 1, optionName: 'visibleWidth', optionValue: 90 },
             { columnIndex: 1, optionName: 'width', optionValue: '45.000%' }
-        ], 'update column options after resizing');
-    });
-
-
-    QUnit.test('Set new width of column in the separatorMoving callback function RTL', function(assert) {
-        // arrange
-        const resizeController = this.createColumnsResizerViewController();
-        this.options.rtlEnabled = true;
-        $('#container').css('direction', 'rtl');
-        // act
-        this.renderViews($('#container'));
-
-        resizeController._isResizing = true;
-        resizeController._targetPoint = { columnIndex: 0 };
-        resizeController._setupResizingInfo(-9850);
-        resizeController._moveSeparator(getEvent({
-            data: resizeController,
-            type: 'mousemove',
-            pageX: -9840
-        }));
-
-        // assert
-        assert.deepEqual(resizeController._columnsController.updateOptions, [
-            { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
-            { columnIndex: 0, optionName: 'width', optionValue: 140 },
-            { columnIndex: 1, optionName: 'visibleWidth', optionValue: null },
-            { columnIndex: 1, optionName: 'width', optionValue: 160 },
-        ], 'update column options after resizing');
-    });
-
-    QUnit.test('Set new width of column in the separatorMoving callback function if RTL and columnResizingMode is widget', function(assert) {
-        // arrange
-        const resizeController = this.createColumnsResizerViewController();
-        this.options.rtlEnabled = true;
-        this.options.columnResizingMode = 'widget';
-        this.component.updateDimensions = $.noop;
-        $('#container').css('direction', 'rtl');
-        // act
-        this.renderViews($('#container'));
-
-        resizeController._isResizing = true;
-        resizeController._targetPoint = { columnIndex: 0 };
-        resizeController._setupResizingInfo(-9850);
-        resizeController._moveSeparator(getEvent({
-            data: resizeController,
-            type: 'mousemove',
-            pageX: -9840
-        }));
-
-        // assert
-        assert.deepEqual(resizeController._columnsController.updateOptions, [
-            { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
-            { columnIndex: 0, optionName: 'width', optionValue: 160 }
         ], 'update column options after resizing');
     });
 
@@ -2632,11 +2609,9 @@ QUnit.module('Columns resizing', {
 
     function hasSubscribesToCallbacks(resizeController) {
         let checkCounter = 0;
-        let i;
-        let subscribe;
 
-        for(i = 0; i < resizeController._subscribesToCallbacks.length; i++) {
-            subscribe = resizeController._subscribesToCallbacks[i];
+        for(let i = 0; i < resizeController._subscribesToCallbacks.length; i++) {
+            const subscribe = resizeController._subscribesToCallbacks[i];
             if(subscribe.callback.has(subscribe.handler)) {
                 checkCounter++;
             }
@@ -2786,7 +2761,6 @@ QUnit.module('Columns resizing', {
             { caption: 'Column 2', width: '125px' },
             { caption: 'Column 3', width: '125px' }
         ]);
-        let resultHeight;
         const testElement = $('#container').height(102);
 
         // act
@@ -2803,7 +2777,7 @@ QUnit.module('Columns resizing', {
 
         controller._tablePositionController.update();
 
-        resultHeight = controller._columnHeadersView.getHeight() + controller._rowsView.height();
+        const resultHeight = controller._columnHeadersView.getHeight() + controller._rowsView.height();
 
         // assert
         assert.ok(controller._trackerView);
@@ -2821,12 +2795,11 @@ QUnit.module('Columns resizing', {
             { caption: 'Column 3', width: '125px' }
         ]);
 
-        let $tracker;
 
         // act
         this.renderViews($('#container'));
         this.component._controllers.tablePosition.positionChanged.fire({ top: 23, height: 345 });
-        $tracker = this.component._views.trackerView.element();
+        const $tracker = this.component._views.trackerView.element();
 
         // assert
         assert.equal($tracker.css('top'), 'auto', 'top');
@@ -2989,8 +2962,6 @@ QUnit.module('Columns resizing', {
         this.component._controllers.tablePosition.init();
 
         const $testElement = $('#container');
-        let $headersContainer;
-        let separatorOffsetTop;
         const resizeController = this.createColumnsResizerViewController();
 
         this.initViews();
@@ -3014,65 +2985,238 @@ QUnit.module('Columns resizing', {
         this.component._views.rowsView.resizeCompleted.fire();
 
         // assert
-        $headersContainer = $(resizeController._columnHeadersView.element());
-        separatorOffsetTop = $headersContainer.offset().top + $headersContainer.find('.dx-header-row')[0].getBoundingClientRect().height;
+        const $headersContainer = $(resizeController._columnHeadersView.element());
+        const separatorOffsetTop = $headersContainer.offset().top + $headersContainer.find('.dx-header-row')[0].getBoundingClientRect().height;
         assert.strictEqual(this.component._controllers.columns.columnOption(2, 'width'), 75, 'width of the first banded column');
         assert.strictEqual($(resizeController._columnsSeparatorView.element()).offset().top, separatorOffsetTop, 'separator offset top');
     });
 
-    // T815002
-    QUnit.test('Resizing of the column should work correctly when rtlEnabled is true and columnResizingMode is set to \'widget\'', function(assert) {
-        // arrange
-        this.options.rtlEnabled = true;
-        this.options.columnResizingMode = 'widget';
-        this.options.columns = [
-            { caption: 'Field 1' },
-            { caption: 'Field 2', width: 125 },
-            { caption: 'Field 3', width: 125 },
-        ];
+    QUnit.module('RTL mode', {
+        beforeEach: function() {
+            this.options.rtlEnabled = true;
+            $('#container').css('direction', 'rtl').addClass('dx-rtl');
+        }
+    }, () => {
+        QUnit.test('Get points by columns if columnResizingMode is widget and RTL', function(assert) {
+            // arrange
+            this.options.columnResizingMode = 'widget';
+            const resizeController = this.createColumnsResizerViewController([
+                { caption: 'Column 1', width: '125px' },
+                { caption: 'Column 2', width: '125px' },
+                { caption: 'Column 3', width: '125px' },
+                { caption: 'Column 4', width: '125px' }
+            ]);
+            const $container = $('#container');
 
-        this.component._notifyOptionChanged = noop;
-        this.component._controllers.columns = new ColumnsController(this.component);
-        this.component._controllers.tablePosition = new columnResizingReordering.TablePositionViewController(this.component);
+            // act
+            $container.css({ width: '500px', height: '500px' });
+            resizeController._columnHeadersView.render($container);
+            resizeController._columnsSeparatorView.render($container);
 
-        this.component._controllers.columns.init();
-        this.component._controllers.tablePosition.init();
-
-        const $testElement = $('#container').css({
-            'width': '600px',
-            'direction': 'rtl'
-        }).addClass('dx-rtl');
-        const resizeController = this.createColumnsResizerViewController();
-
-        this.initViews();
-        this.renderViews($testElement);
-        this.component._controllers.tablePosition.update();
-
-        // assert
-        assert.notOk($(resizeController._rowsView.element()).hasClass('dx-scrollable'), 'no scrolling');
-
-        // act
-        resizeController._isResizing = true;
-        resizeController._targetPoint = { columnIndex: 1 };
-        resizeController._setupResizingInfo(-9750);
-        resizeController._moveSeparator({
-            event: {
-                data: resizeController,
-                type: 'mousemove',
-                pageX: -9650,
-                preventDefault: function() {}
-            }
+            // assert
+            assert.deepEqual(resizeController.pointsByColumns(), [
+                { x: -9500, y: -10000, columnIndex: 0, index: 0 },
+                { x: -9625, y: -10000, columnIndex: 1, index: 1 },
+                { x: -9750, y: -10000, columnIndex: 2, index: 2 },
+                { x: -9875, y: -10000, columnIndex: 3, index: 3 }
+            ], 'points by columns');
         });
 
-        // assert
-        const $headers = resizeController._columnHeadersView.getColumnElements();
-        const $dataCells = resizeController._rowsView.getCellElements(0);
+        QUnit.test('Set new width of column in the separatorMoving callback function RTL', function(assert) {
+            // arrange
+            const resizeController = this.createColumnsResizerViewController();
 
-        assert.strictEqual($headers.length, 3, 'header count');
+            // act
+            this.renderViews($('#container'));
 
-        $headers.each((index, header) => {
-            const $dataCell = $dataCells.eq(index);
-            assert.strictEqual($(header).offset().left, $dataCell.offset().left, `cells with index ${index}: header position matches cell position`);
+            resizeController._isResizing = true;
+            resizeController._targetPoint = { columnIndex: 0 };
+            resizeController._setupResizingInfo(-9850);
+            resizeController._moveSeparator(getEvent({
+                data: resizeController,
+                type: 'mousemove',
+                pageX: -9840
+            }));
+
+            // assert
+            assert.deepEqual(resizeController._columnsController.updateOptions, [
+                { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
+                { columnIndex: 0, optionName: 'width', optionValue: 140 },
+                { columnIndex: 1, optionName: 'visibleWidth', optionValue: null },
+                { columnIndex: 1, optionName: 'width', optionValue: 160 },
+            ], 'update column options after resizing');
+        });
+
+        QUnit.test('Set new width of column in the separatorMoving callback function if RTL and columnResizingMode is widget', function(assert) {
+            // arrange
+            const resizeController = this.createColumnsResizerViewController();
+            this.options.columnResizingMode = 'widget';
+            this.component.updateDimensions = $.noop;
+
+            // act
+            this.renderViews($('#container'));
+
+            resizeController._isResizing = true;
+            resizeController._targetPoint = { columnIndex: 0 };
+            resizeController._setupResizingInfo(-9850);
+            resizeController._moveSeparator(getEvent({
+                data: resizeController,
+                type: 'mousemove',
+                pageX: -9840
+            }));
+
+            // assert
+            assert.deepEqual(resizeController._columnsController.updateOptions, [
+                { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
+                { columnIndex: 0, optionName: 'width', optionValue: 160 }
+            ], 'update column options after resizing');
+        });
+
+        // T815002
+        QUnit.test('Resizing of the column should work correctly when rtlEnabled is true and columnResizingMode is set to \'widget\'', function(assert) {
+            // arrange
+            this.options.columnResizingMode = 'widget';
+            this.options.columns = [
+                { caption: 'Field 1' },
+                { caption: 'Field 2', width: 125 },
+                { caption: 'Field 3', width: 125 },
+            ];
+
+            this.component._notifyOptionChanged = noop;
+            this.component._controllers.columns = new ColumnsController(this.component);
+            this.component._controllers.tablePosition = new columnResizingReordering.TablePositionViewController(this.component);
+
+            this.component._controllers.columns.init();
+            this.component._controllers.tablePosition.init();
+
+            const $testElement = $('#container').css('width', '600px');
+            const resizeController = this.createColumnsResizerViewController();
+
+            this.initViews();
+            this.renderViews($testElement);
+            this.component._controllers.tablePosition.update();
+
+            // assert
+            assert.notOk($(resizeController._rowsView.element()).hasClass('dx-scrollable'), 'no scrolling');
+
+            // act
+            resizeController._isResizing = true;
+            resizeController._targetPoint = { columnIndex: 1 };
+            resizeController._setupResizingInfo(-9750);
+            resizeController._moveSeparator({
+                event: {
+                    data: resizeController,
+                    type: 'mousemove',
+                    pageX: -9650,
+                    preventDefault: function() {}
+                }
+            });
+
+            // assert
+            const $headers = resizeController._columnHeadersView.getColumnElements();
+            const $dataCells = resizeController._rowsView.getCellElements(0);
+
+            assert.strictEqual($headers.length, 3, 'header count');
+
+            $headers.each((index, header) => {
+                const $dataCell = $dataCells.eq(index);
+                assert.strictEqual($(header).offset().left, $dataCell.offset().left, `cells with index ${index}: header position matches cell position`);
+            });
+        });
+
+        QUnit.test('Get points by columns if columnResizingMode is widget and parent grid container in RTL mode', function(assert) {
+            // arrange
+            const $container = $('#container');
+            $container.css({ width: '500px', height: '500px' });
+            $container.parent().attr('dir', 'rtl').css({ width: '1000px', height: '500px' });
+
+            this.options.columnResizingMode = 'widget';
+            const resizeController = this.createColumnsResizerViewController([
+                { caption: 'Column 1', width: '125px' },
+                { caption: 'Column 2', width: '125px' },
+                { caption: 'Column 3', width: '125px' },
+                { caption: 'Column 4', width: '125px' }
+            ]);
+
+            // act
+            resizeController._columnHeadersView.render($container);
+            resizeController._columnsSeparatorView.render($container);
+
+            // assert
+            assert.deepEqual(resizeController.pointsByColumns(), [
+                { x: -9125, y: -10000, columnIndex: 0, index: 1 },
+                { x: -9250, y: -10000, columnIndex: 1, index: 2 },
+                { x: -9375, y: -10000, columnIndex: 2, index: 3 },
+                { x: -9500, y: -10000, columnIndex: 3, index: 4 }
+            ], 'points by columns');
+        });
+
+        QUnit.test('Resizing of the column should work correctly when columnResizingMode is widget and parent grid container in RTL mode', function(assert) {
+            // arrange
+            const $container = $('#container');
+            $container.css({ width: '500px', height: '500px' });
+            $container.parent().attr('dir', 'rtl').css({ width: '1000px', height: '500px' });
+
+            this.options.columnResizingMode = 'widget';
+            const resizeController = this.createColumnsResizerViewController([
+                { caption: 'Column 1', width: '125px' },
+                { caption: 'Column 2', width: '125px' },
+                { caption: 'Column 3', width: '125px' },
+                { caption: 'Column 4', width: '125px' }
+            ]);
+            this.component.updateDimensions = $.noop;
+
+            // act
+            this.renderViews($('#container'));
+
+            resizeController._isResizing = true;
+            resizeController._targetPoint = { columnIndex: 0 };
+            resizeController._setupResizingInfo(-9125);
+            resizeController._moveSeparator(getEvent({
+                data: resizeController,
+                type: 'mousemove',
+                pageX: -9225
+            }));
+
+            // assert
+            assert.deepEqual(resizeController._columnsController.updateOptions, [
+                { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
+                { columnIndex: 0, optionName: 'width', optionValue: 225 }
+            ], 'update column options after resizing');
+        });
+
+        QUnit.test('Resizing of the last column should work correctly when columnResizingMode is widget and parent grid container in RTL mode', function(assert) {
+            // arrange
+            const $container = $('#container');
+            $container.css({ width: '500px', height: '500px' });
+            $container.parent().attr('dir', 'rtl').css({ width: '1000px', height: '500px' });
+
+            this.options.columnResizingMode = 'widget';
+            const resizeController = this.createColumnsResizerViewController([
+                { caption: 'Column 1', width: '125px' },
+                { caption: 'Column 2', width: '125px' },
+                { caption: 'Column 3', width: '125px' },
+                { caption: 'Column 4', width: '125px' }
+            ]);
+            this.component.updateDimensions = $.noop;
+
+            // act
+            this.renderViews($('#container'));
+
+            resizeController._isResizing = true;
+            resizeController._targetPoint = { columnIndex: 3 };
+            resizeController._setupResizingInfo(-9500);
+            resizeController._moveSeparator(getEvent({
+                data: resizeController,
+                type: 'mousemove',
+                pageX: -9600
+            }));
+
+            // assert
+            assert.deepEqual(resizeController._columnsController.updateOptions, [
+                { columnIndex: 3, optionName: 'visibleWidth', optionValue: null },
+                { columnIndex: 3, optionName: 'width', optionValue: 225 }
+            ], 'update column options after resizing');
         });
     });
 });
@@ -3262,13 +3406,12 @@ QUnit.module('Headers reordering', {
             { caption: 'Column 3', width: '125px' }
         ];
         const controller = this.createDraggingHeaderViewController(testColumns);
-        let $cells;
 
         // act
         this.renderViews($('#container').css('width', '320px'));
 
         // assert
-        $cells = controller._columnHeadersView._tableElement.find('td');
+        const $cells = controller._columnHeadersView._tableElement.find('td');
         assert.deepEqual(gridCore.getPointsByColumns($cells, function(point) {
             return controller._pointCreated(point, testColumns, 'headers', testColumns[1]);
         }), [
@@ -3285,12 +3428,11 @@ QUnit.module('Headers reordering', {
             { caption: 'Column 2', allowReordering: false, allowGrouping: true, width: 125 }
         ];
         const controller = this.createDraggingHeaderViewController(testColumns);
-        let $cells;
 
         // act
         this.renderViews($('#container').width(250));
 
-        $cells = controller._columnHeadersView._tableElement.find('td');
+        const $cells = controller._columnHeadersView._tableElement.find('td');
 
         // assert
         assert.deepEqual(gridCore.getPointsByColumns($cells, function(point) {
@@ -3309,12 +3451,11 @@ QUnit.module('Headers reordering', {
             { caption: 'Column 2', allowReordering: false, allowGrouping: true, width: 125 }
         ];
         const controller = this.createDraggingHeaderViewController(testColumns);
-        let $cells;
 
         // act
         this.renderViews($('#container').width(250));
 
-        $cells = controller._columnHeadersView._tableElement.find('td');
+        const $cells = controller._columnHeadersView._tableElement.find('td');
 
         // assert
         assert.ok(!gridCore.getPointsByColumns($cells, function(point) {
@@ -3330,14 +3471,13 @@ QUnit.module('Headers reordering', {
             { caption: 'Column 2', width: '125px' },
             { caption: 'Column 3', width: '125px' }
         ]);
-        let $draggingHeader;
 
         // assert
         assert.ok(controller._draggingHeaderView, 'draggingHeader is not initialized');
 
         // act
         this.renderViews(testElement);
-        $draggingHeader = testElement.find('.dx-datagrid-drag-header');
+        const $draggingHeader = testElement.find('.dx-datagrid-drag-header');
 
         // assert
         assert.strictEqual($draggingHeader.length, 1, 'draggingHeader element');
@@ -3354,14 +3494,13 @@ QUnit.module('Headers reordering', {
             { caption: 'Column 3', width: '125px' }
         ]);
         const testElement = $('#container');
-        let $draggingHeader;
 
         // assert
         assert.ok(controller._draggingHeaderView, 'draggingHeader is not initialized');
 
         // act
         this.renderViews(testElement);
-        $draggingHeader = testElement.find('.dx-datagrid-drag-header');
+        const $draggingHeader = testElement.find('.dx-datagrid-drag-header');
 
         // assert
         assert.strictEqual($draggingHeader.length, 1, 'draggingHeader element');
@@ -3377,14 +3516,13 @@ QUnit.module('Headers reordering', {
             { caption: 'Column 3', width: '125px' }
         ]);
         const testElement = $('#container');
-        let $draggingHeader;
 
         // assert
         assert.ok(controller._draggingHeaderView, 'draggingHeader is not initialized');
 
         // act
         this.renderViews(testElement);
-        $draggingHeader = testElement.find('.dx-datagrid-drag-header');
+        const $draggingHeader = testElement.find('.dx-datagrid-drag-header');
 
         // assert
         assert.strictEqual($draggingHeader.length, 1, 'draggingHeader element');
@@ -3401,12 +3539,11 @@ QUnit.module('Headers reordering', {
         ]);
 
         const testElement = $('#container');
-        let td;
 
         // act
         this.renderViews(testElement);
 
-        td = testElement.find('.dx-datagrid-headers').first().find('td').first();
+        const td = testElement.find('.dx-datagrid-headers').first().find('td').first();
 
         // assert
         assert.ok(!$._data(td[0], 'events'), 'no dxpointerdown event subscription');
@@ -3416,12 +3553,10 @@ QUnit.module('Headers reordering', {
     QUnit.test('Drag header with nowrap', function(assert) {
         // arrange
         const testElement = $('#container');
-        let draggingHeader;
-        let $dragHeader;
 
         // act
         this.createDraggingHeaderViewController();
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
         draggingHeader.init();
         draggingHeader.render(testElement);
         draggingHeader.dragHeader({
@@ -3437,7 +3572,7 @@ QUnit.module('Headers reordering', {
                 caption: 'TestDrag'
             }
         });
-        $dragHeader = $('.dx-datagrid-drag-header');
+        const $dragHeader = $('.dx-datagrid-drag-header');
 
         // assert
         assert.ok(draggingHeader._isDragging, 'is dragging');
@@ -3452,12 +3587,10 @@ QUnit.module('Headers reordering', {
     QUnit.test('Drag header without nowrap', function(assert) {
         // arrange
         const testElement = $('#container');
-        let draggingHeader;
-        let $dragHeader;
 
         // act
         this.createDraggingHeaderViewController();
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
         draggingHeader.init();
         draggingHeader.render(testElement);
         draggingHeader.dragHeader({
@@ -3473,7 +3606,7 @@ QUnit.module('Headers reordering', {
             }
         });
 
-        $dragHeader = $('.dx-datagrid-drag-header');
+        const $dragHeader = $('.dx-datagrid-drag-header');
 
         // assert
         assert.ok(draggingHeader._isDragging, 'is dragging');
@@ -3488,15 +3621,13 @@ QUnit.module('Headers reordering', {
         // arrange
         const testElement = $('#container');
         let options;
-        let draggingHeader;
-        let $draggingHeader;
         const controller = this.createDraggingHeaderViewController();
 
         // act
         controller.dock = function(params) {
             options = params;
         };
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
         draggingHeader.init();
         draggingHeader.render(testElement);
 
@@ -3525,7 +3656,7 @@ QUnit.module('Headers reordering', {
                 type: 'mouse'
             }
         });
-        $draggingHeader = $('.dx-datagrid-drag-header');
+        const $draggingHeader = $('.dx-datagrid-drag-header');
 
         // assert
         assert.equal(options.posX, -9875, 'dockedPosX');
@@ -3537,12 +3668,10 @@ QUnit.module('Headers reordering', {
     QUnit.test('Check dragging header visibility after loading', function(assert) {
         // arrange
         const testElement = $('#container');
-        let draggingHeader;
-        let $draggingHeader;
         const controller = this.createDraggingHeaderViewController();
 
         controller.dock = function() { };
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
         draggingHeader.init();
         draggingHeader.render(testElement);
 
@@ -3571,7 +3700,7 @@ QUnit.module('Headers reordering', {
             }
         });
 
-        $draggingHeader = $('.dx-datagrid-drag-header');
+        const $draggingHeader = $('.dx-datagrid-drag-header');
 
         // act
         assert.notEqual($draggingHeader.css('display'), 'none', 'header is visible');
@@ -3586,8 +3715,6 @@ QUnit.module('Headers reordering', {
         // arrange
         const testElement = $('#container');
         let options;
-        let draggingHeader;
-        let $draggingHeader;
         const controller = this.createDraggingHeaderViewController();
 
         testElement.css('direction', 'rtl');
@@ -3598,7 +3725,7 @@ QUnit.module('Headers reordering', {
         controller.dock = function(params) {
             options = params;
         };
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
         draggingHeader.init();
         draggingHeader.render(testElement);
 
@@ -3629,7 +3756,7 @@ QUnit.module('Headers reordering', {
             }
         });
 
-        $draggingHeader = $('.dx-datagrid-drag-header');
+        const $draggingHeader = $('.dx-datagrid-drag-header');
 
         // assert
         assert.equal(options.posX, -9250, 'dockedPosX');
@@ -3642,8 +3769,6 @@ QUnit.module('Headers reordering', {
         // arrange
         const testElement = $('#container');
         let dropParameters;
-        let draggingHeader;
-        let $draggingHeader;
         const controller = this.createDraggingHeaderViewController();
 
         // act
@@ -3662,7 +3787,7 @@ QUnit.module('Headers reordering', {
         controller._rowsView.setRowsOpacity = function() { };
         controller._columnHeadersView.element = function() { return $('<div />'); };
 
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
         draggingHeader.init();
 
         this.component._views.columnsSeparatorView.render(testElement);
@@ -3696,7 +3821,7 @@ QUnit.module('Headers reordering', {
 
         draggingHeader.dropHeader({ event: { data: { that: draggingHeader } } });
 
-        $draggingHeader = $('.dx-datagrid-drag-header');
+        const $draggingHeader = $('.dx-datagrid-drag-header');
 
         // assert
         assert.equal(dropParameters.sourceColumnIndex, 0, 'sourceColumnIndex');
@@ -3712,8 +3837,6 @@ QUnit.module('Headers reordering', {
         // arrange
         const testElement = $('#container');
         let dropParameters;
-        let draggingHeader;
-        let $draggingHeader;
         const controller = this.createDraggingHeaderViewController();
 
         testElement.css('direction', 'rtl');
@@ -3736,7 +3859,7 @@ QUnit.module('Headers reordering', {
         controller._rowsView.setRowsOpacity = function() { };
         controller._columnHeadersView.element = function() { return $('<div />'); };
 
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
         draggingHeader.init();
 
         this.component._views.columnsSeparatorView.render(testElement);
@@ -3774,7 +3897,7 @@ QUnit.module('Headers reordering', {
             }
         });
 
-        $draggingHeader = $('.dx-datagrid-drag-header');
+        const $draggingHeader = $('.dx-datagrid-drag-header');
 
         // assert
         assert.equal(dropParameters.sourceColumnIndex, 0, 'sourceColumnIndex');
@@ -3790,8 +3913,6 @@ QUnit.module('Headers reordering', {
         // arrange
         const testElement = $('#container');
         let dropParameters;
-        let draggingHeader;
-        let $draggingHeader;
         const controller = this.createDraggingHeaderViewController();
 
         controller.drop = function(parameters) {
@@ -3810,7 +3931,7 @@ QUnit.module('Headers reordering', {
         controller._rowsView.setRowsOpacity = function() { };
         controller._columnHeadersView.element = function() { return $('<div />'); };
 
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
 
         draggingHeader.init();
 
@@ -3850,7 +3971,7 @@ QUnit.module('Headers reordering', {
             }
         });
 
-        $draggingHeader = $('.dx-datagrid-drag-header');
+        const $draggingHeader = $('.dx-datagrid-drag-header');
 
         // assert
         assert.ok(!dropParameters, 'drop parameters');
@@ -4126,7 +4247,6 @@ QUnit.module('Headers reordering', {
         // arrange
         const testElement = $('#container').width(600);
         let dropParameters;
-        let $draggingHeader;
         const controller = this.createDraggingHeaderViewController();
         const draggingHeader = new TestDraggingHeader(this.component);
 
@@ -4221,7 +4341,7 @@ QUnit.module('Headers reordering', {
             }
         });
 
-        $draggingHeader = $('.dx-datagrid-drag-header');
+        const $draggingHeader = $('.dx-datagrid-drag-header');
 
         // assert
         assert.ok(!dropParameters, 'drop parameters');
@@ -4233,7 +4353,6 @@ QUnit.module('Headers reordering', {
         // arrange
         const testElement = $('#container').width(600);
         let dropParameters;
-        let $draggingHeader;
         const controller = this.createDraggingHeaderViewController();
         const draggingHeader = new TestDraggingHeader(this.component);
 
@@ -4322,7 +4441,7 @@ QUnit.module('Headers reordering', {
             }
         });
 
-        $draggingHeader = $('.dx-datagrid-drag-header');
+        const $draggingHeader = $('.dx-datagrid-drag-header');
 
         // assert
         assert.ok(!dropParameters, 'drop parameters');
@@ -4330,69 +4449,67 @@ QUnit.module('Headers reordering', {
         assert.ok(!$draggingHeader.is(':visible'), 'header is not displayed');
     });
 
-    // QUnit.test('target column index equals source column index after QUnit.start dragging without moving', function (assert) {
-    //    // arrange
-    //    var testElement = $('#container'),
-    //        dropParameters,
-    //        controller = this.createDraggingHeaderViewController(),
-    //        draggingHeader = new TestDraggingHeader(this.component);
-    //
-    //    // act
-    //    controller.drop = function (parameters) {
-    //        dropParameters = parameters;
-    //    };
-    //    controller.allowDrop = function (parameters) {
-    //        return true;
-    //    };
-    //
-    //    draggingHeader.init();
-    //
-    //    this.component._views.columnsSeparatorView.render(testElement);
-    //    draggingHeader.render(testElement);
-    //
-    //    draggingHeader.dragHeader({
-    //        sourceLocation: 'headers',
-    //        draggingPanels: this.draggingPanels,
-    //        columnIndex: 1,
-    //        deltaX: 2,
-    //        deltaY: 1,
-    //        sourceColumn: {
-    //            caption: "TestDrag",
-    //            allowReordering: true
-    //        }
-    //    });
-    //
-    //    draggingHeader.dropHeader({
-    //        event: {
-    //            data: {
-    //                that: draggingHeader,
-    //                rootElement: testElement
-    //            },
-    //            pageX: -10000,
-    //            pageY: 55,
-    //            type: 'mouse'
-    //        }
-    //    });
-    //
-    //    // assert
-    //    assert.ok(dropParameters);
-    //    assert.equal(dropParameters.sourceColumnIndex, 1);
-    //    assert.equal(dropParameters.targetColumnIndex, 1);
-    // });
+    QUnit.skip('target column index equals source column index after QUnit.start dragging without moving', function(assert) {
+        // arrange
+        const testElement = $('#container');
+        let dropParameters;
+        const controller = this.createDraggingHeaderViewController();
+        const draggingHeader = new TestDraggingHeader(this.component);
+
+        // act
+        controller.drop = function(parameters) {
+            dropParameters = parameters;
+        };
+        controller.allowDrop = function(parameters) {
+            return true;
+        };
+
+        draggingHeader.init();
+
+        this.component._views.columnsSeparatorView.render(testElement);
+        draggingHeader.render(testElement);
+
+        draggingHeader.dragHeader({
+            sourceLocation: 'headers',
+            draggingPanels: this.draggingPanels,
+            columnIndex: 1,
+            deltaX: 2,
+            deltaY: 1,
+            sourceColumn: {
+                caption: 'TestDrag',
+                allowReordering: true
+            }
+        });
+
+        draggingHeader.dropHeader({
+            event: {
+                data: {
+                    that: draggingHeader,
+                    rootElement: testElement
+                },
+                pageX: -10000,
+                pageY: 55,
+                type: 'mouse'
+            }
+        });
+
+        // assert
+        assert.ok(dropParameters);
+        assert.equal(dropParameters.sourceColumnIndex, 1);
+        assert.equal(dropParameters.targetColumnIndex, 1);
+    });
 
     QUnit.test('Rise element events', function(assert) {
         // arrange
         const testElement = $('#container');
-        let controller;
-        let $draggingHeader;
 
         this.component._views.draggingHeaderView = new TestDraggingHeader2(this.component);
-        controller = this.createDraggingHeaderViewController([{ caption: 'Column 1', width: 100 }, { caption: 'Column 2', width: 200 }]);
+        const controller = this.createDraggingHeaderViewController([{ caption: 'Column 1', width: 100 }, { caption: 'Column 2', width: 200 }]);
 
         // act
         this.renderViews(testElement);
 
-        $draggingHeader = controller._columnHeadersView.element().find('td').first();
+        const $draggingHeader = controller._columnHeadersView.element().find('td').first();
         $($draggingHeader).trigger(dragEvents.start);
         $($draggingHeader).trigger(dragEvents.move);
         $($draggingHeader).trigger(dragEvents.end);
@@ -4404,7 +4521,6 @@ QUnit.module('Headers reordering', {
 
     QUnit.test('Reset opacity for rows', function(assert) {
         const testElement = $('#container');
-        let draggingHeader;
         let columnIndexOpacity;
         let opacityValue;
         const controller = this.createDraggingHeaderViewController();
@@ -4419,7 +4535,7 @@ QUnit.module('Headers reordering', {
             return $('<div/>');
         };
 
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
 
         draggingHeader.init();
 
@@ -4519,14 +4635,13 @@ QUnit.module('Headers reordering', {
         const testElement = $('#container');
         const rowsView = new RowsView(this.component);
         const columnHeadersView = new ColumnHeadersView(this.component);
-        let draggingHeader;
 
         // act
         const controller = this.createDraggingHeaderViewController();
         controller._rowsView = rowsView;
         controller._columnHeadersView = columnHeadersView;
 
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
         draggingHeader.init();
         draggingHeader._rowsView = rowsView;
         draggingHeader._columnHeadersView = columnHeadersView;
@@ -4569,12 +4684,10 @@ QUnit.module('Headers reordering', {
     QUnit.test('Drag command column', function(assert) {
         // arrange
         const testElement = $('#container');
-        let draggingHeader;
-        let $dragHeader;
 
         // act
         this.createDraggingHeaderViewController();
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
         draggingHeader.init();
         draggingHeader.render(testElement);
         draggingHeader.dragHeader({
@@ -4588,7 +4701,7 @@ QUnit.module('Headers reordering', {
                 type: 'buttons'
             }
         });
-        $dragHeader = $('.dx-datagrid-drag-header');
+        const $dragHeader = $('.dx-datagrid-drag-header');
 
         // assert
         assert.ok(draggingHeader._isDragging, 'is dragging');
@@ -4657,7 +4770,6 @@ QUnit.module('Group panel reordering', {
         // arrange
         const testElement = $('#container');
         let options;
-        let $draggingHeaderView;
 
         this.controller.dock = function(params) {
             options = params;
@@ -4689,7 +4801,7 @@ QUnit.module('Group panel reordering', {
                 type: 'mouse'
             }
         });
-        $draggingHeaderView = $('.dx-datagrid-drag-header');
+        const $draggingHeaderView = $('.dx-datagrid-drag-header');
 
         // assert
         const headerViewOffset = $draggingHeaderView.offset();
@@ -4704,7 +4816,6 @@ QUnit.module('Group panel reordering', {
         // arrange
         const testElement = $('#container');
         let dropParameters;
-        let $draggingHeaderView;
 
         this.controller.drop = function(parameters) {
             dropParameters = parameters;
@@ -4761,7 +4872,7 @@ QUnit.module('Group panel reordering', {
             }
         });
 
-        $draggingHeaderView = $('.dx-datagrid-drag-header');
+        const $draggingHeaderView = $('.dx-datagrid-drag-header');
 
         // assert
         assert.equal(dropParameters.sourceColumnIndex, 0, 'sourceColumnIndex');
@@ -4777,7 +4888,6 @@ QUnit.module('Group panel reordering', {
         // arrange
         const testElement = $('#container');
         let dropParameters;
-        let $draggingHeaderView;
 
         this.controller.drop = function(parameters) {
             if(this.allowDrop(parameters)) {
@@ -4836,7 +4946,7 @@ QUnit.module('Group panel reordering', {
             }
         });
 
-        $draggingHeaderView = $('.dx-datagrid-drag-header');
+        const $draggingHeaderView = $('.dx-datagrid-drag-header');
 
         // assert
         assert.ok(!dropParameters, 'drop parameters');
@@ -5098,7 +5208,6 @@ QUnit.module('Group panel reordering', {
     QUnit.test('Check block separator visibility after loading', function(assert) {
         // arrange
         const testElement = $('#container');
-        let $blockSeparator;
 
         this.controller._rowsView = {};
         this.controller._rowsView.setRowsOpacity = function() { };
@@ -5119,7 +5228,7 @@ QUnit.module('Group panel reordering', {
                 allowReordering: true
             }
         });
-        $blockSeparator = $('.dx-datagrid').children('.dx-block-separator');
+        const $blockSeparator = $('.dx-datagrid').children('.dx-block-separator');
 
         this.draggingHeaderView.moveHeader({
             event: {
@@ -5634,10 +5743,9 @@ QUnit.module('column chooser reordering', {
 
     QUnit.test('Get points by columns', function(assert) {
         // arrange
-        let pointsByColumns;
 
         // act
-        pointsByColumns = gridCore.getPointsByColumns($('#itemsContainerVertical').find('div'), false, true);
+        const pointsByColumns = gridCore.getPointsByColumns($('#itemsContainerVertical').find('div'), false, true);
 
         // act, assert
         assert.equal(pointsByColumns.length, 3, 'count points by columns');
@@ -5653,7 +5761,6 @@ QUnit.module('column chooser reordering', {
         // arrange
         const testElement = $('#container');
         let options;
-        let $draggingHeaderView;
 
         this.controller.dock = function(params) {
             options = params;
@@ -5685,7 +5792,7 @@ QUnit.module('column chooser reordering', {
                 type: 'mouse'
             }
         });
-        $draggingHeaderView = $('.dx-datagrid-drag-header');
+        const $draggingHeaderView = $('.dx-datagrid-drag-header');
 
         // assert
         assert.equal(options.targetColumnIndex, -1, 'targetColumnIndex');
@@ -5698,7 +5805,6 @@ QUnit.module('column chooser reordering', {
         // arrange
         const testElement = $('#container');
         let dropParameters;
-        let $draggingHeaderView;
 
         this.controller.drop = function(parameters) {
             dropParameters = parameters;
@@ -5756,7 +5862,7 @@ QUnit.module('column chooser reordering', {
             }
         });
 
-        $draggingHeaderView = $('.dx-datagrid-drag-header');
+        const $draggingHeaderView = $('.dx-datagrid-drag-header');
 
         // assert
         assert.equal(dropParameters.sourceColumnIndex, 0, 'sourceColumnIndex');
@@ -5772,7 +5878,6 @@ QUnit.module('column chooser reordering', {
         // arrange
         const testElement = $('#container');
         let dropParameters;
-        let $draggingHeaderView;
 
         this.controller.drop = function(parameters) {
             dropParameters = parameters;
@@ -5829,7 +5934,7 @@ QUnit.module('column chooser reordering', {
             }
         });
 
-        $draggingHeaderView = $('.dx-datagrid-drag-header');
+        const $draggingHeaderView = $('.dx-datagrid-drag-header');
 
         // assert
         assert.equal(dropParameters.sourceColumnIndex, 0, 'sourceColumnIndex');
@@ -5845,7 +5950,6 @@ QUnit.module('column chooser reordering', {
         // arrange
         const testElement = $('#container');
         let dropParameters;
-        let $draggingHeaderView;
 
         this.controller.drop = function(parameters) {
             if(this.allowDrop(parameters)) {
@@ -5904,7 +6008,7 @@ QUnit.module('column chooser reordering', {
             }
         });
 
-        $draggingHeaderView = $('.dx-datagrid-drag-header');
+        const $draggingHeaderView = $('.dx-datagrid-drag-header');
 
         // assert
         assert.ok(!dropParameters, 'drop parameters');
@@ -6000,14 +6104,14 @@ QUnit.module('column chooser reordering', {
         assert.equal(offset.top, -9491, 'offset top');
     });
 
-    /* QUnit.test('Block separator move in column chooser when dragging down', function (assert) {
+    QUnit.skip('Block separator move in column chooser when dragging down', function(assert) {
         // arrange
-        var testElement = $('#container'),
-            blockSeparator;
+        const testElement = $('#container');
+        let blockSeparator;
 
         this.controller._rowsView = {};
-        this.controller._rowsView.setRowsOpacity = function () { };
-        this.controller._columnHeadersView.element = function () { return $('<div />'); };
+        this.controller._rowsView.setRowsOpacity = function() { };
+        this.controller._columnHeadersView.element = function() { return $('<div />'); };
 
         this.draggingHeaderView.render(testElement);
         this.blockSeparatorView.render(testElement);
@@ -6020,7 +6124,7 @@ QUnit.module('column chooser reordering', {
             deltaY: 1,
             columnElement: $('<div/>'),
             sourceColumn: {
-                caption: "TestDrag",
+                caption: 'TestDrag',
                 allowHiding: true
             }
         });
@@ -6036,7 +6140,7 @@ QUnit.module('column chooser reordering', {
                     that: this.draggingHeaderView,
                     rootElement: testElement
                 },
-                preventDefault: function () { },
+                preventDefault: function() { },
                 pageX: -9800,
                 pageY: -9305,
                 type: 'mouse'
@@ -6044,20 +6148,20 @@ QUnit.module('column chooser reordering', {
         });
 
         // assert
-        assert.equal($("#itemsContainerVertical").children().length, 2);
-        assert.ok($("#itemsContainerVertical").children().eq(2).hasClass('dx-block-separator'));
+        assert.equal($('#itemsContainerVertical').children().length, 2);
+        assert.ok($('#itemsContainerVertical').children().eq(2).hasClass('dx-block-separator'));
         blockSeparator = $('.dx-datagrid').children('.dx-block-separator');
         assert.ok(!blockSeparator.length, 'not has is separator');
     });
 
-    QUnit.test('Block separator move in column chooser when dragging up', function (assert) {
+    QUnit.skip('Block separator move in column chooser when dragging up', function(assert) {
         // arrange
-        var testElement = $('#container'),
-            blockSeparator;
+        const testElement = $('#container');
+        let blockSeparator;
 
         this.controller._rowsView = {};
-        this.controller._rowsView.setRowsOpacity = function () { };
-        this.controller._columnHeadersView.element = function () { return $('<div />'); };
+        this.controller._rowsView.setRowsOpacity = function() { };
+        this.controller._columnHeadersView.element = function() { return $('<div />'); };
 
         this.draggingHeaderView.render(testElement);
         this.blockSeparatorView.render(testElement);
@@ -6070,7 +6174,7 @@ QUnit.module('column chooser reordering', {
             deltaY: 1,
             columnElement: $('<div/>'),
             sourceColumn: {
-                caption: "TestDrag",
+                caption: 'TestDrag',
                 allowHiding: true
             }
         });
@@ -6086,7 +6190,7 @@ QUnit.module('column chooser reordering', {
                     that: this.draggingHeaderView,
                     rootElement: testElement
                 },
-                preventDefault: function () { },
+                preventDefault: function() { },
                 pageX: -9800,
                 pageY: -9495,
                 type: 'mouse'
@@ -6094,12 +6198,12 @@ QUnit.module('column chooser reordering', {
         });
 
         // assert
-        assert.equal($("#itemsContainerVertical").children().length, 3);
-        assert.ok($("#itemsContainerVertical").children().eq(0).hasClass('dx-block-separator'));
+        assert.equal($('#itemsContainerVertical').children().length, 3);
+        assert.ok($('#itemsContainerVertical').children().eq(0).hasClass('dx-block-separator'));
         blockSeparator = $('.dx-datagrid').children('.dx-block-separator');
         assert.ok(!blockSeparator.length, 'not has is separator');
     });
-    */
+
     QUnit.test('Reset opacity for target element', function(assert) {
         // arrange
         const testElement = $('#container');
@@ -6364,8 +6468,6 @@ QUnit.module('column chooser reordering', {
         try {
             fx.off = true;
             const $testElement = $('#container');
-            let treeViewInstance;
-            let $item;
             let dropParameters;
 
             this.controller.drop = function(parameters) {
@@ -6385,10 +6487,10 @@ QUnit.module('column chooser reordering', {
             this.columnChooserView.render($testElement);
 
             this.showColumnChooser();
-            treeViewInstance = $('.dx-datagrid-column-chooser-list').dxTreeView('instance');
+            const treeViewInstance = $('.dx-datagrid-column-chooser-list').dxTreeView('instance');
             treeViewInstance.option('searchValue', '2');
 
-            $item = $(treeViewInstance.element()).find('.dx-treeview-item');
+            const $item = $(treeViewInstance.element()).find('.dx-treeview-item');
 
             // assert
             assert.ok($item.hasClass('dx-datagrid-drag-action'), 'item is draggable');
@@ -6525,14 +6627,13 @@ QUnit.module('Headers reordering inside color swatch', {
 
     QUnit.test('Header renders inside swatch', function(assert) {
         const testElement = $('#gridInSwatch');
-        let draggingHeader;
         const controller = this.createDraggingHeaderViewController();
 
         controller._columnHeadersView.element = function() {
             return $('<div/>');
         };
 
-        draggingHeader = new TestDraggingHeader(this.component);
+        const draggingHeader = new TestDraggingHeader(this.component);
 
         draggingHeader.init();
 

@@ -177,7 +177,7 @@ export interface dxGanttToolbar {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'zoomIn' | 'zoomOut'>;
+    items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut'>;
 }
 
 export interface dxGanttToolbarItem extends dxToolbarItem {
@@ -187,7 +187,7 @@ export interface dxGanttToolbarItem extends dxToolbarItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    name?: 'separator' | 'undo' | 'redo' | 'zoomIn' | 'zoomOut' | string;
+    name?: 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | string;
     /**
      * @docid dxGanttToolbarItem.location
      * @default "before"
@@ -238,7 +238,7 @@ export interface dxGanttStripLine {
 declare global {
 interface JQuery {
     dxGantt(): JQuery;
-    dxGantt(options: "instance"): dxGantt;
+    dxGantt(options: 'instance'): dxGantt;
     dxGantt(options: string): any;
     dxGantt(options: string, ...params: any[]): any;
     dxGantt(options: dxGanttOptions): JQuery;

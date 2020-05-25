@@ -142,13 +142,15 @@ class FileManager extends Widget {
     }
 
     _createFilesTreeView(container) {
+        this._filesTreeViewContextMenu = this._createContextMenu();
+
         const $filesTreeView = $('<div>')
             .addClass(FILE_MANAGER_DIRS_PANEL_CLASS)
             .appendTo(container);
 
         this._filesTreeView = this._createComponent($filesTreeView, FileManagerFilesTreeView, {
             storeExpandedState: true,
-            contextMenu: this._createContextMenu(),
+            contextMenu: this._filesTreeViewContextMenu,
             getDirectories: this.getDirectories.bind(this),
             getCurrentDirectory: this._getCurrentDirectory.bind(this),
             onDirectoryClick: this._onFilesTreeViewDirectoryClick.bind(this),
@@ -157,13 +159,15 @@ class FileManager extends Widget {
     }
 
     _createItemView($container, viewMode) {
+        this._itemViewContextMenu = this._createContextMenu(true);
+
         const itemViewOptions = this.option('itemView');
 
         const options = {
             selectionMode: this.option('selectionMode'),
             selectedItemKeys: this.option('selectedItemKeys'),
             focusedItemKey: this.option('focusedItemKey'),
-            contextMenu: this._createContextMenu(true),
+            contextMenu: this._itemViewContextMenu,
             getItems: this._getItemViewItems.bind(this),
             onError: ({ error }) => this._showError(error),
             onSelectionChanged: this._onItemViewSelectionChanged.bind(this),
@@ -208,7 +212,7 @@ class FileManager extends Widget {
             refresh: () => this._refreshAndShowProgress(),
             thumbnails: () => this.option('itemView.mode', 'thumbnails'),
             details: () => this.option('itemView.mode', 'details'),
-            clear: () => this._clearSelection(),
+            clearSelection: () => this._clearSelection(),
             showNavPane: () => this._adaptivityControl.toggleDrawer()
         });
         this._commandManager.registerActions(actions);
@@ -219,14 +223,14 @@ class FileManager extends Widget {
         this._setItemsViewAreaActive(false);
     }
 
-    _onItemViewSelectionChanged(e) {
-        this._updateToolbar(e.selectedItemInfos);
+    _onItemViewSelectionChanged({ selectedItemInfos, selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys }) {
+        this._updateToolbar(selectedItemInfos);
 
         this._lockSelectionProcessing = true;
-        this.option('selectedItemKeys', e.selectedItemKeys);
+        this.option('selectedItemKeys', selectedItemKeys);
         this._lockSelectionProcessing = false;
 
-        this._actions.onSelectionChanged(e);
+        this._actions.onSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
     }
 
     _onItemViewFocusedItemChanged(e) {
@@ -432,7 +436,7 @@ class FileManager extends Widget {
                 ],
 
                 fileSelectionItems: [
-                    'download', 'separator', 'move', 'copy', 'rename', 'separator', 'delete', 'clear',
+                    'download', 'separator', 'move', 'copy', 'rename', 'separator', 'delete', 'clearSelection',
                     {
                         name: 'separator',
                         location: 'after'
@@ -515,7 +519,7 @@ class FileManager extends Widget {
 
             onErrorOccurred: null,
 
-            allowedFileExtensions: ['.txt', '.rtf', '.doc', '.docx', '.odt', '.xls', '.xlsx', '.ods', '.ppt', '.pptx', '.odp', '.pdf', '.xml', '.png', '.svg', '.gif', '.jpg', '.jpeg', '.ico', '.bmp', '.avi', '.mpeg', '.mkv', ''],
+            allowedFileExtensions: [],
 
             upload: {
                 /**
@@ -620,18 +624,29 @@ class FileManager extends Widget {
             case 'toolbar':
                 {
                     const toolbarOptions = {};
-                    if(args.value.items) {
-                        toolbarOptions.generalItems = args.value.items;
+                    if(args.fullName === 'toolbar') {
+                        if(args.value.items) {
+                            toolbarOptions.generalItems = args.value.items;
+                        }
+                        if(args.value.fileSelectionItems) {
+                            toolbarOptions.fileItems = args.value.fileSelectionItems;
+                        }
                     }
-                    if(args.value.fileSelectionItems) {
-                        toolbarOptions.fileItems = args.value.fileSelectionItems;
+                    if(args.fullName === 'toolbar.items') {
+                        toolbarOptions.generalItems = args.value;
+                    }
+                    if(args.fullName === 'toolbar.fileSelectionItems') {
+                        toolbarOptions.fileItems = args.value;
                     }
                     this._toolbar.option(toolbarOptions);
                 }
                 break;
             case 'contextMenu':
-                this._itemView.option('contextMenu', this._createContextMenu(true));
-                this._filesTreeView.option('contextMenu', this._createContextMenu());
+                if(args.fullName === 'contextMenu' && args.value.items || args.fullName.indexOf('contextMenu.items') === 0) {
+                    const contextMenuItems = this.option('contextMenu.items');
+                    this._filesTreeViewContextMenu.option('items', contextMenuItems);
+                    this._itemViewContextMenu.option('items', contextMenuItems);
+                }
                 break;
             case 'onContextMenuItemClick':
             case 'onCurrentDirectoryChanged':
@@ -718,8 +733,8 @@ class FileManager extends Widget {
         this.option(options);
     }
 
-    getDirectories(parentDirectoryInfo) {
-        return this._controller.getDirectories(parentDirectoryInfo);
+    getDirectories(parentDirectoryInfo, skipNavigationOnError) {
+        return this._controller.getDirectories(parentDirectoryInfo, skipNavigationOnError);
     }
 
     _getSelectedItemInfos() {

@@ -317,7 +317,7 @@
         "dxFileManager-commandRefresh": "Rafraîchir",
         "dxFileManager-commandThumbnails": "Mode vignette",
         "dxFileManager-commandDetails": "Mode détails",
-        "dxFileManager-commandClear": "Vider sélection",
+        "dxFileManager-commandClearSelection": "Vider sélection",
 
         "dxFileManager-dialogDirectoryChooserTitle": "Sélectionner répertoire de destination",
         "dxFileManager-dialogDirectoryChooserButtonText": "Sélectionner",
@@ -544,6 +544,15 @@
         "dxGantt-dialogConstraintViolationMessage": "TODO",
         "dxGantt-dialogCancelOperationMessage": "TODO",
         "dxGantt-dialogDeleteDependencyMessage": "TODO",
-        "dxGantt-dialogMoveTaskAndKeepDependencyMessage": "TODO"
+        "dxGantt-dialogMoveTaskAndKeepDependencyMessage": "TODO",
+        "dxGantt-undo": "TODO",
+        "dxGantt-redo": "TODO",
+        "dxGantt-expandAll": "TODO",
+        "dxGantt-collapseAll": "TODO",
+        "dxGantt-addNewTask": "TODO",
+        "dxGantt-deleteSelectedTask": "TODO",
+        "dxGantt-zoomIn": "TODO",
+        "dxGantt-zoomOut": "TODO",
+        "dxGantt-fullScreen": "TODO"
     }
 }

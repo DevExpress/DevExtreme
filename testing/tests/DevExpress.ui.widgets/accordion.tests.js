@@ -1,20 +1,20 @@
-import $ from 'jquery';
-import domUtils from 'core/utils/dom';
-import holdEvent from 'events/hold';
 import fx from 'animation/fx';
-import { noop, deferUpdate } from 'core/utils/common';
-import { extend } from 'core/utils/extend';
-import config from 'core/config';
-import pointerMock from '../../helpers/pointerMock.js';
-import { DataSource } from 'data/data_source/data_source';
-import CustomStore from 'data/custom_store';
-import { isRenderer } from 'core/utils/type';
-import executeAsyncMock from '../../helpers/executeAsyncMock.js';
-import Accordion from 'ui/accordion';
-import keyboardMock from '../../helpers/keyboardMock.js';
-import themes from 'ui/themes';
-
 import 'common.css!';
+import config from 'core/config';
+import { deferUpdate, noop } from 'core/utils/common';
+import { extend } from 'core/utils/extend';
+import { isRenderer } from 'core/utils/type';
+import CustomStore from 'data/custom_store';
+import { DataSource } from 'data/data_source/data_source';
+import holdEvent from 'events/hold';
+import { triggerShownEvent } from 'events/visibility_change';
+import $ from 'jquery';
+import Accordion from 'ui/accordion';
+import themes from 'ui/themes';
+import executeAsyncMock from '../../helpers/executeAsyncMock.js';
+import keyboardMock from '../../helpers/keyboardMock.js';
+import pointerMock from '../../helpers/pointerMock.js';
+
 
 QUnit.testStart(function() {
     const markup =
@@ -117,7 +117,7 @@ QUnit.module('widget rendering', moduleSetup, () => {
             fx.animate = function() { assert.ok(false, 'animation executed'); };
 
             $container.appendTo('#qunit-fixture');
-            domUtils.triggerShownEvent($container);
+            triggerShownEvent($container);
 
             assert.notEqual($element.height(), 0, 'height is updated');
         } finally {

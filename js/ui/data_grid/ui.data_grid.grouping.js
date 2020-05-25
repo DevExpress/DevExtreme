@@ -72,10 +72,9 @@ const GroupingDataSourceAdapterExtender = (function() {
             const dataSource = that._dataSource;
             const group = dataSource.group();
             const groups = gridCore.normalizeSortingInfo(group || []);
-            let i;
 
             if(groups.length) {
-                for(i = 0; i < groups.length; i++) {
+                for(let i = 0; i < groups.length; i++) {
                     if(groupIndex === undefined || groupIndex === i) {
                         groups[i].isExpanded = isExpand;
                     } else if(group && group[i]) {
@@ -201,13 +200,9 @@ const GroupingDataControllerExtender = (function() {
             const that = this;
             const groupedColumns = that._columnsController.getGroupColumns();
             const column = groupedColumns[groupedColumns.length - groupsCount];
-            let scrollingMode;
-            let i;
-            let item;
-            let resultItems;
 
             if(!options) {
-                scrollingMode = that.option('scrolling.mode');
+                const scrollingMode = that.option('scrolling.mode');
                 options = {
                     collectContinuationItems: scrollingMode !== 'virtual' && scrollingMode !== 'infinite',
                     resultItems: [],
@@ -216,7 +211,7 @@ const GroupingDataControllerExtender = (function() {
                 };
             }
 
-            resultItems = options.resultItems;
+            const resultItems = options.resultItems;
 
             if(options.data) {
                 if(options.collectContinuationItems || !options.data.isContinuation) {
@@ -234,8 +229,8 @@ const GroupingDataControllerExtender = (function() {
                 if(groupsCount === 0) {
                     resultItems.push.apply(resultItems, items);
                 } else {
-                    for(i = 0; i < items.length; i++) {
-                        item = items[i];
+                    for(let i = 0; i < items.length; i++) {
+                        const item = items[i];
                         if(item && 'items' in item) {
                             options.data = item;
                             options.path.push(item.key);
@@ -293,13 +288,14 @@ const GroupingDataControllerExtender = (function() {
             const that = this;
             const dataSource = this._dataSource;
 
-            if(!dataSource) return;
-
             const d = new Deferred();
-            when(dataSource.changeRowExpand(key)).done(function() {
-                that.load().done(d.resolve).fail(d.reject);
-            }).fail(d.reject);
-
+            if(!dataSource) {
+                d.resolve();
+            } else {
+                when(dataSource.changeRowExpand(key)).done(function() {
+                    that.load().done(d.resolve).fail(d.reject);
+                }).fail(d.reject);
+            }
             return d;
         },
         isRowExpanded: function(key) {
@@ -356,21 +352,20 @@ const GroupingHeaderPanelExtender = (function() {
         },
 
         _appendGroupingItem: function(items) {
-            const that = this;
-            let isRendered = false;
-            const groupPanelRenderedCallback = function(e) {
-                const $groupPanel = $(e.itemElement).find('.' + DATAGRID_GROUP_PANEL_CLASS);
-                that._updateGroupPanelContent($groupPanel);
-                registerKeyboardAction('groupPanel', that, $groupPanel, undefined, that._handleActionKeyDown.bind(that));
-                isRendered && that.renderCompleted.fire();
-                isRendered = true;
-            };
-
-            if(that._isGroupPanelVisible()) {
+            if(this._isGroupPanelVisible()) {
+                let isRendered = false;
                 const toolbarItem = {
-                    html: '<div class=\'' + DATAGRID_GROUP_PANEL_CLASS + '\'></div>',
+                    template: () => {
+                        const $groupPanel = $('<div>').addClass(DATAGRID_GROUP_PANEL_CLASS);
+                        this._updateGroupPanelContent($groupPanel);
+                        registerKeyboardAction('groupPanel', this, $groupPanel, undefined, this._handleActionKeyDown.bind(this));
+                        return $groupPanel;
+                    },
                     name: 'groupPanel',
-                    onItemRendered: groupPanelRenderedCallback,
+                    onItemRendered: () => {
+                        isRendered && this.renderCompleted.fire();
+                        isRendered = true;
+                    },
                     location: 'before',
                     locateInMenu: 'never',
                     sortIndex: 1
@@ -487,10 +482,9 @@ const GroupingHeaderPanelExtender = (function() {
         getBoundingRect: function() {
             const that = this;
             const $element = that.element();
-            let offset;
 
             if($element && $element.find('.' + DATAGRID_GROUP_PANEL_CLASS).length) {
-                offset = $element.offset();
+                const offset = $element.offset();
 
                 return {
                     top: offset.top,

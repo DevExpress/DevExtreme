@@ -688,6 +688,27 @@ QUnit.module('collapsible groups', moduleSetup, () => {
             fx.off = false;
         }
     });
+
+    QUnit.test('attachGroupHeaderInkRippleEvents should remove previously attached events (T882408)', function(assert) {
+        const instance = this.element.dxList({
+            items: [{ key: 'a', items: ['0'] }],
+            grouped: true,
+            collapsibleGroups: true
+        }).dxList('instance');
+
+        sinon.spy(instance, 'downInkRippleHandler');
+
+        for(let i = 100; i > 0; i--) {
+            instance.attachGroupHeaderInkRippleEvents();
+        }
+
+        const groupHeaderElement = this.element.find('.' + LIST_GROUP_HEADER_CLASS);
+        groupHeaderElement.trigger('dxpointerdown');
+
+        assert.ok(instance.downInkRippleHandler.calledOnce);
+
+        instance.downInkRippleHandler.restore();
+    });
 });
 
 QUnit.module('next button', moduleSetup, () => {
@@ -798,6 +819,46 @@ QUnit.module('next button', moduleSetup, () => {
 
         list.repaint();
         assert.ok($('.dx-list-next-button', this.element).text());
+    });
+
+    QUnit.test('Click on nextButton should raise pageLoading event (T892010)', function(assert) {
+        assert.expect(1);
+
+        this.element.dxList({
+            dataSource: {
+                store: [1, 2, 3],
+                paginate: true,
+                pageSize: 1
+            },
+            pageLoadMode: 'nextButton',
+            onPageLoading: (e) => {
+                assert.ok(true, 'pageLoading is raised after click on nextButton');
+            }
+        });
+
+        const nextButton = $('.dx-list-next-button ', this.element);
+        $('.dx-button', nextButton).trigger('dxclick');
+    });
+
+
+    QUnit.test('Click on nextButton should raise pageLoading event - subscription by "on" method (T892010)', function(assert) {
+        assert.expect(1);
+
+        const list = this.element.dxList({
+            dataSource: {
+                store: [1, 2, 3],
+                paginate: true,
+                pageSize: 1
+            },
+            pageLoadMode: 'nextButton'
+        }).dxList('instance');
+
+        list.on('pageLoading', (e) => {
+            assert.ok(true, 'pageLoading is raised after click on nextButton');
+        });
+
+        const nextButton = $('.dx-list-next-button ', this.element);
+        $('.dx-button', nextButton).trigger('dxclick');
     });
 
     QUnit.test('nextButton should be removed after search if result items count is smaller than page size, repaintChangesOnly=true (T838645)', function(assert) {
@@ -1089,8 +1150,6 @@ QUnit.module('options changed', moduleSetup, () => {
     });
 
     QUnit.test('searchEditorOptions', function(assert) {
-        let searchEditorInstance;
-
         const $element = $('#list').dxList({
             dataSource: [
                 { text: 'test1', value: '3' },
@@ -1105,7 +1164,7 @@ QUnit.module('options changed', moduleSetup, () => {
 
         const instance = $element.dxList('instance');
 
-        searchEditorInstance = $element.children('.dx-list-search').dxTextBox('instance');
+        const searchEditorInstance = $element.children('.dx-list-search').dxTextBox('instance');
         assert.strictEqual(searchEditorInstance.option('placeholder'), 'Search', 'placeholder of the search box');
 
         instance.option('searchEditorOptions', { placeholder: 'Test' });
@@ -1416,15 +1475,13 @@ QUnit.module('dataSource integration', moduleSetup, () => {
 
     QUnit.test('shared data source', function(assert) {
         const dataSource = new DataSource();
-        let widget;
-        let changedHandler;
 
         this.element.dxList({
             dataSource
         });
 
-        widget = this.element.dxList('instance');
-        changedHandler = widget._proxiedDataSourceChangedHandler;
+        const widget = this.element.dxList('instance');
+        const changedHandler = widget._proxiedDataSourceChangedHandler;
         assert.ok($.isFunction(changedHandler));
         assert.ok(dataSource._eventsStrategy._events['changed'].has(changedHandler));
 
@@ -2730,23 +2787,19 @@ QUnit.module('keyboard navigation', {
 
 QUnit.module('Search', () => {
     QUnit.test('Render search editor', function(assert) {
-        let $searchEditor;
-
         const $element = $('#list').dxList({
             dataSource: [1, 2, 3],
             searchEnabled: true,
             searchValue: '3'
         });
 
-        $searchEditor = $element.children().first();
+        const $searchEditor = $element.children().first();
         assert.ok($element.hasClass('dx-list-with-search'), 'list with search');
         assert.ok($searchEditor.hasClass('dx-list-search'), 'has search editor');
         assert.strictEqual($searchEditor.dxTextBox('instance').option('value'), '3', 'editor value');
     });
 
     QUnit.test('Search', function(assert) {
-        let searchEditor;
-
         const $element = $('#list').dxList({
             dataSource: [1, 2, 3],
             searchEnabled: true,
@@ -2755,7 +2808,7 @@ QUnit.module('Search', () => {
 
         const instance = $element.dxList('instance');
 
-        searchEditor = $element.children().first().dxTextBox('instance');
+        const searchEditor = $element.children().first().dxTextBox('instance');
         searchEditor.option('value', '2');
 
         assert.deepEqual(instance.option('items'), [2], 'items');
@@ -2796,8 +2849,6 @@ QUnit.module('Search', () => {
     });
 
     QUnit.test('Search when searchMode is specified', function(assert) {
-        let searchEditor;
-
         const $element = $('#list').dxList({
             dataSource: [1, 12, 23],
             searchEnabled: true,
@@ -2807,7 +2858,7 @@ QUnit.module('Search', () => {
 
         const instance = $element.dxList('instance');
 
-        searchEditor = $element.children().first().dxTextBox('instance');
+        const searchEditor = $element.children().first().dxTextBox('instance');
         searchEditor.option('value', '2');
 
         assert.deepEqual(instance.option('items'), [23], 'items');

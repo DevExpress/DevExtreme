@@ -330,6 +330,7 @@ module.exports = {
         const labelBBox = label.getBoundingRect();
         const graphicBBox = that._getGraphicBBox(label.pointPosition);
         const fullGraphicBBox = that._getGraphicBBox();
+        const isInside = label.getLayoutOptions().position === 'inside';
         const offset = LABEL_OFFSET;
 
         if(that._isPointInVisibleArea(visibleArea, fullGraphicBBox)) {
@@ -341,17 +342,25 @@ module.exports = {
                     coord.x = visibleArea.maxX - labelBBox.width;
                 }
                 if(visibleArea.minY > coord.y) {
-                    coord.y = graphicBBox.y + graphicBBox.height + offset;
+                    coord.y = isInside ?
+                        visibleArea.minY :
+                        graphicBBox.y + graphicBBox.height + offset;
                 }
                 if(visibleArea.maxY < (coord.y + labelBBox.height)) {
-                    coord.y = graphicBBox.y - labelBBox.height - offset;
+                    coord.y = isInside ?
+                        visibleArea.maxY - labelBBox.height :
+                        graphicBBox.y - labelBBox.height - offset;
                 }
             } else {
                 if(visibleArea.minX > coord.x) {
-                    coord.x = graphicBBox.x + graphicBBox.width + offset;
+                    coord.x = isInside ?
+                        visibleArea.minX :
+                        graphicBBox.x + graphicBBox.width + offset;
                 }
                 if(visibleArea.maxX < (coord.x + labelBBox.width)) {
-                    coord.x = graphicBBox.x - offset - labelBBox.width;
+                    coord.x = isInside ?
+                        visibleArea.maxX - labelBBox.width :
+                        graphicBBox.x - offset - labelBBox.width;
                 }
                 if(visibleArea.minY > coord.y) {
                     coord.y = visibleArea.minY;
@@ -526,12 +535,11 @@ module.exports = {
         const that = this;
         let navigator = window.navigator;
         const r = that._options.styles.normal.r;
-        let minTrackerSize;
         ///#DEBUG
         navigator = that.__debug_navigator || navigator;
         that.__debug_browserNavigator = navigator;
         ///#ENDDEBUG
-        minTrackerSize = windowUtils.hasProperty('ontouchstart') || (navigator.msPointerEnabled && navigator.msMaxTouchPoints || navigator.pointerEnabled && navigator.maxTouchPoints) ? 20 : 6;
+        const minTrackerSize = windowUtils.hasProperty('ontouchstart') || (navigator.msPointerEnabled && navigator.msMaxTouchPoints || navigator.pointerEnabled && navigator.maxTouchPoints) ? 20 : 6;
         that._options.trackerR = r < minTrackerSize ? minTrackerSize : r;
         return that._options.trackerR;
     },

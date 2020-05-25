@@ -9,12 +9,10 @@ core.registerModule('keyboardNavigation', extend(true, {}, keyboardNavigationMod
                 _leftRightKeysHandler: function(eventArgs, isEditing) {
                     const rowIndex = this.getVisibleRowIndex();
                     const dataController = this._dataController;
-                    let key;
-                    let directionCode;
 
                     if(eventArgs.ctrl) {
-                        directionCode = this._getDirectionCodeByKey(eventArgs.keyName);
-                        key = dataController.getKeyByRowIndex(rowIndex);
+                        const directionCode = this._getDirectionCodeByKey(eventArgs.keyName);
+                        const key = dataController.getKeyByRowIndex(rowIndex);
                         if(directionCode === 'nextInRow') {
                             dataController.expandRow(key);
                         } else {
