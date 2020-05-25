@@ -44,6 +44,7 @@ export const recurrenceUtils = {
         rRuleSet.rrule(rRule);
 
         const min = getRRuleUtcDate(options.min);
+        const minTime = min.getTime();
         const max = getRRuleUtcDate(options.max);
         const exception = options.exception;
         const startTime = options.start && options.start.getTime();
@@ -52,8 +53,8 @@ export const recurrenceUtils = {
         const leftBorder = recurrenceUtils.getLeftBorder(min, recurrenceStartDate, duration);
 
         rRuleSet.between(leftBorder, max, true).forEach(date => {
-            const endAppointmentDate = new Date(date.getTime() + duration);
-            const isValidDate = endAppointmentDate > min;
+            const endAppointmentTime = date.getTime() + duration;
+            const isValidDate = endAppointmentTime >= minTime;
 
             if(isValidDate) {
                 correctTimezoneOffset(date);
@@ -68,7 +69,11 @@ export const recurrenceUtils = {
     },
 
     getLeftBorder: function(min, startDate, duration) {
-        return min > startDate ? new Date(min.getTime() - duration) : min;
+        const endDate = new Date(startDate.getTime() + duration);
+        if(endDate.getTime() > min.getTime()) {
+            return new Date(min.getTime() - duration);
+        }
+        return min;
     },
 
     getRecurrenceRule: function(recurrence) {
