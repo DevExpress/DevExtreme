@@ -65,6 +65,12 @@ function getRRuleUtcDate(date) {
     return newDate;
 }
 
+function correctTimezoneOffset(date) {
+    // TZ correction - Some specific in RRule. Perhaps it related to using of luxon.
+    const timezoneOffset = date.getTimezoneOffset() * toMs('minute');
+    date.setTime(date.getTime() + timezoneOffset);
+}
+
 function getDatesByRecurrence(options) {
     const result = [];
     const recurrenceRule = getRecurrenceRule(options.rule);
@@ -94,13 +100,25 @@ function getDatesByRecurrence(options) {
 
     const min = getRRuleUtcDate(options.min);
     const max = getRRuleUtcDate(options.max);
-    const dates = rRuleSet.between(min, max, true);
-    dates.forEach(date => {
-        // TZ correction - Some specific in RRule. Perhaps it related to using of luxon.
-        const timezoneOffset = date.getTimezoneOffset() * toMs('minute');
-        date.setTime(date.getTime() + timezoneOffset);
+    const endTime = options.end && options.end.getTime();
+    const durationInMs = endTime ? endTime - options.start.getTime() : 0;
 
-        if(!dateIsRecurrenceException(date, options.exception)) {
+    rRuleSet.between(min, max, true).forEach(date => {
+        correctTimezoneOffset(date);
+        let isValidDate = !dateIsRecurrenceException(date, options.exception);
+
+        if(durationInMs && date.getTime() < recurrenceStartDate.getTime()) {
+            const comparableDate = new Date(date.getTime() + durationInMs);
+
+            if(comparableDate.getTime() <= options.max.getTime()) {
+                date = recurrenceStartDate;
+                correctTimezoneOffset(date);
+            } else {
+                isValidDate = false;
+            }
+        }
+
+        if(isValidDate) {
             result.push(date);
         }
     });
