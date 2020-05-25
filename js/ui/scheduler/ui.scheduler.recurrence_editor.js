@@ -15,7 +15,7 @@ import NumberBox from '../number_box';
 import RadioGroup from '../radio_group';
 import SelectBox from '../select_box';
 import publisherMixin from './ui.scheduler.publisher_mixin';
-import recurrenceUtils from './utils.recurrence';
+import { recurrenceUtils } from './utils.recurrence';
 
 const RECURRENCE_EDITOR = 'dx-recurrence-editor';
 const LABEL_POSTFIX = '-label';

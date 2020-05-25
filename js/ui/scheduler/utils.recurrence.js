@@ -1,42 +1,176 @@
-const errors = require('../../core/errors');
-const extend = require('../../core/utils/extend').extend;
-const each = require('../../core/utils/iterator').each;
-const inArray = require('../../core/utils/array').inArray;
-const dateUtils = require('../../core/utils/date');
+import errors from '../../core/errors';
+import { each } from '../../core/utils/iterator';
+import { inArray } from '../../core/utils/array';
+import { RRule, RRuleSet } from 'rrule';
+import dateUtils from '../../core/utils/date';
 
 const toMs = dateUtils.dateToMilliseconds;
-
-import { RRule, RRuleSet } from 'rrule';
 
 const ruleNames = ['freq', 'interval', 'byday', 'byweekno', 'byyearday', 'bymonth', 'bymonthday', 'count', 'until', 'byhour', 'byminute', 'bysecond', 'bysetpos', 'wkst'];
 const freqNames = ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY', 'SECONDLY', 'MINUTELY', 'HOURLY'];
 const days = { SU: 0, MO: 1, TU: 2, WE: 3, TH: 4, FR: 5, SA: 6 };
+const loggedWarnings = [];
 
-const resultUtils = {};
+export const recurrenceUtils = {
+    getTimeZoneOffset: function() {
+        return new Date().getTimezoneOffset();
+    },
 
-function getTimeZoneOffset() {
-    return new Date().getTimezoneOffset();
-}
+    dateInRecurrenceRange: function(options) {
+        let result = [];
 
-const dateInRecurrenceRange = function(options) {
-    let result = [];
+        if(options.rule) {
+            result = recurrenceUtils.getDatesByRecurrence(options);
+        }
 
-    if(options.rule) {
-        result = getDatesByRecurrence(options);
+        return !!result.length;
+    },
+
+    getDatesByRecurrence: function(options) {
+        const result = [];
+        const recurrenceRule = recurrenceUtils.getRecurrenceRule(options.rule);
+        const rule = recurrenceRule.rule;
+
+        if(!recurrenceRule.isValid || !rule.freq) {
+            return result;
+        }
+
+        const rRuleSet = new RRuleSet();
+        const ruleOptions = RRule.parseString(options.rule);
+        const recurrenceStartDate = getRRuleUtcDate(options.start);
+
+        ruleOptions.dtstart = recurrenceStartDate;
+
+        const rRule = new RRule(ruleOptions);
+        rRuleSet.rrule(rRule);
+
+        const min = getRRuleUtcDate(options.min);
+        const max = getRRuleUtcDate(options.max);
+        const exception = options.exception;
+        const startTime = options.start && options.start.getTime();
+        const endTime = options.end && options.end.getTime();
+        const duration = endTime ? endTime - startTime : 0;
+
+        rRuleSet.between(min, max, true).forEach(date => {
+            let isValidDate = true;
+
+            if(duration && date.getTime() < recurrenceStartDate.getTime()) {
+                const comparableDate = new Date(date.getTime() + duration);
+
+                if(comparableDate.getTime() <= max.getTime()) {
+                    date = recurrenceStartDate;
+                } else {
+                    isValidDate = false;
+                }
+            }
+
+            if(isValidDate) {
+                correctTimezoneOffset(date);
+
+                if(!dateIsRecurrenceException(date, exception)) {
+                    result.push(date);
+                }
+            }
+        });
+
+        return result;
+    },
+
+    getRecurrenceRule: function(recurrence) {
+        const result = {
+            rule: {},
+            isValid: false
+        };
+
+        if(recurrence) {
+            result.rule = parseRecurrenceRule(recurrence);
+            result.isValid = validateRRule(result.rule, recurrence);
+        }
+
+        return result;
+    },
+
+    daysFromByDayRule: function(rule) {
+        let result = [];
+
+        if(rule['byday']) {
+            if(Array.isArray(rule['byday'])) {
+                result = rule['byday'];
+            } else {
+                result = rule['byday'].split(',');
+            }
+        }
+
+        return result;
+    },
+
+    getAsciiStringByDate: function(date) {
+        const currentOffset = recurrenceUtils.getTimeZoneOffset() * 60000;
+
+        date = new Date(date.getTime() + currentOffset);
+        return date.getFullYear() + ('0' + (date.getMonth() + 1)).slice(-2) + ('0' + date.getDate()).slice(-2) +
+            'T' + ('0' + (date.getHours())).slice(-2) + ('0' + (date.getMinutes())).slice(-2) + ('0' + (date.getSeconds())).slice(-2) + 'Z';
+    },
+
+    getRecurrenceString: function(object) {
+        if(!object || !object.freq) {
+            return;
+        }
+
+        let result = '';
+        for(const field in object) {
+            let value = object[field];
+
+            if(field === 'interval' && value < 2) {
+                continue;
+            }
+
+            if(field === 'until') {
+                value = recurrenceUtils.getAsciiStringByDate(value);
+            }
+
+            result += field + '=' + value + ';';
+        }
+
+        result = result.substring(0, result.length - 1);
+
+        return result.toUpperCase();
+    },
+
+    getDateByAsciiString: function(string, initialDate) {
+        if(typeof string !== 'string') {
+            return string;
+        }
+
+        const arrayDate = string.match(/(\d{4})(\d{2})(\d{2})(T(\d{2})(\d{2})(\d{2}))?(Z)?/);
+
+        if(!arrayDate) {
+            return null;
+        }
+
+        const isUTC = arrayDate[8] !== undefined;
+        let currentOffset = initialDate ? initialDate.getTimezoneOffset() : recurrenceUtils.getTimeZoneOffset();
+        let date = new (Function.prototype.bind.apply(Date, prepareDateArrayToParse(arrayDate)))();
+
+        currentOffset = currentOffset * 60000;
+
+        if(isUTC) {
+            date = new Date(date.getTime() - currentOffset);
+        }
+
+        return date;
     }
-
-    return !!result.length;
 };
 
-const getDatesByRecurrenceException = function(ruleValues, date) {
+function getDatesByRecurrenceException(ruleValues, date) {
     const result = [];
 
     for(let i = 0, len = ruleValues.length; i < len; i++) {
-        result[i] = getDateByAsciiString(ruleValues[i], date);
+        result[i] = recurrenceUtils.getDateByAsciiString(ruleValues[i], date);
     }
 
     return result;
-};
+}
 
 function getRRuleUtcDate(date) {
     const newDate = new Date(Date.UTC(
@@ -55,56 +189,6 @@ function correctTimezoneOffset(date) {
     // TZ correction - Some specific in RRule. Perhaps it related to using of luxon.
     const timezoneOffset = date.getTimezoneOffset() * toMs('minute');
     date.setTime(date.getTime() + timezoneOffset);
-}
-
-function getDatesByRecurrence(options) {
-    const result = [];
-    const recurrenceRule = getRecurrenceRule(options.rule);
-    const rule = recurrenceRule.rule;
-
-    if(!recurrenceRule.isValid || !rule.freq) {
-        return result;
-    }
-
-    const rRuleSet = new RRuleSet();
-    const ruleOptions = RRule.parseString(options.rule);
-    const recurrenceStartDate = getRRuleUtcDate(options.start);
-
-    ruleOptions.dtstart = recurrenceStartDate;
-
-    const rRule = new RRule(ruleOptions);
-    rRuleSet.rrule(rRule);
-
-    const min = getRRuleUtcDate(options.min);
-    const max = getRRuleUtcDate(options.max);
-    const exception = options.exception;
-    const startTime = options.start && options.start.getTime();
-    const endTime = options.end && options.end.getTime();
-    const duration = endTime ? endTime - startTime : 0;
-
-    rRuleSet.between(min, max, true).forEach(date => {
-        let isValidDate = true;
-
-        if(duration && date.getTime() < recurrenceStartDate.getTime()) {
-            const comparableDate = new Date(date.getTime() + duration);
-
-            if(comparableDate.getTime() <= max.getTime()) {
-                date = recurrenceStartDate;
-            } else {
-                isValidDate = false;
-            }
-        }
-
-        if(isValidDate) {
-            correctTimezoneOffset(date);
-
-            if(!dateIsRecurrenceException(date, exception)) {
-                result.push(date);
-            }
-        }
-    });
-
-    return result;
 }
 
 const dateIsRecurrenceException = function(date, recurrenceException) {
@@ -145,22 +229,6 @@ function getDatePartDiffs(date1, date2) {
         seconds: date1.getSeconds() - date2.getSeconds()
     };
 }
-
-function getRecurrenceRule(recurrence) {
-    const result = {
-        rule: {},
-        isValid: false
-    };
-
-    if(recurrence) {
-        result.rule = parseRecurrenceRule(recurrence);
-        result.isValid = validateRRule(result.rule, recurrence);
-    }
-
-    return result;
-}
-
-const loggedWarnings = [];
 
 function validateRRule(rule, recurrence) {
     if(brokenRuleNameExists(rule) ||
@@ -233,7 +301,7 @@ function wrongIntervalRule(rule) {
 }
 
 function wrongDayOfWeek(rule) {
-    const daysByRule = daysFromByDayRule(rule);
+    const daysByRule = recurrenceUtils.daysFromByDayRule(rule);
     let brokenDaysExist = false;
 
     each(daysByRule, function(_, day) {
@@ -295,34 +363,10 @@ function parseRecurrenceRule(recurrence) {
     }
 
     if(ruleObject.freq && ruleObject.until) {
-        ruleObject.until = getDateByAsciiString(ruleObject.until);
+        ruleObject.until = recurrenceUtils.getDateByAsciiString(ruleObject.until);
     }
 
     return ruleObject;
-}
-
-function getDateByAsciiString(string, initialDate) {
-    if(typeof string !== 'string') {
-        return string;
-    }
-
-    const arrayDate = string.match(/(\d{4})(\d{2})(\d{2})(T(\d{2})(\d{2})(\d{2}))?(Z)?/);
-
-    if(!arrayDate) {
-        return null;
-    }
-
-    const isUTC = arrayDate[8] !== undefined;
-    let currentOffset = initialDate ? initialDate.getTimezoneOffset() : resultUtils.getTimeZoneOffset();
-    let date = new (Function.prototype.bind.apply(Date, prepareDateArrayToParse(arrayDate)))();
-
-    currentOffset = currentOffset * 60000;
-
-    if(isUTC) {
-        date = new Date(date.getTime() - currentOffset);
-    }
-
-    return date;
 }
 
 function prepareDateArrayToParse(arrayDate) {
@@ -341,63 +385,3 @@ function prepareDateArrayToParse(arrayDate) {
 
     return arrayDate;
 }
-
-function daysFromByDayRule(rule) {
-    let result = [];
-
-    if(rule['byday']) {
-        if(Array.isArray(rule['byday'])) {
-            result = rule['byday'];
-        } else {
-            result = rule['byday'].split(',');
-        }
-    }
-
-    return result;
-}
-
-function getAsciiStringByDate(date) {
-    const currentOffset = resultUtils.getTimeZoneOffset() * 60000;
-
-    date = new Date(date.getTime() + currentOffset);
-    return date.getFullYear() + ('0' + (date.getMonth() + 1)).slice(-2) + ('0' + date.getDate()).slice(-2) +
-        'T' + ('0' + (date.getHours())).slice(-2) + ('0' + (date.getMinutes())).slice(-2) + ('0' + (date.getSeconds())).slice(-2) + 'Z';
-}
-
-const getRecurrenceString = function(object) {
-    if(!object || !object.freq) {
-        return;
-    }
-
-    let result = '';
-    for(const field in object) {
-        let value = object[field];
-
-        if(field === 'interval' && value < 2) {
-            continue;
-        }
-
-        if(field === 'until') {
-            value = getAsciiStringByDate(value);
-        }
-
-        result += field + '=' + value + ';';
-    }
-
-    result = result.substring(0, result.length - 1);
-
-    return result.toUpperCase();
-};
-
-extend(resultUtils, {
-    getRecurrenceString: getRecurrenceString,
-    getRecurrenceRule: getRecurrenceRule,
-    getAsciiStringByDate: getAsciiStringByDate,
-    getDatesByRecurrence: getDatesByRecurrence,
-    dateInRecurrenceRange: dateInRecurrenceRange,
-    getDateByAsciiString: getDateByAsciiString,
-    daysFromByDayRule: daysFromByDayRule,
-    getTimeZoneOffset: getTimeZoneOffset
-});
-
-module.exports = resultUtils;

@@ -38,7 +38,7 @@ import SchedulerAppointmentModel from './ui.scheduler.appointment_model';
 import SchedulerHeader from './ui.scheduler.header';
 import SchedulerResourceManager from './ui.scheduler.resource_manager';
 import subscribes from './ui.scheduler.subscribes';
-import recurrenceUtils from './utils.recurrence';
+import { recurrenceUtils } from './utils.recurrence';
 import timeZoneUtils from './utils.timeZone';
 import SchedulerAgenda from './workspaces/ui.scheduler.agenda';
 import SchedulerTimelineDay from './workspaces/ui.scheduler.timeline_day';

@@ -11,7 +11,7 @@ import objectUtils from '../../core/utils/object';
 import arrayUtils from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import { getPublicElement } from '../../core/element';
-import recurrenceUtils from './utils.recurrence';
+import { recurrenceUtils } from './utils.recurrence';
 import registerComponent from '../../core/component_registrator';
 import publisherMixin from './ui.scheduler.publisher_mixin';
 import Appointment from './ui.scheduler.appointment';
