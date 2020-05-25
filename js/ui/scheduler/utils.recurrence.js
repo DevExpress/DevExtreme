@@ -89,37 +89,32 @@ function getDatesByRecurrence(options) {
     const rRule = new RRule(ruleOptions);
     rRuleSet.rrule(rRule);
 
-    if(options.exception && options.exception.length) {
-        const splitDates = options.exception.split(',');
-        const exceptDates = getDatesByRecurrenceException(splitDates, recurrenceStartDate);
-        for(let i = 0; i < exceptDates.length; i++) {
-            const exceptDate = getRRuleUtcDate(new Date(exceptDates[i]));
-            rRuleSet.exdate(exceptDate);
-        }
-    }
-
     const min = getRRuleUtcDate(options.min);
     const max = getRRuleUtcDate(options.max);
+    const exception = options.exception;
+    const startTime = options.start && options.start.getTime();
     const endTime = options.end && options.end.getTime();
-    const durationInMs = endTime ? endTime - options.start.getTime() : 0;
+    const duration = endTime ? endTime - startTime : 0;
 
     rRuleSet.between(min, max, true).forEach(date => {
-        correctTimezoneOffset(date);
-        let isValidDate = !dateIsRecurrenceException(date, options.exception);
+        let isValidDate = true;
 
-        if(durationInMs && date.getTime() < recurrenceStartDate.getTime()) {
-            const comparableDate = new Date(date.getTime() + durationInMs);
+        if(duration && date.getTime() < recurrenceStartDate.getTime()) {
+            const comparableDate = new Date(date.getTime() + duration);
 
-            if(comparableDate.getTime() <= options.max.getTime()) {
+            if(comparableDate.getTime() <= max.getTime()) {
                 date = recurrenceStartDate;
-                correctTimezoneOffset(date);
             } else {
                 isValidDate = false;
             }
         }
 
         if(isValidDate) {
-            result.push(date);
+            correctTimezoneOffset(date);
+
+            if(!dateIsRecurrenceException(date, exception)) {
+                result.push(date);
+            }
         }
     });
 
