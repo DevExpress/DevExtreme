@@ -1432,6 +1432,30 @@ QUnit.test('Recurrence appointment occurrences should have correct text (T818393
     assert.equal($thirdAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), '4:00 AM - 5:00 AM', 'Appointment third occurrences has correct date text');
 });
 
+QUnit.test('Recurrent appointment with tail on next week has most top coordinate (T805446)', function(assert) {
+    this.createInstance({
+        views: ['week', { type: 'day', intervalCount: 2 }],
+        currentView: 'week',
+        crossScrollingEnabled: true,
+        dataSource: [{
+            text: 'Recurrent',
+            startDate: '2019-05-13T19:59:00',
+            endDate: '2019-05-14T04:00:00',
+            recurrenceRule: 'FREQ=WEEKLY;BYDAY=SU'
+        }],
+        startDayHour: 0,
+        endDayHour: 24,
+        firstDayOfWeek: 1,
+        cellDuration: 60,
+        currentDate: new Date(2019, 7, 19)
+    });
+
+    const appointment = this.scheduler.appointments.getAppointment();
+
+    const coords = translator.locate(appointment);
+
+    assert.strictEqual(coords.top, 0, 'Appointment tail has most top coordinate');
+});
 
 const apptStartDate = new Date(2019, 2, 30, 2, 0);
 const apptEndDate = new Date(2019, 2, 30, 3, 0);

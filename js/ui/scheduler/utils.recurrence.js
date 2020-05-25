@@ -34,7 +34,7 @@ export const recurrenceUtils = {
         if(!recurrenceRule.isValid || !rule.freq) {
             return result;
         }
-
+        // NOTE: We must check if an appointment could be broken before UTC convertation
         const isAppointmentLong = !dateUtils.sameDate(options.start, options.end);
 
         const ruleOptions = RRule.parseString(options.rule);
