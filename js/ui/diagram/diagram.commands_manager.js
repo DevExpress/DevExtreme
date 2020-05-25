@@ -780,11 +780,17 @@ const DiagramCommandsManager = {
                     text: c.text || internalCommand && internalCommand.text,
                     hint: c.text || internalCommand && internalCommand.hint,
                     icon: c.icon || internalCommand && internalCommand.icon,
-                    menuIcon: c.icon || internalCommand && internalCommand.menuIcon
+                    menuIcon: c.icon || internalCommand && internalCommand.menuIcon,
+                    widget: internalCommand && internalCommand.widget,
+                    cssClass: internalCommand && internalCommand.cssClass,
+                    getParameter: internalCommand && internalCommand.getParameter
                 };
                 if(Array.isArray(c.items)) {
-                    command.items = this._getPreparedCommands(allCommands, c.items || internalCommand && internalCommand.items);
+                    command.items = this._getPreparedCommands(allCommands, c.items);
+                } else {
+                    command.items = internalCommand && internalCommand.items;
                 }
+
                 return command;
             }
         }).filter(c => c);
