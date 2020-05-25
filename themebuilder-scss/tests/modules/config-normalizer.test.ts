@@ -546,7 +546,7 @@ describe('Cli arguments normalizer', () => {
   });
 
   test('build-theme: \'widgets\' field is normalized', () => {
-    const config: ConfigSettings = { command: 'build-theme', widgets: ['datagrid'] };
+    const config: ConfigSettings = { command: 'build-theme', widgets: ['dataGrid'] };
     normalizeConfig(config);
 
     expect(config).toEqual({

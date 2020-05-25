@@ -66,11 +66,22 @@ export default class MetadataGenerator {
     return `(${result})`;
   }
 
+  static isBundleFile(fileName: string): boolean {
+    return /bundles/.test(fileName);
+  }
+
+  static getBundleContent(content: string): string {
+    return content.replace(/(..\/widgets\/(material|generic))/, '$1/tb_index');
+  }
+
   collectMetadata(scssDir: string, filePath: string, content: string): string {
     const normalizedPath = MetadataGenerator.normalizePath(scssDir, filePath);
     const metaItems = MetadataGenerator.getMetaItems(content);
+    let modifiedContent = content;
 
-    if (metaItems.length) {
+    if (MetadataGenerator.isBundleFile(filePath)) {
+      modifiedContent = MetadataGenerator.getBundleContent(content);
+    } else if (metaItems.length) {
       metaItems.forEach((item, index) => {
         metaItems[index].Path = normalizedPath;
         this.metadata.push(item);
@@ -79,9 +90,9 @@ export default class MetadataGenerator {
       const imports = `@forward "${normalizedPath}";\n@use "${normalizedPath}" as *;\n`;
       const collector = `$never-used: collector(${MetadataGenerator.getMapFromMeta(metaItems, normalizedPath)});\n`;
 
-      return imports + content + collector;
+      modifiedContent = imports + content + collector;
     }
 
-    return content;
+    return modifiedContent;
   }
 }

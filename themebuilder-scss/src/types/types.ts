@@ -57,6 +57,10 @@ interface CompilerResult {
 interface PackageResult {
   css: string;
   compiledMetadata: Array<MetaItem>;
+  widgets: Array<string>;
+  unusedWidgets: Array<string>;
+  swatchSelector: string;
+  version?: string;
 }
 
 interface Metadata {
@@ -67,4 +71,20 @@ interface Metadata {
 interface FileInfo {
   path: string;
   content: string;
+}
+
+interface WidgetItem {
+  widgetName: string;
+  widgetImportString: string;
+}
+
+interface WidgetHandlerResult {
+  widgets: Array<string>;
+  unusedWidgets: Array<string>;
+  indexContent: string;
+}
+
+interface SwatchSass {
+  sass: string;
+  selector: string;
 }
