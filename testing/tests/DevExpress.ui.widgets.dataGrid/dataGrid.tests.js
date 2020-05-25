@@ -4645,6 +4645,44 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(focusedRowChangedArgs[0].rowIndex, 149, 'focusedRowChanged event has correct rowElement');
     });
 
+    QUnit.test('Scrolling back should works if rowRenderingMode is virtual and focused row is visible (T889805)', function(assert) {
+        // arrange
+        const data = [];
+
+        for(let i = 0; i < 20; i++) {
+            data.push({ id: i + 1 });
+        }
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            height: 100,
+            keyExpr: 'id',
+            dataSource: data,
+            focusedRowEnabled: true,
+            onRowPrepared: function(e) {
+                $(e.rowElement).css('height', 50);
+            },
+            columns: ['id'],
+            scrolling: {
+                rowRenderingMode: 'virtual',
+                useNative: false
+            }
+        }).dxDataGrid('instance');
+
+        // act
+        this.clock.tick();
+        dataGrid.getScrollable().scrollTo({ top: 10000 });
+        this.clock.tick();
+        dataGrid.option('focusedRowKey', 15);
+        this.clock.tick();
+        dataGrid.getScrollable().scrollTo({ top: 250 });
+        this.clock.tick(1000);
+
+        // assert
+        assert.equal(dataGrid.getScrollable().scrollTop(), 250, 'scroll top');
+        assert.equal(dataGrid.getVisibleRows()[0].key, 6, 'first visible row');
+        assert.equal(dataGrid.getVisibleRows().length, 15, 'visible row count');
+    });
+
     QUnit.test('DataGrid - navigateToRow method should work if rowRenderingMode is \'virtual\' and paging is disabled (T820359)', function(assert) {
     // arrange
         const data = [];
