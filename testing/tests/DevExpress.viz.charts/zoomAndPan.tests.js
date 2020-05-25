@@ -2842,7 +2842,7 @@ QUnit.test('Default behavior - no prevent. On panning by drag (goes to the edge)
 
     // act
     const $root = $(chart._renderer.root.element);
-
+    chart._lastRenderingTime = 0;
     $root.trigger(new $.Event('dxdragstart', { pointerType: 'touch', pageX: 100, pageY: 250 }));
     $root.trigger(new $.Event('dxdrag', { pointerType: 'touch', offset: { x: -100, y: 50 } }));
     $root.trigger(new $.Event('dxdragend', { pointerType: 'touch' }));
@@ -2948,7 +2948,7 @@ QUnit.test('On panning by drag (goes from the edge)', function(assert) {
 
     // act
     const $root = $(chart._renderer.root.element);
-
+    chart._lastRenderingTime = 0;
     $root.trigger(new $.Event('dxdragstart', { pointerType: 'touch', pageX: 200, pageY: 250 }));
     $root.trigger(new $.Event('dxdrag', { pointerType: 'touch', offset: { x: 100, y: 50 }, preventDefault: preventDefault, stopPropagation: stopPropagation }));
     $root.trigger(new $.Event('dxdragend', { pointerType: 'touch', preventDefault: preventDefault, stopPropagation: stopPropagation }));
