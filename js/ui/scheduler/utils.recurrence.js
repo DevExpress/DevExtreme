@@ -7,6 +7,7 @@ const inArray = require('../../core/utils/array').inArray;
 
 // const toMs = dateUtils.dateToMilliseconds;
 import { RRule, RRuleSet } from 'rrule';
+import dateUtils from '../../core/utils/date';
 // import { DateTime } from 'luxon';
 
 // var { DateTime } = require('luxon');
@@ -247,6 +248,9 @@ function getDatesByRecurrence(options) {
     // const iterationResult = {};
     const rule = recurrenceRule.rule;
 
+    const isLongAppointment = !dateUtils.sameDate(options.start, options.end);
+    const durationInMs = options.end.getTime() - options.start.getTime();
+
     const dateUtc = Date.UTC(
         options.start.getUTCFullYear(),
         options.start.getUTCMonth(),
@@ -289,8 +293,27 @@ function getDatesByRecurrence(options) {
             rRuleSet.exdate(exceptDates[i]);
         }
     }
+    const start = new Date(options.min);
 
-    return rRuleSet.between(options.min, options.max, true);
+    if(isLongAppointment) {
+        start.setDate(start.getDate() - (options.end.getDate() - options.start.getDate()));
+    }
+    const dates = rRuleSet.between(start, options.max, true, function(date, i) {
+        const comparableDate = new Date(date.getTime() + durationInMs);
+
+        if(comparableDate.getTime() <= options.max.getTime()) {
+            date = start;
+            return true;
+        }
+    });
+
+    return dates.map((date) => {
+        if(date.getTime() < options.min.getTime()) {
+            return options.min;
+        } else {
+            return date;
+        }
+    });
     // rule.interval = normalizeInterval(rule);
     // const dateRules = splitDateRules(rule, options.firstDayOfWeek);
 
