@@ -26,22 +26,22 @@ const CALENDAR_POPOVER_CLASS = 'dx-scheduler-navigator-calendar-popover';
 
 const MONDAY_INDEX = 1;
 
-const getDefaultFirstDayOfWeekIndex = shift => {
+const getDefaultFirstDayOfWeekIndex = function(shift) {
     return shift ? MONDAY_INDEX : dateLocalization.firstDayOfWeekIndex();
 };
 
-const getDateMonthFormat = short => {
+const getDateMonthFormat = function(short) {
     return function(date) {
         const monthName = dateLocalization.getMonthNames(short ? 'abbreviated' : 'wide')[date.getMonth()];
         return [dateLocalization.format(date, 'day'), monthName].join(' ');
     };
 };
 
-const getMonthYearFormat = date => {
+const getMonthYearFormat = function(date) {
     return dateLocalization.getMonthNames('abbreviated')[date.getMonth()] + ' ' + dateLocalization.format(date, 'year');
 };
 
-const getCaptionFormat = (short, intervalCount, duration) => {
+const getCaptionFormat = function(short, intervalCount, duration) {
     const dateMonthFormat = getDateMonthFormat(short);
     return function(date) {
         if(intervalCount > 1) {
@@ -61,7 +61,7 @@ const getCaptionFormat = (short, intervalCount, duration) => {
     };
 };
 
-const getWeekCaption = (date, shift, rejectWeekend) => {
+const getWeekCaption = function(date, shift, rejectWeekend) {
     const firstDayOfWeek = this.option('firstDayOfWeek');
     let firstDayOfWeekIndex = isDefined(firstDayOfWeek) ? firstDayOfWeek : getDefaultFirstDayOfWeekIndex(shift);
 
@@ -96,7 +96,7 @@ const getWeekCaption = (date, shift, rejectWeekend) => {
     };
 };
 
-const formatCaptionByMonths = (lastDate, firstDate) => {
+const formatCaptionByMonths = function(lastDate, firstDate) {
     const isDifferentMonthDates = firstDate.getMonth() !== lastDate.getMonth();
     const isDifferentYears = firstDate.getFullYear() !== lastDate.getFullYear();
     const useShortFormat = isDifferentMonthDates || this.option('_useShortDateFormat');
@@ -114,7 +114,7 @@ const formatCaptionByMonths = (lastDate, firstDate) => {
     return firstDateText + '-' + lastDateText;
 };
 
-const getMonthCaption = date => {
+const getMonthCaption = function(date) {
     const firstDate = new Date(dateUtils.getFirstMonthDate(date));
     let lastDate = new Date(dateUtils.getLastMonthDate(firstDate));
     let text;
@@ -140,11 +140,11 @@ const getMonthCaption = date => {
     };
 };
 
-const dateGetter = (date, offset) => {
+const dateGetter = function(date, offset) {
     return new Date(date[this.setter](date[this.getter]() + offset));
 };
 
-const getConfig = step => {
+const getConfig = function(step) {
     let agendaDuration;
 
     switch(step) {
