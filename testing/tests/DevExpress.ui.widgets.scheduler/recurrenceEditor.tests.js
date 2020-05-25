@@ -1,8 +1,10 @@
-const $ = require('jquery');
-const dateUtils = require('core/utils/date');
-const RecurrenceEditor = require('ui/scheduler/ui.scheduler.recurrence_editor');
-const recurrenceUtils = require('ui/scheduler/utils.recurrence');
-const dateLocalization = require('localization/date');
+import 'common.css!';
+
+import $ from 'jquery';
+import dateUtils from 'core/utils/date';
+import RecurrenceEditor from 'ui/scheduler/ui.scheduler.recurrence_editor';
+import { recurrenceUtils } from 'ui/scheduler/utils.recurrence';
+import dateLocalization from 'localization/date';
 
 const FREQUENCY_EDITOR = 'dx-recurrence-selectbox-freq';
 const REPEAT_END_EDITOR_CONTAINER = 'dx-recurrence-repeat-end-container';
@@ -16,8 +18,6 @@ const REPEAT_ON_YEAR_EDITOR = 'dx-recurrence-repeat-on-year';
 const MONTH_OF_YEAR = 'dx-recurrence-selectbox-month-of-year';
 const EVERY_INTERVAL = 'dx-recurrence-numberbox-interval';
 const RECURRENCE_BUTTON_GROUP = 'dx-recurrence-button-group';
-
-require('common.css!');
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="recurrence-editor"></div>');
