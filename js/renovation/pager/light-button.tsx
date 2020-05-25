@@ -1,4 +1,3 @@
-// tslint:disable-next-line: max-line-length
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Slot, Event, Ref, Effect,
 } from 'devextreme-generator/component_declaration/common';
@@ -7,6 +6,34 @@ import { registerKeyboardAction } from '../../ui/shared/accessibility';
 import * as eventsEngine from '../../events/core/events_engine';
 import noop from '../utils/noop';
 import { PAGER_CLASS } from './consts';
+
+type EventEngineType = {
+  on: (element, eventName, handler) => void;
+  off: (element, eventName, handler) => void;
+};
+
+type dxClickEffectFn = (HTMLDivElement, Function) => (() => void);
+
+type closestFn = (HTMLDivElement, string) => HTMLElement | null;
+
+export const dxClickEffect: dxClickEffectFn = (element, handler) => {
+  if (handler) {
+    (eventsEngine as EventEngineType).on(element, clickEvent.name, handler);
+    return (): void => (eventsEngine as EventEngineType).off(element, clickEvent.name, handler);
+  }
+  return noop;
+};
+
+export const closest: closestFn = (child, className) => {
+  let el = child;
+  const selector = `.${className}`;
+
+  while (el !== null && el.nodeType === 1) {
+    if (el.matches(selector)) return el;
+    el = el.parentElement;
+  }
+  return null;
+};
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
@@ -17,7 +44,7 @@ export const viewFunction = ({
 }: LightButton) => (
   <div
     key={key}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ref={widgetRef as any}
     className={className}
     tabIndex={0}
@@ -40,26 +67,6 @@ export class LightButtonProps {
   label?: string = '';
 
   @Event() onClick?: () => void;
-}
-type EventEngineType = {
-  on: (element, eventName, handler) => void;
-  off: (element, eventName, handler) => void;
-};
-
-function dxClickEffect(element, handler): (() => void) {
-  if (handler) {
-    (eventsEngine as EventEngineType).on(element, clickEvent.name, handler);
-    return (): void => (eventsEngine as EventEngineType).off(element, clickEvent.name, handler);
-  }
-  return noop;
-}
-function closest(child: HTMLElement, className: string): HTMLElement | null {
-  let el: HTMLElement | null = child;
-  do {
-    if (el.matches(`.${className}`)) return el;
-    el = el.parentElement;
-  } while (el !== null && el.nodeType === 1);
-  return null;
 }
 
 // tslint:disable-next-line: max-classes-per-file
