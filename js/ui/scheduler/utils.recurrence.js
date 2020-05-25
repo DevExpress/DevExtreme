@@ -35,8 +35,11 @@ export const recurrenceUtils = {
             return result;
         }
 
+        const isAppointmentLong = !dateUtils.sameDate(options.start, options.end);
+
         const ruleOptions = RRule.parseString(options.rule);
         const recurrenceStartDate = getRRuleUtcDate(options.start);
+
         ruleOptions.dtstart = recurrenceStartDate;
 
         const rRule = new RRule(ruleOptions);
@@ -50,7 +53,8 @@ export const recurrenceUtils = {
         const startTime = options.start && options.start.getTime();
         const endTime = options.end && options.end.getTime();
         const duration = endTime ? endTime - startTime : 0;
-        const leftBorder = recurrenceUtils.getLeftBorder(min, recurrenceStartDate, duration);
+
+        const leftBorder = isAppointmentLong ? recurrenceUtils.getLeftBorder(minTime, duration) : min;
 
         rRuleSet.between(leftBorder, max, true).forEach(date => {
             const endAppointmentTime = date.getTime() + duration;
@@ -68,12 +72,8 @@ export const recurrenceUtils = {
         return result;
     },
 
-    getLeftBorder: function(min, startDate, duration) {
-        const endDate = new Date(startDate.getTime() + duration);
-        if(endDate.getTime() > min.getTime()) {
-            return new Date(min.getTime() - duration);
-        }
-        return min;
+    getLeftBorder: function(minTime, duration) {
+        return new Date(minTime - duration);
     },
 
     getRecurrenceRule: function(recurrence) {
