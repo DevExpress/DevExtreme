@@ -820,6 +820,7 @@ QUnit.test('AllDay recurrence appointments should be rendered correctly after ch
 });
 
 QUnit.test('AllDay recurrence appointments should be rendered correctly after changing currentDate, day view', function(assert) {
+    // NOTE: checked with rrule demo. Appointment part is from new Date(2015, 4, 26, 9, 30) to new Date(2015, 4, 27, 11, 30) should be rendered
     const tasks = [{
         startDate: new Date(2015, 4, 25, 9, 30),
         endDate: new Date(2015, 4, 26, 11, 30),
@@ -835,7 +836,7 @@ QUnit.test('AllDay recurrence appointments should be rendered correctly after ch
     });
     assert.equal(this.instance.$element().find('.dx-scheduler-appointment-recurrence').length, 1, 'appointments are OK');
     this.instance.option('currentDate', new Date(2015, 4, 27));
-    assert.equal(this.instance.$element().find('.dx-scheduler-appointment-recurrence').length, 0, 'appointments are OK');
+    assert.equal(this.instance.$element().find('.dx-scheduler-appointment-recurrence').length, 1, 'appointments are OK');
 });
 
 QUnit.test('Recurring appt should be rendered correctly after changing of repeate count', function(assert) {
