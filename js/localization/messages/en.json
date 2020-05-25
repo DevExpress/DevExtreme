@@ -194,7 +194,7 @@
         "dxScheduler-openAppointment": "Open appointment",
 
         "dxScheduler-recurrenceNever": "Never",
-        "dxScheduler-recurrenceMinutely": "Minutely",
+        "dxScheduler-recurrenceMinutely": "Every minute",
         "dxScheduler-recurrenceHourly": "Hourly",
         "dxScheduler-recurrenceDaily": "Daily",
         "dxScheduler-recurrenceWeekly": "Weekly",
@@ -306,6 +306,8 @@
         "dxFileManager-errorMaxFileSizeExceeded": "File size exceeds the maximum allowed size.",
         "dxFileManager-errorInvalidSymbols": "This name contains invalid characters.",
         "dxFileManager-errorDefault": "Unspecified error.",
+
+        "dxFileManager-errorDirectoryOpenFailed": "The folder cannot be opened",
 
         "dxFileManager-commandCreate": "New directory",
         "dxFileManager-commandRename": "Rename",

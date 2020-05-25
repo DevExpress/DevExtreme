@@ -1,7 +1,0 @@
-$color: null !default;
-$size: null !default;
-
-@use "colors" with ($color: $color);
-@use "sizes" with ($size: $size);
-
-@use "./accordion";

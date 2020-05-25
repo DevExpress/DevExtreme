@@ -781,7 +781,6 @@ const Scheduler = Widget.inherit({
                 break;
             case 'dataSource':
                 this._initDataSource();
-                this._customizeStoreLoadOptions();
                 this._appointmentModel.setDataSource(this._dataSource);
 
                 this._postponeResourceLoading().done((resources) => {
@@ -1206,9 +1205,6 @@ const Scheduler = Widget.inherit({
 
         this._loadedResources = [];
 
-        this._proxiedCustomizeStoreLoadOptionsHandler = this._customizeStoreLoadOptionsHandler.bind(this);
-        this._customizeStoreLoadOptions();
-
         this.$element()
             .addClass(WIDGET_CLASS)
             .toggleClass(WIDGET_WIN_NO_TOUCH_CLASS, !!(browser.msie && touch));
@@ -1412,10 +1408,6 @@ const Scheduler = Widget.inherit({
         return result;
     },
 
-    _customizeStoreLoadOptions: function() {
-        this._dataSource && this._dataSource.on('customizeStoreLoadOptions', this._proxiedCustomizeStoreLoadOptionsHandler);
-    },
-
     _dispose: function() {
         this._appointmentTooltip && this._appointmentTooltip.dispose();
         this.hideAppointmentPopup();
@@ -1424,17 +1416,7 @@ const Scheduler = Widget.inherit({
         this._asyncTemplatesTimers.forEach(clearTimeout);
         this._asyncTemplatesTimers = [];
 
-        this._dataSource && this._dataSource.off('customizeStoreLoadOptions', this._proxiedCustomizeStoreLoadOptionsHandler);
         this.callBase();
-    },
-
-    _customizeStoreLoadOptionsHandler: function(options) {
-        // TODO: deprecated since 16.1 (manually)
-        options.storeLoadOptions.dxScheduler = {
-            startDate: this.getStartViewDate(),
-            endDate: this.getEndViewDate(),
-            resources: this.option('resources')
-        };
     },
 
     _initActions: function() {
@@ -2202,12 +2184,14 @@ const Scheduler = Widget.inherit({
             dragEvent.cancel = new Deferred();
         }
 
-        this._processActionResult(updatingOptions, function(canceled) {
+        return this._processActionResult(updatingOptions, function(canceled) {
+            let deferred = new Deferred();
+
             if(!canceled) {
                 this._expandAllDayPanel(appointment);
 
                 try {
-                    this._appointmentModel
+                    deferred = this._appointmentModel
                         .update(target, appointment)
                         .done(() => {
                             dragEvent && dragEvent.cancel.resolve(false);
@@ -2224,21 +2208,30 @@ const Scheduler = Widget.inherit({
             } else {
                 performFailAction();
             }
+
+            return deferred.promise();
         });
     },
 
     _processActionResult: function(actionOptions, callback) {
+        const deferred = new Deferred();
+        const resolveCallback = callbackResult => {
+            when(deferredUtils.fromPromise(callbackResult))
+                .always(deferred.resolve);
+        };
+
         if(typeUtils.isPromise(actionOptions.cancel)) {
             when(deferredUtils.fromPromise(actionOptions.cancel)).always((cancel) => {
                 if(!typeUtils.isDefined(cancel)) {
                     cancel = actionOptions.cancel.state() === 'rejected';
                 }
-
-                callback.call(this, cancel);
+                resolveCallback(callback.call(this, cancel));
             });
         } else {
-            callback.call(this, actionOptions.cancel);
+            resolveCallback(callback.call(this, actionOptions.cancel));
         }
+
+        return deferred.promise();
     },
 
     _expandAllDayPanel: function(appointment) {
@@ -2503,21 +2496,22 @@ const Scheduler = Widget.inherit({
 
         this._actions['onAppointmentAdding'](addingOptions);
 
-        this._processActionResult(addingOptions, function(canceled) {
-            if(!canceled) {
-                this._expandAllDayPanel(appointment);
-                this._appointmentModel.add(appointment, {
-                    value: this._getTimezoneOffsetByOption(),
-                    clientOffset: this.fire('getClientTimezoneOffset')
-                }).always((function(e) {
-                    this._executeActionWhenOperationIsCompleted(this._actions['onAppointmentAdded'], appointment, e);
-                }).bind(this));
+        return this._processActionResult(addingOptions, canceled => {
+            if(canceled) {
+                return new Deferred().resolve();
             }
+
+            this._expandAllDayPanel(appointment);
+
+            return this._appointmentModel.add(appointment, {
+                value: this._getTimezoneOffsetByOption(),
+                clientOffset: this.fire('getClientTimezoneOffset')
+            }).always(e => this._executeActionWhenOperationIsCompleted(this._actions['onAppointmentAdded'], appointment, e));
         });
     },
 
     updateAppointment: function(target, appointment) {
-        this._updateAppointment(target, appointment);
+        return this._updateAppointment(target, appointment);
     },
 
     deleteAppointment: function(appointment) {

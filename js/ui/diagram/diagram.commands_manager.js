@@ -514,14 +514,14 @@ const DiagramCommandsManager = {
                     cssClass: CSS_CLASSES.SMALL_EDITOR_ITEM
                 },
                 // Custom commands
-                showToolbox: {
+                toolbox: {
                     command: this.SHOW_TOOLBOX_COMMAND_NAME,
                     iconChecked: 'dx-diagram-i dx-diagram-i-button-toolbox-close',
                     iconUnchecked: 'dx-diagram-i dx-diagram-i-button-toolbox-open',
                     hint: messageLocalization.format('dxDiagram-uiShowToolbox'),
                     text: messageLocalization.format('dxDiagram-uiShowToolbox')
                 },
-                showPropertiesPanel: {
+                propertiesPanel: {
                     command: this.SHOW_PROPERTIES_PANEL_COMMAND_NAME,
                     iconChecked: 'close',
                     iconUnchecked: 'dx-diagram-i dx-diagram-i-button-properties-panel-open',
@@ -601,7 +601,7 @@ const DiagramCommandsManager = {
                 allCommands['undo'],
                 allCommands['redo'],
                 allCommands['separator'],
-                allCommands['showToolbox']
+                allCommands['toolbox']
             ]);
     },
     getViewToolbarCommands: function(commands, excludeCommands) {
@@ -640,7 +640,7 @@ const DiagramCommandsManager = {
                         allCommands['gridSize'],
                         allCommands['separator'],
                         allCommands['simpleView'],
-                        allCommands['showToolbox']
+                        allCommands['toolbox']
                     ]
                 }
             ]);
@@ -654,7 +654,7 @@ const DiagramCommandsManager = {
     _getDefaultPropertiesToolbarCommands: function(allCommands) {
         return this._defaultPropertiesToolbarCommands ||
             (this._defaultPropertiesToolbarCommands = [
-                allCommands['showPropertiesPanel']
+                allCommands['propertiesPanel']
             ]);
     },
 
@@ -772,16 +772,18 @@ const DiagramCommandsManager = {
         return commands.map(c => {
             if(allCommands[c]) {
                 return allCommands[c];
-            } else if(c.text || c.icon) {
+            } else if(c.text || c.icon || c.name) {
+                const internalCommand = c.name && allCommands[c.name];
                 const command = {
-                    command: c.name,
-                    text: c.text,
-                    hint: c.text,
-                    icon: c.icon,
-                    menuIcon: c.icon
+                    command: internalCommand && internalCommand.command,
+                    name: c.name,
+                    text: c.text || internalCommand && internalCommand.text,
+                    hint: c.text || internalCommand && internalCommand.hint,
+                    icon: c.icon || internalCommand && internalCommand.icon,
+                    menuIcon: c.icon || internalCommand && internalCommand.menuIcon
                 };
                 if(Array.isArray(c.items)) {
-                    command.items = this._getPreparedCommands(allCommands, c.items);
+                    command.items = this._getPreparedCommands(allCommands, c.items || internalCommand && internalCommand.items);
                 }
                 return command;
             }
