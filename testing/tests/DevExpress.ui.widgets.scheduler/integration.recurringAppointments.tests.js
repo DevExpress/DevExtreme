@@ -418,7 +418,7 @@ QUnit.test('Recurrent Task resizing, single mode', function(assert) {
     assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
 });
 
-QUnit.skip('Recurrence task resizing when currentDate != recStartDate (T488760)', function(assert) {
+QUnit.test('Recurrence task resizing when currentDate != recStartDate (T488760)', function(assert) {
     this.createInstance({
         currentDate: new Date(2017, 2, 20),
         editing: true,
@@ -964,7 +964,7 @@ QUnit.test('The second appointment in recurring series in Week view should have 
     assert.roughEqual($appointments.eq(1).outerWidth(), cellWidth * 2, 1.001, '2d appt has correct width');
 });
 
-QUnit.skip('The second appointment in recurring series in Week view should be rendered correctly', function(assert) {
+QUnit.test('The second appointment in recurring series in Week view should be rendered correctly', function(assert) {
     // long appointment
     this.createInstance({
         dataSource: [
