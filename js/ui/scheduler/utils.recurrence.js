@@ -299,12 +299,19 @@ function getDatesByRecurrence(options) {
         start.setDate(start.getDate() - (options.end.getDate() - options.start.getDate()));
     }
     const dates = rRuleSet.between(start, options.max, true, function(date, i) {
-        const comparableDate = new Date(date.getTime() + durationInMs);
+        if(date.getTime() < start.getTime()) {
+            const comparableDate = new Date(date.getTime() + durationInMs);
 
-        if(comparableDate.getTime() <= options.max.getTime()) {
-            date = start;
+            if(comparableDate.getTime() <= options.max.getTime()) {
+                date = start;
+                return true;
+            } else {
+                return false;
+            }
+        } else {
             return true;
         }
+
     });
 
     return dates.map((date) => {
