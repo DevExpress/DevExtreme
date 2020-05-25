@@ -548,6 +548,8 @@ module.exports = {
                     const focusedRowKey = this.option('focusedRowKey');
                     const isAutoNavigate = focusController.isAutoNavigateToFocusedRow();
 
+                    this._isPagingByRendering = pagingByRendering;
+
                     if(reload && focusedRowKey !== undefined) {
                         focusController._navigateToRow(focusedRowKey, true).done(function(focusedRowIndex) {
                             if(focusedRowIndex < 0) {
@@ -571,6 +573,10 @@ module.exports = {
                     } else if(!pagingByRendering) {
                         focusController._focusRowByKeyOrIndex();
                     }
+                },
+
+                isPagingByRendering: function() {
+                    return this._isPagingByRendering;
                 },
 
                 getPageIndexByKey: function(key) {
@@ -750,7 +756,8 @@ module.exports = {
                     const that = this;
                     const focusedRowKey = that.option('focusedRowKey');
                     const tabIndex = that.option('tabIndex') || 0;
-                    let rowIndex = that._dataController.getRowIndexByKey(focusedRowKey);
+                    const dataController = that._dataController;
+                    let rowIndex = dataController.getRowIndexByKey(focusedRowKey);
                     let columnIndex = that.option('focusedColumnIndex');
                     const $row = that._findRowElementForTabIndex();
 
@@ -766,12 +773,12 @@ module.exports = {
                             columnIndex = 0;
                         }
 
-                        rowIndex += that.getController('data').getRowIndexOffset();
+                        rowIndex += dataController.getRowIndexOffset();
                         that.getController('keyboardNavigation').setFocusedCellPosition(rowIndex, columnIndex);
 
-                        const dataSource = that.component.getController('data')._dataSource;
+                        const dataSource = dataController.dataSource();
                         const operationTypes = dataSource && dataSource.operationTypes();
-                        if(operationTypes && !operationTypes.paging) {
+                        if(operationTypes && !operationTypes.paging && !dataController.isPagingByRendering()) {
                             that.resizeCompleted.remove(that._scrollToFocusOnResize);
                             that.resizeCompleted.add(that._scrollToFocusOnResize);
                         }
