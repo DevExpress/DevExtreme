@@ -16,6 +16,8 @@ const publisherMixin = require('./ui.scheduler.publisher_mixin');
 const dateLocalization = require('../../localization/date');
 const isDefined = require('../../core/utils/type').isDefined;
 
+const Scrollable = require('../scroll_view/ui.scrollable');
+
 const ELEMENT_CLASS = 'dx-scheduler-navigator';
 const CALENDAR_CLASS = 'dx-scheduler-navigator-calendar';
 const NEXT_BUTTON_CLASS = 'dx-scheduler-navigator-next';
@@ -379,9 +381,12 @@ const SchedulerNavigator = Widget.inherit({
         this._renderCaptionKeys();
     },
 
-    _renderPopover: function() {
-        const overlayType = !devices.current().generic ? Popup : Popover;
+    _isMobileLayout: function() {
+        return !devices.current().generic;
+    },
 
+    _renderPopover: function() {
+        const overlayType = this._isMobileLayout() ? Popup : Popover;
         const popoverContainer = $('<div>').addClass(CALENDAR_POPOVER_CLASS);
         this._popover = this._createComponent(popoverContainer, overlayType, {
             contentTemplate: () => this._createPopupContent(),
@@ -409,9 +414,24 @@ const SchedulerNavigator = Widget.inherit({
         this._popover.$element().appendTo(this.$element());
     },
 
+    _createScrollable: function(content) {
+        const result = this._createComponent($('<div>'), Scrollable, {
+            direction: 'vertical'
+        });
+        result.$content().append(content);
+
+        return result;
+    },
+
     _createPopupContent: function() {
         const result = $('<div>').addClass(CALENDAR_CLASS);
         this._calendar = this._createComponent(result, Calendar, this._calendarOptions());
+
+        if(this._isMobileLayout()) {
+            const scrollable = this._createScrollable(result);
+            return scrollable.$element();
+        }
+
         return result;
     },
 
