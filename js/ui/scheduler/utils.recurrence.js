@@ -55,13 +55,11 @@ export const recurrenceUtils = {
         const endTime = options.end && options.end.getTime();
         const duration = endTime ? endTime - startTime : 0;
 
-        const leftBorder = isAppointmentLong ? recurrenceUtils.getLeftBorder(minTime, duration) : min;
-
+        const leftBorder = isAppointmentLong ? new Date(minTime - duration) : min;
         rRuleSet.between(leftBorder, max, true).forEach(date => {
             const endAppointmentTime = date.getTime() + duration;
-            const isValidDate = endAppointmentTime >= minTime;
 
-            if(isValidDate) {
+            if(endAppointmentTime >= minTime) {
                 correctTimezoneOffset(date);
 
                 if(!dateIsRecurrenceException(date, exception)) {
@@ -71,10 +69,6 @@ export const recurrenceUtils = {
         });
 
         return result;
-    },
-
-    getLeftBorder: function(minTime, duration) {
-        return new Date(minTime - duration);
     },
 
     getRecurrenceRule: function(recurrence) {
