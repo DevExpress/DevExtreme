@@ -65,9 +65,7 @@ testModule('getBoundingRect', {
     });
 
     test('getBoundingRect should return the object with all properties equal to 0 if element is not in DOM', function(assert) {
-        this.$element.remove();
-
-        const rect = getBoundingRect(this.$element);
+        const rect = getBoundingRect(document.createElement('div'));
 
         ['width', 'height', 'top', 'bottom', 'left', 'right'].forEach(prop => {
             assert.strictEqual(rect[prop], 0, `${prop} is correct`);
