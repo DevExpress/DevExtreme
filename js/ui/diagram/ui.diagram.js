@@ -227,11 +227,12 @@ class Diagram extends Widget {
             onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option('export'),
             excludeCommands: this._getExcludeCommands(),
+            onInternalCommand: this._onInternalCommand.bind(this),
             onCustomCommand: this._onCustomCommand.bind(this),
             isMobileView: this.isMobileScreenSize()
         };
     }
-    _onCustomCommand(e) {
+    _onInternalCommand(e) {
         switch(e.command) {
             case DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME:
                 if(this._toolbox) {
@@ -243,9 +244,10 @@ class Diagram extends Widget {
                     this._propertiesPanel.toggle();
                 }
                 break;
-            default:
-                this._customCommandAction({ name: e.command });
         }
+    }
+    _onCustomCommand(e) {
+        this._customCommandAction({ name: e.name });
     }
     _renderMainToolbar() {
         const $toolbarWrapper = $('<div>')
@@ -546,6 +548,7 @@ class Diagram extends Widget {
             onItemClick: (itemData) => { return this._onBeforeCommandExecuted(itemData.command); },
             export: this.option('export'),
             excludeCommands: this._getExcludeCommands(),
+            onInternalCommand: this._onInternalCommand.bind(this),
             onCustomCommand: this._onCustomCommand.bind(this)
         });
     }
