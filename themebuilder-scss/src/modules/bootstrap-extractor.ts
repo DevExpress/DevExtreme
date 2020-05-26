@@ -9,12 +9,12 @@ export default class BootstrapExtractor {
 
   sourceProcessor: () => Promise<string>;
 
-  meta: { [key:string]: string }
+  meta: { [key: string]: string };
 
   input: string;
 
   constructor(source: string, version: number) {
-      this.input = source;
+    this.input = source;
     if (version === 3) {
       this.compiler = BootstrapExtractor.lessRender;
       this.sourceProcessor = this.lessProcessor;
@@ -27,23 +27,25 @@ export default class BootstrapExtractor {
   }
 
   static readSassFile(fileName: string): Promise<string> {
-    const path = require.resolve('bootstrap/scss/' + fileName);
+    const path = require.resolve(`bootstrap/scss/${fileName}`);
     return fs.readFile(path, 'utf8');
   }
 
   static sassRender(input: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      sass.render({ data: input }, (error, result) => {
-        error ? reject(error.message) : resolve(result.css.toString());
-      });
+      sass.render(
+        { data: input },
+        (error, result) => (error ? reject(error.message) : resolve(result.css.toString())),
+      );
     });
   }
 
   static lessRender(input: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      less.render(input, (error, result) => {
-        error ? reject(error.message) : resolve(result.css);
-      });
+      less.render(
+        input,
+        (error, result) => (error ? reject(error.message) : resolve(result.css)),
+      );
     });
   }
 
@@ -58,8 +60,8 @@ export default class BootstrapExtractor {
   }
 
   getServiceCode(): string {
-    let variables = Object.keys(this.meta)
-      .map(key => `${key}: ${this.meta[key]};`)
+    const variables = Object.keys(this.meta)
+      .map((key) => `${key}: ${this.meta[key]};`)
       .join('');
 
     return `dx-empty {${variables}}`;

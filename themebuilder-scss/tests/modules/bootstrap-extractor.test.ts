@@ -1,5 +1,5 @@
-import BootstrapExtractor from '../../src/modules/bootstrap-extractor';
 import { readFileSync } from 'fs';
+import BootstrapExtractor from '../../src/modules/bootstrap-extractor';
 
 describe('BootstrapExtractor', () => {
   test('constructor set the right compiler and processor', () => {
@@ -20,23 +20,23 @@ describe('BootstrapExtractor', () => {
     const sass = '$var: red; div { color: $var;}';
     const css = 'div {\n  color: red;\n}';
 
-    expect(await BootstrapExtractor.sassRender(sass)).toBe(css);
-
-    expect(BootstrapExtractor.sassRender('0'))
-      .rejects
-      .toMatch(/^expected \"{\"\./);
+    return expect(await BootstrapExtractor.sassRender(sass)).toBe(css);
   });
+
+  test('sassRender (error)', async () => expect(BootstrapExtractor.sassRender('0'))
+    .rejects
+    .toMatch(/^expected "{"\./));
 
   test('lessRender', async () => {
     const less = '@var: red; div { color: @var;}';
     const css = 'div {\n  color: red;\n}\n';
 
-    expect(await BootstrapExtractor.lessRender(less)).toBe(css);
-
-    expect(BootstrapExtractor.lessRender('0'))
-      .rejects
-      .toBe('Unrecognised input. Possibly missing something');
+    return expect(await BootstrapExtractor.lessRender(less)).toBe(css);
   });
+
+  test('lessRender (error)', async () => expect(BootstrapExtractor.lessRender('0'))
+    .rejects
+    .toBe('Unrecognised input. Possibly missing something'));
 
   test('sassProcessor', async () => {
     const testSassString = 'test string';
@@ -60,9 +60,9 @@ describe('BootstrapExtractor', () => {
   test('getServiceCode', async () => {
     const extractor = new BootstrapExtractor('', 3);
     extractor.meta = {
-        'test-key-var1': '$var1',
-        'test-key-var2': '$var2',
-    }
+      'test-key-var1': '$var1',
+      'test-key-var2': '$var2',
+    };
     const expectedStyleString = 'dx-empty {test-key-var1: $var1;test-key-var2: $var2;}';
     expect(extractor.getServiceCode()).toBe(expectedStyleString);
   });
@@ -90,7 +90,7 @@ describe('BootstrapExtractor', () => {
 
     expect(await extractor.extract()).toEqual([
       { key: '$dx-var1', value: 'test1' },
-      { key: '$dx-var2', value: 'test2' }
+      { key: '$dx-var2', value: 'test2' },
     ]);
   });
 
@@ -101,7 +101,7 @@ describe('BootstrapExtractor', () => {
 
     expect(await extractor.extract()).toEqual([
       { key: '$dx-var1', value: 'test1' },
-      { key: '$dx-var2', value: 'test2' }
+      { key: '$dx-var2', value: 'test2' },
     ]);
   });
 });
