@@ -36,12 +36,11 @@ export const recurrenceUtils = {
             return result;
         }
 
-        const isAppointmentLong = options.end && !timeZoneUtils.isSameAppointmentDates(options.start, options.end);
-
         const ruleOptions = RRule.parseString(options.rule);
-        const recurrenceStartDate = getRRuleUtcDate(options.start);
+        const start = getRRuleUtcDate(options.start);
+        const end = getRRuleUtcDate(options.end);
 
-        ruleOptions.dtstart = recurrenceStartDate;
+        ruleOptions.dtstart = start;
 
         const rRule = new RRule(ruleOptions);
         const rRuleSet = new RRuleSet();
@@ -51,11 +50,11 @@ export const recurrenceUtils = {
         const minTime = min.getTime();
         const max = getRRuleUtcDate(options.max);
         const exception = options.exception;
-        const startTime = options.start && options.start.getTime();
-        const endTime = options.end && options.end.getTime();
+        const startTime = start && start.getTime();
+        const endTime = end && end.getTime();
         const duration = endTime ? endTime - startTime : 0;
 
-        const leftBorder = isAppointmentLong ? new Date(minTime - duration) : min;
+        const leftBorder = recurrenceUtils.getLeftBorder(options, min, duration);
         rRuleSet.between(leftBorder, max, true).forEach(date => {
             const endAppointmentTime = date.getTime() + duration;
 
@@ -69,6 +68,14 @@ export const recurrenceUtils = {
         });
 
         return result;
+    },
+
+    getLeftBorder: function(options, minDateUtc, appointmentDuration) {
+        if(options.end && !timeZoneUtils.isSameAppointmentDates(options.start, options.end)) {
+            return new Date(minDateUtc.getTime() - appointmentDuration);
+        }
+
+        return minDateUtc;
     },
 
     getRecurrenceRule: function(recurrence) {
@@ -168,6 +175,10 @@ function getDatesByRecurrenceException(ruleValues, date) {
 }
 
 function getRRuleUtcDate(date) {
+    if(!date) {
+        return null;
+    }
+
     const newDate = new Date(Date.UTC(
         date.getFullYear(),
         date.getMonth(),
