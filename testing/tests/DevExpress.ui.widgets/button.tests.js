@@ -375,6 +375,17 @@ QUnit.module('submit behavior', {
         assert.strictEqual(this.$element.find(`.${BUTTON_SUBMIT_INPUT_CLASS}`).length, 1);
     });
 
+    QUnit.test('Button should not raise any errors after text option change when useSubmitBehavior is true (T892480)', function(assert) {
+        this.$element.dxButton('instance').option('text', 'new text');
+        assert.equal(this.$element.text(), 'new text');
+
+        try {
+            this.clickButton();
+        } catch(e) {
+            assert.notOk(true, 'Error is raised after click');
+        }
+    });
+
     QUnit.test('button click call click() on submit input', function(assert) {
         const clickHandlerSpy = sinon.spy();
 
