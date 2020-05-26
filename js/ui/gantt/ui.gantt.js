@@ -431,8 +431,9 @@ class Gantt extends Widget {
     }
     _appendCustomFields(data) {
         const modelData = this._tasksOption._getItems();
+        const keyGetter = dataCoreUtils.compileGetter(this.option(`${GANTT_TASKS}.keyExpr`));
         return data.reduce((previous, item) => {
-            const modelItem = modelData && modelData.filter((obj) => obj.id === item.id)[0];
+            const modelItem = modelData && modelData.filter((obj) => keyGetter(obj) === keyGetter(item))[0];
             if(!modelItem) {
                 previous.push(item);
             } else {
