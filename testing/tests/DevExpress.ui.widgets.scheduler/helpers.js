@@ -9,12 +9,14 @@ export const TOOLBAR_BOTTOM_LOCATION = 'bottom';
 const SCHEDULER_ID = 'scheduler';
 const TEST_ROOT_ELEMENT_ID = 'qunit-fixture';
 
-export const CLASSES = {
+const CLASSES = {
     header: '.dx-scheduler-header-panel',
     navigator: '.dx-scheduler-navigator',
     navigatorCaption: '.dx-scheduler-navigator-caption',
     navigatorPrevButton: '.dx-scheduler-navigator-previous',
     navigatorNextButton: '.dx-scheduler-navigator-next',
+    navigatorPopover: '.dx-scheduler-navigator-calendar-popover',
+    navigatorPopoverContent: '.dx-scheduler-navigator-calendar-popover > .dx-overlay-content',
 
     resizableHandle: {
         left: '.dx-resizable-handle-left',
@@ -58,6 +60,20 @@ class NavigatorCaption extends ClickElementWrapper {
     }
 }
 
+class NavigatorPopover extends ElementWrapper {
+    get isVisible() {
+        return this.content.getElement().is(':visible');
+    }
+
+    get content() {
+        return new ElementWrapper(CLASSES.navigatorPopoverContent);
+    }
+
+    get hasScroll() {
+        return this.content.getElement().find('.dx-scrollable').length > 0;
+    }
+}
+
 class NavigatorWrapper extends ElementWrapper {
     constructor() {
         super(CLASSES.navigator);
@@ -75,8 +91,8 @@ class NavigatorWrapper extends ElementWrapper {
         return new ClickElementWrapper(CLASSES.navigatorNextButton);
     }
 
-    get isPopupVisible() {
-        return $('.dx-scheduler-navigator-calendar-popover > .dx-overlay-content').is(':visible');
+    get popover() {
+        return new NavigatorPopover(CLASSES.navigatorPopover);
     }
 }
 
@@ -385,5 +401,9 @@ export class SchedulerTestWrapper extends ElementWrapper {
     hideControl() {
         $(`#${TEST_ROOT_ELEMENT_ID}`).css('top', '');
         $(`#${TEST_ROOT_ELEMENT_ID}`).css('left', '');
+    }
+
+    get isDesktop() {
+        return isDesktopEnvironment();
     }
 }
