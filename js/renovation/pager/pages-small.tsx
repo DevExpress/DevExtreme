@@ -11,7 +11,7 @@ import {
 import Page from './page';
 import { PAGER_INFO_CLASS } from './info';
 import NumberBox from '../number-box';
-import * as messageLocalization from '../../localization/message';
+import messageLocalization from '../../localization/message';
 import getElementComputedStyle from './get-computed-style';
 import { calculateValuesFittedWidth } from './calculate-values-fitted-width';
 
@@ -43,7 +43,6 @@ export const viewFunction = ({
   </div>
 );
 
-type MessageLocalizationType = { getFormatter: (name: string) => (() => string) };
 @ComponentBindings()
 export class SmallPagesProps {
   @OneWay() pageCount?: number = 10;
@@ -51,7 +50,7 @@ export class SmallPagesProps {
   @OneWay() pageIndex?: number = 0;
 
   // tslint:disable-next-line: max-line-length
-  @OneWay() pagesCountText?: string = (messageLocalization as MessageLocalizationType).getFormatter('dxPager-pagesCountText')();
+  @OneWay() pagesCountText?: string = messageLocalization.getFormatter('dxPager-pagesCountText')();
 
   @OneWay() rtlEnabled?: boolean = false;
 

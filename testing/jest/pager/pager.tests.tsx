@@ -56,7 +56,7 @@ describe('Pager', () => {
     expect(pageIndexSelector().props())
       .toMatchObject({ isLargeDisplayMode: true, pageIndex: 0, maxPagesCount: 10 });
     expect(infoText().props()).toMatchObject({
-      infoTextMessageTemplate: 'Page {0} of {1} ({2} items)', pageCount: 10, pageIndex: 0, totalCount: 0,
+      infoText: 'Page {0} of {1} ({2} items)', pageCount: 10, pageIndex: 0, totalCount: 0,
     });
     expect(pageSizeRender).toHaveBeenCalledTimes(1);
     expect(pageIndexSelectorRender).toHaveBeenCalledTimes(1);
@@ -93,5 +93,15 @@ describe('Pager', () => {
     // Vitik: simulate pageSize changing in pageSizeChange
     root.setProps({ pageSizeChange: pageSizeChangeHandler, pageSize: 10 });
     expect(pageSize().props()).toMatchObject({ pageSize: 10 });
+  });
+  it('custom infoText', () => {
+    const customText = '{0} {1} {2}';
+    const {
+      infoText,
+    } = render({ showInfo: true, infoText: customText });
+    expect(infoText().props()).toMatchObject({
+      infoText: customText, pageCount: 10, pageIndex: 0, totalCount: 0,
+    });
+    expect(InfoTextComp).toHaveBeenCalledTimes(1);
   });
 });

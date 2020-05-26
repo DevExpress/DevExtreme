@@ -3,7 +3,6 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import ResizableContainer from './resizable-container';
 import PagerProps from './pager-props';
-// import { getFormatter } from '../../localization/message';
 import PagerContent from './pager-content';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
