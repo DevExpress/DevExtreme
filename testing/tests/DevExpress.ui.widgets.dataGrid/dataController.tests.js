@@ -3263,11 +3263,10 @@ const setupVirtualScrollingModule = function() {
     };
     setupModule.apply(this);
 
-    let i;
 
     const array = [];
 
-    for(i = 0; i < 1000; i++) {
+    for(let i = 0; i < 1000; i++) {
         array.push({
             id: i,
             value: 'value' + i.toString()
@@ -3449,6 +3448,25 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
         // assert
         assert.strictEqual(virtualItemsCount.begin, 980);
         assert.strictEqual(virtualItemsCount.end, 0);
+    });
+
+    // T866890
+    QUnit.test('virtual items on end when last page size less than viewport size', function(assert) {
+        const dataController = this.dataController;
+        dataController.store().insert({ id: 1001 });
+        dataController.store().insert({ id: 1002 });
+        dataController.store().insert({ id: 1003 });
+        dataController.store().insert({ id: 1004 });
+        dataController.refresh();
+
+        dataController.viewportSize(3);
+
+        // act
+        dataController.setViewportItemIndex(1002);
+
+        // assert
+        assert.strictEqual(this.dataController.pageIndex(), 50);
+        assert.strictEqual(dataController.items().length, 24, 'items');
     });
 
     // B233350
@@ -3851,6 +3869,31 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         // assert
         assert.strictEqual(this.dataController.items().length, 15, 'item count');
         assert.strictEqual(this.dataController.pageCount(), 5, 'page count');
+    });
+
+    // T750279
+    QUnit.test('setViewportItemIndex should be called for rowsScrollController and dataSource with same args after loadIfNeed call', function(assert) {
+        // act
+        this.dataController.setViewportPosition(50);
+
+        // assert
+        assert.strictEqual(this.dataController.getContentOffset('begin'), 50);
+
+        // act
+        const rowsScrollControllerSpy = sinon.spy(this.dataController._rowsScrollController, 'setViewportItemIndex');
+        const dataSourceSpy = sinon.spy(this.dataController._dataSource, 'setViewportItemIndex');
+
+        this.dataController.loadIfNeed();
+
+        // assert
+        assert.equal(rowsScrollControllerSpy.callCount, 1, 'setViewportItemIndex call count');
+        assert.equal(dataSourceSpy.callCount, 1, 'setViewportItemIndex call count');
+
+        const rowsScrollControllerCall = rowsScrollControllerSpy.getCall(0);
+        const dataSourceCall = dataSourceSpy.getCall(0);
+
+        assert.deepEqual(rowsScrollControllerCall.args, [5], 'setViewportItemIndex call args');
+        assert.deepEqual(dataSourceCall.args, [5], 'setViewportItemIndex call args');
     });
 
 // =================================
@@ -4481,11 +4524,10 @@ QUnit.module('Infinite scrolling', {
     beforeEach: function() {
         setupModule.apply(this);
 
-        let i;
 
         const array = [];
 
-        for(i = 0; i < 50; i++) {
+        for(let i = 0; i < 50; i++) {
             array.push({
                 id: i,
                 value: 'value' + i.toString()

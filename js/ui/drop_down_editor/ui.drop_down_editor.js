@@ -7,7 +7,7 @@ import { focused } from '../widget/selectors';
 import { each } from '../../core/utils/iterator';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-import { getPublicElement } from '../../core/utils/dom';
+import { getPublicElement } from '../../core/element';
 import errors from '../widget/ui.errors';
 import { setup as setupPosition } from '../../animation/position';
 import { getDefaultAlignment } from '../../core/utils/position';
@@ -121,13 +121,12 @@ const DropDownEditor = TextBox.inherit({
 
             buttons: void 0,
 
-            dropDownOptions: {},
+            dropDownOptions: { showTitle: false },
             popupPosition: this._getDefaultPopupPosition(),
             onPopupInitialized: null,
             applyButtonText: formatMessage('OK'),
             cancelButtonText: formatMessage('Cancel'),
             buttonsLocation: 'default',
-            showPopupTitle: false,
             useHiddenSubmitElement: false
 
             /**

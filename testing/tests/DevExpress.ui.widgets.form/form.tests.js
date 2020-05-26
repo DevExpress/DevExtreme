@@ -1,27 +1,26 @@
-import $ from 'jquery';
-import resizeCallbacks from 'core/utils/resize_callbacks';
-import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
-import typeUtils from 'core/utils/type';
-import browser from 'core/utils/browser';
-import domUtils from 'core/utils/dom';
-import { __internals as internals } from 'ui/form/ui.form';
-import themes from 'ui/themes';
+import 'common.css!';
 import device from 'core/devices';
-import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import domAdapter from 'core/dom_adapter';
-
-import 'ui/text_area';
+import browser from 'core/utils/browser';
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import typeUtils from 'core/utils/type';
+import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
+import 'generic_light.css!';
+import $ from 'jquery';
 import 'ui/autocomplete';
 import 'ui/calendar';
 import 'ui/date_box';
 import 'ui/drop_down_box';
+import { __internals as internals } from 'ui/form/ui.form';
 import 'ui/html_editor';
 import 'ui/lookup';
 import 'ui/radio_group';
 import 'ui/tag_box';
+import 'ui/text_area';
+import themes from 'ui/themes';
+import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
+import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 
-import 'common.css!';
-import 'generic_light.css!';
 
 const INVALID_CLASS = 'dx-invalid';
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
@@ -315,8 +314,8 @@ QUnit.test('Refresh form when visibility changed to \'true\' in msie browser', f
     }).dxForm('instance');
 
     const refreshStub = sinon.stub(form, '_refresh');
-    domUtils.triggerHidingEvent($testContainer);
-    domUtils.triggerShownEvent($testContainer);
+    triggerHidingEvent($testContainer);
+    triggerShownEvent($testContainer);
 
     assert.equal(refreshStub.callCount, expectedRefreshCount, 'Refresh on visibility changed to \'true\' if browser is IE or Edge');
     refreshStub.restore();
@@ -2057,6 +2056,90 @@ QUnit.test('The exception is not thrown when option of an unknown item is change
         assert.equal(form.getButton('item2'), undefined, 'button of second item');
         assert.deepEqual(form.option('items[0].editorOptions'), { width: 200 }, 'editor options of first item');
         assert.deepEqual(form.option('items[1].buttonOptions'), { width: 100 }, 'button options of second item');
+    });
+
+    QUnit.test(`Set a new validation rules when groups are nested one into another and use the ${optionWay} method`, function(assert) {
+        const form = $('#form').dxForm({
+            formData: {
+                name: null,
+                lastName: null
+            },
+            showValidationSummary: true,
+            items: [{
+                itemType: 'group',
+                name: 'group1',
+                items: [{
+                    dataField: 'name'
+                }, {
+                    itemType: 'group',
+                    name: 'group2',
+                    items: [{
+                        dataField: 'lastName'
+                    }]
+                }]
+            }]
+        }).dxForm('instance');
+
+        form.beginUpdate();
+
+        if(useItemOption) {
+            form.itemOption('group1.name', 'validationRules', [{ type: 'required', message: 'Name is required' }]);
+            form.itemOption('group1.group2.lastName', 'validationRules', [{ type: 'required', message: 'Last Name is required' }]);
+        } else {
+            form.option('items[0].items[0].validationRules', [{ type: 'required', message: 'Name is required' }]);
+            form.option('items[0].items[1].items[0].validationRules', [{ type: 'required', message: 'Last Name is required' }]);
+        }
+
+        form.endUpdate();
+        form.validate();
+
+        const $summaryItemContents = $('.dx-validationsummary-item-content');
+        assert.equal($summaryItemContents.length, 2, 'validation summary items count');
+        assert.equal($summaryItemContents.eq(0).text(), 'Name is required', 'text of the first summary item');
+        assert.equal($summaryItemContents.eq(1).text(), 'Last Name is required', 'text of the second summary item');
+    });
+
+    QUnit.test(`Set a new validation rules when tabs are nested into a group and use the ${optionWay} method`, function(assert) {
+        const form = $('#form').dxForm({
+            formData: {
+                name: null,
+                lastName: null
+            },
+            showValidationSummary: true,
+            items: [{
+                itemType: 'group',
+                name: 'group1',
+                items: [{
+                    dataField: 'name'
+                }, {
+                    itemType: 'tabbed',
+                    tabs: [{
+                        title: 'title1',
+                        items: [{
+                            dataField: 'lastName'
+                        }]
+                    }]
+                }]
+            }]
+        }).dxForm('instance');
+
+        form.beginUpdate();
+
+        if(useItemOption) {
+            form.itemOption('group1.name', 'validationRules', [{ type: 'required', message: 'Name is required' }]);
+            form.itemOption('group1.title1.lastName', 'validationRules', [{ type: 'required', message: 'Last Name is required' }]);
+        } else {
+            form.option('items[0].items[0].validationRules', [{ type: 'required', message: 'Name is required' }]);
+            form.option('items[0].items[1].tabs[0].items[0].validationRules', [{ type: 'required', message: 'Last Name is required' }]);
+        }
+
+        form.endUpdate();
+        form.validate();
+
+        const $summaryItemContents = $('.dx-validationsummary-item-content');
+        assert.equal($summaryItemContents.length, 2, 'validation summary items count');
+        assert.equal($summaryItemContents.eq(0).text(), 'Name is required', 'text of the first summary item');
+        assert.equal($summaryItemContents.eq(1).text(), 'Last Name is required', 'text of the second summary item');
     });
 });
 

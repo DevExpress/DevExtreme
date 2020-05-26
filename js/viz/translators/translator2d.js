@@ -1,22 +1,18 @@
-const extend = require('../../core/utils/extend').extend;
-const each = require('../../core/utils/iterator').each;
-const Range = require('./range').Range;
-const categoryTranslator = require('./category_translator');
-const intervalTranslator = require('./interval_translator');
-const datetimeTranslator = require('./datetime_translator');
-const logarithmicTranslator = require('./logarithmic_translator');
-const vizUtils = require('../core/utils');
-const typeUtils = require('../../core/utils/type');
-const getLog = vizUtils.getLogExt;
-const getPower = vizUtils.getPower;
-const raiseToExt = vizUtils.raiseToExt;
-const isDefined = typeUtils.isDefined;
-const adjust = require('../../core/utils/math').adjust;
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import { Range } from './range';
+import categoryTranslator from './category_translator';
+import intervalTranslator from './interval_translator';
+import datetimeTranslator from './datetime_translator';
+import logarithmicTranslator from './logarithmic_translator';
+import { getLogExt as getLog, getPower, raiseToExt, getCategoriesInfo } from '../core/utils';
+import { isDefined, isDate } from '../../core/utils/type';
+import { adjust } from '../../core/utils/math';
+import { addInterval } from '../../core/utils/date';
 const _abs = Math.abs;
+
 const CANVAS_PROP = ['width', 'height', 'left', 'top', 'bottom', 'right'];
 let _Translator2d;
-
-const addInterval = require('../../core/utils/date').addInterval;
 
 const dummyTranslator = {
     to(value) {
@@ -154,7 +150,7 @@ _Translator2d.prototype = {
         const categories = range.categories || [];
         let script = {};
         const canvasOptions = that._prepareCanvasOptions();
-        const visibleCategories = vizUtils.getCategoriesInfo(categories, range.minVisible, range.maxVisible).categories;
+        const visibleCategories = getCategoriesInfo(categories, range.minVisible, range.maxVisible).categories;
         const categoriesLength = visibleCategories.length;
 
         if(range.isEmpty()) {
@@ -405,7 +401,7 @@ _Translator2d.prototype = {
 
     getInterval: function(interval) {
         const canvasOptions = this._canvasOptions;
-        interval = isDefined(interval) ? interval : this._businessRange.interval;
+        interval = interval ?? this._businessRange.interval;
         if(interval) {
             return Math.round(canvasOptions.ratioOfCanvasRange * interval);
         }
@@ -475,7 +471,7 @@ _Translator2d.prototype = {
         const min = canvasOptions.rangeMin;
         const max = canvasOptions.rangeMax;
         const correction = (max.valueOf() !== min.valueOf() ? max.valueOf() - min.valueOf() : _abs(canvasOptions.rangeMinVisible.valueOf() - min.valueOf())) / canvasOptions.canvasLength;
-        const isDateTime = typeUtils.isDate(max) || typeUtils.isDate(min);
+        const isDateTime = isDate(max) || isDate(min);
         const isLogarithmic = this._businessRange.axisType === 'logarithmic';
 
         let newMin = canvasOptions.rangeMinVisible.valueOf() - correction;

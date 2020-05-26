@@ -9,7 +9,7 @@ const browser = require('../core/utils/browser');
 const dasherize = require('../core/utils/inflector').dasherize;
 const extend = require('../core/utils/extend').extend;
 const DOMComponent = require('../core/dom_component');
-const getPublicElement = require('../core/utils/dom').getPublicElement;
+const getPublicElement = require('../core/element').getPublicElement;
 const eventUtils = require('../events/utils');
 const pointerEvents = require('../events/pointer');
 const dragEvents = require('../events/drag');
@@ -22,6 +22,7 @@ const EmptyTemplate = require('../core/templates/empty_template').EmptyTemplate;
 const deferredUtils = require('../core/utils/deferred');
 const when = deferredUtils.when;
 const fromPromise = deferredUtils.fromPromise;
+const Deferred = deferredUtils.Deferred;
 
 const DRAGGABLE = 'dxDraggable';
 const DRAGSTART_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, DRAGGABLE);
@@ -220,6 +221,8 @@ const Draggable = DOMComponent.inherit({
         const sourceDraggable = this._getSourceDraggable();
 
         sourceDraggable._fireRemoveEvent(sourceEvent);
+
+        return (new Deferred()).resolve();
     },
 
     _fireRemoveEvent: noop,
@@ -570,9 +573,6 @@ const Draggable = DOMComponent.inherit({
     },
 
     _dragStartHandler: function(e) {
-        let $dragElement;
-        let initialOffset;
-        let isFixedPosition;
         const $element = this._getDraggableElement(e);
 
         if(this._$sourceElement) {
@@ -595,12 +595,12 @@ const Draggable = DOMComponent.inherit({
         this._setSourceDraggable();
 
         this._$sourceElement = $element;
-        initialOffset = $element.offset();
-        $dragElement = this._$dragElement = this._createDragElement($element);
+        const initialOffset = $element.offset();
+        const $dragElement = this._$dragElement = this._createDragElement($element);
 
         this._toggleDraggingClass(true);
         this._toggleDragSourceClass(true);
-        isFixedPosition = $dragElement.css('position') === 'fixed';
+        const isFixedPosition = $dragElement.css('position') === 'fixed';
 
         this._initPosition(extend({}, dragStartArgs, {
             dragElement: $dragElement.get(0),
@@ -718,8 +718,8 @@ const Draggable = DOMComponent.inherit({
         }
     },
 
-    getElementsFromPoint: function(position) {
-        const ownerDocument = this._$dragElement.get(0).ownerDocument;
+    getElementsFromPoint: function(position, dragElement) {
+        const ownerDocument = (dragElement || this._$dragElement.get(0)).ownerDocument;
 
         if(browser.msie) {
             const msElements = ownerDocument.msElementsFromPoint(position.x, position.y);
@@ -777,6 +777,7 @@ const Draggable = DOMComponent.inherit({
     },
 
     _dragEndHandler: function(e) {
+        const d = new Deferred();
         const dragEndEventArgs = this._getEventArgs(e);
         const dropEventArgs = this._getEventArgs(e);
         const targetDraggable = this._getTargetDraggable();
@@ -793,32 +794,60 @@ const Draggable = DOMComponent.inherit({
                         }
 
                         if(!dropEventArgs.cancel) {
-                            targetDraggable.dragEnd(dragEndEventArgs);
                             needRevertPosition = false;
+                            when(fromPromise(targetDraggable.dragEnd(dragEndEventArgs))).always(d.resolve);
+                            return;
                         }
                     }
-                }).always(() => {
-                    if(needRevertPosition) {
-                        this._revertItemToInitialPosition();
-                    }
+                    d.resolve();
+                })
+                .fail(d.resolve);
 
-                    this.reset();
-                    targetDraggable.reset();
-                    this._stopAnimator();
-                    this._horizontalScrollHelper.reset();
-                    this._verticalScrollHelper.reset();
+            d.done(() => {
+                if(needRevertPosition) {
+                    this._revertItemToInitialPosition();
+                }
 
-                    this._resetDragElement();
-                    this._resetSourceElement();
+                this.reset();
+                targetDraggable.reset();
+                this._stopAnimator();
+                this._horizontalScrollHelper.reset();
+                this._verticalScrollHelper.reset();
 
-                    this._resetTargetDraggable();
-                    this._resetSourceDraggable();
-                });
+                this._resetDragElement();
+                this._resetSourceElement();
+
+                this._resetTargetDraggable();
+                this._resetSourceDraggable();
+            });
         }
     },
 
+    _isTargetOverAnotherDraggable: function(e) {
+        const sourceDraggable = this._getSourceDraggable();
+
+        if(this === sourceDraggable) {
+            return false;
+        }
+
+        if(!sourceDraggable._dragElementIsCloned()) {
+            return true;
+        }
+
+        const $sourceDraggableElement = sourceDraggable.$element();
+        const elements = this.getElementsFromPoint({
+            x: e.pageX,
+            y: e.pageY
+        }, e.target);
+        const firstWidgetElement = elements.filter((element) => $(element).hasClass(this._addWidgetPrefix()))[0];
+
+        return firstWidgetElement !== $sourceDraggableElement.get(0);
+    },
+
     _dragEnterHandler: function(e) {
-        this._setTargetDraggable();
+        if(this._isTargetOverAnotherDraggable(e)) {
+            this._setTargetDraggable();
+        }
 
         const sourceDraggable = this._getSourceDraggable();
         sourceDraggable.dragEnter(e);
@@ -881,7 +910,6 @@ const Draggable = DOMComponent.inherit({
             case 'contentTemplate':
             case 'container':
             case 'clone':
-                this._resetDragElement();
                 break;
             case 'allowMoveByClick':
             case 'dragDirection':

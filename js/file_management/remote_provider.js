@@ -31,6 +31,7 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
     renameItem(item, name) {
         return this._executeRequest('Rename', {
             pathInfo: item.getFullPathInfo(),
+            isDirectory: item.isDirectory,
             name
         });
     }
@@ -47,12 +48,16 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
     }
 
     deleteItems(items) {
-        return items.map(item => this._executeRequest('Remove', { pathInfo: item.getFullPathInfo() }));
+        return items.map(item => this._executeRequest('Remove', {
+            pathInfo: item.getFullPathInfo(),
+            isDirectory: item.isDirectory
+        }));
     }
 
     moveItems(items, destinationDirectory) {
         return items.map(item => this._executeRequest('Move', {
             sourcePathInfo: item.getFullPathInfo(),
+            sourceIsDirectory: item.isDirectory,
             destinationPathInfo: destinationDirectory.getFullPathInfo()
         }));
     }
@@ -60,6 +65,7 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
     copyItems(items, destinationFolder) {
         return items.map(item => this._executeRequest('Copy', {
             sourcePathInfo: item.getFullPathInfo(),
+            sourceIsDirectory: item.isDirectory,
             destinationPathInfo: destinationFolder.getFullPathInfo()
         }));
     }

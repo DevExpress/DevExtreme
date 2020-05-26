@@ -1,0 +1,51 @@
+{
+  "name": "devextreme-themebuilder",
+  "version": "0.0.1",
+  "description": "DevExtreme ThemeBuilder",
+  "keywords": [
+    "devextreme",
+    "devexpress"
+  ],
+  "main": "modules/builder.js",
+  "homepage": "https://js.devexpress.com/",
+  "bugs": "https://www.devexpress.com/support/",
+  "author": "Developer Express Inc.",
+  "repository": "https://github.com/DevExpress/DevExtreme",
+  "license": "SEE LICENSE IN README.md",
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "clean-css": "^4.2.1",
+    "sass": "^1.26.3",
+    "semver": "^5.6.0"
+  },
+  "scripts": {
+    "test-code": "jest --coverage --verbose --detectOpenHandles",
+    "lint": "eslint --config .eslintrc-themebuilder .",
+    "test": "npm run lint && npm run test-code",
+    "clean-metadata": "",
+    "generate-metadata": "ts-node --files=true src/metadata/generate.ts",
+    "build-ts": "tsc",
+    "build": "npm run generate-metadata && npm run build-ts"
+  },
+  "devDependencies": {
+    "@types/clean-css": "^4.2.1",
+    "@types/jest": "^25.2.1",
+    "@types/node-sass": "^4.11.0",
+    "@typescript-eslint/eslint-plugin": "^2.33.0",
+    "eslint": "^7.0.0",
+    "eslint-config-airbnb-typescript": "^7.2.1",
+    "eslint-config-devextreme": "^0.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jest": "^23.11.0",
+    "eslint-plugin-jest-formatting": "^1.2.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.20.0",
+    "express": "^4.16.4",
+    "jest": "^25.4.0",
+    "less": "3.9.0",
+    "sinon": "^9.0.2",
+    "ts-jest": "^25.5.0",
+    "ts-node": "^8.10.1",
+    "typescript": "^3.8.3"
+  }
+}

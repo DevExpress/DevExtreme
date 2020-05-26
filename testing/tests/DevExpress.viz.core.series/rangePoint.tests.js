@@ -2831,15 +2831,20 @@ QUnit.test('Negative. value', function(assert) {
 QUnit.module('Draw label', environment);
 
 // helper
-function createLabels(x, y, minY) {
+function createLabels(x, y, minY, topLabelBBox, bottomLabelBBox) {
     const point = createPoint(this.series, this.data, this.options);
+    const topLabel = point._topLabel;
+    const bottomLabel = point._bottomLabel;
 
     point.x = x;
     point.y = y;
     point.minY = minY;
 
+    topLabelBBox && topLabel.getBoundingRect.returns(topLabelBBox);
+    bottomLabelBBox && bottomLabel.getBoundingRect.returns(bottomLabelBBox);
+
     point._drawLabel(this.renderer, this.group);
-    return { tl: point._topLabel, bl: point._bottomLabel };
+    return { tl: topLabel, bl: bottomLabel };
 }
 
 QUnit.test('Create label', function(assert) {
@@ -3076,15 +3081,13 @@ const createCorrectionLabels = function(pos1, pos2, x, y, minY, minX) {
 QUnit.test('Get graphic bbox. Not rotated. Not image', function(assert) {
     this.options.styles.normal.r = 5;
     const point = createPoint(this.series, this.data, this.options);
-    let bottomLabelGraphicBBox;
-    let topLabelGraphicBBox;
 
     point.x = 33;
     point.y = 54;
     point.minY = 100;
 
-    topLabelGraphicBBox = point._getGraphicBBox('top');
-    bottomLabelGraphicBBox = point._getGraphicBBox('bottom');
+    const topLabelGraphicBBox = point._getGraphicBBox('top');
+    const bottomLabelGraphicBBox = point._getGraphicBBox('bottom');
 
     assert.equal(topLabelGraphicBBox.x, 28);
     assert.equal(topLabelGraphicBBox.y, 49);
@@ -3100,16 +3103,14 @@ QUnit.test('Get graphic bbox. Not rotated. Not image', function(assert) {
 QUnit.test('Get graphic bbox. Not rotated. Not image. Point is invisible', function(assert) {
     this.options.styles.normal.r = 5;
     const point = createPoint(this.series, this.data, this.options);
-    let bottomLabelGraphicBBox;
-    let topLabelGraphicBBox;
 
     point._options.visible = false;
     point.x = 33;
     point.y = 54;
     point.minY = 100;
 
-    topLabelGraphicBBox = point._getGraphicBBox('top');
-    bottomLabelGraphicBBox = point._getGraphicBBox('bottom');
+    const topLabelGraphicBBox = point._getGraphicBBox('top');
+    const bottomLabelGraphicBBox = point._getGraphicBBox('bottom');
 
     assert.equal(topLabelGraphicBBox.x, 33);
     assert.equal(topLabelGraphicBBox.y, 54);
@@ -3126,15 +3127,13 @@ QUnit.test('Get graphic bbox. Rotated. Not image', function(assert) {
     this.options.styles.normal.r = 5;
     this.options.rotated = true;
     const point = createPoint(this.series, this.data, this.options);
-    let bottomLabelGraphicBBox;
-    let topLabelGraphicBBox;
 
     point.x = 33;
     point.y = 54;
     point.minX = 20;
 
-    topLabelGraphicBBox = point._getGraphicBBox('top');
-    bottomLabelGraphicBBox = point._getGraphicBBox('bottom');
+    const topLabelGraphicBBox = point._getGraphicBBox('top');
+    const bottomLabelGraphicBBox = point._getGraphicBBox('bottom');
 
     assert.equal(topLabelGraphicBBox.x, 28);
     assert.equal(topLabelGraphicBBox.y, 49);
@@ -3151,16 +3150,14 @@ QUnit.test('Get graphic bbox. Rotated. Not image. Point is invisible', function(
     this.options.styles.normal.r = 5;
     this.options.rotated = true;
     const point = createPoint(this.series, this.data, this.options);
-    let bottomLabelGraphicBBox;
-    let topLabelGraphicBBox;
 
     point._options.visible = false;
     point.x = 33;
     point.y = 54;
     point.minX = 20;
 
-    topLabelGraphicBBox = point._getGraphicBBox('top');
-    bottomLabelGraphicBBox = point._getGraphicBBox('bottom');
+    const topLabelGraphicBBox = point._getGraphicBBox('top');
+    const bottomLabelGraphicBBox = point._getGraphicBBox('bottom');
 
     assert.equal(topLabelGraphicBBox.x, 33);
     assert.equal(topLabelGraphicBBox.y, 54);
@@ -3177,15 +3174,13 @@ QUnit.test('Get graphic bbox. Not rotated. Image', function(assert) {
     this.options.styles.normal.r = 5;
     this.options.image = 'test';
     const point = createPoint(this.series, this.data, this.options);
-    let bottomLabelGraphicBBox;
-    let topLabelGraphicBBox;
 
     point.x = 33;
     point.y = 54;
     point.minY = 100;
 
-    topLabelGraphicBBox = point._getGraphicBBox('top');
-    bottomLabelGraphicBBox = point._getGraphicBBox('bottom');
+    const topLabelGraphicBBox = point._getGraphicBBox('top');
+    const bottomLabelGraphicBBox = point._getGraphicBBox('bottom');
 
     assert.equal(topLabelGraphicBBox.x, 23);
     assert.equal(topLabelGraphicBBox.y, 44);
@@ -3203,15 +3198,13 @@ QUnit.test('Get graphic bbox. Rotated. Image', function(assert) {
     this.options.image = 'test';
     this.options.rotated = true;
     const point = createPoint(this.series, this.data, this.options);
-    let bottomLabelGraphicBBox;
-    let topLabelGraphicBBox;
 
     point.x = 33;
     point.y = 54;
     point.minX = 20;
 
-    topLabelGraphicBBox = point._getGraphicBBox('top');
-    bottomLabelGraphicBBox = point._getGraphicBBox('bottom');
+    const topLabelGraphicBBox = point._getGraphicBBox('top');
+    const bottomLabelGraphicBBox = point._getGraphicBBox('bottom');
 
     assert.equal(topLabelGraphicBBox.x, 23);
     assert.equal(topLabelGraphicBBox.y, 44);
@@ -3228,16 +3221,14 @@ QUnit.test('Get graphic bbox. Not rotated. Image. Point is invisible', function(
     this.options.styles.normal.r = 5;
     this.options.image = 'test';
     const point = createPoint(this.series, this.data, this.options);
-    let bottomLabelGraphicBBox;
-    let topLabelGraphicBBox;
 
     point._options.visible = false;
     point.x = 33;
     point.y = 54;
     point.minY = 100;
 
-    topLabelGraphicBBox = point._getGraphicBBox('top');
-    bottomLabelGraphicBBox = point._getGraphicBBox('bottom');
+    const topLabelGraphicBBox = point._getGraphicBBox('top');
+    const bottomLabelGraphicBBox = point._getGraphicBBox('bottom');
 
     assert.equal(topLabelGraphicBBox.x, 33);
     assert.equal(topLabelGraphicBBox.y, 54);
@@ -3255,16 +3246,14 @@ QUnit.test('Get graphic bbox. Rotated. Image. Point is invisible', function(asse
     this.options.image = 'test';
     this.options.rotated = true;
     const point = createPoint(this.series, this.data, this.options);
-    let bottomLabelGraphicBBox;
-    let topLabelGraphicBBox;
 
     point._options.visible = false;
     point.x = 33;
     point.y = 54;
     point.minX = 20;
 
-    topLabelGraphicBBox = point._getGraphicBBox('top');
-    bottomLabelGraphicBBox = point._getGraphicBBox('bottom');
+    const topLabelGraphicBBox = point._getGraphicBBox('top');
+    const bottomLabelGraphicBBox = point._getGraphicBBox('bottom');
 
     assert.equal(topLabelGraphicBBox.x, 33);
     assert.equal(topLabelGraphicBBox.y, 54);
@@ -3377,7 +3366,7 @@ QUnit.test('Value < minValue, inside, rotated', function(assert) {
 
     assert.equal(l.topLabel.shift.firstCall.args[0], 53 + 10);
     assert.equal(l.topLabel.shift.firstCall.args[1], 12 - 5);
-    assert.equal(l.bottomLabel.shift.firstCall.args[0], 130 - 10 - 20);
+    assert.equal(l.bottomLabel.shift.firstCall.args[0], 130 - 50);
     assert.equal(l.bottomLabel.shift.firstCall.args[1], 12 - 5);
 });
 
@@ -3482,6 +3471,27 @@ QUnit.test('Value < minValue, inside, rotated. Overlay corrections', function(as
     assert.equal(topLabel.shift.firstCall.args[1], 12 - 5);
     assert.equal(bottomLabel.shift.firstCall.args[0], 54);
     assert.equal(bottomLabel.shift.firstCall.args[1], 12 - 5);
+});
+
+QUnit.test('Draw labels, labels are crossed and crossing visible area - minY', function(assert) {
+    this.series.getValueAxis = getMockAxisFunction(this.renderer, () => this.translators.val, [10, 100]);
+    const { tl, bl } = createLabels.call(this, 53, 12, 55, { width: 20, height: 10, x: 63, y: 10 }, { width: 20, height: 10, x: 25, y: 17 });
+
+    assert.equal(tl.shift.firstCall.args[0], 63);
+    assert.equal(tl.shift.firstCall.args[1], 10);
+    assert.equal(bl.shift.firstCall.args[0], 25);
+    assert.equal(bl.shift.firstCall.args[1], 21);
+});
+
+QUnit.test('Draw labels, labels are crossed and crossing visible area - maxY', function(assert) {
+    this.series.getValueAxis = getMockAxisFunction(this.renderer, () => this.translators.val, [10, 100]);
+
+    const { tl, bl } = createLabels.call(this, 53, 12, 55, { width: 20, height: 10, x: 63, y: 89 }, { width: 20, height: 10, x: 25, y: 90 });
+
+    assert.equal(tl.shift.firstCall.args[0], 63);
+    assert.equal(tl.shift.firstCall.args[1], 79);
+    assert.equal(bl.shift.firstCall.args[0], 25);
+    assert.equal(bl.shift.firstCall.args[1], 90);
 });
 
 QUnit.test('Default, not rotated. Left alignment', function(assert) {

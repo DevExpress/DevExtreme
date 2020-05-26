@@ -1,25 +1,25 @@
-const $ = require('../core/renderer');
+import translator from '../animation/translator';
+import registerComponent from '../core/component_registrator';
+import devices from '../core/devices';
+import { getPublicElement } from '../core/element';
+import $ from '../core/renderer';
+import { EmptyTemplate } from '../core/templates/empty_template';
+import { inArray } from '../core/utils/array';
+import browser from '../core/utils/browser';
+import { noop } from '../core/utils/common';
+import { extend } from '../core/utils/extend';
+import { camelize } from '../core/utils/inflector';
+import { each } from '../core/utils/iterator';
+import sizeUtils from '../core/utils/size';
+import { isDefined } from '../core/utils/type';
+import { compare as compareVersions } from '../core/utils/version';
+import windowUtils from '../core/utils/window';
+import { triggerResizeEvent } from '../events/visibility_change';
+import messageLocalization from '../localization/message';
+import Button from './button';
+import Overlay from './overlay';
+import themes from './themes';
 const window = require('../core/utils/window').getWindow();
-const translator = require('../animation/translator');
-const camelize = require('../core/utils/inflector').camelize;
-const noop = require('../core/utils/common').noop;
-const getPublicElement = require('../core/utils/dom').getPublicElement;
-const each = require('../core/utils/iterator').each;
-const isDefined = require('../core/utils/type').isDefined;
-const inArray = require('../core/utils/array').inArray;
-const extend = require('../core/utils/extend').extend;
-const browser = require('../core/utils/browser');
-const compareVersions = require('../core/utils/version').compare;
-const messageLocalization = require('../localization/message');
-const devices = require('../core/devices');
-const registerComponent = require('../core/component_registrator');
-const Button = require('./button');
-const themes = require('./themes');
-const Overlay = require('./overlay');
-const EmptyTemplate = require('../core/templates/empty_template').EmptyTemplate;
-const domUtils = require('../core/utils/dom');
-const sizeUtils = require('../core/utils/size');
-const windowUtils = require('../core/utils/window');
 
 require('./toolbar/ui.toolbar.base');
 
@@ -53,7 +53,7 @@ const IS_IE11 = (browser.msie && parseInt(browser.version) === 11);
 const IS_OLD_SAFARI = browser.safari && compareVersions(browser.version, [11]) < 0;
 const HEIGHT_STRATEGIES = { static: '', inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS, flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS };
 
-const getButtonPlace = function(name) {
+const getButtonPlace = name => {
 
     const device = devices.current();
     const platform = device.platform;
@@ -87,8 +87,8 @@ const getButtonPlace = function(name) {
     }
 
     return {
-        toolbar: toolbar,
-        location: location
+        toolbar,
+        location
     };
 };
 
@@ -341,7 +341,7 @@ const Popup = Overlay.inherit({
     },
 
     _getCloseButtonRenderer: function() {
-        return (function(_, __, container) {
+        return (_, __, container) => {
             const $button = $('<div>').addClass(POPUP_TITLE_CLOSEBUTTON_CLASS);
             this._createComponent($button, Button, {
                 icon: 'close',
@@ -349,7 +349,7 @@ const Popup = Overlay.inherit({
                 integrationOptions: {}
             });
             $(container).append($button);
-        }).bind(this);
+        };
     },
 
     _getToolbarItems: function(toolbar) {
@@ -363,7 +363,7 @@ const Popup = Overlay.inherit({
         const currentPlatform = devices.current().platform;
         let index = 0;
 
-        each(toolbarItems, (function(_, data) {
+        each(toolbarItems, (_, data) => {
             const isShortcut = isDefined(data.shortcut);
             const item = isShortcut ? getButtonPlace(data.shortcut) : data;
 
@@ -387,7 +387,7 @@ const Popup = Overlay.inherit({
                     toolbarsItems.push(item);
                 }
             }
-        }).bind(this));
+        });
 
         if(toolbar === 'top' && this.option('showCloseButton') && this.option('showTitle')) {
             toolbarsItems.push(this._getCloseButton());
@@ -452,7 +452,7 @@ const Popup = Overlay.inherit({
     _toggleClasses: function() {
         const aliases = ALLOWED_TOOLBAR_ITEM_ALIASES;
 
-        each(aliases, (function(_, alias) {
+        each(aliases, (_, alias) => {
             const className = POPUP_CLASS + '-' + alias;
 
             if(inArray(className, this._toolbarItemClasses) >= 0) {
@@ -462,7 +462,7 @@ const Popup = Overlay.inherit({
                 this._wrapper().removeClass(className + '-visible');
                 this._$bottom.removeClass(className);
             }
-        }).bind(this));
+        });
     },
 
     _getContainer: function() {
@@ -481,7 +481,7 @@ const Popup = Overlay.inherit({
         if(!isDimensionChanged) {
             this._resetContentHeight();
         }
-        this.callBase.apply(this, arguments);
+        this.callBase(...arguments);
         this._setContentHeight();
     },
 
@@ -626,7 +626,7 @@ const Popup = Overlay.inherit({
                 height: '100%'
             });
         } else {
-            this.callBase.apply(this, arguments);
+            this.callBase(...arguments);
         }
         if(windowUtils.hasWindow()) {
             this._renderFullscreenWidthClass();
@@ -650,7 +650,7 @@ const Popup = Overlay.inherit({
         } else {
             (this.option('forceApplyBindings') || noop)();
 
-            return this.callBase.apply(this, arguments);
+            return this.callBase(...arguments);
         }
     },
 
@@ -689,7 +689,7 @@ const Popup = Overlay.inherit({
                 break;
             case 'autoResizeEnabled':
                 this._renderGeometry();
-                domUtils.triggerResizeEvent(this._$content);
+                triggerResizeEvent(this._$content);
                 break;
             case 'fullScreen':
                 this._toggleFullScreenClass(args.value);
@@ -698,7 +698,7 @@ const Popup = Overlay.inherit({
 
                 this._renderGeometry();
 
-                domUtils.triggerResizeEvent(this._$content);
+                triggerResizeEvent(this._$content);
                 break;
             case 'showCloseButton':
                 this._renderTitle();

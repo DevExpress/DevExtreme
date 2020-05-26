@@ -56,7 +56,7 @@ QUnit.module('render', {
     test('render dropDownMenu', function(assert) {
         this.element.dxToolbar({
             items: [
-                { location: 'after', locateInMenu: 'always', widget: 'button', options: { text: 'After Button' } }
+                { location: 'after', locateInMenu: 'always', widget: 'dxButton', options: { text: 'After Button' } }
             ]
         });
 
@@ -69,10 +69,10 @@ QUnit.module('render', {
     test('items - widgets', function(assert) {
         this.element.dxToolbar({
             items: [
-                { location: 'before', widget: 'button', options: { text: 'Before Button' } },
-                { location: 'after', widget: 'button', options: { text: 'After Button' } },
+                { location: 'before', widget: 'dxButton', options: { text: 'Before Button' } },
+                { location: 'after', widget: 'dxButton', options: { text: 'After Button' } },
                 {
-                    location: 'center', widget: 'tabs', options: {
+                    location: 'center', widget: 'dxTabs', options: {
                         items: [{ text: 'Tab 1' }, { text: 'Tab 2' }, { text: 'Tab 3' }]
                     }
                 }
@@ -394,7 +394,7 @@ QUnit.module('default template', () => {
     });
 
     test('template should be rendered correctly with button without options', function(assert) {
-        const $content = prepareItemTest({ widget: 'button' });
+        const $content = prepareItemTest({ widget: 'dxButton' });
 
         const button = $content.filter('.dx-button');
         assert.equal(button.length, 1);
@@ -408,7 +408,7 @@ QUnit.module('default template', () => {
     });
 
     test('template should be rendered correctly with button', function(assert) {
-        const $content = prepareItemTest({ widget: 'button', options: { text: 'test' } });
+        const $content = prepareItemTest({ widget: 'dxButton', options: { text: 'test' } });
 
         const button = $content.filter('.dx-button');
         assert.equal(button.length, 1);
@@ -426,7 +426,7 @@ QUnit.module('default template', () => {
     });
 
     test('template should be rendered correctly with tabs', function(assert) {
-        const $content = prepareItemTest({ widget: 'tabs', options: { items: [{ text: 'test' }] } });
+        const $content = prepareItemTest({ widget: 'dxTabs', options: { items: [{ text: 'test' }] } });
 
         const tabs = $content.filter('.dx-tabs');
 
@@ -436,7 +436,7 @@ QUnit.module('default template', () => {
     });
 
     test('template should be rendered correctly with dropDownMenu', function(assert) {
-        const $content = prepareItemTest({ widget: 'dropDownMenu', options: { items: [{ text: 'test' }] } });
+        const $content = prepareItemTest({ widget: 'dxDropDownMenu', options: { items: [{ text: 'test' }] } });
 
         const dropDown = $content.filter('.dx-dropdownmenu');
         assert.equal(dropDown.length, 1);

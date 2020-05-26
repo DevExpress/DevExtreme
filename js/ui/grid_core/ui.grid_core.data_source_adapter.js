@@ -208,13 +208,14 @@ module.exports = gridCore.Controller.inherit((function() {
                 return !dataSource.paginate() || change.type !== 'insert' || change.index !== undefined;
             });
 
-            const oldItemCount = this.itemsCount();
+            const getItemCount = () => groupCount ? this.itemsCount() : this._items.length;
+            const oldItemCount = getItemCount();
 
             arrayUtils.applyBatch(keyInfo, this._items, changes, groupCount, true);
             arrayUtils.applyBatch(keyInfo, dataSource.items(), changes, groupCount, true);
 
             if(this._currentTotalCount > 0) {
-                this._skipCorrection += this.itemsCount() - oldItemCount;
+                this._skipCorrection += getItemCount() - oldItemCount;
             }
 
             changes.splice(0, changes.length);
@@ -283,8 +284,6 @@ module.exports = gridCore.Controller.inherit((function() {
             const that = this;
             const dataSource = that._dataSource;
             const lastLoadOptions = that._lastLoadOptions;
-            let loadOptions;
-            let operationTypes;
 
             that.customizeStoreLoadOptions.fire(options);
 
@@ -298,9 +297,9 @@ module.exports = gridCore.Controller.inherit((function() {
                 options.delay = undefined;
             }
 
-            loadOptions = extend({ pageIndex: that.pageIndex() }, options.storeLoadOptions);
+            const loadOptions = extend({ pageIndex: that.pageIndex() }, options.storeLoadOptions);
 
-            operationTypes = calculateOperationTypes(loadOptions, lastLoadOptions);
+            const operationTypes = calculateOperationTypes(loadOptions, lastLoadOptions);
 
             that._customizeRemoteOperations(options, isReload, operationTypes);
 
@@ -577,16 +576,13 @@ module.exports = gridCore.Controller.inherit((function() {
         },
         load: function(options) {
             const that = this;
-            let store;
-            let loadResult;
-            let dataSourceLoadOptions;
             const dataSource = that._dataSource;
             const d = new Deferred();
 
             if(options) {
-                store = dataSource.store();
-                dataSourceLoadOptions = dataSource.loadOptions();
-                loadResult = {
+                const store = dataSource.store();
+                const dataSourceLoadOptions = dataSource.loadOptions();
+                const loadResult = {
                     storeLoadOptions: options,
                     isCustomLoading: true
                 };

@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import { getPublicElement } from '../../core/utils/dom';
+import { getPublicElement } from '../../core/element';
 import { noop } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import modules from './ui.grid_core.modules';
@@ -27,27 +27,22 @@ const ContextMenuController = modules.ViewController.inherit({
 
         const that = this;
         const $targetElement = $(dxEvent.target);
-        let view;
-        let options;
-        let rowIndex;
-        let columnIndex;
-        let rowOptions;
         let $element;
         let $targetRowElement;
         let $targetCellElement;
         let menuItems;
 
         each(VIEW_NAMES, function() {
-            view = that.getView(this);
+            const view = that.getView(this);
             $element = view && view.element();
 
             if($element && ($element.is($targetElement) || $element.find($targetElement).length)) {
                 $targetCellElement = $targetElement.closest('.dx-row > td, .dx-row > tr');
                 $targetRowElement = $targetCellElement.parent();
-                rowIndex = view.getRowIndex($targetRowElement);
-                columnIndex = $targetCellElement[0] && $targetCellElement[0].cellIndex;
-                rowOptions = $targetRowElement.data('options');
-                options = {
+                const rowIndex = view.getRowIndex($targetRowElement);
+                const columnIndex = $targetCellElement[0] && $targetCellElement[0].cellIndex;
+                const rowOptions = $targetRowElement.data('options');
+                const options = {
                     event: dxEvent,
                     targetElement: getPublicElement($targetElement),
                     target: viewName[this],

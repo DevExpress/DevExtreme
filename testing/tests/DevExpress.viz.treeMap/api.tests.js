@@ -59,13 +59,12 @@ QUnit.test('root fields', function(assert) {
 });
 
 QUnit.test('elements fields', function(assert) {
-    let root;
     const dataSource = [{
         items: [{ value: 1 }]
     }, {
         items: [{ value: 2 }, { value: 3 }]
     }];
-    root = common.createWidget({ dataSource: dataSource }).getRootNode();
+    const root = common.createWidget({ dataSource: dataSource }).getRootNode();
 
     assert.strictEqual(root.getChild(0).level, 0, 'tile 1 - level');
     assert.strictEqual(root.getChild(0).index, 0, 'tile 1 - index');

@@ -1,7 +1,8 @@
 import $ from '../renderer';
 import { getBody } from '../dom_adapter';
 import Callbacks from '../utils/callbacks';
-import { contains, triggerShownEvent } from '../utils/dom';
+import { contains } from '../utils/dom';
+import { triggerShownEvent } from '../../events/visibility_change';
 import errors from '../errors';
 
 export const renderedCallbacks = Callbacks({ syncStrategy: true });

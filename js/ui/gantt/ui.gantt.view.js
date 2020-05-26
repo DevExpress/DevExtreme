@@ -11,6 +11,8 @@ export class GanttView extends Widget {
         this._onScroll = this._createActionByOption('onScroll');
         this._onDialogShowing = this._createActionByOption('onDialogShowing');
         this._onPopupMenuShowing = this._createActionByOption('onPopupMenuShowing');
+        this._expandAll = this._createActionByOption('onExpandAll');
+        this._collapseAll = this._createActionByOption('onCollapseAll');
     }
     _initMarkup() {
         const { GanttView } = getGanttViewCore();
@@ -220,5 +222,13 @@ export class GanttView extends Widget {
         return this.option('mainElement').get(0);
     }
     adjustControl() {}
-    getRequireFirstLoadParentAutoCalc() { return this.option('validation.autoUpdateParentTasks'); }
+    getRequireFirstLoadParentAutoCalc() {
+        return this.option('validation.autoUpdateParentTasks');
+    }
+    collapseAll() {
+        this._collapseAll();
+    }
+    expandAll() {
+        this._expandAll();
+    }
 }

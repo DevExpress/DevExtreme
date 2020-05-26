@@ -1,26 +1,13 @@
 const eventsEngine = require('../../events/core/events_engine');
 const Class = require('../../core/class');
 const domAdapter = require('../../core/dom_adapter');
-const ready = require('../../core/utils/ready_callbacks').add;
 const wheelEvent = require('../../events/core/wheel');
+const ready = require('../../core/utils/ready_callbacks').add;
+const addNamespace = require('../../events/utils').addNamespace;
+const pointerEvents = require('../../events/pointer');
+const EVENT_NS = 'gauge-tooltip';
 
 const TOOLTIP_HIDE_DELAY = 100;
-
-const tooltipMouseEvents = {
-    'mouseover.gauge-tooltip': handleTooltipMouseOver,
-    'mouseout.gauge-tooltip': handleTooltipMouseOut
-};
-
-const tooltipMouseMoveEvents = {
-    'mousemove.gauge-tooltip': handleTooltipMouseMove
-};
-
-const tooltipMouseWheelEvents = {};
-tooltipMouseWheelEvents[wheelEvent.name + '.gauge-tooltip'] = handleTooltipMouseWheel;
-
-const tooltipTouchEvents = {
-    'touchstart.gauge-tooltip': handleTooltipTouchStart
-};
 
 const Tracker = Class.inherit({
     ctor: function(parameters) {
@@ -65,6 +52,7 @@ const Tracker = Class.inherit({
         const that = this;
         that._dispose();
         that.deactivate();
+        that._element.off('.' + EVENT_NS);
         that._element.linkOff();
         that._element = that._context = that._callbacks = null;
         return that;
@@ -92,11 +80,15 @@ const Tracker = Class.inherit({
 
     setTooltipState: function(state) {
         const that = this;
-        let data;
-        that._element.off(tooltipMouseEvents).off(tooltipTouchEvents).off(tooltipMouseWheelEvents);
+        that._element.off('.' + EVENT_NS);
         if(state) {
-            data = { tracker: that };
-            that._element.on(tooltipMouseEvents, data).on(tooltipTouchEvents, data).on(tooltipMouseWheelEvents, data);
+            const data = { tracker: that };
+            that._element
+                .on(addNamespace([pointerEvents.move], EVENT_NS), data, handleTooltipMouseOver)
+                .on(addNamespace([pointerEvents.out], EVENT_NS), data, handleTooltipMouseOut)
+                .on(addNamespace([pointerEvents.down], EVENT_NS), data, handleTooltipTouchStart)
+                .on(addNamespace([pointerEvents.up], EVENT_NS), data, handleTooltipTouchEnd)
+                .on(addNamespace([wheelEvent.name], EVENT_NS), data, handleTooltipMouseWheel);
         }
         return that;
     },
@@ -136,32 +128,6 @@ const Tracker = Class.inherit({
     }
 });
 
-function handleTooltipMouseOver(event) {
-    const tracker = event.data.tracker;
-    tracker._x = event.pageX;
-    tracker._y = event.pageY;
-    tracker._element.off(tooltipMouseMoveEvents).on(tooltipMouseMoveEvents, event.data);
-    tracker._showTooltip(event);
-}
-
-function handleTooltipMouseMove(event) {
-    const tracker = event.data.tracker;
-
-    tracker._x = event.pageX;
-    tracker._y = event.pageY;
-    tracker._showTooltip(event);
-}
-
-function handleTooltipMouseOut(event) {
-    const tracker = event.data.tracker;
-    tracker._element.off(tooltipMouseMoveEvents);
-    tracker._hideTooltip(TOOLTIP_HIDE_DELAY);
-}
-
-function handleTooltipMouseWheel(event) {
-    event.data.tracker._hideTooltip();
-}
-
 let active_touch_tooltip_tracker = null;
 
 ///#DEBUG
@@ -170,40 +136,41 @@ Tracker._DEBUG_reset = function() {
 };
 ///#ENDDEBUG
 
-function handleTooltipTouchStart(event) {
-    event.preventDefault();
-    let tracker = active_touch_tooltip_tracker;
-    if(tracker && tracker !== event.data.tracker) {
-        tracker._hideTooltip(TOOLTIP_HIDE_DELAY);
-    }
-    tracker = active_touch_tooltip_tracker = event.data.tracker;
+function handleTooltipMouseOver(event) {
+    const tracker = event.data.tracker;
+    tracker._x = event.pageX;
+    tracker._y = event.pageY;
     tracker._showTooltip(event);
+}
+
+function handleTooltipMouseOut(event) {
+    event.data.tracker._hideTooltip(TOOLTIP_HIDE_DELAY);
+}
+
+function handleTooltipMouseWheel(event) {
+    event.data.tracker._hideTooltip();
+}
+
+function handleTooltipTouchStart(event) {
+    const tracker = active_touch_tooltip_tracker = event.data.tracker;
     tracker._touch = true;
+    handleTooltipMouseOver(event);
 }
 
-function handleTooltipDocumentTouchStart() {
-    const tracker = active_touch_tooltip_tracker;
-    if(tracker) {
-        if(!tracker._touch) {
-            tracker._hideTooltip(TOOLTIP_HIDE_DELAY);
-            active_touch_tooltip_tracker = null;
-        }
-        tracker._touch = null;
-    }
+function handleTooltipTouchEnd() {
+    active_touch_tooltip_tracker._touch = false;
 }
 
-function handleTooltipDocumentTouchEnd() {
+function handleDocumentTooltipTouchStart(event) {
     const tracker = active_touch_tooltip_tracker;
-    if(tracker) {
+    if(tracker && !tracker._touch) {
         tracker._hideTooltip(TOOLTIP_HIDE_DELAY);
         active_touch_tooltip_tracker = null;
     }
 }
 
 ready(function() {
-    eventsEngine.subscribeGlobal(domAdapter.getDocument(), {
-        'touchstart.gauge-tooltip': handleTooltipDocumentTouchStart,
-        'touchend.gauge-tooltip': handleTooltipDocumentTouchEnd
-    });
+    eventsEngine.subscribeGlobal(domAdapter.getDocument(), addNamespace([pointerEvents.down], EVENT_NS), handleDocumentTooltipTouchStart);
 });
+
 module.exports = Tracker;

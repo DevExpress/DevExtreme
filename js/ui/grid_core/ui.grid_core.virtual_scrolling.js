@@ -7,6 +7,7 @@ import { each } from '../../core/utils/iterator';
 import { Deferred } from '../../core/utils/deferred';
 import translator from '../../animation/translator';
 import LoadIndicator from '../load_indicator';
+import browser from '../../core/utils/browser';
 
 const TABLE_CLASS = 'table';
 const BOTTOM_LOAD_PANEL_CLASS = 'bottom-load-panel';
@@ -129,7 +130,6 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
                     return that._renderTime || 0;
                 }
             });
-
         },
         _handleLoadingChanged: function(isLoading) {
             const that = this;
@@ -281,7 +281,6 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
 
 const VirtualScrollingRowsViewExtender = (function() {
     const removeEmptyRows = function($emptyRows, className) {
-        let rowCount;
         const getRowParent = row => $(row).parent('.' + className).get(0);
         const tBodies = $emptyRows.toArray().map(getRowParent).filter(row => row);
 
@@ -289,7 +288,7 @@ const VirtualScrollingRowsViewExtender = (function() {
             $emptyRows = $(tBodies);
         }
 
-        rowCount = className === FREESPACE_CLASS ? $emptyRows.length - 1 : $emptyRows.length;
+        const rowCount = className === FREESPACE_CLASS ? $emptyRows.length - 1 : $emptyRows.length;
 
         for(let i = 0; i < rowCount; i++) {
             $emptyRows.eq(i).remove();
@@ -348,12 +347,11 @@ const VirtualScrollingRowsViewExtender = (function() {
 
         _renderCore: function(e) {
             const that = this;
-            let dataSource;
             const startRenderTime = new Date();
 
             that.callBase.apply(that, arguments);
 
-            dataSource = that._dataController._dataSource;
+            const dataSource = that._dataController._dataSource;
 
             if(dataSource && e) {
                 const itemCount = e.items ? e.items.length : 20;
@@ -427,13 +425,12 @@ const VirtualScrollingRowsViewExtender = (function() {
 
         _updateContent: function(tableElement, change) {
             const that = this;
-            let contentTable;
             let $freeSpaceRowElements;
             const contentElement = that._findContentElement();
             const changeType = change && change.changeType;
 
             if(changeType === 'append' || changeType === 'prepend') {
-                contentTable = contentElement.children().first();
+                const contentTable = contentElement.children().first();
                 const $tBodies = that._getBodies(tableElement);
                 if(!that.option('legacyRendering') && $tBodies.length === 1) {
                     that._getBodies(contentTable)[changeType === 'append' ? 'append' : 'prepend']($tBodies.children());
@@ -511,21 +508,17 @@ const VirtualScrollingRowsViewExtender = (function() {
 
         _updateContentPositionCore: function() {
             const that = this;
-            let contentElement;
             let contentHeight;
-            let top;
             let $tables;
             let $contentTable;
-            let virtualTable;
             const rowHeight = that._rowHeight || 20;
             const virtualItemsCount = that._dataController.virtualItemsCount();
-            let isRenderVirtualTableContentRequired;
 
             if(virtualItemsCount) {
-                contentElement = that._findContentElement();
+                const contentElement = that._findContentElement();
                 $tables = contentElement.children();
                 $contentTable = $tables.eq(0);
-                virtualTable = $tables.eq(1);
+                const virtualTable = $tables.eq(1);
 
                 that._contentTableHeight = $contentTable[0].offsetHeight;
 
@@ -533,13 +526,13 @@ const VirtualScrollingRowsViewExtender = (function() {
                 that._dataController.setContentSize(that._contentTableHeight);
 
                 contentHeight = that._dataController.getVirtualContentSize();
-                top = that._dataController.getContentOffset();
+                const top = that._dataController.getContentOffset();
 
                 deferRender(function() {
                     translator.move($contentTable, { left: 0, top: top });
 
                     // TODO jsdmitry: Separate this functionality on render and resize
-                    isRenderVirtualTableContentRequired = that._contentHeight !== contentHeight || contentHeight === 0 ||
+                    const isRenderVirtualTableContentRequired = that._contentHeight !== contentHeight || contentHeight === 0 ||
                         !that._isTableLinesDisplaysCorrect(virtualTable) ||
                         !that._isColumnElementsEqual($contentTable.find('col'), virtualTable.find('col'));
 
@@ -578,13 +571,12 @@ const VirtualScrollingRowsViewExtender = (function() {
             const columns = that._columnsController.getVisibleColumns();
             let html = that._createColGroup(columns).prop('outerHTML');
             let freeSpaceCellsHtml = '';
-            let i;
             const columnLinesClass = that.option('showColumnLines') ? COLUMN_LINES_CLASS : '';
             const createFreeSpaceRowHtml = function(height) {
                 return '<tr style=\'height:' + height + 'px;\' class=\'' + FREESPACE_CLASS + ' ' + ROW_CLASS + ' ' + columnLinesClass + '\' >' + freeSpaceCellsHtml + '</tr>';
             };
 
-            for(i = 0; i < columns.length; i++) {
+            for(let i = 0; i < columns.length; i++) {
                 const classes = that._getCellClasses(columns[i]);
                 const classString = classes.length ? ' class=\'' + classes.join(' ') + '\'' : '';
 
@@ -657,7 +649,6 @@ const VirtualScrollingRowsViewExtender = (function() {
 
         _updateRowHeight: function() {
             const that = this;
-            let viewportHeight;
 
             that.callBase.apply(that, arguments);
 
@@ -665,7 +656,7 @@ const VirtualScrollingRowsViewExtender = (function() {
 
                 that._updateContentPosition();
 
-                viewportHeight = that._hasHeight ? that.element().outerHeight() : $(getWindow()).outerHeight();
+                const viewportHeight = that._hasHeight ? that.element().outerHeight() : $(getWindow()).outerHeight();
                 that._dataController.viewportSize(Math.ceil(viewportHeight / that._rowHeight));
             }
         },
@@ -791,7 +782,8 @@ module.exports = {
                                     const $rowElement = rowElement && rowElement[0] && $(rowElement[0]);
                                     let top = $rowElement && $rowElement.position().top;
 
-                                    if(top > 0) {
+                                    const allowedTopOffset = browser.mozilla || browser.msie ? 1 : 0; // T884308
+                                    if(top > allowedTopOffset) {
                                         top = Math.round(top + $rowElement.outerHeight() * (itemIndex % 1));
                                         scrollable.scrollTo({ y: top });
                                     }
@@ -907,9 +899,13 @@ module.exports = {
                                     return LOAD_TIMEOUT;
                                 }
 
-                                return dataSource && dataSource._renderTime || 0;
+                                return dataSource?._renderTime || 0;
                             }
                         }, true);
+
+                        that._rowsScrollController.positionChanged.add(() => {
+                            that._dataSource?.setViewportItemIndex(that._rowsScrollController.getViewportItemIndex());
+                        });
 
                         if(that.isLoaded()) {
                             that._rowsScrollController.load();
@@ -1035,11 +1031,9 @@ module.exports = {
                         const dataSource = this._dataSource;
 
                         if(rowsScrollController) {
-                            rowsScrollController.setViewportPosition.apply(rowsScrollController, arguments).done(function() {
-                                dataSource && dataSource.setViewportItemIndex(rowsScrollController.getViewportItemIndex());
-                            });
+                            rowsScrollController.setViewportPosition.apply(rowsScrollController, arguments);
                         } else {
-                            dataSource && dataSource.setViewportPosition.apply(dataSource, arguments);
+                            dataSource?.setViewportPosition.apply(dataSource, arguments);
                         }
                     },
                     setContentSize: function(sizes) {

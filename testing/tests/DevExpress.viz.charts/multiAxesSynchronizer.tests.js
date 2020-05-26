@@ -22,7 +22,6 @@ function setupMocks() {
 }
 
 function checkAxesSynchronization(assert, options) {
-    let axes;
     const axesTickPositions = [];
     let firstIndex;
     const axesOptions = options.axesOptions;
@@ -86,7 +85,7 @@ function checkAxesSynchronization(assert, options) {
         return result;
     };
 
-    axes = createAxes(axesOptions);
+    const axes = createAxes(axesOptions);
 
     // act
     multiAxesSynchronizer.synchronize(axes);

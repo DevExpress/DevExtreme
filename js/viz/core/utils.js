@@ -1,42 +1,33 @@
-const noop = require('../../core/utils/common').noop;
-const typeUtils = require('../../core/utils/type');
-const extend = require('../../core/utils/extend').extend;
-const each = require('../../core/utils/iterator').each;
-const mathUtils = require('../../core/utils/math');
-const dateToMilliseconds = require('../../core/utils/date').dateToMilliseconds;
-const domAdapter = require('../../core/dom_adapter');
-const Color = require('../../color');
-const isDefined = typeUtils.isDefined;
-const isNumber = typeUtils.isNumeric;
-const isExponential = typeUtils.isExponential;
-const _math = Math;
-const _round = _math.round;
-const _sqrt = Math.sqrt;
+import { noop } from '../../core/utils/common';
+import { isDefined, isNumeric, isExponential, isFunction, isString } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import { adjust, sign } from '../../core/utils/math';
+import { dateToMilliseconds } from '../../core/utils/date';
+import domAdapter from '../../core/dom_adapter';
+import Color from '../../color';
+const { PI, LN10, abs, log, floor, ceil, pow, sqrt, atan2 } = Math;
+const _min = Math.min;
+const _max = Math.max;
+const _cos = Math.cos;
+const _sin = Math.sin;
+const _round = Math.round;
 
-const PI = Math.PI;
+
 const MAX_PIXEL_COUNT = 1E10;
 const PI_DIV_180 = PI / 180;
-const LN10 = Math.LN10;
 
-const cosFunc = Math.cos;
-const sinFunc = Math.sin;
-const abs = Math.abs;
-const log = Math.log;
-const floor = Math.floor;
-const ceil = Math.ceil;
-const max = Math.max;
 const _isNaN = isNaN;
 const _Number = Number;
 const _NaN = NaN;
 
-const { adjust, sign } = mathUtils;
 const PANE_PADDING = 10;
 
 const getLog = function(value, base) {
     if(!value) {
         return _NaN;
     }
-    return Math.log(value) / Math.log(base);
+    return log(value) / log(base);
 };
 
 const getAdjustedLog10 = function(value) {
@@ -44,7 +35,7 @@ const getAdjustedLog10 = function(value) {
 };
 
 const raiseTo = function(power, base) {
-    return Math.pow(base, power);
+    return pow(base, power);
 };
 
 //  Translates angle to [0, 360)
@@ -69,7 +60,7 @@ const degreesToRadians = function(value) {
 //  Expects number, no validation
 const getCosAndSin = function(angle) {
     const angleInRadians = degreesToRadians(angle);
-    return { cos: cosFunc(angleInRadians), sin: sinFunc(angleInRadians) };
+    return { cos: _cos(angleInRadians), sin: _sin(angleInRadians) };
 };
 
 //  Because Math.log(1000) / Math.LN10 < 3 though it is exactly 3
@@ -81,7 +72,7 @@ const DECIMAL_ORDER_THRESHOLD = 1E-14;
 const getDistance = function(x1, y1, x2, y2) {
     const diffX = x2 - x1;
     const diffY = y2 - y1;
-    return Math.sqrt(diffY * diffY + diffX * diffX);
+    return sqrt(diffY * diffY + diffX * diffX);
 };
 
 const getDecimalOrder = function(number) {
@@ -99,7 +90,7 @@ const getDecimalOrder = function(number) {
 };
 
 const getAppropriateFormat = function(start, end, count) {
-    const order = max(getDecimalOrder(start), getDecimalOrder(end));
+    const order = _max(getDecimalOrder(start), getDecimalOrder(end));
     let precision = -getDecimalOrder(abs(end - start) / count);
     let format;
 
@@ -122,7 +113,7 @@ const roundValue = function(value, precision) {
     if(precision > 20) {
         precision = 20;
     }
-    if(isNumber(value)) {
+    if(isNumeric(value)) {
         if(isExponential(value)) {
             return _Number(value.toExponential(precision));
         } else {
@@ -152,14 +143,12 @@ function map(array, callback) {
 }
 
 function selectByKeys(object, keys) {
-    return map(keys, function(key) {
-        return object[key] ? object[key] : null;
-    });
+    return map(keys, key => object[key] ? object[key] : null);
 }
 
 function decreaseFields(object, keys, eachDecrease, decrease) {
     let dec = decrease;
-    each(keys, function(_, key) {
+    each(keys, (_, key) => {
         if(object[key]) {
             object[key] -= eachDecrease;
             dec -= eachDecrease;
@@ -203,8 +192,8 @@ function normalizeBBox(bBox) {
 
 // Angle is expected to be from right-handed cartesian (not svg) space - positive is counterclockwise
 function rotateBBox(bBox, center, angle) {
-    const cos = _Number(cosFunc(angle * PI_DIV_180).toFixed(3));
-    const sin = _Number(sinFunc(angle * PI_DIV_180).toFixed(3));
+    const cos = _Number(_cos(angle * PI_DIV_180).toFixed(3));
+    const sin = _Number(_sin(angle * PI_DIV_180).toFixed(3));
     const w2 = bBox.width / 2;
     const h2 = bBox.height / 2;
     const centerX = bBox.x + w2;
@@ -230,8 +219,8 @@ extend(exports, {
         let arrayGaps;
         do {
             arrayGaps = selectByKeys(object, keys);
-            arrayGaps.push(_math.ceil(decrease / arrayGaps.length));
-            decrease = decreaseFields(object, keys, _math.min.apply(null, arrayGaps), decrease);
+            arrayGaps.push(ceil(decrease / arrayGaps.length));
+            decrease = decreaseFields(object, keys, _min.apply(null, arrayGaps), decrease);
         } while(decrease > 0 && arrayGaps.length > 1);
         return decrease;
     },
@@ -305,13 +294,13 @@ extend(exports, {
 
     convertXYToPolar: function(centerCoords, x, y) {
         const radius = getDistance(centerCoords.x, centerCoords.y, x, y);
-        const angle = _math.atan2(y - centerCoords.y, x - centerCoords.x);
+        const angle = atan2(y - centerCoords.y, x - centerCoords.x);
 
-        return { phi: _round(normalizeAngle(angle * 180 / _math.PI)), r: _round(radius) };
+        return { phi: _round(normalizeAngle(angle * 180 / PI)), r: _round(radius) };
     },
 
     processSeriesTemplate: function(seriesTemplate, items) {
-        const customizeSeries = typeUtils.isFunction(seriesTemplate.customizeSeries) ? seriesTemplate.customizeSeries : noop;
+        const customizeSeries = isFunction(seriesTemplate.customizeSeries) ? seriesTemplate.customizeSeries : noop;
         const nameField = seriesTemplate.nameField;
         const generatedSeries = {};
         const seriesOrder = [];
@@ -344,9 +333,7 @@ extend(exports, {
         startValue = isDefined(startValue) ? startValue : categories[0];
         endValue = isDefined(endValue) ? endValue : categories[categories.length - 1];
 
-        const categoriesValue = map(categories, function(category) {
-            return isDefined(category) ? category.valueOf() : null;
-        });
+        const categoriesValue = map(categories, category => category?.valueOf());
         let indexStartValue = categoriesValue.indexOf(startValue.valueOf());
         let indexEndValue = categoriesValue.indexOf(endValue.valueOf());
         let swapBuf;
@@ -379,17 +366,17 @@ extend(exports, {
             let unit = 0;
             let parsedHeight = parseFloat(height) || undefined;
 
-            if(typeUtils.isString(height) && height.indexOf('px') > -1 ||
-                typeUtils.isNumeric(height) && height > 1) {
+            if(isString(height) && height.indexOf('px') > -1 ||
+                isNumeric(height) && height > 1) {
                 parsedHeight = _round(parsedHeight);
                 unit = 1;
             }
 
             if(!unit && parsedHeight) {
-                if(typeUtils.isString(height) && height.indexOf('%') > -1) {
+                if(isString(height) && height.indexOf('%') > -1) {
                     parsedHeight = parsedHeight / 100;
                 } else if(parsedHeight < 0) {
-                    parsedHeight = parsedHeight < -1 ? 1 : _math.abs(parsedHeight);
+                    parsedHeight = parsedHeight < -1 ? 1 : abs(parsedHeight);
                 }
             }
 
@@ -457,7 +444,7 @@ extend(exports, {
         const horizontalOffset1 = (isPositive ? bBox.x : bBox.x + bBox.width) - center.x;
         const verticalOffset1 = bBox.y - center.y;
         const verticalOffset2 = verticalOffset1 + dy;
-        const horizontalOffset2 = _round(_sqrt(horizontalOffset1 * horizontalOffset1 + verticalOffset1 * verticalOffset1 - verticalOffset2 * verticalOffset2));
+        const horizontalOffset2 = _round(sqrt(horizontalOffset1 * horizontalOffset1 + verticalOffset1 * verticalOffset1 - verticalOffset2 * verticalOffset2));
         const dx = (isPositive ? +horizontalOffset2 : -horizontalOffset2) || horizontalOffset1;
         return { x: center.x + (isPositive ? dx : dx - bBox.width), y: bBox.y + dy };
     },
@@ -465,9 +452,9 @@ extend(exports, {
     mergeMarginOptions(opt1, opt2) {
         return {
             checkInterval: opt1.checkInterval || opt2.checkInterval,
-            size: Math.max(opt1.size || 0, opt2.size || 0),
+            size: _max(opt1.size || 0, opt2.size || 0),
             percentStick: opt1.percentStick || opt2.percentStick,
-            sizePointNormalState: Math.max(opt1.sizePointNormalState || 0, opt2.sizePointNormalState || 0)
+            sizePointNormalState: _max(opt1.sizePointNormalState || 0, opt2.sizePointNormalState || 0)
         };
     }
 });
@@ -509,8 +496,8 @@ function getAddFunction(range, correctZeroLevel) {
 }
 
 function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
-    const minDefined = typeUtils.isDefined(visualRange.startValue);
-    const maxDefined = typeUtils.isDefined(visualRange.endValue);
+    const minDefined = isDefined(visualRange.startValue);
+    const maxDefined = isDefined(visualRange.endValue);
     const nonDiscrete = options.axisType !== 'discrete';
 
     dataRange = dataRange || wholeRange;
@@ -522,7 +509,7 @@ function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
     let rangeLength = visualRange.length;
     const categories = dataRange.categories;
 
-    if(nonDiscrete && !typeUtils.isDefined(min) && !typeUtils.isDefined(max)) {
+    if(nonDiscrete && !isDefined(min) && !isDefined(max)) {
         return {
             startValue: min,
             endValue: max
@@ -531,7 +518,7 @@ function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
 
     if(isDefined(rangeLength)) {
         if(nonDiscrete) {
-            if(options.dataType === 'datetime' && !isNumber(rangeLength)) {
+            if(options.dataType === 'datetime' && !isNumeric(rangeLength)) {
                 rangeLength = dateToMilliseconds(rangeLength);
             }
 
@@ -582,11 +569,11 @@ function getLogExt(value, base, allowNegatives = false, linearThreshold) {
     if(value === 0) {
         return 0;
     }
-    const transformValue = getLog(Math.abs(value), base) - (linearThreshold - 1);
+    const transformValue = getLog(abs(value), base) - (linearThreshold - 1);
     if(transformValue < 0) {
         return 0;
     }
-    return adjust(sign(value) * transformValue, Number(Math.pow(base, linearThreshold - 1).toFixed(Math.abs(linearThreshold))));
+    return adjust(sign(value) * transformValue, Number(pow(base, linearThreshold - 1).toFixed(abs(linearThreshold))));
 }
 
 function raiseToExt(value, base, allowNegatives = false, linearThreshold) {
@@ -598,13 +585,13 @@ function raiseToExt(value, base, allowNegatives = false, linearThreshold) {
         return 0;
     }
 
-    const transformValue = raiseTo(Math.abs(value) + (linearThreshold - 1), base);
+    const transformValue = raiseTo(abs(value) + (linearThreshold - 1), base);
 
     if(transformValue < 0) {
         return 0;
     }
 
-    return adjust(sign(value) * transformValue, Number(Math.pow(base, linearThreshold).toFixed(Math.abs(linearThreshold))));
+    return adjust(sign(value) * transformValue, Number(pow(base, linearThreshold).toFixed(abs(linearThreshold))));
 }
 
 function rangesAreEqual(range, rangeFromOptions) {
@@ -622,7 +609,7 @@ function valueOf(value) {
 }
 
 function pointInCanvas(canvas, x, y) {
-    return (x >= canvas.left && x <= canvas.right && y >= canvas.top && y <= canvas.bottom);
+    return x >= canvas.left && x <= canvas.right && y >= canvas.top && y <= canvas.bottom;
 }
 
 exports.getVizRangeObject = getVizRangeObject;

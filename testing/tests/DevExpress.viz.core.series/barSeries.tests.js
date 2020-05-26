@@ -225,7 +225,6 @@ QUnit.test('Draw simple data with animation. first draw', function(assert) {
         type: seriesType,
         point: { visible: false }
     });
-    let complete;
     series.updateData(this.data);
     series.createPoints();
     $.each(series._points, function(i, pt) {
@@ -254,7 +253,7 @@ QUnit.test('Draw simple data with animation. first draw', function(assert) {
         translateY: 0
     });
 
-    complete = series._markersGroup.stub('animate').lastCall.args[2];
+    const complete = series._markersGroup.stub('animate').lastCall.args[2];
     assert.ok(complete);
     complete();
     assert.deepEqual(series._labelsGroup.stub('animate').lastCall.args[1], { duration: 400 });
@@ -269,7 +268,6 @@ QUnit.test('Draw simple data with animation. draw after draw without data', func
         type: seriesType,
         point: { visible: false }
     });
-    let complete;
     series.draw(true);
     series.updateData(this.data);
     series.createPoints();
@@ -298,7 +296,7 @@ QUnit.test('Draw simple data with animation. draw after draw without data', func
         translateY: 0
     });
 
-    complete = series._markersGroup.stub('animate').lastCall.args[2];
+    const complete = series._markersGroup.stub('animate').lastCall.args[2];
     assert.ok(complete);
     complete();
     assert.deepEqual(series._labelsGroup.stub('animate').lastCall.args[1], { duration: 400 });
@@ -314,7 +312,6 @@ QUnit.test('Draw simple data with animation. first draw. Rotated', function(asse
         rotated: true,
         point: { visible: false }
     });
-    let complete;
     series.updateData(this.data);
     series.createPoints();
     $.each(series._points, function(i, pt) {
@@ -343,7 +340,7 @@ QUnit.test('Draw simple data with animation. first draw. Rotated', function(asse
         translateY: 0
     });
 
-    complete = series._markersGroup.stub('animate').lastCall.args[2];
+    const complete = series._markersGroup.stub('animate').lastCall.args[2];
     assert.ok(complete);
     complete();
     assert.deepEqual(series._labelsGroup.stub('animate').lastCall.args[1], { duration: 400 });
@@ -611,12 +608,11 @@ QUnit.test('All options defined', function(assert) {
 
 QUnit.test('without borders', function(assert) {
     const series = createSeries($.extend({}, this.options, { border: { visible: false }, hoverStyle: { border: { visible: false } }, selectionStyle: { border: { visible: false } } }));
-    let styles;
 
     series.updateData(this.data);
     series.createPoints();
 
-    styles = series._getPointOptions().styles;
+    const styles = series._getPointOptions().styles;
 
     assert.strictEqual(styles.hover['stroke-width'], 0);
     assert.strictEqual(styles.normal['stroke-width'], 0);
@@ -641,11 +637,10 @@ QUnit.test('Define only color', function(assert) {
             }
         }
     });
-    let styles;
 
     series.updateData(this.data);
     series.createPoints();
-    styles = series._getPointOptions().styles;
+    const styles = series._getPointOptions().styles;
 
     assert.strictEqual(styles.hover.fill, 'n-color', 'hover fill color');
     assert.strictEqual(styles.hover.stroke, 'n-color', 'hover stroke color');
@@ -675,11 +670,10 @@ QUnit.test('Define only series color', function(assert) {
             }
         }
     });
-    let styles;
     series.updateData(this.data);
     series.createPoints();
 
-    styles = series._getPointOptions().styles;
+    const styles = series._getPointOptions().styles;
 
     assert.strictEqual(styles.hover.fill, 'seriesColor', 'hover fill color');
     assert.strictEqual(styles.hover.stroke, 'seriesColor', 'hover stroke color');

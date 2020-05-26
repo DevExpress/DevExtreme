@@ -69,6 +69,14 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
      * @public
      */
     enabled?: boolean;
+    /**
+     * @docid BaseSparklineOptions.tooltip.interactive
+     * @type boolean
+     * @default false
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    interactive?: boolean;
 }
 /**
  * @docid BaseSparkline

@@ -8,7 +8,7 @@ import MultiView from './multi_view';
 import Tabs from './tabs';
 import { default as TabPanelItem } from './tab_panel/item';
 import { getImageContainer } from '../core/utils/icon';
-import { getPublicElement } from '../core/utils/dom';
+import { getPublicElement } from '../core/element';
 import { isPlainObject, isDefined } from '../core/utils/type';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import windowUtils from '../core/utils/window';

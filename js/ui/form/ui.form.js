@@ -9,7 +9,8 @@ import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import { isEmpty } from '../../core/utils/string';
 import browser from '../../core/utils/browser';
-import { getPublicElement, triggerShownEvent } from '../../core/utils/dom';
+import { triggerShownEvent } from '../../events/visibility_change';
+import { getPublicElement } from '../../core/element';
 import messageLocalization from '../../localization/message';
 import Widget from '../widget/ui.widget';
 import Editor from '../editor/editor';
@@ -917,7 +918,7 @@ const Form = Widget.inherit({
             !layoutManager._updateLockCount && layoutManager.beginUpdate();
             const key = this._itemsRunTimeInfo.getKeyByPath(path);
             this.postponedOperations.add(key, () => {
-                layoutManager.endUpdate();
+                !layoutManager._disposed && layoutManager.endUpdate();
                 return new Deferred().resolve();
             });
         }

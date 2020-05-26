@@ -108,13 +108,12 @@ const dxCircularGauge = dxGauge.inherit({
 
     _shiftScale: function(layout) {
         const scale = this._scale;
-        let centerCoords;
         const canvas = scale.getCanvas();
 
         canvas.width = canvas.height = layout.radius * 2;
 
         scale.draw(canvas);
-        centerCoords = scale.getCenter();
+        const centerCoords = scale.getCenter();
         scale.shift({ right: layout.x - centerCoords.x, bottom: layout.y - centerCoords.y });
     },
 
@@ -196,12 +195,10 @@ const dxCircularGauge = dxGauge.inherit({
         };
         const rect = selectRectByAspectRatio(this._innerRect, (sides.down - sides.up) / (sides.right - sides.left), margins);
         let radius = _min(getWidth(rect) / (sides.right - sides.left), getHeight(rect) / (sides.down - sides.up));
-        let x;
-        let y;
 
         radius = radius - measurements.maxRadius + area.radius;
-        x = rect.left - getWidth(rect) * sides.left / (sides.right - sides.left);
-        y = rect.top - getHeight(rect) * sides.up / (sides.down - sides.up);
+        const x = rect.left - getWidth(rect) * sides.left / (sides.right - sides.left);
+        const y = rect.top - getHeight(rect) * sides.up / (sides.down - sides.up);
         area.x = _round(x);
         area.y = _round(y);
         area.radius = radius;

@@ -10,6 +10,7 @@ import eventsEngine from '../../events/core/events_engine';
 
 import { BindableTemplate } from '../../core/templates/bindable_template';
 
+import ScrollView from '../scroll_view/ui.scroll_view';
 import CollectionWidget from '../collection/ui.collection_widget.edit';
 
 const FILE_MANAGER_THUMBNAILS_VIEW_PORT_CLASS = 'dx-filemanager-thumbnails-view-port';
@@ -30,12 +31,16 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         this._lockFocusedItemProcessing = false;
 
         this.$element().addClass(FILE_MANAGER_THUMBNAILS_VIEW_PORT_CLASS);
+
+        this._renderScrollView();
         this._renderItemsContainer();
+
+        this._createScrollViewControl();
 
         super._initMarkup();
 
         this.onFocusedItemChanged = this._onFocusedItemChanged.bind(this);
-        this._layoutUtils = new ListBoxLayoutUtils(this.$element(), this._$itemContainer, this.itemElements().first());
+        this._layoutUtils = new ListBoxLayoutUtils(this._scrollView, this.$element(), this._$itemContainer, this.itemElements().first());
 
         this._syncFocusedItemKey();
     }
@@ -59,11 +64,29 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         });
     }
 
+    _createScrollViewControl() {
+        if(!this._scrollView) {
+            this._scrollView = this._createComponent(this._$scrollView, ScrollView, {
+                scrollByContent: true,
+                scrollByThumb: true,
+                useKeyboard: false,
+                showScrollbar: 'onHover'
+            });
+        }
+    }
+
+    _renderScrollView() {
+        if(!this._$scrollView) {
+            this._$scrollView = $('<div>')
+                .appendTo(this.$element());
+        }
+    }
+
     _renderItemsContainer() {
         if(!this._$itemContainer) {
             this._$itemContainer = $('<div>')
                 .addClass(FILE_MANAGER_THUMBNAILS_ITEM_LIST_CONTAINER_CLASS)
-                .appendTo(this.$element());
+                .appendTo(this._$scrollView);
         }
     }
 
@@ -302,7 +325,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
             const items = this.option('items');
             const focusedItem = find(items, item => this.keyOf(item) === focusedItemKey);
             if(focusedItem) {
-                this._focusItem(focusedItem);
+                this._focusItem(focusedItem, true);
                 deferred.resolve();
             } else {
                 this.option('focusedItemKey', undefined);
@@ -345,12 +368,16 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         this._selection.changeItemSelection(index, { control: this._isPreserveSelectionMode });
     }
 
+    _chooseSelectOption() {
+        return 'selectedItemKeys';
+    }
+
     getSelectedItems() {
         return this._selection.getSelectedItems();
     }
 
     getItemElementByItem(item) {
-        return this._findItemElementByItem(item);
+        return this._editStrategy.getItemElement(item);
     }
 
     getItemByItemElement(itemElement) {
@@ -358,6 +385,8 @@ class FileManagerThumbnailListBox extends CollectionWidget {
     }
 
     selectAll() {
+        if(this.option('selectionMode') !== 'multiple') return;
+
         this._selection.selectAll();
         this._isPreserveSelectionMode = true;
     }
@@ -409,8 +438,9 @@ class FileManagerThumbnailListBox extends CollectionWidget {
 }
 
 class ListBoxLayoutUtils {
-    constructor($viewPort, $itemContainer, $item) {
+    constructor(scrollView, $viewPort, $itemContainer, $item) {
         this._layoutModel = null;
+        this._scrollView = scrollView;
         this._$viewPort = $viewPort;
         this._$itemContainer = $itemContainer;
         this._$item = $item;
@@ -445,7 +475,7 @@ class ListBoxLayoutUtils {
 
         const viewPortWidth = this._$itemContainer.innerWidth();
         const viewPortHeight = this._$viewPort.innerHeight();
-        const viewPortScrollTop = this._$viewPort.scrollTop();
+        const viewPortScrollTop = this._scrollView.scrollTop();
         const viewPortScrollBottom = viewPortScrollTop + viewPortHeight;
 
         const itemPerRowCount = Math.floor(viewPortWidth / itemWidth);
@@ -500,7 +530,7 @@ class ListBoxLayoutUtils {
             newScrollTop = itemBottom - layout.viewPortHeight;
         }
 
-        this._$viewPort.scrollTop(newScrollTop);
+        this._scrollView.scrollTo(newScrollTop);
     }
 }
 

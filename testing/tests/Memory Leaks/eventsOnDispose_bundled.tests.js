@@ -27,14 +27,12 @@ $.each(DevExpress.ui, function(componentName) {
             try {
                 const testNode = memoryLeaksHelper.createTestNode();
                 const originalEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
-                let newEventSubscriptions;
 
                 $(testNode)[componentName](memoryLeaksHelper.getComponentOptions(componentName))[componentName]('instance'),
 
                 this.clock.tick(0);
                 memoryLeaksHelper.destroyTestNode(testNode);
-                this.clock.tick(100);
-                newEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
+                const newEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
                 assert.deepEqual(newEventSubscriptions, originalEventSubscriptions, 'After a component is disposed, additional event subscriptions must be removed');
             } finally {
                 $.getScript = originalGetScript;

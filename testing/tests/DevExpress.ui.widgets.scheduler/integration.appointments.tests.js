@@ -15,6 +15,8 @@ import CustomStore from 'data/custom_store';
 import dataUtils from 'core/element_data';
 import dateSerialization from 'core/utils/date_serialization';
 import { SchedulerTestWrapper, initTestMarkup, createWrapper, CLASSES } from './helpers.js';
+import browser from 'core/utils/browser';
+import { Deferred } from 'core/utils/deferred';
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
@@ -647,7 +649,7 @@ QUnit.test('Add new appointment', function(assert) {
 
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
     const addAppointment = this.instance.addAppointment;
-    const spy = sinon.spy(noop);
+    const spy = sinon.spy(() => new Deferred());
     const newItem = { startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption' };
     this.instance.addAppointment = spy;
     try {
@@ -706,7 +708,6 @@ QUnit.test('Appointments should be rendered correctly when resourses store is as
 QUnit.test('Add new appointment with delay(T381444)', function(assert) {
     const done = assert.async();
     const data = [];
-    let popup;
 
     this.clock.restore();
 
@@ -742,13 +743,12 @@ QUnit.test('Add new appointment with delay(T381444)', function(assert) {
 
     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-    popup = this.instance.getAppointmentPopup();
+    const popup = this.instance.getAppointmentPopup();
 });
 
 QUnit.test('Add new appointment with delay and an error(T381444)', function(assert) {
     const done = assert.async();
     const data = [];
-    let popup;
 
     this.clock.restore();
 
@@ -780,7 +780,7 @@ QUnit.test('Add new appointment with delay and an error(T381444)', function(asse
 
     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-    popup = this.instance.getAppointmentPopup();
+    const popup = this.instance.getAppointmentPopup();
 });
 
 QUnit.test('Scheduler should not update scroll position if appointment is visible ', function(assert) {
@@ -970,7 +970,7 @@ QUnit.test('Update appointment', function(assert) {
     this.clock.tick();
 
     const updateAppointment = this.instance.updateAppointment;
-    const spy = sinon.spy(noop);
+    const spy = sinon.spy(() => new Deferred());
     const updatedItem = this.tasks[0];
     this.instance.updateAppointment = spy;
     try {
@@ -3054,9 +3054,9 @@ QUnit.test('Appointments should be rendered correctly, Month view with intervalC
     assert.equal($appointments.length, 3, 'Appointments were rendered correctly');
 });
 
-QUnit.test('Scheduler should add only one appointment at multiple \'done\' button clicks on appointment form', function(assert) {
+QUnit.test('Scheduler should add only one appointment at multiple "done" button clicks on appointment form', function(assert) {
     const a = { text: 'a', startDate: new Date(2017, 7, 9), endDate: new Date(2017, 7, 9, 0, 15) };
-    this.createInstance({
+    const scheduler = createWrapper({
         dataSource: [],
         currentDate: new Date(2017, 7, 9),
         currentView: 'week',
@@ -3071,14 +3071,16 @@ QUnit.test('Scheduler should add only one appointment at multiple \'done\' butto
             e.cancel = d.promise();
         }
     });
+    const appointmentPopup = scheduler.appointmentPopup;
 
-    this.instance.showAppointmentPopup(a, true);
-    $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick').trigger('dxclick');
+    scheduler.instance.showAppointmentPopup(a, true);
+
+    appointmentPopup.clickDoneButton();
+    appointmentPopup.clickDoneButton();
+
     this.clock.tick(300);
 
-    const $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
-
-    assert.equal($appointments.length, 1, 'right appointment quantity');
+    assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'right appointment quantity');
 });
 
 QUnit.test('Appointments should be rendered correctly in vertical grouped workspace Month', function(assert) {
@@ -3421,47 +3423,47 @@ QUnit.test('Appointment should be rendered without compact ones if only one per 
     assert.equal(this.scheduler.appointments.getAppointmentCount(), 30, 'Scheduler appointments are rendered without compact ones');
 });
 
-// QUnit.test("Appointments are rendered with custom cell width less than default (T816873)", function(assert) {
-//     let $style = $("<style>").text('#dxLineSchedule .dx-scheduler-date-table-cell, #dxLineSchedule .dx-scheduler-header-panel-cell {width: 100px !important;}');
-//     try {
-//         $style.appendTo("head");
+QUnit.skip('Appointments are rendered with custom cell width less than default (T816873)', function(assert) {
+    const $style = $('<style>').text('#dxLineSchedule .dx-scheduler-date-table-cell, #dxLineSchedule .dx-scheduler-header-panel-cell {width: 100px !important;}');
+    try {
+        $style.appendTo('head');
 
-//         const data = [{
-//             recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T130000",
-//             recurrenceException: "",
-//             startDate: "2019-09-19T18:00:00.000Z",
-//             endDate: "2019-09-19T18:04:00.000Z"
-//         }, {
-//             recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T050000",
-//             recurrenceException: "",
-//             startDate: "2019-09-20T10:00:00.000Z",
-//             endDate: "2019-09-20T04:59:59.000Z"
-//         }, {
-//             recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T045900",
-//             recurrenceException: "",
-//             startDate: "2019-09-20T09:59:00.000Z",
-//             endDate: "2019-09-20T10:00:00.000Z"
-//         }];
+        const data = [{
+            recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T130000',
+            recurrenceException: '',
+            startDate: '2019-09-19T18:00:00.000Z',
+            endDate: '2019-09-19T18:04:00.000Z'
+        }, {
+            recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T050000',
+            recurrenceException: '',
+            startDate: '2019-09-20T10:00:00.000Z',
+            endDate: '2019-09-20T04:59:59.000Z'
+        }, {
+            recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T045900',
+            recurrenceException: '',
+            startDate: '2019-09-20T09:59:00.000Z',
+            endDate: '2019-09-20T10:00:00.000Z'
+        }];
 
-//         this.createInstance({
-//             dataSource: data,
-//             elementAttr: {
-//                 id: "dxLineSchedule"
-//             },
-//             views: [{
-//                 type: "timelineWeek",
-//                 cellDuration: 120,
-//                 maxAppointmentsPerCell: "unlimited"
-//             }],
-//             currentView: 'timelineWeek',
-//             currentDate: new Date(2019, 8, 22)
-//         });
+        this.createInstance({
+            dataSource: data,
+            elementAttr: {
+                id: 'dxLineSchedule'
+            },
+            views: [{
+                type: 'timelineWeek',
+                cellDuration: 120,
+                maxAppointmentsPerCell: 'unlimited'
+            }],
+            currentView: 'timelineWeek',
+            currentDate: new Date(2019, 8, 22)
+        });
 
-//         assert.ok(this.scheduler.appointments.getAppointmentCount() > 0, "Appointments are rendered");
-//     } finally {
-//         $style.remove();
-//     }
-// });
+        assert.ok(this.scheduler.appointments.getAppointmentCount() > 0, 'Appointments are rendered');
+    } finally {
+        $style.remove();
+    }
+});
 
 QUnit.test('Long term appoinment inflict index shift in other appointments (T737780)', function(assert) {
     const data = [
@@ -3923,5 +3925,78 @@ QUnit.module('Appointments', () => {
 
         scheduler.instance.option('currentView', 'month');
         assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointments should be filtered and rendered after change view on "Month"');
+    });
+
+    QUnit.test('Long appointment should have correct parts count(T854740)', function(assert) {
+        const data = [{ text: 'Two Weeks App (Jan 6 - Jan 19)', startDate: new Date(2020, 0, 6), endDate: new Date(2020, 0, 19, 12), typeId: 1 }];
+
+        const scheduler = createWrapper({
+            dataSource: data,
+            views: ['month'],
+            firstDayOfWeek: 1,
+            currentView: 'month',
+            currentDate: new Date(2020, 0, 1),
+            height: 500,
+            width: 250
+        });
+
+        assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointment parts are ok');
+    });
+
+    QUnit.test('Long appointment should have correct parts count if widget is zoomed (T854740)', function(assert) {
+        if(!browser.webkit) {
+            assert.ok(true, 'Browser zooming is enabled in webkit');
+            return;
+        }
+
+        $('#scheduler').css('zoom', 1.25);
+
+        const data = [{ text: 'Two Weeks App (Jan 6 - Jan 19)', startDate: new Date(2020, 0, 6), endDate: new Date(2020, 0, 19, 12), typeId: 1 }];
+
+        const scheduler = createWrapper({
+            dataSource: data,
+            views: ['month'],
+            firstDayOfWeek: 1,
+            currentView: 'month',
+            currentDate: new Date(2020, 0, 1),
+            height: 500,
+            width: 250
+        });
+
+        assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointment parts are ok');
+    });
+
+    QUnit.test('Appointments from neighbor cells should not overlap each other if widget is zoomed (T885595)', function(assert) {
+        if(!browser.webkit) {
+            assert.ok(true, 'Browser zooming is enabled in webkit');
+            return;
+        }
+
+        $('#scheduler').css('zoom', 1.1);
+
+        const data = [{
+            text: 'Provide New Health Insurance Docs',
+            startDate: new Date(2017, 4, 22, 12, 45),
+            endDate: new Date(2017, 4, 22, 14, 15)
+        }, {
+            text: 'Recall Rebate Form',
+            startDate: new Date(2017, 4, 23, 12, 45),
+            endDate: new Date(2017, 4, 23, 13, 15)
+        }];
+
+        const scheduler = createWrapper({
+            dataSource: data,
+            width: 1023.1,
+            views: [{
+                type: 'month',
+                name: 'Auto Mode',
+                maxAppointmentsPerCell: 'auto'
+            }],
+            currentView: 'Auto Mode',
+            currentDate: new Date(2017, 4, 25),
+            height: 650
+        });
+
+        assert.equal(scheduler.appointments.getAppointmentPosition(0).top, scheduler.appointments.getAppointmentPosition(1).top, 'Appointment positions are correct');
     });
 });

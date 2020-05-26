@@ -8,7 +8,7 @@ import windowUtils from '../../core/utils/window';
 import { isDefined, isPrimitive, isFunction, isString } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
-import { getPublicElement } from '../../core/utils/dom';
+import { getPublicElement } from '../../core/element';
 import CheckBox from '../check_box';
 import HierarchicalCollectionWidget from '../hierarchical_collection/ui.hierarchical_collection_widget';
 import { addNamespace } from '../../events/utils';
@@ -663,6 +663,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const showCheckBox = this._showCheckboxes();
 
         $node.addClass(showCheckBox ? ITEM_WITH_CHECKBOX_CLASS : ITEM_WITHOUT_CHECKBOX_CLASS);
+        $node.toggleClass(INVISIBLE_STATE_CLASS, nodeData.item.visible === false);
         showCheckBox && this._renderCheckBox($node, node);
 
         this.setAria('selected', nodeData.selected, $node);

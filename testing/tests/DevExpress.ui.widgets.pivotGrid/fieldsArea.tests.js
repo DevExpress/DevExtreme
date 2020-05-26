@@ -172,72 +172,69 @@ QUnit.module('Rendering', {
         assert.strictEqual(fields.eq(0).data('field').dataField, 'Field2', 'rendered field');
     });
 
-    /*
-
 });
 
-QUnit.module("Hamburger", {
-    beforeEach: function () {
+QUnit.module('Hamburger', {
+    beforeEach: function() {
         this.component = {
             option: sinon.stub(),
-            element: function () {
-                return $("<div>").dxPivotGridFieldChooserBase();
+            element: function() {
+                return $('<div>').dxPivotGridFieldChooserBase();
             },
 
-            _createComponent: function (container, Component, options) {
+            _createComponent: function(container, Component, options) {
                 return new Component(container, options);
             }
         };
 
-        this.component.option.withArgs("fieldPanel.texts.myAreaFieldArea").returns("Drop Fields Here");
-        this.component.option.withArgs("fieldPanel.showRowFields").returns(true);
-        this.component.option.withArgs("fieldPanel.visible").returns(true);
-        this.component.option.withArgs("rowLayout").returns("tree");
+        this.component.option.withArgs('fieldPanel.texts.myAreaFieldArea').returns('Drop Fields Here');
+        this.component.option.withArgs('fieldPanel.showRowFields').returns(true);
+        this.component.option.withArgs('fieldPanel.visible').returns(true);
+        this.component.option.withArgs('rowLayout').returns('tree');
 
         this.fields = [
-            { dataField: "Field Area 1", allowFiltering: true, allowSorting: true, area: "row" },
-            { dataField: "Field2", allowFiltering: true, allowSorting: true, area: "row" }
+            { dataField: 'Field Area 1', allowFiltering: true, allowSorting: true, area: 'row' },
+            { dataField: 'Field2', allowFiltering: true, allowSorting: true, area: 'row' }
         ];
 
-        this.area = new FieldsArea(this.component, "row");
-        this.$container = $("#container").addClass("dx-pivotgrid");
+        this.area = new FieldsArea(this.component, 'row');
+        this.$container = $('#container').addClass('dx-pivotgrid');
 
-        var that = this;
+        const that = this;
 
-        this.renderArea = function () {
+        this.renderArea = function() {
             that.area.render(that.$container, that.fields);
-        }
+        };
     }
 }, () => {
 
-QUnit.test("Render hamburger button", function (assert) {
-    this.renderArea();
+    QUnit.skip('Render hamburger button', function(assert) {
+        this.renderArea();
 
-    var rows = this.area.tableElement()[0].rows;
+        const rows = this.area.tableElement()[0].rows;
 
-    assert.strictEqual(rows.length, 1);
-    assert.strictEqual(rows[0].cells.length, 1);
-    assert.ok($(rows[0].cells[0]).children(0).dxButton("instance"));
-    var popup = this.area.tableElement().find(".dx-fields-area-popup").dxPopup("instance");
+        assert.strictEqual(rows.length, 1);
+        assert.strictEqual(rows[0].cells.length, 1);
+        assert.ok($(rows[0].cells[0]).children(0).dxButton('instance'));
+        const popup = this.area.tableElement().find('.dx-fields-area-popup').dxPopup('instance');
 
-    assert.ok(popup);
-    assert.ok(!popup.option("visible"));
-    assert.ok(!popup.option("dragEnabled"));
-});
+        assert.ok(popup);
+        assert.ok(!popup.option('visible'));
+        assert.ok(!popup.option('dragEnabled'));
+    });
 
-QUnit.test("Show popup with fields", function (assert) {
-    this.renderArea();
-    var button = $(this.area.tableElement()[0].rows[0].cells[0]).children(0).dxButton("instance");
+    QUnit.skip('Show popup with fields', function(assert) {
+        this.renderArea();
+        const button = $(this.area.tableElement()[0].rows[0].cells[0]).children(0).dxButton('instance');
 
-    button.element().trigger("dxclick");
-    var popup = this.area.tableElement().find(".dx-fields-area-popup").dxPopup("instance");
+        button.element().trigger('dxclick');
+        const popup = this.area.tableElement().find('.dx-fields-area-popup').dxPopup('instance');
 
-    assert.ok(popup);
-    assert.ok(popup.option("visible"));
-    assert.strictEqual(popup.content().find(".dx-pivotgrid-fields-area-head").length, 1);
-    assert.strictEqual(popup.content().find(".dx-pivotgrid-fields-area-head").find(".dx-area-field").length, 2);
-});
-*/
+        assert.ok(popup);
+        assert.ok(popup.option('visible'));
+        assert.strictEqual(popup.content().find('.dx-pivotgrid-fields-area-head').length, 1);
+        assert.strictEqual(popup.content().find('.dx-pivotgrid-fields-area-head').find('.dx-area-field').length, 2);
+    });
 
 });
 

@@ -10,7 +10,7 @@ import { active as activeEvents, click as clickEvent, dxClick as dxClickEvent } 
 import { extend } from '../core/utils/extend';
 import { FunctionTemplate } from '../core/templates/function_template';
 import { getImageContainer, getImageSourceType } from '../core/utils/icon';
-import { getPublicElement } from '../core/utils/dom';
+import { getPublicElement } from '../core/element';
 
 const ANONYMOUS_TEMPLATE_NAME = 'content';
 
@@ -133,11 +133,11 @@ class Button extends Widget {
                         this.option('disabled', true);
 
                         complete.then(({ status }) => {
-                            needValidate = true;
                             this.option('disabled', false);
 
                             validationStatus = status;
                             validationStatus === 'valid' && this._submitInput().click();
+                            needValidate = true;
                         });
                     }
                 }

@@ -6,11 +6,11 @@ import devices from '../core/devices';
 import domAdapter from '../core/dom_adapter';
 import { extend } from '../core/utils/extend';
 import { deferRender } from '../core/utils/common';
-import { getPublicElement } from '../core/utils/dom';
+import { getPublicElement } from '../core/element';
 import iteratorUtils from '../core/utils/iterator';
 import { isPlainObject, isDefined } from '../core/utils/type';
 import registerComponent from '../core/component_registrator';
-import * as eventUtils from '../events/utils';
+import { addNamespace } from '../events/utils';
 import CollectionWidget from './collection/ui.collection_widget.live_update';
 import { when, Deferred } from '../core/utils/deferred';
 import { BindableTemplate } from '../core/templates/bindable_template';
@@ -223,7 +223,7 @@ const Accordion = CollectionWidget.inherit({
     },
 
     _attachItemTitleClickAction: function(itemTitle) {
-        const eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
+        const eventName = addNamespace(clickEvent.name, this.NAME);
 
         eventsEngine.off(itemTitle, eventName);
         eventsEngine.on(itemTitle, eventName, this._itemTitleClickHandler.bind(this));

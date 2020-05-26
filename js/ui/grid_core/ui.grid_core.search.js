@@ -90,19 +90,16 @@ module.exports = {
                     let column;
                     const columns = that._columnsController.getColumns();
                     const searchVisibleColumnsOnly = that.option('searchPanel.searchVisibleColumnsOnly');
-                    let filterValue;
                     let lookup;
                     const filters = [];
 
                     if(!text) return null;
 
                     function onQueryDone(items) {
-                        let i;
                         const valueGetter = compileGetter(lookup.valueExpr);
-                        let value;
 
-                        for(i = 0; i < items.length; i++) {
-                            value = valueGetter(items[i]);
+                        for(let i = 0; i < items.length; i++) {
+                            const value = valueGetter(items[i]);
                             filters.push(column.createFilterExpression(value, null, 'search'));
                         }
                     }
@@ -114,7 +111,7 @@ module.exports = {
 
                         if(allowSearch(column) && column.calculateFilterExpression) {
                             lookup = column.lookup;
-                            filterValue = parseValue(column, text);
+                            const filterValue = parseValue(column, text);
                             if(lookup && lookup.items) {
                                 dataQuery(lookup.items).filter(column.createFilterExpression.call({ dataField: lookup.displayExpr, dataType: lookup.dataType, calculateFilterExpression: column.calculateFilterExpression }, filterValue, null, 'search')).enumerate().done(onQueryDone);
                             } else {
@@ -276,7 +273,6 @@ module.exports = {
                     const that = this;
                     let $parent = cellElement.parent();
                     let $items;
-                    let columnIndex;
                     const stringNormalizer = this._getStringNormalizer();
                     const normalizedSearchText = stringNormalizer(searchText);
 
@@ -286,7 +282,7 @@ module.exports = {
                         if(column.groupIndex >= 0 && !column.showWhenGrouped) {
                             $items = cellElement;
                         } else {
-                            columnIndex = that._columnsController.getVisibleIndex(column.index);
+                            const columnIndex = that._columnsController.getVisibleIndex(column.index);
                             $items = $parent.children('td').eq(columnIndex).find('*');
                         }
                     }

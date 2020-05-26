@@ -4,17 +4,16 @@ QUnit.testStart(function() {
 });
 
 import 'common.css!';
-import 'generic_light.css!';
-import 'ui/pivot_grid/ui.pivot_grid.field_chooser';
-
-import PivotGridDataSource from 'ui/pivot_grid/data_source';
-
-import $ from 'jquery';
-import pointerMock from '../../helpers/pointerMock.js';
-import domUtils from 'core/utils/dom';
 import devices from 'core/devices';
 import dataUtils from 'core/element_data';
 import renderer from 'core/renderer';
+import { triggerShownEvent } from 'events/visibility_change';
+import 'generic_light.css!';
+import $ from 'jquery';
+import PivotGridDataSource from 'ui/pivot_grid/data_source';
+import 'ui/pivot_grid/ui.pivot_grid.field_chooser';
+import pointerMock from '../../helpers/pointerMock.js';
+
 
 const createMockDataSource = function(options) {
     $.each(options.fields || [], function(index, field) {
@@ -200,7 +199,7 @@ QUnit.module('dxPivotGridFieldChooser', {
 
         $('#container').show();
 
-        domUtils.triggerShownEvent($('#container'));
+        triggerShownEvent($('#container'));
 
         // assert
         const columns = $('#container').find('.dx-col');
@@ -1126,8 +1125,8 @@ QUnit.module('dxPivotGridFieldChooser', {
         // assert
         assert.strictEqual(this.dataSource.field.callCount, 1);
         assert.deepEqual(this.dataSource.field.getCall(0).args, [0, {
-            filterType: 'exclude',
-            filterValues: [[2002, 2]]
+            filterType: 'include',
+            filterValues: [[2001], [2002, 1]]
         }]);
 
     });
@@ -2105,8 +2104,6 @@ QUnit.module('Base Field chooser', {
     // T852897
     QUnit.test('Custom texts.emptyValue in header filter', function(assert) {
         const that = this;
-        let listItems;
-        let fieldElements;
         const fields = [
             { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true }
         ];
@@ -2129,14 +2126,14 @@ QUnit.module('Base Field chooser', {
             that.$container.append(that.fieldChooser.renderField(field));
         });
 
-        fieldElements = that.$container.find('.dx-area-field');
+        const fieldElements = that.$container.find('.dx-area-field');
 
         // act
         fieldElements.first().find('.dx-header-filter').trigger('dxclick');
         this.clock.tick(500);
 
         // assert
-        listItems = $('.dx-list').dxList('instance').option('items');
+        const listItems = $('.dx-list').dxList('instance').option('items');
 
         assert.equal(listItems.length, 2, 'header filter items');
         assert.equal(listItems[1].text, 'Test');
@@ -2145,8 +2142,6 @@ QUnit.module('Base Field chooser', {
     // T852897
     QUnit.test('Default texts.emptyValue in header filter', function(assert) {
         const that = this;
-        let listItems;
-        let fieldElements;
         const fields = [
             { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true }
         ];
@@ -2163,14 +2158,14 @@ QUnit.module('Base Field chooser', {
             that.$container.append(that.fieldChooser.renderField(field));
         });
 
-        fieldElements = that.$container.find('.dx-area-field');
+        const fieldElements = that.$container.find('.dx-area-field');
 
         // act
         fieldElements.first().find('.dx-header-filter').trigger('dxclick');
         this.clock.tick(500);
 
         // assert
-        listItems = $('.dx-list').dxList('instance').option('items');
+        const listItems = $('.dx-list').dxList('instance').option('items');
 
         assert.equal(listItems.length, 2, 'header filter items');
         assert.equal(listItems[0].text, '(Blanks)');

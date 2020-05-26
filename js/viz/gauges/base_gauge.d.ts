@@ -346,6 +346,14 @@ export interface BaseGaugeTooltip extends BaseWidgetTooltip {
      * @public
      */
     customizeTooltip?: ((scaleValue: { value?: number, valueText?: string }) => any);
+    /**
+     * @docid BaseGaugeOptions.tooltip.interactive
+     * @type boolean
+     * @default false
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    interactive?: boolean;
 }
 /**
  * @docid BaseGauge

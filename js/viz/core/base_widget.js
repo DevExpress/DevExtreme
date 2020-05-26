@@ -1,28 +1,23 @@
-const $ = require('../../core/renderer');
-const noop = require('../../core/utils/common').noop;
-const windowUtils = require('../../core/utils/window');
-const domAdapter = require('../../core/dom_adapter');
-const typeUtils = require('../../core/utils/type');
-const each = require('../../core/utils/iterator').each;
-const version = require('../../core/version');
-const _windowResizeCallbacks = require('../../core/utils/resize_callbacks');
-const _stringFormat = require('../../core/utils/string').format;
-const _isObject = require('../../core/utils/type').isObject;
-const extend = require('../../core/utils/extend').extend;
-const themeManagerModule = require('../core/base_theme_manager');
-
+import $ from '../../core/renderer';
+import { noop } from '../../core/utils/common';
+import { hasWindow, getWindow } from '../../core/utils/window';
+import domAdapter from '../../core/dom_adapter';
+import { isNumeric, isFunction, isDefined, isObject as _isObject, type } from '../../core/utils/type';
+import { each } from '../../core/utils/iterator';
+import version from '../../core/version';
+import _windowResizeCallbacks from '../../core/utils/resize_callbacks';
+import { format as _stringFormat } from '../../core/utils/string';
+import { extend } from '../../core/utils/extend';
+import themeManagerModule from '../core/base_theme_manager';
+import DOMComponent from '../../core/dom_component';
+import helpers from './helpers';
+import { parseScalar as _parseScalar } from './utils';
+import { ERROR_MESSAGES, log as _log } from './errors_warnings';
+import rendererModule from './renderers/renderer';
+import _Layout from './layout';
+import devices from '../../core/devices';
+import eventsEngine from '../../events/core/events_engine';
 const _floor = Math.floor;
-const DOMComponent = require('../../core/dom_component');
-const helpers = require('./helpers');
-const _parseScalar = require('./utils').parseScalar;
-const errors = require('./errors_warnings');
-const _log = errors.log;
-const rendererModule = require('./renderers/renderer');
-
-const _Layout = require('./layout');
-
-const devices = require('../../core/devices');
-const eventsEngine = require('../../events/core/events_engine');
 
 const OPTION_RTL_ENABLED = 'rtlEnabled';
 
@@ -71,7 +66,7 @@ let createIncidentOccurred = function(widgetName, eventTrigger) {
                 id: id,
                 type: id[0] === 'E' ? 'error' : 'warning',
                 args: args,
-                text: _stringFormat.apply(null, [errors.ERROR_MESSAGES[id]].concat(args || [])),
+                text: _stringFormat.apply(null, [ERROR_MESSAGES[id]].concat(args || [])),
                 widget: widgetName,
                 version: version
             }
@@ -111,8 +106,8 @@ const getEmptyComponent = function() {
             this.callBase(element, options);
             const sizedElement = domAdapter.createElement('div');
 
-            const width = options && typeUtils.isNumeric(options.width) ? options.width + 'px' : '100%';
-            const height = options && typeUtils.isNumeric(options.height) ? options.height + 'px' : this._getDefaultSize().height + 'px';
+            const width = options && isNumeric(options.width) ? options.width + 'px' : '100%';
+            const height = options && isNumeric(options.height) ? options.height + 'px' : this._getDefaultSize().height + 'px';
 
             domAdapter.setStyle(sizedElement, 'width', width);
             domAdapter.setStyle(sizedElement, 'height', height);
@@ -127,7 +122,7 @@ const getEmptyComponent = function() {
 
     EmptyComponent.inherit = function(config) {
         for(const field in config) {
-            if(typeUtils.isFunction(config[field]) && field.substr(0, 1) !== '_' && field !== 'option' || field === '_dispose' || field === '_optionChanged') {
+            if(isFunction(config[field]) && field.substr(0, 1) !== '_' && field !== 'option' || field === '_dispose' || field === '_optionChanged') {
                 config[field] = noop;
             }
         }
@@ -138,10 +133,10 @@ const getEmptyComponent = function() {
     return EmptyComponent;
 };
 
-const isServerSide = !windowUtils.hasWindow();
+const isServerSide = !hasWindow();
 
 function sizeIsValid(value) {
-    return typeUtils.isDefined(value) && value > 0;
+    return isDefined(value) && value > 0;
 }
 
 module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
@@ -160,7 +155,6 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
     _init: function() {
         const that = this;
-        let linkTarget;
 
         that._$element.children('.' + SIZED_ELEMENT_CLASS).remove();
 
@@ -176,7 +170,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         that._renderElementAttributes();
         that._initRenderer();
         // Shouldn't "_useLinks" be passed to the renderer instead of doing 3 checks here?
-        linkTarget = that._useLinks && that._renderer.root;
+        const linkTarget = that._useLinks && that._renderer.root;
         // There is an implicit relation between `_useLinks` and `loading indicator` - it uses links
         // Though this relation is not ensured in code we will immediately know when it is broken - `loading indicator` will break on construction
         linkTarget && linkTarget.enableLinks().virtualLink('core').virtualLink('peripheral');
@@ -329,7 +323,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         } else {
             if(root.attr('pointer-events') === 'none') {
                 root.attr({
-                    'pointer-events': typeUtils.isDefined(this._initDisabledState) ? this._initDisabledState : null,
+                    'pointer-events': isDefined(this._initDisabledState) ? this._initDisabledState : null,
                     'filter': null
                 });
             }
@@ -369,7 +363,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         const scrollEvents = 'scroll.viz_widgets';
 
         if(devices.real().platform === 'generic') {
-            $parents = $parents.add(windowUtils.getWindow());
+            $parents = $parents.add(getWindow());
         }
 
         this._proxiedTargetParentsScrollHandler = this._proxiedTargetParentsScrollHandler
@@ -409,8 +403,8 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         const size = that.option('size') || {};
         const margin = that.option('margin') || {};
         const defaultCanvas = that._getDefaultSize() || {};
-        const elementWidth = !sizeIsValid(size.width) && windowUtils.hasWindow() ? that._$element.width() : 0;
-        const elementHeight = !sizeIsValid(size.height) && windowUtils.hasWindow() ? that._$element.height() : 0;
+        const elementWidth = !sizeIsValid(size.width) && hasWindow() ? that._$element.width() : 0;
+        const elementHeight = !sizeIsValid(size.height) && hasWindow() ? that._$element.height() : 0;
         let canvas = {
             width: size.width <= 0 ? 0 : _floor(pickPositiveValue([size.width, elementWidth, defaultCanvas.width])),
             height: size.height <= 0 ? 0 : _floor(pickPositiveValue([size.height, elementHeight, defaultCanvas.height])),
@@ -452,10 +446,9 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         const canvas = this._canvas;
         const layout = this._layout;
         let rect = canvas.width > 0 && canvas.height > 0 ? [canvas.left, canvas.top, canvas.width - canvas.right, canvas.height - canvas.bottom] : [0, 0, 0, 0];
-        let nextRect;
 
         rect = layout.forward(rect, this._getMinSize());
-        nextRect = this._applySize(rect) || rect;
+        const nextRect = this._applySize(rect) || rect;
         layout.backward(nextRect, this._getAlignmentRect() || nextRect);
     },
 
@@ -607,9 +600,9 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
                     fullName.indexOf(op) >= 0 && partialChangeOptionsName.push(op);
                 });
                 if(sections.length === 1) {
-                    if(typeUtils.type(value) === 'object') {
+                    if(type(value) === 'object') {
                         that._addOptionsNameForPartialUpdate(value, options, partialChangeOptionsName);
-                    } else if(typeUtils.type(value) === 'array') {
+                    } else if(type(value) === 'array') {
                         if(value.length > 0 && value.every(item => that._checkOptionsForPartialUpdate(item, options))) {
                             value.forEach(item => that._addOptionsNameForPartialUpdate(item, options, partialChangeOptionsName));
                         }

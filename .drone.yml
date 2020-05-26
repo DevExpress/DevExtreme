@@ -15,7 +15,7 @@ clone:
 pipeline:
 
   build:
-    image: devexpress/devextreme-build:20_1
+    image: devexpress/devextreme-build:20_2
     environment:
       - TRAVIS=true
     commands:
@@ -63,7 +63,7 @@ matrix:
     - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: ui.scheduler }
     - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: viz }
     - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: renovation }
-    - { TARGET: test_functional, COMPONENT: dataGrid }
+    - { TARGET: test_functional, COMPONENT: dataGrid, QUARANTINE_MODE: true }
     - { TARGET: test_functional, COMPONENT: scheduler, QUARANTINE_MODE: true }
     - { TARGET: test_functional, COMPONENT: editors }
     - { TARGET: test_functional, COMPONENT: navigation }

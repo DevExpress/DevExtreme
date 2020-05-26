@@ -1,20 +1,20 @@
-const $ = require('../core/renderer');
-const eventsEngine = require('../events/core/events_engine');
-const registerComponent = require('../core/component_registrator');
-const commonUtils = require('../core/utils/common');
-const extend = require('../core/utils/extend').extend;
-const inArray = require('../core/utils/array').inArray;
-const each = require('../core/utils/iterator').each;
-const typeUtils = require('../core/utils/type');
-const windowUtils = require('../core/utils/window');
-const translator = require('../animation/translator');
-const fitIntoRange = require('../core/utils/math').fitIntoRange;
-const DOMComponent = require('../core/dom_component');
-const eventUtils = require('../events/utils');
-const dragEvents = require('../events/drag');
+import translator from '../animation/translator';
+import registerComponent from '../core/component_registrator';
+import DOMComponent from '../core/dom_component';
+import $ from '../core/renderer';
+import { inArray } from '../core/utils/array';
+import commonUtils from '../core/utils/common';
+import { extend } from '../core/utils/extend';
+import { each } from '../core/utils/iterator';
+import { fitIntoRange } from '../core/utils/math';
+import typeUtils from '../core/utils/type';
+import windowUtils from '../core/utils/window';
+import eventsEngine from '../events/core/events_engine';
+import dragEvents from '../events/drag';
+import { addNamespace } from '../events/utils';
+import { triggerResizeEvent } from '../events/visibility_change';
 const isPlainObject = typeUtils.isPlainObject;
 const isFunction = typeUtils.isFunction;
-const domUtils = require('../core/utils/dom');
 
 const RESIZABLE = 'dxResizable';
 const RESIZABLE_CLASS = 'dx-resizable';
@@ -28,9 +28,9 @@ const RESIZABLE_HANDLE_RIGHT_CLASS = 'dx-resizable-handle-right';
 
 const RESIZABLE_HANDLE_CORNER_CLASS = 'dx-resizable-handle-corner';
 
-const DRAGSTART_START_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, RESIZABLE);
-const DRAGSTART_EVENT_NAME = eventUtils.addNamespace(dragEvents.move, RESIZABLE);
-const DRAGSTART_END_EVENT_NAME = eventUtils.addNamespace(dragEvents.end, RESIZABLE);
+const DRAGSTART_START_EVENT_NAME = addNamespace(dragEvents.start, RESIZABLE);
+const DRAGSTART_EVENT_NAME = addNamespace(dragEvents.move, RESIZABLE);
+const DRAGSTART_END_EVENT_NAME = addNamespace(dragEvents.end, RESIZABLE);
 
 const SIDE_BORDER_WIDTH_STYLES = {
     'left': 'borderLeftWidth',
@@ -107,9 +107,9 @@ const Resizable = DOMComponent.inherit({
 
         const directions = handles === 'all' ? ['top', 'bottom', 'left', 'right'] : handles.split(' ');
 
-        each(directions, (function(index, handleName) {
+        each(directions, (index, handleName) => {
             this._renderHandle(handleName);
-        }).bind(this));
+        });
 
         inArray('bottom', directions) + 1 && inArray('right', directions) + 1 && this._renderHandle('corner-bottom-right');
         inArray('bottom', directions) + 1 && inArray('left', directions) + 1 && this._renderHandle('corner-bottom-left');
@@ -137,7 +137,7 @@ const Resizable = DOMComponent.inherit({
         handlers[DRAGSTART_EVENT_NAME] = this._dragHandler.bind(this);
         handlers[DRAGSTART_END_EVENT_NAME] = this._dragEndHandler.bind(this);
 
-        this._handles.forEach(function(handleElement) {
+        this._handles.forEach(handleElement => {
             eventsEngine.on(handleElement, handlers, {
                 direction: 'both',
                 immediate: true
@@ -146,7 +146,7 @@ const Resizable = DOMComponent.inherit({
     },
 
     _detachEventHandlers: function() {
-        this._handles.forEach(function(handleElement) {
+        this._handles.forEach(handleElement => {
             eventsEngine.off(handleElement);
         });
     },
@@ -247,7 +247,7 @@ const Resizable = DOMComponent.inherit({
             handles: this._movingSides
         });
 
-        domUtils.triggerResizeEvent($element);
+        triggerResizeEvent($element);
     },
 
     _getOffset: function(e) {
@@ -276,17 +276,17 @@ const Resizable = DOMComponent.inherit({
         const yPos = sides.top ? location.top : location.top + size.height;
         const newXShift = (xPos + offset.x) % steps.h;
         const newYShift = (yPos + offset.y) % steps.v;
-        const sign = Math.sign || function(x) {
+        const sign = Math.sign || (x => {
             x = +x;
             if(x === 0 || isNaN(x)) {
                 return x;
             }
             return x > 0 ? 1 : -1;
-        };
-        const separatorOffset = function(steps, offset) {
+        });
+        const separatorOffset = (steps, offset) => {
             return (1 + sign(offset) * 0.2) % 1 * steps;
         };
-        const isSmallOffset = function(offset, steps) {
+        const isSmallOffset = (offset, steps) => {
             return Math.abs(offset) < 0.2 * steps;
         };
 

@@ -100,11 +100,11 @@ QUnit.module('Creation', environment);
 QUnit.test('Creation bubble point', function(assert) {
     const series = createSeries({ type: 'bubble', sizeField: 'size', label: { visible: false } });
     const data = [{ arg: 1, val: 3, size: 5 }];
-    let points;
+
     series.updateData(data);
     series.createPoints();
 
-    points = series.getPoints();
+    const points = series.getPoints();
     assert.ok(points, 'Points should be created');
     assert.equal(points.length, 1, 'Series should have one point');
 
@@ -117,12 +117,11 @@ QUnit.test('Creation bubble point', function(assert) {
 QUnit.test('Creation with errorBars', function(assert) {
     const series = createSeries({ type: 'bubble', sizeField: 'size', errorBars: { lowErrorValueField: 'lowErrorField', highErrorValueField: 'highErrorField' } });
     const data = [{ arg: 1, val: 3, size: 5, lowErrorField: 0, highErrorField: 4 }];
-    let points;
 
     series.updateData(data);
     series.createPoints();
 
-    points = series.getPoints();
+    const points = series.getPoints();
     assert.ok(points, 'Points should be created');
     assert.equal(points.length, 1, 'Series should have one point');
     assert.equal(this.createPoint.firstCall.args[0], series, 'Series should be correct');

@@ -161,7 +161,6 @@ Crosshair.prototype = {
         if(labelOptions.visible) {
             axes.forEach(function(axis) {
                 const position = axis.getOptions().position;
-                let align;
                 if(axis.getTranslator().getBusinessRange().isEmpty()) {
                     return;
                 }
@@ -174,7 +173,7 @@ Crosshair.prototype = {
                     x = canvas.left;
                     y = currentLabelPos;
                 }
-                align = position === TOP || position === BOTTOM ? CENTER : (position === RIGHT ? LEFT : RIGHT);
+                const align = position === TOP || position === BOTTOM ? CENTER : (position === RIGHT ? LEFT : RIGHT);
                 background = renderer.rect(0, 0, 0, 0).attr({ fill: labelOptions.backgroundColor || options.line.stroke }).append(group);
                 text = renderer.text('0', 0, 0).css(patchFontOptions(options.label.font)).attr({
                     align: align,

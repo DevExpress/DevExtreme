@@ -1,18 +1,18 @@
-const $ = require('../core/renderer');
-const domAdapter = require('../core/dom_adapter');
-const windowUtils = require('../core/utils/window');
+import devices from '../core/devices';
+import domAdapter from '../core/dom_adapter';
+import Promise from '../core/polyfills/promise';
+import $ from '../core/renderer';
+import { Deferred } from '../core/utils/deferred';
+import htmlParser from '../core/utils/html_parser';
+import { each } from '../core/utils/iterator';
+import readyCallbacks from '../core/utils/ready_callbacks';
+import viewPortUtils from '../core/utils/view_port';
+import windowUtils from '../core/utils/window';
+import themeReadyCallback from './themes_callback';
+import errors from './widget/ui.errors';
 const window = windowUtils.getWindow();
-const Deferred = require('../core/utils/deferred').Deferred;
-const errors = require('./widget/ui.errors');
-const domUtils = require('../core/utils/dom');
-const readyCallbacks = require('../core/utils/ready_callbacks');
 const ready = readyCallbacks.add;
-const each = require('../core/utils/iterator').each;
-const devices = require('../core/devices');
-const viewPortUtils = require('../core/utils/view_port');
-const themeReadyCallback = require('./themes_callback');
 const viewPort = viewPortUtils.value;
-const Promise = require('../core/polyfills/promise');
 const viewPortChanged = viewPortUtils.changeCallback;
 
 const DX_LINK_SELECTOR = 'link[rel=dx-theme]';
@@ -101,7 +101,7 @@ function processMarkup() {
     }
 
     knownThemes = {};
-    $activeThemeLink = $(domUtils.createMarkupFromString('<link rel=stylesheet>'), context);
+    $activeThemeLink = $(htmlParser.parseHTML('<link rel=stylesheet>'), context);
 
     $allThemeLinks.each(function() {
         const link = $(this, context);

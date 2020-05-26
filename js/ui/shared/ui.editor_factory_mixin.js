@@ -7,7 +7,7 @@ const compileGetter = require('../../core/utils/data').compileGetter;
 const browser = require('../../core/utils/browser');
 const extend = require('../../core/utils/extend').extend;
 const devices = require('../../core/devices');
-const getPublicElement = require('../../core/utils/dom').getPublicElement;
+const getPublicElement = require('../../core/element').getPublicElement;
 const normalizeDataSourceOptions = require('../../data/data_source/utils').normalizeDataSourceOptions;
 const normalizeKeyName = require('../../events/utils').normalizeKeyName;
 
@@ -18,7 +18,6 @@ require('../select_box');
 require('../date_box');
 
 const CHECKBOX_SIZE_CLASS = 'checkbox-size';
-const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 const EDITOR_INLINE_BLOCK = 'dx-editor-inline-block';
 
 const EditorFactoryMixin = (function() {
@@ -249,9 +248,6 @@ const EditorFactoryMixin = (function() {
                 if(!options.isOnForm) {
                     $editorElement.addClass(that.addWidgetPrefix(CHECKBOX_SIZE_CLASS));
                     $editorElement.parent().addClass(EDITOR_INLINE_BLOCK);
-                }
-                if(options.command || options.editorOptions.readOnly) {
-                    $editorElement.parent().addClass(CELL_FOCUS_DISABLED_CLASS);
                 }
             }
 

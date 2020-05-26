@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import dataUtils from '../../core/element_data';
 import typeUtils from '../../core/utils/type';
-import { getPublicElement } from '../../core/utils/dom';
+import { getPublicElement } from '../../core/element';
 
 const ROW_SELECTOR = 'tr';
 

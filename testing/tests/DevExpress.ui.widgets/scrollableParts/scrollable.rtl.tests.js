@@ -1,13 +1,10 @@
-import $ from 'jquery';
 import animationFrame from 'animation/frame';
-import domUtils from 'core/utils/dom';
-import Scrollable from 'ui/scroll_view/ui.scrollable';
-
 import 'common.css!';
+import { triggerShownEvent } from 'events/visibility_change';
+import $ from 'jquery';
+import Scrollable from 'ui/scroll_view/ui.scrollable';
+import { RTL_CLASS } from './scrollable.constants.js';
 
-import {
-    RTL_CLASS
-} from './scrollable.constants.js';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -85,7 +82,7 @@ QUnit.test('rtlEnabled scrolls to very right position after shown event', functi
     });
 
     $wrapper.show();
-    domUtils.triggerShownEvent($wrapper);
+    triggerShownEvent($wrapper);
     const scrollable = $scrollable.dxScrollable('instance');
     const veryRightPosition = scrollable.$content().width() - $scrollable.width();
 

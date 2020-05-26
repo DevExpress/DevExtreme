@@ -70,6 +70,49 @@ QUnit.module('Resource Manager', {
     }
 });
 
+QUnit.module('_createWrappedDataSource', () => {
+    const createWrappedDataSource = (dataSource) => {
+        const manager = new dxSchedulerResourceManager([]);
+        return manager._createWrappedDataSource(dataSource);
+    };
+
+    QUnit.test('JSON declaration should be wrapped to DataSource object', function(assert) {
+        const filterValue = ['id', '=', 'emp1'];
+        const dataSource = createWrappedDataSource({
+            filter: filterValue,
+            store: new CustomStore({
+                load: () => {}
+            })
+        });
+
+        assert.ok(dataSource instanceof DataSource, '_createWrappedDataSource should return DataSource object if JSON is passed');
+        assert.deepEqual(dataSource.filter(), filterValue, 'Filter should be passed to the created dataSource');
+    });
+
+    QUnit.test('Array data should be wrapped to DataSource object', function(assert) {
+        const dataSource = createWrappedDataSource([
+            { id: 0 },
+            { id: 1 }
+        ]);
+
+        assert.ok(dataSource instanceof DataSource, '_createWrappedDataSource should return DataSource object if array passed');
+        assert.equal(dataSource.filter(), undefined, 'Filter shouldn\'t exist in DataSource');
+    });
+
+    QUnit.test('DataSource object shouldn\'t wrapped', function(assert) {
+        const originalDataSource = new DataSource({
+            store: new CustomStore({
+                load: () => {}
+            })
+        });
+
+        const dataSource = createWrappedDataSource(originalDataSource);
+
+        assert.equal(dataSource, originalDataSource, 'result of _createWrappedDataSource should be equal originalDataSource');
+        assert.equal(dataSource.filter(), undefined, 'Filter shouldn\'t exist in DataSource');
+    });
+});
+
 QUnit.test('Init', function(assert) {
     this.createInstance();
     assert.ok(this.instance instanceof dxSchedulerResourceManager, 'Resource Manager is initialized');

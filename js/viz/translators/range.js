@@ -11,7 +11,6 @@ const minVisibleSelector = 'minVisible';
 const maxVisibleSelector = 'maxVisible';
 const baseSelector = 'base';
 const axisTypeSelector = 'axisType';
-let _Range;
 
 function otherLessThan(thisValue, otherValue) {
     return otherValue < thisValue;
@@ -33,7 +32,7 @@ function compareAndReplace(thisValue, otherValue, setValue, compare) {
     }
 }
 
-_Range = exports.Range = function(range) {
+const _Range = exports.Range = function(range) {
     range && extend(this, range);
 };
 
@@ -44,6 +43,7 @@ _Range.prototype = {
         const that = this;
         const categories = that.categories;
         const otherCategories = otherRange.categories;
+        const isDiscrete = that[axisTypeSelector] === 'discrete';
 
         const compareAndReplaceByField = function(field, compare) {
             compareAndReplace(that[field], otherRange[field], function(value) { that[field] = value; }, compare);
@@ -70,7 +70,7 @@ _Range.prototype = {
 
         compareAndReplaceByField(minSelector, otherLessThan);
         compareAndReplaceByField(maxSelector, otherGreaterThan);
-        if(that[axisTypeSelector] === 'discrete') {
+        if(isDiscrete) {
             checkField(minVisibleSelector);
             checkField(maxVisibleSelector);
         } else {
@@ -79,10 +79,12 @@ _Range.prototype = {
         }
         compareAndReplaceByField('interval', otherLessThan);
 
-        controlValuesByVisibleBounds(minSelector, minVisibleSelector, otherLessThan);
-        controlValuesByVisibleBounds(minSelector, maxVisibleSelector, otherLessThan);
-        controlValuesByVisibleBounds(maxSelector, maxVisibleSelector, otherGreaterThan);
-        controlValuesByVisibleBounds(maxSelector, minVisibleSelector, otherGreaterThan);
+        if(!isDiscrete) {
+            controlValuesByVisibleBounds(minSelector, minVisibleSelector, otherLessThan);
+            controlValuesByVisibleBounds(minSelector, maxVisibleSelector, otherLessThan);
+            controlValuesByVisibleBounds(maxSelector, maxVisibleSelector, otherGreaterThan);
+            controlValuesByVisibleBounds(maxSelector, minVisibleSelector, otherGreaterThan);
+        }
 
         if(categories === undefined) {
             that.categories = otherCategories;

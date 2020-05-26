@@ -92,11 +92,11 @@ function filterBreaks(breaks, viewport, breakStyle) {
                 newBreak = {
                     from: from,
                     to: to,
-                    cumulativeWidth: (lastResult ? lastResult.cumulativeWidth : 0) + breakSize
+                    cumulativeWidth: (lastResult?.cumulativeWidth ?? 0) + breakSize
                 };
                 if(currentBreak.gapSize) {
                     newBreak.gapSize = dateUtils.convertMillisecondsToDateUnits(to - from);
-                    newBreak.cumulativeWidth = lastResult ? lastResult.cumulativeWidth : 0;
+                    newBreak.cumulativeWidth = lastResult?.cumulativeWidth ?? 0;
                 }
                 result.push(newBreak);
             }
@@ -345,14 +345,15 @@ module.exports = {
 
         _getTickMarkPoints(coords, length, tickOptions) {
             const isHorizontal = this._isHorizontal;
-            const options = this._options;
+            const tickOrientation = this._options.tickOrientation;
+            const labelPosition = this._options.label.position;
             let tickStartCoord;
 
-            if(isDefined(options.tickOrientation)) {
-                tickStartCoord = TICKS_CORRECTIONS[options.tickOrientation] * length;
+            if(isDefined(tickOrientation)) {
+                tickStartCoord = TICKS_CORRECTIONS[tickOrientation] * length;
             } else {
                 let shift = tickOptions.shift || 0;
-                if(options.position === LEFT || options.position === TOP) {
+                if(!isHorizontal && labelPosition === LEFT || isHorizontal && labelPosition !== BOTTOM) {
                     shift = -shift;
                 }
                 tickStartCoord = shift + this.getTickStartPositionShift(length);
@@ -445,7 +446,6 @@ module.exports = {
             const markerOptions = that._options.marker;
             const invert = that._translator.getBusinessRange().invert;
             const textIndent = markerOptions.width + markerOptions.textLeftIndent;
-            let text;
             let pathElement;
 
             if(options.x === null) return;
@@ -456,7 +456,7 @@ module.exports = {
                     .append(that._axisElementsGroup);
             }
 
-            text = String(that.formatLabel(date, options.labelOptions, range));
+            const text = String(that.formatLabel(date, options.labelOptions, range));
 
             return {
                 date: date,
@@ -496,11 +496,7 @@ module.exports = {
             const translator = that._translator;
             const viewport = that._getViewportRange();
             const minBound = viewport.minVisible;
-            let tickInterval;
-            let markerInterval;
-            let markerDates;
             let dateMarkers = [];
-            let markersAreaTop;
             let dateMarker;
 
             function draw(markerDate, format, withoutStick) {
@@ -516,11 +512,11 @@ module.exports = {
                 return [];
             }
 
-            markersAreaTop = that._axisPosition + options.marker.topIndent;
-            tickInterval = dateUtils.getDateUnitInterval(this._tickInterval);
-            markerInterval = getMarkerInterval(tickInterval);
+            const markersAreaTop = that._axisPosition + options.marker.topIndent;
+            const tickInterval = dateUtils.getDateUnitInterval(this._tickInterval);
+            const markerInterval = getMarkerInterval(tickInterval);
 
-            markerDates = getMarkerDates(minBound, viewport.maxVisible, markerInterval);
+            const markerDates = getMarkerDates(minBound, viewport.maxVisible, markerInterval);
 
             if(markerDates.length > 1
                 || (markerDates.length === 1 && minBound < markerDates[0])) {
@@ -1172,8 +1168,6 @@ module.exports = {
             let additionGroup;
             let additionBreakFrom;
             let additionBreakTo;
-            let mainGroup;
-            let breakOptions;
 
             that._disposeBreaksGroup();
 
@@ -1181,7 +1175,7 @@ module.exports = {
                 return;
             }
 
-            breakOptions = {
+            const breakOptions = {
                 color: that._options.containerColor,
                 borderColor: breakStyle.color,
                 isHorizontal: that._isHorizontal,
@@ -1196,7 +1190,7 @@ module.exports = {
                 positionTo = that._orthogonalPositions.end + (options.visible && (position === RIGHT || position === BOTTOM) ? SCALE_BREAK_OFFSET : 0);
             }
 
-            mainGroup = that._createBreaksGroup(positionFrom, positionTo);
+            const mainGroup = that._createBreaksGroup(positionFrom, positionTo);
 
             if(that._axisShift && options.visible) {
                 additionBreakFrom = that._axisPosition - that._axisShift - SCALE_BREAK_OFFSET;
@@ -1247,7 +1241,7 @@ module.exports = {
 
         getCustomPosition(position) {
             const that = this;
-            const oppositeAxis = that.getCustomPositionAxis();
+            const oppositeAxis = that.getOppositeAxis();
             const resolvedPosition = position ?? that.getResolvedPositionOption();
             const offset = that.getOptions().offset;
             const oppositeTranslator = oppositeAxis.getTranslator();
@@ -1276,12 +1270,12 @@ module.exports = {
 
         getCustomBoundaryPosition(position) {
             const that = this;
-            const oppositeAxis = that.getCustomPositionAxis();
+            const oppositeAxis = that.getOppositeAxis();
             const resolvedPosition = position ?? that.getResolvedPositionOption();
-            const boundaryPositions = that._orthogonalPositions;
             const oppositeTranslator = oppositeAxis.getTranslator();
+            const visibleArea = oppositeTranslator.getCanvasVisibleArea();
 
-            if(!isDefined(boundaryPositions) || !isDefined(oppositeAxis._orthogonalPositions) || oppositeTranslator.canvasLength === 0) {
+            if(!isDefined(oppositeAxis._orthogonalPositions) || oppositeTranslator.canvasLength === 0) {
                 return undefined;
             }
 
@@ -1289,10 +1283,10 @@ module.exports = {
 
             if(!isDefined(currentPosition)) {
                 return that.getResolvedBoundaryPosition();
-            } else if(currentPosition <= boundaryPositions.start || currentPosition >= boundaryPositions.end) {
-                const isStartPosition = currentPosition <= boundaryPositions.start;
-                return isStartPosition ? (that._isHorizontal ? TOP : LEFT) :
-                    (that._isHorizontal ? BOTTOM : RIGHT);
+            } else if(currentPosition <= visibleArea.min) {
+                return that._isHorizontal ? TOP : LEFT;
+            } else if(currentPosition >= visibleArea.max) {
+                return that._isHorizontal ? BOTTOM : RIGHT;
             }
 
             return currentPosition;
@@ -1305,7 +1299,7 @@ module.exports = {
 
         customPositionIsAvailable() {
             const options = this.getOptions();
-            return isDefined(this.getCustomPositionAxis()) && (isDefined(options.customPosition) || isFinite(options.offset));
+            return isDefined(this.getOppositeAxis()) && (isDefined(options.customPosition) || isFinite(options.offset));
         },
 
         hasCustomPosition() {
@@ -1329,7 +1323,7 @@ module.exports = {
         },
 
         getPredefinedPosition(position) {
-            return this._orthogonalPositions ? this._orthogonalPositions[position === TOP || position === LEFT ? 'start' : 'end'] : undefined;
+            return this._orthogonalPositions?.[position === TOP || position === LEFT ? 'start' : 'end'];
         }
     }
 };

@@ -23,6 +23,15 @@
 @GENERIC_MOBILE_TOOLBAR_ITEM_SPACING: 5px;
 @GENERIC_MOBILE_TOOLBAR_LABEL_FONT_SIZE: 20px;
 
+.dx-size-default() {
+    @GENERIC_TOOLBAR_MENU_TOP_PADDING: 7px;
+    @GENERIC_TOOLBAR_MENU_BOTTOM_PADDING: 8px;
+}
+
+.dx-size-compact() {
+    @GENERIC_TOOLBAR_MENU_TOP_PADDING: 4px;
+    @GENERIC_TOOLBAR_MENU_BOTTOM_PADDING: 4px;
+}
 
 .dx-toolbar-sizing(@height, @padding, @label-font-size, @item-spacing) {
     padding: @padding;
@@ -179,4 +188,36 @@
 
 .dx-toolbar .dx-tab {
     padding: 4px;
+}
+
+.dx-toolbar-button {
+    .dx-menu {
+        .dx-menu-item {
+            border: @GENERIC_BUTTON_BORDER_WEIGHT solid transparent;
+            border-radius: @button-border-radius;
+
+            .dx-menu-item-content {
+                padding-top: @GENERIC_TOOLBAR_MENU_TOP_PADDING;
+                padding-bottom: @GENERIC_TOOLBAR_MENU_BOTTOM_PADDING;
+                line-height: 0;
+
+                .dx-menu-item-text {
+                    line-height: normal;
+                }
+            }
+        }
+    }
+}
+
+.dx-toolbar-hidden-button-group {
+    margin-top: @GENERIC_TOOLBAR_ITEM_SPACING;
+    margin-bottom: @GENERIC_TOOLBAR_ITEM_SPACING;
+
+    .dx-buttongroup-wrapper {
+        .dx-buttongroup-item.dx-button {
+            .dx-button-content {
+                padding: @GENERIC_TOOLBAR_ITEM_SPACING 2 * @GENERIC_TOOLBAR_ITEM_SPACING;
+            }
+        }
+    }
 }

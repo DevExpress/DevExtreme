@@ -2,7 +2,7 @@ const $ = require('../../../core/renderer');
 const domAdapter = require('../../../core/dom_adapter');
 const noop = require('../../../core/utils/common').noop;
 const each = require('../../../core/utils/iterator').each;
-const getPublicElement = require('../../../core/utils/dom').getPublicElement;
+const getPublicElement = require('../../../core/element').getPublicElement;
 const registerComponent = require('../../../core/component_registrator');
 const SchedulerWorkSpace = require('./ui.scheduler.work_space');
 const extend = require('../../../core/utils/extend').extend;
@@ -152,7 +152,7 @@ const SchedulerAgenda = SchedulerWorkSpace.inherit({
 
         this._renderTimePanel();
         this._renderDateTable();
-        this.invoke('agendaIsReady', rows, INNER_CELL_MARGIN, OUTER_CELL_MARGIN);
+        this.invoke('onAgendaReady', rows);
         this._applyCellTemplates(cellTemplates);
         this._dateTableScrollable.update();
     },

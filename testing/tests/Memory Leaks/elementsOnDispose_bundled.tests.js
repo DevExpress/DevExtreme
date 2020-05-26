@@ -33,7 +33,6 @@ $.each(DevExpress.ui, function(componentName) {
                 $(testNode)[componentName](memoryLeaksHelper.getComponentOptions(componentName))[componentName]('instance');
                 this.clock.tick(0);
                 memoryLeaksHelper.destroyTestNode(testNode);
-                this.clock.tick(100);
                 const newDomElements = memoryLeaksHelper.getAllPossibleEventTargets();
                 if(newDomElements.length === originalDomElements.length) {
                     assert.ok(true, 'After a component is disposed, additional DOM elements must be removed');

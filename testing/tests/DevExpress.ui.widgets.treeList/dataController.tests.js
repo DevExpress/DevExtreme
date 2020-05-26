@@ -78,7 +78,6 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
     QUnit.test('Initialize from dataSource with plain structure', function(assert) {
     // arrange
-        let items;
         const array = [
             { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
             { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
@@ -95,7 +94,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.expandRow(2);
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.equal(items.length, 3, 'count items');
 
         assert.equal(items[0].rowType, 'data', 'rowType of first item');
@@ -244,8 +243,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
     });
 
     QUnit.test('Initialize from dataSource with hierarchical structure', function(assert) {
-    // arrange
-        let items;
+        // arrange
         const array = [
             { name: 'Category1', phone: '55-55-55' },
             { name: 'Category2', phone: '98-75-21', items: [
@@ -268,7 +266,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.expandRow(2);
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.equal(items.length, 4, 'count items');
 
         assert.equal(items[0].key, 1, 'key of first item');
@@ -291,8 +289,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
     });
 
     QUnit.test('Initialize from dataSource with hierarchical structure when \'keyExpr\' option is specified', function(assert) {
-    // arrange
-        let items;
+        // arrange
         const array = [
             { name: 'Category1', phone: '55-55-55', key: 'key1' },
             { name: 'Category2', phone: '98-75-21', key: 'key2', items: [
@@ -316,7 +313,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.expandRow('key2');
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.equal(items.length, 4, 'count items');
 
         assert.equal(items[0].key, 'key1', 'key of first item');
@@ -340,7 +337,6 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
     QUnit.test('Initialize from dataSource when there is key of store (without the specified \'keyEpxr\' option)', function(assert) {
     // arrange
-        let items;
         const array = [
             { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
             { name: 'Category1', phone: '55-55-55', id: 1 },
@@ -358,7 +354,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.expandRow(2);
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.equal(items.length, 3, 'count items');
 
         assert.equal(items[0].key, 1, 'key of first item');
@@ -377,7 +373,6 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
     QUnit.test('Checking key of store when dataSource as array', function(assert) {
     // arrange
-        let dataSource;
         const array = [
             { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
             { name: 'Category1', phone: '55-55-55', id: 1 },
@@ -388,7 +383,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.applyOptions({ dataSource: array });
 
         // assert
-        dataSource = this.getDataSource();
+        const dataSource = this.getDataSource();
         assert.equal(dataSource.store().key(), 'id', 'key of store');
     });
 
@@ -438,7 +433,6 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
     QUnit.test('Update items', function(assert) {
     // arrange
-        let items;
         const array = [
             { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
             { name: 'Category1', phone: '55-55-55', id: 1 },
@@ -454,14 +448,13 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.dataController.updateItems();
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.equal(items.length, 3, 'count items');
     });
 
     QUnit.test('Initialize from dataSource with plain structure when virtual scrolling enabled', function(assert) {
 
         // arrange
-        let items;
         const array = [
             { name: 'SubCategory1', phone: '55-66-77', id: 5, parentId: 2 },
             { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
@@ -482,7 +475,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // assert
         assert.equal(this.dataController.totalItemsCount(), 4, 'totalItemsCount');
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.equal(items.length, 3, 'count items');
 
         assert.equal(items[0].key, 1, 'key of first item');
@@ -519,7 +512,6 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
     QUnit.test('Expand node when virtual scrolling enabled', function(assert) {
     // arrange
-        let items;
         const array = [
             { name: 'SubCategory1', phone: '55-66-77', id: 5, parentId: 2 },
             { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
@@ -542,7 +534,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // assert
         assert.equal(this.dataController.totalItemsCount(), 5, 'totalItemsCount');
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.equal(items.length, 3, 'count items');
 
         assert.equal(items[0].key, 1, 'key of first item');
@@ -659,8 +651,6 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
     QUnit.test('Get node by key', function(assert) {
     // arrange
-        let rows;
-        let node;
 
         this.applyOptions({
             dataSource: [
@@ -674,8 +664,8 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.dataController.load();
 
         // assert
-        rows = this.getVisibleRows();
-        node = this.getNodeByKey(1);
+        const rows = this.getVisibleRows();
+        const node = this.getNodeByKey(1);
         assert.equal(rows.length, 1, 'count row');
         assert.strictEqual(node, rows[0].node, 'equal to the node of a first row');
         assert.deepEqual(node.data, { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 }, 'node by key is \'1\'');
@@ -683,8 +673,6 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
     QUnit.test('Get node by key when node is hidden', function(assert) {
     // arrange
-        let rows;
-        let node;
 
         this.applyOptions({
             dataSource: [
@@ -698,8 +686,8 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.dataController.load();
 
         // assert
-        rows = this.getVisibleRows();
-        node = this.getNodeByKey(3);
+        const rows = this.getVisibleRows();
+        const node = this.getNodeByKey(3);
         assert.equal(rows.length, 1, 'count row');
         assert.notStrictEqual(node, rows[0].node, 'not equal to the node of a first row');
         assert.deepEqual(node.data, { name: 'SubCategory2', phone: '45-45-45', id: 3, parentId: 1 }, 'node by key is \'3\'');
@@ -715,7 +703,6 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
     QUnit.test('Call forEachNode method when the first parameter as the array of nodes', function(assert) {
     // arrange
-        let rootNode;
         const array = [
             { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
             { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 },
@@ -726,7 +713,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         this.dataController.setDataSource(dataSource);
         dataSource.load();
-        rootNode = this.dataController.getRootNode();
+        const rootNode = this.dataController.getRootNode();
 
         // act
         this.dataController.forEachNode(rootNode.children, spy);
@@ -740,7 +727,6 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
     QUnit.test('Call forEachNode method when the first parameter as node', function(assert) {
     // arrange
-        let rootNode;
         const array = [
             { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
             { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 },
@@ -751,7 +737,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         this.dataController.setDataSource(dataSource);
         dataSource.load();
-        rootNode = this.dataController.getRootNode();
+        const rootNode = this.dataController.getRootNode();
 
         // act
         this.dataController.forEachNode(rootNode, spy);
@@ -789,8 +775,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
     // T621620
     QUnit.test('Initialize from dataSource with hierarchical structure when \'parentIdExpr\' option is specified', function(assert) {
-    // arrange
-        let items;
+        // arrange
         const array = [
             { name: 'Category1', phone: '55-55-55', key: 'key1' },
             { name: 'Category2', phone: '98-75-21', key: 'key2', parentId: 'key1', items: [
@@ -813,7 +798,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         dataSource.load();
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.equal(items.length, 4, 'count items');
 
         assert.equal(items[0].key, 'key1', 'key of first item');
@@ -838,7 +823,6 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
     // T622381
     QUnit.test('Nodes should be expanded after refresh method is called at boot time (when autoExpandAll is true)', function(assert) {
     // arrange
-        let items;
         const array = [
             { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
             { name: 'SubCategory1', phone: '98-75-21', id: 2, parentId: 1 },
@@ -854,7 +838,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             clock.tick(60);
 
             // assert
-            items = this.dataController.items();
+            const items = this.dataController.items();
             assert.strictEqual(items.length, 3, 'item count');
         } finally {
             clock.restore();
@@ -951,7 +935,6 @@ QUnit.module('Expand/Collapse nodes', { beforeEach: setupModule, afterEach: tear
 
     QUnit.test('Expand expanded node (plain structure)', function(assert) {
     // arrange
-        let items;
         const array = [
             { name: 'Category1', phone: '55-55-55', id: 1 },
             { name: 'SubCategory1', phone: '55-66-77', id: 2, parentId: 1 }
@@ -967,7 +950,7 @@ QUnit.module('Expand/Collapse nodes', { beforeEach: setupModule, afterEach: tear
         this.expandRow(1);
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.ok(this.isRowExpanded(1), 'row is expanded');
         assert.equal(items.length, 2, 'count items');
         assert.ok(items[0].isExpanded, 'first item is expanded');
@@ -1009,7 +992,6 @@ QUnit.module('Expand/Collapse nodes', { beforeEach: setupModule, afterEach: tear
 
     QUnit.test('Set expanded nodes by expandedRowKeys - first level', function(assert) {
     // arrange
-        let items;
         const array = [
             { name: 'Category1', phone: '55-55-55', id: 1 },
             { name: 'SubCategory1', phone: '55-66-77', id: 2, parentId: 1 }
@@ -1021,7 +1003,7 @@ QUnit.module('Expand/Collapse nodes', { beforeEach: setupModule, afterEach: tear
         dataSource.load();
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.equal(items.length, 2, 'count items');
         assert.ok(items[0].isExpanded, 'first item is expanded');
     });
@@ -2281,7 +2263,6 @@ QUnit.module('Remote Operations', { beforeEach: function() {
     // T585731
     QUnit.test('Checking the \'hasChildren\' property of the node after expand when key as Guid', function(assert) {
     // arrange
-        let items;
         const keys = [new Guid('26992b5c-7d63-89ec-2138-33dd5d244798'), new Guid('1c88aa8d-eaf7-d7b6-4906-ce07a3bdc1cb')];
 
         this.setupTreeList({
@@ -2295,7 +2276,7 @@ QUnit.module('Remote Operations', { beforeEach: function() {
         this.expandRow(keys[0]);
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.strictEqual(items.length, 2, 'item count');
         assert.ok(items[0].node.hasChildren, 'fist item has children');
         assert.ok(items[1].node.hasChildren, 'second item has children');
@@ -2624,9 +2605,6 @@ QUnit.module('Filtering', { beforeEach: function() {
 }, afterEach: teardownModule }, () => {
 
     QUnit.test('Search should work correctly with hierarchical structure', function(assert) {
-    // arrange
-        let items;
-
         // act
         this.setupTreeList({
             itemsExpr: 'items',
@@ -2641,7 +2619,7 @@ QUnit.module('Filtering', { beforeEach: function() {
         });
 
         // assert
-        items = this.dataController.items();
+        const items = this.dataController.items();
         assert.strictEqual(items.length, 2, 'item count');
         assert.deepEqual(items[0].data, { 'id': 1, 'name': 'Alex', 'parentId': 0 }, 'first item');
         assert.deepEqual(items[1].data, { 'id': 2, 'name': 'Bob', 'parentId': 1 }, 'second item');

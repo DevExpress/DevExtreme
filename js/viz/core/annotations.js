@@ -1,5 +1,5 @@
 import { getDocument } from '../../core/dom_adapter';
-import { isDefined } from '../../core/utils/type';
+import { isDefined, isFunction } from '../../core/utils/type';
 import { Tooltip } from '../core/tooltip';
 import { extend } from '../../core/utils/extend';
 import { patchFontOptions } from './utils';
@@ -102,6 +102,11 @@ export let createAnnotations = function(widget, items, commonAnnotationSettings 
     const commonImageOptions = getImageObject(commonAnnotationSettings.image);
     return items.reduce((arr, item) => {
         const currentImageOptions = getImageObject(item.image);
+        const customizedItem = isFunction(customizeAnnotation) ? customizeAnnotation(item) : {};
+        if(customizedItem) {
+            customizedItem.image = getImageObject(customizedItem.image);// T881143
+        }
+
         const options = extend(
             true,
             {},
@@ -109,7 +114,7 @@ export let createAnnotations = function(widget, items, commonAnnotationSettings 
             item,
             { image: commonImageOptions },
             { image: currentImageOptions },
-            customizeAnnotation && customizeAnnotation.call ? customizeAnnotation(item) : {}
+            customizedItem
         );
         const templateFunction = getTemplateFunction(options, widget);
         const annotation = templateFunction && extend(true, pullOptions(options), coreAnnotation(options, widget._getTemplate(templateFunction)));
@@ -146,11 +151,11 @@ const chartPlugin = {
             const argument = argAxis.validateUnit(annotation.argument);
             let axis = this.getValueAxis(annotation.axis);
             let series;
-            let pane = isDefined(axis) ? axis.pane : undefined;
+            let pane = axis?.pane;
 
             if(annotation.series) {
                 series = this.series.filter(s => s.name === annotation.series)[0];
-                axis = series && series.getValueAxis();
+                axis = series?.getValueAxis();
                 isDefined(axis) && (pane = axis.pane);
             }
 
@@ -164,9 +169,9 @@ const chartPlugin = {
                 !isDefined(pane) && (pane = argAxis.pane);
             }
 
-            const value = axis && axis.validateUnit(annotation.value);
+            const value = axis?.validateUnit(annotation.value);
             if(isDefined(value)) {
-                coords[valCoordName] = axis && axis.getTranslator().translate(value);
+                coords[valCoordName] = axis?.getTranslator().translate(value);
                 !isDefined(pane) && isDefined(axis) && (pane = axis.pane);
             }
 
@@ -177,7 +182,7 @@ const chartPlugin = {
                     coords[valCoordName] = argAxis.getAxisPosition();
                 } else if(isDefined(axis) && !isDefined(series)) {
                     coords[valCoordName] = this._argumentAxes.filter(a => a.pane === axis.pane)[0].getAxisPosition();
-                } else if(isDefined(series) && series.checkSeriesViewportCoord(argAxis, coords[argCoordName])) {
+                } else if(series?.checkSeriesViewportCoord(argAxis, coords[argCoordName])) {
                     coords[valCoordName] = series.getSeriesPairCoord(coords[argCoordName], true);
                 }
             }
@@ -350,7 +355,7 @@ const corePlugin = {
             this._annotations.items = [];
 
             const items = this._getOption('annotations');
-            if(!items || !items.length) {
+            if(!items?.length) {
                 return;
             }
             this._annotations.items = createAnnotations(this, items, this._getOption('commonAnnotationSettings'), this._getOption('customizeAnnotation'), this._pullOptions);

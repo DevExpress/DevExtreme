@@ -1081,12 +1081,15 @@ export const MockAxis = function(renderOptions) {
         getAxisShift: function() {
             return 0;
         },
-        getCustomPositionAxis: commonUtils.noop,
+        getOppositeAxis: commonUtils.noop,
         customPositionIsAvailable() {
             return false;
         },
         hasCustomPosition() {
             return false;
+        },
+        getResolvedBoundaryPosition() {
+            return 'bottom';
         },
         getMarginOptions: sinon.stub.returns({}),
         applyVisualRangeSetter: sinon.spy(),

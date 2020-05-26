@@ -1,17 +1,13 @@
-const isNumeric = require('../../core/utils/type').isNumeric;
-const extend = require('../../core/utils/extend').extend;
-const each = require('../../core/utils/iterator').each;
-const isDefined = require('../../core/utils/type').isDefined;
-const sign = require('../../core/utils/math').sign;
-const _math = Math;
-const _round = _math.round;
-const _abs = _math.abs;
-const _pow = _math.pow;
-const _each = each;
-const _noop = require('../../core/utils/common').noop;
-const vizUtils = require('./utils');
+import { isNumeric, isDefined } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import { each as _each } from '../../core/utils/iterator';
+import { sign } from '../../core/utils/math';
+import { noop as _noop } from '../../core/utils/common';
+import { map as _map, normalizeEnum as _normalizeEnum } from './utils';
+const { round, abs, pow, sqrt } = Math;
+const _min = Math.min;
+
 const DEFAULT_BAR_GROUP_PADDING = 0.3;
-const _normalizeEnum = vizUtils.normalizeEnum;
 
 function validateBarPadding(barPadding) {
     return (barPadding < 0 || barPadding > 1) ? undefined : barPadding;
@@ -99,14 +95,14 @@ function calculateParams(barsArea, count, percentWidth, fixedBarWidth) {
     let width;
 
     if(fixedBarWidth) {
-        width = Math.min(fixedBarWidth, _round(barsArea / count));
-        spacing = count > 1 ? _round((barsArea - width * count) / (count - 1)) : 0;
+        width = _min(fixedBarWidth, round(barsArea / count));
+        spacing = count > 1 ? round((barsArea - width * count) / (count - 1)) : 0;
     } else if(isDefined(percentWidth)) {
-        width = _round(barsArea * percentWidth / count);
-        spacing = _round(count > 1 ? (barsArea - barsArea * percentWidth) / (count - 1) : 0);
+        width = round(barsArea * percentWidth / count);
+        spacing = round(count > 1 ? (barsArea - barsArea * percentWidth) / (count - 1) : 0);
     } else {
-        spacing = _round(barsArea / count * 0.2);
-        width = _round((barsArea - spacing * (count - 1)) / count);
+        spacing = round(barsArea / count * 0.2);
+        width = round((barsArea - spacing * (count - 1)) / count);
     }
 
     return { width: width > 1 ? width : 1, spacing: spacing, middleIndex: count / 2 };
@@ -126,7 +122,7 @@ function correctPointCoordinates(points, width, offset) {
 }
 
 function getValueType(value) {
-    return (value >= 0) ? 'positive' : 'negative';
+    return value >= 0 ? 'positive' : 'negative';
 }
 
 function getVisibleSeries(that) {
@@ -170,7 +166,7 @@ function getFirstValueSign(series) {
     for(let i = 0; i < points.length; i++) {
         const point = points[i];
         value = point.initialValue && point.initialValue.valueOf();
-        if(Math.abs(value) > 0) {
+        if(abs(value) > 0) {
             break;
         }
     }
@@ -207,9 +203,8 @@ function adjustStackedSeriesValues() {
         singleSeries.getPoints().forEach(function(point, index, points) {
             let value = point.initialValue && point.initialValue.valueOf();
             let argument = point.argument.valueOf();
-            let stacks = (value >= 0) ? stackKeepers.positive : stackKeepers.negative;
+            let stacks = value >= 0 ? stackKeepers.positive : stackKeepers.negative;
             const isNotBarSeries = singleSeries.type !== 'bar';
-            let currentStack;
 
             if(negativesAsZeroes && value < 0) {
                 stacks = stackKeepers.positive;
@@ -218,7 +213,7 @@ function adjustStackedSeriesValues() {
             }
 
             stacks[stackName] = stacks[stackName] || {};
-            currentStack = stacks[stackName];
+            const currentStack = stacks[stackName];
 
             if(currentStack[argument]) {
                 if(isNotBarSeries) point.correctValue(currentStack[argument]);
@@ -288,17 +283,14 @@ function updateStackedSeriesValues() {
             }
             let value = point.initialValue && point.initialValue.valueOf();
             const argument = point.argument.valueOf();
-            let updateValue;
-            let valueType;
-            let currentStack;
 
             if(that.fullStacked) {
                 value = ((value / (getAbsStackSumByArg(stack, stackName, argument))) || 0);
             }
 
-            updateValue = valueAxisTranslator.checkMinBarSize(value, minShownBusinessValue, point.value);
-            valueType = getValueType(updateValue);
-            currentStack = stackKeepers[valueType][stackName] = stackKeepers[valueType][stackName] || {};
+            const updateValue = valueAxisTranslator.checkMinBarSize(value, minShownBusinessValue, point.value);
+            const valueType = getValueType(updateValue);
+            const currentStack = stackKeepers[valueType][stackName] = stackKeepers[valueType][stackName] || {};
 
             if(currentStack[argument]) {
                 point.minValue = currentStack[argument];
@@ -317,7 +309,7 @@ function updateStackedSeriesValues() {
 
 function updateFullStackedSeriesValues(series, stackKeepers) {
     _each(series, function(_, singleSeries) {
-        const stackName = (singleSeries.getStackName) ? singleSeries.getStackName() : 'default';
+        const stackName = singleSeries.getStackName ? singleSeries.getStackName() : 'default';
 
         _each(singleSeries.getPoints(), function(index, point) {
             const stackSum = getAbsStackSumByArg(stackKeepers, stackName, point.argument.valueOf());
@@ -360,17 +352,15 @@ function adjustBubbleSeriesDimensions() {
     const options = this._options;
     const visibleAreaX = series[0].getArgumentAxis().getVisibleArea();
     const visibleAreaY = series[0].getValueAxis().getVisibleArea();
-    const min = _math.min((visibleAreaX[1] - visibleAreaX[0]), (visibleAreaY[1] - visibleAreaY[0]));
-    const minBubbleArea = _pow(options.minBubbleSize, 2);
-    const maxBubbleArea = _pow(min * options.maxBubbleSize, 2);
+    const min = _min((visibleAreaX[1] - visibleAreaX[0]), (visibleAreaY[1] - visibleAreaY[0]));
+    const minBubbleArea = pow(options.minBubbleSize, 2);
+    const maxBubbleArea = pow(min * options.maxBubbleSize, 2);
     const equalBubbleSize = (min * options.maxBubbleSize + options.minBubbleSize) / 2;
     let minPointSize = Infinity;
     let maxPointSize = -Infinity;
     let pointSize;
     let bubbleArea;
     let sizeProportion;
-    let sizeDispersion;
-    let areaDispersion;
 
     _each(series, function(_, seriesItem) {
         _each(seriesItem.getPoints(), function(_, point) {
@@ -378,17 +368,17 @@ function adjustBubbleSeriesDimensions() {
             minPointSize = minPointSize < point.size ? minPointSize : point.size;
         });
     });
-    sizeDispersion = maxPointSize - minPointSize;
-    areaDispersion = _abs(maxBubbleArea - minBubbleArea);
+    const sizeDispersion = maxPointSize - minPointSize;
+    const areaDispersion = abs(maxBubbleArea - minBubbleArea);
 
     _each(series, function(_, seriesItem) {
         _each(seriesItem.getPoints(), function(_, point) {
             if(maxPointSize === minPointSize) {
-                pointSize = _round(equalBubbleSize);
+                pointSize = round(equalBubbleSize);
             } else {
-                sizeProportion = _abs(point.size - minPointSize) / sizeDispersion;
+                sizeProportion = abs(point.size - minPointSize) / sizeDispersion;
                 bubbleArea = areaDispersion * sizeProportion + minBubbleArea;
-                pointSize = _round(_math.sqrt(bubbleArea));
+                pointSize = round(sqrt(bubbleArea));
             }
             point.correctCoordinates(pointSize);
         });
@@ -480,8 +470,6 @@ SeriesFamily.prototype = {
 
     add: function(series) {
         const type = this.type;
-        this.series = vizUtils.map(series, function(singleSeries) {
-            return singleSeries.type === type ? singleSeries : null;
-        });
+        this.series = _map(series, singleSeries => singleSeries.type === type ? singleSeries : null);
     }
 };

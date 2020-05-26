@@ -1029,6 +1029,28 @@ module('Options changed', setupModule, () => {
         assert.strictEqual(this.$input.val(), 'October 10 2012', 'date is not changed on mouse wheel');
     });
 
+    test('ValueChanged event should be fired after input clearing undo (T878918)', function(assert) {
+        const valueChangedHandler = sinon.spy();
+        const date = this.instance.option('value');
+        this.instance.option('onValueChanged', valueChangedHandler);
+
+        this.$input
+            .val('')
+            .change();
+
+        let args = valueChangedHandler.getCall(0).args[0];
+        assert.ok(valueChangedHandler.calledOnce, 'value has been changed');
+        assert.strictEqual(args.value, null, 'value is correct');
+
+        this.$input
+            .val(date)
+            .change();
+
+        args = valueChangedHandler.getCall(1).args[0];
+        assert.strictEqual(valueChangedHandler.callCount, 2, 'value has been changed');
+        assert.deepEqual(args.value, date, 'value is correct');
+    });
+
     test('onValueChanged should have event', function(assert) {
         const valueChangedHandler = sinon.spy();
 

@@ -1,9 +1,9 @@
-import $ from 'jquery';
-import domUtils from 'core/utils/dom';
-import 'ui/box';
-
 import 'common.css!';
+import { triggerShownEvent } from 'events/visibility_change';
+import $ from 'jquery';
+import 'ui/box';
 import 'ui/scroll_view/ui.scrollable';
+
 
 const { testStart, module, test } = QUnit;
 
@@ -519,7 +519,7 @@ module('fallback strategy', () => {
         const $items = $box.find('.' + BOX_ITEM_CLASS);
         const round = Math.round;
         $box.show();
-        domUtils.triggerShownEvent($box);
+        triggerShownEvent($box);
 
         assert.equal(round($items.eq(0).outerHeight()), round($box.outerHeight() * 0.5), 'first item has correct width');
         assert.equal(round($items.eq(0).outerHeight()), round($box.outerHeight() * 0.5), 'second item has correct width');

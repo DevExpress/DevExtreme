@@ -1,5 +1,5 @@
 const $ = require('../core/renderer');
-const getPublicElement = require('../core/utils/dom').getPublicElement;
+const getPublicElement = require('../core/element').getPublicElement;
 const noop = require('../core/utils/common').noop;
 const isDefined = require('../core/utils/type').isDefined;
 const registerComponent = require('../core/component_registrator');

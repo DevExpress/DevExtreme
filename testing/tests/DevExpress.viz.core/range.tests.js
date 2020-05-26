@@ -1165,3 +1165,18 @@ QUnit.test('min/max categories after call add range (create with min/max categor
     assert.strictEqual(range.minVisible, 'someStartCategories');
     assert.strictEqual(range.maxVisible, 'someEndCategories');
 });
+
+// T888028
+QUnit.test('Ignote minVisible/maxVisible for discrete scale', function(assert) {
+    // arrange
+    const range = new rangeModule.Range({ minVisible: 'a2', min: 'a2', maxVisible: '', max: '', axisType: 'discrete', categories: ['a1', 'a2', 'a3', '', 'a5', ] });
+
+    // act
+    range.addRange({});
+
+    // assert
+    assert.strictEqual(range.minVisible, 'a2');
+    assert.strictEqual(range.maxVisible, undefined);
+    assert.strictEqual(range.min, 'a2');
+    assert.strictEqual(range.max, '');
+});

@@ -97,11 +97,21 @@ exports.HeaderFilterView = modules.View.inherit({
 
         if(!isSelectAll) {
             if(options.type === 'tree') {
-                fillSelectedItemKeys(filterValues, list.option('items'), options.filterType === 'exclude');
+                if(options.filterType) {
+                    options.filterType = 'include';
+                }
+
+                fillSelectedItemKeys(filterValues, list.option('items'), false);
                 options.filterValues = filterValues;
             }
-        } else if(Array.isArray(options.filterValues)) {
-            options.filterValues = [];
+        } else {
+            if(options.type === 'tree') {
+                options.filterType = 'exclude';
+            }
+
+            if(Array.isArray(options.filterValues)) {
+                options.filterValues = [];
+            }
         }
 
         if(options.filterValues && !options.filterValues.length) {
@@ -115,12 +125,11 @@ exports.HeaderFilterView = modules.View.inherit({
 
     showHeaderFilterMenu: function($columnElement, options) {
         const that = this;
-        let popupContainer;
 
         if(options) {
             that._initializePopupContainer(options);
 
-            popupContainer = that.getPopupContainer();
+            const popupContainer = that.getPopupContainer();
 
             that.hideHeaderFilterMenu();
             that.updatePopup($columnElement, options);
@@ -302,12 +311,11 @@ exports.HeaderFilterView = modules.View.inherit({
                         each(items, function(index, item) {
                             const selected = gridCoreUtils.getIndexByKey(item, selectedItems, null) >= 0;
                             const oldSelected = !!item.selected;
-                            let filterValueIndex;
 
                             if(oldSelected !== selected) {
                                 item.selected = selected;
                                 options.filterValues = options.filterValues || [];
-                                filterValueIndex = gridCoreUtils.getIndexByKey(item.value, options.filterValues, null);
+                                const filterValueIndex = gridCoreUtils.getIndexByKey(item.value, options.filterValues, null);
 
                                 if(filterValueIndex >= 0) {
                                     options.filterValues.splice(filterValueIndex, 1);
@@ -385,12 +393,11 @@ exports.headerFilterMixin = {
     },
 
     _renderIndicator: function(options) {
-        let rtlEnabled;
         const $container = options.container;
         const $indicator = options.indicator;
 
         if(options.name === 'headerFilter') {
-            rtlEnabled = this.option('rtlEnabled');
+            const rtlEnabled = this.option('rtlEnabled');
             if($container.children().length && (!rtlEnabled && options.columnAlignment === 'right' || rtlEnabled && options.columnAlignment === 'left')) {
                 $container.prepend($indicator);
                 return;

@@ -4,10 +4,8 @@ const layoutElementModule = require('viz/core/layout_element');
 
 const LayoutElement = layoutElementModule.LayoutElement;
 const WrapperLayoutElement = layoutElementModule.WrapperLayoutElement;
-let environmentLE;
-let environmentW;
 
-environmentLE = {
+const environmentLE = {
     createLayoutElement: function(options) {
         options = $.extend({
             x: 0, y: 0, width: 10, height: 10
@@ -34,7 +32,7 @@ environmentLE = {
     }
 };
 
-environmentW = {
+const environmentW = {
     beforeEach: function() {
         const that = this;
         this.bBoxes = [];

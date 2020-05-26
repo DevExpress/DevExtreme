@@ -8,6 +8,7 @@ import { hasWindow } from '../../core/utils/window';
 
 import DiagramPanel from './ui.diagram.panel';
 import DiagramMenuHelper from './ui.diagram.menu_helper';
+import { getDiagram } from './diagram.importer';
 
 import '../select_box';
 import '../color_box';
@@ -23,10 +24,12 @@ class DiagramToolbar extends DiagramPanel {
     _init() {
         this._commands = [];
         this._itemHelpers = {};
-        this._contextMenus = {};
+        this._commandContextMenus = {};
+        this._contextMenuList = [];
         this._valueConverters = {};
         this.bar = new DiagramToolbarBar(this);
 
+        this._createOnInternalCommand();
         this._createOnCustomCommand();
         this._createOnSubMenuVisibilityChangingAction();
 
@@ -42,7 +45,8 @@ class DiagramToolbar extends DiagramPanel {
 
         this._commands = this._getCommands();
         this._itemHelpers = {};
-        this._contextMenus = {};
+        this._commandContextMenus = {};
+        this._contextMenuList = [];
 
         const $toolbar = this._createMainElement();
         this._renderToolbar($toolbar);
@@ -174,9 +178,11 @@ class DiagramToolbar extends DiagramPanel {
                         icon: 'spindown',
                         disabled: false,
                         stylingMode: 'text',
-                        onClick: () => {
-                            const contextMenu = this._contextMenus[command];
-                            if(contextMenu) contextMenu.toggle();
+                        onClick: (e) => {
+                            const contextMenu = this._commandContextMenus[command];
+                            if(contextMenu) {
+                                this._toggleContextMenu(contextMenu);
+                            }
                         }
                     }
                 }]
@@ -234,29 +240,43 @@ class DiagramToolbar extends DiagramPanel {
                     options: {
                         onValueChanged: (e) => {
                             const parameter = DiagramMenuHelper.getItemCommandParameter(this, item, e.component.option('value'));
-                            handler.call(this, item.command, parameter);
+                            handler.call(this, item.command, item.name, parameter);
                         }
                     }
                 };
             case 'dxTextBox':
                 return {};
             default:
-                if(!item.items) {
-                    return {
-                        options: {
-                            onClick: (e) => {
+                return {
+                    options: {
+                        onClick: (e) => {
+                            if(!item.items) {
                                 const parameter = DiagramMenuHelper.getItemCommandParameter(this, item);
-                                handler.call(this, item.command, parameter);
+                                handler.call(this, item.command, item.name, parameter);
+                            } else {
+                                const contextMenu = e.component._contextMenu;
+                                if(contextMenu) {
+                                    this._toggleContextMenu(contextMenu);
+                                }
                             }
                         }
-                    };
-                }
+                    }
+                };
         }
+    }
+    _toggleContextMenu(contextMenu) {
+        this._contextMenuList.forEach(cm => {
+            if(contextMenu !== cm) {
+                cm.hide();
+            }
+        });
+        contextMenu.toggle();
     }
     _onItemInitialized(widget, item) {
         this._addItemHelper(item.command, new DiagramToolbarItemHelper(widget));
     }
     _onItemContentReady(widget, item, actionHandler) {
+        const { Browser } = getDiagram();
         if((widget.NAME === 'dxButton' || widget.NAME === 'dxTextBox') && item.items) {
             const $menuContainer = $('<div>')
                 .appendTo(this.$element());
@@ -264,7 +284,8 @@ class DiagramToolbar extends DiagramPanel {
                 items: item.items,
                 target: widget.$element(),
                 cssClass: DiagramMenuHelper.getContextMenuCssClass(),
-                showEvent: widget.NAME === 'dxTextBox' ? '' : 'dxclick',
+                showEvent: '',
+                closeOnOutsideClick: !Browser.TouchUI,
                 focusStateEnabled: false,
                 position: { at: 'left bottom' },
                 itemTemplate: function(itemData, itemIndex, itemElement) {
@@ -290,7 +311,10 @@ class DiagramToolbar extends DiagramPanel {
         }
     }
     _onContextMenuInitialized(widget, item, rootWidget) {
-        this._contextMenus[item.command] = widget;
+        this._contextMenuList.push(widget);
+        if(item.command) {
+            this._commandContextMenus[item.command] = widget;
+        }
         this._addContextMenuHelper(item, widget, [], rootWidget);
     }
     _addItemHelper(command, helper) {
@@ -311,10 +335,11 @@ class DiagramToolbar extends DiagramPanel {
         }
     }
     _onContextMenuDisposing(widget, item) {
-        delete this._contextMenus[item.command];
+        this._contextMenuList.splice(this._contextMenuList.indexOf(widget), 1);
+        delete this._commandContextMenus[item.command];
     }
-    _executeCommand(command, value) {
-        if(this._updateLocked || command === undefined) return;
+    _executeCommand(command, name, value) {
+        if(this._updateLocked) return;
 
         if(typeof command === 'number') {
             const valueConverter = this._valueConverters[command];
@@ -322,10 +347,15 @@ class DiagramToolbar extends DiagramPanel {
                 value = valueConverter.getCommandValue(value);
             }
             this.bar.raiseBarCommandExecuted(command, value);
+        } else if(typeof command === 'string') {
+            this._onInternalCommandAction({ command });
         }
-        if(typeof command === 'string') {
-            this._onCustomCommandAction({ command });
+        if(name !== undefined) {
+            this._onCustomCommandAction({ name });
         }
+    }
+    _createOnInternalCommand() {
+        this._onInternalCommandAction = this._createActionByOption('onInternalCommand');
     }
     _createOnCustomCommand() {
         this._onCustomCommandAction = this._createActionByOption('onCustomCommand');
@@ -341,8 +371,8 @@ class DiagramToolbar extends DiagramPanel {
     }
     _setEnabled(enabled) {
         this._toolbarInstance.option('disabled', !enabled);
-        Object.keys(this._contextMenus).forEach(command => {
-            this._contextMenus[command].option('disabled', !enabled);
+        this._contextMenuList.forEach(contextMenu => {
+            contextMenu.option('disabled', !enabled);
         });
     }
     _setItemValue(command, value) {
@@ -359,7 +389,7 @@ class DiagramToolbar extends DiagramPanel {
                     if(valueConverter && valueConverter.getEditorDisplayValue) {
                         displayValue = valueConverter.getEditorDisplayValue(value);
                     }
-                    const contextMenu = this._contextMenus[command];
+                    const contextMenu = this._commandContextMenus[command];
                     helper.setValue(value, displayValue, contextMenu, contextMenu && command);
                 }
             }
@@ -372,7 +402,7 @@ class DiagramToolbar extends DiagramPanel {
         if(command in this._itemHelpers) {
             const helper = this._itemHelpers[command];
             if(helper.canUpdate(this._showingSubMenu)) {
-                const contextMenu = this._contextMenus[command];
+                const contextMenu = this._commandContextMenus[command];
                 helper.setItems(items, contextMenu, contextMenu && command);
             }
         }
@@ -390,6 +420,9 @@ class DiagramToolbar extends DiagramPanel {
                 break;
             case 'onSubMenuVisibilityChanging':
                 this._createOnSubMenuVisibilityChangingAction();
+                break;
+            case 'onInternalCommand':
+                this._createOnInternalCommand();
                 break;
             case 'onCustomCommand':
                 this._createOnCustomCommand();

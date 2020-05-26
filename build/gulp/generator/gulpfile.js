@@ -1,3 +1,5 @@
+'use strict';
+
 const gulp = require('gulp');
 const { generateComponents } = require('devextreme-generator/component-compiler');
 const generator = require('devextreme-generator/preact-generator').default;

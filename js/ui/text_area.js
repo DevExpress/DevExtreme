@@ -5,7 +5,7 @@ import windowUtils from '../core/utils/window';
 import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
 import { isDefined } from '../core/utils/type';
-import * as eventUtils from '../events/utils';
+import { addNamespace, isDxMouseWheelEvent, eventData } from '../events/utils';
 import pointerEvents from '../events/pointer';
 import scrollEvents from '../ui/scroll_view/ui.events.emitter.gesture.scroll';
 import sizeUtils from '../core/utils/size';
@@ -109,7 +109,7 @@ const TextArea = TextBox.inherit({
 
         const initScrollData = {
             validate: (e) => {
-                if(eventUtils.isDxMouseWheelEvent(e) && $(e.target).is(this._input())) {
+                if(isDxMouseWheelEvent(e) && $(e.target).is(this._input())) {
                     if(allowScroll($input, -e.delta, e.shiftKey)) {
                         e._needSkipEvent = true;
                         return true;
@@ -120,17 +120,17 @@ const TextArea = TextBox.inherit({
             }
         };
 
-        eventsEngine.on($input, eventUtils.addNamespace(scrollEvents.init, this.NAME), initScrollData, noop);
-        eventsEngine.on($input, eventUtils.addNamespace(pointerEvents.down, this.NAME), this._pointerDownHandler.bind(this));
-        eventsEngine.on($input, eventUtils.addNamespace(pointerEvents.move, this.NAME), this._pointerMoveHandler.bind(this));
+        eventsEngine.on($input, addNamespace(scrollEvents.init, this.NAME), initScrollData, noop);
+        eventsEngine.on($input, addNamespace(pointerEvents.down, this.NAME), this._pointerDownHandler.bind(this));
+        eventsEngine.on($input, addNamespace(pointerEvents.move, this.NAME), this._pointerMoveHandler.bind(this));
     },
 
     _pointerDownHandler: function(e) {
-        this._eventY = eventUtils.eventData(e).y;
+        this._eventY = eventData(e).y;
     },
 
     _pointerMoveHandler: function(e) {
-        const currentEventY = eventUtils.eventData(e).y;
+        const currentEventY = eventData(e).y;
         const delta = this._eventY - currentEventY;
 
         if(allowScroll(this._input(), delta)) {
@@ -168,14 +168,14 @@ const TextArea = TextBox.inherit({
 
     _renderEvents: function() {
         if(this.option('autoResizeEnabled')) {
-            eventsEngine.on(this._input(), eventUtils.addNamespace('input paste', this.NAME), this._updateInputHeight.bind(this));
+            eventsEngine.on(this._input(), addNamespace('input paste', this.NAME), this._updateInputHeight.bind(this));
         }
 
         this.callBase();
     },
 
     _refreshEvents: function() {
-        eventsEngine.off(this._input(), eventUtils.addNamespace('input paste', this.NAME));
+        eventsEngine.off(this._input(), addNamespace('input paste', this.NAME));
         this.callBase();
     },
 

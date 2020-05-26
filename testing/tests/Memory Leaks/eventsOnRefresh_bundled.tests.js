@@ -21,15 +21,13 @@ $.each(DevExpress.ui, function(componentName) {
         QUnit.test(componentName + ' should not leak memory by creating redundant event subscriptions after refreshing', function(assert) {
             const testNode = memoryLeaksHelper.createTestNode();
             const component = $(testNode)[componentName](memoryLeaksHelper.getComponentOptions(componentName))[componentName]('instance');
-            let originalEventSubscriptions;
-            let newEventSubscriptions;
 
             this.clock.tick(100);
-            originalEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
+            const originalEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
 
             component._refresh();
             this.clock.tick(100);
-            newEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
+            const newEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
 
             assert.deepEqual(newEventSubscriptions, originalEventSubscriptions, 'After an option changes and causes re-rendering, no additional event subscriptions must be created');
             memoryLeaksHelper.destroyTestNode(testNode);

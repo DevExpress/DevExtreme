@@ -1,55 +1,53 @@
-import $ from '../../core/renderer';
-import Callbacks from '../../core/utils/callbacks';
 import translator from '../../animation/translator';
-import errors from '../widget/ui.errors';
-import windowUtils from '../../core/utils/window';
-import dialog from '../dialog';
-import recurrenceUtils from './utils.recurrence';
-import domUtils from '../../core/utils/dom';
-import dateUtils from '../../core/utils/date';
-import { each } from '../../core/utils/iterator';
-import { extend } from '../../core/utils/extend';
-import { inArray } from '../../core/utils/array';
-import { noop } from '../../core/utils/common';
-import typeUtils from '../../core/utils/type';
-import devices from '../../core/devices';
-import config from '../../core/config';
-import dataCoreUtils from '../../core/utils/data';
 import registerComponent from '../../core/component_registrator';
-import messageLocalization from '../../localization/message';
+import config from '../../core/config';
+import devices from '../../core/devices';
+import $ from '../../core/renderer';
+import { BindableTemplate } from '../../core/templates/bindable_template';
+import { EmptyTemplate } from '../../core/templates/empty_template';
+import { inArray } from '../../core/utils/array';
+import browser from '../../core/utils/browser';
+import Callbacks from '../../core/utils/callbacks';
+import { noop } from '../../core/utils/common';
+import dataCoreUtils from '../../core/utils/data';
+import dateUtils from '../../core/utils/date';
 import dateSerialization from '../../core/utils/date_serialization';
+import deferredUtils from '../../core/utils/deferred';
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import { touch } from '../../core/utils/support';
+import typeUtils from '../../core/utils/type';
+import windowUtils from '../../core/utils/window';
+import DataHelperMixin from '../../data_helper';
+import { triggerResizeEvent } from '../../events/visibility_change';
 import dateLocalization from '../../localization/date';
+import messageLocalization from '../../localization/message';
+import dialog from '../dialog';
+import themes from '../themes';
+import errors from '../widget/ui.errors';
 import Widget from '../widget/ui.widget';
-import subscribes from './ui.scheduler.subscribes';
-
+import AppointmentPopup from './appointmentPopup';
+import { CompactAppointmentsHelper } from './compactAppointmentsHelper';
 import { DesktopTooltipStrategy } from './tooltip_strategies/desktopTooltipStrategy';
 import { MobileTooltipStrategy } from './tooltip_strategies/mobileTooltipStrategy';
-import AppointmentPopup from './appointmentPopup';
-
-import SchedulerHeader from './ui.scheduler.header';
-import SchedulerWorkSpaceDay from './workspaces/ui.scheduler.work_space_day';
-import SchedulerWorkSpaceWeek from './workspaces/ui.scheduler.work_space_week';
-import SchedulerWorkSpaceWorkWeek from './workspaces/ui.scheduler.work_space_work_week';
-import SchedulerWorkSpaceMonth from './workspaces/ui.scheduler.work_space_month';
-import SchedulerTimelineDay from './workspaces/ui.scheduler.timeline_day';
-import SchedulerTimelineWeek from './workspaces/ui.scheduler.timeline_week';
-import SchedulerTimelineWorkWeek from './workspaces/ui.scheduler.timeline_work_week';
-import SchedulerTimelineMonth from './workspaces/ui.scheduler.timeline_month';
-import SchedulerAgenda from './workspaces/ui.scheduler.agenda';
-import SchedulerResourceManager from './ui.scheduler.resource_manager';
-import SchedulerAppointmentModel from './ui.scheduler.appointment_model';
+import loading from './ui.loading';
 import SchedulerAppointments from './ui.scheduler.appointments';
 import SchedulerLayoutManager from './ui.scheduler.appointments.layout_manager';
-import { CompactAppointmentsHelper } from './compactAppointmentsHelper';
-import DataHelperMixin from '../../data_helper';
-import loading from './ui.loading';
-import deferredUtils from '../../core/utils/deferred';
-import { EmptyTemplate } from '../../core/templates/empty_template';
-import { BindableTemplate } from '../../core/templates/bindable_template';
-import themes from '../themes';
-import browser from '../../core/utils/browser';
-import { touch } from '../../core/utils/support';
+import SchedulerAppointmentModel from './ui.scheduler.appointment_model';
+import SchedulerHeader from './ui.scheduler.header';
+import SchedulerResourceManager from './ui.scheduler.resource_manager';
+import subscribes from './ui.scheduler.subscribes';
+import recurrenceUtils from './utils.recurrence';
 import timeZoneUtils from './utils.timeZone';
+import SchedulerAgenda from './workspaces/ui.scheduler.agenda';
+import SchedulerTimelineDay from './workspaces/ui.scheduler.timeline_day';
+import SchedulerTimelineMonth from './workspaces/ui.scheduler.timeline_month';
+import SchedulerTimelineWeek from './workspaces/ui.scheduler.timeline_week';
+import SchedulerTimelineWorkWeek from './workspaces/ui.scheduler.timeline_work_week';
+import SchedulerWorkSpaceDay from './workspaces/ui.scheduler.work_space_day';
+import SchedulerWorkSpaceMonth from './workspaces/ui.scheduler.work_space_month';
+import SchedulerWorkSpaceWeek from './workspaces/ui.scheduler.work_space_week';
+import SchedulerWorkSpaceWorkWeek from './workspaces/ui.scheduler.work_space_work_week';
 
 const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
@@ -424,7 +422,8 @@ const Scheduler = Widget.inherit({
                 allowDragging: true,
                 allowResizing: true,
                 allowUpdating: true,
-                allowEditingTimeZones: false,
+                allowTimeZoneEditing: false,
+                allowEditingTimeZones: false
             },
 
             /**
@@ -455,12 +454,16 @@ const Scheduler = Widget.inherit({
                  * @default false @for Android|iOS
                 */
             /**
-                * @name dxSchedulerOptions.editing.allowEditingTimeZones
+                * @name dxSchedulerOptions.editing.allowTimeZoneEditing
                 * @type boolean
                 * @default false
                 */
-
-
+            /**
+                * @name dxSchedulerOptions.editing.allowEditingTimeZones
+                * @type boolean
+                * @default false
+                * @deprecated dxSchedulerOptions.editing.allowTimeZoneEditing
+                */
             /**
                * @name dxSchedulerOptions.appointmentDragging.autoScroll
                * @type boolean
@@ -727,7 +730,8 @@ const Scheduler = Widget.inherit({
 
         extend(this._deprecatedOptions, {
             onAppointmentFormCreated: { since: '18.2', alias: 'onAppointmentFormOpening' },
-            dropDownAppointmentTemplate: { since: '19.2', message: 'appointmentTooltipTemplate' }
+            dropDownAppointmentTemplate: { since: '19.2', message: 'appointmentTooltipTemplate' },
+            allowEditingTimeZones: { since: '20.1', alias: 'allowTimeZoneEditing' }
         });
     },
 
@@ -775,7 +779,6 @@ const Scheduler = Widget.inherit({
                 break;
             case 'dataSource':
                 this._initDataSource();
-                this._customizeStoreLoadOptions();
                 this._appointmentModel.setDataSource(this._dataSource);
 
                 this._postponeResourceLoading().done((resources) => {
@@ -1200,9 +1203,6 @@ const Scheduler = Widget.inherit({
 
         this._loadedResources = [];
 
-        this._proxiedCustomizeStoreLoadOptionsHandler = this._customizeStoreLoadOptionsHandler.bind(this);
-        this._customizeStoreLoadOptions();
-
         this.$element()
             .addClass(WIDGET_CLASS)
             .toggleClass(WIDGET_WIN_NO_TOUCH_CLASS, !!(browser.msie && touch));
@@ -1406,10 +1406,6 @@ const Scheduler = Widget.inherit({
         return result;
     },
 
-    _customizeStoreLoadOptions: function() {
-        this._dataSource && this._dataSource.on('customizeStoreLoadOptions', this._proxiedCustomizeStoreLoadOptionsHandler);
-    },
-
     _dispose: function() {
         this._appointmentTooltip && this._appointmentTooltip.dispose();
         this.hideAppointmentPopup();
@@ -1418,17 +1414,7 @@ const Scheduler = Widget.inherit({
         this._asyncTemplatesTimers.forEach(clearTimeout);
         this._asyncTemplatesTimers = [];
 
-        this._dataSource && this._dataSource.off('customizeStoreLoadOptions', this._proxiedCustomizeStoreLoadOptionsHandler);
         this.callBase();
-    },
-
-    _customizeStoreLoadOptionsHandler: function(options) {
-        // TODO: deprecated since 16.1 (manually)
-        options.storeLoadOptions.dxScheduler = {
-            startDate: this.getStartViewDate(),
-            endDate: this.getEndViewDate(),
-            resources: this.option('resources')
-        };
     },
 
     _initActions: function() {
@@ -1710,7 +1696,7 @@ const Scheduler = Widget.inherit({
     _recalculateWorkspace: function() {
         this._workSpaceRecalculation = new Deferred();
         this._waitAsyncTemplate(() => {
-            domUtils.triggerResizeEvent(this._workSpace.$element());
+            triggerResizeEvent(this._workSpace.$element());
             this._workSpace._refreshDateTimeIndication();
         });
     },
@@ -2196,12 +2182,14 @@ const Scheduler = Widget.inherit({
             dragEvent.cancel = new Deferred();
         }
 
-        this._processActionResult(updatingOptions, function(canceled) {
+        return this._processActionResult(updatingOptions, function(canceled) {
+            let deferred = new Deferred();
+
             if(!canceled) {
                 this._expandAllDayPanel(appointment);
 
                 try {
-                    this._appointmentModel
+                    deferred = this._appointmentModel
                         .update(target, appointment)
                         .done(() => {
                             dragEvent && dragEvent.cancel.resolve(false);
@@ -2218,21 +2206,30 @@ const Scheduler = Widget.inherit({
             } else {
                 performFailAction();
             }
+
+            return deferred.promise();
         });
     },
 
     _processActionResult: function(actionOptions, callback) {
+        const deferred = new Deferred();
+        const resolveCallback = callbackResult => {
+            when(deferredUtils.fromPromise(callbackResult))
+                .always(deferred.resolve);
+        };
+
         if(typeUtils.isPromise(actionOptions.cancel)) {
             when(deferredUtils.fromPromise(actionOptions.cancel)).always((cancel) => {
                 if(!typeUtils.isDefined(cancel)) {
                     cancel = actionOptions.cancel.state() === 'rejected';
                 }
-
-                callback.call(this, cancel);
+                resolveCallback(callback.call(this, cancel));
             });
         } else {
-            callback.call(this, actionOptions.cancel);
+            resolveCallback(callback.call(this, actionOptions.cancel));
         }
+
+        return deferred.promise();
     },
 
     _expandAllDayPanel: function(appointment) {
@@ -2497,21 +2494,22 @@ const Scheduler = Widget.inherit({
 
         this._actions['onAppointmentAdding'](addingOptions);
 
-        this._processActionResult(addingOptions, function(canceled) {
-            if(!canceled) {
-                this._expandAllDayPanel(appointment);
-                this._appointmentModel.add(appointment, {
-                    value: this._getTimezoneOffsetByOption(),
-                    clientOffset: this.fire('getClientTimezoneOffset')
-                }).always((function(e) {
-                    this._executeActionWhenOperationIsCompleted(this._actions['onAppointmentAdded'], appointment, e);
-                }).bind(this));
+        return this._processActionResult(addingOptions, canceled => {
+            if(canceled) {
+                return new Deferred().resolve();
             }
+
+            this._expandAllDayPanel(appointment);
+
+            return this._appointmentModel.add(appointment, {
+                value: this._getTimezoneOffsetByOption(),
+                clientOffset: this.fire('getClientTimezoneOffset')
+            }).always(e => this._executeActionWhenOperationIsCompleted(this._actions['onAppointmentAdded'], appointment, e));
         });
     },
 
     updateAppointment: function(target, appointment) {
-        this._updateAppointment(target, appointment);
+        return this._updateAppointment(target, appointment);
     },
 
     deleteAppointment: function(appointment) {

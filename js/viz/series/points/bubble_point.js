@@ -21,13 +21,12 @@ module.exports = _extend({}, symbolPoint, {
     getTooltipParams: function(location) {
         const that = this;
         const graphic = that.graphic;
-        let height;
 
         if(!graphic) {
             return;
         }
 
-        height = graphic.getBBox().height;
+        const height = graphic.getBBox().height;
         return {
             x: that.x,
             y: that.y,

@@ -1,14 +1,13 @@
-const seriesModule = require('../series/base_series');
-const seriesFamilyModule = require('../core/series_family');
-const typeUtils = require('../../core/utils/type');
-const extend = require('../../core/utils/extend').extend;
-const inArray = require('../../core/utils/array').inArray;
-const each = require('../../core/utils/iterator').each;
-const vizUtils = require('../core/utils');
-const rangeModule = require('../translators/range');
-const dataValidatorModule = require('../components/data_validator');
-const ChartThemeManager = require('../components/chart_theme_manager').ThemeManager;
-let SeriesDataSource;
+import seriesModule from '../series/base_series';
+import seriesFamilyModule from '../core/series_family';
+import { isNumeric, isDate, isDefined } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import { inArray } from '../../core/utils/array';
+import { each } from '../../core/utils/iterator';
+import vizUtils from '../core/utils';
+import rangeModule from '../translators/range';
+import dataValidatorModule from '../components/data_validator';
+import { ThemeManager as ChartThemeManager } from '../components/chart_theme_manager';
 
 const createThemeManager = function(chartOptions) {
     return new ChartThemeManager({
@@ -47,15 +46,13 @@ const processSeriesFamilies = function(series, equalBarWidth, minBubbleSize, max
     return families;
 };
 
-SeriesDataSource = function(options) {
+const SeriesDataSource = function(options) {
     const that = this;
     const themeManager = that._themeManager = createThemeManager(options.chart);
-    let topIndent;
-    let bottomIndent;
 
     themeManager.setTheme(options.chart.theme);
-    topIndent = themeManager.getOptions('topIndent');
-    bottomIndent = themeManager.getOptions('bottomIndent');
+    const topIndent = themeManager.getOptions('topIndent');
+    const bottomIndent = themeManager.getOptions('bottomIndent');
 
     that._indent = {
         top: (topIndent >= 0 && topIndent < 1) ? topIndent : 0,
@@ -175,7 +172,7 @@ SeriesDataSource.prototype = {
                 barGroupPadding: themeManager.getOptions('barGroupPadding'),
                 barGroupWidth: themeManager.getOptions('barGroupWidth')
             },
-            typeUtils.isDefined(negativesAsZeroes) ? negativesAsZeroes : negativesAsZeros);
+            isDefined(negativesAsZeroes) ? negativesAsZeroes : negativesAsZeros);
     },
 
     adjustSeriesDimensions: function() {
@@ -212,20 +209,20 @@ SeriesDataSource.prototype = {
             minIndent = valueAxis.inverted ? that._indent.top : that._indent.bottom;
             maxIndent = valueAxis.inverted ? that._indent.bottom : that._indent.top;
             rangeYSize = valRange.max - valRange.min;
-            rangeVisibleSizeY = (typeUtils.isNumeric(valRange.maxVisible) ? valRange.maxVisible : valRange.max) - (typeUtils.isNumeric(valRange.minVisible) ? valRange.minVisible : valRange.min);
+            rangeVisibleSizeY = (isNumeric(valRange.maxVisible) ? valRange.maxVisible : valRange.max) - (isNumeric(valRange.minVisible) ? valRange.minVisible : valRange.min);
             // B253717
-            if(typeUtils.isDate(valRange.min)) {
+            if(isDate(valRange.min)) {
                 valRange.min = new Date(valRange.min.valueOf() - rangeYSize * minIndent);
             } else {
                 valRange.min -= rangeYSize * minIndent;
             }
-            if(typeUtils.isDate(valRange.max)) {
+            if(isDate(valRange.max)) {
                 valRange.max = new Date(valRange.max.valueOf() + rangeYSize * maxIndent);
             } else {
                 valRange.max += rangeYSize * maxIndent;
             }
 
-            if(typeUtils.isNumeric(rangeVisibleSizeY)) {
+            if(isNumeric(rangeVisibleSizeY)) {
                 valRange.maxVisible = valRange.maxVisible ? valRange.maxVisible + rangeVisibleSizeY * maxIndent : undefined;
                 valRange.minVisible = valRange.minVisible ? valRange.minVisible - rangeVisibleSizeY * minIndent : undefined;
             }
@@ -262,7 +259,7 @@ SeriesDataSource.prototype = {
 
     getCalculatedValueType: function() {
         const series = this._series[0];
-        return series && series.argumentType;
+        return series?.argumentType;
     },
 
     getThemeManager: function() {

@@ -707,6 +707,7 @@ const environment = {
             stub.update.returns(stub);
             stub.getMargins.returns({ left: 0, top: 0, bottom: 0, right: 0 });
             stub.estimateMargins.returns({ left: 0, top: 0, bottom: 0, right: 0 });
+            stub.getOptions.returns({});
             return stub;
         });
 

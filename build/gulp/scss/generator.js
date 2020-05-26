@@ -1,3 +1,5 @@
+'use strict';
+
 const gulp = require('gulp');
 const path = require('path');
 const fs = require('fs');
@@ -48,7 +50,7 @@ const replaceColorFunctions = (content) => {
         return `color.${colorFunction}(${color}, $alpha: ${percent / 100})${sign}`;
     });
 
-    content = content.replace(/(\s)(screen|difference)\(/g, '$1extColor.$2(');
+    content = content.replace(/(\s)(screen|difference)\(/g, '$1extcolor.$2(');
     return content;
 };
 
@@ -98,7 +100,7 @@ gulp.task('fix-bundles', gulp.parallel(
             ];
             let content = chunk.contents.toString();
             widgets.forEach(widget => content += `@use "../widgets/common/${widget}";\n`);
-            chunk.contents = new Buffer(content);
+            chunk.contents = new Buffer.from(content);
             callback(null, chunk);
         }))
         .pipe(gulp.dest(`${outputPath}/bundles`))
@@ -136,9 +138,9 @@ gulp.task('fix-base', () => {
         .pipe(replace(/(_TOP|_LEFT|100%|absolute|inherit|""|0|_COLOR|none|_BORDER|relative|inline-block|hidden|left),$/gm, '$1;'))
         .pipe(replace(/^\$SCHEDULER_NAVIGATOR_OFFSET/, '@use "./mixins" as *;\n@use "./icons" as *;\n\n$SCHEDULER_NAVIGATOR_OFFSET'))
 
-        // fileManager, diagram
-        .pipe(replace(/\.(filemanager|diagram)-icon-colored\(d/g, '@include $1-icon-colored(d'))
-        .pipe(replace(/@mixin (filemanager|diagram)-icon-colored/, '@use "sass:string";\n@use "./string" as *;\n\n@mixin $1-icon-colored'))
+        // fileManager, diagram, gantt
+        .pipe(replace(/\.(filemanager|diagram|gantt)-icon-colored\(d/g, '@include $1-icon-colored(d'))
+        .pipe(replace(/@mixin (filemanager|diagram|gantt)-icon-colored/, '@use "sass:string";\n@use "./string" as *;\n\n@mixin $1-icon-colored'))
         .pipe(replace(/, "gi"/g, ''))
         .pipe(replace(/(\W)e\(/g, '$1string.unquote('))
 
@@ -153,7 +155,7 @@ gulp.task('fix-base', () => {
             let content = file.contents.toString();
             content = replaceColorFunctions(content);
             content = replaceInterpolatedCalcContent(content);
-            file.contents = new Buffer(content);
+            file.contents = Buffer.from(content);
             callback(null, file);
         }))
         .pipe(rename((path) => {
@@ -176,7 +178,7 @@ gulp.task(function fixCommon() {
             content = `@use "../base/mixins" as *;\n// adduse\n${content}`;
             content = commonSpecificReplacement(content, chunk.path);
             content = replaceInterpolatedCalcContent(content);
-            chunk.contents = new Buffer(content);
+            chunk.contents = Buffer.from(content);
             callback(null, chunk);
         }))
         .pipe(gulp.dest(`${outputPath}/widgets/common`));
@@ -259,7 +261,7 @@ const commonSpecificReplacement = (content, fileName) => {
             } else if(r.import) {
                 // const withPart = addImportedVariables(r, folder); // it seems we do not need it in common
                 const alias = r.alias || '*';
-                content = content.replace(/\/\/\sadduse/, `@use "${r.import}" as ${alias};\n// adduse`); // TODO // adduse at the end
+                content = content.replace(/\/\/\sadduse/, `@use "${r.import}" as ${alias};\n// adduse`);
             }
         });
     }
@@ -296,7 +298,7 @@ gulp.task('create-widgets', () => {
             indexContent = replaceColorFunctions(indexContent);
             indexContent = replaceInterpolatedCalcContent(indexContent);
             indexContent = indexContent.replace(parentSelectorRegex, parentSelectorReplacement);
-            chunk.contents = new Buffer(indexContent);
+            chunk.contents = Buffer.from(indexContent);
 
             let colorsContent = '@use "sass:color";\n';
             colorsContent += '@use "../sizes" as *;\n';
@@ -460,7 +462,7 @@ gulp.task('create-base-widget-generic-colors', (callback) => {
         '$base-grid-selectedrow-border-color'
     ]);
 
-    let colorsContent = '@use "sass:color";\n@use "./color" as extColor;\n$color: null !default;\n\n';
+    let colorsContent = '@use "sass:color";\n@use "./color" as extcolor;\n$color: null !default;\n\n';
     colorsContent += generateDefaultVariablesBlock(genericBaseVariables);
     colorsContent += '\n';
 
@@ -568,8 +570,6 @@ gulp.task('create-base-widget', gulp.series(
     'create-base-widget-sizes'
 ));
 
-// TODO - ui - need only into dx.common.css bundle
-
 gulp.task('create-theme-index', (callback) => {
     const source = require('./index-data');
 
@@ -603,4 +603,8 @@ gulp.task('create-theme-index', (callback) => {
     });
 
     callback();
+});
+
+gulp.task('lint-scss', (callback) => {
+    exec('npx stylelint scss --fix', () => callback());
 });

@@ -9,6 +9,7 @@ import { each } from '../../core/utils/iterator';
 import AsyncCollectionWidget from '../collection/ui.collection_widget.async';
 import Promise from '../../core/polyfills/promise';
 import { BindableTemplate } from '../../core/templates/bindable_template';
+import errors from '../../core/errors';
 import fx from '../../animation/fx';
 
 const TOOLBAR_CLASS = 'dx-toolbar';
@@ -44,6 +45,10 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
         this._userOptions = options || {};
 
         this.callBase(element, options);
+
+        if('height' in this._userOptions) {
+            errors.log('W0001', this.NAME, 'height', '20.1', 'Functionality associated with this option is not intended for the Toolbar widget.');
+        }
     },
 
     _getSynchronizableOptionsForCreateComponent: function() {
