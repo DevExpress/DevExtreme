@@ -302,7 +302,7 @@ QUnit.module('Recurrences', function() {
     QUnit.test('getDatesByRecurrence should handle strings with BYMONTHDAY correctly when recurrenceDate is out of range', function(assert) {
         const dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=MONTHLY;BYMONTHDAY=26', start: new Date(2015, 4, 25, 9, 30), end: new Date(2015, 4, 26, 11, 30), min: new Date(2015, 4, 27), max: new Date(2015, 4, 27, 23, 59) });
 
-        assert.deepEqual(dates, [], 'date are right');
+        assert.deepEqual(dates, [new Date(2015, 4, 26, 9, 30)], 'date are right');
     });
 
     QUnit.test('getDatesByRecurrence should handle strings with BYSECOND', function(assert) {

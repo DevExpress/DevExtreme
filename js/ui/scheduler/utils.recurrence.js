@@ -3,6 +3,7 @@ import { each } from '../../core/utils/iterator';
 import { inArray } from '../../core/utils/array';
 import { RRule, RRuleSet } from 'rrule';
 import dateUtils from '../../core/utils/date';
+import timeZoneUtils from './utils.timeZone.js';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -34,8 +35,9 @@ export const recurrenceUtils = {
         if(!recurrenceRule.isValid || !rule.freq) {
             return result;
         }
+
         // NOTE: We must check if an appointment could be broken before UTC convertation
-        const isAppointmentLong = !dateUtils.sameDate(options.start, options.end);
+        const isAppointmentLong = options.end && !timeZoneUtils.isSameAppointmentDates(options.start, options.end);
 
         const ruleOptions = RRule.parseString(options.rule);
         const recurrenceStartDate = getRRuleUtcDate(options.start);
