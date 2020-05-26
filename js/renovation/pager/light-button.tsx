@@ -3,14 +3,9 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import clickEvent from '../../events/click';
 import { registerKeyboardAction } from '../../ui/shared/accessibility';
-import * as eventsEngine from '../../events/core/events_engine';
+import eventsEngine from '../../events/core/events_engine';
 import noop from '../utils/noop';
 import { PAGER_CLASS } from './consts';
-
-type EventEngineType = {
-  on: (element, eventName, handler) => void;
-  off: (element, eventName, handler) => void;
-};
 
 type dxClickEffectFn = (HTMLDivElement, Function) => (() => void);
 
@@ -18,8 +13,8 @@ type closestFn = (HTMLDivElement, string) => HTMLElement | null;
 
 export const dxClickEffect: dxClickEffectFn = (element, handler) => {
   if (handler) {
-    (eventsEngine as EventEngineType).on(element, clickEvent.name, handler);
-    return (): void => (eventsEngine as EventEngineType).off(element, clickEvent.name, handler);
+    eventsEngine.on(element, clickEvent.name, handler);
+    return (): void => eventsEngine.off(element, clickEvent.name, handler);
   }
   return noop;
 };
