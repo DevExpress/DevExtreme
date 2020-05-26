@@ -18,18 +18,7 @@ const getBoundingRect = (instance) => {
         };
     }
 
-    let rect = {
-        width: 0,
-        height: 0
-    };
-
-    try {
-        rect = element.getBoundingClientRect();
-    } catch(e) {
-        // TODO: add warning "IE throws Unspecified error if there is no such element on the page"
-    }
-
-    return rect;
+    return element.getBoundingClientRect();
 };
 
 exports.getDefaultAlignment = getDefaultAlignment;
