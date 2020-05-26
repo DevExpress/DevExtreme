@@ -423,6 +423,20 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $buttons.each((index, button) => assert.equal($(button).attr('tabindex'), 0, `button ${index} tabindex`));
     });
 
+    // T892543
+    QUnit.test('cells should have aria-describedby attribute if column is without dataField', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [{}],
+            columns: [{ type: 'selection' }, { caption: 'test' }]
+        });
+
+        this.clock.tick();
+
+        // assert
+        assert.notOk($(dataGrid.getCellElement(0, 0)).attr('aria-describedby'), 'no aria-describedby on first cell');
+        assert.equal($(dataGrid.getCellElement(0, 1)).attr('aria-describedby'), 'dx-col-2', 'second cell\'s aria-describedby');
+    });
+
     QUnit.test('DataGrid elements shouldn\'t have aria-describedby attributes if showColumnHeaders is false', function(assert) {
         createDataGrid({
             dataSource: [
