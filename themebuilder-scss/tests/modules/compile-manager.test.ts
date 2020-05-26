@@ -90,7 +90,7 @@ describe('Compile manager - integration test on test sass', () => {
     return manager.compile({
       isBootstrap: true,
       bootstrapVersion: 3,
-      data: '@brand-primary: red;'
+      data: '@brand-primary: red;',
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
   background-color: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif;
@@ -127,7 +127,7 @@ describe('Compile manager - integration test on test sass', () => {
     return manager.compile({
       isBootstrap: true,
       bootstrapVersion: 4,
-      data: '$primary: red;'
+      data: '$primary: red;',
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
   background-color: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
