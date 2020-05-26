@@ -26,7 +26,7 @@ const getBoundingRect = (instance) => {
     try {
         rect = element.getBoundingClientRect();
     } catch(e) {
-        // TODO: add warning "IE10 throws Unspecified error if there is no such element on the page"
+        // TODO: add warning "IE throws Unspecified error if there is no such element on the page"
     }
 
     return rect;
