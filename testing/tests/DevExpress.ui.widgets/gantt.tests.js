@@ -861,12 +861,12 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
         const start = new Date('2019-02-19');
         const end = new Date('2019-02-26');
         const tasks = [
-            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-22'), 'progress': 0, 'customField': 'test0' },
-            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-20'), 'end': new Date('2019-02-20'), 'progress': 0, 'customField': 'test1' },
-            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': start, 'end': end, 'progress': 50, 'customField': 'test2' }
+            { 'idKey': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-22'), 'progress': 0, 'customField': 'test0' },
+            { 'idKey': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-20'), 'end': new Date('2019-02-20'), 'progress': 0, 'customField': 'test1' },
+            { 'idKey': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': start, 'end': end, 'progress': 50, 'customField': 'test2' }
         ];
         const options = {
-            tasks: { dataSource: tasks },
+            tasks: { dataSource: tasks, keyExpr: 'idKey', },
             validation: { autoUpdateParentTasks: true },
             columns: [{
                 dataField: 'customField',
