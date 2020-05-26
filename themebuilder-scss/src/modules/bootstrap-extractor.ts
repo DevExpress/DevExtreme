@@ -52,35 +52,50 @@ export default class BootstrapExtractor {
   async sassProcessor(): Promise<string> {
     const functions = await BootstrapExtractor.readSassFile('_functions.scss');
     const variables = await BootstrapExtractor.readSassFile('_variables.scss');
-    return functions + this.input + variables;
+    return functions
+      + this.input
+      + variables
+      + this.getSetterServiceCode('!default')
+      + this.getCollectorServiceCode();
   }
 
   lessProcessor(): Promise<string> {
-    return Promise.resolve(this.input);
+    return Promise.resolve(
+      this.getSetterServiceCode()
+      + this.input
+      + this.getCollectorServiceCode(),
+    );
   }
 
-  getServiceCode(): string {
+  getSetterServiceCode(postfix = ''): string {
+    return Object.keys(this.meta)
+      .map((key) => `${this.meta[key]}: dx-empty ${postfix};\n`)
+      .join('');
+  }
+
+  getCollectorServiceCode(): string {
     const variables = Object.keys(this.meta)
       .map((key) => `${key}: ${this.meta[key]};`)
       .join('');
 
-    return `dx-empty {${variables}}`;
-  }
-
-  async compile(): Promise<string> {
-    const source = await this.sourceProcessor() + this.getServiceCode();
-    return this.compiler(source);
+    return `dx-varibles-collector {${variables}}`;
   }
 
   async extract(): Promise<Array<ConfigMetaItem>> {
-    const css = await this.compile();
+    const css = await this.compiler(await this.sourceProcessor());
+    const serviceCodeRegex = /dx-varibles-collector\s{([\s\S]*)}/;
     const ruleRegex = /([\w-]*):\s(.*);/g;
+    const serviceCode = serviceCodeRegex.exec(css)[1];
     const result: Array<ConfigMetaItem> = [];
 
-    let match = ruleRegex.exec(css);
+    let match = ruleRegex.exec(serviceCode);
     while (match !== null) {
-      result.push({ key: `$${match[1]}`, value: match[2] });
-      match = ruleRegex.exec(css);
+      const key = `$${match[1]}`;
+      const value = match[2];
+      if (value !== 'dx-empty') {
+        result.push({ key, value });
+      }
+      match = ruleRegex.exec(serviceCode);
     }
 
     return result;

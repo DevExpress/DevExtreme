@@ -40,53 +40,73 @@ describe('BootstrapExtractor', () => {
 
   test('sassProcessor', async () => {
     const testSassString = 'test string';
+    const setterServiceCode = 'setter';
+    const collectorServiceCode = 'collector';
     const extractor = new BootstrapExtractor(testSassString, 4);
     const functionsPath = require.resolve('bootstrap/scss/_functions.scss');
     const variablesPath = require.resolve('bootstrap/scss/_variables.scss');
     const functions = readFileSync(functionsPath);
     const variables = readFileSync(variablesPath);
+    extractor.getSetterServiceCode = (): string => setterServiceCode;
+    extractor.getCollectorServiceCode = (): string => collectorServiceCode;
 
     expect(await extractor.sassProcessor())
-      .toBe(functions + testSassString + variables);
+      .toBe(functions
+        + testSassString
+        + variables
+        + setterServiceCode
+        + collectorServiceCode);
   });
 
   test('lessProcessor', async () => {
     const testLessString = 'test string';
+    const setterServiceCode = 'setter';
+    const collectorServiceCode = 'collector';
     const extractor = new BootstrapExtractor(testLessString, 3);
+    extractor.getSetterServiceCode = (): string => setterServiceCode;
+    extractor.getCollectorServiceCode = (): string => collectorServiceCode;
 
-    expect(await extractor.lessProcessor()).toBe(testLessString);
+    expect(await extractor.lessProcessor())
+      .toBe(setterServiceCode
+        + testLessString
+        + collectorServiceCode);
   });
 
-  test('getServiceCode', async () => {
-    const extractor = new BootstrapExtractor('', 3);
+  test('getSetterServiceCode', async () => {
+    const extractor = new BootstrapExtractor('', 4);
     extractor.meta = {
       'test-key-var1': '$var1',
       'test-key-var2': '$var2',
     };
-    const expectedStyleString = 'dx-empty {test-key-var1: $var1;test-key-var2: $var2;}';
-    expect(extractor.getServiceCode()).toBe(expectedStyleString);
+
+    const expectedStyleStringWithoutPostfix = '$var1: dx-empty ;\n$var2: dx-empty ;\n';
+    const expectedStyleStringWithPostfix = '$var1: dx-empty !default;\n$var2: dx-empty !default;\n';
+
+    expect(extractor.getSetterServiceCode()).toBe(expectedStyleStringWithoutPostfix);
+    expect(extractor.getSetterServiceCode('!default')).toBe(expectedStyleStringWithPostfix);
   });
 
-  test('compile (bootstrap 3)', async () => {
-    const input = '@var1: test1;@var2: test2;';
-    const extractor = new BootstrapExtractor(input, 3);
-    extractor.meta = { 'dx-var1': '@var1', 'dx-var2': '@var2' };
+  test('getCollectorServiceCode', async () => {
+    const extractor = new BootstrapExtractor('', 4);
+    extractor.meta = {
+      'test-key-var1': '$var1',
+      'test-key-var2': '$var2',
+    };
 
-    expect(await extractor.compile()).toBe('dx-empty {\n  dx-var1: test1;\n  dx-var2: test2;\n}\n');
+    const expectedStyleStringWithoutPostfix = 'dx-varibles-collector {test-key-var1: $var1;test-key-var2: $var2;}';
+
+    expect(extractor.getCollectorServiceCode()).toBe(expectedStyleStringWithoutPostfix);
   });
 
-  test('compile (bootstrap 4)', async () => {
-    const input = '$var1: test1;$var2: test2;';
-    const extractor = new BootstrapExtractor(input, 4);
-    extractor.meta = { 'dx-var1': '$var1', 'dx-var2': '$var2' };
-
-    expect(await extractor.compile()).toBe('dx-empty {\n  dx-var1: test1;\n  dx-var2: test2;\n}');
-  });
 
   test('extract (bootstrap 3)', async () => {
-    const input = '@var1: test1;@var2: test2;';
+    const input = '@var1: test1;@var2: test2;@custom-var: test3;';
     const extractor = new BootstrapExtractor(input, 3);
-    extractor.meta = { 'dx-var1': '@var1', 'dx-var2': '@var2' };
+    extractor.meta = {
+      'dx-var1': '@var1',
+      'dx-var2': '@var2',
+      'dx-var3': '@var3',
+    };
 
     expect(await extractor.extract()).toEqual([
       { key: '$dx-var1', value: 'test1' },
@@ -95,9 +115,13 @@ describe('BootstrapExtractor', () => {
   });
 
   test('extract (bootstrap 4)', async () => {
-    const input = '$var1: test1;$var2: test2;';
+    const input = '$var1: test1;$var2: test2 !default;$custom-var: test3;';
     const extractor = new BootstrapExtractor(input, 4);
-    extractor.meta = { 'dx-var1': '$var1', 'dx-var2': '$var2' };
+    extractor.meta = {
+      'dx-var1': '$var1',
+      'dx-var2': '$var2',
+      'dx-var3': '$var3',
+    };
 
     expect(await extractor.extract()).toEqual([
       { key: '$dx-var1', value: 'test1' },
