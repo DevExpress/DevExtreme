@@ -81,16 +81,18 @@ class FileManagerItemListBase extends Widget {
     }
 
     _getItems() {
-        const itemsGetter = this.option('getItems');
-        const itemsResult = itemsGetter ? itemsGetter() : [];
-
-        return itemsResult.done(itemInfos => {
+        return this._getItemsInternal().done(itemInfos => {
             this._itemCount = itemInfos.length;
 
             const parentDirectoryItem = this._findParentDirectoryItem(itemInfos);
             this._hasParentDirectoryItem = !!parentDirectoryItem;
             this._parentDirectoryItemKey = parentDirectoryItem ? parentDirectoryItem.fileItem.key : null;
         });
+    }
+
+    _getItemsInternal() {
+        const itemsGetter = this.option('getItems');
+        return itemsGetter ? itemsGetter() : [];
     }
 
     _raiseOnError(error) {
