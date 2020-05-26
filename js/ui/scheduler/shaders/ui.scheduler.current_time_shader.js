@@ -1,6 +1,6 @@
 const $ = require('../../../core/renderer');
 const Class = require('../../../core/class');
-const getBoundingRect = require('../../../core/utils/position');
+const getBoundingRect = require('../../../core/utils/position').getBoundingRect;
 
 const DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
 
