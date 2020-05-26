@@ -95,6 +95,7 @@ export default class AppointmentDragBehavior {
                 options.onDragEnd(e);
                 if(e.fromComponent !== e.toComponent) {
                     appointmentDragging.onRemove && appointmentDragging.onRemove(e);
+                    this.appointments.notifyObserver('removeDroppableCellClass');
                 }
             }
         };
