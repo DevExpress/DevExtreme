@@ -37,7 +37,6 @@ const subscribes = {
     needCoordinates: function(options) {
         const appointmentData = options.appointmentData;
         const startDate = options.startDate;
-        const endDate = this._getEndDate(appointmentData);
         const originalEndDate = this._getEndDate(appointmentData, true);
         const recurrenceRule = this.fire('getField', 'recurrenceRule', appointmentData);
         const recurrenceException = this._getRecurrenceException(appointmentData);
@@ -52,8 +51,7 @@ const subscribes = {
             rule: recurrenceRule,
             exception: recurrenceException,
             start: originalStartDate,
-            end: endDate,
-            originalEndDate: originalEndDate,
+            end: originalEndDate,
             min: startViewDate,
             max: dateRange[1],
             firstDayOfWeek: firstDayOfWeek

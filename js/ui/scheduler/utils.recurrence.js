@@ -36,10 +36,7 @@ export const recurrenceUtils = {
             return result;
         }
 
-        // NOTE: We must check if an appointment could be broken before UTC convertation
-        // moreover, it is necessary to compare the original data from dataSource
-        const comparableEndDate = options.originalEndDate || options.end;
-        const isAppointmentLong = comparableEndDate && !timeZoneUtils.isSameAppointmentDates(options.start, comparableEndDate);
+        const isAppointmentLong = options.end && !timeZoneUtils.isSameAppointmentDates(options.start, options.end);
 
         const ruleOptions = RRule.parseString(options.rule);
         const recurrenceStartDate = getRRuleUtcDate(options.start);
