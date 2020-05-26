@@ -11,6 +11,7 @@ import typeUtils from '../core/utils/type';
 import windowUtils from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
 import dragEvents from '../events/drag';
+import { getBoundingRect } from '../core/utils/position';
 import { addNamespace } from '../events/utils';
 import { triggerResizeEvent } from '../events/visibility_change';
 const isPlainObject = typeUtils.isPlainObject;
@@ -167,7 +168,7 @@ const Resizable = DOMComponent.inherit({
 
         this._elementLocation = translator.locate($element);
 
-        const elementRect = $element.get(0).getBoundingClientRect();
+        const elementRect = getBoundingRect($element);
 
         this._elementSize = {
             width: elementRect.width,
@@ -231,7 +232,7 @@ const Resizable = DOMComponent.inherit({
         if(offset.x || this.option('stepPrecision') === 'strict') this._renderWidth(width);
         if(offset.y || this.option('stepPrecision') === 'strict') this._renderHeight(height);
 
-        const elementRect = $element.get(0).getBoundingClientRect();
+        const elementRect = getBoundingRect($element);
         const offsetTop = offset.y - ((elementRect.height || height) - height);
         const offsetLeft = offset.x - ((elementRect.width || width) - width);
 

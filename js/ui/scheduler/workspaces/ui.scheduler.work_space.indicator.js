@@ -3,6 +3,7 @@ import SchedulerWorkSpace from './ui.scheduler.work_space';
 import registerComponent from '../../../core/component_registrator';
 import dateUtils from '../../../core/utils/date';
 import { extend } from '../../../core/utils/extend';
+import { getBoundingRect } from '../../../core/utils/position';
 import windowUtils from '../../../core/utils/window';
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -71,7 +72,7 @@ const SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     _getRtlOffset: function(width) {
-        return this.option('rtlEnabled') ? this._dateTableScrollable.$content().get(0).getBoundingClientRect().width - this.getTimePanelWidth() - width : 0;
+        return this.option('rtlEnabled') ? getBoundingRect(this._dateTableScrollable.$content()).width - this.getTimePanelWidth() - width : 0;
     },
 
     _setIndicationUpdateInterval: function() {

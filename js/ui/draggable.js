@@ -20,6 +20,7 @@ const viewPortUtils = require('../core/utils/view_port');
 const commonUtils = require('../core/utils/common');
 const EmptyTemplate = require('../core/templates/empty_template').EmptyTemplate;
 const deferredUtils = require('../core/utils/deferred');
+const getBoundingRect = require('../core/utils/position').getBoundingRect;
 const when = deferredUtils.when;
 const fromPromise = deferredUtils.fromPromise;
 
@@ -118,7 +119,7 @@ class ScrollHelper {
         let areaBoundingRect;
 
         if(area) {
-            areaBoundingRect = area.getBoundingClientRect();
+            areaBoundingRect = getBoundingRect(area);
 
             return {
                 left: mousePosition.x - areaBoundingRect.left,
@@ -180,7 +181,7 @@ class ScrollHelper {
             return false;
         }
 
-        const scrollableSize = component._$scrollable.get(0).getBoundingClientRect();
+        const scrollableSize = getBoundingRect(component._$scrollable);
         const start = scrollableSize[this._limitProps.start];
         const size = scrollableSize[this._sizeAttr];
         const location = this._sizeAttr === 'width' ? event.pageX : event.pageY;

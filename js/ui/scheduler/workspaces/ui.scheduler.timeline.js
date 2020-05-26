@@ -1,6 +1,7 @@
 const $ = require('../../../core/renderer');
 const noop = require('../../../core/utils/common').noop;
 const extend = require('../../../core/utils/extend').extend;
+const getBoundingRect = require('../../../core/utils/position').getBoundingRect;
 const registerComponent = require('../../../core/component_registrator');
 const SchedulerWorkSpace = require('./ui.scheduler.work_space.indicator');
 const dateUtils = require('../../../core/utils/date');
@@ -136,10 +137,10 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
 
     _getWorkSpaceHeight: function() {
         if(this.option('crossScrollingEnabled')) {
-            return this._$dateTable.get(0).getBoundingClientRect().height;
+            return getBoundingRect(this._$dateTable).height;
         }
 
-        return this.$element().get(0).getBoundingClientRect().height;
+        return getBoundingRect(this.$element()).height;
     },
 
     _dateTableScrollableConfig: function() {
@@ -281,13 +282,13 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
 
         if(this.option('groupOrientation') === 'vertical') {
             $indicator = this._createIndicator($container);
-            $indicator.height($container.get(0).getBoundingClientRect().height);
+            $indicator.height(getBoundingRect($container).height);
             $indicator.css('left', rtlOffset ? rtlOffset - width : width);
         } else {
             for(let i = 0; i < groupCount; i++) {
                 const offset = this._getCellCount() * this.getCellWidth() * i;
                 $indicator = this._createIndicator($container);
-                $indicator.height($container.get(0).getBoundingClientRect().height);
+                $indicator.height(getBoundingRect($container).height);
 
                 $indicator.css('left', rtlOffset ? rtlOffset - width - offset : width + offset);
             }
@@ -385,7 +386,7 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
         const dateTable = this._getDateTable();
         const dateTableRowSelector = '.' + this._getDateTableRowClass();
 
-        return (dateTable.get(0).getBoundingClientRect().height / dateTable.find(dateTableRowSelector).length) - DATE_TABLE_CELL_BORDER * 2;
+        return (getBoundingRect(dateTable).height / dateTable.find(dateTableRowSelector).length) - DATE_TABLE_CELL_BORDER * 2;
     },
 
     _getCellCoordinatesByIndex: function(index) {
@@ -562,7 +563,7 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
     scrollToTime: function(hours, minutes, date) {
         const coordinates = this._getScrollCoordinates(hours, minutes, date);
         const scrollable = this.getScrollable();
-        const offset = this.option('rtlEnabled') ? this.getScrollableContainer().get(0).getBoundingClientRect().width : 0;
+        const offset = this.option('rtlEnabled') ? getBoundingRect(this.getScrollableContainer()).width : 0;
 
         if(this.option('templatesRenderAsynchronously')) {
             setTimeout(function() {

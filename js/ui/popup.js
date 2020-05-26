@@ -11,6 +11,7 @@ import { extend } from '../core/utils/extend';
 import { camelize } from '../core/utils/inflector';
 import { each } from '../core/utils/iterator';
 import sizeUtils from '../core/utils/size';
+import { getBoundingRect } from '../core/utils/position';
 import { isDefined } from '../core/utils/type';
 import { compare as compareVersions } from '../core/utils/version';
 import windowUtils from '../core/utils/window';
@@ -553,8 +554,8 @@ const Popup = Overlay.inherit({
         if(currentHeightStrategyClass === HEIGHT_STRATEGIES.static) {
             if(!this._isAutoHeight() || contentMaxHeight || contentMinHeight) {
                 const overlayHeight = this.option('fullScreen')
-                    ? Math.min(overlayContent.getBoundingClientRect().height, windowUtils.getWindow().innerHeight)
-                    : overlayContent.getBoundingClientRect().height;
+                    ? Math.min(getBoundingRect(overlayContent).height, windowUtils.getWindow().innerHeight)
+                    : getBoundingRect(overlayContent).height;
                 const contentHeight = overlayHeight - toolbarsAndVerticalOffsetsHeight;
                 cssStyles = {
                     height: Math.max(0, contentHeight),

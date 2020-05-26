@@ -7,6 +7,7 @@ import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import browser from '../../core/utils/browser';
+import { getBoundingRect } from '../../core/utils/position';
 import translator from '../../animation/translator';
 
 const CONTENT_CLASS = 'content';
@@ -415,7 +416,7 @@ const baseFixedColumns = {
     },
 
     _getClientHeight: function(element) {
-        const boundingClientRectElement = element.getBoundingClientRect && element.getBoundingClientRect();
+        const boundingClientRectElement = element.getBoundingClientRect && getBoundingRect(element);
 
         return boundingClientRectElement && boundingClientRectElement.height ? boundingClientRectElement.height : element.clientHeight;
     },
@@ -952,7 +953,7 @@ module.exports = {
 
 
                         if(!result && location === 'headers' && $transparentColumn && $transparentColumn.length) {
-                            const boundingRect = $transparentColumn.get(0).getBoundingClientRect();
+                            const boundingRect = getBoundingRect($transparentColumn);
 
                             if(sourceColumn && sourceColumn.fixed) {
                                 return sourceColumn.fixedPosition === 'right' ? point.x < boundingRect.right : point.x > boundingRect.left;
@@ -1005,7 +1006,7 @@ module.exports = {
                         const $transparentColumn = this._columnHeadersView.getTransparentColumnElement();
 
                         if($transparentColumn && $transparentColumn.length) {
-                            const boundingRect = $transparentColumn.get(0).getBoundingClientRect();
+                            const boundingRect = getBoundingRect($transparentColumn);
 
                             if(currentX <= boundingRect.left || currentX >= boundingRect.right) {
                                 return this.callBase(this._pointsByFixedColumns, currentX, deltaX);

@@ -6,6 +6,7 @@ const positionUtils = require('../../animation/position');
 const mathUtils = require('../../core/utils/math');
 const typeUtils = require('../../core/utils/type');
 const extend = require('../../core/utils/extend').extend;
+const getBoundingRect = require('../../core/utils/position').getBoundingRect;
 const numberLocalization = require('../../localization/number');
 
 const SLIDER_CLASS = 'dx-slider';
@@ -139,7 +140,7 @@ const SliderHandle = Widget.inherit({
 
         this._$tooltipContent.outerWidth('auto');
 
-        const outerWidthWithoutRounding = this._$tooltipContent.get(0).getBoundingClientRect().width;
+        const outerWidthWithoutRounding = getBoundingRect(this._$tooltipContent).width;
         const tooltipOuterWidth = Math.ceil(outerWidthWithoutRounding);
         const roundedTooltipOuterWidth = tooltipOuterWidth % 2 + tooltipOuterWidth;
 

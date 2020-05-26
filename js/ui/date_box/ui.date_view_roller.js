@@ -3,6 +3,7 @@ const eventsEngine = require('../../events/core/events_engine');
 const registerComponent = require('../../core/component_registrator');
 const extend = require('../../core/utils/extend').extend;
 const each = require('../../core/utils/iterator').each;
+const getBoundingRect = require('../../core/utils/position').getBoundingRect;
 const eventUtils = require('../../events/utils');
 const clickEvent = require('../../events/click');
 const Scrollable = require('../scroll_view/ui.scrollable');
@@ -226,7 +227,7 @@ const DateViewRoller = Scrollable.inherit({
     _itemHeight: function() {
         const $item = this._$items.first();
 
-        return $item.get(0) && $item.get(0).getBoundingClientRect().height || 0;
+        return $item.get(0) && getBoundingRect($item).height || 0;
     },
 
     _toggleActive: function(state) {
