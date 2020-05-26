@@ -419,7 +419,7 @@ const Widget = DOMComponent.inherit({
             e => this._focusInHandler(e),
             e => this._focusOutHandler(e), {
                 namespace: `${this.NAME}Focus`,
-                isFocusable: el => $(el).is(focusableSelector)
+                isFocusable: (index, el) => $(el).is(focusableSelector)
             }
         );
     },

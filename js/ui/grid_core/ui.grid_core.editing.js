@@ -22,7 +22,7 @@ import Form from '../form';
 import holdEvent from '../../events/hold';
 import { when, Deferred, fromPromise } from '../../core/utils/deferred';
 import commonUtils from '../../core/utils/common';
-import iconUtils from '../../core/utils/icon';
+import * as iconUtils from '../../core/utils/icon';
 import Scrollable from '../scroll_view/ui.scrollable';
 import deferredUtils from '../../core/utils/deferred';
 

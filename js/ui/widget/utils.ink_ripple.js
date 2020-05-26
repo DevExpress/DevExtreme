@@ -10,19 +10,15 @@ const ANIMATION_DURATION = 300;
 const HOLD_ANIMATION_DURATION = 1000;
 const DEFAULT_WAVE_INDEX = 0;
 
+const initConfig = ({ useHoldAnimation, waveSizeCoefficient, isCentered, wavesNumber } = {}) => ({
+    waveSizeCoefficient: waveSizeCoefficient || DEFAULT_WAVE_SIZE_COEFFICIENT,
+    isCentered: isCentered || false,
+    wavesNumber: wavesNumber || 1,
+    durations: getDurations(useHoldAnimation ?? true)
+});
+
 const render = function(args) {
-    args = args || {};
-
-    if(args.useHoldAnimation === undefined) {
-        args.useHoldAnimation = true;
-    }
-
-    const config = {
-        waveSizeCoefficient: args.waveSizeCoefficient || DEFAULT_WAVE_SIZE_COEFFICIENT,
-        isCentered: args.isCentered || false,
-        wavesNumber: args.wavesNumber || 1,
-        durations: getDurations(args.useHoldAnimation)
-    };
+    const config = initConfig(args);
 
     return {
         showWave: showWave.bind(this, config),
@@ -43,7 +39,7 @@ const getInkRipple = function(element) {
 };
 
 const getWaves = function(element, wavesNumber) {
-    const inkRipple = getInkRipple(element);
+    const inkRipple = getInkRipple($(element));
     const result = inkRipple.children('.' + INKRIPPLE_WAVE_CLASS).toArray();
 
     for(let i = result.length; i < wavesNumber; i++) {
@@ -58,7 +54,7 @@ const getWaves = function(element, wavesNumber) {
 };
 
 const getWaveStyleConfig = function(args, config) {
-    const element = config.element;
+    const element = $(config.element);
     const elementWidth = element.outerWidth();
     const elementHeight = element.outerHeight();
     const elementDiagonal = parseInt(Math.sqrt(elementWidth * elementWidth + elementHeight * elementHeight));
@@ -71,7 +67,7 @@ const getWaveStyleConfig = function(args, config) {
         top = (elementHeight - waveSize) / 2;
     } else {
         const event = config.event;
-        const position = config.element.offset();
+        const position = element.offset();
         const x = event.pageX - position.left;
         const y = event.pageY - position.top;
 
@@ -80,8 +76,8 @@ const getWaveStyleConfig = function(args, config) {
     }
 
     return {
-        left: left,
-        top: top,
+        left,
+        top,
         height: waveSize,
         width: waveSize
     };
@@ -135,6 +131,9 @@ function hideWave(args, config) {
 }
 
 module.exports = {
-    render: render
+    initConfig,
+    hideWave,
+    render,
+    showWave
 };
 

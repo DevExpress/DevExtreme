@@ -61,8 +61,8 @@ $slideout-background:  $base-color;`,
     }, {
       'spaces after comments':
 `/**
-* $name Slide out background    
-* $type color    
+* $name Slide out background
+* $type color
 */
 $slideout-background: #000;`,
     }];
@@ -103,8 +103,8 @@ $base-color: rgb(0,170,0);
 $slideout-background2:  $base-color;
 
 /**
-* $name Slide out background    
-* $type color    
+* $name Slide out background
+* $type color
 */
 $slideout-background3: #000;`;
 
