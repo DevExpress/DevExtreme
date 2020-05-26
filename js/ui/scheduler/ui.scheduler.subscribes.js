@@ -38,6 +38,7 @@ const subscribes = {
         const appointmentData = options.appointmentData;
         const startDate = options.startDate;
         const endDate = this._getEndDate(appointmentData);
+        const originalEndDate = this._getEndDate(appointmentData, true);
         const recurrenceRule = this.fire('getField', 'recurrenceRule', appointmentData);
         const recurrenceException = this._getRecurrenceException(appointmentData);
         const dateRange = this._workSpace.getDateRange();
@@ -52,6 +53,7 @@ const subscribes = {
             exception: recurrenceException,
             start: originalStartDate,
             end: endDate,
+            originalEndDate: originalEndDate,
             min: startViewDate,
             max: dateRange[1],
             firstDayOfWeek: firstDayOfWeek
