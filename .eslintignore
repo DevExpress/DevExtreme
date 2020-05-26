@@ -6,6 +6,7 @@ testing/helpers/sinon/*
 *.j.js
 *.p.d.ts
 *.j.d.ts
-playground/react/*
+playground/*
 themebuilder/data/metadata/*
 themebuilder-scss/**/*
+js/bundles/dx.custom.js

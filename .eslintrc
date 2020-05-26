@@ -90,5 +90,9 @@
             }
         ],
         "quotes": ["error", "single"]
-    }
+    },
+    "overrides": [{
+        "files": ["*.js"],
+        "parser": "babel-eslint"
+    }]
 }
