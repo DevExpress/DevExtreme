@@ -54,6 +54,17 @@ QUnit.module('options changed callbacks', {
         assert.ok(this.element.hasClass(BUTTON_HAS_TEXT_CLASS, 'button with text has text class'));
     });
 
+    QUnit.test('Button should not raise any errors after text option change when useSubmitBehavior is true (T892480)', function(assert) {
+        this.instance.option('text', 'new text');
+        assert.equal(this.element.text(), 'new text');
+
+        try {
+            this.element.click();
+        } catch(e) {
+            assert.notOk(false, 'Error is raised after click');
+        }
+    });
+
     QUnit.test('onClick', function(assert) {
         const clickHandler = sinon.spy();
 
