@@ -85,6 +85,80 @@ describe('Compile manager - integration test on test sass', () => {
     });
   });
 
+  test('compile test bundle using bootstrap (3) file as input', () => {
+    const manager = new CompileManager();
+    return manager.compile({
+      isBootstrap: true,
+      bootstrapVersion: 3,
+      data: '@brand-primary: red;'
+    }).then((result) => {
+      expect(result.css).toBe(`.dx-accordion {
+  background-color: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif;
+  color: red;
+  font: url("icons/icons.woff2");
+}
+.dx-accordion .from-base {
+  background-color: transparent;
+  color: red;
+}`);
+
+      expect(result.compiledMetadata).toEqual([{
+        Key: '$base-font-family',
+        Path: 'tb/widgets/generic/colors',
+        Value: '"Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif',
+      }, {
+        Key: '$base-accent',
+        Path: 'tb/widgets/generic/colors',
+        Value: 'rgba(255,0,0,1)',
+      }, {
+        Key: '$accordion-title-color',
+        Path: 'tb/widgets/generic/accordion/colors',
+        Value: 'rgba(255,0,0,1)',
+      }, {
+        Key: '$accordion-item-title-opened-bg',
+        Path: 'tb/widgets/generic/accordion/colors',
+        Value: 'rgba(0,0,0,0)',
+      }]);
+    });
+  });
+
+  test('compile test bundle using bootstrap (4) file as input', () => {
+    const manager = new CompileManager();
+    return manager.compile({
+      isBootstrap: true,
+      bootstrapVersion: 4,
+      data: '$primary: red;'
+    }).then((result) => {
+      expect(result.css).toBe(`.dx-accordion {
+  background-color: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  color: red;
+  font: url("icons/icons.woff2");
+}
+.dx-accordion .from-base {
+  background-color: transparent;
+  color: red;
+}`);
+
+      expect(result.compiledMetadata).toEqual([{
+        Key: '$base-font-family',
+        Path: 'tb/widgets/generic/colors',
+        Value: '"Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif',
+      }, {
+        Key: '$base-accent',
+        Path: 'tb/widgets/generic/colors',
+        Value: 'rgba(255,0,0,1)',
+      }, {
+        Key: '$accordion-title-color',
+        Path: 'tb/widgets/generic/accordion/colors',
+        Value: 'rgba(255,0,0,1)',
+      }, {
+        Key: '$accordion-item-title-opened-bg',
+        Path: 'tb/widgets/generic/accordion/colors',
+        Value: 'rgba(0,0,0,0)',
+      }]);
+    });
+  });
+
   test('compile test bundle with error', () => {
     const manager = new CompileManager();
     return expect(manager.compile({
