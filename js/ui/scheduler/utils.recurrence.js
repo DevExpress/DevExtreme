@@ -37,25 +37,23 @@ export const recurrenceUtils = {
         }
 
         const ruleOptions = RRule.parseString(options.rule);
-        const start = getRRuleUtcDate(options.start);
-        const end = getRRuleUtcDate(options.end);
+        const startDateUtc = getRRuleUtcDate(options.start);
+        const endDateUtc = getRRuleUtcDate(options.end);
 
-        ruleOptions.dtstart = start;
+        ruleOptions.dtstart = startDateUtc;
 
         const rRule = new RRule(ruleOptions);
         const rRuleSet = new RRuleSet();
         rRuleSet.rrule(rRule);
 
-        const min = getRRuleUtcDate(options.min);
-        const minTime = min.getTime();
-        const max = getRRuleUtcDate(options.max);
-        const exception = options.exception;
-        const startTime = start && start.getTime();
-        const endTime = end && end.getTime();
-        const duration = endTime ? endTime - startTime : 0;
+        const minDateUtc = getRRuleUtcDate(options.min);
+        const maxDateUtc = getRRuleUtcDate(options.max);
+        const duration = endDateUtc ? endDateUtc.getTime() - startDateUtc.getTime() : 0;
 
-        const leftBorder = recurrenceUtils.getLeftBorder(options, min, duration);
-        rRuleSet.between(leftBorder, max, true).forEach(date => {
+        const exception = options.exception;
+        const minTime = minDateUtc.getTime();
+        const leftBorder = recurrenceUtils.getLeftBorder(options, minDateUtc, duration);
+        rRuleSet.between(leftBorder, maxDateUtc, true).forEach(date => {
             const endAppointmentTime = date.getTime() + duration;
 
             if(endAppointmentTime >= minTime) {
