@@ -9,7 +9,7 @@ export const TOOLBAR_BOTTOM_LOCATION = 'bottom';
 const SCHEDULER_ID = 'scheduler';
 const TEST_ROOT_ELEMENT_ID = 'qunit-fixture';
 
-const CLASSES = {
+export const CLASSES = {
     header: '.dx-scheduler-header-panel',
     navigator: '.dx-scheduler-navigator',
     navigatorCaption: '.dx-scheduler-navigator-caption',
