@@ -39,11 +39,10 @@ export const closest: closestFn = (child, className) => {
 export const viewFunction = ({
   widgetRef,
   props: {
-    key, className, children, label,
+    className, children, label,
   },
 }: LightButton) => (
   <div
-    key={key}
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ref={widgetRef as any}
     className={className}
@@ -62,9 +61,7 @@ export class LightButtonProps {
 
   @OneWay() className?: string = '';
 
-  key?: string;
-
-  label?: string = '';
+  @OneWay() label?: string = '';
 
   @Event() onClick?: () => void;
 }

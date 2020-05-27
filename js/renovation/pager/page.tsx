@@ -8,10 +8,9 @@ const PAGER_SELECTION_CLASS = 'dx-selection';
 const PAGER_PAGE_SELECTION_CLASS = `${PAGER_PAGE_CLASS} ${PAGER_SELECTION_CLASS}`;
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
-  className, value, label, props: { key, onClick },
+  className, value, label, props: { onClick },
 }: Page) => (
   <LightButton
-    key={key}
     className={className}
     label={label}
     onClick={onClick}
@@ -23,8 +22,6 @@ export const viewFunction = ({
 @ComponentBindings()
 export class PageProps {
   @OneWay() index = 0;
-
-  @OneWay() key?: string;
 
   @Event() onClick?: () => void;
 
