@@ -1,3 +1,5 @@
+import '../../core/polyfills/object';
+
 import errors from '../../core/errors';
 import { each } from '../../core/utils/iterator';
 import { inArray } from '../../core/utils/array';
