@@ -34,10 +34,8 @@ const REFRESH_SERIES_DATA_INIT_ACTION_OPTIONS = [
 ];
 
 const REFRESH_SERIES_FAMILIES_ACTION_OPTIONS = [
-    'equalBarWidth',
     'minBubbleSize',
     'maxBubbleSize',
-    'barWidth',
     'barGroupPadding',
     'barGroupWidth',
     'negativesAsZeroes',
@@ -49,8 +47,6 @@ const FORCE_RENDER_REFRESH_ACTION_OPTIONS = [
     'crosshair',
     'resolveLabelOverlapping',
     'adjustOnZoom',
-    'zoomingMode',
-    'scrollingMode',
     'stickyHovering'
 ];
 
@@ -1020,7 +1016,6 @@ const BaseChart = BaseWidget.inherit({
         commonAxisSettings: 'AXES_AND_PANES',
         panes: 'AXES_AND_PANES',
         defaultPane: 'AXES_AND_PANES',
-        useAggregation: 'AXES_AND_PANES',
         containerBackgroundColor: 'AXES_AND_PANES',
 
         rotated: 'ROTATED',

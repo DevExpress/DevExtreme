@@ -752,11 +752,6 @@
  */
 
 /**
- * @typedef {string} Enums.TreeMapResolveLabelOverflow
- * @enum {'ellipsis'|'hide'}
- */
-
-/**
  * @typedef {string} Enums.TreeMapColorizerType
  * @enum {'discrete'|'gradient'|'none'|'range'}
  */
