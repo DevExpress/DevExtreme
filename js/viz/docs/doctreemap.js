@@ -14,7 +14,6 @@ const dxTreeMap = {
     parentField: undefined,
     layoutAlgorithm: "squarified",
     layoutDirection: "leftTopRightBottom",
-    resolveLabelOverflow: 'hide',
     tile: {
         /**
         * @name dxTreeMapOptions.tile.border

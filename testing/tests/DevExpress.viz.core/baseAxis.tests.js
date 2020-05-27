@@ -2,7 +2,6 @@ import $ from 'jquery';
 import vizMocks from '../../helpers/vizMocks.js';
 import { noop } from 'core/utils/common';
 import tickGeneratorModule from 'viz/axes/tick_generator';
-import { ERROR_MESSAGES as dxErrors } from 'viz/core/errors_warnings';
 import { Axis as originalAxis } from 'viz/axes/base_axis';
 import translator2DModule from 'viz/translators/translator2d';
 import { Range } from 'viz/translators/range';
@@ -780,88 +779,6 @@ QUnit.test('Validate, argumentType - datetime', function(assert) {
     assert.deepEqual(this.axis.parser(30), new Date(30));
 });
 
-QUnit.test('Validate, argumentType - datetime, max and min is specified', function(assert) {
-    this.updateOptions({ argumentType: 'datetime', min: 10, max: 20 });
-
-    this.axis.validate();
-
-    assert.ok(this.axis.parser);
-    assert.equal(this.axis.getOptions().dataType, 'datetime');
-    assert.deepEqual(this.axis.getOptions().min, new Date(10));
-    assert.deepEqual(this.axis.getOptions().max, new Date(20));
-});
-
-QUnit.test('Validate, argumentType - datetime, max and min is wrong specified', function(assert) {
-    this.updateOptions({ argumentType: 'datetime', max: 'll', min: 'kk' });
-
-    this.axis.validate();
-
-    assert.ok(this.axis.parser);
-    assert.ok(this.incidentOccurred.calledTwice);
-
-    const firstIdError = this.incidentOccurred.firstCall.args[0];
-    const secondIdError = this.incidentOccurred.secondCall.args[0];
-
-    assert.equal(firstIdError, 'E2106');
-    assert.equal(dxErrors[firstIdError], 'Invalid visible range');
-    assert.equal(secondIdError, 'E2106');
-    assert.equal(dxErrors[secondIdError], 'Invalid visible range');
-
-    assert.equal(this.axis.getOptions().dataType, 'datetime');
-    assert.deepEqual(this.axis.getOptions().min, undefined);
-    assert.deepEqual(this.axis.getOptions().max, undefined);
-});
-
-QUnit.test('Validate, argumentType - numeric, max and min is wrong specified', function(assert) {
-    this.updateOptions({ argumentType: 'numeric', max: 'll', min: 'kk' });
-
-    this.axis.validate();
-
-    assert.ok(this.axis.parser);
-    assert.ok(this.incidentOccurred.calledTwice);
-
-    const firstIdError = this.incidentOccurred.firstCall.args[0];
-    const secondIdError = this.incidentOccurred.secondCall.args[0];
-
-    assert.equal(firstIdError, 'E2106');
-    assert.equal(dxErrors[firstIdError], 'Invalid visible range');
-    assert.equal(secondIdError, 'E2106');
-    assert.equal(dxErrors[secondIdError], 'Invalid visible range');
-
-    assert.equal(this.axis.getOptions().dataType, 'numeric');
-    assert.deepEqual(this.axis.getOptions().min, undefined);
-    assert.deepEqual(this.axis.getOptions().max, undefined);
-});
-
-QUnit.test('Validate, argumentType - wrong, max and min is wrong specified', function(assert) {
-    this.updateOptions({ argumentType: 'wrongType', max: 'll', min: 'kk' });
-
-    this.axis.validate();
-
-    assert.ok(this.axis.parser);
-    assert.ok(this.incidentOccurred.calledTwice);
-
-    const firstIdError = this.incidentOccurred.firstCall.args[0];
-    const secondIdError = this.incidentOccurred.secondCall.args[0];
-
-    assert.equal(firstIdError, 'E2106');
-    assert.equal(dxErrors[firstIdError], 'Invalid visible range');
-    assert.equal(secondIdError, 'E2106');
-    assert.equal(dxErrors[secondIdError], 'Invalid visible range');
-
-    assert.equal(this.axis.getOptions().dataType, 'wrongtype');
-    assert.deepEqual(this.axis.getOptions().min, undefined);
-    assert.deepEqual(this.axis.getOptions().max, undefined);
-});
-
-QUnit.test('Validate wholeRange, option is not set', function(assert) {
-    this.updateOptions({ argumentType: 'datetime', min: 10, max: 20 });
-
-    this.axis.validate();
-
-    assert.deepEqual(this.axis.getOptions().wholeRange, {});
-});
-
 QUnit.test('Validate, wholeRange is wrong', function(assert) {
     this.updateOptions({ argumentType: 'datetime', wholeRange: ['w', 'a'] });
 
@@ -876,14 +793,6 @@ QUnit.test('Validate wholeRange, option is set', function(assert) {
     this.axis.validate();
 
     assert.deepEqual(this.axis.getOptions().wholeRange, [new Date(10), new Date(20)]);
-});
-
-QUnit.test('Validate visualRange, option is not set', function(assert) {
-    this.updateOptions({ argumentType: 'datetime', min: 10, max: 20 });
-
-    this.axis.validate();
-
-    assert.deepEqual(this.axis.getOptions().visualRange, {});
 });
 
 QUnit.test('Validate, visualRange is wrong', function(assert) {
@@ -970,15 +879,6 @@ QUnit.test('hold min/max for single point series', function(assert) {
 
     assert.equal(businessRange.min, 4, 'min');
     assert.equal(businessRange.max, 4, 'max');
-});
-
-QUnit.test('range min and max are not defined', function(assert) {
-    this.updateOptions();
-
-    this.axis.visualRange(10, 20);
-
-    assert.equal(this.axis.visualRange().startValue, 10, 'visualRange[0] should be correct');
-    assert.equal(this.axis.visualRange().endValue, 20, 'visualRange[1] should be correct');
 });
 
 QUnit.test('Get visual range after setBusinessRange. Discrete', function(assert) {
@@ -1154,18 +1054,6 @@ QUnit.test('Set visual range using object', function(assert) {
     });
 
     this.axis.visualRange({ startValue: 10, endValue: 20 });
-
-    assert.equal(this.axis.visualRange().startValue, 10, 'visualRange[0] should be correct');
-    assert.equal(this.axis.visualRange().endValue, 20, 'visualRange[1] should be correct');
-});
-
-QUnit.test('range min and max are defined', function(assert) {
-    this.updateOptions({
-        min: 0,
-        max: 50
-    });
-
-    this.axis.visualRange(10, 20);
 
     assert.equal(this.axis.visualRange().startValue, 10, 'visualRange[0] should be correct');
     assert.equal(this.axis.visualRange().endValue, 20, 'visualRange[1] should be correct');
@@ -1409,29 +1297,6 @@ QUnit.test('Get visualRange after zooming', function(assert) {
     assert.deepEqual(this.axis.visualRange(), { startValue: 10, endValue: 20 });
 });
 
-QUnit.test('Get viewport. min/max are defined', function(assert) {
-    this.updateOptions({
-        min: 5,
-        max: 10
-    });
-    this.axis.validate();
-
-    assert.deepEqual(this.axis.getViewport(), { startValue: 5, endValue: 10 });
-});
-
-QUnit.test('Get visualRange. min/max are defined', function(assert) {
-    this.updateOptions({
-        min: 5,
-        max: 10
-    });
-    this.axis.validate();
-
-    assert.deepEqual(this.axis.visualRange(), {
-        startValue: 5,
-        endValue: 10
-    });
-});
-
 QUnit.test('Get viewport. visualRange is defined', function(assert) {
     this.updateOptions({
         visualRange: [5, 10]
@@ -1448,43 +1313,6 @@ QUnit.test('Get visualRange. visualRange is defined', function(assert) {
     this.axis.validate();
 
     assert.deepEqual(this.axis.visualRange(), { startValue: 5, endValue: 10 });
-});
-
-QUnit.test('Get viewport. Only min is defined', function(assert) {
-    this.updateOptions({
-        min: 5
-    });
-
-    this.axis.validate();
-
-    assert.deepEqual(this.axis.getViewport(), { startValue: 5, endValue: undefined });
-});
-
-QUnit.test('Get visualRange. Only min is defined', function(assert) {
-    this.updateOptions({
-        min: 5
-    });
-    this.axis.validate();
-
-    assert.deepEqual(this.axis.visualRange(), { startValue: 5, endValue: undefined });
-});
-
-QUnit.test('Get viewport. Only max is defined', function(assert) {
-    this.updateOptions({
-        max: 5
-    });
-    this.axis.validate();
-
-    assert.deepEqual(this.axis.getViewport(), { startValue: undefined, endValue: 5 });
-});
-
-QUnit.test('Get visualRange. Only max is defined', function(assert) {
-    this.updateOptions({
-        max: 5
-    });
-    this.axis.validate();
-
-    assert.deepEqual(this.axis.visualRange(), { startValue: undefined, endValue: 5 });
 });
 
 const dataMarginsEnvironment = {
@@ -3393,7 +3221,7 @@ QUnit.module('Set business range', {
 });
 
 QUnit.test('Range from options', function(assert) {
-    this.updateOptions({ min: 0, max: 15 });
+    this.updateOptions({ visualRange: [0, 15] });
     this.axis.validate();
 
     this.axis.setBusinessRange({});
@@ -3487,24 +3315,6 @@ QUnit.test('Merge viewport and visualRange (visualRange is empty) - min/max are 
     const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
     assert.equal(businessRange.minVisible, 2);
     assert.equal(businessRange.maxVisible, 5);
-});
-
-QUnit.test('Set wholeRange and viewport', function(assert) {
-    this.updateOptions({ wholeRange: [-100, 100], min: -40, max: 60 });
-    this.axis.validate();
-
-    this.axis.setBusinessRange({
-        min: 0,
-        max: 10,
-        minVisible: 2,
-        maxVisible: 5
-    });
-
-    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
-    assert.equal(businessRange.min, -100);
-    assert.equal(businessRange.max, 100);
-    assert.equal(businessRange.minVisible, -40);
-    assert.equal(businessRange.maxVisible, 60);
 });
 
 QUnit.test('Set wholeRange and visualRange', function(assert) {
@@ -3776,20 +3586,6 @@ QUnit.test('Set visualRangeLength. Discrete. visual range max is defened. visual
     assert.deepEqual(businessRange.maxVisible, 3);
 });
 
-QUnit.test('viewport can go out from series data range', function(assert) {
-    this.updateOptions({ min: -200, max: 150 });
-    this.axis.validate();
-
-    this.axis.setBusinessRange({
-        min: 0,
-        max: 10
-    });
-
-    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
-    assert.equal(businessRange.minVisible, -200);
-    assert.equal(businessRange.maxVisible, 150);
-});
-
 QUnit.test('visualRange can go out from series data range', function(assert) {
     this.updateOptions({ visualRange: [-200, 150] });
     this.axis.validate();
@@ -3802,24 +3598,6 @@ QUnit.test('visualRange can go out from series data range', function(assert) {
     const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
     assert.equal(businessRange.minVisible, -200);
     assert.equal(businessRange.maxVisible, 150);
-});
-
-QUnit.test('viewport can\'t go out from whole range', function(assert) {
-    this.updateOptions({ wholeRange: [-100, 100], min: -200, max: 150 });
-    this.axis.validate();
-
-    this.axis.setBusinessRange({
-        min: 0,
-        max: 10,
-        minVisible: 2,
-        maxVisible: 5
-    });
-
-    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
-    assert.equal(businessRange.min, -100);
-    assert.equal(businessRange.max, 100);
-    assert.equal(businessRange.minVisible, -100);
-    assert.equal(businessRange.maxVisible, 100);
 });
 
 QUnit.test('visualRange can\'t go out from whole range (numeric)', function(assert) {
@@ -4114,7 +3892,7 @@ QUnit.test('Set inverted', function(assert) {
 });
 
 QUnit.test('Set min > max', function(assert) {
-    this.updateOptions({ min: 10, max: 0 });
+    this.updateOptions({ visualRange: [10, 0] });
     this.axis.validate();
     this.axis.setBusinessRange({});
 
@@ -4127,20 +3905,6 @@ QUnit.test('Set min > max', function(assert) {
 });
 
 QUnit.test('Set min/max for discrete axis', function(assert) {
-    this.updateOptions({ type: 'discrete', min: 'D', max: 'E', synchronizedValue: 0 });
-    this.axis.validate();
-
-    this.axis.setBusinessRange({
-        categories: ['A', 'B', 'C', 'D', 'E', 'F']
-    });
-
-    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
-    assert.deepEqual(businessRange.categories, ['A', 'B', 'C', 'D', 'E', 'F']);
-    assert.equal(businessRange.minVisible, 'D');
-    assert.equal(businessRange.maxVisible, 'E');
-});
-
-QUnit.test('Set min/max for discrete axis (via visualRange)', function(assert) {
     this.updateOptions({ type: 'discrete', visualRange: ['D', 'E'], synchronizedValue: 0 });
     this.axis.validate();
 

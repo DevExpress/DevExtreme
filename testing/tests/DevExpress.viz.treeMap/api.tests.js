@@ -221,13 +221,11 @@ QUnit.test('Update labels', function(assert) {
     assert.strictEqual(this.renderer.text.callCount, 2, 'text count');
     let i;
     for(i = 0; i < 2; ++i) {
-        assert.strictEqual(this.renderer.text.returnValues[i].attr.callCount, 2, 'node ' + (i + 1) + ' - settings call count');
+        assert.strictEqual(this.renderer.text.returnValues[i].attr.callCount, 1, 'node ' + (i + 1) + ' - settings call count');
     }
     assert.deepEqual(this.renderer.text.getCall(0).args, ['new 1'], 'node 1 text');
     assert.deepEqual(this.renderer.text.getCall(1).args, ['new 2'], 'node 2 text');
-    assert.deepEqual(this.renderer.text.returnValues[0].attr.getCall(1).args, [{ visibility: 'visible' }], 'node 1 position');
     assert.deepEqual(this.renderer.text.returnValues[0].move.getCall(0).args, [404, 2], 'node 1 position correction');
-    assert.deepEqual(this.renderer.text.returnValues[1].attr.getCall(1).args, [{ visibility: 'visible' }], 'node 2 position');
     assert.deepEqual(this.renderer.text.returnValues[1].move.getCall(0).args, [4, 2], 'node 2 position correction');
 });
 

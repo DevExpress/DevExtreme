@@ -1,5 +1,6 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
+import { Deferred } from '../../core/utils/deferred';
 import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils';
 import { name as contextMenuEventName } from '../../events/contextmenu';
@@ -98,6 +99,14 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         }
     }
 
+    _getItemsInternal() {
+        return super._getItemsInternal().then(items => {
+            const deferred = new Deferred();
+            setTimeout(() => deferred.resolve(items));
+            return deferred.promise();
+        });
+    }
+
     _disableDragging() {
         return false;
     }
@@ -108,14 +117,18 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         });
     }
 
-    _onItemListSelectionChanged({ addedItems, removedItems }) {
+    _onItemListSelectionChanged({ addedItemKeys, removedItemKeys }) {
         const selectedItemInfos = this.getSelectedItems();
         const selectedItems = selectedItemInfos.map(itemInfo => itemInfo.fileItem);
         const selectedItemKeys = selectedItems.map(item => item.key);
-        const currentSelectedItemKeys = addedItems.map(itemInfo => itemInfo.fileItem.key);
-        const currentDeselectedItemKeys = removedItems.map(itemInfo => itemInfo.fileItem.key);
 
-        this._tryRaiseSelectionChanged({ selectedItemInfos, selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
+        this._tryRaiseSelectionChanged({
+            selectedItemInfos,
+            selectedItems,
+            selectedItemKeys,
+            currentSelectedItemKeys: addedItemKeys,
+            currentDeselectedItemKeys: removedItemKeys
+        });
     }
 
     _onItemListFocusedItemChanged({ item, itemElement }) {
