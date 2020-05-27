@@ -1673,13 +1673,13 @@ const SchedulerWorkSpace = Widget.inherit({
             checkDropTarget: (target, event) => !this._isOutsideScrollable(target, event)
         }, function(e) {
             if(that._$currentTableTarget) {
-                that._$currentTableTarget.removeClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+                that.removeDroppableCellClass(that._$currentTableTarget);
             }
             that._$currentTableTarget = $(e.target);
             that._$currentTableTarget.addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
         });
         eventsEngine.on($element, SCHEDULER_CELL_DXDROP_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, function(e) {
-            $(e.target).removeClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+            that.removeDroppableCellClass($(e.target));
             cellHeight = 0;
             cellWidth = 0;
         });
@@ -2580,8 +2580,11 @@ const SchedulerWorkSpace = Widget.inherit({
 
     _formatWeekdayAndDay: function(date) {
         return formatWeekday(date) + ' ' + dateLocalization.format(date, 'day');
-    }
+    },
 
+    removeDroppableCellClass: function($cellElement) {
+        ($cellElement || this._getDroppableCell()).removeClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+    }
 }).include(publisherMixin);
 
 module.exports = SchedulerWorkSpace;
