@@ -694,6 +694,17 @@ QUnit.module('DataSources', moduleConfig, () => {
         const removedTask = tasks.filter((t) => t.id === removedTaskId)[0];
         assert.equal(removedTask, undefined, 'task was removed');
     });
+    test('delayed loading', function(assert) {
+        this.createInstance({
+            tasks: { dataSource: [] },
+            validation: { autoUpdateParentTasks: true }
+        });
+        this.clock.tick();
+
+        this.instance.option('tasks.dataSource', tasks);
+        this.clock.tick();
+        assert.equal(this.instance._treeList.option('expandedRowKeys').length, 2, 'each task is loaded and expanded');
+    });
 });
 
 QUnit.module('Context Menu', moduleConfig, () => {
