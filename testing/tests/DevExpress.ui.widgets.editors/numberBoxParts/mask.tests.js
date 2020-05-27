@@ -1482,7 +1482,7 @@ QUnit.module('format: removing', moduleConfig, () => {
         assert.equal(this.input.val(), '0.00', 'value is correct');
     });
 
-    QUnit.test('removing all digits should change value to 0 (T892552)', function(assert) {
+    QUnit.test('removing all digits should change value to 0 even if it\'s negative (T892552)', function(assert) {
         this.instance.option({
             format: '#0 kg',
             value: -1
@@ -1493,7 +1493,7 @@ QUnit.module('format: removing', moduleConfig, () => {
         assert.strictEqual(this.input.val(), '0 kg', 'text is correct');
     });
 
-    QUnit.test('removing last digit 0 should save the sign (T892552)', function(assert) {
+    QUnit.test('removing last digit should change value to 0 even if it\'s negative (T892552)', function(assert) {
         this.instance.option({
             format: '#0 kg',
             value: -0
