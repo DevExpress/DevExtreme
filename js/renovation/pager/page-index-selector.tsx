@@ -4,6 +4,7 @@ import {
 import LightButton from './light-button';
 import LargePages from './pages-large';
 import SmallPages from './pages-small';
+import messageLocalization from '../../localization/message';
 
 const PAGER_NAVIGATE_BUTTON = 'dx-navigate-button';
 const PAGER_PREV_BUTTON_CLASS = 'dx-prev-button';
@@ -78,8 +79,7 @@ export class PageIndexSelectorProps {
 
   @Event() pageIndexChange?: (value: number) => void; // commonUtils.noop
 
-  // TODO messageLocalization.getFormatter('dxPager-pagesCountText');
-  @OneWay() pagesCountText?: string = 'Of';
+  @OneWay() pagesCountText?: string = messageLocalization.getFormatter('dxPager-pagesCountText')();
 
   @OneWay() rtlEnabled?: boolean = false;
 

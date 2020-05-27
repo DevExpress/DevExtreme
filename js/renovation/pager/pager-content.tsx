@@ -9,9 +9,6 @@ import PageSizeSelector from './page-size-selector';
 import { PAGER_PAGES_CLASS, PAGER_CLASS_FULL, LIGHT_MODE_CLASS } from './consts';
 import PagerProps from './pager-props';
 
-// import { getFormatter } from '../../localization/message';
-
-
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   className,
@@ -20,7 +17,7 @@ export const viewFunction = ({
     parentRef, pageSizesRef, pagesRef, infoTextRef,
     infoTextVisible,
     pageSizeChange, pageIndexChange,
-    infoTextMessageTemplate, maxPagesCount, pageIndex,
+    infoText, maxPagesCount, pageIndex,
     pageCount, pageSize, pageSizes,
     pagesCountText, rtlEnabled,
     showNavigationButtons, totalCount,
@@ -40,7 +37,7 @@ export const viewFunction = ({
       {showInfo && infoTextVisible && (
         <InfoText
           ref={infoTextRef as any}
-          infoTextMessageTemplate={infoTextMessageTemplate}
+          infoText={infoText}
           pageCount={pageCount}
           pageIndex={pageIndex}
           totalCount={totalCount}
