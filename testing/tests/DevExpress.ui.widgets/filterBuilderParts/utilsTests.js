@@ -23,18 +23,19 @@ const groupOperations = [{
     value: '!or'
 }];
 const filterOperationsDescriptions = {
+    between: 'Is between',
+    contains: 'Contains',
+    endsWith: 'Ends with',
     equal: 'Equals',
-    notEqual: 'Does not equal',
-    lessThan: 'Is less than',
-    lessThanOrEqual: 'Is less than or equal to',
     greaterThan: 'Is greater than',
     greaterThanOrEqual: 'Is greater than or equal to',
-    startsWith: 'Starts with',
-    contains: 'Contains',
-    notContains: 'Does not contain',
-    endsWith: 'Ends with',
     isBlank: 'Is blank',
-    isNotBlank: 'Is not blank'
+    isNotBlank: 'Is not blank',
+    lessThan: 'Is less than',
+    lessThanOrEqual: 'Is less than or equal to',
+    notContains: 'Does not contain',
+    notEqual: 'Does not equal',
+    startsWith: 'Starts with'
 };
 
 QUnit.module('Errors', function() {
@@ -1120,6 +1121,54 @@ QUnit.module('getAvailableOperations', {
 
         // assert
         assert.strictEqual(operations[0].text, 'Last Days');
+    });
+
+    // T889066
+    QUnit.test('a custom operation with enabled notForLookup option should not be listed for a lookup column', function(assert) {
+        // arrange, act
+        const customOperations = [
+            {
+                name: 'test1',
+                notForLookup: true,
+                dataTypes: ['number']
+            },
+            {
+                name: 'test2',
+                notForLookup: false,
+                dataTypes: ['number']
+            },
+            {
+                name: 'test3',
+                dataTypes: ['number']
+            }
+        ];
+        const field1 = {
+            dataField: 'test',
+            dataType: 'number'
+        };
+        const field2 = {
+            dataField: 'test',
+            dataType: 'number',
+            lookup: {}
+        };
+
+        // act
+        let operations = utils.getAvailableOperations(field1, filterOperationsDescriptions, customOperations);
+        let operationValues = operations.map(operation => operation.value);
+
+        // assert
+        assert.ok(operationValues.indexOf('test1') >= 0, 'test1 is in the list');
+        assert.ok(operationValues.indexOf('test2') >= 0, 'test2 is in the list');
+        assert.ok(operationValues.indexOf('test3') >= 0, 'test3 is in the list');
+
+        // act
+        operations = utils.getAvailableOperations(field2, filterOperationsDescriptions, customOperations);
+        operationValues = operations.map(operation => operation.value);
+
+        // assert
+        assert.equal(operationValues.indexOf('test1'), -1, 'test1 is not listed');
+        assert.ok(operationValues.indexOf('test2') >= 0, 'test2 is in the list');
+        assert.ok(operationValues.indexOf('test3') >= 0, 'test3 is in the list');
     });
 });
 

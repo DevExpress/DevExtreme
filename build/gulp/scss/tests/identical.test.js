@@ -28,6 +28,9 @@ const normalizeRule = rule => rule
     .replace(/"/g, '\'')
     .replace(/\.3333333333px/, '.33333333px')
     .replace(/gray/, 'grey')
+    .replace(/Helvetica/g, 'helvetica')
+    .replace(/Verdana/, 'verdana')
+    .replace(/(#|%23)[0-9A-Fa-f]{3,6}/g, (match) => match.toLowerCase())
 
     // colors rounding (mix, darken)
     .replace(/#dd5841/, '#dc5840')

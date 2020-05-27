@@ -1,86 +1,98 @@
-const path = require('path');
+import path from 'path';
 
-export class MetadataGenerator {
-    metadata: Array<MetaItem> = [];
+export default class MetadataGenerator {
+  metadata: Array<MetaItem> = [];
 
-    capitalize(key: string): string {
-        return key.charAt(0).toUpperCase() + key.slice(1);
+  static capitalize(key: string): string {
+    return key.charAt(0).toUpperCase() + key.slice(1);
+  }
+
+  clean(): void {
+    this.metadata = [];
+  }
+
+  getMetadata(): Array<MetaItem> {
+    return this.metadata;
+  }
+
+  static executor(str: string, regex: RegExp, handler: Function): void {
+    let matches = regex.exec(str);
+    while (matches !== null) {
+      handler(matches);
+      matches = regex.exec(str);
+    }
+  }
+
+  static parseComments(comments: string): MetaItem {
+    const metaItem: MetaItem = {};
+
+    MetadataGenerator.executor(comments, /\$(type|name|typeValues)\s(.+)/g, (matches: RegExpMatchArray) => {
+      const key = MetadataGenerator.capitalize(matches[1]);
+      metaItem[key] = matches[2].trim();
+    });
+
+    return metaItem;
+  }
+
+  static getMetaItems(scss: string): Array<MetaItem> {
+    const metaItems: Array<MetaItem> = [];
+
+    MetadataGenerator.executor(scss, /\/\*\*[\n\r]([\s\S]*?)\*\/\s*[\n\r]*([-$a-z_0-9]+):/gim, (matches: RegExpMatchArray) => {
+      const key = matches[2];
+
+      if (metaItems.some((item) => item.Key === key)) return;
+
+      const metaItem = {
+        Key: key,
+      };
+
+      metaItems.push(Object.assign(metaItem, MetadataGenerator.parseComments(matches[1])));
+    });
+
+    return metaItems;
+  }
+
+  static normalizePath(scssDir: string, filePath: string): string {
+    return path.relative(scssDir, filePath)
+      .replace(/\\/g, '/')
+      .replace(/\.scss/, '')
+      .replace('_', '')
+      .replace(/^/, 'tb/');
+  }
+
+  static getMapFromMeta(metaItems: Array<MetaItem>, filePath: string): string {
+    let result = `\n"path": "${filePath}",\n`;
+    result += metaItems.map((item) => `"${item.Key}": ${item.Key},\n`).join('');
+    return `(${result})`;
+  }
+
+  static isBundleFile(fileName: string): boolean {
+    return /bundles/.test(fileName);
+  }
+
+  static getBundleContent(content: string): string {
+    return content.replace(/(..\/widgets\/(material|generic))/, '$1/tb_index');
+  }
+
+  collectMetadata(scssDir: string, filePath: string, content: string): string {
+    const normalizedPath = MetadataGenerator.normalizePath(scssDir, filePath);
+    const metaItems = MetadataGenerator.getMetaItems(content);
+    let modifiedContent = content;
+
+    if (MetadataGenerator.isBundleFile(filePath)) {
+      modifiedContent = MetadataGenerator.getBundleContent(content);
+    } else if (metaItems.length) {
+      metaItems.forEach((item, index) => {
+        metaItems[index].Path = normalizedPath;
+        this.metadata.push(item);
+      });
+
+      const imports = `@forward "${normalizedPath}";\n@use "${normalizedPath}" as *;\n`;
+      const collector = `$never-used: collector(${MetadataGenerator.getMapFromMeta(metaItems, normalizedPath)});\n`;
+
+      modifiedContent = imports + content + collector;
     }
 
-    clean(): void {
-        this.metadata = [];
-    }
-
-    getMetadata(): Array<MetaItem> {
-        return this.metadata;
-    }
-
-    executor(str: string, regex: RegExp, handler: Function) {
-        let matches: RegExpMatchArray;
-        while((matches = regex.exec(str)) !== null) {
-            handler(matches);
-        }
-    }
-
-    parseComments(comments: string): MetaItem {
-        const metaItem: MetaItem = {};
-
-        this.executor(comments, /\$(type|name|typeValues)\s(.+)/g, (matches: RegExpMatchArray) => {
-            const key = this.capitalize(matches[1]);
-            metaItem[key] = matches[2].trim();
-        });
-
-        return metaItem;
-    }
-
-    getMetaItems(scss: string): Array<MetaItem> {
-        const metaItems: Array<MetaItem> = [];
-
-        this.executor(scss, /\/\*\*[\n\r]([\s\S]*?)\*\/\s*[\n\r]*([-$a-z_0-9]+):/gim, (matches: RegExpMatchArray) => {
-            const key = matches[2];
-
-            if(metaItems.some(item => item.Key === key)) return;
-
-            const metaItem = {
-                'Key': key
-            };
-
-            metaItems.push(Object.assign(metaItem, this.parseComments(matches[1])));
-        });
-
-        return metaItems;
-    }
-
-    normalizePath(scssDir: string, filePath: string): string {
-        return path.relative(scssDir, filePath)
-            .replace(/\\/g, '/')
-            .replace(/\.scss/, '')
-            .replace('_', '')
-            .replace(/^/, 'tb/');
-    }
-
-    getMapFromMeta(metaItems: Array<MetaItem>, path: string): string {
-        let result = `"path": "${path}",\n`;
-        metaItems.forEach(item => {
-            result += `"${item.Key}": ${item.Key},\n`;
-        });
-        return `(\n${result})`;
-    }
-
-    collectMetadata(scssDir: string, filePath: string, content: string): string {
-        const path = this.normalizePath(scssDir, filePath);
-        const metaItems = this.getMetaItems(content);
-
-        if(metaItems.length) {
-            metaItems.forEach(item => item.Path = path);
-            Array.prototype.push.apply(this.metadata, metaItems);
-
-            const imports = `@forward "${path}";\n@use "${path}" as *;\n`;
-            const collector = `$never-used: collector(${this.getMapFromMeta(metaItems, path)});\n`;
-
-            content = imports + content + collector;
-        }
-
-        return content;
-    }
+    return modifiedContent;
+  }
 }

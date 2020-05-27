@@ -146,6 +146,12 @@ class FileManagerEditingControl extends Widget {
 
             getItemContent: {
                 action: arg => this._getItemContent(arg)
+            },
+
+            getItems: {
+                singleItemProcessingMessage: '',
+                singleItemErrorMessage: messageLocalization.format('dxFileManager-errorDirectoryOpenFailed'),
+                commonErrorMessage: messageLocalization.format('dxFileManager-errorDirectoryOpenFailed')
             }
 
         };
@@ -201,10 +207,8 @@ class FileManagerEditingControl extends Widget {
     _onEditActionResultAcquired(actionInfo) {
         const { context, operationInfo } = actionInfo.customData;
         context.singleRequest = actionInfo.singleRequest;
-        if(!context.singleRequest) {
-            const details = context.itemInfos.map(itemInfo => this._getItemProgressDisplayInfo(itemInfo));
-            this._notificationControl.addOperationDetails(operationInfo, details, context.actionMetadata.allowCancel);
-        }
+        const details = context.itemInfos.map(itemInfo => this._getItemProgressDisplayInfo(itemInfo));
+        this._notificationControl.addOperationDetails(operationInfo, details, context.actionMetadata.allowCancel);
     }
 
     _onEditActionError(actionInfo, error) {
@@ -223,9 +227,7 @@ class FileManagerEditingControl extends Widget {
         const { context, operationInfo } = actionInfo.customData;
         if(!info.result || !info.result.canceled) {
             context.completeOperationItem(info.index);
-            if(!context.singleRequest) {
-                this._notificationControl.completeOperationItem(operationInfo, info.index, context.commonProgress);
-            }
+            this._notificationControl.completeOperationItem(operationInfo, info.index, context.commonProgress);
         }
     }
 

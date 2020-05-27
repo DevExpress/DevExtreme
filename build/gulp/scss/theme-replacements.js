@@ -47,7 +47,7 @@ module.exports = {
         { import: '../button/colors', type: 'colors' },
     ],
     'badge': [
-        { import: '../color', type: 'colors', alias: 'extColor' },
+        { import: '../color', type: 'colors', alias: 'extcolor' },
     ],
     'scrollView': [
         { import: '../scrollable/colors', type: 'index' },
@@ -67,7 +67,7 @@ module.exports = {
     ],
     'navBar': [
         { import: '../../base/icons', type: 'index' },
-        { import: '../color', type: 'colors', alias: 'extColor' },
+        { import: '../color', type: 'colors', alias: 'extcolor' },
     ],
     'validation': [
         { import: '../../base/validation', type: 'index' },
@@ -131,7 +131,7 @@ module.exports = {
         { import: '../textEditor/sizes', type: 'index' },
         { import: '../textEditor/colors', type: 'index' },
         { import: '../button/colors', type: 'colors' },
-        { import: '../color', type: 'colors', alias: 'extColor' },
+        { import: '../color', type: 'colors', alias: 'extcolor' },
     ],
     'dateView': [
         { import: '../../base/mixins', type: 'index' },
@@ -215,15 +215,15 @@ module.exports = {
     ],
     'progressBar': [
         { import: '../../base/mixins', type: 'index' },
-        { import: '../color', type: 'colors', alias: 'extColor' },
+        { import: '../color', type: 'colors', alias: 'extcolor' },
     ],
     'tooltip': [
         { import: '../overlay/colors', type: 'colors' },
-        { import: '../color', type: 'colors', alias: 'extColor' },
+        { import: '../color', type: 'colors', alias: 'extcolor' },
     ],
     'gallery': [
         { import: '../../base/icons', type: 'index' },
-        { import: '../color', type: 'colors', alias: 'extColor' },
+        { import: '../color', type: 'colors', alias: 'extcolor' },
     ],
     'lookup': [
         { import: '../../base/icons', type: 'index' },
@@ -242,7 +242,7 @@ module.exports = {
         { import: '../../base/icons', type: 'index' },
         { import: '../textEditor', type: 'index' },
         { import: '../common', type: 'index' },
-        { import: '../color', type: 'colors', alias: 'extColor' },
+        { import: '../color', type: 'colors', alias: 'extcolor' },
         { regex: /@mixin dx-icon\(clear\),/, replacement: '@include dx-icon(clear);' },
         { regex: /(px|block|absolute|%|-remove-color|-active-color|-bg|none|0 0),/g, replacement: '$1;' },
     ],
@@ -253,7 +253,7 @@ module.exports = {
         { import: '../../base/icons', type: 'index' },
     ],
     'slider': [
-        { import: '../color', type: 'colors', alias: 'extColor' },
+        { import: '../color', type: 'colors', alias: 'extcolor' },
     ],
     'slideOut': [
         { import: '../../base/icons', type: 'index' },
@@ -389,7 +389,7 @@ module.exports = {
     'scheduler': [
         { import: '../../base/mixins', type: 'index' },
         { import: '../../base/icons', type: 'index' },
-        { import: '../color', type: 'colors', alias: 'extColor' },
+        { import: '../color', type: 'colors', alias: 'extcolor' },
         { import: '../../base/scheduler', type: 'index', alias: 'baseScheduler', withVars: [
             'SCHEDULER_APPOINTMENT_BASE_COLOR',
             'SCHEDULER_APPOINTMENT_START_COLOR',
@@ -468,7 +468,7 @@ module.exports = {
     'htmlEditor': [
         { import: '../button/colors', type: 'colors' },
         { import: '../button/sizes', type: 'index' },
-        { import: '../color', type: 'colors', alias: 'extColor' },
+        { import: '../color', type: 'colors', alias: 'extcolor' },
         { import: '../textEditor/colors', type: 'index' },
         { import: '../toolbar/sizes', type: 'index' },
         { import: '../common', type: 'index' },

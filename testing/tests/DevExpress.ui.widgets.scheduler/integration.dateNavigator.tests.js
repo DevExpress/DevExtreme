@@ -162,9 +162,10 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
             });
 
             const scheduler = createWrapper();
-            scheduler.navigator.click();
 
-            assert.ok(scheduler.navigator.isPopupVisible(), 'Navigator popup should be visible without errors');
+            const { navigator } = scheduler.header;
+            navigator.caption.click();
+            assert.ok(navigator.popover.isVisible, 'Navigator popup should be visible without errors');
         });
     });
 
@@ -498,4 +499,17 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
         assert.equal($caption.text(), 'Jun-Jul 2018', 'Caption is correct');
     });
 
+    QUnit.test('Calendar should be able to scroll content(T882633)', function(assert) {
+        const scheduler = createWrapper();
+        const { navigator } = scheduler.header;
+
+        navigator.caption.click();
+        assert.ok(navigator.popover.isVisible, 'navigator popup should be visible');
+
+        if(scheduler.isDesktop) {
+            assert.notOk(navigator.popover.hasScroll, 'calendar shouldn\'t wrapped in scrollable container in desktop environment');
+        } else {
+            assert.ok(navigator.popover.hasScroll, 'calendar should placed in scrollable container in mobile environment');
+        }
+    });
 });

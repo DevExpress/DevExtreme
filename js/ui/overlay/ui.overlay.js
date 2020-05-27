@@ -1471,8 +1471,12 @@ const Overlay = Widget.inherit({
     },
 
     repaint: function() {
-        this._renderGeometry();
-        triggerResizeEvent(this._$content);
+        if(this._contentAlreadyRendered) {
+            this._renderGeometry();
+            triggerResizeEvent(this._$content);
+        } else {
+            this.callBase();
+        }
     }
 });
 
