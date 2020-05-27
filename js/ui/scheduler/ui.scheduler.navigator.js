@@ -1,20 +1,21 @@
-const $ = require('../../core/renderer');
-const noop = require('../../core/utils/common').noop;
-const isNumeric = require('../../core/utils/type').isNumeric;
-const errors = require('../widget/ui.errors');
-const dateUtils = require('../../core/utils/date');
-const typeUtils = require('../../core/utils/type');
-const extend = require('../../core/utils/extend').extend;
-const registerComponent = require('../../core/component_registrator');
-const devices = require('../../core/devices');
-const Widget = require('../widget/ui.widget');
-const Button = require('../button');
-const Calendar = require('../calendar');
-const Popover = require('../popover');
-const Popup = require('../popup');
-const publisherMixin = require('./ui.scheduler.publisher_mixin');
-const dateLocalization = require('../../localization/date');
-const isDefined = require('../../core/utils/type').isDefined;
+import $ from '../../core/renderer';
+import { noop } from '../../core/utils/common';
+import { isNumeric } from '../../core/utils/type';
+import errors from '../widget/ui.errors';
+import dateUtils from '../../core/utils/date';
+import typeUtils from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import registerComponent from '../../core/component_registrator';
+import devices from '../../core/devices';
+import Widget from '../widget/ui.widget';
+import Button from '../button';
+import Calendar from '../calendar';
+import Popover from '../popover';
+import Popup from '../popup';
+import publisherMixin from './ui.scheduler.publisher_mixin';
+import dateLocalization from '../../localization/date';
+import { isDefined } from '../../core/utils/type';
+import Scrollable from '../scroll_view/ui.scrollable';
 
 const ELEMENT_CLASS = 'dx-scheduler-navigator';
 const CALENDAR_CLASS = 'dx-scheduler-navigator-calendar';
@@ -95,7 +96,7 @@ const getWeekCaption = function(date, shift, rejectWeekend) {
     };
 };
 
-function formatCaptionByMonths(lastDate, firstDate) {
+const formatCaptionByMonths = function(lastDate, firstDate) {
     const isDifferentMonthDates = firstDate.getMonth() !== lastDate.getMonth();
     const isDifferentYears = firstDate.getFullYear() !== lastDate.getFullYear();
     const useShortFormat = isDifferentMonthDates || this.option('_useShortDateFormat');
@@ -111,7 +112,7 @@ function formatCaptionByMonths(lastDate, firstDate) {
     }
 
     return firstDateText + '-' + lastDateText;
-}
+};
 
 const getMonthCaption = function(date) {
     const firstDate = new Date(dateUtils.getFirstMonthDate(date));
@@ -379,9 +380,12 @@ const SchedulerNavigator = Widget.inherit({
         this._renderCaptionKeys();
     },
 
-    _renderPopover: function() {
-        const overlayType = !devices.current().generic ? Popup : Popover;
+    _isMobileLayout: function() {
+        return !devices.current().generic;
+    },
 
+    _renderPopover: function() {
+        const overlayType = this._isMobileLayout() ? Popup : Popover;
         const popoverContainer = $('<div>').addClass(CALENDAR_POPOVER_CLASS);
         this._popover = this._createComponent(popoverContainer, overlayType, {
             contentTemplate: () => this._createPopupContent(),
@@ -409,9 +413,24 @@ const SchedulerNavigator = Widget.inherit({
         this._popover.$element().appendTo(this.$element());
     },
 
+    _createScrollable: function(content) {
+        const result = this._createComponent($('<div>'), Scrollable, {
+            direction: 'vertical'
+        });
+        result.$content().append(content);
+
+        return result;
+    },
+
     _createPopupContent: function() {
         const result = $('<div>').addClass(CALENDAR_CLASS);
         this._calendar = this._createComponent(result, Calendar, this._calendarOptions());
+
+        if(this._isMobileLayout()) {
+            const scrollable = this._createScrollable(result);
+            return scrollable.$element();
+        }
+
         return result;
     },
 
