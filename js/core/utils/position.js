@@ -1,4 +1,3 @@
-import $ from '../renderer';
 import config from '../config';
 import typeUtils from '../utils/type';
 
@@ -9,7 +8,7 @@ const getDefaultAlignment = function(isRtlEnabled) {
 };
 
 const getBoundingRect = (instance) => {
-    const element = $(instance).get(0);
+    const element = instance.get && instance.get(0) || instance;
 
     if(typeUtils.isWindow(element)) {
         return {
