@@ -100,8 +100,10 @@ QUnit.test('change dataSource after zoomArgument with gesture and useAggregation
     chartMocks.seriesMockData.series.push(stubSeries, stubSeries1);
     const dataSource = [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 3, y: 3 }];
     const chartOptions = {
-        useAggregation: true,
-        series: [{ type: 'line' }],
+        series: [{
+            type: 'line',
+            aggregation: { enabled: true }
+        }],
         dataSource: dataSource,
         argumentAxis: { visible: true }
     };
@@ -758,30 +760,6 @@ QUnit.test('change some options', function(assert) {
     assert.equal(chart.panes[0].name, 'top');
     assert.equal(chart.panes[1].name, 'bottom');
     assert.strictEqual(this.validateData.callCount, 1, 'validation');
-});
-
-QUnit.test('change useAggregation options', function(assert) {
-    const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 } } });
-    const stubSeries2 = new MockSeries({ range: { arg: { min: 1, max: 5 } } });
-    const stubSeries3 = new MockSeries({ range: { arg: { min: 1, max: 5 } } });
-
-    chartMocks.seriesMockData.series.push(stubSeries1);
-    chartMocks.seriesMockData.series.push(stubSeries2);
-    chartMocks.seriesMockData.series.push(stubSeries3);
-    const chart = this.createChart({
-        series: [{
-            type: 'spline'
-        }]
-    });
-    chart._doRender = function() {
-        clearTimeout(chart._delayedRedraw);
-        this._renderCalled = true;
-    };
-
-    // Act
-    chart.option({ useAggregation: true });
-    // assert
-    assert.ok(chart._renderCalled);
 });
 
 QUnit.test('change container options', function(assert) {
@@ -1545,38 +1523,6 @@ QUnit.test('seriesSelectionMode option', function(assert) {
     assert.strictEqual(series, chart.getAllSeries()[0], 'Series should be updated');
     assert.strictEqual(valAxis, chart._valueAxes[0], 'Val axis should not be recreated');
     assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should not be recreated');
-});
-
-QUnit.test('useAggregation option', function(assert) {
-    const stubSeries1 = new MockSeries({});
-    const stubSeries2 = new MockSeries({});
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
-
-    stubSeries2.getViewport.returns({
-        min: 10,
-        max: 15
-    });
-
-    const chart = this.createChart({
-        useAggregation: false,
-        series: [{
-            type: 'line'
-        }]
-    });
-
-    const series = chart.getAllSeries()[0];
-    const valAxis = chart._valueAxes[0];
-    const argAxis = chart._argumentAxes[0];
-
-    // act
-    chart.option({
-        useAggregation: true
-    });
-
-    // assert
-    assert.strictEqual(series, chart.getAllSeries()[0], 'Series should be updated');
-    assert.strictEqual(valAxis, chart._valueAxes[0], 'Val axis should be updated');
-    assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should be updated');
 });
 
 QUnit.test('synchronizeMultiAxes option', function(assert) {

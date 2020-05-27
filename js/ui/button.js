@@ -161,7 +161,6 @@ class Button extends Widget {
         super._initMarkup();
 
         this._updateContent();
-        this._renderSubmitInput();
         this.setAria('role', 'button');
     }
 
@@ -363,6 +362,8 @@ class Button extends Widget {
             $template.addClass('dx-button-content');
             $content.replaceWith($template);
         }
+
+        this._updateSubmitInput();
     }
 
     _updateSubmitInput() {
