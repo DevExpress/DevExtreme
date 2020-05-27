@@ -2072,7 +2072,7 @@ module.exports = {
                     columnIndex = filter.columnIndex !== undefined ? filter.columnIndex : columnIndex;
                     filterValue = filter.filterValue !== undefined ? filter.filterValue : filterValue;
 
-                    if(isString(filter[0])) {
+                    if(isString(filter[0]) && filter[0] !== '!') {
                         const column = that.columnOption(filter[0]);
 
                         if(remoteFiltering) {
