@@ -1482,7 +1482,7 @@ QUnit.module('format: removing', moduleConfig, () => {
         assert.equal(this.input.val(), '0.00', 'value is correct');
     });
 
-    QUnit.test('removing all digits should save the sign', function(assert) {
+    QUnit.test('removing all digits should change value to 0 (T892552)', function(assert) {
         this.instance.option({
             format: '#0 kg',
             value: -1
@@ -1490,10 +1490,10 @@ QUnit.module('format: removing', moduleConfig, () => {
 
         this.keyboard.caret({ start: 2, end: 2 }).press('backspace').input('backspace');
 
-        assert.strictEqual(this.input.val(), '-0 kg', 'text is correct');
+        assert.strictEqual(this.input.val(), '0 kg', 'text is correct');
     });
 
-    QUnit.test('removing last digit 0 should save the sign', function(assert) {
+    QUnit.test('removing last digit 0 should save the sign (T892552)', function(assert) {
         this.instance.option({
             format: '#0 kg',
             value: -0
@@ -1501,7 +1501,7 @@ QUnit.module('format: removing', moduleConfig, () => {
 
         this.keyboard.caret({ start: 2, end: 2 }).press('backspace').input('backspace');
 
-        assert.strictEqual(this.input.val(), '-0 kg', 'text is correct');
+        assert.strictEqual(this.input.val(), '0 kg', 'text is correct');
     });
 
     QUnit.test('removing digit if decimal format', function(assert) {
