@@ -388,7 +388,10 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T892543
     QUnit.test('cells should have aria-describedby attribute if column is without dataField', function(assert) {
-        const dataGrid = createDataGrid({
+        const headersWrapper = dataGridWrapper.headers;
+        const rowsViewWrapper = dataGridWrapper.rowsView;
+
+        createDataGrid({
             dataSource: [{}],
             columns: [{ type: 'selection' }, { caption: 'test' }]
         });
@@ -396,8 +399,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.notOk($(dataGrid.getCellElement(0, 0)).attr('aria-describedby'), 'no aria-describedby on first cell');
-        assert.equal($(dataGrid.getCellElement(0, 1)).attr('aria-describedby'), 'dx-col-2', 'second cell\'s aria-describedby');
+        const $secondCell = rowsViewWrapper.getCellElement(0, 1);
+        const $secondHeaderItem = headersWrapper.getHeaderItem(0, 1);
+
+        assert.notOk(rowsViewWrapper.getCellElement(0, 0).attr('aria-describedby'), 'no aria-describedby on first cell');
+        assert.equal($secondCell.attr('aria-describedby'), $secondHeaderItem.attr('id'), 'second cell\'s aria-describedby');
     });
 
     QUnit.test('DataGrid elements shouldn\'t have aria-describedby attributes if showColumnHeaders is false', function(assert) {
