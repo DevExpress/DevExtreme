@@ -176,8 +176,6 @@ QUnit.module('Local Store Initialization', () => {
             assert.ok(false);
         });
     });
-
-
 });
 
 QUnit.module('Array Local Store', moduleConfig, () => {

@@ -2107,7 +2107,7 @@ declare module DevExpress.ui {
         /** @name GridBase.Options.rowAlternationEnabled */
         rowAlternationEnabled?: boolean;
         /** @name GridBase.Options.rowDragging */
-        rowDragging?: { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: string | Element | JQuery, container?: string | Element | JQuery, cursorOffset?: string | { x?: number, y?: number }, data?: any, dragDirection?: 'both' | 'horizontal' | 'vertical', dragTemplate?: DevExpress.core.template | ((dragInfo: { itemData?: any, itemElement?: DevExpress.core.dxElement }, containerElement: DevExpress.core.dxElement) => string | Element | JQuery), dropFeedbackMode?: 'push' | 'indicate', filter?: string, group?: string, handle?: string, onAdd?: ((e: { event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragChange?: ((e: { event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragEnd?: ((e: { event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragMove?: ((e: { event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragStart?: ((e: { event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, fromData?: any }) => any), onRemove?: ((e: { event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onReorder?: ((e: { event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean };
+        rowDragging?: { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: string | Element | JQuery, container?: string | Element | JQuery, cursorOffset?: string | { x?: number, y?: number }, data?: any, dragDirection?: 'both' | 'horizontal' | 'vertical', dragTemplate?: DevExpress.core.template | ((dragInfo: { itemData?: any, itemElement?: DevExpress.core.dxElement }, containerElement: DevExpress.core.dxElement) => string | Element | JQuery), dropFeedbackMode?: 'push' | 'indicate', filter?: string, group?: string, handle?: string, onAdd?: ((e: { event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragChange?: ((e: { event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragEnd?: ((e: { event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragMove?: ((e: { event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragStart?: ((e: { event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, fromData?: any }) => any), onRemove?: ((e: { event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onReorder?: ((e: { event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean, promise?: Promise<void> | JQueryPromise<void> }) => any), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean };
         /** @name GridBase.Options.scrolling */
         scrolling?: GridBaseScrolling;
         /** @name GridBase.Options.searchPanel */
@@ -3316,7 +3316,7 @@ declare module DevExpress.ui {
         /** @name dxDiagramCustomCommand.items */
         items?: Array<dxDiagramCustomCommand>;
         /** @name dxDiagramCustomCommand.name */
-        name?: string;
+        name?: string | 'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor';
         /** @name dxDiagramCustomCommand.text */
         text?: string;
     }
@@ -5720,7 +5720,7 @@ declare module DevExpress.ui {
         /** @name dxSortable.Options.onRemove */
         onRemove?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any);
         /** @name dxSortable.Options.onReorder */
-        onReorder?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
+        onReorder?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean, promise?: Promise<void> | JQueryPromise<void> }) => any);
     }
     /** @name dxSortable */
     export class dxSortable extends DraggableBase {
@@ -7562,9 +7562,6 @@ declare module DevExpress.viz {
         barGroupPadding?: number;
         /** @name dxChart.Options.barGroupWidth */
         barGroupWidth?: number;
-        /** @deprecated */
-        /** @name dxChart.Options.barWidth */
-        barWidth?: number;
         /** @name dxChart.Options.commonAnnotationSettings */
         commonAnnotationSettings?: dxChartCommonAnnotationConfig;
         /** @name dxChart.Options.commonAxisSettings */
@@ -7583,9 +7580,6 @@ declare module DevExpress.viz {
         dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: any, b: any) => number) };
         /** @name dxChart.Options.defaultPane */
         defaultPane?: string;
-        /** @deprecated */
-        /** @name dxChart.Options.equalBarWidth */
-        equalBarWidth?: boolean;
         /** @name dxChart.Options.legend */
         legend?: dxChartLegend;
         /** @name dxChart.Options.maxBubbleSize */
@@ -7618,9 +7612,6 @@ declare module DevExpress.viz {
         rotated?: boolean;
         /** @name dxChart.Options.scrollBar */
         scrollBar?: { color?: string, offset?: number, opacity?: number, position?: 'bottom' | 'left' | 'right' | 'top', visible?: boolean, width?: number };
-        /** @deprecated */
-        /** @name dxChart.Options.scrollingMode */
-        scrollingMode?: 'all' | 'mouse' | 'none' | 'touch';
         /** @name dxChart.Options.series */
         series?: ChartSeries | Array<ChartSeries>;
         /** @name dxChart.Options.seriesSelectionMode */
@@ -7633,16 +7624,10 @@ declare module DevExpress.viz {
         synchronizeMultiAxes?: boolean;
         /** @name dxChart.Options.tooltip */
         tooltip?: dxChartTooltip;
-        /** @deprecated */
-        /** @name dxChart.Options.useAggregation */
-        useAggregation?: boolean;
         /** @name dxChart.Options.valueAxis */
         valueAxis?: dxChartValueAxis | Array<dxChartValueAxis>;
         /** @name dxChart.Options.zoomAndPan */
         zoomAndPan?: { allowMouseWheel?: boolean, allowTouchGestures?: boolean, argumentAxis?: 'both' | 'none' | 'pan' | 'zoom', dragBoxStyle?: { color?: string, opacity?: number }, dragToZoom?: boolean, panKey?: 'alt' | 'ctrl' | 'meta' | 'shift', valueAxis?: 'both' | 'none' | 'pan' | 'zoom' };
-        /** @deprecated */
-        /** @name dxChart.Options.zoomingMode */
-        zoomingMode?: 'all' | 'mouse' | 'none' | 'touch';
     }
     /** @name dxChart.Options.argumentAxis */
     export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
@@ -7680,12 +7665,6 @@ declare module DevExpress.viz {
         linearThreshold?: number;
         /** @name dxChart.Options.argumentAxis.logarithmBase */
         logarithmBase?: number;
-        /** @deprecated */
-        /** @name dxChart.Options.argumentAxis.max */
-        max?: number | Date | string;
-        /** @deprecated */
-        /** @name dxChart.Options.argumentAxis.min */
-        min?: number | Date | string;
         /** @name dxChart.Options.argumentAxis.minVisualRangeLength */
         minVisualRangeLength?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /** @name dxChart.Options.argumentAxis.minorTickCount */
@@ -8009,14 +7988,8 @@ declare module DevExpress.viz {
         linearThreshold?: number;
         /** @name dxChart.Options.valueAxis.logarithmBase */
         logarithmBase?: number;
-        /** @deprecated */
-        /** @name dxChart.Options.valueAxis.max */
-        max?: number | Date | string;
         /** @name dxChart.Options.valueAxis.maxAutoBreakCount */
         maxAutoBreakCount?: number;
-        /** @deprecated */
-        /** @name dxChart.Options.valueAxis.min */
-        min?: number | Date | string;
         /** @name dxChart.Options.valueAxis.minVisualRangeLength */
         minVisualRangeLength?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /** @name dxChart.Options.valueAxis.minorTickCount */
@@ -9310,9 +9283,6 @@ declare module DevExpress.viz {
         barGroupPadding?: number;
         /** @name dxPolarChart.Options.barGroupWidth */
         barGroupWidth?: number;
-        /** @deprecated */
-        /** @name dxPolarChart.Options.barWidth */
-        barWidth?: number;
         /** @name dxPolarChart.Options.commonAnnotationSettings */
         commonAnnotationSettings?: dxPolarChartCommonAnnotationConfig;
         /** @name dxPolarChart.Options.commonAxisSettings */
@@ -9325,9 +9295,6 @@ declare module DevExpress.viz {
         customizeAnnotation?: ((annotation: dxPolarChartAnnotationConfig | any) => dxPolarChartAnnotationConfig);
         /** @name dxPolarChart.Options.dataPrepareSettings */
         dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) };
-        /** @deprecated */
-        /** @name dxPolarChart.Options.equalBarWidth */
-        equalBarWidth?: boolean;
         /** @name dxPolarChart.Options.legend */
         legend?: dxPolarChartLegend;
         /** @name dxPolarChart.Options.negativesAsZeroes */
@@ -9864,7 +9831,7 @@ declare module DevExpress.viz {
         /** @name dxRangeSelector.Options.behavior */
         behavior?: { allowSlidersSwap?: boolean, animationEnabled?: boolean, callValueChanged?: 'onMoving' | 'onMovingComplete', manualRangeSelectionEnabled?: boolean, moveSelectedRangeByClick?: boolean, snapToTicks?: boolean };
         /** @name dxRangeSelector.Options.chart */
-        chart?: { barGroupPadding?: number, barGroupWidth?: number, barWidth?: number, bottomIndent?: number, commonSeriesSettings?: dxChartCommonSeriesSettings, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) }, equalBarWidth?: boolean, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate', series?: ChartSeries | Array<ChartSeries>, seriesTemplate?: { customizeSeries?: ((seriesName: any) => ChartSeries), nameField?: string }, topIndent?: number, useAggregation?: boolean, valueAxis?: { inverted?: boolean, logarithmBase?: number, max?: number, min?: number, type?: 'continuous' | 'logarithmic', valueType?: 'datetime' | 'numeric' | 'string' } };
+        chart?: { barGroupPadding?: number, barGroupWidth?: number, bottomIndent?: number, commonSeriesSettings?: dxChartCommonSeriesSettings, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) }, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate', series?: ChartSeries | Array<ChartSeries>, seriesTemplate?: { customizeSeries?: ((seriesName: any) => ChartSeries), nameField?: string }, topIndent?: number, valueAxis?: { inverted?: boolean, logarithmBase?: number, max?: number, min?: number, type?: 'continuous' | 'logarithmic', valueType?: 'datetime' | 'numeric' | 'string' } };
         /** @name dxRangeSelector.Options.containerBackgroundColor */
         containerBackgroundColor?: string;
         /** @name dxRangeSelector.Options.dataSource */
@@ -10106,9 +10073,6 @@ declare module DevExpress.viz {
         onSelectionChanged?: ((e: { component?: dxTreeMap, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeMapNode }) => any);
         /** @name dxTreeMap.Options.parentField */
         parentField?: string;
-        /** @deprecated */
-        /** @name dxTreeMap.Options.resolveLabelOverflow */
-        resolveLabelOverflow?: 'ellipsis' | 'hide';
         /** @name dxTreeMap.Options.selectionMode */
         selectionMode?: 'multiple' | 'none' | 'single';
         /** @name dxTreeMap.Options.tile */

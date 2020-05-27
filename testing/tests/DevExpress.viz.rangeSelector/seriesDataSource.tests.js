@@ -1276,7 +1276,6 @@ QUnit.test('seriesDataSource with bubbleSize option', function(assert) {
             commonSeriesSettings: {
                 type: 'bubble'
             },
-            equalBarWidth: true,
             minBubbleSize: 1,
             maxBubbleSize: 11,
             series: [{
@@ -1290,27 +1289,6 @@ QUnit.test('seriesDataSource with bubbleSize option', function(assert) {
 
     assert.equal(seriesDataSource._seriesFamilies[0].options.minBubbleSize, 1);
     assert.equal(seriesDataSource._seriesFamilies[0].options.maxBubbleSize, 11);
-});
-
-QUnit.test('seriesDataSource with equalBarWidth option', function(assert) {
-    const seriesDataSource = createSeriesDataSource({
-        dataSource: [{ arg: 'a', val: 3 },
-            { arg: 'b', val: 6 },
-            { arg: 'c', val: 12 }
-        ],
-        chart: {
-            commonSeriesSettings: {
-                type: 'area'
-            },
-            equalBarWidth: true,
-            series: [{
-                type: 'line'
-            }]
-        },
-        renderer: new vizMocks.Renderer(),
-        argumentAxis: this.argumentAxis
-    });
-    assert.equal(seriesDataSource._seriesFamilies[0].options.equalBarWidth, true);
 });
 
 QUnit.test('seriesDataSource with barGroupPadding option', function(assert) {
@@ -1341,48 +1319,6 @@ QUnit.test('seriesDataSource with barGroupWidth option', function(assert) {
         argumentAxis: this.argumentAxis
     });
     assert.equal(seriesDataSource._seriesFamilies[0].options.barGroupWidth, 300);
-});
-
-QUnit.test('seriesDataSource with equalBarWidth option is false', function(assert) {
-    const seriesDataSource = createSeriesDataSource({
-        dataSource: [
-            { arg: 'a', val: 3 },
-            { arg: 'b', val: 6 },
-            { arg: 'c', val: 12 }
-        ],
-        chart: {
-            commonSeriesSettings: {
-                type: 'area'
-            },
-            equalBarWidth: false,
-            series: [{
-                type: 'line'
-            }]
-        },
-        renderer: new vizMocks.Renderer(),
-        argumentAxis: this.argumentAxis
-    });
-    assert.equal(seriesDataSource._seriesFamilies[0].options.equalBarWidth, false);
-});
-
-QUnit.test('seriesDataSource with barWidth option', function(assert) {
-    const seriesDataSource = createSeriesDataSource({
-        dataSource: [{ arg: 'a', val: 3 },
-            { arg: 'b', val: 6 },
-            { arg: 'c', val: 12 }],
-        chart: {
-            commonSeriesSettings: {
-                type: 'area'
-            },
-            barWidth: 0.8,
-            series: [{
-                type: 'line'
-            }]
-        },
-        renderer: new vizMocks.Renderer(),
-        argumentAxis: this.argumentAxis
-    });
-    assert.deepEqual(seriesDataSource._seriesFamilies[0].options.barWidth, 0.8);
 });
 
 QUnit.test('seriesDataSource with negativesAsZeroes option', function(assert) {
