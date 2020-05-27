@@ -1,4 +1,5 @@
 import { extend } from '../../core/utils/extend';
+import { when } from '../../core/utils/deferred';
 import { name as dblClickName } from '../../events/double_click';
 import { addNamespace } from '../../events/utils';
 import eventsEngine from '../../events/core/events_engine';
@@ -92,7 +93,8 @@ class FileManagerItemListBase extends Widget {
 
     _getItemsInternal() {
         const itemsGetter = this.option('getItems');
-        return itemsGetter ? itemsGetter() : [];
+        const itemsResult = itemsGetter ? itemsGetter() : [];
+        return when(itemsResult);
     }
 
     _raiseOnError(error) {
