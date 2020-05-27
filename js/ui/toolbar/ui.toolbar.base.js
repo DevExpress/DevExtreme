@@ -241,8 +241,8 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
             float: 'none'
         });
 
-        const beforeRect = getBoundingRect(this._$beforeSection);
-        const afterRect = getBoundingRect(this._$afterSection);
+        const beforeRect = getBoundingRect(this._$beforeSection.get(0));
+        const afterRect = getBoundingRect(this._$afterSection.get(0));
 
         this._alignCenterSection(beforeRect, afterRect, elementWidth);
 
@@ -279,7 +279,7 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
         const isRTL = this.option('rtlEnabled');
         const leftRect = isRTL ? afterRect : beforeRect;
         const rightRect = isRTL ? beforeRect : afterRect;
-        const centerRect = getBoundingRect(this._$centerSection);
+        const centerRect = getBoundingRect(this._$centerSection.get(0));
 
         if(leftRect.right > centerRect.left || centerRect.right > rightRect.left) {
             this._$centerSection.css({

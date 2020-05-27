@@ -316,7 +316,7 @@ const calculatePosition = function(what, options) {
             h.atSize = of.width();
             v.atSize = of.height();
         } else {
-            const ofRect = getBoundingRect(of);
+            const ofRect = getBoundingRect(of.get(0));
             const o = of.offset();
             h.atLocation = o.left;
             v.atLocation = o.top;

@@ -137,10 +137,10 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
 
     _getWorkSpaceHeight: function() {
         if(this.option('crossScrollingEnabled')) {
-            return getBoundingRect(this._$dateTable).height;
+            return getBoundingRect(this._$dateTable.get(0)).height;
         }
 
-        return getBoundingRect(this.$element()).height;
+        return getBoundingRect(this.$element().get(0)).height;
     },
 
     _dateTableScrollableConfig: function() {
@@ -282,13 +282,13 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
 
         if(this.option('groupOrientation') === 'vertical') {
             $indicator = this._createIndicator($container);
-            $indicator.height(getBoundingRect($container).height);
+            $indicator.height(getBoundingRect($container.get(0)).height);
             $indicator.css('left', rtlOffset ? rtlOffset - width : width);
         } else {
             for(let i = 0; i < groupCount; i++) {
                 const offset = this._getCellCount() * this.getCellWidth() * i;
                 $indicator = this._createIndicator($container);
-                $indicator.height(getBoundingRect($container).height);
+                $indicator.height(getBoundingRect($container.get(0)).height);
 
                 $indicator.css('left', rtlOffset ? rtlOffset - width - offset : width + offset);
             }
@@ -563,7 +563,7 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
     scrollToTime: function(hours, minutes, date) {
         const coordinates = this._getScrollCoordinates(hours, minutes, date);
         const scrollable = this.getScrollable();
-        const offset = this.option('rtlEnabled') ? getBoundingRect(this.getScrollableContainer()).width : 0;
+        const offset = this.option('rtlEnabled') ? getBoundingRect(this.getScrollableContainer().get(0)).width : 0;
 
         if(this.option('templatesRenderAsynchronously')) {
             setTimeout(function() {

@@ -305,7 +305,7 @@ const Drawer = Widget.inherit({
     getElementWidth($element) {
         const $children = $element.children();
 
-        return $children.length ? getBoundingRect($children.eq(0)).width : getBoundingRect($element).width;
+        return $children.length ? getBoundingRect($children.eq(0).get(0)).width : getBoundingRect($element.get(0)).width;
     },
 
     getRealPanelHeight() {
@@ -323,7 +323,7 @@ const Drawer = Widget.inherit({
     getElementHeight($element) {
         const $children = $element.children();
 
-        return $children.length ? getBoundingRect($children.eq(0)).height : getBoundingRect($element).height;
+        return $children.length ? getBoundingRect($children.eq(0).get(0)).height : getBoundingRect($element.get(0)).height;
     },
 
     isHorizontalDirection() {

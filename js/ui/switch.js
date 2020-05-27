@@ -193,7 +193,7 @@ const Switch = Editor.inherit({
     },
 
     _getItemSizeFunc: function() {
-        return this._$switchContainer.outerWidth(true) - getBoundingRect(this._$handle).width;
+        return this._$switchContainer.outerWidth(true) - getBoundingRect(this._$handle.get(0)).width;
     },
 
     _renderSubmitElement: function() {

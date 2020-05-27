@@ -98,7 +98,7 @@ const HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     getWorkSpaceMinWidth: function() {
-        return getBoundingRect(this._workSpace.$element()).width - this._workSpace.getTimePanelWidth();
+        return getBoundingRect(this._workSpace.$element().get(0)).width - this._workSpace.getTimePanelWidth();
     },
 
     getAllDayOffset: function() {
@@ -106,7 +106,7 @@ const HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     getAllDayTableHeight: function() {
-        return getBoundingRect(this._workSpace._$allDayTable).height || 0;
+        return getBoundingRect(this._workSpace._$allDayTable.get(0)).height || 0;
     },
 
     getGroupCountAttr: function(groupRowCount, groupRows) {
@@ -159,7 +159,7 @@ const HorizontalGroupedStrategy = GroupedStrategy.inherit({
 
     getShaderOffset: function(i, width) {
         const offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(i - 1) * i;
-        return this._workSpace.option('rtlEnabled') ? getBoundingRect(this._workSpace._dateTableScrollable.$content()).width - offset - this._workSpace.getTimePanelWidth() - width : offset;
+        return this._workSpace.option('rtlEnabled') ? getBoundingRect(this._workSpace._dateTableScrollable.$content().get(0)).width - offset - this._workSpace.getTimePanelWidth() - width : offset;
     },
 
     getShaderTopOffset: function(i) {
@@ -173,7 +173,7 @@ const HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     getShaderMaxHeight: function() {
-        return getBoundingRect(this._workSpace._dateTableScrollable.$content()).height;
+        return getBoundingRect(this._workSpace._dateTableScrollable.$content().get(0)).height;
     },
 
     getShaderWidth: function(i) {

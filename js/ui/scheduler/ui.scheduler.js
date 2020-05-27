@@ -1170,7 +1170,7 @@ const Scheduler = Widget.inherit({
     },
 
     _toggleSmallClass: function() {
-        const width = getBoundingRect(this.$element()).width;
+        const width = getBoundingRect(this.$element().get(0)).width;
         this.$element().toggleClass(WIDGET_SMALL_CLASS, width < WIDGET_SMALL_WIDTH);
     },
 

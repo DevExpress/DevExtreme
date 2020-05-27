@@ -18,7 +18,7 @@ const HorizontalCurrentTimeShader = Shader.inherit({
 
     _customizeShader: function($shader, groupIndex) {
         let shaderWidth = this._workspace.getIndicationWidth();
-        const maxWidth = getBoundingRect(this._$container).width;
+        const maxWidth = getBoundingRect(this._$container.get(0)).width;
 
         if(shaderWidth > maxWidth) {
             shaderWidth = maxWidth;

@@ -1661,10 +1661,10 @@ const SchedulerWorkSpace = Widget.inherit({
         eventsEngine.on($element, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, {
             itemSizeFunc: function($element) {
                 if(!cellHeight) {
-                    cellHeight = getBoundingRect($element).height;
+                    cellHeight = getBoundingRect($element.get(0)).height;
                 }
                 if(!cellWidth) {
-                    cellWidth = getBoundingRect($element).width;
+                    cellWidth = getBoundingRect($element.get(0)).width;
                 }
                 return {
                     width: cellWidth,
@@ -1804,7 +1804,7 @@ const SchedulerWorkSpace = Widget.inherit({
     },
 
     getTimePanelWidth: function() {
-        return this._$timePanel && getBoundingRect(this._$timePanel).width;
+        return this._$timePanel && getBoundingRect(this._$timePanel.get(0)).width;
     },
 
     getGroupTableWidth: function() {
@@ -1913,10 +1913,10 @@ const SchedulerWorkSpace = Widget.inherit({
 
     _getWorkSpaceWidth: function() {
         if(this._needCreateCrossScrolling()) {
-            return getBoundingRect(this._$dateTable).width;
+            return getBoundingRect(this._$dateTable.get(0)).width;
         }
 
-        return getBoundingRect(this.$element()).width - this.getTimePanelWidth();
+        return getBoundingRect(this.$element().get(0)).width - this.getTimePanelWidth();
     },
 
     _getCellPositionByIndex: function(index, groupIndex, inAllDayRow) {
@@ -1937,7 +1937,7 @@ const SchedulerWorkSpace = Widget.inherit({
     _getCellPosition: function($cell) {
         const position = $cell.position();
         if(this.option('rtlEnabled')) {
-            position.left += getBoundingRect($cell).width;
+            position.left += getBoundingRect($cell.get(0)).width;
         }
         return position;
     },
@@ -1968,7 +1968,7 @@ const SchedulerWorkSpace = Widget.inherit({
     },
 
     _setHorizontalGroupHeaderCellsHeight: function() {
-        const height = getBoundingRect(this._$dateTable).height;
+        const height = getBoundingRect(this._$dateTable.get(0)).height;
 
         this._$groupTable.outerHeight(height);
     },
@@ -2014,7 +2014,7 @@ const SchedulerWorkSpace = Widget.inherit({
             return false;
         }
 
-        const scrollableSize = getBoundingRect($scrollableElement);
+        const scrollableSize = getBoundingRect($scrollableElement.get(0));
 
         return event.pageY < scrollableSize.top || event.pageY > (scrollableSize.top + scrollableSize.height);
     },
@@ -2267,7 +2267,7 @@ const SchedulerWorkSpace = Widget.inherit({
         }
 
         for(let i = startIndex; i < totalCellCount + cellCount; i++) {
-            width = width + getBoundingRect($($cells).eq(i)).width;
+            width = width + getBoundingRect($($cells).eq(i).get(0)).width;
         }
 
         return width / (totalCellCount + cellCount - startIndex);
@@ -2304,7 +2304,7 @@ const SchedulerWorkSpace = Widget.inherit({
                     let maxPosition = $(cell).position().left;
 
                     if(!isRtl) {
-                        maxPosition += getBoundingRect($(cell)).width;
+                        maxPosition += getBoundingRect(cell).width;
                     }
 
                     this._maxAllowedPosition.push(Math.round(maxPosition));
@@ -2324,7 +2324,7 @@ const SchedulerWorkSpace = Widget.inherit({
                 .find('tr:nth-child(' + rows + 'n)')
                 .each(function(_, row) {
 
-                    const maxPosition = $(row).position().top + getBoundingRect($(row)).height;
+                    const maxPosition = $(row).position().top + getBoundingRect(row).height;
 
                     that._maxAllowedVerticalPosition.push(Math.round(maxPosition));
                 });
@@ -2546,7 +2546,7 @@ const SchedulerWorkSpace = Widget.inherit({
                     return true;
                 }
 
-                result += getBoundingRect($(this)).width;
+                result += getBoundingRect(this).width;
             });
 
         return result;

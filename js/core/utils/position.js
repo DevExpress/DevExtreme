@@ -7,9 +7,7 @@ const getDefaultAlignment = function(isRtlEnabled) {
     return rtlEnabled ? 'right' : 'left';
 };
 
-const getBoundingRect = (instance) => {
-    const element = instance.get && instance.get(0) || instance;
-
+const getBoundingRect = (element) => {
     if(typeUtils.isWindow(element)) {
         return {
             width: element.outerWidth,

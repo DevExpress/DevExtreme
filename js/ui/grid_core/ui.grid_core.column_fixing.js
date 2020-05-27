@@ -953,7 +953,7 @@ module.exports = {
 
 
                         if(!result && location === 'headers' && $transparentColumn && $transparentColumn.length) {
-                            const boundingRect = getBoundingRect($transparentColumn);
+                            const boundingRect = getBoundingRect($transparentColumn.get(0));
 
                             if(sourceColumn && sourceColumn.fixed) {
                                 return sourceColumn.fixedPosition === 'right' ? point.x < boundingRect.right : point.x > boundingRect.left;
@@ -1006,7 +1006,7 @@ module.exports = {
                         const $transparentColumn = this._columnHeadersView.getTransparentColumnElement();
 
                         if($transparentColumn && $transparentColumn.length) {
-                            const boundingRect = getBoundingRect($transparentColumn);
+                            const boundingRect = getBoundingRect($transparentColumn.get(0));
 
                             if(currentX <= boundingRect.left || currentX >= boundingRect.right) {
                                 return this.callBase(this._pointsByFixedColumns, currentX, deltaX);

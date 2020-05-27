@@ -153,7 +153,7 @@ export class CompactAppointmentsHelper {
     }
 
     _makeBackgroundDarker(button) {
-        button.css('boxShadow', `inset ${getBoundingRect(button).width}px 0 0 0 rgba(0, 0, 0, 0.3)`);
+        button.css('boxShadow', `inset ${getBoundingRect(button.get(0)).width}px 0 0 0 rgba(0, 0, 0, 0.3)`);
     }
 
     _makeBackgroundColor($button, colors, color) {

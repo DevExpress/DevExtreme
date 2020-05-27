@@ -654,7 +654,7 @@ QUnit.module('content positioning', () => {
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
             const $content = wrapper().find('.dx-overlay-content');
-            const targetRect = getBoundingRect($target);
+            const targetRect = getBoundingRect($target.get(0));
 
             const contentOffsetTop = Math.round($target.offset().top + targetRect.height / 2 - $content.height() / 2);
             const contentOffsetLeft = Math.round($target.offset().left + targetRect.width + $arrow.width());
@@ -688,7 +688,7 @@ QUnit.module('content positioning', () => {
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
             const $content = wrapper().find('.dx-overlay-content');
-            const targetRect = getBoundingRect($target);
+            const targetRect = getBoundingRect($target.get(0));
 
             const contentOffsetTop = Math.round($target.offset().top + targetRect.height + $arrow.height());
             const contentOffsetLeft = Math.round($target.offset().left + targetRect.width / 2 - $content.width() / 2);

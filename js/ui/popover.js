@@ -420,7 +420,7 @@ const Popover = Popup.inherit({
     },
 
     _renderArrowPosition: function(side) {
-        const arrowRect = getBoundingRect(this._$arrow);
+        const arrowRect = getBoundingRect(this._$arrow.get(0));
         const arrowFlip = -(this._isVerticalSide(side) ? arrowRect.height : arrowRect.width);
         this._$arrow.css(POSITION_FLIP_MAP[side], arrowFlip);
 
@@ -433,9 +433,9 @@ const Popover = Popup.inherit({
 
         const arrowSize = arrowRect[sizeProperty];
         const contentLocation = contentOffset[axis];
-        const contentSize = getBoundingRect(this._$content)[sizeProperty];
+        const contentSize = getBoundingRect(this._$content.get(0))[sizeProperty];
         const targetLocation = targetOffset[axis];
-        const targetSize = $target.get(0).preventDefault ? 0 : getBoundingRect($target)[sizeProperty];
+        const targetSize = $target.get(0).preventDefault ? 0 : getBoundingRect($target.get(0))[sizeProperty];
 
         const min = Math.max(contentLocation, targetLocation);
         const max = Math.min(contentLocation + contentSize, targetLocation + targetSize);

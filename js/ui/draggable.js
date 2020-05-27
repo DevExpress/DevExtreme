@@ -181,7 +181,7 @@ class ScrollHelper {
             return false;
         }
 
-        const scrollableSize = getBoundingRect(component._$scrollable);
+        const scrollableSize = getBoundingRect(component._$scrollable.get(0));
         const start = scrollableSize[this._limitProps.start];
         const size = scrollableSize[this._sizeAttr];
         const location = this._sizeAttr === 'width' ? event.pageX : event.pageY;

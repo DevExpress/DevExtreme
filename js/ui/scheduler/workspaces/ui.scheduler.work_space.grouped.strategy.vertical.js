@@ -104,7 +104,7 @@ const VerticalGroupedStrategy = GroupedStrategy.inherit({
 
     getWorkSpaceMinWidth: function() {
         let minWidth = this._workSpace._getWorkSpaceWidth();
-        const workspaceContainerWidth = getBoundingRect(this._workSpace.$element()).width - this._workSpace.getTimePanelWidth() - this._workSpace.getGroupTableWidth() - 2 * WORK_SPACE_BORDER;
+        const workspaceContainerWidth = getBoundingRect(this._workSpace.$element().get(0)).width - this._workSpace.getTimePanelWidth() - this._workSpace.getGroupTableWidth() - 2 * WORK_SPACE_BORDER;
 
         if(minWidth < workspaceContainerWidth) {
             minWidth = workspaceContainerWidth;
@@ -138,7 +138,7 @@ const VerticalGroupedStrategy = GroupedStrategy.inherit({
         const endOffset = $cells.eq(cellCount - 1).offset().left + cellWidth;
         const dayHeight = (this._workSpace._calculateDayDuration() / this._workSpace.option('hoursInterval')) * this._workSpace.getCellHeight();
         const scrollTop = this.getScrollableScrollTop();
-        let topOffset = groupIndex * dayHeight + getBoundingRect(this._workSpace._$thead).height + this._workSpace.invoke('getHeaderHeight') + DATE_HEADER_OFFSET - scrollTop;
+        let topOffset = groupIndex * dayHeight + getBoundingRect(this._workSpace._$thead.get(0)).height + this._workSpace.invoke('getHeaderHeight') + DATE_HEADER_OFFSET - scrollTop;
 
         if(this._workSpace.option('showAllDayPanel') && this._workSpace.supportAllDayRow()) {
             topOffset += this._workSpace.getCellHeight() * (groupIndex + 1);
@@ -170,7 +170,7 @@ const VerticalGroupedStrategy = GroupedStrategy.inherit({
 
     getShaderOffset: function(i, width) {
         const offset = this._workSpace.option('crossScrollingEnabled') ? 0 : this._workSpace.getGroupTableWidth();
-        return this._workSpace.option('rtlEnabled') ? getBoundingRect(this._$container).width - offset - this._workSpace.getWorkSpaceLeftOffset() - width : offset;
+        return this._workSpace.option('rtlEnabled') ? getBoundingRect(this._$container.get(0)).width - offset - this._workSpace.getWorkSpaceLeftOffset() - width : offset;
     },
 
     getShaderTopOffset: function(i) {

@@ -140,7 +140,7 @@ const SliderHandle = Widget.inherit({
 
         this._$tooltipContent.outerWidth('auto');
 
-        const outerWidthWithoutRounding = getBoundingRect(this._$tooltipContent).width;
+        const outerWidthWithoutRounding = getBoundingRect(this._$tooltipContent.get(0)).width;
         const tooltipOuterWidth = Math.ceil(outerWidthWithoutRounding);
         const roundedTooltipOuterWidth = tooltipOuterWidth % 2 + tooltipOuterWidth;
 

@@ -168,7 +168,7 @@ const Resizable = DOMComponent.inherit({
 
         this._elementLocation = translator.locate($element);
 
-        const elementRect = getBoundingRect($element);
+        const elementRect = getBoundingRect($element.get(0));
 
         this._elementSize = {
             width: elementRect.width,
@@ -232,7 +232,7 @@ const Resizable = DOMComponent.inherit({
         if(offset.x || this.option('stepPrecision') === 'strict') this._renderWidth(width);
         if(offset.y || this.option('stepPrecision') === 'strict') this._renderHeight(height);
 
-        const elementRect = getBoundingRect($element);
+        const elementRect = getBoundingRect($element.get(0));
         const offsetTop = offset.y - ((elementRect.height || height) - height);
         const offsetLeft = offset.x - ((elementRect.width || width) - width);
 

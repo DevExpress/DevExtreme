@@ -72,7 +72,7 @@ const SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     _getRtlOffset: function(width) {
-        return this.option('rtlEnabled') ? getBoundingRect(this._dateTableScrollable.$content()).width - this.getTimePanelWidth() - width : 0;
+        return this.option('rtlEnabled') ? getBoundingRect(this._dateTableScrollable.$content().get(0)).width - this.getTimePanelWidth() - width : 0;
     },
 
     _setIndicationUpdateInterval: function() {
