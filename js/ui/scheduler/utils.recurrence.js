@@ -55,8 +55,6 @@ export const recurrenceUtils = {
         const minTime = minDateUtc.getTime();
         const leftBorder = recurrenceUtils.getLeftBorder(options, minDateUtc, duration);
 
-        const tzDiffBetweenRange = options.needCheckTimezoneOffset ? (maxDateUtc.getTimezoneOffset() - leftBorder.getTimezoneOffset()) * toMs('minute') : 0;
-
         rRuleSet.between(leftBorder, maxDateUtc, true).forEach(date => {
             const endAppointmentTime = date.getTime() + duration;
 
@@ -64,7 +62,7 @@ export const recurrenceUtils = {
                 correctTimezoneOffset(date);
 
                 if(!dateIsRecurrenceException(date, exception)) {
-                    result.push(new Date(date.getTime() + tzDiffBetweenRange));
+                    result.push(date);
                 }
             }
         });
@@ -195,8 +193,15 @@ function getRRuleUtcDate(date) {
 
 function correctTimezoneOffset(date) {
     // TZ correction - Some specific in RRule. Perhaps it related to using of luxon.
-    const timezoneOffset = date.getTimezoneOffset() * toMs('minute');
+    const timezoneOffsetBefore = date.getTimezoneOffset();
+    const timezoneOffset = timezoneOffsetBefore * toMs('minute');
+
     date.setTime(date.getTime() + timezoneOffset);
+
+    const timezoneOffsetDelta = date.getTimezoneOffset() - timezoneOffsetBefore;
+    if(timezoneOffsetDelta) {
+        date.setTime(date.getTime() + timezoneOffsetDelta * toMs('minute'));
+    }
 }
 
 const dateIsRecurrenceException = function(date, recurrenceException) {
