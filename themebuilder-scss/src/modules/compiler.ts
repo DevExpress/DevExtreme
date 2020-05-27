@@ -1,6 +1,12 @@
 import * as sass from 'sass';
 import { metadata } from '../data/metadata/dx-theme-builder-metadata';
 
+export enum ImportType {
+  Index,
+  Color,
+  Unknown
+}
+
 export default class Compiler {
   changedVariables: Array<MetaItem> = [];
 
@@ -10,25 +16,23 @@ export default class Compiler {
 
   userItems: Array<ConfigMetaItem> = [];
 
+  indexFileContent: string;
+
   compile(
-    bundlePath: string,
     items: Array<ConfigMetaItem>,
-    customOptions: sass.SyncOptions,
+    options: sass.SyncOptions,
   ): Promise<CompilerResult> {
     this.changedVariables = [];
     this.userItems = items || [];
 
     let compilerOptions: sass.SyncOptions = {
-      file: bundlePath,
       importer: this.setter.bind(this),
       functions: {
         'collector($map)': this.collector.bind(this),
       },
     };
 
-    if (customOptions) {
-      compilerOptions = { ...compilerOptions, ...customOptions };
-    }
+    compilerOptions = { ...compilerOptions, ...options };
 
     return new Promise((resolve, reject) => {
       try {
@@ -44,6 +48,12 @@ export default class Compiler {
     });
   }
 
+  static getImportType(url: string): ImportType {
+    if (/^\.\.\/widgets\/(material|generic)\/tb_index$/.test(url)) return ImportType.Index;
+    if (/^tb/.test(url)) return ImportType.Color;
+    return ImportType.Unknown;
+  }
+
   getMatchingUserItemsAsString(url: string): string {
     const metaKeysForUrl: Array<string> = this.meta
       .filter((item) => item.Path === url)
@@ -57,9 +67,17 @@ export default class Compiler {
 
   setter(url: string): sass.ImporterReturnType {
     let content = this.importerCache[url];
+    const importType = Compiler.getImportType(url);
+
+    if (importType === ImportType.Unknown) {
+      return null;
+    }
 
     if (!content) {
-      content = this.getMatchingUserItemsAsString(url);
+      content = importType === ImportType.Index
+        ? this.indexFileContent
+        : this.getMatchingUserItemsAsString(url);
+
       this.importerCache[url] = content;
     }
 

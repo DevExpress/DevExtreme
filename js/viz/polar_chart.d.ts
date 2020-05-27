@@ -104,14 +104,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      */
     barGroupWidth?: number;
     /**
-     * @docid dxPolarChartOptions.barWidth
-     * @type number
-     * @deprecated dxPolarChartSeriesTypes.CommonPolarChartSeries.barPadding
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    barWidth?: number;
-    /**
      * @docid dxPolarChartOptions.commonAnnotationSettings
      * @type dxPolarChartCommonAnnotationConfig
      * @prevFileNamespace DevExpress.viz
@@ -161,14 +153,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @public
      */
     dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) };
-    /**
-     * @docid dxPolarChartOptions.equalBarWidth
-     * @type boolean
-     * @deprecated dxPolarChartSeriesTypes.CommonPolarChartSeries.ignoreEmptyPoints
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    equalBarWidth?: boolean;
     /**
      * @docid dxPolarChartOptions.legend
      * @type object

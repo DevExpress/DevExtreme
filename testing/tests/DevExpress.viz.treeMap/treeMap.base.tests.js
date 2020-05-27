@@ -3,11 +3,6 @@ const common = require('./commonParts/common.js');
 const themeModule = require('viz/themes');
 const DataSource = require('data/data_source/data_source').DataSource;
 
-const ELLIPSIS_SETTINGS = {
-    wordWrap: 'none',
-    textOverflow: 'ellipsis'
-};
-
 function createDataSource(value) {
     return new DataSource({
         load: function() {
@@ -925,7 +920,6 @@ QUnit.test('layout labels after resize', function(assert) {
     widget.option('size', { width: 900, height: 600 });
 
     assert.equal(this.renderer.text.callCount, 2);
-    assert.deepEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0], { visibility: 'visible' });
     assert.deepEqual(this.renderer.text.lastCall.returnValue.move.lastCall.args, [4, 2]);
 });
 
@@ -949,7 +943,6 @@ QUnit.test('recreating labels after labelField changing', function(assert) {
 
     assert.equal(this.renderer.text.callCount, 1);
     assert.deepEqual(this.renderer.text.lastCall.args, ['2']);
-    assert.deepEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0], { visibility: 'visible' });
     assert.deepEqual(this.renderer.text.lastCall.returnValue.move.lastCall.args, [4, 2]);
 });
 
@@ -973,23 +966,6 @@ QUnit.test('layoutDirection changing', function(assert) {
     assert.checkTile(this.tile(0).attr.lastCall.args[0], [0.5, 0.5, 50.5, 99.5], 'tile 1');
     assert.checkTile(this.tile(1).attr.lastCall.args[0], [50.5, 30.5, 99.5, 99.5], 'tile 2');
     assert.checkTile(this.tile(2).attr.lastCall.args[0], [50.5, 0.5, 99.5, 30.5], 'tile 3');
-});
-
-QUnit.test('resolveLabelOverflow changed for tile labels', function(assert) {
-    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 5 };
-    const widget = common.createWidget({
-        size: {
-            width: 30
-        },
-        dataSource: [{ name: 'Label', value: 10 }],
-        resolveLabelOverflow: 'hide'
-    });
-
-    widget.option('resolveLabelOverflow', 'ellipsis');
-
-    assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, 'visible');
-    assert.ok(this.renderer.text.lastCall.returnValue.setMaxSize.calledOnce);
-    assert.deepEqual(this.renderer.text.lastCall.returnValue.setMaxSize.lastCall.args, [20, undefined, ELLIPSIS_SETTINGS]);
 });
 
 QUnit.test('Passing \'wordWrap\' and \'overflow\' options to texts for tiles', function(assert) {
@@ -1027,36 +1003,6 @@ QUnit.test('Passing \'overflow\' option to texts for group', function(assert) {
 
     assert.ok(this.renderer.text.getCall(1).returnValue.setMaxSize.calledOnce);
     assert.deepEqual(this.renderer.text.getCall(1).returnValue.setMaxSize.lastCall.args, [12, 9, { textOverflow: 'overflow_1', wordWrap: 'none' }]);
-});
-
-QUnit.test('Do not hide label if it width is equal to allowed width', function(assert) {
-    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 25, height: 5 };
-    common.createWidget({
-        size: {
-            width: 35
-        },
-        dataSource: [{ name: 'Label', value: 10 }],
-        resolveLabelOverflow: 'ellipsis'
-    });
-
-    assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, 'visible');
-});
-
-QUnit.test('resolveLabelOverflow changed for group labels', function(assert) {
-    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 10, height: 5 };
-    const widget = common.createWidget({
-        size: {
-            width: 30
-        },
-        dataSource: [{ name: 'someText', items: [{ value: 1 }] }],
-        resolveLabelOverflow: 'hide'
-    });
-
-    widget.option('resolveLabelOverflow', 'ellipsis');
-
-    assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, 'visible');
-    assert.ok(this.renderer.text.lastCall.returnValue.setMaxSize.calledOnce);
-    assert.deepEqual(this.renderer.text.lastCall.returnValue.setMaxSize.lastCall.args, [12, undefined, ELLIPSIS_SETTINGS]);
 });
 
 QUnit.module('labels', environment);
@@ -1142,13 +1088,8 @@ QUnit.test('texts location', function(assert) {
         }]
     });
 
-    assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.lastCall.args[0], { visibility: 'visible' });
     assert.deepEqual(this.renderer.text.getCall(1).returnValue.move.lastCall.args, [484, 2]);
-
-    assert.deepEqual(this.renderer.text.getCall(2).returnValue.attr.lastCall.args[0], { visibility: 'visible' });
     assert.deepEqual(this.renderer.text.getCall(2).returnValue.move.lastCall.args, [8, 24]);
-
-    assert.deepEqual(this.renderer.text.getCall(3).returnValue.attr.lastCall.args[0], { visibility: 'visible' });
     assert.deepEqual(this.renderer.text.getCall(3).returnValue.move.lastCall.args, [244, 24]);
 });
 
@@ -1200,7 +1141,6 @@ QUnit.test('texts positions correcting after font options changing', function(as
     widget.option({ tile: { label: { font: { size: 30 } } } });
 
     assert.deepEqual(this.renderer.text.lastCall.args, ['2']);
-    assert.deepEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0], { visibility: 'visible' });
     assert.deepEqual(this.renderer.text.lastCall.returnValue.move.lastCall.args, [5, -6]);
 });
 
@@ -1230,125 +1170,8 @@ QUnit.test('label in header', function(assert) {
 
     assert.equal(this.renderer.text.callCount, 2);
     assert.deepEqual(this.renderer.text.getCall(1).args, ['1']);
-    assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.lastCall.args[0], { visibility: 'visible' });
     assert.deepEqual(this.renderer.text.getCall(1).returnValue.move.lastCall.args, [8, 6]);
     assert.strictEqual(this.renderer.text.getCall(1).returnValue.css.lastCall.args[0].fill, 'someColor');
-});
-
-QUnit.test('big label didn\'t draw', function(assert) {
-    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 5 };
-    common.createWidget({
-        size: {
-            width: 20
-        },
-        resolveLabelOverflow: 'hide',
-        dataSource: [{ value: 1, name: 'some text' }]
-    });
-
-    assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, 'hidden');
-});
-
-QUnit.test('label\'s height > tile height', function(assert) {
-    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 4, height: 15 };
-    common.createWidget({
-        size: {
-            height: 10
-        },
-        dataSource: [{ value: 1, name: 'some' }]
-    });
-
-    assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, 'visible');
-});
-
-QUnit.test('label\'s height > tile height. resolveLabelOverflow', function(assert) {
-    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 4, height: 15 };
-    common.createWidget({
-        size: {
-            height: 10
-        },
-        dataSource: [{ value: 1, name: 'some' }],
-        resolveLabelOverflow: 'ellipsis'
-    });
-
-    assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, 'hidden');
-});
-
-QUnit.test('Hide multiline tile\'s label', function(assert) {
-    this.renderer.bBoxTemplate = sinon.stub();
-    this.renderer.bBoxTemplate.returns({ x: 0, y: 0, width: 4, height: 5 }).onCall(2).returns({ x: 0, y: 0, width: 4, height: 25 });
-    common.createWidget({
-        size: {
-            height: 10
-        },
-        dataSource: [{ value: 1, name: 'some<br />second line' }],
-        resolveLabelOverflow: 'ellipsis'
-    });
-
-    assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, 'hidden');
-});
-
-QUnit.test('hide long label in header', function(assert) {
-    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 10, height: 5 };
-
-    common.createWidget({
-        size: {
-            width: 10
-        },
-        resolveLabelOverflow: 'hide',
-        dataSource: [{ name: 'someText', items: [{ value: 1 }] }]
-    });
-
-    assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, 'hidden');
-});
-
-QUnit.test('ellipsis label in header', function(assert) {
-    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 10, height: 5 };
-
-    common.createWidget({
-        size: {
-            width: 30
-        },
-        resolveLabelOverflow: 'ellipsis',
-        dataSource: [{ name: 'someText', items: [{ value: 1 }] }]
-    });
-
-    assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, 'visible');
-    assert.ok(this.renderer.text.lastCall.returnValue.setMaxSize.calledOnce);
-    assert.deepEqual(this.renderer.text.lastCall.returnValue.setMaxSize.lastCall.args, [12, undefined, ELLIPSIS_SETTINGS]);
-});
-
-QUnit.test('ellipsis label in header does not fit in width', function(assert) {
-    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 10, height: 5 };
-
-    common.createWidget({
-        size: {
-            width: 20
-        },
-        resolveLabelOverflow: 'ellipsis',
-        dataSource: [{ name: 'someText', items: [{ value: 1 }] }]
-    });
-
-    assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, 'hidden');
-    assert.ok(this.renderer.text.lastCall.returnValue.setMaxSize.calledOnce);
-    assert.deepEqual(this.renderer.text.lastCall.returnValue.setMaxSize.lastCall.args, [2, undefined, ELLIPSIS_SETTINGS]);
-});
-
-QUnit.test('label in header does not fit in width, but fit after ellipsis', function(assert) {
-    this.renderer.bBoxTemplate = sinon.stub();
-    this.renderer.bBoxTemplate.onCall(3).returns({ x: 6, y: 0, width: 5, height: 5 });
-    this.renderer.bBoxTemplate.returns({ x: 6, y: 0, width: 10, height: 5 });
-
-    common.createWidget({
-        size: {
-            width: 25
-        },
-        resolveLabelOverflow: 'ellipsis',
-        dataSource: [{ name: 'someText', items: [{ value: 1 }] }]
-    });
-
-    assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, 'visible');
-    assert.ok(this.renderer.text.lastCall.returnValue.setMaxSize.calledOnce);
-    assert.deepEqual(this.renderer.text.lastCall.returnValue.setMaxSize.lastCall.args, [7, undefined, ELLIPSIS_SETTINGS]);
 });
 
 QUnit.test('draw only header labels', function(assert) {
@@ -1361,22 +1184,6 @@ QUnit.test('draw only header labels', function(assert) {
 
     assert.equal(this.renderer.text.callCount, 2);
     assert.strictEqual(this.renderer.text.lastCall.args[0], 'header');
-});
-
-QUnit.test('hide header labels with set font options', function(assert) {
-    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 50, height: 5 };
-    common.createWidget({
-        size: {
-            width: 30
-        },
-        resolveLabelOverflow: 'hide',
-        dataSource: [{
-            name: 'some',
-            items: [{ value: 1 }]
-        }]
-    });
-
-    assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, 'hidden');
 });
 
 QUnit.test('toggle visibility by \'visible\' option - 1', function(assert) {
@@ -1433,59 +1240,15 @@ QUnit.test('creation widget on non-appended container', function(assert) {
     assert.equal(this.renderer.unlock.callCount, 1);
 });
 
-// T381966
-QUnit.test('labels with small widget height', function(assert) {
-    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 4, height: 15 };
-    common.createWidget({
-        size: {
-            height: 17
-        },
-        resolveLabelOverflow: 'ellipsis',
-        dataSource: [{ name: 'g', value: 1 }]
-    });
-
-    assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, 'hidden');
-});
-
-// T381966
-QUnit.test('labels with small widget width', function(assert) {
-    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 5 };
-    common.createWidget({
-        size: {
-            width: 22
-        },
-        resolveLabelOverflow: 'hide',
-        dataSource: [{ value: 1, name: 'some_' }]
-    });
-
-    assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, 'hidden');
-    assert.strictEqual(this.renderer.text.lastCall.returnValue.stub('move').called, false);
-});
-
-QUnit.test('widget height is small - just hide labels, do not apply ellipsis on labels', function(assert) {
-    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 4, height: 15 };
-    common.createWidget({
-        size: {
-            height: 17
-        },
-        resolveLabelOverflow: 'ellipsis',
-        dataSource: [{ name: 'g', value: 1 }]
-    });
-
-    assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, 'hidden');
-    assert.equal(this.renderer.text.lastCall.returnValue.stub('applyEllipsis').called, false);
-});
-
 QUnit.test('ellipsis mode, change width from small to big - reapply ellipsis', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 10, height: 5 };
     const widget = common.createWidget({
         size: {
             width: 30
         },
-        resolveLabelOverflow: 'ellipsis',
         dataSource: [{ name: 'g', value: 1 }]
     });
-    this.renderer.text.lastCall.returnValue.stub('applyEllipsis').reset();
+    this.renderer.text.lastCall.returnValue.stub('setMaxSize').reset();
 
     widget.option({
         size: {
@@ -1493,7 +1256,6 @@ QUnit.test('ellipsis mode, change width from small to big - reapply ellipsis', f
         }
     });
 
-    assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, 'visible');
     assert.equal(this.renderer.text.lastCall.returnValue.stub('setMaxSize').called, true);
 });
 
@@ -1580,28 +1342,7 @@ QUnit.test('position of labels', function(assert) {
         }]
     });
 
-    assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.lastCall.args[0], { visibility: 'visible' });
     assert.deepEqual(this.renderer.text.getCall(1).returnValue.move.lastCall.args, [574, 2]);
-
-    assert.deepEqual(this.renderer.text.getCall(2).returnValue.attr.lastCall.args[0], { visibility: 'visible' });
     assert.deepEqual(this.renderer.text.getCall(2).returnValue.move.lastCall.args, [450, 6]);
-
-    assert.deepEqual(this.renderer.text.getCall(3).returnValue.attr.lastCall.args[0], { visibility: 'visible' });
     assert.deepEqual(this.renderer.text.getCall(3).returnValue.move.lastCall.args, [450, 24]);
-});
-
-QUnit.test('Correct label position using bBox after ellipsis', function(assert) {
-    this.renderer.bBoxTemplate = sinon.stub();
-    this.renderer.bBoxTemplate.onCall(3).returns({ x: 4, y: 0, width: 5, height: 5 });
-    this.renderer.bBoxTemplate.returns({ x: 6, y: 0, width: 10, height: 5 });
-
-    this.create({
-        size: {
-            width: 25
-        },
-        resolveLabelOverflow: 'ellipsis',
-        dataSource: [{ name: 'someText', items: [{ value: 1 }] }]
-    });
-
-    assert.deepEqual(this.renderer.text.getCall(1).returnValue.move.lastCall.args, [7, 8]);
 });

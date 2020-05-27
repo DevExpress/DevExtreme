@@ -451,7 +451,7 @@ QUnit.test('hide on reinit', function(assert) {
     chart._loadingIndicator.scheduleHiding.reset();
     chart._loadingIndicator.fulfillHiding.reset();
     // act
-    chart.option('scrollingMode', {});
+    chart.option('zoomAndPan', {});
     // assert
     assert.deepEqual(chart._loadingIndicator.scheduleHiding.lastCall.args, []);
     assert.deepEqual(chart._loadingIndicator.fulfillHiding.lastCall.args, []);
@@ -468,7 +468,7 @@ QUnit.test('not hide on reinit, when dataSource is not loaded', function(assert)
     chart._loadingIndicator.fulfillHiding.reset();
     ds.isLoaded = sinon.stub().returns(false);
     // act
-    chart.option('scrollingMode', {});
+    chart.option('zoomAndPan', {});
     // assert
     assert.deepEqual(chart._loadingIndicator.scheduleHiding.lastCall.args, []);
     assert.strictEqual(chart._loadingIndicator.fulfillHiding.lastCall, null);

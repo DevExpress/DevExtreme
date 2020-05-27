@@ -1,4 +1,5 @@
 import path from 'path';
+import * as sass from 'sass';
 import { metadata } from '../data/metadata';
 import noModificationsResult from '../data/compilation-results/no-changes-css';
 import noModificationsMeta from '../data/compilation-results/no-changes-meta';
@@ -9,7 +10,10 @@ const dataPath = path.join(path.resolve(), 'tests', 'data');
 
 jest.mock('../../src/modules/bundle-resolver', () => ({
   __esModule: true,
-  default: (): string => path.join(dataPath, 'scss', 'bundles', 'dx.light.scss'),
+  default: (): sass.SyncOptions => ({
+    file: path.join(dataPath, 'scss', 'bundles', 'dx.light.scss'),
+    includePaths: [path.join(dataPath, 'scss', 'widgets', 'generic')],
+  }),
 }));
 
 jest.mock('../../src/data/metadata/dx-theme-builder-metadata', () => ({
@@ -60,6 +64,24 @@ describe('Compile manager - integration test on test sass', () => {
   color: #337ab7;
 }`);
       expect(result.compiledMetadata).toEqual(noModificationsMeta);
+    });
+  });
+
+  test('compile test bundle with widgets option', () => {
+    const manager = new CompileManager();
+    return manager.compile({
+      widgets: ['datebox'],
+    }).then((result) => {
+      expect(result.css).toBe('');
+      expect(result.compiledMetadata).toEqual([{
+        Key: '$base-font-family',
+        Path: 'tb/widgets/generic/colors',
+        Value: '"Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif',
+      }, {
+        Key: '$base-accent',
+        Path: 'tb/widgets/generic/colors',
+        Value: 'rgba(51,122,183,1)',
+      }]);
     });
   });
 

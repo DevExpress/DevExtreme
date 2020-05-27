@@ -162,9 +162,10 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
             });
 
             const scheduler = createWrapper();
-            scheduler.navigator.click();
 
-            assert.ok(scheduler.navigator.isPopupVisible(), 'Navigator popup should be visible without errors');
+            const { navigator } = scheduler.header;
+            navigator.caption.click();
+            assert.ok(navigator.isPopupVisible, 'Navigator popup should be visible without errors');
         });
     });
 

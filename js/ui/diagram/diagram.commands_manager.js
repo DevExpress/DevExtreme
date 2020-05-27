@@ -772,18 +772,25 @@ const DiagramCommandsManager = {
         return commands.map(c => {
             if(allCommands[c]) {
                 return allCommands[c];
-            } else if(c.text || c.icon) {
+            } else if(c.text || c.icon || c.name) {
+                const internalCommand = c.name && allCommands[c.name];
                 const command = {
-                    command: c.name && allCommands[c.name] && allCommands[c.name].command,
+                    command: internalCommand && internalCommand.command,
                     name: c.name,
-                    text: c.text,
-                    hint: c.text,
-                    icon: c.icon,
-                    menuIcon: c.icon
+                    text: c.text || internalCommand && internalCommand.text,
+                    hint: c.text || internalCommand && internalCommand.hint,
+                    icon: c.icon || internalCommand && internalCommand.icon,
+                    menuIcon: c.icon || internalCommand && internalCommand.menuIcon,
+                    widget: internalCommand && internalCommand.widget,
+                    cssClass: internalCommand && internalCommand.cssClass,
+                    getParameter: internalCommand && internalCommand.getParameter
                 };
                 if(Array.isArray(c.items)) {
                     command.items = this._getPreparedCommands(allCommands, c.items);
+                } else {
+                    command.items = internalCommand && internalCommand.items;
                 }
+
                 return command;
             }
         }).filter(c => c);

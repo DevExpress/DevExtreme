@@ -244,6 +244,15 @@ const createTestData = () => {
         'multiple request - delete single item': [
             { operationId: 1, commonText: 'Deleting an item from Files', allowProgressAutoUpdate: true, type: 'progress-addOperation' },
             { message: 'Deleting an item from Files', status: 'progress', type: 'notification-onActionProgress' },
+            {
+                operationId: 1,
+                details: [
+                    { commonText: 'File 2.jpg', imageUrl: 'image' }
+                ],
+                type: 'progress-addOperationDetails'
+            },
+            { operationId: 1, itemIndex: 0, commonProgress: 100, type: 'progress-completeOperationItem' },
+            { operationId: 1, itemIndex: 0, itemProgress: 100, commonProgress: 100, type: 'progress-updateOperationItemProgress' },
             { commonText: 'Deleted an item from Files', type: 'notification-_showPopup' },
             { operationId: 1, commonText: 'Deleted an item from Files', isError: false, type: 'progress-completeOperation' },
             { message: '', status: 'success', type: 'notification-onActionProgress' },
@@ -253,6 +262,13 @@ const createTestData = () => {
         'multiple request - delete single item with error': [
             { operationId: 1, commonText: 'Deleting an item from Files', allowProgressAutoUpdate: true, type: 'progress-addOperation' },
             { message: 'Deleting an item from Files', status: 'progress', type: 'notification-onActionProgress' },
+            {
+                operationId: 1,
+                details: [
+                    { commonText: 'File 2.jpg', imageUrl: 'image' }
+                ],
+                type: 'progress-addOperationDetails'
+            },
             { operationId: 1, errorText: 'Unspecified error.', type: 'progress-completeSingleOperationWithError' },
             { errorText: 'Unspecified error.', type: 'progress-renderError' },
             {
@@ -270,6 +286,37 @@ const createTestData = () => {
         'single request - delete multiple items': [
             { operationId: 1, commonText: 'Deleting 3 items from Files', allowProgressAutoUpdate: true, type: 'progress-addOperation' },
             { message: 'Deleting 3 items from Files', status: 'progress', type: 'notification-onActionProgress' },
+            {
+                details: [
+                    {
+                        commonText: 'Folder 3',
+                        imageUrl: 'folder'
+                    },
+                    {
+                        commonText: 'File 1.txt',
+                        imageUrl: 'txtfile'
+                    },
+                    {
+                        commonText: 'File 2.jpg',
+                        imageUrl: 'image'
+                    }
+                ],
+                operationId: 1,
+                type: 'progress-addOperationDetails'
+            },
+            {
+                commonProgress: 100,
+                itemIndex: 0,
+                operationId: 1,
+                type: 'progress-completeOperationItem'
+            },
+            {
+                commonProgress: 100,
+                itemIndex: 0,
+                itemProgress: 100,
+                operationId: 1,
+                type: 'progress-updateOperationItemProgress'
+            },
             { commonText: 'Deleted 3 items from Files', type: 'notification-_showPopup' },
             { operationId: 1, commonText: 'Deleted 3 items from Files', isError: false, type: 'progress-completeOperation' },
             { message: '', status: 'success', type: 'notification-onActionProgress' },
@@ -279,6 +326,24 @@ const createTestData = () => {
         'single request - delete multiple items with error': [
             { operationId: 1, commonText: 'Deleting 3 items from Files', allowProgressAutoUpdate: true, type: 'progress-addOperation' },
             { message: 'Deleting 3 items from Files', status: 'progress', type: 'notification-onActionProgress' },
+            {
+                details: [
+                    {
+                        commonText: 'Folder 3',
+                        imageUrl: 'folder'
+                    },
+                    {
+                        commonText: 'File 1.txt',
+                        imageUrl: 'txtfile'
+                    },
+                    {
+                        commonText: 'File 2.jpg',
+                        imageUrl: 'image'
+                    }
+                ],
+                operationId: 1,
+                type: 'progress-addOperationDetails'
+            },
             { operationId: 1, errorText: 'Unspecified error.', type: 'progress-completeSingleOperationWithError' },
             { errorText: 'Unspecified error.', type: 'progress-renderError' },
             { errorText: 'Unspecified error.', type: 'progress-renderError' },
