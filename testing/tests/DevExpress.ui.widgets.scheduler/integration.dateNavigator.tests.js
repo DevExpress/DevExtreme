@@ -507,9 +507,9 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
         assert.ok(navigator.popover.isVisible, 'navigator popup should be visible');
 
         if(scheduler.isDesktop) {
-            assert.equal(navigator.popover.hasScroll, false, 'calendar shouldn\'t wrapped in scrollable container in desktop environment');
+            assert.notOk(navigator.popover.hasScroll, 'calendar shouldn\'t wrapped in scrollable container in desktop environment');
         } else {
-            assert.equal(navigator.popover.hasScroll, true, 'calendar should placed in scrollable container in mobile environment');
+            assert.ok(navigator.popover.hasScroll, 'calendar should placed in scrollable container in mobile environment');
         }
     });
 });
