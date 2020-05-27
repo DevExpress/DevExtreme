@@ -1075,9 +1075,8 @@ const Scheduler = Widget.inherit({
         return timeZoneUtils.calculateTimezoneByValue(this.option('timeZone'), date);
     },
 
-    getCorrectedDatesByDaylightOffsets: function(originalStartDate, dates, appointmentData) {
+    getCorrectedDatesByDaylightOffsets: function(originalStartDate, dates, appointmentData, needCheckTimezoneOffset) {
         const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
-        const needCheckTimezoneOffset = typeUtils.isDefined(startDateTimeZone) && typeUtils.isDefined(this._getTimezoneOffsetByOption(originalStartDate));
         const convertedOriginalStartDate = this.fire('convertDateByTimezoneBack', new Date(originalStartDate.getTime()), startDateTimeZone);
 
         if(needCheckTimezoneOffset) {
@@ -1089,6 +1088,11 @@ const Scheduler = Widget.inherit({
         }
 
         return dates;
+    },
+
+    needCheckTimezoneOffset: function(appointmentData, originalStartDate) {
+        const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
+        return typeUtils.isDefined(startDateTimeZone) && typeUtils.isDefined(this._getTimezoneOffsetByOption(originalStartDate));
     },
 
     _filterAppointmentsByDate: function() {

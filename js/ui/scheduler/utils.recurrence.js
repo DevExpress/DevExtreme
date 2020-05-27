@@ -55,7 +55,7 @@ export const recurrenceUtils = {
         const minTime = minDateUtc.getTime();
         const leftBorder = recurrenceUtils.getLeftBorder(options, minDateUtc, duration);
 
-        const tzDiffBetweenRange = (maxDateUtc.getTimezoneOffset() - leftBorder.getTimezoneOffset()) * toMs('minute');
+        const tzDiffBetweenRange = options.needCheckTimezoneOffset ? (maxDateUtc.getTimezoneOffset() - leftBorder.getTimezoneOffset()) * toMs('minute') : 0;
 
         rRuleSet.between(leftBorder, maxDateUtc, true).forEach(date => {
             const endAppointmentTime = date.getTime() + duration;

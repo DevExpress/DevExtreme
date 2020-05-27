@@ -47,6 +47,8 @@ const subscribes = {
         const renderingStrategy = this.getLayoutManager().getRenderingStrategyInstance();
         const firstDayOfWeek = this.getFirstDayOfWeek();
 
+        const needCheckTimezoneOffset = this.needCheckTimezoneOffset(appointmentData, originalStartDate);
+
         const recurrenceOptions = {
             rule: recurrenceRule,
             exception: recurrenceException,
@@ -54,7 +56,8 @@ const subscribes = {
             end: originalEndDate,
             min: startViewDate,
             max: dateRange[1],
-            firstDayOfWeek: firstDayOfWeek
+            firstDayOfWeek: firstDayOfWeek,
+            needCheckTimezoneOffset: needCheckTimezoneOffset
         };
 
         let dates = recurrenceUtils.getDatesByRecurrence(recurrenceOptions);
@@ -64,7 +67,7 @@ const subscribes = {
             dates.push(startDate);
             initialDates = dates;
         } else {
-            dates = this.getCorrectedDatesByDaylightOffsets(originalStartDate, dates, appointmentData);
+            dates = this.getCorrectedDatesByDaylightOffsets(originalStartDate, dates, appointmentData, needCheckTimezoneOffset);
             initialDates = dates;
 
             dates = dates.map((date) => {
