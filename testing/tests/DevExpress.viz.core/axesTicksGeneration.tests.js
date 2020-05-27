@@ -3386,8 +3386,7 @@ QUnit.test('getAggregationInfo with min/max', function(assert) {
     this.updateOptions({
         argumentType: 'numeric',
         type: 'continuous',
-        min: 3,
-        max: 5,
+        visualRange: [3, 5],
         aggregationGroupWidth: 10
     });
 

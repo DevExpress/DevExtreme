@@ -773,8 +773,11 @@ QUnit.test('empty categories in axis & continuous data', function(assert) {
         }],
         argumentAxis: { categories: [] },
         scrollBar: { visible: true },
-        zoomingMode: 'all',
-        scrollingMode: 'all'
+        zoomAndPan: {
+            argumentAxis: 'both',
+            allowMouseWheel: true,
+            allowTouchGestures: true
+        }
     });
     const businessRange = chart._argumentAxes[0].getTranslator().getBusinessRange();
 

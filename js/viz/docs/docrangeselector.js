@@ -576,12 +576,6 @@ const dxRangeSelector = {
             sortingMethod: true
         },
         /**
-        * @name dxRangeSelectorOptions.chart.useAggregation
-        * @type boolean
-        * @deprecated dxChartSeriesTypes.CommonSeries.aggregation.enabled
-        */
-        useAggregation: false,
-        /**
         * @name dxRangeSelectorOptions.chart.valueAxis
         * @type object
         */
@@ -650,18 +644,6 @@ const dxRangeSelector = {
             */
             customizeSeries: function() { }
         },
-        /**
-        * @name dxRangeSelectorOptions.chart.equalBarWidth
-        * @type boolean
-        * @deprecated dxChartSeriesTypes.CommonSeries.ignoreEmptyPoints
-        */
-        equalBarWidth: true,
-        /**
-        * @name dxRangeSelectorOptions.chart.barWidth
-        * @type number
-        * @deprecated dxChartSeriesTypes.CommonSeries.barPadding
-        */
-        barWidth: undefined,
         /**
         * @name dxRangeSelectorOptions.chart.barGroupPadding
         * @type number
