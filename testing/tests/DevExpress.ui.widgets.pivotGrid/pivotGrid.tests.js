@@ -4077,6 +4077,36 @@ QUnit.module('dxPivotGrid', {
         assert.ok(sortIconRect.left > headerIconRect.left, 'left');
         assert.ok(sortIconRect.right < headerIconRect.right, 'right');
     });
+
+    // T889965
+    QUnit.test('Summary field text should not be NaN if the only field value is null', function(assert) {
+        // arrange
+        const customizeTextSpy = sinon.spy(() => 'custom text');
+
+        createPivotGrid({
+            dataSource: {
+                fields: [
+                    { dataField: 'field', area: 'data', summaryType: 'avg', customizeText: customizeTextSpy }
+                ],
+                store: [{
+                    field: NaN
+                }]
+            },
+        }, assert);
+        this.clock.tick();
+
+        // act
+        assert.equal(customizeTextSpy.callCount, 1, 'customizeText call count');
+
+        const args = customizeTextSpy.args[0][0];
+        // because assert.equal(NaN, NaN) will fail
+        const isValueNaN = args.value === args.value;
+        const grandTotalText = $('.dx-pivotgrid-area.dx-pivotgrid-area-data').find('.dx-grandtotal').text();
+
+        assert.notOk(isValueNaN, 'grand total value is NaN');
+        assert.equal(args.valueText, '', 'grand total valueText');
+        assert.equal(grandTotalText, 'custom text', 'grand total field text');
+    });
 });
 
 QUnit.module('Field Panel', {

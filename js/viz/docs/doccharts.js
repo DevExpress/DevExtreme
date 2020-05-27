@@ -20,8 +20,6 @@ const dxChart = {
     containerBackgroundColor: '#FFFFFF',
     onSeriesClick: function() {},
     onLegendClick: function() { },
-    equalBarWidth: true,
-    barWidth: undefined,
     barGroupPadding: 0.3,
     barGroupWidth: undefined,
     negativesAsZeroes: false,
@@ -237,10 +235,7 @@ const dxChart = {
         */
        allowTouchGestures: true
     },
-    zoomingMode: 'none',
-    scrollingMode: 'none',
     stickyHovering: true,
-    useAggregation: false,
     crosshair: {
         /**
         * @name dxChartOptions.crosshair.enabled
@@ -924,8 +919,6 @@ const dxPolarChart = {
     containerBackgroundColor: '#FFFFFF',
     onSeriesClick: function() { },
     onLegendClick: function() { },
-    equalBarWidth: true,
-    barWidth: undefined,
     barGroupPadding: 0.3,
     barGroupWidth: undefined,
     negativesAsZeroes: false,

@@ -129,10 +129,6 @@ const CollectionWidget = BaseCollectionWidget.inherit({
         this._initKeyGetter();
 
         this._initSelectionModule();
-
-        if(this.option('selectionMode') === 'multi') {
-            this._showDeprecatedSelectionMode();
-        }
     },
 
     _initKeyGetter: function() {
@@ -535,11 +531,6 @@ const CollectionWidget = BaseCollectionWidget.inherit({
         }
     },
 
-    _showDeprecatedSelectionMode: function() {
-        errors.log('W0001', this.NAME, 'selectionMode: \'multi\'', '16.1', 'Use selectionMode: \'multiple\' instead');
-        this.option('selectionMode', 'multiple');
-    },
-
     _addSelection: function(normalizedIndex) {
         const $itemElement = this._editStrategy.getItemElement(normalizedIndex);
 
@@ -557,11 +548,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     _optionChanged: function(args) {
         switch(args.name) {
             case 'selectionMode':
-                if(args.value === 'multi') {
-                    this._showDeprecatedSelectionMode();
-                } else {
-                    this._invalidate();
-                }
+                this._invalidate();
                 break;
             case 'dataSource':
                 if(!args.value || Array.isArray(args.value) && !args.value.length) {

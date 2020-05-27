@@ -390,7 +390,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
         }
 
         if(this._removeStubs(editedText) === '') {
-            parsedValue = this._parsedValue * 0;
+            parsedValue = Math.abs(this._parsedValue * 0);
         }
 
         if(isNaN(parsedValue)) {
