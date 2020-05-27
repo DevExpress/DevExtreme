@@ -776,11 +776,8 @@ registerTheme({
         adjustOnZoom: true,
         autoHidePointMarkers: true,
         rotated: false,
-        zoomingMode: NONE,
-        scrollingMode: NONE,
         synchronizeMultiAxes: true,
         stickyHovering: true,
-        equalBarWidth: true,
         barGroupPadding: 0.3,
         minBubbleSize: 12,
         maxBubbleSize: 0.2,
@@ -1182,7 +1179,6 @@ registerTheme({
         },
         redrawOnResize: true,
         chart: {
-            equalBarWidth: true,
             barGroupPadding: 0.3,
             minBubbleSize: 12,
             maxBubbleSize: 0.2,
@@ -1512,7 +1508,6 @@ registerTheme({
             height: 80,
             keepLabels: true
         },
-        equalBarWidth: true,
         barGroupPadding: 0.3,
         commonAxisSettings: {
             visible: true,

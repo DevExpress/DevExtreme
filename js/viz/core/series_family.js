@@ -17,9 +17,9 @@ function validateBarGroupPadding(barGroupPadding) {
     return (barGroupPadding < 0 || barGroupPadding > 1) ? DEFAULT_BAR_GROUP_PADDING : barGroupPadding;
 }
 
-function isStackExist(series, arg, equalBarWidth) {
+function isStackExist(series, arg) {
     return series.some(function(s) {
-        return (equalBarWidth && !s.getOptions().ignoreEmptyPoints) || s.getPointsByArg(arg, true).some(function(point) {
+        return !s.getOptions().ignoreEmptyPoints || s.getPointsByArg(arg, true).some(function(point) {
             return point.hasValue();
         });
     });
@@ -53,7 +53,6 @@ function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback
     const commonStacks = [];
     const allArguments = [];
     const seriesInStacks = {};
-    const barWidth = options.barWidth;
     const barGroupWidth = options.barGroupWidth;
     const interval = series[0] && series[0].getArgumentAxis().getTranslator().getInterval();
     const barsArea = barGroupWidth ? (interval > barGroupWidth ? barGroupWidth : interval) : (interval * (1 - validateBarGroupPadding(options.barGroupPadding)));
@@ -76,14 +75,14 @@ function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback
 
     allArguments.forEach(function(arg) {
         const currentStacks = commonStacks.reduce((stacks, stack) => {
-            if(isStackExist(seriesInStacks[stack], arg, options.equalBarWidth)) {
+            if(isStackExist(seriesInStacks[stack], arg)) {
                 stacks.push(stack);
             }
 
             return stacks;
         }, []);
 
-        const parameters = calculateParams(barsArea, currentStacks.length, barWidth);
+        const parameters = calculateParams(barsArea, currentStacks.length);
         commonStacks.forEach(stack => {
             correctStackCoordinates(seriesInStacks[stack], currentStacks, arg, stack, parameters, barsArea, seriesStackIndexCallback);
         });
@@ -339,7 +338,7 @@ function updateBarSeriesValues() {
 
 function adjustCandlestickSeriesDimensions() {
     const series = getVisibleSeries(this);
-    adjustBarSeriesDimensionsCore(series, { barWidth: null, equalBarWidth: true, barGroupPadding: 0.3 }, getSeriesStackIndexCallback(isInverted(series)));
+    adjustBarSeriesDimensionsCore(series, { barGroupPadding: 0.3 }, getSeriesStackIndexCallback(isInverted(series)));
 }
 
 function adjustBubbleSeriesDimensions() {

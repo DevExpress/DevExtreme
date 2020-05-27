@@ -345,6 +345,10 @@ const BlockSeparatorView = SeparatorView.inherit({
 const DraggingHeaderView = modules.View.inherit({
     _isDragging: false,
 
+    isDragging: function() {
+        return this._isDragging;
+    },
+
     _getDraggingPanelByPos: function(pos) {
         const that = this;
         let result;
@@ -576,12 +580,17 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         return false;
     },
 
+    _isRtlParentStyle: function() {
+        return this.option('rtlEnabled') && this._$parentContainer?.parent().css('direction') === 'rtl';
+    },
+
     _pointCreated: function(point, cellsLength, columns) {
         const isNextColumnMode = isNextColumnResizingMode(this);
         const rtlEnabled = this.option('rtlEnabled');
-        const firstPointColumnIndex = !isNextColumnMode && rtlEnabled ? 0 : 1;
+        const isRtlParentStyle = this._isRtlParentStyle();
+        const firstPointColumnIndex = !isNextColumnMode && rtlEnabled && !isRtlParentStyle ? 0 : 1;
 
-        if(point.index >= firstPointColumnIndex && point.index < cellsLength + (!isNextColumnMode && !rtlEnabled ? 1 : 0)) {
+        if(point.index >= firstPointColumnIndex && point.index < cellsLength + (!isNextColumnMode && (!rtlEnabled || isRtlParentStyle) ? 1 : 0)) {
             point.columnIndex -= firstPointColumnIndex;
             const currentColumn = columns[point.columnIndex] || {};
             const nextColumn = columns[point.columnIndex + 1] || {};
@@ -614,12 +623,14 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         const parentOffset = that._$parentContainer.offset();
         const parentOffsetLeft = parentOffset.left;
         const eventData = getEventData(e);
+        const rtlEnabled = that.option('rtlEnabled');
+        const isRtlParentStyle = this._isRtlParentStyle();
 
         if(that._isResizing && that._resizingInfo) {
-            if(parentOffsetLeft <= eventData.x && (!isNextColumnMode || eventData.x <= parentOffsetLeft + that._$parentContainer.width())) {
+            if((parentOffsetLeft <= eventData.x || !isNextColumnMode && isRtlParentStyle) && (!isNextColumnMode || eventData.x <= parentOffsetLeft + that._$parentContainer.width())) {
                 if(that._updateColumnsWidthIfNeeded(eventData.x)) {
                     const $cell = that._columnHeadersView.getColumnElements().eq(that._resizingInfo.currentColumnIndex);
-                    that._columnsSeparatorView.moveByX($cell.offset().left + (isNextColumnMode && that.option('rtlEnabled') ? 0 : $cell.outerWidth()));
+                    that._columnsSeparatorView.moveByX($cell.offset().left + ((isNextColumnMode || isRtlParentStyle) && rtlEnabled ? 0 : $cell.outerWidth()));
                     that._tablePositionController.update(that._targetPoint.y);
                     e.preventDefault();
                 }
@@ -725,6 +736,12 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
             that._tablePositionController.update(that._targetPoint.y);
             that._columnsSeparatorView.show();
             that._trackerView.show();
+            const scrollable = that.component.getScrollable();
+
+            if(scrollable && that._isRtlParentStyle()) {
+                that._scrollRight = scrollable.$content().width() - scrollable._container().width() - scrollable.scrollLeft();
+            }
+
             e.preventDefault();
             e.stopPropagation();
         }
@@ -783,6 +800,8 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         let minWidth;
         let nextColumn;
         let cellWidth;
+        const rtlEnabled = this.option('rtlEnabled');
+        const isRtlParentStyle = this._isRtlParentStyle();
 
         function isPercentWidth(width) {
             return typeUtils.isString(width) && width.slice(-1) === '%';
@@ -825,7 +844,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         }
 
         deltaX = posX - resizingInfo.startPosX;
-        if(isNextColumnMode && this.option('rtlEnabled')) {
+        if((isNextColumnMode || isRtlParentStyle) && rtlEnabled) {
             deltaX = -deltaX;
         }
         cellWidth = resizingInfo.currentColumnWidth + deltaX;
@@ -872,6 +891,12 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
             columnsController.endUpdate();
             if(!isNextColumnMode) {
                 this.component.updateDimensions();
+
+                const scrollable = this.component.getScrollable();
+                if(scrollable && isRtlParentStyle) {
+                    const left = scrollable.$content().width() - scrollable._container().width() - this._scrollRight;
+                    scrollable.scrollTo({ left: left });
+                }
             }
         }
 
@@ -921,7 +946,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         that._rowsView = that.getView('rowsView');
         that._columnsController = that.getController('columns');
         that._tablePositionController = that.getController('tablePosition');
-        that._$parentContainer = that._columnsSeparatorView.component.$element();
+        that._$parentContainer = that.component.$element();
 
         that._subscribeToCallback(that._columnHeadersView.renderCompleted, generatePointsByColumnsHandler);
         that._subscribeToCallback(that._columnHeadersView.resizeCompleted, generatePointsByColumnsHandler);
@@ -1006,9 +1031,13 @@ const TablePositionViewController = modules.ViewController.inherit({
         const scrollBarWidth = that._rowsView.getScrollbarWidth(true);
         const rowsHeight = that._rowsView ? that._rowsView.height() - scrollBarWidth : 0;
         const columnsResizerController = that.component.getController('columnsResizer');
+        const draggingHeaderView = that.component.getView('draggingHeaderView');
 
         params.height = columnsHeadersHeight;
-        if(columnsResizerController.isResizing() !== false) {
+
+        const isDraggingOrResizing = columnsResizerController.isResizing() !== false || draggingHeaderView.isDragging();
+
+        if(isDraggingOrResizing) {
             params.height += rowsHeight - diffOffsetTop;
         }
 

@@ -23,6 +23,7 @@ const deferredUtils = require('../core/utils/deferred');
 const getBoundingRect = require('../core/utils/position').getBoundingRect;
 const when = deferredUtils.when;
 const fromPromise = deferredUtils.fromPromise;
+const Deferred = deferredUtils.Deferred;
 
 const DRAGGABLE = 'dxDraggable';
 const DRAGSTART_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, DRAGGABLE);
@@ -221,6 +222,8 @@ const Draggable = DOMComponent.inherit({
         const sourceDraggable = this._getSourceDraggable();
 
         sourceDraggable._fireRemoveEvent(sourceEvent);
+
+        return (new Deferred()).resolve();
     },
 
     _fireRemoveEvent: noop,
@@ -775,6 +778,7 @@ const Draggable = DOMComponent.inherit({
     },
 
     _dragEndHandler: function(e) {
+        const d = new Deferred();
         const dragEndEventArgs = this._getEventArgs(e);
         const dropEventArgs = this._getEventArgs(e);
         const targetDraggable = this._getTargetDraggable();
@@ -791,27 +795,32 @@ const Draggable = DOMComponent.inherit({
                         }
 
                         if(!dropEventArgs.cancel) {
-                            targetDraggable.dragEnd(dragEndEventArgs);
                             needRevertPosition = false;
+                            when(fromPromise(targetDraggable.dragEnd(dragEndEventArgs))).always(d.resolve);
+                            return;
                         }
                     }
-                }).always(() => {
-                    if(needRevertPosition) {
-                        this._revertItemToInitialPosition();
-                    }
+                    d.resolve();
+                })
+                .fail(d.resolve);
 
-                    this.reset();
-                    targetDraggable.reset();
-                    this._stopAnimator();
-                    this._horizontalScrollHelper.reset();
-                    this._verticalScrollHelper.reset();
+            d.done(() => {
+                if(needRevertPosition) {
+                    this._revertItemToInitialPosition();
+                }
 
-                    this._resetDragElement();
-                    this._resetSourceElement();
+                this.reset();
+                targetDraggable.reset();
+                this._stopAnimator();
+                this._horizontalScrollHelper.reset();
+                this._verticalScrollHelper.reset();
 
-                    this._resetTargetDraggable();
-                    this._resetSourceDraggable();
-                });
+                this._resetDragElement();
+                this._resetSourceElement();
+
+                this._resetTargetDraggable();
+                this._resetSourceDraggable();
+            });
         }
     },
 

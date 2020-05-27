@@ -278,6 +278,7 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
     }
 
     _getItems(parentDir) {
+        this._validateDirectoryExists(parentDir);
         const pathInfo = parentDir.getFullPathInfo();
         const parentDirKey = pathInfo && pathInfo.length > 0 ? pathInfo[pathInfo.length - 1].key : null;
         let dirFileObjects = this._data;

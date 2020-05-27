@@ -1819,8 +1819,6 @@ QUnit.test('pass to ctor', function(assert) {
 
 
     this.createChart({
-        equalBarWidth: 'equalBarWidth-option',
-        barWidth: 'barWidth-option',
         rotated: 'rotated-option',
         series: [{ name: 'name1', type: 'line' }, { name: 'name2', type: 'bar' }],
         maxBubbleSize: 'someMaxBubbleSize',
@@ -1831,13 +1829,11 @@ QUnit.test('pass to ctor', function(assert) {
     });
 
     assert.deepEqual(this.createSeriesFamily.args[0][0], {
-        equalBarWidth: 'equalBarWidth-option',
         maxBubbleSize: 'someMaxBubbleSize',
         minBubbleSize: 'someMinBubbleSize',
         type: 'line',
         pane: 'default',
         rotated: 'rotated-option',
-        barWidth: 'barWidth-option',
         negativesAsZeroes: 'someNegativesAsZeroes',
         barGroupPadding: 'barGroupPadding-option',
         barGroupWidth: 'barGroupWidth-option'

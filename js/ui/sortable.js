@@ -7,6 +7,7 @@ import { getWindow } from '../core/utils/window';
 import { getBoundingRect } from '../core/utils/position';
 import translator from '../animation/translator';
 import fx from '../animation/fx';
+import { Deferred } from '../core/utils/deferred';
 
 const SORTABLE = 'dxSortable';
 
@@ -201,9 +202,11 @@ const Sortable = Draggable.inherit({
             }
 
             if(sourceDraggable === this) {
-                this._fireReorderEvent(sourceEvent);
+                return this._fireReorderEvent(sourceEvent);
             }
         }
+
+        return (new Deferred()).resolve();
     },
 
     dragMove: function(e) {
@@ -768,6 +771,8 @@ const Sortable = Draggable.inherit({
         const args = this._getEventArgs(sourceEvent);
 
         this._getAction('onReorder')(args);
+
+        return args.promise || (new Deferred()).resolve();
     }
 });
 
