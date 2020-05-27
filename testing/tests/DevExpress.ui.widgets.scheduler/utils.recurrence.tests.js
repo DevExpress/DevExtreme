@@ -183,9 +183,9 @@ QUnit.module('Recurrences', function() {
     });
 
     QUnit.test('getDatesByRecurrence should handle strings with COUNT & BYMONTH', function(assert) {
-        const dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=MONTHLY;BYMONTHDAY=2;COUNT=5', start: new Date(2017, 4, 1), min: new Date(2017, 4, 1), max: new Date(2017, 9, 20) });
+        const dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=MONTHLY;BYMONTHDAY=2;COUNT=10', start: new Date(2017, 0, 1), min: new Date(2017, 0, 1), max: new Date(2017, 11, 20) });
 
-        assert.deepEqual(dates, [new Date(2017, 4, 2), new Date(2017, 5, 2), new Date(2017, 6, 2), new Date(2017, 7, 2), new Date(2017, 8, 2)], 'date are right');
+        assert.deepEqual(dates, [new Date(2017, 0, 2), new Date(2017, 1, 2), new Date(2017, 2, 2), new Date(2017, 3, 2), new Date(2017, 4, 2), new Date(2017, 5, 2), new Date(2017, 6, 2), new Date(2017, 7, 2), new Date(2017, 8, 2), new Date(2017, 9, 2)], 'date are right');
     });
 
     QUnit.test('getDatesByRecurrence should handle strings with BYYEARDAY, COUNT & YEARLY', function(assert) {
