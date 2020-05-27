@@ -44,11 +44,6 @@ testModule('getBoundingRect', {
         this.$element.appendTo($('#qunit-fixture'));
     }
 }, function() {
-    test('getBoundingRect should return the result of element.getBoundingClientRect() if element is jquery element', function(assert) {
-        const rect = getBoundingRect(this.$element);
-        assert.deepEqual(rect, this.$element.get(0).getBoundingClientRect(), 'result rect is correct');
-    });
-
     test('getBoundingRect should return the result of element.getBoundingClientRect() if element is public element', function(assert) {
         const rect = getBoundingRect(this.$element.get(0));
         assert.deepEqual(rect, this.$element.get(0).getBoundingClientRect(), 'result rect is correct');
