@@ -142,7 +142,7 @@ describe('Compile manager - integration test on test sass', () => {
       expect(result.compiledMetadata).toEqual([{
         Key: '$base-font-family',
         Path: 'tb/widgets/generic/colors',
-        Value: '"Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif',
+        Value: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
       }, {
         Key: '$base-accent',
         Path: 'tb/widgets/generic/colors',
