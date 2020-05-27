@@ -1484,24 +1484,34 @@ QUnit.module('format: removing', moduleConfig, () => {
 
     QUnit.test('removing all digits should change value to 0 even if it\'s negative (T892552)', function(assert) {
         this.instance.option({
-            format: '#0 kg',
+            format: '#,##0.## ₽',
             value: -1
         });
 
-        this.keyboard.caret({ start: 2, end: 2 }).press('backspace').input('backspace');
+        this.keyboard
+            .caret({ start: 0, end: 4 })
+            .press('backspace')
+            .input('backspace')
+            .change();
 
-        assert.strictEqual(this.input.val(), '0 kg', 'text is correct');
+        assert.strictEqual(this.input.val(), '0 ₽', 'text is correct');
+        assert.strictEqual(this.instance.option('value'), 0, 'value is reseted');
     });
 
     QUnit.test('removing last digit should change value to 0 even if it\'s negative (T892552)', function(assert) {
         this.instance.option({
-            format: '#0 kg',
-            value: -0
+            format: '#,##0.## ₽',
+            value: -1
         });
 
-        this.keyboard.caret({ start: 2, end: 2 }).press('backspace').input('backspace');
+        this.keyboard
+            .caret({ start: 2, end: 2 })
+            .press('backspace')
+            .input('backspace')
+            .change();
 
-        assert.strictEqual(this.input.val(), '0 kg', 'text is correct');
+        assert.strictEqual(this.input.val(), '0 ₽', 'text is correct');
+        assert.strictEqual(this.instance.option('value'), 0, 'value is reseted');
     });
 
     QUnit.test('removing digit if decimal format', function(assert) {
