@@ -48,11 +48,15 @@ export const recurrenceUtils = {
 
         const minDateUtc = getRRuleUtcDate(options.min);
         const maxDateUtc = getRRuleUtcDate(options.max);
+
         const duration = endDateUtc ? endDateUtc.getTime() - startDateUtc.getTime() : 0;
 
         const exception = options.exception;
         const minTime = minDateUtc.getTime();
         const leftBorder = recurrenceUtils.getLeftBorder(options, minDateUtc, duration);
+
+        const tzDiffBetweenRange = (maxDateUtc.getTimezoneOffset() - leftBorder.getTimezoneOffset()) * toMs('minute');
+
         rRuleSet.between(leftBorder, maxDateUtc, true).forEach(date => {
             const endAppointmentTime = date.getTime() + duration;
 
@@ -60,7 +64,7 @@ export const recurrenceUtils = {
                 correctTimezoneOffset(date);
 
                 if(!dateIsRecurrenceException(date, exception)) {
-                    result.push(date);
+                    result.push(new Date(date.getTime() + tzDiffBetweenRange));
                 }
             }
         });
@@ -105,7 +109,7 @@ export const recurrenceUtils = {
     },
 
     getAsciiStringByDate: function(date) {
-        const currentOffset = recurrenceUtils.getTimeZoneOffset() * 60000;
+        const currentOffset = recurrenceUtils.getTimeZoneOffset() * toMs('minute');
 
         date = new Date(date.getTime() + currentOffset);
         return date.getFullYear() + ('0' + (date.getMonth() + 1)).slice(-2) + ('0' + date.getDate()).slice(-2) +
@@ -152,7 +156,7 @@ export const recurrenceUtils = {
         let currentOffset = initialDate ? initialDate.getTimezoneOffset() : recurrenceUtils.getTimeZoneOffset();
         let date = new (Function.prototype.bind.apply(Date, prepareDateArrayToParse(arrayDate)))();
 
-        currentOffset = currentOffset * 60000;
+        currentOffset = currentOffset * toMs('minute');
 
         if(isUTC) {
             date = new Date(date.getTime() - currentOffset);
