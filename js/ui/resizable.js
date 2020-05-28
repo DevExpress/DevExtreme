@@ -1,21 +1,22 @@
-const $ = require('../core/renderer');
-const eventsEngine = require('../events/core/events_engine');
-const registerComponent = require('../core/component_registrator');
-const commonUtils = require('../core/utils/common');
-const extend = require('../core/utils/extend').extend;
-const inArray = require('../core/utils/array').inArray;
-const each = require('../core/utils/iterator').each;
-const typeUtils = require('../core/utils/type');
-const windowUtils = require('../core/utils/window');
-const translator = require('../animation/translator');
-const fitIntoRange = require('../core/utils/math').fitIntoRange;
-const DOMComponent = require('../core/dom_component');
-const eventUtils = require('../events/utils');
-const dragEvents = require('../events/drag');
+import translator from '../animation/translator';
+import registerComponent from '../core/component_registrator';
+import DOMComponent from '../core/dom_component';
+import $ from '../core/renderer';
+import { inArray } from '../core/utils/array';
+import commonUtils from '../core/utils/common';
+import { extend } from '../core/utils/extend';
+import { each } from '../core/utils/iterator';
+import { fitIntoRange } from '../core/utils/math';
+import typeUtils from '../core/utils/type';
+import windowUtils from '../core/utils/window';
+import eventsEngine from '../events/core/events_engine';
+import dragEvents from '../events/drag';
+import { getBoundingRect } from '../core/utils/position';
+import eventUtils from '../eventUtils';
+import domUtils from '../core/utils/dom';
+
 const isPlainObject = typeUtils.isPlainObject;
 const isFunction = typeUtils.isFunction;
-const domUtils = require('../core/utils/dom');
-
 const RESIZABLE = 'dxResizable';
 const RESIZABLE_CLASS = 'dx-resizable';
 const RESIZABLE_RESIZING_CLASS = 'dx-resizable-resizing';
@@ -167,7 +168,7 @@ const Resizable = DOMComponent.inherit({
 
         this._elementLocation = translator.locate($element);
 
-        const elementRect = $element.get(0).getBoundingClientRect();
+        const elementRect = getBoundingRect($element.get(0));
 
         this._elementSize = {
             width: elementRect.width,
@@ -231,7 +232,7 @@ const Resizable = DOMComponent.inherit({
         if(offset.x || this.option('stepPrecision') === 'strict') this._renderWidth(width);
         if(offset.y || this.option('stepPrecision') === 'strict') this._renderHeight(height);
 
-        const elementRect = $element.get(0).getBoundingClientRect();
+        const elementRect = getBoundingRect($element.get(0));
         const offsetTop = offset.y - ((elementRect.height || height) - height);
         const offsetLeft = offset.x - ((elementRect.width || width) - width);
 

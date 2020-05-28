@@ -1,6 +1,7 @@
 import Quill from 'quill';
 
 import $ from '../../../core/renderer';
+import { getBoundingRect } from '../../../core/utils/position';
 import PopupModule from './popup';
 import Variable from '../formats/variable';
 
@@ -68,7 +69,7 @@ if(Quill) {
                 });
             } else {
                 const mentionBounds = this.quill.getBounds(position);
-                const rootRect = this.quill.root.getBoundingClientRect();
+                const rootRect = getBoundingRect(this.quill.root);
 
                 this._popup.option('position', {
                     of: this.quill.root,
