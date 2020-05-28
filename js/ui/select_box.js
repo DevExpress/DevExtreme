@@ -668,6 +668,7 @@ const SelectBox = DropDownList.inherit({
         const selectedItem = this.option('selectedItem');
         const searchValue = this._searchValue();
         const selectedItemText = this._displayGetter(selectedItem);
+
         return !selectedItemText || searchValue !== selectedItemText.toString();
     },
 
