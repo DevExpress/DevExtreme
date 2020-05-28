@@ -5,6 +5,7 @@ import Callbacks from '../../core/utils/callbacks';
 import typeUtils from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
+import { getBoundingRect } from '../../core/utils/position';
 import { addNamespace, eventData as getEventData, isTouchEvent } from '../../events/utils';
 import pointerEvents from '../../events/pointer';
 import dragEvents from '../../events/drag';
@@ -695,9 +696,9 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         that._resizingInfo = {
             startPosX: posX,
             currentColumnIndex: currentColumnIndex,
-            currentColumnWidth: currentHeader && currentHeader.length > 0 ? currentHeader[0].getBoundingClientRect().width : 0,
+            currentColumnWidth: currentHeader && currentHeader.length > 0 ? getBoundingRect(currentHeader[0]).width : 0,
             nextColumnIndex: nextColumnIndex,
-            nextColumnWidth: nextHeader && nextHeader.length > 0 ? nextHeader[0].getBoundingClientRect().width : 0
+            nextColumnWidth: nextHeader && nextHeader.length > 0 ? getBoundingRect(nextHeader[0]).width : 0
         };
     },
 

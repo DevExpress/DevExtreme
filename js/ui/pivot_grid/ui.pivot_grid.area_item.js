@@ -2,6 +2,7 @@ import $ from '../../core/renderer';
 import Class from '../../core/class';
 import { getPublicElement } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
+import { getBoundingRect } from '../../core/utils/position';
 import { isDefined } from '../../core/utils/type';
 
 const PIVOTGRID_EXPAND_CLASS = 'dx-expand';
@@ -12,7 +13,7 @@ const getRealElementWidth = function(element) {
     const offsetWidth = element.offsetWidth;
 
     if(element.getBoundingClientRect) {
-        const clientRect = element.getBoundingClientRect();
+        const clientRect = getBoundingRect(element);
         width = clientRect.width;
 
         if(!width) {
@@ -267,7 +268,7 @@ exports.AreaItem = Class.inherit({
 
         if(row && row.lastChild) {
             if(row.getBoundingClientRect) {
-                const clientRect = row.getBoundingClientRect();
+                const clientRect = getBoundingRect(row);
                 height = clientRect.height;
 
                 if(height <= offsetHeight - 1) {

@@ -5,6 +5,7 @@ import messageLocalization from '../../localization/message';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import deferredUtils from '../../core/utils/deferred';
 import { extendFromObject } from '../../core/utils/extend';
+import { getBoundingRect } from '../../core/utils/position';
 import { LIST_ITEM_DATA_KEY, FIXED_CONTAINER_CLASS, LIST_ITEM_CLASS } from './constants';
 
 
@@ -152,7 +153,7 @@ export class CompactAppointmentsHelper {
     }
 
     _makeBackgroundDarker(button) {
-        button.css('boxShadow', `inset ${button.get(0).getBoundingClientRect().width}px 0 0 0 rgba(0, 0, 0, 0.3)`);
+        button.css('boxShadow', `inset ${getBoundingRect(button.get(0)).width}px 0 0 0 rgba(0, 0, 0, 0.3)`);
     }
 
     _makeBackgroundColor($button, colors, color) {
