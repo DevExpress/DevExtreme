@@ -414,12 +414,23 @@ QUnit.module('Options', moduleConfig, () => {
                 text: 'text2'
             }
         ]);
-        assert.equal(this.instance.option('hasChanges'), true, 'on data bind');
+        assert.equal(this.instance.option('hasChanges'), false, 'on data bind');
         assert.ok(this.onOptionChanged.called);
         this.instance.option('hasChanges', false);
         this.instance._diagramInstance.selection.set(['1']);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Bold).execute(true);
         assert.equal(this.instance.option('hasChanges'), true, 'on edit');
+        this.instance.option('nodes.dataSource', [
+            {
+                id: '3',
+                text: 'text3'
+            },
+            {
+                id: '4',
+                text: 'text4'
+            }
+        ]);
+        assert.equal(this.instance.option('hasChanges'), false, 'on data bind after edit');
     });
 });
 
