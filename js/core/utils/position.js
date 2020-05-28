@@ -19,7 +19,7 @@ const getBoundingRect = (element) => {
     try {
         rect = element.getBoundingClientRect();
     } catch(e) {
-        // TODO: add warning "IE throws Unspecified error if there is no such element on the page DOM"
+        // NOTE: IE throws 'Unspecified error' if there is no such element on the page DOM
 
         rect = {
             width: 0,
