@@ -528,18 +528,24 @@ module.exports = {
                 },
 
                 _updatePageIndexes: function() {
+                    const prevRenderingPageIndex = this._lastRenderingPageIndex || 0;
+                    const renderingPageIndex = this._rowsScrollController ? this._rowsScrollController.pageIndex() : 0;
+
                     this._lastPageIndex = this.pageIndex();
-                    this._lastRenderingPageIndex = this._rowsScrollController ? this._rowsScrollController.pageIndex() : 0;
+                    this._lastRenderingPageIndex = renderingPageIndex;
+                    this._isPagingByRendering = renderingPageIndex !== prevRenderingPageIndex;
+                },
+
+                isPagingByRendering: function() {
+                    return this._isPagingByRendering;
                 },
 
                 processUpdateFocusedRow: function() {
                     const prevPageIndex = this._lastPageIndex;
-                    const prevRenderingPageIndex = this._lastRenderingPageIndex || 0;
                     this._updatePageIndexes();
                     const pageIndex = this._lastPageIndex;
-                    const renderingPageIndex = this._lastRenderingPageIndex;
                     const paging = prevPageIndex !== undefined && prevPageIndex !== pageIndex;
-                    const pagingByRendering = renderingPageIndex !== prevRenderingPageIndex;
+                    const pagingByRendering = this.isPagingByRendering();
                     const operationTypes = this._dataSource.operationTypes() || {};
                     const focusController = this.getController('focus');
                     const reload = operationTypes.reload;
@@ -547,8 +553,6 @@ module.exports = {
                     const isVirtualScrolling = keyboardController._isVirtualScrolling();
                     const focusedRowKey = this.option('focusedRowKey');
                     const isAutoNavigate = focusController.isAutoNavigateToFocusedRow();
-
-                    this._isPagingByRendering = pagingByRendering;
 
                     if(reload && focusedRowKey !== undefined) {
                         focusController._navigateToRow(focusedRowKey, true).done(function(focusedRowIndex) {
@@ -573,10 +577,6 @@ module.exports = {
                     } else if(!pagingByRendering) {
                         focusController._focusRowByKeyOrIndex();
                     }
-                },
-
-                isPagingByRendering: function() {
-                    return this._isPagingByRendering;
                 },
 
                 getPageIndexByKey: function(key) {
