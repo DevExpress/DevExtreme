@@ -1449,6 +1449,20 @@ testModule('content', moduleConfig, () => {
         assert.ok(contentReadyStub.calledOnce);
     });
 
+    test('"repaint" should trigger content rendering in case it was not created', function(assert) {
+        const contentReadyStub = sinon.stub();
+        const $container = $('<div>').appendTo('#qunit-fixture').hide();
+        const $widget = $('<div>').appendTo($container);
+        const instance = $widget.dxOverlay({
+            visible: true,
+            onContentReady: contentReadyStub
+        }).dxOverlay('instance');
+
+        $container.show();
+        instance.repaint();
+        assert.ok(contentReadyStub.calledOnce);
+    });
+
     test('content should be rendered only once after resize', function(assert) {
         const contentReadyStub = sinon.stub();
 

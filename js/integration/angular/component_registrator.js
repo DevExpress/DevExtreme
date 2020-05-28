@@ -21,7 +21,6 @@ const compileGetter = dataUtils.compileGetter;
 import extendUtils from '../../core/utils/extend';
 const extendFromObject = extendUtils.extendFromObject;
 import inflector from '../../core/utils/inflector';
-import errors from '../../core/errors';
 const ITEM_ALIAS_ATTRIBUTE_NAME = 'dxItemAlias';
 const SKIP_APPLY_ACTION_CATEGORIES = ['rendering'];
 const NG_MODEL_OPTION = 'value';
@@ -479,22 +478,15 @@ let ComponentBuilder = Class.inherit({
             templates: {
                 'dx-polymorph-widget': {
                     render: options => {
-                        let widgetName = options.model.widget;
+                        const widgetName = options.model.widget;
                         if(!widgetName) {
                             return;
                         }
 
-                        if(widgetName === 'button' || widgetName === 'tabs' || widgetName === 'dropDownMenu') {
-                            const deprecatedName = widgetName;
-                            widgetName = inflector.camelize('dx-' + widgetName);
-                            errors.log('W0001', 'dxToolbar - \'widget\' item field', deprecatedName, '16.1', 'Use: \'' + widgetName + '\' instead');
-                        }
-
                         const markup = $('<div>').attr(inflector.dasherize(widgetName), 'options').get(0);
-
                         const newScope = this._scope.$new();
-                        newScope.options = options.model.options;
 
+                        newScope.options = options.model.options;
                         options.container.append(markup);
                         this._compile(markup)(newScope);
                     }

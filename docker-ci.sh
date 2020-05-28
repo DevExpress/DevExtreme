@@ -20,6 +20,7 @@ function run_ts {
     npm update devextreme-internal-tools
     npm ls devextreme-internal-tools || :
 
+    npm run validate-declarations
     npm run update-ts
 
     if ! diff $target.current $target -U 5 > $target.diff; then
@@ -193,6 +194,9 @@ function run_test_scss {
     npx gulp generate-scss
     npm run build-themes
     node build/gulp/scss/tests/identical.test.js
+
+    cd themebuilder-scss
+    npm i && npm run build && npm run test
 }
 
 function start_runner_watchdog {

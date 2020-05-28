@@ -2214,45 +2214,6 @@ QUnit.test('Temporary _auto mode support', function(assert) {
     assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, '4 text not moved');
 });
 
-QUnit.module('Label overlapping, \'none\' mode', overlappingEnvironment);
-
-QUnit.test('horizontal axis', function(assert) {
-    const markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 4 },
-        { x: 15, y: 0, width: 10, height: 4 },
-        { x: 20, y: 0, width: 20, height: 4 },
-        { x: 45, y: 0, width: 10, height: 4 },
-        { x: 60, y: 0, width: 10, height: 4 }
-    ];
-    this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'none' } });
-
-    assert.equal(this.renderer.text.callCount, 5);
-    assert.deepEqual(this.arrayRemovedElements, []);
-});
-
-
-QUnit.test('vertical axis', function(assert) {
-    this.translator.translate.withArgs(1).returns(50);
-    this.translator.translate.withArgs(3).returns(40);
-    this.translator.translate.withArgs(5).returns(30);
-    this.translator.translate.withArgs(7).returns(20);
-    this.translator.translate.withArgs(9).returns(10);
-    const markersBBoxes = [
-        { x: 0, y: 60, height: 10, width: 4 },
-        { x: 0, y: 45, height: 10, width: 4 },
-        { x: 0, y: 20, height: 30, width: 4 },
-        { x: 0, y: 15, height: 10, width: 4 },
-        { x: 0, y: 0, height: 10, width: 4 }
-    ];
-    this.options.isHorizontal = false;
-    this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'none' } });
-
-    assert.equal(this.renderer.text.callCount, 5);
-    assert.deepEqual(this.arrayRemovedElements, []);
-});
-
 QUnit.module('Estimate size', $.extend({}, environment2DTranslator, {
     beforeEach: function() {
         environment2DTranslator.beforeEach.call(this);
@@ -4720,8 +4681,7 @@ QUnit.test('Do not adjust axis if it has min/max', function(assert) {
     this.updateOptions({
         endOnTick: false,
         valueMarginsEnabled: false,
-        min: -20,
-        max: 60
+        _customVisualRange: [-20, 60]
     });
 
     this.axis.validate();
@@ -4782,8 +4742,7 @@ QUnit.test('Adjust axis after reset zoom', function(assert) {
     this.updateOptions({
         endOnTick: false,
         valueMarginsEnabled: false,
-        min: -20,
-        max: 60
+        _customVisualRange: [-20, 60]
     });
 
     this.axis.validate();
@@ -4901,8 +4860,8 @@ QUnit.module('Custom positioning', {
         const horizontalAxis = this.createSimpleAxis($.extend(true, { isArgumentAxis: false, argumentType: 'numeric' }, horizontalAxisOptions));
         const verticalAxis = this.createSimpleAxis($.extend(true, { isArgumentAxis: false, isHorizontal: false, valueType: 'numeric' }, verticalAxisOptions));
 
-        horizontalAxis.getCustomPositionAxis = () => { return verticalAxis; };
-        verticalAxis.getCustomPositionAxis = () => { return horizontalAxis; };
+        horizontalAxis.getOppositeAxis = () => { return verticalAxis; };
+        verticalAxis.getOppositeAxis = () => { return horizontalAxis; };
 
         horizontalAxis.draw(this.canvas);
         verticalAxis.draw(this.canvas);

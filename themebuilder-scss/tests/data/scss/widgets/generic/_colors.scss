@@ -1,7 +1,7 @@
 @forward "tb/widgets/generic/colors";
 @use "tb/widgets/generic/colors" as *;
 @use "sass:color";
-@use "./color" as extColor;
+
 $color: null !default;
 
 $base-font-family: null !default;
