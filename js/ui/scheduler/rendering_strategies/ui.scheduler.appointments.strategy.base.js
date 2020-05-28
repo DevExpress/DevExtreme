@@ -339,6 +339,7 @@ class BaseRenderingStrategy {
                 ))
         );
     }
+
     _getOrientation(isAllDay) {
         return isAllDay ? ['left', 'right', 'top'] : ['top', 'bottom', 'left'];
     }
