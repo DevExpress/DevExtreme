@@ -820,7 +820,6 @@ QUnit.test('AllDay recurrence appointments should be rendered correctly after ch
 });
 
 QUnit.test('AllDay recurrence appointments should be rendered correctly after changing currentDate, day view', function(assert) {
-    // NOTE: checked with rrule demo. Appointment part is from new Date(2015, 4, 26, 9, 30) to new Date(2015, 4, 27, 11, 30) should be rendered
     const tasks = [{
         startDate: new Date(2015, 4, 25, 9, 30),
         endDate: new Date(2015, 4, 26, 11, 30),
@@ -966,7 +965,6 @@ QUnit.test('The second appointment in recurring series in Week view should have 
 });
 
 QUnit.test('The second appointment in recurring series in Week view should be rendered correctly', function(assert) {
-    // long appointment
     this.createInstance({
         dataSource: [
             {
@@ -1157,7 +1155,6 @@ QUnit.test('Single changed appointment should be rendered correctly in specified
 });
 
 QUnit.test('Recurrent appointment considers firstDayOfWeek of Scheduler, WEEKLY,INTERVAL=2 (T744191)', function(assert) {
-    // checked with rrule demo
     this.createInstance({
         dataSource: [{
             text: 'test',
@@ -1174,7 +1171,7 @@ QUnit.test('Recurrent appointment considers firstDayOfWeek of Scheduler, WEEKLY,
         firstDayOfWeek: 3,
     });
 
-    assert.equal(this.scheduler.appointments.getAppointmentCount(), 8, 'Appointment has right count of occurences');
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 9, 'Appointment has right count of occurences');
 
     const firstAppointmentCoords = translator.locate($(this.scheduler.appointments.getAppointment(0)));
 
@@ -1241,7 +1238,6 @@ QUnit.test('Recurring appointment with interval > 1 rendered correctly (T823073)
 });
 
 QUnit.test('Appointment has correct occurrences dates with interval > 1', function(assert) {
-    // checked with rrule demo
     const data = [
         {
             text: 'Appointment with interval',

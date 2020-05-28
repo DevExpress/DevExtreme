@@ -38,16 +38,8 @@ export const recurrenceUtils = {
             return result;
         }
 
-        const ruleOptions = RRule.parseString(options.rule);
         const startDateUtc = getRRuleUtcDate(options.start);
         const endDateUtc = getRRuleUtcDate(options.end);
-
-        ruleOptions.dtstart = startDateUtc;
-
-        const rRule = new RRule(ruleOptions);
-        const rRuleSet = new RRuleSet();
-        rRuleSet.rrule(rRule);
-
         const minDateUtc = getRRuleUtcDate(options.min);
         const maxDateUtc = getRRuleUtcDate(options.max);
 
@@ -57,6 +49,7 @@ export const recurrenceUtils = {
         const minTime = minDateUtc.getTime();
         const leftBorder = recurrenceUtils.getLeftBorder(options, minDateUtc, duration);
 
+        const rRuleSet = recurrenceUtils.createRRuleSet(options, startDateUtc);
         rRuleSet.between(leftBorder, maxDateUtc, true).forEach(date => {
             const endAppointmentTime = date.getTime() + duration;
 
@@ -70,6 +63,24 @@ export const recurrenceUtils = {
         });
 
         return result;
+    },
+
+    createRRuleSet: function(options, startDateUtc) {
+        const ruleOptions = RRule.parseString(options.rule);
+        const firstDayOfWeek = options.firstDayOfWeek;
+
+        ruleOptions.dtstart = startDateUtc;
+
+        if(!ruleOptions.wkst && firstDayOfWeek) {
+            const weekDayNumbers = [6, 0, 1, 2, 3, 4, 5];
+            ruleOptions.wkst = weekDayNumbers[firstDayOfWeek];
+        }
+
+        const rRuleSet = new RRuleSet();
+
+        rRuleSet.rrule(new RRule(ruleOptions));
+
+        return rRuleSet;
     },
 
     getLeftBorder: function(options, minDateUtc, appointmentDuration) {
