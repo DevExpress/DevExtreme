@@ -11,20 +11,21 @@ Install packages using the following command:
 After instalation generate components and build scripts
 
 ```bash
-    npx gulp generate-react
+    npm run build
+    npm run build:react
 ```
 
 or
 
 ```bash
-    npx gulp generate-react-watch
+    npm run build:react:watch
 ```
 
 
 ### Compiles and hot-reloads for development
 
 ```bash
-cd ./playground/vue
+cd ./playground/react
 npm install
-npm run serve
+npm start
 ```
