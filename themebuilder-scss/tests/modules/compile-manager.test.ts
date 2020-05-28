@@ -3,6 +3,7 @@ import * as sass from 'sass';
 import { metadata } from '../data/metadata';
 import noModificationsResult from '../data/compilation-results/no-changes-css';
 import noModificationsMeta from '../data/compilation-results/no-changes-meta';
+import PostCompiler from '../../src/modules/post-compiler';
 
 import CompileManager from '../../src/modules/compile-manager';
 
@@ -20,6 +21,8 @@ jest.mock('../../src/data/metadata/dx-theme-builder-metadata', () => ({
   __esModule: true,
   metadata,
 }));
+
+PostCompiler.addInfoHeader = (css: string): string => css;
 
 describe('Compile manager - integration test on test sass', () => {
   test('compile test bundle without swatch', () => {
