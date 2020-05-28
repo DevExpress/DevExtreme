@@ -2221,7 +2221,7 @@ QUnit.module('editing', moduleSetup, () => {
         assert.equal(onCustomItemCreating.callCount, 0, 'action has not been called');
     });
 
-    QUnit.test('onCustomItemCreating should not be called twice when there is blur in the handler (T893205)', function(assert) {
+    QUnit.test('onCustomItemCreating should not be called more then once even when there is value change handler call inside of event handler (T893205)', function(assert) {
         let handlerCallCount = 0;
 
         const $selectBox = $('#selectBox').dxSelectBox({
