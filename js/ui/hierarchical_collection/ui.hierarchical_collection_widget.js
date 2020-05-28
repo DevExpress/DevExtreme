@@ -3,7 +3,7 @@ import { compileGetter, compileSetter } from '../../core/utils/data';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import devices from '../../core/devices';
-import iconUtils from '../../core/utils/icon';
+import { getImageContainer } from '../../core/utils/icon';
 import HierarchicalDataAdapter from './ui.data_adapter';
 import CollectionWidget from '../collection/ui.collection_widget.edit';
 import { BindableTemplate } from '../../core/templates/bindable_template';
@@ -93,7 +93,7 @@ const HierarchicalCollectionWidget = CollectionWidget.inherit({
     },
 
     _getIconContainer: function(itemData) {
-        return itemData.icon ? iconUtils.getImageContainer(itemData.icon) : undefined;
+        return itemData.icon ? getImageContainer(itemData.icon) : undefined;
     },
 
     _getTextContainer: function(itemData) {

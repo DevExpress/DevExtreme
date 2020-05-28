@@ -2,5 +2,11 @@ artifacts/*
 js/viz/docs/*
 node_modules/*
 testing/helpers/sinon/*
+*.p.js
+*.j.js
+*.p.d.ts
+*.j.d.ts
+playground/*
 themebuilder/data/metadata/*
 themebuilder-scss/**/*
+js/bundles/dx.custom.js
