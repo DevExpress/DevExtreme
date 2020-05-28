@@ -1,13 +1,21 @@
-# README
+# DevExtreme Angular Playground
 
-## Run Example
+## Run Examples
 
-Install packages using the following command:
+1. Install npm packages:
 
+    ```
     npm install
+    ```
 
-After instalation generate components and build scripts
+2. Generate components and build scripts:
 
+    ```
     npx gulp generate-angular
+    ```
 
-Setup a local web server and run this application in it.
+3. Set up a local web server and launch the application in it:
+
+    ```
+    TODO: Add the command
+    ```
