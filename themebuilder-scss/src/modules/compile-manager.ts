@@ -46,6 +46,12 @@ export default class CompileManager {
         css = PostCompiler.addBasePath(css, config.assetsBasePath);
       }
 
+      css = await PostCompiler.autoPrefix(css);
+
+      if (!config.noClean) {
+        css = await PostCompiler.cleanCss(css);
+      }
+
       css = PostCompiler.addInfoHeader(css, version);
 
       return {

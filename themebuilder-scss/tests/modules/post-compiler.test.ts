@@ -25,4 +25,14 @@ describe('PostCompiler', () => {
       + '*/\n\n'
       + 'css');
   });
+
+  test('cleanCss', async () => {
+    expect(await PostCompiler.cleanCss('.c1 { color: #F00; } .c2 { color: #F00; }'))
+      .toBe('.c1,\n.c2 {\n  color: red;\n}');
+  });
+
+  test('autoPrefixer', async () => {
+    expect(await PostCompiler.autoPrefix('.c1 { box-shadow: none; }'))
+      .toBe('.c1 { -webkit-box-shadow: none; box-shadow: none; }');
+  });
 });

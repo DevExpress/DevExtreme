@@ -1,11 +1,6 @@
 import normalizeConfig from '../../src/modules/config-normalizer';
 import commands from '../../src/modules/commands';
 
-const reader = (): void => {};
-const lessCompiler: LessCompilerInterface = {
-  render: (): void => {},
-};
-
 describe('Cli arguments normalizer', () => {
   test('Commands stay unchanged', () => {
     let config: ConfigSettings = { command: 'build-theme' };
@@ -378,15 +373,13 @@ describe('Cli arguments normalizer', () => {
     });
   });
 
-  test('build-theme \'data\', \'items\', \'reader\', \'lessCompiler\' stay unchanged', () => {
+  test('build-theme \'data\', \'items\' stay unchanged', () => {
     const config: ConfigSettings = {
       command: 'build-theme',
       baseTheme: 'material.blue.light',
       inputFile: 'file.json',
       data: 'somedata',
       items: [{ key: '1', value: '2' }],
-      reader,
-      lessCompiler,
     };
     normalizeConfig(config);
 
@@ -399,11 +392,9 @@ describe('Cli arguments normalizer', () => {
       fileFormat: 'css',
       isBootstrap: false,
       items: [{ key: '1', value: '2' }],
-      lessCompiler,
       makeSwatch: false,
       out: 'dx.material.custom-scheme.css',
       outColorScheme: 'custom-scheme',
-      reader,
       themeName: 'material',
     });
   });
@@ -414,8 +405,6 @@ describe('Cli arguments normalizer', () => {
       baseTheme: 'material.blue.light',
       data: '',
       items: [{ key: '', value: '' }],
-      reader,
-      lessCompiler,
     };
 
     normalizeConfig(config);
@@ -429,11 +418,9 @@ describe('Cli arguments normalizer', () => {
       fileFormat: 'css',
       isBootstrap: false,
       items: [{ key: '', value: '' }],
-      lessCompiler,
       makeSwatch: false,
       out: 'dx.material.custom-scheme.css',
       outColorScheme: 'custom-scheme',
-      reader,
       themeName: 'material',
     });
   });
@@ -572,8 +559,6 @@ describe('Cli arguments normalizer', () => {
       inputFile: 'file.json',
       data: 'somedata',
       items: [{ key: '1', value: '2' }, { key: '@treelist-bg-color', value: '2' }, { key: '@treelist-border-color', value: '3' }],
-      reader,
-      lessCompiler,
     };
     normalizeConfig(config);
 
@@ -586,11 +571,9 @@ describe('Cli arguments normalizer', () => {
       fileFormat: 'css',
       isBootstrap: false,
       items: [{ key: '1', value: '2' }, { key: '$datagrid-bg-color', value: '2' }, { key: '$datagrid-border-color', value: '3' }],
-      lessCompiler,
       makeSwatch: false,
       out: 'dx.material.custom-scheme.css',
       outColorScheme: 'custom-scheme',
-      reader,
       themeName: 'material',
     });
   });
@@ -602,8 +585,6 @@ describe('Cli arguments normalizer', () => {
       inputFile: 'file.json',
       data: 'somedata',
       items: [{ key: '@datagrid-bg-color', value: '2' }, { key: '@datagrid-border-color', value: '3' }],
-      reader,
-      lessCompiler,
     };
     normalizeConfig(config);
 
@@ -616,11 +597,9 @@ describe('Cli arguments normalizer', () => {
       fileFormat: 'css',
       isBootstrap: false,
       items: [{ key: '$datagrid-bg-color', value: '2' }, { key: '$datagrid-border-color', value: '3' }],
-      lessCompiler,
       makeSwatch: false,
       out: 'dx.material.custom-scheme.css',
       outColorScheme: 'custom-scheme',
-      reader,
       themeName: 'material',
     });
   });

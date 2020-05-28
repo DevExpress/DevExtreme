@@ -1,6 +1,8 @@
 // TODO we need to share this option with scss compiler (in gulp task)
 
-export default {
+import CleanCSS from 'clean-css';
+
+const config: CleanCSS.Options = {
   rebase: false,
   format: {
     breaks: {
@@ -23,14 +25,9 @@ export default {
       beforeValue: true,
     },
     wrapAt: false,
+    semicolonAfterLastProperty: true,
   },
-  level: {
-    1: {
-      all: false,
-      semicolonAfterLastProperty: true,
-    },
-    2: {
-      all: true,
-    },
-  },
+  level: 2,
 };
+
+export default config;
