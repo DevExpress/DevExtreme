@@ -12,7 +12,7 @@ import windowUtils from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
 import dragEvents from '../events/drag';
 import { getBoundingRect } from '../core/utils/position';
-import eventUtils from '../eventUtils';
+import eventUtils from '../events/utils';
 import domUtils from '../core/utils/dom';
 
 const isPlainObject = typeUtils.isPlainObject;
