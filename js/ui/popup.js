@@ -21,7 +21,7 @@ import Overlay from './overlay';
 import themes from './themes';
 import domUtils from '../core/utils/dom';
 
-const window = windowUtils.window;
+const window = windowUtils.getWindow();
 
 require('./toolbar/ui.toolbar.base');
 
