@@ -1,7 +1,7 @@
 import translator from '../animation/translator';
 import registerComponent from '../core/component_registrator';
 import devices from '../core/devices';
-import { getPublicElement } from '../integration/jquery/element';
+import { getPublicElement } from '../core/utils/dom';
 import $ from '../core/renderer';
 import { EmptyTemplate } from '../core/templates/empty_template';
 import { inArray } from '../core/utils/array';
