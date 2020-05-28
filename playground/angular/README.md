@@ -11,7 +11,13 @@
 2. Generate components and build scripts:
 
     ```bash
-    npx gulp generate-angular
+    npm run build
+    npm run build:angular
+    ```
+    or
+
+    ```bash
+     npm run build:angular:watch
     ```
 
 3. Set up a local web server and launch the application in it:

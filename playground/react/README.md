@@ -8,7 +8,7 @@ Install packages using the following command:
     npm install
 ```
 
-After instalation generate components and build scripts
+After installation generate components and build scripts
 
 ```bash
     npm run build
