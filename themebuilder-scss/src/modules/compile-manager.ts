@@ -4,6 +4,7 @@ import PreCompiler from './pre-compiler';
 import resolveBundle from './bundle-resolver';
 import PostCompiler from './post-compiler';
 import BootstrapExtractor from './bootstrap-extractor';
+import { version } from '../data/metadata/dx-theme-builder-metadata';
 
 export default class CompileManager {
   compiler = new Compiler();
@@ -45,12 +46,15 @@ export default class CompileManager {
         css = PostCompiler.addBasePath(css, config.assetsBasePath);
       }
 
+      css = PostCompiler.addInfoHeader(css, version);
+
       return {
         compiledMetadata: compileData.changedVariables,
         css,
         widgets: widgetsLists.widgets,
         unusedWidgets: widgetsLists.unusedWidgets,
         swatchSelector,
+        version,
       };
     } catch (e) {
       throw new Error(`Compilation failed. bundle: ${bundleOptions}, e: ${e}`);
