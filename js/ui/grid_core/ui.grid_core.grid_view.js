@@ -4,6 +4,7 @@ import commonUtils from '../../core/utils/common';
 import windowUtils from '../../core/utils/window';
 import { each } from '../../core/utils/iterator';
 import typeUtils from '../../core/utils/type';
+import { getBoundingRect } from '../../core/utils/position';
 import gridCoreUtils from './ui.grid_core.utils';
 import messageLocalization from '../../localization/message';
 import { when, Deferred } from '../../core/utils/deferred';
@@ -292,7 +293,7 @@ const ResizingController = modules.ViewController.inherit({
                 that._toggleBestFitMode(false);
                 resetBestFitMode = false;
                 if(focusedElement && focusedElement !== domAdapter.getActiveElement()) {
-                    const isFocusOutsideWindow = focusedElement.getBoundingClientRect().bottom < 0;
+                    const isFocusOutsideWindow = getBoundingRect(focusedElement).bottom < 0;
                     if(!isFocusOutsideWindow) {
                         if(browser.msie) {
                             setTimeout(function() { restoreFocus(focusedElement, selectionRange); });

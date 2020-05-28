@@ -8,6 +8,7 @@ import { Deferred } from '../../core/utils/deferred';
 import translator from '../../animation/translator';
 import LoadIndicator from '../load_indicator';
 import browser from '../../core/utils/browser';
+import { getBoundingRect } from '../../core/utils/position';
 
 const TABLE_CLASS = 'table';
 const BOTTOM_LOAD_PANEL_CLASS = 'bottom-load-panel';
@@ -472,7 +473,7 @@ const VirtualScrollingRowsViewExtender = (function() {
             if(!that.option('legacyRendering') && (isVirtualMode(that) || isVirtualRowRendering(that))) {
                 if(!isRender) {
                     const rowHeights = that._getRowElements(that._tableElement).toArray().map(function(row) {
-                        return row.getBoundingClientRect().height;
+                        return getBoundingRect(row).height;
                     });
 
                     dataController.setContentSize(rowHeights);

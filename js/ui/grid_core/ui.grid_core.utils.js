@@ -5,6 +5,7 @@ import { getGroupInterval } from '../shared/filtering';
 import { format } from '../../core/utils/string';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
+import { getBoundingRect } from '../../core/utils/position';
 import { extendFromObject } from '../../core/utils/extend';
 import { toComparable } from '../../core/utils/data';
 import { equalByValue } from '../../core/utils/common';
@@ -378,8 +379,8 @@ module.exports = (function() {
 
                 const point = {
                     index: columnIndex,
-                    x: offset ? offset.left + ((!isVertical && (rtlEnabled ^ (i === cellsLength))) ? item[0].getBoundingClientRect().width : 0) : 0,
-                    y: offset ? offset.top + ((isVertical && i === cellsLength) ? item[0].getBoundingClientRect().height : 0) : 0,
+                    x: offset ? offset.left + ((!isVertical && (rtlEnabled ^ (i === cellsLength))) ? getBoundingRect(item[0]).width : 0) : 0,
+                    y: offset ? offset.top + ((isVertical && i === cellsLength) ? getBoundingRect(item[0]).height : 0) : 0,
                     columnIndex: columnIndex
                 };
 
