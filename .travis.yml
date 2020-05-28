@@ -28,12 +28,12 @@ env:
     - TARGET=test PERF=true JQUERY=true NO_HEADLESS=true
     - TARGET=test MOBILE_UA=ios9 CONSTEL=ui
     - TARGET=test MOBILE_UA=ios9 CONSTEL=ui.editors NO_HEADLESS=true
-    - TARGET=test MOBILE_UA=ios9 CONSTEL=ui.grid
+    - TARGET=test MOBILE_UA=ios9 CONSTEL=ui.grid NO_HEADLESS=true
     - TARGET=test MOBILE_UA=ios9 CONSTEL=ui.scheduler
     - TARGET=test MOBILE_UA=ios9 CONSTEL=viz
     - TARGET=test MOBILE_UA=android6 JQUERY=true CONSTEL=ui
     - TARGET=test MOBILE_UA=android6 JQUERY=true CONSTEL=ui.editors NO_HEADLESS=true
-    - TARGET=test MOBILE_UA=android6 JQUERY=true CONSTEL=ui.grid
+    - TARGET=test MOBILE_UA=android6 JQUERY=true CONSTEL=ui.grid NO_HEADLESS=true
     - TARGET=test MOBILE_UA=android6 JQUERY=true CONSTEL=ui.scheduler
     - TARGET=test MOBILE_UA=android6 JQUERY=true CONSTEL=viz
     - TARGET=test BROWSER=firefox JQUERY=true CONSTEL=export
@@ -74,6 +74,10 @@ script:
     -e CONSTEL=$CONSTEL
     -e COMPONENT=$COMPONENT
     -e JQUERY=$JQUERY
+    -e PERF=$PERF
+    -e TZ=$TZ
+    -e MOBILE_UA=$MOBILE_UA
+    -e QUARANTINE_MODE=$QUARANTINE_MODE
     -v $TRAVIS_BUILD_DIR:/devextreme
     docker.io/devexpress/devextreme-build:20_2
     ./docker-ci.sh

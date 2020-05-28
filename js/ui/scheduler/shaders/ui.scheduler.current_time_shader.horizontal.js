@@ -1,4 +1,5 @@
 const Shader = require('./ui.scheduler.current_time_shader');
+import { getBoundingRect } from '../../../core/utils/position';
 
 const HorizontalCurrentTimeShader = Shader.inherit({
     _renderShader: function() {
@@ -17,7 +18,7 @@ const HorizontalCurrentTimeShader = Shader.inherit({
 
     _customizeShader: function($shader, groupIndex) {
         let shaderWidth = this._workspace.getIndicationWidth();
-        const maxWidth = this._$container.get(0).getBoundingClientRect().width;
+        const maxWidth = getBoundingRect(this._$container.get(0)).width;
 
         if(shaderWidth > maxWidth) {
             shaderWidth = maxWidth;
