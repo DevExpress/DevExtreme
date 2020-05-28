@@ -169,6 +169,8 @@
     "build:react:watch": "gulp generate-react-watch",
     "build:angular": "gulp generate-angular",
     "build:angular:watch": "gulp generate-angular-watch",
+    "build:vue": "gulp generate-vue",
+    "build:vue:watch": "gulp generate-vue-watch",
     "dev": "gulp dev",
     "transpile-tests": "gulp transpile-tests",
     "test-env": "node testing/launch",
