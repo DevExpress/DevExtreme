@@ -4,6 +4,7 @@ import { extend } from '../core/utils/extend';
 import Draggable from './draggable';
 import { getPublicElement } from '../core/utils/dom';
 import { getWindow } from '../core/utils/window';
+import { getBoundingRect } from '../core/utils/position';
 import translator from '../animation/translator';
 import fx from '../animation/fx';
 import { Deferred } from '../core/utils/deferred';
@@ -580,7 +581,7 @@ const Sortable = Draggable.inherit({
         }
 
         if(scrollContainer) {
-            const clientRect = scrollContainer.getBoundingClientRect();
+            const clientRect = getBoundingRect(scrollContainer);
             const isVerticalOrientation = this._isVerticalOrientation();
             const start = isVerticalOrientation ? 'top' : 'left';
             const end = isVerticalOrientation ? 'bottom' : 'right';

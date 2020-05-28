@@ -1,4 +1,5 @@
 const GroupedStrategy = require('./ui.scheduler.work_space.grouped.strategy');
+const getBoundingRect = require('../../../core/utils/position').getBoundingRect;
 
 const HORIZONTAL_GROUPED_ATTR = 'dx-group-row-count';
 
@@ -97,7 +98,7 @@ const HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     getWorkSpaceMinWidth: function() {
-        return this._workSpace.$element().get(0).getBoundingClientRect().width - this._workSpace.getTimePanelWidth();
+        return getBoundingRect(this._workSpace.$element().get(0)).width - this._workSpace.getTimePanelWidth();
     },
 
     getAllDayOffset: function() {
@@ -105,7 +106,7 @@ const HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     getAllDayTableHeight: function() {
-        return this._workSpace._$allDayTable.get(0).getBoundingClientRect().height || 0;
+        return getBoundingRect(this._workSpace._$allDayTable.get(0)).height || 0;
     },
 
     getGroupCountAttr: function(groupRowCount, groupRows) {
@@ -158,7 +159,7 @@ const HorizontalGroupedStrategy = GroupedStrategy.inherit({
 
     getShaderOffset: function(i, width) {
         const offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(i - 1) * i;
-        return this._workSpace.option('rtlEnabled') ? this._workSpace._dateTableScrollable.$content().get(0).getBoundingClientRect().width - offset - this._workSpace.getTimePanelWidth() - width : offset;
+        return this._workSpace.option('rtlEnabled') ? getBoundingRect(this._workSpace._dateTableScrollable.$content().get(0)).width - offset - this._workSpace.getTimePanelWidth() - width : offset;
     },
 
     getShaderTopOffset: function(i) {
@@ -172,7 +173,7 @@ const HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     getShaderMaxHeight: function() {
-        return this._workSpace._dateTableScrollable.$content().get(0).getBoundingClientRect().height;
+        return getBoundingRect(this._workSpace._dateTableScrollable.$content().get(0)).height;
     },
 
     getShaderWidth: function(i) {
