@@ -18,7 +18,6 @@ const ExcelJSLocalizationFormatTests = {
             },
             beforeEach: function() {
                 this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
-                this.customizeCellCallCount = 0;
                 helper = new ExcelJSTestHelper(this.worksheet);
             },
             after: function() {
@@ -30,7 +29,7 @@ const ExcelJSLocalizationFormatTests = {
 
                 QUnit.test(`Data - columns.dataType: number, columns.format: { type: 'currency', currency: ${currency.value} } `, function(assert) {
                     const done = assert.async();
-                    const ds = [{ f1: undefined, f2: null, f3: 0, f4: 1, f5: 2, f6: -2, f7: 1050 }];
+                    const ds = [{ f1: undefined, f2: null, f3: 0, f4: 1, f5: 2, f6: -2 }];
                     const topLeft = { row: 1, column: 1 };
 
                     $('#qunit-fixture').append('<div id=\'dataGrid\'></div>');
@@ -42,8 +41,7 @@ const ExcelJSLocalizationFormatTests = {
                             { dataField: 'f3', dataType: 'number', format: { type: 'currency', currency: currency.value } },
                             { dataField: 'f4', dataType: 'number', format: { type: 'currency', currency: currency.value } },
                             { dataField: 'f5', dataType: 'number', format: { type: 'currency', currency: currency.value } },
-                            { dataField: 'f6', dataType: 'number', format: { type: 'currency', currency: currency.value } },
-                            { dataField: 'f7', dataType: 'number', format: { type: 'currency', currency: currency.value } }
+                            { dataField: 'f6', dataType: 'number', format: { type: 'currency', currency: currency.value } }
                         ],
                         showColumnHeaders: false,
                         loadingTimeout: undefined
@@ -55,8 +53,7 @@ const ExcelJSLocalizationFormatTests = {
                         { excelCell: { value: ds[0].f3, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: currency.expected }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
                         { excelCell: { value: ds[0].f4, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: currency.expected }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
                         { excelCell: { value: ds[0].f5, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: currency.expected }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } },
-                        { excelCell: { value: ds[0].f6, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: currency.expected }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(5) } },
-                        { excelCell: { value: ds[0].f7, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: currency.expected }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(6) } }
+                        { excelCell: { value: ds[0].f6, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: currency.expected }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(5) } }
                     ]];
 
                     helper._extendExpectedCells(expectedCells, topLeft);
@@ -67,7 +64,7 @@ const ExcelJSLocalizationFormatTests = {
                     }).then((cellRange) => {
                         helper.checkValues(expectedCells);
                         helper.checkCellFormat(expectedCells);
-                        helper.checkCellRange(cellRange, { row: 1, column: 7 }, topLeft);
+                        helper.checkCellRange(cellRange, { row: 1, column: 6 }, topLeft);
                         done();
                     });
                 });
@@ -83,7 +80,6 @@ const ExcelJSLocalizationFormatTests = {
             },
             beforeEach: function() {
                 this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
-                this.customizeCellCallCount = 0;
                 helper = new ExcelJSTestHelper(this.worksheet);
             },
             after: function() {

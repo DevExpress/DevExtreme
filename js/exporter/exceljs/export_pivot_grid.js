@@ -141,7 +141,6 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
 
         if(isDefined(customizeCell)) {
             customizeCell({
-                cell: excelCell,
                 excelCell: excelCell,
                 gridCell: gridCell
             });
