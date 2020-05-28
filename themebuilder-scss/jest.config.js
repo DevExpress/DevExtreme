@@ -13,7 +13,8 @@ module.exports = {
     },
     testEnvironment: 'node',
     testMatch: [
-        '**/tests/**/*.test.ts'
+        //'**/tests/**/*.test.ts'
+        '**/tests/**/builder.test.ts'
     ],
     coverageThreshold: {
         global: {

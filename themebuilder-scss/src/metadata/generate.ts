@@ -2,6 +2,7 @@
 import MetadataCollector from './collector';
 import { version } from '../../../build/gulp/context';
 import { resolveDataUri } from '../../../build/gulp/gulp-data-uri';
+import { browserslist } from '../../../package.json';
 
 const stylesDirectory = '../scss';
 const stylesDestinationDirectory = './src/data/scss';
@@ -15,7 +16,7 @@ const generate = async (): Promise<void> => {
     const collector = new MetadataCollector();
     const sourceFiles = collector.readFiles(stylesDirectory, sourceHandler);
     await MetadataCollector.saveScssFiles(sourceFiles, stylesDestinationDirectory);
-    await collector.saveMetadata(metadataDestinationFile, version.package);
+    await collector.saveMetadata(metadataDestinationFile, version.package, browserslist);
   } catch (e) {
     console.error(e);
     process.exit(1);

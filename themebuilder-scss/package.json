@@ -13,9 +13,11 @@
   "repository": "https://github.com/DevExpress/DevExtreme",
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
+    "autoprefixer": "^9.8.0",
     "bootstrap": "^4.3.1",
-    "clean-css": "^4.2.1",
+    "clean-css": "^4.2.3",
     "less": "^3.9.0",
+    "postcss": "^7.0.31",
     "sass": "^1.26.3",
     "semver": "^5.6.0"
   },
@@ -29,6 +31,7 @@
     "build": "npm run generate-metadata && npm run build-ts"
   },
   "devDependencies": {
+    "@types/autoprefixer": "^9.7.2",
     "@types/clean-css": "^4.2.1",
     "@types/jest": "^25.2.1",
     "@types/less": "^3.0.1",

@@ -40,9 +40,9 @@ describe('Compile manager - integration test on test sass', () => {
       outColorScheme: 'test-theme',
     }).then((result) => {
       expect(result.css).toBe(`.dx-swatch-test-theme .dx-accordion {
-  background-color: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif;
+  background-color: "Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif;
   color: #337ab7;
-  font: url("icons/icons.woff2");
+  background-image: url(icons/icons.woff2);
 }
 .dx-swatch-test-theme .dx-accordion .from-base {
   background-color: transparent;
@@ -58,9 +58,9 @@ describe('Compile manager - integration test on test sass', () => {
       assetsBasePath: 'base-path',
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
-  background-color: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif;
+  background-color: "Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif;
   color: #337ab7;
-  font: url("base-path/icons/icons.woff2");
+  background-image: url(base-path/icons/icons.woff2);
 }
 .dx-accordion .from-base {
   background-color: transparent;
@@ -96,9 +96,9 @@ describe('Compile manager - integration test on test sass', () => {
       data: '@brand-primary: red;',
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
-  background-color: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif;
+  background-color: "Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif;
   color: red;
-  font: url("icons/icons.woff2");
+  background-image: url(icons/icons.woff2);
 }
 .dx-accordion .from-base {
   background-color: transparent;
@@ -133,9 +133,9 @@ describe('Compile manager - integration test on test sass', () => {
       data: '$primary: red;',
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
-  background-color: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  background-color: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
   color: red;
-  font: url("icons/icons.woff2");
+  background-image: url(icons/icons.woff2);
 }
 .dx-accordion .from-base {
   background-color: transparent;
@@ -159,6 +159,24 @@ describe('Compile manager - integration test on test sass', () => {
         Path: 'tb/widgets/generic/accordion/colors',
         Value: 'rgba(0,0,0,0)',
       }]);
+    });
+  });
+
+  test('compile test bundle with noClean option', () => {
+    const manager = new CompileManager();
+    return manager.compile({
+      noClean: true,
+    }).then((result) => {
+      expect(result.css).toBe(`.dx-accordion {
+  background-color: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif;
+  color: #337ab7;
+  background-image: url(icons/icons.woff2);
+}
+.dx-accordion .from-base {
+  background-color: transparent;
+  color: #337ab7;
+}`);
+      expect(result.compiledMetadata).toEqual(noModificationsMeta);
     });
   });
 
