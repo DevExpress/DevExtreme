@@ -12,6 +12,8 @@ import eventsEngine from '../events/core/events_engine';
 import { triggerShownEvent } from '../events/visibility_change';
 import LoadIndicator from './load_indicator';
 import Widget from './widget/ui.widget';
+import { getBoundingRect } from '../core/utils/position';
+
 const window = windowUtils.getWindow();
 const Deferred = deferredUtils.Deferred;
 
@@ -134,7 +136,7 @@ const DeferRendering = Widget.inherit({
     },
 
     _isElementInViewport: function(element) {
-        const rect = element.getBoundingClientRect();
+        const rect = getBoundingRect(element);
 
         return rect.bottom >= 0 &&
             rect.right >= 0 &&

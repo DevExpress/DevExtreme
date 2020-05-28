@@ -8,6 +8,7 @@ const windowUtils = require('../../../core/utils/window');
 const getPublicElement = require('../../../core/element').getPublicElement;
 const extend = require('../../../core/utils/extend').extend;
 const each = require('../../../core/utils/iterator').each;
+const getBoundingRect = require('../../../core/utils/position').getBoundingRect;
 const messageLocalization = require('../../../localization/message');
 const dateLocalization = require('../../../localization/date');
 const toMs = dateUtils.dateToMilliseconds;
@@ -1660,10 +1661,10 @@ const SchedulerWorkSpace = Widget.inherit({
         eventsEngine.on($element, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, {
             itemSizeFunc: function($element) {
                 if(!cellHeight) {
-                    cellHeight = $element.get(0).getBoundingClientRect().height;
+                    cellHeight = getBoundingRect($element.get(0)).height;
                 }
                 if(!cellWidth) {
-                    cellWidth = $element.get(0).getBoundingClientRect().width;
+                    cellWidth = getBoundingRect($element.get(0)).width;
                 }
                 return {
                     width: cellWidth,
@@ -1803,7 +1804,7 @@ const SchedulerWorkSpace = Widget.inherit({
     },
 
     getTimePanelWidth: function() {
-        return this._$timePanel && this._$timePanel.get(0).getBoundingClientRect().width;
+        return this._$timePanel && getBoundingRect(this._$timePanel.get(0)).width;
     },
 
     getGroupTableWidth: function() {
@@ -1912,10 +1913,10 @@ const SchedulerWorkSpace = Widget.inherit({
 
     _getWorkSpaceWidth: function() {
         if(this._needCreateCrossScrolling()) {
-            return this._$dateTable.get(0).getBoundingClientRect().width;
+            return getBoundingRect(this._$dateTable.get(0)).width;
         }
 
-        return this.$element().get(0).getBoundingClientRect().width - this.getTimePanelWidth();
+        return getBoundingRect(this.$element().get(0)).width - this.getTimePanelWidth();
     },
 
     _getCellPositionByIndex: function(index, groupIndex, inAllDayRow) {
@@ -1936,7 +1937,7 @@ const SchedulerWorkSpace = Widget.inherit({
     _getCellPosition: function($cell) {
         const position = $cell.position();
         if(this.option('rtlEnabled')) {
-            position.left += $cell.get(0).getBoundingClientRect().width;
+            position.left += getBoundingRect($cell.get(0)).width;
         }
         return position;
     },
@@ -1967,7 +1968,7 @@ const SchedulerWorkSpace = Widget.inherit({
     },
 
     _setHorizontalGroupHeaderCellsHeight: function() {
-        const height = this._$dateTable.get(0).getBoundingClientRect().height;
+        const height = getBoundingRect(this._$dateTable.get(0)).height;
 
         this._$groupTable.outerHeight(height);
     },
@@ -2013,7 +2014,7 @@ const SchedulerWorkSpace = Widget.inherit({
             return false;
         }
 
-        const scrollableSize = $scrollableElement.get(0).getBoundingClientRect();
+        const scrollableSize = getBoundingRect($scrollableElement.get(0));
 
         return event.pageY < scrollableSize.top || event.pageY > (scrollableSize.top + scrollableSize.height);
     },
@@ -2242,7 +2243,7 @@ const SchedulerWorkSpace = Widget.inherit({
 
     getCellWidth: function() {
         const cell = this._getCells().first().get(0);
-        return cell && cell.getBoundingClientRect().width;
+        return cell && getBoundingRect(cell).width;
     },
 
     getCellMinWidth: function() {
@@ -2266,7 +2267,7 @@ const SchedulerWorkSpace = Widget.inherit({
         }
 
         for(let i = startIndex; i < totalCellCount + cellCount; i++) {
-            width = width + $($cells).eq(i).get(0).getBoundingClientRect().width;
+            width = width + getBoundingRect($($cells).eq(i).get(0)).width;
         }
 
         return width / (totalCellCount + cellCount - startIndex);
@@ -2275,13 +2276,13 @@ const SchedulerWorkSpace = Widget.inherit({
     getCellHeight: function() {
         const cell = this._getCells().first().get(0);
 
-        return cell && cell.getBoundingClientRect().height;
+        return cell && getBoundingRect(cell).height;
     },
 
     getAllDayHeight: function() {
         const cell = this._getCells(true).first().get(0);
 
-        return this.option('showAllDayPanel') ? cell && cell.getBoundingClientRect().height || 0 : 0;
+        return this.option('showAllDayPanel') ? cell && getBoundingRect(cell).height || 0 : 0;
     },
 
     getAllDayOffset: function() {
@@ -2303,7 +2304,7 @@ const SchedulerWorkSpace = Widget.inherit({
                     let maxPosition = $(cell).position().left;
 
                     if(!isRtl) {
-                        maxPosition += $(cell).get(0).getBoundingClientRect().width;
+                        maxPosition += getBoundingRect(cell).width;
                     }
 
                     this._maxAllowedPosition.push(Math.round(maxPosition));
@@ -2323,7 +2324,7 @@ const SchedulerWorkSpace = Widget.inherit({
                 .find('tr:nth-child(' + rows + 'n)')
                 .each(function(_, row) {
 
-                    const maxPosition = $(row).position().top + $(row).get(0).getBoundingClientRect().height;
+                    const maxPosition = $(row).position().top + getBoundingRect(row).height;
 
                     that._maxAllowedVerticalPosition.push(Math.round(maxPosition));
                 });
@@ -2545,7 +2546,7 @@ const SchedulerWorkSpace = Widget.inherit({
                     return true;
                 }
 
-                result += $(this).get(0).getBoundingClientRect().width;
+                result += getBoundingRect(this).width;
             });
 
         return result;

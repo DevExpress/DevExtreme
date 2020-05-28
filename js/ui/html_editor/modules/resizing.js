@@ -5,6 +5,7 @@ import { addNamespace, normalizeKeyName } from '../../../events/utils';
 import { move } from '../../../animation/translator';
 import devices from '../../../core/devices';
 import Resizable from '../../resizable';
+import { getBoundingRect } from '../../../core/utils/position';
 import Quill from 'quill';
 
 const DX_RESIZE_FRAME_CLASS = 'dx-resize-frame';
@@ -87,8 +88,8 @@ export default class ResizingModule {
     }
 
     updateFramePosition() {
-        const { height, width, top: targetTop, left: targetLeft } = this._$target.getBoundingClientRect();
-        const { top: containerTop, left: containerLeft } = this.quill.root.getBoundingClientRect();
+        const { height, width, top: targetTop, left: targetLeft } = getBoundingRect(this._$target);
+        const { top: containerTop, left: containerLeft } = getBoundingRect(this.quill.root);
         const borderWidth = this._getBorderWidth();
 
         this._$resizeFrame

@@ -1,4 +1,5 @@
 const $ = require('../../../core/renderer');
+const getBoundingRect = require('../../../core/utils/position').getBoundingRect;
 const Shader = require('./ui.scheduler.current_time_shader');
 
 const DATE_TIME_SHADER_ALL_DAY_CLASS = 'dx-scheduler-date-time-shader-all-day';
@@ -22,8 +23,8 @@ const VerticalCurrentTimeShader = Shader.inherit({
             const groupCount = this._workspace._getGroupCount() || 1;
 
             if(renderSolidShader) {
-                this._renderTopShader(this._$shader, shaderHeight, this._$container.get(0).getBoundingClientRect().width, 0);
-                this._renderAllDayShader(this._$container.get(0).getBoundingClientRect().width, 0);
+                this._renderTopShader(this._$shader, shaderHeight, getBoundingRect(this._$container.get(0)).width, 0);
+                this._renderAllDayShader(getBoundingRect(this._$container.get(0)).width, 0);
             } else {
                 for(let i = 0; i < groupCount; i++) {
                     const shaderWidth = this._getShaderWidth(i);
