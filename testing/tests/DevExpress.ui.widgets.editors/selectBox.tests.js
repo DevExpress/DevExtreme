@@ -2221,6 +2221,30 @@ QUnit.module('editing', moduleSetup, () => {
         assert.equal(onCustomItemCreating.callCount, 0, 'action has not been called');
     });
 
+    QUnit.test('onCustomItemCreating should not be called twice when there is blur in the handler (T893205)', function(assert) {
+        let handlerCallCount = 0;
+
+        const $selectBox = $('#selectBox').dxSelectBox({
+            items: ['1', '2', '3'],
+            opened: true,
+            acceptCustomValue: true,
+            onCustomItemCreating: (e) => {
+                ++handlerCallCount;
+                handlerCallCount === 1 && $selectBox.dxSelectBox('instance')._valueChangeEventHandler();
+                e.customItem = null;
+            }
+        });
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+
+        $input.focus();
+        keyboard
+            .type('4')
+            .press('enter');
+
+        assert.strictEqual(handlerCallCount, 1, 'onCustomItemCreating is called only once');
+    });
+
     QUnit.test('creating custom item via the \'customItem\' event parameter', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             acceptCustomValue: true,

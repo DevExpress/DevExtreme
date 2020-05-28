@@ -668,13 +668,14 @@ const SelectBox = DropDownList.inherit({
         const selectedItem = this.option('selectedItem');
         const searchValue = this._searchValue();
         const selectedItemText = this._displayGetter(selectedItem);
-
         return !selectedItemText || searchValue !== selectedItemText.toString();
     },
 
     _valueChangeEventHandler: function(e) {
-        if(this.option('acceptCustomValue') && this._isCustomItemSelected()) {
+        if(this.option('acceptCustomValue') && this._isCustomItemSelected() && !this.isValueChanging) {
+            this.isValueChanging = true;
             this._customItemAddedHandler(e);
+            this.isValueChanging = false;
         }
     },
 
