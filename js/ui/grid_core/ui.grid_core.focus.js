@@ -528,18 +528,24 @@ module.exports = {
                 },
 
                 _updatePageIndexes: function() {
+                    const prevRenderingPageIndex = this._lastRenderingPageIndex || 0;
+                    const renderingPageIndex = this._rowsScrollController ? this._rowsScrollController.pageIndex() : 0;
+
                     this._lastPageIndex = this.pageIndex();
-                    this._lastRenderingPageIndex = this._rowsScrollController ? this._rowsScrollController.pageIndex() : 0;
+                    this._lastRenderingPageIndex = renderingPageIndex;
+                    this._isPagingByRendering = renderingPageIndex !== prevRenderingPageIndex;
+                },
+
+                isPagingByRendering: function() {
+                    return this._isPagingByRendering;
                 },
 
                 processUpdateFocusedRow: function() {
                     const prevPageIndex = this._lastPageIndex;
-                    const prevRenderingPageIndex = this._lastRenderingPageIndex || 0;
                     this._updatePageIndexes();
                     const pageIndex = this._lastPageIndex;
-                    const renderingPageIndex = this._lastRenderingPageIndex;
                     const paging = prevPageIndex !== undefined && prevPageIndex !== pageIndex;
-                    const pagingByRendering = renderingPageIndex !== prevRenderingPageIndex;
+                    const pagingByRendering = this.isPagingByRendering();
                     const operationTypes = this._dataSource.operationTypes() || {};
                     const focusController = this.getController('focus');
                     const reload = operationTypes.reload;
@@ -752,7 +758,8 @@ module.exports = {
                     const that = this;
                     const focusedRowKey = that.option('focusedRowKey');
                     const tabIndex = that.option('tabIndex') || 0;
-                    let rowIndex = that._dataController.getRowIndexByKey(focusedRowKey);
+                    const dataController = that._dataController;
+                    let rowIndex = dataController.getRowIndexByKey(focusedRowKey);
                     let columnIndex = that.option('focusedColumnIndex');
                     const $row = that._findRowElementForTabIndex();
 
@@ -768,12 +775,12 @@ module.exports = {
                             columnIndex = 0;
                         }
 
-                        rowIndex += that.getController('data').getRowIndexOffset();
+                        rowIndex += dataController.getRowIndexOffset();
                         that.getController('keyboardNavigation').setFocusedCellPosition(rowIndex, columnIndex);
 
-                        const dataSource = that.component.getController('data')._dataSource;
+                        const dataSource = dataController.dataSource();
                         const operationTypes = dataSource && dataSource.operationTypes();
-                        if(operationTypes && !operationTypes.paging) {
+                        if(operationTypes && !operationTypes.paging && !dataController.isPagingByRendering()) {
                             that.resizeCompleted.remove(that._scrollToFocusOnResize);
                             that.resizeCompleted.add(that._scrollToFocusOnResize);
                         }
