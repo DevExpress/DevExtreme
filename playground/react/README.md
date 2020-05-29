@@ -1,28 +1,27 @@
-# README
+# DevExtreme React Playground
 
-## Run Example
+## Run Examples
 
-Install packages using the following command:
+1. Install npm packages:
 
-```bash
+    ```bash
     npm install
-```
+    ```
 
-After installation generate components and build scripts
+2. Generate components and build scripts:
 
-```bash
+    ```bash
     npm run build
     npm run build:react
-```
+    ```
 
-or
+    or
 
-```bash
+    ```bash
     npm run build:react:watch
-```
+    ```
 
-
-### Compiles and hot-reloads for development
+## Compile and Hot Reload an Application
 
 ```bash
 cd ./playground/react

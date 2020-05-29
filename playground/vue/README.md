@@ -1,25 +1,27 @@
-# devextreme-vue-playground
+# DevExtreme React Playground
 
-Install packages using the following command:
+## Run Examples
 
-```bash
+1. Install npm packages:
+
+    ```bash
     npm install
-```
+    ```
+2. Generate components and build scripts:
 
-After installation generate components and build scripts
-
-```bash
+    ```bash
     npm run build
     npm run build:vue
-```
+    ```
 
-or
+    or
 
-```bash
+    ```bash
     npm run build:vue:watch
-```
+    ```
 
-### Compiles and hot-reloads for development
+## Compile and Hot Reload an Application
+
 ```bash
 cd ./playground/vue
 npm install
