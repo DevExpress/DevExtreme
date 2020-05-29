@@ -33,7 +33,9 @@ const LOOKUP_EMPTY_CLASS = 'dx-lookup-empty';
 const LOOKUP_POPOVER_FLIP_VERTICAL_CLASS = 'dx-popover-flipped-vertical';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
+const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
+const GROUP_LIST_HEADER_CLASS = 'dx-list-group-header';
 
 const MATERIAL_LOOKUP_LIST_ITEMS_COUNT = 5;
 const MATERIAL_LOOKUP_LIST_PADDING = 8;
@@ -569,13 +571,54 @@ const Lookup = DropDownList.inherit({
         });
     },
 
+
+    _listItemGroupedElements: function() {
+        const groups = this._list._itemContainer().children();
+        const items = [];
+
+        groups.each((_, group) => {
+            items.push($(group).find('.' + GROUP_LIST_HEADER_CLASS)[0]);
+
+            const groupedItems = $(group).find('.' + LIST_ITEM_CLASS);
+            groupedItems.each((_, item) => {
+                items.push(item);
+            });
+        });
+
+        return $(items);
+    },
+
+    _calculateListHeight: function(grouped) {
+        const listItems = grouped ? this._listItemGroupedElements() : this._listItemElements();
+        const selectedListItem = $('.' + LIST_ITEM_SELECTED_CLASS);
+        const selectedIndex = listItems.index(selectedListItem);
+        let listHeight = 0;
+        let requireListItems = [];
+
+        if(listItems.length < MATERIAL_LOOKUP_LIST_ITEMS_COUNT) {
+            listItems.each((_, item) => {
+                listHeight += $(item).outerHeight();
+            });
+        } else {
+            if(selectedIndex <= 1) {
+                requireListItems = listItems.slice(0, MATERIAL_LOOKUP_LIST_ITEMS_COUNT);
+            } else if(this._isCenteringEnabled(selectedIndex, listItems.length)) {
+                requireListItems = listItems.slice(selectedIndex - 2, selectedIndex + 3);
+            } else {
+                requireListItems = listItems.slice(listItems.length - MATERIAL_LOOKUP_LIST_ITEMS_COUNT, listItems.length);
+            }
+
+            requireListItems.each((_, item) => {
+                listHeight += $(item).outerHeight();
+            });
+        }
+
+        return listHeight + (grouped ? MATERIAL_LOOKUP_LIST_PADDING : MATERIAL_LOOKUP_LIST_PADDING * 2);
+    },
+
     _getPopupHeight: function() {
         if(this._list && this._list.itemElements() && this.option('itemCenteringEnabled')) {
-            const itemsCount = this._listItemElements().length;
-            const requiredItemsCount = itemsCount < MATERIAL_LOOKUP_LIST_ITEMS_COUNT ? itemsCount : MATERIAL_LOOKUP_LIST_ITEMS_COUNT;
-
-            return (this._list.itemElements().height() * requiredItemsCount) +
-                MATERIAL_LOOKUP_LIST_PADDING * 2 +
+            return this._calculateListHeight(this.option('grouped')) +
                 (this._$searchWrapper ? this._$searchWrapper.outerHeight() : 0) +
                 (this._popup._$bottom ? this._popup._$bottom.outerHeight() : 0) +
                 (this._popup._$title ? this._popup._$title.outerHeight() : 0);

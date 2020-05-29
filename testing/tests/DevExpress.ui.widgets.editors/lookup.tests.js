@@ -3274,7 +3274,7 @@ QUnit.module('default options', {
 
             $(lookup.field()).trigger('dxclick');
 
-            assert.equal(lookup.option('popupHeight')(), $('.dx-list-item').height() * 5 + 16, 'if items more 4 popup height is 5 items and 2 paddings (8px)');
+            assert.roughEqual(lookup.option('popupHeight')(), $('.dx-list-item').height() * 3 + $('.dx-list-group-header').outerHeight() * 2 + 8, 2, 'if items more 4 popup height is 5 items and padding 8px');
 
             let $popup = $('.dx-popup-wrapper');
 
