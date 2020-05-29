@@ -759,6 +759,7 @@ class Diagram extends Widget {
             this._nodesOption.option('dataSource', this.option('nodes.dataSource'));
             this._nodesOption._refreshDataSource();
         }
+        this.option('hasChanges', false);
     }
     _refreshEdgesDataSource() {
         if(this._edgesOption) {
@@ -770,6 +771,7 @@ class Diagram extends Widget {
             this._edgesOption.option('dataSource', this.option('edges.dataSource'));
             this._edgesOption._refreshDataSource();
         }
+        this.option('hasChanges', false);
     }
     _getDiagramData() {
         let value;
