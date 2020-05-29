@@ -3,8 +3,9 @@ import FileSystemItem from 'file_management/file_system_item';
 
 import RemoteFileSystemProvider from 'file_management/remote_provider';
 import ajaxMock from '../../../helpers/ajaxMock.js';
-import { createSampleFileItems } from '../../../helpers/fileManagerHelpers.js';
+import { createSampleFileItems, generateString, createFileObject } from '../../../helpers/fileManagerHelpers.js';
 import { when } from 'core/utils/deferred';
+import { isString } from 'core/utils/type';
 
 const { test } = QUnit;
 
@@ -147,6 +148,62 @@ QUnit.module('Remote Provider', moduleConfig, () => {
                 assert.ok(result.success, 'item copied');
                 done();
             });
+    });
+
+    test('upload file chunk', function(assert) {
+        const done = assert.async();
+
+        ajaxMock.setup({
+            url: this.options.endpointUrl,
+            responseText: {
+                success: true
+            },
+            callback: request => {
+                const data = request.data;
+
+                const args = JSON.parse(data.get('arguments'));
+
+                const chunkMetadata = JSON.parse(args.chunkMetadata);
+                const uploadId = chunkMetadata.UploadId;
+                chunkMetadata.UploadId = '';
+
+                const expectedChunkMetadata = {
+                    UploadId: '',
+                    FileName: 'New File 1.txt',
+                    Index: 0,
+                    TotalCount: 5,
+                    FileSize: 100
+                };
+
+                const documentsPathInfo = [...filesPathInfo];
+                documentsPathInfo.push({ key: 'Root/Files/Documents', name: 'Documents' });
+
+                assert.equal(request.method, 'POST');
+
+                assert.ok(data instanceof FormData, 'data has type of FormData');
+                assert.strictEqual(data.get('command'), 'UploadChunk', 'command type passed to the request');
+
+                assert.deepEqual(args.destinationPathInfo, documentsPathInfo, 'directory pathInfo passed to the request');
+                assert.deepEqual(chunkMetadata, expectedChunkMetadata, 'chunkMetadata passed to the request');
+
+                assert.ok(isString(uploadId), 'uploadId has type of string');
+                assert.ok(uploadId.length > 6, 'uploadId contains symbol sequence');
+            }
+        });
+
+        const directory = new FileSystemItem(filesPathInfo, 'Documents');
+        const fileData = createFileObject('New File 1.txt', generateString(100));
+        const chunkBlob = new window.Blob([generateString(20)], { type: 'application/octet-stream' });
+        const uploadInfo = {
+            bytesUploaded: 0,
+            chunkCount: 5,
+            customData: { },
+            chunkBlob,
+            chunkIndex: 0
+        };
+
+        this.provider.uploadFileChunk(fileData, uploadInfo, directory)
+            .done(() => done());
     });
 
     test('get items content test', function(assert) {
