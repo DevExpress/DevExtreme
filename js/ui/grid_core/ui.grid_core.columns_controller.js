@@ -213,7 +213,7 @@ module.exports = {
                             columnOptions = extend({}, columnOptions, { dataField: userStateColumnOptions.dataField });
                         }
                         const calculatedColumnOptions = that._createCalculatedColumnOptions(columnOptions, bandColumn);
-                        if(columnOptions.dataField && !columnOptions.type) {
+                        if(!columnOptions.type) {
                             result = { headerId: `dx-col-${globalColumnId++}` };
                         }
                         result = deepExtendArraySafe(result, DEFAULT_COLUMN_OPTIONS);
