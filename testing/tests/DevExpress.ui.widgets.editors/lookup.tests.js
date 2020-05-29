@@ -3195,7 +3195,7 @@ QUnit.module('default options', {
 
             $(lookup.field()).trigger('dxclick');
 
-            assert.equal(lookup.option('popupHeight')(), $('.dx-list-item').height() * 4 + 16, 'if 4 items popup height 4 items and 2 paddings (8px)');
+            assert.equal(lookup.option('dropDownOptions.height')(), $('.dx-list-item').height() * 4 + 16, 'if 4 items popup height 4 items and 2 paddings (8px)');
 
             lookup.close();
 
@@ -3203,7 +3203,7 @@ QUnit.module('default options', {
 
             $(lookup.field()).trigger('dxclick');
 
-            assert.equal(lookup.option('popupHeight')(), $('.dx-list-item').height() * 5 + 16, 'if items more 4 popup height is 5 items and 2 paddings (8px)');
+            assert.equal(lookup.option('dropDownOptions.height')(), $('.dx-list-item').height() * 5 + 16, 'if items more 4 popup height is 5 items and 2 paddings (8px)');
 
             lookup.close();
 
@@ -3212,7 +3212,7 @@ QUnit.module('default options', {
 
             $(lookup.field()).trigger('dxclick');
 
-            assert.equal(lookup.option('popupHeight')(), $('.dx-lookup-search-wrapper').outerHeight() + $('.dx-list-item').height() * 5 + $('.dx-toolbar').outerHeight() + 16, 'popup height contains 4 list items when there are search and cancel button');
+            assert.equal(lookup.option('dropDownOptions.height')(), $('.dx-lookup-search-wrapper').outerHeight() + $('.dx-list-item').height() * 5 + $('.dx-toolbar').outerHeight() + 16, 'popup height contains 4 list items when there are search and cancel button');
 
             lookup.close();
             lookup.option('dropDownOptions.width', 200);
