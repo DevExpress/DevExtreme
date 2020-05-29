@@ -4,6 +4,7 @@ import PreCompiler from './pre-compiler';
 import resolveBundle from './bundle-resolver';
 import PostCompiler from './post-compiler';
 import BootstrapExtractor from './bootstrap-extractor';
+// eslint-disable-next-line
 import { version } from '../data/metadata/dx-theme-builder-metadata';
 
 export default class CompileManager {

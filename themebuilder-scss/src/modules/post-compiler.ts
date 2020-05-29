@@ -2,6 +2,7 @@ import CleanCSS, { Options } from 'clean-css';
 import AutoPrefix from 'autoprefixer';
 import PostCss from 'postcss';
 import commonOptions from './clean-css-options';
+// eslint-disable-next-line
 import { browsersList } from '../data/metadata/dx-theme-builder-metadata';
 
 export default class PostCompiler {
