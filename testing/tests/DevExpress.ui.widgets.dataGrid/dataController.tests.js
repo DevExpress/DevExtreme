@@ -3263,11 +3263,10 @@ const setupVirtualScrollingModule = function() {
     };
     setupModule.apply(this);
 
-    let i;
 
     const array = [];
 
-    for(i = 0; i < 1000; i++) {
+    for(let i = 0; i < 1000; i++) {
         array.push({
             id: i,
             value: 'value' + i.toString()
@@ -3449,6 +3448,25 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
         // assert
         assert.strictEqual(virtualItemsCount.begin, 980);
         assert.strictEqual(virtualItemsCount.end, 0);
+    });
+
+    // T866890
+    QUnit.test('virtual items on end when last page size less than viewport size', function(assert) {
+        const dataController = this.dataController;
+        dataController.store().insert({ id: 1001 });
+        dataController.store().insert({ id: 1002 });
+        dataController.store().insert({ id: 1003 });
+        dataController.store().insert({ id: 1004 });
+        dataController.refresh();
+
+        dataController.viewportSize(3);
+
+        // act
+        dataController.setViewportItemIndex(1002);
+
+        // assert
+        assert.strictEqual(this.dataController.pageIndex(), 50);
+        assert.strictEqual(dataController.items().length, 24, 'items');
     });
 
     // B233350
@@ -4506,11 +4524,10 @@ QUnit.module('Infinite scrolling', {
     beforeEach: function() {
         setupModule.apply(this);
 
-        let i;
 
         const array = [];
 
-        for(i = 0; i < 50; i++) {
+        for(let i = 0; i < 50; i++) {
             array.push({
                 id: i,
                 value: 'value' + i.toString()

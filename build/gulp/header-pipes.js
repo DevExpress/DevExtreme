@@ -1,3 +1,5 @@
+'use strict';
+
 const fs = require('fs');
 const lazyPipe = require('lazypipe');
 const header = require('gulp-header');

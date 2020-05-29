@@ -8,6 +8,7 @@ import positionUtils from '../../animation/position';
 import { addNamespace, fireEvent, normalizeKeyName } from '../../events/utils';
 import browser from '../../core/utils/browser';
 import { extend } from '../../core/utils/extend';
+import { getBoundingRect } from '../../core/utils/position';
 import EditorFactoryMixin from '../shared/ui.editor_factory_mixin';
 import { isElementInCurrentGrid } from './ui.grid_core.utils';
 
@@ -127,7 +128,6 @@ const EditorFactory = modules.ViewController.inherit({
 
     renderFocusOverlay: function($element, hideBorder) {
         const that = this;
-        let focusOverlayPosition;
 
         if(!isElementInCurrentGrid(this, $element)) {
             return;
@@ -143,7 +143,7 @@ const EditorFactory = modules.ViewController.inherit({
             // align "left bottom" for IE, align "right bottom" for Mozilla
             const align = browser.msie ? 'left bottom' : browser.mozilla ? 'right bottom' : 'left top';
             const $content = $element.closest('.' + that.addWidgetPrefix(CONTENT_CLASS));
-            const elemCoord = $element[0].getBoundingClientRect();
+            const elemCoord = getBoundingRect($element.get(0));
 
             that._$focusOverlay
                 .removeClass(DX_HIDDEN)
@@ -151,7 +151,7 @@ const EditorFactory = modules.ViewController.inherit({
                 .outerWidth(elemCoord.right - elemCoord.left + 1)
                 .outerHeight(elemCoord.bottom - elemCoord.top + 1);
 
-            focusOverlayPosition = {
+            const focusOverlayPosition = {
                 precise: true,
                 my: align,
                 at: align,
@@ -207,14 +207,13 @@ const EditorFactory = modules.ViewController.inherit({
     _focusOverlayEventProxy: function(e) {
         const $target = $(e.target);
         const $currentTarget = $(e.currentTarget);
-        let element;
         const needProxy = $target.hasClass(POINTER_EVENTS_TARGET_CLASS) || $target.hasClass(POINTER_EVENTS_NONE_CLASS);
 
         if(!needProxy || $currentTarget.hasClass(DX_HIDDEN)) return;
 
         $currentTarget.addClass(DX_HIDDEN);
 
-        element = $target.get(0).ownerDocument.elementFromPoint(e.clientX, e.clientY);
+        const element = $target.get(0).ownerDocument.elementFromPoint(e.clientX, e.clientY);
 
         fireEvent({
             originalEvent: e,
@@ -246,18 +245,5 @@ module.exports = {
     },
     controllers: {
         editorFactory: EditorFactory
-    },
-    extenders: {
-        controllers: {
-            columnsResizer: {
-                _startResizing: function(args) {
-                    this.callBase(args);
-
-                    if(this.isResizing()) {
-                        this.getController('editorFactory').loseFocus();
-                    }
-                }
-            }
-        }
     }
 };

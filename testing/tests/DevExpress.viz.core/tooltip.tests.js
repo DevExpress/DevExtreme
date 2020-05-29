@@ -580,6 +580,14 @@ QUnit.module('Manipulation', {
     }
 });
 
+QUnit.test('Tug plaque content for shadow (T891490)', function(assert) {
+    this.tooltip.update(this.options);
+
+    this.tooltip.show({ valueText: 'some-text' }, { x: 100, y: 200, offset: 300 });
+
+    assert.equal(this.tooltip.plaque._root.append.callCount, 2, 'Plaque tugged after render');
+});
+
 QUnit.test('Show preparations. W/o customize, empty text', function(assert) {
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
@@ -631,7 +639,8 @@ QUnit.test('Show preparations. W/o customize, w/ text', function(assert) {
         'stroke-opacity': 0.9,
         dashStyle: 'solid',
         type: 'area',
-        opacity: 0.8
+        opacity: 0.8,
+        'pointer-events': 'none'
     });
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
@@ -1052,7 +1061,7 @@ QUnit.test('Show. W/o params', function(assert) {
     assert.deepEqual(this.tooltip._text.css.firstCall.args, [{ fill: 'rgba(147,147,147,0.7)' }]);
 
     assert.equal(this.tooltip._text.attr.callCount, 1, 'text attrs');
-    assert.deepEqual(this.tooltip._text.attr.firstCall.args, [{ text: 'some-text', 'class': 'tooltip_class' }]);
+    assert.deepEqual(this.tooltip._text.attr.firstCall.args, [{ text: 'some-text', 'class': 'tooltip_class', 'pointer-events': 'none' }]);
 
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 0, 'textGroupHtml styles');
     assert.equal(this.tooltip._textGroupHtml.width.callCount, 0, 'textGroupHtml width');
@@ -1102,7 +1111,7 @@ QUnit.test('Show. W/o params. Html', function(assert) {
     assert.equal(cloud._stored_settings.stroke, '#252525');
 
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroupHtml styles');
-    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: 'rgba(147,147,147,0.7)', width: 3000 }]);
+    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: 'rgba(147,147,147,0.7)', width: 3000, 'pointerEvents': 'none', }]);
 
     assert.ok(this.tooltip._textHtml.html.calledOnce, 'textHtml html');
     assert.deepEqual(this.tooltip._textHtml.html.firstCall.args, ['some-html'], 'textHtml html');
@@ -1167,7 +1176,7 @@ QUnit.test('Show. W/o params. Template', function(assert) {
     assert.equal(cloud._stored_settings.stroke, '#252525');
 
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroupHtml styles');
-    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: 'rgba(147,147,147,0.7)', width: 3000 }]);
+    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: 'rgba(147,147,147,0.7)', width: 3000, 'pointerEvents': 'none', }]);
 
     assert.ok(this.tooltip._textHtml.html.calledOnce, 'textHtml html');
     assert.deepEqual(this.tooltip._textHtml.html(), 'custom html', 'textHtml html');
@@ -1214,6 +1223,47 @@ QUnit.test('Do not show tooltip if html is not set in contentTemplate', function
     this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
 
     assert.ok(this.renderer.g.getCall(0).returnValue.remove.called);
+});
+
+QUnit.test('Simple text, tooltip is interactive', function(assert) {
+    this.options.interactive = true;
+    this.tooltip.update(this.options);
+    this.tooltip.show({ valueText: 'some-text' }, { x: 100, y: 200, offset: 300 });
+
+    assert.equal(this.tooltip._text.attr.firstCall.args[0]['pointer-events'], 'auto', 'text is clickable');
+
+    const cloudSettings = this.renderer.path.lastCall.returnValue._stored_settings;
+    assert.equal(cloudSettings['pointer-events'], 'auto', 'cloud is clickable');
+
+    assert.deepEqual(this.renderer.root.css.lastCall.args[0], {
+        '-moz-user-select': 'auto',
+        '-ms-user-select': 'auto',
+        '-webkit-user-select': 'auto'
+    }, 'text can be selected');
+});
+
+QUnit.test('Html text, tooltip is interactive', function(assert) {
+    this.options.interactive = true;
+    this.options.customizeTooltip = function() { return { html: 'some-html' }; };
+    this.tooltip.update(this.options);
+    this.tooltip._textGroupHtml.css = sinon.spy();
+    this.tooltip.show({ valueText: 'some-text' }, { x: 100, y: 200, offset: 300 });
+
+    assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroupHtml styles');
+    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{
+        color: 'rgba(147,147,147,0.7)',
+        width: 3000,
+        'pointerEvents': 'auto'
+    }], 'text is clickable');
+
+    const cloudSettings = this.renderer.path.lastCall.returnValue._stored_settings;
+    assert.equal(cloudSettings['pointer-events'], 'auto', 'cloud is clickable');
+
+    assert.deepEqual(this.renderer.root.css.lastCall.args[0], {
+        '-moz-user-select': 'auto',
+        '-ms-user-select': 'auto',
+        '-webkit-user-select': 'auto'
+    }, 'text can be selected');
 });
 
 QUnit.test('Call template if empty text', function(assert) {
@@ -1290,7 +1340,7 @@ QUnit.test('Show. W/o params. Do not call template if skipTemplate in formatObje
     assert.deepEqual(this.tooltip._text.css.firstCall.args, [{ fill: 'rgba(147,147,147,0.7)' }]);
 
     assert.equal(this.tooltip._text.attr.callCount, 1, 'text attrs');
-    assert.deepEqual(this.tooltip._text.attr.firstCall.args, [{ text: 'some-text', 'class': 'tooltip_class' }]);
+    assert.deepEqual(this.tooltip._text.attr.firstCall.args, [{ text: 'some-text', 'class': 'tooltip_class', 'pointer-events': 'none' }]);
 
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 0, 'textGroupHtml styles');
     assert.equal(this.tooltip._textGroupHtml.width.callCount, 0, 'textGroupHtml width');

@@ -1,9 +1,9 @@
-const DataSource = require('data/data_source/data_source').DataSource;
-const ArrayStore = require('data/array_store');
-const CustomStore = require('data/custom_store');
-const LocalStore = require('data/local_store');
-const ODataStore = require('data/odata/store');
-const ajaxMock = require('../../helpers/ajaxMock.js');
+import { DataSource } from 'data/data_source/data_source';
+import ArrayStore from 'data/array_store';
+import CustomStore from 'data/custom_store';
+import LocalStore from 'data/local_store';
+import ODataStore from 'data/odata/store';
+import ajaxMock from '../../helpers/ajaxMock.js';
 
 QUnit.test('no options', function(assert) {
     const ds = new DataSource();

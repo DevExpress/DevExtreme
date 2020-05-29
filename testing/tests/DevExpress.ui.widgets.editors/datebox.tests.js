@@ -17,6 +17,7 @@ import support from 'core/utils/support';
 import typeUtils from 'core/utils/type';
 import uiDateUtils from 'ui/date_box/ui.date_utils';
 import { noop } from 'core/utils/common';
+import { logger } from 'core/utils/console';
 
 import '../../helpers/calendarFixtures.js';
 
@@ -3025,53 +3026,71 @@ QUnit.module('datebox with time component', {
         assert.deepEqual(dateBox.option('value'), new Date(2014, 1, 16, 11, 20), 'date and time are correct');
     });
 
-    QUnit.test('T231015 - widget should set default date or time if only one widget\'s value is chosen', function(assert) {
-        const $element = $('#dateBox').dxDateBox({
-            pickerType: 'calendar',
-            type: 'datetime',
-            value: null
-        });
+    QUnit.test('T231015 - widget should set default date if only one widget\'s value is chosen', function(assert) {
+        const clock = sinon.useFakeTimers(new Date(2001, 1, 1, 1, 1, 0, 0).valueOf());
 
-        const dateBox = $element.dxDateBox('instance');
+        try {
+            const $element = $('#dateBox').dxDateBox({
+                pickerType: 'calendar',
+                type: 'datetime',
+                value: null
+            });
 
-        dateBox.open();
-        let date = new Date();
-        dateBox._strategy._widget.option('value', new Date(2015, 3, 21));
-        $(dateBox._popup._wrapper()).find('.dx-popup-done').trigger('dxclick');
+            const dateBox = $element.dxDateBox('instance');
+            const date = new Date(2002, 2, 2, 1, 1);
 
-        date.setFullYear(2015, 3, 21);
-        uiDateUtils.normalizeTime(date);
-        assert.equal(Math.floor(dateBox.option('value').getTime() / 1000 / 10), Math.floor(date.getTime() / 1000 / 10), 'value is correct if only calendar value is changed');
+            dateBox.open();
+            dateBox._strategy._widget.option('value', new Date(2002, 2, 2, 2, 2));
+            $(dateBox._popup._wrapper()).find('.dx-popup-done').trigger('dxclick');
+            assert.strictEqual(dateBox.option('value').getTime(), date.getTime(), 'value is correct if only calendar value is changed');
+        } finally {
+            clock.restore();
+        }
+    });
 
-        dateBox.option('value', null);
-        dateBox._strategy._widget.option('value', null);
-        dateBox.open();
-        date = new Date();
-        dateBox._strategy._timeView.option('value', new Date(2015, 3, 21, 15, 15));
-        $(dateBox._popup._wrapper()).find('.dx-popup-done').trigger('dxclick');
+    QUnit.test('T231015 - widget should set default time if only one widget\'s value is chosen', function(assert) {
+        const clock = sinon.useFakeTimers(new Date(2001, 1, 1, 1, 1, 0, 0).valueOf());
 
-        date.setHours(15, 15);
-        uiDateUtils.normalizeTime(date);
-        assert.equal(Math.floor(dateBox.option('value').getTime() / 1000 / 10), Math.floor(date.getTime() / 1000 / 10), 'value is correct if only timeView value is changed');
+        try {
+            const $element = $('#dateBox').dxDateBox({
+                pickerType: 'calendar',
+                type: 'datetime',
+                value: null
+            });
+
+            const dateBox = $element.dxDateBox('instance');
+            const date = new Date(2001, 1, 1, 2, 2);
+
+            dateBox.open();
+            dateBox._strategy._timeView.option('value', new Date(2002, 2, 2, 2, 2));
+            $(dateBox._popup._wrapper()).find('.dx-popup-done').trigger('dxclick');
+            assert.strictEqual(dateBox.option('value').getTime(), date.getTime(), 'value is correct if only timeView value is changed');
+        } finally {
+            clock.restore();
+        }
     });
 
     QUnit.test('T253298 - widget should set default date and time if value is null and the \'OK\' button is clicked', function(assert) {
-        const $element = $('#dateBox').dxDateBox({
-            pickerType: 'calendar',
-            type: 'datetime',
-            value: null
-        });
+        const clock = sinon.useFakeTimers(new Date(2001, 1, 1, 1, 1, 1, 1).valueOf());
 
-        const dateBox = $element.dxDateBox('instance');
+        try {
+            const $element = $('#dateBox').dxDateBox({
+                pickerType: 'calendar',
+                type: 'datetime',
+                value: null
+            });
 
-        dateBox.open();
-        const date = new Date();
-        uiDateUtils.normalizeTime(date);
-        $(dateBox._popup._wrapper()).find('.dx-popup-done').trigger('dxclick');
+            const dateBox = $element.dxDateBox('instance');
 
-        const value = dateBox.option('value');
-        assert.equal(value.getMilliseconds(), 0, 'milliseconds is should be zero');
-        assert.equal(Math.round(value.getTime() / 1000 / 10), Math.round(date.getTime() / 1000 / 10), 'value is correct');
+            dateBox.open();
+            const date = new Date(2001, 1, 1, 1, 1, 0, 0);
+            $(dateBox._popup._wrapper()).find('.dx-popup-done').trigger('dxclick');
+
+            const value = dateBox.option('value');
+            assert.equal(value.getTime(), date.getTime(), 'value is correct');
+        } finally {
+            clock.restore();
+        }
     });
 
     QUnit.test('DateBox should have time part when pickerType is rollers', function(assert) {
@@ -3245,6 +3264,13 @@ QUnit.module('datebox with time component', {
 });
 
 QUnit.module('datebox w/ time list', {
+    before: function() {
+        this.checkForIncorrectKeyWarning = function(assert) {
+            const isIncorrectKeyWarning = logger.warn.lastCall.args[0].indexOf('W1002') > -1;
+            assert.ok(logger.warn.calledOnce);
+            assert.ok(isIncorrectKeyWarning);
+        };
+    },
     beforeEach: function() {
         fx.off = true;
 
@@ -3381,22 +3407,28 @@ QUnit.module('datebox w/ time list', {
     });
 
     QUnit.test('T240639 - correct list item should be highlighted if appropriate datebox value is set', function(assert) {
-        this.dateBox.option({
-            type: 'time',
-            pickerType: 'list',
-            value: new Date(0, 0, 0, 12, 30),
-            opened: true
-        });
+        sinon.stub(logger, 'warn');
+        try {
+            this.dateBox.option({
+                type: 'time',
+                pickerType: 'list',
+                value: new Date(0, 0, 0, 12, 30),
+                opened: true
+            });
 
-        const list = this.dateBox._strategy._widget;
+            const list = this.dateBox._strategy._widget;
 
-        assert.deepEqual(list.option('selectedIndex'), 25, 'selectedIndex item is correct');
-        assert.deepEqual(list.option('selectedItem'), new Date(0, 0, 0, 12, 30), 'selected list item is correct');
+            assert.deepEqual(list.option('selectedIndex'), 25, 'selectedIndex item is correct');
+            assert.deepEqual(list.option('selectedItem'), new Date(0, 0, 0, 12, 30), 'selected list item is correct');
 
-        this.dateBox.option('value', new Date(2016, 1, 1, 12, 20));
+            this.dateBox.option('value', new Date(2016, 1, 1, 12, 20));
 
-        assert.equal(list.option('selectedIndex'), -1, 'there is no selected list item');
-        assert.equal(list.option('selectedItem'), null, 'there is no selected list item');
+            this.checkForIncorrectKeyWarning(assert);
+            assert.equal(list.option('selectedIndex'), -1, 'there is no selected list item');
+            assert.equal(list.option('selectedItem'), null, 'there is no selected list item');
+        } finally {
+            logger.warn.restore();
+        }
     });
 
     QUnit.test('T351678 - the date is reset after item click', function(assert) {
@@ -3516,24 +3548,30 @@ QUnit.module('datebox w/ time list', {
     });
 
     QUnit.test('All items in list should be present if value and min options are belong to different days', function(assert) {
-        this.dateBox.option({
-            min: new Date(2016, 1, 1, 13, 45),
-            value: new Date(2016, 1, 1, 14, 45),
-            interval: 60,
-            opened: true
-        });
+        sinon.stub(logger, 'warn');
+        try {
+            this.dateBox.option({
+                min: new Date(2016, 1, 1, 13, 45),
+                value: new Date(2016, 1, 1, 14, 45),
+                interval: 60,
+                opened: true
+            });
 
-        const $timeList = $('.dx-list');
-        let items = $timeList.find(LIST_ITEM_SELECTOR);
+            const $timeList = $('.dx-list');
+            let items = $timeList.find(LIST_ITEM_SELECTOR);
 
-        assert.equal(items.length, 11, 'interval option works');
+            assert.equal(items.length, 11, 'interval option works');
 
-        this.dateBox.option('value', new Date(2016, 1, 2, 13, 45));
+            this.dateBox.option('value', new Date(2016, 1, 2, 13, 45));
 
-        items = $timeList.find(LIST_ITEM_SELECTOR);
+            items = $timeList.find(LIST_ITEM_SELECTOR);
 
-        assert.equal(items.length, 24, 'interval is correct');
-        assert.equal(items.eq(0).text(), '12:45 AM', 'start time is correct');
+            this.checkForIncorrectKeyWarning(assert);
+            assert.equal(items.length, 24, 'interval is correct');
+            assert.equal(items.eq(0).text(), '12:45 AM', 'start time is correct');
+        } finally {
+            logger.warn.restore();
+        }
     });
 
     QUnit.test('The situation when value and max options are belong to one day', function(assert) {
@@ -3630,25 +3668,31 @@ QUnit.module('datebox w/ time list', {
     });
 
     QUnit.test('validator correctly check value with \'time\' format', function(assert) {
-        const $dateBox = $('#dateBox').dxDateBox({
-            type: 'time',
-            pickerType: 'list',
-            min: new Date(2015, 1, 1, 6, 0),
-            max: new Date(2015, 1, 1, 16, 0),
-            value: new Date(2015, 1, 1, 12, 0),
-            opened: true
-        });
+        sinon.stub(logger, 'warn');
+        try {
+            const $dateBox = $('#dateBox').dxDateBox({
+                type: 'time',
+                pickerType: 'list',
+                min: new Date(2015, 1, 1, 6, 0),
+                max: new Date(2015, 1, 1, 16, 0),
+                value: new Date(2015, 1, 1, 12, 0),
+                opened: true
+            });
 
-        const dateBox = $dateBox.dxDateBox('instance');
-        const $input = $dateBox.find('.' + TEXTEDITOR_INPUT_CLASS);
+            const dateBox = $dateBox.dxDateBox('instance');
+            const $input = $dateBox.find('.' + TEXTEDITOR_INPUT_CLASS);
 
-        $input.val('11:30 AM').change();
+            $input.val('11:30 AM').change();
 
-        const value = dateBox.option('value');
-        assert.equal($input.val(), '11:30 AM', 'Correct input value');
-        assert.equal(value.getHours(), 11, 'Correct hours');
-        assert.equal(value.getMinutes(), 30, 'Correct minutes');
-        assert.equal(dateBox.option('isValid'), true, 'Editor should be marked as valid');
+            const value = dateBox.option('value');
+            this.checkForIncorrectKeyWarning(assert);
+            assert.equal($input.val(), '11:30 AM', 'Correct input value');
+            assert.equal(value.getHours(), 11, 'Correct hours');
+            assert.equal(value.getMinutes(), 30, 'Correct minutes');
+            assert.equal(dateBox.option('isValid'), true, 'Editor should be marked as valid');
+        } finally {
+            logger.warn.restore();
+        }
     });
 
     QUnit.testInActiveWindow('select a new value via the Enter key', function(assert) {
@@ -3745,7 +3789,8 @@ QUnit.module('keyboard navigation', {
     }
 }, () => {
     QUnit.testInActiveWindow('popup hides on tab', function(assert) {
-        this.dateBox.focus();
+        this.$input.focusin();
+
         assert.ok(this.$dateBox.hasClass(STATE_FOCUSED_CLASS), 'element is focused');
         this.dateBox.option('opened', true);
         this.keyboard.keyDown('tab');
@@ -4582,6 +4627,58 @@ QUnit.module('datebox validation', {}, () => {
         });
 
         assert.notOk(dateBox.option('isValid'), 'datebox is invalid');
+    });
+
+    QUnit.test('Validation callback should be called only once when value changes (T879881)', function(assert) {
+        const validationCallbackSpy = sinon.spy();
+
+        const dateBox = $('#dateBox').dxDateBox({
+            value: '2020-01-15'
+        }).dxValidator({
+            validationRules: [{
+                type: 'custom',
+                reevaluate: true,
+                validationCallback: validationCallbackSpy
+            }]
+        }).dxDateBox('instance');
+
+        const date = new Date(2020, 0, 1);
+        dateBox.option('value', date);
+
+        const args = validationCallbackSpy.getCall(0).args[0];
+        assert.ok(validationCallbackSpy.calledOnce, 'validation callback is called only once');
+        assert.strictEqual(args.value, date, 'value is correct');
+        assert.ok(args.validator, 'validator is passed');
+        assert.ok(args.rule, 'rule is passed');
+    });
+
+    QUnit.test('Validation callback should be called only once when value changes by keyboard typing (T879881)', function(assert) {
+        const validationCallbackSpy = sinon.spy();
+
+        const dateBox = $('#dateBox').dxDateBox({
+            value: '2020-01-15',
+            pickerType: 'calendar'
+        }).dxValidator({
+            validationRules: [{
+                type: 'custom',
+                reevaluate: true,
+                validationCallback: validationCallbackSpy
+            }]
+        }).dxDateBox('instance');
+
+        const $input = $(dateBox.$element().find(`.${TEXTEDITOR_INPUT_CLASS}`));
+        const keyboard = keyboardMock($input);
+
+        keyboard
+            .caret({ start: 0, end: 9 })
+            .type('1/1/2020')
+            .press('enter');
+
+        const args = validationCallbackSpy.getCall(0).args[0];
+        assert.ok(validationCallbackSpy.calledOnce, 'validation callback is called only once');
+        assert.strictEqual(args.value, '2020-01-01', 'value is correct');
+        assert.ok(args.validator, 'validator is passed');
+        assert.ok(args.rule, 'rule is passed');
     });
 
     QUnit.testInActiveWindow('DateBox should validate value after remove an invalid characters', function(assert) {

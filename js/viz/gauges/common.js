@@ -121,21 +121,15 @@ exports.dxGauge = dxBaseGauge.inherit({
         const minorTickEnabled = minorTick.visible && minorTick.length > 0 && minorTick.width > 0;
         const label = scaleOptions.label;
         const indentFromTick = Number(label.indentFromTick);
-        let textParams;
-        let layoutValue;
-        let result;
-        let coefs;
-        let innerCoef;
-        let outerCoef;
 
         if(!majorTickEnabled && !minorTickEnabled && !label.visible) { return {}; }
 
-        textParams = that._scale.measureLabels(extend({}, that._canvas));
-        layoutValue = that._getScaleLayoutValue();
-        result = { min: layoutValue, max: layoutValue };
-        coefs = that._getTicksCoefficients(scaleOptions);
-        innerCoef = coefs.inner;
-        outerCoef = coefs.outer;
+        const textParams = that._scale.measureLabels(extend({}, that._canvas));
+        const layoutValue = that._getScaleLayoutValue();
+        const result = { min: layoutValue, max: layoutValue };
+        const coefs = that._getTicksCoefficients(scaleOptions);
+        const innerCoef = coefs.inner;
+        const outerCoef = coefs.outer;
 
         if(majorTickEnabled) {
             result.min = _min(result.min, layoutValue - innerCoef * majorTick.length);
@@ -153,12 +147,11 @@ exports.dxGauge = dxBaseGauge.inherit({
     _renderContent: function() {
         const that = this;
         const scaleOptions = that._prepareScaleSettings();
-        let elements;
 
         that._rangeContainer.render(_extend(that._getOption('rangeContainer'), { vertical: that._area.vertical }));
         that._renderScale(scaleOptions);
 
-        elements = _map([that._rangeContainer].concat(that._prepareValueIndicators()), function(element) {
+        const elements = _map([that._rangeContainer].concat(that._prepareValueIndicators()), function(element) {
             return element && element.enabled ? element : null;
         });
 
@@ -292,14 +285,12 @@ exports.dxGauge = dxBaseGauge.inherit({
         const that = this;
         let target = that._subvalueIndicatorsSet;
         const settings = that._prepareIndicatorSettings(that.option('subvalueIndicator') || {}, 'subvalueIndicatorType');
-        let isRecreate;
-        let dummy;
         if(!target) {
             target = that._subvalueIndicatorsSet = that._createSubvalueIndicatorsSet();
         }
-        isRecreate = settings.type !== target.type;
+        const isRecreate = settings.type !== target.type;
         target.type = settings.type;
-        dummy = that._createIndicator(settings.type, that._renderer.root);
+        const dummy = that._createIndicator(settings.type, that._renderer.root);
         if(dummy) {
             dummy.dispose();
             target.render(settings, isRecreate);

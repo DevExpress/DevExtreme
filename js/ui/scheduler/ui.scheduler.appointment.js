@@ -12,30 +12,19 @@ import DOMComponent from '../../core/dom_component';
 import Resizable from '../resizable';
 import messageLocalization from '../../localization/message';
 import dateLocalization from '../../localization/date';
+import { EMPTY_APPOINTMENT_CLASS,
+    RECURRENCE_APPOINTMENT_CLASS,
+    REDUCED_APPOINTMENT_CLASS,
+    ALL_DAY_APPOINTMENT_CLASS,
+    REDUCED_APPOINTMENT_ICON,
+    REDUCED_APPOINTMENT_PARTS_CLASSES,
+    DIRECTION_APPOINTMENT_CLASSES } from './constants';
 
 const DEFAULT_HORIZONTAL_HANDLES = 'left right';
 const DEFAULT_VERTICAL_HANDLES = 'top bottom';
 
 const REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME = eventUtils.addNamespace(pointerEvents.enter, 'dxSchedulerAppointment');
 const REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME = eventUtils.addNamespace(pointerEvents.leave, 'dxSchedulerAppointment');
-
-const EMPTY_APPOINTMENT_CLASS = 'dx-scheduler-appointment-empty';
-
-const APPOINTMENT_ALL_DAY_ITEM_CLASS = 'dx-scheduler-all-day-appointment';
-const DIRECTION_APPOINTMENT_CLASSES = {
-    horizontal: 'dx-scheduler-appointment-horizontal',
-    vertical: 'dx-scheduler-appointment-vertical'
-};
-
-const RECURRENCE_APPOINTMENT_CLASS = 'dx-scheduler-appointment-recurrence';
-
-const REDUCED_APPOINTMENT_CLASS = 'dx-scheduler-appointment-reduced';
-const REDUCED_APPOINTMENT_ICON = 'dx-scheduler-appointment-reduced-icon';
-const REDUCED_APPOINTMENT_PARTS_CLASSES = {
-    head: 'dx-scheduler-appointment-head',
-    body: 'dx-scheduler-appointment-body',
-    tail: 'dx-scheduler-appointment-tail'
-};
 
 const Appointment = DOMComponent.inherit({
 
@@ -184,7 +173,7 @@ const Appointment = DOMComponent.inherit({
     },
 
     _renderAllDayClass: function() {
-        this.$element().toggleClass(APPOINTMENT_ALL_DAY_ITEM_CLASS, !!this.option('allDay'));
+        this.$element().toggleClass(ALL_DAY_APPOINTMENT_CLASS, !!this.option('allDay'));
     },
 
     _renderRecurrenceClass: function() {

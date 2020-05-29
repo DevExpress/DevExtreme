@@ -33,6 +33,8 @@ const FILE_MANAGER_EDITING_CONTAINER_CLASS = FILE_MANAGER_CLASS + '-editing-cont
 const FILE_MANAGER_ITEMS_PANEL_CLASS = FILE_MANAGER_CLASS + '-items-panel';
 const FILE_MANAGER_ITEM_CUSTOM_THUMBNAIL_CLASS = FILE_MANAGER_CLASS + '-item-custom-thumbnail';
 
+const PARENT_DIRECTORY_KEY_PREFIX = '[*DXPDK*]$40F96F03-FBD8-43DF-91BE-F55F4B8BA871$';
+
 class FileManager extends Widget {
 
     _initTemplates() {
@@ -142,13 +144,15 @@ class FileManager extends Widget {
     }
 
     _createFilesTreeView(container) {
+        this._filesTreeViewContextMenu = this._createContextMenu();
+
         const $filesTreeView = $('<div>')
             .addClass(FILE_MANAGER_DIRS_PANEL_CLASS)
             .appendTo(container);
 
         this._filesTreeView = this._createComponent($filesTreeView, FileManagerFilesTreeView, {
             storeExpandedState: true,
-            contextMenu: this._createContextMenu(),
+            contextMenu: this._filesTreeViewContextMenu,
             getDirectories: this.getDirectories.bind(this),
             getCurrentDirectory: this._getCurrentDirectory.bind(this),
             onDirectoryClick: this._onFilesTreeViewDirectoryClick.bind(this),
@@ -157,13 +161,15 @@ class FileManager extends Widget {
     }
 
     _createItemView($container, viewMode) {
+        this._itemViewContextMenu = this._createContextMenu(true);
+
         const itemViewOptions = this.option('itemView');
 
         const options = {
             selectionMode: this.option('selectionMode'),
             selectedItemKeys: this.option('selectedItemKeys'),
             focusedItemKey: this.option('focusedItemKey'),
-            contextMenu: this._createContextMenu(true),
+            contextMenu: this._itemViewContextMenu,
             getItems: this._getItemViewItems.bind(this),
             onError: ({ error }) => this._showError(error),
             onSelectionChanged: this._onItemViewSelectionChanged.bind(this),
@@ -366,7 +372,7 @@ class FileManager extends Widget {
         parentDirItem.isParentFolder = true;
         parentDirItem.name = '..';
         parentDirItem.relativeName = '..';
-        parentDirItem.key = [];
+        parentDirItem.key = `${PARENT_DIRECTORY_KEY_PREFIX}${selectedDir.fileItem.key}`;
 
         const itemsCopy = [...items];
         itemsCopy.unshift({
@@ -638,8 +644,11 @@ class FileManager extends Widget {
                 }
                 break;
             case 'contextMenu':
-                this._itemView.option('contextMenu', this._createContextMenu(true));
-                this._filesTreeView.option('contextMenu', this._createContextMenu());
+                if(args.fullName === 'contextMenu' && args.value.items || args.fullName.indexOf('contextMenu.items') === 0) {
+                    const contextMenuItems = this.option('contextMenu.items');
+                    this._filesTreeViewContextMenu.option('items', contextMenuItems);
+                    this._itemViewContextMenu.option('items', contextMenuItems);
+                }
                 break;
             case 'onContextMenuItemClick':
             case 'onCurrentDirectoryChanged':
@@ -726,8 +735,8 @@ class FileManager extends Widget {
         this.option(options);
     }
 
-    getDirectories(parentDirectoryInfo) {
-        return this._controller.getDirectories(parentDirectoryInfo);
+    getDirectories(parentDirectoryInfo, skipNavigationOnError) {
+        return this._controller.getDirectories(parentDirectoryInfo, skipNavigationOnError);
     }
 
     _getSelectedItemInfos() {

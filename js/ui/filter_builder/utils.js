@@ -194,11 +194,12 @@ function getCustomOperation(customOperations, name) {
 
 function getAvailableOperations(field, filterOperationDescriptions, customOperations) {
     const filterOperations = getFilterOperations(field);
-
+    const isLookupField = !!field.lookup;
     customOperations.forEach(function(customOperation) {
         if(!field.filterOperations && filterOperations.indexOf(customOperation.name) === -1) {
             const dataTypes = customOperation && customOperation.dataTypes;
-            if(dataTypes && dataTypes.indexOf(field.dataType || DEFAULT_DATA_TYPE) >= 0) {
+            const isOperationForbidden = isLookupField ? !!customOperation.notForLookup : false;
+            if(!isOperationForbidden && dataTypes && dataTypes.indexOf(field.dataType || DEFAULT_DATA_TYPE) >= 0) {
                 filterOperations.push(customOperation.name);
             }
         }
@@ -412,9 +413,9 @@ function getFilterExpression(value, fields, customOperations, target) {
     if(isCondition(criteria)) {
         return getConditionFilterExpression(criteria, fields, customOperations, target) || null;
     } else {
+        let result = [];
         let filterExpression;
         const groupValue = getGroupValue(criteria);
-        const result = [];
 
         for(let i = 0; i < criteria.length; i++) {
             if(isGroup(criteria[i])) {
@@ -426,11 +427,16 @@ function getFilterExpression(value, fields, customOperations, target) {
             } else if(isCondition(criteria[i])) {
                 filterExpression = getConditionFilterExpression(criteria[i], fields, customOperations, target);
                 if(filterExpression) {
-                    i && result.push(groupValue);
+                    result.length && result.push(groupValue);
                     result.push(filterExpression);
                 }
             }
         }
+
+        if(result.length === 1) {
+            result = result[0];
+        }
+
         return result.length ? result : null;
     }
 }

@@ -86,12 +86,10 @@ const moduleSetup = {
 
 QUnit.module('rendering with css', {}, () => {
     QUnit.test('Right width of popup', function(assert) {
-        let $element; let instance; let $popup;
-
-        $element = $('#selectBox').dxSelectBox({ width: 100 });
-        instance = $element.dxSelectBox('instance');
+        const $element = $('#selectBox').dxSelectBox({ width: 100 });
+        const instance = $element.dxSelectBox('instance');
         instance.open();
-        $popup = $(instance._popup.$element());
+        const $popup = $(instance._popup.$element());
 
         assert.ok($popup.hasClass(POPUP_CLASS));
 
@@ -2221,6 +2219,31 @@ QUnit.module('editing', moduleSetup, () => {
             .press('enter');
 
         assert.equal(onCustomItemCreating.callCount, 0, 'action has not been called');
+    });
+
+    QUnit.test('onCustomItemCreating should not be called more then once even when there is value change handler call inside of event handler (T893205)', function(assert) {
+        let handlerCallCount = 0;
+
+        const $selectBox = $('#selectBox').dxSelectBox({
+            items: ['1', '2', '3'],
+            opened: true,
+            acceptCustomValue: true,
+            onCustomItemCreating: (e) => {
+                ++handlerCallCount;
+                if(handlerCallCount === 1) {
+                    $input.change();
+                }
+                e.customItem = null;
+            }
+        });
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+
+        keyboard
+            .type('4')
+            .press('enter');
+
+        assert.strictEqual(handlerCallCount, 1, 'onCustomItemCreating is called only once');
     });
 
     QUnit.test('creating custom item via the \'customItem\' event parameter', function(assert) {

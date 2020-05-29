@@ -14,7 +14,8 @@ const DateViewStrategy = DateBoxStrategy.inherit({
     getDefaultOptions: function() {
         return extend(this.callBase(), {
             openOnFieldClick: true,
-            applyButtonText: messageLocalization.format('OK')
+            applyButtonText: messageLocalization.format('OK'),
+            'dropDownOptions.showTitle': true
         });
     },
 
@@ -25,7 +26,6 @@ const DateViewStrategy = DateBoxStrategy.inherit({
     popupConfig: function(config) {
 
         return {
-            showTitle: true,
             toolbarItems: this.dateBox._popupToolbarItemsConfig(),
             onInitialized: config.onInitialized,
 

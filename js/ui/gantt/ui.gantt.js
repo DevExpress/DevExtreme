@@ -7,6 +7,7 @@ import { GanttView } from './ui.gantt.view';
 import { GanttToolbar, GanttContextMenuBar } from './ui.gantt.bars';
 import dxTreeList from '../tree_list';
 import { extend } from '../../core/utils/extend';
+import { getBoundingRect } from '../../core/utils/position';
 import { hasWindow } from '../../core/utils/window';
 import DataOption from './ui.gantt.data.option';
 import SplitterControl from '../splitter';
@@ -223,11 +224,11 @@ class Gantt extends Widget {
     }
     _getTreeListRowHeight() {
         const $row = this._treeList._$element.find('.dx-data-row');
-        const height = $row.length ? $row.last().get(0).getBoundingClientRect().height : GANTT_DEFAULT_ROW_HEIGHT;
+        const height = $row.length ? getBoundingRect($row.last().get(0)).height : GANTT_DEFAULT_ROW_HEIGHT;
         return height ? height : GANTT_DEFAULT_ROW_HEIGHT;
     }
     _getTreeListHeaderHeight() {
-        return this._treeList._$element.find('.dx-treelist-headers').get(0).getBoundingClientRect().height;
+        return getBoundingRect(this._treeList._$element.find('.dx-treelist-headers').get(0)).height;
     }
 
 
@@ -354,28 +355,30 @@ class Gantt extends Widget {
         this._setGanttViewOption(dataSourceName, mappedData);
         if(dataSourceName === GANTT_TASKS) {
             this._tasksRaw = data;
+            const expandedRowKeys = data.map(t => t.parentId).filter((value, index, self) => value && self.indexOf(value) === index);
+            this._setTreeListOption('expandedRowKeys', expandedRowKeys);
             this._setTreeListOption('dataSource', data);
         }
     }
 
     _createModelChangesListener() {
         return { // IModelChangesListener
-            NotifyTaskCreated: (task, callback) => { this._onRecordInserted(GANTT_TASKS, task, callback); },
-            NotifyTaskRemoved: (taskId) => { this._onRecordRemoved(GANTT_TASKS, taskId); },
-            NotifyTaskTitleChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'title', newValue); },
-            NotifyTaskDescriptionChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'description', newValue); },
-            NotifyTaskStartChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'start', newValue); },
-            NotifyTaskEndChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'end', newValue); },
-            NotifyTaskProgressChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'progress', newValue); },
+            NotifyTaskCreated: (task, callback, errorCallback) => { this._onRecordInserted(GANTT_TASKS, task, callback); },
+            NotifyTaskRemoved: (taskId, errorCallback) => { this._onRecordRemoved(GANTT_TASKS, taskId); },
+            NotifyTaskTitleChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'title', newValue); },
+            NotifyTaskDescriptionChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'description', newValue); },
+            NotifyTaskStartChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'start', newValue); },
+            NotifyTaskEndChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'end', newValue); },
+            NotifyTaskProgressChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'progress', newValue); },
 
-            NotifyDependencyInserted: (dependency, callback) => { this._onRecordInserted(GANTT_DEPENDENCIES, dependency, callback); },
-            NotifyDependencyRemoved: (dependencyId) => { this._onRecordRemoved(GANTT_DEPENDENCIES, dependencyId); },
+            NotifyDependencyInserted: (dependency, callback, errorCallback) => { this._onRecordInserted(GANTT_DEPENDENCIES, dependency, callback); },
+            NotifyDependencyRemoved: (dependencyId, errorCallback) => { this._onRecordRemoved(GANTT_DEPENDENCIES, dependencyId); },
 
-            NotifyResourceCreated: (resource, callback) => { this._onRecordInserted(GANTT_RESOURCES, resource, callback); },
-            NotifyResourceRemoved: (resource) => { this._onRecordRemoved(GANTT_RESOURCES, resource); },
+            NotifyResourceCreated: (resource, callback, errorCallback) => { this._onRecordInserted(GANTT_RESOURCES, resource, callback); },
+            NotifyResourceRemoved: (resource, errorCallback) => { this._onRecordRemoved(GANTT_RESOURCES, resource); },
 
-            NotifyResourceAssigned: (assignment, callback) => { this._onRecordInserted(GANTT_RESOURCE_ASSIGNMENTS, assignment, callback); },
-            NotifyResourceUnassigned: (assignmentId) => { this._onRecordRemoved(GANTT_RESOURCE_ASSIGNMENTS, assignmentId); },
+            NotifyResourceAssigned: (assignment, callback, errorCallback) => { this._onRecordInserted(GANTT_RESOURCE_ASSIGNMENTS, assignment, callback); },
+            NotifyResourceUnassigned: (assignmentId, errorCallback) => { this._onRecordRemoved(GANTT_RESOURCE_ASSIGNMENTS, assignmentId); },
             NotifyParentDataRecalculated: (data) => { this._onParentTasksRecalculated(data); }
         };
     }
@@ -426,8 +429,25 @@ class Gantt extends Widget {
     }
     _onParentTasksRecalculated(data) {
         const setters = this._compileSettersByOption(GANTT_TASKS);
-        const treeDataSource = data.map(this._prepareSetterMapHandler(setters));
+        const treeDataSource = this._appendCustomFields(data.map(this._prepareSetterMapHandler(setters)));
         this._setTreeListOption('dataSource', treeDataSource);
+    }
+    _appendCustomFields(data) {
+        const modelData = this._tasksOption && this._tasksOption._getItems();
+        const keyGetter = dataCoreUtils.compileGetter(this.option(`${GANTT_TASKS}.keyExpr`));
+        return data.reduce((previous, item) => {
+            const modelItem = modelData && modelData.filter((obj) => keyGetter(obj) === keyGetter(item))[0];
+            if(!modelItem) {
+                previous.push(item);
+            } else {
+                const updatedItem = {};
+                for(const field in modelItem) {
+                    updatedItem[field] = Object.prototype.hasOwnProperty.call(item, field) ? item[field] : modelItem[field];
+                }
+                previous.push(updatedItem);
+            }
+            return previous;
+        }, []);
     }
     _updateTreeListDataSource() {
         if(!this._skipUpdateTreeListDataSource()) {

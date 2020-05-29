@@ -380,6 +380,10 @@ export class HeaderPanelWrapper extends GridElement {
     getGroupPanelItem(index) {
         return this.getGroupPanelElement().find('.dx-group-panel-item').eq(index);
     }
+
+    getGroupPanelItems() {
+        return this.getGroupPanelElement().find('.dx-group-panel-item');
+    }
 }
 
 export class HeadersWrapper extends GridTableElement {

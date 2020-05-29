@@ -1960,8 +1960,6 @@ QUnit.module('number validation', {}, () => {
         const isTextMode = numberBox.option('mode') === 'text';
 
         const initialValue = '888888888888888888888888888888';
-        let expectedInputValue;
-        let expectedOptionValue;
 
         keyboard
             .type(initialValue);
@@ -1975,10 +1973,10 @@ QUnit.module('number validation', {}, () => {
 
         $input.trigger('keyup');
 
-        expectedInputValue = isTextMode ? '8.888888888888888e+3' : '888888888888888888888888888880';
+        const expectedInputValue = isTextMode ? '8.888888888888888e+3' : '888888888888888888888888888880';
         assert.equal($input.val(), expectedInputValue, 'last digit was deleted');
 
-        expectedOptionValue = isTextMode ? '8.888888888888888e+3' : '8.888888888888888e+29';
+        const expectedOptionValue = isTextMode ? '8.888888888888888e+3' : '8.888888888888888e+29';
         assert.equal(numberBox.option('value'), expectedOptionValue, 'value vas changed');
     });
 

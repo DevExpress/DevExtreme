@@ -1,3 +1,5 @@
+'use strict';
+
 const gulp = require('gulp');
 const file = require('gulp-file');
 const footer = require('gulp-footer');

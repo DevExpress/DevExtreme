@@ -5,6 +5,7 @@ import { getGroupInterval } from '../shared/filtering';
 import { format } from '../../core/utils/string';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
+import { getBoundingRect } from '../../core/utils/position';
 import { extendFromObject } from '../../core/utils/extend';
 import { toComparable } from '../../core/utils/data';
 import { equalByValue } from '../../core/utils/common';
@@ -46,18 +47,16 @@ const DATE_INTERVAL_SELECTORS = {
 
 module.exports = (function() {
     const getIntervalSelector = function() {
-        let groupInterval;
         const data = arguments[1];
-        let nameIntervalSelector;
         const value = this.calculateCellValue(data);
 
         if(!isDefined(value)) {
             return null;
         } else if(isDateType(this.dataType)) {
-            nameIntervalSelector = arguments[0];
+            const nameIntervalSelector = arguments[0];
             return DATE_INTERVAL_SELECTORS[nameIntervalSelector](value);
         } else if(this.dataType === 'number') {
-            groupInterval = arguments[0];
+            const groupInterval = arguments[0];
             return Math.floor(Number(value) / groupInterval) * groupInterval;
         }
     };
@@ -151,12 +150,11 @@ module.exports = (function() {
 
         getIndexByKey: function(key, items, keyName) {
             let index = -1;
-            let item;
 
             if(key !== undefined && Array.isArray(items)) {
                 keyName = arguments.length <= 2 ? 'key' : keyName;
                 for(let i = 0; i < items.length; i++) {
-                    item = isDefined(keyName) ? items[i][keyName] : items[i];
+                    const item = isDefined(keyName) ? items[i][keyName] : items[i];
 
                     if(equalByValue(key, item)) {
                         index = i;
@@ -170,11 +168,10 @@ module.exports = (function() {
 
         combineFilters: function(filters, operation) {
             let resultFilter = [];
-            let i;
 
             operation = operation || 'and';
 
-            for(i = 0; i < filters.length; i++) {
+            for(let i = 0; i < filters.length; i++) {
                 if(!filters[i]) continue;
                 if(resultFilter.length) {
                     resultFilter.push(operation);
@@ -191,9 +188,8 @@ module.exports = (function() {
 
         checkChanges: function(changes, changeNames) {
             let changesWithChangeNamesCount = 0;
-            let i;
 
-            for(i = 0; i < changeNames.length; i++) {
+            for(let i = 0; i < changeNames.length; i++) {
                 if(changes[changeNames[i]]) {
                     changesWithChangeNamesCount++;
                 }
@@ -203,13 +199,12 @@ module.exports = (function() {
         },
 
         equalFilterParameters: function(filter1, filter2) {
-            let i;
 
             if(Array.isArray(filter1) && Array.isArray(filter2)) {
                 if(filter1.length !== filter2.length) {
                     return false;
                 } else {
-                    for(i = 0; i < filter1.length; i++) {
+                    for(let i = 0; i < filter1.length; i++) {
                         if(!module.exports.equalFilterParameters(filter1[i], filter2[i])) {
                             return false;
                         }
@@ -268,11 +263,9 @@ module.exports = (function() {
 
         getGroupRowSummaryText: function(summaryItems, summaryTexts) {
             let result = '(';
-            let i;
-            let summaryItem;
 
-            for(i = 0; i < summaryItems.length; i++) {
-                summaryItem = summaryItems[i];
+            for(let i = 0; i < summaryItems.length; i++) {
+                const summaryItem = summaryItems[i];
                 result += (i > 0 ? ', ' : '') + module.exports.getSummaryText(summaryItem, summaryTexts);
             }
             return result += ')';
@@ -292,10 +285,9 @@ module.exports = (function() {
 
         normalizeSortingInfo: function(sort) {
             sort = sort || [];
-            let i;
             const result = normalizeSortingInfo(sort);
 
-            for(i = 0; i < sort.length; i++) {
+            for(let i = 0; i < sort.length; i++) {
                 if(sort && sort[i] && sort[i].isExpanded !== undefined) {
                     result[i].isExpanded = sort[i].isExpanded;
                 }
@@ -348,7 +340,6 @@ module.exports = (function() {
         },
 
         equalSortParameters: function(sortParameters1, sortParameters2, ignoreIsExpanded) {
-            let i;
 
             sortParameters1 = module.exports.normalizeSortingInfo(sortParameters1);
             sortParameters2 = module.exports.normalizeSortingInfo(sortParameters2);
@@ -357,7 +348,7 @@ module.exports = (function() {
                 if(sortParameters1.length !== sortParameters2.length) {
                     return false;
                 } else {
-                    for(i = 0; i < sortParameters1.length; i++) {
+                    for(let i = 0; i < sortParameters1.length; i++) {
                         if(!equalSelectors(sortParameters1[i].selector, sortParameters2[i].selector) || sortParameters1[i].desc !== sortParameters2[i].desc || sortParameters1[i].groupInterval !== sortParameters2[i].groupInterval || (!ignoreIsExpanded && Boolean(sortParameters1[i].isExpanded) !== Boolean(sortParameters2[i].isExpanded))) {
                             return false;
                         }
@@ -372,31 +363,28 @@ module.exports = (function() {
         getPointsByColumns: function(items, pointCreated, isVertical, startColumnIndex) {
             const cellsLength = items.length;
             let notCreatePoint = false;
-            let point;
-            let i;
             let item;
             let offset;
             let columnIndex = startColumnIndex || 0;
-            let prevItemOffset;
             const result = [];
             let rtlEnabled;
 
-            for(i = 0; i <= cellsLength; i++) {
+            for(let i = 0; i <= cellsLength; i++) {
                 if(i < cellsLength) {
                     item = items.eq(i);
                     offset = item.offset();
                     rtlEnabled = item.css('direction') === 'rtl';
                 }
 
-                point = {
+                const point = {
                     index: columnIndex,
-                    x: offset ? offset.left + ((!isVertical && (rtlEnabled ^ (i === cellsLength))) ? item[0].getBoundingClientRect().width : 0) : 0,
-                    y: offset ? offset.top + ((isVertical && i === cellsLength) ? item[0].getBoundingClientRect().height : 0) : 0,
+                    x: offset ? offset.left + ((!isVertical && (rtlEnabled ^ (i === cellsLength))) ? getBoundingRect(item[0]).width : 0) : 0,
+                    y: offset ? offset.top + ((isVertical && i === cellsLength) ? getBoundingRect(item[0]).height : 0) : 0,
                     columnIndex: columnIndex
                 };
 
                 if(!isVertical && i > 0) {
-                    prevItemOffset = items.eq(i - 1).offset();
+                    const prevItemOffset = items.eq(i - 1).offset();
 
                     if(prevItemOffset.top < point.y) {
                         point.y = prevItemOffset.top;
@@ -427,11 +415,10 @@ module.exports = (function() {
             return {
                 allowRenderToDetachedContainer: true,
                 render: function(container, options) {
-                    let rowsView;
                     const $container = $(container);
 
                     if(isDefined(options.value) && !(options.data && options.data.isContinuation) && !options.row.isNewRow) {
-                        rowsView = options.component.getView('rowsView');
+                        const rowsView = options.component.getView('rowsView');
                         $container
                             .addClass(DATAGRID_EXPAND_CLASS)
                             .addClass(DATAGRID_SELECTION_DISABLED_CLASS);

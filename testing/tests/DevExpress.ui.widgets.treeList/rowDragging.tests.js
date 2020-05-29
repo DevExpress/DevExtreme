@@ -92,8 +92,6 @@ QUnit.module('Drag and Drop nodes', moduleConfig, () => {
 
     QUnit.test('Drag and drop node', function(assert) {
     // arrange
-        let $draggableElement;
-        let $placeholderElement;
         const onDragEndSpy = sinon.spy();
         const $testElement = $('#container');
 
@@ -106,8 +104,8 @@ QUnit.module('Drag and Drop nodes', moduleConfig, () => {
         const pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
 
         // assert
-        $draggableElement = $('body').children('.dx-sortable-dragging');
-        $placeholderElement = $('body').children('.dx-sortable-placeholder');
+        const $draggableElement = $('body').children('.dx-sortable-dragging');
+        const $placeholderElement = $('body').children('.dx-sortable-placeholder');
         assert.strictEqual($draggableElement.length, 1, 'there is dragging element');
         assert.strictEqual($placeholderElement.length, 1, 'placeholder');
         assert.notOk($placeholderElement.hasClass('dx-sortable-placeholder-inside'), 'placeholder for dropping inward');
@@ -124,7 +122,6 @@ QUnit.module('Drag and Drop nodes', moduleConfig, () => {
 
     QUnit.test('Drag and drop a node into another node', function(assert) {
     // arrange
-        let $placeholderElement;
         const onDragEndSpy = sinon.spy();
         const $testElement = $('#container');
 
@@ -137,7 +134,7 @@ QUnit.module('Drag and Drop nodes', moduleConfig, () => {
         const pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 50);
 
         // assert
-        $placeholderElement = $('body').children('.dx-sortable-placeholder');
+        const $placeholderElement = $('body').children('.dx-sortable-placeholder');
         assert.strictEqual($placeholderElement.length, 1, 'placeholder');
         assert.ok($placeholderElement.hasClass('dx-sortable-placeholder-inside'), 'placeholder for dropping inward');
 

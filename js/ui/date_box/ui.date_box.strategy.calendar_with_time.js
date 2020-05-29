@@ -18,7 +18,7 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
         return extend(this.callBase(), {
             applyValueMode: 'useButtons',
             buttonsLocation: 'bottom after',
-            showPopupTitle: false
+            'dropDownOptions.showTitle': false
         });
     },
 

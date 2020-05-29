@@ -69,12 +69,8 @@ const ErrorHandlingController = modules.ViewController.inherit({
 
     renderErrorRow: function(error, rowIndex, $popupContent) {
         const that = this;
-        let $row;
         let $errorMessageElement;
         let $firstErrorRow;
-        let rowElements;
-        let viewElement;
-        let $tableElements;
 
         if($popupContent) {
             $popupContent.find('.' + ERROR_MESSAGE_CLASS).remove();
@@ -83,20 +79,20 @@ const ErrorHandlingController = modules.ViewController.inherit({
             return $errorMessageElement;
         }
 
-        viewElement = rowIndex >= 0 || !that._columnHeadersView.isVisible() ? that._rowsView : that._columnHeadersView,
-        $tableElements = $popupContent || viewElement.getTableElements();
+        const viewElement = rowIndex >= 0 || !that._columnHeadersView.isVisible() ? that._rowsView : that._columnHeadersView;
+        const $tableElements = $popupContent || viewElement.getTableElements();
 
         each($tableElements, function(_, tableElement) {
             $errorMessageElement = that._createErrorRow(error, $tableElements);
             $firstErrorRow = $firstErrorRow || $errorMessageElement;
 
             if(rowIndex >= 0) {
-                $row = viewElement._getRowElements($(tableElement)).eq(rowIndex);
+                const $row = viewElement._getRowElements($(tableElement)).eq(rowIndex);
                 that.removeErrorRow($row.next());
                 $errorMessageElement.insertAfter($row);
             } else {
                 const $tbody = $(tableElement).children('tbody');
-                rowElements = $tbody.children('tr');
+                const rowElements = $tbody.children('tr');
                 if(that._columnHeadersView.isVisible()) {
                     that.removeErrorRow(rowElements.last());
                     $(tableElement).append($errorMessageElement);

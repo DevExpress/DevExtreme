@@ -1948,11 +1948,9 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
 
     QUnit.test('Initialize from big array store when items with different data', function(assert) {
         const array = [];
-        let i;
-        let item;
 
-        for(i = 0; i < 100; i++) {
-            item = {};
+        for(let i = 0; i < 100; i++) {
+            const item = {};
             item['item' + i] = i;
             item['item' + (i + 1)] = i + 1;
             array.push(item);

@@ -191,7 +191,6 @@
 
     function ObjectPool(ctor) {
         const that = this;
-        let wrapCtor;
 
         this.ctor = ctor;
         this.stubIndex = 0;
@@ -229,7 +228,7 @@
             that.stubIndex = 0;
         };
 
-        wrapCtor = function() {
+        const wrapCtor = function() {
             return that.getItem();
         };
         wrapCtor.resetIndex = this.resetIndex;

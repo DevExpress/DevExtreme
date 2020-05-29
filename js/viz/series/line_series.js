@@ -326,16 +326,11 @@ exports.chart['spline'] = _extend({}, lineSeries, {
                 let rightControlY;
                 const prevPoint = pointsCopy[i - 1];
                 const nextPoint = pointsCopy[i + 1];
-                let xCur;
-                let yCur;
                 let x1;
                 let x2;
                 let y1;
                 let y2;
                 const lambda = 0.5;
-                let curIsExtremum;
-                let leftPoint;
-                let rightPoint;
                 let a;
                 let b;
                 let c;
@@ -348,15 +343,15 @@ exports.chart['spline'] = _extend({}, lineSeries, {
                     return;
                 }
 
-                xCur = curPoint.x;
-                yCur = curPoint.y;
+                const xCur = curPoint.x;
+                const yCur = curPoint.y;
                 x1 = prevPoint.x;
                 x2 = nextPoint.x;
                 y1 = prevPoint.y;
                 y2 = nextPoint.y;
 
                 // check for extremum
-                curIsExtremum = !!((!rotated && ((yCur <= prevPoint.y && yCur <= nextPoint.y)
+                const curIsExtremum = !!((!rotated && ((yCur <= prevPoint.y && yCur <= nextPoint.y)
                             || (yCur >= prevPoint.y && yCur >= nextPoint.y)))
                         || (rotated && ((xCur <= prevPoint.x && xCur <= nextPoint.x)
                             || (xCur >= prevPoint.x && xCur >= nextPoint.x))));
@@ -413,8 +408,8 @@ exports.chart['spline'] = _extend({}, lineSeries, {
                     rightControlX = checkExtremum(nextPoint.x, xCur, rightControlX);
                 }
 
-                leftPoint = clonePoint(curPoint, leftControlX, leftControlY);
-                rightPoint = clonePoint(curPoint, rightControlX, rightControlY);
+                const leftPoint = clonePoint(curPoint, leftControlX, leftControlY);
+                const rightPoint = clonePoint(curPoint, rightControlX, rightControlY);
 
                 bezierPoints.push(leftPoint, curPoint, rightPoint);
 

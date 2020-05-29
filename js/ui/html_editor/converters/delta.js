@@ -164,7 +164,8 @@ class DeltaConverter {
         let attributesString = ' ';
 
         for(let i = 0; i < attributes.length; i++) {
-            let { name, value } = attributes[i];
+            const name = attributes[i].name;
+            let value = attributes[i].value;
 
             if(name === 'class') {
                 value = this._removeIndentClass(value);

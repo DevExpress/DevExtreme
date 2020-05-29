@@ -60,7 +60,7 @@
         "no-whitespace-before-property": "error",
         "object-curly-spacing": [ "error", "always" ],
         "one-var": ["error", "never"],
-        "prefer-const": "warn",
+        "prefer-const": "error",
         "semi-spacing": "error",
         "semi": "error",
         "space-before-blocks": "error",
@@ -132,6 +132,7 @@
                     "eol",          // end of line
                     "etag",         // HTTP header
                     "eula",         // EULA
+                    "globals",      // jest settings
                     "jsrender",     // JsRender template engine
                     "hsl",          // HSL color
                     "hsv",          // HSV color

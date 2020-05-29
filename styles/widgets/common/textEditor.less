@@ -11,7 +11,6 @@
 .dx-editor-content-wrapper() {
     display: flex;
     flex-grow: 1;
-    width: 0;
     position: relative;
     align-items: baseline;
 }
@@ -77,6 +76,10 @@
 
     &:-webkit-autofill + .dx-placeholder {
         display: none;
+    }
+
+    &:-moz-ui-invalid {
+        box-shadow: none;
     }
 }
 

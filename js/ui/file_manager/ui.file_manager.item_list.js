@@ -1,4 +1,5 @@
 import { extend } from '../../core/utils/extend';
+import { when } from '../../core/utils/deferred';
 import { name as dblClickName } from '../../events/double_click';
 import { addNamespace } from '../../events/utils';
 import eventsEngine from '../../events/core/events_engine';
@@ -81,16 +82,19 @@ class FileManagerItemListBase extends Widget {
     }
 
     _getItems() {
-        const itemsGetter = this.option('getItems');
-        const itemsResult = itemsGetter ? itemsGetter() : [];
-
-        return itemsResult.done(itemInfos => {
+        return this._getItemsInternal().done(itemInfos => {
             this._itemCount = itemInfos.length;
 
             const parentDirectoryItem = this._findParentDirectoryItem(itemInfos);
             this._hasParentDirectoryItem = !!parentDirectoryItem;
             this._parentDirectoryItemKey = parentDirectoryItem ? parentDirectoryItem.fileItem.key : null;
         });
+    }
+
+    _getItemsInternal() {
+        const itemsGetter = this.option('getItems');
+        const itemsResult = itemsGetter ? itemsGetter() : [];
+        return when(itemsResult);
     }
 
     _raiseOnError(error) {

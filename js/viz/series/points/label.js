@@ -464,7 +464,8 @@ Label.prototype = {
         const padding = this._background ? 2 * LABEL_BACKGROUND_PADDING_X : 0;
         let rowCountChanged = false;
         if(this._text) {
-            let { rowCount, textIsEmpty } = this._text.setMaxSize(maxWidth - padding, undefined, this._options);
+            const result = this._text.setMaxSize(maxWidth - padding, undefined, this._options);
+            let rowCount = result.rowCount;
             if(rowCount === 0) {
                 rowCount = 1;
             }
@@ -472,7 +473,7 @@ Label.prototype = {
                 rowCountChanged = true;
                 this._rowCount = rowCount;
             }
-            textIsEmpty && disposeItem(this, '_background');
+            result.textIsEmpty && disposeItem(this, '_background');
         }
         this._updateBackground(this._text.getBBox());
         return rowCountChanged;

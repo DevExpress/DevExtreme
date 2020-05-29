@@ -7,6 +7,8 @@ import { each } from '../../core/utils/iterator';
 import { Deferred } from '../../core/utils/deferred';
 import translator from '../../animation/translator';
 import LoadIndicator from '../load_indicator';
+import browser from '../../core/utils/browser';
+import { getBoundingRect } from '../../core/utils/position';
 
 const TABLE_CLASS = 'table';
 const BOTTOM_LOAD_PANEL_CLASS = 'bottom-load-panel';
@@ -424,13 +426,12 @@ const VirtualScrollingRowsViewExtender = (function() {
 
         _updateContent: function(tableElement, change) {
             const that = this;
-            let contentTable;
             let $freeSpaceRowElements;
             const contentElement = that._findContentElement();
             const changeType = change && change.changeType;
 
             if(changeType === 'append' || changeType === 'prepend') {
-                contentTable = contentElement.children().first();
+                const contentTable = contentElement.children().first();
                 const $tBodies = that._getBodies(tableElement);
                 if(!that.option('legacyRendering') && $tBodies.length === 1) {
                     that._getBodies(contentTable)[changeType === 'append' ? 'append' : 'prepend']($tBodies.children());
@@ -472,7 +473,7 @@ const VirtualScrollingRowsViewExtender = (function() {
             if(!that.option('legacyRendering') && (isVirtualMode(that) || isVirtualRowRendering(that))) {
                 if(!isRender) {
                     const rowHeights = that._getRowElements(that._tableElement).toArray().map(function(row) {
-                        return row.getBoundingClientRect().height;
+                        return getBoundingRect(row).height;
                     });
 
                     dataController.setContentSize(rowHeights);
@@ -508,21 +509,17 @@ const VirtualScrollingRowsViewExtender = (function() {
 
         _updateContentPositionCore: function() {
             const that = this;
-            let contentElement;
             let contentHeight;
-            let top;
             let $tables;
             let $contentTable;
-            let virtualTable;
             const rowHeight = that._rowHeight || 20;
             const virtualItemsCount = that._dataController.virtualItemsCount();
-            let isRenderVirtualTableContentRequired;
 
             if(virtualItemsCount) {
-                contentElement = that._findContentElement();
+                const contentElement = that._findContentElement();
                 $tables = contentElement.children();
                 $contentTable = $tables.eq(0);
-                virtualTable = $tables.eq(1);
+                const virtualTable = $tables.eq(1);
 
                 that._contentTableHeight = $contentTable[0].offsetHeight;
 
@@ -530,13 +527,13 @@ const VirtualScrollingRowsViewExtender = (function() {
                 that._dataController.setContentSize(that._contentTableHeight);
 
                 contentHeight = that._dataController.getVirtualContentSize();
-                top = that._dataController.getContentOffset();
+                const top = that._dataController.getContentOffset();
 
                 deferRender(function() {
                     translator.move($contentTable, { left: 0, top: top });
 
                     // TODO jsdmitry: Separate this functionality on render and resize
-                    isRenderVirtualTableContentRequired = that._contentHeight !== contentHeight || contentHeight === 0 ||
+                    const isRenderVirtualTableContentRequired = that._contentHeight !== contentHeight || contentHeight === 0 ||
                         !that._isTableLinesDisplaysCorrect(virtualTable) ||
                         !that._isColumnElementsEqual($contentTable.find('col'), virtualTable.find('col'));
 
@@ -575,13 +572,12 @@ const VirtualScrollingRowsViewExtender = (function() {
             const columns = that._columnsController.getVisibleColumns();
             let html = that._createColGroup(columns).prop('outerHTML');
             let freeSpaceCellsHtml = '';
-            let i;
             const columnLinesClass = that.option('showColumnLines') ? COLUMN_LINES_CLASS : '';
             const createFreeSpaceRowHtml = function(height) {
                 return '<tr style=\'height:' + height + 'px;\' class=\'' + FREESPACE_CLASS + ' ' + ROW_CLASS + ' ' + columnLinesClass + '\' >' + freeSpaceCellsHtml + '</tr>';
             };
 
-            for(i = 0; i < columns.length; i++) {
+            for(let i = 0; i < columns.length; i++) {
                 const classes = that._getCellClasses(columns[i]);
                 const classString = classes.length ? ' class=\'' + classes.join(' ') + '\'' : '';
 
@@ -654,7 +650,6 @@ const VirtualScrollingRowsViewExtender = (function() {
 
         _updateRowHeight: function() {
             const that = this;
-            let viewportHeight;
 
             that.callBase.apply(that, arguments);
 
@@ -662,7 +657,7 @@ const VirtualScrollingRowsViewExtender = (function() {
 
                 that._updateContentPosition();
 
-                viewportHeight = that._hasHeight ? that.element().outerHeight() : $(getWindow()).outerHeight();
+                const viewportHeight = that._hasHeight ? that.element().outerHeight() : $(getWindow()).outerHeight();
                 that._dataController.viewportSize(Math.ceil(viewportHeight / that._rowHeight));
             }
         },
@@ -788,7 +783,8 @@ module.exports = {
                                     const $rowElement = rowElement && rowElement[0] && $(rowElement[0]);
                                     let top = $rowElement && $rowElement.position().top;
 
-                                    if(top > 0) {
+                                    const allowedTopOffset = browser.mozilla || browser.msie ? 1 : 0; // T884308
+                                    if(top > allowedTopOffset) {
                                         top = Math.round(top + $rowElement.outerHeight() * (itemIndex % 1));
                                         scrollable.scrollTo({ y: top });
                                     }

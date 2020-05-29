@@ -6,7 +6,6 @@ const selectStrategy = mapLayerModule._TESTS_selectStrategy;
 
 const emptyStrategy = selectStrategy({}, createData(0));
 const areaStrategyPolygon = selectStrategy({ type: 'area' }, createData(1));
-const areaStrategyMultiPolygon = selectStrategy({ type: 'area' }, createData(1, [[[[1]]]]));
 const lineStrategyLineString = selectStrategy({ type: 'line' }, createData(1));
 const lineStrategyMultiLineString = selectStrategy({ type: 'line' }, createData(1, [[[1]]]));
 const pointDotStrategy = selectStrategy({ type: 'marker', elementType: 'dot' }, createData(1));
@@ -53,14 +52,9 @@ QUnit.test('Selecting', function(assert) {
 
     assert.deepEqual(selectStrategy({}, createData(1, [1])), pointDotStrategy, 'guess kind by data 1');
     assert.deepEqual(selectStrategy({}, createData(1, [[1]])), lineStrategyLineString, 'guess kind by data 2');
-    assert.deepEqual(selectStrategy({}, createData(1, [[[1]]])), areaStrategyPolygon, 'guess kind by data 3');
 
-    assert.deepEqual(selectStrategy({ type: 'area' }, createData(1), []), areaStrategyPolygon, 'kind is defined 1');
     assert.deepEqual(selectStrategy({ type: 'line' }, createData(1), []), lineStrategyLineString, 'kind is defined 2');
     assert.deepEqual(selectStrategy({ type: 'marker' }, createData(1)), pointDotStrategy, 'kind is defined 3');
-
-    assert.deepEqual(selectStrategy({}, createData(1, [[[1, 2]]])), areaStrategyPolygon, 'area polygon strategy');
-    assert.deepEqual(selectStrategy({}, createData(1, [[[[1, 2]]]])), areaStrategyMultiPolygon, 'area mutlipolygon strategy');
 
     assert.deepEqual(selectStrategy({}, createData(1, [[1, 2]])), lineStrategyLineString, 'line linestring strategy');
     assert.deepEqual(selectStrategy({ type: 'line' }, createData(1, [[[1, 2]]])), lineStrategyMultiLineString, 'line multilinestring strategy');
@@ -71,35 +65,42 @@ QUnit.test('Selecting', function(assert) {
     assert.deepEqual(selectStrategy({ elementType: 'image' }, createData(1, [1])), pointImageStrategy, 'image strategy');
 });
 
-QUnit.skip('Project', function(assert) {
+QUnit.test('Select project strategy by type (polygon/multipolygon)', function(assert) {
     const projection = {
         project: function(coordinates) {
             return coordinates + '-proj';
         }
     };
 
-    assert.deepEqual(areaStrategyPolygon.project(projection, [
-        ['p1', 'p2'],
-        ['p3', 'p4', 'p5'],
-        ['p6']
-    ]), [
-        ['p1-proj', 'p2-proj'],
-        ['p3-proj', 'p4-proj', 'p5-proj'],
-        ['p6-proj']
+    assert.deepEqual(areaStrategyPolygon.project(projection, [[
+        [1, 2],
+        [3, 4, 5],
+        [6]
+    ]]), [
+        ['1,2-proj', '3,4,5-proj', '6-proj']
     ], 'area polygon');
-    assert.deepEqual(areaStrategyMultiPolygon.project(projection, [
+    assert.deepEqual(areaStrategyPolygon.project(projection, [[
         [
-            ['p1', 'p2'],
-            ['p3']
+            [1, 2],
+            [3]
         ],
         [
-            ['p4', 'p5', 'p6']
+            [4, 5, 6]
         ]
-    ]), [
-        ['p1-proj', 'p2-proj'],
-        ['p3-proj'],
-        ['p4-proj', 'p5-proj', 'p6-proj']
+    ]]), [
+        ['1,2-proj',
+            '3-proj'], [
+            '4,5,6-proj']
     ], 'area multipolygon');
+});
+
+QUnit.test('Project', function(assert) {
+    const projection = {
+        project: function(coordinates) {
+            return coordinates + '-proj';
+        }
+    };
+
     assert.deepEqual(lineStrategyLineString.project(projection, [
         'p1', 'p2', 'p3'
     ]), [
@@ -117,7 +118,7 @@ QUnit.skip('Project', function(assert) {
     assert.deepEqual(pointDotStrategy.project(projection, ['p']), 'p-proj', 'point');
 });
 
-QUnit.skip('Project area label', function(assert) {
+QUnit.test('Project area label', function(assert) {
     const data = areaStrategyPolygon.projectLabel([
         [[10, 20], [10, 40], [30, 40], [40, 20]],
         [[30, 50], [30, 60], [40, 70], [50, 20]]
@@ -129,7 +130,7 @@ QUnit.skip('Project area label', function(assert) {
     assert.roughEqual(data[1][1], 22.3607, 0.0001, 'size 1');
 });
 
-QUnit.skip('Project line label', function(assert) {
+QUnit.test('Project line label', function(assert) {
     const data = lineStrategyLineString.projectLabel([
         [[10, 20], [10, 40], [30, 40], [40, 20], [50, 20]],
         [[30, 50], [30, 60], [40, 70]]
@@ -142,11 +143,11 @@ QUnit.skip('Project line label', function(assert) {
     assert.roughEqual(data[2], 72.3607, 0.0001, 'length');
 });
 
-QUnit.skip('Transform area', function(assert) {
+QUnit.test('Transform area', function(assert) {
     const figure = { root: new vizMocks.Element() };
     const projection = {
         transform: function(coordinates) {
-            return coordinates + '-tr';
+            return [coordinates + '-tr1', coordinates + '-tr2'];
         }
     };
 
@@ -156,14 +157,20 @@ QUnit.skip('Transform area', function(assert) {
     ]);
 
     assert.deepEqual(figure.root.attr.lastCall.args, [{
-        points: [
-            ['p1-tr', 'p2-tr'],
-            ['p3-tr']
-        ]
+        points: [[
+            'p1-tr1',
+            'p1-tr2',
+            'p2-tr1',
+            'p2-tr2'
+        ],
+        [
+            'p3-tr1',
+            'p3-tr2'
+        ]]
     }]);
 });
 
-QUnit.skip('Transform area label', function(assert) {
+QUnit.test('Transform area label', function(assert) {
     const figure = { text: new vizMocks.Element(), size: [10, 20] };
     const projection = {
         transform: function(coordinates) {
@@ -185,11 +192,11 @@ QUnit.skip('Transform area label', function(assert) {
     assert.deepEqual(figure.text.attr.getCall(3).args, [{ visibility: 'hidden' }], 'visibility 2');
 });
 
-QUnit.skip('Transform line', function(assert) {
+QUnit.test('Transform line', function(assert) {
     const figure = { root: new vizMocks.Element() };
     const projection = {
         transform: function(coordinates) {
-            return coordinates + '-tr';
+            return [coordinates + '-tr1', coordinates + '-tr2'];
         }
     };
 
@@ -199,14 +206,20 @@ QUnit.skip('Transform line', function(assert) {
     ]);
 
     assert.deepEqual(figure.root.attr.lastCall.args, [{
-        points: [
-            ['p1-tr', 'p2-tr'],
-            ['p3-tr']
-        ]
+        points: [[
+            'p1-tr1',
+            'p1-tr2',
+            'p2-tr1',
+            'p2-tr2'
+        ],
+        [
+            'p3-tr1',
+            'p3-tr2'
+        ]]
     }]);
 });
 
-QUnit.skip('Transform line label', function(assert) {
+QUnit.test('Transform line label', function(assert) {
     const figure = { text: new vizMocks.Element(), size: [10, 20] };
     const projection = {
         transform: function(coordinates) {
@@ -228,7 +241,7 @@ QUnit.skip('Transform line label', function(assert) {
     assert.deepEqual(figure.text.attr.getCall(3).args, [{ visibility: 'hidden' }], 'visibility 2');
 });
 
-QUnit.skip('Transform point', function(assert) {
+QUnit.test('Transform point', function(assert) {
     const figure = { root: new vizMocks.Element() };
     const projection = {
         transform: function(coordinates) {

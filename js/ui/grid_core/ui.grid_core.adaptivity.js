@@ -87,7 +87,6 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         const focusAction = that.createAction(function() {
             eventsEngine.trigger($container, clickEvent.name);
         });
-        let container;
         const value = column.calculateCellValue(cellOptions.data);
         const displayValue = gridCoreUtils.getDisplayValue(column, value, cellOptions.data, cellOptions.rowType);
         const text = gridCoreUtils.formatValue(displayValue, column);
@@ -110,7 +109,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
                 rowsView._cellPrepared($container, cellOptions);
             });
         } else {
-            container = $container.get(0);
+            const container = $container.get(0);
             if(column.encodeHtml) {
                 container.textContent = text;
             } else {
@@ -171,11 +170,9 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
     _isVisibleColumnsValid: function(visibleColumns) {
         const getCommandColumnsCount = function() {
             let result = 0;
-            let j;
-            let visibleColumn;
 
-            for(j = 0; j < visibleColumns.length; j++) {
-                visibleColumn = visibleColumns[j];
+            for(let j = 0; j < visibleColumns.length; j++) {
+                const visibleColumn = visibleColumns[j];
                 if(visibleColumn.command) {
                     result++;
                 }
@@ -282,13 +279,12 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         const columnId = getColumnId(this, column);
         const widthOption = this._columnsController.columnOption(columnId, 'width');
         const bestFitWidth = this._columnsController.columnOption(columnId, 'bestFitWidth');
-        let colWidth;
 
         if(widthOption && widthOption !== 'auto' && !this._isPercentWidth(widthOption)) {
             return parseFloat(widthOption);
         }
 
-        colWidth = this._calculateColumnWidth(column, containerWidth, contentColumns, columnsCanFit);
+        const colWidth = this._calculateColumnWidth(column, containerWidth, contentColumns, columnsCanFit);
 
         return colWidth < bestFitWidth ? null : colWidth;
     },
@@ -350,11 +346,9 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
     _getAdaptiveColumnVisibleIndex: function(visibleColumns) {
-        let i;
-        let column;
 
-        for(i = 0; i < visibleColumns.length; i++) {
-            column = visibleColumns[i];
+        for(let i = 0; i < visibleColumns.length; i++) {
+            const column = visibleColumns[i];
             if(column.command === ADAPTIVE_COLUMN_NAME) {
                 return i;
             }
@@ -365,65 +359,77 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         const visibleIndex = this._getAdaptiveColumnVisibleIndex(visibleColumns);
         if(typeUtils.isDefined(visibleIndex)) {
             resultWidths[visibleIndex] = HIDDEN_COLUMNS_WIDTH;
-            this._addCssClassToColumn(COMMAND_ADAPTIVE_HIDDEN_CLASS, visibleIndex);
+            this._hideVisibleColumn({ isCommandColumn: true, visibleIndex });
         }
     },
 
-    _removeCssClassFromColumn: function(cssClassName) {
-        let i;
-        let view;
-        let $cells;
+    _showHiddenCellsInView: function({ $cells, isCommandColumn }) {
+        const cssClassNameToRemove = isCommandColumn ? COMMAND_ADAPTIVE_HIDDEN_CLASS : this.addWidgetPrefix(HIDDEN_COLUMN_CLASS);
+        $cells.removeClass(cssClassNameToRemove);
+    },
 
-        for(i = 0; i < COLUMN_VIEWS.length; i++) {
-            view = this.getView(COLUMN_VIEWS[i]);
+    _showHiddenColumns: function() {
+        for(let i = 0; i < COLUMN_VIEWS.length; i++) {
+            const view = this.getView(COLUMN_VIEWS[i]);
             if(view && view.isVisible() && view.element()) {
-                $cells = view.element().find('.' + cssClassName);
-                $cells.removeClass(cssClassName);
+                const viewName = view.name;
+                const $hiddenCommandCells = view.element().find('.' + COMMAND_ADAPTIVE_HIDDEN_CLASS);
+                this._showHiddenCellsInView({
+                    viewName,
+                    $cells: $hiddenCommandCells,
+                    isCommandColumn: true
+                });
+                const $hiddenCells = view.element().find('.' + this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
+                this._showHiddenCellsInView({
+                    viewName,
+                    $cells: $hiddenCells
+                });
             }
         }
-    },
-
-    _removeCssClassesFromColumns: function() {
-        this._removeCssClassFromColumn(COMMAND_ADAPTIVE_HIDDEN_CLASS);
-        this._removeCssClassFromColumn(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
     },
 
     _isCellValid: function($cell) {
         return $cell && $cell.length && !$cell.hasClass(MASTER_DETAIL_CELL_CLASS) && !$cell.hasClass(GROUP_CELL_CLASS);
     },
 
-    _addCssClassToColumn: function(cssClassName, visibleIndex) {
+    _hideVisibleColumn: function({ isCommandColumn, visibleIndex }) {
         const that = this;
         COLUMN_VIEWS.forEach(function(viewName) {
             const view = that.getView(viewName);
-            view && that._addCssClassToViewColumn(view, cssClassName, visibleIndex);
+            view && that._hideVisibleColumnInView({ view, isCommandColumn, visibleIndex });
         });
     },
 
-    _addCssClassToViewColumn: function(view, cssClassName, visibleIndex) {
+    _hideVisibleColumnInView: function({ view, isCommandColumn, visibleIndex }) {
         const viewName = view.name;
-        let rowsCount;
-        let rowIndex;
         let $cellElement;
-        let currentVisibleIndex;
         const column = this._columnsController.getVisibleColumns()[visibleIndex];
         const editFormRowIndex = this._editingController && this._editingController.getEditFormRowIndex();
 
         if(view && view.isVisible() && column) {
-            rowsCount = view.getRowsCount();
+            const rowsCount = view.getRowsCount();
             const $rowElements = view._getRowElements();
-            for(rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
+            for(let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
                 const cancelClassAdding = rowIndex === editFormRowIndex && viewName === ROWS_VIEW && this.option('editing.mode') !== 'popup';
 
                 if(!cancelClassAdding) {
-                    currentVisibleIndex = viewName === COLUMN_HEADERS_VIEW ? this._columnsController.getVisibleIndex(column.index, rowIndex) : visibleIndex;
+                    const currentVisibleIndex = viewName === COLUMN_HEADERS_VIEW ? this._columnsController.getVisibleIndex(column.index, rowIndex) : visibleIndex;
                     if(currentVisibleIndex >= 0) {
                         $cellElement = $rowElements.eq(rowIndex).children().eq(currentVisibleIndex);
-                        this._isCellValid($cellElement) && $cellElement.addClass(cssClassName);
+                        this._isCellValid($cellElement) && this._hideVisibleCellInView({
+                            viewName,
+                            isCommandColumn,
+                            $cell: $cellElement,
+                        });
                     }
                 }
             }
         }
+    },
+
+    _hideVisibleCellInView: function({ $cell, isCommandColumn }) {
+        const cssClassNameToAdd = isCommandColumn ? COMMAND_ADAPTIVE_HIDDEN_CLASS : this.addWidgetPrefix(HIDDEN_COLUMN_CLASS);
+        $cell.addClass(cssClassNameToAdd);
     },
 
     _getEditMode: function() {
@@ -438,21 +444,18 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
 
     hideRedundantColumns: function(resultWidths, visibleColumns, hiddenQueue) {
         const that = this;
-        let visibleColumn;
 
         this._hiddenColumns = [];
 
         if(that._isVisibleColumnsValid(visibleColumns) && hiddenQueue.length) {
             let totalWidth = 0;
-            let percentWidths;
             const $rootElement = that.component.$element();
             let rootElementWidth = $rootElement.width() - that._getCommandColumnsWidth();
             const getVisibleContentColumns = function() {
-                return visibleColumns.filter(item => !item.command && this._hiddenColumns.filter(i => i.dataField === item.dataField).length === 0);
+                return visibleColumns.filter(item => !item.command && this._hiddenColumns.filter(i => i.index === item.index).length === 0);
             }.bind(this);
             let visibleContentColumns = getVisibleContentColumns();
             const contentColumnsCount = visibleContentColumns.length;
-            let columnsCanFit;
             let i;
             let hasHiddenColumns;
             let needHideColumn;
@@ -461,11 +464,11 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
                 needHideColumn = false;
                 totalWidth = 0;
 
-                percentWidths = that._calculatePercentWidths(resultWidths, visibleColumns);
+                const percentWidths = that._calculatePercentWidths(resultWidths, visibleColumns);
 
-                columnsCanFit = percentWidths < 100 && percentWidths !== 0;
+                const columnsCanFit = percentWidths < 100 && percentWidths !== 0;
                 for(i = 0; i < visibleColumns.length; i++) {
-                    visibleColumn = visibleColumns[i];
+                    const visibleColumn = visibleColumns[i];
 
                     let columnWidth = that._getNotTruncatedColumnWidth(visibleColumn, rootElementWidth, visibleContentColumns, columnsCanFit);
                     const columnId = getColumnId(that, visibleColumn);
@@ -499,7 +502,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
 
                     rootElementWidth += that._calculateColumnWidth(column, rootElementWidth, visibleContentColumns, columnsCanFit);
 
-                    that._addCssClassToColumn(that.addWidgetPrefix(HIDDEN_COLUMN_CLASS), visibleIndex);
+                    that._hideVisibleColumn({ visibleIndex });
                     resultWidths[visibleIndex] = HIDDEN_COLUMNS_WIDTH;
                     this._hiddenColumns.push(column);
                     visibleContentColumns = getVisibleContentColumns();
@@ -517,12 +520,10 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
 
     getItemContentByColumnIndex: function(visibleColumnIndex) {
         let $itemContent;
-        let i;
-        let item;
 
-        for(i = 0; i < this._$itemContents.length; i++) {
+        for(let i = 0; i < this._$itemContents.length; i++) {
             $itemContent = this._$itemContents.eq(i);
-            item = $itemContent.data('dx-form-item');
+            const item = $itemContent.data('dx-form-item');
             if(item && item.column && this._columnsController.getVisibleIndex(item.column.index) === visibleColumnIndex) {
                 return $itemContent;
             }
@@ -920,10 +921,9 @@ module.exports = {
 
                 _beforeCloseEditCellInBatchMode: function(rowIndices) {
                     const expandedKey = this._dataController._adaptiveExpandedKey;
-                    let rowIndex;
 
                     if(expandedKey) {
-                        rowIndex = gridCoreUtils.getIndexByKey(expandedKey, this._dataController.items());
+                        const rowIndex = gridCoreUtils.getIndexByKey(expandedKey, this._dataController.items());
                         if(rowIndex > -1) {
                             rowIndices.unshift(rowIndex);
                         }
@@ -972,11 +972,10 @@ module.exports = {
                     const adaptiveController = this._adaptiveColumnsController;
                     const columnAutoWidth = this.option('columnAutoWidth');
                     const oldHiddenColumns = adaptiveController.getHiddenColumns();
-                    let hiddenColumns;
                     const hidingColumnsQueue = adaptiveController.updateHidingQueue(this._columnsController.getColumns());
 
                     adaptiveController.hideRedundantColumns(resultWidths, visibleColumns, hidingColumnsQueue);
-                    hiddenColumns = adaptiveController.getHiddenColumns();
+                    const hiddenColumns = adaptiveController.getHiddenColumns();
                     if(adaptiveController.hasAdaptiveDetailRowExpanded()) {
                         if(oldHiddenColumns.length !== hiddenColumns.length) {
                             adaptiveController.updateForm(hiddenColumns);
@@ -993,7 +992,7 @@ module.exports = {
                 },
 
                 _toggleBestFitMode: function(isBestFit) {
-                    isBestFit && this._adaptiveColumnsController._removeCssClassesFromColumns();
+                    isBestFit && this._adaptiveColumnsController._showHiddenColumns();
                     this.callBase(isBestFit);
                 },
 
@@ -1014,8 +1013,6 @@ module.exports = {
             data: {
                 _processItems: function(items, change) {
                     const that = this;
-                    let item;
-                    let expandRowIndex;
                     const changeType = change.changeType;
 
                     items = that.callBase.apply(that, arguments);
@@ -1024,10 +1021,10 @@ module.exports = {
                         return items;
                     }
 
-                    expandRowIndex = gridCoreUtils.getIndexByKey(that._adaptiveExpandedKey, items);
+                    const expandRowIndex = gridCoreUtils.getIndexByKey(that._adaptiveExpandedKey, items);
 
                     if(expandRowIndex >= 0) {
-                        item = items[expandRowIndex];
+                        const item = items[expandRowIndex];
                         items.splice(expandRowIndex + 1, 0, {
                             visible: true,
                             rowType: ADAPTIVE_ROW_TYPE,
@@ -1047,10 +1044,9 @@ module.exports = {
 
                 _getRowIndicesForExpand: function(key) {
                     const rowIndices = this.callBase.apply(this, arguments);
-                    let lastRowIndex;
 
                     if(this.getController('adaptiveColumns').isAdaptiveDetailRowExpanded(key)) {
-                        lastRowIndex = rowIndices[rowIndices.length - 1];
+                        const lastRowIndex = rowIndices[rowIndices.length - 1];
                         rowIndices.push(lastRowIndex + 1);
                     }
 

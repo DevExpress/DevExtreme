@@ -182,10 +182,6 @@ QUnit.module('Details View', moduleConfig, () => {
         assert.equal(columnHeader.attr('aria-sort'), 'none', 'sorting default');
     });
 
-    test('Details view must has ScrollView', function(assert) {
-        assert.ok(this.wrapper.getDetailsViewScrollable().length);
-    });
-
     test('\'Back\' directory must not be sortable', function(assert) {
         this.wrapper.getInstance().option({
             fileSystemProvider: createTestFileSystem(),

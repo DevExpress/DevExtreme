@@ -325,13 +325,6 @@ const Toolbar = ToolbarBase.inherit({
         this._menuStrategy.widgetOption(name, value);
     },
 
-    _setDeprecatedOptions() {
-        this.callBase();
-        extend(this._deprecatedOptions, {
-            'height': { since: '20.1', message: 'Functionality associated with this option is not intended for the Toolbar widget.' }
-        });
-    },
-
     /**
      * @name dxToolbarMethods.registerKeyHandler
      * @publicName registerKeyHandler(key, handler)

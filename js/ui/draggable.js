@@ -20,8 +20,10 @@ const viewPortUtils = require('../core/utils/view_port');
 const commonUtils = require('../core/utils/common');
 const EmptyTemplate = require('../core/templates/empty_template').EmptyTemplate;
 const deferredUtils = require('../core/utils/deferred');
+const getBoundingRect = require('../core/utils/position').getBoundingRect;
 const when = deferredUtils.when;
 const fromPromise = deferredUtils.fromPromise;
+const Deferred = deferredUtils.Deferred;
 
 const DRAGGABLE = 'dxDraggable';
 const DRAGSTART_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, DRAGGABLE);
@@ -118,7 +120,7 @@ class ScrollHelper {
         let areaBoundingRect;
 
         if(area) {
-            areaBoundingRect = area.getBoundingClientRect();
+            areaBoundingRect = getBoundingRect(area);
 
             return {
                 left: mousePosition.x - areaBoundingRect.left,
@@ -180,7 +182,7 @@ class ScrollHelper {
             return false;
         }
 
-        const scrollableSize = component._$scrollable.get(0).getBoundingClientRect();
+        const scrollableSize = getBoundingRect(component._$scrollable.get(0));
         const start = scrollableSize[this._limitProps.start];
         const size = scrollableSize[this._sizeAttr];
         const location = this._sizeAttr === 'width' ? event.pageX : event.pageY;
@@ -220,6 +222,8 @@ const Draggable = DOMComponent.inherit({
         const sourceDraggable = this._getSourceDraggable();
 
         sourceDraggable._fireRemoveEvent(sourceEvent);
+
+        return (new Deferred()).resolve();
     },
 
     _fireRemoveEvent: noop,
@@ -570,9 +574,6 @@ const Draggable = DOMComponent.inherit({
     },
 
     _dragStartHandler: function(e) {
-        let $dragElement;
-        let initialOffset;
-        let isFixedPosition;
         const $element = this._getDraggableElement(e);
 
         if(this._$sourceElement) {
@@ -595,12 +596,12 @@ const Draggable = DOMComponent.inherit({
         this._setSourceDraggable();
 
         this._$sourceElement = $element;
-        initialOffset = $element.offset();
-        $dragElement = this._$dragElement = this._createDragElement($element);
+        const initialOffset = $element.offset();
+        const $dragElement = this._$dragElement = this._createDragElement($element);
 
         this._toggleDraggingClass(true);
         this._toggleDragSourceClass(true);
-        isFixedPosition = $dragElement.css('position') === 'fixed';
+        const isFixedPosition = $dragElement.css('position') === 'fixed';
 
         this._initPosition(extend({}, dragStartArgs, {
             dragElement: $dragElement.get(0),
@@ -777,6 +778,7 @@ const Draggable = DOMComponent.inherit({
     },
 
     _dragEndHandler: function(e) {
+        const d = new Deferred();
         const dragEndEventArgs = this._getEventArgs(e);
         const dropEventArgs = this._getEventArgs(e);
         const targetDraggable = this._getTargetDraggable();
@@ -793,27 +795,32 @@ const Draggable = DOMComponent.inherit({
                         }
 
                         if(!dropEventArgs.cancel) {
-                            targetDraggable.dragEnd(dragEndEventArgs);
                             needRevertPosition = false;
+                            when(fromPromise(targetDraggable.dragEnd(dragEndEventArgs))).always(d.resolve);
+                            return;
                         }
                     }
-                }).always(() => {
-                    if(needRevertPosition) {
-                        this._revertItemToInitialPosition();
-                    }
+                    d.resolve();
+                })
+                .fail(d.resolve);
 
-                    this.reset();
-                    targetDraggable.reset();
-                    this._stopAnimator();
-                    this._horizontalScrollHelper.reset();
-                    this._verticalScrollHelper.reset();
+            d.done(() => {
+                if(needRevertPosition) {
+                    this._revertItemToInitialPosition();
+                }
 
-                    this._resetDragElement();
-                    this._resetSourceElement();
+                this.reset();
+                targetDraggable.reset();
+                this._stopAnimator();
+                this._horizontalScrollHelper.reset();
+                this._verticalScrollHelper.reset();
 
-                    this._resetTargetDraggable();
-                    this._resetSourceDraggable();
-                });
+                this._resetDragElement();
+                this._resetSourceElement();
+
+                this._resetTargetDraggable();
+                this._resetSourceDraggable();
+            });
         }
     },
 

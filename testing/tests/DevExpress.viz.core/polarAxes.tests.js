@@ -101,7 +101,6 @@ const environment = {
     },
     createSimpleAxis: function(options) {
         options = $.extend(true, this.options, options);
-        let axis;
 
         this.range.categories = options.categories;
         this.range.minVisible = options.min;
@@ -109,7 +108,7 @@ const environment = {
         this.range.addRange = sinon.stub();
         this.range.isEmpty.returns(false);
 
-        axis = this.createAxis(this.renderSettings, options);
+        const axis = this.createAxis(this.renderSettings, options);
 
         this.translator.getBusinessRange.returns(this.range);
 
@@ -1090,10 +1089,9 @@ QUnit.test('create', function(assert) {
 });
 
 QUnit.test('draw', function(assert) {
-    let returnedPath;
     this.createDrawnAxis({ visible: true });
 
-    returnedPath = this.renderer.path.getCall(0);
+    const returnedPath = this.renderer.path.getCall(0);
     assert.equal(this.renderer.path.callCount, 1);
     assert.deepEqual(returnedPath.args, [[], 'line']);
     assert.deepEqual(returnedPath.returnValue.attr.getCall(0).args[0], { points: [20, 50, 40, 50] });
@@ -1773,7 +1771,6 @@ QUnit.test('frequent tisks', function(assert) {
         { x: 0, y: 2, width: 20, height: 10 },
         { x: 0, y: 2, width: 20, height: 10 }
     ];
-    let text;
 
     this.generatedTicks = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18];
     this.translator.translate.withArgs(0).returns(1);
@@ -1787,7 +1784,7 @@ QUnit.test('frequent tisks', function(assert) {
     this.translator.translate.withArgs(16).returns(212);
     this.translator.translate.withArgs(18).returns(242);
 
-    text = this.renderer.text = spyRendererText.call(this, markersBBoxes);
+    const text = this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.createDrawnAxis();
 
     assert.equal(text.getCall(0).returnValue.stub('remove').called, false, 'text is not removed');

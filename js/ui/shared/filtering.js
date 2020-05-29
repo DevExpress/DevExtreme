@@ -122,13 +122,10 @@ module.exports = (function() {
         if(target === 'headerFilter' && groupInterval && typeUtils.isDefined(filterValue)) {
             const values = ('' + filterValue).split('/');
             const value = Number(values[values.length - 1]);
-            let interval;
-            let startFilterValue;
-            let endFilterValue;
 
-            interval = groupInterval[values.length - 1];
-            startFilterValue = [selector, '>=', value];
-            endFilterValue = [selector, '<', value + interval];
+            const interval = groupInterval[values.length - 1];
+            const startFilterValue = [selector, '>=', value];
+            const endFilterValue = [selector, '<', value + interval];
             const condition = [startFilterValue, 'and', endFilterValue];
             return condition;
         }

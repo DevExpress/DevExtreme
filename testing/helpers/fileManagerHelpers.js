@@ -7,6 +7,7 @@ import FileReaderMock from './fileManager/file_reader.mock.js';
 
 export const Consts = {
     WIDGET_CLASS: 'dx-filemanager',
+    WIDGET_WRAPPER_CLASS: 'dx-filemanager-wrapper',
     TOOLBAR_CLASS: 'dx-filemanager-toolbar',
     NATIVE_TOOLBAR_CLASS: 'dx-toolbar',
     GENERAL_TOOLBAR_CLASS: 'dx-filemanager-general-toolbar',
@@ -17,13 +18,22 @@ export const Consts = {
     DRAWER_MODE_SHRINK: 'dx-drawer-shrink',
     DRAWER_MODE_OVERLAP: 'dx-drawer-overlap',
     NOTIFICATION_DRAWER_CLASS: 'dx-filemanager-notification-drawer',
+    NOTIFICATION_DRAWER_PANEL_CLASS: 'dx-filemanager-notification-drawer-panel',
+    ADAPTIVITY_DRAWER_PANEL_CLASS: 'dx-filemanager-adaptivity-drawer-panel',
+    PROGRESS_PANEL_CLASS: 'dx-filemanager-progress-panel',
+    PROGRESS_PANEL_TITLE_CLASS: 'dx-filemanager-progress-panel-title',
+    PROGRESS_PANEL_CONTAINER_CLASS: 'dx-filemanager-progress-panel-container',
+    PROGRESS_PANEL_INFOS_CONTAINER_CLASS: 'dx-filemanager-progress-panel-infos-container',
     DIRS_PANEL_CLASS: 'dx-filemanager-dirs-panel',
     DIRS_TREE_CLASS: 'dx-filemanager-dirs-tree',
     ITEMS_VIEW_CLASS: 'dx-filemanager-files-view',
     DIALOG_CLASS: 'dx-filemanager-dialog',
+    THUMBNAILS_VIEW_CLASS: 'dx-filemanager-thumbnails',
     THUMBNAILS_VIEW_PORT_CLASS: 'dx-filemanager-thumbnails-view-port',
     THUMBNAILS_ITEM_CLASS: 'dx-filemanager-thumbnails-item',
     THUMBNAILS_ITEM_NAME_CLASS: 'dx-filemanager-thumbnails-item-name',
+    THUMBNAILS_ITEM_SPACER_CLASS: 'dx-filemanager-thumbnails-item-spacer',
+    THUMBNAILS_ITEM_THUMBNAIL_CLASS: 'dx-filemanager-thumbnails-item-thumbnail',
     THUMBNAILS_ITEM_CONTENT_CLASS: 'dx-filemanager-thumbnails-item-content',
     GRID_DATA_ROW_CLASS: 'dx-data-row',
     FILE_ACTION_BUTTON_CLASS: 'dx-filemanager-file-actions-button',
@@ -32,11 +42,13 @@ export const Consts = {
     BREADCRUMBS_CLASS: 'dx-filemanager-breadcrumbs',
     BREADCRUMBS_PARENT_DIRECOTRY_ITEM_CLASS: 'dx-filemanager-breadcrumbs-parent-folder-item',
     BREADCRUMBS_SEPARATOR_ITEM_CLASS: 'dx-filemanager-breadcrumbs-separator-item',
+    ITEMS_PANEL_CLASS: 'dx-filemanager-items-panel',
     ITEMS_GRID_VIEW_CLASS: 'dx-filemanager-files-view',
     FOCUSED_ITEM_CLASS: 'dx-filemanager-focused-item',
     INACTIVE_AREA_CLASS: 'dx-filemanager-inactive-area',
     CUSTOM_THUMBNAIL_CLASS: 'dx-filemanager-item-custom-thumbnail',
     TOOLBAR_SEPARATOR_ITEM: 'dx-filemanager-toolbar-separator-item',
+    DETAILS_VIEW_CLASS: 'dx-filemanager-details',
     DETAILS_ITEM_NAME_CLASS: 'dx-filemanager-details-item-name',
     POPUP_NORMAL_CLASS: 'dx-popup-normal',
     POPUP_BOTTOM_CLASS: 'dx-popup-bottom',
@@ -53,6 +65,7 @@ export const Consts = {
     SELECTION_CLASS: 'dx-selection',
     ITEM_SELECTED_CLASS: 'dx-item-selected',
     FOCUSED_ROW_CLASS: 'dx-row-focused',
+    SPLITTER_WRAPPER_CLASS: 'dx-splitter-wrapper',
     SPLITTER_CLASS: 'dx-splitter',
     FOCUSED_STATE_CLASS: 'dx-state-focused',
     DISABLED_STATE_CLASS: 'dx-state-disabled',
@@ -302,6 +315,10 @@ export class FileManagerWrapper {
 
     getColumnHeaderInDetailsView(index) {
         return this._$element.find('[id*=dx-col]').eq(index);
+    }
+
+    getDetailsColumnsHeaders() {
+        return this.getDetailsItemList().find('.dx-header-row > td');
     }
 
     getDetailsCell(columnCaption, rowIndex) {

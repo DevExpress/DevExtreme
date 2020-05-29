@@ -66,13 +66,12 @@ module.exports = {
     },
 
     _renderIndicator: function(options) {
-        let rtlEnabled;
         const column = options.column;
         const $container = options.container;
         const $indicator = options.indicator;
 
         if(options.name === 'sort') {
-            rtlEnabled = this.option('rtlEnabled');
+            const rtlEnabled = this.option('rtlEnabled');
 
             if(!isDefined(column.sortOrder)) {
                 $indicator && $indicator.addClass(SORT_NONE_CLASS);

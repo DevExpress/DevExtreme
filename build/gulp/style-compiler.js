@@ -1,3 +1,5 @@
+'use strict';
+
 const gulp = require('gulp');
 const path = require('path');
 const replace = require('gulp-replace');
@@ -9,7 +11,7 @@ const autoPrefix = require('gulp-autoprefixer');
 const parseArguments = require('minimist');
 const fs = require('fs');
 
-const dataUri = require('./gulp-data-uri');
+const dataUri = require('./gulp-data-uri').gulpPipe;
 const generator = require('../../themebuilder/modules/metadata-generator');
 const cleanCssOptions = require('../../themebuilder/modules/clean-css-options');
 const context = require('./context');

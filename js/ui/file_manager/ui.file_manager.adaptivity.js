@@ -10,6 +10,7 @@ import SplitterControl from '../splitter';
 const window = getWindow();
 const ADAPTIVE_STATE_SCREEN_WIDTH = 573;
 
+const FILE_MANAGER_ADAPTIVITY_DRAWER_PANEL_CLASS = 'dx-filemanager-adaptivity-drawer-panel';
 const DRAWER_PANEL_CONTENT_INITIAL = 'dx-drawer-panel-content-initial';
 
 class FileManagerAdaptivityControl extends Widget {
@@ -23,10 +24,9 @@ class FileManagerAdaptivityControl extends Widget {
 
         const $drawer = $('<div>').appendTo(this.$element());
 
-        const contentRenderer = this.option('contentTemplate');
-        if(isFunction(contentRenderer)) {
-            contentRenderer($drawer);
-        }
+        $('<div>')
+            .addClass(FILE_MANAGER_ADAPTIVITY_DRAWER_PANEL_CLASS)
+            .appendTo($drawer);
 
         this._drawer = this._createComponent($drawer, Drawer);
         this._drawer.option({
@@ -34,6 +34,13 @@ class FileManagerAdaptivityControl extends Widget {
             template: this._createDrawerTemplate.bind(this)
         });
         $(this._drawer.content()).addClass(DRAWER_PANEL_CONTENT_INITIAL);
+
+        const $drawerContent = $drawer.find(`.${FILE_MANAGER_ADAPTIVITY_DRAWER_PANEL_CLASS}`).first();
+
+        const contentRenderer = this.option('contentTemplate');
+        if(isFunction(contentRenderer)) {
+            contentRenderer($drawerContent);
+        }
     }
 
     _createDrawerTemplate(container) {

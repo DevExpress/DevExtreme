@@ -81,6 +81,8 @@ const zoomModuleConfig = {
     }
 };
 
+const DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
+
 module('Browser zoom', zoomModuleConfig, () => {
     if(!isDesktopEnvironment() || !browser.webkit) {
         return;
@@ -706,7 +708,7 @@ module('Common', commonModuleConfig, () => {
         const $element = scheduler.appointments.getAppointment();
         let elementPosition = getAbsolutePosition($element);
         const cellWidth = scheduler.workSpace.getCellWidth();
-        let pointer = pointerMock($element).start();
+        const pointer = pointerMock($element).start();
 
         pointer.down(elementPosition.left, elementPosition.top).move(-(cellWidth * 2), 0);
         pointer.up();
@@ -791,7 +793,7 @@ module('appointmentDragging customization', $.extend({}, {
                 }
             }, options));
     },
-}, commonModuleConfig, () => {
+}, commonModuleConfig), () => {
     if(!isDesktopEnvironment()) {
         return;
     }
@@ -1031,4 +1033,35 @@ module('appointmentDragging customization', $.extend({}, {
             endDate: new Date(2018, 4, 21, 9, 30)
         }, 'added appointment data');
     });
-}));
+
+    // T885459
+    test('Move appointment to Draggable - droppable class should be removed', function(assert) {
+        const group = 'shared';
+        const $dragElement = this.createDraggable({ group: group });
+        const scheduler = this.createScheduler({
+            views: ['month'],
+            currentView: 'month',
+            dataSource: [{
+                text: 'App 1',
+                startDate: new Date(2018, 4, 1, 9, 30),
+                endDate: new Date(2018, 4, 1, 11, 30)
+            }],
+            appointmentDragging: {
+                group: group
+            }
+        });
+
+        const appointment = scheduler.appointments.find('App 1');
+        const appointmentPosition = getAbsolutePosition(appointment);
+        const draggablePosition = getAbsolutePosition($dragElement);
+        const $cellElement = $(scheduler.workSpace.getCell(0, 2));
+
+        const pointer = pointerMock(appointment).start();
+
+        pointer.down(appointmentPosition.left, appointmentPosition.top);
+        $cellElement.trigger('dxdragenter');
+        pointer.move(draggablePosition.left - appointmentPosition.left, draggablePosition.top - appointmentPosition.top).up();
+
+        assert.notOk($cellElement.hasClass(DROPPABLE_CELL_CLASS), 'cell has not droppable class');
+    });
+});

@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { find } from '../../core/utils/array';
 import { isDefined } from '../../core/utils/type';
-import { Deferred } from '../../core/utils/deferred';
+import { Deferred, when } from '../../core/utils/deferred';
 
 import holdEvent from '../../events/hold';
 import { addNamespace } from '../../events/utils';
@@ -12,6 +12,7 @@ import { BindableTemplate } from '../../core/templates/bindable_template';
 
 import ScrollView from '../scroll_view/ui.scroll_view';
 import CollectionWidget from '../collection/ui.collection_widget.edit';
+import Selection from '../selection/selection';
 
 const FILE_MANAGER_THUMBNAILS_VIEW_PORT_CLASS = 'dx-filemanager-thumbnails-view-port';
 const FILE_MANAGER_THUMBNAILS_ITEM_LIST_CONTAINER_CLASS = 'dx-filemanager-thumbnails-container';
@@ -260,17 +261,75 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         this._selection.changeItemSelection(index, options);
     }
 
+    _initSelectionModule() {
+        super._initSelectionModule();
+
+        const options = extend(this._selection.options, {
+            selectedKeys: this.option('selectedItemKeys'),
+            onSelectionChanged: args => {
+                this.option('selectedItems', this._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
+                this._updateSelectedItems(args);
+            }
+        });
+
+        this._selection = new Selection(options);
+    }
+
+    _updateSelectedItems(args) {
+        const addedItemKeys = args.addedItemKeys;
+        const removedItemKeys = args.removedItemKeys;
+
+        if(this._rendered && (addedItemKeys.length || removedItemKeys.length)) {
+            const selectionChangePromise = this._selectionChangePromise;
+            if(!this._rendering) {
+                const addedSelection = [];
+                let normalizedIndex;
+                const removedSelection = [];
+
+                this._editStrategy.beginCache();
+
+                for(let i = 0; i < removedItemKeys.length; i++) {
+                    normalizedIndex = this._getIndexByKey(removedItemKeys[i]);
+                    removedSelection.push(normalizedIndex);
+                    this._removeSelection(normalizedIndex);
+                }
+
+                for(let i = 0; i < addedItemKeys.length; i++) {
+                    normalizedIndex = this._getIndexByKey(addedItemKeys[i]);
+                    addedSelection.push(normalizedIndex);
+                    this._addSelection(normalizedIndex);
+                }
+
+                this._editStrategy.endCache();
+
+                this._updateSelection(addedSelection, removedSelection);
+            }
+
+            when(selectionChangePromise).done(() => this._fireSelectionChangeEvent(args));
+        }
+    }
+
+    _fireSelectionChangeEvent(args) {
+        this._createActionByOption('onSelectionChanged', {
+            excludeValidators: ['disabled', 'readOnly']
+        })(args);
+    }
+
     _updateSelection(addedSelection, removedSelection) {
-        for(let i = 0; i < removedSelection.length; i++) {
-            this._removeSelection(removedSelection[i]);
-        }
-        for(let i = 0; i < addedSelection.length; i++) {
-            this._addSelection(addedSelection[i]);
-        }
         const selectedItemsCount = this.getSelectedItems().length;
         if(selectedItemsCount === 0) {
             this._isPreserveSelectionMode = false;
         }
+    }
+
+    _normalizeSelectedItems() {
+        const newKeys = this._getKeysByItems(this.option('selectedItems'));
+        const oldKeys = this._selection.getSelectedItemKeys();
+        if(!this._compareKeys(oldKeys, newKeys)) {
+            this._selection.setSelection(newKeys);
+        }
+
+        return new Deferred().resolve().promise();
     }
 
     _focusOutHandler() {}
@@ -377,7 +436,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
     }
 
     getItemElementByItem(item) {
-        return this._findItemElementByItem(item);
+        return this._editStrategy.getItemElement(item);
     }
 
     getItemByItemElement(itemElement) {

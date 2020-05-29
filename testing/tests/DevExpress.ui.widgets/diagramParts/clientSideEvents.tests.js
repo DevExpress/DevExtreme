@@ -81,14 +81,4 @@ QUnit.module('ClientSideEvents', {
         assert.equal(clickedItem.fromKey, '123');
         assert.equal(clickedItem.toKey, '345');
     });
-
-    test('hasChanges changes on import or editing of an unbound diagram', function(assert) {
-        assert.equal(this.instance.option('hasChanges'), false, 'on init');
-        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(Consts.SIMPLE_DIAGRAM);
-        assert.equal(this.instance.option('hasChanges'), true, 'on import');
-        this.instance.option('hasChanges', false);
-        this.instance._diagramInstance.selection.set(['107']);
-        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Bold).execute(true);
-        assert.equal(this.instance.option('hasChanges'), true, 'on edit');
-    });
 });

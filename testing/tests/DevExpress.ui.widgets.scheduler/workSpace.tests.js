@@ -1157,7 +1157,7 @@ QUnit.testStart(function() {
         assert.equal($allDayPanel.css('display'), 'none', 'allDay panel is invisible');
     });
 
-    QUnit.test('Scheduler all day panel is invisible on month view after switching showAllDayPanel option', function(assert) {
+    QUnit.test('Scheduler all day title is invisible on month view after switching showAllDayPanel option', function(assert) {
         this.instance.option('showAllDayPanel', false);
         this.instance.option('showAllDayPanel', true);
 

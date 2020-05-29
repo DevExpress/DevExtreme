@@ -106,10 +106,9 @@ const environmentWithSinonStubPoint = {
             }
         });
         const data = [{ arg: 1, val1: 3, val2: 4 }];
-        let points;
         series.updateData(data);
         series.createPoints();
-        points = series.getPoints();
+        const points = series.getPoints();
 
         assert.ok(points, 'Points should be created');
         assert.equal(points.length, 1, 'Series should have one point');
@@ -141,10 +140,9 @@ const environmentWithSinonStubPoint = {
             }
         });
         const data = [{ arg: 1, val1: 3, val2: 4 }, { arg: 2, val1: null, val2: null }];
-        let points;
         series.updateData(data);
         series.createPoints();
-        points = series.getPoints();
+        const points = series.getPoints();
 
         assert.ok(points, 'Points should be created');
         assert.equal(points.length, 2, 'Series should have one point');
@@ -166,10 +164,9 @@ const environmentWithSinonStubPoint = {
             }
         });
         const data = [{ arg: 1, val1: 3, val2: 4 }, { arg: 2, val1: null, val2: null }];
-        let points;
         series.updateData(data);
         series.createPoints();
-        points = series.getPoints();
+        const points = series.getPoints();
 
         assert.ok(points, 'Points should be created');
         assert.equal(points.length, 1, 'Series should have one point');

@@ -734,6 +734,20 @@ QUnit.module('getCombinedFilter', {
             filterRowFilter
         ], 'combined filter');
     });
+
+    // T882759
+    QUnit.test('The combined filter should be correct when the "between" filter value is incomplete', function(assert) {
+        // act
+        this.setupDataGrid({
+            dataSource: [],
+            columns: ['field1', 'field2'],
+            filterSyncEnabled: true,
+            filterValue: [['field1', 'between', [undefined, 1]], 'and', ['field2', '=', 'test']]
+        });
+
+        // assert
+        assert.deepEqual(this.getCombinedFilter(true), ['field2', '=', 'test'], 'combined filter');
+    });
 });
 
 QUnit.module('Sync on initialization', {
@@ -1433,14 +1447,13 @@ QUnit.module('Custom operations', {
 }, function() {
     QUnit.test('string value', function(assert) {
         // arrange
-        let result;
         const field = {
             dataField: 'field',
         };
         const anyOfOperation = this.getAnyOfOperation(field);
 
         // act
-        result = anyOfOperation.customizeText({
+        const result = anyOfOperation.customizeText({
             value: '100',
             field: field
         });
@@ -1451,7 +1464,6 @@ QUnit.module('Custom operations', {
 
     QUnit.test('date value', function(assert) {
         // arrange
-        let result;
         const field = {
             dataField: 'field',
             dataType: 'date'
@@ -1459,7 +1471,7 @@ QUnit.module('Custom operations', {
         const anyOfOperation = this.getAnyOfOperation(field);
 
         // act
-        result = anyOfOperation.customizeText({
+        const result = anyOfOperation.customizeText({
             value: '2014/1/1',
             field: field
         });
@@ -1605,7 +1617,6 @@ QUnit.module('Custom operations', {
 
     QUnit.test('groupInterval', function(assert) {
         // arrange
-        let result;
         const field = {
             dataField: 'field',
             dataType: 'number',
@@ -1616,7 +1627,7 @@ QUnit.module('Custom operations', {
         const anyOfOperation = this.getAnyOfOperation(field);
 
         // act
-        result = anyOfOperation.customizeText({
+        const result = anyOfOperation.customizeText({
             value: 100,
             field: field
         });
@@ -1647,21 +1658,19 @@ QUnit.module('Custom operations', {
     QUnit.test('anyof popup always has left alignment', function(assert) {
         // arrange
         const $container = $('#container');
-        let popupPosition;
-        let editorTemplate;
         const left = {
             dataField: 'field',
             alignment: 'left'
         };
 
         // act
-        editorTemplate = this.getAnyOfOperation(left).editorTemplate({
+        const editorTemplate = this.getAnyOfOperation(left).editorTemplate({
             value: [1],
             text: '1',
             field: left
         }, $container);
 
-        popupPosition = editorTemplate.find('.dx-overlay').dxPopup('instance').option('position');
+        const popupPosition = editorTemplate.find('.dx-overlay').dxPopup('instance').option('position');
 
         // assert
         assert.equal(popupPosition.my, 'left top');

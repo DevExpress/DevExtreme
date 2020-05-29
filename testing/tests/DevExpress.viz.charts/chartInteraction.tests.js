@@ -512,12 +512,9 @@ QUnit.test('clearPointHover', function(assert) {
 
 QUnit.test('Clean point hover after hover another point', function(assert) {
     // arrange
-    let points;
-    let series;
-
     this.createChart(this.options);
-    series = this.chart.getAllSeries()[0];
-    points = series.getAllPoints();
+    const series = this.chart.getAllSeries()[0];
+    const points = series.getAllPoints();
 
     // act
     points[0].hover();

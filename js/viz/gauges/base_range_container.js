@@ -36,7 +36,6 @@ const BaseRangeContainer = BaseElement.inherit({
         let ranges = [];
         let backgroundRanges = [{ start: totalStart, end: totalEnd }];
         const threshold = _abs(totalDelta) / 1E4;
-        let palette;
         const backgroundColor = _isString(options.backgroundColor) ? options.backgroundColor : 'none';
         const width = options.width || {};
         const startWidth = _Number(width > 0 ? width : width.start);
@@ -59,7 +58,7 @@ const BaseRangeContainer = BaseElement.inherit({
             return result;
         }, []);
 
-        palette = that._themeManager.createPalette(options.palette, {
+        const palette = that._themeManager.createPalette(options.palette, {
             type: 'indicatingSet',
             extensionMode: options.paletteExtensionMode,
             keepLastColorInEnd: true,

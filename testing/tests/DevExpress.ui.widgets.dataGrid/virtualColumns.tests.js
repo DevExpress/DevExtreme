@@ -366,8 +366,9 @@ QUnit.module('Scrolling', { beforeEach: setupModule, afterEach: teardownModule }
     });
 
     QUnit.test('columnsChanged event should be fired during scrolling to right', function(assert) {
-        let pos;
         const columnsChangedPositions = [];
+        let pos;
+
         this.setupVirtualColumns({ width: 420 });
 
         this.columnsController.columnsChanged.add(e => {

@@ -21,7 +21,7 @@ import SchedulerTimezones from 'ui/scheduler/timezones/ui.scheduler.timezones';
 import dataUtils from 'core/element_data';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import themes from 'ui/themes';
-import { SchedulerTestWrapper } from './helpers.js';
+import { SchedulerTestWrapper, createWrapper } from './helpers.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 
 import 'ui/scheduler/ui.scheduler';
@@ -1955,7 +1955,8 @@ QUnit.module('Initialization', {
             allowDeleting: true,
             allowResizing: true,
             allowDragging: true,
-            allowEditingTimeZones: false,
+            allowTimeZoneEditing: false,
+            allowEditingTimeZones: false
         };
 
         if(devices.real().platform !== 'generic') {
@@ -2615,7 +2616,7 @@ QUnit.module('Initialization', {
         assert.equal(this.instance.$element().find('.dx-scheduler-appointment').eq(0).outerHeight(), initialHeight, 'Height is OK');
     });
 
-    QUnit.test('Appointment should have initial size if \'cancel\' flag is defined as true during update operation (month view)', function(assert) {
+    QUnit.test('Appointment should have initial size if "cancel" flag is defined as true during update operation (month view)', function(assert) {
         this.createInstance({
             onAppointmentUpdating: function(args) {
                 args.cancel = true;
@@ -2634,7 +2635,7 @@ QUnit.module('Initialization', {
         const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-right').eq(0)).start();
         pointer.dragStart().drag(cellWidth * 2, 0).dragEnd();
 
-        assert.equal(this.instance.$element().find('.dx-scheduler-appointment').eq(0).outerWidth(), initialWidth, 'Width is OK');
+        assert.roughEqual(this.instance.$element().find('.dx-scheduler-appointment').eq(0).outerWidth(), initialWidth, 0.5, 'Width is OK');
     });
 
     QUnit.test('Appointment should have initial size if \'cancel\' flag is defined as true during update operation (all day)', function(assert) {
@@ -4499,21 +4500,109 @@ QUnit.module('Initialization', {
         assert.ok(result, 'Appointment takes all day');
     });
 
-    QUnit.module('Options for Material theme in components', {
-        beforeEach: function() {
-            this.origIsMaterial = themes.isMaterial;
-            themes.isMaterial = function() { return true; };
-            this.createInstance = function(options) {
-                this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
-            };
-            this.clock = sinon.useFakeTimers();
-        },
-        afterEach: function() {
-            this.clock.restore();
-            themes.isMaterial = this.origIsMaterial;
-        }
+
+    ['day', 'week', 'month'].forEach(viewName => {
+        QUnit.test(`Cell should have default height if view: '${viewName}'`, function(assert) {
+            const DEFAULT_CELL_HEIGHT = 50;
+
+            const scheduler = createWrapper({
+                views: [viewName],
+                currentView: viewName
+            });
+
+            const cellHeight = scheduler.workSpace.getCellHeight(0, 0);
+            assert.equal(cellHeight, DEFAULT_CELL_HEIGHT, 'Cell has min height');
+        });
     });
 
+    ['timelineDay', 'timelineWeek', 'timelineMonth'].forEach(viewName => {
+        QUnit.test(`Group header height should be equals to the grouping cell height if view: '${viewName}'`, function(assert) {
+            const scheduler = createWrapper({
+                views: [viewName],
+                currentView: viewName,
+                groups: ['any'],
+                resources: [{
+                    fieldExpr: 'any',
+                    dataSource: [
+                        { text: 'Group_1', id: 1 },
+                        { text: 'Group_2', id: 2 },
+                        { text: 'Group_3', id: 3 }
+                    ],
+                }]
+            });
+
+            const $groupHeaders = $(scheduler.workSpace.groups.getGroupHeaders(0));
+            $groupHeaders.each((index, groupHeader) => {
+                const groupHeaderHeight = $(groupHeader).outerHeight();
+                const groupingCellHeight = scheduler.workSpace.getCellHeight(index, 0);
+                assert.equal(groupHeaderHeight, groupingCellHeight, `Group header ${index} has min height`);
+            });
+        });
+    });
+
+    ['day', 'week', 'month'].forEach(viewName => {
+        [undefined, 2, 3].forEach(intervalCount => {
+            [undefined, 200, 300, 800].forEach(height => {
+                QUnit.test(`Workspace vertical scroll should be equal to the dataTable height if view: '${viewName}', view.intervalCount: ${intervalCount}, height: ${height}`, function(assert) {
+                    const scheduler = createWrapper({
+                        height: height,
+                        views: [{
+                            type: viewName,
+                            name: viewName,
+                            intervalCount: intervalCount
+                        }],
+                        currentView: viewName
+                    });
+
+                    const dateTableHeight = scheduler.workSpace.getDateTableHeight();
+                    const scrollable = scheduler.workSpace.getScrollable();
+                    assert.roughEqual(scrollable.scrollHeight(), dateTableHeight, 1.01, 'Scroll height > minWorspaceHeight');
+                });
+
+                QUnit.test(`Workspace vertical scroll should be equal to the dataTable height if grouping, view: '${viewName}', view.intervalCount=${intervalCount}, height: ${height}`, function(assert) {
+                    const scheduler = createWrapper({
+                        height: height,
+                        views: [{
+                            type: viewName,
+                            name: viewName,
+                            intervalCount: intervalCount
+                        }],
+                        currentView: viewName,
+                        groups: ['any'],
+                        resources: [{
+                            fieldExpr: 'any',
+                            dataSource: [
+                                { text: 'Group_1', id: 1 },
+                                { text: 'Group_2', id: 2 },
+                                { text: 'Group_3', id: 2 }
+                            ],
+                        }]
+                    });
+
+                    const dateTableHeight = scheduler.workSpace.getDateTableHeight();
+                    const scrollable = scheduler.workSpace.getScrollable();
+                    assert.roughEqual(scrollable.scrollHeight(), dateTableHeight, 1.01, 'Scroll height > minWorspaceHeight');
+                });
+            });
+        });
+    });
+
+})('View with configuration');
+
+QUnit.module('Options for Material theme in components', {
+    beforeEach: function() {
+        this.origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
+        this.createInstance = function(options) {
+            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
+        };
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+        themes.isMaterial = this.origIsMaterial;
+    }
+}, () => {
     QUnit.test('_dropDownButtonIcon option should be passed to SchedulerHeader', function(assert) {
         this.createInstance({
             currentView: 'week',
@@ -4555,5 +4644,4 @@ QUnit.module('Initialization', {
 
         assert.equal(appointments.option('_collectorOffset'), 0, 'SchedulerAppointments has correct _collectorOffset');
     });
-
-})('View with configuration');
+});

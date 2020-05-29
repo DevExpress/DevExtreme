@@ -1530,8 +1530,7 @@ function setDiscreteType(series) {
             argumentAxis: new MockAxis({ renderer: this.renderer }),
             valueAxis: new MockAxis({ renderer: this.renderer })
         });
-        let completeAnimation;
-        let points;
+
         series.updateData(this.data);
         series.createPoints();
         $.each(series.getAllPoints(), function(i, pt) {
@@ -1571,14 +1570,14 @@ function setDiscreteType(series) {
             'stroke-width': 3
         }]);
 
-        points = series.getPoints();
+        const points = series.getPoints();
 
         $.each(points, function(i, p) {
             assert.equal(p.markerRendered.group.errorBars, errorBarGroup, 'correct errorBar group pass to point ' + i);
         });
         assert.ok(!errorBarGroup.animate.called);
 
-        completeAnimation = this.renderer.stub('path').getCall(0).returnValue.stub('animate').lastCall.args[2];
+        const completeAnimation = this.renderer.stub('path').getCall(0).returnValue.stub('animate').lastCall.args[2];
         completeAnimation();
 
         assert.deepEqual(errorBarGroup.animate.lastCall.args, [{
@@ -1687,7 +1686,6 @@ function setDiscreteType(series) {
 
         let element1 = this.renderer.stub('path').getCall(0).returnValue;
         const element2 = this.renderer.stub('path').getCall(1).returnValue;
-        let animatePoints;
 
         // act
         series.updateData(this.data);
@@ -1706,7 +1704,7 @@ function setDiscreteType(series) {
         assert.equal(this.renderer.stub('path').getCall(1).returnValue.stub('append').lastCall.args[0], series._elementsGroup);
 
         element1 = this.renderer.stub('path').getCall(0).returnValue;
-        animatePoints = element1.stub('animate').lastCall.args[0].points;
+        const animatePoints = element1.stub('animate').lastCall.args[0].points;
 
         assert.ok(element2.stub('remove').called, 'second element should be removed');
         checkElementPoints(assert, animatePoints, this.points, false, 'element on animating after update');
@@ -1719,7 +1717,6 @@ function setDiscreteType(series) {
             type: seriesType,
             point: { visible: false }
         });
-        let testPoint;
 
         series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 44 }]);
         series.createPoints();
@@ -1728,7 +1725,7 @@ function setDiscreteType(series) {
             pt.y = pt.value;
         });
 
-        testPoint = series.getAllPoints()[2];
+        const testPoint = series.getAllPoints()[2];
 
         testPoint.hasCoords = function() {
             return false;
@@ -1989,7 +1986,6 @@ function setDiscreteType(series) {
 
         const element1 = this.renderer.stub('path').getCall(0).returnValue;
         const element2 = this.renderer.stub('path').getCall(1).returnValue;
-        let animatePoints;
 
         // act
         series.updateData(data);
@@ -2005,7 +2001,7 @@ function setDiscreteType(series) {
         // assert
         assert.equal(this.renderer.stub('path').callCount, 2);
 
-        animatePoints = element1.stub('animate').lastCall.args[0].points;
+        const animatePoints = element1.stub('animate').lastCall.args[0].points;
 
         assert.ok(element2.stub('remove').called, 'second line element should be removed');
 
@@ -2579,12 +2575,11 @@ function setDiscreteType(series) {
             errorBars: { lowErrorValueField: 'lowErrorField', highErrorValueField: 'highErrorField' }
         });
         const data = [{ arg: 1, val: 3, size: 5, lowErrorField: 0, highErrorField: 4 }];
-        let points;
 
         series.updateData(data);
         series.createPoints();
 
-        points = series.getPoints();
+        const points = series.getPoints();
         assert.ok(points, 'Points should be created');
         assert.equal(points.length, 1, 'Series should have one point');
         assert.equal(this.createPoint.firstCall.args[0], series, 'Series should be correct');

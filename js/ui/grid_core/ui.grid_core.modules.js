@@ -120,10 +120,9 @@ const ModuleItem = Class.inherit({
     },
 
     createAction: function(actionName, config) {
-        let action;
 
         if(isFunction(actionName)) {
-            action = this.component._createAction(actionName.bind(this), config);
+            const action = this.component._createAction(actionName.bind(this), config);
             return function(e) {
                 action({ event: e });
             };
@@ -403,9 +402,8 @@ module.exports = {
 
     registerModule: function(name, module) {
         const modules = this.modules;
-        let i;
 
-        for(i = 0; i < modules.length; i++) {
+        for(let i = 0; i < modules.length; i++) {
             if(modules[i].name === name) {
                 return;
             }
