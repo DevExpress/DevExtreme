@@ -673,10 +673,10 @@ const SelectBox = DropDownList.inherit({
     },
 
     _valueChangeEventHandler: function(e) {
-        if(this.option('acceptCustomValue') && this._isCustomItemSelected() && !this.isValueChanging) {
-            this.isValueChanging = true;
+        if(this.option('acceptCustomValue') && this._isCustomItemSelected() && !this._isValueChanging) {
+            this._isValueChanging = true;
             this._customItemAddedHandler(e);
-            this.isValueChanging = false;
+            this._isValueChanging = false;
         }
     },
 

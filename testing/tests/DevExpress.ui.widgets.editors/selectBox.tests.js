@@ -2230,14 +2230,15 @@ QUnit.module('editing', moduleSetup, () => {
             acceptCustomValue: true,
             onCustomItemCreating: (e) => {
                 ++handlerCallCount;
-                handlerCallCount === 1 && $selectBox.dxSelectBox('instance')._valueChangeEventHandler();
+                if(handlerCallCount === 1) {
+                    $selectBox.dxSelectBox('instance')._valueChangeEventHandler();
+                }
                 e.customItem = null;
             }
         });
         const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
         const keyboard = keyboardMock($input);
 
-        $input.focus();
         keyboard
             .type('4')
             .press('enter');
