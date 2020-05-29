@@ -77,23 +77,6 @@ QUnit.test('Tasks should be duplicated according to recurrence rule, if firstDay
     assert.equal(this.instance.$element().find('.dx-scheduler-appointment-recurrence').length, 3, 'recurrence tasks are OK');
 });
 
-QUnit.test('Tasks should be duplicated according to recurrence rule and recurrence exception', function(assert) {
-    // NOTE: recurrenceException in date format will be converted in dateTime with 00.00 time when processing
-    const tasks = [
-        { text: 'One', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 2), recurrenceRule: 'FREQ=DAILY', recurrenceException: '20150317' }
-    ];
-    const dataSource = new DataSource({
-        store: tasks
-    });
-    this.createInstance({
-        currentView: 'week',
-        currentDate: new Date(2015, 2, 16),
-        dataSource: dataSource
-    });
-
-    assert.equal(this.instance.$element().find('.dx-scheduler-appointment-recurrence').length, 5, 'tasks are OK');
-});
-
 QUnit.test('Recurring appointments with resources should have color of the first resource if groups option is not defined', function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 1, 9),
@@ -880,9 +863,36 @@ QUnit.test('Recurring appt should be rendered correctly after setting recurrence
     });
 
     this.instance.updateAppointment(task, newTask);
-    const appointments = this.instance.$element().find('.dx-scheduler-appointment');
 
-    assert.equal(appointments.length, 2, 'appt was rendered correctly');
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 2, 'appt was rendered correctly');
+});
+
+QUnit.test('Recurring appt should be rendered correctly after setting several recurrenceExceptions', function(assert) {
+    const task = {
+        text: 'Stand-up meeting',
+        startDate: new Date(2015, 4, 4, 9, 0),
+        endDate: new Date(2015, 4, 4, 9, 15),
+        recurrenceRule: 'FREQ=DAILY;COUNT=4'
+    };
+    const newTask = {
+        text: 'Stand-up meeting',
+        startDate: new Date(2015, 4, 4, 9, 0),
+        endDate: new Date(2015, 4, 4, 9, 15),
+        recurrenceRule: 'FREQ=DAILY;COUNT=4',
+        recurrenceException: '20150506T090000, 20150505T090000'
+    };
+
+    this.createInstance({
+        dataSource: [task],
+        views: ['month'],
+        currentView: 'month',
+        currentDate: new Date(2015, 4, 25),
+        recurrenceEditMode: 'single'
+    });
+
+    this.instance.updateAppointment(task, newTask);
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 2, 'appt was rendered correctly');
 });
 
 QUnit.test('Recurrence exception time should be considered when recurrent appointment rendering (T862204)', function(assert) {

@@ -42,23 +42,29 @@ export const recurrenceUtils = {
         const endDateUtc = getRRuleUtcDate(options.end);
         const minDateUtc = getRRuleUtcDate(options.min);
         const maxDateUtc = getRRuleUtcDate(options.max);
+        const exception = options.exception;
 
         const duration = endDateUtc ? endDateUtc.getTime() - startDateUtc.getTime() : 0;
 
-        const exception = options.exception;
         const minTime = minDateUtc.getTime();
         const leftBorder = recurrenceUtils.getLeftBorder(options, minDateUtc, duration);
 
         const rRuleSet = recurrenceUtils.createRRuleSet(options, startDateUtc);
+
+        if(exception) {
+            const splitDates = exception.split(',');
+            const exceptDates = getDatesByRecurrenceException(splitDates, startDateUtc);
+            for(let i = 0; i < exceptDates.length; i++) {
+                rRuleSet.exdate(getRRuleUtcDate(exceptDates[i]));
+            }
+        }
+
         rRuleSet.between(leftBorder, maxDateUtc, true).forEach(date => {
             const endAppointmentTime = date.getTime() + duration;
 
             if(endAppointmentTime >= minTime) {
                 correctTimezoneOffset(date);
-
-                if(!dateIsRecurrenceException(date, exception)) {
-                    result.push(date);
-                }
+                result.push(date);
             }
         });
 
@@ -163,13 +169,13 @@ export const recurrenceUtils = {
             return null;
         }
 
-        const isUTC = arrayDate[8] !== undefined;
+        const isUTCString = arrayDate[8] !== undefined;
         let currentOffset = initialDate ? initialDate.getTimezoneOffset() : recurrenceUtils.getTimeZoneOffset();
         let date = new (Function.prototype.bind.apply(Date, prepareDateArrayToParse(arrayDate)))();
 
         currentOffset = currentOffset * toMs('minute');
 
-        if(isUTC) {
+        if(isUTCString) {
             date = new Date(date.getTime() - currentOffset);
         }
 
@@ -215,45 +221,6 @@ function correctTimezoneOffset(date) {
     if(timezoneOffsetDelta) {
         date.setTime(date.getTime() + timezoneOffsetDelta * toMs('minute'));
     }
-}
-
-const dateIsRecurrenceException = function(date, recurrenceException) {
-    let result = false;
-
-    if(!recurrenceException) {
-        return result;
-    }
-
-    const splitDates = recurrenceException.split(',');
-    const exceptDates = getDatesByRecurrenceException(splitDates, date);
-    const shortFormat = /\d{8}$/;
-
-    for(let i = 0, len = exceptDates.length; i < len; i++) {
-        if(splitDates[i].match(shortFormat)) {
-            const diffs = getDatePartDiffs(date, exceptDates[i]);
-
-            if(diffs.years === 0 && diffs.months === 0 && diffs.days === 0) {
-                result = true;
-            }
-        } else {
-            if(date.getTime() === exceptDates[i].getTime()) {
-                result = true;
-            }
-        }
-    }
-
-    return result;
-};
-
-function getDatePartDiffs(date1, date2) {
-    return {
-        years: date1.getFullYear() - date2.getFullYear(),
-        months: date1.getMonth() - date2.getMonth(),
-        days: date1.getDate() - date2.getDate(),
-        hours: date1.getHours() - date2.getHours(),
-        minutes: date1.getMinutes() - date2.getMinutes(),
-        seconds: date1.getSeconds() - date2.getSeconds()
-    };
 }
 
 function validateRRule(rule, recurrence) {

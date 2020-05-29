@@ -467,18 +467,6 @@ QUnit.module('Recurrences', function() {
         assert.deepEqual(dates, [new Date(2017, 0, 31, 10), new Date(2017, 1, 28, 10), new Date(2017, 2, 28, 10), new Date(2017, 3, 25, 10)], 'Dates are correct');
     });
 
-    QUnit.test('getDatesByRecurrence should handle recurrence exception in short format, DAILY rule', function(assert) {
-        const dates = recurrenceUtils.getDatesByRecurrence({
-            rule: 'FREQ=DAILY',
-            start: new Date(2015, 0, 1, 10),
-            min: new Date(2015, 0, 1),
-            max: new Date(2015, 0, 3, 15),
-            exception: '20150102'
-        });
-
-        assert.deepEqual(dates, [new Date(2015, 0, 1, 10), new Date(2015, 0, 3, 10)], 'dates are right');
-    });
-
     QUnit.test('getDatesByRecurrence should handle recurrence exception in long format, DAILY rule', function(assert) {
         const dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=DAILY', start: new Date(2015, 4, 24, 2), min: new Date(2015, 4, 24), max: new Date(2015, 4, 27, 10), exception: '20150525T020000' });
 
