@@ -1398,7 +1398,7 @@ class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
                         file.onLoad.fire();
                     }
 
-                    this._sendChunk(file, chunksData);
+                    setTimeout(() => this._sendChunk(file, chunksData));
                 })
                 .fail(error => {
                     if(this._shouldHandleError(error)) {
