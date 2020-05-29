@@ -611,6 +611,7 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
         });
         const instance = $fileUploader.dxFileUploader('instance');
         simulateFileChoose($fileUploader, [fakeContentFile]);
+        this.clock.tick();
 
         const expectedCallsCount = Math.ceil(fakeContentFile.size / instance.option('chunkSize'));
         assert.equal(index, expectedCallsCount, 'count of calls onProgress event is valid');
@@ -659,13 +660,14 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
 
                 assert.equal(e.bytesLoaded, state.bytesLoaded, 'loaded bytes size is correct');
                 assert.equal(e.segmentSize, request.loadedSize, 'current loaded segment bytes size is correct');
-                assert.equal(e.component.option('progress'), Math.round(totalLoadedBytes / totalBytes * 100), 'component progress value is correct');
+                assert.equal(e.component.option('progress'), Math.floor(totalLoadedBytes / totalBytes * 100), 'component progress value is correct');
             }.bind(this),
             onUploaded: function() {
                 fileUploadedCount++;
             }
         });
         simulateFileChoose($fileUploader, files);
+        this.clock.tick();
 
         assert.equal(fileUploadedCount, files.length, 'Count uploaded files is correct');
         for(let i = 0; i < files.length; i++) {
@@ -686,11 +688,34 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
 
         const files = [createBlobFile('fake1.png', 100023), createBlobFile('fake2.png', 5000)];
         simulateFileChoose($fileUploader, files);
+        this.clock.tick();
 
         assert.equal(uploadedFiles.length, files.length, 'count uploaded files is valid');
         for(let i = 0; i < files.length; i++) {
-            assert.equal(uploadedFiles[i], files[i].name, 'uploaded files is valid');
+            assert.equal(uploadedFiles[files.length - i - 1], files[i].name, 'uploaded files is valid');
         }
+    });
+    QUnit.test('each chunk should be set in the separate call stack - T886389', function(assert) {
+        this.xhrMock.startSeries();
+
+        const fileSize = 100023;
+        const chunkSize = 20000;
+        const files = [createBlobFile('fake1.png', fileSize)];
+        const chunkCount = Math.ceil(fileSize / chunkSize);
+
+        const progressSpy = sinon.spy();
+
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            chunkSize,
+            onProgress: progressSpy
+        });
+
+        simulateFileChoose($fileUploader, files);
+        assert.strictEqual(progressSpy.callCount, 1, 'only one chunk sent');
+
+        this.clock.tick();
+        assert.strictEqual(progressSpy.callCount, chunkCount, 'all chunks are sent');
     });
 });
 
