@@ -423,6 +423,26 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $buttons.each((index, button) => assert.equal($(button).attr('tabindex'), 0, `button ${index} tabindex`));
     });
 
+    // T892543
+    QUnit.test('cells should have aria-describedby attribute if column is without dataField', function(assert) {
+        const headersWrapper = dataGridWrapper.headers;
+        const rowsViewWrapper = dataGridWrapper.rowsView;
+
+        createDataGrid({
+            dataSource: [{}],
+            columns: [{ type: 'selection' }, { caption: 'test' }]
+        });
+
+        this.clock.tick();
+
+        // assert
+        const $secondCell = rowsViewWrapper.getCellElement(0, 1);
+        const $secondHeaderItem = headersWrapper.getHeaderItem(0, 1);
+
+        assert.notOk(rowsViewWrapper.getCellElement(0, 0).attr('aria-describedby'), 'no aria-describedby on first cell');
+        assert.equal($secondCell.attr('aria-describedby'), $secondHeaderItem.attr('id'), 'second cell\'s aria-describedby');
+    });
+
     QUnit.test('DataGrid elements shouldn\'t have aria-describedby attributes if showColumnHeaders is false', function(assert) {
         createDataGrid({
             dataSource: [
@@ -3622,6 +3642,44 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(focusedRowChangedArgs.length, 1, 'focusedRowChanged event is called once');
         assert.ok($(focusedRowChangedArgs[0].rowElement).hasClass('dx-row-focused'), 'focusedRowChanged event has correct rowElement');
         assert.equal(focusedRowChangedArgs[0].rowIndex, 149, 'focusedRowChanged event has correct rowElement');
+    });
+
+    QUnit.test('Scrolling back should works if rowRenderingMode is virtual and focused row is visible (T889805)', function(assert) {
+        // arrange
+        const data = [];
+
+        for(let i = 0; i < 20; i++) {
+            data.push({ id: i + 1 });
+        }
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            height: 100,
+            keyExpr: 'id',
+            dataSource: data,
+            focusedRowEnabled: true,
+            onRowPrepared: function(e) {
+                $(e.rowElement).css('height', 50);
+            },
+            columns: ['id'],
+            scrolling: {
+                rowRenderingMode: 'virtual',
+                useNative: false
+            }
+        }).dxDataGrid('instance');
+
+        // act
+        this.clock.tick();
+        dataGrid.getScrollable().scrollTo({ top: 10000 });
+        this.clock.tick();
+        dataGrid.option('focusedRowKey', 15);
+        this.clock.tick();
+        dataGrid.getScrollable().scrollTo({ top: 250 });
+        this.clock.tick(1000);
+
+        // assert
+        assert.equal(dataGrid.getScrollable().scrollTop(), 250, 'scroll top');
+        assert.equal(dataGrid.getVisibleRows()[0].key, 6, 'first visible row');
+        assert.equal(dataGrid.getVisibleRows().length, 15, 'visible row count');
     });
 
     QUnit.test('DataGrid - navigateToRow method should work if rowRenderingMode is \'virtual\' and paging is disabled (T820359)', function(assert) {

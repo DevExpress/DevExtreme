@@ -13,6 +13,7 @@ const typeUtils = require('../core/utils/type');
 const mathUtils = require('../core/utils/math');
 const eventUtils = require('../events/utils');
 const Popup = require('./popup');
+const getBoundingRect = require('../core/utils/position').getBoundingRect;
 
 const POPOVER_CLASS = 'dx-popover';
 const POPOVER_WRAPPER_CLASS = 'dx-popover-wrapper';
@@ -419,20 +420,22 @@ const Popover = Popup.inherit({
     },
 
     _renderArrowPosition: function(side) {
-        this._$arrow.css(POSITION_FLIP_MAP[side], -(this._isVerticalSide(side) ? this._$arrow.height() : this._$arrow.width()));
+        const arrowRect = getBoundingRect(this._$arrow.get(0));
+        const arrowFlip = -(this._isVerticalSide(side) ? arrowRect.height : arrowRect.width);
+        this._$arrow.css(POSITION_FLIP_MAP[side], arrowFlip);
 
         const axis = this._isVerticalSide(side) ? 'left' : 'top';
-        const sizeProperty = this._isVerticalSide(side) ? 'outerWidth' : 'outerHeight';
+        const sizeProperty = this._isVerticalSide(side) ? 'width' : 'height';
         const $target = $(this._position.of);
 
         const targetOffset = positionUtils.offset($target) || { top: 0, left: 0 };
         const contentOffset = positionUtils.offset(this._$content);
 
-        const arrowSize = this._$arrow[sizeProperty]();
+        const arrowSize = arrowRect[sizeProperty];
         const contentLocation = contentOffset[axis];
-        const contentSize = this._$content[sizeProperty]();
+        const contentSize = getBoundingRect(this._$content.get(0))[sizeProperty];
         const targetLocation = targetOffset[axis];
-        const targetSize = $target.get(0).preventDefault ? 0 : $target[sizeProperty]();
+        const targetSize = $target.get(0).preventDefault ? 0 : getBoundingRect($target.get(0))[sizeProperty];
 
         const min = Math.max(contentLocation, targetLocation);
         const max = Math.min(contentLocation + contentSize, targetLocation + targetSize);

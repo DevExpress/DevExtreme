@@ -1,19 +1,21 @@
-const $ = require('../core/renderer');
-const domAdapter = require('../core/dom_adapter');
-const windowUtils = require('../core/utils/window');
-const window = windowUtils.getWindow();
-const eventsEngine = require('../events/core/events_engine');
-const registerComponent = require('../core/component_registrator');
-const commonUtils = require('../core/utils/common');
-const extend = require('../core/utils/extend').extend;
-const each = require('../core/utils/iterator').each;
-const domUtils = require('../core/utils/dom');
-const TransitionExecutorModule = require('../animation/transition_executor/transition_executor');
-const Widget = require('./widget/ui.widget');
-const LoadIndicator = require('./load_indicator');
-const isPromise = require('../core/utils/type').isPromise;
-const deferredUtils = require('../core/utils/deferred');
+import TransitionExecutorModule from '../animation/transition_executor/transition_executor';
+import registerComponent from '../core/component_registrator';
+import domAdapter from '../core/dom_adapter';
+import $ from '../core/renderer';
+import commonUtils from '../core/utils/common';
+import deferredUtils from '../core/utils/deferred';
+import { extend } from '../core/utils/extend';
+import { each } from '../core/utils/iterator';
+import { isPromise } from '../core/utils/type';
+import windowUtils from '../core/utils/window';
+import eventsEngine from '../events/core/events_engine';
+import LoadIndicator from './load_indicator';
+import Widget from './widget/ui.widget';
+import { getBoundingRect } from '../core/utils/position';
+import domUtils from '../core/utils/dom';
+
 const Deferred = deferredUtils.Deferred;
+const window = windowUtils.getWindow();
 
 const WIDGET_CLASS = 'dx-widget';
 const DEFER_RENDERING_CLASS = 'dx-deferrendering';
@@ -134,7 +136,7 @@ const DeferRendering = Widget.inherit({
     },
 
     _isElementInViewport: function(element) {
-        const rect = element.getBoundingClientRect();
+        const rect = getBoundingRect(element);
 
         return rect.bottom >= 0 &&
             rect.right >= 0 &&

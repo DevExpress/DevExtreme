@@ -4,6 +4,7 @@ import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import positionUtils from 'animation/position';
 import Popover from 'ui/popover';
+import { getBoundingRect } from 'core/utils/position';
 
 import 'common.css!';
 
@@ -57,7 +58,6 @@ const getElementsPositionAndSize = function($popover, $target) {
         }
     };
 };
-
 
 QUnit.module('render', () => {
     QUnit.test('render', function(assert) {
@@ -633,6 +633,74 @@ QUnit.module('content positioning', () => {
             assert.equal($content.offset().left, contentOffsetLeft, 'popover content positioned at the center of the arrow horizontally');
         } finally {
             fixtures.collisionTopLeft.drop();
+        }
+    });
+
+    QUnit.test('Popover should be positioned correctly on the target right side when target is inside of svg (T891214)', function(assert) {
+        fixtures.svg.create();
+        try {
+            const $target = $('#where');
+            const $popover = $('#what');
+
+            new Popover($popover, {
+                position: {
+                    my: 'left',
+                    at: 'right'
+                },
+                target: $target,
+                animation: null,
+                visible: true
+            });
+
+            const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
+            const $content = wrapper().find('.dx-overlay-content');
+            const targetRect = getBoundingRect($target.get(0));
+
+            const contentOffsetTop = Math.round($target.offset().top + targetRect.height / 2 - $content.height() / 2);
+            const contentOffsetLeft = Math.round($target.offset().left + targetRect.width + $arrow.width());
+            const arrowOffsetTop = Math.round($target.offset().top + targetRect.height / 2 - $arrow.height() / 2);
+            const arrowOffsetLeft = Math.round($target.offset().left + targetRect.width);
+
+            assert.strictEqual($content.offset().top, contentOffsetTop, 'popover content top offset is correct');
+            assert.strictEqual($content.offset().left, contentOffsetLeft, 'popover content left offset is correct');
+            assert.strictEqual($arrow.offset().top, arrowOffsetTop, 'arrow offset top is correct');
+            assert.strictEqual($arrow.offset().left, arrowOffsetLeft, 'arrow offset left is correct');
+        } finally {
+            fixtures.svg.drop();
+        }
+    });
+
+    QUnit.test('Popover should be positioned correctly on the target bottom when target is inside of svg (T891214)', function(assert) {
+        fixtures.svg.create();
+        try {
+            const $target = $('#where');
+            const $popover = $('#what');
+
+            new Popover($popover, {
+                position: {
+                    my: 'top',
+                    at: 'bottom'
+                },
+                target: $target,
+                animation: null,
+                visible: true
+            });
+
+            const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
+            const $content = wrapper().find('.dx-overlay-content');
+            const targetRect = getBoundingRect($target.get(0));
+
+            const contentOffsetTop = Math.round($target.offset().top + targetRect.height + $arrow.height());
+            const contentOffsetLeft = Math.round($target.offset().left + targetRect.width / 2 - $content.width() / 2);
+            const arrowOffsetTop = Math.round($target.offset().top + targetRect.height);
+            const arrowOffsetLeft = Math.round($target.offset().left + targetRect.width / 2 - $arrow.width() / 2);
+
+            assert.strictEqual($content.offset().top, contentOffsetTop, 'popover content top offset is correct');
+            assert.strictEqual($content.offset().left, contentOffsetLeft, 'popover content left offset is correct');
+            assert.strictEqual($arrow.offset().top, arrowOffsetTop, 'arrow offset top is correct');
+            assert.strictEqual($arrow.offset().left, arrowOffsetLeft, 'arrow offset left is correct');
+        } finally {
+            fixtures.svg.drop();
         }
     });
 

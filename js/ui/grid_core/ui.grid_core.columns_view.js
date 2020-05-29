@@ -11,6 +11,7 @@ import { noop } from '../../core/utils/common';
 import styleUtils from '../../core/utils/style';
 import { getPublicElement } from '../../core/utils/dom';
 import typeUtils from '../../core/utils/type';
+import { getBoundingRect } from '../../core/utils/position';
 import iteratorUtils from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { getDefaultAlignment } from '../../core/utils/position';
@@ -848,7 +849,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             iteratorUtils.each($cellElements, function(index, item) {
                 width = item.offsetWidth;
                 if(item.getBoundingClientRect) {
-                    const clientRect = item.getBoundingClientRect();
+                    const clientRect = getBoundingRect(item);
                     if(clientRect.width > width - 1) {
                         width = legacyRendering ? Math.ceil(clientRect.width) : clientRect.width;
                     }
