@@ -1011,7 +1011,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     .find('.dx-row[tabIndex], .dx-row > td[tabindex]')
                     .not($focusElement)
                     .removeClass(CELL_FOCUS_DISABLED_CLASS)
-                    .removeAttr('tabIndex');
+                    .removeAttr('tabindex');
             }
 
             eventsEngine.one($focusElement, 'blur', e => {
@@ -1146,7 +1146,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
     _resetFocusedCell: function(resetFocusedView) {
         const $cell = this._getFocusedCell();
 
-        $cell && $cell.removeAttr('tabIndex');
+        $cell && $cell.removeAttr('tabindex');
 
         this._isNeedFocus = false;
 
@@ -1966,7 +1966,7 @@ export default {
                     const $rowsViewElement = this.element();
 
                     if($rowsViewElement && !focused($rowsViewElement)) {
-                        $rowsViewElement.attr('tabIndex', null);
+                        $rowsViewElement.attr('tabindex', null);
                     }
 
                     let rowIndex = keyboardController.getVisibleRowIndex();
