@@ -2231,7 +2231,7 @@ QUnit.module('editing', moduleSetup, () => {
             onCustomItemCreating: (e) => {
                 ++handlerCallCount;
                 if(handlerCallCount === 1) {
-                    $selectBox.dxSelectBox('instance')._valueChangeEventHandler();
+                    $input.change();
                 }
                 e.customItem = null;
             }
