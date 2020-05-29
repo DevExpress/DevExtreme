@@ -1,4 +1,4 @@
-import 'es6-object-assign/auto';
+import '../../core/polyfills/object';
 
 import errors from '../../core/errors';
 import { each } from '../../core/utils/iterator';
