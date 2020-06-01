@@ -1715,7 +1715,7 @@ QUnit.module('Editing', {
     });
 
     // T869676
-    QUnit.test('Not close Editing Cell in batch mode on click add button inside editor popup', function(assert) {
+    QUnit.test('Not close Editing Cell in batch mode on click add button and cell inside editor popup', function(assert) {
     // arrange
         const that = this;
         const rowsView = this.rowsView;
@@ -1731,7 +1731,7 @@ QUnit.module('Editing', {
                 contentTemplate: function(e) {
                     return $('<div>').dxDataGrid({
                         dataSource: [],
-                        columns: ['name'],
+                        columns: ['name', 'age'],
                         editing: {
                             mode: 'batch',
                             allowAdding: true
@@ -1756,6 +1756,11 @@ QUnit.module('Editing', {
         $addButton.trigger('dxpointerdown');
         $addButton.trigger('dxclick');
         this.clock.tick();
+        const $secondCell = $('.dx-popup-wrapper .dx-datagrid .dx-data-row > td').eq(1);
+        $secondCell.trigger('dxpointerdown');
+        $secondCell.trigger('dxclick');
+        this.clock.tick();
+
 
         // assert
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1, 'editor count');
