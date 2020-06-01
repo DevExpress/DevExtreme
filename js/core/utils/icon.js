@@ -3,7 +3,7 @@ import $ from '../../core/renderer';
 const ICON_CLASS = 'dx-icon';
 const SVG_ICON_CLASS = 'dx-svg-icon';
 
-const getImageSourceType = (source) => {
+export const getImageSourceType = (source) => {
     if(!source || typeof source !== 'string') {
         return false;
     }
@@ -27,7 +27,7 @@ const getImageSourceType = (source) => {
     return false;
 };
 
-const getImageContainer = (source) => {
+export const getImageContainer = (source) => {
     switch(getImageSourceType(source)) {
         case 'image':
             return $('<img>').attr('src', source).addClass(ICON_CLASS);
@@ -41,6 +41,3 @@ const getImageContainer = (source) => {
             return null;
     }
 };
-
-exports.getImageSourceType = getImageSourceType;
-exports.getImageContainer = getImageContainer;

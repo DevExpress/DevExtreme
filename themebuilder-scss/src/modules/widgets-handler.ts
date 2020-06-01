@@ -11,8 +11,9 @@ export default class WidgetsHandler {
   baseIndexContent: string;
 
   constructor(widgets: Array<string>, bundlePath: string) {
+    const theme = /material/.test(bundlePath) ? 'material' : 'generic';
     this.widgets = widgets || [];
-    this.indexPath = join(dirname(bundlePath), '..', 'widgets', 'generic', '_index.scss');
+    this.indexPath = join(dirname(bundlePath), '..', 'widgets', theme, '_index.scss');
   }
 
   getIndexWidgetItems(indexContent: string): Array<WidgetItem> {

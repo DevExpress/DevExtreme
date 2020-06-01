@@ -238,7 +238,7 @@ export interface dxGanttStripLine {
 declare global {
 interface JQuery {
     dxGantt(): JQuery;
-    dxGantt(options: "instance"): dxGantt;
+    dxGantt(options: 'instance'): dxGantt;
     dxGantt(options: string): any;
     dxGantt(options: string, ...params: any[]): any;
     dxGantt(options: dxGanttOptions): JQuery;

@@ -35,3 +35,7 @@ export const getNestedOptionValue = function(optionsObject, name) {
     cachedGetters[name] = cachedGetters[name] || compileGetter(name);
     return cachedGetters[name](optionsObject, { functionsAsIs: true });
 };
+
+export default function createDefaultOptionRules(options = []) {
+    return options;
+}

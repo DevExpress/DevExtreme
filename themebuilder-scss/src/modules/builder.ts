@@ -1,15 +1,12 @@
 
 import normalize from './config-normalizer';
+import CompileManager from './compile-manager';
 
-export default class Builder {
-  static buildTheme(config: ConfigSettings): void {
-    normalize(config);
-    // TODO return promise with
-    // compiledmetadata - compiler (+)
-    // css - compiler (+),
-    // swatchSelector - compiler (+),
-    // version - metadata (+),
-    // widgets - ?
-    // unusedWidgets - ?
-  }
-}
+export const buildTheme = (config: ConfigSettings): Promise<PackageResult> => {
+  normalize(config);
+  const compileManager = new CompileManager();
+  return compileManager.compile(config);
+};
+
+// compatibility default export
+export default { buildTheme };

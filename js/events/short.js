@@ -7,15 +7,19 @@ function addNamespace(event, namespace) {
     return namespace ? pureAddNamespace(event, namespace) : event;
 }
 
+function executeAction(action, args) {
+    return typeof action === 'function' ? action(args) : action.execute(args);
+}
+
 export const active = {
     on: ($el, active, inactive, opts) => {
         const { selector, showTimeout, hideTimeout, namespace } = opts;
 
         eventsEngine.on($el, addNamespace('dxactive', namespace), selector, { timeout: showTimeout },
-            event => active.execute({ event, element: event.currentTarget })
+            event => executeAction(active, { event, element: event.currentTarget })
         );
         eventsEngine.on($el, addNamespace('dxinactive', namespace), selector, { timeout: hideTimeout },
-            event => inactive.execute({ event, element: event.currentTarget })
+            event => executeAction(inactive, { event, element: event.currentTarget })
         );
     },
 
@@ -37,9 +41,8 @@ export const resize = {
 export const hover = {
     on: ($el, start, end, { selector, namespace }) => {
         eventsEngine.on($el, addNamespace('dxhoverend', namespace), selector, event => end(event));
-        eventsEngine.on($el, addNamespace('dxhoverstart', namespace), selector, event => {
-            start.execute({ element: event.target, event });
-        });
+        eventsEngine.on($el, addNamespace('dxhoverstart', namespace), selector,
+            event => executeAction(start, { element: event.target, event }));
     },
 
     off: ($el, { selector, namespace }) => {
@@ -67,7 +70,7 @@ export const focus = {
 
         if(domAdapter.hasDocumentProperty('onbeforeactivate')) {
             eventsEngine.on($el, addNamespace('beforeactivate', namespace),
-                e => isFocusable(e.target) || e.preventDefault()
+                e => isFocusable(null, e.target) || e.preventDefault()
             );
         }
     },

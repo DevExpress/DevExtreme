@@ -2,7 +2,6 @@
 import path from 'path';
 import fs from 'fs';
 import { metadata } from '../data/metadata';
-import noModificationsResult from '../data/compilation-results/no-changes-css';
 import noModificationsMeta from '../data/compilation-results/no-changes-meta';
 
 import Compiler, { ImportType } from '../../src/modules/compiler';
@@ -28,7 +27,15 @@ describe('compile', () => {
       includePaths,
     }).then((data) => {
       // compiled css
-      expect(data.result.css.toString()).toBe(noModificationsResult);
+      expect(data.result.css.toString()).toBe(`.dx-accordion {
+  background-color: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif;
+  color: #337ab7;
+  background-image: url(icons/icons.woff2);
+}
+.dx-accordion .from-base {
+  background-color: transparent;
+  color: #337ab7;
+}`);
       // collected variables
       expect(data.changedVariables).toEqual(noModificationsMeta);
     });
@@ -48,7 +55,7 @@ describe('compile', () => {
       expect(data.result.css.toString()).toBe(`.dx-accordion {
   background-color: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif;
   color: red;
-  font: url("icons/icons.woff2");
+  background-image: url(icons/icons.woff2);
 }
 .dx-accordion .from-base {
   background-color: green;
@@ -106,7 +113,7 @@ describe('compile', () => {
       expect(data.result.css.toString()).toBe(
         '.dx-accordion{background-color:'
         + '"Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif;'
-        + 'color:#337ab7;font:url("icons/icons.woff2")}.dx-accordion '
+        + 'color:#337ab7;background-image:url(icons/icons.woff2)}.dx-accordion '
         + '.from-base{background-color:transparent;color:#337ab7}.extra-class{color:red}',
       );
     });
