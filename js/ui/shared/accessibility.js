@@ -166,7 +166,7 @@ export function restoreFocus(instance) {
     }
 }
 
-    selectView: function(viewName, instance, event) {
+export function selectView(viewName, instance, event) {
     const keyName = normalizeKeyName(event);
 
     if(event.ctrlKey && (keyName === 'upArrow' || keyName === 'downArrow')) {
