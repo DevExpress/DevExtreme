@@ -118,12 +118,10 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
     const styles = dataProvider.getStyles();
 
     for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
-        const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
-        const gridCell = cellData.cellSourceData;
-
+        const cellData = dataProvider.getCellData(rowIndex, cellIndex);
         const excelCell = row.getCell(startColumnIndex + cellIndex);
-        excelCell.value = cellData.value;
 
+        excelCell.value = cellData.value;
 
         if(isDefined(excelCell.value)) {
             const { alignment: horizontalAlignment, format, dataType } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
@@ -142,7 +140,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
         if(isDefined(customizeCell)) {
             customizeCell({
                 excelCell: excelCell,
-                gridCell: gridCell
+                pivotCell: cellData
             });
         }
 

@@ -224,6 +224,10 @@ exports.DataProvider = Class.inherit({
         } else {
             result.value = item.value;
         }
+        result.cell = item; // PivotGrid cell https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxPivotGrid/Pivot_Grid_Cell/
+        result.rowIndex = rowIndex;
+        result.columnIndex = cellIndex;
+
         return result;
     },
 
