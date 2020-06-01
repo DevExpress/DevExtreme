@@ -1,5 +1,5 @@
 {
     "*.js": ["eslint"],
     "*.{css,less}": ["stylelint"],
-    "*.{ts,tsx}": ["npm run lint-ts"]
+    "*.{ts,tsx}": ["eslint --ext .tsx,.ts"]
 }

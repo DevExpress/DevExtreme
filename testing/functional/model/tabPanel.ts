@@ -1,6 +1,6 @@
 import Widget from './internal/widget';
 import Tabs from './tabs';
-import MultiView from './multiview';
+import MultiView from './multiView';
 
 const CLASS = {
     tabs: 'dx-tabs',
