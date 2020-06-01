@@ -44,6 +44,12 @@ export default class AppointmentDragBehavior {
         this.appointments.notifyObserver('hideAppointmentTooltip');
     }
 
+    onDragMove(e) {
+        if(e.fromComponent !== e.toComponent) {
+            this.appointments.notifyObserver('removeDroppableCellClass');
+        }
+    }
+
     getAppointmentElement(e) {
         const itemElement = e.event.data && e.event.data.itemElement || e.itemElement;
 
@@ -88,6 +94,16 @@ export default class AppointmentDragBehavior {
         };
     }
 
+    createDragMoveHandler(options, appointmentDragging) {
+        return (e) => {
+            appointmentDragging.onDragMove && appointmentDragging.onDragMove(e);
+
+            if(!e.cancel) {
+                options.onDragMove(e);
+            }
+        };
+    }
+
     createDragEndHandler(options, appointmentDragging) {
         return (e) => {
             appointmentDragging.onDragEnd && appointmentDragging.onDragEnd(e);
@@ -96,7 +112,6 @@ export default class AppointmentDragBehavior {
                 options.onDragEnd(e);
                 if(e.fromComponent !== e.toComponent) {
                     appointmentDragging.onRemove && appointmentDragging.onRemove(e);
-                    this.appointments.notifyObserver('removeDroppableCellClass');
                 }
             }
         };
@@ -122,11 +137,13 @@ export default class AppointmentDragBehavior {
             filter: `.${APPOINTMENT_ITEM_CLASS}`,
             immediate: false,
             onDragStart: this.onDragStart.bind(this),
+            onDragMove: this.onDragMove.bind(this),
             onDragEnd: this.onDragEnd.bind(this)
         }, config);
 
         this.appointments._createComponent(container, Draggable, extend({}, options, appointmentDragging, {
             onDragStart: this.createDragStartHandler(options, appointmentDragging),
+            onDragMove: this.createDragMoveHandler(options, appointmentDragging),
             onDragEnd: this.createDragEndHandler(options, appointmentDragging),
             onDrop: this.createDropHandler(appointmentDragging),
         }));
