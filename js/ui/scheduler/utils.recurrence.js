@@ -1,4 +1,4 @@
-// NOTE: TODO
+// NOTE: https://github.com/jakubroztocil/rrule/issues/402 (IE11 support)
 import 'es6-object-assign/auto';
 import errors from '../../core/errors';
 import { each } from '../../core/utils/iterator';
