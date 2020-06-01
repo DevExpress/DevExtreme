@@ -1,15 +1,15 @@
 import Widget from './internal/widget';
 import Tabs from './tabs';
-import multiView from './multiView';
+import MultiView from './multiview';
 
 const CLASS = {
     tabs: 'dx-tabs',
-    multiView: 'dx-multiView'
+    multiView: 'dx-multiview'
 };
 
 export default class TabPanel extends Widget {
     tabs: Tabs;
-    multiView: multiView;
+    multiView: MultiView;
 
     name: string = 'dxTabPanel';
 
@@ -17,6 +17,6 @@ export default class TabPanel extends Widget {
         super(id);
 
         this.tabs = new Tabs(`.${CLASS.tabs}`);
-        this.multiView = new multiView(`.${CLASS.multiView}`);
+        this.multiView = new MultiView(`.${CLASS.multiView}`);
     }
 }
