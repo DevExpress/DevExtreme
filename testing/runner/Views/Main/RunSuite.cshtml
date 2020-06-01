@@ -180,6 +180,7 @@
                     'showdown': '@Url.Content("~/node_modules/showdown/dist/showdown.js")',
                     'rrule': '@Url.Content("~/node_modules/rrule/dist/es5/rrule.js")',
                     'luxon': '@Url.Content("~/node_modules/luxon/src/luxon.js")',
+                    'es6-object-assign': '@Url.Content("~/node_modules/es6-object-assign")',
                     // Global CSS
 
                     'common.css': '@Url.Content("~/artifacts/css/dx.common.css")',
@@ -213,6 +214,10 @@
                     },
                     'cldr': {
                         main: '../cldr.js',
+                        defaultExtension: 'js'
+                    },
+                    'es6-object-assign': {
+                        main: './index.js',
                         defaultExtension: 'js'
                     }
                 },

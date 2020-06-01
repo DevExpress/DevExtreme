@@ -1,5 +1,5 @@
-import '../../core/polyfills/object';
-
+// NOTE: TODO
+import 'es6-object-assign/auto';
 import errors from '../../core/errors';
 import { each } from '../../core/utils/iterator';
 import { inArray } from '../../core/utils/array';
