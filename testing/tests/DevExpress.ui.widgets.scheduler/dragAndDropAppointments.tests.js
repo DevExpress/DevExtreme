@@ -1037,6 +1037,40 @@ module('appointmentDragging customization', $.extend({}, {
     // T885459
     test('Move appointment to Draggable - droppable class should be removed', function(assert) {
         const group = 'shared';
+        const scheduler = this.createScheduler({
+            views: ['month'],
+            currentView: 'month',
+            dataSource: [{
+                text: 'App 1',
+                startDate: new Date(2018, 4, 1, 9, 30),
+                endDate: new Date(2018, 4, 1, 11, 30)
+            }],
+            appointmentDragging: {
+                group: group
+            }
+        });
+        const $dragElement = this.createDraggable({ group: group });
+
+        const appointment = scheduler.appointments.find('App 1');
+        const appointmentPosition = getAbsolutePosition(appointment);
+        const draggablePosition = getAbsolutePosition($dragElement);
+        const $cellElement = $(scheduler.workSpace.getCell(0, 2));
+
+        const pointer = pointerMock(appointment).start();
+
+        pointer.down(appointmentPosition.left, appointmentPosition.top);
+        pointer.move(5, 5).move(draggablePosition.left - appointmentPosition.left - 5, draggablePosition.top - appointmentPosition.top - 5).move(5, 5);
+
+        assert.notOk($cellElement.hasClass(DROPPABLE_CELL_CLASS), 'cell has not droppable class');
+
+        pointer.up();
+
+        assert.notOk($cellElement.hasClass(DROPPABLE_CELL_CLASS), 'cell has not droppable class');
+    });
+
+    // T885459
+    test('Move item from Draggable to Scheduler and back - droppable class should be removed', function(assert) {
+        const group = 'shared';
         const $dragElement = this.createDraggable({ group: group });
         const scheduler = this.createScheduler({
             views: ['month'],
@@ -1056,11 +1090,48 @@ module('appointmentDragging customization', $.extend({}, {
         const draggablePosition = getAbsolutePosition($dragElement);
         const $cellElement = $(scheduler.workSpace.getCell(0, 2));
 
+        const pointer = pointerMock($dragElement).start();
+
+        pointer.down(draggablePosition.left, draggablePosition.top);
+        pointer
+            .move(5, 5)
+            .move(appointmentPosition.left - draggablePosition.left - 5, appointmentPosition.top - draggablePosition.top - 5)
+            .move(draggablePosition.left - appointmentPosition.left, draggablePosition.top - appointmentPosition.top)
+            .up();
+
+        assert.notOk($cellElement.hasClass(DROPPABLE_CELL_CLASS), 'cell has not droppable class');
+    });
+
+    // T885459
+    test('Move appointment outside Scheduler - droppable class should not be removed', function(assert) {
+        const group = 'shared';
+        const scheduler = this.createScheduler({
+            views: ['month'],
+            currentView: 'month',
+            dataSource: [{
+                text: 'App 1',
+                startDate: new Date(2018, 4, 1, 9, 30),
+                endDate: new Date(2018, 4, 1, 11, 30)
+            }],
+            appointmentDragging: {
+                group: group
+            }
+        });
+        const $schedulerElement = $(scheduler.instance.element());
+
+        const appointment = scheduler.appointments.find('App 1');
+        const appointmentPosition = getAbsolutePosition(appointment);
+        const schedulerPosition = getAbsolutePosition($schedulerElement);
+        const $cellElement = $(scheduler.workSpace.getCell(0, 2));
+
         const pointer = pointerMock(appointment).start();
 
         pointer.down(appointmentPosition.left, appointmentPosition.top);
-        $cellElement.trigger('dxdragenter');
-        pointer.move(draggablePosition.left - appointmentPosition.left, draggablePosition.top - appointmentPosition.top).up();
+        pointer.move(5, 5).move(schedulerPosition - 15, schedulerPosition - 15);
+
+        assert.ok($cellElement.hasClass(DROPPABLE_CELL_CLASS), 'cell has droppable class');
+
+        pointer.up();
 
         assert.notOk($cellElement.hasClass(DROPPABLE_CELL_CLASS), 'cell has not droppable class');
     });

@@ -84,6 +84,7 @@ const SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME = eventUtils.addNamespace(poi
 
 const SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME = eventUtils.addNamespace(dragEvents.enter, 'dxSchedulerDateTable');
 const SCHEDULER_CELL_DXDROP_EVENT_NAME = eventUtils.addNamespace(dragEvents.drop, 'dxSchedulerDateTable');
+const SCHEDULER_CELL_DXDRAGLEAVE_EVENT_NAME = eventUtils.addNamespace(dragEvents.leave, 'dxSchedulerDateTable');
 const SCHEDULER_CELL_DXCLICK_EVENT_NAME = eventUtils.addNamespace(clickEvent.name, 'dxSchedulerDateTable');
 
 const SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME = eventUtils.addNamespace(pointerEvents.down, 'dxSchedulerDateTable');
@@ -1664,6 +1665,7 @@ const SchedulerWorkSpace = Widget.inherit({
         const $element = this.$element();
 
         eventsEngine.off($element, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME);
+        eventsEngine.off($element, SCHEDULER_CELL_DXDRAGLEAVE_EVENT_NAME);
         eventsEngine.off($element, SCHEDULER_CELL_DXDROP_EVENT_NAME);
         eventsEngine.off($element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME);
         eventsEngine.off($element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME);
@@ -1687,6 +1689,11 @@ const SchedulerWorkSpace = Widget.inherit({
             }
             that._$currentTableTarget = $(e.target);
             that._$currentTableTarget.addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+        });
+        eventsEngine.on($element, SCHEDULER_CELL_DXDRAGLEAVE_EVENT_NAME, function(e) {
+            if(!$element.find($(e.draggingElement)).length) {
+                that.removeDroppableCellClass();
+            }
         });
         eventsEngine.on($element, SCHEDULER_CELL_DXDROP_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, function(e) {
             that.removeDroppableCellClass($(e.target));
