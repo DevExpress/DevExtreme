@@ -3220,7 +3220,7 @@ QUnit.module('default options', {
 
             $(lookup.field()).trigger('dxclick');
 
-            assert.equal(lookup.option('dropDownOptions.height')(), $('.dx-list-item').height() * 5 + 16, 'if 5 items popup height 4 items and 2 paddings (8px)');
+            assert.equal(lookup.option('dropDownOptions.height')(), $('.dx-list-item').height() * 4 + 16, 'if 4 items popup height 4 items and 2 paddings (8px)');
 
             lookup.close();
 
@@ -3293,17 +3293,17 @@ QUnit.module('default options', {
                     'ID': 7,
                     'Group': 'light',
                     'Color': 'blue'
-                }], key: 'ID', group: 'Group' }), grouped: true, valueExpr: 'ID', displayExpr: 'Color', value: 2 }).dxLookup('instance');
+                }], key: 'ID', group: 'Group' }), grouped: true, valueExpr: 'ID', displayExpr: 'Color', value: 1 }).dxLookup('instance');
 
             $lookup.css('margin-top', 200);
 
             $(lookup.field()).trigger('dxclick');
 
-            assert.roughEqual(lookup.option('dropDownOptions.height')(), $('.dx-list-item').height() * 3 + $('.dx-list-group-header').outerHeight() * 2 + 8, 2, 'if items more 4 popup height is 5 items and padding 8px');
+            assert.roughEqual(lookup.option('dropDownOptions.height')(), $('.dx-list-item').height() * 3 + $('.dx-list-group-header').outerHeight() * 2 + 8, 2, 'if items more 5 popup height is 5 items and padding 8px');
 
             let $popup = $('.dx-popup-wrapper');
 
-            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -2.5 - ($('.dx-list-item').height() + $('.dx-list-group-header').outerHeight()), 2, 'offset of the lookup if first item is selected');
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -2.5 + $('.dx-list-group-header').outerHeight(), 2, 'offset of the lookup if first item is selected');
 
             lookup.close();
 
