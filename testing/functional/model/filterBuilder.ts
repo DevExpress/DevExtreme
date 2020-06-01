@@ -11,11 +11,11 @@ class Field {
     element: Selector;
     text: Promise<string>;
 
-    constructor (element: Selector) {
+    constructor(element: Selector) {
         this.element = element;
         this.text = element.textContent;
     }
-};
+}
 
 export default class FilterBuilder extends Widget {
     name: string = 'dxFilterBuilder';
@@ -26,6 +26,6 @@ export default class FilterBuilder extends Widget {
     }
 
     getPopupTreeView(): Selector {
-        return Selector(`.${CLASS.popupContent} .${CLASS.treeView}`)
+        return Selector(`.${CLASS.popupContent} .${CLASS.treeView}`);
     }
 }

@@ -158,7 +158,7 @@
   "scripts": {
     "lint": "npm-run-all -p -c lint-js lint-css",
     "lint-js": "eslint .",
-    "lint-ts": "eslint ./js/renovation/*.{ts,tsx} ./js/renovation/**/*.{ts,tsx} ./testing/jest/**/*.{ts,tsx} ./themebuilder-scss/**/*.ts",
+    "lint-ts": "eslint \"./js/renovation/**/*.{ts,tsx}\" \"./testing/jest/**/*.{ts,tsx}\" \"./themebuilder-scss/**/*.ts\"",
     "lint-css": "stylelint styles",
     "lint-staged": "lint-staged",
     "build": "dotnet build build/build-dotnet.sln && gulp default",
