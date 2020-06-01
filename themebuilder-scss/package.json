@@ -23,17 +23,19 @@
   },
   "scripts": {
     "test": "jest --coverage --verbose --detectOpenHandles",
-    "clean-metadata": "",
+    "copy-resources": "ts-node --files=true src/tools/copy-resources.ts",
     "generate-metadata": "ts-node --files=true src/metadata/generate.ts",
     "build-ts": "tsc",
-    "build": "npm run generate-metadata && npm run build-ts"
+    "build": "npm run generate-metadata && npm run build-ts && npm run copy-resources"
   },
   "devDependencies": {
     "@types/autoprefixer": "^9.7.2",
+    "@types/fs-extra": "^9.0.1",
     "@types/jest": "^25.2.1",
     "@types/less": "^3.0.1",
     "@types/node-sass": "^4.11.0",
     "express": "^4.16.4",
+    "fs-extra": "^9.0.0",
     "jest": "^25.4.0",
     "sinon": "^9.0.2",
     "ts-jest": "^25.5.0",

@@ -2,6 +2,8 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { buildTheme } from '../../src/modules/builder';
 import commands from '../../src/modules/commands';
+// eslint-disable-next-line import/extensions
+import { version } from '../../src/data/metadata/dx-theme-builder-metadata';
 
 const buildTimeout = 150000;
 
@@ -11,6 +13,22 @@ const normalizeCss = (css: string): string => css
   .trim();
 
 describe('Builder integration tests', () => {
+  test('Build theme without parameters', () => {
+    const config: ConfigSettings = {
+      command: commands.BUILD_THEME,
+      outputColorScheme: 'custom-scheme',
+    };
+
+    return buildTheme(config).then((result) => {
+      expect(result.css).not.toBe('');
+      expect(result.swatchSelector).toBe(null);
+      expect(result.compiledMetadata.length).toBeGreaterThan(100);
+      expect(result.widgets.length).toBeGreaterThan(50);
+      expect(result.unusedWidgets.length).toBe(0);
+      expect(result.version).toBe(version);
+    });
+  }, buildTimeout);
+
   test('Build base theme with swatch', () => {
     const config: ConfigSettings = {
       command: commands.BUILD_THEME,
