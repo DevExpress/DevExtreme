@@ -312,7 +312,20 @@ class BaseRenderingStrategy {
         return Math.abs(result) > 1 ? result : 0;
     }
 
-    _isItemsCross(firstItem, secondItem, orientation) {
+    _isItemsCross(firstItem, secondItem) {
+        const areItemsInTheSameTable = !!firstItem.allDay === !!secondItem.allDay;
+        const areItemsAllDay = firstItem.allDay && secondItem.allDay;
+
+        if(areItemsInTheSameTable) {
+            const orientation = this._getOrientation(areItemsAllDay);
+
+            return this._checkItemsCrossing(firstItem, secondItem, orientation);
+        } else {
+            return false;
+        }
+    }
+
+    _checkItemsCrossing(firstItem, secondItem, orientation) {
         const firstItemSide_1 = Math.floor(firstItem[orientation[0]]);
         const firstItemSide_2 = Math.floor(firstItem[orientation[1]]);
 
@@ -328,8 +341,8 @@ class BaseRenderingStrategy {
         );
     }
 
-    _getOrientation() {
-        return ['top', 'bottom', 'left'];
+    _getOrientation(isAllDay) {
+        return isAllDay ? ['left', 'right', 'top'] : ['top', 'bottom', 'left'];
     }
 
     _getResultPositions(sortedArray) {
@@ -341,7 +354,6 @@ class BaseRenderingStrategy {
         let itemIndex;
         let maxIndexInStack = 0;
         let stack = {};
-        const orientation = this._getOrientation();
 
         var findFreeIndex = (indexes, index) => {
             const isFind = indexes.some((item) => {
@@ -397,9 +409,9 @@ class BaseRenderingStrategy {
             if(!stack.items) {
                 startNewStack(currentItem);
             } else {
-                if(this._isItemsCross(stack, currentItem, orientation)) {
+                if(this._isItemsCross(stack, currentItem)) {
                     stack.items.forEach((item, index) => {
-                        if(this._isItemsCross(item, currentItem, orientation)) {
+                        if(this._isItemsCross(item, currentItem)) {
                             indexes.push(item.index);
                         }
                     });
