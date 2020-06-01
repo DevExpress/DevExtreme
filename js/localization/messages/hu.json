@@ -305,6 +305,7 @@
     "dxFileManager-errorWrongFileExtension": "Nem engedélyezett fájltípus",
     "dxFileManager-errorMaxFileSizeExceeded": "A fájlméret meghaladja a megengedett legnagyobb méretet",
     "dxFileManager-errorDefault": "Ismeretlen hiba.",
+    "dxFileManager-errorDirectoryOpenFailed": "TODO",
 
     "dxDiagram-categoryGeneral": "Általános",
     "dxDiagram-categoryFlowchart": "Folyamatábra",

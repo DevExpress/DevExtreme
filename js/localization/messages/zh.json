@@ -306,6 +306,7 @@
     "dxFileManager-errorMaxFileSizeExceeded": "TODO",
     "dxFileManager-errorInvalidSymbols": "TODO",
     "dxFileManager-errorDefault": "TODO",
+    "dxFileManager-errorDirectoryOpenFailed": "TODO",
 
     "dxDiagram-categoryGeneral": "TODO",
     "dxDiagram-categoryFlowchart": "TODO",
