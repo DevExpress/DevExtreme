@@ -3301,17 +3301,13 @@ QUnit.module('default options', {
 
             assert.roughEqual(lookup.option('dropDownOptions.height')(), $('.dx-list-item').outerHeight() * 3 + $('.dx-list-group-header').outerHeight() * 2 + 8, 2, 'if items more 5 popup height is 5 items and padding 8px');
 
-            let $popup = $('.dx-popup-wrapper');
-
-            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -2.5 - ($('.dx-list-item').outerHeight() + $('.dx-list-group-header').outerHeight()), 2, 'offset of the lookup if first item is selected');
-
             lookup.close();
 
             lookup.option('value', 'white');
 
             $(lookup.field()).trigger('dxclick');
 
-            $popup = $('.dx-popup-wrapper');
+            const $popup = $('.dx-popup-wrapper');
 
             assert.roughEqual($popup.find('.dx-overlay-content').position().top, -($popup.find('.dx-overlay-content').height() - $('.dx-list-item').height()) / 2, 2, 'offset of the lookup if fourth item is selected');
 
