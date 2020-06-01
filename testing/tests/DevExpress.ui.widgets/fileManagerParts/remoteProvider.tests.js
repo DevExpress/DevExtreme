@@ -6,6 +6,7 @@ import ajaxMock from '../../../helpers/ajaxMock.js';
 import { createSampleFileItems, generateString, createFileObject } from '../../../helpers/fileManagerHelpers.js';
 import { when } from 'core/utils/deferred';
 import { isString } from 'core/utils/type';
+import browser from 'core/utils/browser';
 
 const { test } = QUnit;
 
@@ -159,6 +160,12 @@ QUnit.module('Remote Provider', moduleConfig, () => {
                 success: true
             },
             callback: request => {
+                assert.equal(request.method, 'POST');
+
+                if(browser.msie) {
+                    return;
+                }
+
                 const data = request.data;
 
                 const args = JSON.parse(data.get('arguments'));
@@ -177,8 +184,6 @@ QUnit.module('Remote Provider', moduleConfig, () => {
 
                 const documentsPathInfo = [...filesPathInfo];
                 documentsPathInfo.push({ key: 'Root/Files/Documents', name: 'Documents' });
-
-                assert.equal(request.method, 'POST');
 
                 assert.ok(data instanceof FormData, 'data has type of FormData');
                 assert.strictEqual(data.get('command'), 'UploadChunk', 'command type passed to the request');
