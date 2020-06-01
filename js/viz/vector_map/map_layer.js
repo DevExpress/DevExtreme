@@ -1036,8 +1036,12 @@ MapLayer.prototype = _extend({
         context.str.updateGrouping(context);
         that._updateHandles();
         that._params.notifyReady();
-        that._dataSourceLoaded.resolve();
-        that._dataSourceLoaded = null;
+        if(that._dataSourceLoaded) { // T890687
+            that._dataSourceLoaded.resolve();
+            that._dataSourceLoaded = null;
+        } else {
+            that._params.dataReady();
+        }
     },
 
     getBounds() {
