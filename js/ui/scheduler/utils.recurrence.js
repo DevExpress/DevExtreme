@@ -50,12 +50,11 @@ class Recurrence {
 
         const duration = endDateUtc ? endDateUtc.getTime() - startDateUtc.getTime() : 0;
 
+        this._createRRuleSet(options, startDateUtc);
+
         const minTime = minDateUtc.getTime();
-        const leftBorder = this.getLeftBorder(options, minDateUtc, duration);
-
-        const rRuleSet = this.createRRuleSet(options, startDateUtc);
-
-        rRuleSet.between(leftBorder, maxDateUtc, true).forEach(date => {
+        const leftBorder = this._getLeftBorder(options, minDateUtc, duration);
+        this.rRuleSet.between(leftBorder, maxDateUtc, true).forEach(date => {
             const endAppointmentTime = date.getTime() + duration;
 
             if(endAppointmentTime >= minTime) {
@@ -64,10 +63,12 @@ class Recurrence {
             }
         });
 
+        this.dispose();
+
         return result;
     }
 
-    createRRuleSet(options, startDateUtc) {
+    _createRRuleSet(options, startDateUtc) {
         const ruleOptions = RRule.parseString(options.rule);
         const firstDayOfWeek = options.firstDayOfWeek;
 
@@ -77,8 +78,6 @@ class Recurrence {
             const weekDayNumbers = [6, 0, 1, 2, 3, 4, 5];
             ruleOptions.wkst = weekDayNumbers[firstDayOfWeek];
         }
-
-        this.dispose();
 
         const rRuleSet = new RRuleSet();
         const rRule = new RRule(ruleOptions);
@@ -99,7 +98,7 @@ class Recurrence {
         return rRuleSet;
     }
 
-    getLeftBorder(options, minDateUtc, appointmentDuration) {
+    _getLeftBorder(options, minDateUtc, appointmentDuration) {
         if(options.end && !timeZoneUtils.isSameAppointmentDates(options.start, options.end)) {
             return new Date(minDateUtc.getTime() - appointmentDuration);
         }
