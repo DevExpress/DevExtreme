@@ -112,6 +112,8 @@ exports.ExportMixin = extend({}, exportMixin, {
 
         return new exports.DataProvider({
             items: items,
+            rowsArea: this._rowsArea,
+            columnsArea: this._columnsArea,
             rtlEnabled: this.option('rtlEnabled'),
             dataFields: this.getDataSource().getAreaFields('data'),
             customizeExcelCell: this.option('export.customizeExcelCell'),
@@ -219,6 +221,7 @@ exports.DataProvider = Class.inherit({
         const items = this._options.items;
         const item = items[rowIndex] && items[rowIndex][cellIndex] || {};
 
+        result.area = this._getArea(item);
         if(this.getCellType(rowIndex, cellIndex) === 'string') {
             result.value = item.text;
         } else {
@@ -229,6 +232,38 @@ exports.DataProvider = Class.inherit({
         result.columnIndex = cellIndex;
 
         return result;
+    },
+
+    _getArea(item) {
+        if(item.rowPath || item.columnPath) {
+            return 'data';
+        }
+
+        if(this._findByPath(this._options.grid._rowsArea, item.path)) {
+            return 'row';
+        }
+
+        if(this._findByPath(this._options.grid._columnsArea, item.path)) {
+            return 'column';
+        }
+
+        return 'filter';
+    },
+
+    _findByPath(container, path) {
+        if(container) {
+            const columns = container.getData();
+            for(let i = 0; i < columns.length; i++) {
+                const column = columns[i];
+                for(let j = 0; j < column.length; j++) {
+                    if(JSON.stringify(column[j].path) === JSON.stringify(path)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     },
 
     getStyles: function() {
