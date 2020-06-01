@@ -3293,21 +3293,21 @@ QUnit.module('default options', {
                     'ID': 7,
                     'Group': 'light',
                     'Color': 'blue'
-                }], key: 'ID', group: 'Group' }), grouped: true, valueExpr: 'ID', displayExpr: 'Color', value: 1 }).dxLookup('instance');
+                }], key: 'ID', group: 'Group' }), grouped: true, valueExpr: 'Color', displayExpr: 'Color', value: 'grey' }).dxLookup('instance');
 
             $lookup.css('margin-top', 200);
 
             $(lookup.field()).trigger('dxclick');
 
-            assert.roughEqual(lookup.option('dropDownOptions.height')(), $('.dx-list-item').height() * 3 + $('.dx-list-group-header').outerHeight() * 2 + 8, 2, 'if items more 5 popup height is 5 items and padding 8px');
+            assert.roughEqual(lookup.option('dropDownOptions.height')(), $('.dx-list-item').outerHeight() * 3 + $('.dx-list-group-header').outerHeight() * 2 + 8, 2, 'if items more 5 popup height is 5 items and padding 8px');
 
             let $popup = $('.dx-popup-wrapper');
 
-            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -2.5 + $('.dx-list-group-header').outerHeight(), 2, 'offset of the lookup if first item is selected');
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -2.5 - ($('.dx-list-item').outerHeight() + $('.dx-list-group-header').outerHeight()), 2, 'offset of the lookup if first item is selected');
 
             lookup.close();
 
-            lookup.option('value', 4);
+            lookup.option('value', 'white');
 
             $(lookup.field()).trigger('dxclick');
 
