@@ -2522,6 +2522,59 @@ QUnit.testStart(function() {
         assert.equal(cells.filter('.dx-state-focused').length, 49, 'right cells are focused');
     });
 
+    QUnit.test('Workspace Day should corrrectly select cells with horizontal grouping', function(assert) {
+        const $element = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({
+            focusStateEnabled: true,
+            startDayHour: 3,
+            endDayHour: 7,
+            currentDate: new Date(2015, 3, 1),
+            onContentReady: function(e) {
+                const scrollable = e.component.getScrollable();
+                scrollable.option('scrollByContent', false);
+                e.component.initDragBehavior();
+            },
+            intervalCount: 3,
+            groupOrientation: 'horizontal',
+        });
+
+        const instance = $element.dxSchedulerWorkSpaceDay('instance');
+
+        stubInvokeMethod(instance);
+        instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
+
+        const cells = $element.find('.' + CELL_CLASS);
+        let cell = cells.eq(13).get(0);
+        const $table = $element.find('.dx-scheduler-date-table');
+
+        pointerMock(cells.eq(0)).start().click();
+
+        $($table).trigger($.Event('dxpointerdown', { target: cells.eq(0).get(0), which: 1, pointerType: 'mouse' }));
+        $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
+
+        assert.equal(cells.filter('.dx-state-focused').length, 11, 'right quantity of focused cells');
+        assert.ok(cells.eq(0).hasClass('dx-state-focused'), 'right first focused cell');
+        assert.ok(cells.eq(42).hasClass('dx-state-focused'), 'cell in the lower left angle is focused');
+        assert.ok(cells.eq(13).hasClass('dx-state-focused'), 'right last focused cell');
+
+        cell = cells.eq(12).get(0);
+
+        $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
+
+        assert.equal(cells.filter('.dx-state-focused').length, 3, 'right quantity of focused cells');
+        assert.ok(cells.eq(0).hasClass('dx-state-focused'), 'right first focused cell');
+        assert.ok(cells.eq(12).hasClass('dx-state-focused'), 'right last focused cell');
+
+        cell = cells.eq(5).get(0);
+
+        $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
+
+        assert.equal(cells.filter('.dx-state-focused').length, 3, 'right quantity of focused cells');
+        assert.ok(cells.eq(0).hasClass('dx-state-focused'), 'right first focused cell');
+        assert.ok(cells.eq(12).hasClass('dx-state-focused'), 'right last focused cell');
+
+        $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
+    });
+
 })('Workspace Mouse Interaction');
 
 
