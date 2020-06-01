@@ -1,5 +1,6 @@
 import * as sass from 'sass';
 // eslint-disable-next-line
+// eslint-disable-next-line import/extensions
 import { metadata } from '../data/metadata/dx-theme-builder-metadata';
 
 export enum ImportType {
