@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import translator from '../../animation/translator';
-import { recurrenceUtils } from './utils.recurrence';
+import { getRecurrence } from './utils.recurrence';
 import { extend } from '../../core/utils/extend';
 import registerComponent from '../../core/component_registrator';
 import tooltip from '../tooltip/ui.tooltip';
@@ -179,7 +179,7 @@ const Appointment = DOMComponent.inherit({
     _renderRecurrenceClass: function() {
         const rule = this.invoke('getField', 'recurrenceRule', this.option('data'));
 
-        if(recurrenceUtils.getRecurrenceRule(rule).isValid) {
+        if(getRecurrence().getRecurrenceRule(rule).isValid) {
             this.$element().addClass(RECURRENCE_APPOINTMENT_CLASS);
         }
     },

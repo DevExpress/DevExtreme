@@ -14,64 +14,60 @@ const freqNames = ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY', 'SECONDLY', 'MINUTELY
 const days = { SU: 0, MO: 1, TU: 2, WE: 3, TH: 4, FR: 5, SA: 6 };
 const loggedWarnings = [];
 
-export const recurrenceUtils = {
-    getTimeZoneOffset: function() {
-        return new Date().getTimezoneOffset();
-    },
+let recurrence = null;
+export function getRecurrence() {
+    if(!recurrence) {
+        recurrence = new Recurrence();
+    }
+    return recurrence;
+}
 
-    dateInRecurrenceRange: function(options) {
-        let result = [];
+class Recurrence {
+    constructor() {
+        this.rRule = null;
+        this.rRuleSet = null;
+        this.validator = new RecurrenceValidator();
+    }
 
-        if(options.rule) {
-            result = recurrenceUtils.getDatesByRecurrence(options);
-        }
+    dispose() {
+        this.rRuleSet && delete this.rRuleSet;
+        this.rRule && delete this.rRule;
+    }
 
-        return !!result.length;
-    },
-
-    getDatesByRecurrence: function(options) {
+    getDatesByRecurrence(options) {
         const result = [];
-        const recurrenceRule = recurrenceUtils.getRecurrenceRule(options.rule);
+        const recurrenceRule = this.getRecurrenceRule(options.rule);
         const rule = recurrenceRule.rule;
 
         if(!recurrenceRule.isValid || !rule.freq) {
             return result;
         }
 
-        const startDateUtc = getRRuleUtcDate(options.start);
-        const endDateUtc = getRRuleUtcDate(options.end);
-        const minDateUtc = getRRuleUtcDate(options.min);
-        const maxDateUtc = getRRuleUtcDate(options.max);
-        const exception = options.exception;
+        const startDateUtc = this._getRRuleUtcDate(options.start);
+        const endDateUtc = this._getRRuleUtcDate(options.end);
+        const minDateUtc = this._getRRuleUtcDate(options.min);
+        const maxDateUtc = this._getRRuleUtcDate(options.max);
 
         const duration = endDateUtc ? endDateUtc.getTime() - startDateUtc.getTime() : 0;
 
         const minTime = minDateUtc.getTime();
-        const leftBorder = recurrenceUtils.getLeftBorder(options, minDateUtc, duration);
+        const leftBorder = this.getLeftBorder(options, minDateUtc, duration);
 
-        const rRuleSet = recurrenceUtils.createRRuleSet(options, startDateUtc);
-
-        if(exception) {
-            const splitDates = exception.split(',');
-            const exceptDates = getDatesByRecurrenceException(splitDates, startDateUtc);
-            for(let i = 0; i < exceptDates.length; i++) {
-                rRuleSet.exdate(getRRuleUtcDate(exceptDates[i]));
-            }
-        }
+        const rRuleSet = this.createRRuleSet(options, startDateUtc);
 
         rRuleSet.between(leftBorder, maxDateUtc, true).forEach(date => {
             const endAppointmentTime = date.getTime() + duration;
 
             if(endAppointmentTime >= minTime) {
-                correctTimezoneOffset(date);
+                this._correctTimezoneOffset(date);
                 result.push(date);
             }
         });
 
         return result;
-    },
+    }
 
-    createRRuleSet: function(options, startDateUtc) {
+    createRRuleSet(options, startDateUtc) {
         const ruleOptions = RRule.parseString(options.rule);
         const firstDayOfWeek = options.firstDayOfWeek;
 
@@ -82,36 +78,64 @@ export const recurrenceUtils = {
             ruleOptions.wkst = weekDayNumbers[firstDayOfWeek];
         }
 
-        const rRuleSet = new RRuleSet();
+        this.dispose();
 
-        rRuleSet.rrule(new RRule(ruleOptions));
+        const rRuleSet = new RRuleSet();
+        const rRule = new RRule(ruleOptions);
+
+        rRuleSet.rrule(rRule);
+
+        if(options.exception) {
+            const splitDates = options.exception.split(',');
+            const exceptDates = this._getDatesByRecurrenceException(splitDates, startDateUtc);
+            for(let i = 0; i < exceptDates.length; i++) {
+                rRuleSet.exdate(this._getRRuleUtcDate(exceptDates[i]));
+            }
+        }
+
+        this.rRule = rRule;
+        this.rRuleSet = rRuleSet;
 
         return rRuleSet;
-    },
+    }
 
-    getLeftBorder: function(options, minDateUtc, appointmentDuration) {
+    getLeftBorder(options, minDateUtc, appointmentDuration) {
         if(options.end && !timeZoneUtils.isSameAppointmentDates(options.start, options.end)) {
             return new Date(minDateUtc.getTime() - appointmentDuration);
         }
 
         return minDateUtc;
-    },
+    }
 
-    getRecurrenceRule: function(recurrence) {
+    getRecurrenceRule(recurrence) {
         const result = {
             rule: {},
             isValid: false
         };
 
         if(recurrence) {
-            result.rule = parseRecurrenceRule(recurrence);
-            result.isValid = validateRRule(result.rule, recurrence);
+            result.rule = this._parseRecurrenceRule(recurrence);
+            result.isValid = this.validator.validateRRule(result.rule, recurrence);
         }
 
         return result;
-    },
+    }
 
-    daysFromByDayRule: function(rule) {
+    getTimeZoneOffset() {
+        return new Date().getTimezoneOffset();
+    }
+
+    dateInRecurrenceRange(options) {
+        let result = [];
+
+        if(options.rule) {
+            result = this.getDatesByRecurrence(options);
+        }
+
+        return !!result.length;
+    }
+
+    daysFromByDayRule(rule) {
         let result = [];
 
         if(rule['byday']) {
@@ -123,17 +147,17 @@ export const recurrenceUtils = {
         }
 
         return result;
-    },
+    }
 
-    getAsciiStringByDate: function(date) {
-        const currentOffset = recurrenceUtils.getTimeZoneOffset() * toMs('minute');
+    getAsciiStringByDate(date) {
+        const currentOffset = this.getTimeZoneOffset() * toMs('minute');
 
         date = new Date(date.getTime() + currentOffset);
         return date.getFullYear() + ('0' + (date.getMonth() + 1)).slice(-2) + ('0' + date.getDate()).slice(-2) +
             'T' + ('0' + (date.getHours())).slice(-2) + ('0' + (date.getMinutes())).slice(-2) + ('0' + (date.getSeconds())).slice(-2) + 'Z';
-    },
+    }
 
-    getRecurrenceString: function(object) {
+    getRecurrenceString(object) {
         if(!object || !object.freq) {
             return;
         }
@@ -147,7 +171,7 @@ export const recurrenceUtils = {
             }
 
             if(field === 'until') {
-                value = recurrenceUtils.getAsciiStringByDate(value);
+                value = this.getAsciiStringByDate(value);
             }
 
             result += field + '=' + value + ';';
@@ -156,9 +180,9 @@ export const recurrenceUtils = {
         result = result.substring(0, result.length - 1);
 
         return result.toUpperCase();
-    },
+    }
 
-    getDateByAsciiString: function(string, initialDate) {
+    getDateByAsciiString(string, initialDate) {
         if(typeof string !== 'string') {
             return string;
         }
@@ -170,8 +194,8 @@ export const recurrenceUtils = {
         }
 
         const isUTCString = arrayDate[8] !== undefined;
-        let currentOffset = initialDate ? initialDate.getTimezoneOffset() : recurrenceUtils.getTimeZoneOffset();
-        let date = new (Function.prototype.bind.apply(Date, prepareDateArrayToParse(arrayDate)))();
+        let currentOffset = initialDate ? initialDate.getTimezoneOffset() : this.getTimeZoneOffset();
+        let date = new (Function.prototype.bind.apply(Date, this._prepareDateArrayToParse(arrayDate)))();
 
         currentOffset = currentOffset * toMs('minute');
 
@@ -181,200 +205,203 @@ export const recurrenceUtils = {
 
         return date;
     }
-};
 
-function getDatesByRecurrenceException(ruleValues, date) {
-    const result = [];
+    _getDatesByRecurrenceException(ruleValues, date) {
+        const result = [];
 
-    for(let i = 0, len = ruleValues.length; i < len; i++) {
-        result[i] = recurrenceUtils.getDateByAsciiString(ruleValues[i], date);
+        for(let i = 0, len = ruleValues.length; i < len; i++) {
+            result[i] = this.getDateByAsciiString(ruleValues[i], date);
+        }
+
+        return result;
     }
 
-    return result;
-}
+    _getRRuleUtcDate(date) {
+        if(!date) {
+            return null;
+        }
 
-function getRRuleUtcDate(date) {
-    if(!date) {
-        return null;
+        const newDate = new Date(Date.UTC(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate(),
+            date.getHours(),
+            date.getMinutes(),
+            date.getSeconds()
+        ));
+
+        return newDate;
     }
 
-    const newDate = new Date(Date.UTC(
-        date.getFullYear(),
-        date.getMonth(),
-        date.getDate(),
-        date.getHours(),
-        date.getMinutes(),
-        date.getSeconds()
-    ));
+    _correctTimezoneOffset(date) {
+        // TZ correction - Some specific in RRule. Perhaps it related to using of luxon.
+        const timezoneOffsetBefore = date.getTimezoneOffset();
+        const timezoneOffset = timezoneOffsetBefore * toMs('minute');
 
-    return newDate;
-}
+        date.setTime(date.getTime() + timezoneOffset);
 
-function correctTimezoneOffset(date) {
-    // TZ correction - Some specific in RRule. Perhaps it related to using of luxon.
-    const timezoneOffsetBefore = date.getTimezoneOffset();
-    const timezoneOffset = timezoneOffsetBefore * toMs('minute');
+        const timezoneOffsetDelta = date.getTimezoneOffset() - timezoneOffsetBefore;
+        if(timezoneOffsetDelta) {
+            date.setTime(date.getTime() + timezoneOffsetDelta * toMs('minute'));
+        }
+    }
 
-    date.setTime(date.getTime() + timezoneOffset);
+    _parseRecurrenceRule(recurrence) {
+        const ruleObject = {};
+        const ruleParts = recurrence.split(';');
 
-    const timezoneOffsetDelta = date.getTimezoneOffset() - timezoneOffsetBefore;
-    if(timezoneOffsetDelta) {
-        date.setTime(date.getTime() + timezoneOffsetDelta * toMs('minute'));
+        for(let i = 0, len = ruleParts.length; i < len; i++) {
+
+            const rule = ruleParts[i].split('=');
+            const ruleName = rule[0].toLowerCase();
+            const ruleValue = rule[1];
+
+            ruleObject[ruleName] = ruleValue;
+        }
+
+        const count = parseInt(ruleObject.count);
+
+        if(!isNaN(count)) {
+            ruleObject.count = count;
+        }
+
+        if(ruleObject.interval) {
+            const interval = parseInt(ruleObject.interval);
+            if(!isNaN(interval)) {
+                ruleObject.interval = interval;
+            }
+        } else {
+            ruleObject.interval = 1;
+        }
+
+        if(ruleObject.freq && ruleObject.until) {
+            ruleObject.until = this.getDateByAsciiString(ruleObject.until);
+        }
+
+        return ruleObject;
+    }
+
+    _prepareDateArrayToParse(arrayDate) {
+        arrayDate.shift();
+
+        if(arrayDate[3] === undefined) {
+            arrayDate.splice(3);
+        } else {
+            arrayDate.splice(3, 1);
+            arrayDate.splice(6);
+        }
+
+        arrayDate[1]--;
+
+        arrayDate.unshift(null);
+
+        return arrayDate;
     }
 }
 
-function validateRRule(rule, recurrence) {
-    if(brokenRuleNameExists(rule) ||
-        inArray(rule.freq, freqNames) === -1 ||
-        wrongCountRule(rule) || wrongIntervalRule(rule) ||
-        wrongDayOfWeek(rule) ||
-        wrongByMonthDayRule(rule) || wrongByMonth(rule) ||
-        wrongUntilRule(rule)) {
+class RecurrenceValidator {
+    validateRRule(rule, recurrence) {
+        if(this._brokenRuleNameExists(rule) ||
+            inArray(rule.freq, freqNames) === -1 ||
+            this._wrongCountRule(rule) || this._wrongIntervalRule(rule) ||
+            this._wrongDayOfWeek(rule) ||
+            this._wrongByMonthDayRule(rule) || this._wrongByMonth(rule) ||
+            this._wrongUntilRule(rule)) {
 
-        logBrokenRule(recurrence);
-        return false;
-    }
+            this._logBrokenRule(recurrence);
 
-    return true;
-}
-
-function wrongUntilRule(rule) {
-    let wrongUntil = false;
-    const until = rule.until;
-
-    if(until !== undefined && !(until instanceof Date)) {
-        wrongUntil = true;
-    }
-
-    return wrongUntil;
-}
-
-function wrongCountRule(rule) {
-    let wrongCount = false;
-    const count = rule.count;
-
-    if(count && typeof count === 'string') {
-        wrongCount = true;
-    }
-
-    return wrongCount;
-}
-
-function wrongByMonthDayRule(rule) {
-    let wrongByMonthDay = false;
-    const byMonthDay = rule['bymonthday'];
-
-    if(byMonthDay && isNaN(parseInt(byMonthDay))) {
-        wrongByMonthDay = true;
-    }
-
-    return wrongByMonthDay;
-}
-
-function wrongByMonth(rule) {
-    let wrongByMonth = false;
-    const byMonth = rule['bymonth'];
-
-    if(byMonth && isNaN(parseInt(byMonth))) {
-        wrongByMonth = true;
-    }
-
-    return wrongByMonth;
-}
-
-function wrongIntervalRule(rule) {
-    let wrongInterval = false;
-    const interval = rule.interval;
-
-    if(interval && typeof interval === 'string') {
-        wrongInterval = true;
-    }
-
-    return wrongInterval;
-}
-
-function wrongDayOfWeek(rule) {
-    const daysByRule = recurrenceUtils.daysFromByDayRule(rule);
-    let brokenDaysExist = false;
-
-    each(daysByRule, function(_, day) {
-        if(!Object.prototype.hasOwnProperty.call(days, day)) {
-            brokenDaysExist = true;
             return false;
         }
-    });
 
-    return brokenDaysExist;
-}
+        return true;
+    }
 
-function brokenRuleNameExists(rule) {
-    let brokenRuleExists = false;
+    _wrongUntilRule(rule) {
+        let wrongUntil = false;
+        const until = rule.until;
 
-    each(rule, function(ruleName) {
-        if(inArray(ruleName, ruleNames) === -1) {
-            brokenRuleExists = true;
-            return false;
+        if(until !== undefined && !(until instanceof Date)) {
+            wrongUntil = true;
         }
-    });
 
-    return brokenRuleExists;
-}
-
-function logBrokenRule(recurrence) {
-    if(inArray(recurrence, loggedWarnings) === -1) {
-        errors.log('W0006', recurrence);
-        loggedWarnings.push(recurrence);
-    }
-}
-
-function parseRecurrenceRule(recurrence) {
-    const ruleObject = {};
-    const ruleParts = recurrence.split(';');
-
-    for(let i = 0, len = ruleParts.length; i < len; i++) {
-
-        const rule = ruleParts[i].split('=');
-        const ruleName = rule[0].toLowerCase();
-        const ruleValue = rule[1];
-
-        ruleObject[ruleName] = ruleValue;
+        return wrongUntil;
     }
 
-    const count = parseInt(ruleObject.count);
+    _wrongCountRule(rule) {
+        let wrongCount = false;
+        const count = rule.count;
 
-    if(!isNaN(count)) {
-        ruleObject.count = count;
-    }
-
-    if(ruleObject.interval) {
-        const interval = parseInt(ruleObject.interval);
-        if(!isNaN(interval)) {
-            ruleObject.interval = interval;
+        if(count && typeof count === 'string') {
+            wrongCount = true;
         }
-    } else {
-        ruleObject.interval = 1;
+
+        return wrongCount;
     }
 
-    if(ruleObject.freq && ruleObject.until) {
-        ruleObject.until = recurrenceUtils.getDateByAsciiString(ruleObject.until);
+    _wrongByMonthDayRule(rule) {
+        let wrongByMonthDay = false;
+        const byMonthDay = rule['bymonthday'];
+
+        if(byMonthDay && isNaN(parseInt(byMonthDay))) {
+            wrongByMonthDay = true;
+        }
+
+        return wrongByMonthDay;
     }
 
-    return ruleObject;
-}
+    _wrongByMonth(rule) {
+        let wrongByMonth = false;
+        const byMonth = rule['bymonth'];
 
-function prepareDateArrayToParse(arrayDate) {
-    arrayDate.shift();
+        if(byMonth && isNaN(parseInt(byMonth))) {
+            wrongByMonth = true;
+        }
 
-    if(arrayDate[3] === undefined) {
-        arrayDate.splice(3);
-    } else {
-        arrayDate.splice(3, 1);
-        arrayDate.splice(6);
+        return wrongByMonth;
     }
 
-    arrayDate[1]--;
+    _wrongIntervalRule(rule) {
+        let wrongInterval = false;
+        const interval = rule.interval;
 
-    arrayDate.unshift(null);
+        if(interval && typeof interval === 'string') {
+            wrongInterval = true;
+        }
 
-    return arrayDate;
+        return wrongInterval;
+    }
+
+    _wrongDayOfWeek(rule) {
+        const daysByRule = getRecurrence().daysFromByDayRule(rule);
+        let brokenDaysExist = false;
+
+        each(daysByRule, function(_, day) {
+            if(!Object.prototype.hasOwnProperty.call(days, day)) {
+                brokenDaysExist = true;
+                return false;
+            }
+        });
+
+        return brokenDaysExist;
+    }
+
+    _brokenRuleNameExists(rule) {
+        let brokenRuleExists = false;
+
+        each(rule, function(ruleName) {
+            if(inArray(ruleName, ruleNames) === -1) {
+                brokenRuleExists = true;
+                return false;
+            }
+        });
+
+        return brokenRuleExists;
+    }
+
+    _logBrokenRule(recurrence) {
+        if(inArray(recurrence, loggedWarnings) === -1) {
+            errors.log('W0006', recurrence);
+            loggedWarnings.push(recurrence);
+        }
+    }
 }

@@ -5,7 +5,7 @@ import 'ui/scheduler/ui.scheduler';
 
 import $ from 'jquery';
 import fx from 'animation/fx';
-import { recurrenceUtils } from 'ui/scheduler/utils.recurrence';
+import { getRecurrence } from 'ui/scheduler/utils.recurrence';
 import dateUtils from 'core/utils/date';
 import config from 'core/config';
 
@@ -267,7 +267,7 @@ QUnit.test('\'needCoordinates\' should calculate correct dates fo recurring appt
         currentDate: new Date(2015, 2, 2, 0),
         firstDayOfWeek: 1
     });
-    const getDatesByRecurrenceStub = sinon.stub(recurrenceUtils, 'getDatesByRecurrence').returns([]);
+    const getDatesByRecurrenceStub = sinon.stub(getRecurrence(), 'getDatesByRecurrence').returns([]);
 
     try {
         const instance = this.instance;

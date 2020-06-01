@@ -1,7 +1,7 @@
 import config from '../../core/config';
 import iteratorUtils from '../../core/utils/iterator';
 import dateSerialization from '../../core/utils/date_serialization';
-import { recurrenceUtils } from './utils.recurrence';
+import { getRecurrence } from './utils.recurrence';
 import dateUtils from '../../core/utils/date';
 import { equalByValue } from '../../core/utils/common';
 import typeUtils from '../../core/utils/type';
@@ -205,6 +205,7 @@ class AppointmentModel {
         let result = true;
         const appointmentStartDate = appointment.startDate;
         const appointmentEndDate = appointment.endDate;
+        const recurrence = getRecurrence();
 
         if(allDay || this._appointmentPartInInterval(appointmentStartDate, appointmentEndDate, startDayHour, endDayHour)) {
             const trimmedDates = this._trimDates(min, max);
@@ -213,12 +214,12 @@ class AppointmentModel {
             max = new Date(trimmedDates.max.getTime() - toMs('minute'));
         }
 
-        if(recurrenceRule && !recurrenceUtils.getRecurrenceRule(recurrenceRule).isValid) {
+        if(recurrenceRule && !recurrence.getRecurrenceRule(recurrenceRule).isValid) {
             result = (appointmentEndDate > min) && (appointmentStartDate <= max);
         }
 
-        if(result && recurrenceUtils.getRecurrenceRule(recurrenceRule).isValid) {
-            result = recurrenceUtils.dateInRecurrenceRange({
+        if(result && recurrence.getRecurrenceRule(recurrenceRule).isValid) {
+            result = recurrence.dateInRecurrenceRange({
                 rule: recurrenceRule,
                 exception: recurrenceException,
                 start: appointmentStartDate,
