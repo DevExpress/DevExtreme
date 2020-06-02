@@ -166,7 +166,7 @@ const defaultOptionRules = createDefaultOptionRules<ButtonProps>([{
   view: viewFunction,
 })
 
-export default class Button extends JSXComponent<ButtonProps> {
+export default class Button extends JSXComponent<ButtonProps>(ButtonProps) {
   @Ref() contentRef!: HTMLDivElement;
 
   @Ref() inkRippleRef!: InkRipple;

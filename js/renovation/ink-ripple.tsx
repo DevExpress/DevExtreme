@@ -20,7 +20,7 @@ export class InkRippleProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class InkRipple extends JSXComponent<InkRippleProps> {
+export default class InkRipple extends JSXComponent<InkRippleProps>(InkRippleProps) {
   @Method()
   hideWave(event) {
     hideWave(this.getConfig, event);

@@ -136,7 +136,7 @@ export class WidgetProps extends BaseWidgetProps {
   view: viewFunction,
 })
 
-export default class Widget extends JSXComponent<WidgetProps> {
+export default class Widget extends JSXComponent<WidgetProps>(WidgetProps) {
   @InternalState() active = false;
 
   @InternalState() focused = false;

@@ -13,6 +13,7 @@ module.exports = {
     collectCoverage: true,
     collectCoverageFrom: [
         './js/renovation/**/*.p.js',
+        '!./js/renovation/error-message.p.js',
         '!./js/renovation/number-box.p.js',
         '!./js/renovation/select-box.p.js',
     ],
@@ -23,7 +24,13 @@ module.exports = {
             statements: 100,
             lines: 100,
             branches: 100
-        }
+        },
+        './js/renovation/**/*.tsx': {
+            functions: 100,
+            statements: 100,
+            lines: 100,
+            branches: 100
+        },
     },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     preset: 'ts-jest',
