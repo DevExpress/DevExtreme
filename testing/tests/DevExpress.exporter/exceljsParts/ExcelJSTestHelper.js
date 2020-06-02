@@ -17,7 +17,7 @@ class ExcelJSTestHelper {
         const expectedAddress = expectedCell.excelCell.address;
 
         assert.strictEqual(this.worksheet.getRow(expectedAddress.row).getCell(expectedAddress.column).address, excelCell.address, `cell.address (${expectedAddress.row}, ${expectedAddress.column})`);
-        assert.notStrictEqual(pivotCell, undefined, 'PivotCell property exist');
+        assert.notStrictEqual(pivotCell, undefined, 'pivotCell property exist');
 
         for(const propertyName in pivotCell) {
             assert.deepEqual(pivotCell[propertyName], expectedCell.pivotCell[propertyName], `pivotCell[${propertyName}], ${callIndex}`);

@@ -118,7 +118,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
     const styles = dataProvider.getStyles();
 
     for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
-        const cellData = dataProvider.getCellData(rowIndex, cellIndex);
+        const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
         const pivotCell = cellData.cellSourceData;
 
         const excelCell = row.getCell(startColumnIndex + cellIndex);

@@ -221,12 +221,15 @@ exports.DataProvider = Class.inherit({
         const items = this._options.items;
         const item = items[rowIndex] && items[rowIndex][cellIndex] || {};
 
-        // if(isExcelJS) {
-        result.cellSourceData = item;
-        result.cellSourceData.area = this._getArea(item, cellIndex);
-        result.cellSourceData.rowIndex = rowIndex;
-        result.cellSourceData.columnIndex = cellIndex;
-        // }
+        if(isExcelJS) {
+            result.cellSourceData = item;
+            const areaName = this._tryGetAreaName(items, item, rowIndex, cellIndex);
+            if(areaName) {
+                result.cellSourceData.area = areaName;
+            }
+            result.cellSourceData.rowIndex = rowIndex;
+            result.cellSourceData.columnIndex = cellIndex;
+        }
 
         if(this.getCellType(rowIndex, cellIndex) === 'string') {
             result.value = item.text;
@@ -237,14 +240,17 @@ exports.DataProvider = Class.inherit({
         return result;
     },
 
-    _getArea(item, cellIndex) {
-        if(item.rowPath || item.columnPath) {
+    _tryGetAreaName(items, item, rowIndex, cellIndex) {
+        const columnHeaderSize = items[0][0].rowspan;
+        const rowHeaderSize = items[0][0].colspan;
+
+        if(cellIndex >= rowHeaderSize && rowIndex < columnHeaderSize) {
+            return 'column';
+        } else if(rowIndex >= columnHeaderSize && cellIndex < rowHeaderSize) {
+            return 'row';
+        } else if(isDefined(item.dataIndex)) {
             return 'data';
         }
-
-        return this._options.columns[cellIndex].dataIndex !== undefined
-            ? 'column'
-            : 'row';
     },
 
     getStyles: function() {
