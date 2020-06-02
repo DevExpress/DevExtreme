@@ -364,10 +364,22 @@ const SchedulerWorkSpace = Widget.inherit({
 
     _getGroupIndexByCell: function($cell) {
         const cellsInRow = this._getCellCount();
-        const currentCellIndex = $cell.index() + 1;
-        const groupIndex = Math.ceil(currentCellIndex / cellsInRow);
+        const columnIndex = $cell.index();
+        const rowIndex = $cell.parent().index() + 1;
+        const groupOrientation = this.option('groupOrientation');
+        const groupByDate = this.option('groupByDate');
+        const rowsInColumn = this._getRowCount();
+        const groupCount = this._getGroupCount();
 
-        return groupIndex;
+        if(groupOrientation === 'horizontal' && !groupByDate) {
+            return Math.ceil(columnIndex + 1 / cellsInRow);
+        }
+
+        if(groupOrientation === 'vertical') {
+            return Math.ceil(rowIndex / rowsInColumn);
+        }
+
+        return columnIndex % groupCount;
     },
 
     _toggleFocusedCellClass: function(isFocused, $element) {
