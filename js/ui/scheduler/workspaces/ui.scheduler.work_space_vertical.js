@@ -2,8 +2,8 @@ import $ from '../../../core/renderer';
 import { each } from '../../../core/utils/iterator';
 import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
 
-const SchedulerWorkspaceVertical = SchedulerWorkSpace.inherit({
-    _getCellsBetween: function($first, $last) {
+class SchedulerWorkspaceVertical extends SchedulerWorkSpace {
+    _getCellsBetween($first, $last) {
         if(this._hasAllDayClass($last)) {
             return this.callBase($first, $last);
         }
@@ -51,7 +51,7 @@ const SchedulerWorkspaceVertical = SchedulerWorkSpace.inherit({
             $cells = $(arr);
         }
         return $cells;
-    },
-});
+    }
+}
 
 module.exports = SchedulerWorkspaceVertical;
