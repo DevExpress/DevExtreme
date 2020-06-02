@@ -2,6 +2,7 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import Sortable from '../sortable';
 import { setEmptyText } from './ui.grid_core.utils';
+import browser from '../../core/utils/browser';
 
 const COMMAND_HANDLE_CLASS = 'dx-command-drag';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
@@ -65,7 +66,8 @@ const RowDraggingExtender = {
 
                     const onDragStart = rowDragging.onDragStart;
                     onDragStart && onDragStart(e);
-                }
+                },
+                dropFeedbackMode: browser.msie ? 'indicate' : rowDragging.dropFeedbackMode
             }));
 
             $content.toggleClass(SORTABLE_WITHOUT_HANDLE_CLASS, !rowDragging.showDragIcons);
