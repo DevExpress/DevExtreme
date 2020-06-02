@@ -163,13 +163,13 @@ describe('Widget', () => {
       it('should not add tabIndex attribute if the `disabled` is true', () => {
         const widget = render({ focusStateEnabled: true, tabIndex: 10, disabled: true });
 
-        expect(widget.prop('tabIndex')).toBe(false);
+        expect(widget.prop('tabIndex')).toBe(undefined);
       });
 
       it('should not add `tabIndex` attribute if the `focusStateEnabled` is false', () => {
         const widget = render({ focusStateEnabled: false, tabIndex: 10 });
 
-        expect(widget.prop('tabIndex')).toBe(false);
+        expect(widget.prop('tabIndex')).toBe(undefined);
       });
     });
 

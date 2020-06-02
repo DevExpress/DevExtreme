@@ -21,12 +21,12 @@ export default class Compiler {
 
   compile(
     items: Array<ConfigMetaItem>,
-    options: sass.SyncOptions,
+    options: sass.Options,
   ): Promise<CompilerResult> {
     this.changedVariables = [];
     this.userItems = items || [];
 
-    let compilerOptions: sass.SyncOptions = {
+    let compilerOptions: sass.Options = {
       importer: this.setter.bind(this),
       functions: {
         'collector($map)': this.collector.bind(this),
@@ -36,22 +36,22 @@ export default class Compiler {
     compilerOptions = { ...compilerOptions, ...options };
 
     return new Promise((resolve, reject) => {
-      try {
-        const result = sass.renderSync(compilerOptions);
+      sass.render(compilerOptions, (error, result) => {
         this.importerCache = {};
-        resolve({
-          result,
-          changedVariables: this.changedVariables,
-        });
-      } catch (e) {
-        reject(e);
-      }
+        if (error) reject(error);
+        else {
+          resolve({
+            result,
+            changedVariables: this.changedVariables,
+          });
+        }
+      });
     });
   }
 
   static getImportType(url: string): ImportType {
-    if (/^\.\.\/widgets\/(material|generic)\/tb_index$/.test(url)) return ImportType.Index;
-    if (/^tb/.test(url)) return ImportType.Color;
+    if (url.endsWith('tb_index')) return ImportType.Index;
+    if (url.startsWith('tb')) return ImportType.Color;
     return ImportType.Unknown;
   }
 

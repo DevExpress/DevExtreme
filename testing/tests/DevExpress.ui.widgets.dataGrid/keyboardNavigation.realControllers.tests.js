@@ -1483,4 +1483,39 @@ QUnit.module('Real DataController and ColumnsController', {
             });
         });
     });
+
+    QUnit.testInActiveWindow('The expand cell should restore focus on expanding a master row when the Enter key is pressed (T892203)', function(assert) {
+        // arrange
+        const $container = $('#container');
+        this.data = [{ id: 1 }];
+        this.columns = ['id'];
+        this.options = {
+            keyExpr: 'id',
+            masterDetail: {
+                enabled: true,
+                template: commonUtils.noop
+            }
+        };
+
+        this.setupModule();
+        this.gridView.render($container);
+        this.clock.tick();
+
+        let $commandCell = $(this.getCellElement(0, 0));
+        $commandCell.focus();
+        this.clock.tick();
+
+        // assert
+        assert.ok($commandCell.is(':focus'), 'command cell is focused');
+        assert.equal($commandCell.find('.dx-datagrid-group-closed').length, 1, 'cell is rendered as collapsed');
+
+        this.triggerKeyDown('enter', false, false, $commandCell);
+        this.clock.tick();
+
+        $commandCell = $(this.getCellElement(0, 0));
+
+        // assert
+        assert.ok($commandCell.is(':focus'), 'command cell is still focused afteк expanding');
+        assert.equal($commandCell.find('.dx-datagrid-group-opened').length, 1, 'cell is rendered as expanded');
+    });
 });
