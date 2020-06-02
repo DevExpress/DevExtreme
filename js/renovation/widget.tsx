@@ -180,11 +180,11 @@ export default class Widget extends JSXComponent<WidgetProps> {
       active.on(this.widgetRef,
         ({ event }) => {
           this.active = true;
-                    onActive?.(event);
+          onActive?.(event);
         },
         ({ event }) => {
           this.active = false;
-                    onInactive?.(event);
+          onInactive?.(event);
         }, {
           hideTimeout: _feedbackHideTimeout,
           namespace,
@@ -359,8 +359,9 @@ export default class Widget extends JSXComponent<WidgetProps> {
   }
 
   get tabIndex() {
-    const { focusStateEnabled, disabled } = this.props;
+    const { focusStateEnabled, disabled, tabIndex } = this.props;
+    const isFocusable = focusStateEnabled && !disabled;
 
-    return focusStateEnabled && !disabled && this.props.tabIndex;
+    return isFocusable ? tabIndex : undefined;
   }
 }
