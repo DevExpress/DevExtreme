@@ -5,7 +5,7 @@ import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
 class SchedulerWorkspaceVertical extends SchedulerWorkSpace {
     _getCellsBetween($first, $last) {
         if(this._hasAllDayClass($last)) {
-            return this.callBase($first, $last);
+            return super._getCellsBetween($first, $last);
         }
 
         let $cells = this._getCells();

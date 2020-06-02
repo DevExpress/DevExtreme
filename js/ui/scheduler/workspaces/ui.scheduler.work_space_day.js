@@ -40,12 +40,12 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
             return;
         }
 
-        return this.callBase();
+        return super._renderDateHeader();
     }
 
     _getRightCell(isMultiSelection) {
         if(!isMultiSelection) {
-            return this.callBase(isMultiSelection);
+            return super._getRightCell(isMultiSelection);
         }
 
         return this._$focusedCell;
@@ -53,7 +53,7 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
 
     _getLeftCell(isMultiSelection) {
         if(!isMultiSelection) {
-            return this.callBase(isMultiSelection);
+            return super._getLeftCell(isMultiSelection);
         }
 
         return this._$focusedCell;
