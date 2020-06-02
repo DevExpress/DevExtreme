@@ -216,20 +216,23 @@ exports.DataProvider = Class.inherit({
         return style && style.dataType || 'string';
     },
 
-    getCellData: function(rowIndex, cellIndex) {
+    getCellData: function(rowIndex, cellIndex, isExcelJS) {
         const result = {};
         const items = this._options.items;
         const item = items[rowIndex] && items[rowIndex][cellIndex] || {};
 
-        result.area = this._getArea(item);
+        // if(isExcelJS) {
+        result.cellSourceData = item;
+        result.cellSourceData.area = this._getArea(item);
+        result.cellSourceData.rowIndex = rowIndex;
+        result.cellSourceData.columnIndex = cellIndex;
+        // }
+
         if(this.getCellType(rowIndex, cellIndex) === 'string') {
             result.value = item.text;
         } else {
             result.value = item.value;
         }
-        result.cell = item; // PivotGrid cell https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxPivotGrid/Pivot_Grid_Cell/
-        result.rowIndex = rowIndex;
-        result.columnIndex = cellIndex;
 
         return result;
     },
@@ -239,11 +242,11 @@ exports.DataProvider = Class.inherit({
             return 'data';
         }
 
-        if(this._findByPath(this._options.grid._rowsArea, item.path)) {
+        if(this._findByPath(this._options.rowsArea, item.path)) {
             return 'row';
         }
 
-        if(this._findByPath(this._options.grid._columnsArea, item.path)) {
+        if(this._findByPath(this._options.columnsArea, item.path)) {
             return 'column';
         }
 

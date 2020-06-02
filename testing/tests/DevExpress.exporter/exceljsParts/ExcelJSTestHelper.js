@@ -7,6 +7,23 @@ class ExcelJSTestHelper {
         this.worksheet = worksheet;
     }
 
+    checkPivotCustomizeCell(eventArgs, expectedCells, callIndex) {
+        const { pivotCell, excelCell } = eventArgs;
+
+        const currentRowIndex = Math.floor(callIndex / expectedCells[0].length);
+        const currentCellIndex = callIndex % expectedCells[currentRowIndex].length;
+        const expectedCell = expectedCells[currentRowIndex][currentCellIndex];
+
+        const expectedAddress = expectedCell.excelCell.address;
+
+        assert.strictEqual(this.worksheet.getRow(expectedAddress.row).getCell(expectedAddress.column).address, excelCell.address, `cell.address (${expectedAddress.row}, ${expectedAddress.column})`);
+        assert.notStrictEqual(pivotCell, undefined, 'PivotCell property exist');
+
+        for(const propertyName in pivotCell) {
+            assert.deepEqual(pivotCell[propertyName], expectedCell.pivotCell[propertyName], `pivotCell[${propertyName}], ${callIndex}`);
+        }
+    }
+
     checkCustomizeCell(eventArgs, expectedCells, callIndex) {
         const { gridCell, excelCell } = eventArgs;
 
@@ -121,6 +138,22 @@ class ExcelJSTestHelper {
 
             if(!('value' in cellArgs.gridCell)) {
                 cellArgs.gridCell.value = cellArgs.excelCell.value;
+            }
+        });
+    }
+
+    _extendExpectedPivotCells(cellsArray, topLeft) {
+        this._iterateCells(cellsArray, (cellArgs, rowIndex, columnIndex) => {
+            cellArgs.excelCell.address = {
+                row: rowIndex + topLeft.row,
+                column: columnIndex + topLeft.column
+            };
+
+            cellArgs.pivotCell.rowIndex = rowIndex;
+            cellArgs.pivotCell.columnIndex = columnIndex;
+
+            if(!('value' in cellArgs.pivotCell)) {
+                cellArgs.pivotCell.value = cellArgs.excelCell.value;
             }
         });
     }
