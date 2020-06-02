@@ -203,6 +203,7 @@ class DataRow extends DxElement {
     isFocusedRow: Promise<boolean>;
     isSelected: Promise<boolean>;
     isEdited: Promise<boolean>;
+    isExpanded: Promise<boolean>;
 
     constructor(element: Selector, widgetName: string) {
         super(element);
@@ -211,6 +212,7 @@ class DataRow extends DxElement {
         this.isFocusedRow = this.element.hasClass(CLASS.focusedRow);
         this.isSelected = this.element.hasClass(CLASS.selection);
         this.isEdited = this.element.hasClass(CLASS.editedRow);
+        this.isExpanded = this.element.find(`.${CLASS.commandExpand} .${addWidgetPrefix(this.widgetName, CLASS.groupExpanded)}`).exists;
     }
 
     getDataCell(index: number): DataCell {
@@ -342,7 +344,7 @@ export default class DataGrid extends Widget {
     }
 
     getDataRow(index: number): DataRow {
-        return new DataRow(this.element.find(`.${CLASS.dataRow}:nth-child(${++index})`), this.name);
+        return new DataRow(this.element.find(`.${CLASS.dataRow}[aria-rowindex='${++index}']`), this.name);
     }
 
     getDataCell(rowIndex: number, columnIndex: number): DataCell {
