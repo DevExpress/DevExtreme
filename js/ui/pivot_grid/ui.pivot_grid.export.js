@@ -237,7 +237,7 @@ exports.DataProvider = Class.inherit({
         return result;
     },
 
-    _getArea(item) {
+    _getArea(item, cellIndex) {
         if(item.rowPath || item.columnPath) {
             return 'data';
         }

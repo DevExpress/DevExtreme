@@ -142,7 +142,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
         if(isDefined(customizeCell)) {
             customizeCell({
                 excelCell: excelCell,
-                // pivotCell: pivotCell
+                pivotCell: pivotCell
             });
         }
 
