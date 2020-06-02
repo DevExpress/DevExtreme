@@ -28,7 +28,7 @@ class DropImageModule extends BaseModule {
 
     _dropHandler(e) {
         const dataTransfer = e.originalEvent.dataTransfer;
-        const hasFiles = dataTransfer && dataTransfer.files && dataTransfer.files.length;
+        const hasFiles = dataTransfer?.files?.length;
 
         e.preventDefault();
         if(hasFiles) {
@@ -48,7 +48,7 @@ class DropImageModule extends BaseModule {
 
         if(!isHtmlData && hasDataItems) {
             this._getImage(clipboardData.items, (imageData) => {
-                if(browser.mozilla) {
+                if(this._isBrowserSupportImagePaste(browser)) {
                     return;
                 }
 
@@ -59,6 +59,11 @@ class DropImageModule extends BaseModule {
                 }
             });
         }
+    }
+
+    _isBrowserSupportImagePaste({ mozilla, chrome, version }) {
+        return mozilla ||
+            chrome && version > 82; // T894297
     }
 
     _isImage(file) {
