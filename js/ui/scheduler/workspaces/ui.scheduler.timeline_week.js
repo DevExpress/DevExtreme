@@ -1,5 +1,6 @@
 const registerComponent = require('../../../core/component_registrator');
 const SchedulerTimeline = require('./ui.scheduler.timeline');
+const getBoundingRect = require('../../../core/utils/position').getBoundingRect;
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-week';
 
@@ -13,7 +14,7 @@ const SchedulerTimelineWeek = SchedulerTimeline.inherit({
     },
 
     _getHeaderPanelCellWidth: function($headerRow) {
-        return $headerRow.children().first().get(0).getBoundingClientRect().width;
+        return getBoundingRect($headerRow.children().first().get(0)).width;
     },
 
     _getWeekDuration: function() {

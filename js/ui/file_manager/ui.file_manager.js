@@ -33,6 +33,8 @@ const FILE_MANAGER_EDITING_CONTAINER_CLASS = FILE_MANAGER_CLASS + '-editing-cont
 const FILE_MANAGER_ITEMS_PANEL_CLASS = FILE_MANAGER_CLASS + '-items-panel';
 const FILE_MANAGER_ITEM_CUSTOM_THUMBNAIL_CLASS = FILE_MANAGER_CLASS + '-item-custom-thumbnail';
 
+const PARENT_DIRECTORY_KEY_PREFIX = '[*DXPDK*]$40F96F03-FBD8-43DF-91BE-F55F4B8BA871$';
+
 class FileManager extends Widget {
 
     _initTemplates() {
@@ -370,7 +372,7 @@ class FileManager extends Widget {
         parentDirItem.isParentFolder = true;
         parentDirItem.name = '..';
         parentDirItem.relativeName = '..';
-        parentDirItem.key = [];
+        parentDirItem.key = `${PARENT_DIRECTORY_KEY_PREFIX}${selectedDir.fileItem.key}`;
 
         const itemsCopy = [...items];
         itemsCopy.unshift({
@@ -733,8 +735,8 @@ class FileManager extends Widget {
         this.option(options);
     }
 
-    getDirectories(parentDirectoryInfo) {
-        return this._controller.getDirectories(parentDirectoryInfo);
+    getDirectories(parentDirectoryInfo, skipNavigationOnError) {
+        return this._controller.getDirectories(parentDirectoryInfo, skipNavigationOnError);
     }
 
     _getSelectedItemInfos() {

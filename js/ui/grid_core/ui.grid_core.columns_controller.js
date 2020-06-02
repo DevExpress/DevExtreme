@@ -213,7 +213,7 @@ module.exports = {
                             columnOptions = extend({}, columnOptions, { dataField: userStateColumnOptions.dataField });
                         }
                         const calculatedColumnOptions = that._createCalculatedColumnOptions(columnOptions, bandColumn);
-                        if(columnOptions.dataField && !columnOptions.type) {
+                        if(!columnOptions.type) {
                             result = { headerId: `dx-col-${globalColumnId++}` };
                         }
                         result = deepExtendArraySafe(result, DEFAULT_COLUMN_OPTIONS);
@@ -2063,7 +2063,7 @@ module.exports = {
                     columnIndex = filter.columnIndex !== undefined ? filter.columnIndex : columnIndex;
                     filterValue = filter.filterValue !== undefined ? filter.filterValue : filterValue;
 
-                    if(isString(filter[0])) {
+                    if(isString(filter[0]) && filter[0] !== '!') {
                         const column = that.columnOption(filter[0]);
 
                         if(remoteFiltering) {

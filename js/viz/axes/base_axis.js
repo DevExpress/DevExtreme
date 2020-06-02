@@ -365,7 +365,7 @@ Axis.prototype = {
         return false;
     },
 
-    getCustomPositionAxis: _noop,
+    getOppositeAxis: _noop,
 
     getCustomPosition: _noop,
 
@@ -2068,25 +2068,6 @@ Axis.prototype = {
         this._axisStripGroup.attr({ 'clip-path': elementsClipID });
     },
 
-    _mergeViewportOptions() {
-        const that = this;
-        const options = that._options;
-        let visualRange = {};
-        const visualRangeOptionValue = options._customVisualRange;
-
-        if((isDefined(options.max) || isDefined(options.min)) &&
-            !isDefined(visualRangeOptionValue.startValue) &&
-            !isDefined(visualRangeOptionValue.endValue) &&
-            !isDefined(visualRangeOptionValue.length)
-        ) {
-            visualRange = { startValue: options.min, endValue: options.max };
-        } else {
-            visualRange = visualRangeOptionValue;
-        }
-
-        that._setVisualRange(visualRange);
-    },
-
     _validateVisualRange(visualRange) {
         const range = getVizRangeObject(visualRange);
         if(range.startValue !== undefined) {
@@ -2103,18 +2084,10 @@ Axis.prototype = {
     _validateOptions(options) {
         const that = this;
 
-        if(options.min !== undefined) {
-            options.min = that.validateUnit(options.min, 'E2106');
-        }
-        if(options.max !== undefined) {
-            options.max = that.validateUnit(options.max, 'E2106');
-        }
-
         options.wholeRange = that._validateVisualRange(options.wholeRange);
-
         options.visualRange = options._customVisualRange = that._validateVisualRange(options._customVisualRange);
 
-        that._mergeViewportOptions();
+        that._setVisualRange(options._customVisualRange);
     },
 
     validate() {

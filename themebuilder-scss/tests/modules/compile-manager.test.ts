@@ -1,76 +1,190 @@
 import path from 'path';
-import { ImportMock } from 'ts-mock-imports';
-import { CompileManager } from '../../src/modules/compile-manager';
-
-import * as realMetadata from '../../src/data/metadata/dx-theme-builder-metadata';
-import * as bundleResolver from '../../src/modules/bundle-resolver';
+import * as sass from 'sass';
 import { metadata } from '../data/metadata';
-
 import noModificationsResult from '../data/compilation-results/no-changes-css';
 import noModificationsMeta from '../data/compilation-results/no-changes-meta';
+import PostCompiler from '../../src/modules/post-compiler';
+
+import CompileManager from '../../src/modules/compile-manager';
 
 const dataPath = path.join(path.resolve(), 'tests', 'data');
 
+jest.mock('../../src/modules/bundle-resolver', () => ({
+  __esModule: true,
+  default: (): sass.SyncOptions => ({
+    file: path.join(dataPath, 'scss', 'bundles', 'dx.light.scss'),
+    includePaths: [path.join(dataPath, 'scss', 'widgets', 'generic')],
+  }),
+}));
+
+jest.mock('../../src/data/metadata/dx-theme-builder-metadata', () => ({
+  __esModule: true,
+  metadata,
+}));
+
+PostCompiler.addInfoHeader = (css: string): string => css;
+
 describe('Compile manager - integration test on test sass', () => {
-    beforeEach(() => {
-        ImportMock.mockOther(realMetadata, 'metadata', metadata);
-        ImportMock.mockOther(bundleResolver, 'resolveBundle', () => path.join(dataPath, 'scss', 'bundles', 'dx.light.scss'));
+  test('compile test bundle without swatch', () => {
+    const manager = new CompileManager();
+    return manager.compile({}).then((result) => {
+      expect(result.css).toBe(noModificationsResult);
+      expect(result.compiledMetadata).toEqual(noModificationsMeta);
     });
+  });
 
-    afterEach(() => {
-        ImportMock.restore();
-    });
-
-    test('compile test bundle without swatch', () => {
-        const manager = new CompileManager();
-        return manager.compile({}).then(result => {
-            expect(result.css).toBe(noModificationsResult);
-            expect(result.compiledMetadata).toEqual(noModificationsMeta);
-        });
-    });
-
-    test('compile test bundle with swatch', () => {
-        const manager = new CompileManager();
-        return manager.compile({
-            makeSwatch: true,
-            outColorScheme: 'test-theme'
-        }).then(result => {
-            expect(result.css).toBe(`.dx-swatch-test-theme .dx-accordion {
-  background-color: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif;
+  test('compile test bundle with swatch', () => {
+    const manager = new CompileManager();
+    return manager.compile({
+      makeSwatch: true,
+      outColorScheme: 'test-theme',
+    }).then((result) => {
+      expect(result.css).toBe(`.dx-swatch-test-theme .dx-accordion {
+  background-color: "Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif;
   color: #337ab7;
-  font: url("icons/icons.woff2");
+  background-image: url(icons/icons.woff2);
 }
 .dx-swatch-test-theme .dx-accordion .from-base {
   background-color: transparent;
   color: #337ab7;
 }`);
-            expect(result.compiledMetadata).toEqual(noModificationsMeta);
-        });
+      expect(result.compiledMetadata).toEqual(noModificationsMeta);
     });
+  });
 
-    test('compile test bundle with assetsBasePath', () => {
-        const manager = new CompileManager();
-        return manager.compile({
-            assetsBasePath: 'base-path'
-        }).then(result => {
-            expect(result.css).toBe(`.dx-accordion {
-  background-color: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif;
+  test('compile test bundle with assetsBasePath', () => {
+    const manager = new CompileManager();
+    return manager.compile({
+      assetsBasePath: 'base-path',
+    }).then((result) => {
+      expect(result.css).toBe(`.dx-accordion {
+  background-color: "Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif;
   color: #337ab7;
-  font: url("base-path/icons/icons.woff2");
+  background-image: url(base-path/icons/icons.woff2);
 }
 .dx-accordion .from-base {
   background-color: transparent;
   color: #337ab7;
 }`);
-            expect(result.compiledMetadata).toEqual(noModificationsMeta);
-        });
+      expect(result.compiledMetadata).toEqual(noModificationsMeta);
     });
+  });
 
-    test('compile test bundle with error', () => {
-        const manager = new CompileManager();
-        expect(manager.compile({
-            makeSwatch: true,
-            outColorScheme: 'error for sass compiler :)'
-        })).rejects.toBeTruthy();
+  test('compile test bundle with widgets option', () => {
+    const manager = new CompileManager();
+    return manager.compile({
+      widgets: ['datebox'],
+    }).then((result) => {
+      expect(result.css).toBe('');
+      expect(result.compiledMetadata).toEqual([{
+        Key: '$base-font-family',
+        Path: 'tb/widgets/generic/colors',
+        Value: '"Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif',
+      }, {
+        Key: '$base-accent',
+        Path: 'tb/widgets/generic/colors',
+        Value: 'rgba(51,122,183,1)',
+      }]);
     });
+  });
+
+  test('compile test bundle using bootstrap (3) file as input', () => {
+    const manager = new CompileManager();
+    return manager.compile({
+      isBootstrap: true,
+      bootstrapVersion: 3,
+      data: '@brand-primary: red;',
+    }).then((result) => {
+      expect(result.css).toBe(`.dx-accordion {
+  background-color: "Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif;
+  color: red;
+  background-image: url(icons/icons.woff2);
+}
+.dx-accordion .from-base {
+  background-color: transparent;
+  color: red;
+}`);
+
+      expect(result.compiledMetadata).toEqual([{
+        Key: '$base-font-family',
+        Path: 'tb/widgets/generic/colors',
+        Value: '"Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif',
+      }, {
+        Key: '$base-accent',
+        Path: 'tb/widgets/generic/colors',
+        Value: 'rgba(255,0,0,1)',
+      }, {
+        Key: '$accordion-title-color',
+        Path: 'tb/widgets/generic/accordion/colors',
+        Value: 'rgba(255,0,0,1)',
+      }, {
+        Key: '$accordion-item-title-opened-bg',
+        Path: 'tb/widgets/generic/accordion/colors',
+        Value: 'rgba(0,0,0,0)',
+      }]);
+    });
+  });
+
+  test('compile test bundle using bootstrap (4) file as input', () => {
+    const manager = new CompileManager();
+    return manager.compile({
+      isBootstrap: true,
+      bootstrapVersion: 4,
+      data: '$primary: red;',
+    }).then((result) => {
+      expect(result.css).toBe(`.dx-accordion {
+  background-color: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  color: red;
+  background-image: url(icons/icons.woff2);
+}
+.dx-accordion .from-base {
+  background-color: transparent;
+  color: red;
+}`);
+
+      expect(result.compiledMetadata).toEqual([{
+        Key: '$base-font-family',
+        Path: 'tb/widgets/generic/colors',
+        Value: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
+      }, {
+        Key: '$base-accent',
+        Path: 'tb/widgets/generic/colors',
+        Value: 'rgba(255,0,0,1)',
+      }, {
+        Key: '$accordion-title-color',
+        Path: 'tb/widgets/generic/accordion/colors',
+        Value: 'rgba(255,0,0,1)',
+      }, {
+        Key: '$accordion-item-title-opened-bg',
+        Path: 'tb/widgets/generic/accordion/colors',
+        Value: 'rgba(0,0,0,0)',
+      }]);
+    });
+  });
+
+  test('compile test bundle with noClean option', () => {
+    const manager = new CompileManager();
+    return manager.compile({
+      noClean: true,
+    }).then((result) => {
+      expect(result.css).toBe(`.dx-accordion {
+  background-color: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif;
+  color: #337ab7;
+  background-image: url(icons/icons.woff2);
+}
+.dx-accordion .from-base {
+  background-color: transparent;
+  color: #337ab7;
+}`);
+      expect(result.compiledMetadata).toEqual(noModificationsMeta);
+    });
+  });
+
+  test('compile test bundle with error', () => {
+    const manager = new CompileManager();
+    return expect(manager.compile({
+      makeSwatch: true,
+      outColorScheme: 'error for sass compiler :)',
+    })).rejects.toBeInstanceOf(Error);
+  });
 });

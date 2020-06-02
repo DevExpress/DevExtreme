@@ -843,5 +843,9 @@ const subscribes = {
             throw errors.Error('E1058');
         }
     },
+
+    removeDroppableCellClass: function() {
+        this._workSpace.removeDroppableCellClass();
+    }
 };
 module.exports = subscribes;

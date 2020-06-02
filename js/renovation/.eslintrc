@@ -1,0 +1,5 @@
+{
+    "extends": [
+        "devextreme/renovation-declarations"
+    ]
+}

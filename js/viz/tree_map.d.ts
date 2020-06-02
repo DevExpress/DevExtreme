@@ -203,15 +203,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      */
     parentField?: string;
     /**
-     * @docid dxTreeMapOptions.resolveLabelOverflow
-     * @type Enums.TreeMapResolveLabelOverflow
-     * @default 'hide'
-     * @deprecated dxTreeMapOptions.tile.label.textOverflow
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    resolveLabelOverflow?: 'ellipsis' | 'hide';
-    /**
      * @docid dxTreeMapOptions.selectionMode
      * @type Enums.SelectionMode
      * @default undefined

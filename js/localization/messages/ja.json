@@ -274,6 +274,7 @@
         "dxFileManager-errorMaxFileSizeExceeded": "ファイルのサイズが最大許容サイズを超えています。",
         "dxFileManager-errorInvalidSymbols": "名前に無効な文字が含まれています。",
         "dxFileManager-errorDefault": "特定できないエラー",
+        "dxFileManager-errorDirectoryOpenFailed": "ディレクトリを開けません",
 
         "dxFileManager-commandCreate": "新しいディレクトリ",
         "dxFileManager-commandRename": "名前の変更",

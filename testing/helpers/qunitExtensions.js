@@ -424,6 +424,9 @@
                 return true;
             }
         }
+
+        if(callback.match(/function\(\)\{clearTimeout\(\w+\),cancelAnimationFrame\(\w+\),setTimeout\(\w+\)\}/)) return true; // NOTE: Preact hooks
+        if(callback.match(/\.__H\.\w+\.forEach\(/)) return true; // NOTE: Preact hooks
     });
 
     const logTestFailure = function(timerInfo) {

@@ -1,44 +1,45 @@
 #!/usr/bin/env node
 
-var path = require("path"),
-    http = require("http"),
-    gulp = require("gulp"),
-    childProcess = require("child_process"),
-    os = require("os");
+const path = require('path');
+const http = require('http');
+const gulp = require('gulp');
+const childProcess = require('child_process');
+const os = require('os');
 
-var PORT = require("./../ports.json").qunit;
+const PORT = require('./../ports.json').qunit;
 
 if(parseInt(process.versions.node.split('.')[0]) < 6) {
-    throw "Node version is too low";
+    throw 'Node version is too low';
 }
 
 watchForTests();
 
 childProcess.spawn(
-    "dotnet",
-    [ path.join(__dirname, "runner/bin/runner.dll") ],
-    { stdio: "inherit" }
+    'dotnet',
+    [ path.join(__dirname, 'runner/bin/runner.dll') ],
+    { stdio: 'inherit' }
 );
 waitForRunner();
 
 
 function watchForTests() {
-    var process = require('process');
-    process.chdir(path.join(__dirname, "../"));
+    const process = require('process');
+    process.chdir(path.join(__dirname, '../'));
 
     require('../gulpfile');
     gulp.parallel(
+        'generate-components-watch',
         'transpile-watch',
         'style-compiler-themes-dev'
     )();
 }
 
 function waitForRunner() {
-    var timestamp = Date.now();
+    const timestamp = Date.now();
     http.request({ port: PORT }, res => openBrowser())
-        .on("error", e => setTimeout(
+        .on('error', e => setTimeout(
             function() {
-                console.log("waiting...");
+                console.log('waiting...');
                 waitForRunner();
             },
             Math.max(0, 300 - Date.now() + timestamp)
@@ -49,7 +50,7 @@ function waitForRunner() {
 function openBrowser() {
     childProcess.spawn(
         getBrowserCommand(),
-        [ "http://localhost:" + PORT ],
+        [ 'http://localhost:' + PORT ],
         {
             shell: true,
             detached: true
@@ -60,15 +61,15 @@ function openBrowser() {
 
 function getBrowserCommand() {
     switch(os.platform()) {
-        case "win32":
-            return "start";
+        case 'win32':
+            return 'start';
 
-        case "darwin":
-            return "open";
+        case 'darwin':
+            return 'open';
 
-        case "linux":
-            return "xdg-open";
+        case 'linux':
+            return 'xdg-open';
     }
 
-    throw "Not implemented";
+    throw 'Not implemented';
 }

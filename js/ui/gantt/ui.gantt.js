@@ -7,6 +7,7 @@ import { GanttView } from './ui.gantt.view';
 import { GanttToolbar, GanttContextMenuBar } from './ui.gantt.bars';
 import dxTreeList from '../tree_list';
 import { extend } from '../../core/utils/extend';
+import { getBoundingRect } from '../../core/utils/position';
 import { hasWindow } from '../../core/utils/window';
 import DataOption from './ui.gantt.data.option';
 import SplitterControl from '../splitter';
@@ -223,11 +224,11 @@ class Gantt extends Widget {
     }
     _getTreeListRowHeight() {
         const $row = this._treeList._$element.find('.dx-data-row');
-        const height = $row.length ? $row.last().get(0).getBoundingClientRect().height : GANTT_DEFAULT_ROW_HEIGHT;
+        const height = $row.length ? getBoundingRect($row.last().get(0)).height : GANTT_DEFAULT_ROW_HEIGHT;
         return height ? height : GANTT_DEFAULT_ROW_HEIGHT;
     }
     _getTreeListHeaderHeight() {
-        return this._treeList._$element.find('.dx-treelist-headers').get(0).getBoundingClientRect().height;
+        return getBoundingRect(this._treeList._$element.find('.dx-treelist-headers').get(0)).height;
     }
 
 
@@ -354,6 +355,8 @@ class Gantt extends Widget {
         this._setGanttViewOption(dataSourceName, mappedData);
         if(dataSourceName === GANTT_TASKS) {
             this._tasksRaw = data;
+            const expandedRowKeys = data.map(t => t.parentId).filter((value, index, self) => value && self.indexOf(value) === index);
+            this._setTreeListOption('expandedRowKeys', expandedRowKeys);
             this._setTreeListOption('dataSource', data);
         }
     }
@@ -430,9 +433,10 @@ class Gantt extends Widget {
         this._setTreeListOption('dataSource', treeDataSource);
     }
     _appendCustomFields(data) {
-        const modelData = this._tasksOption._getItems();
+        const modelData = this._tasksOption && this._tasksOption._getItems();
+        const keyGetter = dataCoreUtils.compileGetter(this.option(`${GANTT_TASKS}.keyExpr`));
         return data.reduce((previous, item) => {
-            const modelItem = modelData && modelData.filter((obj) => obj.id === item.id)[0];
+            const modelItem = modelData && modelData.filter((obj) => keyGetter(obj) === keyGetter(item))[0];
             if(!modelItem) {
                 previous.push(item);
             } else {

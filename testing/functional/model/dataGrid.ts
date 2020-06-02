@@ -1,5 +1,5 @@
-import { ClientFunction, Selector } from "testcafe";
-import Widget from "./internal/widget";
+import { ClientFunction, Selector } from 'testcafe';
+import Widget from './internal/widget';
 
 const CLASS = {
     headers: 'headers',
@@ -137,7 +137,7 @@ class HeaderCell extends DxElement {
     }
 
     getFilterIcon(): Selector {
-        return this.element.find(`.dx-column-indicators > .dx-header-filter`);
+        return this.element.find('.dx-column-indicators > .dx-header-filter');
     }
 }
 
@@ -247,7 +247,7 @@ class GroupRow extends DxElement {
         this.widgetName = widgetName;
         this.isFocusedRow = this.element.hasClass(CLASS.focusedRow);
         this.isFocused = this.element.hasClass(CLASS.focused);
-        this.isExpanded = this.element.find(`.${CLASS.commandExpand} .${addWidgetPrefix(this.widgetName, CLASS.groupExpanded)}`).exists
+        this.isExpanded = this.element.find(`.${CLASS.commandExpand} .${addWidgetPrefix(this.widgetName, CLASS.groupExpanded)}`).exists;
     }
 
     getCell(index: number): DataCell {
@@ -315,7 +315,7 @@ export class EditForm extends DxElement {
     }
 
     getItem(id): Selector {
-        return this.form.find(`.${CLASS.textEditorInput}[id*=_${id}]`)
+        return this.form.find(`.${CLASS.textEditorInput}[id*=_${id}]`);
     }
 
     getInvalids(): Selector {
@@ -329,7 +329,7 @@ export default class DataGrid extends Widget {
 
     name: string;
 
-    constructor(id: string, name='dxDataGrid') {
+    constructor(id: string, name = 'dxDataGrid') {
         super(id);
 
         this.name = name;
@@ -339,7 +339,7 @@ export default class DataGrid extends Widget {
 
         this.getGridInstance = ClientFunction(
             () => $(grid())[`${name}`]('instance'),
-            { dependencies: { grid, name }}
+            { dependencies: { grid, name } }
         );
     }
 
@@ -404,7 +404,7 @@ export default class DataGrid extends Widget {
 
     getEditForm(): EditForm {
         const editFormRowClass = this.addWidgetPrefix(CLASS.editFormRow);
-        const element = this.element ? this.element.find(`.${editFormRowClass}`) :  Selector(`.${editFormRowClass}`);
+        const element = this.element ? this.element.find(`.${editFormRowClass}`) : Selector(`.${editFormRowClass}`);
         const buttons = element.find(`.${this.addWidgetPrefix(CLASS.formButtonsContainer)} .${CLASS.button}`);
 
         return new EditForm(element, buttons);
@@ -478,7 +478,7 @@ export default class DataGrid extends Widget {
         const getGridInstance: any = this.getGridInstance;
         return ClientFunction(() => {
             const dataGrid = getGridInstance();
-            const result = dataGrid.getController('validating').getCellValidationResult({ rowKey : dataGrid.getKeyByRowIndex(rowIndex), columnIndex });
+            const result = dataGrid.getController('validating').getCellValidationResult({ rowKey: dataGrid.getKeyByRowIndex(rowIndex), columnIndex });
             return result ? result.status : null;
         }, { dependencies: { getGridInstance, rowIndex, columnIndex } }
         )();
