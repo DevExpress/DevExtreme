@@ -8,5 +8,7 @@ testing/helpers/sinon/*
 *.j.d.ts
 playground/*
 themebuilder/data/metadata/*
-themebuilder-scss/**/*
+themebuilder-scss/dist/*
+themebuilder-scss/coverage/*
+themebuilder-scss/src/data/metadata/*
 js/bundles/dx.custom.js

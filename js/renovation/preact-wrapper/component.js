@@ -122,17 +122,21 @@ export default class PreactWrapper extends DOMComponent {
         }
 
         const template = this._getTemplate(templateOption);
-        return ({ parentRef, ...restProps }) => {
+        return ({ parentRef, data, index }) => {
             useLayoutEffect(() => {
                 const $parent = $(parentRef.current);
                 const $children = $parent.contents();
 
-                let $template = $(template.render({
+                const payload = {
                     container: getPublicElement($parent),
-                    model: restProps,
-                    transclude: canBeAnonymous && templateOption === this._templateManager.anonymousTemplateName,
-                    // TODO index
-                }));
+                    model: data,
+                    transclude: canBeAnonymous && templateOption === this._templateManager.anonymousTemplateName
+                };
+                if(isFinite(index)) {
+                    payload.index = index;
+                }
+
+                let $template = $(template.render(payload));
 
                 if($template.hasClass(TEMPLATE_WRAPPER_CLASS)) {
                     $template = wrapElement($parent, $template);

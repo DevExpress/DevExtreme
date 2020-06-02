@@ -24,6 +24,5 @@
         "src/modules/*",
         "src/data/**/*",
         "src/types/*",
-        "src/metadata/*"
     ]
 }

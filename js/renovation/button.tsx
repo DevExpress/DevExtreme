@@ -98,8 +98,7 @@ export const viewFunction = (viewModel: Button) => {
         {template
                 && (
                 <viewModel.props.template
-                  icon={icon}
-                  text={text}
+                  data={{ icon, text }}
                   parentRef={viewModel.contentRef}
                 />
                 )}

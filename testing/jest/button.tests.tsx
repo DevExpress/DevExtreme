@@ -268,7 +268,7 @@ describe('Button', () => {
     });
 
     describe('template', () => {
-      const template = ({ text }): JSXInternal.Element => <div className="custom-content">{`${text}123`}</div>;
+      const template = ({ data: { text } }): JSXInternal.Element => <div className="custom-content">{`${text}123`}</div>;
 
       it('should render template', () => {
         const button = render({
@@ -280,7 +280,7 @@ describe('Button', () => {
         expect(customRender.exists()).toBe(true);
         expect(customRender.exists('.custom-content')).toBe(true);
 
-        expect(customRender.props().text).toBe('My button');
+        expect(customRender.props().data.text).toBe('My button');
         expect(customRender.text()).toBe('My button123');
       });
 
@@ -300,25 +300,25 @@ describe('Button', () => {
         const button = mount(<Button text="My button" component={template} />);
         let buttonContent = button.find(template);
 
-        expect(buttonContent.props().text).toBe('My button');
+        expect(buttonContent.props().data.text).toBe('My button');
         expect(buttonContent.text()).toBe('My button123');
 
         button.setProps({ text: 'New value' });
         buttonContent = button.find(template);
 
-        expect(buttonContent.props().text).toBe('New value');
+        expect(buttonContent.props().data.text).toBe('New value');
         expect(buttonContent.text()).toBe('New value123');
       });
 
       it('should get original icon prop', () => {
         const button = render({
           icon: 'testicon',
-          component: ({ icon }) => <div>{icon}</div>,
+          component: ({ data: { icon } }) => <div>{icon}</div>,
           text: 'My button',
         });
         const buttonContentChildren = button.find('.dx-button-content').children();
 
-        expect(buttonContentChildren.props().icon).toBe('testicon');
+        expect(buttonContentChildren.props().data.icon).toBe('testicon');
       });
     });
 
