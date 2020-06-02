@@ -29,11 +29,6 @@ class Recurrence {
         this.validator = new RecurrenceValidator();
     }
 
-    dispose() {
-        this.rRuleSet && delete this.rRuleSet;
-        this.rRule && delete this.rRule;
-    }
-
     getDatesByRecurrence(options) {
         const result = [];
         const recurrenceRule = this.getRecurrenceRule(options.rule);
@@ -50,7 +45,7 @@ class Recurrence {
 
         const duration = endDateUtc ? endDateUtc.getTime() - startDateUtc.getTime() : 0;
 
-        this._createRRuleSet(options, startDateUtc);
+        this._initializeRRule(options, startDateUtc);
 
         const minTime = minDateUtc.getTime();
         const leftBorder = this._getLeftBorder(options, minDateUtc, duration);
@@ -63,12 +58,10 @@ class Recurrence {
             }
         });
 
-        this.dispose();
-
         return result;
     }
 
-    _createRRuleSet(options, startDateUtc) {
+    _initializeRRule(options, startDateUtc) {
         const ruleOptions = RRule.parseString(options.rule);
         const firstDayOfWeek = options.firstDayOfWeek;
 
@@ -79,23 +72,26 @@ class Recurrence {
             ruleOptions.wkst = weekDayNumbers[firstDayOfWeek];
         }
 
-        const rRuleSet = new RRuleSet();
-        const rRule = new RRule(ruleOptions);
-
-        rRuleSet.rrule(rRule);
+        this._createRRule(ruleOptions);
 
         if(options.exception) {
             const splitDates = options.exception.split(',');
             const exceptDates = this._getDatesByRecurrenceException(splitDates, startDateUtc);
             for(let i = 0; i < exceptDates.length; i++) {
-                rRuleSet.exdate(this._getRRuleUtcDate(exceptDates[i]));
+                this.rRuleSet.exdate(this._getRRuleUtcDate(exceptDates[i]));
             }
         }
+    }
 
-        this.rRule = rRule;
+    _createRRule(ruleOptions) {
+        this._dispose();
+
+        const rRuleSet = new RRuleSet();
+
         this.rRuleSet = rRuleSet;
+        this.rRule = new RRule(ruleOptions);
 
-        return rRuleSet;
+        this.rRuleSet.rrule(this.rRule);
     }
 
     _getLeftBorder(options, minDateUtc, appointmentDuration) {
@@ -203,6 +199,17 @@ class Recurrence {
         }
 
         return date;
+    }
+
+    _dispose() {
+        if(this.rRuleSet) {
+            delete this.rRuleSet;
+            this.rRuleSet = null;
+        }
+        if(this.rRule) {
+            delete this.rRule;
+            this.rRule = null;
+        }
     }
 
     _getDatesByRecurrenceException(ruleValues, date) {
