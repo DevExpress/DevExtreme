@@ -724,6 +724,47 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
             assert.notOk($rowElement.hasClass('dx-sortable-source-hidden'), 'element has not source-hidden class');
         });
     });
+
+    // T893965
+    QUnit.test('dropFeedback should be switched to \'indicate\' for msie', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.rowDragging.dropFeedbackMode = 'push';
+
+        const rowsView = this.createRowsView();
+        rowsView.render($testElement);
+
+        // act
+        const dropFeedbackMode = rowsView._sortable.option('rowDragging.dropFeedbackMode');
+
+        // assert
+        if(browser.msie) {
+            assert.equal(dropFeedbackMode, 'indicate', 'dropFeedback mode was switched');
+        } else {
+            assert.equal(dropFeedbackMode, 'push', 'dropFeedback mode was not switched');
+        }
+    });
+
+    // T893965
+    QUnit.test('dropFeedback should be switched to \'indicate\' for msie if set by \'option\' method', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        const rowsView = this.createRowsView();
+        rowsView.render($testElement);
+
+        // act
+        this.dataGrid.option('rowDragging.dropFeedbackMode', 'push');
+        const dropFeedbackMode = rowsView._sortable.option('rowDragging.dropFeedbackMode');
+
+        // assert
+        if(browser.msie) {
+            assert.equal(dropFeedbackMode, 'indicate', 'dropFeedback mode was switched');
+        } else {
+            assert.equal(dropFeedbackMode, 'push', 'dropFeedback mode was not switched');
+        }
+    });
 });
 
 QUnit.module('Handle', $.extend({}, moduleConfig, {
