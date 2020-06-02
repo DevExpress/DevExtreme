@@ -223,7 +223,7 @@ exports.DataProvider = Class.inherit({
 
         // if(isExcelJS) {
         result.cellSourceData = item;
-        result.cellSourceData.area = this._getArea(item);
+        result.cellSourceData.area = this._getArea(item, cellIndex);
         result.cellSourceData.rowIndex = rowIndex;
         result.cellSourceData.columnIndex = cellIndex;
         // }
@@ -242,31 +242,9 @@ exports.DataProvider = Class.inherit({
             return 'data';
         }
 
-        if(this._findByPath(this._options.rowsArea, item.path)) {
-            return 'row';
-        }
-
-        if(this._findByPath(this._options.columnsArea, item.path)) {
-            return 'column';
-        }
-
-        return 'filter';
-    },
-
-    _findByPath(container, path) {
-        if(container) {
-            const columns = container.getData();
-            for(let i = 0; i < columns.length; i++) {
-                const column = columns[i];
-                for(let j = 0; j < column.length; j++) {
-                    if(JSON.stringify(column[j].path) === JSON.stringify(path)) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
+        return this._options.columns[cellIndex].dataIndex !== undefined
+            ? 'column'
+            : 'row';
     },
 
     getStyles: function() {
