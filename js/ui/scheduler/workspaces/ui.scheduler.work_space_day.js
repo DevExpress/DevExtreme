@@ -36,11 +36,7 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
     }
 
     _renderDateHeader() {
-        if(this.option('intervalCount') === 1) {
-            return;
-        }
-
-        return super._renderDateHeader();
+        return this.option('intervalCount') === 1 ? null : super._renderDateHeader();
     }
 
     _getRightCell(isMultiSelection) {
