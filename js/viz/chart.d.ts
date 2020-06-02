@@ -1652,7 +1652,7 @@ export interface dxChartCommonAxisSettingsLabel {
      * @type Enums.RelativePosition | Enums.Position
      * @default 'outside'
      * @prevFileNamespace DevExpress.viz
-     * @public
+     * @hidden
      */
     position?: 'inside' | 'outside' | 'bottom' | 'left' | 'right' | 'top';
     /**
