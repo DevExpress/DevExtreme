@@ -318,15 +318,39 @@ const Lookup = DropDownList.inherit({
     _init: function() {
         this.callBase();
 
-        this._createScrollAction();
+        this._initActions();
     },
 
-    _createScrollAction: function() {
+    _initActions() {
+        this.callBase();
+
+        this._initScrollAction();
+        this._initPageLoadingAction();
+        this._initPullRefreshAction();
+    },
+
+    _initPageLoadingAction: function() {
+        this._pageLoadingAction = this._createActionByOption('onPageLoading');
+    },
+
+    _initPullRefreshAction: function() {
+        this._pullRefreshAction = this._createActionByOption('onPullRefresh');
+    },
+
+    _initScrollAction: function() {
         this._scrollAction = this._createActionByOption('onScroll');
     },
 
     _scrollHandler: function(e) {
         this._scrollAction(e);
+    },
+
+    _pullRefreshHandler: function(e) {
+        this._pullRefreshAction(e);
+    },
+
+    _pageLoadingHandler: function(e) {
+        this._pageLoadingAction(e);
     },
 
     _initTemplates: function() {
@@ -531,8 +555,10 @@ const Lookup = DropDownList.inherit({
     },
 
     _renderPopup: function() {
-        if(this.option('usePopover')) {
-            if(this.option('_scrollToSelectedItemEnabled') && !this.option('itemCenteringEnabled') || !this.option('fullScreen')) {
+        if(this.option('usePopover') && !this.option('fullScreen')) {
+            if(this.option('_scrollToSelectedItemEnabled') && this.option('itemCenteringEnabled')) {
+                this.callBase();
+            } else {
                 this._renderPopover();
             }
         } else {
@@ -836,8 +862,8 @@ const Lookup = DropDownList.inherit({
             refreshingText: this.option('refreshingText'),
             pageLoadingText: this.option('pageLoadingText'),
             onScroll: this._scrollHandler.bind(this),
-            onPullRefresh: this.option('onPullRefresh'),
-            onPageLoading: this.option('onPageLoading'),
+            onPullRefresh: this._pullRefreshHandler.bind(this),
+            onPageLoading: this._pageLoadingHandler.bind(this),
             pageLoadMode: this.option('pageLoadMode'),
             nextButtonText: this.option('nextButtonText'),
             _keyboardProcessor: this._listKeyboardProcessor,
@@ -977,21 +1003,25 @@ const Lookup = DropDownList.inherit({
             case 'popupHeight':
                 this._setPopupOption('popupHeight', value === 'auto' ? this.initialOption('popupHeight') : value);
                 break;
+            case 'onPageLoading':
+                this._initPageLoadingAction();
+                break;
+            case 'onPullRefresh':
+                this._initPullRefreshAction();
+                break;
             case 'pullRefreshEnabled':
             case 'useNativeScrolling':
             case 'pullingDownText':
             case 'pulledDownText':
             case 'refreshingText':
             case 'pageLoadingText':
-            case 'onPullRefresh':
-            case 'onPageLoading':
             case 'nextButtonText':
             case 'grouped':
             case 'groupTemplate':
                 this._setListOption(name);
                 break;
             case 'onScroll':
-                this._createScrollAction();
+                this._initScrollAction();
                 break;
             case 'pageLoadMode':
                 this._setListOption('pageLoadMode', this.option('pageLoadMode'));

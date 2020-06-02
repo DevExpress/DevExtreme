@@ -6,6 +6,7 @@ import styleUtils from '../../core/utils/style';
 import { isDefined, isNumeric, isString } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
+import { getBoundingRect } from '../../core/utils/position';
 import { isEmpty } from '../../core/utils/string';
 import { getDefaultAlignment } from '../../core/utils/position';
 import { compileGetter } from '../../core/utils/data';
@@ -420,10 +421,15 @@ module.exports = {
 
                 _appendEmptyRow: function($table, $emptyRow, location) {
                     const $tBodies = this._getBodies($table);
-                    const $container = $tBodies.length && !$emptyRow.is('tbody') ? $tBodies : $table;
+                    const isTableContainer = !$tBodies.length || $emptyRow.is('tbody');
+                    const $container = isTableContainer ? $table : $tBodies;
 
                     if(location === 'top') {
                         $container.first().prepend($emptyRow);
+                        if(isTableContainer) {
+                            const $colgroup = $container.children('colgroup');
+                            $container.prepend($colgroup);
+                        }
                     } else {
                         $container.last().append($emptyRow);
                     }
@@ -458,7 +464,7 @@ module.exports = {
                     const $rowElements = $tableElement.children('tbody').children().not('.dx-virtual-row').not('.' + FREE_SPACE_CLASS);
 
                     return $rowElements.toArray().reduce(function(sum, row) {
-                        return sum + row.getBoundingClientRect().height;
+                        return sum + getBoundingRect(row).height;
                     }, 0);
                 },
 

@@ -115,8 +115,6 @@ class Button extends Widget {
                         this._waitForValidationCompleting(complete);
                     }
                 }
-            } else {
-                this._needValidate = true;
             }
             this._validationStatus !== 'valid' && e.preventDefault();
             e.stopPropagation();
@@ -355,7 +353,7 @@ class Button extends Widget {
             this._validationStatus = result.status;
             this._setDisabled(false);
             this._validationStatus === 'valid' && this._$submitInput.get(0).click();
-
+            this._needValidate = true;
             return result;
         });
     }

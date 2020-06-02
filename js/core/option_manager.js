@@ -4,7 +4,6 @@ import typeUtils from './utils/type';
 import { noop } from './utils/common';
 import { extend } from './utils/extend';
 
-const cachedDeprecateNames = [];
 const cachedGetters = {};
 const cachedSetters = {};
 
@@ -16,6 +15,7 @@ export class OptionManager {
         this._changingCallback;
         this._changedCallback;
         this._deprecatedCallback;
+        this._cachedDeprecateNames = [];
     }
 
     _notifyDeprecated(option) {
@@ -102,23 +102,20 @@ export class OptionManager {
 
     _normalizeName(name) {
         if(!name) return;
-        let deprecate;
-        if(!cachedDeprecateNames.length) {
-            for(const optionName in this._deprecatedOptions) {
-                cachedDeprecateNames.push(optionName);
-            }
-        }
-        for(let i = 0; i < cachedDeprecateNames.length; i++) {
-            if(cachedDeprecateNames[i] === name) {
-                deprecate = this._deprecatedOptions[name];
-                break;
-            }
-        }
-        if(deprecate) {
-            this._notifyDeprecated(name);
 
-            if(deprecate.alias) {
-                name = deprecate.alias;
+        if(!this._cachedDeprecateNames.length) {
+            for(const optionName in this._deprecatedOptions) {
+                this._cachedDeprecateNames.push(optionName);
+            }
+        }
+
+        for(let i = 0; i < this._cachedDeprecateNames.length; i++) {
+            if(this._cachedDeprecateNames[i] === name) {
+                const deprecate = this._deprecatedOptions[name];
+                if(deprecate) {
+                    this._notifyDeprecated(name);
+                    return deprecate.alias || name;
+                }
             }
         }
 

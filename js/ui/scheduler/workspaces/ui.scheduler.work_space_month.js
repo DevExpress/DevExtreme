@@ -3,6 +3,7 @@ const noop = require('../../../core/utils/common').noop;
 const registerComponent = require('../../../core/component_registrator');
 const SchedulerWorkSpace = require('./ui.scheduler.work_space.indicator');
 const dateUtils = require('../../../core/utils/date');
+const getBoundingRect = require('../../../core/utils/position').getBoundingRect;
 const dateLocalization = require('../../../localization/date');
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
@@ -80,7 +81,7 @@ const SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         const DAYS_IN_WEEK = 7;
 
         let averageWidth = 0;
-        this._getCells().slice(0, DAYS_IN_WEEK).each((index, element) => averageWidth += element.getBoundingClientRect().width);
+        this._getCells().slice(0, DAYS_IN_WEEK).each((index, element) => averageWidth += getBoundingRect(element).width);
 
         return averageWidth / DAYS_IN_WEEK;
     },

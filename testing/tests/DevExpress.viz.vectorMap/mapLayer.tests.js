@@ -227,6 +227,7 @@ QUnit.test('Set options with data, load error', function(assert) {
 
     const DataSource = vizMocks.stubClass(dataSourceModule.DataSource);
     const ds = new DataSource();
+    ds.store = sinon.stub().returns({ _loadMode: '' });
 
     this.layer.setOptions({
         dataSource: ds

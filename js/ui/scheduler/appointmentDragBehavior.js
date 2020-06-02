@@ -2,6 +2,7 @@ import $ from '../../core/renderer';
 import Draggable from '../draggable';
 import translator from '../../animation/translator';
 import { extend } from '../../core/utils/extend';
+import { getBoundingRect } from '../../core/utils/position';
 import { LIST_ITEM_DATA_KEY } from './constants';
 
 const FIXED_CONTAINER_PROP_NAME = 'fixedContainer';
@@ -29,8 +30,8 @@ export default class AppointmentDragBehavior {
         const appointmentContainer = this.appointments._getAppointmentContainer(isAllDay);
         const dragAndDropContainer = this.appointments.option(FIXED_CONTAINER_PROP_NAME);
 
-        const appointmentContainerRect = appointmentContainer[0].getBoundingClientRect();
-        const dragAndDropContainerRect = dragAndDropContainer[0].getBoundingClientRect();
+        const appointmentContainerRect = getBoundingRect(appointmentContainer[0]);
+        const dragAndDropContainerRect = getBoundingRect(dragAndDropContainer[0]);
 
         return {
             left: appointmentContainerRect.left - dragAndDropContainerRect.left,
@@ -95,6 +96,7 @@ export default class AppointmentDragBehavior {
                 options.onDragEnd(e);
                 if(e.fromComponent !== e.toComponent) {
                     appointmentDragging.onRemove && appointmentDragging.onRemove(e);
+                    this.appointments.notifyObserver('removeDroppableCellClass');
                 }
             }
         };

@@ -248,6 +248,18 @@ QUnit.module('Header Filter dataController', {
         // assert
         assert.deepEqual(items, [{ text: 'test1', value: 1 }, { text: 'test2', value: 2 }]);
     });
+
+    // T891627
+    QUnit.test('Filter should be correct when first column with caption = "!" and second column with filterType = "exclude"', function(assert) {
+        // arrange, act
+        this.setupDataGrid({
+            columns: [{ dataField: 'field1', caption: '!' }, { dataField: 'field2', filterType: 'exclude', filterValues: ['test'] }],
+            dataSource: []
+        });
+
+        // assert
+        assert.deepEqual(this.getCombinedFilter(), ['!', [this.columnOption('field2').selector, '=', 'test']], 'combined filter');
+    });
 });
 
 QUnit.module('Header Filter', {

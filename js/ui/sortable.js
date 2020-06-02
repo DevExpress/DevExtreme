@@ -4,8 +4,10 @@ import { extend } from '../core/utils/extend';
 import Draggable from './draggable';
 import { getPublicElement } from '../core/utils/dom';
 import { getWindow } from '../core/utils/window';
+import { getBoundingRect } from '../core/utils/position';
 import translator from '../animation/translator';
 import fx from '../animation/fx';
+import { Deferred } from '../core/utils/deferred';
 
 const SORTABLE = 'dxSortable';
 
@@ -200,9 +202,11 @@ const Sortable = Draggable.inherit({
             }
 
             if(sourceDraggable === this) {
-                this._fireReorderEvent(sourceEvent);
+                return this._fireReorderEvent(sourceEvent);
             }
         }
+
+        return (new Deferred()).resolve();
     },
 
     dragMove: function(e) {
@@ -577,7 +581,7 @@ const Sortable = Draggable.inherit({
         }
 
         if(scrollContainer) {
-            const clientRect = scrollContainer.getBoundingClientRect();
+            const clientRect = getBoundingRect(scrollContainer);
             const isVerticalOrientation = this._isVerticalOrientation();
             const start = isVerticalOrientation ? 'top' : 'left';
             const end = isVerticalOrientation ? 'bottom' : 'right';
@@ -767,6 +771,8 @@ const Sortable = Draggable.inherit({
         const args = this._getEventArgs(sourceEvent);
 
         this._getAction('onReorder')(args);
+
+        return args.promise || (new Deferred()).resolve();
     }
 });
 

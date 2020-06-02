@@ -381,6 +381,16 @@ QUnit.module('common', moduleConfig, () => {
 
         assert.equal(instance.option('displayValue'), '12', 'displayValue option has been changed');
     });
+
+    QUnit.test('displayValueFormatter should be called once (T883129)', function(assert) {
+        const spy = sinon.spy();
+        new DropDownBox(this.$element, {
+            value: 1,
+            displayValueFormatter: spy
+        });
+
+        assert.strictEqual(spy.callCount, 1, 'value has been applied');
+    });
 });
 
 QUnit.module('popup options', moduleConfig, () => {
@@ -654,6 +664,21 @@ QUnit.module('popup options', moduleConfig, () => {
                 DropDownBox.realDevice.mac = originalRealDeviceIsMac;
             }
         });
+    });
+
+    QUnit.test('popup should be positioned with the correct popupPosition offset', function(assert) {
+        const vOffset = 2;
+        const instance = new DropDownBox(this.$element, {
+            opened: true,
+            width: 100,
+            popupPosition: { offset: { v: vOffset } }
+        });
+
+        const { bottom: elementBottom } = this.$element.get(0).getBoundingClientRect();
+        const { top: popupTop } = $(instance.content()).get(0).getBoundingClientRect();
+
+        const actualOffset = Math.round(popupTop) - Math.round(elementBottom);
+        assert.strictEqual(actualOffset, vOffset, 'popup offset is correct');
     });
 });
 

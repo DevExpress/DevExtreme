@@ -352,6 +352,7 @@ module.exports = {
                  * @type_function_param1_field8 fromData:any
                  * @type_function_param1_field9 toData:any
                  * @type_function_param1_field10 dropInsideItem:boolean
+                 * @type_function_param1_field11 promise:Promise<void>
                  */
             }
         };

@@ -690,7 +690,6 @@ module.exports = {
                         dataType: 'boolean',
                         lookup: null,
                         value: options.value,
-                        tabIndex: -1,
                         setValue: function(value, e) {
                             if(e && e.event && e.event.type === 'keydown') {
                                 eventsEngine.trigger(container, clickEvent.name, e);

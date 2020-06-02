@@ -1003,7 +1003,7 @@ var Overlay = Widget.inherit({
             const originalEvent = e.originalEvent.originalEvent;
             e._cancelPreventDefault = true;
 
-            if(originalEvent && originalEvent.type !== 'mousemove') {
+            if(originalEvent && originalEvent.type !== 'mousemove' && e.cancelable !== false) {
                 e.preventDefault();
             }
         });
@@ -1472,8 +1472,12 @@ var Overlay = Widget.inherit({
     },
 
     repaint: function() {
-        this._renderGeometry();
-        domUtils.triggerResizeEvent(this._$content);
+        if(this._contentAlreadyRendered) {
+            this._renderGeometry();
+            domUtils.triggerResizeEvent(this._$content);
+        } else {
+            this.callBase();
+        }
     }
 });
 

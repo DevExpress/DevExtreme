@@ -64,10 +64,6 @@
 
 .dx-texteditor-input-container {
     .dx-editor-content-wrapper();
-
-    .dx-texteditor-collapsed & {
-        flex-basis: 0;
-    }
 }
 
 .dx-texteditor-input {
@@ -80,6 +76,10 @@
 
     &:-webkit-autofill + .dx-placeholder {
         display: none;
+    }
+
+    &:-moz-ui-invalid {
+        box-shadow: none;
     }
 }
 

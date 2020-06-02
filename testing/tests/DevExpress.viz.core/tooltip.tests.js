@@ -580,6 +580,14 @@ QUnit.module('Manipulation', {
     }
 });
 
+QUnit.test('Tug plaque content for shadow (T891490)', function(assert) {
+    this.tooltip.update(this.options);
+
+    this.tooltip.show({ valueText: 'some-text' }, { x: 100, y: 200, offset: 300 });
+
+    assert.equal(this.tooltip.plaque._root.append.callCount, 2, 'Plaque tugged after render');
+});
+
 QUnit.test('Show preparations. W/o customize, empty text', function(assert) {
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
