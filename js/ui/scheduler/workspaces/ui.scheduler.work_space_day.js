@@ -1,9 +1,9 @@
 import registerComponent from '../../../core/component_registrator';
-import SchedulerWorkSpace from './ui.scheduler.work_space_vertical';
+import SchedulerWorkSpaceVertical from './ui.scheduler.work_space_vertical';
 
 const DAY_CLASS = 'dx-scheduler-work-space-day';
 
-class SchedulerWorkSpaceDay extends SchedulerWorkSpace {
+class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
     _getElementClass() {
         return DAY_CLASS;
     }
