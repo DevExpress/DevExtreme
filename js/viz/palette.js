@@ -1,6 +1,5 @@
 import { normalizeEnum } from './core/utils';
 import { extend } from '../core/utils/extend';
-import errors from '../core/errors';
 
 const _floor = Math.floor;
 const _ceil = Math.ceil;

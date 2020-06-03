@@ -2,8 +2,6 @@ import $ from 'jquery';
 import Color from 'color';
 import { registerPalette, generateColors, getPalette, createPalette, getDiscretePalette, _DEBUG_palettes, currentPalette, getGradientPalette, getAccentColor } from 'viz/palette';
 
-import errors from 'core/errors';
-
 const environment = {
     beforeEach: function() {
         this.registerPalette = registerPalette;
