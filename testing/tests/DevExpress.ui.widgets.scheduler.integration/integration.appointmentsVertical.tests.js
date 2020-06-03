@@ -13,7 +13,7 @@ import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
 
-import { SchedulerTestWrapper } from './helpers.js';
+import { SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
 
 const createInstance = function(options) {
     const instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');

@@ -10,7 +10,6 @@ QUnit.testStart(function() {
 require('common.css!');
 require('generic_light.css!');
 
-
 const noop = require('core/utils/common').noop;
 const errors = require('ui/widget/ui.errors');
 const config = require('core/config');
