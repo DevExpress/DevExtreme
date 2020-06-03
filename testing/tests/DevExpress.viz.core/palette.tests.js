@@ -201,20 +201,7 @@ QUnit.test('Disposing', function(assert) {
 });
 
 QUnit.test('Palette is predefined', function(assert) {
-    assert.strictEqual(this.createPalette('default', { type: 'simpleSet' }).getNextColor(), this.palettes['default'].simpleSet[0], 'default');
     assert.strictEqual(this.createPalette('Soft Pastel', { type: 'simpleSet' }).getNextColor(), this.palettes['soft pastel'].simpleSet[0], 'Soft Pastel');
-});
-
-QUnit.test('Throw warning when default palette name is used', function(assert) {
-    sinon.spy(errors, 'log');
-
-    try {
-        this.createPalette('default', { type: 'simpleSet' });
-
-        assert.deepEqual(errors.log.lastCall.args, ['W0016', '"palette"', 'Default', '18.1', 'Use the "Office" value instead.']);
-    } finally {
-        errors.log.restore();
-    }
 });
 
 QUnit.test('Resolve theme palette', function(assert) {
@@ -435,7 +422,6 @@ QUnit.test('palette is not valid', function(assert) {
 });
 
 QUnit.test('palette is predefined', function(assert) {
-    assert.strictEqual(this.getDiscretePalette('default', 2).getColor(0), this.palettes['default'].gradientSet[0], 'default');
     assert.strictEqual(this.getDiscretePalette('Soft Pastel', 2).getColor(0), this.palettes['soft pastel'].gradientSet[0], 'Soft Pastel');
     assert.strictEqual(this.getDiscretePalette('HARMONY LIGHT', 2).getColor(0), this.palettes['harmony light'].gradientSet[0], 'Harmony Light');
 });

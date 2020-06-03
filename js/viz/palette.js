@@ -27,8 +27,6 @@ const palettes = {
         accentColor: '#1db2f5'
     },
 
-    'default': officePalette, // deprecated in 18.1
-
     'office': officePalette,
 
     'harmony light': {
@@ -134,7 +132,7 @@ export function generateColors(palette, count, options = { keepLastColorInEnd: f
 
 export function getPalette(palette, parameters) {
     parameters = parameters || {};
-    palette = selectPaletteOnSeniority(palette, parameters.themeDefault);
+    palette = palette || (currentPaletteName === undefined ? parameters.themeDefault : currentPalette());
 
     let result;
     const type = parameters.type;
@@ -517,16 +515,6 @@ export function getGradientPalette(source, themeDefaultPalette) {
             return 0 <= ratio && ratio <= 1 ? color1.blend(color2, ratio).toHex() : null;
         }
     };
-}
-
-function selectPaletteOnSeniority(source, themeDefaultPalette) {
-    const result = source || (currentPaletteName === undefined ? themeDefaultPalette : currentPalette());
-
-    if(result === 'default') {
-        errors.log('W0016', '"palette"', 'Default', '18.1', 'Use the "Office" value instead.');
-    }
-
-    return result;
 }
 
 ///#DEBUG
