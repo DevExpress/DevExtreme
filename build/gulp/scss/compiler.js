@@ -5,7 +5,7 @@ const gulp = require('gulp');
 const functions = require('../gulp-data-uri').sassFunctions;
 const cleanCss = require('gulp-clean-css');
 const autoPrefix = require('gulp-autoprefixer');
-const cleanCssOptions = require('../../../themebuilder/modules/clean-css-options');
+const cleanCssOptions = require('../../../themebuilder-scss/src/data/clean-css-options.json');
 const fiber = require('fibers');
 
 function compile() {
