@@ -713,10 +713,10 @@ module.exports = {
                     }
 
                     if(item1.rowType === 'group' || item1.rowType === 'groupFooter') {
-                        const expandedMatches = item1.isExpanded === item2.isExpanded;
+                        const expandedMatch = item1.isExpanded === item2.isExpanded;
                         const summaryCellsMatch = JSON.stringify(item1.summaryCells) === JSON.stringify(item2.summaryCells);
-                        const continuationMatches = typeUtils.isDefined(item1.data) && typeUtils.isDefined(item2.data) ? item1.data.isContinuation === item2.data.isContinuation : true;
-                        if(!expandedMatches || !summaryCellsMatch || !continuationMatches) {
+                        const continuationMatch = typeUtils.isDefined(item1.data) && typeUtils.isDefined(item2.data) ? item1.data.isContinuation === item2.data.isContinuation : true;
+                        if(!expandedMatch || !summaryCellsMatch || !continuationMatch) {
                             return false;
                         }
                     }
