@@ -136,7 +136,7 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
                 }
             });
 
-            const assertText = `done button visible should be equal = ${allowUpdatingValue}`;
+            const assertText = `done button visibility should be equal to = ${allowUpdatingValue}`;
             for(let i = 0; i < scheduler.appointments.getAppointmentCount(); i++) {
                 scheduler.appointments.dblclick(i);
                 assert.equal(scheduler.appointmentPopup.getDoneButton().length > 0, allowUpdatingValue, assertText);
