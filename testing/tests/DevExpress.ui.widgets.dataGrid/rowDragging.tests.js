@@ -736,7 +736,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         rowsView.render($testElement);
 
         // act
-        const dropFeedbackMode = rowsView._sortable.option('rowDragging.dropFeedbackMode');
+        const dropFeedbackMode = rowsView._sortable.option('dropFeedbackMode');
 
         // assert
         if(browser.msie) {
@@ -747,16 +747,25 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
     });
 
     // T893965
-    QUnit.test('dropFeedback should be switched to \'indicate\' for msie if set by \'option\' method', function(assert) {
+    QUnit.test('dropFeedback should be switched to \'indicate\' for msie if set at runtime', function(assert) {
         // arrange
         const $testElement = $('#container');
+
+        this.options.rowDragging = {
+            allowReordering: false
+        };
 
         const rowsView = this.createRowsView();
         rowsView.render($testElement);
 
         // act
-        this.dataGrid.option('rowDragging.dropFeedbackMode', 'push');
-        const dropFeedbackMode = rowsView._sortable.option('rowDragging.dropFeedbackMode');
+        this.options.rowDragging = {
+            dropFeedbackMode: 'push',
+            allowReordering: true
+        };
+        rowsView.optionChanged({ name: 'rowDragging' });
+
+        const dropFeedbackMode = rowsView._sortable.option('dropFeedbackMode');
 
         // assert
         if(browser.msie) {
