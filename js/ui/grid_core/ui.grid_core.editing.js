@@ -250,7 +250,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     }
 
                     if(!isRowEditMode(that) && !that._editCellInProgress) {
-                        const isEditorPopup = checkEditorPopup($target) || checkEditorPopup($pointerDownTarget);
+                        const isEditorPopup = checkEditorPopup($target) || checkEditorPopup(targetComponent?.$element());
                         const isDomElement = !!$target.closest(getWindow().document).length;
                         const isAnotherComponent = targetComponent && targetComponent !== that.component;
                         const isAddRowButton = !!$target.closest(`.${that.addWidgetPrefix(ADD_ROW_BUTTON_CLASS)}`).length;
