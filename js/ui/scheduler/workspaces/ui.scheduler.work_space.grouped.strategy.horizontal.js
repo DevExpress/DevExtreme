@@ -150,12 +150,21 @@ const HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     shiftIndicator: function($indicator, height, rtlOffset, i) {
-        const offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(i - 1, 0) * i + this._workSpace.getIndicatorOffset(i) + i;
+        const groupByDay = this._workSpace.option('groupByDate');
+        let offset = 0;
+
+        if(groupByDay) {
+            offset = this._workSpace.getIndicatorOffset(0) * this._workSpace._getGroupCount() + this._workSpace.getRoundedCellWidth(i - 1, 0) * i;
+        } else {
+            offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(i - 1, 0) * i + this._workSpace.getIndicatorOffset(i) + i;
+        }
+
         const horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
 
         $indicator.css('left', horizontalOffset);
         $indicator.css('top', height);
     },
+
 
     getShaderOffset: function(i, width) {
         const offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(i - 1) * i;
