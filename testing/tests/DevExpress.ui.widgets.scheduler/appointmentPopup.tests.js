@@ -148,6 +148,37 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
                 assert.equal(scheduler.appointmentPopup.getDoneButton().length > 0, allowUpdatingValue, assertText);
             });
         });
+
+        QUnit.test('toolbar should re-render after change editing option', function(assert) {
+            const scheduler = createWrapper({
+                dataSource: [],
+                views: ['week'],
+                currentView: 'week',
+                currentDate: new Date(2017, 4, 25),
+                editing: {
+                    allowUpdating: true
+                }
+            });
+
+            const dataObj = {
+                text: 'a',
+                startDate: new Date(2015, 5, 15, 10),
+                endDate: new Date(2015, 5, 15, 11)
+            };
+
+            scheduler.instance.showAppointmentPopup(dataObj);
+            assert.ok(scheduler.appointmentPopup.getDoneButton().length > 0, '"done" button should be visible');
+
+            scheduler.option('editing', {
+                allowUpdating: false
+            });
+
+            scheduler.instance.showAppointmentPopup(dataObj);
+            assert.notOk(scheduler.appointmentPopup.getDoneButton().length > 0, '"done" button shouldn\'t visible after set allowUpdating option to false');
+
+            scheduler.instance.showAppointmentPopup();
+            assert.ok(scheduler.appointmentPopup.getDoneButton().length > 0, '"done" button should be visible in case \'create new appointment\'');
+        });
     });
 
     QUnit.test('showAppointmentPopup method should be work properly with no argument', function(assert) {

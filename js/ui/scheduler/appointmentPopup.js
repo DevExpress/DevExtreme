@@ -47,16 +47,18 @@ export default class AppointmentPopup {
         };
     }
 
-    show(data = {}, showButtons, processTimeZone) {
+    show(data = {}, isDoneButtonVisible, processTimeZone) {
         this.state.appointment.data = data;
         this.state.appointment.processTimeZone = processTimeZone;
 
         if(!this._popup) {
-            const popupConfig = this._createPopupConfig(showButtons);
+            const popupConfig = this._createPopupConfig();
             this._popup = this._createPopup(popupConfig);
         } else {
             this._updateForm();
         }
+
+        this._popup.option('toolbarItems', this._createPopupToolbarItems(isDoneButtonVisible));
         this._popup.show();
     }
 
@@ -89,11 +91,10 @@ export default class AppointmentPopup {
         return this.scheduler._createComponent(popupElement, Popup, options);
     }
 
-    _createPopupConfig(isDoneButtonVisible) {
+    _createPopupConfig() {
         return {
             height: 'auto',
             maxHeight: '100%',
-            toolbarItems: this._createPopupToolbarItems(isDoneButtonVisible),
             showCloseButton: false,
             showTitle: false,
             onHiding: () => { this.scheduler.focus(); },
