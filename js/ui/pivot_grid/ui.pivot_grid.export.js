@@ -112,8 +112,6 @@ exports.ExportMixin = extend({}, exportMixin, {
 
         return new exports.DataProvider({
             items: items,
-            rowsArea: this._rowsArea,
-            columnsArea: this._columnsArea,
             rtlEnabled: this.option('rtlEnabled'),
             dataFields: this.getDataSource().getAreaFields('data'),
             customizeExcelCell: this.option('export.customizeExcelCell'),
@@ -236,7 +234,6 @@ exports.DataProvider = Class.inherit({
         } else {
             result.value = item.value;
         }
-
         return result;
     },
 

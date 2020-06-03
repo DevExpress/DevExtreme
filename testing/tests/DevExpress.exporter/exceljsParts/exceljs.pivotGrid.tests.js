@@ -4,7 +4,7 @@ import ja from 'localization/messages/ja.json!';
 import messageLocalization from 'localization/message';
 import { extend } from 'core/utils/extend';
 import ExcelJS from 'exceljs';
-import ExcelJSTestHelper from './ExcelJSTestHelper.js';
+import { ExcelJSPivotGridTestHelper } from './ExcelJSTestHelper.js';
 import { exportPivotGrid } from 'excel_exporter';
 import { /* MAX_EXCEL_COLUMN_WIDTH, */ _getFullOptions } from 'exporter/exceljs/export_pivot_grid';
 import { initializeDxObjectAssign, clearDxObjectAssign } from './objectAssignHelper.js';
@@ -48,7 +48,7 @@ const moduleConfig = {
     beforeEach: function() {
         this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
         this.customizeCellCallCount = 0;
-        helper = new ExcelJSTestHelper(this.worksheet);
+        helper = new ExcelJSPivotGridTestHelper(this.worksheet);
     },
     after: function() {
         clearDxObjectAssign();
@@ -78,7 +78,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             topLeftCell: topLeftCell,
             customizeCell: (eventArgs) => {
                 if(typeUtils.isDefined(expectedCustomizeCellArgs)) {
-                    helper.checkPivotCustomizeCell(eventArgs, expectedCustomizeCellArgs, context.customizeCellCallCount++);
+                    helper.checkCustomizeCell(eventArgs, expectedCustomizeCellArgs, context.customizeCellCallCount++);
                 }
             }
         };
@@ -100,7 +100,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: null, alignment: undefined }, pivotCell: { value: undefined } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
@@ -143,7 +143,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
@@ -185,7 +185,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [], columnType: 'GT', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
@@ -227,7 +227,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: [], rowType: 'GT', rowspan: 1, text: '1' } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
@@ -278,7 +278,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: 42, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '42' } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
@@ -329,7 +329,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: 42, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '42' } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
@@ -379,7 +379,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
@@ -431,7 +431,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: 2, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a2'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '2' } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
@@ -486,7 +486,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: 3, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'T', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '3' } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 4 }, { row: 3, column: 4 }, topLeft);
@@ -536,7 +536,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
@@ -588,7 +588,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: 2, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A', 'A2'], rowType: 'D', rowspan: 1, text: '2' } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
@@ -644,7 +644,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: 3, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'T', rowspan: 1, text: '3' } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
@@ -703,7 +703,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
@@ -764,7 +764,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: 2, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a2'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A', 'A2'], rowType: 'D', rowspan: 1, text: '2' } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
@@ -808,7 +808,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 2 }, topLeft);
@@ -852,7 +852,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
@@ -899,7 +899,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 2 }, topLeft);
@@ -946,7 +946,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: 2, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [], columnType: 'GT', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['B'], rowType: 'D', rowspan: 1, text: '2' } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
@@ -991,7 +991,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
@@ -1039,7 +1039,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: 2, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['B'], rowType: 'D', rowspan: 1, text: '2' } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
@@ -1087,7 +1087,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
@@ -1138,7 +1138,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: 2, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['b'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['B'], rowType: 'D', rowspan: 1, text: '2' } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
@@ -1193,7 +1193,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
@@ -1252,7 +1252,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
@@ -1308,7 +1308,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: null, alignment: undefined }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a2'], columnType: 'D', dataIndex: 0, dataType: 'number', rowPath: ['B'], rowType: 'D', rowspan: 1, text: '', value: undefined } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
@@ -1377,7 +1377,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [], columnType: 'GT', dataIndex: 0, dataType: 'number', rowPath: [], rowType: 'GT', rowspan: 1, text: '1' } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { keepColumnWidths: false })).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 5, column: 5 }, { row: 5, column: 5 }, topLeft);
@@ -1447,7 +1447,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: 1, alignment: alignLeftTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [], columnType: 'GT', dataIndex: 0, dataType: 'number', rowPath: [], rowType: 'GT', rowspan: 1, text: '1' } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 5, column: 5 }, { row: 5, column: 5 }, topLeft);
@@ -1490,7 +1490,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '$#,##0_);\\($#,##0\\)', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: 'currency', rowPath: ['A'], rowType: 'D', rowspan: 1, text: '$1' } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
@@ -1598,7 +1598,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
                 { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: format.expectedFormat, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: { 'type': format.type, 'precision': expectedPrecision }, rowPath: ['A'], rowType: 'D', rowspan: 1, text: format.expectedText } }
             ]];
 
-            helper._extendExpectedPivotCells(expectedCells, topLeft);
+            helper.extendExpectedCells(expectedCells, topLeft);
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
@@ -1644,7 +1644,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: '1', alignment: alignRightTopNoWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['col1'], columnType: 'D', dataIndex: 0, rowPath: ['row1'], rowType: 'D', rowspan: 1, text: '1', value: 1 } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
@@ -1688,7 +1688,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: '1', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['col1'], columnType: 'D', dataIndex: 0, rowPath: ['row1'], rowType: 'D', rowspan: 1, text: '1', value: 1 } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
@@ -1754,7 +1754,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
                 { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [2019], columnType: 'T', dataIndex: 0, dataType: 'number', rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } }
             ]];
 
-            helper._extendExpectedPivotCells(expectedCells, topLeft);
+            helper.extendExpectedCells(expectedCells, topLeft);
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
@@ -1797,7 +1797,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } }
         ]];
 
-        helper._extendExpectedPivotCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
@@ -1812,7 +1812,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             this.customizeCellCallCount = 0;
             const newTopLeft = { row: topLeft.row + 4, column: topLeft.column + 4 };
-            helper._extendExpectedPivotCells(expectedCells, newTopLeft);
+            helper.extendExpectedCells(expectedCells, newTopLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { topLeftCell: newTopLeft })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 2, column: 2 }, newTopLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn100Pixels], newTopLeft.column);
