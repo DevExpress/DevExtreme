@@ -214,10 +214,20 @@ exports.DataProvider = Class.inherit({
         return style && style.dataType || 'string';
     },
 
-    getCellData: function(rowIndex, cellIndex) {
+    getCellData: function(rowIndex, cellIndex, isExcelJS) {
         const result = {};
         const items = this._options.items;
         const item = items[rowIndex] && items[rowIndex][cellIndex] || {};
+
+        if(isExcelJS) {
+            result.cellSourceData = item;
+            const areaName = this._tryGetAreaName(items, item, rowIndex, cellIndex);
+            if(areaName) {
+                result.cellSourceData.area = areaName;
+            }
+            result.cellSourceData.rowIndex = rowIndex;
+            result.cellSourceData.columnIndex = cellIndex;
+        }
 
         if(this.getCellType(rowIndex, cellIndex) === 'string') {
             result.value = item.text;
@@ -225,6 +235,19 @@ exports.DataProvider = Class.inherit({
             result.value = item.value;
         }
         return result;
+    },
+
+    _tryGetAreaName(items, item, rowIndex, cellIndex) {
+        const columnHeaderSize = items[0][0].rowspan;
+        const rowHeaderSize = items[0][0].colspan;
+
+        if(cellIndex >= rowHeaderSize && rowIndex < columnHeaderSize) {
+            return 'column';
+        } else if(rowIndex >= columnHeaderSize && cellIndex < rowHeaderSize) {
+            return 'row';
+        } else if(isDefined(item.dataIndex)) {
+            return 'data';
+        }
     },
 
     getStyles: function() {
