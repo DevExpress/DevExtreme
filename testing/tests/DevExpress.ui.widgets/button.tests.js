@@ -153,7 +153,7 @@ QUnit.module('options changed callbacks', {
         assert.ok($testElement.parent().hasClass('dx-button'), 'test element is still in button');
     });
 
-    QUnit.test('button with non-string text option value should not rise an error (T893304)', function(assert) {
+    QUnit.test('button with non-string text option value should not raise an error (T893304)', function(assert) {
         assert.expect(0);
 
         try {
