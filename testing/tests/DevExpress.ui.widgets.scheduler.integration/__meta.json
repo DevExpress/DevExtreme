@@ -1,0 +1,5 @@
+{ 
+    "constellation": "ui.scheduler.integration",
+    "explicit": false,
+    "runOnDevices": true
+}
