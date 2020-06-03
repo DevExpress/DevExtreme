@@ -26,13 +26,24 @@ const VerticalCurrentTimeShader = Shader.inherit({
                 this._renderTopShader(this._$shader, shaderHeight, getBoundingRect(this._$container.get(0)).width, 0);
                 this._renderAllDayShader(getBoundingRect(this._$container.get(0)).width, 0);
             } else {
-                for(let i = 0; i < groupCount; i++) {
-                    const shaderWidth = this._getShaderWidth(i);
-                    this._renderTopShader(this._$shader, shaderHeight, shaderWidth, i);
+                const groupByDay = this._workspace.option('groupByDate');
 
-                    this._renderBottomShader(this._$shader, maxHeight - shaderHeight, shaderWidth, i);
+                if(!groupByDay) {
+                    for(let i = 0; i < groupCount; i++) {
+                        const shaderWidth = this._getShaderWidth(i);
+                        this._renderTopShader(this._$shader, shaderHeight, shaderWidth, i);
 
-                    this._renderAllDayShader(shaderWidth, i);
+                        this._renderBottomShader(this._$shader, maxHeight - shaderHeight, shaderWidth, i);
+
+                        this._renderAllDayShader(shaderWidth, i);
+                    }
+                } else {
+                    const shaderWidth = this._getShaderWidth(0);
+                    this._renderTopShader(this._$shader, shaderHeight, shaderWidth * groupCount, 0);
+
+                    this._renderBottomShader(this._$shader, maxHeight - shaderHeight, shaderWidth * groupCount - this._workspace.getCellWidth(), 0);
+
+                    this._renderAllDayShader(shaderWidth * groupCount, 0);
                 }
             }
         }
