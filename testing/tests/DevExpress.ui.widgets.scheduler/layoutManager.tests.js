@@ -15,7 +15,7 @@ import HorizontalMonthLineAppointmentsStrategy from 'ui/scheduler/rendering_stra
 import Color from 'color';
 import dataUtils from 'core/element_data';
 import CustomStore from 'data/custom_store';
-import { SchedulerTestWrapper } from './helpers.js';
+import { SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
 
 const APPOINTMENT_DEFAULT_LEFT_OFFSET = 26;
 

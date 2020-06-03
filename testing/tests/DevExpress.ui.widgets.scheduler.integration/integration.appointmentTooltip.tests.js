@@ -10,8 +10,8 @@ import { DataSource } from 'data/data_source/data_source';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import devices from 'core/devices';
 import dataUtils from 'core/element_data';
-import { createWrapper, initTestMarkup } from './helpers.js';
-import { getSimpleDataArray } from './data.js';
+import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import { getSimpleDataArray } from '../../helpers/scheduler/data.js';
 
 import 'common.css!';
 import 'generic_light.css!';
