@@ -143,9 +143,6 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
                     assert.equal(scheduler.appointmentPopup.getDoneButton().length > 0, allowUpdatingValue, assertText);
                     scheduler.appointmentPopup.clickCancelButton();
                 }
-
-                scheduler.instance.showAppointmentPopup();
-                assert.equal(scheduler.appointmentPopup.getDoneButton().length > 0, allowUpdatingValue, assertText);
             });
         });
 
