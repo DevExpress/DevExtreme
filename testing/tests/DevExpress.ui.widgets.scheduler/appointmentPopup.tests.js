@@ -113,38 +113,40 @@ const moduleConfig = {
 };
 
 QUnit.module('Appointment popup form', moduleConfig, () => {
-    [true, false].forEach(allowUpdatingValue => {
-        const data = [{
-            text: 'Website Re-Design Plan',
-            startDate: new Date(2017, 4, 22, 9, 30),
-            endDate: new Date(2017, 4, 22, 11, 30),
-            disabled: true
-        }, {
-            text: 'Book Flights to San Fran for Sales Trip',
-            startDate: new Date(2017, 4, 22, 12, 0),
-            endDate: new Date(2017, 4, 22, 13, 0),
-        }];
+    QUnit.module('toolbar', () => {
+        [true, false].forEach(allowUpdatingValue => {
+            const data = [{
+                text: 'Website Re-Design Plan',
+                startDate: new Date(2017, 4, 22, 9, 30),
+                endDate: new Date(2017, 4, 22, 11, 30),
+                disabled: true
+            }, {
+                text: 'Book Flights to San Fran for Sales Trip',
+                startDate: new Date(2017, 4, 22, 12, 0),
+                endDate: new Date(2017, 4, 22, 13, 0),
+            }];
 
-        QUnit.test(`done button visibility in case allowUpdatingValue = ${allowUpdatingValue}`, function(assert) {
-            const scheduler = createWrapper({
-                dataSource: data,
-                views: ['week'],
-                currentView: 'week',
-                currentDate: new Date(2017, 4, 25),
-                editing: {
-                    allowUpdating: allowUpdatingValue
+            QUnit.test(`done button visibility in case allowUpdatingValue = ${allowUpdatingValue}`, function(assert) {
+                const scheduler = createWrapper({
+                    dataSource: data,
+                    views: ['week'],
+                    currentView: 'week',
+                    currentDate: new Date(2017, 4, 25),
+                    editing: {
+                        allowUpdating: allowUpdatingValue
+                    }
+                });
+
+                const assertText = `done button visibility should be equal to = ${allowUpdatingValue}`;
+                for(let i = 0; i < scheduler.appointments.getAppointmentCount(); i++) {
+                    scheduler.appointments.dblclick(i);
+                    assert.equal(scheduler.appointmentPopup.getDoneButton().length > 0, allowUpdatingValue, assertText);
+                    scheduler.appointmentPopup.clickCancelButton();
                 }
-            });
 
-            const assertText = `done button visibility should be equal to = ${allowUpdatingValue}`;
-            for(let i = 0; i < scheduler.appointments.getAppointmentCount(); i++) {
-                scheduler.appointments.dblclick(i);
+                scheduler.instance.showAppointmentPopup();
                 assert.equal(scheduler.appointmentPopup.getDoneButton().length > 0, allowUpdatingValue, assertText);
-                scheduler.appointmentPopup.clickCancelButton();
-            }
-
-            scheduler.instance.showAppointmentPopup();
-            assert.equal(scheduler.appointmentPopup.getDoneButton().length > 0, allowUpdatingValue, assertText);
+            });
         });
     });
 
