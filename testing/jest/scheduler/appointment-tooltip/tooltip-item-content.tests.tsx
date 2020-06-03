@@ -34,8 +34,8 @@ describe('DeleteButton', () => {
       })),
       showDeleteButton: true,
       item: {
-        data: 'data',
-        currentData: 'currentData',
+        data: { text: 'data' },
+        currentData: { text: 'currentData' },
         color: 'color',
       },
       index: 0,
@@ -125,8 +125,8 @@ describe('DeleteButton', () => {
     describe('Template', () => {
       const template = ({ model, index }): JSXInternal.Element => (
         <div className="custom-content">
-          <div className="appointment-data">{model.appointmentData}</div>
-          <div className="appointment-targeted-data">{model.appointmentTargetedData}</div>
+          <div className="appointment-data">{model.appointmentData.text}</div>
+          <div className="appointment-targeted-data">{model.targetedAppointmentData.text}</div>
           <div className="index">{index}</div>
         </div>
       );
@@ -185,8 +185,8 @@ describe('DeleteButton', () => {
 
         tree.setProps({
           item: {
-            data: 'newData',
-            currentData: 'newCurrentData',
+            data: { text: 'newData' },
+            currentData: { text: 'newCurrentData' },
           },
           index: 2,
         });
@@ -204,31 +204,41 @@ describe('DeleteButton', () => {
   describe('Getters', () => {
     describe('getCurentData', () => {
       it('should return data if other are undefiend', () => {
-        const appointmentItem = { data: 'data' };
+        const appointmentItem = { data: { text: 'data' } };
         expect(getCurrentData(appointmentItem))
-          .toBe('data');
+          .toBe(appointmentItem.data);
       });
 
       it('should return currentData if settings are undefined', () => {
-        const appointmentItem = { currentData: 'currentData', data: 'data' };
+        const appointmentItem = {
+          currentData: { text: 'currentData' },
+          data: { text: 'data' },
+        };
+
         expect(getCurrentData(appointmentItem))
-          .toBe('currentData');
+          .toBe(appointmentItem.currentData);
       });
 
       it('should return currentData if settings are defined but targetedAppointmentData is undefined', () => {
-        const appointmentItem = { currentData: 'currentData', data: 'data', settings: {} };
+        const appointmentItem = {
+          currentData: { text: 'currentData' },
+          data: { text: 'data' },
+          settings: {},
+        };
+
         expect(getCurrentData(appointmentItem))
-          .toBe('currentData');
+          .toBe(appointmentItem.currentData);
       });
 
       it('should return targetedAppointmentData', () => {
         const appointmentItem = {
-          currentData: 'currentData',
-          data: 'data',
-          settings: { targetedAppointmentData: 'targetedAppointmentData' },
+          currentData: { text: 'currentData' },
+          data: { text: 'data' },
+          settings: { targetedAppointmentData: { text: 'targetedAppointmentData' } },
         };
+
         expect(getCurrentData(appointmentItem))
-          .toBe('targetedAppointmentData');
+          .toBe(appointmentItem.settings.targetedAppointmentData);
       });
     });
 

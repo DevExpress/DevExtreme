@@ -4,8 +4,6 @@ import Marker from '../../../../js/renovation/scheduler/appointment-tooltip/mark
 import { Deferred } from '../../../../js/core/utils/deferred';
 import { MarkerProps } from '../../../../js/renovation/scheduler/appointment-tooltip/marker';
 
-jest.mock('../../../../js/renovation/button.p', () => () => null);
-
 describe('Marker', () => {
   describe('View', () => {
     const render = (props = {}): ReactWrapper => {

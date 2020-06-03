@@ -1,9 +1,9 @@
 import { h } from 'preact';
 import { mount, ReactWrapper } from 'enzyme';
-import DeleteButton from '../../../../js/renovation/scheduler/appointment-tooltip/delete-button.p';
-import Button from '../../../../js/renovation/button.p';
+import DeleteButton from '../../../../js/renovation/scheduler/appointment-tooltip/delete-button';
+import Button, { ButtonProps } from '../../../../js/renovation/button';
 
-jest.mock('../../../../js/renovation/button.p', () => () => null);
+jest.mock('../../../../js/renovation/button', () => () => null);
 
 describe('DeleteButton', () => {
   describe('View', () => {
@@ -11,24 +11,16 @@ describe('DeleteButton', () => {
       window.h = h;
       return mount(<DeleteButton {...props} />).childAt(0);
     };
-    const defaultProps: DeleteButtonProps = {
+    const defaultProps: ButtonProps = {
       onClick: jest.fn(),
     };
 
-    it('should render components correctly', () => {
+    it('should render component correctly', () => {
       const tree = render(defaultProps);
 
-      expect(tree.is('.dx-tooltip-appointment-item-delete-button'))
-        .toBe(true);
-      expect(tree.children())
-        .toHaveLength(1);
-
-      const button = tree.childAt(0);
-      expect(button.exists())
-        .toBe(true);
-      expect(button.type())
+      expect(tree.type())
         .toBe(Button);
-      expect(button.children())
+      expect(tree.children())
         .toHaveLength(0);
     });
 
@@ -41,6 +33,7 @@ describe('DeleteButton', () => {
           icon: 'trash',
           stylingMode: 'text',
           onClick: defaultProps.onClick,
+          className: 'dx-tooltip-appointment-item-delete-button',
         });
     });
   });
