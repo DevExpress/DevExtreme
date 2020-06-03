@@ -4,6 +4,7 @@ import {
 import {
   TOOLTIP_APPOINTMENT_ITEM_MARKER, TOOLTIP_APPOINTMENT_ITEM_MARKER_BODY,
 } from './consts';
+import { DeferredColor, Color } from './types';
 
 export const viewFunction = (viewModel: Marker) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -18,10 +19,8 @@ export const viewFunction = (viewModel: Marker) => (
 
 @ComponentBindings()
 export class MarkerProps {
-  @OneWay() color?: any;
+  @OneWay() color?: DeferredColor;
 }
-
-type Color = string;
 
 @Component({
   defaultOptionRules: null,

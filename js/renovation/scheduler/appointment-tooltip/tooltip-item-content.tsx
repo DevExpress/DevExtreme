@@ -8,12 +8,14 @@ import {
   TOOLTIP_APPOINTMENT_ITEM, TOOLTIP_APPOINTMENT_ITEM_CONTENT,
   TOOLTIP_APPOINTMENT_ITEM_CONTENT_SUBJECT, TOOLTIP_APPOINTMENT_ITEM_CONTENT_DATE,
 } from './consts';
+import { DeferredColor } from './types';
 import Marker from './marker';
 
 type AppointmentItem = {
   data: dxSchedulerAppointment;
   currentData?: dxSchedulerAppointment;
   settings?: AppointmentItemSettings;
+  color?: DeferredColor;
 };
 type AppointmentItemSettings = {
   targetedAppointmentData?: dxSchedulerAppointment;
@@ -78,7 +80,7 @@ export const viewFunction = (viewModel: TooltipItemContent) => {
 
 @ComponentBindings()
 export class TooltipItemContentProps {
-  @OneWay() item?: AppointmentItem;
+  @OneWay() item?: AppointmentItem = { data: {} };
 
   @OneWay() index?: number;
 
@@ -116,11 +118,11 @@ export default class TooltipItemContent extends JSXComponent<TooltipItemContentP
   }
 
   get data(): dxSchedulerAppointment {
-    return this.props?.item.data;
+    return this.props.item!.data;
   }
 
-  get color() {
-    return this.props?.item.color;
+  get color(): DeferredColor | undefined {
+    return this.props.item!.color;
   }
 
   get onDeleteButtonClick(): (e: any) => void {
