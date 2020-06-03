@@ -89,11 +89,11 @@ export default class AppointmentPopup {
         return this.scheduler._createComponent(popupElement, Popup, options);
     }
 
-    _createPopupConfig(doneButtonVisible) {
+    _createPopupConfig(isDoneButtonVisible) {
         return {
             height: 'auto',
             maxHeight: '100%',
-            toolbarItems: this._createPopupToolbarItems(doneButtonVisible),
+            toolbarItems: this._createPopupToolbarItems(isDoneButtonVisible),
             showCloseButton: false,
             showTitle: false,
             onHiding: () => { this.scheduler.focus(); },
@@ -280,11 +280,11 @@ export default class AppointmentPopup {
         }
     }
 
-    _createPopupToolbarItems(doneButtonVisible) {
+    _createPopupToolbarItems(isDoneButtonVisible) {
         const result = [];
         const isIOs = devices.current().platform === 'ios';
 
-        if(doneButtonVisible) {
+        if(isDoneButtonVisible) {
             result.push({
                 shortcut: 'done',
                 options: { text: messageLocalization.format('Done') },
