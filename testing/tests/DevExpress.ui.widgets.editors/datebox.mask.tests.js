@@ -1029,9 +1029,21 @@ module('Options changed', setupModule, () => {
         assert.strictEqual(this.$input.val(), 'October 10 2012', 'date is not changed on mouse wheel');
     });
 
+    test('Value should not contain time after value change if type is "date" when maskBehavior is enabled (T895922)', function(assert) {
+        this.keyboard
+            .focus()
+            .press('down')
+            .change();
+
+        const expectedValue = new Date(2012, 8, 10, 0, 0, 0);
+
+        assert.deepEqual(this.instance.option('value'), expectedValue, 'there is no time in the value');
+    });
+
     test('ValueChanged event should be fired after input clearing undo (T878918)', function(assert) {
         const valueChangedHandler = sinon.spy();
         const date = this.instance.option('value');
+        date.setHours(0, 0, 0, 0);
         this.instance.option('onValueChanged', valueChangedHandler);
 
         this.$input
