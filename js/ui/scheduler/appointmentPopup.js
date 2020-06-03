@@ -89,11 +89,11 @@ export default class AppointmentPopup {
         return this.scheduler._createComponent(popupElement, Popup, options);
     }
 
-    _createPopupConfig(showButtons) {
+    _createPopupConfig(showDoneButton) {
         return {
             height: 'auto',
             maxHeight: '100%',
-            toolbarItems: showButtons ? this._getPopupToolbarItems() : [],
+            toolbarItems: this._createPopupToolbarItems(showDoneButton),
             showCloseButton: false,
             showTitle: false,
             onHiding: () => { this.scheduler.focus(); },
@@ -280,20 +280,24 @@ export default class AppointmentPopup {
         }
     }
 
-    _getPopupToolbarItems() {
+    _createPopupToolbarItems(showDoneButton) {
+        const result = [];
         const isIOs = devices.current().platform === 'ios';
-        return [
-            {
+
+        if(showDoneButton) {
+            result.push({
                 shortcut: 'done',
                 options: { text: messageLocalization.format('Done') },
                 location: TOOLBAR_ITEM_AFTER_LOCATION,
                 onClick: (e) => this._doneButtonClickHandler(e)
-            },
-            {
-                shortcut: 'cancel',
-                location: isIOs ? TOOLBAR_ITEM_BEFORE_LOCATION : TOOLBAR_ITEM_AFTER_LOCATION
-            }
-        ];
+            });
+        }
+        result.push({
+            shortcut: 'cancel',
+            location: isIOs ? TOOLBAR_ITEM_BEFORE_LOCATION : TOOLBAR_ITEM_AFTER_LOCATION
+        });
+
+        return result;
     }
 
     saveChanges(showLoadPanel) {
