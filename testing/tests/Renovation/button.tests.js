@@ -435,7 +435,9 @@ QUnit.module('keyboard navigation', {}, () => {
 
         let clickFired = 0;
 
-        const $element = $('#button').Button();
+        const $element = $('#button').Button({
+            focusStateEnabled: true, // for ios 9 testing
+        });
 
         // NOTE: initialize onClick in constructor doesn't trigger events correctly (dxclick, focusin, etc)
         $element.Button('instance').option('onClick', () => clickFired++);
@@ -453,7 +455,9 @@ QUnit.module('keyboard navigation', {}, () => {
     QUnit.test('arguments on key press', function(assert) {
         const clickHandler = sinon.spy();
 
-        const $element = $('#button').Button();
+        const $element = $('#button').Button({
+            focusStateEnabled: true, // for ios 9 testing
+        });
 
         // NOTE: initialize onClick in constructor doesn't trigger events correctly (dxclick, focusin, etc)
         $element.Button('instance').option('onClick', clickHandler);
