@@ -3,7 +3,7 @@ import translator from 'animation/translator';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import devices from 'core/devices';
-import { initTestMarkup, createWrapper } from './helpers.js';
+import { initTestMarkup, createWrapper } from '../../helpers/scheduler/helpers.js';
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';

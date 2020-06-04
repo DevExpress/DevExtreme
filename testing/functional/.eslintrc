@@ -1,0 +1,11 @@
+{
+    "env": {
+        "node": true,
+        "browser": true,
+        "jquery": true
+    },
+    "globals": {
+        "test": true,
+        "fixture": true
+    }
+}

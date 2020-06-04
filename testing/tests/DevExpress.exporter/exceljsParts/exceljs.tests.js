@@ -5,7 +5,7 @@ import ja from 'localization/messages/ja.json!';
 import messageLocalization from 'localization/message';
 import { extend } from 'core/utils/extend';
 import ExcelJS from 'exceljs';
-import ExcelJSTestHelper from './ExcelJSTestHelper.js';
+import { ExcelJSDataGridTestHelper } from './ExcelJSTestHelper.js';
 import { exportDataGrid } from 'excel_exporter';
 import { MAX_EXCEL_COLUMN_WIDTH, _getFullOptions } from 'exporter/exceljs/export_data_grid';
 import { initializeDxObjectAssign, clearDxObjectAssign } from './objectAssignHelper.js';
@@ -49,7 +49,7 @@ const moduleConfig = {
     beforeEach: function() {
         this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
         this.customizeCellCallCount = 0;
-        helper = new ExcelJSTestHelper(this.worksheet);
+        helper = new ExcelJSDataGridTestHelper(this.worksheet);
     },
     after: function() {
         clearDxObjectAssign();

@@ -58,7 +58,7 @@ function exportPivotGrid(options) {
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 const row = worksheet.getRow(cellRange.from.row + rowIndex);
 
-                _exportRow(rowIndex, columns.length, row, cellRange.from.column, dataProvider, customizeCell, undefined, mergedCells, mergeRanges, /* customizeCell, headerRowCount */ wrapText);
+                _exportRow(rowIndex, columns.length, row, cellRange.from.column, dataProvider, customizeCell, undefined, mergedCells, mergeRanges, wrapText);
 
                 if(rowIndex >= 1) {
                     cellRange.to.row++;
@@ -119,11 +119,11 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
 
     for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
-        const gridCell = cellData.cellSourceData;
+        const pivotCell = cellData.cellSourceData;
 
         const excelCell = row.getCell(startColumnIndex + cellIndex);
-        excelCell.value = cellData.value;
 
+        excelCell.value = cellData.value;
 
         if(isDefined(excelCell.value)) {
             const { alignment: horizontalAlignment, format, dataType } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
@@ -142,7 +142,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
         if(isDefined(customizeCell)) {
             customizeCell({
                 excelCell: excelCell,
-                gridCell: gridCell
+                pivotCell: pivotCell
             });
         }
 

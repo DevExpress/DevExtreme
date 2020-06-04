@@ -1,7 +1,7 @@
 import 'common.css!';
 import 'generic_light.css!';
 
-import { SchedulerTestWrapper, initTestMarkup, createWrapper, isDesktopEnvironment } from './helpers.js';
+import { SchedulerTestWrapper, initTestMarkup, createWrapper, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
 
 import $ from 'jquery';
 import devices from 'core/devices';

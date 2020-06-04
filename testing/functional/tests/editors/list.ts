@@ -154,7 +154,7 @@ test('Grouped List with nested List should able to reorder items (T845082)', asy
     await t
         .expect(group.getItem(0).text).eql('value11')
         .dragToElement(group.getItem().reorderHandle, group.getItem(1).element)
-        .expect(group.getItem(1).text).eql('value11')
+        .expect(group.getItem(1).text).eql('value11');
 });
 
 fixture `List T815151`
