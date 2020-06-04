@@ -11,7 +11,7 @@ import objectUtils from '../../core/utils/object';
 import arrayUtils from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import { getPublicElement } from '../../core/element';
-import { getRecurrence } from './utils.recurrence';
+import { getRecurrenceProcessor } from './utils.recurrence';
 import registerComponent from '../../core/component_registrator';
 import publisherMixin from './ui.scheduler.publisher_mixin';
 import Appointment from './ui.scheduler.appointment';
@@ -795,7 +795,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
             const recurrenceException = this.invoke('getField', 'recurrenceException', appointment);
             const startViewDate = this.invoke('getStartViewDate');
             const endViewDate = this.invoke('getEndViewDate');
-            const recurrentDates = getRecurrence().getDatesByRecurrence({
+            const recurrentDates = getRecurrenceProcessor().getDatesByRecurrence({
                 rule: recurrenceRule,
                 exception: recurrenceException,
                 start: startDate,

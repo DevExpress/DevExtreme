@@ -15,14 +15,14 @@ const days = { SU: 0, MO: 1, TU: 2, WE: 3, TH: 4, FR: 5, SA: 6 };
 const loggedWarnings = [];
 
 let recurrence = null;
-export function getRecurrence() {
+export function getRecurrenceProcessor() {
     if(!recurrence) {
-        recurrence = new Recurrence();
+        recurrence = new RecurrenceProcessor();
     }
     return recurrence;
 }
 
-class Recurrence {
+class RecurrenceProcessor {
     constructor() {
         this.rRule = null;
         this.rRuleSet = null;
@@ -374,7 +374,7 @@ class RecurrenceValidator {
     }
 
     _wrongDayOfWeek(rule) {
-        const daysByRule = getRecurrence().daysFromByDayRule(rule);
+        const daysByRule = getRecurrenceProcessor().daysFromByDayRule(rule);
         let brokenDaysExist = false;
 
         each(daysByRule, function(_, day) {

@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import array from '../../core/utils/array';
-import { getRecurrence } from './utils.recurrence';
+import { getRecurrenceProcessor } from './utils.recurrence';
 import typeUtils from '../../core/utils/type';
 import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';
@@ -57,7 +57,7 @@ const subscribes = {
             firstDayOfWeek: firstDayOfWeek
         };
 
-        let dates = getRecurrence().getDatesByRecurrence(recurrenceOptions);
+        let dates = getRecurrenceProcessor().getDatesByRecurrence(recurrenceOptions);
         let initialDates;
 
         if(!dates.length) {

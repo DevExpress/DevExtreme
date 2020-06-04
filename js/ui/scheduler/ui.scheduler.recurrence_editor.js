@@ -15,7 +15,7 @@ import NumberBox from '../number_box';
 import RadioGroup from '../radio_group';
 import SelectBox from '../select_box';
 import publisherMixin from './ui.scheduler.publisher_mixin';
-import { getRecurrence } from './utils.recurrence';
+import { getRecurrenceProcessor } from './utils.recurrence';
 
 const RECURRENCE_EDITOR = 'dx-recurrence-editor';
 const LABEL_POSTFIX = '-label';
@@ -83,7 +83,7 @@ const DAYS_IN_WEEK = 7;
 class RecurrenceRule {
 
     constructor(rule) {
-        this._recurrence = getRecurrence();
+        this._recurrence = getRecurrenceProcessor();
         this._recurrenceRule = this._recurrence.getRecurrenceRule(rule).rule;
     }
 

@@ -38,7 +38,7 @@ import SchedulerAppointmentModel from './ui.scheduler.appointment_model';
 import SchedulerHeader from './ui.scheduler.header';
 import SchedulerResourceManager from './ui.scheduler.resource_manager';
 import subscribes from './ui.scheduler.subscribes';
-import { getRecurrence } from './utils.recurrence';
+import { getRecurrenceProcessor } from './utils.recurrence';
 import timeZoneUtils from './utils.timeZone';
 import SchedulerAgenda from './workspaces/ui.scheduler.agenda';
 import SchedulerTimelineDay from './workspaces/ui.scheduler.timeline_day';
@@ -1896,7 +1896,7 @@ const Scheduler = Widget.inherit({
 
         const recurrenceRule = this.fire('getField', 'recurrenceRule', targetAppointment);
 
-        if(!getRecurrence().getRecurrenceRule(recurrenceRule).isValid || !this._editing.allowUpdating) {
+        if(!getRecurrenceProcessor().getRecurrenceRule(recurrenceRule).isValid || !this._editing.allowUpdating) {
             callback();
             return;
         }
@@ -2086,7 +2086,7 @@ const Scheduler = Widget.inherit({
     _isAppointmentRecurrence: function(appointmentData) {
         const recurrenceRule = this.fire('getField', 'recurrenceRule', appointmentData);
 
-        return recurrenceRule && getRecurrence().getRecurrenceRule(recurrenceRule).isValid;
+        return recurrenceRule && getRecurrenceProcessor().getRecurrenceRule(recurrenceRule).isValid;
     },
 
     _getAppointmentData: function(appointmentData, options) {

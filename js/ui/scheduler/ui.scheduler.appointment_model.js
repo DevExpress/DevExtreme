@@ -1,7 +1,7 @@
 import config from '../../core/config';
 import iteratorUtils from '../../core/utils/iterator';
 import dateSerialization from '../../core/utils/date_serialization';
-import { getRecurrence } from './utils.recurrence';
+import { getRecurrenceProcessor } from './utils.recurrence';
 import dateUtils from '../../core/utils/date';
 import { equalByValue } from '../../core/utils/common';
 import typeUtils from '../../core/utils/type';
@@ -205,7 +205,7 @@ class AppointmentModel {
         let result = true;
         const appointmentStartDate = appointment.startDate;
         const appointmentEndDate = appointment.endDate;
-        const recurrence = getRecurrence();
+        const recurrence = getRecurrenceProcessor();
 
         if(allDay || this._appointmentPartInInterval(appointmentStartDate, appointmentEndDate, startDayHour, endDayHour)) {
             const trimmedDates = this._trimDates(min, max);
