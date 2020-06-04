@@ -1,7 +1,7 @@
 import CleanCSS, { Options } from 'clean-css';
 import AutoPrefix from 'autoprefixer';
 import PostCss from 'postcss';
-import commonOptions from './clean-css-options';
+import commonOptions from '../data/clean-css-options.json';
 // eslint-disable-next-line import/extensions
 import { browsersList } from '../data/metadata/dx-theme-builder-metadata';
 
@@ -21,7 +21,7 @@ export default class PostCompiler {
 
   static async cleanCss(css: string): Promise<string> {
     const promiseOptions: Options = { returnPromise: true };
-    const options: Options = { ...commonOptions, ...promiseOptions };
+    const options: Options = { ...(commonOptions as Options), ...promiseOptions };
     const cleaner = new CleanCSS(options);
     return (await cleaner.minify(css)).styles;
   }

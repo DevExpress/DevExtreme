@@ -1,4 +1,4 @@
-import { SchedulerTestWrapper, initTestMarkup } from './helpers.js';
+import { SchedulerTestWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import $ from 'jquery';
 import translator from 'animation/translator';
 import { DataSource } from 'data/data_source/data_source';

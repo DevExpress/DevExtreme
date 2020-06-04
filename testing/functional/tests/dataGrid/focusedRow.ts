@@ -30,7 +30,7 @@ test('onFocusedRowChanged event should fire once after changing focusedRowKey if
     },
     onFocusedRowChanged: () => {
         const global = window as any;
-        if (!global.onFocusedRowChangedCounter) {
+        if(!global.onFocusedRowChangedCounter) {
             global.onFocusedRowChangedCounter = 0;
         }
         global.onFocusedRowChangedCounter++;
@@ -152,7 +152,7 @@ test('Popup - Focused row should not be reset after editing a row (T879627)', as
     }
 }));
 
-["Form", "Popup"].forEach(mode => {
+['Form', 'Popup'].forEach(mode => {
     test(`${mode} - Focused row should not be reset after editing a row by API (T879627)`, async t => {
         const dataGrid = new DataGrid('#container');
         const dataRow1 = dataGrid.getDataRow(1);
@@ -428,7 +428,7 @@ test('Batch - Focused row should not be reset after editing a cell (T879627)', a
     }
 }));
 
-["Cell", "Batch"].forEach(mode => {
+['Cell', 'Batch'].forEach(mode => {
     test(`${mode} - Focused row should not be reset after editing a cell by API (T879627)`, async t => {
         const dataGrid = new DataGrid('#container');
         const dataRow1 = dataGrid.getDataRow(1);
@@ -496,10 +496,10 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
     await t.expect(ClientFunction(() => (window as any).focusedRowChanged_Counter)()).eql(1);
 }).before(() => createWidget('dxDataGrid', () => {
     const data = function() {
-        let data = [];
+        const data = [];
 
         for(let i = 0; i < 200; i++) {
-            data.push({ id: i, c0: `c0`, c1: `c1_${i % 20}` });
+            data.push({ id: i, c0: 'c0', c1: `c1_${i % 20}` });
         }
 
         return data;
@@ -507,7 +507,7 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
 
     return {
         height: 300,
-        keyExpr: "id",
+        keyExpr: 'id',
         dataSource: data,
         focusedRowEnabled: true,
         focusedRowKey: 1,
@@ -519,9 +519,9 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
         masterDetail: {
             enabled: true,
             template: container => {
-                container.append($("<div>")['dxDataGrid']({
+                container.append($('<div>')['dxDataGrid']({
                     height: 500,
-                    keyExpr: "id",
+                    keyExpr: 'id',
                     dataSource: data,
                     editing: {
                         allowAdding: true,

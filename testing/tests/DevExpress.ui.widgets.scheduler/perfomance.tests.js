@@ -8,7 +8,7 @@ import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
 
 import CustomStore from 'data/custom_store';
-import { SchedulerTestWrapper } from './helpers.js';
+import { SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler"></div>');

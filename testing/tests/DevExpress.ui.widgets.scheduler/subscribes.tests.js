@@ -9,7 +9,7 @@ import { getRecurrence } from 'ui/scheduler/utils.recurrence';
 import dateUtils from 'core/utils/date';
 import config from 'core/config';
 
-import { SchedulerTestWrapper } from './helpers.js';
+import { SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
 
 function getTimezoneDifference(date, timeZone) {
     return date.getTimezoneOffset() * dateUtils.dateToMilliseconds('minute') + timeZone * dateUtils.dateToMilliseconds('hour');

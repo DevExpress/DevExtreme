@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import 'renovation/button.j';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import ValidationEngine from 'ui/validation_engine';
@@ -9,7 +8,9 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 import { Deferred } from 'core/utils/deferred';
+import { patchOptions as patchPreactOptions, restoreOptions as restorePreactOptions } from '../../helpers/preactHelper.js';
 
+import 'renovation/button.j';
 import 'common.css!';
 import 'generic_light.css!';
 
@@ -435,7 +436,9 @@ QUnit.module('keyboard navigation', {}, () => {
 
         let clickFired = 0;
 
-        const $element = $('#button').Button();
+        const $element = $('#button').Button({
+            focusStateEnabled: true, // NOTE: for ios 9 testing
+        });
 
         // NOTE: initialize onClick in constructor doesn't trigger events correctly (dxclick, focusin, etc)
         $element.Button('instance').option('onClick', () => clickFired++);
@@ -453,7 +456,9 @@ QUnit.module('keyboard navigation', {}, () => {
     QUnit.test('arguments on key press', function(assert) {
         const clickHandler = sinon.spy();
 
-        const $element = $('#button').Button();
+        const $element = $('#button').Button({
+            focusStateEnabled: true, // NOTE: for ios 9 testing
+        });
 
         // NOTE: initialize onClick in constructor doesn't trigger events correctly (dxclick, focusin, etc)
         $element.Button('instance').option('onClick', clickHandler);
@@ -607,34 +612,36 @@ QUnit.module('templates', () => {
     });
 });
 
-QUnit.module('events subscriptions', () => {
+QUnit.module('events subscriptions', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        patchPreactOptions();
+    },
+    afterEach: function() {
+        this.clock.restore();
+        restorePreactOptions();
+    }
+}, () => {
     QUnit.test('click', function(assert) {
-        const done = assert.async();
         const clickHandler = sinon.spy();
         const $button = $('#button').Button({
             text: 'test'
         });
         const button = $button.Button('instance');
+        this.clock.tick();
 
         button.on('click', clickHandler);
 
-        setTimeout(() => {
-            $button.trigger('dxclick');
+        $button.trigger('dxclick');
 
-            setTimeout(() => {
-                assert.ok(clickHandler.calledOnce, 'Handler should be called');
-                const params = clickHandler.getCall(0).args[0];
-                assert.ok(params, 'Event params should be passed');
-                assert.ok(params.event, 'Event should be passed');
-                assert.ok(params.validationGroup, 'validationGroup should be passed');
-
-                done();
-            }, 100);
-        }, 100);
+        assert.ok(clickHandler.calledOnce, 'Handler should be called');
+        const params = clickHandler.getCall(0).args[0];
+        assert.ok(params, 'Event params should be passed');
+        assert.ok(params.event, 'Event should be passed');
+        assert.ok(params.validationGroup, 'validationGroup should be passed');
     });
 
     QUnit.test('contentReady', function(assert) {
-        const done = assert.async();
         assert.expect(3);
 
         const button = $('#button').Button({
@@ -646,7 +653,8 @@ QUnit.module('events subscriptions', () => {
             assert.ok(e.component, 'Component info should be passed');
             assert.ok(e.element, 'Element info should be passed');
             assert.strictEqual($(e.element).text(), 'test', 'Text is rendered to the element');
-            done();
         });
+
+        this.clock.tick();
     });
 });
