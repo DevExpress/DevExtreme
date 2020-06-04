@@ -18,7 +18,7 @@ const PreactTestWidget = (props) => {
 
         return () => props.unsubscribeEffect && props.unsubscribeEffect();
     }, [props.subscribeEffect, props.unsubscribeEffect]);
-    return Preact.h('div', Object.assign({}, props));
+    return Preact.h('div', props);
 };
 
 class TestWidget extends PreactWrapper {
