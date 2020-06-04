@@ -29,8 +29,5 @@ export class DeleteButtonProps {
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
-  jQuery: {
-    register: true,
-  },
 })
 export default class DeleteButton extends JSXComponent<DeleteButtonProps> {}
