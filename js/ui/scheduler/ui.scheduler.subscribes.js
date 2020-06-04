@@ -57,7 +57,7 @@ const subscribes = {
             firstDayOfWeek: firstDayOfWeek
         };
 
-        let dates = getRecurrenceProcessor().getDatesByRecurrence(recurrenceOptions);
+        let dates = getRecurrenceProcessor().generateDates(recurrenceOptions);
         let initialDates;
 
         if(!dates.length) {

@@ -795,7 +795,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
             const recurrenceException = this.invoke('getField', 'recurrenceException', appointment);
             const startViewDate = this.invoke('getStartViewDate');
             const endViewDate = this.invoke('getEndViewDate');
-            const recurrentDates = getRecurrenceProcessor().getDatesByRecurrence({
+            const recurrentDates = getRecurrenceProcessor().generateDates({
                 rule: recurrenceRule,
                 exception: recurrenceException,
                 start: startDate,

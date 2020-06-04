@@ -29,7 +29,7 @@ class RecurrenceProcessor {
         this.validator = new RecurrenceValidator();
     }
 
-    getDatesByRecurrence(options) {
+    generateDates(options) {
         const result = [];
         const recurrenceRule = this.getRecurrenceRule(options.rule);
         const rule = recurrenceRule.rule;
@@ -124,7 +124,7 @@ class RecurrenceProcessor {
         let result = [];
 
         if(options.rule) {
-            result = this.getDatesByRecurrence(options);
+            result = this.generateDates(options);
         }
 
         return !!result.length;

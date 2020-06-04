@@ -267,7 +267,7 @@ QUnit.test('\'needCoordinates\' should calculate correct dates fo recurring appt
         currentDate: new Date(2015, 2, 2, 0),
         firstDayOfWeek: 1
     });
-    const getDatesByRecurrenceStub = sinon.stub(getRecurrenceProcessor(), 'getDatesByRecurrence').returns([]);
+    const getDatesByRecurrenceStub = sinon.stub(getRecurrenceProcessor(), 'generateDates').returns([]);
 
     try {
         const instance = this.instance;
