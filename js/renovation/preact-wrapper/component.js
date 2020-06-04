@@ -22,6 +22,11 @@ export default class PreactWrapper extends DOMComponent {
         Preact.render(Preact.h(this._viewComponent, this.getAllProps(isFirstRender)), this.$element().get(0), container);
     }
 
+    _dispose() {
+        Preact.render(null, this.$element().get(0));
+        super.dispose();
+    }
+
     _render() {
         // NOTE: see ui.widget
         // this._renderContent();
