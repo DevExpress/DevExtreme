@@ -667,6 +667,11 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
     // T887897
     ['push', 'indicate'].forEach((dropFeedbackMode) => {
         QUnit.test(`The dragged row should not be displayed in its original position for a moment after row is dropped (dropFeedbackMode = ${dropFeedbackMode})`, function(assert) {
+            if(browser.msie && dropFeedbackMode === 'push') {
+                assert.ok(true, 'no \'push\' support for msie');
+                return;
+            }
+
             // arrange
             const $testElement = $('#container');
             const items = generateData(10);
