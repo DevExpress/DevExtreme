@@ -39,12 +39,11 @@ matrix:
     - { TARGET: test, CONSTEL: ui.editors, TZ: 'Australia/ACT' }
     - { TARGET: test, CONSTEL: ui.grid }
     - { TARGET: test, CONSTEL: ui.scheduler }
-    - { TARGET: test, CONSTEL: ui.scheduler, TZ: 'PST8PDT' }
-    - { TARGET: test, CONSTEL: ui.scheduler, TZ: 'Japan' }
-    - { TARGET: test, CONSTEL: ui.scheduler, TZ: 'Australia/ACT' }
+    - { TARGET: test, CONSTEL: ui.scheduler.integration }
     - { TARGET: test, CONSTEL: ui.scheduler.integration, TZ: 'PST8PDT' }
     - { TARGET: test, CONSTEL: ui.scheduler.integration, TZ: 'Japan' }
     - { TARGET: test, CONSTEL: ui.scheduler.integration, TZ: 'Australia/ACT' }
+    - { TARGET: test, CONSTEL: ui.scheduler.integrationBase }
     - { TARGET: test, CONSTEL: ui.scheduler.integrationBase, TZ: 'PST8PDT' }
     - { TARGET: test, CONSTEL: ui.scheduler.integrationBase, TZ: 'Japan' }
     - { TARGET: test, CONSTEL: ui.scheduler.integrationBase, TZ: 'Australia/ACT' }
