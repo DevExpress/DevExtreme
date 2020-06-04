@@ -1,5 +1,5 @@
 {
     "*.js": ["eslint"],
     "*.{css,less}": ["stylelint"],
-    "*.{ts,tsx}": ["eslint --ext .tsx,.ts"]
+    "*.{ts,tsx}": ["eslint"]
 }

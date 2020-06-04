@@ -156,8 +156,8 @@
     "devextreme-bundler": "bin/bundler.js"
   },
   "scripts": {
-    "lint": "npm-run-all -p -c lint-js lint-css",
-    "lint-js": "eslint .",
+    "lint": "npm-run-all -p -c lint-js lint-css lint-ts",
+    "lint-js": "eslint --ext .js .",
     "lint-ts": "eslint --ext .tsx,.ts .",
     "lint-css": "stylelint styles",
     "lint-staged": "lint-staged",
