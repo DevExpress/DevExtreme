@@ -474,7 +474,7 @@ QUnit.module('Recurrences', function() {
     });
 
     QUnit.test('generateDates should handle recurrence exception in long format with \'Z\', DAILY rule', function(assert) {
-        const recurrenceStub = sinon.stub(getRecurrenceProcessor(), 'getTimeZoneOffset', function() {
+        const recurrenceStub = sinon.stub(getRecurrenceProcessor(), '_getTimeZoneOffset', function() {
             return new Date(2015, 4, 24).getTimezoneOffset();
         });
         try {
@@ -541,7 +541,7 @@ QUnit.module('Recurrences', function() {
     });
 
     QUnit.test('getRecurrenceString should handle objects with until', function(assert) {
-        const recurrenceStub = sinon.stub(getRecurrenceProcessor(), 'getTimeZoneOffset', function() {
+        const recurrenceStub = sinon.stub(getRecurrenceProcessor(), '_getTimeZoneOffset', function() {
             return new Date(2015, 6, 9).getTimezoneOffset();
         });
 
@@ -601,14 +601,14 @@ QUnit.module('Recurrences', function() {
     });
 
     QUnit.test('get days of the week by byDay rule', function(assert) {
-        const ruleObject = getRecurrenceProcessor().getRecurrenceRule('FREQ=WEEKLY;BYDAY=TU,SA');
+        const ruleObject = getRecurrenceProcessor().evalRecurrenceRule('FREQ=WEEKLY;BYDAY=TU,SA');
         const days = getRecurrenceProcessor().daysFromByDayRule(ruleObject.rule);
 
         assert.deepEqual(days, ['TU', 'SA'], 'returned array is correct');
     });
 
-    QUnit.test('getRecurrenceRule should return an object', function(assert) {
-        const ruleObject = getRecurrenceProcessor().getRecurrenceRule('FREQ=MONTHLY');
+    QUnit.test('evalRecurrenceRule should return an object', function(assert) {
+        const ruleObject = getRecurrenceProcessor().evalRecurrenceRule('FREQ=MONTHLY');
 
         assert.deepEqual(ruleObject, {
             'isValid': true, 'rule':
@@ -619,56 +619,56 @@ QUnit.module('Recurrences', function() {
         }, 'returned ruleObject is right');
     });
 
-    QUnit.test('getRecurrenceRule should return an invalid object for incorrect freq', function(assert) {
-        const ruleObject = getRecurrenceProcessor().getRecurrenceRule('FREQ=WRONG');
+    QUnit.test('evalRecurrenceRule should return an invalid object for incorrect freq', function(assert) {
+        const ruleObject = getRecurrenceProcessor().evalRecurrenceRule('FREQ=WRONG');
 
         assert.notOk(ruleObject.isValid, 'returned ruleObject is invalid');
     });
 
-    QUnit.test('getRecurrenceRule should return an invalid object for string with wrong rule name', function(assert) {
-        const ruleObject = getRecurrenceProcessor().getRecurrenceRule('FRE=DAILY');
+    QUnit.test('evalRecurrenceRule should return an invalid object for string with wrong rule name', function(assert) {
+        const ruleObject = getRecurrenceProcessor().evalRecurrenceRule('FRE=DAILY');
 
         assert.notOk(ruleObject.isValid, 'returned ruleObject is invalid');
     });
 
-    QUnit.test('getRecurrenceRule should return an invalid object for string with wrong count', function(assert) {
-        const ruleObject = getRecurrenceProcessor().getRecurrenceRule('FREQ=DAILY;COUNT=wrong');
+    QUnit.test('evalRecurrenceRule should return an invalid object for string with wrong count', function(assert) {
+        const ruleObject = getRecurrenceProcessor().evalRecurrenceRule('FREQ=DAILY;COUNT=wrong');
 
         assert.notOk(ruleObject.isValid, 'returned ruleObject is invalid');
     });
 
-    QUnit.test('getRecurrenceRule should return an invalid object for string with wrong interval', function(assert) {
-        const ruleObject = getRecurrenceProcessor().getRecurrenceRule('FREQ=DAILY;INTERVAL=wrong');
+    QUnit.test('evalRecurrenceRule should return an invalid object for string with wrong interval', function(assert) {
+        const ruleObject = getRecurrenceProcessor().evalRecurrenceRule('FREQ=DAILY;INTERVAL=wrong');
 
         assert.notOk(ruleObject.isValid, 'returned ruleObject is invalid');
     });
 
-    QUnit.test('getRecurrenceRule should return an invalid object for string with wrong byDay', function(assert) {
-        const ruleObject = getRecurrenceProcessor().getRecurrenceRule('FREQ=DAILY;BYDAY=wrong');
+    QUnit.test('evalRecurrenceRule should return an invalid object for string with wrong byDay', function(assert) {
+        const ruleObject = getRecurrenceProcessor().evalRecurrenceRule('FREQ=DAILY;BYDAY=wrong');
 
         assert.notOk(ruleObject.isValid, 'returned ruleObject is invalid');
     });
 
-    QUnit.test('getRecurrenceRule should return an invalid object for string with wrong byDay, several value', function(assert) {
-        const ruleObject = getRecurrenceProcessor().getRecurrenceRule('FREQ=DAILY;BYDAY=MO,wrong');
+    QUnit.test('evalRecurrenceRule should return an invalid object for string with wrong byDay, several value', function(assert) {
+        const ruleObject = getRecurrenceProcessor().evalRecurrenceRule('FREQ=DAILY;BYDAY=MO,wrong');
 
         assert.notOk(ruleObject.isValid, 'returned ruleObject is invalid');
     });
 
-    QUnit.test('getRecurrenceRule should return an invalid object for string with wrong byMonthDay', function(assert) {
-        const ruleObject = getRecurrenceProcessor().getRecurrenceRule('FREQ=MONTHLY;BYMONTHDAY=wrong');
+    QUnit.test('evalRecurrenceRule should return an invalid object for string with wrong byMonthDay', function(assert) {
+        const ruleObject = getRecurrenceProcessor().evalRecurrenceRule('FREQ=MONTHLY;BYMONTHDAY=wrong');
 
         assert.notOk(ruleObject.isValid, 'returned ruleObject is invalid');
     });
 
-    QUnit.test('getRecurrenceRule should return an invalid object for string with wrong byMonth', function(assert) {
-        const ruleObject = getRecurrenceProcessor().getRecurrenceRule('FREQ=YEARLY;BYMONTH=wrong;BYMONTHDAY=12');
+    QUnit.test('evalRecurrenceRule should return an invalid object for string with wrong byMonth', function(assert) {
+        const ruleObject = getRecurrenceProcessor().evalRecurrenceRule('FREQ=YEARLY;BYMONTH=wrong;BYMONTHDAY=12');
 
         assert.notOk(ruleObject.isValid, 'returned ruleObject is invalid');
     });
 
-    QUnit.test('getRecurrenceRule should return an invalid object for string with wrong until date', function(assert) {
-        const ruleObject = getRecurrenceProcessor().getRecurrenceRule('FREQ=DAILY;UNTIL=wrong');
+    QUnit.test('evalRecurrenceRule should return an invalid object for string with wrong until date', function(assert) {
+        const ruleObject = getRecurrenceProcessor().evalRecurrenceRule('FREQ=DAILY;UNTIL=wrong');
 
         assert.notOk(ruleObject.isValid, 'returned ruleObject is invalid');
     });
@@ -692,7 +692,7 @@ QUnit.module('Recurrences', function() {
     });
 
     QUnit.test('getDateByAsciiString should return a valid date for yyyyMMddTHHmmssZ format', function(assert) {
-        const recurrenceStub = sinon.stub(getRecurrenceProcessor(), 'getTimeZoneOffset', function() {
+        const recurrenceStub = sinon.stub(getRecurrenceProcessor(), '_getTimeZoneOffset', function() {
             return new Date(2016, 6, 11).getTimezoneOffset();
         });
 

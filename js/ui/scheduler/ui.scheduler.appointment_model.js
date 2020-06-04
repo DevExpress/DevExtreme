@@ -205,7 +205,7 @@ class AppointmentModel {
         let result = true;
         const appointmentStartDate = appointment.startDate;
         const appointmentEndDate = appointment.endDate;
-        const recurrence = getRecurrenceProcessor();
+        const recurrenceProcessor = getRecurrenceProcessor();
 
         if(allDay || this._appointmentPartInInterval(appointmentStartDate, appointmentEndDate, startDayHour, endDayHour)) {
             const trimmedDates = this._trimDates(min, max);
@@ -214,12 +214,12 @@ class AppointmentModel {
             max = new Date(trimmedDates.max.getTime() - toMs('minute'));
         }
 
-        if(recurrenceRule && !recurrence.getRecurrenceRule(recurrenceRule).isValid) {
+        if(recurrenceRule && !recurrenceProcessor.evalRecurrenceRule(recurrenceRule).isValid) {
             result = (appointmentEndDate > min) && (appointmentStartDate <= max);
         }
 
-        if(result && recurrence.getRecurrenceRule(recurrenceRule).isValid) {
-            result = recurrence.dateInRecurrenceRange({
+        if(result && recurrenceProcessor.evalRecurrenceRule(recurrenceRule).isValid) {
+            result = recurrenceProcessor.hasRecurrence({
                 rule: recurrenceRule,
                 exception: recurrenceException,
                 start: appointmentStartDate,

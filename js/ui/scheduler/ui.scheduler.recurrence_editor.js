@@ -83,12 +83,12 @@ const DAYS_IN_WEEK = 7;
 class RecurrenceRule {
 
     constructor(rule) {
-        this._recurrence = getRecurrenceProcessor();
-        this._recurrenceRule = this._recurrence.getRecurrenceRule(rule).rule;
+        this._recurrenceProcessor = getRecurrenceProcessor();
+        this._recurrenceRule = this._recurrenceProcessor.evalRecurrenceRule(rule).rule;
     }
 
     makeRules(string) {
-        this._recurrenceRule = this._recurrence.getRecurrenceRule(string).rule;
+        this._recurrenceRule = this._recurrenceProcessor.evalRecurrenceRule(string).rule;
     }
 
     makeRule(field, value) {
@@ -125,7 +125,7 @@ class RecurrenceRule {
     }
 
     recurrenceString() {
-        return this._recurrence.getRecurrenceString(this._recurrenceRule);
+        return this._recurrenceProcessor.getRecurrenceString(this._recurrenceRule);
     }
 
     rules() {
@@ -133,7 +133,7 @@ class RecurrenceRule {
     }
 
     daysFromByDayRule() {
-        return this._recurrence.daysFromByDayRule(this._recurrenceRule);
+        return this._recurrenceProcessor.daysFromByDayRule(this._recurrenceRule);
     }
 }
 

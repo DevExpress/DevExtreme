@@ -1896,7 +1896,7 @@ const Scheduler = Widget.inherit({
 
         const recurrenceRule = this.fire('getField', 'recurrenceRule', targetAppointment);
 
-        if(!getRecurrenceProcessor().getRecurrenceRule(recurrenceRule).isValid || !this._editing.allowUpdating) {
+        if(!getRecurrenceProcessor().evalRecurrenceRule(recurrenceRule).isValid || !this._editing.allowUpdating) {
             callback();
             return;
         }
@@ -2086,7 +2086,7 @@ const Scheduler = Widget.inherit({
     _isAppointmentRecurrence: function(appointmentData) {
         const recurrenceRule = this.fire('getField', 'recurrenceRule', appointmentData);
 
-        return recurrenceRule && getRecurrenceProcessor().getRecurrenceRule(recurrenceRule).isValid;
+        return recurrenceRule && getRecurrenceProcessor().evalRecurrenceRule(recurrenceRule).isValid;
     },
 
     _getAppointmentData: function(appointmentData, options) {

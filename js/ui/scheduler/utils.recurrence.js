@@ -31,7 +31,7 @@ class RecurrenceProcessor {
 
     generateDates(options) {
         const result = [];
-        const recurrenceRule = this.getRecurrenceRule(options.rule);
+        const recurrenceRule = this.evalRecurrenceRule(options.rule);
         const rule = recurrenceRule.rule;
 
         if(!recurrenceRule.isValid || !rule.freq) {
@@ -61,73 +61,22 @@ class RecurrenceProcessor {
         return result;
     }
 
-    _initializeRRule(options, startDateUtc) {
-        const ruleOptions = RRule.parseString(options.rule);
-        const firstDayOfWeek = options.firstDayOfWeek;
-
-        ruleOptions.dtstart = startDateUtc;
-
-        if(!ruleOptions.wkst && firstDayOfWeek) {
-            const weekDayNumbers = [6, 0, 1, 2, 3, 4, 5];
-            ruleOptions.wkst = weekDayNumbers[firstDayOfWeek];
-        }
-
-        this._createRRule(ruleOptions);
-
-        if(options.exception) {
-            const splitDates = options.exception.split(',');
-            const exceptDates = this._getDatesByRecurrenceException(splitDates, startDateUtc);
-            for(let i = 0; i < exceptDates.length; i++) {
-                this.rRuleSet.exdate(this._getRRuleUtcDate(exceptDates[i]));
-            }
-        }
+    hasRecurrence(options) {
+        return !!this.generateDates(options).length;
     }
 
-    _createRRule(ruleOptions) {
-        this._dispose();
-
-        const rRuleSet = new RRuleSet();
-
-        this.rRuleSet = rRuleSet;
-        this.rRule = new RRule(ruleOptions);
-
-        this.rRuleSet.rrule(this.rRule);
-    }
-
-    _getLeftBorder(options, minDateUtc, appointmentDuration) {
-        if(options.end && !timeZoneUtils.isSameAppointmentDates(options.start, options.end)) {
-            return new Date(minDateUtc.getTime() - appointmentDuration);
-        }
-
-        return minDateUtc;
-    }
-
-    getRecurrenceRule(recurrence) {
+    evalRecurrenceRule(rule) {
         const result = {
             rule: {},
             isValid: false
         };
 
-        if(recurrence) {
-            result.rule = this._parseRecurrenceRule(recurrence);
-            result.isValid = this.validator.validateRRule(result.rule, recurrence);
+        if(rule) {
+            result.rule = this._parseRecurrenceRule(rule);
+            result.isValid = this.validator.validateRRule(result.rule, rule);
         }
 
         return result;
-    }
-
-    getTimeZoneOffset() {
-        return new Date().getTimezoneOffset();
-    }
-
-    dateInRecurrenceRange(options) {
-        let result = [];
-
-        if(options.rule) {
-            result = this.generateDates(options);
-        }
-
-        return !!result.length;
     }
 
     daysFromByDayRule(rule) {
@@ -145,11 +94,11 @@ class RecurrenceProcessor {
     }
 
     getAsciiStringByDate(date) {
-        const currentOffset = this.getTimeZoneOffset() * toMs('minute');
+        const currentOffset = this._getTimeZoneOffset() * toMs('minute');
+        const offsetDate = new Date(date.getTime() + currentOffset);
 
-        date = new Date(date.getTime() + currentOffset);
-        return date.getFullYear() + ('0' + (date.getMonth() + 1)).slice(-2) + ('0' + date.getDate()).slice(-2) +
-            'T' + ('0' + (date.getHours())).slice(-2) + ('0' + (date.getMinutes())).slice(-2) + ('0' + (date.getSeconds())).slice(-2) + 'Z';
+        return offsetDate.getFullYear() + ('0' + (offsetDate.getMonth() + 1)).slice(-2) + ('0' + offsetDate.getDate()).slice(-2) +
+            'T' + ('0' + (offsetDate.getHours())).slice(-2) + ('0' + (offsetDate.getMinutes())).slice(-2) + ('0' + (offsetDate.getSeconds())).slice(-2) + 'Z';
     }
 
     getRecurrenceString(object) {
@@ -189,7 +138,7 @@ class RecurrenceProcessor {
         }
 
         const isUTCString = arrayDate[8] !== undefined;
-        let currentOffset = initialDate ? initialDate.getTimezoneOffset() : this.getTimeZoneOffset();
+        let currentOffset = initialDate ? initialDate.getTimezoneOffset() : this._getTimeZoneOffset();
         let date = new (Function.prototype.bind.apply(Date, this._prepareDateArrayToParse(arrayDate)))();
 
         currentOffset = currentOffset * toMs('minute');
@@ -210,6 +159,52 @@ class RecurrenceProcessor {
             delete this.rRule;
             this.rRule = null;
         }
+    }
+
+    _getTimeZoneOffset() {
+        return new Date().getTimezoneOffset();
+    }
+
+    _initializeRRule(options, startDateUtc) {
+        const ruleOptions = RRule.parseString(options.rule);
+        const firstDayOfWeek = options.firstDayOfWeek;
+
+        ruleOptions.dtstart = startDateUtc;
+
+        if(!ruleOptions.wkst && firstDayOfWeek) {
+            const weekDayNumbers = [6, 0, 1, 2, 3, 4, 5];
+            ruleOptions.wkst = weekDayNumbers[firstDayOfWeek];
+        }
+
+        this._createRRule(ruleOptions);
+
+        if(options.exception) {
+            const splitDates = options.exception.split(',');
+            const exceptDates = this._getDatesByRecurrenceException(splitDates, startDateUtc);
+            exceptDates.forEach(date => {
+                const utcDate = this._getRRuleUtcDate(date);
+                this.rRuleSet.exdate(utcDate);
+            });
+        }
+    }
+
+    _createRRule(ruleOptions) {
+        this._dispose();
+
+        const rRuleSet = new RRuleSet();
+
+        this.rRuleSet = rRuleSet;
+        this.rRule = new RRule(ruleOptions);
+
+        this.rRuleSet.rrule(this.rRule);
+    }
+
+    _getLeftBorder(options, minDateUtc, appointmentDuration) {
+        if(options.end && !timeZoneUtils.isSameAppointmentDates(options.start, options.end)) {
+            return new Date(minDateUtc.getTime() - appointmentDuration);
+        }
+
+        return minDateUtc;
     }
 
     _getDatesByRecurrenceException(ruleValues, date) {
@@ -236,7 +231,6 @@ class RecurrenceProcessor {
     }
 
     _correctTimezoneOffset(date) {
-        // TZ correction - Some specific in RRule. Perhaps it related to using of luxon.
         const timezoneOffsetBefore = date.getTimezoneOffset();
         const timezoneOffset = timezoneOffsetBefore * toMs('minute');
 
