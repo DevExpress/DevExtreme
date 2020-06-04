@@ -98,20 +98,6 @@ QUnit.test('Edit button should not be contain the \'pencil\' icon', function(ass
     tooltip.hide();
 });
 
-QUnit.test('Cancel & Done buttons should not be rendered in details popup', function(assert) {
-    this.createInstance();
-
-    const appointment = {
-        text: 'a',
-        startDate: new Date(2015, 5, 15, 10),
-        endDate: new Date(2015, 5, 15, 11)
-    };
-
-    this.instance.fire('showEditAppointmentPopup', { data: appointment, target: $('<div>') });
-
-    assert.notOk($('.dx-scheduler-appointment-popup .dx-popup-bottom .dx-button').length, 'Buttons are not rendered');
-});
-
 QUnit.test('ReadOnly option should be passed to the details appointment view', function(assert) {
     this.createInstance();
 
@@ -164,32 +150,6 @@ QUnit.test('Details appointment view should be readOnly if editing.allowUpdating
     detailsAppointmentView = this.instance.getAppointmentDetailsForm();
 
     assert.notOk(detailsAppointmentView.option('readOnly'), 'ReadOnly option is correct');
-});
-
-QUnit.test('Details appointment view should have right tollbar', function(assert) {
-    this.createInstance({
-        editing: {
-            allowUpdating: true
-        }
-    });
-
-    this.instance.showAppointmentPopup({
-        text: 'a',
-        startDate: new Date(2015, 5, 15, 10),
-        endDate: new Date(2015, 5, 15, 11)
-    });
-    this.instance.option('editing', {
-        allowUpdating: false
-    });
-    this.instance.showAppointmentPopup({
-        text: 'a',
-        startDate: new Date(2015, 5, 15, 10),
-        endDate: new Date(2015, 5, 15, 11)
-    });
-
-    const popup = this.instance.getAppointmentPopup();
-
-    assert.notOk(popup.option('toolbarItems').length, 'Toolbar is correct');
 });
 
 QUnit.test('Details appointment view shouldn\'t be readOnly when adding new appointment if editing.allowUpdating=false', function(assert) {
@@ -297,24 +257,6 @@ QUnit.test('showAppointmentPopup method should not be called after click on focu
     assert.notOk(spy.called, 'showAppointmentPopup is not called');
 
     this.instance.showAppointmentPopup.restore();
-});
-
-QUnit.test('Cancel & Done buttons should not be rendered in details popup if editing.allowUpdating is false', function(assert) {
-    this.createInstance({
-        editing: {
-            allowUpdating: false
-        }
-    });
-
-    const appointment = {
-        text: 'a',
-        startDate: new Date(2015, 5, 15, 10),
-        endDate: new Date(2015, 5, 15, 11)
-    };
-
-    this.instance.fire('showEditAppointmentPopup', { data: appointment, target: $('<div>') });
-
-    assert.notOk($('.dx-scheduler-appointment-popup .dx-popup-bottom .dx-button').length, 'Buttons are not rendered');
 });
 
 QUnit.test('Appointment should not be draggable & resizable if editing.allowUpdating is false', function(assert) {
