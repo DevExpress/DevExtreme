@@ -1761,7 +1761,10 @@ QUnit.test('Validate Axis on update', function(assert) {
 
     chart.option('valueAxis.constantLines[0].value', new Date(2020, 7, 1));
 
-    assert.deepEqual(chart.getValueAxis().getOptions().dataType, 'datetime');
+    assert.strictEqual(chart.getValueAxis().getOptions().dataType, 'datetime');
+    assert.strictEqual(chart.getValueAxis().getOptions().type, 'continuous');
+    assert.strictEqual(chart.getArgumentAxis().getOptions().type, 'continuous');
+
 });
 
 QUnit.module('Legend title', $.extend({}, moduleSetup, {
