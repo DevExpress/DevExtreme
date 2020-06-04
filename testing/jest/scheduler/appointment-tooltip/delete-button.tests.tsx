@@ -18,10 +18,12 @@ describe('DeleteButton', () => {
     it('should render component correctly', () => {
       const tree = render(defaultProps);
 
-      expect(tree.type())
-        .toBe(Button);
+      expect(tree.is('.dx-tooltip-appointment-item-delete-button-container'))
+        .toBe(true);
       expect(tree.children())
-        .toHaveLength(0);
+        .toHaveLength(1);
+      expect(tree.childAt(0).type())
+        .toBe(Button);
     });
 
     it('should pass correct properties to button', () => {
