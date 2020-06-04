@@ -214,11 +214,7 @@ class Recurrence {
 
     _getDatesByRecurrenceException(ruleValues, date) {
         const result = [];
-
-        for(let i = 0, len = ruleValues.length; i < len; i++) {
-            result[i] = this.getDateByAsciiString(ruleValues[i], date);
-        }
-
+        ruleValues.forEach(rule => result.push(this.getDateByAsciiString(rule, date)));
         return result;
     }
 
