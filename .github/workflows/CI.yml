@@ -6,7 +6,7 @@ jobs:
   test:
     strategy:
       matrix:
-        CONSTEL: [ export, misc, ui, ui.editors, ui.grid, ui.scheduler, viz, renovation ]
+        CONSTEL: [ export, misc, ui, ui.editors, ui.grid, ui.scheduler, ui.scheduler.integration, ui.scheduler.integrationBase , viz, renovation ]
 
     runs-on: windows-latest
     timeout-minutes: 60
