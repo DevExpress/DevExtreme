@@ -31,13 +31,17 @@ export default class CustomButton extends TextEditorButton {
 
         const instance = editor._createComponent($element, Button, extend({}, this.options, {
             disabled: this._isDisabled(),
-            integrationOptions: { skipTemplates: ['content'] }
+            integrationOptions: this._prepareIntegrationOptions(editor)
         }));
 
         return {
             $element,
             instance
         };
+    }
+
+    _prepareIntegrationOptions(editor) {
+        return extend({}, editor.option('integrationOptions'), { skipTemplates: ['content'] });
     }
 
     update() {
