@@ -30,7 +30,7 @@ const FIELD_VALUE_CLASS = 'dx-field-value';
 const RECURRENCE_BUTTON_GROUP = 'dx-recurrence-button-group';
 
 // const FREQUENCY_EDITOR = 'dx-recurrence-selectbox-freq';
-const INTERVAL_EDITOR = 'dx-recurrence-numberbox-interval';
+const INTERVAL_EDITOR = 'dx-recurrence-numberbox-interval-1';
 // const INTERVAL_EDITOR_FIELD = 'dx-recurrence-interval-field';
 // const REPEAT_ON_EDITOR = 'dx-recurrence-repeat-on';
 // const REPEAT_ON_MONTH_EDITOR = 'dx-recurrence-repeat-on-month';
@@ -231,7 +231,7 @@ const RecurrenceEditor = Editor.inherit({
 
         this._editors = [
             {
-                dataField: 'FREQ',
+                dataField: 'freq',
                 name: 'FREQ',
                 editorType: 'dxSelectBox',
                 editorOptions: {
@@ -256,7 +256,7 @@ const RecurrenceEditor = Editor.inherit({
                 colCountByScreen: { xs: 2 },
                 items: [
                     {
-                        dataField: 'INTERVAL',
+                        dataField: 'interval',
                         editorType: 'dxNumberBox',
                         editorOptions: {
                             width: 150,
@@ -273,7 +273,7 @@ const RecurrenceEditor = Editor.inherit({
                     },
                     {
                         name: 'intervalLabel',
-                        cssClass: `${REPEAT_TYPE_EDITOR}${LABEL_POSTFIX}`,
+                        cssClass: `${INTERVAL_EDITOR}${LABEL_POSTFIX}`,
                         template: () => messageLocalization.format(`dxScheduler-recurrenceRepeat${freq.charAt(0).toUpperCase()}${freq.substr(1).toLowerCase()}`)
                     }
                 ]
@@ -282,7 +282,7 @@ const RecurrenceEditor = Editor.inherit({
                 itemType: 'group',
                 items: [
                     {
-                        dataField: 'BYDAY',
+                        dataField: 'byday',
                         template: (data, itemElement) =>{
                             const firstDayOfWeek = this._getFirstDayOfWeek();
                             const byDay = this._recurrenceRule.rules()['byday'] ?
@@ -314,7 +314,7 @@ const RecurrenceEditor = Editor.inherit({
                         }
                     },
                     {
-                        dataField: 'BYMONTHDAY',
+                        dataField: 'bymonthday',
                         editorType: 'dxNumberBox',
                         editorOptions: {
                             min: 1,
@@ -331,7 +331,7 @@ const RecurrenceEditor = Editor.inherit({
                         }
                     },
                     {
-                        dataField: 'BYMONTH',
+                        dataField: 'bymonth',
                         editorType: 'dxSelectBox',
                         editorOptions: {
                             field: 'bymonth',
@@ -389,7 +389,7 @@ const RecurrenceEditor = Editor.inherit({
             items: this._editors,
             showValidationSummary: true,
             scrollingEnabled: true,
-            formData: formData,
+            // formData: formData,
             showColonAfterLabel: false,
             labelLocation: 'top',
         });
@@ -705,19 +705,19 @@ const RecurrenceEditor = Editor.inherit({
     _changeRepeatOnVisibility() {
         const freq = this._recurrenceRule.rules().freq;
 
-        this._recurrenceForm.itemOption('BYDAY', 'visible', false);
-        this._recurrenceForm.itemOption('BYMONTHDAY', 'visible', false);
-        this._recurrenceForm.itemOption('BYMONTH', 'visible', false);
+        this._recurrenceForm.itemOption('byday', 'visible', false);
+        this._recurrenceForm.itemOption('bymonthday', 'visible', false);
+        this._recurrenceForm.itemOption('bymonth', 'visible', false);
 
         if(freq === 'WEEKLY') {
-            this._recurrenceForm.itemOption('BYDAY', 'visible', true);
+            this._recurrenceForm.itemOption('byday', 'visible', true);
         }
         if(freq === 'MONTHLY') {
-            this._recurrenceForm.itemOption('BYMONTHDAY', 'visible', true);
+            this._recurrenceForm.itemOption('bymonthday', 'visible', true);
         }
         if(freq === 'YEARLY') {
-            this._recurrenceForm.itemOption('BYMONTHDAY', 'visible', true);
-            this._recurrenceForm.itemOption('BYMONTH', 'visible', true);
+            this._recurrenceForm.itemOption('bymonthday', 'visible', true);
+            this._recurrenceForm.itemOption('bymonth', 'visible', true);
         }
     },
 
@@ -728,7 +728,7 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _changeEditorsValues(rules) {
-        this._recurrenceForm.getEditor('FREQ').option('value', (rules.freq || frequenciesMessages[defaultRecurrenceTypeIndex].value).toLowerCase());
+        this._recurrenceForm.getEditor('freq').option('value', (rules.freq || frequenciesMessages[defaultRecurrenceTypeIndex].value).toLowerCase());
         this._changeDayOfMonthValue();
 
         // this._changeRepeatTypeLabel();
@@ -741,17 +741,17 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _changeIntervalValue(value) {
-        this._recurrenceForm.getEditor('INTERVAL').option('value', value || 1);
+        this._recurrenceForm.getEditor('interval').option('value', value || 1);
     },
 
     _changeDayOfMonthValue() {
-        const isVisible = this._recurrenceForm.itemOption('BYMONTHDAY', 'visible');
+        const isVisible = this._recurrenceForm.itemOption('bymonthday', 'visible');
         if(!isVisible) {
             return;
         }
 
         const day = this._dayOfMonthByRules() || 1;
-        this._recurrenceForm.getEditor('BYMONTHDAY').option('value', day);
+        this._recurrenceForm.getEditor('bymonthday').option('value', day);
     },
 
     _changeRepeatTypeLabel() {
@@ -790,14 +790,14 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _changeMonthOfYearValue() {
-        const isEditorVisible = this._recurrenceForm.itemOption('BYMONTH').visible;
+        const isEditorVisible = this._recurrenceForm.itemOption('bymonth').visible;
 
         if(!isEditorVisible) {
             return;
         }
 
         const month = this._monthOfYearByRules() || 1;
-        this._recurrenceForm.getEditor('BYMONTH').option('value', month);
+        this._recurrenceForm.getEditor('bymonth').option('value', month);
     },
 
     toggle() {
