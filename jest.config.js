@@ -35,6 +35,7 @@ module.exports = {
         path.join(path.resolve('.'), './testing/jest/**/*.tests.[jt]s?(x)')
     ],
     transform: {
-        '.(js|jsx|ts|tsx)': resolve.sync('ts-jest')
+        'test_components.+\\.tsx$': path.resolve('./testing/jest/utils/declaration-transformer.js'),
+        '\\.(js|jsx|ts|tsx)$': resolve.sync('ts-jest')
     }
 };

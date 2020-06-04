@@ -14,11 +14,21 @@ export default class PreactWrapper extends DOMComponent {
         return this;
     }
 
+    get viewRef() {
+        return this._viewRef.current;
+    }
+
+    option(...args) {
+        if(args.length === 0) {
+            return { ...this._viewRef?.current?.__getProps?.(), ...super.option()};
+        }
+        return super.option(...args);
+    }
+
     _initMarkup() {
         const isFirstRender = this.$element().children().length === 0;
         const hasParent = this.$element().parent().length > 0;
         const container = isFirstRender && hasParent ? this.$element().get(0) : undefined;
-
         Preact.render(Preact.h(this._viewComponent, this.getAllProps(isFirstRender)), this.$element().get(0), container);
     }
 
@@ -34,7 +44,7 @@ export default class PreactWrapper extends DOMComponent {
     // _renderContent() { }
 
     getAllProps(isFirstRender) {
-        const options = { ...this.option() };
+        const options = { ...this.option(), ref: this._viewRef };
         const attributes = this.$element()[0].attributes;
         const { width, height } = this.$element()[0].style;
 
@@ -73,10 +83,6 @@ export default class PreactWrapper extends DOMComponent {
             options.height = height;
         }
 
-        if(this.viewRef) {
-            options.ref = this.viewRef;
-        }
-
         Object.keys(this._actionsMap).forEach(name => {
             options[name] = this._actionsMap[name];
         });
@@ -92,16 +98,12 @@ export default class PreactWrapper extends DOMComponent {
 
         Object.keys(this._getActionConfigs()).forEach(name => this._addAction(name));
 
-        this._initWidget && this._initWidget();
+        this._viewRef = Preact.createRef();
         this._supportedKeys = () => ({});
     }
 
     _addAction(event, action) {
         this._actionsMap[event] = action || this._createActionByOption(event, this._getActionConfigs()[event]);
-    }
-
-    _createViewRef() {
-        this.viewRef = Preact.createRef();
     }
 
     _optionChanged(option) {
