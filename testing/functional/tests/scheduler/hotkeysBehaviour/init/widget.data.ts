@@ -39,4 +39,4 @@ export const dataSource = [
         startDate: new Date(2019, 3, 1, 9, 0),
         endDate: new Date(2019, 3, 1, 11, 30),
     }
-]
+];

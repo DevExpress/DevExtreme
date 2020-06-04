@@ -1,5 +1,5 @@
 export const simpleData = [
-	{
+    {
         text: 'Appointment 1',
         startDate: new Date(2017, 4, 24, 13, 0),
         endDate: new Date(2017, 4, 25, 12, 30)
@@ -25,7 +25,7 @@ export const simpleData = [
         endDate: new Date(2017, 4, 25, 12, 0),
         allDay: true
     }
-]
+];
 
 export const allDayData = [
     {
@@ -40,7 +40,7 @@ export const allDayData = [
         endDate: new Date(2017, 4, 22, 12, 0),
         allDay: true
     },
-	{
+    {
         text: 'Appointment 3',
         startDate: new Date(2017, 4, 25, 9, 0),
         endDate: new Date(2017, 4, 25, 10, 30)
@@ -51,4 +51,4 @@ export const allDayData = [
         endDate: new Date(2017, 4, 25, 12, 0),
         allDay: true
     }
-]
+];
