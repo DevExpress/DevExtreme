@@ -32,7 +32,15 @@ export const getOnDeleteButtonClick: GetOnDeleteButtonClick = (
 
 export const viewFunction = (viewModel: TooltipItemContent) => {
   const useTemplate = !!viewModel.props.itemContent;
-  const { formattedData: { text, formatDate } } = viewModel;
+  const onDeleteButtonClick = getOnDeleteButtonClick(
+    viewModel.props, viewModel.data, viewModel.currentData,
+  );
+  const {
+    text, formatDate: formattedDate,
+  }: FormattedContent = viewModel.props.getTextAndFormatDate?.(
+    viewModel.data, viewModel.currentData,
+  );
+
   return (
     <Fragment>
       {useTemplate && (
@@ -53,10 +61,10 @@ export const viewFunction = (viewModel: TooltipItemContent) => {
         <Marker color={viewModel.color} />
         <div className={TOOLTIP_APPOINTMENT_ITEM_CONTENT}>
           <div className={TOOLTIP_APPOINTMENT_ITEM_CONTENT_SUBJECT}>{text}</div>
-          <div className={TOOLTIP_APPOINTMENT_ITEM_CONTENT_DATE}>{formatDate}</div>
+          <div className={TOOLTIP_APPOINTMENT_ITEM_CONTENT_DATE}>{formattedDate}</div>
         </div>
         {viewModel.props.showDeleteButton && (
-          <DeleteButton onClick={viewModel.onDeleteButtonClick} />
+          <DeleteButton onClick={onDeleteButtonClick} />
         )}
       </div>
       )}
@@ -109,14 +117,5 @@ export default class TooltipItemContent extends JSXComponent<TooltipItemContentP
 
   get color(): DeferredColor | undefined {
     return this.props.item!.color;
-  }
-
-  get onDeleteButtonClick(): (e: any) => void {
-    return getOnDeleteButtonClick(this.props, this.data, this.currentData);
-  }
-
-  get formattedData(): FormattedContent {
-    const { getTextAndFormatDate } = this.props;
-    return getTextAndFormatDate?.(this.data, this.currentData);
   }
 }
