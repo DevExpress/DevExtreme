@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import translator from '../../animation/translator';
-import { getRecurrenceProcessor } from './utils.recurrence';
+import { getRecurrenceProcessor } from './recurrence';
 import { extend } from '../../core/utils/extend';
 import registerComponent from '../../core/component_registrator';
 import tooltip from '../tooltip/ui.tooltip';

@@ -1,7 +1,7 @@
 import config from '../../core/config';
 import iteratorUtils from '../../core/utils/iterator';
 import dateSerialization from '../../core/utils/date_serialization';
-import { getRecurrenceProcessor } from './utils.recurrence';
+import { getRecurrenceProcessor } from './recurrence';
 import dateUtils from '../../core/utils/date';
 import { equalByValue } from '../../core/utils/common';
 import typeUtils from '../../core/utils/type';

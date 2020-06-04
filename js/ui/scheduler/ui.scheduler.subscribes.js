@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import array from '../../core/utils/array';
-import { getRecurrenceProcessor } from './utils.recurrence';
+import { getRecurrenceProcessor } from './recurrence';
 import typeUtils from '../../core/utils/type';
 import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';

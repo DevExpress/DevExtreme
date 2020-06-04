@@ -5,7 +5,7 @@ import 'ui/scheduler/ui.scheduler';
 
 import $ from 'jquery';
 import fx from 'animation/fx';
-import { getRecurrenceProcessor } from 'ui/scheduler/utils.recurrence';
+import { getRecurrenceProcessor } from 'ui/scheduler/recurrence';
 import dateUtils from 'core/utils/date';
 import config from 'core/config';
 

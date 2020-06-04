@@ -1,4 +1,4 @@
-import { getRecurrenceProcessor } from 'ui/scheduler/utils.recurrence';
+import { getRecurrenceProcessor } from 'ui/scheduler/recurrence';
 
 const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
 

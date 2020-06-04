@@ -3,7 +3,7 @@ import 'common.css!';
 import $ from 'jquery';
 import dateUtils from 'core/utils/date';
 import RecurrenceEditor from 'ui/scheduler/ui.scheduler.recurrence_editor';
-import { getRecurrenceProcessor } from 'ui/scheduler/utils.recurrence';
+import { getRecurrenceProcessor } from 'ui/scheduler/recurrence';
 import dateLocalization from 'localization/date';
 
 const FREQUENCY_EDITOR = 'dx-recurrence-selectbox-freq';
