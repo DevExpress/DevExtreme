@@ -152,6 +152,16 @@ QUnit.module('options changed callbacks', {
         this.instance.option('text', 'new test button text');
         assert.ok($testElement.parent().hasClass('dx-button'), 'test element is still in button');
     });
+
+    QUnit.test('button with non-string text option value should not raise an error (T893304)', function(assert) {
+        assert.expect(0);
+
+        try {
+            this.instance.option('text', 100);
+        } catch(e) {
+            assert.ok(false);
+        }
+    });
 });
 
 QUnit.module('regressions', {
