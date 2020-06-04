@@ -65,6 +65,14 @@ function setAxisVisualRangeByOption(arg, axis, isDirectOption, index) {
     axis.visualRange(visualRange, options);
 }
 
+function getAxisTypes(groupsData, axis, isArgumentAxes) {
+    if(isArgumentAxes) {
+        return { argumentAxisType: groupsData.argumentAxisType, argumentType: groupsData.argumentType };
+    }
+    const { valueAxisType, valueType } = groupsData.groups.filter(g => g.valueAxis === axis)[0];
+    return { valueAxisType, valueType };
+}
+
 const AdvancedChart = BaseChart.inherit({
 
     _fontFields: [COMMON_AXIS_SETTINGS + '.label.' + FONT, COMMON_AXIS_SETTINGS + '.title.' + FONT],
@@ -249,7 +257,13 @@ const AdvancedChart = BaseChart.inherit({
                 (!_isDefined(opt.pane) && that.panes.some(p => p.name === a.pane) || a.pane === opt.pane));
             if(curAxes && curAxes.length > 0) {
                 _each(curAxes, (_, axis) => {
+                    const axisTypes = getAxisTypes(that._groupsData, axis, isArgumentAxes);// T891599
                     axis.updateOptions(opt);
+                    if(isArgumentAxes) {
+                        axis.setTypes(axisTypes.argumentAxisType, axisTypes.argumentType, 'argumentType');
+                    } else {
+                        axis.setTypes(axisTypes.valueAxisType, axisTypes.valueType, 'valueType');
+                    }
                     axis.validate();
                     axesBasis.push({ axis: axis });
                 });

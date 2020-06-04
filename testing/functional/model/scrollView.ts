@@ -2,11 +2,11 @@ import Widget from './internal/widget';
 import { Selector, ClientFunction } from 'testcafe';
 
 const CLASS = {
-    scrollView: "dx-scrollview",
-    scrollbar: "dx-scrollbar",
-    scrollbarContainer: "dx-scrollable-container",
-    stateInvisible: "dx-state-invisible",
-    scrollableScroll: "dx-scrollable-scroll"
+    scrollView: 'dx-scrollview',
+    scrollbar: 'dx-scrollbar',
+    scrollbarContainer: 'dx-scrollable-container',
+    stateInvisible: 'dx-state-invisible',
+    scrollableScroll: 'dx-scrollable-scroll'
 };
 
 class Scrollbar {
@@ -35,7 +35,7 @@ export default class ScrollView extends Widget {
 
     name: string = 'dxScrollView';
 
-    constructor (id: string|Selector, direction) {
+    constructor(id: string|Selector, direction) {
         super(id);
 
         this.element = Selector(`.${CLASS.scrollView}`);
