@@ -24,7 +24,7 @@ export default class PreactWrapper extends DOMComponent {
 
     _dispose() {
         Preact.render(null, this.$element().get(0));
-        super.dispose();
+        super._dispose();
     }
 
     _render() {
