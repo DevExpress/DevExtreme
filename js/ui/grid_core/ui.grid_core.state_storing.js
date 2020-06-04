@@ -246,25 +246,34 @@ module.exports = {
                     return this.callBase().concat(['stateLoaded']);
                 },
                 _refreshDataSource: function() {
-                    const that = this;
-                    const callBase = that.callBase;
-                    const stateStoringController = that.getController('stateStoring');
+                    const callBase = this.callBase;
+                    const stateStoringController = this.getController('stateStoring');
+                    const showErrorRow = (error) => {
+                        const errorHandling = this.getController('errorHandling');
+                        const errorMessage = error || 'Unknown error';
+                        errorHandling && errorHandling.renderErrorRow(errorMessage);
+                    };
 
                     if(stateStoringController.isEnabled() && !stateStoringController.isLoaded()) {
-                        clearTimeout(that._restoreStateTimeoutID);
+                        clearTimeout(this._restoreStateTimeoutID);
 
                         const deferred = new Deferred();
-                        that._restoreStateTimeoutID = setTimeout(function() {
-                            stateStoringController.load().always(function() {
-                                that._restoreStateTimeoutID = null;
-                                callBase.call(that);
-                                that.stateLoaded.fire();
+                        this._restoreStateTimeoutID = setTimeout(() => {
+                            stateStoringController.load().always(() => {
+                                this._restoreStateTimeoutID = null;
+                            }).done(() => {
+                                callBase.call(this);
+                                this.stateLoaded.fire();
                                 deferred.resolve();
+                            }).fail(error => {
+                                this.stateLoaded.fire();
+                                showErrorRow(error);
+                                deferred.reject();
                             });
                         });
                         return deferred.promise();
-                    } else if(!that.isStateLoading()) {
-                        callBase.call(that);
+                    } else if(!this.isStateLoading()) {
+                        callBase.call(this);
                     }
                 },
 

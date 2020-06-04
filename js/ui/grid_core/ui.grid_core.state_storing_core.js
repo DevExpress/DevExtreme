@@ -68,6 +68,7 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
             try {
                 getStorage(options).setItem(getUniqueStorageKey(options), JSON.stringify(state));
             } catch(e) {
+                errors.log(e.message);
             }
         },
 
@@ -106,14 +107,13 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
         },
 
         load: function() {
-            const that = this;
-
-            that._isLoading = true;
-            const loadResult = fromPromise(that._loadState());
-            loadResult.done(function(state) {
-                that._isLoaded = true;
-                that._isLoading = false;
-                that.state(state);
+            this._isLoading = true;
+            const loadResult = fromPromise(this._loadState());
+            loadResult.always(() => {
+                this._isLoaded = true;
+                this._isLoading = false;
+            }).done((state) => {
+                this.state(state);
             });
             return loadResult;
         },
