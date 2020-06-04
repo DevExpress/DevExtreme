@@ -8,22 +8,8 @@ import {
   TOOLTIP_APPOINTMENT_ITEM, TOOLTIP_APPOINTMENT_ITEM_CONTENT,
   TOOLTIP_APPOINTMENT_ITEM_CONTENT_SUBJECT, TOOLTIP_APPOINTMENT_ITEM_CONTENT_DATE,
 } from './consts';
-import { DeferredColor } from './types';
+import { DeferredColor, AppointmentItem, FormattedContent } from './types';
 import Marker from './marker';
-
-type AppointmentItem = {
-  data: dxSchedulerAppointment;
-  currentData?: dxSchedulerAppointment;
-  settings?: AppointmentItemSettings;
-  color?: DeferredColor;
-};
-type AppointmentItemSettings = {
-  targetedAppointmentData?: dxSchedulerAppointment;
-};
-type FormattedContent = {
-  text: string;
-  formatDate: string;
-};
 
 type GetCurrentDataFn = (appointmentItem: AppointmentItem) => dxSchedulerAppointment;
 type GetOnDeleteButtonClick = (
