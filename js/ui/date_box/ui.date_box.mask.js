@@ -467,6 +467,10 @@ const DateBoxMask = DateBoxBase.inherit({
 
     _saveMaskValue() {
         const value = this._maskValue && new Date(this._maskValue);
+        if(value && this.option('type') === 'date') {
+            value.setHours(0, 0, 0, 0);
+        }
+
         this._initialMaskValue = new Date(value);
         this.dateOption('value', value);
     },

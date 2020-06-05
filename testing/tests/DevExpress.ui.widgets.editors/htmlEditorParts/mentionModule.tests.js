@@ -295,6 +295,38 @@ QUnit.module('Mentions module', moduleConfig, () => {
         assert.ok(showPopupSpy.calledTwice);
     });
 
+    test('Should hide popup after remove more than one char', function(assert) {
+        const mention = new Mentions(this.quillMock, this.complexDataOptions);
+        const hidePopupSpy = sinon.spy(mention._popup, 'hide');
+
+        const addMarker = { ops: [{ insert: '@' }] };
+        const removeWord = { ops: [{ delete: 3 }] };
+
+        mention.onTextChange(addMarker, {}, 'user');
+        this.clock.tick();
+        assert.ok(hidePopupSpy.notCalled);
+
+        mention.onTextChange(removeWord, {}, 'user');
+        this.clock.tick();
+        assert.ok(hidePopupSpy.calledOnce);
+    });
+
+    test('Module should not filter the list after quickly removing the marker (T894506)', function(assert) {
+        const mention = new Mentions(this.quillMock, this.complexDataOptions);
+        const filterListSpy = sinon.spy(mention, '_filterList');
+
+        const addMarker = { ops: [{ insert: '@' }] };
+        const removeMarker = { ops: [{ delete: 1 }] };
+
+        mention.onTextChange(addMarker, {}, 'user');
+        this.clock.tick();
+        mention.onTextChange(removeMarker, {}, 'user');
+        mention.onTextChange(addMarker, {}, 'user');
+        this.clock.tick();
+
+        assert.ok(filterListSpy.notCalled);
+    });
+
     test('display expression should be used in the suggestion list', function(assert) {
         const mention = new Mentions(this.quillMock, this.complexDataOptions);
 
