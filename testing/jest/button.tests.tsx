@@ -240,6 +240,10 @@ describe('Button', () => {
         expect(classNames.includes('dx-button-has-text')).toBe(false);
         expect(render().find('.dx-button-text').exists()).toBe(false);
       });
+
+      it('should not raise an error with non-string text option value', () => {
+        expect(() => { render({ text: 1 }); }).not.toThrow();
+      });
     });
 
     describe('type', () => {

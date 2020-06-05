@@ -52,7 +52,7 @@ const getCssClasses = (model: ButtonProps) => {
 };
 
 const getAriaLabel = (text, icon) => {
-  let label = (text && text.trim()) || icon;
+  let label = text || icon;
 
   if (!text && getImageSourceType(icon) === 'image') {
     label = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';

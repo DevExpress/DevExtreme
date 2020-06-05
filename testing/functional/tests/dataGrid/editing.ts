@@ -16,80 +16,80 @@ const getGridConfig = (config) => {
             paginate: true
         },
         legacyRendering: false
-    }
+    };
 
     return config ? Object.assign({}, defaultConfig, config) : defaultConfig;
-}
+};
 
-test("Tab key on editor should focus next cell if editing mode is cell", async t => {
-    const dataGrid = new DataGrid("#container");
+test('Tab key on editor should focus next cell if editing mode is cell', async t => {
+    const dataGrid = new DataGrid('#container');
 
     await t
         .click(dataGrid.getDataCell(0, 1).element)
-        .pressKey("1 tab")
+        .pressKey('1 tab')
         .expect(dataGrid.getDataCell(1, 1).isFocused).ok();
 
-}).before(() => createWidget("dxDataGrid", {
-    dataSource: [{ name: "AaAaA", value: 1 }, { name: "aAaAa", value: 2 }],
+}).before(() => createWidget('dxDataGrid', {
+    dataSource: [{ name: 'AaAaA', value: 1 }, { name: 'aAaAa', value: 2 }],
     editing: {
-        mode: "cell",
+        mode: 'cell',
         allowUpdating: true
     },
-    columns: [{ dataField: "name", allowEditing: false }, { dataField: "value", showEditorAlways: true }]
+    columns: [{ dataField: 'name', allowEditing: false }, { dataField: 'value', showEditorAlways: true }]
 }));
 
-test("Click should work if a column button set using svg icon (T863635)", async t => {
+test('Click should work if a column button set using svg icon (T863635)', async t => {
     await t
-        .click("#svg-icon")
-        .expect(ClientFunction(() => (window as any).onSvgClickCounter)()).eql(1)
+        .click('#svg-icon')
+        .expect(ClientFunction(() => (window as any).onSvgClickCounter)()).eql(1);
 
-}).before(() => createWidget("dxDataGrid", {
+}).before(() => createWidget('dxDataGrid', {
     dataSource: [{ value: 1 }],
     columns: [{
-        type: "buttons",
+        type: 'buttons',
         width: 110,
         buttons: [
-        {
-            hint: "svg icon",
-            icon: '<svg id="svg-icon"><circle cx="15" cy="15" r="14" /> </svg>',
-            onClick: function(e) {
-                const global = window as any;
-                if (!global.onSvgClickCounter) {
-                    global.onSvgClickCounter = 0;
+            {
+                hint: 'svg icon',
+                icon: '<svg id="svg-icon"><circle cx="15" cy="15" r="14" /> </svg>',
+                onClick: function(e) {
+                    const global = window as any;
+                    if(!global.onSvgClickCounter) {
+                        global.onSvgClickCounter = 0;
+                    }
+                    global.onSvgClickCounter++;
                 }
-                global.onSvgClickCounter++;
-            }
-        }]
+            }]
     }]
 }));
 
-test("Value change on dataGrid row should be fired after clicking on editor (T823431)", async t => {
-    const dataGrid = new DataGrid("#container");
-    const selectBox = new SelectBox("#otherContainer");
+test('Value change on dataGrid row should be fired after clicking on editor (T823431)', async t => {
+    const dataGrid = new DataGrid('#container');
+    const selectBox = new SelectBox('#otherContainer');
 
     await t
         .click(dataGrid.getDataCell(0, 0).element)
-        .typeText(dataGrid.getDataCell(0, 0).element, "new_value")
+        .typeText(dataGrid.getDataCell(0, 0).element, 'new_value')
         .click(selectBox.dropDownButton)
-        .expect(dataGrid.getDataCell(0, 0).element.textContent).eql("new_value");
+        .expect(dataGrid.getDataCell(0, 0).element.textContent).eql('new_value');
 
 }).before(() => {
     return Promise.all([
-        createWidget("dxDataGrid", {
-            dataSource: [{ name: "old_value", value: 1 }],
+        createWidget('dxDataGrid', {
+            dataSource: [{ name: 'old_value', value: 1 }],
             editing: {
-                mode: "batch",
+                mode: 'batch',
                 allowUpdating: true,
                 selectTextOnEditStart: true,
-                startEditAction: "click"
+                startEditAction: 'click'
             }
         }),
-        createWidget("dxSelectBox", {}, false, "#otherContainer")
+        createWidget('dxSelectBox', {}, false, '#otherContainer')
     ]);
 });
 
-test("Async Validation(Row) - Only valid data is saved in a new row", async t => {
-    const dataGrid = new DataGrid("#container");
+test('Async Validation(Row) - Only valid data is saved in a new row', async t => {
+    const dataGrid = new DataGrid('#container');
 
     const rowIndex = 0;
     const columnIndex = 0;
@@ -101,20 +101,20 @@ test("Async Validation(Row) - Only valid data is saved in a new row", async t =>
 
     await t
         .click(headerPanel.getAddRowButton())
-        .expect(dataRow.isInserted).ok("row is inserted")
+        .expect(dataRow.isInserted).ok('row is inserted')
         .expect(cell0.isValidationPending).notOk()
         .expect(cell0.isInvalid).notOk()
         .click(saveButton)
         .expect(cell0.isValidationPending).ok()
-        .expect(dataRow.isInserted).ok("row is still inserted")
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).eql("invalid")
+        .expect(dataRow.isInserted).ok('row is still inserted')
+        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).eql('invalid')
         .expect(cell0.isInvalid).ok('the first cell is invalid')
-        .typeText(editor0.element, "1")
+        .typeText(editor0.element, '1')
         .click(saveButton)
-        .expect(dataRow.isInserted).notOk("row is not in editing mode")
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).notOk("the first cell does not have cached validation result");
+        .expect(dataRow.isInserted).notOk('row is not in editing mode')
+        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).notOk('the first cell does not have cached validation result');
 
-}).before(() => createWidget("dxDataGrid", getGridConfig({
+}).before(() => createWidget('dxDataGrid', getGridConfig({
     editing: {
         mode: 'row',
         allowAdding: true
@@ -134,8 +134,8 @@ test("Async Validation(Row) - Only valid data is saved in a new row", async t =>
     }, 'name', 'lastName']
 })));
 
-test("Async Validation(Row) - Only valid data is saved in a modified row", async t => {
-    const dataGrid = new DataGrid("#container");
+test('Async Validation(Row) - Only valid data is saved in a modified row', async t => {
+    const dataGrid = new DataGrid('#container');
 
     const rowIndex = 0;
     const columnIndex = 0;
@@ -148,19 +148,19 @@ test("Async Validation(Row) - Only valid data is saved in a modified row", async
     await t
         .click(editButton)
         .selectText(editor0.element, 0, 2)
-        .typeText(editor0.element, "3")
+        .typeText(editor0.element, '3')
         .click(saveButton)
         .expect(cell0.isValidationPending).ok()
-        .expect(dataRow.isEdited).ok("first row is still editing")
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).eql("invalid")
+        .expect(dataRow.isEdited).ok('first row is still editing')
+        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).eql('invalid')
         .expect(cell0.isInvalid).ok('the first cell is invalid')
         .selectText(editor0.element, 0, 1)
-        .typeText(editor0.element, "1")
+        .typeText(editor0.element, '1')
         .click(saveButton)
-        .expect(dataRow.isEdited).notOk("row is not in editing mode")
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).notOk("the first cell does not have cached validation result");
+        .expect(dataRow.isEdited).notOk('row is not in editing mode')
+        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).notOk('the first cell does not have cached validation result');
 
-}).before(() => createWidget("dxDataGrid", getGridConfig({
+}).before(() => createWidget('dxDataGrid', getGridConfig({
     editing: {
         mode: 'row',
         allowUpdating: true
@@ -180,8 +180,8 @@ test("Async Validation(Row) - Only valid data is saved in a modified row", async
     }, 'name', 'lastName']
 })));
 
-test("Async Validation(Row) - Data is not saved when a dependant cell value becomes invalid", async t => {
-    const dataGrid = new DataGrid("#container");
+test('Async Validation(Row) - Data is not saved when a dependant cell value becomes invalid', async t => {
+    const dataGrid = new DataGrid('#container');
 
     const rowIndex = 0;
     const dataRow = dataGrid.getDataRow(rowIndex);
@@ -194,24 +194,24 @@ test("Async Validation(Row) - Data is not saved when a dependant cell value beco
     await t
         .click(editButton)
         .selectText(editor0.element, 0, 2)
-        .typeText(editor0.element, "3")
+        .typeText(editor0.element, '3')
         .click(saveButton)
         .expect(cell0.isValidationPending).ok()
-        .expect(dataRow.isEdited).ok("first row is in editing mode")
+        .expect(dataRow.isEdited).ok('first row is in editing mode')
         .expect(cell0.isInvalid).ok('the first cell is invalid')
         .expect(cell1.isInvalid).notOk('the second cell is valid')
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, 0)).eql("invalid")
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, 1)).eql("valid")
+        .expect(dataGrid.api_getCellValidationStatus(rowIndex, 0)).eql('invalid')
+        .expect(dataGrid.api_getCellValidationStatus(rowIndex, 1)).eql('valid')
         .selectText(editor0.element, 0, 1)
-        .typeText(editor0.element, "1")
+        .typeText(editor0.element, '1')
         .click(saveButton)
-        .expect(dataRow.isEdited).ok("row is in editing mode")
+        .expect(dataRow.isEdited).ok('row is in editing mode')
         .expect(cell0.isInvalid).notOk('the first cell is valid')
         .expect(cell1.isInvalid).ok('the second cell is invalid')
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, 0)).eql("valid")
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, 1)).eql("invalid")
+        .expect(dataGrid.api_getCellValidationStatus(rowIndex, 0)).eql('valid')
+        .expect(dataGrid.api_getCellValidationStatus(rowIndex, 1)).eql('invalid');
 
-}).before(() => createWidget("dxDataGrid", getGridConfig({
+}).before(() => createWidget('dxDataGrid', getGridConfig({
     editing: {
         mode: 'row',
         allowUpdating: true
@@ -240,8 +240,8 @@ test("Async Validation(Row) - Data is not saved when a dependant cell value beco
     }, 'lastName']
 })));
 
-test("Async Validation(Cell) - Only the last cell should be switched to edit mode", async t => {
-    const dataGrid = new DataGrid("#container");
+test('Async Validation(Cell) - Only the last cell should be switched to edit mode', async t => {
+    const dataGrid = new DataGrid('#container');
     const cell0 = dataGrid.getDataCell(0, 0);
     const cell1 = dataGrid.getDataCell(0, 1);
     const cell2 = dataGrid.getDataCell(0, 2);
@@ -250,13 +250,13 @@ test("Async Validation(Cell) - Only the last cell should be switched to edit mod
         .click(cell0.element)
         .expect(cell0.isValidationPending).ok()
         .click(cell1.element)
-        .expect(cell1.isFocused).notOk("the second cell should not be focused")
+        .expect(cell1.isFocused).notOk('the second cell should not be focused')
         .click(cell2.element)
-        .expect(cell0.isValidationPending).notOk("validating is completed")
+        .expect(cell0.isValidationPending).notOk('validating is completed')
         .expect(cell2.hasHiddenFocusState).notOk()
-        .expect(cell2.isFocused).ok("the third cell should be focused");
+        .expect(cell2.isFocused).ok('the third cell should be focused');
 
-}).before(() => createWidget("dxDataGrid", getGridConfig({
+}).before(() => createWidget('dxDataGrid', getGridConfig({
     editing: {
         mode: 'cell',
         allowUpdating: true,
@@ -277,8 +277,8 @@ test("Async Validation(Cell) - Only the last cell should be switched to edit mod
     }, 'name', 'lastName']
 })));
 
-test("Async Validation(Cell) - Only valid data is saved in a new row", async t => {
-    const dataGrid = new DataGrid("#container");
+test('Async Validation(Cell) - Only valid data is saved in a new row', async t => {
+    const dataGrid = new DataGrid('#container');
 
     const rowIndex = 0;
     const columnIndex = 0;
@@ -289,21 +289,21 @@ test("Async Validation(Cell) - Only valid data is saved in a new row", async t =
 
     await t
         .click(headerPanel.getAddRowButton())
-        .expect(dataRow.isInserted).ok("row is inserted")
+        .expect(dataRow.isInserted).ok('row is inserted')
         .expect(cell0.isValidationPending).notOk()
         .expect(cell0.isInvalid).notOk()
         .click(cell0.element)
-        .pressKey("enter")
-        .expect(dataRow.isInserted).ok("row is still inserted")
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).eql("invalid")
+        .pressKey('enter')
+        .expect(dataRow.isInserted).ok('row is still inserted')
+        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).eql('invalid')
         .expect(cell0.isInvalid).ok('the first cell is invalid')
         .click(cell0.element)
-        .typeText(editor0.element, "1")
-        .pressKey("enter")
-        .expect(dataRow.isInserted).notOk("row is not in editing mode")
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).notOk("the first cell does not have cached validation result");
+        .typeText(editor0.element, '1')
+        .pressKey('enter')
+        .expect(dataRow.isInserted).notOk('row is not in editing mode')
+        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).notOk('the first cell does not have cached validation result');
 
-}).before(() => createWidget("dxDataGrid", getGridConfig({
+}).before(() => createWidget('dxDataGrid', getGridConfig({
     editing: {
         mode: 'cell',
         allowAdding: true
@@ -323,8 +323,8 @@ test("Async Validation(Cell) - Only valid data is saved in a new row", async t =
     }, 'name', 'lastName']
 })));
 
-test("Async Validation(Cell) - Only valid data is saved in a modified cell", async t => {
-    const dataGrid = new DataGrid("#container");
+test('Async Validation(Cell) - Only valid data is saved in a modified cell', async t => {
+    const dataGrid = new DataGrid('#container');
 
     const rowIndex = 0;
     const columnIndex = 0;
@@ -337,21 +337,21 @@ test("Async Validation(Cell) - Only valid data is saved in a modified cell", asy
         .expect(cell0.isEditCell).ok()
         .expect(cell0.isInvalid).ok()
         .selectText(editor0.element, 0, 2)
-        .typeText(editor0.element, "3")
-        .pressKey("enter")
+        .typeText(editor0.element, '3')
+        .pressKey('enter')
         .expect(cell0.isValidationPending).ok()
         .expect(cell0.isEditCell).ok()
         .expect(cell0.isInvalid).ok('the first cell is invalid')
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).eql("invalid")
+        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).eql('invalid')
         .click(cell0.element)
         .selectText(editor0.element, 0, 1)
-        .typeText(editor0.element, "1")
-        .pressKey("enter")
+        .typeText(editor0.element, '1')
+        .pressKey('enter')
         .expect(cell0.isValidationPending).ok()
         .expect(cell0.isEditCell).notOk()
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).notOk("the first cell does not have cached validation result");
+        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).notOk('the first cell does not have cached validation result');
 
-}).before(() => createWidget("dxDataGrid", getGridConfig({
+}).before(() => createWidget('dxDataGrid', getGridConfig({
     editing: {
         mode: 'cell',
         allowUpdating: true
@@ -371,8 +371,8 @@ test("Async Validation(Cell) - Only valid data is saved in a modified cell", asy
     }, 'name', 'lastName']
 })));
 
-test("Async Validation(Cell) - Data is not saved when a dependant cell value becomes invalid", async t => {
-    const dataGrid = new DataGrid("#container");
+test('Async Validation(Cell) - Data is not saved when a dependant cell value becomes invalid', async t => {
+    const dataGrid = new DataGrid('#container');
 
     const cell0 = dataGrid.getDataCell(0, 0);
     const cell1 = dataGrid.getDataCell(0, 1);
@@ -384,28 +384,28 @@ test("Async Validation(Cell) - Data is not saved when a dependant cell value bec
         .expect(cell0.isEditCell).ok()
         .expect(cell0.isInvalid).ok()
         .selectText(editor0.element, 0, 2)
-        .typeText(editor0.element, "3")
-        .pressKey("enter")
+        .typeText(editor0.element, '3')
+        .pressKey('enter')
         .expect(cell0.isValidationPending).ok()
         .expect(cell0.isEditCell).ok()
         .expect(cell0.isInvalid).ok('the first cell is invalid')
-        .expect(dataGrid.api_getCellValidationStatus(0, 0)).eql("invalid")
+        .expect(dataGrid.api_getCellValidationStatus(0, 0)).eql('invalid')
         .expect(cell1.isEditCell).notOk()
         .expect(cell1.isInvalid).notOk('the second cell is valid')
-        .expect(dataGrid.api_getCellValidationStatus(0, 1)).eql("valid")
+        .expect(dataGrid.api_getCellValidationStatus(0, 1)).eql('valid')
         .click(cell0.element)
         .selectText(editor0.element, 0, 1)
-        .typeText(editor0.element, "1")
-        .pressKey("enter")
+        .typeText(editor0.element, '1')
+        .pressKey('enter')
         .expect(cell0.isValidationPending).ok()
         .expect(cell0.isEditCell).ok()
         .expect(cell0.isInvalid).notOk('the first cell is valid')
-        .expect(dataGrid.api_getCellValidationStatus(0, 0)).eql("valid")
+        .expect(dataGrid.api_getCellValidationStatus(0, 0)).eql('valid')
         .expect(cell1.isEditCell).notOk()
         .expect(cell1.isInvalid).ok('the first cell is invalid')
-        .expect(dataGrid.api_getCellValidationStatus(0, 1)).eql("invalid");
+        .expect(dataGrid.api_getCellValidationStatus(0, 1)).eql('invalid');
 
-}).before(() => createWidget("dxDataGrid", getGridConfig({
+}).before(() => createWidget('dxDataGrid', getGridConfig({
     editing: {
         mode: 'cell',
         allowUpdating: true
@@ -434,8 +434,8 @@ test("Async Validation(Cell) - Data is not saved when a dependant cell value bec
     }, 'lastName']
 })));
 
-test("Async Validation(Batch) - Only valid data is saved in a new row", async t => {
-    const dataGrid = new DataGrid("#container");
+test('Async Validation(Batch) - Only valid data is saved in a new row', async t => {
+    const dataGrid = new DataGrid('#container');
 
     const rowIndex = 0;
     const columnIndex = 0;
@@ -447,26 +447,26 @@ test("Async Validation(Batch) - Only valid data is saved in a new row", async t 
 
     await t
         .click(headerPanel.getAddRowButton())
-        .expect(dataRow.isInserted).ok("row is inserted")
+        .expect(dataRow.isInserted).ok('row is inserted')
         .expect(cell0.isValidationPending).notOk()
         .expect(cell0.isInvalid).notOk()
         .click(cell0.element)
         .click(saveButton)
         .expect(cell0.isValidationPending).ok()
         .expect(cell0.isModified).ok()
-        .expect(dataRow.isInserted).ok("row is still inserted")
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).eql("invalid")
+        .expect(dataRow.isInserted).ok('row is still inserted')
+        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).eql('invalid')
         .expect(cell0.isInvalid).ok('the first cell is invalid')
         .click(cell0.element)
-        .typeText(editor0.element, "1")
+        .typeText(editor0.element, '1')
         .pressKey('enter')
         .expect(cell0.isValidationPending).ok()
         .expect(cell0.isModified).ok()
         .click(saveButton)
-        .expect(dataRow.isInserted).notOk("row is not in editing mode")
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).notOk("the first cell does not have cached validation result");
+        .expect(dataRow.isInserted).notOk('row is not in editing mode')
+        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).notOk('the first cell does not have cached validation result');
 
-}).before(() => createWidget("dxDataGrid", getGridConfig({
+}).before(() => createWidget('dxDataGrid', getGridConfig({
     editing: {
         mode: 'batch',
         allowAdding: true
@@ -486,8 +486,8 @@ test("Async Validation(Batch) - Only valid data is saved in a new row", async t 
     }, 'name', 'lastName']
 })));
 
-test("Async Validation(Batch) - Only valid data is saved in a modified cell", async t => {
-    const dataGrid = new DataGrid("#container");
+test('Async Validation(Batch) - Only valid data is saved in a modified cell', async t => {
+    const dataGrid = new DataGrid('#container');
 
     const rowIndex = 0;
     const columnIndex = 0;
@@ -502,25 +502,25 @@ test("Async Validation(Batch) - Only valid data is saved in a modified cell", as
         .expect(cell0.isEditCell).ok()
         .expect(cell0.isInvalid).ok()
         .selectText(editor0.element, 0, 2)
-        .typeText(editor0.element, "3")
-        .pressKey("enter")
+        .typeText(editor0.element, '3')
+        .pressKey('enter')
         .expect(cell0.isValidationPending).ok()
         .expect(cell0.isModified).ok()
         .click(saveButton)
         .expect(cell0.isInvalid).ok('the first cell is invalid')
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).eql("invalid")
+        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).eql('invalid')
         .click(cell0.element)
         .expect(cell0.isEditCell).ok()
         .selectText(editor0.element, 0, 1)
-        .typeText(editor0.element, "1")
-        .pressKey("enter")
+        .typeText(editor0.element, '1')
+        .pressKey('enter')
         .expect(cell0.isValidationPending).ok()
         .expect(cell0.isModified).ok()
         .click(saveButton)
         .expect(cell0.isEditCell).notOk()
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).notOk("the first cell does not have cached validation result");
+        .expect(dataGrid.api_getCellValidationStatus(rowIndex, columnIndex)).notOk('the first cell does not have cached validation result');
 
-}).before(() => createWidget("dxDataGrid", getGridConfig({
+}).before(() => createWidget('dxDataGrid', getGridConfig({
     editing: {
         mode: 'batch',
         allowUpdating: true
@@ -540,8 +540,8 @@ test("Async Validation(Batch) - Only valid data is saved in a modified cell", as
     }, 'name', 'lastName']
 })));
 
-test("Async Validation(Batch) - Data is not saved when a dependant cell value becomes invalid", async t => {
-    const dataGrid = new DataGrid("#container");
+test('Async Validation(Batch) - Data is not saved when a dependant cell value becomes invalid', async t => {
+    const dataGrid = new DataGrid('#container');
 
     const rowIndex = 0;
     const headerPanel = dataGrid.getHeaderPanel();
@@ -556,21 +556,21 @@ test("Async Validation(Batch) - Data is not saved when a dependant cell value be
         .expect(cell0.isValidationPending).ok()
         .expect(cell0.isInvalid).ok()
         .selectText(editor0.element, 0, 2)
-        .typeText(editor0.element, "3")
-        .pressKey("enter")
+        .typeText(editor0.element, '3')
+        .pressKey('enter')
         .expect(cell0.isValidationPending).ok()
         .expect(cell0.isModified).ok()
         .click(saveButton)
         .expect(cell0.isEditCell).notOk()
         .expect(cell0.isInvalid).ok('the first cell is invalid')
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, 0)).eql("invalid")
+        .expect(dataGrid.api_getCellValidationStatus(rowIndex, 0)).eql('invalid')
         .expect(cell1.isEditCell).notOk()
         .expect(cell1.isInvalid).notOk('the second cell is valid')
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, 1)).eql("valid")
+        .expect(dataGrid.api_getCellValidationStatus(rowIndex, 1)).eql('valid')
         .click(cell0.element)
         .selectText(editor0.element, 0, 1)
-        .typeText(editor0.element, "1")
-        .pressKey("enter")
+        .typeText(editor0.element, '1')
+        .pressKey('enter')
         .expect(cell0.isValidationPending).ok()
         .expect(cell0.isModified).ok()
         .expect(cell1.isModified).ok()
@@ -578,13 +578,13 @@ test("Async Validation(Batch) - Data is not saved when a dependant cell value be
         .expect(cell0.isModified).ok()
         .expect(cell0.isEditCell).notOk()
         .expect(cell0.isInvalid).notOk('the first cell is valid')
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, 0)).eql("valid")
+        .expect(dataGrid.api_getCellValidationStatus(rowIndex, 0)).eql('valid')
         .expect(cell1.isModified).ok()
         .expect(cell1.isEditCell).notOk()
         .expect(cell1.isInvalid).ok('the first cell is invalid')
-        .expect(dataGrid.api_getCellValidationStatus(rowIndex, 1)).eql("invalid");
+        .expect(dataGrid.api_getCellValidationStatus(rowIndex, 1)).eql('invalid');
 
-}).before(() => createWidget("dxDataGrid", getGridConfig({
+}).before(() => createWidget('dxDataGrid', getGridConfig({
     editing: {
         mode: 'batch',
         allowUpdating: true
@@ -613,8 +613,8 @@ test("Async Validation(Batch) - Data is not saved when a dependant cell value be
     }, 'lastName']
 })));
 
-test("Async Validation(Batch) - Data is not saved when a cell with async setCellValue is invalid", async t => {
-    const dataGrid = new DataGrid("#container");
+test('Async Validation(Batch) - Data is not saved when a cell with async setCellValue is invalid', async t => {
+    const dataGrid = new DataGrid('#container');
 
     const rowIndex = 0;
     const columnIndex = 0;
@@ -626,20 +626,20 @@ test("Async Validation(Batch) - Data is not saved when a cell with async setCell
 
     await t
         .click(headerPanel.getAddRowButton())
-        .expect(dataRow.isInserted).ok("row is inserted")
+        .expect(dataRow.isInserted).ok('row is inserted')
         .expect(cell0.isValidationPending).notOk()
         .expect(cell0.isInvalid).notOk()
         .click(cell0.element)
-        .typeText(editor0.element, "123")
+        .typeText(editor0.element, '123')
         .pressKey('enter')
         .click(saveButton)
         .expect(cell0.isValidationPending).ok()
         .expect(cell0.isValidationPending).notOk()
         .expect(cell0.isInvalid).ok()
         .expect(cell0.isModified).ok()
-        .expect(dataRow.isInserted).ok("row is in editing mode");
+        .expect(dataRow.isInserted).ok('row is in editing mode');
 
-}).before(() => createWidget("dxDataGrid", getGridConfig({
+}).before(() => createWidget('dxDataGrid', getGridConfig({
     editing: {
         mode: 'batch',
         allowAdding: true
@@ -667,8 +667,8 @@ test("Async Validation(Batch) - Data is not saved when a cell with async setCell
     }, 'name', 'lastName']
 })));
 
-test("Validation(Row) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=false) (T880238)", async t => {
-    const dataGrid = new DataGrid("#container");
+test('Validation(Row) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=false) (T880238)', async t => {
+    const dataGrid = new DataGrid('#container');
 
     const dataRow = dataGrid.getDataRow(0);
     const cell0 = dataRow.getDataCell(0);
@@ -705,7 +705,7 @@ test("Validation(Row) - Unmodified data cell should be marked as invalid when a 
         .expect(cell1.isInvalid).ok('the second cell is marked as invalid')
         .expect(dataRow.isEdited).ok('row is still in editing mode');
 
-}).before(() => createWidget("dxDataGrid", getGridConfig({
+}).before(() => createWidget('dxDataGrid', getGridConfig({
     editing: {
         mode: 'row',
         allowUpdating: true
@@ -721,8 +721,8 @@ test("Validation(Row) - Unmodified data cell should be marked as invalid when a 
     }]
 })));
 
-test("Validation(Row) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=true) (T880238)", async t => {
-    const dataGrid = new DataGrid("#container");
+test('Validation(Row) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=true) (T880238)', async t => {
+    const dataGrid = new DataGrid('#container');
 
     const dataRow = dataGrid.getDataRow(0);
     const cell0 = dataRow.getDataCell(0);
@@ -755,7 +755,7 @@ test("Validation(Row) - Unmodified data cell should be marked as invalid when a 
         .expect(cell1.isInvalid).notOk('cell is not marked as invalid')
         .expect(dataRow.isEdited).notOk('row is not in editing mode');
 
-}).before(() => createWidget("dxDataGrid", getGridConfig({
+}).before(() => createWidget('dxDataGrid', getGridConfig({
     editing: {
         mode: 'row',
         allowUpdating: true
@@ -772,8 +772,8 @@ test("Validation(Row) - Unmodified data cell should be marked as invalid when a 
     }]
 })));
 
-test("Validation(Cell) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=false) (T880238)", async t => {
-    const dataGrid = new DataGrid("#container");
+test('Validation(Cell) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=false) (T880238)', async t => {
+    const dataGrid = new DataGrid('#container');
 
     const dataRow = dataGrid.getDataRow(0);
     const cell0 = dataRow.getDataCell(0);
@@ -801,7 +801,7 @@ test("Validation(Cell) - Unmodified data cell should be marked as invalid when a
         .expect(cell1.isInvalid).ok('the second cell is still invalid')
         .expect(cell0.isEditCell).ok('the first cell is still in editing mode');
 
-}).before(() => createWidget("dxDataGrid", getGridConfig({
+}).before(() => createWidget('dxDataGrid', getGridConfig({
     editing: {
         mode: 'cell',
         allowUpdating: true
@@ -817,8 +817,8 @@ test("Validation(Cell) - Unmodified data cell should be marked as invalid when a
     }]
 })));
 
-test("Validation(Cell) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=true) (T880238)", async t => {
-    const dataGrid = new DataGrid("#container");
+test('Validation(Cell) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=true) (T880238)', async t => {
+    const dataGrid = new DataGrid('#container');
 
     const dataRow = dataGrid.getDataRow(0);
     const cell0 = dataRow.getDataCell(0);
@@ -846,7 +846,7 @@ test("Validation(Cell) - Unmodified data cell should be marked as invalid when a
         .expect(cell1.isInvalid).notOk('the second cell is notmarked as invalid')
         .expect(cell0.isEditCell).notOk('the first cell is not in editing mode');
 
-}).before(() => createWidget("dxDataGrid", getGridConfig({
+}).before(() => createWidget('dxDataGrid', getGridConfig({
     editing: {
         mode: 'cell',
         allowUpdating: true
@@ -865,7 +865,7 @@ test("Validation(Cell) - Unmodified data cell should be marked as invalid when a
 
 [false, true].forEach(reevaluate => {
     test(`Validation(Batch) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=${reevaluate}) (T880238)`, async t => {
-        const dataGrid = new DataGrid("#container");
+        const dataGrid = new DataGrid('#container');
 
         const saveButton = dataGrid.getHeaderPanel().getSaveButton();
         const dataRow = dataGrid.getDataRow(0);
@@ -909,7 +909,7 @@ test("Validation(Cell) - Unmodified data cell should be marked as invalid when a
             .expect(cell0.isModified).notOk('the first cell is not marked as modified')
             .expect(cell0.isEditCell).notOk('the first cell is not in editing mode');
 
-    }).before(() => createWidget("dxDataGrid", getGridConfig({
+    }).before(() => createWidget('dxDataGrid', getGridConfig({
         editing: {
             mode: 'batch',
             allowUpdating: true
@@ -928,7 +928,7 @@ test("Validation(Cell) - Unmodified data cell should be marked as invalid when a
 });
 
 test('Validation(Batch) - Unmodified data cell with enabled showEditorAlways should be marked as invalid when a neighboring cell is modified (T878218)', async t => {
-    const dataGrid = new DataGrid("#container");
+    const dataGrid = new DataGrid('#container');
 
     const dataRow0 = dataGrid.getDataRow(0);
     const dataRow1 = dataGrid.getDataRow(1);
@@ -970,9 +970,9 @@ test('Validation(Batch) - Unmodified data cell with enabled showEditorAlways sho
         .click(cell10.element)
 
         .expect(cell11.isInvalid).ok()
-        .expect(cell10.isModified).ok()
+        .expect(cell10.isModified).ok();
 
-}).before(() => createWidget("dxDataGrid", getGridConfig({
+}).before(() => createWidget('dxDataGrid', getGridConfig({
     keyExpr: 'id',
     dataSource: [
         { id: 1, name: '', lastName: '' },

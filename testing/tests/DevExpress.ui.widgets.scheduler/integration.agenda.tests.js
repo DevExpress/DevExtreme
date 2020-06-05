@@ -9,7 +9,7 @@ import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dataUtils from 'core/element_data';
-import { SchedulerTestWrapper } from './helpers.js';
+import { SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
 
 import 'common.css!';
 import 'generic_light.css!';

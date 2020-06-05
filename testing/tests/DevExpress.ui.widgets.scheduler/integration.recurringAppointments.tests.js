@@ -8,7 +8,7 @@ import translator from 'animation/translator';
 import { DataSource } from 'data/data_source/data_source';
 import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dateSerialization from 'core/utils/date_serialization';
-import { SchedulerTestWrapper, isDesktopEnvironment } from './helpers.js';
+import { SchedulerTestWrapper, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
 import dateUtils from 'core/utils/date';
 
 import 'common.css!';

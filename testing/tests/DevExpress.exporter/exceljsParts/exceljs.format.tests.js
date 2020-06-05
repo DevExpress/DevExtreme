@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import ExcelJS from 'exceljs';
-import ExcelJSTestHelper from './ExcelJSTestHelper.js';
+import { ExcelJSDataGridTestHelper, ExcelJSPivotGridTestHelper } from './ExcelJSTestHelper.js';
 import { exportDataGrid, exportPivotGrid } from 'excel_exporter';
 import { initializeDxObjectAssign, clearDxObjectAssign } from './objectAssignHelper.js';
 import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
@@ -18,7 +18,7 @@ const ExcelJSLocalizationFormatTests = {
             },
             beforeEach: function() {
                 this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
-                helper = new ExcelJSTestHelper(this.worksheet);
+                helper = new ExcelJSDataGridTestHelper(this.worksheet);
             },
             after: function() {
                 clearDxObjectAssign();
@@ -80,7 +80,7 @@ const ExcelJSLocalizationFormatTests = {
             },
             beforeEach: function() {
                 this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
-                helper = new ExcelJSTestHelper(this.worksheet);
+                helper = new ExcelJSPivotGridTestHelper(this.worksheet);
             },
             after: function() {
                 clearDxObjectAssign();
@@ -111,14 +111,14 @@ const ExcelJSLocalizationFormatTests = {
                     }).dxPivotGrid('instance');
 
                     const expectedCells = [[
-                        { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string' }, gridCell: { rowType: 'header' } },
-                        { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string' }, gridCell: { rowType: 'header' } }
+                        { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string' }, pivotCell: { } },
+                        { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string' }, pivotCell: { } }
                     ], [
-                        { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string' }, gridCell: { rowType: 'header' } },
-                        { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: currency.expected, }, gridCell: { rowType: 'header' } }
+                        { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string' }, pivotCell: { } },
+                        { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: currency.expected, }, pivotCell: { } }
                     ]];
 
-                    helper._extendExpectedCells(expectedCells, topLeft);
+                    helper.extendExpectedCells(expectedCells, topLeft);
 
                     exportPivotGrid({
                         component: pivotGrid,
