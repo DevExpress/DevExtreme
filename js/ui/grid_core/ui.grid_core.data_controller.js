@@ -713,7 +713,10 @@ module.exports = {
                     }
 
                     if(item1.rowType === 'group' || item1.rowType === 'groupFooter') {
-                        if(item1.isExpanded !== item2.isExpanded || JSON.stringify(item1.summaryCells) !== JSON.stringify(item2.summaryCells)) {
+                        const expandedMatch = item1.isExpanded === item2.isExpanded;
+                        const summaryCellsMatch = JSON.stringify(item1.summaryCells) === JSON.stringify(item2.summaryCells);
+                        const continuationMatch = item1.data?.isContinuation === item2.data?.isContinuation && item1.data?.isContinuationOnNextPage === item2.data?.isContinuationOnNextPage;
+                        if(!expandedMatch || !summaryCellsMatch || !continuationMatch) {
                             return false;
                         }
                     }

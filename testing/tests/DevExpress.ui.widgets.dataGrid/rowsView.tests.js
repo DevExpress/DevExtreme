@@ -5430,6 +5430,71 @@ QUnit.module('Rows view with real dataController and columnController', {
             clock.restore();
         }
     });
+
+    QUnit.test('Continuation text in an expanded group row should be updated when repaintChangesOnly is enabled (T893032)', function(assert) {
+        const clock = sinon.useFakeTimers();
+        const $testElement = $('#container');
+        this.options = {
+            dataSource: {
+                store: {
+                    type: 'array',
+                    data: [{
+                        id: 1,
+                        name: 'name1',
+                        category: 'category'
+                    },
+                    {
+                        id: 2,
+                        name: 'name2',
+                        category: 'category'
+                    }],
+                    key: 'id'
+                }
+            },
+            repaintChangesOnly: true,
+            grouping: {
+                autoExpandAll: true,
+                texts: {
+                    groupContinuesMessage: 'continues text',
+                    groupContinuedMessage: 'continued text'
+                }
+            },
+            paging: {
+                pageSize: 2
+            },
+            columns: ['id', 'name', {
+                dataField: 'category',
+                groupIndex: 0
+            }]
+        };
+
+        // act
+        this.setupDataGridModules();
+        this.rowsView.render($testElement);
+        clock.tick();
+
+        let firstItem = this.dataController.items()[0];
+
+        // assert
+        assert.equal(firstItem.rowType, 'group');
+        assert.deepEqual(firstItem.key, ['category']);
+        assert.notOk(firstItem.cells[1].groupContinuedMessage, 'continued text is not defined');
+        assert.ok(firstItem.cells[1].groupContinuesMessage, 'continues text is defined');
+
+        this.pageIndex(1);
+        clock.tick();
+
+        // act
+        firstItem = this.dataController.items()[0];
+
+        // assert
+        assert.equal(firstItem.rowType, 'group');
+        assert.deepEqual(firstItem.key, ['category']);
+        assert.notOk(firstItem.cells[1].groupContinuesMessage, 'continues text is not defined');
+        assert.ok(firstItem.cells[1].groupContinuedMessage, 'continued text is defined');
+
+        clock.restore();
+    });
 });
 
 QUnit.module('Virtual scrolling', {
