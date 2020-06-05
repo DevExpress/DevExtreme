@@ -13,8 +13,6 @@ module.exports = {
     collectCoverage: true,
     collectCoverageFrom: [
         './js/renovation/**/*.p.js',
-        '!./js/renovation/number-box.p.js',
-        '!./js/renovation/select-box.p.js',
     ],
     coverageDirectory: './testing/jest/code_coverage',
     coverageThreshold: {
