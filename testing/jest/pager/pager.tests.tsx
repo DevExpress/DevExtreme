@@ -14,8 +14,8 @@ const pageSizeRender = jest.fn();
 jest.mock('../../../js/renovation/pager/page-size-selector.p', () => (props) => pageSizeRender(props));
 jest.mock('../../../js/renovation/select-box', () => { });
 jest.mock('../../../js/renovation/pager/resizable-container.p', () => (props) => {
-  const { content, ...containerProps } = props;
-  return content({ ...containerProps, isLargeDisplayMode: true, infoTextVisible: true });
+  const { contentTemplate, ...containerProps } = props;
+  return contentTemplate({ ...containerProps, isLargeDisplayMode: true, infoTextVisible: true });
 });
 
 const pageIndexSelectorRender = jest.fn();

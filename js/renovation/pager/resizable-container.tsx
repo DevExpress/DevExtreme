@@ -20,7 +20,7 @@ export const viewFunction = ({
   pagesRef,
   infoTextVisible,
   isLargeDisplayMode,
-  props: { content: Content, ...pagerProps },
+  props: { contentTemplate: Content, ...pagerProps },
 }: ResizableContainer) => (
   <Fragment>
     <Content
@@ -123,14 +123,14 @@ export class ResizableContainerProps extends PagerProps {
   @Event() pageSizeChange!: (pageSize: number) => void;
 
   // TODO Vitik: bug in generator it should be @Template() content!: ContentPagerProps;
-  @Template() content: any;
+  @Template() contentTemplate: any;
 }
 // tslint:disable-next-line: max-classes-per-file
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class ResizableContainer extends JSXComponent<ResizableContainerProps> {
+export default class ResizableContainer extends JSXComponent(ResizableContainerProps) {
   @Ref() parentRef!: HTMLElement;
 
   @Ref() pageSizesRef!: GetHtmlElement;

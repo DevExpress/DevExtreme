@@ -34,7 +34,7 @@ export class PageProps {
   view: viewFunction,
 })
 
-export default class Page extends JSXComponent<PageProps> {
+export default class Page extends JSXComponent(PageProps) {
   get label(): string {
     return `Page ${this.value}`;
   }

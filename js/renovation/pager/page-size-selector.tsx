@@ -51,7 +51,7 @@ export class PageSizeSelectorProps {
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class PageSizeSelector extends JSXComponent<PageSizeSelectorProps>
+export default class PageSizeSelector extends JSXComponent(PageSizeSelectorProps)
   implements GetHtmlElement {
   @Method() getHtmlElement(): HTMLElement {
     return this.htmlRef;
@@ -66,11 +66,8 @@ export default class PageSizeSelector extends JSXComponent<PageSizeSelectorProps
   @Ref() htmlRef!: HTMLDivElement;
 
   get pageSizesText() {
-    const { pageSize, rtlEnabled } = this.props;
-    const normPageSizes = rtlEnabled
-      ? [...this.normalizedPageSizes].reverse()
-      : this.normalizedPageSizes;
-    return normPageSizes.map(({ value: processedPageSize, text }) => {
+    const { pageSize } = this.props;
+    return this.normalizedPageSizes.map(({ value: processedPageSize, text }) => {
       const selected = processedPageSize === pageSize;
       const className = selected ? PAGER_SELECTED_PAGE_SIZE_CLASS : PAGER_PAGE_SIZE_CLASS;
       return {

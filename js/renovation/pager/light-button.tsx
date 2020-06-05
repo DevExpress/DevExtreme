@@ -63,7 +63,7 @@ export class LightButtonProps {
 
 // tslint:disable-next-line: max-classes-per-file
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class LightButton extends JSXComponent<LightButtonProps> {
+export default class LightButton extends JSXComponent(LightButtonProps) {
   @Ref() widgetRef!: HTMLDivElement;
 
   @Effect() keyboardEffect(): (() => void) {

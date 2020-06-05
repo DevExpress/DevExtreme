@@ -95,7 +95,7 @@ function getIncrement(direction: Direction): number {
   type Direction = 'next' | 'prev';
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class PageIndexSelector extends JSXComponent<PageIndexSelectorProps> {
+export default class PageIndexSelector extends JSXComponent(PageIndexSelectorProps) {
   get nextClassName(): string {
     const direction = this.getNextDirection();
     const canNavigate = this.canNavigateTo(direction);

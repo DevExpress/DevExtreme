@@ -14,7 +14,7 @@ export const viewFunction = ({
   <ResizableContainer
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...props as PagerProps}
-    content={PagerContent}
+    contentTemplate={PagerContent}
     pageSizeChange={pageSizeChange}
     pageIndexChange={pageIndexChange}
   />
@@ -23,9 +23,10 @@ export const viewFunction = ({
 // tslint:disable-next-line: max-classes-per-file
 @Component({
   defaultOptionRules: null,
+  jQuery: { register: true },
   view: viewFunction,
 })
-export default class Pager extends JSXComponent<PagerProps> {
+export default class Pager extends JSXComponent(PagerProps) {
   pageIndexChange(newPageIndex: number): void {
     this.props.pageIndex = newPageIndex;
   }

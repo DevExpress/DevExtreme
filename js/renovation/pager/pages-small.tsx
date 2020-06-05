@@ -59,7 +59,7 @@ export class SmallPagesProps {
 
 // tslint:disable-next-line: max-classes-per-file
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class SmallPages extends JSXComponent<SmallPagesProps> {
+export default class SmallPages extends JSXComponent(SmallPagesProps) {
   @Ref() pageIndexRef!: HTMLDivElement;
 
   get value(): number {

@@ -68,7 +68,7 @@ function getPageIndexes(startIndex: number, pageCount: number): (number | null)[
 
 // tslint:disable-next-line: max-classes-per-file
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class LargePages extends JSXComponent<LargePagesProps> {
+export default class LargePages extends JSXComponent(LargePagesProps) {
   get pages(): PageType[] {
     const { pageIndex, pageCount, maxPagesCount } = this.props as Required<LargePagesProps>;
     let pageIndexes: (number | null)[] = [];

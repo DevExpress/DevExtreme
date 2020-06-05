@@ -22,9 +22,11 @@ export const viewFunction = ({
     pagesCountText, rtlEnabled,
     showNavigationButtons, totalCount,
     showInfo,
+    elementAttr,
   },
 }: PagerContent) => (
-  <div ref={parentRef as any} className={className}>
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  <div ref={parentRef as any} className={className} {...elementAttr}>
     <PageSizeSelector
       ref={pageSizesRef as any}
       isLargeDisplayMode={isLargeDisplayMode}
@@ -34,15 +36,6 @@ export const viewFunction = ({
       rtlEnabled={rtlEnabled}
     />
     <div ref={pagesRef as any} className={PAGER_PAGES_CLASS}>
-      {showInfo && infoTextVisible && (
-        <InfoText
-          ref={infoTextRef as any}
-          infoText={infoText}
-          pageCount={pageCount}
-          pageIndex={pageIndex}
-          totalCount={totalCount}
-        />
-      )}
       <PageIndexSelector
                 // hasKnownLastPage={hasKnownLastPage}
         isLargeDisplayMode={isLargeDisplayMode}
@@ -55,6 +48,15 @@ export const viewFunction = ({
         showNavigationButtons={showNavigationButtons}
         totalCount={totalCount}
       />
+      {showInfo && infoTextVisible && (
+        <InfoText
+          ref={infoTextRef as any}
+          infoText={infoText}
+          pageCount={pageCount}
+          pageIndex={pageIndex}
+          totalCount={totalCount}
+        />
+      )}
     </div>
   </div>
 );
@@ -85,7 +87,7 @@ export class PagerContentProps extends PagerProps /* bug in generator  implement
 
 // tslint:disable-next-line: max-classes-per-file
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class PagerContent extends JSXComponent<PagerContentProps> {
+export default class PagerContent extends JSXComponent(PagerContentProps) {
   get isLargeDisplayMode(): boolean {
     return !(this.props.lightModeEnabled
     || !this.props.isLargeDisplayMode);
