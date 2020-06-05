@@ -248,10 +248,9 @@ module.exports = {
                 _refreshDataSource: function() {
                     const callBase = this.callBase;
                     const stateStoringController = this.getController('stateStoring');
-                    const showErrorRow = (error) => {
-                        const errorHandling = this.getController('errorHandling');
+                    const showError = (error) => {
                         const errorMessage = error || 'Unknown error';
-                        errorHandling && errorHandling.renderErrorRow(errorMessage);
+                        this._handleLoadError(errorMessage);
                     };
 
                     if(stateStoringController.isEnabled() && !stateStoringController.isLoaded()) {
@@ -267,7 +266,7 @@ module.exports = {
                                 deferred.resolve();
                             }).fail(error => {
                                 this.stateLoaded.fire();
-                                showErrorRow(error);
+                                showError(error);
                                 deferred.reject();
                             });
                         });

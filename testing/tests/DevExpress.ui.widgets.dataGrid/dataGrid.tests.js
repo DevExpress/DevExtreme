@@ -8773,6 +8773,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // arrange
         const errorText = 'test error';
         const contentReadyHandler = sinon.spy();
+        const dataErrorOccurred = sinon.spy();
         const gridOptions = {
             dataSource: [{ id: 1 }],
             columns: ['id'],
@@ -8783,7 +8784,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                     return $.Deferred().reject(errorText).promise();
                 }
             },
-            onContentReady: contentReadyHandler
+            onContentReady: contentReadyHandler,
+            onDataErrorOccurred: dataErrorOccurred
         };
         const dataGrid = createDataGrid(gridOptions);
         this.clock.tick();
@@ -8794,6 +8796,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.ok(contentReadyHandler.called, 'onContentReady is called');
+        assert.equal(dataErrorOccurred.callCount, 1, 'onDataErrorOccurred is called');
+        assert.equal(dataErrorOccurred.getCall(0).args[0].error, errorText, 'error text is correct');
         assert.equal(renderedRowCount, 0, 'there are no rendered data rows');
         assert.ok($headerRow.length, 'header row is rendered');
         assert.ok($errorRow.length, 'error row is rendered');
@@ -8821,6 +8825,33 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         assert.ok($errorRow.length, 'error row is rendered');
         assert.equal($errorRow.find('.dx-error-message').text(), 'Unknown error', 'default error message');
+    });
+
+    QUnit.test('Error row should not be displayed when reject is called in stateStoring.customLoad and errorRowEnabled === false (T894590)', function(assert) {
+        // arrange
+        const dataErrorOccurred = sinon.spy();
+        const gridOptions = {
+            dataSource: [],
+            columns: ['id'],
+            errorRowEnabled: false,
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return $.Deferred().reject().promise();
+                }
+            },
+            onDataErrorOccurred: dataErrorOccurred
+        };
+        const dataGrid = createDataGrid(gridOptions);
+        this.clock.tick();
+
+        const $errorRow = $(dataGrid.element()).find('.dx-error-row');
+
+        // assert
+        assert.equal(dataErrorOccurred.callCount, 1, 'onDataErrorOccurred is called');
+        assert.equal(dataErrorOccurred.getCall(0).args[0].error, 'Unknown error', 'default error message');
+        assert.notOk($errorRow.length, 'error row is not rendered');
     });
 });
 
