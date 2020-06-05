@@ -2511,6 +2511,36 @@ QUnit.module('Headers with band columns', {
         const $filterRowFirstColumnElement = $testElement.find('.dx-datagrid-filter-row').first().children().eq(0);
         assert.strictEqual($filterRowFirstColumnElement.attr('rowspan'), undefined);
     });
+
+    // T881055, T895531
+    QUnit.test('Column header should not overlap filterRow when grouped and showWhenGrouped', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.columns = [{
+            caption: 'Band column',
+            columns: [{
+                caption: 'Column3',
+                showWhenGrouped: true,
+                groupIndex: 0
+            }]
+        }];
+
+        this.options.filterRow = { visible: true };
+        this.setupDataGrid();
+
+        this.columnHeadersView.render($testElement);
+
+        // act
+        const $headerCells = $testElement.find('.dx-row.dx-column-lines.dx-header-row').children();
+
+        // assert
+        assert.equal($headerCells.length, 4, 'header cell count');
+
+        $headerCells.each((_, headerCellElement) => {
+            assert.strictEqual($(headerCellElement).attr('rowspan'), undefined);
+        });
+    });
 });
 
 QUnit.module('Multiple sorting', {
