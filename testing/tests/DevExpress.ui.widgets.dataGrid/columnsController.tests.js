@@ -5133,6 +5133,51 @@ QUnit.module('Column Option', { beforeEach: setupModule, afterEach: teardownModu
         assert.ok(!column3);
     });
 
+    QUnit.test('get column options by name', function(assert) {
+        this.applyOptions({ columns: [
+            { dataField: 'field', name: 'field1' },
+            { dataField: 'field', name: 'field2' }
+        ] });
+
+        // act
+        const column1 = this.columnsController.columnOption('field1');
+        const column2 = this.columnsController.columnOption('field2');
+
+        // assert
+        assert.equal(column1.index, 0);
+        assert.equal(column2.index, 1);
+    });
+
+    QUnit.test('get column options by caption', function(assert) {
+        this.applyOptions({ columns: [
+            { dataField: 'field', caption: 'field1' },
+            { dataField: 'field', caption: 'field2' }
+        ] });
+
+        // act
+        const column1 = this.columnsController.columnOption('field1');
+        const column2 = this.columnsController.columnOption('field2');
+
+        // assert
+        assert.equal(column1.index, 0);
+        assert.equal(column2.index, 1);
+    });
+
+    QUnit.test('get column options by dataField if some column has such caption (T896131)', function(assert) {
+        this.applyOptions({ columns: [
+            { dataField: 'CompanyNo', caption: 'Company' },
+            { dataField: 'Company', caption: 'Supplier' }
+        ] });
+
+        // act
+        const column1 = this.columnsController.columnOption('CompanyNo');
+        const column2 = this.columnsController.columnOption('Company');
+
+        // assert
+        assert.equal(column1.index, 0);
+        assert.equal(column2.index, 1);
+    });
+
     QUnit.test('get column option', function(assert) {
         this.applyOptions({ columns: ['field1', 'field2'] });
 
