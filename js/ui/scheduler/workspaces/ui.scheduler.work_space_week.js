@@ -1,97 +1,45 @@
-const $ = require('../../../core/renderer');
-const registerComponent = require('../../../core/component_registrator');
-const dateUtils = require('../../../core/utils/date');
-const dateLocalization = require('../../../localization/date');
-const each = require('../../../core/utils/iterator').each;
-const SchedulerWorkSpace = require('./ui.scheduler.work_space.indicator');
+import registerComponent from '../../../core/component_registrator';
+import dateUtils from '../../../core/utils/date';
+import dateLocalization from '../../../localization/date';
+import SchedulerWorkSpaceVertical from './ui.scheduler.work_space_vertical';
 
 const WEEK_CLASS = 'dx-scheduler-work-space-week';
 
 const toMs = dateUtils.dateToMilliseconds;
-const SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
-    _getElementClass: function() {
+class SchedulerWorkSpaceWeek extends SchedulerWorkSpaceVertical {
+    _getElementClass() {
         return WEEK_CLASS;
-    },
+    }
 
-    _getRowCount: function() {
+    _getRowCount() {
         return this._getCellCountInDay();
-    },
+    }
 
-    _getCellCount: function() {
+    _getCellCount() {
         return 7 * this.option('intervalCount');
-    },
+    }
 
-    _getDateByIndex: function(headerIndex) {
+    _getDateByIndex(headerIndex) {
         const resultDate = new Date(this._firstViewDate);
         resultDate.setDate(this._firstViewDate.getDate() + headerIndex);
         return resultDate;
-    },
+    }
 
-    _getFormat: function() {
+    _getFormat() {
         return this._formatWeekdayAndDay;
-    },
+    }
 
-    _getStartViewDate: function() {
+    _getStartViewDate() {
         return dateUtils.getFirstWeekDate(this.option('startDate'), this._firstDayOfWeek() || dateLocalization.firstDayOfWeekIndex());
-    },
+    }
 
-    _getIntervalDuration: function() {
+    _getIntervalDuration() {
         return toMs('day') * 7 * this.option('intervalCount');
-    },
+    }
 
-    _getCellsBetween: function($first, $last) {
-        if(this._hasAllDayClass($last)) {
-            return this.callBase($first, $last);
-        }
-
-        let $cells = this._getCells();
-        const firstColumn = $first.index();
-        const firstRow = $first.parent().index();
-        const lastColumn = $last.index();
-        const lastRow = $last.parent().index();
-        const groupCount = this._getGroupCount();
-        const cellCount = groupCount > 0 ? this._getTotalCellCount(groupCount) : this._getCellCount();
-        const rowCount = this._getTotalRowCount(groupCount);
-        const result = [];
-
-        for(let i = 0; i < cellCount; i++) {
-            for(let j = 0; j < rowCount; j++) {
-                const cell = $cells.get(cellCount * j + i);
-                result.push(cell);
-            }
-        }
-
-        const lastCellGroup = this.getCellData($last).groups;
-        const indexesDifference = this.option('showAllDayPanel') && this._isVerticalGroupedWorkSpace() ? this._getGroupIndexByResourceId(lastCellGroup) + 1 : 0;
-
-        let newFirstIndex = rowCount * firstColumn + firstRow - indexesDifference;
-        let newLastIndex = rowCount * lastColumn + lastRow - indexesDifference;
-
-        if(newFirstIndex > newLastIndex) {
-            const buffer = newFirstIndex;
-            newFirstIndex = newLastIndex;
-            newLastIndex = buffer;
-        }
-
-        $cells = $(result).slice(newFirstIndex, newLastIndex + 1);
-
-        if(this._getGroupCount()) {
-            const arr = [];
-            const focusedGroupIndex = this._getGroupIndexByCell($first);
-            each($cells, (function(_, cell) {
-                const groupIndex = this._getGroupIndexByCell($(cell));
-                if(focusedGroupIndex === groupIndex) {
-                    arr.push(cell);
-                }
-            }).bind(this));
-            $cells = $(arr);
-        }
-        return $cells;
-    },
-
-    _getRightCell: function(isMultiSelection) {
+    _getRightCell(isMultiSelection) {
         if(!isMultiSelection) {
-            return this.callBase(isMultiSelection);
+            return super._getRightCell(isMultiSelection);
         }
         let $rightCell;
         const $focusedCell = this._$focusedCell;
@@ -107,11 +55,11 @@ const SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
             $rightCell = this._checkForViewBounds($rightCell);
         }
         return $rightCell;
-    },
+    }
 
-    _getLeftCell: function(isMultiSelection) {
+    _getLeftCell(isMultiSelection) {
         if(!isMultiSelection) {
-            return this.callBase(isMultiSelection);
+            return super._getLeftCell(isMultiSelection);
         }
         let $leftCell;
         const $focusedCell = this._$focusedCell;
@@ -128,9 +76,9 @@ const SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
         }
 
         return $leftCell;
-    },
+    }
 
-    getPositionShift: function(timeShift, isAllDay) {
+    getPositionShift(timeShift, isAllDay) {
         if(!isAllDay && this.invoke('isAdaptive') && this.invoke('getMaxAppointmentCountPerCellByType') === 0) {
             return {
                 top: 0,
@@ -138,16 +86,16 @@ const SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
                 cellPosition: 0
             };
         }
-        return this.callBase(timeShift, isAllDay);
-    },
+        return super.getPositionShift(timeShift, isAllDay);
+    }
 
-    _isApplyCompactAppointmentOffset: function() {
+    _isApplyCompactAppointmentOffset() {
         if(this.invoke('isAdaptive') && this.invoke('getMaxAppointmentCountPerCellByType') === 0) {
             return false;
         }
-        return this.callBase();
-    },
-});
+        return super._isApplyCompactAppointmentOffset();
+    }
+}
 
 registerComponent('dxSchedulerWorkSpaceWeek', SchedulerWorkSpaceWeek);
 
