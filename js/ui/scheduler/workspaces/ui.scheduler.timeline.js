@@ -51,38 +51,38 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
         });
     },
 
-    _getRightCell: function() {
-        let $rightCell;
-        const $focusedCell = this._$focusedCell;
-        const rowCellCount = this._getCellCount();
-        const edgeCellIndex = this._isRTL() ? 0 : rowCellCount - 1;
-        const direction = this._isRTL() ? 'prev' : 'next';
+    // _getRightCell: function() {
+    //     let $rightCell;
+    //     const $focusedCell = this._$focusedCell;
+    //     const rowCellCount = this._getCellCount();
+    //     const edgeCellIndex = this._isRTL() ? 0 : rowCellCount - 1;
+    //     const direction = this._isRTL() ? 'prev' : 'next';
 
-        if($focusedCell.index() === edgeCellIndex) {
-            $rightCell = $focusedCell;
-        } else {
-            $rightCell = $focusedCell[direction]();
-            $rightCell = this._checkForViewBounds($rightCell);
-        }
-        return $rightCell;
-    },
+    //     if($focusedCell.index() === edgeCellIndex) {
+    //         $rightCell = $focusedCell;
+    //     } else {
+    //         $rightCell = $focusedCell[direction]();
+    //         $rightCell = this._checkForViewBounds($rightCell);
+    //     }
+    //     return $rightCell;
+    // },
 
-    _getLeftCell: function() {
-        let $leftCell;
-        const $focusedCell = this._$focusedCell;
-        const rowCellCount = this._getCellCount();
-        const edgeCellIndex = this._isRTL() ? rowCellCount - 1 : 0;
-        const direction = this._isRTL() ? 'next' : 'prev';
+    // _getLeftCell: function() {
+    //     let $leftCell;
+    //     const $focusedCell = this._$focusedCell;
+    //     const rowCellCount = this._getCellCount();
+    //     const edgeCellIndex = this._isRTL() ? rowCellCount - 1 : 0;
+    //     const direction = this._isRTL() ? 'next' : 'prev';
 
-        if($focusedCell.index() === edgeCellIndex) {
-            $leftCell = $focusedCell;
-        } else {
-            $leftCell = $focusedCell[direction]();
-            $leftCell = this._checkForViewBounds($leftCell);
-        }
+    //     if($focusedCell.index() === edgeCellIndex) {
+    //         $leftCell = $focusedCell;
+    //     } else {
+    //         $leftCell = $focusedCell[direction]();
+    //         $leftCell = this._checkForViewBounds($leftCell);
+    //     }
 
-        return $leftCell;
-    },
+    //     return $leftCell;
+    // },
 
     _getRowCount: function() {
         return 1;
@@ -408,10 +408,6 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
 
     _getWorkSpaceWidth: function() {
         return this._$dateTable.outerWidth(true);
-    },
-
-    _getGroupIndexByCell: function($cell) {
-        return $cell.parent().index();
     },
 
     _getIndicationFirstViewDate: function() {
