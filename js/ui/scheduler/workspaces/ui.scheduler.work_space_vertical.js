@@ -52,6 +52,52 @@ class SchedulerWorkspaceVertical extends SchedulerWorkSpace {
         }
         return $cells;
     }
+
+    _getRightCell(isMultiSelection) {
+        if(!isMultiSelection || this.isGroupedByDate()) {
+            return super._getRightCell(isMultiSelection);
+        }
+        let $rightCell;
+        const $focusedCell = this._$focusedCell;
+        const groupCount = this._getGroupCount();
+        const rowCellCount = isMultiSelection ? this._getCellCount() : this._getTotalCellCount(groupCount);
+        const edgeCellIndex = this._isRTL() ? 0 : rowCellCount - 1;
+        const direction = this._isRTL() ? 'prev' : 'next';
+
+        if($focusedCell.index() === edgeCellIndex || this._isGroupEndCell($focusedCell)) {
+            $rightCell = $focusedCell;
+        } else {
+            $rightCell = $focusedCell[direction]();
+            $rightCell = this._checkForViewBounds($rightCell);
+        }
+
+        return $rightCell;
+    }
+
+    _getLeftCell(isMultiSelection) {
+        if(!isMultiSelection || this.isGroupedByDate) {
+            return super._getLeftCell(isMultiSelection);
+        }
+        let $leftCell;
+        const $focusedCell = this._$focusedCell;
+        const groupCount = this._getGroupCount();
+        const rowCellCount = isMultiSelection ? this._getCellCount() : this._getTotalCellCount(groupCount);
+        const edgeCellIndex = this._isRTL() ? rowCellCount - 1 : 0;
+        const direction = this._isRTL() ? 'next' : 'prev';
+
+        if($focusedCell.index() === edgeCellIndex || this._isGroupStartCell($focusedCell)) {
+            $leftCell = $focusedCell;
+        } else {
+            $leftCell = $focusedCell[direction]();
+            $leftCell = this._checkForViewBounds($leftCell);
+        }
+
+        return $leftCell;
+    }
+
+    _getFormat() {
+        return this._formatWeekdayAndDay;
+    }
 }
 
 module.exports = SchedulerWorkspaceVertical;
