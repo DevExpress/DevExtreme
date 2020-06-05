@@ -4,7 +4,7 @@ import ja from 'localization/messages/ja.json!';
 import messageLocalization from 'localization/message';
 import { extend } from 'core/utils/extend';
 import ExcelJS from 'exceljs';
-import ExcelJSTestHelper from './ExcelJSTestHelper.js';
+import { ExcelJSPivotGridTestHelper } from './ExcelJSTestHelper.js';
 import { exportPivotGrid } from 'excel_exporter';
 import { /* MAX_EXCEL_COLUMN_WIDTH, */ _getFullOptions } from 'exporter/exceljs/export_pivot_grid';
 import { initializeDxObjectAssign, clearDxObjectAssign } from './objectAssignHelper.js';
@@ -48,7 +48,7 @@ const moduleConfig = {
     beforeEach: function() {
         this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
         this.customizeCellCallCount = 0;
-        helper = new ExcelJSTestHelper(this.worksheet);
+        helper = new ExcelJSPivotGridTestHelper(this.worksheet);
     },
     after: function() {
         clearDxObjectAssign();
@@ -69,7 +69,6 @@ const moduleConfig = {
 QUnit.module('Scenarios', moduleConfig, () => {
     const topLeft = { row: 2, column: 3 };
 
-    // const testCaption = '';
     const getOptions = (context, pivotGrid, expectedCustomizeCellArgs, options) => {
         const { keepColumnWidths = true, selectedRowsOnly = false, topLeftCell = topLeft } = options || {};
 
@@ -79,7 +78,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             topLeftCell: topLeftCell,
             customizeCell: (eventArgs) => {
                 if(typeUtils.isDefined(expectedCustomizeCellArgs)) {
-                    // helper.checkCustomizeCell(eventArgs, expectedCustomizeCellArgs, context.customizeCellCallCount++);
+                    helper.checkCustomizeCell(eventArgs, expectedCustomizeCellArgs, context.customizeCellCallCount++);
                 }
             }
         };
@@ -94,14 +93,14 @@ QUnit.module('Scenarios', moduleConfig, () => {
         const pivotGrid = $('#pivotGrid').dxPivotGrid({}).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'Grand Total', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'Grand Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, isLast: true, rowspan: 1, text: 'Grand Total', type: 'GT', width: 100 } }
         ], [
-            { excelCell: { value: 'Grand Total', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'Grand Total', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, isLast: true, rowspan: 1, text: 'Grand Total', type: 'GT' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { value: undefined } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
@@ -137,14 +136,14 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
         ], [
-            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
@@ -179,14 +178,14 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'Grand Total', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'Grand Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, isLast: true, rowspan: 1, text: 'Grand Total', type: 'GT', width: 100 } }
         ], [
-            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [], columnType: 'GT', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
@@ -221,14 +220,14 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
         ], [
-            { excelCell: { value: 'Grand Total', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'Grand Total', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, isLast: true, rowspan: 1, text: 'Grand Total', type: 'GT' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: [], rowType: 'GT', rowspan: 1, text: '1' } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
@@ -266,20 +265,20 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 2, text: '' } },
+            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: 'a', type: 'D' } },
+            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: '', type: 'D' } }
         ], [
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'Count', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'Data1 (Sum)', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'Count', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 0, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'Count', type: 'D', width: 100 } },
+            { excelCell: { value: 'Data1 (Sum)', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'Data1 (Sum)', type: 'D', width: 100 } }
         ], [
-            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 42, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+            { excelCell: { value: 42, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '42' } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
@@ -317,20 +316,20 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 2, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
         ], [
-            { excelCell: { value: 'A', master: [2, 1], alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'Count', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', master: [2, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, path: ['A'], rowspan: 2, text: 'A', type: 'D' } },
+            { excelCell: { value: 'Count', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataIndex: 0, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'Count', type: 'D' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } }
         ], [
-            { excelCell: { value: 'A', master: [2, 1], alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'Data1 (Sum)', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 42, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', master: [2, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, path: ['A'], rowspan: 1, text: '', type: 'D' } },
+            { excelCell: { value: 'Data1 (Sum)', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataIndex: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'Data1 (Sum)', type: 'D' } },
+            { excelCell: { value: 42, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '42' } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
@@ -367,20 +366,20 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 2, text: '' } },
+            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, expanded: true, path: ['a'], rowspan: 1, text: 'a', type: 'D' } },
+            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['a'], rowspan: 1, text: '', type: 'D' } }
         ], [
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a1', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a2', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a1', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['a', 'a1'], rowspan: 1, text: 'a1', type: 'D', width: 100 } },
+            { excelCell: { value: 'a2', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 3, isLast: true, path: ['a', 'a2'], rowspan: 1, text: 'a2', type: 'D', width: 100 } }
         ], [
-            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
@@ -419,20 +418,20 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 2, text: '' } },
+            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, expanded: true, path: ['a'], rowspan: 1, text: 'a', type: 'D' } },
+            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['a'], rowspan: 1, text: '', type: 'D' } }
         ], [
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a1', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a2', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a1', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['a', 'a1'], rowspan: 1, text: 'a1', type: 'D', width: 100 } },
+            { excelCell: { value: 'a2', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 3, isLast: true, path: ['a', 'a2'], rowspan: 1, text: 'a2', type: 'D', width: 100 } }
         ], [
-            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 2, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a1'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+            { excelCell: { value: 2, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a2'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '2' } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
@@ -471,23 +470,23 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a Total', master: [1, 4], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 2, text: '' } },
+            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, expanded: true, path: ['a'], rowspan: 1, text: 'a', type: 'D' } },
+            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['a'], rowspan: 1, text: '', type: 'D' } },
+            { excelCell: { value: 'a Total', master: [1, 4], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 2, text: 'a Total', type: 'T' } }
         ], [
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a1', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a2', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a Total', master: [1, 4], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a1', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['a', 'a1'], rowspan: 1, text: 'a1', type: 'D', width: 100 } },
+            { excelCell: { value: 'a2', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 3, isLast: true, path: ['a', 'a2'], rowspan: 1, text: 'a2', type: 'D', width: 100 } },
+            { excelCell: { value: 'a Total', master: [1, 4], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: '', type: 'T', width: 100 } }
         ], [
-            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 2, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 3, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a1'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+            { excelCell: { value: 2, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a2'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '2' } },
+            { excelCell: { value: 3, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'T', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '3' } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 4 }, { row: 3, column: 4 }, topLeft);
@@ -496,7 +495,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
-            helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+            helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
             helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 1, xSplit: topLeft.column });
             helper.checkCellRange(cellRange, { row: 3, column: 4 }, topLeft);
             done();
@@ -524,20 +523,20 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 2, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
         ], [
-            { excelCell: { value: 'A', master: [2, 1], alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'A1', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', master: [2, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['A'], rowspan: 2, text: 'A', type: 'D' } },
+            { excelCell: { value: 'A1', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['A', 'A1'], rowspan: 1, text: 'A1', type: 'D' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ], [
-            { excelCell: { value: 'A', master: [2, 1], alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'A2', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', master: [2, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['A'], rowspan: 1, text: '', type: 'D' } },
+            { excelCell: { value: 'A2', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 3, isLast: true, path: ['A', 'A2'], rowspan: 1, text: 'A2', type: 'D' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
@@ -576,20 +575,20 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 2, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
         ], [
-            { excelCell: { value: 'A', master: [2, 1], alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'A1', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', master: [2, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['A'], rowspan: 2, text: 'A', type: 'D' } },
+            { excelCell: { value: 'A1', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['A', 'A1'], rowspan: 1, text: 'A1', type: 'D' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A', 'A1'], rowType: 'D', rowspan: 1, text: '1' } }
         ], [
-            { excelCell: { value: 'A', master: [2, 1], alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'A2', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 2, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', master: [2, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['A'], rowspan: 1, text: '', type: 'D' } },
+            { excelCell: { value: 'A2', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 3, isLast: true, path: ['A', 'A2'], rowspan: 1, text: 'A2', type: 'D' } },
+            { excelCell: { value: 2, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A', 'A2'], rowType: 'D', rowspan: 1, text: '2' } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
@@ -628,24 +627,24 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 2, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
         ], [
-            { excelCell: { value: 'A', master: [2, 1], alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'A1', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', master: [2, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['A'], rowspan: 2, text: 'A', type: 'D' } },
+            { excelCell: { value: 'A1', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['A', 'A1'], rowspan: 1, text: 'A1', type: 'D' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A', 'A1'], rowType: 'D', rowspan: 1, text: '1' } }
         ], [
-            { excelCell: { value: 'A', master: [2, 1], alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'A2', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 2, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', master: [2, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['A'], rowspan: 1, text: '', type: 'D' } },
+            { excelCell: { value: 'A2', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 3, isLast: true, path: ['A', 'A2'], rowspan: 1, text: 'A2', type: 'D' } },
+            { excelCell: { value: 2, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A', 'A2'], rowType: 'D', rowspan: 1, text: '2' } }
         ], [
-            { excelCell: { value: 'A Total', master: [4, 1], alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'A Total', master: [4, 1], alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 3, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A Total', master: [4, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 2, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A Total', type: 'T' } },
+            { excelCell: { value: 'A Total', master: [4, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: '', type: 'T' } },
+            { excelCell: { value: 3, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'T', rowspan: 1, text: '3' } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
@@ -683,28 +682,28 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', master: [1, 3], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', master: [1, 3], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 2, rowspan: 2, text: '' } },
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a', master: [1, 3], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, expanded: true, path: ['a'], rowspan: 1, text: 'a', type: 'D' } },
+            { excelCell: { value: 'a', master: [1, 3], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['a'], rowspan: 1, text: '', type: 'D' } }
         ], [
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a1', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a2', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a1', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['a', 'a1'], rowspan: 1, text: 'a1', type: 'D', width: 100 } },
+            { excelCell: { value: 'a2', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 3, isLast: true, path: ['a', 'a2'], rowspan: 1, text: 'a2', type: 'D', width: 100 } }
         ], [
-            { excelCell: { value: 'A', master: [3, 1], alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'A1', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', master: [3, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['A'], rowspan: 2, text: 'A', type: 'D' } },
+            { excelCell: { value: 'A1', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['A', 'A1'], rowspan: 1, text: 'A1', type: 'D' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ], [
-            { excelCell: { value: 'A', master: [3, 1], alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'A2', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', master: [3, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['A'], rowspan: 1, text: '', type: 'D' } },
+            { excelCell: { value: 'A2', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 3, isLast: true, path: ['A', 'A2'], rowspan: 1, text: 'A2', type: 'D' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
@@ -744,28 +743,28 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', master: [1, 3], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', master: [1, 3], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 2, rowspan: 2, text: '' } },
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a', master: [1, 3], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, expanded: true, path: ['a'], rowspan: 1, text: 'a', type: 'D' } },
+            { excelCell: { value: 'a', master: [1, 3], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['a'], rowspan: 1, text: '', type: 'D' } }
         ], [
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a1', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a2', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a1', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['a', 'a1'], rowspan: 1, text: 'a1', type: 'D', width: 100 } },
+            { excelCell: { value: 'a2', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 3, isLast: true, path: ['a', 'a2'], rowspan: 1, text: 'a2', type: 'D', width: 100 } }
         ], [
-            { excelCell: { value: 'A', master: [3, 1], alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'A1', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', master: [3, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['A'], rowspan: 2, text: 'A', type: 'D' } },
+            { excelCell: { value: 'A1', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['A', 'A1'], rowspan: 1, text: 'A1', type: 'D' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a1'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A', 'A1'], rowType: 'D', rowspan: 1, text: '1' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a2'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A', 'A1'], rowType: 'D', rowspan: 1, text: '', value: undefined } }
         ], [
-            { excelCell: { value: 'A', master: [3, 1], alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'A2', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 2, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', master: [3, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['A'], rowspan: 1, text: '', type: 'D' } },
+            { excelCell: { value: 'A2', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 3, isLast: true, path: ['A', 'A2'], rowspan: 1, text: 'A2', type: 'D' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a1'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A', 'A2'], rowType: 'D', rowspan: 1, text: '', value: undefined } },
+            { excelCell: { value: 2, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a2'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A', 'A2'], rowType: 'D', rowspan: 1, text: '2' } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
@@ -799,17 +798,17 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { area: 'column', colspan: 1, rowspan: 1, width: 100 } }
         ], [
-            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ], [
-            { excelCell: { value: 'B', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'B', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['B'], rowspan: 1, text: 'B', type: 'D' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 2 }, topLeft);
@@ -843,17 +842,17 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'Grand Total', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'Grand Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, isLast: true, rowspan: 1, text: 'Grand Total', type: 'GT', width: 100 } }
         ], [
-            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ], [
-            { excelCell: { value: 'B', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'B', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['B'], rowspan: 1, text: 'B', type: 'D' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
@@ -890,17 +889,17 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { area: 'column', colspan: 1, rowspan: 1, width: 100 } }
         ], [
-            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ], [
-            { excelCell: { value: 'B', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'B', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['B'], rowspan: 1, text: 'B', type: 'D' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 2 }, topLeft);
@@ -937,17 +936,17 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'Grand Total', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'Grand Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, isLast: true, rowspan: 1, text: 'Grand Total', type: 'GT', width: 100 } }
         ], [
-            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [], columnType: 'GT', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } }
         ], [
-            { excelCell: { value: 'B', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 2, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'B', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['B'], rowspan: 1, text: 'B', type: 'D' } },
+            { excelCell: { value: 2, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [], columnType: 'GT', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['B'], rowType: 'D', rowspan: 1, text: '2' } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
@@ -982,17 +981,17 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
         ], [
-            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ], [
-            { excelCell: { value: 'B', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'B', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['B'], rowspan: 1, text: 'B', type: 'D' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
@@ -1030,17 +1029,17 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
         ], [
-            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } }
         ], [
-            { excelCell: { value: 'B', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 2, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'B', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['B'], rowspan: 1, text: 'B', type: 'D' } },
+            { excelCell: { value: 2, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['B'], rowType: 'D', rowspan: 1, text: '2' } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
@@ -1075,20 +1074,20 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'b', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } },
+            { excelCell: { value: 'b', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['b'], rowspan: 1, text: 'b', type: 'D', width: 100 } }
         ], [
-            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ], [
-            { excelCell: { value: 'B', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'B', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['B'], rowspan: 1, text: 'B', type: 'D' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
@@ -1126,20 +1125,20 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'b', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } },
+            { excelCell: { value: 'b', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['b'], rowspan: 1, text: 'b', type: 'D', width: 100 } }
         ], [
-            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { area: 'data', colspan: 1, columnPath: ['b'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '', value: undefined } }
         ], [
-            { excelCell: { value: 'B', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 2, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'B', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['B'], rowspan: 1, text: 'B', type: 'D' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['B'], rowType: 'D', rowspan: 1, text: '', value: undefined } },
+            { excelCell: { value: 2, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['b'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['B'], rowType: 'D', rowspan: 1, text: '2' } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
@@ -1177,24 +1176,24 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 2, text: '' } },
+            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, expanded: true, path: ['a'], rowspan: 1, text: 'a', type: 'D' } },
+            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['a'], rowspan: 1, text: '', type: 'D' } }
         ], [
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a1', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a2', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a1', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['a', 'a1'], rowspan: 1, text: 'a1', type: 'D', width: 100 } },
+            { excelCell: { value: 'a2', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 3, isLast: true, path: ['a', 'a2'], rowspan: 1, text: 'a2', type: 'D', width: 100 } }
         ], [
-            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ], [
-            { excelCell: { value: 'B', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'B', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['B'], rowspan: 1, text: 'B', type: 'D' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
@@ -1203,7 +1202,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
-            helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+            helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
             helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 1, xSplit: topLeft.column });
             helper.checkCellRange(cellRange, { row: 4, column: 3 }, topLeft);
             done();
@@ -1232,28 +1231,28 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'Grand Total', master: [1, 4], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 2, text: '' } },
+            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, expanded: true, path: ['a'], rowspan: 1, text: 'a', type: 'D' } },
+            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['a'], rowspan: 1, text: '', type: 'D' } },
+            { excelCell: { value: 'Grand Total', master: [1, 4], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, isLast: true, rowspan: 2, text: 'Grand Total', type: 'GT' } }
         ], [
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a1', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a2', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'Grand Total', master: [1, 4], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a1', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['a', 'a1'], rowspan: 1, text: 'a1', type: 'D', width: 100 } },
+            { excelCell: { value: 'a2', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 3, isLast: true, path: ['a', 'a2'], rowspan: 1, text: 'a2', type: 'D', width: 100 } },
+            { excelCell: { value: 'Grand Total', master: [1, 4], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, isLast: true, rowspan: 1, text: '', type: 'GT', width: 100 } }
         ], [
-            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ], [
-            { excelCell: { value: 'B', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'B', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['B'], rowspan: 1, text: 'B', type: 'D' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { colspan: 1, rowspan: 1 } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
@@ -1262,7 +1261,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
-            helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+            helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
             helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 1, xSplit: topLeft.column });
             helper.checkCellRange(cellRange, { row: 4, column: 4 }, topLeft);
             done();
@@ -1292,24 +1291,24 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 2, text: '' } },
+            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, expanded: true, path: ['a'], rowspan: 1, text: 'a', type: 'D' } },
+            { excelCell: { value: 'a', master: [1, 2], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['a'], rowspan: 1, text: '', type: 'D' } }
         ], [
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a1', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a2', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a1', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 3, isLast: true, path: ['a', 'a1'], rowspan: 1, text: 'a1', type: 'D', width: 100 } },
+            { excelCell: { value: 'a2', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['a', 'a2'], rowspan: 1, text: 'a2', type: 'D', width: 100 } }
         ], [
-            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a1'], columnType: 'D', dataIndex: 0, dataType: 'number', rowPath: ['A'], rowType: 'D', rowspan: 1, text: '', value: undefined } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a2'], columnType: 'D', dataIndex: 0, dataType: 'number', rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } }
         ], [
-            { excelCell: { value: 'B', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 2, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: null, alignment: undefined }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'B', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['B'], rowspan: 1, text: 'B', type: 'D' } },
+            { excelCell: { value: 2, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a1'], columnType: 'D', dataIndex: 0, dataType: 'number', rowPath: ['B'], rowType: 'D', rowspan: 1, text: '2' } },
+            { excelCell: { value: null, alignment: undefined }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a2'], columnType: 'D', dataIndex: 0, dataType: 'number', rowPath: ['B'], rowType: 'D', rowspan: 1, text: '', value: undefined } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
@@ -1347,38 +1346,38 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a Total', master: [1, 4], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'Grand Total', master: [1, 5], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 2, rowspan: 2, text: '' } },
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['a'], rowspan: 1, text: 'a', type: 'D' } },
+            { excelCell: { value: 'a Total', master: [1, 4], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 2, text: 'a Total', type: 'T' } },
+            { excelCell: { value: 'Grand Total', master: [1, 5], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, isLast: true, rowspan: 2, text: 'Grand Total', type: 'GT' } }
         ], [
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a1', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a Total', master: [1, 4], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'Grand Total', master: [1, 5], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a1', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['a', 'a1'], rowspan: 1, text: 'a1', type: 'D', width: 100 } },
+            { excelCell: { value: 'a Total', master: [1, 4], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: '', type: 'T', width: 100 } },
+            { excelCell: { value: 'Grand Total', master: [1, 5], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, isLast: true, rowspan: 1, text: '', type: 'GT', width: 100 } }
         ], [
-            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'A1', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: 'A1', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['A', 'A1'], rowspan: 1, text: 'A1', type: 'D' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a1'], columnType: 'D', dataIndex: 0, dataType: 'number', rowPath: ['A', 'A1'], rowType: 'D', rowspan: 1, text: '1' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'T', dataIndex: 0, dataType: 'number', rowPath: ['A', 'A1'], rowType: 'D', rowspan: 1, text: '1' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [], columnType: 'GT', dataIndex: 0, dataType: 'number', rowPath: ['A', 'A1'], rowType: 'D', rowspan: 1, text: '1' } }
         ], [
-            { excelCell: { value: 'A Total', master: [4, 1], alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'A Total', master: [4, 1], alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A Total', master: [4, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 2, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A Total', type: 'T' } },
+            { excelCell: { value: 'A Total', master: [4, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: '', type: 'T' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a1'], columnType: 'D', dataIndex: 0, dataType: 'number', rowPath: ['A'], rowType: 'T', rowspan: 1, text: '1' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'T', dataIndex: 0, dataType: 'number', rowPath: ['A'], rowType: 'T', rowspan: 1, text: '1' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [], columnType: 'GT', dataIndex: 0, dataType: 'number', rowPath: ['A'], rowType: 'T', rowspan: 1, text: '1' } }
         ], [
-            { excelCell: { value: 'Grand Total', master: [5, 1], alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'Grand Total', master: [5, 1], alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'Grand Total', master: [5, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 2, isLast: true, rowspan: 1, text: 'Grand Total', type: 'GT' } },
+            { excelCell: { value: 'Grand Total', master: [5, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, isLast: true, rowspan: 1, text: '', type: 'GT' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a1'], columnType: 'D', dataIndex: 0, dataType: 'number', rowPath: [], rowType: 'GT', rowspan: 1, text: '1' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'T', dataIndex: 0, dataType: 'number', rowPath: [], rowType: 'GT', rowspan: 1, text: '1' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [], columnType: 'GT', dataIndex: 0, dataType: 'number', rowPath: [], rowType: 'GT', rowspan: 1, text: '1' } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { keepColumnWidths: false })).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 5, column: 5 }, { row: 5, column: 5 }, topLeft);
@@ -1417,38 +1416,38 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a Total', master: [1, 4], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'Grand Total', master: [1, 5], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 2, rowspan: 2, text: '' } },
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['a'], rowspan: 1, text: 'a', type: 'D' } },
+            { excelCell: { value: 'a Total', master: [1, 4], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 2, text: 'a Total', type: 'T' } },
+            { excelCell: { value: 'Grand Total', master: [1, 5], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, isLast: true, rowspan: 2, text: 'Grand Total', type: 'GT' } }
         ], [
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a1', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a Total', master: [1, 4], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'Grand Total', master: [1, 5], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a1', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['a', 'a1'], rowspan: 1, text: 'a1', type: 'D', width: 100 } },
+            { excelCell: { value: 'a Total', master: [1, 4], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: '', type: 'T', width: 100 } },
+            { excelCell: { value: 'Grand Total', master: [1, 5], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, isLast: true, rowspan: 1, text: '', type: 'GT', width: 100 } }
         ], [
-            { excelCell: { value: 'A', alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'A1', alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', alignment: alignRightTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: 'A1', alignment: alignRightTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['A', 'A1'], rowspan: 1, text: 'A1', type: 'D' } },
+            { excelCell: { value: 1, alignment: alignLeftTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a1'], columnType: 'D', dataIndex: 0, dataType: 'number', rowPath: ['A', 'A1'], rowType: 'D', rowspan: 1, text: '1' } },
+            { excelCell: { value: 1, alignment: alignLeftTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'T', dataIndex: 0, dataType: 'number', rowPath: ['A', 'A1'], rowType: 'D', rowspan: 1, text: '1' } },
+            { excelCell: { value: 1, alignment: alignLeftTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [], columnType: 'GT', dataIndex: 0, dataType: 'number', rowPath: ['A', 'A1'], rowType: 'D', rowspan: 1, text: '1' } }
         ], [
-            { excelCell: { value: 'A Total', master: [4, 1], alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'A Total', master: [4, 1], alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A Total', master: [4, 1], alignment: alignRightTopWrap }, pivotCell: { area: 'row', colspan: 2, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A Total', type: 'T' } },
+            { excelCell: { value: 'A Total', master: [4, 1], alignment: alignRightTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: '', type: 'T' } },
+            { excelCell: { value: 1, alignment: alignLeftTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a1'], columnType: 'D', dataIndex: 0, dataType: 'number', rowPath: ['A'], rowType: 'T', rowspan: 1, text: '1' } },
+            { excelCell: { value: 1, alignment: alignLeftTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'T', dataIndex: 0, dataType: 'number', rowPath: ['A'], rowType: 'T', rowspan: 1, text: '1' } },
+            { excelCell: { value: 1, alignment: alignLeftTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [], columnType: 'GT', dataIndex: 0, dataType: 'number', rowPath: ['A'], rowType: 'T', rowspan: 1, text: '1' } }
         ], [
-            { excelCell: { value: 'Grand Total', master: [5, 1], alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'Grand Total', master: [5, 1], alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'Grand Total', master: [5, 1], alignment: alignRightTopWrap }, pivotCell: { area: 'row', colspan: 2, isLast: true, rowspan: 1, text: 'Grand Total', type: 'GT' } },
+            { excelCell: { value: 'Grand Total', master: [5, 1], alignment: alignRightTopWrap }, pivotCell: { area: 'row', colspan: 1, isLast: true, rowspan: 1, text: '', type: 'GT' } },
+            { excelCell: { value: 1, alignment: alignLeftTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a1'], columnType: 'D', dataIndex: 0, dataType: 'number', rowPath: [], rowType: 'GT', rowspan: 1, text: '1' } },
+            { excelCell: { value: 1, alignment: alignLeftTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'T', dataIndex: 0, dataType: 'number', rowPath: [], rowType: 'GT', rowspan: 1, text: '1' } },
+            { excelCell: { value: 1, alignment: alignLeftTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [], columnType: 'GT', dataIndex: 0, dataType: 'number', rowPath: [], rowType: 'GT', rowspan: 1, text: '1' } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 5, column: 5 }, { row: 5, column: 5 }, topLeft);
@@ -1484,14 +1483,14 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
         ], [
-            { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '$#,##0_);\\($#,##0\\)', alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '$#,##0_);\\($#,##0\\)', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: 'currency', rowPath: ['A'], rowType: 'D', rowspan: 1, text: '$1' } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
@@ -1509,57 +1508,57 @@ QUnit.module('Scenarios', moduleConfig, () => {
     });
 
     [
-        { type: 'percent', expectedFormat: '0%' },
-        { type: 'percent', precision: 0, expectedFormat: '0%' },
-        { type: 'percent', precision: 1, expectedFormat: '0.0%' },
-        { type: 'percent', precision: 3, expectedFormat: '0.000%' },
-        { type: 'percent', precision: 6, expectedFormat: '0.000000%' },
-        { type: 'currency', expectedFormat: '$#,##0_);\\($#,##0\\)' },
-        { type: 'currency', precision: 0, expectedFormat: '$#,##0_);\\($#,##0\\)' },
-        { type: 'currency', precision: 1, expectedFormat: '$#,##0.0_);\\($#,##0.0\\)' },
-        { type: 'currency', precision: 2, expectedFormat: '$#,##0.00_);\\($#,##0.00\\)' },
-        { type: 'currency', precision: 4, expectedFormat: '$#,##0.0000_);\\($#,##0.0000\\)' },
-        { type: 'currency', precision: 5, expectedFormat: '$#,##0.00000_);\\($#,##0.00000\\)' },
-        { type: 'trillions', expectedFormat: '#,##0,,,,T' },
-        { type: 'trillions', precision: 0, expectedFormat: '#,##0,,,,T' },
-        { type: 'trillions', precision: 1, expectedFormat: '#,##0.0,,,,T' },
-        { type: 'trillions', precision: 3, expectedFormat: '#,##0.000,,,,T' },
-        { type: 'trillions', precision: 6, expectedFormat: '#,##0.000000,,,,T' },
-        { type: 'billions', expectedFormat: '#,##0,,,B' },
-        { type: 'billions', precision: 0, expectedFormat: '#,##0,,,B' },
-        { type: 'billions', precision: 1, expectedFormat: '#,##0.0,,,B' },
-        { type: 'billions', precision: 3, expectedFormat: '#,##0.000,,,B' },
-        { type: 'billions', precision: 6, expectedFormat: '#,##0.000000,,,B' },
-        { type: 'millions', expectedFormat: '#,##0,,M' },
-        { type: 'millions', precision: 0, expectedFormat: '#,##0,,M' },
-        { type: 'millions', precision: 1, expectedFormat: '#,##0.0,,M' },
-        { type: 'millions', precision: 3, expectedFormat: '#,##0.000,,M' },
-        { type: 'millions', precision: 6, expectedFormat: '#,##0.000000,,M' },
-        { type: 'thousands', expectedFormat: '#,##0,K' },
-        { type: 'thousands', precision: 0, expectedFormat: '#,##0,K' },
-        { type: 'thousands', precision: 1, expectedFormat: '#,##0.0,K' },
-        { type: 'thousands', precision: 3, expectedFormat: '#,##0.000,K' },
-        { type: 'thousands', precision: 6, expectedFormat: '#,##0.000000,K' },
-        { type: 'largeNumber', expectedFormat: undefined },
-        { type: 'largeNumber', precision: 0, expectedFormat: undefined },
-        { type: 'largeNumber', precision: 1, expectedFormat: undefined },
-        { type: 'largeNumber', precision: 3, expectedFormat: undefined },
-        { type: 'largeNumber', precision: 6, expectedFormat: undefined },
-        { type: 'exponential', expectedFormat: '0.0E+00' },
-        { type: 'exponential', precision: 0, expectedFormat: '0E+00' },
-        { type: 'exponential', precision: 1, expectedFormat: '0.0E+00' },
-        { type: 'exponential', precision: 3, expectedFormat: '0.000E+00' },
-        { type: 'exponential', precision: 6, expectedFormat: '0.000000E+00' },
-        { type: 'decimal', expectedFormat: '#' },
-        { type: 'decimal', precision: 0, expectedFormat: '#' },
-        { type: 'decimal', precision: 1, expectedFormat: '#0' },
-        { type: 'decimal', precision: 3, expectedFormat: '#000' },
-        { type: 'decimal', precision: 6, expectedFormat: '#000000' },
-        { type: 'fixedPoint', expectedFormat: '#,##0' },
-        { type: 'fixedPoint', precision: 0, expectedFormat: '#,##0' },
-        { type: 'fixedPoint', precision: 1, expectedFormat: '#,##0.0' },
-        { type: 'fixedPoint', precision: 3, expectedFormat: '#,##0.000' },
-        { type: 'fixedPoint', precision: 6, expectedFormat: '#,##0.000000' }
+        { type: 'percent', expectedFormat: '0%', expectedText: '100%' },
+        { type: 'percent', precision: 0, expectedFormat: '0%', expectedText: '100%' },
+        { type: 'percent', precision: 1, expectedFormat: '0.0%', expectedText: '100.0%' },
+        { type: 'percent', precision: 3, expectedFormat: '0.000%', expectedText: '100.000%' },
+        { type: 'percent', precision: 6, expectedFormat: '0.000000%', expectedText: '100.000000%' },
+        { type: 'currency', expectedFormat: '$#,##0_);\\($#,##0\\)', expectedText: '$1' },
+        { type: 'currency', precision: 0, expectedFormat: '$#,##0_);\\($#,##0\\)', expectedText: '$1' },
+        { type: 'currency', precision: 1, expectedFormat: '$#,##0.0_);\\($#,##0.0\\)', expectedText: '$1.0' },
+        { type: 'currency', precision: 2, expectedFormat: '$#,##0.00_);\\($#,##0.00\\)', expectedText: '$1.00' },
+        { type: 'currency', precision: 4, expectedFormat: '$#,##0.0000_);\\($#,##0.0000\\)', expectedText: '$1.0000' },
+        { type: 'currency', precision: 5, expectedFormat: '$#,##0.00000_);\\($#,##0.00000\\)', expectedText: '$1.00000' },
+        { type: 'trillions', expectedFormat: '#,##0,,,,T', expectedText: '0T' },
+        { type: 'trillions', precision: 0, expectedFormat: '#,##0,,,,T', expectedText: '0T' },
+        { type: 'trillions', precision: 1, expectedFormat: '#,##0.0,,,,T', expectedText: '0.0T' },
+        { type: 'trillions', precision: 3, expectedFormat: '#,##0.000,,,,T', expectedText: '0.000T' },
+        { type: 'trillions', precision: 6, expectedFormat: '#,##0.000000,,,,T', expectedText: '0.000000T' },
+        { type: 'billions', expectedFormat: '#,##0,,,B', expectedText: '0B' },
+        { type: 'billions', precision: 0, expectedFormat: '#,##0,,,B', expectedText: '0B' },
+        { type: 'billions', precision: 1, expectedFormat: '#,##0.0,,,B', expectedText: '0.0B' },
+        { type: 'billions', precision: 3, expectedFormat: '#,##0.000,,,B', expectedText: '0.000B' },
+        { type: 'billions', precision: 6, expectedFormat: '#,##0.000000,,,B', expectedText: '0.000000B' },
+        { type: 'millions', expectedFormat: '#,##0,,M', expectedText: '0M' },
+        { type: 'millions', precision: 0, expectedFormat: '#,##0,,M', expectedText: '0M' },
+        { type: 'millions', precision: 1, expectedFormat: '#,##0.0,,M', expectedText: '0.0M' },
+        { type: 'millions', precision: 3, expectedFormat: '#,##0.000,,M', expectedText: '0.000M' },
+        { type: 'millions', precision: 6, expectedFormat: '#,##0.000000,,M', expectedText: '0.000001M' },
+        { type: 'thousands', expectedFormat: '#,##0,K', expectedText: '0K' },
+        { type: 'thousands', precision: 0, expectedFormat: '#,##0,K', expectedText: '0K' },
+        { type: 'thousands', precision: 1, expectedFormat: '#,##0.0,K', expectedText: '0.0K' },
+        { type: 'thousands', precision: 3, expectedFormat: '#,##0.000,K', expectedText: '0.001K' },
+        { type: 'thousands', precision: 6, expectedFormat: '#,##0.000000,K', expectedText: '0.001000K' },
+        { type: 'largeNumber', expectedFormat: undefined, expectedText: '1' },
+        { type: 'largeNumber', precision: 0, expectedFormat: undefined, expectedText: '1' },
+        { type: 'largeNumber', precision: 1, expectedFormat: undefined, expectedText: '1.0' },
+        { type: 'largeNumber', precision: 3, expectedFormat: undefined, expectedText: '1.000' },
+        { type: 'largeNumber', precision: 6, expectedFormat: undefined, expectedText: '1.000000' },
+        { type: 'exponential', expectedFormat: '0.0E+00', expectedText: '1.0E+0' },
+        { type: 'exponential', precision: 0, expectedFormat: '0E+00', expectedText: '1E+0' },
+        { type: 'exponential', precision: 1, expectedFormat: '0.0E+00', expectedText: '1.0E+0' },
+        { type: 'exponential', precision: 3, expectedFormat: '0.000E+00', expectedText: '1.000E+0' },
+        { type: 'exponential', precision: 6, expectedFormat: '0.000000E+00', expectedText: '1.000000E+0' },
+        { type: 'decimal', expectedFormat: '#', expectedText: '1' },
+        { type: 'decimal', precision: 0, expectedFormat: '#', expectedText: '1' },
+        { type: 'decimal', precision: 1, expectedFormat: '#0', expectedText: '1' },
+        { type: 'decimal', precision: 3, expectedFormat: '#000', expectedText: '001' },
+        { type: 'decimal', precision: 6, expectedFormat: '#000000', expectedText: '000001' },
+        { type: 'fixedPoint', expectedFormat: '#,##0', expectedText: '1' },
+        { type: 'fixedPoint', precision: 0, expectedFormat: '#,##0', expectedText: '1' },
+        { type: 'fixedPoint', precision: 1, expectedFormat: '#,##0.0', expectedText: '1.0' },
+        { type: 'fixedPoint', precision: 3, expectedFormat: '#,##0.000', expectedText: '1.000' },
+        { type: 'fixedPoint', precision: 6, expectedFormat: '#,##0.000000', expectedText: '1.000000' }
     ].forEach((format) => {
         QUnit.test(`Export [string x string x number] with format: { type: '${format.type}', presition: ${format.precision} }`, function(assert) {
             const done = assert.async();
@@ -1580,15 +1579,26 @@ QUnit.module('Scenarios', moduleConfig, () => {
                 dataSource: ds
             }).dxPivotGrid('instance');
 
+            let expectedPrecision = format.precision;
+            if(expectedPrecision === undefined) {
+                if(format.type === 'exponential') {
+                    expectedPrecision = 1;
+                } else if(format.type === 'decimal') {
+                    expectedPrecision = undefined;
+                } else {
+                    expectedPrecision = 0;
+                }
+            }
+
             const expectedCells = [[
-                { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-                { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+                { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
             ], [
-                { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: format.expectedFormat, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+                { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: format.expectedFormat, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: { 'type': format.type, 'precision': expectedPrecision }, rowPath: ['A'], rowType: 'D', rowspan: 1, text: format.expectedText } }
             ]];
 
-            helper._extendExpectedCells(expectedCells, topLeft);
+            helper.extendExpectedCells(expectedCells, topLeft);
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
@@ -1605,7 +1615,6 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
     });
-
 
     QUnit.test('Export with \'PivotGrid.wordWrapEnabled: false\'', function(assert) {
         const done = assert.async();
@@ -1628,14 +1637,14 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', alignment: alignCenterTopNoWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'col1', alignment: alignCenterTopNoWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', alignment: alignCenterTopNoWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'col1', alignment: alignCenterTopNoWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['col1'], rowspan: 1, text: 'col1', type: 'D', width: 100 } }
         ], [
-            { excelCell: { value: 'row1', alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: '1', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'row1', alignment: alignLeftTopNoWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['row1'], rowspan: 1, text: 'row1', type: 'D' } },
+            { excelCell: { value: '1', alignment: alignRightTopNoWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['col1'], columnType: 'D', dataIndex: 0, rowPath: ['row1'], rowType: 'D', rowspan: 1, text: '1', value: 1 } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
@@ -1672,14 +1681,14 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'col1', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'col1', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['col1'], rowspan: 1, text: 'col1', type: 'D', width: 100, wordWrapEnabled: false } }
         ], [
-            { excelCell: { value: 'row1', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: '1', alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'row1', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['row1'], rowspan: 1, text: 'row1', type: 'D', wordWrapEnabled: false } },
+            { excelCell: { value: '1', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['col1'], columnType: 'D', dataIndex: 0, rowPath: ['row1'], rowType: 'D', rowspan: 1, text: '1', value: 1 } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
@@ -1724,28 +1733,28 @@ QUnit.module('Scenarios', moduleConfig, () => {
             }).dxPivotGrid('instance');
 
             const expectedCells = [[
-                { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-                { excelCell: { value: '2019', master: [1, 2], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-                { excelCell: { value: '2019', master: [1, 2], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-                { excelCell: { value: '2019 Total', master: [1, 4], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+                { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 3, text: '' } },
+                { excelCell: { value: '2019', master: [1, 2], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, expanded: true, path: [2019], rowspan: 1, text: '2019', type: 'D' } },
+                { excelCell: { value: '2019', master: [1, 2], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, expanded: true, path: [2019], rowspan: 1, text: '', type: 'D' } },
+                { excelCell: { value: '2019 Total', master: [1, 4], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: [2019], rowspan: 3, text: '2019 Total', type: 'T' } }
             ], [
-                { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-                { excelCell: { value: 'Q1', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-                { excelCell: { value: 'Q1 Total', master: [2, 3], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-                { excelCell: { value: '2019 Total', master: [1, 4], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+                { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'Q1', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, expanded: true, path: [2019, 1], rowspan: 1, text: 'Q1', type: 'D' } },
+                { excelCell: { value: 'Q1 Total', master: [2, 3], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, isLast: true, path: [2019, 1], rowspan: 2, text: 'Q1 Total', type: 'T' } },
+                { excelCell: { value: '2019 Total', master: [1, 4], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: [2019], rowspan: 1, text: '', type: 'T', width: 100 } }
             ], [
-                { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-                { excelCell: { value: 'February', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-                { excelCell: { value: 'Q1 Total', master: [2, 3], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-                { excelCell: { value: '2019 Total', master: [1, 4], alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+                { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'February', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 3, isLast: true, path: [2019, 1, 2], rowspan: 1, text: 'February', type: 'D', width: 100 } },
+                { excelCell: { value: 'Q1 Total', master: [2, 3], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, isLast: true, path: [2019, 1], rowspan: 1, text: '', type: 'T', width: 100 } },
+                { excelCell: { value: '2019 Total', master: [1, 4], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: [2019], rowspan: 1, text: '', type: 'T', width: 100 } }
             ], [
-                { excelCell: { value: 'A', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-                { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } },
-                { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } },
-                { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+                { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+                { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [2019, 1, 2], columnType: 'D', dataIndex: 0, dataType: 'number', rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+                { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [2019, 1], columnType: 'T', dataIndex: 0, dataType: 'number', rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+                { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [2019], columnType: 'T', dataIndex: 0, dataType: 'number', rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } }
             ]];
 
-            helper._extendExpectedCells(expectedCells, topLeft);
+            helper.extendExpectedCells(expectedCells, topLeft);
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
@@ -1754,7 +1763,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0], topLeft.row);
+                helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
                 helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 2, xSplit: topLeft.column });
                 helper.checkCellRange(cellRange, { row: 4, column: 4 }, topLeft);
                 done();
@@ -1781,14 +1790,14 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
         ], [
-            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, gridCell: { rowType: 'header' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, gridCell: { rowType: 'header' } }
+            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } }
         ]];
 
-        helper._extendExpectedCells(expectedCells, topLeft);
+        helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
@@ -1803,7 +1812,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             this.customizeCellCallCount = 0;
             const newTopLeft = { row: topLeft.row + 4, column: topLeft.column + 4 };
-            helper._extendExpectedCells(expectedCells, newTopLeft);
+            helper.extendExpectedCells(expectedCells, newTopLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { topLeftCell: newTopLeft })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 2, column: 2 }, newTopLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn100Pixels], newTopLeft.column);

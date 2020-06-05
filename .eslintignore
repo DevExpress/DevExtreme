@@ -4,9 +4,10 @@ node_modules/*
 testing/helpers/sinon/*
 *.p.js
 *.j.js
-*.p.d.ts
-*.j.d.ts
+*.d.ts
 playground/*
 themebuilder/data/metadata/*
-themebuilder-scss/**/*
+themebuilder-scss/dist/*
+themebuilder-scss/coverage/*
+themebuilder-scss/src/data/metadata/*
 js/bundles/dx.custom.js

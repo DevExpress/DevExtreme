@@ -17,4 +17,4 @@ export const dataSource = [
         endDate: new Date(2019, 3, 1, 11, 30),
         resourceId: 2
     }
-]
+];

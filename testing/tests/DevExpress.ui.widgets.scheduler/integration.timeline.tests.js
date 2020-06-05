@@ -15,7 +15,7 @@ import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
 
 import 'ui/scheduler/ui.scheduler';
-import { SchedulerTestWrapper } from './helpers.js';
+import { SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
 
 const createInstance = options => {
     const instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');

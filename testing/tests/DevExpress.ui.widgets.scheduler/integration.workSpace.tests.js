@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import themes from 'ui/themes';
 import dateLocalization from 'localization/date';
-import { SchedulerTestWrapper } from './helpers.js';
+import { SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
 import devices from 'core/devices';
 
 QUnit.testStart(function() {

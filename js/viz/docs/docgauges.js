@@ -106,7 +106,7 @@ const BaseGauge = {
     rangeContainer: {
         offset: 0,
         backgroundColor: '#808080',
-        palette: 'default',
+        palette: 'Material',
         paletteExtensionMode: 'blend',
         ranges: [{
             /**
@@ -262,7 +262,7 @@ const dxBarGauge = {
         */
         endAngle: 315
     },
-    palette: 'Default',
+    palette: 'Material',
     paletteExtensionMode: 'blend',
     backgroundColor: '#e0e0e0',
     loadingIndicator: {
