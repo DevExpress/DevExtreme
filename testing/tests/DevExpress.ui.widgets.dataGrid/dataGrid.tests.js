@@ -8832,6 +8832,91 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         assert.notOk(onScrollHandler.called, 'onScroll handler is not called');
     });
+
+    QUnit.test('Error row should be shown when state loading failed (T894590)', function(assert) {
+        // arrange
+        const errorText = 'test error';
+        const contentReadyHandler = sinon.spy();
+        const dataErrorOccurred = sinon.spy();
+        const gridOptions = {
+            dataSource: [{ id: 1 }],
+            columns: ['id'],
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return $.Deferred().reject(errorText).promise();
+                }
+            },
+            onContentReady: contentReadyHandler,
+            onDataErrorOccurred: dataErrorOccurred
+        };
+        const dataGrid = createDataGrid(gridOptions);
+        this.clock.tick();
+
+        const $headerRow = $(dataGrid.element()).find('.dx-header-row');
+        const $errorRow = $(dataGrid.element()).find('.dx-error-row');
+        const renderedRowCount = dataGrid.getVisibleRows().length;
+
+        // assert
+        assert.ok(contentReadyHandler.called, 'onContentReady is called');
+        assert.equal(dataErrorOccurred.callCount, 1, 'onDataErrorOccurred is called');
+        assert.equal(dataErrorOccurred.getCall(0).args[0].error, errorText, 'error text is correct');
+        assert.equal(renderedRowCount, 0, 'there are no rendered data rows');
+        assert.ok($headerRow.length, 'header row is rendered');
+        assert.ok($errorRow.length, 'error row is rendered');
+        assert.equal($errorRow.find('.dx-error-message').text(), errorText, 'error text is correct');
+    });
+
+    QUnit.test('Error row should display the default error message when reject is called without a parameter in stateStoring.customLoad (T894590)', function(assert) {
+        // arrange
+        const gridOptions = {
+            dataSource: [],
+            columns: ['id'],
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return $.Deferred().reject().promise();
+                }
+            }
+        };
+        const dataGrid = createDataGrid(gridOptions);
+        this.clock.tick();
+
+        const $errorRow = $(dataGrid.element()).find('.dx-error-row');
+
+        // assert
+        assert.ok($errorRow.length, 'error row is rendered');
+        assert.equal($errorRow.find('.dx-error-message').text(), 'Unknown error', 'default error message');
+    });
+
+    QUnit.test('Error row should not be displayed when reject is called in stateStoring.customLoad and errorRowEnabled === false (T894590)', function(assert) {
+        // arrange
+        const dataErrorOccurred = sinon.spy();
+        const gridOptions = {
+            dataSource: [],
+            columns: ['id'],
+            errorRowEnabled: false,
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return $.Deferred().reject().promise();
+                }
+            },
+            onDataErrorOccurred: dataErrorOccurred
+        };
+        const dataGrid = createDataGrid(gridOptions);
+        this.clock.tick();
+
+        const $errorRow = $(dataGrid.element()).find('.dx-error-row');
+
+        // assert
+        assert.equal(dataErrorOccurred.callCount, 1, 'onDataErrorOccurred is called');
+        assert.equal(dataErrorOccurred.getCall(0).args[0].error, 'Unknown error', 'default error message');
+        assert.notOk($errorRow.length, 'error row is not rendered');
+    });
 });
 
 
