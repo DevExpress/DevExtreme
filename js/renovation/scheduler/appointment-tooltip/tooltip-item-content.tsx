@@ -1,15 +1,17 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Template, Ref, Fragment,
+  Component, ComponentBindings, JSXComponent,
+  OneWay, Template, Ref, Fragment, Event,
 } from 'devextreme-generator/component_declaration/common';
-import { dxSchedulerAppointment } from '../../../ui/scheduler';
+import BaseComponent from '../../preact-wrapper/tooltip-item-content';
 import noop from '../../utils/noop';
-import DeleteButton from './delete-button';
+import { dxSchedulerAppointment } from '../../../ui/scheduler';
 import {
   TOOLTIP_APPOINTMENT_ITEM, TOOLTIP_APPOINTMENT_ITEM_CONTENT,
   TOOLTIP_APPOINTMENT_ITEM_CONTENT_SUBJECT, TOOLTIP_APPOINTMENT_ITEM_CONTENT_DATE,
 } from './consts';
 import { DeferredColor, AppointmentItem, FormattedContent } from './types';
 import Marker from './marker';
+import DeleteButton from './delete-button';
 
 type GetCurrentDataFn = (appointmentItem: AppointmentItem) => dxSchedulerAppointment;
 type GetOnDeleteButtonClick = (
@@ -80,19 +82,23 @@ export class TooltipItemContentProps {
 
   @OneWay() container?: HTMLDivElement;
 
+  @OneWay() showDeleteButton?: boolean = true;
+
   @Template() itemContent?: any;
 
-  @OneWay() onDelete?: (
+  @Event() onDelete?: (
     data?: dxSchedulerAppointment, currentData?: dxSchedulerAppointment,
   ) => void = noop;
 
-  @OneWay() onHide?: () => void = noop;
+  @Event() onHide?: () => void = noop;
 
-  @OneWay() getTextAndFormatDate?: (
+  @Event() getTextAndFormatDate?: (
     data?: dxSchedulerAppointment, currentData?: dxSchedulerAppointment,
   ) => any = noop;
 
-  @OneWay() showDeleteButton?: boolean = true;
+  @Event() getSingleAppointmentData?: any;
+
+  @OneWay() target?: any;
 }
 
 @Component({
@@ -100,6 +106,7 @@ export class TooltipItemContentProps {
   view: viewFunction,
   jQuery: {
     register: true,
+    component: BaseComponent,
   },
 })
 export default class TooltipItemContent extends JSXComponent<TooltipItemContentProps> {
