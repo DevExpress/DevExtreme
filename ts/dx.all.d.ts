@@ -883,7 +883,7 @@ declare module DevExpress {
         /** @name viz.exportWidgets(widgetInstances, options) */
         static exportWidgets(widgetInstances: Array<Array<DOMComponent>>, options: { fileName?: string, format?: 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG', backgroundColor?: string, margin?: number, gridLayout?: boolean, verticalAlignment?: 'bottom' | 'center' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', proxyUrl?: string, onExporting?: Function, onExported?: Function, onFileSaving?: Function, svgToCanvas?: Function }): void;
         /** @name viz.generateColors(palette, count, options) */
-        static generateColors(palette: 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office' | Array<string>, count: number, options: { paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate', baseColorSet?: 'simpleSet' | 'indicatingSet' | 'gradientSet' }): Array<string>;
+        static generateColors(palette: 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office' | Array<string>, count: number, options: { paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate', baseColorSet?: 'simpleSet' | 'indicatingSet' | 'gradientSet' }): Array<string>;
         /** @name viz.getMarkup(widgetInstances) */
         static getMarkup(widgetInstances: Array<DOMComponent>): string;
         /** @name viz.getPalette(paletteName) */
@@ -6652,7 +6652,7 @@ declare module DevExpress.viz {
         /** @name BaseChart.Options.onTooltipShown */
         onTooltipShown?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, target?: basePointObject | dxChartAnnotationConfig | any }) => any);
         /** @name BaseChart.Options.palette */
-        palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+        palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
         /** @name BaseChart.Options.paletteExtensionMode */
         paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate';
         /** @name BaseChart.Options.pointSelectionMode */
@@ -6824,7 +6824,7 @@ declare module DevExpress.viz {
         /** @name BaseGauge.Options.rangeContainer.offset */
         offset?: number;
         /** @name BaseGauge.Options.rangeContainer.palette */
-        palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+        palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
         /** @name BaseGauge.Options.rangeContainer.paletteExtensionMode */
         paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate';
         /** @name BaseGauge.Options.rangeContainer.ranges */
@@ -7150,7 +7150,7 @@ declare module DevExpress.viz {
         /** @name CommonIndicator.offset */
         offset?: number;
         /** @name CommonIndicator.palette */
-        palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+        palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
         /** @name CommonIndicator.secondColor */
         secondColor?: string;
         /** @name CommonIndicator.secondFraction */
@@ -7472,7 +7472,7 @@ declare module DevExpress.viz {
         /** @name dxBarGauge.Options.onTooltipShown */
         onTooltipShown?: ((e: { component?: dxBarGauge, element?: DevExpress.core.dxElement, model?: any, target?: any }) => any);
         /** @name dxBarGauge.Options.palette */
-        palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+        palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
         /** @name dxBarGauge.Options.paletteExtensionMode */
         paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate';
         /** @name dxBarGauge.Options.relativeInnerRadius */
@@ -7562,9 +7562,6 @@ declare module DevExpress.viz {
         barGroupPadding?: number;
         /** @name dxChart.Options.barGroupWidth */
         barGroupWidth?: number;
-        /** @deprecated */
-        /** @name dxChart.Options.barWidth */
-        barWidth?: number;
         /** @name dxChart.Options.commonAnnotationSettings */
         commonAnnotationSettings?: dxChartCommonAnnotationConfig;
         /** @name dxChart.Options.commonAxisSettings */
@@ -7583,9 +7580,6 @@ declare module DevExpress.viz {
         dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: any, b: any) => number) };
         /** @name dxChart.Options.defaultPane */
         defaultPane?: string;
-        /** @deprecated */
-        /** @name dxChart.Options.equalBarWidth */
-        equalBarWidth?: boolean;
         /** @name dxChart.Options.legend */
         legend?: dxChartLegend;
         /** @name dxChart.Options.maxBubbleSize */
@@ -7618,9 +7612,6 @@ declare module DevExpress.viz {
         rotated?: boolean;
         /** @name dxChart.Options.scrollBar */
         scrollBar?: { color?: string, offset?: number, opacity?: number, position?: 'bottom' | 'left' | 'right' | 'top', visible?: boolean, width?: number };
-        /** @deprecated */
-        /** @name dxChart.Options.scrollingMode */
-        scrollingMode?: 'all' | 'mouse' | 'none' | 'touch';
         /** @name dxChart.Options.series */
         series?: ChartSeries | Array<ChartSeries>;
         /** @name dxChart.Options.seriesSelectionMode */
@@ -7633,16 +7624,10 @@ declare module DevExpress.viz {
         synchronizeMultiAxes?: boolean;
         /** @name dxChart.Options.tooltip */
         tooltip?: dxChartTooltip;
-        /** @deprecated */
-        /** @name dxChart.Options.useAggregation */
-        useAggregation?: boolean;
         /** @name dxChart.Options.valueAxis */
         valueAxis?: dxChartValueAxis | Array<dxChartValueAxis>;
         /** @name dxChart.Options.zoomAndPan */
         zoomAndPan?: { allowMouseWheel?: boolean, allowTouchGestures?: boolean, argumentAxis?: 'both' | 'none' | 'pan' | 'zoom', dragBoxStyle?: { color?: string, opacity?: number }, dragToZoom?: boolean, panKey?: 'alt' | 'ctrl' | 'meta' | 'shift', valueAxis?: 'both' | 'none' | 'pan' | 'zoom' };
-        /** @deprecated */
-        /** @name dxChart.Options.zoomingMode */
-        zoomingMode?: 'all' | 'mouse' | 'none' | 'touch';
     }
     /** @name dxChart.Options.argumentAxis */
     export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
@@ -7680,12 +7665,6 @@ declare module DevExpress.viz {
         linearThreshold?: number;
         /** @name dxChart.Options.argumentAxis.logarithmBase */
         logarithmBase?: number;
-        /** @deprecated */
-        /** @name dxChart.Options.argumentAxis.max */
-        max?: number | Date | string;
-        /** @deprecated */
-        /** @name dxChart.Options.argumentAxis.min */
-        min?: number | Date | string;
         /** @name dxChart.Options.argumentAxis.minVisualRangeLength */
         minVisualRangeLength?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /** @name dxChart.Options.argumentAxis.minorTickCount */
@@ -8009,14 +7988,8 @@ declare module DevExpress.viz {
         linearThreshold?: number;
         /** @name dxChart.Options.valueAxis.logarithmBase */
         logarithmBase?: number;
-        /** @deprecated */
-        /** @name dxChart.Options.valueAxis.max */
-        max?: number | Date | string;
         /** @name dxChart.Options.valueAxis.maxAutoBreakCount */
         maxAutoBreakCount?: number;
-        /** @deprecated */
-        /** @name dxChart.Options.valueAxis.min */
-        min?: number | Date | string;
         /** @name dxChart.Options.valueAxis.minVisualRangeLength */
         minVisualRangeLength?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /** @name dxChart.Options.valueAxis.minorTickCount */
@@ -9085,7 +9058,7 @@ declare module DevExpress.viz {
         /** @name dxFunnel.Options.onSelectionChanged */
         onSelectionChanged?: ((e: { component?: dxFunnel, element?: DevExpress.core.dxElement, model?: any, item?: dxFunnelItem }) => any);
         /** @name dxFunnel.Options.palette */
-        palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+        palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
         /** @name dxFunnel.Options.paletteExtensionMode */
         paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate';
         /** @name dxFunnel.Options.resolveLabelOverlapping */
@@ -9217,7 +9190,7 @@ declare module DevExpress.viz {
         /** @name dxPieChart.Options.onLegendClick */
         onLegendClick?: ((e: { component?: dxPieChart, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: DevExpress.events.event, target?: string | number, points?: Array<piePointObject> }) => any) | string;
         /** @name dxPieChart.Options.palette */
-        palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+        palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
         /** @name dxPieChart.Options.resolveLabelOverlapping */
         resolveLabelOverlapping?: 'hide' | 'none' | 'shift';
         /** @name dxPieChart.Options.segmentsDirection */
@@ -9310,9 +9283,6 @@ declare module DevExpress.viz {
         barGroupPadding?: number;
         /** @name dxPolarChart.Options.barGroupWidth */
         barGroupWidth?: number;
-        /** @deprecated */
-        /** @name dxPolarChart.Options.barWidth */
-        barWidth?: number;
         /** @name dxPolarChart.Options.commonAnnotationSettings */
         commonAnnotationSettings?: dxPolarChartCommonAnnotationConfig;
         /** @name dxPolarChart.Options.commonAxisSettings */
@@ -9325,9 +9295,6 @@ declare module DevExpress.viz {
         customizeAnnotation?: ((annotation: dxPolarChartAnnotationConfig | any) => dxPolarChartAnnotationConfig);
         /** @name dxPolarChart.Options.dataPrepareSettings */
         dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) };
-        /** @deprecated */
-        /** @name dxPolarChart.Options.equalBarWidth */
-        equalBarWidth?: boolean;
         /** @name dxPolarChart.Options.legend */
         legend?: dxPolarChartLegend;
         /** @name dxPolarChart.Options.negativesAsZeroes */
@@ -9864,7 +9831,7 @@ declare module DevExpress.viz {
         /** @name dxRangeSelector.Options.behavior */
         behavior?: { allowSlidersSwap?: boolean, animationEnabled?: boolean, callValueChanged?: 'onMoving' | 'onMovingComplete', manualRangeSelectionEnabled?: boolean, moveSelectedRangeByClick?: boolean, snapToTicks?: boolean };
         /** @name dxRangeSelector.Options.chart */
-        chart?: { barGroupPadding?: number, barGroupWidth?: number, barWidth?: number, bottomIndent?: number, commonSeriesSettings?: dxChartCommonSeriesSettings, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) }, equalBarWidth?: boolean, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate', series?: ChartSeries | Array<ChartSeries>, seriesTemplate?: { customizeSeries?: ((seriesName: any) => ChartSeries), nameField?: string }, topIndent?: number, useAggregation?: boolean, valueAxis?: { inverted?: boolean, logarithmBase?: number, max?: number, min?: number, type?: 'continuous' | 'logarithmic', valueType?: 'datetime' | 'numeric' | 'string' } };
+        chart?: { barGroupPadding?: number, barGroupWidth?: number, bottomIndent?: number, commonSeriesSettings?: dxChartCommonSeriesSettings, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) }, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate', series?: ChartSeries | Array<ChartSeries>, seriesTemplate?: { customizeSeries?: ((seriesName: any) => ChartSeries), nameField?: string }, topIndent?: number, valueAxis?: { inverted?: boolean, logarithmBase?: number, max?: number, min?: number, type?: 'continuous' | 'logarithmic', valueType?: 'datetime' | 'numeric' | 'string' } };
         /** @name dxRangeSelector.Options.containerBackgroundColor */
         containerBackgroundColor?: string;
         /** @name dxRangeSelector.Options.dataSource */
@@ -9930,7 +9897,7 @@ declare module DevExpress.viz {
         /** @name dxSankey.Options.onNodeHoverChanged */
         onNodeHoverChanged?: ((e: { component?: dxSankey, element?: DevExpress.core.dxElement, model?: any, target?: dxSankeyNode }) => any);
         /** @name dxSankey.Options.palette */
-        palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+        palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
         /** @name dxSankey.Options.paletteExtensionMode */
         paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate';
         /** @name dxSankey.Options.sortData */
@@ -10073,7 +10040,7 @@ declare module DevExpress.viz {
         /** @name dxTreeMap.Options.colorField */
         colorField?: string;
         /** @name dxTreeMap.Options.colorizer */
-        colorizer?: { colorCodeField?: string, colorizeGroups?: boolean, palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate', range?: Array<number>, type?: 'discrete' | 'gradient' | 'none' | 'range' };
+        colorizer?: { colorCodeField?: string, colorizeGroups?: boolean, palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate', range?: Array<number>, type?: 'discrete' | 'gradient' | 'none' | 'range' };
         /** @name dxTreeMap.Options.dataSource */
         dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string;
         /** @name dxTreeMap.Options.group */
@@ -10106,9 +10073,6 @@ declare module DevExpress.viz {
         onSelectionChanged?: ((e: { component?: dxTreeMap, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeMapNode }) => any);
         /** @name dxTreeMap.Options.parentField */
         parentField?: string;
-        /** @deprecated */
-        /** @name dxTreeMap.Options.resolveLabelOverflow */
-        resolveLabelOverflow?: 'ellipsis' | 'hide';
         /** @name dxTreeMap.Options.selectionMode */
         selectionMode?: 'multiple' | 'none' | 'single';
         /** @name dxTreeMap.Options.tile */
@@ -10198,7 +10162,7 @@ declare module DevExpress.viz {
         /** @name dxVectorMap.Options.controlBar */
         controlBar?: { borderColor?: string, color?: string, enabled?: boolean, horizontalAlignment?: 'center' | 'left' | 'right', margin?: number, opacity?: number, verticalAlignment?: 'bottom' | 'top' };
         /** @name dxVectorMap.Options.layers */
-        layers?: Array<{ borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => any), dataField?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string | Array<any>, elementType?: 'bubble' | 'dot' | 'image' | 'pie', hoverEnabled?: boolean, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: 'multiple' | 'none' | 'single', size?: number, sizeGroupingField?: string, sizeGroups?: Array<number>, type?: 'area' | 'line' | 'marker' }> | { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => any), dataField?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string | Array<any>, elementType?: 'bubble' | 'dot' | 'image' | 'pie', hoverEnabled?: boolean, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: 'multiple' | 'none' | 'single', size?: number, sizeGroupingField?: string, sizeGroups?: Array<number>, type?: 'area' | 'line' | 'marker' };
+        layers?: Array<{ borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => any), dataField?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string | Array<any>, elementType?: 'bubble' | 'dot' | 'image' | 'pie', hoverEnabled?: boolean, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: 'multiple' | 'none' | 'single', size?: number, sizeGroupingField?: string, sizeGroups?: Array<number>, type?: 'area' | 'line' | 'marker' }> | { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => any), dataField?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string | Array<any>, elementType?: 'bubble' | 'dot' | 'image' | 'pie', hoverEnabled?: boolean, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: 'multiple' | 'none' | 'single', size?: number, sizeGroupingField?: string, sizeGroups?: Array<number>, type?: 'area' | 'line' | 'marker' };
         /** @name dxVectorMap.Options.legends */
         legends?: Array<dxVectorMapLegends>;
         /** @name dxVectorMap.Options.maxZoomFactor */

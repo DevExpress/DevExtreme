@@ -323,8 +323,6 @@ const overlappingEnvironment = $.extend({}, environment, {
             commonPaneSettings: {
                 border: { visible: true }
             },
-            zoomingMode: 'zoomingModeValue',
-            scrollingMode: 'scrollingModeValue',
             rotated: 'rotated'
         });
 
@@ -343,8 +341,6 @@ const overlappingEnvironment = $.extend({}, environment, {
         assert.equal(updateArg0.argumentAxis, undefined, 'argumentAxis');
         assert.equal(updateArg0.chart, chart, 'chart');
         assert.equal(updateArg0.rotated, undefined, 'rotated');
-        assert.equal(updateArg0.zoomingMode, undefined, 'zoomingMode');
-        assert.equal(updateArg0.scrollingMode, undefined, 'scrolling mode');
         assert.equal(updateArg0.seriesSelectionMode, 'serieSelectionModeWithTheme', 'series selection mode');
         assert.equal(updateArg0.pointSelectionMode, 'pointSelectionModeWithTheme', 'point selection mode');
 

@@ -40,14 +40,22 @@ export default class MetadataCollector {
     });
   }
 
-  async saveMetadata(filePath: string, version: string): Promise<void> {
+  async saveMetadata(
+    filePath: string,
+    version: string,
+    browsersList: Array<string>,
+  ): Promise<void> {
     const absolutePath = resolve(filePath);
     const metadata = this.generator.getMetadata();
     const metaString = JSON.stringify(metadata)
       .replace(/"/g, '\'')
       .replace(/'(ON|OFF)'/g, '"$1"');
+    const browsersListString = JSON.stringify(browsersList)
+      .replace(/"/g, '\'');
+
     let metaContent = `export const metadata: Array<MetaItem> = ${metaString};\n`;
     metaContent += `export const version: string = '${version}';\n`;
+    metaContent += `export const browsersList: Array<string> = ${browsersListString};\n`;
     await fs.mkdir(dirname(absolutePath), { recursive: true });
     await fs.writeFile(absolutePath, metaContent);
   }

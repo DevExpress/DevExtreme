@@ -65,15 +65,15 @@ function setAxisVisualRangeByOption(arg, axis, isDirectOption, index) {
     axis.visualRange(visualRange, options);
 }
 
-const AdvancedChart = BaseChart.inherit({
+function getAxisTypes(groupsData, axis, isArgumentAxes) {
+    if(isArgumentAxes) {
+        return { argumentAxisType: groupsData.argumentAxisType, argumentType: groupsData.argumentType };
+    }
+    const { valueAxisType, valueType } = groupsData.groups.filter(g => g.valueAxis === axis)[0];
+    return { valueAxisType, valueType };
+}
 
-    _setDeprecatedOptions: function() {
-        this.callBase.apply(this, arguments);
-        _extend(this._deprecatedOptions, {
-            'barWidth': { since: '18.1', message: 'Use the \'commonSeriesSettings.barPadding\' or \'series.barPadding\' option instead' },
-            'equalBarWidth': { since: '18.1', message: 'Use the \'commonSeriesSettings.ignoreEmptyPoints\' or \'series.ignoreEmptyPoints\' option instead' }
-        });
-    },
+const AdvancedChart = BaseChart.inherit({
 
     _fontFields: [COMMON_AXIS_SETTINGS + '.label.' + FONT, COMMON_AXIS_SETTINGS + '.title.' + FONT],
 
@@ -257,7 +257,13 @@ const AdvancedChart = BaseChart.inherit({
                 (!_isDefined(opt.pane) && that.panes.some(p => p.name === a.pane) || a.pane === opt.pane));
             if(curAxes && curAxes.length > 0) {
                 _each(curAxes, (_, axis) => {
+                    const axisTypes = getAxisTypes(that._groupsData, axis, isArgumentAxes);// T891599
                     axis.updateOptions(opt);
+                    if(isArgumentAxes) {
+                        axis.setTypes(axisTypes.argumentAxisType, axisTypes.argumentType, 'argumentType');
+                    } else {
+                        axis.setTypes(axisTypes.valueAxisType, axisTypes.valueType, 'valueType');
+                    }
                     axis.validate();
                     axesBasis.push({ axis: axis });
                 });
@@ -355,10 +361,8 @@ const AdvancedChart = BaseChart.inherit({
         const negativesAsZeroes = themeManager.getOptions('negativesAsZeroes');
         const negativesAsZeros = themeManager.getOptions('negativesAsZeros'); // misspelling case
         const familyOptions = {
-            equalBarWidth: themeManager.getOptions('equalBarWidth'),
             minBubbleSize: themeManager.getOptions('minBubbleSize'),
             maxBubbleSize: themeManager.getOptions('maxBubbleSize'),
-            barWidth: themeManager.getOptions('barWidth'),
             barGroupPadding: themeManager.getOptions('barGroupPadding'),
             barGroupWidth: themeManager.getOptions('barGroupWidth'),
             negativesAsZeroes: _isDefined(negativesAsZeroes) ? negativesAsZeroes : negativesAsZeros
@@ -385,10 +389,8 @@ const AdvancedChart = BaseChart.inherit({
                 const family = new seriesFamilyModule.SeriesFamily({
                     type: type,
                     pane: pane.name,
-                    equalBarWidth: familyOptions.equalBarWidth,
                     minBubbleSize: familyOptions.minBubbleSize,
                     maxBubbleSize: familyOptions.maxBubbleSize,
-                    barWidth: familyOptions.barWidth,
                     barGroupPadding: familyOptions.barGroupPadding,
                     barGroupWidth: familyOptions.barGroupWidth,
                     negativesAsZeroes: familyOptions.negativesAsZeroes,

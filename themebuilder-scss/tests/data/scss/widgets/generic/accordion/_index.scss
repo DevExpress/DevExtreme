@@ -10,12 +10,10 @@ $font-file: "icons";
 .dx-accordion {
     background-color: $base-font-family;
     color: $accordion-title-color;
-    font: url("icons/#{$font-file}.woff2");
+    background-image: url(icons/#{$font-file}.woff2);
 
     .from-base {
         background-color: $accordion-item-title-opened-bg;
         color: $base-accent;
     }
 }
-
-

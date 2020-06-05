@@ -144,10 +144,9 @@ QUnit.test('MultiAxis with title and inverted axis', function(assert) {
         valueAxis: [{
             axisDivisionFactor: 50,
             visible: true, // B231173
-            min: 0,
+            visualRange: { startValue: 0, endValue: 1200 },
             tickInterval: 50,
             name: 'axis2',
-            max: 1200,
             position: 'left',
             title: { text: 'title very long <br/> test <br/> test', margin: 0 },
             grid: {
@@ -162,8 +161,7 @@ QUnit.test('MultiAxis with title and inverted axis', function(assert) {
             axisDivisionFactor: 50,
             visible: true, // B231173
             name: 'axis1',
-            min: 0,
-            max: 5,
+            visualRange: { startValue: 0, endValue: 5 },
             inverted: true, // B231235
             grid: {
                 visible: true
@@ -177,8 +175,7 @@ QUnit.test('MultiAxis with title and inverted axis', function(assert) {
             axisDivisionFactor: 50,
             visible: true, // B231173
             name: 'axis3',
-            min: 0,
-            max: 11,
+            visualRange: { startValue: 0, endValue: 11 },
             grid: {
                 visible: true
             },
@@ -1764,7 +1761,10 @@ QUnit.test('Validate Axis on update', function(assert) {
 
     chart.option('valueAxis.constantLines[0].value', new Date(2020, 7, 1));
 
-    assert.deepEqual(chart.getValueAxis().getOptions().dataType, 'datetime');
+    assert.strictEqual(chart.getValueAxis().getOptions().dataType, 'datetime');
+    assert.strictEqual(chart.getValueAxis().getOptions().type, 'continuous');
+    assert.strictEqual(chart.getArgumentAxis().getOptions().type, 'continuous');
+
 });
 
 QUnit.module('Legend title', $.extend({}, moduleSetup, {

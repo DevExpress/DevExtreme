@@ -765,7 +765,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         const infos = this.progressPanelWrapper.getInfos();
         assert.strictEqual(infos.length, 1, 'There is one notification on panel');
 
-        assert.strictEqual(infos[0].common.commonText, 'The folder cannot be opened', 'Title is correct');
+        assert.strictEqual(infos[0].common.commonText, 'The directory cannot be opened', 'Title is correct');
 
         const details = infos[0].details;
         assert.strictEqual(details.length, 1, 'Notification has one details section');
@@ -818,7 +818,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         infos = this.progressPanelWrapper.getInfos();
         assert.strictEqual(infos.length, 2, 'There is some notification on panel');
 
-        assert.strictEqual(infos[0].common.commonText, 'The folder cannot be opened', 'Title is correct');
+        assert.strictEqual(infos[0].common.commonText, 'The directory cannot be opened', 'Title is correct');
 
         const details = infos[0].details;
         assert.strictEqual(details.length, 1, 'Notification has one details section');
@@ -859,7 +859,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         infos = this.progressPanelWrapper.getInfos();
         assert.strictEqual(infos.length, 1, 'There is one notification on panel');
 
-        assert.strictEqual(infos[0].common.commonText, 'The folder cannot be opened', 'Title is correct');
+        assert.strictEqual(infos[0].common.commonText, 'The directory cannot be opened', 'Title is correct');
 
         const details = infos[0].details;
         assert.strictEqual(details.length, 1, 'Notification has one details section');

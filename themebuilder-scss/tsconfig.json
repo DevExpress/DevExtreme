@@ -6,6 +6,7 @@
         "target": "es6",
         "noImplicitAny": true,
         "allowJs": true,
+        "resolveJsonModule": true,
         "moduleResolution": "node",
         "outDir": "dist",
         "baseUrl": ".",
@@ -23,6 +24,5 @@
         "src/modules/*",
         "src/data/**/*",
         "src/types/*",
-        "src/metadata/*"
     ]
 }

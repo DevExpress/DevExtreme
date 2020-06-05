@@ -26,7 +26,7 @@ test('The row should be selected on click if less than half of a row is visible'
     ],
     height: 150,
     autoExpandAll: true,
-    columns:['name','age'],
+    columns: ['name', 'age'],
     selection: {
         mode: 'multiple'
     }

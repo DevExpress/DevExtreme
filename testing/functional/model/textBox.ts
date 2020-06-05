@@ -9,7 +9,7 @@ const CLASS = {
 class ActionButton {
     element: Selector;
 
-    constructor (editor: Selector, index: number) {
+    constructor(editor: Selector, index: number) {
         this.element = editor.find(`.${CLASS.buttonContainer} .${CLASS.button}:nth-child(${++index})`);
     }
 }
@@ -20,7 +20,7 @@ export default class TextBox extends Widget {
 
     name: string = 'dxTextBox';
 
-    constructor (id: string) {
+    constructor(id: string) {
         super(id);
 
         this.input = this.element.find(`.${CLASS.input}`);

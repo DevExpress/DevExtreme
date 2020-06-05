@@ -47,16 +47,18 @@ export default class AppointmentPopup {
         };
     }
 
-    show(data = {}, showButtons, processTimeZone) {
+    show(data = {}, isDoneButtonVisible, processTimeZone) {
         this.state.appointment.data = data;
         this.state.appointment.processTimeZone = processTimeZone;
 
         if(!this._popup) {
-            const popupConfig = this._createPopupConfig(showButtons);
+            const popupConfig = this._createPopupConfig();
             this._popup = this._createPopup(popupConfig);
         } else {
             this._updateForm();
         }
+
+        this._popup.option('toolbarItems', this._createPopupToolbarItems(isDoneButtonVisible));
         this._popup.show();
     }
 
@@ -89,11 +91,10 @@ export default class AppointmentPopup {
         return this.scheduler._createComponent(popupElement, Popup, options);
     }
 
-    _createPopupConfig(showButtons) {
+    _createPopupConfig() {
         return {
             height: 'auto',
             maxHeight: '100%',
-            toolbarItems: showButtons ? this._getPopupToolbarItems() : [],
             showCloseButton: false,
             showTitle: false,
             onHiding: () => { this.scheduler.focus(); },
@@ -280,20 +281,24 @@ export default class AppointmentPopup {
         }
     }
 
-    _getPopupToolbarItems() {
+    _createPopupToolbarItems(isDoneButtonVisible) {
+        const result = [];
         const isIOs = devices.current().platform === 'ios';
-        return [
-            {
+
+        if(isDoneButtonVisible) {
+            result.push({
                 shortcut: 'done',
                 options: { text: messageLocalization.format('Done') },
                 location: TOOLBAR_ITEM_AFTER_LOCATION,
                 onClick: (e) => this._doneButtonClickHandler(e)
-            },
-            {
-                shortcut: 'cancel',
-                location: isIOs ? TOOLBAR_ITEM_BEFORE_LOCATION : TOOLBAR_ITEM_AFTER_LOCATION
-            }
-        ];
+            });
+        }
+        result.push({
+            shortcut: 'cancel',
+            location: isIOs ? TOOLBAR_ITEM_BEFORE_LOCATION : TOOLBAR_ITEM_AFTER_LOCATION
+        });
+
+        return result;
     }
 
     saveChanges(showLoadPanel) {

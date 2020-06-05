@@ -10,6 +10,7 @@ import browser from '../../core/utils/browser';
 import Callbacks from '../../core/utils/callbacks';
 import { noop } from '../../core/utils/common';
 import dataCoreUtils from '../../core/utils/data';
+import { getBoundingRect } from '../../core/utils/position';
 import dateUtils from '../../core/utils/date';
 import dateSerialization from '../../core/utils/date_serialization';
 import deferredUtils from '../../core/utils/deferred';
@@ -48,7 +49,6 @@ import SchedulerWorkSpaceDay from './workspaces/ui.scheduler.work_space_day';
 import SchedulerWorkSpaceMonth from './workspaces/ui.scheduler.work_space_month';
 import SchedulerWorkSpaceWeek from './workspaces/ui.scheduler.work_space_week';
 import SchedulerWorkSpaceWorkWeek from './workspaces/ui.scheduler.work_space_work_week';
-
 
 const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
@@ -1169,7 +1169,7 @@ const Scheduler = Widget.inherit({
     },
 
     _toggleSmallClass: function() {
-        const width = this.$element().get(0).getBoundingClientRect().width;
+        const width = getBoundingRect(this.$element().get(0)).width;
         this.$element().toggleClass(WIDGET_SMALL_CLASS, width < WIDGET_SMALL_WIDTH);
     },
 

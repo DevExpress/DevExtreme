@@ -5,7 +5,7 @@ import TextBox from '../../model/textBox';
 fixture `Mask T814440`
     .page(url(__dirname, './pages/t814440.html'));
 
-test("'onInput' and 'onValueChanged' events should raise then the mask enabled (T814440)", async t => {
+test('\'onInput\' and \'onValueChanged\' events should raise then the mask enabled (T814440)', async t => {
     const textBox = new TextBox('#textbox');
     const { input } = textBox;
     const eventLog = Selector('#eventLog');
@@ -33,5 +33,5 @@ test("'onInput' and 'onValueChanged' events should raise then the mask enabled (
         .expect(input.value).eql('_')
         .expect(textBox.option('value')).eql('')
         .expect(textBox.option('text')).eql('_')
-        .expect(eventLog.value).eql('changed\ninput\nchanged\ninput\n')
+        .expect(eventLog.value).eql('changed\ninput\nchanged\ninput\n');
 });

@@ -35,6 +35,7 @@ $.each(DevExpress.ui, function(componentName) {
                 assert.ok(false, memoryLeaksHelper.compareDomElements(originalDomElements, newDomElements));
             }
             memoryLeaksHelper.destroyTestNode(testNode);
+            this.clock.tick(100);
         });
     }
 });

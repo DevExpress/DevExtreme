@@ -246,7 +246,7 @@ if(Quill) {
             if(source === USER_ACTION) {
                 const lastOperation = newDelta.ops[newDelta.ops.length - 1];
 
-                if(this._isMentionActive) {
+                if(this._isMentionActive && this._isPopupVisible) {
                     this._processSearchValue(lastOperation) && this._filterList(this._searchValue);
                 } else {
                     const { ops } = newDelta;
@@ -259,13 +259,16 @@ if(Quill) {
             }
         }
 
+        get _isPopupVisible() {
+            return this._popup?.option('visible');
+        }
+
         _processSearchValue(operation) {
             const isInsertOperation = 'insert' in operation;
-
             if(isInsertOperation) {
                 this._searchValue += operation.insert;
             } else {
-                if(!this._searchValue.length) {
+                if(!this._searchValue.length || operation.delete > 1) {
                     this._popup.hide();
                     return false;
                 } else {

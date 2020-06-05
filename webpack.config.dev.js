@@ -7,9 +7,21 @@ module.exports = Object.assign({
     module: {
         rules: [{
             test: /\.js$/,
-            exclude: /(node_modules|bower_components)/,
+            exclude: /node_modules/,
             use: {
                 loader: 'babel-loader'
+            }
+        },
+        {
+            test: /\.jsx$/,
+            exclude: /node_modules/,
+            use: {
+                loader: 'babel-loader',
+                options: {
+                    'plugins': [
+                        ['transform-react-jsx', { 'pragma': 'Preact.h' }]
+                    ]
+                }
             }
         },
         {
@@ -20,5 +32,8 @@ module.exports = Object.assign({
                 replace: require('./package.json').version,
             }
         }]
+    },
+    resolve: {
+        extensions: ['.js', '.jsx'],
     }
 }, baseConfig);
