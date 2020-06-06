@@ -204,7 +204,7 @@ const RecurrenceEditor = Editor.inherit({
     _prepareEditors: function(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, allowTimeZoneEditing, readOnly) {
         const freq = (this._recurrenceRule.rules().freq || frequenciesMessages[defaultRecurrenceTypeIndex].value).toLowerCase();
         const interval = this._recurrenceRule.rules().interval || 1;
-        const byMonthDay = this._dayOfMonthByRules();
+        // const byMonthDay = this._dayOfMonthByRules();
 
         const months = [];
         const monthsNames = dateLocalization.getMonthNames('wide');
@@ -214,7 +214,7 @@ const RecurrenceEditor = Editor.inherit({
             months[i] = { value: String(i + 1), text: monthsNames[i] };
         }
 
-        const byMonth = this._monthOfYearByRules();
+        // const byMonth = this._monthOfYearByRules();
 
         const monthChanged = function(args) {
             this._valueChangedHandler.call(this, args);
@@ -322,7 +322,7 @@ const RecurrenceEditor = Editor.inherit({
                             field: 'bymonthday',
                             showSpinButtons: true,
                             useLargeSpinButtons: false,
-                            value: byMonthDay,
+                            value: this._dayOfMonthByRules(),
                             onValueChanged: this._valueChangedHandler.bind(this)
                         },
                         visible: freq === 'monthly' || freq === 'yearly',
@@ -336,7 +336,7 @@ const RecurrenceEditor = Editor.inherit({
                         editorOptions: {
                             field: 'bymonth',
                             items: months,
-                            value: byMonth,
+                            value: this._monthOfYearByRules(),
                             displayExpr: 'text',
                             valueExpr: 'value',
                             onValueChanged: monthChanged.bind(this)
@@ -395,6 +395,10 @@ const RecurrenceEditor = Editor.inherit({
         });
     },
 
+    getRecurrenceForm: function() {
+        return this._recurrenceForm;
+    },
+
     _changeValueByVisibility(value) {
         this._renderContainerVisibility(value);
 
@@ -419,7 +423,7 @@ const RecurrenceEditor = Editor.inherit({
 
     _daysOfWeekByRules() {
         let daysByRule = this._recurrenceRule.daysFromByDayRule();
-        if(!daysByRule.length) {
+        if(!daysByRule.length && this.option('startDate')) {
             daysByRule = [days[this.option('startDate').getDay()]];
         }
 
@@ -429,7 +433,7 @@ const RecurrenceEditor = Editor.inherit({
     _dayOfMonthByRules() {
         let dayByRule = this._recurrenceRule.rules()['bymonthday'];
 
-        if(!dayByRule) {
+        if(!dayByRule && this.option('startDate')) {
             dayByRule = this.option('startDate').getDate();
         }
 
@@ -439,7 +443,7 @@ const RecurrenceEditor = Editor.inherit({
     _monthOfYearByRules() {
         let monthByRule = this._recurrenceRule.rules()['bymonth'];
 
-        if(!monthByRule) {
+        if(!monthByRule && this.option('startDate')) {
             monthByRule = this.option('startDate').getMonth() + 1;
         }
 
