@@ -11,7 +11,7 @@ export default class DropDownButton extends DropDownList {
         return this.element;
     }
 
-    getPopupIdAttr() {
+    static getPopupIdAttr() {
         return ATTR.popupId;
     }
 }

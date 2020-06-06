@@ -1,7 +1,7 @@
 import { extend } from '../../../../../../js/core/utils/extend';
-import { createWidget } from '../../../../helpers/testHelper';
+import createWidget from '../../../../helpers/testHelper';
 
-export const createScheduler = (options = {}) =>
+export default (options = {}) =>
     createWidget('dxScheduler', extend({
         currentDate: new Date(2020, 1, 9),
         views: ['week'],

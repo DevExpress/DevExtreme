@@ -1,5 +1,5 @@
 import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/testHelper';
+import createWidget from '../../helpers/testHelper';
 import { Selector } from 'testcafe';
 import TabPanel from '../../model/tabPanel';
 import { appendElementTo, insertElementBefore } from './helpers/domUtils';
@@ -31,7 +31,7 @@ test('[{0: selected}, {1}] -> click to tabs[1] -> click to external button', asy
         .expect(tabPanel.multiView.getItem(1).isFocused).notOk()
         .expect(tabPanel.multiView.getItem(0).isFocused).notOk();
 
-}).before(async t => {
+}).before(async () => {
     return createWidget('dxTabPanel', {
         items: ['Item 1', 'Item 2']
     });
@@ -56,7 +56,7 @@ test('[{0: selected}] -> click to multiView -> click to external button', async 
         .expect(tabPanel.tabs.getItem(0).isFocused).notOk()
         .expect(tabPanel.multiView.getItem(0).isFocused).notOk();
 
-}).before(async t => {
+}).before(async () => {
     return createWidget('dxTabPanel', {
         items: ['Item 1']
     });
@@ -101,7 +101,7 @@ test('[{0: selected}, {1}, {2}] -> click to tabs[1] -> navigate to tabs[2] -> cl
         .expect(tabPanel.multiView.getItem(2).isFocused).notOk();
 
 
-}).before(async t => {
+}).before(async () => {
     return createWidget('dxTabPanel', {
         items: ['Item 1', 'Item 2', 'Item 3']
     });
@@ -139,7 +139,7 @@ test('[{0: selected}, {1}] -> click to multiView -> navigate to tabs[1] -> click
         .expect(tabPanel.multiView.getItem(0).isFocused).notOk()
         .expect(tabPanel.multiView.getItem(1).isFocused).notOk();
 
-}).before(async t => {
+}).before(async () => {
     return createWidget('dxTabPanel', {
         items: ['Item 1', 'Item 2']
     });
@@ -169,7 +169,7 @@ test('[{0: selected}] -> click to multiView -> press "tab" -> press "tab"', asyn
         .expect(tabPanel.tabs.getItem(0).isFocused).notOk()
         .expect(tabPanel.multiView.getItem(0).isFocused).notOk();
 
-}).before(async t => {
+}).before(async () => {
     return createWidget('dxTabPanel', {
         items: ['Item 1']
     });
@@ -193,7 +193,7 @@ test('[{0: selected}] -> focusin by press "tab" -> press "tab"', async t => {
         .expect(tabPanel.tabs.getItem(0).isFocused).notOk()
         .expect(tabPanel.multiView.getItem(0).isFocused).notOk();
 
-}).before(async t => {
+}).before(async () => {
     await insertElementBefore('body', '#container', 'button', { id: 'firstButton', width: 150, height: 50, backgroundColor: 'steelblue' });
 
     return createWidget('dxTabPanel', {

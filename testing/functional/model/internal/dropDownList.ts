@@ -18,7 +18,7 @@ export default abstract class DropDownList extends TextBox {
         super(id);
 
         const popupOwnerElement = this.getPopupOwnerElement();
-        const popupIdAttr = this.getPopupIdAttr();
+        const popupIdAttr = DropDownList.getPopupIdAttr();
 
         this.opened = popupOwnerElement.hasAttribute(popupIdAttr);
         this.dropDownButton = this.element.find(`.${CLASS.dropDownButton}`);
@@ -28,7 +28,7 @@ export default abstract class DropDownList extends TextBox {
         return this.input;
     }
 
-    getPopupIdAttr() {
+    static getPopupIdAttr() {
         return ATTR.popupId;
     }
 
@@ -36,7 +36,7 @@ export default abstract class DropDownList extends TextBox {
         await t.expect(this.opened).ok();
 
         const popupOwnerElement = this.getPopupOwnerElement();
-        const popupIdAttr = this.getPopupIdAttr();
+        const popupIdAttr = DropDownList.getPopupIdAttr();
         const popupId = await popupOwnerElement.getAttribute(popupIdAttr);
         const popup = Selector(`#${popupId}`);
 

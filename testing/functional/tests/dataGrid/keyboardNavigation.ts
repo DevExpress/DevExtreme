@@ -1,5 +1,5 @@
 import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/testHelper';
+import createWidget from '../../helpers/testHelper';
 import DataGrid from '../../model/dataGrid';
 import { Selector } from 'testcafe';
 
@@ -77,7 +77,7 @@ test('Cell should highlighted after editing another cell when startEditAction is
         allowUpdating: true,
         startEditAction: 'dblClick'
     },
-    onFocusedCellChanging: e => e.isHighlighted = true
+    onFocusedCellChanging: e => { e.isHighlighted = true; }
 }));
 
 test('Cell should be focused after Enter key press if enterKeyDirection is "none" and enterKeyAction is "moveFocus"', async t => {
@@ -914,21 +914,29 @@ test('Cell should be highlighted after editing another cell when startEditAction
         allowUpdating: true,
         startEditAction: 'dblClick'
     },
-    onFocusedCellChanging: (e) => e.isHighlighted = true
+    onFocusedCellChanging: (e) =>  { e.isHighlighted = true; }
 }));
 
 test('Previous navigation elements should not have "tabindex" if navigation action is "click" (T870120)', async t => {
     const dataGrid = new DataGrid('#container');
-    for(let rowIndex = 0; rowIndex < 3; ++rowIndex) {
-        for(let colIndex = 0; colIndex < 3; ++colIndex) {
-            const cell = dataGrid.getDataCell(rowIndex, colIndex);
+    const cells = [];
 
-            await t
-                .click(cell.element)
-                .expect(cell.element.focused).ok(`cell[${rowIndex}, ${colIndex}] is focused`)
-                .expect(cell.element.getAttribute('tabindex')).eql('111', `cell[${rowIndex}, ${colIndex}] has tabindex`);
+    for(let rowIndex = 0; rowIndex < 3; rowIndex += 1) {
+        for(let colIndex = 0; colIndex < 3; colIndex += 1) {
+            cells.push({
+                cell: dataGrid.getDataCell(rowIndex, colIndex),
+                colIndex,
+                rowIndex
+            });
         }
     }
+
+    await Promise.all(cells.map(({ cell,colIndex, rowIndex }) => (async () => {
+        await t
+            .click(cell.element)
+            .expect(cell.element.focused).ok(`cell[${rowIndex}, ${colIndex}] is focused`)
+            .expect(cell.element.getAttribute('tabindex')).eql('111', `cell[${rowIndex}, ${colIndex}] has tabindex`);
+    })()));
 }).before(() => createWidget('dxDataGrid', {
     dataSource: [
         { id: 4, c0: 'c0_4', c1: 'c1_4' },
@@ -940,21 +948,26 @@ test('Previous navigation elements should not have "tabindex" if navigation acti
 
 test('Previous navigation elements should not have "tabindex" if navigation action is "tab" (T870120)', async t => {
     const dataGrid = new DataGrid('#container');
-    let cell = dataGrid.getDataCell(0, 0);
+    const cells = [];
 
-    await t.click(cell.element);
-
-    for(let rowIndex = 0; rowIndex < 3; ++rowIndex) {
-        for(let colIndex = 0; colIndex < 3; ++colIndex) {
-            cell = dataGrid.getDataCell(rowIndex, colIndex);
-
-            await t
-                .expect(cell.element.focused).ok(`cell[${rowIndex}, ${colIndex}] is focused`)
-                .expect(cell.element.getAttribute('tabindex')).eql('111', `cell[${rowIndex}, ${colIndex}] has tabindex`);
-
-            await t.pressKey('tab');
+    for(let rowIndex = 0; rowIndex < 3; rowIndex += 1) {
+        for(let colIndex = 0; colIndex < 3; colIndex += 1) {
+            cells.push({
+                cell: dataGrid.getDataCell(rowIndex, colIndex),
+                colIndex,
+                rowIndex
+            });
         }
     }
+
+    await t.click(cells[0].element);
+
+    await Promise.all(cells.map(({ cell, colIndex, rowIndex }) => (async () => {
+        await t
+            .expect(cell.element.focused).ok(`cell[${rowIndex}, ${colIndex}] is focused`)
+            .expect(cell.element.getAttribute('tabindex')).eql('111', `cell[${rowIndex}, ${colIndex}] has tabindex`)
+            .pressKey('tab');
+    })()));
 }).before(() => createWidget('dxDataGrid', {
     dataSource: [
         { id: 4, c0: 'c0_4', c1: 'c1_4' },

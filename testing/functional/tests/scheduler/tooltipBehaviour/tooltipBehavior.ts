@@ -1,4 +1,4 @@
-import { dataSource } from './init/widget.data';
+import dataSource from './init/widget.data';
 import { createScheduler, scroll } from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';

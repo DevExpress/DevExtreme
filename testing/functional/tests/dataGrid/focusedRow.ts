@@ -1,6 +1,6 @@
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/testHelper';
 import { ClientFunction } from 'testcafe';
+import url from '../../helpers/getPageUrl';
+import createWidget from '../../helpers/testHelper';
 import DataGrid from '../../model/dataGrid';
 
 fixture`Focused row`
@@ -33,7 +33,7 @@ test('onFocusedRowChanged event should fire once after changing focusedRowKey if
         if(!global.onFocusedRowChangedCounter) {
             global.onFocusedRowChangedCounter = 0;
         }
-        global.onFocusedRowChangedCounter++;
+        global.onFocusedRowChangedCounter += 1;
     }
 }));
 
@@ -161,19 +161,19 @@ test('Popup - Focused row should not be reset after editing a row (T879627)', as
             .expect(dataGrid.option('focusedRowKey')).eql(6)
             .expect(dataRow1.isFocusedRow).ok();
 
-        await dataGrid.api_editRow(1);
+        await dataGrid.apiEditRow(1);
 
         await t.expect(dataGrid.option('focusedRowKey')).eql(6);
 
-        await dataGrid.api_cancelEditData();
+        await dataGrid.apiCancelEditData();
 
         await t.expect(dataGrid.option('focusedRowKey')).eql(6);
 
-        await dataGrid.api_editRow(0);
+        await dataGrid.apiEditRow(0);
 
         await t.expect(dataGrid.option('focusedRowKey')).eql(6);
 
-        await dataGrid.api_saveEditData();
+        await dataGrid.apiSaveEditData();
 
         await t.expect(dataGrid.option('focusedRowKey')).eql(6);
 
@@ -259,19 +259,19 @@ test('Row - Focused row should be reset after editing a row by API (T879627)', a
         .expect(dataGrid.option('focusedRowKey')).eql(6)
         .expect(dataRow1.isFocusedRow).ok();
 
-    await dataGrid.api_editRow(1);
+    await dataGrid.apiEditRow(1);
 
     await t.expect(dataGrid.option('focusedRowKey')).eql(6);
 
-    await dataGrid.api_cancelEditData();
+    await dataGrid.apiCancelEditData();
 
     await t.expect(dataGrid.option('focusedRowKey')).eql(6);
 
-    await dataGrid.api_editRow(0);
+    await dataGrid.apiEditRow(0);
 
     await t.expect(dataGrid.option('focusedRowKey')).eql(5);
 
-    await dataGrid.api_saveEditData();
+    await dataGrid.apiSaveEditData();
 
     await t.expect(dataGrid.option('focusedRowKey')).eql(5);
 
@@ -437,21 +437,21 @@ test('Batch - Focused row should not be reset after editing a cell (T879627)', a
             .expect(dataGrid.option('focusedRowKey')).eql(6)
             .expect(dataRow1.isFocusedRow).ok();
 
-        await dataGrid.api_editCell(1, 1);
+        await dataGrid.apiEditCell(1, 1);
 
         await t.expect(dataGrid.option('focusedRowKey')).eql(6);
 
-        await dataGrid.api_cancelEditData();
+        await dataGrid.apiCancelEditData();
 
         await t.expect(dataGrid.option('focusedRowKey')).eql(6);
 
-        await dataGrid.api_editCell(0, 1);
+        await dataGrid.apiEditCell(0, 1);
 
-        await dataGrid.api_cellValue(0, 1, 'test');
+        await dataGrid.apiCellValue(0, 1, 'test');
 
         await t.expect(dataGrid.option('focusedRowKey')).eql(6);
 
-        await dataGrid.api_saveEditData();
+        await dataGrid.apiSaveEditData();
 
         await t.expect(dataGrid.option('focusedRowKey')).eql(6);
 
@@ -496,13 +496,13 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
     await t.expect(ClientFunction(() => (window as any).focusedRowChanged_Counter)()).eql(1);
 }).before(() => createWidget('dxDataGrid', () => {
     const data = function() {
-        const data = [];
+        const result = [];
 
-        for(let i = 0; i < 200; i++) {
-            data.push({ id: i, c0: 'c0', c1: `c1_${i % 20}` });
+        for(let i = 0; i < 200; i += 1) {
+            result.push({ id: i, c0: 'c0', c1: `c1_${i % 20}` });
         }
 
-        return data;
+        return result;
     }();
 
     return {
@@ -550,13 +550,13 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
             if(!(window as any).focusedRowChanging_Counter) {
                 (window as any).focusedRowChanging_Counter = 0;
             }
-            (window as any).focusedRowChanging_Counter++;
+            (window as any).focusedRowChanging_Counter += 1;
         },
         onFocusedRowChanged: () => {
             if(!(window as any).focusedRowChanged_Counter) {
                 (window as any).focusedRowChanged_Counter = 0;
             }
-            (window as any).focusedRowChanged_Counter++;
+            (window as any).focusedRowChanged_Counter += 1;
         }
     };
 }));

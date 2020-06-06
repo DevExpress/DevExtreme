@@ -1,7 +1,7 @@
 import { extend } from '../../../../../../js/core/utils/extend';
-import { createWidget } from '../../../../helpers/testHelper';
+import createWidget from '../../../../helpers/testHelper';
 
-export const createScheduler = (options = {}) =>
+export default (options = {}) =>
     createWidget('dxScheduler', extend({
         views: ['month'],
         dataSource: [],
