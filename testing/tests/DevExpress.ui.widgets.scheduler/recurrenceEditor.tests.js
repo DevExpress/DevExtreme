@@ -4,6 +4,7 @@ import $ from 'jquery';
 import dateUtils from 'core/utils/date';
 import RecurrenceEditor from 'ui/scheduler/ui.scheduler.recurrence_editor';
 import SelectBox from 'ui/select_box';
+import NumberBox from 'ui/number_box';
 import { getRecurrenceProcessor } from 'ui/scheduler/recurrence';
 import dateLocalization from 'localization/date';
 
@@ -60,7 +61,7 @@ module('Recurrence Editor rendering', moduleConfig, () => {
     });
 });
 
-module('Freq editor rendering', moduleConfig, () => {
+module('Frequency editor', moduleConfig, () => {
     test('Recurrence editor should contain select box for select freq', function(assert) {
         this.createInstance({ value: 'FREQ=WEEKLY' });
 
@@ -154,62 +155,57 @@ module('Freq editor rendering', moduleConfig, () => {
     });
 });
 
-
-QUnit.module('Recurrence editor - interval editor', {
-    beforeEach: function() {
+const intervalModuleConfig = {
+    beforeEach() {
         this.createInstance = function(options) {
             this.instance = new RecurrenceEditor($('#recurrence-editor'), options);
+            this.intervalEditor = this.instance.getRecurrenceForm().getEditor('interval');
         };
     }
+};
+
+module('Interval editor', intervalModuleConfig, () => {
+    test('Recurrence interval numberbox should be rendered with right defaults', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY' });
+
+        const $intervalLabel = this.instance.$element().find('.dx-recurrence-numberbox-interval-1-label');
+        assert.ok(this.intervalEditor instanceof NumberBox, 'Interval editor is NumberBox');
+
+        assert.equal($intervalLabel.length, 1, 'Label for interval editor was rendered');
+        assert.equal(this.intervalEditor.option('showSpinButtons'), true, 'Interval editor has right showSpinButtons');
+        assert.equal(this.intervalEditor.option('useLargeSpinButtons'), false, 'Interval editor has right useLargeSpinButtons');
+        assert.equal(this.intervalEditor.option('min'), 1, 'Interval editor has right min value');
+        assert.equal(this.intervalEditor.option('value'), 1, 'Interval editor hase right value');
+    });
+
+    test('Recurrence interval editor should process value correctly', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY;INTERVAL=2' });
+
+        assert.equal(this.intervalEditor.option('value'), 2, 'Interval editor has right value after init');
+
+        this.instance.option('value', 'FREQ=WEEKLY;INTERVAL=3');
+
+        assert.equal(this.intervalEditor.option('value'), 3, 'Interval editor has right value');
+    });
+
+    test('Recurrence editor should correctly process values from interval editor', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY;INTERVAL=2' });
+
+        this.intervalEditor.option('value', 3);
+
+        assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;INTERVAL=3', 'Recurrence editor has right value');
+    });
+
+    test('Recurrence interval editor should have correct aria-describedby attribute', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY;INTERVAL=2' });
+
+        const $intervalEditor = this.instance.$element().find('.dx-recurrence-numberbox-interval .dx-texteditor-input');
+        const $intervalLabel = this.instance.$element().find('.dx-recurrence-numberbox-interval-1-label').first();
+
+        assert.notEqual(this.intervalEditor.$element().find('.dx-texteditor-input').attr('aria-describedby'), undefined, 'aria-describedby exists');
+        assert.equal($intervalEditor.attr('aria-describedby'), $intervalLabel.attr('id'), 'aria-describedby is correct');
+    });
 });
-
-QUnit.test('Recurrence interval numberbox should be rendered with right defaults', function(assert) {
-    this.createInstance({ value: 'FREQ=WEEKLY' });
-
-    const $interval = this.instance.$element().find('.' + EVERY_INTERVAL);
-    const $intervalLabel = this.instance.$element().find('.dx-recurrence-numberbox-interval-label');
-    const interval = $interval.dxNumberBox('instance');
-
-    assert.equal($interval.length, 1, 'numberBox for setting recurrence interval was rendered');
-    assert.equal($intervalLabel.length, 1, 'labels was rendered');
-    assert.equal(interval.option('showSpinButtons'), true, 'numberBox have right showSpinButtons');
-    assert.equal(interval.option('useLargeSpinButtons'), false, 'numberBox have right useLargeSpinButtons');
-    assert.equal(interval.option('min'), 1, 'numberBox have right min value');
-    assert.equal(interval.option('value'), 1, 'numberBox have right value');
-});
-
-QUnit.test('Recurrence interval numberbox should process value correctly', function(assert) {
-    this.createInstance({ value: 'FREQ=WEEKLY;INTERVAL=2' });
-
-    const $interval = this.instance.$element().find('.' + EVERY_INTERVAL);
-
-    assert.equal($interval.dxNumberBox('instance').option('value'), 2, 'numberBox have right value after init');
-
-    this.instance.option('value', 'FREQ=WEEKLY;INTERVAL=3');
-
-    assert.equal($interval.dxNumberBox('instance').option('value'), 3, 'numberBox have right value');
-});
-
-QUnit.test('Recurrence editor should correctly process values from interval editor', function(assert) {
-    this.createInstance({ value: 'FREQ=WEEKLY;INTERVAL=2' });
-
-    const $interval = this.instance.$element().find('.' + EVERY_INTERVAL);
-
-    $interval.dxNumberBox('instance').option('value', 3);
-
-    assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;INTERVAL=3', 'Recurrence editor have right value');
-});
-
-QUnit.test('Recurrence repeat-interval editor should have correct aria-describedby attribute', function(assert) {
-    this.createInstance({ value: 'FREQ=WEEKLY;INTERVAL=1' });
-
-    const $intervalEditor = this.instance.$element().find('.dx-recurrence-numberbox-interval .dx-texteditor-input');
-    const $intervalLabel = this.instance.$element().find('.dx-recurrence-numberbox-interval-label').first();
-
-    assert.notEqual($intervalEditor.attr('aria-describedby'), undefined, 'aria-describedby exists');
-    assert.equal($intervalEditor.attr('aria-describedby'), $intervalLabel.attr('id'), 'aria-describedby is correct');
-});
-
 
 QUnit.module('Recurrence editor - repeat-end editor', {
     beforeEach: function() {
