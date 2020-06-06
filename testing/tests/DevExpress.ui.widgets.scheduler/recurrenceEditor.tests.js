@@ -3,6 +3,7 @@ import 'common.css!';
 import $ from 'jquery';
 import dateUtils from 'core/utils/date';
 import RecurrenceEditor from 'ui/scheduler/ui.scheduler.recurrence_editor';
+import SelectBox from 'ui/select_box';
 import { getRecurrenceProcessor } from 'ui/scheduler/recurrence';
 import dateLocalization from 'localization/date';
 
@@ -19,154 +20,137 @@ const MONTH_OF_YEAR = 'dx-recurrence-selectbox-month-of-year';
 const EVERY_INTERVAL = 'dx-recurrence-numberbox-interval';
 const RECURRENCE_BUTTON_GROUP = 'dx-recurrence-button-group';
 
-QUnit.testStart(function() {
+const { testStart, test, module } = QUnit;
+
+testStart(() => {
     $('#qunit-fixture').html('<div id="recurrence-editor"></div>');
 });
 
-QUnit.module('Recurrence editor - rendering', {
-    beforeEach: function() {
+const moduleConfig = {
+    beforeEach() {
         this.createInstance = function(options) {
             this.instance = new RecurrenceEditor($('#recurrence-editor'), options);
+            this.freqEditor = this.instance.getRecurrenceForm().getEditor('freq');
         };
     }
+};
+
+module('Recurrence Editor rendering', moduleConfig, () => {
+    test('Recurrence editor should be initialized', function(assert) {
+        this.createInstance();
+        assert.ok(this.instance instanceof RecurrenceEditor, 'dxRecurrenceEditor was initialized');
+
+        assert.ok(this.instance.$element().hasClass('dx-recurrence-editor'));
+    });
+
+    test('Recurrence editor should have correct default options', function(assert) {
+        this.createInstance();
+
+        assert.equal(this.instance.option('value'), null, 'value is right');
+        assert.equal(this.instance.option('visible'), true, 'editor is visible');
+    });
+
+    QUnit.test('Recurrence editor should correctly process null value and reset inner editors to default values', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY' });
+
+        this.instance.option('value', null);
+        this.instance.option('visible', true);
+
+        assert.equal(this.freqEditor.option('value'), 'daily', 'freq editor default value was set');
+    });
 });
 
-QUnit.test('Recurrence editor should be initialized', function(assert) {
-    this.createInstance();
-    assert.ok(this.instance instanceof RecurrenceEditor, 'dxRecurrenceEditor was initialized');
+module('Freq editor rendering', moduleConfig, () => {
+    test('Recurrence editor should contain select box for select freq', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY' });
 
-    assert.ok(this.instance.$element().hasClass('dx-recurrence-editor'));
-});
+        assert.ok(this.freqEditor instanceof SelectBox, 'Freq editor is SelectBox');
+    });
 
-QUnit.test('Recurrence editor should have correct default options', function(assert) {
-    this.createInstance();
+    test('Freq editor should have right items', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY' });
 
-    assert.equal(this.instance.option('value'), null, 'value is right');
-    assert.equal(this.instance.option('visible'), true, 'editor is visible');
-});
+        const items = this.freqEditor.option('items');
+        /* {
+            // functionality is not removed, but hide the ability to set minute recurrence in the editor.
+            // in the future, if we publish the dxRecurrenceEditor, then we publish the minute recurrence
+            { text: 'Minutely', value: 'minutely' };
+        }*/
+        const itemValues = [{ text: 'Hourly', value: 'hourly' }, { text: 'Daily', value: 'daily' }, { text: 'Weekly', value: 'weekly' }, { text: 'Monthly', value: 'monthly' }, { text: 'Yearly', value: 'yearly' }];
 
-QUnit.test('Recurrence editor should correctly process null value and reset inner editors to default values', function(assert) {
-    this.createInstance({ value: 'FREQ=WEEKLY' });
-
-    this.instance.option('value', null);
-    this.instance.option('visible', true);
-
-    const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
-
-    assert.equal(freqEditor.option('value'), 'daily', 'freq editor default value was set');
-});
-
-QUnit.module('Recurrence editor - freq editor', {
-    beforeEach: function() {
-        this.createInstance = function(options) {
-            this.instance = new RecurrenceEditor($('#recurrence-editor'), options);
-        };
-    }
-});
-
-QUnit.test('Recurrence editor should contain select box for select freq', function(assert) {
-    this.createInstance({ value: 'FREQ=WEEKLY' });
-
-    assert.equal($('.' + FREQUENCY_EDITOR).length, 1, 'select box was rendered');
-});
-
-QUnit.test('Recurrence editor should has right items', function(assert) {
-    this.createInstance({ value: 'FREQ=WEEKLY' });
-
-    const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
-
-    const items = freqEditor.option('items');
-    /* {
-        // functionality is not removed, but hide the ability to set minute recurrence in the editor.
-        // in the future, if we publish the dxRecurrenceEditor, then we publish the minute recurrence
-        { text: 'Minutely', value: 'minutely' };
-    }*/
-    const itemValues = [{ text: 'Hourly', value: 'hourly' }, { text: 'Daily', value: 'daily' }, { text: 'Weekly', value: 'weekly' }, { text: 'Monthly', value: 'monthly' }, { text: 'Yearly', value: 'yearly' }];
-
-    for(let i = 0, len = items.length; i < len; i++) {
-        assert.equal(itemValues[i].text, items[i].text(), 'item text is right');
-        assert.equal(itemValues[i].value, items[i].value, 'item value is right');
-    }
-});
-
-QUnit.test('Recurrence editor should correctly process values of the freq selectBox, byday setting', function(assert) {
-    this.createInstance({ startDate: new Date(2015, 7, 27) });
-    this.instance.option('visible', true);
-
-    const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
-
-    assert.equal(this.instance.option('value'), null, 'Recurrence editor has right value');
-
-    freqEditor.option('value', 'weekly');
-    assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;BYDAY=TH', 'Recurrence editor has right value');
-});
-
-QUnit.test('Recurrence editor should correctly process values of the freq radioGroup, bymonthday setting', function(assert) {
-    this.createInstance({ value: 'FREQ=WEEKLY', startDate: new Date(2015, 2, 10) });
-
-    const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
-    freqEditor.option('value', 'monthly');
-
-    assert.equal(this.instance.option('value'), 'FREQ=MONTHLY;BYMONTHDAY=10', 'Recurrence editor has right value');
-});
-
-QUnit.test('Recurrence editor should correctly process values of the freq radioGroup, bymonthday and bymonth setting', function(assert) {
-    this.createInstance({ value: 'FREQ=WEEKLY', startDate: new Date(2015, 2, 10) });
-
-    const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
-    freqEditor.option('value', 'yearly');
-
-    assert.equal(this.instance.option('value'), 'FREQ=YEARLY;BYMONTHDAY=10;BYMONTH=3', 'Recurrence editor has right value');
-});
-
-QUnit.test('Recurrence editor onValueChanged should be fired after change value', function(assert) {
-    let fired = 0;
-    this.createInstance({
-        value: 'FREQ=MONTHLY',
-        startDate: new Date(2019, 1, 1),
-        onValueChanged: function() {
-            fired++;
+        for(let i = 0, len = items.length; i < len; i++) {
+            assert.equal(itemValues[i].text, items[i].text(), 'item text is right');
+            assert.equal(itemValues[i].value, items[i].value, 'item value is right');
         }
     });
 
-    const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
+    test('Recurrence editor should correctly process values of the freq selectBox, byday setting', function(assert) {
+        this.createInstance({ startDate: new Date(2015, 7, 27) });
 
-    freqEditor.option('value', 'weekly');
+        assert.equal(this.instance.option('value'), null, 'Recurrence editor has right value');
 
-    assert.equal(fired, 1, 'Recurrence editor onValueChanged is fired');
-});
-
-QUnit.test('Recurrence editor should correctly process values to the freq radioGroup', function(assert) {
-    this.createInstance({ value: 'FREQ=WEEKLY', startDate: new Date(2019, 1, 1), });
-
-    const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
-
-    assert.equal(freqEditor.option('value'), 'weekly', 'Freq editor has right value');
-
-    this.instance.option('value', 'FREQ=MONTHLY');
-    assert.equal(freqEditor.option('value'), 'monthly', 'Freq editor has right value');
-});
-
-$.each(['minutely', 'hourly'], (_, value) => {
-    QUnit.test(`Recurrence editor should correctly set frequency on ${value} freq`, function(assert) {
-        this.createInstance();
-
-        const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
-
-        assert.equal(this.instance.option('value'), null, 'Freq editor has right value');
-        freqEditor.option('value', value);
-        assert.equal(this.instance.option('value'), `FREQ=${value.toUpperCase()}`, 'Freq editor has right value');
+        this.freqEditor.option('value', 'weekly');
+        assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;BYDAY=TH', 'Recurrence editor has right value');
     });
 
-    QUnit.test(`Recurrence editor should correctly set interval on ${value} freq`, function(assert) {
-        this.createInstance();
+    test('Recurrence editor should correctly process values of the freq selectBox, bymonthday setting', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY', startDate: new Date(2015, 2, 10) });
 
-        const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
-        freqEditor.option('value', value);
-        const intervalEditor = this.instance.$element().find('.' + EVERY_INTERVAL).dxNumberBox('instance');
-        intervalEditor.option('value', 10);
+        this.freqEditor.option('value', 'monthly');
 
-        assert.equal(this.instance.option('value'), `FREQ=${value.toUpperCase()};INTERVAL=10`, 'Freq editor has right value');
+        assert.equal(this.instance.option('value'), 'FREQ=MONTHLY;BYMONTHDAY=10', 'Recurrence editor has right value');
+    });
+
+    test('Recurrence editor should correctly process values of the freq radioGroup, bymonthday and bymonth setting', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY', startDate: new Date(2015, 2, 10) });
+
+        this.freqEditor.option('value', 'yearly');
+
+        assert.equal(this.instance.option('value'), 'FREQ=YEARLY;BYMONTHDAY=10;BYMONTH=3', 'Recurrence editor has right value');
+    });
+
+    test('Recurrence editor onValueChanged should be fired after changing value', function(assert) {
+        let fired = 0;
+        this.createInstance({
+            value: 'FREQ=MONTHLY',
+            startDate: new Date(2019, 1, 1),
+            onValueChanged: function() {
+                fired++;
+            }
+        });
+
+        this.freqEditor.option('value', 'weekly');
+
+        assert.equal(fired, 1, 'Recurrence editor onValueChanged is fired');
+    });
+
+    test('Recurrence editor should correctly pass values to the freq editor', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY', startDate: new Date(2019, 1, 1), });
+
+        assert.equal(this.freqEditor.option('value'), 'weekly', 'Freq editor has right value');
+
+        this.instance.option('value', 'FREQ=MONTHLY');
+        assert.equal(this.freqEditor.option('value'), 'monthly', 'Freq editor has right value');
+    });
+
+    $.each(['minutely', 'hourly'], (_, value) => {
+        test(`Recurrence editor should correctly set frequency on ${value} freq`, function(assert) {
+            this.createInstance();
+
+            assert.equal(this.instance.option('value'), null, 'Freq editor has right value');
+            this.freqEditor.option('value', value);
+            assert.equal(this.instance.option('value'), `FREQ=${value.toUpperCase()}`, 'Recurrence editor has right value');
+        });
+
+        test(`Recurrence editor should correctly set interval on ${value} freq`, function(assert) {
+            this.createInstance();
+
+            this.freqEditor.option('value', value);
+            const intervalEditor = this.instance.getRecurrenceForm().getEditor('interval');
+            intervalEditor.option('value', 10);
+
+            assert.equal(this.instance.option('value'), `FREQ=${value.toUpperCase()};INTERVAL=10`, 'Freq editor has right value');
+        });
     });
 });
 
