@@ -194,15 +194,15 @@ export default class AppointmentPopup {
         this.state.appointment.isEmptyText = data === undefined || data.text === undefined;
         this.state.appointment.isEmptyDescription = data === undefined || data.description === undefined;
 
-        const formData = extend({}, { text: '', description: '', recurrenceRule: '' }, this._createAppointmentFormData(data));
+        const formData = extend({ text: '', description: '', recurrenceRule: '' }, this._createAppointmentFormData(data));
 
         if(processTimeZone) {
             if(startDate) {
-                startDate = this.scheduler.fire('convertDateByTimezone', startDate);
+                startDate = this.scheduler.fire('convertDateByTimezone', startDate, this.scheduler.fire('getField', 'startDateTimeZone', data), true);
                 this.scheduler.fire('setField', 'startDate', formData, startDate);
             }
             if(endDate) {
-                endDate = this.scheduler.fire('convertDateByTimezone', endDate);
+                endDate = this.scheduler.fire('convertDateByTimezone', endDate, this.scheduler.fire('getField', 'endDateTimeZone', data), true);
                 this.scheduler.fire('setField', 'endDate', formData, endDate);
             }
         }
