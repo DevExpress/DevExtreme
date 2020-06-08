@@ -13,7 +13,7 @@ import ButtonGroup from '../button_group';
 import DateBox from '../date_box';
 import Editor from '../editor/editor';
 import NumberBox from '../number_box';
-import RadioGroup from '../radio_group';
+// import RadioGroup from '../radio_group';
 import publisherMixin from './ui.scheduler.publisher_mixin';
 import { getRecurrenceProcessor } from './recurrence';
 
@@ -110,7 +110,7 @@ class RecurrenceRule {
         }
     }
 
-    repeatableRule() {
+    getRepeatEndRule() {
         const rules = this._recurrenceRule;
 
         if('count' in rules) {
@@ -121,7 +121,7 @@ class RecurrenceRule {
             return 'until';
         }
 
-        return null;
+        return 'never';
     }
 
     recurrenceString() {
@@ -208,7 +208,7 @@ const RecurrenceEditor = Editor.inherit({
 
         const months = [];
         const monthsNames = dateLocalization.getMonthNames('wide');
-        const repeatType = this._recurrenceRule.repeatableRule() || 'never';
+        const repeatType = this._recurrenceRule.getRepeatEndRule();
 
         for(let i = 0; i < 12; i++) {
             months[i] = { value: String(i + 1), text: monthsNames[i] };
@@ -354,6 +354,8 @@ const RecurrenceEditor = Editor.inherit({
                 items: [
                     {
                         editorType: 'dxRadioGroup',
+                        dataField: 'repeatEnd',
+                        css: REPEAT_TYPE_EDITOR,
                         editorOptions: {
                             items: repeatEndTypes,
                             value: repeatType,
@@ -393,6 +395,8 @@ const RecurrenceEditor = Editor.inherit({
             showColonAfterLabel: false,
             labelLocation: 'top',
         });
+
+        this._disableRepeatEndParts();
     },
 
     getRecurrenceForm: function() {
@@ -463,37 +467,6 @@ const RecurrenceEditor = Editor.inherit({
         this._changeEditorValue();
     },
 
-    _renderRepeatEndTypeEditor() {
-        const repeatType = this._recurrenceRule.repeatableRule() || 'never';
-
-        this._$repeatTypeEditor = $('<div>')
-            .addClass(REPEAT_TYPE_EDITOR)
-            .addClass(FIELD_VALUE_CLASS)
-            .appendTo(this._$repeatEndEditor);
-
-        this._repeatTypeEditor = this._createComponent(this._$repeatTypeEditor, RadioGroup, {
-            items: repeatEndTypes,
-            value: repeatType,
-            displayExpr: 'text',
-            valueExpr: 'value',
-            itemTemplate: (itemData) => {
-                if(itemData.value === 'count') {
-                    return this._renderRepeatCountEditor();
-                }
-                if(itemData.value === 'until') {
-                    return this._renderRepeatUntilEditor();
-                }
-
-                return this._renderDefaultRepeatEnd();
-
-            },
-            layout: 'vertical',
-            onValueChanged: this._repeatTypeValueChangedHandler.bind(this)
-        });
-
-        this._disableRepeatEndParts(repeatType);
-    },
-
     _renderDefaultRepeatEnd() {
         const $editorTemplate = $('<div>').addClass(REPEAT_END_EDITOR + WRAPPER_POSTFIX);
 
@@ -524,7 +497,7 @@ const RecurrenceEditor = Editor.inherit({
         this._changeEditorValue();
     },
 
-    _disableRepeatEndParts(value) {
+    _disableRepeatEndParts(value = this._recurrenceRule.getRepeatEndRule()) {
         if(value === 'until') {
             this._repeatCountEditor.option('disabled', true);
             this._repeatUntilDate.option('disabled', false);
@@ -571,7 +544,7 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _repeatCountValueChangeHandler(args) {
-        if(this._recurrenceRule.repeatableRule() !== 'count') {
+        if(this._recurrenceRule.getRepeatEndRule() !== 'count') {
             return;
         }
 
@@ -616,7 +589,7 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _repeatUntilValueChangeHandler(args) {
-        if(this._recurrenceRule.repeatableRule() !== 'until') {
+        if(this._recurrenceRule.getRepeatEndRule() !== 'until') {
             return;
         }
 
@@ -676,7 +649,7 @@ const RecurrenceEditor = Editor.inherit({
                 this._recurrenceRule.makeRules(args.value);
                 this._changeRepeatOnVisibility();
                 this._changeRepeatIntervalLabel();
-
+                this._disableRepeatEndParts();
                 this._changeEditorsValues(this._recurrenceRule.rules());
 
                 this.callBase(args);
@@ -740,12 +713,19 @@ const RecurrenceEditor = Editor.inherit({
 
         this._changeIntervalValue(rules.interval);
         this._changeRepeatCountValue();
+        this._changeRepeatEndValue();
         this._changeRepeatUntilValue();
         this._changeMonthOfYearValue();
     },
 
     _changeIntervalValue(value) {
         this._recurrenceForm.getEditor('interval').option('value', value || 1);
+    },
+
+    _changeRepeatEndValue() {
+        const repeatType = this._recurrenceRule.getRepeatEndRule();
+
+        this._recurrenceForm.getEditor('repeatEnd').option('value', repeatType);
     },
 
     _changeDayOfMonthValue() {
