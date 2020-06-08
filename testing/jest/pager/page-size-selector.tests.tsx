@@ -29,12 +29,6 @@ describe('Pager size selector', () => {
       PAGER_PAGE_SIZE_CLASS,
     ]);
   });
-  it('render large page sizes rtlEnabled', () => {
-    const comp = render({
-      rtlEnabled: true, isLargeDisplayMode: true, pageSizes: [5, 10, 20], pageSize: 5,
-    });
-    expect(comp.children().map((c) => c.text())).toEqual(['20', '10', '5']);
-  });
   it('change pagesize in large selector', () => {
     const pageSizeHandler = jest.fn();
     const comp = render({

@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, Fragment,
+  Component, ComponentBindings, JSXComponent,
   Ref, Effect, Template, InternalState, Event,
 } from 'devextreme-generator/component_declaration/common';
 import getElementComputedStyle from './get-computed-style';
@@ -22,18 +22,16 @@ export const viewFunction = ({
   isLargeDisplayMode,
   props: { contentTemplate: Content, ...pagerProps },
 }: ResizableContainer) => (
-  <Fragment>
-    <Content
-      parentRef={parentRef}
-      pageSizesRef={pageSizesRef}
-      infoTextRef={infoTextRef}
-      pagesRef={pagesRef}
-      infoTextVisible={infoTextVisible}
-      isLargeDisplayMode={isLargeDisplayMode}
+  <Content
+    parentRef={parentRef}
+    pageSizesRef={pageSizesRef}
+    infoTextRef={infoTextRef}
+    pagesRef={pagesRef}
+    infoTextVisible={infoTextVisible}
+    isLargeDisplayMode={isLargeDisplayMode}
       // eslint-disable-next-line react/jsx-props-no-spreading
-      {...pagerProps as PagerProps}
-    />
-  </Fragment>
+    {...pagerProps as PagerProps}
+  />
 );
 export type GetHtmlElement = { getHtmlElement: () => HTMLElement | undefined };
 type ChildElementsName = 'pageSizesHtmlEl' | 'pagesHtmlEl' | 'infoHtmlEl';
