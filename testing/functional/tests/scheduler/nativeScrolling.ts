@@ -28,7 +28,10 @@ test('ScrollToTime works correctly with timelineDay and timelineWeek view (T7499
         expectedValue: 25700
     }];
 
-    await Promise.all(views.map(({ name, initValue, expectedValue }) => (async () => {
+    // eslint-disable-next-line no-restricted-syntax
+    for(const view of views) {
+        const { name, initValue, expectedValue } = view;
+
         await scheduler.option('currentView', name);
         await scheduler.option('useNative', true);
 
@@ -41,7 +44,7 @@ test('ScrollToTime works correctly with timelineDay and timelineWeek view (T7499
         await t
             .expect(scheduler.workSpaceScroll.left).eql(expectedValue, `Work space is scrolled in ${name} view`)
             .expect(scheduler.headerSpaceScroll.left).eql(expectedValue, `Header space is scrolled in ${name} view`);
-    })()));
+    }
 }).before(() => createScheduler({
     dataSource: [],
     views: ['timelineDay', 'timelineWeek'],

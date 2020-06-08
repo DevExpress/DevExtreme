@@ -919,24 +919,17 @@ test('Cell should be highlighted after editing another cell when startEditAction
 
 test('Previous navigation elements should not have "tabindex" if navigation action is "click" (T870120)', async t => {
     const dataGrid = new DataGrid('#container');
-    const cells = [];
 
     for(let rowIndex = 0; rowIndex < 3; rowIndex += 1) {
         for(let colIndex = 0; colIndex < 3; colIndex += 1) {
-            cells.push({
-                cell: dataGrid.getDataCell(rowIndex, colIndex),
-                colIndex,
-                rowIndex
-            });
+            const cell = dataGrid.getDataCell(rowIndex, colIndex);
+
+            await t
+                .click(cell.element)
+                .expect(cell.element.focused).ok(`cell[${rowIndex}, ${colIndex}] is focused`)
+                .expect(cell.element.getAttribute('tabindex')).eql('111', `cell[${rowIndex}, ${colIndex}] has tabindex`);
         }
     }
-
-    await Promise.all(cells.map(({ cell,colIndex, rowIndex }) => (async () => {
-        await t
-            .click(cell.element)
-            .expect(cell.element.focused).ok(`cell[${rowIndex}, ${colIndex}] is focused`)
-            .expect(cell.element.getAttribute('tabindex')).eql('111', `cell[${rowIndex}, ${colIndex}] has tabindex`);
-    })()));
 }).before(() => createWidget('dxDataGrid', {
     dataSource: [
         { id: 4, c0: 'c0_4', c1: 'c1_4' },
@@ -948,26 +941,20 @@ test('Previous navigation elements should not have "tabindex" if navigation acti
 
 test('Previous navigation elements should not have "tabindex" if navigation action is "tab" (T870120)', async t => {
     const dataGrid = new DataGrid('#container');
-    const cells = [];
+    let cell = dataGrid.getDataCell(0, 0);
+
+    await t.click(cell.element);
 
     for(let rowIndex = 0; rowIndex < 3; rowIndex += 1) {
         for(let colIndex = 0; colIndex < 3; colIndex += 1) {
-            cells.push({
-                cell: dataGrid.getDataCell(rowIndex, colIndex),
-                colIndex,
-                rowIndex
-            });
+            cell = dataGrid.getDataCell(rowIndex, colIndex);
+
+            await t
+                .expect(cell.element.focused).ok(`cell[${rowIndex}, ${colIndex}] is focused`)
+                .expect(cell.element.getAttribute('tabindex')).eql('111', `cell[${rowIndex}, ${colIndex}] has tabindex`)
+                .pressKey('tab');
         }
     }
-
-    await t.click(cells[0].element);
-
-    await Promise.all(cells.map(({ cell, colIndex, rowIndex }) => (async () => {
-        await t
-            .expect(cell.element.focused).ok(`cell[${rowIndex}, ${colIndex}] is focused`)
-            .expect(cell.element.getAttribute('tabindex')).eql('111', `cell[${rowIndex}, ${colIndex}] has tabindex`)
-            .pressKey('tab');
-    })()));
 }).before(() => createWidget('dxDataGrid', {
     dataSource: [
         { id: 4, c0: 'c0_4', c1: 'c1_4' },
