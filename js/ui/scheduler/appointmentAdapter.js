@@ -8,7 +8,8 @@ const PROPERTY_NAMES = {
     description: 'description',
     startDateTimeZone: 'startDateTimeZone',
     endDateTimeZone: 'endDateTimeZone',
-    recurrenceRule: 'recurrenceRule'
+    recurrenceRule: 'recurrenceRule',
+    recurrenceException: 'recurrenceException'
 };
 
 export const PathTimeZoneConversion = {
@@ -55,6 +56,10 @@ export default class AppointmentAdapter {
 
     get recurrenceRule() {
         return this.scheduler.fire('getField', PROPERTY_NAMES.recurrenceRule, this.appointment);
+    }
+
+    get recurrenceException() {
+        return this.scheduler.fire('getField', PROPERTY_NAMES.recurrenceException, this.appointment);
     }
 
     get disabled() {
