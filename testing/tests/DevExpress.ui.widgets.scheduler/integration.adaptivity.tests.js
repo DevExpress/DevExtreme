@@ -1,7 +1,12 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
-import { createWrapper, initTestMarkup, isDesktopEnvironment, TOOLBAR_TOP_LOCATION, TOOLBAR_BOTTOM_LOCATION } from './helpers.js';
-import { getSimpleDataArray } from './data.js';
+import {
+    createWrapper,
+    initTestMarkup,
+    isDesktopEnvironment,
+    TOOLBAR_TOP_LOCATION,
+    TOOLBAR_BOTTOM_LOCATION } from '../../helpers/scheduler/helpers.js';
+import { getSimpleDataArray } from '../../helpers/scheduler/data.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import devices from 'core/devices';
 import 'ui/switch';

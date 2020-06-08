@@ -55,6 +55,7 @@ class DialogInfoBase {
     }
 
     _getFormItems() { return {}; }
+    _getFormCssClass() { return ''; }
     _updateParameters() {}
     _getOkToolbarItem() {
         return this._getToolbarItem('OK', this._applyAction);
@@ -90,7 +91,10 @@ class DialogInfoBase {
         return (content) => {
             this._form = new Form(content, {
                 formData: this._parameters,
-                items: this._getFormItems()
+                items: this._getFormItems(),
+                elementAttr: {
+                    class: this._getFormCssClass()
+                }
             });
             return content;
         };
@@ -253,13 +257,13 @@ class ConstraintViolationDialogInfo extends DialogInfoBase {
         }
 
         return [{
+            template: this._parameters.validationError.critical ?
+                messageLocalization.format('dxGantt-dialogConstraintCriticalViolationMessage') :
+                messageLocalization.format('dxGantt-dialogConstraintViolationMessage')
+        }, {
+            cssClass: 'dx-cv-dialog-row',
             dataField: 'option',
-            label: {
-                text: this._parameters.validationError.critical ?
-                    messageLocalization.format('dxGantt-dialogConstraintCriticalViolationMessage') :
-                    messageLocalization.format('dxGantt-dialogConstraintViolationMessage'),
-                location: 'top'
-            },
+            label: { visible: false },
             editorType: 'dxRadioGroup',
             editorOptions: {
                 items: items,
@@ -268,8 +272,8 @@ class ConstraintViolationDialogInfo extends DialogInfoBase {
             }
         }];
     }
-    getToolbarItems() {
-        return [ this._getOkToolbarItem()];
+    _getFormCssClass() {
+        return 'dx-cv-dialog';
     }
     _updateParameters(formData) {
         this._parameters.option = formData.option;

@@ -1,5 +1,5 @@
 import fx from 'animation/fx';
-import { createWrapper, initTestMarkup, isDesktopEnvironment } from './helpers.js';
+import { createWrapper, initTestMarkup, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
 import translator from 'animation/translator';
 
 import 'ui/scheduler/ui.scheduler';

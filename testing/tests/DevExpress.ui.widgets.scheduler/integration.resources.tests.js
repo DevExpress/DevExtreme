@@ -12,7 +12,7 @@ import translator from 'animation/translator';
 
 import 'ui/scheduler/ui.scheduler';
 
-import { createWrapper, initTestMarkup } from './helpers.js';
+import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 
 QUnit.testStart(() => initTestMarkup());
 

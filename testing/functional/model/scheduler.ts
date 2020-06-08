@@ -32,11 +32,11 @@ const CLASS = {
     tooltipDeleteButton: 'dx-tooltip-appointment-item-delete-button',
 
     dialog: 'dx-dialog.dx-popup',
-    dialogButton: `dx-dialog-button`,
-    navigator: `dx-scheduler-navigator`,
-    navigatorButtonNext: `dx-scheduler-navigator-next`,
-    navigatorButtonPrev: `dx-scheduler-navigator-previous`,
-    navigatorButtonCaption: `dx-scheduler-navigator-caption`
+    dialogButton: 'dx-dialog-button',
+    navigator: 'dx-scheduler-navigator',
+    navigatorButtonNext: 'dx-scheduler-navigator-next',
+    navigatorButtonPrev: 'dx-scheduler-navigator-previous',
+    navigatorButtonCaption: 'dx-scheduler-navigator-caption'
 };
 
 class Appointment {
@@ -67,14 +67,14 @@ class Appointment {
         this.size = {
             width: this.element.getStyleProperty('width'),
             height: this.element.getStyleProperty('height')
-        }
+        };
 
         this.isFocused = this.element.hasClass(CLASS.stateFocused);
         this.isAllDay = this.element.hasClass(CLASS.allDay);
     }
 }
 
-class AppointmentCollector{
+class AppointmentCollector {
     element: Selector;
     isFocused: Promise<boolean>;
 
@@ -132,15 +132,15 @@ class AppointmentPopup {
         this.element = scheduler.find(`.${CLASS.popup}.${CLASS.appointmentPopup}`);
         this.wrapper = Selector(`.${CLASS.popupWrapper}.${CLASS.appointmentPopup}`);
 
-        this.subjectElement = this.wrapper.find(".dx-texteditor-input").nth(0);
-        this.startDateElement = this.wrapper.find(".dx-texteditor-input").nth(1);
-        this.endDateElement = this.wrapper.find(".dx-texteditor-input").nth(2);
-        this.descriptionElement = this.wrapper.find(".dx-texteditor-input").nth(3);
-        this.allDayElement = this.wrapper.find(".dx-switch").nth(0);
+        this.subjectElement = this.wrapper.find('.dx-texteditor-input').nth(0);
+        this.startDateElement = this.wrapper.find('.dx-texteditor-input').nth(1);
+        this.endDateElement = this.wrapper.find('.dx-texteditor-input').nth(2);
+        this.descriptionElement = this.wrapper.find('.dx-texteditor-input').nth(3);
+        this.allDayElement = this.wrapper.find('.dx-switch').nth(0);
 
-        this.freqElement = this.wrapper.find(".dx-recurrence-selectbox-freq");
+        this.freqElement = this.wrapper.find('.dx-recurrence-selectbox-freq');
 
-        this.doneButton = this.wrapper.find(".dx-popup-done.dx-button");
+        this.doneButton = this.wrapper.find('.dx-popup-done.dx-button');
         this.cancelButton = this.wrapper.find(`.${CLASS.cancelButton}`);
     }
 
@@ -212,7 +212,7 @@ export default class Scheduler extends Widget {
         this.dateTableCells = this.element.find(`.${CLASS.dateTableCell}`);
         this.allDayTableCells = this.element.find(`.${CLASS.allDayTableCell}`);
         this.dateTableRows = this.element.find(`.${CLASS.dateTableRow}`);
-        this.dateTableScrollable =  this.element.find(`.${CLASS.dateTableScrollable}`);
+        this.dateTableScrollable = this.element.find(`.${CLASS.dateTableScrollable}`);
         this.headerPanelCells = this.element.find(`.${CLASS.headerPanelCell}`);
 
         const headerSpaceScroll = this.element.find(`.${CLASS.headerScrollable} .${CLASS.scrollableContainer}`);
@@ -271,4 +271,4 @@ export default class Scheduler extends Widget {
     getNavigator(): SchedulerNavigator {
         return new SchedulerNavigator(this.element);
     }
-};
+}

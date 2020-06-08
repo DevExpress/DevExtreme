@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import array from '../../core/utils/array';
-import recurrenceUtils from './utils.recurrence';
+import { getRecurrenceProcessor } from './recurrence';
 import typeUtils from '../../core/utils/type';
 import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';
@@ -37,7 +37,7 @@ const subscribes = {
     needCoordinates: function(options) {
         const appointmentData = options.appointmentData;
         const startDate = options.startDate;
-        const endDate = this._getEndDate(appointmentData);
+        const originalEndDate = this._getEndDate(appointmentData, true);
         const recurrenceRule = this.fire('getField', 'recurrenceRule', appointmentData);
         const recurrenceException = this._getRecurrenceException(appointmentData);
         const dateRange = this._workSpace.getDateRange();
@@ -51,13 +51,13 @@ const subscribes = {
             rule: recurrenceRule,
             exception: recurrenceException,
             start: originalStartDate,
-            end: endDate,
+            end: originalEndDate,
             min: startViewDate,
             max: dateRange[1],
             firstDayOfWeek: firstDayOfWeek
         };
 
-        let dates = recurrenceUtils.getDatesByRecurrence(recurrenceOptions);
+        let dates = getRecurrenceProcessor().generateDates(recurrenceOptions);
         let initialDates;
 
         if(!dates.length) {

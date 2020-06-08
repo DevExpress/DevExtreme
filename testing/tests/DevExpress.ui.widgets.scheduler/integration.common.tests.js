@@ -1,4 +1,4 @@
-import { createWrapper, initTestMarkup, isDesktopEnvironment } from './helpers.js';
+import { createWrapper, initTestMarkup, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
 
 import 'common.css!';
 import 'generic_light.css!';
