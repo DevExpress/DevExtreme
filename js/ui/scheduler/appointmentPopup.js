@@ -367,7 +367,7 @@ export default class AppointmentPopup {
                     }
                 }
 
-                this.scheduler.addAppointment(appointment)
+                this.scheduler.addAppointment(appointment, true)
                     .done(deferred.resolve);
             }
 
