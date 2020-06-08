@@ -23,7 +23,7 @@ export class SelectBoxProps extends WidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class SelectBox extends JSXComponent<SelectBoxProps>(SelectBoxProps) {
+export default class SelectBox extends JSXComponent(SelectBoxProps) {
   @Ref()
   widgetRef!: HTMLDivElement;
 

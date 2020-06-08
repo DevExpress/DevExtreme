@@ -23,7 +23,7 @@ export class IconProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class Icon extends JSXComponent<IconProps>(IconProps) {
+export default class Icon extends JSXComponent(IconProps) {
   get sourceType() {
     return getImageSourceType(this.props.source);
   }
