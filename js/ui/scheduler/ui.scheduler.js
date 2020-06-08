@@ -49,6 +49,7 @@ import SchedulerWorkSpaceDay from './workspaces/ui.scheduler.work_space_day';
 import SchedulerWorkSpaceMonth from './workspaces/ui.scheduler.work_space_month';
 import SchedulerWorkSpaceWeek from './workspaces/ui.scheduler.work_space_week';
 import SchedulerWorkSpaceWorkWeek from './workspaces/ui.scheduler.work_space_work_week';
+import AppointmentAdapter from './AppointmentAdapter';
 
 const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
@@ -2545,6 +2546,10 @@ const Scheduler = Widget.inherit({
     getFirstDayOfWeek: function() {
         return typeUtils.isDefined(this.option('firstDayOfWeek')) ? this.option('firstDayOfWeek') : dateLocalization.firstDayOfWeekIndex();
     },
+
+    createAppointmentAdapter: function(appointment) {
+        return new AppointmentAdapter(this, appointment);
+    }
 
     /**
         * @name dxSchedulerMethods.registerKeyHandler
