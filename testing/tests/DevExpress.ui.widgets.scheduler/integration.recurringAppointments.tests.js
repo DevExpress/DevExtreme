@@ -77,23 +77,6 @@ QUnit.test('Tasks should be duplicated according to recurrence rule, if firstDay
     assert.equal(this.instance.$element().find('.dx-scheduler-appointment-recurrence').length, 3, 'recurrence tasks are OK');
 });
 
-QUnit.test('Tasks should be duplicated according to recurrence rule and recurrence exception', function(assert) {
-    // NOTE: recurrenceException in date format will be converted in dateTime with 00.00 time when processing
-    const tasks = [
-        { text: 'One', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 2), recurrenceRule: 'FREQ=DAILY', recurrenceException: '20150317' }
-    ];
-    const dataSource = new DataSource({
-        store: tasks
-    });
-    this.createInstance({
-        currentView: 'week',
-        currentDate: new Date(2015, 2, 16),
-        dataSource: dataSource
-    });
-
-    assert.equal(this.instance.$element().find('.dx-scheduler-appointment-recurrence').length, 5, 'tasks are OK');
-});
-
 QUnit.test('Recurring appointments with resources should have color of the first resource if groups option is not defined', function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 1, 9),
@@ -835,7 +818,7 @@ QUnit.test('AllDay recurrence appointments should be rendered correctly after ch
     });
     assert.equal(this.instance.$element().find('.dx-scheduler-appointment-recurrence').length, 1, 'appointments are OK');
     this.instance.option('currentDate', new Date(2015, 4, 27));
-    assert.equal(this.instance.$element().find('.dx-scheduler-appointment-recurrence').length, 0, 'appointments are OK');
+    assert.equal(this.instance.$element().find('.dx-scheduler-appointment-recurrence').length, 1, 'appointments are OK');
 });
 
 QUnit.test('Recurring appt should be rendered correctly after changing of repeate count', function(assert) {
@@ -880,9 +863,36 @@ QUnit.test('Recurring appt should be rendered correctly after setting recurrence
     });
 
     this.instance.updateAppointment(task, newTask);
-    const appointments = this.instance.$element().find('.dx-scheduler-appointment');
 
-    assert.equal(appointments.length, 2, 'appt was rendered correctly');
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 2, 'appt was rendered correctly');
+});
+
+QUnit.test('Recurring appt should be rendered correctly after setting several recurrenceExceptions', function(assert) {
+    const task = {
+        text: 'Stand-up meeting',
+        startDate: new Date(2015, 4, 4, 9, 0),
+        endDate: new Date(2015, 4, 4, 9, 15),
+        recurrenceRule: 'FREQ=DAILY;COUNT=4'
+    };
+    const newTask = {
+        text: 'Stand-up meeting',
+        startDate: new Date(2015, 4, 4, 9, 0),
+        endDate: new Date(2015, 4, 4, 9, 15),
+        recurrenceRule: 'FREQ=DAILY;COUNT=4',
+        recurrenceException: '20150506T090000, 20150505T090000'
+    };
+
+    this.createInstance({
+        dataSource: [task],
+        views: ['month'],
+        currentView: 'month',
+        currentDate: new Date(2015, 4, 25),
+        recurrenceEditMode: 'single'
+    });
+
+    this.instance.updateAppointment(task, newTask);
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 2, 'appt was rendered correctly');
 });
 
 QUnit.test('Recurrence exception time should be considered when recurrent appointment rendering (T862204)', function(assert) {
@@ -1257,7 +1267,7 @@ QUnit.test('Appointment has correct occurrences dates with interval > 1', functi
         height: 600
     });
 
-    assert.equal(this.scheduler.appointments.getAppointmentCount(), 9, 'Appointment occurrences are rendered');
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 10, 'Appointment occurrences are rendered');
     const firstPosition = this.scheduler.appointments.getAppointment(0).position();
     const eighthPosition = this.scheduler.appointments.getAppointment(7).position();
     const cellWorkspaceRect = this.scheduler.workSpace.getCellWorkspaceRect(2, 6);
@@ -1429,6 +1439,30 @@ QUnit.test('Recurrence appointment occurrences should have correct text (T818393
     assert.equal($thirdAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), '4:00 AM - 5:00 AM', 'Appointment third occurrences has correct date text');
 });
 
+QUnit.test('Recurrent appointment with tail on next week has most top coordinate (T805446)', function(assert) {
+    this.createInstance({
+        views: ['week', { type: 'day', intervalCount: 2 }],
+        currentView: 'week',
+        crossScrollingEnabled: true,
+        dataSource: [{
+            text: 'Recurrent',
+            startDate: '2019-05-13T19:59:00',
+            endDate: '2019-05-14T04:00:00',
+            recurrenceRule: 'FREQ=WEEKLY;BYDAY=SU'
+        }],
+        startDayHour: 0,
+        endDayHour: 24,
+        firstDayOfWeek: 1,
+        cellDuration: 60,
+        currentDate: new Date(2019, 7, 19)
+    });
+
+    const appointment = this.scheduler.appointments.getAppointment();
+
+    const coords = translator.locate(appointment);
+
+    assert.strictEqual(coords.top, 0, 'Appointment tail has most top coordinate');
+});
 
 const apptStartDate = new Date(2019, 2, 30, 2, 0);
 const apptEndDate = new Date(2019, 2, 30, 3, 0);
