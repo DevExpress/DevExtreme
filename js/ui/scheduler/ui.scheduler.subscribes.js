@@ -676,22 +676,26 @@ const subscribes = {
         return SchedulerTimezones.getClientTimezoneOffset(date);
     },
 
-    convertDateByTimezone: function(date, appointmentTimezone) {
+    convertDateByTimezone: function(date, appointmentTimezone, skipAppointmentTimezone) {
         date = new Date(date);
 
         const tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
         date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets);
-        date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets);
+        if(!skipAppointmentTimezone || skipAppointmentTimezone && !appointmentTimezone) {
+            date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets);
+        }
 
         return date;
     },
 
-    convertDateByTimezoneBack: function(date, appointmentTimezone) {
+    convertDateByTimezoneBack: function(date, appointmentTimezone, skipAppointmentTimezone) {
         date = new Date(date);
 
         const tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
         date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets, true);
-        date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets, true);
+        if(!skipAppointmentTimezone || skipAppointmentTimezone && !appointmentTimezone) {
+            date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets, true);
+        }
 
         return date;
     },
