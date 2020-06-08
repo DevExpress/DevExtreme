@@ -1,6 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/testHelper';
+import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 
 fixture`Focused row`

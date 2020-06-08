@@ -1,6 +1,6 @@
 import url from '../../helpers/getPageUrl';
 import TagBox from '../../model/tagBox';
-import createWidget from '../../helpers/testHelper';
+import createWidget from '../../helpers/createWidget';
 
 function createTagBox(): Promise<void> {
     return createWidget('dxTagBox', {

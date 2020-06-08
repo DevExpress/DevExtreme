@@ -1,6 +1,6 @@
 import url from '../../helpers/getPageUrl';
 import { Selector } from 'testcafe';
-import createWidget from '../../helpers/testHelper';
+import createWidget from '../../helpers/createWidget';
 import ContextMenu from '../../model/contextMenu';
 import { appendElementTo } from './helpers/domUtils';
 

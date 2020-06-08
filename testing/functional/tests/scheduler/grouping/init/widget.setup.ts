@@ -1,5 +1,5 @@
 import { extend } from '../../../../../../js/core/utils/extend';
-import createWidget from '../../../../helpers/testHelper';
+import createWidget from '../../../../helpers/createWidget';
 
 const priorityData = [
     {

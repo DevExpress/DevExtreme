@@ -1,4 +1,4 @@
-import createWidget from '../../helpers/testHelper';
+import createWidget from '../../helpers/createWidget';
 import Scheduler from '../../model/scheduler';
 import { extend } from '../../../../js/core/utils/extend';
 import url from '../../helpers/getPageUrl';

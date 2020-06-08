@@ -1,5 +1,5 @@
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/testHelper';
+import createWidget from '../../helpers/createWidget';
 import { Selector } from 'testcafe';
 import TabPanel from '../../model/tabPanel';
 import { appendElementTo, insertElementBefore } from './helpers/domUtils';

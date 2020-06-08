@@ -1,6 +1,6 @@
 
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/testHelper';
+import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 
 fixture `Virtual Columns`

@@ -1,5 +1,5 @@
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/testHelper';
+import createWidget from '../../helpers/createWidget';
 import { Selector } from 'testcafe';
 import ScrollView from '../../model/scrollView';
 import { appendElementTo } from './helpers/domUtils';
