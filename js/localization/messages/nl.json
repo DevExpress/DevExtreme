@@ -25,6 +25,8 @@
         "validation-stringLength-formatted": "De lengte van {0}  is niet correct",
         "validation-custom": "Waarde is ongeldig",
         "validation-custom-formatted": "{0} is ongeldig",
+        "validation-async": "Waarde is ongeldig",	
+        "validation-async-formatted": "{0} is ongeldig",
         "validation-compare": "Waardes komen niet overeen",
         "validation-compare-formatted": "{0} komen niet overeen",
         "validation-pattern": "Waarde komt niet overeen met het patroon",
@@ -192,6 +194,8 @@
         "dxScheduler-openAppointment": "Afspraak Openen",
 
         "dxScheduler-recurrenceNever": "Nooit",
+        "dxScheduler-recurrenceMinutely": "Elke minuut",	
+        "dxScheduler-recurrenceHourly": "Elk uur",
         "dxScheduler-recurrenceDaily": "Dagelijks",
         "dxScheduler-recurrenceWeekly": "Wekelijks",
         "dxScheduler-recurrenceMonthly": "Maandelijks",
@@ -203,6 +207,8 @@
         "dxScheduler-recurrenceAfter": "Na",
         "dxScheduler-recurrenceOn": "Op",
 
+        "dxScheduler-recurrenceRepeatMinutely": "minuut/minuten",	
+        "dxScheduler-recurrenceRepeatHourly": "uur/uren",
         "dxScheduler-recurrenceRepeatDaily": "dag(en)",
         "dxScheduler-recurrenceRepeatWeekly": "week/weken",
         "dxScheduler-recurrenceRepeatMonthly": "maand(en)",
