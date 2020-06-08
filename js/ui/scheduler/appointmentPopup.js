@@ -4,7 +4,6 @@ import dateUtils from '../../core/utils/date';
 import { Deferred, when } from '../../core/utils/deferred';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
-import objectUtils from '../../core/utils/object';
 import { isDefined } from '../../core/utils/type';
 import windowUtils from '../../core/utils/window';
 import { triggerResizeEvent } from '../../events/visibility_change';
@@ -12,6 +11,7 @@ import messageLocalization from '../../localization/message';
 import Popup from '../popup';
 import AppointmentForm from './ui.scheduler.appointment_form';
 import loading from './ui.loading';
+import { PathTimeZoneConversion } from './appointmentAdapter';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -189,23 +189,23 @@ export default class AppointmentPopup {
 
     _updateForm() {
         const { data, processTimeZone } = this.state.appointment;
-        const allDay = this.scheduler.fire('getField', 'allDay', data);
-        let startDate = this.scheduler.fire('getField', 'startDate', data);
-        let endDate = this.scheduler.fire('getField', 'endDate', data);
-        this.state.appointment.isEmptyText = data === undefined || data.text === undefined;
-        this.state.appointment.isEmptyDescription = data === undefined || data.description === undefined;
+        const adapter = this.scheduler.createAppointmentAdapter(data);
+
+        const allDay = adapter.allDay;
+        const startDate = processTimeZone ? adapter.calculateStartDate(PathTimeZoneConversion.fromSourceToAppointment) : adapter.startDate;
+        const endDate = processTimeZone ? adapter.calculateEndDate(PathTimeZoneConversion.fromSourceToAppointment) : adapter.endDate;
+
+        this.state.appointment.isEmptyText = data === undefined || adapter.text === undefined;
+        this.state.appointment.isEmptyDescription = data === undefined || adapter.description === undefined;
+
 
         const formData = extend({ text: '', description: '', recurrenceRule: '' }, this._createAppointmentFormData(data));
 
         if(processTimeZone) {
             if(startDate) {
-                const timezone = this.scheduler.fire('getField', 'startDateTimeZone', data);
-                startDate = this.scheduler.fire('convertDateByTimezone', startDate, timezone, true);
                 this.scheduler.fire('setField', 'startDate', formData, startDate);
             }
             if(endDate) {
-                const timezone = this.scheduler.fire('getField', 'endDateTimeZone', data);
-                endDate = this.scheduler.fire('convertDateByTimezone', endDate, timezone, true);
                 this.scheduler.fire('setField', 'endDate', formData, endDate);
             }
         }
@@ -304,6 +304,11 @@ export default class AppointmentPopup {
         return result;
     }
 
+    _createFormDataAdapter() {
+        const formData = this._appointmentForm.option('formData');
+        return this.scheduler.createAppointmentAdapter(formData);
+    }
+
     saveChanges(showLoadPanel) {
         const deferred = new Deferred();
         const validation = this._appointmentForm.validate();
@@ -325,29 +330,32 @@ export default class AppointmentPopup {
                 return;
             }
 
-            const formData = objectUtils.deepExtendArraySafe({}, this._getFormData(), true);
+            // const formData = objectUtils.deepExtendArraySafe({}, this._appointmentForm.option('formData'), true);
+            const adapter = this._createFormDataAdapter();
+            const appointment = adapter.createModifiedAppointment(PathTimeZoneConversion.fromAppointmentToSource);
+
             const oldData = this.scheduler._editAppointmentData;
             const recData = this.scheduler._updatedRecAppointment;
 
-            if(state.isEmptyText && formData.text === '') {
-                delete formData.text;
+            if(state.isEmptyText && adapter.text === '') {
+                delete appointment.text; // TODO
             }
-            if(state.isEmptyDescription && formData.description === '') {
-                delete formData.description;
+            if(state.isEmptyDescription && adapter.description === '') {
+                delete appointment.description; // TODO
             }
-            if(state.data.recurrenceRule === undefined && formData.recurrenceRule === '') { // TODO: plug for recurrent editor
-                delete formData.recurrenceRule;
+            if(state.data.recurrenceRule === undefined && adapter.recurrenceRule === '') { // TODO: plug for recurrent editor
+                delete appointment.recurrenceRule;
             }
-            if(isDefined(formData.repeat)) {
-                delete formData.repeat;
+            if(isDefined(appointment.repeat)) {
+                delete appointment.repeat; // TODO
             }
 
-            if(oldData) {
-                this.scheduler._convertDatesByTimezoneBack(false, formData);
-            }
+            // if(oldData) {
+            //     this.scheduler._convertDatesByTimezoneBack(false, formData);
+            // }
 
             if(oldData && !recData) {
-                this.scheduler.updateAppointment(oldData, formData)
+                this.scheduler.updateAppointment(oldData, appointment)
                     .done(deferred.resolve);
             } else {
                 if(recData) {
@@ -355,33 +363,22 @@ export default class AppointmentPopup {
                     delete this.scheduler._updatedRecAppointment;
 
                     if(typeof this.scheduler._getTimezoneOffsetByOption() === 'number') {
-                        this.scheduler.fire('setField', 'startDate', formData, convert.call(this, formData, 'startDate'));
-                        this.scheduler.fire('setField', 'endDate', formData, convert.call(this, formData, 'endDate'));
+                        this.scheduler.fire('setField', 'startDate', appointment, convert.call(this, appointment, 'startDate'));
+                        this.scheduler.fire('setField', 'endDate', appointment, convert.call(this, appointment, 'endDate'));
                     }
                 }
 
-                this.scheduler.addAppointment(formData)
+                this.scheduler.addAppointment(appointment)
                     .done(deferred.resolve);
             }
 
             deferred.done(() => {
                 this._hideLoadPanel();
-                this.state.lastEditData = formData;
+                this.state.lastEditData = appointment;
             });
         });
 
         return deferred.promise();
-    }
-
-    _getFormData() {
-        const formData = this._appointmentForm.option('formData');
-        const startDate = this.scheduler.fire('getField', 'startDate', formData);
-        const endDate = this.scheduler.fire('getField', 'endDate', formData);
-
-        this.scheduler.fire('setField', 'startDate', formData, startDate);
-        this.scheduler.fire('setField', 'endDate', formData, endDate);
-
-        return formData;
     }
 
     _doneButtonClickHandler(e) {
