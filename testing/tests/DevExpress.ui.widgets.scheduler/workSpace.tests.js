@@ -2847,7 +2847,7 @@ QUnit.testStart(function() {
                 endCell: 44,
                 intermediateCells: [27, 41],
                 focusedCellsCount: 30,
-                cellFromAnotherGroup: 64,
+                cellFromAnotherGroup: 75,
             },
         }];
 

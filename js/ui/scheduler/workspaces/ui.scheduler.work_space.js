@@ -414,14 +414,10 @@ const SchedulerWorkSpace = Widget.inherit({
             return columnIndex % groupCount;
         }
         if(groupOrientation === 'vertical') {
-            const showAllDayPanel = this.option('showAllDayPanel');
             const rowIndex = $cell.parent().index();
-            let rowsCount = this._getRowCount();
-            if(showAllDayPanel) {
-                rowsCount += groupCount;
-            }
+            const rowCount = this._getRowCountWithAllDayRows();
 
-            return Math.ceil((rowIndex + 1) / rowsCount);
+            return Math.ceil((rowIndex + 1) / rowCount);
         }
 
         return Math.ceil((columnIndex + 1) / cellsInRow);
@@ -973,6 +969,13 @@ const SchedulerWorkSpace = Widget.inherit({
     _getElementClass: noop,
 
     _getRowCount: noop,
+
+    _getRowCountWithAllDayRows: function() {
+        const allDayRowsCount = this.option('showAllDayPanel')
+            ? this._getGroupCount() : 0;
+
+        return this._getRowCount() + allDayRowsCount;
+    },
 
     _getCellCount: noop,
 

@@ -568,7 +568,11 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
         } else {
             scrollable.scrollBy({ left: coordinates.left - scrollable.scrollLeft() - offset, top: 0 });
         }
-    }
+    },
+
+    _getRowCountWithAllDayRows: function() {
+        return this._getRowCount();
+    },
 });
 
 registerComponent('dxSchedulerTimeline', SchedulerTimeline);

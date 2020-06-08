@@ -303,7 +303,11 @@ const SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         return false;
     },
 
-    scrollToTime: noop
+    scrollToTime: noop,
+
+    _getRowCountWithAllDayRows: function() {
+        return this._getRowCount();
+    },
 });
 
 registerComponent('dxSchedulerWorkSpaceMonth', SchedulerWorkSpaceMonth);
