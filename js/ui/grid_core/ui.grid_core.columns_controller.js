@@ -1006,6 +1006,7 @@ module.exports = {
             };
 
             const resetBandColumnsCache = (that) => {
+                that._bandColumnsCache = undefined;
             };
 
             const findColumn = (columns, identifier) => {
