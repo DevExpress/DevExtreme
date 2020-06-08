@@ -6086,6 +6086,27 @@ QUnit.module('Editing with real dataController', {
         assert.ok(isEditingRow, 'isEditing parameter of the row');
     });
 
+    // T893985
+    QUnit.test('e.row.isEditing should be \'false\' in onCellPrepared during initialization', function(assert) {
+        // arrange
+        let isEditingCell;
+        let isEditingRow;
+
+        this.options.onCellPrepared = function(e) {
+            if(e.rowIndex === 0 && e.columnIndex === 0) {
+                isEditingCell = e.isEditing;
+                isEditingRow = e.row.isEditing;
+            }
+        };
+
+        this.rowsView.init();
+        this.rowsView.render($('#container'));
+
+        // assert
+        assert.equal(isEditingCell, false, 'isEditing parameter of the cell');
+        assert.equal(isEditingRow, false, 'isEditing parameter of the row');
+    });
+
     // T316439
     QUnit.testInActiveWindow('Hide focus overlay before update on editing cell', function(assert) {
     // arrange
