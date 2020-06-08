@@ -2516,14 +2516,13 @@ class Scheduler extends Widget {
         this._workSpace.scrollToTime(hours, minutes, date);
     }
 
-    addAppointment(appointment) {
-        const text = this.fire('getField', 'text', appointment);
 
+    addAppointment(appointment, skipConvert) {
         if(!text) {
             this.fire('setField', 'text', appointment, '');
         }
 
-        this._convertDatesByTimezoneBack(true, appointment);
+        !skipConvert && this._convertDatesByTimezoneBack(true, appointment);
 
         const addingOptions = {
             appointmentData: appointment,
