@@ -264,8 +264,7 @@ export default class Widget extends JSXComponent<WidgetProps> {
     const { focusStateEnabled, onKeyDown } = this.props;
 
     if (focusStateEnabled || onKeyDown) {
-      const id = keyboard.on(this.widgetRef, this.widgetRef,
-        (options) => onKeyDown!(options.originalEvent, options));
+      const id = keyboard.on(this.widgetRef, this.widgetRef, (e) => onKeyDown!(e));
 
       return () => keyboard.off(id);
     }

@@ -159,7 +159,7 @@ export default class PreactWrapper extends DOMComponent {
     }
 
     _wrapKeyDownHandler(handler) {
-        return (event, options) => {
+        return (options) => {
             const { originalEvent, keyName, which } = options;
             const keys = this._supportedKeys();
             const func = keys[keyName] || keys[which];
@@ -170,13 +170,13 @@ export default class PreactWrapper extends DOMComponent {
                 const result = handler(originalEvent, options);
 
                 if(!result) {
-                    event.cancel = true;
-                    return event;
+                    originalEvent.cancel = true;
+                    return originalEvent;
                 }
             }
 
             // NOTE: make it possible to pass onKeyDown property
-            return handler?.(event, options);
+            return handler?.(originalEvent, options);
         };
     }
 
