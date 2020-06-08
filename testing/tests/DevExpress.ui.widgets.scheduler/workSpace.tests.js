@@ -2194,11 +2194,217 @@ QUnit.testStart(function() {
         assert.notOk(stub.calledOnce, 'Cells weren\'t selected');
     });
 
+    QUnit.test('Multiselection with left arrow should work in workspace day', function(assert) {
+        const $element = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({
+            focusStateEnabled: true,
+            intervalCount: 3,
+        });
+        const keyboard = keyboardMock($element);
+
+        const cells = $element.find('.' + CELL_CLASS);
+
+        pointerMock(cells.eq(5)).start().click();
+        keyboard.keyDown('left', { shiftKey: true });
+
+        assert.equal(cells.filter('.dx-state-focused').length, 49, 'right quantity of focused cells');
+        assert.ok(cells.eq(4).hasClass('dx-state-focused'), 'this first focused cell is correct');
+        assert.ok(cells.eq(142).hasClass('dx-state-focused'), 'the bottommost cell is focused');
+        assert.ok(cells.eq(5).hasClass('dx-state-focused'), 'this last focused cell is correct');
+    });
+
+    QUnit.test('Multiselection with right arrow should work in workspace day', function(assert) {
+        const $element = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({
+            focusStateEnabled: true,
+            intervalCount: 3,
+        });
+        const keyboard = keyboardMock($element);
+
+        const cells = $element.find('.' + CELL_CLASS);
+
+        pointerMock(cells.eq(3)).start().click();
+        keyboard.keyDown('right', { shiftKey: true });
+
+        assert.equal(cells.filter('.dx-state-focused').length, 49, 'right quantity of focused cells');
+        assert.ok(cells.eq(3).hasClass('dx-state-focused'), 'this first focused cell is correct');
+        assert.ok(cells.eq(141).hasClass('dx-state-focused'), 'the bottommost cell is focused');
+        assert.ok(cells.eq(4).hasClass('dx-state-focused'), 'this last focused cell is correct');
+    });
+
+    (function() {
+        QUnit.module('Keyboard Multiselection with GroupByDate');
+
+        const createTest = (workSpace, config, keyBoardAction, testDescription) => {
+            QUnit.test(testDescription, function(assert) {
+                const {
+                    startCell, endCell, intermediateCells, focusedCellsCount, rtlEnabled,
+                } = config;
+
+                const $element = $('#scheduler-work-space')[workSpace.class]({
+                    focusStateEnabled: true,
+                    intervalCount: 2,
+                    groupOrientation: 'horizontal',
+                    groupByDate: true,
+                    startDayHour: 0,
+                    endDayHour: 2,
+                    rtlEnabled,
+                });
+
+                const instance = $element[workSpace.class]('instance');
+                stubInvokeMethod(instance);
+                instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
+
+                const keyboard = keyboardMock($element);
+                const cells = $element.find('.' + CELL_CLASS);
+
+                pointerMock(cells.eq(startCell)).start().click();
+                keyboard.keyDown(keyBoardAction, { shiftKey: true });
+
+                assert.equal(cells.filter('.dx-state-focused').length, focusedCellsCount, 'right quantity of focused cells');
+                assert.ok(cells.eq(startCell).hasClass('dx-state-focused'), 'this first focused cell is correct');
+                assert.ok(cells.eq(endCell).hasClass('dx-state-focused'), 'this last focused cell is correct');
+                intermediateCells.forEach((cell) => {
+                    assert.ok(cells.eq(cell).hasClass('dx-state-focused'), 'intermediate cell is focused');
+                });
+            });
+        };
+
+        const workSpaces = [
+            { class: 'dxSchedulerWorkSpaceDay', name: 'SchedulerWorkSpaceDay' },
+            { class: 'dxSchedulerWorkSpaceWeek', name: 'SchedulerWorkSpaceWeek' },
+            { class: 'dxSchedulerWorkSpaceMonth', name: 'SchedulerWorkSpaceMonth' },
+        ];
+
+        const leftArrowConfig = [
+            { startCell: 3, endCell: 1, intermediateCells: [13], focusedCellsCount: 5, rtlEnabled: false },
+            { startCell: 7, endCell: 5, intermediateCells: [89], focusedCellsCount: 5, rtlEnabled: false },
+            { startCell: 18, endCell: 16, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: false },
+            { startCell: 1, endCell: 3, intermediateCells: [13], focusedCellsCount: 5, rtlEnabled: true },
+            { startCell: 5, endCell: 7, intermediateCells: [89], focusedCellsCount: 5, rtlEnabled: true },
+            { startCell: 16, endCell: 18, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: true },
+        ];
+        const rightArrowConfig = [
+            { startCell: 1, endCell: 3, intermediateCells: [13], focusedCellsCount: 5, rtlEnabled: false },
+            { startCell: 5, endCell: 7, intermediateCells: [89], focusedCellsCount: 5, rtlEnabled: false },
+            { startCell: 16, endCell: 18, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: false },
+            { startCell: 3, endCell: 1, intermediateCells: [13], focusedCellsCount: 5, rtlEnabled: true },
+            { startCell: 7, endCell: 5, intermediateCells: [89], focusedCellsCount: 5, rtlEnabled: true },
+            { startCell: 18, endCell: 16, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: true },
+        ];
+
+        leftArrowConfig.forEach((config, index) => {
+            const workSpace = workSpaces[index % 3];
+            createTest(
+                workSpace, config, 'left',
+                `Multiselection with left arrow should work correctly with groupByDate
+                in ${workSpace.name} when rtlEnabled is equal to ${config.rtlEnabled}`,
+            );
+        });
+        rightArrowConfig.forEach((config, index) => {
+            const workSpace = workSpaces[index % 3];
+            createTest(
+                workSpace, config, 'right',
+                `Multiselection with right arrow should work correctly with groupByDate
+                in ${workSpace.name} when rtlEnabled is equal to ${config.rtlEnabled}`,
+            );
+        });
+
+        const leftArrowWithTransitionToAnotherRowConfig = [
+            { startCell: 4, endCell: 4, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: false },
+            { startCell: 28, endCell: 28, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: false },
+            { startCell: 28, endCell: 26, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: false },
+            { startCell: 7, endCell: 7, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: true },
+            { startCell: 55, endCell: 55, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: true },
+            { startCell: 55, endCell: 57, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: true },
+        ];
+        const rightArrowWithTransitionToAnotherRowConfig = [
+            { startCell: 3, endCell: 3, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: false },
+            { startCell: 26, endCell: 26, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: false },
+            { startCell: 27, endCell: 29, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: false },
+            { startCell: 4, endCell: 4, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: true },
+            { startCell: 29, endCell: 29, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: true },
+            { startCell: 28, endCell: 26, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: true },
+        ];
+
+        leftArrowWithTransitionToAnotherRowConfig.forEach((config, index) => {
+            const workSpace = workSpaces[index % 3];
+            createTest(
+                workSpace, config, 'left',
+                `Multiselection with left arrow should work correctly with groupByDate
+                in ${workSpace.name} when the next cell is in another row and rtlEnabled is ${config.rtlEnabled}`,
+            );
+        });
+        rightArrowWithTransitionToAnotherRowConfig.forEach((config, index) => {
+            const workSpace = workSpaces[index % 3];
+            createTest(
+                workSpace, config, 'right',
+                `Multiselection with right arrow should work correctly with groupByDate
+                in ${workSpace.name} when the next cell is in another row and rtlEnabled is ${config.rtlEnabled}`,
+            );
+        });
+    })('Keyboard Multiselection with GroupByDate');
 })('Workspace Keyboard Navigation');
 
 
 (function() {
     QUnit.module('Workspace Mouse Interaction');
+
+    const createTest = (workSpace, testDescription, groupByDate, groupOrientation) => {
+        QUnit.test(testDescription, function(assert) {
+            const $element = $('#scheduler-work-space')[workSpace.class]({
+                focusStateEnabled: true,
+                onContentReady: function(e) {
+                    const scrollable = e.component.getScrollable();
+                    scrollable.option('scrollByContent', false);
+                    e.component.initDragBehavior();
+                },
+                intervalCount: 2,
+                groupOrientation,
+                groupByDate,
+                startDayHour: 0,
+                endDayHour: 2,
+            });
+
+            const instance = $element[workSpace.class]('instance');
+
+            stubInvokeMethod(instance);
+            instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
+
+            const {
+                startCell, endCell, intermediateCells, focusedCellsCount, cellFromAnotherGroup,
+            } = workSpace.config;
+
+            const cells = $element.find('.' + CELL_CLASS);
+            const $table = $element.find('.dx-scheduler-date-table');
+
+            pointerMock(cells.eq(startCell)).start().click();
+
+            let cell = cells.eq(endCell).get(0);
+
+            $($table).trigger($.Event('dxpointerdown', { target: cells.eq(startCell).get(0), which: 1, pointerType: 'mouse' }));
+            $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
+
+            assert.equal(cells.filter('.dx-state-focused').length, focusedCellsCount, 'the amount of focused cells is correct');
+            assert.ok(cells.eq(startCell).hasClass('dx-state-focused'), 'the start cell is focused');
+            assert.ok(cells.eq(endCell).hasClass('dx-state-focused'), 'the end cell is focused');
+            intermediateCells.forEach((cell) => {
+                assert.ok(cells.eq(cell).hasClass('dx-state-focused'), 'intermediate cell is focused');
+            });
+
+            cell = cells.eq(cellFromAnotherGroup).get(0);
+
+            $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
+
+            assert.equal(cells.filter('.dx-state-focused').length, focusedCellsCount, 'the amount of focused cells has not changed');
+            assert.ok(cells.eq(startCell).hasClass('dx-state-focused'), 'the start cell is still focused');
+            assert.ok(cells.eq(endCell).hasClass('dx-state-focused'), 'the end cell is still focused');
+            intermediateCells.forEach((cell) => {
+                assert.ok(cells.eq(cell).hasClass('dx-state-focused'), 'intermediate cell is still focused');
+            });
+            assert.notOk(cells.eq(cellFromAnotherGroup).hasClass('dx-state-focused'), 'cell from another group is not focused');
+
+            $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
+        });
+    };
 
     QUnit.test('Pointer move propagation should be stopped', function(assert) {
         const $element = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
@@ -2609,6 +2815,94 @@ QUnit.testStart(function() {
 
         $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
     });
+
+    (function() {
+        QUnit.module('Mouse Multiselection with Vertical Grouping');
+
+        const workSpaces = [{
+            class: 'dxSchedulerWorkSpaceDay',
+            name: 'SchedulerWorkSpaceDay',
+            config: {
+                startCell: 2,
+                endCell: 1,
+                intermediateCells: [6],
+                focusedCellsCount: 4,
+                cellFromAnotherGroup: 10,
+            },
+        }, {
+            class: 'dxSchedulerWorkSpaceWeek',
+            name: 'SchedulerWorkSpaceWeek',
+            config: {
+                startCell: 14,
+                endCell: 16,
+                intermediateCells: [42, 43],
+                focusedCellsCount: 9,
+                cellFromAnotherGroup: 64,
+            },
+        }, {
+            class: 'dxSchedulerWorkSpaceMonth',
+            name: 'SchedulerWorkSpaceMonth',
+            config: {
+                startCell: 15,
+                endCell: 44,
+                intermediateCells: [27, 41],
+                focusedCellsCount: 30,
+                cellFromAnotherGroup: 64,
+            },
+        }];
+
+        workSpaces.forEach((workSpace) => {
+            createTest(
+                workSpace,
+                `Mouse Multiselection should work correctly with ${workSpace.name} when it is grouped vertically`,
+                false, 'vertical',
+            );
+        });
+    })('Keyboard Multiselection with Vertical Grouping');
+
+    (function() {
+        QUnit.module('Mouse Multiselection with Grouping by Date');
+
+        const workSpaces = [{
+            class: 'dxSchedulerWorkSpaceDay',
+            name: 'SchedulerWorkSpaceDay',
+            config: {
+                startCell: 4,
+                endCell: 6,
+                intermediateCells: [12],
+                focusedCellsCount: 5,
+                cellFromAnotherGroup: 7,
+            },
+        }, {
+            class: 'dxSchedulerWorkSpaceWeek',
+            name: 'SchedulerWorkSpaceWeek',
+            config: {
+                startCell: 15,
+                endCell: 19,
+                intermediateCells: [43, 45],
+                focusedCellsCount: 9,
+                cellFromAnotherGroup: 20,
+            },
+        }, {
+            class: 'dxSchedulerWorkSpaceMonth',
+            name: 'SchedulerWorkSpaceMonth',
+            config: {
+                startCell: 19,
+                endCell: 39,
+                intermediateCells: [29],
+                focusedCellsCount: 11,
+                cellFromAnotherGroup: 24,
+            },
+        }];
+
+        workSpaces.forEach((workSpace) => {
+            createTest(
+                workSpace,
+                `Mouse Multiselection should work correctly with ${workSpace.name} when it is grouped by date`,
+                true, 'horizontal',
+            );
+        });
+    })('Keyboard Multiselection with Grouping by Date');
 
 })('Workspace Mouse Interaction');
 
