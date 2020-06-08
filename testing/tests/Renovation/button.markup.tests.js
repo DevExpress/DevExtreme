@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 import $ from 'jquery';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
@@ -31,7 +32,7 @@ const BUTTON_CONTAINED_STYLE_CLASS = 'dx-button-mode-contained';
 
 QUnit.module('Button markup', () => {
     QUnit.test('markup init', function(assert) {
-        const element = $('#button').Button();
+        const element = $('#button').dxrButton();
 
         assert.ok(element.hasClass(BUTTON_CLASS));
 
@@ -43,7 +44,7 @@ QUnit.module('Button markup', () => {
     });
 
     QUnit.test('init with options', function(assert) {
-        const element = $('#button').Button({
+        const element = $('#button').dxrButton({
             text: 'text',
             icon: 'home'
         });
@@ -55,13 +56,13 @@ QUnit.module('Button markup', () => {
     });
 
     QUnit.test('submit element should have tabindex attribute', function(assert) {
-        const $element = $('#button').Button({ useSubmitBehavior: true }); const $submitElement = $element.find('input');
+        const $element = $('#button').dxrButton({ useSubmitBehavior: true }); const $submitElement = $element.find('input');
 
         assert.equal($submitElement.attr('tabindex'), -1, 'submit input is not focusable');
     });
 
     QUnit.test('class added from type (back)', function(assert) {
-        const element = $('#button').Button({
+        const element = $('#button').dxrButton({
             type: 'back'
         });
         const buttonContent = element.find('.' + BUTTON_CONTENT_CLASS);
@@ -71,7 +72,7 @@ QUnit.module('Button markup', () => {
     });
 
     QUnit.test('class added from stylingMode', function(assert) {
-        const element = $('#button').Button({
+        const element = $('#button').dxrButton({
             stylingMode: 'text'
         });
 
@@ -79,7 +80,7 @@ QUnit.module('Button markup', () => {
     });
 
     QUnit.test('Default value should be used if stylingMode has wrong value', function(assert) {
-        const element = $('#button').Button({
+        const element = $('#button').dxrButton({
             stylingMode: 'someWrongValue'
         });
 
@@ -87,7 +88,7 @@ QUnit.module('Button markup', () => {
     });
 
     QUnit.test('icon must rendered after change type of button on \'back\'', function(assert) {
-        const element = $('#button').Button({
+        const element = $('#button').dxrButton({
             type: 'normal',
             text: 'test'
         });
@@ -95,7 +96,7 @@ QUnit.module('Button markup', () => {
         assert.ok(element.hasClass('dx-button-normal'), 'button has correct type class');
         assert.equal(element.find('.dx-icon').length, 0, 'icon not be rendered');
 
-        element.Button('instance').option('type', 'back');
+        element.dxrButton('instance').option('type', 'back');
 
         assert.equal(element.find('.dx-button-normal').length, 0, 'prev class type was removed');
         assert.equal(element.find('.dx-icon').length, 1, 'icon was rendered');
@@ -103,69 +104,69 @@ QUnit.module('Button markup', () => {
     });
 
     QUnit.test('class is not removed after change type', function(assert) {
-        const $element = $('#button').Button({});
+        const $element = $('#button').dxrButton({});
 
         $element.addClass('test');
-        $element.Button('option', 'type', 'custom-1');
+        $element.dxrButton('option', 'type', 'custom-1');
 
         assert.ok($element.hasClass('test'));
     });
 
     QUnit.test('previous type class is removed after type changed', function(assert) {
-        const $element = $('#button').Button({});
+        const $element = $('#button').dxrButton({});
 
-        $element.Button('option', 'type', 'custom-1');
+        $element.dxrButton('option', 'type', 'custom-1');
         assert.ok($element.hasClass('dx-button-custom-1'));
 
-        $element.Button('option', 'type', 'custom-2');
+        $element.dxrButton('option', 'type', 'custom-2');
         assert.ok($element.hasClass('dx-button-custom-2'));
         assert.ok(!$element.hasClass('dx-button-custom-1'));
     });
 
     QUnit.test('icon', function(assert) {
 
-        const element = $('#button').Button({
+        const element = $('#button').dxrButton({
             icon: 'back'
         });
 
         assert.ok(element.find('.dx-icon').hasClass('dx-icon-back'), 'class was added');
 
-        element.Button('instance').option('icon', 'success');
+        element.dxrButton('instance').option('icon', 'success');
         assert.ok(element.find('.dx-icon').hasClass('dx-icon-success'), 'class set with option');
         assert.ok(element.hasClass(BUTTON_HAS_ICON_CLASS), 'button with icon has icon class');
         assert.ok(!element.hasClass(BUTTON_HAS_TEXT_CLASS, 'button with icon only has not text class'));
     });
 
     QUnit.test('icon as path', function(assert) {
-        const element = $('#button').Button({
+        const element = $('#button').dxrButton({
             icon: '../../testing/content/add.png'
         });
 
         assert.ok(element.find('img[src=\'../../testing/content/add.png\']').length, 'icon was added by src');
 
-        element.Button('instance').option('icon', '../../testing/content/plus.png');
+        element.dxrButton('instance').option('icon', '../../testing/content/plus.png');
         assert.ok(element.find('img[src=\'../../testing/content/plus.png\']').length, 'icon was changed correctly');
     });
 
     QUnit.test('icon as external lib class', function(assert) {
-        const element = $('#button').Button({
+        const element = $('#button').dxrButton({
             icon: 'fa fa-icon'
         });
 
         assert.ok(element.find('.fa.fa-icon').length, 'icon was added by fa class');
 
-        element.Button('instance').option('icon', 'fa-new-icon fa');
+        element.dxrButton('instance').option('icon', 'fa-new-icon fa');
         assert.ok(element.find('.fa-new-icon.fa').length, 'icon was changed correctly');
     });
 
     QUnit.test('Button content class appear on correct container (T256387)', function(assert) {
-        const $button = $('#buttonWithTemplate').Button({ text: 'text1', icon: 'test-icon', template: 'content' });
+        const $button = $('#buttonWithTemplate').dxrButton({ text: 'text1', icon: 'test-icon', template: 'content' });
 
         assert.ok($button.find('.' + BUTTON_CONTENT_CLASS).hasClass(TEMPLATE_WRAPPER_CLASS), 'template has content class');
     });
 
     QUnit.test('Button with anonymous template', function(assert) {
-        const $button = $('#buttonWithAnonymousTemplate').Button();
+        const $button = $('#buttonWithAnonymousTemplate').dxrButton();
 
         assert.equal($.trim($button.text()), 'test', 'anonymous template rendered');
     });
@@ -173,13 +174,13 @@ QUnit.module('Button markup', () => {
     QUnit.test('anonymous content template rendering', function(assert) {
         const $contentElement = $('#buttonWithAnonymousTemplate #content');
 
-        const $button = $('#buttonWithAnonymousTemplate').Button();
+        const $button = $('#buttonWithAnonymousTemplate').dxrButton();
 
         assert.equal($button.find('#content')[0], $contentElement[0], 'content element preserved');
     });
 
     QUnit.test('Button with template as function', function(assert) {
-        $('#button').Button({
+        $('#button').dxrButton({
             template: function(data, container) {
                 assert.equal(isRenderer(container), !!config().useJQuery, 'container is correct');
                 return $('<div>');
@@ -188,11 +189,11 @@ QUnit.module('Button markup', () => {
     });
 
     QUnit.test('Button should render custom template with render function that returns dom node', function(assert) {
-        const $element = $('#button').Button({
+        const $element = $('#button').dxrButton({
             template: 'test',
         });
 
-        $element.Button('instance').option('integrationOptions', {
+        $element.dxrButton('instance').option('integrationOptions', {
             templates: {
                 'test': {
                     render: function(args) {
@@ -212,18 +213,18 @@ QUnit.module('Button markup', () => {
 
 QUnit.module('aria accessibility', () => {
     QUnit.test('aria role', function(assert) {
-        const $element = $('#button').Button({});
+        const $element = $('#button').dxrButton({});
 
         assert.equal($element.attr('role'), 'button', 'aria role is correct');
     });
 
     QUnit.test('aria-label attribute', function(assert) {
-        const $element = $('#button').Button({
+        const $element = $('#button').dxrButton({
             text: 'test',
             icon: 'find',
             type: 'danger'
         });
-        const instance = $element.Button('instance');
+        const instance = $element.dxrButton('instance');
 
         assert.equal($element.attr('aria-label'), 'test', 'aria label for all params is correct');
 
@@ -238,7 +239,7 @@ QUnit.module('aria accessibility', () => {
     });
 
     QUnit.test('icon-type base64 should not be parsed for aria-label creation (T281454)', function(assert) {
-        const $element = $('#button').Button({
+        const $element = $('#button').dxrButton({
             icon: 'data:image/png;base64,'
         });
 
@@ -246,8 +247,8 @@ QUnit.module('aria accessibility', () => {
     });
 
     QUnit.test('after change the button type to \'back\' and then change to \'normal\' arrow should be disappear', function(assert) {
-        const $element = $('#button').Button({});
-        const instance = $element.Button('instance');
+        const $element = $('#button').dxrButton({});
+        const instance = $element.dxrButton('instance');
 
         const backIconClass = '.dx-icon-back';
 

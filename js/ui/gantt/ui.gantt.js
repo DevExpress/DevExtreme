@@ -166,9 +166,9 @@ class Gantt extends Widget {
     }
     _onTreeListContextMenuPreparing(e) {
         if(e.row && e.row.rowType === 'data') {
-            this._setTreeListOption('selectedRowKeys', [e.row.data.id]);
+            this._setTreeListOption('selectedRowKeys', [e.row.data[this.option('tasks.keyExpr')]]);
             e.items = [];
-            this._showPopupMenu({ position: { x: e.event.clientX, y: e.event.clientY } });
+            this._showPopupMenu({ position: { x: e.event.pageX, y: e.event.pageY } });
         }
     }
     _onTreeListRowDblClick() {

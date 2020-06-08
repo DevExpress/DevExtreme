@@ -276,7 +276,8 @@ describe('Button', () => {
 
       it('should render template', () => {
         const button = render({
-          render: template,
+        // should use "component" property te be able find template
+          component: template,
           text: 'My button',
         });
         const customRender = button.find(template);
@@ -293,15 +294,15 @@ describe('Button', () => {
 
         expect(button.exists(template)).toBe(false);
 
-        button.setProps({ render: template });
+        button.setProps({ component: template });
         expect(button.exists(template)).toBe(true);
 
-        button.setProps({ render: undefined });
+        button.setProps({ component: undefined });
         expect(button.exists(template)).toBe(false);
       });
 
       it('should change properties in runtime', () => {
-        const button = mount(<Button text="My button" render={template} />);
+        const button = mount(<Button text="My button" component={template} />);
         let buttonContent = button.find(template);
 
         expect(buttonContent.props().data.text).toBe('My button');
@@ -317,7 +318,7 @@ describe('Button', () => {
       it('should get original icon prop', () => {
         const button = render({
           icon: 'testicon',
-          render: ({ data: { icon } }) => <div>{icon}</div>,
+          component: ({ icon }) => <div>{icon}</div>,
           text: 'My button',
         });
         const buttonContentChildren = button.find('.dx-button-content').children();
