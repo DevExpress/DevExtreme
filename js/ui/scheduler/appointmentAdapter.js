@@ -75,6 +75,9 @@ export default class AppointmentAdapter {
     }
 
     calculateDate(date, dateTimeZone, pathTimeZoneConversion) {
+        if(!date) {
+            return undefined;
+        }
         switch(pathTimeZoneConversion) {
             case PathTimeZoneConversion.fromSourceToAppointment:
                 return this.scheduler.fire('convertDateByTimezone', date, dateTimeZone, true);
