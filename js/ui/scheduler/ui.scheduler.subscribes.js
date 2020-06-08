@@ -688,12 +688,12 @@ const subscribes = {
         return date;
     },
 
-    convertDateByTimezoneBack: function(date, appointmentTimezone, isAppointmentPopup) {
+    convertDateByTimezoneBack: function(date, appointmentTimezone, skipAppointmentTimezone) {
         date = new Date(date);
 
         const tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
         date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets, true);
-        if(!isAppointmentPopup || isAppointmentPopup && !appointmentTimezone) {
+        if(!skipAppointmentTimezone || skipAppointmentTimezone && !appointmentTimezone) {
             date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets, true);
         }
 
