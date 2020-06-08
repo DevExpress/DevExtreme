@@ -1022,10 +1022,9 @@ module.exports = {
                 if(identifierOptionName) {
                     column = columns.filter(column => ('' + column[identifierOptionName]) === identifier)[0];
                 } else {
-                    ['index', 'name', 'dataField', 'caption'].forEach((optionName) => {
-                        if(!column) {
-                            column = columns.filter(column => column[optionName] === identifier)[0];
-                        }
+                    ['index', 'name', 'dataField', 'caption'].some((optionName) => {
+                        column = columns.filter(column => column[optionName] === identifier)[0];
+                        return !!column;
                     });
                 }
 
