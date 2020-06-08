@@ -2484,14 +2484,14 @@ const Scheduler = Widget.inherit({
         this._workSpace.scrollToTime(hours, minutes, date);
     },
 
-    addAppointment: function(appointment) {
+    addAppointment: function(appointment, skipConvert) {
         const text = this.fire('getField', 'text', appointment);
 
         if(!text) {
             this.fire('setField', 'text', appointment, '');
         }
 
-        this._convertDatesByTimezoneBack(true, appointment);
+        !skipConvert && this._convertDatesByTimezoneBack(true, appointment);
 
         const addingOptions = {
             appointmentData: appointment,
