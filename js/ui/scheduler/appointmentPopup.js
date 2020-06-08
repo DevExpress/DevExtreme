@@ -198,11 +198,13 @@ export default class AppointmentPopup {
 
         if(processTimeZone) {
             if(startDate) {
-                startDate = this.scheduler.fire('convertDateByTimezone', startDate, this.scheduler.fire('getField', 'startDateTimeZone', data), true);
+                const timezone = this.scheduler.fire('getField', 'startDateTimeZone', data);
+                startDate = this.scheduler.fire('convertDateByTimezone', startDate, timezone, true);
                 this.scheduler.fire('setField', 'startDate', formData, startDate);
             }
             if(endDate) {
-                endDate = this.scheduler.fire('convertDateByTimezone', endDate, this.scheduler.fire('getField', 'endDateTimeZone', data), true);
+                const timezone = this.scheduler.fire('getField', 'endDateTimeZone', data);
+                endDate = this.scheduler.fire('convertDateByTimezone', endDate, timezone, true);
                 this.scheduler.fire('setField', 'endDate', formData, endDate);
             }
         }
