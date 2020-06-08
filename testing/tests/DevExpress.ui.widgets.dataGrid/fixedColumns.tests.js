@@ -1365,6 +1365,7 @@ QUnit.module('Fixed columns', {
                 { values: ['test29', 'test26', 'test28', 'test30', 'test27'], rowType: 'data' }];
 
             that.setupDataGrid();
+            that.options.scrolling = { useNative: false };
             that.rowsView.render(that.gridContainer);
             that.rowsView.height(50);
             that.rowsView.resize();
@@ -1422,6 +1423,7 @@ QUnit.module('Fixed columns', {
                 { values: ['test29', 'test26', 'test28', 'test30', 'test27'], rowType: 'data' }];
 
             that.setupDataGrid();
+            that.options.scrolling = { useNative: false };
             that.rowsView.render(that.gridContainer);
             that.rowsView.height(50);
             that.rowsView.resize();
@@ -1457,6 +1459,44 @@ QUnit.module('Fixed columns', {
             $(document).off('dxmousewheel', wheelHandler);
         });
 
+        // T894352
+        QUnit.test('Event bubbling when data can scroll more after wheel under another scrollable', function(assert) {
+            // arrange
+            this.items = [
+                { values: ['test4', 'test1', 'test3', 'test5', 'test2'], rowType: 'data' },
+                { rowType: 'detail' },
+                { values: ['test9', 'test6', 'test8', 'test10', 'test7'], rowType: 'data' },
+                { values: ['test14', 'test11', 'test13', 'test15', 'test12'], rowType: 'data' },
+                { values: ['test19', 'test16', 'test18', 'test20', 'test17'], rowType: 'data' },
+                { values: ['test24', 'test21', 'test23', 'test25', 'test22'], rowType: 'data' },
+                { values: ['test29', 'test26', 'test28', 'test30', 'test27'], rowType: 'data' }];
+
+            this.setupDataGrid();
+            this.options.scrolling = { useNative: false };
+            let detailDataGrid;
+            this.options.masterDetail = {
+                template: function(container) {
+                    detailDataGrid = $('<div>').appendTo(container).dxDataGrid({
+                        height: 100,
+                        loadingTimeout: undefined,
+                        scrolling: { useNative: false },
+                        dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+                        columns: ['id']
+                    }).dxDataGrid('instance');
+                }
+            };
+            this.rowsView.render(this.gridContainer);
+            this.rowsView.height(100);
+            this.rowsView.resize();
+
+            // act
+            nativePointerMock($(detailDataGrid.getCellElement(0, 0))).start().wheel(-30);
+
+            // assert
+            assert.equal(this.getScrollable().scrollTop(), 0, 'scroll top of the main table is not changed');
+            assert.ok(detailDataGrid.getScrollable().scrollTop() > 0, 'detail grid is scrolled');
+        });
+
         // T241973
         QUnit.test('Event bubbling when data cannot scroll more', function(assert) {
         // arrange
@@ -1476,6 +1516,7 @@ QUnit.module('Fixed columns', {
                 { values: ['test29', 'test26', 'test28', 'test30', 'test27'], rowType: 'data' }];
 
             that.setupDataGrid();
+            that.options.scrolling = { useNative: false };
             that.rowsView.render($testElement);
             that.rowsView.height(50);
             that.rowsView.resize();
