@@ -49,7 +49,7 @@ import SchedulerWorkSpaceDay from './workspaces/ui.scheduler.work_space_day';
 import SchedulerWorkSpaceMonth from './workspaces/ui.scheduler.work_space_month';
 import SchedulerWorkSpaceWeek from './workspaces/ui.scheduler.work_space_week';
 import SchedulerWorkSpaceWorkWeek from './workspaces/ui.scheduler.work_space_work_week';
-import AppointmentAdapter from './AppointmentAdapter';
+import AppointmentAdapter from './appointmentAdapter';
 
 const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
