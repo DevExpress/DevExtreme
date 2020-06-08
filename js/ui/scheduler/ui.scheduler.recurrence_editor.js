@@ -41,6 +41,8 @@ const INTERVAL_EDITOR = 'dx-recurrence-numberbox-interval-1';
 // const FIELD_CLASS = 'dx-field';
 // const FIELD_LABEL_CLASS = 'dx-field-label';
 // const REPEAT_END_EDITOR_CONTAINER = 'dx-recurrence-repeat-end-container';
+
+const recurrentEditorNumberBoxWidth = 70;
 const defaultRecurrenceTypeIndex = 1; // TODO default daily recurrence
 
 const frequenciesMessages = [
@@ -259,7 +261,7 @@ const RecurrenceEditor = Editor.inherit({
                         dataField: 'interval',
                         editorType: 'dxNumberBox',
                         editorOptions: {
-                            width: 150,
+                            width: recurrentEditorNumberBoxWidth,
                             min: 1,
                             field: 'interval',
                             value: interval,
@@ -319,6 +321,7 @@ const RecurrenceEditor = Editor.inherit({
                         editorOptions: {
                             min: 1,
                             max: 31,
+                            width: recurrentEditorNumberBoxWidth,
                             field: 'bymonthday',
                             showSpinButtons: true,
                             useLargeSpinButtons: false,
@@ -533,6 +536,7 @@ const RecurrenceEditor = Editor.inherit({
 
         this._repeatCountEditor = this._createComponent(this._$repeatCountEditor, NumberBox, {
             field: 'count',
+            width: recurrentEditorNumberBoxWidth,
             min: 1,
             showSpinButtons: true,
             useLargeSpinButtons: false,
