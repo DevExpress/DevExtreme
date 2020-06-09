@@ -53,26 +53,15 @@ class SchedulerWorkspaceVertical extends SchedulerWorkSpace {
         return $cells;
     }
 
-    _getRightCell(isMultiSelection) {
-        let $rightCell = super._getRightCell(isMultiSelection);
+    _getCellFromNextColumn(direction, isMultiSelection) {
+        let $nextCell = super._getCellFromNextColumn(direction, isMultiSelection);
         const $focusedCell = this._$focusedCell;
 
-        if($focusedCell.parent().index() !== $rightCell.parent().index() && isMultiSelection) {
-            $rightCell = $focusedCell;
+        if($focusedCell.parent().index() !== $nextCell.parent().index() && isMultiSelection) {
+            $nextCell = $focusedCell;
         }
 
-        return $rightCell;
-    }
-
-    _getLeftCell(isMultiSelection) {
-        let $leftCell = super._getLeftCell(isMultiSelection);
-        const $focusedCell = this._$focusedCell;
-
-        if($focusedCell.parent().index() !== $leftCell.parent().index() && isMultiSelection) {
-            $leftCell = $focusedCell;
-        }
-
-        return $leftCell;
+        return $nextCell;
     }
 
     _getFormat() {

@@ -165,13 +165,13 @@ const SchedulerWorkSpace = Widget.inherit({
             },
 
             rightArrow: function(e) {
-                const $rightCell = this._getRightCell(e.shiftKey);
+                const $rightCell = this._getCellFromNextColumn('next', e.shiftKey);
 
                 arrowPressHandler.call(this, e, $rightCell);
             },
 
             leftArrow: function(e) {
-                const $leftCell = this._getLeftCell(e.shiftKey);
+                const $leftCell = this._getCellFromNextColumn('prev', e.shiftKey);
 
                 arrowPressHandler.call(this, e, $leftCell);
             }
@@ -212,12 +212,14 @@ const SchedulerWorkSpace = Widget.inherit({
         return $item;
     },
 
-    _getRightCell: function(isMultiSelection) {
+    _getCellFromNextColumn: function(direction, isMultiSelection) {
         if(!isDefined(this._$focusedCell)) {
             return;
         }
 
         let $rightCell;
+        const nextColumnDirection = direction;
+        const previousColumnDirection = direction === 'next' ? 'prev' : 'next';
         const $focusedCell = this._$focusedCell;
         const groupCount = this._getGroupCount();
         const isHorizontalGrouping = this.option('groupOrientation') === 'horizontal';
@@ -227,35 +229,47 @@ const SchedulerWorkSpace = Widget.inherit({
             ? this._getCellCount() : totalCellCount;
         const lastIndexInRow = rowCellCount - 1;
         const currentIndex = $focusedCell.index();
-        const direction = this._isRTL() ? 'prev' : 'next';
         const $row = $focusedCell.parent();
-        const sign = this._isRTL() ? 1 : -1;
         const step = isGroupedByDate && isMultiSelection ? groupCount : 1;
-        const isEdgeCell = this._isRightEdgeCell(
-            isHorizontalGrouping ? totalCellCount - 1 : lastIndexInRow, currentIndex, step,
+        const isEdgeCell = this._isEdgeCell(
+            isHorizontalGrouping ? totalCellCount - 1 : lastIndexInRow, currentIndex, step, direction,
         );
 
-        if(isEdgeCell || (isMultiSelection && this._isGroupEndCell($focusedCell))) {
-            const nextIndex = currentIndex - sign * step + sign * rowCellCount;
-            $rightCell = $row[direction]().children().eq(nextIndex);
+        const sign = this._isRTL() ? 1 : -1;
+        const directionSign = direction === 'next' ? 1 : -1;
+        const resultingSign = sign * directionSign;
+
+        if(isEdgeCell || (isMultiSelection && this._isGroupEndCell($focusedCell, direction))) {
+            const nextIndex = currentIndex - resultingSign * step + resultingSign * rowCellCount;
+            const rowDirection = this._isRTL() ? previousColumnDirection : nextColumnDirection;
+
+            $rightCell = $row[rowDirection]().children().eq(nextIndex);
             $rightCell = this._checkForViewBounds($rightCell);
         } else {
-            $rightCell = $row.children().eq(currentIndex - sign * step);
+            $rightCell = $row.children().eq(currentIndex - resultingSign * step);
         }
 
         return $rightCell;
     },
 
-    _isRightEdgeCell: function(lastIndexInRow, cellIndex, step) {
+    _isEdgeCell: function(lastIndexInRow, cellIndex, step, direction) {
         const isRTL = this._isRTL();
-        const edgeCellIndex = isRTL ? 0 : lastIndexInRow;
+        const isNextDirection = direction === 'next';
 
-        return isRTL
-            ? (cellIndex - step) < edgeCellIndex
-            : (cellIndex + step) > edgeCellIndex;
+        const rightEdgeCellIndex = isRTL ? 0 : lastIndexInRow;
+        const leftEdgeCellIndex = isRTL ? lastIndexInRow : 0;
+        const edgeCellIndex = isNextDirection ? rightEdgeCellIndex : leftEdgeCellIndex;
+
+        const isNextCellGreaterThanEdge = (cellIndex + step) > edgeCellIndex;
+        const isNextCellLessThanEdge = (cellIndex - step) < edgeCellIndex;
+
+        const isRightEdgeCell = isRTL ? isNextCellLessThanEdge : isNextCellGreaterThanEdge;
+        const isLeftEdgeCell = isRTL ? isNextCellGreaterThanEdge : isNextCellLessThanEdge;
+
+        return isNextDirection ? isRightEdgeCell : isLeftEdgeCell;
     },
 
-    _isGroupEndCell: function($cell) {
+    _isGroupEndCell: function($cell, direction) {
         if(this.isGroupedByDate()) {
             return false;
         }
@@ -263,63 +277,10 @@ const SchedulerWorkSpace = Widget.inherit({
         const cellsInRow = this._getCellCount();
         const currentCellIndex = $cell.index();
         const result = currentCellIndex % cellsInRow;
+        const endCell = direction === 'next' ? cellsInRow - 1 : 0;
+        const startCell = direction === 'next' ? 0 : cellsInRow - 1;
 
-        return this._isRTL() ? result === 0 : result === cellsInRow - 1;
-    },
-
-    _getLeftCell: function(isMultiSelection) {
-        if(!isDefined(this._$focusedCell)) {
-            return;
-        }
-
-        let $leftCell;
-        const $focusedCell = this._$focusedCell;
-        const isHorizontalGrouping = this.option('groupOrientation') === 'horizontal';
-        const groupCount = this._getGroupCount();
-        const totalCellCount = this._getTotalCellCount(groupCount);
-        const isGroupedByDate = this.isGroupedByDate();
-        const rowCellCount = isMultiSelection && (!isGroupedByDate)
-            ? this._getCellCount()
-            : this._getTotalCellCount(groupCount);
-        const lastIndexInRow = rowCellCount - 1;
-        const currentIndex = $focusedCell.index();
-        const direction = this._isRTL() ? 'next' : 'prev';
-        const $row = $focusedCell.parent();
-        const sign = this._isRTL() ? -1 : 1;
-        const step = isGroupedByDate && isMultiSelection ? groupCount : 1;
-        const isEdgeCell = this._isLeftEdgeCell(
-            isHorizontalGrouping ? totalCellCount - 1 : lastIndexInRow, currentIndex, step,
-        );
-
-        if(isEdgeCell || (isMultiSelection && this._isGroupStartCell($focusedCell))) {
-            const nextIndex = currentIndex - sign * step + sign * rowCellCount;
-            $leftCell = $row[direction]().children().eq(nextIndex);
-            $leftCell = this._checkForViewBounds($leftCell);
-        } else {
-            $leftCell = $row.children().eq(currentIndex - sign * step);
-        }
-
-        return $leftCell;
-    },
-
-    _isGroupStartCell: function($cell) {
-        if(this.isGroupedByDate()) {
-            return false;
-        }
-        const cellsInRow = this._getCellCount();
-        const currentCellIndex = $cell.index();
-        const result = currentCellIndex % cellsInRow;
-
-        return this._isRTL() ? result === cellsInRow - 1 : result === 0;
-    },
-
-    _isLeftEdgeCell: function(lastIndexInRow, cellIndex, step) {
-        const isRTL = this._isRTL();
-        const edgeCellIndex = isRTL ? lastIndexInRow : 0;
-
-        return isRTL
-            ? (cellIndex + step) > edgeCellIndex
-            : (cellIndex - step) < edgeCellIndex;
+        return this._isRTL() ? result === startCell : result === endCell;
     },
 
     _moveToCell: function($cell, isMultiSelection) {
