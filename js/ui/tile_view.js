@@ -507,5 +507,6 @@ const TileView = CollectionWidget.inherit({
 });
 
 registerComponent('dxTileView', TileView);
+// #STYLE tilaView
 
 module.exports = TileView;

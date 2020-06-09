@@ -438,5 +438,6 @@ const Accordion = CollectionWidget.inherit({
 });
 
 registerComponent('dxAccordion', Accordion);
+// #STYLE accordion
 
 module.exports = Accordion;

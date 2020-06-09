@@ -88,8 +88,9 @@ describe('MetadataCollector', () => {
     let metaContent = 'export const metadata: Array<MetaItem> = [{\'Key\':\'$var\',\'Value\':\'"ON"\'}];\n';
     metaContent += `export const version: string = '${version}';\n`;
     metaContent += 'export const browsersList: Array<string> = [];\n';
+    metaContent += 'export const dependencies: FlatStylesDependencyTree = {};\n';
 
-    await collector.saveMetadata(fileName, version, []);
+    await collector.saveMetadata(fileName, version, [], {});
 
     expect(promises.mkdir).toHaveBeenCalledTimes(1);
     expect(promises.mkdir).toHaveBeenCalledWith(expectedDirName, { recursive: true });

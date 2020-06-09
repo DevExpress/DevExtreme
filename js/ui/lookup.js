@@ -1059,5 +1059,6 @@ const Lookup = DropDownList.inherit({
 });
 
 registerComponent('dxLookup', Lookup);
+// #STYLE lookup
 
 module.exports = Lookup;

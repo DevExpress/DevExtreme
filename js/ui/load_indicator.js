@@ -237,4 +237,6 @@ const LoadIndicator = Widget.inherit({
 
 registerComponent('dxLoadIndicator', LoadIndicator);
 
+// #STYLE loadIndicator
+
 module.exports = LoadIndicator;

@@ -708,5 +708,6 @@ class Box extends CollectionWidget {
 Box.ItemClass = BoxItem;
 
 registerComponent('dxBox', Box);
+// #STYLE box
 
 module.exports = Box;

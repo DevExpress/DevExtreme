@@ -4,3 +4,5 @@ const NumberBoxMask = require('./number_box.mask');
 registerComponent('dxNumberBox', NumberBoxMask);
 
 module.exports = NumberBoxMask;
+
+// #STYLE numberBox

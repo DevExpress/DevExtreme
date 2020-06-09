@@ -456,6 +456,7 @@ const MultiView = CollectionWidget.inherit({
 */
 
 registerComponent('dxMultiView', MultiView);
+// #STYLE multiView
 
 module.exports = MultiView;
 ///#DEBUG

@@ -1384,7 +1384,7 @@ const Form = Widget.inherit({
 });
 
 registerComponent('dxForm', Form);
-
+// #STYLE form
 module.exports = Form;
 
 //#DEBUG

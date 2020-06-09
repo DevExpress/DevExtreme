@@ -948,6 +948,6 @@ const FilterBuilder = Widget.inherit({
 });
 
 registerComponent('dxFilterBuilder', FilterBuilder);
-
+// #STYLE filterBuilder
 module.exports = FilterBuilder;
 module.exports.renderValueText = renderValueText;

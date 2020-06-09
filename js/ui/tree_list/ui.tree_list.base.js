@@ -180,5 +180,5 @@ const TreeList = Widget.inherit({
 TreeList.registerModule = treeListCore.registerModule.bind(treeListCore);
 
 registerComponent('dxTreeList', TreeList);
-
+// #STYLE treelist
 module.exports = TreeList;

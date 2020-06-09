@@ -1144,5 +1144,6 @@ const Gallery = CollectionWidget.inherit({
 });
 
 registerComponent('dxGallery', Gallery);
+// #STYLE gallery
 
 module.exports = Gallery;

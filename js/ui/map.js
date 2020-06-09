@@ -506,5 +506,6 @@ const Map = Widget.inherit({
 });
 
 registerComponent('dxMap', Map);
+// #STYLE map
 
 module.exports = Map;

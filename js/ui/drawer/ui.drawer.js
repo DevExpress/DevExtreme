@@ -570,6 +570,6 @@ const Drawer = Widget.inherit({
 });
 
 registerComponent('dxDrawer', Drawer);
-
+// #STYLE drawer
 module.exports = Drawer;
 

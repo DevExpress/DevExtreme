@@ -400,6 +400,7 @@ const SlideOutView = Widget.inherit({
 });
 
 registerComponent('dxSlideOutView', SlideOutView);
+// #STYLE slideOutView
 
 module.exports = SlideOutView;
 

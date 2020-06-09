@@ -887,5 +887,5 @@ const DropDownList = DropDownEditor.inherit({
 }).include(DataExpressionMixin, DataConverterMixin);
 
 registerComponent('dxDropDownList', DropDownList);
-
+// #STYLE dropDownList
 module.exports = DropDownList;

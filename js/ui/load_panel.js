@@ -248,4 +248,6 @@ const LoadPanel = Overlay.inherit({
 
 registerComponent('dxLoadPanel', LoadPanel);
 
+// #STYLE loadPanel
+
 module.exports = LoadPanel;

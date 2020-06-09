@@ -468,5 +468,7 @@ Tabs.ItemClass = TabsItem;
 
 registerComponent('dxTabs', Tabs);
 
+// #STYLE tabs
+
 module.exports = Tabs;
 module.exports.getTabsExpandedClass = TABS_EXPANDED_CLASS;

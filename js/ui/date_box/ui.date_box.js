@@ -4,3 +4,5 @@ const DateBoxMask = require('./ui.date_box.mask');
 registerComponent('dxDateBox', DateBoxMask);
 
 module.exports = DateBoxMask;
+
+// #STYLE dateBox

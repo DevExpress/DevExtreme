@@ -854,4 +854,6 @@ const SelectBox = DropDownList.inherit({
 
 registerComponent('dxSelectBox', SelectBox);
 
+// #STYLE selectBox
+
 module.exports = SelectBox;

@@ -86,3 +86,11 @@ interface SwatchSass {
   sass: string;
   selector: string;
 }
+
+interface StylesDependencyTree {
+  [key: string]: StylesDependencyTree;
+}
+
+interface FlatStylesDependencyTree {
+  [key: string]: Array<string>;
+}

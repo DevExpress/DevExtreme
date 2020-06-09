@@ -1742,5 +1742,5 @@ const PivotGrid = Widget.inherit({
     .include(chartIntegrationMixin);
 
 registerComponent('dxPivotGrid', PivotGrid);
-
+// #STYLE pivotGrid
 module.exports = PivotGrid;

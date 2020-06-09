@@ -379,5 +379,6 @@ const TabPanel = MultiView.inherit({
 TabPanel.ItemClass = TabPanelItem;
 
 registerComponent('dxTabPanel', TabPanel);
+// #STYLE tabPanel
 
 module.exports = TabPanel;

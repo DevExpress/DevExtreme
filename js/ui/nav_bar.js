@@ -61,5 +61,6 @@ const NavBar = Tabs.inherit({
 NavBar.ItemClass = NavBarItem;
 
 registerComponent('dxNavBar', NavBar);
+// #STYLE navBar
 
 module.exports = NavBar;

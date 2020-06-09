@@ -596,5 +596,6 @@ const Popover = Popup.inherit({
 });
 
 registerComponent('dxPopover', Popover);
+// #STYLE popover
 
 module.exports = Popover;

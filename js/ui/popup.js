@@ -731,5 +731,6 @@ const Popup = Overlay.inherit({
 });
 
 registerComponent('dxPopup', Popup);
+// #STYLE popup
 
 module.exports = Popup;

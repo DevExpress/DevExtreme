@@ -25,6 +25,8 @@ const colorUtils = {
     makeRgba: colorEditorPrototype._makeRgba.bind(colorEditorPrototype)
 };
 
+// #STYLE colorBox
+
 const ColorBox = DropDownEditor.inherit({
 
     _supportedKeys: function() {

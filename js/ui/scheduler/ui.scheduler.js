@@ -2551,5 +2551,5 @@ const Scheduler = Widget.inherit({
 }).include(DataHelperMixin);
 
 registerComponent('dxScheduler', Scheduler);
-
+// #STYLE scheduler
 module.exports = Scheduler;

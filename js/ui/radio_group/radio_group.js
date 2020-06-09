@@ -354,5 +354,5 @@ class RadioGroup extends Editor {
 RadioGroup.include(DataExpressionMixin);
 
 registerComponent('dxRadioGroup', RadioGroup);
-
+// #STYLE radioGroup
 module.exports = RadioGroup;
