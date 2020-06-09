@@ -35,7 +35,7 @@ export const getOnDeleteButtonClick: GetOnDeleteButtonClick = (
 export const viewFunction = (viewModel: TooltipItemLayout) => {
   const useTemplate = !!viewModel.props.itemContentTemplate;
   const onDeleteButtonClick = getOnDeleteButtonClick(
-    viewModel.props, viewModel.data, viewModel.currentData,
+    viewModel.props, viewModel.data, viewModel.props.singleAppointmentData!,
   );
   const {
     text, formatDate: formattedDate,
@@ -96,9 +96,7 @@ export class TooltipItemLayoutProps {
     data?: dxSchedulerAppointment, currentData?: dxSchedulerAppointment,
   ) => any = noop;
 
-  @Event() getSingleAppointmentData?: any;
-
-  @OneWay() target?: any;
+  @OneWay() singleAppointmentData?: dxSchedulerAppointment;
 }
 
 @Component({
