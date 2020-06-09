@@ -41,8 +41,8 @@ QUnit.module('Value as HTML markup', moduleConfig, () => {
         const $element = instance.$element();
         const markup = $element.find(getSelector(CONTENT_CLASS)).html();
 
-        assert.equal(instance.option('value'), '<h1>Hi!</h1><p>Test</p>');
-        assert.equal(markup, '<h1>Hi!</h1><p>Test</p>');
+        assert.strictEqual(instance.option('value'), '<h1>Hi!</h1><p>Test</p>');
+        assert.strictEqual(markup, '<h1>Hi!</h1><p>Test</p>');
     });
 
     test('render transclude content', function(assert) {
@@ -265,8 +265,8 @@ QUnit.module('Value as Markdown markup', {
         const $element = instance.$element();
         const markup = $element.find(getSelector(CONTENT_CLASS)).html();
 
-        assert.equal(instance.option('value'), 'Hi!\nIt\'s a **test**!');
-        assert.equal(markup, '<p>Hi!</p><p>It\'s a <strong>test</strong>!</p>');
+        assert.strictEqual(instance.option('value'), 'Hi!\nIt\'s a **test**!');
+        assert.strictEqual(markup, '<p>Hi!</p><p>It\'s a <strong>test</strong>!</p>');
     });
 
     test('change value by user', function(assert) {
@@ -285,6 +285,23 @@ QUnit.module('Value as Markdown markup', {
             .$element()
             .find(getSelector(CONTENT_CLASS))
             .html('<p>Hi! <strong>Test.</strong></p>');
+    });
+
+    test('change value to null', function(assert) {
+        const done = assert.async();
+        const instance = $('#htmlEditor')
+            .dxHtmlEditor({
+                value: 'test',
+                valueType: 'markdown',
+                onValueChanged: ({ value }) => {
+                    assert.strictEqual(value, null);
+
+                    done();
+                }
+            })
+            .dxHtmlEditor('instance');
+
+        instance.option('value', null);
     });
 
     test('value after change valueType', function(assert) {
