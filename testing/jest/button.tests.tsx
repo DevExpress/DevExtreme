@@ -318,7 +318,7 @@ describe('Button', () => {
       it('should get original icon prop', () => {
         const button = render({
           icon: 'testicon',
-          component: ({ icon }) => <div>{icon}</div>,
+          component: ({ data: { icon } }) => <div>{icon}</div>,
           text: 'My button',
         });
         const buttonContentChildren = button.find('.dx-button-content').children();
