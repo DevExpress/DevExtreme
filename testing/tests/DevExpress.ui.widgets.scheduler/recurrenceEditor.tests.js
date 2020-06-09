@@ -13,7 +13,7 @@ const FREQUENCY_EDITOR = 'dx-recurrence-selectbox-freq';
 const REPEAT_COUNT_EDITOR = 'dx-recurrence-numberbox-repeat-count';
 const REPEAT_DATE_EDITOR = 'dx-recurrence-datebox-until-date';
 const REPEAT_ON_EDITOR = 'dx-recurrence-repeat-on';
-const REPEAT_ON_MONTH_EDITOR = 'dx-recurrence-repeat-on-month';
+// const REPEAT_ON_MONTH_EDITOR = 'dx-recurrence-repeat-on-month';
 const DAY_OF_MONTH = 'dx-recurrence-numberbox-day-of-month';
 const REPEAT_ON_YEAR_EDITOR = 'dx-recurrence-repeat-on-year';
 const MONTH_OF_YEAR = 'dx-recurrence-selectbox-month-of-year';
@@ -154,22 +154,28 @@ module('Frequency editor', moduleConfig, () => {
     });
 });
 
-module('Repeat-end editor', moduleConfig, () => {
+const repeatEndModuleConfig = {
+    beforeEach() {
+        this.createInstance = function(options) {
+            this.instance = new RecurrenceEditor($('#recurrence-editor'), options);
+            this.repeatEndEditor = this.instance._repeatEndEditor;
+        };
+    }
+};
+
+module('Repeat-end editor', repeatEndModuleConfig, () => {
     test('Recurrence editor should contain repeat-type radio group to turn on/of repeat-end', function(assert) {
         this.createInstance({ value: 'FREQ=WEEKLY' });
-        const repeatEndEditor = this.instance.getRecurrenceForm().getEditor('repeatEnd');
 
-        assert.ok(repeatEndEditor instanceof RadioGroup, 'Repeat-end editor is RadioGroup');
+        assert.ok(this.repeatEndEditor instanceof RadioGroup, 'Repeat-end editor is RadioGroup');
     });
 
     test('Recurrence repeat-end editor should have right default', function(assert) {
         this.createInstance({ value: 'FREQ=WEEKLY' });
         const itemValues = [{ text: 'Never', value: 'never' }, { text: 'Count', value: 'count' }, { text: 'Until', value: 'until' }];
+        const items = this.repeatEndEditor.option('items');
 
-        const repeatEndEditor = this.instance.getRecurrenceForm().getEditor('repeatEnd');
-        const items = repeatEndEditor.option('items');
-
-        assert.equal(repeatEndEditor.option('value'), 'never', 'Repeat-end editor has a right default value');
+        assert.equal(this.repeatEndEditor.option('value'), 'never', 'Repeat-end editor has a right default value');
         for(let i = 0, len = items.length; i < len; i++) {
             assert.equal(items[i].text(), itemValues[i].text, 'item text is right');
             assert.equal(items[i].value, itemValues[i].value, 'item value is right');
@@ -179,21 +185,18 @@ module('Repeat-end editor', moduleConfig, () => {
     test('Repeat-end should process rules correctly', function(assert) {
         this.createInstance({ value: 'FREQ=WEEKLY;COUNT=10' });
 
-        const repeatEndEditor = this.instance.getRecurrenceForm().getEditor('repeatEnd');
-        assert.equal(repeatEndEditor.option('value'), 'count', 'value is correct');
+        assert.equal(this.repeatEndEditor.option('value'), 'count', 'value is correct');
 
         this.instance.option('value', 'FREQ=WEEKLY;UNTIL=19971224T000000Z');
 
-        assert.equal(repeatEndEditor.option('value'), 'until', 'value is correct');
+        assert.equal(this.repeatEndEditor.option('value'), 'until', 'value is correct');
     });
 
     test('Recurrence repeat-type editor should be rendered with right inner editors', function(assert) {
         this.createInstance({ value: 'FREQ=WEEKLY;COUNT=10' });
 
-        const repeatEndEditor = this.instance.getRecurrenceForm().getEditor('repeatEnd');
-
-        const $repeatCount = repeatEndEditor.$element().find('.' + REPEAT_COUNT_EDITOR);
-        const $repeatUntilDate = repeatEndEditor.$element().find('.' + REPEAT_DATE_EDITOR);
+        const $repeatCount = this.repeatEndEditor.$element().find('.' + REPEAT_COUNT_EDITOR);
+        const $repeatUntilDate = this.repeatEndEditor.$element().find('.' + REPEAT_DATE_EDITOR);
 
         assert.equal($repeatCount.length, 1, 'repeatCount editor was rendered');
         assert.equal($repeatUntilDate.length, 1, 'repeatUntilDate editor was rendered');
@@ -202,10 +205,8 @@ module('Repeat-end editor', moduleConfig, () => {
     test('Recurrence editor parts should be disabled if needed, recurrenceString changing', function(assert) {
         this.createInstance({ value: 'FREQ=WEEKLY' });
 
-        const repeatEndEditor = this.instance.getRecurrenceForm().getEditor('repeatEnd');
-
-        const $repeatCount = repeatEndEditor.$element().find('.' + REPEAT_COUNT_EDITOR);
-        const $repeatUntilDate = repeatEndEditor.$element().find('.' + REPEAT_DATE_EDITOR);
+        const $repeatCount = this.repeatEndEditor.$element().find('.' + REPEAT_COUNT_EDITOR);
+        const $repeatUntilDate = this.repeatEndEditor.$element().find('.' + REPEAT_DATE_EDITOR);
 
         assert.ok($repeatCount.hasClass('dx-state-disabled'), 'repeat-count editor is disabled');
         assert.ok($repeatUntilDate.hasClass('dx-state-disabled'), 'repeat-until editor is disabled');
@@ -224,16 +225,15 @@ module('Repeat-end editor', moduleConfig, () => {
     test('Recurrence editor parts should be disabled if needed, repeat-end editor value changing', function(assert) {
         this.createInstance({ value: 'FREQ=WEEKLY;COUNT=10' });
 
-        const repeatEndEditor = this.instance.getRecurrenceForm().getEditor('repeatEnd');
-        const $repeatCount = repeatEndEditor.$element().find('.' + REPEAT_COUNT_EDITOR);
-        const $repeatUntilDate = repeatEndEditor.$element().find('.' + REPEAT_DATE_EDITOR);
+        const $repeatCount = this.repeatEndEditor.$element().find('.' + REPEAT_COUNT_EDITOR);
+        const $repeatUntilDate = this.repeatEndEditor.$element().find('.' + REPEAT_DATE_EDITOR);
 
-        repeatEndEditor.option('value', 'until');
+        this.repeatEndEditor.option('value', 'until');
 
         assert.ok($repeatCount.hasClass('dx-state-disabled'), 'repeat-count editor is disabled');
         assert.ok(!$repeatUntilDate.hasClass('dx-state-disabled'), 'repeat-until editor is not disabled');
 
-        repeatEndEditor.option('value', 'count');
+        this.repeatEndEditor.option('value', 'count');
 
         assert.ok(!$repeatCount.hasClass('dx-state-disabled'), 'repeat-count editor is not disabled');
         assert.ok($repeatUntilDate.hasClass('dx-state-disabled'), 'repeat-until editor is disabled');
@@ -242,21 +242,19 @@ module('Repeat-end editor', moduleConfig, () => {
     test('Recurrence editor should correctly process values from repeat-end editor', function(assert) {
         this.createInstance({ value: 'FREQ=WEEKLY;COUNT=10' });
 
-        const repeatEndEditor = this.instance.getRecurrenceForm().getEditor('repeatEnd');
         let date = dateUtils.trimTime(new Date());
 
         date.setDate(date.getDate() + 1);
         date = new Date(date.getTime() - 1);
 
-        repeatEndEditor.option('value', 'until');
+        this.repeatEndEditor.option('value', 'until');
         assert.equal(this.instance.option('value').substring(0, 26), ('FREQ=WEEKLY;UNTIL=' + getRecurrenceProcessor().getAsciiStringByDate(date)).substring(0, 26), 'Recurrence editor have right value');
     });
 
     test('Recurrence repeat-count editor should be rendered with right defaults', function(assert) {
         this.createInstance({ value: 'FREQ=WEEKLY' });
 
-        const repeatEndEditor = this.instance.getRecurrenceForm().getEditor('repeatEnd');
-        const $repeatCount = repeatEndEditor.$element().find('.' + REPEAT_COUNT_EDITOR);
+        const $repeatCount = this.repeatEndEditor.$element().find('.' + REPEAT_COUNT_EDITOR);
         const repeatCount = $repeatCount.dxNumberBox('instance');
 
         assert.equal(repeatCount.option('showSpinButtons'), true, 'numberBox has right min value');
@@ -269,8 +267,7 @@ module('Repeat-end editor', moduleConfig, () => {
     test('Recurrence repeat-count editor should process rules correctly', function(assert) {
         this.createInstance({ value: 'FREQ=WEEKLY' });
 
-        const repeatEndEditor = this.instance.getRecurrenceForm().getEditor('repeatEnd');
-        const $repeatCount = repeatEndEditor.$element().find('.' + REPEAT_COUNT_EDITOR);
+        const $repeatCount = this.repeatEndEditor.$element().find('.' + REPEAT_COUNT_EDITOR);
         const repeatCount = $repeatCount.dxNumberBox('instance');
 
         ['FREQ=WEEKLY;COUNT=10', 'FREQ=WEEKLY;COUNT=12'].forEach((recurrenceString) => {
@@ -284,8 +281,7 @@ module('Repeat-end editor', moduleConfig, () => {
     test('Recurrence editor should correctly process values from repeat-count editor', function(assert) {
         this.createInstance({ value: 'FREQ=WEEKLY;COUNT=1' });
 
-        const repeatEndEditor = this.instance.getRecurrenceForm().getEditor('repeatEnd');
-        const $repeatCount = repeatEndEditor.$element().find('.' + REPEAT_COUNT_EDITOR);
+        const $repeatCount = this.repeatEndEditor.$element().find('.' + REPEAT_COUNT_EDITOR);
         const repeatCount = $repeatCount.dxNumberBox('instance');
 
         [10, 12].forEach((value) => {
@@ -297,8 +293,7 @@ module('Repeat-end editor', moduleConfig, () => {
     test('Recurrence repeat-until editor should be rendered with right defaults', function(assert) {
         this.createInstance({ value: 'FREQ=WEEKLY;UNTIL=20151007', firstDayOfWeek: 2 });
 
-        const repeatEndEditor = this.instance.getRecurrenceForm().getEditor('repeatEnd');
-        const $repeatUntilDate = repeatEndEditor.$element().find('.' + REPEAT_DATE_EDITOR);
+        const $repeatUntilDate = this.repeatEndEditor.$element().find('.' + REPEAT_DATE_EDITOR);
         const untilDate = $repeatUntilDate.dxDateBox('instance');
 
         assert.equal(untilDate.option('type'), 'date', 'dateBox has right type');
@@ -309,8 +304,7 @@ module('Repeat-end editor', moduleConfig, () => {
     test('Recurrence repeat-until editor should process rules correctly', function(assert) {
         this.createInstance({ value: 'FREQ=WEEKLY;UNTIL=20151007' });
 
-        const repeatEndEditor = this.instance.getRecurrenceForm().getEditor('repeatEnd');
-        const $repeatUntilDate = repeatEndEditor.$element().find('.' + REPEAT_DATE_EDITOR);
+        const $repeatUntilDate = this.repeatEndEditor.$element().find('.' + REPEAT_DATE_EDITOR);
         const untilDate = $repeatUntilDate.dxDateBox('instance');
 
         ['FREQ=WEEKLY;UNTIL=20151107', 'FREQ=WEEKLY;UNTIL=20201107'].forEach((recurrenceString) => {
@@ -324,8 +318,7 @@ module('Repeat-end editor', moduleConfig, () => {
     test('Recurrence editor should correctly process values from until-date editor', function(assert) {
         this.createInstance({ value: 'FREQ=WEEKLY;UNTIL=20151007' });
 
-        const repeatEndEditor = this.instance.getRecurrenceForm().getEditor('repeatEnd');
-        const $repeatUntilDate = repeatEndEditor.$element().find('.' + REPEAT_DATE_EDITOR);
+        const $repeatUntilDate = this.repeatEndEditor.$element().find('.' + REPEAT_DATE_EDITOR);
         const untilDate = $repeatUntilDate.dxDateBox('instance');
 
         [new Date(2015, 11, 7), new Date(2020, 11, 7)].forEach((date) => {
@@ -393,6 +386,93 @@ module('Interval editor', intervalModuleConfig, () => {
     });
 });
 
+const repeatOnModuleConfig = {
+    beforeEach() {
+        this.createInstance = function(options) {
+            this.instance = new RecurrenceEditor($('#recurrence-editor'), options);
+            this.intervalEditor = this.instance.getRecurrenceForm().getEditor('interval');
+        };
+    }
+};
+
+module('Repeat-on editor', repeatOnModuleConfig, () => {
+    test('Recurrence repeat-on editor should be rendered', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY' });
+
+        const $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR);
+
+        assert.equal($repeatOn.length, 1, 'repeat-on editor was rendered');
+    });
+
+    test('Recurrence repeat-on editor should contain repeat-on-week editor, when freq = weekly', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY' });
+
+        const $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR);
+        const $repeatOnWeek = $repeatOn.find('.' + RECURRENCE_BUTTON_GROUP);
+
+        assert.equal($repeatOnWeek.length, 1, 'repeat-on-week editor was rendered');
+    });
+
+    test('Recurrence repeat-on editor should process values correctly, freq = weekly', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY;BYDAY=TU,SU' });
+        assert.deepEqual($('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['SU', 'TU'], 'Right button group select item keys');
+
+        this.instance.option('value', 'FREQ=WEEKLY;BYDAY=MO');
+        assert.deepEqual($('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['MO'], 'Right button group select item keys');
+    });
+
+    test('Recurrence repeat-on editor should process values by startDate correctly, freq = weekly', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY', startDate: new Date(2015, 1, 1, 1) });
+
+        assert.deepEqual($('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['SU'], 'Right button group select item keys');
+    });
+
+    test('Recurrence editor should process values from repeat-on-editor after init correctly, freq=weekly', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY;BYDAY=TU' });
+
+        const buttonGroup = $('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance');
+        buttonGroup.option('selectedItemKeys', ['TU', 'WE']);
+
+        assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;BYDAY=TU,WE');
+    });
+
+    test('\'BYDAY\' rule has a higher priority than \'startDate\' rule, freq=weekly', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY;BYDAY=TU', startDate: new Date(2015, 1, 1, 1) });
+
+        assert.deepEqual($('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['TU'], 'Right button group select item keys');
+    });
+
+    test('Recurrence editor should process values from repeat-on-editor correctly, freq=weekly', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY;BYDAY=TU,SU' });
+
+        const buttonGroup = $('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance');
+        buttonGroup.option('selectedItemKeys', ['TU', 'SU', 'MO']);
+
+        assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;BYDAY=SU,MO,TU');
+    });
+
+    test('Recurrence repeat-on editor should contain repeat-on-month editor, when freq = monthly', function(assert) {
+        this.createInstance({ value: 'FREQ=MONTHLY', startDate: new Date(2019, 1, 1) });
+        const dayOfMonth = this.instance.getRecurrenceForm().getEditor('bymonthday');
+
+        assert.equal(dayOfMonth.option('min'), 1, 'correct default value of day-of-month editor');
+        assert.equal(dayOfMonth.option('max'), 31, 'correct default value of day-of-month editor');
+        assert.equal(dayOfMonth.option('showSpinButtons'), true, 'correct default value of day-of-month editor');
+        assert.equal(dayOfMonth.option('useLargeSpinButtons'), false, 'numberBox have right useLargeSpinButtons');
+    });
+
+    test('Recurrence repeat-on editor should should process values correctly, when freq = monthly', function(assert) {
+        this.createInstance({ value: 'FREQ=MONTHLY;BYMONTHDAY=5' });
+
+        const dayOfMonth = this.instance.getRecurrenceForm().getEditor('bymonthday');
+
+        assert.equal(dayOfMonth.option('value'), 5, 'repeat-on-month editor was rendered');
+
+        this.instance.option('value', 'FREQ=MONTHLY;BYMONTHDAY=6');
+
+        assert.equal(dayOfMonth.option('value'), 6, 'repeat-on-month editor was rendered');
+    });
+});
 
 QUnit.module('Recurrence editor - repeat-on editor', {
     beforeEach: function() {
@@ -402,78 +482,6 @@ QUnit.module('Recurrence editor - repeat-on editor', {
     }
 });
 
-QUnit.test('Recurrence repeat-on editor should be rendered, when freq != daily', function(assert) {
-    this.createInstance({ value: 'FREQ=WEEKLY' });
-
-    const $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR);
-
-    assert.equal($repeatOn.length, 1, 'repeat-on editor was rendered');
-});
-
-QUnit.test('Recurrence repeat-on editor should contain repeat-on-week editor, when freq = weekly', function(assert) {
-    this.createInstance({ value: 'FREQ=WEEKLY' });
-
-    const $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR);
-    const $repeatOnWeek = $repeatOn.find('.' + RECURRENCE_BUTTON_GROUP);
-
-    assert.equal($repeatOnWeek.length, 1, 'repeat-on-week editor was rendered');
-});
-
-QUnit.test('Recurrence repeat-on editor should process values correctly, freq = weekly', function(assert) {
-    this.createInstance({ value: 'FREQ=WEEKLY;BYDAY=TU,SU' });
-    assert.deepEqual($('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['SU', 'TU'], 'Right button group select item keys');
-
-    this.instance.option('value', 'FREQ=WEEKLY;BYDAY=MO');
-    assert.deepEqual($('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['MO'], 'Right button group select item keys');
-});
-
-QUnit.test('Recurrence repeat-on editor should process values by startDate correctly, freq = weekly', function(assert) {
-    this.createInstance({ value: 'FREQ=WEEKLY', startDate: new Date(2015, 1, 1, 1) });
-
-    assert.deepEqual($('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['SU'], 'Right button group select item keys');
-});
-
-QUnit.test('Recurrence editor should process values from repeat-on-editor after init correctly, freq=weekly', function(assert) {
-    this.createInstance({ value: 'FREQ=WEEKLY;BYDAY=TU' });
-
-    const buttonGroup = $('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance');
-    buttonGroup.option('selectedItemKeys', ['TU', 'WE']);
-
-    assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;BYDAY=TU,WE');
-});
-
-QUnit.test('\'BYDAY\' rule has a higher priority than \'startDate\' rule, freq=weekly', function(assert) {
-    this.createInstance({ value: 'FREQ=WEEKLY;BYDAY=TU', startDate: new Date(2015, 1, 1, 1) });
-
-    assert.deepEqual($('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['TU'], 'Right button group select item keys');
-});
-
-QUnit.test('Recurrence editor should process values from repeat-on-editor correctly, freq=weekly', function(assert) {
-    this.createInstance({ value: 'FREQ=WEEKLY;BYDAY=TU,SU' });
-
-    const buttonGroup = $('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance');
-    buttonGroup.option('selectedItemKeys', ['TU', 'SU', 'MO']);
-
-    assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;BYDAY=SU,MO,TU');
-});
-
-QUnit.test('Recurrence repeat-on editor should contain repeat-on-month editor, when freq = monthly', function(assert) {
-    this.createInstance({ value: 'FREQ=MONTHLY', startDate: new Date(2019, 1, 1) });
-
-    const $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR);
-    const $repeatOnMonth = $repeatOn.find('.' + REPEAT_ON_MONTH_EDITOR);
-
-    assert.equal($repeatOnMonth.length, 1, 'repeat-on-month editor was rendered');
-
-    const $day = $repeatOnMonth.find('.' + DAY_OF_MONTH);
-    const dayEditor = $day.dxNumberBox('instance');
-
-    assert.equal($day.length, 1, 'day-of-month editor was rendered');
-    assert.equal(dayEditor.option('min'), 1, 'correct default value of day-of-month editor');
-    assert.equal(dayEditor.option('max'), 31, 'correct default value of day-of-month editor');
-    assert.equal(dayEditor.option('showSpinButtons'), true, 'correct default value of day-of-month editor');
-    assert.equal(dayEditor.option('useLargeSpinButtons'), false, 'numberBox have right useLargeSpinButtons');
-});
 
 QUnit.test('Recurrence repeat-on editor should should process values correctly, when freq = monthly', function(assert) {
     this.createInstance({ value: 'FREQ=MONTHLY;BYMONTHDAY=5' });
