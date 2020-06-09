@@ -15,7 +15,7 @@ import DeleteButton from './delete-button';
 
 type GetCurrentDataFn = (appointmentItem: AppointmentItem) => dxSchedulerAppointment;
 type GetOnDeleteButtonClick = (
-  props: TooltipItemContentProps, data: dxSchedulerAppointment, currentData: dxSchedulerAppointment,
+  props: TooltipItemLayoutProps, data: dxSchedulerAppointment, currentData: dxSchedulerAppointment,
 ) => (e: any) => void;
 
 export const getCurrentData: GetCurrentDataFn = (appointmentItem) => {
@@ -32,7 +32,7 @@ export const getOnDeleteButtonClick: GetOnDeleteButtonClick = (
     onDelete?.(data, currentData);
 };
 
-export const viewFunction = (viewModel: TooltipItemContent) => {
+export const viewFunction = (viewModel: TooltipItemLayout) => {
   const useTemplate = !!viewModel.props.itemContentTemplate;
   const onDeleteButtonClick = getOnDeleteButtonClick(
     viewModel.props, viewModel.data, viewModel.currentData,
@@ -75,7 +75,7 @@ export const viewFunction = (viewModel: TooltipItemContent) => {
 };
 
 @ComponentBindings()
-export class TooltipItemContentProps {
+export class TooltipItemLayoutProps {
   @OneWay() item?: AppointmentItem = { data: {} };
 
   @OneWay() index?: number;
@@ -109,7 +109,7 @@ export class TooltipItemContentProps {
     component: BaseComponent,
   },
 })
-export default class TooltipItemContent extends JSXComponent(TooltipItemContentProps) {
+export default class TooltipItemLayout extends JSXComponent(TooltipItemLayoutProps) {
   @Ref()
   contentRef!: HTMLDivElement;
 
