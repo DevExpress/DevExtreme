@@ -746,7 +746,6 @@ QUnit.module('Timeline Keyboard Navigation', {
 
     QUnit.test('Timeline should select/unselect cells with mouse', function(assert) {
         this.instance.option({
-            focusStateEnabled: true,
             width: 1000,
             height: 800,
             currentDate: new Date(2015, 3, 1),
@@ -756,12 +755,27 @@ QUnit.module('Timeline Keyboard Navigation', {
         const $element = this.instance.$element();
         const cells = $element.find('.' + CELL_CLASS);
         const $table = $element.find('.dx-scheduler-date-table');
+        pointerMock(cells.eq(3)).start().click();
+
+        let cell = cells.eq(15).get(0);
 
         $($table).trigger($.Event('dxpointerdown', { target: cells.eq(3).get(0), which: 1, pointerType: 'mouse' }));
+        $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
 
-        $($table).trigger($.Event('dxpointermove', { target: cells.eq(35).get(0), which: 1 }));
+        assert.equal(cells.filter('.dx-state-focused').length, 13, 'the amount of focused cells is correct');
+        assert.ok(cells.eq(3).hasClass('dx-state-focused'), 'the start cell is focused');
+        assert.ok(cells.eq(15).hasClass('dx-state-focused'), 'the end cell is focused');
 
-        assert.equal(cells.filter('.dx-state-focused').length, 1, 'right quantity of focused cells');
+        cell = cells.eq(35).get(0);
+
+        $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
+
+        assert.equal(cells.filter('.dx-state-focused').length, 13, 'the amount of focused cells has not changed');
+        assert.ok(cells.eq(3).hasClass('dx-state-focused'), 'the start cell is still focused');
+        assert.ok(cells.eq(15).hasClass('dx-state-focused'), 'the end cell is still focused');
+        assert.notOk(cells.eq(35).hasClass('dx-state-focused'), 'cell from another group is not focused');
+
+        $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
     });
 
     (function() {
