@@ -1,5 +1,5 @@
 import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/testHelper';
+import createWidget from '../../helpers/createWidget';
 import { Selector } from 'testcafe';
 import ScrollView from '../../model/scrollView';
 import { appendElementTo } from './helpers/domUtils';
@@ -21,12 +21,12 @@ fixture `ScrollView`
                 await appendElementTo('body', 'button', { id: 'mouseLeaveButton', width: 150, height: 50, backgroundColor: 'grey' });
 
                 await t.expect(scrollView.scrollbar.isScrollVisible()).eql(scrollBarVisibleAfterMouseLeave);
-                await t.hover(scrollView.getScrollViewContainer());
+                await t.hover(ScrollView.getScrollViewContainer());
                 await t.expect(scrollView.scrollbar.isScrollVisible()).eql(scrollBarVisibleAfterMouseEnter);
                 await t.click(Selector('#mouseLeaveButton'));
                 await t.expect(scrollView.scrollbar.isScrollVisible()).eql(scrollBarVisibleAfterMouseLeave);
 
-            }).before(async t => {
+            }).before(async () => {
                 await appendElementTo('#container', 'div', { id: 'innerScrollViewContent', width: scrollableContentSize, height: scrollableContentSize, backgroundColor: 'steelblue' });
 
                 return createWidget('dxScrollView', {

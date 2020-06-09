@@ -1,4 +1,4 @@
-import { createWidget } from '../../helpers/testHelper';
+import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import Scheduler from '../../model/scheduler';
 import { Selector } from 'testcafe';
