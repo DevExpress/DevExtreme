@@ -1454,7 +1454,7 @@ QUnit.testStart(function() {
 
 })('Work Space Month with horizontal grouping');
 
-QUnit.module('Workspace Keyboard Navigation', {}, () => {
+QUnit.module('Workspace Keyboard Navigation', () => {
     QUnit.test('Month workspace navigation by arrows', function(assert) {
         const $element = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth({
             focusStateEnabled: true
@@ -2227,7 +2227,7 @@ QUnit.module('Workspace Keyboard Navigation', {}, () => {
         assert.ok(cells.eq(4).hasClass('dx-state-focused'), 'this last focused cell is correct');
     });
 
-    QUnit.module('Keyboard Multiselection with GroupByDate', {}, () => {
+    QUnit.module('Keyboard Multiselection with GroupByDate', () => {
         const createTest = (workSpace, config, testDescription) => {
             QUnit.test(testDescription, function(assert) {
                 const {
@@ -2319,7 +2319,7 @@ QUnit.module('Workspace Keyboard Navigation', {}, () => {
 });
 
 
-QUnit.module('Workspace Mouse Interaction', {}, () => {
+QUnit.module('Workspace Mouse Interaction', () => {
     const createTest = (workSpace, testDescription, groupByDate, groupOrientation) => {
         QUnit.test(testDescription, function(assert) {
             const $element = $('#scheduler-work-space')[workSpace.class]({
@@ -2786,7 +2786,7 @@ QUnit.module('Workspace Mouse Interaction', {}, () => {
         $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
     });
 
-    QUnit.module('Mouse Multiselection with Vertical Grouping', {}, () => {
+    QUnit.module('Mouse Multiselection with Vertical Grouping', () => {
         const workSpaces = [{
             class: 'dxSchedulerWorkSpaceDay',
             name: 'SchedulerWorkSpaceDay',
@@ -2828,7 +2828,7 @@ QUnit.module('Workspace Mouse Interaction', {}, () => {
         });
     });
 
-    QUnit.module('Mouse Multiselection with Grouping by Date', {}, () => {
+    QUnit.module('Mouse Multiselection with Grouping by Date', () => {
         const workSpaces = [{
             class: 'dxSchedulerWorkSpaceDay',
             name: 'SchedulerWorkSpaceDay',

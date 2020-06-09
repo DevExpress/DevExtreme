@@ -778,7 +778,7 @@ QUnit.module('Timeline Keyboard Navigation', {
         $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
     });
 
-    QUnit.module('Keyboard Multiselection with GroupByDate', {}, () => {
+    QUnit.module('Keyboard Multiselection with GroupByDate', () => {
         const createTest = (config, testDescription) => {
             QUnit.test(testDescription, function(assert) {
                 const {
@@ -821,7 +821,7 @@ QUnit.module('Timeline Keyboard Navigation', {
         });
     });
 
-    QUnit.module('Mouse Multiselection with Vertical Grouping and Grouping by Date', {}, () => {
+    QUnit.module('Mouse Multiselection with Vertical Grouping and Grouping by Date', () => {
         const createTest = (config, testDescription, groupByDate, groupOrientation) => {
             QUnit.test(testDescription, function(assert) {
                 this.instance.option({
