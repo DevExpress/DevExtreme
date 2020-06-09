@@ -2233,10 +2233,10 @@ QUnit.testStart(function() {
     (function() {
         QUnit.module('Keyboard Multiselection with GroupByDate');
 
-        const createTest = (workSpace, config, keyBoardAction, testDescription) => {
+        const createTest = (workSpace, config, testDescription) => {
             QUnit.test(testDescription, function(assert) {
                 const {
-                    startCell, endCell, intermediateCells, focusedCellsCount, rtlEnabled,
+                    startCell, endCell, intermediateCells, focusedCellsCount, rtlEnabled, key,
                 } = config;
 
                 const $element = $('#scheduler-work-space')[workSpace.class]({
@@ -2257,7 +2257,7 @@ QUnit.testStart(function() {
                 const cells = $element.find('.' + CELL_CLASS);
 
                 pointerMock(cells.eq(startCell)).start().click();
-                keyboard.keyDown(keyBoardAction, { shiftKey: true });
+                keyboard.keyDown(key, { shiftKey: true });
 
                 assert.equal(cells.filter('.dx-state-focused').length, focusedCellsCount, 'right quantity of focused cells');
                 assert.ok(cells.eq(startCell).hasClass('dx-state-focused'), 'this first focused cell is correct');
@@ -2274,70 +2274,49 @@ QUnit.testStart(function() {
             { class: 'dxSchedulerWorkSpaceMonth', name: 'SchedulerWorkSpaceMonth' },
         ];
 
-        const leftArrowConfig = [
-            { startCell: 3, endCell: 1, intermediateCells: [13], focusedCellsCount: 5, rtlEnabled: false },
-            { startCell: 7, endCell: 5, intermediateCells: [89], focusedCellsCount: 5, rtlEnabled: false },
-            { startCell: 18, endCell: 16, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: false },
-            { startCell: 1, endCell: 3, intermediateCells: [13], focusedCellsCount: 5, rtlEnabled: true },
-            { startCell: 5, endCell: 7, intermediateCells: [89], focusedCellsCount: 5, rtlEnabled: true },
-            { startCell: 16, endCell: 18, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: true },
+        const config = [
+            { startCell: 3, endCell: 1, intermediateCells: [13], focusedCellsCount: 5, rtlEnabled: false, key: 'left' },
+            { startCell: 7, endCell: 5, intermediateCells: [89], focusedCellsCount: 5, rtlEnabled: false, key: 'left' },
+            { startCell: 18, endCell: 16, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: false, key: 'left' },
+            { startCell: 1, endCell: 3, intermediateCells: [13], focusedCellsCount: 5, rtlEnabled: true, key: 'left' },
+            { startCell: 5, endCell: 7, intermediateCells: [89], focusedCellsCount: 5, rtlEnabled: true, key: 'left' },
+            { startCell: 16, endCell: 18, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: true, key: 'left' },
+            { startCell: 1, endCell: 3, intermediateCells: [13], focusedCellsCount: 5, rtlEnabled: false, key: 'right' },
+            { startCell: 5, endCell: 7, intermediateCells: [89], focusedCellsCount: 5, rtlEnabled: false, key: 'right' },
+            { startCell: 16, endCell: 18, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: false, key: 'right' },
+            { startCell: 3, endCell: 1, intermediateCells: [13], focusedCellsCount: 5, rtlEnabled: true, key: 'right' },
+            { startCell: 7, endCell: 5, intermediateCells: [89], focusedCellsCount: 5, rtlEnabled: true, key: 'right' },
+            { startCell: 18, endCell: 16, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: true, key: 'right' },
         ];
-        const rightArrowConfig = [
-            { startCell: 1, endCell: 3, intermediateCells: [13], focusedCellsCount: 5, rtlEnabled: false },
-            { startCell: 5, endCell: 7, intermediateCells: [89], focusedCellsCount: 5, rtlEnabled: false },
-            { startCell: 16, endCell: 18, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: false },
-            { startCell: 3, endCell: 1, intermediateCells: [13], focusedCellsCount: 5, rtlEnabled: true },
-            { startCell: 7, endCell: 5, intermediateCells: [89], focusedCellsCount: 5, rtlEnabled: true },
-            { startCell: 18, endCell: 16, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: true },
-        ];
-
-        leftArrowConfig.forEach((config, index) => {
+        config.forEach((config, index) => {
             const workSpace = workSpaces[index % 3];
             createTest(
-                workSpace, config, 'left',
-                `Multiselection with left arrow should work correctly with groupByDate
-                in ${workSpace.name} when rtlEnabled is equal to ${config.rtlEnabled}`,
-            );
-        });
-        rightArrowConfig.forEach((config, index) => {
-            const workSpace = workSpaces[index % 3];
-            createTest(
-                workSpace, config, 'right',
-                `Multiselection with right arrow should work correctly with groupByDate
+                workSpace, config,
+                `Multiselection with ${config.key} arrow should work correctly with groupByDate
                 in ${workSpace.name} when rtlEnabled is equal to ${config.rtlEnabled}`,
             );
         });
 
-        const leftArrowWithTransitionToAnotherRowConfig = [
-            { startCell: 4, endCell: 4, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: false },
-            { startCell: 28, endCell: 28, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: false },
-            { startCell: 28, endCell: 26, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: false },
-            { startCell: 7, endCell: 7, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: true },
-            { startCell: 55, endCell: 55, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: true },
-            { startCell: 55, endCell: 57, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: true },
-        ];
-        const rightArrowWithTransitionToAnotherRowConfig = [
-            { startCell: 3, endCell: 3, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: false },
-            { startCell: 26, endCell: 26, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: false },
-            { startCell: 27, endCell: 29, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: false },
-            { startCell: 4, endCell: 4, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: true },
-            { startCell: 29, endCell: 29, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: true },
-            { startCell: 28, endCell: 26, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: true },
+        const transitionToAnotherRowConfig = [
+            { startCell: 4, endCell: 4, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: false, key: 'left' },
+            { startCell: 28, endCell: 28, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: false, key: 'left' },
+            { startCell: 28, endCell: 26, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: false, key: 'left' },
+            { startCell: 7, endCell: 7, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: true, key: 'left' },
+            { startCell: 55, endCell: 55, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: true, key: 'left' },
+            { startCell: 55, endCell: 57, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: true, key: 'left' },
+            { startCell: 3, endCell: 3, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: false, key: 'right' },
+            { startCell: 26, endCell: 26, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: false, key: 'right' },
+            { startCell: 27, endCell: 29, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: false, key: 'right' },
+            { startCell: 4, endCell: 4, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: true, key: 'right' },
+            { startCell: 29, endCell: 29, intermediateCells: [], focusedCellsCount: 1, rtlEnabled: true, key: 'right' },
+            { startCell: 28, endCell: 26, intermediateCells: [], focusedCellsCount: 2, rtlEnabled: true, key: 'right' },
         ];
 
-        leftArrowWithTransitionToAnotherRowConfig.forEach((config, index) => {
+        transitionToAnotherRowConfig.forEach((config, index) => {
             const workSpace = workSpaces[index % 3];
             createTest(
-                workSpace, config, 'left',
-                `Multiselection with left arrow should work correctly with groupByDate
-                in ${workSpace.name} when the next cell is in another row and rtlEnabled is ${config.rtlEnabled}`,
-            );
-        });
-        rightArrowWithTransitionToAnotherRowConfig.forEach((config, index) => {
-            const workSpace = workSpaces[index % 3];
-            createTest(
-                workSpace, config, 'right',
-                `Multiselection with right arrow should work correctly with groupByDate
+                workSpace, config,
+                `Multiselection with ${config.key} arrow should work correctly with groupByDate
                 in ${workSpace.name} when the next cell is in another row and rtlEnabled is ${config.rtlEnabled}`,
             );
         });
