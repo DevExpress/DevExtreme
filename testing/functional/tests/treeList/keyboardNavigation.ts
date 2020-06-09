@@ -1,5 +1,5 @@
 import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/testHelper';
+import createWidget from '../../helpers/createWidget';
 import TreeList from '../../model/treeList';
 
 fixture `Keyboard Navigation`
@@ -26,7 +26,7 @@ test('The row should be selected on click if less than half of a row is visible'
     ],
     height: 150,
     autoExpandAll: true,
-    columns:['name','age'],
+    columns: ['name', 'age'],
     selection: {
         mode: 'multiple'
     }

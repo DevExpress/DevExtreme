@@ -1,13 +1,13 @@
 
 import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/testHelper';
+import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 
 fixture `Virtual Columns`
     .page(url(__dirname, '../container.html'));
 
-test("DataGrid should not scroll back to the focused cell after horizontal scrolling if 'columnRenderingMode' is virtual", async t => {
-    const dataGrid = new DataGrid("#container");
+test('DataGrid should not scroll back to the focused cell after horizontal scrolling if \'columnRenderingMode\' is virtual', async t => {
+    const dataGrid = new DataGrid('#container');
 
     await t.click(dataGrid.getDataCell(0, 0).element);
     await dataGrid.scrollTo({ x: 50 });
@@ -18,10 +18,10 @@ test("DataGrid should not scroll back to the focused cell after horizontal scrol
     const generateData = (rowCount, columnCount) => {
         const items = [];
 
-        for (let i = 0; i < rowCount; i++) {
+        for(let i = 0; i < rowCount; i += 1) {
             const item = { };
 
-            for (let j = 0; j < columnCount; j++) {
+            for(let j = 0; j < columnCount; j += 1) {
                 item[`field${j + 1}`] = `${i + 1}-${j + 1}`;
             }
 
@@ -31,12 +31,12 @@ test("DataGrid should not scroll back to the focused cell after horizontal scrol
         return items;
     };
 
-    return createWidget("dxDataGrid", {
+    return createWidget('dxDataGrid', {
         width: 450,
         dataSource: generateData(10, 30),
         columnWidth: 100,
         scrolling: {
-            columnRenderingMode: "virtual"
+            columnRenderingMode: 'virtual'
         }
     });
 });

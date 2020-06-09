@@ -1,8 +1,10 @@
-const $ = require('jquery');
-const dateUtils = require('core/utils/date');
-const RecurrenceEditor = require('ui/scheduler/ui.scheduler.recurrence_editor');
-const recurrenceUtils = require('ui/scheduler/utils.recurrence');
-const dateLocalization = require('localization/date');
+import 'common.css!';
+
+import $ from 'jquery';
+import dateUtils from 'core/utils/date';
+import RecurrenceEditor from 'ui/scheduler/ui.scheduler.recurrence_editor';
+import { getRecurrenceProcessor } from 'ui/scheduler/recurrence';
+import dateLocalization from 'localization/date';
 
 const FREQUENCY_EDITOR = 'dx-recurrence-selectbox-freq';
 const REPEAT_END_EDITOR_CONTAINER = 'dx-recurrence-repeat-end-container';
@@ -16,8 +18,6 @@ const REPEAT_ON_YEAR_EDITOR = 'dx-recurrence-repeat-on-year';
 const MONTH_OF_YEAR = 'dx-recurrence-selectbox-month-of-year';
 const EVERY_INTERVAL = 'dx-recurrence-numberbox-interval';
 const RECURRENCE_BUTTON_GROUP = 'dx-recurrence-button-group';
-
-require('common.css!');
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="recurrence-editor"></div>');
@@ -335,7 +335,7 @@ QUnit.test('Recurrence editor should correctly process values from repeat-type e
     date = new Date(date.getTime() - 1);
 
     $complete.dxRadioGroup('instance').option('value', 'until');
-    assert.equal(this.instance.option('value').substring(0, 26), ('FREQ=WEEKLY;UNTIL=' + recurrenceUtils.getAsciiStringByDate(date)).substring(0, 26), 'Recurrence editor have right value');
+    assert.equal(this.instance.option('value').substring(0, 26), ('FREQ=WEEKLY;UNTIL=' + getRecurrenceProcessor().getAsciiStringByDate(date)).substring(0, 26), 'Recurrence editor have right value');
 });
 
 QUnit.test('Recurrence repeat-count editor should be rendered with right defaults', function(assert) {
@@ -380,11 +380,11 @@ QUnit.test('Recurrence until-date editor should not process rules if it was set 
     const $untilDate = this.instance.$element().find('.' + REPEAT_DATE_EDITOR);
     const untilDate = $untilDate.dxDateBox('instance');
 
-    assert.deepEqual(untilDate.option('value'), recurrenceUtils.getDateByAsciiString('20151007'), 'value of until-date editor is correct on init');
+    assert.deepEqual(untilDate.option('value'), getRecurrenceProcessor().getDateByAsciiString('20151007'), 'value of until-date editor is correct on init');
 
     this.instance.option('value', 'FREQ=WEEKLY;UNTIL=20151107');
 
-    assert.equal(untilDate.option('value').toString(), recurrenceUtils.getDateByAsciiString('20151107'), 'value of until-date editor is correct');
+    assert.equal(untilDate.option('value').toString(), getRecurrenceProcessor().getDateByAsciiString('20151107'), 'value of until-date editor is correct');
 });
 
 QUnit.test('Recurrence editor should correctly process values from until-date editor', function(assert) {
@@ -393,14 +393,14 @@ QUnit.test('Recurrence editor should correctly process values from until-date ed
     const $untilDate = this.instance.$element().find('.' + REPEAT_DATE_EDITOR);
     const untilDate = $untilDate.dxDateBox('instance');
 
-    untilDate.option('value', recurrenceUtils.getDateByAsciiString('20151107'));
+    untilDate.option('value', getRecurrenceProcessor().getDateByAsciiString('20151107'));
 
     let date = dateUtils.trimTime(new Date(2015, 10, 7));
 
     date.setDate(date.getDate() + 1);
     date = new Date(date.getTime() - 1);
 
-    const untilString = recurrenceUtils.getAsciiStringByDate(date);
+    const untilString = getRecurrenceProcessor().getAsciiStringByDate(date);
 
     assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;UNTIL=' + untilString, 'Recurrence editor has right value');
 });

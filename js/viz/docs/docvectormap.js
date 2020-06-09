@@ -138,7 +138,7 @@ const dxVectorMap = {
         * @name dxVectorMapOptions.layers.palette
         * @extends CommonVizPalette
         */
-        palette: 'default',
+        palette: 'Material',
         /**
         * @name dxVectorMapOptions.layers.paletteSize
         * @type number

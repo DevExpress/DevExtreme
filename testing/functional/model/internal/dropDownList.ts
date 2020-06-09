@@ -14,7 +14,7 @@ export default abstract class DropDownList extends TextBox {
     opened: Promise<boolean>;
     dropDownButton: Selector;
 
-    constructor (id: string) {
+    constructor(id: string) {
         super(id);
 
         const popupOwnerElement = this.getPopupOwnerElement();
@@ -24,11 +24,11 @@ export default abstract class DropDownList extends TextBox {
         this.dropDownButton = this.element.find(`.${CLASS.dropDownButton}`);
     }
 
-    getPopupOwnerElement () {
+    getPopupOwnerElement() {
         return this.input;
     }
 
-    getPopupIdAttr () {
+    getPopupIdAttr() {
         return ATTR.popupId;
     }
 

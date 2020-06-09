@@ -14,7 +14,7 @@ import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import dataUtils from 'core/element_data';
 import dateSerialization from 'core/utils/date_serialization';
-import { SchedulerTestWrapper, initTestMarkup, createWrapper, CLASSES } from './helpers.js';
+import { SchedulerTestWrapper, initTestMarkup, createWrapper, CLASSES } from '../../helpers/scheduler/helpers.js';
 import browser from 'core/utils/browser';
 import { Deferred } from 'core/utils/deferred';
 
@@ -2200,7 +2200,7 @@ QUnit.test('Recurrence long appointment should be rendered correctly when curren
 
     this.instance.option('currentDate', new Date(2015, 5, 25));
 
-    const $appointment = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+    const $appointment = this.instance.$element().find(`.${APPOINTMENT_CLASS}`);
 
     assert.equal($appointment.length, 10, 'Appointments were rendered');
 });

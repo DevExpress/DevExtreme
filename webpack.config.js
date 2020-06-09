@@ -22,6 +22,8 @@ module.exports = {
         'showdown': 'window.showdown',
         'exceljs': 'window.ExcelJS',
         'devexpress-diagram': 'window.DevExpress.diagram',
-        'devexpress-gantt': 'window.DevExpress.Gantt'
+        'devexpress-gantt': 'window.DevExpress.Gantt',
+        'RRule': 'window.RRule',
+        'RRuleSet': 'window.RRuleSet'
     }
 };

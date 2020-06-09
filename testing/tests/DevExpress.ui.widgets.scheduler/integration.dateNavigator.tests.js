@@ -4,7 +4,7 @@ import 'ui/scheduler/ui.scheduler';
 import 'common.css!';
 import 'generic_light.css!';
 import dxPopup from 'ui/popup';
-import { createWrapper } from './helpers.js';
+import { createWrapper } from '../../helpers/scheduler/helpers.js';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(

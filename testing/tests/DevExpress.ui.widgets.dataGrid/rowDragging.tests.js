@@ -667,6 +667,11 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
     // T887897
     ['push', 'indicate'].forEach((dropFeedbackMode) => {
         QUnit.test(`The dragged row should not be displayed in its original position for a moment after row is dropped (dropFeedbackMode = ${dropFeedbackMode})`, function(assert) {
+            if(browser.msie && dropFeedbackMode === 'push') {
+                assert.ok(true, 'no \'push\' support for msie');
+                return;
+            }
+
             // arrange
             const $testElement = $('#container');
             const items = generateData(10);
@@ -723,6 +728,56 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
             assert.notOk($rowElement.hasClass('dx-sortable-source'), 'element has not source class');
             assert.notOk($rowElement.hasClass('dx-sortable-source-hidden'), 'element has not source-hidden class');
         });
+    });
+
+    // T893965
+    QUnit.test('dropFeedback should be switched to \'indicate\' for msie', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.rowDragging.dropFeedbackMode = 'push';
+
+        const rowsView = this.createRowsView();
+        rowsView.render($testElement);
+
+        // act
+        const dropFeedbackMode = rowsView._sortable.option('dropFeedbackMode');
+
+        // assert
+        if(browser.msie) {
+            assert.equal(dropFeedbackMode, 'indicate', 'dropFeedback mode was switched');
+        } else {
+            assert.equal(dropFeedbackMode, 'push', 'dropFeedback mode was not switched');
+        }
+    });
+
+    // T893965
+    QUnit.test('dropFeedback should be switched to \'indicate\' for msie if set at runtime', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.rowDragging = {
+            allowReordering: false
+        };
+
+        const rowsView = this.createRowsView();
+        rowsView.render($testElement);
+
+        // act
+        this.options.rowDragging = {
+            dropFeedbackMode: 'push',
+            allowReordering: true
+        };
+        rowsView.optionChanged({ name: 'rowDragging' });
+
+        const dropFeedbackMode = rowsView._sortable.option('dropFeedbackMode');
+
+        // assert
+        if(browser.msie) {
+            assert.equal(dropFeedbackMode, 'indicate', 'dropFeedback mode was switched');
+        } else {
+            assert.equal(dropFeedbackMode, 'push', 'dropFeedback mode was not switched');
+        }
     });
 });
 

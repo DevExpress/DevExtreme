@@ -7,11 +7,11 @@ const ATTR = {
 export default class DropDownButton extends DropDownList {
     name: string = 'dxDropDownButton';
 
-    getPopupOwnerElement () {
+    getPopupOwnerElement() {
         return this.element;
     }
 
-    getPopupIdAttr () {
+    getPopupIdAttr() {
         return ATTR.popupId;
     }
 }
