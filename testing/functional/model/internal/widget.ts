@@ -15,7 +15,11 @@ export default abstract class Widget {
         this.isFocused = this.element.hasClass(CLASS.focused);
     }
 
-    option (option: string, value?: any): Promise<any> {
+    static addClassPrefix (widgetName: string, className: string) {
+        return `dx-${widgetName.slice(2).toLowerCase() + (className ? '-' + className : '')}`;
+    }
+
+    option(option: string, value?: any): Promise<any> {
         const { element, name } = this;
         const get = () => $(element())[name]('instance').option(option);
         const set = () => $(element())[name]('instance').option(option, value);

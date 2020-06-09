@@ -1,11 +1,11 @@
 import url from '../../helpers/getPageUrl';
 import { Selector } from 'testcafe';
-import { createWidget } from '../../helpers/testHelper';
+import createWidget from '../../helpers/createWidget';
 import ContextMenu from '../../model/contextMenu';
 import { appendElementTo } from './helpers/domUtils';
 
 fixture `ContextMenu`
-    .page(url(__dirname, '../container.html')); 
+    .page(url(__dirname, '../container.html'));
 
 // T755681
 test("Context menu should be shown in the same position when item was added in runtime", async t => {
@@ -21,12 +21,12 @@ test("Context menu should be shown in the same position when item was added in r
     await t
         .expect(contextMenu.getItemCount()).eql(1)
 
-    await t    
+    await t
         .expect(contextMenu.getItemCount()).eql(2)
-        .expect(contextMenu.overlay.getOverlayOffset()).eql(initialOverlayOffset)
-}).before(async t => {
-    const menuTargetID = "menuTarget";
-    await appendElementTo("body", "button", { id: menuTargetID, width: 150, height: 50, backgroundColor: "steelblue" });
+        .expect(contextMenu.overlay.getOverlayOffset()).eql(initialOverlayOffset);
+}).before(async () => {
+    const menuTargetID = 'menuTarget';
+    await appendElementTo('body', 'button', { id: menuTargetID, width: 150, height: 50, backgroundColor: 'steelblue' });
 
     return createWidget("dxContextMenu", {
         items: [ { text: "item1"}],

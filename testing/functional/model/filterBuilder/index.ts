@@ -1,20 +1,11 @@
 import { Selector } from 'testcafe';
-import Widget from './internal/widget';
+import Widget from '../internal/widget';
+import Field from './field';
 
 const CLASS = {
     item: 'dx-filterbuilder-item-field',
     popupContent: 'dx-popup-content',
     treeView: 'dx-treeview'
-};
-
-class Field {
-    element: Selector;
-    text: Promise<string>;
-
-    constructor (element: Selector) {
-        this.element = element;
-        this.text = element.textContent;
-    }
 };
 
 export default class FilterBuilder extends Widget {
@@ -25,7 +16,7 @@ export default class FilterBuilder extends Widget {
         return new Field(fields.nth(index));
     }
 
-    getPopupTreeView(): Selector {
-        return Selector(`.${CLASS.popupContent} .${CLASS.treeView}`)
+    static getPopupTreeView(): Selector {
+        return Selector(`.${CLASS.popupContent} .${CLASS.treeView}`);
     }
 }

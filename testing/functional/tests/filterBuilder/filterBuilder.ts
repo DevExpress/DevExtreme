@@ -17,5 +17,5 @@ test("Field menu should be opened on field click if window scroll exists (T85270
     await t.click(lastField.element);
 
     await t.expect(lastField.text).eql('Test 50');
-    await t.expect(filterBuilder.getPopupTreeView().visible).ok();
+    await t.expect(FilterBuilder.getPopupTreeView().visible).ok();
 });

@@ -1,35 +1,11 @@
 import Widget from './internal/widget';
-import { Selector, ClientFunction } from 'testcafe';
+import { Selector } from 'testcafe';
+import Scrollbar from './internal/scrollbar';
 
 const CLASS = {
-    scrollView: "dx-scrollview",
-    scrollbar: "dx-scrollbar",
-    scrollbarContainer: "dx-scrollable-container",
-    stateInvisible: "dx-state-invisible",
-    scrollableScroll: "dx-scrollable-scroll"
+    scrollView: 'dx-scrollview',
+    scrollbarContainer: 'dx-scrollable-container'
 };
-
-class Scrollbar {
-    element: Selector;
-
-    constructor(postfix: string) {
-        this.element = Selector(`.${CLASS.scrollbar}-${postfix}`);
-    }
-
-    getScroll() {
-        return this.element.find(`.${CLASS.scrollableScroll}`);
-    }
-
-    isScrollVisible(): Promise<boolean> {
-        const scroll = this.getScroll();
-        const invisibleStateClass = CLASS.stateInvisible;
-
-        return ClientFunction(() => !$(scroll()).hasClass(invisibleStateClass), {
-            dependencies: { scroll, invisibleStateClass }
-        })();
-    }
-}
-
 export default class ScrollView extends Widget {
     scrollbar: Scrollbar;
 
@@ -42,7 +18,7 @@ export default class ScrollView extends Widget {
         this.scrollbar = new Scrollbar(direction);
     }
 
-    getScrollViewContainer() {
+    static getScrollViewContainer() {
         return Selector(`.${CLASS.scrollbarContainer}`);
     }
 }

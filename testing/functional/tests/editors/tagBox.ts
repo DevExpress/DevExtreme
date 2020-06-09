@@ -1,6 +1,15 @@
 import url from '../../helpers/getPageUrl';
 import TagBox from '../../model/tagBox';
-import { createWidget } from '../../helpers/testHelper';
+import createWidget from '../../helpers/createWidget';
+
+function createTagBox(): Promise<void> {
+    return createWidget('dxTagBox', {
+        items: ['item1', 'item2', 'item3'],
+        showSelectionControls: true,
+        selectionMode: 'all',
+        applyValueMode: 'useButtons'
+    }, true);
+}
 
 fixture `TagBox`
     .page(url(__dirname, '../container.html'));
@@ -82,12 +91,3 @@ test('Select all checkbox should be focused by tab and closed by escape (T389453
         .expect(tagBox.isFocused).ok()
         .expect(tagBox.opened).notOk();
 }).before(createTagBox);
-
-function createTagBox(): Promise<void> {
-    return createWidget('dxTagBox', {
-        items: ['item1', 'item2', 'item3'],
-        showSelectionControls: true,
-        selectionMode: 'all',
-        applyValueMode: 'useButtons'
-    }, true);
-}
