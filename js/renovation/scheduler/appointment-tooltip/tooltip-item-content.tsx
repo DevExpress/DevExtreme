@@ -33,7 +33,7 @@ export const getOnDeleteButtonClick: GetOnDeleteButtonClick = (
 };
 
 export const viewFunction = (viewModel: TooltipItemContent) => {
-  const useTemplate = !!viewModel.props.itemContent;
+  const useTemplate = !!viewModel.props.itemContentTemplate;
   const onDeleteButtonClick = getOnDeleteButtonClick(
     viewModel.props, viewModel.data, viewModel.currentData,
   );
@@ -46,7 +46,7 @@ export const viewFunction = (viewModel: TooltipItemContent) => {
   return (
     <Fragment>
       {useTemplate && (
-        <viewModel.props.itemContent
+        <viewModel.props.itemContentTemplate
           model={{
             appointmentData: viewModel.data,
             targetedAppointmentData: viewModel.currentData,
@@ -84,7 +84,7 @@ export class TooltipItemContentProps {
 
   @OneWay() showDeleteButton?: boolean = true;
 
-  @Template() itemContent?: any;
+  @Template() itemContentTemplate?: any;
 
   @Event() onDelete?: (
     data?: dxSchedulerAppointment, currentData?: dxSchedulerAppointment,
