@@ -306,6 +306,7 @@
         "dxFileManager-errorMaxFileSizeExceeded": "Kích thước của tập tin vượt quá kích thước tối đa cho phép",
         "dxFileManager-errorInvalidSymbols": "TODO",
         "dxFileManager-errorDefault": "Lỗi không xác định.",
+        "dxFileManager-errorDirectoryOpenFailed": "TODO",
 
         "dxDiagram-categoryGeneral": "Chung",
         "dxDiagram-categoryFlowchart": "Lưu đồ",

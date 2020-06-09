@@ -1,3 +1,5 @@
+'use strict';
+
 const gulp = require('gulp');
 const path = require('path');
 const rename = require('gulp-rename');
@@ -132,7 +134,10 @@ gulp.task('localization-generated-sources', gulp.parallel([
             .pipe(template({
                 json: serializeObject(source.data)
             }))
-            .pipe(lint({ fix: true }))
+            .pipe(lint({
+                fix: true,
+                configFile: '.eslintrc'
+            }))
             .pipe(lint.format())
             .pipe(rename(source.filename))
             .pipe(gulp.dest(source.destination));

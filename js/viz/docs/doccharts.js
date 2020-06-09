@@ -534,7 +534,8 @@ const dxChart = {
                 opacity: undefined
             },
             wordWrap: "normal",
-            textOverflow: "none"
+            textOverflow: "none",
+            position: 'outside'
         },
         grid: {
             /**

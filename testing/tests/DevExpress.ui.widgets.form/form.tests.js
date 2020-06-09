@@ -2058,6 +2058,90 @@ QUnit.test('The exception is not thrown when option of an unknown item is change
         assert.deepEqual(form.option('items[0].editorOptions'), { width: 200 }, 'editor options of first item');
         assert.deepEqual(form.option('items[1].buttonOptions'), { width: 100 }, 'button options of second item');
     });
+
+    QUnit.test(`Set a new validation rules when groups are nested one into another and use the ${optionWay} method`, function(assert) {
+        const form = $('#form').dxForm({
+            formData: {
+                name: null,
+                lastName: null
+            },
+            showValidationSummary: true,
+            items: [{
+                itemType: 'group',
+                name: 'group1',
+                items: [{
+                    dataField: 'name'
+                }, {
+                    itemType: 'group',
+                    name: 'group2',
+                    items: [{
+                        dataField: 'lastName'
+                    }]
+                }]
+            }]
+        }).dxForm('instance');
+
+        form.beginUpdate();
+
+        if(useItemOption) {
+            form.itemOption('group1.name', 'validationRules', [{ type: 'required', message: 'Name is required' }]);
+            form.itemOption('group1.group2.lastName', 'validationRules', [{ type: 'required', message: 'Last Name is required' }]);
+        } else {
+            form.option('items[0].items[0].validationRules', [{ type: 'required', message: 'Name is required' }]);
+            form.option('items[0].items[1].items[0].validationRules', [{ type: 'required', message: 'Last Name is required' }]);
+        }
+
+        form.endUpdate();
+        form.validate();
+
+        const $summaryItemContents = $('.dx-validationsummary-item-content');
+        assert.equal($summaryItemContents.length, 2, 'validation summary items count');
+        assert.equal($summaryItemContents.eq(0).text(), 'Name is required', 'text of the first summary item');
+        assert.equal($summaryItemContents.eq(1).text(), 'Last Name is required', 'text of the second summary item');
+    });
+
+    QUnit.test(`Set a new validation rules when tabs are nested into a group and use the ${optionWay} method`, function(assert) {
+        const form = $('#form').dxForm({
+            formData: {
+                name: null,
+                lastName: null
+            },
+            showValidationSummary: true,
+            items: [{
+                itemType: 'group',
+                name: 'group1',
+                items: [{
+                    dataField: 'name'
+                }, {
+                    itemType: 'tabbed',
+                    tabs: [{
+                        title: 'title1',
+                        items: [{
+                            dataField: 'lastName'
+                        }]
+                    }]
+                }]
+            }]
+        }).dxForm('instance');
+
+        form.beginUpdate();
+
+        if(useItemOption) {
+            form.itemOption('group1.name', 'validationRules', [{ type: 'required', message: 'Name is required' }]);
+            form.itemOption('group1.title1.lastName', 'validationRules', [{ type: 'required', message: 'Last Name is required' }]);
+        } else {
+            form.option('items[0].items[0].validationRules', [{ type: 'required', message: 'Name is required' }]);
+            form.option('items[0].items[1].tabs[0].items[0].validationRules', [{ type: 'required', message: 'Last Name is required' }]);
+        }
+
+        form.endUpdate();
+        form.validate();
+
+        const $summaryItemContents = $('.dx-validationsummary-item-content');
+        assert.equal($summaryItemContents.length, 2, 'validation summary items count');
+        assert.equal($summaryItemContents.eq(0).text(), 'Name is required', 'text of the first summary item');
+        assert.equal($summaryItemContents.eq(1).text(), 'Last Name is required', 'text of the second summary item');
+    });
 });
 
 QUnit.test('Changing the item\'s option via the itemOption when these options are set as object without re-render form', function(assert) {

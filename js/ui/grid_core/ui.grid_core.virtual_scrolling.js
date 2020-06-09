@@ -7,6 +7,8 @@ import { each } from '../../core/utils/iterator';
 import { Deferred } from '../../core/utils/deferred';
 import translator from '../../animation/translator';
 import LoadIndicator from '../load_indicator';
+import browser from '../../core/utils/browser';
+import { getBoundingRect } from '../../core/utils/position';
 
 const TABLE_CLASS = 'table';
 const BOTTOM_LOAD_PANEL_CLASS = 'bottom-load-panel';
@@ -471,7 +473,7 @@ const VirtualScrollingRowsViewExtender = (function() {
             if(!that.option('legacyRendering') && (isVirtualMode(that) || isVirtualRowRendering(that))) {
                 if(!isRender) {
                     const rowHeights = that._getRowElements(that._tableElement).toArray().map(function(row) {
-                        return row.getBoundingClientRect().height;
+                        return getBoundingRect(row).height;
                     });
 
                     dataController.setContentSize(rowHeights);
@@ -781,7 +783,8 @@ module.exports = {
                                     const $rowElement = rowElement && rowElement[0] && $(rowElement[0]);
                                     let top = $rowElement && $rowElement.position().top;
 
-                                    if(top > 0) {
+                                    const allowedTopOffset = browser.mozilla || browser.msie ? 1 : 0; // T884308
+                                    if(top > allowedTopOffset) {
                                         top = Math.round(top + $rowElement.outerHeight() * (itemIndex % 1));
                                         scrollable.scrollTo({ y: top });
                                     }

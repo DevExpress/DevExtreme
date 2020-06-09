@@ -376,27 +376,6 @@ QUnit.module('Drawer behavior', () => {
         assert.ok($(instance._overlay.option('position').of).hasClass('dx-drawer-content'), 'target is ok');
     });
 
-    QUnit.test('show warning if deprecated \'target\' option is used', function(assert) {
-        sinon.spy(errors, 'log');
-
-        try {
-            $('#drawer').dxDrawer({
-                openedStateMode: 'overlap',
-                target: '#someID'
-            });
-
-            assert.deepEqual(errors.log.lastCall.args, [
-                'W0001',
-                'dxDrawer',
-                'target',
-                '20.1',
-                'Functionality associated with this option is not intended for the Drawer widget.'
-            ], 'args of the log method');
-        } finally {
-            errors.log.restore();
-        }
-    });
-
     QUnit.test('content() function', function(assert) {
         const $element = $('#drawer').dxDrawer({});
         const instance = $element.dxDrawer('instance');
@@ -948,7 +927,6 @@ QUnit.module('Animation', {
 
         const drawer = $drawer.dxDrawer('instance');
 
-
         drawer.option('animationDuration', 300);
 
         drawer.toggle();
@@ -1171,14 +1149,23 @@ QUnit.module('Rtl', () => {
     });
 });
 
-QUnit.module('CloseOnOutsideClick', () => {
+QUnit.module('CloseOnOutsideClick', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+        this.clock = undefined;
+    }
+}, () => {
     QUnit.test('drawer should be hidden after click on content', function(assert) {
+        const clock = sinon.useFakeTimers();
         const drawer = $('#drawer').dxDrawer({
             closeOnOutsideClick: false,
             opened: true,
-            shading: true
-        })
-            .dxDrawer('instance');
+            shading: true,
+            animationDuration: 0
+        }).dxDrawer('instance');
         const $content = drawer.viewContent();
 
         $($content).trigger('dxclick');
@@ -1186,7 +1173,9 @@ QUnit.module('CloseOnOutsideClick', () => {
         drawer.option('closeOnOutsideClick', true);
 
         const $shader = drawer.$element().find('.' + DRAWER_SHADER_CLASS);
+
         $($content).trigger('dxclick');
+        clock.tick();
 
         assert.equal(drawer.option('opened'), false, 'drawer is hidden');
         assert.ok($shader.is(':hidden'), 'shader is hidden');
@@ -2052,5 +2041,52 @@ QUnit.module('Modes changing', {
         const $panel = this.instance.$element().find('.' + DRAWER_PANEL_CONTENT_CLASS);
 
         assert.equal($panel.length, 1, 'one panel is rendered');
+    });
+});
+
+QUnit.module('Deprecated options', {
+    beforeEach: function() {
+        fx.off = true;
+    },
+    afterEach: function() {
+        fx.off = false;
+        this.stub.restore();
+    }
+}, () => {
+    ['shrink', 'overlap', 'push'].forEach((openedStateMode) => {
+        QUnit.test(`warnings for deprecated 'target' option, ${openedStateMode}, target: notInitialized`, function(assert) {
+            assert.expect(1);
+            this.stub = sinon.stub(errors, 'log', () => {
+                assert.strictEqual(true, false, 'error.log should not be called');
+            });
+
+            $('#drawer').dxDrawer({
+                openedStateMode: openedStateMode
+            });
+
+            assert.strictEqual(this.stub.callCount, 0, 'error.log.callCount');
+        });
+
+        [null, undefined, '#someID'].forEach((target) => {
+            QUnit.test(`warnings for deprecated 'target' option, openedStateMode: ${openedStateMode}, target: ${target}`, function(assert) {
+                assert.expect(2);
+                this.stub = sinon.stub(errors, 'log', () => {
+                    assert.deepEqual(errors.log.lastCall.args, [
+                        'W0001',
+                        'dxDrawer',
+                        'target',
+                        '20.1',
+                        'Functionality associated with this option is not intended for the Drawer widget.'
+                    ], 'args of the log method');
+                });
+
+                $('#drawer').dxDrawer({
+                    openedStateMode: openedStateMode,
+                    target: target
+                });
+
+                assert.strictEqual(this.stub.callCount, 1, 'error.log.callCount');
+            });
+        });
     });
 });

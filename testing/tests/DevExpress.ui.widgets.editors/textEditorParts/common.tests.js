@@ -8,7 +8,6 @@ import caretWorkaround from './caretWorkaround.js';
 import themes from 'ui/themes';
 import config from 'core/config';
 import { noop } from 'core/utils/common';
-import browser from 'core/utils/browser';
 import consoleUtils from 'core/utils/console';
 
 import 'ui/text_box/ui.text_editor';
@@ -342,6 +341,31 @@ QUnit.module('general', {}, () => {
         assert.strictEqual(blurStub.callCount, 0, 'FocusOut event has not been triggered');
     });
 
+    QUnit.test('TextEditor should pass integration options to the nested buttons (T894344)', function(assert) {
+        const text = 'my template';
+        const editor = $('#texteditor').dxTextEditor({
+            buttons: [{
+                name: 'testButton',
+                options: {
+                    template: 'custom',
+                    text: 'default text'
+                }
+            }],
+            integrationOptions: {
+                templates: {
+                    'custom': {
+                        render: function(args) {
+                            $('<span>').text(text).appendTo(args.container);
+                        }
+                    }
+                }
+            }
+        }).dxTextEditor('instance');
+
+        const buttonText = editor.getButton('testButton').$element().text();
+        assert.strictEqual(buttonText, text);
+    });
+
     QUnit.test('T220209 - the \'displayValueFormatter\' option', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
             value: 'First',
@@ -417,19 +441,6 @@ QUnit.module('general', {}, () => {
         assert.ok($textEditor.hasClass('dx-editor-underlined'));
 
         themes.isMaterial = realIsMaterial;
-    });
-
-    QUnit.test('editors has collapsed class in IE11 (T879885)', function(assert) {
-        const origBrowser = $.extend({}, browser);
-        browser.msie = true;
-        browser.version = '11.0';
-        try {
-            const $textEditor = $('#texteditor').dxTextEditor({});
-            assert.ok($textEditor.hasClass('dx-texteditor-collapsed'));
-        } finally {
-            browser.msie = origBrowser.msie;
-            browser.version = origBrowser.version;
-        }
     });
 });
 

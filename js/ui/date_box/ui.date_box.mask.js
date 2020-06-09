@@ -467,6 +467,10 @@ const DateBoxMask = DateBoxBase.inherit({
 
     _saveMaskValue() {
         const value = this._maskValue && new Date(this._maskValue);
+        if(value && this.option('type') === 'date') {
+            value.setHours(0, 0, 0, 0);
+        }
+
         this._initialMaskValue = new Date(value);
         this.dateOption('value', value);
     },
@@ -561,10 +565,14 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _valueChangeEventHandler(e) {
+        const text = this.option('text');
+
         if(this._useMaskBehavior()) {
             this._saveValueChangeEvent(e);
-            if(!this.option('text')) {
+            if(!text) {
                 this._maskValue = null;
+            } else if(this._maskValue === null) {
+                this._loadMaskValue(text);
             }
             this._saveMaskValue();
         } else {

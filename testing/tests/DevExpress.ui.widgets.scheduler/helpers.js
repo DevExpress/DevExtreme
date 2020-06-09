@@ -10,6 +10,14 @@ const SCHEDULER_ID = 'scheduler';
 const TEST_ROOT_ELEMENT_ID = 'qunit-fixture';
 
 export const CLASSES = {
+    header: '.dx-scheduler-header-panel',
+    navigator: '.dx-scheduler-navigator',
+    navigatorCaption: '.dx-scheduler-navigator-caption',
+    navigatorPrevButton: '.dx-scheduler-navigator-previous',
+    navigatorNextButton: '.dx-scheduler-navigator-next',
+    navigatorPopover: '.dx-scheduler-navigator-calendar-popover',
+    navigatorPopoverContent: '.dx-scheduler-navigator-calendar-popover > .dx-overlay-content',
+
     resizableHandle: {
         left: '.dx-resizable-handle-left',
         right: '.dx-resizable-handle-right'
@@ -22,8 +30,85 @@ export const createWrapper = (option) => new SchedulerTestWrapper($(`#${SCHEDULE
 
 export const isDesktopEnvironment = () => devices.real().deviceType === 'desktop';
 
-export class SchedulerTestWrapper {
+class ElementWrapper {
+    constructor(selector, parent) {
+        this.selector = selector;
+        this.parent = parent;
+    }
+
+    getElement() {
+        if(this.parent) {
+            return this.parent.find(this.selector);
+        }
+        return $(this.selector);
+    }
+}
+
+class ClickElementWrapper extends ElementWrapper {
+    click() {
+        this.getElement().trigger('dxclick');
+    }
+}
+
+class NavigatorCaption extends ClickElementWrapper {
+    constructor(parent) {
+        super(CLASSES.navigatorCaption, parent);
+    }
+
+    getText() {
+        return this.getElement().text();
+    }
+}
+
+class NavigatorPopover extends ElementWrapper {
+    get isVisible() {
+        return this.content.getElement().is(':visible');
+    }
+
+    get content() {
+        return new ElementWrapper(CLASSES.navigatorPopoverContent);
+    }
+
+    get hasScroll() {
+        return this.content.getElement().find('.dx-scrollable').length > 0;
+    }
+}
+
+class NavigatorWrapper extends ElementWrapper {
+    constructor() {
+        super(CLASSES.navigator);
+    }
+
+    get caption() {
+        return new NavigatorCaption(this.getElement());
+    }
+
+    get prevButton() {
+        return new ClickElementWrapper(CLASSES.navigatorPrevButton);
+    }
+
+    get nextButton() {
+        return new ClickElementWrapper(CLASSES.navigatorNextButton);
+    }
+
+    get popover() {
+        return new NavigatorPopover(CLASSES.navigatorPopover);
+    }
+}
+
+class HeaderWrapper extends ElementWrapper {
+    constructor() {
+        super(CLASSES.header);
+    }
+
+    get navigator() {
+        return new NavigatorWrapper();
+    }
+}
+
+export class SchedulerTestWrapper extends ElementWrapper {
     constructor(instance) {
+        super(`.${SCHEDULER_ID}`);
         this.instance = instance;
 
         this.timePanel = {
@@ -174,18 +259,24 @@ export class SchedulerTestWrapper {
                 return buttonNames.every((name, index) => $buttons.eq(index).hasClass(`dx-popup-${name}`));
             },
 
-            getDoneButton: () => this.appointmentPopup.getPopup().find('.dx-popup-done'),
+            getDoneButton: () => this.appointmentPopup.getPopup().find('.dx-button.dx-popup-done'),
             clickDoneButton: () => this.appointmentPopup.getDoneButton().trigger('dxclick'),
 
             getCancelButton: () => this.appointmentPopup.getPopup().find('.dx-popup-cancel'),
             clickCancelButton: () => this.appointmentPopup.getCancelButton().trigger('dxclick'),
             saveAppointmentData: () => this.instance._appointmentPopup.saveEditData.call(this.instance._appointmentPopup),
+
+            hasLoadPanel: () => this.appointmentPopup.getPopup().find('.dx-loadpanel').length !== 0,
+
+            getInstance: () => this.instance._appointmentPopup
         };
 
         this.appointmentForm = {
             getFormInstance: () => this.appointmentPopup.getPopup().find('.dx-form').dxForm('instance'),
             getEditor: name => this.appointmentForm.getFormInstance().getEditor(name),
             setSubject: (value) => this.appointmentForm.getEditor('text').option('value', value),
+            setStartDate: (value) => this.appointmentForm.getEditor('startDate').option('value', value),
+            setEndDate: (value) => this.appointmentForm.getEditor('endDate').option('value', value),
 
             hasFormSingleColumn: () => this.appointmentPopup.getPopup().find('.dx-responsivebox').hasClass('dx-responsivebox-screen-xs'),
             getRecurrentAppointmentFormDialogButtons: () => $('.dx-dialog-buttons .dx-button'),
@@ -255,27 +346,8 @@ export class SchedulerTestWrapper {
                 getGroupHeaders: (index) => this.workSpace.groups.getGroup(index).find('.dx-scheduler-group-header'),
                 getGroupHeader: (index, groupRow = 0) => this.workSpace.groups.getGroupHeaders(groupRow).eq(index),
             },
+            clickCell: (rowIndex, cellIndex) => this.workSpace.getCell(rowIndex, cellIndex).trigger('dxclick')
         };
-
-        this.navigator = {
-            getNavigator: () => $('.dx-scheduler-navigator'),
-            getCaptionElement: () => {
-                return this.navigator.getNavigator().find('.dx-scheduler-navigator-caption');
-            },
-            getCaption: () => this.navigator.getCaptionElement().text(),
-            clickOnPrevButton: () => {
-                this.navigator.getNavigator().find('.dx-scheduler-navigator-previous').trigger('dxclick');
-            },
-            clickOnNextButton: () => {
-                this.navigator.getNavigator().find('.dx-scheduler-navigator-next').trigger('dxclick');
-            },
-            click: () => {
-                this.navigator.getCaptionElement().trigger('dxclick');
-            },
-            isPopupVisible: () => {
-                return $('.dx-scheduler-navigator-calendar-popover > .dx-overlay-content').is(':visible');
-            }
-        },
 
         this.viewSwitcher = {
             getElement: () => $('.dx-dropdownmenu-popup-wrapper.dx-position-bottom'),
@@ -293,10 +365,6 @@ export class SchedulerTestWrapper {
             getLabel: () => $('.dx-scheduler-view-switcher-label')
         },
 
-        this.header = {
-            get: () => $('.dx-scheduler-header-panel')
-        },
-
         this.grouping = {
             getGroupHeaders: () => $('.dx-scheduler-group-header'),
             getGroupHeader: (index = 0) => this.grouping.getGroupHeaders().eq(index),
@@ -308,6 +376,10 @@ export class SchedulerTestWrapper {
             getGroupTable: () => $('.dx-scheduler-group-table'),
             getGroupTableHeight: () => this.grouping.getGroupTable().height()
         };
+    }
+
+    get header() {
+        return new HeaderWrapper();
     }
 
     option(name, value) {
@@ -329,5 +401,9 @@ export class SchedulerTestWrapper {
     hideControl() {
         $(`#${TEST_ROOT_ELEMENT_ID}`).css('top', '');
         $(`#${TEST_ROOT_ELEMENT_ID}`).css('left', '');
+    }
+
+    get isDesktop() {
+        return isDesktopEnvironment();
     }
 }

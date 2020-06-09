@@ -19,9 +19,9 @@
 }
 
 @GENERIC_TABS_BORDER_WIDTH: @GENERIC_BASE_BORDER_WIDTH;
-@GENERIC_TABS_BORDER: 1px solid @tabs-border-color;
-@GENERIC_TABS_TRANSPARENT_BORDER: 1px solid @tabs-tab-bg;
-@GENERIC_TAB_FOCUS_BORDER: 1px solid @tabs-focused-border-color;
+@GENERIC_TABS_BORDER: @GENERIC_TABS_BORDER_WIDTH solid @tabs-border-color;
+@GENERIC_TABS_TRANSPARENT_BORDER: @GENERIC_TABS_BORDER_WIDTH solid @tabs-tab-bg;
+@GENERIC_TAB_FOCUS_BORDER: @GENERIC_TABS_BORDER_WIDTH solid @tabs-focused-border-color;
 
 
 .dx-tabs-border-mixin(@border-horizontal, @border-vertical) {

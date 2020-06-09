@@ -118,6 +118,8 @@
 
 @MATERIAL_SCHEDULER_COMPACT_APPOINTMENT_BUTTON_BORDER_RADIUS: 12px;
 
+@MATERIAL_SCHEDULER_AGENDA_TIME_PANEL_CELL_PADDING: 8px;
+
 .scheduler-mixin();
 
 .dx-scheduler-scrollable-fixed-content {
@@ -140,14 +142,14 @@
         }
     }
 
-    padding-right: 8px;
+    padding-right: @MATERIAL_SCHEDULER_AGENDA_TIME_PANEL_CELL_PADDING;
 
     .dx-scheduler-small & {
         padding-right: 2px;
     }
 
     .dx-rtl & {
-        padding-left: 8px;
+        padding-left: @MATERIAL_SCHEDULER_AGENDA_TIME_PANEL_CELL_PADDING;
         padding-right: 0;
     }
 
@@ -922,9 +924,13 @@
 
     .dx-scheduler-time-panel-cell {
         text-align: left;
+        padding-left: @MATERIAL_SCHEDULER_AGENDA_TIME_PANEL_CELL_PADDING;
+        padding-right: 0;
 
         .dx-rtl & {
             text-align: right;
+            padding-right: @MATERIAL_SCHEDULER_AGENDA_TIME_PANEL_CELL_PADDING;
+            padding-left: 0;
         }
 
         > span {

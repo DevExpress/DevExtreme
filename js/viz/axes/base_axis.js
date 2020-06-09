@@ -183,15 +183,37 @@ function validateAxisOptions(options) {
     const defaultPosition = options.isHorizontal ? BOTTOM : LEFT;
     const secondaryPosition = options.isHorizontal ? TOP : RIGHT;
 
+    let labelPosition = labelOptions.position;
+
     if(position !== defaultPosition && position !== secondaryPosition) {
         position = defaultPosition;
     }
 
-    if(position === RIGHT && !labelOptions.userAlignment) {
-        labelOptions.alignment = LEFT;
+    if(!labelPosition || labelPosition === 'outside') {
+        labelPosition = position;
+    } else if(labelPosition === 'inside') {
+        labelPosition = {
+            [TOP]: BOTTOM,
+            [BOTTOM]: TOP,
+            [LEFT]: RIGHT,
+            [RIGHT]: LEFT
+        }[position];
+    }
+    if(labelPosition !== defaultPosition && labelPosition !== secondaryPosition) {
+        labelPosition = position;
+    }
+
+    if(labelOptions.alignment !== CENTER && !labelOptions.userAlignment) {
+        labelOptions.alignment = {
+            [TOP]: CENTER,
+            [BOTTOM]: CENTER,
+            [LEFT]: RIGHT,
+            [RIGHT]: LEFT
+        }[labelPosition];
     }
 
     options.position = position;
+    labelOptions.position = labelPosition;
     options.hoverMode = options.hoverMode ? options.hoverMode.toLowerCase() : 'none';
     labelOptions.minSpacing = labelOptions.minSpacing ?? DEFAULT_AXIS_LABEL_SPACING;
 
@@ -343,7 +365,7 @@ Axis.prototype = {
         return false;
     },
 
-    getCustomPositionAxis: _noop,
+    getOppositeAxis: _noop,
 
     getCustomPosition: _noop,
 
@@ -575,6 +597,8 @@ Axis.prototype = {
 
     _adjustLabels: function(offset) {
         const that = this;
+        const options = that.getOptions();
+        const positionsAreConsistent = options.position === options.label.position;
         const maxSize = that._majorTicks.reduce(function(size, tick) {
             if(!tick.label) return size;
             const bBox = tick.labelRotationAngle ? vizUtils.rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle) : tick.labelBBox;
@@ -584,11 +608,11 @@ Axis.prototype = {
                 offset: _max(size.offset || 0, tick.labelOffset || 0)
             };
         }, {});
-        const additionalOffset = that._isHorizontal ? maxSize.height : maxSize.width;
+        const additionalOffset = positionsAreConsistent ? (that._isHorizontal ? maxSize.height : maxSize.width) : 0;
 
         that._adjustLabelsCoord(offset, maxSize.width);
 
-        return offset + additionalOffset + (additionalOffset && that._options.label.indentFromAxis) + maxSize.offset;
+        return offset + additionalOffset + (additionalOffset && that._options.label.indentFromAxis) + (positionsAreConsistent ? maxSize.offset : 0);
     },
 
     _getLabelAdjustedCoord: function(tick, offset, maxWidth) {
@@ -596,11 +620,11 @@ Axis.prototype = {
         const that = this;
         const options = that._options;
         const box = vizUtils.rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle || 0);
-        const position = options.position;
         const textAlign = tick.labelAlignment || options.label.alignment;
         const isDiscrete = that._options.type === 'discrete';
         const isFlatLabel = tick.labelRotationAngle % 90 === 0;
         const indentFromAxis = options.label.indentFromAxis;
+        const labelPosition = options.label.position;
         const axisPosition = that._axisPosition;
         const labelCoords = tick.labelCoords;
         const labelX = labelCoords.x;
@@ -608,7 +632,7 @@ Axis.prototype = {
         let translateY;
 
         if(that._isHorizontal) {
-            if(position === BOTTOM) {
+            if(labelPosition === BOTTOM) {
                 translateY = axisPosition + indentFromAxis - box.y + offset;
             } else {
                 translateY = axisPosition - indentFromAxis - (box.y + box.height) - offset;
@@ -623,7 +647,7 @@ Axis.prototype = {
             }
         } else {
             translateY = labelCoords.y - box.y - box.height / 2;
-            if(position === LEFT) {
+            if(labelPosition === LEFT) {
                 if(textAlign === LEFT) {
                     translateX = axisPosition - indentFromAxis - maxWidth - box.x;
                 } else if(textAlign === CENTER) {

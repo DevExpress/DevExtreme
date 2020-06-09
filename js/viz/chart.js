@@ -575,8 +575,8 @@ const dxChart = AdvancedChart.inherit({
         const valueAxis = that._valueAxes.filter(v => v.pane === argumentAxis.pane && (!valueAxisName || valueAxisName === v.name))[0];
 
         that._valueAxes.forEach(v => {
-            if(argumentAxis !== v.getCustomPositionAxis()) {
-                v.getCustomPositionAxis = () => {
+            if(argumentAxis !== v.getOppositeAxis()) {
+                v.getOppositeAxis = () => {
                     return argumentAxis;
                 };
                 v.customPositionIsBoundaryOppositeAxis = () => {
@@ -585,15 +585,15 @@ const dxChart = AdvancedChart.inherit({
             }
         });
 
-        if(_isDefined(valueAxis) && valueAxis !== argumentAxis.getCustomPositionAxis()) {
-            argumentAxis.getCustomPositionAxis = () => {
+        if(_isDefined(valueAxis) && valueAxis !== argumentAxis.getOppositeAxis()) {
+            argumentAxis.getOppositeAxis = () => {
                 return valueAxis;
             };
             argumentAxis.customPositionIsBoundaryOppositeAxis = () => {
                 return that._valueAxes.some(v => v.customPositionIsBoundary());
             };
-        } else if(_isDefined(argumentAxis.getCustomPositionAxis()) && !_isDefined(valueAxis)) {
-            argumentAxis.getCustomPositionAxis = noop;
+        } else if(_isDefined(argumentAxis.getOppositeAxis()) && !_isDefined(valueAxis)) {
+            argumentAxis.getOppositeAxis = noop;
         }
     },
 
@@ -941,7 +941,7 @@ const dxChart = AdvancedChart.inherit({
         const rotated = that._isRotated();
         const synchronizeMultiAxes = that._themeManager.getOptions('synchronizeMultiAxes');
         const scrollBar = that._scrollBar ? [that._scrollBar] : [];
-        const extendedArgAxes = scrollBar.concat(that._argumentAxes);
+        const extendedArgAxes = that._isArgumentAxisBeforeScrollBar() ? that._argumentAxes.concat(scrollBar) : scrollBar.concat(that._argumentAxes);
         const verticalAxes = rotated ? that._argumentAxes : that._valueAxes;
         const verticalElements = rotated ? extendedArgAxes : that._valueAxes;
         const horizontalAxes = rotated ? that._valueAxes : that._argumentAxes;
@@ -1111,7 +1111,8 @@ const dxChart = AdvancedChart.inherit({
         this._renderer.stopAllAnimations(true);
         const that = this;
         const rotated = that._isRotated();
-        const extendedArgAxes = (that._scrollBar ? [that._scrollBar] : []).concat(that._argumentAxes);
+        const scrollBar = that._scrollBar ? [that._scrollBar] : [];
+        const extendedArgAxes = that._isArgumentAxisBeforeScrollBar() ? that._argumentAxes.concat(scrollBar) : scrollBar.concat(that._argumentAxes);
         const verticalAxes = rotated ? extendedArgAxes : that._valueAxes;
         const horizontalAxes = rotated ? that._valueAxes : extendedArgAxes;
         const allAxes = verticalAxes.concat(horizontalAxes);
@@ -1137,6 +1138,21 @@ const dxChart = AdvancedChart.inherit({
 
             that.panes.forEach(pane => _extend(pane.canvas, panesCanvases[pane.name]));
         }
+    },
+
+    _isArgumentAxisBeforeScrollBar() {
+        const that = this;
+        const argumentAxis = that.getArgumentAxis();
+
+        if(that._scrollBar) {
+            const argAxisPosition = argumentAxis.getResolvedBoundaryPosition();
+            const argAxisLabelPosition = argumentAxis.getOptions().label?.position;
+            const scrollBarPosition = that._scrollBar.getOptions().position;
+
+            return argumentAxis.hasCustomPosition() || scrollBarPosition === argAxisPosition && argAxisLabelPosition !== scrollBarPosition;
+        }
+
+        return false;
     },
 
     _getPanesParameters: function() {

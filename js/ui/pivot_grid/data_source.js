@@ -479,7 +479,22 @@ module.exports = Class.inherit((function() {
 
         result.push.apply(result, mergedGroups);
 
+        assignGroupIndexes(result);
+
         return result;
+    }
+
+    function assignGroupIndexes(fields) {
+        fields.forEach(field => {
+            if(field.groupName && field.groupInterval && field.groupIndex === undefined) {
+                const maxGroupIndex = fields
+                    .filter(f => f.groupName === field.groupName && isNumeric(f.groupIndex))
+                    .map(f => f.groupIndex)
+                    .reduce((prev, current) => Math.max(prev, current), -1);
+
+                field.groupIndex = maxGroupIndex + 1;
+            }
+        });
     }
 
     function getFields(that) {
@@ -1262,14 +1277,12 @@ module.exports = Class.inherit((function() {
 
         expandHeaderItem: function(area, path) {
             const that = this;
-            let hasCache;
             const headerItems = area === 'column' ? that._data.columns : that._data.rows;
             const headerItem = findHeaderItem(headerItems, path);
-            let options;
 
             if(headerItem && !headerItem.children) {
-                hasCache = !!headerItem.collapsedChildren;
-                options = {
+                const hasCache = !!headerItem.collapsedChildren;
+                const options = {
                     area: area,
                     path: path,
                     expanded: true,
@@ -1280,7 +1293,7 @@ module.exports = Class.inherit((function() {
                     headerItem.children = headerItem.collapsedChildren;
                     delete headerItem.collapsedChildren;
                     that._update();
-                } else {
+                } else if(this.store()) {
                     that.load(options);
                 }
                 return hasCache;

@@ -1,6 +1,8 @@
 // Tests for the version.js module
 // Note: label and revision can't be set at the same time
 
+'use strict';
+
 const versionFunc = require('./version');
 
 const cases = [

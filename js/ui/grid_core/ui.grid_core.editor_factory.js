@@ -8,6 +8,7 @@ import positionUtils from '../../animation/position';
 import { addNamespace, fireEvent, normalizeKeyName } from '../../events/utils';
 import browser from '../../core/utils/browser';
 import { extend } from '../../core/utils/extend';
+import { getBoundingRect } from '../../core/utils/position';
 import EditorFactoryMixin from '../shared/ui.editor_factory_mixin';
 import { isElementInCurrentGrid } from './ui.grid_core.utils';
 
@@ -142,7 +143,7 @@ const EditorFactory = modules.ViewController.inherit({
             // align "left bottom" for IE, align "right bottom" for Mozilla
             const align = browser.msie ? 'left bottom' : browser.mozilla ? 'right bottom' : 'left top';
             const $content = $element.closest('.' + that.addWidgetPrefix(CONTENT_CLASS));
-            const elemCoord = $element[0].getBoundingClientRect();
+            const elemCoord = getBoundingRect($element.get(0));
 
             that._$focusOverlay
                 .removeClass(DX_HIDDEN)

@@ -663,6 +663,13 @@
 
     .dx-scheduler-time-panel-cell {
         padding-top: @GENERIC_SCHEDULER_AGENDA_TIME_CELL_PADDING;
+        padding-left: @GENERIC_SCHEDULER_AGENDA_TIME_CELL_PADDING;
+        padding-right: 0;
+
+        .dx-rtl & {
+            padding-right: @GENERIC_SCHEDULER_AGENDA_TIME_CELL_PADDING;
+            padding-left: 0;
+        }
     }
 
     .dx-scheduler-group-header-content,

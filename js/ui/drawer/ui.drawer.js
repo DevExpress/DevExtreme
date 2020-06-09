@@ -4,6 +4,7 @@ import typeUtils from '../../core/utils/type';
 import { getPublicElement } from '../../core/utils/dom';
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
+import { getBoundingRect } from '../../core/utils/position';
 import Widget from '../widget/ui.widget';
 import { EmptyTemplate } from '../../core/templates/empty_template';
 import { hasWindow } from '../../core/utils/window';
@@ -146,7 +147,6 @@ const Drawer = Widget.inherit({
             }
 
             this.hide();
-            this._toggleShaderVisibility(false);
         }
     },
 
@@ -275,7 +275,7 @@ const Drawer = Widget.inherit({
     },
 
     getOverlayTarget() {
-        return this.option('target') || this._$wrapper;
+        return this._options.silent('target') || this._$wrapper;
     },
 
     getOverlay() {
@@ -305,7 +305,7 @@ const Drawer = Widget.inherit({
     getElementWidth($element) {
         const $children = $element.children();
 
-        return $children.length ? $children.eq(0).get(0).getBoundingClientRect().width : $element.get(0).getBoundingClientRect().width;
+        return $children.length ? getBoundingRect($children.eq(0).get(0)).width : getBoundingRect($element.get(0)).width;
     },
 
     getRealPanelHeight() {
@@ -323,7 +323,7 @@ const Drawer = Widget.inherit({
     getElementHeight($element) {
         const $children = $element.children();
 
-        return $children.length ? $children.eq(0).get(0).getBoundingClientRect().height : $element.get(0).getBoundingClientRect().height;
+        return $children.length ? getBoundingRect($children.eq(0).get(0)).height : getBoundingRect($element.get(0)).height;
     },
 
     isHorizontalDirection() {

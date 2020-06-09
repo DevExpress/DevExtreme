@@ -1648,6 +1648,14 @@ export interface dxChartCommonAxisSettingsLabel {
      */
     overlappingBehavior?: 'rotate' | 'stagger' | 'none' | 'hide';
     /**
+     * @docid dxChartOptions.commonAxisSettings.label.position
+     * @type Enums.RelativePosition | Enums.Position
+     * @default 'outside'
+     * @prevFileNamespace DevExpress.viz
+     * @hidden
+     */
+    position?: 'inside' | 'outside' | 'bottom' | 'left' | 'right' | 'top';
+    /**
      * @docid dxChartOptions.commonAxisSettings.label.rotationAngle
      * @type number
      * @default 90

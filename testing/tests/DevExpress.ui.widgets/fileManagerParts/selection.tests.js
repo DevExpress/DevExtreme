@@ -94,9 +94,7 @@ QUnit.module('Selection', moduleConfig, () => {
         });
 
         assert.ok(this.wrapper.isThumbnailsItemSelected('Folder 1.2'), 'directory selected');
-        assert.ok(selectionSpy.callCount <= 1, 'event fired not more then once');
-
-        selectionSpy.reset();
+        assert.strictEqual(selectionSpy.callCount, 0, 'events not raised');
 
         const itemPath2 = 'Folder 2/File 2-1.jpg';
         this.fileManager.option({
@@ -105,15 +103,13 @@ QUnit.module('Selection', moduleConfig, () => {
         });
         this.clock.tick(400);
 
-        const lastIndex = selectionSpy.callCount - 1;
-        const deselectionIndex = selectionSpy.callCount > 1 ? lastIndex - 1 : lastIndex;
         assert.ok(this.wrapper.isThumbnailsItemSelected('File 2-1.jpg'), 'directory selected');
-        assert.ok(selectionSpy.callCount <= 2, 'event fired not more then 2 times');
-        assert.strictEqual(selectionSpy.args[lastIndex][0].selectedItems.length, 1, 'one item in selection');
-        assert.strictEqual(selectionSpy.args[lastIndex][0].selectedItems[0].path, itemPath2, 'correct item in selection');
-        assert.deepEqual(selectionSpy.args[lastIndex][0].selectedItemKeys, [ itemPath2 ], 'selected key provided');
-        assert.deepEqual(selectionSpy.args[lastIndex][0].currentSelectedItemKeys, [ itemPath2 ], 'one item became selected');
-        assert.deepEqual(selectionSpy.args[deselectionIndex][0].currentDeselectedItemKeys, [ itemPath1 ], 'one item became deselected');
+        assert.strictEqual(selectionSpy.callCount, 1, 'event raised');
+        assert.strictEqual(selectionSpy.args[0][0].selectedItems.length, 1, 'one item in selection');
+        assert.strictEqual(selectionSpy.args[0][0].selectedItems[0].path, itemPath2, 'correct item in selection');
+        assert.deepEqual(selectionSpy.args[0][0].selectedItemKeys, [ itemPath2 ], 'selected key provided');
+        assert.deepEqual(selectionSpy.args[0][0].currentSelectedItemKeys, [ itemPath2 ], 'one item became selected');
+        assert.deepEqual(selectionSpy.args[0][0].currentDeselectedItemKeys, [ itemPath1 ], 'one item became deselected');
     });
 
     test('Details view - single selection can be cleared', function(assert) {
@@ -278,4 +274,44 @@ QUnit.module('Selection', moduleConfig, () => {
         assert.deepEqual(selectionSpy.args[1][0].currentDeselectedItemKeys, [ 'Folder 1' ], 'one item became deselected');
     });
 
+    test('Details view - wrong selected key raises selection changed event', function(assert) {
+        const selectionSpy = sinon.spy();
+
+        const selectedItemKeys = [ 'Folder 1/Folder 1.2', 'wrong key' ];
+        createFileManager(this, {
+            currentPath: 'Folder 1',
+            selectedItemKeys,
+            onSelectionChanged: selectionSpy
+        });
+
+        assert.ok(this.wrapper.isDetailsRowSelected(3), 'directory selected');
+        assert.strictEqual(selectionSpy.callCount, 1, 'event raised');
+        assert.strictEqual(selectionSpy.args[0][0].selectedItems.length, 1, 'one item in selection');
+        assert.strictEqual(selectionSpy.args[0][0].selectedItems[0].path, selectedItemKeys[0], 'correct item in selection');
+        assert.deepEqual(selectionSpy.args[0][0].selectedItemKeys, [ selectedItemKeys[0] ], 'selected key provided');
+        assert.deepEqual(selectionSpy.args[0][0].currentSelectedItemKeys, [], 'no one item became selected');
+        assert.deepEqual(selectionSpy.args[0][0].currentDeselectedItemKeys, [ selectedItemKeys[1] ], 'one item became deselected');
+    });
+
+    test('Thumbnails view - wrong selected key raises selection changed event', function(assert) {
+        const selectionSpy = sinon.spy();
+
+        const selectedItemKeys = [ 'Folder 1/Folder 1.2', 'wrong key' ];
+        createFileManager(this, {
+            itemView: {
+                mode: 'thumbnails'
+            },
+            currentPath: 'Folder 1',
+            selectedItemKeys,
+            onSelectionChanged: selectionSpy
+        });
+
+        assert.ok(this.wrapper.isThumbnailsItemSelected('Folder 1.2'), 'directory selected');
+        assert.strictEqual(selectionSpy.callCount, 1, 'event raised');
+        assert.strictEqual(selectionSpy.args[0][0].selectedItems.length, 1, 'one item in selection');
+        assert.strictEqual(selectionSpy.args[0][0].selectedItems[0].path, selectedItemKeys[0], 'correct item in selection');
+        assert.deepEqual(selectionSpy.args[0][0].selectedItemKeys, [ selectedItemKeys[0] ], 'selected key provided');
+        assert.deepEqual(selectionSpy.args[0][0].currentSelectedItemKeys, [], 'no one item became selected');
+        assert.deepEqual(selectionSpy.args[0][0].currentDeselectedItemKeys, [ selectedItemKeys[1] ], 'one item became deselected');
+    });
 });

@@ -175,9 +175,22 @@ ScrollBar.prototype = {
         return margins;
     },
 
-    // Axis like functions
-    shift: noop,
+    shift: function(margins) {
+        const that = this;
+        const options = that._layoutOptions;
+        const side = options.position;
+        const isVertical = options.vertical;
+        const attr = {
+            translateX: that._scroll.attr('translateX') ?? 0,
+            translateY: that._scroll.attr('translateY') ?? 0
+        };
+        const shift = margins[side];
 
+        attr[isVertical ? 'translateX' : 'translateY'] += (side === 'left' || side === 'top' ? -1 : 1) * shift;
+        that._scroll.attr(attr);
+    },
+
+    // Axis like functions
     hideTitle: noop,
 
     hideOuterElements: noop,

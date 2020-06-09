@@ -250,9 +250,9 @@ const EditingController = modules.ViewController.inherit((function() {
                     }
 
                     if(!isRowEditMode(that) && !that._editCellInProgress) {
-                        const isEditorPopup = checkEditorPopup($target) || checkEditorPopup($pointerDownTarget);
+                        const isEditorPopup = checkEditorPopup($target) || checkEditorPopup(targetComponent?.$element());
                         const isDomElement = !!$target.closest(getWindow().document).length;
-                        const isAnotherComponent = targetComponent && targetComponent !== that.component;
+                        const isAnotherComponent = targetComponent && !targetComponent._disposed && targetComponent !== that.component;
                         const isAddRowButton = !!$target.closest(`.${that.addWidgetPrefix(ADD_ROW_BUTTON_CLASS)}`).length;
                         const isFocusOverlay = $target.hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
                         const isCellEditMode = getEditMode(that) === EDIT_MODE_CELL;
@@ -1727,6 +1727,7 @@ const EditingController = modules.ViewController.inherit((function() {
         hasEditData: function() {
             return this.hasChanges();
         },
+
         closeEditCell: function(isError, withoutSaveEditData) {
             const that = this;
             let result = deferredUtils.when();
@@ -1734,11 +1735,9 @@ const EditingController = modules.ViewController.inherit((function() {
 
             if(!isRowEditMode(that)) {
                 result = deferredUtils.Deferred();
-                setTimeout(() => {
-                    this.executeOperation(result, () => {
-                        this._closeEditCellCore(isError, oldEditRowIndex, withoutSaveEditData);
-                        result.resolve();
-                    });
+                this.executeOperation(result, () => {
+                    this._closeEditCellCore(isError, oldEditRowIndex, withoutSaveEditData);
+                    result.resolve();
                 });
             }
             return result.promise();

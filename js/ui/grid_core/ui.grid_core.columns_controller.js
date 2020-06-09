@@ -213,7 +213,7 @@ module.exports = {
                             columnOptions = extend({}, columnOptions, { dataField: userStateColumnOptions.dataField });
                         }
                         const calculatedColumnOptions = that._createCalculatedColumnOptions(columnOptions, bandColumn);
-                        if(columnOptions.dataField && !columnOptions.type) {
+                        if(!columnOptions.type) {
                             result = { headerId: `dx-col-${globalColumnId++}` };
                         }
                         result = deepExtendArraySafe(result, DEFAULT_COLUMN_OPTIONS);
@@ -1007,9 +1007,31 @@ module.exports = {
                 });
             };
 
-            function resetBandColumnsCache(that) {
+            const resetBandColumnsCache = (that) => {
                 that._bandColumnsCache = undefined;
-            }
+            };
+
+            const findColumn = (columns, identifier) => {
+                const identifierOptionName = isString(identifier) && identifier.substr(0, identifier.indexOf(':'));
+                let column;
+
+                if(identifier === undefined) return;
+
+                if(identifierOptionName) {
+                    identifier = identifier.substr(identifierOptionName.length + 1);
+                }
+
+                if(identifierOptionName) {
+                    column = columns.filter(column => ('' + column[identifierOptionName]) === identifier)[0];
+                } else {
+                    ['index', 'name', 'dataField', 'caption'].some((optionName) => {
+                        column = columns.filter(column => column[optionName] === identifier)[0];
+                        return !!column;
+                    });
+                }
+
+                return column;
+            };
 
             return {
                 _getExpandColumnOptions: function() {
@@ -2063,7 +2085,7 @@ module.exports = {
                     columnIndex = filter.columnIndex !== undefined ? filter.columnIndex : columnIndex;
                     filterValue = filter.filterValue !== undefined ? filter.filterValue : filterValue;
 
-                    if(isString(filter[0])) {
+                    if(isString(filter[0]) && filter[0] !== '!') {
                         const column = that.columnOption(filter[0]);
 
                         if(remoteFiltering) {
@@ -2092,29 +2114,8 @@ module.exports = {
                 },
                 columnOption: function(identifier, option, value, notFireEvent) {
                     const that = this;
-                    const identifierOptionName = isString(identifier) && identifier.substr(0, identifier.indexOf(':'));
                     const columns = that._columns.concat(that._commandColumns);
-                    let column;
-
-                    if(identifier === undefined) return;
-
-                    if(identifierOptionName) {
-                        identifier = identifier.substr(identifierOptionName.length + 1);
-                    }
-
-                    for(let i = 0; i < columns.length; i++) {
-                        if(identifierOptionName) {
-                            if(('' + columns[i][identifierOptionName]) === identifier) {
-                                column = columns[i];
-                                break;
-                            }
-                        } else if(columns[i].index === identifier || columns[i].name === identifier ||
-                            columns[i].dataField === identifier || columns[i].caption === identifier) {
-
-                            column = columns[i];
-                            break;
-                        }
-                    }
+                    const column = findColumn(columns, identifier);
 
                     if(column) {
                         if(arguments.length === 1) {

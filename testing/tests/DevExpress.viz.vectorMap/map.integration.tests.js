@@ -1,5 +1,8 @@
-const $ = require('jquery');
-const simpleProjection = require('viz/vector_map/projection').projection({
+import $ from 'jquery';
+import CustomStore from 'data/custom_store';
+import DataSource from 'data/data_source';
+import { projection } from 'viz/vector_map/projection';
+const simpleProjection = projection({
     aspectRatio: 4 / 3,
     to: function(coordinates) {
         return [
@@ -16,7 +19,7 @@ const simpleProjection = require('viz/vector_map/projection').projection({
     }
 });
 
-require('viz/vector_map/vector_map');
+import 'viz/vector_map/vector_map';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id=\'container\'></div>');
@@ -40,9 +43,9 @@ QUnit.module('Tests without stub', {
                     type: 'Feature',
                     geometry: {
                         type: 'Polygon',
-                        coordinates: item.coordinates ? item.coordinates : item
+                        coordinates: item
                     },
-                    properties: item.properties || {}
+                    properties: {}
                 };
             })
         };
@@ -109,9 +112,9 @@ QUnit.module('VectorMap bounds', {
                     type: 'Feature',
                     geometry: {
                         type: 'Polygon',
-                        coordinates: item.coordinates ? item.coordinates : item
+                        coordinates: item
                     },
-                    properties: item.properties || {}
+                    properties: {}
                 };
             })
         };
@@ -143,4 +146,86 @@ QUnit.test('VectorMap should set prepared bounds from dataSource (collect from f
 
     assert.deepEqual(map._projection._engine.min(), [-10, -10]);
     assert.deepEqual(map._projection._engine.max(), [120, 60]);
+});
+
+QUnit.module('VectorMap custom store', {
+    beforeEach: function() {
+        const dataObject = {
+            type: 'FeatureCollection',
+            features: [
+                [
+                    [[100, 50], [120, 50], [150, 20], [50, 40]]
+                ],
+                [
+                    [[100, 10], [50, 60], [50, 30]],
+                    [[-10, 0], [0, 30], [40, 30], [40, -10]]
+                ],
+                []
+            ].map(function(item) {
+                return {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Polygon',
+                        coordinates: item
+                    },
+                    properties: {}
+                };
+            })
+        };
+
+        this.dataSource = {
+            store: new CustomStore({
+                'loadMode': 'raw',
+                'load': function() {
+                    const d = $.Deferred();
+                    d.resolve(dataObject);
+                    return d;
+                }
+            })
+        };
+    }
+});
+
+QUnit.test('Vector Map should not failed (T885056)', function(assert) {
+    $('#container').dxVectorMap({
+        layers: {
+            dataSource: this.dataSource
+        }
+    });
+
+    assert.ok(true);
+});
+
+QUnit.test('Updating map bbox after push new item to the CustomStore', function(assert) {
+    const markerSource = new CustomStore({
+        load: function() {
+            return [{
+                coordinates: [-121.2808, 38.3320],
+                attributes: { text: 'Sacramento' },
+                'bbox': [0, 0, -121.2808, 38.3320]
+            }];
+        }
+    });
+
+    const map = $('#container').dxVectorMap({
+        getBoundsFromData: true,
+        layers: [{
+            dataSource: new DataSource({
+                pushAggregationTimeout: 0,
+                paginate: false,
+                store: markerSource
+            })
+        }]
+    }).dxVectorMap('instance');
+
+    markerSource.push([{
+        type: 'insert',
+        data: {
+            coordinates: [-180, 30.25],
+            attributes: { text: 'Austin' },
+            'bbox': [0, 0, -180, 30.25]
+        }
+    }]);
+
+    assert.deepEqual(map._projection._engine.min(), [-180, 0]);
 });

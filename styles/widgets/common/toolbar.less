@@ -159,6 +159,17 @@
 
     .dx-button-content {
         text-align: left;
+
+        .dx-rtl&,
+        .dx-rtl & {
+            text-align: right;
+        }
+    }
+}
+
+.dx-toolbar-menu-section .dx-toolbar-hidden-button {
+    .dx-toolbar-item-auto-hide {
+        padding: 0;
     }
 }
 
@@ -172,4 +183,36 @@
 
 .dx-toolbar-item-invisible {
     display: none;
+}
+
+.dx-toolbar-hidden-button-group {
+    &.dx-state-hover {
+        background-color: transparent;
+    }
+
+    .dx-list-item-content {
+        padding: 0;
+
+        .dx-toolbar-item-auto-hide {
+            padding: 0;
+        }
+    }
+
+    .dx-buttongroup {
+        width: 100%;
+
+        .dx-buttongroup-wrapper {
+            flex-direction: column;
+
+            .dx-buttongroup-item {
+                border: none;
+                text-align: left;
+
+                .dx-rtl&,
+                .dx-rtl & {
+                    text-align: right;
+                }
+            }
+        }
+    }
 }

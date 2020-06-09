@@ -1,25 +1,27 @@
-const $ = require('../core/renderer');
-const window = require('../core/utils/window').getWindow();
-const translator = require('../animation/translator');
-const camelize = require('../core/utils/inflector').camelize;
-const noop = require('../core/utils/common').noop;
-const getPublicElement = require('../core/utils/dom').getPublicElement;
-const each = require('../core/utils/iterator').each;
-const isDefined = require('../core/utils/type').isDefined;
-const inArray = require('../core/utils/array').inArray;
-const extend = require('../core/utils/extend').extend;
-const browser = require('../core/utils/browser');
-const compareVersions = require('../core/utils/version').compare;
-const messageLocalization = require('../localization/message');
-const devices = require('../core/devices');
-const registerComponent = require('../core/component_registrator');
-const Button = require('./button');
-const themes = require('./themes');
-const Overlay = require('./overlay');
-const EmptyTemplate = require('../core/templates/empty_template').EmptyTemplate;
-const domUtils = require('../core/utils/dom');
-const sizeUtils = require('../core/utils/size');
-const windowUtils = require('../core/utils/window');
+import translator from '../animation/translator';
+import registerComponent from '../core/component_registrator';
+import devices from '../core/devices';
+import { getPublicElement } from '../core/utils/dom';
+import $ from '../core/renderer';
+import { EmptyTemplate } from '../core/templates/empty_template';
+import { inArray } from '../core/utils/array';
+import browser from '../core/utils/browser';
+import { noop } from '../core/utils/common';
+import { extend } from '../core/utils/extend';
+import { camelize } from '../core/utils/inflector';
+import { each } from '../core/utils/iterator';
+import sizeUtils from '../core/utils/size';
+import { getBoundingRect } from '../core/utils/position';
+import { isDefined } from '../core/utils/type';
+import { compare as compareVersions } from '../core/utils/version';
+import windowUtils from '../core/utils/window';
+import messageLocalization from '../localization/message';
+import Button from './button';
+import Overlay from './overlay';
+import themes from './themes';
+import domUtils from '../core/utils/dom';
+
+const window = windowUtils.getWindow();
 
 require('./toolbar/ui.toolbar.base');
 
@@ -553,8 +555,8 @@ const Popup = Overlay.inherit({
         if(currentHeightStrategyClass === HEIGHT_STRATEGIES.static) {
             if(!this._isAutoHeight() || contentMaxHeight || contentMinHeight) {
                 const overlayHeight = this.option('fullScreen')
-                    ? Math.min(overlayContent.getBoundingClientRect().height, windowUtils.getWindow().innerHeight)
-                    : overlayContent.getBoundingClientRect().height;
+                    ? Math.min(getBoundingRect(overlayContent).height, windowUtils.getWindow().innerHeight)
+                    : getBoundingRect(overlayContent).height;
                 const contentHeight = overlayHeight - toolbarsAndVerticalOffsetsHeight;
                 cssStyles = {
                     height: Math.max(0, contentHeight),
