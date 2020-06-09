@@ -241,5 +241,6 @@ const ButtonGroup = Widget.inherit({
 });
 
 registerComponent('dxButtonGroup', ButtonGroup);
+// #STYLE buttonGroup
 
 module.exports = ButtonGroup;

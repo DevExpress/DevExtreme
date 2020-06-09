@@ -2438,4 +2438,5 @@ class Diagram extends Widget {
 }
 
 registerComponent('dxDiagram', Diagram);
+// #STYLE diagram
 module.exports = Diagram;

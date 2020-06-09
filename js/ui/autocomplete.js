@@ -209,5 +209,6 @@ const Autocomplete = DropDownList.inherit({
 });
 
 registerComponent('dxAutocomplete', Autocomplete);
+// #STYLE autocomplete
 
 module.exports = Autocomplete;

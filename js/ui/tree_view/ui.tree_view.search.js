@@ -91,5 +91,5 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
 });
 
 registerComponent('dxTreeView', TreeViewSearch);
-
+// #STYLE treeView
 module.exports = TreeViewSearch;

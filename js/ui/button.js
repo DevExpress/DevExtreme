@@ -402,5 +402,6 @@ class Button extends Widget {
 }
 
 registerComponent('dxButton', Button);
+// #STYLE button
 
 module.exports = Button;

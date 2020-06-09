@@ -421,5 +421,6 @@ const Switch = Editor.inherit({
 });
 
 registerComponent('dxSwitch', Switch);
+// #STYLE switch
 
 module.exports = Switch;

@@ -1224,5 +1224,5 @@ const Calendar = Editor.inherit({
 });
 
 registerComponent('dxCalendar', Calendar);
-
+// #STYLE calendar
 module.exports = Calendar;

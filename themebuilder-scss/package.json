@@ -26,15 +26,18 @@
     "test": "jest --coverage --verbose",
     "copy-resources": "ts-node --files=true src/tools/copy-resources.ts",
     "generate-metadata": "ts-node --files=true src/metadata/generate.ts",
+    "collect-dependencies": "ts-node --files=true src/metadata/dependency-collector.ts",
     "build-ts": "tsc",
     "build": "npm run generate-metadata && npm run build-ts && npm run copy-resources"
   },
   "devDependencies": {
     "@types/autoprefixer": "^9.7.2",
+    "@types/dependency-tree": "^7.2.0",
     "@types/fs-extra": "^9.0.1",
     "@types/jest": "^25.2.1",
     "@types/less": "^3.0.1",
     "@types/node-sass": "^4.11.0",
+    "dependency-tree": "^7.2.1",
     "express": "^4.16.4",
     "fs-extra": "^9.0.0",
     "jest": "^25.4.0",

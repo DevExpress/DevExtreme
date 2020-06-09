@@ -622,4 +622,5 @@ const DropDownButton = Widget.inherit({
 }).include(DataHelperMixin);
 
 registerComponent('dxDropDownButton', DropDownButton);
+// #STYLE dropDownButton
 module.exports = DropDownButton;

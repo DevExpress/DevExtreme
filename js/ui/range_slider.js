@@ -351,5 +351,6 @@ const RangeSlider = Slider.inherit({
 });
 
 registerComponent('dxRangeSlider', RangeSlider);
+// #STYLE rangeSlider
 
 module.exports = RangeSlider;

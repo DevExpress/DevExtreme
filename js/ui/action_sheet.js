@@ -406,5 +406,6 @@ const ActionSheet = CollectionWidget.inherit({
 });
 
 registerComponent('dxActionSheet', ActionSheet);
+// #STYLE actionSheet
 
 module.exports = ActionSheet;

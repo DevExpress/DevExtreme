@@ -367,5 +367,6 @@ const SlideOut = CollectionWidget.inherit({
 }).include(DataConverterMixin);
 
 registerComponent('dxSlideOut', SlideOut);
+// #STYLE slideOut
 
 module.exports = SlideOut;

@@ -720,5 +720,5 @@ const ResponsiveBox = CollectionWidget.inherit({
 */
 
 registerComponent('dxResponsiveBox', ResponsiveBox);
-
+// #STYLE responsiveBox
 module.exports = ResponsiveBox;

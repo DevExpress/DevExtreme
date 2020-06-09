@@ -327,6 +327,7 @@ const DropDownBox = DropDownEditor.inherit({
 }).include(DataExpressionMixin);
 
 registerComponent('dxDropDownBox', DropDownBox);
+// #STYLE dropdownBox
 
 module.exports = DropDownBox;
 

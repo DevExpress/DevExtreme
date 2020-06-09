@@ -219,5 +219,6 @@ const CheckBox = Editor.inherit({
 });
 
 registerComponent('dxCheckBox', CheckBox);
+// #STYLE checkbox
 
 module.exports = CheckBox;

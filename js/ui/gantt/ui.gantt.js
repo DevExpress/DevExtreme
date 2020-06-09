@@ -829,4 +829,5 @@ class Gantt extends Widget {
 }
 
 registerComponent('dxGantt', Gantt);
+// #STYLE gantt
 module.exports = Gantt;

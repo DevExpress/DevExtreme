@@ -81,5 +81,5 @@ const Tooltip = Popover.inherit({
 });
 
 registerComponent('dxTooltip', Tooltip);
-
+// #STYLE tooltip
 module.exports = Tooltip;

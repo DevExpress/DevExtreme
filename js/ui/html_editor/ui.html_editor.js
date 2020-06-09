@@ -623,5 +623,5 @@ const HtmlEditor = Editor.inherit({
 });
 
 registerComponent('dxHtmlEditor', HtmlEditor);
-
+// #STYLE htmlEditor
 module.exports = HtmlEditor;

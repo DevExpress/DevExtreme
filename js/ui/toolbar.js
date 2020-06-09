@@ -323,5 +323,6 @@ const Toolbar = ToolbarBase.inherit({
 });
 
 registerComponent('dxToolbar', Toolbar);
+// #STYLE toolbar
 
 module.exports = Toolbar;

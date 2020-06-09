@@ -934,5 +934,6 @@ class ContextMenu extends MenuBase {
 }
 
 registerComponent('dxContextMenu', ContextMenu);
+// #STYLE contextMenu
 
 module.exports = ContextMenu;

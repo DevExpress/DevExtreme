@@ -229,5 +229,6 @@ const ProgressBar = TrackBar.inherit({
 });
 
 registerComponent('dxProgressBar', ProgressBar);
+// #STYLE progressBar
 
 module.exports = ProgressBar;
