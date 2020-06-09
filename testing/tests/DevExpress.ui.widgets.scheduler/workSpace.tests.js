@@ -2230,7 +2230,7 @@ QUnit.testStart(function() {
         assert.ok(cells.eq(4).hasClass('dx-state-focused'), 'this last focused cell is correct');
     });
 
-    (function() {
+    (() => {
         QUnit.module('Keyboard Multiselection with GroupByDate');
 
         const createTest = (workSpace, config, testDescription) => {
@@ -2793,7 +2793,7 @@ QUnit.testStart(function() {
         $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
     });
 
-    (function() {
+    (() => {
         QUnit.module('Mouse Multiselection with Vertical Grouping');
 
         const workSpaces = [{
@@ -2837,7 +2837,7 @@ QUnit.testStart(function() {
         });
     })('Keyboard Multiselection with Vertical Grouping');
 
-    (function() {
+    (() => {
         QUnit.module('Mouse Multiselection with Grouping by Date');
 
         const workSpaces = [{

@@ -778,7 +778,7 @@ QUnit.module('Timeline Keyboard Navigation', {
         $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
     });
 
-    (function() {
+    (() => {
         QUnit.module('Keyboard Multiselection with GroupByDate');
 
         const createTest = (config, testDescription) => {
@@ -823,7 +823,7 @@ QUnit.module('Timeline Keyboard Navigation', {
         });
     })('Keyboard Multiselection with GroupByDate');
 
-    (function() {
+    (() => {
         QUnit.module('Mouse Multiselection with Vertical Grouping and Grouping by Date');
 
         const createTest = (config, testDescription, groupByDate, groupOrientation) => {
