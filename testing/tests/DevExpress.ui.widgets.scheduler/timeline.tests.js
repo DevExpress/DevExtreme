@@ -814,7 +814,6 @@ QUnit.module('Timeline Keyboard Navigation', {
             { startCell: 1, endCell: 3, focusedCellsCount: 2, rtlEnabled: false, key: 'right' },
             { startCell: 3, endCell: 1, focusedCellsCount: 2, rtlEnabled: true, key: 'right' },
         ];
-
         config.forEach((config) => {
             createTest(
                 config,
