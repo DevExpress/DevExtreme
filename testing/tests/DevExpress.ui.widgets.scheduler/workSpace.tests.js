@@ -2356,7 +2356,6 @@ QUnit.testStart(function() {
             const $table = $element.find('.dx-scheduler-date-table');
 
             pointerMock(cells.eq(startCell)).start().click();
-
             let cell = cells.eq(endCell).get(0);
 
             $($table).trigger($.Event('dxpointerdown', { target: cells.eq(startCell).get(0), which: 1, pointerType: 'mouse' }));
@@ -2370,7 +2369,6 @@ QUnit.testStart(function() {
             });
 
             cell = cells.eq(cellFromAnotherGroup).get(0);
-
             $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
 
             assert.equal(cells.filter('.dx-state-focused').length, focusedCellsCount, 'the amount of focused cells has not changed');
