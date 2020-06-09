@@ -33,7 +33,7 @@ const RECURRENCE_BUTTON_GROUP = 'dx-recurrence-button-group';
 // const FREQUENCY_EDITOR = 'dx-recurrence-selectbox-freq';
 const INTERVAL_EDITOR = 'dx-recurrence-numberbox-interval-1';
 // const INTERVAL_EDITOR_FIELD = 'dx-recurrence-interval-field';
-// const REPEAT_ON_EDITOR = 'dx-recurrence-repeat-on';
+const REPEAT_ON_EDITOR = 'dx-recurrence-repeat-on';
 // const REPEAT_ON_MONTH_EDITOR = 'dx-recurrence-repeat-on-month';
 // const DAY_OF_MONTH = 'dx-recurrence-numberbox-day-of-month';
 // const REPEAT_ON_YEAR_EDITOR = 'dx-recurrence-repeat-on-year';
@@ -281,6 +281,7 @@ const RecurrenceEditor = Editor.inherit({
             },
             {
                 itemType: 'group',
+                cssClass: REPEAT_ON_EDITOR,
                 items: [
                     {
                         dataField: 'byday',
