@@ -13,6 +13,7 @@ import ButtonGroup from '../button_group';
 import DateBox from '../date_box';
 import Editor from '../editor/editor';
 import NumberBox from '../number_box';
+import RadioGroup from '../radio_group';
 // import RadioGroup from '../radio_group';
 import publisherMixin from './ui.scheduler.publisher_mixin';
 import { getRecurrenceProcessor } from './recurrence';
@@ -190,7 +191,7 @@ const RecurrenceEditor = Editor.inherit({
 
         this._prepareEditors();
         this._renderEditors(this._$container, this._recurrenceRule.rules());
-        // this._renderEditors();
+
         this._renderContainerVisibility(this.option('value'));
     },
 
@@ -206,17 +207,15 @@ const RecurrenceEditor = Editor.inherit({
     _prepareEditors: function(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, allowTimeZoneEditing, readOnly) {
         const freq = (this._recurrenceRule.rules().freq || frequenciesMessages[defaultRecurrenceTypeIndex].value).toLowerCase();
         const interval = this._recurrenceRule.rules().interval || 1;
-        // const byMonthDay = this._dayOfMonthByRules();
-
         const months = [];
         const monthsNames = dateLocalization.getMonthNames('wide');
         const repeatType = this._recurrenceRule.getRepeatEndRule();
 
+        // replace
         for(let i = 0; i < 12; i++) {
             months[i] = { value: String(i + 1), text: monthsNames[i] };
         }
 
-        // const byMonth = this._monthOfYearByRules();
 
         const monthChanged = function(args) {
             this._valueChangedHandler.call(this, args);
@@ -351,32 +350,37 @@ const RecurrenceEditor = Editor.inherit({
                     },
                 ]
             },
-
             {
                 itemType: 'group',
                 items: [
                     {
-                        editorType: 'dxRadioGroup',
-                        dataField: 'repeatEnd',
-                        css: REPEAT_TYPE_EDITOR,
-                        editorOptions: {
-                            items: repeatEndTypes,
-                            value: repeatType,
-                            displayExpr: 'text',
-                            valueExpr: 'value',
-                            itemTemplate: (itemData) => {
-                                if(itemData.value === 'count') {
-                                    return this._renderRepeatCountEditor();
-                                }
-                                if(itemData.value === 'until') {
-                                    return this._renderRepeatUntilEditor();
-                                }
+                        template: (data, itemElement) =>{
+                            this._$repeatTypeEditor = $('<div>')
+                                .addClass(REPEAT_TYPE_EDITOR)
+                                .addClass(FIELD_VALUE_CLASS)
+                                .appendTo(itemElement);
 
-                                return this._renderDefaultRepeatEnd();
+                            this._repeatEndEditor = this._createComponent(this._$repeatTypeEditor, RadioGroup, {
+                                items: repeatEndTypes,
+                                value: repeatType,
+                                displayExpr: 'text',
+                                valueExpr: 'value',
+                                itemTemplate: (itemData) => {
+                                    if(itemData.value === 'count') {
+                                        return this._renderRepeatCountEditor();
+                                    }
+                                    if(itemData.value === 'until') {
+                                        return this._renderRepeatUntilEditor();
+                                    }
 
-                            },
-                            layout: 'vertical',
-                            onValueChanged: this._repeatTypeValueChangedHandler.bind(this)
+                                    return this._renderDefaultRepeatEnd();
+
+                                },
+                                layout: 'vertical',
+                                onValueChanged: this._repeatEndValueChangedHandler.bind(this)
+                            });
+
+                            this._disableRepeatEndParts(repeatType);
                         },
                         label: {
                             text: messageLocalization.format('dxScheduler-recurrenceEnd')
@@ -481,7 +485,7 @@ const RecurrenceEditor = Editor.inherit({
         return $editorTemplate;
     },
 
-    _repeatTypeValueChangedHandler(args) {
+    _repeatEndValueChangedHandler(args) {
         const value = args.value;
 
         this._disableRepeatEndParts(value);
@@ -501,6 +505,10 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _disableRepeatEndParts(value = this._recurrenceRule.getRepeatEndRule()) {
+        if(!this._repeatCountEditor && !this._repeatUntilDate) {
+            return;
+        }
+
         if(value === 'until') {
             this._repeatCountEditor.option('disabled', true);
             this._repeatUntilDate.option('disabled', false);
@@ -694,10 +702,12 @@ const RecurrenceEditor = Editor.inherit({
             this._recurrenceForm.itemOption('byday', 'visible', true);
         }
         if(freq === 'MONTHLY') {
+            this._recurrenceForm.itemOption('bymonthday', 'label', { visible: true });
             this._recurrenceForm.itemOption('bymonthday', 'visible', true);
         }
         if(freq === 'YEARLY') {
             this._recurrenceForm.itemOption('bymonthday', 'visible', true);
+            this._recurrenceForm.itemOption('bymonthday', 'label', { visible: false });
             this._recurrenceForm.itemOption('bymonth', 'visible', true);
         }
     },
@@ -729,11 +739,11 @@ const RecurrenceEditor = Editor.inherit({
     _changeRepeatEndValue() {
         const repeatType = this._recurrenceRule.getRepeatEndRule();
 
-        this._recurrenceForm.getEditor('repeatEnd').option('value', repeatType);
+        this._repeatEndEditor.option('value', repeatType);
     },
 
     _changeDayOfMonthValue() {
-        const isVisible = this._recurrenceForm.itemOption('bymonthday', 'visible');
+        const isVisible = this._recurrenceForm.itemOption('bymonthday').visible;
         if(!isVisible) {
             return;
         }
