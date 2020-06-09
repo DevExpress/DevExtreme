@@ -6,6 +6,7 @@ import { extend } from '../../core/utils/extend';
 import { hasWindow, getWindow } from '../../core/utils/window';
 import { each, map } from '../../core/utils/iterator';
 import { isDefined } from '../../core/utils/type';
+import { getBoundingRect } from '../../core/utils/position';
 import translator from '../../animation/translator';
 import Class from '../../core/class';
 import Animator from './animator';
@@ -198,7 +199,7 @@ const Scroller = Class.inherit({
     },
 
     _getRealDimension: function(element, dimension) {
-        return Math.round(element.getBoundingClientRect()[dimension]);
+        return Math.round(getBoundingRect(element)[dimension]);
     },
 
     _getBaseDimension: function(element, dimension) {

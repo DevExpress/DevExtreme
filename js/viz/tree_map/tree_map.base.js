@@ -4,8 +4,6 @@ import { getAlgorithm as _getTilingAlgorithm } from './tiling';
 import { getColorizer as _getColorizer } from './colorizing';
 import { patchFontOptions as _patchFontOptions } from '../core/utils';
 import { noop as _noop } from '../../core/utils/common';
-import { isDefined as _isDefined } from '../../core/utils/type';
-import { extend as _extend } from '../../core/utils/extend';
 
 const _max = Math.max;
 const directions = {
@@ -48,16 +46,6 @@ const dxTreeMap = require('../core/base_widget').inherit({
 
     _getDefaultSize: function() {
         return { width: 400, height: 400 };
-    },
-
-    _setDeprecatedOptions: function() {
-        this.callBase.apply(this, arguments);
-        _extend(this._deprecatedOptions, {
-            'resolveLabelOverflow': {
-                since: '19.1',
-                message: 'Use the \'tile.label.overflow\' and \'group.label.textOverflow\' option instead'
-            }
-        });
     },
 
     _themeSection: 'treeMap',
@@ -126,8 +114,7 @@ const dxTreeMap = require('../core/base_widget').inherit({
         group: 'GROUP_SETTINGS',
         maxDepth: 'MAX_DEPTH',
         layoutAlgorithm: 'TILING',
-        layoutDirection: 'TILING',
-        resolveLabelOverflow: 'LABEL_OVERFLOW'
+        layoutDirection: 'TILING'
     },
 
     _themeDependentChanges: ['TILE_SETTINGS', 'GROUP_SETTINGS', 'MAX_DEPTH'],
@@ -157,7 +144,7 @@ const dxTreeMap = require('../core/base_widget').inherit({
         }
     },
 
-    _optionChangesOrder: ['DATA_SOURCE', 'TILE_SETTINGS', 'GROUP_SETTINGS', 'MAX_DEPTH', 'LABEL_OVERFLOW'],
+    _optionChangesOrder: ['DATA_SOURCE', 'TILE_SETTINGS', 'GROUP_SETTINGS', 'MAX_DEPTH'],
 
     _change_DATA_SOURCE: function() {
         this._changeDataSource();
@@ -168,11 +155,6 @@ const dxTreeMap = require('../core/base_widget').inherit({
     },
 
     _change_GROUP_SETTINGS: function() {
-        this._changeGroupSettings();
-    },
-
-    _change_LABEL_OVERFLOW: function() {
-        this._changeTileSettings();
         this._changeGroupSettings();
     },
 
@@ -321,7 +303,6 @@ const dxTreeMap = require('../core/base_widget').inherit({
             rtlEnabled: this._getOption('rtlEnabled', true),
             paddingTopBottom: paddingTopBottom,
             paddingLeftRight: paddingLeftRight,
-            resolveLabelOverflow: this._options.silent('resolveLabelOverflow'),
             tileLabelWordWrap: tileLabelOptions.wordWrap,
             tileLabelOverflow: tileLabelOptions.textOverflow,
             groupLabelOverflow: groupLabelOptions.textOverflow
@@ -587,45 +568,18 @@ function processLabelsLayout(context, node) {
 function layoutTextNode(node, params) {
     const rect = node.rect;
     const text = node.text;
-    let bBox = text.getBBox();
+    const bBox = text.getBBox();
     const paddingLeftRight = params.paddingLeftRight;
     const paddingTopBottom = params.paddingTopBottom;
     const effectiveWidth = rect[2] - rect[0] - 2 * paddingLeftRight;
-    let fitByHeight = bBox.height + paddingTopBottom <= rect[3] - rect[1];
-    let fitByWidth = bBox.width <= effectiveWidth;
-    const resolveLabelOverflow = params.resolveLabelOverflow;
-    const groupLabelOverflow = params.groupLabelOverflow;
-    const tileLabelOverflow = params.tileLabelOverflow;
-    const tileLabelWordWrap = params.tileLabelWordWrap;
 
-    if(_isDefined(resolveLabelOverflow)) {
-        if(resolveLabelOverflow === 'ellipsis' && fitByHeight) {
-            text.setMaxSize(effectiveWidth, undefined, {
-                wordWrap: 'none',
-                textOverflow: 'ellipsis'
-            });
-            if(!fitByWidth) {
-                bBox = text.getBBox();
-                fitByWidth = bBox.width <= effectiveWidth;
-            }
-        }
-    } else {
-        fitByWidth = true;
-        fitByHeight = true;
-        text.setMaxSize(effectiveWidth, rect[3] - rect[1] - paddingTopBottom, node.isNode() ? { textOverflow: groupLabelOverflow, wordWrap: 'none' } :
-            { textOverflow: tileLabelOverflow, wordWrap: tileLabelWordWrap, hideOverflowEllipsis: true });
-    }
+    text.setMaxSize(effectiveWidth, rect[3] - rect[1] - paddingTopBottom, node.isNode() ? { textOverflow: params.groupLabelOverflow, wordWrap: 'none' } :
+        { textOverflow: params.tileLabelOverflow, wordWrap: params.tileLabelWordWrap, hideOverflowEllipsis: true });
 
-    text.attr({
-        visibility: fitByHeight && fitByWidth ? 'visible' : 'hidden'
-    });
-
-    if(fitByHeight && fitByWidth) {
-        text.move(
-            params.rtlEnabled ? (rect[2] - paddingLeftRight - bBox.x - bBox.width) : (rect[0] + paddingLeftRight - bBox.x),
-            rect[1] + paddingTopBottom - bBox.y
-        );
-    }
+    text.move(
+        params.rtlEnabled ? (rect[2] - paddingLeftRight - bBox.x - bBox.width) : (rect[0] + paddingLeftRight - bBox.x),
+        rect[1] + paddingTopBottom - bBox.y
+    );
 }
 
 require('../../core/component_registrator')('dxTreeMap', dxTreeMap);

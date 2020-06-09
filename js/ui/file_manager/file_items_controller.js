@@ -130,8 +130,8 @@ export default class FileItemsController {
         return onlyFiles ? this.getFiles(currentDirectory) : this.getDirectoryContents(currentDirectory);
     }
 
-    getDirectories(parentDirectoryInfo) {
-        return this.getDirectoryContents(parentDirectoryInfo)
+    getDirectories(parentDirectoryInfo, skipNavigationOnError) {
+        return this.getDirectoryContents(parentDirectoryInfo, skipNavigationOnError)
             .then(itemInfos => itemInfos.filter(info => info.fileItem.isDirectory));
     }
 
@@ -140,7 +140,7 @@ export default class FileItemsController {
             .then(itemInfos => itemInfos.filter(info => !info.fileItem.isDirectory));
     }
 
-    getDirectoryContents(parentDirectoryInfo) {
+    getDirectoryContents(parentDirectoryInfo, skipNavigationOnError) {
         if(!parentDirectoryInfo) {
             return new Deferred()
                 .resolve([ this._rootDirectoryInfo ])
@@ -159,8 +159,9 @@ export default class FileItemsController {
             return loadItemsDeferred;
         }
 
-        loadItemsDeferred = this._getFileItems(parentDirectoryInfo)
+        loadItemsDeferred = this._getFileItems(parentDirectoryInfo, skipNavigationOnError)
             .then(fileItems => {
+                fileItems = fileItems || [];
                 parentDirectoryInfo.items = fileItems.map(fileItem =>
                     fileItem.isDirectory && this._createDirectoryInfo(fileItem, parentDirectoryInfo) || this._createFileInfo(fileItem, parentDirectoryInfo)
                 );
@@ -169,16 +170,24 @@ export default class FileItemsController {
             });
 
         this._loadedItems[dirKey] = loadItemsDeferred;
-        loadItemsDeferred.then(() => {
+        loadItemsDeferred.always(() => {
             delete this._loadedItems[dirKey];
         });
 
         return loadItemsDeferred;
     }
 
-    _getFileItems(parentDirectoryInfo) {
-        return when(this._fileProvider.getItems(parentDirectoryInfo.fileItem))
-            .then(fileItems => this._securityController.getAllowedItems(fileItems));
+    _getFileItems(parentDirectoryInfo, skipNavigationOnError) {
+        let loadItemsDeferred = null;
+        try {
+            loadItemsDeferred = this._fileProvider.getItems(parentDirectoryInfo.fileItem);
+        } catch(error) {
+            return this._handleItemLoadError(parentDirectoryInfo, error, skipNavigationOnError);
+        }
+        return when(loadItemsDeferred)
+            .then(
+                fileItems => this._securityController.getAllowedItems(fileItems),
+                errorInfo => this._handleItemLoadError(parentDirectoryInfo, errorInfo, skipNavigationOnError));
     }
 
     createDirectory(parentDirectoryInfo, name) {
@@ -276,6 +285,24 @@ export default class FileItemsController {
     getItemContent(itemInfos) {
         const items = itemInfos.map(i => i.fileItem);
         return when(this._fileProvider.getItemsContent(items));
+    }
+
+    _handleItemLoadError(parentDirectoryInfo, errorInfo, skipNavigationOnError) {
+        const actionInfo = this._createEditActionInfo('getItems', parentDirectoryInfo, parentDirectoryInfo);
+        this._raiseEditActionStarting(actionInfo);
+        this._raiseEditActionResultAcquired(actionInfo);
+        this._raiseEditActionError(actionInfo, {
+            errorId: errorInfo.errorId,
+            fileItem: parentDirectoryInfo.fileItem,
+            index: 0
+        });
+        this._resetDirectoryState(parentDirectoryInfo);
+        parentDirectoryInfo.expanded = false;
+        if(!skipNavigationOnError) {
+            this.setCurrentDirectory(parentDirectoryInfo.parentDirectory);
+        }
+
+        return new Deferred().reject().promise();
     }
 
     _processEditAction(actionInfo, action, completeAction) {

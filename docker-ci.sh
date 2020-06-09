@@ -189,11 +189,22 @@ function run_test_functional {
     npm run test-functional -- $args
 }
 
+function run_test_jest {
+    export DEVEXTREME_TEST_CI=true
+
+    npm i
+    npx gulp generate-components
+    npm run test-jest
+}
+
 function run_test_scss {
     npm i
     npx gulp generate-scss
     npm run build-themes
     node build/gulp/scss/tests/identical.test.js
+
+    cd themebuilder-scss
+    npm i && npm run build && npm run test
 }
 
 function start_runner_watchdog {

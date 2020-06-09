@@ -570,7 +570,6 @@ QUnit.test('creation params', function(assert) {
     const family = new SeriesFamily({
         type: 'bar',
         pane: 'pane-option',
-        equalBarWidth: 'equalBarWidth-option',
         minBubbleSize: 'minBubbleSize-option',
         maxBubbleSize: 'maxBubbleSize-option'
     });
@@ -579,7 +578,6 @@ QUnit.test('creation params', function(assert) {
     assert.ok(family._options);
     assert.equal(family.type, 'bar');
     assert.equal(family.pane, 'pane-option');
-    assert.equal(family._options.equalBarWidth, 'equalBarWidth-option', 'equalBarWidth');
     assert.equal(family._options.minBubbleSize, 'minBubbleSize-option', 'minBubbleSize');
     assert.equal(family._options.maxBubbleSize, 'maxBubbleSize-option', 'maxBubbleSize');
 });
@@ -591,7 +589,6 @@ QUnit.test('update API method', function(assert) {
     });
 
     family.updateOptions({
-        equalBarWidth: 'equalBarWidth',
         minBubbleSize: 'minBubbleSize',
         maxBubbleSize: 'maxBubbleSize',
         barWidth: 'barWidth'
@@ -599,7 +596,6 @@ QUnit.test('update API method', function(assert) {
 
     assert.ok(family);
     assert.ok(family._options);
-    assert.equal(family._options.equalBarWidth, 'equalBarWidth', 'equalBarWidth');
     assert.equal(family._options.minBubbleSize, 'minBubbleSize', 'minBubbleSize');
     assert.equal(family._options.maxBubbleSize, 'maxBubbleSize', 'maxBubbleSize');
     assert.equal(family._options.barWidth, 'barWidth', 'barWidth');
@@ -609,14 +605,12 @@ QUnit.test('update old options', function(assert) {
     const type = 'bar';
     const family = new SeriesFamily({
         type: type,
-        equalBarWidth: 'oldEqualBarWidth',
         minBubbleSize: 'oldMinBubbleSize',
         maxBubbleSize: 'oldMaxBubbleSize',
         barWidth: 'oldBarWidth'
     });
 
     family.updateOptions({
-        equalBarWidth: 'equalBarWidth',
         minBubbleSize: 'minBubbleSize',
         maxBubbleSize: 'maxBubbleSize',
         barWidth: 'barWidth'
@@ -624,7 +618,6 @@ QUnit.test('update old options', function(assert) {
 
     assert.ok(family);
     assert.ok(family._options);
-    assert.equal(family._options.equalBarWidth, 'equalBarWidth', 'equalBarWidth');
     assert.equal(family._options.minBubbleSize, 'minBubbleSize', 'minBubbleSize');
     assert.equal(family._options.maxBubbleSize, 'maxBubbleSize', 'maxBubbleSize');
     assert.equal(family._options.barWidth, 'barWidth', 'barWidth');
@@ -677,20 +670,11 @@ QUnit.test('Add array of different series', function(assert) {
 
 QUnit.module('Bar series - side-by-side width calculation');
 
-QUnit.test('Set single series', function(assert) {
-    const series = createSeries({ points: pointsForStacking.points1() });
-    const expectedWidth = 42;
-
-    createSeriesFamily('bar', [series], { equalBarWidth: true, barWidth: 0.6 });
-
-    checkSeries(assert, series, expectedWidth, 0);
-});
-
 QUnit.test('Set single series, bar width is specify', function(assert) {
     const series = createSeries({ points: pointsForStacking.points1() });
     const expectedWidth = 70;
 
-    createSeriesFamily('bar', [series], { equalBarWidth: true });
+    createSeriesFamily('bar', [series], { });
 
     checkSeries(assert, series, expectedWidth, 0);
 });
@@ -699,7 +683,7 @@ QUnit.test('Set single series, bar width is specify', function(assert) {
     const series = createSeries({ points: pointsForStacking.points1() });
     sinon.spy(series, 'getPointsByArg');
 
-    createSeriesFamily('bar', [series], { equalBarWidth: true });
+    createSeriesFamily('bar', [series], { });
 
     series.getPointsByArg.getCalls().forEach(call => {
         assert.strictEqual(call.args[1], true);
@@ -713,7 +697,7 @@ QUnit.test('Set two series', function(assert) {
     const expectedSpacing = 7;
     const expectedWidth = 32;
 
-    createSeriesFamily('bar', series, { equalBarWidth: true });
+    createSeriesFamily('bar', series, { });
 
     checkSeries(assert, series1, expectedWidth, ZERO - expectedWidth / 2 - expectedSpacing / 2);
     checkSeries(assert, series2, expectedWidth, ZERO + expectedWidth / 2 + expectedSpacing / 2);
@@ -728,7 +712,7 @@ QUnit.test('Set two series with invisible series', function(assert) {
     series2.isVisible = function() {
         return false;
     };
-    createSeriesFamily('bar', series, { equalBarWidth: true });
+    createSeriesFamily('bar', series, {});
 
     checkSeries(assert, series1, expectedWidth, 0);
     $.each(series2.getPoints(), function(i, point) {
@@ -746,26 +730,7 @@ QUnit.test('Set five series', function(assert) {
     const expectedSpacing = 3;
     const expectedWidth = 12;
 
-    createSeriesFamily('bar', series, { equalBarWidth: true });
-
-    checkSeries(assert, series1, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth - expectedSpacing - expectedWidth / 2);
-    checkSeries(assert, series2, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth / 2);
-    checkSeries(assert, series3, expectedWidth, 0);
-    checkSeries(assert, series4, expectedWidth, ZERO + expectedWidth / 2 + expectedSpacing + expectedWidth / 2);
-    checkSeries(assert, series5, expectedWidth, ZERO + expectedWidth / 2 + expectedSpacing + expectedWidth + expectedSpacing + expectedWidth / 2);
-});
-
-QUnit.test('Set five series, width is specified', function(assert) {
-    const series1 = createSeries({ points: pointsForStacking.points1() });
-    const series2 = createSeries({ points: pointsForStacking.points2() });
-    const series3 = createSeries({ points: pointsForStacking.points3() });
-    const series4 = createSeries({ points: pointsForStacking.points4() });
-    const series5 = createSeries({ points: pointsForStacking.points5() });
-    const series = [series1, series2, series3, series4, series5];
-    const expectedSpacing = 14;
-    const expectedWidth = 3;
-
-    createSeriesFamily('bar', series, { equalBarWidth: true, barWidth: 0.2 });
+    createSeriesFamily('bar', series, { });
 
     checkSeries(assert, series1, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth - expectedSpacing - expectedWidth / 2);
     checkSeries(assert, series2, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth / 2);
@@ -875,19 +840,6 @@ QUnit.test('Set two series, barPadding is 1', function(assert) {
 
     checkSeries(assert, series1, 1, -35.5);
     checkSeries(assert, series2, 1, 35.5);
-});
-
-QUnit.test('Set three series, barWidth is specified', function(assert) {
-    const series1 = createSeries({ points: pointsForStacking.points1(), barWidth: 5 });
-    const series2 = createSeries({ points: pointsForStacking.points2(), barWidth: 10 });
-    const series3 = createSeries({ points: pointsForStacking.points3(), barWidth: 15 });
-    const series = [series1, series2, series3];
-
-    createSeriesFamily('bar', series);
-
-    checkSeries(assert, series1, 5, -33);
-    checkSeries(assert, series2, 10, 0);
-    checkSeries(assert, series3, 15, 28);
 });
 
 QUnit.test('Set three series, all of them in one group', function(assert) {
@@ -1051,7 +1003,7 @@ QUnit.test('Set five series, only width is specified, negative value', function(
     const expectedSpacing = 3;
     const expectedWidth = 12;
 
-    createSeriesFamily('bar', series, { equalBarWidth: { width: -10 } });
+    createSeriesFamily('bar', series, { });
 
     checkSeries(assert, series1, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth - expectedSpacing - expectedWidth / 2);
     checkSeries(assert, series2, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth / 2);
@@ -1076,7 +1028,7 @@ QUnit.test('Set five series. inverted', function(assert) {
         };
     });
 
-    createSeriesFamily('bar', series, { equalBarWidth: true });
+    createSeriesFamily('bar', series, { });
 
     checkSeries(assert, series5, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth - expectedSpacing - expectedWidth / 2);
     checkSeries(assert, series4, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth / 2);
@@ -1099,16 +1051,16 @@ QUnit.test('Stackedbar with negative values', function(assert) {
     checkStackedPointHeight(assert, series2, 20, -60, -90, 0, -20, -30);
 });
 
-QUnit.module('Bar series - side-by-side with equalBarWidth calculation');
+QUnit.module('Bar series - side-by-side with ignoreEmptyPoints');
 
 QUnit.test('Set two series', function(assert) {
-    const series1 = createSeries({ points: pointsForStacking.points1FirstOnly() });
-    const series2 = createSeries({ points: pointsForStacking.points2FirstAndSecondOnly() });
+    const series1 = createSeries({ points: pointsForStacking.points1FirstOnly(), ignoreEmptyPoints: false });
+    const series2 = createSeries({ points: pointsForStacking.points2FirstAndSecondOnly(), ignoreEmptyPoints: false });
     const series = [series1, series2];
     const expectedSpacing = 7;
     const expectedWidthTwoBars = 32;
 
-    createSeriesFamily('bar', series, { equalBarWidth: true });
+    createSeriesFamily('bar', series, { });
 
     // first argument - both bars exists
     assert.strictEqual(series1.getPointsByArg('First')[0].coordinatesCorrection.width, expectedWidthTwoBars, 'Series 1, point 1 - both bars exist');
@@ -1130,14 +1082,14 @@ QUnit.test('Set two series', function(assert) {
 QUnit.module('Bar series - side-by-side width different width calculation');
 
 QUnit.test('Set two series', function(assert) {
-    const series1 = createSeries({ points: pointsForStacking.points1FirstOnly() });
-    const series2 = createSeries({ points: pointsForStacking.points2FirstAndSecondOnly() });
+    const series1 = createSeries({ points: pointsForStacking.points1FirstOnly(), ignoreEmptyPoints: true });
+    const series2 = createSeries({ points: pointsForStacking.points2FirstAndSecondOnly(), ignoreEmptyPoints: true });
     const series = [series1, series2];
     const expectedWidthOneBar = 70;
     const expectedWidthTwoBars = 32;
     const expectedSpacing = 7;
 
-    createSeriesFamily('bar', series, { equalBarWidth: false });
+    createSeriesFamily('bar', series, { });
 
     // first argument - both bars exists
     assert.strictEqual(series1.getPointsByArg('First')[0].coordinatesCorrection.width, expectedWidthTwoBars, 'Series 1, point 1 - both bars exist');
@@ -1163,7 +1115,7 @@ QUnit.test('Set two series with points with the same arguments', function(assert
     const expectedWidthTwoBars = 32;
     const expectedSpacing = 7;
 
-    createSeriesFamily('bar', series, { equalBarWidth: false });
+    createSeriesFamily('bar', series, { });
 
     // first series
     assert.strictEqual(series1.getPointsByArg('A')[0].coordinatesCorrection.width, expectedWidthTwoBars, 'Series 1, argument A, first point');
@@ -1193,7 +1145,7 @@ QUnit.test('Set two series with points with the same arguments. With null points
     const expectedWidthTwoBars = 32;
     const expectedSpacing = 7;
 
-    createSeriesFamily('bar', series, { equalBarWidth: false });
+    createSeriesFamily('bar', series, { });
 
     // first series
     assert.strictEqual(series1.getPointsByArg('A')[0].coordinatesCorrection.width, expectedWidthTwoBars, 'Series 1, argument A, first point');
@@ -1225,7 +1177,7 @@ QUnit.test('Set two series, first series is invisible', function(assert) {
     series1.isVisible = function() {
         return false;
     };
-    createSeriesFamily('bar', series, { equalBarWidth: true });
+    createSeriesFamily('bar', series, { });
 
     assert.ok(!points1[0].correctCoordinates.called);
     assert.ok(points2[0].correctCoordinates.called);
@@ -1235,7 +1187,7 @@ QUnit.test('Set one series with datetime argument', function(assert) {
     const series1 = createSeries({ points: pointsForStacking.points1DateArgument() });
     const expectedWidthOneBar = 70;
 
-    createSeriesFamily('bar', [series1], { equalBarWidth: false });
+    createSeriesFamily('bar', [series1], { });
 
     assert.strictEqual(series1.getPointsByArg(new Date(0))[0].coordinatesCorrection.width, expectedWidthOneBar);
 });
@@ -1246,7 +1198,7 @@ QUnit.test('Set two series with datetime argument', function(assert) {
     const series = [series1, series2];
     const expectedWidthTwoBars = 32;
 
-    createSeriesFamily('bar', series, { equalBarWidth: false });
+    createSeriesFamily('bar', series, { });
 
     assert.strictEqual(series1.getPointsByArg(new Date(0))[0].coordinatesCorrection.width, expectedWidthTwoBars, 'Series 1');
     assert.strictEqual(series2.getPointsByArg(new Date(0))[0].coordinatesCorrection.width, expectedWidthTwoBars, 'Series 2');
@@ -1259,7 +1211,7 @@ QUnit.test('Set two series with zero values', function(assert) {
     const expectedWidthTwoBars = 32;
     const expectedSpacing = 7;
 
-    createSeriesFamily('bar', series, { equalBarWidth: false });
+    createSeriesFamily('bar', series, { });
 
     // first argument - both bars exists
     assert.strictEqual(series1.getPointsByArg('First')[0].coordinatesCorrection.width, expectedWidthTwoBars, 'Series 1, point 1 - both bars exist');
@@ -1276,13 +1228,13 @@ QUnit.test('Set two series with zero values', function(assert) {
     assert.strictEqual(series2.getPointsByArg('Second')[0].coordinatesCorrection.offset, expectedWidthTwoBars / 2 + expectedSpacing / 2, 'Series 2, point 2 - single bar exists');
 });
 
-QUnit.test('null values. ignoreEmptyPoints for all series is true and equalBarWidth is true - bars have different width', function(assert) {
+QUnit.test('null values. ignoreEmptyPoints for all series is true - bars have different width', function(assert) {
     const series1 = createSeries({ points: pointsForStacking.barWidthPoints1(), ignoreEmptyPoints: true });
     const series2 = createSeries({ points: pointsForStacking.barWidthPoints2(), ignoreEmptyPoints: true });
     const series3 = createSeries({ points: pointsForStacking.barWidthPoints3(), ignoreEmptyPoints: true });
     const series = [series1, series2, series3];
 
-    createSeriesFamily('bar', series, { equalBarWidth: true });
+    createSeriesFamily('bar', series, { });
 
     const series1Points = series1.getPoints();
     const series2Points = series2.getPoints();
@@ -1307,7 +1259,7 @@ QUnit.test('null values. ignoreEmptyPoints is set for the second series - null v
     const series3 = createSeries({ points: pointsForStacking.barWidthPoints3() });
     const series = [series1, series2, series3];
 
-    createSeriesFamily('bar', series, { equalBarWidth: true });
+    createSeriesFamily('bar', series, { });
 
     const series1Points = series1.getPoints();
     const series2Points = series2.getPoints();
@@ -1480,7 +1432,7 @@ QUnit.test('Set single series', function(assert) {
     const series = createSeries({ points: pointsForStacking.points1() });
     const expectedWidth = 70;
 
-    createSeriesFamily('rangebar', [series], { equalBarWidth: true });
+    createSeriesFamily('rangebar', [series], { });
 
     checkSeries(assert, series, expectedWidth, 0);
 });
@@ -1492,7 +1444,7 @@ QUnit.test('Set two series', function(assert) {
     const expectedSpacing = 7;
     const expectedWidth = 32;
 
-    createSeriesFamily('rangebar', series, { equalBarWidth: true });
+    createSeriesFamily('rangebar', series, { });
 
     checkSeries(assert, series1, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing / 2);
     checkSeries(assert, series2, expectedWidth, ZERO + expectedWidth / 2 + expectedSpacing / 2);
@@ -1506,7 +1458,7 @@ QUnit.test('Set three series', function(assert) {
     const expectedSpacing = 5;
     const expectedWidth = 20;
 
-    createSeriesFamily('rangebar', series, { equalBarWidth: true });
+    createSeriesFamily('rangebar', series, { });
 
     checkSeries(assert, series1, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth / 2);
     checkSeries(assert, series2, expectedWidth, 0);
@@ -1522,7 +1474,7 @@ QUnit.test('Set four series', function(assert) {
     const expectedSpacing = 4;
     const expectedWidth = 15;
 
-    createSeriesFamily('rangebar', series, { equalBarWidth: true });
+    createSeriesFamily('rangebar', series, { });
 
     // looking from center to border...
     checkSeries(assert, series1, expectedWidth, 0 - expectedSpacing / 2 - expectedWidth - expectedSpacing - expectedWidth / 2);
@@ -1541,7 +1493,7 @@ QUnit.test('Set five series', function(assert) {
     const expectedSpacing = 3;
     const expectedWidth = 12;
 
-    createSeriesFamily('rangebar', series, { equalBarWidth: true });
+    createSeriesFamily('rangebar', series, { });
 
     checkSeries(assert, series1, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth - expectedSpacing - expectedWidth / 2);
     checkSeries(assert, series2, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth / 2);
@@ -1562,7 +1514,7 @@ QUnit.test('Set five series. inverted', function(assert) {
 
     series1.getArgumentAxis().getTranslator().isInverted = () => true;
 
-    createSeriesFamily('rangebar', series, { equalBarWidth: true });
+    createSeriesFamily('rangebar', series, { });
 
     checkSeries(assert, series5, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth - expectedSpacing - expectedWidth / 2);
     checkSeries(assert, series4, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth / 2);
@@ -1580,7 +1532,7 @@ QUnit.test('Set single series - matching points', function(assert) {
     });
     const expectedWidth = 70;
 
-    createSeriesFamily('stackedbar', [series1], { equalBarWidth: true });
+    createSeriesFamily('stackedbar', [series1], { });
 
     checkSeries(assert, series1, expectedWidth, 0);
     checkStackedPoints(assert, points1);
@@ -1600,7 +1552,7 @@ QUnit.test('Set two series - matching points', function(assert) {
     const series = [series1, series2];
     const expectedWidth = 70;
 
-    createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('stackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, 0);
     checkSeries(assert, series2, expectedWidth, 0);
@@ -1631,7 +1583,7 @@ QUnit.test('Set two series - matching points. Points with null values', function
         stack: '0'
     });
     const series = [series1, series2];
-    const family = createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    const family = createSeriesFamily('stackedbar', series, { });
     const expectedWidth = 70;
 
     family.updateSeriesValues();
@@ -1662,7 +1614,7 @@ QUnit.test('Set two series - matching points. all series are visible', function(
     });
     const series = [series1, series2];
 
-    createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('stackedbar', series, { });
 
     assert.ok(points1[0].resetCorrection.calledOnce);
     assert.ok(!points2[0].resetCorrection.calledOnce);
@@ -1681,7 +1633,7 @@ QUnit.test('Set two series with invisible series', function(assert) {
     };
     const expectedWidth = 70;
 
-    createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('stackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, 0);
     $.each(series2.getPoints(), function(i, point) {
@@ -1699,7 +1651,7 @@ QUnit.test('Set two series with invisible series. different stack', function(ass
     };
     const expectedWidth = 70;
 
-    createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('stackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, 0);
     $.each(series2.getPoints(), function(i, point) {
@@ -1723,7 +1675,7 @@ QUnit.test('Set two series - matching points. first series is invisible', functi
         return false;
     };
 
-    createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('stackedbar', series, { });
 
     assert.ok(!points1[0].resetCorrection.called);
     assert.ok(points2[0].resetCorrection.calledOnce);
@@ -1747,7 +1699,7 @@ QUnit.test('Set two series - matching points. second series is invisible', funct
         return false;
     };
 
-    createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('stackedbar', series, { });
 
     assert.ok(points1[0].resetCorrection.calledOnce);
     assert.ok(!points2[0].resetCorrection.calledOnce);
@@ -1774,7 +1726,7 @@ QUnit.test('Set three series - matching points', function(assert) {
     const series = [series1, series2, series3];
     const expectedWidth = 70;
 
-    createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('stackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, 0);
     checkSeries(assert, series2, expectedWidth, 0);
@@ -1835,7 +1787,7 @@ QUnit.test('Set three series in two groups - matching points', function(assert) 
     const expectedWidth = 32;
     const expectedOffset = 19.5;
 
-    createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('stackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, -expectedOffset);
@@ -1869,7 +1821,7 @@ QUnit.test('Set four series in two groups - matching points', function(assert) {
     const expectedWidth = 32;
     const expectedOffset = 19.5;
 
-    createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('stackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, expectedOffset);
@@ -1899,7 +1851,7 @@ QUnit.test('Set three series in three groups - matching points', function(assert
     const expectedWidth = 20;
     const expectedOffset = 25;
 
-    createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('stackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, 0);
@@ -2035,7 +1987,7 @@ QUnit.test('Set single series date argument - matching points', function(assert)
     });
     const expectedWidth = 70;
 
-    createSeriesFamily('stackedbar', [series1], { equalBarWidth: true });
+    createSeriesFamily('stackedbar', [series1], { });
 
     checkSeries(assert, series1, expectedWidth, 0);
     checkStackedPoints(assert, points1);
@@ -2062,7 +2014,7 @@ QUnit.test('Set three series - 2 groups. inverted', function(assert) {
     const expectedOffset = 19.5;
 
     series1.getArgumentAxis().getTranslator().isInverted = () => true;
-    createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('stackedbar', series, { });
 
     checkSeries(assert, series3, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, expectedOffset);
@@ -2093,7 +2045,7 @@ QUnit.test('Set three series. inverted', function(assert) {
 
     series1.getArgumentAxis().getTranslator().isInverted = () => true;
 
-    createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('stackedbar', series, { });
 
     checkSeries(assert, series3, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, 0);
@@ -2121,7 +2073,7 @@ QUnit.test('Set three series - datetime value', function(assert) {
     });
     const series = [series1, series2, series3];
 
-    createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('stackedbar', series, { });
 
     checkStackedPoints(assert, points1, points2, points3);
 });
@@ -2135,7 +2087,7 @@ QUnit.test('Set single series - matching points', function(assert) {
     });
     const expectedWidth = 70;
 
-    createSeriesFamily('stackedbar', [series1], { equalBarWidth: true });
+    createSeriesFamily('stackedbar', [series1], { });
 
     checkSeries(assert, series1, expectedWidth, 0);
     checkStackedPoints(assert, negativePoints1);
@@ -2155,7 +2107,7 @@ QUnit.test('Set two series - matching points', function(assert) {
     const series = [series1, series2];
     const expectedWidth = 70;
 
-    createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('stackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, 0);
     checkSeries(assert, series2, expectedWidth, 0);
@@ -2182,7 +2134,7 @@ QUnit.test('Set three series - matching points', function(assert) {
     const series = [series1, series2, series3];
     const expectedWidth = 70;
 
-    createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('stackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, 0);
     checkSeries(assert, series2, expectedWidth, 0);
@@ -2210,7 +2162,7 @@ QUnit.test('Set three series in two groups - matching points', function(assert) 
     const expectedWidth = 32;
     const expectedOffset = 19.5;
 
-    createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('stackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, -expectedOffset);
@@ -2244,7 +2196,7 @@ QUnit.test('Set four series in two groups - matching points', function(assert) {
     const expectedWidth = 32;
     const expectedOffset = 19.5;
 
-    createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('stackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, expectedOffset);
@@ -2274,7 +2226,7 @@ QUnit.test('Set three series in three groups - matching points', function(assert
     const expectedWidth = 20;
     const expectedOffset = 25;
 
-    createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('stackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, 0);
@@ -2293,7 +2245,7 @@ QUnit.test('Set single series - matching points', function(assert) {
     });
     const expectedWidth = 70;
 
-    createSeriesFamily('stackedbar', [series1], { equalBarWidth: true });
+    createSeriesFamily('stackedbar', [series1], { });
 
     checkSeries(assert, series1, expectedWidth, 0);
 
@@ -2314,7 +2266,7 @@ QUnit.test('Set two series - matching points', function(assert) {
     const series = [series1, series2];
     const expectedWidth = 70;
 
-    createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('stackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, 0);
     checkSeries(assert, series2, expectedWidth, 0);
@@ -2340,7 +2292,7 @@ QUnit.test('Set three series - matching points', function(assert) {
         stack: '0'
     });
     const series = [series1, series2, series3];
-    const family = createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    const family = createSeriesFamily('stackedbar', series, { });
     const expectedWidth = 70;
 
     checkSeries(assert, series1, expectedWidth, 0);
@@ -2374,7 +2326,7 @@ QUnit.test('Set three series in two groups - matching points', function(assert) 
     const expectedWidth = 32;
     const expectedOffset = 19.5;
 
-    createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('stackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, -expectedOffset);
@@ -2408,7 +2360,7 @@ QUnit.test('Set four series in two groups - matching points', function(assert) {
     const expectedWidth = 32;
     const expectedOffset = 19.5;
 
-    createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('stackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, expectedOffset);
@@ -2438,7 +2390,7 @@ QUnit.test('Set three series in three groups - matching points', function(assert
     const expectedWidth = 20;
     const expectedOffset = 25;
 
-    createSeriesFamily('stackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('stackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, 0);
@@ -2457,7 +2409,7 @@ QUnit.test('Set single series - matching points', function(assert) {
     });
     const expectedWidth = 70;
 
-    createSeriesFamily('fullstackedbar', [series1], { equalBarWidth: true });
+    createSeriesFamily('fullstackedbar', [series1], { });
 
     checkSeries(assert, series1, expectedWidth, 0);
     checkFullStackedPoints(assert, points1);
@@ -2477,7 +2429,7 @@ QUnit.test('Set two series - matching points', function(assert) {
     const series = [series1, series2];
     const expectedWidth = 70;
 
-    createSeriesFamily('fullstackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('fullstackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, 0);
     checkSeries(assert, series2, expectedWidth, 0);
@@ -2505,7 +2457,7 @@ QUnit.test('Set three series - matching points', function(assert) {
     const series = [series1, series2, series3];
     const expectedWidth = 70;
 
-    createSeriesFamily('fullstackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('fullstackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, 0);
     checkSeries(assert, series2, expectedWidth, 0);
@@ -2533,7 +2485,7 @@ QUnit.test('Set three series in two groups - matching points', function(assert) 
     const expectedWidth = 32;
     const expectedOffset = 19.5;
 
-    createSeriesFamily('fullstackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('fullstackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, -expectedOffset);
@@ -2567,7 +2519,7 @@ QUnit.test('Set four series in two groups - matching points', function(assert) {
     const expectedWidth = 32;
     const expectedOffset = 19.5;
 
-    createSeriesFamily('fullstackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('fullstackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, expectedOffset);
@@ -2597,7 +2549,7 @@ QUnit.test('Set three series in three groups - matching points', function(assert
     const expectedWidth = 20;
     const expectedOffset = 25;
 
-    createSeriesFamily('fullstackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('fullstackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, 0);
@@ -2614,7 +2566,7 @@ QUnit.test('Set single series date argument- matching points', function(assert) 
     });
     const expectedWidth = 70;
 
-    createSeriesFamily('fullstackedbar', [series1], { equalBarWidth: true });
+    createSeriesFamily('fullstackedbar', [series1], { });
 
     checkSeries(assert, series1, expectedWidth, 0);
     checkFullStackedPoints(assert, points1);
@@ -2766,7 +2718,7 @@ QUnit.test('Set three series. inverted', function(assert) {
 
     series1.getArgumentAxis().getTranslator().isInverted = () => true;
 
-    createSeriesFamily('fullstackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('fullstackedbar', series, { });
 
     checkSeries(assert, series3, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, expectedOffset);
@@ -2784,7 +2736,7 @@ QUnit.test('Set single series - matching points', function(assert) {
     });
     const expectedWidth = 70;
 
-    createSeriesFamily('fullstackedbar', [series1], { equalBarWidth: true });
+    createSeriesFamily('fullstackedbar', [series1], { });
 
     checkSeries(assert, series1, expectedWidth, 0);
     checkFullStackedPoints(assert, negativePoints1);
@@ -2804,7 +2756,7 @@ QUnit.test('Set two series - matching points', function(assert) {
     const series = [series1, series2];
     const expectedWidth = 70;
 
-    createSeriesFamily('fullstackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('fullstackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, 0);
     checkSeries(assert, series2, expectedWidth, 0);
@@ -2832,7 +2784,7 @@ QUnit.test('Set three series - matching points', function(assert) {
     const series = [series1, series2, series3];
     const expectedWidth = 70;
 
-    createSeriesFamily('fullstackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('fullstackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, 0);
     checkSeries(assert, series2, expectedWidth, 0);
@@ -2860,7 +2812,7 @@ QUnit.test('Set three series in two groups - matching points', function(assert) 
     const expectedWidth = 32;
     const expectedOffset = 19.5;
 
-    createSeriesFamily('fullstackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('fullstackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, -expectedOffset);
@@ -2894,7 +2846,7 @@ QUnit.test('Set four series in two groups - matching points', function(assert) {
     const expectedWidth = 32;
     const expectedOffset = 19.5;
 
-    createSeriesFamily('fullstackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('fullstackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, expectedOffset);
@@ -2924,7 +2876,7 @@ QUnit.test('Set three series in three groups - matching points', function(assert
     const expectedWidth = 20;
     const expectedOffset = 25;
 
-    createSeriesFamily('fullstackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('fullstackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, 0);
@@ -2943,7 +2895,7 @@ QUnit.test('Set single series - matching points', function(assert) {
     });
     const expectedWidth = 70;
 
-    createSeriesFamily('fullstackedbar', [series1], { equalBarWidth: true });
+    createSeriesFamily('fullstackedbar', [series1], { });
 
     checkSeries(assert, series1, expectedWidth, 0);
     checkFullStackedPoints(assert, mixedPoints1);
@@ -2963,7 +2915,7 @@ QUnit.test('Set two series - matching points', function(assert) {
     const series = [series1, series2];
     const expectedWidth = 70;
 
-    createSeriesFamily('fullstackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('fullstackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, 0);
     checkSeries(assert, series2, expectedWidth, 0);
@@ -2992,7 +2944,7 @@ QUnit.test('Set three series - matching points', function(assert) {
         stack: '0'
     });
     const series = [series1, series2, series3];
-    const family = createSeriesFamily('fullstackedbar', series, { equalBarWidth: true });
+    const family = createSeriesFamily('fullstackedbar', series, { });
     const expectedWidth = 70;
 
     checkSeries(assert, series1, expectedWidth, 0);
@@ -3024,7 +2976,7 @@ QUnit.test('Set three series in two groups - matching points', function(assert) 
     const expectedWidth = 32;
     const expectedOffset = 19.5;
 
-    createSeriesFamily('fullstackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('fullstackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, -expectedOffset);
@@ -3058,7 +3010,7 @@ QUnit.test('Set four series in two groups - matching points', function(assert) {
     const expectedWidth = 32;
     const expectedOffset = 19.5;
 
-    createSeriesFamily('fullstackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('fullstackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, expectedOffset);
@@ -3088,7 +3040,7 @@ QUnit.test('Set three series in three groups - matching points', function(assert
     const expectedWidth = 20;
     const expectedOffset = 25;
 
-    createSeriesFamily('fullstackedbar', series, { equalBarWidth: true });
+    createSeriesFamily('fullstackedbar', series, { });
 
     checkSeries(assert, series1, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, 0);
@@ -3112,7 +3064,7 @@ QUnit.test('Pass correct tatal and absTotal values to setPercentValue', function
         sinon.spy(p, 'setPercentValue');
     });
 
-    createSeriesFamily('fullstackedbar', [series1, series2], { equalBarWidth: true });
+    createSeriesFamily('fullstackedbar', [series1, series2], { });
 
     assert.strictEqual(mixedPoints1[0].setPercentValue.lastCall.args[0], 30);
     assert.strictEqual(mixedPoints1[0].setPercentValue.lastCall.args[1], 10);
@@ -3124,7 +3076,7 @@ QUnit.test('Translator interval is too small - bar width is 1px', function(asser
     const series = createSeries({ points: pointsForStacking.points1() }, undefined, undefined, 2);
     const expectedWidth = 1;
 
-    createSeriesFamily('bar', [series], { equalBarWidth: true, barWidth: 0.3 });
+    createSeriesFamily('bar', [series], { });
 
     checkSeries(assert, series, expectedWidth, 0);
 });
@@ -3137,7 +3089,7 @@ QUnit.test('Set single series - matching points', function(assert) {
         points: points1
     });
 
-    createSeriesFamily('stackedarea', [series1], { equalBarWidth: true });
+    createSeriesFamily('stackedarea', [series1], { });
 
     checkStackedPoints(assert, points1);
 });
@@ -3153,7 +3105,7 @@ QUnit.test('Set two series - matching points', function(assert) {
     });
     const series = [series1, series2];
 
-    createSeriesFamily('stackedarea', series, { equalBarWidth: true });
+    createSeriesFamily('stackedarea', series, { });
 
     checkStackedPoints(assert, points1, points2);
 
@@ -3174,7 +3126,7 @@ QUnit.test('Set three series - matching points', function(assert) {
     });
     const series = [series1, series2, series3];
 
-    createSeriesFamily('stackedarea', series, { equalBarWidth: true });
+    createSeriesFamily('stackedarea', series, { });
 
     checkStackedPoints(assert, points1, points2, points3);
 });
@@ -3818,7 +3770,7 @@ QUnit.test('Set two series, first series is invisible', function(assert) {
         return false;
     };
 
-    createSeriesFamily('candlestick', series, { equalBarWidth: true });
+    createSeriesFamily('candlestick', series, { });
 
     assert.ok(!points1[0].correctCoordinates.called);
     assert.ok(points2[0].correctCoordinates.called);
@@ -3935,7 +3887,7 @@ QUnit.test('Set two series, first series is invisible', function(assert) {
         return false;
     };
 
-    createSeriesFamily('stock', series, { equalBarWidth: true });
+    createSeriesFamily('stock', series, { });
 
     assert.ok(!points1[0].correctCoordinates.called);
     assert.ok(points2[0].correctCoordinates.called);
@@ -4021,7 +3973,7 @@ QUnit.test('Set series', function(assert) {
     const series3 = createSeries({ points: pointsForBubble.points3() }, undefined, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } });
     const series = [series1, series2, series3];
 
-    createSeriesFamily('bubble', series, { equalBarWidth: null, minBubbleSize: 2, maxBubbleSize: 0.1 });
+    createSeriesFamily('bubble', series, { minBubbleSize: 2, maxBubbleSize: 0.1 });
 
     assert.equal(series1.getPoints()[0].coordinatesCorrection, 10);
     assert.equal(series1.getPoints()[1].coordinatesCorrection, 9);
@@ -4041,7 +3993,7 @@ QUnit.test('Set series, points size are not much different', function(assert) {
     const series2 = createSeries({ points: pointsForBubble.points5() }, undefined, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } });
     const series = [series1, series2];
 
-    createSeriesFamily('bubble', series, { equalBarWidth: null, minBubbleSize: 2, maxBubbleSize: 0.1 });
+    createSeriesFamily('bubble', series, { minBubbleSize: 2, maxBubbleSize: 0.1 });
 
     assert.equal(series1.getPoints()[0].coordinatesCorrection, 9);
     assert.equal(series1.getPoints()[1].coordinatesCorrection, 5);
@@ -4055,7 +4007,7 @@ QUnit.test('Set series, points size are not much different', function(assert) {
 QUnit.test('Set series, one point', function(assert) {
     const series1 = createSeries({ points: pointsForBubble.points6() }, undefined, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } });
 
-    createSeriesFamily('bubble', [series1], { equalBarWidth: null, minBubbleSize: 2, maxBubbleSize: 0.1 });
+    createSeriesFamily('bubble', [series1], { minBubbleSize: 2, maxBubbleSize: 0.1 });
 
     assert.equal(series1.getPoints()[0].coordinatesCorrection, 6);
 });
@@ -4063,7 +4015,7 @@ QUnit.test('Set series, one point', function(assert) {
 QUnit.test('set minBubbleSize option', function(assert) {
     const series = [createSeries({ points: pointsForBubble.points3() }, undefined, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } })];
 
-    createSeriesFamily('bubble', series, { equalBarWidth: null, minBubbleSize: 20, maxBubbleSize: 0.1 });
+    createSeriesFamily('bubble', series, { minBubbleSize: 20, maxBubbleSize: 0.1 });
 
     assert.ok(series[0].getPoints()[0].coordinatesCorrection >= 20, 'size > minSize');
     assert.ok(series[0].getPoints()[1].coordinatesCorrection >= 20, 'size > minSize');
@@ -4073,7 +4025,7 @@ QUnit.test('set minBubbleSize option', function(assert) {
 QUnit.test('set maxBubbleSize option', function(assert) {
     const series = [createSeries({ points: pointsForBubble.points3() }, undefined, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } })];
 
-    createSeriesFamily('bubble', series, { equalBarWidth: null, minBubbleSize: 5, maxBubbleSize: 0.1 });
+    createSeriesFamily('bubble', series, { minBubbleSize: 5, maxBubbleSize: 0.1 });
 
     assert.ok(series[0].getPoints()[0].coordinatesCorrection <= 10, 'size < maxSize');
     assert.ok(series[0].getPoints()[1].coordinatesCorrection <= 10, 'size < maxSize');
@@ -4089,7 +4041,7 @@ QUnit.test('maxBubbleSize === minBubbleSize', function(assert) {
         ]
     }, undefined, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } })];
 
-    createSeriesFamily('bubble', series, { equalBarWidth: null, minBubbleSize: 6, maxBubbleSize: 0.1 });
+    createSeriesFamily('bubble', series, { minBubbleSize: 6, maxBubbleSize: 0.1 });
 
     assert.equal(series[0].getPoints()[0].coordinatesCorrection, 8, 'size < maxSize');
     assert.equal(series[0].getPoints()[1].coordinatesCorrection, 8, 'size < maxSize');
@@ -4105,7 +4057,7 @@ QUnit.test('Set two series with invisible series. Bubble', function(assert) {
         return false;
     };
 
-    createSeriesFamily('bubble', series, { equalBarWidth: null, minBubbleSize: 2, maxBubbleSize: 0.1 });
+    createSeriesFamily('bubble', series, { minBubbleSize: 2, maxBubbleSize: 0.1 });
 
     assert.equal(series1.getPoints()[0].coordinatesCorrection, 9);
     assert.equal(series1.getPoints()[1].coordinatesCorrection, 2);
@@ -4123,7 +4075,7 @@ QUnit.test('All series are invisible. Bubble', function(assert) {
         return false;
     };
 
-    createSeriesFamily('bubble', [series], { equalBarWidth: null, minBubbleSize: 2, maxBubbleSize: 0.1 });
+    createSeriesFamily('bubble', [series], { minBubbleSize: 2, maxBubbleSize: 0.1 });
 
     $.each(series.getPoints(), function(i, point) {
         assert.ok(!point.coordinatesCorrected, 'Point [' + i.toString() + '] has no mark about corrected coordinates');

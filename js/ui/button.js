@@ -161,7 +161,6 @@ class Button extends Widget {
         super._initMarkup();
 
         this._updateContent();
-        this._renderSubmitInput();
         this.setAria('role', 'button');
     }
 
@@ -323,7 +322,7 @@ class Button extends Widget {
             text = icon || '';
         }
 
-        ariaTarget.attr('aria-label', text.trim() || null);
+        ariaTarget.attr('aria-label', text || null);
     }
 
     _updateClick() {
@@ -363,6 +362,8 @@ class Button extends Widget {
             $template.addClass('dx-button-content');
             $content.replaceWith($template);
         }
+
+        this._updateSubmitInput();
     }
 
     _updateSubmitInput() {

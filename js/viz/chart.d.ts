@@ -566,14 +566,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      */
     barGroupWidth?: number;
     /**
-     * @docid dxChartOptions.barWidth
-     * @type number
-     * @deprecated dxChartSeriesTypes.CommonSeries.barPadding
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    barWidth?: number;
-    /**
      * @docid dxChartOptions.commonAnnotationSettings
      * @type dxChartCommonAnnotationConfig
      * @prevFileNamespace DevExpress.viz
@@ -646,14 +638,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @public
      */
     defaultPane?: string;
-    /**
-     * @docid dxChartOptions.equalBarWidth
-     * @type boolean
-     * @deprecated dxChartSeriesTypes.CommonSeries.ignoreEmptyPoints
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    equalBarWidth?: boolean;
     /**
      * @docid dxChartOptions.legend
      * @type object
@@ -832,15 +816,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      */
     scrollBar?: { color?: string, offset?: number, opacity?: number, position?: 'bottom' | 'left' | 'right' | 'top', visible?: boolean, width?: number };
     /**
-     * @docid dxChartOptions.scrollingMode
-     * @type Enums.ChartPointerType
-     * @default 'none'
-     * @deprecated dxChartOptions.zoomAndPan
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    scrollingMode?: 'all' | 'mouse' | 'none' | 'touch';
-    /**
      * @docid dxChartOptions.series
      * @type ChartSeries|Array<ChartSeries>
      * @default undefined
@@ -892,14 +867,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      */
     tooltip?: dxChartTooltip;
     /**
-     * @docid dxChartOptions.useAggregation
-     * @type boolean
-     * @deprecated dxChartSeriesTypes.CommonSeries.aggregation.enabled
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    useAggregation?: boolean;
-    /**
      * @docid dxChartOptions.valueAxis
      * @type Object|Array<Object>
      * @inherits dxChartOptions.commonAxisSettings
@@ -914,15 +881,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @public
      */
     zoomAndPan?: { allowMouseWheel?: boolean, allowTouchGestures?: boolean, argumentAxis?: 'both' | 'none' | 'pan' | 'zoom', dragBoxStyle?: { color?: string, opacity?: number }, dragToZoom?: boolean, panKey?: 'alt' | 'ctrl' | 'meta' | 'shift', valueAxis?: 'both' | 'none' | 'pan' | 'zoom' };
-    /**
-     * @docid dxChartOptions.zoomingMode
-     * @type Enums.ChartPointerType
-     * @default 'none'
-     * @deprecated dxChartOptions.zoomAndPan
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    zoomingMode?: 'all' | 'mouse' | 'none' | 'touch';
 }
 export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     /**
@@ -1044,24 +1002,6 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
      * @public
      */
     logarithmBase?: number;
-    /**
-     * @docid dxChartOptions.argumentAxis.max
-     * @type number | datetime | string
-     * @deprecated dxChartOptions.argumentAxis.visualRange
-     * @default undefined
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    max?: number | Date | string;
-    /**
-     * @docid dxChartOptions.argumentAxis.min
-     * @type number | datetime | string
-     * @deprecated dxChartOptions.argumentAxis.visualRange
-     * @default undefined
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    min?: number | Date | string;
     /**
      * @docid dxChartOptions.argumentAxis.minVisualRangeLength
      * @inherits VizTimeInterval
@@ -2132,15 +2072,6 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
      */
     logarithmBase?: number;
     /**
-     * @docid dxChartOptions.valueAxis.max
-     * @type number | datetime | string
-     * @deprecated dxChartOptions.valueAxis.visualRange
-     * @default undefined
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    max?: number | Date | string;
-    /**
      * @docid dxChartOptions.valueAxis.maxAutoBreakCount
      * @type numeric
      * @default 4
@@ -2148,15 +2079,6 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
      * @public
      */
     maxAutoBreakCount?: number;
-    /**
-     * @docid dxChartOptions.valueAxis.min
-     * @type number | datetime | string
-     * @deprecated dxChartOptions.valueAxis.visualRange
-     * @default undefined
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    min?: number | Date | string;
     /**
      * @docid dxChartOptions.valueAxis.minVisualRangeLength
      * @inherits VizTimeInterval

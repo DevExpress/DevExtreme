@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import array from '../../core/utils/array';
-import recurrenceUtils from './utils.recurrence';
+import { getRecurrenceProcessor } from './recurrence';
 import typeUtils from '../../core/utils/type';
 import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';
@@ -37,7 +37,7 @@ const subscribes = {
     needCoordinates: function(options) {
         const appointmentData = options.appointmentData;
         const startDate = options.startDate;
-        const endDate = this._getEndDate(appointmentData);
+        const originalEndDate = this._getEndDate(appointmentData, true);
         const recurrenceRule = this.fire('getField', 'recurrenceRule', appointmentData);
         const recurrenceException = this._getRecurrenceException(appointmentData);
         const dateRange = this._workSpace.getDateRange();
@@ -51,13 +51,13 @@ const subscribes = {
             rule: recurrenceRule,
             exception: recurrenceException,
             start: originalStartDate,
-            end: endDate,
+            end: originalEndDate,
             min: startViewDate,
             max: dateRange[1],
             firstDayOfWeek: firstDayOfWeek
         };
 
-        let dates = recurrenceUtils.getDatesByRecurrence(recurrenceOptions);
+        let dates = getRecurrenceProcessor().generateDates(recurrenceOptions);
         let initialDates;
 
         if(!dates.length) {
@@ -676,22 +676,26 @@ const subscribes = {
         return SchedulerTimezones.getClientTimezoneOffset(date);
     },
 
-    convertDateByTimezone: function(date, appointmentTimezone) {
+    convertDateByTimezone: function(date, appointmentTimezone, skipAppointmentTimezone) {
         date = new Date(date);
 
         const tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
         date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets);
-        date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets);
+        if(!skipAppointmentTimezone || skipAppointmentTimezone && !appointmentTimezone) {
+            date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets);
+        }
 
         return date;
     },
 
-    convertDateByTimezoneBack: function(date, appointmentTimezone) {
+    convertDateByTimezoneBack: function(date, appointmentTimezone, skipAppointmentTimezone) {
         date = new Date(date);
 
         const tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
         date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets, true);
-        date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets, true);
+        if(!skipAppointmentTimezone || skipAppointmentTimezone && !appointmentTimezone) {
+            date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets, true);
+        }
 
         return date;
     },
@@ -843,5 +847,9 @@ const subscribes = {
             throw errors.Error('E1058');
         }
     },
+
+    removeDroppableCellClass: function() {
+        this._workSpace.removeDroppableCellClass();
+    }
 };
 module.exports = subscribes;

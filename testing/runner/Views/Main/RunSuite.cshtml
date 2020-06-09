@@ -168,6 +168,9 @@
                     'jquery': '@GetJQueryUrl()',
                     'knockout': '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")',
                     'angular': '@Url.Content("~/artifacts/js/angular.js")',
+                    'preact': '@Url.Content("~/artifacts/js/preact.js")',
+                    'preact/hooks': '@Url.Content("~/artifacts/js/hooks.js")',
+                    'preact/compat': '@Url.Content("~/artifacts/js/compat.js")',
                     'jszip': '@Url.Content("~/artifacts/js/jszip.js")',
                     'quill': '@Url.Content("~/node_modules/quill/dist/quill.js")',
                     'devexpress-diagram': '@Url.Content("~/artifacts/js/dx-diagram.js")',
@@ -175,7 +178,9 @@
                     'exceljs': '@Url.Content("~/node_modules/exceljs/dist/exceljs.js")',
                     'turndown': '@Url.Content("~/node_modules/turndown/lib/turndown.browser.umd.js")',
                     'showdown': '@Url.Content("~/node_modules/showdown/dist/showdown.js")',
-
+                    'rrule': '@Url.Content("~/node_modules/rrule/dist/es5/rrule.js")',
+                    'luxon': '@Url.Content("~/node_modules/luxon/build/global/luxon.min.js")',
+                    'es6-object-assign': '@Url.Content("~/node_modules/es6-object-assign")',
                     // Global CSS
 
                     'common.css': '@Url.Content("~/artifacts/css/dx.common.css")',
@@ -209,6 +214,10 @@
                     },
                     'cldr': {
                         main: '../cldr.js',
+                        defaultExtension: 'js'
+                    },
+                    'es6-object-assign': {
+                        main: './index.js',
                         defaultExtension: 'js'
                     }
                 },

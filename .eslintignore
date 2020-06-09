@@ -2,4 +2,12 @@ artifacts/*
 js/viz/docs/*
 node_modules/*
 testing/helpers/sinon/*
-/themebuilder/data/metadata/*
+*.p.js
+*.j.js
+*.d.ts
+playground/*
+themebuilder/data/metadata/*
+themebuilder-scss/dist/*
+themebuilder-scss/coverage/*
+themebuilder-scss/src/data/metadata/*
+js/bundles/dx.custom.js

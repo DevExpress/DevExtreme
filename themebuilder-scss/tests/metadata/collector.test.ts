@@ -1,103 +1,99 @@
 import { join, resolve, dirname } from 'path';
 import { promises } from 'fs';
 
-import { MetadataCollector, FileInfo } from '../../src/metadata/collector';
+import MetadataCollector from '../../src/metadata/collector';
 
 const rootDir = join(__dirname, '..', '..');
 const scssDir = join(rootDir, 'tests', 'data', 'scss');
 
 describe('MetadataCollector', () => {
-    const expectedFileList: Array<string> = [
-        join('bundles', 'dx.light.scss'),
-        join('widgets', 'generic', 'accordion', '_colors.scss'),
-        join('widgets', 'generic', 'accordion', '_index.scss'),
-        join('widgets', 'generic', 'accordion', '_sizes.scss'),
-        join('widgets', 'generic', '_colors.scss'),
-        join('widgets', 'generic', '_index.scss'),
-        join('widgets', 'generic', '_sizes.scss')
-    ];
+  const expectedFileList: Array<string> = [
+    join('bundles', 'dx.light.scss'),
+    join('widgets', 'generic', 'accordion', '_colors.scss'),
+    join('widgets', 'generic', 'accordion', '_index.scss'),
+    join('widgets', 'generic', 'accordion', '_sizes.scss'),
+    join('widgets', 'generic', 'dateBox', '_index.scss'),
+    join('widgets', 'generic', '_colors.scss'),
+    join('widgets', 'generic', '_index.scss'),
+    join('widgets', 'generic', '_sizes.scss'),
+  ];
 
-    promises.mkdir = jest.fn();
-    promises.writeFile = jest.fn();
+  promises.mkdir = jest.fn();
+  promises.writeFile = jest.fn();
 
-    beforeEach(() => {
-        jest.clearAllMocks();
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('getFileList', async () => {
+    const collector = new MetadataCollector();
+    const fileList = await collector.getFileList(join(rootDir, 'tests', 'data', 'scss'));
+    const expectedFullPaths = expectedFileList.map((file) => join(scssDir, file));
+
+    expect(fileList.length).toBe(expectedFullPaths.length);
+
+    fileList.forEach((file) => expect(expectedFullPaths).toContain(file));
+  });
+
+  test('readFiles', async () => {
+    const collector = new MetadataCollector();
+    const handler = (content: string): string => content;
+    const filesInfo = await collector.readFiles(join(rootDir, 'tests', 'data', 'scss'), handler);
+
+    expect(filesInfo.length).toBe(expectedFileList.length);
+
+    filesInfo.forEach((file) => {
+      expect(expectedFileList).toContain(file.path);
+      expect(typeof file.content).toBe('string');
+      expect(file.content.length).toBeGreaterThan(0);
     });
+  });
 
-    test('getFileList', async () => {
-        const collector = new MetadataCollector();
-        const iterator = collector.getFileList(join(rootDir, 'tests', 'data', 'scss'));
-        const fileList: Array<string> = [];
+  test('readFiles handle files with additional handler', async () => {
+    const collector = new MetadataCollector();
+    const handler = (content: string): string => `123${content}`;
+    const fileList = await collector.readFiles(join(rootDir, 'tests', 'data', 'scss'), handler);
 
-        for await(const file of iterator) {
-            fileList.push(file);
-        }
+    fileList.forEach((file) => expect(file.content.slice(0, 3)).toBe('123'));
+  });
 
-        expect(fileList).toEqual(expectedFileList.map(file => join(scssDir, file)));
-    });
+  test('saveScssFile', async () => {
+    const relativePath = join('path', 'filePath.scss');
+    const fileContent = 'file content';
+    const destinationPath = './scss';
+    const expectedDestinationPath = resolve(join(destinationPath, relativePath));
+    const expectedDestinationDir = dirname(expectedDestinationPath);
 
-    test('readFiles', async () => {
-        const collector = new MetadataCollector();
-        const handler = (content: string) => content;
-        const iterator = collector.readFiles(join(rootDir, 'tests', 'data', 'scss'), handler);
-        const filesInfo: Array<FileInfo> = [];
+    async function getTestFiles(): Promise<Array<FileInfo>> {
+      return [{ path: relativePath, content: fileContent }];
+    }
 
-        for await(const file of iterator) {
-            filesInfo.push(file);
-        }
+    await MetadataCollector.saveScssFiles(getTestFiles(), destinationPath);
 
-        expect(filesInfo.map(file => file.path)).toEqual(expectedFileList);
+    expect(promises.mkdir).toHaveBeenCalledTimes(1);
+    expect(promises.mkdir).toHaveBeenCalledWith(expectedDestinationDir, { recursive: true });
+    expect(promises.writeFile).toHaveBeenCalledTimes(1);
+    expect(promises.writeFile).toHaveBeenCalledWith(expectedDestinationPath, fileContent);
+  });
 
-        filesInfo.forEach(file => {
-            expect(file.content).not.toBeFalsy();
-            expect(file.content.length > 0).toBeTruthy();
-        });
-    });
+  test('saveMetadata', async () => {
+    const collector = new MetadataCollector();
+    const version = '1.1.1';
+    const fileName = join('metadata', 'dx-theme-builder-metadata.ts');
+    const expectedFileName = resolve(fileName);
+    const expectedDirName = dirname(expectedFileName);
 
-    test('readFiles handle files with additional handler', async () => {
-        const collector = new MetadataCollector();
-        const handler = (content: string) => '123' + content;
-        const iterator = collector.readFiles(join(rootDir, 'tests', 'data', 'scss'), handler);
+    collector.generator.metadata = [{ Key: '$var', Value: '\'ON\'' }];
 
-        for await(const file of iterator) {
-            expect(file.content.slice(0, 3)).toBe('123');
-        }
-    });
+    let metaContent = 'export const metadata: Array<MetaItem> = [{\'Key\':\'$var\',\'Value\':\'"ON"\'}];\n';
+    metaContent += `export const version: string = '${version}';\n`;
+    metaContent += 'export const browsersList: Array<string> = [];\n';
 
-    test('saveScssFile', async () => {
-        const collector = new MetadataCollector();
-        const relativePath = join('path', 'filePath.scss');
-        const fileContent = 'file content';
-        const destinationPath = './scss';
-        const expectedDestinationPath = resolve(join(destinationPath, relativePath));
-        const expectedDestinationDir = dirname(expectedDestinationPath);
+    await collector.saveMetadata(fileName, version, []);
 
-        async function* getTestFiles(): AsyncGenerator<FileInfo> {
-            yield new FileInfo(relativePath, fileContent);
-        }
-
-        await collector.saveScssFiles(getTestFiles(), destinationPath);
-
-        expect(promises.mkdir).toHaveBeenCalledTimes(1);
-        expect(promises.mkdir).toHaveBeenCalledWith(expectedDestinationDir, { recursive: true });
-        expect(promises.writeFile).toHaveBeenCalledTimes(1);
-        expect(promises.writeFile).toHaveBeenCalledWith(expectedDestinationPath, fileContent);
-    });
-
-    test('saveMetadata', async () => {
-        const collector = new MetadataCollector();
-        const version = '1.1.1';
-        const fileName = join('metadata', 'dx-theme-builder-metadata.ts');
-        const expectedFileName = resolve(fileName);
-        const expectedDirName = dirname(expectedFileName);
-        let metaContent = 'export const metadata: Array<MetaItem> = ' + JSON.stringify([]) + ';\n';
-        metaContent += `export const version: string = '${version}';\n`;
-
-        await collector.saveMetadata(fileName, version);
-
-        expect(promises.mkdir).toHaveBeenCalledTimes(1);
-        expect(promises.mkdir).toHaveBeenCalledWith(expectedDirName, { recursive: true });
-        expect(promises.writeFile).toHaveBeenCalledTimes(1);
-        expect(promises.writeFile).toHaveBeenCalledWith(expectedFileName, metaContent);
-    });
+    expect(promises.mkdir).toHaveBeenCalledTimes(1);
+    expect(promises.mkdir).toHaveBeenCalledWith(expectedDirName, { recursive: true });
+    expect(promises.writeFile).toHaveBeenCalledTimes(1);
+    expect(promises.writeFile).toHaveBeenCalledWith(expectedFileName, metaContent);
+  });
 });

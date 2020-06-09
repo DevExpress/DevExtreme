@@ -31,7 +31,7 @@ if(Quill) {
 
         _dropHandler(e) {
             const dataTransfer = e.originalEvent.dataTransfer;
-            const hasFiles = dataTransfer && dataTransfer.files && dataTransfer.files.length;
+            const hasFiles = dataTransfer?.files?.length;
 
             e.preventDefault();
             if(hasFiles) {
@@ -46,12 +46,12 @@ if(Quill) {
                 return;
             }
 
-            const hasDataItems = clipboardData.items && clipboardData.items.length;
+            const hasDataItems = clipboardData.items?.length;
             const isHtmlData = clipboardData.getData('text/html');
 
             if(!isHtmlData && hasDataItems) {
                 this._getImage(clipboardData.items, (imageData) => {
-                    if(browser.mozilla) {
+                    if(this._isBrowserSupportImagePaste(browser)) {
                         return;
                     }
 
@@ -62,6 +62,11 @@ if(Quill) {
                     }
                 });
             }
+        }
+
+        _isBrowserSupportImagePaste({ mozilla, chrome, version }) {
+            return mozilla ||
+                chrome && version > 82; // T894297
         }
 
         _isImage(file) {

@@ -1,6 +1,8 @@
-import { MetadataCollector } from './collector';
+/* eslint no-console: 0 */
+import MetadataCollector from './collector';
 import { version } from '../../../build/gulp/context';
 import { resolveDataUri } from '../../../build/gulp/gulp-data-uri';
+import { browserslist } from '../../../package.json';
 
 const stylesDirectory = '../scss';
 const stylesDestinationDirectory = './src/data/scss';
@@ -9,16 +11,16 @@ const commentsRegex = /\s*\/\*[\S\s]*?\*\//g;
 
 const sourceHandler = (content: string): string => resolveDataUri(content.replace(commentsRegex, ''));
 
-const generate = async () => {
-    try{
-        const collector = new MetadataCollector();
-        const soureFiles = collector.readFiles(stylesDirectory, sourceHandler);
-        await collector.saveScssFiles(soureFiles, stylesDestinationDirectory);
-        await collector.saveMetadata(metadataDestinationFile, version.package);
-    } catch(e) {
-        console.error(e);
-        process.exit(1);
-    }
-}
+const generate = async (): Promise<void> => {
+  try {
+    const collector = new MetadataCollector();
+    const sourceFiles = collector.readFiles(stylesDirectory, sourceHandler);
+    await MetadataCollector.saveScssFiles(sourceFiles, stylesDestinationDirectory);
+    await collector.saveMetadata(metadataDestinationFile, version.package, browserslist);
+  } catch (e) {
+    console.error(e);
+    process.exit(1);
+  }
+};
 
 generate();

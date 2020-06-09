@@ -1,4 +1,4 @@
-import { initTestMarkup, createWrapper } from './helpers.js';
+import { initTestMarkup, createWrapper } from '../../helpers/scheduler/helpers.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import dateLocalization from 'localization/date';
 import fx from 'animation/fx';

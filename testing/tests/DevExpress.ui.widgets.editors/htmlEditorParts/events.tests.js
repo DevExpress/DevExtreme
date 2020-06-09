@@ -1,6 +1,8 @@
 import $ from 'jquery';
 
 import 'ui/html_editor';
+import 'ui/html_editor/converters/markdown';
+
 const FOCUS_STATE_CLASS = 'dx-state-focused';
 const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
 
@@ -129,5 +131,23 @@ module('Events', moduleConfig, () => {
 
         assert.strictEqual(focusInStub.callCount, 1, 'Editor is focused one time');
         assert.strictEqual(focusOutStub.callCount, 1, 'Editor is blurred one time');
+    });
+
+    ['html', 'markdown'].forEach((valueType) => {
+        test(`change value to "null" should raise only one ValueChanged event (valueType is "${valueType}")`, function(assert) {
+            const valueChangedStub = sinon.stub();
+            const onValueChangedStub = sinon.stub();
+            this.createEditor({
+                value: 'test',
+                onValueChanged: onValueChangedStub,
+                valueType
+            });
+            this.instance.on('valueChanged', valueChangedStub);
+
+            this.instance.option('value', null);
+
+            assert.ok(onValueChangedStub.calledOnce, 'subscribe via options');
+            assert.ok(valueChangedStub.calledOnce, 'subscribe via method');
+        });
     });
 });

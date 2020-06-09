@@ -52,6 +52,7 @@ gulp.task('ts-bundle', gulp.series(
 
 gulp.task('ts-jquery-check', gulp.series('ts-bundle', function checkJQueryAugmentations() {
     let content = `/// <reference path='${TS_BUNDLE_FILE}' />\n`;
+    content += 'import * as $ from \'jquery\';';
 
     content += MODULES
         .map(function(moduleMeta) {
