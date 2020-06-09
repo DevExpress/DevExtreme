@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import $ from 'jquery';
 import 'renovation/widget.j';
 
