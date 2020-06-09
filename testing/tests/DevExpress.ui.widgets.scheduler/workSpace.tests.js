@@ -1454,10 +1454,7 @@ QUnit.testStart(function() {
 
 })('Work Space Month with horizontal grouping');
 
-(function() {
-
-    QUnit.module('Workspace Keyboard Navigation');
-
+QUnit.module('Workspace Keyboard Navigation', {}, () => {
     QUnit.test('Month workspace navigation by arrows', function(assert) {
         const $element = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth({
             focusStateEnabled: true
@@ -2291,7 +2288,7 @@ QUnit.testStart(function() {
             createTest(
                 workSpace, config,
                 `Multiselection with ${config.key} arrow should work correctly with groupByDate
-                    in ${workSpace.name} when rtlEnabled is equal to ${config.rtlEnabled}`,
+                in ${workSpace.name} when rtlEnabled is equal to ${config.rtlEnabled}`,
             );
         });
 
@@ -2315,16 +2312,14 @@ QUnit.testStart(function() {
             createTest(
                 workSpace, config,
                 `Multiselection with ${config.key} arrow should work correctly with groupByDate
-                    in ${workSpace.name} when the next cell is in another row and rtlEnabled is ${config.rtlEnabled}`,
+                in ${workSpace.name} when the next cell is in another row and rtlEnabled is ${config.rtlEnabled}`,
             );
         });
     });
-})('Workspace Keyboard Navigation');
+});
 
 
-(function() {
-    QUnit.module('Workspace Mouse Interaction');
-
+QUnit.module('Workspace Mouse Interaction', {}, () => {
     const createTest = (workSpace, testDescription, groupByDate, groupOrientation) => {
         QUnit.test(testDescription, function(assert) {
             const $element = $('#scheduler-work-space')[workSpace.class]({
@@ -2874,8 +2869,7 @@ QUnit.testStart(function() {
             );
         });
     });
-
-})('Workspace Mouse Interaction');
+});
 
 
 (function() {
