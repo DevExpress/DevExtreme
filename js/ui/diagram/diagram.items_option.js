@@ -9,6 +9,7 @@ class ItemsOption extends Component {
     }
 
     _dataSourceChangedHandler(newItems, e) {
+        this._resetCache();
         this._items = newItems;
         this._diagramWidget._onDataSourceChanged();
     }
