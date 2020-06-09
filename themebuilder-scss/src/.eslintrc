@@ -1,0 +1,11 @@
+{
+    "extends": [
+        "devextreme/typescript"
+    ],
+    "env": {
+        "node": true
+    },
+    "parserOptions": {
+        "project": "themebuilder-scss/tsconfig.json",
+    }
+}

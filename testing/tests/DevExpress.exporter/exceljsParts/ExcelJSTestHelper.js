@@ -8,35 +8,15 @@ class ExcelJSTestHelper {
     }
 
     checkCustomizeCell(eventArgs, expectedCells, callIndex) {
-        const { gridCell, excelCell } = eventArgs;
-
         const currentRowIndex = Math.floor(callIndex / expectedCells[0].length);
         const currentCellIndex = callIndex % expectedCells[currentRowIndex].length;
         const expectedCell = expectedCells[currentRowIndex][currentCellIndex];
 
         const expectedAddress = expectedCell.excelCell.address;
 
-        assert.strictEqual(this.worksheet.getRow(expectedAddress.row).getCell(expectedAddress.column).address, excelCell.address, `cell.address (${expectedAddress.row}, ${expectedAddress.column})`);
+        assert.strictEqual(this.worksheet.getRow(expectedAddress.row).getCell(expectedAddress.column).address, eventArgs.excelCell.address, `cell.address (${expectedAddress.row}, ${expectedAddress.column})`);
 
-        const expectedColumn = expectedCell.gridCell.column;
-        const actualColumn = gridCell.column;
-
-        assert.strictEqual(actualColumn.dataField, expectedColumn.dataField, `column.dataField, ${callIndex}`);
-        assert.strictEqual(actualColumn.dataType, expectedColumn.dataType, `column.dataType, ${callIndex}`);
-        assert.strictEqual(actualColumn.caption, expectedColumn.caption, `column.caption, ${callIndex}`);
-        assert.strictEqual(actualColumn.index, expectedColumn.index, `column.index, ${callIndex}`);
-
-        const gridCellSkipProperties = ['column'];
-
-        for(const propertyName in gridCell) {
-            if(gridCellSkipProperties.indexOf(propertyName) === -1) {
-                if(propertyName === 'groupSummaryItems' || propertyName === 'value') {
-                    assert.deepEqual(gridCell[propertyName], expectedCell.gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
-                } else {
-                    assert.strictEqual(gridCell[propertyName], expectedCell.gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
-                }
-            }
-        }
+        return expectedCell;
     }
 
     checkAutoFilter(autoFilterEnabled, autoFilter, worksheetViews) {
@@ -112,16 +92,14 @@ class ExcelJSTestHelper {
         }
     }
 
-    _extendExpectedCells(cellsArray, topLeft) {
+    _extendExpectedCells(cellsArray, topLeft, callback) {
         this._iterateCells(cellsArray, (cellArgs, rowIndex, columnIndex) => {
             cellArgs.excelCell.address = {
                 row: rowIndex + topLeft.row,
                 column: columnIndex + topLeft.column
             };
 
-            if(!('value' in cellArgs.gridCell)) {
-                cellArgs.gridCell.value = cellArgs.excelCell.value;
-            }
+            callback(cellArgs, rowIndex, columnIndex);
         });
     }
 
@@ -176,4 +154,63 @@ class ExcelJSTestHelper {
     }
 }
 
-export default ExcelJSTestHelper;
+class ExcelJSPivotGridTestHelper extends ExcelJSTestHelper {
+    checkCustomizeCell(eventArgs, expectedCells, callIndex) {
+        const { pivotCell } = eventArgs;
+        const expectedCell = super.checkCustomizeCell(eventArgs, expectedCells, callIndex);
+
+        assert.notStrictEqual(pivotCell, undefined, 'pivotCell property exist');
+
+        for(const propertyName in pivotCell) {
+            assert.deepEqual(pivotCell[propertyName], expectedCell.pivotCell[propertyName], `pivotCell[${propertyName}], ${callIndex}`);
+        }
+    }
+
+    extendExpectedCells(cellsArray, topLeft) {
+        super._extendExpectedCells(cellsArray, topLeft, (cellArgs, rowIndex, columnIndex) => {
+            cellArgs.pivotCell.rowIndex = rowIndex;
+            cellArgs.pivotCell.columnIndex = columnIndex;
+
+            if(!('value' in cellArgs.pivotCell)) {
+                cellArgs.pivotCell.value = cellArgs.excelCell.value;
+            }
+        });
+    }
+}
+
+class ExcelJSDataGridTestHelper extends ExcelJSTestHelper {
+    checkCustomizeCell(eventArgs, expectedCells, callIndex) {
+        const { gridCell } = eventArgs;
+        const expectedCell = super.checkCustomizeCell(eventArgs, expectedCells, callIndex);
+
+        const expectedColumn = expectedCell.gridCell.column;
+        const actualColumn = gridCell.column;
+
+        assert.strictEqual(actualColumn.dataField, expectedColumn.dataField, `column.dataField, ${callIndex}`);
+        assert.strictEqual(actualColumn.dataType, expectedColumn.dataType, `column.dataType, ${callIndex}`);
+        assert.strictEqual(actualColumn.caption, expectedColumn.caption, `column.caption, ${callIndex}`);
+        assert.strictEqual(actualColumn.index, expectedColumn.index, `column.index, ${callIndex}`);
+
+        const gridCellSkipProperties = ['column'];
+
+        for(const propertyName in gridCell) {
+            if(gridCellSkipProperties.indexOf(propertyName) === -1) {
+                if(propertyName === 'groupSummaryItems' || propertyName === 'value') {
+                    assert.deepEqual(gridCell[propertyName], expectedCell.gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
+                } else {
+                    assert.strictEqual(gridCell[propertyName], expectedCell.gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
+                }
+            }
+        }
+    }
+
+    _extendExpectedCells(cellsArray, topLeft) {
+        super._extendExpectedCells(cellsArray, topLeft, (cellArgs, rowIndex, columnIndex) => {
+            if(!('value' in cellArgs.gridCell)) {
+                cellArgs.gridCell.value = cellArgs.excelCell.value;
+            }
+        });
+    }
+}
+
+export { ExcelJSPivotGridTestHelper, ExcelJSDataGridTestHelper };

@@ -38,7 +38,7 @@ import SchedulerAppointmentModel from './ui.scheduler.appointment_model';
 import SchedulerHeader from './ui.scheduler.header';
 import SchedulerResourceManager from './ui.scheduler.resource_manager';
 import subscribes from './ui.scheduler.subscribes';
-import recurrenceUtils from './utils.recurrence';
+import { getRecurrenceProcessor } from './recurrence';
 import timeZoneUtils from './utils.timeZone';
 import SchedulerAgenda from './workspaces/ui.scheduler.agenda';
 import SchedulerTimelineDay from './workspaces/ui.scheduler.timeline_day';
@@ -1077,8 +1077,8 @@ const Scheduler = Widget.inherit({
 
     getCorrectedDatesByDaylightOffsets: function(originalStartDate, dates, appointmentData) {
         const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
-        const needCheckTimezoneOffset = typeUtils.isDefined(startDateTimeZone) && typeUtils.isDefined(this._getTimezoneOffsetByOption(originalStartDate));
         const convertedOriginalStartDate = this.fire('convertDateByTimezoneBack', new Date(originalStartDate.getTime()), startDateTimeZone);
+        const needCheckTimezoneOffset = typeUtils.isDefined(startDateTimeZone) && typeUtils.isDefined(this._getTimezoneOffsetByOption(originalStartDate));
 
         if(needCheckTimezoneOffset) {
             dates = dates.map((date) => {
@@ -1896,7 +1896,7 @@ const Scheduler = Widget.inherit({
 
         const recurrenceRule = this.fire('getField', 'recurrenceRule', targetAppointment);
 
-        if(!recurrenceUtils.getRecurrenceRule(recurrenceRule).isValid || !this._editing.allowUpdating) {
+        if(!getRecurrenceProcessor().evalRecurrenceRule(recurrenceRule).isValid || !this._editing.allowUpdating) {
             callback();
             return;
         }
@@ -2086,7 +2086,7 @@ const Scheduler = Widget.inherit({
     _isAppointmentRecurrence: function(appointmentData) {
         const recurrenceRule = this.fire('getField', 'recurrenceRule', appointmentData);
 
-        return recurrenceRule && recurrenceUtils.getRecurrenceRule(recurrenceRule).isValid;
+        return recurrenceRule && getRecurrenceProcessor().evalRecurrenceRule(recurrenceRule).isValid;
     },
 
     _getAppointmentData: function(appointmentData, options) {

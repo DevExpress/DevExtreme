@@ -960,7 +960,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     }
                     if($cell.is('td') || $cell.hasClass(that.addWidgetPrefix(EDIT_FORM_ITEM_CLASS))) {
                         const isCommandCell = $cell.is(COMMAND_CELL_SELECTOR);
-                        if(!isCommandCell && that.getController('editorFactory').focus()) {
+                        if((isRenderView || !isCommandCell) && that.getController('editorFactory').focus()) {
                             that._focus($cell);
                         } else if(that._isCellEditMode()) {
                             that._focus($cell, that._isHiddenFocus);

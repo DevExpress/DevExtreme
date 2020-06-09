@@ -22,6 +22,11 @@ export default class PreactWrapper extends DOMComponent {
         Preact.render(Preact.h(this._viewComponent, this.getAllProps(isFirstRender)), this.$element().get(0), container);
     }
 
+    _dispose() {
+        Preact.render(null, this.$element().get(0));
+        super._dispose();
+    }
+
     _render() {
         // NOTE: see ui.widget
         // this._renderContent();
@@ -154,7 +159,7 @@ export default class PreactWrapper extends DOMComponent {
     }
 
     _wrapKeyDownHandler(handler) {
-        return (event, options) => {
+        return (options) => {
             const { originalEvent, keyName, which } = options;
             const keys = this._supportedKeys();
             const func = keys[keyName] || keys[which];
@@ -165,13 +170,13 @@ export default class PreactWrapper extends DOMComponent {
                 const result = handler(originalEvent, options);
 
                 if(!result) {
-                    event.cancel = true;
-                    return event;
+                    originalEvent.cancel = true;
+                    return originalEvent;
                 }
             }
 
             // NOTE: make it possible to pass onKeyDown property
-            return handler?.(event, options);
+            return handler?.(originalEvent, options);
         };
     }
 

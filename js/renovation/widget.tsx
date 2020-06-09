@@ -136,7 +136,7 @@ export class WidgetProps extends BaseWidgetProps {
   view: viewFunction,
 })
 
-export default class Widget extends JSXComponent<WidgetProps> {
+export default class Widget extends JSXComponent(WidgetProps) {
   @InternalState() active = false;
 
   @InternalState() focused = false;
@@ -180,11 +180,11 @@ export default class Widget extends JSXComponent<WidgetProps> {
       active.on(this.widgetRef,
         ({ event }) => {
           this.active = true;
-                    onActive?.(event);
+          onActive?.(event);
         },
         ({ event }) => {
           this.active = false;
-                    onInactive?.(event);
+          onInactive?.(event);
         }, {
           hideTimeout: _feedbackHideTimeout,
           namespace,
@@ -264,8 +264,7 @@ export default class Widget extends JSXComponent<WidgetProps> {
     const { focusStateEnabled, onKeyDown } = this.props;
 
     if (focusStateEnabled || onKeyDown) {
-      const id = keyboard.on(this.widgetRef, this.widgetRef,
-        (options) => onKeyDown!(options.originalEvent, options));
+      const id = keyboard.on(this.widgetRef, this.widgetRef, (e) => onKeyDown!(e));
 
       return () => keyboard.off(id);
     }
@@ -359,8 +358,9 @@ export default class Widget extends JSXComponent<WidgetProps> {
   }
 
   get tabIndex() {
-    const { focusStateEnabled, disabled } = this.props;
+    const { focusStateEnabled, disabled, tabIndex } = this.props;
+    const isFocusable = focusStateEnabled && !disabled;
 
-    return focusStateEnabled && !disabled && this.props.tabIndex;
+    return isFocusable ? tabIndex : undefined;
   }
 }

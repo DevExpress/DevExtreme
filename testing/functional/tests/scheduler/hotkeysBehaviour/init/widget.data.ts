@@ -1,4 +1,4 @@
-export const dataSource = [
+export default [
     {
         text: 'Website Re-Design Plan',
         startDate: new Date(2019, 3, 1, 9, 0),
@@ -38,5 +38,5 @@ export const dataSource = [
         text: 'Approve New Online Marketing Strategy',
         startDate: new Date(2019, 3, 1, 9, 0),
         endDate: new Date(2019, 3, 1, 11, 30),
-    }
-]
+    },
+];

@@ -24,7 +24,7 @@ import themes from 'ui/themes';
 import errors from 'ui/widget/ui.errors';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
-import { createWrapper, SchedulerTestWrapper } from './helpers.js';
+import { createWrapper, SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler"></div>');

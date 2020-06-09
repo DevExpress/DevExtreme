@@ -341,6 +341,31 @@ QUnit.module('general', {}, () => {
         assert.strictEqual(blurStub.callCount, 0, 'FocusOut event has not been triggered');
     });
 
+    QUnit.test('TextEditor should pass integration options to the nested buttons (T894344)', function(assert) {
+        const text = 'my template';
+        const editor = $('#texteditor').dxTextEditor({
+            buttons: [{
+                name: 'testButton',
+                options: {
+                    template: 'custom',
+                    text: 'default text'
+                }
+            }],
+            integrationOptions: {
+                templates: {
+                    'custom': {
+                        render: function(args) {
+                            $('<span>').text(text).appendTo(args.container);
+                        }
+                    }
+                }
+            }
+        }).dxTextEditor('instance');
+
+        const buttonText = editor.getButton('testButton').$element().text();
+        assert.strictEqual(buttonText, text);
+    });
+
     QUnit.test('T220209 - the \'displayValueFormatter\' option', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
             value: 'First',

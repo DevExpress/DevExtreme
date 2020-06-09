@@ -274,6 +274,7 @@
         "dxFileManager-errorMaxFileSizeExceeded": "Die Dateigröße übersteigt die maximal erlaubte Größe.",
         "dxFileManager-errorInvalidSymbols": "Der Dateiname enthält ungültige Zeichen.",
         "dxFileManager-errorDefault": "Unbekannter Fehler",
+        "dxFileManager-errorDirectoryOpenFailed": "Das Verzeichnis kann nicht geöffnet werden",
 
         "dxFileManager-commandCreate": "Neues Verzeichnis",
         "dxFileManager-commandRename": "Umbenennen",

@@ -1,4 +1,4 @@
-import { createWidget } from '../../helpers/testHelper';
+import createWidget from '../../helpers/createWidget';
 import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import Scheduler from '../../model/scheduler';
@@ -6,33 +6,34 @@ import Scheduler from '../../model/scheduler';
 fixture `Scheduler: NativeScrolling`
     .page(url(__dirname, '../container.html'));
 
-const createScheduler = (options) => createWidget("dxScheduler", options, true);
+const createScheduler = (options) => createWidget('dxScheduler', options, true);
 
 const scrollToTime = ClientFunction(() => {
     const date = new Date(2019, 5, 1, 9, 40);
-    const instance = ($("#container") as any)["dxScheduler"]("instance");
+    const instance = ($('#container') as any)['dxScheduler']('instance');
 
     instance.scrollToTime(date.getHours() - 1, 30, date);
 });
 
-test("ScrollToTime works correctly with timelineDay and timelineWeek view (T749957)", async t => {
-    const scheduler = new Scheduler("#container");
+test('ScrollToTime works correctly with timelineDay and timelineWeek view (T749957)', async t => {
+    const scheduler = new Scheduler('#container');
 
     const views = [{
-        name: "timelineDay",
+        name: 'timelineDay',
         initValue: 0,
         expectedValue: 1700
     }, {
-        name: "timelineWeek",
+        name: 'timelineWeek',
         initValue: 0,
         expectedValue: 25700
     }];
 
-    for(let view of views) {
+    // eslint-disable-next-line no-restricted-syntax
+    for(const view of views) {
         const { name, initValue, expectedValue } = view;
 
-        await scheduler.option("currentView", name);
-        await scheduler.option("useNative", true);
+        await scheduler.option('currentView', name);
+        await scheduler.option('useNative', true);
 
         await t
             .expect(scheduler.workSpaceScroll.left).eql(initValue, `Work space has init scroll position in ${name} view`)
@@ -46,13 +47,13 @@ test("ScrollToTime works correctly with timelineDay and timelineWeek view (T7499
     }
 }).before(() => createScheduler({
     dataSource: [],
-    views: ["timelineDay", "timelineWeek"],
-    currentView: "timelineDay",
+    views: ['timelineDay', 'timelineWeek'],
+    currentView: 'timelineDay',
     currentDate: new Date(2019, 5, 1, 9, 40),
     firstDayOfWeek: 0,
     startDayHour: 0,
     endDayHour: 20,
     cellDuration: 60,
-    groups: ["priority"],
+    groups: ['priority'],
     height: 580
 }));
