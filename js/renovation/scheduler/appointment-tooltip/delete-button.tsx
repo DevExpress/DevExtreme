@@ -30,4 +30,4 @@ export class DeleteButtonProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class DeleteButton extends JSXComponent<DeleteButtonProps> {}
+export default class DeleteButton extends JSXComponent(DeleteButtonProps) {}

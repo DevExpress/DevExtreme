@@ -26,7 +26,7 @@ export class MarkerProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class Marker extends JSXComponent<MarkerProps> {
+export default class Marker extends JSXComponent(MarkerProps) {
   appointmentColor!: Color;
 
   @Effect()

@@ -109,7 +109,7 @@ export class TooltipItemContentProps {
     component: BaseComponent,
   },
 })
-export default class TooltipItemContent extends JSXComponent<TooltipItemContentProps> {
+export default class TooltipItemContent extends JSXComponent(TooltipItemContentProps) {
   @Ref()
   contentRef!: HTMLDivElement;
 
