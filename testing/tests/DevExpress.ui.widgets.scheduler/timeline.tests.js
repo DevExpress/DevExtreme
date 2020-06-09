@@ -778,9 +778,7 @@ QUnit.module('Timeline Keyboard Navigation', {
         $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
     });
 
-    (() => {
-        QUnit.module('Keyboard Multiselection with GroupByDate');
-
+    QUnit.module('Keyboard Multiselection with GroupByDate', {}, () => {
         const createTest = (config, testDescription) => {
             QUnit.test(testDescription, function(assert) {
                 const {
@@ -818,14 +816,12 @@ QUnit.module('Timeline Keyboard Navigation', {
             createTest(
                 config,
                 `Multiselection with ${config.key} arrow should work correctly with groupByDate
-                in Timeleine when rtlEnabled is equal to ${config.rtlEnabled}`,
+                    in Timeleine when rtlEnabled is equal to ${config.rtlEnabled}`,
             );
         });
-    })('Keyboard Multiselection with GroupByDate');
+    });
 
-    (() => {
-        QUnit.module('Mouse Multiselection with Vertical Grouping and Grouping by Date');
-
+    QUnit.module('Mouse Multiselection with Vertical Grouping and Grouping by Date', {}, () => {
         const createTest = (config, testDescription, groupByDate, groupOrientation) => {
             QUnit.test(testDescription, function(assert) {
                 this.instance.option({
@@ -891,7 +887,7 @@ QUnit.module('Timeline Keyboard Navigation', {
             'Mouse Multiselection should work correctly with timeline when it is grouped by date',
             true, 'horizontal',
         );
-    })('Keyboard Multiselection with Vertical Grouping');
+    });
 });
 
 QUnit.module('TimelineWorkWeek with intervalCount', {

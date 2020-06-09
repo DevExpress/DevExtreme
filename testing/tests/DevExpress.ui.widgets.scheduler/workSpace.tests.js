@@ -2230,9 +2230,7 @@ QUnit.testStart(function() {
         assert.ok(cells.eq(4).hasClass('dx-state-focused'), 'this last focused cell is correct');
     });
 
-    (() => {
-        QUnit.module('Keyboard Multiselection with GroupByDate');
-
+    QUnit.module('Keyboard Multiselection with GroupByDate', {}, () => {
         const createTest = (workSpace, config, testDescription) => {
             QUnit.test(testDescription, function(assert) {
                 const {
@@ -2293,7 +2291,7 @@ QUnit.testStart(function() {
             createTest(
                 workSpace, config,
                 `Multiselection with ${config.key} arrow should work correctly with groupByDate
-                in ${workSpace.name} when rtlEnabled is equal to ${config.rtlEnabled}`,
+                    in ${workSpace.name} when rtlEnabled is equal to ${config.rtlEnabled}`,
             );
         });
 
@@ -2317,10 +2315,10 @@ QUnit.testStart(function() {
             createTest(
                 workSpace, config,
                 `Multiselection with ${config.key} arrow should work correctly with groupByDate
-                in ${workSpace.name} when the next cell is in another row and rtlEnabled is ${config.rtlEnabled}`,
+                    in ${workSpace.name} when the next cell is in another row and rtlEnabled is ${config.rtlEnabled}`,
             );
         });
-    })('Keyboard Multiselection with GroupByDate');
+    });
 })('Workspace Keyboard Navigation');
 
 
@@ -2793,9 +2791,7 @@ QUnit.testStart(function() {
         $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
     });
 
-    (() => {
-        QUnit.module('Mouse Multiselection with Vertical Grouping');
-
+    QUnit.module('Mouse Multiselection with Vertical Grouping', {}, () => {
         const workSpaces = [{
             class: 'dxSchedulerWorkSpaceDay',
             name: 'SchedulerWorkSpaceDay',
@@ -2835,11 +2831,9 @@ QUnit.testStart(function() {
                 false, 'vertical',
             );
         });
-    })('Keyboard Multiselection with Vertical Grouping');
+    });
 
-    (() => {
-        QUnit.module('Mouse Multiselection with Grouping by Date');
-
+    QUnit.module('Mouse Multiselection with Grouping by Date', {}, () => {
         const workSpaces = [{
             class: 'dxSchedulerWorkSpaceDay',
             name: 'SchedulerWorkSpaceDay',
@@ -2879,7 +2873,7 @@ QUnit.testStart(function() {
                 true, 'horizontal',
             );
         });
-    })('Keyboard Multiselection with Grouping by Date');
+    });
 
 })('Workspace Mouse Interaction');
 
