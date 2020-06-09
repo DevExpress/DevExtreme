@@ -4,7 +4,6 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { h } from 'preact';
-import React from 'react';
 
 export const viewFunction = ({ props: { message, className }, restAttributes }: ErrorMessage) => (
   <div
@@ -15,7 +14,6 @@ export const viewFunction = ({ props: { message, className }, restAttributes }: 
     {message}
   </div>
 );
-
 
 @ComponentBindings()
 export class ErrorMessageProps {
