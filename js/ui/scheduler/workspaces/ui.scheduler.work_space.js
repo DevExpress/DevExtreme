@@ -213,52 +213,58 @@ const SchedulerWorkSpace = Widget.inherit({
     },
 
     _getCellFromNextColumn: function(direction, isMultiSelection) {
-        if(!isDefined(this._$focusedCell)) {
+        const $focusedCell = this._$focusedCell;
+        if(!isDefined($focusedCell)) {
             return;
         }
 
-        let $rightCell;
+        let $nextCell;
+        const $row = $focusedCell.parent();
         const nextColumnDirection = direction;
-        const previousColumnDirection = direction === 'next' ? 'prev' : 'next';
-        const $focusedCell = this._$focusedCell;
+        const isDirectionNext = direction === 'next';
+        const previousColumnDirection = isDirectionNext ? 'prev' : 'next';
+        const isRTL = this._isRTL();
+
         const groupCount = this._getGroupCount();
         const isHorizontalGrouping = this.option('groupOrientation') === 'horizontal';
         const isGroupedByDate = this.isGroupedByDate();
+
         const totalCellCount = this._getTotalCellCount(groupCount);
         const rowCellCount = isMultiSelection && (!isGroupedByDate)
             ? this._getCellCount() : totalCellCount;
+
         const lastIndexInRow = rowCellCount - 1;
         const currentIndex = $focusedCell.index();
-        const $row = $focusedCell.parent();
+
         const step = isGroupedByDate && isMultiSelection ? groupCount : 1;
         const isEdgeCell = this._isEdgeCell(
             isHorizontalGrouping ? totalCellCount - 1 : lastIndexInRow, currentIndex, step, direction,
         );
 
-        const sign = this._isRTL() ? 1 : -1;
-        const directionSign = direction === 'next' ? 1 : -1;
+        const sign = isRTL ? 1 : -1;
+        const directionSign = isDirectionNext ? 1 : -1;
         const resultingSign = sign * directionSign;
 
         if(isEdgeCell || (isMultiSelection && this._isGroupEndCell($focusedCell, direction))) {
             const nextIndex = currentIndex - resultingSign * step + resultingSign * rowCellCount;
-            const rowDirection = this._isRTL() ? previousColumnDirection : nextColumnDirection;
+            const rowDirection = isRTL ? previousColumnDirection : nextColumnDirection;
 
-            $rightCell = $row[rowDirection]().children().eq(nextIndex);
-            $rightCell = this._checkForViewBounds($rightCell);
+            $nextCell = $row[rowDirection]().children().eq(nextIndex);
+            $nextCell = this._checkForViewBounds($nextCell);
         } else {
-            $rightCell = $row.children().eq(currentIndex - resultingSign * step);
+            $nextCell = $row.children().eq(currentIndex - resultingSign * step);
         }
 
-        return $rightCell;
+        return $nextCell;
     },
 
     _isEdgeCell: function(lastIndexInRow, cellIndex, step, direction) {
         const isRTL = this._isRTL();
-        const isNextDirection = direction === 'next';
+        const isDirectionNext = direction === 'next';
 
         const rightEdgeCellIndex = isRTL ? 0 : lastIndexInRow;
         const leftEdgeCellIndex = isRTL ? lastIndexInRow : 0;
-        const edgeCellIndex = isNextDirection ? rightEdgeCellIndex : leftEdgeCellIndex;
+        const edgeCellIndex = isDirectionNext ? rightEdgeCellIndex : leftEdgeCellIndex;
 
         const isNextCellGreaterThanEdge = (cellIndex + step) > edgeCellIndex;
         const isNextCellLessThanEdge = (cellIndex - step) < edgeCellIndex;
@@ -266,7 +272,7 @@ const SchedulerWorkSpace = Widget.inherit({
         const isRightEdgeCell = isRTL ? isNextCellLessThanEdge : isNextCellGreaterThanEdge;
         const isLeftEdgeCell = isRTL ? isNextCellGreaterThanEdge : isNextCellLessThanEdge;
 
-        return isNextDirection ? isRightEdgeCell : isLeftEdgeCell;
+        return isDirectionNext ? isRightEdgeCell : isLeftEdgeCell;
     },
 
     _isGroupEndCell: function($cell, direction) {
@@ -274,11 +280,12 @@ const SchedulerWorkSpace = Widget.inherit({
             return false;
         }
 
+        const isDirectionNext = direction === 'next';
         const cellsInRow = this._getCellCount();
         const currentCellIndex = $cell.index();
         const result = currentCellIndex % cellsInRow;
-        const endCell = direction === 'next' ? cellsInRow - 1 : 0;
-        const startCell = direction === 'next' ? 0 : cellsInRow - 1;
+        const endCell = isDirectionNext ? cellsInRow - 1 : 0;
+        const startCell = isDirectionNext ? 0 : cellsInRow - 1;
 
         return this._isRTL() ? result === startCell : result === endCell;
     },
