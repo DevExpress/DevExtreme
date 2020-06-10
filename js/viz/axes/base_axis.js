@@ -1300,18 +1300,17 @@ Axis.prototype = {
             }
         }
 
-        that._seriesData.minVisible = that._seriesData.minVisible === undefined ? that._seriesData.min : that._seriesData.minVisible;
-        that._seriesData.maxVisible = that._seriesData.maxVisible === undefined ? that._seriesData.max : that._seriesData.maxVisible;
+        that._seriesData.minVisible = that._seriesData.minVisible ?? that._seriesData.min;
+        that._seriesData.maxVisible = that._seriesData.maxVisible ?? that._seriesData.max;
 
         if(!that.isArgumentAxis && options.showZero) {
             that._seriesData.correctValueZeroLevel();
         }
         that._seriesData.sortCategories(that.getCategoriesSorter(argCategories));
 
-        that._seriesData.breaks =
-            that._breaks = that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
+        that._seriesData.breaks = that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
 
-        that._translator.updateBusinessRange(that.adjustViewport(that._seriesData));
+        that._translator.updateBusinessRange(that._getViewportRange());
     },
 
     _addConstantLinesToRange(dataRange, minValueField, maxValueField) {
@@ -1408,7 +1407,7 @@ Axis.prototype = {
     estimateTickInterval: function(canvas) {
         const that = this;
         that.updateCanvas(canvas);
-        return that._tickInterval !== that._getTicks(that.adjustViewport(that._seriesData), _noop, true).tickInterval;
+        return that._tickInterval !== that._getTicks(that._getViewportRange(), _noop, true).tickInterval;
     },
 
     setTicks: function(ticks) {
@@ -1444,7 +1443,7 @@ Axis.prototype = {
             },
             options.minorTickInterval,
             options.minorTickCount,
-            that._breaks
+            that._seriesData.breaks
         );
     },
 
@@ -1490,7 +1489,7 @@ Axis.prototype = {
         const minInterval = !options.aggregationGroupWidth && !aggregationInterval && range.interval;
 
         const generateTicks = configureGenerator(options, aggregationGroupWidth, businessRange, that._getScreenDelta(), minInterval);
-        const tickInterval = generateTicks(aggregationInterval, true, minVisible, maxVisible, that._breaks).tickInterval;
+        const tickInterval = generateTicks(aggregationInterval, true, minVisible, maxVisible, that._seriesData.breaks).tickInterval;
 
         if(options.type !== constants.discrete) {
             const min = useAllAggregatedPoints ? businessRange.min : minVisible;
@@ -1606,18 +1605,15 @@ Axis.prototype = {
         that._ticksToRemove = Object.keys(majorTicksByValues)
             .map(k => majorTicksByValues[k]).concat(oldMinorTicks.slice(that._minorTicks.length, oldMinorTicks.length));
 
-        that._correctedBreaks = ticks.breaks;
-
+        if(ticks.breaks) {
+            that._seriesData.breaks = ticks.breaks;
+        }
         that._reinitTranslator(that._getViewportRange());
     },
 
     _reinitTranslator: function(range) {
         const that = this;
         const translator = that._translator;
-
-        if(that._correctedBreaks) {
-            range.breaks = that._correctedBreaks;
-        }
 
         if(that._isSynchronized) {
             return;
@@ -2152,7 +2148,7 @@ Axis.prototype = {
 
         const viewPort = that.getViewport();
 
-        that._breaks = that._getScaleBreaks(that._options, {
+        that._seriesData.breaks = that._getScaleBreaks(that._options, {
             minVisible: viewPort.startValue,
             maxVisible: viewPort.endValue
         }, that._series, that.isArgumentAxis);
@@ -2632,8 +2628,8 @@ Axis.prototype = {
     _getScreenDelta: function() {
         const that = this;
         const canvas = that._getCanvasStartEnd();
-        const breaks = that._breaks;
-        const breaksLength = breaks ? breaks.length : 0;
+        const breaks = that._seriesData.breaks;
+        const breaksLength = breaks.length;
         const screenDelta = _abs(canvas.start - canvas.end);
 
         return screenDelta - (breaksLength ? breaks[breaksLength - 1].cumulativeWidth : 0);
