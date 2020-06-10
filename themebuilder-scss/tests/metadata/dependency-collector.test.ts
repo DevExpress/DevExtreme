@@ -4,7 +4,7 @@ import DependencyCollector from '../../src/metadata/dependency-collector';
 
 const simpleJsDependencies: DependencyObj = {
   'dx.all.js': {
-    'datagrid.js': {
+    'toolbar.js': {
       'menu.js': {
         'button.js': {
           'icon.js': {},
@@ -46,8 +46,8 @@ jest.mock('fs', () => ({
   readFileSync: jest.fn().mockImplementation((path: string): string => {
     let content = '';
     switch (path) {
-      case 'datagrid.js':
-        content = '// #STYLE dataGrid';
+      case 'toolbar.js':
+        content = '// #STYLE toolbar';
         break;
       case 'menu.js':
         content = '// #STYLE menu';
@@ -94,7 +94,7 @@ describe('DependencyCollector', () => {
     dependencyCollector.fillStylesDependencyTree();
 
     expect(dependencyCollector.stylesDependencyTree).toEqual({
-      dataGrid: {
+      toolbar: {
         menu: {
           icon: {},
         },
@@ -120,10 +120,10 @@ describe('DependencyCollector', () => {
           icon: {},
         },
       },
-      contextMenu: {
-        buttonGroup: {},
+      context: {
+        group: {},
         toolbar: {
-          navBar: {
+          bar: {
             tab: {},
           },
         },
@@ -132,10 +132,10 @@ describe('DependencyCollector', () => {
       'menu',
       'button',
       'icon',
-      'contextMenu',
-      'buttonGroup',
+      'context',
+      'group',
       'toolbar',
-      'navBar',
+      'bar',
       'tab',
     ]);
 
@@ -145,14 +145,14 @@ describe('DependencyCollector', () => {
           icon: {},
         },
       },
-      contextMenu: {
-        buttonGroup: {
+      context: {
+        group: {
           icon: {},
           button: {},
         },
         toolbar: {
           icon: {},
-          navBar: {
+          bar: {
             tab: {
               icon: {},
             },
@@ -163,10 +163,10 @@ describe('DependencyCollector', () => {
       'menu',
       'button',
       'icon',
-      'contextMenu',
-      'buttonGroup',
+      'context',
+      'group',
       'toolbar',
-      'navBar',
+      'bar',
       'tab',
     ]);
   });
@@ -178,7 +178,7 @@ describe('DependencyCollector', () => {
     dependencyCollector.fillFlatStylesDependencyTree();
 
     expect(dependencyCollector.flatStylesDependencyTree).toEqual({
-      dataGrid: ['menu', 'icon'],
+      toolbar: ['menu', 'icon'],
       menu: ['icon'],
     });
   });
@@ -189,7 +189,7 @@ describe('DependencyCollector', () => {
 
     expect(fs.readFileSync).toBeCalledTimes(7);
     expect(dependencyCollector.flatStylesDependencyTree).toEqual({
-      dataGrid: ['menu', 'icon'],
+      toolbar: ['menu', 'icon'],
       menu: ['icon'],
     });
   });
