@@ -1428,7 +1428,7 @@ Axis.prototype = {
         const minInterval = !options.aggregationGroupWidth && !aggregationInterval && range.interval;
 
         const generateTicks = configureGenerator(options, aggregationGroupWidth, businessRange, that._getScreenDelta(), minInterval);
-        const tickInterval = generateTicks(aggregationInterval, true, minVisible, maxVisible, that._seriesData.breaks).tickInterval;
+        const tickInterval = generateTicks(aggregationInterval, true, minVisible, maxVisible, that._seriesData?.breaks).tickInterval;
 
         if(options.type !== constants.discrete) {
             const min = useAllAggregatedPoints ? businessRange.min : minVisible;
@@ -2572,7 +2572,7 @@ Axis.prototype = {
     _getScreenDelta: function() {
         const that = this;
         const canvas = that._getCanvasStartEnd();
-        const breaks = that._seriesData.breaks;
+        const breaks = that._seriesData ? that._seriesData.breaks : [];
         const breaksLength = breaks.length;
         const screenDelta = _abs(canvas.start - canvas.end);
 
