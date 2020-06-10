@@ -1,4 +1,4 @@
-import { createWidget } from '../../../helpers/testHelper';
+import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
@@ -7,9 +7,11 @@ fixture `Appointment tooltip with recurrence appointment and custom time zone`
 
 test('Time in appointment tooltip should has valid value in case with recurrence appointment and custom time zone(T848058)', async t => {
     const scheduler = new Scheduler('#container');
+    const appointmentCount = await scheduler.getAppointmentCount();
 
-    for(let i = 0; i < await scheduler.getAppointmentCount(); i++) {
-        await t.click(scheduler.getAppointment('Stand-up meeting', i).element)
+    for(let i = 0; i < appointmentCount; i += 1) {
+        await t
+            .click(scheduler.getAppointment('Stand-up meeting', i).element)
             .expect(scheduler.appointmentTooltip.getListItem('Stand-up meeting').date.textContent)
             .eql('8:30 AM - 8:45 AM');
     }

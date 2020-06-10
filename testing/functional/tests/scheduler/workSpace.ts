@@ -1,13 +1,15 @@
-import { createWidget } from '../../helpers/testHelper';
-import Scheduler from '../../model/scheduler';
 import { ClientFunction } from 'testcafe';
+import createWidget from '../../helpers/createWidget';
+import Scheduler from '../../model/scheduler';
 import { extend } from '../../../../js/core/utils/extend';
 import url from '../../helpers/getPageUrl';
 
 fixture `Scheduler: Workspace`
     .page(url(__dirname, '../container.html'));
 
-const disableAnimation = ClientFunction(() => (window as any).DevExpress.fx.off = true);
+const disableAnimation = ClientFunction(() => {
+    (window as any).DevExpress.fx.off = true;
+});
 
 const createScheduler = async(options = {}) => {
     await disableAnimation();

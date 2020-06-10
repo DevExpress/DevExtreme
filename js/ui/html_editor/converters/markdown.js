@@ -28,7 +28,7 @@ class MarkdownConverter {
     }
 
     toMarkdown(htmlMarkup) {
-        return this._html2Markdown.turndown(htmlMarkup);
+        return this._html2Markdown.turndown(htmlMarkup || '');
     }
 
     toHtml(markdownMarkup) {

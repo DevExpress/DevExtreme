@@ -1,5 +1,5 @@
 import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/testHelper';
+import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import { Selector } from 'testcafe';
 
@@ -77,7 +77,7 @@ test('Cell should highlighted after editing another cell when startEditAction is
         allowUpdating: true,
         startEditAction: 'dblClick'
     },
-    onFocusedCellChanging: e => e.isHighlighted = true
+    onFocusedCellChanging: e => { e.isHighlighted = true; }
 }));
 
 test('Cell should be focused after Enter key press if enterKeyDirection is "none" and enterKeyAction is "moveFocus"', async t => {
@@ -914,13 +914,14 @@ test('Cell should be highlighted after editing another cell when startEditAction
         allowUpdating: true,
         startEditAction: 'dblClick'
     },
-    onFocusedCellChanging: (e) => e.isHighlighted = true
+    onFocusedCellChanging: (e) =>  { e.isHighlighted = true; }
 }));
 
 test('Previous navigation elements should not have "tabindex" if navigation action is "click" (T870120)', async t => {
     const dataGrid = new DataGrid('#container');
-    for(let rowIndex = 0; rowIndex < 3; ++rowIndex) {
-        for(let colIndex = 0; colIndex < 3; ++colIndex) {
+
+    for(let rowIndex = 0; rowIndex < 3; rowIndex += 1) {
+        for(let colIndex = 0; colIndex < 3; colIndex += 1) {
             const cell = dataGrid.getDataCell(rowIndex, colIndex);
 
             await t
@@ -944,15 +945,14 @@ test('Previous navigation elements should not have "tabindex" if navigation acti
 
     await t.click(cell.element);
 
-    for(let rowIndex = 0; rowIndex < 3; ++rowIndex) {
-        for(let colIndex = 0; colIndex < 3; ++colIndex) {
+    for(let rowIndex = 0; rowIndex < 3; rowIndex += 1) {
+        for(let colIndex = 0; colIndex < 3; colIndex += 1) {
             cell = dataGrid.getDataCell(rowIndex, colIndex);
 
             await t
                 .expect(cell.element.focused).ok(`cell[${rowIndex}, ${colIndex}] is focused`)
-                .expect(cell.element.getAttribute('tabindex')).eql('111', `cell[${rowIndex}, ${colIndex}] has tabindex`);
-
-            await t.pressKey('tab');
+                .expect(cell.element.getAttribute('tabindex')).eql('111', `cell[${rowIndex}, ${colIndex}] has tabindex`)
+                .pressKey('tab');
         }
     }
 }).before(() => createWidget('dxDataGrid', {

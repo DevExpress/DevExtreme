@@ -17,9 +17,9 @@ const DEST = 'js/renovation/';
 const COMMON_SRC = ['js/**/*.*', `!${SRC}`];
 
 const knownErrors = [
-    'Cannot find module \'preact\'.',
-    'Cannot find module \'preact/hooks\'.',
-    'Cannot find module \'preact/compat\'.'
+    'Cannot find module \'preact\'',
+    'Cannot find module \'preact/hooks\'',
+    'Cannot find module \'preact/compat\''
 ];
 
 gulp.task('generate-components', function() {
@@ -33,7 +33,7 @@ gulp.task('generate-components', function() {
         .pipe(plumber(()=>null))
         .pipe(tsProject({
             error(e) {
-                if(!knownErrors.some(i => e.message.endsWith(i))) {
+                if(!knownErrors.some(i => e.message.includes(i))) {
                     console.log(e.message);
                 }
             },

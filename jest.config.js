@@ -13,6 +13,9 @@ module.exports = {
     collectCoverage: true,
     collectCoverageFrom: [
         './js/renovation/**/*.p.js',
+        '!./js/renovation/error-message.p.js',
+        '!./js/renovation/number-box.p.js',
+        '!./js/renovation/select-box.p.js',
     ],
     coverageDirectory: './testing/jest/code_coverage',
     coverageThreshold: {
@@ -32,6 +35,7 @@ module.exports = {
         path.join(path.resolve('.'), './testing/jest/**/*.tests.[jt]s?(x)')
     ],
     transform: {
-        '.(js|jsx|ts|tsx)': resolve.sync('ts-jest')
+        'test_components.+\\.tsx$': path.resolve('./testing/jest/utils/declaration-transformer.js'),
+        '\\.(js|jsx|ts|tsx)$': resolve.sync('ts-jest')
     }
 };

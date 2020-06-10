@@ -27,7 +27,7 @@ export class BaseWidgetProps { // eslint-disable-line import/prefer-default-expo
     actionConfig: { excludeValidators: ['disabled', 'readOnly'] },
   }) onContentReady?: (e: any) => any = (() => {});
 
-  @Event() onKeyDown?: (e: any, options: any) => any;
+  @Event() onKeyDown?: (e: any) => any;
 
   @OneWay() rtlEnabled?: boolean = config().rtlEnabled;
 

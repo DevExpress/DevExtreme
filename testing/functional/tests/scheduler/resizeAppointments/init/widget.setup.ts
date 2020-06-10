@@ -1,5 +1,5 @@
 import { extend } from '../../../../../../js/core/utils/extend';
-import { createWidget } from '../../../../helpers/testHelper';
+import createWidget from '../../../../helpers/createWidget';
 
 const resources = [
     { id: 0, color: '#e01e38' },
@@ -7,7 +7,7 @@ const resources = [
     { id: 2, color: '#1e65e8' }
 ];
 
-export const createScheduler = (options = {}) =>
+export default (options = {}) =>
     createWidget('dxScheduler', extend({
         views: ['day'],
         dataSource: [],

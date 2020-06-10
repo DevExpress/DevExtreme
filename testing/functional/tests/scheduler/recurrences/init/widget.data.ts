@@ -1,4 +1,4 @@
-export const dataSource = [
+export default [
     {
         text: 'Simple recurrence appointment',
         startDate: new Date(2020, 1, 9, 1),

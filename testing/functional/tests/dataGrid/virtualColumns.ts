@@ -1,6 +1,6 @@
 
 import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/testHelper';
+import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 
 fixture `Virtual Columns`
@@ -18,10 +18,10 @@ test('DataGrid should not scroll back to the focused cell after horizontal scrol
     const generateData = (rowCount, columnCount) => {
         const items = [];
 
-        for(let i = 0; i < rowCount; i++) {
+        for(let i = 0; i < rowCount; i += 1) {
             const item = { };
 
-            for(let j = 0; j < columnCount; j++) {
+            for(let j = 0; j < columnCount; j += 1) {
                 item[`field${j + 1}`] = `${i + 1}-${j + 1}`;
             }
 

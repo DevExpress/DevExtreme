@@ -1,6 +1,6 @@
 import url from '../../helpers/getPageUrl';
 import { Selector } from 'testcafe';
-import { createWidget } from '../../helpers/testHelper';
+import createWidget from '../../helpers/createWidget';
 import ContextMenu from '../../model/contextMenu';
 import { appendElementTo } from './helpers/domUtils';
 
@@ -24,7 +24,7 @@ test('Context menu should be shown in the same position when item was added in r
     await t
         .expect(contextMenu.getItemCount()).eql(2)
         .expect(contextMenu.overlay.getOverlayOffset()).eql(initialOverlayOffset);
-}).before(async t => {
+}).before(async () => {
     const menuTargetID = 'menuTarget';
     await appendElementTo('body', 'button', { id: menuTargetID, width: 150, height: 50, backgroundColor: 'steelblue' });
 
