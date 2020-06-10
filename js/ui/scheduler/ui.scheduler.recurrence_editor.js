@@ -391,7 +391,15 @@ const RecurrenceEditor = Editor.inherit({
             labelLocation: 'top',
         });
 
+        // this._setAriaDescribedBy(this._recurrenceForm.getEditor('interval'), $intervalEditorLabel);
         this._disableRepeatEndParts();
+    },
+
+    _setAriaDescribedBy(editor, $label) {
+        const labelId = `label-${new Guid()}`;
+
+        editor.setAria('describedby', labelId);
+        editor.setAria('id', labelId, $label);
     },
 
     getRecurrenceForm: function() {
@@ -449,12 +457,6 @@ const RecurrenceEditor = Editor.inherit({
         return monthByRule;
     },
 
-    _setAriaDescribedBy(editor, $label) {
-        const labelId = `label-${new Guid()}`;
-
-        editor.setAria('describedby', labelId);
-        editor.setAria('id', labelId, $label);
-    },
 
     _handleRepeatEndDefaults() {
         this._recurrenceRule.makeRule('count', 1);
