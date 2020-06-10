@@ -786,7 +786,9 @@ const LayoutManager = Widget.inherit({
 
     _renderEditor: function(options) {
         const dataValue = this._getDataByField(options.dataField);
-        const defaultEditorOptions = dataValue !== undefined ? { value: dataValue } : {};
+        const defaultEditorOptions = dataValue !== undefined || options.editorType === 'dxCheckBox'
+            ? { value: dataValue }
+            : {};
         const isDeepExtend = true;
 
         if(EDITORS_WITH_ARRAY_VALUE.indexOf(options.editorType) !== -1) {
