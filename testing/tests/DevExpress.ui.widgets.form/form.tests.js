@@ -412,7 +412,7 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
     assert.ok($testContainer.find('.dx-field-item .dx-textbox').hasClass('dx-editor-underlined'), 'right class rendered');
 });
 
-QUnit.module('(T897964)', () => {
+QUnit.module('T897964', () => {
     [true, false, undefined].forEach(boolValue => {
         QUnit.test(`Simple checkbox item, FormData.boolValue = ${boolValue}`, function(assert) {
             const form = $('#form').dxForm({
