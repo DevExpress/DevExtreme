@@ -9,15 +9,11 @@ import RadioGroup from 'ui/radio_group';
 import { getRecurrenceProcessor } from 'ui/scheduler/recurrence';
 import dateLocalization from 'localization/date';
 
-// const FREQUENCY_EDITOR = 'dx-recurrence-selectbox-freq';
 const REPEAT_COUNT_EDITOR = 'dx-recurrence-numberbox-repeat-count';
 const REPEAT_DATE_EDITOR = 'dx-recurrence-datebox-until-date';
 const REPEAT_ON_EDITOR = 'dx-recurrence-repeat-on';
-// const REPEAT_ON_MONTH_EDITOR = 'dx-recurrence-repeat-on-month';
 const DAY_OF_MONTH = 'dx-recurrence-numberbox-day-of-month';
-// const REPEAT_ON_YEAR_EDITOR = 'dx-recurrence-repeat-on-year';
 const MONTH_OF_YEAR = 'dx-recurrence-selectbox-month-of-year';
-// const EVERY_INTERVAL = 'dx-recurrence-numberbox-interval';
 const RECURRENCE_BUTTON_GROUP = 'dx-recurrence-button-group';
 
 const { testStart, test, module } = QUnit;

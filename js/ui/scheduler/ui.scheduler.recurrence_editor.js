@@ -23,24 +23,18 @@ const LABEL_POSTFIX = '-label';
 const WRAPPER_POSTFIX = '-wrapper';
 const RECURRENCE_EDITOR_CONTAINER = 'dx-recurrence-editor-container';
 const REPEAT_END_EDITOR = 'dx-recurrence-repeat-end';
-const REPEAT_TYPE_EDITOR = 'dx-recurrence-radiogroup-repeat-type';
+const REPEAT_END_TYPE_EDITOR = 'dx-recurrence-radiogroup-repeat-type';
 const REPEAT_COUNT_EDITOR = 'dx-recurrence-numberbox-repeat-count';
 const REPEAT_UNTIL_DATE_EDITOR = 'dx-recurrence-datebox-until-date';
 
 const FIELD_VALUE_CLASS = 'dx-field-value';
 const RECURRENCE_BUTTON_GROUP = 'dx-recurrence-button-group';
 
-// const FREQUENCY_EDITOR = 'dx-recurrence-selectbox-freq';
+const FREQUENCY_EDITOR = 'dx-recurrence-selectbox-freq';
 const INTERVAL_EDITOR = 'dx-recurrence-numberbox-interval-1';
-// const INTERVAL_EDITOR_FIELD = 'dx-recurrence-interval-field';
 const REPEAT_ON_EDITOR = 'dx-recurrence-repeat-on';
 const DAY_OF_MONTH = 'dx-recurrence-numberbox-day-of-month';
-// const REPEAT_ON_YEAR_EDITOR = 'dx-recurrence-repeat-on-year';
 const MONTH_OF_YEAR = 'dx-recurrence-selectbox-month-of-year';
-// const RECURRENCE_FREQ_FIELD = 'dx-recurrence-freq-field';
-// const FIELD_CLASS = 'dx-field';
-// const FIELD_LABEL_CLASS = 'dx-field-label';
-// const REPEAT_END_EDITOR_CONTAINER = 'dx-recurrence-repeat-end-container';
 
 const recurrentEditorNumberBoxWidth = 70;
 const defaultRecurrenceTypeIndex = 1; // TODO default daily recurrence
@@ -221,6 +215,7 @@ const RecurrenceEditor = Editor.inherit({
                 dataField: 'freq',
                 name: 'FREQ',
                 editorType: 'dxSelectBox',
+                cssClass: FREQUENCY_EDITOR,
                 editorOptions: {
                     items: frequencies,
                     value: freq,
@@ -344,12 +339,12 @@ const RecurrenceEditor = Editor.inherit({
                 items: [
                     {
                         template: (data, itemElement) =>{
-                            this._$repeatTypeEditor = $('<div>')
-                                .addClass(REPEAT_TYPE_EDITOR)
+                            this._$repeatEndEditor = $('<div>')
+                                .addClass(REPEAT_END_TYPE_EDITOR)
                                 .addClass(FIELD_VALUE_CLASS)
                                 .appendTo(itemElement);
 
-                            this._repeatEndEditor = this._createComponent(this._$repeatTypeEditor, RadioGroup, {
+                            this._repeatEndEditor = this._createComponent(this._$repeatEndEditor, RadioGroup, {
                                 items: repeatEndTypes,
                                 value: repeatType,
                                 valueExpr: 'type',
@@ -747,7 +742,7 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _changeRepeatTypeLabel() {
-        const $labels = this.$element().find(`.${REPEAT_TYPE_EDITOR}${LABEL_POSTFIX}`);
+        const $labels = this.$element().find(`.${REPEAT_END_TYPE_EDITOR}${LABEL_POSTFIX}`);
 
         if(!$labels.length) {
             return;
