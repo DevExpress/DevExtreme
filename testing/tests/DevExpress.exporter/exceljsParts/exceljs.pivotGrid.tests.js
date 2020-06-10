@@ -1641,7 +1641,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         [
             { value: dateValue, expectedPivotCellValue: dateValue, expectedExcelCellValue: new Date(Date.UTC(2019, 9, 9, 9, 9, 9, 9)) },
-            { value: '2019-10-09T06:09:09.009Z', expectedPivotCellValue: new Date(2019, 9, 9, 9, 9, 9, 9), expectedExcelCellValue: new Date(Date.UTC(2019, 9, 9, 9, 9, 9, 9)) },
+            { value: '2019-10-09T00:00:00', expectedPivotCellValue: new Date(2019, 9, 9), expectedExcelCellValue: new Date(Date.UTC(2019, 9, 9)) },
             { value: '2019/10/9', expectedPivotCellValue: new Date(2019, 9, 9), expectedExcelCellValue: new Date(Date.UTC(2019, 9, 9)) },
             { value: dateValue.getTime(), expectedPivotCellValue: dateValue, expectedExcelCellValue: new Date(Date.UTC(2019, 9, 9, 9, 9, 9, 9)) }
         ].forEach((date) => {
@@ -1666,7 +1666,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
                 }).dxPivotGrid('instance');
 
                 let text = format.expectedText;
-                if(date.value === '2019/10/9') {
+                if(date.value === '2019/10/9' || date.value === '2019-10-09T00:00:00') {
                     if(format.format === 'millisecond') text = '000';
                     if(format.format === 'second' || format.format === 'minute' || format.format === 'hour') text = '00';
                     if(format.format === 'shortTime' || format.format === 'longTime') text = '12:00 AM';
