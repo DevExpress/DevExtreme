@@ -1,4 +1,4 @@
-import { createWidget } from '../../helpers/testHelper';
+import createWidget from '../../helpers/createWidget';
 import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import Scheduler from '../../model/scheduler';

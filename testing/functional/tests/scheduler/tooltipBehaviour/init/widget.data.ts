@@ -1,4 +1,4 @@
-export const dataSource = [
+export default [
     {
         text: 'Brochure Design Review',
         startDate: new Date(2019, 3, 1, 10, 0),

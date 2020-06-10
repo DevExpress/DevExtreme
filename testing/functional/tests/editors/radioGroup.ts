@@ -12,7 +12,12 @@ test("Radio buttons placed into the template should not be selected after clicki
     const secondChildGroup = new RadioGroup(parentGroup.getItem(1).content.child());
     const thirdChildGroup = new RadioGroup(parentGroup.getItem(2).content.child());
 
-    const checkGroup = async (group: RadioGroup, firstChecked: boolean = false, secondChecked: boolean  = false, thirdChecked: boolean  = false): Promise<void> => {
+    const checkGroup = async(
+        group: RadioGroup,
+        firstChecked: boolean = false,
+        secondChecked: boolean = false,
+        thirdChecked: boolean = false
+        ): Promise<void> => {
         await t
             .expect(group.getItem().radioButton.isChecked).eql(firstChecked)
             .expect(group.getItem(1).radioButton.isChecked).eql(secondChecked)

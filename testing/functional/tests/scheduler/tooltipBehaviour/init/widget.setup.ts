@@ -1,6 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import { extend } from '../../../../../../js/core/utils/extend';
-import { createWidget } from "../../../../helpers/testHelper";
+import createWidget from '../../../../helpers/createWidget';
 
 export const createScheduler = (options = {}) =>
 	createWidget("dxScheduler", extend({

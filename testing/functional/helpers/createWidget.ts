@@ -1,6 +1,6 @@
 import { ClientFunction } from 'testcafe';
 
-export async function createWidget(
+export default async function createWidget(
     widgetName: string,
     options: any,
     disableAnimation = false,
@@ -20,6 +20,9 @@ export async function createWidget(
         }
     )();
 
-    if(disableAnimation)
-        await (ClientFunction(() => (window as any).DevExpress.fx.off = true))();
+    if(disableAnimation) {
+        await (ClientFunction(() => {
+            (window as any).DevExpress.fx.off = true;
+        }))();
+    }
 }
