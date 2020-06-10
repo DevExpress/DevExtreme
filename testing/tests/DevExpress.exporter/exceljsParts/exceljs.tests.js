@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import browser from 'core/utils/browser';
 import localization from 'localization';
+import errors from 'core/errors';
 import ja from 'localization/messages/ja.json!';
 import messageLocalization from 'localization/message';
 import { extend } from 'core/utils/extend';
@@ -6474,6 +6475,72 @@ QUnit.module('_getFullOptions', moduleConfig, () => {
 
         assert.deepEqual(_getFullOptions({ loadPanel: { enabled: false } }).loadPanel, { enabled: false, text: defaultLoadPanel.text }, '{ enabled: false } }');
         assert.deepEqual(_getFullOptions({ loadPanel: { enabled: false, text: 'my text' } }).loadPanel, { enabled: false, text: 'my text' }, '{ enabled: false, text: my text } }');
+    });
+});
+
+QUnit.module('Deprecated warnings', moduleConfig, () => {
+    QUnit.test('CustomizeCell handler - warnings when \'cell\' field is not used', function(assert) {
+        assert.expect(3);
+        const stub = sinon.stub(errors, 'log', () => {
+            assert.strictEqual(true, false, 'error.log should not be called');
+        });
+
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+
+        exportDataGrid({
+            component: dataGrid,
+            worksheet: this.worksheet,
+            customizeCell: function({ excelCell, gridCell }) {
+                assert.notStrictEqual(excelCell, undefined, 'excelCell');
+                assert.notStrictEqual(gridCell, undefined, 'gridCell');
+            }
+        }).then(() => {
+            assert.strictEqual(stub.callCount, 0, 'error.log.callCount');
+            stub.restore();
+            done();
+        });
+    });
+
+    QUnit.test('CustomizeCell handler - warnings when \'cell\' field is used', function(assert) {
+        assert.expect(4);
+        const stub = sinon.stub(errors, 'log', () => {
+            assert.deepEqual(errors.log.lastCall.args, [
+                'W0003',
+                'CustomizeCell handler argument',
+                'cell',
+                '20.1',
+                'Use the \'excelCell\' field instead'
+            ], 'args of the log method');
+        });
+
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+
+        exportDataGrid({
+            component: dataGrid,
+            worksheet: this.worksheet,
+            customizeCell: function({ cell, excelCell, gridCell }) {
+                assert.strictEqual(cell, excelCell, '\'cell\' field is the same that \'excelCell\' field');
+                assert.notStrictEqual(gridCell, undefined, 'gridCell');
+            }
+        }).then(() => {
+            assert.strictEqual(stub.callCount, 1, 'error.log.callCount');
+            stub.restore();
+            done();
+        });
     });
 });
 
