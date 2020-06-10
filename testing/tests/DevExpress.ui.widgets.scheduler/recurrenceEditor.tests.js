@@ -181,14 +181,14 @@ module('Repeat-end editor', repeatEndModuleConfig, () => {
 
     test('Recurrence repeat-end editor should have right default', function(assert) {
         this.createInstance({ value: 'FREQ=WEEKLY' });
-        const itemValues = [{ text: 'Never', value: 'never' }, { text: 'Count', value: 'count' }, { text: 'Until', value: 'until' }];
-        const items = this.repeatEndEditor.option('items');
+        const itemValues = [
+            { type: 'never' },
+            { type: 'until' },
+            { type: 'count' }
+        ];
 
         assert.equal(this.repeatEndEditor.option('value'), 'never', 'Repeat-end editor has a right default value');
-        for(let i = 0, len = items.length; i < len; i++) {
-            assert.equal(items[i].text(), itemValues[i].text, 'item text is right');
-            assert.equal(items[i].value, itemValues[i].value, 'item value is right');
-        }
+        assert.deepEqual(this.repeatEndEditor.option('items'), itemValues, 'Repeat-end editor items are correct');
     });
 
     test('Repeat-end should process rules correctly', function(assert) {
@@ -382,16 +382,6 @@ module('Interval editor', intervalModuleConfig, () => {
         this.intervalEditor.option('value', 3);
 
         assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;INTERVAL=3', 'Recurrence editor has right value');
-    });
-
-    test('Recurrence interval editor should have correct aria-describedby attribute', function(assert) {
-        this.createInstance({ value: 'FREQ=WEEKLY;INTERVAL=2' });
-
-        const $intervalEditor = this.instance.$element().find('.dx-recurrence-numberbox-interval .dx-texteditor-input');
-        const $intervalLabel = this.instance.$element().find('.dx-recurrence-numberbox-interval-1-label').first();
-
-        assert.notEqual(this.intervalEditor.$element().find('.dx-texteditor-input').attr('aria-describedby'), undefined, 'aria-describedby exists');
-        assert.equal($intervalEditor.attr('aria-describedby'), $intervalLabel.attr('id'), 'aria-describedby is correct');
     });
 });
 

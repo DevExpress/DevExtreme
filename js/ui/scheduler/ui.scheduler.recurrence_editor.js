@@ -75,10 +75,11 @@ const frequencies = frequenciesMessages.map((item) => {
 });
 
 const repeatEndTypes = [
-    { text() { return messageLocalization.format('dxScheduler-recurrenceNever'); }, value: 'never' },
-    { text() { return messageLocalization.format('dxScheduler-recurrenceRepeatOnDate'); }, value: 'until' },
-    { text() { return messageLocalization.format('dxScheduler-recurrenceRepeatCount'); }, value: 'count' }
+    { type: 'never' },
+    { type: 'until' },
+    { type: 'count' }
 ];
+
 
 const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
 
@@ -351,13 +352,12 @@ const RecurrenceEditor = Editor.inherit({
                             this._repeatEndEditor = this._createComponent(this._$repeatTypeEditor, RadioGroup, {
                                 items: repeatEndTypes,
                                 value: repeatType,
-                                displayExpr: 'text',
-                                valueExpr: 'value',
+                                valueExpr: 'type',
                                 itemTemplate: (itemData) => {
-                                    if(itemData.value === 'count') {
+                                    if(itemData.type === 'count') {
                                         return this._renderRepeatCountEditor();
                                     }
-                                    if(itemData.value === 'until') {
+                                    if(itemData.type === 'until') {
                                         return this._renderRepeatUntilEditor();
                                     }
 
@@ -386,12 +386,10 @@ const RecurrenceEditor = Editor.inherit({
             items: this._editors,
             showValidationSummary: true,
             scrollingEnabled: true,
-            // formData: formData,
             showColonAfterLabel: false,
             labelLocation: 'top',
         });
 
-        // this._setAriaDescribedBy(this._recurrenceForm.getEditor('interval'), $intervalEditorLabel);
         this._disableRepeatEndParts();
     },
 
