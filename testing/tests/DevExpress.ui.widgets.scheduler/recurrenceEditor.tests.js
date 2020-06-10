@@ -15,6 +15,8 @@ const REPEAT_ON_EDITOR = 'dx-recurrence-repeat-on';
 const DAY_OF_MONTH = 'dx-recurrence-numberbox-day-of-month';
 const MONTH_OF_YEAR = 'dx-recurrence-selectbox-month-of-year';
 const RECURRENCE_BUTTON_GROUP = 'dx-recurrence-button-group';
+const INTERVAL_EDITOR = 'dx-recurrence-numberbox-interval';
+const LABEL_POSTFIX = '-label';
 
 const { testStart, test, module } = QUnit;
 
@@ -351,7 +353,7 @@ module('Interval editor', intervalModuleConfig, () => {
     test('Recurrence interval numberbox should be rendered with right defaults', function(assert) {
         this.createInstance({ value: 'FREQ=WEEKLY' });
 
-        const $intervalLabel = this.instance.$element().find('.dx-recurrence-numberbox-interval-1-label');
+        const $intervalLabel = this.instance.$element().find(`.${INTERVAL_EDITOR}${LABEL_POSTFIX}`);
         assert.ok(this.intervalEditor instanceof NumberBox, 'Interval editor is NumberBox');
 
         assert.equal($intervalLabel.length, 1, 'Label for interval editor was rendered');
@@ -378,6 +380,22 @@ module('Interval editor', intervalModuleConfig, () => {
         this.intervalEditor.option('value', 3);
 
         assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;INTERVAL=3', 'Recurrence editor has right value');
+    });
+
+    [
+        { freq: 'WEEKLY', expectedText: 'week(s)' },
+        { freq: 'DAILY', expectedText: 'day(s)' },
+        { freq: 'MONTHLY', expectedText: 'month(s)' },
+        { freq: 'YEARLY', expectedText: 'year(s)' }
+    ].forEach((config) => {
+        QUnit.test(`Recurrence interval label should have correct text when freq=${config.freq}`, function(assert) {
+            this.createInstance();
+
+            this.instance.option('value', `FREQ=${config.freq}`);
+            const $label = this.instance.$element().find(`.${INTERVAL_EDITOR}${LABEL_POSTFIX}`);
+
+            assert.equal($label.text(), config.expectedText, 'label text is correct');
+        });
     });
 });
 
