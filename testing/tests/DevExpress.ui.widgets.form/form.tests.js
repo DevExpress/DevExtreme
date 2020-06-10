@@ -3468,5 +3468,3 @@ QUnit.test('Should not skip `optionChanged` event handler that has been added on
         'onOptionChanged'
     ]);
 });
-
-
