@@ -711,7 +711,7 @@ export default class dxScheduler extends Widget {
     /**
      * @docid dxSchedulerOptions.getAppointmentPopup
      * @publicName getAppointmentPopup()
-     * @return dxPopup
+     * @return dxPopup|undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
