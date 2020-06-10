@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import $ from 'jquery';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
