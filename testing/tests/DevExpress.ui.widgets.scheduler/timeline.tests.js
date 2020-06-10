@@ -779,8 +779,14 @@ QUnit.module('Timeline Keyboard Navigation', {
     });
 
     QUnit.module('Keyboard Multiselection with GroupByDate', () => {
-        const createTest = (config, testDescription) => {
-            QUnit.test(testDescription, function(assert) {
+        [
+            { startCell: 3, endCell: 1, focusedCellsCount: 2, rtlEnabled: false, key: 'left' },
+            { startCell: 1, endCell: 3, focusedCellsCount: 2, rtlEnabled: true, key: 'left' },
+            { startCell: 1, endCell: 3, focusedCellsCount: 2, rtlEnabled: false, key: 'right' },
+            { startCell: 3, endCell: 1, focusedCellsCount: 2, rtlEnabled: true, key: 'right' },
+        ].forEach((config) => {
+            QUnit.test(`Multiselection with ${config.key} arrow should work correctly with groupByDate
+                in Timeleine when rtlEnabled is equal to ${config.rtlEnabled}`, function(assert) {
                 const {
                     startCell, endCell, focusedCellsCount, rtlEnabled, key,
                 } = config;
@@ -804,26 +810,31 @@ QUnit.module('Timeline Keyboard Navigation', {
                 assert.ok(cells.eq(startCell).hasClass('dx-state-focused'), 'this first focused cell is correct');
                 assert.ok(cells.eq(endCell).hasClass('dx-state-focused'), 'this last focused cell is correct');
             });
-        };
-
-        const config = [
-            { startCell: 3, endCell: 1, focusedCellsCount: 2, rtlEnabled: false, key: 'left' },
-            { startCell: 1, endCell: 3, focusedCellsCount: 2, rtlEnabled: true, key: 'left' },
-            { startCell: 1, endCell: 3, focusedCellsCount: 2, rtlEnabled: false, key: 'right' },
-            { startCell: 3, endCell: 1, focusedCellsCount: 2, rtlEnabled: true, key: 'right' },
-        ];
-        config.forEach((config) => {
-            createTest(
-                config,
-                `Multiselection with ${config.key} arrow should work correctly with groupByDate
-                    in Timeleine when rtlEnabled is equal to ${config.rtlEnabled}`,
-            );
         });
     });
 
     QUnit.module('Mouse Multiselection with Vertical Grouping and Grouping by Date', () => {
-        const createTest = (config, testDescription, groupByDate, groupOrientation) => {
-            QUnit.test(testDescription, function(assert) {
+        [{
+            startCell: 3,
+            endCell: 7,
+            focusedCellsCount: 5,
+            cellFromAnotherGroup: 40,
+            groupOrientation: 'vertical',
+            groupByDate: false,
+            description: 'Mouse Multiselection should work correctly with timeline when it is grouped vertically'
+        }, {
+            startCell: 3,
+            endCell: 7,
+            focusedCellsCount: 3,
+            cellFromAnotherGroup: 8,
+            groupOrientation: 'horizontal',
+            groupByDate: true,
+            description: 'Mouse Multiselection should work correctly with timeline when it is grouped by date',
+        }].forEach(({
+            startCell, endCell, focusedCellsCount, cellFromAnotherGroup,
+            groupOrientation, groupByDate, description,
+        }) => {
+            QUnit.test(description, function(assert) {
                 this.instance.option({
                     focusStateEnabled: true,
                     groupOrientation,
@@ -833,10 +844,6 @@ QUnit.module('Timeline Keyboard Navigation', {
                 });
 
                 const $element = this.instance.$element();
-
-                const {
-                    startCell, endCell, focusedCellsCount, cellFromAnotherGroup,
-                } = config;
 
                 const cells = $element.find('.' + CELL_CLASS);
                 const $table = $element.find('.dx-scheduler-date-table');
@@ -862,31 +869,7 @@ QUnit.module('Timeline Keyboard Navigation', {
 
                 $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
             });
-        };
-
-        const verticalGroupingConfig = {
-            startCell: 3,
-            endCell: 7,
-            focusedCellsCount: 5,
-            cellFromAnotherGroup: 40,
-        };
-        const groupByDateConfig = {
-            startCell: 3,
-            endCell: 7,
-            focusedCellsCount: 3,
-            cellFromAnotherGroup: 8,
-        };
-
-        createTest(
-            verticalGroupingConfig,
-            'Mouse Multiselection should work correctly with timeline when it is grouped vertically',
-            false, 'vertical',
-        );
-        createTest(
-            groupByDateConfig,
-            'Mouse Multiselection should work correctly with timeline when it is grouped by date',
-            true, 'horizontal',
-        );
+        });
     });
 });
 
