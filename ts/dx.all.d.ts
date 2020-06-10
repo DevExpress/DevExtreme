@@ -5344,6 +5344,8 @@ declare module DevExpress.ui {
         firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
         /** @name dxScheduler.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
+        /** @name dxScheduler.Options.getAppointmentPopup */
+        getAppointmentPopup: (() => dxPopup | undefined);
         /** @name dxScheduler.Options.groupByDate */
         groupByDate?: boolean;
         /** @name dxScheduler.Options.groups */
