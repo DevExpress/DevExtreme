@@ -1,8 +1,8 @@
 import $ from '../../../core/renderer';
 import { each } from '../../../core/utils/iterator';
-import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
+import SchedulerWorkSpaceIndicator from './ui.scheduler.work_space.indicator';
 
-class SchedulerWorkspaceVertical extends SchedulerWorkSpace {
+class SchedulerWorkspaceVertical extends SchedulerWorkSpaceIndicator {
     _getCellsBetween($first, $last) {
         if(this._hasAllDayClass($last)) {
             return super._getCellsBetween($first, $last);
