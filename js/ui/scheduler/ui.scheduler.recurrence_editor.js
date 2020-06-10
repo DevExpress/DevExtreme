@@ -34,10 +34,9 @@ const RECURRENCE_BUTTON_GROUP = 'dx-recurrence-button-group';
 const INTERVAL_EDITOR = 'dx-recurrence-numberbox-interval-1';
 // const INTERVAL_EDITOR_FIELD = 'dx-recurrence-interval-field';
 const REPEAT_ON_EDITOR = 'dx-recurrence-repeat-on';
-// const REPEAT_ON_MONTH_EDITOR = 'dx-recurrence-repeat-on-month';
-// const DAY_OF_MONTH = 'dx-recurrence-numberbox-day-of-month';
+const DAY_OF_MONTH = 'dx-recurrence-numberbox-day-of-month';
 // const REPEAT_ON_YEAR_EDITOR = 'dx-recurrence-repeat-on-year';
-// const MONTH_OF_YEAR = 'dx-recurrence-selectbox-month-of-year';
+const MONTH_OF_YEAR = 'dx-recurrence-selectbox-month-of-year';
 // const RECURRENCE_FREQ_FIELD = 'dx-recurrence-freq-field';
 // const FIELD_CLASS = 'dx-field';
 // const FIELD_LABEL_CLASS = 'dx-field-label';
@@ -216,20 +215,6 @@ const RecurrenceEditor = Editor.inherit({
             months[i] = { value: String(i + 1), text: monthsNames[i] };
         }
 
-
-        const monthChanged = function(args) {
-            this._valueChangedHandler.call(this, args);
-
-            const monthValue = parseInt(args.component.option('value'));
-            if(this._dayEditor && monthValue) {
-                let maxAllowedDay = new Date(new Date().getFullYear(), parseInt(monthValue), 0).getDate();
-                if(monthValue === 2) {
-                    maxAllowedDay = 29;
-                }
-                this._dayEditor.option('max', maxAllowedDay);
-            }
-        };
-
         this._editors = [
             {
                 dataField: 'freq',
@@ -318,6 +303,7 @@ const RecurrenceEditor = Editor.inherit({
                     {
                         dataField: 'bymonthday',
                         editorType: 'dxNumberBox',
+                        cssClass: DAY_OF_MONTH,
                         editorOptions: {
                             min: 1,
                             max: 31,
@@ -326,7 +312,7 @@ const RecurrenceEditor = Editor.inherit({
                             showSpinButtons: true,
                             useLargeSpinButtons: false,
                             value: this._dayOfMonthByRules(),
-                            onValueChanged: this._valueChangedHandler.bind(this)
+                            onValueChanged: (args) => this._valueChangedHandler(args)
                         },
                         visible: freq === 'monthly' || freq === 'yearly',
                         label: {
@@ -336,13 +322,14 @@ const RecurrenceEditor = Editor.inherit({
                     {
                         dataField: 'bymonth',
                         editorType: 'dxSelectBox',
+                        cssClass: MONTH_OF_YEAR,
                         editorOptions: {
                             field: 'bymonth',
                             items: months,
                             value: this._monthOfYearByRules(),
                             displayExpr: 'text',
                             valueExpr: 'value',
-                            onValueChanged: monthChanged.bind(this)
+                            onValueChanged: (args) => this._valueChangedHandler(args)
                         },
                         visible: freq === 'monthly' || freq === 'yearly',
                         label: {
@@ -677,8 +664,14 @@ const RecurrenceEditor = Editor.inherit({
 
                 break;
             case 'firstDayOfWeek':
-                // this._renderRepeatOnEditor(); Rerendering!
+                if(this._weekEditor) {
+                    const localDaysNames = dateLocalization.getDayNames('abbreviated');
+                    const dayNames = days.slice(args.value).concat(days.slice(0, args.value));
 
+                    const itemsButtonGroup = localDaysNames.slice(args.value).concat(localDaysNames.slice(0, args.value)).map((item, index) => { return { text: item, key: dayNames[index] }; });
+
+                    this._weekEditor.option('items', itemsButtonGroup);
+                }
                 if(this._$repeatDateEditor) {
                     this._repeatUntilDate.option('calendarOptions.firstDayOfWeek', this._getFirstDayOfWeek());
                 }
