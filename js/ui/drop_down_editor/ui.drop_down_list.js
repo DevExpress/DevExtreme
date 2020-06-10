@@ -754,7 +754,10 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _updatePopupWidth: function() {
-        this._setPopupOption('width', this.$element().outerWidth() + this.option('popupWidthExtension'));
+        const popupWidth = this.option('dropDownOptions.width');
+        if(!popupWidth || popupWidth === 'auto') {
+            this._setPopupOption('width', this.$element().outerWidth() + this.option('popupWidthExtension'));
+        }
     },
 
     _needPopupRepaint: function() {
