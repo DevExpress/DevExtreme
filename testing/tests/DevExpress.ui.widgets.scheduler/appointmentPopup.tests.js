@@ -113,6 +113,23 @@ const moduleConfig = {
 };
 
 QUnit.module('Appointment popup form', moduleConfig, () => {
+    QUnit.test('getAppointmentPopup should be public', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: [],
+            views: ['week'],
+            currentView: 'week',
+            currentDate: new Date(2017, 4, 25),
+        });
+
+        assert.equal(scheduler.instance.getAppointmentPopup(), undefined, 'popup instance shouldn\'t available until the popup was first opened');
+
+        scheduler.instance.showAppointmentPopup();
+        assert.equal(scheduler.instance.getAppointmentPopup().NAME, 'dxPopup', 'popup instance should available after the popup was first opened');
+
+        scheduler.instance.hideAppointmentPopup();
+        assert.equal(scheduler.instance.getAppointmentPopup().NAME, 'dxPopup', 'popup instance should available after the popup hided');
+    });
+
     QUnit.module('toolbar', () => {
         [true, false].forEach(allowUpdatingValue => {
             const data = [{
