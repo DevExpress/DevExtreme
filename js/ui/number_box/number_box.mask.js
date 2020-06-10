@@ -302,7 +302,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
     _format: function(value, format) {
         const formatOption = this.option('format');
-        const isCustomFormatter = typeUtils.isFunction(formatOption.formatter);
+        const isCustomFormatter = typeUtils.isFunction(formatOption?.formatter);
         const formatter = isCustomFormatter ? formatOption.formatter : number.format;
 
         return formatter(value, format);
@@ -318,7 +318,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
     _updateFormat: function() {
         const format = this.option('format');
-        const isCustomParser = typeUtils.isFunction(format.parser);
+        const isCustomParser = typeUtils.isFunction(format?.parser);
         const isLDMLPattern = typeUtils.isString(format) && (format.indexOf('0') >= 0 || format.indexOf('#') >= 0);
 
         this._currentFormat = isCustomParser || isLDMLPattern ?
@@ -418,7 +418,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _getParsedValue: function(text, format) {
-        const sign = number.getSign(text, format.formatter || format);
+        const sign = number.getSign(text, format?.formatter || format);
         const textWithoutStubs = this._removeStubs(text, true);
         const parsedValue = this._parse(textWithoutStubs, format);
         const parsedValueWithSign = parsedValue ? sign * parsedValue : parsedValue;
