@@ -2002,10 +2002,11 @@ QUnit.module('datebox and calendar integration', () => {
         assert.strictEqual(leftPopupMargin + leftCalendarMargin, rightPopupMargin + rightCalendarMargin);
     });
 
-    QUnit.test('check popup margins if calendar is hidden', function(assert) {
+    QUnit.test('check popup margins if calendar is hidden (T896846)', function(assert) {
         const $element = $('#dateBox').dxDateBox({
             pickerType: 'calendar',
             type: 'datetime',
+            displayFormat: 'HH:mm',
             calendarOptions: {
                 visible: false
             },
@@ -2021,6 +2022,37 @@ QUnit.module('datebox and calendar integration', () => {
         const rightCalendarMargin = parseInt($content.find('.dx-timeview').css('marginRight'));
 
         assert.strictEqual(leftPopupMargin + leftCalendarMargin, rightPopupMargin + rightCalendarMargin);
+    });
+
+    QUnit.test('Today button should be hidden if calendar is hidden', function(assert) {
+        const $element = $('#dateBox').dxDateBox({
+            pickerType: 'calendar',
+            type: 'datetime',
+            calendarOptions: {
+                visible: false
+            },
+            opened: true
+        });
+        const instance = $element.dxDateBox('instance');
+        const $todayButton = $(instance.content()).parent().find('.dx-button-today');
+
+        assert.strictEqual($todayButton.length, 0);
+    });
+
+
+    QUnit.test('Today button should be hidden if calendar visibility is changed', function(assert) {
+        const $element = $('#dateBox').dxDateBox({
+            pickerType: 'calendar',
+            type: 'datetime',
+            opened: true
+        });
+        const instance = $element.dxDateBox('instance');
+
+        instance.option('calendarOptions.visible', false);
+        assert.strictEqual($(instance.content()).parent().find('.dx-button-today').length, 0);
+
+        instance.option('calendarOptions.visible', true);
+        assert.strictEqual($(instance.content()).parent().find('.dx-button-today').length, 1);
     });
 });
 
