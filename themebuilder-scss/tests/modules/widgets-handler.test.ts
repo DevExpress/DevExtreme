@@ -1,5 +1,6 @@
 import { join } from 'path';
 import fs from 'fs';
+import { dependencies } from '../data/metadata';
 import WidgetsHandler from '../../src/modules/widgets-handler';
 
 const mockError = new Error('File not found');
@@ -10,6 +11,11 @@ jest.mock('fs', () => ({
       return Promise.resolve('');
     }),
   },
+}));
+
+jest.mock('../../src/data/metadata/dx-theme-builder-metadata', () => ({
+  __esModule: true,
+  dependencies,
 }));
 
 describe('Widgets handler tests', () => {
@@ -31,7 +37,7 @@ describe('Widgets handler tests', () => {
   });
 
   test('getWidgetLists', () => {
-    const userWidgets = ['accordion', 'box', 'wrongWidget', 'wrongWidget2'];
+    const userWidgets = ['Accordion', 'box', 'wrongWidget', 'wrongWidget2'];
     const widgetsFromIndex: Array<WidgetItem> = [
       { widgetName: 'accordion', widgetImportString: '@use "./accordion";' },
       { widgetName: 'box', widgetImportString: '@use "./box";' },
@@ -42,7 +48,7 @@ describe('Widgets handler tests', () => {
 
     const expected: WidgetHandlerResult = {
       widgets: ['accordion', 'box'],
-      unusedWidgets: ['wrongWidget', 'wrongWidget2'],
+      unusedWidgets: ['wrongwidget', 'wrongwidget2'],
       indexContent: 'base content\n@use "./accordion";\n@use "./box";',
     };
 
@@ -96,5 +102,26 @@ describe('Widgets handler tests', () => {
     const widgetsHandler = new WidgetsHandler(null, '/');
 
     expect(widgetsHandler.widgets).toEqual([]);
+  });
+
+  test('getWidgetsWithDependencies', () => {
+    const widgetsHandler = new WidgetsHandler(['box', 'accordion', 'popup'], '');
+    widgetsHandler.dependencies = {
+      accordion: ['box', 'overlay', 'button'],
+      box: [],
+      popup: ['overlay', 'toolbar'],
+    };
+
+    const expectedWidgetsList = [
+      'box',
+      'accordion',
+      'overlay',
+      'button',
+      'popup',
+      'toolbar',
+    ];
+
+    expect(widgetsHandler.getWidgetsWithDependencies().sort())
+      .toEqual(expectedWidgetsList.sort());
   });
 });

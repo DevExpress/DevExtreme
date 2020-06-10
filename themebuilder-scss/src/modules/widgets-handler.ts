@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs';
 import { join, dirname } from 'path';
+import { dependencies } from '../data/metadata/dx-theme-builder-metadata';
 
 const widgetListComment = '// public widgets';
 
@@ -10,9 +11,12 @@ export default class WidgetsHandler {
 
   baseIndexContent: string;
 
+  dependencies: FlatStylesDependencyTree;
+
   constructor(widgets: Array<string>, bundlePath: string) {
     const theme = /material/.test(bundlePath) ? 'material' : 'generic';
-    this.widgets = widgets || [];
+    this.dependencies = dependencies;
+    this.widgets = widgets ? widgets.map((w) => w.toLowerCase()) : [];
     this.indexPath = join(dirname(bundlePath), '..', 'widgets', theme, '_index.scss');
   }
 
@@ -33,8 +37,20 @@ export default class WidgetsHandler {
     return result;
   }
 
+  getWidgetsWithDependencies(): Array<string> {
+    return this.widgets.reduce((fullWidgetsList, widget) => {
+      const notUnique = [
+        ...fullWidgetsList,
+        widget,
+        ...this.dependencies[widget] || [],
+      ];
+
+      return [...new Set(notUnique)];
+    }, []);
+  }
+
   getWidgetLists(allWidgets: Array<WidgetItem>): WidgetHandlerResult {
-    const userWidgets = this.widgets;
+    const userWidgets = this.getWidgetsWithDependencies();
     const needWidgets = allWidgets.filter((w) => userWidgets.length === 0
       || userWidgets.indexOf(w.widgetName) >= 0);
     const widgets = needWidgets.map((w) => w.widgetName);

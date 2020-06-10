@@ -31,7 +31,7 @@ export default class DependencyCollector {
       if (widget === undefined) {
         const content = this.readFile(fileName);
         const matches = stylesRegex.exec(content);
-        widget = matches !== null ? matches[1] : null;
+        widget = matches !== null ? matches[1].toLowerCase() : null;
         this.stylesCache[fileName] = widget;
       }
 
