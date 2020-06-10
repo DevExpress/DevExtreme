@@ -1,0 +1,9 @@
+<dx-diagram #diagram id="diagram">
+    <dxo-nodes [dataSource]="orgItemsDataSource" keyExpr="ID" [typeExpr]="itemTypeExpr" textExpr="Name" [widthExpr]="itemWidthExpr" [heightExpr]="itemHeightExpr" [textStyleExpr]="itemTextStyleExpr" [styleExpr]="itemStyleExpr">
+        <dxo-auto-layout type="tree" orientation="horizontal"></dxo-auto-layout>
+    </dxo-nodes>
+    <dxo-edges [dataSource]="orgLinksDataSource" keyExpr="ID" fromExpr="From" toExpr="To" [styleExpr]="linkStyleExpr" [fromLineEndExpr]="linkFromLineEndExpr" [toLineEndExpr]="linkToLineEndExpr"></dxo-edges>
+    <dxo-toolbox>
+        <dxi-group category="general" title="General"></dxi-group>
+    </dxo-toolbox>
+</dx-diagram>

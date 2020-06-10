@@ -1,0 +1,52 @@
+<dx-chart
+    id="chart"
+    defaultPane="bottom"
+    [dataSource]="weatherData"
+    title="Weather in Los Angeles, California">
+    <dxi-series
+        pane="top"
+        valueField="avgT"
+        name="Average Temperature, °C">
+        <dxo-value-error-bar
+            lowValueField="avgLowT"
+            highValueField="avgHighT"
+            [lineWidth]="1"
+            [opacity]="0.8">
+        </dxo-value-error-bar>
+    </dxi-series>
+    <dxi-series
+        pane="bottom"
+        valueField="avgH"
+        type="bar"
+        name="Average Humidity, %">
+        <dxo-value-error-bar
+            type="fixed"
+            [value]="3"
+            [lineWidth]="1">
+        </dxo-value-error-bar>
+    </dxi-series>
+    <dxo-common-series-settings argumentField="month"></dxo-common-series-settings>
+    <dxi-pane name="top"></dxi-pane>
+    <dxi-pane name="bottom"></dxi-pane>
+    <dxo-argument-axis>
+        <dxo-label displayMode="stagger"></dxo-label>
+    </dxo-argument-axis>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxi-value-axis pane="top">
+        <dxo-grid [visible]="true"></dxo-grid>
+        <dxo-title text="Temperature, °C"></dxo-title>
+    </dxi-value-axis>
+    <dxi-value-axis
+        [tickInterval]="50"
+        pane="bottom">
+        <dxo-grid [visible]="true"></dxo-grid>
+        <dxo-title text="Humidity, %"></dxo-title>
+    </dxi-value-axis>
+    <dxo-tooltip
+        [enabled]="true"
+        [customizeTooltip]="customizeTooltip"></dxo-tooltip>
+    <dxo-legend
+        verticalAlignment="bottom"
+        horizontalAlignment="center">
+    </dxo-legend>
+</dx-chart>

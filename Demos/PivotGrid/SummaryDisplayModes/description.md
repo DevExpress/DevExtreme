@@ -1,0 +1,1 @@
+The **PivotGrid** widget supports several modes for summary calculation, such as&nbsp;a&nbsp;variation or&nbsp;percent of&nbsp;a&nbsp;total value. Select the required mode from the context menu appearing when you right-click the &laquo;Relative Sales&raquo; field.

@@ -1,0 +1,24 @@
+<div id="range-selector-demo">
+    <dx-range-selector 
+        id="range-selector"
+        title="Filter Employee List by Birth Year"
+        [dataSource]="employees"
+        dataSourceField="BirthYear"
+        (onValueChanged)="onValueChanged($event)">
+        <dxo-margin [top]="20"></dxo-margin>
+        <dxo-scale 
+            [tickInterval]="1"
+            [minorTickInterval]="1">
+            <dxo-label format="decimal"></dxo-label>
+        </dxo-scale>
+        <dxo-behavior callValueChanged="onMoving"></dxo-behavior>
+    </dx-range-selector>
+    <h2>Selected Employees</h2> 
+    <dx-data-grid
+        id="gridContainer"
+        [dataSource]="selectedEmployees"
+        [columns]="['FirstName', 'LastName', 'BirthYear', 'City', 'Title']"
+        [showBorders]="true"
+        [columnAutoWidth]="true">
+    </dx-data-grid>
+</div>

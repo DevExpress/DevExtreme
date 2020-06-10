@@ -1,0 +1,22 @@
+<dx-data-grid id="gridContainer" [dataSource]="orders" [showBorders]="true" (onCellPrepared)="onCellPrepared($event)">
+    <dxo-group-panel [visible]="true"></dxo-group-panel>
+    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+    <dxi-sort-by-group-summary-info summaryItem="count"></dxi-sort-by-group-summary-info>
+
+    <dxi-column dataField="Employee" [groupIndex]="0"></dxi-column>
+    <dxi-column dataField="OrderNumber" caption="Invoice Number" [width]="130"></dxi-column>
+    <dxi-column dataField="OrderDate" [width]="160" dataType="date"></dxi-column>
+    <dxi-column dataField="CustomerStoreCity" caption="City" [groupIndex]="1"></dxi-column>
+    <dxi-column dataField="CustomerStoreState" caption="State"></dxi-column>
+    <dxi-column dataField="SaleAmount" alignment="right" format="currency" sortOrder="desc"></dxi-column>
+    
+    <dxo-export [enabled]="true" [customizeExcelCell]="customizeExcelCell"></dxo-export>
+
+    <dxo-summary>
+        <dxi-group-item column="OrderNumber" summaryType="count" displayFormat="{0} orders" [alignByColumn]="false"></dxi-group-item>
+        <dxi-group-item column="SaleAmount" summaryType="max" displayFormat="Max: {0}" valueFormat="currency" [alignByColumn]="true" [showInGroupFooter]="false" ></dxi-group-item>
+        <dxi-group-item column="SaleAmount" summaryType="sum" displayFormat="Sum: {0}" valueFormat="currency" [alignByColumn]="true" [showInGroupFooter]="true"></dxi-group-item>
+
+        <dxi-total-item column="SaleAmount" summaryType="sum" displayFormat="Total Sum: {0}" valueFormat="currency"></dxi-total-item>
+    </dxo-summary>
+</dx-data-grid>

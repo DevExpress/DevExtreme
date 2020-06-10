@@ -1,0 +1,130 @@
+<div id="gauge-demo">
+    <div id="gauge-container">
+        <div class="left-section">
+            <dx-circular-gauge
+                [value]="speedValue / 2"
+                >
+                <dxo-size [width]="90" [height]="90"></dxo-size>
+                <dxo-value-indicator
+                    color="#f05b41"
+                >
+                </dxo-value-indicator>
+                <dxo-geometry
+                    [startAngle]="180"
+                    [endAngle]="90">
+                </dxo-geometry>
+                <dxo-scale
+                    [startValue]="0"
+                    [endValue]="100"
+                    [tickInterval]="50">
+                </dxo-scale>
+            </dx-circular-gauge>
+            <dx-circular-gauge
+                [value]="speedValue / 2"
+                >
+                <dxo-size [width]="90" [height]="90"></dxo-size>
+                <dxo-value-indicator color="#f05b41"></dxo-value-indicator>
+                <dxo-geometry
+                    [startAngle]="-90"
+                    [endAngle]="-180">
+                </dxo-geometry>
+                <dxo-scale
+                    [startValue]="100"
+                    [endValue]="0"
+                    [tickInterval]="50">
+                </dxo-scale>
+            </dx-circular-gauge>
+        </div>
+        <div class="center-section">
+            <dx-circular-gauge
+                id="speed-gauge"
+                [value]="speedValue"
+                >
+                <dxo-size [width]="260"></dxo-size>
+                <dxo-value-indicator
+                    type="twoColorNeedle"
+                    color="none"
+                    [secondFraction]="0.24"
+                    secondColor="#f05b41"
+                >
+                </dxo-value-indicator>
+                <dxo-geometry
+                    [startAngle]="225"
+                    [endAngle]="315">
+                </dxo-geometry>
+                <dxo-scale
+                    [startValue]="20"
+                    [endValue]="200"
+                    [tickInterval]="20"
+                    [minorTickInterval]="10">
+                </dxo-scale>
+            </dx-circular-gauge>
+            <div class="speed-value">
+                <span>{{speedValue}}</span>
+            </div>
+            <dx-linear-gauge
+                id="fuel-gauge"
+                [value]="50 - speedValue * 0.24"
+            >
+                <dxo-size [width]="90" [height]="20"></dxo-size>
+                <dxo-scale
+                    [startValue]="0"
+                    [endValue]="50"
+                    [tickInterval]="25"
+                    [minorTickInterval]="12.5"
+                >
+                    <dxo-minor-tick [visible]="true"></dxo-minor-tick>
+                    <dxo-label [visible]="false"></dxo-label>
+                </dxo-scale>
+                <dxo-value-indicator
+                    color="#f05b41"
+                    [size]="8"
+                    [offset]="7"
+                >
+                </dxo-value-indicator>
+            </dx-linear-gauge>
+        </div>
+        <div class="right-section">
+            <dx-circular-gauge
+                [value]="speedValue / 2"
+                >
+                <dxo-size [width]="90" [height]="90"></dxo-size>
+                <dxo-value-indicator
+                    color="#f05b41"
+                >
+                </dxo-value-indicator>
+                <dxo-geometry
+                    [startAngle]="90"
+                    [endAngle]="0">
+                </dxo-geometry>
+                <dxo-scale
+                    [startValue]="100"
+                    [endValue]="0"
+                    [tickInterval]="50">
+                </dxo-scale>
+            </dx-circular-gauge>
+            <dx-circular-gauge
+                [value]="speedValue / 2"
+                >
+                <dxo-size [width]="90" [height]="90"></dxo-size>
+                <dxo-value-indicator color="#f05b41"></dxo-value-indicator>
+                <dxo-geometry
+                    [startAngle]="0"
+                    [endAngle]="-90">
+                </dxo-geometry>
+                <dxo-scale
+                    [startValue]="0"
+                    [endValue]="100"
+                    [tickInterval]="50">
+                </dxo-scale>
+            </dx-circular-gauge>
+        </div>
+    </div>
+    <dx-slider id="slider" 
+        [min]="0"
+        [max]="200"
+        [width]="155"
+        [(value)]="speedValue"
+        >
+    </dx-slider>
+</div>

@@ -1,0 +1,21 @@
+<dx-range-selector
+    id="range-selector"
+    title="Select a Month Period"
+    [value]="['2013/03/01', '2013/03/07']"
+    [dataSource]="dataSource">
+    <dxo-margin [top]="50"></dxo-margin>
+    <dxo-chart>
+        <dxi-series valueField="dayT" color="yellow"></dxi-series>
+        <dxi-series valueField="nightT"></dxi-series>
+        <dxo-common-series-settings
+            type="steparea"
+            argumentField="date">
+        </dxo-common-series-settings>
+    </dxo-chart>
+    <dxo-scale
+        minorTickInterval="day"
+        valueType="datetime">
+        <dxo-tick-interval [days]="2"></dxo-tick-interval>
+    </dxo-scale>
+    <dxo-slider-marker format="day"></dxo-slider-marker>
+</dx-range-selector>

@@ -1,0 +1,14 @@
+<dx-polar-chart
+    id="chart"
+    title="Inverted Rose in Polar Coordinates"
+    [dataSource]="coordinates">
+    <dxi-series type="area" name="Function"></dxi-series>
+    <dxo-argument-axis
+        [inverted]="true"
+        [startAngle]="90"
+        [tickInterval]="30">
+    </dxo-argument-axis>
+    <dxo-value-axis [inverted]="true"></dxo-value-axis>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-legend [visible]="false"></dxo-legend>
+</dx-polar-chart>

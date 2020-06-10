@@ -1,0 +1,54 @@
+<div class="long-title"><h3>Monthly Prices of Copper, Nickel and Palladium</h3></div>
+<div id="chart-demo">
+    <table class="demo-table" border="1">
+        <tr>
+            <th></th>
+            <th>Copper (USD/ton)</th>
+            <th>Nickel (USD/ton)</th>
+            <th>Palladium (USD/troy ounce)</th>
+        </tr>
+        <tr *ngFor="let year of years">
+            <th>{{year}}</th>
+            <td>
+                <dx-sparkline class="sparkline"
+                    [dataSource]="copperCosts"
+                    argumentField="month"
+                    valueField="{{year}}"
+                    type="area"
+                    [showMinMax]="true">
+                    <dxo-tooltip format="currency"></dxo-tooltip>
+                </dx-sparkline>
+            </td>
+            <td>
+                <dx-sparkline class="sparkline"
+                    [dataSource]="nickelCosts"
+                    argumentField="month"
+                    valueField="{{year}}"
+                    type="splinearea"
+                    lineColor="#8076bb"
+                    minColor="#6babac"
+                    maxColor="#8076bb"
+                    [pointSize]="6"
+                    [showMinMax]="true"
+                    [showFirstLast]="false">
+                    <dxo-tooltip format="currency"></dxo-tooltip>
+                </dx-sparkline>
+            </td>
+            <td>
+                <dx-sparkline class="sparkline"
+                    [dataSource]="palladiumCosts"
+                    argumentField="month"
+                    valueField="{{year}}"
+                    type="steparea"
+                    lineColor="#7e4452"
+                    [lineWidth]="3"
+                    firstLastColor="#e55253"
+                    pointColor="#e8c267"
+                    pointSymbol="polygon">
+                    <dxo-tooltip format="currency"></dxo-tooltip>
+                </dx-sparkline>
+            </td>
+        </tr>
+      
+    </table>
+</div>

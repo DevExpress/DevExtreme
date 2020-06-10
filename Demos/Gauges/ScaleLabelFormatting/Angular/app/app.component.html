@@ -1,0 +1,17 @@
+<dx-circular-gauge id="gauge" [value]="45">
+    <dxo-scale
+        [startValue]="0"
+        [endValue]="100"
+        [tickInterval]="10">
+        <dxo-label [customizeText]="customizeText"></dxo-label>
+    </dxo-scale>
+    <dxo-range-container>
+        <dxi-range [startValue]="0" [endValue]="20" color="#CE2029"></dxi-range>
+        <dxi-range [startValue]="20" [endValue]="50" color="#FFD700"></dxi-range>
+        <dxi-range [startValue]="50" [endValue]="100" color="#228B22"></dxi-range>
+    </dxo-range-container>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-title text="Battery Charge">
+        <dxo-font [size]="28"></dxo-font>
+    </dxo-title>
+</dx-circular-gauge>

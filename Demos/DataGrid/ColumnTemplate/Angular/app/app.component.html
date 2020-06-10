@@ -1,0 +1,15 @@
+<dx-data-grid id="gridContainer" [dataSource]="employees" [showBorders]="true">
+
+    <dxi-column dataField="Picture" [width]="100" [allowFiltering]="false"
+        [allowSorting]="false" cellTemplate="cellTemplate"></dxi-column>
+    <dxi-column dataField="Prefix" [width]="70" caption="Title"></dxi-column>
+    <dxi-column dataField="FirstName"></dxi-column>
+    <dxi-column dataField="LastName"></dxi-column>
+    <dxi-column dataField="Position"></dxi-column>
+    <dxi-column dataField="BirthDate" dataType="date"></dxi-column>
+    <dxi-column dataField="HireDate" dataType="date"></dxi-column>
+
+    <div *dxTemplate="let data of 'cellTemplate'">
+        <img [src]="data.value"/>
+    </div>
+</dx-data-grid>

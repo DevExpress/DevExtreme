@@ -1,0 +1,13 @@
+<div class="dx-fieldset">
+    <dx-lookup
+        [items]="employees"
+        [displayExpr]="getDisplayExpr"
+        placeholder="Select employee"
+        (onValueChanged)="valueChanged($event)">
+        <dxo-drop-down-options [showTitle]="false"></dxo-drop-down-options>
+    </dx-lookup>
+</div>
+<div class="selected" *ngIf="selectedEmployee">
+    <img  src="{{selectedEmployee.Picture}}" alt="">
+    <span>{{selectedEmployee.Notes}}</span>
+</div> 

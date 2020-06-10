@@ -1,0 +1,60 @@
+<div class="long-title">
+    <h3>Humidity in Rooms (%)</h3>
+</div>
+<div id="gauge-demo">
+    <dx-circular-gauge
+        class="gauge"
+        [value]="80">
+        <dxo-scale
+            [startValue]="0"
+            [endValue]="100"
+            [tickInterval]="10">
+        </dxo-scale>
+        <dxo-geometry
+            [startAngle]="180"
+            [endAngle]="90">
+        </dxo-geometry>
+    </dx-circular-gauge>
+
+    <dx-circular-gauge
+        class="gauge"
+        [value]="75">
+        <dxo-scale
+            [startValue]="100"
+            [endValue]="0"
+            [tickInterval]="10">
+        </dxo-scale>
+        <dxo-geometry
+            [startAngle]="90"
+            [endAngle]="0">
+        </dxo-geometry>
+    </dx-circular-gauge>
+
+    <dx-circular-gauge
+        class="gauge"
+        [value]="70">
+        <dxo-scale
+            [startValue]="100"
+            [endValue]="0"
+            [tickInterval]="10">
+        </dxo-scale>
+        <dxo-geometry
+            [startAngle]="-90"
+            [endAngle]="-180">
+        </dxo-geometry>
+    </dx-circular-gauge>
+
+    <dx-circular-gauge
+        class="gauge"
+        [value]="68">
+        <dxo-scale
+            [startValue]="0"
+            [endValue]="100"
+            [tickInterval]="10">
+        </dxo-scale>
+        <dxo-geometry
+            [startAngle]="0"
+            [endAngle]="-90">
+        </dxo-geometry>
+    </dx-circular-gauge>
+</div>

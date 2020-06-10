@@ -1,0 +1,33 @@
+<dx-data-grid 
+    id="gridContainer" 
+    [dataSource]="dataSource"
+    [columns]="columns"
+    [filterValue]="filterValue"
+    (onInitialized)="onInitialized($event)"
+    [showBorders]="true">
+    <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+    <dxo-filter-builder
+        [customOperations]="customOperations">
+    </dxo-filter-builder>
+    <dxo-filter-builder-popup
+        [position]="popupPosition">
+    </dxo-filter-builder-popup>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-header-filter [visible]="true"></dxo-header-filter>
+    <dxo-scrolling mode="infinite"></dxo-scrolling> 
+    <dxi-column 
+        dataField="OrderNumber"
+        caption="Invoice Number"
+        dataType="number">
+        <dxo-header-filter 
+            [groupInterval]="10000"></dxo-header-filter>
+    </dxi-column>
+    <dxi-column dataField="OrderDate" dataType="date"></dxi-column>
+    <dxi-column dataField="SaleAmount" format="currency" dataType="number">
+        <dxo-header-filter 
+            [dataSource]="saleAmountHeaderFilter"></dxo-header-filter>
+    </dxi-column>
+    <dxi-column dataField="Employee" dataType="string"></dxi-column>
+    <dxi-column dataField="CustomerInfo.StoreCity" caption="City" dataType="string"></dxi-column>
+    <dxi-column dataField="CustomerInfo.StoreState" caption="State" dataType="string"></dxi-column>
+</dx-data-grid>

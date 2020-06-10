@@ -1,0 +1,36 @@
+::ng-deep #grid-container {
+    height: 400px;
+}
+::ng-deep .center {
+    text-align: center;
+}
+::ng-deep .selection-summary {
+    border: 1px solid rgba(161, 161,161, 0.2);
+    padding: 25px;
+}
+::ng-deep .column {
+    margin: 20px 30px 0 0;
+    display: inline-block;
+    white-space: nowrap;
+    text-align: right;
+}
+::ng-deep .value {
+    font-size: 40px;
+    display: inline-block;
+    vertical-align: middle;
+}
+::ng-deep .text {
+    text-align: left;
+    white-space: normal;
+    display: inline-block;
+    vertical-align: middle;
+}
+::ng-deep .avg-duration {
+    width: 100px;
+}
+::ng-deep .count{
+    width: 40px;
+}
+::ng-deep .people-count {
+    width: 65px;
+}

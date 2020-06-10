@@ -1,0 +1,66 @@
+<dx-tree-list 
+    id="employees"
+    [dataSource]="employees"
+    keyExpr="ID"
+    parentIdExpr="Head_ID"
+    [columnAutoWidth]="true"
+    [expandedRowKeys]="[1, 2, 4, 5]"
+    (onFocusedCellChanging)="onFocusedCellChanging($event)">
+    <dxo-keyboard-navigation 
+        [editOnKeyPress]="editOnkeyPress"
+        [enterKeyAction]="enterKeyAction"
+        [enterKeyDirection]="enterKeyDirection">
+    </dxo-keyboard-navigation>
+    <dxo-editing 
+        mode="batch"
+        [allowUpdating]="true"
+        startEditAction="dblClick">
+    </dxo-editing>
+    <dxi-column 
+        dataField="Full_Name">
+    </dxi-column>
+    <dxi-column 
+        dataField="Prefix"
+        caption="Title">
+    </dxi-column>
+    <dxi-column 
+        dataField="Title"
+        caption="Position">
+    </dxi-column>
+    <dxi-column 
+        dataField="City">
+    </dxi-column>
+    <dxi-column 
+        dataField="Hire_Date"
+        dataType="date">
+    </dxi-column>
+</dx-tree-list>
+
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option-container">
+        <div class="option check-box">
+            <dx-check-box 
+                id="editOnKeyPress"
+                text="Edit On Key Press"
+                [(value)]="editOnkeyPress">
+            </dx-check-box>
+        </div>
+        <div class="option">
+            <span class="option-caption">Enter Key Action</span>
+            <dx-select-box 
+                class="select"
+                [dataSource]="enterKeyActions"
+                [(value)]="enterKeyAction">
+            </dx-select-box>
+        </div>
+        <div class="option">
+            <span class="option-caption">Enter Key Direction</span>
+            <dx-select-box 
+                class="select"
+                [dataSource]="enterKeyDirections"
+                [(value)]="enterKeyDirection">
+            </dx-select-box>
+        </div>
+    </div>
+</div>

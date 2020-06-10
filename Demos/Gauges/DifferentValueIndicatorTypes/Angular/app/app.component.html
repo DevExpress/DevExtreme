@@ -1,0 +1,119 @@
+<div class="long-title">
+    <h3>Power of Engines</h3>
+</div>
+<div id="gauge-demo">
+    <dx-circular-gauge
+        id="rectangleNeedle"
+        [value]="75">
+        <dxo-value-indicator
+            type="rectangleNeedle"
+            color="#9B870C">
+        </dxo-value-indicator>
+        <dxo-geometry
+            [startAngle]="180"
+            [endAngle]="0">
+        </dxo-geometry>
+        <dxo-scale
+            [startValue]="0"
+            [endValue]="100"
+            [tickInterval]="50">
+            <dxo-label [customizeText]="customizeText"></dxo-label>
+        </dxo-scale>
+    </dx-circular-gauge>
+
+    <dx-circular-gauge
+        id="twoColorNeedle"
+        [value]="80">
+        <dxo-value-indicator
+            type="twoColorNeedle"
+            color="#779ECB"
+            secondColor="#734F96">
+        </dxo-value-indicator>
+        <dxo-geometry
+            [startAngle]="180"
+            [endAngle]="0">
+        </dxo-geometry>
+        <dxo-scale
+            [startValue]="0"
+            [endValue]="100"
+            [tickInterval]="50">
+            <dxo-label [customizeText]="customizeText"></dxo-label>
+        </dxo-scale>
+    </dx-circular-gauge>
+
+    <dx-circular-gauge
+        id="triangleNeedle"
+        [value]="65">
+        <dxo-value-indicator
+            type="triangleNeedle"
+            color="#8FBC8F">
+        </dxo-value-indicator>
+        <dxo-geometry
+            [startAngle]="180"
+            [endAngle]="0">
+        </dxo-geometry>
+        <dxo-scale
+            [startValue]="0"
+            [endValue]="100"
+            [tickInterval]="50">
+            <dxo-label [customizeText]="customizeText"></dxo-label>
+        </dxo-scale>
+    </dx-circular-gauge>
+
+    <dx-circular-gauge
+        id="rangebar"
+        [value]="90">
+        <dxo-value-indicator
+            type="rangebar"
+            color="#f05b41">
+        </dxo-value-indicator>
+        <dxo-geometry
+            [startAngle]="180"
+            [endAngle]="0">
+        </dxo-geometry>
+        <dxo-scale
+            [startValue]="0"
+            [endValue]="100"
+            [tickInterval]="50">
+            <dxo-label [customizeText]="customizeText"></dxo-label>
+        </dxo-scale>
+    </dx-circular-gauge>
+
+    <dx-circular-gauge
+        id="textCloud"
+        [value]="70">
+        <dxo-value-indicator
+            type="textCloud"
+            color="#483D8B">
+        </dxo-value-indicator>
+        <dxo-geometry
+            [startAngle]="180"
+            [endAngle]="0">
+        </dxo-geometry>
+        <dxo-scale
+            [startValue]="0"
+            [endValue]="100"
+            [tickInterval]="50">
+            <dxo-label [customizeText]="customizeText"></dxo-label>
+        </dxo-scale>
+    </dx-circular-gauge>
+
+    <dx-circular-gauge
+        id="triangleMarker"
+        [value]="85">
+        <dxo-value-indicator
+            type="triangleMarker"
+            color="#e0e33b">
+        </dxo-value-indicator>
+        <dxo-geometry
+            [startAngle]="180"
+            [endAngle]="0">
+        </dxo-geometry>
+        <dxo-scale
+            [startValue]="0"
+            [endValue]="100"
+            [tickInterval]="50">
+            <dxo-label [customizeText]="customizeText"></dxo-label>
+        </dxo-scale>
+    </dx-circular-gauge>
+</div>

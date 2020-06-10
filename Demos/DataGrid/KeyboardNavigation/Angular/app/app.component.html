@@ -1,0 +1,52 @@
+<p>Click this text and press <b>Tab</b></p>
+<dx-data-grid
+    id="gridContainer"
+    [dataSource]="employees"
+    keyExpr="ID"
+    [showBorders]="true"
+    [focusedRowEnabled]="true">
+
+    <dxo-editing
+        [allowUpdating]="true"
+        [allowDeleting]="true"
+        [selectTextOnEditStart]="true"
+        [useIcons]="true">
+    </dxo-editing>
+
+    <dxo-header-filter [visible]="true">
+    </dxo-header-filter>
+
+    <dxo-filter-panel [visible]="true">
+    </dxo-filter-panel>
+
+    <dxo-filter-row [visible]="true">
+    </dxo-filter-row>
+
+    <dxo-paging [pageSize]="10">
+    </dxo-paging>
+
+    <dxo-pager
+        [allowedPageSizes]="[5, 10]"
+        [showPageSizeSelector]="true"
+        [showNavigationButtons]="true">
+    </dxo-pager>
+
+    <dxi-column dataField="FirstName">
+    </dxi-column>
+
+    <dxi-column dataField="LastName">
+    </dxi-column>
+
+    <dxi-column dataField="Position">
+    </dxi-column>
+
+    <dxi-column dataField="StateID"
+        caption="State">
+        <dxo-lookup
+            [dataSource]="states"
+            valueExpr="ID"
+            displayExpr="Name">
+        </dxo-lookup>
+    </dxi-column>
+
+</dx-data-grid>

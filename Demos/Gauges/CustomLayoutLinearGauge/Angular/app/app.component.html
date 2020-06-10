@@ -1,0 +1,23 @@
+<dx-linear-gauge
+    id="gauge"
+    [value]="17"
+    [subvalues]="[5, 25]">
+    <dxo-subvalue-indicator [offset]="-15"></dxo-subvalue-indicator>
+    <dxo-value-indicator [offset]="20"></dxo-value-indicator>
+    <dxo-range-container [offset]="10">
+        <dxi-range [startValue]="0" [endValue]="5" color="#92000A"></dxi-range>
+        <dxi-range [startValue]="5" [endValue]="20" color="#E6E200"></dxi-range>
+        <dxi-range [startValue]="20" [endValue]="30" color="#77DD77"></dxi-range>
+    </dxo-range-container>
+    <dxo-scale
+        [startValue]="0"
+        [endValue]="30"
+        [tickInterval]="5">
+        <dxo-tick color="#536878"></dxo-tick>
+        <dxo-label [indentFromTick]="-3"></dxo-label>
+    </dxo-scale>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-title text="Issues Closed (with Min and Max Expected)">
+        <dxo-font [size]="28"></dxo-font>
+    </dxo-title>
+</dx-linear-gauge>

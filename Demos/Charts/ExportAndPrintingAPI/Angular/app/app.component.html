@@ -1,0 +1,31 @@
+<dx-chart
+    id="chart"
+    [dataSource]="mountains"
+    title="The Highest Mountains">
+    <dxi-series
+        argumentField="name"
+        valueField="height"
+        type="bar"
+        color="#E55253">
+    </dxi-series>
+    <dxo-argument-axis [visible]="true"></dxo-argument-axis>
+    <dxi-value-axis [visualRange]="{startValue:8000}">
+        <dxo-label [customizeText]="customizeLabel"></dxo-label>
+    </dxi-value-axis>
+    <dxo-tooltip
+        [enabled]="true"
+        [customizeTooltip]="customizeTooltip"></dxo-tooltip>
+    <dxo-legend [visible]="false"></dxo-legend>
+</dx-chart>
+<div id="buttonGroup">
+    <dx-button
+        icon="print"
+        text="Print"
+        (onClick)="print()">
+    </dx-button>
+    <dx-button
+        icon="export"
+        text="Export"
+        (onClick)="export()">
+    </dx-button>
+</div>

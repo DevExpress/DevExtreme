@@ -1,0 +1,48 @@
+.widget-container {
+    margin-right: 320px;
+}
+
+#calendar-container {
+    margin: auto;
+}
+
+.dx-calendar-cell:not(.dx-calendar-other-month) .weekend,
+.dx-calendar-cell:not(.dx-calendar-other-month) .holyday {
+    text-shadow: none;
+    font-weight: bold;
+}
+
+.dx-calendar-cell:not(.dx-calendar-other-month) .weekend {
+    color: #3030FF;
+}
+
+.dx-state-disabled.dx-calendar .dx-calendar-cell:not(.dx-calendar-other-month) .weekend {
+    color: #8080FF;
+}
+
+.dx-calendar-cell:not(.dx-calendar-other-month) .holyday {
+    color: #FF3030;
+}
+
+.dx-state-disabled.dx-calendar .dx-calendar-cell:not(.dx-calendar-other-month) .holyday {
+    color: #FF8080;
+}
+
+.options {
+    padding: 20px;
+    background-color: rgba(191, 191, 191, 0.15);
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 260px;
+}
+
+.caption {
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.option {
+    margin-top: 10px;
+}

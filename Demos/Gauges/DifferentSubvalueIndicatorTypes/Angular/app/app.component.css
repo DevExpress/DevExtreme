@@ -1,0 +1,25 @@
+::ng-deep #gauge-demo {
+    width: 100%;
+    text-align: center;
+}
+::ng-deep #triangleMarker, #rectangleNeedle, #triangleNeedle, #textCloud, #twoColorNeedle {
+    display: inline-block;
+}
+::ng-deep #triangleMarker, #rectangleNeedle, #triangleNeedle {
+    width: 33%;
+}
+::ng-deep #twoColorNeedle {
+    width: 31%;
+}
+::ng-deep #textCloud {
+    width: 37%;
+    vertical-align: bottom;
+}
+
+::ng-deep .long-title h3 {
+    font-family: 'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana;
+    font-weight: 200;
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 20px;
+}

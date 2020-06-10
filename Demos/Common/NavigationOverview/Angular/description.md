@@ -1,0 +1,1 @@
+DevExtreme HTML5 JavaScript Navigation Widgets are adaptive controls that help you implement navigation in your application. They provide intuitive UI, adaptive design, and customization flexibility. Available as Angular components, these widgets support native Angular features: AOT compilation, declarative configuration, TypeScript compile-time checking, and more.

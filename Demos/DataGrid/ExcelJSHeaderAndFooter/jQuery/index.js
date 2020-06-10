@@ -1,0 +1,102 @@
+$(function(){
+  $('#gridContainer').dxDataGrid({
+    dataSource: countries,
+    showBorders: true,
+    export: {
+      enabled: true
+    },
+    onExporting: function(e) {
+      var workbook = new ExcelJS.Workbook();
+      var worksheet = workbook.addWorksheet('CountriesPopulation');
+      
+      DevExpress.excelExporter.exportDataGrid({
+        component: e.component,
+        worksheet: worksheet,
+        topLeftCell: { row: 4, column: 1 }
+      }).then(function(dataGridRange) {
+        // header
+        // https://github.com/exceljs/exceljs#rows
+        var headerRow = worksheet.getRow(2);
+        headerRow.height = 30; 
+        // https://github.com/exceljs/exceljs#merged-cells
+        worksheet.mergeCells(2, 1, 2, 8);
+        
+        // https://github.com/exceljs/exceljs#value-types
+        headerRow.getCell(1).value = 'Country Area, Population, and GDP Structure';
+        // https://github.com/exceljs/exceljs#fonts
+        headerRow.getCell(1).font = { name: 'Segoe UI Light', size: 22 };
+        // https://github.com/exceljs/exceljs#alignment
+        headerRow.getCell(1).alignment = { horizontal: 'center' };
+        
+        // footer
+        var footerRowIndex = dataGridRange.to.row + 2;
+        var footerRow = worksheet.getRow(footerRowIndex);
+        worksheet.mergeCells(footerRowIndex, 1, footerRowIndex, 8);
+        
+        footerRow.getCell(1).value = 'www.wikipedia.org';
+        footerRow.getCell(1).font = { color: { argb: 'BFBFBF' }, italic: true };
+        footerRow.getCell(1).alignment = { horizontal: 'right' };
+        
+        return Promise.resolve();
+      }).then(function() {
+        // https://github.com/exceljs/exceljs#writing-xlsx
+        workbook.xlsx.writeBuffer().then(function(buffer) {
+          saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'CountriesPopulation.xlsx');
+        });
+      });
+      e.cancel = true;
+    },
+    columns: [
+      'Country',
+      'Area',
+      {
+        caption: 'Population',
+        columns: [{
+          caption: 'Total',
+          dataField: 'Population_Total',
+          format: 'fixedPoint'
+        }, {
+          caption: 'Urban',
+          dataField: 'Population_Urban',
+          dataType: 'number',
+          format: { type: 'percent'}
+        }]
+      }, {
+        caption: 'Nominal GDP',
+        columns: [{
+          caption: 'Total, mln $',
+          dataField: 'GDP_Total',
+          format: 'fixedPoint',
+          sortOrder: 'desc'
+        }, {
+          caption: 'By Sector',
+          columns: [{
+            caption: 'Agriculture',
+            dataField: 'GDP_Agriculture',
+            width: 95,
+            format: {
+              type: 'percent',
+              precision: 1
+            }
+          }, {
+            caption: 'Industry',
+            dataField: 'GDP_Industry',
+            width: 80,
+            format: {
+              type: 'percent',
+              precision: 1
+            }
+          }, {
+            caption: 'Services',
+            dataField: 'GDP_Services',
+            width: 85,
+            format: {
+              type: 'percent',
+              precision: 1
+            }
+          }]
+        }]
+      }
+    ]
+  });
+});

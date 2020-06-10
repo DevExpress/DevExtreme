@@ -1,0 +1,50 @@
+<div id="chart-demo">
+    <dx-chart
+        id="zoomedChart"
+        palette="soft"
+        [dataSource]="chemicalComposition"
+        title="The Chemical Composition of the Earth Layers">
+        <dxi-series
+            *ngFor="let item of seriesSource"
+            [valueField]="item.valueField"
+            [name]="item.name">
+        </dxi-series>
+        <dxo-common-series-settings 
+            type="bar" 
+            [ignoreEmptyPoints]="true">
+        </dxo-common-series-settings>
+        <dxi-value-axis>
+            <dxo-label [customizeText]="customizeText"></dxo-label>
+        </dxi-value-axis>
+        <dxo-argument-axis #argumentAxis>
+
+        </dxo-argument-axis>
+        <dxo-legend
+            [visible]="true"
+            verticalAlignment="top"
+            horizontalAlignment="right"
+            orientation="horizontal">
+            <dxo-border [visible]="true"></dxo-border>
+        </dxo-legend>
+    </dx-chart>
+    <dx-range-selector
+        [dataSource]="chemicalComposition"
+        [(value)]="argumentAxis.visualRange">
+        <dxo-size [height]="120"></dxo-size>
+        <dxo-margin [left]="10"></dxo-margin>
+        <dxo-scale [minorTickCount]="1"></dxo-scale>
+        <dxo-behavior callValueChanged="onMoving"></dxo-behavior>
+        <dxo-chart
+            palette="soft">
+            <dxo-common-series-settings 
+                type="bar" 
+                [ignoreEmptyPoints]="true">
+            </dxo-common-series-settings>
+            <dxi-series
+                *ngFor="let item of seriesSource"
+                [valueField]="item.valueField"
+                [name]="item.name">
+            </dxi-series>
+        </dxo-chart>
+    </dx-range-selector>
+</div>

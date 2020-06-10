@@ -1,0 +1,54 @@
+<div class="left">
+    <dx-list
+        class="list"
+        [dataSource]="dataSource"
+        [grouped]="true"
+        [searchEnabled]="true"
+        selectionMode="single"
+        [selectedItemKeys]="[currentHotel.Id]"
+        (onSelectionChanged)=listSelectionChanged($event)
+    >
+        <div *dxTemplate="let item of 'item'">
+            <div>
+                <div class="hotel">
+                    <div class="name">{{item.Hotel_Name}}</div>
+                    <div class="address">{{item.Postal_Code + ', ' + item.Address}}</div>
+                    <div class="type" [ngClass]="item.Hotel_Class.toLowerCase()"></div>
+                </div>
+                <div class="price-container">
+                    <div class="price">{{item.Price | currency:'USD':'symbol':'1.0-0'}}</div>
+                    <div class="caption">per<br>night</div>
+                </div>
+            </div>
+        </div>
+        <div *dxTemplate="let item of 'group'">
+            <div class="city">{{item.key}}</div>
+        </div>
+    </dx-list>
+</div>
+<div class="right">
+    <div class="header">
+        <div class="name-container">
+            <div class="name">{{currentHotel.Hotel_Name}}</div>
+            <div class="type" [ngClass]="currentHotel.Hotel_Class.toLowerCase()"></div>
+        </div>
+        <div class="price-container">
+            <div class="price">{{currentHotel.Price | currency:'USD':'symbol':'1.0-0'}}</div>
+            <div class="caption">per<br>night</div>
+        </div>
+    </div>
+    <dx-tile-view class="tile"
+        [dataSource]="currentHotel.Images"
+        noDataText=""
+        [height]="224"
+        [baseItemHeight]="100"
+        [baseItemWidth]="137"
+        [itemMargin]="12"
+    >
+        <div *dxTemplate="let item of 'item'">
+            <div class="tile-image" [ngStyle]="{ 'background-image': 'url(../../../../images/hotels/' + item.FileName + ')' }"></div>
+        </div>
+    </dx-tile-view>
+    <div class="address">{{currentHotel.Postal_Code}}, {{currentHotel.Address}}</div>
+    <div class="description">{{currentHotel.Description}}</div>
+</div>

@@ -1,0 +1,33 @@
+<dx-data-grid 
+    id="gridContainer" 
+    [dataSource]="orders"
+    keyExpr="ID"
+    [showBorders]="true">
+
+    <dxo-selection mode="single"></dxo-selection>
+
+    <dxi-column dataField="OrderNumber" [width]="130" caption="Invoice Number"></dxi-column>
+    <dxi-column dataField="OrderDate" [width]="160" dataType="date"></dxi-column>
+    <dxi-column dataField="Employee"></dxi-column>
+    <dxi-column dataField="CustomerStoreCity"  caption="City"></dxi-column>
+    <dxi-column dataField="CustomerStoreState"  caption="State"></dxi-column>
+    <dxi-column dataField="SaleAmount"  alignment="right" format="currency"></dxi-column>
+
+    <dxo-summary>
+        <dxi-total-item
+            column="OrderNumber"
+            summaryType="count">
+        </dxi-total-item>
+        <dxi-total-item
+            column="OrderDate"
+            summaryType="min"
+            [customizeText]="customizeDate">
+        </dxi-total-item>
+        <dxi-total-item
+            column="SaleAmount"
+            summaryType="sum"
+            valueFormat="currency">
+        </dxi-total-item>
+    </dxo-summary>
+
+</dx-data-grid>

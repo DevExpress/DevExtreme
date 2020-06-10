@@ -1,0 +1,43 @@
+<div id="chart-demo">
+    <dx-chart
+        palette="Violet"
+        [dataSource]="countriesInfo">
+        <dxi-series
+            *ngFor="let energy of energySources"
+            [valueField]="energy.value"
+            [name]="energy.name">
+        </dxi-series>
+        <dxo-common-series-settings #seriesSettings
+            argumentField="country"
+            [type]="types[0]">
+        </dxo-common-series-settings>
+        <dxo-margin [bottom]="20"></dxo-margin>
+        <dxo-argument-axis
+            [valueMarginsEnabled]="false"
+            discreteAxisDivisionMode="crossLabels">
+            <dxo-grid [visible]="true"></dxo-grid>
+        </dxo-argument-axis>
+        <dxo-legend
+            verticalAlignment="bottom"
+            horizontalAlignment="center"
+            itemTextPosition="bottom">
+        </dxo-legend>
+        <dxo-title
+            text="Energy Consumption in 2004">
+            <dxo-subtitle text="(Millions of Tons, Oil Equivalent)">
+            </dxo-subtitle>
+        </dxo-title>
+        <dxo-export [enabled]="true"></dxo-export>
+        <dxo-tooltip [enabled]="true"></dxo-tooltip>
+    </dx-chart>
+    <div class="options">
+        <div class="caption">Options</div>
+        <div class="option">
+            <span>Series Type</span>
+            <dx-select-box
+                [dataSource]="types"
+                [(value)]="seriesSettings.type">
+            </dx-select-box>
+        </div>
+    </div>
+</div>

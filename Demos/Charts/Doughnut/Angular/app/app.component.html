@@ -1,0 +1,25 @@
+<dx-pie-chart
+    id="pie"
+    type="doughnut"
+    title="The Population of Continents and Regions"
+    palette="Soft Pastel"
+    [dataSource]="populationByRegions">
+    <dxi-series
+        argumentField="region">
+        <dxo-label
+            [visible]="true"
+            format="millions">
+            <dxo-connector [visible]="true"></dxo-connector>
+        </dxo-label>
+    </dxi-series>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-legend
+        [margin]="0"
+        horizontalAlignment="right"
+        verticalAlignment="top"></dxo-legend>
+    <dxo-tooltip
+        [enabled]="true"
+        [customizeTooltip]="customizeTooltip"
+        format="millions">
+    </dxo-tooltip>
+</dx-pie-chart>

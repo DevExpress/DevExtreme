@@ -1,0 +1,34 @@
+<dx-tree-list
+    id="tasks"
+    [dataSource]="tasks"
+    keyExpr="Task_ID"
+    parentIdExpr="Task_Parent_ID"
+    [expandedRowKeys]="[1, 2]"
+    [selectedRowKeys]="[1, 29, 42]"
+    [columnAutoWidth]="true"
+    [wordWrapEnabled]="true"
+    [showBorders]="true">
+
+    <dxo-search-panel [visible]="true" width="250"></dxo-search-panel>
+    <dxo-header-filter [visible]="true"></dxo-header-filter>
+    <dxo-selection mode="multiple"></dxo-selection>
+    <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+
+    <dxi-column dataField="Task_Subject" [width]="300"></dxi-column>
+    <dxi-column dataField="Task_Assigned_Employee_ID" caption="Assigned" [minWidth]="200" cssClass="employee" cellTemplate="employeeTemplate">
+      <dxo-lookup [dataSource]="employees" valueExpr="ID" displayExpr="Name"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="Task_Status" caption="Status" [minWidth]="100">
+      <dxo-lookup [dataSource]="statuses"></dxo-lookup>
+    </dxi-column>
+      <dxi-column dataField="Task_Completion" caption="% Completed" [visible]="false" [customizeText]="getCompletionText"></dxi-column>
+    <dxi-column dataField="Task_Priority" caption="Priority" [visible]="false">
+      <dxo-lookup [dataSource]="priorities" valueExpr="id" displayExpr="value"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="Task_Start_Date" caption="Start Date" dataType="date"></dxi-column>
+    <dxi-column dataField="Task_Due_Date" caption="Due Date" dataType="date"></dxi-column>
+    <div *dxTemplate="let options of 'employeeTemplate'">
+        <div class="img" *ngIf="options.data.Task_Assigned_Employee" style.background-image="url('{{options.data.Task_Assigned_Employee.Picture}}')"></div>
+        <span *ngIf="options.data.Task_Assigned_Employee" class="name" >{{options.data.Task_Assigned_Employee.Name}}</span>
+    </div>
+</dx-tree-list>

@@ -1,0 +1,72 @@
+<div class="images">
+
+    <div *ngFor="let house of houses">
+        <div (click)="showHouse(house)" class="item-content">
+            <img src="{{house.Image}}" />
+            <div class="item-options">
+                <div>
+                    <div class="address">{{house.Address}}</div>
+                    <div class="price large-text">{{house.Price | currency:'USD':'symbol':'1.0-0'}}</div>
+                    <div class="agent">
+                        <div id="house{{house.ID}}">
+                            <img src="../../../../images/icon-agent.svg">
+                            Listing agent
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <dx-popover
+                target="#house{{house.ID}}" 
+                showEvent="mouseenter"
+                hideEvent="mouseleave"
+                contentTemplate="popoverContent"
+                [width]="260">
+                <dxo-position
+                    at="bottom"
+                    my="top"
+                    offset="0 2"
+                    collision="fit flip">
+                </dxo-position>
+                <div *dxTemplate="let data of 'popoverContent'">
+                    <div class="agent-details">
+                        <img src="{{house.Agent.Picture}}" />
+                        <div>
+                            <div class="name large-text">{{house.Agent.Name}}</div>
+                            <div class="phone">Tel: {{house.Agent.Phone}}</div>
+                        </div>
+                    </div>
+                </div>
+            </dx-popover>
+        </div>
+    </div>
+
+    <dx-popup
+        [width]="660"
+        [height]="540"
+        [showTitle]="true"
+        [title]="currentHouse.Address"
+        [dragEnabled]="false"
+        [closeOnOutsideClick]="true"
+        [(visible)]="popupVisible">
+        <div *dxTemplate="let data of 'content'">
+            <div class='popup-property-details'>
+                <div class='large-text'>{{currentHouse.Price | currency:'USD':'symbol':'1.0-0'}}</div>
+                <div class='opacity'>{{currentHouse.Address}}, {{currentHouse.City}}, {{currentHouse.State}}</div>
+                <dx-button
+                    class="favorites"
+                    [text]="currentHouse.Favorite ? REMOVE_FROM_FAVORITES : ADD_TO_FAVORITES"
+                    icon="favorites"
+                    [width]="260"
+                    [height]="44"
+                    (onClick)="changeFavoriteState($event)">
+                </dx-button>
+                <div class='images'>
+                    <img src="{{currentHouse.Image}}" />
+                    <img src="{{currentHouse.Image.replace('.jpg', 'b.jpg')}}" />
+                </div>
+                <div>{{currentHouse.Features}}</div>
+            </div>
+        </div>
+    </dx-popup>
+
+</div>

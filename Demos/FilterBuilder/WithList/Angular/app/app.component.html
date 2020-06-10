@@ -1,0 +1,24 @@
+<div class="filter-container">
+    <dx-filter-builder
+        [fields]="fields"
+        [(value)]="filter"
+        [customOperations]="customOperations"
+        (onInitialized)="refreshDataSource()">
+    </dx-filter-builder>
+	<dx-button
+        text="Apply Filter"
+        type="default"
+        (onClick)="refreshDataSource()">
+    </dx-button>
+</div>
+<div class="list-container">
+    <dx-list [dataSource]="dataSource">
+        <div *dxTemplate="let item of 'item'">
+            <div class="product">
+                <img src="{{item.ImageSrc}}" />
+                <div>{{item.Name}}</div>
+                <div class="price">{{item.Price | currency:'USD':'symbol':'1.0'}}</div>
+            </div>
+        </div>
+    </dx-list>
+</div>

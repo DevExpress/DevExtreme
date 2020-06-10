@@ -1,0 +1,12 @@
+::ng-deep #vector-map {
+    height: 700px;
+}
+
+h4 {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+::ng-deep #gdp-sectors {
+    width: 400px;
+    height: 200px;
+}

@@ -1,0 +1,47 @@
+::ng-deep #accordion h1 {
+    font-size: 20px;
+}
+
+::ng-deep #accordion h1,
+::ng-deep #accordion p {
+    margin: 0;
+}
+
+::ng-deep .dx-theme-material #accordion .dx-accordion-item-opened .dx-accordion-item-title {
+    display: flex;
+}
+
+::ng-deep .dx-theme-material #accordion .dx-accordion-item-opened h1 {
+    align-self: center;
+}
+
+::ng-deep .options,
+::ng-deep .selected-data {
+    padding: 20px;
+    background-color: rgba(191, 191, 191, 0.15);
+    margin-top: 20px;
+}
+::ng-deep .selected-data {
+    position: relative;
+    height: 36px;
+}
+::ng-deep .selected-data > .caption {
+    position: relative;
+    top: 5px;
+    margin-right: 10px;
+    font-weight: bold;
+    font-size: 115%;
+}
+::ng-deep .selected-data > .dx-widget {
+    position: absolute;
+    left: 140px;
+    right: 20px;
+    top: 20px;
+}
+::ng-deep .options > .caption {
+    font-weight: 500;
+    font-size: 18px;
+}
+::ng-deep .option {
+    margin-top: 10px;
+}

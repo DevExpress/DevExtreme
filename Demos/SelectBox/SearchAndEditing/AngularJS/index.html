@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script src="../../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.light.css" />
+    <script src="../../../../node_modules/angular/angular.min.js"></script>
+    <script src="../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="index.js"></script>
+</head>
+<body class="dx-viewport">
+    <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
+        <div id="selectbox-demo">
+            <div class="widget-container">
+                <div class="dx-fieldset">
+                    <div class="dx-fieldset-header">SearchBox</div>
+                    <div class="dx-field">
+                        <div class="dx-field-label">Product</div>
+                        <div class="dx-field-value">
+                            <div dx-select-box="selectBox.searchBoxOptions"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dx-fieldset">
+                    <div class="dx-fieldset-header">EditBox</div>
+                    <div class="dx-field">
+                        <div class="dx-field-label">Product</div>
+                        <div class="dx-field-value">
+                            <div dx-select-box="selectBox.editBoxOptions"></div>
+                        </div>
+                    </div>
+                    <div class="dx-field current-product">
+                        Current product:
+                        <span ng-if="currentProduct" class="current-value">
+                            {{currentProduct.Name}} (ID: {{currentProduct.ID}})
+                        </span>
+                        <span ng-if="!currentProduct" class="current-value">
+                            Not selected
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="options">
+                <div class="caption">SearchBox Options</div>
+                <div class="option">
+                    <div>Search Mode</div>
+                    <div dx-select-box="demoOptions.searchModeOptions"></div>
+                </div>
+                <div class="option">
+                    <div>Search Expression</div>
+                    <div dx-select-box="demoOptions.searchExprOptions"></div>
+                </div>
+                <div class="option">
+                    <div>Search Timeout</div>
+                    <div dx-number-box="demoOptions.searchTimeoutOptions"></div>
+                </div>
+                <div class="option">
+                    <div>Minimum Search Length</div>
+                    <div dx-number-box="demoOptions.minSearchLengthOptions"></div>
+                </div>
+                <div class="option">
+                    <div dx-check-box="demoOptions.showDataBeforeSearchOptions"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

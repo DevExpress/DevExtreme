@@ -1,0 +1,17 @@
+<dx-vector-map 
+    id="vector-map" 
+    [bounds]="[-180, 85, 180, -60]">
+    <dxo-tooltip 
+        [enabled]="true" 
+        [customizeTooltip]="customizeTooltip"></dxo-tooltip>
+    <dxi-layer 
+        name="areas" 
+        palette="Violet" 
+        colorGroupingField="population"
+        [colorGroups]="[0, 0.5, 0.8, 1, 2, 3, 100]"
+        [dataSource]="worldMap"
+        [customize]="customizeLayers"></dxi-layer>
+    <dxi-legend [customizeText]="customizeText">
+        <dxo-source layer="areas" grouping="color"></dxo-source>
+    </dxi-legend>
+</dx-vector-map>

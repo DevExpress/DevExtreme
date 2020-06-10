@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script src="../../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.light.css" />
+    <script src="../../../../node_modules/angular/angular.min.js"></script>
+    <script src="../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="index.js"></script>
+</head>
+<body class="dx-viewport">
+    <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
+        <div id="calendar-demo">
+            <div class="widget-container">
+                <div id="calendar-container" dx-calendar="{
+                    bindingOptions: {
+                        min: 'minDateValue',
+                        max: 'maxDateValue',
+                        disabledDates: 'disabledDates',
+                        firstDayOfWeek: 'firstDay',
+                        disabled: 'calendarDisabled',
+                        value: 'currentValue',
+                        zoomLevel: 'zoomLevel',
+                        cellTemplate: 'cellTemplate'
+                    }
+                }"></div>
+            </div>
+            <div class="options">
+                <div class="caption">Options</div>
+                <div class="option">
+                    <div dx-check-box="{
+                        text: 'Specified min value',
+                        value: false,
+                        onValueChanged: setMinDate
+                    }"></div>
+                </div>
+                <div class="option">
+                    <div dx-check-box="{
+                        text: 'Specified max value',
+                        value: false,
+                        onValueChanged: setMaxDate
+                    }"></div>
+                </div>
+                <div class="option">
+                    <div dx-check-box="{
+                        text: 'Disable weekend',
+                        value: false,
+                        onValueChanged: disableWeekend
+                    }"></div>
+                </div>
+                <div class="option">
+                    <div dx-check-box="{
+                        text: 'Monday as the first day of a week',
+                        value: false,
+                        onValueChanged: setFirstDay
+                    }"></div>
+                </div>
+                <div class="option">
+                    <div dx-check-box="{
+                        text: 'Use the Custom Cell Template',
+                        value: false,
+                        onValueChanged: useCellTemplate
+                    }"></div>
+                </div>
+                <div class="option">
+                    <div dx-check-box="{
+                        text: 'Disabled',
+                        bindingOptions: {
+                            value: 'calendarDisabled'
+                        }
+                    }"></div>
+                </div>
+                <div class="option">
+                    <span>Zoom level</span>
+                    <div id="zoom-level" dx-select-box="{
+                        dataSource: zoomLevels,
+                        bindingOptions: {
+                            value: 'zoomLevel'
+                        }
+                }"></div>
+                </div>
+                <div class="option">
+                    <span>Selected date</span>
+                        <div id="selected-date" dx-date-box="{
+                            width: '100%',
+                            bindingOptions: {
+                                value: 'currentValue'
+                            }
+                    }"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

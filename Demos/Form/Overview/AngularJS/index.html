@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script src="../../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.light.css" />
+    <script src="../../../../node_modules/angular/angular.min.js"></script>
+    <script src="../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="index.js"></script>
+</head>
+<body class="dx-viewport">
+    <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
+        <div id="form-demo">
+            <div class="widget-container">
+               <div>Select company:</div>
+               <div dx-select-box="selectCompanyOptions"></div>
+               <div id="form" dx-form="formOptions"></div>
+            </div>
+            <div class="options">
+                <div class="caption">Options</div>
+                <div class="option">
+                    <span>Label location:</span>
+                    <div dx-select-box="labelLocationOptions"></div>
+                </div>
+                <div class="option">
+                    <span>Columns count:</span>
+                    <div dx-select-box="colCountOptions"></div>
+                </div>
+                <div class="option">
+                    <span>Min column width:</span>
+                    <div dx-select-box="minColWidthOptions"></div>
+                </div>
+                <div class="option">
+                    <span>Form width:</span>
+                    <div dx-number-box="widthOptions"></div>
+                </div>
+                <div class="option">
+                    <div dx-check-box="readOnlyOptions"></div>
+                </div>
+                <div class="option">
+                    <div dx-check-box="showColonOptions"></div>
+                </div>
+           </div>
+        </div>
+    </div>
+</body>
+</html>

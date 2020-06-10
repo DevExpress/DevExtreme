@@ -1,0 +1,9 @@
+.pies-container {
+    margin: auto;
+    width: 800px;
+}
+
+.pies-container > div {
+    width: 400px;
+    float: left;
+}

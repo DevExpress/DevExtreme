@@ -1,0 +1,31 @@
+<dx-range-selector 
+    id="range-selector"
+    [value]="[startSelectedValue, endSelectedValue]"
+    title="Select a Time Period">
+    <dxo-margin [top]="50" [bottom]="0"></dxo-margin>
+    <dxo-background>
+        <dxo-image
+            url="../../../../images/RangeImage.png"
+            location="full">
+        </dxo-image>
+    </dxo-background>
+    <dxo-indent
+        [left]="65"
+        [right]="65">
+    </dxo-indent>
+    <dxo-scale
+        [startValue]="startValue"
+        [endValue]="endValue"
+        [placeholderHeight]="20">
+        <dxo-label [format]="shorttime">
+        </dxo-label>
+        <dxo-minor-tick-interval [hours]="1">
+        </dxo-minor-tick-interval>
+        <dxo-tick-interval [hours]="2">
+        </dxo-tick-interval>
+    </dxo-scale>
+    <dxo-slider-marker
+        [format]="shorttime"
+        [placeholderHeight]="30">
+    </dxo-slider-marker>
+</dx-range-selector>

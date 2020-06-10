@@ -1,0 +1,69 @@
+<div class="title">Edit Task</div>
+<div class="editors">
+    <div class="left">
+        <dx-text-box
+            value="Samantha Bright"
+            width="100%"
+            placeholder="Owner"
+            [stylingMode]="stylingMode"
+        ></dx-text-box>
+        <dx-text-box
+            value=""
+            width="100%"
+            placeholder="Subject"
+            [stylingMode]="stylingMode"
+        >
+            <dx-validator [validationRules]="[{
+                type: 'required'
+            }]"></dx-validator>
+        </dx-text-box>
+    </div>
+    <div class="right">
+        <dx-date-box
+            [value]="date"
+            width="100%"
+            placeholder="Start Date"
+            [stylingMode]="stylingMode"
+        ></dx-date-box>
+        <dx-select-box
+            [items]="[ 'High', 'Urgent', 'Normal', 'Low' ]"
+            value="High"
+            width="100%"
+            placeholder="Priority"
+            [stylingMode]="stylingMode"
+        ></dx-select-box>
+    </div>
+    <div class="center">
+        <dx-tag-box
+            [items]="[ 'Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed' ]"
+            [value]="[ 'Not Started' ]"
+            [multiline]="false"
+            width="100%"
+            placeholder="Status"
+            [stylingMode]="stylingMode"
+        ></dx-tag-box>
+        <dx-text-area
+            value="Need sign-off on the new NDA agreement. It's important that this is done quickly to prevent any unauthorized leaks."
+            width="100%"
+            placeholder="Details"
+            [stylingMode]="stylingMode"
+        ></dx-text-area>
+    </div>
+    <div class="center">
+        <dx-button
+            text="Save"
+            type="default"
+            (onClick)="validateClick($event)"
+            class="validate"
+        ></dx-button>
+    </div>
+</div>
+<div class="options">
+    <div class="caption">Styling Mode</div>
+    <div class="option">
+        <dx-select-box
+            [items]="[ 'outlined', 'filled', 'underlined' ]"
+            [(value)]="stylingMode"
+        ></dx-select-box>
+    </div>
+</div>

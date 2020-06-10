@@ -1,0 +1,64 @@
+<div class="tables">
+    <div *ngFor="let dataSource of dataSources" class="column">
+        <dx-data-grid
+            [dataSource]="dataSource"
+            [height]="600"
+            [showBorders]="true"
+            [repaintChangesOnly]="true"
+            [highlightChanges]="true">
+
+            <dxo-paging
+                [enabled]="false">
+            </dxo-paging>
+
+            <dxo-editing
+                mode="cell"
+                refreshMode="reshape"
+                [allowUpdating]="true"
+                [allowDeleting]="true"
+                [allowAdding]="true"
+                [useIcons]="true">
+            </dxo-editing>
+
+            <dxi-column
+                dataField="Prefix"
+                caption="Title"
+                [width]="50">
+                <dxi-validation-rule
+                    type="required">
+                </dxi-validation-rule>
+            </dxi-column>
+
+            <dxi-column
+                dataField="FirstName">
+                <dxi-validation-rule
+                    type="required">
+                </dxi-validation-rule>
+            </dxi-column>
+
+            <dxi-column
+                dataField="StateID"
+                caption="State">
+                <dxi-validation-rule
+                    type="required">
+                </dxi-validation-rule>
+                <dxo-lookup
+                    [dataSource]="stateDataSource"
+                    displayExpr="Name"
+                    valueExpr="ID">
+                </dxo-lookup>
+            </dxi-column>
+
+            <dxi-column
+                dataField="BirthDate"
+                dataType="date">
+                <dxi-validation-rule
+                    type="range"
+                    [max]="maxDate"
+                    message="Date can not be greater than 01/01/3000">
+                </dxi-validation-rule>
+            </dxi-column>
+
+        </dx-data-grid>
+    </div>
+</div>

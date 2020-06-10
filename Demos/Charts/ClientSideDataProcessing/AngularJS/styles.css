@@ -1,0 +1,12 @@
+#choose-temperature {
+    float: right;
+}
+
+.action {
+    width: 320px;
+    margin-top: 20px;
+}
+
+.label {
+    padding-top: 9px;
+}

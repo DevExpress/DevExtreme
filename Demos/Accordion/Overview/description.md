@@ -1,0 +1,1 @@
+The **Accordion** widget contains several panels displayed one under another. These panels can be&nbsp;collapsed or&nbsp;expanded by&nbsp;a&nbsp;user, which makes this widget very useful for presenting information in&nbsp;a&nbsp;limited amount of&nbsp;space.

@@ -1,0 +1,84 @@
+<div class="long-title">
+    <h3>Current Price (with Min and Max)</h3>
+</div>
+<div id="gauge-demo">
+    <dx-linear-gauge
+        id="c1"
+        [value]="24"
+        [subvalues]="[18, 43]">
+        <dxo-subvalue-indicator
+            type="rectangle"
+            color="#9B870C">
+        </dxo-subvalue-indicator>
+        <dxo-scale
+            [startValue]="10"
+            [endValue]="50"
+            [tickInterval]="10">
+            <dxo-label [customizeText]="customizeText"></dxo-label>
+        </dxo-scale>
+    </dx-linear-gauge>
+
+    <dx-linear-gauge
+        id="c2"
+        [value]="38"
+        [subvalues]="[18, 43]">
+        <dxo-subvalue-indicator
+            type="rhombus"
+            color="#779ECB">
+        </dxo-subvalue-indicator>
+        <dxo-scale
+            [startValue]="10"
+            [endValue]="50"
+            [tickInterval]="10">
+            <dxo-label [customizeText]="customizeText"></dxo-label>
+        </dxo-scale>
+    </dx-linear-gauge>
+
+    <dx-linear-gauge
+        id="c3"
+        [value]="21"
+        [subvalues]="[18, 43]">
+        <dxo-subvalue-indicator
+            type="circle"
+            color="#8FBC8F">
+        </dxo-subvalue-indicator>
+        <dxo-scale
+            [startValue]="10"
+            [endValue]="50"
+            [tickInterval]="10">
+            <dxo-label [customizeText]="customizeText"></dxo-label>
+        </dxo-scale>
+    </dx-linear-gauge>
+
+    <dx-linear-gauge
+        id="c4"
+        [value]="42"
+        [subvalues]="[18, 43]">
+        <dxo-subvalue-indicator
+            type="textCloud"
+            color="#734F96">
+        </dxo-subvalue-indicator>
+        <dxo-scale
+            [startValue]="10"
+            [endValue]="50"
+            [tickInterval]="10">
+            <dxo-label [customizeText]="customizeText"></dxo-label>
+        </dxo-scale>
+    </dx-linear-gauge>
+
+    <dx-linear-gauge
+        id="c5"
+        [value]="28"
+        [subvalues]="[18, 43]">
+        <dxo-subvalue-indicator
+            type="triangleMarker"
+            color="#f05b41">
+        </dxo-subvalue-indicator>
+        <dxo-scale
+            [startValue]="10"
+            [endValue]="50"
+            [tickInterval]="10">
+            <dxo-label [customizeText]="customizeText"></dxo-label>
+        </dxo-scale>
+    </dx-linear-gauge>
+</div>

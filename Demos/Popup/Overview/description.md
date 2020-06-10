@@ -1,0 +1,1 @@
+The **Popup** widget is&nbsp;a&nbsp;pop-up window overlaying the current view. Use this widget to&nbsp;display specified content in&nbsp;a&nbsp;popup window. In&nbsp;this demo, the content is&nbsp;specified using a&nbsp;custom template.

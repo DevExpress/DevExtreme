@@ -1,0 +1,26 @@
+::ng-deep .options {
+    padding: 20px;
+    margin-top: 20px;
+    background-color: rgba(191, 191, 191, 0.15);
+    position: relative;
+}
+::ng-deep .caption {
+    font-size: 18px;
+    font-weight: 500;
+}
+::ng-deep .option {
+   margin-top: 10px;
+}
+::ng-deep .checkboxes-mode {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+}
+::ng-deep .option > .dx-selectbox {
+    width: 150px;
+    display: inline-block;
+    vertical-align: middle;
+}
+::ng-deep .option > span {
+    margin-right: 10px;
+}

@@ -1,0 +1,25 @@
+<dx-chart
+    id="chart"
+    title="Australian Medal Count"
+    [dataSource]="medalsInfo">
+    <dxi-series valueField="bronze" name="Bronze Medals" color="#cd7f32"></dxi-series>
+    <dxi-series valueField="silver" name="Silver Medals" color="#c0c0c0"></dxi-series>
+    <dxi-series valueField="gold" name="Gold Medals" color="#ffd700"></dxi-series>
+    <dxo-common-series-settings
+        argumentField="year"
+        type="steparea">
+        <dxo-steparea>
+            <dxo-border [visible]="false"></dxo-border>
+        </dxo-steparea>
+    </dxo-common-series-settings>
+    <dxo-argument-axis [valueMarginsEnabled]="false">
+        <dxo-label>
+            <dxo-format type="decimal"></dxo-format>
+        </dxo-label>
+    </dxo-argument-axis>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-legend
+        verticalAlignment="bottom"
+        horizontalAlignment="center">
+    </dxo-legend>
+</dx-chart>

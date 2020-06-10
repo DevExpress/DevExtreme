@@ -1,0 +1,47 @@
+<div id="wrapper"
+    [class]="wrapperClassName">
+    <dx-load-panel
+        [position]="{ of: '#file-manager' }"
+        [(visible)]="loadPanelVisible">
+    </dx-load-panel>
+    <div id="widget-area">
+        <dx-file-manager
+            id="file-manager"
+            [fileSystemProvider]="fileSystemProvider"
+            [allowedFileExtensions]="allowedFileExtensions">
+            <!-- uncomment the code below to enable file/directory management -->
+            <!-- <dxo-permissions 
+                create="true"
+                copy="true"
+                move="true"
+                delete="true"
+                rename="true"
+                upload="true"
+                download="true">
+            </dxo-permissions> -->
+        </dx-file-manager>
+        <div id="request-panel">
+            <div class="request-info" *ngFor="let request of requests">
+                <div class="parameter-info">
+                    <div class="parameter-name">Method:</div>
+                    <div class="parameter-value dx-theme-accent-as-text-color">{{request.method}}</div>
+                </div>
+                <div class="parameter-info">
+                    <div class="parameter-name">Url path:</div>
+                    <div class="parameter-value dx-theme-accent-as-text-color">{{request.urlPath}}</div>
+                </div>
+                <div class="parameter-info">
+                    <div class="parameter-name">Query string:</div>
+                    <div class="parameter-value dx-theme-accent-as-text-color">{{request.queryString}}</div>
+                </div>
+                <br />
+            </div>
+        </div>
+    </div>
+    <div id="message-box">
+        To run the demo locally, specify your Azure storage account name, access key and container name in the web.config file.
+        Refer to the <a href="https://js.devexpress.com/Demos/WidgetsGallery/Demo/FileManager/AzureClientBinding/Angular/Light/" target="_blank">
+            https://js.devexpress.com/Demos/WidgetsGallery/Demo/FileManager/AzureClientBinding/Angular/Light/</a>
+        to see the demo online.
+    </div>
+</div>

@@ -1,0 +1,27 @@
+::ng-deep .button {
+    width: 280px;
+    display: block;
+    margin: 20px auto;
+}
+::ng-deep .options {
+    padding: 20px;
+    background-color: rgba(191, 191, 191, 0.15);
+    left: 0;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+::ng-deep .caption {
+    font-size: 18px;
+    font-weight: 500;
+}
+::ng-deep .option {
+    margin-top: 10px;
+    line-height: 28px;
+    text-align: right;
+    display: inline-block;
+    width: 100%;
+}
+::ng-deep .option > span {
+    float: left;
+}

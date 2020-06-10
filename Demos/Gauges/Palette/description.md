@@ -1,0 +1,1 @@
+In&nbsp;this demo, the **BarGauge** uses one of&nbsp;the predefined palettes for coloring bars. This palette is&nbsp;specified by&nbsp;the **palette** option. You are not limited to&nbsp;use only the predefined palettes. To&nbsp;specify your own palette, assign an&nbsp;array of&nbsp;required colors to&nbsp;the option mentioned before.

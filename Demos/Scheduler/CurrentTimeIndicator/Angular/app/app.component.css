@@ -1,0 +1,52 @@
+::ng-deep .dx-scheduler-appointment {
+    color: #000000;
+    font-weight: 500;
+    background-color: #e4e4e4;
+}
+
+::ng-deep .dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
+    padding: 5px 0px 5px 7px;
+}
+
+::ng-deep .options {
+    background-color: rgba(191, 191, 191, 0.15);
+    margin-top: 20px;
+}
+
+::ng-deep .column {
+    width: 40%;
+    display: inline-block;
+    margin: 15px 3%;
+    text-align: left;
+    vertical-align: top;
+}
+
+::ng-deep .option {
+    padding: 5px 0;
+}
+
+::ng-deep .label, .value {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+::ng-deep .label {
+    width: 180px;
+}
+
+::ng-deep .value {
+    width: 30%;
+}
+
+::ng-deep .movie img {
+    height: 70px;
+}
+
+::ng-deep .movie-text {
+    font-size: 90%;
+    white-space: normal;
+}
+
+::ng-deep #allow-shading, #show-indicator {
+    height: 36px;
+}

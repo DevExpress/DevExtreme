@@ -1,0 +1,8 @@
+::ng-deep #vector-map {
+    height: 440px;
+}
+
+::ng-deep .country {
+    font-size: 15px;
+    font-weight: 500;
+}

@@ -1,0 +1,52 @@
+<div class="form">
+    <div>
+        <div class="label">Catalog:</div>
+        <dx-menu
+            #menu
+            [dataSource]="products"
+            displayExpr="name"
+            [showFirstSubmenuMode]="showFirstSubmenuModes"
+            orientation="horizontal"
+            submenuDirection="auto"
+            [hideSubmenuOnMouseLeave]="false"
+            (onItemClick)="itemClick($event)"
+        >
+        </dx-menu>
+        <div id="product-details" *ngIf="currentProduct">
+            <img src="{{currentProduct.icon}}" />
+            <div class="name">{{currentProduct.name}}</div>
+            <div class="price">{{"$" + currentProduct.price}}</div>
+        </div>
+    </div>
+    <div class="options">
+        <div class="caption">Options</div>
+        <div class="option">
+            <div>Show First Submenu Mode</div>
+            <dx-select-box
+                [items]="showSubmenuModes"
+                displayExpr="name"
+                [(value)]="showFirstSubmenuModes"
+            ></dx-select-box>
+        </div>
+        <div class="option">
+            <div>Orientation</div>
+            <dx-select-box
+                [items]="['horizontal', 'vertical']"
+                [(value)]="menu.orientation"
+            ></dx-select-box>
+        </div>
+        <div class="option">
+            <div>Submenu Direction</div>
+            <dx-select-box
+                [items]="['auto', 'rightOrBottom', 'leftOrTop']"
+                [(value)]="menu.submenuDirection"
+            ></dx-select-box>
+        </div>
+        <div class="option">
+            <dx-check-box
+                text="Hide Submenu on Mouse Leave"
+                [(value)]="menu.hideSubmenuOnMouseLeave"
+            ></dx-check-box>
+        </div>
+    </div>
+</div>

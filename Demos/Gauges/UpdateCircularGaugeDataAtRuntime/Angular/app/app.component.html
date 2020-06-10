@@ -1,0 +1,27 @@
+<div id="gauge-demo">
+    <dx-circular-gauge id="gauge" 
+        [value]="value.mean"
+        [subvalues]="[value.min, value.max]">
+
+        <dxo-range-container>
+            <dxi-range [startValue]="10" [endValue]="20" color="#0077BE"></dxi-range>
+            <dxi-range [startValue]="20" [endValue]="30" color="#E6E200"></dxi-range>
+            <dxi-range [startValue]="30" [endValue]="40" color="#77DD77"></dxi-range>
+        </dxo-range-container>
+        
+        <dxo-scale [startValue]="10" [endValue]="40" [tickInterval]="5">
+            <dxo-label [customizeText]="customizeText"></dxo-label>
+        </dxo-scale>
+        <dxo-tooltip [enabled]="true"></dxo-tooltip>
+        <dxo-title text="Temperature in the Greenhouse">
+            <dxo-font [size]="28"></dxo-font>
+        </dxo-title>
+    </dx-circular-gauge>
+    
+    <dx-select-box #seasons id="seasons"
+        [dataSource]="dataSource"
+        [width]="150"
+        displayExpr="name"
+        [(value)]="value">
+    </dx-select-box>
+</div>

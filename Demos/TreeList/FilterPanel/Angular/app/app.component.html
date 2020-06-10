@@ -1,0 +1,19 @@
+<dx-tree-list 
+    id="employees" 
+    [dataSource]="dataSource"
+    keyExpr="ID"
+    parentIdExpr="Head_ID"
+    [expandedRowKeys]="[1]"
+    [columns]="columns"
+    [filterValue]="filterValue"
+    [showBorders]="true">
+    <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-header-filter [visible]="true"></dxo-header-filter>
+    <dxi-column dataField="Full_Name" dataType="string"></dxi-column>
+    <dxi-column dataField="Title" caption="Position" dataType="string"></dxi-column>
+    <dxi-column dataField="City" dataType="string"></dxi-column>
+    <dxi-column dataField="State" dataType="string"></dxi-column>
+    <dxi-column dataField="Mobile_Phone" dataType="string"></dxi-column>
+    <dxi-column dataField="Hire_Date" dataType="date"></dxi-column>
+</dx-tree-list>

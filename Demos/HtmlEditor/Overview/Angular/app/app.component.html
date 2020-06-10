@@ -1,0 +1,77 @@
+<dx-html-editor height="550px">
+    <dxo-toolbar [multiline]="isMultiline">
+        <dxi-item formatName="undo"></dxi-item>
+        <dxi-item formatName="redo"></dxi-item>
+        <dxi-item formatName="separator"></dxi-item>
+        <dxi-item formatName="size" [formatValues]="['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt']"></dxi-item>
+        <dxi-item formatName="font" [formatValues]="['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana']"></dxi-item>
+        <dxi-item formatName="separator"></dxi-item>
+        <dxi-item formatName="bold"></dxi-item>
+        <dxi-item formatName="italic"></dxi-item>
+        <dxi-item formatName="strike"></dxi-item>
+        <dxi-item formatName="underline"></dxi-item>
+        <dxi-item formatName="separator"></dxi-item>
+        <dxi-item formatName="alignLeft"></dxi-item>
+        <dxi-item formatName="alignCenter"></dxi-item>
+        <dxi-item formatName="alignRight"></dxi-item>
+        <dxi-item formatName="alignJustify"></dxi-item>
+        <dxi-item formatName="separator"></dxi-item>
+        <dxi-item formatName="orderedList"></dxi-item>
+        <dxi-item formatName="bulletList"></dxi-item>
+        <dxi-item formatName="separator"></dxi-item>
+        <dxi-item formatName="header" [formatValues]="[false, 1, 2, 3, 4, 5]"></dxi-item>
+        <dxi-item formatName="separator"></dxi-item>
+        <dxi-item formatName="color"></dxi-item>
+        <dxi-item formatName="background"></dxi-item>
+        <dxi-item formatName="separator"></dxi-item>
+        <dxi-item formatName="link"></dxi-item>
+        <dxi-item formatName="image"></dxi-item>
+        <dxi-item formatName="separator"></dxi-item>
+        <dxi-item formatName="clear"></dxi-item>
+        <dxi-item formatName="codeBlock"></dxi-item>
+        <dxi-item formatName="blockquote"></dxi-item>
+    </dxo-toolbar>
+    <dxo-media-resizing
+        [enabled]=true>
+    </dxo-media-resizing>
+    <h2>
+        <img src="../../../../images/widgets/HtmlEditor.svg" alt="HtmlEditor">
+        Formatted Text Editor (HTML Editor)
+    </h2>
+    <br>
+    <p>DevExtreme HTML5 JavaScript HTML Editor is a client-side WYSIWYG text editor that allows its users to format textual and visual content and store it as HTML or Markdown.</p>
+    <p>Supported features:</p>
+    <ul>
+        <li>Inline formats:
+            <ul>
+                <li><strong>Bold</strong>, <em>italic</em>, <s>underlined</s> text formatting</li>
+                <li>Font, size, color changes (HTML only)</li>
+            </ul>
+        </li>
+        <li>Block formats:
+            <ul>
+                <li>Headers</li>
+                <li>Text alignment</li>
+                <li>Lists (ordered and unordered)</li>
+                <li>Code blocks</li>
+                <li>Quotes</li>
+            </ul>
+        </li>
+        <li>Custom formats</li>
+        <li>HTML and Markdown support</li>
+        <li>Mail-merge placeholders (for example, %username%)</li>
+        <li>Adaptive toolbar for working images, links, and color formats</li>
+        <li>Insert images as a link or base64 (drag and drop images to convert them to base64)</li>
+        <li>Copy-paste rich content (unsupported formats are removed)</li>
+    </ul>
+</dx-html-editor>
+
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <dx-check-box
+            text="Multiline toolbar"
+            [(value)]="isMultiline"
+        ></dx-check-box>
+    </div>
+</div>

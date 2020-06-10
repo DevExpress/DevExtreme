@@ -1,0 +1,46 @@
+<dx-pivot-grid id="sales"
+    [allowSortingBySummary]="true"
+    [allowSorting]="true"
+    [allowFiltering]="true"
+    [showBorders]="true"
+    [height]="490"
+    [dataSource]="pivotGridDataSource"
+    (onContextMenuPreparing)="contextMenuPreparing($event)">
+
+    <dxo-field-chooser 
+      [height]="500"
+    ></dxo-field-chooser>
+
+    <dxo-field-panel
+        [showDataFields]="showDataFields"
+        [showRowFields]="showRowFields"
+        [showColumnFields]="showColumnFields"
+        [showFilterFields]="showFilterFields"
+        [allowFieldDragging]="true"
+        [visible]="true">
+    </dxo-field-panel>
+</dx-pivot-grid>
+
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <dx-check-box
+          text="Show Data Fields"
+          [(value)]="showDataFields"></dx-check-box>
+    </div>
+    <div class="option">
+        <dx-check-box
+          text="Show Row Fields"
+          [(value)]="showRowFields"></dx-check-box>
+    </div>
+    <div class="option">
+        <dx-check-box
+          text="Show Column Fields"
+          [(value)]="showColumnFields"></dx-check-box>
+    </div>
+    <div class="option">
+        <dx-check-box
+          text="Show Filter Fields"
+          [(value)]="showFilterFields"></dx-check-box>
+    </div>
+</div>

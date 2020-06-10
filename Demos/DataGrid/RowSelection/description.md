@@ -1,0 +1,1 @@
+The **DataGrid** widget offers two row selection modes. In&nbsp;this example, single row selection mode is&nbsp;used. The **onSelectionChanged** callback function is&nbsp;also used to&nbsp;display additional information below the **DataGrid** once a&nbsp;record has been selected.

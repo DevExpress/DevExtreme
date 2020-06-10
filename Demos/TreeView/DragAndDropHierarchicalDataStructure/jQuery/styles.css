@@ -1,0 +1,40 @@
+.form {
+    display: flex;
+}
+
+.form>div {
+    display: inline-block;
+    vertical-align: top;
+}
+
+#treeviewDriveC,
+#treeviewDriveD {
+    margin-top: 10px;
+}
+
+.drive-header {
+    min-height: auto;
+    padding: 0px;
+    cursor: default;
+}
+
+.drive-header .dx-icon {
+    margin-top: -4px;
+}
+
+.drive-panel {
+    padding: 20px 30px;
+    font-size: 115%;
+    font-weight: bold;
+    border-right: 1px solid rgba(165, 165, 165, 0.4);
+    height: 100%;
+}
+
+.drive-panel:last-of-type {
+    border-right: none;
+}
+
+.dx-treeview-item {
+    position: relative;
+    left: -2px;
+}

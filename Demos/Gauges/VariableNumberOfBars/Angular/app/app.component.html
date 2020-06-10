@@ -1,0 +1,21 @@
+<div class="long-title"><h3>Sampling by Goods</h3></div>
+<div id="gauge-demo">
+    <dx-bar-gauge id="gauge"
+        [startValue]="0"
+        [endValue]="50"
+        [values]="values">
+        <dxo-label>
+            <dxo-format
+                type="fixedPoint"
+                [precision]="0">
+            </dxo-format>
+        </dxo-label>
+    </dx-bar-gauge>
+    <div id="panel">
+        <dx-check-box *ngFor="let product of products"
+            [text]="product.name"
+            [(value)]="product.active"
+            (onValueChanged)="productsToValues()"
+        ></dx-check-box>
+    </div>
+</div>

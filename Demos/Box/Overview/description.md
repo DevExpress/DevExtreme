@@ -1,0 +1,1 @@
+The **Box** widget allows you to&nbsp;arrange various elements within&nbsp;it. Separate and adaptive, the **Box** widget acts as&nbsp;a&nbsp;building block for the layout. In&nbsp;this demo, you can see how the widget is&nbsp;used to&nbsp;layout different elements on&nbsp;a&nbsp;page.

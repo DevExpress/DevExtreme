@@ -1,0 +1,24 @@
+::ng-deep p {
+    margin: 0;
+}
+
+::ng-deep #info {
+    width: 200px;
+    height: 200px;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+::ng-deep #info img {
+    width: 100%;
+}
+::ng-deep .slideout-container {
+    height: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width:100%;
+}
+::ng-deep .dx-field-label {
+    width: 70%;
+}

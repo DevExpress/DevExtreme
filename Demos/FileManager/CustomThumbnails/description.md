@@ -1,0 +1,1 @@
+The **FileManager** widget allows you to provide custom thumbnails. Handle the [customizeThumbnail](/Documentation/ApiReference/UI_Widgets/dxFileManager/Configuration/#customizeThumbnail) option to specify how the widget presents files in folders.

@@ -1,0 +1,46 @@
+::ng-deep #chat-window {
+    background-color: rgba(191, 191, 191, 0.15);
+    height: 350px;
+    padding: 10px;
+}
+
+::ng-deep .dx-htmleditor {
+    height: 100px;
+}
+
+::ng-deep #send {
+    float: right;
+    margin: 10px 0px;
+}
+
+::ng-deep .message {
+    height: 85px;
+    background-color: inherit;
+    display: inline-block;
+    max-width: 60%;
+    border-radius: 5px;
+    margin: 5px;
+    padding: 10px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+::ng-deep .name {
+    font-weight: bold;
+}
+
+::ng-deep .date {
+    opacity: 0.5;
+}
+
+::ng-deep .photo {
+    float: left;
+    height: 100%;
+}
+
+::ng-deep .photo > img {
+    width: 40px;
+    height: 40px;
+    display: block;
+    border-radius: 40px;
+    margin-right: 10px;
+}

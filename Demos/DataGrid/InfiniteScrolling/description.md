@@ -1,0 +1,1 @@
+The **DataGrid** widget provides a&nbsp;capability to&nbsp;navigate from a&nbsp;page to&nbsp;a&nbsp;page gradually without using a&nbsp;pager. For this purpose, an&nbsp;infinite scroll mode has been introduced. Data pages in&nbsp;this mode are loaded when the scroll bar reaches the end of&nbsp;its scale. This demo illustrates how you can enable the infinite scroll mode.

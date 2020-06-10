@@ -1,0 +1,41 @@
+<dx-chart
+    id="chart"
+    [dataSource]="populationData"
+    >
+    <dxo-title
+        text="Top 5 Most Populated States in US">
+    </dxo-title>
+    <dxi-series
+        type="bar"
+        name="Population"
+        argumentField="name"
+        valueField="population">
+    </dxi-series>
+    <dxo-common-annotation-settings
+        type="custom"
+        series="Population"
+        template="template"
+        [allowDragging]="true">
+    </dxo-common-annotation-settings>
+    <dxi-annotation *ngFor="let data of populationData"
+    	[data]="data"
+        [argument]="data.name">
+    </dxi-annotation>
+    <dxo-legend [visible]="false"></dxo-legend>
+    <svg *dxTemplate="let annotation of 'template'" class="annotation">
+        <image attr.href="{{getImagePath(annotation)}}" width="60" height="40" /> 
+        <text x="70" y="25" class="state">{{annotation.argument}}</text>
+        <text x="0" y="60">
+            <tspan class="caption">Capital:</tspan>
+            <tspan dx="5">{{annotation.data.capital}}</tspan>
+            
+            <tspan dy="14" x="0" class="caption">Population:</tspan>
+            <tspan dx="5">{{annotation.data.population | number:"3.0-0"}}</tspan>
+            
+            <tspan dy="14" x="0" class="caption">Area:</tspan>
+            <tspan dx="5">{{annotation.data.area | number: "3.0-0"}}</tspan>
+            <tspan dx="5">km</tspan>
+            <tspan class="sup" dy="-2">2</tspan>
+        </text>
+    </svg>
+</dx-chart>

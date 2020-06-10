@@ -1,0 +1,68 @@
+<dx-data-grid
+    id="orders"
+    [dataSource]="productsDataSource"
+    [repaintChangesOnly]="true"
+    [columnAutoWidth]="true"
+    [showBorders]="true">
+
+    <dxo-paging [pageSize]="10"></dxo-paging>
+
+    <dxi-column dataField="ProductName" dataType="string"></dxi-column>
+    <dxi-column dataField="UnitPrice" dataType="number" format="currency"></dxi-column>
+    <dxi-column dataField="OrderCount" dataType="number"></dxi-column>
+    <dxi-column dataField="Quantity" dataType="number"></dxi-column>
+    <dxi-column dataField="Amount" dataType="number" format="currency" [allowSorting]="true"></dxi-column>
+    <dxo-summary>
+        <dxi-total-item column="ProductName" summaryType="count"></dxi-total-item>
+        <dxi-total-item column="Amount" summaryType="sum" displayFormat="{0}" valueFormat="currency"></dxi-total-item>
+        <dxi-total-item column="OrderCount" summaryType="sum" displayFormat="{0}"></dxi-total-item>
+    </dxo-summary>
+    <dxo-master-detail
+        [enabled]="true"
+        template="productDetail">
+    </dxo-master-detail>
+
+    <div *dxTemplate="let detail of 'productDetail'">
+        <dx-data-grid
+            [dataSource]="getDetailGridDataSource(detail.data)"
+            [columnAutoWidth]="true"
+            [repaintChangesOnly]="true"
+            [showBorders]="true">
+
+            <dxo-paging [pageSize]="5"></dxo-paging>
+
+            <dxi-column dataField="OrderID" dataType="number"></dxi-column>
+            <dxi-column dataField="ShipCity" dataType="string"></dxi-column>
+            <dxi-column dataField="OrderDate" dataType="datetime" format="yyyy/MM/dd HH:mm:ss"></dxi-column>
+            <dxi-column dataField="UnitPrice" dataType="number" format="currency"></dxi-column>
+            <dxi-column dataField="Quantity" dataType="number"></dxi-column>
+            <dxi-column caption="Amount" dataType="number" format="currency" [allowSorting]="true" [calculateCellValue]="getAmount"></dxi-column>
+
+            <dxo-summary>
+                <dxi-total-item column="OrderID" summaryType="count"></dxi-total-item>
+                <dxi-total-item column="Quantity" summaryType="sum" displayFormat="{0}"></dxi-total-item>
+                <dxi-total-item column="Amount" summaryType="sum" displayFormat="{0}" valueFormat="currency"></dxi-total-item>
+            </dxo-summary>
+        </dx-data-grid>
+    </div>
+</dx-data-grid>
+
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <span>Update frequency:</span>
+        <dx-slider
+            [min]="10"
+            [step]="10"
+            [max]="5000"
+
+            [(value)]="updatesPerSecond">
+            <dxo-tooltip
+                [enabled]="true"
+                format="#0 per second"
+                showMode="always"
+                position="top">
+            </dxo-tooltip>
+        </dx-slider>
+    </div>
+</div>

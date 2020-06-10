@@ -1,0 +1,1 @@
+This demo illustrates the use of&nbsp;the _stacked bar_ series type. Unlike side-by-side bar charts, this series is&nbsp;able to&nbsp;present both the proportion and the total value for each data category using rectangular bars stacked on&nbsp;top of&nbsp;one another.

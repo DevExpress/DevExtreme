@@ -1,0 +1,9 @@
+::ng-deep #chart {
+    height: 440px;
+}
+
+::ng-deep #reset-button {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+}

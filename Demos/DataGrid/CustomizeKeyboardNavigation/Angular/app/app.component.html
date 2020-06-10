@@ -1,0 +1,72 @@
+<dx-data-grid
+    id="gridContainer"
+    [dataSource]="employees"
+    (onFocusedCellChanging)="onFocusedCellChanging($event)"
+    [showBorders]="true">
+    <dxo-keyboard-navigation
+        [editOnKeyPress]="editOnkeyPress"
+        [enterKeyAction]="enterKeyAction"
+        [enterKeyDirection]="enterKeyDirection">
+    </dxo-keyboard-navigation>
+    <dxo-paging [enabled]="false">
+    </dxo-paging>
+    <dxo-editing
+        mode="batch"
+        [allowUpdating]="true"
+        startEditAction="dblClick">
+    </dxo-editing>
+    <dxi-column
+        dataField="Prefix"
+        [width]="70"
+        caption="Title">
+    </dxi-column>
+    <dxi-column dataField="FirstName">
+    </dxi-column>
+    <dxi-column dataField="LastName">
+    </dxi-column>
+    <dxi-column
+        dataField="Position"
+        [width]="170">
+    </dxi-column>
+    <dxi-column
+        dataField="StateID"
+        caption="State"
+        [width]="125">
+        <dxo-lookup
+            [dataSource]="states"
+            displayExpr="Name"
+            valueExpr="ID">
+        </dxo-lookup>
+    </dxi-column>
+    <dxi-column
+        dataField="BirthDate"
+        dataType="date">
+    </dxi-column>
+</dx-data-grid>
+
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option-container">
+        <div class="option check-box">
+            <dx-check-box
+                id="editOnKeyPress"
+                text="Edit On Key Press"
+                [(value)]="editOnkeyPress">
+            </dx-check-box>
+        </div>
+        <div class="option">
+            <span class="option-caption">Enter Key Action</span>
+            <dx-select-box class="select"
+                [dataSource] = "enterKeyActions"
+                [(value)]="enterKeyAction">
+            </dx-select-box>
+        </div>
+        <div class="option">
+            <span class="option-caption">Enter Key Direction</span>
+            <dx-select-box class="select"
+                [dataSource] = "enterKeyDirections"
+                [(value)]="enterKeyDirection">
+            </dx-select-box>
+        </div>
+    </div>
+</div>

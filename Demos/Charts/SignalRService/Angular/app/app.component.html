@@ -1,0 +1,78 @@
+<div ng-if="connectionStarted">
+    <dx-chart
+        id="chart"
+        [dataSource]="dataSource"
+        title="Stock Price"
+        [customizePoint]="customizePoint">
+        <dxi-series
+            pane="Price"
+            argumentField="date"
+            type="candlestick">
+            <dxo-aggregation
+                [enabled]="true"
+                method="custom"
+                [calculate]="calculateCandle">
+            </dxo-aggregation>
+        </dxi-series>
+        <dxi-series
+            pane="Volume"
+            name="Volume"
+            argumentField="date"
+            valueField="volume"
+            color="red"
+            type="bar">
+            <dxo-aggregation
+                [enabled]="true"
+                method="sum">
+            </dxo-aggregation>
+        </dxi-series>
+        <dxi-pane name="Price"></dxi-pane>
+        <dxi-pane name="Volume" [height]="80"></dxi-pane>
+        <dxo-tooltip 
+            [enabled]="true" 
+            [shared]="true" 
+            argumentFormat="shortDateShortTime"
+            contentTemplate="tooltipTemplate"
+        ></dxo-tooltip>
+        <dxo-crosshair
+            [enabled]="true"
+            [horizontalLine]="{visible: false}"
+        ></dxo-crosshair>
+        <dxo-margin [right]="30"></dxo-margin>
+        <dxo-scroll-bar [visible]="true"></dxo-scroll-bar>
+        <dxo-legend [visible]="false"></dxo-legend>
+        <dxi-value-axis [placeholderSize]="50"></dxi-value-axis>
+        <dxo-zoom-and-pan argumentAxis="both"></dxo-zoom-and-pan>
+        <dxo-argument-axis
+            argumentType="datetime"
+            [minVisualRangeLength]="{minutes: 10}"
+            [visualRange]="{length: 'hour'}"
+        ></dxo-argument-axis>
+        <dxo-loading-indicator [enabled]="true"></dxo-loading-indicator>
+        <div *dxTemplate="let pointInfo of 'tooltipTemplate'">
+            <div class='tooltip-template'>
+                <div>{{pointInfo.argumentText}}</div>
+                <div>
+                    <span>Open: </span>
+                    {{formatPrice(pointInfo.points, "openValue")}}
+                </div>
+                <div>
+                    <span>High: </span>
+                    {{formatPrice(pointInfo.points, "highValue")}}
+                </div>
+                <div>
+                    <span>Low: </span>
+                    {{formatPrice(pointInfo.points, "lowValue")}}
+                </div>
+                <div>
+                    <span>Close: </span>
+                    {{formatPrice(pointInfo.points, "closeValue")}}
+                </div>
+                <div>
+                    <span>Volume: </span>
+                    {{formatVolume(pointInfo.points)}}
+                </div>
+            </div>
+        </div>
+    </dx-chart>
+</div>

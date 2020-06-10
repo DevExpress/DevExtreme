@@ -1,0 +1,27 @@
+::ng-deep .selected-data,
+::ng-deep .options {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: rgba(191, 191, 191, 0.15);
+}
+::ng-deep .selected-data .caption {
+    font-weight: bold;
+    font-size: 115%;
+}
+::ng-deep .options .caption {
+    font-size: 18px;
+    font-weight: 500;
+}
+::ng-deep .option {
+    margin-top: 10px;
+}
+::ng-deep .option > span {
+    width: 120px;
+    display: inline-block;
+}
+::ng-deep .option > .dx-widget {
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
+    max-width: 350px;
+}

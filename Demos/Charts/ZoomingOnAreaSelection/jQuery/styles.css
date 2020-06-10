@@ -1,0 +1,11 @@
+
+#chart {
+    height: 440px;
+    width: 100%;
+}
+
+#reset-zoom{
+    position: absolute;
+    right: 10px;
+    top: 5px;
+}

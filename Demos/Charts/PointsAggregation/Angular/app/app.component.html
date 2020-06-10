@@ -1,0 +1,97 @@
+<div id="chart-demo">
+    <dx-chart
+        id="chart"
+        title="Weather in Las Vegas, NV (2017)"
+        [dataSource]="weatherIndicators">
+        <dxo-common-series-settings
+            argumentField="date">
+        </dxo-common-series-settings>
+        <dxi-series
+            axis="precipitation"
+            color="#03a9f4"
+            type="bar"
+            valueField="precip"
+            name="Precipitation">
+        </dxi-series>
+        <dxi-series
+            axis="temperature"
+            color= "#ffc0bb"
+            type="rangeArea"
+            rangeValue1Field="minTemp"
+            rangeValue2Field="maxTemp"
+            name="Temperature range">
+            <dxo-aggregation
+                [enabled]="useAggregation"
+                method="custom"
+                [calculate]="calculateRangeArea">
+            </dxo-aggregation>
+        </dxi-series>
+        <dxi-series
+            axis="temperature"
+            color="#e91e63"
+            valueField="temp"
+            name="Average temperature">
+            <dxo-point [size]="7"></dxo-point>
+            <dxo-aggregation #pointsAggregationSettings
+                [enabled]="useAggregation"
+                method="avg">
+            </dxo-aggregation>
+        </dxi-series>
+        <dxo-argument-axis #argumentAxisSettings
+            argumentType="datetime"
+            aggregationInterval="week"
+            [valueMarginsEnabled]="false">
+        </dxo-argument-axis>
+        <dxi-value-axis
+            name="temperature">
+            <dxo-title text="Temperature, °C">
+                <dxo-font color="#e91e63"></dxo-font>
+            </dxo-title>
+            <dxo-label>
+                <dxo-font color="#e91e63"></dxo-font>
+            </dxo-label>
+        </dxi-value-axis>
+        <dxi-value-axis
+            name="precipitation"
+            position="right">
+            <dxo-title text="Precipitation, mm">
+                <dxo-font color="#03a9f4"></dxo-font>
+            </dxo-title>
+            <dxo-label>
+                <dxo-font color="#03a9f4"></dxo-font>
+            </dxo-label>
+        </dxi-value-axis>
+        <dxo-legend [visible]="false"></dxo-legend>
+        <dxo-tooltip
+            [enabled]="true"
+            [customizeTooltip]="customizeTooltip">
+        </dxo-tooltip>
+    </dx-chart>
+    <div class="options">
+        <div class="caption">Options</div>
+        <div class="option">
+            <dx-check-box
+                text="Aggregation enabled"
+                [(value)]="useAggregation">
+            </dx-check-box>
+        </div>
+        <div class="option">
+            <span>Interval:</span>
+            <dx-select-box
+                [dataSource]="intervals"
+                displayExpr="displayName"
+                valueExpr="interval"
+                [(value)]="argumentAxisSettings.aggregationInterval">
+            </dx-select-box>
+        </div>
+        <div class="option">
+            <span>Method:</span>
+            <dx-select-box
+                [dataSource]="functions"
+                displayExpr="displayName"
+                valueExpr="func"
+                [(value)]="pointsAggregationSettings.method">
+            </dx-select-box>
+        </div>
+    </div>
+</div>

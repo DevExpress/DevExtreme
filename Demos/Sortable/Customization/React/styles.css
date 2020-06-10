@@ -1,0 +1,70 @@
+.widget-container {
+    margin-right: 320px;
+}
+
+#scroll {
+    height: 500px;
+}
+
+#scroll.horizontal {
+    margin-top: 170px;
+    display: block;
+    width: auto;
+    height: auto;
+    white-space: nowrap;
+}
+
+.handle {
+    position: absolute;
+    left: 4px;
+    top: 10px;
+    font-size: 18px;
+    line-height: 19px;
+    cursor: move;
+}
+
+.horizontal .handle {
+    margin-right: 10px;
+}
+
+.item {
+    box-sizing: border-box;
+    position: relative;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    background: white;
+    cursor: pointer;
+}
+
+.item-with-handle {
+    padding-left: 30px;
+    cursor: default;
+}
+
+.horizontal .item {
+    display: inline-block;
+    width: 200px;
+    height: 100px;
+    margin-bottom: 0;
+    margin-right: 10px;
+    white-space: normal;
+}
+
+.options {
+    padding: 20px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 260px;
+    top: 0;
+    background-color: rgba(191, 191, 191, 0.15);
+}
+
+.caption {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.option {
+    margin-top: 10px;
+}

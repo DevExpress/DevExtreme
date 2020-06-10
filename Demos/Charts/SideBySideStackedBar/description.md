@@ -1,0 +1,1 @@
+In&nbsp;this example, side-by-side mode for the _stacked bar_ series type is&nbsp;used to&nbsp;group bar series based on&nbsp;their **stack** property value. Bar series with common characteristics are displayed and stacked in&nbsp;one column.

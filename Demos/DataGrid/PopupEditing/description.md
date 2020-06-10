@@ -1,0 +1,1 @@
+Among editing modes supported by&nbsp;the **DataGrid** widget, you can find the &laquo;popup&raquo; mode. In&nbsp;this mode, when a&nbsp;user clicks the &laquo;Edit&raquo; button, row data is&nbsp;shown in&nbsp;a&nbsp;popup window. This demo shows how to&nbsp;customize the popup window using the **editing|popup** option.

@@ -1,0 +1,100 @@
+
+<div class="dx-fieldset">
+    <div class="dx-field">
+        <div class="dx-field-label">Default mode</div>
+        <div class="dx-field-value">
+            <dx-slider
+                [min]="0"
+                [max]="100"
+                [value]="90"
+            ></dx-slider>
+        </div>
+    </div>
+    <div class="dx-field custom-height-slider">
+        <div class="dx-field-label">With labels</div>
+        <div class="dx-field-value">
+            <dx-slider
+                [min]="0"
+                [max]="100"
+                [value]="50">
+                <dxo-label
+                    [visible]="true"
+                    [format]="format"
+                    position="top"
+                ></dxo-label>
+            </dx-slider>
+        </div>
+    </div>
+    <div class="dx-field custom-height-slider">
+        <div class="dx-field-label">With tooltip</div>
+        <div class="dx-field-value">
+            <dx-slider
+                [min]="0"
+                [max]="100"
+                [value]="35"
+                [rtlEnabled]="false">
+                <dxo-tooltip
+                    [enabled]="true"
+                    [format]="format"
+                    showMode="always"
+                    position="bottom"
+                ></dxo-tooltip>
+            </dx-slider>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-label">Without range highlighting</div>
+        <div class="dx-field-value">
+            <dx-slider
+                [min]="0"
+                [max]="100"
+                [value]="20"
+                [showRange]="false"
+            ></dx-slider>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-label">With discrete step</div>
+        <div class="dx-field-value">
+            <dx-slider
+                [min]="0"
+                [max]="100"
+                [value]="10"
+                [step]="10">
+                <dxo-tooltip [enabled]="true"></dxo-tooltip>
+            </dx-slider>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-label">Disabled</div>
+        <div class="dx-field-value">
+            <dx-slider
+                [min]="0"
+                [max]="100"
+                [value]="50"
+                [disabled]="true"
+            ></dx-slider>
+        </div>
+    </div>
+</div>
+<div class="dx-fieldset">
+    <div class="dx-fieldset-header">Event Handling and API</div>
+    <div class="dx-field">
+        <dx-slider #slider
+            [min]="0"
+            [max]="100"
+            [value]="10"
+        ></dx-slider>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-label">Slider value</div>
+        <div class="dx-field-value">
+            <dx-number-box
+                [min]="0"
+                [max]="100"
+                [showSpinButtons]="true"
+                [(value)]="slider.value"
+            ></dx-number-box>
+        </div>
+    </div>
+</div>

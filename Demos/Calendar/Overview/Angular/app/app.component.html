@@ -1,0 +1,78 @@
+<div id="calendar-demo">
+    <div class="widget-container">
+        <dx-calendar #calendar
+            id="calendar-container" 
+            [min]="minDateValue"
+            [max]="maxDateValue"
+            [disabledDates]="disabledDates"
+            [firstDayOfWeek]="firstDay"
+            [disabled]="false"
+            [(value)]="currentValue"
+            [zoomLevel]="zoomLevels[0]"
+            [cellTemplate]="cellTemplate">
+                <span *dxTemplate="let cell of 'custom'" [ngClass]="getCellCssClass(cell.date)">
+                    {{cell.text}}
+                </span>
+        </dx-calendar>
+    </div>
+    <div class="options">
+        <div class="caption">Options</div>
+        <div class="option">
+            <dx-check-box 
+                text="Specified min value"
+                [value]="false"
+                (onValueChanged)="setMinDate($event)">
+            </dx-check-box>
+        </div>
+        <div class="option">
+            <dx-check-box
+                text="Specified max value"
+                [value]="false"
+                (onValueChanged)="setMaxDate($event)">
+            </dx-check-box>
+        </div>
+        <div class="option">
+            <dx-check-box
+                text="Disable weekend"
+                [value]="false"
+                (onValueChanged)="disableWeekend($event)">
+            </dx-check-box>
+        </div>
+        <div class="option">
+            <dx-check-box
+                text="Monday as the first day of a week"
+                [value]="false"
+                (onValueChanged)="setFirstDay($event)">
+            </dx-check-box>
+       </div>
+       <div class="option">
+            <dx-check-box
+                text="Use the Custom Cell Template"
+                [value]="false"
+                (onValueChanged)="useCellTemplate($event)">
+            </dx-check-box>
+        </div>
+        <div class="option">
+            <dx-check-box #calendarDisabled
+                [(value)]="calendar.disabled"
+                text="Disabled">
+            </dx-check-box>
+        </div>
+        <div class="option">
+            <span>Zoom level</span>
+            <dx-select-box
+                id="zoom-level"
+                [dataSource]="zoomLevels"
+                [(value)]="calendar.zoomLevel">
+            </dx-select-box>
+       </div>
+       <div class="option">     
+            <span>Selected date</span>
+            <dx-date-box 
+                id="selected-date"
+                width="100%"
+                [(value)]="currentValue">
+            </dx-date-box>
+        </div>
+    </div>    
+</div>

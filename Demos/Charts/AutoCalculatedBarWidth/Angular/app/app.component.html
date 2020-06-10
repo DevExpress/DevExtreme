@@ -1,0 +1,19 @@
+<dx-chart
+    id="chart"
+    [dataSource]="countriesInfo"
+    palette="soft"
+    title="Percent of Total Energy Production">
+    <dxi-series valueField="oil" name="Oil Production"></dxi-series>
+    <dxi-series valueField="gas" name="Gas Production"></dxi-series>
+    <dxi-series valueField="coal" name="Coal Production"></dxi-series>
+    <dxo-common-series-settings
+        argumentField="state"
+        type="bar"
+        [ignoreEmptyPoints]="true">
+    </dxo-common-series-settings>
+    <dxo-legend
+        verticalAlignment="bottom"
+        horizontalAlignment="center">
+    </dxo-legend>
+    <dxo-export [enabled]="true"></dxo-export>
+</dx-chart>

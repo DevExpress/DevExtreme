@@ -1,0 +1,16 @@
+<dx-chart id="chart"
+          [class]="isFirstLevel?'pointer-on-bars':''"
+          [dataSource]="dataSource"
+          (onPointClick)="onPointClick($event)"
+          title="The Most Populated Countries by Continents"
+          [customizePoint]="customizePoint">
+    <dxi-series type="bar"></dxi-series>
+    <dxo-legend [visible]="false"></dxo-legend>
+    <dxi-value-axis [showZero]="false"></dxi-value-axis>
+</dx-chart>
+<dx-button class="button-container"
+           text="Back"
+           icon="chevronleft"
+           [visible]="!isFirstLevel"
+           (onClick)="onButtonClick()">
+</dx-button>

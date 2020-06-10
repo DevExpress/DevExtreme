@@ -1,0 +1,44 @@
+<div class="dx-fieldset">
+    <div class="dx-field">
+        <div class="dx-field-label">Password TextBox</div>
+        <div class="dx-field-value">
+            <dx-text-box 
+                value="password"
+                placeholder="password"
+                stylingMode="filled"
+                [(mode)]="passwordMode"
+            >
+                <dxi-button name="today" location="after" [options]="passwordButton"></dxi-button>
+            </dx-text-box>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-label">Multi-currency NumberBox</div>
+        <div class="dx-field-value">
+            <dx-number-box
+                [value]="14500.55"
+                [(format)]="currencyFormat"
+                [showClearButton]="true"
+                [showSpinButtons]="true"
+            >
+                <dxi-button name="currency" location="after" [options]="currencyButton"></dxi-button>
+                <dxi-button name="clear"></dxi-button>
+                <dxi-button name="spins"></dxi-button>
+            </dx-number-box>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-label">Advanced DateBox</div>
+        <div class="dx-field-value">
+            <dx-date-box
+                stylingMode="outlined"
+                [(value)]="dateValue"
+            >
+                <dxi-button name="today" location="before" [options]="todayButton"></dxi-button>
+                <dxi-button name="prevDate" location="before" [options]="prevDateButton"></dxi-button>
+                <dxi-button name="nextDate" location="after" [options]="nextDateButton"></dxi-button>
+                <dxi-button name="dropDown"></dxi-button>
+            </dx-date-box>
+        </div>
+    </div>
+</div>

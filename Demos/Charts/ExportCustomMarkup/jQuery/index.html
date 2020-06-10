@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script src="../../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.light.css" />
+    <script src="../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvg/dist/browser/canvg.min.js"></script>
+</head>
+
+<body class="dx-viewport">
+    <div class="demo-container">
+        <div id="chart-demo">
+            <div class="chart_environment">
+                <div id="custom_markup_container">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                        width="820px" height="420px">
+                        <path d="M 13 407 L 128 407 L 232 39 L 13 39" fill="#6D39C3"></path>
+                        <path d="M 46 381 L 161 381 L 265 13 L 46 13" opacity="0.5" fill="#6D39C3"></path>
+                        <path d="M 638 365 L 630 396 L 799 396 L 807 365" fill="#6D39C3"></path>
+                        <path d="M 609 376 L 601 407 L 770 407 L 778 376" opacity="0.5" fill="#6D39C3"></path>
+                        <text transform="translate(30,89)"
+                            style="fill: #FFFFFF; font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif; font-size: 36px; font-weight: bold;">
+                            <tspan x="0" y="0">Export </tspan>
+                            <tspan x="0" y="38">Custom</tspan>
+                            <tspan x="0" y="76">Markup</tspan>
+                        </text>
+                        <text transform="translate(32,199)"
+                            style="opacity: 0.8; fill: #FFFFFF;font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif;font-size: 14px;">
+                            <tspan x="0" y="0">Export a chart with</tspan>
+                            <tspan x="0" y="19.2">custom elements</tspan>
+                        </text>
+                        <text x="650" y="385"
+                            style="opacity: 0.8;fill: #FFFFFF;font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif;font-size: 12px;">UNdata (www.data.un.org)</text>
+                        <path opacity="0.8" d="M 0 0 L 820 0 L 820 420 L 0 420 L 0 0" stroke="#999999" stroke-width="1"
+                            stroke-linecap="butt" fill="none" stroke-linejoin="miter"></path>
+                    </svg>
+                </div>
+                <div id="chart"></div>
+            </div>
+            <div class="controls-pane">
+                <div id="export"></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

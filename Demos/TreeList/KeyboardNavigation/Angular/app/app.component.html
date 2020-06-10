@@ -1,0 +1,55 @@
+<p>Click this text and press <b>Tab</b></p>
+<dx-tree-list
+    id="treeListContainer"
+    keyExpr="ID"
+    parentIdExpr="Head_ID"
+    [dataSource]="employees"
+    [showBorders]="true"
+    [focusedRowEnabled]="true"
+    [expandedRowKeys]="[1, 2, 3, 5]">
+
+    <dxo-editing
+        [allowUpdating]="true"
+        [allowDeleting]="true"
+        [selectTextOnEditStart]="true"
+        [useIcons]="true">
+    </dxo-editing>
+
+    <dxo-header-filter [visible]="true">
+    </dxo-header-filter>
+
+    <dxo-filter-panel [visible]="true">
+    </dxo-filter-panel>
+
+    <dxo-filter-row [visible]="true">
+    </dxo-filter-row>
+
+    <dxo-scrolling mode="standard">
+    </dxo-scrolling>
+
+    <dxo-paging
+        [enabled]="true"
+        [pageSize]="10">
+    </dxo-paging>
+
+    <dxo-pager
+        [allowedPageSizes]="[5, 10]"
+        [showPageSizeSelector]="true"
+        [showNavigationButtons]="true">
+    </dxo-pager>
+
+    <dxi-column dataField="Full_Name">
+    </dxi-column>
+
+    <dxi-column
+        dataField="Title"
+        caption="Position">
+    </dxi-column>
+
+    <dxi-column dataField="City">
+    </dxi-column>
+
+    <dxi-column dataField="State">
+    </dxi-column>
+
+</dx-tree-list>

@@ -1,0 +1,3 @@
+The **FileUploader** widget supports direct-upload to blob storages. This demo illustrates how to configure the [uploadChunk](/Documentation/ApiReference/UI_Widgets/dxFileUploader/Configuration/#uploadChunk) option to upload a large file directly to Azure Blob Storage without using a user's web server. All APIs that implement access to Azure Blob Storage on the client are stored in the <a href="../../../../../JSDemos/js/azure-file-system.js" target="_blank">azure-file-system.js</a> file.
+
+To implement file upload logic, use the [uploadChunk](/Documentation/19_2/ApiReference/UI_Widgets/dxFileUploader/Configuration/#uploadChunk) option to specify how to process a connection request to the storage.

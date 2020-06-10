@@ -1,0 +1,59 @@
+<div id="container">
+    <dx-button
+        [disabled]="isAddButtonDisabled"
+        text="Add Tab"
+        icon="add"
+        type="default"
+        (onClick)="addButtonHandler()"
+    ></dx-button>
+    <dx-button
+        [disabled]="isRemoveButtonDisabled"
+        text="Remove Tab"
+        icon="trash"
+        type="danger"
+        stylingMode="outlined"
+        (onClick)="closeButtonHandler(selectedItem)"
+    ></dx-button>
+</div>
+<dx-sortable
+    filter=".dx-tab"
+    [data]="employees"
+    itemOrientation="horizontal"
+    (onDragStart)="onTabDragStart($event)"
+    (onReorder)="onTabDrop($event)">
+    <dx-tab-panel
+        [dataSource]="employees"
+        [height]="472"
+        itemTitleTemplate="title"
+        itemTemplate="item"
+        [deferRendering]="false"
+        [showNavButtons]="true"
+        [repaintChangesOnly]="true"
+        [animationEnabled]="true"
+        [(selectedItem)]="selectedItem"
+        [(selectedIndex)]="selectedIndex">
+        <div *dxTemplate="let content of 'title'">
+            <span>{{content.FirstName}} {{content.LastName}}</span>
+            <i class="dx-icon dx-icon-close" (click)="closeButtonHandler(content)"></i>
+        </div>
+        <div *dxTemplate="let employee of 'item'">
+            <div class="employeeInfo">
+                <img class="employeePhoto" [src]="employee.Picture"/>
+                <p class="employeeNotes"><b>Position: {{employee.Position}}</b><br/>{{employee.Notes}}</p>
+            </div>
+            <div class="caption">{{employee.FirstName + " " + employee.LastName + "'s Tasks:"}}</div>
+            <dx-data-grid
+                [dataSource]="getTasks(employee.ID)"
+                [showBorders]="false"
+                [showColumnLines]="false"
+                [rowAlternationEnabled]="true"
+                [columnAutoWidth]="true">
+                    <dxi-column dataField="Subject"></dxi-column>
+                    <dxi-column dataField="StartDate" dataType="date"></dxi-column>
+                    <dxi-column dataField="DueDate" dataType="date"></dxi-column>
+                    <dxi-column dataField="Priority"></dxi-column>
+                    <dxi-column dataType="boolean" caption="Completed" [calculateCellValue]="completedValue"></dxi-column>
+            </dx-data-grid>
+        </div>
+    </dx-tab-panel>
+</dx-sortable>

@@ -1,0 +1,40 @@
+::ng-deep .dx-dropdownlist-popup-wrapper .dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item-content {
+    padding-left: 7px;
+    padding-right: 7px;
+}
+::ng-deep .custom-item {
+    position: relative;
+    min-height: 30px;
+}
+
+::ng-deep .dx-dropdowneditor-input-wrapper .custom-item > img {
+    padding-left: 8px;
+}
+
+::ng-deep .custom-item .product-name  {
+    display: inline-block;
+    padding-left: 50px;
+    text-indent: 0;
+    line-height: 30px;
+    font-size: 15px;
+    width: 100%;
+}
+::ng-deep .custom-item > img {
+    left: 1px;
+    position: absolute;
+    top: 50%;
+    margin-top: -15px;
+}
+::ng-deep .dx-theme-material #custom-templates .dx-texteditor-buttons-container {
+    display: none;
+}
+::ng-deep .current-value {
+    padding: 10px 0;
+}
+::ng-deep .current-value > span {
+    font-weight: bold;
+}
+
+::ng-deep .dx-theme-material .dx-selectbox-container .product-name {
+    padding-left: 58px;
+}

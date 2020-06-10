@@ -1,0 +1,45 @@
+<div class="form">
+    <div class="dx-fieldset">
+        <div class="dx-field">
+            <div class="dx-field-label">Default mode</div>
+            <div class="dx-field-value">
+                <dx-color-box value="#f05b41"></dx-color-box>
+            </div>
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">With alpha channel editing</div>
+            <div class="dx-field-value">
+                <dx-color-box value="#f05b41" [editAlphaChannel]=true></dx-color-box>
+            </div>
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">Custom button captions</div>
+            <div class="dx-field-value">
+                <dx-color-box value="#f05b41" applyButtonText="Apply" cancelButtonText="Decline"></dx-color-box>
+            </div>
+        </div>        
+        <div class="dx-field">
+            <div class="dx-field-label">Read only</div>
+            <div class="dx-field-value">
+                <dx-color-box value="#f05b41" [readOnly]="true"></dx-color-box>
+            </div>
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">Disabled</div>
+            <div class="dx-field-value">
+                <dx-color-box value="#f05b41" [disabled]="true"></dx-color-box>
+            </div>
+        </div>
+    </div>
+    <div class="dx-fieldset">
+        <div class="dx-fieldset-header">Event Handling</div>
+        <div class="hero-block">
+            <div class="color-block" [style.background-color]="currentColor">
+                <div class="superhero"></div>
+            </div>
+            <div class="hero-color-box">
+                <dx-color-box [(value)]="currentColor" applyValueMode="instantly"></dx-color-box>
+            </div>
+        </div>
+    </div>
+</div>

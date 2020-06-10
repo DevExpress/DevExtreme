@@ -1,0 +1,42 @@
+<dx-vector-map 
+    id="vector-map" 
+    [bounds]="[-180, 85, 180, -75]">
+    <dxo-tooltip 
+        [enabled]="true" 
+        [customizeTooltip]="customizeTooltip"></dxo-tooltip>
+    <dxi-layer 
+        [dataSource]="worldMap"
+        name="areas"
+        palette="Violet"
+        [colorGroups]="[0, 0.5, 0.8, 1, 2, 3, 100]"
+        colorGroupingField="population"
+        [customize]="customizeLayers">
+        <dxo-label [enabled]="true" dataField="name"></dxo-label>
+    </dxi-layer>
+    <dxi-layer 
+        [dataSource]="markers" 
+        name="markers" 
+        elementType="bubble" 
+        dataField="value" 
+        [sizeGroups]="[0, 8000, 10000, 50000]"
+        opacity="0.8">
+        <dxo-label [enabled]="false"></dxo-label>
+    </dxi-layer>
+    <dxi-legend 
+        title = "World Population<br/>Percentages"
+        horizontalAlignment="left"
+        verticalAlignment="bottom"
+        [customizeItems]="customizeItems"
+        [customizeText]="customizeText">
+        <dxo-source layer="areas" grouping="color"></dxo-source>
+    </dxi-legend>
+    <dxi-legend 
+        title="City Population"
+        markerShape="circle" 
+        horizontalAlignment="right" 
+        verticalAlignment="bottom"
+        [customizeItems]="customizeItems"
+        [customizeText]="customizeMarkers">
+        <dxo-source layer="markers" grouping="size"></dxo-source>
+    </dxi-legend>
+</dx-vector-map>

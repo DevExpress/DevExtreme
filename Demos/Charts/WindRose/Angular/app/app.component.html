@@ -1,0 +1,35 @@
+<div id="chart-demo">
+    <dx-polar-chart
+        #chart
+        id="radarChart"
+        palette="soft"
+        title="Wind Rose, Philadelphia PA"
+        [dataSource]="windRoseData[0].values"
+        (onLegendClick)="onLegendClick($event)">
+        <dxi-series
+            *ngFor="let item of windSources"
+            [valueField]="item.valueField"
+            [name]="item.name">
+        </dxi-series>
+        <dxo-common-series-settings type="stackedbar"></dxo-common-series-settings>
+        <dxo-margin
+            [bottom]="50"
+            [left]="100">
+        </dxo-margin>
+        <dxo-argument-axis
+            discreteAxisDivisionMode="crossLabels"
+            [firstPointOnStartAngle]="true">
+        </dxo-argument-axis>
+        <dxo-value-axis [valueMarginsEnabled]="false"></dxo-value-axis>
+        <dxo-export [enabled]="true"></dxo-export>
+    </dx-polar-chart>
+    <div class="center">
+        <dx-select-box
+            [dataSource]="windRoseData"
+            displayExpr="period"
+            valueExpr="values"
+            [(value)]="chart.dataSource"
+            [width]="300">
+        </dx-select-box>
+    </div>
+</div>

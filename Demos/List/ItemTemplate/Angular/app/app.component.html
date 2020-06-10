@@ -1,0 +1,11 @@
+<div class="list-container">
+    <dx-list [items]="products" height="100%">
+		<div *dxTemplate="let item of 'item'">
+            <div class="product">
+                <img src="{{item.ImageSrc}}" />
+                <div>{{item.Name}}</div>
+                <div class="price">{{item.Price | currency:'USD':'symbol':'1.0'}}</div>
+            </div>
+        </div>
+    </dx-list>
+</div>

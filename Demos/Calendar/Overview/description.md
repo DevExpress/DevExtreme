@@ -1,0 +1,1 @@
+The **Calendar** is&nbsp;a&nbsp;widget that displays a&nbsp;calendar and allows an&nbsp;end user to&nbsp;select the required date within a&nbsp;specified date range.

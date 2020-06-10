@@ -1,0 +1,33 @@
+<dx-scheduler
+    [crossScrollingEnabled]="crossScrollingEnabled"
+    [dataSource]="appointmentsData"
+    [views]='["day", "month"]'
+    currentView="month"
+    [groups]="groups"
+    recurrenceEditMode= "series"
+    [currentDate]="currentDate"
+    (onCellContextMenu)="onCellContextMenu($event)"
+    (onAppointmentContextMenu)="onAppointmentContextMenu($event)"
+    [firstDayOfWeek]="1"
+    [startDayHour]="9"
+    [height]="600">
+    <dxi-resource
+        fieldExpr="roomId"
+        label="room"
+        [dataSource]="resourcesData"
+    ></dxi-resource>
+</dx-scheduler>
+<dx-context-menu #contextMenu
+                 [dataSource]="dataSource"
+                 [disabled]="disabled"
+                 [target]="target"
+                 (onItemClick)="onContextMenuItemClick($event)"
+                 [width]="200"
+                 (onHiding)="onContextMenuHiding($event)">
+    <div *dxTemplate="let e of 'item'">
+        <div *ngIf="e.color">
+            <div class="item-badge" [ngStyle]="{ backgroundColor: e.color}"></div>
+        </div>
+        <div class="item-text">{{e.text}}</div>
+    </div>
+</dx-context-menu>

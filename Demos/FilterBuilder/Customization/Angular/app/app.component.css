@@ -1,0 +1,33 @@
+::ng-deep .results {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
+}
+
+::ng-deep .results > div {
+    flex-basis: 49%;
+    max-width: 50%;
+    background-color: rgba(191, 191, 191, 0.15);
+    position: relative;
+}
+
+::ng-deep .results b {
+    position: absolute;
+    top: -25px;
+}
+
+::ng-deep .results pre {
+    padding: 10px 20px;
+    height: 100%;
+    font-size: 13px;
+    overflow: auto;
+    box-sizing: border-box;
+}
+
+::ng-deep .dx-tagbox {
+    min-width: 150px;
+}
+
+::ng-deep .dx-filterbuilder .dx-numberbox {
+    width: 80px;
+}

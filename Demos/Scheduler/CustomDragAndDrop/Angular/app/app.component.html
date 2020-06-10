@@ -1,0 +1,37 @@
+<dx-scroll-view id="scroll">
+    <dx-draggable
+        id="list"
+        data="dropArea"
+        [group]="draggingGroupName"
+        (onDragStart)="onListDragStart($event)">
+        <dx-draggable
+            class="item dx-card dx-theme-text-color dx-theme-background-color"
+            [clone]="true"
+            [group]="draggingGroupName"
+            [data]="task"
+            (onDragStart)="onItemDragStart($event)"
+            (onDragEnd)="onItemDragEnd($event)"
+            *ngFor="let task of tasks">
+            {{task.text}}
+        </dx-draggable>
+    </dx-draggable>
+</dx-scroll-view>
+
+<dx-scheduler
+    id="scheduler"
+    [dataSource]="appointments"
+    [currentDate]="currentDate"
+    [startDayHour]="9"
+    [height]="600"
+    [editing]="true">
+    <dxi-view
+        type="day"
+        [intervalCount]="3">
+    </dxi-view>
+
+    <dxo-appointment-dragging
+		[group]="draggingGroupName"
+        [onRemove]="onAppointmentRemove"
+		[onAdd]="onAppointmentAdd">
+    </dxo-appointment-dragging>
+</dx-scheduler>

@@ -1,0 +1,27 @@
+<dx-chart
+    id="chart"
+    palette="violet"
+    title="Crude Oil Prices in 2005"
+    [dataSource]="oilPrices">
+    <dxo-common-series-settings
+        argumentField="date"
+        type="rangeBar"></dxo-common-series-settings>
+    <dxi-value-axis>
+        <dxo-title text="$ per barrel"></dxo-title>
+    </dxi-value-axis>
+    <dxo-argument-axis>
+        <dxo-label format="month"></dxo-label>
+    </dxo-argument-axis>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-legend
+        verticalAlignment="bottom"
+        horizontalAlignment="center"></dxo-legend>
+    <dxi-series
+        rangeValue1Field="aVal1"
+        rangeValue2Field="aVal2"
+        name="ANS West Coast"></dxi-series>
+    <dxi-series
+        rangeValue1Field="tVal1"
+        rangeValue2Field="tVal2"
+        name="West Texas Intermediate"></dxi-series>
+</dx-chart>

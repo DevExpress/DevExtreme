@@ -1,0 +1,11 @@
+::ng-deep .demo-container {
+    height: 570px;
+}
+
+::ng-deep #gridContainer {
+    height: 440px;
+}
+
+::ng-deep .dx-filterbuilder-overlay .dx-scrollable-container {
+    max-height: 400px;
+}

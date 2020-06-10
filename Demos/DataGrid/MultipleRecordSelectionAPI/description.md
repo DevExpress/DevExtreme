@@ -1,0 +1,1 @@
+The **DataGrid** widget provides a&nbsp;flexible selection API. In&nbsp;this demo, when you choose a&nbsp;title from the drop-down menu above the **DataGrid**, the **selectRows(keys)** method selects those rows that contain the chosen title. A&nbsp;click on&nbsp;the _Clear Selection_ button clears the selection by&nbsp;calling the **clearSelection()** method.

@@ -1,0 +1,1 @@
+This example shows how to&nbsp;filter data using the filter panel. You can use its check box to&nbsp;enable/disable the current filter expression, and clicking on&nbsp;this expression opens the integrated filter builder. Note that changes made in&nbsp;it&nbsp;are reflected in&nbsp;the filter row and header filter, and vice versa.

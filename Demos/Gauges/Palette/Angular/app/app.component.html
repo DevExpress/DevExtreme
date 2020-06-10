@@ -1,0 +1,12 @@
+<dx-bar-gauge id="gauge"
+    [startValue]="-50"
+    [endValue]="50"
+    [baseValue]="0"
+    [values]="[-21.3, 14.8, -30.9, 45.2]"
+    palette="ocean">
+    <dxo-label [customizeText]="customizeText" ></dxo-label>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-title text="Deviations in the Manufactured Parts">
+        <dxo-font [size]="28"></dxo-font>
+    </dxo-title>
+</dx-bar-gauge>

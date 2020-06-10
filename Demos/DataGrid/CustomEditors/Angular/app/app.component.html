@@ -1,0 +1,116 @@
+<dx-data-grid
+    id="gridContainer"
+    [dataSource]="tasks"
+    [showBorders]="true"
+    (onRowInserted)="$event.component.navigateToRow($event.key)"
+    >
+
+    <dxo-paging [enabled]="true" [pageSize]="15"></dxo-paging>
+    <dxo-header-filter [visible]="true"></dxo-header-filter>
+    <dxo-search-panel [visible]="true"></dxo-search-panel>
+    <dxo-editing
+         mode="cell"
+         [allowUpdating]="true"
+         [allowAdding]="true">
+    </dxo-editing>
+    <dxi-column
+        dataField="Owner"
+        [width]="150"
+        [allowSorting]="false"
+        editCellTemplate="singleDropDownBoxEditor"
+        >
+        <dxo-lookup
+            [dataSource]="employees"
+            displayExpr="FullName"
+            valueExpr="ID">
+        </dxo-lookup>
+        <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dxi-column>
+    <dxi-column
+        dataField="AssignedEmployee"
+        caption="Assignees"
+        [width]="200"
+        [allowSorting]="false"
+        editCellTemplate="tagBoxEditor"
+        [cellTemplate]="cellTemplate"
+        [calculateFilterExpression]="calculateFilterExpression">
+        <dxo-lookup
+            [dataSource]="employees"
+            valueExpr="ID"
+            displayExpr="FullName">
+        </dxo-lookup>
+        <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dxi-column>
+    <dxi-column dataField="Subject">
+        <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dxi-column>
+    <dxi-column 
+        dataField="Status"
+        width="200"
+        [editorOptions]="editorOptions"
+    >
+        <dxo-lookup
+            [dataSource]="statuses"
+            displayExpr="name"
+            valueExpr="id">
+        </dxo-lookup>
+        <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dxi-column>
+
+    <div *dxTemplate="let cellInfo of 'tagBoxEditor'">
+        <dx-tag-box
+            [dataSource]="employees"
+            [value]="cellInfo.value"
+            valueExpr="ID"
+            displayExpr="FullName"
+            [showSelectionControls]="true"
+            [maxDisplayedTags]="3"
+            [showMultiTagOnly]="false"
+            applyValueMode="useButtons"
+            [searchEnabled]="true"
+            (onValueChanged)="cellInfo.setValue($event.value)"
+            (onSelectionChanged)="cellInfo.component.updateDimensions()">
+        </dx-tag-box>
+    </div>
+
+    <div *dxTemplate="let cellInfo of 'singleDropDownBoxEditor'">
+        <dx-drop-down-box
+            [dropDownOptions]="dropDownOptions"
+            [dataSource]="employees"
+            [(value)]="cellInfo.value"
+            displayExpr="FullName"
+            valueExpr="ID"
+            contentTemplate="contentTemplate">
+            <div *dxTemplate="let e of 'contentTemplate'">
+                <dx-data-grid
+                    [dataSource]="employees"
+                    [remoteOperations]="true"
+                    [height]="250"
+                    [selectedRowKeys]="[cellInfo.value]"
+                    [focusedRowEnabled]="true"
+                    [focusedRowKey]="cellInfo.value"
+                    [hoverStateEnabled]="true"
+                    (onSelectionChanged)="onSelectionChanged($event.selectedRowKeys, cellInfo, e.component)"
+                >
+                    <dxi-column dataField="FullName"></dxi-column>
+                    <dxi-column dataField="Title"></dxi-column>
+                    <dxi-column dataField="Department"></dxi-column>
+                    <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                    <dxo-selection mode="single" ></dxo-selection>
+                </dx-data-grid>
+            </div>
+        </dx-drop-down-box>
+    </div>
+
+
+    <div *dxTemplate="let status of 'statusTemplate'">
+        <div *ngIf="status === null"; else elseBlock>
+            <span>(All)</span>
+        </div>
+        <div dx-template #elseBlock>
+            <img src="images/icons/status-{{status.id}}.png" class="status-icon middle">
+            <span class="middle">{{status.name}}</span>
+        </div>
+    </div>
+</dx-data-grid>

@@ -1,0 +1,14 @@
+<dx-chart
+    id="chart"
+    palette="Harmony Light"
+    [dataSource]="zoomingData">
+    <dxo-zoom-and-pan
+        argumentAxis="both"
+    ></dxo-zoom-and-pan>
+    <dxi-series argumentField="arg" valueField="y1"></dxi-series>
+    <dxo-argument-axis [visualRange]="{startValue:300, endValue:500}">
+    </dxo-argument-axis>
+    <dxi-series argumentField="arg" valueField="y2"></dxi-series>
+    <dxo-scroll-bar  [visible]="true"></dxo-scroll-bar>
+    <dxo-legend [visible]="false"></dxo-legend>
+</dx-chart>

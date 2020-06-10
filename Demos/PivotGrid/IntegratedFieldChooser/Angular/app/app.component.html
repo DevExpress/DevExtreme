@@ -1,0 +1,26 @@
+<dx-pivot-grid
+  [allowSortingBySummary]="true"
+  [allowSorting]="true"
+  [allowFiltering]="true"
+  [showBorders]="true"
+  [height]="470"
+  [dataSource]="dataSource">
+  <dxo-field-chooser 
+    [applyChangesMode]="applyChangesMode"
+    [allowSearch]="true"
+    [enabled]="true">
+  </dxo-field-chooser>
+</dx-pivot-grid>
+
+<div class="options">
+  <div class="caption">Options</div>
+  <div class="option">
+      <span>Apply Changes Mode:</span> 
+      <dx-select-box 
+          #applyChanges
+          [items]="applyChangesModes"
+          [width]="180"
+          [(value)]="applyChangesMode"> 
+      </dx-select-box>
+    </div>
+</div>

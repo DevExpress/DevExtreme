@@ -1,0 +1,11 @@
+::ng-deep #pivotgrid-demo > .dx-button {
+    margin: 10px 0;
+}
+::ng-deep #pivotgrid-demo .desc-container a {
+    color: #f05b41;
+    text-decoration: underline;
+    cursor: pointer;
+}
+::ng-deep #pivotgrid-demo .desc-container a:hover {
+    text-decoration: none;
+}

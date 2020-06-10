@@ -1,0 +1,83 @@
+<div class="dx-fieldset">
+    <div class="dx-field">
+        <div class="dx-field-label">Built-in icon</div>
+        <div class="dx-field-value">
+            <dx-button
+                icon="check"
+                type="success"
+                text="Done"
+                (onClick)="doneClick()">
+            </dx-button>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-label">Image icon</div>
+        <div class="dx-field-value">
+            <dx-button
+                icon="../../../../images/icons/weather.png"
+                text="Weather"
+                (onClick)="weatherClick()">
+            </dx-button>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-label">External icon</div>
+        <div class="dx-field-value">
+            <dx-button
+                class="send"
+                icon="fa fa-envelope-o"
+                text="Send"
+                (onClick)="sendClick()">
+            </dx-button>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-label">Icon only</div>
+        <div class="dx-field-value">
+            <dx-button icon="plus" (onClick)="plusClick()">
+            </dx-button>
+            <dx-button icon="back" (onClick)="backClick()">
+            </dx-button>            
+        </div>
+    </div>
+</div>
+<div class="dx-fieldset">
+    <div class="dx-fieldset-header">DISABLED</div>
+    <div class="dx-field">
+        <div class="dx-field-value">
+            <dx-button
+                icon="check"
+                type="success"
+                text="Done"
+                [disabled]="true">
+            </dx-button>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-value">
+            <dx-button
+                icon="../../../../images/icons/weather.png"
+                text="Weather"
+                [disabled]="true">
+            </dx-button>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-value">
+            <dx-button
+                class="send"
+                icon="fa fa-envelope-o"
+                text="Send"
+                [disabled]="true">
+            </dx-button>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-value">
+            <dx-button icon="plus" [disabled]="true">
+            </dx-button>
+            <dx-button icon="back" [disabled]="true">
+            </dx-button>            
+        </div>
+    </div>
+</div>

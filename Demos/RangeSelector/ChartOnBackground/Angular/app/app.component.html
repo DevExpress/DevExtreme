@@ -1,0 +1,17 @@
+<dx-range-selector
+    id="range-selector"
+    [value]="[startSelectedValue, endSelectedValue]"
+    title="Select a Range in the Costs and Revenues History"
+    [dataSource]="dataSource">
+    <dxo-margin [top]="50"></dxo-margin>
+    <dxo-scale
+        minorTickInterval="day">
+        <dxo-tick-interval [days]="7">
+        </dxo-tick-interval>
+    </dxo-scale>
+    <dxo-chart>
+        <dxi-series argumentField="t" valueField="costs"></dxi-series>
+        <dxi-series argumentField="t" valueField="income"></dxi-series>
+        <dxo-value-axis [min]="0"></dxo-value-axis>
+    </dxo-chart>
+</dx-range-selector>

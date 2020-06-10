@@ -1,0 +1,31 @@
+<div id="chart-demo">
+    <dx-chart
+        [dataSource]="monthWeather"
+        [customizePoint]="customizePoint"
+    >
+        <dxo-title text="Temperature in Barcelona: January 2012"></dxo-title>
+        <dxo-size [height]="420"></dxo-size>
+        <dxi-series
+            argumentField="day"
+            valueField="t"
+            type="bar"
+        ></dxi-series>
+        <dxo-legend [visible]="false"></dxo-legend>
+        <dxo-export [enabled]="true"></dxo-export>
+        <dxi-value-axis>
+            <dxo-label [customizeText]="customizeText"></dxo-label>
+        </dxi-value-axis>
+        <dxo-loading-indicator [enabled]="true"></dxo-loading-indicator>
+    </dx-chart>
+    <div class="action">
+        <dx-select-box
+            id="choose-temperature"
+            [dataSource]="temperature"
+            [width]="70"
+            [value]="6"
+            (onValueChanged)="onValueChanged($event)"
+        ></dx-select-box>
+        <div class="label">Choose a temperature threshold, &deg;C:
+        </div>
+    </div>
+</div>

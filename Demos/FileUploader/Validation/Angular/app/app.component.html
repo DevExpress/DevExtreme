@@ -1,0 +1,20 @@
+<div class="main-block">
+	<div class="file-uploader-block">
+		<dx-file-uploader
+            [multiple]="true"
+            [uploadMode]="useButtons"
+            uploadUrl="https://js.devexpress.com/Content/Services/upload.aspx"
+            [allowedFileExtensions]="['.jpg', '.jpeg', '.gif', '.png']">
+        </dx-file-uploader>
+		<span class="note">Allowed file extensions: <span>.jpg, .jpeg, .gif, .png</span>.</span>
+	</div>
+	<div class="file-uploader-block" style="float: right">
+		<dx-file-uploader
+            [multiple]="true"
+            [uploadMode]="useButtons"
+            uploadUrl="https://js.devexpress.com/Content/Services/upload.aspx"
+            [maxFileSize]="4000000">
+        </dx-file-uploader>
+		<span class="note">Maximum file size: <span>4 MB</span>.</span>
+	</div>
+</div>

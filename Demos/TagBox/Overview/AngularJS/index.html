@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script src="../../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.light.css" />
+    <script src="../../../../node_modules/angular/angular.min.js"></script>
+    <script src="../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="index.js"></script>
+</head>
+<body class="dx-viewport">
+    <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
+        <div class="form">
+            <div class="dx-fieldset">
+                <div class="dx-field">
+                    <div class="dx-field-label">Default mode</div>
+                    <div class="dx-field-value">
+                        <div dx-tag-box="tagBox.simple"></div>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Search mode</div>
+                    <div class="dx-field-value">
+                        <div dx-tag-box="tagBox.searchOptions"></div>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Batch selection</div>
+                    <div class="dx-field-value">
+                        <div dx-tag-box="tagBox.selectionOptions"></div>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Hide selected items</div>
+                    <div class="dx-field-value">
+                        <div dx-tag-box="tagBox.hideOptions"></div>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Single line mode</div>
+                    <div class="dx-field-value">
+                        <div dx-tag-box="tagBox.lineOptions"></div>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Add custom items</div>
+                    <div class="dx-field-value">
+                        <div dx-tag-box="tagBox.fieldEditOptions"></div>
+                    </div>
+                </div> 
+                <div class="dx-field">
+                    <div class="dx-field-label">With custom placeholder</div>
+                    <div class="dx-field-value">
+                        <div dx-tag-box="tagBox.withCustomPlaceholder"></div>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Disabled</div>
+                    <div class="dx-field-value">
+                        <div dx-tag-box="tagBox.disabled"></div>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Data source</div>
+                    <div class="dx-field-value">
+                        <div dx-tag-box="tagBox.dataSourceUsage"></div>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Custom template</div>
+                    <div class="dx-field-value">
+                        <div dx-tag-box="tagBox.customTemplate" dx-item-alias="product">
+                            <div data-options="dxTemplate: { name: 'customItem' }">
+                                <div class="custom-item">
+                                    <img ng-src="{{product.ImageSrc}}"/>
+                                    <div class="product-name">
+                                        {{product.Name}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

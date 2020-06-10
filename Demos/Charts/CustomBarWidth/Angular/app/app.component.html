@@ -1,0 +1,24 @@
+<dx-chart
+    id="chart"
+    [dataSource]="oilProductionData"
+    palette="soft">
+    <dxi-series valueField="year1970" name="1970"></dxi-series>
+    <dxi-series valueField="year1980" name="1980"></dxi-series>
+    <dxi-series valueField="year1990" name="1990"></dxi-series>
+    <dxi-series valueField="year2000" name="2000"></dxi-series>
+    <dxi-series valueField="year2008" name="2008"></dxi-series>
+    <dxi-series valueField="year2009" name="2009"></dxi-series>
+    <dxo-common-series-settings
+        argumentField="state"
+        type="bar"
+        [barPadding]="0.5">
+    </dxo-common-series-settings>
+    <dxo-legend
+        verticalAlignment="bottom"
+        horizontalAlignment="center">
+    </dxo-legend>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-title text="Oil Production">
+        <dxo-subtitle text="(in millions tonnes)"></dxo-subtitle>
+    </dxo-title>
+</dx-chart>

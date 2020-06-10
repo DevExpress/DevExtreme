@@ -1,0 +1,39 @@
+<div class="long-title">
+    <h3>Personal details</h3>
+</div>
+<div id="form-container">
+    <dx-form id="form"
+        [formData]="employee"
+        [colCount]="2">
+        <dxi-item itemType="group" caption="System Information">
+            <dxi-item dataField="ID"></dxi-item>
+            <dxi-item dataField="FirstName"></dxi-item>
+            <dxi-item dataField="LastName"></dxi-item>
+            <dxi-item dataField="HireDate"></dxi-item>
+            <dxi-item dataField="Position"></dxi-item>
+            <dxi-item dataField="OfficeNo"></dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group" caption="Personal Data">
+            <dxi-item dataField="BirthDate"></dxi-item>
+        	<dxi-item itemType="group" caption="Home Address">
+                <dxi-item dataField="Address"></dxi-item>
+                <dxi-item dataField="City"></dxi-item>
+                <dxi-item dataField="State"></dxi-item>
+                <dxi-item dataField="Zipcode"></dxi-item>
+        	</dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group" caption="Contact Information">
+            <dxi-item itemType="tabbed" [tabPanelOptions]="{ deferRendering: false }">
+                <dxi-tab title="Phone">
+                	<dxi-item dataField="Phone"></dxi-item>
+                </dxi-tab>
+                <dxi-tab title="Skype">
+                	<dxi-item dataField="Skype"></dxi-item>
+                </dxi-tab>
+                <dxi-tab title="Email">
+                	<dxi-item dataField="Email"></dxi-item>
+                </dxi-tab>
+            </dxi-item>
+        </dxi-item>
+    </dx-form>
+</div>

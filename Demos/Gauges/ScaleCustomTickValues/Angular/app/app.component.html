@@ -1,0 +1,12 @@
+<dx-linear-gauge id="gauge" [value]="35">
+    <dxo-geometry orientation="vertical"></dxo-geometry>
+    <dxo-scale
+        [startValue]="0"
+        [endValue]="50"
+        [customTicks]="[0, 10, 25, 50]">
+    </dxo-scale>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-title text="Fuel Volume (in Liters)">
+        <dxo-font [size]="28"></dxo-font>
+    </dxo-title>
+</dx-linear-gauge>

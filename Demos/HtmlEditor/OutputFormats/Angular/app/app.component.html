@@ -1,0 +1,43 @@
+<dx-html-editor
+    [height]="300"
+    [(valueType)]="editorValueType"
+    (valueChange)="valueChange($event)">
+    <dxo-toolbar>
+            <dxi-item formatName="undo"></dxi-item>
+            <dxi-item formatName="redo"></dxi-item>
+            <dxi-item formatName="separator"></dxi-item>
+            <dxi-item formatName="size" [formatValues]="['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt']"></dxi-item>
+            <dxi-item formatName="font" [formatValues]="['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana']"></dxi-item>
+            <dxi-item formatName="separator"></dxi-item>
+            <dxi-item formatName="bold"></dxi-item>
+            <dxi-item formatName="italic"></dxi-item>
+            <dxi-item formatName="strike"></dxi-item>
+            <dxi-item formatName="underline"></dxi-item>
+            <dxi-item formatName="separator"></dxi-item>
+            <dxi-item formatName="alignLeft"></dxi-item>
+            <dxi-item formatName="alignCenter"></dxi-item>
+            <dxi-item formatName="alignRight"></dxi-item>
+            <dxi-item formatName="alignJustify"></dxi-item>
+            <dxi-item formatName="separator"></dxi-item>
+            <dxi-item formatName="color"></dxi-item>
+            <dxi-item formatName="background"></dxi-item>
+    </dxo-toolbar>
+
+    <h2>
+        <img src="../../../../images/widgets/HtmlEditor.svg" alt="HtmlEditor">
+        Formatted Text Editor (HTML Editor)
+    </h2>
+    <br>
+    <p>DevExtreme HTML5 JavaScript HTML Editor is a client-side WYSIWYG text editor that allows its users to format textual and visual content and store it as HTML or Markdown.</p>
+</dx-html-editor>
+
+<div class="options">
+    <dx-button-group
+        (onSelectionChanged)="onValueTypeChanged($event)"
+        [selectedItemKeys]="['Html']">
+        <dxi-item text="Html"></dxi-item>
+        <dxi-item text="Markdown"></dxi-item>
+    </dx-button-group>
+    <div class="value-content">{{valueContent}}</div>
+</div>
+

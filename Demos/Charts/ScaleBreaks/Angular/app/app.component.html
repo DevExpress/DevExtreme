@@ -1,0 +1,48 @@
+<dx-chart 
+    id="chart"
+    [title]="title"
+    [dataSource]="data">
+    <dxi-series
+        valueField="mass"
+        argumentField="name"
+        type="bar">
+    </dxi-series>
+    <dxi-value-axis 
+        [visible]="true"
+        [autoBreaksEnabled]="autoBreaksEnabledValue"
+        [maxAutoBreakCount]="breaksCountValue">
+        <dxo-break-style 
+            [line]="lineStyleValue">
+        </dxo-break-style>
+    </dxi-value-axis>
+    <dxo-legend [visible]="false">
+    </dxo-legend>
+    <dxo-tooltip [enabled]="true">
+    </dxo-tooltip>
+</dx-chart>
+
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <dx-check-box class="checkbox"
+            text="Enable Breaks"
+            [(value)]="autoBreaksEnabledValue">
+        </dx-check-box>
+    </div>
+    <div class="option center">
+        <span>Max Count</span>
+        <dx-select-box
+            [items]="breaksCount"
+            [(value)]="breaksCountValue"
+            [width]="60">
+        </dx-select-box>
+    </div>
+    <div class="option right">
+        <span>Style</span>
+        <dx-select-box
+            [items]="lineStyles"
+            [(value)]="lineStyleValue"
+            [width]="120">
+        </dx-select-box>
+    </div>
+</div>

@@ -1,0 +1,69 @@
+#toolbar {
+    background-color: rgba(191, 191, 191, .15);
+    padding: 5px 10px;
+}
+ 
+.dx-list-item-icon-container, .dx-toolbar-before {
+    width: 36px;
+    padding-right: 0px !important;
+    text-align: center;
+}
+ 
+.dx-list-item-content {
+    padding-left: 10px !important;
+}
+
+.dx-button {
+    background-color: rgba(191, 191, 191, -0.15);
+    border: none;
+}
+
+.dx-drawer-shrink #content {
+    overflow: hidden;
+    transition: all 0.4s ease-out;
+    column-width: 900px;
+    
+}
+.dx-drawer-shrink.dx-drawer-opened #content{
+    column-width: 300px;
+    margin-right: -10px;
+}
+
+.panel-list {
+    height: 200px;
+}
+
+.panel-list .dx-list-item {
+    color: #fff;
+    text-align: center;
+    border-top: 1px solid rgba(221, 221, 221, .2);
+}
+
+.options {
+    padding: 20px;
+    background-color: rgba(191, 191, 191, .15);
+}
+
+.caption {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.option {
+    margin-top: 10px;
+    display: inline-block;
+    margin-right: 50px;
+}
+
+label {
+    font-weight: bold;
+}
+
+#content {
+    height: 100%;
+    padding: 10px 20px;
+}
+
+#content h2 {
+    font-size: 26px;
+}

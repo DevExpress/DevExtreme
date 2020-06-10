@@ -1,0 +1,32 @@
+<dx-chart
+    id="chart"
+    [dataSource]="statisticsData"
+    seriesSelectionMode="multiple"
+    title="Internet Explorer Statistics"
+    (onSeriesClick)="seriesClick($event)">
+    <dxi-series valueField="IE7" name="Internet Explorer 7"></dxi-series>
+    <dxi-series valueField="IE8" name="Internet Explorer 8"></dxi-series>
+    <dxi-series valueField="IE9" name="Internet Explorer 9"></dxi-series>
+    <dxi-series valueField="IE10" name="Internet Explorer 10"></dxi-series>
+    <dxo-common-series-settings
+        argumentField="year"
+        type="stackedarea">
+    </dxo-common-series-settings>
+    <dxo-common-axis-settings
+        [valueMarginsEnabled]="false">
+    </dxo-common-axis-settings>
+    <dxo-argument-axis type="discrete"></dxo-argument-axis>
+    <dxi-value-axis>
+        <dxo-label>
+            <dxo-format
+                type="percent"
+                [precision]="2">
+            </dxo-format>
+        </dxo-label>
+    </dxi-value-axis>
+    <dxo-legend
+        verticalAlignment="bottom"
+        horizontalAlignment="center">
+    </dxo-legend>
+    <dxo-export [enabled]="true"></dxo-export>
+</dx-chart>

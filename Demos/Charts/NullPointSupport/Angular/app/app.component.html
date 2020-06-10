@@ -1,0 +1,24 @@
+<dx-chart
+    id="chart"
+    [dataSource]="medalsInfo"
+    title="France Olympic Medals">
+    <dxi-series valueField="gold" name="Gold Medals" color="#ffd700"></dxi-series>
+    <dxi-series valueField="silver" name="Silver Medals" color="#c0c0c0"></dxi-series>
+    <dxo-common-series-settings
+        argumentField="year"
+        type="steparea">
+        <dxo-steparea>
+            <dxo-point [visible]="true"></dxo-point>
+        </dxo-steparea>
+    </dxo-common-series-settings>
+    <dxo-argument-axis>
+        <dxo-label>
+            <dxo-format type="decimal"></dxo-format>
+        </dxo-label>
+    </dxo-argument-axis>
+    <dxo-legend
+        verticalAlignment="bottom"
+        horizontalAlignment="center">
+    </dxo-legend>
+    <dxo-export [enabled]="true"></dxo-export>
+</dx-chart>

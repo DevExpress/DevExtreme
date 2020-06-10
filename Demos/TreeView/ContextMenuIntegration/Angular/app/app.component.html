@@ -1,0 +1,26 @@
+<div class="form">
+    <dx-tree-view
+        id="treeview"
+        [items]="products"
+        [width]="300"
+        [height]="450"
+        (onItemContextMenu)="treeViewItemContextMenu($event)">
+    </dx-tree-view>
+     
+    <div class="log-container">
+        <div><i class="icon dx-icon-clock"></i>&nbsp;Operations log:</div>
+        <dx-list 
+            id="log" 
+            [width]="400" 
+            [height]="300" 
+            [items]="logItems"
+            showScrollbar="always">
+        </dx-list>
+    </div>    
+
+    <dx-context-menu 
+        [dataSource]="menuItems" 
+        target="#treeview .dx-treeview-item"
+        (onItemClick)="contextMenuItemClick($event)">
+    </dx-context-menu>           
+</div>

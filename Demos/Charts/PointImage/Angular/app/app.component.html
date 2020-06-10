@@ -1,0 +1,28 @@
+<dx-chart
+    id="chart"
+    [dataSource]="iceHockeyStatistics"
+    [title]="title"
+    [customizePoint]="customizePoint">
+    <dxi-series color="#888888"></dxi-series>
+    <dxo-common-series-settings
+        argumentField="year"
+        valueField="place"
+        type="spline">
+        <dxo-point [visible]="false"></dxo-point>
+    </dxo-common-series-settings>
+    <dxo-argument-axis [allowDecimals]="false" [axisDivisionFactor]="60">
+        <dxo-grid [visible]="true"></dxo-grid>
+        <dxo-label>
+            <dxo-format type="decimal"></dxo-format>
+        </dxo-label>
+    </dxo-argument-axis>
+    <dxi-value-axis [inverted]="true">
+        <dxo-grid [visible]="false"></dxo-grid>
+        <dxo-label [customizeText]="customizeText"></dxo-label>
+    </dxi-value-axis>
+    <dxo-legend [visible]="false"></dxo-legend>
+    <dxo-export
+        [enabled]="true"
+        [formats]="['PNG', 'PDF', 'JPEG', 'GIF', 'SVG']">
+    </dxo-export>
+</dx-chart>

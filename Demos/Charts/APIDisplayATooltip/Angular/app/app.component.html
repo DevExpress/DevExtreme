@@ -1,0 +1,27 @@
+<dx-pie-chart
+    id="chart"
+    type="doughnut"
+    [dataSource]="populationData"
+    palette="Soft Pastel"
+    title="The Population of Continents and Regions"
+    (onPointClick)="pointClick($event)">
+    <dxi-series argumentField="region"></dxi-series>
+    <dxo-tooltip
+        [enabled]="false"
+        format="millions"
+        [customizeTooltip]="customizeTooltip">
+    </dxo-tooltip>
+    <dxo-size [height]="350"></dxo-size>
+    <dxo-legend [visible]="false"></dxo-legend>
+</dx-pie-chart>
+<div class="controls-pane">
+    <dx-select-box
+        [width]="250"
+        [dataSource]="populationData"
+        displayExpr="region"
+        valueExpr="region"
+        placeholder="Choose region"
+        [value]="selectedRegion"
+        (onValueChanged)="valueChanged($event)">
+    </dx-select-box>
+</div>

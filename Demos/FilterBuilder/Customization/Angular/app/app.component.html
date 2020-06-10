@@ -1,0 +1,25 @@
+
+<dx-filter-builder
+    [fields]="fields"
+    [(value)]="filter"
+    [groupOperations]="groupOperations"
+    [customOperations]="customOperations"
+    (onInitialized)="updateTexts($event)"
+    (onValueChanged)="updateTexts($event)">
+    <dx-tag-box *dxTemplate="let condition of 'tagBoxTemplate'"
+        [value]="condition.value"
+        [items]="categories"
+        (onValueChanged)="condition.setValue($event.value)"
+        width="auto">
+    </dx-tag-box>
+</dx-filter-builder>
+<div class="results">
+    <div>
+        <b>Value</b>
+        <pre>{{filterText}}</pre>
+    </div>
+    <div>
+        <b>DataSource's filter expression</b>
+        <pre>{{dataSourceText}}</pre>
+    </div>
+</div>

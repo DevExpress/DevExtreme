@@ -1,0 +1,32 @@
+<div id="chart-demo">
+    <dx-chart
+        title="Population: Age Structure (2000)"
+        palette="Harmony Light"
+        [dataSource]="populationData">
+        <dxi-series valueField="y1564" name="15-64 years"></dxi-series>
+        <dxi-series valueField="y014" name="0-14 years"></dxi-series>
+        <dxi-series valueField="y65" name="65 years and older"></dxi-series>
+        <dxo-common-series-settings
+			#commonSeries
+            argumentField="country"
+            [type]="types[0]">
+        </dxo-common-series-settings>
+        <dxo-margin [bottom]="20"></dxo-margin>
+        <dxo-argument-axis [valueMarginsEnabled]="false"></dxo-argument-axis>
+        <dxo-export [enabled]="true"></dxo-export>
+        <dxo-legend
+            verticalAlignment="bottom"
+            horizontalAlignment="center">
+        </dxo-legend>
+    </dx-chart>
+    <div class="options">
+        <div class="caption">Options</div>
+        <div class="option">              
+            <span>Series Type</span> 
+            <dx-select-box
+                [dataSource]="types"
+                [(value)]="commonSeries.type">
+            </dx-select-box>
+         </div>   
+    </div>
+</div>

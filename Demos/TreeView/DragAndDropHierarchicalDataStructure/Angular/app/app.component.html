@@ -1,0 +1,48 @@
+<div class="form">
+    <div class="drive-panel">
+        <div class="drive-header dx-treeview-item"><i class="dx-icon dx-icon-activefolder"></i><span>Drive C:</span></div>
+        <dx-sortable
+            filter=".dx-treeview-item"
+            group="shared"
+            data="driveC"
+            [allowDropInsideItem]="true"
+            [allowReordering]="true"
+            (onDragChange)="onDragChange($event)"
+            (onDragEnd)="onDragEnd($event)">        
+            <dx-tree-view #treeviewDriveC
+                id="treeviewDriveC"
+                dataStructure="tree"
+                [expandNodesRecursive]="false"
+                [items]="itemsDriveC"
+                [width]="250"
+                [height]="380">
+                <div *dxTemplate="let item of 'item'">
+                    <div><i class="dx-icon dx-icon-{{ item.isDirectory ? 'activefolder' : 'file' }}"></i><span>{{ item.name }}</span></div>
+                </div>
+            </dx-tree-view>
+        </dx-sortable>
+    </div>
+    <div class="drive-panel">
+        <div class="drive-header dx-treeview-item"><i class="dx-icon dx-icon-activefolder"></i><span>Drive D:</span></div>
+        <dx-sortable
+            filter=".dx-treeview-item"
+            group="shared"            
+            data="driveD"
+            [allowDropInsideItem]="true"
+            [allowReordering]="true"
+            (onDragChange)="onDragChange($event)"
+            (onDragEnd)="onDragEnd($event)">        
+            <dx-tree-view #treeviewDriveD
+                id="treeviewDriveD"
+                dataStructure="tree"
+                [expandNodesRecursive]="false"
+                [items]="itemsDriveD"
+                [width]="250"
+                [height]="380">
+                <div *dxTemplate="let item of 'item'">
+                    <div><i class="dx-icon dx-icon-{{ item.isDirectory ? 'activefolder' : 'file' }}"></i><span>{{ item.name }}</span></div>
+                </div>
+            </dx-tree-view>
+        </dx-sortable> 
+    </div>
+</div>

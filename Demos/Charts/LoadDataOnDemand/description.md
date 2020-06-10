@@ -1,0 +1,1 @@
+In&nbsp;this demo, the chart loads data as&nbsp;you pan&nbsp;it. Once a&nbsp;data block is&nbsp;loaded, it&nbsp;stays in&nbsp;memory to&nbsp;reduce requests to&nbsp;the server.

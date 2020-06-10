@@ -1,0 +1,26 @@
+<dx-chart
+    id="chart"
+    title="Male Age Structure"
+    [dataSource]="dataSource">
+    <dxi-series valueField="young" name="0-14"></dxi-series>
+    <dxi-series valueField="middle" name="15-64"></dxi-series>
+    <dxi-series valueField="older" name="65 and older"></dxi-series>
+    <dxi-value-axis position="right">
+        <dxo-title text="millions"></dxo-title>
+    </dxi-value-axis>
+    <dxo-common-series-settings
+        argumentField="state"
+        type="stackedBar">
+    </dxo-common-series-settings>
+    <dxo-legend
+        verticalAlignment="bottom"
+        horizontalAlignment="center"
+        itemTextPosition="top">
+    </dxo-legend>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-tooltip
+        [enabled]="true"
+        location="edge"
+        [customizeTooltip]="customizeTooltip">
+    </dxo-tooltip>
+</dx-chart>

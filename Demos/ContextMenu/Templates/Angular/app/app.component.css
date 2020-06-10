@@ -1,0 +1,14 @@
+::ng-deep .dx-menu-item-content span {
+    margin-right: 5px;
+}
+::ng-deep .dx-menu-item .dx-icon-spinright {
+    position: absolute;
+    top: 7px;
+    right: 2px;
+}
+::ng-deep #image{
+    height: 300px;
+}
+::ng-deep .label {
+    color: #767676;
+}

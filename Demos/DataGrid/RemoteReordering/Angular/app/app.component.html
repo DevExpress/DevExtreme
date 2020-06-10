@@ -1,0 +1,28 @@
+<dx-data-grid
+    id="gridContainer"
+    [height]="440"
+    [dataSource]="tasksStore"
+    [showBorders]="true">
+    <dxo-row-dragging
+        [allowReordering]="true"
+        [onReorder]="onReorder"
+    ></dxo-row-dragging>
+    <dxo-sorting mode="none"></dxo-sorting>
+    <dxo-scrolling mode="virtual"></dxo-scrolling>
+    <dxi-column dataField="ID" [width]="55"></dxi-column>
+    <dxi-column dataField="Owner" [width]="150">
+        <dxo-lookup
+            [dataSource]="employeesStore"
+            valueExpr="ID"
+            displayExpr="FullName"
+        ></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="AssignedEmployee" [width]="150" caption="Assignee">
+        <dxo-lookup
+            [dataSource]="employeesStore"
+            valueExpr="ID"
+            displayExpr="FullName"
+        ></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="Subject"></dxi-column>
+</dx-data-grid>

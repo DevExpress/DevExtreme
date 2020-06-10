@@ -1,0 +1,1 @@
+The **TextArea** is&nbsp;a&nbsp;widget that enables a&nbsp;user to&nbsp;enter and edit a&nbsp;multi-line text.

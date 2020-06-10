@@ -1,0 +1,25 @@
+<dx-scheduler
+    [dataSource]="appointmentsData"
+    [views]='["timelineDay", "timelineWeek", "timelineWorkWeek", "timelineMonth"]'
+    currentView="timelineMonth"
+    [firstDayOfWeek]="0"
+    [startDayHour]="8"
+    [endDayHour]="20"
+    [cellDuration]="60"
+    [groups]="['priority']"
+    [currentDate]="currentDate"
+    [height]="580">
+    <dxi-resource
+        fieldExpr="ownerId"
+        [allowMultiple]="true"
+        [dataSource]="resourcesData"
+        label="Owner"
+        [useColorAsDefault]="true"
+    ></dxi-resource>
+    <dxi-resource
+        fieldExpr="priority"
+        [allowMultiple]="false"
+        [dataSource]="prioritiesData"
+        label="Priority"
+    ></dxi-resource>
+</dx-scheduler>

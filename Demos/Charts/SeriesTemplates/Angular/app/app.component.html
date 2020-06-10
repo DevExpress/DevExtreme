@@ -1,0 +1,22 @@
+<dx-chart
+    id="chart"
+    [dataSource]="productionData"
+    palette="violet">
+    <dxo-common-series-settings
+        argumentField="country"
+        type="bar"
+        valueField="oil">
+    </dxo-common-series-settings>
+    <dxo-series-template
+        nameField="year"
+        [customizeSeries]="customizeSeries">
+    </dxo-series-template>
+    <dxo-title text="Oil Production">
+        <dxo-subtitle text="(in millions tonnes)"></dxo-subtitle>
+    </dxo-title>
+    <dxo-legend 
+        verticalAlignment="bottom"
+        horizontalAlignment="center">
+    </dxo-legend>
+    <dxo-export [enabled]="true"></dxo-export>
+</dx-chart>

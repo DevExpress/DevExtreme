@@ -1,0 +1,35 @@
+::ng-deep #chart-demo {
+    height: 700px;
+    width: 100%;
+}
+
+::ng-deep #chart {
+    height: 500px;
+    margin: 0 0 15px;
+}
+
+::ng-deep .options {
+    padding: 20px;
+    margin-top: 20px;
+    background-color: rgba(191, 191, 191, 0.15);
+}
+
+::ng-deep .caption {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+::ng-deep .option {
+    margin-top: 10px;
+}
+
+::ng-deep .option > span {
+    width: 50px;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+::ng-deep .option > .dx-selectbox {
+    display: inline-block;
+    vertical-align: middle;
+}

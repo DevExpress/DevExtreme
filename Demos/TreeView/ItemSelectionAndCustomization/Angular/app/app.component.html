@@ -1,0 +1,67 @@
+<div class="form">
+    <h4>Employees</h4>
+    <dx-tree-view
+        id="treeview"
+        [items]="employees"
+        [width]="340"
+        [height]="320"
+        [showCheckBoxesMode]="showCheckBoxesMode"
+        [selectionMode]="selectionMode"
+        [selectNodesRecursive]="selectNodesRecursive"
+        [selectByClick]="selectByClick"
+        (onSelectionChanged)="treeViewSelectionChanged($event)"        
+        (onContentReady)="treeViewContentReady($event)"
+    >
+        <div *dxTemplate="let item of 'item'">
+            {{ item.fullName + ' (' + item.position + ')' }}
+        </div>
+    </dx-tree-view>
+    <div class="selected-container">
+        Selected employees
+        <dx-list 
+            id="selected-employees" 
+            [width]="400" 
+            [height]="200" 
+            [items]="selectedEmployees"
+            showScrollbar="always"
+        >
+            <dxi-item *ngFor="let item of selectedEmployees">
+                {{ item.prefix + " " + item.fullName  + " (" + item.position + ")" }}
+            </dxi-item>
+        </dx-list>
+    </div>
+</div>
+
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <span>Show Check Boxes Mode:</span>
+        <dx-select-box
+            [items]="showCheckBoxesModes"
+            [value]="showCheckBoxesMode"
+            (onValueChanged)="showCheckBoxesModeValueChanged($event)"
+        ></dx-select-box>        
+    </div>            
+    <div class="option">
+        <span>Selection Mode:</span>
+        <dx-select-box
+            [items]="selectionModes"
+            [value]="selectionMode"
+            [disabled]="isSelectionModeDisabled"
+            (onValueChanged)="selectionModeValueChanged($event)"
+        ></dx-select-box>        
+    </div>
+    <div class="option recursive-option">
+        <dx-check-box
+            text="Select Nodes Recursive"
+            [disabled]="isRecursiveDisabled"
+            [(value)]="selectNodesRecursive"
+        ></dx-check-box>
+    </div>            
+    <div class="option">
+        <dx-check-box 
+            text="Select By Click"
+            [(value)]="selectByClick"
+        ></dx-check-box>
+    </div>                
+</div>   

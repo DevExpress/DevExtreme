@@ -1,0 +1,20 @@
+::ng-deep #toast {
+    padding: 10px;
+}
+::ng-deep #toast ul {
+    text-align: center;
+    list-style-type: none;
+    margin: 20px 0;
+}
+::ng-deep #toast ul li {
+    display: inline-block;
+    width: 160px;
+    margin: 10px;
+}
+::ng-deep #toast ul li img {
+    width: 100px;
+}
+::ng-deep .dx-toast-content {
+    min-width: 300px;
+    max-width: 400px;
+}

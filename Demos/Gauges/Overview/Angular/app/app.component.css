@@ -1,0 +1,87 @@
+::ng-deep #gauge-demo {
+    height: 500px;
+}
+
+::ng-deep #gauge-container  {
+    text-align: center;
+    margin: 20px auto;
+    background-image: url('../../../../images/mask.png');
+    background-repeat: no-repeat;
+    width: 786px;
+    height: 500px;
+}
+
+::ng-deep #gauge-container  > div {
+    display: inline-block;
+    position: relative;
+}
+
+::ng-deep .left-section {
+    top: -20px;
+    left: -40px;
+}
+
+::ng-deep .center-section {
+    top: 25px;
+}
+
+::ng-deep .right-section {
+    top: -20px;
+    right: -40px;
+}
+
+::ng-deep .speed-value {
+    position: absolute;
+    border: 2px solid #f05b41;
+    border-radius: 50%;
+    width: 110px;
+    height: 110px;
+    left: 28%;
+    top: 36%;
+    line-height: 100px;
+}
+
+::ng-deep .speed-value > span {
+    font-size: 50px;
+    font-weight: lighter;
+    color: #f05b41;
+}
+
+::ng-deep #fuel-gauge {
+    position: absolute;
+    left: 34%;
+    bottom: 5%;
+}
+
+::ng-deep #slider {
+    position: relative;
+    top: -105px;
+    margin: 0 auto;
+}
+
+::ng-deep #slider .dx-slider-bar {
+    background-color: #fff;
+}
+
+::ng-deep #slider .dx-slider-handle {
+    background-color: #f05b41;
+    width: 16px;
+    height: 16px;
+    margin-top: -8px;
+    margin-right: -8px;
+    border-radius: 50%;
+    border: none;
+}
+
+::ng-deep #slider .dx-slider-handle .dx-inkripple-wave {
+    background: none;
+}
+
+::ng-deep #slider .dx-slider-handle:after {
+    background-color: #f05b41;
+}
+
+::ng-deep #slider .dx-slider-range.dx-slider-range-visible {
+    border-color: #f05b41;
+    background-color: #f05b41;
+}

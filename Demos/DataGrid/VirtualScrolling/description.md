@@ -1,0 +1,1 @@
+The **DataGrid** widget supports virtual record scrolling, allowing end users to&nbsp;navigate the contents of&nbsp;the widget by&nbsp;using its vertical scrollbar. In&nbsp;this demo, the **DataGrid** is&nbsp;connected to&nbsp;100,000 records and virtual scroll mode has been enabled to&nbsp;simplify record navigation and eliminate the use of&nbsp;data pagers.

@@ -1,0 +1,1 @@
+This example shows the **workWeek** view with different group orientations. Select the *"Vertical Grouping"* tab to&nbsp;see the resource headers organized in&nbsp;a&nbsp;column and the *"Horizontal Grouping"*&nbsp;&mdash; arranged in&nbsp;a&nbsp;row.

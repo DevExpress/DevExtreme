@@ -1,0 +1,16 @@
+<dx-range-selector
+    id="range-selector"
+    [value]="['1', '2']"
+    title="Select a Product Weight"
+    [dataSource]="dataSource">
+    <dxo-margin [top]="50"></dxo-margin>
+    <dxo-scale valueType="numeric"></dxo-scale>
+    <dxo-chart>
+        <dxi-series valueField="appleCost" color="#00ff00"></dxi-series>
+        <dxi-series valueField="orangeCost" color="#ffa500"></dxi-series>
+        <dxo-common-series-settings
+            type="spline"
+            argumentField="weight">
+        </dxo-common-series-settings>
+    </dxo-chart>
+</dx-range-selector>

@@ -1,0 +1,1 @@
+$(".dx-loadindicator-wrapper").hide();

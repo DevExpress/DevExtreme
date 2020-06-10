@@ -1,0 +1,9 @@
+::ng-deep .custom-icon .icon {
+    font-size: 17px;
+    color: #f05b41;
+    margin-right: 2px;
+}
+
+::ng-deep .dx-field {
+    margin-bottom: 50px;
+}

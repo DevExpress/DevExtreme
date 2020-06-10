@@ -1,0 +1,29 @@
+<dx-pie-chart
+    id="pie"
+    palette="ocean"
+    type="doughnut"
+    innerRadius="0.2"
+    [dataSource]="exportImportData">
+    <dxo-title
+        text="Imports/Exports of Goods and Services">
+        <dxo-subtitle
+            text="(billion US$, 2012)"></dxo-subtitle>
+    </dxo-title>
+    <dxo-legend [visible]="true"></dxo-legend>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-common-series-settings>
+        <dxo-label [visible]="false"></dxo-label>
+    </dxo-common-series-settings>
+    <dxo-tooltip
+        [enabled]="true"
+        format="currency"
+        [customizeTooltip]="customizeTooltip"></dxo-tooltip>
+    <dxi-series
+        name="Export"
+        argumentField="Country"
+        valueField="Export"></dxi-series>
+    <dxi-series
+        name="Import"
+        argumentField="Country"
+        valueField="Import"></dxi-series>
+</dx-pie-chart>

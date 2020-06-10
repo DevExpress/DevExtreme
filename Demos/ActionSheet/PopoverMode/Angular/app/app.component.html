@@ -1,0 +1,15 @@
+<dx-list (onItemClick)="itemClick($event)">
+    <dxi-item *ngFor="let contact of contacts">
+        <div>{{contact.name}}</div>
+        <div>{{contact.phone}}</div>
+        <div>{{contact.email}}</div>
+    </dxi-item>
+</dx-list>
+<dx-action-sheet
+    [items]="commands"
+    title="Choose action"
+    [usePopover]="true"
+    [(visible)]="actionSheetVisible"
+    [target]="actionSheetTarget"
+    (onItemClick)="showNotify($event.itemData.text)"
+></dx-action-sheet>

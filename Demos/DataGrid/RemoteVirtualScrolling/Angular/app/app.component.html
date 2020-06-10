@@ -1,0 +1,19 @@
+<dx-data-grid id="gridContainer"
+    [dataSource]="dataSource"  
+    [remoteOperations]="true"
+    [wordWrapEnabled]="true"
+    [showBorders]="true">
+
+    <dxo-scrolling mode="virtual" rowRenderingMode="virtual" ></dxo-scrolling>
+    <dxo-paging [pageSize]="100"></dxo-paging>
+    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+
+    <dxi-column dataField="Id" width="75"></dxi-column>
+    <dxi-column dataField="StoreName" caption="Store" width="150"></dxi-column>
+    <dxi-column dataField="ProductCategoryName" caption="Category" width="120"></dxi-column>
+    <dxi-column dataField="ProductName" caption="Product"></dxi-column>
+    <dxi-column dataField="DateKey" caption="Date" dataType="date" format="yyyy-MM-dd" width="100"></dxi-column>
+    <dxi-column dataField="SalesAmount" caption="Amount" format="currency" width="100">
+        <dxo-header-filter [groupInterval]="1000"></dxo-header-filter>
+    </dxi-column>
+</dx-data-grid>

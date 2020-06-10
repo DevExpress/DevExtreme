@@ -1,0 +1,26 @@
+<dx-scheduler
+    [dataSource]="appointmentsData"
+    [views]="views"
+    currentView="day"
+    [startDayHour]="8"
+    [endDayHour]="20"
+    [currentDate]="currentDate"
+    [height]="580">
+    <dxi-view
+        name="3 Days"
+        type="day"
+        [intervalCount]="3"
+        [startDate]="daysViewStartDate">
+    </dxi-view>
+    <dxi-view
+        name="2 Work Weeks"
+        type="workWeek"
+        [intervalCount]="2"
+        [startDate]="weeksViewStartDate">
+    </dxi-view>
+    <dxi-view
+        name="2 Months" 
+        type="month"
+        [intervalCount]="2">
+    </dxi-view>
+</dx-scheduler>

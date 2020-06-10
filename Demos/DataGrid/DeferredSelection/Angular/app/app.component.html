@@ -1,0 +1,64 @@
+<dx-data-grid
+    id="grid-container"
+    [dataSource]="dataSource"
+    [selectionFilter]="['Task_Status', '=', 'Completed']"
+    [showBorders]="true">
+    <dxo-selection
+        mode="multiple"
+        [deferred]="true"
+    ></dxo-selection>
+    <dxo-filter-row
+        [visible]="true"
+    ></dxo-filter-row>
+    <dxi-column
+        caption="Subject"
+        dataField="Task_Subject"
+    ></dxi-column>
+    <dxi-column
+        caption="Start Date"
+        dataField="Task_Start_Date"
+        width="auto"
+        dataType="date"
+    ></dxi-column>
+    <dxi-column
+        caption="Due Date"
+        dataField="Task_Due_Date"
+        width="auto"
+        dataType="date"
+    ></dxi-column>
+    <dxi-column
+        caption="Assigned To"
+        dataField="ResponsibleEmployee.Employee_Full_Name"
+        width="auto"
+        [allowSorting]="false"
+    ></dxi-column>
+    <dxi-column
+        caption="Status"
+        dataField="Task_Status"
+        width="auto"
+    ></dxi-column>
+</dx-data-grid>
+<div class="selection-summary center">
+    <dx-button
+        id="calculateButton"
+        text="Get statistics on the selected tasks"
+        type="default"
+        (onClick)="calculateStatistics()"
+    ></dx-button>
+    <div>
+        <div class="column">
+            <span class="text count">Task count:</span>
+            <span class="value">{{taskCount}}</span>
+        </div>
+
+        <div class="column">
+            <span class="text people-count">People assingned:</span>
+            <span class="value">{{peopleCount}}</span>
+        </div>
+
+        <div class="column">
+            <span class="text avg-duration">Average task duration (days):</span>
+            <span class="value">{{avgDuration}}</span>
+        </div>
+    </div>
+</div>

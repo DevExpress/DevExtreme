@@ -1,0 +1,10 @@
+<dx-diagram #diagram id="diagram">
+    <dxo-nodes [dataSource]="orgItemsDataSource" keyExpr="ID" textExpr="Text" typeExpr="Type" imageUrlExpr="Picture">
+        <dxo-auto-layout type="tree" orientation="horizontal"></dxo-auto-layout>
+    </dxo-nodes>
+    <dxo-edges [dataSource]="orgLinksDataSource" keyExpr="ID" fromExpr="From" toExpr="To"></dxo-edges>
+    <dxo-toolbox>
+        <dxi-group category="general" title="General"></dxi-group>
+        <dxi-group category="orgChart" title="Organizational Chart" [expanded]="true"></dxi-group>
+    </dxo-toolbox>
+</dx-diagram>

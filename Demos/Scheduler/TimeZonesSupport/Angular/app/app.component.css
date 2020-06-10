@@ -1,0 +1,13 @@
+::ng-deep .option {
+    display: flex;
+}
+
+::ng-deep .option > span {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+::ng-deep .dx-scheduler {
+    margin-top: 20px;
+}

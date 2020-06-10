@@ -1,0 +1,18 @@
+<div class="pies-container">
+    <dx-pie-chart *ngFor="let options of pies" class="pie"
+        [title]="options.title"
+        [palette]="options.palette"
+        [dataSource]="options.dataSource"
+        sizeGroup="piesGroup">
+        <dxi-series
+            argumentField="name"
+            valueField="area">
+            <dxo-label [visible]="true" format="percent"></dxo-label>
+        </dxi-series>
+        <dxo-legend verticalAlignment="bottom"
+            horizontalAlignment="center"
+            itemTextPosition="right"
+            [rowCount]="2">
+        </dxo-legend>
+    </dx-pie-chart>
+</div>

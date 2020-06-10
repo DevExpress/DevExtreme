@@ -1,0 +1,42 @@
+<div id="tree-list-demo">
+    <dx-tree-list
+        id="employees"
+        [dataSource]="employees"
+        keyExpr="ID"
+        parentIdExpr="Head_ID"
+        [showRowLines]="true"
+        [showBorders]="true"
+        [columnAutoWidth]="true"
+        [expandedRowKeys]="[1, 2, 3, 4, 5]"
+        (onEditorPreparing)="editorPreparing($event)"
+        (onInitNewRow)="initNewRow($event)">
+        <dxo-editing
+            mode="row"
+            [allowUpdating]="true"
+            [allowDeleting]="true"
+            [allowAdding]="true">
+        </dxo-editing>
+
+        <dxi-column dataField="Full_Name">
+            <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column dataField="Head_ID" caption="Head">
+            <dxo-lookup
+                [dataSource]="lookupData"
+                valueExpr="ID"
+                displayExpr="Full_Name">
+            </dxo-lookup>
+            <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column dataField="Title" caption="Position">
+            <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column dataField="Hire_Date" dataType="date" [width]="120">
+            <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column type="buttons">
+            <dxi-button name="edit"></dxi-button>
+            <dxi-button name="delete"></dxi-button>
+        </dxi-column>
+    </dx-tree-list>
+</div>    

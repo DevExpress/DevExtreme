@@ -1,0 +1,1 @@
+When values for a&nbsp;series are not specified or&nbsp;are set to&nbsp;zero, bars that represent these values will not be&nbsp;visible within the chart. You can populate these empty region by&nbsp;extending neighboring bars via the **equalBarWidth** property set to _false_.

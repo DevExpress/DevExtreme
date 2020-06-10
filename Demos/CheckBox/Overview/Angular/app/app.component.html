@@ -1,0 +1,47 @@
+<div class="form">
+    <div class="dx-fieldset">
+        <div class="dx-field">
+            <div class="dx-field-label">Checked</div>
+            <div class="dx-field-value">
+                <dx-check-box [value]="true"></dx-check-box>
+            </div>
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">Unchecked</div>
+            <div class="dx-field-value">
+                <dx-check-box [value]="false"></dx-check-box>
+            </div>
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">Indeterminate</div>
+            <div class="dx-field-value">
+                <dx-check-box [(value)]="indeterminateValue"></dx-check-box>
+            </div>
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">Value change handling</div>
+            <div class="dx-field-value">
+                <dx-check-box [(value)]="checkBoxValue"></dx-check-box>
+            </div>
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">Disabled</div>
+            <div class="dx-field-value">
+                <dx-check-box
+                    [disabled]="true"
+                    [value]="checkBoxValue"
+                ></dx-check-box>
+            </div>
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">With label</div>
+            <div class="dx-field-value">
+                <dx-check-box
+                    [value]="true"
+                    [width]="80"
+                    text="Check"
+                ></dx-check-box>
+            </div>
+        </div>
+    </div>
+</div>

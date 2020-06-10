@@ -1,0 +1,33 @@
+<div class="buttongroups-container">
+    <dx-button-group 
+        [items]="alignments"
+        keyExpr="alignment"
+        stylingMode="outlined"
+        [selectedItemKeys]="['left']"
+        (onItemClick)="itemClick($event)">
+    </dx-button-group>
+    <dx-button-group 
+        [items]="fontStyles" 
+        keyExpr="style" 
+        stylingMode="outlined"
+        selectionMode="multiple"
+        (onItemClick)="itemClick($event)">
+    </dx-button-group>
+</div>
+<div class="buttongroups-container">
+    <dx-button-group 
+        [items]="alignments"
+        keyExpr="alignment"
+        stylingMode="text"
+        [selectedItemKeys]="['left']"
+        (onItemClick)="itemClick($event)">
+    </dx-button-group>
+    <dx-button-group 
+        class="multiple-selection-styling-mode" 
+        [items]="fontStyles" 
+        keyExpr="style" 
+        stylingMode="text" 
+        selectionMode="multiple" 
+        (onItemClick)="itemClick($event)">
+    </dx-button-group>
+</div>

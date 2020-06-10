@@ -1,0 +1,19 @@
+<dx-pie-chart
+    id="pie"
+    type="doughnut"
+    title="Olympic Medals in 2008"
+    palette="Soft Pastel"
+    [dataSource]="olympicMedals"
+    (onPointClick)="pointClickHandler($event)">
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-legend
+        [margin]="0"
+        horizontalAlignment="right"
+        verticalAlignment="top"></dxo-legend>
+    <dxi-series        
+        argumentField="country"
+        valueField="medals">
+        <dxo-hover-style
+            color="#ffd700"></dxo-hover-style>
+    </dxi-series>
+</dx-pie-chart>

@@ -1,0 +1,7 @@
+::ng-deep #zoomed-chart{
+    height: 335px;
+    margin: 0 0 15px;
+}
+::ng-deep #range-selector {
+    height: 120px;
+}

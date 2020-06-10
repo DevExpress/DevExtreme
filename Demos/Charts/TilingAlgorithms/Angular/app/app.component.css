@@ -1,0 +1,27 @@
+::ng-deep #treemap {
+    height: 460px;
+}
+
+::ng-deep .country {
+    font-weight: 500;
+}
+
+::ng-deep .options {
+    padding: 20px;
+    background-color: rgba(191, 191, 191, 0.15);
+    margin-top: 20px;
+}
+::ng-deep .option {
+    margin-top: 10px;
+}
+::ng-deep .caption {
+    font-size: 18px;
+    font-weight: 500;
+}
+::ng-deep .option > span {
+    margin-right: 10px;
+}
+::ng-deep .option > .dx-widget {
+    display: inline-block;
+    vertical-align: middle;
+}

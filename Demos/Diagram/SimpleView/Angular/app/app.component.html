@@ -1,0 +1,7 @@
+<dx-diagram #diagram id="diagram" [simpleView]="true">
+    <dxo-nodes [dataSource]="dataSource" keyExpr="ID" textExpr="Title" parentKeyExpr="Head_ID">
+        <dxo-auto-layout type="tree"></dxo-auto-layout>
+    </dxo-nodes>
+    <dxo-toolbox visibility="disabled"></dxo-toolbox>
+    <dxo-properties-panel visibility="disabled"></dxo-properties-panel>
+</dx-diagram>

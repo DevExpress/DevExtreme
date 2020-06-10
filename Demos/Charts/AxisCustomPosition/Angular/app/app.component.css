@@ -1,0 +1,48 @@
+::ng-deep .options {
+  padding: 20px;
+  margin-top: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+}
+
+::ng-deep .option {
+  margin-top: 10px;
+  overflow: auto;
+}
+
+::ng-deep .option > span {
+  margin-right: 20px;
+  margin-top: 6px;
+  float: left;
+}
+
+::ng-deep .caption {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+::ng-deep .option > .dx-numberbox {
+  width: 90px;
+  float: right;
+}
+
+::ng-deep .common {
+  width: 488px;
+}
+
+::ng-deep .block {
+  vertical-align: middle;
+  margin-top: 10px;
+}
+
+::ng-deep .left {
+  display: inline-block;
+}
+
+::ng-deep .right {
+  float: right;
+}
+
+::ng-deep .block > span {
+  font-size: 18px;
+  font-weight: 500;
+}

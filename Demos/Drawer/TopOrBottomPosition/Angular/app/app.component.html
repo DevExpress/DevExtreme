@@ -1,0 +1,49 @@
+
+<dx-toolbar
+    [items]="toolbarContent">
+</dx-toolbar>
+<dx-drawer 
+    [openedStateMode]="selectedOpenMode"
+    [position]="selectedPosition"
+    [revealMode]="selectedRevealMode"
+    template="template"
+    [opened]="false"
+    [height]="400"
+    [closeOnOutsideClick]="true">
+    <div *dxTemplate="let data of 'template'">
+        <dx-list class="panel-list dx-theme-accent-as-background-color"
+            [hoverStateEnabled]="false"
+            [activeStateEnabled]="false"
+            [focusStateEnabled]="false"
+            [dataSource]="navigation">
+        </dx-list>
+    </div>
+    <div id="content" class="dx-theme-background-color" [innerHTML]="text"></div>
+</dx-drawer>
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <label>Opened state mode</label>
+        <dx-radio-group
+            [(value)]="selectedOpenMode"
+            [items]="showModes"
+            layout="horizontal">
+        </dx-radio-group>
+    </div>
+    <div class="option">
+        <label>Position</label>
+        <dx-radio-group
+            [(value)]="selectedPosition"
+            [items]="positionModes"
+            layout="horizontal">
+        </dx-radio-group>
+    </div>
+    <div *ngIf="selectedOpenMode !== 'push'" class="option">
+        <label>Reveal mode</label>
+        <dx-radio-group
+            [(value)]="selectedRevealMode"
+            [items]="showSubmenuModes"
+            layout="horizontal">
+        </dx-radio-group>
+    </div>
+</div>

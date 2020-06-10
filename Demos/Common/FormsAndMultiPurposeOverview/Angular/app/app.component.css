@@ -1,0 +1,20 @@
+::ng-deep .first-group,
+::ng-deep .second-group {
+    padding: 20px;
+}
+
+::ng-deep .second-group {
+    background-color: rgba(191, 191, 191, 0.15);
+}
+
+::ng-deep .form-avatar {
+    height: 128px;
+    width: 128px;
+    margin-right: 10px;
+    border: 1px solid #d2d3d5;
+    border-radius: 50%;
+    background-image: url('../../../../images/petersmith.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}

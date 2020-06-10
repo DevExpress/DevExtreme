@@ -1,0 +1,50 @@
+<div class="dx-fieldset">
+    <div class="dx-field">
+        <div class="dx-field-label">Grouped items</div>
+        <div class="dx-field-value">
+            <dx-tag-box
+                [dataSource]="simpleProducts"
+                valueExpr="ID"
+                [value]="[17, 19]"
+                grouped="true"
+                displayExpr="Name">
+            </dx-tag-box>
+        </div>
+    </div>
+
+    <div class="dx-field">
+        <div class="dx-field-label">Grouped items with search enabled</div>
+        <div class="dx-field-value">
+            <dx-tag-box
+                    [dataSource]="simpleProducts"
+                    valueExpr="ID"
+                    [value]="[17, 19]"
+                    grouped="true"
+                    displayExpr="Name"
+                    searchEnabled="true">
+            </dx-tag-box>
+        </div>
+    </div>
+
+    <div class="dx-field">
+        <div class="dx-field-label">Grouped items with a custom group template</div>
+        <div class="dx-field-value">
+            <dx-tag-box
+                    [dataSource]="simpleProducts"
+                    valueExpr="ID"
+                    [value]="[18]"
+                    grouped="true"
+                    displayExpr="Name"
+                    searchEnabled="true"
+                    groupTemplate="group"
+            >
+                <div *dxTemplate="let data of 'group'">
+                    <div class='custom-icon'>
+                        <span class='dx-icon-box icon'></span>
+                        {{data.key}}
+                    </div>
+                </div>
+            </dx-tag-box>
+        </div>
+    </div>
+</div>

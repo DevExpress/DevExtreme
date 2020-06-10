@@ -1,0 +1,64 @@
+<div class="long-title">
+  <h3>Country Area, Population, and GDP Structure</h3>
+</div>
+<dx-data-grid
+  id="gridContainer"
+  [dataSource]="countries"
+  [showBorders]="true"
+  (onExporting)="onExporting($event)">
+  <dxo-export [enabled]="true"></dxo-export>
+
+  <dxi-column dataField="Country"></dxi-column>
+  <dxi-column
+    dataField="Area">
+  </dxi-column>
+  <dxi-column caption="Population">
+    <dxi-column
+      caption="Total"
+      dataField="Population_Total"
+      format="fixedPoint">
+    </dxi-column>
+    <dxi-column
+      caption="Urban"
+      dataField="Population_Urban"
+      format="percent">
+    </dxi-column>
+  </dxi-column>
+  <dxi-column caption="Nominal GDP">
+    <dxi-column
+      caption="Total, mln $"
+      dataField="GDP_Total"
+      format="fixedPoint"
+      sortOrder="desc">
+    </dxi-column>
+    <dxi-column caption="By Sector">
+      <dxi-column
+        caption="Agriculture"
+        [width]="95"
+        dataField="GDP_Agriculture">
+        <dxo-format
+          type="percent"
+          [precision]="1">
+        </dxo-format>
+      </dxi-column>
+      <dxi-column
+        caption="Industry"
+        [width]="80"
+        dataField="GDP_Industry">
+        <dxo-format
+          type="percent"
+          [precision]="1">
+        </dxo-format>
+      </dxi-column>
+      <dxi-column
+        caption="Services"
+        [width]="85"
+        dataField="GDP_Services">
+        <dxo-format
+          type="percent"
+          [precision]="1">
+        </dxo-format>
+      </dxi-column>
+    </dxi-column>
+  </dxi-column>
+</dx-data-grid>

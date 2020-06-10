@@ -1,0 +1,43 @@
+<dx-chart
+    id="chart"
+    palette="vintage"
+    [dataSource]="populationData"
+    title="Evolution of Population by Continent">
+    <dxi-series valueField="africa" name="Africa"></dxi-series>
+    <dxi-series valueField="asia" name="Asia"></dxi-series>
+    <dxi-series valueField="europe" name="Europe"></dxi-series>
+    <dxi-series valueField="latinamerica" name="Latin America & Caribbean"></dxi-series>
+    <dxi-series valueField="northamerica" name="Northern America"></dxi-series>
+    <dxi-series valueField="oceania" name="Oceania"></dxi-series>
+    <dxi-series
+        axis="total"
+        type="spline"
+        valueField="total"
+        name="Total"
+        color="#008fd8">
+    </dxi-series>
+    <dxo-common-series-settings
+        argumentField="year"
+        type="fullstackedbar">
+    </dxo-common-series-settings>
+    <dxi-value-axis>
+        <dxo-grid [visible]="true"></dxo-grid>
+    </dxi-value-axis>
+    <dxi-value-axis
+        name="total"
+        position="right">
+        <dxo-grid [visible]="true"></dxo-grid>
+        <dxo-title text="Total Population, billions"></dxo-title>
+    </dxi-value-axis>
+    <dxo-legend
+        verticalAlignment="bottom"
+        horizontalAlignment="center">
+    </dxo-legend>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-tooltip
+        [enabled]="true"
+        [shared]="true"
+        [customizeTooltip]="customizeTooltip">
+        <dxo-format type="largeNumber" [precision]="1"></dxo-format>
+    </dxo-tooltip>
+</dx-chart>

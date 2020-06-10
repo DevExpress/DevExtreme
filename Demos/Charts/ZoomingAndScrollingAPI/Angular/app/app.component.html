@@ -1,0 +1,27 @@
+<dx-chart #zoomedChart
+    palette="Harmony Light"
+    [dataSource]="zoomingData">
+    <dxi-series argumentField="arg" valueField="y1"></dxi-series>
+    <dxi-series argumentField="arg" valueField="y2"></dxi-series>
+    <dxi-series argumentField="arg" valueField="y3"></dxi-series>
+    <dxo-common-series-settings>
+        <dxo-point [size]="7"></dxo-point>
+    </dxo-common-series-settings>
+    <dxo-legend [visible]="false"></dxo-legend>
+    <dxo-argument-axis
+        [visualRange]="visualRange">
+    </dxo-argument-axis>
+</dx-chart>
+<dx-range-selector
+    [dataSource]="zoomingData"
+    [(value)]="visualRange">
+    <dxo-size [height]="120"></dxo-size>
+    <dxo-margin [left]="10"></dxo-margin>
+    <dxo-scale [minorTickCount]="1"></dxo-scale>
+    <dxo-behavior callValueChanged="onMoving"></dxo-behavior>
+    <dxo-chart palette="Harmony Light">
+        <dxi-series argumentField="arg" valueField="y1"></dxi-series>
+        <dxi-series argumentField="arg" valueField="y2"></dxi-series>
+        <dxi-series argumentField="arg" valueField="y3"></dxi-series>
+    </dxo-chart>
+</dx-range-selector>

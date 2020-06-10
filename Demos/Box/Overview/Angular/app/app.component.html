@@ -1,0 +1,104 @@
+<dx-box
+    direction="row"
+    width="100%"
+    [height]="75">
+    <dxi-item
+        class="rect demo-dark"
+        [ratio]="1">
+        ratio = 1
+    </dxi-item>
+    <dxi-item
+        class="rect demo-light"
+        [ratio]="2">
+        ratio = 2
+    </dxi-item>
+    <dxi-item
+        class="rect demo-dark"
+        [ratio]="1">
+        ratio = 1
+    </dxi-item>
+</dx-box>
+<br>
+<dx-box
+    direction="row"
+    width="100%"
+    [height]="75">
+    <dxi-item
+        class="rect demo-dark"
+        [ratio]="0"
+        [baseSize]="150">
+        150px
+    </dxi-item>
+    <dxi-item
+        class="demo-light"
+        [ratio]="1">
+        <dx-box
+            direction="row"
+            width="100%"
+            [height]="75"
+            align="center"
+            crossAlign="center">
+            <dxi-item
+                [ratio]="0"
+                [baseSize]="50">
+                <div class="small"></div>
+            </dxi-item>
+            <dxi-item
+                [ratio]="0"
+                [baseSize]="50">
+                <div class="small"></div>
+            </dxi-item>
+            <dxi-item
+                [ratio]="0"
+                [baseSize]="50">
+                <div class="small"></div>
+             </dxi-item>
+        </dx-box>
+    </dxi-item>
+    <dxi-item
+        class="rect demo-dark"
+        [ratio]="0"
+        baseSize="10%">
+        10%
+    </dxi-item>
+</dx-box>
+<br>
+<dx-box
+    direction="col"
+    width="100%"
+    [height]="250">
+    <dxi-item
+        class="rect demo-dark header"
+        [ratio]="1">
+        Header
+    </dxi-item>
+    <dxi-item
+        [ratio]="2"
+        [baseSize]="0">
+        <dx-box
+            direction="row"
+            width="100%"
+            [height]="125">
+            <dxi-item
+                class="rect demo-dark"
+                [ratio]="1">
+                Left Bar
+            </dxi-item>
+            <dxi-item
+                class="rect demo-light"
+                [ratio]="1">
+                Content
+            </dxi-item>
+            <dxi-item
+                class="rect demo-dark"
+                [ratio]="1">
+                Right Bar
+            </dxi-item>
+        </dx-box>
+    </dxi-item>
+    <dxi-item
+        class="rect demo-dark footer"
+        [ratio]="1">
+        Footer
+    </dxi-item>
+</dx-box>

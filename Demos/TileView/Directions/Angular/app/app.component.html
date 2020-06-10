@@ -1,0 +1,25 @@
+<dx-tile-view
+    #tileView
+    [height]="390"
+    [baseItemHeight]="120"
+    [baseItemWidth]="185"
+    width="100%"
+    [itemMargin]="10"
+    direction="horizontal">
+    <dxi-item
+        *ngFor="let home of homes"
+        [widthRatio]="home.widthRatio"
+        [heightRatio]="home.heightRatio">
+        <div class="image" [style.background-image]="'url(' + home.ImageSrc + ')'"></div>
+    </dxi-item>
+</dx-tile-view>
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <span>Direction</span> 
+        <dx-select-box
+            [items]="['horizontal', 'vertical']"
+            [(value)]="tileView.direction">
+        </dx-select-box>
+    </div>
+</div>        

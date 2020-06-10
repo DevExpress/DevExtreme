@@ -1,0 +1,1 @@
+This demo illustrates how to&nbsp;customize bar width to&nbsp;meet specific app requirements.

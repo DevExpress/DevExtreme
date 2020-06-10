@@ -1,0 +1,24 @@
+<dx-funnel
+    id="pyramid"
+    palette="Harmony light"
+    [dataSource]="dataSource"
+    argumentField="level"
+    valueField="count"
+    [inverted]="true"
+    algorithm="dynamicHeight"
+    [sortData]="false">
+    <dxo-title text="Team Composition">
+        <dxo-margin [bottom]="30"></dxo-margin>
+    </dxo-title>
+    <dxo-tooltip [enabled]="true"></dxo-tooltip>
+    <dxo-item>
+        <dxo-border [visible]="true"></dxo-border>
+    </dxo-item>
+    <dxo-legend [visible]="true"></dxo-legend>
+    <dxo-label 
+        visible="true"
+        horizontalAlignment="left"
+        backgroundColor="none">
+        <dxo-font [size]="16"></dxo-font>
+    </dxo-label>
+</dx-funnel>

@@ -1,0 +1,1 @@
+In&nbsp;this example, the **DataGrid** widget displays data stored in&nbsp;an&nbsp;in-memory array. Pass the required array directly to&nbsp;the **dataSource** option to&nbsp;bind it&nbsp;to&nbsp;the **DataGrid**.

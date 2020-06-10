@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script src="../../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.light.css" />
+    <script src="../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
+    <script src="../../../../node_modules/underscore/underscore.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="index.js"></script>
+</head>
+<body class="dx-viewport">
+    <div class="demo-container">
+        <div class="left">
+            <div class="list">
+                <script type="text/html" id="list-template">
+                    <div>
+                        <div class="hotel">
+                            <div class="name"><%= Hotel_Name %></div>
+                            <div class="address"><%= Postal_Code + ", " + Address %></div>
+                            <div class="type <%= Hotel_Class.toLowerCase() %>"></div>
+                        </div>
+                        <div class="price-container">
+                            <div class="price">$<%= Price %></div>
+                            <div class="caption">per<br/>night</div>
+                        </div>
+                    </div>
+                </script>
+            </div>
+        </div>
+        <div class="right">
+            <div class="header">
+                <div class="name-container">
+                    <div class="name"></div>
+                    <div class="type"></div>
+                </div>
+                <div class="price-container">
+                    <div class="price"></div>
+                    <div class="caption">per<br/>night</div>
+                </div>
+            </div>
+            <div class="tile">
+                <script type="text/html" id="tile-template">
+                    <div class="tile-image" style="background-image: url(<%= '../../../../images/hotels/' + FileName %>);"></div>
+                </script>
+            </div>
+            <div class="address"></div>
+            <div class="description"></div>
+        </div>
+    </div>
+</body>
+</html>

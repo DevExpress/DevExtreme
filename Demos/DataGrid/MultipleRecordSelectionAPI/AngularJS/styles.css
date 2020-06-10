@@ -1,0 +1,24 @@
+#grid {
+    position: relative;
+}
+
+#grid-container {
+    margin-top: 10px;
+}
+
+#select-prefix {
+    width: 150px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.selected-data {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: rgba(191, 191, 191, 0.15);
+}
+
+.selected-data .caption {
+    font-weight: bold;
+    font-size: 115%;
+}

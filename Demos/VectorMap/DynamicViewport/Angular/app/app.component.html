@@ -1,0 +1,29 @@
+<dx-vector-map 
+    id="vector-map" #vectorMap
+    [bounds]="viewportData[0].coordinates" 
+    (onZoomFactorChanged)="zoomChanged($event)" 
+    (onCenterChanged)="centerChanged($event)">
+    <dxi-layer [dataSource]="worldMap"></dxi-layer>
+</dx-vector-map>
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <span>Continent</span>
+        <dx-select-box 
+            [dataSource]="viewportData" 
+            [width]="210" 
+            displayExpr="continent" 
+            valueExpr="coordinates" 
+            [(value)]="vectorMap.bounds"></dx-select-box>
+
+    </div>
+    <div class="option">
+        <span>Zoom factor</span>
+        <dx-text-box [value]="zoomFactorValue" [readOnly]="true" [width]="210">
+        </dx-text-box>
+    </div>
+    <div class="option">
+        <span>Center</span>
+        <dx-text-box [value]="centerValue" [readOnly]="true" [width]="210"></dx-text-box>
+    </div>
+</div>

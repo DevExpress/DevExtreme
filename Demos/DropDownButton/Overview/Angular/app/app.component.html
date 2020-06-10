@@ -1,0 +1,113 @@
+<div class="dx-fieldset">
+<div class="dx-fieldset-header">Single usage</div>
+<div class="dx-field">
+	<div class="dx-field-label">
+		Custom static text
+	</div>
+	<div class="dx-field-value">
+		<dx-drop-down-button
+			text="Download Trial"
+			[dropDownOptions]="{ width: 230 }"
+			icon="save"
+			[items]="downloads"
+			(onItemClick)="onItemClick($event)"
+		></dx-drop-down-button>
+	</div>
+</div>
+
+<div class="dx-field">
+	<div class="dx-field-label">
+		Custom main button action
+	</div>
+	<div class="dx-field-value">
+		<dx-drop-down-button
+			[splitButton]="true"
+			[useSelectMode]="false"
+			text="Sandra Johnson"
+			icon="../../../../images/gym/coach-woman.png"
+			[items]="profileSettings"
+			displayExpr="name"
+			keyExpr="id"
+			(onButtonClick)="onButtonClick($event)"
+			(onItemClick)="onItemClick($event)"
+		></dx-drop-down-button>
+	</div>
+</div>
+</div>
+
+<div class="dx-fieldset">
+	<div class="dx-fieldset-header">Usage in a toolbar</div>
+	<div class="dx-field">
+		<dx-toolbar>
+			<dxi-item
+				location="before"
+				widget="dxDropDownButton"
+				[options]="{
+					items: alignments,
+					displayExpr: 'name',
+					keyExpr: 'value',
+					selectedItemKey: 'justify',
+					width: 125,
+					stylingMode: 'text',
+					useSelectMode: true,
+					onSelectionChanged: onAlignmentChanged
+				}">
+			</dxi-item>
+
+			<dxi-item
+				location="before"
+				widget="dxDropDownButton"
+				[options]="{
+					onInitialized: onColorPickerInit,
+					items: colors,
+					icon: 'square',
+					stylingMode: 'text',
+					dropDownContentTemplate: 'colorpicker'
+				}">
+			</dxi-item>
+
+			<dxi-item
+				location="before"
+				widget="dxDropDownButton"
+				[options]="{
+					stylingMode: 'text',
+					displayExpr: 'name',
+					keyExpr: 'value',
+					useSelectMode: true,
+					items: fontSizes,
+					selectedItemKey: 14,
+					onSelectionChanged: onFontSizeChanged,
+					itemTemplate: 'fontItem'
+				}">
+			</dxi-item>
+
+			<dxi-item
+				location="before"
+				widget="dxDropDownButton"
+				[options]="{
+					stylingMode: 'text',
+					icon: 'indent',
+					displayExpr: 'name',
+					keyExpr: 'value',
+					useSelectMode: true,
+					items: lineHeights,
+					selectedItemKey: 1.35,
+					onSelectionChanged: onLineHeightChanged
+				}">
+			</dxi-item>
+
+			<div *dxTemplate="let data of 'fontItem'" [style.fontSize]="data.value + 'px'">
+				{{data.name}}
+			</div>
+
+			<div *dxTemplate="let data of 'colorpicker'">
+				<div class="custom-color-picker">
+					<i *ngFor="let iconColor of colors" class="color dx-icon dx-icon-square" [ngClass]="{ 'dx-theme-text-color': !iconColor }" [style.color]="iconColor" (click)="onColorClick(iconColor)"></i>
+				</div>
+			</div>
+		</dx-toolbar>
+	</div>
+	<div class="dx-field">
+		<p id="text" [style.fontSize]="fontSize + 'px'" [style.lineHeight]="lineHeight" [style.color]="color" [style.textAlign]="alignment">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+	</div>
+</div>

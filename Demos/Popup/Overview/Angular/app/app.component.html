@@ -1,0 +1,45 @@
+<div id="container">
+    <h1>Employees</h1>
+    <ul>
+        <li *ngFor="let employee of employees">
+            <img [src]="employee.Picture"/><br/>
+            <i>{{employee.FirstName}} {{employee.LastName}}</i><br/>
+            <dx-button
+                class="button-info"
+                text="Details"
+                (onClick)="showInfo(employee)">
+            </dx-button>
+        </li>
+    </ul>
+    <dx-popup
+        [width]="300"
+        [height]="250"
+        [showTitle]="true"
+        title="Information"
+        [dragEnabled]="false"
+        [closeOnOutsideClick]="true"
+        [(visible)]="popupVisible">
+        <div *dxTemplate="let data of 'content'">
+            <p>
+                Full Name:
+                <span>{{currentEmployee.FirstName}} {{currentEmployee.LastName}}</span>
+            </p>
+            <p>
+                Birth Date:
+                <span>{{currentEmployee.BirthDate}}</span>
+            </p>
+            <p>
+                Address:
+                <span>{{currentEmployee.Address}}</span>
+            </p>
+            <p>
+                Hire Date:
+                <span>{{currentEmployee.HireDate}}</span>
+            </p>
+            <p>
+                Position:
+                <span>{{currentEmployee.Position}}</span>
+            </p>
+        </div>
+    </dx-popup>
+</div>

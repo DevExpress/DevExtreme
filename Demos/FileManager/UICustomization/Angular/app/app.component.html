@@ -1,0 +1,54 @@
+<dx-file-manager id="fileManager"
+    [fileSystemProvider]="fileItems"
+    (onContextMenuItemClick)="onItemClick($event)"
+    height="450">
+    <dxo-permissions
+        create="true"
+        delete="true"
+        rename="true"
+        download="true">
+    </dxo-permissions>
+    <dxo-item-view [showParentFolder]="false">
+        <dxo-details>
+            <dxi-column dataField="thumbnail"></dxi-column>
+            <dxi-column dataField="name"></dxi-column>
+            <dxi-column dataField="category" caption="Category" width="95"></dxi-column>
+            <dxi-column dataField="dateModified"></dxi-column>
+            <dxi-column dataField="size"></dxi-column>
+        </dxo-details>
+    </dxo-item-view>
+    <dxo-toolbar>
+        <dxi-item name="showNavPane" visible="true"></dxi-item>
+        <dxi-item name="separator"></dxi-item>
+        <dxi-item name="create"></dxi-item>
+        <dxi-item widget="dxMenu" location="before" [options]="newFileMenuOptions"></dxi-item>
+        <dxi-item name="refresh"></dxi-item>
+        <dxi-item name="separator" location="after"></dxi-item>
+        <dxi-item name="switchView"></dxi-item>
+
+        <dxi-file-selection-item name="rename"></dxi-file-selection-item>
+        <dxi-file-selection-item name="separator"></dxi-file-selection-item>
+        <dxi-file-selection-item name="delete"></dxi-file-selection-item>
+        <dxi-file-selection-item name="separator"></dxi-file-selection-item>
+        <dxi-file-selection-item widget="dxMenu" location="before" [options]="changeCategoryMenuOptions"></dxi-file-selection-item>
+        <dxi-file-selection-item name="refresh"></dxi-file-selection-item>
+        <dxi-file-selection-item name="clearSelection"></dxi-file-selection-item>
+    </dxo-toolbar>
+    <dxo-context-menu>
+        <dxi-item name="create"></dxi-item>
+        <dxi-item text="Create new file" icon="plus">
+            <dxi-item text="Text Document" [options]="{ extension: '.txt' }"></dxi-item>
+            <dxi-item text="RTF Document" [options]="{ extension: '.rtf' }"></dxi-item>
+            <dxi-item text="Spreadsheet" [options]="{ extension: '.xls' }"></dxi-item>
+        </dxi-item>
+        <dxi-item name="rename" beginGroup="true"></dxi-item>
+        <dxi-item name="delete"></dxi-item>
+        <dxi-item text="Category" icon="tags" beginGroup="true">
+            <dxi-item text="Work" [options]="{ category: 'Work' }"></dxi-item>
+            <dxi-item text="Important" [options]="{ category: 'Important' }"></dxi-item>
+            <dxi-item text="Home" [options]="{ category: 'Home' }"></dxi-item>
+            <dxi-item text="None" [options]="{ category: '' }"></dxi-item>
+        </dxi-item>
+        <dxi-item name="refresh"></dxi-item>
+    </dxo-context-menu>
+</dx-file-manager>

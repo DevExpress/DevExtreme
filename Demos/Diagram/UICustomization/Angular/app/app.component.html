@@ -1,0 +1,36 @@
+<dx-diagram #diagram id="diagram" (onCustomCommand)="onCustomCommand($event)">
+    <dxo-context-menu [enabled]="true" [commands]='["bringToFront", "sendToBack", "lock", "unlock"]'>
+    </dxo-context-menu>
+    <dxo-context-toolbox [enabled]="true" category="flowchart">
+    </dxo-context-toolbox>
+    <dxo-properties-panel visibility="visible">
+        <dxi-tab>
+            <dxi-group title="Page Properties" [commands]='["pageSize","pageOrientation","pageColor"]'></dxi-group>
+        </dxi-tab>
+    </dxo-properties-panel>
+    <dxo-history-toolbar [visible]="false">
+    </dxo-history-toolbar>
+    <dxo-view-toolbar [visible]="true">
+    </dxo-view-toolbar>
+    <dxo-main-toolbar [visible]="true">
+        <dxi-command name="undo"></dxi-command>
+        <dxi-command name="redo"></dxi-command>
+        <dxi-command name="separator"></dxi-command>
+        <dxi-command name="fontName"></dxi-command>
+        <dxi-command name="fontSize"></dxi-command>
+        <dxi-command name="separator"></dxi-command>
+        <dxi-command name="bold"></dxi-command>
+        <dxi-command name="italic"></dxi-command>
+        <dxi-command name="underline"></dxi-command>
+        <dxi-command name="separator"></dxi-command>
+        <dxi-command name="fontColor"></dxi-command>
+        <dxi-command name="lineColor"></dxi-command>
+        <dxi-command name="fillColor"></dxi-command>
+        <dxi-command name="separator"></dxi-command>
+        <dxi-command name="clear" icon="clearsquare" text="Clear Diagram"></dxi-command>
+    </dxo-main-toolbar>
+    <dxo-toolbox visibility="visible">
+        <dxi-group category="general" title="General"></dxi-group>
+        <dxi-group category="flowchart" title="Flowchart" [expanded]="true"></dxi-group>
+    </dxo-toolbox>
+</dx-diagram>

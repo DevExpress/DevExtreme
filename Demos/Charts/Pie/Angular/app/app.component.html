@@ -1,0 +1,19 @@
+<dx-pie-chart
+    id="pie"
+    title="Area of Countries"
+    palette="bright"
+    [dataSource]="areas"
+    (onPointClick)="pointClickHandler($event)"
+    (onLegendClick)="legendClickHandler($event)">
+    <dxi-series
+        argumentField="country"
+        valueField="area">
+        <dxo-label [visible]="true">
+            <dxo-connector
+                [visible]="true"
+                [width]="1"></dxo-connector>
+        </dxo-label>
+    </dxi-series>
+    <dxo-size [width]="500"></dxo-size>
+    <dxo-export [enabled]="true"></dxo-export>
+</dx-pie-chart>

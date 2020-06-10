@@ -1,0 +1,30 @@
+<dx-chart
+    id="chart"
+    palette="violet"
+    title="Annual Inflation Rate in 2010 and 2011"
+    [dataSource]="inflationData">
+    <dxo-common-series-settings
+        argumentField="date"
+        type="rangeArea"></dxo-common-series-settings>
+    <dxi-value-axis
+        [tickInterval]="0.5"
+        [valueMarginsEnabled]="false"
+        [visualRange]="{startValue:0.5,endValue:4}">
+        <dxo-label
+            [customizeText]="customizeValueAxisText">
+            <dxo-format
+                type="fixedPoint"
+                [precision]="2"></dxo-format>
+        </dxo-label>
+    </dxi-value-axis>
+    <dxo-argument-axis [valueMarginsEnabled]="false">
+        <dxo-label format="month"></dxo-label>
+    </dxo-argument-axis>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-legend
+        [visible]="false"></dxo-legend>
+    <dxi-series
+        rangeValue1Field="val2010"
+        rangeValue2Field="val2011"
+        name="2010 - 2011"></dxi-series>
+</dx-chart>

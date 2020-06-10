@@ -1,0 +1,12 @@
+::ng-deep #employeeInfo .employeePhoto {
+    height: 100px;
+    float: left;
+    padding: 20px;
+}
+::ng-deep #employeeInfo .employeeNotes {
+    padding-top: 20px;
+    text-align: justify;
+}
+::ng-deep .dark #employeeInfo .employeeNotes {
+    color: rgb(181, 181, 181);
+}

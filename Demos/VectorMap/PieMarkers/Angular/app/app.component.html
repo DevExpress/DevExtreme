@@ -1,0 +1,18 @@
+<dx-vector-map 
+    id="vector-map" 
+    [bounds]="[-180, 85, 180, -60]">
+    <dxo-tooltip 
+        [enabled]="true" 
+        [customizeTooltip]="customizeTooltip"></dxo-tooltip>
+    <dxi-layer 
+        [dataSource]="worldMap" 
+        [hoverEnabled]="false"></dxi-layer>
+    <dxi-layer 
+        [dataSource]="markers" 
+        name="pies"
+        elementType="pie" 
+        dataField="values"></dxi-layer>
+    <dxi-legend [customizeText]="customizeText">
+        <dxo-source layer="pies" grouping="color"></dxo-source>
+    </dxi-legend>
+</dx-vector-map>

@@ -1,0 +1,31 @@
+<dx-action-sheet
+    #actionSheet
+    title="Choose action"
+    [items] = "commands"
+    [visible]="false"
+    [showTitle]="true"
+    [showCancelButton]="true"
+    (onCancelClick)="showNotify('Cancel')"
+    (onItemClick)="showNotify($event.itemData.text)"
+>
+</dx-action-sheet>
+<dx-button
+    class="button"
+    text="Click to show Action Sheet"
+    (onClick)="actionSheet.visible = true"
+></dx-button>
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">                    
+        <span>Show title</span>
+        <dx-switch 
+            [(value)]="actionSheet.showTitle"
+        ></dx-switch>
+    </div>
+    <div class="option">
+        <span>Show cancel button</span>
+        <dx-switch
+            [(value)]="actionSheet.showCancelButton"
+        ></dx-switch>
+    </div>
+</div>

@@ -1,0 +1,42 @@
+<div id="data-grid-demo">
+    <dx-data-grid 
+        id="gridContainer"
+        [dataSource]="dataSource"
+        keyExpr="ID"
+        [showBorders]="true">
+        
+        <dxo-paging [enabled]="false"></dxo-paging>
+        <dxo-editing 
+            mode="form"
+            [allowUpdating]="true">
+        </dxo-editing>
+        
+        <dxi-column dataField="Prefix" caption="Title" [width]="70"></dxi-column>
+        <dxi-column dataField="FirstName"></dxi-column>
+        <dxi-column dataField="LastName"></dxi-column>
+        <dxi-column dataField="Position" [width]="170"></dxi-column>
+        <dxi-column
+            dataField="StateID"
+            caption="State"
+            [width]="125">         
+            <dxo-lookup
+                [dataSource]="states"
+                displayExpr="Name"
+                valueExpr="ID">
+            </dxo-lookup>
+        </dxi-column>
+        <dxi-column
+            dataField="BirthDate"
+            dataType="date">
+        </dxi-column>
+        <dxi-column
+            dataField="Notes"
+            [visible]="false">
+            <dxo-form-item
+                [colSpan]="2"
+                editorType="dxTextArea"
+                [editorOptions]="{ height: 100 }">
+            </dxo-form-item>
+        </dxi-column>
+    </dx-data-grid>
+</div>

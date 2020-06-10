@@ -1,0 +1,112 @@
+{
+    "page": {
+        "width": 8391,
+        "height": 11907,
+        "pageWidth": 8391,
+        "pageHeight": 11906,
+        "pageLandscape": false,
+        "gridSize": 180,
+        "snapToGrid": true
+    },
+    "connectors": [
+        {
+            "key": "4",
+            "locked": false,
+            "zIndex": 0,
+            "points": [
+                {
+                    "x": 4140,
+                    "y": 1800
+                },
+                {
+                    "x": 4140,
+                    "y": 2880
+                }
+            ],
+            "beginItemKey": "0",
+            "beginConnectionPointIndex": 2,
+            "endItemKey": "1",
+            "endConnectionPointIndex": 0
+        },
+        {
+            "key": "5",
+            "locked": false,
+            "zIndex": 0,
+            "points": [
+                {
+                    "x": 4140,
+                    "y": 1800
+                },
+                {
+                    "x": 1620,
+                    "y": 2880
+                }
+            ],
+            "beginItemKey": "0",
+            "beginConnectionPointIndex": 2,
+            "endItemKey": "2",
+            "endConnectionPointIndex": 0
+        },
+        {
+            "key": "6",
+            "locked": false,
+            "zIndex": 0,
+            "points": [
+                {
+                    "x": 4140,
+                    "y": 1800
+                },
+                {
+                    "x": 6660,
+                    "y": 2880
+                }
+            ],
+            "beginItemKey": "0",
+            "beginConnectionPointIndex": 2,
+            "endItemKey": "3",
+            "endConnectionPointIndex": 0
+        }
+    ],
+    "shapes": [
+        {
+            "key": "0",
+            "locked": false,
+            "zIndex": 0,
+            "type": "employee1",
+            "x": 3420,
+            "y": 720,
+            "width": 1440,
+            "height": 1080
+        },
+        {
+            "key": "1",
+            "locked": false,
+            "zIndex": 0,
+            "type": "employee2",
+            "x": 3420,
+            "y": 2880,
+            "width": 1440,
+            "height": 1080
+        },
+        {
+            "key": "2",
+            "locked": false,
+            "zIndex": 0,
+            "type": "employee3",
+            "x": 900,
+            "y": 2880,
+            "width": 1440,
+            "height": 1080
+        },
+        {
+            "key": "3",
+            "locked": false,
+            "zIndex": 0,
+            "type": "employee4",
+            "x": 5940,
+            "y": 2880,
+            "width": 1440,
+            "height": 1080
+        }
+    ]
+}

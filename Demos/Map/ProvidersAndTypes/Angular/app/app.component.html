@@ -1,0 +1,23 @@
+<dx-map 
+    #map    
+    center="Brooklyn Bridge,New York,NY" 
+    [zoom]="14" 
+    [height]="400" 
+    width="100%" 
+    provider="bing"
+    [key]="keys"
+    [type]="mapTypes[0].key">
+</dx-map>
+
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <span>Map Type</span>
+        <dx-select-box 
+            [dataSource]="mapTypes" 
+            displayExpr="name" 
+            valueExpr="key" 
+            [(value)]="map.type">
+        </dx-select-box>
+    </div>
+</div>

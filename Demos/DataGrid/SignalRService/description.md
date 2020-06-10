@@ -1,0 +1,1 @@
+This example demonstrates real-time data update in&nbsp;the **DataGrid** widget bound to&nbsp;a [SignalR](https://docs.microsoft.com/en-us/aspnet/signalr/overview/getting-started/introduction-to-signalr) server. Note that data used in&nbsp;this demo is&nbsp;for demonstration purposes only.

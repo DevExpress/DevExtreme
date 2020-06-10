@@ -1,0 +1,52 @@
+::ng-deep .form>h4 {
+    margin-bottom: 20px;
+}
+
+::ng-deep .form>div,
+::ng-deep #treeview {
+    display: inline-block;
+    vertical-align: top;
+}
+
+::ng-deep .selected-container {
+    padding: 20px;
+    margin-left: 20px;    
+    background-color: rgba(191, 191, 191, 0.15);
+    font-size: 115%;
+    font-weight: bold;
+}
+
+::ng-deep #selected-employees {
+    margin-top: 20px;
+}
+
+::ng-deep .dx-list-item-content {
+    padding-left: 0;
+}
+
+::ng-deep .options {
+    padding: 20px;
+    background-color: rgba(191, 191, 191, 0.15);
+    margin-top: 20px;
+}
+
+::ng-deep .caption {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+::ng-deep .option {
+    width: 24%;
+    display: inline-block;
+    margin-top: 10px;
+    margin-right: 5px;
+    box-sizing: border-box;
+}
+
+::ng-deep .recursive-option {
+    padding-left: 10px;
+}
+
+::ng-deep .option:last-of-type {
+    margin-right: 0px;
+}

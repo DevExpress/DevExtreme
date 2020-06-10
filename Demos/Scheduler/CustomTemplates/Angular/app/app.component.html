@@ -1,0 +1,63 @@
+<div class="long-title">
+    <h3>DXCinema Show Times</h3>
+</div>
+<dx-scheduler
+    id="scheduler"
+    [dataSource]="data"
+    [views]="['day', 'week', 'timelineDay']"
+    currentView="day"
+    [firstDayOfWeek]="0"
+    [startDayHour]="9"
+    [endDayHour]="23"
+    [showAllDayPanel]="false"
+    [groups]="['theatreId']"
+    [currentDate]="currentDate"
+    [crossScrollingEnabled]="true"
+    [cellDuration]="20"
+    [height]="600"
+    appointmentTemplate="appointment-template"
+    appointmentTooltipTemplate="tooltip-template"
+    (onAppointmentFormOpening)="onAppointmentFormOpening($event)">
+
+    <dxo-editing [allowAdding]="false"></dxo-editing>
+
+    <dxi-resource
+        fieldExpr="movieId"
+        [useColorAsDefault]="true"
+        [dataSource]="moviesData">
+    </dxi-resource>
+
+    <dxi-resource
+        fieldExpr="theatreId"
+        [dataSource]="theatreData">
+    </dxi-resource>
+
+    <div *dxTemplate="let model of 'appointment-template'">
+        <div class='showtime-preview'>
+            <div>{{getMovieById(model.appointmentData.movieId).text}}</div>
+            <div>Ticket Price:
+                <strong>{{"$" + model.appointmentData.price}}</strong>
+            </div>
+            <div class='dropdown-appointment-dates'>
+                {{(model.appointmentData.startDate | date:'shortTime') + ' - ' + (model.appointmentData.endDate | date:'shortTime')}}
+            </div>
+        </div>
+    </div>
+
+    <div *dxTemplate="let model of 'tooltip-template'">
+        <div class='movie-tooltip'>
+            <img [src]="getMovieById(model.appointmentData.movieId).image" />
+            <div class='movie-info'>
+                <div class='movie-title'>
+                    {{getMovieById(model.appointmentData.movieId).text + ' (' + getMovieById(model.appointmentData.movieId).year + ')'}}
+                </div>
+                <div>
+                    {{'Director: ' + getMovieById(model.appointmentData.movieId).director}}
+                </div>
+                <div>
+                    {{'Duration: ' + getMovieById(model.appointmentData.movieId).duration + ' minutes'}}
+                </div>
+            </div>
+        </div>
+    </div>
+</dx-scheduler>

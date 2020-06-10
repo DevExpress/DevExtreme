@@ -1,0 +1,39 @@
+::ng-deep .widget-container {
+    margin-right: 320px;
+}
+::ng-deep #calendar-container {
+    margin: auto;
+}
+::ng-deep .dx-calendar-cell:not(.dx-calendar-other-month) .weekend,
+::ng-deep .dx-calendar-cell:not(.dx-calendar-other-month) .holyday {
+    text-shadow: none;
+    font-weight: bold;
+}
+::ng-deep .dx-calendar-cell:not(.dx-calendar-other-month) .weekend {
+    color: #3030FF;
+}
+::ng-deep .dx-state-disabled.dx-calendar .dx-calendar-cell:not(.dx-calendar-other-month) .weekend {
+    color: #8080FF;
+}
+::ng-deep .dx-calendar-cell:not(.dx-calendar-other-month) .holyday {
+    color: #FF3030;
+}
+::ng-deep .dx-state-disabled.dx-calendar .dx-calendar-cell:not(.dx-calendar-other-month) .holyday {
+    color: #FF8080;
+}
+::ng-deep .options {
+    padding: 20px;
+    background-color: rgba(191, 191, 191, 0.15);
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 260px;
+}
+::ng-deep .caption {
+    font-weight: 500;
+    font-size: 18px;
+}
+::ng-deep .option {
+    margin-top: 10px;
+}

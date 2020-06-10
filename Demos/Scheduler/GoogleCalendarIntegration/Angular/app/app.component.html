@@ -1,0 +1,17 @@
+<div class="long-title">
+    <h3>Tasks for Employees (USA Office)</h3>
+</div>
+<dx-scheduler
+    [dataSource]="dataSource"
+    [editing]="false"
+    startDateExpr="start.dateTime"
+    endDateExpr="end.dateTime"
+    textExpr="summary"
+    [startDayHour]="7"
+    timeZone="America/Los_Angeles"
+    [showAllDayPanel]="false"
+    [views]='["day", "workWeek", "month"]'
+    currentView="workWeek"
+    [currentDate]="currentDate"
+    [height]="500">
+</dx-scheduler>

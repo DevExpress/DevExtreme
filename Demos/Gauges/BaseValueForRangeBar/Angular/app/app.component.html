@@ -1,0 +1,36 @@
+<div class="long-title">
+    <h3>Deviation from the Target (Horizontal and Vertical)</h3>
+</div>
+<div id="gauge-demo">
+    <dx-circular-gauge
+        id="c1"
+        [value]="20">
+        <dxo-value-indicator
+            type="rangebar"
+            [baseValue]="0">
+        </dxo-value-indicator>
+        <dxo-geometry
+            [startAngle]="135"
+            [endAngle]="45">
+        </dxo-geometry>
+        <dxo-scale
+            [startValue]="45"
+            [endValue]="-45"
+            [tickInterval]="45">
+            <dxo-label [customizeText]="customizeText"></dxo-label>
+        </dxo-scale>
+    </dx-circular-gauge>
+
+    <dx-linear-gauge
+        id="c2"
+        [value]="-10">
+        <dxo-value-indicator [baseValue]="0"></dxo-value-indicator>
+        <dxo-geometry orientation="vertical"></dxo-geometry>
+        <dxo-scale
+            [startValue]="-45"
+            [endValue]="45"
+            [tickInterval]="45">
+            <dxo-label [customizeText]="customizeText"></dxo-label>
+        </dxo-scale>
+    </dx-linear-gauge>
+</div>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <script src="../../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.common.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.light.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.min.js"></script>
+    <script src="../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css"/>
+    <script src="index.js"></script>
+</head>
+<body class="dx-viewport">
+    <div class="demo-container">
+        <div id="chat-window">
+            <div class="message dx-theme-background-color">
+                <div class="photo">
+                    <img src="../../../../images/mentions/Kevin-Carter.png" />
+                </div>
+                <div class="name">
+                    Kevin Carter
+                </div>
+                <div class="date">
+                    07/03/19 - 12:22AM
+                </div>
+                <div class="text">
+                    <span class="dx-mention" spellcheck="false"><span><span>@</span>John Heart</span></span> What experience do you have in this field?
+                </div>
+            </div>
+            <br />
+            <div class="message dx-theme-background-color">
+                <div class="photo">
+                    <img src="../../../../images/mentions/John-Heart.png" />
+                </div>
+                <div class="name">
+                    John Heart
+                </div>
+                <div class="date">
+                    07/03/19 - 12:25AM
+                </div>
+                <div class="text">
+                    I've been in the audio/video industry since 2001, and I've been the CEO of DevAv since 2009.
+                </div>
+            </div>
+            <br />
+            <div class="message dx-theme-background-color">
+                <div class="photo">
+                    <img src="../../../../images/mentions/Kevin-Carter.png" />
+                </div>
+                <div class="name">
+                    Kevin Carter
+                </div>
+                <div class="date">
+                    07/03/19 - 12:26AM
+                </div>
+                <div class="text">
+                    That's very interesting. <span class="dx-mention" spellcheck="false"><span><span>@</span>Olivia Peyton</span></span>, what do you think?
+                </div>
+            </div>
+        </div>
+        <div id="html-editor">
+            <p>
+                <span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="Kevin Carter"><span contenteditable="false"><span>@</span>Kevin Carter</span></span> I think John's expertise can be very valuable in our startup.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

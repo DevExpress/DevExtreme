@@ -1,0 +1,97 @@
+<div class="dx-fieldset">
+    <div class="dx-field">
+        <div class="dx-field-label">Date</div>
+        <div class="dx-field-value">
+            <dx-date-box
+                [value]="now"
+                type="date">
+            </dx-date-box>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-label">Time</div>
+        <div class="dx-field-value">
+            <dx-date-box
+                [value]="now"
+                type="time">
+            </dx-date-box>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-label">Date and time</div>
+        <div class="dx-field-value">
+            <dx-date-box
+                [value]="now"
+                type="datetime">
+            </dx-date-box>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-label">Custom format</div>
+        <div class="dx-field-value">
+            <dx-date-box
+                [value]="now"
+                displayFormat="EEEE, MMM dd">
+            </dx-date-box>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-label">Date picker</div>
+        <div class="dx-field-value">
+            <dx-date-box
+                [value]="now"
+                pickerType="rollers">
+            </dx-date-box>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-label">Clear button</div>
+        <div class="dx-field-value">
+            <dx-date-box
+                [value]="dateClear"
+                type="time"
+                [showClearButton]="true">
+            </dx-date-box>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-label">Disabled</div>
+        <div class="dx-field-value">
+            <dx-date-box
+                [value]="now"
+                type="datetime"
+                [disabled]="true">
+            </dx-date-box>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-label">Disable certain dates</div>
+        <div class="dx-field-value">
+            <dx-date-box
+                [value]="firstWorkDay2017"
+                type="date"
+                pickerType="calendar"
+                [disabledDates]="disabledDates">
+            </dx-date-box>
+        </div>
+    </div>
+</div>
+<div class="dx-fieldset">
+    <div class="dx-fieldset-header">Event Handling</div>
+    <div class="dx-field">
+        <div class="dx-field-label">Set Birthday</div>
+        <div class="dx-field-value">
+            <dx-date-box
+                applyValueMode="useButtons"
+                [(value)]="value"
+                [min]="min"
+                [max]="now">
+            </dx-date-box>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-value">
+            Your age is <div id="age">{{diffInDay}}</div>
+        </div>
+    </div>
+</div>

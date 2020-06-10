@@ -1,0 +1,40 @@
+<div>
+    <div class="long-title"><h3>Energy Production (GWh, 2016)</h3></div>
+    <div class="pies-container">
+        <dx-pie-chart *ngFor="let country of countries" class="pie"
+            sizeGroup="piesGroup"
+            [dataSource]="service.getData(country)"
+            [animation]="false"
+            resolveLabelOverlapping="shift"
+            type="doughnut"
+            centerTemplate="centerTemplate"
+            [innerRadius]="0.65">
+            <dxi-series 
+                argumentField="commodity"
+                valueField="total">
+                <dxo-label 
+                    backgroundColor="none"
+                    [visible]="true"
+                    format="fixedPoint"
+                    [customizeText]="customizeLabel"
+                    >
+                    <dxo-connector
+                        [visible]="true"
+                    ></dxo-connector>
+                </dxo-label>
+            </dxi-series>
+            <dxo-legend [visible]="false">
+            </dxo-legend>
+            <svg *dxTemplate="let pieChart of 'centerTemplate'">
+                <circle cx="100" cy="100" [attr.r]="pieChart.getInnerRadius()-6" fill="#eee"></circle>
+                <image attr.href="{{getImagePath(country)}}" x="70" y="58" width="60" height="40" /> 
+                <text text-anchor="middle" style="font-size: 18px" x="100" y="120" fill="#494949">
+                    <tspan x="100" >{{country}}</tspan>
+                    <tspan x="100" dy="20px" style="font-weight: 600">{{
+                    calculateTotal(pieChart) 
+                        }}</tspan>
+                </text>
+            </svg>
+        </dx-pie-chart>
+    </div>
+</div>

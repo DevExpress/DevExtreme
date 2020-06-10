@@ -1,0 +1,26 @@
+<dx-tree-map
+    [dataSource]="salesAmount"
+    title="Sales Amount by Product"
+    valueField="salesAmount"
+    [colorizer]="options">
+    <dxo-tooltip
+        [enabled]="true"
+        format="currency"
+        [customizeTooltip]="customizeTooltip"></dxo-tooltip>
+</dx-tree-map>
+
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <span>Colorization Type</span>
+        <dx-select-box
+            #selectbox
+            class="selectbox"
+            [items]="colorizationOptions"
+            [width]="200"
+            [(value)]="options"
+            displayExpr="name"
+            valueExpr="options">
+        </dx-select-box>
+     </div>   
+</div>

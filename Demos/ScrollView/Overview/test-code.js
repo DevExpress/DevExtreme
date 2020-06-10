@@ -1,0 +1,1 @@
+$(".demo-container").css("min-height", "450px");

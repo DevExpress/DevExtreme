@@ -1,0 +1,6 @@
+::ng-deep #pivotgrid {
+    margin-top: 20px;
+}
+::ng-deep .currency {
+    text-align: center;
+}

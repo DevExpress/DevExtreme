@@ -1,0 +1,38 @@
+<dx-chart
+    id="chart"
+    title="Damped Sine Wave"
+    [dataSource]="dataSource">
+    <dxi-pane  name="top"></dxi-pane>
+    <dxi-pane  name="bottom"></dxi-pane>
+    <dxi-series pane="top"></dxi-series>
+    <dxi-series pane="bottom"></dxi-series>
+    <dxo-common-axis-settings [endOnTick]="false">
+    </dxo-common-axis-settings>
+    <dxi-value-axis
+        title="Logarithmic Axis"
+        type="logarithmic"
+        pane="top"
+        [linearThreshold]="-3"
+    ></dxi-value-axis>
+    <dxi-value-axis
+        title="Linear Axis"
+        pane="bottom"
+    ></dxi-value-axis>
+    <dxo-tooltip
+        [enabled]="true"
+        format="exponential"
+    ></dxo-tooltip>
+    <dxo-crosshair
+        [enabled]="true">
+        <dxo-label [visible]="true">
+            <dxo-format
+                type="fixedPoint"
+                [precision]="2"
+            ></dxo-format>
+        </dxo-label>
+        <dxo-horizontal-line [visible]="false">
+        </dxo-horizontal-line>
+    </dxo-crosshair>
+    <dxo-legend [visible]="false">
+    </dxo-legend>
+</dx-chart>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script src="../../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.light.css" />
+    <script src="../../../../node_modules/angular/angular.min.js"></script>
+    <script src="../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="index.js"></script>
+</head>
+<body class="dx-viewport">
+    <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController" ng-class="{'dx-rtl': rtlEnabled}">
+        <div class="options" >
+            <div class="caption">Options</div>
+            <div class="dx-fieldset">
+                <div class="dx-field">
+                    <div class="dx-field-label">Language</div>
+                    <div class="dx-field-value">
+                        <div id="select-language" dx-select-box="{
+                            items: languages,
+                            bindingOptions: {
+                                value: 'selectBoxValue'
+                            }
+                        }"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="dx-fieldset">
+                <div class="dx-fieldset-header">
+                    <div dx-menu="{
+                        dataSource: continents,
+                        bindingOptions: {
+                            rtlEnabled: 'rtlEnabled',
+                            displayExpr: 'displayExpr'
+                        }
+                    }" dx-item-alias="continent"></div>
+                </div>
+                
+            </div>
+            <div class="dx-fieldset">
+                <div class="dx-field">
+                    <div class="dx-field-label">
+                        <div dx-tree-view="{
+                            dataSource: continents,
+                            width: 200,
+                            bindingOptions: {
+                                displayExpr: 'displayExpr',
+                                rtlEnabled: 'rtlEnabled' 
+                            }
+                        }"></div>
+                    </div>
+                    <div class="dx-field-value">
+                        <div dx-accordion="{
+                            dataSource: europeCountries,
+                            bindingOptions: {
+                                rtlEnabled: 'rtlEnabled',
+                                itemTitleTemplate: 'itemTitleTemplate',
+                                itemTemplate: 'itemTemplate'
+                            }
+                        }" dx-item-alias="country">
+                            <div data-options="dxTemplate: { name: 'arabic' }">
+                                <div>عاصمة: {{country.capitalAr}}</div>
+                                <div>عدد السكان: {{country.population}} نسمة</div>
+                                <div>المساحة: {{country.area}} كم<sup>2</sup></div>
+                            </div>
+
+                            <div data-options="dxTemplate: { name: 'english' }">
+                                <div>Capital: {{country.capitalEn}}</div>
+                                <div>Population: {{country.population}} people</div>
+                                <div>Area: {{country.area}} km<sup>2</sup></div>
+                            </div>
+
+                            <div data-options="dxTemplate: { name: 'arabicTitle' }">
+                                {{country.nameAr}}
+                            </div>
+
+                            <div data-options="dxTemplate: { name: 'englishTitle' }">
+                                {{country.nameEn}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

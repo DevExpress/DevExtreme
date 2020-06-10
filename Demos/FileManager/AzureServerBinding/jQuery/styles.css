@@ -1,0 +1,19 @@
+﻿#wrapper #file-manager {
+    visibility: hidden;
+}
+
+#wrapper #message-box {
+    display: none;
+}
+
+#wrapper.show-widget #file-manager {
+    visibility: visible;
+}
+
+#wrapper.show-message #file-manager {
+    display: none;
+}
+
+#wrapper.show-message #message-box {
+    display: block;
+}

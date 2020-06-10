@@ -1,0 +1,26 @@
+::ng-deep #chart-demo {
+    height: 460px;
+}
+
+::ng-deep .charts {
+    width: 820px;
+    margin: 0 auto;
+    height: 374px;
+    margin-bottom: 40px;
+    font-size: 0;
+}
+
+::ng-deep #chart, #pieChart{
+    width: 395px;
+    height: 100%;
+    display: inline-block;
+    vertical-align: top;
+}
+
+::ng-deep #chart {
+    margin-right: 30px;
+}
+
+::ng-deep .controls-pane {
+    text-align: center;
+}

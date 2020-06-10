@@ -1,0 +1,100 @@
+<div class="long-title">
+    <h3>Grades of Goods</h3>
+</div>
+<div id="gauge-demo">
+    <dx-circular-gauge
+        id="triangleMarker"
+        [value]="8"
+        [subvalues]="[2, 8]">
+        <dxo-subvalue-indicator
+            type="triangleMarker"
+            color="#8FBC8F">
+        </dxo-subvalue-indicator>
+        <dxo-geometry
+            [startAngle]="180"
+            [endAngle]="0">
+        </dxo-geometry>
+        <dxo-scale
+            [startValue]="0"
+            [endValue]="10"
+            [tickInterval]="1">
+        </dxo-scale>
+    </dx-circular-gauge>
+
+    <dx-circular-gauge
+        id="rectangleNeedle"
+        [value]="9"
+        [subvalues]="[2, 8]">
+        <dxo-subvalue-indicator
+            type="rectangleNeedle"
+            color="#9B870C">
+        </dxo-subvalue-indicator>
+        <dxo-geometry
+            [startAngle]="180"
+            [endAngle]="0">
+        </dxo-geometry>
+        <dxo-scale
+            [startValue]="0"
+            [endValue]="10"
+            [tickInterval]="1">
+        </dxo-scale>
+    </dx-circular-gauge>
+
+    <dx-circular-gauge
+        id="triangleNeedle"
+        [value]="5"
+        [subvalues]="[2, 8]">
+        <dxo-subvalue-indicator
+            type="triangleNeedle"
+            color="#779ECB">
+        </dxo-subvalue-indicator>
+        <dxo-geometry
+            [startAngle]="180"
+            [endAngle]="0">
+        </dxo-geometry>
+        <dxo-scale
+            [startValue]="0"
+            [endValue]="10"
+            [tickInterval]="1">
+        </dxo-scale>
+    </dx-circular-gauge>
+
+    <dx-circular-gauge
+        id="textCloud"
+        [value]="6"
+        [subvalues]="[2, 8]">
+        <dxo-subvalue-indicator
+            type="textCloud"
+            color="#f05b41">
+        </dxo-subvalue-indicator>
+        <dxo-geometry
+            [startAngle]="180"
+            [endAngle]="0">
+        </dxo-geometry>
+        <dxo-scale
+            [startValue]="0"
+            [endValue]="10"
+            [tickInterval]="1">
+        </dxo-scale>
+    </dx-circular-gauge>
+
+    <dx-circular-gauge
+        id="twoColorNeedle"
+        [value]="4"
+        [subvalues]="[2, 8]">
+        <dxo-subvalue-indicator
+            type="twoColorNeedle"
+            color="#779ECB"
+            secondColor="#734F96">
+        </dxo-subvalue-indicator>
+        <dxo-geometry
+            [startAngle]="180"
+            [endAngle]="0">
+        </dxo-geometry>
+        <dxo-scale
+            [startValue]="0"
+            [endValue]="10"
+            [tickInterval]="1">
+        </dxo-scale>
+    </dx-circular-gauge>
+</div>

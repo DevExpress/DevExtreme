@@ -1,0 +1,26 @@
+<dx-tree-map
+    id="treemap"
+    [dataSource]="getPopulationsByAge"
+    title="Population by Age Groups"
+    [layoutAlgorithm]="selectbox.value === 'custom' ? customAlgorithm : selectbox.value">
+    <dxo-colorizer
+        type="discrete"  
+        [colorizeGroups]="true"></dxo-colorizer>
+    <dxo-tooltip
+        [enabled]="true"
+        format="thousands"
+        [customizeTooltip]="customizeTooltip"></dxo-tooltip>
+</dx-tree-map>
+
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <span>Tiling Algorithm</span>
+        <dx-select-box
+			#selectbox
+			[items]="algorithms"
+			[width]="200"
+			[value]="algorithms[2]">
+		</dx-select-box>
+     </div>   
+</div>

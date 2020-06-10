@@ -1,0 +1,63 @@
+<div class="dx-fieldset">
+    <div class="dx-field">
+        <div class="dx-field-label">DropDownBox with embedded TreeView</div>
+        <div class="dx-field-value">
+            <dx-drop-down-box
+                [(value)]="treeBoxValue"
+                valueExpr="ID"
+                displayExpr="name"
+                placeholder="Select a value..."
+                [showClearButton]="true"
+                [dataSource]="treeDataSource"
+                (onValueChanged)="syncTreeViewSelection()"
+            >
+
+                <div *dxTemplate="let data of 'content'">
+                    <dx-tree-view
+                        [dataSource]="treeDataSource"
+                        dataStructure="plain"
+                        keyExpr="ID"
+                        parentIdExpr="categoryId"
+                        selectionMode="multiple"
+                        showCheckBoxesMode="normal"
+                        [selectNodesRecursive]="false"
+                        displayExpr="name"
+                        [selectByClick]="true"
+                        (onContentReady)="syncTreeViewSelection($event)"
+                        (onItemSelectionChanged)="treeView_itemSelectionChanged($event)"
+                    >
+                    </dx-tree-view>
+                </div>
+            </dx-drop-down-box>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-label">DropDownBox with embedded DataGrid</div>
+        <div class="dx-field-value">
+            <dx-drop-down-box
+                    [(value)]="gridBoxValue"
+                    valueExpr="ID"
+                    displayExpr="CompanyName"
+                    placeholder="Select a value..."
+                    [showClearButton]="true"
+                    [dataSource]="gridDataSource"
+            >
+
+                <div *dxTemplate="let data of 'content'">
+                    <dx-data-grid
+                            [dataSource]="gridDataSource"
+                            [columns]="['CompanyName', 'City', 'Phone']"
+                            [selection]="{ mode: 'multiple' }"
+                            [hoverStateEnabled]="true"
+                            [paging]="{ enabled: true, pageSize: 10 }"
+                            [filterRow]="{ visible: true }"
+                            [scrolling]="{ mode: 'infinite' }"
+                            [height]="345"
+                            [(selectedRowKeys)]="gridBoxValue"
+                    >
+                    </dx-data-grid>
+                </div>
+            </dx-drop-down-box>
+        </div>
+    </div>
+</div>

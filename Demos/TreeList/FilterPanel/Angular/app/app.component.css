@@ -1,0 +1,7 @@
+::ng-deep .demo-container {
+    height: 570px;
+}
+
+::ng-deep #employees {
+    height: 440px;
+}

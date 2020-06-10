@@ -1,0 +1,19 @@
+::ng-deep .filter-container {
+    background-color: rgba(191, 191, 191, 0.15);
+    padding: 5px;
+    width: 500px;
+    margin-bottom: 25px;
+}
+
+::ng-deep .dx-filterbuilder {
+    padding: 10px;
+}
+
+::ng-deep .dx-button {
+    margin: 10px;
+    float: right;
+}
+
+::ng-deep .dx-filterbuilder .dx-numberbox {
+    width: 80px;
+}

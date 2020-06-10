@@ -1,0 +1,1 @@
+_Step area_ series are much like traditional area series. The primary difference is&nbsp;that in _step area_ series, data points are connected by&nbsp;vertical and horizontal lines &mdash; resulting in&nbsp;a&nbsp;&laquo;stair step&raquo; effect.

@@ -1,0 +1,53 @@
+<template>
+  <div>
+    <div class="dx-fieldset">
+      <div class="dx-fieldset-header">Simple lookup</div>
+      <div class="dx-field">
+        <DxLookup
+          :items="employeesList"
+          :value="employeesList[0]"
+        >
+          <DxDropDownOptions :show-title="false"/>
+        </DxLookup>
+      </div>
+    </div>
+    <div class="dx-fieldset">
+      <div class="dx-fieldset-header">Grouped lookup</div>
+      <div class="dx-field">
+        <DxLookup
+          :data-source="employeesTasks"
+          :grouped="true"
+          display-expr="Subject"
+        >
+          <DxDropDownOptions
+            :close-on-outside-click="true"
+            :show-title="false"
+          />
+        </DxLookup>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+import { DxLookup, DxDropDownOptions } from 'devextreme-vue/lookup';
+import { employeesList, employeesTasks } from './data.js';
+import DataSource from 'devextreme/data/data_source';
+
+export default {
+  components: {
+    DxLookup,
+    DxDropDownOptions
+  },
+  data() {
+    return {
+      employeesList,
+      employeesTasks: new DataSource({
+        store: employeesTasks,
+        key: 'ID',
+        group: 'Assigned'
+      })
+    };
+  }
+};
+</script>
+

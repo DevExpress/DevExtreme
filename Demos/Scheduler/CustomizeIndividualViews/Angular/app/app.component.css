@@ -1,0 +1,14 @@
+::ng-deep .dx-scheduler-work-space-week .dx-scheduler-header-panel-cell,
+::ng-deep .dx-scheduler-work-space-work-week .dx-scheduler-header-panel-cell {
+    text-align: center;
+    vertical-align: middle;
+}
+
+::ng-deep .dx-scheduler-work-space .dx-scheduler-header-panel-cell .name {
+    font-size: 13px;
+    line-height: 15px
+}
+::ng-deep .dx-scheduler-work-space .dx-scheduler-header-panel-cell .number {
+    font-size: 15px;
+    line-height: 15px
+}

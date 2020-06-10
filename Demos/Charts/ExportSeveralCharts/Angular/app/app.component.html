@@ -1,0 +1,35 @@
+<div class="charts">
+    <dx-chart id="chart"
+              [dataSource]="goldMedals"
+              title="Olympic Gold Medals in 2008"
+              [rotated]="true">
+        <dxi-series color="#f3c40b"
+                    type="bar"
+                    argumentField="country"
+                    valueField="medals">
+            <dxo-label [visible]="true"></dxo-label>
+        </dxi-series>
+        <dxo-legend [visible]="false"></dxo-legend>
+    </dx-chart>
+
+    <dx-pie-chart id="pieChart"
+                  [dataSource]="allMedals"
+                  [title]="title"
+                  palette="Harmony Light">
+        <dxi-series argumentField="country"
+                    valueField="medals">
+            <dxo-label [visible]="true">
+                <dxo-connector [visible]="true"></dxo-connector>
+            </dxo-label>
+        </dxi-series>
+    </dx-pie-chart>
+</div>
+
+<div class="controls-pane">
+    <dx-button icon="export"
+                text="Export"
+                type="default"
+                [width]="145"
+                (onClick)="export()">
+    </dx-button>
+</div>

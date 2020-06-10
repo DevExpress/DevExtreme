@@ -1,0 +1,1 @@
+This demo shows a&nbsp;drill-down chart with two views. The start view displays a&nbsp;breakdown of&nbsp;population by&nbsp;continents. When you click a&nbsp;bar, the detailed view reveals most populated countries on&nbsp;the selected continent. Data for this view is&nbsp;provided by&nbsp;applying a&nbsp;filter to&nbsp;the original data.

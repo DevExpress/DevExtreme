@@ -1,0 +1,12 @@
+<dx-diagram #diagram id="diagram">
+    <dxi-custom-shape *ngFor="let emp of employees"
+        category="employees"
+        [type]='"employee" + emp.ID'
+        baseType="rectangle"
+        [defaultText]="emp.Full_Name"
+        [allowEditText]="false">
+    </dxi-custom-shape>
+    <dxo-toolbox>
+        <dxi-group category="employees" title="Employees" displayMode="texts"></dxi-group>
+    </dxo-toolbox>
+</dx-diagram>

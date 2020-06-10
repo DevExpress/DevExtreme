@@ -1,0 +1,34 @@
+::ng-deep .container {
+    position: relative;
+    margin-top: 20px;
+}
+::ng-deep .options {
+    padding: 20px;
+    background-color: rgba(191, 191, 191, 0.15);
+    position: absolute;
+    top: 29px;
+    bottom: 5px;
+    left: 420px;
+    width: 180px;
+}
+::ng-deep .caption {
+    font-size: 18px;
+    font-weight: 500;
+}
+::ng-deep .option {
+    margin-top: 10px;
+}
+
+::ng-deep .bottom-bar {
+    width: 396px;
+    text-align: right;
+    margin-top: 5px;
+}
+
+::ng-deep #applyButton {
+    margin-right: 10px;
+}
+
+::ng-deep .option-editor {
+    margin-top: 5px;
+}

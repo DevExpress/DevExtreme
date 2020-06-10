@@ -1,0 +1,25 @@
+<dx-data-grid id="gridContainer"
+    [dataSource]="dataSource"  
+    [remoteOperations]="{ groupPaging: true }"
+    [wordWrapEnabled]="true"
+    [showBorders]="true">
+
+    <dxo-scrolling mode="virtual" ></dxo-scrolling>
+    <dxo-group-panel [visible]="true"></dxo-group-panel>
+    <dxo-grouping #expand [autoExpandAll]="false"></dxo-grouping>
+
+    <dxi-column dataField="Id" dataType="number" [width]="75"></dxi-column>
+    <dxi-column dataField="ProductSubcategoryName" caption="Subcategory" [width]="150"></dxi-column>
+    <dxi-column dataField="StoreName" caption="Store" [width]="150" [groupIndex]="0"></dxi-column>
+    <dxi-column dataField="ProductCategoryName" caption="Category" [width]="120" [groupIndex]="1"></dxi-column>
+    <dxi-column dataField="ProductName" caption="Product"></dxi-column>
+    <dxi-column dataField="DateKey" caption="Date" dataType="date" format="yyyy-MM-dd" [width]="100"></dxi-column>
+    <dxi-column dataField="SalesAmount" caption="Amount" format="currency" [width]="100"></dxi-column>
+
+    <dxo-summary>
+        <dxi-group-item
+            column="Id"
+            summaryType="count">
+        </dxi-group-item>
+    </dxo-summary>
+</dx-data-grid>

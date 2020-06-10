@@ -1,0 +1,34 @@
+<div id="kanban">
+    <dx-scroll-view
+        class="scrollable-board"
+        direction="horizontal"
+        showScrollbar="always">
+        <dx-sortable
+            class="sortable-lists"
+            itemOrientation="horizontal"
+            handle=".list-title"
+            (onReorder)="onListReorder($event)">
+            <div class="list" *ngFor="let list of lists; let listIndex = index">
+                <div class="list-title dx-theme-text-color">{{statuses[listIndex]}}</div>
+                <dx-scroll-view
+                    class="scrollable-list"
+                    direction="vertical"
+                    showScrollbar="always">
+                    <dx-sortable
+                        class="sortable-cards"
+                        group="cardsGroup"
+                        [data]="list"
+                        (onDragStart)="onTaskDragStart($event)"
+                        (onReorder)="onTaskDrop($event)"
+                        (onAdd)="onTaskDrop($event)">
+                        <div class="card dx-card dx-theme-text-color dx-theme-background-color" *ngFor="let task of list">
+                            <div class="card-priority" [ngClass]="'priority-' + task.Task_Priority"></div>
+                            <div class="card-subject">{{task.Task_Subject}}</div>
+                            <div class="card-assignee">{{employees[task.Task_Assigned_Employee_ID]}}</div>
+                        </div>
+                    </dx-sortable>
+                </dx-scroll-view>
+            </div>
+        </dx-sortable>
+    </dx-scroll-view>
+</div>

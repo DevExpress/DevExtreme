@@ -1,0 +1,17 @@
+<div class="desc-container">
+  Right-click (or&nbsp;touch and hold) the "Relative Sales" field
+  and select an&nbsp;item from the appeared context menu to&nbsp;change the
+  <b>"summaryDisplayMode"</b> option.
+</div>
+
+<dx-pivot-grid
+  [allowSortingBySummary]="true"
+  [allowSorting]="true"
+  [allowExpandAll]="true"
+  [showBorders]="true"
+  [dataSource]="pivotGridDataSource"
+  (onContextMenuPreparing)="prepareContextMenu($event)">
+
+  <dxo-field-chooser [enabled]="false"></dxo-field-chooser>
+  <dxo-field-panel [showFilterFields]="false" [allowFieldDragging]="false" [visible]="true"></dxo-field-panel>
+</dx-pivot-grid>

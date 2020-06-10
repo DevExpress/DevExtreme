@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script src="../../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../../../../node_modules/cldrjs/dist/cldr.js"></script>
+    <script src="../../../../node_modules/cldrjs/dist/cldr/event.js"></script>
+    <script src="../../../../node_modules/cldrjs/dist/cldr/supplemental.js"></script>
+    <script src="../../../../node_modules/cldrjs/dist/cldr/unresolved.js"></script>
+    <script type="text/javascript" src="../../../../node_modules/globalize/dist/globalize.js"></script>
+    <script type="text/javascript" src="../../../../node_modules/globalize/dist/globalize/message.js"></script>
+    <script type="text/javascript" src="../../../../node_modules/globalize/dist/globalize/number.js"></script>
+    <script type="text/javascript" src="../../../../node_modules/globalize/dist/globalize/currency.js"></script>
+    <script type="text/javascript" src="../../../../node_modules/globalize/dist/globalize/date.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.light.css" />
+    <script src="../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
+    <script src="../../../../node_modules/underscore/underscore.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="index.js"></script>
+    <script src="data.js"></script>
+</head>
+<body class="dx-viewport">
+    <div class="demo-container">
+        <div class="images"></div>
+        <div id="popup"></div>
+    </div>
+
+    <script id="property-item" type="text/html">
+        <div>
+            <div class="item-content">
+                <img id="house-image<%= ID %>" src="<%= Image %>" />
+                <div class="item-options">
+                    <div>
+                        <div class="address"><%= Address %></div>
+                        <div class="price large-text">$<%= Globalize.formatNumber(Price, { maximumfractiondigits: 0 }) %></div>
+                        <div class="agent">
+                            <div id="house<%= ID %>">
+                                <img src="../../../../images/icon-agent.svg">
+                                Listing agent
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="popover<%= ID %>">
+                <div class="agent-details">
+                    <img src="<%= Agent.Picture %>" />
+                    <div>
+                        <div class="name large-text"><%= Agent.Name %></div>
+                        <div class="phone">Tel: <%= Agent.Phone %></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script id="property-details" type="text/html">
+        <div class="popup-property-details">
+            <div class="large-text">$<%= Globalize.formatNumber(Price, { maximumfractiondigits: 0 }) %></div>
+            <div class="opacity"><%= Address + ", " + City + ", " + State %></div>
+            <div id="favorites" class="favorites"></div>
+            <div class="images">
+                <img src="<%= Image %>" />
+                <img src="<%= Image.replace('.jpg', 'b.jpg') %>" />
+            </div>
+            <div><%= Features %></div>
+        </div>
+    </script>
+
+</body>
+</html>

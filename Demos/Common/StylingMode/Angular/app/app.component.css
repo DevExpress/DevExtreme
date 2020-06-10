@@ -1,0 +1,47 @@
+::ng-deep .title {
+    padding: 20px 0 20px 0;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+::ng-deep .editors {
+    margin-right: 320px;
+}
+
+::ng-deep .editors .left, ::ng-deep .editors .right {
+    display: inline-block;
+    width: 49%;
+    padding-right: 20px;
+    box-sizing: border-box;
+}
+
+::ng-deep .editors .left > *, ::ng-deep .editors .right > *, ::ng-deep .editors .center > * {
+    margin-bottom: 20px;
+}
+
+::ng-deep .editors .center {
+    padding: 20px 27px 0 0;
+}
+
+::ng-deep .validate {
+    float: right;
+}
+
+::ng-deep .options {
+    padding: 20px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 260px;
+    top: 0;
+    background-color: rgba(191, 191, 191, 0.15);
+}
+
+::ng-deep .caption {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+::ng-deep .option {
+    margin-top: 20px;
+}

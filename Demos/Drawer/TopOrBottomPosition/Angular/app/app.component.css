@@ -1,0 +1,69 @@
+::ng-deep .dx-toolbar {
+    background-color: rgba(191, 191, 191, .15);
+    padding: 5px 10px;
+}
+
+::ng-deep .dx-list-item-icon-container, ::ng-deep .dx-toolbar-before {
+    width: 36px;
+    padding-right: 0px !important;
+    text-align: center;
+}
+ 
+::ng-deep .dx-list-item-content {
+    padding-left: 10px !important;
+}
+
+::ng-deep .dx-button {
+    background-color: rgba(191, 191, 191, -0.15);
+    border: none;
+}
+
+::ng-deep .dx-drawer-shrink #content {
+    overflow: hidden;
+    transition: all 0.4s ease-out;
+    column-width: 900px;
+}
+
+::ng-deep .dx-drawer-shrink.dx-drawer-opened #content {
+    column-width: 300px;
+    margin-right: -10px;
+}
+
+::ng-deep .panel-list {
+    height: 200px;
+}
+
+::ng-deep .panel-list .dx-list-item {
+    color: #fff;
+    text-align: center;
+    border-top: 1px solid rgba(221, 221, 221, .2);
+}
+
+::ng-deep .options {
+    padding: 20px;
+    background-color: rgba(191, 191, 191, .15);
+}
+
+::ng-deep .caption {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+::ng-deep .option {
+    margin-top: 10px;
+    display: inline-block;
+    margin-right: 50px;
+}
+
+::ng-deep label {
+    font-weight: bold;
+}
+
+::ng-deep #content {
+    height: 100%;
+    padding: 10px 20px;
+}
+
+::ng-deep #content h2 {
+    font-size: 26px;
+}

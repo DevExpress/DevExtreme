@@ -1,0 +1,7 @@
+::ng-deep #gauge-demo {
+    height: 440px;
+    width: 100%;
+}
+::ng-deep #gauge {
+    height: 400px;
+}

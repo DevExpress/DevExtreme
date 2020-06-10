@@ -1,0 +1,18 @@
+::ng-deep #form {
+    max-width: 600px;
+    margin: auto;
+}
+::ng-deep #button {
+    margin-top: 50px;
+    margin-right: 20px;
+    float: right;
+}
+::ng-deep #fileuploader-container{
+    border: 1px solid #d3d3d3;
+    margin: 20px 20px 0 20px;
+}
+::ng-deep #form h3 {
+    margin-left: 20px;
+    font-weight: normal;
+    font-size: 22px;
+}

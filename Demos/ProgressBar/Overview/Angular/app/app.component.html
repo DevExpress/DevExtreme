@@ -1,0 +1,20 @@
+<div class="form">
+    <dx-button 
+        id="progress-button"
+        [(text)]="buttonText"
+        (onClick)="onButtonClick()"
+        [width]="200">
+    </dx-button>
+    <div class="progress-info">
+        Time left {{seconds | time}}
+    </div>
+    <dx-progress-bar #progressBar
+        id="progress-bar-status"
+         width="90%"
+        [class.complete]="progressBar.value == maxValue"
+        [min]="0"
+        [max]="maxValue"
+        [statusFormat]="format"
+        [value]="maxValue - seconds">
+    </dx-progress-bar>
+</div>

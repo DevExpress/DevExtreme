@@ -1,0 +1,17 @@
+<dx-data-grid 
+    id="gridContainer"
+    [dataSource]="dataSource"
+    [showBorders]="true">    
+    <dxo-paging [pageSize]="10"></dxo-paging>
+    <dxo-pager 
+        [showPageSizeSelector]="true"
+        [allowedPageSizes]="[5, 10, 20]"
+        [showInfo]="true">
+    </dxo-pager>
+    
+    <dxi-column dataField="CompanyName"></dxi-column>
+    <dxi-column dataField="City"></dxi-column>
+    <dxi-column dataField="State"></dxi-column>
+    <dxi-column dataField="Phone"></dxi-column>
+    <dxi-column dataField="Fax"></dxi-column>
+</dx-data-grid>

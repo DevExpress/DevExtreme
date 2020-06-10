@@ -1,0 +1,23 @@
+<dx-data-grid
+    #grid
+    id="gridContainer"
+    [dataSource]="employees"
+    keyExpr="ID"
+    [hoverStateEnabled]="true"
+    [showBorders]="true"
+    [selectedRowKeys]="[]">
+    <dxo-selection mode="single"></dxo-selection>
+    <dxi-column dataField="Prefix" caption="Title" [width]="70"></dxi-column>
+    <dxi-column dataField="FirstName"></dxi-column>
+    <dxi-column dataField="LastName"></dxi-column>
+    <dxi-column dataField="Position" [width]="180"></dxi-column>
+    <dxi-column dataField="BirthDate" dataType="date"></dxi-column>
+    <dxi-column dataField="HireDate" dataType="date"></dxi-column>
+</dx-data-grid>
+<div id="employeeInfo" *ngIf="grid.selectedRowKeys.length">
+    <img
+        class="employeePhoto"
+        [src]="grid.instance.getSelectedRowsData()[0].Picture"
+    />
+    <p class="employeeNotes">{{grid.instance.getSelectedRowsData()[0].Notes}}</p>
+</div>

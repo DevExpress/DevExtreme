@@ -1,0 +1,28 @@
+::ng-deep #simple-treeview, #product-details {
+    display: inline-block;
+}
+::ng-deep #product-details {
+    vertical-align: top;
+    width: 400px;
+    height: 420px;
+    margin-left: 20px;
+}
+::ng-deep #product-details > img {
+    border: none;
+    height: 300px;
+    width: 400px;
+}
+::ng-deep #product-details > .name {
+    text-align: center;
+    font-size: 20px;
+}
+::ng-deep #product-details > .price {
+    text-align: center;
+    font-size: 24px;
+}
+::ng-deep .dark #product-details > div {
+    color: #f0f0f0;
+}
+::ng-deep .hidden {
+    visibility: hidden;
+}

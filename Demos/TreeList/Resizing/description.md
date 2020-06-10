@@ -1,0 +1,1 @@
+The widget allows a&nbsp;user to&nbsp;resize columns at&nbsp;runtime. They can be&nbsp;resized in&nbsp;two different modes: by&nbsp;changing the width of&nbsp;the next column or&nbsp;the width of&nbsp;the widget. To&nbsp;switch the current mode, use the &laquo;Column resizing mode&raquo; select box.

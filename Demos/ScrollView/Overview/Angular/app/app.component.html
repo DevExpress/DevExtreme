@@ -1,0 +1,51 @@
+  <div id="scrollview-demo">
+    <dx-scroll-view #scrollView
+        id="scrollview"
+        [scrollByContent]="scrollByContent"
+        [scrollByThumb]="scrollByThumb"
+        [showScrollbar]="scrollbarMode"
+        [bounceEnabled]="pullDown"
+        reachBottomText="Updating..."
+        (onPullDown)="updateTopContent($event)"
+        (onReachBottom)="updateBottomContent($event)">
+        <div [innerHTML]="content"></div>
+    </dx-scroll-view>
+    <div class="options">
+        <div class="caption">Options</div>
+        <div class="option">
+            <span>Show scrollbar:</span> 
+            <dx-select-box
+                id="show-scrollbar-mode"
+                [items]="showScrollbarModes"
+                valueExpr="value"
+                displayExpr="text"
+                [(value)]="scrollbarMode">
+            </dx-select-box>
+        </div>
+        <div class="option">
+            <dx-check-box
+                text="Update content on the ReachBottom event"
+                (onValueChanged)="valueChanged($event)"
+                [value]="true">
+            </dx-check-box>
+        </div>
+        <div class="option">
+            <dx-check-box
+                text="Update content on the PullDown event"
+                [(value)]="pullDown">
+            </dx-check-box>
+        </div>
+        <div class="option">
+            <dx-check-box
+                text="Scroll by content"
+                [(value)]="scrollByContent">
+            </dx-check-box>
+        </div>
+        <div class="option">
+            <dx-check-box
+                text="Scroll by thumb"
+                [(value)]="scrollByThumb">
+            </dx-check-box>
+        </div>
+    </div>
+</div>

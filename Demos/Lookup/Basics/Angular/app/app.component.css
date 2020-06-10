@@ -1,0 +1,9 @@
+::ng-deep .dx-theme-generic .dx-fieldset,
+::ng-deep .dx-theme-material .dx-fieldset {
+    width: 40%;
+    float: left;
+}
+
+::ng-deep .dx-field > .dx-lookup {
+    flex: 1;
+}

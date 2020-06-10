@@ -1,0 +1,94 @@
+<div id="page">
+    <dx-responsive-box
+        singleColumnScreen="sm"
+        [(screenByWidth)]="screen">
+        <dxi-row [ratio]="1"></dxi-row>
+        <dxi-row [ratio]="2" screen="xs"></dxi-row>
+        <dxi-row [ratio]="2"></dxi-row>
+        <dxi-row [ratio]="1"></dxi-row>
+
+        <dxi-col [ratio]="1"></dxi-col>
+        <dxi-col [ratio]="2" screen="lg"></dxi-col>
+        <dxi-col [ratio]="1"></dxi-col>
+        <dxi-item>
+            <dxi-location
+                [row]="0"
+                [col]="0"
+                [colspan]="3"
+                screen="lg"
+            ></dxi-location>
+            <dxi-location
+                [row]="0"
+                [col]="0"
+                [colspan]="2"
+                screen="sm"
+            ></dxi-location>
+            <div *dxTemplate class="header item">
+                <p>Header</p>
+            </div>
+        </dxi-item>
+        <dxi-item>
+            <dxi-location
+                [row]="1"
+                [col]="1"
+                screen="lg"
+            ></dxi-location>
+            <dxi-location
+                [row]="1"
+                [col]="0"
+                [colspan]="2"
+                screen="sm"
+            ></dxi-location>
+            <div *dxTemplate class="content item">
+                <p>Content</p>
+            </div>
+        </dxi-item>
+        <dxi-item>
+            <dxi-location
+                [row]="1"
+                [col]="0"
+                screen="lg"
+            ></dxi-location>
+            <dxi-location
+                [row]="2"
+                [col]="0"
+                screen="sm"
+            ></dxi-location>
+            <div *dxTemplate class="left-side-bar item">
+                <p>Left Bar</p>
+            </div>
+        </dxi-item>
+        <dxi-item>
+            <dxi-location
+                [row]="1"
+                [col]="2"
+                screen="lg"
+            ></dxi-location>
+            <dxi-location
+                [row]="2"
+                [col]="1"
+                screen="sm"
+            ></dxi-location>
+            <div *dxTemplate class="right-side-bar item">
+                <p>Right Bar</p>
+            </div>
+        </dxi-item>
+        <dxi-item>
+            <dxi-location
+                [row]="2"
+                [col]="0"
+                [colspan]="3"
+                screen="lg"
+            ></dxi-location>
+            <dxi-location
+                [row]="3"
+                [col]="0"
+                [colspan]="2"
+                screen="sm"
+            ></dxi-location>
+            <div *dxTemplate class="footer item">
+                <p>Footer</p>
+            </div>
+        </dxi-item>
+    </dx-responsive-box>
+</div>

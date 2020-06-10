@@ -1,0 +1,8 @@
+::ng-deep #range-selector-demo {
+    text-align: center;
+}
+
+::ng-deep #range-selector {
+    margin-bottom: 20px;
+    height: 200px;
+}

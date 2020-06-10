@@ -1,0 +1,42 @@
+<dx-tree-list
+    id="employees"
+    [dataSource]="employees"
+    keyExpr="ID"
+    parentIdExpr="Head_ID"
+    [showRowLines]="true"
+    [showBorders]="true"
+    [columnAutoWidth]="true"
+    [expandedRowKeys]="[1]">
+    <dxo-column-chooser #columnChooser
+        [enabled]="true"
+        [allowSearch]="allowSearch"
+        [mode]="columnChooserModes[0].key">
+    </dxo-column-chooser>
+
+    <dxi-column dataField="Title" caption="Position"></dxi-column>
+    <dxi-column dataField="Full_Name" [allowHiding]="false"></dxi-column>
+    <dxi-column dataField="City"></dxi-column>
+    <dxi-column dataField="State"></dxi-column>
+    <dxi-column dataField="Mobile_Phone"></dxi-column>
+    <dxi-column dataField="Email" [visible]="false"></dxi-column>
+    <dxi-column dataField="Hire_Date" dataType="date"></dxi-column>
+    <dxi-column dataField="Skype" [visible]="false"></dxi-column>    
+</dx-tree-list>
+
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <span>Column chooser mode</span>
+        <dx-select-box 
+            id="columnChooserMode" 
+            [items]="columnChooserModes" 
+            [(value)]="columnChooser.mode" 
+            valueExpr="key"
+            displayExpr="name"></dx-select-box>
+    </div>
+    <div class="option">
+    <dx-check-box 
+        text="Allow search" 
+        [(value)]="allowSearch"></dx-check-box>
+    </div>
+</div>

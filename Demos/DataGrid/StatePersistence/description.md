@@ -1,0 +1,1 @@
+Sort and filter data, group, reorder and resize columns, change page numbers and page size. Once you are done, refresh the web page to&nbsp;see that the grid&rsquo;s state is&nbsp;automatically persisted to&nbsp;continue working from where you stopped.

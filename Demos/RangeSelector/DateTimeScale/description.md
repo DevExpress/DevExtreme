@@ -1,0 +1,1 @@
+In&nbsp;this demo, data used to&nbsp;define the **RangeSelector** scale comes in&nbsp;the string type. However, there is&nbsp;the **valueType** option that specifies the actual scale data type. As&nbsp;this option is&nbsp;set to _&laquo;datetime&raquo;_, the string data will be&nbsp;cast to&nbsp;the date type.

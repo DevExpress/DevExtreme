@@ -1,0 +1,77 @@
+<template>
+  <div>
+    <DxForm
+      id="form"
+      :form-data="employee"
+      :col-count-by-screen="colCountByScreen"
+      :screen-by-width="screenByWidth"
+      :min-col-width="233"
+      label-location="top"
+      col-count="auto"
+    />
+    <div class="options">
+      <div class="caption">Options</div>
+      <div class="option">
+        <DxCheckBox
+          :text="'Set the count of columns regardless of screen size'"
+          :value.sync="useColCountByScreen"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+import { DxCheckBox, DxForm } from 'devextreme-vue';
+import employee from './data.js';
+
+export default {
+  components: {
+    DxCheckBox,
+    DxForm
+  },
+  data() {
+    return {
+      employee,
+      useColCountByScreen: true
+    };
+  },
+  computed: {
+    colCountByScreen() {
+      return this.useColCountByScreen
+        ? {
+          sm: 2,
+          md: 3
+        }
+        : null;
+    }
+  },
+  methods: {
+    screenByWidth(width) {
+      return width < 720 ? 'sm' : 'md';
+    }
+  }
+};
+</script>
+<style scoped>
+#form {
+    padding: 10px 10px 110px;
+}
+
+.options {
+    padding: 20px;
+    background-color: rgba(191, 191, 191, 0.15);
+    left: 0;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.caption {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.option {
+    margin-top: 10px;
+}
+</style>

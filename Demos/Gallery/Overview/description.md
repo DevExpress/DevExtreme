@@ -1,0 +1,1 @@
+The **Gallery** is&nbsp;a&nbsp;widget that displays a&nbsp;collection of&nbsp;images in&nbsp;a&nbsp;carousel. The widget is&nbsp;supplied with various navigation controls that allow a&nbsp;user to&nbsp;switch between images.

@@ -1,0 +1,18 @@
+<dx-chart
+    id="chart"
+    [dataSource]="dataSource">
+    <dxi-series argumentField="x1" valueField="y1"></dxi-series>
+    <dxi-series argumentField="x2" valueField="y2">
+        <dxo-point symbol="triangleDown"></dxo-point>
+    </dxi-series>
+    <dxi-value-axis [tickInterval]="50"></dxi-value-axis>
+    <dxo-common-series-settings type="scatter"></dxo-common-series-settings>
+    <dxo-argument-axis [tickInterval]="5">
+        <dxo-grid [visible]="true"></dxo-grid>
+        <dxo-minor-grid [visible]="true"></dxo-minor-grid>
+    </dxo-argument-axis>
+    <dxo-legend [visible]="false"></dxo-legend>
+    <dxo-common-pane-settings>
+        <dxo-border [visible]="true"></dxo-border>
+    </dxo-common-pane-settings>
+</dx-chart>

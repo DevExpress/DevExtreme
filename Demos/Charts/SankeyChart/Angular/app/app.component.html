@@ -1,0 +1,18 @@
+<dx-sankey id="sankey"
+    [dataSource]="data"
+    sourceField="source"
+    targetField="target"
+    weightField="weight"
+    title="Commodity Turnover in 2017">
+    <dxo-tooltip 
+        [enabled]="true"
+        [customizeLinkTooltip]="customizeLinkTooltip">
+    </dxo-tooltip>
+    <dxo-link 
+        colorMode="gradient">
+    </dxo-link>
+    <dxo-node 
+        [width]="8"
+        [padding]="30">
+    </dxo-node>
+</dx-sankey>

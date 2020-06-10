@@ -1,0 +1,1 @@
+In&nbsp;this demo, the **Chart** widget is&nbsp;populated with data taken from a&nbsp;simple JavaScript array. It&nbsp;is&nbsp;the easiest way to&nbsp;provide data for the widget, and it&nbsp;is&nbsp;the right choice if&nbsp;you do&nbsp;not need to&nbsp;get data from the server or&nbsp;update data dynamically.

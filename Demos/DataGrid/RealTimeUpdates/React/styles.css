@@ -1,0 +1,26 @@
+.options {
+  padding: 20px;
+  margin-top: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+}
+
+.caption {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.option {
+  margin-top: 10px;
+}
+
+.option > span {
+  position: relative;
+  top: 2px;
+  margin-right: 10px;
+}
+
+.option > .dx-widget {
+  width: 500px;
+  display: inline-block;
+  vertical-align: middle;
+}

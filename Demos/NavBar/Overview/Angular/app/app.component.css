@@ -1,0 +1,24 @@
+::ng-deep .dx-list {
+    height: 90%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+}
+::ng-deep .info {
+    margin-top: 5px;
+    height: 78px;
+}
+::ng-deep .image-container {
+    width: 65px;
+    float: left;
+    margin-right: 20px;
+}
+::ng-deep .image-container img {
+    display: block;
+    width: 100%;
+}
+::ng-deep .dx-tabs.dx-navbar {
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+}

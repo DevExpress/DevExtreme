@@ -1,0 +1,17 @@
+::ng-deep img {
+    max-width: 200px;
+    float: left;
+}
+
+::ng-deep .dx-theme-ios7 .selected {
+    padding: 10px;
+}
+
+::ng-deep .dx-theme-ios7 img {
+    max-width: 100%;
+    margin-bottom: 10px;
+}
+
+::ng-deep .dx-field > .dx-lookup {
+    flex: 1;
+}

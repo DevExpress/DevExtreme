@@ -1,0 +1,23 @@
+<dx-file-manager id="fileManager"
+    [fileSystemProvider]="remoteProvider"
+    currentPath="Documents/Reports"
+    [allowedFileExtensions]="allowedFileExtensions"
+    height="550">
+
+    <dxo-permissions 
+        create="true"
+        copy="true"
+        move="true"
+        delete="true"
+        rename="true">
+    </dxo-permissions>
+    <dxo-item-view>
+        <dxo-details>
+            <dxi-column dataField="thumbnail"></dxi-column>
+            <dxi-column dataField="name"></dxi-column>
+            <dxi-column dataField="dateModified" caption="Modified"></dxi-column>
+            <dxi-column dataField="created" caption="Created" dataType="date"></dxi-column>
+            <dxi-column dataField="modifiedBy" caption="Modified By" visibleIndex="2"></dxi-column>
+        </dxo-details>
+    </dxo-item-view>
+</dx-file-manager>

@@ -1,0 +1,1 @@
+This demo illustrates the ease with which you can create a _bar_ chart.

@@ -1,0 +1,45 @@
+<dx-data-grid id="gridContainer" #grid
+        [dataSource]="employees"
+        [showColumnLines]="false"
+        [showRowLines]="true"
+        [showBorders]="true"
+        [rowAlternationEnabled]="true">
+
+    <dxi-column dataField="Prefix" [width]="80" caption="Title"></dxi-column>
+    <dxi-column dataField="FirstName"></dxi-column>
+    <dxi-column dataField="LastName"></dxi-column>
+    <dxi-column dataField="City"></dxi-column>
+    <dxi-column dataField="State"></dxi-column>
+    <dxi-column dataField="Position" [width]="130"></dxi-column>
+    <dxi-column dataField="BirthDate" [width]="100" dataType="date"></dxi-column>
+    <dxi-column dataField="HireDate" [width]="100" dataType="date"></dxi-column>
+
+</dx-data-grid>
+
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <dx-check-box
+            text="Show Column Lines"
+            [(value)]="grid.showColumnLines">
+        </dx-check-box>
+    </div>
+    <div class="option">
+        <dx-check-box
+            text="Show Row Lines"
+            [(value)]="grid.showRowLines">
+        </dx-check-box>
+    </div>
+    <div class="option">
+        <dx-check-box
+            text="Show Borders"
+            [(value)]="grid.showBorders">
+        </dx-check-box>
+    </div>
+    <div class="option">
+        <dx-check-box
+            text="Alternating Row Color"
+            [(value)]="grid.rowAlternationEnabled">
+        </dx-check-box>
+    </div>
+</div>

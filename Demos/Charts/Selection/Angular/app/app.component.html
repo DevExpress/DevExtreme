@@ -1,0 +1,35 @@
+<dx-chart
+    id="chart"
+    [dataSource]="exportData"
+    [rotated]="true"
+    title="Economy - Export Change"
+    (onPointClick)="pointClick($event)"
+    (onLegendClick)="legendClick($event)">
+    <dxi-series valueField="year2007" name="2007 - 2008"></dxi-series>
+    <dxi-series valueField="year2008" name="2008 - 2009"></dxi-series>
+    <dxo-common-series-settings
+        argumentField="country"
+        type="bar"
+        hoverMode="allArgumentPoints"
+        selectionMode="allArgumentPoints">
+        <dxo-label [visible]="true">
+            <dxo-format
+                type="percent"
+                [precision]="1">
+            </dxo-format>
+        </dxo-label>
+    </dxo-common-series-settings>
+    <dxi-value-axis>
+        <dxo-label>
+            <dxo-format
+                type="percent"
+                [precision]="1">
+            </dxo-format>
+        </dxo-label>
+    </dxi-value-axis>
+    <dxo-legend
+        verticalAlignment="bottom"
+        horizontalAlignment="center">
+    </dxo-legend>
+    <dxo-export [enabled]="true"></dxo-export>
+</dx-chart>

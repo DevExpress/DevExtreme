@@ -1,0 +1,22 @@
+<div id="descContainer">Sort and filter data, group, reorder and resize columns, change page numbers and page size. Once you are done, <a onclick="window.location.reload()">refresh</a> the web page to see that the grid’s state is automatically persisted to continue working from where you stopped.</div>
+<dx-data-grid id="gridContainer"
+    [dataSource]="orders"
+    [allowColumnResizing]="true"
+    [allowColumnReordering]="true"
+    [showBorders]="true"
+    keyExpr="ID">
+
+    <dxo-selection mode="single"></dxo-selection>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-group-panel [visible]="true"></dxo-group-panel>
+    <dxo-state-storing [enabled]="true" type="localStorage" storageKey="storage"></dxo-state-storing>
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]"></dxo-pager>
+
+    <dxi-column dataField="OrderNumber" [width]="130" caption="Invoice Number"></dxi-column>
+    <dxi-column dataField="OrderDate" sortOrder="desc" dataType="date"></dxi-column>
+    <dxi-column dataField="SaleAmount" alignment="right" format="currency"></dxi-column>
+    <dxi-column dataField="Employee"></dxi-column>
+    <dxi-column dataField="CustomerStoreCity" caption="City"></dxi-column>
+    <dxi-column dataField="CustomerStoreState" caption="State" [groupIndex]="0"></dxi-column>
+
+</dx-data-grid>

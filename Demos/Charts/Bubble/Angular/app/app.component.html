@@ -1,0 +1,33 @@
+<dx-chart
+    id="chart"
+    [dataSource]="dataSource"
+    [title]="title"
+    [palette]="['#00ced1', '#008000', '#ffd700', '#ff7f50']"
+    (onSeriesClick)="onSeriesClick($event)">
+    <dxo-common-series-settings type="bubble"></dxo-common-series-settings>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-legend
+        position="inside"
+        horizontalAlignment="left">
+        <dxo-border [visible]="true"></dxo-border>
+    </dxo-legend>
+    <dxo-argument-axis title="Total Population">
+        <dxo-label [customizeText]="argumentCustomizeText"></dxo-label>
+    </dxo-argument-axis>
+    <dxi-value-axis title="Population with Age over 60">
+        <dxo-label [customizeText]="valueCustomizeText"></dxo-label>
+    </dxi-value-axis>
+    <dxo-tooltip
+        [enabled]="true"
+        location="edge"
+        [customizeTooltip]="customizeTooltip">
+    </dxo-tooltip>
+    <dxi-series
+        *ngFor="let correlation of correlationSource"
+        [name]="correlation.name"
+        [argumentField]="correlation.argumentField"
+        [valueField]="correlation.valueField"
+        [sizeField]="correlation.sizeField"
+        [tagField]="correlation.tagField">
+    </dxi-series>
+</dx-chart>

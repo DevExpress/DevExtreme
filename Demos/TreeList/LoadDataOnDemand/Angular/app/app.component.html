@@ -1,0 +1,14 @@
+<dx-tree-list
+    id="treelist"
+    [dataSource]="dataSource"
+    [showBorders]="true"
+    [remoteOperations]="{ filtering: true }"
+    keyExpr="id"
+    parentIdExpr="parentId"
+    hasItemsExpr="hasItems"
+    rootValue="">
+    <dxi-column dataField="name"></dxi-column>
+    <dxi-column dataField="size" [width]="100" [customizeText]="customizeSizeText"></dxi-column>
+    <dxi-column dataField="createdDate" dataType="date" [width]="150"></dxi-column>
+    <dxi-column dataField="modifiedDate" dataType="date" [width]="150"></dxi-column>
+</dx-tree-list>

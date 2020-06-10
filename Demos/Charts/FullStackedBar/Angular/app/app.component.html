@@ -1,0 +1,26 @@
+<dx-chart
+    id="chart"
+    [dataSource]="countriesInfo">
+    <dxi-series valueField="hydro" name="Hydro-electric"></dxi-series>
+    <dxi-series valueField="oil" name="Oil"></dxi-series>
+    <dxi-series valueField="gas" name="Natural gas"></dxi-series>
+    <dxi-series valueField="coal" name="Coal"></dxi-series>
+    <dxi-series valueField="nuclear" name="Nuclear"></dxi-series>
+    <dxo-common-series-settings
+        argumentField="country"
+        type="fullStackedBar">
+    </dxo-common-series-settings>
+    <dxo-legend
+        verticalAlignment="top"
+        horizontalAlignment="center"
+        itemTextPosition="right">
+    </dxo-legend>
+    <dxo-title text="Energy Consumption in 2004">
+        <dxo-subtitle text="(Millions of Tons, Oil Equivalent)"></dxo-subtitle>
+    </dxo-title>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-tooltip
+        [enabled]="true"
+        [customizeTooltip]="customizeTooltip">
+    </dxo-tooltip>
+</dx-chart>

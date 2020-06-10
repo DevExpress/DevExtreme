@@ -1,0 +1,10 @@
+::ng-deep #choose-temperature {
+    float: right;
+}
+::ng-deep .action {
+    width: 320px;
+    margin-top: 20px;
+}
+::ng-deep .label {
+    padding-top: 9px;
+}

@@ -1,0 +1,53 @@
+<div class="widget-container">
+    <dx-file-uploader
+        #fileUploader
+        uploadUrl="https://js.devexpress.com/Content/Services/upload.aspx"
+        [multiple]="false"
+        accept="*"
+        [(value)]="value"
+        uploadMode="instantly"
+    ></dx-file-uploader>
+    <div class="content">
+        <div *ngIf="value.length > 0">
+            <h4>Selected Files</h4>
+        </div>
+        <div *ngFor="let file of value">
+            <div class="selected-item">
+                Name:
+                <span>{{file.name}}</span><br /> Size:
+                <span>{{file.size}}</span>bytes<br /> Type:
+                <span>{{file.type}}</span><br /> Last Modified Date:
+                <span>{{file.lastModifiedDate}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <span>File types</span>
+        <dx-select-box
+            [dataSource]="[
+                {name: 'All types', value: '*'}, 
+                {name: 'Images', value: 'image/*'}, 
+                {name: 'Videos', value: 'video/*'}
+            ]"
+            valueExpr="value"
+            displayExpr="name"
+            [(value)]="fileUploader.accept"
+        ></dx-select-box>
+    </div>
+    <div class="option">
+        <span>Upload mode</span>
+        <dx-select-box
+            [items]="['instantly', 'useButtons']"
+            [(value)]="fileUploader.uploadMode"
+        ></dx-select-box>
+    </div>
+    <div class="option">
+        <dx-check-box
+            text="Allow multiple files selection"
+            [(value)]="fileUploader.multiple"
+        ></dx-check-box>
+    </div>
+</div>

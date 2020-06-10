@@ -1,0 +1,11 @@
+<div class="list-container">
+    <dx-list
+        height="100%"
+        [dataSource]="employees"
+        [grouped]="true"
+        [collapsibleGroups]="true">
+        <div *dxTemplate="let item of 'group'">
+            <div>Assigned: {{item.key}}</div>
+        </div>
+    </dx-list>
+</div>

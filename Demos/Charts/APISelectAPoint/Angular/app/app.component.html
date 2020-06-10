@@ -1,0 +1,19 @@
+<dx-chart
+    id="chart"
+    [dataSource]="catBreedsData"
+    [rotated]="true"
+    title="Most Popular US Cat Breeds"
+    (onPointClick)="pointClick($event)"
+    (onDone)="done($event)">
+    <dxi-series valueField="count" name="breeds" color="#a3d6d2">
+        <dxo-selection-style color="#ec2e7a">
+            <dxo-hatching direction="none"></dxo-hatching>
+        </dxo-selection-style>
+    </dxi-series>
+    <dxo-common-series-settings
+        argumentField="breed"
+        type="bar">
+    </dxo-common-series-settings>
+    <dxo-legend [visible]="false"></dxo-legend>
+    <dxo-export [enabled]="true"></dxo-export>
+</dx-chart>

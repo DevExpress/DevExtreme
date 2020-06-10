@@ -1,0 +1,24 @@
+<div id="gauge-demo">
+    <dx-linear-gauge
+        id="gauge"
+        [value]="currentValue.primary"
+        [subvalues]="currentValue.secondary">
+        <dxo-scale
+            [startValue]="0"
+            [endValue]="10"
+            [tickInterval]="2">
+            <dxo-label [customizeText]="customizeText"></dxo-label>
+        </dxo-scale>
+        <dxo-tooltip [enabled]="true" [customizeTooltip]="customizeTooltip"></dxo-tooltip>
+        <dxo-export [enabled]="true"></dxo-export>
+        <dxo-title text="Power of Air Conditioners in Store Departments (kW)">
+            <dxo-font [size]="28"></dxo-font>
+        </dxo-title>
+    </dx-linear-gauge>
+    <dx-select-box #select
+        [dataSource]="powerInfo"
+        displayExpr="name"
+        [(value)]="currentValue"
+        [width]="200">
+    </dx-select-box>
+</div>

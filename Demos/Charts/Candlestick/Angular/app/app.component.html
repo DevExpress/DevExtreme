@@ -1,0 +1,36 @@
+<dx-chart
+    id="chart"
+    title="Stock Price"
+    [dataSource]="stockPrices">
+    <dxi-series
+        name="DELL"
+        openValueField="o"
+        highValueField="h"
+        lowValueField="l"
+        closeValueField="c">
+        <dxo-reduction color="red"></dxo-reduction>
+    </dxi-series>
+    <dxo-common-series-settings
+        argumentField="date"
+        type="candlestick">
+    </dxo-common-series-settings>
+    <dxo-legend itemTextPosition="left"></dxo-legend>
+    <dxi-value-axis [tickInterval]="1">
+        <dxo-title text="US dollars"></dxo-title>
+        <dxo-label>
+            <dxo-format
+                type="currency"
+                [precision]="0">
+            </dxo-format>
+        </dxo-label>
+    </dxi-value-axis>
+    <dxo-argument-axis [workdaysOnly]="true">
+        <dxo-label format="shortDate"></dxo-label>
+    </dxo-argument-axis>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-tooltip
+        [enabled]="true"
+        location="edge"
+        [customizeTooltip]="customizeTooltip">
+    </dxo-tooltip>
+</dx-chart>

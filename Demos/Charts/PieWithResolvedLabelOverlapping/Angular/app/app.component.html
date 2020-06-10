@@ -1,0 +1,29 @@
+<div id="chart-demo">
+    <dx-pie-chart #pie
+        title="Olympic Medals in 2008"
+        palette="bright"
+        [dataSource]="olympicMedals"
+        [resolveLabelOverlapping]="resolveOverlappingTypes[0]">
+        <dxo-margin [bottom]="20"></dxo-margin>
+        <dxo-legend [visible]="false"></dxo-legend>
+        <dxo-export [enabled]="true"></dxo-export>
+        <dxi-series
+            argumentField="country"
+            valueField="medals">
+            <dxo-label
+                [visible]="true"
+                [customizeText]="customizeLabel">
+            </dxo-label>
+        </dxi-series>
+    </dx-pie-chart>
+    <div class="options">
+        <div class="caption">Options</div>
+        <div class="option">
+            <span>Label Overlapping Resolution Mode</span>
+            <dx-select-box
+                [dataSource]="resolveOverlappingTypes"
+                [(value)]="pie.resolveLabelOverlapping">
+            </dx-select-box>
+        </div>    
+    </div>
+</div>

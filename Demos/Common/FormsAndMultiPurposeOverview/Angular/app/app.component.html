@@ -1,0 +1,26 @@
+<dx-form id="form"
+	[formData]="employee">
+	<dxi-item itemType="group" cssClass="first-group" [colCount]="4">
+		<dxi-item>
+			<div class="form-avatar"></div>
+		</dxi-item>
+		<dxi-item itemType="group" [colSpan]="3">
+				<dxi-item dataField="FirstName"></dxi-item>
+				<dxi-item dataField="LastName"></dxi-item>
+				<dxi-item dataField="BirthDate" editorType="dxDateBox" [editorOptions]="{ width: '100%'}"></dxi-item>
+		</dxi-item>
+	</dxi-item>
+	<dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+		<dxi-item itemType="group">
+			<dxi-item dataField="Address"></dxi-item>
+			<dxi-item dataField="City"></dxi-item>
+			<dxi-item dataField="Position" editorType="dxSelectBox" [editorOptions]="{ items: positions, value: '' }"></dxi-item>
+		</dxi-item>
+		<dxi-item itemType="group">
+			<dxi-item dataField="State" editorType="dxSelectBox" [editorOptions]="{ items: states }"></dxi-item>
+			<dxi-item dataField="ZipCode"></dxi-item>
+			<dxi-item dataField="Mobile" [label]="{text: 'Phone'}" [editorOptions]="{ mask: '+1 (000) 000-0000'}"></dxi-item>
+		</dxi-item>
+		<dxi-item dataField="Notes" [colSpan]="2" editorType="dxTextArea" [editorOptions]="{ height: 140 }"></dxi-item>
+	</dxi-item>
+</dx-form>

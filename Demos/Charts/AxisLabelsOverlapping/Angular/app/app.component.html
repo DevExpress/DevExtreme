@@ -1,0 +1,18 @@
+<dx-chart id="chart"
+          [dataSource]="population" title="Population by Countries">
+    <dxi-series argumentField="country"></dxi-series>
+    <dxo-argument-axis>
+        <dxo-label wordWrap="none" [overlappingBehavior]="currentMode"></dxo-label>
+    </dxo-argument-axis>
+    <dxo-legend [visible]="false"></dxo-legend>
+</dx-chart>
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <span>Overlapping Modes:</span>
+        <dx-select-box
+            [dataSource]="overlappingModes"
+            [(value)]="currentMode">
+        </dx-select-box>
+    </div>
+</div>

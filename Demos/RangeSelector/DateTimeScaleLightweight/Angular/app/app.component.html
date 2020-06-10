@@ -1,0 +1,16 @@
+<dx-range-selector 
+    id="range-selector"
+    [value]="[selectedStartValue, selectedEndValue]"
+    title="Select a Vacation Period">
+    <dxo-margin [top]="50"></dxo-margin>
+    <dxo-scale
+        [startValue]="startValue"
+        [endValue]="endValue"
+        minorTickInterval="day"
+        tickInterval="week"
+        minRange="week"
+        maxRange="month">
+        <dxo-minor-tick [visible]="false"></dxo-minor-tick>
+    </dxo-scale>
+    <dxo-slider-marker format="monthAndDay"></dxo-slider-marker>
+</dx-range-selector>

@@ -1,0 +1,29 @@
+<dx-data-grid id="gridContainer"
+              [dataSource]="employees"
+              [showBorders]="true"
+              keyExpr="ID"
+              (onRowValidating)="rowValidating($event)"
+              (onEditorPreparing)="editorPreparing($event)">
+
+    <dxo-paging [enabled]="false"></dxo-paging>
+    <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="allowDeleting" [useIcons]="true"></dxo-editing>
+
+    <dxi-column type="buttons" [width]="110">
+        <dxi-button name="edit"></dxi-button>
+        <dxi-button name="delete"></dxi-button>
+        <dxi-button
+            hint="Clone"
+            icon="repeat"
+            [visible]="isCloneIconVisible"
+            [onClick]="cloneIconClick"></dxi-button>
+    </dxi-column>
+    <dxi-column dataField="Prefix" caption="Title"></dxi-column>
+    <dxi-column dataField="FirstName"></dxi-column>
+    <dxi-column dataField="LastName"></dxi-column>
+    <dxi-column dataField="Position" [width]="130"></dxi-column>
+    <dxi-column dataField="StateID" [width]="125" caption="State">
+        <dxo-lookup [dataSource]="states" displayExpr="Name" valueExpr="ID"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="BirthDate" [width]="125" dataType="date"></dxi-column>
+
+</dx-data-grid>

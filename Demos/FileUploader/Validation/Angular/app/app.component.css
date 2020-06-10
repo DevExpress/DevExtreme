@@ -1,0 +1,19 @@
+::ng-deep .file-uploader-block {
+    width: 350px;
+    float: left;
+}
+
+::ng-deep .note {
+    font-size: 10pt;
+    color: #484848;
+    margin-left: 9px;
+}
+
+::ng-deep .note > span {
+	font-weight: 700
+}
+
+::ng-deep .main-block {
+    max-width: 900px;
+    min-width: 700px;
+}

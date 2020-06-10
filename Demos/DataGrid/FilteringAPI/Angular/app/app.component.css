@@ -1,0 +1,20 @@
+::ng-deep .right-side {
+    position: absolute;
+    right: 1px;
+    top: 6px;
+}
+::ng-deep .logo {
+    line-height: 48px;
+}
+::ng-deep .logo img {
+    vertical-align: middle;
+    margin: 0 5px;
+}
+::ng-deep .dx-row.dx-data-row .employee {
+    color: #bf4e6a;
+    font-weight: bold;
+}
+::ng-deep #gridContainer {
+    margin: 20px 0;
+    height: 400px;
+}

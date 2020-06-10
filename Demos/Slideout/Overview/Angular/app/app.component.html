@@ -1,0 +1,33 @@
+<div class="slideout-container">
+    <dx-slide-out
+        #slideout
+        [dataSource]="dataSource"
+        (onItemClick)="menuVisible = !menuVisible;"
+        [menuGrouped]="true"
+        [(menuVisible)]="menuVisible"
+        [swipeEnabled]="true"
+    >
+        <div *dxTemplate="let product of 'item'">
+            <dx-toolbar [dataSource]="toolbarItems">
+                <div *dxTemplate="let data of 'title'">
+                    <p>{{product.text}}</p>
+                </div>
+            </dx-toolbar>
+            <div id="info">
+                <img src="{{product.src}}">
+                <h1>{{product.price}}</h1>
+            </div>
+            <div class="dx-fieldset">
+                <div class="dx-fieldset-header">Options</div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Swipe to reveal the menu</div>
+                    <dx-switch class="dx-field-value" [(value)]="slideout.swipeEnabled">
+                    </dx-switch>
+                </div>
+            </div>
+        </div>
+        <div *dxTemplate="let category of 'menuGroup'">
+            <b>{{category.key}}</b>
+        </div>
+    </dx-slide-out>
+</div>

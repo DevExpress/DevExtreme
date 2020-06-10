@@ -1,0 +1,25 @@
+<dx-pie-chart
+    id="pie"
+    title="Top internet languages"
+    palette="bright"
+    [dataSource]="internetLanguages">
+    <dxo-legend
+        horizontalAlignment="center"
+        verticalAlignment="bottom"></dxo-legend>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxi-series
+        argumentField="language"
+        valueField="percent">
+        <dxo-label
+            [visible]="true"
+            format="fixedPoint"
+            [customizeText]="customizeLabel">
+            <dxo-connector
+                [visible]="true"
+                [width]="0.5"></dxo-connector>
+        </dxo-label>
+        <dxo-small-values-grouping
+            mode="smallValueThreshold"
+            [threshold]="4.5"></dxo-small-values-grouping>
+    </dxi-series>
+</dx-pie-chart>

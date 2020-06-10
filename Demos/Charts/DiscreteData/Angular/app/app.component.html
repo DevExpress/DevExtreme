@@ -1,0 +1,28 @@
+<div class="long-title">
+    <h3>Average temperature in London</h3>
+</div>
+<div id="chart-demo">
+    <dx-polar-chart
+        id="radarChart"
+        [dataSource]="temperaturesData">
+        <dxi-series valueField="day" name="Day" color="#ba4d51"></dxi-series>
+        <dxi-series valueField="night" name="Night" color="#5f8b95"></dxi-series>
+        <dxo-common-series-settings
+            #seriesSettings
+            type="scatter">
+        </dxo-common-series-settings>
+        <dxo-margin
+            [top]="50"
+            [bottom]="50"
+            [left]="100">
+        </dxo-margin>
+    </dx-polar-chart>
+    <div class="center">
+        <div>Series Type</div>&nbsp;
+        <dx-select-box
+            [dataSource]="types"
+            [(value)]="seriesSettings.type"
+            [width]="200">
+        </dx-select-box>
+    </div>
+</div>

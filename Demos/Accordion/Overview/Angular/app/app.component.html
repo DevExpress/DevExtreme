@@ -1,0 +1,76 @@
+<div id="accordion">
+    <dx-accordion
+        #accordion
+        [dataSource]="companies"
+        [collapsible]="false"
+        [multiple]="false"
+        [animationDuration]="300"
+        [selectedItems]="[companies[0]]">
+        <div *dxTemplate="let company of 'title'">
+            <h1>{{company.CompanyName}}</h1>
+        </div>
+        <div *dxTemplate="let company of 'item'">
+            <div>
+                <p>
+                    <b>{{company.City}}</b>
+                    (<span>{{company.State}}</span>)
+                </p>
+                <p>
+                    <span>{{company.Zipcode}}</span>
+                    <span>{{company.Address}}</span>
+                </p>
+            </div>
+            <div>
+                <p>
+                    Phone: <b>{{company.Phone}}</b>
+                </p>
+                <p>
+                    Fax: <b>{{company.Fax}}</b>
+                </p>
+                <p>
+                    Website:
+                    <a href="{{company.Website}}" target="_blank">
+                        {{company.Website}}
+                    </a>
+                </p>
+            </div>
+        </div>
+    </dx-accordion>
+
+    <div class="selected-data">
+        <span class="caption">Selected Items</span>
+        <dx-tag-box
+            [dataSource]="companies"
+            displayExpr="CompanyName"
+            [(value)]="accordion.selectedItems"
+            [disabled]="!accordion.multiple"
+        ></dx-tag-box>
+    </div>
+
+    <div class="options">
+        <div class="caption">Options</div>
+        <div class="option">
+            <dx-check-box
+                text="Multiple enabled"
+                [(value)]="accordion.multiple"
+            ></dx-check-box>
+        </div>    
+        <div class="option">            
+            <dx-check-box
+                text="Collapsible enabled"
+                [(value)]="accordion.collapsible"
+            ></dx-check-box>
+        </div>
+        <div class="option">
+            <span>Animation duration</span>
+            <dx-slider
+                [min]="0"
+                [max]="1000"
+                [(value)]="accordion.animationDuration"
+            >
+            <dxo-tooltip [enabled]="true" position="bottom"></dxo-tooltip>
+            <dxo-label [visible]="true"></dxo-label>
+            </dx-slider>
+        </div>       
+    </div>
+</div>

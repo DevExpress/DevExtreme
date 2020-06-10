@@ -1,0 +1,37 @@
+<dx-data-grid id="gridContainer"
+    [dataSource]="dataSource"
+    [showRowLines]="true"
+    [showColumnLines]="false"
+    [showBorders]="true">
+
+    <dxo-sorting mode="none"></dxo-sorting>
+    <dxo-paging [pageSize]="10"></dxo-paging>
+
+    <dxi-column dataField="date" [width]="110" dataType="date"></dxi-column>
+    <dxi-column caption="Open" cellTemplate="diffCellTemplate"></dxi-column>
+    <dxi-column caption="Close" cellTemplate="diffCellTemplate"></dxi-column>
+    <dxi-column caption="Dynamics" [minWidth]="320" cellTemplate="chartCellTemplate"></dxi-column>
+    <dxi-column caption="High" cellTemplate="diffCellTemplate"></dxi-column>
+    <dxi-column caption="Low" cellTemplate="diffCellTemplate"></dxi-column>
+
+    <div *dxTemplate="let d of 'chartCellTemplate'">
+          <div class="chart-cell">
+              <dx-sparkline
+                  [dataSource]="d.data.dayClose"
+                  argumentField="date"
+                  valueField="close"
+                  type="line"
+                  [showMinMax]="true"
+                  minColor="#f00"
+                  maxColor="#2ab71b"
+                  [pointSize]="6">
+                  <dxo-size [width]="290" [height]="40"></dxo-size>
+                  <dxo-tooltip [enabled]="false"></dxo-tooltip>
+              </dx-sparkline>
+          </div>
+      </div>
+      <div *dxTemplate="let d of 'diffCellTemplate'" [class]="(d | gridCellData).diff > 0 ? 'inc' : 'dec'">
+          <div class="current-value">{{(d | gridCellData).value | currency:'USD':'symbol'}}</div>
+          <div class="diff">{{abs((d | gridCellData).diff) | number:'1.2-2'}}</div>
+      </div>
+</dx-data-grid>

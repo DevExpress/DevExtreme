@@ -1,0 +1,1 @@
+The **DataGrid** widget supports custom row templates that allow you to&nbsp;place virtually anything into a&nbsp;grid row. A&nbsp;custom row template is&nbsp;assigned to&nbsp;the **rowTemplate** option.

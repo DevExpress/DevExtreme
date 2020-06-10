@@ -1,0 +1,60 @@
+<dx-data-grid
+    id="grid"
+    [dataSource]="dataSource"  
+    [repaintChangesOnly]="true"
+    [showBorders]="true">
+
+    <dxo-scrolling mode="virtual"></dxo-scrolling>
+    <dxo-editing
+        mode="cell"
+        [refreshMode]="refreshMode"
+        [allowAdding]="true"
+        [allowUpdating]="true"
+        [allowDeleting]="true">
+    </dxo-editing>
+
+    <dxi-column dataField="CustomerID" caption="Customer">
+        <dxo-lookup [dataSource]="customersData" valueExpr="Value" displayExpr="Text"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="OrderDate" dataType="date"></dxi-column>
+    <dxi-column dataField="Freight"></dxi-column>
+    <dxi-column dataField="ShipCountry"></dxi-column>
+    <dxi-column dataField="ShipVia" caption="Shipping Company" dataType="number">
+        <dxo-lookup [dataSource]="shippersData" valueExpr="Value" displayExpr="Text"></dxo-lookup>
+    </dxi-column>
+
+    <dxo-summary>
+        <dxi-total-item
+            column="CustomerID"
+            summaryType="count">
+        </dxi-total-item>
+        <dxi-total-item
+            column="Freight"
+            summaryType="sum"
+            valueFormat="#0.00">
+        </dxi-total-item>
+    </dxo-summary>
+</dx-data-grid>
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <span>Refresh Mode:</span>
+        <dx-select-box
+            [(value)]="refreshMode"
+            [items]="refreshModes">
+        </dx-select-box>
+    </div>
+    <div id="requests">
+        <div>
+            <div class="caption">Network Requests</div>
+            <dx-button
+                id="clear"
+                text="Clear"
+                (onClick)="clearRequests()">
+            </dx-button>
+        </div>
+        <ul>
+            <li *ngFor="let request of requests">{{request}}</li>
+        </ul>
+    </div>
+</div>

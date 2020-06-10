@@ -1,0 +1,3 @@
+The <b>DataGrid</b> widget allows you to&nbsp;customize its command columns. In&nbsp;this demo, a&nbsp;custom command column contains <b>Edit</b>, <b>Delete</b>, and <b>Clone</b> buttons represented by&nbsp;icons instead of&nbsp;textual links. The first two rows do&nbsp;not have the <b>Delete</b> and <b>Clone</b> buttons.
+
+The customizations mentioned above are implemented in&nbsp;the <a href="/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/editing/">editing</a> object for standard <b>Edit</b> and <b>Delete</b> buttons, and in&nbsp;the <a href="/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/columns/buttons/">buttons</a> array for the custom <b>Clone</b> button.

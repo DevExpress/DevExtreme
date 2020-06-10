@@ -1,0 +1,25 @@
+<div id="exportContainer">
+    <dx-button 
+        text="Export multiple grids"
+        icon="xlsxfile"
+        (onClick)="exportGrids($event)"
+    ></dx-button>
+</div>
+<dx-tab-panel id="tabPanel" [deferRendering]="false">
+    <dxi-item title="Price">
+        <dx-data-grid #priceDataGrid class="data-grid" width="100%" [dataSource]="priceDataSource" [showBorders]="true" [rowAlternationEnabled]="true">
+            <dxi-column dataField="Product_ID" caption="ID" [width]="50" ></dxi-column>
+            <dxi-column dataField="Product_Name" caption="Name"></dxi-column>
+            <dxi-column dataField="Product_Sale_Price" caption="Sale Price" dataType="number" format="currency"></dxi-column>
+            <dxi-column dataField="Product_Retail_Price" caption="Retail Price" dataType="number" format="currency"></dxi-column>
+        </dx-data-grid>
+    </dxi-item>
+    <dxi-item title="Rating">
+        <dx-data-grid #ratingDataGrid class="data-grid" width="100%" [dataSource]="ratingDataSource" [showBorders]="true" [rowAlternationEnabled]="true">
+            <dxi-column dataField="Product_ID" caption="ID" [width]="50" ></dxi-column>
+            <dxi-column dataField="Product_Name" caption="Name"></dxi-column>
+            <dxi-column dataField="Product_Consumer_Rating" caption="Rating"></dxi-column>
+            <dxi-column dataField="Product_Category" caption="Category"></dxi-column>
+        </dx-data-grid>
+    </dxi-item>
+</dx-tab-panel>

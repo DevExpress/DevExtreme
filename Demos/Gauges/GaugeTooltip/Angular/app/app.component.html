@@ -1,0 +1,23 @@
+<dx-circular-gauge
+    id="gauge"
+    [value]="12"
+    [subvalues]="[8, 18]">
+    <dxo-scale
+        [startValue]="0"
+        [endValue]="20"
+        [tickInterval]="5">
+    </dxo-scale>
+    <dxo-title text="Rheostat Resistance">
+        <dxo-font [size]="28"></dxo-font>
+    </dxo-title>
+    <dxo-tooltip
+        [enabled]="true"
+        [customizeTooltip]="customizeTooltip">
+        <dxo-font
+            color="#DCD0FF"
+            [size]="40">
+        </dxo-font>
+    </dxo-tooltip>
+    <dxo-export [enabled]="true"></dxo-export>
+</dx-circular-gauge>
+

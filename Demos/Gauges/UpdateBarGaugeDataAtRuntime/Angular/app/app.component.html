@@ -1,0 +1,21 @@
+<div class="long-title"><h3>Colors Representation via Basic Colors</h3></div>
+<div id="gauge-demo">
+    <dx-bar-gauge id="gauge"
+        [values]="getBasicColors(currentColor)"
+        [startValue]="0"
+        [endValue]="255"
+        [palette]="['#ff0000', '#00ff00', '#0000ff']">
+        <dxo-label [visible]="false"></dxo-label>
+    </dx-bar-gauge>
+
+    <div class="action-container">
+        <dx-select-box
+            [width]="150"
+            [dataSource]="colors"
+            displayExpr="name" 
+            valueExpr="code"
+            [(value)]="currentColor">
+        </dx-select-box>
+        <div class="color-box" [style.backgroundColor]="currentColor"></div>
+    </div>
+</div>

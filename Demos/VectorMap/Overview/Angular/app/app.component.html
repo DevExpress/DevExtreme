@@ -1,0 +1,50 @@
+<dx-vector-map 
+    id="vector-map" 
+    [bounds]="[-180, 85, 180, -60]" >
+    <dxo-tooltip 
+        [enabled]="true" 
+        contentTemplate="tooltipContent"></dxo-tooltip>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-title text="Nominal GDP">
+        <dxo-subtitle text="(in millions of US dollars)"></dxo-subtitle>
+    </dxo-title>
+    <dxi-layer 
+        [customize]="customizeLayers"  
+        [dataSource]="worldMap"
+        [colorGroups]="[0, 10000, 50000, 100000, 500000, 1000000, 10000000, 50000000]"
+        colorGroupingField="total"
+        name="areas">
+        <dxo-label [enabled]="true" dataField="name"></dxo-label>
+    </dxi-layer>
+    <dxi-legend [customizeText]="customizeText">
+        <dxo-source layer="areas" grouping="color"></dxo-source>
+    </dxi-legend>
+    <div *dxTemplate="let info of 'tooltipContent'" class='state-tooltip'>
+        <div>
+            <h4>{{info.attribute("name")}}</h4>
+            <div *ngIf="gdpData[info.attribute('name')] as countryGDPData" id='nominal' >
+                Nominal GDP: $<span>{{pipe.transform(countryGDPData.total, "1.0-0")}}</span>M
+            </div>
+            <div *ngIf="getPieData(info.attribute('name')) as data; else noData">
+                <dx-pie-chart id='gdp-sectors'
+                    [dataSource]="data"
+                    [animation]="false">
+                    <dxi-series
+                        argumentField="name"
+                        valueField="value">
+                        <dxo-label 
+                            [visible]="true"
+                            [customizeText]="customizePieLabel">
+                            <dxo-connector 
+                                [visible]="true"
+                                [width]="1"
+                            ></dxo-connector>
+                        </dxo-label>
+                    </dxi-series>
+                    <dxo-legend [visible]="false"></dxo-legend>
+                </dx-pie-chart>
+            </div>
+            <ng-template #noData>No economic development data</ng-template>
+        </div>
+    </div>
+</dx-vector-map>

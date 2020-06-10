@@ -1,0 +1,19 @@
+<dx-vector-map 
+    id="vector-map" 
+    [bounds]="[-118, 52, -80, 20]">
+    <dxo-loading-indicator [show]="true"></dxo-loading-indicator>
+    <dxi-layer 
+        [dataSource]="usaMap" 
+        borderColor="#ffffff" 
+        [hoverEnabled]="false"></dxi-layer>
+    <dxi-layer 
+        [dataSource]="weather"
+        dataField="url" 
+        elementType="image" 
+        type="marker" 
+        [size]="51">
+        <dxo-label dataField="text">
+            <dxo-font [size]="14"></dxo-font>
+        </dxo-label>
+    </dxi-layer>
+</dx-vector-map>

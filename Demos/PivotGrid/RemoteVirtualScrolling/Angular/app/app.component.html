@@ -1,0 +1,14 @@
+<div class="long-title">
+	<h3>Sales Statistics</h3>
+</div>
+<dx-pivot-grid
+  [allowSorting]="true"
+  [allowFiltering]="true"
+  [height]="570"
+  [showBorders]="true"
+  [dataSource]="dataSource">
+  <dxo-field-panel [visible]="true" [showFilterFields]="false"></dxo-field-panel>
+  <dxo-field-chooser [allowSearch]="true"></dxo-field-chooser>
+  <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+  <dxo-scrolling mode="virtual"></dxo-scrolling>
+</dx-pivot-grid>

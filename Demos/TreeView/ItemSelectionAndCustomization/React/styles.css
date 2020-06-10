@@ -1,0 +1,52 @@
+.form>h4 {
+    margin-bottom: 20px;
+}
+
+.form>div,
+#treeview {
+    display: inline-block;
+    vertical-align: top;
+}
+
+#selected-employees {
+    margin-top: 20px;
+}
+
+.selected-container {
+    padding: 20px;
+    margin-left: 20px;    
+    background-color: rgba(191, 191, 191, 0.15);
+    font-size: 115%;
+    font-weight: bold;
+}
+
+.dx-list-item-content {
+    padding-left: 0;
+}
+.options {
+    padding: 20px;
+    background-color: rgba(191, 191, 191, 0.15);
+    margin-top: 20px;
+    box-sizing: border-box;
+}
+
+.caption {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.option {
+    width: 24%;
+    display: inline-block;
+    margin-top: 10px;
+    margin-right: 5px;
+    box-sizing: border-box;
+}
+
+.recursive-option {
+    padding-left: 10px;
+}
+
+.option:last-of-type {
+    margin-right: 0px;
+}

@@ -1,0 +1,1 @@
+When bare facts are not enough to&nbsp;present your data in&nbsp;the best possible way, turn them into an&nbsp;eye-catching animated chart using the **Chart** widget. This demo illustrates this widget coordinating with the **PivotGrid** widget. Expand a&nbsp;column or&nbsp;row in&nbsp;the **PivotGrid** for the Chart to&nbsp;show data of&nbsp;the lowest expanded level.

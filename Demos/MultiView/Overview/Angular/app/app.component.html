@@ -1,0 +1,57 @@
+<div id="multiview">
+    <div>
+        Item <span>{{multiview.selectedIndex + 1}}</span> of <span>{{itemCount}}</span>: <i>Swipe the view horizontally to switch to the next view.</i>
+    </div>
+    <dx-multi-view
+        #multiview
+        [height]="300"
+        [dataSource]="companies"
+        [selectedIndex]="0"
+        [loop]="false"
+        [animationEnabled]="true">
+        <div *dxTemplate="let company of 'item'">
+            <div class="multiview-item">
+                <h1>{{company.CompanyName}}</h1>
+                <div>
+                    <p>
+                        <b>{{company.City}}</b>
+                        (<span>{{company.State}}</span>)
+                    </p>
+                    <p>
+                        <span>{{company.Zipcode}}</span>
+                        <span>{{company.Address}}</span>
+                    </p>
+                </div>
+                <div>
+                    <p>
+                        Phone: <b>{{company.Phone}}</b>
+                    </p>
+                    <p>
+                        Fax: <b>{{company.Fax}}</b>
+                    </p>
+                    <p>
+                        Website:
+                        <a href="{{company.Website}}" target="_blank">
+                            {{company.Website}}
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </dx-multi-view>
+    <div class="options">
+        <div class="caption">Options</div>
+        <div class="option">
+            <dx-check-box
+                text="Loop enabled"
+                [(value)]="multiview.loop"
+            ></dx-check-box>
+        </div>
+        <div class="option">
+            <dx-check-box
+                text="Animation enabled"
+                [(value)]="multiview.animationEnabled"
+            ></dx-check-box>
+        </div>
+    </div>
+</div>

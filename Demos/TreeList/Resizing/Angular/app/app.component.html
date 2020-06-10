@@ -1,0 +1,31 @@
+<dx-tree-list
+    id="employees"
+    [dataSource]="employees"
+    keyExpr="ID"
+    parentIdExpr="Head_ID"
+    [columnAutoWidth]="true"
+    [showRowLines]="true"
+    [showBorders]="true"
+    [allowColumnResizing]="true"
+    [columnResizingMode]="columnResizingMode"
+    [columnMinWidth]="50"
+    [expandedRowKeys]="[1, 3, 6]">
+    <dxi-column dataField="Title" caption="Position"></dxi-column>
+    <dxi-column dataField="Full_Name"></dxi-column>
+    <dxi-column dataField="City"></dxi-column>
+    <dxi-column dataField="State"></dxi-column>
+    <dxi-column dataField="Hire_Date" dataType="date"></dxi-column>
+</dx-tree-list>
+
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <span>Column resizing mode:</span>
+        <dx-select-box id="select-resizing"
+            [items]="resizingModes"
+            [value]="resizingModes[0]"
+            [width]="250"
+            (onValueChanged)="selectResizing($event)">
+        </dx-select-box>
+    </div>
+</div>

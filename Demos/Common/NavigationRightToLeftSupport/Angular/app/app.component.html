@@ -1,0 +1,68 @@
+<div [ngClass]="{'dx-rtl': rtlEnabled}">
+    <div class="options" >
+        <div class="caption">Options</div>
+        <div class="dx-fieldset">
+            <div class="dx-field">
+                <div class="dx-field-label">Language</div>
+                <div class="dx-field-value">
+                    <dx-select-box
+                        [items]="languages"
+                        [value]="languages[1]"
+                        (onValueChanged)="selectLanguage($event)"
+                    ></dx-select-box>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="dx-fieldset">
+            <div class="dx-fieldset-header">
+                <dx-menu
+                    [dataSource]="continents"
+                    [rtlEnabled]="rtlEnabled"
+                    [displayExpr]="rtlEnabled ? 'textAr' : 'text'"
+                ></dx-menu>
+            </div>
+            
+        </div>
+        <div class="dx-fieldset">
+            <div class="dx-field">
+                <div class="dx-field-label">
+                    <dx-tree-view
+                        [width]=200
+                        [dataSource]="continents"
+                        [displayExpr]="rtlEnabled ? 'textAr' : 'text'"
+                        [rtlEnabled]="rtlEnabled"
+                    ></dx-tree-view>
+                </div>
+                <div class="dx-field-value">
+
+
+                    <dx-accordion
+                        [dataSource]="europeCountries"
+                        [rtlEnabled]="rtlEnabled"
+                        [itemTitleTemplate]="rtlEnabled ? 'arabicTitle' : 'englishTitle'"
+                        [itemTemplate]="rtlEnabled ? 'arabic' : 'english'"
+                    >
+                        <div *dxTemplate="let item of 'arabicTitle'">
+                            {{item.nameAr}}
+                        </div>
+                        <div *dxTemplate="let country of 'arabic'">
+                            <div>عاصمة: {{country.capitalAr}} </div>
+                            <div>عدد السكان: {{country.population}} نسمة</div>
+                            <div>المساحة: {{country.area}} كم<sup>2</sup></div>
+                        </div>
+                        <div *dxTemplate="let item of 'englishTitle'">
+                            {{item.nameEn}}
+                        </div>
+                        <div *dxTemplate="let country of 'english'">
+                            <div>Capital: {{country.capitalEn}} </div>
+                            <div>Population: {{country.population}} people</div>
+                            <div>Area: {{country.area}} km<sup>2</sup></div>
+                        </div>
+                    </dx-accordion>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

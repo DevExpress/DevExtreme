@@ -1,0 +1,48 @@
+<dx-chart
+    id="chart"
+    [dataSource]="weatherData"
+    defaultPane="bottomPane"
+    title="Weather in Glendale, CA">
+    <dxi-series
+        pane="topPane"
+        color="#b0daff"
+        type="rangeArea"
+        rangeValue1Field="minT"
+        rangeValue2Field="maxT"
+        name="Monthly Temperature Ranges, °C">
+    </dxi-series>
+    <dxi-series
+        pane="topPane"
+        valueField="avgT"
+        name="Average Temperature, °C">
+        <dxo-label
+            [visible]="true"
+            [customizeText]="temperatureCustomizeText">
+        </dxo-label>
+    </dxi-series>
+    <dxi-series
+        type="bar"
+        valueField="prec"
+        name="prec, mm">
+        <dxo-label
+            [visible]="true"
+            [customizeText]="precipitationCustomizeText">
+        </dxo-label>
+    </dxi-series>
+    <dxo-common-series-settings argumentField="month"></dxo-common-series-settings>
+    <dxi-pane name="topPane"></dxi-pane>
+    <dxi-pane name="bottomPane"></dxi-pane>
+    <dxi-value-axis pane="bottomPane">
+        <dxo-grid [visible]="true"></dxo-grid>
+        <dxo-title text="Precipitation, mm"></dxo-title>
+    </dxi-value-axis>
+    <dxi-value-axis pane="topPane">
+        <dxo-grid [visible]="true"></dxo-grid>
+        <dxo-title text="Temperature, °C"></dxo-title>
+    </dxi-value-axis>
+    <dxo-legend
+        verticalAlignment="bottom"
+        horizontalAlignment="center">
+    </dxo-legend>
+    <dxo-export [enabled]="true"></dxo-export>
+</dx-chart>

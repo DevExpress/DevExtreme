@@ -1,0 +1,52 @@
+<div id="chart-demo">
+    <dx-chart
+        id="zoomedChart"
+        [dataSource]="stockPrices"
+        title="Google Inc. Stock Prices">
+        <dxi-series
+            type="candleStick"
+            openValueField="Open"
+            highValueField="High"
+            lowValueField="Low"
+            closeValueField="Close"
+            argumentField="Date">
+            <dxo-aggregation [enabled]="true"></dxo-aggregation>
+        </dxi-series>
+        <dxo-margin [right]="10"></dxo-margin>
+        <dxi-value-axis valueType="numeric"></dxi-value-axis>
+        <dxo-argument-axis
+            [valueMarginsEnabled]="false"
+            argumentType="datetime"
+            [visualRange]="visualRange">
+            <dxo-grid [visible]="true"></dxo-grid>
+            <dxo-label [visible]="false"></dxo-label>
+        </dxo-argument-axis>
+        <dxo-legend [visible]="false"></dxo-legend>
+        <dxo-tooltip [enabled]="true"></dxo-tooltip>
+    </dx-chart>
+    <dx-range-selector
+        [dataSource]="stockPrices"
+        [(value)]="visualRange">
+        <dxo-size [height]="120"></dxo-size>
+        <dxo-scale
+            minorTickInterval="day"
+            tickInterval="month"
+            valueType="datetime"
+            aggregationInterval="week"
+            [placeholderHeight]="20">
+        </dxo-scale>
+        <dxo-behavior
+            callValueChanged="onMoving"
+            [snapToTicks]="false">
+        </dxo-behavior>
+        <dxo-chart>
+            <dxo-value-axis valueType="numeric"></dxo-value-axis>
+            <dxi-series
+                type="line"
+                valueField="Open"
+                argumentField="Date">
+                <dxo-aggregation [enabled]="true"></dxo-aggregation>
+            </dxi-series>
+        </dxo-chart>
+    </dx-range-selector>
+</div>

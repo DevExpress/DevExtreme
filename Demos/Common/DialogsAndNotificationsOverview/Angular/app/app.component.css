@@ -1,0 +1,136 @@
+::ng-deep .large-text {
+    font-size: 24px;
+    color: #ff6a50;
+}
+
+::ng-deep .opacity {
+    opacity: 0.5;
+}
+
+::ng-deep .images {
+    font-size: 0;
+}
+
+::ng-deep .images > div {
+    display: inline-block;
+    width: 33.3%;
+    vertical-align: top;
+}
+
+::ng-deep .images .item-content {
+    position: relative;
+    margin: 5px;
+    color: #fff;
+    cursor: pointer;
+}
+
+::ng-deep .images .item-content > img {
+    width: 100%;
+}
+
+::ng-deep .item-content .item-options {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+::ng-deep .images .item-content:hover > .item-options {
+    box-shadow: inset 0 0 0 2px #f05b41;
+}
+
+::ng-deep .item-content .item-options > div {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 64px;
+    padding-top: 4px;
+    background-color: rgba(19,32,51,0.8);
+    z-index: 1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-left: 2px solid transparent;
+    border-right: 2px solid transparent;
+}
+
+::ng-deep .images .item-content:hover > .item-options > div {
+    border-bottom: 2px solid #f05b41;
+    border-left: 2px solid #f05b41;
+    border-right: 2px solid #f05b41;
+}
+
+::ng-deep .item-content .item-options .address,
+::ng-deep .item-content .item-options .price {
+    max-width: 70%;
+    padding-left: 8px;
+}
+
+::ng-deep .item-content .item-options .address {
+    font-size: 14px;
+}
+
+::ng-deep .item-content .item-options .agent {
+    font-size: 12px;
+    width: 60px;
+    position: absolute;
+    right: -2px;
+    top: 0;
+    bottom: 0;
+    text-align: center;
+    border-left: 1px solid rgba(255, 255, 255, 0.4);
+    line-height: 13px;
+}
+
+::ng-deep .item-content .item-options .agent > div:hover {
+    color: #f05b41;
+}
+
+::ng-deep .item-content .item-options .agent img {
+    display: block;
+    width: 13px;
+    height: 16px;
+    margin: 8px auto 2px;
+}
+
+::ng-deep .agent-details > img, .agent-details > div {
+    display: inline-block;
+    vertical-align: top;
+    line-height: 26px;
+}
+
+::ng-deep .agent-details > img {
+    width: 40px;
+    margin-right: 10px;
+}
+
+::ng-deep .agent-details .phone {
+    font-size: 18px;
+}
+
+::ng-deep .popup-property-details {
+    overflow: hidden;
+    position: relative;
+}
+
+::ng-deep .popup-property-details .images {
+    width: 700px;
+}
+
+::ng-deep .popup-property-details img {
+    height: 205px;
+    margin: 10px 10px 10px 0;
+}
+
+::ng-deep .dx-button.favorites {
+    background-color: #f05b41;
+    color: #fff;
+    position: absolute;
+    top: 5px;
+    right: 0;
+}
+
+::ng-deep .dx-button.favorites .dx-icon {
+    color: #fff;
+}

@@ -1,0 +1,34 @@
+<dx-scheduler
+    [dataSource]="appointmentsData"
+    currentView="Week"
+    [currentDate]="currentDate"
+    [(groupByDate)]="groupByDate"
+    [startDayHour]="9"
+    [endDayHour]="16"
+    [groups]="['priorityId']"
+    [height]="700"
+    [crossScrollingEnabled]="true">
+    <dxi-view
+        type="week"
+        name="Week">
+    </dxi-view>
+    <dxi-view
+        type="month"
+        name="Month">
+    </dxi-view>
+    <dxi-resource
+        [dataSource]="prioritiesData"
+        fieldExpr="priorityId"
+        label="Priority"
+        [allowMultiple]="false"
+    ></dxi-resource>
+</dx-scheduler>
+
+<div class="options">
+    <div class="caption">Group by Date First</div>
+    <div class="option">
+        <dx-switch
+            [(value)]="groupByDate">
+        </dx-switch>
+    </div>
+</div>

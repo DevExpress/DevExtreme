@@ -1,0 +1,60 @@
+<div id="gauge-demo">
+    <div class="widget-container">
+        <dx-circular-gauge
+            id="gauge"
+            [value]="gaugeValue"
+            [subvalues]="gaugeSubvalues">
+            <dxo-scale
+                [startValue]="10"
+                [endValue]="40"
+                [tickInterval]="5">
+                <dxo-label [customizeText]="customizeText"></dxo-label>
+            </dxo-scale>
+            <dxo-title text="Generators Voltage (kV)">
+                <dxo-font [size]="28"></dxo-font>
+            </dxo-title>
+            <dxo-tooltip [enabled]="true"></dxo-tooltip>
+        </dx-circular-gauge>
+    </div>
+    <div class="options">
+        <div class="caption">Options</div>
+        <div class="option">
+            <span>Main generator</span> 
+            <dx-number-box
+                [(value)]="mainGenerator"
+                [min]="10"
+                [max]="40"
+                [width]="100"
+                [showSpinButtons]="true">
+            </dx-number-box>
+        </div>
+        <div class="option">
+            <span>Additional generator 1</span>
+            <dx-number-box
+                [(value)]="additionalGenerator[0]"
+                [min]="10"
+                [max]="40"
+                [width]="100"
+                [showSpinButtons]="true">
+            </dx-number-box>
+        </div>
+        <div class="option">
+            <span>Additional generator 2</span>
+            <dx-number-box
+                [(value)]="additionalGenerator[1]"
+                [min]="10"
+                [max]="40"
+                [width]="100"
+                [showSpinButtons]="true">
+            </dx-number-box>
+        </div>
+        <div class="option">
+            <dx-button
+                text="Apply"
+                [width]="100"
+                (onClick)="updateValues()">
+            </dx-button>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,20 @@
+<dx-range-selector 
+    id="range-selector"
+    title="Select a Year Period"
+    [dataSource]="dataSource">
+    <dxo-margin [top]="50"></dxo-margin>
+    <dxo-chart>
+        <dxo-common-series-settings
+            type="spline"
+            argumentField="year"
+            valueField="oil">
+        </dxo-common-series-settings>
+        <dxo-series-template
+            nameField="country"
+            [customizeSeries]="customizeSeries">
+        </dxo-series-template>
+    </dxo-chart>
+    <dxo-scale>
+        <dxo-label format="decimal"></dxo-label>
+    </dxo-scale>
+</dx-range-selector>

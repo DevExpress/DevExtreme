@@ -1,0 +1,35 @@
+::ng-deep .dx-viewport:not(.dx-theme-ios7) .dx-fieldset {
+    width: 520px;
+    margin: 30px auto;
+}
+
+::ng-deep .dx-viewport:not(.dx-theme-ios7) .dx-fieldset:first-child {
+    margin-top: 120px;
+}
+
+::ng-deep .dx-viewport:not(.dx-theme-ios7) .dx-fieldset-header {
+    font-size: 16px;
+}
+
+::ng-deep .dx-viewport:not(.dx-theme-ios7) .dx-field {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+::ng-deep .dx-viewport:not(.dx-theme-ios7) .dx-field-value:not(.dx-widget) > .dx-button {
+    float: none;
+}
+
+::ng-deep .dx-viewport:not(.dx-theme-ios7) .dx-field-value:not(.dx-switch):not(.dx-checkbox):not(.dx-button),
+::ng-deep .dx-viewport:not(.dx-theme-ios7) .dx-field-label {
+    float: none;
+    width: 100%;
+}
+
+::ng-deep .dx-viewport:not(.dx-theme-ios7) .dx-field-label {
+    padding-left: 0;
+}
+
+::ng-deep .send .dx-button-content .dx-icon {
+    font-size: 18px;
+}

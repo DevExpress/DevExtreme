@@ -1,0 +1,47 @@
+<dx-data-grid id="gridContainer"
+        [dataSource]="dataSource"
+        [rtlEnabled]="rtlEnabled"
+        [showBorders]="true">
+    <dxo-paging [pageSize]="15"></dxo-paging>
+    <dxo-search-panel [visible]="true" [placeholder]="placeholder"></dxo-search-panel>
+
+    <dxi-column
+        [dataField]="rtlEnabled ? 'nameAr' : 'nameEn'"
+        [caption]="rtlEnabled ? 'الدولة' : 'Name'">
+    </dxi-column>
+    <dxi-column
+        [dataField]="rtlEnabled ? 'capitalAr' : 'capitalEn'"
+        [caption]="rtlEnabled ? 'عاصمة' : 'Capital'">
+    </dxi-column>
+    <dxi-column
+        dataField="population"
+        [caption]="rtlEnabled ? 'عدد السكان (نسمة) 2013' : 'Population'"
+        [format]="{ type: 'fixedPoint', precision: 0 }">
+    </dxi-column>
+    <dxi-column
+        dataField="area"
+        [headerCellTemplate]="rtlEnabled ? 'arabicTemplate' : 'englishTemplate'"
+        [format]="{ type: 'fixedPoint', precision: 0 }">
+    </dxi-column>
+    <dxi-column dataField="accession" [visible]="false"></dxi-column>
+
+    <div *dxTemplate="let item of 'englishTemplate'">
+        <div>Area (km<sup>2</sup>)</div>
+    </div>
+    <div *dxTemplate="let item of 'arabicTemplate'">
+        <div>المساحة (كم<sup>2</sup>)</div>
+    </div>
+</dx-data-grid>
+
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <span>Language:</span>
+        <dx-select-box id="select-language"
+            [items]="languages"
+            [value]="languages[1]"
+            [width]="250"
+            (onValueChanged)="selectLanguage($event)">
+        </dx-select-box>
+    </div>
+</div>

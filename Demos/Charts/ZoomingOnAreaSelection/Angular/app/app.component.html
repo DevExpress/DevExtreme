@@ -1,0 +1,42 @@
+<dx-chart
+    id="chart"
+    [dataSource]="data">
+    <dxo-title text="Life Expectancy vs. Birth Rates"></dxo-title>
+    <dxo-zoom-and-pan
+        valueAxis="both"
+        argumentAxis="both"
+        [dragToZoom]="true"
+        [allowMouseWheel]="true"
+        panKey="shift"
+    ></dxo-zoom-and-pan>
+    <dxo-common-series-settings
+        type="scatter"
+        argumentField="life_exp"
+        valueField="birth_rate">
+        <dxo-point [size]="8"></dxo-point>
+    </dxo-common-series-settings>
+    <dxo-series-template nameField="year"></dxo-series-template>
+    <dxo-crosshair
+        [enabled]="true">
+        <dxo-label [visible]="true"></dxo-label>
+    </dxo-crosshair>
+    <dxo-tooltip
+        [enabled]="true"
+        [customizeTooltip]="customizeTooltip"
+    ></dxo-tooltip>
+    <dxo-argument-axis
+        title="Life Expectancy">
+    </dxo-argument-axis>
+    <dxi-value-axis
+        title="Birth Rate">
+    </dxi-value-axis>
+    <dxo-legend position="inside">
+        <dxo-border
+            [visible]="true"
+        ></dxo-border>
+    </dxo-legend>
+</dx-chart>
+<dx-button id="reset-button"
+    text="Reset"
+    (onClick)="resetZoom($event)"
+></dx-button>

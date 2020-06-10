@@ -1,0 +1,28 @@
+.dx-list {
+    height: 90%;
+    position: absolute;
+    top: 0; 
+    bottom: 0;
+}
+
+.info {
+    margin-top: 5px;
+    height: 78px;
+}
+
+.image-container {
+    width: 65px;
+    float: left;
+    margin-right: 20px;
+}
+
+.image-container img {
+    display: block;
+    width: 100%;
+}
+
+.dx-tabs.dx-navbar {
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+}

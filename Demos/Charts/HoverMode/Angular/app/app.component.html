@@ -1,0 +1,21 @@
+<dx-chart
+    id="chart"
+    [dataSource]="grossProductData"
+    [stickyHovering]="false"
+    title="Great Lakes Gross State Product">
+    <dxi-series valueField="year2004" name="2004"></dxi-series>
+    <dxi-series valueField="year2001" name="2001"></dxi-series>
+    <dxi-series valueField="year1998" name="1998"></dxi-series>
+    <dxo-common-series-settings
+        argumentField="state"
+        type="spline"
+        hoverMode="includePoints">
+        <dxo-point hoverMode="allArgumentPoints"></dxo-point>
+    </dxo-common-series-settings>
+    <dxo-legend
+        verticalAlignment="bottom"
+        horizontalAlignment="center"
+        hoverMode="excludePoints">
+    </dxo-legend>
+    <dxo-export [enabled]="true"></dxo-export>
+</dx-chart>

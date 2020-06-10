@@ -1,0 +1,29 @@
+<dx-data-grid id="gridContainer"
+    [dataSource]="employees"
+    [columnAutoWidth]="true"
+    [showBorders]="true"
+    rowTemplate="rowTemplateName">
+
+    <dxi-column caption="Photo" [width]="100" [allowFiltering]="false" [allowSorting]="false"></dxi-column>
+    <dxi-column dataField="Prefix" [width]="70" caption="Title"></dxi-column>
+    <dxi-column dataField="FirstName"></dxi-column>
+    <dxi-column dataField="LastName"></dxi-column>
+    <dxi-column dataField="Position"></dxi-column>
+    <dxi-column dataField="BirthDate" dataType="date"></dxi-column>
+    <dxi-column dataField="HireDate" dataType="date"></dxi-column>
+
+    <tbody class="employee dx-row" [ngClass]="{'dx-row-alt': employee.rowIndex % 2}" *dxTemplate="let employee of 'rowTemplateName'" >
+        <tr class="main-row">
+            <td rowspan="2"><img [src]="employee.data.Picture"/></td>
+            <td>{{employee.data.Prefix}}</td>
+            <td>{{employee.data.FirstName}}</td>
+            <td>{{employee.data.LastName}}</td>
+            <td>{{employee.data.Position}}</td>
+            <td>{{employee.data.BirthDate | date: "M/d/yyyy"}}</td>
+            <td>{{employee.data.HireDate | date: "M/d/yyyy"}}</td>
+        </tr>
+        <tr class="notes-row">
+            <td colspan="6"><div>{{employee.data.Notes}}</div></td>
+        </tr>
+    </tbody>
+</dx-data-grid>

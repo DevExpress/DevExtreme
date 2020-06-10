@@ -1,0 +1,1 @@
+This example demonstrates the **List** widget loading data from a Web API service.

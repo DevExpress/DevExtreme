@@ -1,0 +1,29 @@
+::ng-deep #range-selector {
+    height: 200px;
+}
+
+::ng-deep h2 {
+    text-align: center;
+}
+::ng-deep .options {
+    padding: 20px;
+    background-color: rgba(191, 191, 191, 0.15);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+::ng-deep .option {
+    margin-top: 10px;
+}
+ ::ng-deep .caption {
+    font-size: 18px;
+    font-weight: 500;
+}
+::ng-deep .option > span {
+    margin-right: 10px;
+}
+::ng-deep .option > .dx-widget {
+    display: inline-block;
+    vertical-align: middle;
+}

@@ -1,0 +1,15 @@
+<dx-data-grid id="gridContainer" [dataSource]="employees" [showBorders]="true" (onExporting)="onExporting($event)" (onCellPrepared)="onCellPrepared($event)">
+    <dxo-group-panel [visible]="true"></dxo-group-panel>
+    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+    <dxo-selection mode="multiple"></dxo-selection>
+
+    <dxi-column dataField="FirstName"></dxi-column>
+    <dxi-column dataField="LastName"></dxi-column>
+    <dxi-column dataField="City"></dxi-column>
+    <dxi-column dataField="State" [groupIndex]="0"></dxi-column>
+    <dxi-column dataField="Position" [width]="130"></dxi-column>
+    <dxi-column dataField="BirthDate" dataType="date" [width]="100"></dxi-column>
+    <dxi-column dataField="HireDate" dataType="date" [width]="100"></dxi-column>
+
+    <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+</dx-data-grid>

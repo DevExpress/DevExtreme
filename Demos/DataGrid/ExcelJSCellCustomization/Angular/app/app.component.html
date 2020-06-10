@@ -1,0 +1,20 @@
+<dx-data-grid id="gridContainer" [dataSource]="companies" [showBorders]="true" (onExporting)="onExporting($event)">
+  <dxo-group-panel [visible]="true"></dxo-group-panel>
+  <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+  <dxo-export [enabled]="true"></dxo-export>
+  <dxi-sort-by-group-summary-info summaryItem="count"></dxi-sort-by-group-summary-info>
+  
+  <dxi-column dataField="Name" [width]="190"></dxi-column>
+  <dxi-column dataField="Address" [width]="200"></dxi-column>
+  <dxi-column dataField="City"></dxi-column>
+  <dxi-column dataField="State" [groupIndex]="0"></dxi-column>
+  <dxi-column dataField="Phone" [format]="phoneNumberFormat"></dxi-column>
+  <dxi-column dataField="Website" caption="" alignment="center" [width]="100" cellTemplate="cellTemplate"></dxi-column>
+  <div *dxTemplate="let cell of 'cellTemplate'">
+    <a href="{{ cell.text }}" target="_blank">Website</a>
+  </div>
+  
+  <dxo-summary>
+    <dxi-total-item column="Name" summaryType="count" displayFormat="Total count: {0} companies"></dxi-total-item>
+  </dxo-summary>
+</dx-data-grid>

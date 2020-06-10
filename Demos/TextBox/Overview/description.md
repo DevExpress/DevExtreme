@@ -1,0 +1,1 @@
+The **TextBox** is&nbsp;a&nbsp;widget that enables a&nbsp;user to&nbsp;enter and edit a&nbsp;single line of&nbsp;text.

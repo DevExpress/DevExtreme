@@ -1,0 +1,23 @@
+<dx-data-grid
+    id="orders"
+    [dataSource]="customers"
+    [allowColumnResizing]="true"
+    [showBorders]="true"
+    [columnResizingMode]="columnResizingMode"
+    [columnMinWidth]="50"
+    [columnAutoWidth]="true"
+    [columns]="['CompanyName', 'City', 'State', 'Phone', 'Fax']">
+</dx-data-grid>
+
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <span>Column resizing mode:</span>
+        <dx-select-box id="select-resizing"
+            [items]="resizingModes"
+            [value]="resizingModes[0]"
+            [width]="250"
+            (onValueChanged)="selectResizing($event)">
+        </dx-select-box>
+    </div>
+</div>

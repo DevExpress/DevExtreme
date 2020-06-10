@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script src="../../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../../../../node_modules/cldrjs/dist/cldr.js"></script>
+    <script src="../../../../node_modules/cldrjs/dist/cldr/event.js"></script>
+    <script src="../../../../node_modules/cldrjs/dist/cldr/supplemental.js"></script>
+    <script src="../../../../node_modules/cldrjs/dist/cldr/unresolved.js"></script>
+    <script type="text/javascript" src="../../../../node_modules/globalize/dist/globalize.js"></script>
+    <script type="text/javascript" src="../../../../node_modules/globalize/dist/globalize/message.js"></script>
+    <script type="text/javascript" src="../../../../node_modules/globalize/dist/globalize/number.js"></script>
+    <script type="text/javascript" src="../../../../node_modules/globalize/dist/globalize/currency.js"></script>
+    <script type="text/javascript" src="../../../../node_modules/globalize/dist/globalize/date.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.light.css" />
+    <script src="../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="index.js"></script>
+</head>
+<body class="dx-viewport">
+    <div class="demo-container">
+        <div class="dx-fieldset">
+            <div class="dx-field">
+                <div class="dx-field-label">Date</div>
+                <div class="dx-field-value">
+                    <div id="date"></div>
+                </div>
+            </div>    
+            <div class="dx-field">
+                <div class="dx-field-label">Time</div>
+                <div class="dx-field-value">
+                    <div id="time"></div>
+                </div>
+            </div>
+            <div class="dx-field">
+                <div class="dx-field-label">Date and time</div>
+                <div class="dx-field-value">
+                    <div id="date-time"></div>
+                </div>
+            </div>
+            <div class="dx-field">
+                <div class="dx-field-label">Custom format</div>
+                <div class="dx-field-value">
+                    <div id="custom"></div>
+                </div>
+            </div>
+            <div class="dx-field">
+                <div class="dx-field-label">Date picker</div>
+                <div class="dx-field-value">
+                    <div id="date-by-picker"></div>
+                </div>
+            </div>
+            <div class="dx-field">
+                <div class="dx-field-label">Clear button</div>
+                <div class="dx-field-value">
+                    <div id="clear"></div>
+                </div>
+            </div>
+            <div class="dx-field">
+                <div class="dx-field-label">Disabled</div>
+                <div class="dx-field-value">
+                    <div id="disabled"></div>
+                </div>
+            </div>
+            <div class="dx-field">
+                <div class="dx-field-label">Disable certain dates</div>
+                <div class="dx-field-value">
+                    <div id="disabledDates"></div>
+                </div>
+            </div>
+        </div>
+        <div class="dx-fieldset">
+            <div class="dx-fieldset-header">Event Handling</div>
+            <div class="dx-field">
+                <div class="dx-field-label">Set Birthday</div>
+                <div class="dx-field-value">
+                    <div id="birthday"></div>
+                </div>
+            </div>
+            <div class="dx-field">
+                <div class="dx-field-value">
+                    Your age is <div id="age"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

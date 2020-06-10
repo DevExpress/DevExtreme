@@ -1,0 +1,26 @@
+<dx-funnel
+    id="funnel"
+    [dataSource]="data"
+    argumentField="argument"
+    valueField="value"
+    palette="Soft Pastel">
+    <dxo-title text="Website Conversions">
+        <dxo-margin [bottom]="30"></dxo-margin>
+    </dxo-title>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-tooltip
+        [enabled]="true"
+        [format]="fixedPoint">
+    </dxo-tooltip>
+    <dxo-item>
+        <dxo-border
+            [visible]="true">
+        </dxo-border>
+    </dxo-item>
+    <dxo-label
+        [visible]="true"
+        position="inside"
+        backgroundColor="none"
+        [customizeText]="customizeText"
+    ></dxo-label>
+</dx-funnel>

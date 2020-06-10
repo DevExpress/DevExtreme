@@ -1,0 +1,31 @@
+<dx-scheduler
+    [dataSource]="appointmentsData"
+    currentView="Vertical Grouping"
+    [currentDate]="currentDate"
+    [startDayHour]="9"
+    [endDayHour]="16"
+    [groups]="['priorityId']"
+    [showCurrentTimeIndicator]="false"
+    [showAllDayPanel]="false"
+    [crossScrollingEnabled]="true">
+    <dxi-view
+        type="workWeek"
+        name="Vertical Grouping"
+        groupOrientation="vertical"
+        [cellDuration]="60"
+        [intervalCount]="2">
+    </dxi-view>
+    <dxi-view 
+        type="workWeek"
+        name="Horizontal Grouping"
+        groupOrientation="horizontal"
+        [cellDuration]="30"
+        [intervalCount]="2">
+    </dxi-view>
+    <dxi-resource
+        [dataSource]="prioritiesData"
+        fieldExpr="priorityId"
+        label="Priority"
+        [allowMultiple]="false"
+    ></dxi-resource>
+</dx-scheduler>

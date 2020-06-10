@@ -1,0 +1,30 @@
+<dx-tree-list
+    id="employees"
+    [dataSource]="employees"
+    keyExpr="ID"
+    parentIdExpr="Head_ID"
+    [showRowLines]="true"
+    [showBorders]="true"
+    [columnAutoWidth]="true"
+    [expandedRowKeys]="[1, 2, 10]"
+    [(selectedRowKeys)]="selectedRowKeys">
+    <dxo-selection
+            mode="multiple"
+            [recursive]="recursiveSelectionEnabled">
+    </dxo-selection>
+    <dxi-column dataField="Full_Name" caption="Full Name" ></dxi-column>
+    <dxi-column dataField="Title" caption="Position"></dxi-column>
+    <dxi-column dataField="City"></dxi-column>
+    <dxi-column dataField="State"></dxi-column>
+    <dxi-column dataField="Hire_Date" caption="Hire Date" dataType="date" [width]="120"></dxi-column>
+</dx-tree-list>
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <dx-check-box 
+            [(value)]="recursiveSelectionEnabled"
+            (onValueChanged)="onValueChanged($event)"
+            text="Recursive Selection"> 
+        </dx-check-box>
+    </div>
+</div>

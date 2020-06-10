@@ -1,0 +1,28 @@
+::ng-deep #gauge-demo {
+    height: 440px;
+    width: 100%;
+}
+::ng-deep #gauge {
+    width: 80%;
+    height: 100%;
+    margin-top: 20px;
+    float: left;
+}
+::ng-deep .action-container {
+    width: 20%;
+    text-align: left;
+    margin-top: 20px;
+    float: left;
+}
+::ng-deep .color-box {
+    width: 40px;
+    height: 40px;
+    margin-top: 20px;
+}
+
+::ng-deep .long-title h3 {
+    font-weight: 200;
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 20px;
+}

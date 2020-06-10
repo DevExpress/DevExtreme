@@ -1,0 +1,21 @@
+::ng-deep #chart-demo {
+    height: 460px;
+}
+
+::ng-deep #chart {
+    position: absolute;
+    top: 12px;
+    right: 35px;
+    width: 480px;
+    height: 347px;
+}
+
+::ng-deep .chart_environment {
+    width: 820px;
+    position: relative;
+    margin: 0 auto;
+}
+
+::ng-deep .controls-pane {
+    text-align: center;
+}

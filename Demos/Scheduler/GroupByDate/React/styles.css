@@ -1,0 +1,24 @@
+#scheduler {
+    display: flex;
+    flex-direction: column;
+}
+
+.options {
+    padding: 20px;
+    background-color: rgba(191, 191, 191, 0.15);
+    margin-top: 20px;
+}
+
+.caption {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.option {
+    margin-top: 10px;
+    display: inline-block;
+}
+
+.dx-scheduler-work-space-group-by-date .dx-scheduler-group-header-content {
+    font-size: 11px;
+}

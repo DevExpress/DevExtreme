@@ -1,0 +1,37 @@
+<dx-scheduler [dataSource]="dataSource"
+              [views]="['month']"
+              currentView="month"
+              [currentDate]="currentDate"
+              [firstDayOfWeek]="1"
+              [startDayHour]="8"
+              [endDayHour]="18"
+              [showAllDayPanel]="false"
+              [height]="600"
+              [groups]="['employeeID']"
+              resourceCellTemplate="resourceCellTemplate"
+              dataCellTemplate="dataCellTemplate">
+
+    <dxi-resource fieldExpr="employeeID"
+                  [allowMultiple]="false"
+                  [dataSource]="resourcesDataSource"
+                  label="Employee">
+    </dxi-resource>
+
+    <div *dxTemplate="let employee of 'resourceCellTemplate'">
+        <div class='name' [style.background]="employee.color">
+            <h2>{{employee.text}}</h2>
+        </div>
+        <div class='avatar'>
+            <img [src]="employee.data.avatar" />
+        </div>
+        <div class='info' [style.color]="employee.color">
+            Age: {{employee.data.age}}
+            <br />
+            <b>{{employee.data.discipline}}</b>
+        </div>
+    </div>
+
+    <div *dxTemplate="let cellData of 'dataCellTemplate'" class='employee-weekend' [ngClass]="markWeekEnd(cellData)">
+        <div class='day-cell' [ngClass]='markTraining(cellData)'>{{cellData.text}}</div>
+    </div>
+</dx-scheduler>

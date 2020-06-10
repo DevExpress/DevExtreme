@@ -1,0 +1,1 @@
+Scale breaks allow breaking off parts of the axis to improve the readability of a chart with high amplitude values. This example demonstrates auto-calculated scale breaks. You can change the number of breaks, their style or disabled them.

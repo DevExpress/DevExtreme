@@ -1,0 +1,79 @@
+<div id="demo-container">
+    <div class="widget-container">
+        <dx-scroll-view
+            id="scroll"
+            [ngClass]="{'horizontal': itemOrientation === 'horizontal'}"
+            [direction]="itemOrientation"
+            showScrollbar="always">
+            <dx-sortable
+                id="list"
+                [dropFeedbackMode]="dropFeedbackMode"
+                [itemOrientation]="itemOrientation"
+                [dragDirection]="dragDirection"
+                [scrollSpeed]="scrollSpeed"
+                [scrollSensitivity]="scrollSensitivity"
+                [handle]="handle"
+                [dragTemplate]="dragTemplate"
+                [cursorOffset]="cursorOffset"
+                (onDragStart)="onDragStart($event)"
+                (onReorder)="onReorder($event)"
+                >
+                <div
+                    *dxTemplate="let dragInfo of 'drag'"
+                    class="item dx-card dx-theme-text-color dx-theme-background-color"
+                    style="font-weight: bold; width: 200px; padding: 10px">
+                    {{dragInfo.itemData}}
+                </div>
+                <div
+                    class="item dx-card dx-theme-text-color dx-theme-background-color"
+                    [ngClass]="{'item-with-handle': handle}"
+                    *ngFor="let item of items">
+                    <i *ngIf="handle" class="handle dx-icon dx-icon-dragvertical"></i>
+                    {{item}}
+                </div>
+            </dx-sortable>
+        </dx-scroll-view>
+    </div>
+    <div class="options">
+        <div class="caption">Options</div>
+        <div class="option">
+            <span>Drop Feedback Mode:</span>
+            <dx-select-box
+                [items]="['push', 'indicate']"
+                [(value)]="dropFeedbackMode"></dx-select-box>
+        </div>
+        <div class="option">
+            <span>Item Orientation:</span>
+            <dx-select-box 
+                [items]="['vertical', 'horizontal']"
+                [(value)]="itemOrientation"
+                (onValueChanged)="onItemOrientationChanged($event)"></dx-select-box>
+        </div>
+        <div class="option">
+            <span>Drag Direction:</span>
+            <dx-select-box 
+                [items]="dragDirections"
+                [(value)]="dragDirection"></dx-select-box>
+        </div>
+        <div class="option">
+            <span>Scroll Speed:</span>
+            <dx-number-box 
+                [(value)]="scrollSpeed"></dx-number-box>
+        </div>
+        <div class="option">
+            <span>Scroll Sensitivity:</span>
+            <dx-number-box 
+                [(value)]="scrollSensitivity"></dx-number-box>
+        </div>
+        <div class="option">
+            <dx-check-box 
+                text="Use Handle"
+                (onValueChanged)="onHandleChanged($event)"></dx-check-box>
+        </div>
+        <div class="option">
+            <dx-check-box 
+                text="Use Drag Template"
+                (onValueChanged)="onDragTemplateChanged($event)"></dx-check-box>
+        </div>
+    </div>
+</div>

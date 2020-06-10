@@ -1,0 +1,26 @@
+<dx-range-selector 
+    id="range-selector"
+    title="Select a Lead Concentration in Water">
+    <dxo-margin [top]="50"></dxo-margin>
+    <dxo-scale
+        [startValue]="0.004563"
+        [endValue]="0.04976"
+        [minorTickInterval]="0.001"
+        [tickInterval]="0.005">
+        <dxo-label>
+            <dxo-format
+                type="fixedPoint"
+                [precision]="3">
+            </dxo-format>
+        </dxo-label>
+    </dxo-scale>
+    <dxo-slider-marker [customizeText]="customizeText">
+        <dxo-format
+            type="fixedPoint"
+            [precision]="4">
+        </dxo-format>
+    </dxo-slider-marker>
+    <dxo-behavior 
+        [snapToTicks]="false">
+    </dxo-behavior>
+</dx-range-selector>

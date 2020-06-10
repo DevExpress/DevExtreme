@@ -1,0 +1,36 @@
+<div class="tables">
+    <div *ngFor="let status of statuses" class="column">
+        <dx-data-grid
+            [dataSource]="dataSource"
+            [height]="440"
+            [showBorders]="true"
+            [filterValue]="['Status', '=', status]">
+            <dxo-row-dragging
+                [data]="status"
+                group="tasksGroup"
+                [onAdd]="onAdd"
+            ></dxo-row-dragging>
+            <dxo-scrolling mode='virtual'></dxo-scrolling>
+            
+            <dxi-column 
+                dataField="Subject"
+                dataType="string"
+            ></dxi-column>
+            <dxi-column
+                dataField="Priority"
+                dataType="number"
+                [width]="80" >
+                <dxo-lookup
+                    [dataSource]="priorities"
+                    valueExpr="id"
+                    displayExpr="text"
+                ></dxo-lookup>
+            </dxi-column>
+            <dxi-column
+                dataField="Status"
+                dataType="number"
+                [visible]="false"
+            ></dxi-column>
+        </dx-data-grid>
+    </div>
+</div>

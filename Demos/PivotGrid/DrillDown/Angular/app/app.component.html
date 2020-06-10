@@ -1,0 +1,26 @@
+<dx-pivot-grid id="sales"
+  [allowSortingBySummary]="true"
+  [allowSorting]="true"
+  [allowFiltering]="true"
+  [allowExpandAll]="true"
+  [showBorders]="true"
+  [dataSource]="pivotGridDataSource"
+  (onCellClick)="onPivotCellClick($event)">
+  <dxo-field-chooser [enabled]="false"></dxo-field-chooser>
+</dx-pivot-grid>
+
+<dx-popup
+  [(visible)]="salesPopupVisible"
+  [title]="salesPopupTitle"
+  [width]="600"
+  [height]="400"
+  (onShown)="onPopupShown()">
+  <div *dxTemplate="let data of 'content'">
+    <dx-data-grid #drillDownDataGrid
+      [width]="560" 
+      [height]="300"
+      [dataSource]="drillDownDataSource"
+      [columns]="['region', 'city', 'amount', 'date']">
+    </dx-data-grid>
+  </div>
+</dx-popup>

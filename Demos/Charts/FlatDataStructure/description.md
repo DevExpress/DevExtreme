@@ -1,0 +1,1 @@
+In&nbsp;this demo, the **TreeMap** widget accepts a&nbsp;data source of&nbsp;a&nbsp;plain structure.

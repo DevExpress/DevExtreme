@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script src="../../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../../../../node_modules/knockout/build/output/knockout-latest.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.light.css" />
+    <script src="../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="index.js"></script>
+</head>
+<body class="dx-viewport">
+    <div class="demo-container">
+        <div class="slideout-container" id="slideout">
+            <div data-bind="dxSlideOut: {
+                dataSource: products,
+                onItemClick: showMenu,
+                menuVisible: menuVisible,
+                swipeEnabled: swipeValue,
+                menuGrouped: true
+            }">
+                <div data-options="dxTemplate: { name: 'item' }">
+                    <div data-bind="dxToolbar: { dataSource: $root.toolbarItems }">
+                        <div data-options="dxTemplate: { name: 'title' }">
+                            <p data-bind="text: $parent.text"></p>
+                        </div>
+                    </div>
+                    <div id="info">
+                        <img data-bind="attr:{src: src}">
+                        <h1 data-bind="text: price"></h1>
+                    </div>
+                    <div class="dx-fieldset">
+                        <div class="dx-fieldset-header">Options</div>
+                        <div class="dx-field">
+                            <div class="dx-field-label">Swipe to reveal the menu</div>
+                            <div class="dx-field-value" data-bind="dxSwitch: { value: $root.swipeValue }"></div>
+                        </div>
+                    </div>
+                </div>
+                <div data-options="dxTemplate: { name: 'menuGroup' }">
+                    <b data-bind="text: key"></b>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

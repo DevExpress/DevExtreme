@@ -1,0 +1,61 @@
+<div class="long-title"><h3>Monthly Prices of Aluminium, Nickel and Copper</h3></div>
+<div id="chart-demo">
+    <table class="demo-table" border="1">
+        <tr>
+            <th></th>
+            <th>Aluminium (USD/ton)</th>
+            <th>Nickel (USD/ton)</th>
+            <th>Copper (USD/ton)</th>
+        </tr>
+        <tr *ngFor="let year of years">
+            <th>{{year}}</th>
+            <td>
+                <dx-sparkline class="sparkline"
+                    [dataSource]="source"
+                    argumentField="month"
+                    valueField="alum{{year}}"
+                    type="bar"
+                    [showMinMax]="true">
+                    <dxo-tooltip format="currency"></dxo-tooltip>
+                </dx-sparkline>
+            </td>
+            <td>
+                <dx-sparkline class="sparkline"
+                    [dataSource]="source"
+                    argumentField="month"
+                    valueField="nickel{{year}}"
+                    type="bar"
+                    [showMinMax]="true"
+                    [showFirstLast]="false"
+                    barPositiveColor="#6babac"
+                    minColor="#9ab57e"
+                    maxColor="#8076bb">
+                    <dxo-tooltip format="currency"></dxo-tooltip>
+                </dx-sparkline>
+            </td>
+            <td>
+                <dx-sparkline class="sparkline"
+                    [dataSource]="source"
+                    argumentField="month"
+                    valueField="copper{{year}}"
+                    type="bar"
+                    barPositiveColor="#e55253"
+                    firstLastColor="#ebdd8f">
+                    <dxo-tooltip format="currency"></dxo-tooltip>
+                </dx-sparkline>
+            </td>
+        </tr>
+      
+    </table>
+    <div class="action">
+        <dx-select-box
+            id="choose-months"
+            [dataSource]="filters"
+            [width]="70"
+            [value]="filters[0]"
+            (onValueChanged)="onValueChanged($event)">
+        </dx-select-box>
+        <div class="label">Choose a number of months:
+        </div>
+    </div>
+</div>

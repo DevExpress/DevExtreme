@@ -1,0 +1,47 @@
+.title {
+    padding: 20px 0 20px 0;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.editors {
+    margin-right: 320px;
+}
+
+.editors .left, .editors .right {
+    display: inline-block;
+    width: 49%;
+    padding-right: 20px;
+    box-sizing: border-box;
+}
+
+.editors .left > *, .editors .right > *, .editors .center > * {
+    margin-bottom: 20px;
+}
+
+.editors .center {
+    padding: 20px 27px 0 0;
+}
+
+.validate {
+    float: right;
+}
+
+.options {
+    padding: 20px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 260px;
+    top: 0;
+    background-color: rgba(191, 191, 191, 0.15);
+}
+
+.caption {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.option {
+    margin-top: 20px;
+}

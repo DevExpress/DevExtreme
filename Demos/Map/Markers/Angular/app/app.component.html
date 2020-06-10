@@ -1,0 +1,27 @@
+<dx-map 
+    provider="bing"
+    [zoom]="11" 
+    [height]="440" 
+    width="100%" 
+    [controls]="true" 
+    [markerIconSrc]="mapMarkerUrl" 
+    [markers]="markers">
+</dx-map>
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">    
+        <dx-check-box 
+            id="use-custom-markers" 
+            [value]="true" 
+            text="Use custom marker icons" 
+            (onValueChanged)="checkCustomMarker($event)">
+        </dx-check-box>
+    </div>
+    <div class="option">
+        <dx-button 
+            id="show-tooltips" 
+            text="Show all tooltips" 
+            (onClick)="showTooltips()">
+        </dx-button>
+    </div>      
+</div>

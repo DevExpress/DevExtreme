@@ -1,0 +1,1 @@
+The **DataGrid** can adapt its layout to narrow screens. If screen width is not enough to display all columns, the widget hides them one by one. To view values of hidden columns, click the ellipsis button in the last column of the required row. Switch between the landscape and portrait layouts to see how the **DataGrid** looks on wide and narrow screens.

@@ -1,0 +1,27 @@
+<dx-data-grid id="gridContainer"
+    [dataSource]="orders"
+    [selectedRowKeys]="[1, 4, 7]"
+    keyExpr="ID"
+    [showBorders]="true"
+    (onSelectionChanged)="onSelectionChanged($event)">
+
+    <dxo-paging [enabled]="false"></dxo-paging>
+    <dxo-selection mode="multiple"></dxo-selection>
+
+    <dxi-column dataField="OrderNumber" [width]="130" caption="Invoice Number"></dxi-column>
+    <dxi-column dataField="OrderDate" [width]="160" dataType="date"></dxi-column>
+    <dxi-column dataField="Employee"></dxi-column>
+    <dxi-column dataField="CustomerStoreCity"  caption="City"></dxi-column>
+    <dxi-column dataField="CustomerStoreState"  caption="State"></dxi-column>
+    <dxi-column dataField="SaleAmount"  alignment="right" format="currency"></dxi-column>
+
+    <dxo-summary [calculateCustomSummary]="calculateSelectedRow">
+        <dxi-total-item
+            name="SelectedRowsSummary"
+            summaryType="custom"
+            valueFormat="currency"
+            displayFormat="Sum: {0}"
+            showInColumn="SaleAmount">
+        </dxi-total-item>
+    </dxo-summary>
+</dx-data-grid>

@@ -1,0 +1,14 @@
+<div class="long-title">
+	<h3>Sales Statistics</h3>
+</div>
+<dx-pivot-grid
+  [allowSortingBySummary]="true"
+  [allowSorting]="true"
+  [allowFiltering]="true"
+  [allowExpandAll]="true"
+  [height]="570"
+  [showBorders]="true"
+  [dataSource]="dataSource">
+  <dxo-field-chooser [allowSearch]="true"></dxo-field-chooser>
+	<dxo-export [enabled]="true" fileName="Adventure Works"></dxo-export>
+</dx-pivot-grid>

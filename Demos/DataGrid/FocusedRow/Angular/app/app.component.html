@@ -1,0 +1,44 @@
+<dx-data-grid
+    id="gridContainer"
+    [dataSource]="dataSource"
+    [columns]="columns"
+    [showBorders]="true"
+    [focusedRowEnabled]="true"
+    [(focusedRowKey)]="focusedRowKey"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+    (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)">
+    <dxo-paging [pageSize]="10">
+    </dxo-paging>
+</dx-data-grid>
+
+<div class="task-info">
+    <div class="info">
+        <div id="taskSubject">{{taskSubject}}</div>
+        <p id="taskDetails" [innerHtml]="taskDetailsHtml"></p>
+    </div>
+    <div class="progress">
+        <span id="taskStatus">{{taskStatus}}</span>
+        <span id="taskProgress">{{taskProgress}}</span>
+    </div>
+</div>
+
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <span>Focused Row Key</span>
+        <dx-number-box
+            id="taskId"
+            min="1"
+            max="183"
+            step="0"
+            [(value)]="focusedRowKey">
+        </dx-number-box>
+    </div>
+    <div class="option">
+        <dx-check-box
+            [text]="'Auto Navigate To Focused Row'"
+            [(value)]="autoNavigateToFocusedRow">
+        </dx-check-box>
+    </div>
+</div>

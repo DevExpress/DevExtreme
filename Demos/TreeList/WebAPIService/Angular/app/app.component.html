@@ -1,0 +1,36 @@
+<dx-tree-list
+    id="tree-list"
+    [dataSource]="tasksData"
+    keyExpr="Task_ID"
+    parentIdExpr="Task_Parent_ID"
+    hasItemsExpr="Has_Items"
+    [expandedRowKeys]="[1, 2]"
+    [showRowLines]="true"
+    [showBorders]="true"
+    [columnAutoWidth]="true"
+    [wordWrapEnabled]="true"
+    (onInitNewRow)="initNewRow($event)">
+
+    <dxo-remote-operations [filtering]="true" [sorting]="true" [grouping]="true"></dxo-remote-operations>
+    <dxo-search-panel [visible]="true"></dxo-search-panel>
+    <dxo-header-filter [visible]="true"></dxo-header-filter>
+    <dxo-editing
+        mode="row"
+        [allowAdding]="true"
+        [allowUpdating]="true"
+        [allowDeleting]="true">
+    </dxo-editing>
+
+    <dxi-column dataField="Task_Subject" [minWidth]="250">
+        <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dxi-column>
+    <dxi-column dataField="Task_Assigned_Employee_ID" caption="Assigned" [minWidth]="120">
+        <dxo-lookup [dataSource]="employeesData" valueExpr="ID" displayExpr="Name"></dxo-lookup>
+        <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dxi-column>
+    <dxi-column dataField="Task_Status" caption="Status" [minWidth]="120">
+        <dxo-lookup [dataSource]="statusesData"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="Task_Start_Date" caption="Start Date" dataType="date"></dxi-column>
+    <dxi-column dataField="Task_Due_Date" caption="Due Date" dataType="date"></dxi-column>
+</dx-tree-list>

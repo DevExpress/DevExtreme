@@ -1,0 +1,49 @@
+<dx-polar-chart
+    id="zoomedChart"
+    title="Stochastic Process"
+    [dataSource]="dataSource">
+    <dxi-series
+        type="scatter"
+        name="Test results"
+        valueField="value">
+        <dxo-point [size]="8"></dxo-point>
+    </dxi-series>
+    <dxi-series
+        type="line"
+        name="Expected average"
+        valueField="originalValue">
+        <dxo-point [visible]="false"></dxo-point>
+    </dxi-series>
+    <dxo-common-series-settings
+        argumentField="argument"
+        [closed]="false">
+    </dxo-common-series-settings>
+    <dxo-argument-axis
+        [startAngle]="90"
+        [tickInterval]="30">
+    </dxo-argument-axis>
+    <dxo-value-axis [visualRange]="visualRange"></dxo-value-axis>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-legend 
+        hoverMode="excludePoints"
+        verticalAlignment="top"
+        horizontalAlignment="center">
+    </dxo-legend>
+</dx-polar-chart>
+<dx-range-selector [(value)]="visualRange">
+    <dxo-size [height]="100"></dxo-size>
+    <dxo-margin
+        [top]="10"
+        [left]="60"
+        [bottom]="10"
+        [right]="50">
+    </dxo-margin>
+    <dxo-scale
+        [startValue]="0"
+        [endValue]="8"
+        [minorTickInterval]="0.1"
+        [tickInterval]="1">
+        <dxo-minor-tick [visible]="false"></dxo-minor-tick>
+    </dxo-scale>
+    <dxo-behavior callValueChanged="onMoving"></dxo-behavior>
+</dx-range-selector>

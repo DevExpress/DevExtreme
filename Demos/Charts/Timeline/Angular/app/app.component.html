@@ -1,0 +1,25 @@
+<dx-chart
+    id="chart"
+    [dataSource]="dataSource"
+    [rotated]="true"
+    [barGroupPadding]="0.2">
+    <dxo-argument-axis [categories]="['Royal Houses']">
+        <dxo-tick [visible]="false"></dxo-tick>
+    </dxo-argument-axis>
+    <dxo-title text="The British Monarchy"
+        subtitle="An Abbreviated Timeline"
+    ></dxo-title>
+    <dxo-animation [enabled]="false"></dxo-animation>
+    <dxo-legend verticalAlignment="bottom"
+        horizontalAlignment="center">
+        <dxo-title text="Royal Houses"></dxo-title>
+    </dxo-legend>
+    <dxo-series-template nameField="house"></dxo-series-template>
+    <dxo-common-series-settings
+        argumentField="monarch"
+        type="rangeBar"
+        rangeValue1Field="start"
+        rangeValue2Field="end"
+        barOverlapGroup="monarchs">
+    </dxo-common-series-settings>
+</dx-chart>

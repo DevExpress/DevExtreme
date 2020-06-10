@@ -1,0 +1,12 @@
+<dx-data-grid id="gridContainer"
+    [dataSource]="dataSource"
+    [showBorders]="true">
+
+    <dxi-column dataField="OrderNumber" [width]="130" caption="Invoice Number"></dxi-column>
+    <dxi-column dataField="CustomerStoreCity" caption="City" [hidingPriority]="0"></dxi-column>
+    <dxi-column dataField="CustomerStoreState" caption="State" [hidingPriority]="1"></dxi-column>
+    <dxi-column dataField="Employee"></dxi-column>
+    <dxi-column dataField="OrderDate" dataType="date" [hidingPriority]="2"></dxi-column>
+    <dxi-column dataField="SaleAmount" format="currency"></dxi-column>
+
+</dx-data-grid>

@@ -1,0 +1,25 @@
+<dx-data-grid 
+    id="gridContainer"
+    keyExpr="ID"
+    [dataSource]="employees"
+    (onSelectionChanged)="selectionChanged($event)"
+    (onContentReady)="contentReady($event)"
+    [masterDetail]="{ enabled: false, template: 'detail' }"
+    [showBorders]="true">
+
+    <dxo-selection mode="single"></dxo-selection>
+
+    <dxi-column dataField="Prefix" [width]="70" caption="Title"></dxi-column>
+    <dxi-column dataField="FirstName"></dxi-column>
+    <dxi-column dataField="LastName"></dxi-column>
+    <dxi-column dataField="Position" [width]="170"></dxi-column>
+    <dxi-column dataField="State" [width]="125"></dxi-column>
+    <dxi-column dataField="BirthDate" dataType="date"></dxi-column>
+
+    <div *dxTemplate="let employee of 'detail'">
+        <div class="employeeInfo">
+            <img class="employeePhoto" [src]="employee.data.Picture" />
+            <p class="employeeNotes">{{employee.data.Notes}}</p>
+        </div>
+    </div>
+</dx-data-grid>

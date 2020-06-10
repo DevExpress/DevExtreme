@@ -1,0 +1,1 @@
+The **RangeSlider** is&nbsp;a&nbsp;widget that allows a&nbsp;user to&nbsp;choose a&nbsp;range of&nbsp;numeric values.

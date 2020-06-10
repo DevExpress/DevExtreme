@@ -1,0 +1,56 @@
+<div>
+    <div class="dx-fieldset">
+        <div class="dx-field">
+            <div class="dx-field-label">
+                Multi-tag for several items
+            </div>
+            <div class="dx-field-value">
+                <dx-tag-box
+                    [items]="products"
+                    [value]="[1, 2, 3, 4]"
+                    displayExpr="Name"
+                    valueExpr="Id"
+                    [showSelectionControls]="true"
+                    selectAllMode="allPages"
+                    [maxDisplayedTags]="3"
+                ></dx-tag-box>
+            </div>
+        </div>
+
+        <div class="dx-field">
+            <div class="dx-field-label">
+                Multi-tag for all items
+            </div>
+            <div class="dx-field-value">
+                <dx-tag-box
+                    [items]="products.slice(0, 5)"
+                    [value]="[1, 2, 3, 4, 5]"
+                    displayExpr="Name"
+                    valueExpr="Id"
+                    [showSelectionControls]="true"
+                    (onMultiTagPreparing)="onMultiTagPreparing($event)"
+                    [maxDisplayedTags]="3"
+                ></dx-tag-box>
+            </div>
+        </div>
+
+
+        <div class="dx-field">
+            <div class="dx-field-label">
+                Multi-tag with ordinary tags
+            </div>
+            <div class="dx-field-value">
+                <dx-tag-box
+                    [items]="products"
+                    [value]="[1, 2, 3, 4, 5, 6, 7]"
+                    displayExpr="Name"
+                    valueExpr="Id"
+                    [showSelectionControls]="true"
+                    selectAllMode="allPages"
+                    [maxDisplayedTags]="2"
+                    [showMultiTagOnly]="false"
+                ></dx-tag-box>
+            </div>
+        </div>
+    </div>
+</div>

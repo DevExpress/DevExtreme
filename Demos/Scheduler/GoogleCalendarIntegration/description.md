@@ -1,0 +1,1 @@
+This demo shows how to&nbsp;configure the **CustomStore** to&nbsp;load data from the Google Calendar.

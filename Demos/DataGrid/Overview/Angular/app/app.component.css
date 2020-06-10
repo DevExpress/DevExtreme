@@ -1,0 +1,4 @@
+::ng-deep .dx-datagrid .dx-data-row > td.bullet {
+    padding-top: 0;
+    padding-bottom: 0;
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script src="../../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../../../../node_modules/cldrjs/dist/cldr.js"></script>
+    <script src="../../../../node_modules/cldrjs/dist/cldr/event.js"></script>
+    <script src="../../../../node_modules/cldrjs/dist/cldr/supplemental.js"></script>
+    <script src="../../../../node_modules/cldrjs/dist/cldr/unresolved.js"></script>
+    <script type="text/javascript" src="../../../../node_modules/globalize/dist/globalize.js"></script>
+    <script type="text/javascript" src="../../../../node_modules/globalize/dist/globalize/message.js"></script>
+    <script type="text/javascript" src="../../../../node_modules/globalize/dist/globalize/number.js"></script>
+    <script type="text/javascript" src="../../../../node_modules/globalize/dist/globalize/currency.js"></script>
+    <script type="text/javascript" src="../../../../node_modules/globalize/dist/globalize/date.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.light.css" />
+    <script src="../../../../node_modules/angular/angular.min.js"></script>
+    <script src="../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="index.js"></script>
+</head>
+<body class="dx-viewport">
+    <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
+        <div id="gridContainer" dx-data-grid="dataGridOptions" dx-item-alias="day"> 
+           <div data-options="dxTemplate:{ name:'cellTemplate' }">
+                <div class="chart-cell">
+                    <div dx-sparkline="{
+                        dataSource: day.data.dayClose,
+                        argumentField: 'date',
+                        valueField: 'close',
+                        type: 'line',
+                        showMinMax: true,
+                        minColor: '#f00',
+                        maxColor: '#2ab71b',
+                        pointSize: 6,
+                        size: {
+                            width: 290,
+                            height: 40
+                        },
+                        tooltip: {
+                            enabled: false
+                        }
+                    }"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

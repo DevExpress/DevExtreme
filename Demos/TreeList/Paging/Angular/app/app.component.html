@@ -1,0 +1,28 @@
+<dx-tree-list
+    id="tasks"
+    [dataSource]="tasksData"
+    keyExpr="Task_ID"
+    parentIdExpr="Task_Parent_ID"
+    [autoExpandAll]="true"
+    [columnAutoWidth]="true"
+    [showBorders]="true">
+    <dxo-scrolling mode="standard"></dxo-scrolling>
+    <dxo-paging 
+        [enabled]="true"
+        [pageSize]="10">
+    </dxo-paging>
+    <dxo-pager 
+        [showPageSizeSelector]="true"
+        [allowedPageSizes]="[5, 10, 20]"
+        [showInfo]="true">
+    </dxo-pager>
+    <dxi-column dataField="Task_Subject" [width]="390"></dxi-column>
+    <dxi-column dataField="Task_Assigned_Employee_ID" caption="Assigned">
+        <dxo-lookup [dataSource]="employeesData" valueExpr="ID" displayExpr="Name"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="Task_Status" caption="Status">
+        <dxo-lookup [dataSource]="statusesData"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="Task_Start_Date" caption="Start Date" dataType="date" [width]="100"></dxi-column>
+    <dxi-column dataField="Task_Due_Date" caption="Due Date" dataType="date" [width]="100"></dxi-column>
+</dx-tree-list>

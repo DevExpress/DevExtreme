@@ -1,0 +1,34 @@
+<dx-data-grid 
+    id="gridContainer" 
+    [dataSource]="orders"
+    keyExpr="ID"
+    [repaintChangesOnly]="true"
+    [showBorders]="true">
+
+    <dxo-editing
+        mode="batch"
+        [allowAdding]="true"
+        [allowUpdating]="true"
+        [allowDeleting]="true">
+    </dxo-editing>
+
+    <dxi-column dataField="OrderNumber" [width]="130" caption="Invoice Number"></dxi-column>
+    <dxi-column dataField="OrderDate" dataType="date"></dxi-column>
+    <dxi-column dataField="Employee"></dxi-column>
+    <dxi-column dataField="CustomerStoreCity" caption="City"></dxi-column>
+    <dxi-column dataField="CustomerStoreState" caption="State"></dxi-column>
+    <dxi-column dataField="SaleAmount" alignment="right" format="currency" [editorOptions]="editorOptions"></dxi-column>
+
+    <dxo-summary [recalculateWhileEditing]="true">
+        <dxi-total-item
+            column="OrderNumber"
+            summaryType="count">
+        </dxi-total-item>
+        <dxi-total-item
+            column="SaleAmount"
+            summaryType="sum"
+            valueFormat="currency">
+        </dxi-total-item>
+    </dxo-summary>
+
+</dx-data-grid>

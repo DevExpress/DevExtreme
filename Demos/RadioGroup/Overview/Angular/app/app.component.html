@@ -1,0 +1,64 @@
+<div class="form">
+    <div class="dx-fieldset">
+        <div class="dx-field">
+            <div class="dx-field-label">Default mode</div>
+            <div class="dx-field-value">
+                <dx-radio-group
+                    [items]="priorities"
+                    [value]="priorities[0]">
+                </dx-radio-group>
+            </div>
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">Disabled</div>
+            <div class="dx-field-value">
+                <dx-radio-group
+                    [items]="priorities"
+                    [value]="priorities[1]"
+                    [disabled]="true">
+                </dx-radio-group>
+            </div>
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">Horizontal layout</div>
+            <div class="dx-field-value">
+                <dx-radio-group
+                    [items]="priorities"
+                    [value]="priorities[0]"
+                    layout="horizontal">
+                </dx-radio-group>
+            </div>
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">Custom item template</div>
+            <div class="dx-field-value">
+                <dx-radio-group
+                    [items]="priorities"
+                    [(value)]="priority"
+                    [ngClass]="priority.toLowerCase()">
+                    <div *dxTemplate="let priority of 'item'">
+                        <div>{{priority}}</div>
+                    </div>
+                </dx-radio-group>
+            </div>
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">Event handling</div>
+            <div class="dx-field-value">
+                <dx-radio-group #eventRadioGroup
+                    id="radio-group-with-selection"
+                    [items]="priorities"
+                    (onValueChanged)="onValueChanged($event)">
+                </dx-radio-group>
+            </div>
+        </div>
+    </div>
+    <div id="tasks-list">
+        Tasks by selected priority:
+        <ul id="list">
+            <li *ngFor="let data of currentData">
+                {{data}}
+            </li>
+        </ul>
+    </div>
+</div>

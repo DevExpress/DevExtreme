@@ -1,0 +1,1 @@
+The **Switch** is&nbsp;a&nbsp;widget that can be&nbsp;in&nbsp;two states: &laquo;On&raquo; (when **value** is _true_) and &laquo;Off&raquo; (when **value** is _false_).

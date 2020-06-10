@@ -1,0 +1,34 @@
+#toast {
+    padding: 10px;
+}
+
+#toast ul {
+    text-align: center;
+    list-style-type: none;
+    margin: 20px 0;
+    font-size: 0;
+}
+
+#toast ul li {
+    display: inline-block;
+    width: 160px;
+    margin: 10px;
+    font-size: 14px;
+}
+
+#toast ul li img {
+    width: 100px;
+}
+
+.dx-toast-content {
+    min-width: 300px;
+    max-width: 400px;
+}
+
+.dx-theme-ios7 #toast ul li {
+    font-size: 16px;
+}
+
+.dx-theme-win10 #toast ul li {
+    font-size: 15px;
+}

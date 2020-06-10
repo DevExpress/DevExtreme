@@ -1,0 +1,1 @@
+The **DataGrid** widget can automatically split its content across multiple pages and allow end users to&nbsp;navigate records using its built-in pager. This demo illustrates how you can change pager settings by&nbsp;using both the **paging** and **pager** configuration options.

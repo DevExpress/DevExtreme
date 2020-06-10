@@ -1,0 +1,22 @@
+<dx-vector-map 
+    id="vector-map" 
+    [bounds]="[-180, 85, 180, -60]">
+    <dxo-tooltip 
+        [enabled]="true" 
+        [customizeTooltip]="customizeTooltip"></dxo-tooltip>
+    <dxi-layer 
+        [dataSource]="worldMap" 
+        [hoverEnabled]="false"></dxi-layer>
+    <dxi-layer 
+        [dataSource]="markers"
+        [minSize]="20"
+        [maxSize]="40"
+        [sizeGroups]="[0, 8000, 10000, 50000]"
+        [opacity]="0.8"
+        name="bubbles"
+        elementType="bubble"
+        dataField="value"></dxi-layer>
+    <dxi-legend markerShape="circle" [customizeText]="customizeText" [customizeItems]="customizeItems">
+        <dxo-source layer="bubbles" grouping="size"></dxo-source>
+    </dxi-legend>
+</dx-vector-map>

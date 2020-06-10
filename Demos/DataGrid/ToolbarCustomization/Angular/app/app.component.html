@@ -1,0 +1,24 @@
+<dx-data-grid id="gridContainer"
+    [dataSource]="orders"
+    [showBorders]="true"
+    (onToolbarPreparing)="onToolbarPreparing($event)">
+
+    <dxo-grouping [autoExpandAll]="expanded"></dxo-grouping>
+    <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+    <dxo-load-panel [enabled]="true"></dxo-load-panel>
+
+    <dxi-column dataField="OrderNumber" caption="Invoice Number"></dxi-column>
+    <dxi-column dataField="OrderDate"></dxi-column>
+    <dxi-column dataField="Employee"></dxi-column>
+    <dxi-column dataField="CustomerStoreCity" caption="City"></dxi-column>
+    <dxi-column dataField="CustomerStoreState" caption="State" [groupIndex]="0"></dxi-column>
+    <dxi-column dataField="SaleAmount" alignment="right" format="currency"></dxi-column>
+
+    <div *dxTemplate="let data of 'totalGroupCount'">
+        <div class="informer">
+            <h2 class="count">{{totalCount}}</h2>
+            <span class="name">Total Count</span>
+        </div>
+    </div>
+
+</dx-data-grid>

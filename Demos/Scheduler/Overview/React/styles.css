@@ -1,0 +1,88 @@
+.dx-scheduler-date-table-other-month.dx-scheduler-date-table-cell {
+    opacity: 1;
+    color: rgba(0, 0, 0, 0.3);
+}
+
+.dx-template-wrapper, .dx-scheduler-date-table-cell {
+  position: relative;
+}
+
+.dx-scheduler-date-table-cell .dx-template-wrapper {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.avatar {
+    width: 155px;
+    float: left;
+    overflow: hidden;
+    position: relative;
+    height: 125px;
+}
+
+.name {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+.name h2 {
+    color: #fff;
+    text-align: left;
+    padding: 0 0 5px 175px;
+    margin: 0;    
+}
+
+.info {
+    width: auto;
+    text-align: left;
+    height: 100%;
+    font-size: 11pt;
+    font-weight: normal;
+    padding: 25px 20px;
+    color: #707070;
+}
+
+.dx-color-scheme-contrast .info {
+    color: #FFF;
+}
+
+.day-cell {
+    height: 100%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.employee-1 {
+    background-color: rgba(86, 202, 133, 0.1);
+}
+
+.employee-2 {
+    background-color: rgba(255, 151, 71, 0.1);
+}
+
+.employee-weekend-1 {
+    background-color: rgba(86, 202, 133, 0.2);
+}
+
+.employee-weekend-2 {
+    background-color: rgba(255, 151, 71, 0.2);
+}
+
+.training-background-0 {
+    background-image: url("../../../../images/gym/icon-abs.png");
+}
+
+.training-background-1 {
+    background-image: url("../../../../images/gym/icon-step.png");
+}
+
+.training-background-2 {
+    background-image: url("../../../../images/gym/icon-fitball.png");
+}
+
+.dx-theme-material .name h2 {
+    font-size: 28px;
+}

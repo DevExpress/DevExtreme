@@ -1,0 +1,12 @@
+::ng-deep #gridContainer {
+    height: 440px;
+    margin-top: 30px;
+}
+::ng-deep #descContainer  a {
+    color: #f05b41;
+    text-decoration: underline;
+    cursor: pointer;
+}
+::ng-deep #descContainer  a:hover {
+    text-decoration: none;
+}

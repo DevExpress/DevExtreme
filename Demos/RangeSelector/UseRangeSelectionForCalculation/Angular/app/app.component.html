@@ -1,0 +1,35 @@
+<div id="range-selector-demo">
+    <dx-range-selector 
+        id="range-selector"
+        title="Calculate the Working Days Count in a Date Period"
+        (onValueChanged)="onValueChanged($event)">
+        <dxo-margin [top]="50"></dxo-margin>
+        <dxo-scale
+            [startValue]="startValue"
+            [endValue]="endValue"
+            minorTickInterval="day"
+            tickInterval="month">
+            <dxo-minor-tick [visible]="false"></dxo-minor-tick>
+            <dxo-marker [visible]="false"></dxo-marker>
+            <dxo-label [customizeText]="customizeLabel"></dxo-label>
+        </dxo-scale>
+        <dxo-slider-marker [customizeText]="customizeSliderMarker">
+        </dxo-slider-marker>
+        <dxo-behavior #beh
+            callValueChanged="onMoving">
+        </dxo-behavior>
+    </dx-range-selector>
+    <h2>Working days count: {{workingDaysCount.toFixed()}}</h2>
+    <div class="options">
+        <div class="caption">Options</div>
+        <div class="option">
+            <span>Handle Range Changes</span>
+            <dx-select-box
+                id="handle"
+                [dataSource]="dataSource" 
+                [width]="210" 
+                [(value)]="beh.callValueChanged"
+            ></dx-select-box>
+        </div>    
+    </div>
+</div>

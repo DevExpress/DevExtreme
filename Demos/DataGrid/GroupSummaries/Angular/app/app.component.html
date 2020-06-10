@@ -1,0 +1,47 @@
+<dx-data-grid 
+    id="gridContainer" 
+    [dataSource]="orders"
+    keyExpr="ID"
+    [showBorders]="true">
+
+    <dxo-selection mode="single"></dxo-selection>
+
+    <dxi-column dataField="OrderNumber" [width]="130" caption="Invoice Number"></dxi-column>
+    <dxi-column dataField="OrderDate" [width]="160" dataType="date"></dxi-column>
+    <dxi-column dataField="Employee" [groupIndex]="0"></dxi-column>
+    <dxi-column dataField="CustomerStoreCity"  caption="City"></dxi-column>
+    <dxi-column dataField="CustomerStoreState"  caption="State"></dxi-column>
+    <dxi-column dataField="SaleAmount"  alignment="right" format="currency"></dxi-column>
+    <dxi-column dataField="TotalAmount"  alignment="right" format="currency"></dxi-column>
+
+    <dxo-summary>
+        <dxi-group-item
+            column="OrderNumber"
+            summaryType="count"
+            displayFormat="{0} orders">
+        </dxi-group-item>
+        <dxi-group-item
+            column="SaleAmount"
+            summaryType="max"
+            valueFormat="currency"
+            [showInGroupFooter]="false"
+            [alignByColumn]="true">
+        </dxi-group-item>
+        <dxi-group-item
+            column="TotalAmount"
+            summaryType="max"
+            valueFormat="currency"
+            [showInGroupFooter]="false"
+            [alignByColumn]="true">
+        </dxi-group-item>
+        <dxi-group-item
+            column="TotalAmount"
+            summaryType="sum"
+            valueFormat="currency"
+            displayFormat="Total: {0}"
+            [showInGroupFooter]="true">
+        </dxi-group-item>
+    </dxo-summary>
+
+    <dxi-sort-by-group-summary-info summaryItem="count"></dxi-sort-by-group-summary-info>
+</dx-data-grid>

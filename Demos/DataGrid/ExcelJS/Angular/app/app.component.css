@@ -1,0 +1,14 @@
+#gridContainer {
+    height: 425px;
+}
+
+#header {
+    font-weight: bold;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+#footer {
+    text-align: right;
+    color: #bfbfbf;
+}

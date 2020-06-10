@@ -1,0 +1,16 @@
+<div class="label">
+    Right click an image to display the context menu:
+</div>
+<img id="image" src="../../../../images/products/5.png" />
+<dx-context-menu 
+    [dataSource]="dataSource" 
+    [width]="200" 
+    target="#image" 
+    (onItemClick)="itemClick($event)">
+        <div *dxTemplate="let e of 'item'">
+            <div>
+                <span [ngClass]="e.icon"></span>
+                <span *ngIf="e.items" class="dx-icon-spinright"></span> {{e.text}}
+            </div>
+        </div>
+</dx-context-menu>

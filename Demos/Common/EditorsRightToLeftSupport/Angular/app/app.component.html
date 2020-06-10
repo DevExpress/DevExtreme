@@ -1,0 +1,99 @@
+<div [ngClass]="{ 'dx-rtl': rtlEnabled }">
+    <div class="options">
+        <div class="caption">Options</div>
+        <div class="dx-fieldset">
+            <div class="dx-field">
+                <div class="dx-field-label">Language</div>
+                <div class="dx-field-value">
+                    <dx-select-box
+                        [items]="languages"
+                        [value]="languages[1]"
+                        [rtlEnabled]="rtlEnabled"
+                        (onValueChanged)="onLanguageChanged($event)"
+                    ></dx-select-box>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="dx-fieldset">
+        <div class="dx-field">
+            <div class="dx-field-label">Text Box</div>
+            <div class="dx-field-value">
+                <dx-text-box
+                    [showClearButton]="true"
+                    [value]="textValue"
+                    [rtlEnabled]="rtlEnabled">
+                </dx-text-box>
+            </div>
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">Number Box</div>
+            <div class="dx-field-value">
+                <dx-number-box
+                    [showSpinButtons]="true"
+                    [value]="123"
+                    [rtlEnabled]="rtlEnabled">
+                </dx-number-box>
+            </div>
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">Select Box</div>
+            <div class="dx-field-value">
+                <dx-select-box
+                    [items]="europeanUnion"
+                    [value]="europeanUnion[0]"
+                    [displayExpr]="displayExpr"
+                    [rtlEnabled]="rtlEnabled">
+                </dx-select-box>
+            </div>
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">Tag Box</div>
+            <div class="dx-field-value">
+                <dx-tag-box
+                    [items]="europeanUnion"
+                    [value]="[europeanUnion[0].id]"
+                    placeholder="..."
+                    valueExpr="id"
+                    [displayExpr]="displayExpr"
+                    [rtlEnabled]="rtlEnabled"
+                ></dx-tag-box>
+            </div>
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">Text Area</div>
+            <div class="dx-field-value">
+                <dx-text-area
+                    [value]="textValue"
+                    [rtlEnabled]="rtlEnabled">
+                </dx-text-area>
+            </div>
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">Autocomplete</div>
+            <div class="dx-field-value">
+                <dx-autocomplete
+                    [items]="europeanUnion"
+                    [valueExpr]="displayExpr"
+                    [rtlEnabled]="rtlEnabled">
+                </dx-autocomplete>
+            </div>
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">Check Box</div>
+            <div class="dx-field-value">
+                <dx-check-box
+                    [value]="true"
+                    [text]="textValue"
+                    [rtlEnabled]="rtlEnabled">
+                </dx-check-box>
+            </div>
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">Switch</div>
+            <div class="dx-field-value">
+                <dx-switch [rtlEnabled]="rtlEnabled"></dx-switch>
+            </div>
+        </div>
+    </div>
+</div>

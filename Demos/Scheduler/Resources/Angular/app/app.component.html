@@ -1,0 +1,41 @@
+<dx-scheduler
+    [dataSource]="appointmentsData"
+    [views]='["workWeek"]'
+    currentView="workWeek"
+    [currentDate]="currentDate"
+    [startDayHour]="9"
+    [endDayHour]="19"
+    [height]="600">
+    <dxi-resource
+        fieldExpr="roomId"
+        label="Room"
+        [allowMultiple]="true"
+        [dataSource]="rooms"
+        [useColorAsDefault]="selectedResource === 'Room'">
+    </dxi-resource>
+    <dxi-resource
+        fieldExpr="priorityId"
+        label="Priority"
+        [allowMultiple]="true"
+        [dataSource]="priorities"
+        [useColorAsDefault]="selectedResource === 'Priority'">
+    </dxi-resource>
+    <dxi-resource
+        fieldExpr="ownerId"
+        label="Owner"
+        [allowMultiple]="true"
+        [dataSource]="owners"
+        [useColorAsDefault]="selectedResource === 'Owner'">
+    </dxi-resource>
+</dx-scheduler>
+
+<div class="options">
+    <div class="caption">Use colors of:</div>
+    <div class="option">
+        <dx-radio-group
+            [items]="resourcesList"
+            [(value)]="selectedResource"
+            layout="horizontal">
+        </dx-radio-group>
+    </div>
+</div>

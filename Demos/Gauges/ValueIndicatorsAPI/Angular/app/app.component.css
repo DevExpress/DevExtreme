@@ -1,0 +1,30 @@
+::ng-deep .widget-container {
+    margin-right: 320px;
+}
+::ng-deep .options {
+    padding: 20px;
+    background-color: rgba(191, 191, 191, 0.15);
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 260px;
+}
+::ng-deep .caption {
+    font-size: 18px;
+    font-weight: 500;
+}
+::ng-deep .option {
+    margin-top: 10px;
+}
+::ng-deep .option > span {
+    display: inline-block;
+    width: 155px;
+}
+::ng-deep .option > .dx-widget {
+    display: inline-block;
+    vertical-align: middle;
+}
+::ng-deep .option > .dx-button {
+    float: right;
+}

@@ -1,0 +1,40 @@
+::ng-deep #chart-demo {
+    height: 440px;
+    width: 100%;
+}
+::ng-deep .demo-table {
+    margin-top: 80px;
+    width: 100%;
+    border: 1px solid #c2c2c2;
+    border-collapse: collapse;
+}
+::ng-deep .demo-table th,
+::ng-deep .demo-table td {
+    font-weight: 400;
+    width: 200px;
+    padding: 25px 10px 5px 10px;
+    border: 1px solid #e5e5e5;
+}
+::ng-deep .demo-table th {
+    padding: 25px 15px 20px 15px;
+    border: 1px solid #c2c2c2;
+}
+::ng-deep .demo-table tr:nth-child(2) td {
+    border-top: 1px solid #c2c2c2;
+}
+::ng-deep .demo-table td:first-of-type {
+    border-left: 1px solid #c2c2c2;
+}
+::ng-deep .demo-table .bullet {
+    width: 200px;
+    height: 30px;
+}
+
+
+::ng-deep .long-title h3 {
+    font-family: 'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana;
+    font-weight: 200;
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 20px;
+}

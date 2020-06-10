@@ -1,0 +1,55 @@
+<dx-chart id="chart"
+    [dataSource]="dataSource"
+    title="Pizza Shop Complaints"
+    palette="Harmony Light"
+    [valueAxis]="[{
+        name: 'frequency',
+        position: 'left',
+        tickInterval: 300
+    }, {
+        name: 'percentage',
+        position: 'right',
+        showZero: true,
+        label: {
+            customizeText: customizeLabelText
+        },
+        constantLines: [{
+            value: 80,
+            color: '#fc3535',
+            dashStyle: 'dash',
+            width: 2,
+            label: { visible: false }
+        }],
+        tickInterval: 20,
+        valueMarginsEnabled: false
+    }]">
+    <dxo-argument-axis>
+        <dxo-label overlappingBehavior="stagger"></dxo-label>
+    </dxo-argument-axis>
+    <dxo-tooltip 
+        [enabled]="true"
+        [shared]="true"
+        [customizeTooltip]="customizeTooltip">
+    </dxo-tooltip>
+    <dxo-common-series-settings 
+        argumentField="complaint">
+    </dxo-common-series-settings>
+    <dxi-series 
+        type="bar"
+        valueField="count"
+        axis="frequency"
+        name="Complaint frequency"
+        color="#fac29a">
+    </dxi-series>
+    <dxi-series 
+        type="spline"
+        valueField="cumulativePercent"
+        axis="percentage"
+        name="Cumulative percentage"
+        color="#6b71c3">
+    </dxi-series>
+    <dxo-legend 
+        verticalAlignment="top"
+        horizontalAlignment="center">
+    </dxo-legend>
+</dx-chart>

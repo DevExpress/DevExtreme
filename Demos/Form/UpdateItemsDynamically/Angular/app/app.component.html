@@ -1,0 +1,43 @@
+<div class="long-title">
+    <h3>Personal details</h3>
+</div>
+<div id="form-container">
+    <dx-form id="form"
+        [colCount]="2"
+        [formData]="employee">
+        <dxi-item itemType="group">            
+            <dxi-item itemType="group" caption="Personal Data">
+                <dxi-item dataField="FirstName"></dxi-item>
+                <dxi-item dataField="LastName"></dxi-item> 
+                <dxi-item editorType="dxCheckBox" [editorOptions]="checkBoxOptions"></dxi-item> 
+            </dxi-item>
+            <dxi-item itemType="group">
+                <dxi-item itemType="group" 
+                    caption="Home Address"
+                    name="HomeAddress"
+                    [visible]="isHomeAddressVisible">
+                    <dxi-item dataField="Address"></dxi-item>
+                    <dxi-item dataField="City"></dxi-item>
+                </dxi-item>
+            </dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group"
+            caption="Phones"
+            name="phones-container">
+            <dxi-item itemType="group"
+                name="phones"
+                *ngFor="let phone of phoneOptions; let i = index">
+                <dxi-item [dataField]="'Phones[' + i + ']'" [editorOptions]="phoneOptions[i]">
+                    <dxo-label
+                        [text]="'Phone ' + (i + 1)">
+                    </dxo-label>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="button" 
+                horizontalAlignment="left" 
+                cssClass="add-phone-button" 
+                [buttonOptions]="addPhoneButtonOptions">
+            </dxi-item>
+        </dxi-item>        
+    </dx-form>
+</div>

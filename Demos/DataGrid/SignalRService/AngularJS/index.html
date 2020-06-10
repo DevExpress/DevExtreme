@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.light.css" />
+    <script src="../../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../../../../node_modules/angular/angular.min.js"></script>
+    <script src="../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
+    <script src="../../../../node_modules/@aspnet/signalr/dist/browser/signalr.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="index.js"></script>
+</head>
+<body class="dx-viewport">
+    <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
+        <div ng-if="connectionStarted">
+            <div id="gridContainer" dx-data-grid="dataGridOptions" dx-item-alias="cell">
+                <div data-options="dxTemplate:{ name:'priceCellTemplate' }"
+                    ng-class="{ inc: cell.data.change > 0, dec: cell.data.change < 0 }" class="ng-hide" ng-show="true">
+                    <span>{{cell.text}}</span>
+                </div>
+                <div data-options="dxTemplate:{ name:'changeCellTemplate' }"
+                ng-class="{ inc: cell.data.change > 0, dec: cell.data.change < 0 }" class="ng-hide" ng-show="true">
+                    <span class='current-value'>{{cell.text}}</span>
+                    <span class="arrow"></span>
+                    <span class='diff'>{{cell.data.percentChange.toFixed(2)}}%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

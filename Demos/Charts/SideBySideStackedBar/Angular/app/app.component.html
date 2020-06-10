@@ -1,0 +1,51 @@
+<dx-chart
+    id="chart"
+    [dataSource]="populationData"
+    title="Population: Age Structure">
+    <dxi-series
+        valueField="maleyoung"
+        name="Male: 0-14"
+        stack="male">
+    </dxi-series>
+    <dxi-series
+        valueField="malemiddle"
+        name="Male: 15-64"
+        stack="male">
+    </dxi-series>
+    <dxi-series
+        valueField="maleolder"
+        name="Male: 65 and older"
+        stack="male">
+    </dxi-series>
+    <dxi-series
+        valueField="femaleyoung"
+        name="Female: 0-14"
+        stack="female">
+    </dxi-series>
+    <dxi-series
+        valueField="femalemiddle"
+        name="Female: 15-64"
+        stack="female">
+    </dxi-series>
+    <dxi-series
+        valueField="femaleolder"
+        name="Female: 65 and older"
+        stack="female">
+    </dxi-series>
+    <dxi-value-axis>
+        <dxo-title text="Populations, millions"></dxo-title>
+    </dxi-value-axis>
+    <dxo-common-series-settings
+        argumentField="state"
+        type="stackedBar">
+    </dxo-common-series-settings>
+    <dxo-legend
+        horizontalAlignment="right"
+        columnCount=2
+        [customizeItems]="customizeItems"
+        position="inside">
+        <dxo-border [visible]="true"></dxo-border>
+    </dxo-legend>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-tooltip [enabled]="true"></dxo-tooltip>
+</dx-chart>

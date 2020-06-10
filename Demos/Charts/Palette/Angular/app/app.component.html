@@ -1,0 +1,25 @@
+<div class="flex-container">
+    <dx-pie-chart id="pie" [palette]="palette" [dataSource]="data" [paletteExtensionMode]="paletteExtensionMode">
+        <dxo-size [width]="500"></dxo-size>
+        <dxo-legend [visible]="false"></dxo-legend>
+        <dxi-series></dxi-series>
+    </dx-pie-chart>
+
+    <div class="palette-container flex-block">
+        <div class="palette-item" *ngFor="let color of baseColors" [style.background-color]="color"></div>
+    </div>
+</div>
+
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <span>Palette</span>
+        <dx-select-box [items]="paletteCollection" [(value)]="palette">
+        </dx-select-box>
+    </div>
+    <div class="option">
+        <span>Palette Extension Mode</span>
+        <dx-select-box [items]="paletteExtensionModes" [(value)]="paletteExtensionMode">
+        </dx-select-box>
+    </div>
+</div>

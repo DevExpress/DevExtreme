@@ -1,0 +1,52 @@
+#accordion h1 {
+    font-size: 20px;
+}
+
+#accordion h1,
+#accordion p {
+    margin: 0;
+}
+
+.dx-theme-material #accordion .dx-accordion-item-opened .dx-accordion-item-title {
+    display: flex;
+}
+
+.dx-theme-material #accordion .dx-accordion-item-opened h1 {
+    align-self: center;
+}
+
+.options,
+.selected-data {
+    padding: 20px;
+    background-color: rgba(191, 191, 191, 0.15);
+    margin-top: 20px;
+}
+
+.selected-data {
+    position: relative;
+    height: 36px;
+}
+
+.selected-data > .caption {
+    position: relative;
+    top: 5px;
+    margin-right: 10px;
+    font-weight: bold;
+    font-size: 115%;
+}
+
+.selected-data > .dx-widget {
+    position: absolute;
+    left: 140px;
+    right: 20px;
+    top: 20px;
+}
+
+.options > .caption {
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.option {
+    margin-top: 10px;
+}

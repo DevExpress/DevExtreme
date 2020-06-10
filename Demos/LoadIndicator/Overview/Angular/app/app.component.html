@@ -1,0 +1,21 @@
+<div class="form">
+    <div class="label">Custom size</div>
+    <dx-load-indicator id="small-indicator" height="20" width="20"></dx-load-indicator>
+    <dx-load-indicator id="medium-indicator" height="40" width="40"></dx-load-indicator>
+    <dx-load-indicator id="large-indicator" height="60" width="60"></dx-load-indicator>
+    <div class="label">Custom image</div>
+    <dx-load-indicator id="image-indicator" indicatorSrc='../../../../images/Loading.gif'></dx-load-indicator>
+    <div class="label">Using with other widgets</div>
+    <dx-button
+        id="button"
+        [height]="40"
+        [width]="180"
+        (onClick)="onClick($event)">
+        <div *dxTemplate="let data of 'content'">
+            <dx-load-indicator class='button-indicator'
+                [visible]="loadIndicatorVisible">
+            </dx-load-indicator>
+            <span class='dx-button-text'>{{buttonText}}</span>
+        </div>
+    </dx-button>
+</div>

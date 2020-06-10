@@ -1,0 +1,57 @@
+<dx-data-grid id="gridContainer"
+    [dataSource]="dataSource"
+    [remoteOperations]="false"
+    [allowColumnReordering]="true"
+    [rowAlternationEnabled]="true"
+    [showBorders]="true"
+    (onContentReady)="contentReady($event)">
+
+    <dxo-paging [pageSize]="10"></dxo-paging>
+    <dxo-pager
+        [showPageSizeSelector]="true"
+        [allowedPageSizes]="[10, 25, 50, 100]"
+    ></dxo-pager>
+    <dxo-search-panel
+        [visible]="true"
+        [highlightCaseSensitive]="true"
+    ></dxo-search-panel>
+    <dxo-group-panel
+        [visible]="true"
+    ></dxo-group-panel>
+    <dxo-grouping
+        [autoExpandAll]="false"
+    ></dxo-grouping>
+
+    <dxi-column dataField="Product" [groupIndex]="0"></dxi-column>
+    <dxi-column dataField="Amount" caption="Sale Amount" dataType="number" format="currency" alignment="right"></dxi-column>
+    <dxi-column caption="Discount %" dataField="Discount" cellTemplate="discountCellTemplate" dataType="number" format="percent" alignment="right" [allowGrouping]="false" cssClass="bullet"></dxi-column>
+    <dxi-column dataField="SaleDate" dataType="date"></dxi-column>
+    <dxi-column dataField="Region" dataType="string"></dxi-column>
+    <dxi-column dataField="Sector" dataType="string"></dxi-column>
+    <dxi-column dataField="Channel" dataType="string"></dxi-column>
+    <dxi-column dataField="Customer" dataType="string" [width]="150"></dxi-column>
+
+    <div *dxTemplate="let d of 'discountCellTemplate'">
+          <div class="chart-cell">
+              <dx-bullet
+                  [showTarget]="false"
+                  [showZeroLevel]="true"
+                  [startScaleValue]="0"
+                  [endScaleValue]="100"
+                  [value]="d.value * 100">
+                  <dxo-size [width]="150" [height]="35"></dxo-size>
+                  <dxo-tooltip
+                      [enabled]="true"
+                      [paddingTopBottom]="2"
+                      [customizeTooltip]="customizeTooltip">
+                      <dxo-font [size]="18"></dxo-font>
+                  </dxo-tooltip>
+                  <dxo-margin
+                      [top]="5"
+                      [bottom]="0"
+                      [left]="5"
+                  ></dxo-margin>
+              </dx-bullet>
+          </div>
+      </div>
+</dx-data-grid>

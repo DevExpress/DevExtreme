@@ -1,0 +1,21 @@
+<dx-tree-list
+    id="employees"
+    [dataSource]="employees"
+    keyExpr="ID"
+    parentIdExpr="Head_ID"
+    [showRowLines]="true"
+    [showBorders]="true"
+    [columnAutoWidth]="true"
+    [expandedRowKeys]="[1, 2, 10]">
+    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+
+    <dxi-column dataField="Title" caption="Position"></dxi-column>
+    <dxi-column dataField="Full_Name" [fixed]="true"></dxi-column>
+    <dxi-column dataField="City"></dxi-column>
+    <dxi-column dataField="State"></dxi-column>
+    <dxi-column dataField="Mobile_Phone"></dxi-column>
+    <dxi-column dataField="Email"></dxi-column>
+    <dxi-column dataField="Hire_Date" dataType="date"></dxi-column>
+    <dxi-column dataField="Birth_Date" dataType="date"></dxi-column>
+    <dxi-column dataField="Skype"></dxi-column>
+</dx-tree-list>

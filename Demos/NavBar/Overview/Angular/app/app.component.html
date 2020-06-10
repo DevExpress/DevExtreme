@@ -1,0 +1,17 @@
+<dx-list [dataSource]="currentData">
+    <div *dxTemplate="let item of 'item'">
+        <div class="image-container">
+            <img src="{{item.image}}">
+        </div>
+        <div class="info">
+            <div>{{item.name}}</div>
+            <div>{{item.phone}}</div>
+            <div>{{item.email}}</div>
+        </div>
+    </div>
+</dx-list>
+<dx-nav-bar
+    [dataSource]="navBarData"
+    (onItemClick)="selectionChanged($event)"
+    [selectedIndex]="0"
+></dx-nav-bar>

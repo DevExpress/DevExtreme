@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script src="../../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../../../../node_modules/cldrjs/dist/cldr.js"></script>
+    <script src="../../../../node_modules/cldrjs/dist/cldr/event.js"></script>
+    <script src="../../../../node_modules/cldrjs/dist/cldr/supplemental.js"></script>
+    <script src="../../../../node_modules/cldrjs/dist/cldr/unresolved.js"></script>
+    <script type="text/javascript" src="../../../../node_modules/globalize/dist/globalize.js"></script>
+    <script type="text/javascript" src="../../../../node_modules/globalize/dist/globalize/message.js"></script>
+    <script type="text/javascript" src="../../../../node_modules/globalize/dist/globalize/number.js"></script>
+    <script type="text/javascript" src="../../../../node_modules/globalize/dist/globalize/currency.js"></script>
+    <script type="text/javascript" src="../../../../node_modules/globalize/dist/globalize/date.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.light.css" />
+    <script src="../../../../node_modules/angular/angular.min.js"></script>
+    <script src="../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="index.js"></script>
+</head>
+<body class="dx-viewport">
+    <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
+        <form id="form" action="your-action" ng-submit="onFormSubmit($event)">
+            <div class="dx-fieldset">
+                <div class="dx-fieldset-header">Credentials</div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Email</div>
+                    <div class="dx-field-value">
+                        <div dx-text-box="{ }" 
+                            dx-validator="emailValidationRules">
+                        </div>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Password</div>
+                    <div class="dx-field-value">
+                        <div id="password-validation" dx-text-box="{ mode: 'password' }" 
+                            dx-validator="passwordValidationRules">
+                        </div>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Confirm Password</div>
+                    <div class="dx-field-value">
+                        <div dx-text-box="{ mode: 'password' }" 
+                            dx-validator="confirmPasswordValidationRules">
+                        </div>
+                    </div>
+                </div>
+            </div> 
+            <div class="dx-fieldset">
+                <div class="dx-fieldset-header">Personal Data</div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Name</div>
+                    <div class="dx-field-value">
+                        <div dx-text-box="{ value: 'Peter' }" 
+                            dx-validator="nameValidationRules">
+                        </div>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Date of birth</div>
+                    <div class="dx-field-value">
+                        <div dx-date-box="dateboxOptions" 
+                            dx-validator="dobValidationRules">
+                        </div>
+                    </div>
+                </div>
+            </div>   
+            <div class="dx-fieldset">
+                <div class="dx-fieldset-header">Billing address</div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Country</div>
+                    <div class="dx-field-value">
+                        <div dx-select-box="{ dataSource: countries }" 
+                            dx-validator="countryValidationRules">
+                        </div>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">City</div>
+                    <div class="dx-field-value">
+                        <div dx-text-box="{ }" 
+                            dx-validator="cityValidationRules">
+                        </div>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Address</div>
+                    <div class="dx-field-value">
+                        <div dx-text-box="{ }" 
+                            dx-validator="addressValidationRules">
+                        </div>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Phone <i>(optional)</i></div>
+                    <div class="dx-field-value">
+                        <div dx-text-box="phoneTextBoxOptions" 
+                            dx-validator="phoneValidationRules">
+                        </div>
+                    </div>
+                </div>
+                <div id="check" dx-check-box="{ 
+                    value: false,
+                    text: 'I agree to the Terms and Conditions'}" 
+                    dx-validator="checkValidationRules">
+                </div>
+            </div>
+            <div class="dx-fieldset">
+                <div id="summary" dx-validation-summary="{ }"></div>
+                <div id="button" dx-button="submitButtonOptions"></div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

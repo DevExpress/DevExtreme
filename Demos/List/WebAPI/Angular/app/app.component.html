@@ -1,0 +1,18 @@
+<div class="list-container">
+    <dx-list
+        height="600"
+        [dataSource]="listData"
+        [grouped]="true"
+        [collapsibleGroups]="true"
+        [selectionMode]="multiple"
+        [showSelectionControls]="true"
+        pageLoadMode="scrollBottom"
+        itemTemplate="data"
+    >
+        <div *dxTemplate="let item of 'data'">
+            <div>{{item.CategoryName}}</div>
+            <div>{{item.ProductName}}</div>
+            <b>{{item.UnitPrice | currency:'USD':'symbol':'1.2'}}</b>
+        </div>
+    </dx-list>
+</div>

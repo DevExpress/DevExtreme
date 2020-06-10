@@ -1,0 +1,65 @@
+<dx-chart id="chart"
+          [dataSource]="dataSource">
+  <dxo-common-series-settings type="scatter"></dxo-common-series-settings>
+  <dxi-series argumentField="x1" valueField="y1"></dxi-series>
+  <dxi-series argumentField="x2" valueField="y2">
+    <dxo-point symbol="triangleDown"></dxo-point>
+  </dxi-series>
+  <dxo-argument-axis
+      #argument
+      [visualRange]="[-20, 20]" 
+      [offset]="0" 
+      [customPosition]="0">
+  </dxo-argument-axis>
+  <dxi-value-axis
+    #value
+    [visualRange]="[-20, 20]" 
+    [endOnTick]="false" 
+    [offset]="0" 
+    [customPosition]="0">
+  </dxi-value-axis>
+  <dxo-legend [visible]="false"></dxo-legend>
+</dx-chart>
+<div class="options">
+  <div class="caption">Options</div>
+  <div class="common">
+    <div class='block left'>
+      <span>Argument Axis</span>
+      <div class='option'>
+        <span>Custom position:</span>
+        <dx-number-box 
+          [value]="0" 
+          [showSpinButtons]="true" 
+          [(value)]="argument.customPosition">
+        </dx-number-box>
+      </div>
+      <div class='option'>
+        <span>Offset:</span>
+        <dx-number-box 
+          [value]="0" 
+          [showSpinButtons]="true" 
+          [(value)]="argument.offset">
+        </dx-number-box>
+      </div>
+    </div>
+    <div class='block right'>
+      <span>Value Axis</span>
+      <div class='option'>
+        <span>Custom position:</span>
+        <dx-number-box 
+          [value]="0" 
+          [showSpinButtons]="true" 
+          [(value)]="value.customPosition">
+        </dx-number-box>
+      </div>
+      <div class='option'>
+        <span>Offset:</span>
+        <dx-number-box 
+          [value]="0" 
+          [showSpinButtons]="true" 
+          [(value)]="value.offset">
+        </dx-number-box>
+      </div>
+    </div>
+  </div>
+</div>

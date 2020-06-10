@@ -1,0 +1,30 @@
+::ng-deep #treeview {
+	height: 400px;
+}
+
+::ng-deep .options {
+    padding: 20px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 260px;
+    top: 0;
+    background-color: #f5f5f5;
+}
+
+::ng-deep .caption {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+::ng-deep .option {
+    margin-top: 10px;
+}
+
+::ng-deep .option > .dx-selectbox {
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 350px;
+    width: 100%;
+    margin-top: 5px;
+}

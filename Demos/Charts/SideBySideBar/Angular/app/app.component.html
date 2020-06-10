@@ -1,0 +1,27 @@
+<dx-chart
+    id="chart"
+    title="Gross State Product within the Great Lakes Region"
+    [dataSource]="grossProductData"
+    (onPointClick)="onPointClick($event)">
+    <dxi-series valueField="year2004" name="2004"></dxi-series>
+    <dxi-series valueField="year2001" name="2001"></dxi-series>
+    <dxi-series valueField="year1998" name="1998"></dxi-series>
+    <dxo-common-series-settings
+        argumentField="state"
+        type="bar"
+        hoverMode="allArgumentPoints"
+        selectionMode="allArgumentPoints">
+        <dxo-label
+            [visible]="true"
+            [format]="{
+                type: 'fixedPoint',
+                precision: '0'
+            }">
+        </dxo-label>
+    </dxo-common-series-settings>
+    <dxo-legend
+        verticalAlignment="bottom"
+        horizontalAlignment="center">
+    </dxo-legend>
+    <dxo-export [enabled]="true"></dxo-export>
+</dx-chart>

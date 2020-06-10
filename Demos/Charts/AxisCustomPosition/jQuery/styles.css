@@ -1,0 +1,48 @@
+.options {
+  padding: 20px;
+  margin-top: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+}
+
+.option {
+  margin-top: 10px;
+  overflow: auto;
+}
+
+.option > span {
+  margin-right: 20px;
+  margin-top: 6px;
+  float: left;
+}
+
+.caption {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.option > .dx-numberbox {
+  width: 90px;
+  float: right;
+}
+
+.common {
+  width: 488px;
+}
+
+.block {
+  vertical-align: middle;
+  margin-top: 10px;
+}
+
+.left {
+  display: inline-block;
+}
+
+.right {
+  float: right;
+}
+
+.block > span {
+  font-size: 18px;
+  font-weight: 500;
+}

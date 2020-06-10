@@ -1,0 +1,1 @@
+This demo shows how to&nbsp;filter data in&nbsp;the **List** using the **FilterBuilder** widget. Note that the **DataSource** does not support the *"between"* operation. Call the [getFilterExpression()](/Documentation/ApiReference/UI_Widgets/dxFilterBuilder/Methods/#getFilterExpression) method to&nbsp;convert it&nbsp;into **DataSource**-compatible operations.

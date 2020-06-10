@@ -1,0 +1,38 @@
+<div class="dx-fieldset">
+    <div class="dx-fieldset-header">Custom Field Template</div>
+    <div class="dx-field">
+        <dx-lookup
+            class="field-customization"
+            [items]="employees"
+            [displayExpr]="getDisplayExpr"
+            valueExpr="ID"
+            [value]="employees[0].ID"
+            fieldTemplate="field">
+            <dxo-drop-down-options title="Select employee"></dxo-drop-down-options>
+            <div *dxTemplate="let item of 'field'">
+                <div class="custom-field">
+                    <img src="{{item.Picture}}"/><div>{{item.Prefix }} {{item.FirstName }} {{item.LastName}}</div>
+                </div>
+            </div>
+        </dx-lookup>
+    </div>
+</div>
+<div class="dx-fieldset">
+    <div class="dx-fieldset-header">Custom Item Template</div>
+    <div class="dx-field">
+        <dx-lookup
+            [items]="employees"
+            [searchExpr]="['FirstName', 'LastName', 'Prefix']"
+            valueExpr="ID"
+            [displayExpr]="getDisplayExpr"
+            placeholder="Select employee"
+            itemTemplate="listItem">
+            <dxo-drop-down-options title="Select employee"></dxo-drop-down-options>
+            <div *dxTemplate="let item of 'listItem'">
+                <div class="custom-item">
+                    <img src="{{item.Picture}}"/><div>{{item.Prefix }} {{item.FirstName }} {{item.LastName}}</div>
+                </div>
+            </div>
+        </dx-lookup>
+    </div>
+</div>

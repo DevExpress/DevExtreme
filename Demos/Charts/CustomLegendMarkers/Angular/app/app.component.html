@@ -1,0 +1,30 @@
+<dx-chart 
+    id='chart'
+    [dataSource]="dataSource"
+    (onLegendClick)="onLegendClick($event)"
+    >
+    <dxo-title
+        text='Noisy and Original Signals'>
+    </dxo-title>
+    <dxo-common-series-settings
+        argumentField="argument">
+        <dxo-point [visible]='false'></dxo-point>
+    </dxo-common-series-settings>
+    <dxi-series
+        valueField='originalValue'
+        name='Original Signal'>
+    </dxi-series>
+    <dxi-series
+        valueField='value'
+        name='Noisy Signal'>
+    </dxi-series>
+    <dxo-legend
+        verticalAlignment='bottom'
+        horizontalAlignment='center'
+        markerTemplate="markerTemplate">
+        <svg *dxTemplate="let item of 'markerTemplate'" attr.fill="{{getMarkerColor(item)}}">
+            <rect x="0" y="0" width="18" height="18" opacity="0.3" attr.fill="getMarkerColor(item)"></rect>
+            <path attr.d="{{getMarkerPath(item.series.name)}}"></path>
+        </svg>
+    </dxo-legend>
+</dx-chart>

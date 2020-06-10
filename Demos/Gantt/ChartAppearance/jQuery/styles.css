@@ -1,0 +1,25 @@
+#gantt {
+    height: 700px;
+}
+
+.options {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: rgba(191, 191, 191, 0.15);
+    position: relative;
+}
+
+.caption {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.option {
+    margin-top: 10px;
+    margin-right: 40px;
+    display: inline-block;
+}
+
+.option:last-child {
+    margin-right: 0;
+}

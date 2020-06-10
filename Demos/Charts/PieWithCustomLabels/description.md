@@ -1,0 +1,1 @@
+This demo illustrates how the **PieChart** widget arranges labels in&nbsp;several columns. To&nbsp;maximize readability, the widget ensures that labels do&nbsp;not overlap one another.

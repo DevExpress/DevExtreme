@@ -1,0 +1,35 @@
+::ng-deep .form {
+    display: flex;
+}
+
+::ng-deep .form>div,
+::ng-deep #treeview {
+    display: inline-block;
+    vertical-align: top;
+}
+
+::ng-deep .log-container {
+    padding: 20px;
+    margin-left: 20px;
+    font-size: 115%;
+    font-weight: bold;    
+    background-color: rgba(191, 191, 191, 0.15);
+    height: 100%;
+}
+
+::ng-deep .log-container .dx-icon-clock {
+    position: relative;
+    top: 1px;
+}
+
+::ng-deep #log {
+    margin-top: 10px;
+}
+
+::ng-deep #log .dx-empty-message {
+    padding-left: 0px;
+}
+
+::ng-deep .dx-list-item-content {
+    padding-left: 0;
+}

@@ -1,0 +1,17 @@
+::ng-deep .pies-container {
+    margin: auto;
+    width: 800px;
+}
+
+::ng-deep .pies-container > .pie {
+    width: 400px;
+    margin-top: -50px;
+    float: left;
+}
+
+::ng-deep .long-title h3 {
+    font-weight: 200;
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 20px;
+}

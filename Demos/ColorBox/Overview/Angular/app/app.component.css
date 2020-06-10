@@ -1,0 +1,55 @@
+::ng-deep .form {
+    min-height: 690px;
+}
+::ng-deep .form .dx-field-value {
+    text-align: right;
+}
+::ng-deep .dx-fieldset-header {
+    padding: 10px 0;
+}
+::ng-deep .color-block {
+    width: 360px;
+    height: 254px;
+    background-color: #f05b41;
+    position: relative;
+}
+::ng-deep .hero-color-box{
+    position: absolute;
+    right: 0;
+    left: 400px;
+    top: 110px;
+}
+::ng-deep .color-block .superhero{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+::ng-deep .hero-block {
+    position: relative;
+}
+::ng-deep .superhero {
+    background-image: url(../../../../images/hero_white.png);
+}
+::ng-deep .dx-color-scheme-dark .superhero {
+    background-image: url(../../../../images/hero_black.png);
+}
+::ng-deep .dx-color-scheme-darkmoon .superhero {
+    background-image: url(../../../../images/hero_darkmoon.png);
+}
+::ng-deep .dx-color-scheme-darkviolet .superhero {
+    background-image: url(../../../../images/hero_darkviolet.png);
+}
+::ng-deep .dx-color-scheme-greenmist .superhero {
+    background-image: url(../../../../images/hero_greenmist.png);
+}
+::ng-deep .dx-color-scheme-contrast .superhero {
+    background-image: url(../../../../images/hero_contrast.png);
+}
+
+::ng-deep .dx-color-scheme-blue-dark .superhero,
+::ng-deep .dx-color-scheme-orange-dark .superhero,
+::ng-deep .dx-color-scheme-teal-dark .superhero,
+::ng-deep .dx-color-scheme-lime-dark .superhero,
+::ng-deep .dx-color-scheme-purple-dark .superhero {
+    background-image: url(../../../../images/hero_material_dark.png);
+}

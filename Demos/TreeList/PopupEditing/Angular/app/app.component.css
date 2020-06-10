@@ -1,0 +1,7 @@
+﻿/::ng-deep#tree-list-demo {
+ 	min-height: 530px;
+}
+
+::ng-deep #employees {
+    max-height: 530px;
+}

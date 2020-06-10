@@ -1,0 +1,52 @@
+<div id="chart-demo">
+    <dx-chart
+        [dataSource]="chartDataSource"
+        title="Temperature in Barcelona, 2012"
+        [valueAxis]="{
+            valueType: 'numeric',
+            grid: {
+                opacity: 0.2
+            },
+            label: {
+                customizeText: customizeText
+            }
+        }"
+    >
+        <dxo-size [height]="420"></dxo-size>
+        <dxi-series
+            argumentField="Number"
+            valueField="Temperature"
+            type="spline"
+        ></dxi-series>
+        <dxo-legend [visible]="false"></dxo-legend>
+        <dxo-common-pane-settings>
+            <dxo-border
+                [visible]="true"
+                [width]="2"
+                [top]="false"
+                [right]="false"
+            ></dxo-border>
+        </dxo-common-pane-settings>
+        <dxo-export [enabled]="true"></dxo-export>
+        <dxo-tooltip
+            [enabled]="true"
+            [customizeTooltip]="customizeTooltip"
+        ></dxo-tooltip>
+        <dxo-argument-axis type="discrete">
+            <dxo-grid [visible]="true" [opacity]="0.5"></dxo-grid>
+        </dxo-argument-axis>
+        <dxo-loading-indicator [enabled]="true"></dxo-loading-indicator>
+    </dx-chart>
+    <div class="action">
+        <dx-select-box
+            id="selectbox"
+            [items]="months"
+            [width]="150"
+            [value]="1"
+            valueExpr="id"
+            displayExpr="name"
+            (onValueChanged)="onValueChanged($event)"
+        ></dx-select-box>
+        <div class="label">Choose a month:</div>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+::ng-deep
+.dx-dropdowneditor-button .dx-button-content {
+    text-align: center;
+}
+
+::ng-deep
+.dx-theme-material .dx-dropdowneditor-button .dx-button-content .dx-loadindicator {
+    width: 24px;
+    height: 24px;
+}
+
+::ng-deep
+.custom-icon {
+    max-height: 100%;
+    max-width: 100%;
+    font-size: 28px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+::ng-deep
+.dx-theme-android5 .custom-item img {
+    padding: 4px 22px 0 0;
+}
+
+::ng-deep
+.custom-item img {
+    float: right;
+}
+
+::ng-deep
+.custom-item .product-name {
+    line-height: 32px;
+    padding-left: 5px;
+}

@@ -1,0 +1,31 @@
+::ng-deep #pie-chart {
+    height: 440px;
+}
+
+::ng-deep .state-tooltip {
+    height: 90px;
+}
+
+::ng-deep .state-tooltip > img {
+    width: 60px;
+    height: 40px;
+    display: block;
+    margin: 0 5px 0 0;
+    float: left;
+}
+
+::ng-deep .state-tooltip > h4 {
+    line-height: 40px;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+::ng-deep .state-tooltip .caption {
+    font-weight: 500;
+}
+
+::ng-deep .state-tooltip sup {
+    font-size: 0.8em;
+    vertical-align: super;
+    line-height: 0;
+}

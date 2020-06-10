@@ -1,0 +1,19 @@
+<div class="filter-container">
+    <dx-filter-builder 
+        [fields]="fields" 
+        [(value)]="filter">
+    </dx-filter-builder>
+    <dx-button 
+        text="Apply Filter"
+        type="default"
+        (onClick)="buttonClick()">
+    </dx-button>    
+    <div class="dx-clearfix"></div>
+</div>
+<dx-data-grid 
+    [dataSource]="dataSource"
+    [filterValue]="gridFilterValue"
+    [showBorders]="true"  
+    [columns]="fields"
+    [height]="300">
+</dx-data-grid>

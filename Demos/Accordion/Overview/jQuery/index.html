@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script src="../../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.light.css" />
+    <script src="../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
+    <script src="../../../../node_modules/underscore/underscore.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="index.js"></script>
+</head>
+<body class="dx-viewport">
+    <div class="demo-container">
+        <div id="accordion">
+            <div id="accordion-container">
+            </div>
+
+            <div class="selected-data">
+                <span class="caption">Selected Items</span>
+                <div id="tagbox"></div>
+            </div>
+            
+            <div class="options">
+                <div class="caption">Options</div>
+                <div class="option">
+                    <div id="multiple-enabled"></div>
+                </div>    
+                <div class="option">
+                    <div id="collapsible-enabled"></div>
+                </div>
+                <div class="option">
+                    <span>Animation duration</span>
+                    <div id="slider"></div>
+                </div>                
+            </div>
+        </div>
+        
+        <script type="text/html" id="title">
+            <h1><%= CompanyName%></h1>
+        </script>
+        
+        <script type="text/html" id="customer">
+            <div class="accodion-item">
+                <div>
+                    <p>
+                        <b><%= City%></b> 
+                        (<span><%= State%></span>)
+                    </p>
+                    <p>
+                        <span><%= Zipcode%></span> 
+                        <span><%= Address%></span>
+                    </p>
+                </div>
+                <div>
+                    <p>
+                        Phone: <b><%= Phone%></b>
+                    </p>
+                    <p>
+                        Fax: <b><%= Fax%></b>
+                    </p>
+                    <p>
+                        Website: 
+                        <a href="<%= Website%>" target="_blank">
+                            <%= Website%>
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </script>
+    </div>
+</body>
+</html>

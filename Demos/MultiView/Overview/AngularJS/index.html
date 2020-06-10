@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script src="../../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.light.css" />
+    <script src="../../../../node_modules/angular/angular.min.js"></script>
+    <script src="../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="index.js"></script>
+</head>
+<body class="dx-viewport">
+    <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
+        <div id="multiview">
+            <div>
+                Item <span>{{selectedIndex + 1}}</span> 
+                of <span >{{itemCount}}</span>: 
+                <i>Swipe the view horizontally to switch to the next view.</i>
+            </div>
+            <div dx-multi-view="multiViewOptions" dx-item-alias="company">
+                <div data-options="dxTemplate : { name: 'customer' } ">
+                    <div class="multiview-item">
+                        <h1 >{{company.CompanyName}}</h1>
+                        <div>
+                            <p>
+                                <b>{{company.City}}</b> 
+                                (<span>{{company.State}}</span>)
+                            </p>
+                            <p>
+                                <span>{{company.Zipcode}}</span> 
+                                <span>{{company.Address}}</span>
+                            </p>
+                        </div>
+                        <div>
+                            <p>
+                                Phone: <b>{{company.Phone}}</b>
+                            </p>
+                            <p>
+                                Fax: <b>{{company.Fax}}</b>
+                            </p>
+                            <p>
+                                Website: 
+                                <a ng-href="{{company.Website}}" 
+                                    target="_blank">
+                                    {{company.Website}}
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="options">
+                <div class="caption">Options</div>
+                <div class="option">
+                    <div dx-check-box="{            
+                        text: 'Loop enabled',
+                        bindingOptions: {
+                            value: 'loop'
+                        }
+                    }"></div>
+                </div>
+                <div class="option">
+                    <div dx-check-box="{ 
+                        text: 'Animation enabled',
+                        bindingOptions: {
+                            value: 'animationEnabled'
+                        }
+                    }"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

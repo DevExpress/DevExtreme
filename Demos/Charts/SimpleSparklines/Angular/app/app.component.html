@@ -1,0 +1,53 @@
+<div class="long-title"><h3>Monthly Prices of Oil, Gold and Silver</h3></div>
+<div id="chart-demo">
+    <table class="demo-table">
+        <tr>
+            <th></th>
+            <th>Oil (USD/barrel)</th>
+            <th>Gold (USD/troy ounce)</th>
+            <th>Silver (USD/troy ounce)</th>
+        </tr>
+        <tr *ngFor="let year of years">
+            <th>{{year}}</th>
+            <td>
+                <dx-sparkline class="sparkline"
+                    [dataSource]="oilCosts"
+                    argumentField="month"
+                    valueField="{{year}}"
+                    type="line"
+                    [showMinMax]="true">
+                    <dxo-tooltip format="currency"></dxo-tooltip>
+                </dx-sparkline>
+            </td>
+            <td>
+                <dx-sparkline class="sparkline"
+                    [dataSource]="goldCosts"
+                    argumentField="month"
+                    valueField="{{year}}"
+                    type="spline"
+                    [lineWidth]="3"
+                    lineColor="#9ab57e"
+                    minColor="#6babac"
+                    maxColor="#ebdd8f"
+                    [showMinMax]="true"
+                    [showFirstLast]="false">
+                    <dxo-tooltip format="currency"></dxo-tooltip>
+                </dx-sparkline>
+            </td>
+            <td>
+                <dx-sparkline class="sparkline"
+                    [dataSource]="silverCosts"
+                    argumentField="month"
+                    valueField="{{year}}"
+                    type="stepline"
+                    lineColor="#e8c267"
+                    firstLastColor="#e55253"
+                    [pointSize]="6"
+                    pointSymbol="square"
+                    pointColor="#ebdd8f">
+                    <dxo-tooltip format="currency"></dxo-tooltip>
+                </dx-sparkline>
+            </td>
+      </tr>
+    </table>
+</div>

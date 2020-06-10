@@ -1,0 +1,16 @@
+::ng-deep #gauge-demo {
+    height: 440px;
+    width: 100%;
+}
+::ng-deep #gauge {
+    width: 80%;
+    height: 100%;
+    float: left;
+}
+::ng-deep #seasons {
+    width: 20%;
+    float: left;
+    text-align: left;
+    margin-top: 20px;
+}
+

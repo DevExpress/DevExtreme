@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script src="../../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.light.css" />
+    <script src="../../../../node_modules/angular/angular.min.js"></script>
+    <script src="../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="index.js"></script>
+</head>
+<body class="dx-viewport">
+    <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
+        <div class="long-title"><h3>Daily temperature</h3></div>
+        <div id="chart-demo">
+            <table class="demo-table">
+                <tr>
+                    <th>
+                    </th>
+                    <th>June</th>
+                    <th>July</th>
+                    <th>August</th>
+                </tr>
+                <tr>
+                    <th>First week</th>
+                    <td><div class="bullet" dx-bullet="june1"></div></td>
+                    <td><div class="bullet" dx-bullet="july1"></div></td>
+                    <td><div class="bullet" dx-bullet="august1"></div></td>
+                </tr>
+                <tr>
+                    <th>Second week</th>
+                    <td><div class="bullet" dx-bullet="june2"></div></td>
+                    <td><div class="bullet" dx-bullet="july2"></div></td>
+                    <td><div class="bullet" dx-bullet="august2"></div></td>
+                </tr>
+                <tr>
+                    <th>Third week</th>
+                    <td><div class="bullet" dx-bullet="june3"></div></td>
+                    <td><div class="bullet" dx-bullet="july3"></div></td>
+                    <td><div class="bullet" dx-bullet="august3"></div></td>
+                </tr>
+                <tr>
+                    <th>Fourth week</th>
+                    <td><div class="bullet" dx-bullet="june4"></div></td>
+                    <td><div class="bullet" dx-bullet="july4"></div></td>
+                    <td><div class="bullet" dx-bullet="august4"></div></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

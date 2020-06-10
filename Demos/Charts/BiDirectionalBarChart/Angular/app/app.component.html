@@ -1,0 +1,33 @@
+<dx-chart
+    id="chart"
+    [dataSource]="populationData"
+    [rotated]="true"
+    [barGroupWidth]="18"
+    title="Population Pyramid For Norway 2016">
+    <dxo-common-series-settings 
+        argumentField="age"
+        type="stackedbar">
+    </dxo-common-series-settings>
+    <dxi-series 
+        valueField="male" 
+        name="Male"
+        color="#3F7FBF">
+    </dxi-series>
+    <dxi-series 
+        valueField="female" 
+        name="Female"
+        color="#F87CCC">
+    </dxi-series>
+    <dxo-tooltip 
+        [enabled]="true"
+        [customizeTooltip]="customizeTooltip">
+    </dxo-tooltip>
+    <dxi-value-axis>
+        <dxo-label [customizeText]="customizeLabel"></dxo-label>
+    </dxi-value-axis>
+    <dxo-legend
+        verticalAlignment="bottom"
+        horizontalAlignment="center">
+        <dxo-margin [left]="50"></dxo-margin>
+    </dxo-legend>
+</dx-chart>

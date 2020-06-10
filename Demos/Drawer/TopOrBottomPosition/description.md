@@ -1,0 +1,1 @@
+This example shows a&nbsp;<b>Drawer</b> that opens from the top or&nbsp;bottom of&nbsp;the view. You can use the radio buttons under the <b>Drawer</b> to&nbsp;change its position and behavior in&nbsp;relation to&nbsp;the view.

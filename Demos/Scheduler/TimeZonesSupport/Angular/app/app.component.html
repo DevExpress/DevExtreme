@@ -1,0 +1,23 @@
+<div class="option">
+    <span>Office Time Zone</span>
+    <dx-select-box
+        [items]="locations"
+        [width]="240"
+        displayExpr="text"
+        valueExpr="timeZoneId"
+        [(value)]="timezone"
+    >
+    </dx-select-box>
+</div>
+<dx-scheduler
+    [dataSource]="dataSource"
+    [timeZone]="timezone"
+    [views]="['workWeek']"
+    currentView="workWeek"
+    [currentDate]="currentDate"
+    [resources]="resources"
+    [height]="600">
+    <dxo-editing
+        [allowTimeZoneEditing]="true">
+    </dxo-editing>
+</dx-scheduler>

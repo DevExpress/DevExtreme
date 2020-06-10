@@ -1,0 +1,94 @@
+
+<div class="dx-fieldset">
+    <div class="dx-field">
+        <div class="dx-field-label">Default mode</div>
+        <div class="dx-field-value">
+            <dx-select-box [items]="simpleProducts"></dx-select-box>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-label">With a custom placeholder</div>
+        <div class="dx-field-value">
+            <dx-select-box
+                [items]="simpleProducts"
+                placeholder="Choose Product"
+                [showClearButton]="true"
+            ></dx-select-box>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-label">Read only</div>
+        <div class="dx-field-value">
+            <dx-select-box
+                [items]="simpleProducts"
+                [value]="simpleProducts[0]"
+                [readOnly]="true"
+            ></dx-select-box>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-label">Disabled</div>
+        <div class="dx-field-value">
+            <dx-select-box
+            [items]="simpleProducts"
+            [value]="simpleProducts[0]"
+            [disabled]="true"
+            ></dx-select-box>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-label">Data source usage</div>
+        <div class="dx-field-value">
+            <dx-select-box
+                [dataSource]="data"
+                displayExpr="Name"
+                valueExpr="ID"
+                [value]="products[0].ID"
+            ></dx-select-box>
+        </div>
+    </div>
+    <div class="dx-field">
+        <div class="dx-field-label">Custom templates</div>
+        <div class="dx-field-value">
+            <dx-select-box
+                id="custom-templates"
+                [dataSource]="products"
+                displayExpr="Name"
+                valueExpr="ID"
+                [value]="products[3].ID"
+                fieldTemplate="field"
+            >
+                <div *dxTemplate="let data of 'field'">
+                    <div class="custom-item">
+                        <img src="{{data && data.ImageSrc}}"/>
+                        <dx-text-box class="product-name" 
+                            [value]="data && data.Name" 
+                            [readOnly]="true"
+                        ></dx-text-box>
+                    </div>
+                </div>
+                <div *dxTemplate="let data of 'item'">
+                    <div class="custom-item">
+                        <img src="{{data.ImageSrc}}" />
+                        <div class="product-name">
+                            {{data.Name}}
+                        </div>
+                    </div>
+                </div>
+            </dx-select-box>
+        </div>
+    </div>
+</div>
+<div class="dx-fieldset">
+    <div class="dx-fieldset-header">Event Handling</div>
+    <div class="dx-field">
+        <div class="dx-field-label">Product</div>
+        <div class="dx-field-value">
+            <dx-select-box #selectBox [items]="simpleProducts" [value]="simpleProducts[0]">
+            </dx-select-box>
+        </div>
+    </div>
+    <div class="current-value">
+        Selected product is <span>{{selectBox.value}}</span>
+    </div>
+</div>

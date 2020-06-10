@@ -1,0 +1,16 @@
+<div id="range-selector-demo">
+    <dx-range-selector
+        id="range-selector"
+        title="Copper Production in 2013"
+        [dataSource]="dataSource"
+        (onValueChanged)="onValueChanged($event)">
+        <dxo-chart>
+            <dxi-series valueField="copper" name="Copper"></dxi-series>
+            <dxo-common-series-settings
+                type="bar"
+                argumentField="country">
+            </dxo-common-series-settings>
+        </dxo-chart>
+    </dx-range-selector>
+    <h2>Total: <span>{{totalResult | number}}</span> tons</h2>
+</div>

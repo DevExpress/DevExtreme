@@ -1,0 +1,1 @@
+This demo illustrates the **agenda** view, which lists all available appointments grouped by&nbsp;a&nbsp;date. Designed for narrow screens, this view represents appointments compactly.

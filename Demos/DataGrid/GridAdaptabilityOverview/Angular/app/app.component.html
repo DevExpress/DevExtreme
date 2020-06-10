@@ -1,0 +1,29 @@
+<dx-data-grid id="gridContainer"
+    [dataSource]="dataSource"
+    [columnHidingEnabled]="true"
+    [showBorders]="true">
+
+    <dxo-export [enabled]="true" fileName="Orders"></dxo-export>
+    <dxo-editing [allowAdding]="true" [allowUpdating]="true" mode="batch"></dxo-editing>
+    <dxo-grouping [contextMenuEnabled]="true" expandMode="rowClick"></dxo-grouping>
+    <dxo-group-panel [visible]="true" emptyPanelText="Use the context menu of header columns to group data"></dxo-group-panel>
+
+    <dxo-pager
+        [allowedPageSizes]="[5, 8, 15, 30]"
+        [showInfo]="true"
+        [showNavigationButtons]="true"
+        [showPageSizeSelector]="true"
+        [visible]="true">
+    </dxo-pager>
+
+    <dxo-paging [pageSize]="8"></dxo-paging>
+    <dxo-column-chooser [enabled]="true" mode="select"></dxo-column-chooser>
+
+    <dxi-column [allowGrouping]="false" dataField="OrderNumber" [width]="130" caption="Invoice Number"></dxi-column>
+    <dxi-column dataField="CustomerStoreCity" caption="City"></dxi-column>
+    <dxi-column dataField="CustomerStoreState" caption="State"></dxi-column>
+    <dxi-column dataField="Employee"></dxi-column>
+    <dxi-column dataField="OrderDate" dataType="date"></dxi-column>
+    <dxi-column dataField="SaleAmount" format="currency"></dxi-column>
+
+</dx-data-grid>

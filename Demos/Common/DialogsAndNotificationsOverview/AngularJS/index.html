@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script src="../../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.light.css" />
+    <script src="../../../../node_modules/angular/angular.min.js"></script>
+    <script src="../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="data.js"></script>
+    <script src="index.js"></script>
+</head>
+<body class="dx-viewport">
+    <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
+
+        <div class="images" >
+            <div ng-repeat="house in houses">
+                <div ng-click="showHouse(house)" class="item-content">
+                    <img ng-src="{{house.Image}}" />
+
+                    <div class="item-options">
+                        <div>
+                            <div class="address">{{house.Address}}</div>
+                            <div class="price large-text">{{house.Price | currency:"$":0}}</div>
+                            <div class="agent">
+                                <div id="house{{house.ID}}">
+                                    <img src="../../../../images/icon-agent.svg">
+                                    Listing agent
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="popover{{house.ID}}" dx-popover="{
+                        target: '#house' + house.ID,
+                        showEvent: 'mouseenter',
+                        hideEvent: 'mouseleave',
+                        position: {
+                            offset: '0, 2',
+                            at: 'bottom',
+                            my: 'top',
+                            collision: 'fit flip'
+                        },
+                        width: 260
+                    }">
+                        <div class="agent-details">
+                            <img ng-src="{{house.Agent.Picture}}" />
+                            <div>
+                                <div class="name large-text">{{house.Agent.Name}}</div>
+                                <div class="phone">Tel: {{house.Agent.Phone}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div dx-popup="{
+                width: 660,
+                height: 540,
+                showTitle: true,
+                dragEnabled: false,
+                bindingOptions: {
+                    visible: 'popupVisible',
+                    title: 'currentHouse.Address'
+                },
+                closeOnOutsideClick: true,
+            }">
+                <div class='popup-property-details'>
+                    <div class='large-text'>{{currentHouse.Price | currency:"$":0}}</div>
+                    <div class='opacity'>{{currentHouse.Address}}, {{currentHouse.City}}, {{currentHouse.State}}</div>
+                    <div class="favorites" dx-button="{ 
+                        bindingOptions: {
+                            text: 'currentHouse.Favorite ? REMOVE_FROM_FAVORITES : ADD_TO_FAVORITES'
+                        },
+                        onClick: 'changeFavoriteState()',
+                        icon: 'favorites',
+                        width: 260,
+                        height: 44
+                    }"></div>
+                    <div class='images'>
+                        <img ng-src="{{currentHouse.Image}}" />
+                        <img ng-src="{{currentHouse.Image.replace('.jpg', 'b.jpg')}}" />
+                    </div>
+                    <div>{{currentHouse.Features}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

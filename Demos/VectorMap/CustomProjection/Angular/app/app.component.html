@@ -1,0 +1,12 @@
+<dx-vector-map 
+    id="vector-map" 
+    [projection]="customProjection" 
+    title="Wagner VI projection">
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxi-layer [dataSource]="worldMap"></dxi-layer>
+    <dxi-layer 
+        [dataSource]="coordLinesData" 
+        [hoverEnabled]="false" 
+        [borderWidth]="1" 
+        color="#aaa"></dxi-layer>
+</dx-vector-map>

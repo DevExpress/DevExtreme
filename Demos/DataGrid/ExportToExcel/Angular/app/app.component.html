@@ -1,0 +1,15 @@
+<dx-data-grid id="gridContainer" [dataSource]="dataSource" [showBorders]="true">
+
+    <dxo-export [enabled]="true" fileName="Employees" [allowExportSelectedData]="true"></dxo-export>
+    <dxo-selection mode="multiple"></dxo-selection>
+    <dxo-group-panel [visible]="true"></dxo-group-panel>
+
+    <dxi-column dataField="Prefix" [width]="60" caption="Title"></dxi-column>
+    <dxi-column dataField="FirstName"></dxi-column>
+    <dxi-column dataField="LastName"></dxi-column>
+    <dxi-column dataField="City"></dxi-column>
+    <dxi-column dataField="State"></dxi-column>
+    <dxi-column dataField="Position" [width]="130"></dxi-column>
+    <dxi-column dataField="BirthDate" [width]="100" dataType="date"></dxi-column>
+    <dxi-column dataField="HireDate" [width]="100" dataType="date"></dxi-column>
+</dx-data-grid>

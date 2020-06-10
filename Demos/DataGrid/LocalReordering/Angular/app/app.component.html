@@ -1,0 +1,45 @@
+<div id="data-grid-demo">
+    <dx-data-grid
+        #dataGrid
+        id="gridContainer"
+        [height]="440"
+        [dataSource]="tasks"
+        [showBorders]="true">
+        <dxo-row-dragging
+            [allowReordering]="true"
+            [onReorder]="onReorder"
+            [showDragIcons]="showDragIcons"
+        ></dxo-row-dragging>
+        <dxo-scrolling mode="virtual"></dxo-scrolling>
+        <dxo-sorting mode="none"></dxo-sorting>
+        <dxi-column dataField="ID" [width]="55"></dxi-column>
+        <dxi-column dataField="Owner" [width]="150">
+            <dxo-lookup
+                [dataSource]="employees"
+                valueExpr="ID"
+                displayExpr="FullName"
+            ></dxo-lookup>
+        </dxi-column>
+        <dxi-column
+            dataField="AssignedEmployee"
+            caption="Assignee"
+            [width]="150">
+            <dxo-lookup
+                [dataSource]="employees"
+                valueExpr="ID"
+                displayExpr="FullName"
+            ></dxo-lookup>
+        </dxi-column>
+        <dxi-column dataField="Subject"></dxi-column>
+    </dx-data-grid>
+
+    <div class="options">
+        <div class="caption">Options</div>
+        <div class="option">
+            <dx-check-box
+                [(value)]="showDragIcons"
+                text="Show Drag Icons">
+            </dx-check-box>
+        </div>
+    </div>
+</div>

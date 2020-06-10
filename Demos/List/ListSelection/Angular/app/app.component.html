@@ -1,0 +1,32 @@
+<div id="list-demo">
+    <div class="widget-container">
+        <dx-list #list
+            [dataSource]="tasks"
+            [height]="400"
+            [selectionMode]="selectionModeValue"
+            [selectAllMode]="selectAllModeVlaue"
+            [showSelectionControls]="true"
+            [selectedItemKeys]="[]"></dx-list>
+        <div class="selected-data">
+            <span class="caption">Selected IDs:</span>
+            <span>{{list.selectedItemKeys.join(", ")}}</span>
+        </div>
+    </div>
+    <div class="options">
+        <div class="caption">Options</div>
+        <div class="option">
+            <span>Selection Mode</span>
+            <dx-select-box
+                [items]="['none', 'single', 'multiple', 'all']"
+                [(value)]="selectionModeValue">
+            </dx-select-box>
+        </div>
+        <div class="option">
+            <span>Select All Mode</span>
+            <dx-select-box
+                [items]="['page', 'allPages']"
+                [(value)]="selectAllModeVlaue">
+            </dx-select-box>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+p {
+    margin: 0;
+}
+
+#info {
+    width: 200px;
+    height: 200px;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+#info img {
+    width: 100%;
+}
+
+.slideout-container {
+    height: auto;
+    position: absolute;
+    top: 0; 
+    bottom: 0;
+    width:100%;
+}
+
+.dx-field-label {
+    width: 70%;
+}

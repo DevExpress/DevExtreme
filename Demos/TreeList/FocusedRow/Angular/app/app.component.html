@@ -1,0 +1,47 @@
+<dx-tree-list
+    id="treeList"
+    [dataSource]="dataSource"
+    parentIdExpr="Task_Parent_ID"
+    wordWrapEnabled="true"
+    showBorders="true"
+    focusedRowEnabled="true"
+    hasItemsExpr="Has_Items"
+    [(focusedRowKey)]="focusedRowKey"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)">
+    <dxo-remote-operations [filtering]="true" [sorting]="true" [grouping]="true"></dxo-remote-operations>
+
+    <dxi-column dataField="Task_ID" width="100" alignment="left"></dxi-column>
+    <dxi-column dataField="Task_Assigned_Employee_ID" caption="Assigned" minWidth="120">
+        <dxo-lookup [dataSource]="taskEmployees" valueExpr="ID" displayExpr="Name"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="Task_Status" caption="Status" width=160></dxi-column>
+    <dxi-column dataField="Task_Start_Date" caption="Start Data" dataType="date" width=160></dxi-column>
+    <dxi-column dataField="Task_Due_Date" caption="Due Data" dataType="date" width=160></dxi-column>
+
+</dx-tree-list>
+
+<div class="task-info">
+    <div class="info">
+        <div class="task-subject">{{taskSubject}}</div>
+        <span class="task-assigned">{{taskAssigned}}</span>
+        <span class="start-date">{{startDate}}</span>
+    </div>
+    <div class="progress">
+        <span class="task-status">{{taskStatus}}</span>
+        <span class="task-progress">{{taskProgress}}</span>
+    </div>
+</div>
+
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <span>Focused row key</span>
+        <dx-number-box
+            id="taskId"
+            min="1"
+            max="182"
+            step="0"
+            [(value)]="focusedRowKey">
+        </dx-number-box>
+    </div>
+</div>

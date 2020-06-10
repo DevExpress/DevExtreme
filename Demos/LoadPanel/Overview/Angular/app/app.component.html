@@ -1,0 +1,64 @@
+<h1>John Heart</h1>
+        
+<dx-button
+    text="Load Data"
+    (onClick)="showLoadPanel()">
+</dx-button>
+
+<div id="employee">
+    <p>
+        Birth date: <b>{{employeeInfo.Birth_Date}}</b>
+    </p>
+    <p class="address">
+        Address:<br />
+        <b>{{employeeInfo.City}}</b><br />
+        <span>{{employeeInfo.Zipcode}}</span> 
+        <span>{{employeeInfo.Address}}</span>
+    </p>
+    <p>
+        Phone: 
+        <b>{{employeeInfo.Mobile_Phone}}</b><br />
+        Email: <b>{{employeeInfo.Email}}</b>
+    </p>
+</div>
+
+<dx-load-panel
+    #loadPanel
+    shadingColor="rgba(0,0,0,0.4)"
+    [position]="{ of: '#employee' }"
+    [(visible)]="loadingVisible"
+    [showIndicator]="true"
+    [showPane]="true"
+    [shading]="true"
+    [closeOnOutsideClick]="false"
+    (onShown)="onShown()"
+    (onHidden)="onHidden()">
+</dx-load-panel>
+
+<div class="options">  
+    <div class="caption">Options</div>
+    <div class="option">
+        <dx-check-box        
+            text="With indicator"
+            [(value)]="loadPanel.showIndicator">
+        </dx-check-box>
+    </div>
+    <div class="option">
+        <dx-check-box        
+            text="With overlay"
+            [(value)]="loadPanel.shading">
+        </dx-check-box>
+    </div>
+    <div class="option">    
+        <dx-check-box        
+            text="With pane"
+            [(value)]="loadPanel.showPane">
+        </dx-check-box>
+    </div>
+    <div class="option">    
+        <dx-check-box        
+            text="Close on outside click"
+            [(value)]="loadPanel.closeOnOutsideClick">
+        </dx-check-box>
+    </div>
+  </div>

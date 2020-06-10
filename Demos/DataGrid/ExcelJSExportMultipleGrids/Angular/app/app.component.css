@@ -1,0 +1,9 @@
+::ng-deep #exportContainer {
+    text-align: right;
+}
+::ng-deep #tabPanel {
+    padding-top: 10px;
+}
+::ng-deep .data-grid {
+    padding: 10px;
+}

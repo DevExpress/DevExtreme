@@ -1,0 +1,62 @@
+<dx-scheduler
+    [dataSource]='appointmentsData'
+    [views]='["week", "timelineWeek"]'
+    currentView='week'
+    [currentDate]='currentDate'
+    [showCurrentTimeIndicator]='showCurrentTimeIndicator'
+    [shadeUntilCurrentTime]='shadeUntilCurrentTime'
+    [showAllDayPanel]='false'
+    [height]='600'
+    [editing]='false'
+    appointmentTemplate='appointment-template'
+    (onContentReady)='onContentReady($event)'
+    (onAppointmentClick)='onAppointmentClick($event)'
+    (onAppointmentDblClick)='onAppointmentDblClick($event)'>
+
+    <dxi-resource
+        fieldExpr='movieId'
+        [dataSource]='moviesData'>
+    </dxi-resource>
+
+    <div *dxTemplate='let model of "appointment-template"'>
+        <div class='movie'>
+            <img [src]='getMovieById(model.appointmentData.movieId).image' />
+            <div class='movie-text'>{{getMovieById(model.appointmentData.movieId).text}}</div>
+        </div>
+    </div>   
+</dx-scheduler>
+
+<div class='options'>
+    <div class='column'>
+        <div class='option'>
+            <div class='label'>Current time indicator</div>
+            <div class='value'>
+                <dx-switch [(value)]='showCurrentTimeIndicator' id="show-indicator"></dx-switch>
+            </div>
+        </div>
+        <div class='option'>
+            <div class='label'>Shading until current time</div>
+            <div class='value'>
+                <dx-switch [(value)]='shadeUntilCurrentTime' id="allow-shading"></dx-switch>
+            </div>
+        </div>
+    </div>
+    <div class='column'>
+        <div class='option'>
+            <div class='label'>Update position in</div>
+            <div class='value'>
+                <dx-number-box 
+                    id="update-interval"
+                    (onValueChanged)='changeIndicatorUpdateInterval($event)'
+                    [showSpinButtons]='true'
+                    [min]='1'
+                    [max]='1200'
+                    [(value)]='intervalValue'
+                    [step]='10'
+                    [width]='100'
+                    format='#0 s'>
+                </dx-number-box>
+            </div>
+        </div>
+    </div>
+</div>

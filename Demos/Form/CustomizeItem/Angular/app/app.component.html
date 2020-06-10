@@ -1,0 +1,22 @@
+<div class="long-title">
+    <h3>Employee Details</h3>
+</div>
+<div id="form-container">
+    <dx-form id="form"
+        [colCount]="2"
+        [formData]="employee">
+        <dxi-item dataField="FirstName" [editorOptions]="{ disabled: true }"></dxi-item>
+        <dxi-item dataField="Position" editorType="dxSelectBox" [editorOptions]="{ items: positions, searchEnabled: true, value: '' }">
+            <dxi-validation-rule type="required" message="Position is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item dataField="LastName" [editorOptions]="{ disabled: true }"></dxi-item>
+        <dxi-item dataField="HireDate" editorType="dxDateBox" [editorOptions]="{ value: null, width: '100%' }">
+            <dxi-validation-rule type="required" message="Hire date is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item dataField="BirthDate" editorType="dxDateBox" [editorOptions]="{ disabled: true, width: '100%' }"></dxi-item>
+        <dxi-item dataField="Address"></dxi-item>
+        <dxi-item dataField="Notes" editorType="dxTextArea" [editorOptions]="{ height: 90 }" [colSpan]="2"></dxi-item>        
+        <dxi-item dataField="Phone" [editorOptions]="{ mask: '+1 (X00) 000-0000', maskRules: rules }"></dxi-item>
+        <dxi-item dataField="Email"></dxi-item>        
+    </dx-form>
+</div>

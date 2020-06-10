@@ -1,0 +1,63 @@
+<dx-pivot-grid
+  [allowSortingBySummary]="true"
+  [allowSorting]="true"
+  [allowFiltering]="true"
+  [showBorders]="true"
+  [dataSource]="pivotGridDataSource">
+  <dxo-field-chooser [enabled]="false"></dxo-field-chooser>
+</dx-pivot-grid>
+
+<div class="container">
+
+  <dx-pivot-grid-field-chooser
+    [dataSource]="pivotGridDataSource"
+    [width]="400"
+    [height]="400"
+    [layout]="layout"
+    [applyChangesMode]="applyChangesMode"
+    [(state)]="state">
+    <dxo-texts allFields="All"
+      columnFields="Columns"
+      dataFields="Data"
+      rowFields="Rows"
+      filterFields="Filter">
+    </dxo-texts>
+  </dx-pivot-grid-field-chooser>
+  <div class="bottom-bar" *ngIf="applyChangesMode === 'onDemand'">
+    <dx-button id="applyButton"
+      text="Apply"
+      type="default"
+      (onClick)="applyClick()">
+    </dx-button>
+    <dx-button
+      text="Cancel"
+      (onClick)="cancelClick()">
+    </dx-button>
+  </div>
+
+  <div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <span>Choose layout:</span>
+        <dx-radio-group
+          class="option-editor"
+          id="layouts"
+          [items]="layouts"
+          layout="vertical"
+          valueExpr="key"
+          displayExpr="name"
+          [(value)]="layout">
+        </dx-radio-group>
+      </div>
+      <div class="option">
+        <span>Apply Changes Mode:</span>
+        <dx-select-box
+          class="option-editor"
+          [items]="applyChangesModes"
+          width="180"
+          [(value)]="applyChangesMode">
+        </dx-select-box>
+    </div>
+  </div>
+
+</div>

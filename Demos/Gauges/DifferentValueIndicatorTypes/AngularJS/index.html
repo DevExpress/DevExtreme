@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script src="../../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.light.css" />
+    <script src="../../../../node_modules/angular/angular.min.js"></script>
+    <script src="../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="index.js"></script>
+</head>
+<body class="dx-viewport">
+    <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
+        <div class="long-title"><h3>Power of Engines</h3></div>
+        <div id="gauge-demo">
+            <div id="rectangleNeedle" dx-circular-gauge="gauge.rectangleNeedleIndicator"></div>
+            <div id="twoColorNeedle" dx-circular-gauge="gauge.twoColorNeedleIndicator"></div>
+            <div id="triangleNeedle" dx-circular-gauge="gauge.triangleNeedleIndicator"></div>
+            <div id="rangebar" dx-circular-gauge="gauge.rangebarIndicator"></div>
+            <div id="textCloud" dx-circular-gauge="gauge.textCloudIndicator"></div>
+            <div id="triangleMarker" dx-circular-gauge="gauge.triangleMarkerIndicator"></div>
+        </div>
+    </div>
+</body>
+</html>

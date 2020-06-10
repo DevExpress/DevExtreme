@@ -1,0 +1,20 @@
+<div id="descContainer">Sort and filter data, reorder and resize columns, select and expand rows. Once you are done, <a onclick="window.location.reload()">refresh</a> the web page to see that the grid’s state is automatically persisted to continue working from where you stopped.</div>
+<dx-tree-list 
+    id="employees"
+    [dataSource]="employees"
+    keyExpr="ID"
+    parentIdExpr="Head_ID"
+    [allowColumnResizing]="true"
+    [allowColumnReordering]="true"
+    [showBorders]="true"
+    [expandedRowKeys]="[1, 2, 10]">
+
+    <dxo-selection mode="multiple" [recursive]="true"></dxo-selection>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-state-storing [enabled]="true" type="localStorage" storageKey="treeListStorage"></dxo-state-storing>
+
+    <dxi-column dataField="Full_Name" caption="Full Name" ></dxi-column>
+    <dxi-column dataField="Title" caption="Position"></dxi-column>
+    <dxi-column dataField="City"></dxi-column>
+    <dxi-column dataField="Hire_Date" caption="Hire Date" dataType="date" [width]="160"></dxi-column>
+</dx-tree-list>

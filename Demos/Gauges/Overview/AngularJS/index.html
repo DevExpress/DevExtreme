@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script src="../../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.light.css" />
+    <script src="../../../../node_modules/angular/angular.min.js"></script>
+    <script src="../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="index.js"></script>
+</head>
+<body class="dx-viewport">
+    <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
+        <div id="gauge-demo">
+            <div id="gauge-container">
+                <div class="left-section">
+                    <div dx-circular-gauge="options.coolant"></div>
+                    <div dx-circular-gauge="options.rpm"></div>
+                </div>
+                <div class="center-section">
+                    <div id="speed-gauge" dx-circular-gauge="options.speed"></div>
+                    <div class="speed-value">
+                        <span>{{speedValue}}</span>
+                    </div>
+                    <div id="fuel-gauge" dx-linear-gauge="options.fuel"></div>
+                </div>
+                <div class="right-section">
+                    <div dx-circular-gauge="options.psi"></div>
+                    <div dx-circular-gauge="options.instantFuel"></div>
+                </div>
+            </div>
+            <div id="slider" dx-slider="options.slider"></div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<div class="left-side">
+    <div class="logo">
+        <img src="../../../../images/logo-devav.png" />
+        <img src="../../../../images/logo-tasks.png" />
+    </div>
+</div>
+<div class="right-side">
+    <dx-select-box
+        [items]="statuses" 
+        [value]="statuses[0]" 
+        (onValueChanged)="selectStatus($event)"></dx-select-box>
+</div>
+<dx-data-grid 
+    id="gridContainer" 
+    [columnAutoWidth]="true"
+    [dataSource]="tasks"
+    [showBorders]="true">
+    <dxi-column 
+        dataField="Task_ID"
+        [width]="80" 
+        dataType="number"></dxi-column>
+    <dxi-column 
+        dataField="Task_Start_Date" 
+        dataType="date" 
+        caption="Start Date"></dxi-column>
+    <dxi-column 
+        cssClass="employee"
+        dataField="ResponsibleEmployee.Employee_Full_Name" 
+        dataType="string"
+        caption="Assigned To"
+        [allowSorting]="false"></dxi-column>
+    <dxi-column 
+        dataField="Task_Subject"
+        [width]="350"
+        dataType="string"
+        caption="Subject"></dxi-column>
+    <dxi-column 
+        dataField="Task_Status" 
+        dataType="string"
+        caption="Status"></dxi-column>
+</dx-data-grid>

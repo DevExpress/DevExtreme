@@ -1,0 +1,59 @@
+::ng-deep .filter-container {
+    background-color: rgba(191, 191, 191, 0.15);
+    width: 55%;
+    float: left;
+    margin-bottom: 25px;
+    height: 430px;
+}
+
+::ng-deep .dx-filterbuilder {
+    padding: 10px;
+    height: 360px;
+    margin: 5px;
+    overflow: auto;
+}
+
+::ng-deep .dx-filterbuilder .dx-texteditor {
+    width: 135px;
+}
+
+::ng-deep .dx-button {
+    margin: 10px 20px;
+    float: right;
+}
+
+::ng-deep .list-container {
+    float: right;
+    width: 45%;
+}
+
+::ng-deep .list-container .dx-scrollable-container {
+    max-height: 430px;
+    padding-left: 30px;
+}
+
+::ng-deep .product {
+    height: 65px;
+}
+
+::ng-deep .product > img {
+    height: 100%;
+    float: left;
+}
+
+::ng-deep .product > div {
+    padding-left: 10px;
+    vertical-align: top;
+    line-height: 65px;
+    font-size: 15px;
+    float: left;
+}
+
+::ng-deep .product > div.price {
+    float: right;
+    font-size: 18px;
+}
+
+::ng-deep .dx-filterbuilder .dx-numberbox {
+    width: 80px;
+}

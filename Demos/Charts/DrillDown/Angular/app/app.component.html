@@ -1,0 +1,20 @@
+<dx-tree-map
+    [dataSource]="citiesPopulations"
+    [interactWithGroup]="true"
+    [maxDepth]="2"
+    (onClick)="nodeClick($event)"
+    (onDrill)="drill($event)">
+    <dxo-size
+        height="440"></dxo-size>
+    <dxo-title
+        text="The Most Populated Cities by Continents"
+        [placeholderSize]="80"></dxo-title>
+    <dxo-colorizer
+        palette="soft"></dxo-colorizer>
+</dx-tree-map>
+<div id="drill-down-title">
+    <span *ngFor="let drillInfo of drillInfos; let isLast = last">
+        <span [ngClass]="{'link': !!drillInfo.node }" (click)="drillInfoClick(drillInfo.node)">{{drillInfo.text}}</span>
+        {{isLast ? '' : ' > '}}
+    </span>
+</div>

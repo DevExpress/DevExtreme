@@ -1,0 +1,14 @@
+<dx-polar-chart
+    id="chart"
+    title="Archimedean Spiral"
+    [dataSource]="coordinates">
+    <dxi-series type="line" name="Function" [closed]="false"></dxi-series>
+    <dxo-argument-axis
+        [inverted]="true"
+        [startAngle]="90"
+        [tickInterval]="45"
+        [period]="360">
+    </dxo-argument-axis>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-legend [visible]="false"></dxo-legend>
+</dx-polar-chart>

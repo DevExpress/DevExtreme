@@ -1,0 +1,61 @@
+<div id="grid">
+    <dx-data-grid
+        id="grid-container"
+        [dataSource]="sales"
+        keyExpr="orderId"
+        [showBorders]="true">
+        <dxo-selection
+            [selectAllMode]="allMode"
+            [showCheckBoxesMode]="checkBoxesMode"
+            mode="multiple"
+        ></dxo-selection>
+        <dxo-paging
+            [pageSize]="10"
+        ></dxo-paging>
+        <dxo-filter-row
+            [visible]="true"
+        ></dxo-filter-row>
+        <dxi-column
+            dataField="orderId"
+            caption="Order ID"
+            [width]="90"
+        ></dxi-column>
+        <dxi-column dataField="city"></dxi-column>
+        <dxi-column
+            dataField="country"
+            [width]="180"
+        ></dxi-column>
+        <dxi-column
+            dataField="region"
+        ></dxi-column>
+        <dxi-column
+            dataField="date"
+            dataType="date"
+        ></dxi-column>
+        <dxi-column
+            dataField="amount"
+            format="currency"
+            [width]="90"
+        ></dxi-column>
+    </dx-data-grid>
+    <div class="options">
+        <div class="caption">Options</div>
+        <div class="option">
+            <span>Select All Mode</span>
+            <dx-select-box
+                id="select-all-mode"
+                [dataSource]="['allPages', 'page']"
+                [(value)]="allMode"
+                [disabled]="checkBoxesMode === 'none'"
+            ></dx-select-box>
+        </div>
+        <div class="option checkboxes-mode">
+            <span>Show Checkboxes Mode</span>
+            <dx-select-box
+                id="show-checkboxes-mode"
+                [dataSource]="['none', 'onClick', 'onLongTap', 'always']"
+                [(value)]="checkBoxesMode"
+            ></dx-select-box>
+        </div>
+    </div>
+</div>

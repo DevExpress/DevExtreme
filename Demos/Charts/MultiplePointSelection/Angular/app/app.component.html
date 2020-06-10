@@ -1,0 +1,23 @@
+<dx-chart
+    id="chart"
+    [dataSource]="medalsInfo"
+    pointSelectionMode="multiple"
+    [rotated]="true"
+    title="Olympic Medals in 2008"
+    (onPointClick)="pointClick($event)">
+    <dxi-series valueField="gold" name="Gold Medals" color="#ffd700"></dxi-series>
+    <dxi-series valueField="silver" name="Silver Medals" color="#c0c0c0"></dxi-series>
+    <dxi-series valueField="bronze" name="Bronze Medals" color="#cd7f32"></dxi-series>
+    <dxo-common-series-settings
+        argumentField="country"
+        type="stackedbar">
+        <dxo-selection-style>
+            <dxo-hatching direction="left"></dxo-hatching>
+        </dxo-selection-style>
+    </dxo-common-series-settings>
+    <dxo-legend
+        verticalAlignment="bottom"
+        horizontalAlignment="center">
+    </dxo-legend>
+    <dxo-export [enabled]="true"></dxo-export>
+</dx-chart>

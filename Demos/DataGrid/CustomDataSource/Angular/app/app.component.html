@@ -1,0 +1,35 @@
+<dx-data-grid id="gridContainer"
+    [dataSource]="dataSource"
+    [showBorders]="true"
+    [remoteOperations]="true">
+    <dxi-column
+        dataField="OrderNumber"
+        dataType="number">
+    </dxi-column>
+    <dxi-column
+        dataField="OrderDate"
+        dataType="date">
+    </dxi-column>
+    <dxi-column
+        dataField="StoreCity"
+        dataType="string">
+    </dxi-column>
+    <dxi-column
+        dataField="StoreState"
+        dataType="string">
+    </dxi-column>
+    <dxi-column
+        dataField="Employee"
+        dataType="string">
+    </dxi-column>
+    <dxi-column
+        dataField="SaleAmount"
+        dataType="number"
+        format="currency">
+    </dxi-column>
+    <dxo-paging [pageSize]="12"></dxo-paging>
+    <dxo-pager
+        [showPageSizeSelector]="true"
+        [allowedPageSizes]="[8, 12, 20]"
+    ></dxo-pager>
+</dx-data-grid>

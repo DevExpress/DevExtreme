@@ -1,0 +1,48 @@
+<div>
+    <dx-tree-list
+        id="employees"
+        [dataSource]="employees"
+        rootValue="-1"
+        keyExpr="ID"
+        [showRowLines]="true"
+        [showBorders]="true"
+        parentIdExpr="Head_ID"
+        [expandedRowKeys]="expandedRowKeys"
+        [columnAutoWidth]="true">
+        <dxo-row-dragging
+            [onDragChange]="onDragChange"
+            [onReorder]="onReorder"
+            [allowDropInsideItem]="allowDropInsideItem"
+            [allowReordering]="allowReordering"
+            [showDragIcons]="showDragIcons"
+        ></dxo-row-dragging>
+        <dxi-column dataField="Title" caption="Position"></dxi-column>
+        <dxi-column dataField="Full_Name"></dxi-column>
+        <dxi-column dataField="City"></dxi-column>
+        <dxi-column dataField="State"></dxi-column>
+        <dxi-column dataField="Mobile_Phone"></dxi-column>
+        <dxi-column dataField="Hire_Date" dataType="date"></dxi-column>
+    </dx-tree-list>
+
+    <div class="options">
+        <div class="caption">Options</div>
+        <div class="option">
+            <dx-check-box
+                [(value)]="allowDropInsideItem"
+                text="Allow Drop Inside Item">
+            </dx-check-box>
+        </div>
+        <div class="option">
+            <dx-check-box
+                [(value)]="allowReordering"
+                text="Allow Reordering">
+            </dx-check-box>
+        </div>
+        <div class="option">
+            <dx-check-box
+                [(value)]="showDragIcons"
+                text="Show Drag Icons">
+            </dx-check-box>
+        </div>
+    </div>
+</div>

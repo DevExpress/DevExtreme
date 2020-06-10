@@ -1,0 +1,14 @@
+<dx-file-uploader
+	name="file"
+    accept="image/*"
+    uploadUrl="https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/ChunkUpload"
+    [chunkSize]="200000"
+	(onUploadStarted)="onUploadStarted($event)"
+	(onProgress)="onUploadProgress($event)">
+</dx-file-uploader>
+
+<span class="note">Allowed file extensions: <span>.jpg, .jpeg, .gif, .png</span>.</span>
+<span class="note">Maximum file size: <span>4 MB.</span></span>
+
+<div class="chunk-panel">
+</div>

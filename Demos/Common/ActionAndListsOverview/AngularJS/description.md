@@ -1,0 +1,1 @@
+DevExtreme ships with various HTML5 JavaScript widgets for visualizing data collections and performing actions on the view. These widgets are available as AngularJS directives that support two-way binding and declarative configuration. This demo showcases the List and Tile View widget. Discover more widgets from other demos in this section.
