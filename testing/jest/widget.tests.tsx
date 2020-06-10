@@ -86,28 +86,28 @@ describe('Widget', () => {
     describe('width/height', () => {
       it('should have the ability to be a function', () => {
         const widget = render({ width: () => 50, height: () => 'auto' });
-        const props = widget.props() as WidgetProps;
+        const props = widget.props() as any;
 
         expect(props.style).toEqual({ width: 50, height: 'auto' });
       });
 
       it('should process string values', () => {
         const widget = render({ width: '50px', height: () => '100%' });
-        const props = widget.props() as WidgetProps;
+        const props = widget.props() as any;
 
         expect(props.style).toEqual({ width: '50px', height: '100%' });
       });
 
       it('should process number values', () => {
         const widget = render({ width: 50, height: 70 });
-        const props = widget.props() as WidgetProps;
+        const props = widget.props() as any;
 
         expect(props.style).toEqual({ width: 50, height: 70 });
       });
 
       it('should ignore null/undefined values', () => {
         const widget = render({ width: null, height: undefined });
-        const props = widget.props() as WidgetProps;
+        const props = widget.props() as any;
 
         expect(props.style).toEqual({});
       });
@@ -240,8 +240,8 @@ describe('Widget', () => {
         expect(widget.is('.custom-class.dx-widget')).toBe(true);
       });
 
-      it('should add merge `style` property', () => {
-        const widget = render({ style: { fontSize: '20px', height: 10 } });
+      it('should add merge `styles` property', () => {
+        const widget = render({ styles: { fontSize: '20px', height: 10 } });
 
         expect(widget.prop('style')).toMatchObject({
           fontSize: '20px',
