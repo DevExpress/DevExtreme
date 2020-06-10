@@ -24,6 +24,8 @@ import dxDraggable from './draggable';
 
 import dxForm from './form';
 
+import dxPopup from './popup'
+
 import dxSortable from './sortable';
 
 import Widget, {
@@ -706,6 +708,14 @@ export default class dxScheduler extends Widget {
      * @public
      */
     updateAppointment(target: any, appointment: any): void;
+    /**
+     * @docid dxSchedulerOptions.getAppointmentPopup
+     * @publicName getAppointmentPopup()
+     * @return dxPopup
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getAppointmentPopup(): dxPopup;
 }
 
 export interface dxSchedulerAppointment extends CollectionWidgetItem {
