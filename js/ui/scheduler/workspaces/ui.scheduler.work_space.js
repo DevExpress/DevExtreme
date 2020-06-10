@@ -373,22 +373,7 @@ const SchedulerWorkSpace = Widget.inherit({
     },
 
     _getGroupIndexByCell: function($cell) {
-        const cellsInRow = this._getCellCount();
-        const columnIndex = $cell.index();
-        const groupOrientation = this.option('groupOrientation');
-        const groupCount = this._getGroupCount();
-
-        if(this.isGroupedByDate()) {
-            return columnIndex % groupCount;
-        }
-        if(groupOrientation === 'vertical') {
-            const rowIndex = $cell.parent().index();
-            const rowCount = this._getRowCountWithAllDayRows();
-
-            return Math.ceil((rowIndex + 1) / rowCount);
-        }
-
-        return Math.ceil((columnIndex + 1) / cellsInRow);
+        return this._groupedStrategy.getGroupIndexByCell($cell);
     },
 
     _toggleFocusedCellClass: function(isFocused, $element) {
