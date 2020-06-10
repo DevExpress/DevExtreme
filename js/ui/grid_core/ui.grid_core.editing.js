@@ -719,13 +719,12 @@ const EditingController = modules.ViewController.inherit((function() {
             const key = item.data[INSERT_INDEX] ? item.data.key : item.key;
 
             const editIndex = getIndexByKey(key, that._editData);
+            item.isEditing = false;
 
             if(editIndex >= 0) {
                 const editMode = getEditMode(that);
                 const editData = that._editData[editIndex];
                 data = editData.data;
-
-                item.isEditing = false;
 
                 switch(editData.type) {
                     case DATA_EDIT_DATA_INSERT_TYPE:
