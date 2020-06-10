@@ -3,7 +3,6 @@ import Guid from '../../core/guid';
 import $ from '../../core/renderer';
 import dateUtils from '../../core/utils/date';
 import { extend } from '../../core/utils/extend';
-import { each } from '../../core/utils/iterator';
 import { isDefined } from '../../core/utils/type';
 import { triggerShownEvent } from '../../events/visibility_change';
 import dateLocalization from '../../localization/date';
@@ -14,7 +13,6 @@ import DateBox from '../date_box';
 import Editor from '../editor/editor';
 import NumberBox from '../number_box';
 import RadioGroup from '../radio_group';
-// import RadioGroup from '../radio_group';
 import publisherMixin from './ui.scheduler.publisher_mixin';
 import { getRecurrenceProcessor } from './recurrence';
 
@@ -31,7 +29,7 @@ const FIELD_VALUE_CLASS = 'dx-field-value';
 const RECURRENCE_BUTTON_GROUP = 'dx-recurrence-button-group';
 
 const FREQUENCY_EDITOR = 'dx-recurrence-selectbox-freq';
-const INTERVAL_EDITOR = 'dx-recurrence-numberbox-interval-1';
+const INTERVAL_EDITOR = 'dx-recurrence-numberbox-interval';
 const REPEAT_ON_EDITOR = 'dx-recurrence-repeat-on';
 const DAY_OF_MONTH = 'dx-recurrence-numberbox-day-of-month';
 const MONTH_OF_YEAR = 'dx-recurrence-selectbox-month-of-year';
@@ -205,7 +203,6 @@ const RecurrenceEditor = Editor.inherit({
         const monthsNames = dateLocalization.getMonthNames('wide');
         const repeatType = this._recurrenceRule.getRepeatEndRule();
 
-        // replace
         for(let i = 0; i < 12; i++) {
             months[i] = { value: String(i + 1), text: monthsNames[i] };
         }
@@ -650,7 +647,6 @@ const RecurrenceEditor = Editor.inherit({
                 this.callBase(args);
                 break;
             case 'startDate':
-                // this._renderRepeatOnEditor(); Rerendering!
                 this._makeRepeatOnRule('freq', this._recurrenceRule.rules().freq);
 
                 if(isDefined(this._recurrenceRule.recurrenceString())) {
@@ -711,9 +707,6 @@ const RecurrenceEditor = Editor.inherit({
         this._recurrenceForm.getEditor('freq').option('value', (rules.freq || frequenciesMessages[defaultRecurrenceTypeIndex].value).toLowerCase());
         this._changeDayOfMonthValue();
 
-        // this._changeRepeatTypeLabel();
-        // this._intervalEditor.option('value', rules.interval || 1);
-
         this._changeIntervalValue(rules.interval);
         this._changeRepeatCountValue();
         this._changeRepeatEndValue();
@@ -739,20 +732,6 @@ const RecurrenceEditor = Editor.inherit({
 
         const day = this._dayOfMonthByRules() || 1;
         this._recurrenceForm.getEditor('bymonthday').option('value', day);
-    },
-
-    _changeRepeatTypeLabel() {
-        const $labels = this.$element().find(`.${REPEAT_END_TYPE_EDITOR}${LABEL_POSTFIX}`);
-
-        if(!$labels.length) {
-            return;
-        }
-
-        const freq = this._recurrenceRule.rules().freq || 'daily';
-
-        each($labels, (_, $label) => {
-            $($label).text(messageLocalization.format(`dxScheduler-recurrenceRepeat${freq.charAt(0).toUpperCase()}${freq.substr(1).toLowerCase()}`));
-        });
     },
 
     _changeRepeatCountValue() {
