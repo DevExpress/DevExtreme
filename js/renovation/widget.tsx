@@ -20,7 +20,7 @@ import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import { focusable } from '../ui/widget/selectors';
 import { isFakeClickEvent } from '../events/utils';
-import { BaseWidgetProps } from './utils/base-props';
+import BaseWidgetProps from './utils/base-props';
 
 const getStyles = ({ width, height, style }) => {
   const computedWidth = typeof width === 'function' ? width() : width;
