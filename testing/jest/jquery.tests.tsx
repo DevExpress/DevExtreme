@@ -16,6 +16,7 @@ describe('JQuery', () => {
   });
 
   afterEach(() => {
+    $('#components').empty();
     document.body.innerHTML = '';
   });
 
@@ -38,19 +39,19 @@ describe('JQuery', () => {
 
   describe('Method Option', () => {
     it('should return default props of preact component', () => {
-      $('#component').dxrPreactTestWidget({});
+      act(() => $('#component').dxrPreactTestWidget({}));
 
       expect($('#component').dxrPreactTestWidget('option').text).toBe('default text');
     });
 
     it.skip('should return default value of TwoWay prop', () => {
-      $('#component').dxrPreactTestWidget({});
+      act(() => $('#component').dxrPreactTestWidget({}));
 
       expect($('#component').dxrPreactTestWidget('option').count).toBe(1);
     });
 
     it('should return update value of TwoWay prop', () => {
-      $('#component').dxrPreactTestWidget({});
+      act(() => $('#component').dxrPreactTestWidget({}));
 
       $('#component').dxrPreactTestWidget('tick');
 
