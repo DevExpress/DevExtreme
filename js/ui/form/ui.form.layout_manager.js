@@ -148,6 +148,25 @@ const LayoutManager = Widget.inherit({
         return dataField ? this.option('layoutData.' + dataField) : null;
     },
 
+    _isCheckBoxUndefinedValue: function(dataField, editorType, value) {
+        if(editorType !== 'dxCheckBox') {
+            return false;
+        }
+        if(value !== undefined) {
+            return false;
+        }
+
+        const lastIndex = dataField.lastIndexOf('.');
+        const layoutData = lastIndex !== -1
+            ? this.option(`layoutData.${dataField.substring(0, lastIndex)}`)
+            : this.option('layoutData');
+        const propName = lastIndex !== -1
+            ? dataField.substring(lastIndex + 1, dataField.length)
+            : dataField;
+
+        return Object.keys(layoutData).indexOf(propName) !== -1;
+    },
+
     _updateFieldValue: function(dataField, value) {
         const layoutData = this.option('layoutData');
         let newValue = value;
@@ -786,7 +805,7 @@ const LayoutManager = Widget.inherit({
 
     _renderEditor: function(options) {
         const dataValue = this._getDataByField(options.dataField);
-        const defaultEditorOptions = dataValue !== undefined || options.editorType === 'dxCheckBox'
+        const defaultEditorOptions = dataValue !== undefined || this._isCheckBoxUndefinedValue(options.dataField, options.editorType, dataValue)
             ? { value: dataValue }
             : {};
         const isDeepExtend = true;
