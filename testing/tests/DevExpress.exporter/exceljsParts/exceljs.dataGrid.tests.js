@@ -50,7 +50,14 @@ const moduleConfig = {
     beforeEach: function() {
         this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
         this.customizeCellCallCount = 0;
+        this.stub = sinon.stub(errors, 'log', () => {
+            QUnit.assert.strictEqual(true, false, 'error.log should not be called');
+        });
+
         helper = new ExcelJSDataGridTestHelper(this.worksheet);
+    },
+    afterEach: function() {
+        this.stub.restore();
     },
     after: function() {
         clearDxObjectAssign();
@@ -6479,38 +6486,10 @@ QUnit.module('_getFullOptions', moduleConfig, () => {
 });
 
 QUnit.module('Deprecated warnings', moduleConfig, () => {
-    QUnit.test('CustomizeCell handler - warnings when \'cell\' field is not used', function(assert) {
-        assert.expect(3);
-        const stub = sinon.stub(errors, 'log', () => {
-            assert.strictEqual(true, false, 'error.log should not be called');
-        });
-
-        const done = assert.async();
-        const ds = [{ f1: 'f1_1' }];
-
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            dataSource: ds,
-            loadingTimeout: undefined,
-            showColumnHeaders: false
-        }).dxDataGrid('instance');
-
-        exportDataGrid({
-            component: dataGrid,
-            worksheet: this.worksheet,
-            customizeCell: function({ excelCell, gridCell }) {
-                assert.notStrictEqual(excelCell, undefined, 'excelCell');
-                assert.notStrictEqual(gridCell, undefined, 'gridCell');
-            }
-        }).then(() => {
-            assert.strictEqual(stub.callCount, 0, 'error.log.callCount');
-            stub.restore();
-            done();
-        });
-    });
-
     QUnit.test('CustomizeCell handler - warnings when \'cell\' field is used', function(assert) {
         assert.expect(4);
-        const stub = sinon.stub(errors, 'log', () => {
+        this.stub.restore();
+        this.stub = sinon.stub(errors, 'log', () => {
             assert.deepEqual(errors.log.lastCall.args, [
                 'W0003',
                 'CustomizeCell handler argument',
@@ -6537,8 +6516,7 @@ QUnit.module('Deprecated warnings', moduleConfig, () => {
                 assert.notStrictEqual(gridCell, undefined, 'gridCell');
             }
         }).then(() => {
-            assert.strictEqual(stub.callCount, 1, 'error.log.callCount');
-            stub.restore();
+            assert.strictEqual(this.stub.callCount, 1, 'error.log.callCount');
             done();
         });
     });
