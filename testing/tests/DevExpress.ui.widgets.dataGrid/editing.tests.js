@@ -8732,6 +8732,42 @@ QUnit.module('Refresh modes', {
         // assert
         assert.ok(event.isDefaultPrevented(), 'default is prevented');
     });
+
+    ['Full', 'Reshape', 'Repaint'].forEach(refreshMode => {
+        QUnit.test(`${refreshMode} - selectedRowKeys should be updated after deleting a row (T896582)`, function(assert) {
+            // arrange
+            const items = [
+                { id: 1, name: 'Test1' },
+                { id: 2, name: 'Test2' },
+                { id: 3, name: 'Test2' }
+            ];
+            this.options.dataSource = {
+                store: {
+                    type: 'array',
+                    key: 'id',
+                    data: items
+                }
+            };
+            this.options.editing = {
+                refreshMode: refreshMode.toLowerCase()
+            };
+            this.options.selection = {
+                mode: 'multiple'
+            };
+            this.options.selectedRowKeys = [1, 2];
+            this.setupModules();
+            this.clock.tick();
+
+            // act
+            this.deleteRow(0);
+            this.clock.tick();
+
+            // assert
+            assert.equal(this.getVisibleRows().length, 2);
+            assert.deepEqual(this.getSelectedRowKeys(), [2], 'getSelectedRowKeys returns correct values');
+            assert.deepEqual(this.option('selectedRowKeys'), [2], 'the selectedRowKeys option is updated');
+        });
+    });
 });
 
 QUnit.module('Editing with validation', {
