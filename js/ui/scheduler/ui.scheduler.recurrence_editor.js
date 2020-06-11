@@ -331,7 +331,6 @@ const RecurrenceEditor = Editor.inherit({
             {
                 dataField: 'bymonthday',
                 editorType: 'dxNumberBox',
-                cssClass: DAY_OF_MONTH,
                 editorOptions: {
                     min: 1,
                     max: 31,
@@ -340,7 +339,10 @@ const RecurrenceEditor = Editor.inherit({
                     showSpinButtons: true,
                     useLargeSpinButtons: false,
                     value: this._dayOfMonthByRules(),
-                    onValueChanged: (args) => this._valueChangedHandler(args)
+                    onValueChanged: (args) => this._valueChangedHandler(args),
+                    elementAttr: {
+                        class: DAY_OF_MONTH
+                    }
                 },
                 visible: freq === 'monthly' || freq === 'yearly',
                 label: {
@@ -350,13 +352,15 @@ const RecurrenceEditor = Editor.inherit({
             {
                 dataField: 'bymonth',
                 editorType: 'dxSelectBox',
-                cssClass: MONTH_OF_YEAR,
                 editorOptions: {
                     field: 'bymonth',
                     items: months,
                     value: this._monthOfYearByRules(),
                     displayExpr: 'text',
                     valueExpr: 'value',
+                    elementAttr: {
+                        class: MONTH_OF_YEAR
+                    },
                     onValueChanged: (args) => this._valueChangedHandler(args)
                 },
                 visible: freq === 'yearly',

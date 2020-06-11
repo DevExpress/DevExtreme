@@ -9,9 +9,11 @@ import RadioGroup from 'ui/radio_group';
 import { getRecurrenceProcessor } from 'ui/scheduler/recurrence';
 import dateLocalization from 'localization/date';
 
+const FREQUENCY_EDITOR = 'dx-recurrence-selectbox-freq';
 const REPEAT_COUNT_EDITOR = 'dx-recurrence-numberbox-repeat-count';
 const REPEAT_DATE_EDITOR = 'dx-recurrence-datebox-until-date';
 const REPEAT_ON_EDITOR = 'dx-recurrence-repeat-on';
+const REPEAT_END_TYPE_EDITOR = 'dx-recurrence-radiogroup-repeat-type';
 const DAY_OF_MONTH = 'dx-recurrence-numberbox-day-of-month';
 const MONTH_OF_YEAR = 'dx-recurrence-selectbox-month-of-year';
 const RECURRENCE_BUTTON_GROUP = 'dx-recurrence-button-group';
@@ -72,6 +74,12 @@ module('Frequency editor', moduleConfig, () => {
         this.createInstance({ value: 'FREQ=WEEKLY' });
 
         assert.ok(this.freqEditor instanceof SelectBox, 'Freq editor is SelectBox');
+    });
+
+    test('Frequency editor should have right css class', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY' });
+
+        assert.ok(this.freqEditor.$element().hasClass(FREQUENCY_EDITOR), 'Freq editor class is correct');
     });
 
     test('Freq editor should have right items', function(assert) {
@@ -185,6 +193,7 @@ module('Repeat-end editor', repeatEndModuleConfig, () => {
             { type: 'count' }
         ];
 
+        assert.ok(this.repeatEndEditor.$element().hasClass(REPEAT_END_TYPE_EDITOR), 'Repeat-end editor has a class');
         assert.equal(this.repeatEndEditor.option('value'), 'never', 'Repeat-end editor has a right default value');
         assert.deepEqual(this.repeatEndEditor.option('items'), itemValues, 'Repeat-end editor items are correct');
     });
@@ -364,6 +373,12 @@ module('Interval editor', intervalModuleConfig, () => {
         assert.equal(this.intervalEditor.option('width'), 70, 'Interval editor has right width');
     });
 
+    test('Interval editor should have right css class', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY' });
+
+        assert.ok(this.intervalEditor.$element().hasClass(INTERVAL_EDITOR), 'Interval editor class is correct');
+    });
+
     test('Recurrence interval editor should process value correctly', function(assert) {
         this.createInstance({ value: 'FREQ=WEEKLY;INTERVAL=2' });
 
@@ -482,6 +497,7 @@ module('Repeat-on editor', repeatOnModuleConfig, () => {
         this.createInstance({ value: 'FREQ=MONTHLY', startDate: new Date(2019, 1, 1) });
         const dayOfMonth = this.instance.getRecurrenceForm().getEditor('bymonthday');
 
+        assert.ok(dayOfMonth.$element().hasClass(DAY_OF_MONTH), 'correct default value of day-of-month editor');
         assert.equal(dayOfMonth.option('min'), 1, 'correct default value of day-of-month editor');
         assert.equal(dayOfMonth.option('max'), 31, 'correct default value of day-of-month editor');
         assert.equal(dayOfMonth.option('showSpinButtons'), true, 'correct default value of day-of-month editor');
@@ -541,6 +557,7 @@ module('Repeat-on editor', repeatOnModuleConfig, () => {
 
         const monthOfYear = this.instance.getRecurrenceForm().getEditor('bymonth');
 
+        assert.ok(monthOfYear.$element().hasClass(MONTH_OF_YEAR), 'correct default value of day-of-month editor');
         assert.equal(monthOfYear.option('items').length, 12, 'items are correct');
         assert.equal(monthOfYear.option('value'), 2, 'value is correct');
     });
