@@ -35,7 +35,7 @@ QUnit.module('format: api value changing', moduleConfig, () => {
     QUnit.test('number type of input should be converted to tel on mobile device when inputMode is unsupported', function(assert) {
         const realDeviceMock = sinon.stub(devices, 'real').returns({ deviceType: 'mobile' });
         const realBrowser = browser;
-        const $element = $('<div>').appendTo('body');
+        const $element = $('<div>').appendTo('#qunit-fixture');
 
         try {
             browser.chrome = true;
@@ -66,7 +66,7 @@ QUnit.module('format: api value changing', moduleConfig, () => {
 
     QUnit.test('number type of input should be converted to text on desktop device', function(assert) {
         const realDeviceMock = sinon.stub(devices, 'real').returns({ deviceType: 'desktop' });
-        const $element = $('<div>').appendTo('body');
+        const $element = $('<div>').appendTo('#qunit-fixture');
 
         try {
             const instance = $element.dxNumberBox({
@@ -1027,7 +1027,7 @@ QUnit.module('format: incomplete value', moduleConfig, () => {
     QUnit.test('paste of value should call valueChanged event on keyup', function(assert) {
         const valueChangedStub = sinon.stub();
         const originalIE = browser.msie;
-        const $element = $('<div>').appendTo('body');
+        const $element = $('<div>').appendTo('#qunit-fixture');
 
         try {
             browser.msie = false;
@@ -1049,6 +1049,7 @@ QUnit.module('format: incomplete value', moduleConfig, () => {
             assert.ok(valueChangedStub.calledOnce, 'valueChanged event was called');
         } finally {
             browser.msie = originalIE;
+            $element.remove();
         }
     });
 
@@ -1057,7 +1058,7 @@ QUnit.module('format: incomplete value', moduleConfig, () => {
         const valueChangedStub = sinon.stub();
         const originalIE = browser.msie;
         const originalVersion = browser.version;
-        const $element = $('<div>').appendTo('body');
+        const $element = $('<div>').appendTo('#qunit-fixture');
 
         try {
             browser.msie = true;
@@ -1081,6 +1082,7 @@ QUnit.module('format: incomplete value', moduleConfig, () => {
         } finally {
             browser.msie = originalIE;
             browser.version = originalVersion;
+            $element.remove();
         }
     });
 
@@ -1977,6 +1979,68 @@ QUnit.module('format: custom parser and formatter', moduleConfig, () => {
 
         assert.equal(this.input.val(), '$ 1234.56', 'text is correct');
         assert.equal(this.instance.option('value'), 1234.56, 'value is correct');
+    });
+
+    QUnit.test('editor should create a related LDML pattern for custom formatter only once', function(assert) {
+        let counter = 0;
+        this.instance.option({
+            value: null,
+            format: {
+                formatter: (val) => {
+                    counter++;
+                    return String(val);
+                }
+            }
+        });
+
+        const callCountAfterCreateLdmlPattern = counter;
+        this.keyboard.type('1');
+        assert.strictEqual(counter, callCountAfterCreateLdmlPattern + 1, 'initial formatting + 1 -> format after typing');
+
+        this.keyboard.type('1');
+        assert.strictEqual(counter, callCountAfterCreateLdmlPattern + 1 + 1, '+ 1 -> format after typing');
+    });
+
+    QUnit.test('editor should create a new LDML pattern for custom formatter after "format" option change', function(assert) {
+        let counter = 0;
+        const formatter = (val) => {
+            counter++;
+            return String(val);
+        };
+        this.instance.option({
+            value: null,
+            format: {
+                formatter
+            }
+        });
+
+        const callCountAfterCreateLdmlPattern = counter;
+        this.keyboard.type('1');
+        assert.strictEqual(counter, callCountAfterCreateLdmlPattern + 1, 'initial formatting + 1 -> format after typing');
+
+        counter = 0;
+        this.instance.option('format', { formatter: formatter.bind(this) });
+        assert.strictEqual(counter, callCountAfterCreateLdmlPattern, 'LDML pattern recalculated');
+    });
+
+    QUnit.test('editor should not try to create a related LDML pattern for custom formatter and parser', function(assert) {
+        let counter = 0;
+        this.instance.option({
+            value: null,
+            format: {
+                formatter: (val) => {
+                    counter++;
+                    return String(val);
+                },
+                parser: (text) => parseFloat(text.replace(/[^0-9.-]/g, ''))
+            }
+        });
+
+        this.keyboard.type('1');
+        assert.strictEqual(counter, 4, '1 -> initial formatting + 3 -> format after typing');
+
+        this.keyboard.type('1');
+        assert.strictEqual(counter, 7, '+ 3 -> format after typing');
     });
 });
 
