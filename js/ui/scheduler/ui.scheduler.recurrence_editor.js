@@ -35,6 +35,7 @@ const DAY_OF_MONTH = 'dx-recurrence-numberbox-day-of-month';
 const MONTH_OF_YEAR = 'dx-recurrence-selectbox-month-of-year';
 
 const recurrentEditorNumberBoxWidth = 70;
+const recurrentEditorSelectBoxWidth = 120;
 const defaultRecurrenceTypeIndex = 1; // TODO default daily recurrence
 
 const frequenciesMessages = [
@@ -329,6 +330,26 @@ const RecurrenceEditor = Editor.inherit({
                 }
             },
             {
+                dataField: 'bymonth',
+                editorType: 'dxSelectBox',
+                editorOptions: {
+                    field: 'bymonth',
+                    items: months,
+                    value: this._monthOfYearByRules(),
+                    width: recurrentEditorSelectBoxWidth,
+                    displayExpr: 'text',
+                    valueExpr: 'value',
+                    elementAttr: {
+                        class: MONTH_OF_YEAR
+                    },
+                    onValueChanged: (args) => this._valueChangedHandler(args)
+                },
+                visible: freq === 'yearly',
+                label: {
+                    visible: false
+                }
+            },
+            {
                 dataField: 'bymonthday',
                 editorType: 'dxNumberBox',
                 editorOptions: {
@@ -348,26 +369,7 @@ const RecurrenceEditor = Editor.inherit({
                 label: {
                     visible: false
                 }
-            },
-            {
-                dataField: 'bymonth',
-                editorType: 'dxSelectBox',
-                editorOptions: {
-                    field: 'bymonth',
-                    items: months,
-                    value: this._monthOfYearByRules(),
-                    displayExpr: 'text',
-                    valueExpr: 'value',
-                    elementAttr: {
-                        class: MONTH_OF_YEAR
-                    },
-                    onValueChanged: (args) => this._valueChangedHandler(args)
-                },
-                visible: freq === 'yearly',
-                label: {
-                    visible: false
-                }
-            },
+            }
         ];
     },
 
