@@ -35,7 +35,7 @@ QUnit.module('format: api value changing', moduleConfig, () => {
     QUnit.test('number type of input should be converted to tel on mobile device when inputMode is unsupported', function(assert) {
         const realDeviceMock = sinon.stub(devices, 'real').returns({ deviceType: 'mobile' });
         const realBrowser = browser;
-        const $element = $('<div>').appendTo('body');
+        const $element = $('<div>').appendTo('#qunit-fixture');
 
         try {
             browser.chrome = true;
@@ -66,7 +66,7 @@ QUnit.module('format: api value changing', moduleConfig, () => {
 
     QUnit.test('number type of input should be converted to text on desktop device', function(assert) {
         const realDeviceMock = sinon.stub(devices, 'real').returns({ deviceType: 'desktop' });
-        const $element = $('<div>').appendTo('body');
+        const $element = $('<div>').appendTo('#qunit-fixture');
 
         try {
             const instance = $element.dxNumberBox({
@@ -1027,7 +1027,7 @@ QUnit.module('format: incomplete value', moduleConfig, () => {
     QUnit.test('paste of value should call valueChanged event on keyup', function(assert) {
         const valueChangedStub = sinon.stub();
         const originalIE = browser.msie;
-        const $element = $('<div>').appendTo('body');
+        const $element = $('<div>').appendTo('#qunit-fixture');
 
         try {
             browser.msie = false;
@@ -1058,7 +1058,7 @@ QUnit.module('format: incomplete value', moduleConfig, () => {
         const valueChangedStub = sinon.stub();
         const originalIE = browser.msie;
         const originalVersion = browser.version;
-        const $element = $('<div>').appendTo('body');
+        const $element = $('<div>').appendTo('#qunit-fixture');
 
         try {
             browser.msie = true;
