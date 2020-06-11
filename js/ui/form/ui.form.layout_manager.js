@@ -157,7 +157,7 @@ const LayoutManager = Widget.inherit({
         const propertyName = nameParts.pop();
         const layoutData = this.option(nameParts.join('.'));
 
-        return (propertyName in layoutData);
+        return propertyName in layoutData;
     },
 
     _updateFieldValue: function(dataField, value) {
