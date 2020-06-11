@@ -30,6 +30,7 @@ const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const LIST_CLASS = 'dx-list';
+const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 
 const getPopup = (instance) => {
     return instance._popup;
@@ -1148,18 +1149,29 @@ QUnit.module('popup', moduleConfig, () => {
             opened: true
         }).dxDropDownList('instance');
 
-        assert.strictEqual(getPopup(instance).option('width'), 300, 'width is correct');
+        assert.strictEqual(getPopup(instance).option('width'), 300, 'popup width option value is correct');
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.strictEqual($overlayContent.outerWidth(), 300, 'overlay content width is correct');
     });
 
-    QUnit.test('popup should have width equal to the input width if dropDownOptions.width isn\'t defined (T897820)', function(assert) {
+    QUnit.test('popup should have width equal to dropDownOptions.width even after editor input width change (T897820)', function(assert) {
         const instance = $('#dropDownList').dxDropDownList({
+            dropDownOptions: {
+                width: 500
+            },
             opened: true
         }).dxDropDownList('instance');
 
-        assert.strictEqual(getPopup(instance).option('width'), instance.$element().outerWidth(), 'width is correct');
+        instance.option('width', 300);
+
+        assert.strictEqual(getPopup(instance).option('width'), 500, 'popup width option value is correct');
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.strictEqual($overlayContent.outerWidth(), 500, 'overlay content width is correct');
     });
 
-    QUnit.test('popup should have width equal to the input width if dropDownOptions.width is set to "auto" (T897820)', function(assert) {
+    QUnit.test('popup should have width 100% if dropDownOptions.width is set to auto (T897820)', function(assert) {
         const instance = $('#dropDownList').dxDropDownList({
             dropDownOptions: {
                 width: 'auto'
@@ -1167,7 +1179,39 @@ QUnit.module('popup', moduleConfig, () => {
             opened: true
         }).dxDropDownList('instance');
 
-        assert.strictEqual(getPopup(instance).option('width'), instance.$element().outerWidth(), 'width is correct');
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.strictEqual($overlayContent.outerWidth(), instance.$element().outerWidth(), 'overlay content width is correct');
+    });
+
+    QUnit.test('popup should have width 100% if dropDownOptions.width is not defined (T897820)', function(assert) {
+        const instance = $('#dropDownList').dxDropDownList({
+            opened: true
+        }).dxDropDownList('instance');
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.strictEqual($overlayContent.outerWidth(), instance.$element().outerWidth(), 'overlay content width is correct');
+    });
+
+    QUnit.test('popup should have correct width when dropDownOptions.width is percent (T897820)', function(assert) {
+        const instance = $('#dropDownList').dxDropDownList({
+            width: 600,
+            dropDownOptions: {
+                width: '50%'
+            },
+            opened: true
+        }).dxDropDownList('instance');
+
+        assert.strictEqual(getPopup(instance).option('width'), '50%', 'popup width option value is correct');
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.strictEqual($overlayContent.outerWidth(), 300, 'overlay content width is correct');
+
+        instance.close();
+        instance.option('width', 400);
+        instance.open();
+
+        assert.strictEqual(getPopup(instance).option('width'), '50%', 'popup width option value is correct after editor width runtime change');
+        assert.strictEqual($overlayContent.outerWidth(), 200, 'overlay content width is correct after editor width runtime change');
     });
 
     QUnit.test('After load new page scrollTop should not be changed', function(assert) {

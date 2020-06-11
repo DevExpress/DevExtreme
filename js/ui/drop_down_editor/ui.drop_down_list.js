@@ -430,7 +430,6 @@ const DropDownList = DropDownEditor.inherit({
     _popupConfig: function() {
         return extend(this.callBase(), {
             templatesRenderAsynchronously: false,
-            width: this.option('width'),
             height: 'auto',
             autoResizeEnabled: false,
             maxHeight: this._getMaxHeight.bind(this)
@@ -745,19 +744,7 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _dimensionChanged: function() {
-        this._popup && this._updatePopupDimensions();
-    },
-
-    _updatePopupDimensions: function() {
-        this._updatePopupWidth();
-        this._updatePopupHeight();
-    },
-
-    _updatePopupWidth: function() {
-        const popupWidth = this.option('dropDownOptions.width');
-        if(!popupWidth || popupWidth === 'auto') {
-            this._setPopupOption('width', this.$element().outerWidth() + this.option('popupWidthExtension'));
-        }
+        this._popup && this._updatePopupHeight();
     },
 
     _needPopupRepaint: function() {
