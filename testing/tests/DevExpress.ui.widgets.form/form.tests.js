@@ -412,8 +412,45 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
     assert.ok($testContainer.find('.dx-field-item .dx-textbox').hasClass('dx-editor-underlined'), 'right class rendered');
 });
 
-QUnit.module('Checkbox state', () => {
-    // T897964
+QUnit.module('Checkbox editor value', () => {
+    QUnit.test('FormData = {}', function(assert) {
+        const form = $('#form').dxForm({
+            items: [ { dataField: 'boolValue', editorType: 'dxCheckBox' } ],
+            formData: { }
+        }).dxForm('instance');
+
+        assert.equal(form.getEditor('boolValue').option('value'), false);
+    });
+
+    QUnit.test('FormData = { innerObject = {} }', function(assert) {
+        const form = $('#form').dxForm({
+            items: [ { dataField: 'innerObject.boolValue', editorType: 'dxCheckBox' } ],
+            formData: { innerObject: { } }
+        }).dxForm('instance');
+
+        assert.equal(form.getEditor('innerObject.boolValue').option('value'), false);
+    });
+
+    QUnit.test('FormData = { boolBalue: true } -> option("formData", { })', function(assert) {
+        const form = $('#form').dxForm({
+            items: [ { dataField: 'boolValue', editorType: 'dxCheckBox' } ],
+            formData: { boolValue: true }
+        }).dxForm('instance');
+
+        form.option('formData', { });
+        assert.equal(form.getEditor('boolValue').option('value'), false);
+    });
+
+    QUnit.test('FormData = { innerObject = { boolValue: true } } -> option("formData", { innerObject = { } })', function(assert) {
+        const form = $('#form').dxForm({
+            items: [ { dataField: 'innerObject.boolValue', editorType: 'dxCheckBox' } ],
+            formData: { innerObject: { boolValue: true } }
+        }).dxForm('instance');
+
+        form.option('formData', { innerObject: { } });
+        assert.equal(form.getEditor('innerObject.boolValue').option('value'), false);
+    });
+
     [true, false, undefined].forEach(boolValue => {
         QUnit.test(`FormData.boolValue = ${boolValue}`, function(assert) {
             const form = $('#form').dxForm({
@@ -433,6 +470,25 @@ QUnit.module('Checkbox state', () => {
             assert.equal(form.getEditor('innerObject.boolValue').option('value'), boolValue);
         });
 
+        QUnit.test(`FormData = {} -> FormData.boolValue = ${boolValue}`, function(assert) {
+            const form = $('#form').dxForm({
+                items: [ { dataField: 'boolValue', editorType: 'dxCheckBox' } ],
+                formData: { }
+            }).dxForm('instance');
+
+            form.updateData({ boolValue: boolValue });
+            assert.equal(form.getEditor('boolValue').option('value'), boolValue);
+        });
+
+        QUnit.test(`FormData.innerObject = {} -> FormData.innerObject.boolValue = ${boolValue}`, function(assert) {
+            const form = $('#form').dxForm({
+                items: [ { dataField: 'innerObject.boolValue', editorType: 'dxCheckBox' } ],
+                formData: { innerObject: { } }
+            }).dxForm('instance');
+
+            form.updateData({ innerObject: { boolValue: boolValue } });
+            assert.equal(form.getEditor('innerObject.boolValue').option('value'), boolValue);
+        });
 
         [true, false, undefined].forEach(newBoolValue => {
             QUnit.test(`FormData.boolValue = ${boolValue} -> FormData.boolValue = ${newBoolValue}`, function(assert) {
@@ -454,46 +510,6 @@ QUnit.module('Checkbox state', () => {
                 form.updateData({ innerObject: { boolValue: newBoolValue } });
                 assert.equal(form.getEditor('innerObject.boolValue').option('value'), newBoolValue);
             });
-        });
-    });
-
-    QUnit.test('FormData = {}', function(assert) {
-        const form = $('#form').dxForm({
-            items: [ { dataField: 'boolValue', editorType: 'dxCheckBox' } ],
-            formData: { }
-        }).dxForm('instance');
-
-        assert.equal(form.getEditor('boolValue').option('value'), false);
-    });
-
-    QUnit.test('FormData = { innerObject = {} }', function(assert) {
-        const form = $('#form').dxForm({
-            items: [ { dataField: 'innerObject.boolValue', editorType: 'dxCheckBox' } ],
-            formData: { innerObject: { } }
-        }).dxForm('instance');
-
-        assert.equal(form.getEditor('innerObject.boolValue').option('value'), false);
-    });
-
-    [true, false, undefined].forEach(newBoolValue => {
-        QUnit.test(`FormData = {} -> FormData.boolValue = ${newBoolValue}`, function(assert) {
-            const form = $('#form').dxForm({
-                items: [ { dataField: 'boolValue', editorType: 'dxCheckBox' } ],
-                formData: { }
-            }).dxForm('instance');
-
-            form.updateData({ boolValue: newBoolValue });
-            assert.equal(form.getEditor('boolValue').option('value'), newBoolValue);
-        });
-
-        QUnit.test(`FormData.innerObject = {} -> FormData.innerObject.boolValue = ${newBoolValue}`, function(assert) {
-            const form = $('#form').dxForm({
-                items: [ { dataField: 'innerObject.boolValue', editorType: 'dxCheckBox' } ],
-                formData: { innerObject: { } }
-            }).dxForm('instance');
-
-            form.updateData({ innerObject: { boolValue: newBoolValue } });
-            assert.equal(form.getEditor('innerObject.boolValue').option('value'), newBoolValue);
         });
     });
 });
