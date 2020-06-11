@@ -37,7 +37,7 @@ jobs:
       env:
         CONSTEL: ${{ matrix.CONSTEL }}
       run: |
-        $runner = Start-Process -FilePath dotnet -ArgumentList './testing/runner/bin/runner.dll --single-run' -PassThru -NoNewWindow
+        $runner = Start-Process -FilePath dotnet -ArgumentList './testing/qunit/runner/bin/runner.dll --single-run' -PassThru -NoNewWindow
         Write-Host "Runner starting"
         $runner_port = (Get-Content ports.json | ConvertFrom-Json).qunit
         $runner_host = "http://localhost:$runner_port"

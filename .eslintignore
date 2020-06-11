@@ -1,7 +1,7 @@
 artifacts/*
 js/viz/docs/*
 node_modules/*
-testing/helpers/sinon/*
+testing/qunit/helpers/sinon/*
 *.p.js
 *.j.js
 *.d.ts

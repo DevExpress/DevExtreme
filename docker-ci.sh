@@ -60,7 +60,7 @@ function run_test {
     npm i
     npm run build
 
-    dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
+    dotnet ./testing/qunit/runner/bin/runner.dll --single-run & runner_pid=$!
 
     for i in {15..0}; do
         if [ -n "$runner_pid" ] && [ ! -e "/proc/$runner_pid" ]; then
@@ -208,7 +208,7 @@ function run_test_scss {
 }
 
 function start_runner_watchdog {
-    local last_suite_time_file="$PWD/testing/LastSuiteTime.txt"
+    local last_suite_time_file="$PWD/testing/qunit/LastSuiteTime.txt"
     local last_suite_time=unknown
 
     while true; do
