@@ -431,7 +431,7 @@ QUnit.module('Checkbox editor value', () => {
         assert.equal(form.getEditor('innerObject.boolValue').option('value'), false);
     });
 
-    QUnit.test('FormData = { boolBalue: true } -> option("formData", { })', function(assert) {
+    QUnit.test('FormData = { boolValue: true } -> option("formData", { })', function(assert) {
         const form = $('#form').dxForm({
             items: [ { dataField: 'boolValue', editorType: 'dxCheckBox' } ],
             formData: { boolValue: true }
