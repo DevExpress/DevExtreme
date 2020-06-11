@@ -153,11 +153,11 @@ const LayoutManager = Widget.inherit({
             return false;
         }
 
-        const nameParts = [].concat('layoutData', [...dataField.split('.')]);
+        const nameParts = ['layoutData', ...dataField.split('.')];
         const propertyName = nameParts.pop();
         const layoutData = this.option(nameParts.join('.'));
 
-        return Object.keys(layoutData).indexOf(propertyName) !== -1;
+        return (propertyName in layoutData);
     },
 
     _updateFieldValue: function(dataField, value) {
