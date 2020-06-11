@@ -1333,7 +1333,7 @@ QUnit.test('Appointment popup should contain resources and recurrence editor', f
         resources: [{ label: 'Room', fieldExpr: 'roomId', dataSource: rooms }],
     });
 
-    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2), roomId: 4 });
+    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2), roomId: 4, recurrenceRule: 'FREQ=WEEKLY' });
     $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
     const form = this.instance.getAppointmentDetailsForm();
     const items = form.option('items');
