@@ -24,10 +24,7 @@ const REPEAT_END_EDITOR = 'dx-recurrence-repeat-end';
 const REPEAT_END_TYPE_EDITOR = 'dx-recurrence-radiogroup-repeat-type';
 const REPEAT_COUNT_EDITOR = 'dx-recurrence-numberbox-repeat-count';
 const REPEAT_UNTIL_DATE_EDITOR = 'dx-recurrence-datebox-until-date';
-
-const FIELD_VALUE_CLASS = 'dx-field-value';
 const RECURRENCE_BUTTON_GROUP = 'dx-recurrence-button-group';
-
 const FREQUENCY_EDITOR = 'dx-recurrence-selectbox-freq';
 const INTERVAL_EDITOR = 'dx-recurrence-numberbox-interval';
 const REPEAT_ON_EDITOR = 'dx-recurrence-repeat-on';
@@ -381,7 +378,6 @@ const RecurrenceEditor = Editor.inherit({
                 template: (data, itemElement) =>{
                     this._$repeatEndEditor = $('<div>')
                         .addClass(REPEAT_END_TYPE_EDITOR)
-                        .addClass(FIELD_VALUE_CLASS)
                         .appendTo(itemElement);
 
                     this._repeatEndEditor = this._createComponent(this._$repeatEndEditor, RadioGroup, {
@@ -553,7 +549,6 @@ const RecurrenceEditor = Editor.inherit({
 
         this._$repeatCountEditor = $('<div>')
             .addClass(REPEAT_COUNT_EDITOR)
-            .addClass(FIELD_VALUE_CLASS)
             .appendTo($editorTemplate);
 
         $('<div>')
@@ -603,7 +598,6 @@ const RecurrenceEditor = Editor.inherit({
 
         this._$repeatDateEditor = $('<div>')
             .addClass(REPEAT_UNTIL_DATE_EDITOR)
-            .addClass(FIELD_VALUE_CLASS)
             .appendTo($editorTemplate);
 
         this._repeatUntilDate = this._createComponent(this._$repeatDateEditor, DateBox, {
