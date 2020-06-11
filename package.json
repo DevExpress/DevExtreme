@@ -146,7 +146,7 @@
     "update-ts": "dx-tools update-ts-bundle --output=./ts/dx.all.d.ts",
     "internal-tool": "dx-tools",
     "validate-declarations": "dx-tools validate-declarations",
-    "test-functional": "node ./testing/functional/runner"
+    "test-testcafe": "node ./testing/testcafe/runner"
   },
   "browserslist": [
     "last 2 versions",
