@@ -1247,7 +1247,7 @@ Axis.prototype = {
         }
         that._seriesData.sortCategories(that.getCategoriesSorter(argCategories));
 
-        that._seriesData.breaks = that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
+        that._seriesData.breaks = that._initialBreaks = that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
 
         that._translator.updateBusinessRange(that._getViewportRange());
     },
@@ -1382,7 +1382,7 @@ Axis.prototype = {
             },
             options.minorTickInterval,
             options.minorTickCount,
-            that._seriesData.breaks
+            that._initialBreaks
         );
     },
 
@@ -2093,7 +2093,7 @@ Axis.prototype = {
 
         const viewPort = that.getViewport();
 
-        that._seriesData.breaks = that._getScaleBreaks(that._options, {
+        that._seriesData.breaks = that._initialBreaks = that._getScaleBreaks(that._options, {
             minVisible: viewPort.startValue,
             maxVisible: viewPort.endValue
         }, that._series, that.isArgumentAxis);

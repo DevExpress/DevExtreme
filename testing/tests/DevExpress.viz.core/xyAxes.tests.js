@@ -3261,6 +3261,32 @@ QUnit.test('T889259. Scale breaks should be into account in the translator after
     }
 });
 
+QUnit.test('Tick generator should get initial breaks', function(assert) {
+    const that = this;
+    this.tickGeneratorSpy = sinon.spy(function() {
+        return {
+            ticks: that.generatedTicks || [],
+            minorTicks: that.generatedMinorTicks || [],
+            tickInterval: that.generatedTickInterval,
+            breaks: [{ from: 350, to: 450, cumulativeWidth: 0 }]
+        };
+    });
+    this.updateOptions({
+        breaks: [{ startValue: 300, endValue: 400 }]
+    });
+
+    this.axis.visualRange(250, 540);
+
+    this.axis.createTicks(this.canvas);
+    this.axis.createTicks(this.canvas);
+
+    assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], [{
+        from: 300,
+        to: 400,
+        cumulativeWidth: 0
+    }]);
+});
+
 QUnit.module('Datetime scale breaks. Weekends and holidays', $.extend({}, environment2DTranslator, {
     beforeEach: function() {
         const that = this;
