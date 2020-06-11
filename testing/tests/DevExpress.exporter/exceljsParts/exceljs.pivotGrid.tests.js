@@ -1650,12 +1650,12 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
                 const ds = {
                     fields: [
-                        { area: 'row', dataField: 'row1', dataType: 'string' },
-                        { area: 'column', dataField: 'col1', dataType: 'string' },
-                        { area: 'data', summaryType: 'max', dataType: 'date', dataField: 'date', format: format.format }
+                        { area: 'row', groupName: null, dataField: 'row1', dataType: 'date', format: format.format },
+                        { area: 'column', groupName: null, dataField: 'col1', dataType: 'date', format: format.format },
+                        { area: 'data', summaryType: 'max', dataField: 'date', dataType: 'date', format: format.format }
                     ],
                     store: [
-                        { row1: 'A', col1: 'a', date: date.value }
+                        { row1: date.value, col1: date.value, date: date.value }
                     ]
                 };
 
@@ -1677,10 +1677,10 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
                 const expectedCells = [[
                     { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
-                    { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
+                    { excelCell: { value: text, type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: [new Date(date.value).toString()], rowspan: 1, text: text, type: 'D', width: 100, value: date.expectedPivotCellValue } }
                 ], [
-                    { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
-                    { excelCell: { value: date.expectedExcelCellValue, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: format.expectedFormat, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'date', format: format.format, rowPath: ['A'], rowType: 'D', rowspan: 1, value: date.expectedPivotCellValue, text: text } }
+                    { excelCell: { value: text, type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: [new Date(date.value).toString()], rowspan: 1, text: text, type: 'D', value: date.expectedPivotCellValue } },
+                    { excelCell: { value: date.expectedExcelCellValue, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: format.expectedFormat, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [new Date(date.value).toString()], columnType: 'D', dataIndex: 0, dataType: 'date', format: format.format, rowPath: [new Date(date.value).toString()], rowType: 'D', rowspan: 1, value: date.expectedPivotCellValue, text: text } }
                 ]];
 
                 helper.extendExpectedCells(expectedCells, topLeft);
