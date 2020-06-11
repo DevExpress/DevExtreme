@@ -3438,7 +3438,7 @@ QUnit.module('datebox w/ time list', {
         this.dateBox.option('opened', true);
 
         const popup = this.dateBox.$element().find(`.${POPUP_CLASS}`).dxPopup('instance');
-        assert.strictEqual(popup.option('width'), 'auto', 'popup width option value is correct');
+        assert.strictEqual(popup.option('width'), '100%', 'popup width option value is correct');
 
         const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
         assert.strictEqual($overlayContent.outerWidth(), this.dateBox.$element().outerWidth(), 'overlay content width is correct');
