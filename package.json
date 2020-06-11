@@ -1,10 +1,10 @@
 {
-    "name": "devextreme-technical-demos",
-    "version": "20.1.0",
+    "name": "devextreme-demos",
+    "version": "20.2.0",
     "description": "",
     "repository": {
         "type": "git",
-        "url": ""
+        "url": "https://github.com/DevExpress/devextreme-demos.git"
     },
     "author": "Developer Express Inc.",
     "dependencies": {
