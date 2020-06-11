@@ -54,6 +54,7 @@ const environment = {
         };
         this.axis.updateOptions($.extend(true, defaultOptions, options));
         this.axis._options._customVisualRange = options ? options.visualRange : undefined;
+        this.axis.setBusinessRange({});
     }
 };
 
@@ -322,6 +323,7 @@ QUnit.test('Get options after resetTypes - axis type and data types are in lower
 
 QUnit.test('Check tickInterval with new canvas', function(assert) {
     this.updateOptions({});
+    this.axis.setBusinessRange({});
     this.generatedTickInterval = 2;
     this.axis.createTicks(this.canvas);
     const translator = translator2DModule.Translator2D.lastCall.returnValue;
