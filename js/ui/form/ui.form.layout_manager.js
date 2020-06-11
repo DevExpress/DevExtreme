@@ -149,22 +149,15 @@ const LayoutManager = Widget.inherit({
     },
 
     _isCheckBoxUndefinedValue: function(dataField, editorType, value) {
-        if(editorType !== 'dxCheckBox') {
-            return false;
-        }
-        if(value !== undefined) {
+        if(editorType !== 'dxCheckBox' || value !== undefined) {
             return false;
         }
 
-        const lastIndex = dataField.lastIndexOf('.');
-        const layoutData = lastIndex !== -1
-            ? this.option(`layoutData.${dataField.substring(0, lastIndex)}`)
-            : this.option('layoutData');
-        const propName = lastIndex !== -1
-            ? dataField.substring(lastIndex + 1, dataField.length)
-            : dataField;
+        const nameParts = [].concat('layoutData', [...dataField.split('.')]);
+        const propertyName = nameParts.pop();
+        const layoutData = this.option(nameParts.join('.'));
 
-        return Object.keys(layoutData).indexOf(propName) !== -1;
+        return Object.keys(layoutData).indexOf(propertyName) !== -1;
     },
 
     _updateFieldValue: function(dataField, value) {
