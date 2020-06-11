@@ -560,6 +560,8 @@ module.exports = {
                         const currentValidator = that.getController('validating').getValidator();
                         currentValidator && currentValidator.validate();
                     }
+
+                    this.getController('editorFactory').refocus();
                 },
 
                 showHighlighting: function($cell, skipValidation) {
