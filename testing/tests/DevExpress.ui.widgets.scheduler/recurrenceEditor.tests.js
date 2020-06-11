@@ -382,13 +382,27 @@ module('Interval editor', intervalModuleConfig, () => {
         assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;INTERVAL=3', 'Recurrence editor has right value');
     });
 
-    [
+    const textExpectation = [
         { freq: 'WEEKLY', expectedText: 'week(s)' },
         { freq: 'DAILY', expectedText: 'day(s)' },
         { freq: 'MONTHLY', expectedText: 'month(s)' },
         { freq: 'YEARLY', expectedText: 'year(s)' }
-    ].forEach((config) => {
-        QUnit.test(`Recurrence interval label should have correct text when freq=${config.freq}`, function(assert) {
+    ];
+
+    textExpectation.forEach((config) => {
+        QUnit.test(`Recurrence interval label should have correct text on init, freq=${config.freq}`, function(assert) {
+            this.createInstance({
+                value: `FREQ=${config.freq}`
+            });
+
+            const $label = this.instance.$element().find(`.${INTERVAL_EDITOR}${LABEL_POSTFIX}`);
+
+            assert.equal($label.text(), config.expectedText, 'label text is correct');
+        });
+    });
+
+    textExpectation.forEach((config) => {
+        QUnit.test(`Recurrence interval label should have correct text after changing freq, freq=${config.freq}`, function(assert) {
             this.createInstance();
 
             this.instance.option('value', `FREQ=${config.freq}`);
@@ -589,32 +603,41 @@ module('Repeat-on editor', repeatOnModuleConfig, () => {
         assert.equal(monthEditor.option('value'), 10, 'month was set correctly');
     });
 
-    // NOTE: matrix testing
-    test('Recurrence repeat-on editor should be visible after changing freq if needed', function(assert) {
-        this.createInstance({ value: 'FREQ=DAILY', startDate: new Date(2019, 1, 1) });
-        const recurrenceForm = this.instance.getRecurrenceForm();
+    const repeatOnPartsVisibilityExpectation = [
+        { freq: 'WEEKLY', byDayVisible: true, byMonthDayVisible: false, byMonthVisible: false, labelVisible: true },
+        { freq: 'DAILY', byDayVisible: false, byMonthDayVisible: false, byMonthVisible: false, labelVisible: false },
+        { freq: 'HOURLY', byDayVisible: false, byMonthDayVisible: false, byMonthVisible: false, labelVisible: false },
+        { freq: 'MONTHLY', byDayVisible: false, byMonthDayVisible: true, byMonthVisible: false, labelVisible: true },
+        { freq: 'YEARLY', byDayVisible: false, byMonthDayVisible: true, byMonthVisible: true, labelVisible: true }
+    ];
 
-        assert.notOk(recurrenceForm.itemOption('byday').visible, 'byday editor is hidden');
-        assert.notOk(recurrenceForm.itemOption('bymonthday').visible, 'byday editor is hidden');
-        assert.notOk(recurrenceForm.itemOption('bymonth').visible, 'byday editor is hidden');
+    repeatOnPartsVisibilityExpectation.forEach((config) => {
+        QUnit.test(`Recurrence repeat-on editor parts visibility on init, freq=${config.freq}`, function(assert) {
+            this.createInstance({
+                value: `FREQ=${config.freq}`
+            });
 
-        this.instance.option('value', 'FREQ=WEEKLY');
+            const recurrenceForm = this.instance.getRecurrenceForm();
 
-        assert.ok(recurrenceForm.itemOption('byday').visible, 'byday editor is hidden');
-        assert.notOk(recurrenceForm.itemOption('bymonthday').visible, 'byday editor is hidden');
-        assert.notOk(recurrenceForm.itemOption('bymonth').visible, 'byday editor is hidden');
+            assert.equal(recurrenceForm.itemOption('repeatOnLabel').visible, config.labelVisible, `label visibility is ${config.byDayVisible}`);
+            assert.equal(recurrenceForm.itemOption('byday').visible, config.byDayVisible, `byday editor visibility is ${config.byDayVisible}`);
+            assert.equal(recurrenceForm.itemOption('bymonthday').visible, config.byMonthDayVisible, `bymonthday editor visibility is ${config.byMonthDayVisible}`);
+            assert.equal(recurrenceForm.itemOption('bymonth').visible, config.byMonthVisible, `bymonth editor visibility is ${config.byDayVisible}`);
+        });
+    });
 
-        this.instance.option('value', 'FREQ=MONTHLY');
+    repeatOnPartsVisibilityExpectation.forEach((config) => {
+        QUnit.test(`Recurrence repeat-on editor parts visibility after changing freq, freq=${config.freq}`, function(assert) {
+            this.createInstance();
 
-        assert.notOk(recurrenceForm.itemOption('byday').visible, 'byday editor is hidden');
-        assert.ok(recurrenceForm.itemOption('bymonthday').visible, 'byday editor is hidden');
-        assert.notOk(recurrenceForm.itemOption('bymonth').visible, 'byday editor is hidden');
+            this.instance.option('value', `FREQ=${config.freq}`);
+            const recurrenceForm = this.instance.getRecurrenceForm();
 
-        this.instance.option('value', 'FREQ=YEARLY');
-
-        assert.notOk(recurrenceForm.itemOption('byday').visible, 'byday editor is hidden');
-        assert.ok(recurrenceForm.itemOption('bymonthday').visible, 'byday editor is hidden');
-        assert.ok(recurrenceForm.itemOption('bymonth').visible, 'byday editor is hidden');
+            assert.equal(recurrenceForm.itemOption('repeatOnLabel').visible, config.labelVisible, `label visibility is ${config.byDayVisible}`);
+            assert.equal(recurrenceForm.itemOption('byday').visible, config.byDayVisible, `byday editor visibility is ${config.byDayVisible}`);
+            assert.equal(recurrenceForm.itemOption('bymonthday').visible, config.byMonthDayVisible, `bymonthday editor visibility is ${config.byMonthDayVisible}`);
+            assert.equal(recurrenceForm.itemOption('bymonth').visible, config.byMonthVisible, `bymonth editor visibility is ${config.byDayVisible}`);
+        });
     });
 
     test('Recurrence editor should process values from repeat-on-editor correctly after freq changing', function(assert) {

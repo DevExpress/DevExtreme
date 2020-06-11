@@ -219,6 +219,9 @@ const RecurrenceEditor = Editor.inherit({
                     valueExpr: 'value',
                     displayExpr: 'text',
                     layout: 'horizontal',
+                    elementAttr: {
+                        class: FREQUENCY_EDITOR
+                    },
                     onValueChanged: (args) => this._valueChangedHandler(args)
                 },
                 label: {
@@ -228,7 +231,7 @@ const RecurrenceEditor = Editor.inherit({
             {
                 itemType: 'group',
                 colCount: 2,
-                cssClass: INTERVAL_EDITOR,
+                cssClass: `${INTERVAL_EDITOR}${WRAPPER_POSTFIX}`,
                 colCountByScreen: { xs: 2 },
                 items: [
                     {
@@ -241,6 +244,9 @@ const RecurrenceEditor = Editor.inherit({
                             value: interval,
                             showSpinButtons: true,
                             useLargeSpinButtons: false,
+                            elementAttr: {
+                                class: INTERVAL_EDITOR
+                            },
                             onValueChanged: (args) => this._valueChangedHandler(args)
                         },
                         label: {
@@ -256,7 +262,20 @@ const RecurrenceEditor = Editor.inherit({
             },
             {
                 itemType: 'group',
+                items: [
+                    {
+                        name: 'repeatOnLabel',
+                        colSpan: 2,
+                        template: () => messageLocalization.format('dxScheduler-recurrenceRepeatOn'),
+                        visible: freq && freq !== 'daily' && freq !== 'hourly',
+                    }
+                ]
+            },
+            {
+                itemType: 'group',
                 cssClass: REPEAT_ON_EDITOR,
+                colCount: 2,
+                colCountByScreen: { xs: 2 },
                 items: this._getRepeatOnItems(freq)
             },
             {
@@ -306,7 +325,7 @@ const RecurrenceEditor = Editor.inherit({
                 },
                 visible: freq === 'weekly',
                 label: {
-                    text: messageLocalization.format('dxScheduler-recurrenceRepeatOn')
+                    visible: false
                 }
             },
             {
@@ -325,7 +344,7 @@ const RecurrenceEditor = Editor.inherit({
                 },
                 visible: freq === 'monthly' || freq === 'yearly',
                 label: {
-                    text: messageLocalization.format('dxScheduler-recurrenceRepeatOn')
+                    visible: false
                 }
             },
             {
@@ -340,9 +359,9 @@ const RecurrenceEditor = Editor.inherit({
                     valueExpr: 'value',
                     onValueChanged: (args) => this._valueChangedHandler(args)
                 },
-                visible: freq === 'monthly' || freq === 'yearly',
+                visible: freq === 'yearly',
                 label: {
-                    text: messageLocalization.format('dxScheduler-recurrenceRepeatOn')
+                    visible: false
                 }
             },
         ];
@@ -386,6 +405,7 @@ const RecurrenceEditor = Editor.inherit({
             }
         ];
     },
+
     _renderEditors: function($container, formData) {
         this._recurrenceForm = this._createComponent($container, Form, {
             items: this._editors,
@@ -690,22 +710,23 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _changeRepeatOnVisibility() {
+
         const freq = this._recurrenceRule.rules().freq;
 
         this._recurrenceForm.itemOption('byday', 'visible', false);
         this._recurrenceForm.itemOption('bymonthday', 'visible', false);
         this._recurrenceForm.itemOption('bymonth', 'visible', false);
 
+        this._recurrenceForm.itemOption('repeatOnLabel', 'visible', freq && freq !== 'DAILY' && freq !== 'HOURLY');
+
         if(freq === 'WEEKLY') {
             this._recurrenceForm.itemOption('byday', 'visible', true);
         }
         if(freq === 'MONTHLY') {
-            this._recurrenceForm.itemOption('bymonthday', 'label', { visible: true });
             this._recurrenceForm.itemOption('bymonthday', 'visible', true);
         }
         if(freq === 'YEARLY') {
             this._recurrenceForm.itemOption('bymonthday', 'visible', true);
-            this._recurrenceForm.itemOption('bymonthday', 'label', { visible: false });
             this._recurrenceForm.itemOption('bymonth', 'visible', true);
         }
     },
