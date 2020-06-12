@@ -15,6 +15,7 @@ import NumberBox from '../number_box';
 import RadioGroup from '../radio_group';
 import publisherMixin from './ui.scheduler.publisher_mixin';
 import { getRecurrenceProcessor } from './recurrence';
+import typeUtils from '../../core/utils/type';
 
 const RECURRENCE_EDITOR = 'dx-recurrence-editor';
 const LABEL_POSTFIX = '-label';
@@ -192,6 +193,26 @@ const RecurrenceEditor = Editor.inherit({
         } else {
             this._$container.hide();
         }
+    },
+
+    getEditorByField: function(fieldName) {
+        let editor = this.getRecurrenceForm().getEditor(fieldName);
+
+        if(!typeUtils.isDefined(editor)) {
+            switch(fieldName) {
+                case 'byday':
+                    editor = this._weekEditor;
+                    break;
+                case 'count':
+                    editor = this._repeatCountEditor;
+                    break;
+                case 'until':
+                    editor = this._repeatUntilDate;
+                    break;
+            }
+        }
+
+        return editor;
     },
 
     _prepareEditors: function(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, allowTimeZoneEditing, readOnly) {

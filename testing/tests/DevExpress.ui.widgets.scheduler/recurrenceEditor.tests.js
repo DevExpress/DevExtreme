@@ -6,6 +6,7 @@ import RecurrenceEditor from 'ui/scheduler/ui.scheduler.recurrence_editor';
 import SelectBox from 'ui/select_box';
 import NumberBox from 'ui/number_box';
 import RadioGroup from 'ui/radio_group';
+import ButtonGroup from 'ui/button_group';
 import { getRecurrenceProcessor } from 'ui/scheduler/recurrence';
 import dateLocalization from 'localization/date';
 
@@ -449,10 +450,20 @@ module('Repeat-on editor', repeatOnModuleConfig, () => {
     test('Recurrence repeat-on editor should contain repeat-on-week editor, when freq = weekly', function(assert) {
         this.createInstance({ value: 'FREQ=WEEKLY' });
 
-        const $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR);
-        const $repeatOnWeek = $repeatOn.find('.' + RECURRENCE_BUTTON_GROUP);
+        const buttonGroup = this.instance.getEditorByField('byday');
 
-        assert.equal($repeatOnWeek.length, 1, 'repeat-on-week editor was rendered');
+        assert.ok(buttonGroup instanceof ButtonGroup, 'repeat-on-week editor was rendered');
+        assert.ok(buttonGroup.$element().hasClass(RECURRENCE_BUTTON_GROUP), 'repeat-on-week editor has correct class');
+    });
+
+    test('Repeat-on-week editor should have right defaults', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY' });
+
+        const buttonGroup = this.instance.getEditorByField('byday');
+
+        assert.equal(buttonGroup.option('selectionMode'), 'multiple', 'Selection mode is ok');
+        assert.equal(buttonGroup.option('keyExpr'), 'key', 'KeyExpr mode is ok');
+        assert.equal(buttonGroup.option('field'), 'byday', 'Field mode is ok');
     });
 
     test('Recurrence repeat-on editor should process values correctly, freq = weekly', function(assert) {
