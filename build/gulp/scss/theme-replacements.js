@@ -380,11 +380,7 @@ module.exports = {
     ],
     'recurrenceEditor': [
         { import: '../scheduler/sizes', type: 'index' },
-        { import: '../../base/recurrenceEditor', type: 'index', withVars: [
-            'base-border-color',
-            'SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET',
-            'SCHEDULER_RECURRENCE_REPEAT_LABEL_OFFSET',
-        ] },
+        { import: '../../base/recurrenceEditor', type: 'index' },
     ],
     'scheduler': [
         { import: '../../base/mixins', type: 'index' },
