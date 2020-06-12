@@ -2001,48 +2001,6 @@
             padding-right: @SCHEDULER_APPOINTMENT_FORM_LABEL_PADDING;
         }
 
-        .dx-scheduler-recurrence-rule-item.dx-field-item {
-            padding-top: @SCHEDULER_RECURRENCE_EDITOR_TOP_OFFSET;
-
-            &.dx-label-h-align.dx-flex-layout {
-                -webkit-box-align: start; // stylelint-disable-line property-no-vendor-prefix
-                align-items: start;
-            }
-
-            .dx-field-value,
-            .dx-field-label {
-                float: none;
-
-                .dx-recurrence-numberbox-repeat-count {
-                    float: left;
-                }
-            }
-
-            .dx-field-item-label:first-child {
-                padding-top: @SCHEDULER_RECURRENCE_REPEAT_LABEL_OFFSET;
-            }
-
-            .dx-recurrence-numberbox-interval-label,
-            .dx-recurrence-repeat-on-label,
-            .dx-recurrence-repeat-end-container-label {
-                position: absolute;
-
-                // NOTE: labels allignment in recurrence editor with the base offset
-                left: @SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET - 2px;
-                padding-right: 10px;
-            }
-
-            .dx-recurrence-radiogroup-repeat-type {
-                position: relative;
-                left: @SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET;
-                top: @SCHEDULER_RECURRENCE_EDITOR_TOP_OFFSET;
-            }
-
-            .dx-field-value {
-                display: inline-block;
-            }
-        }
-
         .dx-field {
             min-height: 0;
         }
