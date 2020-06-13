@@ -7,6 +7,7 @@ import SelectBox from 'ui/select_box';
 import NumberBox from 'ui/number_box';
 import RadioGroup from 'ui/radio_group';
 import ButtonGroup from 'ui/button_group';
+import DateBox from 'ui/date_box';
 import { getRecurrenceProcessor } from 'ui/scheduler/recurrence';
 import dateLocalization from 'localization/date';
 
@@ -70,6 +71,36 @@ module('Recurrence Editor rendering', moduleConfig, () => {
     });
 });
 
+module('GetEditorByField', moduleConfig, () => {
+    const cases = [
+        { field: 'freq', isNecessarily: true, editorType: SelectBox },
+        { field: 'interval', isNecessarily: true, editorType: NumberBox },
+        { field: 'count', isNecessarily: true, editorType: NumberBox },
+        { field: 'until', isNecessarily: true, editorType: DateBox },
+        { field: 'byday', isNecessarily: false, editorType: ButtonGroup, freq: 'FREQ=WEEKLY' },
+        { field: 'bymonth', isNecessarily: false, editorType: SelectBox, freq: 'FREQ=YEARLY' },
+        { field: 'bymonthday', isNecessarily: false, editorType: NumberBox, freq: 'FREQ=MONTHLY' }
+
+    ];
+
+    cases.forEach((config) => {
+        QUnit.test(`getEditorByField should return editor if it's visible, field=${config.field}`, function(assert) {
+            this.createInstance({ value: 'FREQ=DAILY' });
+            let editor = this.instance.getEditorByField(config.field);
+
+            if(!config.isNecessarily) {
+                assert.strictEqual(editor, undefined, 'editor is hidden');
+
+                this.instance.option('value', config.freq);
+                editor = this.instance.getEditorByField(config.field);
+            }
+
+            assert.ok(editor instanceof config.editorType, `returned editor is ${config.editorType}`);
+            assert.equal(editor.option('field'), config.field, 'returned editor has correct field');
+        });
+    });
+});
+
 module('Frequency editor', moduleConfig, () => {
     test('Recurrence editor should contain select box for select freq', function(assert) {
         this.createInstance({ value: 'FREQ=WEEKLY' });
@@ -81,6 +112,13 @@ module('Frequency editor', moduleConfig, () => {
         this.createInstance({ value: 'FREQ=WEEKLY' });
 
         assert.ok(this.freqEditor.$element().hasClass(FREQUENCY_EDITOR), 'Freq editor class is correct');
+    });
+
+    test('Frequency editor should have right defaults', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY' });
+
+        assert.equal(this.freqEditor.option('value'), 'weekly', 'Value is right');
+        assert.equal(this.freqEditor.option('layout'), 'horizontal', 'Layout is right');
     });
 
     test('Freq editor should have right items', function(assert) {
@@ -398,14 +436,14 @@ module('Interval editor', intervalModuleConfig, () => {
         assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;INTERVAL=3', 'Recurrence editor has right value');
     });
 
-    const textExpectation = [
+    const textCases = [
         { freq: 'WEEKLY', expectedText: 'week(s)' },
         { freq: 'DAILY', expectedText: 'day(s)' },
         { freq: 'MONTHLY', expectedText: 'month(s)' },
         { freq: 'YEARLY', expectedText: 'year(s)' }
     ];
 
-    textExpectation.forEach((config) => {
+    textCases.forEach((config) => {
         QUnit.test(`Recurrence interval label should have correct text on init, freq=${config.freq}`, function(assert) {
             this.createInstance({
                 value: `FREQ=${config.freq}`
@@ -417,7 +455,7 @@ module('Interval editor', intervalModuleConfig, () => {
         });
     });
 
-    textExpectation.forEach((config) => {
+    textCases.forEach((config) => {
         QUnit.test(`Recurrence interval label should have correct text after changing freq, freq=${config.freq}`, function(assert) {
             this.createInstance();
 
@@ -631,7 +669,7 @@ module('Repeat-on editor', repeatOnModuleConfig, () => {
         assert.equal(monthEditor.option('value'), 10, 'month was set correctly');
     });
 
-    const repeatOnPartsVisibilityExpectation = [
+    const repeatOnPartsVisibilityCases = [
         { freq: 'WEEKLY', byDayVisible: true, byMonthDayVisible: false, byMonthVisible: false, labelVisible: true },
         { freq: 'DAILY', byDayVisible: false, byMonthDayVisible: false, byMonthVisible: false, labelVisible: false },
         { freq: 'HOURLY', byDayVisible: false, byMonthDayVisible: false, byMonthVisible: false, labelVisible: false },
@@ -639,7 +677,7 @@ module('Repeat-on editor', repeatOnModuleConfig, () => {
         { freq: 'YEARLY', byDayVisible: false, byMonthDayVisible: true, byMonthVisible: true, labelVisible: true }
     ];
 
-    repeatOnPartsVisibilityExpectation.forEach((config) => {
+    repeatOnPartsVisibilityCases.forEach((config) => {
         QUnit.test(`Recurrence repeat-on editor parts visibility on init, freq=${config.freq}`, function(assert) {
             this.createInstance({
                 value: `FREQ=${config.freq}`
@@ -654,7 +692,7 @@ module('Repeat-on editor', repeatOnModuleConfig, () => {
         });
     });
 
-    repeatOnPartsVisibilityExpectation.forEach((config) => {
+    repeatOnPartsVisibilityCases.forEach((config) => {
         QUnit.test(`Recurrence repeat-on editor parts visibility after changing freq, freq=${config.freq}`, function(assert) {
             this.createInstance();
 

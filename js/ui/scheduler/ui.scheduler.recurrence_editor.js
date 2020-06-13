@@ -474,10 +474,14 @@ const RecurrenceEditor = Editor.inherit({
         this.option('value', this._recurrenceRule.recurrenceString() || '');
     },
 
+    _getStartDate() {
+        return this.option('startDate') || new Date();
+    },
+
     _daysOfWeekByRules() {
         let daysByRule = this._recurrenceRule.daysFromByDayRule();
-        if(!daysByRule.length && this.option('startDate')) {
-            daysByRule = [days[this.option('startDate').getDay()]];
+        if(!daysByRule.length) {
+            daysByRule = [days[this._getStartDate().getDay()]];
         }
 
         return daysByRule;
@@ -486,8 +490,8 @@ const RecurrenceEditor = Editor.inherit({
     _dayOfMonthByRules() {
         let dayByRule = this._recurrenceRule.rules()['bymonthday'];
 
-        if(!dayByRule && this.option('startDate')) {
-            dayByRule = this.option('startDate').getDate();
+        if(!dayByRule) {
+            dayByRule = this._getStartDate().getDate();
         }
 
         return dayByRule;
@@ -496,8 +500,8 @@ const RecurrenceEditor = Editor.inherit({
     _monthOfYearByRules() {
         let monthByRule = this._recurrenceRule.rules()['bymonth'];
 
-        if(!monthByRule && this.option('startDate')) {
-            monthByRule = this.option('startDate').getMonth() + 1;
+        if(!monthByRule) {
+            monthByRule = this._getStartDate().getMonth() + 1;
         }
 
         return monthByRule;
