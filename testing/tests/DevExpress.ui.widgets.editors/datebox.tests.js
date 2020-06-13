@@ -2148,6 +2148,17 @@ QUnit.module('datebox w/ calendar', {
         assert.deepEqual(getInstanceWidget(this.fixture.dateBox).option('value'), date);
     });
 
+    QUnit.test('popup should have correct width after editor width runtime change (T897820)', function(assert) {
+        this.fixture.dateBox.option('width', 300);
+        this.fixture.dateBox.option('dropDownOptions.width', '50%');
+        this.fixture.dateBox.option('opened', true);
+
+        this.fixture.dateBox.option('width', 700);
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.strictEqual($overlayContent.outerWidth(), 350, 'overlay content width is correct');
+    });
+
     QUnit.test('DateBox must update its value when a date is selected in the calendar when applyValueMode=\'instantly\'', function(assert) {
         const date = new Date(2011, 11, 11);
 
@@ -3454,6 +3465,17 @@ QUnit.module('datebox w/ time list', {
 
         const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
         assert.strictEqual($overlayContent.outerWidth(), 300, 'overlay content width is correct');
+    });
+
+    QUnit.test('popup should have correct width after editor width runtime change', function(assert) {
+        this.dateBox.option('width', 300);
+        this.dateBox.option('dropDownOptions.width', '50%');
+        this.dateBox.option('opened', true);
+
+        this.dateBox.option('width', 700);
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.strictEqual($overlayContent.outerWidth(), 350, 'overlay content width is correct');
     });
 
     QUnit.test('list should contain correct values if min/max does not specified', function(assert) {

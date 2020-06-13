@@ -57,6 +57,11 @@ const DateBoxStrategy = Class.inherit({
 
     popupConfig: abstract,
 
+    _dimensionChanged: function() {
+        const popup = this._getPopup();
+        popup && popup.repaint();
+    },
+
     renderPopupContent: function() {
         const popup = this._getPopup();
         this._renderWidget();

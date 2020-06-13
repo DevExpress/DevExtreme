@@ -483,6 +483,11 @@ const SelectBox = DropDownList.inherit({
         }
     },
 
+    _renderDimensions: function() {
+        this.callBase();
+        this._dimensionChanged();
+    },
+
     _isValueEqualInputText: function() {
         const initialSelectedItem = this.option('selectedItem');
         const value = this._displayGetter(initialSelectedItem);

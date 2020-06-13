@@ -957,6 +957,23 @@ QUnit.module('widget options', moduleSetup, () => {
         assert.strictEqual($overlayContent.outerWidth(), 200, 'overlay content width is correct after editor width runtime change');
     });
 
+    QUnit.test('popup should have correct width after editor width runtime change (T897820)', function(assert) {
+        const instance = $('#selectBox').dxSelectBox({
+            width: 600,
+            dropDownOptions: {
+                width: '50%'
+            },
+            opened: true
+        }).dxSelectBox('instance');
+
+        const $overlayContent = $('.dx-overlay-content');
+        assert.strictEqual($overlayContent.outerWidth(), 300, 'overlay content width is correct');
+
+        instance.option('width', 400);
+
+        assert.strictEqual($overlayContent.outerWidth(), 200, 'overlay content width is correct after editor width runtime change');
+    });
+
     QUnit.test('option onValueChanged', function(assert) {
         assert.expect(4);
 
