@@ -329,3 +329,165 @@ QUnit.test('Reset editor\'s value when set formData: {dataField1: a}', function(
         assert.deepEqual(editor.option('value'), editor._getDefaultOptions().value, `a default value of the ${dataField} editor`);
     });
 });
+
+QUnit.module('UpdateFormData for Textbox editor field', () => {
+    ['2', null, undefined, 'no member'].forEach(oldValue => {
+        ['3', null, undefined, 'no member'].forEach(newValue => {
+            QUnit.test(`FormData = { a: '1', b: ${oldValue} } -> UpdateFormData({ b: ${newValue} })`, function(assert) {
+                const oldFormData = { a: '1' };
+                if(oldValue !== 'no member') {
+                    oldFormData['b'] = oldValue;
+                }
+
+                const form = $('#form').dxForm({
+                    formData: oldFormData,
+                    items: [
+                        { dataField: 'a', editorType: 'dxTextBox' },
+                        { dataField: 'b', editorType: 'dxTextBox' }
+                    ],
+                }).dxForm('instance');
+                const expectedOldValue = (oldValue === 'no member' || oldValue === undefined) ? '' : oldValue;
+                assert.equal(form.getEditor('a').option('value'), '1');
+                assert.equal(form.getEditor('b').option('value'), expectedOldValue);
+
+                const newFormData = {};
+                if(newValue !== 'no member') {
+                    newFormData['b'] = newValue;
+                }
+
+                form.updateData(newFormData);
+                const expectedNewValue = newValue === 'no member' ? expectedOldValue : newValue;
+                assert.equal(form.getEditor('a').option('value'), '1');
+                assert.equal(form.getEditor('b').option('value'), expectedNewValue);
+            });
+        });
+
+        QUnit.test(`FormData = { a: '1', b: ${oldValue} } -> option('formData', {})`, function(assert) {
+            const oldFormData = { a: '1' };
+            if(oldValue !== 'no member') {
+                oldFormData['b'] = oldValue;
+            }
+            const form = $('#form').dxForm({
+                formData: oldFormData,
+                items: [
+                    { dataField: 'a', editorType: 'dxTextBox' },
+                    { dataField: 'b', editorType: 'dxTextBox' }
+                ],
+            }).dxForm('instance');
+
+            form.option('formData', {});
+            assert.equal(form.getEditor('a').option('value'), '');
+            assert.equal(form.getEditor('b').option('value'), '');
+        });
+    });
+});
+
+QUnit.module('UpdateFormData for Checkbox editor field', () => {
+    function checkCheckboxEditor(editor, value) {
+        QUnit.assert.equal(editor.option('value'), value, `editor has ${value} value`);
+
+        const $checkBox = $(editor.element());
+        QUnit.assert.equal($checkBox.hasClass('dx-checkbox-checked'), value === true, 'checkbox has checked class if it has selected');
+        QUnit.assert.equal($checkBox.hasClass('dx-checkbox-indeterminate'), value === undefined, 'checkbox has indeterminate class if it has undefied value');
+    }
+
+    [true, false, undefined, null, 'no member'].forEach(oldBoolValue => {
+        [true, false, undefined, null, 'no member'].forEach(newBoolValue => {
+            QUnit.test(`FormData = { a: true, b:  ${oldBoolValue}}-> updateFormData({ b: ${newBoolValue} })`, function() {
+                const oldFormData = { a: true };
+                if(oldBoolValue !== 'no member') {
+                    oldFormData['b'] = oldBoolValue;
+                }
+
+                const form = $('#form').dxForm({
+                    formData: oldFormData,
+                    items: [
+                        { dataField: 'a', editorType: 'dxCheckBox' },
+                        { dataField: 'b', editorType: 'dxCheckBox' }
+                    ],
+                }).dxForm('instance');
+
+                const expectedOldValue = (oldBoolValue === undefined || oldBoolValue === 'no member') ? false : oldBoolValue;
+                checkCheckboxEditor(form.getEditor('a'), true);
+                checkCheckboxEditor(form.getEditor('b'), expectedOldValue);
+
+                const newFormData = {};
+                if(newBoolValue !== 'no member') {
+                    newFormData['b'] = newBoolValue;
+                }
+
+                form.updateData(newFormData);
+                const expectedNewValue = newBoolValue === 'no member' ? expectedOldValue : newBoolValue;
+                checkCheckboxEditor(form.getEditor('a'), true);
+                checkCheckboxEditor(form.getEditor('b'), expectedNewValue);
+            });
+
+            QUnit.test(`FormData = { innerObject: { a: true, b:  ${oldBoolValue} }} -> updateFormData({ innerObject.b = ${newBoolValue })`, function() {
+                const oldFormData = { innerObject: { a: true } };
+                if(oldBoolValue !== 'no member') {
+                    oldFormData.innerObject['b'] = oldBoolValue;
+                }
+
+                const form = $('#form').dxForm({
+                    formData: oldFormData,
+                    items: [
+                        { dataField: 'innerObject.a', editorType: 'dxCheckBox' },
+                        { dataField: 'innerObject.b', editorType: 'dxCheckBox' }
+                    ],
+                }).dxForm('instance');
+
+                const expectedOldValue = (oldBoolValue === undefined || oldBoolValue === 'no member') ? false : oldBoolValue;
+                checkCheckboxEditor(form.getEditor('innerObject.a'), true);
+                checkCheckboxEditor(form.getEditor('innerObject.b'), expectedOldValue);
+
+                const newFormData = { innerObject: { a: 1 } };
+                if(newBoolValue !== 'no member') {
+                    newFormData.innerObject['b'] = newBoolValue;
+                }
+
+                form.updateData(newFormData);
+                const expectedNewValue = newBoolValue === 'no member' ? expectedOldValue : newBoolValue;
+                checkCheckboxEditor(form.getEditor('innerObject.a'), true);
+                checkCheckboxEditor(form.getEditor('innerObject.b'), expectedNewValue);
+            });
+        });
+
+        QUnit.test(`FormData = { a: true, b:  ${oldBoolValue}} -> option('formData', {})`, function() {
+            const oldFormData = { a: true };
+            if(oldBoolValue !== 'no member') {
+                oldFormData['b'] = oldBoolValue;
+            }
+
+            const form = $('#form').dxForm({
+                formData: oldFormData,
+                items: [
+                    { dataField: 'a', editorType: 'dxCheckBox' },
+                    { dataField: 'b', editorType: 'dxCheckBox' }
+                ],
+            }).dxForm('instance');
+
+            form.option('formData', {});
+            checkCheckboxEditor(form.getEditor('a'), false);
+            checkCheckboxEditor(form.getEditor('b'), false);
+        });
+
+        QUnit.test(`FormData = { innerObject: {a: true, b:  ${oldBoolValue} }} -> option('formData', {})`, function() {
+            const oldFormData = { innerObject: { a: true } };
+            if(oldBoolValue !== 'no member') {
+                oldFormData.innerObject['b'] = oldBoolValue;
+            }
+
+            const form = $('#form').dxForm({
+                formData: oldFormData,
+                items: [
+                    { dataField: 'a', editorType: 'dxCheckBox' },
+                    { dataField: 'b', editorType: 'dxCheckBox' }
+                ],
+            }).dxForm('instance');
+
+            form.option('formData', {});
+            checkCheckboxEditor(form.getEditor('a'), false);
+            checkCheckboxEditor(form.getEditor('b'), false);
+        });
+    });
+});
