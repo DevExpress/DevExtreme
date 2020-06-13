@@ -317,6 +317,7 @@ const RecurrenceEditor = Editor.inherit({
         return [
             {
                 dataField: 'byday',
+                colSpan: 2,
                 template: (data, itemElement) =>{
                     const firstDayOfWeek = this._getFirstDayOfWeek();
                     const byDay = this._recurrenceRule.rules()['byday'] ?
