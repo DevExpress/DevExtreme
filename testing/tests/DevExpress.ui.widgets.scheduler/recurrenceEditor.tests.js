@@ -42,7 +42,7 @@ module('Recurrence Editor rendering', moduleConfig, () => {
         this.createInstance();
         assert.ok(this.instance instanceof RecurrenceEditor, 'dxRecurrenceEditor was initialized');
 
-        assert.ok(this.instance.$element().hasClass('dx-recurrence-editor'));
+        assert.ok(this.instance.$element().hasClass('dx-recurrence-editor'), 'dxRecurrence editor has right class');
     });
 
     test('Recurrence editor should have correct default options', function(assert) {
