@@ -56,10 +56,12 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     _renderIndicator(height, rtlOffset, $container, groupCount) {
-        for(let i = 0; i < groupCount; i++) {
+        const repeatCount = this.option('groupByDate') ? 1 : groupCount; // NOTE: groupByDate without grouping or groupOrientation
+
+        for(let i = 0; i < repeatCount; i++) {
             const $indicator = this._createIndicator($container);
 
-            $indicator.width(this.getCellWidth());
+            $indicator.width(this.option('groupByDate') ? this.getCellWidth() * groupCount : this.getCellWidth());
             this._groupedStrategy.shiftIndicator($indicator, height, rtlOffset, i);
         }
     }

@@ -737,7 +737,7 @@ const stubInvokeMethod = function(instance, options) {
         assert.roughEqual(parseInt($bottomShader.css('left')), 770, 1.5, 'Bottom indicator has correct left');
     });
 
-    QUnit.test('DateTimeIndicator should have correct positions, Week view with groupByDate', function(assert) {
+    QUnit.test('DateTimeIndicator should have correct position and size, Week view with groupByDate', function(assert) {
         this.instance.option({
             groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
             groupByDate: true,
@@ -746,10 +746,11 @@ const stubInvokeMethod = function(instance, options) {
 
         const $element = this.instance.$element();
         const $indicator = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+        const cellWidth = $element.find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
 
-        assert.equal($indicator.length, 2, 'Indicator count is correct');
+        assert.equal($indicator.length, 1, 'Indicator count is correct');
         assert.roughEqual($indicator.eq(0).position().left, 256, 1.5, 'Indicator left is OK');
-        assert.roughEqual($indicator.eq(1).position().left, 320, 1.5, 'Indicator left is OK');
+        assert.roughEqual($indicator.outerWidth(), 2 * cellWidth, 1, 'Indicator has correct width');
     });
 })('DateTime indicator on Week View');
 
