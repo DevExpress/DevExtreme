@@ -22,14 +22,14 @@ import { focusable } from '../ui/widget/selectors';
 import { isFakeClickEvent } from '../events/utils';
 import BaseWidgetProps from './utils/base-props';
 
-const getStyles = ({ width, height, style }) => {
+const getStyles = ({ width, height, styles }) => {
   const computedWidth = typeof width === 'function' ? width() : width;
   const computedHeight = typeof height === 'function' ? height() : height;
 
   return {
     height: computedHeight ?? undefined,
     width: computedWidth ?? undefined,
-    ...style,
+    ...styles,
   };
 };
 
@@ -90,7 +90,7 @@ export const viewFunction = (viewModel: Widget) => (
     title={viewModel.props.hint}
     hidden={!viewModel.props.visible}
     className={viewModel.cssClasses}
-    style={viewModel.styles}
+    style={viewModel.computedStyles}
     {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
   >
     {viewModel.props.children}
@@ -125,7 +125,7 @@ export class WidgetProps extends BaseWidgetProps {
 
   @Event() onVisibilityChange?: (args: boolean) => undefined;
 
-  @OneWay() style?: { [name: string]: any };
+  @OneWay() styles?: { [name: string]: any };
 }
 
 @Component({
@@ -322,10 +322,10 @@ export default class Widget extends JSXComponent(WidgetProps) {
     return { ...attrsWithoutClass, ...arias };
   }
 
-  get styles() {
-    const { width, height, style } = this.props;
+  get computedStyles() {
+    const { width, height, styles } = this.props;
 
-    return getStyles({ width, height, style });
+    return getStyles({ width, height, styles });
   }
 
   get cssClasses() {

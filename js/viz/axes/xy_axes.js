@@ -996,7 +996,7 @@ module.exports = {
                 seriesData.maxVisible = viewport.max;
             }
 
-            seriesData.breaks = that._getScaleBreaks(that._options, {
+            seriesData.breaks = that._initialBreaks = that._getScaleBreaks(that._options, {
                 minVisible: seriesData.minVisible,
                 maxVisible: seriesData.maxVisible
             }, that._series, that.isArgumentAxis);
