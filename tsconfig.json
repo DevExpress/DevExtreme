@@ -35,13 +35,9 @@
     },
     "outDir": "dist"
   },
-  "include": [
-    "./js/renovation",
-  ],
   "exclude": [
     "artifacts",
     "node_modules",
-    "**/*.tests.ts*",
     "**/dist"
   ]
 }
