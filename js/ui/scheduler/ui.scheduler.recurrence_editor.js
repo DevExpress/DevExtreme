@@ -533,10 +533,6 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _disableRepeatEndParts(value = this._recurrenceRule.getRepeatEndRule()) {
-        if(!this._repeatCountEditor && !this._repeatUntilDate) {
-            return;
-        }
-
         if(value === 'until') {
             this._repeatCountEditor.option('disabled', true);
             this._repeatUntilDate.option('disabled', false);
@@ -583,13 +579,11 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _repeatCountValueChangeHandler(args) {
-        if(this._recurrenceRule.getRepeatEndRule() !== 'count') {
-            return;
+        if(this._recurrenceRule.getRepeatEndRule() === 'count') {
+            const value = args.value;
+            this._recurrenceRule.makeRule('count', value);
+            this._changeEditorValue();
         }
-
-        const value = args.value;
-        this._recurrenceRule.makeRule('count', value);
-        this._changeEditorValue();
     },
 
     _formatUntilDate(date) {
@@ -627,16 +621,14 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _repeatUntilValueChangeHandler(args) {
-        if(this._recurrenceRule.getRepeatEndRule() !== 'until') {
-            return;
+        if(this._recurrenceRule.getRepeatEndRule() === 'until') {
+            const untilDate = this._formatUntilDate(new Date(args.value));
+
+            this._repeatUntilDate.option('value', untilDate);
+
+            this._recurrenceRule.makeRule('until', untilDate);
+            this._changeEditorValue();
         }
-
-        const untilDate = this._formatUntilDate(new Date(args.value));
-
-        this._repeatUntilDate.option('value', untilDate);
-
-        this._recurrenceRule.makeRule('until', untilDate);
-        this._changeEditorValue();
     },
 
     _valueChangedHandler(args) {
@@ -647,17 +639,13 @@ const RecurrenceEditor = Editor.inherit({
             this.option('value', '');
         } else {
             this._recurrenceRule.makeRule(field, value);
-            this._makeRepeatOnRule(field, value);
+            field === 'freq' && this._makeRepeatOnRule(value);
             this._changeEditorValue();
         }
     },
 
-    _makeRepeatOnRule(field, value) {
-        if(field !== 'freq') {
-            return;
-        }
-
-        if(value === 'daily') {
+    _makeRepeatOnRule(value) {
+        if(value === 'daily' || value === 'hourly') {
             this._recurrenceRule.makeRule('byday', '');
             this._recurrenceRule.makeRule('bymonth', '');
             this._recurrenceRule.makeRule('bymonthday', '');
@@ -688,12 +676,12 @@ const RecurrenceEditor = Editor.inherit({
                 this._changeRepeatOnVisibility();
                 this._changeRepeatIntervalLabel();
                 this._disableRepeatEndParts();
-                this._changeEditorsValues(this._recurrenceRule.getRules());
+                this._changeEditorsValue(this._recurrenceRule.getRules());
 
                 this.callBase(args);
                 break;
             case 'startDate':
-                this._makeRepeatOnRule('freq', this._recurrenceRule.getRules().freq);
+                this._makeRepeatOnRule(this._recurrenceRule.getRules().freq);
 
                 if(isDefined(this._recurrenceRule.getRecurrenceString())) {
                     this._changeEditorValue();
@@ -749,15 +737,17 @@ const RecurrenceEditor = Editor.inherit({
         freq && this._recurrenceForm.itemOption('intervalLabel', 'template', messageLocalization.format(`dxScheduler-recurrenceRepeat${freq.charAt(0).toUpperCase()}${freq.substr(1).toLowerCase()}`));
     },
 
-    _changeEditorsValues(rules) {
+    _changeEditorsValue(rules) {
         this._recurrenceForm.getEditor('freq').option('value', (rules.freq || frequenciesMessages[defaultRecurrenceTypeIndex].value).toLowerCase());
+
         this._changeDayOfMonthValue();
+        this._changeMonthOfYearValue();
 
         this._changeIntervalValue(rules.interval);
+
         this._changeRepeatCountValue();
         this._changeRepeatEndValue();
         this._changeRepeatUntilValue();
-        this._changeMonthOfYearValue();
     },
 
     _changeIntervalValue(value) {
@@ -771,45 +761,32 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _changeDayOfMonthValue() {
-        const isVisible = this._recurrenceForm.itemOption('bymonthday').visible;
-        if(!isVisible) {
-            return;
+        const isEditorVisible = this._recurrenceForm.itemOption('bymonthday').visible;
+        if(isEditorVisible) {
+            const day = this._dayOfMonthByRules();
+            this._recurrenceForm.getEditor('bymonthday').option('value', day);
         }
+    },
 
-        const day = this._dayOfMonthByRules() || 1;
-        this._recurrenceForm.getEditor('bymonthday').option('value', day);
+    _changeMonthOfYearValue() {
+        const isEditorVisible = this._recurrenceForm.itemOption('bymonth').visible;
+        if(isEditorVisible) {
+            const month = this._monthOfYearByRules();
+            this._recurrenceForm.getEditor('bymonth').option('value', month);
+        }
     },
 
     _changeRepeatCountValue() {
-        if(!this._$repeatCountEditor) {
-            return;
-        }
-
         const count = this._recurrenceRule.getRules().count || 1;
         this._repeatCountEditor.option('value', count);
     },
 
     _changeRepeatUntilValue() {
-        if(!this._$repeatDateEditor) {
-            return;
-        }
-
         this._repeatUntilDate.option('value', this._getUntilValue());
     },
 
     _getUntilValue() {
         return this._recurrenceRule.getRules().until || this._formatUntilDate(new Date());
-    },
-
-    _changeMonthOfYearValue() {
-        const isEditorVisible = this._recurrenceForm.itemOption('bymonth').visible;
-
-        if(!isEditorVisible) {
-            return;
-        }
-
-        const month = this._monthOfYearByRules() || 1;
-        this._recurrenceForm.getEditor('bymonth').option('value', month);
     },
 
     toggle() {
