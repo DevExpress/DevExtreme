@@ -874,7 +874,7 @@ QUnit.test('Recurrence Editor should have right freq editor value if recurrence 
 
     const form = this.instance.getAppointmentDetailsForm();
     const recurrenceEditor = form.getEditor('recurrenceRule');
-    const freqEditor = recurrenceEditor.getRecurrenceForm().getEditor('freq');
+    const freqEditor = recurrenceEditor.getEditorByField('freq');
 
     assert.equal(freqEditor.option('value'), 'weekly', 'value is right');
 });
@@ -906,7 +906,7 @@ QUnit.test('Recurrence editor should change value if freq editor value changed',
 
     const form = this.instance.getAppointmentDetailsForm();
     const recurrenceEditor = form.getEditor('recurrenceRule');
-    const freqEditor = recurrenceEditor.getRecurrenceForm().getEditor('freq');
+    const freqEditor = recurrenceEditor.getEditorByField('freq');
 
     freqEditor.option('value', 'daily');
 
