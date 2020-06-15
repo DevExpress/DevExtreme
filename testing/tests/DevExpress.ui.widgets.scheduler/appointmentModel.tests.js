@@ -750,7 +750,7 @@ const DataSource = require('data/data_source/data_source').DataSource;
         const appts = appointmentModel.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7,
-            min: new Date(2015, 0, 1).toString(),
+            min: new Date(2014, 11, 31).toString(),
             max: new Date(2015, 0, 1, 23, 59).toString()
         });
 

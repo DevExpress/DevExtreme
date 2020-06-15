@@ -81,6 +81,7 @@ import themes from 'ui/themes';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE, DX_ICON_EXPORT_SELECTED_CONTENT_CODE } from '../../helpers/checkDxFontIconHelper.js';
 import 'ui/scroll_view';
+import 'ui/drop_down_box';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 
 
@@ -124,6 +125,7 @@ const createDataGrid = function(options, $container) {
     const dataGrid = dataGridElement.dxDataGrid('instance');
     return dataGrid;
 };
+
 
 QUnit.module('Initialization', baseModuleConfig, () => {
 
@@ -8832,6 +8834,91 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         assert.notOk(onScrollHandler.called, 'onScroll handler is not called');
     });
+
+    QUnit.test('Error row should be shown when state loading failed (T894590)', function(assert) {
+        // arrange
+        const errorText = 'test error';
+        const contentReadyHandler = sinon.spy();
+        const dataErrorOccurred = sinon.spy();
+        const gridOptions = {
+            dataSource: [{ id: 1 }],
+            columns: ['id'],
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return $.Deferred().reject(errorText).promise();
+                }
+            },
+            onContentReady: contentReadyHandler,
+            onDataErrorOccurred: dataErrorOccurred
+        };
+        const dataGrid = createDataGrid(gridOptions);
+        this.clock.tick();
+
+        const $headerRow = $(dataGrid.element()).find('.dx-header-row');
+        const $errorRow = $(dataGrid.element()).find('.dx-error-row');
+        const renderedRowCount = dataGrid.getVisibleRows().length;
+
+        // assert
+        assert.ok(contentReadyHandler.called, 'onContentReady is called');
+        assert.equal(dataErrorOccurred.callCount, 1, 'onDataErrorOccurred is called');
+        assert.equal(dataErrorOccurred.getCall(0).args[0].error, errorText, 'error text is correct');
+        assert.equal(renderedRowCount, 0, 'there are no rendered data rows');
+        assert.ok($headerRow.length, 'header row is rendered');
+        assert.ok($errorRow.length, 'error row is rendered');
+        assert.equal($errorRow.find('.dx-error-message').text(), errorText, 'error text is correct');
+    });
+
+    QUnit.test('Error row should display the default error message when reject is called without a parameter in stateStoring.customLoad (T894590)', function(assert) {
+        // arrange
+        const gridOptions = {
+            dataSource: [],
+            columns: ['id'],
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return $.Deferred().reject().promise();
+                }
+            }
+        };
+        const dataGrid = createDataGrid(gridOptions);
+        this.clock.tick();
+
+        const $errorRow = $(dataGrid.element()).find('.dx-error-row');
+
+        // assert
+        assert.ok($errorRow.length, 'error row is rendered');
+        assert.equal($errorRow.find('.dx-error-message').text(), 'Unknown error', 'default error message');
+    });
+
+    QUnit.test('Error row should not be displayed when reject is called in stateStoring.customLoad and errorRowEnabled === false (T894590)', function(assert) {
+        // arrange
+        const dataErrorOccurred = sinon.spy();
+        const gridOptions = {
+            dataSource: [],
+            columns: ['id'],
+            errorRowEnabled: false,
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return $.Deferred().reject().promise();
+                }
+            },
+            onDataErrorOccurred: dataErrorOccurred
+        };
+        const dataGrid = createDataGrid(gridOptions);
+        this.clock.tick();
+
+        const $errorRow = $(dataGrid.element()).find('.dx-error-row');
+
+        // assert
+        assert.equal(dataErrorOccurred.callCount, 1, 'onDataErrorOccurred is called');
+        assert.equal(dataErrorOccurred.getCall(0).args[0].error, 'Unknown error', 'default error message');
+        assert.notOk($errorRow.length, 'error row is not rendered');
+    });
 });
 
 
@@ -10624,7 +10711,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     // T708525
     QUnit.test('change columns with grouping after dataSource change', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({});
 
         // act
@@ -10634,7 +10721,39 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.equal(dataGrid.getVisibleRows()[0].rowType, 'group', 'first row type is');
+        assert.equal(dataGrid.getVisibleRows()[0].rowType, 'group', 'first row type is group');
+        assert.equal(dataGrid.columnOption('b', 'groupIndex'), 0, 'column b is grouped');
+    });
+
+    QUnit.test('Column changes are applied while dataSource is loading (T895552)', function(assert) {
+        // arrange, act
+        const dataGrid = createDataGrid({
+            dataSource: {
+                store: {
+                    type: 'array',
+                    key: 'a',
+                    data: [{ a: 1, b: 2 }]
+                }
+            },
+            columns: ['a', 'b']
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.option('filterPanel.visible', true); // causes reloading a data source
+        const dataSource = dataGrid.getDataSource();
+
+        // assert
+        assert.ok(dataSource.isLoading(), 'dataSource is loading');
+
+        // act
+        dataGrid.option('columns', ['a', { dataField: 'b', groupIndex: 0 }]);
+        this.clock.tick();
+        const $filterPanelViewElement = $(dataGrid.getView('filterPanelView').element());
+
+        // assert
+        assert.ok($filterPanelViewElement.is(':visible'), 'filterPanel is visible');
+        assert.equal(dataGrid.getVisibleRows()[0].rowType, 'group', 'first row type is group');
         assert.equal(dataGrid.columnOption('b', 'groupIndex'), 0, 'column b is grouped');
     });
 
@@ -19299,6 +19418,96 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
         // assert
         assert.ok($firstCell.hasClass('dx-datagrid-invalid'), 'cell is invalid');
+    });
+
+    ['Cell', 'Batch'].forEach(mode => {
+        QUnit.testInActiveWindow(`${mode} - Edit cell should not be closed when DropDownBox in editCellTemplate is updated if calculateCellValue is used (T896030)`, function(assert) {
+            // arrange
+            const dataSource = {
+                asyncLoadEnabled: false,
+                store: {
+                    type: 'array',
+                    key: 'name',
+                    data: [
+                        { name: 'a' },
+                        { name: 'b' }
+                    ]
+                }
+            };
+            const gridConfig = {
+                dataSource: {
+                    asyncLoadEnabled: false,
+                    store: [{
+                        name: 'a'
+                    }]
+                },
+                editing: {
+                    mode: mode.toLowerCase(),
+                    allowUpdating: true
+                },
+                columns: [
+                    {
+                        dataField: 'name',
+                        calculateCellValue: function(rowData) {
+                            return rowData.name;
+                        },
+                        editCellTemplate: function(cellElement, cellInfo) {
+                            return $('<div>').dxDropDownBox({
+                                dataSource,
+                                acceptCustomValue: true,
+                                valueExpr: 'name',
+                                displayExpr: 'name',
+                                value: cellInfo.value,
+                                contentTemplate: function(arg) {
+                                    return $('<div>').addClass('my-class').dxDataGrid({
+                                        dataSource,
+                                        selection: { mode: 'single' },
+                                        selectedRowKeys: [cellInfo.value],
+                                        onSelectionChanged: function(e) {
+                                            arg.component.option('value', e.selectedRowKeys[0]);
+                                            cellInfo.setValue(e.selectedRowKeys[0]);
+                                            arg.component.close();
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+                ]
+            };
+
+            const grid = createDataGrid(gridConfig);
+            this.clock.tick();
+            $(grid.getCellElement(0, 0)).trigger('dxclick');
+            const $dropDownIcon = $(grid.element()).find('.dx-dropdowneditor-icon');
+
+            // assert
+            assert.equal($dropDownIcon.length, 1, 'drop down icon rendered');
+
+
+            $dropDownIcon.trigger('dxclick');
+            this.clock.tick();
+            const $dropDownGridElement = $('.dx-overlay-wrapper.dx-dropdowneditor-overlay .my-class');
+
+            // assert
+            assert.equal($dropDownGridElement.length, 1, 'drop-down grid is rendered ');
+
+            // act
+            const $row1 = $($dropDownGridElement.dxDataGrid('instance').getRowElement(1));
+
+            // assert
+            assert.equal($row1.length, 1, 'second row is found');
+
+            $row1.trigger('dxpointerdown');
+            $row1.trigger('dxclick');
+            this.clock.tick();
+            const $dropDownPopupElement = $('.dx-overlay-wrapper.dx-dropdowneditor-overlay');
+            const $dropDownBoxElement = $(grid.getCellElement(0, 0)).find('.dx-dropdownbox');
+
+            // assert
+            assert.equal($dropDownPopupElement.length, 0, 'drop-down window is hidden');
+            assert.equal($dropDownBoxElement.length, 1, 'editor is found');
+        });
     });
 });
 

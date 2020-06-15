@@ -2,10 +2,7 @@ import $ from '../../core/renderer';
 import Draggable from '../draggable';
 import translator from '../../animation/translator';
 import { extend } from '../../core/utils/extend';
-import { getBoundingRect } from '../../core/utils/position';
 import { LIST_ITEM_DATA_KEY } from './constants';
-
-const FIXED_CONTAINER_PROP_NAME = 'fixedContainer';
 
 const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
 
@@ -26,22 +23,15 @@ export default class AppointmentDragBehavior {
         return appointment.data('dxAppointmentSettings').allDay;
     }
 
-    getContainerShift(isAllDay) {
-        const appointmentContainer = this.appointments._getAppointmentContainer(isAllDay);
-        const dragAndDropContainer = this.appointments.option(FIXED_CONTAINER_PROP_NAME);
-
-        const appointmentContainerRect = getBoundingRect(appointmentContainer[0]);
-        const dragAndDropContainerRect = getBoundingRect(dragAndDropContainer[0]);
-
-        return {
-            left: appointmentContainerRect.left - dragAndDropContainerRect.left,
-            top: appointmentContainerRect.top - dragAndDropContainerRect.top
-        };
-    }
-
     onDragStart(e) {
         this.initialPosition = translator.locate($(e.itemElement));
         this.appointments.notifyObserver('hideAppointmentTooltip');
+    }
+
+    onDragMove(e) {
+        if(e.fromComponent !== e.toComponent) {
+            this.appointments.notifyObserver('removeDroppableCellClass');
+        }
     }
 
     getAppointmentElement(e) {
@@ -88,6 +78,16 @@ export default class AppointmentDragBehavior {
         };
     }
 
+    createDragMoveHandler(options, appointmentDragging) {
+        return (e) => {
+            appointmentDragging.onDragMove && appointmentDragging.onDragMove(e);
+
+            if(!e.cancel) {
+                options.onDragMove(e);
+            }
+        };
+    }
+
     createDragEndHandler(options, appointmentDragging) {
         return (e) => {
             appointmentDragging.onDragEnd && appointmentDragging.onDragEnd(e);
@@ -96,7 +96,6 @@ export default class AppointmentDragBehavior {
                 options.onDragEnd(e);
                 if(e.fromComponent !== e.toComponent) {
                     appointmentDragging.onRemove && appointmentDragging.onRemove(e);
-                    this.appointments.notifyObserver('removeDroppableCellClass');
                 }
             }
         };
@@ -122,11 +121,13 @@ export default class AppointmentDragBehavior {
             filter: `.${APPOINTMENT_ITEM_CLASS}`,
             immediate: false,
             onDragStart: this.onDragStart.bind(this),
+            onDragMove: this.onDragMove.bind(this),
             onDragEnd: this.onDragEnd.bind(this)
         }, config);
 
         this.appointments._createComponent(container, Draggable, extend({}, options, appointmentDragging, {
             onDragStart: this.createDragStartHandler(options, appointmentDragging),
+            onDragMove: this.createDragMoveHandler(options, appointmentDragging),
             onDragEnd: this.createDragEndHandler(options, appointmentDragging),
             onDrop: this.createDropHandler(appointmentDragging),
         }));

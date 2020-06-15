@@ -1,4 +1,4 @@
-import { isDefined, isString, isObject } from '../../core/utils/type'; //  '../../core/utils/type';
+import { isDefined, isString, isObject, isDate } from '../../core/utils/type'; //  '../../core/utils/type';
 import excelFormatConverter from '../excel_format_converter';
 import messageLocalization from '../../localization/message';
 import { extend } from '../../core/utils/extend'; // '../../core/utils/extend';
@@ -123,7 +123,11 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
 
         const excelCell = row.getCell(startColumnIndex + cellIndex);
 
-        excelCell.value = cellData.value;
+        if(isDate(cellData.value)) {
+            excelCell.value = _convertDateForExcelJS(cellData.value);
+        } else {
+            excelCell.value = cellData.value;
+        }
 
         if(isDefined(excelCell.value)) {
             const { alignment: horizontalAlignment, format, dataType } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
@@ -151,6 +155,10 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
             mergeRanges.push(mergeRange);
         }
     }
+}
+
+function _convertDateForExcelJS(date) {
+    return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()));
 }
 
 function _setNumberFormat(excelCell, numberFormat) {

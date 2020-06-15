@@ -213,6 +213,7 @@ module.exports = {
                         case 'columns':
                             dataSource = that.dataSource();
                             if(dataSource && dataSource.isLoading() && args.name === args.fullName) {
+                                this._useSortingGroupingFromColumns = true;
                                 dataSource.load();
                             }
                             break;
@@ -288,7 +289,7 @@ module.exports = {
                         columnsController.updateColumnDataTypes(dataSource);
                     }
                     this._columnsUpdating = true;
-                    columnsController.updateSortingGrouping(dataSource, !this._isFirstLoading);
+                    columnsController.updateSortingGrouping(dataSource, !this._useSortingGroupingFromColumns);
                     this._columnsUpdating = false;
 
                     storeLoadOptions.sort = columnsController.getSortDataSourceParameters();
@@ -354,7 +355,7 @@ module.exports = {
                     const columnsController = that._columnsController;
                     let isAsyncDataSourceApplying = false;
 
-                    this._isFirstLoading = false;
+                    this._useSortingGroupingFromColumns = false;
 
                     if(dataSource && !that._isDataSourceApplying) {
                         that._isDataSourceApplying = true;
@@ -454,7 +455,7 @@ module.exports = {
 
                     that.callBase();
                     dataSource = that._dataSource;
-                    that._isFirstLoading = true;
+                    that._useSortingGroupingFromColumns = true;
                     if(dataSource) {
                         that._setPagingOptions(dataSource);
                         that.setDataSource(dataSource);
@@ -713,7 +714,10 @@ module.exports = {
                     }
 
                     if(item1.rowType === 'group' || item1.rowType === 'groupFooter') {
-                        if(item1.isExpanded !== item2.isExpanded || JSON.stringify(item1.summaryCells) !== JSON.stringify(item2.summaryCells)) {
+                        const expandedMatch = item1.isExpanded === item2.isExpanded;
+                        const summaryCellsMatch = JSON.stringify(item1.summaryCells) === JSON.stringify(item2.summaryCells);
+                        const continuationMatch = item1.data?.isContinuation === item2.data?.isContinuation && item1.data?.isContinuationOnNextPage === item2.data?.isContinuationOnNextPage;
+                        if(!expandedMatch || !summaryCellsMatch || !continuationMatch) {
                             return false;
                         }
                     }
