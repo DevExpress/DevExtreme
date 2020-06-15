@@ -2558,7 +2558,7 @@ QUnit.test('repairTooltip. Point got invisible, tooltipHidden not fired', functi
     assert.equal(this.tooltip.stub('show').callCount, 0);
 });
 
-QUnit.test('repairTooltip. Point got visible after invisible, tooltipShown not fired', function(assert) {
+QUnit.test('repairTooltip. Point got visible after invisible, tooltipShown fired', function(assert) {
     $(this.environment.options.seriesGroup.element).trigger(getEvent('showpointtooltip'), this.environment.point1);
     this.environment.point1.isVisible = function() { return false; };
     this.tracker.repairTooltip();
@@ -2570,7 +2570,7 @@ QUnit.test('repairTooltip. Point got visible after invisible, tooltipShown not f
     this.tracker.repairTooltip();
 
     assert.equal(this.tooltip.show.callCount, 1);
-    assert.deepEqual(this.tooltip.show.lastCall.args[2], undefined);
+    assert.strictEqual(this.tooltip.show.lastCall.args[2].target, this.environment.point1);
     assert.equal(this.tooltip.stub('hide').callCount, 0);
 });
 
