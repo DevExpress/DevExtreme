@@ -1,17 +1,17 @@
 import {
   Component, ComponentBindings, JSXComponent,
-  OneWay, Template, Ref, Fragment, Event,
+  OneWay, Template, Fragment, Event,
 } from 'devextreme-generator/component_declaration/common';
 import BaseComponent from '../../preact-wrapper/tooltip-item-content';
 import noop from '../../utils/noop';
 import { dxSchedulerAppointment } from '../../../ui/scheduler';
 import {
-  TOOLTIP_APPOINTMENT_ITEM, TOOLTIP_APPOINTMENT_ITEM_CONTENT,
-  TOOLTIP_APPOINTMENT_ITEM_CONTENT_SUBJECT, TOOLTIP_APPOINTMENT_ITEM_CONTENT_DATE,
+  TOOLTIP_APPOINTMENT_ITEM, TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER,
 } from './consts';
-import { DeferredColor, AppointmentItem, FormattedContent } from './types';
+import { DeferredColor, AppointmentItem } from './types';
 import Marker from './marker';
 import DeleteButton from './delete-button';
+import ItemContent from './tooltip-item-content';
 
 type GetCurrentDataFn = (appointmentItem: AppointmentItem) => dxSchedulerAppointment;
 type GetOnDeleteButtonClick = (
@@ -37,11 +37,6 @@ export const viewFunction = (viewModel: TooltipItemLayout) => {
   const onDeleteButtonClick = getOnDeleteButtonClick(
     viewModel.props, viewModel.data, viewModel.props.singleAppointmentData!,
   );
-  const {
-    text, formatDate: formattedDate,
-  }: FormattedContent = viewModel.props.getTextAndFormatDate?.(
-    viewModel.data, viewModel.currentData,
-  );
 
   return (
     <Fragment>
@@ -61,12 +56,16 @@ export const viewFunction = (viewModel: TooltipItemLayout) => {
       // eslint-disable-next-line react/jsx-props-no-spreading
       <div className={TOOLTIP_APPOINTMENT_ITEM} {...viewModel.restAttributes}>
         <Marker color={viewModel.color} />
-        <div className={TOOLTIP_APPOINTMENT_ITEM_CONTENT}>
-          <div className={TOOLTIP_APPOINTMENT_ITEM_CONTENT_SUBJECT}>{text}</div>
-          <div className={TOOLTIP_APPOINTMENT_ITEM_CONTENT_DATE}>{formattedDate}</div>
-        </div>
+        <ItemContent
+          appointmentData={viewModel.data}
+          currentAppointmentData={viewModel.currentData}
+          getTextAndFormatDate={viewModel.props.getTextAndFormatDate}
+        />
         {viewModel.props.showDeleteButton && (
+        <div className={TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER}>
           <DeleteButton onClick={onDeleteButtonClick} />
+        </div>
+
         )}
       </div>
       )}
@@ -108,9 +107,6 @@ export class TooltipItemLayoutProps {
   },
 })
 export default class TooltipItemLayout extends JSXComponent(TooltipItemLayoutProps) {
-  @Ref()
-  contentRef!: HTMLDivElement;
-
   get currentData(): dxSchedulerAppointment {
     const { item } = this.props;
     return getCurrentData(item!);
