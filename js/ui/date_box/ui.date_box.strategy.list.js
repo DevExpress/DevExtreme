@@ -250,7 +250,9 @@ const ListStrategy = DateBoxStrategy.inherit({
     },
 
     _dimensionChanged: function() {
-        this._getPopup() && this._updatePopupHeight();
+        if(this._getPopup()) {
+            this._updatePopupHeight();
+        }
     },
 
     _updatePopupHeight: function() {
