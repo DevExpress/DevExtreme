@@ -44,7 +44,8 @@ const GroupedStrategy = Class.inherit({
     getShaderTopOffset: abstract,
     getShaderMaxHeight: abstract,
     getShaderWidth: abstract,
-    getScrollableScrollTop: abstract
+    getScrollableScrollTop: abstract,
+    getGroupIndexByCell: abstract,
 });
 
 
