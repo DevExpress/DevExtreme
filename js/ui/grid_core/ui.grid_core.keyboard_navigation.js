@@ -471,7 +471,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             this.getController('editorFactory').loseFocus();
             if(this._editingController.isEditing() && !this._isRowEditMode()) {
                 this._resetFocusedCell();
-                this._editingController.closeEditCell();
+                this._closeEditCell();
             }
         } else {
             eventArgs.originalEvent.preventDefault();
@@ -672,7 +672,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 if(this._editingController.getEditMode() === 'cell') {
                     this._editingController.cancelEditData();
                 } else {
-                    this._editingController.closeEditCell();
+                    this._closeEditCell();
                 }
             } else {
                 this._focusEditFormCell($cell);
@@ -813,7 +813,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             this.setFocusedRowIndex(args.prevRowIndex);
             $cell = this._getFocusedCell();
             if(this._editingController.isEditing() && isCellEditMode) {
-                this._editingController.closeEditCell();
+                this._closeEditCell();
             }
         }
     },
