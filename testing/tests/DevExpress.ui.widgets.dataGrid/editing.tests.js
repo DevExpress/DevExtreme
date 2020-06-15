@@ -17,6 +17,7 @@ import 'ui/autocomplete';
 import 'ui/color_box';
 import 'ui/data_grid/ui.data_grid';
 import 'ui/drop_down_box';
+import 'ui/switch';
 import 'ui/validator';
 import errors from 'ui/widget/ui.errors';
 import { getCells, MockColumnsController, MockDataController, setupDataGridModules } from '../../helpers/dataGridMocks.js';
@@ -9881,6 +9882,49 @@ QUnit.module('Editing with validation', {
         // assert
         assert.equal(getInputElements($testElement).length, 1, 'has input');
         assert.ok(!$cells.eq(1).find('.dx-tooltip').length, 'not has tooltip');
+    });
+
+    QUnit.testInActiveWindow('Show tooltip on switch editor value change to invalid value (T897363)', function(assert) {
+        // arrange
+        const that = this;
+        const rowsView = this.rowsView;
+        const $testElement = $('#container .dx-datagrid');
+
+        that.applyOptions({
+            onEditorPreparing(e) {
+                e.editorName = 'dxSwitch';
+                e.editorOptions.value = true;
+            },
+            editing: {
+                mode: 'batch'
+            },
+            columns: [{
+                dataField: 'boolean',
+                dataType: 'boolean',
+                validationRules: [{ type: 'required' }]
+            }]
+        });
+
+        that.editorFactoryController.init();
+
+        rowsView.render($testElement);
+
+        // act
+        const $cell = $(this.getCellElement(0, 0));
+        const editor = $cell.find('.dx-switch').dxSwitch('instance');
+
+        eventsEngine.trigger(editor.$element(), 'focus');
+        this.clock.tick();
+
+        // assert
+        assert.equal($cell.find('.dx-overlay').length, 0, 'no tooltip');
+
+        // act
+        editor.option('value', false);
+        this.clock.tick();
+
+        // assert
+        assert.equal($cell.find('.dx-overlay').length, 1, 'tooltip is rendered');
     });
 
     // T183197

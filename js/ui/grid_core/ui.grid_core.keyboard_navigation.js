@@ -2018,7 +2018,7 @@ module.exports = {
                         const focusedRowIndexCorrection = getRowIndexCorrection(focusedCellPosition.rowIndex);
                         if(focusedRowIndexCorrection) {
                             focusedCellPosition.rowIndex += focusedRowIndexCorrection;
-                            editorFactory.focus(editorFactory.focus());
+                            editorFactory.refocus();
                         }
                     }
                 }
