@@ -585,8 +585,7 @@ const Lookup = DropDownList.inherit({
             closeOnTargetScroll: true,
             width: this._isInitialOptionValue('dropDownOptions.width')
                 ? (function() { return this.$element().outerWidth(); }).bind(this)
-                : this._popupConfig().width,
-            toolbarItems: this.option('dropDownOptions.toolbarItems')
+                : this._popupConfig().width
         }));
 
         this._popup.on({
@@ -636,7 +635,7 @@ const Lookup = DropDownList.inherit({
             fullScreen: this.option('dropDownOptions.fullScreen'),
             shading: this.option('dropDownOptions.shading'),
             closeOnOutsideClick: this.option('dropDownOptions.closeOnOutsideClick'),
-        });
+        }, this._options.cache('dropDownOptions'));
 
         delete result.animation;
         delete result.position;
