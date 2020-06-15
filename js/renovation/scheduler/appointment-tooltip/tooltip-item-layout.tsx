@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { h } from 'preact';
 import {
   Component, ComponentBindings, JSXComponent,
   OneWay, Template, Fragment, Event,
@@ -8,14 +10,16 @@ import { dxSchedulerAppointment } from '../../../ui/scheduler';
 import {
   TOOLTIP_APPOINTMENT_ITEM, TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER,
 } from './consts';
-import { DeferredColor, AppointmentItem } from './types';
+import { AppointmentItem } from './types';
 import Marker from './marker';
 import DeleteButton from './delete-button';
-import ItemContent from './tooltip-item-content';
+import TooltipItemContent from './tooltip-item-content';
 
 type GetCurrentDataFn = (appointmentItem: AppointmentItem) => dxSchedulerAppointment;
 type GetOnDeleteButtonClick = (
-  props: TooltipItemLayoutProps, data: dxSchedulerAppointment, currentData: dxSchedulerAppointment,
+  props: TooltipItemLayoutProps,
+  data?: dxSchedulerAppointment,
+  currentData?: dxSchedulerAppointment,
 ) => (e: any) => void;
 
 export const getCurrentData: GetCurrentDataFn = (appointmentItem) => {
@@ -35,7 +39,7 @@ export const getOnDeleteButtonClick: GetOnDeleteButtonClick = (
 export const viewFunction = (viewModel: TooltipItemLayout) => {
   const useTemplate = !!viewModel.props.itemContentTemplate;
   const onDeleteButtonClick = getOnDeleteButtonClick(
-    viewModel.props, viewModel.data, viewModel.props.singleAppointmentData!,
+    viewModel.props, viewModel.props.item?.data, viewModel.props.singleAppointmentData,
   );
 
   return (
@@ -43,7 +47,7 @@ export const viewFunction = (viewModel: TooltipItemLayout) => {
       {useTemplate && (
         <viewModel.props.itemContentTemplate
           model={{
-            appointmentData: viewModel.data,
+            appointmentData: viewModel.props.item?.data,
             targetedAppointmentData: viewModel.currentData,
           }}
           index={viewModel.props.index}
@@ -55,9 +59,9 @@ export const viewFunction = (viewModel: TooltipItemLayout) => {
       {!useTemplate && (
       // eslint-disable-next-line react/jsx-props-no-spreading
       <div className={TOOLTIP_APPOINTMENT_ITEM} {...viewModel.restAttributes}>
-        <Marker color={viewModel.color} />
-        <ItemContent
-          appointmentData={viewModel.data}
+        <Marker color={viewModel.props.item?.color} />
+        <TooltipItemContent
+          appointmentData={viewModel.props.item?.data}
           currentAppointmentData={viewModel.currentData}
           getTextAndFormatDate={viewModel.props.getTextAndFormatDate}
         />
@@ -110,13 +114,5 @@ export default class TooltipItemLayout extends JSXComponent(TooltipItemLayoutPro
   get currentData(): dxSchedulerAppointment {
     const { item } = this.props;
     return getCurrentData(item!);
-  }
-
-  get data(): dxSchedulerAppointment {
-    return this.props.item!.data;
-  }
-
-  get color(): DeferredColor | undefined {
-    return this.props.item!.color;
   }
 }
