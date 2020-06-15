@@ -1,10 +1,11 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Event,
 } from 'devextreme-generator/component_declaration/common';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { h } from 'preact';
 import LightButton from './light-button';
-import { PAGER_PAGE_CLASS } from './consts';
+import { PAGER_PAGE_CLASS, PAGER_SELECTION_CLASS } from './consts';
 
-const PAGER_SELECTION_CLASS = 'dx-selection';
 const PAGER_PAGE_SELECTION_CLASS = `${PAGER_PAGE_CLASS} ${PAGER_SELECTION_CLASS}`;
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
@@ -25,7 +26,9 @@ export class PageProps {
 
   @Event() onClick?: () => void;
 
-  @OneWay() selected?: boolean = false;
+  @OneWay() selected? = false;
+
+  @OneWay() className?: string;
 }
 
 // tslint:disable-next-line: max-classes-per-file
@@ -46,6 +49,6 @@ export default class Page extends JSXComponent(PageProps) {
   get className(): string {
     const
       { selected } = this.props;
-    return selected ? PAGER_PAGE_SELECTION_CLASS : PAGER_PAGE_CLASS;
+    return ([selected ? PAGER_PAGE_SELECTION_CLASS : PAGER_PAGE_CLASS, this.props.className].join(' ')).trim();
   }
 }

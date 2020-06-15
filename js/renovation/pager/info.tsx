@@ -1,9 +1,11 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Method, Ref,
 } from 'devextreme-generator/component_declaration/common';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { h } from 'preact';
 import { formatNumber } from '../../localization';
 import { format } from '../../core/utils/string';
-import type { GetHtmlElement } from './resizable-container';
+import { GetHtmlElement } from './pager.types';
 
 export const PAGER_INFO_CLASS = 'dx-info';
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -17,9 +19,9 @@ export class InfoTextProps {
 
   @OneWay() pageCount?: number = 10;
 
-  @OneWay() pageIndex ? = 0;
+  @OneWay() pageIndex?: number = 0;
 
-  @OneWay() totalCount ? = 0;
+  @OneWay() totalCount?: number = 0;
 }
 
 // tslint:disable-next-line: max-classes-per-file
@@ -36,7 +38,7 @@ export default class InfoText extends JSXComponent(InfoTextProps) implements Get
 
   get text(): string {
     const {
-      infoText, pageIndex, pageCount, totalCount,
+      infoText = '', pageIndex, pageCount, totalCount,
     } = this.props as Required<InfoTextProps>;
     return format(infoText,
       formatNumber(pageIndex + 1, ''),

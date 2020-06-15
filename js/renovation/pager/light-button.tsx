@@ -1,6 +1,8 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Slot, Event, Ref, Effect,
 } from 'devextreme-generator/component_declaration/common';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { h } from 'preact';
 import clickEvent from '../../events/click';
 import { registerKeyboardAction } from '../../ui/shared/accessibility';
 import eventsEngine from '../../events/core/events_engine';
@@ -18,13 +20,16 @@ export const dxClickEffect: dxClickEffectFn = (element, handler) => {
   }
   return noop;
 };
+const isMatchSelector = (el, selector): boolean => el.matches(selector);
 
+// const isMatchSelector = Element.prototype.matches
+//   ? (el, selector): boolean => el.matches(selector)
+//   : (el, selector): boolean => el.msMatchesSelector(selector);
 export const closest: closestFn = (child, className) => {
   let el = child;
   const selector = `.${className}`;
-
   while (el !== null && el.nodeType === 1) {
-    if (el.matches(selector)) return el;
+    if (isMatchSelector(el, selector)) return el;
     el = el.parentElement;
   }
   return null;
@@ -61,6 +66,9 @@ export class LightButtonProps {
   @Event() onClick?: () => void;
 }
 
+function createActionByOption(): () => void {
+  return (): void => { };
+}
 // tslint:disable-next-line: max-classes-per-file
 @Component({ defaultOptionRules: null, view: viewFunction })
 export default class LightButton extends JSXComponent(LightButtonProps) {
@@ -70,7 +78,7 @@ export default class LightButton extends JSXComponent(LightButtonProps) {
     const fakePagerInstance = {
       option: (): boolean => false,
       element: (): HTMLElement | null => closest(this.widgetRef, PAGER_CLASS),
-      _createActionByOption: (): () => void => () => (): void => { },
+      _createActionByOption: createActionByOption,
     };
     return registerKeyboardAction('pager', fakePagerInstance, this.widgetRef, undefined, this.props.onClick);
   }

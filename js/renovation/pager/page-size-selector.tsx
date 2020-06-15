@@ -2,40 +2,40 @@
 import {
   ComponentBindings, JSXComponent, Event, OneWay, Component, Method, Ref,
 } from 'devextreme-generator/component_declaration/common';
-import LightButton from './light-button';
-import type { GetHtmlElement } from './resizable-container';
-import SmallPageSize from './small-page-size';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { h } from 'preact';
+import type { GetHtmlElement } from './pager.types';
+import PageSizeSmall from './page-size-small';
+import PageSizeLarge from './page-size-large';
+import { FullPageSize } from './pager.types';
 
-const PAGER_SELECTION_CLASS = 'dx-selection';
 export const PAGER_PAGE_SIZES_CLASS = 'dx-page-sizes';
-export const PAGER_PAGE_SIZE_CLASS = 'dx-page-size';
-export const PAGER_SELECTED_PAGE_SIZE_CLASS = `${PAGER_PAGE_SIZE_CLASS} ${PAGER_SELECTION_CLASS}`;
+
 export const viewFunction = ({
-  pageSizesText, htmlRef, getHtmlElementWorkAround: getHtmlElement, normalizedPageSizes,
+  htmlRef, getHtmlElementWorkAround: getHtmlElement, normalizedPageSizes,
   props: {
-    isLargeDisplayMode, pageSize, pageSizeChanged, rtlEnabled,
+    isLargeDisplayMode, pageSize, pageSizeChange, rtlEnabled,
   },
 }: PageSizeSelector) => (
   <div ref={htmlRef as never} className={PAGER_PAGE_SIZES_CLASS}>
-    {isLargeDisplayMode && pageSizesText.map(({
-      text, className, label, click,
-    }) => (
-      <LightButton key={text} className={className} label={label} onClick={click}>
-        {text}
-      </LightButton>
-    ))}
+    {isLargeDisplayMode && (
+    <PageSizeLarge
+      pageSizes={normalizedPageSizes}
+      pageSize={pageSize}
+      pageSizeChange={pageSizeChange}
+    />
+    )}
     {!isLargeDisplayMode && (
-      <SmallPageSize
+      <PageSizeSmall
         parentRef={getHtmlElement}
         rtlEnabled={rtlEnabled}
         pageSizes={normalizedPageSizes}
         pageSize={pageSize}
-        pageSizeChanged={pageSizeChanged}
+        pageSizeChange={pageSizeChange}
       />
     )}
   </div>
 );
-export type FullPageSize = { text: string; value: number };
 type PageSize = number;// | FullPageSize;
 @ComponentBindings()
 export class PageSizeSelectorProps {
@@ -47,7 +47,7 @@ export class PageSizeSelectorProps {
 
   @OneWay() rtlEnabled?: boolean = false;
 
-  @Event() pageSizeChanged!: (pageSize: number) => void; // commonUtils.noop
+  @Event() pageSizeChange!: (pageSize: number) => void; // commonUtils.noop
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
@@ -65,26 +65,8 @@ export default class PageSizeSelector extends JSXComponent(PageSizeSelectorProps
 
   @Ref() htmlRef!: HTMLDivElement;
 
-  get pageSizesText() {
-    const { pageSize } = this.props;
-    return this.normalizedPageSizes.map(({ value: processedPageSize, text }) => {
-      const selected = processedPageSize === pageSize;
-      const className = selected ? PAGER_SELECTED_PAGE_SIZE_CLASS : PAGER_PAGE_SIZE_CLASS;
-      return {
-        className,
-        click: this.onPageSizeChanged(processedPageSize),
-        label: `Display ${processedPageSize} items on page`,
-        text,
-      };
-    });
-  }
-
   get normalizedPageSizes(): FullPageSize[] {
     const { pageSizes } = this.props as Required<PageSizeSelectorProps>;
     return pageSizes.map((p) => ({ text: String(p), value: p } as FullPageSize));
-  }
-
-  private onPageSizeChanged(processedPageSize: number) {
-    return () => this.props.pageSizeChanged(processedPageSize);
   }
 }

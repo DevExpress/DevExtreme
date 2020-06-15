@@ -1,17 +1,16 @@
 import { h } from 'preact';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import { EVENT, emit, getEventHandlers } from '../utils/events-mock';
 import { registerKeyboardAction } from '../../../js/ui/shared/accessibility';
 import LightButton, { LightButtonProps, dxClickEffect } from '../../../js/renovation/pager/light-button';
+
 
 jest.mock('../../../js/ui/shared/accessibility');
 
 describe('LightButton', () => {
   describe('View', () => {
-    const render = (props) => {
-      window.h = h;
-      return mount(<LightButton {...new LightButtonProps()} {...props} />);
-    };
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    const render = (props: LightButtonProps) => shallow(<LightButton {...props} />);
 
     it('should render valid markup', () => {
       const tree = render({
@@ -92,7 +91,7 @@ describe('LightButton', () => {
 
         button.keyboardEffect.bind({ props: { onClick }, widgetRef })();
 
-        const pagerInstance = registerKeyboardAction.mock.calls[0][1];
+        const pagerInstance = (registerKeyboardAction as jest.Mock).mock.calls[0][1];
 
         expect(pagerInstance.element()).toBe(null);
       });

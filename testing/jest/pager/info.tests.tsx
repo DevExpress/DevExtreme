@@ -1,30 +1,41 @@
-import { h } from 'preact';
-import { mount } from 'enzyme';
-import InfoText, { viewFunction } from '../../../js/renovation/pager/info';
+import { h, createRef } from 'preact';
+import { shallow } from 'enzyme';
+import InfoText, { viewFunction as InfoTextComponent } from '../../../js/renovation/pager/info';
 
-describe('Info', () => {
+
+describe('Info, separate view and component approach', () => {
   describe('View', () => {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    const render = (props: Partial<InfoText>) => {
-      window.h = h;
-      const Component = viewFunction;
-      return mount(<Component {...props as any} />);
-    };
-
-    it('should render valid markup', () => {
-      const tree = render({ text: 'some text' });
-
+    it('should render valid markup, view', () => {
+      const tree = shallow(<InfoTextComponent {...{ text: 'some text' } as any} />);
       expect(tree.html())
         .toBe('<div class="dx-info">some text</div>');
     });
+    it('ref test', () => {
+      const ref = createRef();
+      shallow(<InfoTextComponent {...{ htmlRef: ref, text: 'text' } as any} />);
+      expect(ref.current).not.toBeNull();
+      expect(ref.current.className).toBe('dx-info');
+    });
   });
 
-  describe('InfoText', () => {
-    it('get text with custom props', () => {
+  describe('Logic', () => {
+    it('getHtmlElement', () => {
+      const infoText = new InfoText({ });
+      infoText.htmlRef = {} as any;
+      expect(infoText.getHtmlElement()).toBe(infoText.htmlRef);
+    });
+    it('text with changed infoText', () => {
       const infoText = new InfoText({
         infoText: 'Page {0} of {1} ({2} items) (custom)', pageCount: 20, pageIndex: 5, totalCount: 200,
       });
       expect(infoText.text).toBe('Page 6 of 20 (200 items) (custom)');
+    });
+    it('text with numberFormatting', () => {
+      const infoText = new InfoText({
+        infoText: 'Page {0} of {1} ({2} items)', pageCount: 2000, pageIndex: 50000, totalCount: 20000,
+      });
+      expect(infoText.text).toBe('Page 50,001 of 2,000 (20,000 items)');
     });
   });
 });

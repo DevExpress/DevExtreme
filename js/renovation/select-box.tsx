@@ -2,14 +2,14 @@ import {
   Ref, Effect, Component, ComponentBindings, JSXComponent, Event, OneWay, TwoWay,
 } from 'devextreme-generator/component_declaration/common';
 import { WidgetProps } from './widget';
-// import DataSource, { DataSourceOptions } from '../data/data_source';
+import DataSource, { DataSourceOptions } from '../data/data_source';
 import DxSelectBox from '../ui/select_box';
 
 export const viewFunction = ({ widgetRef }: SelectBox) => (<div ref={widgetRef as any} />);
 
 @ComponentBindings()
 export class SelectBoxProps extends WidgetProps {
-  @OneWay() dataSource?: string | Array<string | any>;// | DataSource | DataSourceOptions;
+  @OneWay() dataSource?: string | Array<string | any> | DataSource | DataSourceOptions;
 
   @OneWay() displayExpr?: string;
 

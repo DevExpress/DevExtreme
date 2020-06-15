@@ -5,13 +5,14 @@ import {
   Event,
   OneWay,
   Fragment,
-  InternalState,
 } from 'devextreme-generator/component_declaration/common';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { h } from 'preact';
 import Page, { PageProps } from './page';
 
 const PAGER_PAGE_SEPARATOR_CLASS = 'dx-separator';
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const viewFunction = ({ pages }: LargePages) => {
+export const viewFunction = ({ pages }: PagesLarge) => {
   const PagesMarkup = pages.map((pageProps) => {
     if (pageProps !== null) {
       const { index = 0, selected, onClick } = pageProps;
@@ -32,7 +33,7 @@ export const viewFunction = ({ pages }: LargePages) => {
 };
 
 @ComponentBindings()
-export class LargePagesProps {
+export class PagesLargeProps {
   @OneWay() maxPagesCount?: number = 10;
 
   @OneWay() pageCount?: number = 10;
@@ -46,98 +47,141 @@ export class LargePagesProps {
 
 const PAGES_LIMITER = 4;
 type PageType = Partial<PageProps> | null;
-type PagesState = {
-  lastPageIndex: number;
-  pageIndexes: (number | null)[];
-  startPageIndex: number;
-} | null;
+type SlidingWindowState = {
+  indexesForReuse: number[];
+  slidingWindowIndexes: number[];
+};
 
-function getPageIndexes(startIndex: number, pageCount: number): (number | null)[] {
-  const pageIndexes: (number | null)[] = [];
-  for (let i = 0; i < PAGES_LIMITER; i += 1) {
-    pageIndexes.push(startIndex + i);
+type PageIndexes = (number | null)[];
+type DelimiterType = 'none' | 'low' | 'high' | 'both';
+function getDelimiterType(
+  startIndex: number, slidingWindowSize: number, pageCount: number,
+): DelimiterType {
+  if (startIndex === 1) {
+    return 'high';
+  } if (startIndex + slidingWindowSize === pageCount - 1) {
+    return 'low';
   }
-  if (pageIndexes[0] === 1) {
-    return [0, ...pageIndexes, null, pageCount - 1];
-  }
-  if (pageIndexes[pageIndexes.length - 1] === pageCount - 2) {
-    return [0, null, ...pageIndexes, pageCount - 1];
-  }
-  return [0, null, ...pageIndexes, null, pageCount - 1];
+  return 'both';
 }
 
-// tslint:disable-next-line: max-classes-per-file
+function createPageIndexesBySlidingWindowIndexes(slidingWindowIndexes: number[], pageCount: number,
+  delimiter: DelimiterType): SlidingWindowState & { pageIndexes: PageIndexes } {
+  let pageIndexes: PageIndexes = [];
+  let possibleIndexes: number[] = [];
+  if (delimiter === 'none') {
+    pageIndexes = [...slidingWindowIndexes];
+  } else if (delimiter === 'both') {
+    pageIndexes = [0, null, ...slidingWindowIndexes, null, pageCount - 1];
+    possibleIndexes = slidingWindowIndexes.slice(1, -1);
+  } else if (delimiter === 'high') {
+    pageIndexes = [0, ...slidingWindowIndexes, null, pageCount - 1];
+    possibleIndexes = slidingWindowIndexes.slice(0, -1);
+  } else if (delimiter === 'low') {
+    pageIndexes = [0, null, ...slidingWindowIndexes, pageCount - 1];
+    possibleIndexes = slidingWindowIndexes.slice(1);
+  }
+  return { slidingWindowIndexes, indexesForReuse: possibleIndexes, pageIndexes };
+}
+
+function createPageIndexes(startIndex: number, slidingWindowSize: number, pageCount: number,
+  delimiter: DelimiterType): ReturnType<typeof createPageIndexesBySlidingWindowIndexes> {
+  const slidingWindowIndexes: number[] = [];
+  for (let i = 0; i < slidingWindowSize; i += 1) {
+    slidingWindowIndexes.push(i + startIndex);
+  }
+  return createPageIndexesBySlidingWindowIndexes(
+    slidingWindowIndexes, pageCount, delimiter,
+  );
+}
+
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class LargePages extends JSXComponent(LargePagesProps) {
+export default class PagesLarge extends JSXComponent(PagesLargeProps) {
   get pages(): PageType[] {
-    const { pageIndex, pageCount, maxPagesCount } = this.props as Required<LargePagesProps>;
-    let pageIndexes: (number | null)[] = [];
+    const { pageIndex } = this.props as Required<PagesLargeProps>;
     const createPage = (index: number): PageType => ({
       index,
       onClick: () => this.onPageClick(index),
       selected: pageIndex === index,
     } as PageType);
-    if (pageCount > 0) {
-      if (pageCount <= maxPagesCount) {
-        for (let i = 0; i < pageCount; i += 1) {
-          pageIndexes.push(i);
-        }
-      } else {
-        const startIndex = this.getStartIndex(pageIndex, pageCount);
-        const usePrevState = this.canUsePrevState(pageIndex, pageCount);
-        pageIndexes = usePrevState
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          ? this.prevState!.pageIndexes
-          : getPageIndexes(startIndex, pageCount);
-        if (!usePrevState) {
-          this.prevState = {
-            lastPageIndex: startIndex + PAGES_LIMITER - 1,
-            pageIndexes,
-            startPageIndex: startIndex,
-          };
-        }
-      }
-    }
-    const rtlPageIndexes = this.props.rtlEnabled ? [...pageIndexes].reverse() : pageIndexes;
-    return rtlPageIndexes.map((index) => (index === null ? null : createPage(index)));
+    const rtlPageIndexes = this.props.rtlEnabled
+      ? [...this.pageIndexes].reverse() : this.pageIndexes;
+    return rtlPageIndexes.map((index): PageType => (index === null ? null : createPage(index)));
   }
 
-  @InternalState() private prevState = null as PagesState;
+  canReuseSlidingWindow(pageIndex = 0): boolean {
+    const { indexesForReuse } = this.slidingWindowState;
+    return indexesForReuse.indexOf(pageIndex) !== -1;
+  }
+
+  generatePageIndexes(): PageIndexes {
+    const { pageIndex, pageCount } = this.props as Required<PagesLargeProps>;
+    let startIndex = 0;
+    let slidingWindowSize = 0;
+    let delimiter: DelimiterType = 'none';
+    const slidingWindow = this.slidingWindowState.slidingWindowIndexes;
+    if (pageIndex === slidingWindow[0]) {
+      startIndex = pageIndex - 1;
+      slidingWindowSize = PAGES_LIMITER;
+      delimiter = getDelimiterType(startIndex, slidingWindowSize, pageCount);
+    } else if (pageIndex === slidingWindow[slidingWindow.length - 1]) {
+      startIndex = pageIndex + 2 - PAGES_LIMITER;
+      slidingWindowSize = PAGES_LIMITER;
+      delimiter = getDelimiterType(startIndex, slidingWindowSize, pageCount);
+    } else if (pageIndex < PAGES_LIMITER) {
+      startIndex = 1;
+      slidingWindowSize = PAGES_LIMITER;
+      delimiter = getDelimiterType(startIndex, slidingWindowSize, pageCount);
+    } else if (pageIndex >= pageCount - PAGES_LIMITER) {
+      startIndex = pageCount - PAGES_LIMITER - 1;
+      slidingWindowSize = PAGES_LIMITER;
+      delimiter = getDelimiterType(startIndex, slidingWindowSize, pageCount);
+    } else {
+      startIndex = pageIndex - 1;
+      slidingWindowSize = PAGES_LIMITER;
+      delimiter = getDelimiterType(startIndex, slidingWindowSize, pageCount);
+    }
+    const {
+      pageIndexes,
+      ...state
+    } = createPageIndexes(startIndex, slidingWindowSize, pageCount, delimiter);
+    this.patchState(state);
+    return pageIndexes;
+  }
+
+  patchState({ slidingWindowIndexes, indexesForReuse }: SlidingWindowState): void {
+    this.slidingWindowState.slidingWindowIndexes = slidingWindowIndexes;
+    this.slidingWindowState.indexesForReuse = indexesForReuse;
+  }
+
+  isSlidingWindowMode(): boolean {
+    const { pageCount, maxPagesCount } = this.props as Required<PagesLargeProps>;
+    return (pageCount <= PAGES_LIMITER) || (pageCount <= maxPagesCount);
+  }
+
+  get pageIndexes(): PageIndexes {
+    const { pageCount } = this.props as {pageCount: number};
+    if (this.isSlidingWindowMode()) {
+      return createPageIndexes(0, pageCount, pageCount, 'none').pageIndexes;
+    }
+    if (this.canReuseSlidingWindow(this.props.pageIndex)) {
+      const { slidingWindowIndexes } = this.slidingWindowState;
+      const delimiter = getDelimiterType(
+        slidingWindowIndexes[0], PAGES_LIMITER, pageCount,
+      );
+      return createPageIndexesBySlidingWindowIndexes(
+        slidingWindowIndexes, pageCount, delimiter,
+      ).pageIndexes;
+    }
+    return this.generatePageIndexes();
+  }
+
+  private slidingWindowState: SlidingWindowState = {
+    indexesForReuse: [],
+    slidingWindowIndexes: [],
+  };
 
   onPageClick(pageIndex: number): void {
-    if (this.props.pageIndexChange) {
-      this.props.pageIndexChange(pageIndex);
-    }
-  }
-
-  private canUsePrevState(pageIndex: number, pageCount: number): boolean {
-    if (this.prevState !== null) {
-      const { startPageIndex, lastPageIndex } = this.prevState;
-      const isFirstOrLastPage = pageIndex === 0 || pageIndex === pageCount - 1;
-      const isInRange = (startPageIndex < pageIndex && pageIndex < lastPageIndex);
-      const isNextAfterFirst = (startPageIndex === 1 && startPageIndex === pageIndex);
-      const isPrevBeforeLast = (lastPageIndex === pageIndex
-                && lastPageIndex === pageCount - 2);
-      const isNotFirstOrLastInRange = startPageIndex !== pageIndex
-                || lastPageIndex !== pageIndex;
-      return isFirstOrLastPage || (isInRange || isNextAfterFirst || isPrevBeforeLast)
-                || !isNotFirstOrLastInRange;
-    }
-    return false;
-  }
-
-  private getStartIndex(pageIndex: number, pageCount: number): number {
-    let startIndex = pageIndex - 1;
-    if (this.prevState !== null) {
-      if (this.prevState.lastPageIndex === pageIndex) {
-        startIndex = this.prevState.startPageIndex + 1;
-      }
-      if (this.prevState.startPageIndex === pageIndex) {
-        startIndex = this.prevState.startPageIndex - 1;
-      }
-    }
-    startIndex = Math.max(startIndex, 1);
-    const isLastPage = startIndex + PAGES_LIMITER >= pageCount;
-    return isLastPage ? pageCount - PAGES_LIMITER - 1 : startIndex;
+    this.props.pageIndexChange?.(pageIndex);
   }
 }

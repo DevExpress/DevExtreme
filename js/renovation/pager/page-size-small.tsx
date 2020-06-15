@@ -2,35 +2,37 @@
 import {
   ComponentBindings, JSXComponent, Event, OneWay, InternalState, Effect, Component,
 } from 'devextreme-generator/component_declaration/common';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { h } from 'preact';
 import SelectBox from '../select-box';
-import getElementComputedStyle from './get-computed-style';
 import { calculateValuesFittedWidth } from './calculate-values-fitted-width';
+import { FullPageSize } from './pager.types';
 // bug in generator import type { FullPageSize } from './page-size-selector';
+import { PAGER_SELECTION_CLASS } from './consts';
+import { getElementMinWidth } from './utils/get-element-width';
 
-const PAGER_SELECTION_CLASS = 'dx-selection';
 export const PAGER_PAGE_SIZES_CLASS = 'dx-page-sizes';
 export const PAGER_PAGE_SIZE_CLASS = 'dx-page-size';
 export const PAGER_SELECTED_PAGE_SIZE_CLASS = `${PAGER_PAGE_SIZE_CLASS} ${PAGER_SELECTION_CLASS}`;
 export const viewFunction = ({
   width,
   props: {
-    rtlEnabled, pageSize, pageSizeChanged, pageSizes,
+    rtlEnabled, pageSize, pageSizeChange, pageSizes,
   },
-}: SmallPageSize) => (
+}: PageSizeSmall) => (
   <SelectBox
     displayExpr="text"
     valueExpr="value"
     dataSource={pageSizes}
     rtlEnabled={rtlEnabled}
     value={pageSize}
-    valueChange={pageSizeChanged}
+    valueChange={pageSizeChange}
     width={width}
   />
 );
-type FullPageSize = { text: string; value: number };
-// type PageSize = number;// | FullPageSize;
+
 @ComponentBindings()
-export class SmallPageSizeProps {
+export class PageSizeSmallProps {
   @OneWay() parentRef!: () => HTMLElement;
 
   @OneWay() pageSize?: number = 5;
@@ -39,11 +41,11 @@ export class SmallPageSizeProps {
 
   @OneWay() rtlEnabled?: boolean = false;
 
-  @Event() pageSizeChanged!: (pageSize: number) => void;
+  @Event() pageSizeChange!: (pageSize: number) => void;
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class SmallPageSize extends JSXComponent(SmallPageSizeProps) {
+export default class PageSizeSmall extends JSXComponent(PageSizeSmallProps) {
   @InternalState() private minWidth = 10;
 
   get width() {
@@ -51,9 +53,6 @@ export default class SmallPageSize extends JSXComponent(SmallPageSizeProps) {
   }
 
   @Effect() updateWidth(): void {
-    const style = getElementComputedStyle(this.props.parentRef());
-    if (style) {
-      this.minWidth = Number(style.minWidth.replace('px', ''));
-    }
+    this.minWidth = getElementMinWidth(this.props.parentRef()) || this.minWidth;
   }
 }

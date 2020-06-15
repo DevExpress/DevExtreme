@@ -8,43 +8,46 @@ import {
   Ref,
   InternalState,
 } from 'devextreme-generator/component_declaration/common';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { h } from 'preact';
 import Page from './page';
 import { PAGER_INFO_CLASS } from './info';
 import NumberBox from '../number-box';
 import messageLocalization from '../../localization/message';
-import getElementComputedStyle from './get-computed-style';
 import { calculateValuesFittedWidth } from './calculate-values-fitted-width';
+import { getElementMinWidth } from './utils/get-element-width';
 
 const PAGER_INFO_TEXT_CLASS = `${PAGER_INFO_CLASS}  dx-info-text`;
 const PAGER_PAGE_INDEX_CLASS = 'dx-page-index';
 const LIGHT_PAGES_CLASS = 'dx-light-pages';
+const PAGER_PAGES_COUNT_CLASS = 'dx-pages-count';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
-  valueChanged,
+  valueChange,
   width,
   value,
   pageIndexRef,
   props: { pageCount, pagesCountText, rtlEnabled },
-}: SmallPages) => (
+}: PagesSmall) => (
   <div className={LIGHT_PAGES_CLASS}>
-    <div ref={pageIndexRef as never} className={PAGER_PAGE_INDEX_CLASS}>
-      <NumberBox
-        min={1}
-        max={pageCount}
-        width={width}
-        value={value}
-        rtlEnabled={rtlEnabled}
-        valueChange={valueChanged}
-      />
-    </div>
+    <NumberBox
+      ref={pageIndexRef as never}
+      className={PAGER_PAGE_INDEX_CLASS}
+      min={1}
+      max={pageCount}
+      width={width}
+      value={value}
+      rtlEnabled={rtlEnabled}
+      valueChange={valueChange}
+    />
     <span className={PAGER_INFO_TEXT_CLASS}>{pagesCountText}</span>
-    <Page selected={false} index={(pageCount as number) - 1} />
+    <Page className={PAGER_PAGES_COUNT_CLASS} selected={false} index={(pageCount as number) - 1} />
   </div>
 );
 
 @ComponentBindings()
-export class SmallPagesProps {
+export class PagesSmallProps {
   @OneWay() pageCount?: number = 10;
 
   @OneWay() pageIndex?: number = 0;
@@ -59,29 +62,25 @@ export class SmallPagesProps {
 
 // tslint:disable-next-line: max-classes-per-file
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class SmallPages extends JSXComponent(SmallPagesProps) {
-  @Ref() pageIndexRef!: HTMLDivElement;
+export default class PagesSmall extends JSXComponent(PagesSmallProps) {
+  @Ref() pageIndexRef!: NumberBox;
 
   get value(): number {
     return (this.props.pageIndex as number) + 1;
   }
 
   get width(): number {
-    return calculateValuesFittedWidth(this.minWidth, [this.props.pageCount as number]);
+    const pageCount = this.props.pageCount as number;
+    return calculateValuesFittedWidth(this.minWidth, [pageCount]);
   }
 
   @InternalState() private minWidth = 10;
 
   @Effect() updateWidth(): void {
-    const style = getElementComputedStyle(this.pageIndexRef);
-    if (style) {
-      this.minWidth = Number(style.minWidth.replace('px', ''));
-    }
+    this.minWidth = getElementMinWidth(this.pageIndexRef.getHtmlElement()) || this.minWidth;
   }
 
-  valueChanged(value: number): void {
-    if (this.props.pageIndexChange) {
-      this.props.pageIndexChange(value - 1);
-    }
+  valueChange(value: number): void {
+      this.props.pageIndexChange?.(value - 1);
   }
 }

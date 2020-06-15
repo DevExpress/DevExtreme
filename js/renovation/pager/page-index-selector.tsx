@@ -1,9 +1,11 @@
 import {
   Component, ComponentBindings, JSXComponent, Event, OneWay, Fragment,
 } from 'devextreme-generator/component_declaration/common';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { h } from 'preact';
 import LightButton from './light-button';
-import LargePages from './pages-large';
-import SmallPages from './pages-small';
+import PagesLarge from './pages-large';
+import PagesSmall from './pages-small';
 import messageLocalization from '../../localization/message';
 
 const PAGER_NAVIGATE_BUTTON = 'dx-navigate-button';
@@ -28,16 +30,15 @@ export const viewFunction = ({
   },
 }: PageIndexSelector) => (
   <Fragment>
-    {renderNavButtons
-                && (
-                <LightButton
-                  className={prevClassName}
-                  label="Previous page"
-                  onClick={navigateToPrevPage}
-                />
-                )}
+    {renderNavButtons && (
+    <LightButton
+      className={prevClassName}
+      label="Previous page"
+      onClick={navigateToPrevPage}
+    />
+    )}
     {isLargeDisplayMode && (
-    <LargePages
+    <PagesLarge
       maxPagesCount={maxPagesCount}
       pageCount={pageCount}
       pageIndex={pageIndex}
@@ -46,7 +47,7 @@ export const viewFunction = ({
     />
     )}
     {!isLargeDisplayMode && (
-    <SmallPages
+    <PagesSmall
       pageCount={pageCount}
       pageIndex={pageIndex}
       pageIndexChange={pageIndexChange}
@@ -54,14 +55,13 @@ export const viewFunction = ({
       rtlEnabled={rtlEnabled}
     />
     )}
-    {renderNavButtons
-                && (
-                <LightButton
-                  className={nextClassName}
-                  label="Next page"
-                  onClick={navigateToNextPage}
-                />
-                )}
+    {renderNavButtons && (
+    <LightButton
+      className={nextClassName}
+      label="Next page"
+      onClick={navigateToNextPage}
+    />
+    )}
   </Fragment>
 );
 
@@ -92,7 +92,7 @@ function getIncrement(direction: Direction): number {
   return direction === 'next' ? +1 : -1;
 }
 
-  type Direction = 'next' | 'prev';
+type Direction = 'next' | 'prev';
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export default class PageIndexSelector extends JSXComponent(PageIndexSelectorProps) {
@@ -140,8 +140,8 @@ export default class PageIndexSelector extends JSXComponent(PageIndexSelectorPro
 
   private navigateToPage(direction: Direction): void {
     const canNavigate = this.canNavigateTo(direction);
-    if (canNavigate && this.props.pageIndexChange) {
-      this.props.pageIndexChange((this.props.pageIndex as number) + getIncrement(direction));
+    if (canNavigate) {
+      this.props.pageIndexChange?.((this.props.pageIndex as number) + getIncrement(direction));
     }
   }
 }

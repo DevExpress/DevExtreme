@@ -2,9 +2,12 @@ import {
   Component, ComponentBindings, JSXComponent,
   Ref, Effect, Template, InternalState, Event,
 } from 'devextreme-generator/component_declaration/common';
-import getElementComputedStyle from './get-computed-style';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { h } from 'preact';
 import resizeCallbacks from '../../core/utils/resize_callbacks';
 import PagerProps from './pager-props';
+import type { GetHtmlElement } from './pager.types.d';
+import { getElementWidth } from './utils/get-element-width';
 // bug in generator: Max call stack
 // import { TwoWayProps } from './pager-content';
 // import type PagerContentProps from './pager-content';
@@ -33,9 +36,8 @@ export const viewFunction = ({
     {...pagerProps as PagerProps}
   />
 );
-export type GetHtmlElement = { getHtmlElement: () => HTMLElement | undefined };
-type ChildElementsName = 'pageSizesHtmlEl' | 'pagesHtmlEl' | 'infoHtmlEl';
-type AllElementsName = 'parentHtmlEl' | ChildElementsName;
+type ChildElementsName = 'pageSizes' | 'pages' | 'info';
+type AllElementsName = 'parent' | ChildElementsName;
 type AllElementsWidth = Record<AllElementsName, number>;
 type ChildElementsWidth = Record<ChildElementsName, number>;
 type HTMLRefType = Record<AllElementsName, HTMLElement | undefined>;
@@ -44,16 +46,13 @@ type ChildElementProps = {
   isLargeDisplayMode: boolean;
 };
 
-function ToNumber(attribute: string | undefined): number {
-  return attribute ? Number(attribute.replace('px', '')) : 0;
-}
 export function getContentProps({
-  parentHtmlEl: parentWidth, pageSizesHtmlEl: pageSizesWidth,
-  pagesHtmlEl: pagesHtmlWidth, infoHtmlEl: infoWidth,
+  parent: parentWidth, pageSizes: pageSizesWidth,
+  pages: pagesWidth, info: infoWidth,
 }: AllElementsWidth): ChildElementProps {
-  const minimalWidth = pageSizesWidth + pagesHtmlWidth;
+  const minimalWidth = pageSizesWidth + pagesWidth;
   const infoTextVisible = parentWidth - minimalWidth > 0;
-  const isLargeDisplayMode = parentWidth - (pageSizesWidth + (pagesHtmlWidth - infoWidth)) > 0;
+  const isLargeDisplayMode = parentWidth - (pageSizesWidth + (pagesWidth - infoWidth)) > 0;
   return {
     infoTextVisible,
     isLargeDisplayMode,
@@ -61,17 +60,17 @@ export function getContentProps({
 }
 
 function getElementsWidth({
-  parentHtmlEl, pageSizesHtmlEl, pagesHtmlEl, infoHtmlEl,
+  parent, pageSizes, pages, info,
 }: HTMLRefType): AllElementsWidth {
-  const parentWidth = ToNumber(getElementComputedStyle(parentHtmlEl)?.width);
-  const pageSizesWidth = ToNumber(getElementComputedStyle(pageSizesHtmlEl)?.width);
-  const infoWidth = ToNumber(getElementComputedStyle(infoHtmlEl)?.width);
-  const pagesHtmlWidth = ToNumber(getElementComputedStyle(pagesHtmlEl)?.width);
+  const parentWidth = getElementWidth(parent);
+  const pageSizesWidth = getElementWidth(pageSizes);
+  const infoWidth = getElementWidth(info);
+  const pagesHtmlWidth = getElementWidth(pages);
   return {
-    parentHtmlEl: parentWidth,
-    pageSizesHtmlEl: pageSizesWidth,
-    infoHtmlEl: infoWidth,
-    pagesHtmlEl: pagesHtmlWidth,
+    parent: parentWidth,
+    pageSizes: pageSizesWidth,
+    info: infoWidth,
+    pages: pagesHtmlWidth,
   };
 }
 
@@ -80,14 +79,14 @@ function updateElementsWidthIfNeed(
   currentElementsWidth: ChildElementsWidth,
 ): ChildElementsWidth {
   const updated = {
-    pageSizesHtmlEl: Math.max(elementsWidth.pageSizesHtmlEl || 0,
-      currentElementsWidth.pageSizesHtmlEl || 0),
-    infoHtmlEl: Math.max(elementsWidth.infoHtmlEl || 0, currentElementsWidth.infoHtmlEl || 0),
-    pagesHtmlEl: Math.max(elementsWidth.pagesHtmlEl || 0, currentElementsWidth.pagesHtmlEl || 0),
+    pageSizes: Math.max(elementsWidth.pageSizes || 0,
+      currentElementsWidth.pageSizes || 0),
+    info: Math.max(elementsWidth.info || 0, currentElementsWidth.info || 0),
+    pages: Math.max(elementsWidth.pages || 0, currentElementsWidth.pages || 0),
   };
-  const isEqual = (elementsWidth.pageSizesHtmlEl === updated.pageSizesHtmlEl)
-  && (elementsWidth.pagesHtmlEl === updated.pagesHtmlEl)
-  && (elementsWidth.infoHtmlEl === updated.infoHtmlEl);
+  const isEqual = (elementsWidth.pageSizes === updated.pageSizes)
+  && (elementsWidth.pages === updated.pages)
+  && (elementsWidth.info === updated.info);
   return isEqual ? elementsWidth : updated;
 }
 export function updateChildProps(
@@ -96,15 +95,15 @@ export function updateChildProps(
   elementsWidth: ChildElementsWidth,
 ):
   { elementsWidth: ChildElementsWidth } & ChildElementProps {
-  const { parentHtmlEl: parentWidth, ...currentElementsWidth } = getElementsWidth({
-    parentHtmlEl: parentRef,
-    pageSizesHtmlEl: pageSizesHtmlRef?.getHtmlElement(),
-    infoHtmlEl: infoTextRef?.getHtmlElement(),
-    pagesHtmlEl: pagesRef,
+  const { parent: parentWidth, ...currentElementsWidth } = getElementsWidth({
+    parent: parentRef,
+    pageSizes: pageSizesHtmlRef?.getHtmlElement(),
+    info: infoTextRef?.getHtmlElement(),
+    pages: pagesRef,
   });
   const newElementsWidth = updateElementsWidthIfNeed(elementsWidth, currentElementsWidth);
   const { infoTextVisible, isLargeDisplayMode } = getContentProps({
-    parentHtmlEl: parentWidth,
+    parent: parentWidth,
     ...newElementsWidth,
   });
   return {
@@ -142,9 +141,9 @@ export default class ResizableContainer extends JSXComponent(ResizableContainerP
   @InternalState() isLargeDisplayMode = true;
 
   elementsWidth: ChildElementsWidth = {
-    pageSizesHtmlEl: 0,
-    pagesHtmlEl: 0,
-    infoHtmlEl: 0,
+    pageSizes: 0,
+    pages: 0,
+    info: 0,
   };
 
   @Effect() subscribeToResize(): EffectCallback {

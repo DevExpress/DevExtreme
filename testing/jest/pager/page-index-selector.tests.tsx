@@ -1,24 +1,18 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h } from 'preact';
-import { mount } from 'enzyme';
-import type { PageIndexSelectorPropsType as Props } from '../../../js/renovation/pager/page-index-selector.p';
-import Component from '../../../js/renovation/pager/page-index-selector.p';
-import LightButton from '../../../js/renovation/pager/light-button.p';
-import { PAGER_BUTTON_DISABLE_CLASS } from '../../../js/renovation/pager/page-index-selector';
-import LargePages from '../../../js/renovation/pager/pages-large.p';
-import SmallPages from '../../../js/renovation/pager/pages-small.p';
-
-jest.mock('../../../js/renovation/pager/pages-small.p', () => () => null);
-jest.mock('../../../js/renovation/pager/pages-large.p', () => () => null);
+import { shallow } from 'enzyme';
+import Component, { PageIndexSelectorProps, PAGER_BUTTON_DISABLE_CLASS } from '../../../js/renovation/pager/page-index-selector';
+import LightButton from '../../../js/renovation/pager/light-button';
+import PagesLarge from '../../../js/renovation/pager/pages-large';
+import SmallPages from '../../../js/renovation/pager/pages-small';
 
 describe('Page index selector', () => {
-  const render = (props: Props) => {
-    const root = mount(<Component {...props} />);
-    const PagesType = props.isLargeDisplayMode ? LargePages : SmallPages;
+  const render = (props: PageIndexSelectorProps) => {
+    const root = shallow<Component>(<Component {...props} />);
+    const PagesType = props.isLargeDisplayMode ? PagesLarge : SmallPages;
     return {
       root,
-      // tslint:disable-next-line: object-literal-sort-keys
-      pages: () => root.find(PagesType).at(0),
+      pages: () => root.find(PagesType),
       prevButton: () => root.find(LightButton).at(0),
       nextButton: () => root.find(LightButton).at(1),
     };
@@ -105,7 +99,7 @@ describe('Page index selector', () => {
   });
   it('click to navigation buttons pageIndex = 0', () => {
     const pageIndexChangeHandler = jest.fn();
-    const { prevButton, nextButton } = render({
+    const component = new Component({
       rtlEnabled: false,
       pageIndex: 0,
       pageCount: 3,
@@ -113,14 +107,14 @@ describe('Page index selector', () => {
       isLargeDisplayMode: true,
       showNavigationButtons: true,
     });
-    prevButton().props().onClick();
+    component.navigateToPrevPage();
     expect(pageIndexChangeHandler).not.toBeCalled();
-    nextButton().props().onClick();
+    component.navigateToNextPage();
     expect(pageIndexChangeHandler).toBeCalled();
   });
   it('click to navigation buttons pageIndex = pageCount - 1', () => {
     const pageIndexChangeHandler = jest.fn();
-    const { prevButton, nextButton } = render({
+    const component = new Component({
       rtlEnabled: false,
       pageIndex: 2,
       pageCount: 3,
@@ -128,9 +122,9 @@ describe('Page index selector', () => {
       isLargeDisplayMode: true,
       showNavigationButtons: true,
     });
-    nextButton().props().onClick();
+    component.navigateToNextPage();
     expect(pageIndexChangeHandler).not.toBeCalled();
-    prevButton().props().onClick();
+    component.navigateToPrevPage();
     expect(pageIndexChangeHandler).toBeCalled();
   });
 });

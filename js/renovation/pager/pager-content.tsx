@@ -3,6 +3,8 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Event,
 } from 'devextreme-generator/component_declaration/common';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { h } from 'preact';
 import InfoText from './info';
 import PageIndexSelector from './page-index-selector';
 import PageSizeSelector from './page-size-selector';
@@ -24,14 +26,14 @@ export const viewFunction = ({
     showInfo,
     elementAttr,
   },
-}: PagerContent) => (
+}: PagerContentComponent) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <div ref={parentRef as any} className={className} {...elementAttr}>
     <PageSizeSelector
       ref={pageSizesRef as any}
       isLargeDisplayMode={isLargeDisplayMode}
       pageSize={pageSize}
-      pageSizeChanged={pageSizeChange}
+      pageSizeChange={pageSizeChange}
       pageSizes={pageSizes}
       rtlEnabled={rtlEnabled}
     />
@@ -61,10 +63,11 @@ export const viewFunction = ({
   </div>
 );
 
+/* Vitik bug in generator try to use in resizable-container
 export type TwoWayProps = {
   pageIndexChange?: (pageIndex: number) => void;
   pageSizeChange?: (pageSize: number) => void;
-};
+}; */
 
 @ComponentBindings()
 export class PagerContentProps extends PagerProps /* bug in generator  implements TwoWayProps */ {
@@ -87,10 +90,9 @@ export class PagerContentProps extends PagerProps /* bug in generator  implement
 
 // tslint:disable-next-line: max-classes-per-file
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class PagerContent extends JSXComponent(PagerContentProps) {
+export default class PagerContentComponent extends JSXComponent(PagerContentProps) {
   get isLargeDisplayMode(): boolean {
-    return !(this.props.lightModeEnabled
-    || !this.props.isLargeDisplayMode);
+    return !this.props.lightModeEnabled && this.props.isLargeDisplayMode;
   }
 
   get className(): string {
