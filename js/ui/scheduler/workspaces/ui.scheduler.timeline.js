@@ -1,12 +1,12 @@
-const $ = require('../../../core/renderer');
-const noop = require('../../../core/utils/common').noop;
-const extend = require('../../../core/utils/extend').extend;
-const getBoundingRect = require('../../../core/utils/position').getBoundingRect;
-const registerComponent = require('../../../core/component_registrator');
-const SchedulerWorkSpace = require('./ui.scheduler.work_space.indicator');
-const dateUtils = require('../../../core/utils/date');
-const tableCreator = require('../ui.scheduler.table_creator');
-const HorizontalShader = require('../shaders/ui.scheduler.current_time_shader.horizontal');
+import $ from '../../../core/renderer';
+import { noop } from '../../../core/utils/common';
+import { extend } from '../../../core/utils/extend';
+import { getBoundingRect } from '../../../core/utils/position';
+import registerComponent from '../../../core/component_registrator';
+import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
+import dateUtils from '../../../core/utils/date';
+import tableCreator from '../ui.scheduler.table_creator';
+import HorizontalShader from '../shaders/ui.scheduler.current_time_shader.horizontal';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline';
 const GROUP_TABLE_CLASS = 'dx-scheduler-group-table';
@@ -22,178 +22,146 @@ const DATE_TABLE_CELL_BORDER = 1;
 const DATE_TABLE_HEADER_MARGIN = 10;
 const toMs = dateUtils.dateToMilliseconds;
 
-const SchedulerTimeline = SchedulerWorkSpace.inherit({
-    _init: function() {
-        this.callBase();
+class SchedulerTimeline extends SchedulerWorkSpace {
+    _init() {
+        super._init();
+
         this.$element().addClass(TIMELINE_CLASS);
         this._$sidebarTable = $('<div>')
             .addClass(GROUP_TABLE_CLASS);
-    },
-    _getCellFromNextRow: function(direction, isMultiSelection) {
+    }
+    _getCellFromNextRow(direction, isMultiSelection) {
         if(!isMultiSelection) {
-            return this.callBase(direction, isMultiSelection);
+            return super._getCellFromNextRow(direction, isMultiSelection);
         }
 
         return this._$focusedCell;
-    },
+    }
 
-    _getDefaultGroupStrategy: function() {
+    _getDefaultGroupStrategy() {
         return 'vertical';
-    },
+    }
 
-    _toggleGroupingDirectionClass: function() {
+    _toggleGroupingDirectionClass() {
         this.$element().toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace());
-    },
+    }
 
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
             groupOrientation: 'vertical'
         });
-    },
+    }
 
-    _getRightCell: function() {
-        let $rightCell;
-        const $focusedCell = this._$focusedCell;
-        const rowCellCount = this._getCellCount();
-        const edgeCellIndex = this._isRTL() ? 0 : rowCellCount - 1;
-        const direction = this._isRTL() ? 'prev' : 'next';
-
-        if($focusedCell.index() === edgeCellIndex) {
-            $rightCell = $focusedCell;
-        } else {
-            $rightCell = $focusedCell[direction]();
-            $rightCell = this._checkForViewBounds($rightCell);
-        }
-        return $rightCell;
-    },
-
-    _getLeftCell: function() {
-        let $leftCell;
-        const $focusedCell = this._$focusedCell;
-        const rowCellCount = this._getCellCount();
-        const edgeCellIndex = this._isRTL() ? rowCellCount - 1 : 0;
-        const direction = this._isRTL() ? 'next' : 'prev';
-
-        if($focusedCell.index() === edgeCellIndex) {
-            $leftCell = $focusedCell;
-        } else {
-            $leftCell = $focusedCell[direction]();
-            $leftCell = this._checkForViewBounds($leftCell);
-        }
-
-        return $leftCell;
-    },
-
-    _getRowCount: function() {
+    _getRowCount() {
         return 1;
-    },
+    }
 
-    _getCellCount: function() {
+    _getCellCount() {
         return this._getCellCountInDay() * this.option('intervalCount');
-    },
+    }
 
-    getGroupTableWidth: function() {
+    getGroupTableWidth() {
         return this._$sidebarTable ? this._$sidebarTable.outerWidth() : 0;
-    },
+    }
 
-    _getTotalRowCount: function(groupCount) {
+    _getTotalRowCount(groupCount) {
         if(this._isHorizontalGroupedWorkSpace()) {
             return this._getRowCount();
         } else {
             groupCount = groupCount || 1;
             return this._getRowCount() * groupCount;
         }
-    },
+    }
 
-    _getDateByIndex: function(index) {
+    _getDateByIndex(index) {
         const resultDate = new Date(this._firstViewDate);
         const dayIndex = Math.floor(index / this._getCellCountInDay());
         resultDate.setTime(this._firstViewDate.getTime() + this._calculateCellIndex(0, index) * this._getInterval() + dayIndex * this._getHiddenInterval());
         return resultDate;
-    },
+    }
 
-    _getFormat: function() {
+    _getFormat() {
         return 'shorttime';
-    },
+    }
 
-    _needApplyLastGroupCellClass: function() {
+    _needApplyLastGroupCellClass() {
         return true;
-    },
+    }
 
-    _calculateHiddenInterval: function(rowIndex, cellIndex) {
+    _calculateHiddenInterval(rowIndex, cellIndex) {
         const dayIndex = Math.floor(cellIndex / this._getCellCountInDay());
         return dayIndex * this._getHiddenInterval();
-    },
+    }
 
-    _getMillisecondsOffset: function(rowIndex, cellIndex) {
+    _getMillisecondsOffset(rowIndex, cellIndex) {
         cellIndex = this._calculateCellIndex(rowIndex, cellIndex);
 
         return this._getInterval() * cellIndex + this._calculateHiddenInterval(rowIndex, cellIndex);
-    },
+    }
 
-    _createWorkSpaceElements: function() {
+    _createWorkSpaceElements() {
         this._createWorkSpaceScrollableElements();
-    },
+    }
 
-    _getWorkSpaceHeight: function() {
+    _getWorkSpaceHeight() {
         if(this.option('crossScrollingEnabled')) {
             return getBoundingRect(this._$dateTable.get(0)).height;
         }
 
         return getBoundingRect(this.$element().get(0)).height;
-    },
+    }
 
-    _dateTableScrollableConfig: function() {
-        const config = this.callBase();
+    _dateTableScrollableConfig() {
+        const config = super._dateTableScrollableConfig();
         const timelineConfig = {
             direction: HORIZONTAL
         };
 
         return this.option('crossScrollingEnabled') ? config : extend(config, timelineConfig);
-    },
+    }
 
-    _needCreateCrossScrolling: function() {
+    _needCreateCrossScrolling() {
         return true;
-    },
+    }
 
-    _headerScrollableConfig: function() {
-        const config = this.callBase();
+    _headerScrollableConfig() {
+        const config = super._headerScrollableConfig();
 
         return extend(config, {
             scrollByContent: true
         });
-    },
+    }
 
-    _renderTimePanel: noop,
-    _renderAllDayPanel: noop,
-    _getTableAllDay: function() {
+    _renderTimePanel() { return noop(); }
+    _renderAllDayPanel() { return noop(); }
+    _getTableAllDay() {
         return false;
-    },
-    _getDateHeaderTemplate: function() {
+    }
+    _getDateHeaderTemplate() {
         return this.option('timeCellTemplate');
-    },
-    _toggleAllDayVisibility: noop,
-    _changeAllDayVisibility: noop,
+    }
+    _toggleAllDayVisibility() { return noop(); }
+    _changeAllDayVisibility() { return noop(); }
 
-    supportAllDayRow: function() {
+    supportAllDayRow() {
         return false;
-    },
+    }
 
-    _getGroupHeaderContainer: function() {
+    _getGroupHeaderContainer() {
         if(this._isHorizontalGroupedWorkSpace()) {
             return this._$thead;
         }
         return this._$sidebarTable;
-    },
+    }
 
-    _insertAllDayRowsIntoDateTable: function() {
+    _insertAllDayRowsIntoDateTable() {
         return false;
-    },
+    }
 
-    _createAllDayPanelElements: noop,
+    _createAllDayPanelElements() { return noop(); }
 
-    _renderDateHeader: function() {
-        const $headerRow = this.callBase();
+    _renderDateHeader() {
+        const $headerRow = super._renderDateHeader();
 
         if(this._needRenderWeekHeader()) {
             const firstViewDate = new Date(this._firstViewDate);
@@ -229,21 +197,21 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
             const $row = $('<tr>').addClass(HEADER_ROW_CLASS).append($cells);
             $headerRow.before($row);
         }
-    },
+    }
 
-    _needRenderWeekHeader: function() {
+    _needRenderWeekHeader() {
         return false;
-    },
+    }
 
-    _incrementDate: function(date) {
+    _incrementDate(date) {
         date.setDate(date.getDate() + 1);
-    },
+    }
 
-    _getWeekDuration: function() {
+    _getWeekDuration() {
         return 1;
-    },
+    }
 
-    _renderView: function() {
+    _renderView() {
         this._setFirstViewDate();
         const groupCellTemplates = this._renderGroupHeader();
         this._renderDateHeader();
@@ -258,11 +226,11 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
 
         this._$sidebarTable.appendTo(this._sidebarScrollable.$content());
         this._applyCellTemplates(groupCellTemplates);
-    },
+    }
 
-    _setHorizontalGroupHeaderCellsHeight: noop,
+    _setHorizontalGroupHeaderCellsHeight() { return noop(); }
 
-    getIndicationWidth: function() {
+    getIndicationWidth() {
         const today = this._getToday();
         const cellWidth = this.getCellWidth();
         const date = this._getIndicationFirstViewDate();
@@ -274,9 +242,9 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
         const cellCount = duration / this.getCellDuration();
 
         return cellCount * cellWidth;
-    },
+    }
 
-    _renderIndicator: function(height, rtlOffset, $container, groupCount) {
+    _renderIndicator(height, rtlOffset, $container, groupCount) {
         let $indicator;
         const width = this.getIndicationWidth();
 
@@ -293,13 +261,13 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
                 $indicator.css('left', rtlOffset ? rtlOffset - width - offset : width + offset);
             }
         }
-    },
+    }
 
-    _isVerticalShader: function() {
+    _isVerticalShader() {
         return false;
-    },
+    }
 
-    _isCurrentTimeHeaderCell: function(headerIndex) {
+    _isCurrentTimeHeaderCell(headerIndex) {
         let result = false;
 
         if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {
@@ -318,18 +286,18 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
         }
 
         return result;
-    },
+    }
 
-    _cleanView: function() {
-        this.callBase();
+    _cleanView() {
+        super._cleanView();
         this._$sidebarTable.empty();
-    },
+    }
 
-    _visibilityChanged: function(visible) {
-        this.callBase(visible);
-    },
+    _visibilityChanged(visible) {
+        super._visibilityChanged(visible);
+    }
 
-    _setTableSizes: function() {
+    _setTableSizes() {
         const cellHeight = this.getCellHeight();
         const minHeight = this._getWorkSpaceMinHeight();
         const $groupCells = this._$sidebarTable
@@ -343,10 +311,10 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
         this._$sidebarTable.height(height);
         this._$dateTable.height(height);
 
-        this.callBase();
-    },
+        super._setTableSizes();
+    }
 
-    _getWorkSpaceMinHeight: function() {
+    _getWorkSpaceMinHeight() {
         let minHeight = this._getWorkSpaceHeight();
         const workspaceContainerHeight = this.$element().outerHeight(true) - this.getHeaderPanelHeight() - 2 * DATE_TABLE_CELL_BORDER - DATE_TABLE_HEADER_MARGIN;
 
@@ -355,9 +323,9 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
         }
 
         return minHeight;
-    },
+    }
 
-    _makeGroupRows: function(groups, groupByDate) {
+    _makeGroupRows(groups, groupByDate) {
         const tableCreatorStrategy = this.option('groupOrientation') === 'vertical' ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
 
         return tableCreator.makeGroupedTable(tableCreatorStrategy,
@@ -371,32 +339,32 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
             this.option('resourceCellTemplate'),
             this._getTotalRowCount(this._getGroupCount()),
             groupByDate);
-    },
+    }
 
-    _ensureGroupHeaderCellsHeight: function(cellHeight) {
+    _ensureGroupHeaderCellsHeight(cellHeight) {
         const minCellHeight = this._calculateMinCellHeight();
 
         if(cellHeight < minCellHeight) {
             return minCellHeight;
         }
         return cellHeight;
-    },
+    }
 
-    _calculateMinCellHeight: function() {
+    _calculateMinCellHeight() {
         const dateTable = this._getDateTable();
         const dateTableRowSelector = '.' + this._getDateTableRowClass();
 
         return (getBoundingRect(dateTable).height / dateTable.find(dateTableRowSelector).length) - DATE_TABLE_CELL_BORDER * 2;
-    },
+    }
 
-    _getCellCoordinatesByIndex: function(index) {
+    _getCellCoordinatesByIndex(index) {
         return {
             cellIndex: index % this._getCellCount(),
             rowIndex: 0
         };
-    },
+    }
 
-    _getCellByCoordinates: function(cellCoordinates, groupIndex) {
+    _getCellByCoordinates(cellCoordinates, groupIndex) {
         const indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex);
 
         return this._$dateTable
@@ -404,21 +372,17 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
             .eq(indexes.rowIndex)
             .find('td')
             .eq(indexes.cellIndex);
-    },
+    }
 
-    _getWorkSpaceWidth: function() {
+    _getWorkSpaceWidth() {
         return this._$dateTable.outerWidth(true);
-    },
+    }
 
-    _getGroupIndexByCell: function($cell) {
-        return $cell.parent().index();
-    },
-
-    _getIndicationFirstViewDate: function() {
+    _getIndicationFirstViewDate() {
         return new Date(this._firstViewDate);
-    },
+    }
 
-    _getIntervalBetween: function(currentDate, allDay) {
+    _getIntervalBetween(currentDate, allDay) {
         const startDayHour = this.option('startDayHour');
         const endDayHour = this.option('endDayHour');
         const firstViewDate = this.getStartViewDate();
@@ -449,22 +413,22 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
         }
 
         return result;
-    },
+    }
 
-    _getWeekendsCount: function() {
+    _getWeekendsCount() {
         return 0;
-    },
+    }
 
-    getAllDayContainer: function() {
+    getAllDayContainer() {
         return null;
-    },
+    }
 
-    getTimePanelWidth: function() {
+    getTimePanelWidth() {
         return 0;
-    },
+    }
 
-    getPositionShift: function(timeShift) {
-        const positionShift = this.callBase(timeShift);
+    getPositionShift(timeShift) {
+        const positionShift = super.getPositionShift(timeShift);
         let left = this.getCellWidth() * timeShift;
 
         if(this.option('rtlEnabled')) {
@@ -478,9 +442,9 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
             left: left,
             cellPosition: left
         };
-    },
+    }
 
-    getVisibleBounds: function() {
+    getVisibleBounds() {
         const isRtl = this.option('rtlEnabled');
 
         const result = {};
@@ -511,9 +475,9 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
         };
 
         return result;
-    },
+    }
 
-    needUpdateScrollPosition: function(hours, minutes, bounds, date) {
+    needUpdateScrollPosition(hours, minutes, bounds, date) {
         let isUpdateNeeded = false;
 
         isUpdateNeeded = this._dateWithinBounds(bounds, date);
@@ -531,13 +495,13 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
         }
 
         return isUpdateNeeded;
-    },
+    }
 
-    getIntervalDuration: function(allDay) {
+    getIntervalDuration(allDay) {
         return this.getCellDuration();
-    },
+    }
 
-    _dateWithinBounds: function(bounds, date) {
+    _dateWithinBounds(bounds, date) {
         const trimmedDate = dateUtils.trimTime(new Date(date));
         let isUpdateNeeded = false;
 
@@ -546,21 +510,21 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
         }
 
         return isUpdateNeeded;
-    },
+    }
 
-    _supportCompactDropDownAppointments: function() {
+    _supportCompactDropDownAppointments() {
         return false;
-    },
+    }
 
-    getCellMinWidth: function() {
+    getCellMinWidth() {
         return 0;
-    },
+    }
 
-    getWorkSpaceLeftOffset: function() {
+    getWorkSpaceLeftOffset() {
         return 0;
-    },
+    }
 
-    scrollToTime: function(hours, minutes, date) {
+    scrollToTime(hours, minutes, date) {
         const coordinates = this._getScrollCoordinates(hours, minutes, date);
         const scrollable = this.getScrollable();
         const offset = this.option('rtlEnabled') ? getBoundingRect(this.getScrollableContainer().get(0)).width : 0;
@@ -573,8 +537,11 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
             scrollable.scrollBy({ left: coordinates.left - scrollable.scrollLeft() - offset, top: 0 });
         }
     }
-});
+
+    _getRowCountWithAllDayRows() {
+        return this._getRowCount();
+    }
+}
 
 registerComponent('dxSchedulerTimeline', SchedulerTimeline);
-
 module.exports = SchedulerTimeline;

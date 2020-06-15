@@ -182,7 +182,14 @@ const HorizontalGroupedStrategy = GroupedStrategy.inherit({
 
     getScrollableScrollTop: function(allDay) {
         return !allDay ? this._workSpace.getScrollable().scrollTop() : 0;
-    }
+    },
+
+    getGroupIndexByCell: function($cell) {
+        const rowIndex = $cell.parent().index();
+        const cellIndex = $cell.index();
+
+        return this.getGroupIndex(rowIndex, cellIndex);
+    },
 });
 
 module.exports = HorizontalGroupedStrategy;

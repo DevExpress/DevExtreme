@@ -10711,7 +10711,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     // T708525
     QUnit.test('change columns with grouping after dataSource change', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({});
 
         // act
@@ -10721,7 +10721,39 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.equal(dataGrid.getVisibleRows()[0].rowType, 'group', 'first row type is');
+        assert.equal(dataGrid.getVisibleRows()[0].rowType, 'group', 'first row type is group');
+        assert.equal(dataGrid.columnOption('b', 'groupIndex'), 0, 'column b is grouped');
+    });
+
+    QUnit.test('Column changes are applied while dataSource is loading (T895552)', function(assert) {
+        // arrange, act
+        const dataGrid = createDataGrid({
+            dataSource: {
+                store: {
+                    type: 'array',
+                    key: 'a',
+                    data: [{ a: 1, b: 2 }]
+                }
+            },
+            columns: ['a', 'b']
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.option('filterPanel.visible', true); // causes reloading a data source
+        const dataSource = dataGrid.getDataSource();
+
+        // assert
+        assert.ok(dataSource.isLoading(), 'dataSource is loading');
+
+        // act
+        dataGrid.option('columns', ['a', { dataField: 'b', groupIndex: 0 }]);
+        this.clock.tick();
+        const $filterPanelViewElement = $(dataGrid.getView('filterPanelView').element());
+
+        // assert
+        assert.ok($filterPanelViewElement.is(':visible'), 'filterPanel is visible');
+        assert.equal(dataGrid.getVisibleRows()[0].rowType, 'group', 'first row type is group');
         assert.equal(dataGrid.columnOption('b', 'groupIndex'), 0, 'column b is grouped');
     });
 
