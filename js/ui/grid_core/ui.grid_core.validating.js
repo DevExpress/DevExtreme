@@ -765,10 +765,10 @@ module.exports = {
                             columnIndex: e.column.index
                         });
                         when(currentValidator && validatingController.validateCell(currentValidator))
-                            .done(() => {
+                           .done((validationResult) => {
                                 this.getController('editorFactory').refocus();
-                            })
-                            .done(deferred.resolve);
+                                deferred.resolve(validationResult);
+                            });
                     });
                     return deferred.promise();
                 },
