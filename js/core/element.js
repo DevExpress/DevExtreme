@@ -10,5 +10,5 @@ function setPublicElementWrapper(newStrategy) {
     strategy = newStrategy;
 }
 
-exports.setPublicElementWrapper = setPublicElementWrapper;
-exports.getPublicElement = getPublicElement;
+export { setPublicElementWrapper };
+export { getPublicElement };

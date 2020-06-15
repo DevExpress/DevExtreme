@@ -316,29 +316,21 @@ const equalByValue = function(object1, object2, depth = 0, strict = true) {
     return false;
 };
 
-exports.ensureDefined = ensureDefined;
-
-exports.executeAsync = executeAsync;
-
-exports.deferRender = deferRender;
-exports.deferRenderer = deferRenderer;
-exports.deferUpdate = deferUpdate;
-exports.deferUpdater = deferUpdater;
-
-exports.pairToObject = pairToObject;
-exports.splitPair = splitPair;
-
-exports.findBestMatches = findBestMatches;
-
-exports.normalizeKey = normalizeKey;
-exports.denormalizeKey = denormalizeKey;
-exports.getKeyHash = getKeyHash;
-
-exports.escapeRegExp = escapeRegExp;
-
-exports.applyServerDecimalSeparator = applyServerDecimalSeparator;
-
-exports.noop = noop;
-exports.asyncNoop = asyncNoop;
-exports.grep = grep;
-exports.equalByValue = equalByValue;
+export { ensureDefined };
+export { executeAsync };
+export { deferRender };
+export { deferRenderer };
+export { deferUpdate };
+export { deferUpdater };
+export { pairToObject };
+export { splitPair };
+export { findBestMatches };
+export { normalizeKey };
+export { denormalizeKey };
+export { getKeyHash };
+export { escapeRegExp };
+export { applyServerDecimalSeparator };
+export { noop };
+export { asyncNoop };
+export { grep };
+export { equalByValue };

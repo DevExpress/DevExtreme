@@ -1,4 +1,4 @@
-const Class = require('./class');
+import Class from './class';
 
 const Guid = Class.inherit({
 
@@ -54,4 +54,4 @@ const Guid = Class.inherit({
 
 });
 
-module.exports = Guid;
+export default Guid;

@@ -1,5 +1,5 @@
 import $ from '../core/renderer';
-import windowUtils from './utils/window';
+import { getNavigator, getWindow, hasWindow } from './utils/window';
 import { extend } from './utils/extend';
 import { isPlainObject } from './utils/type';
 import { each } from './utils/iterator';
@@ -11,8 +11,8 @@ import { sessionStorage as SessionStorage } from './utils/storage';
 import viewPort from './utils/view_port';
 import Config from './config';
 
-const navigator = windowUtils.getNavigator();
-const window = windowUtils.getWindow();
+const navigator = getNavigator();
+const window = getWindow();
 
 const KNOWN_UA_TABLE = {
     'iPhone': 'iPhone',
@@ -132,7 +132,7 @@ class Devices {
         this._eventsStrategy = new EventsStrategy(this);
 
         this.changed = Callbacks();
-        if(windowUtils.hasWindow()) {
+        if(hasWindow()) {
             this._recalculateOrientation();
             resizeCallbacks.add(this._recalculateOrientation.bind(this));
         }
@@ -232,7 +232,7 @@ class Devices {
     isSimulator() {
         // NOTE: error may happen due to same-origin policy
         try {
-            return this._isSimulator || windowUtils.hasWindow() && this._window.top !== this._window.self && this._window.top['dx-force-device'] || this.isRippleEmulator();
+            return this._isSimulator || hasWindow() && this._window.top !== this._window.self && this._window.top['dx-force-device'] || this.isRippleEmulator();
         } catch(e) {
             return false;
         }
@@ -270,7 +270,7 @@ class Devices {
     _getDeviceOrNameFromWindowScope() {
         let result;
 
-        if(windowUtils.hasWindow() && (this._window.top['dx-force-device-object'] || this._window.top['dx-force-device'])) {
+        if(hasWindow() && (this._window.top['dx-force-device-object'] || this._window.top['dx-force-device'])) {
             result = this._window.top['dx-force-device-object'] || this._window.top['dx-force-device'];
         }
 
@@ -366,4 +366,4 @@ viewPort.changeCallback.add((viewPort, prevViewport) => {
     devices.attachCssClasses(viewPort);
 });
 
-module.exports = devices;
+export default devices;

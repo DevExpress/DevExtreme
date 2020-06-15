@@ -42,6 +42,6 @@ const reverseEach = (array, callback) => {
     }
 };
 
-exports.map = map;
-exports.each = each;
-exports.reverseEach = reverseEach;
+export { map };
+export { each };
+export { reverseEach };

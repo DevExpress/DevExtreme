@@ -1,11 +1,9 @@
 import domAdapter from '../../core/dom_adapter';
 import $ from '../../core/renderer';
-import typeUtils from './type';
-import windowUtils from './window';
+import { isDefined, isRenderer } from './type';
+import { getWindow } from './window';
 
-const window = windowUtils.getWindow();
-const isDefined = typeUtils.isDefined;
-const isRenderer = typeUtils.isRenderer;
+const window = getWindow();
 
 const resetActiveElement = function() {
     const activeElement = domAdapter.getActiveElement();
@@ -138,11 +136,11 @@ const createTextElementHiddenCopy = function(element, text, options) {
     });
 };
 
-exports.resetActiveElement = resetActiveElement;
-exports.extractTemplateMarkup = extractTemplateMarkup; // TODO: extract
-exports.normalizeTemplateElement = normalizeTemplateElement; // TODO: extract
-exports.clearSelection = clearSelection;
-exports.closestCommonParent = closestCommonParent;
-exports.clipboardText = clipboardText;
-exports.contains = contains;
-exports.createTextElementHiddenCopy = createTextElementHiddenCopy; // TODO: extract
+export { resetActiveElement };
+export { extractTemplateMarkup }; // TODO: extract
+export { normalizeTemplateElement }; // TODO: extract
+export { clearSelection };
+export { closestCommonParent };
+export { clipboardText };
+export { contains };
+export { createTextElementHiddenCopy }; // TODO: extract

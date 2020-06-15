@@ -56,4 +56,4 @@ const registerRendererComponent = function(name, componentClass) {
 
 callbacks.add(registerRendererComponent);
 
-module.exports = registerComponent;
+export default registerComponent;

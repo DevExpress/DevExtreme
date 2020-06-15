@@ -1,7 +1,7 @@
 /* global console */
 /* eslint no-console: off */
 
-const isFunction = require('./type').isFunction;
+import { isFunction } from './type';
 
 const noop = function() {};
 const getConsoleMethod = function(method) {
@@ -11,13 +11,13 @@ const getConsoleMethod = function(method) {
     return console[method].bind(console);
 };
 
-const logger = {
+export const logger = {
     info: getConsoleMethod('info'),
     warn: getConsoleMethod('warn'),
     error: getConsoleMethod('error')
 };
 
-const debug = (function() {
+export const debug = (function() {
     function assert(condition, message) {
         if(!condition) {
             throw new Error(message);
@@ -31,6 +31,3 @@ const debug = (function() {
         assertParam: assertParam
     };
 }());
-
-exports.logger = logger;
-exports.debug = debug;

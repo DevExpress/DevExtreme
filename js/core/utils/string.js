@@ -1,4 +1,4 @@
-const typeUtils = require('./type');
+import typeUtils from './type';
 
 const encodeHtml = (function() {
     const encodeRegExp = [new RegExp('&', 'g'), new RegExp('"', 'g'), new RegExp('\'', 'g'), new RegExp('<', 'g'), new RegExp('>', 'g')];
@@ -96,8 +96,8 @@ const isEmpty = (function() {
     };
 })();
 
-exports.encodeHtml = encodeHtml;
-exports.quadToObject = quadToObject;
-exports.format = stringFormat;
-exports.replaceAll = replaceAll;
-exports.isEmpty = isEmpty;
+export { encodeHtml };
+export { quadToObject };
+export { stringFormat as format };
+export { replaceAll };
+export { isEmpty };

@@ -31,4 +31,4 @@ const equals = function(oldValue, newValue) {
     return false;
 };
 
-exports.equals = equals;
+export { equals };

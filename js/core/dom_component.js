@@ -482,5 +482,4 @@ DOMComponent.defaultOptions = function(rule) {
     this._classCustomRules.push(rule);
 };
 
-
-module.exports = DOMComponent;
+export default DOMComponent;

@@ -10,4 +10,4 @@ const getSessionStorage = function() {
     return sessionStorage;
 };
 
-exports.sessionStorage = getSessionStorage;
+export { getSessionStorage as sessionStorage };

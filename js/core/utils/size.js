@@ -1,5 +1,7 @@
-const window = require('../../core/utils/window').getWindow();
-const typeUtils = require('../utils/type');
+import { getWindow } from '../../core/utils/window';
+import typeUtils from '../utils/type';
+
+const window = getWindow();
 
 const SPECIAL_HEIGHT_VALUES = ['auto', 'none', 'inherit', 'initial'];
 
@@ -137,10 +139,10 @@ const getVisibleHeight = function(element) {
     return 0;
 };
 
-exports.getSize = getSize;
-exports.getElementBoxParams = getElementBoxParams;
-exports.addOffsetToMaxHeight = addOffsetToMaxHeight;
-exports.addOffsetToMinHeight = addOffsetToMinHeight;
-exports.getVerticalOffsets = getVerticalOffsets;
-exports.getVisibleHeight = getVisibleHeight;
-exports.parseHeight = parseHeight;
+export { getSize };
+export { getElementBoxParams };
+export { addOffsetToMaxHeight };
+export { addOffsetToMinHeight };
+export { getVerticalOffsets };
+export { getVisibleHeight };
+export { parseHeight };

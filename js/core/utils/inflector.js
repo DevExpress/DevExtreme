@@ -1,4 +1,4 @@
-const map = require('./iterator').map;
+import { map } from './iterator';
 
 const _normalize = function(text) {
     if(text === undefined || text === null) {
@@ -74,9 +74,9 @@ const captionize = function(name) {
     return captionList.join('');
 };
 
-exports.dasherize = dasherize;
-exports.camelize = camelize;
-exports.humanize = humanize;
-exports.titleize = titleize;
-exports.underscore = underscore;
-exports.captionize = captionize;
+export { dasherize };
+export { camelize };
+export { humanize };
+export { titleize };
+export { underscore };
+export { captionize };

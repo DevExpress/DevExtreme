@@ -64,19 +64,20 @@ const pointerEvents = detectPointerEvent(hasProperty, pointerEnabled);
 const touchPointersPresent = !!maxTouchPoints || !!msMaxTouchPoints;
 
 ///#DEBUG
-exports.detectTouchEvents = detectTouchEvents;
-exports.detectPointerEvent = detectPointerEvent;
+export { detectTouchEvents };
+
+export { detectPointerEvent };
+
 ///#ENDDEBUG
-exports.touchEvents = touchEvents;
-exports.pointerEvents = pointerEvents;
-exports.touch = touchEvents || pointerEvents && touchPointersPresent;
-exports.transition = callOnce(function() { return supportProp('transition'); });
-exports.transitionEndEventName = callOnce(function() { return transitionEndEventNames[styleUtils.styleProp('transition')]; });
-exports.animation = callOnce(function() { return supportProp('animation'); });
-exports.nativeScrolling = isNativeScrollingSupported();
+export { touchEvents };
 
-exports.styleProp = styleUtils.styleProp;
-exports.stylePropPrefix = styleUtils.stylePropPrefix;
-exports.supportProp = supportProp;
-
-exports.inputType = inputType;
+export { pointerEvents };
+export const touch = touchEvents || pointerEvents && touchPointersPresent;
+export const transition = callOnce(function() { return supportProp('transition'); });
+export const transitionEndEventName = callOnce(function() { return transitionEndEventNames[styleUtils.styleProp('transition')]; });
+export const animation = callOnce(function() { return supportProp('animation'); });
+export const nativeScrolling = isNativeScrollingSupported();
+export const styleProp = styleUtils.styleProp;
+export const stylePropPrefix = styleUtils.stylePropPrefix;
+export { supportProp };
+export { inputType };

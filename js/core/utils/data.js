@@ -1,9 +1,9 @@
-const errors = require('../errors');
-const Class = require('../class');
-const objectUtils = require('./object');
-const typeUtils = require('./type');
-const each = require('./iterator').each;
-const variableWrapper = require('./variable_wrapper');
+import errors from '../errors';
+import Class from '../class';
+import objectUtils from './object';
+import typeUtils from './type';
+import { each } from './iterator';
+import variableWrapper from './variable_wrapper';
 const unwrapVariable = variableWrapper.unwrap;
 const isWrapped = variableWrapper.isWrapped;
 const assign = variableWrapper.assign;
@@ -195,6 +195,6 @@ const toComparable = function(value, caseSensitive) {
     return value;
 };
 
-exports.compileGetter = compileGetter;
-exports.compileSetter = compileSetter;
-exports.toComparable = toComparable;
+export { compileGetter };
+export { compileSetter };
+export { toComparable };

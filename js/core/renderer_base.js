@@ -1,11 +1,11 @@
-const dataUtils = require('./element_data');
-const domAdapter = require('./dom_adapter');
-const windowUtils = require('./utils/window');
-const window = windowUtils.getWindow();
-const typeUtils = require('./utils/type');
-const styleUtils = require('./utils/style');
-const sizeUtils = require('./utils/size');
-const htmlParser = require('./utils/html_parser');
+import dataUtils from './element_data';
+import domAdapter from './dom_adapter';
+import { getWindow } from './utils/window';
+const window = getWindow();
+import typeUtils from './utils/type';
+import styleUtils from './utils/style';
+import sizeUtils from './utils/size';
+import htmlParser from './utils/html_parser';
 
 let renderer;
 
@@ -878,7 +878,7 @@ Object.defineProperty(rendererWrapper, 'fn', {
     }
 });
 
-module.exports = {
+export default {
     set: function(strategy) {
         renderer = strategy;
     },

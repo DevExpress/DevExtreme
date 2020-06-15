@@ -7,8 +7,8 @@ const dataMap = new WeakMap();
 let strategy;
 
 const strategyChanging = new MemorizedCallbacks();
-let beforeCleanData = function() {};
-let afterCleanData = function() {};
+let beforeCleanDataFunc = function() {};
+let afterCleanDataFunc = function() {};
 
 const setDataStrategy = exports.setDataStrategy = function(value) {
     strategyChanging.fire(value);
@@ -18,11 +18,11 @@ const setDataStrategy = exports.setDataStrategy = function(value) {
     const cleanData = strategy.cleanData;
 
     strategy.cleanData = function(nodes) {
-        beforeCleanData(nodes);
+        beforeCleanDataFunc(nodes);
 
         const result = cleanData.call(this, nodes);
 
-        afterCleanData(nodes);
+        afterCleanDataFunc(nodes);
 
         return result;
     };
@@ -75,35 +75,35 @@ setDataStrategy({
     }
 });
 
-exports.setDataStrategy = setDataStrategy;
+export { setDataStrategy };
 
-exports.getDataStrategy = function() {
+export function getDataStrategy() {
     return strategy;
-};
+}
 
-exports.data = function() {
+export function data() {
     return strategy.data.apply(this, arguments);
-};
+}
 
-exports.strategyChanging = strategyChanging;
+export { strategyChanging };
 
-exports.beforeCleanData = function(callback) {
-    beforeCleanData = callback;
-};
+export function beforeCleanData(callback) {
+    beforeCleanDataFunc = callback;
+}
 
-exports.afterCleanData = function(callback) {
-    afterCleanData = callback;
-};
+export function afterCleanData(callback) {
+    afterCleanDataFunc = callback;
+}
 
-exports.cleanData = function(nodes) {
+export function cleanData(nodes) {
     return strategy.cleanData.call(this, nodes);
-};
+}
 
-exports.removeData = function(element, key) {
+export function removeData(element, key) {
     return strategy.removeData.call(this, element, key);
-};
+}
 
-exports.cleanDataRecursive = function(element, cleanSelf) {
+export function cleanDataRecursive(element, cleanSelf) {
     if(!domAdapter.isElementNode(element)) {
         return;
     }
@@ -115,4 +115,4 @@ exports.cleanDataRecursive = function(element, cleanSelf) {
     if(cleanSelf) {
         strategy.cleanData([element]);
     }
-};
+}

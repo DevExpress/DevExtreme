@@ -1,5 +1,5 @@
-const merge = require('./array').merge;
-const domAdapter = require('../dom_adapter');
+import { merge } from './array';
+import domAdapter from '../dom_adapter';
 
 const isTagName = (/<([a-z][^/\0>\x20\t\r\n\f]+)/i);
 
@@ -59,5 +59,5 @@ const isTablePart = function(html) {
     return tags && tags[1] in tagWrappers;
 };
 
-exports.parseHTML = parseHTML;
-exports.isTablePart = isTablePart;
+export { parseHTML };
+export { isTablePart };

@@ -375,4 +375,4 @@ const Component = Class.inherit({
     }
 });
 
-module.exports = Component;
+export default Component;

@@ -1,4 +1,4 @@
-const isPlainObject = require('./type').isPlainObject;
+import { isPlainObject } from './type';
 
 const extendFromObject = function(target, source, overrideExistingValues) {
     target = target || {};
@@ -61,5 +61,5 @@ const extend = function(target) {
     return target;
 };
 
-exports.extend = extend;
-exports.extendFromObject = extendFromObject;
+export { extend };
+export { extendFromObject };

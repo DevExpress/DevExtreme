@@ -1,7 +1,7 @@
-const isDefined = require('./type').isDefined;
-const each = require('./iterator').each;
-const objectUtils = require('./object');
-const config = require('../config');
+import { isDefined } from './type';
+import { each } from './iterator';
+import objectUtils from './object';
+import config from '../config';
 
 const isEmpty = function(entity) {
     return Array.isArray(entity) && !entity.length;
@@ -141,12 +141,12 @@ const groupBy = (array, cb) => array.reduce(
     {}
 );
 
-exports.isEmpty = isEmpty;
-exports.wrapToArray = wrapToArray;
-exports.intersection = intersection;
-exports.removeDuplicates = removeDuplicates;
-exports.normalizeIndexes = normalizeIndexes;
-exports.inArray = inArray;
-exports.merge = merge;
-exports.find = find;
-exports.groupBy = groupBy;
+export { isEmpty };
+export { wrapToArray };
+export { intersection };
+export { removeDuplicates };
+export { normalizeIndexes };
+export { inArray };
+export { merge };
+export { find };
+export { groupBy };

@@ -1,8 +1,8 @@
-const windowUtils = require('./window');
-const domAdapter = require('../dom_adapter');
-const Callbacks = require('./callbacks');
-const readyCallbacks = require('./ready_callbacks');
-const callOnce = require('./call_once');
+import windowUtils from './window';
+import domAdapter from '../dom_adapter';
+import Callbacks from './callbacks';
+import readyCallbacks from './ready_callbacks';
+import callOnce from './call_once';
 
 const resizeCallbacks = (function() {
     let prevSize;
@@ -74,4 +74,4 @@ const resizeCallbacks = (function() {
     return callbacks;
 })();
 
-module.exports = resizeCallbacks;
+export default resizeCallbacks;

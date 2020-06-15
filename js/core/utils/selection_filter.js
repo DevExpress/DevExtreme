@@ -1,6 +1,6 @@
-const getKeyHash = require('./common').getKeyHash;
-const equalByValue = require('./common').equalByValue;
-const typeUtils = require('./type');
+import { getKeyHash } from './common';
+import { equalByValue } from './common';
+import typeUtils from './type';
 
 const SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
 
@@ -128,4 +128,4 @@ const SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
     }
 };
 
-exports.SelectionFilterCreator = SelectionFilterCreator;
+export { SelectionFilterCreator };
