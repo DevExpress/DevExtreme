@@ -576,17 +576,18 @@ const Lookup = DropDownList.inherit({
     },
 
     _renderPopover: function() {
-        this._popup = this._createComponent(this._$popup, Popover, extend(this._popupConfig(), {
-            showEvent: null,
-            hideEvent: null,
-            target: this.$element(),
-            fullScreen: false,
-            shading: false,
-            closeOnTargetScroll: true,
-            width: this._isInitialOptionValue('dropDownOptions.width')
-                ? (function() { return this.$element().outerWidth(); }).bind(this)
-                : this._popupConfig().width
-        }));
+        this._popup = this._createComponent(this._$popup, Popover, extend(this._popupConfig(),
+            this._options.cache('dropDownOptions'), {
+                showEvent: null,
+                hideEvent: null,
+                target: this.$element(),
+                fullScreen: false,
+                shading: false,
+                closeOnTargetScroll: true,
+                width: this._isInitialOptionValue('dropDownOptions.width')
+                    ? (function() { return this.$element().outerWidth(); }).bind(this)
+                    : this._popupConfig().width
+            }));
 
         this._popup.on({
             'showing': this._popupShowingHandler.bind(this),
