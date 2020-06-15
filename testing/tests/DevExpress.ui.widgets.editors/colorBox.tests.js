@@ -94,23 +94,6 @@ QUnit.module('Color Box', {
         fx.off = false;
     }
 }, () => {
-    QUnit.skip('popup should have correct width after editor width runtime change', function(assert) {
-        const instance = this.element.dxColorBox({
-            width: 600,
-            dropDownOptions: {
-                width: '50%'
-            },
-            opened: true
-        }).dxColorBox('instance');
-
-        const $overlayContent = $('.dx-overlay-content');
-        assert.strictEqual($overlayContent.outerWidth(), 300, 'overlay content width is correct');
-
-        instance.option('width', 400);
-
-        assert.strictEqual($overlayContent.outerWidth(), 200, 'overlay content width is correct after editor width runtime change');
-    });
-
     QUnit.test('Render with hex value', function(assert) {
         const $colorBox = showColorBox.call(this, { value: '#000000' }); const $input = $colorBox.find('.' + COLOR_BOX_INPUT_CLASS);
 

@@ -74,23 +74,6 @@ QUnit.module('popup integration', {
         this.popup = getPopup(this.instance);
     }
 }, () => {
-    QUnit.skip('popup should have correct width after editor width runtime change', function(assert) {
-        const instance = new DropDownButton('#dropDownButton', {
-            width: 600,
-            dropDownOptions: {
-                width: '50%'
-            },
-            opened: true
-        });
-
-        const $overlayContent = $('.dx-overlay-content');
-        assert.strictEqual($overlayContent.outerWidth(), 300, 'overlay content width is correct');
-
-        instance.option('width', 400);
-
-        assert.strictEqual($overlayContent.outerWidth(), 200, 'overlay content width is correct after editor width runtime change');
-    });
-
     QUnit.test('toggle button should toggle the widget', function(assert) {
         const instance = new DropDownButton('#dropDownButton', { splitButton: true });
         const $toggleButton = getToggleButton(instance);
