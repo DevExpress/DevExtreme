@@ -214,7 +214,7 @@ case "$TARGET" in
     "ts") run_ts ;;
     "test") run_test ;;
     "test_themebuilder") run_test_themebuilder ;;
-    "test_functional") run_test_functional ;;
+    "test_testcafe") run_test_testcafe ;;
 
     *)
         echo "Unknown target"
