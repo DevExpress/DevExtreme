@@ -474,7 +474,7 @@ const DropDownEditor = TextBox.inherit({
     _renderPopupContent: noop,
 
     _renderPopup: function() {
-        const popupConfig = extend(this._popupConfig(), this._options.cache('dropDownOptions'));
+        const popupConfig = extend(this._popupConfig(), this._getInnerOptionsCache('dropDownOptions'));
         if(popupConfig.width === 'auto') {
             popupConfig.width = '100%';
         }
