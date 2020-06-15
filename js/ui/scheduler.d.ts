@@ -23,6 +23,7 @@ import {
 import dxDraggable from './draggable';
 
 import dxForm from './form';
+import dxPopup from './popup';
 
 import dxSortable from './sortable';
 
@@ -394,7 +395,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentFormOpening?: ((e: { component?: dxScheduler, element?: dxElement, model?: any, appointmentData?: any, form?: dxForm, cancel?: boolean }) => any);
+    onAppointmentFormOpening?: ((e: { component?: dxScheduler, element?: dxElement, model?: any, appointmentData?: any, form: dxForm, popup: dxPopup, cancel: boolean }) => any);
     /**
      * @docid dxSchedulerOptions.onAppointmentRendered
      * @extends Action
