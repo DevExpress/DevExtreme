@@ -161,19 +161,19 @@ test('Popup - Focused row should not be reset after editing a row (T879627)', as
             .expect(dataGrid.option('focusedRowKey')).eql(6)
             .expect(dataRow1.isFocusedRow).ok();
 
-        await dataGrid.api_editRow(1);
+        await dataGrid.apiEditRow(1);
 
         await t.expect(dataGrid.option('focusedRowKey')).eql(6);
 
-        await dataGrid.api_cancelEditData();
+        await dataGrid.apiCancelEditData();
 
         await t.expect(dataGrid.option('focusedRowKey')).eql(6);
 
-        await dataGrid.api_editRow(0);
+        await dataGrid.apiEditRow(0);
 
         await t.expect(dataGrid.option('focusedRowKey')).eql(6);
 
-        await dataGrid.api_saveEditData();
+        await dataGrid.apiSaveEditData();
 
         await t.expect(dataGrid.option('focusedRowKey')).eql(6);
 
@@ -259,19 +259,19 @@ test('Row - Focused row should be reset after editing a row by API (T879627)', a
         .expect(dataGrid.option('focusedRowKey')).eql(6)
         .expect(dataRow1.isFocusedRow).ok();
 
-    await dataGrid.api_editRow(1);
+    await dataGrid.apiEditRow(1);
 
     await t.expect(dataGrid.option('focusedRowKey')).eql(6);
 
-    await dataGrid.api_cancelEditData();
+    await dataGrid.apiCancelEditData();
 
     await t.expect(dataGrid.option('focusedRowKey')).eql(6);
 
-    await dataGrid.api_editRow(0);
+    await dataGrid.apiEditRow(0);
 
     await t.expect(dataGrid.option('focusedRowKey')).eql(5);
 
-    await dataGrid.api_saveEditData();
+    await dataGrid.apiSaveEditData();
 
     await t.expect(dataGrid.option('focusedRowKey')).eql(5);
 
@@ -437,21 +437,21 @@ test('Batch - Focused row should not be reset after editing a cell (T879627)', a
             .expect(dataGrid.option('focusedRowKey')).eql(6)
             .expect(dataRow1.isFocusedRow).ok();
 
-        await dataGrid.api_editCell(1, 1);
+        await dataGrid.apiEditCell(1, 1);
 
         await t.expect(dataGrid.option('focusedRowKey')).eql(6);
 
-        await dataGrid.api_cancelEditData();
+        await dataGrid.apiCancelEditData();
 
         await t.expect(dataGrid.option('focusedRowKey')).eql(6);
 
-        await dataGrid.api_editCell(0, 1);
+        await dataGrid.apiEditCell(0, 1);
 
-        await dataGrid.api_cellValue(0, 1, 'test');
+        await dataGrid.apiCellValue(0, 1, 'test');
 
         await t.expect(dataGrid.option('focusedRowKey')).eql(6);
 
-        await dataGrid.api_saveEditData();
+        await dataGrid.apiSaveEditData();
 
         await t.expect(dataGrid.option('focusedRowKey')).eql(6);
 

@@ -14,7 +14,7 @@ test(`Recurrence appointments should be deleted by click on 'delete' button`, as
         .click(scheduler.getAppointment("Text", 3).element)
 
         .click(scheduler.appointmentTooltip.deleteElement)
-        .click(scheduler.getDialog().appointment)
+        .click(Scheduler.getDialog().appointment)
 
         .expect(scheduler.getAppointmentCount()).eql(5);
 
@@ -22,7 +22,7 @@ test(`Recurrence appointments should be deleted by click on 'delete' button`, as
         .click(scheduler.getAppointment("Text", 3).element)
 
         .click(scheduler.appointmentTooltip.deleteElement)
-        .click(scheduler.getDialog().series)
+        .click(Scheduler.getDialog().series)
 
         .expect(scheduler.getAppointmentCount()).eql(0);
 }).before(async () => await createScheduler(createRecurrenceData()));
@@ -34,7 +34,7 @@ test(`Recurrence appointments should be deleted by press 'delete' key`, async t 
         .click(scheduler.getAppointment("Text", 3).element)
 
         .pressKey("delete")
-        .click(scheduler.getDialog().appointment)
+        .click(Scheduler.getDialog().appointment)
 
         .expect(scheduler.getAppointmentCount()).eql(5);
 
@@ -42,7 +42,7 @@ test(`Recurrence appointments should be deleted by press 'delete' key`, async t 
         .click(scheduler.getAppointment("Text", 3).element)
 
         .pressKey("delete")
-        .click(scheduler.getDialog().series)
+        .click(Scheduler.getDialog().series)
 
         .expect(scheduler.getAppointmentCount()).eql(0);
 }).before(async () => await createScheduler(createRecurrenceData()));

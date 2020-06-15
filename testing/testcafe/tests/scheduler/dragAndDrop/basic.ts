@@ -42,7 +42,7 @@ test(`Drag recurrent appointment occurrence from collector (T832887)`, async t =
     const collector = scheduler.getAppointmentCollector("2");
     const appointmentTooltip = scheduler.appointmentTooltip;
     const appointmentTooltipItem = appointmentTooltip.getListItem("Recurrence two");
-    const popup = scheduler.getDialog();
+    const popup = Scheduler.getDialog();
 
     await t
         .click(collector.element)
@@ -77,5 +77,5 @@ test(`Drag recurrent appointment occurrence from collector (T832887)`, async t =
         recurrenceException: "",
         recurrenceRule: "FREQ=DAILY"
     }],
-    currentDate: new Date(2019, 2, 26), 
+    currentDate: new Date(2019, 2, 26),
 }));
