@@ -51,40 +51,7 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
         });
     },
 
-    _getRightCell: function() {
-        let $rightCell;
-        const $focusedCell = this._$focusedCell;
-        const rowCellCount = this._getCellCount();
-        const edgeCellIndex = this._isRTL() ? 0 : rowCellCount - 1;
-        const direction = this._isRTL() ? 'prev' : 'next';
-
-        if($focusedCell.index() === edgeCellIndex) {
-            $rightCell = $focusedCell;
-        } else {
-            $rightCell = $focusedCell[direction]();
-            $rightCell = this._checkForViewBounds($rightCell);
-        }
-        return $rightCell;
-    },
-
-    _getLeftCell: function() {
-        let $leftCell;
-        const $focusedCell = this._$focusedCell;
-        const rowCellCount = this._getCellCount();
-        const edgeCellIndex = this._isRTL() ? rowCellCount - 1 : 0;
-        const direction = this._isRTL() ? 'next' : 'prev';
-
-        if($focusedCell.index() === edgeCellIndex) {
-            $leftCell = $focusedCell;
-        } else {
-            $leftCell = $focusedCell[direction]();
-            $leftCell = this._checkForViewBounds($leftCell);
-        }
-
-        return $leftCell;
-    },
-
-    _getRowCount: function() {
+    _getRowCount() {
         return 1;
     },
 
@@ -410,11 +377,7 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
         return this._$dateTable.outerWidth(true);
     },
 
-    _getGroupIndexByCell: function($cell) {
-        return $cell.parent().index();
-    },
-
-    _getIndicationFirstViewDate: function() {
+    _getIndicationFirstViewDate() {
         return new Date(this._firstViewDate);
     },
 
@@ -572,6 +535,10 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
         } else {
             scrollable.scrollBy({ left: coordinates.left - scrollable.scrollLeft() - offset, top: 0 });
         }
+    },
+
+    _getRowCountWithAllDayRows: function() {
+        return this._getRowCount();
     }
 });
 
