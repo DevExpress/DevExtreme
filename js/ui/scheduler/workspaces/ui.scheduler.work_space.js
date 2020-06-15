@@ -226,7 +226,7 @@ const SchedulerWorkSpace = Widget.inherit({
         const isRTL = this._isRTL();
 
         const groupCount = this._getGroupCount();
-        const isHorizontalGrouping = this.option('groupOrientation') === 'horizontal';
+        const isHorizontalGrouping = this._isHorizontalGroupedWorkSpace();
         const isGroupedByDate = this.isGroupedByDate();
 
         const totalCellCount = this._getTotalCellCount(groupCount);
