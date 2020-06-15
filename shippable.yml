@@ -38,10 +38,10 @@ env:
     - TARGET=test BROWSER=firefox JQUERY=true CONSTEL=ui.grid
     - TARGET=test BROWSER=firefox JQUERY=true CONSTEL=ui.scheduler
     - TARGET=test BROWSER=firefox JQUERY=true CONSTEL=viz
-    - TARGET=test_functional COMPONENT=dataGrid QUARANTINE_MODE=true
-    - TARGET=test_functional COMPONENT=scheduler QUARANTINE_MODE=true
-    - TARGET=test_functional COMPONENT=editors
-    - TARGET=test_functional COMPONENT=navigation
+    - TARGET=test_testcafe COMPONENT=dataGrid QUARANTINE_MODE=true
+    - TARGET=test_testcafe COMPONENT=scheduler QUARANTINE_MODE=true
+    - TARGET=test_testcafe COMPONENT=editors
+    - TARGET=test_testcafe COMPONENT=navigation
     - TARGET=test_themebuilder
 
 build:
