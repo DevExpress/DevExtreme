@@ -1,10 +1,10 @@
-const eventsEngine = require('../events/core/events_engine');
-const domUtils = require('../core/utils/dom');
-const domAdapter = require('../core/dom_adapter');
-const Class = require('../core/class');
-const registerEvent = require('./core/event_registrator');
-const clickEvent = require('./click');
-const eventUtils = require('./utils');
+import eventsEngine from '../events/core/events_engine';
+import domUtils from '../core/utils/dom';
+import domAdapter from '../core/dom_adapter';
+import Class from '../core/class';
+import registerEvent from './core/event_registrator';
+import clickEvent from './click';
+import eventUtils from './utils';
 
 const DBLCLICK_EVENT_NAME = 'dxdblclick';
 const DBLCLICK_NAMESPACE = 'dxDblClick';
@@ -60,4 +60,4 @@ const DblClick = Class.inherit({
 
 registerEvent(DBLCLICK_EVENT_NAME, new DblClick());
 
-exports.name = DBLCLICK_EVENT_NAME;
+export { DBLCLICK_EVENT_NAME as name };

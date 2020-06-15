@@ -1,8 +1,8 @@
-const eventsEngine = require('../../events/core/events_engine');
-const browser = require('../../core/utils/browser');
-const domAdapter = require('../../core/dom_adapter');
-const Class = require('../../core/class');
-const eventUtils = require('../utils');
+import eventsEngine from '../../events/core/events_engine';
+import browser from '../../core/utils/browser';
+import domAdapter from '../../core/dom_adapter';
+import Class from '../../core/class';
+import eventUtils from '../utils';
 
 const POINTER_EVENTS_NAMESPACE = 'dxPointerEvents';
 
@@ -105,4 +105,4 @@ const BaseStrategy = Class.inherit({
     }
 });
 
-module.exports = BaseStrategy;
+export default BaseStrategy;

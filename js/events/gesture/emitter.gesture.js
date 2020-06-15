@@ -1,16 +1,16 @@
-const $ = require('../../core/renderer');
-const eventsEngine = require('../../events/core/events_engine');
-const devices = require('../../core/devices');
-const styleUtils = require('../../core/utils/style');
-const callOnce = require('../../core/utils/call_once');
-const domUtils = require('../../core/utils/dom');
-const readyCallbacks = require('../../core/utils/ready_callbacks');
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import devices from '../../core/devices';
+import styleUtils from '../../core/utils/style';
+import callOnce from '../../core/utils/call_once';
+import domUtils from '../../core/utils/dom';
+import readyCallbacks from '../../core/utils/ready_callbacks';
 const ready = readyCallbacks.add;
-const mathUtils = require('../../core/utils/math');
-const noop = require('../../core/utils/common').noop;
-const isDefined = require('../../core/utils/type').isDefined;
-const eventUtils = require('../utils');
-const Emitter = require('../core/emitter');
+import mathUtils from '../../core/utils/math';
+import { noop } from '../../core/utils/common';
+import { isDefined } from '../../core/utils/type';
+import eventUtils from '../utils';
+import Emitter from '../core/emitter';
 const sign = mathUtils.sign;
 const abs = Math.abs;
 
@@ -229,4 +229,4 @@ GestureEmitter.touchBoundary = function(newBoundary) {
     return TOUCH_BOUNDARY;
 };
 
-module.exports = GestureEmitter;
+export default GestureEmitter;

@@ -1,6 +1,6 @@
-const eventUtils = require('./utils');
-const Emitter = require('./core/emitter');
-const registerEmitter = require('./core/emitter_registrator');
+import eventUtils from './utils';
+import Emitter from './core/emitter';
+import registerEmitter from './core/emitter_registrator';
 const abs = Math.abs;
 
 const HOLD_EVENT_NAME = 'dxhold';
@@ -72,6 +72,6 @@ registerEmitter({
     ]
 });
 
-module.exports = {
+export default {
     name: HOLD_EVENT_NAME
 };

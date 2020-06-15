@@ -1,11 +1,11 @@
-const Class = require('../../core/class');
-const commonUtils = require('../../core/utils/common');
-const contains = require('../../core/utils/dom').contains;
-const devices = require('../../core/devices');
-const eventUtils = require('../utils');
-const pointerEvents = require('../pointer');
-const Emitter = require('./emitter');
-const registerEmitter = require('./emitter_registrator');
+import Class from '../../core/class';
+import commonUtils from '../../core/utils/common';
+import { contains } from '../../core/utils/dom';
+import devices from '../../core/devices';
+import eventUtils from '../utils';
+import pointerEvents from '../pointer';
+import Emitter from './emitter';
+import registerEmitter from './emitter_registrator';
 
 const ACTIVE_EVENT_NAME = 'dxactive';
 const INACTIVE_EVENT_NAME = 'dxinactive';
@@ -170,6 +170,6 @@ registerEmitter({
     ]
 });
 
-exports.lock = FeedbackEmitter.lock;
-exports.active = ACTIVE_EVENT_NAME;
-exports.inactive = INACTIVE_EVENT_NAME;
+export const lock = FeedbackEmitter.lock;
+export { ACTIVE_EVENT_NAME as active };
+export { INACTIVE_EVENT_NAME as inactive };

@@ -1,6 +1,6 @@
-const eventUtils = require('./utils');
-const GestureEmitter = require('./gesture/emitter.gesture');
-const registerEmitter = require('./core/emitter_registrator');
+import eventUtils from './utils';
+import GestureEmitter from './gesture/emitter.gesture';
+import registerEmitter from './core/emitter_registrator';
 
 const SWIPE_START_EVENT = 'dxswipestart';
 const SWIPE_EVENT = 'dxswipe';
@@ -196,6 +196,6 @@ registerEmitter({
     ]
 });
 
-exports.swipe = SWIPE_EVENT;
-exports.start = SWIPE_START_EVENT;
-exports.end = SWIPE_END_EVENT;
+export { SWIPE_EVENT as swipe };
+export { SWIPE_START_EVENT as start };
+export { SWIPE_END_EVENT as end };

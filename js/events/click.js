@@ -1,14 +1,14 @@
-const $ = require('../core/renderer');
-const eventsEngine = require('../events/core/events_engine');
-const devices = require('../core/devices');
-const domAdapter = require('../core/dom_adapter');
-const domUtils = require('../core/utils/dom');
-const animationFrame = require('../animation/frame');
-const eventUtils = require('./utils');
-const pointerEvents = require('./pointer');
-const Emitter = require('./core/emitter');
-const registerEmitter = require('./core/emitter_registrator');
-const compareVersions = require('../core/utils/version').compare;
+import $ from '../core/renderer';
+import eventsEngine from '../events/core/events_engine';
+import devices from '../core/devices';
+import domAdapter from '../core/dom_adapter';
+import domUtils from '../core/utils/dom';
+import animationFrame from '../animation/frame';
+import eventUtils from './utils';
+import pointerEvents from './pointer';
+import Emitter from './core/emitter';
+import registerEmitter from './core/emitter_registrator';
+import { compare as compareVersions } from '../core/utils/version';
 
 const CLICK_EVENT_NAME = 'dxclick';
 const TOUCH_BOUNDARY = 10;
@@ -206,8 +206,8 @@ registerEmitter({
     ]
 });
 
-exports.name = CLICK_EVENT_NAME;
+export { CLICK_EVENT_NAME as name };
 
 ///#DEBUG
-exports.misc = misc;
+export { misc };
 ///#ENDDEBUG

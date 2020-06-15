@@ -1,10 +1,10 @@
-const eventsEngine = require('../events/core/events_engine');
-const dataUtils = require('../core/element_data');
-const Class = require('../core/class');
-const devices = require('../core/devices');
-const registerEvent = require('./core/event_registrator');
-const eventUtils = require('./utils');
-const pointerEvents = require('./pointer');
+import eventsEngine from '../events/core/events_engine';
+import dataUtils from '../core/element_data';
+import Class from '../core/class';
+import devices from '../core/devices';
+import registerEvent from './core/event_registrator';
+import eventUtils from './utils';
+import pointerEvents from './pointer';
 
 const HOVERSTART_NAMESPACE = 'dxHoverStart';
 const HOVERSTART = 'dxhoverstart';
@@ -107,5 +107,5 @@ const HoverEnd = Hover.inherit({
 registerEvent(HOVERSTART, new HoverStart());
 registerEvent(HOVEREND, new HoverEnd());
 
-exports.start = HOVERSTART;
-exports.end = HOVEREND;
+export { HOVERSTART as start };
+export { HOVEREND as end };

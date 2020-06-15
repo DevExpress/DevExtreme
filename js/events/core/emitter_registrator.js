@@ -1,16 +1,16 @@
-const $ = require('../../core/renderer');
-const readyCallbacks = require('../../core/utils/ready_callbacks');
-const domAdapter = require('../../core/dom_adapter');
-const eventsEngine = require('../../events/core/events_engine');
-const dataUtils = require('../../core/element_data');
-const Class = require('../../core/class');
-const extend = require('../../core/utils/extend').extend;
-const inArray = require('../../core/utils/array').inArray;
-const each = require('../../core/utils/iterator').each;
-const registerEvent = require('./event_registrator');
-const eventUtils = require('../utils');
-const pointerEvents = require('../pointer');
-const wheelEvent = require('./wheel');
+import $ from '../../core/renderer';
+import readyCallbacks from '../../core/utils/ready_callbacks';
+import domAdapter from '../../core/dom_adapter';
+import eventsEngine from '../../events/core/events_engine';
+import dataUtils from '../../core/element_data';
+import Class from '../../core/class';
+import { extend } from '../../core/utils/extend';
+import { inArray } from '../../core/utils/array';
+import { each } from '../../core/utils/iterator';
+import registerEvent from './event_registrator';
+import eventUtils from '../utils';
+import pointerEvents from '../pointer';
+import wheelEvent from './wheel';
 
 const MANAGER_EVENT = 'dxEventManager';
 const EMITTER_DATA = 'dxEmitter';
@@ -295,4 +295,4 @@ const registerEmitter = function(emitterConfig) {
     });
 };
 
-module.exports = registerEmitter;
+export default registerEmitter;

@@ -1,11 +1,11 @@
-const $ = require('../core/renderer');
-const eventsEngine = require('../events/core/events_engine');
-const support = require('../core/utils/support');
-const devices = require('../core/devices');
-const Class = require('../core/class');
-const registerEvent = require('./core/event_registrator');
-const eventUtils = require('./utils');
-const holdEvent = require('./hold');
+import $ from '../core/renderer';
+import eventsEngine from '../events/core/events_engine';
+import support from '../core/utils/support';
+import devices from '../core/devices';
+import Class from '../core/class';
+import registerEvent from './core/event_registrator';
+import eventUtils from './utils';
+import holdEvent from './hold';
 
 const CONTEXTMENU_NAMESPACE = 'dxContexMenu';
 
@@ -62,4 +62,4 @@ const ContextMenu = Class.inherit({
 registerEvent(CONTEXTMENU_EVENT_NAME, new ContextMenu());
 
 
-exports.name = CONTEXTMENU_EVENT_NAME;
+export { CONTEXTMENU_EVENT_NAME as name };

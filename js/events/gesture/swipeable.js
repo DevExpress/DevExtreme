@@ -1,10 +1,10 @@
-const swipeEvents = require('../swipe');
-const eventsEngine = require('../../events/core/events_engine');
-const DOMComponent = require('../../core/dom_component');
-const each = require('../../core/utils/iterator').each;
-const eventUtils = require('../utils');
-const extend = require('../../core/utils/extend').extend;
-const publicComponentUtils = require('../../core/utils/public_component');
+import swipeEvents from '../swipe';
+import eventsEngine from '../../events/core/events_engine';
+import DOMComponent from '../../core/dom_component';
+import { each } from '../../core/utils/iterator';
+import eventUtils from '../utils';
+import { extend } from '../../core/utils/extend';
+import publicComponentUtils from '../../core/utils/public_component';
 
 const DX_SWIPEABLE = 'dxSwipeable';
 const SWIPEABLE_CLASS = 'dx-swipeable';
@@ -103,4 +103,4 @@ const Swipeable = DOMComponent.inherit({
 
 publicComponentUtils.name(Swipeable, DX_SWIPEABLE);
 
-module.exports = Swipeable;
+export default Swipeable;

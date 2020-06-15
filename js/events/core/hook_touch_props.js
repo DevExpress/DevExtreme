@@ -12,10 +12,10 @@ const touchPropHook = function(name, event) {
     return touches[0][name];
 };
 
-module.exports = function(callback) {
+export default function(callback) {
     touchPropsToHook.forEach(function(name) {
         callback(name, function(event) {
             return touchPropHook(name, event);
         });
     }, this);
-};
+}

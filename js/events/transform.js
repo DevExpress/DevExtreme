@@ -1,9 +1,9 @@
-const mathUtils = require('../core/utils/math');
-const iteratorUtils = require('../core/utils/iterator');
-const errors = require('../core/errors');
-const eventUtils = require('./utils');
-const Emitter = require('./core/emitter');
-const registerEmitter = require('./core/emitter_registrator');
+import mathUtils from '../core/utils/math';
+import iteratorUtils from '../core/utils/iterator';
+import errors from '../core/errors';
+import eventUtils from './utils';
+import Emitter from './core/emitter';
+import registerEmitter from './core/emitter_registrator';
 
 
 const DX_PREFIX = 'dx';

@@ -1,9 +1,9 @@
-const $ = require('../../core/renderer');
-const noop = require('../../core/utils/common').noop;
-const Class = require('../../core/class');
-const Callbacks = require('../../core/utils/callbacks');
-const extend = require('../../core/utils/extend').extend;
-const eventUtils = require('../utils');
+import $ from '../../core/renderer';
+import { noop } from '../../core/utils/common';
+import Class from '../../core/class';
+import Callbacks from '../../core/utils/callbacks';
+import { extend } from '../../core/utils/extend';
+import eventUtils from '../utils';
 
 const Emitter = Class.inherit({
 
@@ -103,4 +103,4 @@ const Emitter = Class.inherit({
 
 });
 
-module.exports = Emitter;
+export default Emitter;
