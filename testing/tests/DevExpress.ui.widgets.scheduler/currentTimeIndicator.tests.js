@@ -864,6 +864,25 @@ const stubInvokeMethod = function(instance, options) {
         assert.equal($indicators.eq(1).position().top, 0);
     });
 
+    QUnit.test('DateTimeIndicator should be rendered correctly, groupByDate = true', function(assert) {
+        this.instance.option({
+            indicatorTime: new Date(2017, 8, 5, 12, 45),
+            groupByDate: true,
+            startDayHour: 11
+        });
+
+        this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
+
+        const $element = this.instance.$element();
+        const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+
+        assert.equal($indicators.length, 2, 'Indicator count is correct');
+        assert.equal($indicators.eq(0).position().left, 550);
+        assert.equal($indicators.eq(0).position().top, 0);
+        assert.equal($indicators.eq(1).position().left, 750);
+        assert.equal($indicators.eq(1).position().top, 0);
+    });
+
     QUnit.test('Shader should have correct height, width and position', function(assert) {
         this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 

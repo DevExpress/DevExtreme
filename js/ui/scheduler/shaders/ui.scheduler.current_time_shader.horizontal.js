@@ -17,18 +17,50 @@ const HorizontalCurrentTimeShader = Shader.inherit({
     },
 
     _customizeShader: function($shader, groupIndex) {
-        let shaderWidth = this._workspace.getIndicationWidth();
-        const maxWidth = getBoundingRect(this._$container.get(0)).width;
+        if(this._workspace.option('groupByDate')) {
+            if(groupIndex === 0) {
+                let shaderWidth = this._workspace.getIndicationWidth();
+                const maxWidth = getBoundingRect(this._$container.get(0)).width;
 
-        if(shaderWidth > maxWidth) {
-            shaderWidth = maxWidth;
+                if(shaderWidth > maxWidth) {
+                    shaderWidth = maxWidth;
+                }
+
+                if(shaderWidth > 0) {
+                    $shader.width(shaderWidth);
+                }
+
+                $shader.css('left', this._workspace._getCellCount() * this._workspace.getCellWidth() * groupIndex);
+            } else {
+                const cellCount = this._workspace.getIndicationCellCount();
+                const integerPart = Math.trunc(cellCount);
+                const fractionPart = cellCount - integerPart;
+
+                const shaderWidth = fractionPart * this._workspace.getCellWidth();
+
+                if(shaderWidth > 0) {
+                    $shader.width(shaderWidth);
+                }
+                if(this._workspace.option('crossScrollingEnabled')) {
+                    $shader.css('marginTop', -getBoundingRect(this._$container.get(0)).height);
+                    $shader.css('height', getBoundingRect(this._$container.get(0)).height);
+                }
+                $shader.css('left', this._workspace.getCellWidth() * integerPart * this._workspace._getGroupCount() + groupIndex * this._workspace.getCellWidth());
+            }
+        } else {
+            let shaderWidth = this._workspace.getIndicationWidth();
+            const maxWidth = getBoundingRect(this._$container.get(0)).width;
+
+            if(shaderWidth > maxWidth) {
+                shaderWidth = maxWidth;
+            }
+
+            if(shaderWidth > 0) {
+                $shader.width(shaderWidth);
+            }
+
+            $shader.css('left', this._workspace._getCellCount() * this._workspace.getCellWidth() * groupIndex);
         }
-
-        if(shaderWidth > 0) {
-            $shader.width(shaderWidth);
-        }
-
-        $shader.css('left', this._workspace._getCellCount() * this._workspace.getCellWidth() * groupIndex);
     },
 });
 
