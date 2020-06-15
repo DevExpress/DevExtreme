@@ -585,7 +585,8 @@ const Lookup = DropDownList.inherit({
             closeOnTargetScroll: true,
             width: this._isInitialOptionValue('dropDownOptions.width')
                 ? (function() { return this.$element().outerWidth(); }).bind(this)
-                : this._popupConfig().width
+                : this._popupConfig().width,
+            toolbarItems: this.option('dropDownOptions.toolbarItems')
         }));
 
         this._popup.on({
