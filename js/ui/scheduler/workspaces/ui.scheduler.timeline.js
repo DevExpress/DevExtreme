@@ -52,39 +52,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         });
     }
 
-    _getRightCell() {
-        let $rightCell;
-        const $focusedCell = this._$focusedCell;
-        const rowCellCount = this._getCellCount();
-        const edgeCellIndex = this._isRTL() ? 0 : rowCellCount - 1;
-        const direction = this._isRTL() ? 'prev' : 'next';
-
-        if($focusedCell.index() === edgeCellIndex) {
-            $rightCell = $focusedCell;
-        } else {
-            $rightCell = $focusedCell[direction]();
-            $rightCell = this._checkForViewBounds($rightCell);
-        }
-        return $rightCell;
-    }
-
-    _getLeftCell() {
-        let $leftCell;
-        const $focusedCell = this._$focusedCell;
-        const rowCellCount = this._getCellCount();
-        const edgeCellIndex = this._isRTL() ? rowCellCount - 1 : 0;
-        const direction = this._isRTL() ? 'next' : 'prev';
-
-        if($focusedCell.index() === edgeCellIndex) {
-            $leftCell = $focusedCell;
-        } else {
-            $leftCell = $focusedCell[direction]();
-            $leftCell = this._checkForViewBounds($leftCell);
-        }
-
-        return $leftCell;
-    }
-
     _getRowCount() {
         return 1;
     }
@@ -411,10 +378,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         return this._$dateTable.outerWidth(true);
     }
 
-    _getGroupIndexByCell($cell) {
-        return $cell.parent().index();
-    }
-
     _getIndicationFirstViewDate() {
         return new Date(this._firstViewDate);
     }
@@ -573,6 +536,10 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         } else {
             scrollable.scrollBy({ left: coordinates.left - scrollable.scrollLeft() - offset, top: 0 });
         }
+    }
+
+    _getRowCountWithAllDayRows() {
+        return this._getRowCount();
     }
 }
 
