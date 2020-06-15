@@ -94,7 +94,10 @@ QUnit.module('rendering with css', {}, () => {
 
         assert.ok($popup.hasClass(POPUP_CLASS));
 
-        assert.equal(instance._popup.option('width'), 100 + instance.option('popupWidthExtension'));
+        assert.strictEqual(instance._popup.option('width'), '100%');
+
+        const $overlayContent = $('.dx-overlay-content');
+        assert.strictEqual($overlayContent.outerWidth(), 100, 'overlay content width is correct');
     });
 });
 
@@ -936,6 +939,41 @@ QUnit.module('functionality', moduleSetup, () => {
 });
 
 QUnit.module('widget options', moduleSetup, () => {
+    QUnit.test('popup should have correct width when dropDownOptions.width is percent (T897820)', function(assert) {
+        const instance = $('#selectBox').dxSelectBox({
+            width: 600,
+            dropDownOptions: {
+                width: '50%'
+            },
+            opened: true
+        }).dxSelectBox('instance');
+
+        const $overlayContent = $('.dx-overlay-content');
+        assert.strictEqual($overlayContent.outerWidth(), 300, 'overlay content width is correct');
+
+        instance.close();
+        instance.option('width', 400);
+        instance.open();
+
+        assert.strictEqual($overlayContent.outerWidth(), 200, 'overlay content width is correct after editor width runtime change');
+    });
+
+    QUnit.test('popup should have correct width after editor width runtime change (T897820)', function(assert) {
+        const instance = $('#selectBox').dxSelectBox({
+            width: 600,
+            dropDownOptions: {
+                width: '50%'
+            },
+            opened: true
+        }).dxSelectBox('instance');
+
+        const $overlayContent = $('.dx-overlay-content');
+        assert.strictEqual($overlayContent.outerWidth(), 300, 'overlay content width is correct');
+
+        instance.option('width', 400);
+
+        assert.strictEqual($overlayContent.outerWidth(), 200, 'overlay content width is correct after editor width runtime change');
+    });
 
     QUnit.test('option onValueChanged', function(assert) {
         assert.expect(4);

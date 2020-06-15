@@ -817,7 +817,7 @@ const Lookup = DropDownList.inherit({
 
     _refreshPopupVisibility: function() {
         if(this.option('opened')) {
-            this._updatePopupHeight();
+            this._updatePopupDimensions();
         }
     },
 
@@ -827,10 +827,6 @@ const Lookup = DropDownList.inherit({
         }
 
         this.callBase();
-    },
-
-    _updatePopupDimensions: function() {
-        this._updatePopupHeight();
     },
 
     _input: function() {
