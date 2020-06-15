@@ -765,7 +765,7 @@ module.exports = {
                             columnIndex: e.column.index
                         });
                         when(currentValidator && validatingController.validateCell(currentValidator))
-                           .done((validationResult) => {
+                            .done((validationResult) => {
                                 this.getController('editorFactory').refocus();
                                 deferred.resolve(validationResult);
                             });
