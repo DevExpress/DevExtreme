@@ -2024,6 +2024,27 @@ QUnit.module('popup options', {
         assert.equal($lookup.hasClass(SKIP_GESTURE_EVENT_CLASS), false, 'skip gesture event class was removed after popup was closed');
     });
 
+    QUnit.test('toolbarItems should be passed to the popover (T896951)', function(assert) {
+        const buttonConfig = {
+            location: 'after',
+            toolbar: 'bottom',
+            widget: 'dxButton',
+            options: { text: 'test' }
+        };
+
+        const lookup = $('#lookup').dxLookup({
+            opened: true,
+            dropDownOptions: {
+                toolbarItems: [buttonConfig]
+            }
+        }).dxLookup('instance');
+
+        const $button = $(lookup.content()).parent().find('.dx-button-text');
+
+        assert.deepEqual(lookup._popup.option('toolbarItems'), [buttonConfig], 'toolbarItems are passed correctly');
+        assert.strictEqual($button.text(), 'test', 'button is added successfully');
+    });
+
     QUnit.test('shading should present', function(assert) {
         const $lookup = $('#lookupOptions');
 

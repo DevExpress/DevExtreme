@@ -1,6 +1,11 @@
 import maskCaret from 'ui/number_box/number_box.caret';
 
 QUnit.module('format caret', () => {
+    const customFormat = {
+        formatter: (value) => `${value} mil`,
+        parser: (text) => parseFloat(text)
+    };
+
     QUnit.test('getCaretWithOffset', function(assert) {
         assert.deepEqual(maskCaret.getCaretWithOffset({ start: 1, end: 2 }, 5), { start: 6, end: 7 });
         assert.deepEqual(maskCaret.getCaretWithOffset({ start: 4, end: 6 }, -2), { start: 2, end: 4 });
@@ -20,6 +25,10 @@ QUnit.module('format caret', () => {
         assert.deepEqual(maskCaret.getCaretBoundaries('($ 12,345) ts', '$ #,##0.## ts;($ #,##0.##) ts'), {
             start: 3,
             end: 9
+        });
+        assert.deepEqual(maskCaret.getCaretBoundaries('123 mil', customFormat), {
+            start: 0,
+            end: 7
         });
     });
 
@@ -49,6 +58,11 @@ QUnit.module('format caret', () => {
         assert.deepEqual(maskCaret.getCaretAfterFormat('1,234', '4', { start: 0, end: 4 }, '#,##0.##'), { start: 0, end: 0 }, 'select and remove some digits');
         assert.deepEqual(maskCaret.getCaretAfterFormat('12534', '1534', 3, '0000'), { start: 2, end: 2 }, 'enter 5 in the middle of decimal format');
         assert.deepEqual(maskCaret.getCaretAfterFormat('12345', '2345', 5, '0000'), { start: 4, end: 4 }, 'enter 5 in the end of decimal format');
+
+        assert.deepEqual(maskCaret.getCaretAfterFormat('01 mil', '1 mil', 2, customFormat), { start: 1, end: 1 }, 'enter 1 in the end of custom decimal format');
+        assert.deepEqual(maskCaret.getCaretAfterFormat('12 mil', '12 mil', 2, customFormat), { start: 2, end: 2 }, 'enter 2 in the end of custom decimal format');
+        assert.deepEqual(maskCaret.getCaretAfterFormat('12534 mil', '12534 mil', 3, customFormat), { start: 3, end: 3 }, 'enter 5 in the middle of custom decimal format');
+        assert.deepEqual(maskCaret.getCaretAfterFormat('12 mil', '12 mil', 2, customFormat), { start: 2, end: 2 }, 'enter 2 in the end of custom decimal format');
     });
 
     QUnit.test('getCaretAfterFormat with float part', function(assert) {
@@ -60,6 +74,10 @@ QUnit.module('format caret', () => {
         assert.deepEqual(maskCaret.getCaretAfterFormat('1.24', '1.240', 3, '#0.000'), { start: 3, end: 3 }, 'remove 3 with backspace');
         assert.deepEqual(maskCaret.getCaretAfterFormat('1.34', '1.30', 2, '#0.000'), { start: 2, end: 2 }, 'remove 2 with backspace');
         assert.deepEqual(maskCaret.getCaretAfterFormat('1.0000 kg', '1 kg', 6, '#0.### kg'), { start: 1, end: 1 }, 'remove 2 with backspace');
+
+        assert.deepEqual(maskCaret.getCaretAfterFormat('12.34 mil', '12.34 mil', 2, customFormat), { start: 2, end: 2 }, 'enter 2 before separator');
+        assert.deepEqual(maskCaret.getCaretAfterFormat('12.34 mil', '12.34 mil', 4, customFormat), { start: 4, end: 4 }, 'enter 3 after separator');
+        assert.deepEqual(maskCaret.getCaretAfterFormat('12.34 mil', '12.34 mil', 5, customFormat), { start: 5, end: 5 }, 'enter 4 in the the end of expression');
     });
 });
 
