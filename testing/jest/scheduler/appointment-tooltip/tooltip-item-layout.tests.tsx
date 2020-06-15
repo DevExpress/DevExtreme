@@ -1,31 +1,33 @@
 import { h } from 'preact';
 import { mount, ReactWrapper } from 'enzyme';
 import { JSXInternal } from 'preact/src/jsx';
-import TooltipItemContent from '../../../../js/renovation/scheduler/appointment-tooltip/tooltip-item-content.p';
+import TooltipItemLayout from '../../../../js/renovation/scheduler/appointment-tooltip/tooltip-item-layout.p';
 import {
-  TooltipItemContentProps, getCurrentData, getOnDeleteButtonClick,
-} from '../../../../js/renovation/scheduler/appointment-tooltip/tooltip-item-content';
+  TooltipItemLayoutProps, getCurrentData, getOnDeleteButtonClick,
+} from '../../../../js/renovation/scheduler/appointment-tooltip/tooltip-item-layout';
 import DeleteButton from '../../../../js/renovation/scheduler/appointment-tooltip/delete-button.p';
 import Marker from '../../../../js/renovation/scheduler/appointment-tooltip/marker.p';
+import TooltipItemContent from '../../../../js/renovation/scheduler/appointment-tooltip/tooltip-item-content.p';
 
 jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/delete-button.p', () => () => null);
 jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/marker.p', () => () => null);
+jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/tooltip-item-content.p', () => () => null);
 
 describe('DeleteButton', () => {
   describe('View', () => {
     const render = (props = {}): ReactWrapper => {
       window.h = h;
       return mount(
-        <TooltipItemContent {...(new TooltipItemContentProps())} {...props} />,
+        <TooltipItemLayout {...(new TooltipItemLayoutProps())} {...props} />,
       ).childAt(0);
     };
     const renderRoot = (props = {}): ReactWrapper => {
       window.h = h;
       return mount(
-        <TooltipItemContent {...(new TooltipItemContentProps())} {...props} />,
+        <TooltipItemLayout {...(new TooltipItemLayoutProps())} {...props} />,
       );
     };
-    const defaultProps: TooltipItemContentProps = {
+    const defaultProps: TooltipItemLayoutProps = {
       onDelete: jest.fn(),
       onHide: jest.fn(),
       getTextAndFormatDate: jest.fn(() => ({
