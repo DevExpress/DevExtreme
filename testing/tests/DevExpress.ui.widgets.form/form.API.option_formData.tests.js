@@ -347,8 +347,8 @@ QUnit.module('UpdateFormData for Textbox editor field', () => {
                     ],
                 }).dxForm('instance');
                 const expectedOldValue = (oldValue === 'no member' || oldValue === undefined) ? '' : oldValue;
-                assert.equal(form.getEditor('a').option('value'), '1');
-                assert.equal(form.getEditor('b').option('value'), expectedOldValue);
+                assert.strictEqual(form.getEditor('a').option('value'), '1');
+                assert.strictEqual(form.getEditor('b').option('value'), expectedOldValue);
 
                 const newFormData = {};
                 if(newValue !== 'no member') {
@@ -357,8 +357,8 @@ QUnit.module('UpdateFormData for Textbox editor field', () => {
 
                 form.updateData(newFormData);
                 const expectedNewValue = newValue === 'no member' ? expectedOldValue : newValue;
-                assert.equal(form.getEditor('a').option('value'), '1');
-                assert.equal(form.getEditor('b').option('value'), expectedNewValue);
+                assert.strictEqual(form.getEditor('a').option('value'), '1');
+                assert.strictEqual(form.getEditor('b').option('value'), expectedNewValue);
             });
         });
 
@@ -376,19 +376,19 @@ QUnit.module('UpdateFormData for Textbox editor field', () => {
             }).dxForm('instance');
 
             form.option('formData', {});
-            assert.equal(form.getEditor('a').option('value'), '');
-            assert.equal(form.getEditor('b').option('value'), '');
+            assert.strictEqual(form.getEditor('a').option('value'), '');
+            assert.strictEqual(form.getEditor('b').option('value'), '');
         });
     });
 });
 
 QUnit.module('UpdateFormData for Checkbox editor field', () => {
     function checkCheckboxEditor(editor, value) {
-        QUnit.assert.equal(editor.option('value'), value, `editor has ${value} value`);
+        QUnit.assert.strictEqual(editor.option('value'), value, `editor has ${value} value`);
 
         const $checkBox = $(editor.element());
-        QUnit.assert.equal($checkBox.hasClass('dx-checkbox-checked'), value === true, 'checkbox has checked class if it has selected');
-        QUnit.assert.equal($checkBox.hasClass('dx-checkbox-indeterminate'), value === undefined, 'checkbox has indeterminate class if it has undefied value');
+        QUnit.assert.strictEqual($checkBox.hasClass('dx-checkbox-checked'), value === true, 'checkbox has checked class if it has selected');
+        QUnit.assert.strictEqual($checkBox.hasClass('dx-checkbox-indeterminate'), value === undefined, 'checkbox has indeterminate class if it has undefied value');
     }
 
     [true, false, undefined, null, 'no member'].forEach(oldBoolValue => {
@@ -440,7 +440,7 @@ QUnit.module('UpdateFormData for Checkbox editor field', () => {
                 checkCheckboxEditor(form.getEditor('innerObject.a'), true);
                 checkCheckboxEditor(form.getEditor('innerObject.b'), expectedOldValue);
 
-                const newFormData = { innerObject: { a: 1 } };
+                const newFormData = { innerObject: { a: true } };
                 if(newBoolValue !== 'no member') {
                     newFormData.innerObject['b'] = newBoolValue;
                 }
