@@ -45,9 +45,7 @@ const ListStrategy = DateBoxStrategy.inherit({
     },
 
     popupConfig: function(popupConfig) {
-        return extend(popupConfig, {
-            width: this._getPopupWidth()
-        });
+        return popupConfig;
     },
 
     useCurrentDateByDefault: function() {
@@ -56,10 +54,6 @@ const ListStrategy = DateBoxStrategy.inherit({
 
     getDefaultDate: function() {
         return new Date(null);
-    },
-
-    _getPopupWidth: function() {
-        return this.dateBox.$element().outerWidth();
     },
 
     popupShowingHandler: function() {
@@ -263,16 +257,9 @@ const ListStrategy = DateBoxStrategy.inherit({
     },
 
     _dimensionChanged: function() {
-        this._getPopup() && this._updatePopupDimensions();
-    },
-
-    _updatePopupDimensions: function() {
-        this._updatePopupWidth();
-        this._updatePopupHeight();
-    },
-
-    _updatePopupWidth: function() {
-        this.dateBox._setPopupOption('width', this._getPopupWidth());
+        if(this._getPopup()) {
+            this._updatePopupHeight();
+        }
     },
 
     _updatePopupHeight: function() {
