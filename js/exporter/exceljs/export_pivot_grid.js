@@ -1,8 +1,7 @@
-import { isDefined, isString, isObject, isDate } from '../../core/utils/type';
-import errors from '../../core/errors';
+import { isDefined, isString, isObject } from '../../core/utils/type'; //  '../../core/utils/type';
 import excelFormatConverter from '../excel_format_converter';
 import messageLocalization from '../../localization/message';
-import { extend } from '../../core/utils/extend';
+import { extend } from '../../core/utils/extend'; // '../../core/utils/extend';
 
 // docs.microsoft.com/en-us/office/troubleshoot/excel/determine-column-widths - "Description of how column widths are determined in Excel"
 const MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
@@ -11,7 +10,7 @@ const MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
 // support.office.com/en-us/article/excel-specifications-and-limits-1672b34d-7043-467e-8e27-269d656771c3 - "Column width limit - 255 characters"
 const MAX_EXCEL_COLUMN_WIDTH = 255;
 
-function exportDataGrid(options) {
+function exportPivotGrid(options) {
     if(!isDefined(options)) return;
 
     const {
@@ -19,9 +18,7 @@ function exportDataGrid(options) {
         component,
         worksheet,
         topLeftCell,
-        autoFilterEnabled,
         keepColumnWidths,
-        selectedRowsOnly,
         loadPanel
     } = _getFullOptions(options);
 
@@ -29,6 +26,7 @@ function exportDataGrid(options) {
     if('animation' in component.option('loadPanel')) {
         loadPanel.animation = null;
     }
+
     component.option('loadPanel', loadPanel);
 
     const wrapText = !!component.option('wordWrapEnabled');
@@ -43,12 +41,11 @@ function exportDataGrid(options) {
         to: { row: topLeftCell.row, column: topLeftCell.column }
     };
 
-    const dataProvider = component.getDataProvider(selectedRowsOnly);
+    const dataProvider = component.getDataProvider();
 
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
             const columns = dataProvider.getColumns();
-            const headerRowCount = dataProvider.getHeaderRowCount();
             const dataRowsCount = dataProvider.getRowsCount();
 
             if(keepColumnWidths) {
@@ -61,11 +58,8 @@ function exportDataGrid(options) {
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 const row = worksheet.getRow(cellRange.from.row + rowIndex);
 
-                _exportRow(rowIndex, columns.length, row, cellRange.from.column, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText);
+                _exportRow(rowIndex, columns.length, row, cellRange.from.column, dataProvider, customizeCell, undefined, mergedCells, mergeRanges, wrapText);
 
-                if(rowIndex >= headerRowCount) {
-                    row.outlineLevel = dataProvider.getGroupLevel(rowIndex);
-                }
                 if(rowIndex >= 1) {
                     cellRange.to.row++;
                 }
@@ -81,11 +75,8 @@ function exportDataGrid(options) {
                 worksheetViewSettings.rightToLeft = true;
             }
 
-            if(headerRowCount > 0) {
-                if(Object.keys(worksheetViewSettings).indexOf('state') === -1) {
-                    extend(worksheetViewSettings, { state: 'frozen', ySplit: cellRange.from.row + dataProvider.getFrozenArea().y - 1 });
-                }
-                _setAutoFilter(dataProvider, worksheet, cellRange, autoFilterEnabled);
+            if(Object.keys(worksheetViewSettings).indexOf('state') === -1) {
+                extend(worksheetViewSettings, { state: 'frozen', xSplit: cellRange.from.column + dataProvider.getFrozenArea().x - 1, ySplit: cellRange.from.row + dataProvider.getFrozenArea().y - 1 });
             }
 
             if(Object.keys(worksheetViewSettings).length > 0) {
@@ -110,9 +101,6 @@ function _getFullOptions(options) {
     if(!isDefined(fullOptions.keepColumnWidths)) {
         fullOptions.keepColumnWidths = true;
     }
-    if(!isDefined(fullOptions.selectedRowsOnly)) {
-        fullOptions.selectedRowsOnly = false;
-    }
     if(!isDefined(fullOptions.loadPanel)) {
         fullOptions.loadPanel = {};
     }
@@ -121,9 +109,6 @@ function _getFullOptions(options) {
     }
     if(!isDefined(fullOptions.loadPanel.text)) {
         fullOptions.loadPanel.text = messageLocalization.format('dxDataGrid-exporting');
-    }
-    if(!isDefined(fullOptions.autoFilterEnabled)) {
-        fullOptions.autoFilterEnabled = false;
     }
 
     return fullOptions;
@@ -134,18 +119,14 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
 
     for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
-        const gridCell = cellData.cellSourceData;
+        const pivotCell = cellData.cellSourceData;
 
         const excelCell = row.getCell(startColumnIndex + cellIndex);
 
-        if(isDate(cellData.value)) {
-            excelCell.value = _convertDateForExcelJS(cellData.value);
-        } else {
-            excelCell.value = cellData.value;
-        }
+        excelCell.value = cellData.value;
 
         if(isDefined(excelCell.value)) {
-            const { bold, alignment: horizontalAlignment, format, dataType } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
+            const { alignment: horizontalAlignment, format, dataType } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
 
             let numberFormat = _tryConvertToExcelNumberFormat(format, dataType);
             if(isDefined(numberFormat)) {
@@ -155,40 +136,19 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
             }
 
             _setNumberFormat(excelCell, numberFormat);
-            _setFont(excelCell, bold);
             _setAlignment(excelCell, wrapText, horizontalAlignment);
         }
 
         if(isDefined(customizeCell)) {
-            const options = { excelCell, gridCell };
-
-            Object.defineProperty(options, 'cell', {
-                get: function() {
-                    errors.log('W0003', 'CustomizeCell handler argument', 'cell', '20.1', 'Use the \'excelCell\' field instead');
-                    return excelCell;
-                },
+            customizeCell({
+                excelCell: excelCell,
+                pivotCell: pivotCell
             });
-
-            customizeCell(options);
         }
 
-        if(rowIndex < headerRowCount) {
-            const mergeRange = _tryGetMergeRange(rowIndex, cellIndex, mergedCells, dataProvider);
-            if(isDefined(mergeRange)) {
-                mergeRanges.push(mergeRange);
-            }
-        }
-    }
-}
-
-function _convertDateForExcelJS(date) {
-    return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()));
-}
-
-function _setAutoFilter(dataProvider, worksheet, cellRange, autoFilterEnabled) {
-    if(autoFilterEnabled) {
-        if(!isDefined(worksheet.autoFilter) && dataProvider.getRowsCount() > 0) {
-            worksheet.autoFilter = cellRange;
+        const mergeRange = _tryGetMergeRange(rowIndex, cellIndex, mergedCells, dataProvider);
+        if(isDefined(mergeRange)) {
+            mergeRanges.push(mergeRange);
         }
     }
 }
@@ -224,13 +184,6 @@ function _formatObjectConverter(format, dataType) {
     return result;
 }
 
-function _setFont(excelCell, bold) {
-    if(isDefined(bold)) {
-        excelCell.font = excelCell.font || {};
-        excelCell.font.bold = bold;
-    }
-}
-
 function _setAlignment(excelCell, wrapText, horizontalAlignment) {
     excelCell.alignment = excelCell.alignment || {};
 
@@ -250,6 +203,7 @@ function _setColumnsWidth(worksheet, columns, startColumnIndex) {
     }
     for(let i = 0; i < columns.length; i++) {
         const columnWidth = columns[i].width;
+
         if((typeof columnWidth === 'number') && isFinite(columnWidth)) {
             worksheet.getColumn(startColumnIndex + i).width =
                 Math.min(MAX_EXCEL_COLUMN_WIDTH, Math.floor(columnWidth / MAX_DIGIT_WIDTH_IN_PIXELS * 100) / 100);
@@ -283,4 +237,4 @@ function _mergeCells(worksheet, topLeftCell, mergeRanges) {
     });
 }
 
-export { exportDataGrid, MAX_EXCEL_COLUMN_WIDTH, _getFullOptions };
+export { exportPivotGrid, _getFullOptions };
