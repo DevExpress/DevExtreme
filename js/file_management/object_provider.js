@@ -406,4 +406,4 @@ function getJSZip() {
     return JSZip;
 }
 
-module.exports = ObjectFileSystemProvider;
+export default ObjectFileSystemProvider;

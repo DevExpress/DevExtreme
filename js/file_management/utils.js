@@ -73,10 +73,10 @@ const pathCombine = function() {
     return result;
 };
 
-module.exports.getFileExtension = getFileExtension;
-module.exports.getName = getName;
-module.exports.getParentPath = getParentPath;
-module.exports.getPathParts = getPathParts;
-module.exports.getEscapedFileName = getEscapedFileName;
-module.exports.pathCombine = pathCombine;
-module.exports.PATH_SEPARATOR = PATH_SEPARATOR;
+export { getFileExtension };
+export { getName };
+export { getParentPath };
+export { getPathParts };
+export { getEscapedFileName };
+export { pathCombine };
+export { PATH_SEPARATOR };
