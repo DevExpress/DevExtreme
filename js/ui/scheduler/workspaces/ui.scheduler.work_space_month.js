@@ -1,10 +1,10 @@
-const $ = require('../../../core/renderer');
-const noop = require('../../../core/utils/common').noop;
-const registerComponent = require('../../../core/component_registrator');
-const SchedulerWorkSpace = require('./ui.scheduler.work_space.indicator');
-const dateUtils = require('../../../core/utils/date');
-const getBoundingRect = require('../../../core/utils/position').getBoundingRect;
-const dateLocalization = require('../../../localization/date');
+import $ from '../../../core/renderer';
+import { noop } from '../../../core/utils/common';
+import registerComponent from '../../../core/component_registrator';
+import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
+import dateUtils from '../../../core/utils/date';
+import { getBoundingRect } from '../../../core/utils/position';
+import dateLocalization from '../../../localization/date';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
 
@@ -18,35 +18,35 @@ const DAY_IN_MILLISECONDS = 86400000;
 
 const toMs = dateUtils.dateToMilliseconds;
 
-const SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
-    _toggleFixedScrollableClass: function() {
+class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
+    _toggleFixedScrollableClass() {
         this._dateTableScrollable.$content().toggleClass(DATE_TABLE_SCROLLABLE_FIXED_CLASS, !this._isWorkSpaceWithCount() && !this._isVerticalGroupedWorkSpace());
-    },
+    }
 
-    _getElementClass: function() {
+    _getElementClass() {
         return MONTH_CLASS;
-    },
+    }
 
-    _getRowCount: function() {
+    _getRowCount() {
         return this._isWorkSpaceWithCount() ? 4 * this.option('intervalCount') + 2 : 6;
-    },
+    }
 
-    _getCellCount: function() {
+    _getCellCount() {
         return DAYS_IN_WEEK;
-    },
+    }
 
-    _getDateByIndex: function(headerIndex) {
+    _getDateByIndex(headerIndex) {
         const resultDate = new Date(this._firstViewDate);
         resultDate.setDate(this._firstViewDate.getDate() + headerIndex);
 
         return resultDate;
-    },
+    }
 
-    _getFormat: function() {
+    _getFormat() {
         return this._formatWeekday;
-    },
+    }
 
-    _calculateCellIndex: function(rowIndex, cellIndex) {
+    _calculateCellIndex(rowIndex, cellIndex) {
         if(this._isVerticalGroupedWorkSpace()) {
             rowIndex = rowIndex % this._getRowCount();
         } else {
@@ -54,46 +54,46 @@ const SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         }
 
         return rowIndex * this._getCellCount() + cellIndex;
-    },
+    }
 
-    _getInterval: function() {
+    _getInterval() {
         return DAY_IN_MILLISECONDS;
-    },
+    }
 
-    _getIntervalBetween: function(currentDate) {
+    _getIntervalBetween(currentDate) {
         const firstViewDate = this.getStartViewDate();
         const timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
 
         return currentDate.getTime() - (firstViewDate.getTime() - this.option('startDayHour') * 3600000) - timeZoneOffset;
-    },
+    }
 
-    _getDateByCellIndexes: function(rowIndex, cellIndex) {
-        const date = this.callBase(rowIndex, cellIndex);
+    _getDateByCellIndexes(rowIndex, cellIndex) {
+        const date = super._getDateByCellIndexes(rowIndex, cellIndex);
 
         this._setStartDayHour(date);
 
         return date;
-    },
+    }
 
     // TODO: temporary fix, in the future, if we replace table layout on div layout, getCellWidth method need remove. Details in T712431
     // TODO: there is a test for this bug, when changing the layout, the test will also be useless
-    getCellWidth: function() {
+    getCellWidth() {
         const DAYS_IN_WEEK = 7;
 
         let averageWidth = 0;
         this._getCells().slice(0, DAYS_IN_WEEK).each((index, element) => averageWidth += getBoundingRect(element).width);
 
         return averageWidth / DAYS_IN_WEEK;
-    },
+    }
 
-    _calculateHiddenInterval: function() {
+    _calculateHiddenInterval() {
         return 0;
-    },
+    }
 
-    _insertAllDayRowsIntoDateTable: function() {
+    _insertAllDayRowsIntoDateTable() {
         return false;
-    },
-    _getCellCoordinatesByIndex: function(index) {
+    }
+    _getCellCoordinatesByIndex(index) {
         const rowIndex = Math.floor(index / this._getCellCount());
         const cellIndex = index - this._getCellCount() * rowIndex;
 
@@ -101,27 +101,27 @@ const SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
             rowIndex: rowIndex,
             cellIndex: cellIndex
         };
-    },
+    }
 
-    _createWorkSpaceElements: function() {
+    _createWorkSpaceElements() {
         if(this._isVerticalGroupedWorkSpace()) {
             this._createWorkSpaceScrollableElements();
         } else {
-            this.callBase();
+            super._createWorkSpaceElements();
         }
-    },
+    }
 
-    _needCreateCrossScrolling: function() {
+    _needCreateCrossScrolling() {
         return this.option('crossScrollingEnabled') || this._isVerticalGroupedWorkSpace();
-    },
+    }
 
-    _renderTimePanel: noop,
-    _renderAllDayPanel: noop,
-    _getTableAllDay: noop,
-    _toggleAllDayVisibility: noop,
-    _changeAllDayVisibility: noop,
+    _renderTimePanel() { return noop(); }
+    _renderAllDayPanel() { return noop(); }
+    _getTableAllDay() { return noop(); }
+    _toggleAllDayVisibility() { return noop(); }
+    _changeAllDayVisibility() { return noop(); }
 
-    _setFirstViewDate: function() {
+    _setFirstViewDate() {
         const firstMonthDate = dateUtils.getFirstMonthDate(this._getViewStartByOptions());
         this._firstViewDate = dateUtils.getFirstWeekDate(firstMonthDate, this.option('firstDayOfWeek') || dateLocalization.firstDayOfWeekIndex());
         this._setStartDayHour(this._firstViewDate);
@@ -129,9 +129,9 @@ const SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         const date = this._getViewStartByOptions();
         this._minVisibleDate = new Date(date.setDate(1));
         this._maxVisibleDate = new Date(new Date(date.setMonth(date.getMonth() + this.option('intervalCount'))).setDate(0));
-    },
+    }
 
-    _getViewStartByOptions: function() {
+    _getViewStartByOptions() {
         if(!this.option('startDate')) {
             return new Date(this.option('currentDate').getTime());
         } else {
@@ -152,19 +152,19 @@ const SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
 
             return diff > 0 ? startDate : endDate;
         }
-    },
+    }
 
-    _getStartViewDate: function() {
+    _getStartViewDate() {
         const firstMonthDate = dateUtils.getFirstMonthDate(this.option('startDate'));
         return firstMonthDate;
-    },
+    }
 
-    _renderTableBody: function(options) {
+    _renderTableBody(options) {
         options.getCellText = this._getCellText.bind(this);
-        this.callBase(options);
-    },
+        super._renderTableBody(options);
+    }
 
-    _getCellText: function(rowIndex, cellIndex) {
+    _getCellText(rowIndex, cellIndex) {
         if(this.option('groupByDate') && this._getGroupCount()) {
             cellIndex = Math.floor(cellIndex / this._getGroupCount());
         } else {
@@ -177,27 +177,27 @@ const SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
             return this._formatMonthAndDay(date);
         }
         return dateLocalization.format(date, 'dd');
-    },
+    }
 
-    _formatMonthAndDay: function(date) {
+    _formatMonthAndDay(date) {
         const monthName = dateLocalization.getMonthNames('abbreviated')[date.getMonth()];
         return [monthName, dateLocalization.format(date, 'day')].join(' ');
-    },
+    }
 
-    _getDate: function(week, day) {
+    _getDate(week, day) {
         const result = new Date(this._firstViewDate);
         const lastRowInDay = this._getRowCount();
 
         result.setDate(result.getDate() + (week % lastRowInDay) * DAYS_IN_WEEK + day);
         return result;
-    },
+    }
 
-    _updateIndex: function(index) {
+    _updateIndex(index) {
         return index;
-    },
+    }
 
-    _prepareCellData: function(rowIndex, cellIndex, cell) {
-        const data = this.callBase(rowIndex, cellIndex, cell);
+    _prepareCellData(rowIndex, cellIndex, cell) {
+        const data = super._prepareCellData(rowIndex, cellIndex, cell);
         const $cell = $(cell);
 
         $cell
@@ -206,81 +206,81 @@ const SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
             .toggleClass(DATE_TABLE_OTHER_MONTH_DATE_CLASS, this._isOtherMonth(data.startDate));
 
         return data;
-    },
+    }
 
-    _isCurrentDate: function(cellDate) {
+    _isCurrentDate(cellDate) {
         const today = new Date();
 
         return dateUtils.sameDate(cellDate, today);
-    },
+    }
 
-    _isFirstDayOfMonth: function(cellDate) {
+    _isFirstDayOfMonth(cellDate) {
         return this._isWorkSpaceWithCount() && cellDate.getDate() === 1;
-    },
+    }
 
-    _isOtherMonth: function(cellDate) {
+    _isOtherMonth(cellDate) {
         return !dateUtils.dateInRange(cellDate, this._minVisibleDate, this._maxVisibleDate, 'date');
-    },
+    }
 
-    needRenderDateTimeIndication: function() {
+    needRenderDateTimeIndication() {
         return false;
-    },
+    }
 
-    getCellDuration: function() {
+    getCellDuration() {
         return this._calculateDayDuration() * 3600000;
-    },
+    }
 
-    getIntervalDuration: function() {
+    getIntervalDuration() {
         return toMs('day');
-    },
+    }
 
-    getTimePanelWidth: function() {
+    getTimePanelWidth() {
         return 0;
-    },
+    }
 
-    getPositionShift: function(timeShift) {
+    getPositionShift(timeShift) {
         return {
             cellPosition: timeShift * this.getCellWidth(),
             top: 0,
             left: 0
         };
-    },
+    }
 
-    getCellCountToLastViewDate: function(date) {
+    getCellCountToLastViewDate(date) {
         const firstDateTime = date.getTime();
         const lastDateTime = this.getEndViewDate().getTime();
         const dayDurationInMs = this.getCellDuration();
 
         return Math.ceil((lastDateTime - firstDateTime) / dayDurationInMs);
-    },
+    }
 
-    supportAllDayRow: function() {
+    supportAllDayRow() {
         return false;
-    },
+    }
 
-    keepOriginalHours: function() {
+    keepOriginalHours() {
         return true;
-    },
+    }
 
-    calculateEndDate: function(startDate) {
+    calculateEndDate(startDate) {
         const startDateCopy = new Date(startDate);
         return new Date(startDateCopy.setHours(this.option('endDayHour')));
-    },
+    }
 
-    getWorkSpaceLeftOffset: function() {
+    getWorkSpaceLeftOffset() {
         return 0;
-    },
+    }
 
-    needApplyCollectorOffset: function() {
+    needApplyCollectorOffset() {
         return true;
-    },
+    }
 
-    _getDateTableBorderOffset: function() {
+    _getDateTableBorderOffset() {
         return this._getDateTableBorder();
-    },
+    }
 
-    _getCellPositionByIndex: function(index, groupIndex) {
-        const position = this.callBase(index, groupIndex);
+    _getCellPositionByIndex(index, groupIndex) {
+        const position = super._getCellPositionByIndex(index, groupIndex);
         const rowIndex = this._getCellCoordinatesByIndex(index).rowIndex;
         let calculatedTopOffset;
         if(!this._isVerticalGroupedWorkSpace()) {
@@ -293,18 +293,18 @@ const SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
             position.top = calculatedTopOffset;
         }
         return position;
-    },
+    }
 
-    _getHeaderDate: function() {
+    _getHeaderDate() {
         return this._getViewStartByOptions();
-    },
+    }
 
-    _supportCompactDropDownAppointments: function() {
+    _supportCompactDropDownAppointments() {
         return false;
-    },
+    }
 
-    scrollToTime: noop
-});
+    scrollToTime() { return noop(); }
+}
 
 registerComponent('dxSchedulerWorkSpaceMonth', SchedulerWorkSpaceMonth);
 

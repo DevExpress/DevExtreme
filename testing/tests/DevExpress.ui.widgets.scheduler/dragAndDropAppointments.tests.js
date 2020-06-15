@@ -231,12 +231,6 @@ const draggingFromTooltipConfig = $.extend({}, {
         };
     },
 
-    testViews: function(views, currentView, rtlEnabled, assert) {
-        const scheduler = this.createScheduler(views, currentView, rtlEnabled);
-
-        this.testFakeAppointmentPosition(scheduler, scheduler.appointments.compact.getButton(0), 0, currentView, assert);
-    },
-
     testFakeAppointmentPosition: function(scheduler, button, index, viewName, assert) {
         const dragOffset = { left: 100, top: 100 };
 
@@ -268,14 +262,37 @@ module('Appointment should move a same distance in dragging from tooltip case, r
     if(!isDesktopEnvironment()) {
         return;
     }
-    commonViews.forEach((view) => {
-        test(`Common Views: ${view.name}`, function(assert) { this.testViews(commonViews, view.name, false, assert); });
-    });
-    timeLineViews.forEach((view) => {
-        test(`Time Line Views: ${view.name}`, function(assert) { this.testViews(timeLineViews, view.name, false, assert); });
-    });
-    groupViews.forEach((view) => {
-        test(`Group Views: ${view.name}`, function(assert) { this.testViews(groupViews, view.name, false, assert); });
+    [commonViews, timeLineViews, groupViews].forEach(views => {
+        views.forEach(view => {
+            test(`Views: ${view.name}`, function(assert) {
+                const scheduler = this.createScheduler(views, view.name, false);
+                const compactAppointmentButton = scheduler.appointments.compact.getButton(0);
+
+                const dragOffset = { left: 100, top: 100 };
+
+                this.scrollToButton(scheduler, compactAppointmentButton);
+                scheduler.appointments.compact.click(0);
+
+                const compactAppointment = scheduler.appointments.compact.getAppointment();
+                const mousePosition = this.createMousePosition(compactAppointment);
+
+                const pointer = pointerMock(compactAppointment).start();
+
+                pointer
+                    .down(mousePosition.x, mousePosition.y)
+                    .move(dragOffset.left, dragOffset.top);
+
+                const fakeAppointmentPosition = this.getFakeAppointmentPosition(scheduler);
+
+                assert.roughEqual(Math.round(fakeAppointmentPosition.left - dragOffset.left), Math.round(mousePosition.x), 1.1,
+                    `appointment should have correct left position in ${view.name}`);
+                assert.roughEqual(Math.round(fakeAppointmentPosition.top - dragOffset.top), Math.round(mousePosition.y), 1.1,
+                    `appointment should have correct top position in ${view.name}`);
+
+                pointer
+                    .up();
+            });
+        });
     });
 });
 
@@ -284,14 +301,38 @@ module('Appointment should move a same distance in dragging from tooltip case, r
     if(!isDesktopEnvironment()) {
         return;
     }
-    commonViews.forEach((view) => {
-        test(`Common Views: ${view.name}`, function(assert) { this.testViews(commonViews, view.name, true, assert); });
-    });
-    timeLineViews.forEach((view) => {
-        test(`Time Line Views: ${view.name}`, function(assert) { this.testViews(timeLineViews, view.name, true, assert); });
-    });
-    groupViews.forEach((view) => {
-        test(`Group Views: ${view.name}`, function(assert) { this.testViews(groupViews, view.name, true, assert); });
+
+    [commonViews, timeLineViews, groupViews].forEach(views => {
+        views.forEach(view => {
+            test(`Views: ${view.name}`, function(assert) {
+                const scheduler = this.createScheduler(views, view.name, true);
+                const compactAppointmentButton = scheduler.appointments.compact.getButton(0);
+
+                const dragOffset = { left: 100, top: 100 };
+
+                this.scrollToButton(scheduler, compactAppointmentButton);
+                scheduler.appointments.compact.click(0);
+
+                const compactAppointment = scheduler.appointments.compact.getAppointment();
+                const mousePosition = this.createMousePosition(compactAppointment);
+
+                const pointer = pointerMock(compactAppointment).start();
+
+                pointer
+                    .down(mousePosition.x, mousePosition.y)
+                    .move(dragOffset.left, dragOffset.top);
+
+                const fakeAppointmentPosition = this.getFakeAppointmentPosition(scheduler);
+
+                assert.roughEqual(Math.round(fakeAppointmentPosition.left - dragOffset.left), Math.round(mousePosition.x), 1.1,
+                    `appointment should have correct left position in ${view.name}`);
+                assert.roughEqual(Math.round(fakeAppointmentPosition.top - dragOffset.top), Math.round(mousePosition.y), 1.1,
+                    `appointment should have correct top position in ${view.name}`);
+
+                pointer
+                    .up();
+            });
+        });
     });
 });
 

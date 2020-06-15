@@ -162,7 +162,14 @@ class ExcelJSPivotGridTestHelper extends ExcelJSTestHelper {
         assert.notStrictEqual(pivotCell, undefined, 'pivotCell property exist');
 
         for(const propertyName in pivotCell) {
-            assert.deepEqual(pivotCell[propertyName], expectedCell.pivotCell[propertyName], `pivotCell[${propertyName}], ${callIndex}`);
+            if(propertyName === 'path' || propertyName === 'rowPath' || propertyName === 'columnPath') {
+                assert.strictEqual(pivotCell[propertyName].length, expectedCell.pivotCell[propertyName].length, `pivotCell[${propertyName}].length, ${callIndex}`);
+                pivotCell[propertyName].forEach((pathValue, index) => {
+                    assert.equal(pathValue, expectedCell.pivotCell[propertyName][index], `pivotCell[${propertyName}][${index}], ${callIndex}`);
+                });
+            } else {
+                assert.deepEqual(pivotCell[propertyName], expectedCell.pivotCell[propertyName], `pivotCell[${propertyName}], ${callIndex}`);
+            }
         }
     }
 
