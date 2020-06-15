@@ -26,8 +26,10 @@ describe('DeleteButton', () => {
     it('should combine `className` with predefined classes', () => {
       const tree = shallow(<DeleteButtonView props={{ ...defaultProps, className: 'custom-class' }} />);
 
-      expect(tree.hasClass('dx-tooltip-appointment-item-delete-button')).toBe(true);
-      expect(tree.hasClass('custom-class')).toBe(true);
+      expect(tree.hasClass('dx-tooltip-appointment-item-delete-button'))
+        .toBe(true);
+      expect(tree.hasClass('custom-class'))
+        .toBe(true);
     });
 
     it('should spread restAttributes', () => {

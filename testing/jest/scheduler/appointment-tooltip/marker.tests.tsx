@@ -1,19 +1,13 @@
 import { h } from 'preact';
-import { mount, ReactWrapper } from 'enzyme';
-import Marker from '../../../../js/renovation/scheduler/appointment-tooltip/marker.p';
+import { shallow } from 'enzyme';
+import Marker, { viewFunction as MarkerView } from '../../../../js/renovation/scheduler/appointment-tooltip/marker';
 import { Deferred } from '../../../../js/core/utils/deferred';
-import { MarkerProps } from '../../../../js/renovation/scheduler/appointment-tooltip/marker';
 
 describe('Marker', () => {
   describe('View', () => {
-    const render = (props = {}): ReactWrapper => {
-      window.h = h;
-      return mount(<Marker {...(new MarkerProps())} {...props} />).childAt(0);
-    };
-    const defaultProps: MarkerProps = {};
-
+    const defaultProps = {};
     it('should render components correctly', () => {
-      const tree = render(defaultProps);
+      const tree = shallow(<MarkerView props={defaultProps} />);
 
       expect(tree.is('.dx-tooltip-appointment-item-marker'))
         .toEqual(true);
@@ -32,21 +26,48 @@ describe('Marker', () => {
     });
 
     it('should set color correctly', () => {
-      const color = 'color';
-      const deferredColor = Deferred() as any;
-      deferredColor.resolve(color);
-
-      const tree = render({
-        ...defaultProps,
-        color: deferredColor.promise(),
-      });
-
+      const tree = shallow(<MarkerView props={defaultProps} appointmentColor="appointmentColor" />);
 
       const childDiv = tree.find('.dx-tooltip-appointment-item-marker-body');
       expect(childDiv.prop('style'))
         .toEqual({
-          background: 'color',
+          background: 'appointmentColor',
         });
+    });
+
+    it('should combine `className` with predefined classes', () => {
+      const tree = shallow(<MarkerView props={{ className: 'custom-class' }} />);
+
+      expect(tree.hasClass('dx-tooltip-appointment-item-marker'))
+        .toBe(true);
+      expect(tree.hasClass('custom-class'))
+        .toBe(true);
+    });
+
+    it('should spread restAttributes', () => {
+      const tree = shallow(<MarkerView
+        restAttributes={{ customAttribute: 'customAttribute' }}
+        props={defaultProps}
+      />);
+
+      expect(tree.prop('customAttribute'))
+        .toBe('customAttribute');
+    });
+  });
+
+  describe('Effect', () => {
+    describe('colorEffect', () => {
+      it('should set color correctly', () => {
+        const color = 'color';
+        const deferredColor = new Deferred();
+        deferredColor.resolve(color);
+
+        const marker = new Marker({ color: deferredColor });
+
+        marker.colorEffect();
+        expect(marker.appointmentColor)
+          .toBe('color');
+      });
     });
   });
 });
