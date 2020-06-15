@@ -1541,20 +1541,6 @@ QUnit.test('pointermove from axis element to out of canvas', function(assert) {
     assert.strictEqual(this.series.notify.lastCall.args[0].action, 'clearPointHover');
 });
 
-QUnit.test('pointermove from axis element to out of canvas', function(assert) {
-    const axisElement1 = this.renderer.g();
-
-    this.axis.coordsIn.withArgs(97, 45).returns(true);
-
-    axisElement1.element['chart-data-argument'] = 'argument1';
-
-    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50, target: axisElement1.element }));
-    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 2, pageY: 50 }));
-
-    assert.strictEqual(this.series.stub('notify').callCount, 2);
-    assert.strictEqual(this.series.notify.lastCall.args[0].action, 'clearPointHover');
-});
-
 QUnit.test('pointermove from hovered point to axis element', function(assert) {
     // arrange
     const point1 = createPoint(this.series, 'argument1');
