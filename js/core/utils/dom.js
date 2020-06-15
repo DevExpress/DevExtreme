@@ -1,11 +1,9 @@
 import domAdapter from '../../core/dom_adapter';
 import $ from '../../core/renderer';
-import typeUtils from './type';
+import { isDefined, isRenderer, isWindow } from './type';
 import windowUtils from './window';
 
 const window = windowUtils.getWindow();
-const isDefined = typeUtils.isDefined;
-const isRenderer = typeUtils.isRenderer;
 
 const resetActiveElement = function() {
     const activeElement = domAdapter.getActiveElement();
@@ -108,6 +106,10 @@ const contains = function(container, element) {
 
     if(domAdapter.isDocument(container)) {
         return container.documentElement.contains(element);
+    }
+
+    if(isWindow(container)) {
+        return contains(container.document, element);
     }
 
     return container.contains
