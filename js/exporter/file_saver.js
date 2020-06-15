@@ -1,14 +1,14 @@
 /* global Windows */
 import $ from '../core/renderer';
 import domAdapter from '../core/dom_adapter';
-import windowUtils from '../core/utils/window';
+import { getWindow, getNavigator } from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
 import errors from '../ui/widget/ui.errors';
 import typeUtils from '../core/utils/type';
 import { logger } from '../core/utils/console';
 
-const window = windowUtils.getWindow();
-const navigator = windowUtils.getNavigator();
+const window = getWindow();
+const navigator = getNavigator();
 
 const FILE_EXTESIONS = {
     EXCEL: 'xlsx',
@@ -20,7 +20,7 @@ const FILE_EXTESIONS = {
     PDF: 'pdf'
 };
 
-const MIME_TYPES = exports.MIME_TYPES = {
+const MIME_TYPES = {
     CSS: 'text/css',
     EXCEL: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     PNG: 'image/png',
@@ -32,7 +32,7 @@ const MIME_TYPES = exports.MIME_TYPES = {
 
 // Use github.com/eligrey/FileSaver.js library instead this method
 
-exports.fileSaver = {
+export const fileSaver = {
     _revokeObjectURLTimeout: 30000,
 
     _getDataUri: function(format, data) {
@@ -166,3 +166,5 @@ exports.fileSaver = {
         }
     }
 };
+
+export { MIME_TYPES };

@@ -1,15 +1,15 @@
-const $ = require('../core/renderer');
-const ajax = require('../core/utils/ajax');
+import $ from '../core/renderer';
+import ajax from '../core/utils/ajax';
 const window = require('../core/utils/window').getWindow();
-const isFunction = require('../core/utils/type').isFunction;
-const each = require('../core/utils/iterator').each;
-const svgUtils = require('../core/utils/svg');
-const deferredUtils = require('../core/utils/deferred');
+import { isFunction } from '../core/utils/type';
+import { each } from '../core/utils/iterator';
+import svgUtils from '../core/utils/svg';
+import deferredUtils from '../core/utils/deferred';
 const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
 
 
-exports.svgCreator = {
+export const svgCreator = {
     _markup: '',
     _imageArray: {},
     _imageDeferreds: [],
@@ -103,6 +103,6 @@ exports.svgCreator = {
     }
 };
 
-exports.getData = function(data, options) {
-    return exports.svgCreator.getData(data, options);
-};
+export function getData(data, options) {
+    return svgCreator.getData(data, options);
+}
