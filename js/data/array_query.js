@@ -1,11 +1,11 @@
-const Class = require('../core/class');
-const typeUtils = require('../core/utils/type');
-const iteratorUtils = require('../core/utils/iterator');
-const compileGetter = require('../core/utils/data').compileGetter;
-const toComparable = require('../core/utils/data').toComparable;
-const Deferred = require('../core/utils/deferred').Deferred;
-const errorsModule = require('./errors');
-const dataUtils = require('./utils');
+import Class from '../core/class';
+import typeUtils from '../core/utils/type';
+import iteratorUtils from '../core/utils/iterator';
+import { compileGetter } from '../core/utils/data';
+import { toComparable } from '../core/utils/data';
+import { Deferred } from '../core/utils/deferred';
+import errorsModule from './errors';
+import dataUtils from './utils';
 
 const Iterator = Class.inherit({
 
@@ -655,4 +655,4 @@ const arrayQueryImpl = function(iter, queryOptions) {
     };
 };
 
-module.exports = arrayQueryImpl;
+export default arrayQueryImpl;

@@ -1,7 +1,7 @@
-const each = require('../core/utils/iterator').each;
-const domAdapter = require('../core/dom_adapter');
+import { each } from '../core/utils/iterator';
+import domAdapter from '../core/dom_adapter';
 const window = require('../core/utils/window').getWindow();
-const callOnce = require('../core/utils/call_once');
+import callOnce from '../core/utils/call_once';
 const DXPROXY_HOST = 'dxproxy.devexpress.com:8000';
 const urlMapping = {};
 
@@ -37,7 +37,7 @@ const extractProxyAppId = function() {
     return window.location.pathname.split('/')[1];
 };
 
-module.exports = {
+export default {
     parseUrl: parseUrl,
 
     isProxyUsed: function() {
