@@ -1616,6 +1616,92 @@ QUnit.module('Scenarios', moduleConfig, () => {
         });
     });
 
+    [
+        { format: 'millisecond', expectedFormat: '[$-9]SSS', expectedText: '009' },
+        { format: 'second', expectedFormat: '[$-9]ss', expectedText: '09' },
+        { format: 'minute', expectedFormat: '[$-9]mm', expectedText: '09' },
+        { format: 'hour', expectedFormat: '[$-9]HH', expectedText: '09' },
+        { format: 'day', expectedFormat: '[$-9]d', expectedText: '9' },
+        { format: 'month', expectedFormat: '[$-9]MMMM', expectedText: 'October' },
+        { format: 'year', expectedFormat: '[$-9]yyyy', expectedText: '2019' },
+        { format: 'quarter', expectedFormat: '[$-9]\\QM', expectedText: 'Q4' },
+        { format: 'monthAndDay', expectedFormat: '[$-9]MMMM d', expectedText: 'October 9' },
+        { format: 'monthAndYear', expectedFormat: '[$-9]MMMM yyyy', expectedText: 'October 2019' },
+        { format: 'quarterAndYear', expectedFormat: '[$-9]\\QM yyyy', expectedText: 'Q4 2019' },
+        { format: 'shortDate', expectedFormat: '[$-9]M\\/d\\/yyyy', expectedText: '10/9/2019' },
+        { format: 'shortTime', expectedFormat: '[$-9]H:mm AM/PM', expectedText: '9:09 AM' },
+        { format: 'longDateLongTime', expectedFormat: '[$-9]dddd, MMMM d, yyyy, H:mm:ss AM/PM', expectedText: 'Wednesday, October 9, 2019, 9:09:09 AM' },
+        { format: 'shotDateShortTime', expectedFormat: '[$-9]ssAM/PMSS\\o\\r\\t\\T\\im\\e', expectedText: '99otDAMte09ortTi9e' },
+        { format: 'longDate', expectedFormat: '[$-9]dddd, MMMM d, yyyy', expectedText: 'Wednesday, October 9, 2019' },
+        { format: 'longTime', expectedFormat: '[$-9]H:mm:ss AM/PM', expectedText: '9:09:09 AM' },
+        { format: 'dayOfWeek', expectedFormat: '[$-9]dddd', expectedText: 'Wednesday' },
+        { format: 'yyyy-MM-dd', expectedFormat: '[$-9]yyyy-MM-dd', expectedText: '2019-10-09' }
+    ].forEach((format)=> {
+        const dateValue = new Date(2019, 9, 9, 9, 9, 9, 9);
+
+        [
+            { value: dateValue, expectedPivotCellValue: dateValue, expectedExcelCellValue: new Date(Date.UTC(2019, 9, 9, 9, 9, 9, 9)) },
+            { value: '2019-10-09T00:00:00', expectedPivotCellValue: new Date(2019, 9, 9), expectedExcelCellValue: new Date(Date.UTC(2019, 9, 9)) },
+            { value: '2019/10/9', expectedPivotCellValue: new Date(2019, 9, 9), expectedExcelCellValue: new Date(Date.UTC(2019, 9, 9)) },
+            { value: dateValue.getTime(), expectedPivotCellValue: dateValue, expectedExcelCellValue: new Date(Date.UTC(2019, 9, 9, 9, 9, 9, 9)) }
+        ].forEach((date) => {
+            QUnit.test(`Export [string x string x number] with date format '${format.format}', cell.value: ${JSON.stringify(date.value)}`, function(assert) {
+                const done = assert.async();
+
+                const ds = {
+                    fields: [
+                        { area: 'row', groupName: null, dataField: 'row1', dataType: 'date', format: format.format },
+                        { area: 'column', groupName: null, dataField: 'col1', dataType: 'date', format: format.format },
+                        { area: 'data', summaryType: 'max', dataField: 'date', dataType: 'date', format: format.format }
+                    ],
+                    store: [
+                        { row1: date.value, col1: date.value, date: date.value }
+                    ]
+                };
+
+                const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                    showColumnGrandTotals: false,
+                    showRowGrandTotals: false,
+                    dataSource: ds
+                }).dxPivotGrid('instance');
+
+                let text = format.expectedText;
+                if(date.value === '2019/10/9' || date.value === '2019-10-09T00:00:00') {
+                    if(format.format === 'millisecond') text = '000';
+                    if(format.format === 'second' || format.format === 'minute' || format.format === 'hour') text = '00';
+                    if(format.format === 'shortTime' || format.format === 'longTime') text = '12:00 AM';
+                    if(format.format === 'longDateLongTime') text = 'Wednesday, October 9, 2019, 12:00:00 AM';
+                    if(format.format === 'shotDateShortTime') text = '012otDAMte012ortTi0e';
+                    if(format.format === 'longTime') text = '12:00:00 AM';
+                }
+
+                const expectedCells = [[
+                    { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                    { excelCell: { value: text, type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: [new Date(date.value).toString()], rowspan: 1, text: text, type: 'D', width: 100, value: date.expectedPivotCellValue } }
+                ], [
+                    { excelCell: { value: text, type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: [new Date(date.value).toString()], rowspan: 1, text: text, type: 'D', value: date.expectedPivotCellValue } },
+                    { excelCell: { value: date.expectedExcelCellValue, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: format.expectedFormat, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [new Date(date.value).toString()], columnType: 'D', dataIndex: 0, dataType: 'date', format: format.format, rowPath: [new Date(date.value).toString()], rowType: 'D', rowspan: 1, value: date.expectedPivotCellValue, text: text } }
+                ]];
+
+                helper.extendExpectedCells(expectedCells, topLeft);
+
+                exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
+                    helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+                    helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn100Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkCellFormat(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
+                    helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
+                    done();
+                });
+            });
+        });
+    });
+
     QUnit.test('Export with \'PivotGrid.wordWrapEnabled: false\'', function(assert) {
         const done = assert.async();
         const ds = {
