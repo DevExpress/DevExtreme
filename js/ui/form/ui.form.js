@@ -1252,10 +1252,13 @@ const Form = Widget.inherit({
     },
 
     _resetValues: function() {
+        const that = this;
         this._itemsRunTimeInfo.each(function(_, itemRunTimeInfo) {
             if(isDefined(itemRunTimeInfo.widgetInstance) && itemRunTimeInfo.widgetInstance instanceof Editor) {
-                itemRunTimeInfo.widgetInstance.reset();
-                itemRunTimeInfo.widgetInstance.option('isValid', true);
+                const pathParts = itemRunTimeInfo.path.split('.');
+                pathParts.pop();
+                const layoutManager = that._itemsRunTimeInfo.getGroupOrTabLayoutManagerByPath(pathParts.join('.')) ?? that._rootLayoutManager;
+                layoutManager._resetWidget(itemRunTimeInfo.widgetInstance);
             }
         });
 
