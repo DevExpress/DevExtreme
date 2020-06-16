@@ -15,39 +15,15 @@ import Marker from './marker';
 import DeleteButton from './delete-button';
 import TooltipItemContent from './tooltip-item-content';
 
-type GetCurrentDataFn = (appointmentItem: AppointmentItem) => dxSchedulerAppointment;
-type GetOnDeleteButtonClick = (
-  props: TooltipItemLayoutProps,
-  data?: dxSchedulerAppointment,
-  currentData?: dxSchedulerAppointment,
-) => (e: any) => void;
-
-export const getCurrentData: GetCurrentDataFn = (appointmentItem) => {
-  const { settings, data, currentData } = appointmentItem;
-
-  return settings?.targetedAppointmentData || currentData || data;
-};
-
-export const getOnDeleteButtonClick: GetOnDeleteButtonClick = (
-  { onDelete, onHide }, data, currentData,
-) => (e: any): void => {
-    onHide?.();
-    e.event.stopPropagation();
-    onDelete?.(data, currentData);
-};
-
 export const viewFunction = (viewModel: TooltipItemLayout) => {
   const useTemplate = !!viewModel.props.itemContentTemplate;
-  const onDeleteButtonClick = getOnDeleteButtonClick(
-    viewModel.props, viewModel.props.item?.data, viewModel.props.singleAppointmentData,
-  );
 
   return (
     <Fragment>
       {useTemplate && (
         <viewModel.props.itemContentTemplate
           model={{
-            appointmentData: viewModel.props.item?.data,
+            appointmentData: viewModel.props.item!.data,
             targetedAppointmentData: viewModel.currentData,
           }}
           index={viewModel.props.index}
@@ -57,17 +33,20 @@ export const viewFunction = (viewModel: TooltipItemLayout) => {
         />
       )}
       {!useTemplate && (
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      <div className={TOOLTIP_APPOINTMENT_ITEM} {...viewModel.restAttributes}>
-        <Marker color={viewModel.props.item?.color} />
+      <div
+        className={`${TOOLTIP_APPOINTMENT_ITEM} ${viewModel.props.className}`}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...viewModel.restAttributes}
+      >
+        <Marker color={viewModel.props.item!.color} />
         <TooltipItemContent
-          appointmentData={viewModel.props.item?.data}
+          appointmentData={viewModel.props.item!.data}
           currentAppointmentData={viewModel.currentData}
           getTextAndFormatDate={viewModel.props.getTextAndFormatDate}
         />
         {viewModel.props.showDeleteButton && (
         <div className={TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER}>
-          <DeleteButton onClick={onDeleteButtonClick} />
+          <DeleteButton onClick={viewModel.onDeleteButtonClick} />
         </div>
 
         )}
@@ -79,6 +58,8 @@ export const viewFunction = (viewModel: TooltipItemLayout) => {
 
 @ComponentBindings()
 export class TooltipItemLayoutProps {
+  @OneWay() className?: string = '';
+
   @OneWay() item?: AppointmentItem = { data: {} };
 
   @OneWay() index?: number;
@@ -113,6 +94,21 @@ export class TooltipItemLayoutProps {
 export default class TooltipItemLayout extends JSXComponent(TooltipItemLayoutProps) {
   get currentData(): dxSchedulerAppointment {
     const { item } = this.props;
-    return getCurrentData(item!);
+
+    const { settings, data, currentData } = item!;
+
+    return settings?.targetedAppointmentData || currentData || data;
+  }
+
+  get onDeleteButtonClick(): (e: any) => void {
+    const {
+      singleAppointmentData, item, onHide, onDelete,
+    } = this.props;
+
+    return (e: any): void => {
+      onHide!();
+      e.event.stopPropagation();
+      onDelete!(item!.data, singleAppointmentData);
+    };
   }
 }
