@@ -34,6 +34,4 @@ module.exports = [
     { themeId: 40, name: 'material', colorScheme: 'purple-dark-compact', text: 'Purple Dark Compact', group: 'Material Design (Compact)' },
     { themeId: 41, name: 'material', colorScheme: 'teal-light-compact', text: 'Teal Light Compact', group: 'Material Design (Compact)' },
     { themeId: 42, name: 'material', colorScheme: 'teal-dark-compact', text: 'Teal Dark Compact', group: 'Material Design (Compact)' },
-
-    { themeId: 3, name: 'ios7', colorScheme: 'default', text: 'iOS', group: 'Mobile' }
 ];
