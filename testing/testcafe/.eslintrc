@@ -1,12 +1,6 @@
 {
-    "env": {
-        "node": true,
-        "browser": true,
-        "jquery": true
-    },
-    "globals": {
-        "test": true,
-        "fixture": true
-    },
-    "extends": ["devextreme/testcafe"]
+    "overrides": [{
+        "files": ["*.ts", "*.tsx"],
+        "extends": ["devextreme/testcafe"]
+    }]
 }

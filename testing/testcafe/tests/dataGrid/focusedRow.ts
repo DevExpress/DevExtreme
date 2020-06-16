@@ -577,7 +577,7 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
     masterDetail: {
       enabled: true,
       template: (container) => {
-        container.append($('<div>').dxDataGrid({
+        (container.append($('<div>') as any).dxDataGrid({
           height: 500,
           keyExpr: 'id',
           dataSource: data,

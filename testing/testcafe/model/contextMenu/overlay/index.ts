@@ -14,7 +14,7 @@ export default class Overlay {
 
     const { element } = this;
     this.getOverlayInstance = ClientFunction(
-      () => $(element()).dxOverlay('instance'),
+      () => ($(element()) as any).dxOverlay('instance'),
       { dependencies: { element } },
     );
   }
@@ -26,7 +26,7 @@ export default class Overlay {
         const {
           offsetX, offsetY, pageX, pageY,
         // eslint-disable-next-line no-underscore-dangle
-        } = getOverlayInstance()._position.of;
+        } = (getOverlayInstance() as any)._position.of;
 
         return {
           offsetX, offsetY, pageX, pageY,
