@@ -869,7 +869,7 @@ module.exports = {
 
                 rowIndex = rowIndex || 0;
                 columns[rowIndex] && iteratorUtils.each(columns[rowIndex], function(_, column) {
-                    if(column.ownerBand === bandColumnID || isDefined(column.groupIndex)) {
+                    if(column.ownerBand === bandColumnID || column.type === GROUP_COMMAND_COLUMN_NAME) {
                         if(!column.isBand || !column.colspan) {
                             if((!column.command || rowIndex < 1)) {
                                 result.push(column);
