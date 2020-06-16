@@ -138,7 +138,6 @@ export default class VirtualScrolling {
         const topVirtualRowCount = options.topVirtualRowCount;
         const bottomVirtualRowCount = options.bottomVirtualRowCount;
         const dataRowCount = options.rowCount;
-        const allDayElements = options.allDayElements;
 
         let rowCountInGroup = dataRowCount;
         if(options.groupCount) {
@@ -147,87 +146,75 @@ export default class VirtualScrolling {
 
         const layoutMap = this.getLayoutMap();
         let dataItems = layoutMap.dataItems.slice(0, dataRowCount);
-        const isEmptyData = dataItems.length === 0;
 
         const prevTopVirtualRowHeight = layoutMap.topVirtualRow.height;
         const prevBottomVirtualRowHeight = layoutMap.bottomVirtualRow.height;
         const topVirtualRowHeight = rowHeight * topVirtualRowCount;
         const bottomVirtualRowHeight = rowHeight * bottomVirtualRowCount;
 
-        layoutMap.topVirtualRow.height = topVirtualRowHeight;
-        layoutMap.bottomVirtualRow.height = bottomVirtualRowHeight;
+        let addRowCount = 0;
+        const isAppend = prevTopVirtualRowHeight < topVirtualRowHeight;
+        const isPrepend = prevBottomVirtualRowHeight < bottomVirtualRowHeight;
+        const needAddRows = isAppend || isPrepend;
 
-        let appendRowCount = isEmptyData ? dataRowCount : 0;
-        let prependRowCount = 0;
-        if(prevTopVirtualRowHeight < topVirtualRowHeight) {
-            appendRowCount = Math.ceil((topVirtualRowHeight - prevTopVirtualRowHeight) / rowHeight);
-            appendRowCount = Math.min(appendRowCount, dataRowCount);
-        } else if(prevBottomVirtualRowHeight < bottomVirtualRowHeight) {
-            prependRowCount = Math.ceil((bottomVirtualRowHeight - prevBottomVirtualRowHeight) / rowHeight);
-            prependRowCount = Math.min(prependRowCount, dataRowCount);
+        if(needAddRows) {
+            if(isAppend) {
+                addRowCount = Math.ceil((topVirtualRowHeight - prevTopVirtualRowHeight) / rowHeight);
+            } else {
+                addRowCount = Math.ceil((bottomVirtualRowHeight - prevBottomVirtualRowHeight) / rowHeight);
+            }
+
+            addRowCount = Math.min(addRowCount, dataRowCount);
+
+            dataItems = this._addLayoutMapRows(options, dataItems, addRowCount, rowCountInGroup, isAppend);
+
+            layoutMap.dataItems = dataItems;
+            layoutMap.topVirtualRow.height = topVirtualRowHeight;
+            layoutMap.bottomVirtualRow.height = bottomVirtualRowHeight;
+        }
+    }
+
+    _addLayoutMapRows(options, dataItems, addRowCount, rowCountInGroup, isAppend) {
+        const dataRowCount = options.rowCount;
+        const topVirtualRowCount = options.topVirtualRowCount;
+        const isEmptyData = dataItems.length === 0;
+
+        if(!isEmptyData) {
+            let deltaRowCount = 0;
+            if(dataRowCount > dataItems.length) {
+                deltaRowCount = dataRowCount - dataItems.length;
+            }
+
+            if(isAppend) {
+                dataItems = dataItems.slice(addRowCount);
+            } else {
+                dataItems.splice(-addRowCount);
+            }
+
+            addRowCount += deltaRowCount;
         }
 
-        if(appendRowCount > 0) {
-            if(!isEmptyData) {
-                let deltaRowCount = 0;
-                if(dataRowCount > dataItems.length) {
-                    deltaRowCount = dataRowCount - dataItems.length;
-                }
-
-                dataItems = dataItems.slice(appendRowCount);
-
-                appendRowCount += deltaRowCount;
-            }
-
-            for(let index = 0; index < appendRowCount; ++index) {
+        if(isAppend) {
+            for(let index = 0; index < addRowCount; ++index) {
                 const rowIndex = dataItems.length + topVirtualRowCount;
-
-                const cells = this._createCellsMap(options, rowIndex);
-                const isLastRowInGroup = (rowIndex + 1) % rowCountInGroup === 0;
-
-                const rowModel = {
-                    rowIndex: rowIndex,
-                    className: options.rowClass,
-                    cells: cells,
-                    needInsertAllDayRow: allDayElements && isLastRowInGroup
-                };
-
+                const rowModel = this._createRowModel(options, rowIndex, rowCountInGroup);
                 dataItems.push(rowModel);
             }
-        } else if(prependRowCount > 0) {
-            if(!isEmptyData) {
-                let deltaRowCount = 0;
-                if(dataRowCount > dataItems.length) {
-                    deltaRowCount = dataRowCount - dataItems.length;
-                }
-
-                dataItems.splice(-prependRowCount);
-
-                prependRowCount += deltaRowCount;
-            }
-
+        } else {
             const startIndex = options.startIndex;
-            const prependRows = new Array(prependRowCount);
-            for(let index = prependRowCount - 1; index >= 0; --index) {
+            const prependRows = new Array(addRowCount);
+            for(let index = addRowCount - 1; index >= 0; --index) {
                 const rowIndex = startIndex + index;
-                const cells = this._createCellsMap(options, rowIndex);
-                const isLastRowInGroup = (rowIndex + 1) % rowCountInGroup === 0;
-
-                const rowModel = {
-                    rowIndex: rowIndex,
-                    className: options.rowClass,
-                    cells: cells,
-                    needInsertAllDayRow: allDayElements && isLastRowInGroup
-                };
-
+                const rowModel = this._createRowModel(options, rowIndex, rowCountInGroup);
                 prependRows[index] = rowModel;
             }
 
             dataItems = [...prependRows, ...dataItems];
         }
 
-        layoutMap.dataItems = dataItems;
+        return dataItems;
     }
+
     _createRowModel(options, rowIndex, rowCountInGroup) {
         const cells = this._createCellsMap(options, rowIndex);
         const isLastRowInGroup = (rowIndex + 1) % rowCountInGroup === 0;
