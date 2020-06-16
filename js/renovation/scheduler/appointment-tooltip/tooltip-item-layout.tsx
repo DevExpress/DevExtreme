@@ -54,7 +54,6 @@ export const viewFunction = (viewModel: TooltipItemLayout) => {
                 onClick={viewModel.onDeleteButtonClick}
               />
             </div>
-
           )}
         </div>
       )}
