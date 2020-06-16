@@ -3,6 +3,11 @@ import { shallow } from 'enzyme';
 import { DeleteButtonProps, viewFunction as DeleteButtonView } from '../../../../js/renovation/scheduler/appointment-tooltip/delete-button';
 import Button from '../../../../js/renovation/button';
 
+jest.mock('../../../../js/renovation/button', () => ({
+  default: () => null,
+  ButtonProps: require.requireActual('../../../../js/renovation/button').ButtonProps,
+}));
+
 describe('DeleteButton', () => {
   describe('View', () => {
     const defaultProps: DeleteButtonProps = {
