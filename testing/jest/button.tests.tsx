@@ -1,24 +1,19 @@
-import { h, createRef } from 'preact';
-import { mount, ReactWrapper } from 'enzyme';
-import { JSXInternal } from 'preact/src/jsx';
+import { h } from 'preact';
+import { mount, shallow } from 'enzyme';
 import devices from '../../js/core/devices';
+import { convertRulesToOptions } from '../../js/core/options/utils';
 import themes from '../../js/ui/themes';
 import {
   clear as clearEventHandlers,
   defaultEvent,
   emit,
-  emitKeyboard,
   getEventHandlers,
-  fakeClickEvent,
   EVENT,
-  KEY,
 } from './utils/events-mock';
-import Button, { defaultOptions } from '../../js/renovation/button.p';
-import type ButtonRef from '../../js/renovation/button.p';
-import Icon from '../../js/renovation/icon.p';
-import Widget from '../../js/renovation/widget.p';
-import type { WidgetProps } from '../../js/renovation/widget';
-import type { ButtonProps } from '../../js/renovation/button';
+import Button, { ButtonProps, defaultOptionRules, viewFunction } from '../../js/renovation/button';
+import Widget from '../../js/renovation/widget';
+import Icon from '../../js/renovation/icon';
+import InkRipple from '../../js/renovation/ink-ripple';
 
 type Mock = jest.Mock;
 
@@ -39,659 +34,509 @@ jest.mock('../../js/ui/themes', () => ({
 }));
 
 describe('Button', () => {
-  const render = (props = {}): ReactWrapper => mount(<Button {...props} />).childAt(0);
-
-  beforeEach(() => {
-    (devices.real as Mock).mockImplementation(() => ({ deviceType: 'desktop' }));
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (devices as any).isSimulator.mockImplementation(() => false);
-    (themes.current as Mock).mockImplementation(() => 'generic');
-  });
-
-  afterEach(() => {
-    jest.resetAllMocks();
-    clearEventHandlers();
-  });
-
-  describe('Props', () => {
-    describe('useInkRipple', () => {
-      describe('Wave position and size', () => {
-        it('should calc correct position and size for the back button', () => {
-          const button = render({ useInkRipple: true, type: 'back' });
-          const content = button.find('.dx-button-content').getDOMNode<HTMLDivElement>();
-          const { onActive } = button.find(Widget).props() as WidgetProps;
-
-          content.style.width = '10px';
-          content.style.height = '10px';
-          onActive(fakeClickEvent);
-
-          const wave = content.querySelectorAll<HTMLDivElement>('.dx-inkripple-wave')[0];
-
-          expect(wave.style).toMatchObject({
-            left: '-2px', top: '-2px', width: '14px', height: '14px',
-          });
-        });
-
-        it('should calc correct position and size for the icon only button', () => {
-          const button = render({ useInkRipple: true, text: '', icon: 'icon' });
-          const content = button.find('.dx-button-content').getDOMNode<HTMLDivElement>();
-          const { onActive } = button.find(Widget).props() as WidgetProps;
-
-          content.style.width = '10px';
-          content.style.height = '10px';
-          onActive(fakeClickEvent);
-
-          const wave = content.querySelectorAll<HTMLDivElement>('.dx-inkripple-wave')[0];
-
-          expect(wave.style).toMatchObject({
-            left: '-2px', top: '-2px', width: '14px', height: '14px',
-          });
-        });
-
-        it('should calc correct position and size for the regular button', () => {
-          const button = render({ useInkRipple: true });
-          const content = button.find('.dx-button-content').getDOMNode<HTMLDivElement>();
-          const { onActive } = button.find(Widget).props() as WidgetProps;
-
-          content.style.width = '10px';
-          content.style.height = '10px';
-          onActive(fakeClickEvent);
-
-          const wave = content.querySelectorAll<HTMLDivElement>('.dx-inkripple-wave')[0];
-
-          expect(wave.style).toMatchObject({
-            left: '-14px', top: '-14px', width: '28px', height: '28px',
-          });
-        });
-      });
-
-      it('should be `false` by default', () => {
-        const button = render();
-        const content = button.find('.dx-button-content').getDOMNode<HTMLDivElement>();
-        const { onActive } = button.find(Widget).props() as WidgetProps;
-
-        onActive(defaultEvent);
-        expect(content.querySelectorAll('.dx-inkripple')).toHaveLength(0);
-      });
-
-      it('should render on active event and clear on inactive event', () => {
-        const button = render({ useInkRipple: true });
-        const content: Element = button.find('.dx-button-content').getDOMNode();
-        const { onActive, onInactive } = button.find(Widget).props() as WidgetProps;
-
-        expect(content.querySelectorAll('.dx-inkripple-wave')).toHaveLength(0);
-        expect(content.querySelectorAll('.dx-inkripple-hiding')).toHaveLength(0);
-        onActive(defaultEvent);
-        expect(content.querySelectorAll('.dx-inkripple-wave')).toHaveLength(1);
-        expect(content.querySelectorAll('.dx-inkripple-hiding')).toHaveLength(0);
-        onInactive(defaultEvent);
-        expect(content.querySelectorAll('.dx-inkripple-hiding')).toHaveLength(1);
+  describe('Render', () => {
+    it('should render InkRipple if useInkRipple is true', () => {
+      const button = shallow(viewFunction({
+        props: { useInkRipple: true },
+        inkRippleConfig: { isConfig: true },
+      } as any) as any);
+      expect(button.find(InkRipple).props()).toMatchObject({
+        config: { isConfig: true },
       });
     });
 
-    describe('useSubmitBehavior', () => {
-      it('should be `false` by default', () => {
-        const button = render();
-
-        expect(button.exists('.dx-button-submit-input')).toBe(false);
-      });
-
-      it('should render submit input', () => {
-        const button = render({ useSubmitBehavior: true });
-        const submitInput = button.find('input.dx-button-submit-input');
-
-        expect(submitInput.props()).toMatchObject({
-          tabIndex: -1,
-          type: 'submit',
-        });
-      });
-
-      it('should submit form by button click', () => {
-        const button = render({ useSubmitBehavior: true });
-        const submitInput = button.find('input.dx-button-submit-input');
-        const submitInputClick = jest.fn();
-
-        submitInput.getDOMNode<HTMLInputElement>().click = submitInputClick;
-        expect(submitInputClick).toHaveBeenCalledTimes(0);
-        emit(EVENT.dxClick, defaultEvent, button.getDOMNode());
-        expect(submitInputClick).toHaveBeenCalledTimes(1);
-      });
-
-      it('should submit form by enter press', () => {
-        const button = render({ useSubmitBehavior: true });
-        const submitInput = button.find('input.dx-button-submit-input');
-        const submitInputClick = jest.fn();
-
-        submitInput.getDOMNode<HTMLInputElement>().click = submitInputClick;
-        expect(submitInputClick).toHaveBeenCalledTimes(0);
-        emitKeyboard(KEY.enter);
-        expect(submitInputClick).toHaveBeenCalledTimes(1);
-      });
-
-      it('should submit form by space press', () => {
-        const button = render({ useSubmitBehavior: true });
-        const submitInput = button.find('input.dx-button-submit-input').getDOMNode<HTMLInputElement>();
-        const submitInputClick = jest.fn();
-
-        submitInput.click = submitInputClick;
-        expect(submitInputClick).toHaveBeenCalledTimes(0);
-        emitKeyboard(KEY.space);
-        expect(submitInputClick).toHaveBeenCalledTimes(1);
-      });
-
-      it('should stop event propagation', () => {
-        const onSubmit = ({ event }): boolean => event.stopPropagation();
-        const button = render({ useSubmitBehavior: true, onSubmit });
-        const submitInput = button.find('input.dx-button-submit-input');
-        const e = { ...defaultEvent, stopPropagation: jest.fn() };
-
-        expect(e.stopPropagation).toHaveBeenCalledTimes(0);
-        emit(EVENT.click, e, submitInput.getDOMNode());
-        expect(e.stopPropagation).toHaveBeenCalledTimes(1);
+    it('should render submit input if useSubmitBehavior is true', () => {
+      const button = shallow(viewFunction({ props: { useSubmitBehavior: true } } as any) as any);
+      const submitInput = button.find('input.dx-button-submit-input');
+      expect(submitInput.props()).toMatchObject({
+        type: 'submit',
+        tabIndex: -1,
       });
     });
 
-    describe('stylingMode', () => {
-      it('should use `contained` as a default value', () => {
-        const classNames = render().prop('classes') as string[];
+    it('should render text', () => {
+      const button = shallow(viewFunction({ props: { text: 'button-text' } } as any) as any);
+      const buttonText = button.find('.dx-button-content .dx-button-text');
+      expect(buttonText.text()).toBe('button-text');
+    });
 
-        expect(classNames.includes('dx-button-mode-contained')).toBe(true);
-        expect(classNames.includes('dx-button-mode-text')).toBe(false);
-        expect(classNames.includes('dx-button-mode-outlined')).toBe(false);
-      });
+    it('should not render text if template is defined', () => {
+      const button = shallow(viewFunction({
+        props: {
+          text: 'button-text',
+          template: () => <div />,
+        },
+      } as any) as any);
+      const buttonText = button.find('.dx-button-content .dx-button-text');
+      expect(buttonText.exists()).toBe(false);
+    });
 
-      it('should add `dx-button-mode-text` class if the stylingMode is `text`', () => {
-        const classNames = render({ stylingMode: 'text' }).prop('classes') as string[];
+    it('should not render icon component if iconSource is not defined', () => {
+      const button = shallow(viewFunction({
+        props: {
+          text: 'button-text',
+          iconPosition: 'left',
+        },
+      } as any) as any);
+      expect(button.find(Icon).exists()).toBe(false);
+    });
 
-        expect(classNames.includes('dx-button-mode-text')).toBe(true);
-        expect(classNames.includes('dx-button-mode-contained')).toBe(false);
-        expect(classNames.includes('dx-button-mode-outlined')).toBe(false);
-      });
+    it('should not render icon component if template is defined', () => {
+      const button = shallow(viewFunction({
+        props: {
+          text: 'button-text',
+          template: () => <div />,
+        },
+        iconSource: 'icon-source',
+      } as any) as any);
+      expect(button.find(Icon).exists()).toBe(false);
+    });
 
-      it('should add `dx-button-mode-contained` class if the stylingMode is `contained`', () => {
-        const classNames = render({ stylingMode: 'contained' }).prop('classes') as string[];
-
-        expect(classNames.includes('dx-button-mode-contained')).toBe(true);
-        expect(classNames.includes('dx-button-mode-text')).toBe(false);
-        expect(classNames.includes('dx-button-mode-outlined')).toBe(false);
-      });
-
-      it('should add `dx-button-mode-outlined` class if the stylingMode is `outlined`', () => {
-        const classNames = render({ stylingMode: 'outlined' }).prop('classes') as string[];
-
-        expect(classNames.includes('dx-button-mode-outlined')).toBe(true);
-        expect(classNames.includes('dx-button-mode-text')).toBe(false);
-        expect(classNames.includes('dx-button-mode-contained')).toBe(false);
+    it.skip('should render icon component on the left side', () => {
+      const button = shallow(viewFunction({
+        props: {
+          text: 'button-text',
+          iconPosition: 'left',
+        },
+        iconSource: 'icon-source',
+      } as any) as any);
+      const buttonContent = button.find('.dx-button-content');
+      expect(buttonContent.childAt(0).is(Icon)).toBe(true);
+      expect(buttonContent.find(Icon).props()).toEqual({
+        source: 'icon-surce',
+        position: 'left',
       });
     });
 
-    describe('text', () => {
-      it('should render `text`', () => {
-        const button = render({ text: 'My button' });
-
-        expect(button.find('.dx-button-text').text()).toBe('My button');
-      });
-
-      it('should not render `text` by default', () => {
-        const classNames = render().prop('classes') as string[];
-
-        expect(classNames.includes('dx-button')).toBe(true);
-        expect(classNames.includes('dx-button-has-text')).toBe(false);
-        expect(render().find('.dx-button-text').exists()).toBe(false);
-      });
-
-      it('should not raise an error with non-string text option value', () => {
-        expect(() => { render({ text: 1 }); }).not.toThrow();
-      });
-    });
-
-    describe('type', () => {
-      it('should use `normal` as a default value', () => {
-        const classNames = render().prop('classes') as string[];
-
-        expect(classNames.includes('dx-button-normal')).toBe(true);
-      });
-
-      it('should add `dx-button-*` if the type is defined', () => {
-        const classNames = render({ type: 'custom' }).prop('classes') as string[];
-
-        expect(classNames.includes('dx-button-custom')).toBe(true);
-        expect(classNames.includes('dx-button-normal')).toBe(false);
-      });
-    });
-
-    describe('activeStateEnabled', () => {
-      it('should be enabled by default', () => {
-        const button = render();
-        const classNames = button.prop('classes') as string[];
-
-        expect(button.prop('activeStateEnabled')).toBe(true);
-        expect(classNames.includes('dx-state-active')).toBe(false);
-      });
-    });
-
-    describe('template', () => {
-      const template = ({ data: { text } }): JSXInternal.Element => <div className="custom-content">{`${text}123`}</div>;
-
-      it('should render template', () => {
-        const button = render({
-        // should use "component" property te be able find template
-          component: template,
-          text: 'My button',
-        });
-        const customRender = button.find(template);
-
-        expect(customRender.exists()).toBe(true);
-        expect(customRender.exists('.custom-content')).toBe(true);
-
-        expect(customRender.props().data.text).toBe('My button');
-        expect(customRender.text()).toBe('My button123');
-      });
-
-      it('should rerender template in runtime', () => {
-        const button = mount(<Button text="My button" />);
-
-        expect(button.exists(template)).toBe(false);
-
-        button.setProps({ component: template });
-        expect(button.exists(template)).toBe(true);
-
-        button.setProps({ component: undefined });
-        expect(button.exists(template)).toBe(false);
-      });
-
-      it('should change properties in runtime', () => {
-        const button = mount(<Button text="My button" component={template} />);
-        let buttonContent = button.find(template);
-
-        expect(buttonContent.props().data.text).toBe('My button');
-        expect(buttonContent.text()).toBe('My button123');
-
-        button.setProps({ text: 'New value' });
-        buttonContent = button.find(template);
-
-        expect(buttonContent.props().data.text).toBe('New value');
-        expect(buttonContent.text()).toBe('New value123');
-      });
-
-      it('should get original icon prop', () => {
-        const button = render({
-          icon: 'testicon',
-          component: ({ data: { icon } }) => <div>{icon}</div>,
-          text: 'My button',
-        });
-        const buttonContentChildren = button.find('.dx-button-content').children();
-
-        expect(buttonContentChildren.props().data.icon).toBe('testicon');
-      });
-    });
-
-    describe('icon', () => {
-      it('should not render icon by default', () => {
-        const button = render();
-
-        expect(button.is('.dx-button-has-icon')).toBe(false);
-        expect(button.exists(Icon)).toBe(false);
-      });
-
-      it('should render icon', () => {
-        const button = render({ icon: 'test' });
-        const classNames = button.prop('classes') as string[];
-
-        expect(classNames.includes('dx-button-has-icon')).toBe(true);
-        const { source } = button.find(Icon).props();
-        expect(source).toEqual('test');
-      });
-    });
-
-    describe('iconPosition', () => {
-      it('should render icon before text if iconPosition is left (by default)', () => {
-        const button = render({
-          icon: 'test',
-          text: 'myButton',
-        });
-        const elements = button.find('.dx-button-content').children();
-
-        expect(elements.at(0).is(Icon)).toBe(true);
-        expect(elements.at(1).is('.dx-button-text')).toBe(true);
-        expect(elements.at(0).props().position).toEqual('left');
-      });
-
-      it('should render icon after text if iconPosition is right', () => {
-        const button = render({
-          icon: 'test',
+    it.skip('should render icon component on the right side', () => {
+      const button = shallow(viewFunction({
+        props: {
+          text: 'button-text',
           iconPosition: 'right',
-          text: 'myButton',
-        });
-        const elements = button.find('.dx-button-content').children();
-        const classNames = button.prop('classes') as string[];
-
-        expect(classNames.includes('dx-button-icon-right')).toBe(true);
-        expect(elements.at(0).is('.dx-button-text')).toBe(true);
-        expect(elements.at(1).is(Icon)).toBe(true);
-        expect(elements.at(1).props().position).toEqual('right');
+        },
+        iconSource: 'icon-source',
+      } as any) as any);
+      const buttonContent = button.find('.dx-button-content');
+      expect(buttonContent.childAt(1).is(Icon)).toBe(true);
+      expect(buttonContent.childAt(0).text()).toBe('button-text');
+      expect(buttonContent.find(Icon).props()).toEqual({
+        source: 'icon-surce',
+        position: 'right',
       });
     });
 
-    describe('hoverStateEnabled', () => {
-      it('should pass a default value into Widget component', () => {
-        const tree = render();
+    it('should render template', () => {
+      const template = ({ data: { text } }) => <div className="custom-content">{`${text}_text`}</div>;
+      const button = mount(viewFunction({
+        props: { template, text: 'button', icon: 'icon' },
+      } as any) as any);
 
-        expect(tree.find(Widget).prop('hoverStateEnabled')).toBe(true);
-      });
-
-      it('should pass a custom value into Widget component', () => {
-        const tree = render({ hoverStateEnabled: false });
-
-        expect(tree.find(Widget).prop('hoverStateEnabled')).toBe(false);
-      });
+      const buttonContent = button.find('.dx-button-content');
+      const templateContent = buttonContent.find(template);
+      const customContent = templateContent.find('.custom-content');
+      expect(templateContent.props().data.text).toBe('button');
+      expect(templateContent.props().data.icon).toBe('icon');
+      expect(customContent.text()).toBe('button_text');
     });
 
-    describe('visible', () => {
-      it('should pass the default value into Widget component', () => {
-        const tree = render();
-
-        expect(tree.find(Widget).prop('visible')).toBe(true);
-      });
-
-      it('should pass the custom value into Widget component', () => {
-        const tree = render({ visible: false });
-
-        expect(tree.find(Widget).prop('visible')).toBe(false);
-      });
-    });
-
-    describe('focusStateEnabled', () => {
-      it('should pass a default value into Widget component', () => {
-        const button = render();
-
-        expect(button.find(Widget).prop('focusStateEnabled')).toBe(true);
-      });
-
-      it('should pass a custom value into Widget component', () => {
-        const button = render({ focusStateEnabled: false });
-
-        expect(button.find(Widget).prop('focusStateEnabled')).toBe(false);
-      });
-    });
-
-    describe('tabIndex', () => {
-      it('should pass a default value into Widget component', () => {
-        const tree = render();
-
-        expect(tree.find(Widget).prop('tabIndex')).toBe(0);
-      });
-
-      it('should pass a custom value into Widget component', () => {
-        const tree = render({ tabIndex: 10 });
-
-        expect(tree.find(Widget).prop('tabIndex')).toBe(10);
-      });
-    });
-
-    describe('onKeyDown', () => {
-      it('should call custom handler on key press', () => {
-        const onClick = jest.fn();
-        const onKeyDown = jest.fn();
-
-        render({ onClick, onKeyDown });
-
-        expect(onClick).toHaveBeenCalledTimes(0);
-        expect(onKeyDown).toHaveBeenCalledTimes(0);
-
-        emitKeyboard(KEY.space);
-        expect(onClick).toHaveBeenCalledTimes(1);
-        expect(onKeyDown).toHaveBeenCalledTimes(1);
-
-        emitKeyboard(KEY.a);
-        expect(onClick).toHaveBeenCalledTimes(1);
-        expect(onKeyDown).toHaveBeenCalledTimes(2);
-      });
-
-      it('should call custom handler on press specific key', () => {
-        const onClick = jest.fn();
-        const customHandler = jest.fn();
-
-        render({
-          onClick,
-          onKeyDown: ({ keyName, which }) => {
-            if (keyName === 'a' || which === 'a') {
-              customHandler();
-            }
-
-            return null;
-          },
-        });
-
-        expect(onClick).toHaveBeenCalledTimes(0);
-        expect(customHandler).toHaveBeenCalledTimes(0);
-
-        emitKeyboard(KEY.space);
-        expect(onClick).toHaveBeenCalledTimes(1);
-        expect(customHandler).toHaveBeenCalledTimes(0);
-
-        emitKeyboard(KEY.a);
-        expect(onClick).toHaveBeenCalledTimes(1);
-        expect(customHandler).toHaveBeenCalledTimes(1);
-      });
-
-      it('should not call onClick on press Enter and Space if prevented', () => {
-        const onClick = jest.fn();
-        const customHandler = jest.fn();
-
-        render({
-          onClick,
-          onKeyDown: ({ originalEvent, keyName, which }) => {
-            if (keyName === 'space' || which === 'space' || keyName === 'enter' || which === 'enter') {
-              customHandler();
-              originalEvent.cancel = true; // eslint-disable-line no-param-reassign
-
-              return originalEvent;
-            }
-
-            return null;
-          },
-        });
-
-        expect(onClick).toHaveBeenCalledTimes(0);
-        expect(customHandler).toHaveBeenCalledTimes(0);
-
-        emitKeyboard(KEY.space);
-        expect(onClick).toHaveBeenCalledTimes(0);
-        expect(customHandler).toHaveBeenCalledTimes(1);
-
-        emitKeyboard(KEY.enter);
-        expect(onClick).toHaveBeenCalledTimes(0);
-        expect(customHandler).toHaveBeenCalledTimes(2);
+    it('should pass all necessary properties to the Widget', () => {
+      const renderOptions = {
+        aria: 'area',
+        onActive: () => null,
+        onInactive: () => null,
+      };
+      const renderProps = {
+        accessKey: 'A',
+        activeStateEnabled: true,
+        disabled: true,
+        focusStateEnabled: true,
+        height: 100,
+        hint: 'hint',
+        hoverStateEnabled: true,
+        onContentReady: () => null,
+        rtlEnabled: true,
+        tabIndex: -2,
+        visible: true,
+        width: 200,
+      };
+      const cssClasses = 'cssClasses';
+      const restAttributes = { attr1: 'value1', attr2: 'value2' };
+      const onWidgetKeyDown = () => null;
+      const onWidgetClick = () => null;
+      const button = mount(viewFunction({
+        ...renderOptions,
+        props: renderProps,
+        restAttributes,
+        cssClasses,
+        onWidgetKeyDown,
+        onWidgetClick,
+      } as any) as any);
+      expect(button.find(Widget).props()).toMatchObject({
+        ...renderOptions,
+        ...renderProps,
+        ...restAttributes,
+        classes: cssClasses,
+        onKeyDown: onWidgetKeyDown,
+        onClick: onWidgetClick,
       });
     });
   });
 
-  describe('Events', () => {
-    describe('onSubmit', () => {
-      it('should be called on submit input `click` event', () => {
-        const onSubmit = jest.fn();
-        const button = render({ useSubmitBehavior: true, onSubmit });
-        const submitInput = button.find('input.dx-button-submit-input');
+  describe('Behavior', () => {
+    describe('Effects', () => {
+      afterEach(clearEventHandlers);
 
-        expect(onSubmit).toHaveBeenCalledTimes(0);
-        emit(EVENT.click, defaultEvent, submitInput.getDOMNode());
-        expect(onSubmit).toHaveBeenCalledTimes(1);
+      describe('contentReadyEffect', () => {
+        it('should call "onContentReady" callback with the content node\'s parent', () => {
+          const onContentReady = jest.fn();
+          const button = new Button({ onContentReady });
+          const parentNode = {};
+          button.contentRef = { parentNode } as any;
+          button.contentReadyEffect();
+          expect(onContentReady).toHaveBeenCalledTimes(1);
+          expect(onContentReady).toHaveBeenCalledWith({ element: parentNode });
+        });
       });
 
-      it('should detach `click` event before rerendering', () => {
-        const button = mount(<Button useSubmitBehavior />);
+      describe('submitEffect', () => {
+        it('should be ignored if the "useSubmitBehavior" is false', () => {
+          const button = new Button({ useSubmitBehavior: false, onSubmit: () => false });
+          expect(button.submitEffect()).toBe(undefined);
+          expect(getEventHandlers(EVENT.click)).toBeUndefined();
+        });
 
-        expect(getEventHandlers(EVENT.click).length).toBe(1);
-        button.setProps({ useSubmitBehavior: false });
-        expect(getEventHandlers(EVENT.click).length).toBe(0);
-      });
-    });
+        it('should be ignored if the "onSubmit" is empty', () => {
+          const button = new Button({ useSubmitBehavior: true, onSubmit: undefined });
+          expect(button.submitEffect()).toBe(undefined);
+          expect(getEventHandlers(EVENT.click)).toBeUndefined();
+        });
 
-    describe('onClick', () => {
-      it('should be called on `click` event', () => {
-        const onClick = jest.fn();
-        const button = render({ onClick });
+        it('should call "onSubmit" callback by submit input click ', () => {
+          const onSubmit = jest.fn();
+          const button = new Button({ useSubmitBehavior: true, onSubmit });
+          button.submitInputRef = {} as any;
+          button.submitEffect();
+          emit(EVENT.click, defaultEvent, button.submitInputRef as any);
+          expect(onSubmit).toHaveBeenCalledTimes(1);
+          expect(onSubmit).toHaveBeenCalledWith(
+            { event: defaultEvent, submitInput: button.submitInputRef },
+          );
+        });
 
-        expect(onClick).toHaveBeenCalledTimes(0);
-        emit(EVENT.dxClick, defaultEvent, button.getDOMNode());
-        expect(onClick).toHaveBeenCalledTimes(1);
-      });
-
-      it('should be called with passed event', () => {
-        const onClick = jest.fn();
-        const button = render({ onClick });
-
-        emit(EVENT.dxClick, defaultEvent, button.getDOMNode());
-        expect(onClick).toHaveBeenCalledWith({ event: defaultEvent });
-      });
-
-      it('should be called by Enter', () => {
-        const onClick = jest.fn();
-
-        render({ onClick });
-        expect(onClick).toHaveBeenCalledTimes(0);
-        emitKeyboard(KEY.enter);
-        expect(onClick).toHaveBeenCalledTimes(1);
-        emitKeyboard(KEY.a, KEY.enter);
-        expect(onClick).toHaveBeenCalledTimes(2);
-      });
-
-      it('should be called by Space', () => {
-        const onClick = jest.fn();
-
-        render({ onClick });
-        expect(onClick).toHaveBeenCalledTimes(0);
-        emitKeyboard(KEY.space);
-        expect(onClick).toHaveBeenCalledTimes(1);
-        emitKeyboard(KEY.a, KEY.space);
-        expect(onClick).toHaveBeenCalledTimes(2);
-      });
-
-      it('should be called by key press with passed event', () => {
-        const onClick = jest.fn();
-
-        render({ onClick });
-        emitKeyboard(KEY.enter);
-        expect(onClick).toHaveBeenCalledWith({ event: defaultEvent });
-      });
-
-      it('should respond to Enter or Space keys only', () => {
-        const onClick = jest.fn();
-
-        render({ onClick });
-        emitKeyboard(KEY.a);
-        expect(onClick).toHaveBeenCalledTimes(0);
+        it('should return event dettach callback', () => {
+          const onSubmit = jest.fn();
+          const button = new Button({ useSubmitBehavior: true, onSubmit });
+          button.submitInputRef = {} as any;
+          const detach = button.submitEffect() as () => undefined;
+          expect(getEventHandlers(EVENT.click).length).toBe(1);
+          detach();
+          expect(getEventHandlers(EVENT.click).length).toBe(0);
+        });
       });
     });
 
-    describe('onContentReady', () => {
-      it('should be called after rendering', () => {
-        const onContentReady = jest.fn(({ element }) => expect(element.classList.contains('dx-button')).toBe(true));
+    describe('Methods', () => {
+      describe('focus', () => {
+        it('should focus main element', () => {
+          const button = new Button({});
+          button.widgetRef = { focus: jest.fn() } as any;
+          button.focus();
 
-        render({ onContentReady });
-        expect(onContentReady).toHaveBeenCalledTimes(1);
+          expect(button.widgetRef.focus).toHaveBeenCalledTimes(1);
+          expect(button.widgetRef.focus).toHaveBeenCalledWith();
+        });
+      });
+    });
+
+    describe('Events', () => {
+      describe('Widget', () => {
+        describe('Key down', () => {
+          it('should call onKeyDown callback by Widget key down', () => {
+            const onKeyDown = jest.fn(() => ({ cancel: true }));
+            const options = {};
+            const button = new Button({ onKeyDown });
+            button.onWidgetKeyDown(options);
+            expect(onKeyDown).toHaveBeenCalledTimes(1);
+            expect(onKeyDown).toHaveBeenCalledWith(options);
+          });
+
+          it('should prevent key down event processing if onKeyDown event handler returns event.cancel="true"', () => {
+            const onKeyDown = jest.fn(() => ({ cancel: true }));
+            const onClick = jest.fn();
+            const options = { keyName: 'enter' };
+            const button = new Button({ onKeyDown, onClick });
+            button.onWidgetKeyDown(options);
+            expect(onKeyDown).toBeCalled();
+            expect(onClick).not.toBeCalled();
+          });
+
+          it('should prevent default key down event and simulate click by space/enter keys', () => {
+            const onClick = jest.fn();
+            const options = {
+              keyName: 'enter',
+              originalEvent: {
+                preventDefault: jest.fn(),
+              },
+            };
+            const button = new Button({ onClick, validationGroup: 'vGroup' });
+            button.onWidgetKeyDown(options);
+            expect(options.originalEvent.preventDefault).toBeCalled();
+            expect(onClick).toHaveBeenCalledTimes(1);
+            expect(onClick).toHaveBeenCalledWith({
+              event: options.originalEvent, validationGroup: 'vGroup',
+            });
+          });
+
+          it('should not simulate click by common keys down', () => {
+            const onClick = jest.fn();
+            const button = new Button({ onClick, validationGroup: 'vGroup' });
+            button.onWidgetKeyDown({ keyName: 'A' });
+            expect(onClick).not.toBeCalled();
+          });
+        });
+
+        describe('Click', () => {
+          it('should call onClick callback by Widget click', () => {
+            const onClick = jest.fn();
+            const event = {} as Event;
+            const button = new Button({ onClick, validationGroup: 'vGroup' });
+            button.onWidgetClick(event);
+            expect(onClick).toHaveBeenCalledTimes(1);
+            expect(onClick).toHaveBeenCalledWith({
+              event, validationGroup: 'vGroup',
+            });
+          });
+
+          it('should force form submit by Widget click if the "useSubmitBehavior" is true', () => {
+            const event = {} as Event;
+            const button = new Button({ useSubmitBehavior: true });
+            button.submitInputRef = { click: jest.fn() } as any;
+            button.onWidgetClick(event);
+            expect(button.submitInputRef.click).toHaveBeenCalledTimes(1);
+          });
+
+          it('should not force form submit by Widget click if the "useSubmitBehavior" is false', () => {
+            const event = {} as Event;
+            const button = new Button({ useSubmitBehavior: false });
+            button.submitInputRef = { click: jest.fn() } as any;
+            button.onWidgetClick(event);
+            expect(button.submitInputRef.click).not.toBeCalled();
+          });
+        });
+
+        describe('Active/Inactive', () => {
+          it('should ignore inkripple effects if the useInkRipple is "false"', () => {
+            const button = new Button({ useInkRipple: false });
+            button.inkRippleRef = {
+              showWave: jest.fn(),
+              hideWave: jest.fn(),
+            } as any;
+
+            button.onActive({} as Event);
+            button.onInactive({} as Event);
+            expect(button.inkRippleRef.showWave).not.toHaveBeenCalled();
+            expect(button.inkRippleRef.hideWave).not.toHaveBeenCalled();
+          });
+
+          it('should show inkripple effect on active action', () => {
+            const button = new Button({ useInkRipple: true });
+            const contentRef = {};
+            const event = {} as Event;
+            button.contentRef = contentRef as any;
+            button.inkRippleRef = { showWave: jest.fn() } as any;
+            button.onActive(event);
+
+            expect(button.inkRippleRef.showWave).toHaveBeenCalledTimes(1);
+            expect(button.inkRippleRef.showWave).toHaveBeenCalledWith({
+              element: contentRef, event,
+            });
+          });
+
+          it('should hide inkripple effect on inactive action', () => {
+            const button = new Button({ useInkRipple: true });
+            const contentRef = {};
+            const event = {} as Event;
+            button.contentRef = contentRef as any;
+            button.inkRippleRef = { hideWave: jest.fn() } as any;
+            button.onInactive(event);
+
+            expect(button.inkRippleRef.hideWave).toHaveBeenCalledTimes(1);
+            expect(button.inkRippleRef.hideWave).toHaveBeenCalledWith({
+              element: contentRef, event,
+            });
+          });
+        });
       });
     });
   });
 
-  describe('ARIA accessibility', () => {
-    it('should set `button` role', () => {
-      const tree = render({ text: 'button-text' });
+  describe('Logic', () => {
+    describe('Getters', () => {
+      describe('aria', () => {
+        it('should compile label value from the icon if the icon source type is "image"', () => {
+          let button = new Button({ icon: 'data:text/plain;base64,SGVsbG8sIFdvcmxkIQ==' });
+          expect(button.aria).toEqual({ label: 'Base64', role: 'button' });
 
-      expect(tree.find(Widget).prop('aria')).toMatchObject({ role: 'button' });
-    });
+          button = new Button({ icon: '.' });
+          expect(button.aria).toEqual({ label: '.', role: 'button' });
+        });
 
-    it('should use `text` value as aria-label', () => {
-      const tree = render({ text: 'button-text' });
+        it('should not return label if the text and the icon are empty', () => {
+          expect(new Button({}).aria).toEqual({ role: 'button' });
+        });
 
-      expect(tree.find(Widget).prop('aria')).toMatchObject({ label: 'button-text' });
-    });
-
-    it('should use `icon` name as aria-label', () => {
-      const tree = render({ text: '', icon: 'find' });
-
-      expect(tree.find(Widget).prop('aria')).toMatchObject({ label: 'find' });
-    });
-
-    it('should use `icon` file name as aria-label if local icon is used', () => {
-      const tree = render({ text: '', icon: '/path/file.png' });
-
-      expect(tree.find(Widget).prop('aria')).toMatchObject({ label: 'file' });
-    });
-
-    it('should not parse icon if icon-type is base64 for aria-label', () => {
-      const tree = render({ text: '', icon: 'data:image/png;base64,' });
-
-      expect(tree.find(Widget).prop('aria')).toMatchObject({ label: 'Base64' });
-    });
-
-    it('should not define aria-label if properties are not defined', () => {
-      const tree = render({ text: '', icon: '' });
-
-      expect(tree.find(Widget).prop('aria')).not.toHaveProperty('label');
-    });
-  });
-
-  describe('Default option rules', () => {
-    const getDefaultProps = (): ButtonProps => {
-      defaultOptions({
-        device: () => false,
-        options: {},
+        it('should return icon value if the text is empty', () => {
+          expect(new Button({ icon: 'icon' }).aria)
+            .toEqual({ label: 'icon', role: 'button' });
+        });
       });
 
-      return Button.defaultProps as ButtonProps;
-    };
+      describe('cssClasses', () => {
+        it('should add button styling mode class', () => {
+          expect(new Button({ stylingMode: 'text' }).cssClasses)
+            .toEqual(expect.stringMatching('dx-button-mode-text'));
+        });
 
-    describe('focusStateEnabled', () => {
-      it('should be false if device is not desktop', () => {
-        (devices.real as Mock).mockImplementation(() => ({ deviceType: 'android' }));
-        expect(getDefaultProps().focusStateEnabled).toBe(false);
+        it('should add "contained" button styling mode class by default', () => {
+          expect(new Button({}).cssClasses)
+            .toEqual(expect.stringMatching('dx-button-mode-contained'));
+        });
+
+        it('should add button type class', () => {
+          expect(new Button({ type: 'back' }).cssClasses)
+            .toEqual(expect.stringMatching('dx-button-back'));
+        });
+
+        it('should add "normal" button type class by default', () => {
+          expect(new Button({}).cssClasses)
+            .toEqual(expect.stringMatching('dx-button-normal'));
+        });
+
+        it('should add "right" icon position class if iconPosition is not "left"', () => {
+          expect(new Button({}).cssClasses)
+            .toEqual(expect.stringMatching('dx-button-icon-right'));
+
+          expect(new Button({ iconPosition: 'center' }).cssClasses)
+            .toEqual(expect.stringMatching('dx-button-icon-right'));
+        });
+
+        it('should not add icon position class if iconPosition is "left"', () => {
+          expect(new Button({ iconPosition: 'left' }).cssClasses)
+            .toEqual(expect.not.stringMatching('dx-button-icon-'));
+        });
+
+        it('should add "dx-button" class', () => {
+          expect(new Button({}).cssClasses)
+            .toEqual(expect.stringMatching(/dx-button(\s|$)/));
+        });
+
+        it('should add button text class', () => {
+          expect(new Button({ text: 'text' }).cssClasses)
+            .toEqual(expect.stringMatching('dx-button-has-text'));
+        });
+
+        it('should add button icon class', () => {
+          expect(new Button({ icon: 'icon' }).cssClasses)
+            .toEqual(expect.stringMatching('dx-button-has-icon'));
+        });
+
+        it('should not add button text class by default', () => {
+          expect(new Button({}).cssClasses)
+            .toEqual(expect.not.stringMatching('dx-button-has-text'));
+        });
+
+        it('should not add button icon class by default', () => {
+          expect(new Button({}).cssClasses)
+            .toEqual(expect.not.stringMatching('dx-button-has-icon'));
+        });
       });
 
-      it('should be true on desktop and not simulator', () => {
-        expect(getDefaultProps().focusStateEnabled).toBe(true);
+      describe('iconSource', () => {
+        it('should return "icon" property value if defined', () => {
+          expect(new Button({ icon: 'icon' }).iconSource).toBe('icon');
+        });
+
+        it('should return "icon" property value if the type is "back"', () => {
+          expect(new Button({ icon: 'icon', type: 'back' }).iconSource)
+            .toBe('icon');
+        });
+
+        it('should return "back" property value for the back button', () => {
+          expect(new Button({ type: 'back' }).iconSource).toBe('back');
+        });
+
+        it('should return empty string if the icon property value is empty', () => {
+          expect(new Button({}).iconSource).toBe('');
+        });
+
+        it('should return empty string if the type property value is not "back"', () => {
+          expect(new Button({ type: 'normal' }).iconSource).toBe('');
+        });
       });
 
-      it('should be false on simulator', () => {
+      describe('inkRippleConfig', () => {
+        const rippleConfig = {
+          isCentered: true,
+          useHoldAnimation: false,
+          waveSizeCoefficient: 1,
+        };
+
+        it('should return empty config for the text button', () => {
+          expect(new Button({ text: 'text' }).inkRippleConfig).toEqual({});
+        });
+
+        it('should return config for the icon only button', () => {
+          expect(new Button({ icon: 'icon' }).inkRippleConfig)
+            .toEqual(rippleConfig);
+        });
+
+        it('should return config for the back button', () => {
+          expect(new Button({ type: 'back' }).inkRippleConfig)
+            .toEqual(rippleConfig);
+        });
+      });
+    });
+
+    describe('Default options', () => {
+      const getDefaultOptions = (): ButtonProps => Object.assign(new ButtonProps(),
+        convertRulesToOptions(defaultOptionRules));
+
+      beforeEach(() => {
+        (devices.real as Mock).mockImplementation(() => ({ deviceType: 'desktop' }));
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (devices as any).isSimulator.mockImplementation(() => true);
-        expect(getDefaultProps().focusStateEnabled).toBe(false);
-      });
-    });
-
-    describe('useInkRiple', () => {
-      it('should be true if material theme', () => {
-        (themes.current as Mock).mockImplementation(() => 'material');
-        expect(getDefaultProps().useInkRipple).toBe(true);
-      });
-
-      it('should be false if theme is not material', () => {
+        (devices as any).isSimulator.mockImplementation(() => false);
         (themes.current as Mock).mockImplementation(() => 'generic');
-        expect(getDefaultProps().useInkRipple).toBe(false);
+      });
+
+      afterEach(() => jest.resetAllMocks());
+
+      describe('useInkRiple', () => {
+        it('should be true if material theme', () => {
+          (themes.current as Mock).mockImplementation(() => 'material');
+          expect(getDefaultOptions().useInkRipple).toBe(true);
+        });
+
+        it('should be false if theme is not material', () => {
+          (themes.current as Mock).mockImplementation(() => 'generic');
+          expect(getDefaultOptions().useInkRipple).toBe(false);
+        });
+      });
+
+      describe('focusStateEnabled', () => {
+        it('should be false if device is not desktop', () => {
+          (devices.real as Mock).mockImplementation(() => ({ deviceType: 'android' }));
+          expect(getDefaultOptions().focusStateEnabled).toBe(false);
+        });
+
+        it('should be true on desktop and not simulator', () => {
+          expect(getDefaultOptions().focusStateEnabled).toBe(true);
+        });
+
+        it('should be false on simulator', () => {
+          (devices as any).isSimulator.mockImplementation(() => true);
+          expect(getDefaultOptions().focusStateEnabled).toBe(false);
+        });
       });
     });
-  });
-
-  describe('API', () => {
-    describe('Focus', () => {
-      it('should call .focus API', () => {
-        const apiRef = createRef<ButtonRef>();
-        const button = render({ ref: apiRef, focusStateEnabled: true });
-        const { ref: widgetRef } = button.find(Widget).props() as WidgetProps & { ref };
-        const widgetFocusApi = jest.fn();
-
-        (widgetRef as ButtonRef & { current }).current.focus = widgetFocusApi;
-        (apiRef as ButtonRef & { current }).current.focus();
-
-        expect(widgetFocusApi).toHaveBeenCalledTimes(1);
-      });
-    });
-  });
-
-  it('should have dx-button class', () => {
-    const classNames = render().prop('classes') as string[];
-
-    expect(classNames.includes('dx-button')).toBe(true);
   });
 });
