@@ -233,7 +233,7 @@ describe('TooltipItemLayout', () => {
   });
 
   describe('Getters', () => {
-    describe('getCurentData', () => {
+    describe('curentData', () => {
       it('should return data if other are undefiend', () => {
         const appointmentItem = { data: { text: 'data' } };
         const tooltipItemLayout = new TooltipItemLayout({ item: appointmentItem });
@@ -278,7 +278,7 @@ describe('TooltipItemLayout', () => {
       });
     });
 
-    describe('getOnDeleteButtonClick', () => {
+    describe('gonDeleteButtonClick', () => {
       it('should return data if other are undefiend', () => {
         const onHide = jest.fn();
         const onDelete = jest.fn();
