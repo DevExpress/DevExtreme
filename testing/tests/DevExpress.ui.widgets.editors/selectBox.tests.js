@@ -93,10 +93,10 @@ QUnit.module('rendering with css', {}, () => {
 
         assert.ok($popup.hasClass(POPUP_CLASS));
 
-        assert.strictEqual(instance._popup.option('width'), '100%');
+        assert.strictEqual(instance._popup.option('width'), 'auto');
 
         const $overlayContent = $('.dx-overlay-content');
-        assert.strictEqual($overlayContent.outerWidth(), 100, 'overlay content width is correct');
+        assert.roughEqual($overlayContent.outerWidth(), 137, 1, 'overlay content width is correct');
     });
 });
 
