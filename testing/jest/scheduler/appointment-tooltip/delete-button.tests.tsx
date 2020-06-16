@@ -5,13 +5,12 @@ import Button from '../../../../js/renovation/button';
 
 jest.mock('../../../../js/renovation/button', () => ({
   default: () => null,
-  ButtonProps: require.requireActual('../../../../js/renovation/button').ButtonProps,
+  ButtonProps: class {},
 }));
 
 describe('DeleteButton', () => {
   describe('View', () => {
     const defaultProps: DeleteButtonProps = {
-      ...(new DeleteButtonProps()),
       onClick: jest.fn(),
     };
 

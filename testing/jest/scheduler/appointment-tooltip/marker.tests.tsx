@@ -68,6 +68,14 @@ describe('Marker', () => {
         expect(marker.appointmentColor)
           .toBe('color');
       });
+
+      it('should not set color correctly', () => {
+        const marker = new Marker({ color: undefined });
+
+        marker.colorEffect();
+        expect(marker.appointmentColor)
+          .toBe(undefined);
+      });
     });
   });
 });
