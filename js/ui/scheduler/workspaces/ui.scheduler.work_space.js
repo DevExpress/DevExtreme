@@ -22,7 +22,7 @@ import dragEvents from '../../../events/drag';
 import Scrollable from '../../scroll_view/ui.scrollable';
 import HorizontalGroupedStrategy from './ui.scheduler.work_space.grouped.strategy.horizontal';
 import VerticalGroupedStrategy from './ui.scheduler.work_space.grouped.strategy.vertical';
-import tableCreator from '../ui.scheduler.table_creator';
+import { tableCreator } from '../ui.scheduler.table_creator';
 import VerticalShader from '../shaders/ui.scheduler.current_time_shader.vertical';
 import AppointmentDragBehavior from '../appointmentDragBehavior';
 import { FIXED_CONTAINER_CLASS } from '../constants';

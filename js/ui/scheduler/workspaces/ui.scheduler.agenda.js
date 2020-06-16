@@ -7,7 +7,7 @@ import registerComponent from '../../../core/component_registrator';
 import SchedulerWorkSpace from './ui.scheduler.work_space';
 import { extend } from '../../../core/utils/extend';
 import dateLocalization from '../../../localization/date';
-import tableCreator from '../ui.scheduler.table_creator';
+import { tableCreator } from '../ui.scheduler.table_creator';
 
 const AGENDA_CLASS = 'dx-scheduler-agenda';
 const AGENDA_DATE_CLASS = 'dx-scheduler-agenda-date';
