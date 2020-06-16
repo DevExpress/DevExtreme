@@ -69,7 +69,7 @@ describe('Marker', () => {
           .toBe('color');
       });
 
-      it('should not set color correctly', () => {
+      it('should not set color', () => {
         const marker = new Marker({ color: undefined });
 
         marker.colorEffect();

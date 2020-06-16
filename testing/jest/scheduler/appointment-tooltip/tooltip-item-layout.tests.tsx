@@ -88,7 +88,7 @@ describe('TooltipItemLayout', () => {
         });
     });
 
-    it('should process delete button click correctly', () => {
+    it('should pass correct props to DeleteButton', () => {
       const onDeleteButtonClick = jest.fn();
       const deleteButton = shallow(<TooltipItemLayoutView
         props={{ ...defaultProps }}
@@ -236,7 +236,7 @@ describe('TooltipItemLayout', () => {
 
   describe('Getters', () => {
     describe('curentData', () => {
-      it('should return data if other are undefiend', () => {
+      it('should return data if others are undefiend', () => {
         const appointmentItem = { data: { text: 'data' } };
         const tooltipItemLayout = new TooltipItemLayout({ item: appointmentItem });
 
@@ -280,8 +280,8 @@ describe('TooltipItemLayout', () => {
       });
     });
 
-    describe('gonDeleteButtonClick', () => {
-      it('should return data if other are undefiend', () => {
+    describe('onDeleteButtonClick', () => {
+      it('should create onDeleteButtonClick correctly', () => {
         const onHide = jest.fn();
         const onDelete = jest.fn();
         const stopPropagation = jest.fn();

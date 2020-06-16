@@ -2,7 +2,7 @@ import { h } from 'preact';
 import { shallow } from 'enzyme';
 import TooltipItemContent, { viewFunction as TooltipItemContentView } from '../../../../js/renovation/scheduler/appointment-tooltip/tooltip-item-content';
 
-describe('Marker', () => {
+describe('TooltipItemContent', () => {
   describe('View', () => {
     const defaultProps = {};
     const formattedData = { text: 'text', formatDate: 'formatDate' };
