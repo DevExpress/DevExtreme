@@ -33,24 +33,24 @@ export const viewFunction = (viewModel: TooltipItemLayout) => {
         />
       )}
       {!useTemplate && (
-      <div
-        className={`${TOOLTIP_APPOINTMENT_ITEM} ${viewModel.props.className}`}
+        <div
+          className={`${TOOLTIP_APPOINTMENT_ITEM} ${viewModel.props.className}`}
         // eslint-disable-next-line react/jsx-props-no-spreading
-        {...viewModel.restAttributes}
-      >
-        <Marker color={viewModel.props.item!.color} />
-        <TooltipItemContent
-          appointmentData={viewModel.props.item!.data}
-          currentAppointmentData={viewModel.currentData}
-          getTextAndFormatDate={viewModel.props.getTextAndFormatDate}
-        />
-        {viewModel.props.showDeleteButton && (
-        <div className={TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER}>
-          <DeleteButton onClick={viewModel.onDeleteButtonClick} />
-        </div>
+          {...viewModel.restAttributes}
+        >
+          <Marker color={viewModel.props.item!.color} />
+          <TooltipItemContent
+            appointmentData={viewModel.props.item!.data}
+            currentAppointmentData={viewModel.currentData}
+            getTextAndFormatDate={viewModel.props.getTextAndFormatDate}
+          />
+          {viewModel.props.showDeleteButton && (
+          <div className={TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER}>
+            <DeleteButton onClick={viewModel.onDeleteButtonClick} />
+          </div>
 
-        )}
-      </div>
+          )}
+        </div>
       )}
     </Fragment>
   );

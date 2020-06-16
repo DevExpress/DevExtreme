@@ -36,7 +36,7 @@ export default class Marker extends JSXComponent(MarkerProps) {
   appointmentColor!: Color;
 
   @Effect()
-  colorEffect() {
+  colorEffect(): void {
     const { color } = this.props;
     color?.done((value) => {
       this.appointmentColor = value;
