@@ -60,6 +60,8 @@ const TODAY_CELL_CLASS = 'dx-calendar-today';
 const GESTURE_COVER_CLASS = 'dx-gesture-cover';
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdowneditor-button';
 const DROP_DOWN_BUTTON_VISIBLE_CLASS = 'dx-dropdowneditor-button-visible';
+const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+const POPUP_CLASS = 'dx-popup';
 
 const CALENDAR_APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
 
@@ -2146,6 +2148,26 @@ QUnit.module('datebox w/ calendar', {
         assert.deepEqual(getInstanceWidget(this.fixture.dateBox).option('value'), date);
     });
 
+    QUnit.test('popup should have correct width after editor width runtime change', function(assert) {
+        this.fixture.dateBox.option('width', 300);
+        this.fixture.dateBox.option('dropDownOptions.width', '50%');
+        this.fixture.dateBox.option('opened', true);
+
+        this.fixture.dateBox.option('width', 700);
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.strictEqual($overlayContent.outerWidth(), 350, 'overlay content width is correct');
+    });
+
+    QUnit.test('popup should have correct width when editor width is defined (T897820)', function(assert) {
+        const editorWidth = 200;
+        this.fixture.dateBox.option('width', editorWidth);
+        this.fixture.dateBox.option('opened', true);
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.ok($overlayContent.outerWidth() > editorWidth, 'overlay content width is correct');
+    });
+
     QUnit.test('DateBox must update its value when a date is selected in the calendar when applyValueMode=\'instantly\'', function(assert) {
         const date = new Date(2011, 11, 11);
 
@@ -3395,19 +3417,74 @@ QUnit.module('datebox w/ time list', {
         assert.ok(getInstanceWidget(this.dateBox).$element().hasClass('dx-list'), 'list initialized');
     });
 
-    QUnit.test('width option test', function(assert) {
-        this.dateBox.option('opened', false);
-        this.dateBox.option('width', 'auto');
+    QUnit.test('popup width shoud be equal to the editor width when dropDownOptions.width in not defined', function(assert) {
         this.dateBox.option('opened', true);
 
-        const popup = this.$dateBox.find('.dx-popup').dxPopup('instance');
-
-        assert.equal(this.$dateBox.outerWidth(), popup.option('width'), 'timebox popup has equal width with timebox with option width \'auto\'');
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.strictEqual($overlayContent.outerWidth(), this.$dateBox.outerWidth(), 'popup width is correct');
 
         this.dateBox.option('opened', false);
-        this.dateBox.option('width', '153px');
+        this.dateBox.option('width', '153');
         this.dateBox.option('opened', true);
-        assert.equal(this.$dateBox.outerWidth(), popup.option('width'), 'timebox popup has equal width with timebox with option width in pixels');
+        assert.strictEqual($overlayContent.outerWidth(), this.$dateBox.outerWidth(), 'popup width is correct');
+    });
+
+    QUnit.test('popup should have width equal to dropDownOptions.width if it\'s defined (T897820)', function(assert) {
+        this.dateBox.option('dropDownOptions.width', 500);
+        this.dateBox.option('opened', true);
+
+        const popup = this.dateBox.$element().find(`.${POPUP_CLASS}`).dxPopup('instance');
+        assert.strictEqual(popup.option('width'), 500, 'popup width option value is correct');
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.strictEqual($overlayContent.outerWidth(), 500, 'overlay content width is correct');
+    });
+
+    QUnit.test('popup should have width equal to dropDownOptions.width even after editor input width change (T897820)', function(assert) {
+        this.dateBox.option('dropDownOptions.width', 500);
+        this.dateBox.option('opened', true);
+
+        this.dateBox.option('width', 300);
+
+        const popup = this.dateBox.$element().find(`.${POPUP_CLASS}`).dxPopup('instance');
+        assert.strictEqual(popup.option('width'), 500, 'popup width option value is correct');
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.strictEqual($overlayContent.outerWidth(), 500, 'overlay content width is correct');
+    });
+
+    QUnit.test('popup should have width auto if dropDownOptions.width is set to auto (T897820)', function(assert) {
+        this.dateBox.option('dropDownOptions.width', 'auto');
+        this.dateBox.option('opened', true);
+
+        const popup = this.dateBox.$element().find(`.${POPUP_CLASS}`).dxPopup('instance');
+        assert.strictEqual(popup.option('width'), 'auto', 'popup width option value is correct');
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.strictEqual($overlayContent.outerWidth(), this.dateBox.$element().outerWidth(), 'overlay content width is correct');
+    });
+
+    QUnit.test('popup should have correct width when dropDownOptions.width is percent (T897820)', function(assert) {
+        this.dateBox.option('width', 600);
+        this.dateBox.option('dropDownOptions.width', '50%');
+        this.dateBox.option('opened', true);
+
+        const popup = this.dateBox.$element().find(`.${POPUP_CLASS}`).dxPopup('instance');
+        assert.strictEqual(popup.option('width'), '50%', 'popup width option value is correct');
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.strictEqual($overlayContent.outerWidth(), 300, 'overlay content width is correct');
+    });
+
+    QUnit.test('popup should have correct width after editor width runtime change', function(assert) {
+        this.dateBox.option('width', 300);
+        this.dateBox.option('dropDownOptions.width', '50%');
+        this.dateBox.option('opened', true);
+
+        this.dateBox.option('width', 700);
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.strictEqual($overlayContent.outerWidth(), 350, 'overlay content width is correct');
     });
 
     QUnit.test('list should contain correct values if min/max does not specified', function(assert) {

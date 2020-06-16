@@ -304,6 +304,10 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
 
     scrollToTime() { return noop(); }
+
+    _getRowCountWithAllDayRows() {
+        return this._getRowCount();
+    }
 }
 
 registerComponent('dxSchedulerWorkSpaceMonth', SchedulerWorkSpaceMonth);

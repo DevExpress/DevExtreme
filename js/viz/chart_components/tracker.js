@@ -184,15 +184,12 @@ const baseTrackerPrototype = {
     _showTooltip: function(point) {
         const that = this;
         let tooltipFormatObject;
-        let eventData;
+        const eventData = { target: point };
 
         if(point?.getOptions()) {
             tooltipFormatObject = point.getTooltipFormatObject(that._tooltip, that._tooltip.isShared() && that._chart.getStackedPoints(point));
             if(!isDefined(tooltipFormatObject.valueText) && !tooltipFormatObject.points || !point.isVisible()) {
                 return;
-            }
-            if(!that.pointAtShownTooltip || that.pointAtShownTooltip !== point) {
-                eventData = { target: point };
             }
 
             const coords = point.getTooltipParams(that._tooltip.getLocation());
