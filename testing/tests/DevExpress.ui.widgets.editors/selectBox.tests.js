@@ -86,17 +86,18 @@ const moduleSetup = {
 
 QUnit.module('rendering with css', {}, () => {
     QUnit.test('Right width of popup', function(assert) {
-        const $element = $('#selectBox').dxSelectBox({ width: 100 });
+        const editorWidth = 100;
+        const $element = $('#selectBox').dxSelectBox({ editorWidth: 100 });
         const instance = $element.dxSelectBox('instance');
         instance.open();
         const $popup = $(instance._popup.$element());
 
         assert.ok($popup.hasClass(POPUP_CLASS));
 
-        assert.strictEqual(instance._popup.option('width'), '100%');
+        assert.strictEqual(instance._popup.option('width'), 'auto');
 
         const $overlayContent = $('.dx-overlay-content');
-        assert.strictEqual($overlayContent.outerWidth(), 100, 'overlay content width is correct');
+        assert.ok($overlayContent.outerWidth() > editorWidth, 'overlay content width is correct');
     });
 });
 
@@ -942,36 +943,36 @@ QUnit.module('widget options', moduleSetup, () => {
         const instance = $('#selectBox').dxSelectBox({
             width: 600,
             dropDownOptions: {
-                width: '50%'
+                width: '150%'
             },
             opened: true
         }).dxSelectBox('instance');
 
         const $overlayContent = $('.dx-overlay-content');
-        assert.strictEqual($overlayContent.outerWidth(), 300, 'overlay content width is correct');
+        assert.strictEqual($overlayContent.outerWidth(), 900, 'overlay content width is correct');
 
         instance.close();
         instance.option('width', 400);
         instance.open();
 
-        assert.strictEqual($overlayContent.outerWidth(), 200, 'overlay content width is correct after editor width runtime change');
+        assert.strictEqual($overlayContent.outerWidth(), 600, 'overlay content width is correct after editor width runtime change');
     });
 
     QUnit.test('popup should have correct width after editor width runtime change (T897820)', function(assert) {
         const instance = $('#selectBox').dxSelectBox({
             width: 600,
             dropDownOptions: {
-                width: '50%'
+                width: '150%'
             },
             opened: true
         }).dxSelectBox('instance');
 
         const $overlayContent = $('.dx-overlay-content');
-        assert.strictEqual($overlayContent.outerWidth(), 300, 'overlay content width is correct');
+        assert.strictEqual($overlayContent.outerWidth(), 900, 'overlay content width is correct');
 
         instance.option('width', 400);
 
-        assert.strictEqual($overlayContent.outerWidth(), 200, 'overlay content width is correct after editor width runtime change');
+        assert.strictEqual($overlayContent.outerWidth(), 600, 'overlay content width is correct after editor width runtime change');
     });
 
     QUnit.test('option onValueChanged', function(assert) {
