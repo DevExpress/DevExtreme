@@ -24,11 +24,11 @@ export const viewFunction = ({
     pagesCountText, rtlEnabled,
     showNavigationButtons, totalCount,
     showInfo,
-    elementAttr,
   },
+  restAttributes,
 }: PagerContentComponent) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
-  <div ref={parentRef as any} className={className} {...elementAttr}>
+  <div ref={parentRef as any} {...restAttributes} className={className}>
     <PageSizeSelector
       ref={pageSizesRef as any}
       isLargeDisplayMode={isLargeDisplayMode}
