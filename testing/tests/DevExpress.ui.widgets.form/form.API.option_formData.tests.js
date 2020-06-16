@@ -416,12 +416,13 @@ QUnit.module('Checkbox editor field', () => {
                         ? false
                         : newBoolValue;
 
-                    let expectedFormValue = newBoolValue === 'no member'
-                        ? (oldBoolValue === false || oldBoolValue === 'no member') ? undefined : false
-                        : newBoolValue;
-                    if(oldBoolValue === undefined && allowIndeterminateState === false && newBoolValue === 'no member') {
-                        expectedFormValue = undefined;
+                    let expectedFormValue = newBoolValue;
+                    if(newBoolValue === 'no member') {
+                        expectedFormValue = oldBoolValue === false || oldBoolValue === 'no member' || (oldBoolValue === undefined && allowIndeterminateState === false)
+                            ? undefined
+                            : false;
                     }
+
                     checkCheckbox(form, 'b', editorValue, expectedFormValue);
                 });
 
