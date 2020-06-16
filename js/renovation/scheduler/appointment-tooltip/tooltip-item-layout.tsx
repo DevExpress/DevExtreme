@@ -9,10 +9,11 @@ import noop from '../../utils/noop';
 import { dxSchedulerAppointment } from '../../../ui/scheduler';
 import {
   TOOLTIP_APPOINTMENT_ITEM, TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER,
+  TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON,
 } from './consts';
 import { AppointmentItem } from './types';
 import Marker from './marker';
-import DeleteButton from './delete-button';
+import Button from '../../button';
 import TooltipItemContent from './tooltip-item-content';
 
 export const viewFunction = (viewModel: TooltipItemLayout) => {
@@ -45,9 +46,14 @@ export const viewFunction = (viewModel: TooltipItemLayout) => {
             getTextAndFormatDate={viewModel.props.getTextAndFormatDate}
           />
           {viewModel.props.showDeleteButton && (
-          <div className={TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER}>
-            <DeleteButton onClick={viewModel.onDeleteButtonClick} />
-          </div>
+            <div className={TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER}>
+              <Button
+                className={TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON}
+                icon="trash"
+                stylingMode="text"
+                onClick={viewModel.onDeleteButtonClick}
+              />
+            </div>
 
           )}
         </div>
