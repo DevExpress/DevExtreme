@@ -1,0 +1,120 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+@use "../textEditor/sizes" as *;
+@use "../textEditor/colors" as *;
+@use "../dropDownEditor" as *;
+@use "../common" as *;
+// adduse
+
+
+$GENERIC_LOOKUP_FIELD_PADDING:
+    $GENERIC_BASE_INLINE_BORDEREDWIDGET_TOP_PADDING
+    $GENERIC_BASE_INLINE_BORDEREDWIDGET_INNER_SIZE
+    $GENERIC_BASE_INLINE_BORDEREDWIDGET_BOTTOM_PADDING
+    $GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
+$GENERIC_LOOKUP_FIELD_PADDING_RTL:
+    $GENERIC_BASE_INLINE_BORDEREDWIDGET_TOP_PADDING
+    $GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING
+    $GENERIC_BASE_INLINE_BORDEREDWIDGET_BOTTOM_PADDING
+    $GENERIC_BASE_INLINE_BORDEREDWIDGET_INNER_SIZE;
+
+
+.dx-lookup {
+    height: $GENERIC_LOOKUP_HEIGHT;
+    border: 1px solid $texteditor-border-color;
+    background: $texteditor-bg;
+
+    &.dx-editor-underlined {
+        background: $texteditor-underlined-bg;
+    }
+}
+
+.dx-lookup-field {
+    padding: $GENERIC_LOOKUP_FIELD_PADDING;
+    font-size: 1em;
+
+    .dx-rtl & {
+        padding: $GENERIC_LOOKUP_FIELD_PADDING_RTL;
+    }
+}
+
+.dx-lookup-arrow {
+    @include dx-icon(spinnext);
+
+    width: $GENERIC_BASE_INLINE_BORDEREDWIDGET_INNER_SIZE;
+    color: $lookup-icon-color;
+
+    @include dx-icon-font-centered-sizing($GENERIC_BASE_ICON_SIZE);
+}
+
+.dx-state-readonly .dx-lookup-field:before {
+    opacity: 0.5,;
+}
+
+.dx-lookup-popup-wrapper {
+    .dx-list-item {
+        border-top: none;
+
+        &:last-of-type {
+            border-bottom: none;
+        }
+    }
+
+    .dx-list-item-content {
+        padding-left: $GENERIC_LOOKUP_POPUP_CONTENT_PADDING;
+        padding-right: $GENERIC_LOOKUP_POPUP_CONTENT_PADDING;
+    }
+
+    .dx-popup-content {
+        top: 0;
+        padding: 0;
+    }
+
+    .dx-popup-title + .dx-popup-content {
+        top: $GENERIC_LOOKUP_POPUP_CONTENT_TOP;
+    }
+}
+
+.dx-lookup-empty {
+    .dx-lookup-field {
+        color: $texteditor-placeholder-color;
+    }
+}
+
+@mixin lookup-badge-offset() {
+    right: $GENERIC_DROPDOWNEDITOR_INVALID_BADGE_OFFSET;
+
+    @at-root #{selector-append(".dx-rtl", &)},
+    .dx-rtl & {
+        right: auto;
+        left: $GENERIC_DROPDOWNEDITOR_INVALID_BADGE_OFFSET;
+    }
+}
+
+.dx-invalid.dx-lookup .dx-lookup-field:after {
+    @include lookup-badge-offset();
+    @include dx-invalid-generic-badge();
+}
+
+.dx-valid.dx-lookup .dx-lookup-field:after {
+    @include lookup-badge-offset();
+    @include dx-valid-generic-badge();
+}
+
+.dx-validation-pending.dx-lookup .dx-lookup-field-wrapper .dx-pending-indicator {
+    @include lookup-badge-offset();
+    @include dx-pending-indicator-generic();
+}
+
+.dx-lookup-popup-search .dx-list {
+    height: calc(100% - #{$GENERIC_LOOKUP_LIST_TOP});
+}
+
+.dx-lookup-search-wrapper {
+    padding: $GENERIC_LOOKUP_POPUP_CONTENT_PADDING;
+    padding-bottom: $GENERIC_LOOKUP_POPUP_CONTENT_PADDING - 6px;
+}

@@ -1,0 +1,12 @@
+@use "../sizes" as *;
+// adduse
+
+$GENERIC_SLIDEOUT_MENU_ICON_OVERSIZE: null !default;
+
+@if $size == "default" {
+    $GENERIC_SLIDEOUT_MENU_ICON_OVERSIZE: 8px;
+}
+
+@else if $size == "compact" {
+    $GENERIC_SLIDEOUT_MENU_ICON_OVERSIZE: 4px;
+}

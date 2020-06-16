@@ -1,0 +1,15 @@
+@use "../sizes" as *;
+// adduse
+
+$TEXTAREA_CONTENT_PADDING: null !default;
+$TEXTAREA_CONTENT_LINE_HEIGHT: null !default;
+
+@if $size == "default" {
+    $TEXTAREA_CONTENT_PADDING: 10px;
+    $TEXTAREA_CONTENT_LINE_HEIGHT: 24px;
+}
+
+@else if $size == "compact" {
+    $TEXTAREA_CONTENT_PADDING: 8px;
+    $TEXTAREA_CONTENT_LINE_HEIGHT: 20px;
+}

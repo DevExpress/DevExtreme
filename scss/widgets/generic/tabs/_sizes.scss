@@ -1,0 +1,23 @@
+@use "../sizes" as *;
+// adduse
+
+$GENERIC_TABS_ITEM_PADDING: null !default;
+$GENERIC_TAB_TEXT_LINE_HEIGHT: null !default;
+$GENERIC_TABS_NAV_BUTTON_POSITION: null !default;
+$GENERIC_TABS_NAV_BUTTON_SIZE: null !default;
+
+@if $size == "default" {
+    $GENERIC_TABS_ITEM_PADDING: 9px;
+    $GENERIC_TAB_TEXT_LINE_HEIGHT: 25px;
+
+    $GENERIC_TABS_NAV_BUTTON_POSITION: 4px 6px;
+    $GENERIC_TABS_NAV_BUTTON_SIZE: 20px;
+}
+
+@else if $size == "compact" {
+    $GENERIC_TABS_ITEM_PADDING: 4px;
+    $GENERIC_TAB_TEXT_LINE_HEIGHT: 21px;
+
+    $GENERIC_TABS_NAV_BUTTON_POSITION: 8px 5px;
+    $GENERIC_TABS_NAV_BUTTON_SIZE: 13px;
+}

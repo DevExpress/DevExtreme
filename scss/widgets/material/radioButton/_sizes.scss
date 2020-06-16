@@ -1,0 +1,18 @@
+@use "../sizes" as *;
+// adduse
+
+$MATERIAL_RADIOBUTTON_SIZE: null !default;
+$MATERIAL_RADIOBUTTON_DOT_SIZE: null !default;
+$MATERIAL_RADIOBUTTON_RIPPLE_SIZE: null !default;
+
+@if $size == "default" {
+    $MATERIAL_RADIOBUTTON_SIZE: 20px;
+    $MATERIAL_RADIOBUTTON_DOT_SIZE: 10px;
+    $MATERIAL_RADIOBUTTON_RIPPLE_SIZE: 40px;
+}
+
+@else if $size == "compact" {
+    $MATERIAL_RADIOBUTTON_SIZE: 16px;
+    $MATERIAL_RADIOBUTTON_DOT_SIZE: 8px;
+    $MATERIAL_RADIOBUTTON_RIPPLE_SIZE: 32px;
+}

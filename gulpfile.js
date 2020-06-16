@@ -13,7 +13,6 @@ require('./build/gulp/bundler-config');
 require('./build/gulp/transpile');
 require('./build/gulp/js-bundles');
 require('./build/gulp/vectormap');
-require('./build/gulp/css-bundles');
 require('./build/gulp/npm');
 require('./build/gulp/themebuilder-npm');
 require('./build/gulp/aspnet');
@@ -34,7 +33,7 @@ if(TEST_CI) {
 function createStyleCompilerBatch() {
     return gulp.series(TEST_CI
         ? ['style-compiler-themes-ci']
-        : ['style-compiler-themes', 'style-compiler-tb-assets']
+        : ['style-compiler-themes']
     );
 }
 

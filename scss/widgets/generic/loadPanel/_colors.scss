@@ -1,0 +1,130 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../overlay/colors" as *;
+// adduse
+
+
+$loadpanel-border-color: null !default;
+$loadpanel-content-shadow-color: null !default;
+$loadpanel-content-bg: null !default;
+$loadpanel-content-border-radius: null !default;
+
+
+@if $color == "carmine" {
+
+    $loadpanel-border-color: $overlay-border-color !default;
+    $loadpanel-content-shadow-color: color.change($base-shadow-color, $alpha: 0.25) !default;
+
+    /**
+    * $name 20. Loadpanel background color
+    * $type color
+    * $inherit $overlay-content-bg
+    * $isLastSubGroupItem true
+    */
+    $loadpanel-content-bg: $overlay-content-bg !default;
+
+    $loadpanel-content-border-radius: $base-border-radius-large !default;
+}
+
+@if $color == "contrast" {
+
+    $loadpanel-border-color: $base-border-color !default;
+    $loadpanel-content-shadow-color: $base-shadow-color !default;
+    $loadpanel-content-bg: color.change($overlay-content-bg, $alpha: 0.9) !default;
+
+    $loadpanel-content-border-radius: $base-border-radius + 2px;
+}
+
+@if $color == "dark" {
+
+    $loadpanel-border-color: $overlay-border-color !default;
+    $loadpanel-content-shadow-color: $overlay-content-shadow-color !default;
+
+    /**
+    * $name 20. Loadpanel background color
+    * $type color
+    * $inherit $overlay-content-bg
+    * $isLastSubGroupItem true
+    */
+    $loadpanel-content-bg: $overlay-content-bg !default;
+    $loadpanel-content-border-radius: $base-border-radius-large !default;
+}
+
+@if $color == "darkmoon" {
+
+    $loadpanel-border-color: $overlay-border-color !default;
+    $loadpanel-content-shadow-color: $overlay-content-shadow-color !default;
+
+    /**
+    * $name 20. Loadpanel background color
+    * $type color
+    * $inherit $overlay-content-bg
+    * $isLastSubGroupItem true
+    */
+    $loadpanel-content-bg: $overlay-content-bg !default;
+    $loadpanel-content-border-radius: $base-border-radius-large !default;
+}
+
+@if $color == "darkviolet" {
+
+    $loadpanel-border-color: $overlay-border-color !default;
+    $loadpanel-content-shadow-color: $overlay-content-shadow-color !default;
+
+    /**
+    * $name 20. Loadpanel background color
+    * $type color
+    * $inherit $overlay-content-bg
+    * $isLastSubGroupItem true
+    */
+    $loadpanel-content-bg: $overlay-content-bg !default;
+    $loadpanel-content-border-radius: $base-border-radius-large !default;
+}
+
+@if $color == "greenmist" {
+
+    $loadpanel-border-color: $overlay-border-color !default;
+    $loadpanel-content-shadow-color: color.change($base-shadow-color, $alpha: 0.25) !default;
+
+    /**
+    * $name 20. Loadpanel background color
+    * $type color
+    * $inherit $overlay-content-bg
+    * $isLastSubGroupItem true
+    */
+    $loadpanel-content-bg: $overlay-content-bg !default;
+
+    $loadpanel-content-border-radius: $base-border-radius-large !default;
+}
+
+@if $color == "light" {
+
+    $loadpanel-border-color: $overlay-border-color !default;
+    $loadpanel-content-shadow-color: color.change($base-shadow-color, $alpha: 0.25) !default;
+
+    /**
+    * $name 20. Loadpanel background color
+    * $type color
+    * $inherit $overlay-content-bg
+    * $isLastSubGroupItem true
+    */
+    $loadpanel-content-bg: $overlay-content-bg !default;
+
+    $loadpanel-content-border-radius: $base-border-radius-large !default;
+}
+
+@if $color == "softblue" {
+
+    $loadpanel-border-color: $overlay-border-color !default;
+    $loadpanel-content-shadow-color: color.change($base-shadow-color, $alpha: 0.25) !default;
+
+    /**
+    * $name 20. Loadpanel background color
+    * $type color
+    * $inherit $overlay-content-bg
+    * $isLastSubGroupItem true
+    */
+    $loadpanel-content-bg: $overlay-content-bg !default;
+    $loadpanel-content-border-radius: $base-border-radius-large !default;
+}
+

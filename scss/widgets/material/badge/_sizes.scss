@@ -1,0 +1,15 @@
+@use "../sizes" as *;
+// adduse
+
+$MATERIAL_BADGE_PADDING: null !default;
+$MATERIAL_BADGE_FONT_SIZE: null !default;
+
+@if $size == "default" {
+    $MATERIAL_BADGE_PADDING: 3px 9px;
+    $MATERIAL_BADGE_FONT_SIZE: 12px;
+}
+
+@else if $size == "compact" {
+    $MATERIAL_BADGE_PADDING: 2px 7px;
+    $MATERIAL_BADGE_FONT_SIZE: 11px;
+}

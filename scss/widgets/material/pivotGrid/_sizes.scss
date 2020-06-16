@@ -1,0 +1,12 @@
+@use "../sizes" as *;
+// adduse
+
+$MATERIAL_PIVOTGRID_CELL_PADDING: null !default;
+
+@if $size == "default" {
+    $MATERIAL_PIVOTGRID_CELL_PADDING: 10px 14px;
+}
+
+@else if $size == "compact" {
+    $MATERIAL_PIVOTGRID_CELL_PADDING: 7px 8px;
+}

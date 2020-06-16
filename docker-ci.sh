@@ -166,16 +166,6 @@ function run_test {
     exit $runner_result
 }
 
-function run_test_themebuilder {
-    dotnet build build/build-dotnet.sln
-    npm i
-    npm run build-themes
-    npm run build-themebuilder-assets
-    cd themebuilder
-    npm i
-    npm run test
-}
-
 function run_test_testcafe {
     export DEVEXTREME_TEST_CI=true
 
@@ -198,11 +188,6 @@ function run_test_jest {
 }
 
 function run_test_scss {
-    npm i
-    npx gulp generate-scss
-    npm run build-themes
-    node build/gulp/scss/tests/identical.test.js
-
     cd themebuilder-scss
     npm i && npm run build && npm run test
 }

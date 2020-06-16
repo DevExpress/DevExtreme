@@ -1,0 +1,12 @@
+@use "../sizes" as *;
+// adduse
+
+$GENERIC_TEXTEDITOR_CLEAR_ICON_OVERSIZE: null !default;
+
+@if $size == "default" {
+    $GENERIC_TEXTEDITOR_CLEAR_ICON_OVERSIZE: 2px;
+}
+
+@else if $size == "compact" {
+    $GENERIC_TEXTEDITOR_CLEAR_ICON_OVERSIZE: 1px;
+}

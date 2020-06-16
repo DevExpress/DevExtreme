@@ -1,6 +1,9 @@
 {
+    "plugins": [
+        "stylelint-scss"
+    ],
     "extends": "stylelint-config-standard",
-    "ignoreFiles": "!**/*.{css,less,scss}",
+    "ignoreFiles": "!**/*.{css,scss}",
     "rules": {
         "indentation": [4, { "ignore": ["inside-parens"] }],
         "max-empty-lines": 2,
@@ -14,6 +17,8 @@
         "value-no-vendor-prefix": true,
         "declaration-no-important": true,
         "selector-max-id": 0,
-        "selector-class-pattern": "dx-[a-z0-9-]+"
+        "selector-class-pattern": "dx-[a-z0-9-]+",
+        "at-rule-no-unknown": null,
+        "scss/at-rule-no-unknown": true
     }
 }
