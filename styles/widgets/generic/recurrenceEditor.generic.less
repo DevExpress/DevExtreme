@@ -5,10 +5,22 @@
 @import (once) "./selectBox.generic.less";
 @import (once) "./dateBox.generic.less";
 
+.dx-size-default() {
+    @GENERIC_RECURRENCE_INTERVAL_NUMBER_BOX_MARGIN_TOP: 25px;
+}
+
+.dx-size-compact() {
+    @GENERIC_RECURRENCE_INTERVAL_NUMBER_BOX_MARGIN_TOP: 18px;
+}
+
 @GENERIC_RECURRENCE_NUMBER_BOX_MARGIN_RIGHT: 11px;
 
 .dx-recurrence-editor-container {
     .dx-recurrence-numberbox-interval {
         margin-right: @GENERIC_RECURRENCE_NUMBER_BOX_MARGIN_RIGHT;
     }
+}
+
+.dx-recurrence-numberbox-interval-label {
+    margin-top: @GENERIC_RECURRENCE_INTERVAL_NUMBER_BOX_MARGIN_TOP;
 }
